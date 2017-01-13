@@ -1,1 +1,8 @@
 rootProject.name='dist-foreign'
+
+include 'dist-foreign-domain'
+include 'dist-foreign-db'
+include 'dist-foreign-repository'
+include 'dist-foreign-service'
+include 'dist-foreign-ui'
+include 'dist-foreign-party-db'

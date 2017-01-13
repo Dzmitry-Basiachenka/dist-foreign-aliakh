@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE suppressions PUBLIC
+        "-//Puppy Crawl//DTD Suppressions 1.1//EN"
+        "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
+
+<suppressions>
+    <suppress checks="MagicNumber"              files=".*"/>
+
+    <!-- Unit tests -->
+    <suppress checks="JavadocMethod"            files="src[/\\]test[/\\]java[/\\].*"/>
+    <suppress checks="JavadocVariable"          files="src[/\\]test[/\\]java[/\\].*"/>
+    <suppress checks="ExecutableStatementCount" files="src[/\\]test[/\\]java[/\\].*"/>
+    <suppress checks="MethodLength"             files="src[/\\]test[/\\]java[/\\].*"/>
+    <suppress checks="FileLength"               files="src[/\\]test[/\\]java[/\\].*"/>
+    <!-- Integration tests -->
+    <suppress checks="JavadocMethod"            files="src[/\\]testInteg[/\\]java[/\\].*"/>
+    <suppress checks="JavadocVariable"          files="src[/\\]testInteg[/\\]java[/\\].*"/>
+    <suppress checks="ExecutableStatementCount" files="src[/\\]testInteg[/\\]java[/\\].*"/>
+    <suppress checks="MethodLength"             files="src[/\\]testInteg[/\\]java[/\\].*"/>
+    <suppress checks="FileLength"               files="src[/\\]testInteg[/\\]java[/\\].*"/>
+
+    <!-- UI tests -->
+    <suppress checks="JavadocMethod"            files="src[/\\]testUi[/\\]java[/\\].*"/>
+    <suppress checks="JavadocVariable"          files="src[/\\]testUi[/\\]java[/\\].*"/>
+    <suppress checks="ExecutableStatementCount" files="src[/\\]testUi[/\\]java[/\\].*"/>
+    <suppress checks="MethodLength"             files="src[/\\]testUi[/\\]java[/\\].*"/>
+    <suppress checks="FileLength"               files="src[/\\]testUi[/\\]java[/\\].*"/>
+
+</suppressions>

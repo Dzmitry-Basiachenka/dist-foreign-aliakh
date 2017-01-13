@@ -1,0 +1,17 @@
+apply plugin: 'rup-jdbc'
+apply plugin: 'rup-mybatis'
+
+dependencies {
+    compile project(':dist-foreign-domain')
+
+    compile("org.perf4j:perf4j:${perf4jVersion}")
+    compile("com.copyright.rup.dist.common:dist-common-repository:${distCommonVersion}")
+
+    compile("org.mybatis:mybatis-typehandlers-jsr310:${mybatisTypehandlersVersion}")
+
+    testIntegRuntime project(':dist-foreign-db')
+
+    testIntegRuntime("com.copyright.rup.common:rup-common-test-integ:${rupCommonTestIntegVersion}")
+    testIntegRuntime(group: 'com.copyright.rup.common', name: 'rup-common-test-integ',
+            version: "${rupCommonTestIntegVersion}", configuration: 'h2')
+}
