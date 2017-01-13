@@ -1,0 +1,47 @@
+buildscript {
+    repositories {
+        maven { url rupRepoExtUrl }
+        ivy { url rupRepoReleaseUrl }
+        if ( project.hasProperty('developPlugins') ) {
+            ivy { url file(System.getProperty('user.home') + '/.ivylocal') }
+        }
+    }
+    dependencies {
+        classpath("com.copyright.rup.scm.gradle.plugins:rup-gradle-plugins:${rupGradlePluginsVersion}")
+        classpath("fi.jasoft.plugin:gradle-vaadin-plugin:${gradleVaadinPluginVersion}")
+    }
+}
+
+apply plugin: 'rup-java'
+apply plugin: 'rup-idea'
+
+allprojects {
+    group='com.copyright.rup.dist.sharefeeder'
+}
+
+subprojects {
+    def styleCheckConfigDir = rootProject.getProjectDir().getCanonicalPath() + '/tools/stylecheck/'
+    checkstyle {
+        configProperties.suppressionsFile = styleCheckConfigDir + 'checkstyle-suppressions.xml'
+    }
+    findbugs {
+        // fail build if findbugs exceptions found
+        ignoreFailures = false
+        // Higher levels increase precision and find more bugs
+        effort = "max"
+        // Report all bugs
+        reportLevel = "low"
+        excludeFilter = file("${styleCheckConfigDir}findbugs_excludes.xml")
+    }
+
+    // Enabling pmd fail on error (disabled by rup-plugin)
+    pmd {
+        ignoreFailures = false
+        ruleSetFiles = files("${styleCheckConfigDir}pmd_rules.xml")
+    }
+    [pmdMain, pmdTest, pmdTestInteg]*.ignoreFailures = false
+
+    tasks.test.rupCodeCoverage {
+        preInstrument = true
+    }
+}
