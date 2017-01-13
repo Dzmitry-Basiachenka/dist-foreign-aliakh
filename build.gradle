@@ -16,7 +16,7 @@ apply plugin: 'rup-java'
 apply plugin: 'rup-idea'
 
 allprojects {
-    group='com.copyright.rup.dist.foreign-distributions'
+    group='com.copyright.rup.dist.foreign'
 }
 
 subprojects {
