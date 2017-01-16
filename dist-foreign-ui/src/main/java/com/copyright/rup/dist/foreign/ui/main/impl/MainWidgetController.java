@@ -2,10 +2,12 @@ package com.copyright.rup.dist.foreign.ui.main.impl;
 
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidget;
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidgetController;
+import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.widget.api.TabController;
 
 import com.vaadin.ui.TabSheet;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -22,6 +24,14 @@ import org.springframework.stereotype.Component;
 @Component("MainController")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class MainWidgetController extends TabController<IMainWidget> implements IMainWidgetController {
+
+    @Autowired
+    private IUsagesController usagesController;
+
+    @Override
+    public IUsagesController getUsagesController() {
+        return usagesController;
+    }
 
     @Override
     protected TabSheet getTabSheet() {

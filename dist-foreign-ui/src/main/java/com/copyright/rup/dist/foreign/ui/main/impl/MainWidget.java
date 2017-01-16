@@ -27,7 +27,8 @@ public class MainWidget extends TabSheet implements IMainWidget {
     @SuppressWarnings("unchecked")
     public MainWidget init() {
         VaadinUtils.addComponentStyle(this, Cornerstone.MAIN_TABSHEET);
-        addTab(new Label(), ForeignUi.getMessage("tab.caption.usage"));
+        addTab(controller.getUsagesController().initWidget(),
+            ForeignUi.getMessage("tab.caption.usage"));
         addTab(new Label(), ForeignUi.getMessage("tab.caption.scenario"));
         addTab(new Label(), ForeignUi.getMessage("tab.caption.audit"));
         addListener(TabSheet.SelectedTabChangeEvent.class, controller,
