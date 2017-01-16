@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.main;
 
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidgetController;
+import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.CommonUi;
@@ -67,6 +68,11 @@ public class ForeignUi extends CommonUi {
     @Override
     protected String getApplicationTitle() {
         return getMessage("application.name");
+    }
+
+    @Override
+    protected boolean hasAccessPermission() {
+        return ForeignSecurityUtils.hasAccessPermission();
     }
 
     @Override
