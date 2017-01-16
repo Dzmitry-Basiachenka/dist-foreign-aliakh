@@ -1,0 +1,54 @@
+@mixin foreign {
+    $v-sprites-url : url("../cornerstone/img/sprites.png");
+
+    /**==== Reports menu styles ===*/
+    .reports-menu {
+        &.v-menubar {
+             background: none !important;
+             .v-menubar-menuitem-selected {
+                 background: none !important;
+                 .v-menubar-menuitem-caption {
+                    color: $main-layout-text-color-hover !important;
+                 }
+             }
+        }
+
+        .v-menubar-menuitem-reports-menu-root {
+            margin: -3px 0 !important;
+            height: 35px !important;
+            padding: 0 20px !important;
+
+            .v-menubar-menuitem-caption {
+                height: 35px !important;
+                line-height: 35px !important;
+                padding: 0 !important;
+                color: $main-tabsheet-text-color !important;
+                text-shadow: none !important;
+                font-size: 13px !important;
+                font-weight: bold;
+                &:hover {
+                    color: $main-layout-text-color-hover !important;
+                    cursor: pointer;
+                }
+            }
+            &:hover {
+                cursor: pointer;
+            }
+        }
+
+        &.v-menubar-submenu {
+
+            .v-menubar-menuitem-caption {
+                font-size: 14px;
+                line-height: 25px !important;
+                text-shadow: none;
+                padding: 1px 2px !important;
+            }
+
+            .v-menubar-menuitem.v-menubar-menuitem-selected {
+                background: $v-button-color !important;
+            }
+        }
+    }
+
+}

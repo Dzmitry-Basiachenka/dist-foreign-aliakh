@@ -1,0 +1,14 @@
+apply plugin: 'rup-postgres'
+
+rupPostgres {
+    commonScripts {
+        version = '1.4.0'
+    }
+    mainChangelog = 'com/copyright/rup/dist/foreign/db/main-changelog.groovy'
+    
+    schemaSpy {
+        schema = 'apps'
+        host = 'localhost'
+        database = 'rd'
+    }
+}

@@ -1,0 +1,79 @@
+import com.copyright.rup.scm.gradle.plugins.PluginUtils
+import fi.jasoft.plugin.GradleVaadinPlugin
+import fi.jasoft.plugin.tasks.CompileThemeTask
+import org.apache.tools.ant.filters.ReplaceTokens
+
+apply plugin: 'rup-war-ui'
+
+if (!project.plugins.findPlugin(GradleVaadinPlugin)) {
+    project.apply(plugin: GradleVaadinPlugin)
+}
+
+rupTomcat {
+    tomcatVersion = '8.0.33'
+}
+
+vaadin {
+    version = "${vaadinVersion}"
+    manageDependencies = false
+    manageRepositories = false
+}
+
+dependencies {
+    compile project(':dist-foreign-domain')
+    compile project(':dist-foreign-service')
+
+    compile("com.copyright.rup.vaadin:rup-vaadin-core:${rupVaadinVersion}")
+    compile("com.copyright.rup.vaadin:rup-vaadin-theme:${rupVaadinVersion}")
+    compile("com.copyright.rup.security.auth:rup-auth-common:${rupAuthVersion}")
+    compile("ru.xpoft.vaadin:spring-vaadin-integration:${vaadinSpringIntegrationAddonVersion}")
+
+    runtime("com.copyright.rup.security.auth:rup-auth-consumer:${rupAuthVersion}")
+    runtime("com.copyright.rup.common:rup-common-web:${rupCommonWebVersion}")
+    runtime("com.copyright.rup.common:rup-common-config:${rupCommonConfigVersion}")
+    runtime("org.codehaus.janino:janino:${janinoVersion}")
+    runtime("com.vaadin:vaadin-push:${vaadinVersion}")
+    runtime("org.springframework.security:spring-security-core:${springSecurityVersion}")
+
+    testCompile("nl.jqno.equalsverifier:equalsverifier:${equalsVerifierVersion}")
+
+    testUiCompile("com.copyright.rup.vaadin:rup-vaadin-test:${rupVaadinVersion}")
+    testUiCompile("com.copyright.rup.common:rup-common-test-integ:${rupCommonTestIntegVersion}")
+
+    testUiRuntime(group: 'com.copyright.rup.common', name: 'rup-common-test-integ',
+            version: "${rupCommonTestIntegVersion}", configuration: 'h2')
+
+    testUiWebApp project(':dist-foreign-db')
+
+    testUiWebApp("com.copyright.rup.common:rup-common-test-integ:${rupCommonTestIntegVersion}")
+    testUiWebApp(group: 'com.copyright.rup.common', name: 'rup-common-test-integ',
+            version: "${rupCommonTestIntegVersion}", configuration: 'h2')
+}
+
+rupWarUi {
+    embeddedTomcat {
+        httpPort = 20000
+        stopPort = 20001
+    }
+}
+
+uiTest {
+    //Execute only on Local environment or test server until resolving issue with running Selenium Webdriver on Jenkinks
+    boolean isOnTestServer = ['prd1cmbuild5.copyright.com', 'prd1cmbuild6.copyright.com'].contains(PluginUtils.getHost())
+    onlyIf { !PluginUtils.onBuildServer() || isOnTestServer }
+
+    testLogging {
+        // UI tests are generally slower and fewer in number, so log the start of each test
+        events 'started', 'skipped', 'failed'
+    }
+}
+
+task compileVaadinTheme(type: CompileThemeTask, group: "rupVaadin")
+
+war {
+    dependsOn 'compileVaadinTheme'
+    exclude '**/*.scss'
+    filesMatching("**/*.xml") {
+        filter(ReplaceTokens, tokens: ['vaadinProductionMode': 'true'])
+    }
+}

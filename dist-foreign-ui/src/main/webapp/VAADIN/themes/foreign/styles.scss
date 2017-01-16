@@ -1,0 +1,7 @@
+@import "../cornerstone/cornerstone.scss";
+@import "foreign.scss";
+
+.foreign {
+    @include cornerstone;
+    @include foreign;
+}

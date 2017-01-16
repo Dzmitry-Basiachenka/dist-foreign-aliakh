@@ -1,0 +1,29 @@
+<configuration>
+
+    <include resource="com/copyright/rup/dist/foreign/ui/logback-dist-foreign-ui.xml" />
+    <include resource="com/copyright/rup/dist/foreign/ui/logback-dist-foreign-ui-performance.xml" />
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator>
+                <expression>return level <![CDATA[ >= ]]> WARN || (logger.startsWith("com.copyright.rup.dist.foreign.ui") <![CDATA[ && ]]> level <![CDATA[ >= ]]> INFO );</expression>
+            </evaluator>
+            <OnMismatch>DENY</OnMismatch>
+            <OnMatch>ACCEPT</OnMatch>
+        </filter>
+        <encoder>
+            <pattern>%date [%-10.-10thread] [%-5level] %logger{56} ->%method:%line - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.copyright.rup.dist" level="${DIST_FOREIGN_UI_LOG_LEVEL:-${GEN_LOG_LEVEL:-debug}}" additivity="false">
+        <appender-ref ref="FILE_DIST_FOREIGN_UI" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="FILE_DIST_FOREIGN_UI" />
+        <appender-ref ref="STDOUT" />
+    </root>
+
+</configuration>

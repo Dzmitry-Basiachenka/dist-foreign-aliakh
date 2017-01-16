@@ -1,0 +1,9 @@
+apply plugin: 'rup-postgres'
+
+rupPostgres {
+    commonScripts {
+        version = '1.4.0'
+    }
+
+    mainChangelog = 'com/copyright/rup/dist/foreign/party/db/main-party-changelog.groovy'
+}

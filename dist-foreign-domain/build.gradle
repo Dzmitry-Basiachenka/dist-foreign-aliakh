@@ -1,0 +1,6 @@
+dependencies {
+    compile("com.copyright.rup.dist.common:dist-common-domain:${distCommonVersion}")
+
+    testCompile("nl.jqno.equalsverifier:equalsverifier:${equalsVerifierVersion}")
+    testCompile("com.googlecode.openpojo:openpojo:${openPojoVersion}")
+}

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         name="Android Application Rules"
+         xmlns="http://pmd.sf.net/ruleset/1.0.0"
+         xsi:noNamespaceSchemaLocation="http://pmd.sf.net/ruleset_xml_schema.xsd"
+         xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0
+                        http://pmd.sf.net/ruleset_xml_schema.xsd">
+
+    <rule ref="rulesets/java/basic.xml"/>
+    <rule ref="rulesets/java/braces.xml"/>
+    <rule ref="rulesets/java/coupling.xml">
+        <!--The complex logic requires some extra number of imports-->
+        <exclude name="ExcessiveImports"/>
+        <!--Too complicated to follow-->
+        <exclude name="LawOfDemeter"/>
+        <!--False positive on tests-->
+        <exclude name="CouplingBetweenObjects"/>
+        <!--Misconfigured check-->
+        <exclude name="LoosePackageCoupling"/>
+    </rule>
+    <rule ref="rulesets/java/design.xml">
+        <!--Spring beans are not instantiated in constructor-->
+        <exclude name="AccessorClassGeneration"/>
+        <!--Ternary check is false positive sometimes and fails when common case goes first-->
+        <exclude name="ConfusingTernary"/>
+        <!--In case of template pattern this check will fail-->
+        <exclude name="EmptyMethodInAbstractClassShouldBeAbstract"/>
+        <!--Check fails while working with Sessions in Vaadin. To many ifs is the necessity-->
+        <exclude name="AvoidDeeplyNestedIfStmts"/>
+        <!--Excluded due to the Vaadin implementation specific staff-->
+        <exclude name="ImmutableField"/>
+        <!--False potisive on DTO related to REST/JSON calls-->
+        <exclude name="GodClass"/>
+        <!--TODO {nlevyankov} for UI widgets needs to be redesigned -->
+        <exclude name="ConstructorCallsOverridableMethod"/>
+    </rule>
+    <rule ref="rulesets/java/imports.xml">
+        <!--Static imports frequently used in tests-->
+        <exclude name="TooManyStaticImports"/>
+    </rule>
+    <rule ref="rulesets/java/junit.xml">
+        <!--Too many messages to write. Need to refactor-->
+        <exclude name="JUnitAssertionsShouldIncludeMessage"/>
+        <!--False positive on equalsVerifier library-->
+        <exclude name="JUnitTestsShouldIncludeAssert"/>
+        <!--False positive on complex unit tests-->
+        <exclude name="JUnitTestContainsTooManyAsserts"/>
+        <!--False positive on Equals/HashCode tests-->
+        <exclude name="TestClassWithoutTestCases"/>
+    </rule>
+    <rule ref="rulesets/java/strings.xml"/>
+    <rule ref="rulesets/java/unusedcode.xml"/>
+</ruleset>

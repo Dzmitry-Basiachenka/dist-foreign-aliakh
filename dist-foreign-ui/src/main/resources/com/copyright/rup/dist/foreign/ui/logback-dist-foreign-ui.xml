@@ -1,0 +1,13 @@
+<included>
+    <appender name="FILE_DIST_FOREIGN_UI" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${APP_LOG_DIR:-/r01/foreign/log}/dist-foreign-ui-starter.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${APP_LOG_DIR:-/r01/foreign/log}/dist-foreign-ui-starter.%d{yyyy-MM-dd}.log.zip</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <append>true</append>
+        <encoder>
+            <pattern>%date [%-10.-10thread] [%-5level] %logger{56} ->%method:%line - %msg%n</pattern>
+        </encoder>
+    </appender>
+</included>

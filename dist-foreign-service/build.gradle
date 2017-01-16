@@ -1,0 +1,10 @@
+dependencies {
+    compile project(':dist-foreign-domain')
+    compile project(':dist-foreign-repository')
+
+    compile("org.quartz-scheduler:quartz:${quartzVersion}")
+    compile("org.springframework:spring-context-support:${rupJava.standardDependencies.spring.version}")
+    compile("org.perf4j:perf4j:${perf4jVersion}")
+
+    testIntegRuntime project(path: ':dist-foreign-repository', configuration: 'testIntegRuntime')
+}
