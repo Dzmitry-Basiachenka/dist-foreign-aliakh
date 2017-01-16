@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.main.api;
 
+import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.widget.api.IController;
 import com.copyright.rup.vaadin.widget.api.ITabChangeController;
 
@@ -13,4 +14,9 @@ import com.copyright.rup.vaadin.widget.api.ITabChangeController;
  * @author Nikita Levyankov
  */
 public interface IMainWidgetController extends IController<IMainWidget>, ITabChangeController {
+
+    /**
+     * @return instance of {@link IUsagesController}.
+     */
+    IUsagesController getUsagesController();
 }
