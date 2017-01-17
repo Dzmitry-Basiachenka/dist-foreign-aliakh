@@ -26,7 +26,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
     @Override
     @SuppressWarnings("unchecked")
     public UsagesWidget init() {
-        setFirstComponent(initFilterWidget());
+        setFirstComponent(controller.initUsagesFilterWidget());
         setSecondComponent(initUsagesLayout());
         setSplitPosition(200, Unit.PIXELS);
         setLocked(true);
@@ -44,11 +44,6 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
      */
     IUsagesController getController() {
         return controller;
-    }
-
-    private VerticalLayout initFilterWidget() {
-        // TODO {mhladkikh} implement method
-        return new VerticalLayout();
     }
 
     private VerticalLayout initUsagesLayout() {
