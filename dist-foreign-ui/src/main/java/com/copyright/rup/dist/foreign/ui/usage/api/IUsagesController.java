@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.api;
 
+import com.copyright.rup.dist.foreign.UsageDetail;
+import com.copyright.rup.vaadin.ui.component.lazytable.IBeanLoader;
 import com.copyright.rup.vaadin.widget.api.IController;
 
 /**
@@ -11,7 +13,7 @@ import com.copyright.rup.vaadin.widget.api.IController;
  *
  * @author Mikita Hladkikh
  */
-public interface IUsagesController extends IController<IUsagesWidget>{
+public interface IUsagesController extends IController<IUsagesWidget>, IBeanLoader<UsageDetail> {
 
     /**
      * Initializes {@link IUsagesFilterWidget}.
