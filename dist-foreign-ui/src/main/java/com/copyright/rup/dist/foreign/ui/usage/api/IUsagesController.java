@@ -12,4 +12,11 @@ import com.copyright.rup.vaadin.widget.api.IController;
  * @author Mikita Hladkikh
  */
 public interface IUsagesController extends IController<IUsagesWidget>{
+
+    /**
+     * Initializes {@link IUsagesFilterWidget}.
+     *
+     * @return initialized {@link IUsagesFilterWidget}
+     */
+    IUsagesFilterWidget initUsagesFilterWidget();
 }
