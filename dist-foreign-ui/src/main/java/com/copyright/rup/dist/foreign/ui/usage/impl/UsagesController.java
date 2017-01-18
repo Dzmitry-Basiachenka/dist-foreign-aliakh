@@ -1,14 +1,19 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
+import com.copyright.rup.dist.foreign.UsageDetail;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Controller for {@link UsagesWidget}.
@@ -29,6 +34,18 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     @Override
     public IUsagesFilterWidget initUsagesFilterWidget() {
         return filterController.initWidget();
+    }
+
+    @Override
+    public int getSize() {
+        // TODO: refactor after implementing backend logic for getting usages
+        return 0;
+    }
+
+    @Override
+    public List<UsageDetail> loadBeans(int startIndex, int count, Object[] sortPropertyIds, boolean... sortStates) {
+        // TODO: refactor after implementing backend logic for getting usages
+        return Collections.emptyList();
     }
 
     @Override
