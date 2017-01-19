@@ -8,13 +8,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 
+import com.copyright.rup.dist.foreign.ui.common.domain.FakeDataGenerator;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
-
-import java.util.Collections;
 
 /**
  * Verifies {@link UsagesController}.
@@ -36,12 +35,12 @@ public class UsagesControllerTest {
 
     @Test
     public void testGetSize() {
-        assertEquals(0, controller.getSize());
+        assertEquals(FakeDataGenerator.getUsageDetailDTOs().size(), controller.getSize());
     }
 
     @Test
     public void testLoadBeans() {
-        assertEquals(Collections.emptyList(), controller.loadBeans(0, 150, null));
+        assertEquals(FakeDataGenerator.getUsageDetailDTOs().size(), controller.loadBeans(0, 150, null).size());
     }
 
     @Test

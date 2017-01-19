@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign;
 
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.domain.StoredEntity;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -23,6 +24,7 @@ public class UsageDetail extends StoredEntity<String> {
     private String batchId;
     private Long wrWrkInst;
     private String workTitle;
+    private Rightsholder rightsholder;
     private String article;
     private String standardNumber;
     private String publisher;
@@ -81,6 +83,22 @@ public class UsageDetail extends StoredEntity<String> {
      */
     public void setWorkTitle(String workTitle) {
         this.workTitle = workTitle;
+    }
+
+    /**
+     * @return rights holder.
+     */
+    public Rightsholder getRightsholder() {
+        return rightsholder;
+    }
+
+    /**
+     * Sets rights holder.
+     *
+     * @param rightsholder rights holder
+     */
+    public void setRightsholder(Rightsholder rightsholder) {
+        this.rightsholder = rightsholder;
     }
 
     /**
@@ -277,6 +295,7 @@ public class UsageDetail extends StoredEntity<String> {
             .append(this.batchId, that.batchId)
             .append(this.wrWrkInst, that.wrWrkInst)
             .append(this.workTitle, that.workTitle)
+            .append(this.rightsholder, that.rightsholder)
             .append(this.article, that.article)
             .append(this.standardNumber, that.standardNumber)
             .append(this.publisher, that.publisher)
@@ -298,6 +317,7 @@ public class UsageDetail extends StoredEntity<String> {
             .append(batchId)
             .append(wrWrkInst)
             .append(workTitle)
+            .append(rightsholder)
             .append(article)
             .append(standardNumber)
             .append(publisher)
@@ -319,6 +339,7 @@ public class UsageDetail extends StoredEntity<String> {
             .append("batchId", batchId)
             .append("wrWrkInst", wrWrkInst)
             .append("workTitle", workTitle)
+            .append("rightsholder", rightsholder)
             .append("article", article)
             .append("standardNumber", standardNumber)
             .append("publisher", publisher)

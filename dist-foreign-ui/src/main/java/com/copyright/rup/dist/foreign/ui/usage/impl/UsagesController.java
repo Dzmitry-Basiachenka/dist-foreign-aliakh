@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
-import com.copyright.rup.dist.foreign.UsageDetail;
+import com.copyright.rup.dist.foreign.ui.common.domain.FakeDataGenerator;
+import com.copyright.rup.dist.foreign.ui.common.domain.UsageDetailDto;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
@@ -12,7 +13,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -39,13 +39,13 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     @Override
     public int getSize() {
         // TODO: refactor after implementing backend logic for getting usages
-        return 0;
+        return FakeDataGenerator.getUsageDetailDTOs().size();
     }
 
     @Override
-    public List<UsageDetail> loadBeans(int startIndex, int count, Object[] sortPropertyIds, boolean... sortStates) {
+    public List<UsageDetailDto> loadBeans(int startIndex, int count, Object[] sortPropertyIds, boolean... sortStates) {
         // TODO: refactor after implementing backend logic for getting usages
-        return Collections.emptyList();
+        return FakeDataGenerator.getUsageDetailDTOs();
     }
 
     @Override
