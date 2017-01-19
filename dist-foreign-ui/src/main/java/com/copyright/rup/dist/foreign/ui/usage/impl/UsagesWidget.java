@@ -1,9 +1,10 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
-import com.copyright.rup.dist.foreign.UsageDetail;
+import com.copyright.rup.dist.foreign.ui.common.domain.UsageDetailDto;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.LongColumnGenerator;
 import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.ui.component.lazytable.LazyTable;
 
@@ -26,7 +27,7 @@ import java.math.BigDecimal;
 class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
 
     private IUsagesController controller;
-    private LazyTable<UsageBeanQuery, UsageDetail> usagesTable;
+    private LazyTable<UsageBeanQuery, UsageDetailDto> usagesTable;
 
     @Override
     public void refresh() {
@@ -60,6 +61,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         usagesTable = new LazyTable<>(controller, UsageBeanQuery.class);
         usagesTable.addProperty("id", String.class, false);
         usagesTable.addProperty("wrWrkInst", Long.class, true);
+        usagesTable.addGeneratedColumn("wrWrkInst", new LongColumnGenerator());
         usagesTable.addProperty("workTitle", String.class, false);
         usagesTable.addProperty("grossAmount", BigDecimal.class, true);
         usagesTable.setVisibleColumns("wrWrkInst", "workTitle", "grossAmount");
