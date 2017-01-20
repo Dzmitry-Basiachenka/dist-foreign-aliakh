@@ -29,14 +29,15 @@ public class LocalDateWidget extends CustomField<LocalDate> {
     /**
      * Constructor.
      *
-     * @param caption widget caption
+     * @param caption  widget caption
      * @param property property
      */
     public LocalDateWidget(String caption, Property<LocalDate> property) {
         dateProperty = new ObjectProperty<>(null, Date.class);
-        this.popupDateWidget = new PopupDateWidget(caption, dateProperty);
+        this.popupDateWidget = new PopupDateWidget(dateProperty);
         popupDateWidget.setImmediate(true);
         setPropertyDataSource(property);
+        setCaption(caption);
     }
 
     @Override
@@ -61,5 +62,15 @@ public class LocalDateWidget extends CustomField<LocalDate> {
     @Override
     public Class<LocalDate> getType() {
         return LocalDate.class;
+    }
+
+    @Override
+    public void addValueChangeListener(ValueChangeListener listener) {
+        popupDateWidget.addValueChangeListener(listener);
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return null == getValue();
     }
 }
