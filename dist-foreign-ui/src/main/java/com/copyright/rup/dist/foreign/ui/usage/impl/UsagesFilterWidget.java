@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
+import com.copyright.rup.dist.foreign.UsageFilter;
 import com.copyright.rup.dist.foreign.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.component.LocalDateWidget;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
@@ -7,11 +8,13 @@ import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.VaadinUtils;
+import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
 import com.vaadin.data.Property;
 import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -41,6 +44,9 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
     private ComboBox statusComboBox;
     private ComboBox taxCountryComboBox;
     private IUsagesFilterController controller;
+    private Label batchesCountLabel;
+    private Label rightsholdersCountLabel;
+    private UsageFilter usageFilter = new UsageFilter();
 
     @Override
     @SuppressWarnings("unchecked")
@@ -54,7 +60,8 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
 
     @Override
     public void applyFilter() {
-        // TODO {mhladkikh} implement method
+        applyButton.setEnabled(false);
+        Windows.showNotificationWindow("Apply filter clicked");
     }
 
     @Override
@@ -63,11 +70,33 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
         statusComboBox.setValue(null);
         taxCountryComboBox.setValue(null);
         applyButton.setEnabled(false);
+        usageFilter = new UsageFilter();
+        setCountLabelValue(batchesCountLabel, 0);
+        setCountLabelValue(rightsholdersCountLabel, 0);
     }
 
     @Override
     public void setController(IUsagesFilterController controller) {
         this.controller = controller;
+    }
+
+    @Override
+    public void setSelectedUsageBatches(Set<String> usageBatchesIds) {
+        setCountLabelValue(batchesCountLabel, usageBatchesIds.size());
+        usageFilter.setUsageBatchesIds(usageBatchesIds);
+        filterChanged();
+    }
+
+    @Override
+    public void setSelectedRightsholders(Set<Long> accountNumbers) {
+        setCountLabelValue(rightsholdersCountLabel, accountNumbers.size());
+        usageFilter.setRightsholdersAccountNumbers(accountNumbers);
+        filterChanged();
+    }
+
+    @Override
+    public UsageFilter getFilter() {
+        return usageFilter;
     }
 
     /**
@@ -81,15 +110,18 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
         statusComboBox = buildComboBox(ForeignUi.getMessage("label.caption.status"), FILTER_USAGE_STATES);
         // TODO {mhladkikh} fill in tax country values
         taxCountryComboBox = buildComboBox(ForeignUi.getMessage("label.caption.tax_country"), Collections.emptySet());
-        Label batchesCountLabel = new Label(String.format(ForeignUi.getMessage("label.filter.items_count_format"), 0));
-        Label rightsholdersCountLabel =
-            new Label(String.format(ForeignUi.getMessage("label.filter.items_count_format"), 0));
-        VerticalLayout verticalLayout = new VerticalLayout(buildFiltersHeaderLabel(),
-            buildItemsFilter(batchesCountLabel, ForeignUi.getMessage("label.caption.batches")),
-            buildItemsFilter(rightsholdersCountLabel, ForeignUi.getMessage("label.caption.rightsholders")),
-            statusComboBox,
-            new LocalDateWidget(ForeignUi.getMessage("label.caption.payment_date"), paymentDateProperty),
-            taxCountryComboBox);
+        batchesCountLabel = new Label(String.format(ForeignUi.getMessage("label.filter.items_count_format"), 0));
+        rightsholdersCountLabel = new Label(String.format(ForeignUi.getMessage("label.filter.items_count_format"), 0));
+        HorizontalLayout batchesFilter =
+            buildItemsFilter(batchesCountLabel, ForeignUi.getMessage("label.caption.batches"),
+                (ClickListener) event -> controller.onUsageBatchFilterClick());
+        HorizontalLayout rightsholdersFilter =
+            buildItemsFilter(rightsholdersCountLabel, ForeignUi.getMessage("label.caption.rightsholders"),
+                (ClickListener) event -> controller.onRightsholderFilterClick());
+        LocalDateWidget paymentDateWidget =
+            new LocalDateWidget(ForeignUi.getMessage("label.caption.payment_date"), paymentDateProperty);
+        VerticalLayout verticalLayout = new VerticalLayout(buildFiltersHeaderLabel(), batchesFilter,
+            rightsholdersFilter, statusComboBox, paymentDateWidget, taxCountryComboBox);
         verticalLayout.setSpacing(true);
         return verticalLayout;
     }
@@ -119,12 +151,21 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
         return horizontalLayout;
     }
 
-    private HorizontalLayout buildItemsFilter(Label countLabel, String caption) {
+    private HorizontalLayout buildItemsFilter(Label countLabel, String caption, ClickListener clickListener) {
         Button button = Buttons.createButton(caption);
         button.addStyleName(BaseTheme.BUTTON_LINK);
+        button.addClickListener(clickListener);
         HorizontalLayout layout = new HorizontalLayout(countLabel, button);
         layout.setSpacing(true);
         VaadinUtils.setButtonsAutoDisabled(button);
         return layout;
+    }
+
+    private void filterChanged() {
+        applyButton.setEnabled(!usageFilter.isEmpty());
+    }
+
+    private void setCountLabelValue(Label label, int count) {
+        label.setValue(String.format(ForeignUi.getMessage("label.filter.items_count_format"), count));
     }
 }

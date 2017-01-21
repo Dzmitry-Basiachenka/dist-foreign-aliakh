@@ -33,10 +33,10 @@ public final class FakeDataGenerator {
     public static List<UsageBatch> getUsageBatches() {
         List<UsageBatch> result = Lists.newArrayList();
         List<Rightsholder> rros = getRROs();
-        result.add(buildUsageBatch(rros.get(0), LocalDate.of(2016, 11, 8)));
-        result.add(buildUsageBatch(rros.get(0), LocalDate.of(2016, 5, 7)));
-        result.add(buildUsageBatch(rros.get(1), LocalDate.of(2015, 5, 20)));
-        result.add(buildUsageBatch(rros.get(2), LocalDate.of(2016, 1, 3)));
+        result.add(buildUsageBatch(rros.get(0), LocalDate.of(2016, 11, 8), "1"));
+        result.add(buildUsageBatch(rros.get(0), LocalDate.of(2016, 5, 7), "2"));
+        result.add(buildUsageBatch(rros.get(1), LocalDate.of(2015, 5, 20), "3"));
+        result.add(buildUsageBatch(rros.get(2), LocalDate.of(2016, 1, 3), "4"));
         return result;
     }
 
@@ -81,9 +81,9 @@ public final class FakeDataGenerator {
         return result;
     }
 
-    private static UsageBatch buildUsageBatch(Rightsholder rro, LocalDate paymentDate) {
+    private static UsageBatch buildUsageBatch(Rightsholder rro, LocalDate paymentDate, String id) {
         UsageBatch result = new UsageBatch();
-        result.setId(UUID.randomUUID().toString());
+        result.setId(id);
         result.setName(rro.getAccountNumber() + " " + DateTimeFormatter.ofPattern("MM/dd/yyyy").format(paymentDate));
         result.setRro(rro);
         result.setPaymentDate(paymentDate);

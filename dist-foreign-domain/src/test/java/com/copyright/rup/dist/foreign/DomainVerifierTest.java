@@ -71,6 +71,7 @@ public class DomainVerifierTest {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         Object[][] testData = new Object[][]{
+            {UsageFilter.class},
             {UsageBatch.class},
             {UsageDetail.class}
         };
