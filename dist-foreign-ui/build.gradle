@@ -52,8 +52,8 @@ dependencies {
 
 rupWarUi {
     embeddedTomcat {
-        httpPort = 20000
-        stopPort = 20001
+        httpPort = 22000
+        stopPort = 22001
     }
 }
 
