@@ -11,6 +11,7 @@ import com.copyright.rup.vaadin.ui.VaadinUtils;
 import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
+import com.google.common.collect.Sets;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.ui.Button;
@@ -22,15 +23,14 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.BaseTheme;
 
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Set;
 
 /**
  * Widget for filtering usages.
- * <p/>
+ * <p>
  * Copyright (C) 2017 copyright.com
- * <p/>
+ * <p>
  * Date: 01/11/2017
  *
  * @author Mikita Hladkikh
@@ -108,8 +108,8 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
 
     private VerticalLayout initFiltersLayout() {
         statusComboBox = buildComboBox(ForeignUi.getMessage("label.status"), FILTER_USAGE_STATES);
-        // TODO {mhladkikh} fill in tax country values
-        taxCountryComboBox = buildComboBox(ForeignUi.getMessage("label.tax_country"), Collections.emptySet());
+        taxCountryComboBox =
+            buildComboBox(ForeignUi.getMessage("label.tax_country"), Sets.newHashSet("Non-U.S.", "U.S."));
         batchesCountLabel = new Label(String.format(ForeignUi.getMessage("label.filter.items_count_format"), 0));
         rightsholdersCountLabel = new Label(String.format(ForeignUi.getMessage("label.filter.items_count_format"), 0));
         HorizontalLayout batchesFilter =

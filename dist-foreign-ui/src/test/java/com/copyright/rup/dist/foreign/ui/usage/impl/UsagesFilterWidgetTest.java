@@ -238,7 +238,7 @@ public class UsagesFilterWidgetTest {
         verifyComboboxComponent(verticalLayout.getComponent(3), "Status",
             EnumSet.of(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.INELIGIBLE));
         verifyDateWidget(verticalLayout.getComponent(4));
-        verifyComboboxComponent(verticalLayout.getComponent(5), "Tax Country", Collections.emptySet());
+        verifyComboboxComponent(verticalLayout.getComponent(5), "Tax Country", Sets.newHashSet("Non-U.S.", "U.S."));
     }
 
     private void verifyFiltersLabel(Component component) {
@@ -270,7 +270,7 @@ public class UsagesFilterWidgetTest {
         assertEquals(caption, comboBox.getCaption());
         assertEquals(100, comboBox.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, comboBox.getWidthUnits());
-        values.forEach(o -> assertNotNull(comboBox.getItem(o)));
+        assertTrue(CollectionUtils.isEqualCollection(values, comboBox.getItemIds()));
     }
 
     private void verifyDateWidget(Component component) {
