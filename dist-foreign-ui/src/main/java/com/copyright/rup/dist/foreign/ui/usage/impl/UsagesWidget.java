@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.dist.foreign.ui.common.domain.UsageDetailDto;
+import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -74,9 +75,11 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
     }
 
     private HorizontalLayout initButtonsLayout() {
-        Button loadButton = Buttons.createButton("Load");
+        Button loadButton = Buttons.createButton(ForeignUi.getMessage("button.load"));
         loadButton.addClickListener(event -> Windows.showNotificationWindow("Load button clicked"));
-        HorizontalLayout layout = new HorizontalLayout(loadButton);
+        Button addToScenarioButton = Buttons.createButton(ForeignUi.getMessage("button.add_to_scenario"));
+        addToScenarioButton.addClickListener(event -> Windows.showNotificationWindow("Add to scenario button clicked"));
+        HorizontalLayout layout = new HorizontalLayout(loadButton, addToScenarioButton);
         layout.setSpacing(true);
         layout.setMargin(true);
         return layout;

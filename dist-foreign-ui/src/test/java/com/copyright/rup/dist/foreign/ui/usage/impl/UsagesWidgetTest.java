@@ -13,6 +13,7 @@ import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.vaadin.ui.Windows;
+import com.copyright.rup.vaadin.ui.component.lazytable.LazyTable;
 
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
@@ -29,8 +30,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
+import org.vaadin.addons.lazyquerycontainer.LazyQueryContainer;
+import org.vaadin.addons.lazyquerycontainer.QueryView;
 
 import java.util.Collection;
+import java.util.Collections;
 
 /**
  * Verifies {@link UsagesWidget}.
@@ -61,7 +66,6 @@ public class UsagesWidgetTest {
     }
 
     @Test
-    @PrepareForTest(Windows.class)
     public void testWidgetStructure() {
         assertTrue(usagesWidget.isLocked());
         assertEquals(200, usagesWidget.getSplitPosition(), 0);
@@ -82,26 +86,62 @@ public class UsagesWidgetTest {
         assertSame(controller, usagesWidget.getController());
     }
 
-    private void verifyButtonsLayout(HorizontalLayout layout) {
-        assertTrue(layout.isSpacing());
-        assertEquals(new MarginInfo(true), layout.getMargin());
-        assertEquals(1, layout.getComponentCount());
-        Button button = (Button) layout.getComponent(0);
-        assertEquals("Load", button.getCaption());
-        Collection<?> listeners = button.getListeners(ClickEvent.class);
-        assertEquals(1, listeners.size());
-        verifyLoadButtonClickListener((ClickListener) listeners.iterator().next());
-    }
-
-    private void verifyLoadButtonClickListener(ClickListener clickListener) {
+    @Test
+    @PrepareForTest(Windows.class)
+    public void testLoadButtonClickListener() {
         mockStatic(Windows.class);
         ClickEvent clickEvent = createMock(ClickEvent.class);
+        Button loadButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
+            .getComponent(0)).getComponent(0);
+        Collection<?> listeners = loadButton.getListeners(ClickEvent.class);
+        assertEquals(1, listeners.size());
+        ClickListener clickListener = (ClickListener) listeners.iterator().next();
         Windows.showNotificationWindow("Load button clicked");
         expectLastCall().once();
         replay(clickEvent, Windows.class);
         clickListener.buttonClick(clickEvent);
         verify(clickEvent, Windows.class);
-        reset(clickEvent, Windows.class);
+    }
+
+    @Test
+    @PrepareForTest(Windows.class)
+    public void testAddToScenarioButtonClickListener() {
+        mockStatic(Windows.class);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
+            .getComponent(0)).getComponent(1);
+        Collection<?> listeners = addToScenarioButton.getListeners(ClickEvent.class);
+        ClickListener clickListener = (ClickListener) listeners.iterator().next();
+        assertEquals(1, listeners.size());
+        Windows.showNotificationWindow("Add to scenario button clicked");
+        expectLastCall().once();
+        replay(clickEvent, Windows.class);
+        clickListener.buttonClick(clickEvent);
+        verify(clickEvent, Windows.class);
+    }
+
+    @Test
+    public void testRefresh() {
+        LazyTable usagesTableMock = createMock(LazyTable.class);
+        LazyQueryContainer containerMock = createMock(LazyQueryContainer.class);
+        QueryView queryView = createMock(QueryView.class);
+        Whitebox.setInternalState(containerMock, "itemSetChangeListeners", Collections.emptyList());
+        Whitebox.setInternalState(containerMock, "queryView", queryView);
+        Whitebox.setInternalState(usagesWidget, "usagesTable", usagesTableMock);
+        expect(usagesTableMock.getContainerDataSource()).andReturn(containerMock).once();
+        containerMock.refresh();
+        expectLastCall().once();
+        replay(usagesTableMock, containerMock, queryView);
+        usagesWidget.refresh();
+        verify(usagesTableMock, containerMock, queryView);
+    }
+
+    private void verifyButtonsLayout(HorizontalLayout layout) {
+        assertTrue(layout.isSpacing());
+        assertEquals(new MarginInfo(true), layout.getMargin());
+        assertEquals(2, layout.getComponentCount());
+        assertEquals("Load", layout.getComponent(0).getCaption());
+        assertEquals("Add to scenario", layout.getComponent(1).getCaption());
     }
 
     private void verifyTable(Table table) {

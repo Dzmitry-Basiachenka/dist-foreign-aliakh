@@ -107,19 +107,19 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
     }
 
     private VerticalLayout initFiltersLayout() {
-        statusComboBox = buildComboBox(ForeignUi.getMessage("label.caption.status"), FILTER_USAGE_STATES);
+        statusComboBox = buildComboBox(ForeignUi.getMessage("label.status"), FILTER_USAGE_STATES);
         // TODO {mhladkikh} fill in tax country values
-        taxCountryComboBox = buildComboBox(ForeignUi.getMessage("label.caption.tax_country"), Collections.emptySet());
+        taxCountryComboBox = buildComboBox(ForeignUi.getMessage("label.tax_country"), Collections.emptySet());
         batchesCountLabel = new Label(String.format(ForeignUi.getMessage("label.filter.items_count_format"), 0));
         rightsholdersCountLabel = new Label(String.format(ForeignUi.getMessage("label.filter.items_count_format"), 0));
         HorizontalLayout batchesFilter =
-            buildItemsFilter(batchesCountLabel, ForeignUi.getMessage("label.caption.batches"),
+            buildItemsFilter(batchesCountLabel, ForeignUi.getMessage("label.batches"),
                 (ClickListener) event -> controller.onUsageBatchFilterClick());
         HorizontalLayout rightsholdersFilter =
-            buildItemsFilter(rightsholdersCountLabel, ForeignUi.getMessage("label.caption.rightsholders"),
+            buildItemsFilter(rightsholdersCountLabel, ForeignUi.getMessage("label.rightsholders"),
                 (ClickListener) event -> controller.onRightsholderFilterClick());
         LocalDateWidget paymentDateWidget =
-            new LocalDateWidget(ForeignUi.getMessage("label.caption.payment_date"), paymentDateProperty);
+            new LocalDateWidget(ForeignUi.getMessage("label.payment_date"), paymentDateProperty);
         VerticalLayout verticalLayout = new VerticalLayout(buildFiltersHeaderLabel(), batchesFilter,
             rightsholdersFilter, statusComboBox, paymentDateWidget, taxCountryComboBox);
         verticalLayout.setSpacing(true);
@@ -127,7 +127,7 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
     }
 
     private Label buildFiltersHeaderLabel() {
-        Label filterHeaderLabel = new Label(ForeignUi.getMessage("label.caption.filters"));
+        Label filterHeaderLabel = new Label(ForeignUi.getMessage("label.filters"));
         filterHeaderLabel.addStyleName(Cornerstone.LABEL_H2);
         return filterHeaderLabel;
     }
@@ -140,10 +140,10 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
     }
 
     private HorizontalLayout initButtonsLayout() {
-        applyButton = Buttons.createButton(ForeignUi.getMessage("button.caption.apply"));
+        applyButton = Buttons.createButton(ForeignUi.getMessage("button.apply"));
         applyButton.setEnabled(false);
         applyButton.addClickListener(event -> applyFilter());
-        Button clearButton = Buttons.createButton(ForeignUi.getMessage("button.caption.clear"));
+        Button clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
         clearButton.addClickListener(event -> clearFilter());
         HorizontalLayout horizontalLayout = new HorizontalLayout(applyButton, clearButton);
         horizontalLayout.setSpacing(true);
