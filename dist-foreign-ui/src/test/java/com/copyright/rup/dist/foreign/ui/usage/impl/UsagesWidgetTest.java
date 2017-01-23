@@ -141,7 +141,7 @@ public class UsagesWidgetTest {
         assertEquals(new MarginInfo(true), layout.getMargin());
         assertEquals(2, layout.getComponentCount());
         assertEquals("Load", layout.getComponent(0).getCaption());
-        assertEquals("Add to scenario", layout.getComponent(1).getCaption());
+        assertEquals("Add To Scenario", layout.getComponent(1).getCaption());
     }
 
     private void verifyTable(Table table) {
