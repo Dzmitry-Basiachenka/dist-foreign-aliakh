@@ -63,7 +63,7 @@ public class RightsholdersFilterController implements ICommonFilterWindowControl
     @Override
     public void showFilterWindow() {
         FilterWindow<Long, Rightsholder> filterWindow =
-            Windows.showFilterWindow(ForeignUi.getMessage("window.caption.rightsholders_filter"), this,
+            Windows.showFilterWindow(ForeignUi.getMessage("window.rightsholders_filter"), this,
                 "name", "accountNumber");
         filterWindow.setSelectedItemsIds(filterWidget.getFilter().getRightsholdersAccountNumbers());
     }

@@ -63,7 +63,7 @@ public class UsageBatchesFilterController implements ICommonFilterWindowControll
     @Override
     public void showFilterWindow() {
         FilterWindow<String, UsageBatch> filterWindow =
-            Windows.showFilterWindow(ForeignUi.getMessage("window.caption.batches_filter"), this,
+            Windows.showFilterWindow(ForeignUi.getMessage("window.batches_filter"), this,
                 "name", "rro.accountNumber");
         filterWindow.setSelectedItemsIds(filterWidget.getFilter().getUsageBatchesIds());
     }
