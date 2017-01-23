@@ -43,10 +43,10 @@ public class UsageDetailDto extends StoredEntity<String> {
         wrWrkInst = detail.getWrWrkInst();
         workTitle = detail.getWorkTitle();
         rightsholder = detail.getRightsholder();
+        eligible = null == rightsholder;
         grossAmount = detail.getGrossAmount();
         rro = batch.getRro();
         paymentDate = batch.getPaymentDate();
-        eligible = true;
     }
 
     /**

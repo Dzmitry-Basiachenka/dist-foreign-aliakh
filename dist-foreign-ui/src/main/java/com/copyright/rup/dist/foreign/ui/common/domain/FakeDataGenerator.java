@@ -64,6 +64,7 @@ public final class FakeDataGenerator {
         UsageBatch batch1 = usageBatches.get(0);
         UsageBatch batch2 = usageBatches.get(1);
         UsageBatch batch3 = usageBatches.get(2);
+        UsageBatch batch4 = usageBatches.get(3);
         result.add(
             new UsageDetailDto(batch1, buildUsageDetail(156426671L, "Transporte mundial", rightsholder1, "56.21")));
         result.add(new UsageDetailDto(batch1, buildUsageDetail(158956997L, "Brioude", rightsholder1, "12.71")));
@@ -78,6 +79,8 @@ public final class FakeDataGenerator {
             .add(new UsageDetailDto(batch3, buildUsageDetail(122824345L, "ACP journal club", rightsholder3, "45.12")));
         result.add(new UsageDetailDto(batch3,
             buildUsageDetail(122839717L, "Annals of internal medicine", rightsholder3, "9.65")));
+        result.add(new UsageDetailDto(batch4,
+            buildUsageDetail(122839717L, "Annals of internal medicine", null, "19.65")));
         return result;
     }
 
