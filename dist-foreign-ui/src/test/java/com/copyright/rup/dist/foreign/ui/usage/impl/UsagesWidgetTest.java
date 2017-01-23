@@ -39,9 +39,9 @@ import java.util.Collections;
 
 /**
  * Verifies {@link UsagesWidget}.
- * <p/>
+ * <p>
  * Copyright (C) 2017 copyright.com
- * <p/>
+ * <p>
  * Date: 1/18/17
  *
  * @author Aliaksandr Radkevich
@@ -145,13 +145,21 @@ public class UsagesWidgetTest {
     }
 
     private void verifyTable(Table table) {
-        assertArrayEquals(new Object[]{"wrWrkInst", "workTitle", "grossAmount"}, table.getVisibleColumns());
-        assertArrayEquals(new Object[]{"Wr Wrk Inst", "Work Title", "Gross Amount"}, table.getColumnHeaders());
+        assertArrayEquals(new Object[]{"wrWrkInst", "workTitle", "rightsholder.accountNumber", "rightsholder.name",
+            "paymentDate", "grossAmount", "rro.accountNumber", "eligible"}, table.getVisibleColumns());
+        assertArrayEquals(
+            new Object[]{"Wr Wrk Inst", "Work Title", "RH Acct #", "RH Name", "Payment Date", "Gross Amount",
+                "RRO", "Eligible"}, table.getColumnHeaders());
         Collection<?> containerPropertyIds = table.getContainerPropertyIds();
         assertTrue(containerPropertyIds.contains("id"));
         assertTrue(containerPropertyIds.contains("wrWrkInst"));
         assertTrue(containerPropertyIds.contains("workTitle"));
+        assertTrue(containerPropertyIds.contains("rightsholder.accountNumber"));
+        assertTrue(containerPropertyIds.contains("rightsholder.name"));
+        assertTrue(containerPropertyIds.contains("paymentDate"));
         assertTrue(containerPropertyIds.contains("grossAmount"));
+        assertTrue(containerPropertyIds.contains("rro.accountNumber"));
+        assertTrue(containerPropertyIds.contains("eligible"));
         verifySize(table);
     }
 
