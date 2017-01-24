@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.isA;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
@@ -96,7 +97,7 @@ public class UsagesWidgetTest {
         Collection<?> listeners = loadButton.getListeners(ClickEvent.class);
         assertEquals(1, listeners.size());
         ClickListener clickListener = (ClickListener) listeners.iterator().next();
-        Windows.showNotificationWindow("Load button clicked");
+        Windows.showModalWindow(isA(UsageUploadWindow.class));
         expectLastCall().once();
         replay(clickEvent, Windows.class);
         clickListener.buttonClick(clickEvent);

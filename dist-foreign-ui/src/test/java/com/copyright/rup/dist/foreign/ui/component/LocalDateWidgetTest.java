@@ -1,8 +1,10 @@
 package com.copyright.rup.dist.foreign.ui.component;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.vaadin.widget.PopupDateWidget;
 
@@ -41,7 +43,7 @@ public class LocalDateWidgetTest {
         PopupDateWidget dateWidget = Whitebox.getInternalState(widget, PopupDateWidget.class);
         Property dateProperty = Whitebox.getInternalState(widget, Property.class);
         assertNotNull(dateWidget);
-        assertEquals("Caption", dateWidget.getCaption());
+        assertEquals("Caption", widget.getCaption());
         assertNotNull(dateProperty);
     }
 
@@ -68,5 +70,12 @@ public class LocalDateWidgetTest {
     @Test
     public void testGetType() {
         assertEquals(LocalDate.class, widget.getType());
+    }
+
+    @Test
+    public void isEmpty() {
+        assertTrue(widget.isEmpty());
+        widget.setValue(LocalDate.now());
+        assertFalse(widget.isEmpty());
     }
 }
