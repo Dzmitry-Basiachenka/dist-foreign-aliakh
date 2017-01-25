@@ -55,6 +55,7 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
         VaadinUtils.setMaxComponentsWidth(this);
         setMargin(true);
         setSpacing(true);
+        VaadinUtils.addComponentStyle(this, "usages-filter-widget");
         return this;
     }
 
@@ -108,18 +109,23 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
 
     private VerticalLayout initFiltersLayout() {
         statusComboBox = buildComboBox(ForeignUi.getMessage("label.status"), FILTER_USAGE_STATES);
+        VaadinUtils.addComponentStyle(statusComboBox, "status-filter");
         taxCountryComboBox =
             buildComboBox(ForeignUi.getMessage("label.tax_country"), Sets.newHashSet("Non-U.S.", "U.S."));
+        VaadinUtils.addComponentStyle(taxCountryComboBox, "tax-country-filter");
         batchesCountLabel = new Label(String.format(ForeignUi.getMessage("label.filter.items_count_format"), 0));
         rightsholdersCountLabel = new Label(String.format(ForeignUi.getMessage("label.filter.items_count_format"), 0));
         HorizontalLayout batchesFilter =
             buildItemsFilter(batchesCountLabel, ForeignUi.getMessage("label.batches"),
                 (ClickListener) event -> controller.onUsageBatchFilterClick());
+        VaadinUtils.addComponentStyle(batchesFilter, "batches-filter");
         HorizontalLayout rightsholdersFilter =
             buildItemsFilter(rightsholdersCountLabel, ForeignUi.getMessage("label.rightsholders"),
                 (ClickListener) event -> controller.onRightsholderFilterClick());
+        VaadinUtils.addComponentStyle(rightsholdersFilter, "rightsholders-filter");
         LocalDateWidget paymentDateWidget =
             new LocalDateWidget(ForeignUi.getMessage("label.payment_date"), paymentDateProperty);
+        VaadinUtils.addComponentStyle(paymentDateWidget, "payment-date-filter");
         VerticalLayout verticalLayout = new VerticalLayout(buildFiltersHeaderLabel(), batchesFilter,
             rightsholdersFilter, statusComboBox, paymentDateWidget, taxCountryComboBox);
         verticalLayout.setSpacing(true);
@@ -148,6 +154,7 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
         HorizontalLayout horizontalLayout = new HorizontalLayout(applyButton, clearButton);
         horizontalLayout.setSpacing(true);
         VaadinUtils.setMaxComponentsWidth(horizontalLayout, applyButton, clearButton);
+        VaadinUtils.addComponentStyle(horizontalLayout, "filter-buttons");
         return horizontalLayout;
     }
 
