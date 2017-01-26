@@ -8,6 +8,7 @@ import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.LocalDateColumnGenerator;
 import com.copyright.rup.vaadin.ui.LongColumnGenerator;
 import com.copyright.rup.vaadin.ui.MoneyColumnGenerator;
+import com.copyright.rup.vaadin.ui.VaadinUtils;
 import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.ui.component.lazytable.LazyTable;
 
@@ -85,9 +86,11 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
             .setColumnHeaders("Wr Wrk Inst", "Work Title", "RH Acct #", "RH Name", "Payment Date", "Gross Amount",
                 "RRO", "Eligible");
         usagesTable.setSizeFull();
+        VaadinUtils.addComponentStyle(usagesTable, "usages-table");
         VerticalLayout layout = new VerticalLayout(initButtonsLayout(), usagesTable);
         layout.setSizeFull();
         layout.setExpandRatio(usagesTable, 1);
+        VaadinUtils.addComponentStyle(layout, "usages-layout");
         return layout;
     }
 
@@ -99,6 +102,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         HorizontalLayout layout = new HorizontalLayout(loadButton, addToScenarioButton);
         layout.setSpacing(true);
         layout.setMargin(true);
+        VaadinUtils.addComponentStyle(layout, "usages-buttons");
         return layout;
     }
 }
