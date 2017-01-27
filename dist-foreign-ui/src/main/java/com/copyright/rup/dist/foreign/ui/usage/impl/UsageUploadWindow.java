@@ -61,6 +61,7 @@ class UsageUploadWindow extends Window {
         setResizable(false);
         setWidth(600, Unit.PIXELS);
         setHeight(310, Unit.PIXELS);
+        VaadinUtils.addComponentStyle(this, "usage-upload-window");
     }
 
     /**
@@ -110,6 +111,7 @@ class UsageUploadWindow extends Window {
     private ComponentContainer initRootLayout() {
         csvUploadComponent = new CsvUploadComponent();
         VaadinUtils.setMaxComponentsWidth(csvUploadComponent);
+        VaadinUtils.addComponentStyle(csvUploadComponent, "usage-upload-component");
         setRequired(csvUploadComponent.getFileNameField());
         HorizontalLayout buttonsLayout = initButtonsLayout();
         VerticalLayout rootLayout = new VerticalLayout();
@@ -138,6 +140,7 @@ class UsageUploadWindow extends Window {
         accountNumberField.setImmediate(true);
         accountNumberField.addValidator(new NumberValidator());
         VaadinUtils.setMaxComponentsWidth(accountNumberField);
+        VaadinUtils.addComponentStyle(accountNumberField, "rro-account-number-field");
         return accountNumberField;
     }
 
@@ -148,6 +151,7 @@ class UsageUploadWindow extends Window {
         setRequired(paymentDateWidget);
         paymentDateWidget.addValueChangeListener(event ->
             fiscalYearProperty.setValue(UsageBatchUtils.getFiscalYear(paymentDateWidget.getValue())));
+        VaadinUtils.addComponentStyle(paymentDateWidget, "payment-date-field");
         return paymentDateWidget;
     }
 
@@ -157,6 +161,7 @@ class UsageUploadWindow extends Window {
         nameField.setReadOnly(true);
         nameField.setNullRepresentation(StringUtils.EMPTY);
         VaadinUtils.setMaxComponentsWidth(nameField);
+        VaadinUtils.addComponentStyle(nameField, "rro-account-name-field");
         return nameField;
     }
 
@@ -166,6 +171,7 @@ class UsageUploadWindow extends Window {
         fiscalYearField.setReadOnly(true);
         fiscalYearField.setNullRepresentation(StringUtils.EMPTY);
         VaadinUtils.setMaxComponentsWidth(fiscalYearField);
+        VaadinUtils.addComponentStyle(fiscalYearField, "fiscal-year-field");
         return fiscalYearField;
     }
 
@@ -177,6 +183,7 @@ class UsageUploadWindow extends Window {
         grossAmountField.setConversionError(ForeignUi.getMessage("field.error.number_format"));
         grossAmountField.addValidator(new AmountValidator());
         VaadinUtils.setMaxComponentsWidth(grossAmountField);
+        VaadinUtils.addComponentStyle(grossAmountField, "gross-amount-field");
         return grossAmountField;
     }
 
@@ -186,11 +193,12 @@ class UsageUploadWindow extends Window {
         setRequired(reportedCurrencyBox);
         reportedCurrencyBox.addItems((Object[]) CurrencyEnum.values());
         VaadinUtils.setMaxComponentsWidth(reportedCurrencyBox);
+        VaadinUtils.addComponentStyle(reportedCurrencyBox, "reported-currency-field");
         return reportedCurrencyBox;
     }
 
     private Button initVerifyButton() {
-        Button button = new Button(ForeignUi.getMessage("button.verify"));
+        Button button = Buttons.createButton(ForeignUi.getMessage("button.verify"));
         button.addClickListener(event -> rightsholderNameProperty.setValue(accountNumberField.getValue()));
         return button;
     }
