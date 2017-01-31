@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.ui.common.domain.FakeDataGenerator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonFilterWindowController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
+import com.copyright.rup.vaadin.ui.VaadinUtils;
 import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 
@@ -66,5 +67,6 @@ public class UsageBatchesFilterController implements ICommonFilterWindowControll
             Windows.showFilterWindow(ForeignUi.getMessage("window.batches_filter"), this,
                 "name", "rro.accountNumber");
         filterWindow.setSelectedItemsIds(filterWidget.getFilter().getUsageBatchesIds());
+        VaadinUtils.addComponentStyle(filterWindow, "batches-filter-window");
     }
 }
