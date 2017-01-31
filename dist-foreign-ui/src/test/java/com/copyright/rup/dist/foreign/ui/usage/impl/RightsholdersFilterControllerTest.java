@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -15,6 +16,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
 import com.copyright.rup.vaadin.ui.VaadinUtils;
 import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
+import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.FilterSaveEvent;
 
 import com.google.common.collect.Sets;
 
@@ -86,7 +88,7 @@ public class RightsholdersFilterControllerTest {
         filterWidgetMock.setSelectedRightsholders(selectedItemsIds);
         expectLastCall().once();
         replay(filterWidgetMock);
-        controller.onSave(selectedItemsIds);
+        controller.onSave(new FilterSaveEvent<>(filterWidgetMock, selectedItemsIds));
         verify(filterWidgetMock);
     }
 
@@ -109,7 +111,7 @@ public class RightsholdersFilterControllerTest {
         filterWindowMock.setSelectedItemsIds(selectedItemsIds);
         expectLastCall().once();
         replay(filterWidgetMock, filterMock, filterWindowMock, Windows.class, VaadinUtils.class);
-        controller.showFilterWindow();
+        assertSame(filterWindowMock, controller.showFilterWindow());
         verify(filterWidgetMock, filterMock, filterWindowMock, Windows.class, VaadinUtils.class);
     }
 }

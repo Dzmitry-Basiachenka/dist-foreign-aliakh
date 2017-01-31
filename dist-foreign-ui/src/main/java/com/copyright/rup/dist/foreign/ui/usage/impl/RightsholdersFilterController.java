@@ -8,13 +8,13 @@ import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
 import com.copyright.rup.vaadin.ui.VaadinUtils;
 import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
+import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.FilterSaveEvent;
 
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
-import java.util.Set;
 
 /**
  * Controller for the rightsholders filter window.
@@ -47,8 +47,8 @@ public class RightsholdersFilterController implements ICommonFilterWindowControl
     }
 
     @Override
-    public void onSave(Set<Long> selectedItemsIds) {
-        filterWidget.setSelectedRightsholders(selectedItemsIds);
+    public void onSave(FilterSaveEvent<Long> event) {
+        filterWidget.setSelectedRightsholders(event.getSelectedItemsIds());
     }
 
     @Override
@@ -62,11 +62,12 @@ public class RightsholdersFilterController implements ICommonFilterWindowControl
     }
 
     @Override
-    public void showFilterWindow() {
+    public FilterWindow<Long, Rightsholder> showFilterWindow() {
         FilterWindow<Long, Rightsholder> filterWindow =
             Windows.showFilterWindow(ForeignUi.getMessage("window.rightsholders_filter"), this,
                 "name", "accountNumber");
         filterWindow.setSelectedItemsIds(filterWidget.getFilter().getRightsholdersAccountNumbers());
         VaadinUtils.addComponentStyle(filterWindow, "rightsholders-filter-window");
+        return filterWindow;
     }
 }

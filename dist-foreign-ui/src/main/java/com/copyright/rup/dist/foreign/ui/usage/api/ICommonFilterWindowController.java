@@ -21,9 +21,4 @@ public interface ICommonFilterWindowController<IT, BT> extends IFilterWindowCont
      * @param filterWidget {@link IUsagesFilterWidget}
      */
     void setFilterWidget(IUsagesFilterWidget filterWidget);
-
-    /**
-     * Shows rightsholders filter window.
-     */
-    void showFilterWindow();
 }
