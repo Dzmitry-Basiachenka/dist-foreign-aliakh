@@ -18,9 +18,9 @@ import java.util.Set;
 
 /**
  * Controller for the rightsholders filter window.
- * <p/>
+ * <p>
  * Copyright (C) 2017 copyright.com
- * <p/>
+ * <p>
  * Date: 1/19/17
  *
  * @author Aliaksandr Radkevich
@@ -33,7 +33,7 @@ public class RightsholdersFilterController implements ICommonFilterWindowControl
 
     @Override
     public Collection<Rightsholder> loadBeans() {
-        return FakeDataGenerator.getRROs();
+        return FakeDataGenerator.getRros();
     }
 
     @Override
@@ -66,7 +66,7 @@ public class RightsholdersFilterController implements ICommonFilterWindowControl
         FilterWindow<Long, Rightsholder> filterWindow =
             Windows.showFilterWindow(ForeignUi.getMessage("window.rightsholders_filter"), this,
                 "name", "accountNumber");
-        filterWindow.setSelectedItemsIds(filterWidget.getFilter().getRightsholdersAccountNumbers());
+        filterWindow.setSelectedItemsIds(filterWidget.getFilter().getRhAccountNumbers());
         VaadinUtils.addComponentStyle(filterWindow, "rightsholders-filter-window");
     }
 }

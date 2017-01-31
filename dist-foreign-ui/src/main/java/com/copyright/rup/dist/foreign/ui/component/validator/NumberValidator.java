@@ -1,13 +1,11 @@
 package com.copyright.rup.dist.foreign.ui.component.validator;
 
-import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-
 import com.vaadin.data.validator.AbstractStringValidator;
 
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * Validator to check that given value is not negative number.
+ * Validator to check that given value only contains digits, and is non-null and not-negatives.
  * <p/>
  * Copyright (C) 2017 copyright.com
  * <p/>
@@ -21,7 +19,7 @@ public class NumberValidator extends AbstractStringValidator {
      * Constructor.
      */
     public NumberValidator() {
-        super(ForeignUi.getMessage("field.error.number_format"));
+        super("Field value should contain numeric values only");
     }
 
     @Override

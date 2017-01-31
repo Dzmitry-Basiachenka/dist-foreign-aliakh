@@ -33,7 +33,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.time.LocalDate;
 
 /**
- * Window for uploading usages.
+ * Window for uploading a usage batch with usages.
  * <p/>
  * Copyright (C) 2017 copyright.com
  * <p/>
@@ -41,7 +41,7 @@ import java.time.LocalDate;
  *
  * @author Mikita Hladkikh
  */
-class UsageUploadWindow extends Window {
+class UsageBatchUploadWindow extends Window {
 
     private static final int DEFAULT_WIDTH = 157;
     private TextField accountNumberField;
@@ -55,7 +55,7 @@ class UsageUploadWindow extends Window {
     /**
      * Constructor.
      */
-    UsageUploadWindow() {
+    UsageBatchUploadWindow() {
         setContent(initRootLayout());
         setCaption(ForeignUi.getMessage("window.upload_usage_batch"));
         setResizable(false);

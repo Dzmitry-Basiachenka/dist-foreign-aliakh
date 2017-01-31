@@ -1,9 +1,11 @@
 package com.copyright.rup.dist.foreign.ui.common.domain;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.domain.StoredEntity;
+import com.copyright.rup.dist.foreign.Usage;
 import com.copyright.rup.dist.foreign.UsageBatch;
-import com.copyright.rup.dist.foreign.UsageDetail;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -14,7 +16,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 /**
- * Represents usage detail with usage batch.
+ * Represents usage with usage batch.
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
@@ -22,7 +24,7 @@ import java.time.LocalDate;
  *
  * @author Aliaksei Pchelnikau
  */
-public class UsageDetailDto extends StoredEntity<String> {
+public class UsageDto extends StoredEntity<String> {
 
     private Long wrWrkInst;
     private String workTitle;
@@ -35,17 +37,17 @@ public class UsageDetailDto extends StoredEntity<String> {
     /**
      * Constructor.
      *
-     * @param batch  batch
-     * @param detail detail
+     * @param batch batch
+     * @param usage usage
      */
-    public UsageDetailDto(UsageBatch batch, UsageDetail detail) {
-        setId(detail.getId());
-        wrWrkInst = detail.getWrWrkInst();
-        workTitle = detail.getWorkTitle();
-        rightsholder = detail.getRightsholder();
+    public UsageDto(UsageBatch batch, Usage usage) {
+        setId(checkNotNull(usage).getId());
+        wrWrkInst = usage.getWrWrkInst();
+        workTitle = usage.getWorkTitle();
+        rightsholder = usage.getRightsholder();
         eligible = null == rightsholder;
-        grossAmount = detail.getGrossAmount();
-        rro = batch.getRro();
+        grossAmount = usage.getGrossAmount();
+        rro = checkNotNull(batch).getRro();
         paymentDate = batch.getPaymentDate();
     }
 
@@ -171,7 +173,7 @@ public class UsageDetailDto extends StoredEntity<String> {
         if (null == obj || this.getClass() != obj.getClass()) {
             return false;
         }
-        UsageDetailDto that = (UsageDetailDto) obj;
+        UsageDto that = (UsageDto) obj;
         return new EqualsBuilder()
             .appendSuper(super.equals(obj))
             .append(this.wrWrkInst, that.wrWrkInst)

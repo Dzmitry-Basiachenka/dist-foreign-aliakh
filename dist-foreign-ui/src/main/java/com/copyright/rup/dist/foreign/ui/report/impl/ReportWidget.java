@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.report.impl;
 
+import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportWidget;
 import com.copyright.rup.vaadin.ui.VaadinUtils;
@@ -27,7 +28,7 @@ public class ReportWidget extends MenuBar implements IReportWidget {
     @SuppressWarnings("unchecked")
     public ReportWidget init() {
         VaadinUtils.addComponentStyle(this, "reports-menu");
-        rootItem = addItem("Reports", null);
+        rootItem = addItem(ForeignUi.getMessage("tab.reports"), null);
         rootItem.setStyleName("reports-menu-root");
         addReportItem("Report1", controller.getReportWindowController());
         return this;

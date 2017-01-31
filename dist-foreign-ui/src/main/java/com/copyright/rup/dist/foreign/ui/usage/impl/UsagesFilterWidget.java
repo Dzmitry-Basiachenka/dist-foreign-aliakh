@@ -91,7 +91,7 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
     @Override
     public void setSelectedRightsholders(Set<Long> accountNumbers) {
         setCountLabelValue(rightsholdersCountLabel, accountNumbers.size());
-        usageFilter.setRightsholdersAccountNumbers(accountNumbers);
+        usageFilter.setRhAccountNumbers(accountNumbers);
         filterChanged();
     }
 

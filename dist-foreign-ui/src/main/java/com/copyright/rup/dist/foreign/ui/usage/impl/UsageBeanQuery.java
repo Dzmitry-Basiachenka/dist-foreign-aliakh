@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
-import com.copyright.rup.dist.foreign.ui.common.domain.UsageDetailDto;
+import com.copyright.rup.dist.foreign.ui.common.domain.UsageDto;
 import com.copyright.rup.vaadin.ui.component.lazytable.CommonBeanQuery;
 
 import org.vaadin.addons.lazyquerycontainer.QueryDefinition;
@@ -8,7 +8,7 @@ import org.vaadin.addons.lazyquerycontainer.QueryDefinition;
 import java.util.Map;
 
 /**
- * Bean query implementation for {@link UsageDetailDto}.
+ * Bean query implementation for {@link UsageDto}.
  * <p/>
  * Copyright (C) 2017 copyright.com
  * <p/>
@@ -16,7 +16,7 @@ import java.util.Map;
  *
  * @author Aliaksandr Radkevich
  */
-public class UsageBeanQuery extends CommonBeanQuery<UsageDetailDto> {
+public class UsageBeanQuery extends CommonBeanQuery<UsageDto> {
 
     /**
      * Constructor.

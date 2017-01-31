@@ -37,5 +37,8 @@ public class NumberValidatorTest {
         assertFalse(validator.isValid("a"));
         assertFalse(validator.isValid("4a"));
         assertFalse(validator.isValid(" "));
+        assertFalse(validator.isValid("-1"));
+        assertFalse(validator.isValid("100."));
+        assertFalse(validator.isValid(null));
     }
 }

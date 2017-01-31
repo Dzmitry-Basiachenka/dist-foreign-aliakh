@@ -9,32 +9,32 @@ import java.util.Set;
 
 /**
  * Class represents a set of filtering criteria.
- * <p/>
+ * <p>
  * Copyright (C) 2017 copyright.com
- * <p/>
+ * <p>
  * Date: 1/19/17
  *
  * @author Aliaksandr Radkevich
  */
 public class UsageFilter {
 
-    private Set<Long> rightsholdersAccountNumbers;
+    private Set<Long> rhAccountNumbers;
     private Set<String> usageBatchesIds;
 
     /**
      * @return a set of rightsholders account numbers.
      */
-    public Set<Long> getRightsholdersAccountNumbers() {
-        return rightsholdersAccountNumbers;
+    public Set<Long> getRhAccountNumbers() {
+        return rhAccountNumbers;
     }
 
     /**
      * Sets rightsholders account numbers.
      *
-     * @param rightsholdersAccountNumbers rightsholders account numbers
+     * @param rhAccountNumbers rightsholders account numbers
      */
-    public void setRightsholdersAccountNumbers(Set<Long> rightsholdersAccountNumbers) {
-        this.rightsholdersAccountNumbers = rightsholdersAccountNumbers;
+    public void setRhAccountNumbers(Set<Long> rhAccountNumbers) {
+        this.rhAccountNumbers = rhAccountNumbers;
     }
 
     /**
@@ -57,7 +57,7 @@ public class UsageFilter {
      * @return {@code true} if filter does not contain any criteria, otherwise {@code false}.
      */
     public boolean isEmpty() {
-        return (null == rightsholdersAccountNumbers || rightsholdersAccountNumbers.isEmpty())
+        return (null == rhAccountNumbers || rhAccountNumbers.isEmpty())
             && (null == usageBatchesIds || usageBatchesIds.isEmpty());
     }
 
@@ -71,7 +71,7 @@ public class UsageFilter {
         }
         UsageFilter that = (UsageFilter) obj;
         return new EqualsBuilder()
-            .append(this.rightsholdersAccountNumbers, that.rightsholdersAccountNumbers)
+            .append(this.rhAccountNumbers, that.rhAccountNumbers)
             .append(this.usageBatchesIds, that.usageBatchesIds)
             .isEquals();
     }
@@ -79,7 +79,7 @@ public class UsageFilter {
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
-            .append(rightsholdersAccountNumbers)
+            .append(rhAccountNumbers)
             .append(usageBatchesIds)
             .toHashCode();
     }
@@ -87,7 +87,7 @@ public class UsageFilter {
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-            .append("rightsholdersAccountNumbers", rightsholdersAccountNumbers)
+            .append("rhAccountNumbers", rhAccountNumbers)
             .append("usageBatchesIds", usageBatchesIds)
             .toString();
     }
