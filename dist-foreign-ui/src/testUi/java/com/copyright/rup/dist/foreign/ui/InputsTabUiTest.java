@@ -54,8 +54,7 @@ public class InputsTabUiTest extends ForeignCommonUiTest {
         assertTextElement(uploadWindow, "gross-amount-field", "Gross Amount (USD)");
         assertComboboxElement(uploadWindow, "reported-currency-field", HTML_DIV_TAG_NAME, "Reported Currency");
         assertElement(uploadWindow, "Upload");
-        assertElement(uploadWindow, "Close");
-        clickButtonAndWait(uploadWindow, "Close");
+        clickElementAndWait(assertElement(uploadWindow, "Close"));
     }
 
     private void verifyUploadElement(WebElement uploadWindow) {
@@ -121,13 +120,36 @@ public class InputsTabUiTest extends ForeignCommonUiTest {
     private void verifyBatchesFilter(WebElement filterWidget) {
         WebElement batchesFilter = assertElement(filterWidget, "batches-filter");
         assertNotNull(findElementByText(batchesFilter, HTML_DIV_TAG_NAME, "(0)"));
-        assertNotNull(findElementByText(batchesFilter, HTML_SPAN_TAG_NAME, "Batches"));
+        WebElement batchesFilterButton = findElementByText(batchesFilter, HTML_SPAN_TAG_NAME, "Batches");
+        assertNotNull(batchesFilterButton);
+        clickElementAndWait(batchesFilterButton);
+        verifyFilterWindow("batches-filter-window", "Batches filter");
     }
 
     private void verifyRightsholdersFilter(WebElement filterWidget) {
         WebElement rightsholdersFilter = assertElement(filterWidget, "rightsholders-filter");
         assertNotNull(findElementByText(rightsholdersFilter, HTML_DIV_TAG_NAME, "(0)"));
-        assertNotNull(findElementByText(rightsholdersFilter, HTML_SPAN_TAG_NAME, "RROs"));
+        WebElement rightsholderFilterButton = findElementByText(rightsholdersFilter, HTML_SPAN_TAG_NAME, "RROs");
+        assertNotNull(rightsholderFilterButton);
+        clickElementAndWait(rightsholderFilterButton);
+        verifyFilterWindow("rightsholders-filter-window", "Rightsholders filter");
+    }
+
+    private void verifyFilterWindow(String id, String caption) {
+        WebElement filterWindow = findElementById(id);
+        assertNotNull(filterWindow);
+        assertEquals(caption, getWindowCaption(filterWindow));
+        verifySearchToolBar(filterWindow);
+        assertElement(filterWindow, "Save");
+        assertElement(filterWindow, "Clear");
+        clickElementAndWait(assertElement(filterWindow, "Close"));
+    }
+
+    private void verifySearchToolBar(WebElement filterWindow) {
+        WebElement searchToolBar = assertElement(filterWindow, "search-toolbar");
+        assertNotNull(findElement(searchToolBar, By.tagName(HTML_INPUT_TAG_NAME)));
+        assertNotNull(findElement(searchToolBar, By.className("button-search")));
+        assertNotNull(findElement(searchToolBar, By.className("button-clear")));
     }
 
     private void verifyStatusFilter(WebElement filterWidget) {

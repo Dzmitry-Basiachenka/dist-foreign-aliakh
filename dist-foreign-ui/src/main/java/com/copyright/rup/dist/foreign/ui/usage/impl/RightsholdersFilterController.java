@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.ui.common.domain.FakeDataGenerator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonFilterWindowController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
+import com.copyright.rup.vaadin.ui.VaadinUtils;
 import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 
@@ -66,5 +67,6 @@ public class RightsholdersFilterController implements ICommonFilterWindowControl
             Windows.showFilterWindow(ForeignUi.getMessage("window.rightsholders_filter"), this,
                 "name", "accountNumber");
         filterWindow.setSelectedItemsIds(filterWidget.getFilter().getRightsholdersAccountNumbers());
+        VaadinUtils.addComponentStyle(filterWindow, "rightsholders-filter-window");
     }
 }

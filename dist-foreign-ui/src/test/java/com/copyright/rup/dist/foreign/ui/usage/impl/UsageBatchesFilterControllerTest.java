@@ -13,6 +13,7 @@ import com.copyright.rup.dist.foreign.UsageBatch;
 import com.copyright.rup.dist.foreign.UsageFilter;
 import com.copyright.rup.dist.foreign.ui.common.domain.FakeDataGenerator;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
+import com.copyright.rup.vaadin.ui.VaadinUtils;
 import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 
@@ -90,22 +91,25 @@ public class UsageBatchesFilterControllerTest {
     }
 
     @Test
-    @PrepareForTest(Windows.class)
+    @PrepareForTest({Windows.class, VaadinUtils.class})
     public void testShowFilterWindow() {
         mockStatic(Windows.class);
+        mockStatic(VaadinUtils.class);
         IUsagesFilterWidget filterWidgetMock = createMock(IUsagesFilterWidget.class);
         UsageFilter filterMock = createMock(UsageFilter.class);
         FilterWindow filterWindowMock = createMock(FilterWindow.class);
         Set<String> selectedItemsIds = Sets.newHashSet(RupPersistUtils.generateUuid());
         controller.setFilterWidget(filterWidgetMock);
+        VaadinUtils.addComponentStyle(filterWindowMock, "batches-filter-window");
+        expectLastCall().once();
         expect(Windows.showFilterWindow("Batches filter", controller, "name", "rro.accountNumber"))
             .andReturn(filterWindowMock).once();
         expect(filterWidgetMock.getFilter()).andReturn(filterMock).once();
         expect(filterMock.getUsageBatchesIds()).andReturn(selectedItemsIds).once();
         filterWindowMock.setSelectedItemsIds(selectedItemsIds);
         expectLastCall().once();
-        replay(filterWidgetMock, filterMock, filterWindowMock, Windows.class);
+        replay(filterWidgetMock, filterMock, filterWindowMock, Windows.class, VaadinUtils.class);
         controller.showFilterWindow();
-        verify(filterWidgetMock, filterMock, filterWindowMock, Windows.class);
+        verify(filterWidgetMock, filterMock, filterWindowMock, Windows.class, VaadinUtils.class);
     }
 }
