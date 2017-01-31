@@ -8,13 +8,13 @@ import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
 import com.copyright.rup.vaadin.ui.VaadinUtils;
 import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
+import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.FilterSaveEvent;
 
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
-import java.util.Set;
 
 /**
  * Controller for the usage batches filter window.
@@ -47,8 +47,8 @@ public class UsageBatchesFilterController implements ICommonFilterWindowControll
     }
 
     @Override
-    public void onSave(Set<String> selectedItemsIds) {
-        filterWidget.setSelectedUsageBatches(selectedItemsIds);
+    public void onSave(FilterSaveEvent<String> event) {
+        filterWidget.setSelectedUsageBatches(event.getSelectedItemsIds());
     }
 
     @Override
@@ -62,11 +62,12 @@ public class UsageBatchesFilterController implements ICommonFilterWindowControll
     }
 
     @Override
-    public void showFilterWindow() {
+    public FilterWindow<String, UsageBatch> showFilterWindow() {
         FilterWindow<String, UsageBatch> filterWindow =
             Windows.showFilterWindow(ForeignUi.getMessage("window.batches_filter"), this,
                 "name", "rro.accountNumber");
         filterWindow.setSelectedItemsIds(filterWidget.getFilter().getUsageBatchesIds());
         VaadinUtils.addComponentStyle(filterWindow, "batches-filter-window");
+        return filterWindow;
     }
 }
