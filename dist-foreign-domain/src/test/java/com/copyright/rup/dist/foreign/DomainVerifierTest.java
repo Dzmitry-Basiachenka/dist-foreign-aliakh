@@ -73,7 +73,7 @@ public class DomainVerifierTest {
         Object[][] testData = new Object[][]{
             {UsageFilter.class},
             {UsageBatch.class},
-            {UsageDetail.class}
+            {Usage.class}
         };
         return Arrays.asList(testData);
     }

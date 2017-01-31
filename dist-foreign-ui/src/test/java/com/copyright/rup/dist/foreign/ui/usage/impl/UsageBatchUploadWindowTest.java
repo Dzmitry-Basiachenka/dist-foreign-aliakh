@@ -46,7 +46,7 @@ import java.time.LocalDate;
 import java.util.Collection;
 
 /**
- * Verifies {@link UsageUploadWindow}.
+ * Verifies {@link UsageBatchUploadWindow}.
  * <p/>
  * Copyright (C) 2017 copyright.com
  * <p/>
@@ -55,13 +55,13 @@ import java.util.Collection;
  * @author Mikita Hladkikh
  */
 @RunWith(PowerMockRunner.class)
-public class UsageUploadWindowTest {
+public class UsageBatchUploadWindowTest {
 
-    private UsageUploadWindow window;
+    private UsageBatchUploadWindow window;
 
     @Before
     public void setUp() {
-        window = new UsageUploadWindow();
+        window = new UsageBatchUploadWindow();
     }
 
     @Test

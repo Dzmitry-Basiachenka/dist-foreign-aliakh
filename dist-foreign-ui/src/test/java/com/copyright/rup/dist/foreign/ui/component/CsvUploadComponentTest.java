@@ -25,9 +25,9 @@ import java.util.Iterator;
 
 /**
  * Verifies {@link CsvUploadComponent}.
- * <p/>
+ * <p>
  * Copyright (C) 2017 copyright.com
- * <p/>
+ * <p>
  * Date: 01/21/2017
  *
  * @author Mikita Hladkikh
@@ -59,7 +59,7 @@ public class CsvUploadComponentTest {
     @Test
     public void testCsvFileExtensionValidator() {
         CsvUploadComponent.CsvFileExtensionValidator validator = new CsvUploadComponent.CsvFileExtensionValidator();
-        assertEquals("File format is incorrect", validator.getErrorMessage());
+        assertEquals("File extension is incorrect", validator.getErrorMessage());
         assertFalse(validator.isValid(StringUtils.EMPTY));
         assertFalse(validator.isValid("file.cs"));
         assertFalse(validator.isValid("filecsv"));

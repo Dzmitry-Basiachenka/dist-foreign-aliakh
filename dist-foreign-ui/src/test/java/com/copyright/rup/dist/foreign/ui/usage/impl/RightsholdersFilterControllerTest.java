@@ -52,7 +52,7 @@ public class RightsholdersFilterControllerTest {
     @PrepareForTest(FakeDataGenerator.class)
     public void testLoadBeans() {
         mockStatic(FakeDataGenerator.class);
-        expect(FakeDataGenerator.getRROs()).andReturn(Collections.emptyList()).once();
+        expect(FakeDataGenerator.getRros()).andReturn(Collections.emptyList()).once();
         replay(FakeDataGenerator.class);
         assertEquals(Collections.emptyList(), controller.loadBeans());
         verify(FakeDataGenerator.class);
@@ -105,7 +105,7 @@ public class RightsholdersFilterControllerTest {
         expect(Windows.showFilterWindow("Rightsholders filter", controller, "name", "accountNumber"))
             .andReturn(filterWindowMock).once();
         expect(filterWidgetMock.getFilter()).andReturn(filterMock).once();
-        expect(filterMock.getRightsholdersAccountNumbers()).andReturn(selectedItemsIds).once();
+        expect(filterMock.getRhAccountNumbers()).andReturn(selectedItemsIds).once();
         filterWindowMock.setSelectedItemsIds(selectedItemsIds);
         expectLastCall().once();
         replay(filterWidgetMock, filterMock, filterWindowMock, Windows.class, VaadinUtils.class);

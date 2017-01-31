@@ -11,7 +11,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.math.BigDecimal;
 
 /**
- * Represents usage detail.
+ * Represents usage.
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
@@ -19,7 +19,7 @@ import java.math.BigDecimal;
  *
  * @author Aliaksei Pchelnikau
  */
-public class UsageDetail extends StoredEntity<String> {
+public class Usage extends StoredEntity<String> {
 
     private String batchId;
     private Long wrWrkInst;
@@ -289,7 +289,7 @@ public class UsageDetail extends StoredEntity<String> {
         if (null == obj || this.getClass() != obj.getClass()) {
             return false;
         }
-        UsageDetail that = (UsageDetail) obj;
+        Usage that = (Usage) obj;
         return new EqualsBuilder()
             .appendSuper(super.equals(obj))
             .append(this.batchId, that.batchId)

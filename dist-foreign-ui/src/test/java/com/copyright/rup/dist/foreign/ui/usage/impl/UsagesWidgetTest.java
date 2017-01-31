@@ -97,7 +97,7 @@ public class UsagesWidgetTest {
         Collection<?> listeners = loadButton.getListeners(ClickEvent.class);
         assertEquals(1, listeners.size());
         ClickListener clickListener = (ClickListener) listeners.iterator().next();
-        Windows.showModalWindow(isA(UsageUploadWindow.class));
+        Windows.showModalWindow(isA(UsageBatchUploadWindow.class));
         expectLastCall().once();
         replay(clickEvent, Windows.class);
         clickListener.buttonClick(clickEvent);

@@ -26,11 +26,11 @@ public class UsageFilterTest {
         assertTrue(usageFilter.isEmpty());
         usageFilter.setUsageBatchesIds(Sets.newHashSet());
         assertTrue(usageFilter.isEmpty());
-        usageFilter.setRightsholdersAccountNumbers(Sets.newHashSet());
+        usageFilter.setRhAccountNumbers(Sets.newHashSet());
         assertTrue(usageFilter.isEmpty());
         usageFilter.setUsageBatchesIds(Sets.newHashSet(RupPersistUtils.generateUuid()));
         assertFalse(usageFilter.isEmpty());
-        usageFilter.setRightsholdersAccountNumbers(Sets.newHashSet(10000L));
+        usageFilter.setRhAccountNumbers(Sets.newHashSet(10000L));
         assertFalse(usageFilter.isEmpty());
         usageFilter.setUsageBatchesIds(null);
         assertFalse(usageFilter.isEmpty());

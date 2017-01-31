@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
-import com.copyright.rup.dist.foreign.ui.common.domain.UsageDetailDto;
+import com.copyright.rup.dist.foreign.ui.common.domain.UsageDto;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesWidget;
@@ -33,7 +33,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
 
     private static final String RIGHTSHOLDER_ACCOUNT_NUMBER_PROPERTY = "rightsholder.accountNumber";
     private IUsagesController controller;
-    private LazyTable<UsageBeanQuery, UsageDetailDto> usagesTable;
+    private LazyTable<UsageBeanQuery, UsageDto> usagesTable;
 
     @Override
     public void refresh() {
@@ -67,18 +67,21 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         usagesTable = new LazyTable<>(controller, UsageBeanQuery.class, 1);
         usagesTable.addProperty("id", String.class, false);
         usagesTable.addProperty("wrWrkInst", Long.class, true);
-        usagesTable.addGeneratedColumn("wrWrkInst", new LongColumnGenerator());
         usagesTable.addProperty("workTitle", String.class, false);
         usagesTable.addProperty(RIGHTSHOLDER_ACCOUNT_NUMBER_PROPERTY, Long.class, false);
-        usagesTable.addGeneratedColumn(RIGHTSHOLDER_ACCOUNT_NUMBER_PROPERTY, new LongColumnGenerator());
         usagesTable.addProperty("rightsholder.name", String.class, false);
         usagesTable.addProperty("paymentDate", LocalDate.class, false);
-        usagesTable.addGeneratedColumn("paymentDate", new LocalDateColumnGenerator());
         usagesTable.addProperty("grossAmount", BigDecimal.class, true);
-        usagesTable.addGeneratedColumn("grossAmount", new MoneyColumnGenerator());
         usagesTable.addProperty("rro.accountNumber", Long.class, false);
-        usagesTable.addGeneratedColumn("rro.accountNumber", new LongColumnGenerator());
         usagesTable.addProperty("eligible", Boolean.class, false);
+
+        LongColumnGenerator longColumnGenerator = new LongColumnGenerator();
+        usagesTable.addGeneratedColumn("wrWrkInst", longColumnGenerator);
+        usagesTable.addGeneratedColumn(RIGHTSHOLDER_ACCOUNT_NUMBER_PROPERTY, longColumnGenerator);
+        usagesTable.addGeneratedColumn("paymentDate", new LocalDateColumnGenerator());
+        usagesTable.addGeneratedColumn("grossAmount", new MoneyColumnGenerator());
+        usagesTable.addGeneratedColumn("rro.accountNumber", longColumnGenerator);
+
         usagesTable
             .setVisibleColumns("wrWrkInst", "workTitle", RIGHTSHOLDER_ACCOUNT_NUMBER_PROPERTY, "rightsholder.name",
                 "paymentDate", "grossAmount", "rro.accountNumber", "eligible");
@@ -96,7 +99,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
 
     private HorizontalLayout initButtonsLayout() {
         Button loadButton = Buttons.createButton(ForeignUi.getMessage("button.load"));
-        loadButton.addClickListener(event -> Windows.showModalWindow(new UsageUploadWindow()));
+        loadButton.addClickListener(event -> Windows.showModalWindow(new UsageBatchUploadWindow()));
         Button addToScenarioButton = Buttons.createButton(ForeignUi.getMessage("button.add_to_scenario"));
         addToScenarioButton.addClickListener(event -> Windows.showNotificationWindow("Add to scenario button clicked"));
         HorizontalLayout layout = new HorizontalLayout(loadButton, addToScenarioButton);

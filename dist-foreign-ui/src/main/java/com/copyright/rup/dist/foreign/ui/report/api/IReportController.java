@@ -14,7 +14,7 @@ import com.copyright.rup.vaadin.widget.api.IController;
 public interface IReportController extends IController<IReportWidget> {
 
     /**
-     * @return report report controller.
+     * @return report controller.
      */
     IReportWindowController getReportWindowController();
 }

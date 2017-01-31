@@ -97,7 +97,7 @@ public class UsagesFilterWidgetTest {
         Set<Long> accountNumbers = Sets.newHashSet(10000L);
         assertFalse(applyButton.isEnabled());
         widget.setSelectedRightsholders(accountNumbers);
-        assertEquals(accountNumbers, widget.getFilter().getRightsholdersAccountNumbers());
+        assertEquals(accountNumbers, widget.getFilter().getRhAccountNumbers());
         assertTrue(applyButton.isEnabled());
         verifyCountLabelValue("(1)", "rightsholdersCountLabel");
     }

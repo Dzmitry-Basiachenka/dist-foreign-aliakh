@@ -35,12 +35,12 @@ public class UsagesControllerTest {
 
     @Test
     public void testGetSize() {
-        assertEquals(FakeDataGenerator.getUsageDetailDTOs().size(), controller.getSize());
+        assertEquals(FakeDataGenerator.getUsageDtos().size(), controller.getSize());
     }
 
     @Test
     public void testLoadBeans() {
-        assertEquals(FakeDataGenerator.getUsageDetailDTOs().size(), controller.loadBeans(0, 150, null).size());
+        assertEquals(FakeDataGenerator.getUsageDtos().size(), controller.loadBeans(0, 150, null).size());
     }
 
     @Test
