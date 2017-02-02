@@ -161,4 +161,62 @@ databaseChangeLog {
             // automatic rollback
         }
     }
+
+    changeSet(id: '2017-02-02-00', author: 'Mikalai_Bezmen mbezmen@copyright.com') {
+        comment('B-28915 FDA DB prototyping: Implement liquibase script for usage batch table')
+
+        createTable(tableName: 'df_usage_batch', schemaName: dbAppsSchema, tablespace: dbDataTablespace,
+                remarks: 'Table for storing usage batches') {
+
+            column(name: 'df_usage_batch_uid', type: 'VARCHAR(255)', remarks: 'The identifier of usage batch') {
+                constraints(nullable: false)
+            }
+            column(name: 'name', type: 'VARCHAR(255)', remarks: 'The name of usage batch') {
+                constraints(nullable: false)
+            }
+            column(name: 'rro_account_number', type: 'NUMERIC(22,0)', remarks: 'The RRO account number')
+            column(name: 'payment_date', type: 'DATE', remarks: 'The payment date')
+            column(name: 'fiscal_year', type: 'NUMERIC(4,0)', remarks: 'The fiscal year')
+            column(name: 'gross_amount', type: 'DECIMAL(38,2)', defaultValue: 0.00, remarks: 'The gross amount') {
+                constraints(nullable: false)
+            }
+            column(name: 'currency_ind', type: 'VARCHAR(3)', remarks: 'The currency index')
+            column(name: 'conversion_rate', type: 'NUMERIC(20,10)', remarks: 'The conversion rate')
+            column(name: 'applied_conversion_rate', type: 'NUMERIC(20,10)', remarks: 'The applied conversion rate')
+            column(name: 'record_version', type: 'INTEGER', defaultValue: '1',
+                    remarks: 'The latest version of this record, used for optimistic locking') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM', remarks: 'The user name who created this record') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who updated this record; when a record is first created, this will be the same as the created_by_user') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created; when a record is first created, this will be the same as the created_datetime') {
+                constraints(nullable: false)
+            }
+        }
+
+        addPrimaryKey(schemaName: dbAppsSchema, tableName: 'df_usage_batch', tablespace: dbIndexTablespace,
+                columnNames: 'df_usage_batch_uid', constraintName: 'df_usage_batch_pk')
+
+        addForeignKeyConstraint(constraintName: 'fk_df_usage_2_df_usage_batch',
+                baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_usage',
+                baseColumnNames: 'df_usage_batch_uid',
+                referencedTableName: 'df_usage_batch',
+                referencedColumnNames: 'df_usage_batch_uid')
+
+        rollback {
+            // automatic rollback
+        }
+    }
 }
