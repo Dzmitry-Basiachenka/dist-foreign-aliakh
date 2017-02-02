@@ -7,9 +7,9 @@ import java.time.Month;
 
 /**
  * Utils class for working with Usage Batch and it's properties.
- * <p/>
+ * <p>
  * Copyright (C) 2017 copyright.com
- * <p/>
+ * <p>
  * Date: 01/21/2017
  *
  * @author Mikita Hladkikh
@@ -29,7 +29,17 @@ public final class UsageBatchUtils {
      * @return Fiscal Year value
      */
     public static String getFiscalYear(LocalDate localDate) {
-        return null != localDate ? String.format("FY%s", calculateFiscalYear(localDate)) : StringUtils.EMPTY;
+        return null != localDate ? getFiscalYear(calculateFiscalYear(localDate)) : StringUtils.EMPTY;
+    }
+
+    /**
+     * Formats fiscal year, format: FYYYYY.
+     *
+     * @param fiscalYear fiscal year
+     * @return formatted fiscal year
+     */
+    public static String getFiscalYear(Integer fiscalYear) {
+        return null != fiscalYear ? String.format("FY%s", fiscalYear) : StringUtils.EMPTY;
     }
 
     private static int calculateFiscalYear(LocalDate localDate) {

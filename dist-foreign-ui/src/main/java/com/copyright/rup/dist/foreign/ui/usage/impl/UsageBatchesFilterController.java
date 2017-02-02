@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
-import com.copyright.rup.dist.foreign.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.ui.common.domain.FakeDataGenerator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonFilterWindowController;

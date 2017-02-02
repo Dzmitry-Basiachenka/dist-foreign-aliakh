@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
-import com.copyright.rup.dist.foreign.UsageFilter;
-import com.copyright.rup.dist.foreign.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.UsageFilter;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.component.LocalDateWidget;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;

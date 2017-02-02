@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign;
+package com.copyright.rup.dist.foreign.domain;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;

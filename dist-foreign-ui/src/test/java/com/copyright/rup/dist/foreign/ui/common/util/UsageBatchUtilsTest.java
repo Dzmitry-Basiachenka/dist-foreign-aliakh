@@ -14,17 +14,17 @@ import java.time.LocalDate;
 
 /**
  * Verifies {@link UsageBatchUtils}.
- * <p/>
+ * <p>
  * Copyright (C) 2017 copyright.com
- * <p/>
+ * <p>
  * Date: 01/21/2017
  *
  * @author Mikita Hladkikh
  */
 public class UsageBatchUtilsTest {
 
-   private static final String FY_2017 = "FY2017";
-   private static final String FY_2018 = "FY2018";
+    private static final String FY_2017 = "FY2017";
+    private static final String FY_2018 = "FY2018";
 
     @Test
     public void privateConstructorTest() {
@@ -45,7 +45,8 @@ public class UsageBatchUtilsTest {
 
     @Test
     public void testGetFiscalYear() {
-        assertEquals(StringUtils.EMPTY, UsageBatchUtils.getFiscalYear(null));
+        assertEquals(StringUtils.EMPTY, UsageBatchUtils.getFiscalYear((LocalDate) null));
+        assertEquals(StringUtils.EMPTY, UsageBatchUtils.getFiscalYear((Integer) null));
         assertEquals(FY_2017, UsageBatchUtils.getFiscalYear(LocalDate.of(2017, 1, 1)));
         assertEquals(FY_2017, UsageBatchUtils.getFiscalYear(LocalDate.of(2017, 2, 1)));
         assertEquals(FY_2017, UsageBatchUtils.getFiscalYear(LocalDate.of(2017, 3, 1)));
@@ -60,5 +61,6 @@ public class UsageBatchUtilsTest {
         assertEquals(FY_2018, UsageBatchUtils.getFiscalYear(LocalDate.of(2017, 11, 1)));
         assertEquals(FY_2018, UsageBatchUtils.getFiscalYear(LocalDate.of(2017, 12, 1)));
         assertEquals(FY_2018, UsageBatchUtils.getFiscalYear(LocalDate.of(2017, 12, 31)));
+        assertEquals(FY_2018, UsageBatchUtils.getFiscalYear(2018));
     }
 }

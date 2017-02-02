@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign;
+package com.copyright.rup.dist.foreign.domain;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.domain.StoredEntity;

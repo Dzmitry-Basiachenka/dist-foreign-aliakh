@@ -4,8 +4,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.domain.StoredEntity;
-import com.copyright.rup.dist.foreign.Usage;
-import com.copyright.rup.dist.foreign.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.ui.common.util.UsageBatchUtils;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -26,13 +28,26 @@ import java.time.LocalDate;
  */
 public class UsageDto extends StoredEntity<String> {
 
-    private Long wrWrkInst;
-    private String workTitle;
-    private Rightsholder rightsholder;
-    private BigDecimal grossAmount;
+    private Integer detailId;
+    private String batchName;
+    private String fiscalYear;
     private Rightsholder rro;
     private LocalDate paymentDate;
-    private boolean eligible;
+    private Long wrWrkInst;
+    private String workTitle;
+    private String article;
+    private Rightsholder rightsholder;
+    private String standardNumber;
+    private String publisher;
+    private LocalDate publicationDate;
+    private Integer numberOfCopies;
+    private String market;
+    private Integer marketPeriodFrom;
+    private Integer marketPeriodTo;
+    private String author;
+    private BigDecimal grossAmount;
+    private BigDecimal originalAmount;
+    private UsageStatusEnum status;
 
     /**
      * Constructor.
@@ -42,13 +57,74 @@ public class UsageDto extends StoredEntity<String> {
      */
     public UsageDto(UsageBatch batch, Usage usage) {
         setId(checkNotNull(usage).getId());
+        batchName = checkNotNull(batch).getName();
+        fiscalYear = UsageBatchUtils.getFiscalYear(batch.getFiscalYear());
+        rro = batch.getRro();
+        paymentDate = batch.getPaymentDate();
+        detailId = usage.getDetailId();
         wrWrkInst = usage.getWrWrkInst();
         workTitle = usage.getWorkTitle();
+        article = usage.getArticle();
         rightsholder = usage.getRightsholder();
-        eligible = null == rightsholder;
+        standardNumber = usage.getStandardNumber();
+        publisher = usage.getPublisher();
+        publicationDate = usage.getPublicationDate();
+        numberOfCopies = usage.getNumberOfCopies();
+        market = usage.getMarket();
+        marketPeriodFrom = usage.getMarketPeriodFrom();
+        marketPeriodTo = usage.getMarketPeriodTo();
+        author = usage.getAuthor();
         grossAmount = usage.getGrossAmount();
-        rro = checkNotNull(batch).getRro();
-        paymentDate = batch.getPaymentDate();
+        originalAmount = usage.getOriginalAmount();
+        status = usage.getStatus();
+    }
+
+    /**
+     * @return detail id.
+     */
+    public Integer getDetailId() {
+        return detailId;
+    }
+
+    /**
+     * Sets detail id.
+     *
+     * @param detailId detail id
+     */
+    public void setDetailId(Integer detailId) {
+        this.detailId = detailId;
+    }
+
+    /**
+     * @return batch name.
+     */
+    public String getBatchName() {
+        return batchName;
+    }
+
+    /**
+     * Sets batch name.
+     *
+     * @param batchName batch name
+     */
+    public void setBatchName(String batchName) {
+        this.batchName = batchName;
+    }
+
+    /**
+     * @return fiscal year.
+     */
+    public String getFiscalYear() {
+        return fiscalYear;
+    }
+
+    /**
+     * Sets fiscal year.
+     *
+     * @param fiscalYear fiscal year
+     */
+    public void setFiscalYear(String fiscalYear) {
+        this.fiscalYear = fiscalYear;
     }
 
     /**
@@ -84,6 +160,22 @@ public class UsageDto extends StoredEntity<String> {
     }
 
     /**
+     * @return article.
+     */
+    public String getArticle() {
+        return article;
+    }
+
+    /**
+     * Sets article.
+     *
+     * @param article article
+     */
+    public void setArticle(String article) {
+        this.article = article;
+    }
+
+    /**
      * @return rights holder.
      */
     public Rightsholder getRightsholder() {
@@ -100,6 +192,150 @@ public class UsageDto extends StoredEntity<String> {
     }
 
     /**
+     * @return standard number.
+     */
+    public String getStandardNumber() {
+        return standardNumber;
+    }
+
+    /**
+     * Sets standard number.
+     *
+     * @param standardNumber standard number
+     */
+    public void setStandardNumber(String standardNumber) {
+        this.standardNumber = standardNumber;
+    }
+
+    /**
+     * @return publisher.
+     */
+    public String getPublisher() {
+        return publisher;
+    }
+
+    /**
+     * Sets publication date.
+     *
+     * @param publisher publisher
+     */
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
+    }
+
+    /**
+     * @return publication date.
+     */
+    public LocalDate getPublicationDate() {
+        return publicationDate;
+    }
+
+    /**
+     * Sets publication date.
+     *
+     * @param publicationDate publication date
+     */
+    public void setPublicationDate(LocalDate publicationDate) {
+        this.publicationDate = publicationDate;
+    }
+
+    /**
+     * @return market.
+     */
+    public String getMarket() {
+        return market;
+    }
+
+    /**
+     * Sets market.
+     *
+     * @param market market
+     */
+    public void setMarket(String market) {
+        this.market = market;
+    }
+
+    /**
+     * @return market period from.
+     */
+    public Integer getMarketPeriodFrom() {
+        return marketPeriodFrom;
+    }
+
+    /**
+     * Sets market period from.
+     *
+     * @param marketPeriodFrom market period from
+     */
+    public void setMarketPeriodFrom(Integer marketPeriodFrom) {
+        this.marketPeriodFrom = marketPeriodFrom;
+    }
+
+    /**
+     * @return market period to.
+     */
+    public Integer getMarketPeriodTo() {
+        return marketPeriodTo;
+    }
+
+    /**
+     * Sets market period to.
+     *
+     * @param marketPeriodTo market period to
+     */
+    public void setMarketPeriodTo(Integer marketPeriodTo) {
+        this.marketPeriodTo = marketPeriodTo;
+    }
+
+    /**
+     * @return author.
+     */
+    public String getAuthor() {
+        return author;
+    }
+
+    /**
+     * Sets author.
+     *
+     * @param author author
+     */
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    /**
+     * @return number of copies.
+     */
+    public Integer getNumberOfCopies() {
+        return numberOfCopies;
+    }
+
+    /**
+     * Sets number of copies.
+     *
+     * @param numberOfCopies number of copies
+     */
+    public void setNumberOfCopies(Integer numberOfCopies) {
+        this.numberOfCopies = numberOfCopies;
+    }
+
+    /**
+     * @return original amount.
+     */
+    public BigDecimal getOriginalAmount() {
+        return originalAmount;
+    }
+
+    /**
+     * Sets original amount.
+     *
+     * @param originalAmount original amount
+     */
+    public void setOriginalAmount(BigDecimal originalAmount) {
+        this.originalAmount = originalAmount;
+    }
+
+    /**
      * @return gross amount.
      */
     public BigDecimal getGrossAmount() {
@@ -112,9 +348,7 @@ public class UsageDto extends StoredEntity<String> {
      * @param grossAmount gross amount
      */
     public void setGrossAmount(BigDecimal grossAmount) {
-        if (null != grossAmount) {
-            this.grossAmount = grossAmount;
-        }
+        this.grossAmount = grossAmount;
     }
 
     /**
@@ -150,19 +384,19 @@ public class UsageDto extends StoredEntity<String> {
     }
 
     /**
-     * @return eligible.
+     * @return status.
      */
-    public boolean isEligible() {
-        return eligible;
+    public UsageStatusEnum getStatus() {
+        return status;
     }
 
     /**
-     * Sets eligible.
+     * Sets status.
      *
-     * @param eligible eligible
+     * @param status status
      */
-    public void setEligible(boolean eligible) {
-        this.eligible = eligible;
+    public void setStatus(UsageStatusEnum status) {
+        this.status = status;
     }
 
     @Override
@@ -182,7 +416,7 @@ public class UsageDto extends StoredEntity<String> {
             .append(this.grossAmount, that.grossAmount)
             .append(this.rro, that.rro)
             .append(this.paymentDate, that.paymentDate)
-            .append(this.eligible, that.eligible)
+            .append(this.status, that.status)
             .isEquals();
     }
 
@@ -196,7 +430,7 @@ public class UsageDto extends StoredEntity<String> {
             .append(grossAmount)
             .append(rro)
             .append(paymentDate)
-            .append(eligible)
+            .append(status)
             .toHashCode();
     }
 
@@ -210,7 +444,7 @@ public class UsageDto extends StoredEntity<String> {
             .append("grossAmount", grossAmount)
             .append("rro", rro)
             .append("paymentDate", paymentDate)
-            .append("eligible", eligible)
+            .append("status", status)
             .toString();
     }
 }

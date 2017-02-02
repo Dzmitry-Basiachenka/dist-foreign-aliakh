@@ -1,8 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.common.domain;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.foreign.Usage;
-import com.copyright.rup.dist.foreign.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
 
 import com.google.common.collect.Lists;
 

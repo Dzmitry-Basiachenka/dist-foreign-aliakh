@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign;
+package com.copyright.rup.dist.foreign.domain;
 
 import static org.junit.Assert.assertTrue;
 

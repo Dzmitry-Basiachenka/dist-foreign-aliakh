@@ -4,6 +4,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.isA;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
@@ -13,6 +14,9 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.vaadin.ui.LocalDateColumnGenerator;
+import com.copyright.rup.vaadin.ui.LongColumnGenerator;
+import com.copyright.rup.vaadin.ui.MoneyColumnGenerator;
 import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.ui.component.lazytable.LazyTable;
 
@@ -146,22 +150,59 @@ public class UsagesWidgetTest {
     }
 
     private void verifyTable(Table table) {
-        assertArrayEquals(new Object[]{"wrWrkInst", "workTitle", "rightsholder.accountNumber", "rightsholder.name",
-            "paymentDate", "grossAmount", "rro.accountNumber", "eligible"}, table.getVisibleColumns());
+        assertArrayEquals(new Object[]{"detailId", "batchName", "fiscalYear", "rro.accountNumber", "rro.name",
+            "paymentDate", "workTitle", "article", "standardNumber", "wrWrkInst", "rightsholder.accountNumber",
+            "rightsholder.name", "publisher", "publicationDate", "numberOfCopies", "originalAmount", "grossAmount",
+            "market", "marketPeriodFrom", "marketPeriodTo", "author", "status"}, table.getVisibleColumns());
         assertArrayEquals(
-            new Object[]{"Wr Wrk Inst", "Work Title", "RH Acct #", "RH Name", "Payment Date", "Gross Amount",
-                "RRO", "Eligible"}, table.getColumnHeaders());
+            new Object[]{"Detail ID", "Usage Batch Name", "Fiscal Year", "RRO Account #",
+                "RRO Name", "Payment Date", "Title", "Article", "Standard Number", "WrWrkInst", "RH Account #",
+                "RH Name", "Publisher", "Pub Date", "Number of Copies", "Amt in Orig Currency", "Amt in USD", "Market",
+                "Market Period From", "Market Period To", "Author", "Detail Status"}, table.getColumnHeaders());
         Collection<?> containerPropertyIds = table.getContainerPropertyIds();
+
         assertTrue(containerPropertyIds.contains("id"));
-        assertTrue(containerPropertyIds.contains("wrWrkInst"));
+        assertTrue(containerPropertyIds.contains("detailId"));
+        assertTrue(containerPropertyIds.contains("batchName"));
+        assertTrue(containerPropertyIds.contains("fiscalYear"));
+        assertTrue(containerPropertyIds.contains("rro.accountNumber"));
+        assertTrue(containerPropertyIds.contains("rro.name"));
+        assertTrue(containerPropertyIds.contains("paymentDate"));
         assertTrue(containerPropertyIds.contains("workTitle"));
+        assertTrue(containerPropertyIds.contains("article"));
+        assertTrue(containerPropertyIds.contains("standardNumber"));
+        assertTrue(containerPropertyIds.contains("wrWrkInst"));
         assertTrue(containerPropertyIds.contains("rightsholder.accountNumber"));
         assertTrue(containerPropertyIds.contains("rightsholder.name"));
-        assertTrue(containerPropertyIds.contains("paymentDate"));
+        assertTrue(containerPropertyIds.contains("publisher"));
+        assertTrue(containerPropertyIds.contains("publicationDate"));
+        assertTrue(containerPropertyIds.contains("numberOfCopies"));
+        assertTrue(containerPropertyIds.contains("originalAmount"));
         assertTrue(containerPropertyIds.contains("grossAmount"));
-        assertTrue(containerPropertyIds.contains("rro.accountNumber"));
-        assertTrue(containerPropertyIds.contains("eligible"));
+        assertTrue(containerPropertyIds.contains("market"));
+        assertTrue(containerPropertyIds.contains("marketPeriodFrom"));
+        assertTrue(containerPropertyIds.contains("marketPeriodTo"));
+        assertTrue(containerPropertyIds.contains("author"));
+        assertTrue(containerPropertyIds.contains("status"));
+
+        verifyGeneratedColumns(table);
         verifySize(table);
+    }
+
+    private void verifyGeneratedColumns(Table table) {
+        verifyColumnGenerator(table.getColumnGenerator("detailId"), LongColumnGenerator.class);
+        verifyColumnGenerator(table.getColumnGenerator("wrWrkInst"), LongColumnGenerator.class);
+        verifyColumnGenerator(table.getColumnGenerator("rightsholder.accountNumber"), LongColumnGenerator.class);
+        verifyColumnGenerator(table.getColumnGenerator("rro.accountNumber"), LongColumnGenerator.class);
+        verifyColumnGenerator(table.getColumnGenerator("publicationDate"), LocalDateColumnGenerator.class);
+        verifyColumnGenerator(table.getColumnGenerator("paymentDate"), LocalDateColumnGenerator.class);
+        verifyColumnGenerator(table.getColumnGenerator("originalAmount"), MoneyColumnGenerator.class);
+        verifyColumnGenerator(table.getColumnGenerator("grossAmount"), MoneyColumnGenerator.class);
+    }
+
+    private void verifyColumnGenerator(Table.ColumnGenerator columnGenerator, Class clazz) {
+        assertNotNull(columnGenerator);
+        assertEquals(clazz, columnGenerator.getClass());
     }
 
     private void verifySize(Component component) {
