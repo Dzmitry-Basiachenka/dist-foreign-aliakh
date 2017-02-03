@@ -42,6 +42,7 @@ public class InputsTabUiTest extends ForeignCommonUiTest {
         WebElement loadButton = assertElement(buttonsLayout, "Load");
         clickElementAndWait(loadButton);
         assertElement(buttonsLayout, "Add_To_Scenario");
+        assertElement(buttonsLayout, "Export");
         verifyUploadUsageWindow();
     }
 
@@ -88,15 +89,29 @@ public class InputsTabUiTest extends ForeignCommonUiTest {
         WebElement tableHeader = findElement(usagesTable, By.className(V_TABLE_HEADER_CLASS_NAME));
         List<WebElement> tableHeaderElements =
             findElements(tableHeader, By.className(V_TABLE_CAPTION_CONTAINER_CLASS_NAME));
-        assertEquals(8, tableHeaderElements.size());
-        assertEquals("Wr Wrk Inst", getInnerHtml(tableHeaderElements.get(0)));
-        assertEquals("Work Title", getInnerHtml(tableHeaderElements.get(1)));
-        assertEquals("RH Acct #", getInnerHtml(tableHeaderElements.get(2)));
-        assertEquals("RH Name", getInnerHtml(tableHeaderElements.get(3)));
-        assertEquals("Payment Date", getInnerHtml(tableHeaderElements.get(4)));
-        assertEquals("Gross Amount", getInnerHtml(tableHeaderElements.get(5)));
-        assertEquals("RRO", getInnerHtml(tableHeaderElements.get(6)));
-        assertEquals("Eligible", getInnerHtml(tableHeaderElements.get(7)));
+        assertEquals(22, tableHeaderElements.size());
+        assertEquals("Detail ID", getInnerHtml(tableHeaderElements.get(0)));
+        assertEquals("Usage Batch Name", getInnerHtml(tableHeaderElements.get(1)));
+        assertEquals("Fiscal Year", getInnerHtml(tableHeaderElements.get(2)));
+        assertEquals("RRO Account #", getInnerHtml(tableHeaderElements.get(3)));
+        assertEquals("RRO Name", getInnerHtml(tableHeaderElements.get(4)));
+        assertEquals("Payment Date", getInnerHtml(tableHeaderElements.get(5)));
+        assertEquals("Title", getInnerHtml(tableHeaderElements.get(6)));
+        assertEquals("Article", getInnerHtml(tableHeaderElements.get(7)));
+        assertEquals("Standard Number", getInnerHtml(tableHeaderElements.get(8)));
+        assertEquals("Wr Wrk Inst", getInnerHtml(tableHeaderElements.get(9)));
+        assertEquals("RH Account #", getInnerHtml(tableHeaderElements.get(10)));
+        assertEquals("RH Name", getInnerHtml(tableHeaderElements.get(11)));
+        assertEquals("Publisher", getInnerHtml(tableHeaderElements.get(12)));
+        assertEquals("Pub Date", getInnerHtml(tableHeaderElements.get(13)));
+        assertEquals("Number of Copies", getInnerHtml(tableHeaderElements.get(14)));
+        assertEquals("Amt in Orig Currency", getInnerHtml(tableHeaderElements.get(15)));
+        assertEquals("Amt in USD", getInnerHtml(tableHeaderElements.get(16)));
+        assertEquals("Market", getInnerHtml(tableHeaderElements.get(17)));
+        assertEquals("Market Period From", getInnerHtml(tableHeaderElements.get(18)));
+        assertEquals("Market Period To", getInnerHtml(tableHeaderElements.get(19)));
+        assertEquals("Author", getInnerHtml(tableHeaderElements.get(20)));
+        assertEquals("Detail Status", getInnerHtml(tableHeaderElements.get(21)));
     }
 
     private void verifyTableBody(WebElement usagesTable) {

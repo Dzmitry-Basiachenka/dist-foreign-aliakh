@@ -6,6 +6,7 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 
 import com.copyright.rup.dist.foreign.ui.common.domain.FakeDataGenerator;
@@ -14,6 +15,8 @@ import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
+
+import java.time.LocalDate;
 
 /**
  * Verifies {@link UsagesController}.
@@ -57,5 +60,17 @@ public class UsagesControllerTest {
         replay(filterController);
         assertSame(filterWidget, controller.initUsagesFilterWidget());
         verify(filterController);
+    }
+
+    @Test
+    public void testGetStream() {
+        assertNull(controller.getStream());
+    }
+
+    @Test
+    public void testGetFileName() {
+        LocalDate localDate = LocalDate.now();
+        assertEquals(String.format("export_usage_%s_%s_%s.csv", localDate.getMonthValue(), localDate.getDayOfMonth(),
+            localDate.getYear()), controller.getFileName());
     }
 }
