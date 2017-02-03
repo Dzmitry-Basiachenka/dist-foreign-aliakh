@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
+import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -62,29 +63,39 @@ import java.util.Set;
 @RunWith(PowerMockRunner.class)
 public class UsagesFilterWidgetTest {
 
+    private static final Integer FISCAL_YEAR = 2017;
+    private IUsagesFilterController usagesFilterController;
     private UsagesFilterWidget widget;
 
     @Before
     public void setUp() {
+        usagesFilterController = createMock(IUsagesFilterController.class);
         widget = new UsagesFilterWidget();
+        widget.setController(usagesFilterController);
     }
 
     @Test
     public void testInit() {
+        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
+        replay(usagesFilterController);
         assertSame(widget, widget.init());
         assertEquals(2, widget.getComponentCount());
         assertEquals(new MarginInfo(true), widget.getMargin());
         verifyFiltersLayout(widget.getComponent(0));
         verifyButtonsLayout(widget.getComponent(1));
+        verify(usagesFilterController);
     }
 
     @Test
     public void testSetSelectedUsageBatches() {
+        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
+        replay(usagesFilterController);
         widget.init();
         Button applyButton = Whitebox.getInternalState(widget, "applyButton", UsagesFilterWidget.class);
         Set<String> usageBatchesIds = Sets.newHashSet(RupPersistUtils.generateUuid());
         assertFalse(applyButton.isEnabled());
         widget.setSelectedUsageBatches(usageBatchesIds);
+        verify(usagesFilterController);
         assertEquals(usageBatchesIds, widget.getFilter().getUsageBatchesIds());
         assertTrue(applyButton.isEnabled());
         verifyCountLabelValue("(1)", "batchesCountLabel");
@@ -92,11 +103,14 @@ public class UsagesFilterWidgetTest {
 
     @Test
     public void testSetSelectedRightsholders() {
+        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
+        replay(usagesFilterController);
         widget.init();
         Button applyButton = getApplyButton();
         Set<Long> accountNumbers = Sets.newHashSet(10000L);
         assertFalse(applyButton.isEnabled());
         widget.setSelectedRightsholders(accountNumbers);
+        verify(usagesFilterController);
         assertEquals(accountNumbers, widget.getFilter().getRhAccountNumbers());
         assertTrue(applyButton.isEnabled());
         verifyCountLabelValue("(1)", "rightsholdersCountLabel");
@@ -106,16 +120,17 @@ public class UsagesFilterWidgetTest {
     @PrepareForTest(Windows.class)
     public void testApplyFilter() {
         mockStatic(Windows.class);
+        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
+        Windows.showNotificationWindow("Apply filter clicked");
+        expectLastCall().once();
+        replay(Windows.class, usagesFilterController);
         widget.init();
         Button applyButton = getApplyButton();
         assertFalse(applyButton.isEnabled());
         widget.setSelectedRightsholders(Sets.newHashSet(10000L));
         assertTrue(applyButton.isEnabled());
-        Windows.showNotificationWindow("Apply filter clicked");
-        expectLastCall().once();
-        replay(Windows.class);
         widget.applyFilter();
-        verify(Windows.class);
+        verify(Windows.class, usagesFilterController);
         assertFalse(applyButton.isEnabled());
     }
 
@@ -123,30 +138,37 @@ public class UsagesFilterWidgetTest {
     @PrepareForTest(Windows.class)
     public void testFilterChangedEmptyFilter() {
         mockStatic(Windows.class);
+        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
+        Windows.showNotificationWindow("Apply filter clicked");
+        expectLastCall().once();
+        replay(Windows.class, usagesFilterController);
         widget.init();
         Button applyButton = getApplyButton();
         assertFalse(applyButton.isEnabled());
         widget.setSelectedRightsholders(Collections.emptySet());
-        Windows.showNotificationWindow("Apply filter clicked");
-        expectLastCall().once();
-        replay(Windows.class);
         widget.applyFilter();
-        verify(Windows.class);
+        verify(Windows.class, usagesFilterController);
         assertFalse(applyButton.isEnabled());
     }
 
     @Test
     public void testGetController() {
+        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
+        replay(usagesFilterController);
         widget.init();
         UsagesFilterController controller = new UsagesFilterController();
         widget.setController(controller);
+        verify(usagesFilterController);
         assertSame(controller, widget.getController());
     }
 
     @Test
     public void testClearFilter() {
+        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
+        replay(usagesFilterController);
         widget.init();
         widget.clearFilter();
+        verify(usagesFilterController);
         assertFalse(getApplyButton().isEnabled());
         assertTrue(widget.getFilter().isEmpty());
         String labelValue = "(0)";
@@ -157,26 +179,30 @@ public class UsagesFilterWidgetTest {
         assertNull(paymentDateProperty.getValue());
         ComboBox statusComboBox = Whitebox.getInternalState(widget, "statusComboBox", UsagesFilterWidget.class);
         assertNull(statusComboBox.getValue());
-        ComboBox taxCountryComboBox = Whitebox.getInternalState(widget, "taxCountryComboBox", UsagesFilterWidget.class);
-        assertNull(taxCountryComboBox.getValue());
+        ComboBox fiscalYearComboBox = Whitebox.getInternalState(widget, "fiscalYearComboBox", UsagesFilterWidget.class);
+        assertNull(fiscalYearComboBox.getValue());
     }
 
     @Test
     @PrepareForTest(Windows.class)
     public void verifyApplyButtonClickListener() {
-        widget.init();
-        ClickListener clickListener = (ClickListener) getApplyButton().getListeners(ClickEvent.class).iterator().next();
         mockStatic(Windows.class);
         ClickEvent clickEvent = createMock(ClickEvent.class);
+        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
         Windows.showNotificationWindow("Apply filter clicked");
         expectLastCall().once();
-        replay(clickEvent, Windows.class);
+        replay(clickEvent, Windows.class, usagesFilterController);
+        widget.init();
+        ClickListener clickListener = (ClickListener) getApplyButton().getListeners(ClickEvent.class).iterator().next();
         clickListener.buttonClick(clickEvent);
-        verify(clickEvent);
+        verify(clickEvent, usagesFilterController);
     }
 
     @Test
     public void verifyButtonClickListener() {
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
+        replay(clickEvent, usagesFilterController);
         widget.init();
         widget.setSelectedRightsholders(Sets.newHashSet(10000L));
         Button applyButton = getApplyButton();
@@ -184,48 +210,48 @@ public class UsagesFilterWidgetTest {
         assertFalse(widget.getFilter().isEmpty());
         Button clearButton = (Button) ((HorizontalLayout) widget.getComponent(1)).getComponent(1);
         ClickListener clickListener = (ClickListener) clearButton.getListeners(ClickEvent.class).iterator().next();
-        ClickEvent clickEvent = createMock(ClickEvent.class);
-        replay(clickEvent);
         clickListener.buttonClick(clickEvent);
         assertFalse(applyButton.isEnabled());
         assertTrue(widget.getFilter().isEmpty());
-        verify(clickEvent);
+        verify(clickEvent, usagesFilterController);
     }
 
     @Test
     public void testBatchesButtonClickListener() {
-        widget.init();
+        ClickEvent clickEvent = createMock(ClickEvent.class);
         IUsagesFilterController filterController = createMock(IUsagesFilterController.class);
+        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
+        filterController.onUsageBatchFilterClick();
+        expectLastCall().once();
+        replay(clickEvent, filterController, usagesFilterController);
+        widget.init();
         widget.setController(filterController);
         VerticalLayout layout = (VerticalLayout) widget.getComponent(0);
         HorizontalLayout horizontalLayout = (HorizontalLayout) layout.getComponent(1);
         Button button = (Button) horizontalLayout.getComponent(1);
         Collection<?> listeners = button.getListeners(ClickEvent.class);
         ClickListener clickListener = (ClickListener) listeners.iterator().next();
-        ClickEvent clickEvent = createMock(ClickEvent.class);
-        filterController.onUsageBatchFilterClick();
-        expectLastCall().once();
-        replay(clickEvent, filterController);
         clickListener.buttonClick(clickEvent);
-        verify(clickEvent, filterController);
+        verify(clickEvent, filterController, usagesFilterController);
     }
 
     @Test
     public void testRightsholdersButtonClickListener() {
-        widget.init();
         IUsagesFilterController filterController = createMock(IUsagesFilterController.class);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
+        filterController.onRightsholderFilterClick();
+        expectLastCall().once();
+        replay(clickEvent, filterController, usagesFilterController);
+        widget.init();
         widget.setController(filterController);
         VerticalLayout layout = (VerticalLayout) widget.getComponent(0);
         HorizontalLayout horizontalLayout = (HorizontalLayout) layout.getComponent(2);
         Button button = (Button) horizontalLayout.getComponent(1);
         Collection<?> listeners = button.getListeners(ClickEvent.class);
         ClickListener clickListener = (ClickListener) listeners.iterator().next();
-        ClickEvent clickEvent = createMock(ClickEvent.class);
-        filterController.onRightsholderFilterClick();
-        expectLastCall().once();
-        replay(clickEvent, filterController);
         clickListener.buttonClick(clickEvent);
-        verify(clickEvent, filterController);
+        verify(clickEvent, filterController, usagesFilterController);
     }
 
     private void verifyFiltersLayout(Component layout) {
@@ -238,7 +264,7 @@ public class UsagesFilterWidgetTest {
         verifyComboboxComponent(verticalLayout.getComponent(3), "Status",
             EnumSet.of(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.INELIGIBLE));
         verifyDateWidget(verticalLayout.getComponent(4));
-        verifyComboboxComponent(verticalLayout.getComponent(5), "Tax Country", Sets.newHashSet("Non-U.S.", "U.S."));
+        verifyComboboxComponent(verticalLayout.getComponent(5), "Fiscal Year", Collections.singleton(FISCAL_YEAR));
     }
 
     private void verifyFiltersLabel(Component component) {

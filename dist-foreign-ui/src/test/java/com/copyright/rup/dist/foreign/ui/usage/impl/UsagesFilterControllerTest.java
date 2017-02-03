@@ -5,17 +5,24 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.api.easymock.PowerMock;
 import org.powermock.reflect.Whitebox;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies {@link UsagesFilterController}.
@@ -28,6 +35,7 @@ import org.powermock.reflect.Whitebox;
  */
 public class UsagesFilterControllerTest {
 
+    private static final Integer FISCAL_YEAR = 2017;
     private UsagesFilterController controller;
 
     @Before
@@ -71,5 +79,18 @@ public class UsagesFilterControllerTest {
         replay(rightsholdersFilterController, filterWidgetMock, filterWindow);
         controller.onRightsholderFilterClick();
         verify(rightsholdersFilterController, filterWidgetMock, filterWindow);
+    }
+
+    @Test
+    public void testGetFiscalYears() {
+        IUsageBatchService usageBatchService = createMock(IUsageBatchService.class);
+        Whitebox.setInternalState(controller, "usageBatchService", usageBatchService);
+        expect(usageBatchService.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
+        replay(usageBatchService);
+        List<Integer> fiscalYears = controller.getFiscalYears();
+        assertTrue(CollectionUtils.isNotEmpty(fiscalYears));
+        assertEquals(1, fiscalYears.size());
+        assertTrue(fiscalYears.contains(FISCAL_YEAR));
+        verify(usageBatchService);
     }
 }

@@ -9,6 +9,7 @@ import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
+import org.springframework.test.context.ContextConfiguration;
 
 /**
  * Common class for UI tests.
@@ -20,6 +21,7 @@ import org.openqa.selenium.WebElement;
  *
  * @author Darya Baraukova
  */
+@ContextConfiguration(value = "classpath:/com/copyright/rup/dist/foreign/ui/dist-foreign-ui-test-context.xml")
 public class ForeignCommonUiTest extends CommonUiTest {
 
     private static final String APP_URL = "http://localhost:22000/dist-foreign-ui/";

@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
+import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonFilterWindowController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * Controller for filtering usages.
@@ -32,6 +35,10 @@ public class UsagesFilterController extends CommonController<IUsagesFilterWidget
     @Qualifier("rightsholderFilterWindowController")
     private ICommonFilterWindowController rightsholdersFilterController;
 
+    @Autowired
+    @Qualifier("df.service.usageBatchService")
+    private IUsageBatchService usageBatchService;
+
     @Override
     public void onUsageBatchFilterClick() {
         batchesFilterController.setFilterWidget(getWidget());
@@ -42,6 +49,11 @@ public class UsagesFilterController extends CommonController<IUsagesFilterWidget
     public void onRightsholderFilterClick() {
         rightsholdersFilterController.setFilterWidget(getWidget());
         rightsholdersFilterController.showFilterWindow();
+    }
+
+    @Override
+    public List<Integer> getFiscalYears() {
+        return usageBatchService.getFiscalYears();
     }
 
     @Override

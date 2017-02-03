@@ -10,7 +10,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Currency;
 
 /**
  * Represents usage batch.
@@ -28,7 +27,9 @@ public class UsageBatch extends StoredEntity<String> {
     private LocalDate paymentDate;
     private Integer fiscalYear;
     private BigDecimal grossAmount = BigDecimal.ZERO;
-    private Currency currency;
+    private CurrencyEnum currency;
+    private BigDecimal conversionRate;
+    private BigDecimal appliedConversionRate;
 
     /**
      * @return name.
@@ -114,7 +115,7 @@ public class UsageBatch extends StoredEntity<String> {
     /**
      * @return currency.
      */
-    public Currency getCurrency() {
+    public CurrencyEnum getCurrency() {
         return currency;
     }
 
@@ -123,8 +124,40 @@ public class UsageBatch extends StoredEntity<String> {
      *
      * @param currency currency
      */
-    public void setCurrency(Currency currency) {
+    public void setCurrency(CurrencyEnum currency) {
         this.currency = currency;
+    }
+
+    /**
+     * @return conversion rate.
+     */
+    public BigDecimal getConversionRate() {
+        return conversionRate;
+    }
+
+    /**
+     * Sets conversion rate.
+     *
+     * @param conversionRate conversion rate
+     */
+    public void setConversionRate(BigDecimal conversionRate) {
+        this.conversionRate = conversionRate;
+    }
+
+    /**
+     * @return applied conversion rate.
+     */
+    public BigDecimal getAppliedConversionRate() {
+        return appliedConversionRate;
+    }
+
+    /**
+     * Sets applied conversion rate.
+     *
+     * @param appliedConversionRate applied conversion rate
+     */
+    public void setAppliedConversionRate(BigDecimal appliedConversionRate) {
+        this.appliedConversionRate = appliedConversionRate;
     }
 
     @Override
@@ -144,6 +177,8 @@ public class UsageBatch extends StoredEntity<String> {
             .append(this.fiscalYear, that.fiscalYear)
             .append(this.grossAmount, that.grossAmount)
             .append(this.currency, that.currency)
+            .append(this.conversionRate, that.conversionRate)
+            .append(this.appliedConversionRate, that.appliedConversionRate)
             .isEquals();
     }
 
@@ -157,6 +192,8 @@ public class UsageBatch extends StoredEntity<String> {
             .append(fiscalYear)
             .append(grossAmount)
             .append(currency)
+            .append(conversionRate)
+            .append(appliedConversionRate)
             .toHashCode();
     }
 
@@ -170,6 +207,8 @@ public class UsageBatch extends StoredEntity<String> {
             .append("fiscalYear", fiscalYear)
             .append("grossAmount", grossAmount)
             .append("currency", currency)
+            .append("conversionRate", conversionRate)
+            .append("appliedConversionRate", appliedConversionRate)
             .toString();
     }
 }

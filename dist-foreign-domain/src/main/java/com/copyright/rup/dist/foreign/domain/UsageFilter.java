@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 /**
@@ -20,6 +21,9 @@ public class UsageFilter {
 
     private Set<Long> rhAccountNumbers;
     private Set<String> usageBatchesIds;
+    private UsageStatusEnum usageStatus;
+    private LocalDate paymentDate;
+    private Integer fiscalYear;
 
     /**
      * @return a set of rightsholders account numbers.
@@ -54,11 +58,62 @@ public class UsageFilter {
     }
 
     /**
+     * @return instance of {@link UsageStatusEnum}.
+     */
+    public UsageStatusEnum getUsageStatus() {
+        return usageStatus;
+    }
+
+    /**
+     * Sets usage status.
+     *
+     * @param usageStatus instance of {@link UsageStatusEnum}
+     */
+    public void setUsageStatus(UsageStatusEnum usageStatus) {
+        this.usageStatus = usageStatus;
+    }
+
+    /**
+     * @return payment date.
+     */
+    public LocalDate getPaymentDate() {
+        return paymentDate;
+    }
+
+    /**
+     * Sets payment date.
+     *
+     * @param paymentDate payment date
+     */
+    public void setPaymentDate(LocalDate paymentDate) {
+        this.paymentDate = paymentDate;
+    }
+
+    /**
+     * @return fiscal year.
+     */
+    public Integer getFiscalYear() {
+        return fiscalYear;
+    }
+
+    /**
+     * Sets fiscal year.
+     *
+     * @param fiscalYear fiscal year
+     */
+    public void setFiscalYear(Integer fiscalYear) {
+        this.fiscalYear = fiscalYear;
+    }
+
+    /**
      * @return {@code true} if filter does not contain any criteria, otherwise {@code false}.
      */
     public boolean isEmpty() {
         return (null == rhAccountNumbers || rhAccountNumbers.isEmpty())
-            && (null == usageBatchesIds || usageBatchesIds.isEmpty());
+            && (null == usageBatchesIds || usageBatchesIds.isEmpty())
+            && null == usageStatus
+            && null == paymentDate
+            && null == fiscalYear;
     }
 
     @Override
@@ -73,6 +128,9 @@ public class UsageFilter {
         return new EqualsBuilder()
             .append(this.rhAccountNumbers, that.rhAccountNumbers)
             .append(this.usageBatchesIds, that.usageBatchesIds)
+            .append(this.usageStatus, that.usageStatus)
+            .append(this.paymentDate, that.paymentDate)
+            .append(this.fiscalYear, that.fiscalYear)
             .isEquals();
     }
 
@@ -81,6 +139,9 @@ public class UsageFilter {
         return new HashCodeBuilder()
             .append(rhAccountNumbers)
             .append(usageBatchesIds)
+            .append(usageStatus)
+            .append(paymentDate)
+            .append(fiscalYear)
             .toHashCode();
     }
 
@@ -89,6 +150,9 @@ public class UsageFilter {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
             .append("rhAccountNumbers", rhAccountNumbers)
             .append("usageBatchesIds", usageBatchesIds)
+            .append("usageStatus", usageStatus)
+            .append("paymentDate", paymentDate)
+            .append("fiscalYear", fiscalYear)
             .toString();
     }
 }

@@ -22,6 +22,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
 
     @Override
     public int insertUsage(Usage usage) {
-        return insert("insertUsage", checkNotNull(usage));
+        return insert("IUsageMapper.insertUsage", checkNotNull(usage));
     }
 }
