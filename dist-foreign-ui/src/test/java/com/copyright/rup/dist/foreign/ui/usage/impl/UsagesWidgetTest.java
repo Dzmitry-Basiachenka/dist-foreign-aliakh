@@ -156,7 +156,7 @@ public class UsagesWidgetTest {
             "market", "marketPeriodFrom", "marketPeriodTo", "author", "status"}, table.getVisibleColumns());
         assertArrayEquals(
             new Object[]{"Detail ID", "Usage Batch Name", "Fiscal Year", "RRO Account #",
-                "RRO Name", "Payment Date", "Title", "Article", "Standard Number", "WrWrkInst", "RH Account #",
+                "RRO Name", "Payment Date", "Title", "Article", "Standard Number", "Wr Wrk Inst", "RH Account #",
                 "RH Name", "Publisher", "Pub Date", "Number of Copies", "Amt in Orig Currency", "Amt in USD", "Market",
                 "Market Period From", "Market Period To", "Author", "Detail Status"}, table.getColumnHeaders());
         Collection<?> containerPropertyIds = table.getContainerPropertyIds();
