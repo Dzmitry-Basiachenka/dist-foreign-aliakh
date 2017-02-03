@@ -18,8 +18,10 @@ import com.copyright.rup.vaadin.ui.LocalDateColumnGenerator;
 import com.copyright.rup.vaadin.ui.LongColumnGenerator;
 import com.copyright.rup.vaadin.ui.MoneyColumnGenerator;
 import com.copyright.rup.vaadin.ui.Windows;
+import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.ui.component.lazytable.LazyTable;
 
+import com.vaadin.server.Extension;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
@@ -30,6 +32,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -144,9 +147,15 @@ public class UsagesWidgetTest {
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(true), layout.getMargin());
-        assertEquals(2, layout.getComponentCount());
+        assertEquals(3, layout.getComponentCount());
         assertEquals("Load", layout.getComponent(0).getCaption());
         assertEquals("Add To Scenario", layout.getComponent(1).getCaption());
+        Component component = layout.getComponent(2);
+        assertEquals("Export", component.getCaption());
+        Collection<Extension> extensions = component.getExtensions();
+        assertTrue(CollectionUtils.isNotEmpty(extensions));
+        assertEquals(1, extensions.size());
+        assertTrue(extensions.iterator().next() instanceof OnDemandFileDownloader);
     }
 
     private void verifyTable(Table table) {

@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.api;
 
 import com.copyright.rup.dist.foreign.ui.common.domain.UsageDto;
+import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.ui.component.lazytable.IBeanLoader;
 import com.copyright.rup.vaadin.widget.api.IController;
 
@@ -13,7 +14,7 @@ import com.copyright.rup.vaadin.widget.api.IController;
  *
  * @author Mikita Hladkikh
  */
-public interface IUsagesController extends IController<IUsagesWidget>, IBeanLoader<UsageDto> {
+public interface IUsagesController extends IController<IUsagesWidget>, IBeanLoader<UsageDto>, IStreamSource {
 
     /**
      * Initializes {@link IUsagesFilterWidget}.

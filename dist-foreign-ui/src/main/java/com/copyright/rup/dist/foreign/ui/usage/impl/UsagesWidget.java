@@ -10,6 +10,7 @@ import com.copyright.rup.vaadin.ui.LongColumnGenerator;
 import com.copyright.rup.vaadin.ui.MoneyColumnGenerator;
 import com.copyright.rup.vaadin.ui.VaadinUtils;
 import com.copyright.rup.vaadin.ui.Windows;
+import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.ui.component.lazytable.LazyTable;
 
 import com.vaadin.ui.Button;
@@ -135,7 +136,10 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         loadButton.addClickListener(event -> Windows.showModalWindow(new UsageBatchUploadWindow()));
         Button addToScenarioButton = Buttons.createButton(ForeignUi.getMessage("button.add_to_scenario"));
         addToScenarioButton.addClickListener(event -> Windows.showNotificationWindow("Add to scenario button clicked"));
-        HorizontalLayout layout = new HorizontalLayout(loadButton, addToScenarioButton);
+        Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
+        OnDemandFileDownloader fileDownloader = new OnDemandFileDownloader(getController());
+        fileDownloader.extend(exportButton);
+        HorizontalLayout layout = new HorizontalLayout(loadButton, addToScenarioButton, exportButton);
         layout.setSpacing(true);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "usages-buttons");
