@@ -8,7 +8,7 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertNotNull;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.foreign.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 

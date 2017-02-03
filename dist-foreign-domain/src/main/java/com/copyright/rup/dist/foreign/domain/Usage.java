@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign;
+package com.copyright.rup.dist.foreign.domain;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.domain.StoredEntity;
@@ -9,6 +9,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 /**
  * Represents usage.
@@ -21,6 +22,7 @@ import java.math.BigDecimal;
  */
 public class Usage extends StoredEntity<String> {
 
+    private Integer detailId;
     private String batchId;
     private Long wrWrkInst;
     private String workTitle;
@@ -28,14 +30,34 @@ public class Usage extends StoredEntity<String> {
     private String article;
     private String standardNumber;
     private String publisher;
-    private Integer publicationDate;
+    private LocalDate publicationDate;
     private String market;
     private Integer marketPeriodFrom;
     private Integer marketPeriodTo;
     private String author;
     private Integer numberOfCopies;
     private BigDecimal originalAmount = BigDecimal.ZERO;
+    private BigDecimal netAmount = BigDecimal.ZERO;
+    private BigDecimal serviceFee = BigDecimal.ZERO;
+    private BigDecimal serviceFeeAmount = BigDecimal.ZERO;
     private BigDecimal grossAmount = BigDecimal.ZERO;
+    private UsageStatusEnum status;
+
+    /**
+     * @return detail id.
+     */
+    public Integer getDetailId() {
+        return detailId;
+    }
+
+    /**
+     * Sets detail id.
+     *
+     * @param detailId detail id
+     */
+    public void setDetailId(Integer detailId) {
+        this.detailId = detailId;
+    }
 
     /**
      * @return batch id.
@@ -152,7 +174,7 @@ public class Usage extends StoredEntity<String> {
     /**
      * @return publication date.
      */
-    public Integer getPublicationDate() {
+    public LocalDate getPublicationDate() {
         return publicationDate;
     }
 
@@ -161,7 +183,7 @@ public class Usage extends StoredEntity<String> {
      *
      * @param publicationDate publication date
      */
-    public void setPublicationDate(Integer publicationDate) {
+    public void setPublicationDate(LocalDate publicationDate) {
         this.publicationDate = publicationDate;
     }
 
@@ -264,6 +286,60 @@ public class Usage extends StoredEntity<String> {
     }
 
     /**
+     * @return net amount.
+     */
+    public BigDecimal getNetAmount() {
+        return netAmount;
+    }
+
+    /**
+     * Sets net amount.
+     *
+     * @param netAmount net amount
+     */
+    public void setNetAmount(BigDecimal netAmount) {
+        if (null != netAmount) {
+            this.netAmount = netAmount;
+        }
+    }
+
+    /**
+     * @return service fee.
+     */
+    public BigDecimal getServiceFee() {
+        return serviceFee;
+    }
+
+    /**
+     * Sets service fee.
+     *
+     * @param serviceFee service fee
+     */
+    public void setServiceFee(BigDecimal serviceFee) {
+        if (null != serviceFee) {
+            this.serviceFee = serviceFee;
+        }
+    }
+
+    /**
+     * @return service fee amount.
+     */
+    public BigDecimal getServiceFeeAmount() {
+        return serviceFeeAmount;
+    }
+
+    /**
+     * Sets service fee amount.
+     *
+     * @param serviceFeeAmount service fee amount
+     */
+    public void setServiceFeeAmount(BigDecimal serviceFeeAmount) {
+        if (null != serviceFeeAmount) {
+            this.serviceFeeAmount = serviceFeeAmount;
+        }
+    }
+
+    /**
      * @return gross amount.
      */
     public BigDecimal getGrossAmount() {
@@ -281,6 +357,22 @@ public class Usage extends StoredEntity<String> {
         }
     }
 
+    /**
+     * @return status.
+     */
+    public UsageStatusEnum getStatus() {
+        return status;
+    }
+
+    /**
+     * Sets status.
+     *
+     * @param status status
+     */
+    public void setStatus(UsageStatusEnum status) {
+        this.status = status;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -292,6 +384,7 @@ public class Usage extends StoredEntity<String> {
         Usage that = (Usage) obj;
         return new EqualsBuilder()
             .appendSuper(super.equals(obj))
+            .append(this.detailId, that.detailId)
             .append(this.batchId, that.batchId)
             .append(this.wrWrkInst, that.wrWrkInst)
             .append(this.workTitle, that.workTitle)
@@ -306,7 +399,11 @@ public class Usage extends StoredEntity<String> {
             .append(this.author, that.author)
             .append(this.numberOfCopies, that.numberOfCopies)
             .append(this.originalAmount, that.originalAmount)
+            .append(this.netAmount, that.netAmount)
+            .append(this.serviceFee, that.serviceFee)
+            .append(this.serviceFeeAmount, that.serviceFeeAmount)
             .append(this.grossAmount, that.grossAmount)
+            .append(this.status, that.status)
             .isEquals();
     }
 
@@ -314,6 +411,7 @@ public class Usage extends StoredEntity<String> {
     public int hashCode() {
         return new HashCodeBuilder()
             .appendSuper(super.hashCode())
+            .append(detailId)
             .append(batchId)
             .append(wrWrkInst)
             .append(workTitle)
@@ -328,7 +426,11 @@ public class Usage extends StoredEntity<String> {
             .append(author)
             .append(numberOfCopies)
             .append(originalAmount)
+            .append(netAmount)
+            .append(serviceFee)
+            .append(serviceFeeAmount)
             .append(grossAmount)
+            .append(status)
             .toHashCode();
     }
 
@@ -336,6 +438,7 @@ public class Usage extends StoredEntity<String> {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
             .appendSuper(super.toString())
+            .append("detailId", detailId)
             .append("batchId", batchId)
             .append("wrWrkInst", wrWrkInst)
             .append("workTitle", workTitle)
@@ -350,7 +453,11 @@ public class Usage extends StoredEntity<String> {
             .append("author", author)
             .append("numberOfCopies", numberOfCopies)
             .append("originalAmount", originalAmount)
+            .append("netAmount", netAmount)
+            .append("serviceFee", serviceFee)
+            .append("serviceFeeAmount", serviceFeeAmount)
             .append("grossAmount", grossAmount)
+            .append("status", status)
             .toString();
     }
 }

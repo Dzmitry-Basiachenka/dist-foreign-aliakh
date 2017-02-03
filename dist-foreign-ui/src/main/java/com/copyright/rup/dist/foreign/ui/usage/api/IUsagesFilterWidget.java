@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.api;
 
-import com.copyright.rup.dist.foreign.UsageFilter;
+import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.ui.common.api.IFilterWidget;
 
 import java.util.Set;

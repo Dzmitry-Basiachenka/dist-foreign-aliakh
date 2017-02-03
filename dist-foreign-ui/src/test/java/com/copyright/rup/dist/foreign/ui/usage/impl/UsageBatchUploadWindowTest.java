@@ -11,7 +11,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
-import com.copyright.rup.dist.foreign.CurrencyEnum;
+import com.copyright.rup.dist.foreign.domain.CurrencyEnum;
 import com.copyright.rup.dist.foreign.ui.component.CsvUploadComponent;
 import com.copyright.rup.dist.foreign.ui.component.LocalDateWidget;
 import com.copyright.rup.dist.foreign.ui.component.validator.AmountValidator;
