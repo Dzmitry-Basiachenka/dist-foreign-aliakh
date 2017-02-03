@@ -1,0 +1,49 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="usageMapper">
+
+    <!--TODO {dbaraukova} implement LocalDateHandler for publication date-->
+    <insert id="insertUsage" parameterType="Usage">
+        insert into ${schema}.df_usage(
+            df_usage_uid,
+            df_usage_batch_uid,
+            detail_id,
+            wr_wrk_inst,
+            work_title,
+            rh_account_number,
+            status_ind,
+            article,
+            standard_number,
+            publisher,
+            market,
+            market_period_from,
+            market_period_to,
+            author,
+            number_of_copies,
+            original_amount,
+            gross_amount,
+            <include refid="StoredEntityMapper.additionalColumns"/>)
+        values(
+            #{id},
+            #{batchId},
+            #{detailId},
+            #{wrWrkInst},
+            #{workTitle},
+            #{rightsholder.accountNumber},
+            #{status},
+            #{article},
+            #{standardNumber},
+            #{publisher},
+            #{market},
+            #{marketPeriodFrom},
+            #{marketPeriodTo},
+            #{author},
+            #{numberOfCopies},
+            #{originalAmount},
+            #{grossAmount},
+            <include refid="StoredEntityMapper.insert"/>
+        )
+    </insert>
+</mapper>
