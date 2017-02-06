@@ -1,0 +1,38 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="IUsageBatchMapper">
+
+    <insert id="insert" parameterType="UsageBatch">
+        insert into ${schema}.df_usage_batch(
+            df_usage_batch_uid,
+            name,
+            rro_account_number,
+            payment_date,
+            fiscal_year,
+            gross_amount,
+            currency_ind,
+            conversion_rate,
+            applied_conversion_rate,
+            <include refid="StoredEntityMapper.additionalColumns"/>
+        ) values (
+            #{id},
+            #{name},
+            #{rro.accountNumber},
+            #{paymentDate},
+            #{fiscalYear},
+            #{grossAmount},
+            #{currency.name},
+            #{conversionRate},
+            #{appliedConversionRate},
+            <include refid="StoredEntityMapper.insert"/>
+        )
+    </insert>
+
+    <select id="findFiscalYears" resultType="int">
+        select distinct fiscal_year
+        from ${schema}.df_usage_batch
+        order by fiscal_year
+    </select>
+</mapper>

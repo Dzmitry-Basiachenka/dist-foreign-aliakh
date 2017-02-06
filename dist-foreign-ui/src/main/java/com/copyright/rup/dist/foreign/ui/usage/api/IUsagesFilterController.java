@@ -2,6 +2,8 @@ package com.copyright.rup.dist.foreign.ui.usage.api;
 
 import com.copyright.rup.dist.foreign.ui.common.api.IFilterController;
 
+import java.util.List;
+
 /**
  * Interface for controller for usage filtering.
  * <p/>
@@ -23,4 +25,9 @@ public interface IUsagesFilterController extends IFilterController<IUsagesFilter
      * Handles click on rightsholders filter.
      */
     void onRightsholderFilterClick();
+
+    /**
+     * @return list of fiscal years.
+     */
+    List<Integer> getFiscalYears();
 }

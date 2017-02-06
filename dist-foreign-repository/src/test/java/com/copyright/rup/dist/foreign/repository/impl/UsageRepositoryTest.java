@@ -36,7 +36,7 @@ public class UsageRepositoryTest {
     @Test
     public void testInsertUsage() {
         Usage usage = new Usage();
-        expect(sqlSessionTemplate.insert("insertUsage", usage)).andReturn(1).once();
+        expect(sqlSessionTemplate.insert("IUsageMapper.insertUsage", usage)).andReturn(1).once();
         replay(sqlSessionTemplate);
         assertEquals(1, usageRepository.insertUsage(usage));
         verify(sqlSessionTemplate);

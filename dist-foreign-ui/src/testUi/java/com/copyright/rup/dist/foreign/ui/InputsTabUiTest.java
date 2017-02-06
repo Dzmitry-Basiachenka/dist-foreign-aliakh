@@ -8,6 +8,7 @@ import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ import java.util.List;
  *
  * @author Mikita Hladkikh
  */
+@ContextConfiguration(value = "classpath:/com/copyright/rup/dist/foreign/ui/dist-foreign-ui-test-context.xml")
 public class InputsTabUiTest extends ForeignCommonUiTest {
 
     @Test
@@ -128,7 +130,7 @@ public class InputsTabUiTest extends ForeignCommonUiTest {
         verifyRightsholdersFilter(filterWidget);
         verifyStatusFilter(filterWidget);
         verifyPaymentDateComponent(filterWidget, "payment-date-filter");
-        assertComboboxElement(filterWidget, "tax-country-filter", HTML_SPAN_TAG_NAME, "Tax Country");
+        assertComboboxElement(filterWidget, "fiscal-year-filter", HTML_SPAN_TAG_NAME, "Fiscal Year");
         verifyFiltersWidgetButtons(filterWidget);
     }
 
