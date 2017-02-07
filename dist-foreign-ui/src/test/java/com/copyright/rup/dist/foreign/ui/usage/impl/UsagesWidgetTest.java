@@ -14,6 +14,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.ui.LocalDateColumnGenerator;
 import com.copyright.rup.vaadin.ui.LongColumnGenerator;
 import com.copyright.rup.vaadin.ui.MoneyColumnGenerator;
@@ -58,11 +59,11 @@ import java.util.Collections;
 public class UsagesWidgetTest {
 
     private UsagesWidget usagesWidget;
-    private UsagesController controller;
+    private IUsagesController controller;
 
     @Before
     public void setUp() {
-        controller = createMock(UsagesController.class);
+        controller = createMock(IUsagesController.class);
         UsagesFilterWidget filterWidget = new UsagesFilterWidget();
         usagesWidget = new UsagesWidget();
         usagesWidget.setController(controller);

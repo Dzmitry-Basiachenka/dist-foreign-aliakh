@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
@@ -14,9 +15,9 @@ import java.util.List;
 
 /**
  * UI test for "Usages" tab.
- * <p/>
+ * <p>
  * Copyright (C) 2017 copyright.com
- * <p/>
+ * <p>
  * Date: 01/24/2017
  *
  * @author Mikita Hladkikh
@@ -119,7 +120,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     private void verifyTableBody(WebElement usagesTable) {
         WebElement table = findElement(usagesTable, By.className(V_TABLE_BODY_CLASS_NAME));
         List<WebElement> tableRows = findElements(table, By.tagName(HTML_TR_TAG_NAME));
-        assertEquals(9, tableRows.size());
+        assertTrue(tableRows.isEmpty());
     }
 
     private void verifyFiltersWidget(WebElement tabContainer) {
