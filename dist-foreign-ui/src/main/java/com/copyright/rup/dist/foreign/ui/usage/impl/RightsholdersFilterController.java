@@ -64,8 +64,7 @@ public class RightsholdersFilterController implements ICommonFilterWindowControl
     @Override
     public FilterWindow<Long, Rightsholder> showFilterWindow() {
         FilterWindow<Long, Rightsholder> filterWindow =
-            Windows.showFilterWindow(ForeignUi.getMessage("window.rightsholders_filter"), this,
-                "name", "accountNumber");
+            Windows.showFilterWindow(ForeignUi.getMessage("window.rros_filter"), this, "name", "accountNumber");
         filterWindow.setSelectedItemsIds(filterWidget.getFilter().getRhAccountNumbers());
         VaadinUtils.addComponentStyle(filterWindow, "rightsholders-filter-window");
         return filterWindow;

@@ -104,7 +104,7 @@ public class RightsholdersFilterControllerTest {
         controller.setFilterWidget(filterWidgetMock);
         VaadinUtils.addComponentStyle(filterWindowMock, "rightsholders-filter-window");
         expectLastCall().once();
-        expect(Windows.showFilterWindow("Rightsholders filter", controller, "name", "accountNumber"))
+        expect(Windows.showFilterWindow("RROs filter", controller, "name", "accountNumber"))
             .andReturn(filterWindowMock).once();
         expect(filterWidgetMock.getFilter()).andReturn(filterMock).once();
         expect(filterMock.getRhAccountNumbers()).andReturn(selectedItemsIds).once();

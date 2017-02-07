@@ -13,7 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import java.util.List;
 
 /**
- * UI test for "Inputs" tab.
+ * UI test for "Usages" tab.
  * <p/>
  * Copyright (C) 2017 copyright.com
  * <p/>
@@ -22,13 +22,13 @@ import java.util.List;
  * @author Mikita Hladkikh
  */
 @ContextConfiguration(value = "classpath:/com/copyright/rup/dist/foreign/ui/dist-foreign-ui-test-context.xml")
-public class InputsTabUiTest extends ForeignCommonUiTest {
+public class UsagesTabUiTest extends ForeignCommonUiTest {
 
     @Test
     public void testLookAndFeel() {
         loginAsViewOnly();
         WebElement tabContainer = findElementById(Cornerstone.MAIN_TABSHEET);
-        tabContainer = waitAndGetTab(tabContainer, "Inputs");
+        tabContainer = waitAndGetTab(tabContainer, "Usages");
         verifyFiltersWidget(tabContainer);
         verifyUsagesLayout(tabContainer);
     }
@@ -130,7 +130,7 @@ public class InputsTabUiTest extends ForeignCommonUiTest {
         verifyRightsholdersFilter(filterWidget);
         verifyStatusFilter(filterWidget);
         verifyPaymentDateComponent(filterWidget, "payment-date-filter");
-        assertComboboxElement(filterWidget, "fiscal-year-filter", HTML_SPAN_TAG_NAME, "Fiscal Year");
+        assertComboboxElement(filterWidget, "fiscal-year-filter", HTML_SPAN_TAG_NAME, "Fiscal Year To");
         verifyFiltersWidgetButtons(filterWidget);
     }
 
@@ -149,7 +149,7 @@ public class InputsTabUiTest extends ForeignCommonUiTest {
         WebElement rightsholderFilterButton = findElementByText(rightsholdersFilter, HTML_SPAN_TAG_NAME, "RROs");
         assertNotNull(rightsholderFilterButton);
         clickElementAndWait(rightsholderFilterButton);
-        verifyFilterWindow("rightsholders-filter-window", "Rightsholders filter");
+        verifyFilterWindow("rightsholders-filter-window", "RROs filter");
     }
 
     private void verifyFilterWindow(String id, String caption) {
@@ -178,7 +178,7 @@ public class InputsTabUiTest extends ForeignCommonUiTest {
 
     private void verifyPaymentDateComponent(WebElement filterWidget, String id) {
         WebElement paymentDateFilter = assertElement(filterWidget, id);
-        assertNotNull(findElementByText(paymentDateFilter, HTML_SPAN_TAG_NAME, "Payment Date"));
+        assertNotNull(findElementByText(paymentDateFilter, HTML_SPAN_TAG_NAME, "Payment Date To"));
         assertNotNull(findElement(paymentDateFilter, By.className("v-datefield")));
         assertNotNull(findElement(paymentDateFilter, By.className(V_DATE_FIELD_BUTTON_CLASS_NAME)));
     }
