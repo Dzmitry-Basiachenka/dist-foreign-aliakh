@@ -22,7 +22,7 @@ import java.time.LocalDate;
  */
 public class Usage extends StoredEntity<String> {
 
-    private Integer detailId;
+    private Long detailId;
     private String batchId;
     private Long wrWrkInst;
     private String workTitle;
@@ -46,7 +46,7 @@ public class Usage extends StoredEntity<String> {
     /**
      * @return detail id.
      */
-    public Integer getDetailId() {
+    public Long getDetailId() {
         return detailId;
     }
 
@@ -55,7 +55,7 @@ public class Usage extends StoredEntity<String> {
      *
      * @param detailId detail id
      */
-    public void setDetailId(Integer detailId) {
+    public void setDetailId(Long detailId) {
         this.detailId = detailId;
     }
 

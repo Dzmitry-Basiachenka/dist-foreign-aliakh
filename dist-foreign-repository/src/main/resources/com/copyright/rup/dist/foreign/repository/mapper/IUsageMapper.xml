@@ -184,7 +184,7 @@
                 </choose>
             </when>
             <otherwise>
-                usage_updated_datetime desc
+                updated_datetime desc
             </otherwise>
         </choose>
     </sql>

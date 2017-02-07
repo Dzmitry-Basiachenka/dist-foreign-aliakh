@@ -72,7 +72,7 @@ public class UsageRepositoryIntegrationTest {
     private static final BigDecimal NET_AMOUNT = new BigDecimal("9.13");
     private static final BigDecimal SERVICE_FEE = new BigDecimal("0.15000");
     private static final BigDecimal SERVICE_FEE_AMOUNT = new BigDecimal("2.98");
-    private static final Integer DETAIL_ID = 12345;
+    private static final Long DETAIL_ID = 12345L;
     private static final Integer NUMBER_OF_COPIES = 155;
 
     @Autowired

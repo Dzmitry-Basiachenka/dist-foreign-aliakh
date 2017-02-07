@@ -4,11 +4,11 @@ import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.component.LocalDateWidget;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.VaadinUtils;
-import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
 import com.vaadin.data.Property;
@@ -62,7 +62,7 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
     @Override
     public void applyFilter() {
         applyButton.setEnabled(false);
-        Windows.showNotificationWindow("Apply filter clicked");
+        fireEvent(new FilterChangedEvent(this, usageFilter));
     }
 
     @Override

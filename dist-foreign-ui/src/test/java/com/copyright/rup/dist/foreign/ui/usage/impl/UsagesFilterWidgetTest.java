@@ -52,9 +52,9 @@ import java.util.Set;
 
 /**
  * Verifies {@link UsagesFilterWidget}.
- * <p/>
+ * <p>
  * Copyright (C) 2017 copyright.com
- * <p/>
+ * <p>
  * Date: 01/12/2017
  *
  * @author Mikita Hladkikh
@@ -117,37 +117,29 @@ public class UsagesFilterWidgetTest {
     }
 
     @Test
-    @PrepareForTest(Windows.class)
     public void testApplyFilter() {
-        mockStatic(Windows.class);
         expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
-        Windows.showNotificationWindow("Apply filter clicked");
-        expectLastCall().once();
-        replay(Windows.class, usagesFilterController);
+        replay(usagesFilterController);
         widget.init();
         Button applyButton = getApplyButton();
         assertFalse(applyButton.isEnabled());
         widget.setSelectedRightsholders(Sets.newHashSet(10000L));
         assertTrue(applyButton.isEnabled());
         widget.applyFilter();
-        verify(Windows.class, usagesFilterController);
+        verify(usagesFilterController);
         assertFalse(applyButton.isEnabled());
     }
 
     @Test
-    @PrepareForTest(Windows.class)
     public void testFilterChangedEmptyFilter() {
-        mockStatic(Windows.class);
         expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
-        Windows.showNotificationWindow("Apply filter clicked");
-        expectLastCall().once();
-        replay(Windows.class, usagesFilterController);
+        replay(usagesFilterController);
         widget.init();
         Button applyButton = getApplyButton();
         assertFalse(applyButton.isEnabled());
         widget.setSelectedRightsholders(Collections.emptySet());
         widget.applyFilter();
-        verify(Windows.class, usagesFilterController);
+        verify(usagesFilterController);
         assertFalse(applyButton.isEnabled());
     }
 
