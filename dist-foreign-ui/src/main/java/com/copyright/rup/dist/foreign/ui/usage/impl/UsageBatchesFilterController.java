@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
-import com.copyright.rup.dist.foreign.ui.common.domain.FakeDataGenerator;
+import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.ICommonFilterWindowController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
@@ -10,6 +10,7 @@ import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.FilterSaveEvent;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -29,11 +30,14 @@ import java.util.Collection;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class UsageBatchesFilterController implements ICommonFilterWindowController<String, UsageBatch> {
 
+    @Autowired
+    private IUsageBatchService usageBatchService;
+
     private IUsagesFilterWidget filterWidget;
 
     @Override
     public Collection<UsageBatch> loadBeans() {
-        return FakeDataGenerator.getUsageBatches();
+        return usageBatchService.getUsageBatches();
     }
 
     @Override
@@ -64,8 +68,7 @@ public class UsageBatchesFilterController implements ICommonFilterWindowControll
     @Override
     public FilterWindow<String, UsageBatch> showFilterWindow() {
         FilterWindow<String, UsageBatch> filterWindow =
-            Windows.showFilterWindow(ForeignUi.getMessage("window.batches_filter"), this,
-                "name", "rro.accountNumber");
+            Windows.showFilterWindow(ForeignUi.getMessage("window.batches_filter"), this, "name");
         filterWindow.setSelectedItemsIds(filterWidget.getFilter().getUsageBatchesIds());
         VaadinUtils.addComponentStyle(filterWindow, "batches-filter-window");
         return filterWindow;

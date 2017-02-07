@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.service.api;
 
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
+
 import java.util.List;
 
 /**
@@ -17,4 +19,9 @@ public interface IUsageBatchService {
      * @return list of fiscal years presented in DB.
      */
     List<Integer> getFiscalYears();
+
+    /**
+     * @return list of {@link UsageBatch}.
+     */
+    List<UsageBatch> getUsageBatches();
 }

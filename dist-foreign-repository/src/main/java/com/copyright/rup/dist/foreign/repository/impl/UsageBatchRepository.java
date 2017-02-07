@@ -31,4 +31,9 @@ public class UsageBatchRepository extends BaseRepository implements IUsageBatchR
     public List<Integer> findFiscalYears() {
         return selectList("IUsageBatchMapper.findFiscalYears");
     }
+
+    @Override
+    public List<UsageBatch> findUsageBatches() {
+        return selectList("IUsageBatchMapper.findUsageBatches");
+    }
 }

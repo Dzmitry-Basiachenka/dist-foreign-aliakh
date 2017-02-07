@@ -36,7 +36,6 @@ public class UsagesFilterController extends CommonController<IUsagesFilterWidget
     private ICommonFilterWindowController rightsholdersFilterController;
 
     @Autowired
-    @Qualifier("df.service.usageBatchService")
     private IUsageBatchService usageBatchService;
 
     @Override

@@ -27,4 +27,9 @@ public interface IUsageBatchRepository {
      * @return list of all fiscal years presented in DB.
      */
     List<Integer> findFiscalYears();
+
+    /**
+     * @return list of all {@link UsageBatch} presented in DB.
+     */
+    List<UsageBatch> findUsageBatches();
 }
