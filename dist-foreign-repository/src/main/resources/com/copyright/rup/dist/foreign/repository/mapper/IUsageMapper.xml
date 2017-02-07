@@ -4,6 +4,30 @@
 
 <mapper namespace="IUsageMapper">
 
+    <resultMap id="usageDtoResultMap" type="UsageDto" extends="StoredEntityMapper.storedEntityResult">
+        <result property="id" column="df_usage_uid"/>
+        <result property="detailId" column="detail_id"/>
+        <result property="wrWrkInst" column="wr_wrk_inst"/>
+        <result property="workTitle" column="work_title"/>
+        <result property="rightsholder.accountNumber" column="rh_account_number"/>
+        <result property="status" column="status_ind"/>
+        <result property="article" column="article"/>
+        <result property="standardNumber" column="standard_number"/>
+        <result property="publisher" column="publisher"/>
+        <result property="publicationDate" column="publication_date"/>
+        <result property="market" column="market"/>
+        <result property="marketPeriodFrom" column="market_period_from"/>
+        <result property="marketPeriodTo" column="market_period_to"/>
+        <result property="author" column="author"/>
+        <result property="numberOfCopies" column="number_of_copies"/>
+        <result property="originalAmount" column="original_amount"/>
+        <result property="grossAmount" column="gross_amount"/>
+        <result property="batchName" column="name"/>
+        <result property="rro.accountNumber" column="rro_account_number"/>
+        <result property="paymentDate" column="payment_date"/>
+        <result property="fiscalYear" column="fiscal_year"/>
+    </resultMap>
+
     <!--TODO {dbaraukova} implement LocalDateHandler for publication date-->
     <insert id="insertUsage" parameterType="Usage">
         insert into ${schema}.df_usage(
@@ -17,12 +41,16 @@
             article,
             standard_number,
             publisher,
+            publication_date,
             market,
             market_period_from,
             market_period_to,
             author,
             number_of_copies,
             original_amount,
+            net_amount,
+            service_fee,
+            service_fee_amount,
             gross_amount,
             <include refid="StoredEntityMapper.additionalColumns"/>)
         values(
@@ -36,14 +64,173 @@
             #{article},
             #{standardNumber},
             #{publisher},
+            #{publicationDate},
             #{market},
             #{marketPeriodFrom},
             #{marketPeriodTo},
             #{author},
             #{numberOfCopies},
             #{originalAmount},
+            #{netAmount},
+            #{serviceFee},
+            #{serviceFeeAmount},
             #{grossAmount},
             <include refid="StoredEntityMapper.insert"/>
         )
     </insert>
+
+    <sql id="usageFilter">
+        <where>
+            <if test="filter.usageBatchesIds.size() > 0">
+                and
+                <foreach collection="filter.usageBatchesIds" item="usageBatchId" open="(" separator=" or " close=")">
+                    ub.df_usage_batch_uid = #{usageBatchId}
+                </foreach>
+            </if>
+            <if test="filter.rhAccountNumbers.size() > 0">
+                and
+                <foreach collection="filter.rhAccountNumbers" item="rhAccountNumber" open="(" separator=" or " close=")">
+                    ub.rro_account_number = #{rhAccountNumber}
+                </foreach>
+            </if>
+            <if test="null != filter.paymentDate">
+                and <![CDATA[ub.payment_date <= #{filter.paymentDate}]]>
+            </if>
+            <if test="null != filter.usageStatus">
+                and u.status_ind = #{filter.usageStatus}
+            </if>
+            <if test="null != filter.fiscalYear">
+                and <![CDATA[ub.fiscal_year <= #{filter.fiscalYear}]]>
+            </if>
+        </where>
+    </sql>
+
+    <sql id="direction">
+        <choose>
+            <when test="sort.direction == 'asc'">
+                asc
+            </when>
+            <otherwise>
+                desc
+            </otherwise>
+        </choose>
+    </sql>
+
+    <sql id="usageFilterOrderBy">
+        order by
+        <choose>
+            <when test="null != sort">
+                <choose>
+                    <when test="sort.property == 'detailId'">
+                        u.detail_id <include refid="direction"/>
+                    </when>
+                    <when test="sort.property == 'name'">
+                        ub.name <include refid="direction"/>
+                    </when>
+                    <when test="sort.property == 'fiscalYear'">
+                        ub.fiscal_year <include refid="direction"/>
+                    </when>
+                    <when test="sort.property == 'rro.accountNumber'">
+                        ub.rro_account_number <include refid="direction"/>
+                    </when>
+                    <when test="sort.property == 'paymentDate'">
+                        ub.payment_date <include refid="direction"/>
+                    </when>
+                    <when test="sort.property == 'title'">
+                        u.work_title <include refid="direction"/>
+                    </when>
+                    <when test="sort.property == 'article'">
+                        u.article <include refid="direction"/>
+                    </when>
+                    <when test="sort.property == 'standardNumber'">
+                        u.standard_number <include refid="direction"/>
+                    </when>
+                    <when test="sort.property == 'wrWrkInst'">
+                        u.wr_wrk_inst <include refid="direction"/>
+                    </when>
+                    <when test="sort.property == 'rightsholder.accountNumber'">
+                        u.rh_account_number <include refid="direction"/>
+                    </when>
+                    <when test="sort.property == 'publisher'">
+                        u.publisher <include refid="direction"/>
+                    </when>
+                    <when test="sort.property == 'publicationDate'">
+                        u.publication_date <include refid="direction"/>
+                    </when>
+                    <when test="sort.property == 'numberOfCopies'">
+                        u.number_of_copies <include refid="direction"/>
+                    </when>
+                    <when test="sort.property == 'originalAmount'">
+                        u.original_amount <include refid="direction"/>
+                    </when>
+                    <when test="sort.property == 'grossAmount'">
+                        usage_gross_amount <include refid="direction"/>
+                    </when>
+                    <when test="sort.property == 'market'">
+                        u.market <include refid="direction"/>
+                    </when>
+                    <when test="sort.property == 'marketPeriodFrom'">
+                        u.market_period_from <include refid="direction"/>
+                    </when>
+                    <when test="sort.property == 'marketPeriodTo'">
+                        u.market_period_to <include refid="direction"/>
+                    </when>
+                    <when test="sort.property == 'author'">
+                        u.author <include refid="direction"/>
+                    </when>
+                    <when test="sort.property == 'status'">
+                        u.status_ind <include refid="direction"/>
+                    </when>
+                </choose>
+            </when>
+            <otherwise>
+                usage_updated_datetime desc
+            </otherwise>
+        </choose>
+    </sql>
+
+    <select id="findByFilter" resultMap="usageDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
+        select
+            u.df_usage_uid,
+            u.detail_id,
+            u.wr_wrk_inst,
+            u.work_title,
+            u.rh_account_number,
+            u.status_ind,
+            u.article,
+            u.standard_number,
+            u.publisher,
+            u.publication_date,
+            u.market,
+            u.market_period_from,
+            u.market_period_to,
+            u.author,
+            u.number_of_copies,
+            u.original_amount,
+            u.gross_amount,
+            ub.name,
+            ub.rro_account_number,
+            ub.payment_date,
+            ub.fiscal_year,
+            u.record_version,
+            u.created_by_user,
+            u.created_datetime,
+            u.updated_by_user,
+            u.updated_datetime
+        from ${schema}.df_usage u
+        join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+        <include refid="usageFilter"/>
+        <include refid="usageFilterOrderBy"/>
+        <if test="null != pageable">
+            limit #{pageable.limit}
+            offset #{pageable.offset}
+        </if>
+    </select>
+
+    <select id="getUsagesCount" parameterType="map" resultType="int">
+        select count(1)
+        from ${schema}.df_usage u
+        join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+        <include refid="usageFilter"/>
+    </select>
 </mapper>

@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.repository.api.Sort;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
@@ -21,6 +22,7 @@ import java.util.List;
  *
  * @author Aliaksei Pchelnikau
  */
+@Service
 public class UsageService implements IUsageService {
 
     @Autowired
