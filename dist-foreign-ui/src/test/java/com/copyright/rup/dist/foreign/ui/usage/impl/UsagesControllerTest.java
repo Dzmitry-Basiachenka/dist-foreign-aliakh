@@ -1,7 +1,10 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
+import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.isNull;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
@@ -9,20 +12,27 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 
-import com.copyright.rup.dist.foreign.ui.common.domain.FakeDataGenerator;
-import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
+import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageFilter;
+import com.copyright.rup.dist.foreign.repository.api.Pageable;
+import com.copyright.rup.dist.foreign.service.impl.UsageService;
+import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
+import com.copyright.rup.vaadin.widget.api.IWidget;
 
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies {@link UsagesController}.
- * <p/>
+ * <p>
  * Copyright (C) 2017 copyright.com
- * <p/>
+ * <p>
  * Date: 1/18/17
  *
  * @author Aliaksandr Radkevich
@@ -30,20 +40,49 @@ import java.time.LocalDate;
 public class UsagesControllerTest {
 
     private UsagesController controller;
+    private UsageService usageService;
+    private UsagesFilterController filterController;
 
     @Before
     public void setUp() {
         controller = new UsagesController();
+        usageService = createMock(UsageService.class);
+        Whitebox.setInternalState(controller, "usageService", usageService);
+        filterController = createMock(UsagesFilterController.class);
+        Whitebox.setInternalState(controller, "filterController", filterController);
     }
 
     @Test
     public void testGetSize() {
-        assertEquals(FakeDataGenerator.getUsageDtos().size(), controller.getSize());
+        IUsagesFilterWidget filterWidget = createMock(IUsagesFilterWidget.class);
+        Whitebox.setInternalState(filterController, IWidget.class, filterWidget);
+        UsageFilter filter = new UsageFilter();
+        filter.setFiscalYear(2017);
+        expect(filterWidget.getFilter()).andReturn(filter).once();
+        expect(usageService.getUsagesCount(filter)).andReturn(1).once();
+        replay(filterWidget, usageService);
+        assertEquals(1, controller.getSize());
+        verify(filterWidget, usageService);
     }
 
     @Test
     public void testLoadBeans() {
-        assertEquals(FakeDataGenerator.getUsageDtos().size(), controller.loadBeans(0, 150, null).size());
+        IUsagesFilterWidget filterWidget = createMock(IUsagesFilterWidget.class);
+        Whitebox.setInternalState(filterController, IWidget.class, filterWidget);
+        UsageFilter filter = new UsageFilter();
+        filter.setFiscalYear(2017);
+        Capture<Pageable> pageableCapture = new Capture<>();
+        expect(filterWidget.getFilter()).andReturn(filter).once();
+        expect(usageService.getUsages(eq(filter), capture(pageableCapture), isNull()))
+            .andReturn(Collections.emptyList()).once();
+        replay(filterWidget, usageService);
+        List<UsageDto> result = controller.loadBeans(10, 150, null);
+        Pageable pageable = pageableCapture.getValue();
+        assertEquals(10, pageable.getOffset());
+        assertEquals(150, pageable.getLimit());
+        assertNotNull(result);
+        assertEquals(0, result.size());
+        verify(filterWidget, usageService);
     }
 
     @Test
@@ -53,7 +92,6 @@ public class UsagesControllerTest {
 
     @Test
     public void testInitUsagesFilterWidget() {
-        IUsagesFilterController filterController = createMock(IUsagesFilterController.class);
         UsagesFilterWidget filterWidget = new UsagesFilterWidget();
         Whitebox.setInternalState(controller, "filterController", filterController);
         expect(filterController.initWidget()).andReturn(filterWidget).once();

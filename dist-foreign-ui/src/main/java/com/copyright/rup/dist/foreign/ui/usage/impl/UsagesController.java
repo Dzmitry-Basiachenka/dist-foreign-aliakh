@@ -1,7 +1,10 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
-import com.copyright.rup.dist.foreign.ui.common.domain.FakeDataGenerator;
-import com.copyright.rup.dist.foreign.ui.common.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageFilter;
+import com.copyright.rup.dist.foreign.repository.api.Pageable;
+import com.copyright.rup.dist.foreign.repository.api.Sort;
+import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
@@ -20,9 +23,9 @@ import java.util.List;
 
 /**
  * Controller for {@link UsagesWidget}.
- * <p/>
+ * <p>
  * Copyright (C) 2017 copyright.com
- * <p/>
+ * <p>
  * Date: 01/16/2017
  *
  * @author Mikita Hladkikh
@@ -30,6 +33,9 @@ import java.util.List;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class UsagesController extends CommonController<IUsagesWidget> implements IUsagesController {
+
+    @Autowired
+    private IUsageService usageService;
 
     @Autowired
     private IUsagesFilterController filterController;
@@ -41,14 +47,13 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
 
     @Override
     public int getSize() {
-        // TODO: refactor after implementing backend logic for getting usages
-        return FakeDataGenerator.getUsageDtos().size();
+        return usageService.getUsagesCount(getFilter());
     }
 
     @Override
     public List<UsageDto> loadBeans(int startIndex, int count, Object[] sortPropertyIds, boolean... sortStates) {
-        // TODO: refactor after implementing backend logic for getting usages
-        return FakeDataGenerator.getUsageDtos();
+        return usageService.getUsages(getFilter(), new Pageable(startIndex, count),
+            Sort.create(sortPropertyIds, sortStates));
     }
 
     @Override
@@ -67,5 +72,9 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
         LocalDate now = LocalDate.now();
         return VaadinUtils.encodeAndBuildFileName(
             String.format("export_usage_%s_%s_%s", now.getMonthValue(), now.getDayOfMonth(), now.getYear()), "csv");
+    }
+
+    private UsageFilter getFilter() {
+        return filterController.getWidget().getFilter();
     }
 }

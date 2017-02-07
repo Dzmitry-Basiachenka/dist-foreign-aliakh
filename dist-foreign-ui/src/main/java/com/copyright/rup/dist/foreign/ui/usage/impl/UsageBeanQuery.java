@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
-import com.copyright.rup.dist.foreign.ui.common.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.vaadin.ui.component.lazytable.CommonBeanQuery;
 
 import org.vaadin.addons.lazyquerycontainer.QueryDefinition;

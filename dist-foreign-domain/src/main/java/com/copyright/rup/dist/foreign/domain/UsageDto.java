@@ -1,13 +1,7 @@
-package com.copyright.rup.dist.foreign.ui.common.domain;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+package com.copyright.rup.dist.foreign.domain;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.domain.StoredEntity;
-import com.copyright.rup.dist.foreign.domain.Usage;
-import com.copyright.rup.dist.foreign.domain.UsageBatch;
-import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.ui.common.util.UsageBatchUtils;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -30,7 +24,7 @@ public class UsageDto extends StoredEntity<String> {
 
     private Integer detailId;
     private String batchName;
-    private String fiscalYear;
+    private Integer fiscalYear;
     private Rightsholder rro;
     private LocalDate paymentDate;
     private Long wrWrkInst;
@@ -48,36 +42,6 @@ public class UsageDto extends StoredEntity<String> {
     private BigDecimal grossAmount;
     private BigDecimal originalAmount;
     private UsageStatusEnum status;
-
-    /**
-     * Constructor.
-     *
-     * @param batch batch
-     * @param usage usage
-     */
-    public UsageDto(UsageBatch batch, Usage usage) {
-        setId(checkNotNull(usage).getId());
-        batchName = checkNotNull(batch).getName();
-        fiscalYear = UsageBatchUtils.getFiscalYear(batch.getFiscalYear());
-        rro = batch.getRro();
-        paymentDate = batch.getPaymentDate();
-        detailId = usage.getDetailId();
-        wrWrkInst = usage.getWrWrkInst();
-        workTitle = usage.getWorkTitle();
-        article = usage.getArticle();
-        rightsholder = usage.getRightsholder();
-        standardNumber = usage.getStandardNumber();
-        publisher = usage.getPublisher();
-        publicationDate = usage.getPublicationDate();
-        numberOfCopies = usage.getNumberOfCopies();
-        market = usage.getMarket();
-        marketPeriodFrom = usage.getMarketPeriodFrom();
-        marketPeriodTo = usage.getMarketPeriodTo();
-        author = usage.getAuthor();
-        grossAmount = usage.getGrossAmount();
-        originalAmount = usage.getOriginalAmount();
-        status = usage.getStatus();
-    }
 
     /**
      * @return detail id.
@@ -114,7 +78,7 @@ public class UsageDto extends StoredEntity<String> {
     /**
      * @return fiscal year.
      */
-    public String getFiscalYear() {
+    public Integer getFiscalYear() {
         return fiscalYear;
     }
 
@@ -123,7 +87,7 @@ public class UsageDto extends StoredEntity<String> {
      *
      * @param fiscalYear fiscal year
      */
-    public void setFiscalYear(String fiscalYear) {
+    public void setFiscalYear(Integer fiscalYear) {
         this.fiscalYear = fiscalYear;
     }
 
@@ -410,12 +374,25 @@ public class UsageDto extends StoredEntity<String> {
         UsageDto that = (UsageDto) obj;
         return new EqualsBuilder()
             .appendSuper(super.equals(obj))
-            .append(this.wrWrkInst, that.wrWrkInst)
-            .append(this.workTitle, that.workTitle)
-            .append(this.rightsholder, that.rightsholder)
-            .append(this.grossAmount, that.grossAmount)
+            .append(this.detailId, that.detailId)
+            .append(this.batchName, that.batchName)
+            .append(this.fiscalYear, that.fiscalYear)
             .append(this.rro, that.rro)
             .append(this.paymentDate, that.paymentDate)
+            .append(this.wrWrkInst, that.wrWrkInst)
+            .append(this.workTitle, that.workTitle)
+            .append(this.article, that.article)
+            .append(this.rightsholder, that.rightsholder)
+            .append(this.standardNumber, that.standardNumber)
+            .append(this.publisher, that.publisher)
+            .append(this.publicationDate, that.publicationDate)
+            .append(this.numberOfCopies, that.numberOfCopies)
+            .append(this.market, that.market)
+            .append(this.marketPeriodFrom, that.marketPeriodFrom)
+            .append(this.marketPeriodTo, that.marketPeriodTo)
+            .append(this.author, that.author)
+            .append(this.grossAmount, that.grossAmount)
+            .append(this.originalAmount, that.originalAmount)
             .append(this.status, that.status)
             .isEquals();
     }
@@ -424,12 +401,25 @@ public class UsageDto extends StoredEntity<String> {
     public int hashCode() {
         return new HashCodeBuilder()
             .appendSuper(super.hashCode())
-            .append(wrWrkInst)
-            .append(workTitle)
-            .append(rightsholder)
-            .append(grossAmount)
+            .append(detailId)
+            .append(batchName)
+            .append(fiscalYear)
             .append(rro)
             .append(paymentDate)
+            .append(wrWrkInst)
+            .append(workTitle)
+            .append(article)
+            .append(rightsholder)
+            .append(standardNumber)
+            .append(publisher)
+            .append(publicationDate)
+            .append(numberOfCopies)
+            .append(market)
+            .append(marketPeriodFrom)
+            .append(marketPeriodTo)
+            .append(author)
+            .append(grossAmount)
+            .append(originalAmount)
             .append(status)
             .toHashCode();
     }
@@ -438,12 +428,25 @@ public class UsageDto extends StoredEntity<String> {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
             .appendSuper(super.toString())
-            .append("wrWrkInst", wrWrkInst)
-            .append("workTitle", workTitle)
-            .append("rightsholder", rightsholder)
-            .append("grossAmount", grossAmount)
+            .append("detailId", detailId)
+            .append("batchName", batchName)
+            .append("fiscalYear", fiscalYear)
             .append("rro", rro)
             .append("paymentDate", paymentDate)
+            .append("wrWrkInst", wrWrkInst)
+            .append("workTitle", workTitle)
+            .append("article", article)
+            .append("rightsholder", rightsholder)
+            .append("standardNumber", standardNumber)
+            .append("publisher", publisher)
+            .append("publicationDate", publicationDate)
+            .append("numberOfCopies", numberOfCopies)
+            .append("market", market)
+            .append("marketPeriodFrom", marketPeriodFrom)
+            .append("marketPeriodTo", marketPeriodTo)
+            .append("author", author)
+            .append("grossAmount", grossAmount)
+            .append("originalAmount", originalAmount)
             .append("status", status)
             .toString();
     }

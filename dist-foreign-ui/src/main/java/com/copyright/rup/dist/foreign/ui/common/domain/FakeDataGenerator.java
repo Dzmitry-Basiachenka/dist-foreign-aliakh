@@ -1,16 +1,13 @@
 package com.copyright.rup.dist.foreign.ui.common.domain;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 
 import com.google.common.collect.Lists;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * FakeDataGenerator class.
@@ -51,38 +48,6 @@ public final class FakeDataGenerator {
         return result;
     }
 
-    /**
-     * @return usage dtos.
-     */
-    public static List<UsageDto> getUsageDtos() {
-        List<UsageDto> result = Lists.newArrayList();
-        List<UsageBatch> usageBatches = getUsageBatches();
-        Rightsholder rightsholder1 = buildRightsholder(2000017002L, "VG Wort, Verwertungsgesellschaft WORT");
-        Rightsholder rightsholder2 =
-            buildRightsholder(7000454170L, "Association of the Scientifica Medical Societies in Germany [T]");
-        Rightsholder rightsholder3 = buildRightsholder(1000000322L, "American College of Physicians - Journals");
-        UsageBatch batch1 = usageBatches.get(0);
-        UsageBatch batch2 = usageBatches.get(1);
-        UsageBatch batch3 = usageBatches.get(2);
-        UsageBatch batch4 = usageBatches.get(3);
-        result.add(
-            new UsageDto(batch1, buildUsage(156426671L, "Transporte mundial", rightsholder1, "56.21")));
-        result.add(new UsageDto(batch1, buildUsage(158956997L, "Brioude", rightsholder1, "12.71")));
-        result.add(new UsageDto(batch1, buildUsage(295042091L,
-            "Standard Test Methods for Evaluating Properties of Wood-Base Fiber and Particle Panel Materials",
-            rightsholder1, "23.01")));
-        result.add(new UsageDto(batch1, buildUsage(158956997L, "Brioude", rightsholder1, "1112.71")));
-        result.add(new UsageDto(batch1, buildUsage(283491771L, "East moves West", rightsholder2, "52.71")));
-        result.add(new UsageDto(batch2,
-            buildUsage(122516585L, "Concepts of information retrieval", rightsholder2, "654.21")));
-        result.add(new UsageDto(batch3, buildUsage(122824345L, "ACP journal club", rightsholder3, "45.12")));
-        result.add(new UsageDto(batch3,
-            buildUsage(122839717L, "Annals of internal medicine", rightsholder3, "9.65")));
-        result.add(new UsageDto(batch4,
-            buildUsage(122839717L, "Annals of internal medicine", null, "19.65")));
-        return result;
-    }
-
     private static UsageBatch buildUsageBatch(Rightsholder rro, LocalDate paymentDate, String id) {
         UsageBatch result = new UsageBatch();
         result.setId(id);
@@ -97,16 +62,6 @@ public final class FakeDataGenerator {
         Rightsholder result = new Rightsholder();
         result.setAccountNumber(accountNumber);
         result.setName(name);
-        return result;
-    }
-
-    private static Usage buildUsage(Long wrWrkInst, String workTitle, Rightsholder rightsholder, String grossAmount) {
-        Usage result = new Usage();
-        result.setId(UUID.randomUUID().toString());
-        result.setWrWrkInst(wrWrkInst);
-        result.setWorkTitle(workTitle);
-        result.setRightsholder(rightsholder);
-        result.setGrossAmount(new BigDecimal(grossAmount));
         return result;
     }
 }
