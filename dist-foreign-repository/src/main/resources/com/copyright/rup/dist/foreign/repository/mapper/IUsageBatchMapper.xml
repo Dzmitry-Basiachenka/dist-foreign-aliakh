@@ -4,6 +4,11 @@
 
 <mapper namespace="IUsageBatchMapper">
 
+    <resultMap id="usageBatchResultMap" type="UsageBatch">
+        <result property="id" column="df_usage_batch_uid"/>
+        <result property="name" column="name"/>
+    </resultMap>
+
     <insert id="insert" parameterType="UsageBatch">
         insert into ${schema}.df_usage_batch(
             df_usage_batch_uid,
@@ -34,5 +39,10 @@
         select distinct fiscal_year
         from ${schema}.df_usage_batch
         order by fiscal_year
+    </select>
+
+    <select id="findUsageBatches" resultMap="usageBatchResultMap">
+        select df_usage_batch_uid, name
+        from ${schema}.df_usage_batch
     </select>
 </mapper>

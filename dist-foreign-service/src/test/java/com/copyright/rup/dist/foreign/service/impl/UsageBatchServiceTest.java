@@ -8,6 +8,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 
 import org.junit.Before;
@@ -48,6 +49,15 @@ public class UsageBatchServiceTest {
         assertNotNull(result);
         assertEquals(1, result.size());
         assertTrue(result.contains(FISCAL_YEAR));
+        verify(usageBatchRepository);
+    }
+
+    @Test
+    public void testGetUsageBatches() {
+        List<UsageBatch> usageBatches = Collections.singletonList(new UsageBatch());
+        expect(usageBatchRepository.findUsageBatches()).andReturn(usageBatches).once();
+        replay(usageBatchRepository);
+        assertEquals(usageBatches, usageBatchService.getUsageBatches());
         verify(usageBatchRepository);
     }
 }

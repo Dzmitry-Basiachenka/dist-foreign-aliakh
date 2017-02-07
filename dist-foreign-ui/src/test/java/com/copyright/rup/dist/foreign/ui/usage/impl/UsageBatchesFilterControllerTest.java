@@ -12,7 +12,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
-import com.copyright.rup.dist.foreign.ui.common.domain.FakeDataGenerator;
+import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
 import com.copyright.rup.vaadin.ui.VaadinUtils;
 import com.copyright.rup.vaadin.ui.Windows;
@@ -26,6 +26,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -51,13 +52,13 @@ public class UsageBatchesFilterControllerTest {
     }
 
     @Test
-    @PrepareForTest(FakeDataGenerator.class)
     public void testLoadBeans() {
-        mockStatic(FakeDataGenerator.class);
-        expect(FakeDataGenerator.getUsageBatches()).andReturn(Collections.emptyList()).once();
-        replay(FakeDataGenerator.class);
+        IUsageBatchService usageBatchService = createMock(IUsageBatchService.class);
+        Whitebox.setInternalState(controller, usageBatchService);
+        expect(usageBatchService.getUsageBatches()).andReturn(Collections.emptyList()).once();
+        replay(usageBatchService);
         assertEquals(Collections.emptyList(), controller.loadBeans());
-        verify(FakeDataGenerator.class);
+        verify(usageBatchService);
     }
 
     @Test
@@ -104,7 +105,7 @@ public class UsageBatchesFilterControllerTest {
         controller.setFilterWidget(filterWidgetMock);
         VaadinUtils.addComponentStyle(filterWindowMock, "batches-filter-window");
         expectLastCall().once();
-        expect(Windows.showFilterWindow("Batches filter", controller, "name", "rro.accountNumber"))
+        expect(Windows.showFilterWindow("Batches filter", controller, "name"))
             .andReturn(filterWindowMock).once();
         expect(filterWidgetMock.getFilter()).andReturn(filterMock).once();
         expect(filterMock.getUsageBatchesIds()).andReturn(selectedItemsIds).once();

@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 
@@ -17,7 +18,7 @@ import java.util.List;
  *
  * @author Mikalai Bezmen
  */
-@Service("df.service.usageBatchService")
+@Service
 public class UsageBatchService implements IUsageBatchService {
 
     @Autowired
@@ -26,5 +27,10 @@ public class UsageBatchService implements IUsageBatchService {
     @Override
     public List<Integer> getFiscalYears() {
         return usageBatchRepository.findFiscalYears();
+    }
+
+    @Override
+    public List<UsageBatch> getUsageBatches() {
+        return usageBatchRepository.findUsageBatches();
     }
 }

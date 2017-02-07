@@ -17,7 +17,7 @@ import org.springframework.stereotype.Repository;
  *
  * @author Darya Baraukova
  */
-@Repository("df.repository.usageRepository")
+@Repository
 public class UsageRepository extends BaseRepository implements IUsageRepository {
 
     @Override

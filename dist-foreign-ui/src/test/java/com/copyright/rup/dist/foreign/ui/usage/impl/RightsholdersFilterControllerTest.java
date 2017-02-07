@@ -11,7 +11,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
-import com.copyright.rup.dist.foreign.ui.common.domain.FakeDataGenerator;
+import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
 import com.copyright.rup.vaadin.ui.VaadinUtils;
 import com.copyright.rup.vaadin.ui.Windows;
@@ -25,6 +25,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
 
 import java.util.Collections;
 import java.util.Set;
@@ -51,13 +52,13 @@ public class RightsholdersFilterControllerTest {
     }
 
     @Test
-    @PrepareForTest(FakeDataGenerator.class)
     public void testLoadBeans() {
-        mockStatic(FakeDataGenerator.class);
-        expect(FakeDataGenerator.getRros()).andReturn(Collections.emptyList()).once();
-        replay(FakeDataGenerator.class);
+        IRightsholderService rightsholderService = createMock(IRightsholderService.class);
+        Whitebox.setInternalState(controller, rightsholderService);
+        expect(rightsholderService.getRros()).andReturn(Collections.emptyList()).once();
+        replay(rightsholderService);
         assertEquals(Collections.emptyList(), controller.loadBeans());
-        verify(FakeDataGenerator.class);
+        verify(rightsholderService);
     }
 
     @Test
