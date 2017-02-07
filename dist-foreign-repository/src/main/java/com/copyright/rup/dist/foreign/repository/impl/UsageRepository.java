@@ -10,10 +10,13 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
+
 import org.springframework.stereotype.Repository;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Implementation of Usage repository.
@@ -27,6 +30,10 @@ import java.util.List;
 @Repository
 public class UsageRepository extends BaseRepository implements IUsageRepository {
 
+    private static final String FILTER_KEY = "filter";
+    private static final String PAGEABLE_KEY = "pageable";
+    private static final String SORT_KEY = "sort";
+
     @Override
     public int insertUsage(Usage usage) {
         return insert("IUsageMapper.insertUsage", checkNotNull(usage));
@@ -34,11 +41,15 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
 
     @Override
     public List<UsageDto> findByFilter(UsageFilter filter, Pageable pageable, Sort sort) {
-        return Collections.emptyList();
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
+        parameters.put(FILTER_KEY, checkNotNull(filter));
+        parameters.put(PAGEABLE_KEY, checkNotNull(pageable));
+        parameters.put(SORT_KEY, checkNotNull(sort));
+        return selectList("IUsageMapper.findByFilter", parameters);
     }
 
     @Override
     public int getUsagesCount(UsageFilter filter) {
-        return 0;
+        return selectOne("IUsageMapper.getUsagesCount", ImmutableMap.of(FILTER_KEY, checkNotNull(filter)));
     }
 }
