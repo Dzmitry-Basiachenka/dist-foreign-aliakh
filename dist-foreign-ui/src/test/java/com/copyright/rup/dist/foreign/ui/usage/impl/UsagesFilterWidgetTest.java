@@ -264,7 +264,7 @@ public class UsagesFilterWidgetTest {
         verifyComboboxComponent(verticalLayout.getComponent(3), "Status",
             EnumSet.of(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.INELIGIBLE));
         verifyDateWidget(verticalLayout.getComponent(4));
-        verifyComboboxComponent(verticalLayout.getComponent(5), "Fiscal Year", Collections.singleton(FISCAL_YEAR));
+        verifyComboboxComponent(verticalLayout.getComponent(5), "Fiscal Year To", Collections.singleton(FISCAL_YEAR));
     }
 
     private void verifyFiltersLabel(Component component) {

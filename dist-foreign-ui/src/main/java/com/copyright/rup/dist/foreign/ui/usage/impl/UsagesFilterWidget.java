@@ -111,7 +111,7 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
         statusComboBox = buildComboBox(ForeignUi.getMessage("label.status"), FILTER_USAGE_STATES);
         VaadinUtils.addComponentStyle(statusComboBox, "status-filter");
         fiscalYearComboBox =
-            buildComboBox(ForeignUi.getMessage("label.fiscal_year"), getController().getFiscalYears());
+            buildComboBox(ForeignUi.getMessage("label.fiscal_year_to"), getController().getFiscalYears());
         VaadinUtils.addComponentStyle(fiscalYearComboBox, "fiscal-year-filter");
         batchesCountLabel = new Label(String.format(ForeignUi.getMessage("label.filter.items_count_format"), 0));
         rightsholdersCountLabel = new Label(String.format(ForeignUi.getMessage("label.filter.items_count_format"), 0));
@@ -124,7 +124,7 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
                 (ClickListener) event -> controller.onRightsholderFilterClick());
         VaadinUtils.addComponentStyle(rightsholdersFilter, "rightsholders-filter");
         LocalDateWidget paymentDateWidget =
-            new LocalDateWidget(ForeignUi.getMessage("label.payment_date"), paymentDateProperty);
+            new LocalDateWidget(ForeignUi.getMessage("label.payment_date_to"), paymentDateProperty);
         VaadinUtils.addComponentStyle(paymentDateWidget, "payment-date-filter");
         VerticalLayout verticalLayout = new VerticalLayout(buildFiltersHeaderLabel(), batchesFilter,
             rightsholdersFilter, statusComboBox, paymentDateWidget, fiscalYearComboBox);
