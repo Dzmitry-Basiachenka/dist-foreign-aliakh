@@ -140,6 +140,9 @@ public class UsagesWidgetTest {
         expect(usagesTableMock.getContainerDataSource()).andReturn(containerMock).once();
         containerMock.refresh();
         expectLastCall().once();
+        expect(containerMock.getItemIds()).andReturn(Collections.emptyList()).once();
+        usagesTableMock.addStyleName("empty-usages-table");
+        expectLastCall().once();
         replay(usagesTableMock, containerMock, queryView);
         usagesWidget.refresh();
         verify(usagesTableMock, containerMock, queryView);

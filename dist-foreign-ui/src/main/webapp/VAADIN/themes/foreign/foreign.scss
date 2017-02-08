@@ -51,4 +51,10 @@
         }
     }
 
+    /*=== Styles for Usages table ===*/
+    .empty-usages-table .v-table-body {
+        background-image: url("img/empty_usages_table.png");
+        background-repeat: no-repeat;
+        background-position: center center;
+    }
 }

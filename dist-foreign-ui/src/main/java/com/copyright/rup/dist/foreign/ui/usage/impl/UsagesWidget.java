@@ -20,6 +20,9 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.VerticalLayout;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.vaadin.addons.lazyquerycontainer.LazyQueryContainer;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -34,12 +37,20 @@ import java.time.LocalDate;
  */
 class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
 
+    private static final String EMPTY_STYLE_NAME = "empty-usages-table";
+
     private IUsagesController controller;
     private LazyTable<UsageBeanQuery, UsageDto> usagesTable;
 
     @Override
     public void refresh() {
-        usagesTable.getContainerDataSource().refresh();
+        LazyQueryContainer container = usagesTable.getContainerDataSource();
+        container.refresh();
+        if (CollectionUtils.isNotEmpty(container.getItemIds())) {
+            usagesTable.removeStyleName(EMPTY_STYLE_NAME);
+        } else {
+            usagesTable.addStyleName(EMPTY_STYLE_NAME);
+        }
     }
 
     @Override
