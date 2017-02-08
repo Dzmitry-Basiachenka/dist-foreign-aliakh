@@ -4,6 +4,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.isA;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -58,6 +59,8 @@ import java.util.Collections;
 @RunWith(PowerMockRunner.class)
 public class UsagesWidgetTest {
 
+    private static final String DETAIL_ID_PROPERTY = "detailId";
+    
     private UsagesWidget usagesWidget;
     private IUsagesController controller;
 
@@ -163,7 +166,7 @@ public class UsagesWidgetTest {
     }
 
     private void verifyTable(Table table) {
-        assertArrayEquals(new Object[]{"detailId", "batchName", "fiscalYear", "rro.accountNumber", "rro.name",
+        assertArrayEquals(new Object[]{DETAIL_ID_PROPERTY, "batchName", "fiscalYear", "rro.accountNumber", "rro.name",
             "paymentDate", "workTitle", "article", "standardNumber", "wrWrkInst", "rightsholder.accountNumber",
             "rightsholder.name", "publisher", "publicationDate", "numberOfCopies", "originalAmount", "grossAmount",
             "market", "marketPeriodFrom", "marketPeriodTo", "author", "status"}, table.getVisibleColumns());
@@ -175,7 +178,7 @@ public class UsagesWidgetTest {
         Collection<?> containerPropertyIds = table.getContainerPropertyIds();
 
         assertTrue(containerPropertyIds.contains("id"));
-        assertTrue(containerPropertyIds.contains("detailId"));
+        assertTrue(containerPropertyIds.contains(DETAIL_ID_PROPERTY));
         assertTrue(containerPropertyIds.contains("batchName"));
         assertTrue(containerPropertyIds.contains("fiscalYear"));
         assertTrue(containerPropertyIds.contains("rro.accountNumber"));
@@ -197,13 +200,14 @@ public class UsagesWidgetTest {
         assertTrue(containerPropertyIds.contains("marketPeriodTo"));
         assertTrue(containerPropertyIds.contains("author"));
         assertTrue(containerPropertyIds.contains("status"));
-
+        assertTrue(table.isColumnCollapsingAllowed());
+        assertFalse(table.isColumnCollapsible(DETAIL_ID_PROPERTY));
         verifyGeneratedColumns(table);
         verifySize(table);
     }
 
     private void verifyGeneratedColumns(Table table) {
-        verifyColumnGenerator(table.getColumnGenerator("detailId"), LongColumnGenerator.class);
+        verifyColumnGenerator(table.getColumnGenerator(DETAIL_ID_PROPERTY), LongColumnGenerator.class);
         verifyColumnGenerator(table.getColumnGenerator("wrWrkInst"), LongColumnGenerator.class);
         verifyColumnGenerator(table.getColumnGenerator("rightsholder.accountNumber"), LongColumnGenerator.class);
         verifyColumnGenerator(table.getColumnGenerator("rro.accountNumber"), LongColumnGenerator.class);

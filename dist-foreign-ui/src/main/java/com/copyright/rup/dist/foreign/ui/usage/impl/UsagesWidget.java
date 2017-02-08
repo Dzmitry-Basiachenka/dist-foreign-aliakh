@@ -38,6 +38,7 @@ import java.time.LocalDate;
 class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
 
     private static final String EMPTY_STYLE_NAME = "empty-usages-table";
+    private static final String DETAIL_ID_PROPERTY = "detailId";
 
     private IUsagesController controller;
     private LazyTable<UsageBeanQuery, UsageDto> usagesTable;
@@ -78,52 +79,52 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
 
     private VerticalLayout initUsagesLayout() {
         usagesTable = new LazyTable<>(controller, UsageBeanQuery.class, 1);
-        usagesTable.addProperty("id", String.class, false);
-        usagesTable.addProperty("detailId", Long.class, false);
-        usagesTable.addProperty("batchName", String.class, false);
-        usagesTable.addProperty("fiscalYear", String.class, false);
-        usagesTable.addProperty("rro.accountNumber", Long.class, false);
-        usagesTable.addProperty("rro.name", String.class, false);
-        usagesTable.addProperty("paymentDate", LocalDate.class, false);
-        usagesTable.addProperty("workTitle", String.class, false);
-        usagesTable.addProperty("article", String.class, false);
-        usagesTable.addProperty("standardNumber", String.class, false);
-        usagesTable.addProperty("wrWrkInst", Long.class, false);
-        usagesTable.addProperty("rightsholder.accountNumber", Long.class, false);
-        usagesTable.addProperty("rightsholder.name", String.class, false);
-        usagesTable.addProperty("publisher", String.class, false);
-        usagesTable.addProperty("publicationDate", LocalDate.class, false);
-        usagesTable.addProperty("numberOfCopies", Integer.class, false);
-        usagesTable.addProperty("originalAmount", BigDecimal.class, false);
-        usagesTable.addProperty("grossAmount", BigDecimal.class, false);
-        usagesTable.addProperty("market", String.class, false);
-        usagesTable.addProperty("marketPeriodFrom", Integer.class, false);
-        usagesTable.addProperty("marketPeriodTo", Integer.class, false);
-        usagesTable.addProperty("author", String.class, false);
-        usagesTable.addProperty("status", String.class, false);
-        IntegerColumnGenerator integerColumnGenerator = new IntegerColumnGenerator();
-        usagesTable.addGeneratedColumn("numberOfCopies", integerColumnGenerator);
-        usagesTable.addGeneratedColumn("marketPeriodFrom", integerColumnGenerator);
-        usagesTable.addGeneratedColumn("marketPeriodTo", integerColumnGenerator);
-        usagesTable.addGeneratedColumn("fiscalYear", new FiscalYearColumnGenerator());
-        LongColumnGenerator longColumnGenerator = new LongColumnGenerator();
-        usagesTable.addGeneratedColumn("detailId", longColumnGenerator);
-        usagesTable.addGeneratedColumn("wrWrkInst", longColumnGenerator);
-        usagesTable.addGeneratedColumn("rightsholder.accountNumber", longColumnGenerator);
-        usagesTable.addGeneratedColumn("rro.accountNumber", longColumnGenerator);
-        LocalDateColumnGenerator localDateColumnGenerator = new LocalDateColumnGenerator();
-        usagesTable.addGeneratedColumn("publicationDate", localDateColumnGenerator);
-        usagesTable.addGeneratedColumn("paymentDate", localDateColumnGenerator);
-        MoneyColumnGenerator moneyColumnGenerator = new MoneyColumnGenerator();
-        usagesTable.addGeneratedColumn("originalAmount", moneyColumnGenerator);
-        usagesTable.addGeneratedColumn("grossAmount", moneyColumnGenerator);
-
+        addProperties();
+        addColumnGenerators();
         usagesTable
-            .setVisibleColumns("detailId", "batchName", "fiscalYear", "rro.accountNumber", "rro.name",
+            .setVisibleColumns(DETAIL_ID_PROPERTY, "batchName", "fiscalYear", "rro.accountNumber", "rro.name",
                 "paymentDate", "workTitle", "article", "standardNumber", "wrWrkInst", "rightsholder.accountNumber",
                 "rightsholder.name", "publisher", "publicationDate", "numberOfCopies", "originalAmount", "grossAmount",
                 "market", "marketPeriodFrom", "marketPeriodTo", "author", "status");
+        setColumnHeaders();
+        usagesTable.setSizeFull();
+        usagesTable.setColumnCollapsingAllowed(true);
+        usagesTable.setColumnCollapsible(DETAIL_ID_PROPERTY, false);
+        VaadinUtils.addComponentStyle(usagesTable, "usages-table");
+        VerticalLayout layout = new VerticalLayout(initButtonsLayout(), usagesTable);
+        layout.setSizeFull();
+        layout.setExpandRatio(usagesTable, 1);
+        VaadinUtils.addComponentStyle(layout, "usages-layout");
+        return layout;
+    }
 
+    private void addProperties() {
+        usagesTable.addProperty("id", String.class, true);
+        usagesTable.addProperty(DETAIL_ID_PROPERTY, Long.class, true);
+        usagesTable.addProperty("batchName", String.class, true);
+        usagesTable.addProperty("fiscalYear", String.class, true);
+        usagesTable.addProperty("rro.accountNumber", Long.class, true);
+        usagesTable.addProperty("rro.name", String.class, false);
+        usagesTable.addProperty("paymentDate", LocalDate.class, true);
+        usagesTable.addProperty("workTitle", String.class, true);
+        usagesTable.addProperty("article", String.class, true);
+        usagesTable.addProperty("standardNumber", String.class, true);
+        usagesTable.addProperty("wrWrkInst", Long.class, true);
+        usagesTable.addProperty("rightsholder.accountNumber", Long.class, true);
+        usagesTable.addProperty("rightsholder.name", String.class, false);
+        usagesTable.addProperty("publisher", String.class, true);
+        usagesTable.addProperty("publicationDate", LocalDate.class, true);
+        usagesTable.addProperty("numberOfCopies", Integer.class, true);
+        usagesTable.addProperty("originalAmount", BigDecimal.class, true);
+        usagesTable.addProperty("grossAmount", BigDecimal.class, true);
+        usagesTable.addProperty("market", String.class, true);
+        usagesTable.addProperty("marketPeriodFrom", Integer.class, true);
+        usagesTable.addProperty("marketPeriodTo", Integer.class, true);
+        usagesTable.addProperty("author", String.class, true);
+        usagesTable.addProperty("status", String.class, true);
+    }
+
+    private void setColumnHeaders() {
         usagesTable
             .setColumnHeaders(ForeignUi.getMessage("table.column.detail_id"),
                 ForeignUi.getMessage("table.column.batch_name"), ForeignUi.getMessage("table.column.fiscal_year"),
@@ -139,13 +140,25 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
                 ForeignUi.getMessage("table.column.market"), ForeignUi.getMessage("table.column.market_period_from"),
                 ForeignUi.getMessage("table.column.market_period_to"), ForeignUi.getMessage("table.column.author"),
                 ForeignUi.getMessage("table.column.usage_status"));
-        usagesTable.setSizeFull();
-        VaadinUtils.addComponentStyle(usagesTable, "usages-table");
-        VerticalLayout layout = new VerticalLayout(initButtonsLayout(), usagesTable);
-        layout.setSizeFull();
-        layout.setExpandRatio(usagesTable, 1);
-        VaadinUtils.addComponentStyle(layout, "usages-layout");
-        return layout;
+    }
+
+    private void addColumnGenerators() {
+        IntegerColumnGenerator integerColumnGenerator = new IntegerColumnGenerator();
+        usagesTable.addGeneratedColumn("numberOfCopies", integerColumnGenerator);
+        usagesTable.addGeneratedColumn("marketPeriodFrom", integerColumnGenerator);
+        usagesTable.addGeneratedColumn("marketPeriodTo", integerColumnGenerator);
+        usagesTable.addGeneratedColumn("fiscalYear", new FiscalYearColumnGenerator());
+        LongColumnGenerator longColumnGenerator = new LongColumnGenerator();
+        usagesTable.addGeneratedColumn(DETAIL_ID_PROPERTY, longColumnGenerator);
+        usagesTable.addGeneratedColumn("wrWrkInst", longColumnGenerator);
+        usagesTable.addGeneratedColumn("rightsholder.accountNumber", longColumnGenerator);
+        usagesTable.addGeneratedColumn("rro.accountNumber", longColumnGenerator);
+        LocalDateColumnGenerator localDateColumnGenerator = new LocalDateColumnGenerator();
+        usagesTable.addGeneratedColumn("publicationDate", localDateColumnGenerator);
+        usagesTable.addGeneratedColumn("paymentDate", localDateColumnGenerator);
+        MoneyColumnGenerator moneyColumnGenerator = new MoneyColumnGenerator();
+        usagesTable.addGeneratedColumn("originalAmount", moneyColumnGenerator);
+        usagesTable.addGeneratedColumn("grossAmount", moneyColumnGenerator);
     }
 
     private HorizontalLayout initButtonsLayout() {
