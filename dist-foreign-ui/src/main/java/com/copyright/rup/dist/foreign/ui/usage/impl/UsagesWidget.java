@@ -39,6 +39,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
 
     private static final String EMPTY_STYLE_NAME = "empty-usages-table";
     private static final String DETAIL_ID_PROPERTY = "detailId";
+    private static final int COLUMN_WIDTH_300_PIXELS = 300;
 
     private IUsagesController controller;
     private LazyTable<UsageBeanQuery, UsageDto> usagesTable;
@@ -81,6 +82,8 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         usagesTable = new LazyTable<>(controller, UsageBeanQuery.class, 1);
         addProperties();
         addColumnGenerators();
+        setColumnsWidth();
+
         usagesTable
             .setVisibleColumns(DETAIL_ID_PROPERTY, "batchName", "fiscalYear", "rro.accountNumber", "rro.name",
                 "paymentDate", "workTitle", "article", "standardNumber", "wrWrkInst", "rightsholder.accountNumber",
@@ -159,6 +162,16 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         MoneyColumnGenerator moneyColumnGenerator = new MoneyColumnGenerator();
         usagesTable.addGeneratedColumn("originalAmount", moneyColumnGenerator);
         usagesTable.addGeneratedColumn("grossAmount", moneyColumnGenerator);
+    }
+
+    private void setColumnsWidth() {
+        usagesTable.setColumnWidth("rro.name", COLUMN_WIDTH_300_PIXELS);
+        usagesTable.setColumnWidth("workTitle", COLUMN_WIDTH_300_PIXELS);
+        usagesTable.setColumnWidth("article", COLUMN_WIDTH_300_PIXELS);
+        usagesTable.setColumnWidth("rightsholder.name", COLUMN_WIDTH_300_PIXELS);
+        usagesTable.setColumnWidth("publisher", COLUMN_WIDTH_300_PIXELS);
+        usagesTable.setColumnWidth("market", COLUMN_WIDTH_300_PIXELS);
+        usagesTable.setColumnWidth("author", COLUMN_WIDTH_300_PIXELS);
     }
 
     private HorizontalLayout initButtonsLayout() {
