@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
@@ -42,7 +43,14 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
 
     @Override
     public IUsagesFilterWidget initUsagesFilterWidget() {
-        return filterController.initWidget();
+        IUsagesFilterWidget result = filterController.initWidget();
+        result.addListener(FilterChangedEvent.class, this, IUsagesController.ON_FILTER_CHANGED);
+        return result;
+    }
+
+    @Override
+    public void onFilterChanged(FilterChangedEvent event) {
+        getWidget().refresh();
     }
 
     @Override

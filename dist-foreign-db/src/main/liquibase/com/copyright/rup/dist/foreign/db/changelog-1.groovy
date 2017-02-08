@@ -14,7 +14,7 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', type: 'VARCHAR(255)', remarks: 'The identifier of usage batch') {
                 constraints(nullable: false)
             }
-            column(name: 'detail_id', type: 'INTEGER', remarks: 'The usage identifier in TF') {
+            column(name: 'detail_id', type: 'NUMERIC(15,0)', remarks: 'The usage identifier in TF') {
                 constraints(nullable: false)
             }
             column(name: 'wr_wrk_inst', type: 'NUMERIC(15,0)', remarks: 'The wr wrk inst')

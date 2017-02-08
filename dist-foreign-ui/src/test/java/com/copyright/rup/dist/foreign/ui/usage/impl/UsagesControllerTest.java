@@ -4,6 +4,7 @@ import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.isNull;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
@@ -16,8 +17,12 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.service.impl.UsageService;
+import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
+import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesWidget;
 import com.copyright.rup.vaadin.widget.api.IWidget;
+
+import com.vaadin.ui.HorizontalLayout;
 
 import org.easymock.Capture;
 import org.junit.Before;
@@ -42,13 +47,16 @@ public class UsagesControllerTest {
     private UsagesController controller;
     private UsageService usageService;
     private UsagesFilterController filterController;
+    private IUsagesWidget usagesWidget;
 
     @Before
     public void setUp() {
         controller = new UsagesController();
         usageService = createMock(UsageService.class);
-        Whitebox.setInternalState(controller, "usageService", usageService);
         filterController = createMock(UsagesFilterController.class);
+        usagesWidget = createMock(IUsagesWidget.class);
+        Whitebox.setInternalState(controller, "usageService", usageService);
+        Whitebox.setInternalState(controller, IWidget.class, usagesWidget);
         Whitebox.setInternalState(controller, "filterController", filterController);
     }
 
@@ -98,6 +106,16 @@ public class UsagesControllerTest {
         replay(filterController);
         assertSame(filterWidget, controller.initUsagesFilterWidget());
         verify(filterController);
+    }
+
+    @Test
+    public void testOnFilterChanged() {
+        FilterChangedEvent filterChangedEvent = new FilterChangedEvent(new HorizontalLayout(), new UsageFilter());
+        usagesWidget.refresh();
+        expectLastCall().once();
+        replay(usagesWidget);
+        controller.onFilterChanged(filterChangedEvent);
+        verify(usagesWidget);
     }
 
     @Test

@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.domain;
 
+import com.google.common.collect.Sets;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -19,8 +21,8 @@ import java.util.Set;
  */
 public class UsageFilter {
 
-    private Set<Long> rhAccountNumbers;
-    private Set<String> usageBatchesIds;
+    private Set<Long> rhAccountNumbers = Sets.newHashSet();
+    private Set<String> usageBatchesIds = Sets.newHashSet();
     private UsageStatusEnum usageStatus;
     private LocalDate paymentDate;
     private Integer fiscalYear;

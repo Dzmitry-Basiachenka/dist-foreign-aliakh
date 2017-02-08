@@ -44,7 +44,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
         parameters.put(FILTER_KEY, checkNotNull(filter));
         parameters.put(PAGEABLE_KEY, checkNotNull(pageable));
-        parameters.put(SORT_KEY, checkNotNull(sort));
+        parameters.put(SORT_KEY, sort);
         return selectList("IUsageMapper.findByFilter", parameters);
     }
 

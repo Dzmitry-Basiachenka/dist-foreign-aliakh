@@ -5,6 +5,10 @@ import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.ui.component.lazytable.IBeanLoader;
 import com.copyright.rup.vaadin.widget.api.IController;
 
+import com.vaadin.util.ReflectTools;
+
+import java.lang.reflect.Method;
+
 /**
  * Interface for controller for {@link IUsagesWidget}.
  * <p>
@@ -17,9 +21,22 @@ import com.copyright.rup.vaadin.widget.api.IController;
 public interface IUsagesController extends IController<IUsagesWidget>, IBeanLoader<UsageDto>, IStreamSource {
 
     /**
+     * {@link #onFilterChanged(FilterChangedEvent)}.
+     */
+    Method ON_FILTER_CHANGED =
+        ReflectTools.findMethod(IUsagesController.class, "onFilterChanged", FilterChangedEvent.class);
+
+    /**
      * Initializes {@link IUsagesFilterWidget}.
      *
      * @return initialized {@link IUsagesFilterWidget}
      */
     IUsagesFilterWidget initUsagesFilterWidget();
+
+    /**
+     * Handles changes of filter.
+     *
+     * @param event event
+     */
+    void onFilterChanged(FilterChangedEvent event);
 }
