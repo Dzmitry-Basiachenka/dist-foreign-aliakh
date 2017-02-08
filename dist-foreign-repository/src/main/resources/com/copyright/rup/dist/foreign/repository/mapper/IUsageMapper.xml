@@ -124,7 +124,7 @@
                     <when test="sort.property == 'detailId'">
                         u.detail_id <include refid="direction"/>
                     </when>
-                    <when test="sort.property == 'name'">
+                    <when test="sort.property == 'batchName'">
                         ub.name <include refid="direction"/>
                     </when>
                     <when test="sort.property == 'fiscalYear'">
@@ -136,7 +136,7 @@
                     <when test="sort.property == 'paymentDate'">
                         ub.payment_date <include refid="direction"/>
                     </when>
-                    <when test="sort.property == 'title'">
+                    <when test="sort.property == 'workTitle'">
                         u.work_title <include refid="direction"/>
                     </when>
                     <when test="sort.property == 'article'">
@@ -164,7 +164,7 @@
                         u.original_amount <include refid="direction"/>
                     </when>
                     <when test="sort.property == 'grossAmount'">
-                        usage_gross_amount <include refid="direction"/>
+                        u.gross_amount <include refid="direction"/>
                     </when>
                     <when test="sort.property == 'market'">
                         u.market <include refid="direction"/>
