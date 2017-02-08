@@ -1,15 +1,12 @@
 package com.copyright.rup.dist.foreign.ui.common.util;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
-import org.apache.commons.lang3.ArrayUtils;
+import com.copyright.rup.dist.common.test.TestUtils;
+
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
 
 /**
@@ -28,19 +25,7 @@ public class UsageBatchUtilsTest {
 
     @Test
     public void privateConstructorTest() {
-        Constructor<?>[] declaredConstructors = UsageBatchUtils.class.getDeclaredConstructors();
-        assertTrue(ArrayUtils.isNotEmpty(declaredConstructors));
-        assertEquals(1, declaredConstructors.length);
-        Constructor<?> declaredConstructor = declaredConstructors[0];
-        try {
-            declaredConstructor.setAccessible(true);
-            declaredConstructor.newInstance();
-            fail("Constructor shouldn't be called directly");
-        } catch (InvocationTargetException e) {
-            assertEquals("Constructor shouldn't be called directly", e.getCause().getMessage());
-        } catch (InstantiationException | IllegalAccessException e) {
-            fail("Constructor couldn't be invoked");
-        }
+        TestUtils.validatePrivateConstructor(UsageBatchUtils.class);
     }
 
     @Test

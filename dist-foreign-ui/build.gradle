@@ -36,6 +36,7 @@ dependencies {
     runtime("org.springframework.security:spring-security-core:${springSecurityVersion}")
 
     testCompile("nl.jqno.equalsverifier:equalsverifier:${equalsVerifierVersion}")
+    testCompile("com.copyright.rup.dist.common:dist-common-test:${distCommonVersion}")
 
     testUiCompile("com.copyright.rup.vaadin:rup-vaadin-test:${rupVaadinVersion}")
     testUiCompile("com.copyright.rup.common:rup-common-test-integ:${rupCommonTestIntegVersion}")
