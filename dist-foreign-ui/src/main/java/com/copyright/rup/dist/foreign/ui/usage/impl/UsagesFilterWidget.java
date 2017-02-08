@@ -22,7 +22,6 @@ import com.vaadin.ui.themes.BaseTheme;
 
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
