@@ -57,4 +57,10 @@
         background-repeat: no-repeat;
         background-position: center center;
     }
+
+    .usages-table {
+        .v-table-cell-wrapper {
+            white-space: normal;
+        }
+    }
 }

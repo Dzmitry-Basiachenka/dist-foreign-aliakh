@@ -60,7 +60,7 @@ import java.util.Collections;
 public class UsagesWidgetTest {
 
     private static final String DETAIL_ID_PROPERTY = "detailId";
-    
+    private static final int COLUMN_WIDTH_300_PIXELS = 300;
     private UsagesWidget usagesWidget;
     private IUsagesController controller;
 
@@ -202,6 +202,15 @@ public class UsagesWidgetTest {
         assertTrue(containerPropertyIds.contains("status"));
         assertTrue(table.isColumnCollapsingAllowed());
         assertFalse(table.isColumnCollapsible(DETAIL_ID_PROPERTY));
+
+        assertEquals(COLUMN_WIDTH_300_PIXELS, table.getColumnWidth("rro.name"));
+        assertEquals(COLUMN_WIDTH_300_PIXELS, table.getColumnWidth("workTitle"));
+        assertEquals(COLUMN_WIDTH_300_PIXELS, table.getColumnWidth("article"));
+        assertEquals(COLUMN_WIDTH_300_PIXELS, table.getColumnWidth("rightsholder.name"));
+        assertEquals(COLUMN_WIDTH_300_PIXELS, table.getColumnWidth("publisher"));
+        assertEquals(COLUMN_WIDTH_300_PIXELS, table.getColumnWidth("market"));
+        assertEquals(COLUMN_WIDTH_300_PIXELS, table.getColumnWidth("author"));
+
         verifyGeneratedColumns(table);
         verifySize(table);
     }
