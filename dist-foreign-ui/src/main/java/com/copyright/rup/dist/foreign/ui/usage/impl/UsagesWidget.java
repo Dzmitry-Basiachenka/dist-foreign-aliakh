@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.ui.common.util.FiscalYearColumnGenerator;
+import com.copyright.rup.dist.foreign.ui.common.util.IntegerColumnGenerator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesWidget;
@@ -88,7 +90,11 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         usagesTable.addProperty("marketPeriodTo", Integer.class, false);
         usagesTable.addProperty("author", String.class, false);
         usagesTable.addProperty("status", String.class, false);
-
+        IntegerColumnGenerator integerColumnGenerator = new IntegerColumnGenerator();
+        usagesTable.addGeneratedColumn("numberOfCopies", integerColumnGenerator);
+        usagesTable.addGeneratedColumn("marketPeriodFrom", integerColumnGenerator);
+        usagesTable.addGeneratedColumn("marketPeriodTo", integerColumnGenerator);
+        usagesTable.addGeneratedColumn("fiscalYear", new FiscalYearColumnGenerator());
         LongColumnGenerator longColumnGenerator = new LongColumnGenerator();
         usagesTable.addGeneratedColumn("detailId", longColumnGenerator);
         usagesTable.addGeneratedColumn("wrWrkInst", longColumnGenerator);

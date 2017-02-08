@@ -129,7 +129,6 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         assertNotNull(findElementByText(filterWidget, HTML_DIV_TAG_NAME, "Filters"));
         verifyBatchesFilter(filterWidget);
         verifyRightsholdersFilter(filterWidget);
-        verifyStatusFilter(filterWidget);
         verifyPaymentDateComponent(filterWidget, "payment-date-filter");
         assertComboboxElement(filterWidget, "fiscal-year-filter", HTML_SPAN_TAG_NAME, "Fiscal Year To");
         verifyFiltersWidgetButtons(filterWidget);
@@ -168,13 +167,6 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         assertNotNull(findElement(searchToolBar, By.tagName(HTML_INPUT_TAG_NAME)));
         assertNotNull(findElement(searchToolBar, By.className("button-search")));
         assertNotNull(findElement(searchToolBar, By.className("button-clear")));
-    }
-
-    private void verifyStatusFilter(WebElement filterWidget) {
-        WebElement statusFilter = assertElement(filterWidget, "status-filter");
-        assertNotNull(findElementByText(statusFilter, HTML_SPAN_TAG_NAME, "Status"));
-        assertNotNull(findElement(statusFilter, By.tagName(HTML_INPUT_TAG_NAME)));
-        assertNotNull(findElement(statusFilter, By.className(V_FILTER_SELECT_BUTTON_CLASS_NAME)));
     }
 
     private void verifyPaymentDateComponent(WebElement filterWidget, String id) {

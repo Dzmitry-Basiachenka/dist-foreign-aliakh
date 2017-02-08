@@ -174,9 +174,15 @@ databaseChangeLog {
             column(name: 'name', type: 'VARCHAR(255)', remarks: 'The name of usage batch') {
                 constraints(nullable: false)
             }
-            column(name: 'rro_account_number', type: 'NUMERIC(22,0)', remarks: 'The RRO account number')
-            column(name: 'payment_date', type: 'DATE', remarks: 'The payment date')
-            column(name: 'fiscal_year', type: 'NUMERIC(4,0)', remarks: 'The fiscal year')
+            column(name: 'rro_account_number', type: 'NUMERIC(22,0)', remarks: 'The RRO account number') {
+                constraints(nullable: false)
+            }
+            column(name: 'payment_date', type: 'DATE', remarks: 'The payment date') {
+                constraints(nullable: false)
+            }
+            column(name: 'fiscal_year', type: 'NUMERIC(4,0)', remarks: 'The fiscal year') {
+                constraints(nullable: false)
+            }
             column(name: 'gross_amount', type: 'DECIMAL(38,2)', defaultValue: 0.00, remarks: 'The gross amount') {
                 constraints(nullable: false)
             }

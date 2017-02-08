@@ -14,7 +14,6 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
-import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.component.LocalDateWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
 import com.copyright.rup.vaadin.ui.Windows;
@@ -46,7 +45,6 @@ import org.powermock.reflect.Whitebox;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -169,8 +167,6 @@ public class UsagesFilterWidgetTest {
         Property<LocalDate> paymentDateProperty =
             Whitebox.getInternalState(widget, "paymentDateProperty", UsagesFilterWidget.class);
         assertNull(paymentDateProperty.getValue());
-        ComboBox statusComboBox = Whitebox.getInternalState(widget, "statusComboBox", UsagesFilterWidget.class);
-        assertNull(statusComboBox.getValue());
         ComboBox fiscalYearComboBox = Whitebox.getInternalState(widget, "fiscalYearComboBox", UsagesFilterWidget.class);
         assertNull(fiscalYearComboBox.getValue());
     }
@@ -249,14 +245,13 @@ public class UsagesFilterWidgetTest {
     private void verifyFiltersLayout(Component layout) {
         assertTrue(layout instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) layout;
-        assertEquals(6, verticalLayout.getComponentCount());
+        assertEquals(5, verticalLayout.getComponentCount());
         verifyFiltersLabel(verticalLayout.getComponent(0));
         verifyItemsFilterLayout(verticalLayout.getComponent(1), "Batches");
         verifyItemsFilterLayout(verticalLayout.getComponent(2), "RROs");
-        verifyComboboxComponent(verticalLayout.getComponent(3), "Status",
-            EnumSet.of(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.INELIGIBLE));
-        verifyDateWidget(verticalLayout.getComponent(4));
-        verifyComboboxComponent(verticalLayout.getComponent(5), "Fiscal Year To", Collections.singleton(FISCAL_YEAR));
+        verifyDateWidget(verticalLayout.getComponent(3));
+        verifyFiscalYearComboboxComponent(verticalLayout.getComponent(4),
+            Collections.singleton(String.valueOf(FISCAL_YEAR)));
     }
 
     private void verifyFiltersLabel(Component component) {
@@ -282,10 +277,10 @@ public class UsagesFilterWidgetTest {
         assertFalse(iterator.hasNext());
     }
 
-    private void verifyComboboxComponent(Component component, String caption, Set<?> values) {
+    private void verifyFiscalYearComboboxComponent(Component component, Set<?> values) {
         assertTrue(component instanceof ComboBox);
         ComboBox comboBox = (ComboBox) component;
-        assertEquals(caption, comboBox.getCaption());
+        assertEquals("Fiscal Year To", comboBox.getCaption());
         assertEquals(100, comboBox.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, comboBox.getWidthUnits());
         assertTrue(CollectionUtils.isEqualCollection(values, comboBox.getItemIds()));
