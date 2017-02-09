@@ -4,13 +4,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.foreign.domain.CurrencyEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
-import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
@@ -31,6 +28,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -50,15 +48,13 @@ import java.util.UUID;
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class, TransactionalTestExecutionListener.class})
 public class UsageRepositoryIntegrationTest {
 
-    private static final Long RH_ACCOUNT_NUMBER = 12345678L;
-    private static final LocalDate PAYMENT_DATE = LocalDate.of(2016, 11, 8);
+    private static final String USAGE_BATCH_ID_1 = "56282dbc-2468-48d4-b926-93d3458a656a";
+    private static final Long RH_ACCOUNT_NUMBER = 7000813806L;
+    private static final LocalDate PAYMENT_DATE = LocalDate.of(2017, 1, 11);
     private static final Integer FISCAL_YEAR = 2017;
     private static final String RH_ACCOUNT_NAME = "Rh Account Name";
-    private static final String USAGE_BATCH_NAME = "Usage Batch Name";
     private static final BigDecimal GROSS_AMOUNT = new BigDecimal("54.44");
-    private static final BigDecimal CONVERSION_RATE = new BigDecimal("10.0000000000");
-    private static final BigDecimal APPLIED_CONVERSION_RATE = new BigDecimal("1.0000000000");
-    private static final Long WR_WRK_INST = 123456789L;
+    private static final Long WR_WRK_INST = 123456783L;
     private static final String WORK_TITLE = "Work Title";
     private static final String ARTICLE = "Article";
     private static final String STANDART_NUMBER = "StandardNumber";
@@ -68,18 +64,38 @@ public class UsageRepositoryIntegrationTest {
     private static final Integer MARKED_PERIOD_TO = 2017;
     private static final String AUTHOR = "Author";
     private static final BigDecimal ORIGINAL_AMOUNT = new BigDecimal("11.25");
-    private static final LocalDate PUBLICATION_DATE = LocalDate.of(2016, 11, 9);
-    private static final BigDecimal NET_AMOUNT = new BigDecimal("9.13");
+    private static final LocalDate PUBLICATION_DATE = LocalDate.of(2016, 11, 3);
+    private static final BigDecimal NET_AMOUNT = new BigDecimal("3.13");
     private static final BigDecimal SERVICE_FEE = new BigDecimal("0.15000");
-    private static final BigDecimal SERVICE_FEE_AMOUNT = new BigDecimal("2.98");
+    private static final BigDecimal SERVICE_FEE_AMOUNT = new BigDecimal("2.38");
     private static final Long DETAIL_ID = 12345L;
     private static final Integer NUMBER_OF_COPIES = 155;
+    private static final String DETAIL_ID_KEY = "detailId";
+    private static final String WORK_TITLE_KEY = "workTitle";
+    private static final String ARTICLE_KEY = "article";
+    private static final String STANDART_NUMBER_KEY = "standardNumber";
+    private static final String WR_WRK_INST_KEY = "wrWrkInst";
+    private static final String RH_ACCOUNT_NUMBER_KEY = "rightsholder.accountNumber";
+    private static final String PUBLISHER_KEY = "publisher";
+    private static final String PUBLICATION_DATE_KEY = "publicationDate";
+    private static final String NUMBER_OF_COPIES_KEY = "numberOfCopies";
+    private static final String ORIGINAL_AMOUNT_KEY = "originalAmount";
+    private static final String GROSS_AMOUNT_KEY = "grossAmount";
+    private static final String MARKET_KEY = "market";
+    private static final String MARKED_PERIOD_FROM_KEY = "marketPeriodFrom";
+    private static final String MARKED_PERIOD_TO_KEY = "marketPeriodTo";
+    private static final String AUTHOR_KEY = "author";
+    private static final String STATUS_KEY = "status";
+    private static final String BATCH_NAME_KEY = "batchName";
+    private static final String FISCAL_YEAR_KEY = "fiscalYear";
+    private static final String RRO_ACCOUNT_NUMBER_KEY = "rro.accountNumber";
+    private static final String PAYMENT_DATE_KEY = "paymentDate";
+    private static final String USAGE_ID_1 = "111111111";
+    private static final String USAGE_ID_2 = "222222222";
+    private static final String USAGE_ID_3 = "333333333";
 
     @Autowired
     private IUsageRepository usageRepository;
-
-    @Autowired
-    private IUsageBatchRepository usageBatchRepository;
 
     @Test
     @Ignore
@@ -89,79 +105,189 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindByFilter() {
-        UsageBatch usageBatch = buildUsageBatch();
-        UsageFilter usageFilter = buildUsageFilter(usageBatch.getId());
-        usageBatchRepository.insert(usageBatch);
-        usageRepository.insertUsage(buildUsage(usageBatch.getId()));
-        List<UsageDto> usageDtos = usageRepository.findByFilter(usageFilter, new Pageable(0, 1),
-            new Sort("detailId", Sort.Direction.ASC));
-        assertNotNull(usageDtos);
-        assertEquals(1, usageDtos.size());
-        verifyUsageDto(usageDtos.get(0));
+    public void testGetUsagesCount() {
+        assertEquals(1, usageRepository.getUsagesCount(
+            buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.singleton(USAGE_BATCH_ID_1),
+                UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, FISCAL_YEAR)));
     }
 
     @Test
-    public void testGetUsagesCount() {
-        UsageBatch usageBatch = buildUsageBatch();
-        usageBatchRepository.insert(usageBatch);
-        usageRepository.insertUsage(buildUsage(usageBatch.getId()));
-        assertEquals(1, usageRepository.getUsagesCount(buildUsageFilter(usageBatch.getId())));
+    public void testFindByFilter() {
+        UsageFilter usageFilter =
+            buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.singleton(USAGE_BATCH_ID_1),
+                UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, FISCAL_YEAR);
+        verifyUsageDtos(usageRepository.findByFilter(usageFilter, new Pageable(0, 200),
+            new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 1, USAGE_ID_1);
     }
 
-    private void verifyUsageDto(UsageDto usageDto) {
-        assertNotNull(usageDto);
-        assertEquals(DETAIL_ID, usageDto.getDetailId());
-        assertEquals(WR_WRK_INST, usageDto.getWrWrkInst());
-        assertEquals(WORK_TITLE, usageDto.getWorkTitle());
-        assertEquals(RH_ACCOUNT_NUMBER, usageDto.getRightsholder().getAccountNumber());
-        assertEquals(UsageStatusEnum.ELIGIBLE, usageDto.getStatus());
-        assertEquals(ARTICLE, usageDto.getArticle());
-        assertEquals(STANDART_NUMBER, usageDto.getStandardNumber());
-        assertEquals(PUBLISHER, usageDto.getPublisher());
-        assertEquals(PUBLICATION_DATE, usageDto.getPublicationDate());
-        assertEquals(MARKET, usageDto.getMarket());
-        assertEquals(MARKED_PERIOD_FROM, usageDto.getMarketPeriodFrom());
-        assertEquals(MARKED_PERIOD_TO, usageDto.getMarketPeriodTo());
-        assertEquals(AUTHOR, usageDto.getAuthor());
-        assertEquals(NUMBER_OF_COPIES, usageDto.getNumberOfCopies());
-        assertEquals(ORIGINAL_AMOUNT, usageDto.getOriginalAmount());
-        assertEquals(GROSS_AMOUNT, usageDto.getGrossAmount());
-        assertEquals(USAGE_BATCH_NAME, usageDto.getBatchName());
-        assertEquals(RH_ACCOUNT_NUMBER, usageDto.getRro().getAccountNumber());
-        assertEquals(PAYMENT_DATE, usageDto.getPaymentDate());
-        assertEquals(FISCAL_YEAR, usageDto.getFiscalYear());
+    @Test
+    public void testFindByUsageBatchFilter() {
+        UsageFilter usageFilter =
+            buildUsageFilter(Collections.emptySet(), Collections.singleton(USAGE_BATCH_ID_1), null, null, null);
+        verifyUsageDtos(usageRepository.findByFilter(usageFilter, new Pageable(0, 200),
+            new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 1, USAGE_ID_1);
     }
 
-    private UsageBatch buildUsageBatch() {
-        UsageBatch usageBatch = new UsageBatch();
-        usageBatch.setId(UUID.randomUUID().toString());
-        usageBatch.setName(USAGE_BATCH_NAME);
-        usageBatch.setRro(buildRightsholder());
-        usageBatch.setPaymentDate(PAYMENT_DATE);
-        usageBatch.setFiscalYear(FISCAL_YEAR);
-        usageBatch.setGrossAmount(GROSS_AMOUNT);
-        usageBatch.setCurrency(CurrencyEnum.USD);
-        usageBatch.setConversionRate(CONVERSION_RATE);
-        usageBatch.setAppliedConversionRate(APPLIED_CONVERSION_RATE);
-        return usageBatch;
+    @Test
+    public void testFindByRhAccountNumberFilter() {
+        UsageFilter usageFilter =
+            buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.emptySet(), null, null, null);
+        verifyUsageDtos(usageRepository.findByFilter(usageFilter, new Pageable(0, 200),
+            new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 1, USAGE_ID_1);
     }
 
-    private Rightsholder buildRightsholder() {
-        Rightsholder rightsholder = new Rightsholder();
-        rightsholder.setId(UUID.randomUUID().toString());
-        rightsholder.setAccountNumber(RH_ACCOUNT_NUMBER);
-        rightsholder.setName(RH_ACCOUNT_NAME);
-        return rightsholder;
+    @Test
+    public void testFindByStatusFilter() {
+        UsageFilter usageFilter =
+            buildUsageFilter(Collections.emptySet(), Collections.emptySet(), UsageStatusEnum.ELIGIBLE, null, null);
+        verifyUsageDtos(usageRepository.findByFilter(usageFilter, new Pageable(0, 200),
+            new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 1, USAGE_ID_1);
     }
 
-    private UsageFilter buildUsageFilter(String usageBatchId) {
+    @Test
+    public void testFindByPaymentDateFilter() {
+        UsageFilter usageFilter =
+            buildUsageFilter(Collections.emptySet(), Collections.emptySet(), null, PAYMENT_DATE, null);
+        verifyUsageDtos(usageRepository.findByFilter(usageFilter, new Pageable(0, 200),
+            new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 2, USAGE_ID_2, USAGE_ID_1);
+    }
+
+    @Test
+    public void testFindByFiscalYearFilter() {
+        UsageFilter usageFilter =
+            buildUsageFilter(Collections.emptySet(), Collections.emptySet(), null, null, FISCAL_YEAR);
+        verifyUsageDtos(usageRepository.findByFilter(usageFilter, new Pageable(0, 200),
+            new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 2, USAGE_ID_2, USAGE_ID_1);
+    }
+
+    @Test
+    public void testFindByFilterSortByDetailId() {
+        verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
+            new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 3, USAGE_ID_3, USAGE_ID_2, USAGE_ID_1);
+    }
+
+    @Test
+    public void testFindByFilterSortByWorkTitle() {
+        verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
+            new Sort(WORK_TITLE_KEY, Sort.Direction.ASC)), 3, USAGE_ID_2, USAGE_ID_1, USAGE_ID_3);
+    }
+
+    @Test
+    public void testFindByFilterSortByArticle() {
+        verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
+            new Sort(ARTICLE_KEY, Sort.Direction.ASC)), 3, USAGE_ID_1, USAGE_ID_2, USAGE_ID_3);
+    }
+
+    @Test
+    public void testFindByFilterSortByStandartNumber() {
+        verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
+            new Sort(STANDART_NUMBER_KEY, Sort.Direction.ASC)), 3, USAGE_ID_2, USAGE_ID_3, USAGE_ID_1);
+    }
+
+    @Test
+    public void testFindByFilterSortByWrWrkInst() {
+        verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
+            new Sort(WR_WRK_INST_KEY, Sort.Direction.ASC)), 3, USAGE_ID_3, USAGE_ID_1, USAGE_ID_2);
+    }
+
+    @Test
+    public void testFindByFilterSortByRhAccountNumber() {
+        verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
+            new Sort(RH_ACCOUNT_NUMBER_KEY, Sort.Direction.ASC)), 3, USAGE_ID_2, USAGE_ID_3, USAGE_ID_1);
+    }
+
+    @Test
+    public void testFindByFilterSortByPublisher() {
+        verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
+            new Sort(PUBLISHER_KEY, Sort.Direction.ASC)), 3, USAGE_ID_3, USAGE_ID_1, USAGE_ID_2);
+    }
+
+    @Test
+    public void testFindByFilterSortByPublicationDate() {
+        verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
+            new Sort(PUBLICATION_DATE_KEY, Sort.Direction.ASC)), 3, USAGE_ID_3, USAGE_ID_2, USAGE_ID_1);
+    }
+
+    @Test
+    public void testFindByFilterSortByNumberOfCopies() {
+        verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
+            new Sort(NUMBER_OF_COPIES_KEY, Sort.Direction.ASC)), 3, USAGE_ID_3, USAGE_ID_2, USAGE_ID_1);
+    }
+
+    @Test
+    public void testFindByFilterSortByOriginalAmount() {
+        verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
+            new Sort(ORIGINAL_AMOUNT_KEY, Sort.Direction.ASC)), 3, USAGE_ID_3, USAGE_ID_2, USAGE_ID_1);
+    }
+
+    @Test
+    public void testFindByFilterSortByGrossAmount() {
+        verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
+            new Sort(GROSS_AMOUNT_KEY, Sort.Direction.ASC)), 3, USAGE_ID_3, USAGE_ID_2, USAGE_ID_1);
+    }
+
+    @Test
+    public void testFindByFilterSortByMarket() {
+        verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
+            new Sort(MARKET_KEY, Sort.Direction.ASC)), 3, USAGE_ID_3, USAGE_ID_2, USAGE_ID_1);
+    }
+
+    @Test
+    public void testFindByFilterSortByMarketPeriodFrom() {
+        verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
+            new Sort(MARKED_PERIOD_FROM_KEY, Sort.Direction.ASC)), 3, USAGE_ID_1, USAGE_ID_3, USAGE_ID_2);
+    }
+
+    @Test
+    public void testFindByFilterSortByMarketPeriodTo() {
+        verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
+            new Sort(MARKED_PERIOD_TO_KEY, Sort.Direction.ASC)), 3, USAGE_ID_1, USAGE_ID_3, USAGE_ID_2);
+    }
+
+    @Test
+    public void testFindByFilterSortByAuthor() {
+        verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
+            new Sort(AUTHOR_KEY, Sort.Direction.ASC)), 3, USAGE_ID_2, USAGE_ID_1, USAGE_ID_3);
+    }
+
+    @Test
+    public void testFindByFilterSortByStatus() {
+        verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
+            new Sort(STATUS_KEY, Sort.Direction.ASC)), 3, USAGE_ID_1, USAGE_ID_2, USAGE_ID_3);
+    }
+
+    @Test
+    public void testFindByFilterSortByBatchName() {
+        verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
+            new Sort(BATCH_NAME_KEY, Sort.Direction.ASC)), 3, USAGE_ID_2, USAGE_ID_1, USAGE_ID_3);
+    }
+
+    @Test
+    public void testFindByFilterSortByFiscalYear() {
+        verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
+            new Sort(FISCAL_YEAR_KEY, Sort.Direction.ASC)), 3, USAGE_ID_2, USAGE_ID_1, USAGE_ID_3);
+    }
+
+    @Test
+    public void testFindByFilterSortByRroAccountNumber() {
+        verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
+            new Sort(RRO_ACCOUNT_NUMBER_KEY, Sort.Direction.ASC)), 3, USAGE_ID_2, USAGE_ID_1, USAGE_ID_3);
+    }
+
+    @Test
+    public void testFindByFilterSortByPaymentDate() {
+        verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
+            new Sort(PAYMENT_DATE_KEY, Sort.Direction.ASC)), 3, USAGE_ID_2, USAGE_ID_1, USAGE_ID_3);
+    }
+
+    private UsageFilter buildUsageFilter(Set<Long> accountNumbers, Set<String> usageBatchIds, UsageStatusEnum status,
+                                         LocalDate paymentDate, Integer fiscalYear) {
         UsageFilter usageFilter = new UsageFilter();
-        usageFilter.setRhAccountNumbers(Collections.singleton(RH_ACCOUNT_NUMBER));
-        usageFilter.setUsageBatchesIds(Collections.singleton(usageBatchId));
-        usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
-        usageFilter.setPaymentDate(PAYMENT_DATE);
-        usageFilter.setFiscalYear(FISCAL_YEAR);
+        usageFilter.setRhAccountNumbers(accountNumbers);
+        usageFilter.setUsageBatchesIds(usageBatchIds);
+        usageFilter.setUsageStatus(status);
+        usageFilter.setPaymentDate(paymentDate);
+        usageFilter.setFiscalYear(fiscalYear);
         return usageFilter;
     }
 
@@ -192,5 +318,13 @@ public class UsageRepositoryIntegrationTest {
         usage.setServiceFeeAmount(SERVICE_FEE_AMOUNT);
         usage.setGrossAmount(GROSS_AMOUNT);
         return usage;
+    }
+
+    private void verifyUsageDtos(List<UsageDto> usageDtos, int count, String... usageIds) {
+        assertNotNull(usageDtos);
+        assertEquals(count, usageDtos.size());
+        for (int i = 0; i < count; i++) {
+            assertEquals(usageIds[i], usageDtos.get(i).getId());
+        }
     }
 }
