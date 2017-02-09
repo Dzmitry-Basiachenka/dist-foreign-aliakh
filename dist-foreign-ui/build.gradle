@@ -39,16 +39,9 @@ dependencies {
     testCompile("com.copyright.rup.dist.common:dist-common-test:${distCommonVersion}")
 
     testUiCompile("com.copyright.rup.vaadin:rup-vaadin-test:${rupVaadinVersion}")
-    testUiCompile("com.copyright.rup.common:rup-common-test-integ:${rupCommonTestIntegVersion}")
+    testUiCompile project(path: ":dist-foreign-repository", configuration: "testIntegRuntime")
 
-    testUiRuntime(group: 'com.copyright.rup.common', name: 'rup-common-test-integ',
-            version: "${rupCommonTestIntegVersion}", configuration: 'h2')
-
-    testUiWebApp project(':dist-foreign-db')
-
-    testUiWebApp("com.copyright.rup.common:rup-common-test-integ:${rupCommonTestIntegVersion}")
-    testUiWebApp(group: 'com.copyright.rup.common', name: 'rup-common-test-integ',
-            version: "${rupCommonTestIntegVersion}", configuration: 'h2')
+    testUiWebApp project(path: ":dist-foreign-repository", configuration: "testIntegRuntime")
 }
 
 rupWarUi {

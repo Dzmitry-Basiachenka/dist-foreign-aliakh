@@ -9,7 +9,8 @@
           class="com.copyright.rup.common.test.integ.db.embedded.EmbeddedH2DatabaseFactory">
         <property name="resourcesFromPaths">
             <list value-type="java.lang.String">
-                <value>/com/copyright/rup/dist/foreign/db/integ-test-changelog.groovy</value>
+                <value>/com/copyright/rup/dist/foreign/db/main-changelog.groovy</value>
+                <value>/com/copyright/rup/dist/foreign/repository/integ-test-changelog.groovy</value>
             </list>
         </property>
         <property name="url">

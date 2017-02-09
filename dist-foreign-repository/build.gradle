@@ -9,9 +9,8 @@ dependencies {
 
     compile("org.mybatis:mybatis-typehandlers-jsr310:${mybatisTypehandlersVersion}")
 
-    testIntegRuntime project(':dist-foreign-db')
-
+    testIntegRuntime project(":dist-foreign-db")
     testIntegRuntime("com.copyright.rup.common:rup-common-test-integ:${rupCommonTestIntegVersion}")
-    testIntegRuntime(group: 'com.copyright.rup.common', name: 'rup-common-test-integ',
-            version: "${rupCommonTestIntegVersion}", configuration: 'h2')
+    testIntegRuntime(group: "com.copyright.rup.common", name: "rup-common-test-integ",
+            version: "${rupCommonTestIntegVersion}", configuration: "h2")
 }
