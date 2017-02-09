@@ -85,9 +85,9 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         setColumnsWidth();
 
         usagesTable
-            .setVisibleColumns(DETAIL_ID_PROPERTY, "batchName", "fiscalYear", "rro.accountNumber", "rro.name",
-                "paymentDate", "workTitle", "article", "standardNumber", "wrWrkInst", "rightsholder.accountNumber",
-                "rightsholder.name", "publisher", "publicationDate", "numberOfCopies", "originalAmount", "grossAmount",
+            .setVisibleColumns(DETAIL_ID_PROPERTY, "batchName", "fiscalYear", "rroAccountNumber", "rroName",
+                "paymentDate", "workTitle", "article", "standardNumber", "wrWrkInst", "rightsholderAccountNumber",
+                "rightsholderName", "publisher", "publicationDate", "numberOfCopies", "originalAmount", "grossAmount",
                 "market", "marketPeriodFrom", "marketPeriodTo", "author", "status");
         setColumnHeaders();
         usagesTable.setSizeFull();
@@ -106,15 +106,15 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         usagesTable.addProperty(DETAIL_ID_PROPERTY, Long.class, true);
         usagesTable.addProperty("batchName", String.class, true);
         usagesTable.addProperty("fiscalYear", String.class, true);
-        usagesTable.addProperty("rro.accountNumber", Long.class, true);
-        usagesTable.addProperty("rro.name", String.class, false);
+        usagesTable.addProperty("rroAccountNumber", Long.class, true);
+        usagesTable.addProperty("rroName", String.class, false);
         usagesTable.addProperty("paymentDate", LocalDate.class, true);
         usagesTable.addProperty("workTitle", String.class, true);
         usagesTable.addProperty("article", String.class, true);
         usagesTable.addProperty("standardNumber", String.class, true);
         usagesTable.addProperty("wrWrkInst", Long.class, true);
-        usagesTable.addProperty("rightsholder.accountNumber", Long.class, true);
-        usagesTable.addProperty("rightsholder.name", String.class, false);
+        usagesTable.addProperty("rightsholderAccountNumber", Long.class, true);
+        usagesTable.addProperty("rightsholderName", String.class, false);
         usagesTable.addProperty("publisher", String.class, true);
         usagesTable.addProperty("publicationDate", LocalDate.class, true);
         usagesTable.addProperty("numberOfCopies", Integer.class, true);
@@ -154,8 +154,8 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         LongColumnGenerator longColumnGenerator = new LongColumnGenerator();
         usagesTable.addGeneratedColumn(DETAIL_ID_PROPERTY, longColumnGenerator);
         usagesTable.addGeneratedColumn("wrWrkInst", longColumnGenerator);
-        usagesTable.addGeneratedColumn("rightsholder.accountNumber", longColumnGenerator);
-        usagesTable.addGeneratedColumn("rro.accountNumber", longColumnGenerator);
+        usagesTable.addGeneratedColumn("rightsholderAccountNumber", longColumnGenerator);
+        usagesTable.addGeneratedColumn("rroAccountNumber", longColumnGenerator);
         LocalDateColumnGenerator localDateColumnGenerator = new LocalDateColumnGenerator();
         usagesTable.addGeneratedColumn("publicationDate", localDateColumnGenerator);
         usagesTable.addGeneratedColumn("paymentDate", localDateColumnGenerator);
@@ -165,10 +165,10 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
     }
 
     private void setColumnsWidth() {
-        usagesTable.setColumnWidth("rro.name", COLUMN_WIDTH_300_PIXELS);
+        usagesTable.setColumnWidth("rroName", COLUMN_WIDTH_300_PIXELS);
         usagesTable.setColumnWidth("workTitle", COLUMN_WIDTH_300_PIXELS);
         usagesTable.setColumnWidth("article", COLUMN_WIDTH_300_PIXELS);
-        usagesTable.setColumnWidth("rightsholder.name", COLUMN_WIDTH_300_PIXELS);
+        usagesTable.setColumnWidth("rightsholderName", COLUMN_WIDTH_300_PIXELS);
         usagesTable.setColumnWidth("publisher", COLUMN_WIDTH_300_PIXELS);
         usagesTable.setColumnWidth("market", COLUMN_WIDTH_300_PIXELS);
         usagesTable.setColumnWidth("author", COLUMN_WIDTH_300_PIXELS);

@@ -75,7 +75,7 @@ public class UsageRepositoryIntegrationTest {
     private static final String ARTICLE_KEY = "article";
     private static final String STANDART_NUMBER_KEY = "standardNumber";
     private static final String WR_WRK_INST_KEY = "wrWrkInst";
-    private static final String RH_ACCOUNT_NUMBER_KEY = "rightsholder.accountNumber";
+    private static final String RH_ACCOUNT_NUMBER_KEY = "rightsholderAccountNumber";
     private static final String PUBLISHER_KEY = "publisher";
     private static final String PUBLICATION_DATE_KEY = "publicationDate";
     private static final String NUMBER_OF_COPIES_KEY = "numberOfCopies";
@@ -88,7 +88,7 @@ public class UsageRepositoryIntegrationTest {
     private static final String STATUS_KEY = "status";
     private static final String BATCH_NAME_KEY = "batchName";
     private static final String FISCAL_YEAR_KEY = "fiscalYear";
-    private static final String RRO_ACCOUNT_NUMBER_KEY = "rro.accountNumber";
+    private static final String RRO_ACCOUNT_NUMBER_KEY = "rroAccountNumber";
     private static final String PAYMENT_DATE_KEY = "paymentDate";
     private static final String USAGE_ID_1 = "111111111";
     private static final String USAGE_ID_2 = "222222222";
