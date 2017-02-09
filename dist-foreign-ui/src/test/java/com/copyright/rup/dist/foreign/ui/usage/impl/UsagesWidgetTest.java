@@ -166,9 +166,9 @@ public class UsagesWidgetTest {
     }
 
     private void verifyTable(Table table) {
-        assertArrayEquals(new Object[]{DETAIL_ID_PROPERTY, "batchName", "fiscalYear", "rro.accountNumber", "rro.name",
-            "paymentDate", "workTitle", "article", "standardNumber", "wrWrkInst", "rightsholder.accountNumber",
-            "rightsholder.name", "publisher", "publicationDate", "numberOfCopies", "originalAmount", "grossAmount",
+        assertArrayEquals(new Object[]{DETAIL_ID_PROPERTY, "batchName", "fiscalYear", "rroAccountNumber", "rroName",
+            "paymentDate", "workTitle", "article", "standardNumber", "wrWrkInst", "rightsholderAccountNumber",
+            "rightsholderName", "publisher", "publicationDate", "numberOfCopies", "originalAmount", "grossAmount",
             "market", "marketPeriodFrom", "marketPeriodTo", "author", "status"}, table.getVisibleColumns());
         assertArrayEquals(
             new Object[]{"Detail ID", "Usage Batch Name", "Fiscal Year", "RRO Account #",
@@ -181,15 +181,15 @@ public class UsagesWidgetTest {
         assertTrue(containerPropertyIds.contains(DETAIL_ID_PROPERTY));
         assertTrue(containerPropertyIds.contains("batchName"));
         assertTrue(containerPropertyIds.contains("fiscalYear"));
-        assertTrue(containerPropertyIds.contains("rro.accountNumber"));
-        assertTrue(containerPropertyIds.contains("rro.name"));
+        assertTrue(containerPropertyIds.contains("rroAccountNumber"));
+        assertTrue(containerPropertyIds.contains("rroName"));
         assertTrue(containerPropertyIds.contains("paymentDate"));
         assertTrue(containerPropertyIds.contains("workTitle"));
         assertTrue(containerPropertyIds.contains("article"));
         assertTrue(containerPropertyIds.contains("standardNumber"));
         assertTrue(containerPropertyIds.contains("wrWrkInst"));
-        assertTrue(containerPropertyIds.contains("rightsholder.accountNumber"));
-        assertTrue(containerPropertyIds.contains("rightsholder.name"));
+        assertTrue(containerPropertyIds.contains("rightsholderAccountNumber"));
+        assertTrue(containerPropertyIds.contains("rightsholderName"));
         assertTrue(containerPropertyIds.contains("publisher"));
         assertTrue(containerPropertyIds.contains("publicationDate"));
         assertTrue(containerPropertyIds.contains("numberOfCopies"));
@@ -203,10 +203,10 @@ public class UsagesWidgetTest {
         assertTrue(table.isColumnCollapsingAllowed());
         assertFalse(table.isColumnCollapsible(DETAIL_ID_PROPERTY));
 
-        assertEquals(COLUMN_WIDTH_300_PIXELS, table.getColumnWidth("rro.name"));
+        assertEquals(COLUMN_WIDTH_300_PIXELS, table.getColumnWidth("rroName"));
         assertEquals(COLUMN_WIDTH_300_PIXELS, table.getColumnWidth("workTitle"));
         assertEquals(COLUMN_WIDTH_300_PIXELS, table.getColumnWidth("article"));
-        assertEquals(COLUMN_WIDTH_300_PIXELS, table.getColumnWidth("rightsholder.name"));
+        assertEquals(COLUMN_WIDTH_300_PIXELS, table.getColumnWidth("rightsholderName"));
         assertEquals(COLUMN_WIDTH_300_PIXELS, table.getColumnWidth("publisher"));
         assertEquals(COLUMN_WIDTH_300_PIXELS, table.getColumnWidth("market"));
         assertEquals(COLUMN_WIDTH_300_PIXELS, table.getColumnWidth("author"));
@@ -218,8 +218,8 @@ public class UsagesWidgetTest {
     private void verifyGeneratedColumns(Table table) {
         verifyColumnGenerator(table.getColumnGenerator(DETAIL_ID_PROPERTY), LongColumnGenerator.class);
         verifyColumnGenerator(table.getColumnGenerator("wrWrkInst"), LongColumnGenerator.class);
-        verifyColumnGenerator(table.getColumnGenerator("rightsholder.accountNumber"), LongColumnGenerator.class);
-        verifyColumnGenerator(table.getColumnGenerator("rro.accountNumber"), LongColumnGenerator.class);
+        verifyColumnGenerator(table.getColumnGenerator("rightsholderAccountNumber"), LongColumnGenerator.class);
+        verifyColumnGenerator(table.getColumnGenerator("rroAccountNumber"), LongColumnGenerator.class);
         verifyColumnGenerator(table.getColumnGenerator("publicationDate"), LocalDateColumnGenerator.class);
         verifyColumnGenerator(table.getColumnGenerator("paymentDate"), LocalDateColumnGenerator.class);
         verifyColumnGenerator(table.getColumnGenerator("originalAmount"), MoneyColumnGenerator.class);

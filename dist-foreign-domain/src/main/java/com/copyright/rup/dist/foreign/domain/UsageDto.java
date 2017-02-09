@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.domain;
 
-import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.domain.StoredEntity;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -25,12 +24,14 @@ public class UsageDto extends StoredEntity<String> {
     private Long detailId;
     private String batchName;
     private Integer fiscalYear;
-    private Rightsholder rro;
+    private String rroName;
+    private Long rroAccountNumber;
     private LocalDate paymentDate;
     private Long wrWrkInst;
     private String workTitle;
     private String article;
-    private Rightsholder rightsholder;
+    private String rightsholderName;
+    private Long rightsholderAccountNumber;
     private String standardNumber;
     private String publisher;
     private LocalDate publicationDate;
@@ -137,22 +138,6 @@ public class UsageDto extends StoredEntity<String> {
      */
     public void setArticle(String article) {
         this.article = article;
-    }
-
-    /**
-     * @return rights holder.
-     */
-    public Rightsholder getRightsholder() {
-        return rightsholder;
-    }
-
-    /**
-     * Sets rights holder.
-     *
-     * @param rightsholder rights holder
-     */
-    public void setRightsholder(Rightsholder rightsholder) {
-        this.rightsholder = rightsholder;
     }
 
     /**
@@ -316,22 +301,6 @@ public class UsageDto extends StoredEntity<String> {
     }
 
     /**
-     * @return rro.
-     */
-    public Rightsholder getRro() {
-        return rro;
-    }
-
-    /**
-     * Sets rro.
-     *
-     * @param rro rro
-     */
-    public void setRro(Rightsholder rro) {
-        this.rro = rro;
-    }
-
-    /**
      * @return payment date.
      */
     public LocalDate getPaymentDate() {
@@ -363,6 +332,70 @@ public class UsageDto extends StoredEntity<String> {
         this.status = status;
     }
 
+    /**
+     * @return rro name.
+     */
+    public String getRroName() {
+        return rroName;
+    }
+
+    /**
+     * Sets rro name.
+     *
+     * @param rroName rro name to set
+     */
+    public void setRroName(String rroName) {
+        this.rroName = rroName;
+    }
+
+    /**
+     * @return rro account number.
+     */
+    public Long getRroAccountNumber() {
+        return rroAccountNumber;
+    }
+
+    /**
+     * Sets rro account number.
+     *
+     * @param rroAccountNumber rro account number to set
+     */
+    public void setRroAccountNumber(Long rroAccountNumber) {
+        this.rroAccountNumber = rroAccountNumber;
+    }
+
+    /**
+     * @return rightsholder name.
+     */
+    public String getRightsholderName() {
+        return rightsholderName;
+    }
+
+    /**
+     * Sets rightsholder name.
+     *
+     * @param rightsholderName rightsholder name to set
+     */
+    public void setRightsholderName(String rightsholderName) {
+        this.rightsholderName = rightsholderName;
+    }
+
+    /**
+     * @return gets rightsholder account number.
+     */
+    public Long getRightsholderAccountNumber() {
+        return rightsholderAccountNumber;
+    }
+
+    /**
+     * Sets rightsholder account number.
+     *
+     * @param rightsholderAccountNumber rightsholder account number
+     */
+    public void setRightsholderAccountNumber(Long rightsholderAccountNumber) {
+        this.rightsholderAccountNumber = rightsholderAccountNumber;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -377,12 +410,14 @@ public class UsageDto extends StoredEntity<String> {
             .append(this.detailId, that.detailId)
             .append(this.batchName, that.batchName)
             .append(this.fiscalYear, that.fiscalYear)
-            .append(this.rro, that.rro)
+            .append(this.rroName, that.rroName)
+            .append(this.rroAccountNumber, that.rroAccountNumber)
             .append(this.paymentDate, that.paymentDate)
             .append(this.wrWrkInst, that.wrWrkInst)
             .append(this.workTitle, that.workTitle)
             .append(this.article, that.article)
-            .append(this.rightsholder, that.rightsholder)
+            .append(this.rightsholderName, that.rightsholderName)
+            .append(this.rightsholderAccountNumber, that.rightsholderAccountNumber)
             .append(this.standardNumber, that.standardNumber)
             .append(this.publisher, that.publisher)
             .append(this.publicationDate, that.publicationDate)
@@ -404,12 +439,14 @@ public class UsageDto extends StoredEntity<String> {
             .append(detailId)
             .append(batchName)
             .append(fiscalYear)
-            .append(rro)
+            .append(rroName)
+            .append(rroAccountNumber)
             .append(paymentDate)
             .append(wrWrkInst)
             .append(workTitle)
             .append(article)
-            .append(rightsholder)
+            .append(rightsholderName)
+            .append(rightsholderAccountNumber)
             .append(standardNumber)
             .append(publisher)
             .append(publicationDate)
@@ -431,12 +468,14 @@ public class UsageDto extends StoredEntity<String> {
             .append("detailId", detailId)
             .append("batchName", batchName)
             .append("fiscalYear", fiscalYear)
-            .append("rro", rro)
+            .append("rroName", rroName)
+            .append("rroAccountNumber", rroAccountNumber)
             .append("paymentDate", paymentDate)
             .append("wrWrkInst", wrWrkInst)
             .append("workTitle", workTitle)
             .append("article", article)
-            .append("rightsholder", rightsholder)
+            .append("rightsholderName", rightsholderName)
+            .append("rightsholderAccountNumber", rightsholderAccountNumber)
             .append("standardNumber", standardNumber)
             .append("publisher", publisher)
             .append("publicationDate", publicationDate)
