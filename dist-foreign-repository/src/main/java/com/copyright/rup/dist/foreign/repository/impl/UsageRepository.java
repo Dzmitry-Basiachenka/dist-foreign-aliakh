@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -15,6 +16,8 @@ import com.google.common.collect.Maps;
 
 import org.springframework.stereotype.Repository;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -51,5 +54,18 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     @Override
     public int getUsagesCount(UsageFilter filter) {
         return selectOne("IUsageMapper.getUsagesCount", ImmutableMap.of(FILTER_KEY, checkNotNull(filter)));
+    }
+
+    @Override
+    public void writeUsagesCsvReport(UsageFilter filter, OutputStream outputStream) {
+        checkNotNull(outputStream);
+        try {
+            UsageCsvReportHandler handler = new UsageCsvReportHandler(outputStream);
+            getTemplate()
+                .select("IUsageMapper.findByFilter", ImmutableMap.of(FILTER_KEY, checkNotNull(filter)), handler);
+            handler.closeStream();
+        } catch (IOException e) {
+            throw new RupRuntimeException(e);
+        }
     }
 }

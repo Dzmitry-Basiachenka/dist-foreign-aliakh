@@ -8,6 +8,7 @@ dependencies {
     compile("com.copyright.rup.dist.common:dist-common-repository:${distCommonVersion}")
 
     compile("org.mybatis:mybatis-typehandlers-jsr310:${mybatisTypehandlersVersion}")
+    compile("net.sf.supercsv:super-csv:${superCsvVersion}")
 
     testIntegRuntime project(":dist-foreign-db")
     testIntegRuntime("com.copyright.rup.common:rup-common-test-integ:${rupCommonTestIntegVersion}")

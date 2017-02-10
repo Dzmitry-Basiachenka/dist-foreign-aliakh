@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
+import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
@@ -18,9 +19,14 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Controller for {@link UsagesWidget}.
@@ -37,9 +43,9 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
 
     @Autowired
     private IUsageService usageService;
-
     @Autowired
     private IUsagesFilterController filterController;
+    private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     @Override
     public IUsagesFilterWidget initUsagesFilterWidget() {
@@ -71,8 +77,14 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
 
     @Override
     public InputStream getStream() {
-        // TODO {mhladkikh} implement method
-        return null;
+        try {
+            PipedOutputStream outputStream = new PipedOutputStream();
+            PipedInputStream pipedInputStream = new PipedInputStream(outputStream);
+            executorService.execute(() -> usageService.writeUsageCsvReport(getFilter(), outputStream));
+            return pipedInputStream;
+        } catch (IOException e) {
+            throw new RupRuntimeException(e);
+        }
     }
 
     @Override

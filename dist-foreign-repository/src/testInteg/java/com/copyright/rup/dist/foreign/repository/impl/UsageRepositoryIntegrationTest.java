@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -24,7 +25,12 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
 import java.math.BigDecimal;
+import java.nio.charset.Charset;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
@@ -278,6 +284,28 @@ public class UsageRepositoryIntegrationTest {
     public void testFindByFilterSortByPaymentDate() {
         verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
             new Sort(PAYMENT_DATE_KEY, Sort.Direction.ASC)), 3, USAGE_ID_2, USAGE_ID_1, USAGE_ID_3);
+    }
+
+    @Test
+    public void testWriteUsagesCsvReport() throws Exception {
+        PipedOutputStream outputStream = new PipedOutputStream();
+        PipedInputStream inputStream = new PipedInputStream(outputStream);
+        UsageFilter usageFilter = new UsageFilter();
+        usageFilter.setUsageBatchesIds(Collections.singleton(USAGE_BATCH_ID_1));
+        usageRepository.writeUsagesCsvReport(usageFilter, outputStream);
+        BufferedReader bufferedReader =
+            new BufferedReader(new InputStreamReader(inputStream, Charset.defaultCharset()));
+        assertEquals("Detail ID,Usage Batch Name,Fiscal Year,RRO Account #,RRO Name,Payment Date,Title,Article," +
+                "Standard Number,Wr Wrk Inst,RH Account #,RH Name,Publisher,Pub Date,Number of Copies," +
+                "Amt in Orig Currency,Amt in USD,Market,Market Period From,Market Period To,Author,Detail Status",
+            bufferedReader.readLine());
+        assertEquals("6997788888,CADRA_11Dec16,2017,7000813806,,2017-01-11," +
+                "\"2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, " +
+                "Texas, USA\",Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle," +
+                "1008902112377654XX,180382914,1000009997,,IEEE,2013-09-10,2502232,2500.00,13461.54,Doc Del,2013,2017," +
+                "\"Íñigo López de Mendoza, marqués de Santillana\",ELIGIBLE",
+            bufferedReader.readLine());
+        assertNull(bufferedReader.readLine());
     }
 
     private UsageFilter buildUsageFilter(Set<Long> accountNumbers, Set<String> usageBatchIds, UsageStatusEnum status,

@@ -10,6 +10,7 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.OutputStream;
 import java.util.Collections;
 import java.util.List;
 
@@ -44,5 +45,10 @@ public class UsageService implements IUsageService {
             result = usageRepository.getUsagesCount(filter);
         }
         return result;
+    }
+
+    @Override
+    public void writeUsageCsvReport(UsageFilter filter, OutputStream outputStream) {
+        usageRepository.writeUsagesCsvReport(filter, outputStream);
     }
 }
