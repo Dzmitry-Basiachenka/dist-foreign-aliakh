@@ -308,6 +308,21 @@ public class UsageRepositoryIntegrationTest {
         assertNull(bufferedReader.readLine());
     }
 
+    @Test
+    public void testWriteUsagesEmptyCsvReport() throws Exception {
+        PipedOutputStream outputStream = new PipedOutputStream();
+        PipedInputStream inputStream = new PipedInputStream(outputStream);
+        UsageFilter usageFilter = new UsageFilter();
+        usageRepository.writeUsagesCsvReport(usageFilter, outputStream);
+        BufferedReader bufferedReader =
+            new BufferedReader(new InputStreamReader(inputStream, Charset.defaultCharset()));
+        assertEquals("Detail ID,Usage Batch Name,Fiscal Year,RRO Account #,RRO Name,Payment Date,Title,Article," +
+                "Standard Number,Wr Wrk Inst,RH Account #,RH Name,Publisher,Pub Date,Number of Copies," +
+                "Amt in Orig Currency,Amt in USD,Market,Market Period From,Market Period To,Author,Detail Status",
+            bufferedReader.readLine());
+        assertNull(bufferedReader.readLine());
+    }
+
     private UsageFilter buildUsageFilter(Set<Long> accountNumbers, Set<String> usageBatchIds, UsageStatusEnum status,
                                          LocalDate paymentDate, Integer fiscalYear) {
         UsageFilter usageFilter = new UsageFilter();

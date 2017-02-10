@@ -61,8 +61,10 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         checkNotNull(outputStream);
         try {
             UsageCsvReportHandler handler = new UsageCsvReportHandler(outputStream);
-            getTemplate()
-                .select("IUsageMapper.findByFilter", ImmutableMap.of(FILTER_KEY, checkNotNull(filter)), handler);
+            if (!checkNotNull(filter).isEmpty()) {
+                getTemplate()
+                    .select("IUsageMapper.findByFilter", ImmutableMap.of(FILTER_KEY, filter), handler);
+            }
             handler.closeStream();
         } catch (IOException e) {
             throw new RupRuntimeException(e);
