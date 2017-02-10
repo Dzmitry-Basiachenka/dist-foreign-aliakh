@@ -20,7 +20,6 @@ import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
 import com.google.common.collect.Sets;
-import com.vaadin.data.Property;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
@@ -42,10 +41,10 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -160,13 +159,13 @@ public class UsagesFilterWidgetTest {
         widget.clearFilter();
         verify(usagesFilterController);
         assertFalse(getApplyButton().isEnabled());
-        assertTrue(widget.getFilter().isEmpty());
+        assertTrue(widget.getAppliedFilter().isEmpty());
         String labelValue = "(0)";
         verifyCountLabelValue(labelValue, "batchesCountLabel");
         verifyCountLabelValue(labelValue, "rightsholdersCountLabel");
-        Property<LocalDate> paymentDateProperty =
-            Whitebox.getInternalState(widget, "paymentDateProperty", UsagesFilterWidget.class);
-        assertNull(paymentDateProperty.getValue());
+        LocalDateWidget localDateWidget =
+            Whitebox.getInternalState(widget, "paymentDateWidget", UsagesFilterWidget.class);
+        assertNull(localDateWidget.getValue());
         ComboBox fiscalYearComboBox = Whitebox.getInternalState(widget, "fiscalYearComboBox", UsagesFilterWidget.class);
         assertNull(fiscalYearComboBox.getValue());
     }
@@ -251,7 +250,7 @@ public class UsagesFilterWidgetTest {
         verifyItemsFilterLayout(verticalLayout.getComponent(2), "RROs");
         verifyDateWidget(verticalLayout.getComponent(3));
         verifyFiscalYearComboboxComponent(verticalLayout.getComponent(4),
-            Collections.singleton(String.valueOf(FISCAL_YEAR)));
+            Collections.singletonList(FISCAL_YEAR));
     }
 
     private void verifyFiltersLabel(Component component) {
@@ -277,7 +276,7 @@ public class UsagesFilterWidgetTest {
         assertFalse(iterator.hasNext());
     }
 
-    private void verifyFiscalYearComboboxComponent(Component component, Set<?> values) {
+    private void verifyFiscalYearComboboxComponent(Component component, List<Integer> values) {
         assertTrue(component instanceof ComboBox);
         ComboBox comboBox = (ComboBox) component;
         assertEquals("Fiscal Year To", comboBox.getCaption());

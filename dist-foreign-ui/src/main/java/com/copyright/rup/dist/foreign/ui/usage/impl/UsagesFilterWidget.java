@@ -10,8 +10,9 @@ import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.VaadinUtils;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
-import com.vaadin.data.Property;
-import com.vaadin.data.util.ObjectProperty;
+import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.ui.AbstractSelect.ItemCaptionMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
@@ -20,10 +21,8 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.BaseTheme;
 
-import java.time.LocalDate;
-import java.util.Collection;
+import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Widget for filtering usages.
@@ -36,13 +35,15 @@ import java.util.stream.Collectors;
  */
 class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
 
-    private Property<LocalDate> paymentDateProperty = new ObjectProperty<>(null, LocalDate.class);
+    private static final String COUNT_LABEL_FORMAT = ForeignUi.getMessage("label.filter.items_count_format");
     private Button applyButton;
+    private LocalDateWidget paymentDateWidget;
     private ComboBox fiscalYearComboBox;
     private IUsagesFilterController controller;
     private Label batchesCountLabel;
     private Label rightsholdersCountLabel;
     private UsageFilter usageFilter = new UsageFilter();
+    private UsageFilter appliedUsageFilter = new UsageFilter();
 
     @Override
     @SuppressWarnings("unchecked")
@@ -57,18 +58,19 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
 
     @Override
     public void applyFilter() {
-        applyButton.setEnabled(false);
-        fireEvent(new FilterChangedEvent(this, usageFilter));
+        appliedUsageFilter = new UsageFilter(usageFilter);
+        filterChanged();
+        fireEvent(new FilterChangedEvent(this));
     }
 
     @Override
     public void clearFilter() {
-        paymentDateProperty.setValue(null);
+        paymentDateWidget.setInternalValue(null);
         fiscalYearComboBox.setValue(null);
-        applyButton.setEnabled(false);
         usageFilter = new UsageFilter();
         setCountLabelValue(batchesCountLabel, 0);
         setCountLabelValue(rightsholdersCountLabel, 0);
+        applyFilter();
     }
 
     @Override
@@ -95,6 +97,11 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
         return usageFilter;
     }
 
+    @Override
+    public UsageFilter getAppliedFilter() {
+        return appliedUsageFilter;
+    }
+
     /**
      * @return instance of {@link IUsagesFilterController}.
      */
@@ -103,26 +110,49 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
     }
 
     private VerticalLayout initFiltersLayout() {
-        fiscalYearComboBox =
-            buildComboBox(ForeignUi.getMessage("label.fiscal_year_to"), getController().getFiscalYears());
-        VaadinUtils.addComponentStyle(fiscalYearComboBox, "fiscal-year-filter");
-        batchesCountLabel = new Label(String.format(ForeignUi.getMessage("label.filter.items_count_format"), 0));
-        rightsholdersCountLabel = new Label(String.format(ForeignUi.getMessage("label.filter.items_count_format"), 0));
+        initPaymentDateFilter();
+        initFiscalYearFilter();
+        VerticalLayout verticalLayout = new VerticalLayout(buildFiltersHeaderLabel(), buildUsageBatchFilter(),
+            buildRroAccountNumberFilter(), paymentDateWidget, fiscalYearComboBox);
+        verticalLayout.setSpacing(true);
+        return verticalLayout;
+    }
+
+    private HorizontalLayout buildUsageBatchFilter() {
+        batchesCountLabel = new Label(String.format(COUNT_LABEL_FORMAT, 0));
         HorizontalLayout batchesFilter =
             buildItemsFilter(batchesCountLabel, ForeignUi.getMessage("label.batches"),
                 (ClickListener) event -> controller.onUsageBatchFilterClick());
         VaadinUtils.addComponentStyle(batchesFilter, "batches-filter");
-        HorizontalLayout rightsholdersFilter =
+        return batchesFilter;
+    }
+
+    private HorizontalLayout buildRroAccountNumberFilter() {
+        rightsholdersCountLabel = new Label(String.format(COUNT_LABEL_FORMAT, 0));
+        HorizontalLayout rrosFilter =
             buildItemsFilter(rightsholdersCountLabel, ForeignUi.getMessage("label.rightsholders"),
                 (ClickListener) event -> controller.onRightsholderFilterClick());
-        VaadinUtils.addComponentStyle(rightsholdersFilter, "rightsholders-filter");
-        LocalDateWidget paymentDateWidget =
-            new LocalDateWidget(ForeignUi.getMessage("label.payment_date_to"), paymentDateProperty);
+        VaadinUtils.addComponentStyle(rrosFilter, "rightsholders-filter");
+        return rrosFilter;
+    }
+
+    private void initFiscalYearFilter() {
+        fiscalYearComboBox =
+            buildComboBox(ForeignUi.getMessage("label.fiscal_year_to"), getController().getFiscalYears());
+        fiscalYearComboBox.addValueChangeListener((ValueChangeListener) event -> {
+            usageFilter.setFiscalYear((Integer) fiscalYearComboBox.getValue());
+            filterChanged();
+        });
+        VaadinUtils.addComponentStyle(fiscalYearComboBox, "fiscal-year-filter");
+    }
+
+    private void initPaymentDateFilter() {
+        paymentDateWidget = new LocalDateWidget(ForeignUi.getMessage("label.payment_date_to"));
+        paymentDateWidget.addValueChangeListener((ValueChangeListener) event -> {
+            usageFilter.setPaymentDate(paymentDateWidget.getValue());
+            filterChanged();
+        });
         VaadinUtils.addComponentStyle(paymentDateWidget, "payment-date-filter");
-        VerticalLayout verticalLayout = new VerticalLayout(buildFiltersHeaderLabel(), batchesFilter,
-            rightsholdersFilter, paymentDateWidget, fiscalYearComboBox);
-        verticalLayout.setSpacing(true);
-        return verticalLayout;
     }
 
     private Label buildFiltersHeaderLabel() {
@@ -131,10 +161,10 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
         return filterHeaderLabel;
     }
 
-    private ComboBox buildComboBox(String caption, Collection<?> values) {
-        ComboBox comboBox = new ComboBox(caption);
-        comboBox.addItems(values.stream().map(Object::toString).collect(Collectors.toList()));
-        comboBox.setConverter(String.class);
+    private ComboBox buildComboBox(String caption, List<Integer> values) {
+        BeanItemContainer<Integer> dataSource = new BeanItemContainer<>(Integer.class, values);
+        ComboBox comboBox = new ComboBox(caption, dataSource);
+        comboBox.setItemCaptionMode(ItemCaptionMode.ID_TOSTRING);
         VaadinUtils.setMaxComponentsWidth(comboBox);
         return comboBox;
     }
@@ -163,10 +193,10 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
     }
 
     private void filterChanged() {
-        applyButton.setEnabled(!usageFilter.isEmpty());
+        applyButton.setEnabled(!usageFilter.equals(appliedUsageFilter));
     }
 
     private void setCountLabelValue(Label label, int count) {
-        label.setValue(String.format(ForeignUi.getMessage("label.filter.items_count_format"), count));
+        label.setValue(String.format(COUNT_LABEL_FORMAT, count));
     }
 }

@@ -95,6 +95,6 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     private UsageFilter getFilter() {
-        return filterController.getWidget().getFilter();
+        return filterController.getWidget().getAppliedFilter();
     }
 }

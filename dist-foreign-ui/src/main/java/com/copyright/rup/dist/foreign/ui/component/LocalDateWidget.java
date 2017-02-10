@@ -30,13 +30,11 @@ public class LocalDateWidget extends CustomField<LocalDate> {
      * Constructor.
      *
      * @param caption  widget caption
-     * @param property property
      */
-    public LocalDateWidget(String caption, Property<LocalDate> property) {
+    public LocalDateWidget(String caption) {
         dateProperty = new ObjectProperty<>(null, Date.class);
         this.popupDateWidget = new PopupDateWidget(dateProperty);
         popupDateWidget.setImmediate(true);
-        setPropertyDataSource(property);
         setCaption(caption);
     }
 
