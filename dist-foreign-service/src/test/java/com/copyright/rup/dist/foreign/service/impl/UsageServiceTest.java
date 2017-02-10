@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.service.impl;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
@@ -21,6 +22,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
+import java.io.PipedOutputStream;
 import java.util.List;
 
 /**
@@ -79,5 +81,16 @@ public class UsageServiceTest {
         List<UsageDto> result = usageService.getUsages(new UsageFilter(), null, null);
         assertNotNull(result);
         assertTrue(result.isEmpty());
+    }
+
+    @Test
+    public void testWriteUsageCsvReport() {
+        PipedOutputStream outputStream = new PipedOutputStream();
+        UsageFilter usageFilter = new UsageFilter();
+        usageRepository.writeUsagesCsvReport(usageFilter, outputStream);
+        expectLastCall().once();
+        replay(usageRepository);
+        usageService.writeUsageCsvReport(usageFilter, outputStream);
+        verify(usageRepository);
     }
 }

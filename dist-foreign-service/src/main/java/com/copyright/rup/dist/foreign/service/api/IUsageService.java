@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
 
+import java.io.OutputStream;
 import java.util.List;
 
 /**
@@ -35,4 +36,12 @@ public interface IUsageService {
      * @return the the count of usages.
      */
     int getUsagesCount(UsageFilter filter);
+
+    /**
+     * Writes usages found by filter into csv output stream.
+     *
+     * @param filter       instance of {@link UsageFilter}
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeUsageCsvReport(UsageFilter filter, OutputStream outputStream);
 }

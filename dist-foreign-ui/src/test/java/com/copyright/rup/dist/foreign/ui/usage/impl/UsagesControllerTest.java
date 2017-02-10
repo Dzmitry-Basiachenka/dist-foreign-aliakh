@@ -10,8 +10,8 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
@@ -29,9 +29,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
+import java.io.PipedOutputStream;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 /**
  * Verifies {@link UsagesController}.
@@ -120,7 +122,18 @@ public class UsagesControllerTest {
 
     @Test
     public void testGetStream() {
-        assertNull(controller.getStream());
+        ExecutorService executorService = createMock(ExecutorService.class);
+        Whitebox.setInternalState(controller, executorService);
+        Capture<Runnable> captureRunnable = new Capture<>();
+        executorService.execute(capture(captureRunnable));
+        expectLastCall().once();
+        replay(usageService, filterController, executorService);
+        assertNotNull(controller.getStream());
+        Runnable runnable = captureRunnable.getValue();
+        assertNotNull(runnable);
+        assertSame(controller, Whitebox.getInternalState(runnable, "arg$1"));
+        assertTrue(Whitebox.getInternalState(runnable, "arg$2") instanceof PipedOutputStream);
+        verify(usageService, filterController, executorService);
     }
 
     @Test

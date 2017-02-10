@@ -4,6 +4,7 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
 
+import java.io.OutputStream;
 import java.util.List;
 
 /**
@@ -42,4 +43,12 @@ public interface IUsageRepository {
      * @return the count of usages
      */
     int getUsagesCount(UsageFilter filter);
+
+    /**
+     * Finds usages according to given {@link UsageFilter} and writes them to the output stream in CSV format.
+     *
+     * @param filter       instance of {@link UsageFilter}
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeUsagesCsvReport(UsageFilter filter, OutputStream outputStream);
 }
