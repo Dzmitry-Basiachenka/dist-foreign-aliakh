@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.dist.foreign.domain.CurrencyEnum;
-import com.copyright.rup.dist.foreign.ui.common.util.UsageBatchUtils;
+import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
 import com.copyright.rup.dist.foreign.ui.component.CsvUploadComponent;
 import com.copyright.rup.dist.foreign.ui.component.LocalDateWidget;
 import com.copyright.rup.dist.foreign.ui.component.validator.AmountValidator;

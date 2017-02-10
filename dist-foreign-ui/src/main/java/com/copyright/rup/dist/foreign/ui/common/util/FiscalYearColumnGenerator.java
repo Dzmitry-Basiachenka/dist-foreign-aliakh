@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.common.util;
 
+import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
 import com.copyright.rup.vaadin.ui.VaadinUtils;
 
 import com.vaadin.ui.Table;

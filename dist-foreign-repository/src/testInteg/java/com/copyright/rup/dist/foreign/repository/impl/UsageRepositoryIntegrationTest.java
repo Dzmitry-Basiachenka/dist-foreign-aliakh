@@ -55,6 +55,7 @@ import java.util.UUID;
 public class UsageRepositoryIntegrationTest {
 
     private static final String USAGE_BATCH_ID_1 = "56282dbc-2468-48d4-b926-93d3458a656a";
+    private static final String USAGE_BATCH_ID_2 = "56282dbc-2468-48d4-b926-94d3458a666a";
     private static final Long RH_ACCOUNT_NUMBER = 7000813806L;
     private static final LocalDate PAYMENT_DATE = LocalDate.of(2017, 1, 11);
     private static final Integer FISCAL_YEAR = 2017;
@@ -291,7 +292,7 @@ public class UsageRepositoryIntegrationTest {
         PipedOutputStream outputStream = new PipedOutputStream();
         PipedInputStream inputStream = new PipedInputStream(outputStream);
         UsageFilter usageFilter = new UsageFilter();
-        usageFilter.setUsageBatchesIds(Collections.singleton(USAGE_BATCH_ID_1));
+        usageFilter.setUsageBatchesIds(Collections.singleton(USAGE_BATCH_ID_2));
         usageRepository.writeUsagesCsvReport(usageFilter, outputStream);
         BufferedReader bufferedReader =
             new BufferedReader(new InputStreamReader(inputStream, Charset.defaultCharset()));
@@ -299,11 +300,12 @@ public class UsageRepositoryIntegrationTest {
                 "Standard Number,Wr Wrk Inst,RH Account #,RH Name,Publisher,Pub Date,Number of Copies," +
                 "Amt in Orig Currency,Amt in USD,Market,Market Period From,Market Period To,Author,Detail Status",
             bufferedReader.readLine());
-        assertEquals("6997788888,CADRA_11Dec16,2017,7000813806,,2017-01-11," +
-                "\"2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, " +
-                "Texas, USA\",Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle," +
-                "1008902112377654XX,180382914,1000009997,,IEEE,2013-09-10,2502232,2500.00,13461.54,Doc Del,2013,2017," +
-                "\"Íñigo López de Mendoza, marqués de Santillana\",ELIGIBLE",
+        assertEquals("6997788885,AccessCopyright_11Dec16,FY2016,2000017004,,09/10/2015," +
+                "15th International Conference on Environmental Degradation of Materials in Nuclear Power Systems " +
+                "Water Reactors,First-Week Protein and Energy Intakes Are Associated With 18-Month Developmental " +
+                "Outcomes in Extremely Low Birth Weight Infants,1008902002377655XX,244614835,1000002859,," +
+                "John Wiley & Sons,05/10/2011,1600,1560.00,8400.00,\"Bus,Doc Del,Edu,Gov,Lib,Sch,Univ\",2015,2019," +
+                "Nanette M. Schwann,INELIGIBLE",
             bufferedReader.readLine());
         assertNull(bufferedReader.readLine());
     }
