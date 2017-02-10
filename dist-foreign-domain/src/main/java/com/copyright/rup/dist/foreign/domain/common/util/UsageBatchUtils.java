@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.ui.common.util;
+package com.copyright.rup.dist.foreign.domain.common.util;
 
 import org.apache.commons.lang3.StringUtils;
 
