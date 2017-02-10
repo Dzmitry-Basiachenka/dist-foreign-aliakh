@@ -103,6 +103,27 @@ databaseChangeLog {
             column(name: 'gross_amount', value: '4577.00')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '444444444')
+            column(name: 'df_usage_batch_uid', value: '56782dbc-2158-48d4-b026-94d3458a666a')
+            column(name: 'detail_id', value: '6997788884')
+            column(name: 'wr_wrk_inst', value: '345870577')
+            column(name: 'work_title', value: '10 Years Plant Molecular Biology')
+            column(name: 'rh_account_number', value: '1000005413')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '1008902002377655XX')
+            column(name: 'publisher', value: 'McGraw-Hill')
+            column(name: 'publication_date', value: '2009-12-31')
+            column(name: 'market', value: 'Edu')
+            column(name: 'market_period_from', value: '2015')
+            column(name: 'market_period_to', value: '2019')
+            column(name: 'author', value: 'Mirjam H. Hüberli')
+            column(name: 'number_of_copies', value: '2630')
+            column(name: 'original_amount', value: '1280.00')
+            column(name: 'gross_amount', value: '6892.30')
+        }
+
         rollback {
             delete(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
                 where "df_usage_batch_uid in ('56282dbc-2468-48d4-b926-93d3458a656a', " +
