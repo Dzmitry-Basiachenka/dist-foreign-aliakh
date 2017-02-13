@@ -23,7 +23,8 @@ public class UsageFilter {
 
     private Set<Long> rhAccountNumbers = Sets.newHashSet();
     private Set<String> usageBatchesIds = Sets.newHashSet();
-    private UsageStatusEnum usageStatus;
+    // Phase I only ELIGIBLE usages are displayed. Add usageStatus to isEmpty method after implementing filter by status
+    private UsageStatusEnum usageStatus = UsageStatusEnum.ELIGIBLE;
     private LocalDate paymentDate;
     private Integer fiscalYear;
 
@@ -113,7 +114,6 @@ public class UsageFilter {
     public boolean isEmpty() {
         return (null == rhAccountNumbers || rhAccountNumbers.isEmpty())
             && (null == usageBatchesIds || usageBatchesIds.isEmpty())
-            && null == usageStatus
             && null == paymentDate
             && null == fiscalYear;
     }

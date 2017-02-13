@@ -55,7 +55,6 @@ import java.util.UUID;
 public class UsageRepositoryIntegrationTest {
 
     private static final String USAGE_BATCH_ID_1 = "56282dbc-2468-48d4-b926-93d3458a656a";
-    private static final String USAGE_BATCH_ID_2 = "56282dbc-2468-48d4-b926-94d3458a666a";
     private static final Long RH_ACCOUNT_NUMBER = 7000813806L;
     private static final LocalDate PAYMENT_DATE = LocalDate.of(2017, 1, 11);
     private static final Integer FISCAL_YEAR = 2017;
@@ -92,14 +91,13 @@ public class UsageRepositoryIntegrationTest {
     private static final String MARKED_PERIOD_FROM_KEY = "marketPeriodFrom";
     private static final String MARKED_PERIOD_TO_KEY = "marketPeriodTo";
     private static final String AUTHOR_KEY = "author";
-    private static final String STATUS_KEY = "status";
     private static final String BATCH_NAME_KEY = "batchName";
     private static final String FISCAL_YEAR_KEY = "fiscalYear";
     private static final String RRO_ACCOUNT_NUMBER_KEY = "rroAccountNumber";
     private static final String PAYMENT_DATE_KEY = "paymentDate";
     private static final String USAGE_ID_1 = "111111111";
     private static final String USAGE_ID_2 = "222222222";
-    private static final String USAGE_ID_3 = "333333333";
+    private static final String USAGE_ID_3 = "444444444";
 
     @Autowired
     private IUsageRepository usageRepository;
@@ -148,7 +146,7 @@ public class UsageRepositoryIntegrationTest {
         UsageFilter usageFilter =
             buildUsageFilter(Collections.emptySet(), Collections.emptySet(), UsageStatusEnum.ELIGIBLE, null, null);
         verifyUsageDtos(usageRepository.findByFilter(usageFilter, new Pageable(0, 200),
-            new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 1, USAGE_ID_1);
+            new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 2, USAGE_ID_3, USAGE_ID_1);
     }
 
     @Test
@@ -170,121 +168,115 @@ public class UsageRepositoryIntegrationTest {
     @Test
     public void testFindByFilterSortByDetailId() {
         verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
-            new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 3, USAGE_ID_3, USAGE_ID_2, USAGE_ID_1);
+            new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 2, USAGE_ID_3, USAGE_ID_1);
     }
 
     @Test
     public void testFindByFilterSortByWorkTitle() {
         verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
-            new Sort(WORK_TITLE_KEY, Sort.Direction.ASC)), 3, USAGE_ID_2, USAGE_ID_1, USAGE_ID_3);
+            new Sort(WORK_TITLE_KEY, Sort.Direction.ASC)), 2, USAGE_ID_3, USAGE_ID_1);
     }
 
     @Test
     public void testFindByFilterSortByArticle() {
         verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
-            new Sort(ARTICLE_KEY, Sort.Direction.ASC)), 3, USAGE_ID_1, USAGE_ID_2, USAGE_ID_3);
+            new Sort(ARTICLE_KEY, Sort.Direction.ASC)), 2, USAGE_ID_3, USAGE_ID_1);
     }
 
     @Test
     public void testFindByFilterSortByStandartNumber() {
         verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
-            new Sort(STANDART_NUMBER_KEY, Sort.Direction.ASC)), 3, USAGE_ID_2, USAGE_ID_3, USAGE_ID_1);
+            new Sort(STANDART_NUMBER_KEY, Sort.Direction.ASC)), 2, USAGE_ID_3, USAGE_ID_1);
     }
 
     @Test
     public void testFindByFilterSortByWrWrkInst() {
         verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
-            new Sort(WR_WRK_INST_KEY, Sort.Direction.ASC)), 3, USAGE_ID_3, USAGE_ID_1, USAGE_ID_2);
+            new Sort(WR_WRK_INST_KEY, Sort.Direction.ASC)), 2, USAGE_ID_1, USAGE_ID_3);
     }
 
     @Test
     public void testFindByFilterSortByRhAccountNumber() {
         verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
-            new Sort(RH_ACCOUNT_NUMBER_KEY, Sort.Direction.ASC)), 3, USAGE_ID_2, USAGE_ID_3, USAGE_ID_1);
+            new Sort(RH_ACCOUNT_NUMBER_KEY, Sort.Direction.ASC)), 2, USAGE_ID_3, USAGE_ID_1);
     }
 
     @Test
     public void testFindByFilterSortByPublisher() {
         verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
-            new Sort(PUBLISHER_KEY, Sort.Direction.ASC)), 3, USAGE_ID_3, USAGE_ID_1, USAGE_ID_2);
+            new Sort(PUBLISHER_KEY, Sort.Direction.ASC)), 2, USAGE_ID_1, USAGE_ID_3);
     }
 
     @Test
     public void testFindByFilterSortByPublicationDate() {
         verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
-            new Sort(PUBLICATION_DATE_KEY, Sort.Direction.ASC)), 3, USAGE_ID_3, USAGE_ID_2, USAGE_ID_1);
+            new Sort(PUBLICATION_DATE_KEY, Sort.Direction.ASC)), 2, USAGE_ID_3, USAGE_ID_1);
     }
 
     @Test
     public void testFindByFilterSortByNumberOfCopies() {
         verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
-            new Sort(NUMBER_OF_COPIES_KEY, Sort.Direction.ASC)), 3, USAGE_ID_3, USAGE_ID_2, USAGE_ID_1);
+            new Sort(NUMBER_OF_COPIES_KEY, Sort.Direction.ASC)), 2, USAGE_ID_3, USAGE_ID_1);
     }
 
     @Test
     public void testFindByFilterSortByOriginalAmount() {
         verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
-            new Sort(ORIGINAL_AMOUNT_KEY, Sort.Direction.ASC)), 3, USAGE_ID_3, USAGE_ID_2, USAGE_ID_1);
+            new Sort(ORIGINAL_AMOUNT_KEY, Sort.Direction.ASC)), 2, USAGE_ID_3, USAGE_ID_1);
     }
 
     @Test
     public void testFindByFilterSortByGrossAmount() {
         verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
-            new Sort(GROSS_AMOUNT_KEY, Sort.Direction.ASC)), 3, USAGE_ID_3, USAGE_ID_2, USAGE_ID_1);
+            new Sort(GROSS_AMOUNT_KEY, Sort.Direction.ASC)), 2, USAGE_ID_3, USAGE_ID_1);
     }
 
     @Test
     public void testFindByFilterSortByMarket() {
         verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
-            new Sort(MARKET_KEY, Sort.Direction.ASC)), 3, USAGE_ID_3, USAGE_ID_2, USAGE_ID_1);
+            new Sort(MARKET_KEY, Sort.Direction.ASC)), 2, USAGE_ID_1, USAGE_ID_3);
     }
 
     @Test
     public void testFindByFilterSortByMarketPeriodFrom() {
         verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
-            new Sort(MARKED_PERIOD_FROM_KEY, Sort.Direction.ASC)), 3, USAGE_ID_1, USAGE_ID_3, USAGE_ID_2);
+            new Sort(MARKED_PERIOD_FROM_KEY, Sort.Direction.ASC)), 2, USAGE_ID_1, USAGE_ID_3);
     }
 
     @Test
     public void testFindByFilterSortByMarketPeriodTo() {
         verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
-            new Sort(MARKED_PERIOD_TO_KEY, Sort.Direction.ASC)), 3, USAGE_ID_1, USAGE_ID_3, USAGE_ID_2);
+            new Sort(MARKED_PERIOD_TO_KEY, Sort.Direction.ASC)), 2, USAGE_ID_1, USAGE_ID_3);
     }
 
     @Test
     public void testFindByFilterSortByAuthor() {
         verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
-            new Sort(AUTHOR_KEY, Sort.Direction.ASC)), 3, USAGE_ID_2, USAGE_ID_1, USAGE_ID_3);
-    }
-
-    @Test
-    public void testFindByFilterSortByStatus() {
-        verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
-            new Sort(STATUS_KEY, Sort.Direction.ASC)), 3, USAGE_ID_1, USAGE_ID_2, USAGE_ID_3);
+            new Sort(AUTHOR_KEY, Sort.Direction.ASC)), 2, USAGE_ID_3, USAGE_ID_1);
     }
 
     @Test
     public void testFindByFilterSortByBatchName() {
         verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
-            new Sort(BATCH_NAME_KEY, Sort.Direction.ASC)), 3, USAGE_ID_2, USAGE_ID_1, USAGE_ID_3);
+            new Sort(BATCH_NAME_KEY, Sort.Direction.ASC)), 2, USAGE_ID_1, USAGE_ID_3);
     }
 
     @Test
     public void testFindByFilterSortByFiscalYear() {
         verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
-            new Sort(FISCAL_YEAR_KEY, Sort.Direction.ASC)), 3, USAGE_ID_2, USAGE_ID_1, USAGE_ID_3);
+            new Sort(FISCAL_YEAR_KEY, Sort.Direction.ASC)), 2, USAGE_ID_1, USAGE_ID_3);
     }
 
     @Test
     public void testFindByFilterSortByRroAccountNumber() {
         verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
-            new Sort(RRO_ACCOUNT_NUMBER_KEY, Sort.Direction.ASC)), 3, USAGE_ID_2, USAGE_ID_1, USAGE_ID_3);
+            new Sort(RRO_ACCOUNT_NUMBER_KEY, Sort.Direction.ASC)), 2, USAGE_ID_1, USAGE_ID_3);
     }
 
     @Test
     public void testFindByFilterSortByPaymentDate() {
         verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
-            new Sort(PAYMENT_DATE_KEY, Sort.Direction.ASC)), 3, USAGE_ID_2, USAGE_ID_1, USAGE_ID_3);
+            new Sort(PAYMENT_DATE_KEY, Sort.Direction.ASC)), 2, USAGE_ID_1, USAGE_ID_3);
     }
 
     @Test
@@ -292,7 +284,7 @@ public class UsageRepositoryIntegrationTest {
         PipedOutputStream outputStream = new PipedOutputStream();
         PipedInputStream inputStream = new PipedInputStream(outputStream);
         UsageFilter usageFilter = new UsageFilter();
-        usageFilter.setUsageBatchesIds(Collections.singleton(USAGE_BATCH_ID_2));
+        usageFilter.setUsageBatchesIds(Collections.singleton(USAGE_BATCH_ID_1));
         usageRepository.writeUsagesCsvReport(usageFilter, outputStream);
         BufferedReader bufferedReader =
             new BufferedReader(new InputStreamReader(inputStream, Charset.defaultCharset()));
@@ -300,12 +292,11 @@ public class UsageRepositoryIntegrationTest {
                 "Standard Number,Wr Wrk Inst,RH Account #,RH Name,Publisher,Pub Date,Number of Copies," +
                 "Amt in Orig Currency,Amt in USD,Market,Market Period From,Market Period To,Author,Detail Status",
             bufferedReader.readLine());
-        assertEquals("6997788885,AccessCopyright_11Dec16,FY2016,2000017004,,09/10/2015," +
-                "15th International Conference on Environmental Degradation of Materials in Nuclear Power Systems " +
-                "Water Reactors,First-Week Protein and Energy Intakes Are Associated With 18-Month Developmental " +
-                "Outcomes in Extremely Low Birth Weight Infants,1008902002377655XX,244614835,1000002859,," +
-                "John Wiley & Sons,05/10/2011,1600,1560.00,8400.00,\"Bus,Doc Del,Edu,Gov,Lib,Sch,Univ\",2015,2019," +
-                "Nanette M. Schwann,INELIGIBLE",
+        assertEquals("6997788888,CADRA_11Dec16,FY2017,7000813806,,01/11/2017,\"2001 IEEE Workshop on High" +
+            " Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA\",Efficient Generation of H2 by" +
+            " Splitting Water with an Isothermal Redox Cycle,1008902112377654XX,180382914,1000009997,,IEEE," +
+            "09/10/2013,2502232,2500.00,13461.54,Doc Del,2013,2017,\"Íñigo López de Mendoza, marqués de Santillana\"" +
+            ",ELIGIBLE",
             bufferedReader.readLine());
         assertNull(bufferedReader.readLine());
     }
