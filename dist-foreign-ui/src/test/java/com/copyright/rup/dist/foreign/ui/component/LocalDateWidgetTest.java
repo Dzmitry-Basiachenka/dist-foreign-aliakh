@@ -9,7 +9,6 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.vaadin.widget.PopupDateWidget;
 
 import com.vaadin.data.Property;
-import com.vaadin.data.util.ObjectProperty;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -34,8 +33,7 @@ public class LocalDateWidgetTest {
 
     @Before
     public void setUp() {
-        Property<LocalDate> property = new ObjectProperty<>(null, LocalDate.class);
-        widget = new LocalDateWidget("Caption", property);
+        widget = new LocalDateWidget("Caption");
     }
 
     @Test

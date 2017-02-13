@@ -3,8 +3,6 @@ package com.copyright.rup.dist.foreign.ui.usage.api;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 
-import com.copyright.rup.dist.foreign.domain.UsageFilter;
-
 import com.vaadin.ui.HorizontalLayout;
 
 import org.junit.Test;
@@ -23,9 +21,8 @@ public class FilterChangedEventTest {
     @Test
     public void testConstructorWithArguments() {
         HorizontalLayout horizontalLayout = new HorizontalLayout();
-        FilterChangedEvent filterChangedEvent = new FilterChangedEvent(horizontalLayout, new UsageFilter());
+        FilterChangedEvent filterChangedEvent = new FilterChangedEvent(horizontalLayout);
         assertNotNull(filterChangedEvent);
         assertSame(horizontalLayout, filterChangedEvent.getSource());
-        assertNotNull(filterChangedEvent.getFilter());
     }
 }

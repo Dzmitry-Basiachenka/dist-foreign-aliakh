@@ -29,6 +29,28 @@ public class UsageFilter {
     private Integer fiscalYear;
 
     /**
+     * Default constructor.
+     */
+    public UsageFilter() {
+        // Default constructor
+    }
+
+    /**
+     * Constructs new filter based on existing.
+     *
+     * @param filter base filter
+     */
+    public UsageFilter(UsageFilter filter) {
+        if (null != filter) {
+            setRhAccountNumbers(filter.getRhAccountNumbers());
+            setUsageBatchesIds(filter.getUsageBatchesIds());
+            setUsageStatus(filter.getUsageStatus());
+            setPaymentDate(filter.getPaymentDate());
+            setFiscalYear(filter.getFiscalYear());
+        }
+    }
+
+    /**
      * @return a set of rightsholders account numbers.
      */
     public Set<Long> getRhAccountNumbers() {

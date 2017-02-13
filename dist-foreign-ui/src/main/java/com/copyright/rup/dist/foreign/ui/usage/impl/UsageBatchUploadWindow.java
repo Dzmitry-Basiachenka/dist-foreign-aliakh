@@ -30,8 +30,6 @@ import com.vaadin.ui.Window;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.time.LocalDate;
-
 /**
  * Window for uploading a usage batch with usages.
  * <p/>
@@ -145,8 +143,7 @@ class UsageBatchUploadWindow extends Window {
     }
 
     private LocalDateWidget initPaymentDateWidget() {
-        paymentDateWidget = new LocalDateWidget(ForeignUi.getMessage("label.payment_date"),
-            new ObjectProperty<>(null, LocalDate.class));
+        paymentDateWidget = new LocalDateWidget(ForeignUi.getMessage("label.payment_date"));
         VaadinUtils.setMaxComponentsWidth(accountNumberField);
         setRequired(paymentDateWidget);
         paymentDateWidget.addValueChangeListener(event ->

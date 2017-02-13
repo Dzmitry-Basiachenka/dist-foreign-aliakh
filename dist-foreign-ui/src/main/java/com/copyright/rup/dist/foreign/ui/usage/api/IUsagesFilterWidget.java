@@ -34,4 +34,9 @@ public interface IUsagesFilterWidget extends IFilterWidget<IUsagesFilterControll
      * @return {@link UsageFilter}.
      */
     UsageFilter getFilter();
+
+    /**
+     * @return applied {@link UsageFilter}.
+     */
+    UsageFilter getAppliedFilter();
 }

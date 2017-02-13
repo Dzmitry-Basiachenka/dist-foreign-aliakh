@@ -68,7 +68,7 @@ public class UsagesControllerTest {
         Whitebox.setInternalState(filterController, IWidget.class, filterWidget);
         UsageFilter filter = new UsageFilter();
         filter.setFiscalYear(2017);
-        expect(filterWidget.getFilter()).andReturn(filter).once();
+        expect(filterWidget.getAppliedFilter()).andReturn(filter).once();
         expect(usageService.getUsagesCount(filter)).andReturn(1).once();
         replay(filterWidget, usageService);
         assertEquals(1, controller.getSize());
@@ -82,7 +82,7 @@ public class UsagesControllerTest {
         UsageFilter filter = new UsageFilter();
         filter.setFiscalYear(2017);
         Capture<Pageable> pageableCapture = new Capture<>();
-        expect(filterWidget.getFilter()).andReturn(filter).once();
+        expect(filterWidget.getAppliedFilter()).andReturn(filter).once();
         expect(usageService.getUsages(eq(filter), capture(pageableCapture), isNull()))
             .andReturn(Collections.emptyList()).once();
         replay(filterWidget, usageService);
@@ -112,7 +112,7 @@ public class UsagesControllerTest {
 
     @Test
     public void testOnFilterChanged() {
-        FilterChangedEvent filterChangedEvent = new FilterChangedEvent(new HorizontalLayout(), new UsageFilter());
+        FilterChangedEvent filterChangedEvent = new FilterChangedEvent(new HorizontalLayout());
         usagesWidget.refresh();
         expectLastCall().once();
         replay(usagesWidget);
