@@ -20,7 +20,7 @@ import java.util.List;
 public interface IUsageService {
 
     /**
-     * Gets the pairs usage based on applied filter.
+     * Gets list of {@link UsageDto}s based on applied filter.
      *
      * @param filter   instance of {@link UsageFilter}
      * @param pageable instance of {@link Pageable}

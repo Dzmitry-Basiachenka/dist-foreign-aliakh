@@ -164,7 +164,7 @@ public class UsageDto extends StoredEntity<String> {
     }
 
     /**
-     * Sets publication date.
+     * Sets publisher.
      *
      * @param publisher publisher
      */

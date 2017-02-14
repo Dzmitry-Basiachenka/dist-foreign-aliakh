@@ -37,7 +37,7 @@ public class UsageBatchRepositoryTest {
     }
 
     @Test
-    public void testGetRros() {
+    public void testFindUsageBatches() {
         List<UsageBatch> usageBatches = Collections.singletonList(new UsageBatch());
         expect(sqlSessionTemplate.<UsageBatch>selectList("IUsageBatchMapper.findUsageBatches"))
             .andReturn(usageBatches).once();

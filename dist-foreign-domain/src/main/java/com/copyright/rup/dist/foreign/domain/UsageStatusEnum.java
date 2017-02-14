@@ -12,17 +12,17 @@ package com.copyright.rup.dist.foreign.domain;
 public enum UsageStatusEnum {
 
     /**
-     * 'Eligible' usage status.
+     * Status for eligible usages.
      */
     ELIGIBLE,
 
     /**
-     * 'Ineligible' usage status.
+     * Status for ineligible usages.
      */
     INELIGIBLE,
 
     /**
-     * 'Locked' usage status.
+     * Status for usages which were added to scenario.
      */
     LOCKED
 }

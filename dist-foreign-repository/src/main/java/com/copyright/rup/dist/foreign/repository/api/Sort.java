@@ -11,6 +11,7 @@ import org.apache.commons.lang3.ArrayUtils;
  *
  * @author Aliaksei Pchelnikau
  */
+// TODO {mbezmen} move to dist-common
 public class Sort {
 
     private String property;
