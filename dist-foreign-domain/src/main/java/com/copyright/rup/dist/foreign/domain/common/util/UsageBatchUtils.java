@@ -34,6 +34,7 @@ public final class UsageBatchUtils {
 
     /**
      * Formats fiscal year, format: FYYYYY.
+     * For example, for given value 2017, result will be FY2017.
      *
      * @param fiscalYear fiscal year
      * @return formatted fiscal year

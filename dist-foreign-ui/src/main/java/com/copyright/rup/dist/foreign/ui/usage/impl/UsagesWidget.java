@@ -86,8 +86,8 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
 
         usagesTable
             .setVisibleColumns(DETAIL_ID_PROPERTY, "batchName", "fiscalYear", "rroAccountNumber", "rroName",
-                "paymentDate", "workTitle", "article", "standardNumber", "wrWrkInst", "rightsholderAccountNumber",
-                "rightsholderName", "publisher", "publicationDate", "numberOfCopies", "originalAmount", "grossAmount",
+                "paymentDate", "workTitle", "article", "standardNumber", "wrWrkInst", "rhAccountNumber",
+                "rhName", "publisher", "publicationDate", "numberOfCopies", "originalAmount", "grossAmount",
                 "market", "marketPeriodFrom", "marketPeriodTo", "author", "status");
         setColumnHeaders();
         usagesTable.setSizeFull();
@@ -113,8 +113,8 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         usagesTable.addProperty("article", String.class, true);
         usagesTable.addProperty("standardNumber", String.class, true);
         usagesTable.addProperty("wrWrkInst", Long.class, true);
-        usagesTable.addProperty("rightsholderAccountNumber", Long.class, true);
-        usagesTable.addProperty("rightsholderName", String.class, false);
+        usagesTable.addProperty("rhAccountNumber", Long.class, true);
+        usagesTable.addProperty("rhName", String.class, false);
         usagesTable.addProperty("publisher", String.class, true);
         usagesTable.addProperty("publicationDate", LocalDate.class, true);
         usagesTable.addProperty("numberOfCopies", Integer.class, true);
@@ -154,7 +154,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         LongColumnGenerator longColumnGenerator = new LongColumnGenerator();
         usagesTable.addGeneratedColumn(DETAIL_ID_PROPERTY, longColumnGenerator);
         usagesTable.addGeneratedColumn("wrWrkInst", longColumnGenerator);
-        usagesTable.addGeneratedColumn("rightsholderAccountNumber", longColumnGenerator);
+        usagesTable.addGeneratedColumn("rhAccountNumber", longColumnGenerator);
         usagesTable.addGeneratedColumn("rroAccountNumber", longColumnGenerator);
         LocalDateColumnGenerator localDateColumnGenerator = new LocalDateColumnGenerator();
         usagesTable.addGeneratedColumn("publicationDate", localDateColumnGenerator);
@@ -168,7 +168,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         usagesTable.setColumnWidth("rroName", COLUMN_WIDTH_300_PIXELS);
         usagesTable.setColumnWidth("workTitle", COLUMN_WIDTH_300_PIXELS);
         usagesTable.setColumnWidth("article", COLUMN_WIDTH_300_PIXELS);
-        usagesTable.setColumnWidth("rightsholderName", COLUMN_WIDTH_300_PIXELS);
+        usagesTable.setColumnWidth("rhName", COLUMN_WIDTH_300_PIXELS);
         usagesTable.setColumnWidth("publisher", COLUMN_WIDTH_300_PIXELS);
         usagesTable.setColumnWidth("market", COLUMN_WIDTH_300_PIXELS);
         usagesTable.setColumnWidth("author", COLUMN_WIDTH_300_PIXELS);

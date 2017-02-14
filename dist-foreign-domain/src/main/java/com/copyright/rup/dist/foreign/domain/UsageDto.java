@@ -30,8 +30,8 @@ public class UsageDto extends StoredEntity<String> {
     private Long wrWrkInst;
     private String workTitle;
     private String article;
-    private String rightsholderName;
-    private Long rightsholderAccountNumber;
+    private Long rhAccountNumber;
+    private String rhName;
     private String standardNumber;
     private String publisher;
     private LocalDate publicationDate;
@@ -367,33 +367,33 @@ public class UsageDto extends StoredEntity<String> {
     /**
      * @return rightsholder name.
      */
-    public String getRightsholderName() {
-        return rightsholderName;
+    public String getRhName() {
+        return rhName;
     }
 
     /**
      * Sets rightsholder name.
      *
-     * @param rightsholderName rightsholder name to set
+     * @param rhName rightsholder name to set
      */
-    public void setRightsholderName(String rightsholderName) {
-        this.rightsholderName = rightsholderName;
+    public void setRhName(String rhName) {
+        this.rhName = rhName;
     }
 
     /**
-     * @return gets rightsholder account number.
+     * @return rightsholder account number.
      */
-    public Long getRightsholderAccountNumber() {
-        return rightsholderAccountNumber;
+    public Long getRhAccountNumber() {
+        return rhAccountNumber;
     }
 
     /**
      * Sets rightsholder account number.
      *
-     * @param rightsholderAccountNumber rightsholder account number
+     * @param rhAccountNumber rightsholder account number
      */
-    public void setRightsholderAccountNumber(Long rightsholderAccountNumber) {
-        this.rightsholderAccountNumber = rightsholderAccountNumber;
+    public void setRhAccountNumber(Long rhAccountNumber) {
+        this.rhAccountNumber = rhAccountNumber;
     }
 
     @Override
@@ -416,8 +416,8 @@ public class UsageDto extends StoredEntity<String> {
             .append(this.wrWrkInst, that.wrWrkInst)
             .append(this.workTitle, that.workTitle)
             .append(this.article, that.article)
-            .append(this.rightsholderName, that.rightsholderName)
-            .append(this.rightsholderAccountNumber, that.rightsholderAccountNumber)
+            .append(this.rhAccountNumber, that.rhAccountNumber)
+            .append(this.rhName, that.rhName)
             .append(this.standardNumber, that.standardNumber)
             .append(this.publisher, that.publisher)
             .append(this.publicationDate, that.publicationDate)
@@ -445,8 +445,8 @@ public class UsageDto extends StoredEntity<String> {
             .append(wrWrkInst)
             .append(workTitle)
             .append(article)
-            .append(rightsholderName)
-            .append(rightsholderAccountNumber)
+            .append(rhAccountNumber)
+            .append(rhName)
             .append(standardNumber)
             .append(publisher)
             .append(publicationDate)
@@ -474,8 +474,8 @@ public class UsageDto extends StoredEntity<String> {
             .append("wrWrkInst", wrWrkInst)
             .append("workTitle", workTitle)
             .append("article", article)
-            .append("rightsholderName", rightsholderName)
-            .append("rightsholderAccountNumber", rightsholderAccountNumber)
+            .append("rhAccountNumber", rhAccountNumber)
+            .append("rhName", rhName)
             .append("standardNumber", standardNumber)
             .append("publisher", publisher)
             .append("publicationDate", publicationDate)

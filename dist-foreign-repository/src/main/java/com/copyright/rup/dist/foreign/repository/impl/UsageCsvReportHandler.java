@@ -5,10 +5,12 @@ import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
 
+import com.google.common.collect.ImmutableTable;
+import com.google.common.collect.Table;
+
 import org.apache.ibatis.session.ResultContext;
 import org.apache.ibatis.session.ResultHandler;
 import org.supercsv.cellprocessor.Optional;
-import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvBeanWriter;
 import org.supercsv.io.ICsvBeanWriter;
@@ -34,18 +36,32 @@ import java.util.Locale;
  */
 public class UsageCsvReportHandler implements ResultHandler<UsageDto> {
 
-    private static final String[] USAGE_PROPERTY_MAPPING = new String[]{"detailId", "batchName", "fiscalYear",
-        "rroAccountNumber", "rroName", "paymentDate", "workTitle", "article", "standardNumber", "wrWrkInst",
-        "rightsholderAccountNumber", "rightsholderName", "publisher", "publicationDate", "numberOfCopies",
-        "originalAmount", "grossAmount", "market", "marketPeriodFrom", "marketPeriodTo", "author", "status"};
-    private static final NotNull NOT_NULL_PROCESSOR = new NotNull();
     private static final Optional OPTIONAL_PROCESSOR = new Optional();
-    private static final CellProcessor[] CELL_PROCESSORS = new CellProcessor[]{
-        NOT_NULL_PROCESSOR, NOT_NULL_PROCESSOR, new FiscalYearCellProcessor(), NOT_NULL_PROCESSOR, OPTIONAL_PROCESSOR,
-        new DateCellProcessor(), NOT_NULL_PROCESSOR, NOT_NULL_PROCESSOR, NOT_NULL_PROCESSOR, NOT_NULL_PROCESSOR,
-        NOT_NULL_PROCESSOR, OPTIONAL_PROCESSOR, NOT_NULL_PROCESSOR, new DateCellProcessor(), NOT_NULL_PROCESSOR,
-        NOT_NULL_PROCESSOR, NOT_NULL_PROCESSOR, NOT_NULL_PROCESSOR, NOT_NULL_PROCESSOR, NOT_NULL_PROCESSOR,
-        NOT_NULL_PROCESSOR, NOT_NULL_PROCESSOR};
+    private static final DateCellProcessor DATE_CELL_PROCESSOR = new DateCellProcessor();
+    private Table<String, String, CellProcessor> propertyTable = ImmutableTable.<String, String, CellProcessor>builder()
+        .put("detailId", "Detail ID", OPTIONAL_PROCESSOR)
+        .put("batchName", "Usage Batch Name", OPTIONAL_PROCESSOR)
+        .put("fiscalYear", "Fiscal Year", new FiscalYearCellProcessor())
+        .put("rroAccountNumber", "RRO Account #", OPTIONAL_PROCESSOR)
+        .put("rroName", "RRO Name", OPTIONAL_PROCESSOR)
+        .put("paymentDate", "Payment Date", DATE_CELL_PROCESSOR)
+        .put("workTitle", "Title", OPTIONAL_PROCESSOR)
+        .put("article", "Article", OPTIONAL_PROCESSOR)
+        .put("standardNumber", "Standard Number", OPTIONAL_PROCESSOR)
+        .put("wrWrkInst", "Wr Wrk Inst", OPTIONAL_PROCESSOR)
+        .put("rhAccountNumber", "RH Account #", OPTIONAL_PROCESSOR)
+        .put("rhName", "RH Name", OPTIONAL_PROCESSOR)
+        .put("publisher", "Publisher", OPTIONAL_PROCESSOR)
+        .put("publicationDate", "Pub Date", new DateCellProcessor())
+        .put("numberOfCopies", "Number of Copies", OPTIONAL_PROCESSOR)
+        .put("originalAmount", "Amt in Orig Currency", OPTIONAL_PROCESSOR)
+        .put("grossAmount", "Amt in USD", OPTIONAL_PROCESSOR)
+        .put("market", "Market", OPTIONAL_PROCESSOR)
+        .put("marketPeriodFrom", "Market Period From", OPTIONAL_PROCESSOR)
+        .put("marketPeriodTo", "Market Period To", OPTIONAL_PROCESSOR)
+        .put("author", "Author", OPTIONAL_PROCESSOR)
+        .put("status", "Detail Status", OPTIONAL_PROCESSOR)
+        .build();
     private ICsvBeanWriter beanWriter;
 
     /**
@@ -57,16 +73,15 @@ public class UsageCsvReportHandler implements ResultHandler<UsageDto> {
     public UsageCsvReportHandler(OutputStream outputStream) throws IOException {
         beanWriter = new CsvBeanWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8),
             CsvPreference.STANDARD_PREFERENCE);
-        beanWriter.writeHeader("Detail ID", "Usage Batch Name", "Fiscal Year", "RRO Account #", "RRO Name",
-            "Payment Date", "Title", "Article", "Standard Number", "Wr Wrk Inst", "RH Account #", "RH Name",
-            "Publisher", "Pub Date", "Number of Copies", "Amt in Orig Currency", "Amt in USD", "Market",
-            "Market Period From", "Market Period To", "Author", "Detail Status");
+        beanWriter.writeHeader(propertyTable.columnKeySet().toArray(new String[propertyTable.size()]));
     }
 
     @Override
     public void handleResult(ResultContext<? extends UsageDto> resultContext) {
         try {
-            beanWriter.write(resultContext.getResultObject(), USAGE_PROPERTY_MAPPING, CELL_PROCESSORS);
+            beanWriter.write(resultContext.getResultObject(),
+                propertyTable.rowKeySet().toArray(new String[propertyTable.size()]),
+                propertyTable.values().toArray(new CellProcessor[propertyTable.size()]));
         } catch (IOException e) {
             throw new RupRuntimeException(e);
         }
@@ -99,12 +114,12 @@ public class UsageCsvReportHandler implements ResultHandler<UsageDto> {
      */
     static class DateCellProcessor implements CellProcessor {
 
+        private static final DateTimeFormatter FORMATTER =
+            DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT, Locale.US);
+
         @Override
         public Object execute(Object value, CsvContext context) {
-            return null != value
-                ? ((LocalDate) value).format(
-                DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT, Locale.US))
-                : null;
+            return null != value ? ((LocalDate) value).format(FORMATTER) : null;
         }
     }
 }

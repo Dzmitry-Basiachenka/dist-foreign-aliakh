@@ -81,7 +81,7 @@ public class UsageRepositoryIntegrationTest {
     private static final String ARTICLE_KEY = "article";
     private static final String STANDART_NUMBER_KEY = "standardNumber";
     private static final String WR_WRK_INST_KEY = "wrWrkInst";
-    private static final String RH_ACCOUNT_NUMBER_KEY = "rightsholderAccountNumber";
+    private static final String RH_ACCOUNT_NUMBER_KEY = "rhAccountNumber";
     private static final String PUBLISHER_KEY = "publisher";
     private static final String PUBLICATION_DATE_KEY = "publicationDate";
     private static final String NUMBER_OF_COPIES_KEY = "numberOfCopies";
