@@ -31,20 +31,14 @@ public class UsageService implements IUsageService {
 
     @Override
     public List<UsageDto> getUsages(UsageFilter filter, Pageable pageable, Sort sort) {
-        List<UsageDto> result = Collections.emptyList();
-        if (!filter.isEmpty()) {
-            result = usageRepository.findByFilter(filter, pageable, sort);
-        }
-        return result;
+        return !filter.isEmpty()
+            ? usageRepository.findByFilter(filter, pageable, sort)
+            : Collections.emptyList();
     }
 
     @Override
     public int getUsagesCount(UsageFilter filter) {
-        int result = 0;
-        if (!filter.isEmpty()) {
-            result = usageRepository.getUsagesCount(filter);
-        }
-        return result;
+        return !filter.isEmpty() ? usageRepository.getUsagesCount(filter) : 0;
     }
 
     @Override

@@ -287,7 +287,7 @@ public class UsageRepositoryIntegrationTest {
         usageFilter.setUsageBatchesIds(Collections.singleton(USAGE_BATCH_ID_1));
         usageRepository.writeUsagesCsvReport(usageFilter, outputStream);
         BufferedReader bufferedReader =
-            new BufferedReader(new InputStreamReader(inputStream, Charset.defaultCharset()));
+            new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
         assertEquals("Detail ID,Usage Batch Name,Fiscal Year,RRO Account #,RRO Name,Payment Date,Title,Article," +
                 "Standard Number,Wr Wrk Inst,RH Account #,RH Name,Publisher,Pub Date,Number of Copies," +
                 "Amt in Orig Currency,Amt in USD,Market,Market Period From,Market Period To,Author,Detail Status",
@@ -295,9 +295,8 @@ public class UsageRepositoryIntegrationTest {
         assertEquals("6997788888,CADRA_11Dec16,FY2017,7000813806,,01/11/2017,\"2001 IEEE Workshop on High" +
             " Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA\",Efficient Generation of H2 by" +
             " Splitting Water with an Isothermal Redox Cycle,1008902112377654XX,180382914,1000009997,,IEEE," +
-            "09/10/2013,2502232,2500.00,13461.54,Doc Del,2013,2017,\"Íñigo López de Mendoza, marqués de Santillana\"" +
-            ",ELIGIBLE",
-            bufferedReader.readLine());
+            "09/10/2013,2502232,2500.00,13461.54,Doc Del,2013,2017," +
+            "\"Íñigo López de Mendoza, marqués de Santillana\",ELIGIBLE", bufferedReader.readLine());
         assertNull(bufferedReader.readLine());
     }
 

@@ -2,7 +2,7 @@ databaseChangeLog {
     property(file: 'database.properties')
 
     changeSet(id: '2017-09-02-00', author: 'Mikalai_Bezmen mbezmen@copyright.com') {
-        comment('Inserting data for UsageRepositoryIntegrationTest')
+        comment('Inserting Usage Batch with Usages for repository integration tests')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '56282dbc-2468-48d4-b926-93d3458a656a')

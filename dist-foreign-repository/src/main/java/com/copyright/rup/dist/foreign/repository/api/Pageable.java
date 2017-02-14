@@ -9,6 +9,7 @@ package com.copyright.rup.dist.foreign.repository.api;
  *
  * @author Aliaksei Pchelnikau
  */
+// TODO {mbezmen} move to dist-common
 public class Pageable {
 
     private int offset;

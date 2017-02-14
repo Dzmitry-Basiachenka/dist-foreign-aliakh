@@ -28,7 +28,6 @@
         <result property="fiscalYear" column="fiscal_year"/>
     </resultMap>
 
-    <!--TODO {dbaraukova} implement LocalDateHandler for publication date-->
     <insert id="insertUsage" parameterType="Usage">
         insert into ${schema}.df_usage(
             df_usage_uid,

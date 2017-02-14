@@ -2,7 +2,6 @@ package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
-import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
@@ -41,11 +40,13 @@ import java.util.concurrent.Executors;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class UsagesController extends CommonController<IUsagesWidget> implements IUsagesController {
 
+    private ExecutorService executorService = Executors.newSingleThreadExecutor();
+
     @Autowired
     private IUsageService usageService;
+    
     @Autowired
     private IUsagesFilterController filterController;
-    private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     @Override
     public IUsagesFilterWidget initUsagesFilterWidget() {
@@ -61,12 +62,12 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
 
     @Override
     public int getSize() {
-        return usageService.getUsagesCount(getFilter());
+        return usageService.getUsagesCount(filterController.getWidget().getAppliedFilter());
     }
 
     @Override
     public List<UsageDto> loadBeans(int startIndex, int count, Object[] sortPropertyIds, boolean... sortStates) {
-        return usageService.getUsages(getFilter(), new Pageable(startIndex, count),
+        return usageService.getUsages(filterController.getWidget().getAppliedFilter(), new Pageable(startIndex, count),
             Sort.create(sortPropertyIds, sortStates));
     }
 
@@ -80,7 +81,8 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
         try {
             PipedOutputStream outputStream = new PipedOutputStream();
             PipedInputStream pipedInputStream = new PipedInputStream(outputStream);
-            executorService.execute(() -> usageService.writeUsageCsvReport(getFilter(), outputStream));
+            executorService.execute(
+                () -> usageService.writeUsageCsvReport(filterController.getWidget().getAppliedFilter(), outputStream));
             return pipedInputStream;
         } catch (IOException e) {
             throw new RupRuntimeException(e);
@@ -92,9 +94,5 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
         LocalDate now = LocalDate.now();
         return VaadinUtils.encodeAndBuildFileName(
             String.format("export_usage_%s_%s_%s", now.getMonthValue(), now.getDayOfMonth(), now.getYear()), "csv");
-    }
-
-    private UsageFilter getFilter() {
-        return filterController.getWidget().getAppliedFilter();
     }
 }
