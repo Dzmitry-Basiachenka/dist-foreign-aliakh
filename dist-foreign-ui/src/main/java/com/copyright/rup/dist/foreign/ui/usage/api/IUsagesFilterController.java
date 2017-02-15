@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.api;
 
+import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.ui.common.api.IFilterController;
 
 import java.util.List;
@@ -17,17 +19,17 @@ import java.util.List;
 public interface IUsagesFilterController extends IFilterController<IUsagesFilterWidget> {
 
     /**
-     * Handles click on usage batch filter.
-     */
-    void onUsageBatchFilterClick();
-
-    /**
-     * Handles click on rightsholders filter.
-     */
-    void onRightsholderFilterClick();
-
-    /**
      * @return list of fiscal years.
      */
     List<Integer> getFiscalYears();
+
+    /**
+     * @return list of usage batches.
+     */
+    List<UsageBatch> getUsageBatches();
+
+    /**
+     * @return list of rightsholders.
+     */
+    List<Rightsholder> getRros();
 }

@@ -14,15 +14,12 @@ import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.AbstractSelect.ItemCaptionMode;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.themes.BaseTheme;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * Widget for filtering usages.
@@ -35,13 +32,12 @@ import java.util.Set;
  */
 class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
 
-    private static final String COUNT_LABEL_FORMAT = ForeignUi.getMessage("label.filter.items_count_format");
     private Button applyButton;
     private LocalDateWidget paymentDateWidget;
     private ComboBox fiscalYearComboBox;
     private IUsagesFilterController controller;
-    private Label batchesCountLabel;
-    private Label rightsholdersCountLabel;
+    private RightsholderFilterWidget rightsholderFilterWidget;
+    private UsageBatchFilterWidget usageBatchFilterWidget;
     private UsageFilter usageFilter = new UsageFilter();
     private UsageFilter appliedUsageFilter = new UsageFilter();
 
@@ -68,28 +64,14 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
         paymentDateWidget.setInternalValue(null);
         fiscalYearComboBox.setValue(null);
         usageFilter = new UsageFilter();
-        setCountLabelValue(batchesCountLabel, 0);
-        setCountLabelValue(rightsholdersCountLabel, 0);
+        rightsholderFilterWidget.reset();
+        usageBatchFilterWidget.reset();
         applyFilter();
     }
 
     @Override
     public void setController(IUsagesFilterController controller) {
         this.controller = controller;
-    }
-
-    @Override
-    public void setSelectedUsageBatches(Set<String> usageBatchesIds) {
-        setCountLabelValue(batchesCountLabel, usageBatchesIds.size());
-        usageFilter.setUsageBatchesIds(usageBatchesIds);
-        filterChanged();
-    }
-
-    @Override
-    public void setSelectedRightsholders(Set<Long> accountNumbers) {
-        setCountLabelValue(rightsholdersCountLabel, accountNumbers.size());
-        usageFilter.setRhAccountNumbers(accountNumbers);
-        filterChanged();
     }
 
     @Override
@@ -119,21 +101,23 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
     }
 
     private HorizontalLayout buildUsageBatchFilter() {
-        batchesCountLabel = new Label(String.format(COUNT_LABEL_FORMAT, 0));
-        HorizontalLayout batchesFilter =
-            buildItemsFilter(batchesCountLabel, ForeignUi.getMessage("label.batches"),
-                (ClickListener) event -> controller.onUsageBatchFilterClick());
-        VaadinUtils.addComponentStyle(batchesFilter, "batches-filter");
-        return batchesFilter;
+        usageBatchFilterWidget = new UsageBatchFilterWidget(controller);
+        usageBatchFilterWidget.addFilterSaveListener(saveEvent -> {
+            usageFilter.setUsageBatchesIds(saveEvent.getSelectedItemsIds());
+            filterChanged();
+        });
+        VaadinUtils.addComponentStyle(usageBatchFilterWidget, "batches-filter");
+        return usageBatchFilterWidget;
     }
 
     private HorizontalLayout buildRroAccountNumberFilter() {
-        rightsholdersCountLabel = new Label(String.format(COUNT_LABEL_FORMAT, 0));
-        HorizontalLayout rrosFilter =
-            buildItemsFilter(rightsholdersCountLabel, ForeignUi.getMessage("label.rightsholders"),
-                (ClickListener) event -> controller.onRightsholderFilterClick());
-        VaadinUtils.addComponentStyle(rrosFilter, "rightsholders-filter");
-        return rrosFilter;
+        rightsholderFilterWidget = new RightsholderFilterWidget(controller);
+        rightsholderFilterWidget.addFilterSaveListener(saveEvent -> {
+            usageFilter.setRhAccountNumbers(saveEvent.getSelectedItemsIds());
+            filterChanged();
+        });
+        VaadinUtils.addComponentStyle(rightsholderFilterWidget, "rightsholders-filter");
+        return rightsholderFilterWidget;
     }
 
     private void initFiscalYearFilter() {
@@ -182,21 +166,8 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
         return horizontalLayout;
     }
 
-    private HorizontalLayout buildItemsFilter(Label countLabel, String caption, ClickListener clickListener) {
-        Button button = Buttons.createButton(caption);
-        button.addStyleName(BaseTheme.BUTTON_LINK);
-        button.addClickListener(clickListener);
-        HorizontalLayout layout = new HorizontalLayout(countLabel, button);
-        layout.setSpacing(true);
-        VaadinUtils.setButtonsAutoDisabled(button);
-        return layout;
-    }
-
     private void filterChanged() {
         applyButton.setEnabled(!usageFilter.equals(appliedUsageFilter));
     }
 
-    private void setCountLabelValue(Label label, int count) {
-        label.setValue(String.format(COUNT_LABEL_FORMAT, count));
-    }
 }

@@ -1,13 +1,14 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
+import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
-import com.copyright.rup.dist.foreign.ui.usage.api.ICommonFilterWindowController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -28,26 +29,19 @@ import java.util.List;
 public class UsagesFilterController extends CommonController<IUsagesFilterWidget> implements IUsagesFilterController {
 
     @Autowired
-    @Qualifier("usageBatchesFilterController")
-    private ICommonFilterWindowController batchesFilterController;
-
-    @Autowired
-    @Qualifier("rightsholderFilterWindowController")
-    private ICommonFilterWindowController rightsholdersFilterController;
-
-    @Autowired
     private IUsageBatchService usageBatchService;
 
+    @Autowired
+    private IRightsholderService rightsholderService;
+
     @Override
-    public void onUsageBatchFilterClick() {
-        batchesFilterController.setFilterWidget(getWidget());
-        batchesFilterController.showFilterWindow();
+    public List<UsageBatch> getUsageBatches() {
+        return usageBatchService.getUsageBatches();
     }
 
     @Override
-    public void onRightsholderFilterClick() {
-        rightsholdersFilterController.setFilterWidget(getWidget());
-        rightsholdersFilterController.showFilterWindow();
+    public List<Rightsholder> getRros() {
+        return rightsholderService.getRros();
     }
 
     @Override

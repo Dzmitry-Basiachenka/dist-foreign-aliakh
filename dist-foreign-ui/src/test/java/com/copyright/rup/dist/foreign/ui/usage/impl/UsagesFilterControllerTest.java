@@ -2,7 +2,6 @@ package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
@@ -11,14 +10,14 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
-import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
-import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
+
+import com.google.common.collect.Lists;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
-import org.powermock.api.easymock.PowerMock;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Collections;
@@ -49,39 +48,6 @@ public class UsagesFilterControllerTest {
     }
 
     @Test
-    @SuppressWarnings("unchecked")
-    public void testOnUsageBatchFilterClick() {
-        IUsagesFilterWidget filterWidgetMock = PowerMock.createMock(IUsagesFilterWidget.class);
-        UsageBatchesFilterController batchesFilterController = createMock(UsageBatchesFilterController.class);
-        FilterWindow<String, UsageBatch> filterWindow = createMock(FilterWindow.class);
-        Whitebox.setInternalState(controller, "batchesFilterController", batchesFilterController);
-        Whitebox.setInternalState(controller, "widget", filterWidgetMock);
-        batchesFilterController.setFilterWidget(filterWidgetMock);
-        expectLastCall().once();
-        expect(batchesFilterController.showFilterWindow()).andReturn(filterWindow).once();
-        replay(batchesFilterController, filterWidgetMock, filterWindow);
-        controller.onUsageBatchFilterClick();
-        verify(batchesFilterController, filterWidgetMock, filterWindow);
-    }
-
-    @Test
-    @SuppressWarnings("unchecked")
-    public void testOnRightsholderFilterClick() {
-        IUsagesFilterWidget filterWidgetMock = PowerMock.createMock(IUsagesFilterWidget.class);
-        RightsholdersFilterController rightsholdersFilterController =
-            createMock(RightsholdersFilterController.class);
-        FilterWindow<Long, Rightsholder> filterWindow = createMock(FilterWindow.class);
-        Whitebox.setInternalState(controller, "rightsholdersFilterController", rightsholdersFilterController);
-        Whitebox.setInternalState(controller, "widget", filterWidgetMock);
-        rightsholdersFilterController.setFilterWidget(filterWidgetMock);
-        expectLastCall().once();
-        expect(rightsholdersFilterController.showFilterWindow()).andReturn(filterWindow).once();
-        replay(rightsholdersFilterController, filterWidgetMock, filterWindow);
-        controller.onRightsholderFilterClick();
-        verify(rightsholdersFilterController, filterWidgetMock, filterWindow);
-    }
-
-    @Test
     public void testGetFiscalYears() {
         IUsageBatchService usageBatchService = createMock(IUsageBatchService.class);
         Whitebox.setInternalState(controller, "usageBatchService", usageBatchService);
@@ -92,5 +58,33 @@ public class UsagesFilterControllerTest {
         assertEquals(1, fiscalYears.size());
         assertTrue(fiscalYears.contains(FISCAL_YEAR));
         verify(usageBatchService);
+    }
+
+    @Test
+    public void testGetUsageBatches() {
+        IUsageBatchService usageBatchService = createMock(IUsageBatchService.class);
+        Whitebox.setInternalState(controller, IUsageBatchService.class, usageBatchService);
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatch.setName("name");
+        expect(usageBatchService.getUsageBatches()).andReturn(Lists.newArrayList(usageBatch)).once();
+        replay(usageBatchService);
+        List<UsageBatch> usageBatches = controller.getUsageBatches();
+        assertEquals(1, usageBatches.size());
+        assertEquals(usageBatch.getName(), usageBatches.iterator().next().getName());
+        verify(usageBatchService);
+    }
+
+    @Test
+    public void testGetRros() {
+        IRightsholderService rightsholderService = createMock(IRightsholderService.class);
+        Whitebox.setInternalState(controller, IRightsholderService.class, rightsholderService);
+        Rightsholder rightsholder = new Rightsholder();
+        rightsholder.setAccountNumber(12345678L);
+        expect(rightsholderService.getRros()).andReturn(Lists.newArrayList(rightsholder)).once();
+        replay(rightsholderService);
+        List<Rightsholder> rightsholders = controller.getRros();
+        assertEquals(1, rightsholders.size());
+        assertEquals(rightsholder.getAccountNumber(), rightsholders.iterator().next().getAccountNumber());
+        verify(rightsholderService);
     }
 }
