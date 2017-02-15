@@ -13,7 +13,6 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
-import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.ui.component.LocalDateWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
 import com.copyright.rup.vaadin.ui.Windows;
@@ -52,15 +51,16 @@ import java.util.Set;
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
- * Date: 01/12/2017
+ * Date: 2/10/17
  *
- * @author Mikita Hladkikh
- * @author Aliaksandr Radkevich
+ * @author Mikalai Bezmen
  */
 @RunWith(PowerMockRunner.class)
 public class UsagesFilterWidgetTest {
 
     private static final Integer FISCAL_YEAR = 2017;
+    private static final Long ACCOUNT_NUMBER = 12345678L;
+
     private IUsagesFilterController usagesFilterController;
     private UsagesFilterWidget widget;
 
@@ -84,47 +84,26 @@ public class UsagesFilterWidgetTest {
     }
 
     @Test
-    public void testSetSelectedUsageBatches() {
-        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
-        replay(usagesFilterController);
-        widget.init();
-        Button applyButton = Whitebox.getInternalState(widget, "applyButton", UsagesFilterWidget.class);
-        Set<String> usageBatchesIds = Sets.newHashSet(RupPersistUtils.generateUuid());
-        assertFalse(applyButton.isEnabled());
-        widget.setSelectedUsageBatches(usageBatchesIds);
-        verify(usagesFilterController);
-        assertEquals(usageBatchesIds, widget.getFilter().getUsageBatchesIds());
-        assertTrue(applyButton.isEnabled());
-        verifyCountLabelValue("(1)", "batchesCountLabel");
-    }
-
-    @Test
-    public void testSetSelectedRightsholders() {
-        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
-        replay(usagesFilterController);
-        widget.init();
-        Button applyButton = getApplyButton();
-        Set<Long> accountNumbers = Sets.newHashSet(10000L);
-        assertFalse(applyButton.isEnabled());
-        widget.setSelectedRightsholders(accountNumbers);
-        verify(usagesFilterController);
-        assertEquals(accountNumbers, widget.getFilter().getRhAccountNumbers());
-        assertTrue(applyButton.isEnabled());
-        verifyCountLabelValue("(1)", "rightsholdersCountLabel");
-    }
-
-    @Test
     public void testApplyFilter() {
         expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
         replay(usagesFilterController);
         widget.init();
+        widget.clearFilter();
+        verify(usagesFilterController);
         Button applyButton = getApplyButton();
         assertFalse(applyButton.isEnabled());
-        widget.setSelectedRightsholders(Sets.newHashSet(10000L));
+        assertTrue(widget.getAppliedFilter().getRhAccountNumbers().isEmpty());
+        assertTrue(widget.getFilter().getRhAccountNumbers().isEmpty());
+        Set<Long> accountNumbers = Sets.newHashSet(ACCOUNT_NUMBER);
+        widget.getFilter().setRhAccountNumbers(accountNumbers);
+        assertFalse(widget.getFilter().equals(widget.getAppliedFilter()));
+        applyButton.setEnabled(true);
+        assertTrue(widget.getAppliedFilter().getRhAccountNumbers().isEmpty());
+        assertFalse(widget.getFilter().getRhAccountNumbers().isEmpty());
         assertTrue(applyButton.isEnabled());
-        widget.applyFilter();
-        verify(usagesFilterController);
+        applyButton.click();
         assertFalse(applyButton.isEnabled());
+        assertFalse(widget.getAppliedFilter().getRhAccountNumbers().isEmpty());
     }
 
     @Test
@@ -134,7 +113,6 @@ public class UsagesFilterWidgetTest {
         widget.init();
         Button applyButton = getApplyButton();
         assertFalse(applyButton.isEnabled());
-        widget.setSelectedRightsholders(Collections.emptySet());
         widget.applyFilter();
         verify(usagesFilterController);
         assertFalse(applyButton.isEnabled());
@@ -153,16 +131,20 @@ public class UsagesFilterWidgetTest {
 
     @Test
     public void testClearFilter() {
-        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
-        replay(usagesFilterController);
         widget.init();
+        Button applyButton = getApplyButton();
+        assertTrue(widget.getFilter().getRhAccountNumbers().isEmpty());
+        assertTrue(widget.getAppliedFilter().getRhAccountNumbers().isEmpty());
+        Set<Long> accountNumbers = Sets.newHashSet(ACCOUNT_NUMBER);
+        widget.getFilter().setRhAccountNumbers(accountNumbers);
+        applyButton.setEnabled(true);
+        applyButton.click();
+        assertFalse(widget.getFilter().getRhAccountNumbers().isEmpty());
+        assertFalse(widget.getAppliedFilter().getRhAccountNumbers().isEmpty());
         widget.clearFilter();
-        verify(usagesFilterController);
-        assertFalse(getApplyButton().isEnabled());
-        assertTrue(widget.getAppliedFilter().isEmpty());
-        String labelValue = "(0)";
-        verifyCountLabelValue(labelValue, "batchesCountLabel");
-        verifyCountLabelValue(labelValue, "rightsholdersCountLabel");
+        assertTrue(widget.getFilter().getRhAccountNumbers().isEmpty());
+        assertTrue(widget.getAppliedFilter().getRhAccountNumbers().isEmpty());
+        assertFalse(applyButton.isEnabled());
         LocalDateWidget localDateWidget =
             Whitebox.getInternalState(widget, "paymentDateWidget", UsagesFilterWidget.class);
         assertNull(localDateWidget.getValue());
@@ -191,9 +173,10 @@ public class UsagesFilterWidgetTest {
         expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
         replay(clickEvent, usagesFilterController);
         widget.init();
-        widget.setSelectedRightsholders(Sets.newHashSet(10000L));
+        Set<Long> accountNumbers = Sets.newHashSet(ACCOUNT_NUMBER);
         Button applyButton = getApplyButton();
-        assertTrue(applyButton.isEnabled());
+        widget.getFilter().setRhAccountNumbers(accountNumbers);
+        applyButton.setEnabled(true);
         assertFalse(widget.getFilter().isEmpty());
         Button clearButton = (Button) ((HorizontalLayout) widget.getComponent(1)).getComponent(1);
         ClickListener clickListener = (ClickListener) clearButton.getListeners(ClickEvent.class).iterator().next();
@@ -201,44 +184,6 @@ public class UsagesFilterWidgetTest {
         assertFalse(applyButton.isEnabled());
         assertTrue(widget.getFilter().isEmpty());
         verify(clickEvent, usagesFilterController);
-    }
-
-    @Test
-    public void testBatchesButtonClickListener() {
-        ClickEvent clickEvent = createMock(ClickEvent.class);
-        IUsagesFilterController filterController = createMock(IUsagesFilterController.class);
-        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
-        filterController.onUsageBatchFilterClick();
-        expectLastCall().once();
-        replay(clickEvent, filterController, usagesFilterController);
-        widget.init();
-        widget.setController(filterController);
-        VerticalLayout layout = (VerticalLayout) widget.getComponent(0);
-        HorizontalLayout horizontalLayout = (HorizontalLayout) layout.getComponent(1);
-        Button button = (Button) horizontalLayout.getComponent(1);
-        Collection<?> listeners = button.getListeners(ClickEvent.class);
-        ClickListener clickListener = (ClickListener) listeners.iterator().next();
-        clickListener.buttonClick(clickEvent);
-        verify(clickEvent, filterController, usagesFilterController);
-    }
-
-    @Test
-    public void testRightsholdersButtonClickListener() {
-        IUsagesFilterController filterController = createMock(IUsagesFilterController.class);
-        ClickEvent clickEvent = createMock(ClickEvent.class);
-        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
-        filterController.onRightsholderFilterClick();
-        expectLastCall().once();
-        replay(clickEvent, filterController, usagesFilterController);
-        widget.init();
-        widget.setController(filterController);
-        VerticalLayout layout = (VerticalLayout) widget.getComponent(0);
-        HorizontalLayout horizontalLayout = (HorizontalLayout) layout.getComponent(2);
-        Button button = (Button) horizontalLayout.getComponent(1);
-        Collection<?> listeners = button.getListeners(ClickEvent.class);
-        ClickListener clickListener = (ClickListener) listeners.iterator().next();
-        clickListener.buttonClick(clickEvent);
-        verify(clickEvent, filterController, usagesFilterController);
     }
 
     private void verifyFiltersLayout(Component layout) {
@@ -249,8 +194,7 @@ public class UsagesFilterWidgetTest {
         verifyItemsFilterLayout(verticalLayout.getComponent(1), "Batches");
         verifyItemsFilterLayout(verticalLayout.getComponent(2), "RROs");
         verifyDateWidget(verticalLayout.getComponent(3));
-        verifyFiscalYearComboboxComponent(verticalLayout.getComponent(4),
-            Collections.singletonList(FISCAL_YEAR));
+        verifyFiscalYearComboboxComponent(verticalLayout.getComponent(4), Collections.singletonList(FISCAL_YEAR));
     }
 
     private void verifyFiltersLabel(Component component) {
@@ -316,10 +260,5 @@ public class UsagesFilterWidgetTest {
 
     private Button getApplyButton() {
         return Whitebox.getInternalState(widget, "applyButton", UsagesFilterWidget.class);
-    }
-
-    private void verifyCountLabelValue(String value, String fieldName) {
-        Label label = Whitebox.getInternalState(widget, fieldName, UsagesFilterWidget.class);
-        assertEquals(value, label.getValue());
     }
 }
