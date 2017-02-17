@@ -131,7 +131,7 @@ databaseChangeLog {
             }
 
             delete(schemaName: dbAppsSchema, tableName: 'df_usage') {
-                where "df_usage_uid in ('111111111', '222222222', '333333333')"
+                where "df_usage_uid in ('111111111', '222222222', '333333333', '444444444')"
             }
         }
     }

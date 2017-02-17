@@ -25,13 +25,84 @@ import java.util.List;
 @ContextConfiguration(value = "classpath:/com/copyright/rup/dist/foreign/ui/dist-foreign-ui-test-context.xml")
 public class UsagesTabUiTest extends ForeignCommonUiTest {
 
+    private static final String SAVE_BUTTON_ID = "Save";
+    private static final String APPLY_BUTTON_ID = "Apply";
+
     @Test
-    public void testLookAndFeel() {
+    // Test case ID: '65520aa2-3a1c-4c7c-81e6-96a0a845331e'
+    public void testVerifyUsagesTab() {
         loginAsViewOnly();
+        WebElement usagesTab = getUsagesTab();
+        verifyFiltersWidget(usagesTab);
+        verifyUsagesLayout(usagesTab);
+    }
+
+    @Test
+    // Test cases IDs: 'a2a66f64-ab10-44d4-a2b9-c779631cbe6a', '1b24b641-8da0-46a2-917c-7ee99d781d6d'
+    public void testVerifyBatchAndUsageInformationIsDisplayedCorrectly() {
+        loginAsViewOnly();
+        WebElement usagesTab = getUsagesTab();
+        WebElement filterWidget = waitAndFindElement(usagesTab, By.id("usages-filter-widget"));
+        assertNotNull(filterWidget);
+        assertNotNull(findElementByText(filterWidget, HTML_DIV_TAG_NAME, "Filters"));
+        openBatchesFilterWindow(filterWidget);
+        applyBatchFilter();
+        clickButtonAndWait(assertElement(filterWidget, "filter-buttons"), APPLY_BUTTON_ID);
+        verifyFoundUsages(usagesTab);
+    }
+
+    private void applyBatchFilter() {
+        WebElement filterWindow = findElementById("batches-filter-window");
+        assertNotNull(filterWindow);
+        WebElement batchLabel = findElementByText(filterWindow, HTML_LABEL_TAG_NAME, "CADRA_11Dec16");
+        assertNotNull(batchLabel);
+        clickElementAndWait(batchLabel);
+        clickButtonAndWait(filterWindow, SAVE_BUTTON_ID);
+    }
+
+    private void verifyFoundUsages(WebElement usagesTab) {
+        WebElement usagesLayout = assertElement(usagesTab, "usages-layout");
+        verifyUsagesLayoutButtons(usagesLayout);
+        WebElement usagesTable = assertElement(usagesLayout, "usages-table");
+        WebElement table = findElement(usagesTable, By.className(V_TABLE_BODY_CLASS_NAME));
+        List<WebElement> usageTableRows = findElements(table, By.tagName(HTML_TR_TAG_NAME));
+        assertEquals(1, usageTableRows.size());
+        WebElement usageTableRow = usageTableRows.get(0);
+        List<WebElement> usageValues = findElements(usageTableRow, By.tagName(HTML_TD_TAG_NAME));
+        assertEquals(22, usageValues.size());
+        verifyUsageValues(usageValues);
+    }
+
+    private void verifyUsageValues(List<WebElement> usageValues) {
+        assertTrue(getInnerHtml(usageValues.get(0)).contains("6997788888"));
+        assertTrue(getInnerHtml(usageValues.get(1)).contains("CADRA_11Dec16"));
+        assertTrue(getInnerHtml(usageValues.get(2)).contains("FY2017"));
+        assertTrue(getInnerHtml(usageValues.get(3)).contains("7000813806"));
+        // TODO {mbezmen} add RRO account name
+        assertTrue(getInnerHtml(usageValues.get(5)).contains("01/11/2017"));
+        assertTrue(getInnerHtml(usageValues.get(6)).contains(
+            "2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA"));
+        assertTrue(getInnerHtml(usageValues.get(7)).contains(
+            "Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle"));
+        assertTrue(getInnerHtml(usageValues.get(8)).contains("1008902112377654XX"));
+        assertTrue(getInnerHtml(usageValues.get(9)).contains("180382914"));
+        assertTrue(getInnerHtml(usageValues.get(10)).contains("1000009997"));
+        // TODO {mbezmen} add Rh account name
+        assertTrue(getInnerHtml(usageValues.get(12)).contains("IEEE"));
+        assertTrue(getInnerHtml(usageValues.get(13)).contains("09/10/2013"));
+        assertTrue(getInnerHtml(usageValues.get(14)).contains("2502232"));
+        assertTrue(getInnerHtml(usageValues.get(15)).contains("2,500.00"));
+        assertTrue(getInnerHtml(usageValues.get(16)).contains("13,461.54"));
+        assertTrue(getInnerHtml(usageValues.get(17)).contains("Doc Del"));
+        assertTrue(getInnerHtml(usageValues.get(18)).contains("2013"));
+        assertTrue(getInnerHtml(usageValues.get(19)).contains("2017"));
+        assertTrue(getInnerHtml(usageValues.get(20)).contains("Íñigo López de Mendoza, marqués de Santillana"));
+        assertTrue(getInnerHtml(usageValues.get(21)).contains("ELIGIBLE"));
+    }
+
+    private WebElement getUsagesTab() {
         WebElement tabContainer = findElementById(Cornerstone.MAIN_TABSHEET);
-        tabContainer = waitAndGetTab(tabContainer, "Usages");
-        verifyFiltersWidget(tabContainer);
-        verifyUsagesLayout(tabContainer);
+        return waitAndGetTab(tabContainer, "Usages");
     }
 
     private void verifyUsagesLayout(WebElement tabContainer) {
@@ -86,6 +157,13 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         WebElement usagesTable = assertElement(usagesLayout, "usages-table");
         verifyTableHeaderElements(usagesTable);
         verifyTableBody(usagesTable);
+        assertNotNull(findElement(usagesTable, By.className("v-table-column-selector")));
+        verifyEmptyTable(usagesTable);
+    }
+
+    private void verifyEmptyTable(WebElement usagesTable) {
+        String backgroundImage = findElement(usagesTable, By.className("v-scrollable")).getCssValue("background-image");
+        assertTrue(backgroundImage.contains("img/empty_usages_table.png"));
     }
 
     private void verifyTableHeaderElements(WebElement usagesTable) {
@@ -135,21 +213,29 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     }
 
     private void verifyBatchesFilter(WebElement filterWidget) {
-        WebElement batchesFilter = assertElement(filterWidget, "batches-filter");
-        assertNotNull(findElementByText(batchesFilter, HTML_DIV_TAG_NAME, "(0)"));
-        WebElement batchesFilterButton = findElementByText(batchesFilter, HTML_SPAN_TAG_NAME, "Batches");
-        assertNotNull(batchesFilterButton);
-        clickElementAndWait(batchesFilterButton);
+        openBatchesFilterWindow(filterWidget);
         verifyFilterWindow("batches-filter-window", "Batches filter");
     }
 
     private void verifyRightsholdersFilter(WebElement filterWidget) {
+        openRroFilterWindow(filterWidget);
+        verifyFilterWindow("rightsholders-filter-window", "RROs filter");
+    }
+
+    private void openRroFilterWindow(WebElement filterWidget) {
         WebElement rightsholdersFilter = assertElement(filterWidget, "rightsholders-filter");
         assertNotNull(findElementByText(rightsholdersFilter, HTML_DIV_TAG_NAME, "(0)"));
         WebElement rightsholderFilterButton = findElementByText(rightsholdersFilter, HTML_SPAN_TAG_NAME, "RROs");
         assertNotNull(rightsholderFilterButton);
         clickElementAndWait(rightsholderFilterButton);
-        verifyFilterWindow("rightsholders-filter-window", "RROs filter");
+    }
+
+    private void openBatchesFilterWindow(WebElement filterWidget) {
+        WebElement batchesFilter = assertElement(filterWidget, "batches-filter");
+        assertNotNull(findElementByText(batchesFilter, HTML_DIV_TAG_NAME, "(0)"));
+        WebElement batchesFilterButton = findElementByText(batchesFilter, HTML_SPAN_TAG_NAME, "Batches");
+        assertNotNull(batchesFilterButton);
+        clickElementAndWait(batchesFilterButton);
     }
 
     private void verifyFilterWindow(String id, String caption) {
