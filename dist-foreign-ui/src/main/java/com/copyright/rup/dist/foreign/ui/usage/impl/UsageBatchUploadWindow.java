@@ -15,16 +15,16 @@ import com.google.common.collect.Lists;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.data.util.converter.StringToBigDecimalConverter;
+import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.Component;
 import com.vaadin.ui.ComponentContainer;
-import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.Upload;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
@@ -45,6 +45,7 @@ class UsageBatchUploadWindow extends Window {
     private TextField accountNumberField;
     private LocalDateWidget paymentDateWidget;
     private TextField grossAmountField;
+    private TextField usageBatchNameField;
     private ComboBox reportedCurrencyBox;
     private Property<String> rightsholderNameProperty;
     private Property<String> fiscalYearProperty;
@@ -57,8 +58,8 @@ class UsageBatchUploadWindow extends Window {
         setContent(initRootLayout());
         setCaption(ForeignUi.getMessage("window.upload_usage_batch"));
         setResizable(false);
-        setWidth(600, Unit.PIXELS);
-        setHeight(310, Unit.PIXELS);
+        setWidth(440, Unit.PIXELS);
+        setHeight(305, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "usage-upload-window");
     }
 
@@ -71,8 +72,9 @@ class UsageBatchUploadWindow extends Window {
             Windows.showNotificationWindow("Uploading is started");
         } else {
             // TODO {mhladkikh} use csvUploadComponent, but not it's internal state for error window
-            Windows.showValidationErrorWindow(Lists.newArrayList(csvUploadComponent.getFileNameField(),
-                accountNumberField, paymentDateWidget, grossAmountField, reportedCurrencyBox));
+            Windows.showValidationErrorWindow(
+                Lists.newArrayList(usageBatchNameField, csvUploadComponent.getFileNameField(),
+                    accountNumberField, paymentDateWidget, grossAmountField, reportedCurrencyBox));
         }
     }
 
@@ -82,43 +84,39 @@ class UsageBatchUploadWindow extends Window {
      * @return {@code true} if all inputs are valid, {@code false} - otherwise
      */
     boolean isValid() {
-        return csvUploadComponent.isValid()
+        return usageBatchNameField.isValid()
+            && csvUploadComponent.isValid()
             && accountNumberField.isValid()
             && paymentDateWidget.isValid()
             && grossAmountField.isValid()
             && reportedCurrencyBox.isValid();
     }
 
-    private Component initComponentsLayout() {
-        GridLayout gridlayout = new GridLayout(3, 4);
-        gridlayout.addComponent(initRighsholderAccountNumberField(), 0, 0);
-        gridlayout.addComponent(initRightsholderAccountNameField(), 1, 0);
-        gridlayout.addComponent(initVerifyButton(), 2, 0);
-        gridlayout.addComponent(initPaymentDateWidget(), 0, 1);
-        gridlayout.addComponent(initFiscalYearField(), 1, 1);
-        gridlayout.addComponent(initGrossAmountField(), 0, 2);
-        gridlayout.addComponent(initReportedCurrency(), 0, 3);
-        gridlayout.setSpacing(true);
-        gridlayout.setComponentAlignment(gridlayout.getComponent(2, 0), Alignment.BOTTOM_RIGHT);
-        gridlayout.setSizeFull();
-        gridlayout.setColumnExpandRatio(0, 0.3f);
-        gridlayout.setColumnExpandRatio(1, 0.6f);
-        return gridlayout;
-    }
-
     private ComponentContainer initRootLayout() {
-        csvUploadComponent = new CsvUploadComponent();
-        VaadinUtils.setMaxComponentsWidth(csvUploadComponent);
-        VaadinUtils.addComponentStyle(csvUploadComponent, "usage-upload-component");
-        setRequired(csvUploadComponent.getFileNameField());
         HorizontalLayout buttonsLayout = initButtonsLayout();
         VerticalLayout rootLayout = new VerticalLayout();
-        rootLayout.addComponents(csvUploadComponent, initComponentsLayout(), buttonsLayout);
+        rootLayout.addComponents(initUsageBatchNameField(), initCsvUploadComponent(), initRightsholderLayout(),
+            initPaymentDataLayout(), initGrossAmountLayout(), buttonsLayout);
         rootLayout.setSpacing(true);
         rootLayout.setMargin(new MarginInfo(true, true, false, true));
         VaadinUtils.setMaxComponentsWidth(rootLayout);
         rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
         return rootLayout;
+    }
+
+    private CsvUploadComponent initCsvUploadComponent() {
+        csvUploadComponent = new CsvUploadComponent();
+        HorizontalLayout csvUploadLayout = (HorizontalLayout) csvUploadComponent.getComponent(0);
+        Upload upload = (Upload) csvUploadLayout.getComponent(1);
+        upload.setSizeFull();
+        csvUploadLayout.setSizeFull();
+        csvUploadLayout.setComponentAlignment(upload, Alignment.BOTTOM_RIGHT);
+        csvUploadLayout.setExpandRatio(csvUploadLayout.getComponent(0), 0.8f);
+        csvUploadLayout.setExpandRatio(upload, 0.2f);
+        VaadinUtils.setMaxComponentsWidth(csvUploadComponent);
+        VaadinUtils.addComponentStyle(csvUploadComponent, "usage-upload-component");
+        setRequired(csvUploadComponent.getFileNameField());
+        return csvUploadComponent;
     }
 
     private HorizontalLayout initButtonsLayout() {
@@ -131,12 +129,57 @@ class UsageBatchUploadWindow extends Window {
         return horizontalLayout;
     }
 
+    private TextField initUsageBatchNameField() {
+        usageBatchNameField = new TextField(ForeignUi.getMessage("label.usage_batch_name"));
+        usageBatchNameField.addValidator(new StringLengthValidator(String.format(
+            ForeignUi.getMessage("field.error.length"), 50), 0, 50, false));
+        setRequired(usageBatchNameField);
+        usageBatchNameField.setSizeFull();
+        VaadinUtils.setMaxComponentsWidth(usageBatchNameField);
+        VaadinUtils.addComponentStyle(usageBatchNameField, "usage-batch-name-field");
+        return usageBatchNameField;
+    }
+
+    private HorizontalLayout initRightsholderLayout() {
+        HorizontalLayout horizontalLayout = new HorizontalLayout();
+        TextField accountNumber = initRighsholderAccountNumberField();
+        TextField accountName = initRightsholderAccountNameField();
+        Button verifyButton = initVerifyButton();
+        horizontalLayout.addComponents(accountNumber, accountName, verifyButton);
+        horizontalLayout.setSpacing(true);
+        horizontalLayout.setSizeFull();
+        horizontalLayout.setExpandRatio(accountNumber, 0.25f);
+        horizontalLayout.setExpandRatio(accountName, 0.55f);
+        horizontalLayout.setExpandRatio(verifyButton, 0.2f);
+        horizontalLayout.setComponentAlignment(verifyButton, Alignment.BOTTOM_RIGHT);
+        return horizontalLayout;
+    }
+
+    private HorizontalLayout initPaymentDataLayout() {
+        HorizontalLayout horizontalLayout = new HorizontalLayout();
+        horizontalLayout.addComponents(initPaymentDateWidget(), initFiscalYearField());
+        horizontalLayout.setSpacing(true);
+        horizontalLayout.setSizeFull();
+        return horizontalLayout;
+    }
+
+    private HorizontalLayout initGrossAmountLayout() {
+        HorizontalLayout horizontalLayout = new HorizontalLayout();
+        horizontalLayout.addComponents(initReportedCurrency(), initGrossAmountField());
+        horizontalLayout.setSpacing(true);
+        horizontalLayout.setSizeFull();
+        return horizontalLayout;
+    }
+
     private TextField initRighsholderAccountNumberField() {
         accountNumberField = new TextField(ForeignUi.getMessage("label.rro_account_number"));
         setRequired(accountNumberField);
         accountNumberField.setNullRepresentation(StringUtils.EMPTY);
         accountNumberField.setImmediate(true);
         accountNumberField.addValidator(new NumberValidator());
+        accountNumberField.addValidator(
+            new StringLengthValidator(String.format(ForeignUi.getMessage("field.error.number_length"), 10), 0, 10,
+                false));
         VaadinUtils.setMaxComponentsWidth(accountNumberField);
         VaadinUtils.addComponentStyle(accountNumberField, "rro-account-number-field");
         return accountNumberField;
@@ -196,6 +239,7 @@ class UsageBatchUploadWindow extends Window {
 
     private Button initVerifyButton() {
         Button button = Buttons.createButton(ForeignUi.getMessage("button.verify"));
+        button.setSizeFull();
         button.addClickListener(event -> rightsholderNameProperty.setValue(accountNumberField.getValue()));
         return button;
     }

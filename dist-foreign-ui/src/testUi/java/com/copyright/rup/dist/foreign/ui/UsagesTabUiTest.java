@@ -126,8 +126,9 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         verifyUploadElement(uploadWindow);
         verifyRightsholdersFields(uploadWindow);
         verifyDateFields(uploadWindow);
+        assertTextElement(uploadWindow, "usage-batch-name-field", "Usage Batch Name");
         assertTextElement(uploadWindow, "gross-amount-field", "Gross Amount (USD)");
-        assertComboboxElement(uploadWindow, "reported-currency-field", HTML_DIV_TAG_NAME, "Reported Currency");
+        assertComboboxElement(uploadWindow, "reported-currency-field", HTML_SPAN_TAG_NAME, "Reported Currency");
         assertElement(uploadWindow, "Upload");
         clickElementAndWait(assertElement(uploadWindow, "Close"));
     }
@@ -143,8 +144,8 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     }
 
     private void verifyRightsholdersFields(WebElement uploadWindow) {
-        assertTextElement(uploadWindow, "rro-account-number-field", "RRO Account #");
         assertTextElement(uploadWindow, "rro-account-name-field", "RRO Account Name");
+        assertTextElement(uploadWindow, "rro-account-number-field", "RRO Account #");
         assertElement(uploadWindow, "Verify");
     }
 
@@ -271,7 +272,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     private WebElement assertTextElement(WebElement parentElement, String id, String caption) {
         WebElement webElement = assertElement(parentElement, id);
         WebElement elementContainer = getParentElement(webElement);
-        assertNotNull(findElementByText(elementContainer, HTML_DIV_TAG_NAME, caption));
+        assertNotNull(findElementByText(elementContainer, HTML_SPAN_TAG_NAME, caption));
         return webElement;
     }
 
