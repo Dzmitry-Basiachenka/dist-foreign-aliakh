@@ -27,6 +27,15 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
 
     private static final String SAVE_BUTTON_ID = "Save";
     private static final String APPLY_BUTTON_ID = "Apply";
+    private static final String USAGE_BATCH_NAME = "CADRA_11Dec16";
+    private static final String RRO_ACCOUNT = "7000813806 - null";
+    private static final String FISCAL_YEAR = "2017";
+    private static final String CLEAR_BATTON_ID = "Clear";
+    private static final String USAGE_LAYOUT_ID = "usages-layout";
+    private static final String USAGE_TABLE_ID = "usages-table";
+    private static final String USAGE_FILTER_WIDGET_ID = "usages-filter-widget";
+    private static final String FILTERS_HEADER_TEXT = "Filters";
+    private static final String FILTER_BUTTONS_LAYOUT_ID = "filter-buttons";
 
     @Test
     // Test case ID: '65520aa2-3a1c-4c7c-81e6-96a0a845331e'
@@ -42,28 +51,80 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     public void testVerifyBatchAndUsageInformationIsDisplayedCorrectly() {
         loginAsViewOnly();
         WebElement usagesTab = getUsagesTab();
-        WebElement filterWidget = waitAndFindElement(usagesTab, By.id("usages-filter-widget"));
+        WebElement filterWidget = waitAndFindElement(usagesTab, By.id(USAGE_FILTER_WIDGET_ID));
         assertNotNull(filterWidget);
-        assertNotNull(findElementByText(filterWidget, HTML_DIV_TAG_NAME, "Filters"));
+        assertNotNull(findElementByText(filterWidget, HTML_DIV_TAG_NAME, FILTERS_HEADER_TEXT));
         openBatchesFilterWindow(filterWidget);
-        applyBatchFilter();
-        clickButtonAndWait(assertElement(filterWidget, "filter-buttons"), APPLY_BUTTON_ID);
+        applyBatchFilter(USAGE_BATCH_NAME);
+        clickButtonAndWait(assertElement(filterWidget, FILTER_BUTTONS_LAYOUT_ID), APPLY_BUTTON_ID);
         verifyFoundUsages(usagesTab);
     }
 
-    private void applyBatchFilter() {
+    @Test
+    // Test cases IDs: 'd438bf76-31f9-4266-8a4e-8c416a616aed', '87ac1966-737c-4b18-b5d1-6e583776b3a1'
+    public void testVerifyMultiplyUsageDataFilterAndClearFilterButton() {
+        loginAsViewOnly();
+        WebElement usagesTab = getUsagesTab();
+        WebElement usagesLayout = assertElement(usagesTab, USAGE_LAYOUT_ID);
+        assertNotNull(usagesLayout);
+        WebElement usagesTable = assertElement(usagesLayout, USAGE_TABLE_ID);
+        assertNotNull(usagesTable);
+        WebElement filterWidget = waitAndFindElement(usagesTab, By.id(USAGE_FILTER_WIDGET_ID));
+        assertNotNull(filterWidget);
+        assertNotNull(findElementByText(filterWidget, HTML_DIV_TAG_NAME, FILTERS_HEADER_TEXT));
+        openBatchesFilterWindow(filterWidget);
+        applyBatchFilter(USAGE_BATCH_NAME);
+        openRroFilterWindow(filterWidget);
+        applyRroFilter(RRO_ACCOUNT);
+        applyPaymentDateFilter();
+        applyFiscalYear(FISCAL_YEAR);
+        WebElement filterButtonsLayout = assertElement(filterWidget, FILTER_BUTTONS_LAYOUT_ID);
+        clickButtonAndWait(filterButtonsLayout, APPLY_BUTTON_ID);
+        verifyFoundUsages(usagesTab);
+        clickButtonAndWait(filterButtonsLayout, CLEAR_BATTON_ID);
+        verifyEmptyTable(usagesTable);
+    }
+
+    private void applyFiscalYear(String fiscalYear) {
+        WebElement fiscalYearFilter = waitAndFindElement(By.id("fiscal-year-filter"));
+        assertNotNull(fiscalYearFilter);
+        WebElement fiscalYearFilterSelectButton = waitAndFindElement(By.className("v-filterselect-button"));
+        clickElementAndWait(fiscalYearFilterSelectButton);
+        WebElement fiscalYearLabel = findElementByText(fiscalYearFilter, HTML_SPAN_TAG_NAME, fiscalYear);
+        assertNotNull(fiscalYearLabel);
+        clickElementAndWait(fiscalYearLabel);
+    }
+
+    private void applyPaymentDateFilter() {
+        WebElement paymentDateFilter = waitAndFindElement(By.id("payment-date-filter"));
+        findElement(paymentDateFilter, By.className("v-datefield-button")).click();
+        WebElement calendarPanel = waitAndFindElement(By.className("v-datefield-calendarpanel"));
+        WebElement currentDateSlot = findElement(calendarPanel, By.className("v-datefield-calendarpanel-day-today"));
+        clickElementAndWait(currentDateSlot);
+    }
+
+    private void applyRroFilter(String rroAccount) {
+        WebElement filterWindow = waitAndFindElement(By.id("rightsholders-filter-window"));
+        assertNotNull(filterWindow);
+        WebElement rroAccountLabel = findElementByText(filterWindow, HTML_LABEL_TAG_NAME, rroAccount);
+        assertNotNull(rroAccountLabel);
+        clickElementAndWait(rroAccountLabel);
+        clickButtonAndWait(filterWindow, SAVE_BUTTON_ID);
+    }
+
+    private void applyBatchFilter(String batchName) {
         WebElement filterWindow = findElementById("batches-filter-window");
         assertNotNull(filterWindow);
-        WebElement batchLabel = findElementByText(filterWindow, HTML_LABEL_TAG_NAME, "CADRA_11Dec16");
+        WebElement batchLabel = findElementByText(filterWindow, HTML_LABEL_TAG_NAME, batchName);
         assertNotNull(batchLabel);
         clickElementAndWait(batchLabel);
         clickButtonAndWait(filterWindow, SAVE_BUTTON_ID);
     }
 
     private void verifyFoundUsages(WebElement usagesTab) {
-        WebElement usagesLayout = assertElement(usagesTab, "usages-layout");
+        WebElement usagesLayout = assertElement(usagesTab, USAGE_LAYOUT_ID);
         verifyUsagesLayoutButtons(usagesLayout);
-        WebElement usagesTable = assertElement(usagesLayout, "usages-table");
+        WebElement usagesTable = assertElement(usagesLayout, USAGE_TABLE_ID);
         WebElement table = findElement(usagesTable, By.className(V_TABLE_BODY_CLASS_NAME));
         List<WebElement> usageTableRows = findElements(table, By.tagName(HTML_TR_TAG_NAME));
         assertEquals(1, usageTableRows.size());
@@ -154,7 +215,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     }
 
     private void verifyUsagesTable(WebElement usagesLayout) {
-        WebElement usagesTable = assertElement(usagesLayout, "usages-table");
+        WebElement usagesTable = assertElement(usagesLayout, USAGE_TABLE_ID);
         verifyTableHeaderElements(usagesTable);
         verifyTableBody(usagesTable);
         assertNotNull(findElement(usagesTable, By.className("v-table-column-selector")));
@@ -202,9 +263,9 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     }
 
     private void verifyFiltersWidget(WebElement tabContainer) {
-        WebElement filterWidget = waitAndFindElement(tabContainer, By.id("usages-filter-widget"));
+        WebElement filterWidget = waitAndFindElement(tabContainer, By.id(USAGE_FILTER_WIDGET_ID));
         assertNotNull(filterWidget);
-        assertNotNull(findElementByText(filterWidget, HTML_DIV_TAG_NAME, "Filters"));
+        assertNotNull(findElementByText(filterWidget, HTML_DIV_TAG_NAME, FILTERS_HEADER_TEXT));
         verifyBatchesFilter(filterWidget);
         verifyRightsholdersFilter(filterWidget);
         verifyPaymentDateComponent(filterWidget, "payment-date-filter");
@@ -244,7 +305,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         assertEquals(caption, getWindowCaption(filterWindow));
         verifySearchToolBar(filterWindow);
         assertElement(filterWindow, "Save");
-        assertElement(filterWindow, "Clear");
+        assertElement(filterWindow, CLEAR_BATTON_ID);
         clickElementAndWait(assertElement(filterWindow, "Close"));
     }
 
@@ -263,9 +324,9 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     }
 
     private void verifyFiltersWidgetButtons(WebElement filterWidget) {
-        WebElement buttonsContainer = assertElement(filterWidget, "filter-buttons");
-        assertElement(buttonsContainer, "Apply");
-        assertElement(buttonsContainer, "Clear");
+        WebElement buttonsContainer = assertElement(filterWidget, FILTER_BUTTONS_LAYOUT_ID);
+        assertElement(buttonsContainer, APPLY_BUTTON_ID);
+        assertElement(buttonsContainer, CLEAR_BATTON_ID);
     }
 
     private WebElement assertTextElement(WebElement parentElement, String id, String caption) {
