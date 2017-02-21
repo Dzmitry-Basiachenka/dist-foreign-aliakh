@@ -60,7 +60,8 @@ import java.util.Collections;
 public class UsagesWidgetTest {
 
     private static final String DETAIL_ID_PROPERTY = "detailId";
-    private static final int COLUMN_WIDTH_300_PIXELS = 300;
+    private static final String GROSS_AMOUNT_PROPERTY = "grossAmount";
+    private static final String ORIGINAL_AMOUNT_PROPERTY = "originalAmount";
     private UsagesWidget usagesWidget;
     private IUsagesController controller;
 
@@ -166,15 +167,15 @@ public class UsagesWidgetTest {
     }
 
     private void verifyTable(Table table) {
-        assertArrayEquals(new Object[]{DETAIL_ID_PROPERTY, "batchName", "fiscalYear", "rroAccountNumber", "rroName",
-            "paymentDate", "workTitle", "article", "standardNumber", "wrWrkInst", "rhAccountNumber",
-            "rhName", "publisher", "publicationDate", "numberOfCopies", "originalAmount", "grossAmount",
-            "market", "marketPeriodFrom", "marketPeriodTo", "author", "status"}, table.getVisibleColumns());
+        assertArrayEquals(new Object[]{DETAIL_ID_PROPERTY, "status", "batchName", "fiscalYear", "rroAccountNumber",
+            "rroName", "paymentDate", "workTitle", "article", "standardNumber", "wrWrkInst", "rhAccountNumber",
+            "rhName", "publisher", "publicationDate", "numberOfCopies", ORIGINAL_AMOUNT_PROPERTY, GROSS_AMOUNT_PROPERTY,
+            "market", "marketPeriodFrom", "marketPeriodTo", "author"}, table.getVisibleColumns());
         assertArrayEquals(
-            new Object[]{"Detail ID", "Usage Batch Name", "Fiscal Year", "RRO Account #",
+            new Object[]{"Detail ID", "Detail Status", "Usage Batch Name", "Fiscal Year", "RRO Account #",
                 "RRO Name", "Payment Date", "Title", "Article", "Standard Number", "Wr Wrk Inst", "RH Account #",
                 "RH Name", "Publisher", "Pub Date", "Number of Copies", "Amt in Orig Currency", "Amt in USD", "Market",
-                "Market Period From", "Market Period To", "Author", "Detail Status"}, table.getColumnHeaders());
+                "Market Period From", "Market Period To", "Author"}, table.getColumnHeaders());
         Collection<?> containerPropertyIds = table.getContainerPropertyIds();
 
         assertTrue(containerPropertyIds.contains("id"));
@@ -193,8 +194,8 @@ public class UsagesWidgetTest {
         assertTrue(containerPropertyIds.contains("publisher"));
         assertTrue(containerPropertyIds.contains("publicationDate"));
         assertTrue(containerPropertyIds.contains("numberOfCopies"));
-        assertTrue(containerPropertyIds.contains("originalAmount"));
-        assertTrue(containerPropertyIds.contains("grossAmount"));
+        assertTrue(containerPropertyIds.contains(ORIGINAL_AMOUNT_PROPERTY));
+        assertTrue(containerPropertyIds.contains(GROSS_AMOUNT_PROPERTY));
         assertTrue(containerPropertyIds.contains("market"));
         assertTrue(containerPropertyIds.contains("marketPeriodFrom"));
         assertTrue(containerPropertyIds.contains("marketPeriodTo"));
@@ -203,13 +204,16 @@ public class UsagesWidgetTest {
         assertTrue(table.isColumnCollapsingAllowed());
         assertFalse(table.isColumnCollapsible(DETAIL_ID_PROPERTY));
 
-        assertEquals(COLUMN_WIDTH_300_PIXELS, table.getColumnWidth("rroName"));
-        assertEquals(COLUMN_WIDTH_300_PIXELS, table.getColumnWidth("workTitle"));
-        assertEquals(COLUMN_WIDTH_300_PIXELS, table.getColumnWidth("article"));
-        assertEquals(COLUMN_WIDTH_300_PIXELS, table.getColumnWidth("rhName"));
-        assertEquals(COLUMN_WIDTH_300_PIXELS, table.getColumnWidth("publisher"));
-        assertEquals(COLUMN_WIDTH_300_PIXELS, table.getColumnWidth("market"));
-        assertEquals(COLUMN_WIDTH_300_PIXELS, table.getColumnWidth("author"));
+        assertEquals(135, table.getColumnWidth("rroName"));
+        assertEquals(135, table.getColumnWidth("article"));
+        assertEquals(135, table.getColumnWidth("publisher"));
+        assertEquals(135, table.getColumnWidth("market"));
+        assertEquals(135, table.getColumnWidth("batchName"));
+        assertEquals(300, table.getColumnWidth("workTitle"));
+        assertEquals(300, table.getColumnWidth("rhName"));
+        assertEquals(300, table.getColumnWidth("author"));
+        assertEquals(70, table.getColumnWidth(ORIGINAL_AMOUNT_PROPERTY));
+        assertEquals(70, table.getColumnWidth(GROSS_AMOUNT_PROPERTY));
 
         verifyGeneratedColumns(table);
         verifySize(table);
@@ -222,8 +226,8 @@ public class UsagesWidgetTest {
         verifyColumnGenerator(table.getColumnGenerator("rroAccountNumber"), LongColumnGenerator.class);
         verifyColumnGenerator(table.getColumnGenerator("publicationDate"), LocalDateColumnGenerator.class);
         verifyColumnGenerator(table.getColumnGenerator("paymentDate"), LocalDateColumnGenerator.class);
-        verifyColumnGenerator(table.getColumnGenerator("originalAmount"), MoneyColumnGenerator.class);
-        verifyColumnGenerator(table.getColumnGenerator("grossAmount"), MoneyColumnGenerator.class);
+        verifyColumnGenerator(table.getColumnGenerator(ORIGINAL_AMOUNT_PROPERTY), MoneyColumnGenerator.class);
+        verifyColumnGenerator(table.getColumnGenerator(GROSS_AMOUNT_PROPERTY), MoneyColumnGenerator.class);
     }
 
     private void verifyColumnGenerator(Table.ColumnGenerator columnGenerator, Class clazz) {
