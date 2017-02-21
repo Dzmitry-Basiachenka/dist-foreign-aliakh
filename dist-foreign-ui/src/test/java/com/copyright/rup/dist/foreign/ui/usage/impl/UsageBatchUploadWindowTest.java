@@ -28,7 +28,6 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
@@ -57,6 +56,7 @@ import java.util.Collection;
 @RunWith(PowerMockRunner.class)
 public class UsageBatchUploadWindowTest {
 
+    private static final String ACCOUNT_NUMBER = "1234567890";
     private UsageBatchUploadWindow window;
 
     @Before
@@ -68,9 +68,9 @@ public class UsageBatchUploadWindowTest {
     @PrepareForTest(Windows.class)
     public void testConstructor() {
         assertEquals("Upload Usage Batch", window.getCaption());
-        assertEquals(600, window.getWidth(), 0);
+        assertEquals(440, window.getWidth(), 0);
         assertEquals(Unit.PIXELS, window.getWidthUnits());
-        assertEquals(310, window.getHeight(), 0);
+        assertEquals(305, window.getHeight(), 0);
         assertEquals(Unit.PIXELS, window.getHeightUnits());
         verifyRootLayout(window.getContent());
     }
@@ -78,9 +78,11 @@ public class UsageBatchUploadWindowTest {
     @Test
     public void testIsValid() {
         assertFalse(window.isValid());
+        ((TextField) Whitebox.getInternalState(window, "usageBatchNameField")).setValue("BatchName");
+        assertFalse(window.isValid());
         Whitebox.getInternalState(window, CsvUploadComponent.class).getFileNameField().setValue("test.csv");
         assertFalse(window.isValid());
-        ((TextField) Whitebox.getInternalState(window, "accountNumberField")).setValue("101");
+        ((TextField) Whitebox.getInternalState(window, "accountNumberField")).setValue(ACCOUNT_NUMBER);
         assertFalse(window.isValid());
         Whitebox.getInternalState(window, LocalDateWidget.class).setValue(LocalDate.now());
         assertFalse(window.isValid());
@@ -94,8 +96,9 @@ public class UsageBatchUploadWindowTest {
     @PrepareForTest(Windows.class)
     public void testOnUploadClickedValidFields() {
         mockStatic(Windows.class);
+        ((TextField) Whitebox.getInternalState(window, "usageBatchNameField")).setValue("BatchName");
         Whitebox.getInternalState(window, CsvUploadComponent.class).getFileNameField().setValue("test.csv");
-        ((TextField) Whitebox.getInternalState(window, "accountNumberField")).setValue("101");
+        ((TextField) Whitebox.getInternalState(window, "accountNumberField")).setValue(ACCOUNT_NUMBER);
         Whitebox.getInternalState(window, LocalDateWidget.class).setValue(LocalDate.now());
         ((TextField) Whitebox.getInternalState(window, "grossAmountField")).setValue("100");
         Whitebox.getInternalState(window, ComboBox.class).setValue(CurrencyEnum.EUR);
@@ -108,10 +111,21 @@ public class UsageBatchUploadWindowTest {
     private void verifyRootLayout(Component component) {
         assertTrue(component instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) component;
-        assertEquals(3, verticalLayout.getComponentCount());
-        verifyUploadComponent(verticalLayout.getComponent(0));
-        verifyGridLayout(verticalLayout.getComponent(1));
-        verifyButtonsLayout(verticalLayout.getComponent(2));
+        assertEquals(6, verticalLayout.getComponentCount());
+        verifyUsageBatchNameComponent(verticalLayout.getComponent(0));
+        verifyUploadComponent(verticalLayout.getComponent(1));
+        verifyRightsholdersComponents(verticalLayout.getComponent(2));
+        verifyDateComponents(verticalLayout.getComponent(3));
+        verifyReportedCurrencyAndGrossAmount(verticalLayout.getComponent(4));
+        verifyButtonsLayout(verticalLayout.getComponent(5));
+    }
+
+    private void verifyUsageBatchNameComponent(Component component) {
+        assertTrue(component instanceof TextField);
+        TextField textField = (TextField) component;
+        assertEquals(100, component.getWidth(), 0);
+        assertEquals(StringUtils.EMPTY, textField.getValue());
+        verifyRequiredField(textField);
     }
 
     private void verifyUploadComponent(Component component) {
@@ -120,19 +134,6 @@ public class UsageBatchUploadWindowTest {
         assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
         CsvUploadComponent uploadComponent = (CsvUploadComponent) component;
         verifyRequiredField(uploadComponent.getFileNameField());
-    }
-
-    private void verifyGridLayout(Component component) {
-        assertTrue(component instanceof GridLayout);
-        GridLayout gridLayout = (GridLayout) component;
-        assertEquals(3, gridLayout.getColumns());
-        assertEquals(4, gridLayout.getRows());
-        assertEquals(7, gridLayout.getComponentCount());
-        verifyRightsholdersComponents(gridLayout.getComponent(0, 0), gridLayout.getComponent(1, 0),
-            gridLayout.getComponent(2, 0));
-        verifyDateComponents(gridLayout.getComponent(0, 1), gridLayout.getComponent(1, 1));
-        verifyGrossAmountComponent(gridLayout.getComponent(0, 2));
-        verifyReportedCurrency(gridLayout.getComponent(0, 3));
     }
 
     private void verifyButtonsLayout(Component component) {
@@ -148,6 +149,7 @@ public class UsageBatchUploadWindowTest {
     private void verifyLoadClickListener(Button loadButton) {
         mockStatic(Windows.class);
         Windows.showValidationErrorWindow(Lists.newArrayList(
+            Whitebox.getInternalState(window, "usageBatchNameField"),
             Whitebox.getInternalState(window, CsvUploadComponent.class).getFileNameField(),
             Whitebox.getInternalState(window, "accountNumberField"),
             Whitebox.getInternalState(window, LocalDateWidget.class),
@@ -166,8 +168,13 @@ public class UsageBatchUploadWindowTest {
         return (Button) component;
     }
 
-    private void verifyRightsholdersComponents(Component numberComponent, Component nameComponent,
-                                               Component verifyComponent) {
+    private void verifyRightsholdersComponents(Component component) {
+        assertTrue(component instanceof HorizontalLayout);
+        HorizontalLayout horizontalLayout = (HorizontalLayout) component;
+        assertEquals(3, horizontalLayout.getComponentCount());
+        Component numberComponent = horizontalLayout.getComponent(0);
+        Component nameComponent = horizontalLayout.getComponent(1);
+        Component verifyComponent = horizontalLayout.getComponent(2);
         TextField numberField = verifyTextField(numberComponent, "RRO Account #");
         assertEquals(100, numberField.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, numberField.getWidthUnits());
@@ -175,7 +182,7 @@ public class UsageBatchUploadWindowTest {
         assertEquals(StringUtils.EMPTY, numberField.getNullRepresentation());
         Collection<Validator> validators = numberField.getValidators();
         assertTrue(CollectionUtils.isNotEmpty(validators));
-        assertEquals(1, validators.size());
+        assertEquals(2, validators.size());
         assertTrue(validators.iterator().next() instanceof NumberValidator);
         TextField nameField = verifyTextField(nameComponent, "RRO Account Name");
         assertTrue(nameField.isReadOnly());
@@ -184,12 +191,17 @@ public class UsageBatchUploadWindowTest {
         assertEquals("Verify", verifyComponent.getCaption());
         assertEquals(1, verifyButton.getListeners(ClickEvent.class).size());
         assertEquals(StringUtils.EMPTY, nameField.getValue());
-        numberField.setValue("1000000096");
+        numberField.setValue(ACCOUNT_NUMBER);
         verifyButton.click();
-        assertEquals("1000000096", nameField.getValue());
+        assertEquals(ACCOUNT_NUMBER, nameField.getValue());
     }
 
-    private void verifyDateComponents(Component paymentDateComponent, Component fiscalYearComponent) {
+    private void verifyDateComponents(Component component) {
+        assertTrue(component instanceof HorizontalLayout);
+        HorizontalLayout horizontalLayout = (HorizontalLayout) component;
+        assertEquals(2, horizontalLayout.getComponentCount());
+        Component paymentDateComponent = horizontalLayout.getComponent(0);
+        Component fiscalYearComponent = horizontalLayout.getComponent(1);
         assertTrue(paymentDateComponent instanceof LocalDateWidget);
         LocalDateWidget widget = (LocalDateWidget) paymentDateComponent;
         assertEquals("Payment Date", widget.getCaption());
@@ -217,11 +229,16 @@ public class UsageBatchUploadWindowTest {
         assertTrue(validators.iterator().next() instanceof AmountValidator);
     }
 
-    private void verifyReportedCurrency(Component reportedCurrencyComponent) {
+    private void verifyReportedCurrencyAndGrossAmount(Component component) {
+        assertTrue(component instanceof HorizontalLayout);
+        HorizontalLayout horizontalLayout = (HorizontalLayout) component;
+        assertEquals(2, horizontalLayout.getComponentCount());
+        Component reportedCurrencyComponent = horizontalLayout.getComponent(0);
         assertTrue(reportedCurrencyComponent instanceof ComboBox);
         ComboBox comboBox = (ComboBox) reportedCurrencyComponent;
         verifyRequiredField(comboBox);
         assertArrayEquals(CurrencyEnum.values(), comboBox.getItemIds().toArray());
+        verifyGrossAmountComponent(horizontalLayout.getComponent(1));
     }
 
     private TextField verifyTextField(Component component, String caption) {
