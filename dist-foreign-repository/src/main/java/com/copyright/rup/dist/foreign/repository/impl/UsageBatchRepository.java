@@ -1,11 +1,13 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -35,5 +37,11 @@ public class UsageBatchRepository extends BaseRepository implements IUsageBatchR
     @Override
     public List<UsageBatch> findUsageBatches() {
         return selectList("IUsageBatchMapper.findUsageBatches");
+    }
+
+    @Override
+    public int getUsageBatchesCountByName(String name) {
+        checkArgument(StringUtils.isNotBlank(name));
+        return selectOne("IUsageBatchMapper.getUsageBatchesCountByName", name);
     }
 }

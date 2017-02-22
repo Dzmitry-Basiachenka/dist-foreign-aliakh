@@ -1,10 +1,12 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
+import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
@@ -16,6 +18,7 @@ import com.copyright.rup.dist.foreign.ui.component.CsvUploadComponent;
 import com.copyright.rup.dist.foreign.ui.component.LocalDateWidget;
 import com.copyright.rup.dist.foreign.ui.component.validator.AmountValidator;
 import com.copyright.rup.dist.foreign.ui.component.validator.NumberValidator;
+import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.ui.Windows;
 
 import com.google.common.collect.Lists;
@@ -57,11 +60,14 @@ import java.util.Collection;
 public class UsageBatchUploadWindowTest {
 
     private static final String ACCOUNT_NUMBER = "1234567890";
+    private static final String USAGE_BATCH_NAME = "BatchName";
     private UsageBatchUploadWindow window;
+    private IUsagesController usagesController;
 
     @Before
     public void setUp() {
-        window = new UsageBatchUploadWindow();
+        usagesController = createMock(IUsagesController.class);
+        window = new UsageBatchUploadWindow(usagesController);
     }
 
     @Test
@@ -78,8 +84,6 @@ public class UsageBatchUploadWindowTest {
     @Test
     public void testIsValid() {
         assertFalse(window.isValid());
-        ((TextField) Whitebox.getInternalState(window, "usageBatchNameField")).setValue("BatchName");
-        assertFalse(window.isValid());
         Whitebox.getInternalState(window, CsvUploadComponent.class).getFileNameField().setValue("test.csv");
         assertFalse(window.isValid());
         ((TextField) Whitebox.getInternalState(window, "accountNumberField")).setValue(ACCOUNT_NUMBER);
@@ -89,23 +93,28 @@ public class UsageBatchUploadWindowTest {
         ((TextField) Whitebox.getInternalState(window, "grossAmountField")).setValue("100");
         assertFalse(window.isValid());
         Whitebox.getInternalState(window, ComboBox.class).setValue(CurrencyEnum.EUR);
+        ((TextField) Whitebox.getInternalState(window, "usageBatchNameField")).setValue(USAGE_BATCH_NAME);
+        expect(usagesController.usageBatchExists(USAGE_BATCH_NAME)).andReturn(false).once();
+        replay(usagesController);
         assertTrue(window.isValid());
+        verify(usagesController);
     }
 
     @Test
     @PrepareForTest(Windows.class)
     public void testOnUploadClickedValidFields() {
         mockStatic(Windows.class);
-        ((TextField) Whitebox.getInternalState(window, "usageBatchNameField")).setValue("BatchName");
+        ((TextField) Whitebox.getInternalState(window, "usageBatchNameField")).setValue(USAGE_BATCH_NAME);
         Whitebox.getInternalState(window, CsvUploadComponent.class).getFileNameField().setValue("test.csv");
         ((TextField) Whitebox.getInternalState(window, "accountNumberField")).setValue(ACCOUNT_NUMBER);
         Whitebox.getInternalState(window, LocalDateWidget.class).setValue(LocalDate.now());
         ((TextField) Whitebox.getInternalState(window, "grossAmountField")).setValue("100");
         Whitebox.getInternalState(window, ComboBox.class).setValue(CurrencyEnum.EUR);
         Windows.showNotificationWindow("Uploading is started");
-        replay(Windows.class);
+        expect(usagesController.usageBatchExists(USAGE_BATCH_NAME)).andReturn(false).once();
+        replay(Windows.class, usagesController);
         window.onUploadClicked();
-        verify(Windows.class);
+        verify(Windows.class, usagesController);
     }
 
     private void verifyRootLayout(Component component) {

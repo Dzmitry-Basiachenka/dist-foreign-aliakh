@@ -51,4 +51,11 @@ public class UsageBatchRepositoryIntegrationTest {
         assertEquals(FISCAL_YEAR_2017, fiscalYears.get(1));
         assertEquals(FISCAL_YEAR_2019, fiscalYears.get(2));
     }
+
+    @Test
+    public void testGetUsageBatchesCountByName() {
+        assertEquals(1, usageBatchRepository.getUsageBatchesCountByName("JAACC_11Dec16"));
+        assertEquals(1, usageBatchRepository.getUsageBatchesCountByName("JaAcC_11dec16"));
+        assertEquals(0, usageBatchRepository.getUsageBatchesCountByName("Batch name"));
+    }
 }

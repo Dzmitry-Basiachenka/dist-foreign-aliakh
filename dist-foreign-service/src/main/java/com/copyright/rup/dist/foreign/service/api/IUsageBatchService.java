@@ -24,4 +24,12 @@ public interface IUsageBatchService {
      * @return list of {@link UsageBatch}.
      */
     List<UsageBatch> getUsageBatches();
+
+    /**
+     * Checks whether Usage Batch with provided name exists in database or not.
+     *
+     * @param name usage batch name
+     * @return {@code true} - if usage batch exists, {@code false} - otherwise
+     */
+    boolean usageBatchExists(String name);
 }
