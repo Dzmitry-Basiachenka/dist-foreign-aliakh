@@ -225,4 +225,19 @@ databaseChangeLog {
             // automatic rollback
         }
     }
+
+    changeSet(id: '2017-02-22-00', author: 'Aliaksandr Radkevich aradkevich@copyright.com') {
+        comment('B-29760 Calculate Usage Gross amount while loading to FDA: make usage amounts 10 decimal places')
+
+        modifyDataType(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'net_amount', newDataType: 'numeric(38,10)')
+        modifyDataType(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'service_fee_amount', newDataType: 'numeric(38,10)')
+        modifyDataType(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'gross_amount', newDataType: 'numeric(38,10)')
+
+        rollback {
+
+            modifyDataType(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'net_amount', newDataType: 'numeric(38,2)')
+            modifyDataType(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'service_fee_amount', newDataType: 'numeric(38,2)')
+            modifyDataType(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'gross_amount', newDataType: 'numeric(38,2)')
+        }
+    }
 }
