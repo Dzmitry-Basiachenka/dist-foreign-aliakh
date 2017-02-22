@@ -38,8 +38,9 @@ import java.time.LocalDate;
 class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
 
     private static final String EMPTY_STYLE_NAME = "empty-usages-table";
+    private static final String GROSS_AMOUNT_PROPERTY = "grossAmount";
+    private static final String ORIGINAL_AMOUNT_PROPERTY = "originalAmount";
     private static final String DETAIL_ID_PROPERTY = "detailId";
-    private static final int COLUMN_WIDTH_300_PIXELS = 300;
 
     private IUsagesController controller;
     private LazyTable<UsageBeanQuery, UsageDto> usagesTable;
@@ -85,10 +86,10 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         setColumnsWidth();
 
         usagesTable
-            .setVisibleColumns(DETAIL_ID_PROPERTY, "batchName", "fiscalYear", "rroAccountNumber", "rroName",
+            .setVisibleColumns(DETAIL_ID_PROPERTY, "status", "batchName", "fiscalYear", "rroAccountNumber", "rroName",
                 "paymentDate", "workTitle", "article", "standardNumber", "wrWrkInst", "rhAccountNumber",
-                "rhName", "publisher", "publicationDate", "numberOfCopies", "originalAmount", "grossAmount",
-                "market", "marketPeriodFrom", "marketPeriodTo", "author", "status");
+                "rhName", "publisher", "publicationDate", "numberOfCopies", ORIGINAL_AMOUNT_PROPERTY,
+                GROSS_AMOUNT_PROPERTY, "market", "marketPeriodFrom", "marketPeriodTo", "author");
         setColumnHeaders();
         usagesTable.setSizeFull();
         usagesTable.setColumnCollapsingAllowed(true);
@@ -104,6 +105,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
     private void addProperties() {
         usagesTable.addProperty("id", String.class, true);
         usagesTable.addProperty(DETAIL_ID_PROPERTY, Long.class, true);
+        usagesTable.addProperty("status", String.class, true);
         usagesTable.addProperty("batchName", String.class, true);
         usagesTable.addProperty("fiscalYear", String.class, true);
         usagesTable.addProperty("rroAccountNumber", Long.class, true);
@@ -118,31 +120,38 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         usagesTable.addProperty("publisher", String.class, true);
         usagesTable.addProperty("publicationDate", LocalDate.class, true);
         usagesTable.addProperty("numberOfCopies", Integer.class, true);
-        usagesTable.addProperty("originalAmount", BigDecimal.class, true);
-        usagesTable.addProperty("grossAmount", BigDecimal.class, true);
+        usagesTable.addProperty(ORIGINAL_AMOUNT_PROPERTY, BigDecimal.class, true);
+        usagesTable.addProperty(GROSS_AMOUNT_PROPERTY, BigDecimal.class, true);
         usagesTable.addProperty("market", String.class, true);
         usagesTable.addProperty("marketPeriodFrom", Integer.class, true);
         usagesTable.addProperty("marketPeriodTo", Integer.class, true);
         usagesTable.addProperty("author", String.class, true);
-        usagesTable.addProperty("status", String.class, true);
     }
 
     private void setColumnHeaders() {
         usagesTable
             .setColumnHeaders(ForeignUi.getMessage("table.column.detail_id"),
-                ForeignUi.getMessage("table.column.batch_name"), ForeignUi.getMessage("table.column.fiscal_year"),
+                ForeignUi.getMessage("table.column.usage_status"),
+                ForeignUi.getMessage("table.column.batch_name"),
+                ForeignUi.getMessage("table.column.fiscal_year"),
                 ForeignUi.getMessage("table.column.rro_account_number"),
                 ForeignUi.getMessage("table.column.rro_account_name"),
-                ForeignUi.getMessage("table.column.payment_date"), ForeignUi.getMessage("table.column.work_title"),
-                ForeignUi.getMessage("table.column.article"), ForeignUi.getMessage("table.column.standard_number"),
-                ForeignUi.getMessage("table.column.wrWrkInst"), ForeignUi.getMessage("table.column.rh_account_number"),
-                ForeignUi.getMessage("table.column.rh_account_name"), ForeignUi.getMessage("table.column.publisher"),
+                ForeignUi.getMessage("table.column.payment_date"),
+                ForeignUi.getMessage("table.column.work_title"),
+                ForeignUi.getMessage("table.column.article"),
+                ForeignUi.getMessage("table.column.standard_number"),
+                ForeignUi.getMessage("table.column.wrWrkInst"),
+                ForeignUi.getMessage("table.column.rh_account_number"),
+                ForeignUi.getMessage("table.column.rh_account_name"),
+                ForeignUi.getMessage("table.column.publisher"),
                 ForeignUi.getMessage("table.column.publication_date"),
                 ForeignUi.getMessage("table.column.number_of_copies"),
-                ForeignUi.getMessage("table.column.original_amount"), ForeignUi.getMessage("table.column.gross_amount"),
-                ForeignUi.getMessage("table.column.market"), ForeignUi.getMessage("table.column.market_period_from"),
-                ForeignUi.getMessage("table.column.market_period_to"), ForeignUi.getMessage("table.column.author"),
-                ForeignUi.getMessage("table.column.usage_status"));
+                ForeignUi.getMessage("table.column.original_amount"),
+                ForeignUi.getMessage("table.column.gross_amount"),
+                ForeignUi.getMessage("table.column.market"),
+                ForeignUi.getMessage("table.column.market_period_from"),
+                ForeignUi.getMessage("table.column.market_period_to"),
+                ForeignUi.getMessage("table.column.author"));
     }
 
     private void addColumnGenerators() {
@@ -160,18 +169,21 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         usagesTable.addGeneratedColumn("publicationDate", localDateColumnGenerator);
         usagesTable.addGeneratedColumn("paymentDate", localDateColumnGenerator);
         MoneyColumnGenerator moneyColumnGenerator = new MoneyColumnGenerator();
-        usagesTable.addGeneratedColumn("originalAmount", moneyColumnGenerator);
-        usagesTable.addGeneratedColumn("grossAmount", moneyColumnGenerator);
+        usagesTable.addGeneratedColumn(ORIGINAL_AMOUNT_PROPERTY, moneyColumnGenerator);
+        usagesTable.addGeneratedColumn(GROSS_AMOUNT_PROPERTY, moneyColumnGenerator);
     }
 
     private void setColumnsWidth() {
-        usagesTable.setColumnWidth("rroName", COLUMN_WIDTH_300_PIXELS);
-        usagesTable.setColumnWidth("workTitle", COLUMN_WIDTH_300_PIXELS);
-        usagesTable.setColumnWidth("article", COLUMN_WIDTH_300_PIXELS);
-        usagesTable.setColumnWidth("rhName", COLUMN_WIDTH_300_PIXELS);
-        usagesTable.setColumnWidth("publisher", COLUMN_WIDTH_300_PIXELS);
-        usagesTable.setColumnWidth("market", COLUMN_WIDTH_300_PIXELS);
-        usagesTable.setColumnWidth("author", COLUMN_WIDTH_300_PIXELS);
+        usagesTable.setColumnWidth("rroName", 135);
+        usagesTable.setColumnWidth("article", 135);
+        usagesTable.setColumnWidth("publisher", 135);
+        usagesTable.setColumnWidth("market", 135);
+        usagesTable.setColumnWidth("batchName", 135);
+        usagesTable.setColumnWidth("workTitle", 300);
+        usagesTable.setColumnWidth("rhName", 300);
+        usagesTable.setColumnWidth("author", 300);
+        usagesTable.setColumnWidth(ORIGINAL_AMOUNT_PROPERTY, 70);
+        usagesTable.setColumnWidth(GROSS_AMOUNT_PROPERTY, 70);
     }
 
     private HorizontalLayout initButtonsLayout() {
