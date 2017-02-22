@@ -1,7 +1,9 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
+import com.copyright.rup.dist.common.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
@@ -25,6 +27,7 @@ import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -52,6 +55,9 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     @Autowired
     private IUsagesFilterController filterController;
 
+    @Autowired
+    private IPrmIntegrationService prmIntegrationService;
+
     @Override
     public IUsagesFilterWidget initUsagesFilterWidget() {
         IUsagesFilterWidget result = filterController.initWidget();
@@ -76,11 +82,6 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
-    protected IUsagesWidget instantiateWidget() {
-        return new UsagesWidget();
-    }
-
-    @Override
     public InputStream getStream() {
         try {
             PipedOutputStream outputStream = new PipedOutputStream();
@@ -101,7 +102,17 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
+    public Set<Currency> getCurrencies() {
+        return prmIntegrationService.getCurrencies();
+    }
+
+    @Override
     public boolean usageBatchExists(String name) {
         return usageBatchService.usageBatchExists(name);
+    }
+
+    @Override
+    protected IUsagesWidget instantiateWidget() {
+        return new UsagesWidget();
     }
 }

@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
-import com.copyright.rup.dist.foreign.domain.CurrencyEnum;
+import com.copyright.rup.dist.common.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
 import com.copyright.rup.dist.foreign.ui.component.CsvUploadComponent;
 import com.copyright.rup.dist.foreign.ui.component.LocalDateWidget;
@@ -14,6 +14,8 @@ import com.copyright.rup.vaadin.ui.Windows;
 
 import com.google.common.collect.Lists;
 import com.vaadin.data.Property;
+import com.vaadin.data.util.BeanItem;
+import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.data.util.converter.StringToBigDecimalConverter;
 import com.vaadin.data.validator.AbstractStringValidator;
@@ -40,6 +42,7 @@ import org.apache.commons.lang3.StringUtils;
  * Date: 01/18/2017
  *
  * @author Mikita Hladkikh
+ * @author Mikalai Bezmen
  */
 class UsageBatchUploadWindow extends Window {
 
@@ -235,10 +238,15 @@ class UsageBatchUploadWindow extends Window {
     }
 
     private ComboBox initReportedCurrency() {
-        reportedCurrencyBox = new ComboBox(ForeignUi.getMessage("label.reported_currency"));
+        BeanItemContainer<Currency> container =
+            new BeanItemContainer<>(Currency.class, usagesController.getCurrencies());
+        reportedCurrencyBox = new ComboBox(ForeignUi.getMessage("label.reported_currency"), container);
         reportedCurrencyBox.setWidth(DEFAULT_WIDTH, Unit.PIXELS);
+        for (Object itemId : reportedCurrencyBox.getItemIds()) {
+            reportedCurrencyBox.setItemCaption(itemId, getCurrencyItemCaption(container, itemId));
+        }
+        container.sort(new Object[]{"code"}, new boolean[]{true});
         setRequired(reportedCurrencyBox);
-        reportedCurrencyBox.addItems((Object[]) CurrencyEnum.values());
         VaadinUtils.setMaxComponentsWidth(reportedCurrencyBox);
         VaadinUtils.addComponentStyle(reportedCurrencyBox, "reported-currency-field");
         return reportedCurrencyBox;
@@ -254,6 +262,16 @@ class UsageBatchUploadWindow extends Window {
     private void setRequired(AbstractField field) {
         field.setRequired(true);
         field.setRequiredError(ForeignUi.getMessage("field.error.empty"));
+    }
+
+    private String getCurrencyItemCaption(BeanItemContainer<Currency> container, Object itemId) {
+        BeanItem<Currency> currencyBean = container.getItem(itemId);
+        String caption = StringUtils.EMPTY;
+        if (null != currencyBean) {
+            Currency currency = currencyBean.getBean();
+            caption = String.format("%s - %s", currency.getCode(), currency.getName());
+        }
+        return caption;
     }
 
     /**

@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import static org.easymock.EasyMock.expect;
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -13,7 +12,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
-import com.copyright.rup.dist.foreign.domain.CurrencyEnum;
+import com.copyright.rup.dist.common.domain.Currency;
 import com.copyright.rup.dist.foreign.ui.component.CsvUploadComponent;
 import com.copyright.rup.dist.foreign.ui.component.LocalDateWidget;
 import com.copyright.rup.dist.foreign.ui.component.validator.AmountValidator;
@@ -46,6 +45,7 @@ import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Collections;
 
 /**
  * Verifies {@link UsageBatchUploadWindow}.
@@ -60,6 +60,8 @@ import java.util.Collection;
 public class UsageBatchUploadWindowTest {
 
     private static final String ACCOUNT_NUMBER = "1234567890";
+    private static final String EUR_CURRENCY_CODE = "EUR";
+    private static final String EUR_CURRENCY_NAME = "European currency";
     private static final String USAGE_BATCH_NAME = "BatchName";
     private UsageBatchUploadWindow window;
     private IUsagesController usagesController;
@@ -67,22 +69,28 @@ public class UsageBatchUploadWindowTest {
     @Before
     public void setUp() {
         usagesController = createMock(IUsagesController.class);
-        window = new UsageBatchUploadWindow(usagesController);
+        expect(usagesController.getCurrencies()).andReturn(Collections.singleton(buildCurrency())).once();
     }
 
     @Test
     @PrepareForTest(Windows.class)
     public void testConstructor() {
+        replay(usagesController);
+        window = new UsageBatchUploadWindow(usagesController);
         assertEquals("Upload Usage Batch", window.getCaption());
         assertEquals(440, window.getWidth(), 0);
         assertEquals(Unit.PIXELS, window.getWidthUnits());
         assertEquals(305, window.getHeight(), 0);
         assertEquals(Unit.PIXELS, window.getHeightUnits());
         verifyRootLayout(window.getContent());
+        verify(usagesController);
     }
 
     @Test
     public void testIsValid() {
+        expect(usagesController.usageBatchExists(USAGE_BATCH_NAME)).andReturn(false).once();
+        replay(usagesController);
+        window = new UsageBatchUploadWindow(usagesController);
         assertFalse(window.isValid());
         Whitebox.getInternalState(window, CsvUploadComponent.class).getFileNameField().setValue("test.csv");
         assertFalse(window.isValid());
@@ -92,10 +100,8 @@ public class UsageBatchUploadWindowTest {
         assertFalse(window.isValid());
         ((TextField) Whitebox.getInternalState(window, "grossAmountField")).setValue("100");
         assertFalse(window.isValid());
-        Whitebox.getInternalState(window, ComboBox.class).setValue(CurrencyEnum.EUR);
+        Whitebox.getInternalState(window, ComboBox.class).setValue(buildCurrency());
         ((TextField) Whitebox.getInternalState(window, "usageBatchNameField")).setValue(USAGE_BATCH_NAME);
-        expect(usagesController.usageBatchExists(USAGE_BATCH_NAME)).andReturn(false).once();
-        replay(usagesController);
         assertTrue(window.isValid());
         verify(usagesController);
     }
@@ -104,15 +110,16 @@ public class UsageBatchUploadWindowTest {
     @PrepareForTest(Windows.class)
     public void testOnUploadClickedValidFields() {
         mockStatic(Windows.class);
+        Windows.showNotificationWindow("Uploading is started");
+        expect(usagesController.usageBatchExists(USAGE_BATCH_NAME)).andReturn(false).once();
+        replay(Windows.class, usagesController);
+        window = new UsageBatchUploadWindow(usagesController);
         ((TextField) Whitebox.getInternalState(window, "usageBatchNameField")).setValue(USAGE_BATCH_NAME);
         Whitebox.getInternalState(window, CsvUploadComponent.class).getFileNameField().setValue("test.csv");
         ((TextField) Whitebox.getInternalState(window, "accountNumberField")).setValue(ACCOUNT_NUMBER);
         Whitebox.getInternalState(window, LocalDateWidget.class).setValue(LocalDate.now());
         ((TextField) Whitebox.getInternalState(window, "grossAmountField")).setValue("100");
-        Whitebox.getInternalState(window, ComboBox.class).setValue(CurrencyEnum.EUR);
-        Windows.showNotificationWindow("Uploading is started");
-        expect(usagesController.usageBatchExists(USAGE_BATCH_NAME)).andReturn(false).once();
-        replay(Windows.class, usagesController);
+        Whitebox.getInternalState(window, ComboBox.class).setValue(buildCurrency());
         window.onUploadClicked();
         verify(Windows.class, usagesController);
     }
@@ -246,7 +253,7 @@ public class UsageBatchUploadWindowTest {
         assertTrue(reportedCurrencyComponent instanceof ComboBox);
         ComboBox comboBox = (ComboBox) reportedCurrencyComponent;
         verifyRequiredField(comboBox);
-        assertArrayEquals(CurrencyEnum.values(), comboBox.getItemIds().toArray());
+        assertTrue(comboBox.getItemIds().contains(buildCurrency()));
         verifyGrossAmountComponent(horizontalLayout.getComponent(1));
     }
 
@@ -259,5 +266,12 @@ public class UsageBatchUploadWindowTest {
     private void verifyRequiredField(AbstractField field) {
         assertTrue(field.isRequired());
         assertEquals("Field value should be specified", field.getRequiredError());
+    }
+
+    private Currency buildCurrency() {
+        Currency currency = new Currency();
+        currency.setCode(EUR_CURRENCY_CODE);
+        currency.setName(EUR_CURRENCY_NAME);
+        return currency;
     }
 }

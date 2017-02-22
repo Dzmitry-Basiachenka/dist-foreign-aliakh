@@ -1,6 +1,7 @@
 dependencies {
     compile project(':dist-foreign-domain')
     compile project(':dist-foreign-repository')
+    compile project(':dist-foreign-integration')
 
     compile("org.quartz-scheduler:quartz:${quartzVersion}")
     compile("org.springframework:spring-context-support:${rupJava.standardDependencies.spring.version}")
