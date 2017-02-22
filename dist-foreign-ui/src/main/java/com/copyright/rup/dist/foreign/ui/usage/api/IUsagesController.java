@@ -39,4 +39,12 @@ public interface IUsagesController extends IController<IUsagesWidget>, IBeanLoad
      * @param event event
      */
     void onFilterChanged(FilterChangedEvent event);
+
+    /**
+     * Checks whether usage batch with provided name already exists or not.
+     *
+     * @param name usage batch name
+     * @return {@code true} - if usage batch exists, {@code false} - otherwise
+     */
+    boolean usageBatchExists(String name);
 }

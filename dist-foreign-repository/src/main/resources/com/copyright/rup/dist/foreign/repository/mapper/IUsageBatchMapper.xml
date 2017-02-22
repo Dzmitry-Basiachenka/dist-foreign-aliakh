@@ -45,4 +45,10 @@
         select df_usage_batch_uid, name
         from ${schema}.df_usage_batch
     </select>
+
+    <select id="getUsageBatchesCountByName" parameterType="string" resultType="int">
+        select count(name)
+        from ${schema}.df_usage_batch
+        where upper(name) = upper(#{name})
+    </select>
 </mapper>

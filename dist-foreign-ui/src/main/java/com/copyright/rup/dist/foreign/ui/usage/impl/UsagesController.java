@@ -4,6 +4,7 @@ import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
+import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
@@ -41,6 +42,9 @@ import java.util.concurrent.Executors;
 public class UsagesController extends CommonController<IUsagesWidget> implements IUsagesController {
 
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
+
+    @Autowired
+    private IUsageBatchService usageBatchService;
 
     @Autowired
     private IUsageService usageService;
@@ -94,5 +98,10 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
         LocalDate now = LocalDate.now();
         return VaadinUtils.encodeAndBuildFileName(
             String.format("export_usage_%s_%s_%s", now.getMonthValue(), now.getDayOfMonth(), now.getYear()), "csv");
+    }
+
+    @Override
+    public boolean usageBatchExists(String name) {
+        return usageBatchService.usageBatchExists(name);
     }
 }

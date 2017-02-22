@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.ui.component.LocalDateWidget;
 import com.copyright.rup.dist.foreign.ui.component.validator.AmountValidator;
 import com.copyright.rup.dist.foreign.ui.component.validator.NumberValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.VaadinUtils;
 import com.copyright.rup.vaadin.ui.Windows;
@@ -15,6 +16,7 @@ import com.google.common.collect.Lists;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.data.util.converter.StringToBigDecimalConverter;
+import com.vaadin.data.validator.AbstractStringValidator;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.AbstractField;
@@ -50,11 +52,15 @@ class UsageBatchUploadWindow extends Window {
     private Property<String> rightsholderNameProperty;
     private Property<String> fiscalYearProperty;
     private CsvUploadComponent csvUploadComponent;
+    private IUsagesController usagesController;
 
     /**
      * Constructor.
+     *
+     * @param usagesController {@link IUsagesController} instance
      */
-    UsageBatchUploadWindow() {
+    UsageBatchUploadWindow(IUsagesController usagesController) {
+        this.usagesController = usagesController;
         setContent(initRootLayout());
         setCaption(ForeignUi.getMessage("window.upload_usage_batch"));
         setResizable(false);
@@ -133,6 +139,7 @@ class UsageBatchUploadWindow extends Window {
         usageBatchNameField = new TextField(ForeignUi.getMessage("label.usage_batch_name"));
         usageBatchNameField.addValidator(new StringLengthValidator(String.format(
             ForeignUi.getMessage("field.error.length"), 50), 0, 50, false));
+        usageBatchNameField.addValidator(new UsageBatchNameUniqueValidator());
         setRequired(usageBatchNameField);
         usageBatchNameField.setSizeFull();
         VaadinUtils.setMaxComponentsWidth(usageBatchNameField);
@@ -247,5 +254,23 @@ class UsageBatchUploadWindow extends Window {
     private void setRequired(AbstractField field) {
         field.setRequired(true);
         field.setRequiredError(ForeignUi.getMessage("field.error.empty"));
+    }
+
+    /**
+     * Validator for Usage Batch uniqueness. Checks whether usage batch with provided name already exists or not.
+     */
+    class UsageBatchNameUniqueValidator extends AbstractStringValidator {
+
+        /**
+         * Constructs a validator for Usage Batch name.
+         */
+        UsageBatchNameUniqueValidator() {
+            super("Usage Batch with such name already exists");
+        }
+
+        @Override
+        protected boolean isValidValue(String value) {
+            return !usagesController.usageBatchExists(StringUtils.trim(value));
+        }
     }
 }

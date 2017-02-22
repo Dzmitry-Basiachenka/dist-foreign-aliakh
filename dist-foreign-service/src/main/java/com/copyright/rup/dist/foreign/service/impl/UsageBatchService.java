@@ -33,4 +33,9 @@ public class UsageBatchService implements IUsageBatchService {
     public List<UsageBatch> getUsageBatches() {
         return usageBatchRepository.findUsageBatches();
     }
+
+    @Override
+    public boolean usageBatchExists(String name) {
+        return 0 < usageBatchRepository.getUsageBatchesCountByName(name);
+    }
 }

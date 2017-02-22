@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -30,7 +31,8 @@ import java.util.List;
 public class UsageBatchServiceTest {
 
     private static final Integer FISCAL_YEAR = 2017;
-    
+    private static final String BATCH_NAME = "JAACC_11Dec16";
+
     private IUsageBatchRepository usageBatchRepository;
     private UsageBatchService usageBatchService;
 
@@ -58,6 +60,22 @@ public class UsageBatchServiceTest {
         expect(usageBatchRepository.findUsageBatches()).andReturn(usageBatches).once();
         replay(usageBatchRepository);
         assertEquals(usageBatches, usageBatchService.getUsageBatches());
+        verify(usageBatchRepository);
+    }
+
+    @Test
+    public void testUsageBatchExists() {
+        expect(usageBatchRepository.getUsageBatchesCountByName(BATCH_NAME)).andReturn(1).once();
+        replay(usageBatchRepository);
+        assertTrue(usageBatchService.usageBatchExists(BATCH_NAME));
+        verify(usageBatchRepository);
+    }
+
+    @Test
+    public void testUsageBatchDoesNotExist() {
+        expect(usageBatchRepository.getUsageBatchesCountByName(BATCH_NAME)).andReturn(0).once();
+        replay(usageBatchRepository);
+        assertFalse(usageBatchService.usageBatchExists(BATCH_NAME));
         verify(usageBatchRepository);
     }
 }
