@@ -27,7 +27,7 @@ public class UsageBatch extends StoredEntity<String> {
     private LocalDate paymentDate;
     private Integer fiscalYear;
     private BigDecimal grossAmount = BigDecimal.ZERO;
-    private CurrencyEnum currency;
+    private String currency;
     private BigDecimal conversionRate;
     private BigDecimal appliedConversionRate;
 
@@ -115,7 +115,7 @@ public class UsageBatch extends StoredEntity<String> {
     /**
      * @return currency.
      */
-    public CurrencyEnum getCurrency() {
+    public String getCurrency() {
         return currency;
     }
 
@@ -124,7 +124,7 @@ public class UsageBatch extends StoredEntity<String> {
      *
      * @param currency currency
      */
-    public void setCurrency(CurrencyEnum currency) {
+    public void setCurrency(String currency) {
         this.currency = currency;
     }
 

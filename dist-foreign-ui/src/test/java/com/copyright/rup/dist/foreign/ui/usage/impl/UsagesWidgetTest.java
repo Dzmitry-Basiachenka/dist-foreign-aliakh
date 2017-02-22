@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
+import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.isA;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -15,6 +15,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.ui.LocalDateColumnGenerator;
 import com.copyright.rup.vaadin.ui.LongColumnGenerator;
@@ -103,17 +104,19 @@ public class UsagesWidgetTest {
     @PrepareForTest(Windows.class)
     public void testLoadButtonClickListener() {
         mockStatic(Windows.class);
+        IPrmIntegrationService prmIntegrationService = createMock(IPrmIntegrationService.class);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button loadButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
             .getComponent(0)).getComponent(0);
         Collection<?> listeners = loadButton.getListeners(ClickEvent.class);
         assertEquals(1, listeners.size());
         ClickListener clickListener = (ClickListener) listeners.iterator().next();
-        Windows.showModalWindow(isA(UsageBatchUploadWindow.class));
+        Windows.showModalWindow(anyObject(UsageBatchUploadWindow.class));
         expectLastCall().once();
-        replay(clickEvent, Windows.class);
+        expect(controller.getCurrencies()).andReturn(Collections.emptySet()).once();
+        replay(clickEvent, Windows.class, controller, prmIntegrationService);
         clickListener.buttonClick(clickEvent);
-        verify(clickEvent, Windows.class);
+        verify(clickEvent, Windows.class, controller, prmIntegrationService);
     }
 
     @Test

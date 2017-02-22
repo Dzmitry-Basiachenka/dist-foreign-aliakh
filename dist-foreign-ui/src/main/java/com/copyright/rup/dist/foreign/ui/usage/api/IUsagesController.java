@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.api;
 
+import com.copyright.rup.dist.common.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.ui.component.lazytable.IBeanLoader;
@@ -8,6 +9,7 @@ import com.copyright.rup.vaadin.widget.api.IController;
 import com.vaadin.util.ReflectTools;
 
 import java.lang.reflect.Method;
+import java.util.Set;
 
 /**
  * Interface for controller for {@link IUsagesWidget}.
@@ -39,6 +41,11 @@ public interface IUsagesController extends IController<IUsagesWidget>, IBeanLoad
      * @param event event
      */
     void onFilterChanged(FilterChangedEvent event);
+
+    /**
+     * @return set of {@link Currency}ies from PRM.
+     */
+    Set<Currency> getCurrencies();
 
     /**
      * Checks whether usage batch with provided name already exists or not.
