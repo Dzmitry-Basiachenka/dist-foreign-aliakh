@@ -158,7 +158,7 @@ public class UsagesWidgetTest {
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(true), layout.getMargin());
-        assertEquals(3, layout.getComponentCount());
+        assertEquals(4, layout.getComponentCount());
         assertEquals("Load", layout.getComponent(0).getCaption());
         assertEquals("Add To Scenario", layout.getComponent(1).getCaption());
         Component component = layout.getComponent(2);
@@ -167,6 +167,8 @@ public class UsagesWidgetTest {
         assertTrue(CollectionUtils.isNotEmpty(extensions));
         assertEquals(1, extensions.size());
         assertTrue(extensions.iterator().next() instanceof OnDemandFileDownloader);
+        component = layout.getComponent(3);
+        assertEquals("Delete Usage Batch", component.getCaption());
     }
 
     private void verifyTable(Table table) {

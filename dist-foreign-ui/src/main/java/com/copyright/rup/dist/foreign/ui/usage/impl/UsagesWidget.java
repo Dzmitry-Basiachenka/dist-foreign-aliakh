@@ -195,7 +195,8 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
         OnDemandFileDownloader fileDownloader = new OnDemandFileDownloader(getController());
         fileDownloader.extend(exportButton);
-        HorizontalLayout layout = new HorizontalLayout(loadButton, addToScenarioButton, exportButton);
+        Button deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete_usage_batch"));
+        HorizontalLayout layout = new HorizontalLayout(loadButton, addToScenarioButton, exportButton, deleteButton);
         layout.setSpacing(true);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "usages-buttons");
