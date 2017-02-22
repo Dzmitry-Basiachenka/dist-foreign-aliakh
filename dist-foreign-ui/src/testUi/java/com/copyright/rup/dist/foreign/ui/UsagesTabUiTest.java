@@ -2,16 +2,21 @@ package com.copyright.rup.dist.foreign.ui;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
+import com.google.common.collect.Sets;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * UI test for "Usages" tab.
@@ -37,20 +42,81 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     private static final String USAGE_FILTER_WIDGET_ID = "usages-filter-widget";
     private static final String FILTERS_HEADER_TEXT = "Filters";
     private static final String FILTER_BUTTONS_LAYOUT_ID = "filter-buttons";
+    private static final String ADD_TO_SCENARIO_BUTTON_ID = "Add_To_Scenario";
+    private static final String EXPORT_BUTTON_ID = "Export";
+    private static final String LOAD_USAGE_BUTTON_ID = "Load";
+    private static final String DELETE_USAGE_BUTTON_ID = "Delete_Usage_Batch";
+    private static final String CLOSE_BUTTON = "Close";
+    private static final Set USAGES_BUTTONS =
+        Sets.newHashSet(LOAD_USAGE_BUTTON_ID, ADD_TO_SCENARIO_BUTTON_ID, EXPORT_BUTTON_ID, DELETE_USAGE_BUTTON_ID);
 
     @Test
     // Test case ID: '65520aa2-3a1c-4c7c-81e6-96a0a845331e'
-    public void testVerifyUsagesTab() {
+    public void testVerifyUsagesTabSpecialist() {
+        loginAsSpecialist();
+        WebElement usagesLayout = verifyUsagesTab();
+        verifyUsagesLayoutButtonSpecialist(usagesLayout);
+    }
+
+    @Test
+    // TODO {isuvorau} set test cases IDs
+    public void testVerifyUsagesTabManager() {
+        loginAsManager();
+        WebElement usagesLayout = verifyUsagesTab();
+        verifyUsagesLayoutButtonManager(usagesLayout);
+    }
+
+    @Test
+    // TODO {isuvorau} set test cases IDs
+    public void testVerifyUsagesTabViewOnly() {
         loginAsViewOnly();
-        WebElement usagesTab = getUsagesTab();
-        verifyFiltersWidget(usagesTab);
-        verifyUsagesLayout(usagesTab);
+        WebElement usagesLayout = verifyUsagesTab();
+        verifyUsagesLayoutButtonViewOnly(usagesLayout);
     }
 
     @Test
     // Test cases IDs: 'a2a66f64-ab10-44d4-a2b9-c779631cbe6a', '1b24b641-8da0-46a2-917c-7ee99d781d6d'
-    public void testVerifyBatchAndUsageInformationIsDisplayedCorrectly() {
+    public void testVerifyBatchAndUsageInformationIsDisplayedCorrectlySpecialist() {
+        loginAsSpecialist();
+        verifyBatchAndUsageInformationIsDisplayedCorrectly();
+    }
+
+    @Test
+    // TODO {isuvorau} set test cases IDs
+    public void testVerifyBatchAndUsageInformationIsDisplayedCorrectlyManager() {
+        loginAsManager();
+        verifyBatchAndUsageInformationIsDisplayedCorrectly();
+    }
+
+    @Test
+    // TODO {isuvorau} set test cases IDs
+    public void testVerifyBatchAndUsageInformationIsDisplayedCorrectlyViewOnly() {
         loginAsViewOnly();
+        verifyBatchAndUsageInformationIsDisplayedCorrectly();
+    }
+
+    @Test
+    // Test cases IDs: 'd438bf76-31f9-4266-8a4e-8c416a616aed', '87ac1966-737c-4b18-b5d1-6e583776b3a1'
+    public void testVerifyMultiplyUsageDataFilterAndClearFilterButtonSpecialist() {
+        loginAsSpecialist();
+        verifyMultiplyUsageDataFilterAndClearFilterButton();
+    }
+
+    @Test
+    // TODO {isuvorau} set test cases IDs
+    public void testVerifyMultiplyUsageDataFilterAndClearFilterButtonManager() {
+        loginAsManager();
+        verifyMultiplyUsageDataFilterAndClearFilterButton();
+    }
+
+    @Test
+    // TODO {isuvorau} set test cases IDs
+    public void testVerifyMultiplyUsageDataFilterAndClearFilterButtonViewOnly() {
+        loginAsViewOnly();
+        verifyMultiplyUsageDataFilterAndClearFilterButton();
+    }
+
+    private void verifyBatchAndUsageInformationIsDisplayedCorrectly() {
         WebElement usagesTab = getUsagesTab();
         WebElement filterWidget = waitAndFindElement(usagesTab, By.id(USAGE_FILTER_WIDGET_ID));
         assertNotNull(filterWidget);
@@ -61,10 +127,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         verifyFoundUsages(usagesTab);
     }
 
-    @Test
-    // Test cases IDs: 'd438bf76-31f9-4266-8a4e-8c416a616aed', '87ac1966-737c-4b18-b5d1-6e583776b3a1'
-    public void testVerifyMultiplyUsageDataFilterAndClearFilterButton() {
-        loginAsViewOnly();
+    private void verifyMultiplyUsageDataFilterAndClearFilterButton() {
         WebElement usagesTab = getUsagesTab();
         WebElement usagesLayout = assertElement(usagesTab, USAGE_LAYOUT_ID);
         assertNotNull(usagesLayout);
@@ -124,7 +187,6 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
 
     private void verifyFoundUsages(WebElement usagesTab) {
         WebElement usagesLayout = assertElement(usagesTab, USAGE_LAYOUT_ID);
-        verifyUsagesLayoutButtons(usagesLayout);
         WebElement usagesTable = assertElement(usagesLayout, USAGE_TABLE_ID);
         WebElement table = findElement(usagesTable, By.className(V_TABLE_BODY_CLASS_NAME));
         List<WebElement> usageTableRows = findElements(table, By.tagName(HTML_TR_TAG_NAME));
@@ -168,22 +230,74 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         return waitAndGetTab(tabContainer, "Usages");
     }
 
-    private void verifyUsagesLayout(WebElement tabContainer) {
-        WebElement usagesLayout = assertElement(tabContainer, "usages-layout");
-        verifyUsagesLayoutButtons(usagesLayout);
+    private WebElement verifyUsagesTab() {
+        WebElement usagesTab = getUsagesTab();
+        verifyFiltersWidget(usagesTab);
+        WebElement usagesLayout = assertElement(usagesTab, USAGE_LAYOUT_ID);
         verifyUsagesTable(usagesLayout);
+        return usagesLayout;
     }
 
-    private void verifyUsagesLayoutButtons(WebElement usagesLayout) {
+    private void verifyUsagesLayoutButtonSpecialist(WebElement usagesLayout) {
         WebElement buttonsLayout = assertElement(usagesLayout, "usages-buttons");
-        WebElement loadButton = assertElement(buttonsLayout, "Load");
-        clickElementAndWait(loadButton);
-        assertElement(buttonsLayout, "Add_To_Scenario");
-        assertElement(buttonsLayout, "Export");
-        verifyUploadUsageWindow();
+        verifyUsagesLayoutButton(buttonsLayout,
+            Sets.newHashSet(ADD_TO_SCENARIO_BUTTON_ID, EXPORT_BUTTON_ID, LOAD_USAGE_BUTTON_ID, DELETE_USAGE_BUTTON_ID));
+        verifyUploadUsageWindow(buttonsLayout);
+        verifyLoadUsageButton(buttonsLayout);
+        verifyDeleteUsageButton(buttonsLayout);
+        verifyAddToScenarioButton(buttonsLayout);
+        verifyExportButton(buttonsLayout);
     }
 
-    private void verifyUploadUsageWindow() {
+    private void verifyUsagesLayoutButtonManager(WebElement usagesLayout) {
+        WebElement buttonsLayout = assertElement(usagesLayout, "usages-buttons");
+        verifyUsagesLayoutButton(buttonsLayout, Sets.newHashSet(ADD_TO_SCENARIO_BUTTON_ID, EXPORT_BUTTON_ID));
+        verifyAddToScenarioButton(buttonsLayout);
+        verifyExportButton(buttonsLayout);
+    }
+
+    private void verifyUsagesLayoutButtonViewOnly(WebElement usagesLayout) {
+        WebElement buttonsLayout = assertElement(usagesLayout, "usages-buttons");
+        verifyUsagesLayoutButton(buttonsLayout, Sets.newHashSet(ADD_TO_SCENARIO_BUTTON_ID, EXPORT_BUTTON_ID));
+        verifyAddToScenarioButton(buttonsLayout);
+        verifyExportButton(buttonsLayout);
+    }
+
+    private void verifyUsagesLayoutButton(WebElement buttonsLayout, Set<String> buttonsIds) {
+        assertTrue(USAGES_BUTTONS.containsAll(buttonsIds));
+        Set<String> invisibleButtons = Sets.newHashSet(CollectionUtils.subtract(USAGES_BUTTONS, buttonsIds));
+        for (String id : invisibleButtons) {
+            assertNull(findElement(buttonsLayout, By.id(id)));
+        }
+    }
+
+    private void verifyLoadUsageButton(WebElement buttonsLayout) {
+        WebElement button = assertElement(buttonsLayout, LOAD_USAGE_BUTTON_ID);
+        clickElementAndWait(button);
+        clickElementAndWait(assertElement(waitAndFindElement(By.id("usage-upload-window")), CLOSE_BUTTON));
+    }
+
+    private void verifyDeleteUsageButton(WebElement buttonsLayout) {
+        WebElement button = assertElement(buttonsLayout, DELETE_USAGE_BUTTON_ID);
+        clickElementAndWait(button);
+        clickElementAndWait(assertElement(waitAndFindElement(By.id("delete-usage-batch")), CLOSE_BUTTON));
+    }
+
+    private void verifyAddToScenarioButton(WebElement buttonsLayout) {
+        WebElement button = assertElement(buttonsLayout, ADD_TO_SCENARIO_BUTTON_ID);
+        clickElementAndWait(button);
+        clickElementAndWait(
+            findElementByText(waitAndFindElement(By.id("notification-window")), HTML_SPAN_TAG_NAME, "Ok"));
+    }
+
+    private void verifyExportButton(WebElement buttonsLayout) {
+        WebElement button = assertElement(buttonsLayout, EXPORT_BUTTON_ID);
+        assertTrue(button.isEnabled());
+        //TODO {isuvorau} find solution to close browser window
+    }
+
+    private void verifyUploadUsageWindow(WebElement buttonsLayout) {
+        clickElementAndWait(findElement(buttonsLayout, By.id(LOAD_USAGE_BUTTON_ID)));
         WebElement uploadWindow = waitAndFindElement(By.id("usage-upload-window"));
         assertEquals("Upload Usage Batch", getWindowCaption(uploadWindow));
         verifyUploadElement(uploadWindow);
@@ -193,7 +307,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         assertTextElement(uploadWindow, "gross-amount-field", "Gross Amount (USD)");
         assertComboboxElement(uploadWindow, "reported-currency-field", HTML_SPAN_TAG_NAME, "Reported Currency");
         assertElement(uploadWindow, "Upload");
-        clickElementAndWait(assertElement(uploadWindow, "Close"));
+        clickElementAndWait(assertElement(uploadWindow, CLOSE_BUTTON));
     }
 
     private void verifyUploadElement(WebElement uploadWindow) {
@@ -309,7 +423,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         verifySearchToolBar(filterWindow);
         assertElement(filterWindow, "Save");
         assertElement(filterWindow, CLEAR_BATTON_ID);
-        clickElementAndWait(assertElement(filterWindow, "Close"));
+        clickElementAndWait(assertElement(filterWindow, CLOSE_BUTTON));
     }
 
     private void verifySearchToolBar(WebElement filterWindow) {

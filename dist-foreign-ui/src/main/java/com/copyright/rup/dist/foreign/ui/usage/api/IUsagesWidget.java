@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.api;
 
+import com.copyright.rup.vaadin.widget.api.IMediatorProvider;
 import com.copyright.rup.vaadin.widget.api.IRefreshable;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
@@ -12,5 +13,5 @@ import com.copyright.rup.vaadin.widget.api.IWidget;
  *
  * @author Mikita Hladkikh
  */
-public interface IUsagesWidget extends IWidget<IUsagesController>, IRefreshable {
+public interface IUsagesWidget extends IWidget<IUsagesController>, IRefreshable, IMediatorProvider {
 }

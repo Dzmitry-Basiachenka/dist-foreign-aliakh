@@ -44,6 +44,8 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
 
     private IUsagesController controller;
     private LazyTable<UsageBeanQuery, UsageDto> usagesTable;
+    private Button loadButton;
+    private Button deleteButton;
 
     @Override
     public void refresh() {
@@ -70,6 +72,14 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
     @Override
     public void setController(IUsagesController controller) {
         this.controller = controller;
+    }
+
+    @Override
+    public UsagesMediator initMediator() {
+        UsagesMediator mediator = new UsagesMediator();
+        mediator.setLoadUsageButton(loadButton);
+        mediator.setDeleteUsageButton(deleteButton);
+        return mediator;
     }
 
     /**
@@ -187,7 +197,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
     }
 
     private HorizontalLayout initButtonsLayout() {
-        Button loadButton = Buttons.createButton(ForeignUi.getMessage("button.load"));
+        loadButton = Buttons.createButton(ForeignUi.getMessage("button.load"));
         loadButton.addClickListener(
             event -> Windows.showModalWindow(new UsageBatchUploadWindow(controller)));
         Button addToScenarioButton = Buttons.createButton(ForeignUi.getMessage("button.add_to_scenario"));
@@ -195,7 +205,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
         OnDemandFileDownloader fileDownloader = new OnDemandFileDownloader(getController());
         fileDownloader.extend(exportButton);
-        Button deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete_usage_batch"));
+        deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete_usage_batch"));
         deleteButton.addClickListener(event -> Windows.showModalWindow(new DeleteUsageBatchWindow(controller)));
         HorizontalLayout layout = new HorizontalLayout(loadButton, addToScenarioButton, exportButton, deleteButton);
         layout.setSpacing(true);
