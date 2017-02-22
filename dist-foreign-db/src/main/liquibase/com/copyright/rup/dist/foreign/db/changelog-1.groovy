@@ -263,4 +263,45 @@ databaseChangeLog {
             addDefaultValue(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'gross_amount', defaultValue: '0.00')
         }
     }
+
+    changeSet(id: '2017-02-22-01', author: 'Mikalai_Bezmen mbezmen@copyright.com') {
+        comment('B-29460 Integrate with PRM to get RH and RRO names')
+
+        createTable(tableName: 'df_rightsholder', schemaName: dbAppsSchema, tablespace: dbDataTablespace,
+                remarks: 'Table for storing rightsholders') {
+
+            column(name: 'rh_account_number', type: 'NUMERIC(22,0)', remarks: 'The rightsholder account number') {
+                constraints(nullable: false)
+            }
+            column(name: 'name', type: 'VARCHAR(255)', remarks: 'The name of Rightsholder') {
+                constraints(nullable: false)
+            }
+            column(name: 'record_version', type: 'INTEGER', defaultValue: '1',
+                    remarks: 'The latest version of this record, used for optimistic locking') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM', remarks: 'The user name who created this record') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who updated this record; when a record is first created, this will be the same as the created_by_user') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created; when a record is first created, this will be the same as the created_datetime') {
+                constraints(nullable: false)
+            }
+        }
+
+        addPrimaryKey(schemaName: dbAppsSchema, tableName: 'df_rightsholder', tablespace: dbIndexTablespace,
+                columnNames: 'rh_account_number', constraintName: 'rh_account_number_pk')
+
+        rollback {
+            // automatic rollback
+        }
+    }
 }
