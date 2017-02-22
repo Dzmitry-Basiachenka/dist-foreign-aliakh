@@ -295,7 +295,7 @@ public class UsageRepositoryIntegrationTest {
         assertEquals("6997788888,CADRA_11Dec16,FY2017,7000813806,,01/11/2017,\"2001 IEEE Workshop on High" +
             " Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA\",Efficient Generation of H2 by" +
             " Splitting Water with an Isothermal Redox Cycle,1008902112377654XX,180382914,1000009997,,IEEE," +
-            "09/10/2013,2502232,2500.00,13461.54,Doc Del,2013,2017," +
+            "09/10/2013,2502232,2500.00,13461.5400000000,Doc Del,2013,2017," +
             "\"Íñigo López de Mendoza, marqués de Santillana\",ELIGIBLE", bufferedReader.readLine());
         assertNull(bufferedReader.readLine());
     }

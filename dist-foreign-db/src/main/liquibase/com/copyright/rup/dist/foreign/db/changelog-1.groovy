@@ -233,11 +233,34 @@ databaseChangeLog {
         modifyDataType(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'service_fee_amount', newDataType: 'numeric(38,10)')
         modifyDataType(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'gross_amount', newDataType: 'numeric(38,10)')
 
-        rollback {
+        modifyDataType(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'net_amount', newDataType: 'numeric(38,10)')
+        modifyDataType(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'service_fee_amount', newDataType: 'numeric(38,10)')
+        modifyDataType(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'gross_amount', newDataType: 'numeric(38,10)')
 
+        addDefaultValue(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'net_amount', defaultValue: '0.0000000000')
+        addDefaultValue(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'service_fee_amount', defaultValue: '0.0000000000')
+        addDefaultValue(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'gross_amount', defaultValue: '0.0000000000')
+
+        addDefaultValue(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'net_amount', defaultValue: '0.0000000000')
+        addDefaultValue(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'service_fee_amount', defaultValue: '0.0000000000')
+        addDefaultValue(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'gross_amount', defaultValue: '0.0000000000')
+
+        rollback {
             modifyDataType(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'net_amount', newDataType: 'numeric(38,2)')
             modifyDataType(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'service_fee_amount', newDataType: 'numeric(38,2)')
             modifyDataType(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'gross_amount', newDataType: 'numeric(38,2)')
+
+            modifyDataType(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'net_amount', newDataType: 'numeric(38,2)')
+            modifyDataType(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'service_fee_amount', newDataType: 'numeric(38,2)')
+            modifyDataType(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'gross_amount', newDataType: 'numeric(38,2)')
+
+            addDefaultValue(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'net_amount', defaultValue: '0.00')
+            addDefaultValue(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'service_fee_amount', defaultValue: '0.00')
+            addDefaultValue(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'gross_amount', defaultValue: '0.00')
+
+            addDefaultValue(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'net_amount', defaultValue: '0.00')
+            addDefaultValue(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'service_fee_amount', defaultValue: '0.00')
+            addDefaultValue(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'gross_amount', defaultValue: '0.00')
         }
     }
 }
