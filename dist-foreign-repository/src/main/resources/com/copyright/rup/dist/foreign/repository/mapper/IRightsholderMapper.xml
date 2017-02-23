@@ -4,6 +4,11 @@
 
 <mapper namespace="IRightsholderMapper">
 
+    <resultMap id="rightsholderResultMap" type="Rightsholder" extends="StoredEntityMapper.storedEntityResult">
+        <result property="accountNumber" column="rh_account_number"/>
+        <result property="name" column="name"/>
+    </resultMap>
+
     <resultMap id="rroResultMap" type="Rightsholder">
         <result property="accountNumber" column="rro_account_number"/>
     </resultMap>
@@ -12,5 +17,25 @@
         select distinct rro_account_number
         from ${schema}.df_usage_batch
         order by rro_account_number
+    </select>
+
+    <insert id="insert" parameterType="Rightsholder">
+        insert into ${schema}.df_rightsholder(
+            rh_account_number,
+            name,
+            <include refid="StoredEntityMapper.additionalColumns"/>)
+        values(
+            #{accountNumber},
+            #{name},
+            <include refid="StoredEntityMapper.insert"/>
+        )
+    </insert>
+
+    <select id="findAll" resultMap="rightsholderResultMap">
+        select
+            rh_account_number,
+            name,
+            <include refid="StoredEntityMapper.additionalColumns"/>
+        from ${schema}.df_rightsholder
     </select>
 </mapper>
