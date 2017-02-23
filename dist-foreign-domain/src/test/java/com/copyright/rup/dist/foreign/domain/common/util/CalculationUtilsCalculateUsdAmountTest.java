@@ -23,19 +23,20 @@ import java.util.Collection;
 @RunWith(Parameterized.class)
 public class CalculationUtilsCalculateUsdAmountTest {
 
-    private BigDecimal expected;
+    private BigDecimal expectedUsdAmount;
     private BigDecimal amount;
     private BigDecimal conversionRate;
 
     /**
      * Constructor.
      *
-     * @param expected       expected result
-     * @param amount         amount to check
-     * @param conversionRate conversion rate
+     * @param expectedUsdAmount expected USD amount
+     * @param amount            amount to check
+     * @param conversionRate    conversion rate
      */
-    public CalculationUtilsCalculateUsdAmountTest(BigDecimal expected, BigDecimal amount, BigDecimal conversionRate) {
-        this.expected = expected;
+    public CalculationUtilsCalculateUsdAmountTest(BigDecimal expectedUsdAmount, BigDecimal amount,
+                                                  BigDecimal conversionRate) {
+        this.expectedUsdAmount = expectedUsdAmount;
         this.amount = amount;
         this.conversionRate = conversionRate;
     }
@@ -53,6 +54,6 @@ public class CalculationUtilsCalculateUsdAmountTest {
 
     @Test
     public void testCalculateUsdAmount() {
-        assertEquals(expected, CalculationUtils.calculateUsdAmount(amount, conversionRate));
+        assertEquals(expectedUsdAmount, CalculationUtils.calculateUsdAmount(amount, conversionRate));
     }
 }
