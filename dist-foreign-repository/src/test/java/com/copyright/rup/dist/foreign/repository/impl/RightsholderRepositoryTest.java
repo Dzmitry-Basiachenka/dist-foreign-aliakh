@@ -39,8 +39,7 @@ public class RightsholderRepositoryTest {
     @Test
     public void testGetRros() {
         List<Rightsholder> rros = Collections.singletonList(new Rightsholder());
-        expect(sqlSessionTemplate.<Rightsholder>selectList("IRightsholderMapper.findRros"))
-            .andReturn(rros).once();
+        expect(sqlSessionTemplate.<Rightsholder>selectList("IRightsholderMapper.findRros")).andReturn(rros).once();
         replay(sqlSessionTemplate);
         assertEquals(rros, rightsholderRepository.findRros());
         verify(sqlSessionTemplate);
