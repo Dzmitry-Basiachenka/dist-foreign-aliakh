@@ -9,11 +9,9 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,11 +53,12 @@ import java.util.UUID;
 public class UsageRepositoryIntegrationTest {
 
     private static final String USAGE_BATCH_ID_1 = "56282dbc-2468-48d4-b926-93d3458a656a";
+    private static final String USAGE_ID = UUID.randomUUID().toString();
     private static final Long RH_ACCOUNT_NUMBER = 7000813806L;
     private static final LocalDate PAYMENT_DATE = LocalDate.of(2017, 1, 11);
     private static final Integer FISCAL_YEAR = 2017;
     private static final String RH_ACCOUNT_NAME = "Rh Account Name";
-    private static final BigDecimal GROSS_AMOUNT = new BigDecimal("54.44");
+    private static final BigDecimal GROSS_AMOUNT = new BigDecimal("54.4400000000");
     private static final Long WR_WRK_INST = 123456783L;
     private static final String WORK_TITLE = "Work Title";
     private static final String ARTICLE = "Article";
@@ -71,9 +70,6 @@ public class UsageRepositoryIntegrationTest {
     private static final String AUTHOR = "Author";
     private static final BigDecimal ORIGINAL_AMOUNT = new BigDecimal("11.25");
     private static final LocalDate PUBLICATION_DATE = LocalDate.of(2016, 11, 3);
-    private static final BigDecimal NET_AMOUNT = new BigDecimal("3.13");
-    private static final BigDecimal SERVICE_FEE = new BigDecimal("0.15000");
-    private static final BigDecimal SERVICE_FEE_AMOUNT = new BigDecimal("2.38");
     private static final Long DETAIL_ID = 12345L;
     private static final Integer NUMBER_OF_COPIES = 155;
     private static final String DETAIL_ID_KEY = "detailId";
@@ -100,13 +96,29 @@ public class UsageRepositoryIntegrationTest {
     private static final String USAGE_ID_3 = "444444444";
 
     @Autowired
-    private IUsageRepository usageRepository;
+    private UsageRepository usageRepository;
 
     @Test
-    @Ignore
     public void testInsertUsage() {
-        assertEquals(1, usageRepository.insertUsage(buildUsage(UUID.randomUUID().toString())));
-        //TODO {dbaraukova} add verifiration of fields
+        usageRepository.insertUsage(buildUsage(USAGE_ID, USAGE_BATCH_ID_1));
+        Usage usage = usageRepository.findUsageByDetailId(DETAIL_ID);
+        assertNotNull(usage);
+        assertEquals(USAGE_ID, usage.getId());
+        assertEquals(WR_WRK_INST, usage.getWrWrkInst());
+        assertEquals(WORK_TITLE, usage.getWorkTitle());
+        assertEquals(RH_ACCOUNT_NUMBER, usage.getRightsholder().getAccountNumber());
+        assertEquals(UsageStatusEnum.ELIGIBLE, usage.getStatus());
+        assertEquals(ARTICLE, usage.getArticle());
+        assertEquals(STANDART_NUMBER, usage.getStandardNumber());
+        assertEquals(PUBLISHER, usage.getPublisher());
+        assertEquals(PUBLICATION_DATE, usage.getPublicationDate());
+        assertEquals(MARKET, usage.getMarket());
+        assertEquals(MARKED_PERIOD_FROM, usage.getMarketPeriodFrom());
+        assertEquals(MARKED_PERIOD_TO, usage.getMarketPeriodTo());
+        assertEquals(AUTHOR, usage.getAuthor());
+        assertEquals(NUMBER_OF_COPIES, usage.getNumberOfCopies());
+        assertEquals(ORIGINAL_AMOUNT, usage.getOriginalAmount());
+        assertEquals(GROSS_AMOUNT, usage.getGrossAmount());
     }
 
     @Test
@@ -326,9 +338,9 @@ public class UsageRepositoryIntegrationTest {
         return usageFilter;
     }
 
-    private Usage buildUsage(String usageBatchId) {
+    private Usage buildUsage(String usageId, String usageBatchId) {
         Usage usage = new Usage();
-        usage.setId(UUID.randomUUID().toString());
+        usage.setId(usageId);
         usage.setBatchId(usageBatchId);
         usage.setDetailId(DETAIL_ID);
         usage.setWrWrkInst(WR_WRK_INST);
@@ -348,9 +360,6 @@ public class UsageRepositoryIntegrationTest {
         usage.setAuthor(AUTHOR);
         usage.setNumberOfCopies(NUMBER_OF_COPIES);
         usage.setOriginalAmount(ORIGINAL_AMOUNT);
-        usage.setNetAmount(NET_AMOUNT);
-        usage.setServiceFee(SERVICE_FEE);
-        usage.setServiceFeeAmount(SERVICE_FEE_AMOUNT);
         usage.setGrossAmount(GROSS_AMOUNT);
         return usage;
     }

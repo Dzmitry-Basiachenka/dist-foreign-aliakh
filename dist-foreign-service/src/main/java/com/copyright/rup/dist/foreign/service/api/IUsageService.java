@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.service.api;
 
+import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
@@ -33,7 +34,7 @@ public interface IUsageService {
      * Gets usages count based on applied filter.
      *
      * @param filter instance of {@link UsageFilter}.
-     * @return the the count of usages.
+     * @return count of usages
      */
     int getUsagesCount(UsageFilter filter);
 
@@ -44,4 +45,13 @@ public interface IUsageService {
      * @param outputStream instance of {@link OutputStream}
      */
     void writeUsageCsvReport(UsageFilter filter, OutputStream outputStream);
+
+    /**
+     * Inserts usages.
+     *
+     * @param usages     list of {@link Usage}s
+     * @param userName   user name
+     * @return count of inserted usages
+     */
+    int insertUsages(List<Usage> usages, String userName);
 }

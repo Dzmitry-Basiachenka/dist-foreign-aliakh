@@ -28,29 +28,51 @@
         <result property="fiscalYear" column="fiscal_year"/>
     </resultMap>
 
+    <resultMap id="usageResultMap" type="Usage" extends="StoredEntityMapper.storedEntityResult">
+        <result property="id" column="df_usage_uid"/>
+        <result property="detailId" column="detail_id"/>
+        <result property="batchId" column="df_usage_batch_uid"/>
+        <result property="wrWrkInst" column="wr_wrk_inst"/>
+        <result property="workTitle" column="work_title"/>
+        <result property="rightsholder.accountNumber" column="rh_account_number"/>
+        <result property="status" column="status_ind"/>
+        <result property="article" column="article"/>
+        <result property="standardNumber" column="standard_number"/>
+        <result property="publisher" column="publisher"/>
+        <result property="publicationDate" column="publication_date"/>
+        <result property="market" column="market"/>
+        <result property="marketPeriodFrom" column="market_period_from"/>
+        <result property="marketPeriodTo" column="market_period_to"/>
+        <result property="author" column="author"/>
+        <result property="numberOfCopies" column="number_of_copies"/>
+        <result property="originalAmount" column="original_amount"/>
+        <result property="grossAmount" column="gross_amount"/>
+    </resultMap>
+
+    <sql id="usageColumns">
+        df_usage_uid,
+        df_usage_batch_uid,
+        detail_id,
+        wr_wrk_inst,
+        work_title,
+        rh_account_number,
+        status_ind,
+        article,
+        standard_number,
+        publisher,
+        publication_date,
+        market,
+        market_period_from,
+        market_period_to,
+        author,
+        number_of_copies,
+        original_amount,
+        gross_amount
+    </sql>
+
     <insert id="insertUsage" parameterType="Usage">
         insert into ${schema}.df_usage(
-            df_usage_uid,
-            df_usage_batch_uid,
-            detail_id,
-            wr_wrk_inst,
-            work_title,
-            rh_account_number,
-            status_ind,
-            article,
-            standard_number,
-            publisher,
-            publication_date,
-            market,
-            market_period_from,
-            market_period_to,
-            author,
-            number_of_copies,
-            original_amount,
-            net_amount,
-            service_fee,
-            service_fee_amount,
-            gross_amount,
+            <include refid="usageColumns"/>,
             <include refid="StoredEntityMapper.additionalColumns"/>)
         values(
             #{id},
@@ -70,9 +92,6 @@
             #{author},
             #{numberOfCopies},
             #{originalAmount},
-            #{netAmount},
-            #{serviceFee},
-            #{serviceFeeAmount},
             #{grossAmount},
             <include refid="StoredEntityMapper.insert"/>
         )
@@ -231,5 +250,13 @@
         from ${schema}.df_usage u
         join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
         <include refid="usageFilter"/>
+    </select>
+
+    <select id="findUsageByDetailId" resultMap="usageResultMap" parameterType="long">
+        select
+            <include refid="usageColumns"/>,
+            <include refid="StoredEntityMapper.additionalColumns"/>
+        from ${schema}.df_usage
+        where detail_id = #{detailId}
     </select>
 </mapper>

@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.service.api;
 
+import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 
 import java.util.List;
@@ -32,4 +33,14 @@ public interface IUsageBatchService {
      * @return {@code true} - if usage batch exists, {@code false} - otherwise
      */
     boolean usageBatchExists(String name);
+
+    /**
+     * Inserts usage batch and it's usages.
+     *
+     * @param usageBatch {@link UsageBatch} instance
+     * @param usages     list of {@link Usage}s
+     * @param userName   user name
+     * @return count of inserted usages
+     */
+    int insertUsages(UsageBatch usageBatch, List<Usage> usages, String userName);
 }

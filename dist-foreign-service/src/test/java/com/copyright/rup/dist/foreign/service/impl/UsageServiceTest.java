@@ -9,6 +9,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
@@ -91,6 +92,18 @@ public class UsageServiceTest {
         expectLastCall().once();
         replay(usageRepository);
         usageService.writeUsageCsvReport(usageFilter, outputStream);
+        verify(usageRepository);
+    }
+
+    @Test
+    public void testInsertUsages() {
+        List<Usage> usages = Lists.newArrayList(new Usage(), new Usage());
+        usageRepository.insertUsage(usages.get(0));
+        expectLastCall().once();
+        usageRepository.insertUsage(usages.get(1));
+        expectLastCall().once();
+        replay(usageRepository);
+        assertEquals(2, usageService.insertUsages(usages, "User Name"));
         verify(usageRepository);
     }
 }

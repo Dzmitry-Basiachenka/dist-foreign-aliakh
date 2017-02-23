@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
+import com.copyright.rup.common.logging.RupLogUtils;
+import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
@@ -7,8 +9,10 @@ import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.OutputStream;
 import java.util.Collections;
@@ -25,6 +29,8 @@ import java.util.List;
  */
 @Service
 public class UsageService implements IUsageService {
+
+    private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired
     private IUsageRepository usageRepository;
@@ -44,5 +50,15 @@ public class UsageService implements IUsageService {
     @Override
     public void writeUsageCsvReport(UsageFilter filter, OutputStream outputStream) {
         usageRepository.writeUsagesCsvReport(filter, outputStream);
+    }
+
+    @Override
+    @Transactional
+    public int insertUsages(List<Usage> usages, String userName) {
+        int size = usages.size();
+        LOGGER.info("Insert usages. Started. Usages={}, UserName={}", size, userName);
+        usages.forEach(usage -> usageRepository.insertUsage(usage));
+        LOGGER.info("Insert usages. Finished. Usages={}, UserName={}", size, userName);
+        return size;
     }
 }

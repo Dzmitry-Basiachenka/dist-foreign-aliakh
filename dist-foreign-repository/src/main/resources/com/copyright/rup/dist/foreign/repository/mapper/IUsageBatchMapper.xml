@@ -7,19 +7,30 @@
     <resultMap id="usageBatchResultMap" type="UsageBatch">
         <result property="id" column="df_usage_batch_uid"/>
         <result property="name" column="name"/>
+        <result property="rro.accountNumber" column="rro_account_number"/>
+        <result property="paymentDate" column="payment_date"/>
+        <result property="fiscalYear" column="fiscal_year"/>
+        <result property="grossAmount" column="gross_amount"/>
+        <result property="currency" column="currency_ind"/>
+        <result property="conversionRate" column="conversion_rate"/>
+        <result property="appliedConversionRate" column="applied_conversion_rate"/>
     </resultMap>
+
+    <sql id="usageBatchColumns">
+        df_usage_batch_uid,
+        name,
+        rro_account_number,
+        payment_date,
+        fiscal_year,
+        gross_amount,
+        currency_ind,
+        conversion_rate,
+        applied_conversion_rate
+    </sql>
 
     <insert id="insert" parameterType="UsageBatch">
         insert into ${schema}.df_usage_batch(
-            df_usage_batch_uid,
-            name,
-            rro_account_number,
-            payment_date,
-            fiscal_year,
-            gross_amount,
-            currency_ind,
-            conversion_rate,
-            applied_conversion_rate,
+            <include refid="usageBatchColumns"/>,
             <include refid="StoredEntityMapper.additionalColumns"/>
         ) values (
             #{id},
@@ -28,7 +39,7 @@
             #{paymentDate},
             #{fiscalYear},
             #{grossAmount},
-            #{currency.name},
+            #{currency},
             #{conversionRate},
             #{appliedConversionRate},
             <include refid="StoredEntityMapper.insert"/>
@@ -48,6 +59,14 @@
 
     <select id="getUsageBatchesCountByName" parameterType="string" resultType="int">
         select count(name)
+        from ${schema}.df_usage_batch
+        where upper(name) = upper(#{name})
+    </select>
+
+    <select id="findUsageBatchByName" parameterType="string" resultMap="usageBatchResultMap">
+        select
+            <include refid="usageBatchColumns"/>,
+            <include refid="StoredEntityMapper.additionalColumns"/>
         from ${schema}.df_usage_batch
         where upper(name) = upper(#{name})
     </select>
