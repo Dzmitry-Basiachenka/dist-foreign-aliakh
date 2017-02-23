@@ -22,9 +22,8 @@ public interface IUsageRepository {
      * Inserts Usage into database.
      *
      * @param usage {@link Usage} instance
-     * @return count of inserted records
      */
-    int insertUsage(Usage usage);
+    void insertUsage(Usage usage);
 
     /**
      * Finds the usage based on applied filter.

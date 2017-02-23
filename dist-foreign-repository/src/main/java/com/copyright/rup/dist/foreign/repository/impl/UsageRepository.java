@@ -38,8 +38,8 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     private static final String SORT_KEY = "sort";
 
     @Override
-    public int insertUsage(Usage usage) {
-        return insert("IUsageMapper.insertUsage", checkNotNull(usage));
+    public void insertUsage(Usage usage) {
+        insert("IUsageMapper.insertUsage", checkNotNull(usage));
     }
 
     @Override
@@ -69,5 +69,15 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         } catch (IOException e) {
             throw new RupRuntimeException(e);
         }
+    }
+
+    /**
+     * Finds usage by provided detail id.
+     *
+     * @param detailId usage details id
+     * @return found {@link Usage} instance
+     */
+    Usage findUsageByDetailId(Long detailId) {
+        return selectOne("IUsageMapper.findUsageByDetailId", checkNotNull(detailId));
     }
 }

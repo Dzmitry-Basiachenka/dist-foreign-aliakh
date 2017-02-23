@@ -1,11 +1,16 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
+import com.copyright.rup.common.logging.RupLogUtils;
+import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
+import com.copyright.rup.dist.foreign.service.api.IUsageService;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,8 +26,12 @@ import java.util.List;
 @Service
 public class UsageBatchService implements IUsageBatchService {
 
+    private static final Logger LOGGER = RupLogUtils.getLogger();
+
     @Autowired
     private IUsageBatchRepository usageBatchRepository;
+    @Autowired
+    private IUsageService usageService;
 
     @Override
     public List<Integer> getFiscalYears() {
@@ -37,5 +46,14 @@ public class UsageBatchService implements IUsageBatchService {
     @Override
     public boolean usageBatchExists(String name) {
         return 0 < usageBatchRepository.getUsageBatchesCountByName(name);
+    }
+
+    @Override
+    @Transactional
+    public int insertUsages(UsageBatch usageBatch, List<Usage> usages, String userName) {
+        LOGGER.info("Insert usage batch. Started. UsageBatchId={}, UserName={}", usageBatch.getId(), userName);
+        usageBatchRepository.insert(usageBatch);
+        LOGGER.info("Insert usage batch. Finished. UsageBatchId={}, UserName={}", usageBatch.getId(), userName);
+        return usageService.insertUsages(usages, userName);
     }
 }

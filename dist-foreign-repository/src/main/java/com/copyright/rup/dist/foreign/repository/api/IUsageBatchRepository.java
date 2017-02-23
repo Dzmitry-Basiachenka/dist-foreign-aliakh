@@ -19,9 +19,8 @@ public interface IUsageBatchRepository {
      * Inserts {@link UsageBatch}.
      *
      * @param usageBatch instance of {@link UsageBatch}
-     * @return count of inserted records
      */
-    int insert(UsageBatch usageBatch);
+    void insert(UsageBatch usageBatch);
 
     /**
      * @return list of all fiscal years presented in DB.

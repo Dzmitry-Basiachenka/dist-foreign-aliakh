@@ -25,8 +25,8 @@ import java.util.List;
 public class UsageBatchRepository extends BaseRepository implements IUsageBatchRepository {
 
     @Override
-    public int insert(UsageBatch usageBatch) {
-        return insert("IUsageBatchMapper.insert", checkNotNull(usageBatch));
+    public void insert(UsageBatch usageBatch) {
+        insert("IUsageBatchMapper.insert", checkNotNull(usageBatch));
     }
 
     @Override
@@ -43,5 +43,16 @@ public class UsageBatchRepository extends BaseRepository implements IUsageBatchR
     public int getUsageBatchesCountByName(String name) {
         checkArgument(StringUtils.isNotBlank(name));
         return selectOne("IUsageBatchMapper.getUsageBatchesCountByName", name);
+    }
+
+    /**
+     * Finds usage batch by provided name.
+     *
+     * @param name usage batch name
+     * @return found {@link UsageBatch} instance
+     */
+    UsageBatch findUsageBatchByName(String name) {
+        checkArgument(StringUtils.isNotBlank(name));
+        return selectOne("IUsageBatchMapper.findUsageBatchByName", name);
     }
 }
