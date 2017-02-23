@@ -17,7 +17,7 @@ import java.math.RoundingMode;
 public final class CalculationUtils {
 
     private CalculationUtils() {
-        throw new AssertionError("Constructor should not be called directly");
+        throw new AssertionError("Constructor shouldn't be called directly");
     }
 
     /**
@@ -32,5 +32,20 @@ public final class CalculationUtils {
         checkArgument(0 >= BigDecimal.ZERO.compareTo(amount));
         checkArgument(0 > BigDecimal.ZERO.compareTo(conversionRate));
         return amount.multiply(conversionRate).setScale(10, RoundingMode.HALF_UP);
+    }
+
+    /**
+     * Calculates conversion rate based on given fund pool amount and total amount by formula:
+     * Conversion rate = fund pool amount / total amount. Result has scale = 10 and rounds with
+     * {@link RoundingMode#HALF_UP}.
+     *
+     * @param fundPoolAmount fund pool amount
+     * @param totalAmount    total amount in original currency
+     * @return conversion rate
+     */
+    public static BigDecimal calculateConversionRate(BigDecimal fundPoolAmount, BigDecimal totalAmount) {
+        checkArgument(0 > BigDecimal.ZERO.compareTo(fundPoolAmount));
+        checkArgument(0 > BigDecimal.ZERO.compareTo(totalAmount));
+        return fundPoolAmount.divide(totalAmount, 10, RoundingMode.HALF_UP);
     }
 }
