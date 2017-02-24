@@ -48,6 +48,14 @@ public interface IUsagesController extends IController<IUsagesWidget>, IBeanLoad
     Set<Currency> getCurrencies();
 
     /**
+     * Gets RRO name from PRM by account number.
+     *
+     * @param rroAccountNumber RRO account number
+     * @return RRO name
+     */
+    String getRroName(Long rroAccountNumber);
+
+    /**
      * Checks whether usage batch with provided name already exists or not.
      *
      * @param name usage batch name
