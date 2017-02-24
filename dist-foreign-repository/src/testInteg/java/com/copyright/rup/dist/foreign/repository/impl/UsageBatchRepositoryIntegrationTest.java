@@ -89,10 +89,10 @@ public class UsageBatchRepositoryIntegrationTest {
     @Test
     public void testDeleteUsageBatch() {
         String batchId = "56282dbc-2468-48d4-b926-93d3458a656a";
-        assertEquals(3, usageBatchRepository.findUsageBatches().size());
+        assertEquals(4, usageBatchRepository.findUsageBatches().size());
         usageRepository.deleteUsageBatchDetails(batchId);
         usageBatchRepository.deleteUsageBatch(batchId);
-        assertEquals(2, usageBatchRepository.findUsageBatches().size());
+        assertEquals(3, usageBatchRepository.findUsageBatches().size());
     }
 
     private UsageBatch buildUsageBatch() {
