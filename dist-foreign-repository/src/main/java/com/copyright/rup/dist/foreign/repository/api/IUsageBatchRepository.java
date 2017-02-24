@@ -12,6 +12,7 @@ import java.util.List;
  * Date: 02/02/2017
  *
  * @author Mikalai Bezmen
+ * @author Aliaksandr Radkevich
  */
 public interface IUsageBatchRepository {
 
@@ -39,4 +40,11 @@ public interface IUsageBatchRepository {
      * @return count of found batches
      */
     int getUsageBatchesCountByName(String name);
+
+    /**
+     * Deletes {@link UsageBatch} with given id from database.
+     *
+     * @param batchId id of the batch to be deleted
+     */
+    void deleteUsageBatch(String batchId);
 }

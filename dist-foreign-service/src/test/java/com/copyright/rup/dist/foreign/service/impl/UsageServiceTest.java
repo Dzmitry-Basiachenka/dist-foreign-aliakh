@@ -9,6 +9,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
@@ -104,6 +105,16 @@ public class UsageServiceTest {
         expectLastCall().once();
         replay(usageRepository);
         assertEquals(2, usageService.insertUsages(usages, "User Name"));
+        verify(usageRepository);
+    }
+
+    @Test
+    public void testDeleteUsageBatchDetails() {
+        String batchId = RupPersistUtils.generateUuid();
+        usageRepository.deleteUsageBatchDetails(batchId);
+        expectLastCall().once();
+        replay(usageRepository);
+        usageService.deleteUsageBatchDetails(batchId);
         verify(usageRepository);
     }
 }

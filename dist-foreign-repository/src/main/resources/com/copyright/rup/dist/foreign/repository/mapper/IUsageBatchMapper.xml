@@ -53,7 +53,8 @@
     </select>
 
     <select id="findUsageBatches" resultMap="usageBatchResultMap">
-        select df_usage_batch_uid, name
+        select
+            <include refid="usageBatchColumns"/>
         from ${schema}.df_usage_batch
     </select>
 
@@ -70,4 +71,9 @@
         from ${schema}.df_usage_batch
         where upper(name) = upper(#{name})
     </select>
+
+    <delete id="deleteUsageBatch" parameterType="String">
+        delete from ${schema}.df_usage_batch
+        where df_usage_batch_uid = #{batchId}
+    </delete>
 </mapper>

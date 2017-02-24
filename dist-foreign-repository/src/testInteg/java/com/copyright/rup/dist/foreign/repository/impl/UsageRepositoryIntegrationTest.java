@@ -11,6 +11,9 @@ import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
+import com.copyright.rup.dist.foreign.repository.api.Sort.Direction;
+
+import com.google.common.collect.Sets;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -325,6 +328,17 @@ public class UsageRepositoryIntegrationTest {
                 "Amt in Orig Currency,Amt in USD,Market,Market Period From,Market Period To,Author,Detail Status",
             bufferedReader.readLine());
         assertNull(bufferedReader.readLine());
+    }
+
+    @Test
+    public void testDeleteUsageBatchDetails() {
+        UsageFilter filter = new UsageFilter();
+        filter.setUsageBatchesIds(Sets.newHashSet(USAGE_BATCH_ID_1));
+        Pageable pageable = new Pageable(0, 100);
+        Sort sort = new Sort(DETAIL_ID_KEY, Direction.ASC);
+        assertEquals(1, usageRepository.findByFilter(filter, pageable, sort).size());
+        usageRepository.deleteUsageBatchDetails(USAGE_BATCH_ID_1);
+        assertEquals(0, usageRepository.findByFilter(filter, pageable, sort).size());
     }
 
     private UsageFilter buildUsageFilter(Set<Long> accountNumbers, Set<String> usageBatchIds, UsageStatusEnum status,

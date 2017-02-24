@@ -22,6 +22,7 @@ import java.util.List;
  * Date: 02/03/2017
  *
  * @author Mikalai Bezmen
+ * @author Aliaksandr Radkevich
  */
 @Service
 public class UsageBatchService implements IUsageBatchService {
@@ -55,5 +56,14 @@ public class UsageBatchService implements IUsageBatchService {
         usageBatchRepository.insert(usageBatch);
         LOGGER.info("Insert usage batch. Finished. UsageBatchId={}, UserName={}", usageBatch.getId(), userName);
         return usageService.insertUsages(usages, userName);
+    }
+
+    @Transactional
+    @Override
+    public void deleteUsageBatch(String batchId, String userName) {
+        LOGGER.info("Delete usage batch. Started. BatchId={}, UserName={}", batchId, userName);
+        usageService.deleteUsageBatchDetails(batchId);
+        usageBatchRepository.deleteUsageBatch(batchId);
+        LOGGER.info("Delete usage batch. Finished. BatchId={}, UserName={}", batchId, userName);
     }
 }
