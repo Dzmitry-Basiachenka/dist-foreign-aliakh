@@ -17,7 +17,6 @@ import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.ObjectProperty;
-import com.vaadin.data.util.converter.StringToBigDecimalConverter;
 import com.vaadin.data.validator.AbstractStringValidator;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.shared.ui.MarginInfo;
@@ -229,8 +228,6 @@ class UsageBatchUploadWindow extends Window {
         grossAmountField = new TextField(ForeignUi.getMessage("label.gross_amount_usd"));
         setRequired(grossAmountField);
         grossAmountField.setNullRepresentation(StringUtils.EMPTY);
-        grossAmountField.setConverter(new StringToBigDecimalConverter());
-        grossAmountField.setConversionError(ForeignUi.getMessage("field.error.number_format"));
         grossAmountField.addValidator(new AmountValidator());
         VaadinUtils.setMaxComponentsWidth(grossAmountField);
         VaadinUtils.addComponentStyle(grossAmountField, "gross-amount-field");

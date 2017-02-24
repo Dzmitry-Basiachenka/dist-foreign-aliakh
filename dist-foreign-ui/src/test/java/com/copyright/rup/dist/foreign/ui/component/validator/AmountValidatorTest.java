@@ -1,42 +1,68 @@
 package com.copyright.rup.dist.foreign.ui.component.validator;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
-import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * Verifies {@link AmountValidator}.
  * <p/>
  * Copyright (C) 2017 copyright.com
  * <p/>
- * Date: 01/20/2017
+ * Date: 02/24/17
  *
- * @author Mikita Hladkikh
+ * @author Darya Baraukova
  */
+@RunWith(Parameterized.class)
 public class AmountValidatorTest {
 
-    private AmountValidator amountValidator;
+    private String amount;
+    private boolean expectedResult;
+    private AmountValidator validator = new AmountValidator();
 
-    @Before
-    public void setUp() {
-        amountValidator = new AmountValidator();
+    /**
+     * Constructor.
+     *
+     * @param amount         amount
+     * @param expectedResult expected test result
+     */
+    public AmountValidatorTest(String amount, boolean expectedResult) {
+        this.amount = amount;
+        this.expectedResult = expectedResult;
+    }
+
+    @Parameters
+    public static Collection<Object[]> data() {
+        return Arrays.asList(new Object[][]{
+            {"  125", true},
+            {"  125.2", true},
+            {"125.23  ", true},
+            {"152.44", true},
+            {"555.9", true},
+            {"84.44415", false},
+            {"33..5", false},
+            {"86.0.5", false},
+            {"amount", false},
+            {"-15.55", false},
+            {".55", false},
+            {"874.", false},
+            {" ", false},
+            {"15,687", false},
+            {"0", false},
+            {"0.0", false},
+            {"0.00", false},
+            {"+0.00", false}
+        });
     }
 
     @Test
-    public void testConstructor() {
-        assertEquals("Value field range should be from 0 to 9999999999.99", amountValidator.getErrorMessage());
-    }
-
-    @Test
-    public void testIsValid() {
-        assertTrue(amountValidator.isValid(BigDecimal.ZERO));
-        assertTrue(amountValidator.isValid(new BigDecimal("9999999999.99")));
-        assertFalse(amountValidator.isValid(new BigDecimal("-0.1")));
-        assertFalse(amountValidator.isValid(new BigDecimal("10000000000.00")));
+    public void testValidate() {
+        assertEquals(expectedResult, validator.isValid(amount));
     }
 }

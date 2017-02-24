@@ -24,6 +24,6 @@ public class NumberValidator extends AbstractStringValidator {
 
     @Override
     protected boolean isValidValue(String value) {
-        return StringUtils.isNumeric(value);
+        return StringUtils.isNumeric(StringUtils.trim(value));
     }
 }
