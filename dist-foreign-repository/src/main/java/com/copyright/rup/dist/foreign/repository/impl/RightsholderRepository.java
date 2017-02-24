@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.repository.api.IRightsholderRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Implementation of {@link IRightsholderRepository} for MyBatis.
@@ -30,6 +31,16 @@ public class RightsholderRepository extends BaseRepository implements IRightshol
     @Override
     public void insert(Rightsholder rightsholder) {
         insert("IRightsholderMapper.insert", checkNotNull(rightsholder));
+    }
+
+    @Override
+    public Set<Long> findRightsholdersAccountNumbers() {
+        return selectSet("IRightsholderMapper.findRightsholdersAccountNumbers");
+    }
+
+    @Override
+    public void deleteAll() {
+        delete("IRightsholderMapper.deleteAll");
     }
 
     /**

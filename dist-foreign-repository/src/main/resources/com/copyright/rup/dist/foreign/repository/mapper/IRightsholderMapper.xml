@@ -38,4 +38,22 @@
             <include refid="StoredEntityMapper.additionalColumns"/>
         from ${schema}.df_rightsholder
     </select>
+
+    <select id="findRightsholdersAccountNumbers" resultType="long">
+        select
+            distinct(ub.rro_account_number) as account_number
+        from ${schema}.df_usage_batch as ub
+        union
+        select
+            distinct(u.rh_account_number) as account_number
+        from ${schema}.df_usage as u
+        union
+        select
+            distinct(ua.rh_account_number) as account_number
+        from ${schema}.df_usage_archive as ua
+    </select>
+
+    <delete id="deleteAll">
+        delete from ${schema}.df_rightsholder
+    </delete>
 </mapper>

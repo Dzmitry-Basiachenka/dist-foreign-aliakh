@@ -19,4 +19,13 @@ public interface IRightsholderService {
      * @return list of all RROs presented in DB.
      */
     List<Rightsholder> getRros();
+
+    /**
+     * Updates infromation about rightsholders. Gets set of RRO and RH account numbers from usages, archived usages and
+     * usage batches tables, make call to PRM service to get infromation about rightsholders, remove all data
+     * from df_rightsholder table, and insert data from PRM to this table.
+     *
+     * @return count of updated records
+     */
+    int updateRightsholdersInformation();
 }
