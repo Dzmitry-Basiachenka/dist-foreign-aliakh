@@ -29,4 +29,12 @@ public interface IPrmIntegrationService {
      * @return the list of {@link Rightsholder}
      */
     List<Rightsholder> getRightsholders(Set<Long> accountNumbers);
+
+    /**
+     * Gets rightsholder name from PRM by account number.
+     *
+     * @param accountNumber rightsholder account number
+     * @return rightsholder name
+     */
+    String getRighstholderName(Long accountNumber);
 }

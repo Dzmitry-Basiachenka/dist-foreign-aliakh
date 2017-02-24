@@ -15,6 +15,7 @@ import com.copyright.rup.dist.foreign.integration.prm.api.IPrmRightsholderServic
 
 import com.google.common.collect.Sets;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -35,7 +36,8 @@ import java.util.UUID;
  */
 public class PrmIntegrationServiceTest {
 
-    private static final long ACCOUNT_NUMBER = 10L;
+    private static final long ACCOUNT_NUMBER = 1000001863L;
+    private static final String RIGHTSHOLDER_NAME = "CANADIAN CERAMIC SOCIETY";
     private static final String USD_CURRENCY_CODE = "USD";
     private static final String USD_CURRENCY_NAME = "USD Currency name";
     private IPrmRightsholderService prmRightsholderService;
@@ -54,7 +56,7 @@ public class PrmIntegrationServiceTest {
     @Test
     public void testGetRightsholders() {
         Set<Long> accountNumbers = Sets.newHashSet(ACCOUNT_NUMBER);
-        Rightsholder rightsholder = buildRightsholder(ACCOUNT_NUMBER);
+        Rightsholder rightsholder = buildRightsholder(ACCOUNT_NUMBER, RIGHTSHOLDER_NAME);
         expect(prmRightsholderService.getRightsholders(accountNumbers))
             .andReturn(Collections.singletonList(rightsholder)).once();
         replay(prmRightsholderService);
@@ -69,6 +71,24 @@ public class PrmIntegrationServiceTest {
     public void testGetRightsholdersForEmptySet() {
         replay(prmRightsholderService);
         assertTrue(prmIntegrationService.getRightsholders(Collections.emptySet()).isEmpty());
+        verify(prmRightsholderService);
+    }
+
+    @Test
+    public void testGetRightsholderName() {
+        expect(prmRightsholderService.getRightsholders(Sets.newHashSet(ACCOUNT_NUMBER)))
+            .andReturn(Collections.singletonList(buildRightsholder(ACCOUNT_NUMBER, RIGHTSHOLDER_NAME))).once();
+        replay(prmRightsholderService);
+        assertEquals(RIGHTSHOLDER_NAME, prmIntegrationService.getRighstholderName(ACCOUNT_NUMBER));
+        verify(prmRightsholderService);
+    }
+
+    @Test
+    public void testGetRightsholderNameNotPresentedInPrm() {
+        expect(prmRightsholderService.getRightsholders(Sets.newHashSet(ACCOUNT_NUMBER)))
+            .andReturn(Collections.emptyList()).once();
+        replay(prmRightsholderService);
+        assertEquals(StringUtils.EMPTY, prmIntegrationService.getRighstholderName(ACCOUNT_NUMBER));
         verify(prmRightsholderService);
     }
 
@@ -89,10 +109,11 @@ public class PrmIntegrationServiceTest {
         return currency;
     }
 
-    private Rightsholder buildRightsholder(Long accountNumber) {
+    private Rightsholder buildRightsholder(Long accountNumber, String name) {
         Rightsholder rightsholder = new Rightsholder();
         rightsholder.setId(UUID.randomUUID().toString());
         rightsholder.setAccountNumber(accountNumber);
+        rightsholder.setName(name);
         return rightsholder;
     }
 }

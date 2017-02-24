@@ -56,7 +56,7 @@ import java.util.Collections;
 @RunWith(PowerMockRunner.class)
 public class UsageBatchUploadWindowTest {
 
-    private static final String ACCOUNT_NUMBER = "1234567890";
+    private static final String ACCOUNT_NUMBER = "1000001863";
     private static final String EUR_CURRENCY_CODE = "EUR";
     private static final String EUR_CURRENCY_NAME = "European currency";
     private static final String USAGE_BATCH_NAME = "BatchName";
@@ -72,6 +72,8 @@ public class UsageBatchUploadWindowTest {
     @Test
     @PrepareForTest(Windows.class)
     public void testConstructor() {
+        expect(usagesController.getRroName(Long.valueOf(ACCOUNT_NUMBER)))
+            .andReturn("CANADIAN CERAMIC SOCIETY").once();
         replay(usagesController);
         window = new UsageBatchUploadWindow(usagesController);
         assertEquals("Upload Usage Batch", window.getCaption());
@@ -206,7 +208,7 @@ public class UsageBatchUploadWindowTest {
         assertEquals(StringUtils.EMPTY, nameField.getValue());
         numberField.setValue(ACCOUNT_NUMBER);
         verifyButton.click();
-        assertEquals(ACCOUNT_NUMBER, nameField.getValue());
+        assertEquals("CANADIAN CERAMIC SOCIETY", nameField.getValue());
     }
 
     private void verifyDateComponents(Component component) {

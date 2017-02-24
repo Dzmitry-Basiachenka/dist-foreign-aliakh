@@ -107,6 +107,11 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
+    public String getRroName(Long rroAccountNumber) {
+        return prmIntegrationService.getRighstholderName(rroAccountNumber);
+    }
+
+    @Override
     public boolean usageBatchExists(String name) {
         return usageBatchService.usageBatchExists(name);
     }
