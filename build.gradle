@@ -25,6 +25,8 @@ subprojects {
         configProperties.suppressionsFile = styleCheckConfigDir + 'checkstyle-suppressions.xml'
     }
     findbugs {
+        // fail build if exists a call private java 8 method reference
+        toolVersion = '3.0.1'
         // fail build if findbugs exceptions found
         ignoreFailures = false
         // Higher levels increase precision and find more bugs
