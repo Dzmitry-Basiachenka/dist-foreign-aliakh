@@ -3,7 +3,6 @@ package com.copyright.rup.dist.foreign.ui.usage.impl;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
@@ -22,8 +21,6 @@ import com.copyright.rup.vaadin.ui.Windows;
 
 import com.google.common.collect.Lists;
 import com.vaadin.data.Validator;
-import com.vaadin.data.util.converter.Converter;
-import com.vaadin.data.util.converter.StringToBigDecimalConverter;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Button;
@@ -235,10 +232,6 @@ public class UsageBatchUploadWindowTest {
         assertEquals(Unit.PERCENTAGE, grossAmountField.getWidthUnits());
         verifyRequiredField(grossAmountField);
         assertEquals(StringUtils.EMPTY, grossAmountField.getNullRepresentation());
-        Converter<String, Object> converter = grossAmountField.getConverter();
-        assertNotNull(converter);
-        assertEquals(StringToBigDecimalConverter.class, converter.getClass());
-        assertEquals("Field value should contain numeric values only", grossAmountField.getConversionError());
         Collection<Validator> validators = grossAmountField.getValidators();
         assertTrue(CollectionUtils.isNotEmpty(validators));
         assertEquals(1, validators.size());

@@ -1,25 +1,34 @@
 package com.copyright.rup.dist.foreign.ui.component.validator;
 
-import com.vaadin.data.validator.BigDecimalRangeValidator;
+import com.vaadin.data.validator.AbstractStringValidator;
 
-import java.math.BigDecimal;
+import org.apache.commons.lang3.StringUtils;
 
 /**
- * Validator for validating that given value is in range from 0 to 9999999999,99.
+ * Validator for amounts. Checks that amount is greater than 0 and contain up to 2 decimals.
  * <p/>
  * Copyright (C) 2017 copyright.com
  * <p/>
- * Date: 01/19/2017
+ * Date: 02/24/17
  *
- * @author Mikita Hladkikh
+ * @author Darya Baraukova
  */
-public class AmountValidator extends BigDecimalRangeValidator {
+public class AmountValidator extends AbstractStringValidator {
 
     /**
-     * Constructs validator.
+     * Regular expression to validate that value is greater than zero allowing 2 decimal places.
+     */
+    private static final String AMOUNT_REGEX = "^((0\\.((0[1-9])|([1-9][0-9]?)))|([1-9][0-9]*)\\.?[0-9]{1,2})$";
+
+    /**
+     * Constructs a validator for amounts.
      */
     public AmountValidator() {
-        super("Value field range should be from 0 to 9999999999.99",
-            BigDecimal.ZERO, BigDecimal.valueOf(Math.pow(10, 10)).subtract(new BigDecimal("0.01")));
+        super("Field should be greater than 0 and contain up to 2 decimals");
+    }
+
+    @Override
+    protected boolean isValidValue(String value) {
+        return StringUtils.trimToEmpty(value).matches(AMOUNT_REGEX);
     }
 }
