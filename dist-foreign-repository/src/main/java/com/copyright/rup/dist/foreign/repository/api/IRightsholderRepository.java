@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.repository.api;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Represents interface of repository for rightsholders.
@@ -27,4 +28,16 @@ public interface IRightsholderRepository {
      * @param rightsholder instance of {@link Rightsholder}
      */
     void insert(Rightsholder rightsholder);
+
+    /**
+     * Finds set of RRO and RH account numbers from usages, archived usages and usage batches tables.
+     *
+     * @return set of account numbers
+     */
+    Set<Long> findRightsholdersAccountNumbers();
+
+    /**
+     * Removes all rightsholders from df_rightsholder table.
+     */
+    void deleteAll();
 }

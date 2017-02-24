@@ -125,13 +125,13 @@ databaseChangeLog {
         }
 
         rollback {
+            delete(schemaName: dbAppsSchema, tableName: 'df_usage') {
+                where "df_usage_uid in ('111111111', '222222222', '333333333', '444444444')"
+            }
+
             delete(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
                 where "df_usage_batch_uid in ('56282dbc-2468-48d4-b926-93d3458a656a', " +
                         "'56282dbc-2468-48d4-b926-94d3458a666a', '56782dbc-2158-48d4-b026-94d3458a666a')"
-            }
-
-            delete(schemaName: dbAppsSchema, tableName: 'df_usage') {
-                where "df_usage_uid in ('111111111', '222222222', '333333333', '444444444')"
             }
         }
     }

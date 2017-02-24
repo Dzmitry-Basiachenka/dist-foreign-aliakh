@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 
@@ -16,6 +17,7 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link RightsholderRepository}.
@@ -35,6 +37,15 @@ import java.util.List;
 public class RightsholderRepositoryIntegrationTest {
 
     private static final Long RH_ACCOUNT_NUMBER = 12345678L;
+    private static final Long RH_ACCOUNT_NUMBER_7000813806 = 7000813806L;
+    private static final Long RH_ACCOUNT_NUMBER_2000017004 = 2000017004L;
+    private static final Long RH_ACCOUNT_NUMBER_7001440663 = 7001440663L;
+    private static final Long RH_ACCOUNT_NUMBER_1000009997 = 1000009997L;
+    private static final Long RH_ACCOUNT_NUMBER_1000002859 = 1000002859L;
+    private static final Long RH_ACCOUNT_NUMBER_1000008666 = 1000008666L;
+    private static final Long RH_ACCOUNT_NUMBER_1000005413 = 1000005413L;
+    private static final Long RH_ACCOUNT_NUMBER_1000159997 = 1000159997L;
+    private static final Long RH_ACCOUNT_NUMBER_7000800832 = 7000800832L;
     private static final String RH_ACCOUNT_NAME = "Rh Account Name";
     
     @Autowired
@@ -47,6 +58,32 @@ public class RightsholderRepositoryIntegrationTest {
         List<Rightsholder> rightsholders = rightsholderRepository.findAll();
         assertEquals(1, rightsholders.size());
         assertEquals(rightsholder, rightsholders.get(0));
+    }
+
+    @Test
+    public void testFindRightsholdersAccountNumbers() {
+        Set<Long> accountNumbers = rightsholderRepository.findRightsholdersAccountNumbers();
+        assertEquals(9, accountNumbers.size());
+        assertTrue(accountNumbers.contains(RH_ACCOUNT_NUMBER_7000813806));
+        assertTrue(accountNumbers.contains(RH_ACCOUNT_NUMBER_2000017004));
+        assertTrue(accountNumbers.contains(RH_ACCOUNT_NUMBER_7001440663));
+        assertTrue(accountNumbers.contains(RH_ACCOUNT_NUMBER_1000009997));
+        assertTrue(accountNumbers.contains(RH_ACCOUNT_NUMBER_1000002859));
+        assertTrue(accountNumbers.contains(RH_ACCOUNT_NUMBER_1000008666));
+        assertTrue(accountNumbers.contains(RH_ACCOUNT_NUMBER_1000005413));
+        assertTrue(accountNumbers.contains(RH_ACCOUNT_NUMBER_1000159997));
+        assertTrue(accountNumbers.contains(RH_ACCOUNT_NUMBER_7000800832));
+    }
+
+    @Test
+    public void testDeleteAll() {
+        Rightsholder rightsholder = buildRightsholder();
+        rightsholderRepository.insert(rightsholder);
+        List<Rightsholder> rightsholders = rightsholderRepository.findAll();
+        assertEquals(1, rightsholders.size());
+        rightsholderRepository.deleteAll();
+        rightsholders = rightsholderRepository.findAll();
+        assertEquals(0, rightsholders.size());
     }
 
     private Rightsholder buildRightsholder() {

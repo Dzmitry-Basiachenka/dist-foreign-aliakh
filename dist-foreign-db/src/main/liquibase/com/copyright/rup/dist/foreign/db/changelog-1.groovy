@@ -304,4 +304,28 @@ databaseChangeLog {
             // automatic rollback
         }
     }
+
+    changeSet(id: '2017-02-24-00', author: 'Mikalai_Bezmen mbezmen@copyright.com') {
+        comment('B-29460 Integrate with PRM to get RH and RRO names: add foreign key for df_usage_archive table, ' +
+                'change datatype of detail_id column in df_usage_archived')
+
+        modifyDataType(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'detail_id', newDataType: 'numeric(15,0)')
+
+        addForeignKeyConstraint(constraintName: 'fk_df_usage_archive_2_df_usage_batch',
+                baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_usage_archive',
+                baseColumnNames: 'df_usage_batch_uid',
+                referencedTableName: 'df_usage_batch',
+                referencedColumnNames: 'df_usage_batch_uid')
+
+        rollback {
+            modifyDataType(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'detail_id', newDataType: 'INTEGER')
+
+            dropForeignKeyConstraint(
+                    baseTableSchemaName: dbAppsSchema,
+                    baseTableName: 'df_usage_archive',
+                    constraintName: 'fk_df_usage_archive_2_df_usage_batch')
+        }
+    }
 }

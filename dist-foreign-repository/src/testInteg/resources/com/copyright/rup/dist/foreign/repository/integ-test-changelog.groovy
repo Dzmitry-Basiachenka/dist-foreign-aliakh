@@ -125,13 +125,60 @@ databaseChangeLog {
         }
 
         rollback {
+            delete(schemaName: dbAppsSchema, tableName: 'df_usage') {
+                where "df_usage_uid in ('111111111', '222222222', '333333333', '444444444')"
+            }
+
             delete(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
                 where "df_usage_batch_uid in ('56282dbc-2468-48d4-b926-93d3458a656a', " +
                         "'56282dbc-2468-48d4-b926-94d3458a666a', '56782dbc-2158-48d4-b026-94d3458a666a')"
             }
+        }
+    }
 
-            delete(schemaName: dbAppsSchema, tableName: 'df_usage') {
-                where "df_usage_uid in ('111111111', '222222222', '333333333', '444444444')"
+    changeSet(id: '2017-02-24-00', author: 'Mikalai_Bezmen mbezmen@copyright.com') {
+        comment('Inserting Usage Batch with Usages for repository integration tests')
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: '56282cac-2468-48d4-b346-93d3458a656a')
+            column(name: 'name', value: 'WOW_22Nov87')
+            column(name: 'rro_account_number', value: '7000800832')
+            column(name: 'payment_date', value: '2017-01-11')
+            column(name: 'fiscal_year', value: '2017')
+            column(name: 'gross_amount', value: '30000')
+            column(name: 'currency_ind', value: 'EUR')
+            column(name: 'conversion_rate', value: '0.926484011')
+            column(name: 'applied_conversion_rate', value: '4.38461958')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+            column(name: 'df_usage_archive_uid', value: '55555555')
+            column(name: 'df_usage_batch_uid', value: '56282cac-2468-48d4-b346-93d3458a656a')
+            column(name: 'detail_id', value: '6997788338')
+            column(name: 'wr_wrk_inst', value: '180382915')
+            column(name: 'work_title', value: 'High Performance Switching and Routing')
+            column(name: 'rh_account_number', value: '1000159997')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+            column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water')
+            column(name: 'standard_number', value: '1008902992377654XX')
+            column(name: 'publisher', value: 'IEEE 015')
+            column(name: 'publication_date', value: '2014-09-11')
+            column(name: 'market', value: 'Play Market')
+            column(name: 'market_period_from', value: '2014')
+            column(name: 'market_period_to', value: '2018')
+            column(name: 'author', value: 'Mikalai Bezmen')
+            column(name: 'number_of_copies', value: '190222')
+            column(name: 'original_amount', value: '2300')
+            column(name: 'gross_amount', value: '15514.18')
+        }
+
+        rollback {
+            delete(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+                where "df_usage_archive_uid = '55555555'"
+            }
+
+            delete(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+                where "df_usage_batch_uid = '56282cac-2468-48d4-b346-93d3458a656a'"
             }
         }
     }
