@@ -31,7 +31,7 @@ databaseChangeLog {
         //Permission to load usage
         insert(schemaName: dbCommonSchema, tableName: 'cm_permission') {
             column(name: 'cm_permission_uid', value: 'baseline-fda-load-usage')
-            column(name: 'permission_name', value: 'LOAD_USAGE')
+            column(name: 'permission_name', value: 'FDA_LOAD_USAGE')
             column(name: 'permission_descr', value: 'Permission to load usage')
             column(name: 'cm_application_area_uid', value: 'FDA')
             column(name: 'cm_permission_type_uid', value: 'ACTION')
@@ -44,7 +44,7 @@ databaseChangeLog {
         //Permission to delete usage
         insert(schemaName: dbCommonSchema, tableName: 'cm_permission') {
             column(name: 'cm_permission_uid', value: 'baseline-fda-delete-usage')
-            column(name: 'permission_name', value: 'DELETE_USAGE')
+            column(name: 'permission_name', value: 'FDA_DELETE_USAGE')
             column(name: 'permission_descr', value: 'Permission to delete usage')
             column(name: 'cm_application_area_uid', value: 'FDA')
             column(name: 'cm_permission_type_uid', value: 'ACTION')
