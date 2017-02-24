@@ -61,4 +61,9 @@ public class UsageService implements IUsageService {
         LOGGER.info("Insert usages. Finished. Usages={}, UserName={}", size, userName);
         return size;
     }
+
+    @Override
+    public void deleteUsageBatchDetails(String batchId) {
+        usageRepository.deleteUsageBatchDetails(batchId);
+    }
 }

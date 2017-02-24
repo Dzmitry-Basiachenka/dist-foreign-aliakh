@@ -20,6 +20,7 @@ import java.util.List;
  * Date: 02/02/2017
  *
  * @author Mikalai Bezmen
+ * @author Aliaksandr Radkevich
  */
 @Repository
 public class UsageBatchRepository extends BaseRepository implements IUsageBatchRepository {
@@ -54,5 +55,11 @@ public class UsageBatchRepository extends BaseRepository implements IUsageBatchR
     UsageBatch findUsageBatchByName(String name) {
         checkArgument(StringUtils.isNotBlank(name));
         return selectOne("IUsageBatchMapper.findUsageBatchByName", name);
+    }
+
+    @Override
+    public void deleteUsageBatch(String batchId) {
+        checkArgument(StringUtils.isNotBlank(batchId));
+        delete("IUsageBatchMapper.deleteUsageBatch", batchId);
     }
 }

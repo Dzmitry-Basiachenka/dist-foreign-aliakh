@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
-import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.createStrictMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
@@ -10,6 +10,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
@@ -32,6 +33,7 @@ import java.util.List;
  * Date: 02/03/2017
  *
  * @author Mikalai Bezmen
+ * @author Aliaksandr Radkevich
  */
 public class UsageBatchServiceTest {
 
@@ -45,8 +47,8 @@ public class UsageBatchServiceTest {
 
     @Before
     public void setUp() {
-        usageBatchRepository = createMock(IUsageBatchRepository.class);
-        usageService = createMock(IUsageService.class);
+        usageBatchRepository = createStrictMock(IUsageBatchRepository.class);
+        usageService = createStrictMock(IUsageService.class);
         usageBatchService = new UsageBatchService();
         Whitebox.setInternalState(usageBatchService, "usageBatchRepository", usageBatchRepository);
         Whitebox.setInternalState(usageBatchService, "usageService", usageService);
@@ -98,5 +100,17 @@ public class UsageBatchServiceTest {
         replay(usageBatchRepository, usageService);
         assertEquals(2, usageBatchService.insertUsages(usageBatch, usages, USER_NAME));
         verify(usageBatchRepository, usageService);
+    }
+
+    @Test
+    public void testDeleteUsageBatch() {
+        String batchId = RupPersistUtils.generateUuid();
+        usageService.deleteUsageBatchDetails(batchId);
+        expectLastCall().once();
+        usageBatchRepository.deleteUsageBatch(batchId);
+        expectLastCall().once();
+        replay(usageService, usageBatchRepository);
+        usageBatchService.deleteUsageBatch(batchId, USER_NAME);
+        verify(usageService, usageBatchRepository);
     }
 }

@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
@@ -14,6 +15,7 @@ import com.copyright.rup.dist.foreign.repository.api.Sort;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
@@ -29,6 +31,7 @@ import java.util.Map;
  * Date: 02/02/17
  *
  * @author Darya Baraukova
+ * @author Aliaksandr Radkevich
  */
 @Repository
 public class UsageRepository extends BaseRepository implements IUsageRepository {
@@ -79,5 +82,11 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
      */
     Usage findUsageByDetailId(Long detailId) {
         return selectOne("IUsageMapper.findUsageByDetailId", checkNotNull(detailId));
+    }
+
+    @Override
+    public void deleteUsageBatchDetails(String batchId) {
+        checkArgument(StringUtils.isNotBlank(batchId));
+        delete("IUsageMapper.deleteUsageBatchDetails", batchId);
     }
 }

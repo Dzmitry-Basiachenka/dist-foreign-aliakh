@@ -13,6 +13,7 @@ import java.util.List;
  * Date: 02/03/2017
  *
  * @author Mikalai Bezmen
+ * @author Aliaksandr Radkevich
  */
 public interface IUsageBatchService {
 
@@ -43,4 +44,12 @@ public interface IUsageBatchService {
      * @return count of inserted usages
      */
     int insertUsages(UsageBatch usageBatch, List<Usage> usages, String userName);
+
+    /**
+     * Deletes {@link UsageBatch} with given id and all it's usage details.
+     *
+     * @param batchId  {@link UsageBatch} id
+     * @param userName user name
+     */
+    void deleteUsageBatch(String batchId, String userName);
 }

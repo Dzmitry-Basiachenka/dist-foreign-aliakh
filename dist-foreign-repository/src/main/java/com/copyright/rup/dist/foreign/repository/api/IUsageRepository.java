@@ -15,6 +15,7 @@ import java.util.List;
  * Date: 02/02/17
  *
  * @author Darya Baraukova
+ * @author Aliaksandr Radkevich
  */
 public interface IUsageRepository {
 
@@ -50,4 +51,11 @@ public interface IUsageRepository {
      * @param outputStream instance of {@link OutputStream}
      */
     void writeUsagesCsvReport(UsageFilter filter, OutputStream outputStream);
+
+    /**
+     * Deletes all {@link Usage}s from the batch with given id.
+     *
+     * @param batchId usage batch id
+     */
+    void deleteUsageBatchDetails(String batchId);
 }

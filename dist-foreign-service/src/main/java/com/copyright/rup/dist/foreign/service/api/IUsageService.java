@@ -54,4 +54,11 @@ public interface IUsageService {
      * @return count of inserted usages
      */
     int insertUsages(List<Usage> usages, String userName);
+
+    /**
+     * Deletes all {@link Usage}s associated with the batch with given id.
+     *
+     * @param batchId usage batch id
+     */
+    void deleteUsageBatchDetails(String batchId);
 }

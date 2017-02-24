@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,6 +31,7 @@ import java.util.UUID;
  * Date: 02/03/2017
  *
  * @author Mikalai Bezmen
+ * @author Aliaksandr Radkevich
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
@@ -47,10 +49,12 @@ public class UsageBatchRepositoryIntegrationTest {
     private static final Long RRO_ACCOUNT_NUMBER = 123456789L;
     private static final BigDecimal GROSS_AMOUNT = new BigDecimal("23.53");
     private static final BigDecimal APPLIED_CONVERSION_RATE = new BigDecimal("1.2500000000");
-    private static final LocalDate PAYMENT_DATE = LocalDate.of(2017,2,23);
+    private static final LocalDate PAYMENT_DATE = LocalDate.of(2017, 2, 23);
 
     @Autowired
     private UsageBatchRepository usageBatchRepository;
+    @Autowired
+    private IUsageRepository usageRepository;
 
     @Test
     public void testFindFiscalYears() {
@@ -80,6 +84,15 @@ public class UsageBatchRepositoryIntegrationTest {
         assertEquals(CURRENCY, usageBatch.getCurrency());
         assertEquals(GROSS_AMOUNT, usageBatch.getGrossAmount());
         assertEquals(APPLIED_CONVERSION_RATE, usageBatch.getAppliedConversionRate());
+    }
+
+    @Test
+    public void testDeleteUsageBatch() {
+        String batchId = "56282dbc-2468-48d4-b926-93d3458a656a";
+        assertEquals(3, usageBatchRepository.findUsageBatches().size());
+        usageRepository.deleteUsageBatchDetails(batchId);
+        usageBatchRepository.deleteUsageBatch(batchId);
+        assertEquals(2, usageBatchRepository.findUsageBatches().size());
     }
 
     private UsageBatch buildUsageBatch() {

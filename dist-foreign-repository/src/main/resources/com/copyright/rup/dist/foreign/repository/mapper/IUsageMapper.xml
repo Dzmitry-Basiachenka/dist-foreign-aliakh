@@ -259,4 +259,9 @@
         from ${schema}.df_usage
         where detail_id = #{detailId}
     </select>
+
+    <delete id="deleteUsageBatchDetails" parameterType="String">
+        delete from ${schema}.df_usage
+        where df_usage_batch_uid = #{batchId}
+    </delete>
 </mapper>
