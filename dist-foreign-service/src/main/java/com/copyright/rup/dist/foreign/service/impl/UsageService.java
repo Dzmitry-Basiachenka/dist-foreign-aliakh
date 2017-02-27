@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
+import com.copyright.rup.dist.foreign.domain.common.util.CalculationUtils;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
@@ -31,6 +33,8 @@ import java.util.List;
 public class UsageService implements IUsageService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
+    private static final String CALCULATION_FINISHED_LOG_MESSAGE = "Calculated usages gross amount. " +
+        "UsageBatchName={}, FundPoolAmount={}, TotalAmount={}, ConversionRate={}";
 
     @Autowired
     private IUsageRepository usageRepository;
@@ -55,19 +59,32 @@ public class UsageService implements IUsageService {
     @Override
     public int insertUsages(UsageBatch usageBatch, List<Usage> usages, String userName) {
         int size = usages.size();
-        LOGGER.info("Insert usages. Started. Usages={}, UserName={}", size, userName);
+        LOGGER.info("Insert usages. Started. UsageBatchName={}, UsagesCount={}, UserName={}", usageBatch.getName(),
+            size, userName);
+        calculateUsagesGrossAmount(usageBatch, usages);
         usages.forEach(usage -> {
             usage.setBatchId(usageBatch.getId());
             usage.setCreateUser(userName);
             usage.setUpdateUser(userName);
             usageRepository.insertUsage(usage);
         });
-        LOGGER.info("Insert usages. Finished. Usages={}, UserName={}", size, userName);
+        LOGGER.info("Insert usages. Finished. UsageBatchName={}, UsagesCount={}, UserName={}", usageBatch.getName(),
+            size, userName);
         return size;
     }
 
     @Override
     public void deleteUsageBatchDetails(String batchId) {
         usageRepository.deleteUsageBatchDetails(batchId);
+    }
+
+    private void calculateUsagesGrossAmount(UsageBatch usageBatch, List<Usage> usages) {
+        BigDecimal fundPoolAmount = usageBatch.getGrossAmount();
+        BigDecimal totalAmount = usages.stream().map(Usage::getOriginalAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal conversionRate = CalculationUtils.calculateConversionRate(fundPoolAmount, totalAmount);
+        usages.forEach(usage -> usage.setGrossAmount(
+            CalculationUtils.calculateUsdAmount(usage.getOriginalAmount(), conversionRate)));
+        LOGGER.info(CALCULATION_FINISHED_LOG_MESSAGE, usageBatch.getName(), usageBatch.getGrossAmount(), totalAmount,
+            conversionRate);
     }
 }

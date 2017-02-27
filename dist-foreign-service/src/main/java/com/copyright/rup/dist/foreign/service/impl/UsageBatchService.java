@@ -56,18 +56,18 @@ public class UsageBatchService implements IUsageBatchService {
         usageBatch.setId(UUID.randomUUID().toString());
         usageBatch.setCreateUser(userName);
         usageBatch.setUpdateUser(userName);
-        LOGGER.info("Insert usage batch. Started. UsageBatchId={}, UserName={}", usageBatch.getId(), userName);
+        LOGGER.info("Insert usage batch. Started. UsageBatchBatch={}, UserName={}", usageBatch.getName(), userName);
         usageBatchRepository.insert(usageBatch);
-        LOGGER.info("Insert usage batch. Finished. UsageBatchId={}, UserName={}", usageBatch.getId(), userName);
+        LOGGER.info("Insert usage batch. Finished. UsageBatchBatch={}, UserName={}", usageBatch.getName(), userName);
         return usageService.insertUsages(usageBatch, usages, userName);
     }
 
     @Transactional
     @Override
     public void deleteUsageBatch(String batchId, String userName) {
-        LOGGER.info("Delete usage batch. Started. BatchId={}, UserName={}", batchId, userName);
+        LOGGER.info("Delete usage batch. Started. UsageBatchId={}, UserName={}", batchId, userName);
         usageService.deleteUsageBatchDetails(batchId);
         usageBatchRepository.deleteUsageBatch(batchId);
-        LOGGER.info("Delete usage batch. Finished. BatchId={}, UserName={}", batchId, userName);
+        LOGGER.info("Delete usage batch. Finished. UsageBatchId={}, UserName={}", batchId, userName);
     }
 }
