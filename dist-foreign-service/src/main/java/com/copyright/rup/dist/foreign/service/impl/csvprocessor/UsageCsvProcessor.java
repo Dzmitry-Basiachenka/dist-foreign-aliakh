@@ -19,20 +19,6 @@ import java.util.List;
  */
 public class UsageCsvProcessor extends CommonCsvProcessor<Usage> {
 
-    private String batchId;
-    private String userName;
-
-    /**
-     * Constructor.
-     *
-     * @param batchId  batch id
-     * @param userName user name
-     */
-    public UsageCsvProcessor(String batchId, String userName) {
-        this.batchId = batchId;
-        this.userName = userName;
-    }
-
     @Override
     protected List<ICsvColumn> getHeaders() {
         return Arrays.asList(Header.values());
@@ -42,7 +28,6 @@ public class UsageCsvProcessor extends CommonCsvProcessor<Usage> {
     protected Usage deserialize(List<String> params) {
         Usage result = new Usage();
         result.setId(RupPersistUtils.generateUuid());
-        result.setBatchId(batchId);
         result.setDetailId(getLong(Header.DETAIL_ID, params));
         result.setWorkTitle(getString(Header.TITLE, params));
         result.setArticle(getString(Header.ARTICLE, params));
@@ -60,8 +45,6 @@ public class UsageCsvProcessor extends CommonCsvProcessor<Usage> {
         result.setMarketPeriodTo(getInteger(Header.MARKET_PERIOD_TO, params));
         result.setAuthor(getString(Header.AUTHOR, params));
         result.setStatus(UsageStatusEnum.ELIGIBLE);
-        result.setCreateUser(userName);
-        result.setUpdateUser(userName);
         return result;
     }
 

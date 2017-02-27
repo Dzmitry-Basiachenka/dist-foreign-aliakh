@@ -96,7 +96,7 @@ public class UsageBatchServiceTest {
         List<Usage> usages = Lists.newArrayList(new Usage(), new Usage());
         usageBatchRepository.insert(usageBatch);
         expectLastCall().once();
-        expect(usageService.insertUsages(usages, USER_NAME)).andReturn(2).once();
+        expect(usageService.insertUsages(usageBatch, usages, USER_NAME)).andReturn(2).once();
         replay(usageBatchRepository, usageService);
         assertEquals(2, usageBatchService.insertUsages(usageBatch, usages, USER_NAME));
         verify(usageBatchRepository, usageService);

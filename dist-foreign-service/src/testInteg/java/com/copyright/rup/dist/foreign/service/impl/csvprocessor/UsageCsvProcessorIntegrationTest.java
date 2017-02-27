@@ -28,14 +28,11 @@ import java.time.LocalDate;
  */
 public class UsageCsvProcessorIntegrationTest {
 
-    private static final String USER_NAME = "USER";
-    private static final String BATCH_ID = "batchId";
-
     private UsageCsvProcessor processor;
 
     @Before
     public void setUp() {
-        processor = new UsageCsvProcessor(BATCH_ID, USER_NAME);
+        processor = new UsageCsvProcessor();
     }
 
     @Test
@@ -50,7 +47,6 @@ public class UsageCsvProcessorIntegrationTest {
     private void verifyUsage(Usage usage) {
         assertNotNull(usage);
         assertNotNull(usage.getId());
-        assertEquals(BATCH_ID, usage.getBatchId());
         assertEquals(Long.valueOf(234), usage.getDetailId());
         assertEquals("1984", usage.getWorkTitle());
         assertEquals("Appendix: The Principles of Newspeak", usage.getArticle());
@@ -66,15 +62,12 @@ public class UsageCsvProcessorIntegrationTest {
         assertEquals(Integer.valueOf(2016), usage.getMarketPeriodTo());
         assertEquals(UsageStatusEnum.ELIGIBLE, usage.getStatus());
         assertEquals("Aarseth, Espen J.", usage.getAuthor());
-        assertEquals(USER_NAME, usage.getCreateUser());
-        assertEquals(USER_NAME, usage.getUpdateUser());
         assertEquals(BigDecimal.ZERO, usage.getGrossAmount());
     }
 
     private void verifyUsageWithEmptyFields(Usage usage) {
         assertNotNull(usage);
         assertNotNull(usage.getId());
-        assertEquals(BATCH_ID, usage.getBatchId());
         assertEquals(Long.valueOf(235), usage.getDetailId());
         assertEquals("1984", usage.getWorkTitle());
         assertEquals(null, usage.getArticle());
@@ -90,8 +83,6 @@ public class UsageCsvProcessorIntegrationTest {
         assertEquals(Integer.valueOf(2016), usage.getMarketPeriodTo());
         assertEquals(UsageStatusEnum.ELIGIBLE, usage.getStatus());
         assertEquals(null, usage.getAuthor());
-        assertEquals(USER_NAME, usage.getCreateUser());
-        assertEquals(USER_NAME, usage.getUpdateUser());
         assertEquals(BigDecimal.ZERO, usage.getGrossAmount());
     }
 

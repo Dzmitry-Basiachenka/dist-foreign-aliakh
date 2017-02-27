@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.api;
 
 import com.copyright.rup.dist.common.domain.Currency;
+import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
@@ -85,4 +86,14 @@ public interface IUsagesController extends IController<IUsagesWidget>, IBeanLoad
      * @return a list of scenarios names
      */
     List<String> getScenariosNamesAssociatedWithUsageBatch(String batchId);
+
+    /**
+     * Inserts usage batch and it's usages.
+     *
+     * @param usageBatch {@link UsageBatch} instance
+     * @param usages     list of {@link Usage}s
+     * @param userName   user name
+     * @return count of inserted usages
+     */
+    int loadUsageBatch(UsageBatch usageBatch, List<Usage> usages, String userName);
 }

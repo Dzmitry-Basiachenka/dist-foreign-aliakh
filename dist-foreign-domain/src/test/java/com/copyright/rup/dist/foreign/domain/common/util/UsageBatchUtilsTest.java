@@ -48,4 +48,9 @@ public class UsageBatchUtilsTest {
         assertEquals(FY_2018, UsageBatchUtils.getFiscalYear(LocalDate.of(2017, 12, 31)));
         assertEquals(FY_2018, UsageBatchUtils.getFiscalYear(2018));
     }
+
+    @Test
+    public void testCalculateFiscalYear() {
+        assertEquals(2017, UsageBatchUtils.calculateFiscalYear(LocalDate.of(2017, 1, 1)));
+    }
 }

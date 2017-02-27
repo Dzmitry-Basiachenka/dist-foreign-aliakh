@@ -1,13 +1,20 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
+import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.common.domain.Currency;
+import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
+import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingResult;
+import com.copyright.rup.dist.foreign.service.impl.csvprocessor.UsageCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.component.CsvUploadComponent;
 import com.copyright.rup.dist.foreign.ui.component.LocalDateWidget;
 import com.copyright.rup.dist.foreign.ui.component.validator.AmountValidator;
 import com.copyright.rup.dist.foreign.ui.component.validator.NumberValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
+import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.VaadinUtils;
 import com.copyright.rup.vaadin.ui.Windows;
@@ -32,6 +39,8 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 import org.apache.commons.lang3.StringUtils;
+
+import java.math.BigDecimal;
 
 /**
  * Window for uploading a usage batch with usages.
@@ -76,8 +85,20 @@ class UsageBatchUploadWindow extends Window {
      */
     void onUploadClicked() {
         if (isValid()) {
-            // TODO {mhladkikh} implement logic
-            Windows.showNotificationWindow("Uploading is started");
+            try {
+                UsageCsvProcessor processor = new UsageCsvProcessor();
+                CsvProcessingResult<Usage> processingResult =
+                    processor.process(csvUploadComponent.getStreamToUploadedFile());
+                if (processingResult.isSuccessful()) {
+                    int usagesCount = usagesController.loadUsageBatch(buildUsageBatch(), processingResult.getResult(),
+                        SecurityUtils.getUserName());
+                    close();
+                    Windows.showNotificationWindow(
+                        String.format(ForeignUi.getMessage("message.upload_completed"), usagesCount));
+                }
+            } catch (RupRuntimeException e) {
+                Windows.showNotificationWindow(e.getMessage());
+            }
         } else {
             // TODO {mhladkikh} use csvUploadComponent, but not it's internal state for error window
             Windows.showValidationErrorWindow(
@@ -98,6 +119,18 @@ class UsageBatchUploadWindow extends Window {
             && paymentDateWidget.isValid()
             && grossAmountField.isValid()
             && reportedCurrencyBox.isValid();
+    }
+
+    private UsageBatch buildUsageBatch() {
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatch.setName(StringUtils.trim(usageBatchNameField.getValue()));
+        Rightsholder rro = new Rightsholder();
+        rro.setAccountNumber(Long.valueOf(StringUtils.trim(accountNumberField.getValue())));
+        usageBatch.setRro(rro);
+        usageBatch.setPaymentDate(paymentDateWidget.getValue());
+        usageBatch.setFiscalYear(UsageBatchUtils.calculateFiscalYear(paymentDateWidget.getValue()));
+        usageBatch.setGrossAmount(new BigDecimal(StringUtils.trim(grossAmountField.getValue())));
+        return usageBatch;
     }
 
     private ComponentContainer initRootLayout() {

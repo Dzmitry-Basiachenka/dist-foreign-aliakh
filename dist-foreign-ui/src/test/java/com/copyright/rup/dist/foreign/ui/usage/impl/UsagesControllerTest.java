@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.isNull;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -15,6 +16,8 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
@@ -27,6 +30,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesWidget;
 import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
+import com.google.common.collect.Lists;
 import com.vaadin.ui.HorizontalLayout;
 
 import org.easymock.Capture;
@@ -68,6 +72,7 @@ public class UsagesControllerTest {
         usageBatchService = createMock(IUsageBatchService.class);
         filterController = createMock(IUsagesFilterController.class);
         usagesWidget = createMock(IUsagesWidget.class);
+        Whitebox.setInternalState(controller, "usageBatchService", usageBatchService);
         Whitebox.setInternalState(controller, "usageService", usageService);
         Whitebox.setInternalState(controller, "usageBatchService", usageBatchService);
         Whitebox.setInternalState(controller, IWidget.class, usagesWidget);
@@ -167,6 +172,30 @@ public class UsagesControllerTest {
         replay(usageBatchService);
         controller.getUsageBatches();
         verify(usageBatchService);
+    }
+
+    @Test
+    @PrepareForTest(SecurityUtils.class)
+    public void testUsageBatchExists() {
+        expect(usageBatchService.usageBatchExists("Usage Batch Name")).andReturn(false).once();
+        replay(usageBatchService);
+        assertFalse(controller.usageBatchExists("Usage Batch Name"));
+        verify(usageBatchService);
+    }
+
+    @Test
+    public void testLoadUsageBatch() {
+        IUsagesFilterWidget filterWidgetMock = createMock(IUsagesFilterWidget.class);
+        UsageBatch usageBatch = new UsageBatch();
+        List<Usage> usages = Lists.newArrayList(new Usage());
+        String userName = "User Name";
+        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
+        filterWidgetMock.clearFilter();
+        expectLastCall().once();
+        expect(usageBatchService.insertUsages(usageBatch, usages, userName)).andReturn(1).once();
+        replay(usageBatchService, filterController, filterWidgetMock);
+        assertEquals(1, controller.loadUsageBatch(usageBatch, usages, userName));
+        verify(usageBatchService, filterController, filterWidgetMock);
     }
 
     @Test
