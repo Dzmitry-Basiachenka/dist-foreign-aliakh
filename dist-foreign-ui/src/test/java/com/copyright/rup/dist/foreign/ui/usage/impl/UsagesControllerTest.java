@@ -13,11 +13,14 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
+import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.impl.UsageService;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
+import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesWidget;
 import com.copyright.rup.vaadin.widget.api.IWidget;
@@ -48,51 +51,54 @@ public class UsagesControllerTest {
 
     private UsagesController controller;
     private UsageService usageService;
-    private UsagesFilterController filterController;
+    private IUsagesFilterController filterController;
     private IUsagesWidget usagesWidget;
+    private IUsageBatchService usageBatchService;
 
     @Before
     public void setUp() {
         controller = new UsagesController();
         usageService = createMock(UsageService.class);
-        filterController = createMock(UsagesFilterController.class);
+        usageBatchService = createMock(IUsageBatchService.class);
+        filterController = createMock(IUsagesFilterController.class);
         usagesWidget = createMock(IUsagesWidget.class);
         Whitebox.setInternalState(controller, "usageService", usageService);
+        Whitebox.setInternalState(controller, "usageBatchService", usageBatchService);
         Whitebox.setInternalState(controller, IWidget.class, usagesWidget);
         Whitebox.setInternalState(controller, "filterController", filterController);
     }
 
     @Test
     public void testGetSize() {
-        IUsagesFilterWidget filterWidget = createMock(IUsagesFilterWidget.class);
-        Whitebox.setInternalState(filterController, IWidget.class, filterWidget);
+        IUsagesFilterWidget filterWidgetMock = createMock(IUsagesFilterWidget.class);
+        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         UsageFilter filter = new UsageFilter();
         filter.setFiscalYear(2017);
-        expect(filterWidget.getAppliedFilter()).andReturn(filter).once();
+        expect(filterWidgetMock.getAppliedFilter()).andReturn(filter).once();
         expect(usageService.getUsagesCount(filter)).andReturn(1).once();
-        replay(filterWidget, usageService);
+        replay(filterWidgetMock, usageService, filterController);
         assertEquals(1, controller.getSize());
-        verify(filterWidget, usageService);
+        verify(filterWidgetMock, usageService, filterController);
     }
 
     @Test
     public void testLoadBeans() {
-        IUsagesFilterWidget filterWidget = createMock(IUsagesFilterWidget.class);
-        Whitebox.setInternalState(filterController, IWidget.class, filterWidget);
+        IUsagesFilterWidget filterWidgetMock = createMock(IUsagesFilterWidget.class);
+        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         UsageFilter filter = new UsageFilter();
         filter.setFiscalYear(2017);
         Capture<Pageable> pageableCapture = new Capture<>();
-        expect(filterWidget.getAppliedFilter()).andReturn(filter).once();
+        expect(filterWidgetMock.getAppliedFilter()).andReturn(filter).once();
         expect(usageService.getUsages(eq(filter), capture(pageableCapture), isNull()))
             .andReturn(Collections.emptyList()).once();
-        replay(filterWidget, usageService);
+        replay(filterWidgetMock, usageService, filterController);
         List<UsageDto> result = controller.loadBeans(10, 150, null);
         Pageable pageable = pageableCapture.getValue();
         assertEquals(10, pageable.getOffset());
         assertEquals(150, pageable.getLimit());
         assertNotNull(result);
         assertEquals(0, result.size());
-        verify(filterWidget, usageService);
+        verify(filterWidgetMock, usageService, filterController);
     }
 
     @Test
@@ -141,5 +147,33 @@ public class UsagesControllerTest {
         LocalDate localDate = LocalDate.now();
         assertEquals(String.format("export_usage_%s_%s_%s.csv", localDate.getMonthValue(), localDate.getDayOfMonth(),
             localDate.getYear()), controller.getFileName());
+    }
+
+    @Test
+    public void testGetScenariosNamesAssociatedWithUsageBatch() {
+        assertEquals(Collections.emptyList(),
+            controller.getScenariosNamesAssociatedWithUsageBatch(RupPersistUtils.generateUuid()));
+    }
+
+    @Test
+    public void testGetUsageBatches() {
+        expect(usageBatchService.getUsageBatches()).andReturn(Collections.emptyList()).once();
+        replay(usageBatchService);
+        controller.getUsageBatches();
+        verify(usageBatchService);
+    }
+
+    @Test
+    public void testDeleteUsageBatch() {
+        String batchId = RupPersistUtils.generateUuid();
+        IUsagesFilterWidget filterWidgetMock = createMock(IUsagesFilterWidget.class);
+        usageBatchService.deleteUsageBatch(batchId, "User@copyright.com");
+        expectLastCall().once();
+        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
+        filterWidgetMock.clearFilter();
+        expectLastCall().once();
+        replay(usageBatchService, filterController, filterWidgetMock);
+        controller.deleteUsageBatch(batchId);
+        verify(usageBatchService, filterController, filterWidgetMock);
     }
 }

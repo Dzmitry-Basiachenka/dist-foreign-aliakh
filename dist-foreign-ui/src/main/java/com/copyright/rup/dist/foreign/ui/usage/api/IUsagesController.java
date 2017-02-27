@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.api;
 
 import com.copyright.rup.dist.common.domain.Currency;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.ui.component.lazytable.IBeanLoader;
@@ -9,6 +10,7 @@ import com.copyright.rup.vaadin.widget.api.IController;
 import com.vaadin.util.ReflectTools;
 
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -62,4 +64,25 @@ public interface IUsagesController extends IController<IUsagesWidget>, IBeanLoad
      * @return {@code true} - if usage batch exists, {@code false} - otherwise
      */
     boolean usageBatchExists(String name);
+
+    /**
+     * @return list of {@link UsageBatch}es available for deleting.
+     */
+    List<UsageBatch> getUsageBatches();
+
+    /**
+     * Deletes {@link UsageBatch} and all it's details.
+     *
+     * @param batchId {@link UsageBatch} id
+     */
+    void deleteUsageBatch(String batchId);
+
+    /**
+     * Gets a list of scenarios names that are associated with at least one
+     * {@link com.copyright.rup.dist.foreign.domain.Usage} from the {@link UsageBatch} with given id.
+     *
+     * @param batchId {@link UsageBatch} id
+     * @return a list of scenarios names
+     */
+    List<String> getScenariosNamesAssociatedWithUsageBatch(String batchId);
 }

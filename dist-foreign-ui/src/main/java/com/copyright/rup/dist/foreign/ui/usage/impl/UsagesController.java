@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.common.domain.Currency;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
@@ -13,6 +14,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesWidget;
+import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.ui.VaadinUtils;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
@@ -26,6 +28,7 @@ import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
@@ -39,6 +42,7 @@ import java.util.concurrent.Executors;
  * Date: 01/16/2017
  *
  * @author Mikita Hladkikh
+ * @author Aliaksandr Radkevich
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -119,5 +123,22 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     @Override
     protected IUsagesWidget instantiateWidget() {
         return new UsagesWidget();
+    }
+
+    @Override
+    public List<String> getScenariosNamesAssociatedWithUsageBatch(String batchId) {
+        // TODO: implement method after introducing scenarios
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<UsageBatch> getUsageBatches() {
+        return usageBatchService.getUsageBatches();
+    }
+
+    @Override
+    public void deleteUsageBatch(String batchId) {
+        usageBatchService.deleteUsageBatch(batchId, SecurityUtils.getUserName());
+        filterController.getWidget().clearFilter();
     }
 }

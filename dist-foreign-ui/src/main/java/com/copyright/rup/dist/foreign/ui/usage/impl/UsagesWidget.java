@@ -196,6 +196,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         OnDemandFileDownloader fileDownloader = new OnDemandFileDownloader(getController());
         fileDownloader.extend(exportButton);
         Button deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete_usage_batch"));
+        deleteButton.addClickListener(event -> Windows.showModalWindow(new DeleteUsageBatchWindow(controller)));
         HorizontalLayout layout = new HorizontalLayout(loadButton, addToScenarioButton, exportButton, deleteButton);
         layout.setSpacing(true);
         layout.setMargin(true);
