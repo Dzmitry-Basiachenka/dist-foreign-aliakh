@@ -26,6 +26,7 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.io.PipedOutputStream;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -99,13 +100,21 @@ public class UsageServiceTest {
 
     @Test
     public void testInsertUsages() {
-        List<Usage> usages = Lists.newArrayList(new Usage(), new Usage());
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatch.setGrossAmount(new BigDecimal("12.00"));
+        Usage usage1 = new Usage();
+        usage1.setOriginalAmount(BigDecimal.TEN);
+        Usage usage2 = new Usage();
+        usage2.setOriginalAmount(BigDecimal.ONE);
+        List<Usage> usages = Lists.newArrayList(usage1, usage2);
         usageRepository.insertUsage(usages.get(0));
         expectLastCall().once();
         usageRepository.insertUsage(usages.get(1));
         expectLastCall().once();
         replay(usageRepository);
-        assertEquals(2, usageService.insertUsages(new UsageBatch(), usages, "User Name"));
+        assertEquals(2, usageService.insertUsages(usageBatch, usages, "User Name"));
+        assertEquals(new BigDecimal("10.9090909090"), usage1.getGrossAmount());
+        assertEquals(new BigDecimal("1.0909090909"), usage2.getGrossAmount());
         verify(usageRepository);
     }
 
