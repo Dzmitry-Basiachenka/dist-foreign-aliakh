@@ -28,7 +28,8 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     private static final String SAVE_BUTTON_ID = "Save";
     private static final String APPLY_BUTTON_ID = "Apply";
     private static final String USAGE_BATCH_NAME = "CADRA_11Dec16";
-    private static final String RRO_ACCOUNT = "7000813806 - null";
+    private static final String RRO_ACCOUNT =
+        "7000813806 - CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil";
     private static final String FISCAL_YEAR = "2017";
     private static final String CLEAR_BATTON_ID = "Clear";
     private static final String USAGE_LAYOUT_ID = "usages-layout";
@@ -140,7 +141,8 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         assertTrue(getInnerHtml(usageValues.get(2)).contains("CADRA_11Dec16"));
         assertTrue(getInnerHtml(usageValues.get(3)).contains("FY2017"));
         assertTrue(getInnerHtml(usageValues.get(4)).contains("7000813806"));
-        // TODO {mbezmen} add RRO account name
+        assertTrue(getInnerHtml(usageValues.get(5)).contains(
+            "CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil"));
         assertTrue(getInnerHtml(usageValues.get(6)).contains("01/11/2017"));
         assertTrue(getInnerHtml(usageValues.get(7)).contains(
             "2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA"));
@@ -149,7 +151,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         assertTrue(getInnerHtml(usageValues.get(9)).contains("1008902112377654XX"));
         assertTrue(getInnerHtml(usageValues.get(10)).contains("180382914"));
         assertTrue(getInnerHtml(usageValues.get(11)).contains("1000009997"));
-        // TODO {mbezmen} add Rh account name
+        assertTrue(getInnerHtml(usageValues.get(12)).contains("IEEE - Inst of Electrical and Electronics Engrs"));
         assertTrue(getInnerHtml(usageValues.get(13)).contains("IEEE"));
         assertTrue(getInnerHtml(usageValues.get(14)).contains("09/10/2013"));
         assertTrue(getInnerHtml(usageValues.get(15)).contains("2502232"));

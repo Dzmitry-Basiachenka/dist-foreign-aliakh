@@ -182,4 +182,55 @@ databaseChangeLog {
             }
         }
     }
+
+    changeSet(id: '2017-02-27-00', author: 'Mikalai_Bezmen mbezmen@copyright.com') {
+        comment('Inserting Rightsholders for repository integration tests')
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'rh_account_number', value: '1000002797')
+            column(name: 'name', value: 'British Film Institute (BFI)')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'rh_account_number', value: '1000002859')
+            column(name: 'name', value: 'John Wiley & Sons - Books')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'rh_account_number', value: '1000005413')
+            column(name: 'name', value: 'Kluwer Academic Publishers - Dordrecht')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'rh_account_number', value: '1000008666')
+            column(name: 'name', value: 'CCH')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'rh_account_number', value: '1000009997')
+            column(name: 'name', value: 'IEEE - Inst of Electrical and Electronics Engrs')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'rh_account_number', value: '2000017004')
+            column(name: 'name', value: 'Access Copyright, The Canadian Copyright Agency')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'rh_account_number', value: '7000813806')
+            column(name: 'name', value: 'CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'rh_account_number', value: '7001440663')
+            column(name: 'name', value: 'JAACC, Japan Academic Association for Copyright Clearance [T]')
+        }
+
+        rollback {
+            delete(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+                where "rh_account_number in ('1000002797', '1000002859', '1000005413', '1000008666', '1000009997', " +
+                        "'2000017004', '7000813806', '7001440663')"
+            }
+        }
+    }
 }

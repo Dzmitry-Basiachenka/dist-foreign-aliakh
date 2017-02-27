@@ -11,12 +11,14 @@
 
     <resultMap id="rroResultMap" type="Rightsholder">
         <result property="accountNumber" column="rro_account_number"/>
+        <result property="name" column="name"/>
     </resultMap>
 
     <select id="findRros" resultMap="rroResultMap">
-        select distinct rro_account_number
-        from ${schema}.df_usage_batch
-        order by rro_account_number
+        select distinct ub.rro_account_number, r.name
+        from ${schema}.df_usage_batch ub
+        left join ${schema}.df_rightsholder r on r.rh_account_number = ub.rro_account_number
+        order by r.name
     </select>
 
     <insert id="insert" parameterType="Rightsholder">

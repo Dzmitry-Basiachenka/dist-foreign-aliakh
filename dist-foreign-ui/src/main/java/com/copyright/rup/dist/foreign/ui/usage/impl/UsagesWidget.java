@@ -109,14 +109,14 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         usagesTable.addProperty("batchName", String.class, true);
         usagesTable.addProperty("fiscalYear", String.class, true);
         usagesTable.addProperty("rroAccountNumber", Long.class, true);
-        usagesTable.addProperty("rroName", String.class, false);
+        usagesTable.addProperty("rroName", String.class, true);
         usagesTable.addProperty("paymentDate", LocalDate.class, true);
         usagesTable.addProperty("workTitle", String.class, true);
         usagesTable.addProperty("article", String.class, true);
         usagesTable.addProperty("standardNumber", String.class, true);
         usagesTable.addProperty("wrWrkInst", Long.class, true);
         usagesTable.addProperty("rhAccountNumber", Long.class, true);
-        usagesTable.addProperty("rhName", String.class, false);
+        usagesTable.addProperty("rhName", String.class, true);
         usagesTable.addProperty("publisher", String.class, true);
         usagesTable.addProperty("publicationDate", LocalDate.class, true);
         usagesTable.addProperty("numberOfCopies", Integer.class, true);
