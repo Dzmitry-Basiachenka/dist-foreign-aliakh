@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 /**
- * Verifies {@link AmountValidator}.
+ * Verifies {@link GrossAmountValidator}.
  * <p/>
  * Copyright (C) 2017 copyright.com
  * <p/>
@@ -20,11 +20,11 @@ import java.util.Collection;
  * @author Darya Baraukova
  */
 @RunWith(Parameterized.class)
-public class AmountValidatorTest {
+public class GrossAmountValidatorTest {
 
     private String amount;
     private boolean expectedResult;
-    private AmountValidator validator = new AmountValidator();
+    private GrossAmountValidator validator = new GrossAmountValidator();
 
     /**
      * Constructor.
@@ -32,7 +32,7 @@ public class AmountValidatorTest {
      * @param amount         amount
      * @param expectedResult expected test result
      */
-    public AmountValidatorTest(String amount, boolean expectedResult) {
+    public GrossAmountValidatorTest(String amount, boolean expectedResult) {
         this.amount = amount;
         this.expectedResult = expectedResult;
     }
@@ -40,11 +40,11 @@ public class AmountValidatorTest {
     @Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-            {"  125", true},
-            {"  125.2", true},
+            {"  125", false},
+            {"  125.2", false},
             {"125.23  ", true},
             {"152.44", true},
-            {"555.9", true},
+            {"555.9", false},
             {"84.44415", false},
             {"33..5", false},
             {"86.0.5", false},
