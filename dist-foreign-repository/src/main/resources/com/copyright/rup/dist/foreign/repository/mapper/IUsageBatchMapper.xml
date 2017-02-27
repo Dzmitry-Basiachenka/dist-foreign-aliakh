@@ -8,6 +8,7 @@
         <result property="id" column="df_usage_batch_uid"/>
         <result property="name" column="name"/>
         <result property="rro.accountNumber" column="rro_account_number"/>
+        <result property="rro.name" column="rh_name"/>
         <result property="paymentDate" column="payment_date"/>
         <result property="fiscalYear" column="fiscal_year"/>
         <result property="grossAmount" column="gross_amount"/>
@@ -17,20 +18,34 @@
     </resultMap>
 
     <sql id="usageBatchColumns">
-        df_usage_batch_uid,
-        name,
-        rro_account_number,
-        payment_date,
-        fiscal_year,
-        gross_amount,
-        currency_ind,
-        conversion_rate,
-        applied_conversion_rate
+        ub.df_usage_batch_uid,
+        ub.name,
+        ub.rro_account_number,
+        r.name rh_name,
+        ub.payment_date,
+        ub.fiscal_year,
+        ub.gross_amount,
+        ub.currency_ind,
+        ub.conversion_rate,
+        ub.applied_conversion_rate,
+        ub.created_datetime,
+        ub.updated_datetime,
+        ub.created_by_user,
+        ub.updated_by_user,
+        ub.record_version
     </sql>
 
     <insert id="insert" parameterType="UsageBatch">
         insert into ${schema}.df_usage_batch(
-            <include refid="usageBatchColumns"/>,
+            df_usage_batch_uid,
+            name,
+            rro_account_number,
+            payment_date,
+            fiscal_year,
+            gross_amount,
+            currency_ind,
+            conversion_rate,
+            applied_conversion_rate,
             <include refid="StoredEntityMapper.additionalColumns"/>
         ) values (
             #{id},
@@ -55,7 +70,8 @@
     <select id="findUsageBatches" resultMap="usageBatchResultMap">
         select
             <include refid="usageBatchColumns"/>
-        from ${schema}.df_usage_batch
+        from ${schema}.df_usage_batch ub
+        left join ${schema}.df_rightsholder r on r.rh_account_number = ub.rro_account_number
     </select>
 
     <select id="getUsageBatchesCountByName" parameterType="string" resultType="int">
@@ -66,10 +82,10 @@
 
     <select id="findUsageBatchByName" parameterType="string" resultMap="usageBatchResultMap">
         select
-            <include refid="usageBatchColumns"/>,
-            <include refid="StoredEntityMapper.additionalColumns"/>
-        from ${schema}.df_usage_batch
-        where upper(name) = upper(#{name})
+            <include refid="usageBatchColumns"/>
+        from ${schema}.df_usage_batch ub
+        left join ${schema}.df_rightsholder r on r.rh_account_number = ub.rro_account_number
+        where upper(ub.name) = upper(#{name})
     </select>
 
     <delete id="deleteUsageBatch" parameterType="String">

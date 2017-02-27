@@ -53,11 +53,12 @@ public class RightsholderRepositoryIntegrationTest {
 
     @Test
     public void testInsertRightsholder() {
+        List<Rightsholder> rightsholders = rightsholderRepository.findAll();
+        assertEquals(8, rightsholders.size());
         Rightsholder rightsholder = buildRightsholder();
         rightsholderRepository.insert(rightsholder);
-        List<Rightsholder> rightsholders = rightsholderRepository.findAll();
-        assertEquals(1, rightsholders.size());
-        assertEquals(rightsholder, rightsholders.get(0));
+        rightsholders = rightsholderRepository.findAll();
+        assertEquals(9, rightsholders.size());
     }
 
     @Test
@@ -77,10 +78,8 @@ public class RightsholderRepositoryIntegrationTest {
 
     @Test
     public void testDeleteAll() {
-        Rightsholder rightsholder = buildRightsholder();
-        rightsholderRepository.insert(rightsholder);
         List<Rightsholder> rightsholders = rightsholderRepository.findAll();
-        assertEquals(1, rightsholders.size());
+        assertEquals(8, rightsholders.size());
         rightsholderRepository.deleteAll();
         rightsholders = rightsholderRepository.findAll();
         assertEquals(0, rightsholders.size());
