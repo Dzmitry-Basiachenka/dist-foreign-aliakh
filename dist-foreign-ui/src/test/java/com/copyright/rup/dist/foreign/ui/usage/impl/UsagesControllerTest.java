@@ -1,17 +1,18 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import static org.easymock.EasyMock.capture;
-import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.isNull;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.expectLastCall;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
+import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -23,6 +24,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesWidget;
+import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
 import com.vaadin.ui.HorizontalLayout;
@@ -30,6 +32,9 @@ import com.vaadin.ui.HorizontalLayout;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.io.PipedOutputStream;
@@ -47,6 +52,7 @@ import java.util.concurrent.ExecutorService;
  *
  * @author Aliaksandr Radkevich
  */
+@RunWith(PowerMockRunner.class)
 public class UsagesControllerTest {
 
     private UsagesController controller;
@@ -164,16 +170,19 @@ public class UsagesControllerTest {
     }
 
     @Test
+    @PrepareForTest(SecurityUtils.class)
     public void testDeleteUsageBatch() {
+        mockStatic(SecurityUtils.class);
         String batchId = RupPersistUtils.generateUuid();
         IUsagesFilterWidget filterWidgetMock = createMock(IUsagesFilterWidget.class);
-        usageBatchService.deleteUsageBatch(batchId, "User@copyright.com");
+        expect(SecurityUtils.getUserName()).andReturn("user@copyright.com").once();
+        usageBatchService.deleteUsageBatch(batchId, "user@copyright.com");
         expectLastCall().once();
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         filterWidgetMock.clearFilter();
         expectLastCall().once();
-        replay(usageBatchService, filterController, filterWidgetMock);
+        replay(usageBatchService, filterController, filterWidgetMock, SecurityUtils.class);
         controller.deleteUsageBatch(batchId);
-        verify(usageBatchService, filterController, filterWidgetMock);
+        verify(usageBatchService, filterController, filterWidgetMock, SecurityUtils.class);
     }
 }
