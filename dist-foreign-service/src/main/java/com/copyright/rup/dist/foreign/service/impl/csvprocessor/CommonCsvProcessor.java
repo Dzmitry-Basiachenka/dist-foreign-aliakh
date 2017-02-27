@@ -42,6 +42,11 @@ public abstract class CommonCsvProcessor<T> {
     private static final DateTimeFormatter DATE_FORMAT =
         DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT);
 
+    /**
+     * Regular expression to find 'null', 'na', 'n/a' case insensitively.
+     */
+    private static final String EMPTY_STRING_REGEX = "^\\s*(([nN][uU][lL][lL])|([nN][aA])|([nN]/[aA]))\\s*$";
+
     private Map<ICsvColumn, List<IValidator<String>>> plainValidators = Maps.newHashMap();
     private List<ICsvColumn> headers = Lists.newArrayList();
     private CsvProcessingResult<T> processingResult = new CsvProcessingResult<>();
@@ -121,8 +126,7 @@ public abstract class CommonCsvProcessor<T> {
      * @return null or Long
      */
     protected Long getLong(ICsvColumn column, List<String> params) {
-        String value = getValue(column, params);
-        return NumberUtils.createLong(StringUtils.defaultIfBlank(value, null));
+        return NumberUtils.createLong(getValue(column, params));
     }
 
     /**
@@ -145,8 +149,7 @@ public abstract class CommonCsvProcessor<T> {
      * @return null or Integer
      */
     protected Integer getInteger(ICsvColumn column, List<String> params) {
-        String value = getValue(column, params);
-        return NumberUtils.createInteger(StringUtils.defaultIfBlank(value, null));
+        return NumberUtils.createInteger(getValue(column, params));
     }
 
     /**
@@ -157,8 +160,7 @@ public abstract class CommonCsvProcessor<T> {
      * @return null or BigDecimal
      */
     protected BigDecimal getBigDecimal(ICsvColumn column, List<String> params) {
-        String value = getValue(column, params);
-        return NumberUtils.createBigDecimal(StringUtils.defaultIfBlank(value, null));
+        return NumberUtils.createBigDecimal(getValue(column, params));
     }
 
     private List<IValidator<String>> getPlainValidators(int index) {
@@ -218,7 +220,7 @@ public abstract class CommonCsvProcessor<T> {
     }
 
     private String getValue(ICsvColumn header, List<String> params) {
-        return params.get(header.ordinal());
+        return StringUtils.defaultIfBlank(params.get(header.ordinal()), null);
     }
 
     private static List<String> trimNulls(List<String> values) {
@@ -231,10 +233,7 @@ public abstract class CommonCsvProcessor<T> {
     }
 
     private static String trimNulls(String value) {
-        return null != value
-            ? StringUtils
-            .trim(value.replaceAll("^\\s*(([nN][uU][lL][lL])|([nN][aA])|([nN]/[aA]))\\s*$", StringUtils.EMPTY))
-            : null;
+        return null != value ? StringUtils.trim(value.replaceAll(EMPTY_STRING_REGEX, StringUtils.EMPTY)) : null;
     }
 
     /**
