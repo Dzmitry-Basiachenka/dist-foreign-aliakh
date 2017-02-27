@@ -191,7 +191,6 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         verifyDateFields(uploadWindow);
         assertTextElement(uploadWindow, "usage-batch-name-field", "Usage Batch Name");
         assertTextElement(uploadWindow, "gross-amount-field", "Gross Amount (USD)");
-        assertComboboxElement(uploadWindow, "reported-currency-field", HTML_SPAN_TAG_NAME, "Reported Currency");
         assertElement(uploadWindow, "Upload");
         clickElementAndWait(assertElement(uploadWindow, "Close"));
     }
@@ -251,7 +250,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         assertEquals("Publisher", getInnerHtml(tableHeaderElements.get(13)));
         assertEquals("Pub Date", getInnerHtml(tableHeaderElements.get(14)));
         assertEquals("Number of Copies", getInnerHtml(tableHeaderElements.get(15)));
-        assertEquals("Amt in Orig Currency", getInnerHtml(tableHeaderElements.get(16)));
+        assertEquals("Reported value", getInnerHtml(tableHeaderElements.get(16)));
         assertEquals("Amt in USD", getInnerHtml(tableHeaderElements.get(17)));
         assertEquals("Market", getInnerHtml(tableHeaderElements.get(18)));
         assertEquals("Market Period From", getInnerHtml(tableHeaderElements.get(19)));

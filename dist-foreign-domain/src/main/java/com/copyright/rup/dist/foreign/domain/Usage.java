@@ -36,7 +36,7 @@ public class Usage extends StoredEntity<String> {
     private Integer marketPeriodTo;
     private String author;
     private Integer numberOfCopies;
-    private BigDecimal originalAmount = BigDecimal.ZERO;
+    private BigDecimal reportedValue = BigDecimal.ZERO;
     private BigDecimal netAmount = BigDecimal.ZERO;
     private BigDecimal serviceFee = BigDecimal.ZERO;
     private BigDecimal serviceFeeAmount = BigDecimal.ZERO;
@@ -268,20 +268,20 @@ public class Usage extends StoredEntity<String> {
     }
 
     /**
-     * @return original amount.
+     * @return reported value.
      */
-    public BigDecimal getOriginalAmount() {
-        return originalAmount;
+    public BigDecimal getReportedValue() {
+        return reportedValue;
     }
 
     /**
-     * Sets original amount.
+     * Sets reported value.
      *
-     * @param originalAmount original amount
+     * @param reportedValue reported value
      */
-    public void setOriginalAmount(BigDecimal originalAmount) {
-        if (null != originalAmount) {
-            this.originalAmount = originalAmount;
+    public void setReportedValue(BigDecimal reportedValue) {
+        if (null != reportedValue) {
+            this.reportedValue = reportedValue;
         }
     }
 
@@ -398,7 +398,7 @@ public class Usage extends StoredEntity<String> {
             .append(this.marketPeriodTo, that.marketPeriodTo)
             .append(this.author, that.author)
             .append(this.numberOfCopies, that.numberOfCopies)
-            .append(this.originalAmount, that.originalAmount)
+            .append(this.reportedValue, that.reportedValue)
             .append(this.netAmount, that.netAmount)
             .append(this.serviceFee, that.serviceFee)
             .append(this.serviceFeeAmount, that.serviceFeeAmount)
@@ -425,7 +425,7 @@ public class Usage extends StoredEntity<String> {
             .append(marketPeriodTo)
             .append(author)
             .append(numberOfCopies)
-            .append(originalAmount)
+            .append(reportedValue)
             .append(netAmount)
             .append(serviceFee)
             .append(serviceFeeAmount)
@@ -452,7 +452,7 @@ public class Usage extends StoredEntity<String> {
             .append("marketPeriodTo", marketPeriodTo)
             .append("author", author)
             .append("numberOfCopies", numberOfCopies)
-            .append("originalAmount", originalAmount)
+            .append("reportedValue", reportedValue)
             .append("netAmount", netAmount)
             .append("serviceFee", serviceFee)
             .append("serviceFeeAmount", serviceFeeAmount)

@@ -8,9 +8,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import com.copyright.rup.dist.common.domain.Currency;
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.common.integration.rest.prm.IPrmCurrencyService;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmRightsholderService;
 
 import com.google.common.collect.Sets;
@@ -38,19 +36,14 @@ public class PrmIntegrationServiceTest {
 
     private static final long ACCOUNT_NUMBER = 1000001863L;
     private static final String RIGHTSHOLDER_NAME = "CANADIAN CERAMIC SOCIETY";
-    private static final String USD_CURRENCY_CODE = "USD";
-    private static final String USD_CURRENCY_NAME = "USD Currency name";
     private IPrmRightsholderService prmRightsholderService;
     private PrmIntegrationService prmIntegrationService;
-    private IPrmCurrencyService prmCurrencyService;
 
     @Before
     public void setUp() {
         prmIntegrationService = new PrmIntegrationService();
         prmRightsholderService = createMock(IPrmRightsholderService.class);
-        prmCurrencyService = createMock(IPrmCurrencyService.class);
         Whitebox.setInternalState(prmIntegrationService, "prmRightsholderService", prmRightsholderService);
-        Whitebox.setInternalState(prmIntegrationService, "prmCurrencyService", prmCurrencyService);
     }
 
     @Test
@@ -90,23 +83,6 @@ public class PrmIntegrationServiceTest {
         replay(prmRightsholderService);
         assertEquals(StringUtils.EMPTY, prmIntegrationService.getRighstholderName(ACCOUNT_NUMBER));
         verify(prmRightsholderService);
-    }
-
-    @Test
-    public void testGetCountries() {
-        Set<Currency> currencies = Collections.singleton(buildCurrency());
-        expect(prmCurrencyService.getCurrencies()).andReturn(currencies).once();
-        replay(prmCurrencyService);
-        Set<Currency> actualResult = prmIntegrationService.getCurrencies();
-        assertEquals(currencies, actualResult);
-        verify(prmCurrencyService);
-    }
-
-    private Currency buildCurrency() {
-        Currency currency = new Currency();
-        currency.setCode(USD_CURRENCY_CODE);
-        currency.setName(USD_CURRENCY_NAME);
-        return currency;
     }
 
     private Rightsholder buildRightsholder(Long accountNumber, String name) {

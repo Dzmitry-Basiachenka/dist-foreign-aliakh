@@ -39,7 +39,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
 
     private static final String EMPTY_STYLE_NAME = "empty-usages-table";
     private static final String GROSS_AMOUNT_PROPERTY = "grossAmount";
-    private static final String ORIGINAL_AMOUNT_PROPERTY = "originalAmount";
+    private static final String REPORTED_VALUE = "reportedValue";
     private static final String DETAIL_ID_PROPERTY = "detailId";
 
     private IUsagesController controller;
@@ -88,7 +88,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         usagesTable
             .setVisibleColumns(DETAIL_ID_PROPERTY, "status", "batchName", "fiscalYear", "rroAccountNumber", "rroName",
                 "paymentDate", "workTitle", "article", "standardNumber", "wrWrkInst", "rhAccountNumber",
-                "rhName", "publisher", "publicationDate", "numberOfCopies", ORIGINAL_AMOUNT_PROPERTY,
+                "rhName", "publisher", "publicationDate", "numberOfCopies", REPORTED_VALUE,
                 GROSS_AMOUNT_PROPERTY, "market", "marketPeriodFrom", "marketPeriodTo", "author");
         setColumnHeaders();
         usagesTable.setSizeFull();
@@ -120,7 +120,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         usagesTable.addProperty("publisher", String.class, true);
         usagesTable.addProperty("publicationDate", LocalDate.class, true);
         usagesTable.addProperty("numberOfCopies", Integer.class, true);
-        usagesTable.addProperty(ORIGINAL_AMOUNT_PROPERTY, BigDecimal.class, true);
+        usagesTable.addProperty(REPORTED_VALUE, BigDecimal.class, true);
         usagesTable.addProperty(GROSS_AMOUNT_PROPERTY, BigDecimal.class, true);
         usagesTable.addProperty("market", String.class, true);
         usagesTable.addProperty("marketPeriodFrom", Integer.class, true);
@@ -146,7 +146,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
                 ForeignUi.getMessage("table.column.publisher"),
                 ForeignUi.getMessage("table.column.publication_date"),
                 ForeignUi.getMessage("table.column.number_of_copies"),
-                ForeignUi.getMessage("table.column.original_amount"),
+                ForeignUi.getMessage("table.column.reported_value"),
                 ForeignUi.getMessage("table.column.gross_amount"),
                 ForeignUi.getMessage("table.column.market"),
                 ForeignUi.getMessage("table.column.market_period_from"),
@@ -169,7 +169,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         usagesTable.addGeneratedColumn("publicationDate", localDateColumnGenerator);
         usagesTable.addGeneratedColumn("paymentDate", localDateColumnGenerator);
         MoneyColumnGenerator moneyColumnGenerator = new MoneyColumnGenerator();
-        usagesTable.addGeneratedColumn(ORIGINAL_AMOUNT_PROPERTY, moneyColumnGenerator);
+        usagesTable.addGeneratedColumn(REPORTED_VALUE, moneyColumnGenerator);
         usagesTable.addGeneratedColumn(GROSS_AMOUNT_PROPERTY, moneyColumnGenerator);
     }
 
@@ -182,7 +182,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         usagesTable.setColumnWidth("workTitle", 300);
         usagesTable.setColumnWidth("rhName", 300);
         usagesTable.setColumnWidth("author", 300);
-        usagesTable.setColumnWidth(ORIGINAL_AMOUNT_PROPERTY, 70);
+        usagesTable.setColumnWidth(REPORTED_VALUE, 70);
         usagesTable.setColumnWidth(GROSS_AMOUNT_PROPERTY, 70);
     }
 

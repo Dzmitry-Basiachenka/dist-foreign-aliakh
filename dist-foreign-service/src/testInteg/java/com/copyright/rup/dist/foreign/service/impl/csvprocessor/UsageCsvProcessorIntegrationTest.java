@@ -56,7 +56,7 @@ public class UsageCsvProcessorIntegrationTest {
         assertEquals("Publisher", usage.getPublisher());
         assertEquals(LocalDate.of(3000, 12, 22), usage.getPublicationDate());
         assertEquals(Integer.valueOf(65), usage.getNumberOfCopies());
-        assertEquals(new BigDecimal("30.86"), usage.getOriginalAmount());
+        assertEquals(new BigDecimal("30.86"), usage.getReportedValue());
         assertEquals("Univ,Bus,Doc,S", usage.getMarket());
         assertEquals(Integer.valueOf(2015), usage.getMarketPeriodFrom());
         assertEquals(Integer.valueOf(2016), usage.getMarketPeriodTo());
@@ -77,7 +77,7 @@ public class UsageCsvProcessorIntegrationTest {
         assertEquals(null, usage.getPublisher());
         assertEquals(null, usage.getPublicationDate());
         assertEquals(null, usage.getNumberOfCopies());
-        assertEquals(new BigDecimal("60.86"), usage.getOriginalAmount());
+        assertEquals(new BigDecimal("60.86"), usage.getReportedValue());
         assertEquals("Univ,Bus,Doc,S", usage.getMarket());
         assertEquals(Integer.valueOf(2015), usage.getMarketPeriodFrom());
         assertEquals(Integer.valueOf(2016), usage.getMarketPeriodTo());

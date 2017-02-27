@@ -42,13 +42,11 @@ import java.util.UUID;
 public class UsageBatchRepositoryIntegrationTest {
 
     private static final String USAGE_BATCH_NAME = "Batch name";
-    private static final String CURRENCY = "USD";
     private static final Integer FISCAL_YEAR_2017 = 2017;
     private static final Integer FISCAL_YEAR_2016 = 2016;
     private static final Integer FISCAL_YEAR_2019 = 2019;
     private static final Long RRO_ACCOUNT_NUMBER = 123456789L;
     private static final BigDecimal GROSS_AMOUNT = new BigDecimal("23.53");
-    private static final BigDecimal APPLIED_CONVERSION_RATE = new BigDecimal("1.2500000000");
     private static final LocalDate PAYMENT_DATE = LocalDate.of(2017, 2, 23);
 
     @Autowired
@@ -81,9 +79,7 @@ public class UsageBatchRepositoryIntegrationTest {
         assertEquals(RRO_ACCOUNT_NUMBER, usageBatch.getRro().getAccountNumber());
         assertEquals(PAYMENT_DATE, usageBatch.getPaymentDate());
         assertEquals(FISCAL_YEAR_2017, usageBatch.getFiscalYear());
-        assertEquals(CURRENCY, usageBatch.getCurrency());
         assertEquals(GROSS_AMOUNT, usageBatch.getGrossAmount());
-        assertEquals(APPLIED_CONVERSION_RATE, usageBatch.getAppliedConversionRate());
     }
 
     @Test
@@ -104,9 +100,7 @@ public class UsageBatchRepositoryIntegrationTest {
         usageBatch.setRro(rightsholder);
         usageBatch.setPaymentDate(PAYMENT_DATE);
         usageBatch.setFiscalYear(FISCAL_YEAR_2017);
-        usageBatch.setCurrency(CURRENCY);
         usageBatch.setGrossAmount(GROSS_AMOUNT);
-        usageBatch.setAppliedConversionRate(APPLIED_CONVERSION_RATE);
         return usageBatch;
     }
 }

@@ -21,7 +21,7 @@
         <result property="marketPeriodTo" column="market_period_to"/>
         <result property="author" column="author"/>
         <result property="numberOfCopies" column="number_of_copies"/>
-        <result property="originalAmount" column="original_amount"/>
+        <result property="reportedValue" column="reported_value"/>
         <result property="grossAmount" column="gross_amount"/>
         <result property="batchName" column="name"/>
         <result property="rroAccountNumber" column="rro_account_number"/>
@@ -48,7 +48,7 @@
         <result property="marketPeriodTo" column="market_period_to"/>
         <result property="author" column="author"/>
         <result property="numberOfCopies" column="number_of_copies"/>
-        <result property="originalAmount" column="original_amount"/>
+        <result property="reportedValue" column="reported_value"/>
         <result property="grossAmount" column="gross_amount"/>
     </resultMap>
 
@@ -69,7 +69,7 @@
         market_period_to,
         author,
         number_of_copies,
-        original_amount,
+        reported_value,
         gross_amount
     </sql>
 
@@ -94,7 +94,7 @@
             #{marketPeriodTo},
             #{author},
             #{numberOfCopies},
-            #{originalAmount},
+            #{reportedValue},
             #{grossAmount},
             <include refid="StoredEntityMapper.insert"/>
         )
@@ -187,8 +187,8 @@
                     <when test="sort.property == 'numberOfCopies'">
                         u.number_of_copies <include refid="direction"/>
                     </when>
-                    <when test="sort.property == 'originalAmount'">
-                        u.original_amount <include refid="direction"/>
+                    <when test="sort.property == 'reportedValue'">
+                        u.reported_value <include refid="direction"/>
                     </when>
                     <when test="sort.property == 'grossAmount'">
                         u.gross_amount <include refid="direction"/>
@@ -234,7 +234,7 @@
             u.market_period_to,
             u.author,
             u.number_of_copies,
-            u.original_amount,
+            u.reported_value,
             u.gross_amount,
             ub.name,
             ub.rro_account_number,
@@ -286,7 +286,7 @@
             u.market_period_to,
             u.author,
             u.number_of_copies,
-            u.original_amount,
+            u.reported_value,
             u.gross_amount,
             u.created_datetime,
             u.updated_datetime,

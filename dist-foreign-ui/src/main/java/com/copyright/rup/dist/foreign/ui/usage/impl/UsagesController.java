@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
-import com.copyright.rup.dist.common.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -31,7 +30,6 @@ import java.io.PipedOutputStream;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -56,7 +54,7 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
 
     @Autowired
     private IUsageService usageService;
-    
+
     @Autowired
     private IUsagesFilterController filterController;
 
@@ -104,11 +102,6 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
         LocalDate now = LocalDate.now();
         return VaadinUtils.encodeAndBuildFileName(
             String.format("export_usage_%s_%s_%s", now.getMonthValue(), now.getDayOfMonth(), now.getYear()), "csv");
-    }
-
-    @Override
-    public Set<Currency> getCurrencies() {
-        return prmIntegrationService.getCurrencies();
     }
 
     @Override

@@ -54,7 +54,7 @@ public class UsageCsvReportHandler implements ResultHandler<UsageDto> {
         .put("publisher", "Publisher", OPTIONAL_PROCESSOR)
         .put("publicationDate", "Pub Date", new DateCellProcessor())
         .put("numberOfCopies", "Number of Copies", OPTIONAL_PROCESSOR)
-        .put("originalAmount", "Amt in Orig Currency", OPTIONAL_PROCESSOR)
+        .put("reportedValue", "Reported value", OPTIONAL_PROCESSOR)
         .put("grossAmount", "Amt in USD", OPTIONAL_PROCESSOR)
         .put("market", "Market", OPTIONAL_PROCESSOR)
         .put("marketPeriodFrom", "Market Period From", OPTIONAL_PROCESSOR)

@@ -29,7 +29,6 @@ public class ApplicationContextTest {
         try {
             ApplicationContext context = new ClassPathXmlApplicationContext(CONFIG_LOCATION);
             assertNotNull(context);
-            assertNotNull(context.getBean("dist.common.integration.rest.prmCurrencyService"));
             assertNotNull(context.getBean(RestTemplate.class));
             assertNotNull(context.getBean(IPrmIntegrationService.class));
             assertNotNull(context.getBean("prmRightsholderService"));

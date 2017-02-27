@@ -103,9 +103,9 @@ public class UsageServiceTest {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setGrossAmount(new BigDecimal("12.00"));
         Usage usage1 = new Usage();
-        usage1.setOriginalAmount(BigDecimal.TEN);
+        usage1.setReportedValue(BigDecimal.TEN);
         Usage usage2 = new Usage();
-        usage2.setOriginalAmount(BigDecimal.ONE);
+        usage2.setReportedValue(BigDecimal.ONE);
         List<Usage> usages = Lists.newArrayList(usage1, usage2);
         usageRepository.insertUsage(usages.get(0));
         expectLastCall().once();

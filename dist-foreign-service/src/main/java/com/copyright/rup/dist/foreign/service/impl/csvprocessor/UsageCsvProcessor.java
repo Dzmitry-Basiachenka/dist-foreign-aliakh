@@ -39,7 +39,7 @@ public class UsageCsvProcessor extends CommonCsvProcessor<Usage> {
         result.setPublisher(getString(Header.PUBLISHER, params));
         result.setPublicationDate(getDate(Header.PUB_DATE, params));
         result.setNumberOfCopies(getInteger(Header.NUMBER_OF_COPIES, params));
-        result.setOriginalAmount(getBigDecimal(Header.AMT_IN_ORIG_CURRENCY, params));
+        result.setReportedValue(getBigDecimal(Header.REPORTED_VALUE, params));
         result.setMarket(getString(Header.MARKET, params));
         result.setMarketPeriodFrom(getInteger(Header.MARKET_PERIOD_FROM, params));
         result.setMarketPeriodTo(getInteger(Header.MARKET_PERIOD_TO, params));
@@ -58,7 +58,7 @@ public class UsageCsvProcessor extends CommonCsvProcessor<Usage> {
         PUBLISHER("Publisher"),
         PUB_DATE("Pub Date"),
         NUMBER_OF_COPIES("Number of Copies"),
-        AMT_IN_ORIG_CURRENCY("Amt in Orig Currency"),
+        REPORTED_VALUE("Reported value"),
         MARKET("Market"),
         MARKET_PERIOD_FROM("Market Period From"),
         MARKET_PERIOD_TO("Market Period To"),

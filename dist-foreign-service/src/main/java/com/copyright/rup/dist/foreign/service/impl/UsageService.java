@@ -80,10 +80,10 @@ public class UsageService implements IUsageService {
 
     private void calculateUsagesGrossAmount(UsageBatch usageBatch, List<Usage> usages) {
         BigDecimal fundPoolAmount = usageBatch.getGrossAmount();
-        BigDecimal totalAmount = usages.stream().map(Usage::getOriginalAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal totalAmount = usages.stream().map(Usage::getReportedValue).reduce(BigDecimal.ZERO, BigDecimal::add);
         BigDecimal conversionRate = CalculationUtils.calculateConversionRate(fundPoolAmount, totalAmount);
         usages.forEach(usage -> usage.setGrossAmount(
-            CalculationUtils.calculateUsdAmount(usage.getOriginalAmount(), conversionRate)));
+            CalculationUtils.calculateUsdAmount(usage.getReportedValue(), conversionRate)));
         LOGGER.info(CALCULATION_FINISHED_LOG_MESSAGE, usageBatch.getName(), usageBatch.getGrossAmount(), totalAmount,
             conversionRate);
     }
