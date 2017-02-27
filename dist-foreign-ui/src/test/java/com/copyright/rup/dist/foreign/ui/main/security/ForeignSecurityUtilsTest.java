@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import com.google.common.collect.Sets;
 
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -55,6 +56,11 @@ public final class ForeignSecurityUtilsTest {
         MockSecurityContext context = new MockSecurityContext();
         context.setGrantedAuthorities(permissions);
         SecurityContextHolder.setContext(context);
+    }
+
+    @AfterClass
+    public static void tearDown() {
+        SecurityContextHolder.clearContext();
     }
 
     @Test

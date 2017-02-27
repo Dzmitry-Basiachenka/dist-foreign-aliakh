@@ -18,7 +18,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
-import com.copyright.rup.dist.foreign.ui.common.util.IntegerColumnGenerator;
+import com.copyright.rup.dist.foreign.ui.common.util.FiscalYearColumnGenerator;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.DeleteUsageBatchWindow.ConfirmDeleteListener;
 import com.copyright.rup.dist.foreign.ui.usage.impl.DeleteUsageBatchWindow.PaymentDateFilter;
@@ -224,7 +224,7 @@ public class DeleteUsageBatchWindowTest {
         assertEquals(80, table.getColumnWidth(FISCAL_YEAR_PROPERTY));
         assertEquals(1, table.getColumnExpandRatio(NAME_PROPERTY), 0);
         assertEquals(LocalDateColumnGenerator.class, table.getColumnGenerator(PAYMENT_DATE_PROPERTY).getClass());
-        assertEquals(IntegerColumnGenerator.class, table.getColumnGenerator(FISCAL_YEAR_PROPERTY).getClass());
+        assertEquals(FiscalYearColumnGenerator.class, table.getColumnGenerator(FISCAL_YEAR_PROPERTY).getClass());
         assertNotNull(table.getColumnGenerator(DELETE_PROPERTY));
     }
 }

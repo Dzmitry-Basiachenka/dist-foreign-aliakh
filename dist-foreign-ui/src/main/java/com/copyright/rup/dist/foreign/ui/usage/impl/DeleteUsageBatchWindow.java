@@ -3,7 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl;
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.domain.BaseEntity;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
-import com.copyright.rup.dist.foreign.ui.common.util.IntegerColumnGenerator;
+import com.copyright.rup.dist.foreign.ui.common.util.FiscalYearColumnGenerator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -81,7 +81,7 @@ class DeleteUsageBatchWindow extends Window {
         table.setSizeFull();
         table.addGeneratedColumn(PAYMENT_DATE_PROPERTY, new LocalDateColumnGenerator(
             RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT));
-        table.addGeneratedColumn("fiscalYear", new IntegerColumnGenerator());
+        table.addGeneratedColumn("fiscalYear", new FiscalYearColumnGenerator());
         table.addGeneratedColumn("delete", (ColumnGenerator) (source, itemId, columnId) -> {
             Button deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
             deleteButton.addClickListener(event -> deleteUsageBatch(container.getItem(itemId).getBean()));
