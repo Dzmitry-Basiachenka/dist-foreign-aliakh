@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Implementation of {@link IUsageBatchService}.
@@ -52,10 +53,13 @@ public class UsageBatchService implements IUsageBatchService {
     @Override
     @Transactional
     public int insertUsages(UsageBatch usageBatch, List<Usage> usages, String userName) {
+        usageBatch.setId(UUID.randomUUID().toString());
+        usageBatch.setCreateUser(userName);
+        usageBatch.setUpdateUser(userName);
         LOGGER.info("Insert usage batch. Started. UsageBatchId={}, UserName={}", usageBatch.getId(), userName);
         usageBatchRepository.insert(usageBatch);
         LOGGER.info("Insert usage batch. Finished. UsageBatchId={}, UserName={}", usageBatch.getId(), userName);
-        return usageService.insertUsages(usages, userName);
+        return usageService.insertUsages(usageBatch, usages, userName);
     }
 
     @Transactional

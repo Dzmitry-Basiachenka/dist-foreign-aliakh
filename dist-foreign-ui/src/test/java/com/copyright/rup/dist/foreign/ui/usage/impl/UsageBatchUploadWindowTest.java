@@ -1,26 +1,36 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
+import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.createPartialMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
+import static org.powermock.api.easymock.PowerMock.expectNew;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.domain.Currency;
+import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingResult;
+import com.copyright.rup.dist.foreign.service.impl.csvprocessor.UsageCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.component.CsvUploadComponent;
 import com.copyright.rup.dist.foreign.ui.component.LocalDateWidget;
 import com.copyright.rup.dist.foreign.ui.component.validator.AmountValidator;
 import com.copyright.rup.dist.foreign.ui.component.validator.NumberValidator;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
+import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.ui.Windows;
 
 import com.google.common.collect.Lists;
 import com.vaadin.data.Validator;
+import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Button;
@@ -40,6 +50,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
@@ -60,18 +71,20 @@ public class UsageBatchUploadWindowTest {
     private static final String EUR_CURRENCY_CODE = "EUR";
     private static final String EUR_CURRENCY_NAME = "European currency";
     private static final String USAGE_BATCH_NAME = "BatchName";
+    private static final String USER_NAME = "user@copyright.com";
+    private static final LocalDate PAYMENT_DATE = LocalDate.of(2017, 2, 27);
     private UsageBatchUploadWindow window;
     private IUsagesController usagesController;
 
     @Before
     public void setUp() {
         usagesController = createMock(IUsagesController.class);
-        expect(usagesController.getCurrencies()).andReturn(Collections.singleton(buildCurrency())).once();
     }
 
     @Test
     @PrepareForTest(Windows.class)
     public void testConstructor() {
+        expect(usagesController.getCurrencies()).andReturn(Collections.singleton(buildCurrency())).once();
         expect(usagesController.getRroName(Long.valueOf(ACCOUNT_NUMBER)))
             .andReturn("CANADIAN CERAMIC SOCIETY").once();
         replay(usagesController);
@@ -87,6 +100,7 @@ public class UsageBatchUploadWindowTest {
 
     @Test
     public void testIsValid() {
+        expect(usagesController.getCurrencies()).andReturn(Collections.singleton(buildCurrency())).once();
         expect(usagesController.usageBatchExists(USAGE_BATCH_NAME)).andReturn(false).once();
         replay(usagesController);
         window = new UsageBatchUploadWindow(usagesController);
@@ -106,21 +120,40 @@ public class UsageBatchUploadWindowTest {
     }
 
     @Test
-    @PrepareForTest(Windows.class)
-    public void testOnUploadClickedValidFields() {
+    @PrepareForTest({Windows.class, SecurityUtils.class, UsageBatchUploadWindow.class})
+    public void testOnUploadClickedValidFields() throws Exception {
         mockStatic(Windows.class);
-        Windows.showNotificationWindow("Uploading is started");
-        expect(usagesController.usageBatchExists(USAGE_BATCH_NAME)).andReturn(false).once();
-        replay(Windows.class, usagesController);
-        window = new UsageBatchUploadWindow(usagesController);
-        ((TextField) Whitebox.getInternalState(window, "usageBatchNameField")).setValue(USAGE_BATCH_NAME);
-        Whitebox.getInternalState(window, CsvUploadComponent.class).getFileNameField().setValue("test.csv");
-        ((TextField) Whitebox.getInternalState(window, "accountNumberField")).setValue(ACCOUNT_NUMBER);
-        Whitebox.getInternalState(window, LocalDateWidget.class).setValue(LocalDate.now());
-        ((TextField) Whitebox.getInternalState(window, "grossAmountField")).setValue("100");
-        Whitebox.getInternalState(window, ComboBox.class).setValue(buildCurrency());
+        mockStatic(SecurityUtils.class);
+        CsvUploadComponent csvUploadComponent = createPartialMock(CsvUploadComponent.class, "getStreamToUploadedFile");
+        UsageCsvProcessor processor = createMock(UsageCsvProcessor.class);
+        LocalDateWidget paymentDateWidget = new LocalDateWidget("Payment Date");
+        paymentDateWidget.setValue(PAYMENT_DATE);
+        CsvProcessingResult<Usage> processingResult = buildCsvProcessingResult();
+        window = createPartialMock(UsageBatchUploadWindow.class, "isValid");
+        Whitebox.setInternalState(window, "usagesController", usagesController);
+        Whitebox.setInternalState(window, "csvUploadComponent", csvUploadComponent);
+        Whitebox.setInternalState(window, "usageBatchNameField", new TextField("Usage Batch Name", USAGE_BATCH_NAME));
+        Whitebox.setInternalState(window, "accountNumberField", new TextField("RRO Account #", ACCOUNT_NUMBER));
+        Whitebox.setInternalState(window, "paymentDateWidget", paymentDateWidget);
+        Whitebox.setInternalState(window, "fiscalYearProperty", new ObjectProperty<>("FY2017"));
+        Whitebox.setInternalState(window, "grossAmountField", new TextField("Gross Amount", "100.00"));
+        expect(window.isValid()).andReturn(true).once();
+        expect(SecurityUtils.getUserName()).andReturn(USER_NAME).once();
+        expectNew(UsageCsvProcessor.class).andReturn(processor).once();
+        expect(processor.process(anyObject())).andReturn(processingResult).once();
+        expect(usagesController.loadUsageBatch(buildUsageBatch(), processingResult.getResult(), USER_NAME))
+            .andReturn(1).once();
+        Windows.showNotificationWindow("Upload completed: 1 records were stored successfully");
+        expectLastCall().once();
+        replay(window, usagesController, Windows.class, SecurityUtils.class, UsageCsvProcessor.class, processor);
         window.onUploadClicked();
-        verify(Windows.class, usagesController);
+        verify(window, usagesController, Windows.class, SecurityUtils.class, UsageCsvProcessor.class, processor);
+    }
+
+    private CsvProcessingResult<Usage> buildCsvProcessingResult() {
+        CsvProcessingResult<Usage> processingResult = new CsvProcessingResult<>();
+        processingResult.addRecord(new Usage());
+        return processingResult;
     }
 
     private void verifyRootLayout(Component component) {
@@ -268,5 +301,17 @@ public class UsageBatchUploadWindowTest {
         currency.setCode(EUR_CURRENCY_CODE);
         currency.setName(EUR_CURRENCY_NAME);
         return currency;
+    }
+
+    private UsageBatch buildUsageBatch() {
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatch.setName(USAGE_BATCH_NAME);
+        Rightsholder rro = new Rightsholder();
+        rro.setAccountNumber(Long.valueOf(ACCOUNT_NUMBER));
+        usageBatch.setRro(rro);
+        usageBatch.setPaymentDate(PAYMENT_DATE);
+        usageBatch.setFiscalYear(2017);
+        usageBatch.setGrossAmount(new BigDecimal("100.00"));
+        return usageBatch;
     }
 }

@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.api;
 
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
@@ -49,11 +50,12 @@ public interface IUsageService {
     /**
      * Inserts usages.
      *
+     * @param usageBatch usage batch
      * @param usages     list of {@link Usage}s
      * @param userName   user name
      * @return count of inserted usages
      */
-    int insertUsages(List<Usage> usages, String userName);
+    int insertUsages(UsageBatch usageBatch, List<Usage> usages, String userName);
 
     /**
      * Deletes all {@link Usage}s associated with the batch with given id.

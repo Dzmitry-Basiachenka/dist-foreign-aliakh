@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.common.domain.Currency;
+import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
@@ -118,6 +119,12 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     @Override
     public boolean usageBatchExists(String name) {
         return usageBatchService.usageBatchExists(name);
+    }
+
+    @Override
+    public int loadUsageBatch(UsageBatch usageBatch, List<Usage> usages, String userName) {
+        filterController.getWidget().clearFilter();
+        return usageBatchService.insertUsages(usageBatch, usages, userName);
     }
 
     @Override

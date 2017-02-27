@@ -43,7 +43,13 @@ public final class UsageBatchUtils {
         return null != fiscalYear ? String.format("FY%s", fiscalYear) : StringUtils.EMPTY;
     }
 
-    private static int calculateFiscalYear(LocalDate localDate) {
+    /**
+     * Calculates Fiscal Year based on payment date.
+     *
+     * @param localDate {@link LocalDate} instance
+     * @return Fiscal Year value
+     */
+    public static int calculateFiscalYear(LocalDate localDate) {
         return 0 >= Month.JULY.compareTo(localDate.getMonth()) ? (localDate.getYear() + 1) : localDate.getYear();
     }
 }

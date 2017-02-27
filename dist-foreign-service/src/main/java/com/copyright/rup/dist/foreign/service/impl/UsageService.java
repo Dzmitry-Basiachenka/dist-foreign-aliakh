@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.service.impl;
 
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
@@ -12,7 +13,6 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.OutputStream;
 import java.util.Collections;
@@ -53,11 +53,15 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    @Transactional
-    public int insertUsages(List<Usage> usages, String userName) {
+    public int insertUsages(UsageBatch usageBatch, List<Usage> usages, String userName) {
         int size = usages.size();
         LOGGER.info("Insert usages. Started. Usages={}, UserName={}", size, userName);
-        usages.forEach(usage -> usageRepository.insertUsage(usage));
+        usages.forEach(usage -> {
+            usage.setBatchId(usageBatch.getId());
+            usage.setCreateUser(userName);
+            usage.setUpdateUser(userName);
+            usageRepository.insertUsage(usage);
+        });
         LOGGER.info("Insert usages. Finished. Usages={}, UserName={}", size, userName);
         return size;
     }

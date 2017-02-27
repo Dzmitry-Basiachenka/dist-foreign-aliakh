@@ -11,6 +11,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
@@ -104,7 +105,7 @@ public class UsageServiceTest {
         usageRepository.insertUsage(usages.get(1));
         expectLastCall().once();
         replay(usageRepository);
-        assertEquals(2, usageService.insertUsages(usages, "User Name"));
+        assertEquals(2, usageService.insertUsages(new UsageBatch(), usages, "User Name"));
         verify(usageRepository);
     }
 
