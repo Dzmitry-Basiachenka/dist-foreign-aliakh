@@ -12,7 +12,6 @@
         <result property="paymentDate" column="payment_date"/>
         <result property="fiscalYear" column="fiscal_year"/>
         <result property="grossAmount" column="gross_amount"/>
-        <result property="conversionRate" column="conversion_rate"/>
     </resultMap>
 
     <sql id="usageBatchColumns">
@@ -23,7 +22,6 @@
         ub.payment_date,
         ub.fiscal_year,
         ub.gross_amount,
-        ub.conversion_rate,
         ub.created_datetime,
         ub.updated_datetime,
         ub.created_by_user,
@@ -39,7 +37,6 @@
             payment_date,
             fiscal_year,
             gross_amount,
-            conversion_rate,
             <include refid="StoredEntityMapper.additionalColumns"/>
         ) values (
             #{id},
@@ -48,7 +45,6 @@
             #{paymentDate},
             #{fiscalYear},
             #{grossAmount},
-            #{conversionRate},
             <include refid="StoredEntityMapper.insert"/>
         )
     </insert>

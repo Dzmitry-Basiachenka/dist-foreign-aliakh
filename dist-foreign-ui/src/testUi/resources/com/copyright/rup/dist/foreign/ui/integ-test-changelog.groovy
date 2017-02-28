@@ -11,7 +11,6 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
             column(name: 'gross_amount', value: '35000')
-            column(name: 'conversion_rate', value: '0.929584011')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -21,7 +20,6 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2015-09-10')
             column(name: 'fiscal_year', value: '2016')
             column(name: 'gross_amount', value: '35000')
-            column(name: 'conversion_rate', value: '1.000000000')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -31,7 +29,6 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2018-08-16')
             column(name: 'fiscal_year', value: '2019')
             column(name: 'gross_amount', value: '35000')
-            column(name: 'conversion_rate', value: '0.008851')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
