@@ -34,15 +34,18 @@ public class UsagesMediatorTest {
 
     private Button deleteButton;
     private Button loadButton;
+    private Button addToScenarioButton;
     private UsagesMediator mediator;
 
     @Before
     public void setUp() {
         deleteButton = new Button();
         loadButton = new Button();
+        addToScenarioButton = new Button();
         mediator = new UsagesMediator();
         mediator.setLoadUsageButton(loadButton);
         mediator.setDeleteUsageButton(deleteButton);
+        mediator.setAddToScenarioButton(addToScenarioButton);
     }
 
     @Test
@@ -52,6 +55,7 @@ public class UsagesMediatorTest {
         mediator.applyPermissions();
         assertFalse(deleteButton.isVisible());
         assertFalse(loadButton.isVisible());
+        assertFalse(addToScenarioButton.isVisible());
     }
 
     @Test
@@ -61,6 +65,7 @@ public class UsagesMediatorTest {
         mediator.applyPermissions();
         assertFalse(deleteButton.isVisible());
         assertFalse(loadButton.isVisible());
+        assertFalse(addToScenarioButton.isVisible());
     }
 
     @Test
@@ -70,6 +75,7 @@ public class UsagesMediatorTest {
         mediator.applyPermissions();
         assertTrue(deleteButton.isVisible());
         assertTrue(loadButton.isVisible());
+        assertTrue(addToScenarioButton.isVisible());
     }
 
     private void mockViewOnlyPermissions() {
@@ -93,5 +99,6 @@ public class UsagesMediatorTest {
         expect(SecurityUtils.hasPermission("FDA_ACCESS_APPLICATION")).andReturn(true).anyTimes();
         expect(SecurityUtils.hasPermission("FDA_DELETE_USAGE")).andReturn(true).anyTimes();
         expect(SecurityUtils.hasPermission("FDA_LOAD_USAGE")).andReturn(true).anyTimes();
+        expect(SecurityUtils.hasPermission("FDA_CREATE_EDIT_SCENARIO")).andReturn(true).anyTimes();
     }
 }
