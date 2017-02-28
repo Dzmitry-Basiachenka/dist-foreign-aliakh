@@ -27,7 +27,6 @@ public class UsageBatch extends StoredEntity<String> {
     private LocalDate paymentDate;
     private Integer fiscalYear;
     private BigDecimal grossAmount = BigDecimal.ZERO;
-    private BigDecimal conversionRate;
 
     /**
      * @return name.
@@ -110,22 +109,6 @@ public class UsageBatch extends StoredEntity<String> {
         }
     }
 
-    /**
-     * @return conversion rate.
-     */
-    public BigDecimal getConversionRate() {
-        return conversionRate;
-    }
-
-    /**
-     * Sets conversion rate.
-     *
-     * @param conversionRate conversion rate
-     */
-    public void setConversionRate(BigDecimal conversionRate) {
-        this.conversionRate = conversionRate;
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -142,7 +125,6 @@ public class UsageBatch extends StoredEntity<String> {
             .append(this.paymentDate, that.paymentDate)
             .append(this.fiscalYear, that.fiscalYear)
             .append(this.grossAmount, that.grossAmount)
-            .append(this.conversionRate, that.conversionRate)
             .isEquals();
     }
 
@@ -155,7 +137,6 @@ public class UsageBatch extends StoredEntity<String> {
             .append(paymentDate)
             .append(fiscalYear)
             .append(grossAmount)
-            .append(conversionRate)
             .toHashCode();
     }
 
@@ -168,7 +149,6 @@ public class UsageBatch extends StoredEntity<String> {
             .append("paymentDate", paymentDate)
             .append("fiscalYear", fiscalYear)
             .append("grossAmount", grossAmount)
-            .append("conversionRate", conversionRate)
             .toString();
     }
 }

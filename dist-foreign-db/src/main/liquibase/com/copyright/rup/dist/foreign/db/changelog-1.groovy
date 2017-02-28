@@ -367,4 +367,16 @@ databaseChangeLog {
                     columnDataType: 'DECIMAL(38,2)')
         }
     }
+
+    changeSet(id: '2017-02-28-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment('B-29461 Integrate with PRM to get available Currencies: delete conversion_rate column')
+
+        dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_batch', columnName: 'conversion_rate')
+
+        rollback {
+            addColumn(tableName: 'df_usage_batch', schemaName: dbAppsSchema) {
+                column(name: 'conversion_rate', type: 'NUMERIC(20,10)', remarks: 'The conversion rate')
+            }
+        }
+    }
 }
