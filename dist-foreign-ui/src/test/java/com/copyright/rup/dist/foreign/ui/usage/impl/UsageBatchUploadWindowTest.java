@@ -22,7 +22,7 @@ import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingRes
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.UsageCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.component.CsvUploadComponent;
 import com.copyright.rup.dist.foreign.ui.component.LocalDateWidget;
-import com.copyright.rup.dist.foreign.ui.component.validator.AmountValidator;
+import com.copyright.rup.dist.foreign.ui.component.validator.GrossAmountValidator;
 import com.copyright.rup.dist.foreign.ui.component.validator.NumberValidator;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.security.SecurityUtils;
@@ -111,7 +111,7 @@ public class UsageBatchUploadWindowTest {
         assertFalse(window.isValid());
         Whitebox.getInternalState(window, LocalDateWidget.class).setValue(LocalDate.now());
         assertFalse(window.isValid());
-        ((TextField) Whitebox.getInternalState(window, "grossAmountField")).setValue("100");
+        ((TextField) Whitebox.getInternalState(window, "grossAmountField")).setValue("100.00");
         assertFalse(window.isValid());
         Whitebox.getInternalState(window, ComboBox.class).setValue(buildCurrency());
         ((TextField) Whitebox.getInternalState(window, "usageBatchNameField")).setValue(USAGE_BATCH_NAME);
@@ -270,7 +270,7 @@ public class UsageBatchUploadWindowTest {
         Collection<Validator> validators = grossAmountField.getValidators();
         assertTrue(CollectionUtils.isNotEmpty(validators));
         assertEquals(1, validators.size());
-        assertTrue(validators.iterator().next() instanceof AmountValidator);
+        assertTrue(validators.iterator().next() instanceof GrossAmountValidator);
     }
 
     private void verifyReportedCurrencyAndGrossAmount(Component component) {

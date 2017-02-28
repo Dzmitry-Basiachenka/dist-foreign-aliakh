@@ -10,7 +10,7 @@ import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingRes
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.UsageCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.component.CsvUploadComponent;
 import com.copyright.rup.dist.foreign.ui.component.LocalDateWidget;
-import com.copyright.rup.dist.foreign.ui.component.validator.AmountValidator;
+import com.copyright.rup.dist.foreign.ui.component.validator.GrossAmountValidator;
 import com.copyright.rup.dist.foreign.ui.component.validator.NumberValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
@@ -261,7 +261,7 @@ class UsageBatchUploadWindow extends Window {
         grossAmountField = new TextField(ForeignUi.getMessage("label.gross_amount_usd"));
         setRequired(grossAmountField);
         grossAmountField.setNullRepresentation(StringUtils.EMPTY);
-        grossAmountField.addValidator(new AmountValidator());
+        grossAmountField.addValidator(new GrossAmountValidator());
         VaadinUtils.setMaxComponentsWidth(grossAmountField);
         VaadinUtils.addComponentStyle(grossAmountField, "gross-amount-field");
         return grossAmountField;
