@@ -90,6 +90,7 @@ public class CsvUploadComponentTest {
         assertTrue(fileNameTextField.isRequired());
         assertEquals(100, fileNameTextField.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, fileNameTextField.getWidthUnits());
+        assertEquals(0, fileNameTextField.getMaxLength());
         verifyValidators(fileNameTextField.getValidators());
     }
 
