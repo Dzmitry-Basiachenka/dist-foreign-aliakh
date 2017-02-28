@@ -164,6 +164,8 @@ public class UsagesWidgetTest {
         expectLastCall().once();
         mediator.setLoadUsageButton(anyObject(Button.class));
         expectLastCall().once();
+        mediator.setAddToScenarioButton(anyObject(Button.class));
+        expectLastCall().once();
         replay(UsagesMediator.class, mediator);
         assertNotNull(usagesWidget.initMediator());
         verify(UsagesMediator.class, mediator);
