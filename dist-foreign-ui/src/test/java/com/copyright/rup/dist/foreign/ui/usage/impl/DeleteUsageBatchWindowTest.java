@@ -219,7 +219,7 @@ public class DeleteUsageBatchWindowTest {
             table.getVisibleColumns());
         assertArrayEquals(new Object[]{"Usage Batch Name", "Payment Date", "Fiscal Year", StringUtils.EMPTY},
             table.getColumnHeaders());
-        assertEquals(60, table.getColumnWidth(DELETE_PROPERTY));
+        assertEquals(65, table.getColumnWidth(DELETE_PROPERTY));
         assertEquals(100, table.getColumnWidth(PAYMENT_DATE_PROPERTY));
         assertEquals(80, table.getColumnWidth(FISCAL_YEAR_PROPERTY));
         assertEquals(1, table.getColumnExpandRatio(NAME_PROPERTY), 0);
