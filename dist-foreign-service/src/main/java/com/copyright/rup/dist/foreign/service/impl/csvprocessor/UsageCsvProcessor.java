@@ -58,7 +58,7 @@ public class UsageCsvProcessor extends CommonCsvProcessor<Usage> {
         PUBLISHER("Publisher"),
         PUB_DATE("Pub Date"),
         NUMBER_OF_COPIES("Number of Copies"),
-        REPORTED_VALUE("Reported value"),
+        REPORTED_VALUE("Reported Value"),
         MARKET("Market"),
         MARKET_PERIOD_FROM("Market Period From"),
         MARKET_PERIOD_TO("Market Period To"),
