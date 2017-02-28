@@ -40,6 +40,7 @@ public class UsageCsvReportHandler implements ResultHandler<UsageDto> {
     private static final DateCellProcessor DATE_CELL_PROCESSOR = new DateCellProcessor();
     private Table<String, String, CellProcessor> propertyTable = ImmutableTable.<String, String, CellProcessor>builder()
         .put("detailId", "Detail ID", OPTIONAL_PROCESSOR)
+        .put("status", "Detail Status", OPTIONAL_PROCESSOR)
         .put("batchName", "Usage Batch Name", OPTIONAL_PROCESSOR)
         .put("fiscalYear", "Fiscal Year", new FiscalYearCellProcessor())
         .put("rroAccountNumber", "RRO Account #", OPTIONAL_PROCESSOR)
@@ -60,7 +61,6 @@ public class UsageCsvReportHandler implements ResultHandler<UsageDto> {
         .put("marketPeriodFrom", "Market Period From", OPTIONAL_PROCESSOR)
         .put("marketPeriodTo", "Market Period To", OPTIONAL_PROCESSOR)
         .put("author", "Author", OPTIONAL_PROCESSOR)
-        .put("status", "Detail Status", OPTIONAL_PROCESSOR)
         .build();
     private ICsvBeanWriter beanWriter;
 
