@@ -7,7 +7,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.vaadin.data.Validator;
-import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.Upload;
@@ -96,9 +95,8 @@ public class CsvUploadComponentTest {
 
     private void verifyValidators(Collection<Validator> validators) {
         assertNotNull(validators);
-        assertEquals(2, validators.size());
+        assertEquals(1, validators.size());
         Iterator<Validator> iterator = validators.iterator();
-        assertTrue(iterator.next() instanceof StringLengthValidator);
         assertTrue(iterator.next() instanceof CsvUploadComponent.CsvFileExtensionValidator);
     }
 }

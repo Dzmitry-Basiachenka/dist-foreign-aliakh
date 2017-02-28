@@ -5,7 +5,6 @@ import com.copyright.rup.vaadin.ui.VaadinUtils;
 
 import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.data.validator.AbstractStringValidator;
-import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
@@ -147,8 +146,6 @@ public class CsvUploadComponent extends HorizontalLayout {
         fileNameField = new TextField(ForeignUi.getMessage("field.file_to_upload"));
         fileNameField.setRequired(true);
         fileNameField.setRequiredError(ForeignUi.getMessage("field.error.empty"));
-        fileNameField.addValidator(new StringLengthValidator(String.format(
-            ForeignUi.getMessage("field.error.length"), 50), 0, 50, false));
         fileNameField.addValidator(new CsvFileExtensionValidator());
         fileNameField.setPropertyDataSource(fileNameProperty);
         fileNameField.setMaxLength(0);
