@@ -10,6 +10,7 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
+import static org.powermock.api.easymock.PowerMock.expectNew;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
@@ -58,6 +59,7 @@ import java.util.Collections;
  * @author Aliaksandr Radkevich
  */
 @RunWith(PowerMockRunner.class)
+@PrepareForTest({UsagesWidget.class})
 public class UsagesWidgetTest {
 
     private static final String DETAIL_ID_PROPERTY = "detailId";
@@ -152,6 +154,19 @@ public class UsagesWidgetTest {
         replay(usagesTableMock, containerMock, queryView);
         usagesWidget.refresh();
         verify(usagesTableMock, containerMock, queryView);
+    }
+
+    @Test
+    public void testInitMediator() throws Exception {
+        UsagesMediator mediator = createMock(UsagesMediator.class);
+        expectNew(UsagesMediator.class).andReturn(mediator).once();
+        mediator.setDeleteUsageButton(anyObject(Button.class));
+        expectLastCall().once();
+        mediator.setLoadUsageButton(anyObject(Button.class));
+        expectLastCall().once();
+        replay(UsagesMediator.class, mediator);
+        assertNotNull(usagesWidget.initMediator());
+        verify(UsagesMediator.class, mediator);
     }
 
     private void verifyButtonsLayout(HorizontalLayout layout) {

@@ -33,6 +33,7 @@ import java.util.Set;
 @RunWith(Parameterized.class)
 public final class ForeignSecurityUtilsTest {
 
+    private static final String FDA_ACCESS_APPLICATION = "FDA_ACCESS_APPLICATION";
     private Set<String> permissions;
 
     /**
@@ -46,9 +47,16 @@ public final class ForeignSecurityUtilsTest {
 
     @Parameterized.Parameters
     public static Collection<Object[]> setUpUserPermissions() {
-        Object[] viewOnlyRole = {Sets.newHashSet("FDA_ACCESS_APPLICATION")};
+        Object[] viewOnlyRole = {Sets.newHashSet(FDA_ACCESS_APPLICATION)};
+        Object[] distributionManagerRole = {Sets.newHashSet(FDA_ACCESS_APPLICATION)};
+        Object[] distributionSpecialistRole = {Sets.newHashSet(
+            FDA_ACCESS_APPLICATION, "FDA_DELETE_USAGE", "FDA_LOAD_USAGE")};
         Object[] roleWithoutPermissions = {Collections.emptySet()};
-        return Arrays.asList(viewOnlyRole, roleWithoutPermissions);
+        return Arrays.asList(
+            viewOnlyRole,
+            distributionManagerRole,
+            distributionSpecialistRole,
+            roleWithoutPermissions);
     }
 
     @Before
@@ -65,7 +73,12 @@ public final class ForeignSecurityUtilsTest {
 
     @Test
     public void testUserRolePermissions() {
-        assertEquals(permissions.contains("FDA_ACCESS_APPLICATION"), ForeignSecurityUtils.hasAccessPermission());
+        assertEquals(permissions.contains(FDA_ACCESS_APPLICATION),
+            ForeignSecurityUtils.hasAccessPermission());
+        assertEquals(permissions.contains("FDA_DELETE_USAGE"),
+            ForeignSecurityUtils.hasDeleteUsagePermission());
+        assertEquals(permissions.contains("FDA_LOAD_USAGE"),
+            ForeignSecurityUtils.hasLoadUsagePermission());
     }
 
     private static class MockSecurityContext implements SecurityContext {

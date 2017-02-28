@@ -60,6 +60,24 @@ public class ForeignCommonUiTest extends CommonUiTest {
     }
 
     /**
+     * Logs in into application as Distribution Manager.
+     *
+     * @return credentials of user
+     */
+    protected void loginAsManager() {
+        openAppPage(ForeignCredentials.MANAGER);
+    }
+
+    /**
+     * Logs in into application as Distribution Specialist.
+     *
+     * @return credentials of user
+     */
+    protected void loginAsSpecialist() {
+        openAppPage(ForeignCredentials.SPECIALIST);
+    }
+
+    /**
      * Logs out.
      *
      * @return {@code true} if logout button was clicked, {@code false} if logout button was not found.
@@ -81,8 +99,18 @@ public class ForeignCommonUiTest extends CommonUiTest {
      * Enum with credentials for logging into application.
      */
     protected enum ForeignCredentials {
-
-        VIEW_ONLY("fda_view@copyright.com", PASSWORD);
+        /**
+         * Credentials for view only role.
+         */
+        VIEW_ONLY("fda_view@copyright.com", PASSWORD),
+        /**
+         * Credentials for manager role.
+         */
+        MANAGER("fda_manager@copyright.com", PASSWORD),
+        /**
+         * Credentials for specialist role.
+         */
+        SPECIALIST("fda_spec@copyright.com", PASSWORD);
 
         private String userName;
         private String password;

@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.ConfirmDialogWindow;
 import com.copyright.rup.vaadin.ui.LocalDateColumnGenerator;
+import com.copyright.rup.vaadin.ui.VaadinUtils;
 import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 import com.copyright.rup.vaadin.widget.SearchWidget.ISearchController;
@@ -71,6 +72,7 @@ class DeleteUsageBatchWindow extends Window {
         layout.setExpandRatio(table, 1);
         layout.setComponentAlignment(closeButton, Alignment.MIDDLE_RIGHT);
         setContent(layout);
+        VaadinUtils.addComponentStyle(this, "delete-usage-batch");
     }
 
     private Table initUsageBatchesTable() {
