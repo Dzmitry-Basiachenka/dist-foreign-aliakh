@@ -93,7 +93,7 @@ class DeleteUsageBatchWindow extends Window {
             ForeignUi.getMessage("table.column.payment_date"),
             ForeignUi.getMessage("table.column.fiscal_year"),
             StringUtils.EMPTY);
-        table.setColumnWidth("delete", 60);
+        table.setColumnWidth("delete", 65);
         table.setColumnWidth(PAYMENT_DATE_PROPERTY, 100);
         table.setColumnWidth("fiscalYear", 80);
         table.setColumnExpandRatio("name", 1);
