@@ -131,7 +131,10 @@ public class CsvUploadComponent extends HorizontalLayout {
         VaadinUtils.setMaxComponentsWidth(uploadLayout);
         uploadLayout.setExpandRatio(fileNameField, FILE_NAME_FIELD_EXPAND_RATIO);
         addComponent(uploadLayout);
-        addSucceededListener(event -> setFileName(event.getFilename()));
+        addSucceededListener(event -> {
+            setFileName(event.getFilename());
+            fileNameField.setReadOnly(true);
+        });
     }
 
     private void initUpload() {
@@ -148,6 +151,7 @@ public class CsvUploadComponent extends HorizontalLayout {
             ForeignUi.getMessage("field.error.length"), 50), 0, 50, false));
         fileNameField.addValidator(new CsvFileExtensionValidator());
         fileNameField.setPropertyDataSource(fileNameProperty);
+        fileNameField.setMaxLength(0);
         VaadinUtils.setMaxComponentsWidth(fileNameField);
     }
 
