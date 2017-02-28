@@ -79,6 +79,8 @@ public final class ForeignSecurityUtilsTest {
             ForeignSecurityUtils.hasDeleteUsagePermission());
         assertEquals(permissions.contains("FDA_LOAD_USAGE"),
             ForeignSecurityUtils.hasLoadUsagePermission());
+        assertEquals(permissions.contains("FDA_CREATE_EDIT_SCENARIO"),
+            ForeignSecurityUtils.hasCreateEditScenarioPermission());
     }
 
     private static class MockSecurityContext implements SecurityContext {
