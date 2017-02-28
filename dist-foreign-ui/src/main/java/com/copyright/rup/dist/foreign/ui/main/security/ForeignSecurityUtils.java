@@ -30,6 +30,11 @@ public final class ForeignSecurityUtils {
      */
     private static final String FDA_DELETE_USAGE = "FDA_DELETE_USAGE";
 
+    /**
+     * Permission to access create and edit scenarios.
+     */
+    private static final String FDA_CREATE_EDIT_SCENARIO = "FDA_CREATE_EDIT_SCENARIO";
+
     private ForeignSecurityUtils() {
         throw new AssertionError("Constructor shouldn't be called directly");
     }
@@ -53,5 +58,12 @@ public final class ForeignSecurityUtils {
      */
     public static boolean hasDeleteUsagePermission() {
         return SecurityUtils.hasPermission(FDA_DELETE_USAGE);
+    }
+
+    /**
+     * @return {@code true} if user has permission to create and edit scenarios.
+     */
+    public static boolean hasCreateEditScenarioPermission() {
+        return SecurityUtils.hasPermission(FDA_CREATE_EDIT_SCENARIO);
     }
 }

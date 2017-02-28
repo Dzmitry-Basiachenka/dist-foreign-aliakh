@@ -46,6 +46,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
     private LazyTable<UsageBeanQuery, UsageDto> usagesTable;
     private Button loadButton;
     private Button deleteButton;
+    private Button addToScenarioButton;
 
     @Override
     public void refresh() {
@@ -79,6 +80,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         UsagesMediator mediator = new UsagesMediator();
         mediator.setLoadUsageButton(loadButton);
         mediator.setDeleteUsageButton(deleteButton);
+        mediator.setAddToScenarioButton(addToScenarioButton);
         return mediator;
     }
 
@@ -200,7 +202,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         loadButton = Buttons.createButton(ForeignUi.getMessage("button.load"));
         loadButton.addClickListener(
             event -> Windows.showModalWindow(new UsageBatchUploadWindow(controller)));
-        Button addToScenarioButton = Buttons.createButton(ForeignUi.getMessage("button.add_to_scenario"));
+        addToScenarioButton = Buttons.createButton(ForeignUi.getMessage("button.add_to_scenario"));
         addToScenarioButton.addClickListener(event -> Windows.showNotificationWindow("Add to scenario button clicked"));
         Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
         OnDemandFileDownloader fileDownloader = new OnDemandFileDownloader(getController());

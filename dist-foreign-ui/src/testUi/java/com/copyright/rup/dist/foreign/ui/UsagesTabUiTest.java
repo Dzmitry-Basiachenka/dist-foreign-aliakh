@@ -251,15 +251,13 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
 
     private void verifyUsagesLayoutButtonManager(WebElement usagesLayout) {
         WebElement buttonsLayout = assertElement(usagesLayout, "usages-buttons");
-        verifyUsagesLayoutButton(buttonsLayout, Sets.newHashSet(ADD_TO_SCENARIO_BUTTON_ID, EXPORT_BUTTON_ID));
-        verifyAddToScenarioButton(buttonsLayout);
+        verifyUsagesLayoutButton(buttonsLayout, Sets.newHashSet(EXPORT_BUTTON_ID));
         verifyExportButton(buttonsLayout);
     }
 
     private void verifyUsagesLayoutButtonViewOnly(WebElement usagesLayout) {
         WebElement buttonsLayout = assertElement(usagesLayout, "usages-buttons");
-        verifyUsagesLayoutButton(buttonsLayout, Sets.newHashSet(ADD_TO_SCENARIO_BUTTON_ID, EXPORT_BUTTON_ID));
-        verifyAddToScenarioButton(buttonsLayout);
+        verifyUsagesLayoutButton(buttonsLayout, Sets.newHashSet(EXPORT_BUTTON_ID));
         verifyExportButton(buttonsLayout);
     }
 
