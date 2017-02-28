@@ -328,4 +328,43 @@ databaseChangeLog {
                     constraintName: 'fk_df_usage_archive_2_df_usage_batch')
         }
     }
+
+    changeSet(id: '2017-02-27-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment('B-29461 Integrate with PRM to get available Currencies: delete currency_ind and applied_conversion_rate columns,' +
+                'rename original_amount column into reported_value')
+
+        dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_batch', columnName: 'currency_ind')
+        dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_batch', columnName: 'applied_conversion_rate')
+
+        renameColumn(schemaName: dbAppsSchema,
+                tableName: 'df_usage',
+                oldColumnName: 'original_amount',
+                newColumnName: 'reported_value',
+                columnDataType: 'DECIMAL(38,2)')
+
+        renameColumn(schemaName: dbAppsSchema,
+                tableName: 'df_usage_archive',
+                oldColumnName: 'original_amount',
+                newColumnName: 'reported_value',
+                columnDataType: 'DECIMAL(38,2)')
+
+        rollback {
+            addColumn(tableName: 'df_usage_batch', schemaName: dbAppsSchema) {
+                column(name: 'currency_ind', type: 'VARCHAR(3)', remarks: 'The currency index')
+                column(name: 'applied_conversion_rate', type: 'NUMERIC(20,10)', remarks: 'The applied conversion rate')
+            }
+
+            renameColumn(schemaName: dbAppsSchema,
+                    tableName: 'df_usage',
+                    oldColumnName: 'reported_value',
+                    newColumnName: 'original_amount',
+                    columnDataType: 'DECIMAL(38,2)')
+
+            renameColumn(schemaName: dbAppsSchema,
+                    tableName: 'df_usage_archive',
+                    oldColumnName: 'reported_value',
+                    newColumnName: 'original_amount',
+                    columnDataType: 'DECIMAL(38,2)')
+        }
+    }
 }

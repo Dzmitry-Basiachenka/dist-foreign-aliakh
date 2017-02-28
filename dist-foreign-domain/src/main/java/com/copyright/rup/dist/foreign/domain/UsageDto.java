@@ -41,7 +41,7 @@ public class UsageDto extends StoredEntity<String> {
     private Integer marketPeriodTo;
     private String author;
     private BigDecimal grossAmount;
-    private BigDecimal originalAmount;
+    private BigDecimal reportedValue;
     private UsageStatusEnum status;
 
     /**
@@ -269,19 +269,19 @@ public class UsageDto extends StoredEntity<String> {
     }
 
     /**
-     * @return original amount.
+     * @return reported value.
      */
-    public BigDecimal getOriginalAmount() {
-        return originalAmount;
+    public BigDecimal getReportedValue() {
+        return reportedValue;
     }
 
     /**
-     * Sets original amount.
+     * Sets reported value.
      *
-     * @param originalAmount original amount
+     * @param reportedValue reported value
      */
-    public void setOriginalAmount(BigDecimal originalAmount) {
-        this.originalAmount = originalAmount;
+    public void setReportedValue(BigDecimal reportedValue) {
+        this.reportedValue = reportedValue;
     }
 
     /**
@@ -427,7 +427,7 @@ public class UsageDto extends StoredEntity<String> {
             .append(this.marketPeriodTo, that.marketPeriodTo)
             .append(this.author, that.author)
             .append(this.grossAmount, that.grossAmount)
-            .append(this.originalAmount, that.originalAmount)
+            .append(this.reportedValue, that.reportedValue)
             .append(this.status, that.status)
             .isEquals();
     }
@@ -456,7 +456,7 @@ public class UsageDto extends StoredEntity<String> {
             .append(marketPeriodTo)
             .append(author)
             .append(grossAmount)
-            .append(originalAmount)
+            .append(reportedValue)
             .append(status)
             .toHashCode();
     }
@@ -485,7 +485,7 @@ public class UsageDto extends StoredEntity<String> {
             .append("marketPeriodTo", marketPeriodTo)
             .append("author", author)
             .append("grossAmount", grossAmount)
-            .append("originalAmount", originalAmount)
+            .append("reportedValue", reportedValue)
             .append("status", status)
             .toString();
     }

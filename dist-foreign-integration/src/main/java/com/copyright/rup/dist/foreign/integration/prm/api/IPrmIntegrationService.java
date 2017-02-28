@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.integration.prm.api;
 
-import com.copyright.rup.dist.common.domain.Currency;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 
 import java.util.List;
@@ -16,11 +15,6 @@ import java.util.Set;
  * @author Mikalai Bezmen
  */
 public interface IPrmIntegrationService {
-
-    /**
-     * @return set of {@link Currency}s found in PRM.
-     */
-    Set<Currency> getCurrencies();
 
     /**
      * Retrieves list of {@link Rightsholder} by specified set of account numbers from PRM.

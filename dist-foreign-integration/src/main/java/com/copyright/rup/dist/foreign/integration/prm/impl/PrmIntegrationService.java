@@ -1,8 +1,6 @@
 package com.copyright.rup.dist.foreign.integration.prm.impl;
 
-import com.copyright.rup.dist.common.domain.Currency;
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.common.integration.rest.prm.IPrmCurrencyService;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmRightsholderService;
 
@@ -31,15 +29,8 @@ import java.util.Set;
 public class PrmIntegrationService implements IPrmIntegrationService {
 
     @Autowired
-    private IPrmCurrencyService prmCurrencyService;
-    @Autowired
     private IPrmRightsholderService prmRightsholderService;
 
-    @Override
-    @Profiled(tag = "integration.PrmIntegrationService.getCurrencies")
-    public Set<Currency> getCurrencies() {
-        return prmCurrencyService.getCurrencies();
-    }
 
     @Override
     @Profiled(tag = "integration.PrmRightsholderService.getRightsholders")

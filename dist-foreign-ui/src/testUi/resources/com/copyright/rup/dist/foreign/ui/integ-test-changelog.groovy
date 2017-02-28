@@ -11,9 +11,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
             column(name: 'gross_amount', value: '35000')
-            column(name: 'currency_ind', value: 'EUR')
             column(name: 'conversion_rate', value: '0.929584011')
-            column(name: 'applied_conversion_rate', value: '5.38461538')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -23,9 +21,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2015-09-10')
             column(name: 'fiscal_year', value: '2016')
             column(name: 'gross_amount', value: '35000')
-            column(name: 'currency_ind', value: 'USD')
             column(name: 'conversion_rate', value: '1.000000000')
-            column(name: 'applied_conversion_rate', value: '5.38461538')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -35,9 +31,7 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2018-08-16')
             column(name: 'fiscal_year', value: '2019')
             column(name: 'gross_amount', value: '35000')
-            column(name: 'currency_ind', value: 'JPY')
             column(name: 'conversion_rate', value: '0.008851')
-            column(name: 'applied_conversion_rate', value: '5.38461538')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -57,7 +51,7 @@ databaseChangeLog {
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'number_of_copies', value: '2502232')
-            column(name: 'original_amount', value: '2500')
+            column(name: 'reported_value', value: '2500')
             column(name: 'gross_amount', value: '13461.54')
         }
 
@@ -78,7 +72,7 @@ databaseChangeLog {
             column(name: 'market_period_to', value: '2019')
             column(name: 'author', value: 'Nanette M. Schwann')
             column(name: 'number_of_copies', value: '1600')
-            column(name: 'original_amount', value: '1560')
+            column(name: 'reported_value', value: '1560')
             column(name: 'gross_amount', value: '8400.00')
         }
 
@@ -99,7 +93,7 @@ databaseChangeLog {
             column(name: 'market_period_to', value: '2019')
             column(name: 'author', value: '愛染恭子')
             column(name: 'number_of_copies', value: '16')
-            column(name: 'original_amount', value: '850')
+            column(name: 'reported_value', value: '850')
             column(name: 'gross_amount', value: '4577.00')
         }
 
@@ -120,7 +114,7 @@ databaseChangeLog {
             column(name: 'market_period_to', value: '2019')
             column(name: 'author', value: 'Mirjam H. Hüberli')
             column(name: 'number_of_copies', value: '2630')
-            column(name: 'original_amount', value: '1280.00')
+            column(name: 'reported_value', value: '1280.00')
             column(name: 'gross_amount', value: '6892.30')
         }
 

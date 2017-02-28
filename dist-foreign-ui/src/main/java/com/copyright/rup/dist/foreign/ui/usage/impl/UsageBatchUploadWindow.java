@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
-import com.copyright.rup.dist.common.domain.Currency;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
@@ -21,8 +20,6 @@ import com.copyright.rup.vaadin.ui.Windows;
 
 import com.google.common.collect.Lists;
 import com.vaadin.data.Property;
-import com.vaadin.data.util.BeanItem;
-import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.data.validator.AbstractStringValidator;
 import com.vaadin.data.validator.StringLengthValidator;
@@ -30,9 +27,9 @@ import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.Upload;
 import com.vaadin.ui.VerticalLayout;
@@ -54,12 +51,10 @@ import java.math.BigDecimal;
  */
 class UsageBatchUploadWindow extends Window {
 
-    private static final int DEFAULT_WIDTH = 157;
     private TextField accountNumberField;
     private LocalDateWidget paymentDateWidget;
     private TextField grossAmountField;
     private TextField usageBatchNameField;
-    private ComboBox reportedCurrencyBox;
     private Property<String> rightsholderNameProperty;
     private Property<String> fiscalYearProperty;
     private CsvUploadComponent csvUploadComponent;
@@ -100,10 +95,10 @@ class UsageBatchUploadWindow extends Window {
                 Windows.showNotificationWindow(e.getMessage());
             }
         } else {
-            // TODO {mhladkikh} use csvUploadComponent, but not it's internal state for error window
+            // TODO {apchelnikau} use csvUploadComponent, but not it's internal state for error window
             Windows.showValidationErrorWindow(
                 Lists.newArrayList(usageBatchNameField, csvUploadComponent.getFileNameField(),
-                    accountNumberField, paymentDateWidget, grossAmountField, reportedCurrencyBox));
+                    accountNumberField, paymentDateWidget, grossAmountField));
         }
     }
 
@@ -117,8 +112,7 @@ class UsageBatchUploadWindow extends Window {
             && csvUploadComponent.isValid()
             && accountNumberField.isValid()
             && paymentDateWidget.isValid()
-            && grossAmountField.isValid()
-            && reportedCurrencyBox.isValid();
+            && grossAmountField.isValid();
     }
 
     private UsageBatch buildUsageBatch() {
@@ -207,7 +201,7 @@ class UsageBatchUploadWindow extends Window {
 
     private HorizontalLayout initGrossAmountLayout() {
         HorizontalLayout horizontalLayout = new HorizontalLayout();
-        horizontalLayout.addComponents(initReportedCurrency(), initGrossAmountField());
+        horizontalLayout.addComponents(initGrossAmountField(), new Label());
         horizontalLayout.setSpacing(true);
         horizontalLayout.setSizeFull();
         return horizontalLayout;
@@ -267,21 +261,6 @@ class UsageBatchUploadWindow extends Window {
         return grossAmountField;
     }
 
-    private ComboBox initReportedCurrency() {
-        BeanItemContainer<Currency> container =
-            new BeanItemContainer<>(Currency.class, usagesController.getCurrencies());
-        reportedCurrencyBox = new ComboBox(ForeignUi.getMessage("label.reported_currency"), container);
-        reportedCurrencyBox.setWidth(DEFAULT_WIDTH, Unit.PIXELS);
-        for (Object itemId : reportedCurrencyBox.getItemIds()) {
-            reportedCurrencyBox.setItemCaption(itemId, getCurrencyItemCaption(container, itemId));
-        }
-        container.sort(new Object[]{"code"}, new boolean[]{true});
-        setRequired(reportedCurrencyBox);
-        VaadinUtils.setMaxComponentsWidth(reportedCurrencyBox);
-        VaadinUtils.addComponentStyle(reportedCurrencyBox, "reported-currency-field");
-        return reportedCurrencyBox;
-    }
-
     private Button initVerifyButton() {
         Button button = Buttons.createButton(ForeignUi.getMessage("button.verify"));
         button.setSizeFull();
@@ -297,16 +276,6 @@ class UsageBatchUploadWindow extends Window {
     private void setRequired(AbstractField field) {
         field.setRequired(true);
         field.setRequiredError(ForeignUi.getMessage("field.error.empty"));
-    }
-
-    private String getCurrencyItemCaption(BeanItemContainer<Currency> container, Object itemId) {
-        BeanItem<Currency> currencyBean = container.getItem(itemId);
-        String caption = StringUtils.EMPTY;
-        if (null != currencyBean) {
-            Currency currency = currencyBean.getBean();
-            caption = String.format("%s - %s", currency.getCode(), currency.getName());
-        }
-        return caption;
     }
 
     /**

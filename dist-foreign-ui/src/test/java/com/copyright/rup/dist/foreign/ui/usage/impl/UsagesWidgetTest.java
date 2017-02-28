@@ -62,7 +62,7 @@ public class UsagesWidgetTest {
 
     private static final String DETAIL_ID_PROPERTY = "detailId";
     private static final String GROSS_AMOUNT_PROPERTY = "grossAmount";
-    private static final String ORIGINAL_AMOUNT_PROPERTY = "originalAmount";
+    private static final String REPORTED_VALUE = "reportedValue";
     private UsagesWidget usagesWidget;
     private IUsagesController controller;
 
@@ -113,7 +113,6 @@ public class UsagesWidgetTest {
         ClickListener clickListener = (ClickListener) listeners.iterator().next();
         Windows.showModalWindow(anyObject(UsageBatchUploadWindow.class));
         expectLastCall().once();
-        expect(controller.getCurrencies()).andReturn(Collections.emptySet()).once();
         replay(clickEvent, Windows.class, controller, prmIntegrationService);
         clickListener.buttonClick(clickEvent);
         verify(clickEvent, Windows.class, controller, prmIntegrationService);
@@ -174,12 +173,12 @@ public class UsagesWidgetTest {
     private void verifyTable(Table table) {
         assertArrayEquals(new Object[]{DETAIL_ID_PROPERTY, "status", "batchName", "fiscalYear", "rroAccountNumber",
             "rroName", "paymentDate", "workTitle", "article", "standardNumber", "wrWrkInst", "rhAccountNumber",
-            "rhName", "publisher", "publicationDate", "numberOfCopies", ORIGINAL_AMOUNT_PROPERTY, GROSS_AMOUNT_PROPERTY,
+            "rhName", "publisher", "publicationDate", "numberOfCopies", REPORTED_VALUE, GROSS_AMOUNT_PROPERTY,
             "market", "marketPeriodFrom", "marketPeriodTo", "author"}, table.getVisibleColumns());
         assertArrayEquals(
             new Object[]{"Detail ID", "Detail Status", "Usage Batch Name", "Fiscal Year", "RRO Account #",
                 "RRO Name", "Payment Date", "Title", "Article", "Standard Number", "Wr Wrk Inst", "RH Account #",
-                "RH Name", "Publisher", "Pub Date", "Number of Copies", "Amt in Orig Currency", "Amt in USD", "Market",
+                "RH Name", "Publisher", "Pub Date", "Number of Copies", "Reported value", "Amt in USD", "Market",
                 "Market Period From", "Market Period To", "Author"}, table.getColumnHeaders());
         Collection<?> containerPropertyIds = table.getContainerPropertyIds();
 
@@ -199,7 +198,7 @@ public class UsagesWidgetTest {
         assertTrue(containerPropertyIds.contains("publisher"));
         assertTrue(containerPropertyIds.contains("publicationDate"));
         assertTrue(containerPropertyIds.contains("numberOfCopies"));
-        assertTrue(containerPropertyIds.contains(ORIGINAL_AMOUNT_PROPERTY));
+        assertTrue(containerPropertyIds.contains(REPORTED_VALUE));
         assertTrue(containerPropertyIds.contains(GROSS_AMOUNT_PROPERTY));
         assertTrue(containerPropertyIds.contains("market"));
         assertTrue(containerPropertyIds.contains("marketPeriodFrom"));
@@ -217,7 +216,7 @@ public class UsagesWidgetTest {
         assertEquals(300, table.getColumnWidth("workTitle"));
         assertEquals(300, table.getColumnWidth("rhName"));
         assertEquals(300, table.getColumnWidth("author"));
-        assertEquals(70, table.getColumnWidth(ORIGINAL_AMOUNT_PROPERTY));
+        assertEquals(70, table.getColumnWidth(REPORTED_VALUE));
         assertEquals(70, table.getColumnWidth(GROSS_AMOUNT_PROPERTY));
 
         verifyGeneratedColumns(table);
@@ -231,7 +230,7 @@ public class UsagesWidgetTest {
         verifyColumnGenerator(table.getColumnGenerator("rroAccountNumber"), LongColumnGenerator.class);
         verifyColumnGenerator(table.getColumnGenerator("publicationDate"), LocalDateColumnGenerator.class);
         verifyColumnGenerator(table.getColumnGenerator("paymentDate"), LocalDateColumnGenerator.class);
-        verifyColumnGenerator(table.getColumnGenerator(ORIGINAL_AMOUNT_PROPERTY), MoneyColumnGenerator.class);
+        verifyColumnGenerator(table.getColumnGenerator(REPORTED_VALUE), MoneyColumnGenerator.class);
         verifyColumnGenerator(table.getColumnGenerator(GROSS_AMOUNT_PROPERTY), MoneyColumnGenerator.class);
     }
 

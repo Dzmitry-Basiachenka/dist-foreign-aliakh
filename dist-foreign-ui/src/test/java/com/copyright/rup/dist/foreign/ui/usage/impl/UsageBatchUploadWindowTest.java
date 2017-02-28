@@ -14,7 +14,6 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
-import com.copyright.rup.dist.common.domain.Currency;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
@@ -35,7 +34,6 @@ import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
@@ -53,7 +51,6 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Collections;
 
 /**
  * Verifies {@link UsageBatchUploadWindow}.
@@ -68,8 +65,6 @@ import java.util.Collections;
 public class UsageBatchUploadWindowTest {
 
     private static final String ACCOUNT_NUMBER = "1000001863";
-    private static final String EUR_CURRENCY_CODE = "EUR";
-    private static final String EUR_CURRENCY_NAME = "European currency";
     private static final String USAGE_BATCH_NAME = "BatchName";
     private static final String USER_NAME = "user@copyright.com";
     private static final LocalDate PAYMENT_DATE = LocalDate.of(2017, 2, 27);
@@ -84,7 +79,6 @@ public class UsageBatchUploadWindowTest {
     @Test
     @PrepareForTest(Windows.class)
     public void testConstructor() {
-        expect(usagesController.getCurrencies()).andReturn(Collections.singleton(buildCurrency())).once();
         expect(usagesController.getRroName(Long.valueOf(ACCOUNT_NUMBER)))
             .andReturn("CANADIAN CERAMIC SOCIETY").once();
         replay(usagesController);
@@ -100,7 +94,6 @@ public class UsageBatchUploadWindowTest {
 
     @Test
     public void testIsValid() {
-        expect(usagesController.getCurrencies()).andReturn(Collections.singleton(buildCurrency())).once();
         expect(usagesController.usageBatchExists(USAGE_BATCH_NAME)).andReturn(false).once();
         replay(usagesController);
         window = new UsageBatchUploadWindow(usagesController);
@@ -113,7 +106,6 @@ public class UsageBatchUploadWindowTest {
         assertFalse(window.isValid());
         ((TextField) Whitebox.getInternalState(window, "grossAmountField")).setValue("100.00");
         assertFalse(window.isValid());
-        Whitebox.getInternalState(window, ComboBox.class).setValue(buildCurrency());
         ((TextField) Whitebox.getInternalState(window, "usageBatchNameField")).setValue(USAGE_BATCH_NAME);
         assertTrue(window.isValid());
         verify(usagesController);
@@ -164,7 +156,7 @@ public class UsageBatchUploadWindowTest {
         verifyUploadComponent(verticalLayout.getComponent(1));
         verifyRightsholdersComponents(verticalLayout.getComponent(2));
         verifyDateComponents(verticalLayout.getComponent(3));
-        verifyReportedCurrencyAndGrossAmount(verticalLayout.getComponent(4));
+        verifyGrossAmount(verticalLayout.getComponent(4));
         verifyButtonsLayout(verticalLayout.getComponent(5));
     }
 
@@ -201,8 +193,7 @@ public class UsageBatchUploadWindowTest {
             Whitebox.getInternalState(window, CsvUploadComponent.class).getFileNameField(),
             Whitebox.getInternalState(window, "accountNumberField"),
             Whitebox.getInternalState(window, LocalDateWidget.class),
-            Whitebox.getInternalState(window, "grossAmountField"),
-            Whitebox.getInternalState(window, ComboBox.class)));
+            Whitebox.getInternalState(window, "grossAmountField")));
         expectLastCall().once();
         replay(Windows.class);
         loadButton.click();
@@ -273,16 +264,11 @@ public class UsageBatchUploadWindowTest {
         assertTrue(validators.iterator().next() instanceof GrossAmountValidator);
     }
 
-    private void verifyReportedCurrencyAndGrossAmount(Component component) {
+    private void verifyGrossAmount(Component component) {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
         assertEquals(2, horizontalLayout.getComponentCount());
-        Component reportedCurrencyComponent = horizontalLayout.getComponent(0);
-        assertTrue(reportedCurrencyComponent instanceof ComboBox);
-        ComboBox comboBox = (ComboBox) reportedCurrencyComponent;
-        verifyRequiredField(comboBox);
-        assertTrue(comboBox.getItemIds().contains(buildCurrency()));
-        verifyGrossAmountComponent(horizontalLayout.getComponent(1));
+        verifyGrossAmountComponent(horizontalLayout.getComponent(0));
     }
 
     private TextField verifyTextField(Component component, String caption) {
@@ -294,13 +280,6 @@ public class UsageBatchUploadWindowTest {
     private void verifyRequiredField(AbstractField field) {
         assertTrue(field.isRequired());
         assertEquals("Field value should be specified", field.getRequiredError());
-    }
-
-    private Currency buildCurrency() {
-        Currency currency = new Currency();
-        currency.setCode(EUR_CURRENCY_CODE);
-        currency.setName(EUR_CURRENCY_NAME);
-        return currency;
     }
 
     private UsageBatch buildUsageBatch() {

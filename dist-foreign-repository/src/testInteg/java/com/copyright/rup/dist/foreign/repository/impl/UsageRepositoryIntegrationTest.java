@@ -71,7 +71,7 @@ public class UsageRepositoryIntegrationTest {
     private static final Integer MARKED_PERIOD_FROM = 2015;
     private static final Integer MARKED_PERIOD_TO = 2017;
     private static final String AUTHOR = "Author";
-    private static final BigDecimal ORIGINAL_AMOUNT = new BigDecimal("11.25");
+    private static final BigDecimal REPORTED_VALUE = new BigDecimal("11.25");
     private static final LocalDate PUBLICATION_DATE = LocalDate.of(2016, 11, 3);
     private static final Long DETAIL_ID = 12345L;
     private static final Integer NUMBER_OF_COPIES = 155;
@@ -84,7 +84,7 @@ public class UsageRepositoryIntegrationTest {
     private static final String PUBLISHER_KEY = "publisher";
     private static final String PUBLICATION_DATE_KEY = "publicationDate";
     private static final String NUMBER_OF_COPIES_KEY = "numberOfCopies";
-    private static final String ORIGINAL_AMOUNT_KEY = "originalAmount";
+    private static final String REPORTED_VALUE_KEY = "reportedValue";
     private static final String GROSS_AMOUNT_KEY = "grossAmount";
     private static final String MARKET_KEY = "market";
     private static final String MARKED_PERIOD_FROM_KEY = "marketPeriodFrom";
@@ -120,7 +120,7 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(MARKED_PERIOD_TO, usage.getMarketPeriodTo());
         assertEquals(AUTHOR, usage.getAuthor());
         assertEquals(NUMBER_OF_COPIES, usage.getNumberOfCopies());
-        assertEquals(ORIGINAL_AMOUNT, usage.getOriginalAmount());
+        assertEquals(REPORTED_VALUE, usage.getReportedValue());
         assertEquals(GROSS_AMOUNT, usage.getGrossAmount());
     }
 
@@ -235,9 +235,9 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindByFilterSortByOriginalAmount() {
+    public void testFindByFilterSortByReportedValue() {
         verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
-            new Sort(ORIGINAL_AMOUNT_KEY, Sort.Direction.ASC)), 2, USAGE_ID_3, USAGE_ID_1);
+            new Sort(REPORTED_VALUE_KEY, Sort.Direction.ASC)), 2, USAGE_ID_3, USAGE_ID_1);
     }
 
     @Test
@@ -305,7 +305,7 @@ public class UsageRepositoryIntegrationTest {
             new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
         assertEquals("Detail ID,Usage Batch Name,Fiscal Year,RRO Account #,RRO Name,Payment Date,Title,Article," +
                 "Standard Number,Wr Wrk Inst,RH Account #,RH Name,Publisher,Pub Date,Number of Copies," +
-                "Amt in Orig Currency,Amt in USD,Market,Market Period From,Market Period To,Author,Detail Status",
+                "Reported value,Amt in USD,Market,Market Period From,Market Period To,Author,Detail Status",
             bufferedReader.readLine());
         assertEquals("6997788888,CADRA_11Dec16,FY2017,7000813806," +
             "\"CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil\",01/11/2017," +
@@ -327,7 +327,7 @@ public class UsageRepositoryIntegrationTest {
             new BufferedReader(new InputStreamReader(inputStream, Charset.defaultCharset()));
         assertEquals("Detail ID,Usage Batch Name,Fiscal Year,RRO Account #,RRO Name,Payment Date,Title,Article," +
                 "Standard Number,Wr Wrk Inst,RH Account #,RH Name,Publisher,Pub Date,Number of Copies," +
-                "Amt in Orig Currency,Amt in USD,Market,Market Period From,Market Period To,Author,Detail Status",
+                "Reported value,Amt in USD,Market,Market Period From,Market Period To,Author,Detail Status",
             bufferedReader.readLine());
         assertNull(bufferedReader.readLine());
     }
@@ -375,7 +375,7 @@ public class UsageRepositoryIntegrationTest {
         usage.setMarketPeriodTo(MARKED_PERIOD_TO);
         usage.setAuthor(AUTHOR);
         usage.setNumberOfCopies(NUMBER_OF_COPIES);
-        usage.setOriginalAmount(ORIGINAL_AMOUNT);
+        usage.setReportedValue(REPORTED_VALUE);
         usage.setGrossAmount(GROSS_AMOUNT);
         return usage;
     }

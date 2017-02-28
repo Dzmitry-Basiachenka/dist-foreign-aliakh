@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.ui.usage.api;
 
-import com.copyright.rup.dist.common.domain.Currency;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -12,7 +11,6 @@ import com.vaadin.util.ReflectTools;
 
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Interface for controller for {@link IUsagesWidget}.
@@ -44,11 +42,6 @@ public interface IUsagesController extends IController<IUsagesWidget>, IBeanLoad
      * @param event event
      */
     void onFilterChanged(FilterChangedEvent event);
-
-    /**
-     * @return set of {@link Currency}ies from PRM.
-     */
-    Set<Currency> getCurrencies();
 
     /**
      * Gets RRO name from PRM by account number.
