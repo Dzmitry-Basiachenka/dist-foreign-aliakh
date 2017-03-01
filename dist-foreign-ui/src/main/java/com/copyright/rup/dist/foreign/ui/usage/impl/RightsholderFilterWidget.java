@@ -10,6 +10,8 @@ import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.FilterSaveEvent
 import com.copyright.rup.vaadin.ui.component.filter.IFilterWindowController;
 import com.copyright.rup.vaadin.widget.BaseItemsFilterWidget;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.List;
 import java.util.Set;
 
@@ -56,7 +58,11 @@ public class RightsholderFilterWidget extends BaseItemsFilterWidget<Long, Rights
 
     @Override
     public String getBeanItemCaption(Rightsholder rightsholder) {
-        return String.format("%s - %s", rightsholder.getAccountNumber(), rightsholder.getName());
+        String rightsholderName = rightsholder.getName();
+        return String.format("%s - %s", rightsholder.getAccountNumber(),
+            StringUtils.isNotBlank(rightsholderName)
+                ? rightsholder.getName()
+                : ForeignUi.getMessage("message.error.rro_not_found"));
     }
 
     @Override
