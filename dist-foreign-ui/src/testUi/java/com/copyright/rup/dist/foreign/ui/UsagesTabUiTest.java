@@ -5,8 +5,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import com.copyright.rup.vaadin.ui.themes.Cornerstone;
-
 import com.google.common.collect.Sets;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -37,14 +35,12 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         "7000813806 - CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil";
     private static final String FISCAL_YEAR = "2017";
     private static final String CLEAR_BATTON_ID = "Clear";
-    private static final String USAGE_LAYOUT_ID = "usages-layout";
     private static final String USAGE_TABLE_ID = "usages-table";
     private static final String USAGE_FILTER_WIDGET_ID = "usages-filter-widget";
     private static final String FILTERS_HEADER_TEXT = "Filters";
     private static final String FILTER_BUTTONS_LAYOUT_ID = "filter-buttons";
     private static final String ADD_TO_SCENARIO_BUTTON_ID = "Add_To_Scenario";
     private static final String EXPORT_BUTTON_ID = "Export";
-    private static final String LOAD_USAGE_BUTTON_ID = "Load";
     private static final String DELETE_USAGE_BUTTON_ID = "Delete_Usage_Batch";
     private static final String CLOSE_BUTTON = "Close";
     private static final Set USAGES_BUTTONS =
@@ -223,11 +219,6 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         assertTrue(getInnerHtml(usageValues.get(19)).contains("2013"));
         assertTrue(getInnerHtml(usageValues.get(20)).contains("2017"));
         assertTrue(getInnerHtml(usageValues.get(21)).contains("Íñigo López de Mendoza, marqués de Santillana"));
-    }
-
-    private WebElement getUsagesTab() {
-        WebElement tabContainer = findElementById(Cornerstone.MAIN_TABSHEET);
-        return waitAndGetTab(tabContainer, "Usages");
     }
 
     private WebElement verifyUsagesTab() {
@@ -456,12 +447,6 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         assertNotNull(findElementByText(webElement, captionTagName, caption));
         assertNotNull(findElement(webElement, By.tagName(HTML_INPUT_TAG_NAME)));
         assertNotNull(findElement(webElement, By.className(V_FILTER_SELECT_BUTTON_CLASS_NAME)));
-        return webElement;
-    }
-
-    private WebElement assertElement(WebElement parentElement, String id) {
-        WebElement webElement = findElement(parentElement, By.id(id));
-        assertNotNull(webElement);
         return webElement;
     }
 }
