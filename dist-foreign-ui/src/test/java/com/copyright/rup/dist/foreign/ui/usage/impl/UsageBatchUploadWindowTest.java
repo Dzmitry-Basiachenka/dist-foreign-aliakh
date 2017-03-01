@@ -230,6 +230,14 @@ public class UsageBatchUploadWindowTest {
         assertEquals("Verify", verifyComponent.getCaption());
         assertEquals(1, verifyButton.getListeners(ClickEvent.class).size());
         assertEquals(StringUtils.EMPTY, nameField.getValue());
+        verifyButton.click();
+        assertEquals(StringUtils.EMPTY, nameField.getValue());
+        numberField.setValue("value");
+        verifyButton.click();
+        assertEquals(StringUtils.EMPTY, nameField.getValue());
+        numberField.setValue("123456789874541246");
+        verifyButton.click();
+        assertEquals(StringUtils.EMPTY, nameField.getValue());
         numberField.setValue(ACCOUNT_NUMBER);
         verifyButton.click();
         assertEquals("CANADIAN CERAMIC SOCIETY", nameField.getValue());

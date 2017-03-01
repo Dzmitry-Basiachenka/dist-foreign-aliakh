@@ -264,12 +264,10 @@ class UsageBatchUploadWindow extends Window {
     private Button initVerifyButton() {
         Button button = Buttons.createButton(ForeignUi.getMessage("button.verify"));
         button.setSizeFull();
-        button.addClickListener(event -> {
-            String rroAccountNumber = StringUtils.trim(accountNumberField.getValue());
-            rightsholderNameProperty.setValue(StringUtils.isNotEmpty(rroAccountNumber)
-                ? usagesController.getRroName(Long.valueOf(rroAccountNumber))
-                : StringUtils.EMPTY);
-        });
+        button.addClickListener(event ->
+            rightsholderNameProperty.setValue(accountNumberField.isValid()
+                ? usagesController.getRroName(Long.valueOf(StringUtils.trim(accountNumberField.getValue())))
+                : StringUtils.EMPTY));
         return button;
     }
 
