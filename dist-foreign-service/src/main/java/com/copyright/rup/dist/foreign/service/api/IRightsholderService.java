@@ -28,4 +28,11 @@ public interface IRightsholderService {
      * @return count of updated records
      */
     int updateRightsholdersInformation();
+
+    /**
+     * Updates {@link Rightsholder} information in database table.
+     *
+     * @param rightsholder instance of {@link Rightsholder} for update
+     */
+    void updateRightsholder(Rightsholder rightsholder);
 }

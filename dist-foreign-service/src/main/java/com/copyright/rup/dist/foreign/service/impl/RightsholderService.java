@@ -57,4 +57,15 @@ public class RightsholderService implements IRightsholderService {
             rightsholdersSize);
         return rightsholdersSize;
     }
+
+    @Override
+    @Transactional
+    public void updateRightsholder(Rightsholder rightsholder) {
+        LOGGER.info("Update Rightsholder information. Started. Rightsholder={}", rightsholder);
+        if (null != rightsholder) {
+            repository.deleteRightsholderByAccountNumber(rightsholder.getAccountNumber());
+            repository.insert(rightsholder);
+        }
+        LOGGER.info("Update Rightsholder information. Finished. Rightsholder={}", rightsholder);
+    }
 }

@@ -71,6 +71,25 @@ public class RightsholderServiceTest {
         verify(rightsholderRepository, prmIntegrationService);
     }
 
+    @Test
+    public void testUpdateRightsholder() {
+        Rightsholder rightsholder = buildRightsholder();
+        rightsholderRepository.deleteRightsholderByAccountNumber(rightsholder.getAccountNumber());
+        expectLastCall().once();
+        rightsholderRepository.insert(rightsholder);
+        expectLastCall().once();
+        replay(rightsholderRepository);
+        rightsholderService.updateRightsholder(rightsholder);
+        verify(rightsholderRepository);
+    }
+
+    @Test
+    public void testUpdateNullRightsholder() {
+        replay(rightsholderRepository);
+        rightsholderService.updateRightsholder(null);
+        verify(rightsholderRepository);
+    }
+
     private Rightsholder buildRightsholder() {
         Rightsholder rightsholder = new Rightsholder();
         rightsholder.setAccountNumber(ACCOUNT_NUMBER);

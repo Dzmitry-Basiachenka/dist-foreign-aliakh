@@ -36,7 +36,7 @@ public interface IUsageBatchService {
     boolean usageBatchExists(String name);
 
     /**
-     * Inserts usage batch and it's usages.
+     * Inserts usage batch, it's usages and RRO.
      *
      * @param usageBatch {@link UsageBatch} instance
      * @param usages     list of {@link Usage}s

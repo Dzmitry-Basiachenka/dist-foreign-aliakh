@@ -40,4 +40,11 @@ public interface IRightsholderRepository {
      * Removes all rightsholders from df_rightsholder table.
      */
     void deleteAll();
+
+    /**
+     * Deletes {@link Rightsholder} from database table by account number.
+     *
+     * @param accountNumber acccount number of {@link Rightsholder}
+     */
+    void deleteRightsholderByAccountNumber(Long accountNumber);
 }

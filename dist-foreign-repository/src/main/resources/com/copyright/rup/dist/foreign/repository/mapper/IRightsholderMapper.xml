@@ -58,4 +58,9 @@
     <delete id="deleteAll">
         delete from ${schema}.df_rightsholder
     </delete>
+
+    <delete id="deleteRightsholderByAccountNumber" parameterType="long">
+        delete from ${schema}.df_rightsholder
+        where rh_account_number = #{accountNumber}
+    </delete>
 </mapper>

@@ -4,6 +4,7 @@ import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
+import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 
@@ -34,6 +35,8 @@ public class UsageBatchService implements IUsageBatchService {
     private IUsageBatchRepository usageBatchRepository;
     @Autowired
     private IUsageService usageService;
+    @Autowired
+    private IRightsholderService rightsholderService;
 
     @Override
     public List<Integer> getFiscalYears() {
@@ -59,6 +62,7 @@ public class UsageBatchService implements IUsageBatchService {
         LOGGER.info("Insert usage batch. Started. UsageBatchBatch={}, UserName={}", usageBatch.getName(), userName);
         usageBatchRepository.insert(usageBatch);
         LOGGER.info("Insert usage batch. Finished. UsageBatchBatch={}, UserName={}", usageBatch.getName(), userName);
+        rightsholderService.updateRightsholder(usageBatch.getRro());
         return usageService.insertUsages(usageBatch, usages, userName);
     }
 

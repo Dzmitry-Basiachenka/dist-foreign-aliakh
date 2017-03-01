@@ -120,6 +120,7 @@ class UsageBatchUploadWindow extends Window {
         usageBatch.setName(StringUtils.trim(usageBatchNameField.getValue()));
         Rightsholder rro = new Rightsholder();
         rro.setAccountNumber(Long.valueOf(StringUtils.trim(accountNumberField.getValue())));
+        rro.setName(rightsholderNameProperty.getValue());
         usageBatch.setRro(rro);
         usageBatch.setPaymentDate(paymentDateWidget.getValue());
         usageBatch.setFiscalYear(UsageBatchUtils.calculateFiscalYear(paymentDateWidget.getValue()));
