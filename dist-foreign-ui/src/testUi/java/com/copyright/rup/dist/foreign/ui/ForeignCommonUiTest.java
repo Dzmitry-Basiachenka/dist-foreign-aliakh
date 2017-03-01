@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import com.copyright.rup.vaadin.test.CommonUiTest;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
@@ -7,6 +9,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
+import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
 import org.springframework.test.context.ContextConfiguration;
@@ -24,6 +27,14 @@ import org.springframework.test.context.ContextConfiguration;
 @ContextConfiguration(value = "classpath:/com/copyright/rup/dist/foreign/ui/dist-foreign-ui-test-context.xml")
 public class ForeignCommonUiTest extends CommonUiTest {
 
+    /**
+     * Identifier for "Load" usage button.
+     */
+    protected static final String LOAD_USAGE_BUTTON_ID = "Load";
+    /**
+     * Identifier for usage layout.
+     */
+    protected static final String USAGE_LAYOUT_ID = "usages-layout";
     private static final String APP_URL = "http://localhost:22000/dist-foreign-ui/";
     private static final Dimension WINDOW_DIMENSION = new Dimension(1280, 800);
     private static final String PASSWORD = "`123qwer";
@@ -89,6 +100,24 @@ public class ForeignCommonUiTest extends CommonUiTest {
             return true;
         }
         return false;
+    }
+
+    /**
+     * @return "Usages" tab.
+     */
+    protected WebElement getUsagesTab() {
+        return waitAndGetTab(findElementById(Cornerstone.MAIN_TABSHEET), "Usages");
+    }
+
+    /**
+     * Finds element by locating mechanism inside parent element and verifies it for {@code null}.
+     *
+     * @param parentElement parent element
+     * @param id            component id
+     * @return instance of {@link WebElement}
+     */
+    protected WebElement assertElement(WebElement parentElement, String id) {
+        return checkNotNull(findElement(parentElement, By.id(id)));
     }
 
     private void openAppPage(ForeignCredentials credentials) {
