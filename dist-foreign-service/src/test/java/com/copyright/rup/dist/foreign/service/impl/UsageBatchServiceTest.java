@@ -11,9 +11,11 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
+import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 
 import com.google.common.collect.Lists;
@@ -40,18 +42,23 @@ public class UsageBatchServiceTest {
     private static final Integer FISCAL_YEAR = 2017;
     private static final String BATCH_NAME = "JAACC_11Dec16";
     private static final String USER_NAME = "User Name";
+    private static final Long RRO_ACCOUNT_NUMBER = 123456789L;
+    private static final String RRO_NAME = "RRO Name";
 
     private IUsageBatchRepository usageBatchRepository;
     private IUsageService usageService;
+    private IRightsholderService rightsholderService;
     private UsageBatchService usageBatchService;
 
     @Before
     public void setUp() {
         usageBatchRepository = createStrictMock(IUsageBatchRepository.class);
         usageService = createStrictMock(IUsageService.class);
+        rightsholderService = createStrictMock(IRightsholderService.class);
         usageBatchService = new UsageBatchService();
         Whitebox.setInternalState(usageBatchService, "usageBatchRepository", usageBatchRepository);
         Whitebox.setInternalState(usageBatchService, "usageService", usageService);
+        Whitebox.setInternalState(usageBatchService, "rightsholderService", rightsholderService);
     }
 
     @Test
@@ -93,8 +100,12 @@ public class UsageBatchServiceTest {
     @Test
     public void testInsertUsages() {
         UsageBatch usageBatch = new UsageBatch();
+        Rightsholder rro = buildRro();
+        usageBatch.setRro(rro);
         List<Usage> usages = Lists.newArrayList(new Usage(), new Usage());
         usageBatchRepository.insert(usageBatch);
+        expectLastCall().once();
+        rightsholderService.updateRightsholder(rro);
         expectLastCall().once();
         expect(usageService.insertUsages(usageBatch, usages, USER_NAME)).andReturn(2).once();
         replay(usageBatchRepository, usageService);
@@ -112,5 +123,12 @@ public class UsageBatchServiceTest {
         replay(usageService, usageBatchRepository);
         usageBatchService.deleteUsageBatch(batchId, USER_NAME);
         verify(usageService, usageBatchRepository);
+    }
+
+    private Rightsholder buildRro() {
+        Rightsholder rightsholder = new Rightsholder();
+        rightsholder.setAccountNumber(RRO_ACCOUNT_NUMBER);
+        rightsholder.setName(RRO_NAME);
+        return rightsholder;
     }
 }

@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Verifies {@link RightsholderRepository}.
@@ -47,7 +48,7 @@ public class RightsholderRepositoryIntegrationTest {
     private static final Long RH_ACCOUNT_NUMBER_1000159997 = 1000159997L;
     private static final Long RH_ACCOUNT_NUMBER_7000800832 = 7000800832L;
     private static final String RH_ACCOUNT_NAME = "Rh Account Name";
-    
+
     @Autowired
     private RightsholderRepository rightsholderRepository;
 
@@ -83,6 +84,18 @@ public class RightsholderRepositoryIntegrationTest {
         rightsholderRepository.deleteAll();
         rightsholders = rightsholderRepository.findAll();
         assertEquals(0, rightsholders.size());
+    }
+
+    @Test
+    public void testDeleteRightsholderByAccountNumber() {
+        List<Rightsholder> rightsholders = rightsholderRepository.findAll();
+        assertEquals(8, rightsholders.size());
+        rightsholderRepository.deleteRightsholderByAccountNumber(RH_ACCOUNT_NUMBER_7000813806);
+        rightsholders = rightsholderRepository.findAll();
+        assertEquals(7, rightsholders.size());
+        assertTrue(rightsholders.stream()
+            .filter(rightsholder -> RH_ACCOUNT_NUMBER_7000813806.equals(rightsholder.getAccountNumber()))
+            .collect(Collectors.toList()).isEmpty());
     }
 
     private Rightsholder buildRightsholder() {

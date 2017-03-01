@@ -68,6 +68,7 @@ public class UsageBatchUploadWindowTest {
     private static final String USAGE_BATCH_NAME = "BatchName";
     private static final String USER_NAME = "user@copyright.com";
     private static final LocalDate PAYMENT_DATE = LocalDate.of(2017, 2, 27);
+    private static final String RRO_NAME = "RRO name";
     private UsageBatchUploadWindow window;
     private IUsagesController usagesController;
 
@@ -129,6 +130,7 @@ public class UsageBatchUploadWindowTest {
         Whitebox.setInternalState(window, "paymentDateWidget", paymentDateWidget);
         Whitebox.setInternalState(window, "fiscalYearProperty", new ObjectProperty<>("FY2017"));
         Whitebox.setInternalState(window, "grossAmountField", new TextField("Gross Amount", "100.00"));
+        Whitebox.setInternalState(window, "rightsholderNameProperty", new ObjectProperty<>(RRO_NAME));
         expect(window.isValid()).andReturn(true).once();
         expect(SecurityUtils.getUserName()).andReturn(USER_NAME).once();
         expectNew(UsageCsvProcessor.class).andReturn(processor).once();
@@ -295,6 +297,7 @@ public class UsageBatchUploadWindowTest {
         usageBatch.setName(USAGE_BATCH_NAME);
         Rightsholder rro = new Rightsholder();
         rro.setAccountNumber(Long.valueOf(ACCOUNT_NUMBER));
+        rro.setName(RRO_NAME);
         usageBatch.setRro(rro);
         usageBatch.setPaymentDate(PAYMENT_DATE);
         usageBatch.setFiscalYear(2017);

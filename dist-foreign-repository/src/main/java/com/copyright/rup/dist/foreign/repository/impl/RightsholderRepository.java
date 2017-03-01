@@ -43,6 +43,11 @@ public class RightsholderRepository extends BaseRepository implements IRightshol
         delete("IRightsholderMapper.deleteAll");
     }
 
+    @Override
+    public void deleteRightsholderByAccountNumber(Long accountNumber) {
+        delete("IRightsholderMapper.deleteRightsholderByAccountNumber", checkNotNull(accountNumber));
+    }
+
     /**
      * @return list of all {@link Rightsholder}s from DB.
      */
