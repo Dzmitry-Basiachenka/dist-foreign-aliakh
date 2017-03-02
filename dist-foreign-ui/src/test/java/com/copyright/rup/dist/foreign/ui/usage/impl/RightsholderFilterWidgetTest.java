@@ -73,6 +73,14 @@ public class RightsholderFilterWidgetTest {
     }
 
     @Test
+    public void testGetBeanItemCaptionNullName() {
+        Rightsholder rightsholder = buildRightsholder();
+        rightsholder.setName(null);
+        assertEquals("12345678 - <span class=\"filter-field-empty-name\">RRO is absent in PRM</span>",
+            rightsholderFilterWidget.getBeanItemCaption(rightsholder));
+    }
+
+    @Test
     public void testGetIdForBean() {
         assertEquals(ACCOUNT_NUMBER, rightsholderFilterWidget.getIdForBean(buildRightsholder()));
     }
