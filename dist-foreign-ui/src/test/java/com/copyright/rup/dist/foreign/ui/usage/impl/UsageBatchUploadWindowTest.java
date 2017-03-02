@@ -54,14 +54,15 @@ import java.util.Collection;
 
 /**
  * Verifies {@link UsageBatchUploadWindow}.
- * <p/>
+ * <p>
  * Copyright (C) 2017 copyright.com
- * <p/>
+ * <p>
  * Date: 01/21/2017
  *
  * @author Mikita Hladkikh
  */
 @RunWith(PowerMockRunner.class)
+@PrepareForTest({Windows.class, SecurityUtils.class, UsageBatchUploadWindow.class})
 public class UsageBatchUploadWindowTest {
 
     private static final String ACCOUNT_NUMBER = "1000001863";
@@ -78,7 +79,6 @@ public class UsageBatchUploadWindowTest {
     }
 
     @Test
-    @PrepareForTest(Windows.class)
     public void testConstructor() {
         expect(usagesController.getRroName(Long.valueOf(ACCOUNT_NUMBER)))
             .andReturn("CANADIAN CERAMIC SOCIETY").once();
@@ -113,7 +113,6 @@ public class UsageBatchUploadWindowTest {
     }
 
     @Test
-    @PrepareForTest({Windows.class, SecurityUtils.class, UsageBatchUploadWindow.class})
     public void testOnUploadClickedValidFields() throws Exception {
         mockStatic(Windows.class);
         mockStatic(SecurityUtils.class);

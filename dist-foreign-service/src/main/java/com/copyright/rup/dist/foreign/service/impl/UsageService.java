@@ -32,9 +32,9 @@ import java.util.List;
 @Service
 public class UsageService implements IUsageService {
 
-    private static final Logger LOGGER = RupLogUtils.getLogger();
     private static final String CALCULATION_FINISHED_LOG_MESSAGE = "Calculated usages gross amount. " +
         "UsageBatchName={}, FundPoolAmount={}, TotalAmount={}, ConversionRate={}";
+    private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired
     private IUsageRepository usageRepository;

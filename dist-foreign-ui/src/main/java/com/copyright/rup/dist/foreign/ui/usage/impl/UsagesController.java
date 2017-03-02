@@ -117,12 +117,7 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     @Override
     public int loadUsageBatch(UsageBatch usageBatch, List<Usage> usages, String userName) {
         filterController.getWidget().clearFilter();
-        return usageBatchService.insertUsages(usageBatch, usages, userName);
-    }
-
-    @Override
-    protected IUsagesWidget instantiateWidget() {
-        return new UsagesWidget();
+        return usageBatchService.insertUsageBatch(usageBatch, usages, userName);
     }
 
     @Override
@@ -140,5 +135,10 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     public void deleteUsageBatch(String batchId) {
         usageBatchService.deleteUsageBatch(batchId, SecurityUtils.getUserName());
         filterController.getWidget().clearFilter();
+    }
+
+    @Override
+    protected IUsagesWidget instantiateWidget() {
+        return new UsagesWidget();
     }
 }

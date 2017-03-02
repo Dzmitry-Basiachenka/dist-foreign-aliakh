@@ -196,14 +196,14 @@ public abstract class CommonCsvProcessor<T> {
             List<IValidator<String>> validators = getPlainValidators(i);
             validators.stream()
                 .filter(validator -> !validator.isValid(value))
-                //TODO stub
+                //TODO stub will be implemented as a part of B-29761
                 .forEach(validator -> processingResult.logError(line, validator.getErrorMessage()));
         }
         return processingResult.isSuccessful();
     }
 
     private boolean businessValidate(T item) {
-        //TODO stub
+        //TODO stub will be implemented as a part of B-29761
         return item != null;
     }
 
@@ -212,7 +212,7 @@ public abstract class CommonCsvProcessor<T> {
             throw new RupRuntimeException("Columns count is incorrect.");
         }
         for (int i = 0; i < headers.size(); i++) {
-            if (!headers.get(i).getColumnName().equals(fileHeaders[i])) {
+            if (!headers.get(i).getColumnName().equalsIgnoreCase(fileHeaders[i])) {
                 //TODO initial version
                 throw new RupRuntimeException("Column headers are incorrect.");
             }

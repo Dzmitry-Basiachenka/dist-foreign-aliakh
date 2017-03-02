@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -36,7 +37,6 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 /**
  * Integration test for {@link UsageRepository}.
@@ -56,7 +56,7 @@ import java.util.UUID;
 public class UsageRepositoryIntegrationTest {
 
     private static final String USAGE_BATCH_ID_1 = "56282dbc-2468-48d4-b926-93d3458a656a";
-    private static final String USAGE_ID = UUID.randomUUID().toString();
+    private static final String USAGE_ID = RupPersistUtils.generateUuid();
     private static final Long RH_ACCOUNT_NUMBER = 7000813806L;
     private static final LocalDate PAYMENT_DATE = LocalDate.of(2017, 1, 11);
     private static final Integer FISCAL_YEAR = 2017;
