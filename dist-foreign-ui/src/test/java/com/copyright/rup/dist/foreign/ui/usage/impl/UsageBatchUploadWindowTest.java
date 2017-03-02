@@ -41,6 +41,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -52,6 +53,7 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * Verifies {@link UsageBatchUploadWindow}.
@@ -69,9 +71,12 @@ public class UsageBatchUploadWindowTest {
     private static final String ACCOUNT_NUMBER = "1000001863";
     private static final String USAGE_BATCH_NAME = "BatchName";
     private static final String USER_NAME = "user@copyright.com";
-    private static final LocalDate PAYMENT_DATE = LocalDate.of(2017, 2, 27);
     private static final String RRO_NAME = "RRO name";
     private static final String ACCOUNT_NAME = "Account Name";
+    private static final String INVALID_GROSS_AMOUNT_ERROR_MESSAGE =
+        "<div>Field should be greater than 0 and contain 2 decimals</div>\n";
+    private static final String GROSS_AMOUNT_FIELD = "grossAmountField";
+    private static final LocalDate PAYMENT_DATE = LocalDate.of(2017, 2, 27);
     private UsageBatchUploadWindow window;
     private IUsagesController usagesController;
 
@@ -111,10 +116,38 @@ public class UsageBatchUploadWindowTest {
         assertFalse(window.isValid());
         Whitebox.getInternalState(window, LocalDateWidget.class).setValue(LocalDate.now());
         assertFalse(window.isValid());
-        ((TextField) Whitebox.getInternalState(window, "grossAmountField")).setValue("100.00");
+        ((TextField) Whitebox.getInternalState(window, GROSS_AMOUNT_FIELD)).setValue("100.00");
         assertFalse(window.isValid());
         ((TextField) Whitebox.getInternalState(window, "usageBatchNameField")).setValue(USAGE_BATCH_NAME);
         assertTrue(window.isValid());
+        verify(usagesController);
+    }
+
+    @Test
+    public void testIsValidGrossAmountField() {
+        replay(usagesController);
+        window = new UsageBatchUploadWindow(usagesController);
+        TextField grossAmountField = Whitebox.getInternalState(window, GROSS_AMOUNT_FIELD);
+        grossAmountField.setValue("123.5684");
+        assertFalse(grossAmountField.isValid());
+        assertEquals(INVALID_GROSS_AMOUNT_ERROR_MESSAGE,
+            StringEscapeUtils.unescapeHtml4(grossAmountField.getErrorMessage().getFormattedHtmlMessage()));
+        grossAmountField.setValue("0.00");
+        assertFalse(grossAmountField.isValid());
+        assertEquals(INVALID_GROSS_AMOUNT_ERROR_MESSAGE,
+            StringEscapeUtils.unescapeHtml4(grossAmountField.getErrorMessage().getFormattedHtmlMessage()));
+        grossAmountField.setValue("value");
+        assertFalse(grossAmountField.isValid());
+        assertEquals(INVALID_GROSS_AMOUNT_ERROR_MESSAGE,
+            StringEscapeUtils.unescapeHtml4(grossAmountField.getErrorMessage().getFormattedHtmlMessage()));
+        grossAmountField.setValue("10000000000.00");
+        assertFalse(grossAmountField.isValid());
+        assertEquals(INVALID_GROSS_AMOUNT_ERROR_MESSAGE,
+            StringEscapeUtils.unescapeHtml4(grossAmountField.getErrorMessage().getFormattedHtmlMessage()));
+        grossAmountField.setValue("9999999999.99");
+        assertTrue(grossAmountField.isValid());
+        grossAmountField.setValue("98.12");
+        assertTrue(grossAmountField.isValid());
         verify(usagesController);
     }
 
@@ -134,7 +167,7 @@ public class UsageBatchUploadWindowTest {
         Whitebox.setInternalState(window, "accountNumberField", new TextField("RRO Account #", ACCOUNT_NUMBER));
         Whitebox.setInternalState(window, "paymentDateWidget", paymentDateWidget);
         Whitebox.setInternalState(window, "fiscalYearProperty", new ObjectProperty<>("FY2017"));
-        Whitebox.setInternalState(window, "grossAmountField", new TextField("Gross Amount", "100.00"));
+        Whitebox.setInternalState(window, GROSS_AMOUNT_FIELD, new TextField("Gross Amount", "100.00"));
         Whitebox.setInternalState(window, "rightsholderNameProperty", new ObjectProperty<>(RRO_NAME));
         expect(window.isValid()).andReturn(true).once();
         expect(SecurityUtils.getUserName()).andReturn(USER_NAME).once();
@@ -201,7 +234,7 @@ public class UsageBatchUploadWindowTest {
             Whitebox.getInternalState(window, "accountNumberField"),
             Whitebox.getInternalState(window, "accountNameField"),
             Whitebox.getInternalState(window, LocalDateWidget.class),
-            Whitebox.getInternalState(window, "grossAmountField")));
+            Whitebox.getInternalState(window, GROSS_AMOUNT_FIELD)));
         expectLastCall().once();
         replay(Windows.class);
         loadButton.click();
@@ -280,7 +313,8 @@ public class UsageBatchUploadWindowTest {
         Collection<Validator> validators = grossAmountField.getValidators();
         assertTrue(CollectionUtils.isNotEmpty(validators));
         assertEquals(1, validators.size());
-        assertTrue(validators.iterator().next() instanceof GrossAmountValidator);
+        Iterator<Validator> iterator = validators.iterator();
+        assertTrue(iterator.next() instanceof GrossAmountValidator);
     }
 
     private void verifyGrossAmount(Component component) {
