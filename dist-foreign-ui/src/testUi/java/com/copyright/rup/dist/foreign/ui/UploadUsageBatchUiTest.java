@@ -28,6 +28,9 @@ import java.util.stream.Collectors;
 public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
 
     private static final String HTML_B_TAG_NAME = "b";
+    private static final String COMMON_EMPTY_FIELD_MESSAGE = "Field value should be specified";
+    private static final String RRO_ACCOUNT_NAME_EMPTY_FIELD_MESSAGE =
+        COMMON_EMPTY_FIELD_MESSAGE + ". Please press 'Verify' to ensure that RRO is present in PRM";
 
     @Test
     public void testUsageBatchNameFieldValidation() {
@@ -43,13 +46,17 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         WebElement errorWindow = findErrorWindow();
         WebElement errorContent = waitAndFindElement(By.className("validation-error-content"));
         List<WebElement> errors = findElements(errorContent, By.tagName(HTML_B_TAG_NAME));
-        assertEquals(5, errors.size());
-        Set<String> errorFields = Sets.newHashSet("Usage Batch Name", "File to Upload", "RRO Account #", "Payment Date",
-            "Gross Amount (USD)");
-        assertTrue(errors.stream().map(e -> e.getText()).collect(Collectors.toList()).containsAll(errorFields));
+        assertEquals(6, errors.size());
+        Set<String> errorFields = Sets.newHashSet("Usage Batch Name", "File to Upload", "RRO Account #",
+            "RRO Account Name", "Payment Date", "Gross Amount (USD)");
+        assertTrue(errors.stream().map(WebElement::getText).collect(Collectors.toList()).containsAll(errorFields));
         List<WebElement> errorMessages = findElements(errorContent, By.tagName(HTML_SPAN_TAG_NAME));
-        assertEquals(5, errorMessages.size());
-        errorMessages.stream().forEach(message -> assertEquals("Field value should be specified", message.getText()));
+        assertEquals(6, errorMessages.size());
+        Set<String> errorMessageFields = Sets.newHashSet(COMMON_EMPTY_FIELD_MESSAGE, COMMON_EMPTY_FIELD_MESSAGE,
+            COMMON_EMPTY_FIELD_MESSAGE, RRO_ACCOUNT_NAME_EMPTY_FIELD_MESSAGE, COMMON_EMPTY_FIELD_MESSAGE,
+            COMMON_EMPTY_FIELD_MESSAGE);
+        assertTrue(errorMessages.stream().map(WebElement::getText).collect(Collectors.toList())
+            .containsAll(errorMessageFields));
         clickElementAndWait(findElementByText(errorWindow, HTML_SPAN_TAG_NAME, "Ok"));
         clickElementAndWait(assertElement(uploadWindow, "Close"));
     }

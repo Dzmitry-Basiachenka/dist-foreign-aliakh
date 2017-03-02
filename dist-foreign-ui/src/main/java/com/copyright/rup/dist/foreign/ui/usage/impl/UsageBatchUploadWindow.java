@@ -20,6 +20,7 @@ import com.copyright.rup.vaadin.ui.Windows;
 
 import com.google.common.collect.Lists;
 import com.vaadin.data.Property;
+import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.data.validator.AbstractStringValidator;
 import com.vaadin.data.validator.StringLengthValidator;
@@ -52,6 +53,7 @@ import java.math.BigDecimal;
 class UsageBatchUploadWindow extends Window {
 
     private TextField accountNumberField;
+    private TextField accountNameField;
     private LocalDateWidget paymentDateWidget;
     private TextField grossAmountField;
     private TextField usageBatchNameField;
@@ -98,7 +100,7 @@ class UsageBatchUploadWindow extends Window {
             // TODO {apchelnikau} use csvUploadComponent, but not it's internal state for error window
             Windows.showValidationErrorWindow(
                 Lists.newArrayList(usageBatchNameField, csvUploadComponent.getFileNameField(),
-                    accountNumberField, paymentDateWidget, grossAmountField));
+                    accountNumberField, accountNameField, paymentDateWidget, grossAmountField));
         }
     }
 
@@ -111,6 +113,7 @@ class UsageBatchUploadWindow extends Window {
         return usageBatchNameField.isValid()
             && csvUploadComponent.isValid()
             && accountNumberField.isValid()
+            && accountNameField.isValid()
             && paymentDateWidget.isValid()
             && grossAmountField.isValid();
     }
@@ -219,6 +222,8 @@ class UsageBatchUploadWindow extends Window {
                 false));
         VaadinUtils.setMaxComponentsWidth(accountNumberField);
         VaadinUtils.addComponentStyle(accountNumberField, "rro-account-number-field");
+        accountNumberField.addValueChangeListener(
+            (ValueChangeListener) event -> rightsholderNameProperty.setValue(StringUtils.EMPTY));
         return accountNumberField;
     }
 
@@ -234,12 +239,14 @@ class UsageBatchUploadWindow extends Window {
 
     private TextField initRightsholderAccountNameField() {
         rightsholderNameProperty = new ObjectProperty<>(StringUtils.EMPTY);
-        TextField nameField = new TextField(ForeignUi.getMessage("label.rro_account_name"), rightsholderNameProperty);
-        nameField.setReadOnly(true);
-        nameField.setNullRepresentation(StringUtils.EMPTY);
-        VaadinUtils.setMaxComponentsWidth(nameField);
-        VaadinUtils.addComponentStyle(nameField, "rro-account-name-field");
-        return nameField;
+        accountNameField = new TextField(ForeignUi.getMessage("label.rro_account_name"), rightsholderNameProperty);
+        accountNameField.setRequired(true);
+        accountNameField.setRequiredError(ForeignUi.getMessage("field.error.rro_name.empty"));
+        accountNameField.setReadOnly(true);
+        accountNameField.setNullRepresentation(StringUtils.EMPTY);
+        VaadinUtils.setMaxComponentsWidth(accountNameField);
+        VaadinUtils.addComponentStyle(accountNameField, "rro-account-name-field");
+        return accountNameField;
     }
 
     private TextField initFiscalYearField() {
