@@ -28,6 +28,7 @@ import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.ui.Windows;
 
 import com.google.common.collect.Lists;
+import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Validator;
 import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.server.Sizeable.Unit;
@@ -70,6 +71,7 @@ public class UsageBatchUploadWindowTest {
     private static final String USER_NAME = "user@copyright.com";
     private static final LocalDate PAYMENT_DATE = LocalDate.of(2017, 2, 27);
     private static final String RRO_NAME = "RRO name";
+    private static final String ACCOUNT_NAME = "Account Name";
     private UsageBatchUploadWindow window;
     private IUsagesController usagesController;
 
@@ -80,8 +82,7 @@ public class UsageBatchUploadWindowTest {
 
     @Test
     public void testConstructor() {
-        expect(usagesController.getRroName(Long.valueOf(ACCOUNT_NUMBER)))
-            .andReturn("CANADIAN CERAMIC SOCIETY").once();
+        expect(usagesController.getRroName(Long.valueOf(ACCOUNT_NUMBER))).andReturn("CANADIAN CERAMIC SOCIETY").once();
         replay(usagesController);
         window = new UsageBatchUploadWindow(usagesController);
         assertEquals("Upload Usage Batch", window.getCaption());
@@ -102,6 +103,11 @@ public class UsageBatchUploadWindowTest {
         Whitebox.getInternalState(window, CsvUploadComponent.class).getFileNameField().setValue("test.csv");
         assertFalse(window.isValid());
         ((TextField) Whitebox.getInternalState(window, "accountNumberField")).setValue(ACCOUNT_NUMBER);
+        assertFalse(window.isValid());
+        TextField rhNameField = Whitebox.getInternalState(window, "accountNameField");
+        rhNameField.setReadOnly(false);
+        rhNameField.setValue(ACCOUNT_NAME);
+        rhNameField.setReadOnly(true);
         assertFalse(window.isValid());
         Whitebox.getInternalState(window, LocalDateWidget.class).setValue(LocalDate.now());
         assertFalse(window.isValid());
@@ -193,6 +199,7 @@ public class UsageBatchUploadWindowTest {
             Whitebox.getInternalState(window, "usageBatchNameField"),
             Whitebox.getInternalState(window, CsvUploadComponent.class).getFileNameField(),
             Whitebox.getInternalState(window, "accountNumberField"),
+            Whitebox.getInternalState(window, "accountNameField"),
             Whitebox.getInternalState(window, LocalDateWidget.class),
             Whitebox.getInternalState(window, "grossAmountField")));
         expectLastCall().once();
@@ -224,6 +231,9 @@ public class UsageBatchUploadWindowTest {
         assertTrue(CollectionUtils.isNotEmpty(validators));
         assertEquals(2, validators.size());
         assertTrue(validators.iterator().next() instanceof NumberValidator);
+        Collection<?> listeners = numberField.getListeners(ValueChangeEvent.class);
+        assertTrue(CollectionUtils.isNotEmpty(listeners));
+        assertEquals(1, listeners.size());
         TextField nameField = verifyTextField(nameComponent, "RRO Account Name");
         assertTrue(nameField.isReadOnly());
         assertTrue(verifyComponent instanceof Button);
