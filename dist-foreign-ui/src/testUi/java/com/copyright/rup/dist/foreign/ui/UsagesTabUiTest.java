@@ -157,10 +157,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
 
     private void applyPaymentDateFilter() {
         WebElement paymentDateFilter = waitAndFindElement(By.id("payment-date-filter"));
-        findElement(paymentDateFilter, By.className("v-datefield-button")).click();
-        WebElement calendarPanel = waitAndFindElement(By.className("v-datefield-calendarpanel"));
-        WebElement currentDateSlot = findElement(calendarPanel, By.className("v-datefield-calendarpanel-day-today"));
-        clickElementAndWait(currentDateSlot);
+        applyCurrentDateForDateField(paymentDateFilter);
     }
 
     private void applyRroFilter(String rroAccount) {
@@ -276,7 +273,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         WebElement button = assertElement(buttonsLayout, ADD_TO_SCENARIO_BUTTON_ID);
         clickElementAndWait(button);
         clickElementAndWait(
-            findElementByText(waitAndFindElement(By.id("notification-window")), HTML_SPAN_TAG_NAME, "Ok"));
+            findElementByText(waitAndFindElement(By.id("notification-window")), HTML_SPAN_TAG_NAME, OK_BUTTON_ID));
     }
 
     private void verifyExportButton(WebElement buttonsLayout) {
@@ -294,7 +291,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         verifyDateFields(uploadWindow);
         assertTextElement(uploadWindow, "usage-batch-name-field", "Usage Batch Name");
         assertTextElement(uploadWindow, "gross-amount-field", "Gross Amount (USD)");
-        assertElement(uploadWindow, "Upload");
+        assertElement(uploadWindow, UPLOAD_BUTTON_ID);
         clickElementAndWait(assertElement(uploadWindow, CLOSE_BUTTON));
     }
 
@@ -311,7 +308,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     private void verifyRightsholdersFields(WebElement uploadWindow) {
         assertTextElement(uploadWindow, "rro-account-name-field", "RRO Account Name");
         assertTextElement(uploadWindow, "rro-account-number-field", "RRO Account #");
-        assertElement(uploadWindow, "Verify");
+        assertElement(uploadWindow, VERIFY_BUTTON_ID);
     }
 
     private void verifyDateFields(WebElement uploadWindow) {
