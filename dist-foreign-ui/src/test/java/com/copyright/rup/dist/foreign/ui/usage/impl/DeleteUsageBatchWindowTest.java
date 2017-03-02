@@ -65,6 +65,7 @@ import java.util.Collections;
  * @author Aliaksandr Radkevich
  */
 @RunWith(PowerMockRunner.class)
+@PrepareForTest(Windows.class)
 public class DeleteUsageBatchWindowTest {
 
     private static final String USAGE_BATCH_ID = RupPersistUtils.generateUuid();
@@ -121,7 +122,6 @@ public class DeleteUsageBatchWindowTest {
     }
 
     @Test
-    @PrepareForTest(Windows.class)
     public void testDeleteClickListenerEmptyAssociatedScenarios() {
         mockStatic(Windows.class);
         Capture<ConfirmDeleteListener> listenerCapture = new Capture<>();
@@ -138,7 +138,7 @@ public class DeleteUsageBatchWindowTest {
         ClickListener listener = (ClickListener) listeners.iterator().next();
         expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
             .andReturn(Collections.emptyList()).once();
-        expect(Windows.showConfirmDialog(eq("Are you sure you want to delete usage batch 'Batch Name'"),
+        expect(Windows.showConfirmDialog(eq("Are you sure you want to delete usage batch 'Batch Name'?"),
             capture(listenerCapture))).andReturn(confirmWindowCapture).once();
         replay(controller, confirmWindowCapture, Windows.class);
         listener.buttonClick(null);
@@ -146,7 +146,6 @@ public class DeleteUsageBatchWindowTest {
     }
 
     @Test
-    @PrepareForTest(Windows.class)
     public void testDeleteClickListener() {
         mockStatic(Windows.class);
         Window confirmWindowCapture = createMock(Window.class);
@@ -176,7 +175,7 @@ public class DeleteUsageBatchWindowTest {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setId(USAGE_BATCH_ID);
         ConfirmDeleteListener listener = new ConfirmDeleteListener(controller, usageBatch, container);
-        controller.deleteUsageBatch(USAGE_BATCH_ID);
+        controller.deleteUsageBatch(usageBatch);
         expectLastCall().once();
         expect(container.removeItem(USAGE_BATCH_ID)).andReturn(true).once();
         replay(container, controller);

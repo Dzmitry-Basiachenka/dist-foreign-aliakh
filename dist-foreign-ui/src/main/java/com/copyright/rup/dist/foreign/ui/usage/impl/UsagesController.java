@@ -132,8 +132,8 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
-    public void deleteUsageBatch(String batchId) {
-        usageBatchService.deleteUsageBatch(batchId, SecurityUtils.getUserName());
+    public void deleteUsageBatch(UsageBatch usageBatch) {
+        usageBatchService.deleteUsageBatch(usageBatch, SecurityUtils.getUserName());
         filterController.getWidget().clearFilter();
     }
 

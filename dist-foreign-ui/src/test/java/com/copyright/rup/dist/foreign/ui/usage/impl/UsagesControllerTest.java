@@ -57,6 +57,7 @@ import java.util.concurrent.ExecutorService;
  * @author Aliaksandr Radkevich
  */
 @RunWith(PowerMockRunner.class)
+@PrepareForTest(SecurityUtils.class)
 public class UsagesControllerTest {
 
     private UsagesController controller;
@@ -175,7 +176,6 @@ public class UsagesControllerTest {
     }
 
     @Test
-    @PrepareForTest(SecurityUtils.class)
     public void testUsageBatchExists() {
         expect(usageBatchService.usageBatchExists("Usage Batch Name")).andReturn(false).once();
         replay(usageBatchService);
@@ -199,19 +199,18 @@ public class UsagesControllerTest {
     }
 
     @Test
-    @PrepareForTest(SecurityUtils.class)
     public void testDeleteUsageBatch() {
         mockStatic(SecurityUtils.class);
-        String batchId = RupPersistUtils.generateUuid();
+        UsageBatch usageBatch = new UsageBatch();
         IUsagesFilterWidget filterWidgetMock = createMock(IUsagesFilterWidget.class);
         expect(SecurityUtils.getUserName()).andReturn("user@copyright.com").once();
-        usageBatchService.deleteUsageBatch(batchId, "user@copyright.com");
+        usageBatchService.deleteUsageBatch(usageBatch, "user@copyright.com");
         expectLastCall().once();
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         filterWidgetMock.clearFilter();
         expectLastCall().once();
         replay(usageBatchService, filterController, filterWidgetMock, SecurityUtils.class);
-        controller.deleteUsageBatch(batchId);
+        controller.deleteUsageBatch(usageBatch);
         verify(usageBatchService, filterController, filterWidgetMock, SecurityUtils.class);
     }
 }

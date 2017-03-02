@@ -8,6 +8,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmRightsholderService;
 
@@ -21,7 +22,6 @@ import org.powermock.reflect.Whitebox;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 /**
  * Verifies {@link PrmIntegrationService}.
@@ -87,7 +87,7 @@ public class PrmIntegrationServiceTest {
 
     private Rightsholder buildRightsholder(Long accountNumber, String name) {
         Rightsholder rightsholder = new Rightsholder();
-        rightsholder.setId(UUID.randomUUID().toString());
+        rightsholder.setId(RupPersistUtils.generateUuid());
         rightsholder.setAccountNumber(accountNumber);
         rightsholder.setName(name);
         return rightsholder;

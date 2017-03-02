@@ -74,8 +74,8 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public void deleteUsageBatchDetails(String batchId) {
-        usageRepository.deleteUsageBatchDetails(batchId);
+    public void deleteUsageBatchDetails(UsageBatch usageBatch) {
+        usageRepository.deleteUsageBatchDetails(usageBatch.getId());
     }
 
     private void calculateUsagesGrossAmount(UsageBatch usageBatch, List<Usage> usages) {

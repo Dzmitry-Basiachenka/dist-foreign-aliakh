@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
@@ -21,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Verifies {@link UsageBatchRepository}.
@@ -93,7 +93,7 @@ public class UsageBatchRepositoryIntegrationTest {
 
     private UsageBatch buildUsageBatch() {
         UsageBatch usageBatch = new UsageBatch();
-        usageBatch.setId(UUID.randomUUID().toString());
+        usageBatch.setId(RupPersistUtils.generateUuid());
         usageBatch.setName(USAGE_BATCH_NAME);
         Rightsholder rightsholder = new Rightsholder();
         rightsholder.setAccountNumber(RRO_ACCOUNT_NUMBER);
