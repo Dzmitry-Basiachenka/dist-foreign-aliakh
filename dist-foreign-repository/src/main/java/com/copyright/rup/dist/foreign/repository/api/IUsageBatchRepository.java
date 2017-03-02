@@ -44,7 +44,7 @@ public interface IUsageBatchRepository {
     /**
      * Deletes {@link UsageBatch} with given id from database.
      *
-     * @param batchId id of the batch to be deleted
+     * @param batchId id of the {@link UsageBatch} to be deleted
      */
     void deleteUsageBatch(String batchId);
 }

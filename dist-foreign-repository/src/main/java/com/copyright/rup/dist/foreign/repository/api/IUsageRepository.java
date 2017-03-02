@@ -55,7 +55,7 @@ public interface IUsageRepository {
     /**
      * Deletes all {@link Usage}s from the batch with given id.
      *
-     * @param batchId usage batch id
+     * @param batchId {@link com.copyright.rup.dist.foreign.domain.UsageBatch} id
      */
     void deleteUsageBatchDetails(String batchId);
 }

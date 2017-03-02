@@ -68,10 +68,10 @@ public class UsageBatchService implements IUsageBatchService {
 
     @Override
     @Transactional
-    public void deleteUsageBatch(String batchId, String userName) {
-        LOGGER.info("Delete usage batch. Started. UsageBatchId={}, UserName={}", batchId, userName);
-        usageService.deleteUsageBatchDetails(batchId);
-        usageBatchRepository.deleteUsageBatch(batchId);
-        LOGGER.info("Delete usage batch. Finished. UsageBatchId={}, UserName={}", batchId, userName);
+    public void deleteUsageBatch(UsageBatch usageBatch, String userName) {
+        LOGGER.info("Delete usage batch. Started. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
+        usageService.deleteUsageBatchDetails(usageBatch);
+        usageBatchRepository.deleteUsageBatch(usageBatch.getId());
+        LOGGER.info("Delete usage batch. Finished. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
     }
 }

@@ -178,7 +178,7 @@ class DeleteUsageBatchWindow extends Window {
 
         @Override
         public void onActionConfirmed() {
-            controller.deleteUsageBatch(usageBatch.getId());
+            controller.deleteUsageBatch(usageBatch);
             container.removeItem(usageBatch.getId());
         }
     }

@@ -59,7 +59,7 @@ import java.util.Collections;
  * @author Aliaksandr Radkevich
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({UsagesWidget.class})
+@PrepareForTest({UsagesWidget.class, Windows.class})
 public class UsagesWidgetTest {
 
     private static final String DETAIL_ID_PROPERTY = "detailId";
@@ -103,7 +103,6 @@ public class UsagesWidgetTest {
     }
 
     @Test
-    @PrepareForTest(Windows.class)
     public void testLoadButtonClickListener() {
         mockStatic(Windows.class);
         IPrmIntegrationService prmIntegrationService = createMock(IPrmIntegrationService.class);
@@ -121,7 +120,6 @@ public class UsagesWidgetTest {
     }
 
     @Test
-    @PrepareForTest(Windows.class)
     public void testAddToScenarioButtonClickListener() {
         mockStatic(Windows.class);
         ClickEvent clickEvent = createMock(ClickEvent.class);

@@ -46,10 +46,10 @@ public interface IUsageBatchService {
     int insertUsageBatch(UsageBatch usageBatch, List<Usage> usages, String userName);
 
     /**
-     * Deletes {@link UsageBatch} with given id and all it's usage details.
+     * Deletes given {@link UsageBatch} and all it's usage details.
      *
-     * @param batchId  {@link UsageBatch} id
-     * @param userName user name
+     * @param usageBatch {@link UsageBatch}
+     * @param userName   user name
      */
-    void deleteUsageBatch(String batchId, String userName);
+    void deleteUsageBatch(UsageBatch usageBatch, String userName);
 }

@@ -56,6 +56,7 @@ import java.util.Set;
  * @author Mikalai Bezmen
  */
 @RunWith(PowerMockRunner.class)
+@PrepareForTest(Windows.class)
 public class UsagesFilterWidgetTest {
 
     private static final Integer FISCAL_YEAR = 2017;
@@ -153,7 +154,6 @@ public class UsagesFilterWidgetTest {
     }
 
     @Test
-    @PrepareForTest(Windows.class)
     public void verifyApplyButtonClickListener() {
         mockStatic(Windows.class);
         ClickEvent clickEvent = createMock(ClickEvent.class);

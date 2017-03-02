@@ -67,9 +67,9 @@ public interface IUsagesController extends IController<IUsagesWidget>, IBeanLoad
     /**
      * Deletes {@link UsageBatch} and all it's details.
      *
-     * @param batchId {@link UsageBatch} id
+     * @param usageBatch {@link UsageBatch} to delete
      */
-    void deleteUsageBatch(String batchId);
+    void deleteUsageBatch(UsageBatch usageBatch);
 
     /**
      * Gets a list of scenarios names that are associated with at least one

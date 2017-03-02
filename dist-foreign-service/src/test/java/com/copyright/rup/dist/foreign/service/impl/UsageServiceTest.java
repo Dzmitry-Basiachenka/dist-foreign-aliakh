@@ -120,11 +120,12 @@ public class UsageServiceTest {
 
     @Test
     public void testDeleteUsageBatchDetails() {
-        String batchId = RupPersistUtils.generateUuid();
-        usageRepository.deleteUsageBatchDetails(batchId);
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatch.setId(RupPersistUtils.generateUuid());
+        usageRepository.deleteUsageBatchDetails(usageBatch.getId());
         expectLastCall().once();
         replay(usageRepository);
-        usageService.deleteUsageBatchDetails(batchId);
+        usageService.deleteUsageBatchDetails(usageBatch);
         verify(usageRepository);
     }
 }
