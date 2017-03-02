@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
-import static org.easymock.EasyMock.createStrictMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
@@ -9,6 +8,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.createMock;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
@@ -29,9 +29,9 @@ import java.util.List;
 
 /**
  * Verifies {@link UsageBatchService}.
- * <p/>
+ * <p>
  * Copyright (C) 2017 copyright.com
- * <p/>
+ * <p>
  * Date: 02/03/2017
  *
  * @author Mikalai Bezmen
@@ -52,9 +52,9 @@ public class UsageBatchServiceTest {
 
     @Before
     public void setUp() {
-        usageBatchRepository = createStrictMock(IUsageBatchRepository.class);
-        usageService = createStrictMock(IUsageService.class);
-        rightsholderService = createStrictMock(IRightsholderService.class);
+        usageBatchRepository = createMock(IUsageBatchRepository.class);
+        usageService = createMock(IUsageService.class);
+        rightsholderService = createMock(IRightsholderService.class);
         usageBatchService = new UsageBatchService();
         Whitebox.setInternalState(usageBatchService, "usageBatchRepository", usageBatchRepository);
         Whitebox.setInternalState(usageBatchService, "usageService", usageService);
@@ -98,7 +98,7 @@ public class UsageBatchServiceTest {
     }
 
     @Test
-    public void testInsertUsages() {
+    public void insertUsageBatch() {
         UsageBatch usageBatch = new UsageBatch();
         Rightsholder rro = buildRro();
         usageBatch.setRro(rro);
@@ -109,7 +109,7 @@ public class UsageBatchServiceTest {
         expectLastCall().once();
         expect(usageService.insertUsages(usageBatch, usages, USER_NAME)).andReturn(2).once();
         replay(usageBatchRepository, usageService);
-        assertEquals(2, usageBatchService.insertUsages(usageBatch, usages, USER_NAME));
+        assertEquals(2, usageBatchService.insertUsageBatch(usageBatch, usages, USER_NAME));
         verify(usageBatchRepository, usageService);
     }
 

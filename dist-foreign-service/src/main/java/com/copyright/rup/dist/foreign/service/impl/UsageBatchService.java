@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
 import com.copyright.rup.common.logging.RupLogUtils;
+import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
@@ -14,13 +15,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Implementation of {@link IUsageBatchService}.
- * <p/>
+ * <p>
  * Copyright (C) 2017 copyright.com
- * <p/>
+ * <p>
  * Date: 02/03/2017
  *
  * @author Mikalai Bezmen
@@ -55,8 +55,8 @@ public class UsageBatchService implements IUsageBatchService {
 
     @Override
     @Transactional
-    public int insertUsages(UsageBatch usageBatch, List<Usage> usages, String userName) {
-        usageBatch.setId(UUID.randomUUID().toString());
+    public int insertUsageBatch(UsageBatch usageBatch, List<Usage> usages, String userName) {
+        usageBatch.setId(RupPersistUtils.generateUuid());
         usageBatch.setCreateUser(userName);
         usageBatch.setUpdateUser(userName);
         LOGGER.info("Insert usage batch. Started. UsageBatchBatch={}, UserName={}", usageBatch.getName(), userName);
@@ -66,8 +66,8 @@ public class UsageBatchService implements IUsageBatchService {
         return usageService.insertUsages(usageBatch, usages, userName);
     }
 
-    @Transactional
     @Override
+    @Transactional
     public void deleteUsageBatch(String batchId, String userName) {
         LOGGER.info("Delete usage batch. Started. UsageBatchId={}, UserName={}", batchId, userName);
         usageService.deleteUsageBatchDetails(batchId);

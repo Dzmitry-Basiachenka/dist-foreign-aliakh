@@ -25,11 +25,11 @@ public final class UsageBatchUtils {
      * The fiscal year runs from July 1 - June 30.
      * For example, in fiscal year July 1, 2016 - June 30, 2017, a payment date of 12/13/2016 would generate FY2017.
      *
-     * @param localDate {@link LocalDate} instance
+     * @param paymentDate {@link LocalDate} instance
      * @return Fiscal Year value
      */
-    public static String getFiscalYear(LocalDate localDate) {
-        return null != localDate ? getFiscalYear(calculateFiscalYear(localDate)) : StringUtils.EMPTY;
+    public static String getFiscalYear(LocalDate paymentDate) {
+        return null != paymentDate ? getFiscalYear(calculateFiscalYear(paymentDate)) : StringUtils.EMPTY;
     }
 
     /**
@@ -45,11 +45,12 @@ public final class UsageBatchUtils {
 
     /**
      * Calculates Fiscal Year based on payment date.
+     * Calculation is the same as {@link UsageBatchUtils#getFiscalYear(LocalDate)}.
      *
-     * @param localDate {@link LocalDate} instance
+     * @param paymentDate {@link LocalDate} instance
      * @return Fiscal Year value
      */
-    public static int calculateFiscalYear(LocalDate localDate) {
-        return 0 >= Month.JULY.compareTo(localDate.getMonth()) ? (localDate.getYear() + 1) : localDate.getYear();
+    public static int calculateFiscalYear(LocalDate paymentDate) {
+        return 0 >= Month.JULY.compareTo(paymentDate.getMonth()) ? (paymentDate.getYear() + 1) : paymentDate.getYear();
     }
 }

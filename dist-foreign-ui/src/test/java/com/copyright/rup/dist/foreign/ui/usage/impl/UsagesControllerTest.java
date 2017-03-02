@@ -192,7 +192,7 @@ public class UsagesControllerTest {
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         filterWidgetMock.clearFilter();
         expectLastCall().once();
-        expect(usageBatchService.insertUsages(usageBatch, usages, userName)).andReturn(1).once();
+        expect(usageBatchService.insertUsageBatch(usageBatch, usages, userName)).andReturn(1).once();
         replay(usageBatchService, filterController, filterWidgetMock);
         assertEquals(1, controller.loadUsageBatch(usageBatch, usages, userName));
         verify(usageBatchService, filterController, filterWidgetMock);

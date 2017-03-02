@@ -43,7 +43,7 @@ public interface IUsageBatchService {
      * @param userName   user name
      * @return count of inserted usages
      */
-    int insertUsages(UsageBatch usageBatch, List<Usage> usages, String userName);
+    int insertUsageBatch(UsageBatch usageBatch, List<Usage> usages, String userName);
 
     /**
      * Deletes {@link UsageBatch} with given id and all it's usage details.
