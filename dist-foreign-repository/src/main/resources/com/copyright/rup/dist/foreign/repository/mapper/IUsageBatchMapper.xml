@@ -60,6 +60,7 @@
             <include refid="usageBatchColumns"/>
         from ${schema}.df_usage_batch ub
         left join ${schema}.df_rightsholder r on r.rh_account_number = ub.rro_account_number
+        order by ub.updated_datetime
     </select>
 
     <select id="getUsageBatchesCountByName" parameterType="string" resultType="int">

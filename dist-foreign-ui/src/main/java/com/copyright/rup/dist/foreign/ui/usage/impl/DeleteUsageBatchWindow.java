@@ -80,13 +80,16 @@ class DeleteUsageBatchWindow extends Window {
         container.setBeanIdResolver(BaseEntity::getId);
         container.addAll(controller.getUsageBatches());
         Table table = new Table(null, container);
+        VaadinUtils.addComponentStyle(table, "usage-batches-table");
         table.setSizeFull();
         table.addGeneratedColumn(PAYMENT_DATE_PROPERTY, new LocalDateColumnGenerator(
             RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT));
         table.addGeneratedColumn("fiscalYear", new FiscalYearColumnGenerator());
         table.addGeneratedColumn("delete", (ColumnGenerator) (source, itemId, columnId) -> {
             Button deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
-            deleteButton.addClickListener(event -> deleteUsageBatch(container.getItem(itemId).getBean()));
+            UsageBatch usageBatch = container.getItem(itemId).getBean();
+            deleteButton.setId(usageBatch.getId());
+            deleteButton.addClickListener(event -> deleteUsageBatch(usageBatch));
             return deleteButton;
         });
         table.setVisibleColumns("name", PAYMENT_DATE_PROPERTY, "fiscalYear", "delete");

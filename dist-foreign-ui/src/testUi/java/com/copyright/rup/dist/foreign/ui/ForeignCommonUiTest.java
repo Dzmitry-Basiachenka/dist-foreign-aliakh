@@ -2,6 +2,8 @@ package com.copyright.rup.dist.foreign.ui;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import static org.junit.Assert.assertEquals;
+
 import com.copyright.rup.vaadin.test.CommonUiTest;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
@@ -13,6 +15,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
 import org.springframework.test.context.ContextConfiguration;
+
+import java.util.List;
 
 /**
  * Common class for UI tests.
@@ -118,6 +122,21 @@ public class ForeignCommonUiTest extends CommonUiTest {
      */
     protected WebElement assertElement(WebElement parentElement, String id) {
         return checkNotNull(findElement(parentElement, By.id(id)));
+    }
+
+    /**
+     * Verifies columns headers for the given table.
+     *
+     * @param table           table to verify
+     * @param expectedHeaders expected columns headers in the order they appear on UI
+     */
+    protected void verifyTableColumns(WebElement table, String... expectedHeaders) {
+        WebElement tableHeader = findElement(table, By.className(V_TABLE_HEADER_CLASS_NAME));
+        List<WebElement> headers = findElements(tableHeader, By.className(V_TABLE_CAPTION_CONTAINER_CLASS_NAME));
+        assertEquals(expectedHeaders.length, headers.size());
+        for (int i = 0; i < expectedHeaders.length; i++) {
+            assertEquals(expectedHeaders[i], getInnerHtml(headers.get(i)));
+        }
     }
 
     private void openAppPage(ForeignCredentials credentials) {

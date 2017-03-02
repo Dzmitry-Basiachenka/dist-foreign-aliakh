@@ -333,32 +333,29 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     }
 
     private void verifyTableHeaderElements(WebElement usagesTable) {
-        WebElement tableHeader = findElement(usagesTable, By.className(V_TABLE_HEADER_CLASS_NAME));
-        List<WebElement> tableHeaderElements =
-            findElements(tableHeader, By.className(V_TABLE_CAPTION_CONTAINER_CLASS_NAME));
-        assertEquals(22, tableHeaderElements.size());
-        assertEquals("Detail ID", getInnerHtml(tableHeaderElements.get(0)));
-        assertEquals("Detail Status", getInnerHtml(tableHeaderElements.get(1)));
-        assertEquals("Usage Batch Name", getInnerHtml(tableHeaderElements.get(2)));
-        assertEquals("Fiscal Year", getInnerHtml(tableHeaderElements.get(3)));
-        assertEquals("RRO Account #", getInnerHtml(tableHeaderElements.get(4)));
-        assertEquals("RRO Name", getInnerHtml(tableHeaderElements.get(5)));
-        assertEquals("Payment Date", getInnerHtml(tableHeaderElements.get(6)));
-        assertEquals("Title", getInnerHtml(tableHeaderElements.get(7)));
-        assertEquals("Article", getInnerHtml(tableHeaderElements.get(8)));
-        assertEquals("Standard Number", getInnerHtml(tableHeaderElements.get(9)));
-        assertEquals("Wr Wrk Inst", getInnerHtml(tableHeaderElements.get(10)));
-        assertEquals("RH Account #", getInnerHtml(tableHeaderElements.get(11)));
-        assertEquals("RH Name", getInnerHtml(tableHeaderElements.get(12)));
-        assertEquals("Publisher", getInnerHtml(tableHeaderElements.get(13)));
-        assertEquals("Pub Date", getInnerHtml(tableHeaderElements.get(14)));
-        assertEquals("Number of Copies", getInnerHtml(tableHeaderElements.get(15)));
-        assertEquals("Reported value", getInnerHtml(tableHeaderElements.get(16)));
-        assertEquals("Amt in USD", getInnerHtml(tableHeaderElements.get(17)));
-        assertEquals("Market", getInnerHtml(tableHeaderElements.get(18)));
-        assertEquals("Market Period From", getInnerHtml(tableHeaderElements.get(19)));
-        assertEquals("Market Period To", getInnerHtml(tableHeaderElements.get(20)));
-        assertEquals("Author", getInnerHtml(tableHeaderElements.get(21)));
+        verifyTableColumns(usagesTable,
+            "Detail ID",
+            "Detail Status",
+            "Usage Batch Name",
+            "Fiscal Year",
+            "RRO Account #",
+            "RRO Name",
+            "Payment Date",
+            "Title",
+            "Article",
+            "Standard Number",
+            "Wr Wrk Inst",
+            "RH Account #",
+            "RH Name",
+            "Publisher",
+            "Pub Date",
+            "Number of Copies",
+            "Reported value",
+            "Amt in USD",
+            "Market",
+            "Market Period From",
+            "Market Period To",
+            "Author");
     }
 
     private void verifyTableBody(WebElement usagesTable) {
