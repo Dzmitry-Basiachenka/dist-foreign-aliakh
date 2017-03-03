@@ -1,9 +1,13 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
+
+import com.google.common.collect.Lists;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,6 +52,10 @@ public class RightsholderRepositoryIntegrationTest {
     private static final Long RH_ACCOUNT_NUMBER_1000159997 = 1000159997L;
     private static final Long RH_ACCOUNT_NUMBER_7000800832 = 7000800832L;
     private static final String RH_ACCOUNT_NAME = "Rh Account Name";
+    private static final String RH_NAME_7000813806 =
+        "CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil";
+    private static final String RH_NAME_2000017004 = "Access Copyright, The Canadian Copyright Agency";
+    private static final String RH_NAME_7001440663 = "JAACC, Japan Academic Association for Copyright Clearance [T]";
 
     @Autowired
     private RightsholderRepository rightsholderRepository;
@@ -66,15 +74,10 @@ public class RightsholderRepositoryIntegrationTest {
     public void testFindRightsholdersAccountNumbers() {
         Set<Long> accountNumbers = rightsholderRepository.findRightsholdersAccountNumbers();
         assertEquals(9, accountNumbers.size());
-        assertTrue(accountNumbers.contains(RH_ACCOUNT_NUMBER_7000813806));
-        assertTrue(accountNumbers.contains(RH_ACCOUNT_NUMBER_2000017004));
-        assertTrue(accountNumbers.contains(RH_ACCOUNT_NUMBER_7001440663));
-        assertTrue(accountNumbers.contains(RH_ACCOUNT_NUMBER_1000009997));
-        assertTrue(accountNumbers.contains(RH_ACCOUNT_NUMBER_1000002859));
-        assertTrue(accountNumbers.contains(RH_ACCOUNT_NUMBER_1000008666));
-        assertTrue(accountNumbers.contains(RH_ACCOUNT_NUMBER_1000005413));
-        assertTrue(accountNumbers.contains(RH_ACCOUNT_NUMBER_1000159997));
-        assertTrue(accountNumbers.contains(RH_ACCOUNT_NUMBER_7000800832));
+        assertTrue(accountNumbers.containsAll(Lists.newArrayList(RH_ACCOUNT_NUMBER_7000813806,
+            RH_ACCOUNT_NUMBER_2000017004, RH_ACCOUNT_NUMBER_7001440663, RH_ACCOUNT_NUMBER_1000009997,
+            RH_ACCOUNT_NUMBER_1000002859, RH_ACCOUNT_NUMBER_1000008666, RH_ACCOUNT_NUMBER_1000005413,
+            RH_ACCOUNT_NUMBER_1000159997, RH_ACCOUNT_NUMBER_7000800832)));
     }
 
     @Test
@@ -96,6 +99,20 @@ public class RightsholderRepositoryIntegrationTest {
         assertTrue(rightsholders.stream()
             .filter(rightsholder -> RH_ACCOUNT_NUMBER_7000813806.equals(rightsholder.getAccountNumber()))
             .collect(Collectors.toList()).isEmpty());
+    }
+
+    @Test
+    public void testFindRros() {
+        List<Rightsholder> rros = rightsholderRepository.findRros();
+        assertNotNull(rros);
+        assertFalse(rros.isEmpty());
+        assertEquals(4, rros.size());
+        assertTrue(rros.stream().map(Rightsholder::getAccountNumber).collect(Collectors.toList())
+            .containsAll(Lists.newArrayList(RH_ACCOUNT_NUMBER_7000813806, RH_ACCOUNT_NUMBER_2000017004,
+                RH_ACCOUNT_NUMBER_7001440663, RH_ACCOUNT_NUMBER_7000800832)));
+        assertTrue(rros.stream().map(Rightsholder::getName).collect(Collectors.toList())
+            .containsAll(Lists.newArrayList(RH_NAME_7000813806, RH_NAME_2000017004,
+                RH_NAME_7001440663, null)));
     }
 
     private Rightsholder buildRightsholder() {
