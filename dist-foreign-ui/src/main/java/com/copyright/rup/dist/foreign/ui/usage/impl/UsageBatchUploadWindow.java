@@ -170,6 +170,7 @@ class UsageBatchUploadWindow extends Window {
         usageBatchNameField.addValidator(new UsageBatchNameUniqueValidator());
         setRequired(usageBatchNameField);
         usageBatchNameField.setSizeFull();
+        usageBatchNameField.setImmediate(true);
         VaadinUtils.setMaxComponentsWidth(usageBatchNameField);
         VaadinUtils.addComponentStyle(usageBatchNameField, "usage-batch-name-field");
         return usageBatchNameField;
@@ -258,6 +259,7 @@ class UsageBatchUploadWindow extends Window {
         grossAmountField = new TextField(ForeignUi.getMessage("label.gross_amount_usd"));
         setRequired(grossAmountField);
         grossAmountField.setNullRepresentation(StringUtils.EMPTY);
+        grossAmountField.setImmediate(true);
         grossAmountField.addValidator(new GrossAmountValidator());
         VaadinUtils.setMaxComponentsWidth(grossAmountField);
         VaadinUtils.addComponentStyle(grossAmountField, "gross-amount-field");

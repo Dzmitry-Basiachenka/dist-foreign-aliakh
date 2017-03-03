@@ -41,7 +41,6 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
     private static final String PAYMENT_DATE_FIELD = "Payment Date";
     private static final String GROSS_AMOUT_FIELD = "Gross Amount (USD)";
 
-    private Map<String, String> errors;
 
     @Test
     public void testUsageBatchNameFieldValidation() {
@@ -54,7 +53,7 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
     public void testVerifyUploadUsageWindowEmptyFields() {
         WebElement uploadWindow = openUploadUsageBatchWindow();
         clickElementAndWait(assertElement(uploadWindow, UPLOAD_BUTTON_ID));
-        errors = Maps.newHashMap();
+        Map<String, String> errors = Maps.newHashMap();
         errors.put(USAGE_BATCH_NAME_FIELD, COMMON_EMPTY_FIELD_MESSAGE);
         errors.put(FILE_TO_UPLOAD_FIELD, COMMON_EMPTY_FIELD_MESSAGE);
         errors.put(RRO_ACCOUNT_NUMBER_FIELD, COMMON_EMPTY_FIELD_MESSAGE);
@@ -62,7 +61,6 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         errors.put(PAYMENT_DATE_FIELD, COMMON_EMPTY_FIELD_MESSAGE);
         errors.put(GROSS_AMOUT_FIELD, COMMON_EMPTY_FIELD_MESSAGE);
         verifyErrorWindow(errors);
-        clickElementAndWait(assertElement(uploadWindow, "Close"));
     }
 
     @Test
@@ -73,7 +71,7 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         fillRroAccountNumberField(uploadWindow, StringUtils.EMPTY);
         verifyRroAccountNameField(uploadWindow, StringUtils.EMPTY);
         clickElementAndWait(assertElement(uploadWindow, UPLOAD_BUTTON_ID));
-        errors = Maps.newHashMap();
+        Map<String, String> errors = Maps.newHashMap();
         errors.put(RRO_ACCOUNT_NUMBER_FIELD, COMMON_EMPTY_FIELD_MESSAGE);
         errors.put(RRO_ACCOUNT_NAME_FIELD, RRO_ACCOUNT_NAME_EMPTY_FIELD_MESSAGE);
         verifyErrorWindow(errors);
@@ -87,14 +85,30 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         clickElementAndWait(assertElement(uploadWindow, UPLOAD_BUTTON_ID));
         errors.remove(RRO_ACCOUNT_NUMBER_FIELD);
         verifyErrorWindow(errors);
-        fillRroAccountNumberField(uploadWindow, "2000017000");
-        // TODO {isuvorau, mbezmen} verify RRO Account Name for valid RRO Account #
-        verifyRroAccountNameField(uploadWindow, StringUtils.EMPTY);
+    }
+
+    @Test
+    // Test case ID: '44201b49-bbf5-438a-85a7-11559ec43a2b'
+    public void testVerifyGrossAmountField() {
+        WebElement uploadWindow = openUploadUsageBatchWindow();
+        fillValidValuesForUploadWindowFields(uploadWindow);
+        fillGrossAmountField(uploadWindow, "symbols");
         clickElementAndWait(assertElement(uploadWindow, UPLOAD_BUTTON_ID));
-        WebElement successWindow = waitAndFindElement(By.className("notification-window"));
-        assertNotNull(findElementByText(successWindow, HTML_DIV_TAG_NAME,
-            "Upload completed: 30 records were stored successfully"));
-        clickElementAndWait(findElementByText(successWindow, HTML_SPAN_TAG_NAME, OK_BUTTON_ID));
+        Map<String, String> errors = Maps.newHashMap();
+        errors.put(GROSS_AMOUT_FIELD, "Field should be greater than 0 and contain 2 decimals");
+        verifyErrorWindow(errors);
+        fillGrossAmountField(uploadWindow, "-555");
+        clickElementAndWait(assertElement(uploadWindow, UPLOAD_BUTTON_ID));
+        verifyErrorWindow(errors);
+        fillGrossAmountField(uploadWindow, "0");
+        clickElementAndWait(assertElement(uploadWindow, UPLOAD_BUTTON_ID));
+        verifyErrorWindow(errors);
+        fillGrossAmountField(uploadWindow, "555");
+        clickElementAndWait(assertElement(uploadWindow, UPLOAD_BUTTON_ID));
+        verifyErrorWindow(errors);
+        fillGrossAmountField(uploadWindow, "555.5");
+        clickElementAndWait(assertElement(uploadWindow, UPLOAD_BUTTON_ID));
+        verifyErrorWindow(errors);
     }
 
     private void verifyRroAccountNameField(WebElement uploadWindow, String value) {
@@ -108,6 +122,7 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         fillUsageBatchNameField(uploadWindow, "CADRA11Dec16");
         fillFileNameField(uploadWindow);
         fillRroAccountNumberField(uploadWindow, "2000017004");
+        clickElementAndWait(assertElement(uploadWindow, VERIFY_BUTTON_ID));
         fillPaymentDateField(uploadWindow);
         fillGrossAmountField(uploadWindow, "10000.00");
     }
