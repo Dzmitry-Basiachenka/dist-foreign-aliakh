@@ -39,6 +39,22 @@ public class ForeignCommonUiTest extends CommonUiTest {
      * Identifier for usage layout.
      */
     protected static final String USAGE_LAYOUT_ID = "usages-layout";
+    /**
+     * &lt;b&gt; tag name.
+     */
+    protected static final String HTML_B_TAG_NAME = "b";
+    /**
+     * Identifier for "Upload" button.
+     */
+    protected static final String UPLOAD_BUTTON_ID = "Upload";
+    /**
+     * Identifier for "Ok" button.
+     */
+    protected static final String OK_BUTTON_ID = "Ok";
+    /**
+     * Identifier for "Verify" button.
+     */
+    protected static final String VERIFY_BUTTON_ID = "Verify";
     private static final String APP_URL = "http://localhost:22000/dist-foreign-ui/";
     private static final Dimension WINDOW_DIMENSION = new Dimension(1280, 800);
     private static final String PASSWORD = "`123qwer";
@@ -137,6 +153,19 @@ public class ForeignCommonUiTest extends CommonUiTest {
         for (int i = 0; i < expectedHeaders.length; i++) {
             assertEquals(expectedHeaders[i], getInnerHtml(headers.get(i)));
         }
+    }
+
+    /**
+     * Applies current date into date element.
+     *
+     * @param dateElement date element
+     */
+    protected void applyCurrentDateForDateField(WebElement dateElement) {
+        waitAndFindElement(dateElement, By.className("v-datefield-button")).click();
+        WebElement calendarPanel = waitAndFindElement(By.className("v-datefield-calendarpanel"));
+        WebElement currentDateSlot =
+            waitAndFindElement(calendarPanel, By.className("v-datefield-calendarpanel-day-today"));
+        clickElementAndWait(currentDateSlot);
     }
 
     private void openAppPage(ForeignCredentials credentials) {

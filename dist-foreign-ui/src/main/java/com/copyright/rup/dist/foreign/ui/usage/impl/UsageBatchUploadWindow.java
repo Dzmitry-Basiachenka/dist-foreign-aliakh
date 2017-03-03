@@ -32,7 +32,6 @@ import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
-import com.vaadin.ui.Upload;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
@@ -145,13 +144,9 @@ class UsageBatchUploadWindow extends Window {
 
     private CsvUploadComponent initCsvUploadComponent() {
         csvUploadComponent = new CsvUploadComponent();
-        HorizontalLayout csvUploadLayout = (HorizontalLayout) csvUploadComponent.getComponent(0);
-        Upload upload = (Upload) csvUploadLayout.getComponent(1);
-        upload.setSizeFull();
-        csvUploadLayout.setSizeFull();
-        csvUploadLayout.setComponentAlignment(upload, Alignment.BOTTOM_RIGHT);
-        csvUploadLayout.setExpandRatio(csvUploadLayout.getComponent(0), 0.8f);
-        csvUploadLayout.setExpandRatio(upload, 0.2f);
+        csvUploadComponent.setSizeFull();
+        csvUploadComponent.setExpandRatio(csvUploadComponent.getComponent(0), 0.8f);
+        csvUploadComponent.setExpandRatio(csvUploadComponent.getComponent(1), 0.2f);
         VaadinUtils.setMaxComponentsWidth(csvUploadComponent);
         VaadinUtils.addComponentStyle(csvUploadComponent, "usage-upload-component");
         setRequired(csvUploadComponent.getFileNameField());

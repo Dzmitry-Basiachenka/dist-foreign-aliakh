@@ -122,14 +122,12 @@ public class CsvUploadComponent extends HorizontalLayout {
     private void init() {
         initFileNameField();
         initUpload();
-        HorizontalLayout uploadLayout = new HorizontalLayout();
-        uploadLayout.addComponent(fileNameField);
-        uploadLayout.addComponent(upload);
-        uploadLayout.setComponentAlignment(upload, Alignment.BOTTOM_RIGHT);
-        uploadLayout.setSpacing(true);
-        VaadinUtils.setMaxComponentsWidth(uploadLayout);
-        uploadLayout.setExpandRatio(fileNameField, FILE_NAME_FIELD_EXPAND_RATIO);
-        addComponent(uploadLayout);
+        addComponent(fileNameField);
+        addComponent(upload);
+        setComponentAlignment(upload, Alignment.BOTTOM_RIGHT);
+        setSpacing(true);
+        setExpandRatio(fileNameField, FILE_NAME_FIELD_EXPAND_RATIO);
+        VaadinUtils.setMaxComponentsWidth(this);
         addSucceededListener(event -> {
             setFileName(event.getFilename());
             fileNameField.setReadOnly(true);
@@ -139,6 +137,7 @@ public class CsvUploadComponent extends HorizontalLayout {
     private void initUpload() {
         upload.setButtonCaption(ForeignUi.getMessage("button.browse"));
         upload.setImmediate(true);
+        upload.setSizeFull();
     }
 
     private void initFileNameField() {
@@ -150,6 +149,7 @@ public class CsvUploadComponent extends HorizontalLayout {
         fileNameField.setPropertyDataSource(fileNameProperty);
         fileNameField.setMaxLength(0);
         VaadinUtils.setMaxComponentsWidth(fileNameField);
+        VaadinUtils.addComponentStyle(fileNameField, "file-name-field");
     }
 
     /**
