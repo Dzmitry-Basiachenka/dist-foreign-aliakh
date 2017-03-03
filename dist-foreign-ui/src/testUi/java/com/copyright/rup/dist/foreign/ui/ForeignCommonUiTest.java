@@ -137,7 +137,7 @@ public class ForeignCommonUiTest extends CommonUiTest {
      * @return instance of {@link WebElement}
      */
     protected WebElement assertElement(WebElement parentElement, String id) {
-        return checkNotNull(findElement(parentElement, By.id(id)));
+        return checkNotNull(waitAndFindElement(parentElement, By.id(id)));
     }
 
     /**
