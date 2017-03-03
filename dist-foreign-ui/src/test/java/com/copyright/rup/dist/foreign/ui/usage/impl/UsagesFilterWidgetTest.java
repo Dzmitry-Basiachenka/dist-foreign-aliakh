@@ -86,7 +86,7 @@ public class UsagesFilterWidgetTest {
 
     @Test
     public void testApplyFilter() {
-        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
+        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).times(2);
         replay(usagesFilterController);
         widget.init();
         widget.clearFilter();
@@ -132,6 +132,8 @@ public class UsagesFilterWidgetTest {
 
     @Test
     public void testClearFilter() {
+        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).times(2);
+        replay(usagesFilterController);
         widget.init();
         Button applyButton = getApplyButton();
         assertTrue(widget.getFilter().getRhAccountNumbers().isEmpty());
@@ -151,6 +153,7 @@ public class UsagesFilterWidgetTest {
         assertNull(localDateWidget.getValue());
         ComboBox fiscalYearComboBox = Whitebox.getInternalState(widget, "fiscalYearComboBox", UsagesFilterWidget.class);
         assertNull(fiscalYearComboBox.getValue());
+        verify(usagesFilterController);
     }
 
     @Test
@@ -170,7 +173,7 @@ public class UsagesFilterWidgetTest {
     @Test
     public void verifyButtonClickListener() {
         ClickEvent clickEvent = createMock(ClickEvent.class);
-        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
+        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).times(2);
         replay(clickEvent, usagesFilterController);
         widget.init();
         Set<Long> accountNumbers = Sets.newHashSet(ACCOUNT_NUMBER);

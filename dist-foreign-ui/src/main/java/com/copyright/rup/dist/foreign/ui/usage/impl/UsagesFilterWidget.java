@@ -19,8 +19,6 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
-import java.util.List;
-
 /**
  * Widget for filtering usages.
  * <p>
@@ -40,6 +38,7 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
     private UsageBatchFilterWidget usageBatchFilterWidget;
     private UsageFilter usageFilter = new UsageFilter();
     private UsageFilter appliedUsageFilter = new UsageFilter();
+    private BeanItemContainer<Integer> fiscalYearContainer;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -63,6 +62,7 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
     public void clearFilter() {
         paymentDateWidget.setInternalValue(null);
         fiscalYearComboBox.setValue(null);
+        refreshFiscalYearComboBox();
         usageFilter = new UsageFilter();
         rightsholderFilterWidget.reset();
         usageBatchFilterWidget.reset();
@@ -121,8 +121,10 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
     }
 
     private void initFiscalYearFilter() {
-        fiscalYearComboBox =
-            buildComboBox(ForeignUi.getMessage("label.fiscal_year_to"), getController().getFiscalYears());
+        fiscalYearContainer = new BeanItemContainer<>(Integer.class, getController().getFiscalYears());
+        fiscalYearComboBox = new ComboBox(ForeignUi.getMessage("label.fiscal_year_to"), fiscalYearContainer);
+        fiscalYearComboBox.setItemCaptionMode(ItemCaptionMode.ID_TOSTRING);
+        VaadinUtils.setMaxComponentsWidth(fiscalYearComboBox);
         fiscalYearComboBox.addValueChangeListener((ValueChangeListener) event -> {
             usageFilter.setFiscalYear((Integer) fiscalYearComboBox.getValue());
             filterChanged();
@@ -145,14 +147,6 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
         return filterHeaderLabel;
     }
 
-    private ComboBox buildComboBox(String caption, List<Integer> values) {
-        BeanItemContainer<Integer> dataSource = new BeanItemContainer<>(Integer.class, values);
-        ComboBox comboBox = new ComboBox(caption, dataSource);
-        comboBox.setItemCaptionMode(ItemCaptionMode.ID_TOSTRING);
-        VaadinUtils.setMaxComponentsWidth(comboBox);
-        return comboBox;
-    }
-
     private HorizontalLayout initButtonsLayout() {
         applyButton = Buttons.createButton(ForeignUi.getMessage("button.apply"));
         applyButton.setEnabled(false);
@@ -170,4 +164,8 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
         applyButton.setEnabled(!usageFilter.equals(appliedUsageFilter));
     }
 
+    private void refreshFiscalYearComboBox() {
+        fiscalYearContainer.removeAllItems();
+        fiscalYearContainer.addAll(getController().getFiscalYears());
+    }
 }
