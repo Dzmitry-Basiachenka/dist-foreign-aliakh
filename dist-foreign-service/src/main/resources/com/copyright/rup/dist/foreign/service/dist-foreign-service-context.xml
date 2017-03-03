@@ -23,7 +23,7 @@
 
     <context:component-scan base-package="com.copyright.rup.dist.foreign.service.impl"/>
 
-    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+    <bean id="quartzScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
         <property name="jobDetails">
             <list>
                 <ref bean="df.service.rightsholdersQuartzJob"/>
@@ -34,7 +34,7 @@
                 <ref bean="df.service.rightsholdersTrigger"/>
             </list>
         </property>
-        <property name="autoStartup" value="$RUP{dist.foreign.service.quartz.auto.startup}"/>
+        <property name="autoStartup" value="true"/>
     </bean>
 
     <bean id="df.service.rightsholdersQuartzJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">

@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -106,7 +107,8 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
 
     @Override
     public String getRroName(Long rroAccountNumber) {
-        return prmIntegrationService.getRighstholderName(rroAccountNumber);
+        Rightsholder rro = prmIntegrationService.getRightsholder(rroAccountNumber);
+        return null != rro ? rro.getName() : null;
     }
 
     @Override

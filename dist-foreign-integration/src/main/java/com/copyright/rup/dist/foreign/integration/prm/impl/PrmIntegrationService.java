@@ -7,7 +7,6 @@ import com.copyright.rup.dist.foreign.integration.prm.api.IPrmRightsholderServic
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
-import org.apache.commons.lang3.StringUtils;
 import org.perf4j.aop.Profiled;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,8 +40,8 @@ public class PrmIntegrationService implements IPrmIntegrationService {
     }
 
     @Override
-    public String getRighstholderName(Long accountNumber) {
+    public Rightsholder getRightsholder(Long accountNumber) {
         List<Rightsholder> rightsholders = getRightsholders(Sets.newHashSet(accountNumber));
-        return !rightsholders.isEmpty() ? rightsholders.get(0).getName() : StringUtils.EMPTY;
+        return !rightsholders.isEmpty() ? rightsholders.get(0) : null;
     }
 }

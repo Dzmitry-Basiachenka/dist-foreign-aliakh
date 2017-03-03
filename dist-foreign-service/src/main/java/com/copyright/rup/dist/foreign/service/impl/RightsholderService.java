@@ -45,15 +45,14 @@ public class RightsholderService implements IRightsholderService {
     public int updateRightsholdersInformation() {
         Set<Long> accountNumbers = repository.findRightsholdersAccountNumbers();
         int accountNumbersSize = accountNumbers.size();
-        LOGGER.info("Update Rightsholder information. Started. RHs count={}", accountNumbersSize);
+        LOGGER.info("Update Rightsholder information. Started. RHsCount={}", accountNumbersSize);
         Collection<Rightsholder> rightsholders = prmIntegrationService.getRightsholders(accountNumbers);
         int rightsholdersSize = rightsholders.size();
         repository.deleteAll();
         for (Rightsholder rightsholder : rightsholders) {
             repository.insert(rightsholder);
-            LOGGER.debug("Insert Rightsholder. {}", rightsholder);
         }
-        LOGGER.info("Update Rightsholder information. Finished. RHs Count={}, Updated Count={}", accountNumbersSize,
+        LOGGER.info("Update Rightsholder information. Finished. RHsCount={}, UpdatedCount={}", accountNumbersSize,
             rightsholdersSize);
         return rightsholdersSize;
     }

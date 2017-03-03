@@ -18,6 +18,10 @@
           p:username="SA"
           p:password=""/>
 
+    <bean id="quartzScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <!--Stub Scheduler for quartz job-->
+    </bean>
+
     <context:component-scan base-package="com.copyright.rup.dist.foreign.ui"/>
 
 </beans>

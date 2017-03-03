@@ -6,6 +6,7 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
@@ -14,7 +15,6 @@ import com.copyright.rup.dist.foreign.integration.prm.api.IPrmRightsholderServic
 
 import com.google.common.collect.Sets;
 
-import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -72,7 +72,9 @@ public class PrmIntegrationServiceTest {
         expect(prmRightsholderService.getRightsholders(Sets.newHashSet(ACCOUNT_NUMBER)))
             .andReturn(Collections.singletonList(buildRightsholder(ACCOUNT_NUMBER, RIGHTSHOLDER_NAME))).once();
         replay(prmRightsholderService);
-        assertEquals(RIGHTSHOLDER_NAME, prmIntegrationService.getRighstholderName(ACCOUNT_NUMBER));
+        Rightsholder rightsholder = prmIntegrationService.getRightsholder(ACCOUNT_NUMBER);
+        assertEquals(ACCOUNT_NUMBER, rightsholder.getAccountNumber(), 0);
+        assertEquals(RIGHTSHOLDER_NAME, rightsholder.getName());
         verify(prmRightsholderService);
     }
 
@@ -81,7 +83,7 @@ public class PrmIntegrationServiceTest {
         expect(prmRightsholderService.getRightsholders(Sets.newHashSet(ACCOUNT_NUMBER)))
             .andReturn(Collections.emptyList()).once();
         replay(prmRightsholderService);
-        assertEquals(StringUtils.EMPTY, prmIntegrationService.getRighstholderName(ACCOUNT_NUMBER));
+        assertNull(prmIntegrationService.getRightsholder(ACCOUNT_NUMBER));
         verify(prmRightsholderService);
     }
 

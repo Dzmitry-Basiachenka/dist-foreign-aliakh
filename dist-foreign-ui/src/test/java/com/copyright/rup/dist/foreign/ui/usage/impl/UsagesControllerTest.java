@@ -7,6 +7,7 @@ import static org.easymock.EasyMock.isNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
@@ -16,10 +17,12 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
+import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.impl.UsageService;
@@ -60,11 +63,14 @@ import java.util.concurrent.ExecutorService;
 @PrepareForTest(SecurityUtils.class)
 public class UsagesControllerTest {
 
+    private static final String RRO_ACCOUNT_NAME = "Account Name";
+    private static final Long RRO_ACCOUNT_NUMBER = 12345678L;
     private UsagesController controller;
     private UsageService usageService;
     private IUsagesFilterController filterController;
     private IUsagesWidget usagesWidget;
     private IUsageBatchService usageBatchService;
+    private IPrmIntegrationService prmIntegrationService;
 
     @Before
     public void setUp() {
@@ -73,11 +79,13 @@ public class UsagesControllerTest {
         usageBatchService = createMock(IUsageBatchService.class);
         filterController = createMock(IUsagesFilterController.class);
         usagesWidget = createMock(IUsagesWidget.class);
+        prmIntegrationService = createMock(IPrmIntegrationService.class);
         Whitebox.setInternalState(controller, "usageBatchService", usageBatchService);
         Whitebox.setInternalState(controller, "usageService", usageService);
         Whitebox.setInternalState(controller, "usageBatchService", usageBatchService);
         Whitebox.setInternalState(controller, IWidget.class, usagesWidget);
         Whitebox.setInternalState(controller, "filterController", filterController);
+        Whitebox.setInternalState(controller, "prmIntegrationService", prmIntegrationService);
     }
 
     @Test
@@ -212,5 +220,24 @@ public class UsagesControllerTest {
         replay(usageBatchService, filterController, filterWidgetMock, SecurityUtils.class);
         controller.deleteUsageBatch(usageBatch);
         verify(usageBatchService, filterController, filterWidgetMock, SecurityUtils.class);
+    }
+
+    @Test
+    public void testGetRroName() {
+        Rightsholder rightsholder = new Rightsholder();
+        rightsholder.setName(RRO_ACCOUNT_NAME);
+        rightsholder.setAccountNumber(RRO_ACCOUNT_NUMBER);
+        expect(prmIntegrationService.getRightsholder(RRO_ACCOUNT_NUMBER)).andReturn(rightsholder).once();
+        replay(prmIntegrationService);
+        assertEquals(RRO_ACCOUNT_NAME, controller.getRroName(RRO_ACCOUNT_NUMBER));
+        verify(prmIntegrationService);
+    }
+
+    @Test
+    public void testGetNullRroName() {
+        expect(prmIntegrationService.getRightsholder(RRO_ACCOUNT_NUMBER)).andReturn(null).once();
+        replay(prmIntegrationService);
+        assertNull(controller.getRroName(RRO_ACCOUNT_NUMBER));
+        verify(prmIntegrationService);
     }
 }

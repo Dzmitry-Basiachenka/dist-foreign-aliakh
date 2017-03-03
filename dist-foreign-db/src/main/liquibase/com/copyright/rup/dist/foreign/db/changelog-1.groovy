@@ -379,4 +379,158 @@ databaseChangeLog {
             }
         }
     }
+
+    changeSet(id: '2017-03-03-00', author: 'Mikalai Bezmen <mbezmen@copyright.com>') {
+        comment('B-29460 Integrate with PRM to get RH and RRO names: rename primary keys based on database code standards')
+
+        dropPrimaryKey(
+                schemaName: dbAppsSchema,
+                tableName: 'df_rightsholder',
+                constraintName: 'rh_account_number_pk')
+
+        addPrimaryKey(
+                tablespace: dbIndexTablespace,
+                schemaName: dbAppsSchema,
+                tableName: 'df_rightsholder',
+                columnNames: 'rh_account_number',
+                constraintName: 'pk_rh_account_number')
+
+        dropForeignKeyConstraint(
+                baseTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_usage',
+                constraintName: 'fk_df_usage_2_df_usage_batch')
+
+        dropPrimaryKey(
+                schemaName: dbAppsSchema,
+                tableName: 'df_usage',
+                constraintName: 'df_usage_pk')
+
+        addPrimaryKey(
+                tablespace: dbIndexTablespace,
+                schemaName: dbAppsSchema,
+                tableName: 'df_usage',
+                columnNames: 'df_usage_uid',
+                constraintName: 'pk_df_usage')
+
+        dropForeignKeyConstraint(
+                baseTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_usage_archive',
+                constraintName: 'fk_df_usage_archive_2_df_usage_batch')
+
+        dropPrimaryKey(
+                schemaName: dbAppsSchema,
+                tableName: 'df_usage_archive',
+                constraintName: 'df_usage_archive_pk')
+
+        addPrimaryKey(
+                tablespace: dbIndexTablespace,
+                schemaName: dbAppsSchema,
+                tableName: 'df_usage_archive',
+                columnNames: 'df_usage_archive_uid',
+                constraintName: 'pk_df_usage_archive')
+
+        dropPrimaryKey(
+                schemaName: dbAppsSchema,
+                tableName: 'df_usage_batch',
+                constraintName: 'df_usage_batch_pk')
+
+        addPrimaryKey(
+                tablespace: dbIndexTablespace,
+                schemaName: dbAppsSchema,
+                tableName: 'df_usage_batch',
+                columnNames: 'df_usage_batch_uid',
+                constraintName: 'pk_df_usage_batch')
+
+        addForeignKeyConstraint(constraintName: 'fk_df_usage_2_df_usage_batch',
+                baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_usage',
+                baseColumnNames: 'df_usage_batch_uid',
+                referencedTableName: 'df_usage_batch',
+                referencedColumnNames: 'df_usage_batch_uid')
+
+        addForeignKeyConstraint(constraintName: 'fk_df_usage_archive_2_df_usage_batch',
+                baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_usage_archive',
+                baseColumnNames: 'df_usage_batch_uid',
+                referencedTableName: 'df_usage_batch',
+                referencedColumnNames: 'df_usage_batch_uid')
+
+        rollback {
+            dropPrimaryKey(
+                    schemaName: dbAppsSchema,
+                    tableName: 'df_rightsholder',
+                    constraintName: 'pk_rh_account_number')
+
+            addPrimaryKey(
+                    tablespace: dbIndexTablespace,
+                    schemaName: dbAppsSchema,
+                    tableName: 'df_rightsholder',
+                    columnNames: 'rh_account_number',
+                    constraintName: 'rh_account_number_pk')
+            
+            dropForeignKeyConstraint(
+                    baseTableSchemaName: dbAppsSchema,
+                    baseTableName: 'df_usage',
+                    constraintName: 'fk_df_usage_2_df_usage_batch')
+
+            dropPrimaryKey(
+                    schemaName: dbAppsSchema,
+                    tableName: 'df_usage',
+                    constraintName: 'pk_df_usage')
+
+            addPrimaryKey(
+                    tablespace: dbIndexTablespace,
+                    schemaName: dbAppsSchema,
+                    tableName: 'df_usage',
+                    columnNames: 'df_usage_uid',
+                    constraintName: 'df_usage_pk')
+
+            dropForeignKeyConstraint(
+                    baseTableSchemaName: dbAppsSchema,
+                    baseTableName: 'df_usage_archive',
+                    constraintName: 'fk_df_usage_archive_2_df_usage_batch')
+
+            dropPrimaryKey(
+                    schemaName: dbAppsSchema,
+                    tableName: 'df_usage_archive',
+                    constraintName: 'pk_df_usage_archive')
+
+            addPrimaryKey(
+                    tablespace: dbIndexTablespace,
+                    schemaName: dbAppsSchema,
+                    tableName: 'df_usage_archive',
+                    columnNames: 'df_usage_archive_uid',
+                    constraintName: 'df_usage_archive_pk')
+
+            dropPrimaryKey(
+                    schemaName: dbAppsSchema,
+                    tableName: 'df_usage_batch',
+                    constraintName: 'pk_df_usage_batch')
+
+            addPrimaryKey(
+                    tablespace: dbIndexTablespace,
+                    schemaName: dbAppsSchema,
+                    tableName: 'df_usage_batch',
+                    columnNames: 'df_usage_batch_uid',
+                    constraintName: 'df_usage_batch_pk')
+
+            addForeignKeyConstraint(constraintName: 'fk_df_usage_2_df_usage_batch',
+                    baseTableSchemaName: dbAppsSchema,
+                    referencedTableSchemaName: dbAppsSchema,
+                    baseTableName: 'df_usage',
+                    baseColumnNames: 'df_usage_batch_uid',
+                    referencedTableName: 'df_usage_batch',
+                    referencedColumnNames: 'df_usage_batch_uid')
+
+            addForeignKeyConstraint(constraintName: 'fk_df_usage_archive_2_df_usage_batch',
+                    baseTableSchemaName: dbAppsSchema,
+                    referencedTableSchemaName: dbAppsSchema,
+                    baseTableName: 'df_usage_archive',
+                    baseColumnNames: 'df_usage_batch_uid',
+                    referencedTableName: 'df_usage_batch',
+                    referencedColumnNames: 'df_usage_batch_uid')
+        }
+    }
 }
