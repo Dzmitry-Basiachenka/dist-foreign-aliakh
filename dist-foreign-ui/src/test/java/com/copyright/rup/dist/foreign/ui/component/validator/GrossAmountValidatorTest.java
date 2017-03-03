@@ -43,9 +43,23 @@ public class GrossAmountValidatorTest {
             {"  125", false},
             {"  125.2", false},
             {"125.23  ", true},
-            {"152.44", true},
+            {"  106.44", true},
+            {"  1024656.56   ", true},
+            {"0.11", true},
+            {"0.10", true},
+            {"0.01", true},
+            {"0.09", true},
+            {"1.00", true},
+            {"10.00", true},
+            {"9999999999.99", true},
+            {"999999999999", false},
+            {"000125.52", false},
+            {"01.44", false},
+            {"10000000000.00", false},
             {"555.9", false},
+            {"105.8 9", false},
             {"84.44415", false},
+            {"99.451", false},
             {"33..5", false},
             {"86.0.5", false},
             {"amount", false},
@@ -56,8 +70,10 @@ public class GrossAmountValidatorTest {
             {"15,687", false},
             {"0", false},
             {"0.0", false},
+            {"0.1", false},
             {"0.00", false},
-            {"+0.00", false}
+            {"+0.00", false},
+            {"-0.00", false}
         });
     }
 
