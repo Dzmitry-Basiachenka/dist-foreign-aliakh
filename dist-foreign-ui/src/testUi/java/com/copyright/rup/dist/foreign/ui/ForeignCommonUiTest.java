@@ -92,8 +92,6 @@ public class ForeignCommonUiTest extends CommonUiTest {
 
     /**
      * Logs in into application as Distribution Manager.
-     *
-     * @return credentials of user
      */
     protected void loginAsManager() {
         openAppPage(ForeignCredentials.MANAGER);
@@ -101,8 +99,6 @@ public class ForeignCommonUiTest extends CommonUiTest {
 
     /**
      * Logs in into application as Distribution Specialist.
-     *
-     * @return credentials of user
      */
     protected void loginAsSpecialist() {
         openAppPage(ForeignCredentials.SPECIALIST);

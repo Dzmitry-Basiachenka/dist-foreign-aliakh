@@ -41,11 +41,24 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
     private static final String PAYMENT_DATE_FIELD = "Payment Date";
     private static final String GROSS_AMOUT_FIELD = "Gross Amount (USD)";
 
-
     @Test
+    //Test case ID: 1b30b405-0431-4f96-81ca-9c9ff65a32f1
     public void testUsageBatchNameFieldValidation() {
-        openUploadUsageBatchWindow();
-        // TODO {mbezmen, dbaraukova} Implement test
+        WebElement uploadWindow = openUploadUsageBatchWindow();
+        fillValidValuesForUploadWindowFields(uploadWindow);
+        fillUsageBatchNameField(uploadWindow, StringUtils.EMPTY);
+        Map<String, String> errors = Maps.newHashMapWithExpectedSize(1);
+        errors.put(USAGE_BATCH_NAME_FIELD, COMMON_EMPTY_FIELD_MESSAGE);
+        clickElementAndWait(assertElement(uploadWindow, UPLOAD_BUTTON_ID));
+        verifyErrorWindow(errors);
+        fillUsageBatchNameField(uploadWindow, "JAACC_11Dec16");
+        errors.replace(USAGE_BATCH_NAME_FIELD, "Usage Batch with such name already exists");
+        clickElementAndWait(assertElement(uploadWindow, UPLOAD_BUTTON_ID));
+        verifyErrorWindow(errors);
+        fillUsageBatchNameField(uploadWindow, "Usage Batch with name that exceeds more than 50 characters");
+        errors.replace(USAGE_BATCH_NAME_FIELD, "Field value should not exceed 50 characters");
+        clickElementAndWait(assertElement(uploadWindow, UPLOAD_BUTTON_ID));
+        verifyErrorWindow(errors);
     }
 
     @Test
@@ -112,7 +125,6 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
     }
 
     private void verifyRroAccountNameField(WebElement uploadWindow, String value) {
-        clickElementAndWait(assertElement(uploadWindow, VERIFY_BUTTON_ID));
         WebElement rroAccountNameField = waitAndFindElement(uploadWindow, By.id("rro-account-name-field"));
         assertNotNull(rroAccountNameField);
         assertEquals(value, getInnerHtml(rroAccountNameField));
@@ -122,7 +134,6 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         fillUsageBatchNameField(uploadWindow, "CADRA11Dec16");
         fillFileNameField(uploadWindow);
         fillRroAccountNumberField(uploadWindow, "2000017004");
-        clickElementAndWait(assertElement(uploadWindow, VERIFY_BUTTON_ID));
         fillPaymentDateField(uploadWindow);
         fillGrossAmountField(uploadWindow, "10000.00");
     }
@@ -131,21 +142,22 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         WebElement usageBatchNameField = waitAndFindElement(uploadWindow, By.id("usage-batch-name-field"));
         assertNotNull(usageBatchNameField);
         usageBatchNameField.clear();
-        usageBatchNameField.sendKeys(value);
+        sendKeysToInput(usageBatchNameField, value);
     }
 
     private void fillFileNameField(WebElement uploadWindow) {
         WebElement fileUpload = waitAndFindElement(uploadWindow, By.className("gwt-FileUpload"));
         assertNotNull(fileUpload);
         fileUpload.clear();
-        fileUpload.sendKeys(new File(FILE_PATH, "sample_usage_data_file.csv").getAbsolutePath());
+        sendKeysToInput(fileUpload, new File(FILE_PATH, "sample_usage_data_file.csv").getAbsolutePath());
     }
 
     private void fillRroAccountNumberField(WebElement uploadWindow, String value) {
         WebElement rroAccountNumberField = waitAndFindElement(uploadWindow, By.id("rro-account-number-field"));
         assertNotNull(rroAccountNumberField);
         rroAccountNumberField.clear();
-        rroAccountNumberField.sendKeys(value);
+        sendKeysToInput(rroAccountNumberField, value);
+        clickElementAndWait(assertElement(uploadWindow, VERIFY_BUTTON_ID));
     }
 
     private void fillPaymentDateField(WebElement uploadWindow) {
@@ -157,7 +169,7 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         WebElement grossAmountField = waitAndFindElement(uploadWindow, By.id("gross-amount-field"));
         assertNotNull(grossAmountField);
         grossAmountField.clear();
-        grossAmountField.sendKeys(value);
+        sendKeysToInput(grossAmountField, value);
     }
 
     private void verifyErrorWindow(Map<String, String> fieldNameToErrorMessageMap) {
