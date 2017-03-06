@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
 import org.apache.commons.lang3.StringUtils;
@@ -124,6 +125,16 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         verifyErrorWindow(errors);
     }
 
+    @Test
+    // Test case ID: '0dcb3d62-62f8-4249-bb03-9f40328b57bf'
+    public void testVerifyUploadFileField() {
+        WebElement uploadWindow = openUploadUsageBatchWindow();
+        fillValidValuesForUploadWindowFields(uploadWindow);
+        fillFileNameField(uploadWindow, "invalid_extension.txt");
+        clickElementAndWait(assertElement(uploadWindow, UPLOAD_BUTTON_ID));
+        verifyErrorWindow(ImmutableMap.of(FILE_TO_UPLOAD_FIELD, "File extension is incorrect"));
+    }
+
     private void verifyRroAccountNameField(WebElement uploadWindow, String value) {
         WebElement rroAccountNameField = waitAndFindElement(uploadWindow, By.id("rro-account-name-field"));
         assertNotNull(rroAccountNameField);
@@ -132,7 +143,7 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
 
     private void fillValidValuesForUploadWindowFields(WebElement uploadWindow) {
         fillUsageBatchNameField(uploadWindow, "CADRA11Dec16");
-        fillFileNameField(uploadWindow);
+        fillFileNameField(uploadWindow, "sample_usage_data_file.csv");
         fillRroAccountNumberField(uploadWindow, "2000017004");
         fillPaymentDateField(uploadWindow);
         fillGrossAmountField(uploadWindow, "10000.00");
@@ -143,13 +154,14 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         assertNotNull(usageBatchNameField);
         usageBatchNameField.clear();
         sendKeysToInput(usageBatchNameField, value);
+        clickElementAndWait(uploadWindow);
     }
 
-    private void fillFileNameField(WebElement uploadWindow) {
+    private void fillFileNameField(WebElement uploadWindow, String usageFileName) {
         WebElement fileUpload = waitAndFindElement(uploadWindow, By.className("gwt-FileUpload"));
         assertNotNull(fileUpload);
         fileUpload.clear();
-        sendKeysToInput(fileUpload, new File(FILE_PATH, "sample_usage_data_file.csv").getAbsolutePath());
+        sendKeysToInput(fileUpload, new File(FILE_PATH, usageFileName).getAbsolutePath());
     }
 
     private void fillRroAccountNumberField(WebElement uploadWindow, String value) {
