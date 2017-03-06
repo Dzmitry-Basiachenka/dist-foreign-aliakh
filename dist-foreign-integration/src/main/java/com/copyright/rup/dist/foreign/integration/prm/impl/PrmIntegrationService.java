@@ -30,7 +30,6 @@ public class PrmIntegrationService implements IPrmIntegrationService {
     @Autowired
     private IPrmRightsholderService prmRightsholderService;
 
-
     @Override
     @Profiled(tag = "integration.PrmRightsholderService.getRightsholders")
     public List<Rightsholder> getRightsholders(Set<Long> accountNumbers) {
