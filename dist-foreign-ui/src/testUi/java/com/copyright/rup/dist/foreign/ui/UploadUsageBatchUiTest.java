@@ -161,7 +161,7 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         WebElement fileUpload = waitAndFindElement(uploadWindow, By.className("gwt-FileUpload"));
         assertNotNull(fileUpload);
         fileUpload.clear();
-        sendKeysToInput(fileUpload, new File(FILE_PATH, usageFileName).getAbsolutePath());
+        fileUpload.sendKeys(new File(FILE_PATH, usageFileName).getAbsolutePath());
     }
 
     private void fillRroAccountNumberField(WebElement uploadWindow, String value) {

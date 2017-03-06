@@ -15,6 +15,12 @@
         <constructor-arg value="-tcp,-tcpAllowOthers,-tcpPort,$RUP{dist.foreign.ui.db.port}"/>
     </bean>
 
+    <bean id="quartzScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <!--Stub Scheduler for quartz job-->
+    </bean>
+
+    <bean id="prmIntegrationService" class="com.copyright.rup.dist.foreign.ui.mock.PrmIntegrationServiceMock"/>
+
     <bean id="dfDataSource"
           class="com.copyright.rup.common.test.integ.db.embedded.EmbeddedH2DatabaseFactory">
         <property name="resourcesFromPaths">
