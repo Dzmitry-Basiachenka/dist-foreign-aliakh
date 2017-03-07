@@ -4,18 +4,35 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageFilter;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
+import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
+import com.copyright.rup.dist.foreign.repository.api.Pageable;
+import com.copyright.rup.dist.foreign.repository.api.Sort;
+
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
 import org.apache.commons.lang3.StringUtils;
+import org.junit.After;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.File;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -28,6 +45,7 @@ import java.util.stream.Collectors;
  * @author Mikalai Bezmen
  * @author Ihar Suvorau
  */
+@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(value = "classpath:/com/copyright/rup/dist/foreign/ui/dist-foreign-ui-test-context.xml")
 public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
 
@@ -41,6 +59,18 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
     private static final String RRO_ACCOUNT_NAME_FIELD = "RRO Account Name";
     private static final String PAYMENT_DATE_FIELD = "Payment Date";
     private static final String GROSS_AMOUT_FIELD = "Gross Amount (USD)";
+    private static final String USAGE_BATCH_NAME = "TEST_Dec16";
+    private static final Long RRO_ACCOUNT_NUMBER = 2000017004L;
+    private static final String GROSS_AMOUNT = "10000.00";
+    private static final Long DETAIL_ID_234 = 234L;
+    private static final Long DETAIL_ID_235 = 235L;
+    private static final String DETAIL_ID_KEY = "detailId";
+
+    @Autowired
+    private IUsageBatchRepository usageBatchRepository;
+
+    @Autowired
+    private IUsageRepository usageRepository;
 
     @Test
     //Test case ID: 1b30b405-0431-4f96-81ca-9c9ff65a32f1
@@ -135,6 +165,114 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         verifyErrorWindow(ImmutableMap.of(FILE_TO_UPLOAD_FIELD, "File extension is incorrect"));
     }
 
+    @Test
+    // Test case ID: '81989dc2-329b-4ce7-b5d6-97330d02ccd1'
+    public void testUploadValidFile() {
+        List<UsageBatch> usageBatches = usageBatchRepository.findUsageBatches();
+        assertEquals(3, usageBatches.size());
+        WebElement uploadWindow = openUploadUsageBatchWindow();
+        fillValidValuesForUploadWindowFields(uploadWindow);
+        LocalDate paymentDate = LocalDate.now();
+        clickElementAndWait(assertElement(uploadWindow, UPLOAD_BUTTON_ID));
+        WebElement successfullyUploadedWindow = waitAndFindElement(By.className("v-window-contents"));
+        assertNotNull(successfullyUploadedWindow);
+        WebElement messageLabel = findElement(successfullyUploadedWindow, By.className("v-label"));
+        assertNotNull(messageLabel);
+        assertEquals("Upload completed: 2 records were stored successfully", messageLabel.getText());
+        clickElementAndWait(assertElement(successfullyUploadedWindow, OK_BUTTON_ID));
+        List<UsageBatch> usageBatchesAfterUploading = usageBatchRepository.findUsageBatches();
+        assertEquals(4, usageBatchesAfterUploading.size());
+        List<UsageBatch> uploadedUsageBatches =
+            usageBatchesAfterUploading.stream().filter(usageBatch -> USAGE_BATCH_NAME.equals(usageBatch.getName()))
+                .collect(Collectors.toList());
+        assertEquals(1, uploadedUsageBatches.size());
+        UsageBatch usageBatch = uploadedUsageBatches.get(0);
+        verifyUploadedUsageBatch(usageBatch, paymentDate);
+        verifyUploadedUsages(usageBatch.getId());
+        deleteUploadedUsageBatch(usageBatch);
+    }
+
+    @After
+    public void tierDown() {
+        List<UsageBatch> usageBatches = usageBatchRepository.findUsageBatches().stream()
+            .filter(usageBatch -> USAGE_BATCH_NAME.equals(usageBatch.getName())).collect(Collectors.toList());
+        if (1 == usageBatches.size()) {
+            deleteUploadedUsageBatch(usageBatches.get(0));
+        }
+    }
+
+    private void verifyUploadedUsageBatch(UsageBatch usageBatch, LocalDate date) {
+        assertEquals(RRO_ACCOUNT_NUMBER, usageBatch.getRro().getAccountNumber());
+        assertEquals(new BigDecimal(GROSS_AMOUNT), usageBatch.getGrossAmount());
+        assertEquals(date.getYear(), usageBatch.getFiscalYear(), 0);
+        assertEquals(date, usageBatch.getPaymentDate());
+    }
+
+    private void verifyUploadedUsages(String usageBatchId) {
+        UsageFilter usageFilter = new UsageFilter();
+        usageFilter.setUsageBatchesIds(Collections.singleton(usageBatchId));
+        List<UsageDto> usages = usageRepository.findByFilter(usageFilter, new Pageable(0, 200),
+            new Sort(DETAIL_ID_KEY, Sort.Direction.ASC));
+        assertNotNull(usages);
+        assertEquals(2, usages.size());
+        verifyUsageWithDetailId234(usages.stream()
+            .filter(usage -> Objects.equals(DETAIL_ID_234, usage.getDetailId())).collect(Collectors.toList()));
+        verifyUsageWithDetailId235(usages.stream()
+            .filter(usage -> Objects.equals(DETAIL_ID_235, usage.getDetailId())).collect(Collectors.toList()));
+    }
+
+    private void verifyUsageWithDetailId235(List<UsageDto> usages) {
+        assertNotNull(usages);
+        assertEquals(1, usages.size());
+        UsageDto usage = usages.get(0);
+        assertNotNull(usage);
+        assertEquals("1984", usage.getWorkTitle());
+        assertEquals(null, usage.getArticle());
+        assertEquals("9.78015E+12", usage.getStandardNumber());
+        assertEquals(Long.valueOf(123456789), usage.getWrWrkInst());
+        assertEquals(Long.valueOf(1000009522), usage.getRhAccountNumber());
+        assertEquals(null, usage.getPublisher());
+        assertEquals(null, usage.getPublicationDate());
+        assertEquals(null, usage.getNumberOfCopies());
+        assertEquals(new BigDecimal("60.86"), usage.getReportedValue());
+        assertEquals("Univ,Bus,Doc,S", usage.getMarket());
+        assertEquals(Integer.valueOf(2015), usage.getMarketPeriodFrom());
+        assertEquals(Integer.valueOf(2016), usage.getMarketPeriodTo());
+        assertEquals(UsageStatusEnum.ELIGIBLE, usage.getStatus());
+        assertEquals(null, usage.getAuthor());
+        assertEquals(new BigDecimal("6635.4121238564"), usage.getGrossAmount());
+    }
+
+    private void verifyUsageWithDetailId234(List<UsageDto> usages) {
+        assertNotNull(usages);
+        assertEquals(1, usages.size());
+        UsageDto usage = usages.get(0);
+        assertNotNull(usage);
+        assertEquals("1984", usage.getWorkTitle());
+        assertEquals("Appendix: The Principles of Newspeak", usage.getArticle());
+        assertEquals("9.78015E+12", usage.getStandardNumber());
+        assertEquals(Long.valueOf(123456789), usage.getWrWrkInst());
+        assertEquals(Long.valueOf(1000009522), usage.getRhAccountNumber());
+        assertEquals("Publisher", usage.getPublisher());
+        assertEquals(LocalDate.of(3000, 12, 22), usage.getPublicationDate());
+        assertEquals(Integer.valueOf(65), usage.getNumberOfCopies());
+        assertEquals(new BigDecimal("30.86"), usage.getReportedValue());
+        assertEquals("Univ,Bus,Doc,S", usage.getMarket());
+        assertEquals(Integer.valueOf(2015), usage.getMarketPeriodFrom());
+        assertEquals(Integer.valueOf(2016), usage.getMarketPeriodTo());
+        assertEquals(UsageStatusEnum.ELIGIBLE, usage.getStatus());
+        assertEquals("Aarseth, Espen J.", usage.getAuthor());
+        assertEquals(new BigDecimal("3364.5878761454"), usage.getGrossAmount());
+    }
+
+    private void deleteUploadedUsageBatch(UsageBatch usageBatch) {
+        assertNotNull(usageBatch);
+        String usageBatchId = usageBatch.getId();
+        assertNotNull(usageBatchId);
+        usageRepository.deleteUsageBatchDetails(usageBatchId);
+        usageBatchRepository.deleteUsageBatch(usageBatchId);
+    }
+
     private void verifyRroAccountNameField(WebElement uploadWindow, String value) {
         WebElement rroAccountNameField = waitAndFindElement(uploadWindow, By.id("rro-account-name-field"));
         assertNotNull(rroAccountNameField);
@@ -142,11 +280,11 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
     }
 
     private void fillValidValuesForUploadWindowFields(WebElement uploadWindow) {
-        fillUsageBatchNameField(uploadWindow, "CADRA11Dec16");
+        fillUsageBatchNameField(uploadWindow, USAGE_BATCH_NAME);
         fillFileNameField(uploadWindow, "sample_usage_data_file.csv");
-        fillRroAccountNumberField(uploadWindow, "2000017004");
+        fillRroAccountNumberField(uploadWindow, String.valueOf(RRO_ACCOUNT_NUMBER));
         fillPaymentDateField(uploadWindow);
-        fillGrossAmountField(uploadWindow, "10000.00");
+        fillGrossAmountField(uploadWindow, GROSS_AMOUNT);
     }
 
     private void fillUsageBatchNameField(WebElement uploadWindow, String value) {

@@ -8,7 +8,6 @@ import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
-import org.springframework.test.context.ContextConfiguration;
 
 /**
  * Verifies login/logout functionality.
@@ -19,7 +18,6 @@ import org.springframework.test.context.ContextConfiguration;
  *
  * @author Darya Baraukova
  */
-@ContextConfiguration(value = "classpath:/com/copyright/rup/dist/foreign/ui/dist-foreign-ui-test-context.xml")
 public class LoginTest extends ForeignCommonUiTest {
 
     @Test

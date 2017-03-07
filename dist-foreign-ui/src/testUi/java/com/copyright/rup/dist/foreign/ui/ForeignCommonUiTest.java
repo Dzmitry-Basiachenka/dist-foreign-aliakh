@@ -14,7 +14,6 @@ import org.junit.runner.Description;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
-import org.springframework.test.context.ContextConfiguration;
 
 import java.util.List;
 
@@ -28,7 +27,6 @@ import java.util.List;
  *
  * @author Darya Baraukova
  */
-@ContextConfiguration(value = "classpath:/com/copyright/rup/dist/foreign/ui/dist-foreign-ui-test-context.xml")
 public class ForeignCommonUiTest extends CommonUiTest {
 
     /**

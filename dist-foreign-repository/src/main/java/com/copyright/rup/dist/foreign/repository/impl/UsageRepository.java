@@ -74,6 +74,12 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         }
     }
 
+    @Override
+    public void deleteUsageBatchDetails(String batchId) {
+        checkArgument(StringUtils.isNotBlank(batchId));
+        delete("IUsageMapper.deleteUsageBatchDetails", batchId);
+    }
+
     /**
      * Finds usage by provided detail id.
      *
@@ -82,11 +88,5 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
      */
     Usage findUsageByDetailId(Long detailId) {
         return selectOne("IUsageMapper.findUsageByDetailId", checkNotNull(detailId));
-    }
-
-    @Override
-    public void deleteUsageBatchDetails(String batchId) {
-        checkArgument(StringUtils.isNotBlank(batchId));
-        delete("IUsageMapper.deleteUsageBatchDetails", batchId);
     }
 }

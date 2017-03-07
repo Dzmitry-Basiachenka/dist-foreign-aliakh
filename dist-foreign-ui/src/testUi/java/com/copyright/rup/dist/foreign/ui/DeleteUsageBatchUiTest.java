@@ -9,7 +9,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.springframework.test.context.ContextConfiguration;
 
 import java.util.List;
 
@@ -22,7 +21,6 @@ import java.util.List;
  *
  * @author Aliaksandr Radkevich
  */
-@ContextConfiguration(value = "classpath:/com/copyright/rup/dist/foreign/ui/dist-foreign-ui-test-context.xml")
 @Ignore
 public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
 
