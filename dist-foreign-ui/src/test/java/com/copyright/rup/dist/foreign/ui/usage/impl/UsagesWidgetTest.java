@@ -109,12 +109,13 @@ public class UsagesWidgetTest {
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button loadButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
             .getComponent(0)).getComponent(0);
-        Collection<?> listeners = loadButton.getListeners(ClickEvent.class);
-        assertEquals(1, listeners.size());
-        ClickListener clickListener = (ClickListener) listeners.iterator().next();
+        assertTrue(loadButton.isDisableOnClick());
         Windows.showModalWindow(anyObject(UsageBatchUploadWindow.class));
         expectLastCall().once();
         replay(clickEvent, Windows.class, controller, prmIntegrationService);
+        Collection<?> listeners = loadButton.getListeners(ClickEvent.class);
+        assertEquals(2, listeners.size());
+        ClickListener clickListener = (ClickListener) listeners.iterator().next();
         clickListener.buttonClick(clickEvent);
         verify(clickEvent, Windows.class, controller, prmIntegrationService);
     }
@@ -125,14 +126,33 @@ public class UsagesWidgetTest {
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
             .getComponent(0)).getComponent(1);
-        Collection<?> listeners = addToScenarioButton.getListeners(ClickEvent.class);
-        ClickListener clickListener = (ClickListener) listeners.iterator().next();
-        assertEquals(1, listeners.size());
+        assertTrue(addToScenarioButton.isDisableOnClick());
         Windows.showNotificationWindow("Add to scenario button clicked");
         expectLastCall().once();
         replay(clickEvent, Windows.class);
+        Collection<?> listeners = addToScenarioButton.getListeners(ClickEvent.class);
+        assertEquals(2, listeners.size());
+        ClickListener clickListener = (ClickListener) listeners.iterator().next();
         clickListener.buttonClick(clickEvent);
         verify(clickEvent, Windows.class);
+    }
+
+    @Test
+    public void testDeleteButtonClickListener() {
+        mockStatic(Windows.class);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        Button deleteButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
+            .getComponent(0)).getComponent(3);
+        assertTrue(deleteButton.isDisableOnClick());
+        expect(controller.getUsageBatches()).andReturn(Collections.EMPTY_LIST).once();
+        Windows.showModalWindow(anyObject(DeleteUsageBatchWindow.class));
+        expectLastCall().once();
+        replay(clickEvent, Windows.class, controller);
+        Collection<?> listeners = deleteButton.getListeners(ClickEvent.class);
+        assertEquals(2, listeners.size());
+        ClickListener clickListener = (ClickListener) listeners.iterator().next();
+        clickListener.buttonClick(clickEvent);
+        verify(clickEvent, Windows.class, controller);
     }
 
     @Test
