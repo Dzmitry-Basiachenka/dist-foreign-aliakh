@@ -29,6 +29,7 @@ import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -100,9 +101,9 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
 
     @Override
     public String getFileName() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM_dd_YYYY");
         LocalDate now = LocalDate.now();
-        return VaadinUtils.encodeAndBuildFileName(
-            String.format("export_usage_%s_%s_%s", now.getMonthValue(), now.getDayOfMonth(), now.getYear()), "csv");
+        return VaadinUtils.encodeAndBuildFileName(String.format("export_usage_%s", now.format(formatter)), "csv");
     }
 
     @Override
