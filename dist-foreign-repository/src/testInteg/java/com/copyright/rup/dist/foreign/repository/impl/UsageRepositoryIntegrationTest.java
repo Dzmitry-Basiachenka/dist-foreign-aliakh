@@ -60,7 +60,8 @@ public class UsageRepositoryIntegrationTest {
     private static final Long RH_ACCOUNT_NUMBER = 7000813806L;
     private static final LocalDate PAYMENT_DATE = LocalDate.of(2017, 1, 11);
     private static final Integer FISCAL_YEAR = 2017;
-    private static final String RH_ACCOUNT_NAME = "Rh Account Name";
+    private static final String RH_ACCOUNT_NAME =
+        "CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil";
     private static final BigDecimal GROSS_AMOUNT = new BigDecimal("54.4400000000");
     private static final Long WR_WRK_INST = 123456783L;
     private static final String WORK_TITLE = "Work Title";
@@ -110,6 +111,7 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(WR_WRK_INST, usage.getWrWrkInst());
         assertEquals(WORK_TITLE, usage.getWorkTitle());
         assertEquals(RH_ACCOUNT_NUMBER, usage.getRightsholder().getAccountNumber());
+        assertEquals(RH_ACCOUNT_NAME, usage.getRightsholder().getName());
         assertEquals(UsageStatusEnum.ELIGIBLE, usage.getStatus());
         assertEquals(ARTICLE, usage.getArticle());
         assertEquals(STANDART_NUMBER, usage.getStandardNumber());

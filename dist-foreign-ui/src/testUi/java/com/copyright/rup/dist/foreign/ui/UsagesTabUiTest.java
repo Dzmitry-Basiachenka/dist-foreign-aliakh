@@ -11,7 +11,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.springframework.test.context.ContextConfiguration;
 
 import java.util.List;
 import java.util.Set;
@@ -25,7 +24,6 @@ import java.util.Set;
  *
  * @author Mikita Hladkikh
  */
-@ContextConfiguration(value = "classpath:/com/copyright/rup/dist/foreign/ui/dist-foreign-ui-test-context.xml")
 public class UsagesTabUiTest extends ForeignCommonUiTest {
 
     private static final String SAVE_BUTTON_ID = "Save";

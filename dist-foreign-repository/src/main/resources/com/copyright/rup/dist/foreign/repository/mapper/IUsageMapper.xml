@@ -73,33 +73,6 @@
         gross_amount
     </sql>
 
-    <insert id="insertUsage" parameterType="Usage">
-        insert into ${schema}.df_usage(
-            <include refid="usageColumns"/>,
-            <include refid="StoredEntityMapper.additionalColumns"/>)
-        values(
-            #{id},
-            #{batchId},
-            #{detailId},
-            #{wrWrkInst},
-            #{workTitle},
-            #{rightsholder.accountNumber},
-            #{status},
-            #{article},
-            #{standardNumber},
-            #{publisher},
-            #{publicationDate},
-            #{market},
-            #{marketPeriodFrom},
-            #{marketPeriodTo},
-            #{author},
-            #{numberOfCopies},
-            #{reportedValue},
-            #{grossAmount},
-            <include refid="StoredEntityMapper.insert"/>
-        )
-    </insert>
-
     <sql id="usageFilter">
         <where>
             <if test="filter.usageBatchesIds.size() > 0">
@@ -216,6 +189,33 @@
         </choose>
     </sql>
 
+    <insert id="insertUsage" parameterType="Usage">
+        insert into ${schema}.df_usage(
+            <include refid="usageColumns"/>,
+            <include refid="StoredEntityMapper.additionalColumns"/>)
+        values(
+            #{id},
+            #{batchId},
+            #{detailId},
+            #{wrWrkInst},
+            #{workTitle},
+            #{rightsholder.accountNumber},
+            #{status},
+            #{article},
+            #{standardNumber},
+            #{publisher},
+            #{publicationDate},
+            #{market},
+            #{marketPeriodFrom},
+            #{marketPeriodTo},
+            #{author},
+            #{numberOfCopies},
+            #{reportedValue},
+            #{grossAmount},
+            <include refid="StoredEntityMapper.insert"/>
+        )
+    </insert>
+
     <select id="findByFilter" resultMap="usageDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
         select
             u.df_usage_uid,
@@ -275,7 +275,7 @@
             u.wr_wrk_inst,
             u.work_title,
             u.rh_account_number,
-            r.name,
+            r.name rh_name,
             u.status_ind,
             u.article,
             u.standard_number,
