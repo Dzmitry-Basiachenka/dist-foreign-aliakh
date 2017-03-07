@@ -13,6 +13,7 @@ import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
+import static org.powermock.api.easymock.PowerMock.mockStaticPartial;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
@@ -60,7 +61,7 @@ import java.util.concurrent.ExecutorService;
  * @author Aliaksandr Radkevich
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(SecurityUtils.class)
+@PrepareForTest({SecurityUtils.class, LocalDate.class, UsagesController.class})
 public class UsagesControllerTest {
 
     private static final String RRO_ACCOUNT_NAME = "Account Name";
@@ -164,9 +165,13 @@ public class UsagesControllerTest {
 
     @Test
     public void testGetFileName() {
-        LocalDate localDate = LocalDate.now();
-        assertEquals(String.format("export_usage_%s_%s_%s.csv", localDate.getMonthValue(), localDate.getDayOfMonth(),
-            localDate.getYear()), controller.getFileName());
+        mockStaticPartial(LocalDate.class, "now");
+        expect(LocalDate.now()).andReturn(LocalDate.of(2017, 1, 2)).once();
+        expect(LocalDate.now()).andReturn(LocalDate.of(2009, 11, 22)).once();
+        replay(LocalDate.class, UsagesController.class);
+        assertEquals("export_usage_01_02_2017.csv", controller.getFileName());
+        assertEquals("export_usage_11_22_2009.csv", controller.getFileName());
+        verify(LocalDate.class, UsagesController.class);
     }
 
     @Test
