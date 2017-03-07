@@ -26,8 +26,6 @@ import java.util.Set;
  */
 public class UsagesTabUiTest extends ForeignCommonUiTest {
 
-    private static final String SAVE_BUTTON_ID = "Save";
-    private static final String APPLY_BUTTON_ID = "Apply";
     private static final String USAGE_BATCH_NAME = "CADRA_11Dec16";
     private static final String RRO_ACCOUNT =
         "7000813806 - CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil";
@@ -40,7 +38,6 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     private static final String ADD_TO_SCENARIO_BUTTON_ID = "Add_To_Scenario";
     private static final String EXPORT_BUTTON_ID = "Export";
     private static final String DELETE_USAGE_BUTTON_ID = "Delete_Usage_Batch";
-    private static final String CLOSE_BUTTON = "Close";
     private static final Set USAGES_BUTTONS =
         Sets.newHashSet(LOAD_USAGE_BUTTON_ID, ADD_TO_SCENARIO_BUTTON_ID, EXPORT_BUTTON_ID, DELETE_USAGE_BUTTON_ID);
 
@@ -140,7 +137,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         clickButtonAndWait(filterButtonsLayout, APPLY_BUTTON_ID);
         verifyFoundUsages(usagesTab);
         clickButtonAndWait(filterButtonsLayout, CLEAR_BATTON_ID);
-        verifyEmptyTable(usagesTable);
+        assertUsagesTableEmpty(usagesTable);
     }
 
     private void applyFiscalYear(String fiscalYear) {
@@ -258,13 +255,13 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     private void verifyLoadUsageButton(WebElement buttonsLayout) {
         WebElement button = assertElement(buttonsLayout, LOAD_USAGE_BUTTON_ID);
         clickElementAndWait(button);
-        clickElementAndWait(assertElement(waitAndFindElement(By.id("usage-upload-window")), CLOSE_BUTTON));
+        clickElementAndWait(assertElement(waitAndFindElement(By.id("usage-upload-window")), CLOSE_BUTTON_ID));
     }
 
     private void verifyDeleteUsageButton(WebElement buttonsLayout) {
         WebElement button = assertElement(buttonsLayout, DELETE_USAGE_BUTTON_ID);
         clickElementAndWait(button);
-        clickElementAndWait(assertElement(waitAndFindElement(By.id("delete-usage-batch")), CLOSE_BUTTON));
+        clickElementAndWait(assertElement(waitAndFindElement(By.id("delete-usage-batch")), CLOSE_BUTTON_ID));
     }
 
     private void verifyAddToScenarioButton(WebElement buttonsLayout) {
@@ -290,7 +287,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         assertTextElement(uploadWindow, "usage-batch-name-field", "Usage Batch Name");
         assertTextElement(uploadWindow, "gross-amount-field", "Gross Amount (USD)");
         assertElement(uploadWindow, UPLOAD_BUTTON_ID);
-        clickElementAndWait(assertElement(uploadWindow, CLOSE_BUTTON));
+        clickElementAndWait(assertElement(uploadWindow, CLOSE_BUTTON_ID));
     }
 
     private void verifyUploadElement(WebElement uploadWindow) {
@@ -319,12 +316,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         verifyTableHeaderElements(usagesTable);
         verifyTableBody(usagesTable);
         assertNotNull(findElement(usagesTable, By.className("v-table-column-selector")));
-        verifyEmptyTable(usagesTable);
-    }
-
-    private void verifyEmptyTable(WebElement usagesTable) {
-        String backgroundImage = findElement(usagesTable, By.className("v-scrollable")).getCssValue("background-image");
-        assertTrue(backgroundImage.contains("img/empty_usages_table.png"));
+        assertUsagesTableEmpty(usagesTable);
     }
 
     private void verifyTableHeaderElements(WebElement usagesTable) {
@@ -401,9 +393,9 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         assertNotNull(filterWindow);
         assertEquals(caption, getWindowCaption(filterWindow));
         verifySearchToolBar(filterWindow);
-        assertElement(filterWindow, "Save");
+        assertElement(filterWindow, SAVE_BUTTON_ID);
         assertElement(filterWindow, CLEAR_BATTON_ID);
-        clickElementAndWait(assertElement(filterWindow, CLOSE_BUTTON));
+        clickElementAndWait(assertElement(filterWindow, CLOSE_BUTTON_ID));
     }
 
     private void verifySearchToolBar(WebElement filterWindow) {
