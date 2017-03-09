@@ -1,0 +1,174 @@
+package com.copyright.rup.dist.foreign.ui.main;
+
+import static org.easymock.EasyMock.anyObject;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
+import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.verify;
+
+import com.copyright.rup.dist.foreign.ui.main.api.IMainWidgetController;
+import com.copyright.rup.dist.foreign.ui.main.impl.MainWidget;
+import com.copyright.rup.dist.foreign.ui.main.impl.MainWidgetController;
+import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
+import com.copyright.rup.dist.foreign.ui.report.api.IReportController;
+import com.copyright.rup.dist.foreign.ui.report.impl.ReportWidget;
+import com.copyright.rup.vaadin.ui.RupConverterFactory;
+
+import com.vaadin.server.VaadinSession;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Component;
+
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.ResourceBundle;
+
+/**
+ * Verifies {@link ForeignUi}.
+ * <p>
+ * Copyright (C) 2017 copyright.com
+ * <p>
+ * Date: 3/8/17
+ *
+ * @author Ihar Suvorau
+ */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({ForeignSecurityUtils.class, VaadinSession.class, ForeignUi.class})
+public class ForeignUiTest {
+
+    private ForeignUi foreignUi;
+
+    @Before
+    public void setUp() {
+        foreignUi = new ForeignUi();
+        Whitebox.setInternalState(ForeignUi.class, "MESSAGES",
+            ResourceBundle.getBundle("com.copyright.rup.dist.foreign.ui.messages"));
+    }
+
+    @Test
+    public void testGetMessage() {
+        mockStatic(ResourceBundle.class);
+        ResourceBundle bundle = createMock(ResourceBundle.class);
+        Whitebox.setInternalState(ForeignUi.class, bundle);
+        expect(bundle.getString("Case without parameters")).andReturn("No parameters");
+        expect(bundle.getString("Case with 1 digit")).andReturn("Parameter is %d");
+        expect(bundle.getString("Case with 2 digit, one ignore")).andReturn("Parameter is %d");
+        expect(bundle.getString("Case with digit and string")).andReturn("Parameters are %d, %s");
+        expect(bundle.getString("Case with 2 digits")).andReturn("Parameters are %d, %d");
+        replay(ForeignUi.class, bundle);
+        assertEquals("No parameters", ForeignUi.getMessage("Case without parameters"));
+        assertEquals("Parameter is 1", ForeignUi.getMessage("Case with 1 digit", 1));
+        assertEquals("Parameter is 1", ForeignUi.getMessage("Case with 2 digit, one ignore", 1, 2));
+        assertEquals("Parameters are 1, string", ForeignUi.getMessage("Case with digit and string", 1, "string"));
+        assertEquals("Parameters are 1, 2", ForeignUi.getMessage("Case with 2 digits", 1, 2));
+        verify(ForeignUi.class, bundle);
+    }
+
+    @Test
+    public void testGetApplicationName() {
+        assertEquals("Foreign Distribution", new ForeignUi().getApplicationTitle());
+    }
+
+    @Test
+    public void testHasAccessPermissionTrue() {
+        final boolean expectedResult = true;
+        mockStatic(ForeignSecurityUtils.class);
+        expect(ForeignSecurityUtils.hasAccessPermission()).andReturn(expectedResult).once();
+        replay(ForeignSecurityUtils.class);
+        boolean result = foreignUi.hasAccessPermission();
+        assertEquals(expectedResult, result);
+        verify(ForeignSecurityUtils.class);
+    }
+
+    @Test
+    public void testHasAccessPermissionFalse() {
+        final boolean expectedResult = false;
+        mockStatic(ForeignSecurityUtils.class);
+        expect(ForeignSecurityUtils.hasAccessPermission()).andReturn(expectedResult).once();
+        replay(ForeignSecurityUtils.class);
+        boolean result = foreignUi.hasAccessPermission();
+        assertEquals(expectedResult, result);
+        verify(ForeignSecurityUtils.class);
+    }
+
+    @Test
+    public void testInitUi() {
+        MockSecurityContext context = new MockSecurityContext();
+        SecurityContextHolder.setContext(context);
+        IMainWidgetController controller = createMock(IMainWidgetController.class);
+        IReportController reportController = createMock(IReportController.class);
+        VaadinSession session = createMock(VaadinSession.class);
+        mockStatic(ForeignSecurityUtils.class);
+        mockStatic(VaadinSession.class);
+        MainWidget mainWidget = new MainWidget();
+        Whitebox.setInternalState(foreignUi, controller);
+        Whitebox.setInternalState(foreignUi, reportController);
+        expect(controller.initWidget()).andReturn(mainWidget).once();
+        expect(reportController.initWidget()).andReturn(new ReportWidget()).once();
+        expect(VaadinSession.getCurrent()).andReturn(session).once();
+        session.setConverterFactory(anyObject(RupConverterFactory.class));
+        controller.refreshWidget();
+        expectLastCall().once();
+        replay(controller, reportController, ForeignSecurityUtils.class, session, VaadinSession.class);
+        foreignUi.initUi();
+        verify(controller, reportController, ForeignSecurityUtils.class, session, VaadinSession.class);
+    }
+
+    @Test
+    public void testGetAdditionalComponents() {
+        Whitebox.setInternalState(foreignUi, new MainWidgetController());
+        mockStatic(ForeignSecurityUtils.class);
+        replay(ForeignSecurityUtils.class);
+        List<Component> additionalComponents = foreignUi.getAdditionalComponents();
+        assertNotNull(additionalComponents);
+        assertEquals(1, additionalComponents.size());
+        assertEquals(Button.class, additionalComponents.get(0).getClass());
+        verify(ForeignSecurityUtils.class);
+    }
+
+    @Test
+    public void testInitMainWidget() {
+        IMainWidgetController controller = createMock(IMainWidgetController.class);
+        Whitebox.setInternalState(foreignUi, controller);
+        MainWidget mainWidget = new MainWidget();
+        expect(controller.initWidget()).andReturn(mainWidget).once();
+        replay(controller);
+        assertEquals(mainWidget, foreignUi.initMainWidget());
+        verify(controller);
+    }
+
+    @AfterClass
+    public static void tearDown() {
+        SecurityContextHolder.clearContext();
+    }
+
+    private static class MockSecurityContext implements SecurityContext {
+
+        private static final String USER_NAME = "User@copyright.com";
+
+        @Override
+        public Authentication getAuthentication() {
+            return new UsernamePasswordAuthenticationToken(USER_NAME, null, Collections.emptyList());
+        }
+
+        @Override
+        public void setAuthentication(Authentication authentication) {
+            // stub method
+        }
+    }
+}

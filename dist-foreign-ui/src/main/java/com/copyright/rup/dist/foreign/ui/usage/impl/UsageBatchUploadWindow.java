@@ -89,8 +89,7 @@ class UsageBatchUploadWindow extends Window {
                     int usagesCount = usagesController.loadUsageBatch(buildUsageBatch(), processingResult.getResult(),
                         SecurityUtils.getUserName());
                     close();
-                    Windows.showNotificationWindow(
-                        String.format(ForeignUi.getMessage("message.upload_completed"), usagesCount));
+                    Windows.showNotificationWindow(ForeignUi.getMessage("message.upload_completed", usagesCount));
                 }
             } catch (RupRuntimeException e) {
                 Windows.showNotificationWindow(e.getMessage());
@@ -165,8 +164,8 @@ class UsageBatchUploadWindow extends Window {
 
     private TextField initUsageBatchNameField() {
         usageBatchNameField = new TextField(ForeignUi.getMessage("label.usage_batch_name"));
-        usageBatchNameField.addValidator(new StringLengthValidator(String.format(
-            ForeignUi.getMessage("field.error.length"), 50), 0, 50, false));
+        usageBatchNameField.addValidator(
+            new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50, false));
         usageBatchNameField.addValidator(new UsageBatchNameUniqueValidator());
         setRequired(usageBatchNameField);
         usageBatchNameField.setSizeFull();
@@ -214,8 +213,7 @@ class UsageBatchUploadWindow extends Window {
         accountNumberField.setImmediate(true);
         accountNumberField.addValidator(new NumberValidator());
         accountNumberField.addValidator(
-            new StringLengthValidator(String.format(ForeignUi.getMessage("field.error.number_length"), 10), 0, 10,
-                false));
+            new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 10), 0, 10, false));
         VaadinUtils.setMaxComponentsWidth(accountNumberField);
         VaadinUtils.addComponentStyle(accountNumberField, "rro-account-number-field");
         accountNumberField.addValueChangeListener(
