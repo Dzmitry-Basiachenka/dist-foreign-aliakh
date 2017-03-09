@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.vaadin.test.CommonUiTest;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
@@ -53,6 +54,19 @@ public class ForeignCommonUiTest extends CommonUiTest {
      * Identifier for "Verify" button.
      */
     protected static final String VERIFY_BUTTON_ID = "Verify";
+    /**
+     * Identifier for 'Apply' button.
+     */
+    protected static final String APPLY_BUTTON_ID = "Apply";
+    /**
+     * Identifier for 'Close' button.
+     */
+    protected static final String CLOSE_BUTTON_ID = "Close";
+    /**
+     * Identifier for 'Save' button.
+     */
+    protected static final String SAVE_BUTTON_ID = "Save";
+
     private static final String APP_URL = "http://localhost:22000/dist-foreign-ui/";
     private static final Dimension WINDOW_DIMENSION = new Dimension(1280, 800);
     private static final String PASSWORD = "`123qwer";
@@ -160,6 +174,16 @@ public class ForeignCommonUiTest extends CommonUiTest {
         WebElement currentDateSlot =
             waitAndFindElement(calendarPanel, By.className("v-datefield-calendarpanel-day-today"));
         clickElementAndWait(currentDateSlot);
+    }
+
+    /**
+     * Asserts that usages table is empty.
+     *
+     * @param usagesTable {@link WebElement} representing usages table
+     */
+    protected void assertUsagesTableEmpty(WebElement usagesTable) {
+        String backgroundImage = findElement(usagesTable, By.className("v-scrollable")).getCssValue("background-image");
+        assertTrue(backgroundImage.contains("img/empty_usages_table.png"));
     }
 
     private void openAppPage(ForeignCredentials credentials) {
