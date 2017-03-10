@@ -469,7 +469,7 @@ databaseChangeLog {
                     tableName: 'df_rightsholder',
                     columnNames: 'rh_account_number',
                     constraintName: 'rh_account_number_pk')
-            
+
             dropForeignKeyConstraint(
                     baseTableSchemaName: dbAppsSchema,
                     baseTableName: 'df_usage',
@@ -531,6 +531,84 @@ databaseChangeLog {
                     baseColumnNames: 'df_usage_batch_uid',
                     referencedTableName: 'df_usage_batch',
                     referencedColumnNames: 'df_usage_batch_uid')
+        }
+    }
+
+    changeSet(id: '2017-03-14-00', author: 'Ihar Suvorau isuvorau@copyright.com') {
+        comment('B-29575 Create an FAS Scenario: Implement liquibase script for df_scenario table, ' +
+                'add df_scenario_uid column for df_usage table')
+
+        createTable(tableName: 'df_scenario', schemaName: dbAppsSchema, tablespace: dbDataTablespace,
+                remarks: 'Table for storing scenarios') {
+
+            column(name: 'df_scenario_uid', type: 'VARCHAR(255)', remarks: 'The identifier of scenario') {
+                constraints(nullable: false)
+            }
+            column(name: 'name', type: 'VARCHAR(255)', remarks: 'The name of scenario') {
+                constraints(nullable: false)
+            }
+            column(name: 'status_ind', type: 'VARCHAR(16)', remarks: 'The status index') {
+                constraints(nullable: false)
+            }
+            column(name: 'net_total', type: 'DECIMAL(38,10)', defaultValue: 0.0000000000, remarks: 'The sum of usages net amounts included in scenario') {
+                constraints(nullable: false)
+            }
+            column(name: 'gross_total', type: 'DECIMAL(38,10)', defaultValue: 0.0000000000, remarks: 'The sum of gross amounts included in scenario') {
+                constraints(nullable: false)
+            }
+            column(name: 'reported_total', type: 'DECIMAL(38,10)', defaultValue: 0.0000000000, remarks: 'The sum of reported values included in scenario') {
+                constraints(nullable: false)
+            }
+            column(name: 'description', type: 'VARCHAR(2000)', remarks: 'The description of scenario')
+            column(name: 'record_version', type: 'INTEGER', defaultValue: '1', remarks: 'The latest version of this record, used for optimistic locking') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM', remarks: 'The user name who created this record') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who updated this record; when a record is first created, this will be the same as the created_by_user') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created; when a record is first created, this will be the same as the created_datetime') {
+                constraints(nullable: false)
+            }
+        }
+
+        addPrimaryKey(schemaName: dbAppsSchema, tableName: 'df_scenario', tablespace: dbIndexTablespace,
+                columnNames: 'df_scenario_uid', constraintName: 'pk_df_scenario')
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_scenario_uid', type: 'VARCHAR(255)', remarks: 'The identifier of scenario')
+        }
+
+        addForeignKeyConstraint(constraintName: 'fk_df_usage_2_df_scenario',
+                baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_usage',
+                baseColumnNames: 'df_scenario_uid',
+                referencedTableName: 'df_scenario',
+                referencedColumnNames: 'df_scenario_uid')
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+            column(name: 'df_scenario_uid', type: 'VARCHAR(255)', remarks: 'The identifier of scenario')
+        }
+
+        addForeignKeyConstraint(constraintName: 'fk_df_usage_archive_2_df_scenario',
+                baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_usage_archive',
+                baseColumnNames: 'df_scenario_uid',
+                referencedTableName: 'df_scenario',
+                referencedColumnNames: 'df_scenario_uid')
+
+        rollback {
+            // automatic rollback
         }
     }
 }
