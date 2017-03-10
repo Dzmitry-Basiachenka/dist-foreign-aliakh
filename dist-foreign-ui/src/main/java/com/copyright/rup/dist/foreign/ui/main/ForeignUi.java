@@ -47,10 +47,11 @@ public class ForeignUi extends CommonUi {
      * Gets a message associated with specified {@code key}.
      *
      * @param key the key to get {@code message}
+     * @param parameters arguments referenced by the format specifiers in the format string
      * @return the string message
      */
-    public static String getMessage(String key) {
-        return MESSAGES.getString(key);
+    public static String getMessage(String key, Object... parameters) {
+        return String.format(MESSAGES.getString(key), parameters);
     }
 
     @Override

@@ -108,8 +108,7 @@ class DeleteUsageBatchWindow extends Window {
     private void deleteUsageBatch(UsageBatch usageBatch) {
         List<String> scenariosNames = controller.getScenariosNamesAssociatedWithUsageBatch(usageBatch.getId());
         if (CollectionUtils.isEmpty(scenariosNames)) {
-            Windows.showConfirmDialog(
-                String.format(ForeignUi.getMessage("message.delete_usage_batch"), usageBatch.getName()),
+            Windows.showConfirmDialog(ForeignUi.getMessage("message.delete_usage_batch", usageBatch.getName()),
                 new ConfirmDeleteListener(controller, usageBatch, container));
         } else {
             StringBuilder scenariosHtml = new StringBuilder("<ul>");
@@ -118,7 +117,7 @@ class DeleteUsageBatchWindow extends Window {
             }
             scenariosHtml.append("</ul>");
             Windows.showNotificationWindow(
-                String.format(ForeignUi.getMessage("message.usage_batch_associated_with_scenarios"), scenariosHtml));
+                ForeignUi.getMessage("message.usage_batch_associated_with_scenarios", scenariosHtml));
         }
     }
 
