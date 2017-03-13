@@ -42,7 +42,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         Sets.newHashSet(LOAD_USAGE_BUTTON_ID, ADD_TO_SCENARIO_BUTTON_ID, EXPORT_BUTTON_ID, DELETE_USAGE_BUTTON_ID);
 
     @Test
-    // Test case ID: '65520aa2-3a1c-4c7c-81e6-96a0a845331e'
+    // Test case IDs: '65520aa2-3a1c-4c7c-81e6-96a0a845331e', 90031f0e-1d4b-4d1c-86a6-ca5d72ae3637
     public void testVerifyUsagesTabSpecialist() {
         loginAsSpecialist();
         WebElement usagesLayout = verifyUsagesTab();
@@ -50,7 +50,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     }
 
     @Test
-    // TODO {isuvorau} set test cases IDs
+    // Test case ID: 'd84167c0-2140-4207-a3bb-92e26ffeb5c1'
     public void testVerifyUsagesTabManager() {
         loginAsManager();
         WebElement usagesLayout = verifyUsagesTab();
@@ -58,7 +58,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     }
 
     @Test
-    // TODO {isuvorau} set test cases IDs
+    // Test case ID: 'd84167c0-2140-4207-a3bb-92e26ffeb5c1'
     public void testVerifyUsagesTabViewOnly() {
         loginAsViewOnly();
         WebElement usagesLayout = verifyUsagesTab();
@@ -66,42 +66,44 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     }
 
     @Test
-    // Test cases IDs: 'a2a66f64-ab10-44d4-a2b9-c779631cbe6a', '1b24b641-8da0-46a2-917c-7ee99d781d6d'
+    // Test cases IDs: 'a2a66f64-ab10-44d4-a2b9-c779631cbe6a', '1b24b641-8da0-46a2-917c-7ee99d781d6d',
+    // '90031f0e-1d4b-4d1c-86a6-ca5d72ae3637'
     public void testVerifyBatchAndUsageInformationIsDisplayedCorrectlySpecialist() {
         loginAsSpecialist();
         verifyBatchAndUsageInformationIsDisplayedCorrectly();
     }
 
     @Test
-    // TODO {isuvorau} set test cases IDs
+    // Test case ID: 'd84167c0-2140-4207-a3bb-92e26ffeb5c1'
     public void testVerifyBatchAndUsageInformationIsDisplayedCorrectlyManager() {
         loginAsManager();
         verifyBatchAndUsageInformationIsDisplayedCorrectly();
     }
 
     @Test
-    // TODO {isuvorau} set test cases IDs
+    // Test case ID: 'd84167c0-2140-4207-a3bb-92e26ffeb5c1'
     public void testVerifyBatchAndUsageInformationIsDisplayedCorrectlyViewOnly() {
         loginAsViewOnly();
         verifyBatchAndUsageInformationIsDisplayedCorrectly();
     }
 
     @Test
-    // Test cases IDs: 'd438bf76-31f9-4266-8a4e-8c416a616aed', '87ac1966-737c-4b18-b5d1-6e583776b3a1'
+    // Test cases IDs: 'd438bf76-31f9-4266-8a4e-8c416a616aed', '87ac1966-737c-4b18-b5d1-6e583776b3a1',
+    // 'fbadb917-85db-4099-8c00-b218317a9818'
     public void testVerifyMultiplyUsageDataFilterAndClearFilterButtonSpecialist() {
         loginAsSpecialist();
         verifyMultiplyUsageDataFilterAndClearFilterButton();
     }
 
     @Test
-    // TODO {isuvorau} set test cases IDs
+    // Test cases ID: 'fbadb917-85db-4099-8c00-b218317a9818'
     public void testVerifyMultiplyUsageDataFilterAndClearFilterButtonManager() {
         loginAsManager();
         verifyMultiplyUsageDataFilterAndClearFilterButton();
     }
 
     @Test
-    // TODO {isuvorau} set test cases IDs
+    // Test cases ID: 'fbadb917-85db-4099-8c00-b218317a9818'
     public void testVerifyMultiplyUsageDataFilterAndClearFilterButtonViewOnly() {
         loginAsViewOnly();
         verifyMultiplyUsageDataFilterAndClearFilterButton();

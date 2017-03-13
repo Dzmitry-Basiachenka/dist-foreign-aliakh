@@ -78,18 +78,14 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         WebElement uploadWindow = openUploadUsageBatchWindow();
         fillValidValuesForUploadWindowFields(uploadWindow);
         fillUsageBatchNameField(uploadWindow, StringUtils.EMPTY);
-        Map<String, String> errors = Maps.newHashMapWithExpectedSize(1);
-        errors.put(USAGE_BATCH_NAME_FIELD, COMMON_EMPTY_FIELD_MESSAGE);
         clickElementAndWait(assertElement(uploadWindow, UPLOAD_BUTTON_ID));
-        verifyErrorWindow(errors);
+        verifyErrorWindow(ImmutableMap.of(USAGE_BATCH_NAME_FIELD, COMMON_EMPTY_FIELD_MESSAGE));
         fillUsageBatchNameField(uploadWindow, "JAACC_11Dec16");
-        errors.replace(USAGE_BATCH_NAME_FIELD, "Usage Batch with such name already exists");
         clickElementAndWait(assertElement(uploadWindow, UPLOAD_BUTTON_ID));
-        verifyErrorWindow(errors);
+        verifyErrorWindow(ImmutableMap.of(USAGE_BATCH_NAME_FIELD, "Usage Batch with such name already exists"));
         fillUsageBatchNameField(uploadWindow, "Usage Batch with name that exceeds more than 50 characters");
-        errors.replace(USAGE_BATCH_NAME_FIELD, "Field value should not exceed 50 characters");
         clickElementAndWait(assertElement(uploadWindow, UPLOAD_BUTTON_ID));
-        verifyErrorWindow(errors);
+        verifyErrorWindow(ImmutableMap.of(USAGE_BATCH_NAME_FIELD, "Field value should not exceed 50 characters"));
     }
 
     @Test
@@ -115,20 +111,17 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         fillRroAccountNumberField(uploadWindow, StringUtils.EMPTY);
         verifyRroAccountNameField(uploadWindow, StringUtils.EMPTY);
         clickElementAndWait(assertElement(uploadWindow, UPLOAD_BUTTON_ID));
-        Map<String, String> errors = Maps.newHashMap();
-        errors.put(RRO_ACCOUNT_NUMBER_FIELD, COMMON_EMPTY_FIELD_MESSAGE);
-        errors.put(RRO_ACCOUNT_NAME_FIELD, RRO_ACCOUNT_NAME_EMPTY_FIELD_MESSAGE);
-        verifyErrorWindow(errors);
+        verifyErrorWindow(ImmutableMap.of(RRO_ACCOUNT_NUMBER_FIELD, COMMON_EMPTY_FIELD_MESSAGE, RRO_ACCOUNT_NAME_FIELD,
+            RRO_ACCOUNT_NAME_EMPTY_FIELD_MESSAGE));
         fillRroAccountNumberField(uploadWindow, "symbols");
         verifyRroAccountNameField(uploadWindow, StringUtils.EMPTY);
         clickElementAndWait(assertElement(uploadWindow, UPLOAD_BUTTON_ID));
-        errors.replace(RRO_ACCOUNT_NUMBER_FIELD, "Field value should contain numeric values only");
-        verifyErrorWindow(errors);
+        verifyErrorWindow(ImmutableMap.of(RRO_ACCOUNT_NUMBER_FIELD, "Field value should contain numeric values only",
+            RRO_ACCOUNT_NAME_FIELD, RRO_ACCOUNT_NAME_EMPTY_FIELD_MESSAGE));
         fillRroAccountNumberField(uploadWindow, "555");
         verifyRroAccountNameField(uploadWindow, StringUtils.EMPTY);
         clickElementAndWait(assertElement(uploadWindow, UPLOAD_BUTTON_ID));
-        errors.remove(RRO_ACCOUNT_NUMBER_FIELD);
-        verifyErrorWindow(errors);
+        verifyErrorWindow(ImmutableMap.of(RRO_ACCOUNT_NAME_FIELD, RRO_ACCOUNT_NAME_EMPTY_FIELD_MESSAGE));
     }
 
     @Test
@@ -138,8 +131,8 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         fillValidValuesForUploadWindowFields(uploadWindow);
         fillGrossAmountField(uploadWindow, "symbols");
         clickElementAndWait(assertElement(uploadWindow, UPLOAD_BUTTON_ID));
-        Map<String, String> errors = Maps.newHashMap();
-        errors.put(GROSS_AMOUT_FIELD, "Field should be greater than 0 and contain 2 decimals");
+        Map<String, String> errors =
+            ImmutableMap.of(GROSS_AMOUT_FIELD, "Field should be greater than 0 and contain 2 decimals");
         verifyErrorWindow(errors);
         fillGrossAmountField(uploadWindow, "-555");
         clickElementAndWait(assertElement(uploadWindow, UPLOAD_BUTTON_ID));
@@ -339,7 +332,7 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
             .map(WebElement::getText)
             .collect(Collectors.toList())
             .containsAll(fieldNameToErrorMessageMap.values()));
-        clickElementAndWait(findElementByText(errorWindow, HTML_SPAN_TAG_NAME, OK_BUTTON_ID));
+        clickElementAndWait(assertElement(errorWindow, OK_BUTTON_ID));
     }
 
     private WebElement findErrorWindow() {
