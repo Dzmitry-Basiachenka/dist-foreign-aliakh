@@ -10,6 +10,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +58,8 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public int insertUsages(UsageBatch usageBatch, List<Usage> usages, String userName) {
+    public int insertUsages(UsageBatch usageBatch, List<Usage> usages) {
+        String userName = RupContextUtils.getUserName();
         int size = usages.size();
         LOGGER.info("Insert usages. Started. UsageBatchName={}, UsagesCount={}, UserName={}", usageBatch.getName(),
             size, userName);

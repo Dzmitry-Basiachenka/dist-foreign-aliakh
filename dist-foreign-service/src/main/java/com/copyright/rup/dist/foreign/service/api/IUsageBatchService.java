@@ -7,9 +7,9 @@ import java.util.List;
 
 /**
  * Represents interface of service for usage batch business logic.
- * <p/>
+ * <p>
  * Copyright (C) 2017 copyright.com
- * <p/>
+ * <p>
  * Date: 02/03/2017
  *
  * @author Mikalai Bezmen
@@ -40,10 +40,9 @@ public interface IUsageBatchService {
      *
      * @param usageBatch {@link UsageBatch} instance
      * @param usages     list of {@link Usage}s
-     * @param userName   user name
      * @return count of inserted usages
      */
-    int insertUsageBatch(UsageBatch usageBatch, List<Usage> usages, String userName);
+    int insertUsageBatch(UsageBatch usageBatch, List<Usage> usages);
 
     /**
      * Deletes given {@link UsageBatch} and all it's usage details.

@@ -70,7 +70,6 @@ public class UsageBatchUploadWindowTest {
 
     private static final String ACCOUNT_NUMBER = "1000001863";
     private static final String USAGE_BATCH_NAME = "BatchName";
-    private static final String USER_NAME = "user@copyright.com";
     private static final String RRO_NAME = "RRO name";
     private static final String ACCOUNT_NAME = "Account Name";
     private static final String INVALID_GROSS_AMOUNT_ERROR_MESSAGE =
@@ -154,7 +153,6 @@ public class UsageBatchUploadWindowTest {
     @Test
     public void testOnUploadClickedValidFields() throws Exception {
         mockStatic(Windows.class);
-        mockStatic(SecurityUtils.class);
         CsvUploadComponent csvUploadComponent = createPartialMock(CsvUploadComponent.class, "getStreamToUploadedFile");
         UsageCsvProcessor processor = createMock(UsageCsvProcessor.class);
         LocalDateWidget paymentDateWidget = new LocalDateWidget("Payment Date");
@@ -170,16 +168,15 @@ public class UsageBatchUploadWindowTest {
         Whitebox.setInternalState(window, GROSS_AMOUNT_FIELD, new TextField("Gross Amount", "100.00"));
         Whitebox.setInternalState(window, "rightsholderNameProperty", new ObjectProperty<>(RRO_NAME));
         expect(window.isValid()).andReturn(true).once();
-        expect(SecurityUtils.getUserName()).andReturn(USER_NAME).once();
         expectNew(UsageCsvProcessor.class).andReturn(processor).once();
         expect(processor.process(anyObject())).andReturn(processingResult).once();
-        expect(usagesController.loadUsageBatch(buildUsageBatch(), processingResult.getResult(), USER_NAME))
+        expect(usagesController.loadUsageBatch(buildUsageBatch(), processingResult.getResult()))
             .andReturn(1).once();
         Windows.showNotificationWindow("Upload completed: 1 records were stored successfully");
         expectLastCall().once();
-        replay(window, usagesController, Windows.class, SecurityUtils.class, UsageCsvProcessor.class, processor);
+        replay(window, usagesController, Windows.class, UsageCsvProcessor.class, processor);
         window.onUploadClicked();
-        verify(window, usagesController, Windows.class, SecurityUtils.class, UsageCsvProcessor.class, processor);
+        verify(window, usagesController, Windows.class, UsageCsvProcessor.class, processor);
     }
 
     private CsvProcessingResult<Usage> buildCsvProcessingResult() {

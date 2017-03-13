@@ -85,8 +85,7 @@ public interface IUsagesController extends IController<IUsagesWidget>, IBeanLoad
      *
      * @param usageBatch {@link UsageBatch} instance
      * @param usages     list of {@link Usage}s
-     * @param userName   user name
      * @return count of inserted usages
      */
-    int loadUsageBatch(UsageBatch usageBatch, List<Usage> usages, String userName);
+    int loadUsageBatch(UsageBatch usageBatch, List<Usage> usages);
 }

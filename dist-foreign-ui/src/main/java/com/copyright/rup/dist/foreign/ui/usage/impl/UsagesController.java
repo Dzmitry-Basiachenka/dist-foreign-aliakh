@@ -118,8 +118,8 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
-    public int loadUsageBatch(UsageBatch usageBatch, List<Usage> usages, String userName) {
-        int result = usageBatchService.insertUsageBatch(usageBatch, usages, userName);
+    public int loadUsageBatch(UsageBatch usageBatch, List<Usage> usages) {
+        int result = usageBatchService.insertUsageBatch(usageBatch, usages);
         filterController.getWidget().clearFilter();
         return result;
     }

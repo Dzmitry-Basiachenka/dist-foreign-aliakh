@@ -7,6 +7,8 @@ dependencies {
     compile("org.springframework:spring-context-support:${rupJava.standardDependencies.spring.version}")
     compile("org.perf4j:perf4j:${perf4jVersion}")
 
+    testCompile("com.copyright.rup.dist.common:dist-common-test:${distCommonVersion}")
+
     testIntegCompile("commons-io:commons-io:${commonsIoVersion}")
     testIntegRuntime project(path: ':dist-foreign-repository', configuration: 'testIntegRuntime')
 }

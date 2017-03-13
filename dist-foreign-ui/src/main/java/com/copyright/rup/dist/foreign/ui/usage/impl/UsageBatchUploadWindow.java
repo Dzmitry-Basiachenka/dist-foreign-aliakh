@@ -13,7 +13,6 @@ import com.copyright.rup.dist.foreign.ui.component.validator.GrossAmountValidato
 import com.copyright.rup.dist.foreign.ui.component.validator.NumberValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
-import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.VaadinUtils;
 import com.copyright.rup.vaadin.ui.Windows;
@@ -41,9 +40,9 @@ import java.math.BigDecimal;
 
 /**
  * Window for uploading a usage batch with usages.
- * <p/>
+ * <p>
  * Copyright (C) 2017 copyright.com
- * <p/>
+ * <p>
  * Date: 01/18/2017
  *
  * @author Mikita Hladkikh
@@ -86,8 +85,7 @@ class UsageBatchUploadWindow extends Window {
                 CsvProcessingResult<Usage> processingResult =
                     processor.process(csvUploadComponent.getStreamToUploadedFile());
                 if (processingResult.isSuccessful()) {
-                    int usagesCount = usagesController.loadUsageBatch(buildUsageBatch(), processingResult.getResult(),
-                        SecurityUtils.getUserName());
+                    int usagesCount = usagesController.loadUsageBatch(buildUsageBatch(), processingResult.getResult());
                     close();
                     Windows.showNotificationWindow(ForeignUi.getMessage("message.upload_completed", usagesCount));
                 }
