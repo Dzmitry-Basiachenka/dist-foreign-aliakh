@@ -40,7 +40,8 @@ public class DomainVerifierTest {
             {UsageFilter.class},
             {UsageBatch.class},
             {Usage.class},
-            {UsageDto.class}
+            {UsageDto.class},
+            {Scenario.class}
         };
         return Arrays.asList(testData);
     }
