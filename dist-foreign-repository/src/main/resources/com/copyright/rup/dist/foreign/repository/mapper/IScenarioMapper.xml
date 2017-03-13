@@ -1,0 +1,55 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="IScenarioMapper">
+
+    <resultMap id="scenarioResultMap" type="Scenario" extends="StoredEntityMapper.storedEntityResult">
+        <result property="id" column="df_scenario_uid"/>
+        <result property="name" column="name"/>
+        <result property="status" column="status_ind"/>
+        <result property="netTotal" column="net_total"/>
+        <result property="grossTotal" column="gross_total"/>
+        <result property="reportedTotal" column="reported_total"/>
+        <result property="description" column="description"/>
+    </resultMap>
+
+    <sql id="scenarioColumns">
+        df_scenario_uid,
+        name,
+        status_ind,
+        net_total,
+        gross_total,
+        reported_total,
+        description,
+        <include refid="StoredEntityMapper.additionalColumns"/>
+    </sql>
+
+    <insert id="insert" parameterType="Scenario">
+        insert into ${schema}.df_scenario(
+            <include refid="scenarioColumns"/>
+        ) values (
+            #{id},
+            #{name},
+            #{status},
+            #{netTotal},
+            #{grossTotal},
+            #{reportedTotal},
+            #{description},
+            <include refid="StoredEntityMapper.insert"/>
+        )
+    </insert>
+
+    <select id="findById" parameterType="string" resultMap="scenarioResultMap">
+        select
+            <include refid="scenarioColumns"/>
+        from ${schema}.df_scenario
+        where df_scenario_uid = #{df_scenario_uid}
+    </select>
+
+    <select id="getCountByName" parameterType="string" resultType="int">
+        select count(name)
+        from ${schema}.df_scenario
+        where upper(name) = upper(#{name})
+    </select>
+</mapper>
