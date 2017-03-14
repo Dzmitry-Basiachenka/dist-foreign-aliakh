@@ -81,7 +81,7 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
         usageBatchRepository.insert(buildUsageBatch());
         usageRepository.insertUsage(buildUsage());
         loginAsSpecialist();
-        WebElement filterWidget = findElementById("usages-filter-widget");
+        WebElement filterWidget = findElementById(USAGE_FILTER_WIDGET_ID);
         assertNotNull(filterWidget);
         applyFilters(filterWidget, usageBatch4);
         WebElement usagesTable = findElementById("usages-table");
@@ -94,9 +94,9 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
         clickButtonAndWait(confirmDialog, "Yes");
         verifyTableRows(usageBatchesTable, usageBatch1, usageBatch2, usageBatch3);
         clickButtonAndWait(window, CLOSE_BUTTON_ID);
-        assertUsagesTableEmpty(usagesTable);
-        assertNullFilterItem(filterWidget, "batches-filter", "batches-filter-window", usageBatch4.name);
-        assertNullFilterItem(filterWidget, "rightsholders-filter", "rightsholders-filter-window", usageBatch4.rro);
+        assertUsagesFilterEmpty(filterWidget, usagesTable);
+        assertNullFilterItem(filterWidget, BATCHES_FILTER_ID, "batches-filter-window", usageBatch4.name);
+        assertNullFilterItem(filterWidget, RRO_FILTER_ID, "rightsholders-filter-window", usageBatch4.rro);
         verifyFiscalYearFilter(filterWidget, " ", "2016", "2017", "2019");
         assertEquals(0, usageBatchRepository.getUsageBatchesCountByName(usageBatch4.name));
     }
@@ -105,7 +105,7 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
     // Test case ID: '259c2da3-46e5-4493-942b-3ae47cae7f94'
     public void testDeleteUsageBatchWithoutApproval() {
         loginAsSpecialist();
-        WebElement filterWidget = findElementById("usages-filter-widget");
+        WebElement filterWidget = findElementById(USAGE_FILTER_WIDGET_ID);
         assertNotNull(filterWidget);
         applyFilters(filterWidget, usageBatch1);
         WebElement usagesTable = findElementById("usages-table");
@@ -136,8 +136,8 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
     }
 
     private void applyFilters(WebElement filterWidget, UsageBatchInfo usageBatchInfo) {
-        saveFilter(filterWidget, "batches-filter", "batches-filter-window", usageBatchInfo.name);
-        saveFilter(filterWidget, "rightsholders-filter", "rightsholders-filter-window", usageBatchInfo.rro);
+        saveFilter(filterWidget, BATCHES_FILTER_ID, "batches-filter-window", usageBatchInfo.name);
+        saveFilter(filterWidget, RRO_FILTER_ID, "rightsholders-filter-window", usageBatchInfo.rro);
         WebElement fiscalYearFilter = findElement(filterWidget, By.id("fiscal-year-filter"));
         assertNotNull(fiscalYearFilter);
         WebElement button = findElement(fiscalYearFilter, By.className("v-filterselect-button"));
@@ -286,8 +286,7 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
         assertNotNull(window);
         WebElement searchToolbar = getSearchToolbar(window);
         WebElement prompt = findElement(searchToolbar, By.className("v-textfield-prompt"));
-        assertNotNull(prompt);
-        assertEquals("Enter Batch Name or Payment Date (MM/dd/yyyy)", prompt.getAttribute("value"));
+        assertEquals("Enter Batch Name or Payment Date (MM/dd/yyyy)", getValueAttribute(prompt));
         assertNotNull(getSearchButton(searchToolbar));
         assertNotNull(findElement(searchToolbar, By.className("button-clear")));
     }

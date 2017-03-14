@@ -32,7 +32,6 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     private static final String FISCAL_YEAR = "2017";
     private static final String CLEAR_BATTON_ID = "Clear";
     private static final String USAGE_TABLE_ID = "usages-table";
-    private static final String USAGE_FILTER_WIDGET_ID = "usages-filter-widget";
     private static final String FILTERS_HEADER_TEXT = "Filters";
     private static final String FILTER_BUTTONS_LAYOUT_ID = "filter-buttons";
     private static final String ADD_TO_SCENARIO_BUTTON_ID = "Add_To_Scenario";
@@ -123,9 +122,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     private void verifyMultiplyUsageDataFilterAndClearFilterButton() {
         WebElement usagesTab = getUsagesTab();
         WebElement usagesLayout = assertElement(usagesTab, USAGE_LAYOUT_ID);
-        assertNotNull(usagesLayout);
         WebElement usagesTable = assertElement(usagesLayout, USAGE_TABLE_ID);
-        assertNotNull(usagesTable);
         WebElement filterWidget = waitAndFindElement(usagesTab, By.id(USAGE_FILTER_WIDGET_ID));
         assertNotNull(filterWidget);
         assertNotNull(findElementByText(filterWidget, HTML_DIV_TAG_NAME, FILTERS_HEADER_TEXT));
@@ -139,7 +136,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         clickButtonAndWait(filterButtonsLayout, APPLY_BUTTON_ID);
         verifyFoundUsages(usagesTab);
         clickButtonAndWait(filterButtonsLayout, CLEAR_BATTON_ID);
-        assertUsagesTableEmpty(usagesTable);
+        assertUsagesFilterEmpty(filterWidget, usagesTable);
     }
 
     private void applyFiscalYear(String fiscalYear) {
@@ -153,7 +150,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     }
 
     private void applyPaymentDateFilter() {
-        WebElement paymentDateFilter = waitAndFindElement(By.id("payment-date-filter"));
+        WebElement paymentDateFilter = waitAndFindElement(By.id(PAYMENT_DATE_FILTER_ID));
         applyCurrentDateForDateField(paymentDateFilter);
     }
 
@@ -359,7 +356,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         assertNotNull(findElementByText(filterWidget, HTML_DIV_TAG_NAME, FILTERS_HEADER_TEXT));
         verifyBatchesFilter(filterWidget);
         verifyRightsholdersFilter(filterWidget);
-        verifyPaymentDateComponent(filterWidget, "payment-date-filter");
+        verifyPaymentDateComponent(filterWidget, PAYMENT_DATE_FILTER_ID);
         assertComboboxElement(filterWidget, "fiscal-year-filter", HTML_SPAN_TAG_NAME, "Fiscal Year To");
         verifyFiltersWidgetButtons(filterWidget);
     }
@@ -375,7 +372,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     }
 
     private void openRroFilterWindow(WebElement filterWidget) {
-        WebElement rightsholdersFilter = assertElement(filterWidget, "rightsholders-filter");
+        WebElement rightsholdersFilter = assertElement(filterWidget, RRO_FILTER_ID);
         assertNotNull(findElementByText(rightsholdersFilter, HTML_DIV_TAG_NAME, "(0)"));
         WebElement rightsholderFilterButton = findElementByText(rightsholdersFilter, HTML_SPAN_TAG_NAME, "RROs");
         assertNotNull(rightsholderFilterButton);
@@ -383,7 +380,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     }
 
     private void openBatchesFilterWindow(WebElement filterWidget) {
-        WebElement batchesFilter = assertElement(filterWidget, "batches-filter");
+        WebElement batchesFilter = assertElement(filterWidget, BATCHES_FILTER_ID);
         assertNotNull(findElementByText(batchesFilter, HTML_DIV_TAG_NAME, "(0)"));
         WebElement batchesFilterButton = findElementByText(batchesFilter, HTML_SPAN_TAG_NAME, "Batches");
         assertNotNull(batchesFilterButton);

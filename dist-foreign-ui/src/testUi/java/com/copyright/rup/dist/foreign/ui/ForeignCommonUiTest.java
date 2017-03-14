@@ -3,11 +3,13 @@ package com.copyright.rup.dist.foreign.ui;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.vaadin.test.CommonUiTest;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TestWatcher;
@@ -66,6 +68,22 @@ public class ForeignCommonUiTest extends CommonUiTest {
      * Identifier for 'Save' button.
      */
     protected static final String SAVE_BUTTON_ID = "Save";
+    /**
+     * Identifier for usage filter widget.
+     */
+    protected static final String USAGE_FILTER_WIDGET_ID = "usages-filter-widget";
+    /**
+     * Identifier for batches filter.
+     */
+    protected static final String BATCHES_FILTER_ID = "batches-filter";
+    /**
+     * Identifier for RRO filter.
+     */
+    protected static final String RRO_FILTER_ID = "rightsholders-filter";
+    /**
+     * Identifier for payment date filter.
+     */
+    protected static final String PAYMENT_DATE_FILTER_ID = "payment-date-filter";
 
     private static final String APP_URL = "http://localhost:22000/dist-foreign-ui/";
     private static final Dimension WINDOW_DIMENSION = new Dimension(1280, 800);
@@ -177,6 +195,21 @@ public class ForeignCommonUiTest extends CommonUiTest {
     }
 
     /**
+     * Asserts that usage filters are empty, "Apply" button is disabled and usages table is empty.
+     *
+     * @param filterWidget  {@link WebElement} representing filter widget
+     * @param usagesTable  {@link WebElement} representing usages table
+     */
+    protected void assertUsagesFilterEmpty(WebElement filterWidget, WebElement usagesTable) {
+        assertBatchesFilterEmpty(filterWidget);
+        assertRroFilterEmpty(filterWidget);
+        assertPaymentDateFilterEmpty(filterWidget);
+        assertFiscalYearFilterEmpty(filterWidget);
+        assertApplyButtonDisabled(filterWidget);
+        assertUsagesTableEmpty(usagesTable);
+    }
+
+    /**
      * Asserts that usages table is empty.
      *
      * @param usagesTable {@link WebElement} representing usages table
@@ -186,8 +219,50 @@ public class ForeignCommonUiTest extends CommonUiTest {
         assertTrue(backgroundImage.contains("img/empty_usages_table.png"));
     }
 
+    /**
+     * Gets attribute "value" for given element.
+     *
+     * @param element instance of {@link WebElement}
+     * @return string representation of element value
+     */
+    protected String getValueAttribute(WebElement element) {
+        assertNotNull(element);
+        return element.getAttribute("value");
+    }
+
     private void openAppPage(ForeignCredentials credentials) {
         openPage(APP_URL, credentials.getUserName(), credentials.getPassword());
+    }
+
+    private void assertApplyButtonDisabled(WebElement filterWidget) {
+        WebElement applyButton = assertElement(filterWidget, APPLY_BUTTON_ID);
+        assertTrue(applyButton.getAttribute("class").contains("v-disabled"));
+    }
+
+    private void assertFiscalYearFilterEmpty(WebElement filterWidget) {
+        WebElement fiscalYearFilterInput = findElement(filterWidget, By.className("v-filterselect-input"));
+        assertEquals(StringUtils.EMPTY, getValueAttribute(fiscalYearFilterInput));
+    }
+
+    private void assertPaymentDateFilterEmpty(WebElement filterWidget) {
+        WebElement paymentDateFilter = assertElement(filterWidget, PAYMENT_DATE_FILTER_ID);
+        WebElement paymentDateField = findElement(paymentDateFilter, By.className("v-textfield"));
+        assertNotNull(paymentDateField);
+        assertEquals(StringUtils.EMPTY, getValueAttribute(paymentDateField));
+    }
+
+    private void assertRroFilterEmpty(WebElement filterWidget) {
+        WebElement rightsholdersFilter = assertElement(filterWidget, RRO_FILTER_ID);
+        assertNotNull(findElementByText(rightsholdersFilter, HTML_DIV_TAG_NAME, "(0)"));
+        WebElement rightsholderFilterButton = findElementByText(rightsholdersFilter, HTML_SPAN_TAG_NAME, "RROs");
+        assertNotNull(rightsholderFilterButton);
+    }
+
+    private void assertBatchesFilterEmpty(WebElement filterWidget) {
+        WebElement batchesFilter = assertElement(filterWidget, BATCHES_FILTER_ID);
+        assertNotNull(findElementByText(batchesFilter, HTML_DIV_TAG_NAME, "(0)"));
+        WebElement batchesFilterButton = findElementByText(batchesFilter, HTML_SPAN_TAG_NAME, "Batches");
+        assertNotNull(batchesFilterButton);
     }
 
     /**
