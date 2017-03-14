@@ -556,7 +556,7 @@ databaseChangeLog {
             column(name: 'gross_total', type: 'DECIMAL(38,10)', defaultValue: 0.0000000000, remarks: 'The sum of gross amounts included in scenario') {
                 constraints(nullable: false)
             }
-            column(name: 'reported_total', type: 'DECIMAL(38,10)', defaultValue: 0.0000000000, remarks: 'The sum of reported values included in scenario') {
+            column(name: 'reported_total', type: 'DECIMAL(38,2)', defaultValue: 0.00, remarks: 'The sum of reported values included in scenario') {
                 constraints(nullable: false)
             }
             column(name: 'description', type: 'VARCHAR(2000)', remarks: 'The description of scenario')
