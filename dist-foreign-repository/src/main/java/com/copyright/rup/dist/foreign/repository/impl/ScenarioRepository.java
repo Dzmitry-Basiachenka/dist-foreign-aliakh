@@ -10,6 +10,8 @@ import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Implementation of {@link IScenarioRepository} for MyBatis.
  * <p/>
@@ -37,5 +39,10 @@ public class ScenarioRepository extends BaseRepository implements IScenarioRepos
     public Scenario findById(String id) {
         checkArgument(StringUtils.isNotBlank(id));
         return selectOne("IScenarioMapper.findById", id);
+    }
+
+    @Override
+    public List<Scenario> getScenarios() {
+        return selectList("IScenarioMapper.getScenarios");
     }
 }

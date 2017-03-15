@@ -23,6 +23,8 @@ import com.vaadin.ui.VerticalLayout;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.math.BigDecimal;
+
 /**
  * Widget that represents 'Scenarios' tab.
  * <p/>
@@ -127,8 +129,9 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
         if (null != scenario) {
             ownerLabel.setValue(ForeignUi.getMessage("label.owner", scenario.getCreateUser()));
             distributionTotalLabel.setValue(ForeignUi.getMessage("label.distribution_total",
-                scenario.getNetTotal()));
-            grossTotalLabel.setValue(ForeignUi.getMessage("label.gross_total", scenario.getGrossTotal()));
+                scenario.getNetTotal().setScale(2, BigDecimal.ROUND_HALF_UP)));
+            grossTotalLabel.setValue(ForeignUi.getMessage("label.gross_total",
+                scenario.getGrossTotal().setScale(2, BigDecimal.ROUND_HALF_UP)));
             reportedTotalLabel.setValue(ForeignUi.getMessage("label.reported_total",
                 scenario.getReportedTotal()));
             descriptionLabel.setValue(ForeignUi.getMessage("label.description", scenario.getDescription()));
