@@ -28,17 +28,20 @@ import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.impl.UsageService;
+import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingResult;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CreateScenarioWindow.ScenarioCreateEvent;
 import com.copyright.rup.vaadin.security.SecurityUtils;
+import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
 import com.google.common.collect.Lists;
 import com.vaadin.ui.HorizontalLayout;
 
+import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -154,30 +157,57 @@ public class UsagesControllerTest {
     }
 
     @Test
-    public void testGetStream() {
+    public void testGetExportStream() {
+        IStreamSource exportStreamSource = controller.getExportUsagesStreamSource();
         ExecutorService executorService = createMock(ExecutorService.class);
-        Whitebox.setInternalState(controller, executorService);
+        Whitebox.setInternalState(exportStreamSource, executorService);
         Capture<Runnable> captureRunnable = new Capture<>();
         executorService.execute(capture(captureRunnable));
         expectLastCall().once();
         replay(usageService, filterController, executorService);
-        assertNotNull(controller.getStream());
+        assertNotNull(exportStreamSource.getStream());
         Runnable runnable = captureRunnable.getValue();
         assertNotNull(runnable);
-        assertSame(controller, Whitebox.getInternalState(runnable, "arg$1"));
+        assertSame(exportStreamSource, Whitebox.getInternalState(runnable, "arg$1"));
         assertTrue(Whitebox.getInternalState(runnable, "arg$2") instanceof PipedOutputStream);
         verify(usageService, filterController, executorService);
     }
 
     @Test
-    public void testGetFileName() {
+    public void testGetErrorsStream() {
+        CsvProcessingResult csvProcessingResult = new CsvProcessingResult(Collections.emptyList(), StringUtils.EMPTY);
+        IStreamSource errorStreamSource =
+            controller.getErrorResultStreamSource(csvProcessingResult);
+        ExecutorService executorService = createMock(ExecutorService.class);
+        Whitebox.setInternalState(errorStreamSource, executorService);
+        Capture<Runnable> captureRunnable = new Capture<>();
+        executorService.execute(capture(captureRunnable));
+        expectLastCall().once();
+        replay(usageService, filterController, executorService);
+        assertNotNull(errorStreamSource.getStream());
+        Runnable runnable = captureRunnable.getValue();
+        assertNotNull(runnable);
+        assertSame(errorStreamSource, Whitebox.getInternalState(runnable, "arg$1"));
+        assertTrue(Whitebox.getInternalState(runnable, "arg$2") instanceof PipedOutputStream);
+        verify(usageService, filterController, executorService);
+    }
+
+    @Test
+    public void testGetExportFileName() {
         mockStaticPartial(LocalDate.class, "now");
         expect(LocalDate.now()).andReturn(LocalDate.of(2017, 1, 2)).once();
         expect(LocalDate.now()).andReturn(LocalDate.of(2009, 11, 22)).once();
         replay(LocalDate.class, UsagesController.class);
-        assertEquals("export_usage_01_02_2017.csv", controller.getFileName());
-        assertEquals("export_usage_11_22_2009.csv", controller.getFileName());
+        assertEquals("export_usage_01_02_2017.csv", controller.getExportUsagesStreamSource().getFileName());
+        assertEquals("export_usage_11_22_2009.csv", controller.getExportUsagesStreamSource().getFileName());
         verify(LocalDate.class, UsagesController.class);
+    }
+
+    @Test
+    public void testGetErrorsFileName() {
+        CsvProcessingResult csvProcessingResult = new CsvProcessingResult(Collections.emptyList(), "fileName.csv");
+        assertEquals("Error_for_fileName.csv",
+            controller.getErrorResultStreamSource(csvProcessingResult).getFileName());
     }
 
     @Test

@@ -217,7 +217,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         addToScenarioButton = Buttons.createButton(ForeignUi.getMessage("button.add_to_scenario"));
         addToScenarioButton.addClickListener(event -> onAddToScenarioClicked());
         Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
-        OnDemandFileDownloader fileDownloader = new OnDemandFileDownloader(getController());
+        OnDemandFileDownloader fileDownloader = new OnDemandFileDownloader(controller.getExportUsagesStreamSource());
         fileDownloader.extend(exportButton);
         deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete_usage_batch"));
         deleteButton.addClickListener(event -> Windows.showModalWindow(new DeleteUsageBatchWindow(controller)));

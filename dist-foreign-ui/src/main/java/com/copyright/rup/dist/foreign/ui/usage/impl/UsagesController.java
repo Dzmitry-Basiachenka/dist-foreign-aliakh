@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.repository.api.Sort;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingResult;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
@@ -19,7 +20,10 @@ import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CreateScenarioWindow.ScenarioCreateEvent;
 import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.ui.VaadinUtils;
+import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.widget.api.CommonController;
+
+import com.google.common.io.Files;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,8 +56,6 @@ import java.util.concurrent.Executors;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class UsagesController extends CommonController<IUsagesWidget> implements IUsagesController {
-
-    private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     @Autowired
     private IUsageBatchService usageBatchService;
@@ -91,26 +93,6 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     public List<UsageDto> loadBeans(int startIndex, int count, Object[] sortPropertyIds, boolean... sortStates) {
         return usageService.getUsages(filterController.getWidget().getAppliedFilter(), new Pageable(startIndex, count),
             Sort.create(sortPropertyIds, sortStates));
-    }
-
-    @Override
-    public InputStream getStream() {
-        try {
-            PipedOutputStream outputStream = new PipedOutputStream();
-            PipedInputStream pipedInputStream = new PipedInputStream(outputStream);
-            executorService.execute(
-                () -> usageService.writeUsageCsvReport(filterController.getWidget().getAppliedFilter(), outputStream));
-            return pipedInputStream;
-        } catch (IOException e) {
-            throw new RupRuntimeException(e);
-        }
-    }
-
-    @Override
-    public String getFileName() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM_dd_YYYY");
-        LocalDate now = LocalDate.now();
-        return VaadinUtils.encodeAndBuildFileName(String.format("export_usage_%s", now.format(formatter)), "csv");
     }
 
     @Override
@@ -163,6 +145,16 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
+    public IStreamSource getExportUsagesStreamSource() {
+        return new ExportStreamSource(usageService, filterController);
+    }
+
+    @Override
+    public IStreamSource getErrorResultStreamSource(CsvProcessingResult csvProcessingResult) {
+        return new ErrorResultStreamSource(usageService, csvProcessingResult);
+    }
+
+    @Override
     public void onScenarioCreated(ScenarioCreateEvent event) {
         getWidget().fireWidgetEvent(event);
     }
@@ -170,5 +162,85 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     @Override
     protected IUsagesWidget instantiateWidget() {
         return new UsagesWidget();
+    }
+
+    /**
+     * Export stream source.
+     */
+    public static class ExportStreamSource implements IStreamSource {
+
+        private ExecutorService executorService = Executors.newSingleThreadExecutor();
+        private IUsageService usageService;
+        private IUsagesFilterController controller;
+
+        /**
+         * Constructor.
+         *
+         * @param usageService instance of {@link IUsageService}
+         * @param controller   instance of {@link IUsagesController}
+         */
+        public ExportStreamSource(IUsageService usageService, IUsagesFilterController controller) {
+            this.usageService = usageService;
+            this.controller = controller;
+        }
+
+        @Override
+        public InputStream getStream() {
+            try {
+                PipedOutputStream outputStream = new PipedOutputStream();
+                PipedInputStream pipedInputStream = new PipedInputStream(outputStream);
+                executorService.execute(
+                    () -> usageService.writeUsageCsvReport(controller.getWidget().getAppliedFilter(), outputStream));
+                return pipedInputStream;
+            } catch (IOException e) {
+                throw new RupRuntimeException(e);
+            }
+        }
+
+        @Override
+        public String getFileName() {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM_dd_YYYY");
+            return VaadinUtils.encodeAndBuildFileName(
+                String.format("export_usage_%s", LocalDate.now().format(formatter)), "csv");
+        }
+    }
+
+    /**
+     * Error results stream source.
+     */
+    public static class ErrorResultStreamSource implements IStreamSource {
+
+        private ExecutorService executorService = Executors.newSingleThreadExecutor();
+        private CsvProcessingResult csvProcessingResult;
+        private IUsageService usageService;
+
+        /**
+         * Constructor.
+         *
+         * @param csvProcessingResult information about errors
+         * @param usageService        instance of {@link IUsageService}
+         */
+        public ErrorResultStreamSource(IUsageService usageService, CsvProcessingResult csvProcessingResult) {
+            this.csvProcessingResult = csvProcessingResult;
+            this.usageService = usageService;
+        }
+
+        @Override
+        public String getFileName() {
+            return VaadinUtils.encodeAndBuildFileName(
+                String.format("Error_for_%s", Files.getNameWithoutExtension(csvProcessingResult.getFileName())), "csv");
+        }
+
+        @Override
+        public InputStream getStream() {
+            try {
+                PipedOutputStream outputStream = new PipedOutputStream();
+                PipedInputStream pipedInputStream = new PipedInputStream(outputStream);
+                executorService.execute(() -> usageService.writeErrorsCsvReport(csvProcessingResult, outputStream));
+                return pipedInputStream;
+            } catch (IOException e) {
+                throw new RupRuntimeException(e);
+            }
+        }
     }
 }

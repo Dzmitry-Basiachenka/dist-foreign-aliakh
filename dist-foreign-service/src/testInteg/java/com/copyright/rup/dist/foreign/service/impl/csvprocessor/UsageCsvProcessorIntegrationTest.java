@@ -91,7 +91,7 @@ public class UsageCsvProcessorIntegrationTest {
             "/com/copyright/rup/dist/foreign/service/csv/" + file);
              ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             IOUtils.copy(stream, outputStream);
-            result = processor.process(outputStream);
+            result = processor.process(outputStream, file);
         }
         return result;
     }

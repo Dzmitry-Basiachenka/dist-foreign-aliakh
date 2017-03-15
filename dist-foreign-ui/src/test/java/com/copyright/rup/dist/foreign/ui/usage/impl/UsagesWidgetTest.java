@@ -23,6 +23,7 @@ import com.copyright.rup.vaadin.ui.LocalDateColumnGenerator;
 import com.copyright.rup.vaadin.ui.LongColumnGenerator;
 import com.copyright.rup.vaadin.ui.MoneyColumnGenerator;
 import com.copyright.rup.vaadin.ui.Windows;
+import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.ui.component.lazytable.IBeanLoader;
 import com.copyright.rup.vaadin.ui.component.lazytable.LazyTable;
@@ -79,6 +80,7 @@ public class UsagesWidgetTest {
         usagesWidget = new UsagesWidget();
         usagesWidget.setController(controller);
         expect(controller.initUsagesFilterWidget()).andReturn(filterWidget).once();
+        expect(controller.getExportUsagesStreamSource()).andReturn(createMock(IStreamSource.class)).once();
         replay(controller);
         usagesWidget.init();
         verify(controller);

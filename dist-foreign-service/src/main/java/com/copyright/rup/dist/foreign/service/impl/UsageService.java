@@ -11,6 +11,8 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvErrorResultWriter;
+import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingResult;
 import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
 import org.slf4j.Logger;
@@ -57,6 +59,12 @@ public class UsageService implements IUsageService {
     @Override
     public void writeUsageCsvReport(UsageFilter filter, OutputStream outputStream) {
         usageRepository.writeUsagesCsvReport(filter, outputStream);
+    }
+
+    @Override
+    public void writeErrorsCsvReport(CsvProcessingResult csvProcessingResult, OutputStream outputStream) {
+        CsvErrorResultWriter downloader = new CsvErrorResultWriter();
+        downloader.writeErrorsResult(outputStream, csvProcessingResult);
     }
 
     @Override

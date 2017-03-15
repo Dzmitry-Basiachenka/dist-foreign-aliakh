@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import static org.easymock.EasyMock.anyObject;
+import static org.easymock.EasyMock.anyString;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -50,6 +51,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collection;
@@ -154,7 +156,8 @@ public class UsageBatchUploadWindowTest {
     @Test
     public void testOnUploadClickedValidFields() throws Exception {
         mockStatic(Windows.class);
-        CsvUploadComponent csvUploadComponent = createPartialMock(CsvUploadComponent.class, "getStreamToUploadedFile");
+        CsvUploadComponent csvUploadComponent =
+            createPartialMock(CsvUploadComponent.class, "getStreamToUploadedFile", "getFileName");
         UsageCsvProcessor processor = createMock(UsageCsvProcessor.class);
         LocalDateWidget paymentDateWidget = new LocalDateWidget("Payment Date");
         paymentDateWidget.setValue(PAYMENT_DATE);
@@ -170,18 +173,21 @@ public class UsageBatchUploadWindowTest {
         Whitebox.setInternalState(window, "rightsholderNameProperty", new ObjectProperty<>(RRO_NAME));
         expect(window.isValid()).andReturn(true).once();
         expectNew(UsageCsvProcessor.class).andReturn(processor).once();
-        expect(processor.process(anyObject())).andReturn(processingResult).once();
+        expect(processor.process(anyObject(), anyString())).andReturn(processingResult).once();
         expect(usagesController.loadUsageBatch(buildUsageBatch(), processingResult.getResult()))
             .andReturn(1).once();
+        expect(csvUploadComponent.getStreamToUploadedFile()).andReturn(createMock(ByteArrayOutputStream.class)).once();
+        expect(csvUploadComponent.getFileName()).andReturn("fileName.csv").once();
         Windows.showNotificationWindow("Upload completed: 1 records were stored successfully");
         expectLastCall().once();
-        replay(window, usagesController, Windows.class, UsageCsvProcessor.class, processor);
+        replay(window, usagesController, Windows.class, UsageCsvProcessor.class, processor, csvUploadComponent);
         window.onUploadClicked();
-        verify(window, usagesController, Windows.class, UsageCsvProcessor.class, processor);
+        verify(window, usagesController, Windows.class, UsageCsvProcessor.class, processor, csvUploadComponent);
     }
 
     private CsvProcessingResult<Usage> buildCsvProcessingResult() {
-        CsvProcessingResult<Usage> processingResult = new CsvProcessingResult<>(Collections.emptyList());
+        CsvProcessingResult<Usage> processingResult =
+            new CsvProcessingResult<>(Collections.emptyList(), "fileName.csv");
         processingResult.addRecord(new Usage());
         return processingResult;
     }

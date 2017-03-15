@@ -83,11 +83,14 @@ class UsageBatchUploadWindow extends Window {
             try {
                 UsageCsvProcessor processor = new UsageCsvProcessor();
                 CsvProcessingResult<Usage> processingResult =
-                    processor.process(csvUploadComponent.getStreamToUploadedFile());
+                    processor.process(csvUploadComponent.getStreamToUploadedFile(), csvUploadComponent.getFileName());
                 if (processingResult.isSuccessful()) {
                     int usagesCount = usagesController.loadUsageBatch(buildUsageBatch(), processingResult.getResult());
                     close();
                     Windows.showNotificationWindow(ForeignUi.getMessage("message.upload_completed", usagesCount));
+                } else {
+                    Windows.showModalWindow(
+                        new ErrorUploadWindow(usagesController.getErrorResultStreamSource(processingResult)));
                 }
             } catch (ValidationException e) {
                 Windows.showNotificationWindow(ForeignUi.getMessage("window.caption.error"), e.getHtmlMessage());

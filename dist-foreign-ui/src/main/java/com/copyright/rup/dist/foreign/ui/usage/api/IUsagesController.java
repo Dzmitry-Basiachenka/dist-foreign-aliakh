@@ -4,6 +4,7 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
+import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingResult;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CreateScenarioWindow.ScenarioCreateEvent;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.ui.component.lazytable.IBeanLoader;
@@ -24,7 +25,7 @@ import java.util.List;
  * @author Mikita Hladkikh
  * @author Mikalai Bezmen
  */
-public interface IUsagesController extends IController<IUsagesWidget>, IBeanLoader<UsageDto>, IStreamSource {
+public interface IUsagesController extends IController<IUsagesWidget>, IBeanLoader<UsageDto> {
 
     /**
      * {@link #onFilterChanged(FilterChangedEvent)}.
@@ -118,4 +119,17 @@ public interface IUsagesController extends IController<IUsagesWidget>, IBeanLoad
      * @param event {@link ScenarioCreateEvent}
      */
     void onScenarioCreated(ScenarioCreateEvent event);
+
+    /**
+     * @return instance of {@link IStreamSource} for export.
+     */
+    IStreamSource getExportUsagesStreamSource();
+
+    /**
+     * Return instance of {@link IStreamSource} for errors result.
+     *
+     * @param csvProcessingResult information about errors
+     * @return instance of {@link IStreamSource}
+     */
+    IStreamSource getErrorResultStreamSource(CsvProcessingResult csvProcessingResult);
 }

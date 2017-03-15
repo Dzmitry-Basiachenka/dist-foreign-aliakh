@@ -21,14 +21,17 @@ public class CsvProcessingResult<T> {
     private final List<String> headers;
     private List<T> result = Lists.newArrayList();
     private Map<Integer, ErrorRow> errors = Maps.newTreeMap();
+    private String fileName;
 
     /**
      * Constructor.
      *
-     * @param headers csv file headers
+     * @param headers  csv file headers
+     * @param fileName file name of uploaded file
      */
-    public CsvProcessingResult(List<String> headers) {
+    public CsvProcessingResult(List<String> headers, String fileName) {
         this.headers = headers;
+        this.fileName = fileName;
     }
 
     /**
@@ -50,10 +53,10 @@ public class CsvProcessingResult<T> {
     }
 
     /**
-     * @return the map of errors. Key is the line number, value is {@link ErrorRow}.
+     * @return the list of {@link ErrorRow}s.
      */
-    public Map<Integer, ErrorRow> getErrors() {
-        return errors;
+    public List<ErrorRow> getErrors() {
+        return Lists.newArrayList(errors.values());
     }
 
     /**
@@ -64,13 +67,20 @@ public class CsvProcessingResult<T> {
     }
 
     /**
+     * @return uploaded file name.
+     */
+    public String getFileName() {
+        return fileName;
+    }
+
+    /**
      * Adds failed row to result, if the row exists error message will be appended.
      *
      * @param line         line number from CSV
      * @param originalRow  original row from CSV
      * @param errorMessage error message
      */
-    public void logError(Integer line, String originalRow, String errorMessage) {
+    public void logError(Integer line, List<String> originalRow, String errorMessage) {
         ErrorRow errorRow = errors.get(line);
         if (null == errorRow) {
             errorRow = new ErrorRow(line, originalRow);
@@ -99,13 +109,13 @@ public class CsvProcessingResult<T> {
      * Contains information about errors.
      */
     public static class ErrorRow {
-        private final int line;
-        private final String originalRow;
+        private final Integer lineNumber;
+        private final List<String> originalRow;
         private List<String> errorMessages = Lists.newArrayList();
 
-        private ErrorRow(int line, String originalRow) {
-            this.line = line;
-            this.originalRow = originalRow;
+        private ErrorRow(Integer lineNumber, List<String> originalLine) {
+            this.lineNumber = lineNumber;
+            this.originalRow = originalLine;
         }
 
         private void addErrorMessage(String errorMessage) {
@@ -115,14 +125,14 @@ public class CsvProcessingResult<T> {
         /**
          * @return line number.
          */
-        public int getLine() {
-            return line;
+        public Integer getLineNumber() {
+            return lineNumber;
         }
 
         /**
          * @return original row.
          */
-        public String getOriginalRow() {
+        public List<String> getOriginalLine() {
             return originalRow;
         }
 
