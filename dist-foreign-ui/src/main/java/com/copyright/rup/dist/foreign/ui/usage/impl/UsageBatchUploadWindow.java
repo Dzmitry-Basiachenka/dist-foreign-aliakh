@@ -1,12 +1,12 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
-import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingResult;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.UsageCsvProcessor;
+import com.copyright.rup.dist.foreign.service.impl.csvprocessor.exception.ValidationException;
 import com.copyright.rup.dist.foreign.ui.component.CsvUploadComponent;
 import com.copyright.rup.dist.foreign.ui.component.LocalDateWidget;
 import com.copyright.rup.dist.foreign.ui.component.validator.GrossAmountValidator;
@@ -89,8 +89,8 @@ class UsageBatchUploadWindow extends Window {
                     close();
                     Windows.showNotificationWindow(ForeignUi.getMessage("message.upload_completed", usagesCount));
                 }
-            } catch (RupRuntimeException e) {
-                Windows.showNotificationWindow(e.getMessage());
+            } catch (ValidationException e) {
+                Windows.showNotificationWindow(ForeignUi.getMessage("window.caption.error"), e.getHtmlMessage());
             }
         } else {
             // TODO {apchelnikau} use csvUploadComponent, but not it's internal state for error window
