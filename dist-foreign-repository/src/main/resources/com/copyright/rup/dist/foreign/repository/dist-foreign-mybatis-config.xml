@@ -34,6 +34,6 @@
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUsageMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUsageBatchMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IRightsholderMapper.xml"/>
-        <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IScenarioMapper.xml/"/>
+        <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IScenarioMapper.xml"/>
     </mappers>
 </configuration>
