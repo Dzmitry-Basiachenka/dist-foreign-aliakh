@@ -17,6 +17,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesWidget;
 import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.ui.VaadinUtils;
+import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,10 +41,11 @@ import java.util.concurrent.Executors;
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
- * Date: 01/16/2017
+ * Date: 01/16/17
  *
  * @author Mikita Hladkikh
  * @author Aliaksandr Radkevich
+ * @author Mikalai Bezmen
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -122,6 +124,14 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
         int result = usageBatchService.insertUsageBatch(usageBatch, usages);
         filterController.getWidget().clearFilter();
         return result;
+    }
+
+    @Override
+    public void createScenario(String scenarioName, String description) {
+        Windows.showNotificationWindow("Scenario created successfully");
+        // TODO {mbezmen} plug service method for scenario creation
+        filterController.getWidget().clearFilter();
+        // TODO {mbezmen} implement redirect to Scenario tab
     }
 
     @Override

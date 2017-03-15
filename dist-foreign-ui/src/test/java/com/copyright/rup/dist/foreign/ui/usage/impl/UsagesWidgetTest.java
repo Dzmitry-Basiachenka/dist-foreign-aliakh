@@ -16,6 +16,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.ui.LocalDateColumnGenerator;
@@ -23,6 +24,7 @@ import com.copyright.rup.vaadin.ui.LongColumnGenerator;
 import com.copyright.rup.vaadin.ui.MoneyColumnGenerator;
 import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
+import com.copyright.rup.vaadin.ui.component.lazytable.IBeanLoader;
 import com.copyright.rup.vaadin.ui.component.lazytable.LazyTable;
 
 import com.vaadin.server.Extension;
@@ -48,6 +50,7 @@ import org.vaadin.addons.lazyquerycontainer.QueryView;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies {@link UsagesWidget}.
@@ -121,13 +124,37 @@ public class UsagesWidgetTest {
     }
 
     @Test
-    public void testAddToScenarioButtonClickListener() {
+    @SuppressWarnings("unchecked")
+    public void testAddToScenarioButtonEmptyUsagesTableClickListener() {
         mockStatic(Windows.class);
+        LazyTable<UsageBeanQuery, UsageDto> usagesTable = new LazyTable<>(controller, UsageBeanQuery.class, 1);
+        Whitebox.setInternalState(usagesWidget, "usagesTable", usagesTable);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
             .getComponent(0)).getComponent(1);
         assertTrue(addToScenarioButton.isDisableOnClick());
-        Windows.showNotificationWindow("Add to scenario button clicked");
+        Windows.showNotificationWindow("Please select at least one usage");
+        expectLastCall().once();
+        replay(clickEvent, Windows.class);
+        Collection<?> listeners = addToScenarioButton.getListeners(ClickEvent.class);
+        assertEquals(2, listeners.size());
+        ClickListener clickListener = (ClickListener) listeners.iterator().next();
+        clickListener.buttonClick(clickEvent);
+        verify(clickEvent, Windows.class);
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testAddToScenarioButtonTableClickListener() {
+        mockStatic(Windows.class);
+        LazyTable<UsageBeanQuery, UsageDto> usagesTable =
+            new LazyTable<>(new UsageDtoBeanLoader(), UsageBeanQuery.class, 1);
+        Whitebox.setInternalState(usagesWidget, "usagesTable", usagesTable);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
+            .getComponent(0)).getComponent(1);
+        assertTrue(addToScenarioButton.isDisableOnClick());
+        Windows.showModalWindow(anyObject(CreateScenarioWindow.class));
         expectLastCall().once();
         replay(clickEvent, Windows.class);
         Collection<?> listeners = addToScenarioButton.getListeners(ClickEvent.class);
@@ -279,5 +306,18 @@ public class UsagesWidgetTest {
         assertEquals(100, component.getHeight(), 0);
         assertEquals(Unit.PERCENTAGE, component.getHeightUnits());
         assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
+    }
+
+    private static class UsageDtoBeanLoader implements IBeanLoader<UsageDto> {
+
+        @Override
+        public int getSize() {
+            return 1;
+        }
+
+        @Override
+        public List<UsageDto> loadBeans(int startIndex, int count, Object[] sortPropertyIds, boolean... sortStates) {
+            return Collections.singletonList(new UsageDto());
+        }
     }
 }
