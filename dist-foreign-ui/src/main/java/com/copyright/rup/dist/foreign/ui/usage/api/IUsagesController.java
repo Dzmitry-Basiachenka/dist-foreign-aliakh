@@ -17,9 +17,10 @@ import java.util.List;
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
- * Date: 01/16/2017
+ * Date: 01/16/17
  *
  * @author Mikita Hladkikh
+ * @author Mikalai Bezmen
  */
 public interface IUsagesController extends IController<IUsagesWidget>, IBeanLoader<UsageDto>, IStreamSource {
 
@@ -88,4 +89,12 @@ public interface IUsagesController extends IController<IUsagesWidget>, IBeanLoad
      * @return count of inserted usages
      */
     int loadUsageBatch(UsageBatch usageBatch, List<Usage> usages);
+
+    /**
+     * Creates a scenario by entered scenario name and description.
+     *
+     * @param scenarioName name of scenario
+     * @param description  description for creating scenario
+     */
+    void createScenario(String scenarioName, String description);
 }

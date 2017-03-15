@@ -31,7 +31,7 @@ import java.time.LocalDate;
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
- * Date: 01/16/2017
+ * Date: 01/16/17
  *
  * @author Mikita Hladkikh
  */
@@ -203,7 +203,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         loadButton.addClickListener(
             event -> Windows.showModalWindow(new UsageBatchUploadWindow(controller)));
         addToScenarioButton = Buttons.createButton(ForeignUi.getMessage("button.add_to_scenario"));
-        addToScenarioButton.addClickListener(event -> Windows.showNotificationWindow("Add to scenario button clicked"));
+        addToScenarioButton.addClickListener(event -> onAddToScenarioClicked());
         Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
         OnDemandFileDownloader fileDownloader = new OnDemandFileDownloader(getController());
         fileDownloader.extend(exportButton);
@@ -215,5 +215,13 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "usages-buttons");
         return layout;
+    }
+
+    private void onAddToScenarioClicked() {
+        if (0 < usagesTable.getContainerDataSource().size()) {
+            Windows.showModalWindow(new CreateScenarioWindow(controller));
+        } else {
+            Windows.showNotificationWindow(ForeignUi.getMessage("message.create_scenario.empty_usages"));
+        }
     }
 }
