@@ -112,7 +112,7 @@ public class UsageServiceTest {
         usageRepository.insertUsage(usages.get(1));
         expectLastCall().once();
         replay(usageRepository);
-        assertEquals(2, usageService.insertUsages(usageBatch, usages, "User Name"));
+        assertEquals(2, usageService.insertUsages(usageBatch, usages));
         assertEquals(new BigDecimal("10.9090909090"), usage1.getGrossAmount());
         assertEquals(new BigDecimal("1.0909090909"), usage2.getGrossAmount());
         verify(usageRepository);

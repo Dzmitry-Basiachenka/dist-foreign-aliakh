@@ -201,13 +201,12 @@ public class UsagesControllerTest {
         IUsagesFilterWidget filterWidgetMock = createMock(IUsagesFilterWidget.class);
         UsageBatch usageBatch = new UsageBatch();
         List<Usage> usages = Lists.newArrayList(new Usage());
-        String userName = "User Name";
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         filterWidgetMock.clearFilter();
         expectLastCall().once();
-        expect(usageBatchService.insertUsageBatch(usageBatch, usages, userName)).andReturn(1).once();
+        expect(usageBatchService.insertUsageBatch(usageBatch, usages)).andReturn(1).once();
         replay(usageBatchService, filterController, filterWidgetMock);
-        assertEquals(1, controller.loadUsageBatch(usageBatch, usages, userName));
+        assertEquals(1, controller.loadUsageBatch(usageBatch, usages));
         verify(usageBatchService, filterController, filterWidgetMock);
     }
 

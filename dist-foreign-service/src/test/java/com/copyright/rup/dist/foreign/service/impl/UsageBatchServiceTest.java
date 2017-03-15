@@ -107,9 +107,9 @@ public class UsageBatchServiceTest {
         expectLastCall().once();
         rightsholderService.updateRightsholder(rro);
         expectLastCall().once();
-        expect(usageService.insertUsages(usageBatch, usages, USER_NAME)).andReturn(2).once();
+        expect(usageService.insertUsages(usageBatch, usages)).andReturn(2).once();
         replay(usageBatchRepository, usageService);
-        assertEquals(2, usageBatchService.insertUsageBatch(usageBatch, usages, USER_NAME));
+        assertEquals(2, usageBatchService.insertUsageBatch(usageBatch, usages));
         verify(usageBatchRepository, usageService);
     }
 

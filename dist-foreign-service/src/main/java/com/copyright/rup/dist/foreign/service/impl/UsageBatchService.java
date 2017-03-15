@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +56,8 @@ public class UsageBatchService implements IUsageBatchService {
 
     @Override
     @Transactional
-    public int insertUsageBatch(UsageBatch usageBatch, List<Usage> usages, String userName) {
+    public int insertUsageBatch(UsageBatch usageBatch, List<Usage> usages) {
+        String userName = RupContextUtils.getUserName();
         usageBatch.setId(RupPersistUtils.generateUuid());
         usageBatch.setCreateUser(userName);
         usageBatch.setUpdateUser(userName);
@@ -63,7 +65,7 @@ public class UsageBatchService implements IUsageBatchService {
         usageBatchRepository.insert(usageBatch);
         LOGGER.info("Insert usage batch. Finished. UsageBatchBatch={}, UserName={}", usageBatch.getName(), userName);
         rightsholderService.updateRightsholder(usageBatch.getRro());
-        return usageService.insertUsages(usageBatch, usages, userName);
+        return usageService.insertUsages(usageBatch, usages);
     }
 
     @Override

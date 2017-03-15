@@ -52,10 +52,9 @@ public interface IUsageService {
      *
      * @param usageBatch usage batch
      * @param usages     list of {@link Usage}s
-     * @param userName   user name
      * @return count of inserted usages
      */
-    int insertUsages(UsageBatch usageBatch, List<Usage> usages, String userName);
+    int insertUsages(UsageBatch usageBatch, List<Usage> usages);
 
     /**
      * Deletes all {@link Usage}s associated with the given {@link UsageBatch}.
