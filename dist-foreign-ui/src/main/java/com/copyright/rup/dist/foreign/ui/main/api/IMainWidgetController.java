@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.main.api;
 
+import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.widget.api.IController;
 import com.copyright.rup.vaadin.widget.api.ITabChangeController;
@@ -19,4 +20,9 @@ public interface IMainWidgetController extends IController<IMainWidget>, ITabCha
      * @return instance of {@link IUsagesController}.
      */
     IUsagesController getUsagesController();
+
+    /**
+     * @return {@link IScenariosController}.
+     */
+    IScenariosController getScenariosController();
 }

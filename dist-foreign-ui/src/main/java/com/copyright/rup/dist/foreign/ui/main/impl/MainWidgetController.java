@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.main.impl;
 
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidget;
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidgetController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.widget.api.TabController;
 
@@ -27,10 +28,17 @@ public class MainWidgetController extends TabController<IMainWidget> implements 
 
     @Autowired
     private IUsagesController usagesController;
+    @Autowired
+    private IScenariosController scenariosController;
 
     @Override
     public IUsagesController getUsagesController() {
         return usagesController;
+    }
+
+    @Override
+    public IScenariosController getScenariosController() {
+        return scenariosController;
     }
 
     @Override

@@ -29,10 +29,9 @@ public class MainWidget extends TabSheet implements IMainWidget {
         VaadinUtils.addComponentStyle(this, Cornerstone.MAIN_TABSHEET);
         addTab(controller.getUsagesController().initWidget(),
             ForeignUi.getMessage("tab.usages"));
-        addTab(new Label(), ForeignUi.getMessage("tab.scenario"));
+        addTab(controller.getScenariosController().initWidget(), ForeignUi.getMessage("tab.scenario"));
         addTab(new Label(), ForeignUi.getMessage("tab.audit"));
-        addListener(TabSheet.SelectedTabChangeEvent.class, controller,
-            ITabChangeController.TAB_CHANGE_HANDLER);
+        addListener(TabSheet.SelectedTabChangeEvent.class, controller, ITabChangeController.TAB_CHANGE_HANDLER);
         return this;
     }
 
