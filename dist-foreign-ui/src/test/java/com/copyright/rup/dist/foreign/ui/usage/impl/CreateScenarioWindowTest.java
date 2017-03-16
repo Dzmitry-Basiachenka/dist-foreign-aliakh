@@ -8,11 +8,16 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.date.RupDateUtils;
+import com.copyright.rup.dist.foreign.service.api.IScenarioService;
+import com.copyright.rup.dist.foreign.ui.component.validator.ScenarioNameUniqueValidator;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 
+import com.vaadin.data.Validator;
+import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -31,6 +36,7 @@ import org.powermock.reflect.Whitebox;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * Verifies {@link CreateScenarioWindow}.
@@ -46,12 +52,18 @@ public class CreateScenarioWindowTest {
     private static final String SCENARIO_NAME = "Scenario Name";
     private static final String DESCRIPTION = "Description of Scenario creation";
     private CreateScenarioWindow createScenarioWindow;
+    private IScenarioService scenarioService;
     private IUsagesController controller;
 
     @Before
     public void setUp() {
         controller = createMock(IUsagesController.class);
+        scenarioService = createMock(IScenarioService.class);
+        expect(controller.getScenarioService()).andReturn(scenarioService).once();
+        replay(controller);
         createScenarioWindow = new CreateScenarioWindow(controller);
+        verify(controller);
+        reset(controller);
     }
 
     @Test
@@ -82,12 +94,12 @@ public class CreateScenarioWindowTest {
         expect(descriptionArea.getValue()).andReturn(DESCRIPTION).once();
         controller.createScenario(SCENARIO_NAME, DESCRIPTION);
         expectLastCall().once();
-        replay(clickEvent, scenarioNameField, descriptionArea, controller);
+        replay(clickEvent, scenarioNameField, descriptionArea, controller, scenarioService);
         Collection<?> listeners = confirmButton.getListeners(ClickEvent.class);
         assertEquals(1, listeners.size());
         ClickListener clickListener = (ClickListener) listeners.iterator().next();
         clickListener.buttonClick(clickEvent);
-        verify(clickEvent, scenarioNameField, descriptionArea, controller);
+        verify(clickEvent, scenarioNameField, descriptionArea, controller, scenarioService);
     }
 
     private void verifyScenarioNameField(Component component) {
@@ -101,6 +113,11 @@ public class CreateScenarioWindowTest {
         assertEquals(StringUtils.EMPTY, scenarioNameField.getNullRepresentation());
         assertTrue(scenarioNameField.isRequired());
         assertEquals("Field value should be specified", scenarioNameField.getRequiredError());
+        Collection<Validator> validators = scenarioNameField.getValidators();
+        assertEquals(2, validators.size());
+        Iterator<Validator> iterator = validators.iterator();
+        assertTrue(iterator.next() instanceof StringLengthValidator);
+        assertTrue(iterator.next() instanceof ScenarioNameUniqueValidator);
     }
 
     private void verifyDescriptionArea(Component component) {
@@ -108,6 +125,10 @@ public class CreateScenarioWindowTest {
         TextArea descriptionArea = (TextArea) component;
         assertEquals("Description", descriptionArea.getCaption());
         assertFalse(descriptionArea.isValidationVisible());
+        Collection<Validator> validators = descriptionArea.getValidators();
+        assertEquals(1, validators.size());
+        Iterator<Validator> iterator = validators.iterator();
+        assertTrue(iterator.next() instanceof StringLengthValidator);
     }
 
     private void verifyButtonsLayout(Component component) {

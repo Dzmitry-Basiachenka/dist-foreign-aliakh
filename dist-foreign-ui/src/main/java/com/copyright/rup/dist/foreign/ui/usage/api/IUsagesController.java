@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.api;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.ui.component.lazytable.IBeanLoader;
 import com.copyright.rup.vaadin.widget.api.IController;
@@ -97,4 +98,9 @@ public interface IUsagesController extends IController<IUsagesWidget>, IBeanLoad
      * @param description  description for creating scenario
      */
     void createScenario(String scenarioName, String description);
+
+    /**
+     * @return instance of {@link IScenarioService}.
+     */
+    IScenarioService getScenarioService();
 }

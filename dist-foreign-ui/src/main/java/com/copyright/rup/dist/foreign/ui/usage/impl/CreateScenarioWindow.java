@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.common.date.RupDateUtils;
+import com.copyright.rup.dist.foreign.ui.component.validator.ScenarioNameUniqueValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -8,6 +9,7 @@ import com.copyright.rup.vaadin.ui.VaadinUtils;
 import com.copyright.rup.vaadin.ui.Windows;
 
 import com.google.common.collect.Lists;
+import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
@@ -73,6 +75,8 @@ class CreateScenarioWindow extends Window {
         descriptionArea = new TextArea(ForeignUi.getMessage("field.description"));
         descriptionArea.setValidationVisible(false);
         descriptionArea.setWidth(100, Unit.PERCENTAGE);
+        descriptionArea.addValidator(
+            new StringLengthValidator(ForeignUi.getMessage("field.error.length", 2000), 0, 2000, false));
     }
 
     private void initScenarioNameField() {
@@ -85,6 +89,9 @@ class CreateScenarioWindow extends Window {
             DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT))));
         scenarioNameField.setRequired(true);
         scenarioNameField.setRequiredError(ForeignUi.getMessage("field.error.empty"));
+        scenarioNameField.addValidator(
+            new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50, false));
+        scenarioNameField.addValidator(new ScenarioNameUniqueValidator(controller.getScenarioService()));
     }
 
     private boolean isValid() {
@@ -93,7 +100,8 @@ class CreateScenarioWindow extends Window {
 
     private void onConfirmButtonClicked() {
         if (isValid()) {
-            controller.createScenario(scenarioNameField.getValue(), descriptionArea.getValue());
+            controller.createScenario(StringUtils.trimToEmpty(scenarioNameField.getValue()),
+                StringUtils.trimToEmpty(descriptionArea.getValue()));
             close();
         } else {
             Windows.showValidationErrorWindow(Lists.newArrayList(scenarioNameField, descriptionArea));
