@@ -8,6 +8,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
 
@@ -31,6 +32,7 @@ import java.util.List;
 public class ScenarioServiceTest {
 
     private static final String SCENARIO_NAME = "Scenario Name";
+    private static final String USAGE_BATCH_ID = RupPersistUtils.generateUuid();
     private ScenarioService scenarioService;
     private IScenarioRepository scenarioRepository;
 
@@ -63,6 +65,15 @@ public class ScenarioServiceTest {
         expect(scenarioRepository.getCountByName(SCENARIO_NAME)).andReturn(0).once();
         replay(scenarioRepository);
         assertFalse(scenarioService.isScenarioExists(SCENARIO_NAME));
+        verify(scenarioRepository);
+    }
+
+    @Test
+    public void testGetScenariosNamesByUsageBatchId() {
+        List<String> scenariosNames = Lists.newArrayList(SCENARIO_NAME);
+        expect(scenarioRepository.findScenariosNamesByUsageBatchId(USAGE_BATCH_ID)).andReturn(scenariosNames).once();
+        replay(scenarioRepository);
+        assertEquals(scenariosNames, scenarioService.getScenariosNamesByUsageBatchId(USAGE_BATCH_ID));
         verify(scenarioRepository);
     }
 }

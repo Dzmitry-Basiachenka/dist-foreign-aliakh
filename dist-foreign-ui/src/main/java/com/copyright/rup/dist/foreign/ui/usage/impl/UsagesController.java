@@ -21,6 +21,7 @@ import com.copyright.rup.vaadin.ui.VaadinUtils;
 import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -145,8 +146,8 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
 
     @Override
     public List<String> getScenariosNamesAssociatedWithUsageBatch(String batchId) {
-        // TODO: implement method after introducing scenarios
-        return Collections.emptyList();
+        return ObjectUtils.defaultIfNull(scenarioService.getScenariosNamesByUsageBatchId(batchId),
+            Collections.emptyList());
     }
 
     @Override

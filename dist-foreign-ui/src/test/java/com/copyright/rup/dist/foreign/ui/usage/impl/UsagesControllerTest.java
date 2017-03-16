@@ -25,6 +25,7 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
+import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.impl.UsageService;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
@@ -65,6 +66,7 @@ import java.util.concurrent.ExecutorService;
 public class UsagesControllerTest {
 
     private static final String RRO_ACCOUNT_NAME = "Account Name";
+    private static final String USAGE_BATCH_ID = RupPersistUtils.generateUuid();
     private static final Long RRO_ACCOUNT_NUMBER = 12345678L;
     private UsagesController controller;
     private UsageService usageService;
@@ -72,6 +74,7 @@ public class UsagesControllerTest {
     private IUsagesWidget usagesWidget;
     private IUsageBatchService usageBatchService;
     private IPrmIntegrationService prmIntegrationService;
+    private IScenarioService scenarioService;
 
     @Before
     public void setUp() {
@@ -80,6 +83,7 @@ public class UsagesControllerTest {
         usageBatchService = createMock(IUsageBatchService.class);
         filterController = createMock(IUsagesFilterController.class);
         usagesWidget = createMock(IUsagesWidget.class);
+        scenarioService = createMock(IScenarioService.class);
         prmIntegrationService = createMock(IPrmIntegrationService.class);
         Whitebox.setInternalState(controller, "usageBatchService", usageBatchService);
         Whitebox.setInternalState(controller, "usageService", usageService);
@@ -87,6 +91,7 @@ public class UsagesControllerTest {
         Whitebox.setInternalState(controller, IWidget.class, usagesWidget);
         Whitebox.setInternalState(controller, "filterController", filterController);
         Whitebox.setInternalState(controller, "prmIntegrationService", prmIntegrationService);
+        Whitebox.setInternalState(controller, "scenarioService", scenarioService);
     }
 
     @Test
@@ -176,8 +181,11 @@ public class UsagesControllerTest {
 
     @Test
     public void testGetScenariosNamesAssociatedWithUsageBatch() {
-        assertEquals(Collections.emptyList(),
-            controller.getScenariosNamesAssociatedWithUsageBatch(RupPersistUtils.generateUuid()));
+        expect(scenarioService.getScenariosNamesByUsageBatchId(USAGE_BATCH_ID))
+            .andReturn(Collections.emptyList()).once();
+        replay(scenarioService);
+        controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID);
+        verify(scenarioService);
     }
 
     @Test

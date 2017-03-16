@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
+import static org.easymock.EasyMock.anyString;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -12,7 +13,6 @@ import com.copyright.rup.vaadin.security.SecurityUtils;
 
 import com.vaadin.ui.Button;
 
-import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -86,17 +86,17 @@ public class ScenariosMediatorTest {
 
     private void mockViewOnlyPermissions() {
         expect(SecurityUtils.getUserName()).andReturn(USERNAME).anyTimes();
-        expect(SecurityUtils.hasPermission(EasyMock.anyObject())).andStubReturn(false);
+        expect(SecurityUtils.hasPermission(anyString())).andStubReturn(false);
     }
 
     private void mockManagerPermissions() {
         expect(SecurityUtils.getUserName()).andReturn(USERNAME).anyTimes();
-        expect(SecurityUtils.hasPermission(EasyMock.anyObject())).andStubReturn(false);
+        expect(SecurityUtils.hasPermission(anyString())).andStubReturn(false);
     }
 
     private void mockSpecialistPermissions() {
         expect(SecurityUtils.getUserName()).andReturn(USERNAME).anyTimes();
-        expect(SecurityUtils.hasPermission(EasyMock.anyObject())).andStubReturn(false);
+        expect(SecurityUtils.hasPermission(anyString())).andStubReturn(false);
         expect(SecurityUtils.hasPermission("FDA_DELETE_SCENARIO")).andReturn(true).once();
     }
 }

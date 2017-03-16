@@ -17,6 +17,7 @@ import java.util.List;
  * Date: 3/15/17
  *
  * @author Aliaksandr Radkevich
+ * @author Ihar Suvorau
  */
 @Service
 public class ScenarioService implements IScenarioService {
@@ -32,5 +33,10 @@ public class ScenarioService implements IScenarioService {
     @Override
     public boolean isScenarioExists(String scenarioName) {
         return 0 < scenarioRepository.getCountByName(scenarioName);
+    }
+
+    @Override
+    public List<String> getScenariosNamesByUsageBatchId(String usageBatchId) {
+        return scenarioRepository.findScenariosNamesByUsageBatchId(usageBatchId);
     }
 }
