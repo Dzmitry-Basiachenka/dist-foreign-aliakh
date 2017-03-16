@@ -2,6 +2,8 @@ package com.copyright.rup.dist.foreign.repository.api;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
 
+import java.util.List;
+
 /**
  * Interface for Scenario repository.
  * <p/>
@@ -10,6 +12,7 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
  * Date: 03/15/17
  *
  * @author Ihar Suvorau
+ * @author Aliaksandr Radkevich
  */
 // TODO {isuvorau} use one pattern for naming repository methods
 public interface IScenarioRepository {
@@ -36,4 +39,9 @@ public interface IScenarioRepository {
      * @return count of found scenarios
      */
     int getCountByName(String name);
+
+    /**
+     * @return list of {@link Scenario}s.
+     */
+    List<Scenario> getScenarios();
 }

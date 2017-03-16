@@ -39,7 +39,7 @@ import java.math.BigDecimal;
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class, TransactionalTestExecutionListener.class})
 public class ScenarioRepositoryIntegrationTest {
 
-    private static final String NAME = "name";
+    private static final String SCENARIO_NAME = "name";
     private static final String DESCRIPTION = "description";
     private static final String ID = RupPersistUtils.generateUuid();
     private static final BigDecimal NET_TOTAL = BigDecimal.ONE.setScale(10, BigDecimal.ROUND_HALF_UP);
@@ -53,11 +53,11 @@ public class ScenarioRepositoryIntegrationTest {
     public void testInsert() {
         Scenario scenario = scenarioRepository.findById(ID);
         assertNull(scenario);
-        scenarioRepository.insert(buildScenario(ID, NAME));
+        scenarioRepository.insert(buildScenario(ID, SCENARIO_NAME));
         scenario = scenarioRepository.findById(ID);
         assertNotNull(scenario);
         assertEquals(ID, scenario.getId());
-        assertEquals(NAME, scenario.getName());
+        assertEquals(SCENARIO_NAME, scenario.getName());
         assertEquals(NET_TOTAL, scenario.getNetTotal());
         assertEquals(GROSS_TOTAL, scenario.getGrossTotal());
         assertEquals(REPORTED_TOTAL, scenario.getReportedTotal());
@@ -72,9 +72,18 @@ public class ScenarioRepositoryIntegrationTest {
 
     @Test
     public void testGetCountByName() {
-        assertEquals(0, scenarioRepository.getCountByName(NAME));
-        scenarioRepository.insert(buildScenario(ID, NAME));
-        assertEquals(1, scenarioRepository.getCountByName(NAME));
+        assertEquals(0, scenarioRepository.getCountByName(SCENARIO_NAME));
+        scenarioRepository.insert(buildScenario(ID, SCENARIO_NAME));
+        assertEquals(1, scenarioRepository.getCountByName(SCENARIO_NAME));
+    }
+
+    @Test
+    public void testGetScenarios() {
+        assertEquals(0, scenarioRepository.getScenarios().size());
+        scenarioRepository.insert(buildScenario(RupPersistUtils.generateUuid(), SCENARIO_NAME));
+        assertEquals(1, scenarioRepository.getScenarios().size());
+        scenarioRepository.insert(buildScenario(RupPersistUtils.generateUuid(), SCENARIO_NAME));
+        assertEquals(2, scenarioRepository.getScenarios().size());
     }
 
     private Scenario buildScenario(String id, String name) {

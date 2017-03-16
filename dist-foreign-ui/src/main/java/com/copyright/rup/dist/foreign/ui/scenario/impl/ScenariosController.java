@@ -1,15 +1,16 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -25,10 +26,12 @@ import java.util.List;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ScenariosController extends CommonController<IScenariosWidget> implements IScenariosController {
 
+    @Autowired
+    private IScenarioService scenarioService;
+
     @Override
     public List<Scenario> getScenarios() {
-        // TODO: {aradkevich} get scenarios from database after implementing service
-        return Collections.emptyList();
+        return scenarioService.getScenarios();
     }
 
     @Override
