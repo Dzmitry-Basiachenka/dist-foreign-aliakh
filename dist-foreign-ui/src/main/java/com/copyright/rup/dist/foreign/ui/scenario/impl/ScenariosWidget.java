@@ -91,6 +91,7 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
         layout.addComponents(deleteButton);
         layout.setSpacing(true);
         layout.setMargin(true);
+        VaadinUtils.addComponentStyle(layout, "scenarios-buttons");
         return layout;
     }
 
@@ -112,12 +113,14 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
             BeanItem<Scenario> item = container.getItem(event.getProperty().getValue());
             onItemChanged(null != item ? item.getBean() : null);
         });
+        VaadinUtils.addComponentStyle(table, "scenarios-table");
     }
 
     private void initMetadataPanel() {
         metadataPanel = new Panel();
         metadataPanel.setHeight(100, Unit.PERCENTAGE);
         metadataPanel.setWidth(500, Unit.PIXELS);
+        VaadinUtils.addComponentStyle(metadataPanel, "scenarios-metadata");
         metadataLayout = new VerticalLayout(ownerLabel, distributionTotalLabel, grossTotalLabel, reportedTotalLabel,
             descriptionLabel);
         metadataLayout.setSpacing(true);

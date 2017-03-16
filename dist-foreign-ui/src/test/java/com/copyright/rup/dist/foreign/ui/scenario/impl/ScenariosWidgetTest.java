@@ -182,11 +182,11 @@ public class ScenariosWidgetTest {
         assertEquals(100, layout.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, layout.getWidthUnits());
         assertEquals(5, layout.getComponentCount());
-        verifyMetadataLabel(layout.getComponent(0), "<b>Owner:</b> User@copyright.com");
-        verifyMetadataLabel(layout.getComponent(1), "<b>Distribution Total:</b> 100.00");
-        verifyMetadataLabel(layout.getComponent(2), "<b>Gross Total:</b> 200.00");
-        verifyMetadataLabel(layout.getComponent(3), "<b>Reported Total:</b> 300.00");
-        verifyMetadataLabel(layout.getComponent(4), "<b>Description:</b> Description");
+        verifyMetadataLabel(layout.getComponent(0), "<b>Owner: </b>User@copyright.com");
+        verifyMetadataLabel(layout.getComponent(1), "<b>Distribution Total: </b>100.00");
+        verifyMetadataLabel(layout.getComponent(2), "<b>Gross Total: </b>200.00");
+        verifyMetadataLabel(layout.getComponent(3), "<b>Reported Total: </b>300.00");
+        verifyMetadataLabel(layout.getComponent(4), "<b>Description: </b>Description");
     }
 
     private void verifyMetadataLabel(Component component, String expectedValue) {
