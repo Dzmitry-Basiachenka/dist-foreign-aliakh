@@ -28,4 +28,9 @@ public class ScenarioService implements IScenarioService {
     public List<Scenario> getScenarios() {
         return scenarioRepository.getScenarios();
     }
+
+    @Override
+    public boolean isScenarioExists(String scenarioName) {
+        return 0 < scenarioRepository.getCountByName(scenarioName);
+    }
 }

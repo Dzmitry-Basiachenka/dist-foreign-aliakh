@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
+import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
@@ -64,6 +65,9 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
 
     @Autowired
     private IPrmIntegrationService prmIntegrationService;
+
+    @Autowired
+    private IScenarioService scenarioService;
 
     @Override
     public IUsagesFilterWidget initUsagesFilterWidget() {
@@ -132,6 +136,11 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
         // TODO {mbezmen} plug service method for scenario creation
         filterController.getWidget().clearFilter();
         // TODO {mbezmen} implement redirect to Scenario tab
+    }
+
+    @Override
+    public IScenarioService getScenarioService() {
+        return scenarioService;
     }
 
     @Override
