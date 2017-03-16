@@ -17,7 +17,7 @@ import java.util.List;
 public interface IScenariosController extends IController<IScenariosWidget> {
 
     /**
-     * @return list of {@link Scenario)s.
+     * @return list of {@link Scenario}s.
      */
     List<Scenario> getScenarios();
 }
