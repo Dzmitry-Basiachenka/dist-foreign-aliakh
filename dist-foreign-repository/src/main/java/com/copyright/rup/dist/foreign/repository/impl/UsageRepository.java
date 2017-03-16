@@ -15,6 +15,7 @@ import com.copyright.rup.dist.foreign.repository.api.Sort;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
@@ -39,6 +40,9 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     private static final String FILTER_KEY = "filter";
     private static final String PAGEABLE_KEY = "pageable";
     private static final String SORT_KEY = "sort";
+    private static final String SCENARIO_ID_KEY = "scenarioId";
+    private static final String UPDATE_USER_KEY = "updateUser";
+    private static final String USAGE_IDS_KEY = "usageIds";
 
     @Override
     public void insertUsage(Usage usage) {
@@ -78,6 +82,21 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     public void deleteUsageBatchDetails(String batchId) {
         checkArgument(StringUtils.isNotBlank(batchId));
         delete("IUsageMapper.deleteUsageBatchDetails", batchId);
+    }
+
+    @Override
+    public List<Usage> findByFilter(UsageFilter filter) {
+        return selectList("IUsageMapper.findUsageByFilter", ImmutableMap.of(FILTER_KEY, checkNotNull(filter)));
+    }
+
+    @Override
+    public void addUsagesToScenario(List<String> usageIds, String scenarioId, String updateUser) {
+        checkArgument(CollectionUtils.isNotEmpty(usageIds));
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
+        parameters.put(USAGE_IDS_KEY, usageIds);
+        parameters.put(SCENARIO_ID_KEY, checkNotNull(scenarioId));
+        parameters.put(UPDATE_USER_KEY, checkNotNull(updateUser));
+        update("IUsageMapper.addUsagesToScenario", parameters);
     }
 
     /**

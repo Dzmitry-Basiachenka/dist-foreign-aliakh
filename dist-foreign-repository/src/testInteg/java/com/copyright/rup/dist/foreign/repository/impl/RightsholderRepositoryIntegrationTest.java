@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -9,6 +8,7 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 
 import com.google.common.collect.Lists;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,7 +105,7 @@ public class RightsholderRepositoryIntegrationTest {
     public void testFindRros() {
         List<Rightsholder> rros = rightsholderRepository.findRros();
         assertNotNull(rros);
-        assertFalse(rros.isEmpty());
+        assertTrue(CollectionUtils.isNotEmpty(rros));
         assertEquals(4, rros.size());
         assertTrue(rros.stream().map(Rightsholder::getAccountNumber).collect(Collectors.toList())
             .containsAll(Lists.newArrayList(RH_ACCOUNT_NUMBER_7000813806, RH_ACCOUNT_NUMBER_2000017004,

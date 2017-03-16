@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
@@ -20,11 +21,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.BufferedReader;
@@ -52,7 +50,6 @@ import java.util.Set;
     value = {"classpath:/com/copyright/rup/dist/foreign/repository/dist-foreign-sql-test-context.xml"})
 @TransactionConfiguration
 @Transactional
-@TestExecutionListeners({DependencyInjectionTestExecutionListener.class, TransactionalTestExecutionListener.class})
 public class UsageRepositoryIntegrationTest {
 
     private static final String USAGE_BATCH_ID_1 = "56282dbc-2468-48d4-b926-93d3458a656a";
@@ -75,6 +72,7 @@ public class UsageRepositoryIntegrationTest {
     private static final BigDecimal REPORTED_VALUE = new BigDecimal("11.25");
     private static final LocalDate PUBLICATION_DATE = LocalDate.of(2016, 11, 3);
     private static final Long DETAIL_ID = 12345L;
+    private static final Long DETAIL_ID_1 = 6997788884L;
     private static final Integer NUMBER_OF_COPIES = 155;
     private static final String DETAIL_ID_KEY = "detailId";
     private static final String WORK_TITLE_KEY = "workTitle";
@@ -99,6 +97,8 @@ public class UsageRepositoryIntegrationTest {
     private static final String USAGE_ID_2 = "222222222";
     private static final String USAGE_ID_3 = "444444444";
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
+    private static final String USER_NAME = "User Name";
+    private static final BigDecimal NET_AMOUNT = new BigDecimal("25.1500000000");
 
     @Autowired
     private UsageRepository usageRepository;
@@ -347,6 +347,64 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(0, usageRepository.findByFilter(filter, pageable, sort).size());
     }
 
+    @Test
+    public void testFindUsagesByFilter() {
+        UsageFilter usageFilter =
+            buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.singleton(USAGE_BATCH_ID_1),
+                UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, FISCAL_YEAR);
+        verifyUsages(usageRepository.findByFilter(usageFilter), 1, USAGE_ID_1);
+    }
+
+    @Test
+    public void testFindUsagesByUsageBatchFilter() {
+        UsageFilter usageFilter =
+            buildUsageFilter(Collections.emptySet(), Collections.singleton(USAGE_BATCH_ID_1), null, null, null);
+        verifyUsages(usageRepository.findByFilter(usageFilter), 1, USAGE_ID_1);
+    }
+
+    @Test
+    public void testFindUsagesByRhAccountNumberFilter() {
+        UsageFilter usageFilter =
+            buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.emptySet(), null, null, null);
+        verifyUsages(usageRepository.findByFilter(usageFilter), 1, USAGE_ID_1);
+    }
+
+    @Test
+    public void testFindUsagesByStatusFilter() {
+        UsageFilter usageFilter =
+            buildUsageFilter(Collections.emptySet(), Collections.emptySet(), UsageStatusEnum.ELIGIBLE, null, null);
+        verifyUsages(usageRepository.findByFilter(usageFilter), 2, USAGE_ID_1, USAGE_ID_3);
+    }
+
+    @Test
+    public void testFindUsagesByPaymentDateFilter() {
+        UsageFilter usageFilter =
+            buildUsageFilter(Collections.emptySet(), Collections.emptySet(), null, PAYMENT_DATE, null);
+        verifyUsages(usageRepository.findByFilter(usageFilter), 2, USAGE_ID_1, USAGE_ID_2);
+    }
+
+    @Test
+    public void testFindUsagesByFiscalYearFilter() {
+        UsageFilter usageFilter =
+            buildUsageFilter(Collections.emptySet(), Collections.emptySet(), null, null, FISCAL_YEAR);
+        verifyUsages(usageRepository.findByFilter(usageFilter), 2, USAGE_ID_1, USAGE_ID_2);
+    }
+
+    @Test
+    public void testAddUsagesToScenario() {
+        verifyUsage(usageRepository.findUsageByDetailId(DETAIL_ID_1), UsageStatusEnum.ELIGIBLE, null,
+            StoredEntity.DEFAULT_USER);
+        usageRepository.addUsagesToScenario(Collections.singletonList(USAGE_ID_3), SCENARIO_ID, USER_NAME);
+        verifyUsage(usageRepository.findUsageByDetailId(DETAIL_ID_1), UsageStatusEnum.LOCKED, SCENARIO_ID, USER_NAME);
+    }
+
+    private void verifyUsage(Usage usage, UsageStatusEnum status, String scenarioId, String defaultUser) {
+        assertNotNull(usage);
+        assertEquals(status, usage.getStatus());
+        assertEquals(scenarioId, usage.getScenarioId());
+        assertEquals(defaultUser, usage.getUpdateUser());
+    }
+
     private UsageFilter buildUsageFilter(Set<Long> accountNumbers, Set<String> usageBatchIds, UsageStatusEnum status,
                                          LocalDate paymentDate, Integer fiscalYear) {
         UsageFilter usageFilter = new UsageFilter();
@@ -382,6 +440,7 @@ public class UsageRepositoryIntegrationTest {
         usage.setNumberOfCopies(NUMBER_OF_COPIES);
         usage.setReportedValue(REPORTED_VALUE);
         usage.setGrossAmount(GROSS_AMOUNT);
+        usage.setNetAmount(NET_AMOUNT);
         return usage;
     }
 
@@ -390,6 +449,14 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(count, usageDtos.size());
         for (int i = 0; i < count; i++) {
             assertEquals(usageIds[i], usageDtos.get(i).getId());
+        }
+    }
+
+    private void verifyUsages(List<Usage> usages, int count, String... usageIds) {
+        assertNotNull(usages);
+        assertEquals(count, usages.size());
+        for (int i = 0; i < count; i++) {
+            assertEquals(usageIds[i], usages.get(i).getId());
         }
     }
 }
