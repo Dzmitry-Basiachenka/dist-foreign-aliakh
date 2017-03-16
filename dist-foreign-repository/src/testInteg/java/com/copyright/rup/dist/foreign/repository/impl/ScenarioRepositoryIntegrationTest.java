@@ -79,8 +79,6 @@ public class ScenarioRepositoryIntegrationTest {
 
     @Test
     public void testGetScenarios() {
-        assertEquals(0, scenarioRepository.getScenarios().size());
-        scenarioRepository.insert(buildScenario(RupPersistUtils.generateUuid(), SCENARIO_NAME));
         assertEquals(1, scenarioRepository.getScenarios().size());
         scenarioRepository.insert(buildScenario(RupPersistUtils.generateUuid(), SCENARIO_NAME));
         assertEquals(2, scenarioRepository.getScenarios().size());
