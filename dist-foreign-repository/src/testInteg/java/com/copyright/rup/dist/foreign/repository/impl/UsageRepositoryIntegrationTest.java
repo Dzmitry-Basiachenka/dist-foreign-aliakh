@@ -98,6 +98,7 @@ public class UsageRepositoryIntegrationTest {
     private static final String USAGE_ID_1 = "111111111";
     private static final String USAGE_ID_2 = "222222222";
     private static final String USAGE_ID_3 = "444444444";
+    private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
 
     @Autowired
     private UsageRepository usageRepository;
@@ -108,6 +109,7 @@ public class UsageRepositoryIntegrationTest {
         Usage usage = usageRepository.findUsageByDetailId(DETAIL_ID);
         assertNotNull(usage);
         assertEquals(USAGE_ID, usage.getId());
+        assertEquals(SCENARIO_ID, usage.getScenarioId());
         assertEquals(WR_WRK_INST, usage.getWrWrkInst());
         assertEquals(WORK_TITLE, usage.getWorkTitle());
         assertEquals(RH_ACCOUNT_NUMBER, usage.getRightsholder().getAccountNumber());
@@ -360,6 +362,7 @@ public class UsageRepositoryIntegrationTest {
         Usage usage = new Usage();
         usage.setId(usageId);
         usage.setBatchId(usageBatchId);
+        usage.setScenarioId(SCENARIO_ID);
         usage.setDetailId(DETAIL_ID);
         usage.setWrWrkInst(WR_WRK_INST);
         usage.setWorkTitle(WORK_TITLE);
