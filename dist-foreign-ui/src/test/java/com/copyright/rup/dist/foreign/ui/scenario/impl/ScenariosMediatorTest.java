@@ -1,14 +1,23 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
+import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
+import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.vaadin.security.SecurityUtils;
 
 import com.vaadin.ui.Button;
 
+import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 /**
  * Verifies {@link ScenariosMediator}.
@@ -19,22 +28,48 @@ import org.junit.Test;
  *
  * @author Aliaksandr Radkevich
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(SecurityUtils.class)
 public class ScenariosMediatorTest {
+
+    private static final String USERNAME = "username@copyright.com";
 
     private ScenariosMediator mediator;
     private Button deleteButton;
 
     @Before
     public void setUp() {
+        mockStatic(SecurityUtils.class);
         mediator = new ScenariosMediator();
         deleteButton = new Button("Delete");
         mediator.setDeleteButton(deleteButton);
     }
 
     @Test
-    public void testApplyPermissions() {
+    public void testApplyPermissionsViewOnly() {
+        mockViewOnlyPermissions();
+        replay(SecurityUtils.class);
         mediator.applyPermissions();
-        assertTrue(deleteButton.isEnabled());
+        assertFalse(deleteButton.isVisible());
+        verify(SecurityUtils.class);
+    }
+
+    @Test
+    public void testApplyPermissionsDistributionManager() {
+        mockManagerPermissions();
+        replay(SecurityUtils.class);
+        mediator.applyPermissions();
+        assertFalse(deleteButton.isVisible());
+        verify(SecurityUtils.class);
+    }
+
+    @Test
+    public void testApplyPermissionsDistributionSpecialist() {
+        mockSpecialistPermissions();
+        replay(SecurityUtils.class);
+        mediator.applyPermissions();
+        assertTrue(deleteButton.isVisible());
+        verify(SecurityUtils.class);
     }
 
     @Test
@@ -47,5 +82,21 @@ public class ScenariosMediatorTest {
     public void testSelectedScenarioChanged() {
         mediator.selectedScenarioChanged(new Scenario());
         assertTrue(deleteButton.isEnabled());
+    }
+
+    private void mockViewOnlyPermissions() {
+        expect(SecurityUtils.getUserName()).andReturn(USERNAME).anyTimes();
+        expect(SecurityUtils.hasPermission(EasyMock.anyObject())).andStubReturn(false);
+    }
+
+    private void mockManagerPermissions() {
+        expect(SecurityUtils.getUserName()).andReturn(USERNAME).anyTimes();
+        expect(SecurityUtils.hasPermission(EasyMock.anyObject())).andStubReturn(false);
+    }
+
+    private void mockSpecialistPermissions() {
+        expect(SecurityUtils.getUserName()).andReturn(USERNAME).anyTimes();
+        expect(SecurityUtils.hasPermission(EasyMock.anyObject())).andStubReturn(false);
+        expect(SecurityUtils.hasPermission("FDA_DELETE_SCENARIO")).andReturn(true).once();
     }
 }

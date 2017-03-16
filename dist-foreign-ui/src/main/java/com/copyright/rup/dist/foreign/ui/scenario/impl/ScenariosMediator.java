@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.vaadin.widget.api.IMediator;
 
 import com.vaadin.ui.Button;
@@ -29,8 +30,7 @@ class ScenariosMediator implements IMediator {
 
     @Override
     public void applyPermissions() {
-        // TODO: {mbezmen} apply permission after adding it
-       deleteButton.setVisible(true);
+       deleteButton.setVisible(ForeignSecurityUtils.hasDeleteScenarioPermission());
     }
 
     /**

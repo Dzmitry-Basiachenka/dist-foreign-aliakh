@@ -85,4 +85,28 @@ databaseChangeLog {
             }
         }
     }
+
+    changeSet(id: '2017-03-16-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-30734 Delete an FAS Scenario: insert delete scenario permission for Foreign Distribution Application")
+
+        //Permission to delete scenario
+        insert(schemaName: dbCommonSchema, tableName: 'cm_permission') {
+            column(name: 'cm_permission_uid', value: 'baseline-fda-delete-scenario')
+            column(name: 'permission_name', value: 'FDA_DELETE_SCENARIO')
+            column(name: 'permission_descr', value: 'Permission to delete scenario')
+            column(name: 'cm_application_area_uid', value: 'FDA')
+            column(name: 'cm_permission_type_uid', value: 'ACTION')
+            column(name: 'created_by_user', value: 'system')
+            column(name: 'updated_by_user', value: 'system')
+            column(name: 'created_datetime', value: 'now()')
+            column(name: 'updated_datetime', value: 'now()')
+            column(name: 'record_version', value: '1')
+        }
+
+        rollback {
+            delete(schemaName: dbCommonSchema, tableName: 'cm_permission') {
+                where "cm_permission_uid = 'baseline-fda-delete-scenario'"
+            }
+        }
+    }
 }
