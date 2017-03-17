@@ -189,6 +189,8 @@ databaseChangeLog {
             column(name: 'gross_total', value: '24000')
             column(name: 'reported_total', value: '18000')
             column(name: 'description', value: 'The description of scenario')
+            column(name: 'created_datetime', value: '2017-01-01')
+            column(name: 'updated_datetime', value: '2017-01-01')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -265,7 +267,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '47943793-4f9a-47b1-b2a8-e95a87aa58e6')
-            column(name: 'df_usage_batch_uid', value: '56282dbc-2468-48d4-b926-93d3458a656a')
+            column(name: 'df_usage_batch_uid', value: '56782dbc-2158-48d4-b026-94d3458a666a')
             column(name: 'df_scenario_uid', value: '5c3c3412-dea5-4572-a894-15a4b87071c4')
             column(name: 'detail_id', value: '6907723886')
             column(name: 'wr_wrk_inst', value: '122235137')
@@ -287,7 +289,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '3846ead0-87ae-4d9b-8dfe-1b985d78c061')
-            column(name: 'df_usage_batch_uid', value: '56282dbc-2468-48d4-b926-93d3458a656a')
+            column(name: 'df_usage_batch_uid', value: '56782dbc-2158-48d4-b026-94d3458a666a')
             column(name: 'df_scenario_uid', value: '92cfce61-9532-448e-a2bb-2ba23636debb')
             column(name: 'detail_id', value: '6907723886')
             column(name: 'wr_wrk_inst', value: '122235137')
@@ -309,7 +311,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'b7ee7e4c-ec30-400b-ba49-70aaf8a4940e')
-            column(name: 'df_usage_batch_uid', value: '56282dbc-2468-48d4-b926-93d3458a656a')
+            column(name: 'df_usage_batch_uid', value: '56782dbc-2158-48d4-b026-94d3458a666a')
             column(name: 'df_scenario_uid', value: 'b2f3bf86-8343-4f78-bdb5-20a47c6a52b8')
             column(name: 'detail_id', value: '6907723886')
             column(name: 'wr_wrk_inst', value: '122235137')

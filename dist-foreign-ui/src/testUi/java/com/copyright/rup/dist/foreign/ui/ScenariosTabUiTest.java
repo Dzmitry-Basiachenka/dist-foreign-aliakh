@@ -26,9 +26,10 @@ import java.util.List;
  */
 public class ScenariosTabUiTest extends ForeignCommonUiTest {
 
-    private ScenarioInfo scenario1 = new ScenarioInfo("Scenario 03/16/2017", "03/16/2017", "IN_PROGRESS");
-    private ScenarioInfo scenario2 = new ScenarioInfo("Scenario 03/15/2017", "03/15/2017", "IN_PROGRESS");
-    private ScenarioInfo scenario3 = new ScenarioInfo("Scenario 02/15/2017", "02/15/2017", "IN_PROGRESS");
+    private ScenarioInfo scenario1 = new ScenarioInfo("Scenario 03/16/2017", "03/16/2017");
+    private ScenarioInfo scenario2 = new ScenarioInfo("Scenario 03/15/2017", "03/15/2017");
+    private ScenarioInfo scenario3 = new ScenarioInfo("Scenario 02/15/2017", "02/15/2017");
+    private ScenarioInfo scenario4 = new ScenarioInfo("Scenario name", "01/01/2017");
 
     @Test
     public void testVerifyScenariosTabSpecialist() {
@@ -79,7 +80,7 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
 
     private void verifyScenariosTable(WebElement table) {
         verifyTableColumns(table, "Name", "Create Date", "Status");
-        verifyTableRows(table, scenario1, scenario2, scenario3);
+        verifyTableRows(table, scenario1, scenario2, scenario3, scenario4);
     }
 
     private void verifyEmptyMetadataPanel(WebElement scenarioTab, WebElement table) {
@@ -116,19 +117,17 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
         List<WebElement> cells = findElements(row, By.className(V_TABLE_CELL_CONTENT_CLASS_NAME));
         assertEquals(scenarioInfo.name, cells.get(0).getText());
         assertEquals(scenarioInfo.createDate, cells.get(1).getText());
-        assertEquals(scenarioInfo.status, cells.get(2).getText());
+        assertEquals("IN_PROGRESS", cells.get(2).getText());
     }
 
     private static class ScenarioInfo {
 
         private String name;
         private String createDate;
-        private String status;
 
-        private ScenarioInfo(String name, String createDate, String status) {
+        private ScenarioInfo(String name, String createDate) {
             this.name = name;
             this.createDate = createDate;
-            this.status = status;
         }
     }
 }
