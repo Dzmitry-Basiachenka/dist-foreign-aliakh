@@ -59,4 +59,14 @@
         from ${schema}.df_scenario
         order by updated_datetime desc
     </select>
+
+    <select id="findScenariosNamesByUsageBatchId" parameterType="string" resultType="string">
+        select distinct name
+        from ${schema}.df_scenario
+        where df_scenario_uid in (
+            select df_scenario_uid
+                from ${schema}.df_usage
+                where df_usage_batch_uid = #{df_usage_batch_id}
+            )
+    </select>
 </mapper>

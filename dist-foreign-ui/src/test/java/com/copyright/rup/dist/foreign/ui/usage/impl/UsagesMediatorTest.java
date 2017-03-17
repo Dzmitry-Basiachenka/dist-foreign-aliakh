@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
+import static org.easymock.EasyMock.anyString;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -10,7 +11,6 @@ import com.copyright.rup.vaadin.security.SecurityUtils;
 
 import com.vaadin.ui.Button;
 
-import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -81,21 +81,21 @@ public class UsagesMediatorTest {
     private void mockViewOnlyPermissions() {
         mockStatic(SecurityUtils.class);
         expect(SecurityUtils.getUserName()).andReturn(USERNAME).anyTimes();
-        expect(SecurityUtils.hasPermission(EasyMock.anyObject())).andStubReturn(false);
+        expect(SecurityUtils.hasPermission(anyString())).andStubReturn(false);
         expect(SecurityUtils.hasPermission("FDA_ACCESS_APPLICATION")).andReturn(true).anyTimes();
     }
 
     private void mockManagerPermissions() {
         mockStatic(SecurityUtils.class);
         expect(SecurityUtils.getUserName()).andReturn(USERNAME).anyTimes();
-        expect(SecurityUtils.hasPermission(EasyMock.anyObject())).andStubReturn(false);
+        expect(SecurityUtils.hasPermission(anyString())).andStubReturn(false);
         expect(SecurityUtils.hasPermission("FDA_ACCESS_APPLICATION")).andReturn(true).anyTimes();
     }
 
     private void mockSpecialistPermissions() {
         mockStatic(SecurityUtils.class);
         expect(SecurityUtils.getUserName()).andReturn(USERNAME).anyTimes();
-        expect(SecurityUtils.hasPermission(EasyMock.anyObject())).andStubReturn(false);
+        expect(SecurityUtils.hasPermission(anyString())).andStubReturn(false);
         expect(SecurityUtils.hasPermission("FDA_ACCESS_APPLICATION")).andReturn(true).anyTimes();
         expect(SecurityUtils.hasPermission("FDA_DELETE_USAGE")).andReturn(true).anyTimes();
         expect(SecurityUtils.hasPermission("FDA_LOAD_USAGE")).andReturn(true).anyTimes();

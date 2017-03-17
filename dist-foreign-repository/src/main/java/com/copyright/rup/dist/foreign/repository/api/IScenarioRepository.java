@@ -25,18 +25,10 @@ public interface IScenarioRepository {
     void insert(Scenario scenario);
 
     /**
-     * Finds {@link Scenario} by provided identifier.
+     * Gets {@link Scenario}s count with specified name.
      *
-     * @param id scenario identifier
-     * @return found {@link Scenario} instance
-     */
-    Scenario findById(String id);
-
-    /**
-     * Gets scenarios count with specified name.
-     *
-     * @param name scenario name
-     * @return count of found scenarios
+     * @param name {@link Scenario} name
+     * @return count of found {@link Scenario}s
      */
     int getCountByName(String name);
 
@@ -44,4 +36,12 @@ public interface IScenarioRepository {
      * @return list of {@link Scenario}s.
      */
     List<Scenario> getScenarios();
+
+    /**
+     * Finds {@link Scenario}s names associated with any of usages from selected usage batch.
+     *
+     * @param usageBatchId identifier of usage batch
+     * @return found list of {@link Scenario}s names
+     */
+    List<String> findScenariosNamesByUsageBatchId(String usageBatchId);
 }

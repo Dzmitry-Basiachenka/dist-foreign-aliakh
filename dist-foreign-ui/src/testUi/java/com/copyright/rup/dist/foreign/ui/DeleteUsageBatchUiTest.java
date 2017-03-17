@@ -82,7 +82,6 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
         usageRepository.insertUsage(buildUsage());
         loginAsSpecialist();
         WebElement filterWidget = findElementById(USAGE_FILTER_WIDGET_ID);
-        assertNotNull(filterWidget);
         applyFilters(filterWidget, usageBatch4);
         WebElement usagesTable = findElementById("usages-table");
         assertUsagesTableNotEmpty(usagesTable);
@@ -105,9 +104,7 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
     // Test case ID: '259c2da3-46e5-4493-942b-3ae47cae7f94'
     public void testDeleteUsageBatchWithoutApproval() {
         loginAsSpecialist();
-        WebElement filterWidget = findElementById(USAGE_FILTER_WIDGET_ID);
-        assertNotNull(filterWidget);
-        applyFilters(filterWidget, usageBatch1);
+        applyFilters(findElementById(USAGE_FILTER_WIDGET_ID), usageBatch1);
         WebElement usagesTable = findElementById("usages-table");
         assertUsagesTableNotEmpty(usagesTable);
         WebElement window = openDeleteUsageBatchWindow();
@@ -116,6 +113,24 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
         WebElement confirmDialog = openDeleteUsageBatchConfirmDialog(usageBatchesTable,
             "56282dbc-2468-48d4-b926-93d3458a656a", usageBatch1.name);
         clickButtonAndWait(confirmDialog, "Cancel");
+        verifyTableRows(usageBatchesTable, usageBatch1, usageBatch2, usageBatch3);
+        clickButtonAndWait(window, CLOSE_BUTTON_ID);
+        assertUsagesTableNotEmpty(usagesTable);
+        assertEquals(1, usageBatchRepository.getUsageBatchesCountByName(usageBatch1.name));
+    }
+
+    @Test
+    public void testDeleteUsageBatchAssociatedWithScenarios() {
+        loginAsSpecialist();
+        applyFilters(findElementById(USAGE_FILTER_WIDGET_ID), usageBatch1);
+        WebElement usagesTable = findElementById("usages-table");
+        assertUsagesTableNotEmpty(usagesTable);
+        WebElement window = openDeleteUsageBatchWindow();
+        WebElement usageBatchesTable = getUsageBatchesTable(window);
+        verifyTableRows(usageBatchesTable, usageBatch1, usageBatch2, usageBatch3);
+        WebElement deleteButton = findElement(usageBatchesTable, By.id("56282dbc-2468-48d4-b926-94d3458a666a"));
+        clickElementAndWait(deleteButton);
+        verifyNotificationWindow();
         verifyTableRows(usageBatchesTable, usageBatch1, usageBatch2, usageBatch3);
         clickButtonAndWait(window, CLOSE_BUTTON_ID);
         assertUsagesTableNotEmpty(usagesTable);
@@ -246,6 +261,17 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
         WebElement deleteUsageBatchWindow = findElementById("delete-usage-batch");
         assertNotNull(deleteUsageBatchWindow);
         return deleteUsageBatchWindow;
+    }
+
+    private void verifyNotificationWindow() {
+        WebElement notificationWindow = findElementById("notification-window");
+        assertNotNull(notificationWindow);
+        WebElement label = waitAndFindElement(notificationWindow, By.className("v-label"));
+        assertNotNull(label);
+        assertEquals(
+            "Usage batch can not be deleted because it is associated with the following scenarios:\nScenario name",
+            label.getText());
+        clickButtonAndWait(notificationWindow, OK_BUTTON_ID);
     }
 
     private void verifyDeleteUsageBatchWindow(WebElement deleteUsageBatchWindow) {

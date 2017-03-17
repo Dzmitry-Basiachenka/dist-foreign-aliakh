@@ -2,7 +2,7 @@ databaseChangeLog {
     property(file: 'database.properties')
 
     changeSet(id: '2017-17-02-00', author: 'Mikalai_Bezmen mbezmen@copyright.com') {
-        comment('Inserting Usage Batch with Usages for repository integration tests')
+        comment('Inserting Usage Batch with Usages for ui tests')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '56282dbc-2468-48d4-b926-93d3458a656a')
@@ -128,7 +128,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2017-02-27-00', author: 'Mikalai_Bezmen mbezmen@copyright.com') {
-        comment('Inserting Rightsholders for repository integration tests')
+        comment('Inserting Rightsholders for ui tests')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'rh_account_number', value: '1000002797')
@@ -174,6 +174,52 @@ databaseChangeLog {
             delete(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
                 where "rh_account_number in ('1000002797', '1000002859', '1000005413', '1000008666', '1000009997', " +
                         "'2000017004', '7000813806', '7001440663')"
+            }
+        }
+    }
+
+    changeSet(id: '2017-03-16-00', author: 'Ihar Suvorau isuvorau@copyright.com') {
+        comment('Inserting scenario for ui tests')
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
+            column(name: 'df_scenario_uid', value: 'b1f0b236-3ae9-4a60-9fab-61db84199d6f')
+            column(name: 'name', value: 'Scenario name')
+            column(name: 'status_ind', value: 'IN_PROGRESS')
+            column(name: 'net_total', value: '15000')
+            column(name: 'gross_total', value: '24000')
+            column(name: 'reported_total', value: '18000')
+            column(name: 'description', value: 'The description of scenario')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'b1f0b236-3ae9-4a60-9fab-61db84199dss')
+            column(name: 'df_usage_batch_uid', value: '56282dbc-2468-48d4-b926-94d3458a666a')
+            column(name: 'df_scenario_uid', value: 'b1f0b236-3ae9-4a60-9fab-61db84199d6f')
+            column(name: 'detail_id', value: '6997788886')
+            column(name: 'wr_wrk_inst', value: '243904752')
+            column(name: 'work_title', value: '100 ROAD MOVIES')
+            column(name: 'rh_account_number', value: '1000002859')
+            column(name: 'status_ind', value: 'LOCKED')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '1008902112377654XX')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'number_of_copies', value: '250232')
+            column(name: 'reported_value', value: '9900')
+            column(name: 'gross_amount', value: '11461.54')
+        }
+
+        rollback {
+            delete(schemaName: dbAppsSchema, tableName: 'df_scenario') {
+                where "df_scenario_uid = 'b1f0b236-3ae9-4a60-9fab-61db84199d6f'"
+            }
+
+            delete(schemaName: dbAppsSchema, tableName: 'df_usage') {
+                where "df_usage_uid = 'b1f0b236-3ae9-4a60-9fab-61db84199dss'"
             }
         }
     }

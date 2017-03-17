@@ -36,13 +36,24 @@ public class ScenarioRepository extends BaseRepository implements IScenarioRepos
     }
 
     @Override
-    public Scenario findById(String id) {
-        checkArgument(StringUtils.isNotBlank(id));
-        return selectOne("IScenarioMapper.findById", id);
+    public List<Scenario> getScenarios() {
+        return selectList("IScenarioMapper.getScenarios");
     }
 
     @Override
-    public List<Scenario> getScenarios() {
-        return selectList("IScenarioMapper.getScenarios");
+    public List<String> findScenariosNamesByUsageBatchId(String usageBatchId) {
+        checkArgument(StringUtils.isNotBlank(usageBatchId));
+        return selectList("IScenarioMapper.findScenariosNamesByUsageBatchId", usageBatchId);
+    }
+
+    /**
+     * Finds {@link Scenario} by provided identifier.
+     *
+     * @param id {@link Scenario} identifier
+     * @return found {@link Scenario} instance
+     */
+    Scenario findById(String id) {
+        checkArgument(StringUtils.isNotBlank(id));
+        return selectOne("IScenarioMapper.findById", id);
     }
 }

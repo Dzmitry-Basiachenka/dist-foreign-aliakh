@@ -12,6 +12,7 @@ import java.util.List;
  * Date: 3/15/17
  *
  * @author Aliaksandr Radkevich
+ * @author Ihar Suvorau
  */
 public interface IScenarioService {
 
@@ -23,8 +24,17 @@ public interface IScenarioService {
     /**
      * Checks whether {@link Scenario} with specified name already exists in database.
      *
-     * @param scenarioName name of Scenario to check
-     * @return {@code true} if Scenario with specified name already exists in database, {@code false} - if doesn't
+     * @param scenarioName name of {@link Scenario} to check
+     * @return {@code true} if {@link Scenario} with specified name already exists in database,
+     * {@code false} - if doesn't
      */
     boolean isScenarioExists(String scenarioName);
+
+    /**
+     * Gets list of {@link Scenario}s names based on usage batch.
+     *
+     * @param usageBatchId usage batch id
+     * @return list of {@link Scenario}s names
+     */
+    List<String> getScenariosNamesByUsageBatchId(String usageBatchId);
 }
