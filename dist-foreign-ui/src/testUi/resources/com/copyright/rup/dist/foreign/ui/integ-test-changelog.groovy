@@ -223,4 +223,122 @@ databaseChangeLog {
             }
         }
     }
+
+    changeSet(id: '2017-03-16-00', author: 'Aliaksandr Radkevich <aradkevich@copyright.com>') {
+        comment('Inserting Scenarios for integration tests')
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
+            column(name: 'df_scenario_uid', value: '5c3c3412-dea5-4572-a894-15a4b87071c4')
+            column(name: 'name', value: 'Scenario 03/16/2017')
+            column(name: 'status_ind', value: 'IN_PROGRESS')
+            column(name: 'net_total', value: '90.00')
+            column(name: 'gross_total', value: '100.00')
+            column(name: 'reported_total', value: '110.00')
+            column(name: 'description', value: 'Scenario description')
+            column(name: 'created_datetime', value: '2017-03-16')
+            column(name: 'updated_datetime', value: '2017-03-17')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
+            column(name: 'df_scenario_uid', value: '92cfce61-9532-448e-a2bb-2ba23636debb')
+            column(name: 'name', value: 'Scenario 02/15/2017')
+            column(name: 'status_ind', value: 'IN_PROGRESS')
+            column(name: 'net_total', value: '180.00')
+            column(name: 'gross_total', value: '200.00')
+            column(name: 'reported_total', value: '210.00')
+            column(name: 'description', value: '')
+            column(name: 'created_datetime', value: '2017-02-15')
+            column(name: 'updated_datetime', value: '2017-02-16')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
+            column(name: 'df_scenario_uid', value: 'b2f3bf86-8343-4f78-bdb5-20a47c6a52b8')
+            column(name: 'name', value: 'Scenario 03/15/2017')
+            column(name: 'status_ind', value: 'IN_PROGRESS')
+            column(name: 'net_total', value: '220.00')
+            column(name: 'gross_total', value: '250.00')
+            column(name: 'reported_total', value: '240.00')
+            column(name: 'description', value: '')
+            column(name: 'created_datetime', value: '2017-03-15')
+            column(name: 'updated_datetime', value: '2017-03-15')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '47943793-4f9a-47b1-b2a8-e95a87aa58e6')
+            column(name: 'df_usage_batch_uid', value: '56282dbc-2468-48d4-b926-93d3458a656a')
+            column(name: 'df_scenario_uid', value: '5c3c3412-dea5-4572-a894-15a4b87071c4')
+            column(name: 'detail_id', value: '6907723886')
+            column(name: 'wr_wrk_inst', value: '122235137')
+            column(name: 'work_title', value: 'TOMATOES')
+            column(name: 'rh_account_number', value: '2000017003')
+            column(name: 'status_ind', value: 'LOCKED')
+            column(name: 'article', value: '')
+            column(name: 'standard_number', value: '1112202112377654XX')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'number_of_copies', value: '200')
+            column(name: 'reported_value', value: '100.00')
+            column(name: 'gross_amount', value: '100.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '3846ead0-87ae-4d9b-8dfe-1b985d78c061')
+            column(name: 'df_usage_batch_uid', value: '56282dbc-2468-48d4-b926-93d3458a656a')
+            column(name: 'df_scenario_uid', value: '92cfce61-9532-448e-a2bb-2ba23636debb')
+            column(name: 'detail_id', value: '6907723886')
+            column(name: 'wr_wrk_inst', value: '122235137')
+            column(name: 'work_title', value: 'TOMATOES')
+            column(name: 'rh_account_number', value: '2000017003')
+            column(name: 'status_ind', value: 'LOCKED')
+            column(name: 'article', value: '')
+            column(name: 'standard_number', value: '1112202112377654XX')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'number_of_copies', value: '200')
+            column(name: 'reported_value', value: '200.00')
+            column(name: 'gross_amount', value: '210.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'b7ee7e4c-ec30-400b-ba49-70aaf8a4940e')
+            column(name: 'df_usage_batch_uid', value: '56282dbc-2468-48d4-b926-93d3458a656a')
+            column(name: 'df_scenario_uid', value: 'b2f3bf86-8343-4f78-bdb5-20a47c6a52b8')
+            column(name: 'detail_id', value: '6907723886')
+            column(name: 'wr_wrk_inst', value: '122235137')
+            column(name: 'work_title', value: 'TOMATOES')
+            column(name: 'rh_account_number', value: '2000017003')
+            column(name: 'status_ind', value: 'LOCKED')
+            column(name: 'article', value: '')
+            column(name: 'standard_number', value: '1112202112377654XX')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'number_of_copies', value: '200')
+            column(name: 'reported_value', value: '250.00')
+            column(name: 'gross_amount', value: '240.00')
+        }
+
+        rollback {
+            delete(schemaName: dbAppsSchema, tableName: 'df_scenario') {
+                where "df_scenario_uid in ('5c3c3412-dea5-4572-a894-15a4b87071c4', '92cfce61-9532-448e-a2bb-2ba23636debb'," +
+                        " 'b2f3bf86-8343-4f78-bdb5-20a47c6a52b8')"
+            }
+
+            delete(schemaName: dbAppsSchema, tableName: 'df_usage') {
+                where "df_usage_uid in ('47943793-4f9a-47b1-b2a8-e95a87aa58e6', '3846ead0-87ae-4d9b-8dfe-1b985d78c061'," +
+                        " 'b7ee7e4c-ec30-400b-ba49-70aaf8a4940e')"
+            }
+        }
+    }
 }
