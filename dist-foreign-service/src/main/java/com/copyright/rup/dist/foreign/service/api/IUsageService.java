@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.service.api;
 
+import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -62,4 +63,20 @@ public interface IUsageService {
      * @param usageBatch {@link UsageBatch} to delete usages from
      */
     void deleteUsageBatchDetails(UsageBatch usageBatch);
+
+    /**
+     * Gets the {@link Usage}s based on {@link UsageFilter}.
+     *
+     * @param filter instance of {@link UsageFilter}
+     * @return the list of {@link Usage}s only with information about gross amount, net amount and reported value
+     */
+    List<Usage> getUsagesWithAmounts(UsageFilter filter);
+
+    /**
+     * Updates {@link Scenario} id, updated user name and status to 'LOCKED' for {@link Usage}s.
+     *
+     * @param usageIds list of usage identifiers
+     * @param scenario {@link Scenario}
+     */
+    void addUsagesToScenario(List<String> usageIds, Scenario scenario);
 }

@@ -85,8 +85,8 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public List<Usage> findByFilter(UsageFilter filter) {
-        return selectList("IUsageMapper.findUsageByFilter", ImmutableMap.of(FILTER_KEY, checkNotNull(filter)));
+    public List<Usage> findUsagesWithAmounts(UsageFilter filter) {
+        return selectList("IUsageMapper.findUsagesWithAmounts", ImmutableMap.of(FILTER_KEY, checkNotNull(filter)));
     }
 
     @Override

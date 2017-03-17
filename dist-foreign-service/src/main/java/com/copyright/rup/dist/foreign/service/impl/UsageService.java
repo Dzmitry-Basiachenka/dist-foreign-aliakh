@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
 import com.copyright.rup.common.logging.RupLogUtils;
+import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -78,6 +79,16 @@ public class UsageService implements IUsageService {
     @Override
     public void deleteUsageBatchDetails(UsageBatch usageBatch) {
         usageRepository.deleteUsageBatchDetails(usageBatch.getId());
+    }
+
+    @Override
+    public List<Usage> getUsagesWithAmounts(UsageFilter filter) {
+        return usageRepository.findUsagesWithAmounts(filter);
+    }
+
+    @Override
+    public void addUsagesToScenario(List<String> usageIds, Scenario scenario) {
+        usageRepository.addUsagesToScenario(usageIds, scenario.getId(), scenario.getCreateUser());
     }
 
     private void calculateUsagesGrossAmount(UsageBatch usageBatch, List<Usage> usages) {

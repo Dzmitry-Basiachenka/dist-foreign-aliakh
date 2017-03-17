@@ -18,7 +18,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesWidget;
 import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.ui.VaadinUtils;
-import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import org.apache.commons.lang3.ObjectUtils;
@@ -132,9 +131,9 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
+    // TODO {mbezmen} implement unit test
     public void createScenario(String scenarioName, String description) {
-        Windows.showNotificationWindow("Scenario created successfully");
-        // TODO {mbezmen} plug service method for scenario creation
+        scenarioService.createScenario(scenarioName, description, filterController.getWidget().getAppliedFilter());
         filterController.getWidget().clearFilter();
         // TODO {mbezmen} implement redirect to Scenario tab
     }

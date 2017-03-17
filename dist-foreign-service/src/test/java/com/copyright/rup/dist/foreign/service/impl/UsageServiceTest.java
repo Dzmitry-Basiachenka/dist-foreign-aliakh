@@ -10,6 +10,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -21,12 +22,14 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 
 import com.google.common.collect.Lists;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.io.PipedOutputStream;
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -37,9 +40,14 @@ import java.util.List;
  * Date: 02/03/17
  *
  * @author Aliaksei Pchelnikau
+ * @author Mikalai Bezmen
  */
 public class UsageServiceTest {
 
+    private static final String USAGE_ID_1 = "Usage id 1";
+    private static final String USAGE_ID_2 = "Usage id 2";
+    private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
+    private static final String USER_NAME = "User name";
     private IUsageRepository usageRepository;
     private IUsageService usageService;
 
@@ -126,6 +134,28 @@ public class UsageServiceTest {
         expectLastCall().once();
         replay(usageRepository);
         usageService.deleteUsageBatchDetails(usageBatch);
+        verify(usageRepository);
+    }
+
+    @Test
+    public void testGetUsagesWithAmounts() {
+        UsageFilter usageFilter = new UsageFilter();
+        expect(usageRepository.findUsagesWithAmounts(usageFilter)).andReturn(Collections.emptyList()).once();
+        replay(usageRepository);
+        assertTrue(CollectionUtils.isEmpty(usageService.getUsagesWithAmounts(usageFilter)));
+        verify(usageRepository);
+    }
+
+    @Test
+    public void testAddUsagesToScenario() {
+        Scenario scenario = new Scenario();
+        scenario.setId(SCENARIO_ID);
+        scenario.setCreateUser(USER_NAME);
+        List<String> usagesIds = Lists.newArrayList(USAGE_ID_1, USAGE_ID_2);
+        usageRepository.addUsagesToScenario(usagesIds, SCENARIO_ID, USER_NAME);
+        expectLastCall().once();
+        replay(usageRepository);
+        usageService.addUsagesToScenario(usagesIds, scenario);
         verify(usageRepository);
     }
 }

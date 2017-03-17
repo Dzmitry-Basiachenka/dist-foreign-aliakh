@@ -60,12 +60,13 @@ public interface IUsageRepository {
     void deleteUsageBatchDetails(String batchId);
 
     /**
-     * Finds the {@link Usage}s based on {@link UsageFilter}.
+     * Finds the {@link Usage}s only with information about gross amount, net amount and reported value
+     * based on {@link UsageFilter}.
      *
      * @param filter instance of {@link UsageFilter}
      * @return the list of {@link Usage}s only with information about gross amount, net amount and reported value
      */
-    List<Usage> findByFilter(UsageFilter filter);
+    List<Usage> findUsagesWithAmounts(UsageFilter filter);
 
     /**
      * Updates scenario id, updated user name and status to 'LOCKED' for {@link Usage}s.
