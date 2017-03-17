@@ -12,7 +12,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -36,7 +35,7 @@ public class UsageCsvProcessorIntegrationTest {
     }
 
     @Test
-    public void testProcessorForPositivePath() throws IOException {
+    public void testProcessorForPositivePath() throws Exception {
         CsvProcessingResult<Usage> result = processFile("usages.csv");
         assertEquals(2, result.getResult().size());
         assertTrue(result.isSuccessful());
@@ -86,7 +85,7 @@ public class UsageCsvProcessorIntegrationTest {
         assertEquals(BigDecimal.ZERO, usage.getGrossAmount());
     }
 
-    private CsvProcessingResult<Usage> processFile(String file) throws IOException {
+    private CsvProcessingResult<Usage> processFile(String file) throws Exception {
         CsvProcessingResult<Usage> result;
         try (InputStream stream = this.getClass().getResourceAsStream(
             "/com/copyright/rup/dist/foreign/service/csv/" + file);

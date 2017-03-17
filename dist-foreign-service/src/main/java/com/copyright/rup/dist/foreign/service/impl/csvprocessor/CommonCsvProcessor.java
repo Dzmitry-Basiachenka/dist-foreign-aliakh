@@ -1,7 +1,8 @@
 package com.copyright.rup.dist.foreign.service.impl.csvprocessor;
 
 import com.copyright.rup.common.date.RupDateUtils;
-import com.copyright.rup.common.exception.RupRuntimeException;
+import com.copyright.rup.dist.foreign.service.impl.csvprocessor.exception.HeaderValidationException;
+import com.copyright.rup.dist.foreign.service.impl.csvprocessor.exception.ValidationException;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -58,8 +59,9 @@ public abstract class CommonCsvProcessor<T> {
      *
      * @param stream byte array output stream
      * @return {@link CsvProcessingResult} instance with uploaded data
+     * @throws ValidationException in case of invalid file
      */
-    public CsvProcessingResult<T> process(ByteArrayOutputStream stream) {
+    public CsvProcessingResult<T> process(ByteArrayOutputStream stream) throws ValidationException {
         try (ICsvListReader listReader = new CsvListReader(
             new InputStreamReader(new ByteArrayInputStream(stream.toByteArray()), StandardCharsets.UTF_8),
             CsvPreference.STANDARD_PREFERENCE)) {
@@ -68,10 +70,10 @@ public abstract class CommonCsvProcessor<T> {
             initPlainValidators();
             processRows(listReader);
         } catch (IOException | SuperCsvException e) {
-            throw new RupRuntimeException(e);
+            throw new ValidationException(String.format("Failed to read file: %s", e.getMessage()), e);
         }
         if (processingResult.isEmpty()) {
-            throw new RupRuntimeException("File doesn't contain data");
+            throw new ValidationException("File does not contain data");
         }
         return processingResult;
     }
@@ -207,16 +209,21 @@ public abstract class CommonCsvProcessor<T> {
         return item != null;
     }
 
-    private void validateHeader(String... fileHeaders) {
+    private void validateHeader(String... fileHeaders) throws HeaderValidationException {
         if (ArrayUtils.isEmpty(fileHeaders) || fileHeaders.length != headers.size()) {
-            throw new RupRuntimeException("Columns count is incorrect.");
+            throw new HeaderValidationException(getColumnsHeaders(), fileHeaders);
         }
         for (int i = 0; i < headers.size(); i++) {
             if (!headers.get(i).getColumnName().equalsIgnoreCase(fileHeaders[i])) {
-                //TODO initial version
-                throw new RupRuntimeException("Column headers are incorrect.");
+                throw new HeaderValidationException(getColumnsHeaders(), fileHeaders);
             }
         }
+    }
+
+    private List<String> getColumnsHeaders() {
+        return headers.stream()
+            .map(ICsvColumn::getColumnName)
+            .collect(Collectors.toList());
     }
 
     private String getValue(ICsvColumn header, List<String> params) {
