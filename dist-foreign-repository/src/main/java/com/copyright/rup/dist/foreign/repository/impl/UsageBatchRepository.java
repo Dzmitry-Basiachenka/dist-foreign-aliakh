@@ -46,6 +46,12 @@ public class UsageBatchRepository extends BaseRepository implements IUsageBatchR
         return selectOne("IUsageBatchMapper.getUsageBatchesCountByName", name);
     }
 
+    @Override
+    public void deleteUsageBatch(String batchId) {
+        checkArgument(StringUtils.isNotBlank(batchId));
+        delete("IUsageBatchMapper.deleteUsageBatch", batchId);
+    }
+
     /**
      * Finds usage batch by provided name.
      *
@@ -55,11 +61,5 @@ public class UsageBatchRepository extends BaseRepository implements IUsageBatchR
     UsageBatch findUsageBatchByName(String name) {
         checkArgument(StringUtils.isNotBlank(name));
         return selectOne("IUsageBatchMapper.findUsageBatchByName", name);
-    }
-
-    @Override
-    public void deleteUsageBatch(String batchId) {
-        checkArgument(StringUtils.isNotBlank(batchId));
-        delete("IUsageBatchMapper.deleteUsageBatch", batchId);
     }
 }

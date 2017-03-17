@@ -30,8 +30,14 @@
         <result property="fiscalYear" column="fiscal_year"/>
     </resultMap>
 
-    <resultMap id="usageResultMap" type="Usage" extends="StoredEntityMapper.storedEntityResult">
+    <resultMap id="usageAmountResultMap" type="Usage" extends="StoredEntityMapper.storedEntityResult">
         <result property="id" column="df_usage_uid"/>
+        <result property="grossAmount" column="gross_amount"/>
+        <result property="netAmount" column="net_amount"/>
+        <result property="reportedValue" column="reported_value"/>
+    </resultMap>
+
+    <resultMap id="usageResultMap" type="Usage" extends="usageAmountResultMap">
         <result property="detailId" column="detail_id"/>
         <result property="batchId" column="df_usage_batch_uid"/>
         <result property="scenarioId" column="df_scenario_uid"/>
@@ -49,8 +55,6 @@
         <result property="marketPeriodTo" column="market_period_to"/>
         <result property="author" column="author"/>
         <result property="numberOfCopies" column="number_of_copies"/>
-        <result property="reportedValue" column="reported_value"/>
-        <result property="grossAmount" column="gross_amount"/>
     </resultMap>
 
     <sql id="usageColumns">
@@ -293,6 +297,7 @@
             u.number_of_copies,
             u.reported_value,
             u.gross_amount,
+            u.net_amount,
             u.created_datetime,
             u.updated_datetime,
             u.created_by_user,
@@ -307,4 +312,34 @@
         delete from ${schema}.df_usage
         where df_usage_batch_uid = #{batchId}
     </delete>
+
+    <select id="findUsageByFilter" parameterType="map" resultMap="usageAmountResultMap">
+        select
+            u.df_usage_uid,
+            u.gross_amount,
+            u.net_amount,
+            u.reported_value,
+            u.created_datetime,
+            u.updated_datetime,
+            u.created_by_user,
+            u.updated_by_user,
+            u.record_version
+        from ${schema}.df_usage u
+        join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+        <include refid="usageFilter"/>
+    </select>
+
+    <update id="addUsagesToScenario" parameterType="map">
+        update
+            ${schema}.df_usage
+        set
+            status_ind = 'LOCKED',
+            df_scenario_uid = #{scenarioId},
+            <include refid="StoredEntityMapper.update"/>
+        where df_usage_uid in (
+            <foreach collection="usageIds" item="usageId" separator=", ">
+                #{usageId}
+            </foreach>
+        )
+    </update>
 </mapper>

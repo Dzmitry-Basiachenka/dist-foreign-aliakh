@@ -58,4 +58,21 @@ public interface IUsageRepository {
      * @param batchId {@link com.copyright.rup.dist.foreign.domain.UsageBatch} id
      */
     void deleteUsageBatchDetails(String batchId);
+
+    /**
+     * Finds the {@link Usage}s based on {@link UsageFilter}.
+     *
+     * @param filter instance of {@link UsageFilter}
+     * @return the list of {@link Usage}s only with information about gross amount, net amount and reported value
+     */
+    List<Usage> findByFilter(UsageFilter filter);
+
+    /**
+     * Updates scenario id, updated user name and status to 'LOCKED' for {@link Usage}s.
+     *
+     * @param usageIds   list of usage identifiers
+     * @param scenarioId scenario identifier
+     * @param updateUser name of user who performed this action
+     */
+    void addUsagesToScenario(List<String> usageIds, String scenarioId, String updateUser);
 }

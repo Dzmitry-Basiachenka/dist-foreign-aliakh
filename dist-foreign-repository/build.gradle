@@ -4,6 +4,7 @@ apply plugin: 'rup-mybatis'
 dependencies {
     compile project(':dist-foreign-domain')
 
+    compile("commons-collections:commons-collections:${commonsCollectionsVersion}")
     compile("org.perf4j:perf4j:${perf4jVersion}")
     compile("com.copyright.rup.dist.common:dist-common-repository:${distCommonVersion}")
 
