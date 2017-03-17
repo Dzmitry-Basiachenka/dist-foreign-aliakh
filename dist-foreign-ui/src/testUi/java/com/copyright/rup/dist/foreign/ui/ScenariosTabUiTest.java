@@ -5,8 +5,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import com.copyright.rup.vaadin.ui.themes.Cornerstone;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
@@ -49,14 +47,8 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
         verifyScenariosTabManagerAndViewOnly();
     }
 
-    private WebElement getScenarioTab() {
-        WebElement scenariosTab = waitAndGetTab(findElementById(Cornerstone.MAIN_TABSHEET), "Scenario");
-        clickElementAndWait(scenariosTab);
-        return scenariosTab;
-    }
-
     private void verifyScenariosTabManagerAndViewOnly() {
-        WebElement scenarioTab = getScenarioTab();
+        WebElement scenarioTab = selectScenariosTab();
         assertNotNull(scenarioTab);
         WebElement buttonsLayout = assertElement(scenarioTab, "scenarios-buttons");
         List<WebElement> buttons = findElements(buttonsLayout, By.className("v-button"));
@@ -66,7 +58,7 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
     }
 
     private void verifyScenariosTabSpecialist() {
-        WebElement scenarioTab = getScenarioTab();
+        WebElement scenarioTab = selectScenariosTab();
         assertNotNull(scenarioTab);
         WebElement buttonsLayout = assertElement(scenarioTab, "scenarios-buttons");
         List<WebElement> buttons = findElements(buttonsLayout, By.className("v-button"));

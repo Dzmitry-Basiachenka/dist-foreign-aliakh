@@ -41,6 +41,10 @@ public class ForeignCommonUiTest extends CommonUiTest {
      */
     protected static final String USAGE_LAYOUT_ID = "usages-layout";
     /**
+     * Identifier for usage table.
+     */
+    protected static final String USAGE_TABLE_ID = "usages-table";
+    /**
      * &lt;b&gt; tag name.
      */
     protected static final String HTML_B_TAG_NAME = "b";
@@ -48,6 +52,10 @@ public class ForeignCommonUiTest extends CommonUiTest {
      * Identifier for "Upload" button.
      */
     protected static final String UPLOAD_BUTTON_ID = "Upload";
+    /**
+     * Identifier for "Add to scenario" button.
+     */
+    protected static final String ADD_TO_SCENARIO_BUTTON_ID = "Add_To_Scenario";
     /**
      * Identifier for "Ok" button.
      */
@@ -64,6 +72,10 @@ public class ForeignCommonUiTest extends CommonUiTest {
      * Identifier for 'Close' button.
      */
     protected static final String CLOSE_BUTTON_ID = "Close";
+    /**
+     * Identifier for 'Cancel' button.
+     */
+    protected static final String CANCEL_BUTTON_ID = "Cancel";
     /**
      * Identifier for 'Save' button.
      */
@@ -151,8 +163,19 @@ public class ForeignCommonUiTest extends CommonUiTest {
     /**
      * @return "Usages" tab.
      */
-    protected WebElement getUsagesTab() {
-        return waitAndGetTab(findElementById(Cornerstone.MAIN_TABSHEET), "Usages");
+    protected WebElement selectUsagesTab() {
+        WebElement usagesTab = waitAndGetTab(findElementById(Cornerstone.MAIN_TABSHEET), "Usages");
+        clickElementAndWait(usagesTab);
+        return usagesTab;
+    }
+
+    /**
+     * @return "Scenarios" tab.
+     */
+    protected WebElement selectScenariosTab() {
+        WebElement scenariosTab = waitAndGetTab(findElementById(Cornerstone.MAIN_TABSHEET), "Scenarios");
+        clickElementAndWait(scenariosTab);
+        return scenariosTab;
     }
 
     /**
@@ -197,7 +220,7 @@ public class ForeignCommonUiTest extends CommonUiTest {
     /**
      * Asserts that usage filters are empty, "Apply" button is disabled and usages table is empty.
      *
-     * @param filterWidget  {@link WebElement} representing filter widget
+     * @param filterWidget {@link WebElement} representing filter widget
      * @param usagesTable  {@link WebElement} representing usages table
      */
     protected void assertUsagesFilterEmpty(WebElement filterWidget, WebElement usagesTable) {
@@ -210,13 +233,48 @@ public class ForeignCommonUiTest extends CommonUiTest {
     }
 
     /**
+     * Choose item in filter window and click "Save" button.
+     *
+     * @param filterWidget   {@link WebElement} representing filter widget
+     * @param filterId       filter identifier
+     * @param filterWindowId filter window identifier
+     * @param item           item to choose
+     */
+    protected void saveFilter(WebElement filterWidget, String filterId, String filterWindowId, String item) {
+        WebElement itemsFilter = findElement(filterWidget, By.id(filterId));
+        assertNotNull(itemsFilter);
+        clickElementAndWait(itemsFilter);
+        WebElement filterWindow = findElementById(filterWindowId);
+        assertNotNull(filterWindow);
+        WebElement label = findElementByText(filterWindow, HTML_LABEL_TAG_NAME, item);
+        assertNotNull(label);
+        clickElementAndWait(label);
+        clickButtonAndWait(filterWindow, SAVE_BUTTON_ID);
+    }
+
+    /**
      * Asserts that usages table is empty.
      *
      * @param usagesTable {@link WebElement} representing usages table
      */
     protected void assertUsagesTableEmpty(WebElement usagesTable) {
-        String backgroundImage = findElement(usagesTable, By.className("v-scrollable")).getCssValue("background-image");
+        String backgroundImage =
+            waitAndFindElement(usagesTable, By.className("v-scrollable")).getCssValue("background-image");
         assertTrue(backgroundImage.contains("img/empty_usages_table.png"));
+    }
+
+    /**
+     * Assert that usages table is not empty.
+     *
+     * @param usagesTable {@link WebElement} representing usages table
+     * @param rowsCount   count of Usages rows in table
+     */
+    protected void assertUsagesTableNotEmpty(WebElement usagesTable, int rowsCount) {
+        assertNotNull(usagesTable);
+        WebElement usagesTableBody = waitAndFindElement(usagesTable, By.className(V_TABLE_BODY_CLASS_NAME));
+        assertNotNull(usagesTableBody);
+        List<WebElement> rows = findElements(usagesTableBody, By.tagName(HTML_TR_TAG_NAME));
+        assertEquals(rowsCount, rows.size());
     }
 
     /**

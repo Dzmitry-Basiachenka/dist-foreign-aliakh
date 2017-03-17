@@ -31,10 +31,8 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         "7000813806 - CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil";
     private static final String FISCAL_YEAR = "2017";
     private static final String CLEAR_BATTON_ID = "Clear";
-    private static final String USAGE_TABLE_ID = "usages-table";
     private static final String FILTERS_HEADER_TEXT = "Filters";
     private static final String FILTER_BUTTONS_LAYOUT_ID = "filter-buttons";
-    private static final String ADD_TO_SCENARIO_BUTTON_ID = "Add_To_Scenario";
     private static final String EXPORT_BUTTON_ID = "Export";
     private static final String DELETE_USAGE_BUTTON_ID = "Delete_Usage_Batch";
     private static final Set USAGES_BUTTONS =
@@ -109,7 +107,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     }
 
     private void verifyBatchAndUsageInformationIsDisplayedCorrectly() {
-        WebElement usagesTab = getUsagesTab();
+        WebElement usagesTab = selectUsagesTab();
         WebElement filterWidget = waitAndFindElement(usagesTab, By.id(USAGE_FILTER_WIDGET_ID));
         assertNotNull(filterWidget);
         assertNotNull(findElementByText(filterWidget, HTML_DIV_TAG_NAME, FILTERS_HEADER_TEXT));
@@ -120,7 +118,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     }
 
     private void verifyMultiplyUsageDataFilterAndClearFilterButton() {
-        WebElement usagesTab = getUsagesTab();
+        WebElement usagesTab = selectUsagesTab();
         WebElement usagesLayout = assertElement(usagesTab, USAGE_LAYOUT_ID);
         WebElement usagesTable = assertElement(usagesLayout, USAGE_TABLE_ID);
         WebElement filterWidget = waitAndFindElement(usagesTab, By.id(USAGE_FILTER_WIDGET_ID));
@@ -214,7 +212,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     }
 
     private WebElement verifyUsagesTab() {
-        WebElement usagesTab = getUsagesTab();
+        WebElement usagesTab = selectUsagesTab();
         verifyFiltersWidget(usagesTab);
         WebElement usagesLayout = assertElement(usagesTab, USAGE_LAYOUT_ID);
         verifyUsagesTable(usagesLayout);

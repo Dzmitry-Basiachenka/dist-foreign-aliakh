@@ -57,6 +57,7 @@ public class CreateScenarioWindow extends Window {
         layout.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
         scenarioNameField.focus();
         setContent(layout);
+        VaadinUtils.addComponentStyle(this, "create-scenario-window");
     }
 
     private HorizontalLayout initButtonsLayout() {
@@ -78,13 +79,14 @@ public class CreateScenarioWindow extends Window {
         descriptionArea.setWidth(100, Unit.PERCENTAGE);
         descriptionArea.addValidator(
             new StringLengthValidator(ForeignUi.getMessage("field.error.length", 2000), 0, 2000, false));
+        VaadinUtils.addComponentStyle(descriptionArea, "scenario-description");
     }
 
     private void initScenarioNameField() {
         scenarioNameField = new TextField(ForeignUi.getMessage("field.scenario_name"));
         scenarioNameField.setValidationVisible(false);
         scenarioNameField.setWidth(100, Unit.PERCENTAGE);
-        VaadinUtils.addComponentStyle(scenarioNameField, ForeignUi.getMessage("field.scenario_name"));
+        VaadinUtils.addComponentStyle(scenarioNameField, "scenario-name");
         scenarioNameField.setNullRepresentation(StringUtils.EMPTY);
         scenarioNameField.setValue(ForeignUi.getMessage("field.default_value.scenario_name", LocalDate.now().format(
             DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT))));
