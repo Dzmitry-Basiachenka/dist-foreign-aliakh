@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.api;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.UsageFilter;
 
 import java.util.List;
 
@@ -37,4 +38,13 @@ public interface IScenarioService {
      * @return list of {@link Scenario}s names
      */
     List<String> getScenariosNamesByUsageBatchId(String usageBatchId);
+
+    /**
+     * Creates {@link Scenario}. Also calculates gross total and reported total for {@link Scenario}.
+     *
+     * @param scenarioName name of scenario
+     * @param description  description
+     * @param usageFilter  instance of {@link UsageFilter}
+     */
+    void createScenario(String scenarioName, String description, UsageFilter usageFilter);
 }

@@ -348,46 +348,46 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindUsagesByFilter() {
+    public void testFindUsagesWithAmounts() {
         UsageFilter usageFilter =
             buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.singleton(USAGE_BATCH_ID_1),
                 UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, FISCAL_YEAR);
-        verifyUsages(usageRepository.findByFilter(usageFilter), 1, USAGE_ID_1);
+        verifyUsages(usageRepository.findUsagesWithAmounts(usageFilter), 1, USAGE_ID_1);
     }
 
     @Test
-    public void testFindUsagesByUsageBatchFilter() {
+    public void testFindUsagesWithAmountsByUsageBatchFilter() {
         UsageFilter usageFilter =
             buildUsageFilter(Collections.emptySet(), Collections.singleton(USAGE_BATCH_ID_1), null, null, null);
-        verifyUsages(usageRepository.findByFilter(usageFilter), 1, USAGE_ID_1);
+        verifyUsages(usageRepository.findUsagesWithAmounts(usageFilter), 1, USAGE_ID_1);
     }
 
     @Test
-    public void testFindUsagesByRhAccountNumberFilter() {
+    public void testFindUsagesWithAmountsByRhAccountNumberFilter() {
         UsageFilter usageFilter =
             buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.emptySet(), null, null, null);
-        verifyUsages(usageRepository.findByFilter(usageFilter), 1, USAGE_ID_1);
+        verifyUsages(usageRepository.findUsagesWithAmounts(usageFilter), 1, USAGE_ID_1);
     }
 
     @Test
-    public void testFindUsagesByStatusFilter() {
+    public void testFindUsagesWithAmountsByStatusFilter() {
         UsageFilter usageFilter =
             buildUsageFilter(Collections.emptySet(), Collections.emptySet(), UsageStatusEnum.ELIGIBLE, null, null);
-        verifyUsages(usageRepository.findByFilter(usageFilter), 2, USAGE_ID_1, USAGE_ID_3);
+        verifyUsages(usageRepository.findUsagesWithAmounts(usageFilter), 2, USAGE_ID_1, USAGE_ID_3);
     }
 
     @Test
-    public void testFindUsagesByPaymentDateFilter() {
+    public void testFindUsagesWithAmountsByPaymentDateFilter() {
         UsageFilter usageFilter =
             buildUsageFilter(Collections.emptySet(), Collections.emptySet(), null, PAYMENT_DATE, null);
-        verifyUsages(usageRepository.findByFilter(usageFilter), 2, USAGE_ID_1, USAGE_ID_2);
+        verifyUsages(usageRepository.findUsagesWithAmounts(usageFilter), 2, USAGE_ID_1, USAGE_ID_2);
     }
 
     @Test
-    public void testFindUsagesByFiscalYearFilter() {
+    public void testFindUsagesWithAmountsByFiscalYearFilter() {
         UsageFilter usageFilter =
             buildUsageFilter(Collections.emptySet(), Collections.emptySet(), null, null, FISCAL_YEAR);
-        verifyUsages(usageRepository.findByFilter(usageFilter), 2, USAGE_ID_1, USAGE_ID_2);
+        verifyUsages(usageRepository.findUsagesWithAmounts(usageFilter), 2, USAGE_ID_1, USAGE_ID_2);
     }
 
     @Test

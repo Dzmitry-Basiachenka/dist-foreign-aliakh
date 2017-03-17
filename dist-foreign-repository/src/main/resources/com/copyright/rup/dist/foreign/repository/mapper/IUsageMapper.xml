@@ -313,7 +313,7 @@
         where df_usage_batch_uid = #{batchId}
     </delete>
 
-    <select id="findUsageByFilter" parameterType="map" resultMap="usageAmountResultMap">
+    <select id="findUsagesWithAmounts" parameterType="map" resultMap="usageAmountResultMap">
         select
             u.df_usage_uid,
             u.gross_amount,
