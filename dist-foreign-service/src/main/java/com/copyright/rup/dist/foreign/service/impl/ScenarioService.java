@@ -55,11 +55,12 @@ public class ScenarioService implements IScenarioService {
 
     @Override
     @Transactional
-    public void createScenario(String scenarioName, String description, UsageFilter usageFilter) {
+    public String createScenario(String scenarioName, String description, UsageFilter usageFilter) {
         List<Usage> usages = usageService.getUsagesWithAmounts(usageFilter);
         Scenario scenario = buildScenario(scenarioName, description, usages);
         scenarioRepository.insert(scenario);
         usageService.addUsagesToScenario(usages.stream().map(Usage::getId).collect(Collectors.toList()), scenario);
+        return scenario.getId();
     }
 
     private Scenario buildScenario(String scenarioName, String description, List<Usage> usages) {

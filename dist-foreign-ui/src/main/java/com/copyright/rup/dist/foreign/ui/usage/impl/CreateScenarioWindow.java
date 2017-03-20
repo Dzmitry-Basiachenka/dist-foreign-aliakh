@@ -12,6 +12,7 @@ import com.google.common.collect.Lists;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
@@ -32,7 +33,7 @@ import java.time.format.DateTimeFormatter;
  *
  * @author Mikalai Bezmen
  */
-class CreateScenarioWindow extends Window {
+public class CreateScenarioWindow extends Window {
 
     private TextField scenarioNameField;
     private TextArea descriptionArea;
@@ -100,11 +101,38 @@ class CreateScenarioWindow extends Window {
 
     private void onConfirmButtonClicked() {
         if (isValid()) {
-            controller.createScenario(StringUtils.trimToEmpty(scenarioNameField.getValue()),
+            String scenarioId = controller.createScenario(StringUtils.trimToEmpty(scenarioNameField.getValue()),
                 StringUtils.trimToEmpty(descriptionArea.getValue()));
+            fireEvent(new ScenarioCreateEvent(this, scenarioId));
             close();
         } else {
             Windows.showValidationErrorWindow(Lists.newArrayList(scenarioNameField, descriptionArea));
+        }
+    }
+
+    /**
+     * Event that is thrown when new {@link com.copyright.rup.dist.foreign.domain.Scenario} is created.
+     */
+    public static class ScenarioCreateEvent extends Event {
+
+        private String scenarioId;
+
+        /**
+         * Constructor.
+         *
+         * @param source     event source
+         * @param scenarioId created scenarios id
+         */
+        private ScenarioCreateEvent(Component source, String scenarioId) {
+            super(source);
+            this.scenarioId = scenarioId;
+        }
+
+        /**
+         * @return scenario id.
+         */
+        public String getScenarioId() {
+            return scenarioId;
         }
     }
 }

@@ -32,6 +32,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesWidget;
+import com.copyright.rup.dist.foreign.ui.usage.impl.CreateScenarioWindow.ScenarioCreateEvent;
 import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
@@ -251,5 +252,17 @@ public class UsagesControllerTest {
         replay(prmIntegrationService);
         assertNull(controller.getRroName(RRO_ACCOUNT_NUMBER));
         verify(prmIntegrationService);
+    }
+
+    @Test
+    public void testOnScenarioCreated() {
+        IUsagesWidget usagesWidgetMock = createMock(IUsagesWidget.class);
+        ScenarioCreateEvent eventMock = createMock(ScenarioCreateEvent.class);
+        Whitebox.setInternalState(controller, "widget", usagesWidgetMock);
+        usagesWidgetMock.fireWidgetEvent(eventMock);
+        expectLastCall().once();
+        replay(usagesWidgetMock, eventMock);
+        controller.onScenarioCreated(eventMock);
+        verify(usagesWidgetMock, eventMock);
     }
 }

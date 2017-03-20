@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -12,6 +11,7 @@ import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.date.RupDateUtils;
+import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.ui.component.validator.ScenarioNameUniqueValidator;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
@@ -92,8 +92,7 @@ public class CreateScenarioWindowTest {
         expect(descriptionArea.isValid()).andReturn(true).once();
         expect(scenarioNameField.getValue()).andReturn(SCENARIO_NAME).once();
         expect(descriptionArea.getValue()).andReturn(DESCRIPTION).once();
-        controller.createScenario(SCENARIO_NAME, DESCRIPTION);
-        expectLastCall().once();
+        expect(controller.createScenario(SCENARIO_NAME, DESCRIPTION)).andReturn(RupPersistUtils.generateUuid()).once();
         replay(clickEvent, scenarioNameField, descriptionArea, controller, scenarioService);
         Collection<?> listeners = confirmButton.getListeners(ClickEvent.class);
         assertEquals(1, listeners.size());

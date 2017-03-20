@@ -4,6 +4,7 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
+import com.copyright.rup.dist.foreign.ui.usage.impl.CreateScenarioWindow.ScenarioCreateEvent;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.ui.component.lazytable.IBeanLoader;
 import com.copyright.rup.vaadin.widget.api.IController;
@@ -30,6 +31,12 @@ public interface IUsagesController extends IController<IUsagesWidget>, IBeanLoad
      */
     Method ON_FILTER_CHANGED =
         ReflectTools.findMethod(IUsagesController.class, "onFilterChanged", FilterChangedEvent.class);
+
+    /**
+     * {@link #onScenarioCreated(ScenarioCreateEvent)}.
+     */
+    Method ON_SCENARIO_CREATED =
+        ReflectTools.findMethod(IUsagesController.class, "onScenarioCreated", ScenarioCreateEvent.class);
 
     /**
      * Initializes {@link IUsagesFilterWidget}.
@@ -96,11 +103,19 @@ public interface IUsagesController extends IController<IUsagesWidget>, IBeanLoad
      *
      * @param scenarioName name of scenario
      * @param description  description for creating scenario
+     * @return created scenario id
      */
-    void createScenario(String scenarioName, String description);
+    String createScenario(String scenarioName, String description);
 
     /**
      * @return instance of {@link IScenarioService}.
      */
     IScenarioService getScenarioService();
+
+    /**
+     * Handles {@link com.copyright.rup.dist.foreign.domain.Scenario} creation.
+     *
+     * @param event {@link ScenarioCreateEvent}
+     */
+    void onScenarioCreated(ScenarioCreateEvent event);
 }

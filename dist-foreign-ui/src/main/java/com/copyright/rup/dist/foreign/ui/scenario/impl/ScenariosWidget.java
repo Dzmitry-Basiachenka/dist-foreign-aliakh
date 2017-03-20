@@ -67,6 +67,11 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
     }
 
     @Override
+    public void selectScenario(Object scenarioId) {
+        table.select(scenarioId);
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
     public ScenariosWidget init() {
         setSizeFull();

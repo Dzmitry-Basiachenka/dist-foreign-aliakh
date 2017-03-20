@@ -121,11 +121,13 @@ public class ScenarioServiceTest {
             capture(captureScenario));
         expectLastCall().once();
         replay(scenarioRepository, usageService, RupContextUtils.class);
-        scenarioService.createScenario(SCENARIO_NAME, DESCRIPTION, usageFilter);
+        String scenarioId = scenarioService.createScenario(SCENARIO_NAME, DESCRIPTION, usageFilter);
         Scenario scenarioForInsert = captureScenarioForInsert.getValue();
         Scenario scenario = captureScenario.getValue();
         assertNotNull(scenarioForInsert);
         assertNotNull(scenario);
+        assertNotNull(scenarioId);
+        assertEquals(scenarioId, scenario.getId());
         assertEquals(scenario, scenarioForInsert);
         assertEquals(SCENARIO_NAME, scenarioForInsert.getName());
         assertEquals(DESCRIPTION, scenarioForInsert.getDescription());

@@ -14,4 +14,12 @@ import com.copyright.rup.vaadin.widget.api.IWidget;
  * @author Mikita Hladkikh
  */
 public interface IUsagesWidget extends IWidget<IUsagesController>, IRefreshable, IMediatorProvider {
+
+    /**
+     * Fires {@link Event}.
+     *
+     * @param event an {@link Event} to be fired
+     * @see com.vaadin.server.AbstractClientConnector#fireEvent(java.util.EventObject)
+     */
+    void fireWidgetEvent(Event event);
 }
