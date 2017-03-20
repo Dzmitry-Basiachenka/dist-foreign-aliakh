@@ -45,6 +45,7 @@ public interface IScenarioService {
      * @param scenarioName name of scenario
      * @param description  description
      * @param usageFilter  instance of {@link UsageFilter}
+     * @return scenario id
      */
-    void createScenario(String scenarioName, String description, UsageFilter usageFilter);
+    String createScenario(String scenarioName, String description, UsageFilter usageFilter);
 }

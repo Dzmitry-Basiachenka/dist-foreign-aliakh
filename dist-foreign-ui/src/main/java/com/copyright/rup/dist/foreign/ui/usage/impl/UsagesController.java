@@ -16,6 +16,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesWidget;
+import com.copyright.rup.dist.foreign.ui.usage.impl.CreateScenarioWindow.ScenarioCreateEvent;
 import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.ui.VaadinUtils;
 import com.copyright.rup.vaadin.widget.api.CommonController;
@@ -132,10 +133,11 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
 
     @Override
     // TODO {mbezmen} implement unit test
-    public void createScenario(String scenarioName, String description) {
-        scenarioService.createScenario(scenarioName, description, filterController.getWidget().getAppliedFilter());
+    public String createScenario(String scenarioName, String description) {
+        String scenarioId =
+            scenarioService.createScenario(scenarioName, description, filterController.getWidget().getAppliedFilter());
         filterController.getWidget().clearFilter();
-        // TODO {mbezmen} implement redirect to Scenario tab
+        return scenarioId;
     }
 
     @Override
@@ -158,6 +160,11 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     public void deleteUsageBatch(UsageBatch usageBatch) {
         usageBatchService.deleteUsageBatch(usageBatch, SecurityUtils.getUserName());
         filterController.getWidget().clearFilter();
+    }
+
+    @Override
+    public void onScenarioCreated(ScenarioCreateEvent event) {
+        getWidget().fireWidgetEvent(event);
     }
 
     @Override

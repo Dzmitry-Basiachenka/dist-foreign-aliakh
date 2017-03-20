@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.ui.common.util.IntegerColumnGenerator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesWidget;
+import com.copyright.rup.dist.foreign.ui.usage.impl.CreateScenarioWindow.ScenarioCreateEvent;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.LocalDateColumnGenerator;
 import com.copyright.rup.vaadin.ui.LongColumnGenerator;
@@ -82,6 +83,11 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         mediator.setDeleteUsageButton(deleteButton);
         mediator.setAddToScenarioButton(addToScenarioButton);
         return mediator;
+    }
+
+    @Override
+    public void fireWidgetEvent(Event event) {
+        fireEvent(event);
     }
 
     /**
@@ -219,7 +225,9 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
 
     private void onAddToScenarioClicked() {
         if (0 < usagesTable.getContainerDataSource().size()) {
-            Windows.showModalWindow(new CreateScenarioWindow(controller));
+            CreateScenarioWindow window = new CreateScenarioWindow(controller);
+            window.addListener(ScenarioCreateEvent.class, controller, IUsagesController.ON_SCENARIO_CREATED);
+            Windows.showModalWindow(window);
         } else {
             Windows.showNotificationWindow(ForeignUi.getMessage("message.create_scenario.empty_usages"));
         }

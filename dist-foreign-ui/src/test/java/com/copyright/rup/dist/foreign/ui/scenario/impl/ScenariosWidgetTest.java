@@ -8,6 +8,7 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
@@ -33,6 +34,7 @@ import com.vaadin.ui.VerticalLayout;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -104,6 +106,15 @@ public class ScenariosWidgetTest {
         scenariosWidget.refresh();
         verifyScenarioMetadataPanel();
         verify(controller);
+    }
+
+    @Test
+    public void testSelectScenario() {
+        scenariosWidget.selectScenario(null);
+        Table table = Whitebox.getInternalState(scenariosWidget, "table");
+        assertNull(table.getValue());
+        scenariosWidget.selectScenario(SCENARIO_ID);
+        assertEquals(SCENARIO_ID, table.getValue());
     }
 
     private void verifyPanel(Panel panel) {
