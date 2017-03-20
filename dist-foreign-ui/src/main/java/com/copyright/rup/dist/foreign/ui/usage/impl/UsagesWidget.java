@@ -40,6 +40,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
     private static final String EMPTY_STYLE_NAME = "empty-usages-table";
     private static final String GROSS_AMOUNT_PROPERTY = "grossAmount";
     private static final String REPORTED_VALUE_PROPERTY = "reportedValue";
+    private static final String BATCH_GROSS_AMOUNT_PROPERTY = "batchGrossAmount";
     private static final String DETAIL_ID_PROPERTY = "detailId";
 
     private IUsagesController controller;
@@ -101,7 +102,8 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
             .setVisibleColumns(DETAIL_ID_PROPERTY, "status", "batchName", "fiscalYear", "rroAccountNumber", "rroName",
                 "paymentDate", "workTitle", "article", "standardNumber", "wrWrkInst", "rhAccountNumber",
                 "rhName", "publisher", "publicationDate", "numberOfCopies", REPORTED_VALUE_PROPERTY,
-                GROSS_AMOUNT_PROPERTY, "market", "marketPeriodFrom", "marketPeriodTo", "author");
+                GROSS_AMOUNT_PROPERTY, BATCH_GROSS_AMOUNT_PROPERTY, "market", "marketPeriodFrom", "marketPeriodTo",
+                "author");
         setColumnHeaders();
         usagesTable.setSizeFull();
         usagesTable.setColumnCollapsingAllowed(true);
@@ -134,6 +136,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         usagesTable.addProperty("numberOfCopies", Integer.class, true);
         usagesTable.addProperty(REPORTED_VALUE_PROPERTY, BigDecimal.class, true);
         usagesTable.addProperty(GROSS_AMOUNT_PROPERTY, BigDecimal.class, true);
+        usagesTable.addProperty(BATCH_GROSS_AMOUNT_PROPERTY, BigDecimal.class, true);
         usagesTable.addProperty("market", String.class, true);
         usagesTable.addProperty("marketPeriodFrom", Integer.class, true);
         usagesTable.addProperty("marketPeriodTo", Integer.class, true);
@@ -160,6 +163,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
                 ForeignUi.getMessage("table.column.number_of_copies"),
                 ForeignUi.getMessage("table.column.reported_value"),
                 ForeignUi.getMessage("table.column.gross_amount"),
+                ForeignUi.getMessage("table.column.batch_gross_amount"),
                 ForeignUi.getMessage("table.column.market"),
                 ForeignUi.getMessage("table.column.market_period_from"),
                 ForeignUi.getMessage("table.column.market_period_to"),
@@ -183,6 +187,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         MoneyColumnGenerator moneyColumnGenerator = new MoneyColumnGenerator();
         usagesTable.addGeneratedColumn(REPORTED_VALUE_PROPERTY, moneyColumnGenerator);
         usagesTable.addGeneratedColumn(GROSS_AMOUNT_PROPERTY, moneyColumnGenerator);
+        usagesTable.addGeneratedColumn(BATCH_GROSS_AMOUNT_PROPERTY, moneyColumnGenerator);
     }
 
     private void setColumnsWidth() {
@@ -194,8 +199,9 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         usagesTable.setColumnWidth("workTitle", 300);
         usagesTable.setColumnWidth("rhName", 300);
         usagesTable.setColumnWidth("author", 300);
-        usagesTable.setColumnWidth(REPORTED_VALUE_PROPERTY, 95);
-        usagesTable.setColumnWidth(GROSS_AMOUNT_PROPERTY, 95);
+        usagesTable.setColumnWidth(REPORTED_VALUE_PROPERTY, 100);
+        usagesTable.setColumnWidth(GROSS_AMOUNT_PROPERTY, 100);
+        usagesTable.setColumnWidth(BATCH_GROSS_AMOUNT_PROPERTY, 100);
     }
 
     private HorizontalLayout initButtonsLayout() {

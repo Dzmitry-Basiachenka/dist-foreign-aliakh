@@ -87,7 +87,7 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
         assertUsagesTableNotEmpty(usagesTable);
         WebElement window = openDeleteUsageBatchWindow();
         WebElement usageBatchesTable = getUsageBatchesTable(window);
-        verifyTableRows(usageBatchesTable, usageBatch1, usageBatch2, usageBatch3, usageBatch4);
+        verifyTableRows(usageBatchesTable, usageBatch4, usageBatch1, usageBatch2, usageBatch3);
         WebElement confirmDialog = openDeleteUsageBatchConfirmDialog(usageBatchesTable,
             "4b67f17c-3c32-4b55-b2a0-dabebb513304", usageBatch4.name);
         clickButtonAndWait(confirmDialog, "Yes");

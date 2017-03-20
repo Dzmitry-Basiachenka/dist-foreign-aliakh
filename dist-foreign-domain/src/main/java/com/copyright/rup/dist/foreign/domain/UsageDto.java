@@ -42,6 +42,7 @@ public class UsageDto extends StoredEntity<String> {
     private String author;
     private BigDecimal grossAmount;
     private BigDecimal reportedValue;
+    private BigDecimal batchGrossAmount;
     private UsageStatusEnum status;
 
     /**
@@ -301,6 +302,22 @@ public class UsageDto extends StoredEntity<String> {
     }
 
     /**
+     * @return batch gross amount.
+     */
+    public BigDecimal getBatchGrossAmount() {
+        return batchGrossAmount;
+    }
+
+    /**
+     * Sets batch gross amount.
+     *
+     * @param batchGrossAmount batch gross amount
+     */
+    public void setBatchGrossAmount(BigDecimal batchGrossAmount) {
+        this.batchGrossAmount = batchGrossAmount;
+    }
+
+    /**
      * @return payment date.
      */
     public LocalDate getPaymentDate() {
@@ -428,6 +445,7 @@ public class UsageDto extends StoredEntity<String> {
             .append(this.author, that.author)
             .append(this.grossAmount, that.grossAmount)
             .append(this.reportedValue, that.reportedValue)
+            .append(this.batchGrossAmount, that.batchGrossAmount)
             .append(this.status, that.status)
             .isEquals();
     }
@@ -457,6 +475,7 @@ public class UsageDto extends StoredEntity<String> {
             .append(author)
             .append(grossAmount)
             .append(reportedValue)
+            .append(batchGrossAmount)
             .append(status)
             .toHashCode();
     }
@@ -486,6 +505,7 @@ public class UsageDto extends StoredEntity<String> {
             .append("author", author)
             .append("grossAmount", grossAmount)
             .append("reportedValue", reportedValue)
+            .append("batchGrossAmount", batchGrossAmount)
             .append("status", status)
             .toString();
     }

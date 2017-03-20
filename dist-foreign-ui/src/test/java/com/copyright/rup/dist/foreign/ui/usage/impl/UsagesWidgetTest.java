@@ -68,6 +68,7 @@ public class UsagesWidgetTest {
     private static final String DETAIL_ID_PROPERTY = "detailId";
     private static final String GROSS_AMOUNT_PROPERTY = "grossAmount";
     private static final String REPORTED_VALUE_PROPERTY = "reportedValue";
+    private static final String BATCH_GROSS_AMOUNT_PROPERTY = "batchGrossAmount";
     private UsagesWidget usagesWidget;
     private IUsagesController controller;
 
@@ -236,12 +237,14 @@ public class UsagesWidgetTest {
         assertArrayEquals(new Object[]{DETAIL_ID_PROPERTY, "status", "batchName", "fiscalYear", "rroAccountNumber",
             "rroName", "paymentDate", "workTitle", "article", "standardNumber", "wrWrkInst", "rhAccountNumber",
             "rhName", "publisher", "publicationDate", "numberOfCopies", REPORTED_VALUE_PROPERTY, GROSS_AMOUNT_PROPERTY,
-            "market", "marketPeriodFrom", "marketPeriodTo", "author"}, table.getVisibleColumns());
+            BATCH_GROSS_AMOUNT_PROPERTY, "market", "marketPeriodFrom", "marketPeriodTo", "author"},
+            table.getVisibleColumns());
         assertArrayEquals(
             new Object[]{"Detail ID", "Detail Status", "Usage Batch Name", "Fiscal Year", "RRO Account #",
                 "RRO Name", "Payment Date", "Title", "Article", "Standard Number", "Wr Wrk Inst", "RH Account #",
-                "RH Name", "Publisher", "Pub Date", "Number of Copies", "Reported value", "Amt in USD", "Market",
-                "Market Period From", "Market Period To", "Author"}, table.getColumnHeaders());
+                "RH Name", "Publisher", "Pub Date", "Number of Copies", "Reported value", "Amt in USD",
+                "Gross Amt in USD", "Market", "Market Period From", "Market Period To", "Author"},
+            table.getColumnHeaders());
         Collection<?> containerPropertyIds = table.getContainerPropertyIds();
 
         assertTrue(containerPropertyIds.contains("id"));
@@ -278,8 +281,9 @@ public class UsagesWidgetTest {
         assertEquals(300, table.getColumnWidth("workTitle"));
         assertEquals(300, table.getColumnWidth("rhName"));
         assertEquals(300, table.getColumnWidth("author"));
-        assertEquals(95, table.getColumnWidth(REPORTED_VALUE_PROPERTY));
-        assertEquals(95, table.getColumnWidth(GROSS_AMOUNT_PROPERTY));
+        assertEquals(100, table.getColumnWidth(REPORTED_VALUE_PROPERTY));
+        assertEquals(100, table.getColumnWidth(GROSS_AMOUNT_PROPERTY));
+        assertEquals(100, table.getColumnWidth(BATCH_GROSS_AMOUNT_PROPERTY));
 
         verifyGeneratedColumns(table);
         verifySize(table);
