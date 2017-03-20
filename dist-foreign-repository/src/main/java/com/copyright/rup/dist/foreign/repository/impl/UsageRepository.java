@@ -13,6 +13,7 @@ import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -37,6 +38,11 @@ import java.util.Map;
 @Repository
 public class UsageRepository extends BaseRepository implements IUsageRepository {
 
+    /**
+     * Spring uses 2-bytes integer which max value is 32767, so set batch size to 32000 to avoid issues.
+     */
+    // TODO {mbezmen} move to BaseRepository in dist-common
+    private static final int BATCH_SIZE_FOR_SELECT = 32000;
     private static final String FILTER_KEY = "filter";
     private static final String PAGEABLE_KEY = "pageable";
     private static final String SORT_KEY = "sort";
@@ -93,10 +99,12 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     public void addUsagesToScenario(List<String> usageIds, String scenarioId, String updateUser) {
         checkArgument(CollectionUtils.isNotEmpty(usageIds));
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
-        parameters.put(USAGE_IDS_KEY, usageIds);
         parameters.put(SCENARIO_ID_KEY, checkNotNull(scenarioId));
         parameters.put(UPDATE_USER_KEY, checkNotNull(updateUser));
-        update("IUsageMapper.addUsagesToScenario", parameters);
+        for (List<String> usageIdsPartition : Iterables.partition(usageIds, BATCH_SIZE_FOR_SELECT)) {
+            parameters.put(USAGE_IDS_KEY, usageIdsPartition);
+            update("IUsageMapper.addUsagesToScenario", parameters);
+        }
     }
 
     /**
