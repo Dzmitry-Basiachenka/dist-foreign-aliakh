@@ -58,7 +58,7 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
     private static final String RRO_ACCOUNT_NUMBER_FIELD = "RRO Account #";
     private static final String RRO_ACCOUNT_NAME_FIELD = "RRO Account Name";
     private static final String PAYMENT_DATE_FIELD = "Payment Date";
-    private static final String GROSS_AMOUT_FIELD = "Gross Amount (USD)";
+    private static final String GROSS_AMOUT_FIELD = "Gross Amount in USD";
     private static final String USAGE_BATCH_NAME = "TEST_Dec16";
     private static final Long RRO_ACCOUNT_NUMBER = 2000017004L;
     private static final String GROSS_AMOUNT = "10000.00";

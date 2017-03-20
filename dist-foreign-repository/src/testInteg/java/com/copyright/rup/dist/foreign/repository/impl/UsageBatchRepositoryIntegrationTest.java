@@ -91,6 +91,16 @@ public class UsageBatchRepositoryIntegrationTest {
         assertEquals(3, usageBatchRepository.findUsageBatches().size());
     }
 
+    @Test
+    public void testFindUsageBatch() {
+        List<UsageBatch> usageBatches = usageBatchRepository.findUsageBatches();
+        assertEquals(4, usageBatches.size());
+        assertEquals("56282dbc-2468-48d4-b926-94d3458a666a", usageBatches.get(0).getId());
+        assertEquals("56282dbc-2468-48d4-b926-93d3458a656a", usageBatches.get(1).getId());
+        assertEquals("56782dbc-2158-48d4-b026-94d3458a666a", usageBatches.get(2).getId());
+        assertEquals("56282cac-2468-48d4-b346-93d3458a656a", usageBatches.get(3).getId());
+    }
+
     private UsageBatch buildUsageBatch() {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setId(RupPersistUtils.generateUuid());

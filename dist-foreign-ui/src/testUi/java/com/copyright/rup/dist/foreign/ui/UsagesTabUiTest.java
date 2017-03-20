@@ -180,7 +180,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         assertEquals(1, usageTableRows.size());
         WebElement usageTableRow = usageTableRows.get(0);
         List<WebElement> usageValues = findElements(usageTableRow, By.tagName(HTML_TD_TAG_NAME));
-        assertEquals(22, usageValues.size());
+        assertEquals(23, usageValues.size());
         verifyUsageValues(usageValues);
     }
 
@@ -206,10 +206,11 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         assertTrue(getInnerHtml(usageValues.get(15)).contains("2502232"));
         assertTrue(getInnerHtml(usageValues.get(16)).contains("2,500.00"));
         assertTrue(getInnerHtml(usageValues.get(17)).contains("13,461.54"));
-        assertTrue(getInnerHtml(usageValues.get(18)).contains("Doc Del"));
-        assertTrue(getInnerHtml(usageValues.get(19)).contains("2013"));
-        assertTrue(getInnerHtml(usageValues.get(20)).contains("2017"));
-        assertTrue(getInnerHtml(usageValues.get(21)).contains("Íñigo López de Mendoza, marqués de Santillana"));
+        assertTrue(getInnerHtml(usageValues.get(18)).contains("35,000.00"));
+        assertTrue(getInnerHtml(usageValues.get(19)).contains("Doc Del"));
+        assertTrue(getInnerHtml(usageValues.get(20)).contains("2013"));
+        assertTrue(getInnerHtml(usageValues.get(21)).contains("2017"));
+        assertTrue(getInnerHtml(usageValues.get(22)).contains("Íñigo López de Mendoza, marqués de Santillana"));
     }
 
     private WebElement verifyUsagesTab() {
@@ -284,7 +285,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         verifyRightsholdersFields(uploadWindow);
         verifyDateFields(uploadWindow);
         assertTextElement(uploadWindow, "usage-batch-name-field", "Usage Batch Name");
-        assertTextElement(uploadWindow, "gross-amount-field", "Gross Amount (USD)");
+        assertTextElement(uploadWindow, "gross-amount-field", "Gross Amount in USD");
         assertElement(uploadWindow, UPLOAD_BUTTON_ID);
         clickElementAndWait(assertElement(uploadWindow, CLOSE_BUTTON_ID));
     }
@@ -338,6 +339,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
             "Number of Copies",
             "Reported value",
             "Amt in USD",
+            "Gross Amt in USD",
             "Market",
             "Market Period From",
             "Market Period To",

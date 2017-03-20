@@ -23,6 +23,7 @@
         <result property="numberOfCopies" column="number_of_copies"/>
         <result property="reportedValue" column="reported_value"/>
         <result property="grossAmount" column="gross_amount"/>
+        <result property="batchGrossAmount" column="batch_gross_amount"/>
         <result property="batchName" column="name"/>
         <result property="rroAccountNumber" column="rro_account_number"/>
         <result property="rroName" column="rro_name"/>
@@ -244,6 +245,7 @@
             u.number_of_copies,
             u.reported_value,
             u.gross_amount,
+            ub.gross_amount batch_gross_amount,
             ub.name,
             ub.rro_account_number,
             rro.name rro_name,

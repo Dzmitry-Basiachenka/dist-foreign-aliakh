@@ -302,7 +302,7 @@ public class UsageBatchUploadWindowTest {
     }
 
     private void verifyGrossAmountComponent(Component component) {
-        TextField grossAmountField = verifyTextField(component, "Gross Amount (USD)");
+        TextField grossAmountField = verifyTextField(component, "Gross Amount in USD");
         assertEquals(100, grossAmountField.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, grossAmountField.getWidthUnits());
         verifyRequiredField(grossAmountField);
