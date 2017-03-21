@@ -14,6 +14,7 @@ import java.util.List;
  *
  * @author Aliaksandr Radkevich
  * @author Ihar Suvorau
+ * @author Mikalai Bezmen
  */
 public interface IScenarioService {
 
@@ -48,4 +49,11 @@ public interface IScenarioService {
      * @return scenario id
      */
     String createScenario(String scenarioName, String description, UsageFilter usageFilter);
+
+    /**
+     * Deletes {@link Scenario} by given identifier.
+     *
+     * @param scenarioId scenario identifier
+     */
+    void deleteScenario(String scenarioId);
 }

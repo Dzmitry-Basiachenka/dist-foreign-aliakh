@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
  *
  * @author Aliaksandr Radkevich
  * @author Ihar Suvorau
+ * @author Mikalai Bezmen
  */
 @Service
 public class ScenarioService implements IScenarioService {
@@ -61,6 +62,13 @@ public class ScenarioService implements IScenarioService {
         scenarioRepository.insert(scenario);
         usageService.addUsagesToScenario(usages.stream().map(Usage::getId).collect(Collectors.toList()), scenario);
         return scenario.getId();
+    }
+
+    @Override
+    @Transactional
+    public void deleteScenario(String scenarioId) {
+        usageService.deleteUsagesFromScenario(scenarioId);
+        scenarioRepository.deleteScenario(scenarioId);
     }
 
     private Scenario buildScenario(String scenarioName, String description, List<Usage> usages) {

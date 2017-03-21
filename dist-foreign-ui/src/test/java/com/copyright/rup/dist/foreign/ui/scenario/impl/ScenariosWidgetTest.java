@@ -20,6 +20,8 @@ import com.google.common.collect.Lists;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.data.util.BeanContainer;
+import com.vaadin.data.util.BeanItem;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
@@ -47,6 +49,7 @@ import java.util.Collection;
  * Date: 3/15/17
  *
  * @author Aliaksandr Radkevich
+ * @author Mikalai Bezmen
  */
 public class ScenariosWidgetTest {
 
@@ -117,6 +120,30 @@ public class ScenariosWidgetTest {
         assertEquals(SCENARIO_ID, table.getValue());
     }
 
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testGetSelectedScenario() {
+        Table scenariosTable = createMock(Table.class);
+        Whitebox.setInternalState(scenariosWidget, "table", scenariosTable);
+        BeanContainer<String, Scenario> container = createMock(BeanContainer.class);
+        Whitebox.setInternalState(scenariosWidget, "container", container);
+        expect(scenariosTable.getValue()).andReturn(SCENARIO_ID).once();
+        expect(container.getItem(SCENARIO_ID)).andReturn(new BeanItem(scenario)).once();
+        replay(scenariosTable, container);
+        assertEquals(scenario, scenariosWidget.getSelectedScenario());
+        verify(scenariosTable, container);
+    }
+
+    @Test
+    public void testGetNotSelectedScenario() {
+        Table scenariosTable = createMock(Table.class);
+        Whitebox.setInternalState(scenariosWidget, "table", scenariosTable);
+        expect(scenariosTable.getValue()).andReturn(null).once();
+        replay(scenariosTable);
+        assertEquals(null, scenariosWidget.getSelectedScenario());
+        verify(scenariosTable);
+    }
+
     private void verifyPanel(Panel panel) {
         verifySize(panel);
         Component content = panel.getContent();
@@ -172,7 +199,7 @@ public class ScenariosWidgetTest {
         assertEquals("Delete", button.getCaption());
         assertEquals("Delete", button.getStyleName());
         assertFalse(button.isEnabled());
-        assertEquals(0, button.getListeners(ClickEvent.class).size());
+        assertEquals(1, button.getListeners(ClickEvent.class).size());
     }
 
     private void verifySize(Component component) {

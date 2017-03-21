@@ -20,6 +20,7 @@ import java.util.List;
  * Date: 03/15/17
  *
  * @author Ihar Suvorau
+ * @author Mikalai Bezmen
  */
 @Repository
 public class ScenarioRepository extends BaseRepository implements IScenarioRepository {
@@ -44,6 +45,11 @@ public class ScenarioRepository extends BaseRepository implements IScenarioRepos
     public List<String> findScenariosNamesByUsageBatchId(String usageBatchId) {
         checkArgument(StringUtils.isNotBlank(usageBatchId));
         return selectList("IScenarioMapper.findScenariosNamesByUsageBatchId", usageBatchId);
+    }
+
+    @Override
+    public void deleteScenario(String scenarioId) {
+        delete("IScenarioMapper.deleteScenario", checkNotNull(scenarioId));
     }
 
     /**

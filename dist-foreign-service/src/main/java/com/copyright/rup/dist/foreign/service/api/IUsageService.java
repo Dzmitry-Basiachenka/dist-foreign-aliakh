@@ -19,6 +19,7 @@ import java.util.List;
  * Date: 02/03/17
  *
  * @author Aliaksei Pchelnikau
+ * @author Mikalai Bezmen
  */
 public interface IUsageService {
 
@@ -79,4 +80,12 @@ public interface IUsageService {
      * @param scenario {@link Scenario}
      */
     void addUsagesToScenario(List<String> usageIds, Scenario scenario);
+
+    /**
+     * Deletes {@link Usage}s from {@link Scenario}. Reverts status of {@link Usage}s
+     * to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE} and set scenario id as {@code null}.
+     *
+     * @param scenarioId scenario identifier
+     */
+    void deleteUsagesFromScenario(String scenarioId);
 }

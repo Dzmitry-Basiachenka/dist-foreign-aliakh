@@ -69,4 +69,9 @@
                 where df_usage_batch_uid = #{df_usage_batch_id}
             )
     </select>
+
+    <delete id="deleteScenario" parameterType="string">
+        delete from ${schema}.df_scenario
+        where df_scenario_uid = #{scenarioId}
+    </delete>
 </mapper>

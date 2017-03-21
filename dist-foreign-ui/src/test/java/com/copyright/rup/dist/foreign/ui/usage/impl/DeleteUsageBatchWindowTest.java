@@ -138,7 +138,7 @@ public class DeleteUsageBatchWindowTest {
         ClickListener listener = (ClickListener) listeners.iterator().next();
         expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
             .andReturn(Collections.emptyList()).once();
-        expect(Windows.showConfirmDialog(eq("Are you sure you want to delete usage batch 'Batch Name'?"),
+        expect(Windows.showConfirmDialog(eq("Are you sure you want to delete <i><b>'Batch Name'</b></i> usage batch?"),
             capture(listenerCapture))).andReturn(confirmWindowCapture).once();
         replay(controller, confirmWindowCapture, Windows.class);
         listener.buttonClick(null);

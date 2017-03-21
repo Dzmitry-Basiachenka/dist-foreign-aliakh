@@ -35,6 +35,7 @@ import java.util.List;
  * Date: 03/15/17
  *
  * @author Ihar Suvorau
+ * @author Mikalai Bezmen
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
@@ -104,6 +105,14 @@ public class ScenarioRepositoryIntegrationTest {
         scenariosNames = scenarioRepository.findScenariosNamesByUsageBatchId(USAGE_BATCH_ID);
         assertNotNull(scenariosNames);
         assertEquals(2, scenariosNames.size());
+    }
+
+    @Test
+    public void testDeleteScenario() {
+        scenarioRepository.insert(buildScenario(SCENARIO_ID, SCENARIO_NAME));
+        assertEquals(1, scenarioRepository.getCountByName(SCENARIO_NAME));
+        scenarioRepository.deleteScenario(SCENARIO_ID);
+        assertEquals(0, scenarioRepository.getCountByName(SCENARIO_NAME));
     }
 
     private Usage buildUsage() {

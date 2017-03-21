@@ -176,7 +176,7 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
         assertNotNull(confirmDialog);
         WebElement label = findElement(confirmDialog, By.className("v-label"));
         assertNotNull(label);
-        assertEquals(String.format("Are you sure you want to delete usage batch '%s'?", usageBatchName),
+        assertEquals(String.format("Are you sure you want to delete '%s' usage batch?", usageBatchName),
             label.getText());
         return confirmDialog;
     }

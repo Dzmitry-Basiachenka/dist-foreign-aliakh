@@ -57,6 +57,7 @@ public class UsageBatchService implements IUsageBatchService {
     @Override
     @Transactional
     public int insertUsageBatch(UsageBatch usageBatch, List<Usage> usages) {
+        // TODO {apchelnikau} adjust unit test to verify getUserName() method
         String userName = RupContextUtils.getUserName();
         usageBatch.setId(RupPersistUtils.generateUuid());
         usageBatch.setCreateUser(userName);

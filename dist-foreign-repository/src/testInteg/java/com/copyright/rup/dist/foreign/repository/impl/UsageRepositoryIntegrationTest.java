@@ -44,6 +44,7 @@ import java.util.Set;
  * Date: 02/03/17
  *
  * @author Darya Baraukova
+ * @author Mikalai Bezmen
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
@@ -73,6 +74,7 @@ public class UsageRepositoryIntegrationTest {
     private static final LocalDate PUBLICATION_DATE = LocalDate.of(2016, 11, 3);
     private static final Long DETAIL_ID = 12345L;
     private static final Long DETAIL_ID_1 = 6997788884L;
+    private static final Long DETAIL_ID_2 = 6997788886L;
     private static final Integer NUMBER_OF_COPIES = 155;
     private static final String DETAIL_ID_KEY = "detailId";
     private static final String WORK_TITLE_KEY = "workTitle";
@@ -396,6 +398,14 @@ public class UsageRepositoryIntegrationTest {
             StoredEntity.DEFAULT_USER);
         usageRepository.addUsagesToScenario(Collections.singletonList(USAGE_ID_3), SCENARIO_ID, USER_NAME);
         verifyUsage(usageRepository.findUsageByDetailId(DETAIL_ID_1), UsageStatusEnum.LOCKED, SCENARIO_ID, USER_NAME);
+    }
+
+    @Test
+    public void testDeleteUsagesFromScenario() {
+        verifyUsage(usageRepository.findUsageByDetailId(DETAIL_ID_2), UsageStatusEnum.LOCKED, SCENARIO_ID,
+            StoredEntity.DEFAULT_USER);
+        usageRepository.deleteUsagesFromScenario(SCENARIO_ID, USER_NAME);
+        verifyUsage(usageRepository.findUsageByDetailId(DETAIL_ID_2), UsageStatusEnum.ELIGIBLE, null, USER_NAME);
     }
 
     private void verifyUsage(Usage usage, UsageStatusEnum status, String scenarioId, String defaultUser) {

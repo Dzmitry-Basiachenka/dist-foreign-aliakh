@@ -24,6 +24,7 @@ import com.vaadin.ui.VerticalLayout;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  * Widget that represents 'Scenarios' tab.
@@ -33,11 +34,12 @@ import java.math.BigDecimal;
  * Date: 3/14/17
  *
  * @author Aliaksandr Radkevich
+ * @author Mikalai Bezmen
  */
 public class ScenariosWidget extends VerticalLayout implements IScenariosWidget {
 
     private IScenariosController controller;
-    private Button deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
+    private Button deleteButton;
     private BeanContainer<String, Scenario> container;
     private Label ownerLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private Label distributionTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
@@ -53,9 +55,7 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
     public IMediator initMediator() {
         mediator = new ScenariosMediator();
         mediator.setDeleteButton(deleteButton);
-        if (null == table.getValue()) {
-            mediator.selectedScenarioChanged(null);
-        }
+        mediator.selectedScenarioChanged(getSelectedScenario());
         return mediator;
     }
 
@@ -69,6 +69,12 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
     @Override
     public void selectScenario(Object scenarioId) {
         table.select(scenarioId);
+    }
+
+    @Override
+    public Scenario getSelectedScenario() {
+        String itemId = Objects.toString(table.getValue(), null);
+        return null != itemId ? container.getItem(itemId).getBean() : null;
     }
 
     @Override
@@ -94,11 +100,17 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
 
     private HorizontalLayout initButtonsLayout() {
         HorizontalLayout layout = new HorizontalLayout();
+        initDeleteButton();
         layout.addComponents(deleteButton);
         layout.setSpacing(true);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "scenarios-buttons");
         return layout;
+    }
+
+    private void initDeleteButton() {
+        deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
+        deleteButton.addClickListener(event -> controller.onDeleteButtonClicked());
     }
 
     private void initTable() {

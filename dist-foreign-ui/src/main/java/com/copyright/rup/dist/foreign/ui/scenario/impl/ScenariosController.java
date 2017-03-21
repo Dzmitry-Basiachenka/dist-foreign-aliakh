@@ -2,8 +2,11 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
+import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosWidget;
+import com.copyright.rup.vaadin.ui.ConfirmDialogWindow;
+import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,7 @@ import java.util.List;
  * Date: 3/14/17
  *
  * @author Aliaksandr Radkevich
+ * @author Mikalai Bezmen
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -32,6 +36,20 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
     @Override
     public List<Scenario> getScenarios() {
         return scenarioService.getScenarios();
+    }
+
+    @Override
+    public void onDeleteButtonClicked() {
+        final Scenario scenario = getWidget().getSelectedScenario();
+        String message = ForeignUi.getMessage("message.confirm.delete_action", scenario.getName(), "scenario");
+        // TODO {mbezmen} try to replace with default method of @FunctionalInterface
+        Windows.showConfirmDialog(message, new ConfirmDialogWindow.Listener() {
+            @Override
+            public void onActionConfirmed() {
+                scenarioService.deleteScenario(scenario.getId());
+                getWidget().refresh();
+            }
+        });
     }
 
     @Override

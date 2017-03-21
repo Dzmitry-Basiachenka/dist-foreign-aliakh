@@ -13,6 +13,7 @@ import java.util.List;
  *
  * @author Ihar Suvorau
  * @author Aliaksandr Radkevich
+ * @author Mikalai Bezmen
  */
 // TODO {isuvorau} use one pattern for naming repository methods
 public interface IScenarioRepository {
@@ -44,4 +45,11 @@ public interface IScenarioRepository {
      * @return found list of {@link Scenario}s names
      */
     List<String> findScenariosNamesByUsageBatchId(String usageBatchId);
+
+    /**
+     * Deletes {@link Scenario} by given identifier.
+     *
+     * @param scenarioId {@link Scenario} identifier
+     */
+    void deleteScenario(String scenarioId);
 }

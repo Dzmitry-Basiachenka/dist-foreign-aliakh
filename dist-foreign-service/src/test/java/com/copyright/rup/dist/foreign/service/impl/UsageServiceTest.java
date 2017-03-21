@@ -3,11 +3,12 @@ package com.copyright.rup.dist.foreign.service.impl;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
+import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.Scenario;
@@ -19,12 +20,16 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
 import com.google.common.collect.Lists;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.io.PipedOutputStream;
@@ -42,6 +47,8 @@ import java.util.List;
  * @author Aliaksei Pchelnikau
  * @author Mikalai Bezmen
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({RupContextUtils.class})
 public class UsageServiceTest {
 
     private static final String USAGE_ID_1 = "Usage id 1";
@@ -157,5 +164,16 @@ public class UsageServiceTest {
         replay(usageRepository);
         usageService.addUsagesToScenario(usagesIds, scenario);
         verify(usageRepository);
+    }
+
+    @Test
+    public void testDeleteUsagesFromScenario() {
+        mockStatic(RupContextUtils.class);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        usageRepository.deleteUsagesFromScenario(SCENARIO_ID, USER_NAME);
+        expectLastCall().once();
+        replay(usageRepository, RupContextUtils.class);
+        usageService.deleteUsagesFromScenario(SCENARIO_ID);
+        verify(usageRepository, RupContextUtils.class);
     }
 }

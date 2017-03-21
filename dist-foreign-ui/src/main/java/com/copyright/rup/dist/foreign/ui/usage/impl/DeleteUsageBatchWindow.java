@@ -108,7 +108,8 @@ class DeleteUsageBatchWindow extends Window {
     private void deleteUsageBatch(UsageBatch usageBatch) {
         List<String> scenariosNames = controller.getScenariosNamesAssociatedWithUsageBatch(usageBatch.getId());
         if (CollectionUtils.isEmpty(scenariosNames)) {
-            Windows.showConfirmDialog(ForeignUi.getMessage("message.delete_usage_batch", usageBatch.getName()),
+            Windows.showConfirmDialog(
+                ForeignUi.getMessage("message.confirm.delete_action", usageBatch.getName(), "usage batch"),
                 new ConfirmDeleteListener(controller, usageBatch, container));
         } else {
             StringBuilder scenariosHtml = new StringBuilder("<ul>");

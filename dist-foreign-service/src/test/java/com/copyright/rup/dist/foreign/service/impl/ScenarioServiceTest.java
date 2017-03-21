@@ -43,6 +43,7 @@ import java.util.List;
  * Date: 3/15/17
  *
  * @author Aliaksandr Radkevich
+ * @author Mikalai Bezmen
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({RupContextUtils.class})
@@ -58,6 +59,7 @@ public class ScenarioServiceTest {
     private static final BigDecimal REPORTED_VALUE_2 = new BigDecimal("8.52");
     private static final BigDecimal REPORTED_VALUE_SUM = new BigDecimal("23.86");
     private static final String USER_NAME = "User Name";
+    private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
     private ScenarioService scenarioService;
     private IScenarioRepository scenarioRepository;
     private IUsageService usageService;
@@ -135,6 +137,17 @@ public class ScenarioServiceTest {
         assertEquals(REPORTED_VALUE_SUM, scenarioForInsert.getReportedTotal());
         assertEquals(ScenarioStatusEnum.IN_PROGRESS, scenarioForInsert.getStatus());
         verify(scenarioRepository, usageService, RupContextUtils.class);
+    }
+
+    @Test
+    public void testDeleteScenario() {
+        usageService.deleteUsagesFromScenario(SCENARIO_ID);
+        expectLastCall().once();
+        scenarioRepository.deleteScenario(SCENARIO_ID);
+        expectLastCall().once();
+        replay(usageService, scenarioRepository);
+        scenarioService.deleteScenario(SCENARIO_ID);
+        verify(usageService, scenarioRepository);
     }
 
     private Usage buildUsage(BigDecimal grossAmount, BigDecimal reportedValue) {
