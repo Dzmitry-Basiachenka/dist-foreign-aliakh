@@ -16,6 +16,7 @@ import com.copyright.rup.dist.foreign.repository.api.Sort;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.Test;
@@ -65,6 +66,7 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
     private static final Long DETAIL_ID_234 = 234L;
     private static final Long DETAIL_ID_235 = 235L;
     private static final String DETAIL_ID_KEY = "detailId";
+    private UsageBatch usageBatch;
 
     @Autowired
     private IUsageBatchRepository usageBatchRepository;
@@ -173,24 +175,18 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         assertNotNull(messageLabel);
         assertEquals("Upload completed: 2 records were stored successfully", messageLabel.getText());
         clickElementAndWait(assertElement(successfullyUploadedWindow, OK_BUTTON_ID));
-        List<UsageBatch> usageBatchesAfterUploading = usageBatchRepository.findUsageBatches();
-        assertEquals(4, usageBatchesAfterUploading.size());
-        List<UsageBatch> uploadedUsageBatches =
-            usageBatchesAfterUploading.stream().filter(usageBatch -> USAGE_BATCH_NAME.equals(usageBatch.getName()))
-                .collect(Collectors.toList());
-        assertEquals(1, uploadedUsageBatches.size());
-        UsageBatch usageBatch = uploadedUsageBatches.get(0);
+        List<UsageBatch> uploadedUsageBatches = usageBatchRepository.findUsageBatches().stream()
+            .filter(usageBatch -> USAGE_BATCH_NAME.equals(usageBatch.getName())).collect(Collectors.toList());
+        assertEquals(1, CollectionUtils.size(uploadedUsageBatches));
+        usageBatch = uploadedUsageBatches.get(0);
         verifyUploadedUsageBatch(usageBatch, paymentDate);
         verifyUploadedUsages(usageBatch.getId());
-        deleteUploadedUsageBatch(usageBatch);
     }
 
     @After
-    public void tierDown() {
-        List<UsageBatch> usageBatches = usageBatchRepository.findUsageBatches().stream()
-            .filter(usageBatch -> USAGE_BATCH_NAME.equals(usageBatch.getName())).collect(Collectors.toList());
-        if (1 == usageBatches.size()) {
-            deleteUploadedUsageBatch(usageBatches.get(0));
+    public void tearDown() {
+        if (null != usageBatch) {
+            deleteUploadedUsageBatch(usageBatch.getId());
         }
     }
 
@@ -258,10 +254,7 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         assertEquals(new BigDecimal("3364.5878761454"), usage.getGrossAmount());
     }
 
-    private void deleteUploadedUsageBatch(UsageBatch usageBatch) {
-        assertNotNull(usageBatch);
-        String usageBatchId = usageBatch.getId();
-        assertNotNull(usageBatchId);
+    private void deleteUploadedUsageBatch(String usageBatchId) {
         usageRepository.deleteUsageBatchDetails(usageBatchId);
         usageBatchRepository.deleteUsageBatch(usageBatchId);
     }

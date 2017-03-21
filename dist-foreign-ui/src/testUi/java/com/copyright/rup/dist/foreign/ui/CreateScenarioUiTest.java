@@ -4,18 +4,28 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import com.copyright.rup.common.date.RupDateUtils;
+import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
+import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * UI test to verify 'Add to Scenario' functionality.
@@ -30,10 +40,19 @@ import java.time.format.DateTimeFormatter;
 @ContextConfiguration(value = "classpath:/com/copyright/rup/dist/foreign/ui/dist-foreign-ui-test-context.xml")
 public class CreateScenarioUiTest extends ForeignCommonUiTest {
 
+    private static final String SCENARIO_NAME = "Scenario";
+    private static final String DESCRIPTION = "Description";
+    private static final BigDecimal GROSS_TOTAL = new BigDecimal("13461.54").setScale(10, RoundingMode.HALF_UP);
+    private static final BigDecimal REPORTED_TOTAL = new BigDecimal("2500").setScale(2, RoundingMode.HALF_UP);
+    private static final BigDecimal NET_TOTAL = BigDecimal.ZERO.setScale(10, RoundingMode.HALF_UP);
     private UsageBatchInfo invalidUsageBatch = new UsageBatchInfo("CADRA_11Dec16", "01/11/2017", "FY2017",
         "2000017004 - Access Copyright, The Canadian Copyright Agency");
     private UsageBatchInfo validUsageBatch = new UsageBatchInfo("CADRA_11Dec16", "01/11/2017", "FY2017",
         "7000813806 - CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil");
+    private Scenario scenario;
+
+    @Autowired
+    private IScenarioService scenarioService;
 
     @Test
     // Test case ID: 'e4b0a048-51af-4c1c-91bd-2a199747ca34'
@@ -57,37 +76,59 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
         applyFilters(findElementById(USAGE_FILTER_WIDGET_ID), validUsageBatch);
         assertUsagesTableNotEmpty(waitAndFindElement(By.id(USAGE_TABLE_ID)), 1);
         clickElementAndWait(waitAndFindElement(By.id(ADD_TO_SCENARIO_BUTTON_ID)));
-        WebElement createScenarioWindow = verifyFieldsCreateScenarioWindow();
-        verifyButtonsCreateScenarioWindow(createScenarioWindow);
+        WebElement createScenarioWindow = waitAndFindElement(By.id("create-scenario-window"));
+        assertNotNull(createScenarioWindow);
+        verifyCreateScenarioWindowFields(createScenarioWindow);
+        verifyCreateScenarioWindowButtons(createScenarioWindow);
+        WebElement nameTextField = assertElement(createScenarioWindow, "scenario-name");
+        sendKeysToInput(nameTextField, SCENARIO_NAME);
+        WebElement descriptionTextField = assertElement(createScenarioWindow, "scenario-description");
+        sendKeysToInput(descriptionTextField, DESCRIPTION);
+        clickButtonAndWait(createScenarioWindow, "Confirm");
         WebElement scenarioTab = waitAndGetTab(findElementById(Cornerstone.MAIN_TABSHEET), "Scenarios");
         assertNotNull(scenarioTab);
         verifyScenariosTable();
         selectUsagesTab();
         assertUsagesFilterEmpty(waitAndFindElement(By.id(USAGE_FILTER_WIDGET_ID)),
             waitAndFindElement(By.id(USAGE_TABLE_ID)));
+        List<Scenario> scenarios = scenarioService.getScenarios().stream()
+            .filter(scenario -> SCENARIO_NAME.equals(scenario.getName())).collect(Collectors.toList());
+        assertEquals(1, CollectionUtils.size(scenarios));
+        scenario = scenarios.get(0);
+        verifyScenario();
     }
 
-    private WebElement verifyFieldsCreateScenarioWindow() {
-        WebElement createScenarioWindow = waitAndFindElement(By.id("create-scenario-window"));
-        assertNotNull(createScenarioWindow);
+    @After
+    public void tearDown() {
+        if (null != scenario) {
+            scenarioService.deleteScenario(scenario.getId());
+        }
+    }
+
+    private void verifyScenario() {
+        assertEquals(SCENARIO_NAME, scenario.getName());
+        assertEquals(DESCRIPTION, scenario.getDescription());
+        assertEquals(ScenarioStatusEnum.IN_PROGRESS, scenario.getStatus());
+        assertEquals(GROSS_TOTAL, scenario.getGrossTotal());
+        assertEquals(NET_TOTAL, scenario.getNetTotal());
+        assertEquals(REPORTED_TOTAL, scenario.getReportedTotal());
+    }
+
+    private WebElement verifyCreateScenarioWindowFields(WebElement createScenarioWindow) {
         assertNotNull(waitAndFindElement(createScenarioWindow, By.className("v-caption-scenario-name")));
-        WebElement nameTextField = waitAndFindElement(createScenarioWindow, By.id("scenario-name"));
-        assertNotNull(nameTextField);
+        WebElement nameTextField = assertElement(createScenarioWindow, "scenario-name");
         String currentDate =
             LocalDate.now().format(DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT));
         assertEquals("FAS Distribution " + currentDate, nameTextField.getAttribute("value"));
         assertNotNull(waitAndFindElement(createScenarioWindow, By.className("v-caption-scenario-description")));
-        WebElement descriptionTextField = waitAndFindElement(createScenarioWindow, By.id("scenario-description"));
-        assertNotNull(descriptionTextField);
+        WebElement descriptionTextField = assertElement(createScenarioWindow, "scenario-description");
         assertEquals(StringUtils.EMPTY, descriptionTextField.getText());
         return createScenarioWindow;
     }
 
-    private void verifyButtonsCreateScenarioWindow(WebElement createScenarioWindow) {
-        assertNotNull(waitAndFindElement(createScenarioWindow, By.id(CANCEL_BUTTON_ID)));
-        WebElement confirmButton = waitAndFindElement(createScenarioWindow, By.id("Confirm"));
-        assertNotNull(confirmButton);
-        clickElementAndWait(confirmButton);
+    private void verifyCreateScenarioWindowButtons(WebElement createScenarioWindow) {
+        assertElement(createScenarioWindow, CANCEL_BUTTON_ID);
+        assertElement(createScenarioWindow, "Confirm");
     }
 
     private void verifyScenariosTable() {
