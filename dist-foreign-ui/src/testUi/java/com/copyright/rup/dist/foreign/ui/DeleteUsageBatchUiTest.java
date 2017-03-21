@@ -286,26 +286,7 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
         WebElement table = getUsageBatchesTable(window);
         verifyTableColumns(table, "Usage Batch Name", "Payment Date", "Fiscal Year", StringUtils.EMPTY);
         verifyTableRows(table, usageBatch1, usageBatch2, usageBatch3);
-        verifyTableSorting(table);
-    }
-
-    private void verifyTableSorting(WebElement table) {
-        WebElement header = findElement(table, By.className(V_TABLE_HEADER_CLASS_NAME));
-        List<WebElement> columns = findElements(header, By.className("v-table-header-sortable"));
-        assertEquals(3, columns.size());
-        String ascSortStyleName = "v-table-header-cell-asc";
-        String descSortStyleName = "v-table-header-cell-desc";
-        verifyColumnSorting(header, columns.get(0), ascSortStyleName);
-        verifyColumnSorting(header, columns.get(0), descSortStyleName);
-        verifyColumnSorting(header, columns.get(1), descSortStyleName);
-        verifyColumnSorting(header, columns.get(1), ascSortStyleName);
-        verifyColumnSorting(header, columns.get(2), ascSortStyleName);
-        verifyColumnSorting(header, columns.get(2), descSortStyleName);
-    }
-
-    private void verifyColumnSorting(WebElement tableHeader, WebElement column, String styleName) {
-        clickElementAndWait(column);
-        assertNotNull(findElement(tableHeader, By.className(styleName)));
+        verifyTableSorting(table, "name", "createDate", "fiscalYear");
     }
 
     private void verifySearchToolbar(WebElement window) {

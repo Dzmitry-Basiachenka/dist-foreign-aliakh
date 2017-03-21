@@ -32,18 +32,22 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
     private ScenarioInfo scenario4 = new ScenarioInfo("Scenario name", "01/01/2017");
 
     @Test
+    // Test cases IDs: 'f030a29a-f482-4ec7-869a-5ab6f0f3e655', '8afa9dfb-e4e2-47a5-8fa6-fc88241fb591',
+    // 'f77fa41d-0a2f-4ea5-b120-5e01156e7a1e'
     public void testVerifyScenariosTabSpecialist() {
         loginAsSpecialist();
         verifyScenariosTabSpecialist();
     }
 
     @Test
+    // Test cases IDs: 'dd64f8ba-1016-43a6-90b7-e605b126fae8', 'f77fa41d-0a2f-4ea5-b120-5e01156e7a1e'
     public void testVerifyScenariosTabManager() {
         loginAsManager();
         verifyScenariosTabManagerAndViewOnly();
     }
 
     @Test
+    // Test cases IDs: 'dd64f8ba-1016-43a6-90b7-e605b126fae8', 'f77fa41d-0a2f-4ea5-b120-5e01156e7a1e'
     public void testVerifyScenariosTabViewOnly() {
         loginAsViewOnly();
         verifyScenariosTabManagerAndViewOnly();
@@ -81,6 +85,7 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
     private void verifyScenariosTable(WebElement table) {
         verifyTableColumns(table, "Name", "Create Date", "Status");
         verifyTableRows(table, scenario1, scenario2, scenario3, scenario4);
+        verifyTableSorting(table, "name", "createDate", "status");
     }
 
     private void verifyEmptyMetadataPanel(WebElement scenarioTab, WebElement table) {

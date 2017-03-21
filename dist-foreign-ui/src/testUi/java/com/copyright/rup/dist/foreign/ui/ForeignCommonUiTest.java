@@ -9,6 +9,7 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.vaadin.test.CommonUiTest;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Rule;
@@ -232,6 +233,30 @@ public class ForeignCommonUiTest extends CommonUiTest {
 
     private void openAppPage(ForeignCredentials credentials) {
         openPage(APP_URL, credentials.getUserName(), credentials.getPassword());
+    }
+
+    /**
+     * Verifies table sorting.
+     *
+     * @param table           {@link WebElement} representing table
+     * @param sortableColumns sortable columns
+     */
+    protected void verifyTableSorting(WebElement table, String... sortableColumns) {
+        WebElement header = findElement(table, By.className(V_TABLE_HEADER_CLASS_NAME));
+        assertNotNull(header);
+        List<WebElement> columns = findElements(header, By.className("v-table-header-sortable"));
+        assertEquals(sortableColumns.length, columns.size());
+        for (WebElement column : columns) {
+            verifyColumnSorting(header, column, "v-table-header-cell-asc");
+            verifyColumnSorting(header, column, "v-table-header-cell-desc");
+            clickElementAndWait(column);
+            ArrayUtils.contains(sortableColumns, column.getText());
+        }
+    }
+
+    private void verifyColumnSorting(WebElement tableHeader, WebElement column, String sortStyleName) {
+        clickElementAndWait(column);
+        assertNotNull(findElement(tableHeader, By.className(sortStyleName)));
     }
 
     private void assertApplyButtonDisabled(WebElement filterWidget) {
