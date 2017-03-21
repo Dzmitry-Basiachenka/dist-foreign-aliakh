@@ -79,7 +79,8 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
         initMetadataPanel();
         HorizontalLayout horizontalLayout = new HorizontalLayout(table, metadataPanel);
         horizontalLayout.setSizeFull();
-        horizontalLayout.setExpandRatio(table, 1);
+        horizontalLayout.setExpandRatio(table, 0.7f);
+        horizontalLayout.setExpandRatio(metadataPanel, 0.3f);
         horizontalLayout.setSpacing(true);
         addComponents(initButtonsLayout(), horizontalLayout);
         setExpandRatio(horizontalLayout, 1);
@@ -111,8 +112,9 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
             ForeignUi.getMessage("table.column.name"),
             ForeignUi.getMessage("table.column.create_date"),
             ForeignUi.getMessage("table.column.status"));
-        table.setColumnWidth("createDate", 300);
-        table.setColumnWidth("status", 300);
+        table.setColumnWidth("createDate", 100);
+        table.setColumnWidth("status", 130);
+        table.setColumnExpandRatio("name", 1);
         table.addGeneratedColumn("createDate", new DateColumnGenerator());
         table.addValueChangeListener(event -> {
             BeanItem<Scenario> item = container.getItem(event.getProperty().getValue());
@@ -123,8 +125,7 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
 
     private void initMetadataPanel() {
         metadataPanel = new Panel();
-        metadataPanel.setHeight(100, Unit.PERCENTAGE);
-        metadataPanel.setWidth(500, Unit.PIXELS);
+        metadataPanel.setSizeFull();
         VaadinUtils.addComponentStyle(metadataPanel, "scenarios-metadata");
         metadataLayout = new VerticalLayout(ownerLabel, distributionTotalLabel, grossTotalLabel, reportedTotalLabel,
             descriptionLabel);

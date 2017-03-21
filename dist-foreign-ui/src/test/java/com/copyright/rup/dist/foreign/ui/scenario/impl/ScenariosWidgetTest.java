@@ -118,10 +118,7 @@ public class ScenariosWidgetTest {
     }
 
     private void verifyPanel(Panel panel) {
-        assertEquals(100, panel.getHeight(), 0);
-        assertEquals(Unit.PERCENTAGE, panel.getHeightUnits());
-        assertEquals(500, panel.getWidth(), 0);
-        assertEquals(Unit.PIXELS, panel.getWidthUnits());
+        verifySize(panel);
         Component content = panel.getContent();
         assertTrue(content instanceof Label);
         Label label = (Label) content;
@@ -132,8 +129,9 @@ public class ScenariosWidgetTest {
         verifySize(table);
         assertArrayEquals(new Object[]{"name", "createDate", "status"}, table.getVisibleColumns());
         assertArrayEquals(new Object[]{"Name", "Create Date", "Status"}, table.getColumnHeaders());
-        assertEquals(300, table.getColumnWidth("createDate"));
-        assertEquals(300, table.getColumnWidth("status"));
+        assertEquals(100, table.getColumnWidth("createDate"));
+        assertEquals(130, table.getColumnWidth("status"));
+        assertEquals(1, table.getColumnExpandRatio("name"), 0);
         assertTrue(table.getColumnGenerator("createDate") instanceof DateColumnGenerator);
         Collection<?> listeners = table.getListeners(ValueChangeEvent.class);
         assertEquals(1, listeners.size());
