@@ -53,6 +53,7 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 
 /**
@@ -180,7 +181,7 @@ public class UsageBatchUploadWindowTest {
     }
 
     private CsvProcessingResult<Usage> buildCsvProcessingResult() {
-        CsvProcessingResult<Usage> processingResult = new CsvProcessingResult<>();
+        CsvProcessingResult<Usage> processingResult = new CsvProcessingResult<>(Collections.emptyList());
         processingResult.addRecord(new Usage());
         return processingResult;
     }

@@ -4,6 +4,7 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator.RequiredValidator;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,6 +23,12 @@ public class UsageCsvProcessor extends CommonCsvProcessor<Usage> {
     @Override
     protected List<ICsvColumn> getHeaders() {
         return Arrays.asList(Header.values());
+    }
+
+    @Override
+    protected void initPlainValidators() {
+        addPlainValidators(Header.DETAIL_ID, new RequiredValidator());
+        addPlainValidators(Header.RH_ACCT_NUMBER, new RequiredValidator());
     }
 
     @Override
