@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.service.impl.csvprocessor;
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.exception.HeaderValidationException;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.exception.ValidationException;
+import com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator.IValidator;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -50,8 +51,9 @@ public abstract class CommonCsvProcessor<T> {
 
     private Map<ICsvColumn, List<IValidator<String>>> plainValidators = Maps.newHashMap();
     private List<ICsvColumn> headers = Lists.newArrayList();
-    private CsvProcessingResult<T> processingResult = new CsvProcessingResult<>();
+    private CsvProcessingResult<T> processingResult;
     private int line = 1;
+    private String originalRow;
 
     /**
      * Processes CSV resource from the specified stream and {@link CsvProcessingResult}
@@ -66,6 +68,7 @@ public abstract class CommonCsvProcessor<T> {
             new InputStreamReader(new ByteArrayInputStream(stream.toByteArray()), StandardCharsets.UTF_8),
             CsvPreference.STANDARD_PREFERENCE)) {
             headers = getHeaders();
+            processingResult = new CsvProcessingResult<>(getColumnsHeaders());
             validateHeader(listReader.getHeader(true));
             initPlainValidators();
             processRows(listReader);
@@ -174,6 +177,7 @@ public abstract class CommonCsvProcessor<T> {
         while (true) {
             ++line;
             List<String> params = listReader.read();
+            originalRow = listReader.getUntokenizedRow();
             if (null != params) {
                 processRow(params);
             } else {
@@ -195,11 +199,12 @@ public abstract class CommonCsvProcessor<T> {
     private boolean plainValidate(List<String> params) {
         for (int i = 0; i < params.size(); i++) {
             String value = params.get(i);
+            String field = headers.get(i).getColumnName();
             List<IValidator<String>> validators = getPlainValidators(i);
             validators.stream()
                 .filter(validator -> !validator.isValid(value))
-                //TODO stub will be implemented as a part of B-29761
-                .forEach(validator -> processingResult.logError(line, validator.getErrorMessage()));
+                .forEach(validator -> processingResult
+                    .logError(line, originalRow, String.format("%s: %s", field, validator.getErrorMessage())));
         }
         return processingResult.isSuccessful();
     }

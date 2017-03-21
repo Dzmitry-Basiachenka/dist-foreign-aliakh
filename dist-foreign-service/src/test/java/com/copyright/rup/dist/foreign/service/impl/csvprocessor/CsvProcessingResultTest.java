@@ -7,6 +7,8 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Collections;
+
 /**
  * Verifies {@link CsvProcessingResult}.
  * <p>
@@ -22,7 +24,7 @@ public class CsvProcessingResultTest {
 
     @Before
     public void setUp() {
-        result = new CsvProcessingResult<>();
+        result = new CsvProcessingResult<>(Collections.emptyList());
     }
 
     @Test
@@ -43,9 +45,17 @@ public class CsvProcessingResultTest {
 
     @Test
     public void testLogError() {
-        result.logError(1, "Error message");
+        String originalRow = "originalRow";
+        String errorMessage = "Error message";
+        int line = 1;
+        result.logError(line, originalRow, errorMessage);
         assertFalse(result.isSuccessful());
         assertFalse(result.isEmpty());
         assertTrue(result.getResult().isEmpty());
+        assertEquals(1, result.getErrors().size());
+        CsvProcessingResult.ErrorRow errorRow = result.getErrors().get(1);
+        assertEquals(line, errorRow.getLine());
+        assertEquals(originalRow, errorRow.getOriginalRow());
+        assertEquals(errorMessage, errorRow.getErrorMessages().get(0));
     }
 }

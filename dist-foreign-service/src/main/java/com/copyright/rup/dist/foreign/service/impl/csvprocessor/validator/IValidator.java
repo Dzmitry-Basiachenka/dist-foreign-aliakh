@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.service.impl.csvprocessor;
+package com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator;
 
 /**
  * The contract for validators. Used optional value approach (see {@link #isValid(Object)}).

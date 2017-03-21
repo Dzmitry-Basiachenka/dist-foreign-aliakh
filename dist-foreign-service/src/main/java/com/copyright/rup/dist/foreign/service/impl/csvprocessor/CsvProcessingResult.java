@@ -18,8 +18,18 @@ import java.util.Map;
  */
 public class CsvProcessingResult<T> {
 
+    private final List<String> headers;
     private List<T> result = Lists.newArrayList();
-    private Map<Integer, String> errors = Maps.newTreeMap();
+    private Map<Integer, ErrorRow> errors = Maps.newTreeMap();
+
+    /**
+     * Constructor.
+     *
+     * @param headers csv file headers
+     */
+    public CsvProcessingResult(List<String> headers) {
+        this.headers = headers;
+    }
 
     /**
      * Adds valid item to the valid list.
@@ -40,13 +50,33 @@ public class CsvProcessingResult<T> {
     }
 
     /**
-     * Adds failed row to result.
-     *
-     * @param line     line number from CSV
-     * @param errorRow original row from CSV
+     * @return the map of errors. Key is the line number, value is {@link ErrorRow}.
      */
-    public void logError(Integer line, String errorRow) {
-        errors.put(line, errorRow);
+    public Map<Integer, ErrorRow> getErrors() {
+        return errors;
+    }
+
+    /**
+     * @return file headers.
+     */
+    public List<String> getHeaders() {
+        return headers;
+    }
+
+    /**
+     * Adds failed row to result, if the row exists error message will be appended.
+     *
+     * @param line         line number from CSV
+     * @param originalRow  original row from CSV
+     * @param errorMessage error message
+     */
+    public void logError(Integer line, String originalRow, String errorMessage) {
+        ErrorRow errorRow = errors.get(line);
+        if (null == errorRow) {
+            errorRow = new ErrorRow(line, originalRow);
+            errors.put(line, errorRow);
+        }
+        errorRow.addErrorMessage(errorMessage);
     }
 
     /**
@@ -63,5 +93,44 @@ public class CsvProcessingResult<T> {
      */
     public boolean isEmpty() {
         return result.isEmpty() && errors.isEmpty();
+    }
+
+    /**
+     * Contains information about errors.
+     */
+    public static class ErrorRow {
+        private final int line;
+        private final String originalRow;
+        private List<String> errorMessages = Lists.newArrayList();
+
+        private ErrorRow(int line, String originalRow) {
+            this.line = line;
+            this.originalRow = originalRow;
+        }
+
+        private void addErrorMessage(String errorMessage) {
+            errorMessages.add(errorMessage);
+        }
+
+        /**
+         * @return line number.
+         */
+        public int getLine() {
+            return line;
+        }
+
+        /**
+         * @return original row.
+         */
+        public String getOriginalRow() {
+            return originalRow;
+        }
+
+        /**
+         * @return list of error messages.
+         */
+        public List<String> getErrorMessages() {
+            return errorMessages;
+        }
     }
 }
