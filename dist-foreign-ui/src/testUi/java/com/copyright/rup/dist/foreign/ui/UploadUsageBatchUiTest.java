@@ -190,11 +190,11 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         }
     }
 
-    private void verifyUploadedUsageBatch(UsageBatch usageBatch, LocalDate date) {
-        assertEquals(RRO_ACCOUNT_NUMBER, usageBatch.getRro().getAccountNumber());
-        assertEquals(new BigDecimal(GROSS_AMOUNT), usageBatch.getGrossAmount());
-        assertEquals(date.getYear(), usageBatch.getFiscalYear(), 0);
-        assertEquals(date, usageBatch.getPaymentDate());
+    private void verifyUploadedUsageBatch(UsageBatch uploadedUsageBatch, LocalDate date) {
+        assertEquals(RRO_ACCOUNT_NUMBER, uploadedUsageBatch.getRro().getAccountNumber());
+        assertEquals(new BigDecimal(GROSS_AMOUNT), uploadedUsageBatch.getGrossAmount());
+        assertEquals(date.getYear(), uploadedUsageBatch.getFiscalYear(), 0);
+        assertEquals(date, uploadedUsageBatch.getPaymentDate());
     }
 
     private void verifyUploadedUsages(String usageBatchId) {
