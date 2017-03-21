@@ -343,7 +343,7 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
 
     private WebElement openUploadUsageBatchWindow() {
         loginAsSpecialist();
-        WebElement usagesTab = getUsagesTab();
+        WebElement usagesTab = selectUsagesTab();
         WebElement usagesLayout = assertElement(usagesTab, USAGE_LAYOUT_ID);
         WebElement buttonsLayout = assertElement(usagesLayout, "usages-buttons");
         clickElementAndWait(findElement(buttonsLayout, By.id(LOAD_USAGE_BUTTON_ID)));

@@ -70,6 +70,7 @@ public class CreateScenarioWindowTest {
     public void testComponentStructure() {
         assertEquals("Create Scenario", createScenarioWindow.getCaption());
         assertEquals(320, createScenarioWindow.getWidth(), 0);
+        assertEquals("create-scenario-window", createScenarioWindow.getId());
         VerticalLayout content = (VerticalLayout) createScenarioWindow.getContent();
         assertNotNull(content);
         assertTrue(content.isSpacing());
@@ -108,7 +109,7 @@ public class CreateScenarioWindowTest {
         assertEquals(String.format("FAS Distribution %s", LocalDate.now().format(
             DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT))), scenarioNameField.getValue());
         assertFalse(scenarioNameField.isValidationVisible());
-        assertEquals("Scenario_name", scenarioNameField.getId());
+        assertEquals("scenario-name", scenarioNameField.getId());
         assertEquals(StringUtils.EMPTY, scenarioNameField.getNullRepresentation());
         assertTrue(scenarioNameField.isRequired());
         assertEquals("Field value should be specified", scenarioNameField.getRequiredError());
@@ -123,6 +124,7 @@ public class CreateScenarioWindowTest {
         assertNotNull(component);
         TextArea descriptionArea = (TextArea) component;
         assertEquals("Description", descriptionArea.getCaption());
+        assertEquals("scenario-description", descriptionArea.getId());
         assertFalse(descriptionArea.isValidationVisible());
         Collection<Validator> validators = descriptionArea.getValidators();
         assertEquals(1, validators.size());

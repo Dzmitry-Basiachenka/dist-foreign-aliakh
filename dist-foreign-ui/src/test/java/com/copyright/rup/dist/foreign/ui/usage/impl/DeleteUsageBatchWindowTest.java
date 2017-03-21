@@ -161,7 +161,7 @@ public class DeleteUsageBatchWindowTest {
         ClickListener listener = (ClickListener) listeners.iterator().next();
         expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
             .andReturn(Lists.newArrayList("Scenario 1", "Scenario 2")).once();
-        Windows.showNotificationWindow("Usage batch can not be deleted because it is associated with the following " +
+        Windows.showNotificationWindow("Usage batch cannot be deleted because it is associated with the following " +
             "scenarios:<ul><li>Scenario 1</li><li>Scenario 2</li></ul>");
         expectLastCall().once();
         replay(controller, confirmWindowCapture, Windows.class);
