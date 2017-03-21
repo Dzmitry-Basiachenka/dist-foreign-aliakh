@@ -8,6 +8,7 @@ import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
@@ -34,6 +35,7 @@ import java.util.Map;
  *
  * @author Darya Baraukova
  * @author Aliaksandr Radkevich
+ * @author Mikalai Bezmen
  */
 @Repository
 public class UsageRepository extends BaseRepository implements IUsageRepository {
@@ -49,6 +51,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     private static final String SCENARIO_ID_KEY = "scenarioId";
     private static final String UPDATE_USER_KEY = "updateUser";
     private static final String USAGE_IDS_KEY = "usageIds";
+    private static final String STATUS_KEY = "status";
 
     @Override
     public void insertUsage(Usage usage) {
@@ -98,13 +101,23 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     @Override
     public void addUsagesToScenario(List<String> usageIds, String scenarioId, String updateUser) {
         checkArgument(CollectionUtils.isNotEmpty(usageIds));
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
         parameters.put(SCENARIO_ID_KEY, checkNotNull(scenarioId));
         parameters.put(UPDATE_USER_KEY, checkNotNull(updateUser));
+        parameters.put(STATUS_KEY, UsageStatusEnum.LOCKED);
         for (List<String> usageIdsPartition : Iterables.partition(usageIds, BATCH_SIZE_FOR_SELECT)) {
             parameters.put(USAGE_IDS_KEY, usageIdsPartition);
             update("IUsageMapper.addUsagesToScenario", parameters);
         }
+    }
+
+    @Override
+    public void deleteUsagesFromScenario(String scenarioId, String updateUser) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
+        parameters.put(SCENARIO_ID_KEY, checkNotNull(scenarioId));
+        parameters.put(UPDATE_USER_KEY, checkNotNull(updateUser));
+        parameters.put(STATUS_KEY, UsageStatusEnum.ELIGIBLE);
+        update("IUsageMapper.deleteUsagesFromScenario", parameters);
     }
 
     /**

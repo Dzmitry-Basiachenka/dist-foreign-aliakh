@@ -335,7 +335,7 @@
         update
             ${schema}.df_usage
         set
-            status_ind = 'LOCKED',
+            status_ind = #{status},
             df_scenario_uid = #{scenarioId},
             <include refid="StoredEntityMapper.update"/>
         where df_usage_uid in (
@@ -343,5 +343,15 @@
                 #{usageId}
             </foreach>
         )
+    </update>
+
+    <update id="deleteUsagesFromScenario" parameterType="map">
+        update
+            ${schema}.df_usage
+        set
+            status_ind = #{status},
+            df_scenario_uid = null,
+            <include refid="StoredEntityMapper.update"/>
+        where df_scenario_uid = #{scenarioId}
     </update>
 </mapper>

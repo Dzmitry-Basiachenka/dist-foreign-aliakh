@@ -30,6 +30,7 @@ import java.util.List;
  * Date: 02/03/17
  *
  * @author Aliaksei Pchelnikau
+ * @author Mikalai Bezmen
  */
 @Service
 public class UsageService implements IUsageService {
@@ -60,6 +61,7 @@ public class UsageService implements IUsageService {
 
     @Override
     public int insertUsages(UsageBatch usageBatch, List<Usage> usages) {
+        // TODO {apchelnikau} adjust unit test to verify getUserName() method
         String userName = RupContextUtils.getUserName();
         int size = usages.size();
         LOGGER.info("Insert usages. Started. UsageBatchName={}, UsagesCount={}, UserName={}", usageBatch.getName(),
@@ -89,6 +91,11 @@ public class UsageService implements IUsageService {
     @Override
     public void addUsagesToScenario(List<String> usageIds, Scenario scenario) {
         usageRepository.addUsagesToScenario(usageIds, scenario.getId(), scenario.getCreateUser());
+    }
+
+    @Override
+    public void deleteUsagesFromScenario(String scenarioId) {
+        usageRepository.deleteUsagesFromScenario(scenarioId, RupContextUtils.getUserName());
     }
 
     private void calculateUsagesGrossAmount(UsageBatch usageBatch, List<Usage> usages) {

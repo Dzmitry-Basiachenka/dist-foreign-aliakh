@@ -13,6 +13,7 @@ import java.util.List;
  * Date: 3/14/17
  *
  * @author Aliaksandr Radkevich
+ * @author Mikalai Bezmen
  */
 public interface IScenariosController extends IController<IScenariosWidget> {
 
@@ -20,4 +21,9 @@ public interface IScenariosController extends IController<IScenariosWidget> {
      * @return list of {@link Scenario}s.
      */
     List<Scenario> getScenarios();
+
+    /**
+     * Handles click on 'Delete' button.
+     */
+    void onDeleteButtonClicked();
 }
