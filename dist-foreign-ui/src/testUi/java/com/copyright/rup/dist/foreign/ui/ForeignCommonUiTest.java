@@ -9,6 +9,7 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.vaadin.test.CommonUiTest;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
@@ -20,6 +21,8 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Common class for UI tests.
@@ -191,11 +194,11 @@ public class ForeignCommonUiTest extends CommonUiTest {
      * Finds element by locating mechanism inside parent element and verifies it for {@code null}.
      *
      * @param parentElement parent element
-     * @param id            component id
+     * @param by            the element selector
      * @return instance of {@link WebElement}
      */
-    protected WebElement assertElement(WebElement parentElement, String id) {
-        return checkNotNull(waitAndFindElement(parentElement, By.id(id)));
+    protected WebElement assertElement(WebElement parentElement, By by) {
+        return checkNotNull(waitAndFindElement(parentElement, by));
     }
 
     /**
@@ -205,9 +208,9 @@ public class ForeignCommonUiTest extends CommonUiTest {
      * @param expectedHeaders expected columns headers in the order they appear on UI
      */
     protected void verifyTableColumns(WebElement table, String... expectedHeaders) {
-        WebElement tableHeader = findElement(table, By.className(V_TABLE_HEADER_CLASS_NAME));
+        WebElement tableHeader = assertElement(table, By.className(V_TABLE_HEADER_CLASS_NAME));
         List<WebElement> headers = findElements(tableHeader, By.className(V_TABLE_CAPTION_CONTAINER_CLASS_NAME));
-        assertEquals(expectedHeaders.length, headers.size());
+        assertEquals(expectedHeaders.length, CollectionUtils.size(headers));
         for (int i = 0; i < expectedHeaders.length; i++) {
             assertEquals(expectedHeaders[i], getInnerHtml(headers.get(i)));
         }
@@ -219,10 +222,9 @@ public class ForeignCommonUiTest extends CommonUiTest {
      * @param dateElement date element
      */
     protected void applyCurrentDateForDateField(WebElement dateElement) {
-        waitAndFindElement(dateElement, By.className("v-datefield-button")).click();
+        clickElementAndWait(assertElement(dateElement, By.className("v-datefield-button")));
         WebElement calendarPanel = waitAndFindElement(By.className("v-datefield-calendarpanel"));
-        WebElement currentDateSlot =
-            waitAndFindElement(calendarPanel, By.className("v-datefield-calendarpanel-day-today"));
+        WebElement currentDateSlot = assertElement(calendarPanel, By.className("v-datefield-calendarpanel-day-today"));
         clickElementAndWait(currentDateSlot);
     }
 
@@ -250,9 +252,7 @@ public class ForeignCommonUiTest extends CommonUiTest {
      * @param item           item to choose
      */
     protected void saveFilter(WebElement filterWidget, String filterId, String filterWindowId, String item) {
-        WebElement itemsFilter = findElement(filterWidget, By.id(filterId));
-        assertNotNull(itemsFilter);
-        clickElementAndWait(itemsFilter);
+        clickElementAndWait(assertElement(filterWidget, By.id(filterId)));
         WebElement filterWindow = findElementById(filterWindowId);
         assertNotNull(filterWindow);
         WebElement label = findElementByText(filterWindow, HTML_LABEL_TAG_NAME, item);
@@ -268,7 +268,7 @@ public class ForeignCommonUiTest extends CommonUiTest {
      */
     protected void assertUsagesTableEmpty(WebElement usagesTable) {
         String backgroundImage =
-            waitAndFindElement(usagesTable, By.className("v-scrollable")).getCssValue("background-image");
+            assertElement(usagesTable, By.className("v-scrollable")).getCssValue("background-image");
         assertTrue(backgroundImage.contains("img/empty_usages_table.png"));
     }
 
@@ -280,10 +280,9 @@ public class ForeignCommonUiTest extends CommonUiTest {
      */
     protected void assertUsagesTableNotEmpty(WebElement usagesTable, int rowsCount) {
         assertNotNull(usagesTable);
-        WebElement usagesTableBody = waitAndFindElement(usagesTable, By.className(V_TABLE_BODY_CLASS_NAME));
-        assertNotNull(usagesTableBody);
-        List<WebElement> rows = findElements(usagesTableBody, By.tagName(HTML_TR_TAG_NAME));
-        assertEquals(rowsCount, rows.size());
+        List<WebElement> rows = findElements(assertElement(usagesTable, By.className(V_TABLE_BODY_CLASS_NAME)),
+            By.tagName(HTML_TR_TAG_NAME));
+        assertEquals(rowsCount, CollectionUtils.size(rows));
     }
 
     /**
@@ -304,16 +303,52 @@ public class ForeignCommonUiTest extends CommonUiTest {
      * @param sortableColumns sortable columns
      */
     protected void verifyTableSorting(WebElement table, String... sortableColumns) {
-        WebElement header = findElement(table, By.className(V_TABLE_HEADER_CLASS_NAME));
-        assertNotNull(header);
+        WebElement header = assertElement(table, By.className(V_TABLE_HEADER_CLASS_NAME));
         List<WebElement> columns = findElements(header, By.className("v-table-header-sortable"));
-        assertEquals(sortableColumns.length, columns.size());
+        assertEquals(sortableColumns.length, CollectionUtils.size(columns));
         for (WebElement column : columns) {
             verifyColumnSorting(header, column, "v-table-header-cell-asc");
             verifyColumnSorting(header, column, "v-table-header-cell-desc");
             clickElementAndWait(column);
             ArrayUtils.contains(sortableColumns, column.getText());
         }
+    }
+
+    /**
+     * Finds error window and verifies error messages for appropriate fields by given map. Also closes error window
+     * after verification.
+     *
+     * @param fieldNameToErrorMessageMap map of field names to their error messages
+     */
+    protected void verifyErrorWindow(Map<String, String> fieldNameToErrorMessageMap) {
+        WebElement errorWindow = findErrorWindow();
+        WebElement errorContent = waitAndFindElement(By.className("validation-error-content"));
+        assertNotNull(errorContent);
+        List<WebElement> errorFields = findElements(errorContent, By.tagName(HTML_B_TAG_NAME));
+        List<WebElement> errorMessages = findElements(errorContent, By.tagName(HTML_SPAN_TAG_NAME));
+        int errorsSize = CollectionUtils.size(fieldNameToErrorMessageMap);
+        assertEquals(errorsSize, CollectionUtils.size(errorFields));
+        assertEquals(errorsSize, CollectionUtils.size(errorMessages));
+        assertTrue(errorFields.stream()
+            .map(WebElement::getText)
+            .collect(Collectors.toList())
+            .containsAll(fieldNameToErrorMessageMap.keySet()));
+        assertTrue(errorMessages.stream()
+            .map(WebElement::getText)
+            .collect(Collectors.toList())
+            .containsAll(fieldNameToErrorMessageMap.values()));
+        clickElementAndWait(assertElement(errorWindow, By.id(OK_BUTTON_ID)));
+    }
+
+    /**
+     * Finds field on window by given id and sets the value.
+     *
+     * @param window  instance of {@link WebElement} represented parent window
+     * @param fieldId identifier of field
+     * @param value   value to set
+     */
+    protected void fillField(WebElement window, String fieldId, String value) {
+        sendKeysToInput(assertElement(window, By.id(fieldId)), value);
     }
 
     /**
@@ -334,6 +369,12 @@ public class ForeignCommonUiTest extends CommonUiTest {
         verifyConfirmDialogAndClickButton(expectedLabel, CANCEL_BUTTON_ID);
     }
 
+    private WebElement findErrorWindow() {
+        WebElement errorWindow = waitAndFindElement(By.className("validation-error-window"));
+        assertNotNull(errorWindow);
+        return errorWindow;
+    }
+
     private void openAppPage(ForeignCredentials credentials) {
         openPage(APP_URL, credentials.getUserName(), credentials.getPassword());
     }
@@ -341,7 +382,7 @@ public class ForeignCommonUiTest extends CommonUiTest {
     private void verifyConfirmDialogAndClickButton(String expectedLabel, String buttonToClick) {
         WebElement confirmDialog = findElementById("confirm-dialog-window");
         assertNotNull(confirmDialog);
-        WebElement label = findElement(confirmDialog, By.className("v-label"));
+        WebElement label = assertElement(confirmDialog, By.className("v-label"));
         assertNotNull(label);
         assertEquals(expectedLabel, label.getText());
         clickButtonAndWait(confirmDialog, buttonToClick);
@@ -349,35 +390,34 @@ public class ForeignCommonUiTest extends CommonUiTest {
 
     private void verifyColumnSorting(WebElement tableHeader, WebElement column, String sortStyleName) {
         clickElementAndWait(column);
-        assertNotNull(findElement(tableHeader, By.className(sortStyleName)));
+        assertElement(tableHeader, By.className(sortStyleName));
     }
 
     private void assertApplyButtonDisabled(WebElement filterWidget) {
-        WebElement applyButton = assertElement(filterWidget, APPLY_BUTTON_ID);
+        WebElement applyButton = assertElement(filterWidget, By.id(APPLY_BUTTON_ID));
         assertTrue(applyButton.getAttribute("class").contains("v-disabled"));
     }
 
     private void assertFiscalYearFilterEmpty(WebElement filterWidget) {
-        WebElement fiscalYearFilterInput = findElement(filterWidget, By.className("v-filterselect-input"));
+        WebElement fiscalYearFilterInput = assertElement(filterWidget, By.className("v-filterselect-input"));
         assertEquals(StringUtils.EMPTY, getValueAttribute(fiscalYearFilterInput));
     }
 
     private void assertPaymentDateFilterEmpty(WebElement filterWidget) {
-        WebElement paymentDateFilter = assertElement(filterWidget, PAYMENT_DATE_FILTER_ID);
-        WebElement paymentDateField = findElement(paymentDateFilter, By.className("v-textfield"));
-        assertNotNull(paymentDateField);
-        assertEquals(StringUtils.EMPTY, getValueAttribute(paymentDateField));
+        WebElement paymentDateFilter = assertElement(filterWidget, By.id(PAYMENT_DATE_FILTER_ID));
+        assertEquals(StringUtils.EMPTY,
+            getValueAttribute(assertElement(paymentDateFilter, By.className("v-textfield"))));
     }
 
     private void assertRroFilterEmpty(WebElement filterWidget) {
-        WebElement rightsholdersFilter = assertElement(filterWidget, RRO_FILTER_ID);
+        WebElement rightsholdersFilter = assertElement(filterWidget, By.id(RRO_FILTER_ID));
         assertNotNull(findElementByText(rightsholdersFilter, HTML_DIV_TAG_NAME, "(0)"));
         WebElement rightsholderFilterButton = findElementByText(rightsholdersFilter, HTML_SPAN_TAG_NAME, "RROs");
         assertNotNull(rightsholderFilterButton);
     }
 
     private void assertBatchesFilterEmpty(WebElement filterWidget) {
-        WebElement batchesFilter = assertElement(filterWidget, BATCHES_FILTER_ID);
+        WebElement batchesFilter = assertElement(filterWidget, By.id(BATCHES_FILTER_ID));
         assertNotNull(findElementByText(batchesFilter, HTML_DIV_TAG_NAME, "(0)"));
         WebElement batchesFilterButton = findElementByText(batchesFilter, HTML_SPAN_TAG_NAME, "Batches");
         assertNotNull(batchesFilterButton);

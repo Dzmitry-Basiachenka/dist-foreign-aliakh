@@ -108,21 +108,19 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
 
     private void verifyBatchAndUsageInformationIsDisplayedCorrectly() {
         WebElement usagesTab = selectUsagesTab();
-        WebElement filterWidget = waitAndFindElement(usagesTab, By.id(USAGE_FILTER_WIDGET_ID));
-        assertNotNull(filterWidget);
+        WebElement filterWidget = assertElement(usagesTab, By.id(USAGE_FILTER_WIDGET_ID));
         assertNotNull(findElementByText(filterWidget, HTML_DIV_TAG_NAME, FILTERS_HEADER_TEXT));
         openBatchesFilterWindow(filterWidget);
         applyBatchFilter(USAGE_BATCH_NAME);
-        clickButtonAndWait(assertElement(filterWidget, FILTER_BUTTONS_LAYOUT_ID), APPLY_BUTTON_ID);
+        clickButtonAndWait(assertElement(filterWidget, By.id(FILTER_BUTTONS_LAYOUT_ID)), APPLY_BUTTON_ID);
         verifyFoundUsages(usagesTab);
     }
 
     private void verifyMultiplyUsageDataFilterAndClearFilterButton() {
         WebElement usagesTab = selectUsagesTab();
-        WebElement usagesLayout = assertElement(usagesTab, USAGE_LAYOUT_ID);
-        WebElement usagesTable = assertElement(usagesLayout, USAGE_TABLE_ID);
-        WebElement filterWidget = waitAndFindElement(usagesTab, By.id(USAGE_FILTER_WIDGET_ID));
-        assertNotNull(filterWidget);
+        WebElement usagesLayout = assertElement(usagesTab, By.id(USAGE_LAYOUT_ID));
+        WebElement usagesTable = assertElement(usagesLayout, By.id(USAGE_TABLE_ID));
+        WebElement filterWidget = assertElement(usagesTab, By.id(USAGE_FILTER_WIDGET_ID));
         assertNotNull(findElementByText(filterWidget, HTML_DIV_TAG_NAME, FILTERS_HEADER_TEXT));
         openBatchesFilterWindow(filterWidget);
         applyBatchFilter(USAGE_BATCH_NAME);
@@ -130,7 +128,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         applyRroFilter(RRO_ACCOUNT);
         applyPaymentDateFilter();
         applyFiscalYear(FISCAL_YEAR);
-        WebElement filterButtonsLayout = assertElement(filterWidget, FILTER_BUTTONS_LAYOUT_ID);
+        WebElement filterButtonsLayout = assertElement(filterWidget, By.id(FILTER_BUTTONS_LAYOUT_ID));
         clickButtonAndWait(filterButtonsLayout, APPLY_BUTTON_ID);
         verifyFoundUsages(usagesTab);
         clickButtonAndWait(filterButtonsLayout, CLEAR_BATTON_ID);
@@ -171,14 +169,14 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     }
 
     private void verifyFoundUsages(WebElement usagesTab) {
-        WebElement usagesLayout = assertElement(usagesTab, USAGE_LAYOUT_ID);
-        WebElement usagesTable = assertElement(usagesLayout, USAGE_TABLE_ID);
-        WebElement table = findElement(usagesTable, By.className(V_TABLE_BODY_CLASS_NAME));
+        WebElement usagesLayout = assertElement(usagesTab, By.id(USAGE_LAYOUT_ID));
+        WebElement usagesTable = assertElement(usagesLayout, By.id(USAGE_TABLE_ID));
+        WebElement table = assertElement(usagesTable, By.className(V_TABLE_BODY_CLASS_NAME));
         List<WebElement> usageTableRows = findElements(table, By.tagName(HTML_TR_TAG_NAME));
-        assertEquals(1, usageTableRows.size());
+        assertEquals(1, CollectionUtils.size(usageTableRows));
         WebElement usageTableRow = usageTableRows.get(0);
         List<WebElement> usageValues = findElements(usageTableRow, By.tagName(HTML_TD_TAG_NAME));
-        assertEquals(23, usageValues.size());
+        assertEquals(23, CollectionUtils.size(usageValues));
         verifyUsageValues(usageValues);
     }
 
@@ -214,13 +212,13 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     private WebElement verifyUsagesTab() {
         WebElement usagesTab = selectUsagesTab();
         verifyFiltersWidget(usagesTab);
-        WebElement usagesLayout = assertElement(usagesTab, USAGE_LAYOUT_ID);
+        WebElement usagesLayout = assertElement(usagesTab, By.id(USAGE_LAYOUT_ID));
         verifyUsagesTable(usagesLayout);
         return usagesLayout;
     }
 
     private void verifyUsagesLayoutButtonSpecialist(WebElement usagesLayout) {
-        WebElement buttonsLayout = assertElement(usagesLayout, "usages-buttons");
+        WebElement buttonsLayout = assertElement(usagesLayout, By.id("usages-buttons"));
         verifyUsagesLayoutButton(buttonsLayout,
             Sets.newHashSet(ADD_TO_SCENARIO_BUTTON_ID, EXPORT_BUTTON_ID, LOAD_USAGE_BUTTON_ID, DELETE_USAGE_BUTTON_ID));
         verifyUploadUsageWindow(buttonsLayout);
@@ -231,13 +229,13 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     }
 
     private void verifyUsagesLayoutButtonManager(WebElement usagesLayout) {
-        WebElement buttonsLayout = assertElement(usagesLayout, "usages-buttons");
+        WebElement buttonsLayout = assertElement(usagesLayout, By.id("usages-buttons"));
         verifyUsagesLayoutButton(buttonsLayout, Sets.newHashSet(EXPORT_BUTTON_ID));
         verifyExportButton(buttonsLayout);
     }
 
     private void verifyUsagesLayoutButtonViewOnly(WebElement usagesLayout) {
-        WebElement buttonsLayout = assertElement(usagesLayout, "usages-buttons");
+        WebElement buttonsLayout = assertElement(usagesLayout, By.id("usages-buttons"));
         verifyUsagesLayoutButton(buttonsLayout, Sets.newHashSet(EXPORT_BUTTON_ID));
         verifyExportButton(buttonsLayout);
     }
@@ -251,57 +249,56 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     }
 
     private void verifyLoadUsageButton(WebElement buttonsLayout) {
-        WebElement button = assertElement(buttonsLayout, LOAD_USAGE_BUTTON_ID);
+        WebElement button = assertElement(buttonsLayout, By.id(LOAD_USAGE_BUTTON_ID));
         clickElementAndWait(button);
-        clickElementAndWait(assertElement(waitAndFindElement(By.id("usage-upload-window")), CLOSE_BUTTON_ID));
+        clickElementAndWait(assertElement(waitAndFindElement(By.id("usage-upload-window")), By.id(CLOSE_BUTTON_ID)));
     }
 
     private void verifyDeleteUsageButton(WebElement buttonsLayout) {
-        WebElement button = assertElement(buttonsLayout, DELETE_USAGE_BUTTON_ID);
+        WebElement button = assertElement(buttonsLayout, By.id(DELETE_USAGE_BUTTON_ID));
         clickElementAndWait(button);
-        clickElementAndWait(assertElement(waitAndFindElement(By.id("delete-usage-batch")), CLOSE_BUTTON_ID));
+        clickElementAndWait(assertElement(waitAndFindElement(By.id("delete-usage-batch")), By.id(CLOSE_BUTTON_ID)));
     }
 
     private void verifyAddToScenarioButton(WebElement buttonsLayout) {
-        WebElement button = assertElement(buttonsLayout, ADD_TO_SCENARIO_BUTTON_ID);
+        WebElement button = assertElement(buttonsLayout, By.id(ADD_TO_SCENARIO_BUTTON_ID));
         clickElementAndWait(button);
         clickElementAndWait(
             findElementByText(waitAndFindElement(By.id("notification-window")), HTML_SPAN_TAG_NAME, OK_BUTTON_ID));
     }
 
     private void verifyExportButton(WebElement buttonsLayout) {
-        WebElement button = assertElement(buttonsLayout, EXPORT_BUTTON_ID);
+        WebElement button = assertElement(buttonsLayout, By.id(EXPORT_BUTTON_ID));
         assertTrue(button.isEnabled());
         //TODO {isuvorau} find solution to close browser window
     }
 
     private void verifyUploadUsageWindow(WebElement buttonsLayout) {
-        clickElementAndWait(findElement(buttonsLayout, By.id(LOAD_USAGE_BUTTON_ID)));
+        clickElementAndWait(assertElement(buttonsLayout, By.id(LOAD_USAGE_BUTTON_ID)));
         WebElement uploadWindow = waitAndFindElement(By.id("usage-upload-window"));
+        assertNotNull(uploadWindow);
         assertEquals("Upload Usage Batch", getWindowCaption(uploadWindow));
         verifyUploadElement(uploadWindow);
         verifyRightsholdersFields(uploadWindow);
         verifyDateFields(uploadWindow);
         assertTextElement(uploadWindow, "usage-batch-name-field", "Usage Batch Name");
         assertTextElement(uploadWindow, "gross-amount-field", "Gross Amount in USD");
-        assertElement(uploadWindow, UPLOAD_BUTTON_ID);
-        clickElementAndWait(assertElement(uploadWindow, CLOSE_BUTTON_ID));
+        assertElement(uploadWindow, By.id(UPLOAD_BUTTON_ID));
+        clickElementAndWait(assertElement(uploadWindow, By.id(CLOSE_BUTTON_ID)));
     }
 
     private void verifyUploadElement(WebElement uploadWindow) {
-        WebElement uploadField = assertElement(uploadWindow, "usage-upload-component");
+        WebElement uploadField = assertElement(uploadWindow, By.id("usage-upload-component"));
         assertNotNull(findElementByText(uploadField, HTML_SPAN_TAG_NAME, "File to Upload"));
         assertNotNull(findElementByText(uploadField, HTML_SPAN_TAG_NAME, "*"));
-        assertNotNull(findElement(uploadField, By.tagName(HTML_INPUT_TAG_NAME)));
-        WebElement uploadForm = findElement(uploadField, By.tagName("form"));
-        assertNotNull(uploadForm);
-        assertNotNull(findElementByText(uploadForm, HTML_SPAN_TAG_NAME, "Browse"));
+        assertElement(uploadField, By.tagName(HTML_INPUT_TAG_NAME));
+        assertNotNull(findElementByText(assertElement(uploadField, By.tagName("form")), HTML_SPAN_TAG_NAME, "Browse"));
     }
 
     private void verifyRightsholdersFields(WebElement uploadWindow) {
         assertTextElement(uploadWindow, "rro-account-name-field", "RRO Account Name");
         assertTextElement(uploadWindow, "rro-account-number-field", "RRO Account #");
-        assertElement(uploadWindow, VERIFY_BUTTON_ID);
+        assertElement(uploadWindow, By.id(VERIFY_BUTTON_ID));
     }
 
     private void verifyDateFields(WebElement uploadWindow) {
@@ -310,10 +307,10 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     }
 
     private void verifyUsagesTable(WebElement usagesLayout) {
-        WebElement usagesTable = assertElement(usagesLayout, USAGE_TABLE_ID);
+        WebElement usagesTable = assertElement(usagesLayout, By.id(USAGE_TABLE_ID));
         verifyTableHeaderElements(usagesTable);
         verifyTableBody(usagesTable);
-        assertNotNull(findElement(usagesTable, By.className("v-table-column-selector")));
+        assertElement(usagesTable, By.className("v-table-column-selector"));
         assertUsagesTableEmpty(usagesTable);
     }
 
@@ -345,14 +342,13 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     }
 
     private void verifyTableBody(WebElement usagesTable) {
-        WebElement table = findElement(usagesTable, By.className(V_TABLE_BODY_CLASS_NAME));
+        WebElement table = assertElement(usagesTable, By.className(V_TABLE_BODY_CLASS_NAME));
         List<WebElement> tableRows = findElements(table, By.tagName(HTML_TR_TAG_NAME));
         assertTrue(tableRows.isEmpty());
     }
 
     private void verifyFiltersWidget(WebElement tabContainer) {
-        WebElement filterWidget = waitAndFindElement(tabContainer, By.id(USAGE_FILTER_WIDGET_ID));
-        assertNotNull(filterWidget);
+        WebElement filterWidget = assertElement(tabContainer, By.id(USAGE_FILTER_WIDGET_ID));
         assertNotNull(findElementByText(filterWidget, HTML_DIV_TAG_NAME, FILTERS_HEADER_TEXT));
         verifyBatchesFilter(filterWidget);
         verifyRightsholdersFilter(filterWidget);
@@ -372,7 +368,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     }
 
     private void openRroFilterWindow(WebElement filterWidget) {
-        WebElement rightsholdersFilter = assertElement(filterWidget, RRO_FILTER_ID);
+        WebElement rightsholdersFilter = assertElement(filterWidget, By.id(RRO_FILTER_ID));
         assertNotNull(findElementByText(rightsholdersFilter, HTML_DIV_TAG_NAME, "(0)"));
         WebElement rightsholderFilterButton = findElementByText(rightsholdersFilter, HTML_SPAN_TAG_NAME, "RROs");
         assertNotNull(rightsholderFilterButton);
@@ -380,7 +376,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     }
 
     private void openBatchesFilterWindow(WebElement filterWidget) {
-        WebElement batchesFilter = assertElement(filterWidget, BATCHES_FILTER_ID);
+        WebElement batchesFilter = assertElement(filterWidget, By.id(BATCHES_FILTER_ID));
         assertNotNull(findElementByText(batchesFilter, HTML_DIV_TAG_NAME, "(0)"));
         WebElement batchesFilterButton = findElementByText(batchesFilter, HTML_SPAN_TAG_NAME, "Batches");
         assertNotNull(batchesFilterButton);
@@ -392,33 +388,33 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         assertNotNull(filterWindow);
         assertEquals(caption, getWindowCaption(filterWindow));
         verifySearchToolBar(filterWindow);
-        assertElement(filterWindow, SAVE_BUTTON_ID);
-        assertElement(filterWindow, CLEAR_BATTON_ID);
-        clickElementAndWait(assertElement(filterWindow, CLOSE_BUTTON_ID));
+        assertElement(filterWindow, By.id(SAVE_BUTTON_ID));
+        assertElement(filterWindow, By.id(CLEAR_BATTON_ID));
+        clickElementAndWait(assertElement(filterWindow, By.id(CLOSE_BUTTON_ID)));
     }
 
     private void verifySearchToolBar(WebElement filterWindow) {
-        WebElement searchToolBar = assertElement(filterWindow, "search-toolbar");
-        assertNotNull(findElement(searchToolBar, By.tagName(HTML_INPUT_TAG_NAME)));
-        assertNotNull(findElement(searchToolBar, By.className("button-search")));
-        assertNotNull(findElement(searchToolBar, By.className("button-clear")));
+        WebElement searchToolBar = assertElement(filterWindow, By.id("search-toolbar"));
+        assertElement(searchToolBar, By.tagName(HTML_INPUT_TAG_NAME));
+        assertElement(searchToolBar, By.className("button-search"));
+        assertElement(searchToolBar, By.className("button-clear"));
     }
 
     private void verifyPaymentDateComponent(WebElement filterWidget, String id) {
-        WebElement paymentDateFilter = assertElement(filterWidget, id);
+        WebElement paymentDateFilter = assertElement(filterWidget, By.id(id));
         assertNotNull(findElementByText(paymentDateFilter, HTML_SPAN_TAG_NAME, "Payment Date To"));
-        assertNotNull(findElement(paymentDateFilter, By.className("v-datefield")));
-        assertNotNull(findElement(paymentDateFilter, By.className(V_DATE_FIELD_BUTTON_CLASS_NAME)));
+        assertElement(paymentDateFilter, By.className("v-datefield"));
+        assertElement(paymentDateFilter, By.className(V_DATE_FIELD_BUTTON_CLASS_NAME));
     }
 
     private void verifyFiltersWidgetButtons(WebElement filterWidget) {
-        WebElement buttonsContainer = assertElement(filterWidget, FILTER_BUTTONS_LAYOUT_ID);
-        assertElement(buttonsContainer, APPLY_BUTTON_ID);
-        assertElement(buttonsContainer, CLEAR_BATTON_ID);
+        WebElement buttonsContainer = assertElement(filterWidget, By.id(FILTER_BUTTONS_LAYOUT_ID));
+        assertElement(buttonsContainer, By.id(APPLY_BUTTON_ID));
+        assertElement(buttonsContainer, By.id(CLEAR_BATTON_ID));
     }
 
     private WebElement assertTextElement(WebElement parentElement, String id, String caption) {
-        WebElement webElement = assertElement(parentElement, id);
+        WebElement webElement = assertElement(parentElement, By.id(id));
         WebElement elementContainer = getParentElement(webElement);
         assertNotNull(findElementByText(elementContainer, HTML_SPAN_TAG_NAME, caption));
         return webElement;
@@ -426,10 +422,10 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
 
     private WebElement assertComboboxElement(WebElement parentElement, String id, String captionTagName,
                                              String caption) {
-        WebElement webElement = assertElement(parentElement, id);
+        WebElement webElement = assertElement(parentElement, By.id(id));
         assertNotNull(findElementByText(webElement, captionTagName, caption));
-        assertNotNull(findElement(webElement, By.tagName(HTML_INPUT_TAG_NAME)));
-        assertNotNull(findElement(webElement, By.className(V_FILTER_SELECT_BUTTON_CLASS_NAME)));
+        assertElement(webElement, By.tagName(HTML_INPUT_TAG_NAME));
+        assertElement(webElement, By.className(V_FILTER_SELECT_BUTTON_CLASS_NAME));
         return webElement;
     }
 }

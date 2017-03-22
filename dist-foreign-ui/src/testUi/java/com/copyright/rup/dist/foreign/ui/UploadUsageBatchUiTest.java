@@ -2,7 +2,6 @@ package com.copyright.rup.dist.foreign.ui;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -66,6 +65,8 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
     private static final Long DETAIL_ID_234 = 234L;
     private static final Long DETAIL_ID_235 = 235L;
     private static final String DETAIL_ID_KEY = "detailId";
+    private static final String USAGE_BATCH_NAME_FIELD_ID = "usage-batch-name-field";
+    private static final String GROSS_AMOUNT_FIELD_ID = "gross-amount-field";
     private UsageBatch usageBatch;
 
     @Autowired
@@ -87,14 +88,15 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
     public void testUsageBatchNameFieldValidation() {
         WebElement uploadWindow = openUploadUsageBatchWindow();
         fillValidValuesForUploadWindowFields(uploadWindow);
-        fillUsageBatchNameField(uploadWindow, StringUtils.EMPTY);
-        clickElementAndWait(assertElement(uploadWindow, UPLOAD_BUTTON_ID));
+        fillField(uploadWindow, USAGE_BATCH_NAME_FIELD_ID, StringUtils.EMPTY);
+        clickElementAndWait(assertElement(uploadWindow, By.id(UPLOAD_BUTTON_ID)));
         verifyErrorWindow(ImmutableMap.of(USAGE_BATCH_NAME_FIELD, COMMON_EMPTY_FIELD_MESSAGE));
-        fillUsageBatchNameField(uploadWindow, "JAACC_11Dec16");
-        clickElementAndWait(assertElement(uploadWindow, UPLOAD_BUTTON_ID));
+        fillField(uploadWindow, USAGE_BATCH_NAME_FIELD_ID, "JAACC_11Dec16");
+        clickElementAndWait(assertElement(uploadWindow, By.id(UPLOAD_BUTTON_ID)));
         verifyErrorWindow(ImmutableMap.of(USAGE_BATCH_NAME_FIELD, "Usage Batch with such name already exists"));
-        fillUsageBatchNameField(uploadWindow, "Usage Batch with name that exceeds more than 50 characters");
-        clickElementAndWait(assertElement(uploadWindow, UPLOAD_BUTTON_ID));
+        fillField(uploadWindow, USAGE_BATCH_NAME_FIELD_ID,
+            "Usage Batch with name that exceeds more than 50 characters");
+        clickElementAndWait(assertElement(uploadWindow, By.id(UPLOAD_BUTTON_ID)));
         verifyErrorWindow(ImmutableMap.of(USAGE_BATCH_NAME_FIELD, "Field value should not exceed 50 characters"));
     }
 
@@ -102,7 +104,7 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
     // Test case ID: 'ddfeaeaa-2ffa-4c06-9bf9-6ff446296175'
     public void testVerifyUploadUsageWindowEmptyFields() {
         WebElement uploadWindow = openUploadUsageBatchWindow();
-        clickElementAndWait(assertElement(uploadWindow, UPLOAD_BUTTON_ID));
+        clickElementAndWait(assertElement(uploadWindow, By.id(UPLOAD_BUTTON_ID)));
         Map<String, String> errors = Maps.newHashMap();
         errors.put(USAGE_BATCH_NAME_FIELD, COMMON_EMPTY_FIELD_MESSAGE);
         errors.put(FILE_TO_UPLOAD_FIELD, COMMON_EMPTY_FIELD_MESSAGE);
@@ -120,17 +122,17 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         fillValidValuesForUploadWindowFields(uploadWindow);
         fillRroAccountNumberField(uploadWindow, StringUtils.EMPTY);
         verifyRroAccountNameField(uploadWindow, StringUtils.EMPTY);
-        clickElementAndWait(assertElement(uploadWindow, UPLOAD_BUTTON_ID));
+        clickElementAndWait(assertElement(uploadWindow, By.id(UPLOAD_BUTTON_ID)));
         verifyErrorWindow(ImmutableMap.of(RRO_ACCOUNT_NUMBER_FIELD, COMMON_EMPTY_FIELD_MESSAGE, RRO_ACCOUNT_NAME_FIELD,
             RRO_ACCOUNT_NAME_EMPTY_FIELD_MESSAGE));
         fillRroAccountNumberField(uploadWindow, "symbols");
         verifyRroAccountNameField(uploadWindow, StringUtils.EMPTY);
-        clickElementAndWait(assertElement(uploadWindow, UPLOAD_BUTTON_ID));
+        clickElementAndWait(assertElement(uploadWindow, By.id(UPLOAD_BUTTON_ID)));
         verifyErrorWindow(ImmutableMap.of(RRO_ACCOUNT_NUMBER_FIELD, "Field value should contain numeric values only",
             RRO_ACCOUNT_NAME_FIELD, RRO_ACCOUNT_NAME_EMPTY_FIELD_MESSAGE));
         fillRroAccountNumberField(uploadWindow, "555");
         verifyRroAccountNameField(uploadWindow, StringUtils.EMPTY);
-        clickElementAndWait(assertElement(uploadWindow, UPLOAD_BUTTON_ID));
+        clickElementAndWait(assertElement(uploadWindow, By.id(UPLOAD_BUTTON_ID)));
         verifyErrorWindow(ImmutableMap.of(RRO_ACCOUNT_NAME_FIELD, RRO_ACCOUNT_NAME_EMPTY_FIELD_MESSAGE));
     }
 
@@ -139,22 +141,22 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
     public void testVerifyGrossAmountField() {
         WebElement uploadWindow = openUploadUsageBatchWindow();
         fillValidValuesForUploadWindowFields(uploadWindow);
-        fillGrossAmountField(uploadWindow, "symbols");
-        clickElementAndWait(assertElement(uploadWindow, UPLOAD_BUTTON_ID));
+        fillField(uploadWindow, GROSS_AMOUNT_FIELD_ID, "symbols");
+        clickElementAndWait(assertElement(uploadWindow, By.id(UPLOAD_BUTTON_ID)));
         Map<String, String> errors =
             ImmutableMap.of(GROSS_AMOUT_FIELD, "Field should be greater than 0 and contain 2 decimals");
         verifyErrorWindow(errors);
-        fillGrossAmountField(uploadWindow, "-555");
-        clickElementAndWait(assertElement(uploadWindow, UPLOAD_BUTTON_ID));
+        fillField(uploadWindow, GROSS_AMOUNT_FIELD_ID, "-555");
+        clickElementAndWait(assertElement(uploadWindow, By.id(UPLOAD_BUTTON_ID)));
         verifyErrorWindow(errors);
-        fillGrossAmountField(uploadWindow, "0");
-        clickElementAndWait(assertElement(uploadWindow, UPLOAD_BUTTON_ID));
+        fillField(uploadWindow, GROSS_AMOUNT_FIELD_ID, "0");
+        clickElementAndWait(assertElement(uploadWindow, By.id(UPLOAD_BUTTON_ID)));
         verifyErrorWindow(errors);
-        fillGrossAmountField(uploadWindow, "555");
-        clickElementAndWait(assertElement(uploadWindow, UPLOAD_BUTTON_ID));
+        fillField(uploadWindow, GROSS_AMOUNT_FIELD_ID, "555");
+        clickElementAndWait(assertElement(uploadWindow, By.id(UPLOAD_BUTTON_ID)));
         verifyErrorWindow(errors);
-        fillGrossAmountField(uploadWindow, "555.5");
-        clickElementAndWait(assertElement(uploadWindow, UPLOAD_BUTTON_ID));
+        fillField(uploadWindow, GROSS_AMOUNT_FIELD_ID, "555.5");
+        clickElementAndWait(assertElement(uploadWindow, By.id(UPLOAD_BUTTON_ID)));
         verifyErrorWindow(errors);
     }
 
@@ -164,7 +166,7 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         WebElement uploadWindow = openUploadUsageBatchWindow();
         fillValidValuesForUploadWindowFields(uploadWindow);
         fillFileNameField(uploadWindow, "invalid_extension.txt");
-        clickElementAndWait(assertElement(uploadWindow, UPLOAD_BUTTON_ID));
+        clickElementAndWait(assertElement(uploadWindow, By.id(UPLOAD_BUTTON_ID)));
         verifyErrorWindow(ImmutableMap.of(FILE_TO_UPLOAD_FIELD, "File extension is incorrect"));
     }
 
@@ -172,17 +174,16 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
     // Test case ID: '81989dc2-329b-4ce7-b5d6-97330d02ccd1'
     public void testUploadValidFile() {
         List<UsageBatch> usageBatches = usageBatchRepository.findUsageBatches();
-        assertEquals(3, usageBatches.size());
+        assertEquals(3, CollectionUtils.size(usageBatches));
         WebElement uploadWindow = openUploadUsageBatchWindow();
         fillValidValuesForUploadWindowFields(uploadWindow);
         LocalDate paymentDate = LocalDate.now();
-        clickElementAndWait(assertElement(uploadWindow, UPLOAD_BUTTON_ID));
+        clickElementAndWait(assertElement(uploadWindow, By.id(UPLOAD_BUTTON_ID)));
         WebElement successfullyUploadedWindow = waitAndFindElement(By.className("v-window-contents"));
         assertNotNull(successfullyUploadedWindow);
-        WebElement messageLabel = findElement(successfullyUploadedWindow, By.className("v-label"));
-        assertNotNull(messageLabel);
-        assertEquals("Upload completed: 2 records were stored successfully", messageLabel.getText());
-        clickElementAndWait(assertElement(successfullyUploadedWindow, OK_BUTTON_ID));
+        assertEquals("Upload completed: 2 records were stored successfully",
+            assertElement(successfullyUploadedWindow, By.className("v-label")).getText());
+        clickElementAndWait(assertElement(successfullyUploadedWindow, By.id(OK_BUTTON_ID)));
         List<UsageBatch> uploadedUsageBatches = usageBatchRepository.findUsageBatches().stream()
             .filter(usageBatch -> USAGE_BATCH_NAME.equals(usageBatch.getName())).collect(Collectors.toList());
         assertEquals(1, CollectionUtils.size(uploadedUsageBatches));
@@ -204,7 +205,7 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         List<UsageDto> usages = usageRepository.findByFilter(usageFilter, new Pageable(0, 200),
             new Sort(DETAIL_ID_KEY, Sort.Direction.ASC));
         assertNotNull(usages);
-        assertEquals(2, usages.size());
+        assertEquals(2, CollectionUtils.size(usages));
         verifyUsageWithDetailId234(usages.stream()
             .filter(usage -> Objects.equals(DETAIL_ID_234, usage.getDetailId())).collect(Collectors.toList()));
         verifyUsageWithDetailId235(usages.stream()
@@ -213,7 +214,7 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
 
     private void verifyUsageWithDetailId235(List<UsageDto> usages) {
         assertNotNull(usages);
-        assertEquals(1, usages.size());
+        assertEquals(1, CollectionUtils.size(usages));
         UsageDto usage = usages.get(0);
         assertNotNull(usage);
         assertEquals("1984", usage.getWorkTitle());
@@ -235,7 +236,7 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
 
     private void verifyUsageWithDetailId234(List<UsageDto> usages) {
         assertNotNull(usages);
-        assertEquals(1, usages.size());
+        assertEquals(1, CollectionUtils.size(usages));
         UsageDto usage = usages.get(0);
         assertNotNull(usage);
         assertEquals("1984", usage.getWorkTitle());
@@ -261,40 +262,26 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
     }
 
     private void verifyRroAccountNameField(WebElement uploadWindow, String value) {
-        WebElement rroAccountNameField = waitAndFindElement(uploadWindow, By.id("rro-account-name-field"));
-        assertNotNull(rroAccountNameField);
-        assertEquals(value, getInnerHtml(rroAccountNameField));
+        assertEquals(value, getInnerHtml(assertElement(uploadWindow, By.id("rro-account-name-field"))));
     }
 
     private void fillValidValuesForUploadWindowFields(WebElement uploadWindow) {
-        fillUsageBatchNameField(uploadWindow, USAGE_BATCH_NAME);
+        fillField(uploadWindow, USAGE_BATCH_NAME_FIELD_ID, USAGE_BATCH_NAME);
         fillFileNameField(uploadWindow, "sample_usage_data_file.csv");
         fillRroAccountNumberField(uploadWindow, String.valueOf(RRO_ACCOUNT_NUMBER));
         fillPaymentDateField(uploadWindow);
-        fillGrossAmountField(uploadWindow, GROSS_AMOUNT);
-    }
-
-    private void fillUsageBatchNameField(WebElement uploadWindow, String value) {
-        WebElement usageBatchNameField = waitAndFindElement(uploadWindow, By.id("usage-batch-name-field"));
-        assertNotNull(usageBatchNameField);
-        usageBatchNameField.clear();
-        sendKeysToInput(usageBatchNameField, value);
-        clickElementAndWait(uploadWindow);
+        fillField(uploadWindow, GROSS_AMOUNT_FIELD_ID, GROSS_AMOUNT);
     }
 
     private void fillFileNameField(WebElement uploadWindow, String usageFileName) {
-        WebElement fileUpload = waitAndFindElement(uploadWindow, By.className("gwt-FileUpload"));
-        assertNotNull(fileUpload);
+        WebElement fileUpload = assertElement(uploadWindow, By.className("gwt-FileUpload"));
         fileUpload.clear();
         fileUpload.sendKeys(new File(FILE_PATH, usageFileName).getAbsolutePath());
     }
 
     private void fillRroAccountNumberField(WebElement uploadWindow, String value) {
-        WebElement rroAccountNumberField = waitAndFindElement(uploadWindow, By.id("rro-account-number-field"));
-        assertNotNull(rroAccountNumberField);
-        rroAccountNumberField.clear();
-        sendKeysToInput(rroAccountNumberField, value);
-        clickElementAndWait(assertElement(uploadWindow, VERIFY_BUTTON_ID));
+        fillField(uploadWindow, "rro-account-number-field", value);
+        clickElementAndWait(assertElement(uploadWindow, By.id(VERIFY_BUTTON_ID)));
     }
 
     private void fillPaymentDateField(WebElement uploadWindow) {
@@ -302,45 +289,12 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         applyCurrentDateForDateField(paymentDate);
     }
 
-    private void fillGrossAmountField(WebElement uploadWindow, String value) {
-        WebElement grossAmountField = waitAndFindElement(uploadWindow, By.id("gross-amount-field"));
-        assertNotNull(grossAmountField);
-        grossAmountField.clear();
-        sendKeysToInput(grossAmountField, value);
-    }
-
-    private void verifyErrorWindow(Map<String, String> fieldNameToErrorMessageMap) {
-        WebElement errorWindow = findErrorWindow();
-        WebElement errorContent = waitAndFindElement(By.className("validation-error-content"));
-        assertNotNull(errorContent);
-        List<WebElement> errorFields = findElements(errorContent, By.tagName(HTML_B_TAG_NAME));
-        List<WebElement> errorMessages = findElements(errorContent, By.tagName(HTML_SPAN_TAG_NAME));
-        int errorsSize = fieldNameToErrorMessageMap.size();
-        assertEquals(errorsSize, errorFields.size());
-        assertEquals(errorsSize, errorMessages.size());
-        assertTrue(errorFields.stream()
-            .map(WebElement::getText)
-            .collect(Collectors.toList())
-            .containsAll(fieldNameToErrorMessageMap.keySet()));
-        assertTrue(errorMessages.stream()
-            .map(WebElement::getText)
-            .collect(Collectors.toList())
-            .containsAll(fieldNameToErrorMessageMap.values()));
-        clickElementAndWait(assertElement(errorWindow, OK_BUTTON_ID));
-    }
-
-    private WebElement findErrorWindow() {
-        WebElement errorWindow = waitAndFindElement(By.className("validation-error-window"));
-        assertNotNull(errorWindow);
-        return errorWindow;
-    }
-
     private WebElement openUploadUsageBatchWindow() {
         loginAsSpecialist();
         WebElement usagesTab = selectUsagesTab();
-        WebElement usagesLayout = assertElement(usagesTab, USAGE_LAYOUT_ID);
-        WebElement buttonsLayout = assertElement(usagesLayout, "usages-buttons");
-        clickElementAndWait(findElement(buttonsLayout, By.id(LOAD_USAGE_BUTTON_ID)));
+        WebElement usagesLayout = assertElement(usagesTab, By.id(USAGE_LAYOUT_ID));
+        WebElement buttonsLayout = assertElement(usagesLayout, By.id("usages-buttons"));
+        clickElementAndWait(assertElement(buttonsLayout, By.id(LOAD_USAGE_BUTTON_ID)));
         return waitAndFindElement(By.id("usage-upload-window"));
     }
 }
