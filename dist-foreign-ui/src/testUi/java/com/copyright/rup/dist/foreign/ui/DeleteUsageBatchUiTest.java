@@ -12,6 +12,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 
 import org.apache.commons.lang3.StringUtils;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
@@ -37,11 +38,6 @@ import java.util.List;
 @ContextConfiguration(value = "classpath:/com/copyright/rup/dist/foreign/ui/dist-foreign-ui-test-context.xml")
 public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
 
-    @Autowired
-    private IUsageRepository usageRepository;
-    @Autowired
-    private IUsageBatchRepository usageBatchRepository;
-
     private UsageBatchInfo usageBatch1 = new UsageBatchInfo("CADRA_11Dec16", "01/11/2017", "FY2017",
         "7000813806 - CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil");
     private UsageBatchInfo usageBatch2 = new UsageBatchInfo("AccessCopyright_11Dec16", "09/10/2015", "FY2016",
@@ -50,6 +46,21 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
         "7001440663 - JAACC, Japan Academic Association for Copyright Clearance [T]");
     private UsageBatchInfo usageBatch4 =
         new UsageBatchInfo("Batch to delete", "07/11/2017", "FY2018", "1000002797 - British Film Institute (BFI)");
+
+    @Autowired
+    private IUsageRepository usageRepository;
+    @Autowired
+    private IUsageBatchRepository usageBatchRepository;
+    private UsageBatch usageBatchToDelete;
+
+    @After
+    public void tearDown() {
+        if (null != usageBatchToDelete) {
+            usageBatchRepository.deleteUsageBatch(usageBatchToDelete.getId());
+            usageRepository.deleteUsageBatchDetails(usageBatchToDelete.getId());
+            usageBatchToDelete = null;
+        }
+    }
 
     @Test
     // Test cases IDs: 'fa7466eb-7d5d-4068-877a-835522f1deeb', '18eb492e-5ec1-4c87-ac1c-be9ed9facbdb',
@@ -78,7 +89,8 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
     // Test cases IDs: '251507d4-af2d-4f5f-a4d0-772b70804f83', '0de548a6-6e56-4141-95fb-71931e7f1c7d',
     // 'af0b68e7-236a-4f21-8691-a6c6192d153c'
     public void testDeleteUsageBatchWithApproval() {
-        usageBatchRepository.insert(buildUsageBatch());
+        usageBatchToDelete = buildUsageBatch();
+        usageBatchRepository.insert(usageBatchToDelete);
         usageRepository.insertUsage(buildUsage());
         loginAsSpecialist();
         WebElement filterWidget = findElementById(USAGE_FILTER_WIDGET_ID);
@@ -88,9 +100,8 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
         WebElement window = openDeleteUsageBatchWindow();
         WebElement usageBatchesTable = getUsageBatchesTable(window);
         verifyTableRows(usageBatchesTable, usageBatch4, usageBatch1, usageBatch2, usageBatch3);
-        WebElement confirmDialog = openDeleteUsageBatchConfirmDialog(usageBatchesTable,
-            "4b67f17c-3c32-4b55-b2a0-dabebb513304", usageBatch4.getName());
-        clickButtonAndWait(confirmDialog, "Yes");
+        clickElementAndWait(assertElement(usageBatchesTable, "4b67f17c-3c32-4b55-b2a0-dabebb513304"));
+        verifyConfirmDialogAndConfirm("Are you sure you want to delete 'Batch to delete' usage batch?");
         verifyTableRows(usageBatchesTable, usageBatch1, usageBatch2, usageBatch3);
         clickButtonAndWait(window, CLOSE_BUTTON_ID);
         assertUsagesFilterEmpty(filterWidget, usagesTable);
@@ -98,6 +109,7 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
         assertNullFilterItem(filterWidget, RRO_FILTER_ID, "rightsholders-filter-window", usageBatch4.getRro());
         verifyFiscalYearFilter(filterWidget, " ", "2016", "2017", "2019");
         assertEquals(0, usageBatchRepository.getUsageBatchesCountByName(usageBatch4.getName()));
+        usageBatchToDelete = null;
     }
 
     @Test
@@ -110,9 +122,8 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
         WebElement window = openDeleteUsageBatchWindow();
         WebElement usageBatchesTable = getUsageBatchesTable(window);
         verifyTableRows(usageBatchesTable, usageBatch1, usageBatch2, usageBatch3);
-        WebElement confirmDialog = openDeleteUsageBatchConfirmDialog(usageBatchesTable,
-            "56282dbc-2468-48d4-b926-93d3458a656a", usageBatch1.getName());
-        clickButtonAndWait(confirmDialog, CANCEL_BUTTON_ID);
+        clickElementAndWait(assertElement(usageBatchesTable, "56282dbc-2468-48d4-b926-93d3458a656a"));
+        verifyConfirmDialogAndDecline("Are you sure you want to delete 'CADRA_11Dec16' usage batch?");
         verifyTableRows(usageBatchesTable, usageBatch1, usageBatch2, usageBatch3);
         clickButtonAndWait(window, CLOSE_BUTTON_ID);
         assertUsagesTableNotEmpty(usagesTable, 1);
@@ -166,19 +177,6 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
         clickElementAndWait(fiscalYear);
         WebElement filterButtonsLayout = assertElement(filterWidget, "filter-buttons");
         clickButtonAndWait(filterButtonsLayout, APPLY_BUTTON_ID);
-    }
-
-    private WebElement openDeleteUsageBatchConfirmDialog(WebElement table, String usageBatchId, String usageBatchName) {
-        WebElement deleteButton = findElement(table, By.id(usageBatchId));
-        assertNotNull(deleteButton);
-        clickElementAndWait(deleteButton);
-        WebElement confirmDialog = findElementById("confirm-dialog-window");
-        assertNotNull(confirmDialog);
-        WebElement label = findElement(confirmDialog, By.className("v-label"));
-        assertNotNull(label);
-        assertEquals(String.format("Are you sure you want to delete '%s' usage batch?", usageBatchName),
-            label.getText());
-        return confirmDialog;
     }
 
     private void assertNullFilterItem(WebElement filterWidget, String filterId, String filterWindowId, String item) {
@@ -293,7 +291,7 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
         assertEquals(usageBatch.getName(), cells.get(0).getText());
         assertEquals(usageBatch.getPaymentDate(), cells.get(1).getText());
         assertEquals(usageBatch.getFiscalYear(), cells.get(2).getText());
-        assertNotNull(findElement(cells.get(3), By.className("Delete")));
+        assertNotNull(findElement(cells.get(3), By.className(DELETE_BUTTON_ID)));
     }
 
     private void verifyCloseButton(WebElement window) {

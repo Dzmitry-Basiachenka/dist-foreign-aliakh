@@ -74,6 +74,10 @@ public class ForeignCommonUiTest extends CommonUiTest {
      */
     protected static final String CLOSE_BUTTON_ID = "Close";
     /**
+     * Identifier for 'Yes' button.
+     */
+    protected static final String YES_BUTTON_ID = "Yes";
+    /**
      * Identifier for 'Cancel' button.
      */
     protected static final String CANCEL_BUTTON_ID = "Cancel";
@@ -81,6 +85,10 @@ public class ForeignCommonUiTest extends CommonUiTest {
      * Identifier for 'Save' button.
      */
     protected static final String SAVE_BUTTON_ID = "Save";
+    /**
+     * Identifier for 'Delete' button.
+     */
+    protected static final String DELETE_BUTTON_ID = "Delete";
     /**
      * Identifier for usage filter widget.
      */
@@ -289,10 +297,6 @@ public class ForeignCommonUiTest extends CommonUiTest {
         return element.getAttribute("value");
     }
 
-    private void openAppPage(ForeignCredentials credentials) {
-        openPage(APP_URL, credentials.getUserName(), credentials.getPassword());
-    }
-
     /**
      * Verifies table sorting.
      *
@@ -310,6 +314,37 @@ public class ForeignCommonUiTest extends CommonUiTest {
             clickElementAndWait(column);
             ArrayUtils.contains(sortableColumns, column.getText());
         }
+    }
+
+    /**
+     * Verifies that confirm dialog is present on UI with expected message and clicks 'Yes' button.
+     *
+     * @param expectedLabel expected confirmation message
+     */
+    protected void verifyConfirmDialogAndConfirm(String expectedLabel) {
+        verifyConfirmDialogAndClickButton(expectedLabel, YES_BUTTON_ID);
+    }
+
+    /**
+     * Verifies that confirm dialog is present on UI with expected message and clicks 'Cancel' button.
+     *
+     * @param expectedLabel expected confirmation message
+     */
+    protected void verifyConfirmDialogAndDecline(String expectedLabel) {
+        verifyConfirmDialogAndClickButton(expectedLabel, CANCEL_BUTTON_ID);
+    }
+
+    private void openAppPage(ForeignCredentials credentials) {
+        openPage(APP_URL, credentials.getUserName(), credentials.getPassword());
+    }
+
+    private void verifyConfirmDialogAndClickButton(String expectedLabel, String buttonToClick) {
+        WebElement confirmDialog = findElementById("confirm-dialog-window");
+        assertNotNull(confirmDialog);
+        WebElement label = findElement(confirmDialog, By.className("v-label"));
+        assertNotNull(label);
+        assertEquals(expectedLabel, label.getText());
+        clickButtonAndWait(confirmDialog, buttonToClick);
     }
 
     private void verifyColumnSorting(WebElement tableHeader, WebElement column, String sortStyleName) {
