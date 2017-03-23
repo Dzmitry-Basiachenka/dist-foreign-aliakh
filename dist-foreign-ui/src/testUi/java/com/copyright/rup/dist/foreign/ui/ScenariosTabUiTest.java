@@ -146,31 +146,31 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
     private void verifyScenariosTabManagerAndViewOnly() {
         WebElement scenarioTab = selectScenariosTab();
         assertNotNull(scenarioTab);
-        WebElement buttonsLayout = assertElement(scenarioTab, "scenarios-buttons");
+        WebElement buttonsLayout = assertElement(scenarioTab, By.id("scenarios-buttons"));
         List<WebElement> buttons = findElements(buttonsLayout, By.className("v-button"));
         assertTrue(CollectionUtils.isEmpty(buttons));
         verifyScenariosTable(assertScenariosTable(scenarioTab));
-        verifyMetadataPanel(assertElement(scenarioTab, "scenarios-metadata"));
+        verifyMetadataPanel(assertElement(scenarioTab, By.id("scenarios-metadata")));
     }
 
     private void verifyScenariosTabSpecialist() {
         WebElement scenarioTab = selectScenariosTab();
         assertNotNull(scenarioTab);
-        WebElement buttonsLayout = assertElement(scenarioTab, "scenarios-buttons");
+        WebElement buttonsLayout = assertElement(scenarioTab, By.id("scenarios-buttons"));
         List<WebElement> buttons = findElements(buttonsLayout, By.className("v-button"));
         assertEquals(1, CollectionUtils.size(buttons));
-        assertElement(buttonsLayout, DELETE_BUTTON_ID);
+        assertElement(buttonsLayout, By.id(DELETE_BUTTON_ID));
         WebElement table = assertScenariosTable(scenarioTab);
         verifyScenariosTable(table);
-        verifyMetadataPanel(assertElement(scenarioTab, "scenarios-metadata"));
+        verifyMetadataPanel(assertElement(scenarioTab, By.id("scenarios-metadata")));
         verifyEmptyMetadataPanel(scenarioTab, table);
-        WebElement deleteButton = findElement(buttonsLayout, By.className(V_DISABLED_CLASS_NAME));
+        WebElement deleteButton = assertElement(buttonsLayout, By.className(V_DISABLED_CLASS_NAME));
         assertNotNull(deleteButton);
         assertTrue(deleteButton.getAttribute("class").contains("v-button-Delete"));
     }
 
     private WebElement assertScenariosTable(WebElement scenarioTab) {
-        return assertElement(scenarioTab, "scenarios-table");
+        return assertElement(scenarioTab, By.id("scenarios-table"));
     }
 
     private void verifyScenariosTable(WebElement table) {
@@ -180,11 +180,9 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
     }
 
     private void verifyEmptyMetadataPanel(WebElement scenarioTab, WebElement table) {
-        WebElement selectedRow = findElement(table, By.className("v-selected"));
-        assertNotNull(selectedRow);
-        clickElementAndWait(selectedRow);
+        clickElementAndWait(assertElement(table, By.className("v-selected")));
         assertNull(findElement(table, By.className("v-selected")));
-        WebElement metadataPanel = assertElement(scenarioTab, "scenarios-metadata");
+        WebElement metadataPanel = assertElement(scenarioTab, By.id("scenarios-metadata"));
         List<WebElement> labels = findElements(metadataPanel, By.className("v-label"));
         assertEquals(1, CollectionUtils.size(labels));
         assertEquals(StringUtils.EMPTY, labels.get(0).getText());
@@ -201,7 +199,7 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
     }
 
     private void verifyTableRows(WebElement table, ScenarioInfo... scenariosInfo) {
-        List<WebElement> rows = findElements(findElement(table, By.className(V_TABLE_BODY_CLASS_NAME)),
+        List<WebElement> rows = findElements(assertElement(table, By.className(V_TABLE_BODY_CLASS_NAME)),
             By.tagName(HTML_TR_TAG_NAME));
         assertEquals(scenariosInfo.length, CollectionUtils.size(rows));
         for (int i = 0; i < scenariosInfo.length; i++) {
