@@ -74,6 +74,14 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
     @Autowired
     private IUsageRepository usageRepository;
 
+    @After
+    public void tearDown() {
+        if (null != usageBatch) {
+            deleteUploadedUsageBatch(usageBatch.getId());
+            usageBatch = null;
+        }
+    }
+
     @Test
     //Test case ID: 1b30b405-0431-4f96-81ca-9c9ff65a32f1
     public void testUsageBatchNameFieldValidation() {
@@ -181,13 +189,6 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         usageBatch = uploadedUsageBatches.get(0);
         verifyUploadedUsageBatch(usageBatch, paymentDate);
         verifyUploadedUsages(usageBatch.getId());
-    }
-
-    @After
-    public void tearDown() {
-        if (null != usageBatch) {
-            deleteUploadedUsageBatch(usageBatch.getId());
-        }
     }
 
     private void verifyUploadedUsageBatch(UsageBatch uploadedUsageBatch, LocalDate date) {

@@ -4,9 +4,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import com.copyright.rup.common.date.RupDateUtils;
+import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
-import com.copyright.rup.dist.foreign.service.api.IScenarioService;
+import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
+import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -52,7 +54,18 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
     private Scenario scenario;
 
     @Autowired
-    private IScenarioService scenarioService;
+    private IScenarioRepository scenarioRepository;
+    @Autowired
+    private IUsageRepository usageRepository;
+
+    @After
+    public void tearDown() {
+        if (null != scenario) {
+            usageRepository.deleteUsagesFromScenario(scenario.getId(), StoredEntity.DEFAULT_USER);
+            scenarioRepository.deleteScenario(scenario.getId());
+            scenario = null;
+        }
+    }
 
     @Test
     // Test case ID: 'e4b0a048-51af-4c1c-91bd-2a199747ca34'
@@ -91,18 +104,11 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
         selectUsagesTab();
         assertUsagesFilterEmpty(waitAndFindElement(By.id(USAGE_FILTER_WIDGET_ID)),
             waitAndFindElement(By.id(USAGE_TABLE_ID)));
-        List<Scenario> scenarios = scenarioService.getScenarios().stream()
+        List<Scenario> scenarios = scenarioRepository.getScenarios().stream()
             .filter(scenario -> SCENARIO_NAME.equals(scenario.getName())).collect(Collectors.toList());
         assertEquals(1, CollectionUtils.size(scenarios));
         scenario = scenarios.get(0);
         verifyScenario();
-    }
-
-    @After
-    public void tearDown() {
-        if (null != scenario) {
-            scenarioService.deleteScenario(scenario.getId());
-        }
     }
 
     private void verifyScenario() {
