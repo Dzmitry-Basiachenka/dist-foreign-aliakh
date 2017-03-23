@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.DateColumnGenerator;
 import com.copyright.rup.vaadin.ui.VaadinUtils;
+import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.widget.api.IMediator;
 
 import com.vaadin.data.util.BeanContainer;
@@ -150,16 +151,20 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
         if (null != scenario) {
             ownerLabel.setValue(ForeignUi.getMessage("label.owner", scenario.getCreateUser()));
             distributionTotalLabel.setValue(ForeignUi.getMessage("label.distribution_total",
-                scenario.getNetTotal().setScale(2, BigDecimal.ROUND_HALF_UP)));
+                formatAmount(scenario.getNetTotal())));
             grossTotalLabel.setValue(ForeignUi.getMessage("label.gross_total",
-                scenario.getGrossTotal().setScale(2, BigDecimal.ROUND_HALF_UP)));
+                formatAmount(scenario.getGrossTotal())));
             reportedTotalLabel.setValue(ForeignUi.getMessage("label.reported_total",
-                scenario.getReportedTotal()));
+                formatAmount(scenario.getReportedTotal())));
             descriptionLabel.setValue(ForeignUi.getMessage("label.description", scenario.getDescription()));
             metadataPanel.setContent(metadataLayout);
         } else {
             metadataPanel.setContent(new Label());
         }
         mediator.selectedScenarioChanged(scenario);
+    }
+
+    private String formatAmount(BigDecimal amount) {
+        return CurrencyUtils.formatAsHtml(amount.setScale(2, BigDecimal.ROUND_HALF_UP));
     }
 }
