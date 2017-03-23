@@ -67,9 +67,9 @@ public class ScenariosWidgetTest {
         scenario = new Scenario();
         scenario.setId(SCENARIO_ID);
         scenario.setDescription("Description");
-        scenario.setNetTotal(new BigDecimal("100.00"));
-        scenario.setGrossTotal(new BigDecimal("200.00"));
-        scenario.setReportedTotal(new BigDecimal("300.00"));
+        scenario.setNetTotal(new BigDecimal("10000.00"));
+        scenario.setGrossTotal(new BigDecimal("20000.00"));
+        scenario.setReportedTotal(new BigDecimal("30000.00"));
         scenario.setCreateUser("User@copyright.com");
         expect(controller.getScenarios()).andReturn(Lists.newArrayList(scenario)).once();
         replay(controller);
@@ -219,9 +219,12 @@ public class ScenariosWidgetTest {
         assertEquals(Unit.PERCENTAGE, layout.getWidthUnits());
         assertEquals(5, layout.getComponentCount());
         verifyMetadataLabel(layout.getComponent(0), "<b>Owner: </b>User@copyright.com");
-        verifyMetadataLabel(layout.getComponent(1), "<b>Distribution Total: </b>100.00");
-        verifyMetadataLabel(layout.getComponent(2), "<b>Gross Total: </b>200.00");
-        verifyMetadataLabel(layout.getComponent(3), "<b>Reported Total: </b>300.00");
+        verifyMetadataLabel(layout.getComponent(1),
+            "<b>Distribution Total: </b><span class='label-amount'>10,000.00</span>");
+        verifyMetadataLabel(layout.getComponent(2),
+            "<b>Gross Total: </b><span class='label-amount'>20,000.00</span>");
+        verifyMetadataLabel(layout.getComponent(3),
+            "<b>Reported Total: </b><span class='label-amount'>30,000.00</span>");
         verifyMetadataLabel(layout.getComponent(4), "<b>Description: </b>Description");
     }
 
