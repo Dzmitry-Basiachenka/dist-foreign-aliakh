@@ -2,10 +2,10 @@ package com.copyright.rup.dist.foreign.service.impl;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
@@ -48,7 +48,7 @@ import java.util.List;
  * @author Mikalai Bezmen
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({RupContextUtils.class})
+@PrepareForTest({RupContextUtils.class, UsageService.class})
 public class UsageServiceTest {
 
     private static final String USAGE_ID_1 = "Usage id 1";

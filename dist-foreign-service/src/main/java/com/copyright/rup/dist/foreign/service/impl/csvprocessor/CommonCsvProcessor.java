@@ -53,22 +53,23 @@ public abstract class CommonCsvProcessor<T> {
     private List<ICsvColumn> headers = Lists.newArrayList();
     private CsvProcessingResult<T> processingResult;
     private int line = 1;
-    private String originalRow;
+    private List<String> originalParameters;
 
     /**
      * Processes CSV resource from the specified stream and {@link CsvProcessingResult}
      * containing valid objects and errors data (if it was found) based on uploaded information.
      *
-     * @param stream byte array output stream
+     * @param stream   byte array output stream
+     * @param fileName file name of uploaded file
      * @return {@link CsvProcessingResult} instance with uploaded data
      * @throws ValidationException in case of invalid file
      */
-    public CsvProcessingResult<T> process(ByteArrayOutputStream stream) throws ValidationException {
+    public CsvProcessingResult<T> process(ByteArrayOutputStream stream, String fileName) throws ValidationException {
         try (ICsvListReader listReader = new CsvListReader(
             new InputStreamReader(new ByteArrayInputStream(stream.toByteArray()), StandardCharsets.UTF_8),
             CsvPreference.STANDARD_PREFERENCE)) {
             headers = getHeaders();
-            processingResult = new CsvProcessingResult<>(getColumnsHeaders());
+            processingResult = new CsvProcessingResult<>(getColumnsHeaders(), fileName);
             validateHeader(listReader.getHeader(true));
             initPlainValidators();
             processRows(listReader);
@@ -176,10 +177,9 @@ public abstract class CommonCsvProcessor<T> {
     private void processRows(ICsvListReader listReader) throws IOException {
         while (true) {
             ++line;
-            List<String> params = listReader.read();
-            originalRow = listReader.getUntokenizedRow();
-            if (null != params) {
-                processRow(params);
+            originalParameters = listReader.read();
+            if (null != originalParameters) {
+                processRow(originalParameters);
             } else {
                 break;
             }
@@ -204,7 +204,7 @@ public abstract class CommonCsvProcessor<T> {
             validators.stream()
                 .filter(validator -> !validator.isValid(value))
                 .forEach(validator -> processingResult
-                    .logError(line, originalRow, String.format("%s: %s", field, validator.getErrorMessage())));
+                    .logError(line, originalParameters, String.format("%s: %s", field, validator.getErrorMessage())));
         }
         return processingResult.isSuccessful();
     }

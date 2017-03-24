@@ -35,7 +35,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     private static final String FILTER_BUTTONS_LAYOUT_ID = "filter-buttons";
     private static final String EXPORT_BUTTON_ID = "Export";
     private static final String DELETE_USAGE_BUTTON_ID = "Delete_Usage_Batch";
-    private static final Set USAGES_BUTTONS =
+    private static final Set<String> USAGES_BUTTONS =
         Sets.newHashSet(LOAD_USAGE_BUTTON_ID, ADD_TO_SCENARIO_BUTTON_ID, EXPORT_BUTTON_ID, DELETE_USAGE_BUTTON_ID);
 
     @Test
@@ -240,6 +240,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         verifyExportButton(buttonsLayout);
     }
 
+    @SuppressWarnings("unchecked")
     private void verifyUsagesLayoutButton(WebElement buttonsLayout, Set<String> buttonsIds) {
         assertTrue(USAGES_BUTTONS.containsAll(buttonsIds));
         Set<String> invisibleButtons = Sets.newHashSet(CollectionUtils.subtract(USAGES_BUTTONS, buttonsIds));

@@ -131,7 +131,7 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
     }
 
     @Test
-    // Test case ID: 'd79eba61-99c1-4e8b-bda8-b099facfb8d4'
+    // Test cases IDs: 'd79eba61-99c1-4e8b-bda8-b099facfb8d4', 'c32b46ce-6676-4526-af2f-65deb637a346'
     public void testDeleteUsageBatchAssociatedWithScenarios() {
         loginAsSpecialist();
         applyFilters(findElementById(USAGE_FILTER_WIDGET_ID), usageBatch1);

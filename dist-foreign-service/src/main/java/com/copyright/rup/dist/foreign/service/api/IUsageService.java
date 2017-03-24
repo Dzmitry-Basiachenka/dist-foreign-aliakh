@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
+import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingResult;
 
 import java.io.OutputStream;
 import java.util.List;
@@ -48,6 +49,14 @@ public interface IUsageService {
      * @param outputStream instance of {@link OutputStream}
      */
     void writeUsageCsvReport(UsageFilter filter, OutputStream outputStream);
+
+    /**
+     * Writes errors information into csv output stream.
+     *
+     * @param csvProcessingResult instance of {@link CsvProcessingResult}
+     * @param outputStream        instance of {@link OutputStream}
+     */
+    void writeErrorsCsvReport(CsvProcessingResult csvProcessingResult, OutputStream outputStream);
 
     /**
      * Inserts usages.
