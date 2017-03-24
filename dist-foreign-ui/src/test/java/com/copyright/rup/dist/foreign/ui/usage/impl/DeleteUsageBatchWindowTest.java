@@ -20,9 +20,9 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.ui.common.util.FiscalYearColumnGenerator;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
-import com.copyright.rup.dist.foreign.ui.usage.impl.DeleteUsageBatchWindow.ConfirmDeleteListener;
 import com.copyright.rup.dist.foreign.ui.usage.impl.DeleteUsageBatchWindow.PaymentDateFilter;
 import com.copyright.rup.dist.foreign.ui.usage.impl.DeleteUsageBatchWindow.SearchController;
+import com.copyright.rup.vaadin.ui.ConfirmDialogWindow.IListener;
 import com.copyright.rup.vaadin.ui.LocalDateColumnGenerator;
 import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.widget.SearchWidget;
@@ -124,7 +124,7 @@ public class DeleteUsageBatchWindowTest {
     @Test
     public void testDeleteClickListenerEmptyAssociatedScenarios() {
         mockStatic(Windows.class);
-        Capture<ConfirmDeleteListener> listenerCapture = new Capture<>();
+        Capture<IListener> listenerCapture = new Capture<>();
         Window confirmWindowCapture = createMock(Window.class);
         VerticalLayout content = (VerticalLayout) usageBatchWindow.getContent();
         Table table = (Table) content.getComponent(1);
@@ -167,20 +167,6 @@ public class DeleteUsageBatchWindowTest {
         replay(controller, confirmWindowCapture, Windows.class);
         listener.buttonClick(null);
         verify(controller, confirmWindowCapture, Windows.class);
-    }
-
-    @Test
-    public void testConfirmDeleteListener() {
-        BeanContainer<String, UsageBatch> container = createMock(BeanContainer.class);
-        UsageBatch usageBatch = new UsageBatch();
-        usageBatch.setId(USAGE_BATCH_ID);
-        ConfirmDeleteListener listener = new ConfirmDeleteListener(controller, usageBatch, container);
-        controller.deleteUsageBatch(usageBatch);
-        expectLastCall().once();
-        expect(container.removeItem(USAGE_BATCH_ID)).andReturn(true).once();
-        replay(container, controller);
-        listener.onActionConfirmed();
-        verify(container, controller);
     }
 
     @Test

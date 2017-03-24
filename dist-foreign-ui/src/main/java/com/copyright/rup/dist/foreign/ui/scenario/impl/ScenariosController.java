@@ -5,7 +5,6 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosWidget;
-import com.copyright.rup.vaadin.ui.ConfirmDialogWindow;
 import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
@@ -42,18 +41,16 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
     public void onDeleteButtonClicked() {
         final Scenario scenario = getWidget().getSelectedScenario();
         String message = ForeignUi.getMessage("message.confirm.delete_action", scenario.getName(), "scenario");
-        // TODO {mbezmen} try to replace with default method of @FunctionalInterface
-        Windows.showConfirmDialog(message, new ConfirmDialogWindow.Listener() {
-            @Override
-            public void onActionConfirmed() {
-                scenarioService.deleteScenario(scenario.getId());
-                getWidget().refresh();
-            }
-        });
+        Windows.showConfirmDialog(message, () -> deleteScenario(scenario));
     }
 
     @Override
     protected IScenariosWidget instantiateWidget() {
         return new ScenariosWidget();
+    }
+
+    private void deleteScenario(Scenario scenario) {
+        scenarioService.deleteScenario(scenario.getId());
+        getWidget().refresh();
     }
 }

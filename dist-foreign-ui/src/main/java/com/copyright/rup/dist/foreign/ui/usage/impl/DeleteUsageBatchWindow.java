@@ -7,7 +7,6 @@ import com.copyright.rup.dist.foreign.ui.common.util.FiscalYearColumnGenerator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.ui.Buttons;
-import com.copyright.rup.vaadin.ui.ConfirmDialogWindow;
 import com.copyright.rup.vaadin.ui.LocalDateColumnGenerator;
 import com.copyright.rup.vaadin.ui.VaadinUtils;
 import com.copyright.rup.vaadin.ui.Windows;
@@ -110,7 +109,7 @@ class DeleteUsageBatchWindow extends Window {
         if (CollectionUtils.isEmpty(scenariosNames)) {
             Windows.showConfirmDialog(
                 ForeignUi.getMessage("message.confirm.delete_action", usageBatch.getName(), "usage batch"),
-                new ConfirmDeleteListener(controller, usageBatch, container));
+                () -> performDelete(usageBatch));
         } else {
             StringBuilder scenariosHtml = new StringBuilder("<ul>");
             for (String scenarioName : scenariosNames) {
@@ -120,6 +119,11 @@ class DeleteUsageBatchWindow extends Window {
             Windows.showNotificationWindow(
                 ForeignUi.getMessage("message.usage_batch_associated_with_scenarios", scenariosHtml));
         }
+    }
+
+    private void performDelete(UsageBatch usageBatch) {
+        controller.deleteUsageBatch(usageBatch);
+        container.removeItem(usageBatch.getId());
     }
 
     /**
@@ -150,36 +154,6 @@ class DeleteUsageBatchWindow extends Window {
         @Override
         public boolean appliesToProperty(Object propertyId) {
             return PAYMENT_DATE_PROPERTY.equals(propertyId);
-        }
-    }
-
-    /**
-     * Listener for confirming usage datch deleting.
-     */
-    static class ConfirmDeleteListener extends ConfirmDialogWindow.Listener {
-
-        private IUsagesController controller;
-        private UsageBatch usageBatch;
-        private BeanContainer<String, UsageBatch> container;
-
-        /**
-         * Constructor.
-         *
-         * @param controller {@link IUsagesController}
-         * @param usageBatch {@link UsageBatch} to be deleted
-         * @param container  container
-         */
-        ConfirmDeleteListener(IUsagesController controller, UsageBatch usageBatch,
-                              BeanContainer<String, UsageBatch> container) {
-            this.controller = controller;
-            this.usageBatch = usageBatch;
-            this.container = container;
-        }
-
-        @Override
-        public void onActionConfirmed() {
-            controller.deleteUsageBatch(usageBatch);
-            container.removeItem(usageBatch.getId());
         }
     }
 
