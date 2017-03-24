@@ -165,7 +165,6 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
         verifyMetadataPanel(assertElement(scenarioTab, By.id("scenarios-metadata")));
         verifyEmptyMetadataPanel(scenarioTab, table);
         WebElement deleteButton = assertElement(buttonsLayout, By.className(V_DISABLED_CLASS_NAME));
-        assertNotNull(deleteButton);
         assertTrue(deleteButton.getAttribute("class").contains("v-button-Delete"));
     }
 
@@ -181,7 +180,7 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
 
     private void verifyEmptyMetadataPanel(WebElement scenarioTab, WebElement table) {
         clickElementAndWait(assertElement(table, By.className("v-selected")));
-        assertNull(findElement(table, By.className("v-selected")));
+        assertNull(waitAndFindElement(table, By.className("v-selected")));
         WebElement metadataPanel = assertElement(scenarioTab, By.id("scenarios-metadata"));
         List<WebElement> labels = findElements(metadataPanel, By.className("v-label"));
         assertEquals(1, CollectionUtils.size(labels));

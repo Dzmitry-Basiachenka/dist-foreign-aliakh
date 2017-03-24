@@ -176,7 +176,7 @@ public class ForeignCommonUiTest extends CommonUiTest {
      * @return "Usages" tab.
      */
     protected WebElement selectUsagesTab() {
-        WebElement usagesTab = waitAndGetTab(findElementById(Cornerstone.MAIN_TABSHEET), "Usages");
+        WebElement usagesTab = waitAndGetTab(assertElement(By.id(Cornerstone.MAIN_TABSHEET)), "Usages");
         clickElementAndWait(usagesTab);
         return usagesTab;
     }
@@ -185,7 +185,7 @@ public class ForeignCommonUiTest extends CommonUiTest {
      * @return "Scenarios" tab.
      */
     protected WebElement selectScenariosTab() {
-        WebElement scenariosTab = waitAndGetTab(findElementById(Cornerstone.MAIN_TABSHEET), "Scenarios");
+        WebElement scenariosTab = waitAndGetTab(assertElement(By.id(Cornerstone.MAIN_TABSHEET)), "Scenarios");
         clickElementAndWait(scenariosTab);
         return scenariosTab;
     }
@@ -199,6 +199,16 @@ public class ForeignCommonUiTest extends CommonUiTest {
      */
     protected WebElement assertElement(WebElement parentElement, By by) {
         return checkNotNull(waitAndFindElement(parentElement, by));
+    }
+
+    /**
+     * Finds element by locating mechanism and verifies it for {@code null}.
+     *
+     * @param by the element selector
+     * @return instance of {@link WebElement}
+     */
+    protected WebElement assertElement(By by) {
+        return checkNotNull(waitAndFindElement(by));
     }
 
     /**
@@ -223,7 +233,7 @@ public class ForeignCommonUiTest extends CommonUiTest {
      */
     protected void applyCurrentDateForDateField(WebElement dateElement) {
         clickElementAndWait(assertElement(dateElement, By.className("v-datefield-button")));
-        WebElement calendarPanel = waitAndFindElement(By.className("v-datefield-calendarpanel"));
+        WebElement calendarPanel = assertElement(By.className("v-datefield-calendarpanel"));
         WebElement currentDateSlot = assertElement(calendarPanel, By.className("v-datefield-calendarpanel-day-today"));
         clickElementAndWait(currentDateSlot);
     }
@@ -253,8 +263,7 @@ public class ForeignCommonUiTest extends CommonUiTest {
      */
     protected void saveFilter(WebElement filterWidget, String filterId, String filterWindowId, String item) {
         clickElementAndWait(assertElement(filterWidget, By.id(filterId)));
-        WebElement filterWindow = findElementById(filterWindowId);
-        assertNotNull(filterWindow);
+        WebElement filterWindow = assertElement(By.id(filterWindowId));
         WebElement label = findElementByText(filterWindow, HTML_LABEL_TAG_NAME, item);
         assertNotNull(label);
         clickElementAndWait(label);
@@ -322,8 +331,7 @@ public class ForeignCommonUiTest extends CommonUiTest {
      */
     protected void verifyErrorWindow(Map<String, String> fieldNameToErrorMessageMap) {
         WebElement errorWindow = findErrorWindow();
-        WebElement errorContent = waitAndFindElement(By.className("validation-error-content"));
-        assertNotNull(errorContent);
+        WebElement errorContent = assertElement(By.className("validation-error-content"));
         List<WebElement> errorFields = findElements(errorContent, By.tagName(HTML_B_TAG_NAME));
         List<WebElement> errorMessages = findElements(errorContent, By.tagName(HTML_SPAN_TAG_NAME));
         int errorsSize = CollectionUtils.size(fieldNameToErrorMessageMap);
@@ -370,9 +378,7 @@ public class ForeignCommonUiTest extends CommonUiTest {
     }
 
     private WebElement findErrorWindow() {
-        WebElement errorWindow = waitAndFindElement(By.className("validation-error-window"));
-        assertNotNull(errorWindow);
-        return errorWindow;
+        return assertElement(By.className("validation-error-window"));
     }
 
     private void openAppPage(ForeignCredentials credentials) {
@@ -380,10 +386,8 @@ public class ForeignCommonUiTest extends CommonUiTest {
     }
 
     private void verifyConfirmDialogAndClickButton(String expectedLabel, String buttonToClick) {
-        WebElement confirmDialog = findElementById("confirm-dialog-window");
-        assertNotNull(confirmDialog);
+        WebElement confirmDialog = assertElement(By.id("confirm-dialog-window"));
         WebElement label = assertElement(confirmDialog, By.className("v-label"));
-        assertNotNull(label);
         assertEquals(expectedLabel, label.getText());
         clickButtonAndWait(confirmDialog, buttonToClick);
     }

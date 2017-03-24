@@ -86,7 +86,7 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
     }
 
     @Test
-    //Test case ID: 1b30b405-0431-4f96-81ca-9c9ff65a32f1
+    // Test case ID: '1b30b405-0431-4f96-81ca-9c9ff65a32f1'
     public void testUsageBatchNameFieldValidation() {
         WebElement uploadWindow = openUploadUsageBatchWindow();
         fillValidValuesForUploadWindowFields(uploadWindow);
@@ -181,10 +181,8 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         fillValidValuesForUploadWindowFields(uploadWindow);
         LocalDate paymentDate = LocalDate.now();
         clickElementAndWait(assertElement(uploadWindow, By.id(UPLOAD_BUTTON_ID)));
-        WebElement successfullyUploadedWindow = waitAndFindElement(By.className("v-window-contents"));
-        assertNotNull(successfullyUploadedWindow);
-        assertEquals("Upload completed: 2 records were stored successfully",
-            assertElement(successfullyUploadedWindow, By.className("v-label")).getText());
+        WebElement successfullyUploadedWindow = assertElement(By.className("v-window-contents"));
+        verifyLabelMessage(successfullyUploadedWindow, "Upload completed: 2 records were stored successfully");
         clickElementAndWait(assertElement(successfullyUploadedWindow, By.id(OK_BUTTON_ID)));
         List<UsageBatch> uploadedUsageBatches = usageBatchRepository.findAll().stream()
             .filter(usageBatch -> USAGE_BATCH_NAME.equals(usageBatch.getName())).collect(Collectors.toList());
@@ -204,12 +202,31 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         verifyErrorWindowComponents();
     }
 
-    private void verifyErrorWindowComponents() {
-        WebElement errorWindow = waitAndFindElement(By.id("upload-error-window"));
-        assertNotNull(errorWindow);
+    @Test
+    // Test case ID: '66a5ac82-8933-4814-8c71-153a6226d507'
+    public void testUploadFileWithInvalidHeader() {
+        WebElement uploadWindow = openUploadUsageBatchWindow();
+        fillValidValuesForUploadWindowFields(uploadWindow);
+        fillFileNameField(uploadWindow, "invalid_header_usage_data_file.csv");
+        clickElementAndWait(assertElement(uploadWindow, By.id(UPLOAD_BUTTON_ID)));
+        verifyErrorNotificationWindow();
+    }
+
+    private void verifyErrorNotificationWindow() {
+        WebElement errorWindow = assertElement(By.id("notification-window"));
         assertEquals("Error", assertElement(errorWindow, By.className(V_WINDOW_HEADER_CLASS_NAME)).getText());
-        assertEquals("The file could not be uploaded.\nPress Download button to see detailed list of errors.",
-            assertElement(errorWindow, By.className("v-label")).getText());
+        verifyLabelMessage(errorWindow, "Columns headers are incorrect. Expected columns headers are:\n" +
+            "Detail ID\nTitle\nArticle\nStandard Number\nWr Wrk Inst\nRH Acct Number\nPublisher\nPub Date\n" +
+            "Number of Copies\nReported Value\nMarket\nMarket Period From\nMarket Period To\nAuthor");
+        clickElementAndWait(assertElement(errorWindow, By.id(OK_BUTTON_ID)));
+        assertNull(waitAndFindElement(By.id("notification-window")));
+    }
+
+    private void verifyErrorWindowComponents() {
+        WebElement errorWindow = assertElement(By.id("upload-error-window"));
+        assertEquals("Error", assertElement(errorWindow, By.className(V_WINDOW_HEADER_CLASS_NAME)).getText());
+        verifyLabelMessage(errorWindow,
+            "The file could not be uploaded.\nPress Download button to see detailed list of errors.");
         assertTrue(assertElement(errorWindow, By.id("Download")).isEnabled());
         clickElementAndWait(assertElement(errorWindow, By.id(CLOSE_BUTTON_ID)));
         assertNull(waitAndFindElement(By.id("upload-error-window")));
@@ -288,6 +305,10 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         assertEquals(value, getInnerHtml(assertElement(uploadWindow, By.id("rro-account-name-field"))));
     }
 
+    private void verifyLabelMessage(WebElement webElement, String message) {
+        assertEquals(message, assertElement(webElement, By.className("v-label")).getText());
+    }
+
     private void fillValidValuesForUploadWindowFields(WebElement uploadWindow) {
         fillField(uploadWindow, USAGE_BATCH_NAME_FIELD_ID, USAGE_BATCH_NAME);
         fillFileNameField(uploadWindow, "sample_usage_data_file.csv");
@@ -308,7 +329,7 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
     }
 
     private void fillPaymentDateField(WebElement uploadWindow) {
-        WebElement paymentDate = waitAndFindElement(uploadWindow, By.id("payment-date-field"));
+        WebElement paymentDate = assertElement(uploadWindow, By.id("payment-date-field"));
         applyCurrentDateForDateField(paymentDate);
     }
 
@@ -318,6 +339,6 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         WebElement usagesLayout = assertElement(usagesTab, By.id(USAGE_LAYOUT_ID));
         WebElement buttonsLayout = assertElement(usagesLayout, By.id("usages-buttons"));
         clickElementAndWait(assertElement(buttonsLayout, By.id(LOAD_USAGE_BUTTON_ID)));
-        return waitAndFindElement(By.id("usage-upload-window"));
+        return assertElement(By.id("usage-upload-window"));
     }
 }
