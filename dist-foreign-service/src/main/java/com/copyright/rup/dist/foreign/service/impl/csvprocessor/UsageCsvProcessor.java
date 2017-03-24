@@ -4,7 +4,14 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator.DetailIdValidator;
+import com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator.DuplicateInFileValidator;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator.RequiredValidator;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,7 +25,12 @@ import java.util.List;
  *
  * @author Aliaksei Pchelnikau
  */
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class UsageCsvProcessor extends CommonCsvProcessor<Usage> {
+
+    @Autowired
+    private DetailIdValidator detailIdValidator;
 
     @Override
     protected List<ICsvColumn> getHeaders() {
@@ -26,9 +38,10 @@ public class UsageCsvProcessor extends CommonCsvProcessor<Usage> {
     }
 
     @Override
-    protected void initPlainValidators() {
-        addPlainValidators(Header.DETAIL_ID, new RequiredValidator());
+    protected void initValidators() {
+        addPlainValidators(Header.DETAIL_ID, new RequiredValidator(), new DuplicateInFileValidator());
         addPlainValidators(Header.RH_ACCT_NUMBER, new RequiredValidator());
+        addBusinessValidators(detailIdValidator);
     }
 
     @Override

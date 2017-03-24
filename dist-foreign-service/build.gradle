@@ -11,4 +11,5 @@ dependencies {
 
     testIntegCompile("commons-io:commons-io:${commonsIoVersion}")
     testIntegRuntime project(path: ':dist-foreign-repository', configuration: 'testIntegRuntime')
+    testIntegRuntime("com.copyright.rup.common:rup-common-config:${rupCommonConfigVersion}")
 }

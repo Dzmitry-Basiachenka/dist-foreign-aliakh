@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
+
+    <import resource="classpath:/com/copyright/rup/common/config/rup-properties-config.xml"/>
+    <import resource="classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-context.xml"/>
+
+    <bean id="dfDataSource"
+          class="com.copyright.rup.common.test.integ.db.embedded.EmbeddedH2DatabaseFactory">
+        <property name="resourcesFromPaths">
+            <list value-type="java.lang.String">
+                <value>/com/copyright/rup/dist/foreign/db/main-changelog.groovy</value>
+            </list>
+        </property>
+        <property name="url">
+            <value>jdbc:h2:mem:db1;MVCC=true</value>
+        </property>
+    </bean>
+
+    <bean id="quartzScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <!--Stub Scheduler for quartz job-->
+    </bean>
+
+</beans>
