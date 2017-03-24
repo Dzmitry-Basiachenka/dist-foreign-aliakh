@@ -9,7 +9,6 @@ import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.createPartialMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
-import static org.powermock.api.easymock.PowerMock.expectNew;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
@@ -172,7 +171,7 @@ public class UsageBatchUploadWindowTest {
         Whitebox.setInternalState(window, GROSS_AMOUNT_FIELD, new TextField("Gross Amount", "100.00"));
         Whitebox.setInternalState(window, "rightsholderNameProperty", new ObjectProperty<>(RRO_NAME));
         expect(window.isValid()).andReturn(true).once();
-        expectNew(UsageCsvProcessor.class).andReturn(processor).once();
+        expect(usagesController.getCsvProcessor()).andReturn(processor).once();
         expect(processor.process(anyObject(), anyString())).andReturn(processingResult).once();
         expect(usagesController.loadUsageBatch(buildUsageBatch(), processingResult.getResult()))
             .andReturn(1).once();

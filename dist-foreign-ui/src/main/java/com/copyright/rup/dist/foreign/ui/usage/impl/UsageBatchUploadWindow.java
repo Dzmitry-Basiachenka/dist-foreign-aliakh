@@ -81,7 +81,7 @@ class UsageBatchUploadWindow extends Window {
     void onUploadClicked() {
         if (isValid()) {
             try {
-                UsageCsvProcessor processor = new UsageCsvProcessor();
+                UsageCsvProcessor processor = usagesController.getCsvProcessor();
                 CsvProcessingResult<Usage> processingResult =
                     processor.process(csvUploadComponent.getStreamToUploadedFile(), csvUploadComponent.getFileName());
                 if (processingResult.isSuccessful()) {

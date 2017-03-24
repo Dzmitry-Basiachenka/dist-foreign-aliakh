@@ -10,6 +10,10 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -25,13 +29,18 @@ import java.time.LocalDate;
  *
  * @author Aliaksei Pchelnikau
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(
+    value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
 public class UsageCsvProcessorIntegrationTest {
 
     private UsageCsvProcessor processor;
+    @Autowired
+    private UsageCsvProcessorFactory usageCsvProcessorFactory;
 
     @Before
     public void setUp() {
-        processor = new UsageCsvProcessor();
+        processor = usageCsvProcessorFactory.getProcessor();
     }
 
     @Test

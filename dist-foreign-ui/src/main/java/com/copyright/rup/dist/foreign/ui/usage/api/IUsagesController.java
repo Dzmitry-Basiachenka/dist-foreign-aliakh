@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingResult;
+import com.copyright.rup.dist.foreign.service.impl.csvprocessor.UsageCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CreateScenarioWindow.ScenarioCreateEvent;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.ui.component.lazytable.IBeanLoader;
@@ -132,4 +133,9 @@ public interface IUsagesController extends IController<IUsagesWidget>, IBeanLoad
      * @return instance of {@link IStreamSource}
      */
     IStreamSource getErrorResultStreamSource(CsvProcessingResult csvProcessingResult);
+
+    /**
+     * @return instance of {@link UsageCsvProcessor}.
+     */
+    UsageCsvProcessor getCsvProcessor();
 }

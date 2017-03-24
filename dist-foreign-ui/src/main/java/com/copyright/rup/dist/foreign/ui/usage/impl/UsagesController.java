@@ -12,6 +12,8 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingResult;
+import com.copyright.rup.dist.foreign.service.impl.csvprocessor.UsageCsvProcessor;
+import com.copyright.rup.dist.foreign.service.impl.csvprocessor.UsageCsvProcessorFactory;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
@@ -58,18 +60,17 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
 
     @Autowired
     private IUsageBatchService usageBatchService;
-
     @Autowired
     private IUsageService usageService;
-
     @Autowired
     private IUsagesFilterController filterController;
-
     @Autowired
     private IPrmIntegrationService prmIntegrationService;
-
     @Autowired
     private IScenarioService scenarioService;
+    @Autowired
+    private UsageCsvProcessorFactory usageCsvProcessorFactory;
+
 
     @Override
     public IUsagesFilterWidget initUsagesFilterWidget() {
@@ -155,6 +156,11 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     @Override
     public void onScenarioCreated(ScenarioCreateEvent event) {
         getWidget().fireWidgetEvent(event);
+    }
+
+    @Override
+    public UsageCsvProcessor getCsvProcessor() {
+        return usageCsvProcessorFactory.getProcessor();
     }
 
     @Override

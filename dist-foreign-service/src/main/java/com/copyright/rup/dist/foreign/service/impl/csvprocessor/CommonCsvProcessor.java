@@ -50,6 +50,7 @@ public abstract class CommonCsvProcessor<T> {
     private static final String EMPTY_STRING_REGEX = "^\\s*(([nN][uU][lL][lL])|([nN][aA])|([nN]/[aA]))\\s*$";
 
     private Map<ICsvColumn, List<IValidator<String>>> plainValidators = Maps.newHashMap();
+    private List<IValidator<T>> businessValidators = Lists.newArrayList();
     private List<ICsvColumn> headers = Lists.newArrayList();
     private CsvProcessingResult<T> processingResult;
     private int line = 1;
@@ -71,7 +72,7 @@ public abstract class CommonCsvProcessor<T> {
             headers = getHeaders();
             processingResult = new CsvProcessingResult<>(getColumnsHeaders(), fileName);
             validateHeader(listReader.getHeader(true));
-            initPlainValidators();
+            initValidators();
             processRows(listReader);
         } catch (IOException | SuperCsvException e) {
             throw new ValidationException(String.format("Failed to read file: %s", e.getMessage()), e);
@@ -98,7 +99,7 @@ public abstract class CommonCsvProcessor<T> {
     /**
      * Initializations plain validators.
      */
-    protected void initPlainValidators() {
+    protected void initValidators() {
         //Empty
     }
 
@@ -111,6 +112,16 @@ public abstract class CommonCsvProcessor<T> {
     @SuppressWarnings("unchecked")
     protected void addPlainValidators(ICsvColumn column, IValidator<String>... validators) {
         plainValidators.put(column, Lists.newArrayList(validators));
+    }
+
+    /**
+     * Puts business validators.
+     *
+     * @param validators vararg of validators
+     */
+    @SuppressWarnings("unchecked")
+    protected void addBusinessValidators(IValidator<T>... validators) {
+        businessValidators = Lists.newArrayList(validators);
     }
 
     /**
@@ -210,8 +221,14 @@ public abstract class CommonCsvProcessor<T> {
     }
 
     private boolean businessValidate(T item) {
-        //TODO stub will be implemented as a part of B-29761
-        return item != null;
+        boolean valid = true;
+        for (IValidator<T> validator : businessValidators) {
+            if (!validator.isValid(item)) {
+                valid = false;
+                processingResult.logError(line, originalParameters, validator.getErrorMessage());
+            }
+        }
+        return valid;
     }
 
     private void validateHeader(String... fileHeaders) throws HeaderValidationException {
