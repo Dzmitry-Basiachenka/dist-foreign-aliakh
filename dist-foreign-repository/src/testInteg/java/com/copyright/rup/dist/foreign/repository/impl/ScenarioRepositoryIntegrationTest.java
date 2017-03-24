@@ -85,9 +85,19 @@ public class ScenarioRepositoryIntegrationTest {
 
     @Test
     public void testFindAll() {
-        assertEquals(1, scenarioRepository.findAll().size());
-        scenarioRepository.insert(buildScenario(RupPersistUtils.generateUuid(), SCENARIO_NAME));
         assertEquals(2, scenarioRepository.findAll().size());
+        String scenarioId = RupPersistUtils.generateUuid();
+        scenarioRepository.insert(buildScenario(scenarioId, SCENARIO_NAME));
+        List<Scenario> scenarios = scenarioRepository.findAll();
+        assertEquals(3, scenarios.size());
+        verifyScenario(scenarios.get(0), scenarioId, SCENARIO_NAME, DESCRIPTION, GROSS_TOTAL, NET_TOTAL,
+            REPORTED_TOTAL);
+        verifyScenario(scenarios.get(1), "e27551ed-3f69-4e08-9e4f-8ac03f67595f", "Scenario name 2",
+            "The description of scenario 2", new BigDecimal("10000.0000000000"), new BigDecimal("16000.0000000000"),
+            new BigDecimal("8000.00"));
+        verifyScenario(scenarios.get(2), "b1f0b236-3ae9-4a60-9fab-61db84199d6f", "Scenario name",
+            "The description of scenario", new BigDecimal("24000.0000000000"), new BigDecimal("15000.0000000000"),
+            new BigDecimal("18000.00"));
     }
 
     @Test
@@ -148,5 +158,17 @@ public class ScenarioRepositoryIntegrationTest {
         scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
         scenario.setDescription(DESCRIPTION);
         return scenario;
+    }
+
+    private void verifyScenario(Scenario scenario, String id, String name, String description, BigDecimal grossAmount,
+                                BigDecimal netAmount, BigDecimal reportedAmount) {
+        assertEquals(id, scenario.getId());
+        assertEquals(name, scenario.getName());
+        assertEquals(description, scenario.getDescription());
+        assertEquals("SYSTEM", scenario.getCreateUser());
+        assertEquals(ScenarioStatusEnum.IN_PROGRESS, scenario.getStatus());
+        assertEquals(grossAmount, scenario.getGrossTotal());
+        assertEquals(netAmount, scenario.getNetTotal());
+        assertEquals(reportedAmount, scenario.getReportedTotal());
     }
 }
