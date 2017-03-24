@@ -36,7 +36,7 @@ public class ScenarioNameUniqueValidatorTest {
 
     @Test
     public void testIsValidValueStoredNull() {
-        expect(scenarioService.isScenarioExists(SCENARIO_NAME)).andReturn(true).once();
+        expect(scenarioService.scenarioExists(SCENARIO_NAME)).andReturn(true).once();
         replay(scenarioService);
         assertFalse(validator.isValid(SCENARIO_NAME));
         verify(scenarioService);
@@ -44,7 +44,7 @@ public class ScenarioNameUniqueValidatorTest {
 
     @Test
     public void testIsValidValue() {
-        expect(scenarioService.isScenarioExists(SCENARIO_NEW_NAME)).andReturn(true).once();
+        expect(scenarioService.scenarioExists(SCENARIO_NEW_NAME)).andReturn(true).once();
         replay(scenarioService);
         assertFalse(validator.isValid(SCENARIO_NEW_NAME));
         verify(scenarioService);
@@ -52,7 +52,7 @@ public class ScenarioNameUniqueValidatorTest {
 
     @Test
     public void testIsValidValueScenarioNotExist() {
-        expect(scenarioService.isScenarioExists(SCENARIO_NAME)).andReturn(false).once();
+        expect(scenarioService.scenarioExists(SCENARIO_NAME)).andReturn(false).once();
         replay(scenarioService);
         assertTrue(validator.isValidValue(SCENARIO_NAME));
         verify(scenarioService);

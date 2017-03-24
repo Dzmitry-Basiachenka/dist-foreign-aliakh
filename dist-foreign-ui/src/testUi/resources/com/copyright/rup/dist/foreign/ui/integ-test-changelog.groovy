@@ -1,7 +1,7 @@
 databaseChangeLog {
     property(file: 'database.properties')
 
-    changeSet(id: '2017-17-02-00', author: 'Mikalai_Bezmen mbezmen@copyright.com') {
+    changeSet(id: '2017-17-02-00', author: 'Mikalai_Bezmen <mbezmen@copyright.com>') {
         comment('Inserting Usage Batch with Usages for ui tests')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -127,7 +127,7 @@ databaseChangeLog {
         }
     }
 
-    changeSet(id: '2017-02-27-00', author: 'Mikalai_Bezmen mbezmen@copyright.com') {
+    changeSet(id: '2017-02-27-00', author: 'Mikalai_Bezmen <mbezmen@copyright.com>') {
         comment('Inserting Rightsholders for ui tests')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
@@ -178,7 +178,7 @@ databaseChangeLog {
         }
     }
 
-    changeSet(id: '2017-03-16-00', author: 'Ihar Suvorau isuvorau@copyright.com') {
+    changeSet(id: '2017-03-16-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
         comment('Inserting scenario for ui tests')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {

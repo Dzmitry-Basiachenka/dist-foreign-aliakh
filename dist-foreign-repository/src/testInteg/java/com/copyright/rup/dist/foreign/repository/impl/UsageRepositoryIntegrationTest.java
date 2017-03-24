@@ -106,9 +106,9 @@ public class UsageRepositoryIntegrationTest {
     private UsageRepository usageRepository;
 
     @Test
-    public void testInsertUsage() {
-        usageRepository.insertUsage(buildUsage(USAGE_ID, USAGE_BATCH_ID_1));
-        Usage usage = usageRepository.findUsageByDetailId(DETAIL_ID);
+    public void testInsert() {
+        usageRepository.insert(buildUsage(USAGE_ID, USAGE_BATCH_ID_1));
+        Usage usage = usageRepository.findByDetailId(DETAIL_ID);
         assertNotNull(usage);
         assertEquals(USAGE_ID, usage.getId());
         assertEquals(SCENARIO_ID, usage.getScenarioId());
@@ -131,8 +131,8 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testGetUsagesCount() {
-        assertEquals(1, usageRepository.getUsagesCount(
+    public void testGetCountByFilter() {
+        assertEquals(1, usageRepository.getCountByFilter(
             buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.singleton(USAGE_BATCH_ID_1),
                 UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, FISCAL_YEAR)));
     }
@@ -339,73 +339,73 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testDeleteUsageBatchDetails() {
+    public void testDeleteUsages() {
         UsageFilter filter = new UsageFilter();
         filter.setUsageBatchesIds(Sets.newHashSet(USAGE_BATCH_ID_1));
         Pageable pageable = new Pageable(0, 100);
         Sort sort = new Sort(DETAIL_ID_KEY, Direction.ASC);
         assertEquals(1, usageRepository.findByFilter(filter, pageable, sort).size());
-        usageRepository.deleteUsageBatchDetails(USAGE_BATCH_ID_1);
+        usageRepository.deleteUsages(USAGE_BATCH_ID_1);
         assertEquals(0, usageRepository.findByFilter(filter, pageable, sort).size());
     }
 
     @Test
-    public void testFindUsagesWithAmounts() {
+    public void testFindWithAmounts() {
         UsageFilter usageFilter =
             buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.singleton(USAGE_BATCH_ID_1),
                 UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, FISCAL_YEAR);
-        verifyUsages(usageRepository.findUsagesWithAmounts(usageFilter), 1, USAGE_ID_1);
+        verifyUsages(usageRepository.findWithAmounts(usageFilter), 1, USAGE_ID_1);
     }
 
     @Test
-    public void testFindUsagesWithAmountsByUsageBatchFilter() {
+    public void testFindWithAmountsByUsageBatchFilter() {
         UsageFilter usageFilter =
             buildUsageFilter(Collections.emptySet(), Collections.singleton(USAGE_BATCH_ID_1), null, null, null);
-        verifyUsages(usageRepository.findUsagesWithAmounts(usageFilter), 1, USAGE_ID_1);
+        verifyUsages(usageRepository.findWithAmounts(usageFilter), 1, USAGE_ID_1);
     }
 
     @Test
-    public void testFindUsagesWithAmountsByRhAccountNumberFilter() {
+    public void testFindWithAmountsByRhAccountNumberFilter() {
         UsageFilter usageFilter =
             buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.emptySet(), null, null, null);
-        verifyUsages(usageRepository.findUsagesWithAmounts(usageFilter), 1, USAGE_ID_1);
+        verifyUsages(usageRepository.findWithAmounts(usageFilter), 1, USAGE_ID_1);
     }
 
     @Test
-    public void testFindUsagesWithAmountsByStatusFilter() {
+    public void testFindWithAmountsByStatusFilter() {
         UsageFilter usageFilter =
             buildUsageFilter(Collections.emptySet(), Collections.emptySet(), UsageStatusEnum.ELIGIBLE, null, null);
-        verifyUsages(usageRepository.findUsagesWithAmounts(usageFilter), 2, USAGE_ID_1, USAGE_ID_3);
+        verifyUsages(usageRepository.findWithAmounts(usageFilter), 2, USAGE_ID_1, USAGE_ID_3);
     }
 
     @Test
-    public void testFindUsagesWithAmountsByPaymentDateFilter() {
+    public void testFindWithAmountsByPaymentDateFilter() {
         UsageFilter usageFilter =
             buildUsageFilter(Collections.emptySet(), Collections.emptySet(), null, PAYMENT_DATE, null);
-        verifyUsages(usageRepository.findUsagesWithAmounts(usageFilter), 2, USAGE_ID_1, USAGE_ID_2);
+        verifyUsages(usageRepository.findWithAmounts(usageFilter), 2, USAGE_ID_1, USAGE_ID_2);
     }
 
     @Test
-    public void testFindUsagesWithAmountsByFiscalYearFilter() {
+    public void testFindWithAmountsByFiscalYearFilter() {
         UsageFilter usageFilter =
             buildUsageFilter(Collections.emptySet(), Collections.emptySet(), null, null, FISCAL_YEAR);
-        verifyUsages(usageRepository.findUsagesWithAmounts(usageFilter), 2, USAGE_ID_1, USAGE_ID_2);
+        verifyUsages(usageRepository.findWithAmounts(usageFilter), 2, USAGE_ID_1, USAGE_ID_2);
     }
 
     @Test
-    public void testAddUsagesToScenario() {
-        verifyUsage(usageRepository.findUsageByDetailId(DETAIL_ID_1), UsageStatusEnum.ELIGIBLE, null,
+    public void testAddToScenario() {
+        verifyUsage(usageRepository.findByDetailId(DETAIL_ID_1), UsageStatusEnum.ELIGIBLE, null,
             StoredEntity.DEFAULT_USER);
-        usageRepository.addUsagesToScenario(Collections.singletonList(USAGE_ID_3), SCENARIO_ID, USER_NAME);
-        verifyUsage(usageRepository.findUsageByDetailId(DETAIL_ID_1), UsageStatusEnum.LOCKED, SCENARIO_ID, USER_NAME);
+        usageRepository.addToScenario(Collections.singletonList(USAGE_ID_3), SCENARIO_ID, USER_NAME);
+        verifyUsage(usageRepository.findByDetailId(DETAIL_ID_1), UsageStatusEnum.LOCKED, SCENARIO_ID, USER_NAME);
     }
 
     @Test
-    public void testDeleteUsagesFromScenario() {
-        verifyUsage(usageRepository.findUsageByDetailId(DETAIL_ID_2), UsageStatusEnum.LOCKED, SCENARIO_ID,
+    public void testDeleteFromScenario() {
+        verifyUsage(usageRepository.findByDetailId(DETAIL_ID_2), UsageStatusEnum.LOCKED, SCENARIO_ID,
             StoredEntity.DEFAULT_USER);
-        usageRepository.deleteUsagesFromScenario(SCENARIO_ID, USER_NAME);
-        verifyUsage(usageRepository.findUsageByDetailId(DETAIL_ID_2), UsageStatusEnum.ELIGIBLE, null, USER_NAME);
+        usageRepository.deleteFromScenario(SCENARIO_ID, USER_NAME);
+        verifyUsage(usageRepository.findByDetailId(DETAIL_ID_2), UsageStatusEnum.ELIGIBLE, null, USER_NAME);
     }
 
     private void verifyUsage(Usage usage, UsageStatusEnum status, String scenarioId, String defaultUser) {

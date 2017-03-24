@@ -30,7 +30,7 @@ public interface IScenarioService {
      * @return {@code true} if {@link Scenario} with specified name already exists in database,
      * {@code false} - if doesn't
      */
-    boolean isScenarioExists(String scenarioName);
+    boolean scenarioExists(String scenarioName);
 
     /**
      * Gets list of {@link Scenario}s names based on usage batch.

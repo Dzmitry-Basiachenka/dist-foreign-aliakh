@@ -196,7 +196,7 @@
         </choose>
     </sql>
 
-    <insert id="insertUsage" parameterType="Usage">
+    <insert id="insert" parameterType="Usage">
         insert into ${schema}.df_usage(
             <include refid="usageColumns"/>,
             <include refid="StoredEntityMapper.additionalColumns"/>)
@@ -268,7 +268,7 @@
         </if>
     </select>
 
-    <select id="getUsagesCount" parameterType="map" resultType="int">
+    <select id="getCountByFilter" parameterType="map" resultType="int">
         select count(1)
         from ${schema}.df_usage u
         join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
@@ -277,7 +277,7 @@
         <include refid="usageFilter"/>
     </select>
 
-    <select id="findUsageByDetailId" resultMap="usageResultMap" parameterType="long">
+    <select id="findByDetailId" resultMap="usageResultMap" parameterType="long">
         select
             u.df_usage_uid,
             u.df_usage_batch_uid,
@@ -310,12 +310,12 @@
         where u.detail_id = #{detailId}
     </select>
 
-    <delete id="deleteUsageBatchDetails" parameterType="String">
+    <delete id="deleteUsages" parameterType="string">
         delete from ${schema}.df_usage
         where df_usage_batch_uid = #{batchId}
     </delete>
 
-    <select id="findUsagesWithAmounts" parameterType="map" resultMap="usageAmountResultMap">
+    <select id="findWithAmounts" parameterType="map" resultMap="usageAmountResultMap">
         select
             u.df_usage_uid,
             u.gross_amount,
@@ -331,7 +331,7 @@
         <include refid="usageFilter"/>
     </select>
 
-    <update id="addUsagesToScenario" parameterType="map">
+    <update id="addToScenario" parameterType="map">
         update
             ${schema}.df_usage
         set
@@ -345,7 +345,7 @@
         )
     </update>
 
-    <update id="deleteUsagesFromScenario" parameterType="map">
+    <update id="deleteFromScenario" parameterType="map">
         update
             ${schema}.df_usage
         set

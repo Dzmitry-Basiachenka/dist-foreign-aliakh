@@ -15,7 +15,6 @@ import java.util.List;
  * @author Aliaksandr Radkevich
  * @author Mikalai Bezmen
  */
-// TODO {isuvorau} use one pattern for naming repository methods
 public interface IScenarioRepository {
 
     /**
@@ -34,9 +33,9 @@ public interface IScenarioRepository {
     int getCountByName(String name);
 
     /**
-     * @return list of {@link Scenario}s.
+     * @return list of all {@link Scenario}s.
      */
-    List<Scenario> getScenarios();
+    List<Scenario> findAll();
 
     /**
      * Finds {@link Scenario}s names associated with any of usages from selected usage batch.
@@ -44,7 +43,7 @@ public interface IScenarioRepository {
      * @param usageBatchId identifier of usage batch
      * @return found list of {@link Scenario}s names
      */
-    List<String> findScenariosNamesByUsageBatchId(String usageBatchId);
+    List<String> findNamesByUsageBatchId(String usageBatchId);
 
     /**
      * Deletes {@link Scenario} by given identifier.

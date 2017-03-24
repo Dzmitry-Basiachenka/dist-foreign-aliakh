@@ -58,7 +58,7 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
     public void tearDown() {
         if (null != usageBatchToDelete) {
             usageBatchRepository.deleteUsageBatch(usageBatchToDelete.getId());
-            usageRepository.deleteUsageBatchDetails(usageBatchToDelete.getId());
+            usageRepository.deleteUsages(usageBatchToDelete.getId());
             usageBatchToDelete = null;
         }
     }
@@ -91,7 +91,7 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
     public void testDeleteUsageBatchWithApproval() {
         usageBatchToDelete = buildUsageBatch();
         usageBatchRepository.insert(usageBatchToDelete);
-        usageRepository.insertUsage(buildUsage());
+        usageRepository.insert(buildUsage());
         loginAsSpecialist();
         WebElement filterWidget = findElementById(USAGE_FILTER_WIDGET_ID);
         applyFilters(filterWidget, usageBatch4);
@@ -108,7 +108,7 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
         assertNullFilterItem(filterWidget, BATCHES_FILTER_ID, "batches-filter-window", usageBatch4.getName());
         assertNullFilterItem(filterWidget, RRO_FILTER_ID, "rightsholders-filter-window", usageBatch4.getRro());
         verifyFiscalYearFilter(filterWidget, " ", "2016", "2017", "2019");
-        assertEquals(0, usageBatchRepository.getUsageBatchesCountByName(usageBatch4.getName()));
+        assertEquals(0, usageBatchRepository.getCountByName(usageBatch4.getName()));
         usageBatchToDelete = null;
     }
 
@@ -127,7 +127,7 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
         verifyTableRows(usageBatchesTable, usageBatch1, usageBatch2, usageBatch3);
         clickButtonAndWait(window, CLOSE_BUTTON_ID);
         assertUsagesTableNotEmpty(usagesTable, 1);
-        assertEquals(1, usageBatchRepository.getUsageBatchesCountByName(usageBatch1.getName()));
+        assertEquals(1, usageBatchRepository.getCountByName(usageBatch1.getName()));
     }
 
     @Test
@@ -145,7 +145,7 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
         verifyTableRows(usageBatchesTable, usageBatch1, usageBatch2, usageBatch3);
         clickButtonAndWait(window, CLOSE_BUTTON_ID);
         assertUsagesTableNotEmpty(usagesTable, 1);
-        assertEquals(1, usageBatchRepository.getUsageBatchesCountByName(usageBatch1.getName()));
+        assertEquals(1, usageBatchRepository.getCountByName(usageBatch1.getName()));
     }
 
     private void verifyFiscalYearFilter(WebElement filterWidget, String... expectedItems) {

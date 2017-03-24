@@ -25,7 +25,7 @@ public interface IUsageRepository {
      *
      * @param usage {@link Usage} instance
      */
-    void insertUsage(Usage usage);
+    void insert(Usage usage);
 
     /**
      * Finds the usage based on applied filter.
@@ -43,7 +43,7 @@ public interface IUsageRepository {
      * @param filter instance of {@link UsageFilter}
      * @return the count of usages
      */
-    int getUsagesCount(UsageFilter filter);
+    int getCountByFilter(UsageFilter filter);
 
     /**
      * Finds usages according to given {@link UsageFilter} and writes them to the output stream in CSV format.
@@ -58,7 +58,7 @@ public interface IUsageRepository {
      *
      * @param batchId {@link com.copyright.rup.dist.foreign.domain.UsageBatch} id
      */
-    void deleteUsageBatchDetails(String batchId);
+    void deleteUsages(String batchId);
 
     /**
      * Finds the {@link Usage}s only with information about gross amount, net amount and reported value
@@ -67,7 +67,7 @@ public interface IUsageRepository {
      * @param filter instance of {@link UsageFilter}
      * @return the list of {@link Usage}s only with information about gross amount, net amount and reported value
      */
-    List<Usage> findUsagesWithAmounts(UsageFilter filter);
+    List<Usage> findWithAmounts(UsageFilter filter);
 
     /**
      * Updates scenario id, updated user name and status to 'LOCKED' for {@link Usage}s.
@@ -76,7 +76,7 @@ public interface IUsageRepository {
      * @param scenarioId scenario identifier
      * @param updateUser name of user who performed this action
      */
-    void addUsagesToScenario(List<String> usageIds, String scenarioId, String updateUser);
+    void addToScenario(List<String> usageIds, String scenarioId, String updateUser);
 
     /**
      * Deletes {@link Usage}s from scenario. Reverts status of {@link Usage}s
@@ -85,5 +85,5 @@ public interface IUsageRepository {
      * @param scenarioId scenario identifier
      * @param updateUser name of user who performed this action
      */
-    void deleteUsagesFromScenario(String scenarioId, String updateUser);
+    void deleteFromScenario(String scenarioId, String updateUser);
 }

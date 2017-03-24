@@ -13,11 +13,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -38,7 +35,6 @@ import java.util.stream.Collectors;
     value = {"classpath:/com/copyright/rup/dist/foreign/repository/dist-foreign-sql-test-context.xml"})
 @TransactionConfiguration
 @Transactional
-@TestExecutionListeners({DependencyInjectionTestExecutionListener.class, TransactionalTestExecutionListener.class})
 public class RightsholderRepositoryIntegrationTest {
 
     private static final Long RH_ACCOUNT_NUMBER = 12345678L;
@@ -71,8 +67,8 @@ public class RightsholderRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindRightsholdersAccountNumbers() {
-        Set<Long> accountNumbers = rightsholderRepository.findRightsholdersAccountNumbers();
+    public void testFindAccountNumbers() {
+        Set<Long> accountNumbers = rightsholderRepository.findAccountNumbers();
         assertEquals(9, accountNumbers.size());
         assertTrue(accountNumbers.containsAll(Lists.newArrayList(RH_ACCOUNT_NUMBER_7000813806,
             RH_ACCOUNT_NUMBER_2000017004, RH_ACCOUNT_NUMBER_7001440663, RH_ACCOUNT_NUMBER_1000009997,
@@ -90,10 +86,10 @@ public class RightsholderRepositoryIntegrationTest {
     }
 
     @Test
-    public void testDeleteRightsholderByAccountNumber() {
+    public void testDeleteByAccountNumber() {
         List<Rightsholder> rightsholders = rightsholderRepository.findAll();
         assertEquals(8, rightsholders.size());
-        rightsholderRepository.deleteRightsholderByAccountNumber(RH_ACCOUNT_NUMBER_7000813806);
+        rightsholderRepository.deleteByAccountNumber(RH_ACCOUNT_NUMBER_7000813806);
         rightsholders = rightsholderRepository.findAll();
         assertEquals(7, rightsholders.size());
         assertTrue(rightsholders.stream()

@@ -85,10 +85,10 @@ public interface IUsageService {
     /**
      * Updates {@link Scenario} id, updated user name and status to 'LOCKED' for {@link Usage}s.
      *
-     * @param usageIds list of usage identifiers
+     * @param usages list of {@link Usage}s
      * @param scenario {@link Scenario}
      */
-    void addUsagesToScenario(List<String> usageIds, Scenario scenario);
+    void addUsagesToScenario(List<Usage> usages, Scenario scenario);
 
     /**
      * Deletes {@link Usage}s from {@link Scenario}. Reverts status of {@link Usage}s

@@ -12,7 +12,6 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
-import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.mockStaticPartial;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
@@ -34,7 +33,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CreateScenarioWindow.ScenarioCreateEvent;
-import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
@@ -66,12 +64,15 @@ import java.util.concurrent.ExecutorService;
  * @author Aliaksandr Radkevich
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({SecurityUtils.class, LocalDate.class, UsagesController.class})
+@PrepareForTest({LocalDate.class, UsagesController.class})
 public class UsagesControllerTest {
 
     private static final String RRO_ACCOUNT_NAME = "Account Name";
     private static final String USAGE_BATCH_ID = RupPersistUtils.generateUuid();
     private static final Long RRO_ACCOUNT_NUMBER = 12345678L;
+    private static final String SCENARIO_NAME = "Scenario Name";
+    private static final String DESCRIPTION = "Description";
+    private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
     private UsagesController controller;
     private UsageService usageService;
     private IUsagesFilterController filterController;
@@ -251,18 +252,16 @@ public class UsagesControllerTest {
 
     @Test
     public void testDeleteUsageBatch() {
-        mockStatic(SecurityUtils.class);
-        UsageBatch usageBatch = new UsageBatch();
         IUsagesFilterWidget filterWidgetMock = createMock(IUsagesFilterWidget.class);
-        expect(SecurityUtils.getUserName()).andReturn("user@copyright.com").once();
-        usageBatchService.deleteUsageBatch(usageBatch, "user@copyright.com");
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatchService.deleteUsageBatch(usageBatch);
         expectLastCall().once();
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         filterWidgetMock.clearFilter();
         expectLastCall().once();
-        replay(usageBatchService, filterController, filterWidgetMock, SecurityUtils.class);
+        replay(usageBatchService, filterController, filterWidgetMock);
         controller.deleteUsageBatch(usageBatch);
-        verify(usageBatchService, filterController, filterWidgetMock, SecurityUtils.class);
+        verify(usageBatchService, filterController, filterWidgetMock);
     }
 
     @Test
@@ -294,5 +293,19 @@ public class UsagesControllerTest {
         replay(usagesWidgetMock, eventMock);
         controller.onScenarioCreated(eventMock);
         verify(usagesWidgetMock, eventMock);
+    }
+
+    @Test
+    public void testCreateScenario() {
+        IUsagesFilterWidget filterWidgetMock = createMock(IUsagesFilterWidget.class);
+        UsageFilter usageFilter = new UsageFilter();
+        expect(filterController.getWidget()).andReturn(filterWidgetMock).times(2);
+        expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
+        expect(scenarioService.createScenario(SCENARIO_NAME, DESCRIPTION, usageFilter)).andReturn(SCENARIO_ID).once();
+        filterWidgetMock.clearFilter();
+        expectLastCall().once();
+        replay(scenarioService, filterController, filterWidgetMock);
+        assertEquals(SCENARIO_ID, controller.createScenario(SCENARIO_NAME, DESCRIPTION));
+        verify(scenarioService, filterController, filterWidgetMock);
     }
 }

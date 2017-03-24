@@ -18,7 +18,6 @@ import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CreateScenarioWindow.ScenarioCreateEvent;
-import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.ui.VaadinUtils;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.widget.api.CommonController;
@@ -114,7 +113,6 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
-    // TODO {mbezmen} implement unit test
     public String createScenario(String scenarioName, String description) {
         String scenarioId =
             scenarioService.createScenario(scenarioName, description, filterController.getWidget().getAppliedFilter());
@@ -140,7 +138,7 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
 
     @Override
     public void deleteUsageBatch(UsageBatch usageBatch) {
-        usageBatchService.deleteUsageBatch(usageBatch, SecurityUtils.getUserName());
+        usageBatchService.deleteUsageBatch(usageBatch);
         filterController.getWidget().clearFilter();
     }
 

@@ -33,6 +33,6 @@ public class ScenarioNameUniqueValidator extends AbstractStringValidator {
 
     @Override
     protected boolean isValidValue(String value) {
-        return !scenarioService.isScenarioExists(StringUtils.trimToEmpty(value));
+        return !scenarioService.scenarioExists(StringUtils.trimToEmpty(value));
     }
 }

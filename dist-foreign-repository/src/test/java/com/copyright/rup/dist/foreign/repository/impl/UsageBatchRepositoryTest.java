@@ -37,12 +37,12 @@ public class UsageBatchRepositoryTest {
     }
 
     @Test
-    public void testFindUsageBatches() {
+    public void testFindAll() {
         List<UsageBatch> usageBatches = Collections.singletonList(new UsageBatch());
-        expect(sqlSessionTemplate.<UsageBatch>selectList("IUsageBatchMapper.findUsageBatches"))
+        expect(sqlSessionTemplate.<UsageBatch>selectList("IUsageBatchMapper.findAll"))
             .andReturn(usageBatches).once();
         replay(sqlSessionTemplate);
-        assertEquals(usageBatches, usageBatchRepository.findUsageBatches());
+        assertEquals(usageBatches, usageBatchRepository.findAll());
         verify(sqlSessionTemplate);
     }
 }

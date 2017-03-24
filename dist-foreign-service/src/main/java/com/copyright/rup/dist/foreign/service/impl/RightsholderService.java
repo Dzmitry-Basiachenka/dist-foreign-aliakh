@@ -43,7 +43,7 @@ public class RightsholderService implements IRightsholderService {
     @Override
     @Transactional
     public int updateRightsholdersInformation() {
-        Set<Long> accountNumbers = repository.findRightsholdersAccountNumbers();
+        Set<Long> accountNumbers = repository.findAccountNumbers();
         int accountNumbersSize = accountNumbers.size();
         LOGGER.info("Update Rightsholder information. Started. RHsCount={}", accountNumbersSize);
         Collection<Rightsholder> rightsholders = prmIntegrationService.getRightsholders(accountNumbers);
@@ -61,7 +61,7 @@ public class RightsholderService implements IRightsholderService {
     @Transactional
     public void updateRightsholder(Rightsholder rightsholder) {
         if (null != rightsholder) {
-            repository.deleteRightsholderByAccountNumber(rightsholder.getAccountNumber());
+            repository.deleteByAccountNumber(rightsholder.getAccountNumber());
             repository.insert(rightsholder);
         }
     }

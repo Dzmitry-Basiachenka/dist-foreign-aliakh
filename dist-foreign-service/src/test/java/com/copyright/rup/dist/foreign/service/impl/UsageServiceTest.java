@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
+import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
@@ -25,6 +26,7 @@ import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 import com.google.common.collect.Lists;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,7 +50,7 @@ import java.util.List;
  * @author Mikalai Bezmen
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({RupContextUtils.class, UsageService.class})
+@PrepareForTest(RupContextUtils.class)
 public class UsageServiceTest {
 
     private static final String USAGE_ID_1 = "Usage id 1";
@@ -69,7 +71,7 @@ public class UsageServiceTest {
     public void testGetUsagesCount() {
         UsageFilter filter = new UsageFilter();
         filter.setFiscalYear(2017);
-        expect(usageRepository.getUsagesCount(filter)).andReturn(1).once();
+        expect(usageRepository.getCountByFilter(filter)).andReturn(1).once();
         replay(usageRepository);
         usageService.getUsagesCount(filter);
         verify(usageRepository);
@@ -115,6 +117,9 @@ public class UsageServiceTest {
 
     @Test
     public void testInsertUsages() {
+        mockStatic(RupContextUtils.class);
+        Capture<Usage> captureUsage1 = new Capture<>();
+        Capture<Usage> captureUsage2 = new Capture<>();
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setGrossAmount(new BigDecimal("12.00"));
         Usage usage1 = new Usage();
@@ -122,22 +127,23 @@ public class UsageServiceTest {
         Usage usage2 = new Usage();
         usage2.setReportedValue(BigDecimal.ONE);
         List<Usage> usages = Lists.newArrayList(usage1, usage2);
-        usageRepository.insertUsage(usages.get(0));
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        usageRepository.insert(capture(captureUsage1));
         expectLastCall().once();
-        usageRepository.insertUsage(usages.get(1));
+        usageRepository.insert(capture(captureUsage2));
         expectLastCall().once();
-        replay(usageRepository);
+        replay(usageRepository, RupContextUtils.class);
         assertEquals(2, usageService.insertUsages(usageBatch, usages));
-        assertEquals(new BigDecimal("10.9090909090"), usage1.getGrossAmount());
-        assertEquals(new BigDecimal("1.0909090909"), usage2.getGrossAmount());
-        verify(usageRepository);
+        verifyUsage(captureUsage1.getValue(), new BigDecimal("10.9090909090"));
+        verifyUsage(captureUsage2.getValue(), new BigDecimal("1.0909090909"));
+        verify(usageRepository, RupContextUtils.class);
     }
 
     @Test
     public void testDeleteUsageBatchDetails() {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setId(RupPersistUtils.generateUuid());
-        usageRepository.deleteUsageBatchDetails(usageBatch.getId());
+        usageRepository.deleteUsages(usageBatch.getId());
         expectLastCall().once();
         replay(usageRepository);
         usageService.deleteUsageBatchDetails(usageBatch);
@@ -147,7 +153,7 @@ public class UsageServiceTest {
     @Test
     public void testGetUsagesWithAmounts() {
         UsageFilter usageFilter = new UsageFilter();
-        expect(usageRepository.findUsagesWithAmounts(usageFilter)).andReturn(Collections.emptyList()).once();
+        expect(usageRepository.findWithAmounts(usageFilter)).andReturn(Collections.emptyList()).once();
         replay(usageRepository);
         assertTrue(CollectionUtils.isEmpty(usageService.getUsagesWithAmounts(usageFilter)));
         verify(usageRepository);
@@ -158,11 +164,10 @@ public class UsageServiceTest {
         Scenario scenario = new Scenario();
         scenario.setId(SCENARIO_ID);
         scenario.setCreateUser(USER_NAME);
-        List<String> usagesIds = Lists.newArrayList(USAGE_ID_1, USAGE_ID_2);
-        usageRepository.addUsagesToScenario(usagesIds, SCENARIO_ID, USER_NAME);
+        usageRepository.addToScenario(Lists.newArrayList(USAGE_ID_1, USAGE_ID_2), SCENARIO_ID, USER_NAME);
         expectLastCall().once();
         replay(usageRepository);
-        usageService.addUsagesToScenario(usagesIds, scenario);
+        usageService.addUsagesToScenario(Lists.newArrayList(buildUsage(USAGE_ID_1), buildUsage(USAGE_ID_2)), scenario);
         verify(usageRepository);
     }
 
@@ -170,10 +175,23 @@ public class UsageServiceTest {
     public void testDeleteUsagesFromScenario() {
         mockStatic(RupContextUtils.class);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
-        usageRepository.deleteUsagesFromScenario(SCENARIO_ID, USER_NAME);
+        usageRepository.deleteFromScenario(SCENARIO_ID, USER_NAME);
         expectLastCall().once();
         replay(usageRepository, RupContextUtils.class);
         usageService.deleteUsagesFromScenario(SCENARIO_ID);
         verify(usageRepository, RupContextUtils.class);
+    }
+
+    private void verifyUsage(Usage usage, BigDecimal grossAmount) {
+        assertNotNull(usage);
+        assertEquals(grossAmount, usage.getGrossAmount());
+        assertEquals(USER_NAME, usage.getCreateUser());
+        assertEquals(USER_NAME, usage.getUpdateUser());
+    }
+
+    private Usage buildUsage(String usageId) {
+        Usage usage = new Usage();
+        usage.setId(usageId);
+        return usage;
     }
 }
