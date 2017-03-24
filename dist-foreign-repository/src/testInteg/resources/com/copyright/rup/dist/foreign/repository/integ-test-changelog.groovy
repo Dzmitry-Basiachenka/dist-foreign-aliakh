@@ -237,6 +237,18 @@ databaseChangeLog {
             column(name: 'gross_total', value: '24000')
             column(name: 'reported_total', value: '18000')
             column(name: 'description', value: 'The description of scenario')
+            column(name: 'updated_datetime', value: '2017-02-14 11:41:52.735531+03')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
+            column(name: 'df_scenario_uid', value: 'e27551ed-3f69-4e08-9e4f-8ac03f67595f')
+            column(name: 'name', value: 'Scenario name 2')
+            column(name: 'status_ind', value: 'IN_PROGRESS')
+            column(name: 'net_total', value: '16000')
+            column(name: 'gross_total', value: '10000')
+            column(name: 'reported_total', value: '8000')
+            column(name: 'description', value: 'The description of scenario 2')
+            column(name: 'updated_datetime', value: '2017-03-14 12:50:42.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -259,6 +271,28 @@ databaseChangeLog {
             column(name: 'number_of_copies', value: '250232')
             column(name: 'reported_value', value: '9900')
             column(name: 'gross_amount', value: '11461.54')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'cf38d390-11bb-4af7-9685-e034c9c32fb6')
+            column(name: 'df_usage_batch_uid', value: '56782dbc-2158-48d4-b026-94d3458a666a')
+            column(name: 'df_scenario_uid', value: 'b1f0b236-3ae9-4a60-9fab-61db84199d6f')
+            column(name: 'detail_id', value: '6213788886')
+            column(name: 'wr_wrk_inst', value: '243904752')
+            column(name: 'work_title', value: '100 ROAD MOVIES')
+            column(name: 'rh_account_number', value: '1000002859')
+            column(name: 'status_ind', value: 'LOCKED')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '9900')
+            column(name: 'gross_amount', value: '1200.00')
         }
 
         rollback {

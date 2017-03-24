@@ -34,7 +34,7 @@ class ScenariosMediator implements IMediator {
     }
 
     /**
-     * Handles buttons state sepending on selected {@link Scenario}.
+     * Handles buttons state depending on selected {@link Scenario}.
      *
      * @param scenario selected {@link Scenario}
      */
