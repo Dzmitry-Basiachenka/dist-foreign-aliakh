@@ -67,7 +67,7 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
     public void tearDown() {
         if (null != scenarioToDelete) {
             scenarioRepository.deleteScenario(scenarioToDelete.getId());
-            usageRepository.deleteUsagesFromScenario(scenarioToDelete.getId(), StoredEntity.DEFAULT_USER);
+            usageRepository.deleteFromScenario(scenarioToDelete.getId(), StoredEntity.DEFAULT_USER);
             scenarioToDelete = null;
         }
     }
@@ -118,8 +118,8 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
         scenarioToDelete.setName("Scenario for deleting");
         scenarioToDelete.setStatus(ScenarioStatusEnum.IN_PROGRESS);
         scenarioRepository.insert(scenarioToDelete);
-        assertEquals(5, CollectionUtils.size(scenarioRepository.getScenarios()));
-        usageRepository.addUsagesToScenario(Lists.newArrayList("111111111"), scenarioToDelete.getId(),
+        assertEquals(5, CollectionUtils.size(scenarioRepository.findAll()));
+        usageRepository.addToScenario(Lists.newArrayList("111111111"), scenarioToDelete.getId(),
             StoredEntity.DEFAULT_USER);
         UsageFilter filter = new UsageFilter();
         filter.setUsageStatus(UsageStatusEnum.LOCKED);
@@ -136,7 +136,7 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
         clickButtonAndWait(scenariosTab, DELETE_BUTTON_ID);
         verifyConfirmDialogAndConfirm("Are you sure you want to delete 'Scenario for deleting' scenario?");
         verifyTableRows(table, scenario1, scenario2, scenario3, scenario4);
-        assertEquals(4, CollectionUtils.size(scenarioRepository.getScenarios()));
+        assertEquals(4, CollectionUtils.size(scenarioRepository.findAll()));
         assertEquals(0, CollectionUtils.size(usageRepository.findByFilter(filter, pageable, sort)));
         filter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         assertEquals(1, CollectionUtils.size(usageRepository.findByFilter(filter, pageable, sort)));

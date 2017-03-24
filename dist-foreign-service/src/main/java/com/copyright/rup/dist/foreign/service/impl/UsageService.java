@@ -23,6 +23,7 @@ import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Represents interface of service for usage business logic.
@@ -53,7 +54,7 @@ public class UsageService implements IUsageService {
 
     @Override
     public int getUsagesCount(UsageFilter filter) {
-        return !filter.isEmpty() ? usageRepository.getUsagesCount(filter) : 0;
+        return !filter.isEmpty() ? usageRepository.getCountByFilter(filter) : 0;
     }
 
     @Override
@@ -69,7 +70,6 @@ public class UsageService implements IUsageService {
 
     @Override
     public int insertUsages(UsageBatch usageBatch, List<Usage> usages) {
-        // TODO {apchelnikau} adjust unit test to verify getUserName() method
         String userName = RupContextUtils.getUserName();
         int size = usages.size();
         LOGGER.info("Insert usages. Started. UsageBatchName={}, UsagesCount={}, UserName={}", usageBatch.getName(),
@@ -79,7 +79,7 @@ public class UsageService implements IUsageService {
             usage.setBatchId(usageBatch.getId());
             usage.setCreateUser(userName);
             usage.setUpdateUser(userName);
-            usageRepository.insertUsage(usage);
+            usageRepository.insert(usage);
         });
         LOGGER.info("Insert usages. Finished. UsageBatchName={}, UsagesCount={}, UserName={}", usageBatch.getName(),
             size, userName);
@@ -88,22 +88,23 @@ public class UsageService implements IUsageService {
 
     @Override
     public void deleteUsageBatchDetails(UsageBatch usageBatch) {
-        usageRepository.deleteUsageBatchDetails(usageBatch.getId());
+        usageRepository.deleteUsages(usageBatch.getId());
     }
 
     @Override
     public List<Usage> getUsagesWithAmounts(UsageFilter filter) {
-        return usageRepository.findUsagesWithAmounts(filter);
+        return usageRepository.findWithAmounts(filter);
     }
 
     @Override
-    public void addUsagesToScenario(List<String> usageIds, Scenario scenario) {
-        usageRepository.addUsagesToScenario(usageIds, scenario.getId(), scenario.getCreateUser());
+    public void addUsagesToScenario(List<Usage> usages, Scenario scenario) {
+        usageRepository.addToScenario(usages.stream().map(Usage::getId).collect(Collectors.toList()),
+            scenario.getId(), scenario.getCreateUser());
     }
 
     @Override
     public void deleteUsagesFromScenario(String scenarioId) {
-        usageRepository.deleteUsagesFromScenario(scenarioId, RupContextUtils.getUserName());
+        usageRepository.deleteFromScenario(scenarioId, RupContextUtils.getUserName());
     }
 
     private void calculateUsagesGrossAmount(UsageBatch usageBatch, List<Usage> usages) {

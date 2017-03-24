@@ -13,7 +13,6 @@ import com.copyright.rup.dist.common.domain.StoredEntity;
  *
  * @author Aliaksei Pchelnikau
  */
-//TODO {apchelnikau} replace all usages SecurityUtils.getUserName() on the UI layer
 public final class RupContextUtils {
 
     private RupContextUtils() {

@@ -53,14 +53,14 @@
         where upper(name) = upper(#{name})
     </select>
 
-    <select id="getScenarios" resultMap="scenarioResultMap">
+    <select id="findAll" resultMap="scenarioResultMap">
         select
         <include refid="scenarioColumns"/>
         from ${schema}.df_scenario
         order by updated_datetime desc
     </select>
 
-    <select id="findScenariosNamesByUsageBatchId" parameterType="string" resultType="string">
+    <select id="findNamesByUsageBatchId" parameterType="string" resultType="string">
         select distinct name
         from ${schema}.df_scenario
         where df_scenario_uid in (

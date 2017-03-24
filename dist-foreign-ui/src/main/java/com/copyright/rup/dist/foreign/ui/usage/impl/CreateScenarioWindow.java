@@ -76,7 +76,7 @@ public class CreateScenarioWindow extends Window {
     private void initDescriptionArea() {
         descriptionArea = new TextArea(ForeignUi.getMessage("field.description"));
         descriptionArea.setValidationVisible(false);
-        descriptionArea.setWidth(100, Unit.PERCENTAGE);
+        VaadinUtils.setMaxComponentsWidth(descriptionArea);
         descriptionArea.addValidator(
             new StringLengthValidator(ForeignUi.getMessage("field.error.length", 2000), 0, 2000, false));
         VaadinUtils.addComponentStyle(descriptionArea, "scenario-description");
@@ -85,7 +85,7 @@ public class CreateScenarioWindow extends Window {
     private void initScenarioNameField() {
         scenarioNameField = new TextField(ForeignUi.getMessage("field.scenario_name"));
         scenarioNameField.setValidationVisible(false);
-        scenarioNameField.setWidth(100, Unit.PERCENTAGE);
+        VaadinUtils.setMaxComponentsWidth(scenarioNameField);
         VaadinUtils.addComponentStyle(scenarioNameField, "scenario-name");
         scenarioNameField.setNullRepresentation(StringUtils.EMPTY);
         scenarioNameField.setValue(ForeignUi.getMessage("field.default_value.scenario_name", LocalDate.now().format(

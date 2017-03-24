@@ -16,11 +16,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -42,7 +39,6 @@ import java.util.List;
     value = {"classpath:/com/copyright/rup/dist/foreign/repository/dist-foreign-sql-test-context.xml"})
 @TransactionConfiguration
 @Transactional
-@TestExecutionListeners({DependencyInjectionTestExecutionListener.class, TransactionalTestExecutionListener.class})
 public class ScenarioRepositoryIntegrationTest {
 
     private static final String SCENARIO_NAME = "name";
@@ -88,21 +84,21 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
-    public void testGetScenarios() {
-        assertEquals(1, scenarioRepository.getScenarios().size());
+    public void testFindAll() {
+        assertEquals(1, scenarioRepository.findAll().size());
         scenarioRepository.insert(buildScenario(RupPersistUtils.generateUuid(), SCENARIO_NAME));
-        assertEquals(2, scenarioRepository.getScenarios().size());
+        assertEquals(2, scenarioRepository.findAll().size());
     }
 
     @Test
-    public void testFindScenariosNamesByUsageBatchId() {
-        List<String> scenariosNames = scenarioRepository.findScenariosNamesByUsageBatchId(USAGE_BATCH_ID);
+    public void testFindNamesByUsageBatchId() {
+        List<String> scenariosNames = scenarioRepository.findNamesByUsageBatchId(USAGE_BATCH_ID);
         assertNotNull(scenariosNames);
         assertEquals(1, scenariosNames.size());
         Scenario scenario = buildScenario(SCENARIO_ID, SCENARIO_NAME);
         scenarioRepository.insert(scenario);
-        usageRepository.insertUsage(buildUsage());
-        scenariosNames = scenarioRepository.findScenariosNamesByUsageBatchId(USAGE_BATCH_ID);
+        usageRepository.insert(buildUsage());
+        scenariosNames = scenarioRepository.findNamesByUsageBatchId(USAGE_BATCH_ID);
         assertNotNull(scenariosNames);
         assertEquals(2, scenariosNames.size());
     }

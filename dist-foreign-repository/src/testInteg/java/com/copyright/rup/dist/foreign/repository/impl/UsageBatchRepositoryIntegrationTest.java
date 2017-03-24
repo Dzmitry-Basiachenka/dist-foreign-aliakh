@@ -12,11 +12,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -38,7 +35,6 @@ import java.util.List;
     value = {"classpath:/com/copyright/rup/dist/foreign/repository/dist-foreign-sql-test-context.xml"})
 @TransactionConfiguration
 @Transactional
-@TestExecutionListeners({DependencyInjectionTestExecutionListener.class, TransactionalTestExecutionListener.class})
 public class UsageBatchRepositoryIntegrationTest {
 
     private static final String USAGE_BATCH_NAME = "Batch name";
@@ -65,16 +61,16 @@ public class UsageBatchRepositoryIntegrationTest {
     }
 
     @Test
-    public void testGetUsageBatchesCountByName() {
-        assertEquals(1, usageBatchRepository.getUsageBatchesCountByName("JAACC_11Dec16"));
-        assertEquals(1, usageBatchRepository.getUsageBatchesCountByName("JaAcC_11dec16"));
-        assertEquals(0, usageBatchRepository.getUsageBatchesCountByName(USAGE_BATCH_NAME));
+    public void testGetCountByName() {
+        assertEquals(1, usageBatchRepository.getCountByName("JAACC_11Dec16"));
+        assertEquals(1, usageBatchRepository.getCountByName("JaAcC_11dec16"));
+        assertEquals(0, usageBatchRepository.getCountByName(USAGE_BATCH_NAME));
     }
 
     @Test
     public void testInsertUsageBatch() {
         usageBatchRepository.insert(buildUsageBatch());
-        UsageBatch usageBatch = usageBatchRepository.findUsageBatchByName(USAGE_BATCH_NAME);
+        UsageBatch usageBatch = usageBatchRepository.findByName(USAGE_BATCH_NAME);
         assertNotNull(usageBatch);
         assertEquals(RRO_ACCOUNT_NUMBER, usageBatch.getRro().getAccountNumber());
         assertEquals(PAYMENT_DATE, usageBatch.getPaymentDate());
@@ -85,15 +81,15 @@ public class UsageBatchRepositoryIntegrationTest {
     @Test
     public void testDeleteUsageBatch() {
         String batchId = "56282dbc-2468-48d4-b926-93d3458a656a";
-        assertEquals(4, usageBatchRepository.findUsageBatches().size());
-        usageRepository.deleteUsageBatchDetails(batchId);
+        assertEquals(4, usageBatchRepository.findAll().size());
+        usageRepository.deleteUsages(batchId);
         usageBatchRepository.deleteUsageBatch(batchId);
-        assertEquals(3, usageBatchRepository.findUsageBatches().size());
+        assertEquals(3, usageBatchRepository.findAll().size());
     }
 
     @Test
     public void testFindUsageBatch() {
-        List<UsageBatch> usageBatches = usageBatchRepository.findUsageBatches();
+        List<UsageBatch> usageBatches = usageBatchRepository.findAll();
         assertEquals(4, usageBatches.size());
         assertEquals("56282dbc-2468-48d4-b926-94d3458a666a", usageBatches.get(0).getId());
         assertEquals("56282dbc-2468-48d4-b926-93d3458a656a", usageBatches.get(1).getId());

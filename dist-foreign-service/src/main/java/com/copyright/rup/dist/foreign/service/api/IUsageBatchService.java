@@ -48,7 +48,6 @@ public interface IUsageBatchService {
      * Deletes given {@link UsageBatch} and all it's usage details.
      *
      * @param usageBatch {@link UsageBatch}
-     * @param userName   user name
      */
-    void deleteUsageBatch(UsageBatch usageBatch, String userName);
+    void deleteUsageBatch(UsageBatch usageBatch);
 }

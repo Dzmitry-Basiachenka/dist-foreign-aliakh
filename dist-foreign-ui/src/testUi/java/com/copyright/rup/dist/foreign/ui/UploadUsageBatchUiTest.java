@@ -173,7 +173,7 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
     @Test
     // Test case ID: '81989dc2-329b-4ce7-b5d6-97330d02ccd1'
     public void testUploadValidFile() {
-        List<UsageBatch> usageBatches = usageBatchRepository.findUsageBatches();
+        List<UsageBatch> usageBatches = usageBatchRepository.findAll();
         assertEquals(3, CollectionUtils.size(usageBatches));
         WebElement uploadWindow = openUploadUsageBatchWindow();
         fillValidValuesForUploadWindowFields(uploadWindow);
@@ -184,7 +184,7 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         assertEquals("Upload completed: 2 records were stored successfully",
             assertElement(successfullyUploadedWindow, By.className("v-label")).getText());
         clickElementAndWait(assertElement(successfullyUploadedWindow, By.id(OK_BUTTON_ID)));
-        List<UsageBatch> uploadedUsageBatches = usageBatchRepository.findUsageBatches().stream()
+        List<UsageBatch> uploadedUsageBatches = usageBatchRepository.findAll().stream()
             .filter(usageBatch -> USAGE_BATCH_NAME.equals(usageBatch.getName())).collect(Collectors.toList());
         assertEquals(1, CollectionUtils.size(uploadedUsageBatches));
         usageBatch = uploadedUsageBatches.get(0);
@@ -257,7 +257,7 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
     }
 
     private void deleteUploadedUsageBatch(String usageBatchId) {
-        usageRepository.deleteUsageBatchDetails(usageBatchId);
+        usageRepository.deleteUsages(usageBatchId);
         usageBatchRepository.deleteUsageBatch(usageBatchId);
     }
 

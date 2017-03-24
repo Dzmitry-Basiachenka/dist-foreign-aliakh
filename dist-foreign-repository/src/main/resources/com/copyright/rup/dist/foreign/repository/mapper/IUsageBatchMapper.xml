@@ -55,7 +55,7 @@
         order by fiscal_year
     </select>
 
-    <select id="findUsageBatches" resultMap="usageBatchResultMap">
+    <select id="findAll" resultMap="usageBatchResultMap">
         select
             <include refid="usageBatchColumns"/>
         from ${schema}.df_usage_batch ub
@@ -63,13 +63,13 @@
         order by ub.updated_datetime desc
     </select>
 
-    <select id="getUsageBatchesCountByName" parameterType="string" resultType="int">
+    <select id="getCountByName" parameterType="string" resultType="int">
         select count(name)
         from ${schema}.df_usage_batch
         where upper(name) = upper(#{name})
     </select>
 
-    <select id="findUsageBatchByName" parameterType="string" resultMap="usageBatchResultMap">
+    <select id="findByName" parameterType="string" resultMap="usageBatchResultMap">
         select
             <include refid="usageBatchColumns"/>
         from ${schema}.df_usage_batch ub
@@ -77,7 +77,7 @@
         where upper(ub.name) = upper(#{name})
     </select>
 
-    <delete id="deleteUsageBatch" parameterType="String">
+    <delete id="deleteUsageBatch" parameterType="string">
         delete from ${schema}.df_usage_batch
         where df_usage_batch_uid = #{batchId}
     </delete>

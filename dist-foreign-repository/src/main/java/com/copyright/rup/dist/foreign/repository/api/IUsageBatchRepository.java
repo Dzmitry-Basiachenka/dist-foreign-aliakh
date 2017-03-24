@@ -31,7 +31,7 @@ public interface IUsageBatchRepository {
     /**
      * @return list of all {@link UsageBatch} presented in DB.
      */
-    List<UsageBatch> findUsageBatches();
+    List<UsageBatch> findAll();
 
     /**
      * Gets usage batches count with specified name.
@@ -39,7 +39,7 @@ public interface IUsageBatchRepository {
      * @param name batch name
      * @return count of found batches
      */
-    int getUsageBatchesCountByName(String name);
+    int getCountByName(String name);
 
     /**
      * Deletes {@link UsageBatch} with given id from database.

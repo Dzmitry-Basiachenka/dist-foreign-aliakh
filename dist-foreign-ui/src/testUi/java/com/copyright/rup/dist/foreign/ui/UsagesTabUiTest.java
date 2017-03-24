@@ -271,7 +271,6 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     private void verifyExportButton(WebElement buttonsLayout) {
         WebElement button = assertElement(buttonsLayout, By.id(EXPORT_BUTTON_ID));
         assertTrue(button.isEnabled());
-        //TODO {isuvorau} find solution to close browser window
     }
 
     private void verifyUploadUsageWindow(WebElement buttonsLayout) {

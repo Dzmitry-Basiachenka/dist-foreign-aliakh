@@ -34,8 +34,8 @@ public class RightsholderRepository extends BaseRepository implements IRightshol
     }
 
     @Override
-    public Set<Long> findRightsholdersAccountNumbers() {
-        return selectSet("IRightsholderMapper.findRightsholdersAccountNumbers");
+    public Set<Long> findAccountNumbers() {
+        return selectSet("IRightsholderMapper.findAccountNumbers");
     }
 
     @Override
@@ -44,8 +44,8 @@ public class RightsholderRepository extends BaseRepository implements IRightshol
     }
 
     @Override
-    public void deleteRightsholderByAccountNumber(Long accountNumber) {
-        delete("IRightsholderMapper.deleteRightsholderByAccountNumber", checkNotNull(accountNumber));
+    public void deleteByAccountNumber(Long accountNumber) {
+        delete("IRightsholderMapper.deleteByAccountNumber", checkNotNull(accountNumber));
     }
 
     /**

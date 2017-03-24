@@ -36,14 +36,14 @@ public class UsageBatchRepository extends BaseRepository implements IUsageBatchR
     }
 
     @Override
-    public List<UsageBatch> findUsageBatches() {
-        return selectList("IUsageBatchMapper.findUsageBatches");
+    public List<UsageBatch> findAll() {
+        return selectList("IUsageBatchMapper.findAll");
     }
 
     @Override
-    public int getUsageBatchesCountByName(String name) {
+    public int getCountByName(String name) {
         checkArgument(StringUtils.isNotBlank(name));
-        return selectOne("IUsageBatchMapper.getUsageBatchesCountByName", name);
+        return selectOne("IUsageBatchMapper.getCountByName", name);
     }
 
     @Override
@@ -58,8 +58,8 @@ public class UsageBatchRepository extends BaseRepository implements IUsageBatchR
      * @param name usage batch name
      * @return found {@link UsageBatch} instance
      */
-    UsageBatch findUsageBatchByName(String name) {
+    UsageBatch findByName(String name) {
         checkArgument(StringUtils.isNotBlank(name));
-        return selectOne("IUsageBatchMapper.findUsageBatchByName", name);
+        return selectOne("IUsageBatchMapper.findByName", name);
     }
 }

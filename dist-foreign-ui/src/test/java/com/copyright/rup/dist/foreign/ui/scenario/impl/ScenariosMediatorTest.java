@@ -32,8 +32,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 @PrepareForTest(SecurityUtils.class)
 public class ScenariosMediatorTest {
 
-    private static final String USERNAME = "username@copyright.com";
-
     private ScenariosMediator mediator;
     private Button deleteButton;
 
@@ -85,17 +83,14 @@ public class ScenariosMediatorTest {
     }
 
     private void mockViewOnlyPermissions() {
-        expect(SecurityUtils.getUserName()).andReturn(USERNAME).anyTimes();
         expect(SecurityUtils.hasPermission(anyString())).andStubReturn(false);
     }
 
     private void mockManagerPermissions() {
-        expect(SecurityUtils.getUserName()).andReturn(USERNAME).anyTimes();
         expect(SecurityUtils.hasPermission(anyString())).andStubReturn(false);
     }
 
     private void mockSpecialistPermissions() {
-        expect(SecurityUtils.getUserName()).andReturn(USERNAME).anyTimes();
         expect(SecurityUtils.hasPermission(anyString())).andStubReturn(false);
         expect(SecurityUtils.hasPermission("FDA_DELETE_SCENARIO")).andReturn(true).once();
     }

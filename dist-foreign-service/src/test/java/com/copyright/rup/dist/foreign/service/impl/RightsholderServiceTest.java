@@ -59,7 +59,7 @@ public class RightsholderServiceTest {
     public void testUpdateRightsholdersInformation() {
         Set<Long> accountNumbers = Collections.singleton(ACCOUNT_NUMBER);
         Rightsholder rightsholder = buildRightsholder();
-        expect(rightsholderRepository.findRightsholdersAccountNumbers()).andReturn(accountNumbers).once();
+        expect(rightsholderRepository.findAccountNumbers()).andReturn(accountNumbers).once();
         expect(prmIntegrationService.getRightsholders(accountNumbers))
             .andReturn(Collections.singletonList(rightsholder)).once();
         rightsholderRepository.deleteAll();
@@ -74,7 +74,7 @@ public class RightsholderServiceTest {
     @Test
     public void testUpdateRightsholder() {
         Rightsholder rightsholder = buildRightsholder();
-        rightsholderRepository.deleteRightsholderByAccountNumber(rightsholder.getAccountNumber());
+        rightsholderRepository.deleteByAccountNumber(rightsholder.getAccountNumber());
         expectLastCall().once();
         rightsholderRepository.insert(rightsholder);
         expectLastCall().once();

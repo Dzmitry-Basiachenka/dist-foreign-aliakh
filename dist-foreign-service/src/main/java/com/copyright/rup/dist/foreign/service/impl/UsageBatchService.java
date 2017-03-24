@@ -46,18 +46,17 @@ public class UsageBatchService implements IUsageBatchService {
 
     @Override
     public List<UsageBatch> getUsageBatches() {
-        return usageBatchRepository.findUsageBatches();
+        return usageBatchRepository.findAll();
     }
 
     @Override
     public boolean usageBatchExists(String name) {
-        return 0 < usageBatchRepository.getUsageBatchesCountByName(name);
+        return 0 < usageBatchRepository.getCountByName(name);
     }
 
     @Override
     @Transactional
     public int insertUsageBatch(UsageBatch usageBatch, List<Usage> usages) {
-        // TODO {apchelnikau} adjust unit test to verify getUserName() method
         String userName = RupContextUtils.getUserName();
         usageBatch.setId(RupPersistUtils.generateUuid());
         usageBatch.setCreateUser(userName);
@@ -71,7 +70,8 @@ public class UsageBatchService implements IUsageBatchService {
 
     @Override
     @Transactional
-    public void deleteUsageBatch(UsageBatch usageBatch, String userName) {
+    public void deleteUsageBatch(UsageBatch usageBatch) {
+        String userName = RupContextUtils.getUserName();
         LOGGER.info("Delete usage batch. Started. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
         usageService.deleteUsageBatchDetails(usageBatch);
         usageBatchRepository.deleteUsageBatch(usageBatch.getId());

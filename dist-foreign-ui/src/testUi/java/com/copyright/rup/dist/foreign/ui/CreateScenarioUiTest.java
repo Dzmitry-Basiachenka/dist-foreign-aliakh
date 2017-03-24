@@ -68,7 +68,7 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
     @After
     public void tearDown() {
         if (null != scenario) {
-            usageRepository.deleteUsagesFromScenario(scenario.getId(), StoredEntity.DEFAULT_USER);
+            usageRepository.deleteFromScenario(scenario.getId(), StoredEntity.DEFAULT_USER);
             scenarioRepository.deleteScenario(scenario.getId());
             scenario = null;
         }
@@ -105,7 +105,7 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
         selectUsagesTab();
         assertUsagesFilterEmpty(waitAndFindElement(By.id(USAGE_FILTER_WIDGET_ID)),
             waitAndFindElement(By.id(USAGE_TABLE_ID)));
-        List<Scenario> scenarios = scenarioRepository.getScenarios().stream()
+        List<Scenario> scenarios = scenarioRepository.findAll().stream()
             .filter(scenario -> SCENARIO_NAME.equals(scenario.getName())).collect(Collectors.toList());
         assertEquals(1, CollectionUtils.size(scenarios));
         scenario = scenarios.get(0);

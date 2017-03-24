@@ -54,8 +54,8 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     private static final String STATUS_KEY = "status";
 
     @Override
-    public void insertUsage(Usage usage) {
-        insert("IUsageMapper.insertUsage", checkNotNull(usage));
+    public void insert(Usage usage) {
+        insert("IUsageMapper.insert", checkNotNull(usage));
     }
 
     @Override
@@ -68,8 +68,8 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public int getUsagesCount(UsageFilter filter) {
-        return selectOne("IUsageMapper.getUsagesCount", ImmutableMap.of(FILTER_KEY, checkNotNull(filter)));
+    public int getCountByFilter(UsageFilter filter) {
+        return selectOne("IUsageMapper.getCountByFilter", ImmutableMap.of(FILTER_KEY, checkNotNull(filter)));
     }
 
     @Override
@@ -88,18 +88,18 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public void deleteUsageBatchDetails(String batchId) {
+    public void deleteUsages(String batchId) {
         checkArgument(StringUtils.isNotBlank(batchId));
-        delete("IUsageMapper.deleteUsageBatchDetails", batchId);
+        delete("IUsageMapper.deleteUsages", batchId);
     }
 
     @Override
-    public List<Usage> findUsagesWithAmounts(UsageFilter filter) {
-        return selectList("IUsageMapper.findUsagesWithAmounts", ImmutableMap.of(FILTER_KEY, checkNotNull(filter)));
+    public List<Usage> findWithAmounts(UsageFilter filter) {
+        return selectList("IUsageMapper.findWithAmounts", ImmutableMap.of(FILTER_KEY, checkNotNull(filter)));
     }
 
     @Override
-    public void addUsagesToScenario(List<String> usageIds, String scenarioId, String updateUser) {
+    public void addToScenario(List<String> usageIds, String scenarioId, String updateUser) {
         checkArgument(CollectionUtils.isNotEmpty(usageIds));
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
         parameters.put(SCENARIO_ID_KEY, checkNotNull(scenarioId));
@@ -107,17 +107,17 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         parameters.put(STATUS_KEY, UsageStatusEnum.LOCKED);
         for (List<String> usageIdsPartition : Iterables.partition(usageIds, BATCH_SIZE_FOR_SELECT)) {
             parameters.put(USAGE_IDS_KEY, usageIdsPartition);
-            update("IUsageMapper.addUsagesToScenario", parameters);
+            update("IUsageMapper.addToScenario", parameters);
         }
     }
 
     @Override
-    public void deleteUsagesFromScenario(String scenarioId, String updateUser) {
+    public void deleteFromScenario(String scenarioId, String updateUser) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
         parameters.put(SCENARIO_ID_KEY, checkNotNull(scenarioId));
         parameters.put(UPDATE_USER_KEY, checkNotNull(updateUser));
         parameters.put(STATUS_KEY, UsageStatusEnum.ELIGIBLE);
-        update("IUsageMapper.deleteUsagesFromScenario", parameters);
+        update("IUsageMapper.deleteFromScenario", parameters);
     }
 
     /**
@@ -126,7 +126,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
      * @param detailId usage details id
      * @return found {@link Usage} instance
      */
-    Usage findUsageByDetailId(Long detailId) {
-        return selectOne("IUsageMapper.findUsageByDetailId", checkNotNull(detailId));
+    Usage findByDetailId(Long detailId) {
+        return selectOne("IUsageMapper.findByDetailId", checkNotNull(detailId));
     }
 }

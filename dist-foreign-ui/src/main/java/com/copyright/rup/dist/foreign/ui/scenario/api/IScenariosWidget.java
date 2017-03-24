@@ -18,7 +18,7 @@ import com.copyright.rup.vaadin.widget.api.IWidget;
 public interface IScenariosWidget extends IWidget<IScenariosController>, IRefreshable, IMediatorProvider {
 
     /**
-     * Selects {@link com.copyright.rup.dist.foreign.domain.Scenario} with specified id.
+     * Selects {@link Scenario} with specified id.
      *
      * @param scenarioId scenario id to be selected
      */

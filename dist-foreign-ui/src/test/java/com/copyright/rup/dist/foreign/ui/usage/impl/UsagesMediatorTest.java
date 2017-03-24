@@ -30,8 +30,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 @PrepareForTest(SecurityUtils.class)
 public class UsagesMediatorTest {
 
-    private static final String USERNAME = "username@copyright.com";
-
     private Button deleteButton;
     private Button loadButton;
     private Button addToScenarioButton;
@@ -80,21 +78,18 @@ public class UsagesMediatorTest {
 
     private void mockViewOnlyPermissions() {
         mockStatic(SecurityUtils.class);
-        expect(SecurityUtils.getUserName()).andReturn(USERNAME).anyTimes();
         expect(SecurityUtils.hasPermission(anyString())).andStubReturn(false);
         expect(SecurityUtils.hasPermission("FDA_ACCESS_APPLICATION")).andReturn(true).anyTimes();
     }
 
     private void mockManagerPermissions() {
         mockStatic(SecurityUtils.class);
-        expect(SecurityUtils.getUserName()).andReturn(USERNAME).anyTimes();
         expect(SecurityUtils.hasPermission(anyString())).andStubReturn(false);
         expect(SecurityUtils.hasPermission("FDA_ACCESS_APPLICATION")).andReturn(true).anyTimes();
     }
 
     private void mockSpecialistPermissions() {
         mockStatic(SecurityUtils.class);
-        expect(SecurityUtils.getUserName()).andReturn(USERNAME).anyTimes();
         expect(SecurityUtils.hasPermission(anyString())).andStubReturn(false);
         expect(SecurityUtils.hasPermission("FDA_ACCESS_APPLICATION")).andReturn(true).anyTimes();
         expect(SecurityUtils.hasPermission("FDA_DELETE_USAGE")).andReturn(true).anyTimes();

@@ -34,7 +34,7 @@ public interface IRightsholderRepository {
      *
      * @return set of account numbers
      */
-    Set<Long> findRightsholdersAccountNumbers();
+    Set<Long> findAccountNumbers();
 
     /**
      * Removes all rightsholders from df_rightsholder table.
@@ -46,5 +46,5 @@ public interface IRightsholderRepository {
      *
      * @param accountNumber acccount number of {@link Rightsholder}
      */
-    void deleteRightsholderByAccountNumber(Long accountNumber);
+    void deleteByAccountNumber(Long accountNumber);
 }

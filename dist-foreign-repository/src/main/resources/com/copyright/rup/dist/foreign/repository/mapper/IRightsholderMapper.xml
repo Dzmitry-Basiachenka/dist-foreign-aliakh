@@ -41,7 +41,7 @@
         from ${schema}.df_rightsholder
     </select>
 
-    <select id="findRightsholdersAccountNumbers" resultType="long">
+    <select id="findAccountNumbers" resultType="long">
         select
             distinct(ub.rro_account_number) as account_number
         from ${schema}.df_usage_batch as ub
@@ -59,7 +59,7 @@
         delete from ${schema}.df_rightsholder
     </delete>
 
-    <delete id="deleteRightsholderByAccountNumber" parameterType="long">
+    <delete id="deleteByAccountNumber" parameterType="long">
         delete from ${schema}.df_rightsholder
         where rh_account_number = #{accountNumber}
     </delete>

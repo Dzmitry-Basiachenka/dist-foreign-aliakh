@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Scenario service implementation.
@@ -41,17 +40,17 @@ public class ScenarioService implements IScenarioService {
 
     @Override
     public List<Scenario> getScenarios() {
-        return scenarioRepository.getScenarios();
+        return scenarioRepository.findAll();
     }
 
     @Override
-    public boolean isScenarioExists(String scenarioName) {
+    public boolean scenarioExists(String scenarioName) {
         return 0 < scenarioRepository.getCountByName(scenarioName);
     }
 
     @Override
     public List<String> getScenariosNamesByUsageBatchId(String usageBatchId) {
-        return scenarioRepository.findScenariosNamesByUsageBatchId(usageBatchId);
+        return scenarioRepository.findNamesByUsageBatchId(usageBatchId);
     }
 
     @Override
@@ -60,7 +59,7 @@ public class ScenarioService implements IScenarioService {
         List<Usage> usages = usageService.getUsagesWithAmounts(usageFilter);
         Scenario scenario = buildScenario(scenarioName, description, usages);
         scenarioRepository.insert(scenario);
-        usageService.addUsagesToScenario(usages.stream().map(Usage::getId).collect(Collectors.toList()), scenario);
+        usageService.addUsagesToScenario(usages, scenario);
         return scenario.getId();
     }
 
@@ -72,7 +71,6 @@ public class ScenarioService implements IScenarioService {
     }
 
     private Scenario buildScenario(String scenarioName, String description, List<Usage> usages) {
-        String userName = RupContextUtils.getUserName();
         Scenario scenario = new Scenario();
         scenario.setId(RupPersistUtils.generateUuid());
         scenario.setName(scenarioName);
@@ -85,6 +83,7 @@ public class ScenarioService implements IScenarioService {
         scenario.setReportedTotal(usages.stream()
             .map(Usage::getReportedValue)
             .reduce(BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP), BigDecimal::add));
+        String userName = RupContextUtils.getUserName();
         scenario.setCreateUser(userName);
         scenario.setUpdateUser(userName);
         return scenario;

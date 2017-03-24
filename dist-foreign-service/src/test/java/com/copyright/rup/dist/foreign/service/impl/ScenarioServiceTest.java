@@ -46,7 +46,7 @@ import java.util.List;
  * @author Mikalai Bezmen
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({RupContextUtils.class})
+@PrepareForTest(RupContextUtils.class)
 public class ScenarioServiceTest {
 
     private static final String SCENARIO_NAME = "Scenario Name";
@@ -76,32 +76,32 @@ public class ScenarioServiceTest {
     @Test
     public void testGetScenarios() {
         List<Scenario> scenarios = Lists.newArrayList(new Scenario());
-        expect(scenarioRepository.getScenarios()).andReturn(scenarios).once();
+        expect(scenarioRepository.findAll()).andReturn(scenarios).once();
         replay(scenarioRepository);
         assertEquals(scenarios, scenarioService.getScenarios());
         verify(scenarioRepository);
     }
 
     @Test
-    public void testIsScenarioExists() {
+    public void testScenarioExists() {
         expect(scenarioRepository.getCountByName(SCENARIO_NAME)).andReturn(1).once();
         replay(scenarioRepository);
-        assertTrue(scenarioService.isScenarioExists(SCENARIO_NAME));
+        assertTrue(scenarioService.scenarioExists(SCENARIO_NAME));
         verify(scenarioRepository);
     }
 
     @Test
-    public void testIsScenarioNotExists() {
+    public void testScenarioNotExists() {
         expect(scenarioRepository.getCountByName(SCENARIO_NAME)).andReturn(0).once();
         replay(scenarioRepository);
-        assertFalse(scenarioService.isScenarioExists(SCENARIO_NAME));
+        assertFalse(scenarioService.scenarioExists(SCENARIO_NAME));
         verify(scenarioRepository);
     }
 
     @Test
     public void testGetScenariosNamesByUsageBatchId() {
         List<String> scenariosNames = Lists.newArrayList(SCENARIO_NAME);
-        expect(scenarioRepository.findScenariosNamesByUsageBatchId(USAGE_BATCH_ID)).andReturn(scenariosNames).once();
+        expect(scenarioRepository.findNamesByUsageBatchId(USAGE_BATCH_ID)).andReturn(scenariosNames).once();
         replay(scenarioRepository);
         assertEquals(scenariosNames, scenarioService.getScenariosNamesByUsageBatchId(USAGE_BATCH_ID));
         verify(scenarioRepository);
@@ -119,8 +119,7 @@ public class ScenarioServiceTest {
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         scenarioRepository.insert(capture(captureScenarioForInsert));
         expectLastCall().once();
-        usageService.addUsagesToScenario(eq(Lists.newArrayList(usage1.getId(), usage2.getId())),
-            capture(captureScenario));
+        usageService.addUsagesToScenario(eq(Lists.newArrayList(usage1, usage2)), capture(captureScenario));
         expectLastCall().once();
         replay(scenarioRepository, usageService, RupContextUtils.class);
         String scenarioId = scenarioService.createScenario(SCENARIO_NAME, DESCRIPTION, usageFilter);
