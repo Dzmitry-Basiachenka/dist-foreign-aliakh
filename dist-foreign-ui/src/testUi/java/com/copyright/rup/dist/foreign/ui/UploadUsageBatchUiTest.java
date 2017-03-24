@@ -2,6 +2,8 @@ package com.copyright.rup.dist.foreign.ui;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -190,6 +192,27 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         usageBatch = uploadedUsageBatches.get(0);
         verifyUploadedUsageBatch(usageBatch, paymentDate);
         verifyUploadedUsages(usageBatch.getId());
+    }
+
+    @Test
+    // Test case ID: 'fd4ee0a0-72a7-4e26-bf84-9d5905b58b86'
+    public void testUploadFileWithInvalidData() {
+        WebElement uploadWindow = openUploadUsageBatchWindow();
+        fillValidValuesForUploadWindowFields(uploadWindow);
+        fillFileNameField(uploadWindow, "invalid_usage_data_file.csv");
+        clickElementAndWait(assertElement(uploadWindow, By.id(UPLOAD_BUTTON_ID)));
+        verifyErrorWindowComponents();
+    }
+
+    private void verifyErrorWindowComponents() {
+        WebElement errorWindow = waitAndFindElement(By.id("upload-error-window"));
+        assertNotNull(errorWindow);
+        assertEquals("Error", assertElement(errorWindow, By.className(V_WINDOW_HEADER_CLASS_NAME)).getText());
+        assertEquals("The file could not be uploaded.\nPress Download button to see detailed list of errors.",
+            assertElement(errorWindow, By.className("v-label")).getText());
+        assertTrue(assertElement(errorWindow, By.id("Download")).isEnabled());
+        clickElementAndWait(assertElement(errorWindow, By.id(CLOSE_BUTTON_ID)));
+        assertNull(waitAndFindElement(By.id("upload-error-window")));
     }
 
     private void verifyUploadedUsageBatch(UsageBatch uploadedUsageBatch, LocalDate date) {
