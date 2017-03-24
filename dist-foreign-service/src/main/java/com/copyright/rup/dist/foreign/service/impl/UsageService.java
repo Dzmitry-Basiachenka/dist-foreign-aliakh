@@ -107,6 +107,11 @@ public class UsageService implements IUsageService {
         usageRepository.deleteFromScenario(scenarioId, RupContextUtils.getUserName());
     }
 
+    @Override
+    public boolean detailIdExists(Long detailId) {
+        return 0 < usageRepository.getCountByDetailId(detailId);
+    }
+
     private void calculateUsagesGrossAmount(UsageBatch usageBatch, List<Usage> usages) {
         BigDecimal fundPoolAmount = usageBatch.getGrossAmount();
         BigDecimal totalAmount = usages.stream().map(Usage::getReportedValue).reduce(BigDecimal.ZERO, BigDecimal::add);

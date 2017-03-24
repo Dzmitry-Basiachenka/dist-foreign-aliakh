@@ -85,7 +85,7 @@ public interface IUsageService {
     /**
      * Updates {@link Scenario} id, updated user name and status to 'LOCKED' for {@link Usage}s.
      *
-     * @param usages list of {@link Usage}s
+     * @param usages   list of {@link Usage}s
      * @param scenario {@link Scenario}
      */
     void addUsagesToScenario(List<Usage> usages, Scenario scenario);
@@ -97,4 +97,12 @@ public interface IUsageService {
      * @param scenarioId scenario identifier
      */
     void deleteUsagesFromScenario(String scenarioId);
+
+    /**
+     * Checks whether detail id exists in database or not.
+     *
+     * @param detailId detail id
+     * @return {@code true} - if detail id exists, {@code false} - otherwise
+     */
+    boolean detailIdExists(Long detailId);
 }
