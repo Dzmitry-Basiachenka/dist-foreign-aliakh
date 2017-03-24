@@ -27,9 +27,7 @@ public class DetailIdValidator implements IValidator<Usage> {
 
     @Override
     public boolean isValid(Usage value) {
-        //TODO {apchelnikau} stub for PMD, will be implemented in the TK-80798
-        usageService.getClass();
-        return true;
+        return !usageService.detailIdExists(value.getDetailId());
     }
 
     @Override

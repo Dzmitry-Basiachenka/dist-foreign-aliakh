@@ -38,9 +38,9 @@ import java.util.Set;
 
 /**
  * Integration test for {@link UsageRepository}.
- * <p/>
+ * <p>
  * Copyright (C) 2017 copyright.com
- * <p/>
+ * <p>
  * Date: 02/03/17
  *
  * @author Darya Baraukova
@@ -406,6 +406,12 @@ public class UsageRepositoryIntegrationTest {
             StoredEntity.DEFAULT_USER);
         usageRepository.deleteFromScenario(SCENARIO_ID, USER_NAME);
         verifyUsage(usageRepository.findByDetailId(DETAIL_ID_2), UsageStatusEnum.ELIGIBLE, null, USER_NAME);
+    }
+
+    @Test
+    public void testGetCountByDetailId() {
+        assertEquals(1, usageRepository.getCountByDetailId(DETAIL_ID_1));
+        assertEquals(0, usageRepository.getCountByDetailId(-1L));
     }
 
     private void verifyUsage(Usage usage, UsageStatusEnum status, String scenarioId, String defaultUser) {

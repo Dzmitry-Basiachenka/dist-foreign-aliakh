@@ -86,4 +86,12 @@ public interface IUsageRepository {
      * @param updateUser name of user who performed this action
      */
     void deleteFromScenario(String scenarioId, String updateUser);
+
+    /**
+     * Gets {@link Usage}s count with specified detail id.
+     *
+     * @param detailId detail id
+     * @return count of found usages
+     */
+    int getCountByDetailId(Long detailId);
 }

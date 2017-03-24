@@ -28,9 +28,9 @@ import java.util.Map;
 
 /**
  * Implementation of Usage repository.
- * <p/>
+ * <p>
  * Copyright (C) 2017 copyright.com
- * <p/>
+ * <p>
  * Date: 02/02/17
  *
  * @author Darya Baraukova
@@ -118,6 +118,11 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         parameters.put(UPDATE_USER_KEY, checkNotNull(updateUser));
         parameters.put(STATUS_KEY, UsageStatusEnum.ELIGIBLE);
         update("IUsageMapper.deleteFromScenario", parameters);
+    }
+
+    @Override
+    public int getCountByDetailId(Long detailId) {
+        return selectOne("IUsageMapper.getCountByDetailId", checkNotNull(detailId));
     }
 
     /**
