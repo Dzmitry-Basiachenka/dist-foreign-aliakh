@@ -78,11 +78,10 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
     // Test case ID: 'e4b0a048-51af-4c1c-91bd-2a199747ca34'
     public void testAddToScenarioWithoutSelectedUsages() {
         loginAsSpecialist();
-        applyFilters(findElementById(USAGE_FILTER_WIDGET_ID), invalidUsageBatch);
-        assertUsagesTableEmpty(waitAndFindElement(By.id(USAGE_TABLE_ID)));
-        clickElementAndWait(waitAndFindElement(By.id(ADD_TO_SCENARIO_BUTTON_ID)));
-        WebElement notificationWindow = waitAndFindElement(By.id("notification-window"));
-        assertNotNull(notificationWindow);
+        applyFilters(assertElement(By.id(USAGE_FILTER_WIDGET_ID)), invalidUsageBatch);
+        assertUsagesTableEmpty(assertElement(By.id(USAGE_TABLE_ID)));
+        clickElementAndWait(assertElement(By.id(ADD_TO_SCENARIO_BUTTON_ID)));
+        WebElement notificationWindow = assertElement(By.id("notification-window"));
         assertEquals("Please select at least one usage",
             assertElement(notificationWindow, By.className("v-label")).getText());
         clickElementAndWait(assertElement(notificationWindow, By.id(OK_BUTTON_ID)));
@@ -99,12 +98,12 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
         WebElement descriptionTextField = assertElement(createScenarioWindow, By.id("scenario-description"));
         sendKeysToInput(descriptionTextField, DESCRIPTION);
         clickButtonAndWait(createScenarioWindow, "Confirm");
-        WebElement scenarioTab = waitAndGetTab(findElementById(Cornerstone.MAIN_TABSHEET), "Scenarios");
+        WebElement scenarioTab = waitAndGetTab(assertElement(By.id(Cornerstone.MAIN_TABSHEET)), "Scenarios");
         assertNotNull(scenarioTab);
         verifyScenariosTable();
         selectUsagesTab();
-        assertUsagesFilterEmpty(waitAndFindElement(By.id(USAGE_FILTER_WIDGET_ID)),
-            waitAndFindElement(By.id(USAGE_TABLE_ID)));
+        assertUsagesFilterEmpty(assertElement(By.id(USAGE_FILTER_WIDGET_ID)),
+            assertElement(By.id(USAGE_TABLE_ID)));
         List<Scenario> scenarios = scenarioRepository.findAll().stream()
             .filter(scenario -> SCENARIO_NAME.equals(scenario.getName())).collect(Collectors.toList());
         assertEquals(1, CollectionUtils.size(scenarios));
@@ -139,12 +138,10 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
 
     private WebElement openAddToScenarioWindow() {
         loginAsSpecialist();
-        applyFilters(findElementById(USAGE_FILTER_WIDGET_ID), validUsageBatch);
-        assertUsagesTableNotEmpty(waitAndFindElement(By.id(USAGE_TABLE_ID)), 1);
-        clickElementAndWait(waitAndFindElement(By.id(ADD_TO_SCENARIO_BUTTON_ID)));
-        WebElement createScenarioWindow = waitAndFindElement(By.id("create-scenario-window"));
-        assertNotNull(createScenarioWindow);
-        return createScenarioWindow;
+        applyFilters(assertElement(By.id(USAGE_FILTER_WIDGET_ID)), validUsageBatch);
+        assertUsagesTableNotEmpty(assertElement(By.id(USAGE_TABLE_ID)), 1);
+        clickElementAndWait(assertElement(By.id(ADD_TO_SCENARIO_BUTTON_ID)));
+        return assertElement(By.id("create-scenario-window"));
     }
 
     private void verifyScenario() {
@@ -173,8 +170,7 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
     }
 
     private void verifyScenariosTable() {
-        WebElement scenariosTable = waitAndFindElement(By.id("scenarios-table"));
-        assertNotNull(scenariosTable);
+        WebElement scenariosTable = assertElement(By.id("scenarios-table"));
         assertElement(scenariosTable, By.className("v-selected"));
     }
 

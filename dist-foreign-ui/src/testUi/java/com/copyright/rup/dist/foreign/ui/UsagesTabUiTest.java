@@ -136,9 +136,8 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     }
 
     private void applyFiscalYear(String fiscalYear) {
-        WebElement fiscalYearFilter = waitAndFindElement(By.id("fiscal-year-filter"));
-        assertNotNull(fiscalYearFilter);
-        WebElement fiscalYearFilterSelectButton = waitAndFindElement(By.className("v-filterselect-button"));
+        WebElement fiscalYearFilter = assertElement(By.id("fiscal-year-filter"));
+        WebElement fiscalYearFilterSelectButton = assertElement(By.className("v-filterselect-button"));
         clickElementAndWait(fiscalYearFilterSelectButton);
         WebElement fiscalYearLabel = findElementByText(fiscalYearFilter, HTML_SPAN_TAG_NAME, fiscalYear);
         assertNotNull(fiscalYearLabel);
@@ -146,13 +145,12 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     }
 
     private void applyPaymentDateFilter() {
-        WebElement paymentDateFilter = waitAndFindElement(By.id(PAYMENT_DATE_FILTER_ID));
+        WebElement paymentDateFilter = assertElement(By.id(PAYMENT_DATE_FILTER_ID));
         applyCurrentDateForDateField(paymentDateFilter);
     }
 
     private void applyRroFilter(String rroAccount) {
-        WebElement filterWindow = waitAndFindElement(By.id("rightsholders-filter-window"));
-        assertNotNull(filterWindow);
+        WebElement filterWindow = assertElement(By.id("rightsholders-filter-window"));
         WebElement rroAccountLabel = findElementByText(filterWindow, HTML_LABEL_TAG_NAME, rroAccount);
         assertNotNull(rroAccountLabel);
         clickElementAndWait(rroAccountLabel);
@@ -160,8 +158,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     }
 
     private void applyBatchFilter(String batchName) {
-        WebElement filterWindow = findElementById("batches-filter-window");
-        assertNotNull(filterWindow);
+        WebElement filterWindow = assertElement(By.id("batches-filter-window"));
         WebElement batchLabel = findElementByText(filterWindow, HTML_LABEL_TAG_NAME, batchName);
         assertNotNull(batchLabel);
         clickElementAndWait(batchLabel);
@@ -245,27 +242,27 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         assertTrue(USAGES_BUTTONS.containsAll(buttonsIds));
         Set<String> invisibleButtons = Sets.newHashSet(CollectionUtils.subtract(USAGES_BUTTONS, buttonsIds));
         for (String id : invisibleButtons) {
-            assertNull(findElement(buttonsLayout, By.id(id)));
+            assertNull(waitAndFindElement(buttonsLayout, By.id(id)));
         }
     }
 
     private void verifyLoadUsageButton(WebElement buttonsLayout) {
         WebElement button = assertElement(buttonsLayout, By.id(LOAD_USAGE_BUTTON_ID));
         clickElementAndWait(button);
-        clickElementAndWait(assertElement(waitAndFindElement(By.id("usage-upload-window")), By.id(CLOSE_BUTTON_ID)));
+        clickElementAndWait(assertElement(assertElement(By.id("usage-upload-window")), By.id(CLOSE_BUTTON_ID)));
     }
 
     private void verifyDeleteUsageButton(WebElement buttonsLayout) {
         WebElement button = assertElement(buttonsLayout, By.id(DELETE_USAGE_BUTTON_ID));
         clickElementAndWait(button);
-        clickElementAndWait(assertElement(waitAndFindElement(By.id("delete-usage-batch")), By.id(CLOSE_BUTTON_ID)));
+        clickElementAndWait(assertElement(assertElement(By.id("delete-usage-batch")), By.id(CLOSE_BUTTON_ID)));
     }
 
     private void verifyAddToScenarioButton(WebElement buttonsLayout) {
         WebElement button = assertElement(buttonsLayout, By.id(ADD_TO_SCENARIO_BUTTON_ID));
         clickElementAndWait(button);
         clickElementAndWait(
-            findElementByText(waitAndFindElement(By.id("notification-window")), HTML_SPAN_TAG_NAME, OK_BUTTON_ID));
+            findElementByText(assertElement(By.id("notification-window")), HTML_SPAN_TAG_NAME, OK_BUTTON_ID));
     }
 
     private void verifyExportButton(WebElement buttonsLayout) {
@@ -275,8 +272,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
 
     private void verifyUploadUsageWindow(WebElement buttonsLayout) {
         clickElementAndWait(assertElement(buttonsLayout, By.id(LOAD_USAGE_BUTTON_ID)));
-        WebElement uploadWindow = waitAndFindElement(By.id("usage-upload-window"));
-        assertNotNull(uploadWindow);
+        WebElement uploadWindow = assertElement(By.id("usage-upload-window"));
         assertEquals("Upload Usage Batch", getWindowCaption(uploadWindow));
         verifyUploadElement(uploadWindow);
         verifyRightsholdersFields(uploadWindow);
@@ -384,8 +380,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     }
 
     private void verifyFilterWindow(String id, String caption) {
-        WebElement filterWindow = findElementById(id);
-        assertNotNull(filterWindow);
+        WebElement filterWindow = assertElement(By.id(id));
         assertEquals(caption, getWindowCaption(filterWindow));
         verifySearchToolBar(filterWindow);
         assertElement(filterWindow, By.id(SAVE_BUTTON_ID));
@@ -413,19 +408,16 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         assertElement(buttonsContainer, By.id(CLEAR_BATTON_ID));
     }
 
-    private WebElement assertTextElement(WebElement parentElement, String id, String caption) {
+    private void assertTextElement(WebElement parentElement, String id, String caption) {
         WebElement webElement = assertElement(parentElement, By.id(id));
         WebElement elementContainer = getParentElement(webElement);
         assertNotNull(findElementByText(elementContainer, HTML_SPAN_TAG_NAME, caption));
-        return webElement;
     }
 
-    private WebElement assertComboboxElement(WebElement parentElement, String id, String captionTagName,
-                                             String caption) {
+    private void assertComboboxElement(WebElement parentElement, String id, String captionTagName, String caption) {
         WebElement webElement = assertElement(parentElement, By.id(id));
         assertNotNull(findElementByText(webElement, captionTagName, caption));
         assertElement(webElement, By.tagName(HTML_INPUT_TAG_NAME));
         assertElement(webElement, By.className(V_FILTER_SELECT_BUTTON_CLASS_NAME));
-        return webElement;
     }
 }

@@ -93,9 +93,9 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
         usageBatchRepository.insert(usageBatchToDelete);
         usageRepository.insert(buildUsage());
         loginAsSpecialist();
-        WebElement filterWidget = findElementById(USAGE_FILTER_WIDGET_ID);
+        WebElement filterWidget = assertElement(By.id(USAGE_FILTER_WIDGET_ID));
         applyFilters(filterWidget, usageBatch4);
-        WebElement usagesTable = findElementById(USAGE_TABLE_ID);
+        WebElement usagesTable = assertElement(By.id(USAGE_TABLE_ID));
         assertUsagesTableNotEmpty(usagesTable, 1);
         WebElement window = openDeleteUsageBatchWindow();
         WebElement usageBatchesTable = getUsageBatchesTable(window);
@@ -116,8 +116,8 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
     // Test case ID: '259c2da3-46e5-4493-942b-3ae47cae7f94'
     public void testDeleteUsageBatchWithoutApproval() {
         loginAsSpecialist();
-        applyFilters(findElementById(USAGE_FILTER_WIDGET_ID), usageBatch1);
-        WebElement usagesTable = findElementById(USAGE_TABLE_ID);
+        applyFilters(assertElement(By.id(USAGE_FILTER_WIDGET_ID)), usageBatch1);
+        WebElement usagesTable = assertElement(By.id(USAGE_TABLE_ID));
         assertUsagesTableNotEmpty(usagesTable, 1);
         WebElement window = openDeleteUsageBatchWindow();
         WebElement usageBatchesTable = getUsageBatchesTable(window);
@@ -134,8 +134,8 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
     // Test cases IDs: 'd79eba61-99c1-4e8b-bda8-b099facfb8d4', 'c32b46ce-6676-4526-af2f-65deb637a346'
     public void testDeleteUsageBatchAssociatedWithScenarios() {
         loginAsSpecialist();
-        applyFilters(findElementById(USAGE_FILTER_WIDGET_ID), usageBatch1);
-        WebElement usagesTable = findElementById(USAGE_TABLE_ID);
+        applyFilters(assertElement(By.id(USAGE_FILTER_WIDGET_ID)), usageBatch1);
+        WebElement usagesTable = assertElement(By.id(USAGE_TABLE_ID));
         assertUsagesTableNotEmpty(usagesTable, 1);
         WebElement window = openDeleteUsageBatchWindow();
         WebElement usageBatchesTable = getUsageBatchesTable(window);
@@ -151,7 +151,7 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
     private void verifyFiscalYearFilter(WebElement filterWidget, String... expectedItems) {
         WebElement fiscalYearFilter = assertElement(filterWidget, By.id("fiscal-year-filter"));
         clickElementAndWait(assertElement(fiscalYearFilter, By.className("v-filterselect-button")));
-        WebElement optionlist = findElementById("VAADIN_COMBOBOX_OPTIONLIST");
+        WebElement optionlist = assertElement(By.id("VAADIN_COMBOBOX_OPTIONLIST"));
         assertEquals(expectedItems.length,
             CollectionUtils.size(findElements(optionlist, By.tagName(HTML_TR_TAG_NAME))));
         for (String item : expectedItems) {
@@ -164,7 +164,7 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
         saveFilter(filterWidget, RRO_FILTER_ID, "rightsholders-filter-window", usageBatchInfo.getRro());
         WebElement fiscalYearFilter = assertElement(filterWidget, By.id("fiscal-year-filter"));
         clickElementAndWait(assertElement(fiscalYearFilter, By.className("v-filterselect-button")));
-        WebElement optionlist = findElementById("VAADIN_COMBOBOX_OPTIONLIST");
+        WebElement optionlist = assertElement(By.id("VAADIN_COMBOBOX_OPTIONLIST"));
         WebElement fiscalYear =
             findElementByText(optionlist, HTML_SPAN_TAG_NAME, usageBatchInfo.getFiscalYear().substring(2));
         assertNotNull(fiscalYear);
@@ -176,8 +176,7 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
     private void assertNullFilterItem(WebElement filterWidget, String filterId, String filterWindowId, String item) {
         WebElement itemsFilter = assertElement(filterWidget, By.id(filterId));
         clickElementAndWait(itemsFilter);
-        WebElement filterWindow = findElementById(filterWindowId);
-        assertNotNull(filterWindow);
+        WebElement filterWindow = assertElement(By.id(filterWindowId));
         assertNull(findElementByText(filterWindow, HTML_LABEL_TAG_NAME, item));
         clickButtonAndWait(filterWindow, CLOSE_BUTTON_ID);
     }
@@ -222,16 +221,12 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
     }
 
     private WebElement openDeleteUsageBatchWindow() {
-        WebElement deleteUsageBatchButton = findElementById("Delete_Usage_Batch");
-        clickElementAndWait(deleteUsageBatchButton);
-        WebElement deleteUsageBatchWindow = findElementById("delete-usage-batch");
-        assertNotNull(deleteUsageBatchWindow);
-        return deleteUsageBatchWindow;
+        clickElementAndWait(assertElement(By.id("Delete_Usage_Batch")));
+        return assertElement(By.id("delete-usage-batch"));
     }
 
     private void verifyNotificationWindow() {
-        WebElement notificationWindow = findElementById("notification-window");
-        assertNotNull(notificationWindow);
+        WebElement notificationWindow = assertElement(By.id("notification-window"));
         assertEquals(
             "Usage batch cannot be deleted because it is associated with the following scenarios:\nScenario name",
             assertElement(notificationWindow, By.className("v-label")).getText());
@@ -281,7 +276,7 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
 
     private void verifyCloseButton(WebElement window) {
         clickElementAndWait(assertElement(window, By.id(CLOSE_BUTTON_ID)));
-        assertNull(findElementById("delete-usage-batch"));
+        assertNull(waitAndFindElement(By.id("delete-usage-batch")));
     }
 
     private UsageBatch buildUsageBatch() {

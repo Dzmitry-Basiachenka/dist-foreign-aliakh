@@ -1,12 +1,12 @@
 package com.copyright.rup.dist.foreign.ui;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
 import org.junit.Test;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 /**
@@ -23,8 +23,7 @@ public class LoginTest extends ForeignCommonUiTest {
     @Test
     public void testLoginAsViewOnly() {
         loginAsViewOnly();
-        WebElement userNameElement = findElementById(Cornerstone.USER_WIDGET_USERNAME_LABEL);
-        assertNotNull(userNameElement);
+        WebElement userNameElement = assertElement(By.id(Cornerstone.USER_WIDGET_USERNAME_LABEL));
         assertEquals(ForeignCredentials.VIEW_ONLY.getUserName(), userNameElement.getText());
         assertTrue(logOut());
     }
@@ -32,8 +31,7 @@ public class LoginTest extends ForeignCommonUiTest {
     @Test
     public void testLoginAsDistributionManager() {
         loginAsManager();
-        WebElement userNameElement = findElementById(Cornerstone.USER_WIDGET_USERNAME_LABEL);
-        assertNotNull(userNameElement);
+        WebElement userNameElement = assertElement(By.id(Cornerstone.USER_WIDGET_USERNAME_LABEL));
         assertEquals(ForeignCredentials.MANAGER.getUserName(), userNameElement.getText());
         assertTrue(logOut());
     }
@@ -41,8 +39,7 @@ public class LoginTest extends ForeignCommonUiTest {
     @Test
     public void testLoginAsDistributionSpecialist() {
         loginAsSpecialist();
-        WebElement userNameElement = findElementById(Cornerstone.USER_WIDGET_USERNAME_LABEL);
-        assertNotNull(userNameElement);
+        WebElement userNameElement = assertElement(By.id(Cornerstone.USER_WIDGET_USERNAME_LABEL));
         assertEquals(ForeignCredentials.SPECIALIST.getUserName(), userNameElement.getText());
         assertTrue(logOut());
     }
