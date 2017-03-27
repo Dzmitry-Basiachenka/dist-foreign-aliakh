@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingRes
 
 import java.io.OutputStream;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Represents interface of service for usage business logic.
@@ -99,10 +100,10 @@ public interface IUsageService {
     void deleteUsagesFromScenario(String scenarioId);
 
     /**
-     * Checks whether detail id exists in database or not.
+     * Gets duplicate detail ids of {@link Usage}s which are already presented in database.
      *
-     * @param detailId detail id
-     * @return {@code true} - if detail id exists, {@code false} - otherwise
+     * @param detailIds list of detail ids
+     * @return set of duplicate detail ids
      */
-    boolean detailIdExists(Long detailId);
+    Set<Long> getDuplicateDetailIds(Set<Long> detailIds);
 }

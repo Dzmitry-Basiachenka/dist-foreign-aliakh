@@ -40,7 +40,7 @@ public class CsvProcessingResultTest {
     @Test
     public void testAddRecord() {
         Integer item = 10;
-        result.addRecord(item);
+        result.addRecord(1, item);
         assertTrue(result.isSuccessful());
         assertFalse(result.isEmpty());
         assertEquals(item, result.getResult().get(0));

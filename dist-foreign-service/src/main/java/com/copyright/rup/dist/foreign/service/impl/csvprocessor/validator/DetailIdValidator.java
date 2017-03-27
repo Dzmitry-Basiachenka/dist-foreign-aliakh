@@ -1,12 +1,8 @@
 package com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator;
 
 import com.copyright.rup.dist.foreign.domain.Usage;
-import com.copyright.rup.dist.foreign.service.api.IUsageService;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
+import java.util.Set;
 
 /**
  * The validator to check whether detail id doesn't exist in the database.
@@ -17,17 +13,23 @@ import org.springframework.stereotype.Component;
  *
  * @author Aliaksei Pchelnikau
  */
-@Component
-@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class DetailIdValidator implements IValidator<Usage> {
 
     private static final String ERROR_MESSAGE = "Detail ID: Detail with such ID already exists";
-    @Autowired
-    private IUsageService usageService;
+    private Set<Long> databaseDuplicates;
+
+    /**
+     * Constructor.
+     *
+     * @param databaseDuplicates set of duplicate details ids
+     */
+    public DetailIdValidator(Set<Long> databaseDuplicates) {
+        this.databaseDuplicates = databaseDuplicates;
+    }
 
     @Override
     public boolean isValid(Usage value) {
-        return !usageService.detailIdExists(value.getDetailId());
+        return !databaseDuplicates.contains(value.getDetailId());
     }
 
     @Override

@@ -15,6 +15,7 @@ import com.copyright.rup.dist.foreign.repository.api.Sort;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -25,6 +26,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Implementation of Usage repository.
@@ -121,8 +123,13 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public int getCountByDetailId(Long detailId) {
-        return selectOne("IUsageMapper.getCountByDetailId", checkNotNull(detailId));
+    public List<Long> getDuplicateDetailIds(Set<Long> detailIds) {
+        checkArgument(CollectionUtils.isNotEmpty(detailIds));
+        List<Long> result = Lists.newArrayList();
+        for (List<Long> detailIdsPartition : Iterables.partition(detailIds, BATCH_SIZE_FOR_SELECT)) {
+            result.addAll(selectList("IUsageMapper.getDuplicateDetailIds", detailIdsPartition));
+        }
+        return result;
     }
 
     /**

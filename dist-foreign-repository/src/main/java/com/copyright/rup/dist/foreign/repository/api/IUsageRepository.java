@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.UsageFilter;
 
 import java.io.OutputStream;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Interface for Usage repository.
@@ -88,10 +89,10 @@ public interface IUsageRepository {
     void deleteFromScenario(String scenarioId, String updateUser);
 
     /**
-     * Gets {@link Usage}s count with specified detail id.
+     * Gets duplicate detail ids of {@link Usage}s which are already presented in database.
      *
-     * @param detailId detail id
-     * @return count of found usages
+     * @param detailIds list of detail ids
+     * @return list of duplicate detail ids
      */
-    int getCountByDetailId(Long detailId);
+    List<Long> getDuplicateDetailIds(Set<Long> detailIds);
 }

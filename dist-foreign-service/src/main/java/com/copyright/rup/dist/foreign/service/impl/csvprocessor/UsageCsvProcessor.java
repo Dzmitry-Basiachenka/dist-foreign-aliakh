@@ -4,6 +4,7 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator.DetailIdValidator;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator.DuplicateInFileValidator;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator.RequiredValidator;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * CSV processor for uploading {@link Usage}s.
@@ -30,7 +33,7 @@ import java.util.List;
 public class UsageCsvProcessor extends CommonCsvProcessor<Usage> {
 
     @Autowired
-    private DetailIdValidator detailIdValidator;
+    private IUsageService usageService;
 
     @Override
     protected List<ICsvColumn> getHeaders() {
@@ -41,7 +44,16 @@ public class UsageCsvProcessor extends CommonCsvProcessor<Usage> {
     protected void initValidators() {
         addPlainValidators(Header.DETAIL_ID, new RequiredValidator(), new DuplicateInFileValidator());
         addPlainValidators(Header.RH_ACCT_NUMBER, new RequiredValidator());
-        addBusinessValidators(detailIdValidator);
+    }
+
+    @Override
+    protected void businessValidate() {
+        Set<Long> detailIds = getResult().getResult().stream()
+            .map(Usage::getDetailId)
+            .collect(Collectors.toSet());
+        Set<Long> detailIdDuplicates = usageService.getDuplicateDetailIds(detailIds);
+        addBusinessValidators(new DetailIdValidator(detailIdDuplicates));
+        super.businessValidate();
     }
 
     @Override
