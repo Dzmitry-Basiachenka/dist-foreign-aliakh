@@ -12,51 +12,51 @@ import java.util.Arrays;
 import java.util.Collection;
 
 /**
- * Verifies {@link RequiredValidator}.
+ * Verifies {@link LengthValidator}.
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
- * Date: 03/20/17
+ * Date: 03/27/17
  *
- * @author Aliaksei Pchelnikau
+ * @author Ihar Suvorau
  */
 @RunWith(Parameterized.class)
-public class RequiredValidatorTest {
+public class LengthValidatorTest {
 
     private String value;
     private boolean expectedResult;
+    private int length;
 
     /**
      * Constructor.
      *
      * @param value          expected value
      * @param expectedResult expected result
+     * @param length         max length
      */
-    public RequiredValidatorTest(String value, boolean expectedResult) {
+    public LengthValidatorTest(String value, int length, boolean expectedResult) {
         this.value = value;
         this.expectedResult = expectedResult;
+        this.length = length;
     }
 
     @Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-            {"test", true},
-            {"test\n", true},
-            {"test\r", true},
-            {"test\t", true},
-            {StringUtils.EMPTY, false},
-            {" ", false},
-            {null, false},
-            {"\n", false},
-            {"\r", false},
-            {"\t", false}
+            {null, 10, true},
+            {StringUtils.EMPTY, 10, true},
+            {"012356789", 10, true},
+            {"01234567891", 10, false},
+            {" 0123456789", 10, false},
+            {"0", 1, true},
+            {"01", 1, false}
         });
     }
 
     @Test
     public void testIsValid() {
-        RequiredValidator validator = new RequiredValidator();
+        LengthValidator validator = new LengthValidator(length);
         assertEquals(expectedResult, validator.isValid(value));
-        assertEquals("Field is required and cannot be null or empty", validator.getErrorMessage());
+        assertEquals(String.format("Field value should not exceed %d characters", length), validator.getErrorMessage());
     }
 }

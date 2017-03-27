@@ -56,7 +56,7 @@ public class DuplicateInFileValidatorTest {
     }
 
     @Test
-    public void getErrorMessage() {
+    public void testGetErrorMessage() {
         assertEquals(StringUtils.EMPTY, validator.getErrorMessage());
     }
 }

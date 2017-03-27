@@ -12,16 +12,16 @@ import java.util.Arrays;
 import java.util.Collection;
 
 /**
- * Verifies {@link RequiredValidator}.
+ * Verifies {@link NumericValidator}.
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
- * Date: 03/20/17
+ * Date: 03/27/17
  *
- * @author Aliaksei Pchelnikau
+ * @author Ihar Suvorau
  */
 @RunWith(Parameterized.class)
-public class RequiredValidatorTest {
+public class NumericValidatorTest {
 
     private String value;
     private boolean expectedResult;
@@ -32,7 +32,7 @@ public class RequiredValidatorTest {
      * @param value          expected value
      * @param expectedResult expected result
      */
-    public RequiredValidatorTest(String value, boolean expectedResult) {
+    public NumericValidatorTest(String value, boolean expectedResult) {
         this.value = value;
         this.expectedResult = expectedResult;
     }
@@ -40,23 +40,33 @@ public class RequiredValidatorTest {
     @Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-            {"test", true},
-            {"test\n", true},
-            {"test\r", true},
-            {"test\t", true},
-            {StringUtils.EMPTY, false},
-            {" ", false},
-            {null, false},
-            {"\n", false},
-            {"\r", false},
-            {"\t", false}
+            {null, true},
+            {StringUtils.EMPTY, true},
+            {"123", true},
+            {" 123", true},
+            {"123 ", true},
+            {"\u0967\u0968\u0969", true},
+            {"0x20", false},
+            {"0b1010", false},
+            {"123L", false},
+            {"2F", false},
+            {"123\n", true},
+            {"123\r", true},
+            {"123\t", true},
+            {"12 3", false},
+            {"12_3", false},
+            {"ab2c", false},
+            {"12-3", false},
+            {"12.3", false},
+            {"-123", false},
+            {"+123", false}
         });
     }
 
     @Test
     public void testIsValid() {
-        RequiredValidator validator = new RequiredValidator();
+        NumericValidator validator = new NumericValidator();
         assertEquals(expectedResult, validator.isValid(value));
-        assertEquals("Field is required and cannot be null or empty", validator.getErrorMessage());
+        assertEquals("Field value should be numeric and positive", validator.getErrorMessage());
     }
 }
