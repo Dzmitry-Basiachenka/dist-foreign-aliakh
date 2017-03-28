@@ -27,6 +27,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -225,6 +226,11 @@ public abstract class CommonCsvProcessor<T> {
 
     private boolean plainValidate(int line, List<String> params) {
         boolean valid = true;
+        if (!Objects.equals(headers.size(), params.size())) {
+            processingResult.logError(line, originalParametersMap.get(line),
+                String.format("Row is incorrect: Expected columns are %s actual %s", headers.size(), params.size()));
+            return false;
+        }
         for (int i = 0; i < params.size(); i++) {
             String value = params.get(i);
             String field = headers.get(i).getColumnName();
