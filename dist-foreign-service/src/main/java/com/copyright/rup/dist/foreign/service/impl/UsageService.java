@@ -67,7 +67,7 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public void writeErrorsCsvReport(CsvProcessingResult csvProcessingResult, OutputStream outputStream) {
+    public void writeErrorsCsvReport(CsvProcessingResult<String> csvProcessingResult, OutputStream outputStream) {
         CsvErrorResultWriter downloader = new CsvErrorResultWriter();
         downloader.writeErrorsResult(outputStream, csvProcessingResult);
     }

@@ -57,7 +57,7 @@ public interface IUsageService {
      * @param csvProcessingResult instance of {@link CsvProcessingResult}
      * @param outputStream        instance of {@link OutputStream}
      */
-    void writeErrorsCsvReport(CsvProcessingResult csvProcessingResult, OutputStream outputStream);
+    void writeErrorsCsvReport(CsvProcessingResult<String> csvProcessingResult, OutputStream outputStream);
 
     /**
      * Inserts usages.

@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.test.ReportMatcher;
-import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.UsageService;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingResult.ErrorRow;
@@ -40,7 +39,7 @@ public class UsageServiceIntegrationTest {
     private static final String PATH_TO_ACTUAL_REPORT = "build/temp";
     private static final String FILE_NAME = "errors_report.csv";
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
-    private CsvProcessingResult<Usage> result;
+    private CsvProcessingResult<String> result;
 
     @BeforeClass
     public static void setUpTestDirectory() throws IOException {
