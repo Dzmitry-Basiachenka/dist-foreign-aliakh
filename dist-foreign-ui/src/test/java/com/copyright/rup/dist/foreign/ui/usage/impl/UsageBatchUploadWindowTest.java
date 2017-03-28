@@ -19,13 +19,13 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingResult;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.UsageCsvProcessor;
-import com.copyright.rup.dist.foreign.ui.component.CsvUploadComponent;
 import com.copyright.rup.dist.foreign.ui.component.LocalDateWidget;
 import com.copyright.rup.dist.foreign.ui.component.validator.GrossAmountValidator;
 import com.copyright.rup.dist.foreign.ui.component.validator.NumberValidator;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.ui.Windows;
+import com.copyright.rup.vaadin.ui.component.upload.UploadField;
 
 import com.google.common.collect.Lists;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -36,6 +36,7 @@ import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
@@ -106,7 +107,8 @@ public class UsageBatchUploadWindowTest {
         replay(usagesController);
         window = new UsageBatchUploadWindow(usagesController);
         assertFalse(window.isValid());
-        Whitebox.getInternalState(window, CsvUploadComponent.class).getFileNameField().setValue("test.csv");
+        UploadField uploadField = Whitebox.getInternalState(window, UploadField.class);
+        Whitebox.getInternalState(uploadField, TextField.class).setValue("test.csv");
         assertFalse(window.isValid());
         ((TextField) Whitebox.getInternalState(window, "accountNumberField")).setValue(ACCOUNT_NUMBER);
         assertFalse(window.isValid());
@@ -155,15 +157,15 @@ public class UsageBatchUploadWindowTest {
     @Test
     public void testOnUploadClickedValidFields() throws Exception {
         mockStatic(Windows.class);
-        CsvUploadComponent csvUploadComponent =
-            createPartialMock(CsvUploadComponent.class, "getStreamToUploadedFile", "getFileName");
+        UploadField uploadField =
+            createPartialMock(UploadField.class, "getStreamToUploadedFile", "getFileName");
         UsageCsvProcessor processor = createMock(UsageCsvProcessor.class);
         LocalDateWidget paymentDateWidget = new LocalDateWidget("Payment Date");
         paymentDateWidget.setValue(PAYMENT_DATE);
         CsvProcessingResult<Usage> processingResult = buildCsvProcessingResult();
         window = createPartialMock(UsageBatchUploadWindow.class, "isValid");
         Whitebox.setInternalState(window, "usagesController", usagesController);
-        Whitebox.setInternalState(window, "csvUploadComponent", csvUploadComponent);
+        Whitebox.setInternalState(window, "uploadField", uploadField);
         Whitebox.setInternalState(window, "usageBatchNameField", new TextField("Usage Batch Name", USAGE_BATCH_NAME));
         Whitebox.setInternalState(window, "accountNumberField", new TextField("RRO Account #", ACCOUNT_NUMBER));
         Whitebox.setInternalState(window, "paymentDateWidget", paymentDateWidget);
@@ -175,13 +177,23 @@ public class UsageBatchUploadWindowTest {
         expect(processor.process(anyObject(), anyString())).andReturn(processingResult).once();
         expect(usagesController.loadUsageBatch(buildUsageBatch(), processingResult.getResult()))
             .andReturn(1).once();
-        expect(csvUploadComponent.getStreamToUploadedFile()).andReturn(createMock(ByteArrayOutputStream.class)).once();
-        expect(csvUploadComponent.getFileName()).andReturn("fileName.csv").once();
+        expect(uploadField.getStreamToUploadedFile()).andReturn(createMock(ByteArrayOutputStream.class)).once();
+        expect(uploadField.getFileName()).andReturn("fileName.csv").once();
         Windows.showNotificationWindow("Upload completed: 1 records were stored successfully");
         expectLastCall().once();
-        replay(window, usagesController, Windows.class, processor, csvUploadComponent);
+        replay(window, usagesController, Windows.class, processor, uploadField);
         window.onUploadClicked();
-        verify(window, usagesController, Windows.class, processor, csvUploadComponent);
+        verify(window, usagesController, Windows.class, processor, uploadField);
+    }
+
+    @Test
+    public void testCsvFileExtensionValidator() {
+        UsageBatchUploadWindow.CsvFileExtensionValidator validator =
+            new UsageBatchUploadWindow.CsvFileExtensionValidator();
+        assertEquals("File extension is incorrect", validator.getErrorMessage());
+        assertTrue(validator.isValid("file.csv"));
+        assertFalse(validator.isValid("file.txt"));
+        assertFalse(validator.isValid(null));
     }
 
     private CsvProcessingResult<Usage> buildCsvProcessingResult() {
@@ -212,11 +224,10 @@ public class UsageBatchUploadWindowTest {
     }
 
     private void verifyUploadComponent(Component component) {
-        assertTrue(component instanceof CsvUploadComponent);
+        assertTrue(component instanceof UploadField);
         assertEquals(100, component.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
-        CsvUploadComponent uploadComponent = (CsvUploadComponent) component;
-        verifyRequiredField(uploadComponent.getFileNameField());
+        // TODO {aradkevich} verify field is required after making adjustments to UploadField in rup-vaadin
     }
 
     private void verifyButtonsLayout(Component component) {
@@ -231,13 +242,14 @@ public class UsageBatchUploadWindowTest {
 
     private void verifyLoadClickListener(Button loadButton) {
         mockStatic(Windows.class);
-        Windows.showValidationErrorWindow(Lists.newArrayList(
+        Collection<? extends Field<?>> fields = Lists.newArrayList(
             Whitebox.getInternalState(window, "usageBatchNameField"),
-            Whitebox.getInternalState(window, CsvUploadComponent.class).getFileNameField(),
+            Whitebox.getInternalState(window, "uploadField"),
             Whitebox.getInternalState(window, "accountNumberField"),
             Whitebox.getInternalState(window, "accountNameField"),
-            Whitebox.getInternalState(window, LocalDateWidget.class),
-            Whitebox.getInternalState(window, GROSS_AMOUNT_FIELD)));
+            Whitebox.getInternalState(window, "paymentDateWidget"),
+            Whitebox.getInternalState(window, GROSS_AMOUNT_FIELD));
+        Windows.showValidationErrorWindow(fields);
         expectLastCall().once();
         replay(Windows.class);
         loadButton.click();
