@@ -34,7 +34,7 @@ public class ErrorUploadWindow extends Window {
         setCaption(ForeignUi.getMessage("window.caption.error"));
         setWidth(365, Unit.PIXELS);
         setHeight(150, Unit.PIXELS);
-        setSizeFull();
+        setResizable(false);
         HorizontalLayout buttonsLayout = buildButtonsLayout(streamSource);
         Label label = new Label(ForeignUi.getMessage("label.upload_error"), ContentMode.HTML);
         VerticalLayout layout = new VerticalLayout(label, buttonsLayout);

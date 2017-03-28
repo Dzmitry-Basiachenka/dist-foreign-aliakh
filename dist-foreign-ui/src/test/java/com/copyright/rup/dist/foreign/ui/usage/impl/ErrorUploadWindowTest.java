@@ -4,6 +4,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 
@@ -32,9 +33,9 @@ import java.util.Collections;
 /**
  * Verifies {@link ErrorUploadWindow}.
  *
- * <p/>
+ * <p>
  * Copyright (C) 2017 copyright.com
- * <p/>
+ * <p>
  * Date: 03/22/17
  *
  * @author Ihar Suvorau
@@ -51,6 +52,7 @@ public class ErrorUploadWindowTest {
         ErrorUploadWindow errorUploadWindow =
             new ErrorUploadWindow(controller.getErrorResultStreamSource(csvProcessingResult));
         verify(controller);
+        assertFalse(errorUploadWindow.isResizable());
         assertEquals("upload-error-window", errorUploadWindow.getId());
         assertEquals("Error", errorUploadWindow.getCaption());
         assertEquals(365, errorUploadWindow.getWidth(), 0);
