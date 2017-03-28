@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
@@ -17,6 +18,7 @@ import com.copyright.rup.dist.foreign.repository.api.Sort.Direction;
 
 import com.google.common.collect.Sets;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -409,9 +411,10 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testGetCountByDetailId() {
-        assertEquals(1, usageRepository.getCountByDetailId(DETAIL_ID_1));
-        assertEquals(0, usageRepository.getCountByDetailId(-1L));
+    public void testGetDuplicateDetailIds() {
+        assertTrue(CollectionUtils.containsAny(Sets.newHashSet(DETAIL_ID_1, DETAIL_ID_2),
+            usageRepository.getDuplicateDetailIds(Sets.newHashSet(DETAIL_ID_1, DETAIL_ID_2, -1L))));
+        assertTrue(CollectionUtils.isEmpty(usageRepository.getDuplicateDetailIds(Sets.newHashSet(-1L))));
     }
 
     private void verifyUsage(Usage usage, UsageStatusEnum status, String scenarioId, String defaultUser) {

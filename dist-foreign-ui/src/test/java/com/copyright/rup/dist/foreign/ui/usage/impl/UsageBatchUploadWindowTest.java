@@ -179,15 +179,15 @@ public class UsageBatchUploadWindowTest {
         expect(csvUploadComponent.getFileName()).andReturn("fileName.csv").once();
         Windows.showNotificationWindow("Upload completed: 1 records were stored successfully");
         expectLastCall().once();
-        replay(window, usagesController, Windows.class, UsageCsvProcessor.class, processor, csvUploadComponent);
+        replay(window, usagesController, Windows.class, processor, csvUploadComponent);
         window.onUploadClicked();
-        verify(window, usagesController, Windows.class, UsageCsvProcessor.class, processor, csvUploadComponent);
+        verify(window, usagesController, Windows.class, processor, csvUploadComponent);
     }
 
     private CsvProcessingResult<Usage> buildCsvProcessingResult() {
         CsvProcessingResult<Usage> processingResult =
             new CsvProcessingResult<>(Collections.emptyList(), "fileName.csv");
-        processingResult.addRecord(new Usage());
+        processingResult.addRecord(1, new Usage());
         return processingResult;
     }
 

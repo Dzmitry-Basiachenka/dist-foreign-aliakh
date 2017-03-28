@@ -611,4 +611,18 @@ databaseChangeLog {
             // automatic rollback
         }
     }
+
+    changeSet(id: '2017-03-27-00', author: 'Aliaksei Pchelnikau <aliaksei_pchelnikau@epam.com>') {
+        comment('B-29761: Validate FAS Usages while loading to FDA: Implement and apply validator for Detail ID uniqueness')
+
+        addUniqueConstraint(constraintName: 'iu_detail_id',
+                schemaName: dbAppsSchema,
+                tablespace: dbDataTablespace,
+                tableName: 'df_usage',
+                columnNames: 'detail_id');
+
+        rollback {
+            // automatic rollback
+        }
+    }
 }

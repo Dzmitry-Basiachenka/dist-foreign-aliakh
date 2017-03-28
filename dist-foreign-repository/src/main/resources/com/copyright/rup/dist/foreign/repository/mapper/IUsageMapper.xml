@@ -355,9 +355,13 @@
         where df_scenario_uid = #{scenarioId}
     </update>
 
-    <select id="getCountByDetailId" parameterType="long" resultType="int">
-        select count(detail_id)
+    <select id="getDuplicateDetailIds" parameterType="list" resultType="long">
+        select distinct detail_id
         from ${schema}.df_usage
-        where detail_id = #{detailId}
+        where detail_id in (
+            <foreach collection="collection" item="detailId" separator=", ">
+                #{detailId}
+            </foreach>
+        )
     </select>
 </mapper>

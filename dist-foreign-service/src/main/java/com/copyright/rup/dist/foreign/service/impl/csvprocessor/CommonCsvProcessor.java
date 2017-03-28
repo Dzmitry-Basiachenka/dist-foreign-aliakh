@@ -53,8 +53,7 @@ public abstract class CommonCsvProcessor<T> {
     private List<IValidator<T>> businessValidators = Lists.newArrayList();
     private List<ICsvColumn> headers = Lists.newArrayList();
     private CsvProcessingResult<T> processingResult;
-    private int line = 1;
-    private List<String> originalParameters;
+    private Map<Integer, List<String>> originalParametersMap = Maps.newHashMap();
 
     /**
      * Processes CSV resource from the specified stream and {@link CsvProcessingResult}
@@ -74,6 +73,7 @@ public abstract class CommonCsvProcessor<T> {
             validateHeader(listReader.getHeader(true));
             initValidators();
             processRows(listReader);
+            businessValidate();
         } catch (IOException | SuperCsvException e) {
             throw new ValidationException(String.format("Failed to read file: %s", e.getMessage()), e);
         }
@@ -180,55 +180,72 @@ public abstract class CommonCsvProcessor<T> {
         return NumberUtils.createBigDecimal(getValue(column, params));
     }
 
+    /**
+     * Validates business rules.
+     */
+    protected void businessValidate() {
+        for (Map.Entry<Integer, T> entry : processingResult.getResultMap().entrySet()) {
+            businessValidate(entry.getKey(), entry.getValue());
+        }
+    }
+
+    /**
+     * @return result for uploading.
+     */
+    protected CsvProcessingResult<T> getResult() {
+        return processingResult;
+    }
+
     private List<IValidator<String>> getPlainValidators(int index) {
         List<IValidator<String>> result = plainValidators.get(headers.get(index));
         return null != result ? result : Collections.emptyList();
     }
 
     private void processRows(ICsvListReader listReader) throws IOException {
+        int line = 1;
         while (true) {
             ++line;
-            originalParameters = listReader.read();
+            List<String> originalParameters = listReader.read();
+            originalParametersMap.put(line, originalParameters);
             if (null != originalParameters) {
-                processRow(originalParameters);
+                processRow(line, originalParameters);
             } else {
                 break;
             }
         }
     }
 
-    private void processRow(List<String> params) {
+    private void processRow(int line, List<String> params) {
         List<String> trimmedParams = trimNulls(params);
-        if (plainValidate(trimmedParams)) {
+        if (plainValidate(line, trimmedParams)) {
             T item = deserialize(trimmedParams);
-            if (businessValidate(item)) {
-                processingResult.addRecord(item);
-            }
+            processingResult.addRecord(line, item);
         }
     }
 
-    private boolean plainValidate(List<String> params) {
+    private boolean plainValidate(int line, List<String> params) {
+        boolean valid = true;
         for (int i = 0; i < params.size(); i++) {
             String value = params.get(i);
             String field = headers.get(i).getColumnName();
             List<IValidator<String>> validators = getPlainValidators(i);
-            validators.stream()
-                .filter(validator -> !validator.isValid(value))
-                .forEach(validator -> processingResult
-                    .logError(line, originalParameters, String.format("%s: %s", field, validator.getErrorMessage())));
-        }
-        return processingResult.isSuccessful();
-    }
-
-    private boolean businessValidate(T item) {
-        boolean valid = true;
-        for (IValidator<T> validator : businessValidators) {
-            if (!validator.isValid(item)) {
-                valid = false;
-                processingResult.logError(line, originalParameters, validator.getErrorMessage());
+            for (IValidator<String> validator : validators) {
+                if (!validator.isValid(value)) {
+                    valid = false;
+                    processingResult.logError(line, originalParametersMap.get(line),
+                        String.format("%s: %s", field, validator.getErrorMessage()));
+                }
             }
         }
         return valid;
+    }
+
+    private void businessValidate(int line, T item) {
+        businessValidators.stream()
+            .filter(validator -> !validator.isValid(item))
+            .forEach(validator -> {
+                processingResult.logError(line, originalParametersMap.get(line), validator.getErrorMessage());
+            });
     }
 
     private void validateHeader(String... fileHeaders) throws HeaderValidationException {

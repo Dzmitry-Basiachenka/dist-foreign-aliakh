@@ -19,7 +19,7 @@ import java.util.Map;
 public class CsvProcessingResult<T> {
 
     private final List<String> headers;
-    private List<T> result = Lists.newArrayList();
+    private Map<Integer, T> result = Maps.newHashMap();
     private Map<Integer, ErrorRow> errors = Maps.newTreeMap();
     private String fileName;
 
@@ -38,9 +38,10 @@ public class CsvProcessingResult<T> {
      * Adds valid item to the valid list.
      *
      * @param item item to add
+     * @param line line
      */
-    public void addRecord(T item) {
-        result.add(item);
+    public void addRecord(int line, T item) {
+        result.put(line, item);
     }
 
     /**
@@ -49,6 +50,15 @@ public class CsvProcessingResult<T> {
      * @return the list of valid items
      */
     public List<T> getResult() {
+        return Lists.newArrayList(result.values());
+    }
+
+    /**
+     * Gets map of valid items.
+     *
+     * @return the map of valid items
+     */
+    public Map<Integer, T> getResultMap() {
         return result;
     }
 

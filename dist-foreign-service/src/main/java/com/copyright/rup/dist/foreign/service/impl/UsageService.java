@@ -15,6 +15,9 @@ import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvErrorResultWr
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingResult;
 import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
+import com.google.common.collect.Sets;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +26,7 @@ import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -108,8 +112,10 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public boolean detailIdExists(Long detailId) {
-        return 0 < usageRepository.getCountByDetailId(detailId);
+    public Set<Long> getDuplicateDetailIds(Set<Long> detailIds) {
+        return CollectionUtils.isNotEmpty(detailIds)
+            ? Sets.newHashSet(usageRepository.getDuplicateDetailIds(detailIds))
+            : Collections.emptySet();
     }
 
     private void calculateUsagesGrossAmount(UsageBatch usageBatch, List<Usage> usages) {
