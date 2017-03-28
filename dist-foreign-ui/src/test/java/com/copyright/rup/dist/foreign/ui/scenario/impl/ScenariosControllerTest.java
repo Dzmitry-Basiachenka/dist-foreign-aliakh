@@ -74,7 +74,7 @@ public class ScenariosControllerTest {
         expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
         expect(Windows.showConfirmDialog(
             eq("Are you sure you want to delete <i><b>'" + SCENARIO_NAME + "'</b></i> scenario?"),
-            anyObject(ConfirmDialogWindow.Listener.class))).andReturn(null).once();
+            anyObject(ConfirmDialogWindow.IListener.class))).andReturn(null).once();
         replay(scenariosWidget, Windows.class);
         scenariosController.onDeleteButtonClicked();
         verify(scenariosWidget, Windows.class);

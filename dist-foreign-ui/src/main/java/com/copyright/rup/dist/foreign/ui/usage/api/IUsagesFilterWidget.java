@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.api;
 
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
-import com.copyright.rup.dist.foreign.ui.common.api.IFilterWidget;
+import com.copyright.rup.vaadin.widget.api.IFilterWidget;
 
 /**
  * Interface for widget for usage filtering.

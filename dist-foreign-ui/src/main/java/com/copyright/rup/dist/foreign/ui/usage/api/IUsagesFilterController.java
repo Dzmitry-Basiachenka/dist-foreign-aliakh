@@ -2,7 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.api;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
-import com.copyright.rup.dist.foreign.ui.common.api.IFilterController;
+import com.copyright.rup.vaadin.widget.api.IFilterController;
 
 import java.util.List;
 
