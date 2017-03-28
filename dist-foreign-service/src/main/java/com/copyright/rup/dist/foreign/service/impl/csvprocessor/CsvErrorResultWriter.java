@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.csvprocessor;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
+import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingResult.ErrorRow;
 
 import org.supercsv.io.CsvListWriter;
@@ -31,7 +32,7 @@ public class CsvErrorResultWriter {
      * @param outputStream        output stream for writing
      * @param csvProcessingResult contains information about errors
      */
-    public void writeErrorsResult(OutputStream outputStream, CsvProcessingResult<String> csvProcessingResult) {
+    public void writeErrorsResult(OutputStream outputStream, CsvProcessingResult<Usage> csvProcessingResult) {
         try (CsvListWriter csvListWriter = new CsvListWriter(
             new OutputStreamWriter(outputStream, StandardCharsets.UTF_8), CsvPreference.STANDARD_PREFERENCE)) {
             List<String> header = csvProcessingResult.getHeaders();
