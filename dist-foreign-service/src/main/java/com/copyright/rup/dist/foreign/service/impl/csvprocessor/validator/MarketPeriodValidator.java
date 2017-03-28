@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import com.copyright.rup.dist.foreign.domain.Usage;
 
 /**
@@ -15,9 +17,7 @@ public class MarketPeriodValidator implements IValidator<Usage> {
 
     @Override
     public boolean isValid(Usage usage) {
-        if (null == usage || null == usage.getMarketPeriodTo() || null == usage.getMarketPeriodFrom()) {
-            return true;
-        }
+        checkNotNull(usage);
         return usage.getMarketPeriodFrom() <= usage.getMarketPeriodTo();
     }
 

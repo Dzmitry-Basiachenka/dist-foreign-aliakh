@@ -44,8 +44,6 @@ public class MarketPeriodValidatorTest {
     @Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-            {2000, null, true},
-            {null, 2000, true},
             {2000, 2005, true},
             {2000, 2000, true},
             {2000, 1999, false}

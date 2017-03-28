@@ -20,6 +20,6 @@ public class NumericValidator implements IValidator<String> {
 
     @Override
     public String getErrorMessage() {
-        return "Field value should be numeric and positive";
+        return "Field value should be positive number";
     }
 }

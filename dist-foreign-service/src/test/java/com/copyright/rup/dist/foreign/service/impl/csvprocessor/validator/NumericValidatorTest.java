@@ -67,6 +67,6 @@ public class NumericValidatorTest {
     public void testIsValid() {
         NumericValidator validator = new NumericValidator();
         assertEquals(expectedResult, validator.isValid(value));
-        assertEquals("Field value should be numeric and positive", validator.getErrorMessage());
+        assertEquals("Field value should be positive number", validator.getErrorMessage());
     }
 }
