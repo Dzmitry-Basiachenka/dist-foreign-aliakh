@@ -7,7 +7,6 @@ import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingResult;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.UsageCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.exception.ValidationException;
-import com.copyright.rup.dist.foreign.ui.component.CsvUploadComponent;
 import com.copyright.rup.dist.foreign.ui.component.LocalDateWidget;
 import com.copyright.rup.dist.foreign.ui.component.validator.GrossAmountValidator;
 import com.copyright.rup.dist.foreign.ui.component.validator.NumberValidator;
@@ -17,11 +16,13 @@ import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.VaadinUtils;
 import com.copyright.rup.vaadin.ui.Windows;
+import com.copyright.rup.vaadin.ui.component.upload.UploadField;
 
 import com.google.common.collect.Lists;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.util.ObjectProperty;
+import com.vaadin.data.validator.AbstractStringValidator;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.AbstractField;
@@ -57,7 +58,7 @@ class UsageBatchUploadWindow extends Window {
     private TextField usageBatchNameField;
     private Property<String> rightsholderNameProperty;
     private Property<String> fiscalYearProperty;
-    private CsvUploadComponent csvUploadComponent;
+    private UploadField uploadField;
     private IUsagesController usagesController;
 
     /**
@@ -83,7 +84,7 @@ class UsageBatchUploadWindow extends Window {
             try {
                 UsageCsvProcessor processor = usagesController.getCsvProcessor();
                 CsvProcessingResult<Usage> processingResult =
-                    processor.process(csvUploadComponent.getStreamToUploadedFile(), csvUploadComponent.getFileName());
+                    processor.process(uploadField.getStreamToUploadedFile(), uploadField.getFileName());
                 if (processingResult.isSuccessful()) {
                     int usagesCount = usagesController.loadUsageBatch(buildUsageBatch(), processingResult.getResult());
                     close();
@@ -96,9 +97,8 @@ class UsageBatchUploadWindow extends Window {
                 Windows.showNotificationWindow(ForeignUi.getMessage("window.caption.error"), e.getHtmlMessage());
             }
         } else {
-            // TODO {apchelnikau} use csvUploadComponent, but not it's internal state for error window
             Windows.showValidationErrorWindow(
-                Lists.newArrayList(usageBatchNameField, csvUploadComponent.getFileNameField(),
+                Lists.newArrayList(usageBatchNameField, uploadField,
                     accountNumberField, accountNameField, paymentDateWidget, grossAmountField));
         }
     }
@@ -110,7 +110,7 @@ class UsageBatchUploadWindow extends Window {
      */
     boolean isValid() {
         return usageBatchNameField.isValid()
-            && csvUploadComponent.isValid()
+            && uploadField.isValid()
             && accountNumberField.isValid()
             && accountNameField.isValid()
             && paymentDateWidget.isValid()
@@ -133,7 +133,7 @@ class UsageBatchUploadWindow extends Window {
     private ComponentContainer initRootLayout() {
         HorizontalLayout buttonsLayout = initButtonsLayout();
         VerticalLayout rootLayout = new VerticalLayout();
-        rootLayout.addComponents(initUsageBatchNameField(), initCsvUploadComponent(), initRightsholderLayout(),
+        rootLayout.addComponents(initUsageBatchNameField(), initUploadField(), initRightsholderLayout(),
             initPaymentDataLayout(), initGrossAmountLayout(), buttonsLayout);
         rootLayout.setSpacing(true);
         rootLayout.setMargin(new MarginInfo(true, true, false, true));
@@ -142,15 +142,13 @@ class UsageBatchUploadWindow extends Window {
         return rootLayout;
     }
 
-    private CsvUploadComponent initCsvUploadComponent() {
-        csvUploadComponent = new CsvUploadComponent();
-        csvUploadComponent.setSizeFull();
-        csvUploadComponent.setExpandRatio(csvUploadComponent.getComponent(0), 0.8f);
-        csvUploadComponent.setExpandRatio(csvUploadComponent.getComponent(1), 0.2f);
-        VaadinUtils.setMaxComponentsWidth(csvUploadComponent);
-        VaadinUtils.addComponentStyle(csvUploadComponent, "usage-upload-component");
-        setRequired(csvUploadComponent.getFileNameField());
-        return csvUploadComponent;
+    private UploadField initUploadField() {
+        uploadField = new UploadField();
+        uploadField.setSizeFull();
+        uploadField.addValidator(new CsvFileExtensionValidator());
+        VaadinUtils.setMaxComponentsWidth(uploadField);
+        VaadinUtils.addComponentStyle(uploadField, "usage-upload-component");
+        return uploadField;
     }
 
     private HorizontalLayout initButtonsLayout() {
@@ -181,12 +179,12 @@ class UsageBatchUploadWindow extends Window {
         TextField accountNumber = initRighsholderAccountNumberField();
         TextField accountName = initRightsholderAccountNameField();
         Button verifyButton = initVerifyButton();
+        verifyButton.setWidth(72, Unit.PIXELS);
         horizontalLayout.addComponents(accountNumber, accountName, verifyButton);
         horizontalLayout.setSpacing(true);
         horizontalLayout.setSizeFull();
-        horizontalLayout.setExpandRatio(accountNumber, 0.25f);
-        horizontalLayout.setExpandRatio(accountName, 0.55f);
-        horizontalLayout.setExpandRatio(verifyButton, 0.2f);
+        horizontalLayout.setExpandRatio(accountNumber, 0.35f);
+        horizontalLayout.setExpandRatio(accountName, 0.65f);
         horizontalLayout.setComponentAlignment(verifyButton, Alignment.BOTTOM_RIGHT);
         return horizontalLayout;
     }
@@ -278,5 +276,23 @@ class UsageBatchUploadWindow extends Window {
     private void setRequired(AbstractField field) {
         field.setRequired(true);
         field.setRequiredError(ForeignUi.getMessage("field.error.empty"));
+    }
+
+    /**
+     * Validator for CSV file extension.
+     */
+    static class CsvFileExtensionValidator extends AbstractStringValidator {
+
+        /**
+         * Constructor.
+         */
+        CsvFileExtensionValidator() {
+            super(ForeignUi.getMessage("error.upload_file.invalid_extension"));
+        }
+
+        @Override
+        protected boolean isValidValue(String value) {
+            return StringUtils.endsWith(value, ".csv");
+        }
     }
 }
