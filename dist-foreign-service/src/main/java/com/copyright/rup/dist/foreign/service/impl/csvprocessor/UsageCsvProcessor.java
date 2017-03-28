@@ -5,8 +5,14 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator.DateFormatValidator;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator.DetailIdValidator;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator.DuplicateInFileValidator;
+import com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator.LengthValidator;
+import com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator.MarketPeriodValidator;
+import com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator.NumericValidator;
+import com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator.RangeValidator;
+import com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator.ReportedValueValidator;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator.RequiredValidator;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +33,7 @@ import java.util.stream.Collectors;
  * Date: 02/21/17
  *
  * @author Aliaksei Pchelnikau
+ * @author Mikalai Bezmen
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -42,8 +49,30 @@ public class UsageCsvProcessor extends CommonCsvProcessor<Usage> {
 
     @Override
     protected void initValidators() {
-        addPlainValidators(Header.DETAIL_ID, new RequiredValidator(), new DuplicateInFileValidator());
-        addPlainValidators(Header.RH_ACCT_NUMBER, new RequiredValidator());
+        RequiredValidator requiredValidator = new RequiredValidator();
+        NumericValidator numericValidator = new NumericValidator();
+        LengthValidator lengthValidator_1000 = new LengthValidator(1000);
+        LengthValidator lengthValidator_2000 = new LengthValidator(2000);
+        LengthValidator lengthValidator_4 = new LengthValidator(4);
+        RangeValidator marketPeriodRangeValidator = new RangeValidator(1000, 9999);
+        addPlainValidators(Header.DETAIL_ID, requiredValidator, numericValidator, new LengthValidator(10),
+            new DuplicateInFileValidator());
+        addPlainValidators(Header.TITLE, requiredValidator, lengthValidator_2000);
+        addPlainValidators(Header.ARTICLE, lengthValidator_1000);
+        addPlainValidators(Header.STANDARD_NUMBER, requiredValidator, lengthValidator_1000);
+        addPlainValidators(Header.WR_WRK_INST, requiredValidator, numericValidator, new LengthValidator(15));
+        addPlainValidators(Header.RH_ACCT_NUMBER, requiredValidator, numericValidator, new LengthValidator(22));
+        addPlainValidators(Header.PUBLISHER, lengthValidator_1000);
+        addPlainValidators(Header.PUB_DATE, new DateFormatValidator());
+        addPlainValidators(Header.NUMBER_OF_COPIES, numericValidator, new RangeValidator(0, null),
+            new LengthValidator(9));
+        addPlainValidators(Header.REPORTED_VALUE, requiredValidator, new ReportedValueValidator());
+        addPlainValidators(Header.MARKET, requiredValidator, new LengthValidator(200));
+        addPlainValidators(Header.MARKET_PERIOD_FROM, requiredValidator, numericValidator, lengthValidator_4,
+            marketPeriodRangeValidator);
+        addPlainValidators(Header.MARKET_PERIOD_TO, requiredValidator, numericValidator, lengthValidator_4,
+            marketPeriodRangeValidator);
+        addPlainValidators(Header.AUTHOR, lengthValidator_2000);
     }
 
     @Override
@@ -52,7 +81,7 @@ public class UsageCsvProcessor extends CommonCsvProcessor<Usage> {
             .map(Usage::getDetailId)
             .collect(Collectors.toSet());
         Set<Long> detailIdDuplicates = usageService.getDuplicateDetailIds(detailIds);
-        addBusinessValidators(new DetailIdValidator(detailIdDuplicates));
+        addBusinessValidators(new DetailIdValidator(detailIdDuplicates), new MarketPeriodValidator());
         super.businessValidate();
     }
 
