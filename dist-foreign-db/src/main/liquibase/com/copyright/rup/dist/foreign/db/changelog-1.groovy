@@ -619,10 +619,41 @@ databaseChangeLog {
                 schemaName: dbAppsSchema,
                 tablespace: dbDataTablespace,
                 tableName: 'df_usage',
-                columnNames: 'detail_id');
+                columnNames: 'detail_id')
 
         rollback {
             // automatic rollback
+        }
+    }
+
+    changeSet(id: '2017-03-28-00', author: 'Mikalai Bezmen <mbezmen@copyright.com>') {
+        comment('B-29761: Validate FAS Usages while loading to FDA: ' +
+                'change datatype of author column in df_usage and df_usage_archive tables')
+
+        modifyDataType(
+                schemaName: dbAppsSchema,
+                tableName: 'df_usage_archive',
+                columnName: 'author',
+                newDataType: 'VARCHAR(2000)')
+
+        modifyDataType(
+                schemaName: dbAppsSchema,
+                tableName: 'df_usage',
+                columnName: 'author',
+                newDataType: 'VARCHAR(2000)')
+
+        rollback {
+            modifyDataType(
+                    schemaName: dbAppsSchema,
+                    tableName: 'df_usage_archive',
+                    columnName: 'author',
+                    newDataType: 'VARCHAR(1000)')
+
+            modifyDataType(
+                    schemaName: dbAppsSchema,
+                    tableName: 'df_usage',
+                    columnName: 'author',
+                    newDataType: 'VARCHAR(1000)')
         }
     }
 }

@@ -42,11 +42,11 @@ public class RangeValidator implements IValidator<String> {
             message = String.format("Field value should be in range from %d to %d", minValue, maxValue);
             return minValue <= parsedValue && maxValue >= parsedValue;
         } else if (null != minValue) {
-            message = String.format("Field value should be greater then %d", minValue);
-            return minValue <= parsedValue;
+            message = String.format("Field value should be greater than %d", minValue);
+            return minValue < parsedValue;
         } else {
-            message = String.format("Field value should be less then %d", maxValue);
-            return maxValue >= parsedValue;
+            message = String.format("Field value should be less than %d", maxValue);
+            return maxValue > parsedValue;
         }
     }
 
