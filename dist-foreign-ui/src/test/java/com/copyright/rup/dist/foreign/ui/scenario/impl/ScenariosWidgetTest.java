@@ -43,10 +43,10 @@ import java.util.Collection;
 
 /**
  * Verifies {@link ScenariosWidget}.
- * <p/>
+ * <p>
  * Copyright (C) 2017 copyright.com
- * <p/>
- * Date: 3/15/17
+ * <p>
+ * Date: 03/15/17
  *
  * @author Aliaksandr Radkevich
  * @author Mikalai Bezmen
@@ -154,6 +154,7 @@ public class ScenariosWidgetTest {
 
     private void verifyTable(Table table) {
         verifySize(table);
+        assertEquals("scenarios-table", table.getId());
         assertArrayEquals(new Object[]{"name", "createDate", "status"}, table.getVisibleColumns());
         assertArrayEquals(new Object[]{"Name", "Create Date", "Status"}, table.getColumnHeaders());
         assertEquals(100, table.getColumnWidth("createDate"));
@@ -192,12 +193,13 @@ public class ScenariosWidgetTest {
     }
 
     private void verifyButtonsLayout(HorizontalLayout layout) {
+        assertEquals("scenarios-buttons", layout.getId());
         assertEquals(1, layout.getComponentCount());
         Component component = layout.getComponent(0);
         assertTrue(component instanceof Button);
         Button button = (Button) component;
         assertEquals("Delete", button.getCaption());
-        assertEquals("Delete", button.getStyleName());
+        assertEquals("Delete", button.getId());
         assertFalse(button.isEnabled());
         assertEquals(1, button.getListeners(ClickEvent.class).size());
     }
@@ -211,6 +213,7 @@ public class ScenariosWidgetTest {
 
     private void verifyScenarioMetadataPanel() {
         Panel panel = (Panel) ((HorizontalLayout) scenariosWidget.getComponent(1)).getComponent(1);
+        assertEquals("scenarios-metadata", panel.getId());
         Component content = panel.getContent();
         assertTrue(content instanceof VerticalLayout);
         VerticalLayout layout = (VerticalLayout) content;

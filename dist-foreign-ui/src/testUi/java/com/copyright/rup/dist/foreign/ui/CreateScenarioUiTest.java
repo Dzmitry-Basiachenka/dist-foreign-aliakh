@@ -34,9 +34,9 @@ import java.util.stream.Collectors;
 
 /**
  * UI test to verify 'Add to Scenario' functionality.
- * <p/>
+ * <p>
  * Copyright (C) 2017 copyright.com
- * <p/>
+ * <p>
  * Date: 03/17/17
  *
  * @author Ihar Suvorau
@@ -116,13 +116,13 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
     public void testVerifyScenarioNameFieldValidators() {
         WebElement createScenarioWindow = openAddToScenarioWindow();
         WebElement confirmButton = assertElement(createScenarioWindow, By.id(CONFIRM_BUTTON_ID));
-        fillField(createScenarioWindow, SCENARIO_NAME_FIELD_ID, StringUtils.EMPTY);
+        populateField(createScenarioWindow, SCENARIO_NAME_FIELD_ID, StringUtils.EMPTY);
         clickElementAndWait(confirmButton);
         verifyErrorWindow(ImmutableMap.of(SCENARIO_NAME_FIELD, "Field value should be specified"));
-        fillField(createScenarioWindow, SCENARIO_NAME_FIELD_ID, RandomStringUtils.randomAlphanumeric(51));
+        populateField(createScenarioWindow, SCENARIO_NAME_FIELD_ID, RandomStringUtils.randomAlphanumeric(51));
         clickElementAndWait(confirmButton);
         verifyErrorWindow(ImmutableMap.of(SCENARIO_NAME_FIELD, "Field value should not exceed 50 characters"));
-        fillField(createScenarioWindow, SCENARIO_NAME_FIELD_ID, "Scenario name");
+        populateField(createScenarioWindow, SCENARIO_NAME_FIELD_ID, "Scenario name");
         clickElementAndWait(confirmButton);
         verifyErrorWindow(ImmutableMap.of(SCENARIO_NAME_FIELD, "Scenario with such name already exists"));
     }
@@ -131,7 +131,7 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
     // Test case ID: 'bd5bdf6f-1edf-4a01-b229-756dc253a98c'
     public void testVerifyDescriptionField() {
         WebElement createScenarioWindow = openAddToScenarioWindow();
-        fillField(createScenarioWindow, "scenario-description", RandomStringUtils.randomAlphanumeric(2001));
+        populateField(createScenarioWindow, "scenario-description", RandomStringUtils.randomAlphanumeric(2001));
         clickElementAndWait(assertElement(createScenarioWindow, By.id(CONFIRM_BUTTON_ID)));
         verifyErrorWindow(ImmutableMap.of(DESCRIPTION_FIELD, "Field value should not exceed 2000 characters"));
     }

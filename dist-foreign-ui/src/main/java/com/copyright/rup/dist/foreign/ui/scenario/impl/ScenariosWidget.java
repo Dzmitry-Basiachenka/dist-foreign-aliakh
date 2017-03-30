@@ -29,10 +29,10 @@ import java.util.Objects;
 
 /**
  * Widget that represents 'Scenarios' tab.
- * <p/>
+ * <p>
  * Copyright (C) 2017 copyright.com
- * <p/>
- * Date: 3/14/17
+ * <p>
+ * Date: 03/14/17
  *
  * @author Aliaksandr Radkevich
  * @author Mikalai Bezmen
