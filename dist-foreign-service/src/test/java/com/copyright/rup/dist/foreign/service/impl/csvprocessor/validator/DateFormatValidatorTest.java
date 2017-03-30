@@ -43,10 +43,12 @@ public class DateFormatValidatorTest {
             {null, true},
             {StringUtils.EMPTY, true},
             {"01/01/2017", true},
-            {" 01/01/2017 ", true},
-            {"01/01/2017\r", true},
-            {"\n01/01/2017 ", true},
-            {"\t01/01/2017 ", true},
+            {"1/1/2017", true},
+            {"1/1/00", false},
+            {" 01/01/2017 ", false},
+            {"01/01/2017\r", false},
+            {"\n01/01/2017 ", false},
+            {"\t01/01/2017 ", false},
             {"2017/01/01", false},
             {"01/2017/01", false},
             {"13/01/2017", false},
@@ -64,6 +66,6 @@ public class DateFormatValidatorTest {
     public void testGetErrorMessage() {
         DateFormatValidator validator = new DateFormatValidator();
         assertEquals(expectedResult, validator.isValid(value));
-        assertEquals("Field value should have MM/dd/yyyy format", validator.getErrorMessage());
+        assertEquals("Field value should have MM/dd/yyyy or M/d/yyyy format", validator.getErrorMessage());
     }
 }
