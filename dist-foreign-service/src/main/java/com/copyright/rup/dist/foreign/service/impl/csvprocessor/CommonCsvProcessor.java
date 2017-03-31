@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.service.impl.csvprocessor;
 
-import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.exception.HeaderValidationException;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.exception.ValidationException;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator.IValidator;
@@ -24,8 +23,10 @@ import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -41,9 +42,6 @@ import java.util.stream.Collectors;
  * @author Aliaksei Pchelnikau
  */
 public abstract class CommonCsvProcessor<T> {
-
-    private static final DateTimeFormatter DATE_FORMAT =
-        DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT);
 
     /**
      * Regular expression to find 'null', 'na', 'n/a' case insensitively.
@@ -156,7 +154,7 @@ public abstract class CommonCsvProcessor<T> {
      */
     protected LocalDate getDate(ICsvColumn column, List<String> params) {
         String value = getValue(column, params);
-        return null != value ? LocalDate.parse(value, DATE_FORMAT) : null;
+        return null != value ? parseDateValue(value) : null;
     }
 
     /**
@@ -286,6 +284,14 @@ public abstract class CommonCsvProcessor<T> {
 
     private static String trimNulls(String value) {
         return null != value ? StringUtils.trim(value.replaceAll(EMPTY_STRING_REGEX, StringUtils.EMPTY)) : null;
+    }
+
+    private LocalDate parseDateValue(String value) {
+        try {
+            return LocalDate.parse(value, DateTimeFormatter.ofPattern("M/d/yyyy", Locale.US));
+        } catch (DateTimeParseException e) {
+            return null;
+        }
     }
 
     /**
