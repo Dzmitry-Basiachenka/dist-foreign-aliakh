@@ -48,7 +48,7 @@ public class CreateScenarioWindow extends Window {
         this.controller = controller;
         setResizable(false);
         setWidth(320, Unit.PIXELS);
-        setCaption(ForeignUi.getMessage("window.caption.create_scenario"));
+        setCaption(ForeignUi.getMessage("window.create_scenario"));
         initFields();
         HorizontalLayout buttonsLayout = initButtonsLayout();
         VerticalLayout layout = new VerticalLayout(scenarioNameField, descriptionArea, buttonsLayout);

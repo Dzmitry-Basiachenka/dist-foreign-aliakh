@@ -226,7 +226,7 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         WebElement errorWindow = assertElement(By.id("upload-error-window"));
         assertEquals("Error", assertElement(errorWindow, By.className(V_WINDOW_HEADER_CLASS_NAME)).getText());
         verifyLabelMessage(errorWindow,
-            "The file could not be uploaded.\nPress Download button to see detailed list of errors.");
+            "The file could not be uploaded.\nPress Download button to see detailed list of errors");
         assertTrue(assertElement(errorWindow, By.id("Download")).isEnabled());
         clickElementAndWait(assertElement(errorWindow, By.id(CLOSE_BUTTON_ID)));
         assertNull(waitAndFindElement(By.id("upload-error-window")));
