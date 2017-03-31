@@ -27,9 +27,9 @@ import java.util.stream.Collectors;
 /**
  * Common class for UI tests.
  * Provides functionality for logging in/out, setting up tests, taking screenshots if test fails.
- * <p/>
+ * <p>
  * Copyright (C) 2017 copyright.com
- * <p/>
+ * <p>
  * Date: 01/23/17
  *
  * @author Darya Baraukova
@@ -289,8 +289,8 @@ public class ForeignCommonUiTest extends CommonUiTest {
      */
     protected void assertUsagesTableNotEmpty(WebElement usagesTable, int rowsCount) {
         assertNotNull(usagesTable);
-        List<WebElement> rows = findElements(assertElement(usagesTable, By.className(V_TABLE_BODY_CLASS_NAME)),
-            By.tagName(HTML_TR_TAG_NAME));
+        WebElement tableBody = assertElement(usagesTable, By.className(V_TABLE_BODY_CLASS_NAME));
+        List<WebElement> rows = findElements(tableBody, By.tagName(HTML_TR_TAG_NAME));
         assertEquals(rowsCount, CollectionUtils.size(rows));
     }
 
@@ -355,7 +355,7 @@ public class ForeignCommonUiTest extends CommonUiTest {
      * @param fieldId identifier of field
      * @param value   value to set
      */
-    protected void fillField(WebElement window, String fieldId, String value) {
+    protected void populateField(WebElement window, String fieldId, String value) {
         sendKeysToInput(assertElement(window, By.id(fieldId)), value);
     }
 

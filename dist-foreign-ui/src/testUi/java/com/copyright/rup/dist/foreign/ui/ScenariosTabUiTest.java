@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.ui;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -42,7 +41,7 @@ import java.util.List;
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
- * Date: 3/16/17
+ * Date: 03/16/17
  *
  * @author Aliaksandr Radkevich
  */
@@ -145,7 +144,6 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
 
     private void verifyScenariosTabManagerAndViewOnly() {
         WebElement scenarioTab = selectScenariosTab();
-        assertNotNull(scenarioTab);
         WebElement buttonsLayout = assertElement(scenarioTab, By.id("scenarios-buttons"));
         List<WebElement> buttons = findElements(buttonsLayout, By.className("v-button"));
         assertTrue(CollectionUtils.isEmpty(buttons));
@@ -155,7 +153,6 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
 
     private void verifyScenariosTabSpecialist() {
         WebElement scenarioTab = selectScenariosTab();
-        assertNotNull(scenarioTab);
         WebElement buttonsLayout = assertElement(scenarioTab, By.id("scenarios-buttons"));
         List<WebElement> buttons = findElements(buttonsLayout, By.className("v-button"));
         assertEquals(1, CollectionUtils.size(buttons));
