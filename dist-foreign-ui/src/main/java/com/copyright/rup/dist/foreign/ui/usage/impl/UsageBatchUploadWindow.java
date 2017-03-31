@@ -94,7 +94,7 @@ class UsageBatchUploadWindow extends Window {
                         new ErrorUploadWindow(usagesController.getErrorResultStreamSource(processingResult)));
                 }
             } catch (ValidationException e) {
-                Windows.showNotificationWindow(ForeignUi.getMessage("window.caption.error"), e.getHtmlMessage());
+                Windows.showNotificationWindow(ForeignUi.getMessage("window.error"), e.getHtmlMessage());
             }
         } else {
             Windows.showValidationErrorWindow(

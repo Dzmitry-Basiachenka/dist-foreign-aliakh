@@ -117,7 +117,7 @@ class DeleteUsageBatchWindow extends Window {
             }
             scenariosHtml.append("</ul>");
             Windows.showNotificationWindow(
-                ForeignUi.getMessage("message.usage_batch_associated_with_scenarios", scenariosHtml));
+                ForeignUi.getMessage("message.error.delete_usage_batch", scenariosHtml));
         }
     }
 

@@ -70,7 +70,7 @@ public class ErrorUploadWindowTest {
     private void verifyLabel(Component component) {
         assertEquals(Label.class, component.getClass());
         Label label = (Label) component;
-        assertEquals("The file could not be uploaded.<br>Press Download button to see detailed list of errors.",
+        assertEquals("The file could not be uploaded.<br>Press Download button to see detailed list of errors",
             label.getValue());
         assertEquals(ContentMode.HTML, label.getContentMode());
     }
