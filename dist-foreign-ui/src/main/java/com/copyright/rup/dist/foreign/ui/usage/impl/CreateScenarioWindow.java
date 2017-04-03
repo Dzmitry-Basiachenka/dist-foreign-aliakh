@@ -88,7 +88,7 @@ public class CreateScenarioWindow extends Window {
         VaadinUtils.setMaxComponentsWidth(scenarioNameField);
         VaadinUtils.addComponentStyle(scenarioNameField, "scenario-name");
         scenarioNameField.setNullRepresentation(StringUtils.EMPTY);
-        scenarioNameField.setValue(ForeignUi.getMessage("field.default_value.scenario_name", LocalDate.now().format(
+        scenarioNameField.setValue(ForeignUi.getMessage("field.scenario_name.default", LocalDate.now().format(
             DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT))));
         scenarioNameField.setRequired(true);
         scenarioNameField.setRequiredError(ForeignUi.getMessage("field.error.empty"));

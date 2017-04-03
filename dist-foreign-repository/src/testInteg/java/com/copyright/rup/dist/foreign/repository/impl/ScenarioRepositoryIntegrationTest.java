@@ -26,9 +26,9 @@ import java.util.List;
 
 /**
  * Verifies {@link ScenarioRepository}.
- * <p/>
+ * <p>
  * Copyright (C) 2017 copyright.com
- * <p/>
+ * <p>
  * Date: 03/15/17
  *
  * @author Ihar Suvorau
@@ -114,10 +114,10 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
-    public void testDeleteScenario() {
+    public void testRemove() {
         scenarioRepository.insert(buildScenario(SCENARIO_ID, SCENARIO_NAME));
         assertEquals(1, scenarioRepository.getCountByName(SCENARIO_NAME));
-        scenarioRepository.deleteScenario(SCENARIO_ID);
+        scenarioRepository.remove(SCENARIO_ID);
         assertEquals(0, scenarioRepository.getCountByName(SCENARIO_NAME));
     }
 

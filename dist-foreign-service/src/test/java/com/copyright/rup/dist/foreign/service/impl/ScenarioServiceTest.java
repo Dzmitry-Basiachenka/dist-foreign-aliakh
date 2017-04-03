@@ -8,6 +8,7 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
@@ -37,10 +38,10 @@ import java.util.List;
 
 /**
  * Verifies {@link ScenarioService}.
- * <p/>
+ * <p>
  * Copyright (C) 2017 copyright.com
- * <p/>
- * Date: 3/15/17
+ * <p>
+ * Date: 03/15/17
  *
  * @author Aliaksandr Radkevich
  * @author Mikalai Bezmen
@@ -78,7 +79,7 @@ public class ScenarioServiceTest {
         List<Scenario> scenarios = Lists.newArrayList(new Scenario());
         expect(scenarioRepository.findAll()).andReturn(scenarios).once();
         replay(scenarioRepository);
-        assertEquals(scenarios, scenarioService.getScenarios());
+        assertSame(scenarios, scenarioService.getScenarios());
         verify(scenarioRepository);
     }
 
@@ -103,7 +104,7 @@ public class ScenarioServiceTest {
         List<String> scenariosNames = Lists.newArrayList(SCENARIO_NAME);
         expect(scenarioRepository.findNamesByUsageBatchId(USAGE_BATCH_ID)).andReturn(scenariosNames).once();
         replay(scenarioRepository);
-        assertEquals(scenariosNames, scenarioService.getScenariosNamesByUsageBatchId(USAGE_BATCH_ID));
+        assertSame(scenariosNames, scenarioService.getScenariosNamesByUsageBatchId(USAGE_BATCH_ID));
         verify(scenarioRepository);
     }
 
@@ -139,10 +140,10 @@ public class ScenarioServiceTest {
     }
 
     @Test
-    public void testDeleteScenario() {
+    public void testremove() {
         usageService.deleteUsagesFromScenario(SCENARIO_ID);
         expectLastCall().once();
-        scenarioRepository.deleteScenario(SCENARIO_ID);
+        scenarioRepository.remove(SCENARIO_ID);
         expectLastCall().once();
         replay(usageService, scenarioRepository);
         scenarioService.deleteScenario(SCENARIO_ID);

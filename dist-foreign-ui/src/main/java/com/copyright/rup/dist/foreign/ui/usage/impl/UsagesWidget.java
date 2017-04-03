@@ -235,7 +235,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
             window.addListener(ScenarioCreateEvent.class, controller, IUsagesController.ON_SCENARIO_CREATED);
             Windows.showModalWindow(window);
         } else {
-            Windows.showNotificationWindow(ForeignUi.getMessage("message.create_scenario.empty_usages"));
+            Windows.showNotificationWindow(ForeignUi.getMessage("message.error.empty_usages"));
         }
     }
 }

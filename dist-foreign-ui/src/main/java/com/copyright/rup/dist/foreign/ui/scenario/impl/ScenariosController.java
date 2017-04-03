@@ -17,9 +17,9 @@ import java.util.List;
 
 /**
  * Controller class for {@link ScenariosWidget}.
- * <p/>
+ * <p>
  * Copyright (C) 2017 copyright.com
- * <p/>
+ * <p>
  * Date: 3/14/17
  *
  * @author Aliaksandr Radkevich

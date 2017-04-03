@@ -14,9 +14,9 @@ import java.util.List;
 
 /**
  * Implementation of {@link IScenarioRepository} for MyBatis.
- * <p/>
+ * <p>
  * Copyright (C) 2017 copyright.com
- * <p/>
+ * <p>
  * Date: 03/15/17
  *
  * @author Ihar Suvorau
@@ -48,8 +48,9 @@ public class ScenarioRepository extends BaseRepository implements IScenarioRepos
     }
 
     @Override
-    public void deleteScenario(String scenarioId) {
-        delete("IScenarioMapper.deleteScenario", checkNotNull(scenarioId));
+    public void remove(String scenarioId) {
+        checkArgument(StringUtils.isNotBlank(scenarioId));
+        delete("IScenarioMapper.remove", scenarioId);
     }
 
     /**

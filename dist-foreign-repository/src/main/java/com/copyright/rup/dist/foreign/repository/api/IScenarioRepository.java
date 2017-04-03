@@ -6,9 +6,9 @@ import java.util.List;
 
 /**
  * Interface for Scenario repository.
- * <p/>
+ * <p>
  * Copyright (C) 2017 copyright.com
- * <p/>
+ * <p>
  * Date: 03/15/17
  *
  * @author Ihar Suvorau
@@ -46,9 +46,9 @@ public interface IScenarioRepository {
     List<String> findNamesByUsageBatchId(String usageBatchId);
 
     /**
-     * Deletes {@link Scenario} by given identifier.
+     * Removes {@link Scenario} by given identifier.
      *
      * @param scenarioId {@link Scenario} identifier
      */
-    void deleteScenario(String scenarioId);
+    void remove(String scenarioId);
 }
