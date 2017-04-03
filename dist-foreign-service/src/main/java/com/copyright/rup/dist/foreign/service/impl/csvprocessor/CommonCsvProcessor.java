@@ -24,6 +24,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -288,7 +289,8 @@ public abstract class CommonCsvProcessor<T> {
 
     private LocalDate parseDateValue(String value) {
         try {
-            return LocalDate.parse(value, DateTimeFormatter.ofPattern("M/d/yyyy", Locale.US));
+            return LocalDate.parse(value, DateTimeFormatter.ofPattern("M/d/uuuu", Locale.US).withResolverStyle(
+                ResolverStyle.STRICT));
         } catch (DateTimeParseException e) {
             return null;
         }

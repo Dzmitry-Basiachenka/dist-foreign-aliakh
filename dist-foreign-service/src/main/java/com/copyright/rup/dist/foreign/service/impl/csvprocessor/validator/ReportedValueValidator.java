@@ -15,7 +15,6 @@ import java.math.BigDecimal;
  */
 public class ReportedValueValidator implements IValidator<String> {
 
-    // TODO {isuvorau} we use the same regex in GrossAmountValidator
     private static final String AMOUNT_REGEX = "(0|([1-9]\\d{0,9}))\\.\\d{2}";
 
     @Override
