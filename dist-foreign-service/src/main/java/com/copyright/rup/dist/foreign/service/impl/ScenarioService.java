@@ -20,9 +20,9 @@ import java.util.List;
 
 /**
  * Scenario service implementation.
- * <p/>
+ * <p>
  * Copyright (C) 2017 copyright.com
- * <p/>
+ * <p>
  * Date: 3/15/17
  *
  * @author Aliaksandr Radkevich
@@ -67,7 +67,7 @@ public class ScenarioService implements IScenarioService {
     @Transactional
     public void deleteScenario(String scenarioId) {
         usageService.deleteUsagesFromScenario(scenarioId);
-        scenarioRepository.deleteScenario(scenarioId);
+        scenarioRepository.remove(scenarioId);
     }
 
     private Scenario buildScenario(String scenarioName, String description, List<Usage> usages) {

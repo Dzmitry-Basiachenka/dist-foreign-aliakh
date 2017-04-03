@@ -65,7 +65,7 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
     @After
     public void tearDown() {
         if (null != scenarioToDelete) {
-            scenarioRepository.deleteScenario(scenarioToDelete.getId());
+            scenarioRepository.remove(scenarioToDelete.getId());
             usageRepository.deleteFromScenario(scenarioToDelete.getId(), StoredEntity.DEFAULT_USER);
             scenarioToDelete = null;
         }
