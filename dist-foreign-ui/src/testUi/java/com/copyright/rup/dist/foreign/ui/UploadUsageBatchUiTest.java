@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
- * Date: 03/01/2017
+ * Date: 03/01/17
  *
  * @author Mikalai Bezmen
  * @author Ihar Suvorau

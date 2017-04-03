@@ -28,9 +28,9 @@ import java.util.List;
 
 /**
  * UI test to verify 'Delete Usage Batch' functionality.
- * <p/>
+ * <p>
  * Copyright (C) 2017 copyright.com
- * <p/>
+ * <p>
  * Date: 3/1/17
  *
  * @author Aliaksandr Radkevich

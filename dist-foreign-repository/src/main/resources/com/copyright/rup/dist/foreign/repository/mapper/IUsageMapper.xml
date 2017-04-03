@@ -356,7 +356,7 @@
     </update>
 
     <select id="getDuplicateDetailIds" parameterType="list" resultType="long">
-        select distinct detail_id
+        select detail_id
         from ${schema}.df_usage
         where detail_id in (
             <foreach collection="collection" item="detailId" separator=", ">

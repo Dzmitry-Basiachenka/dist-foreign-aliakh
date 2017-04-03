@@ -16,6 +16,7 @@ import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
 import com.copyright.rup.dist.foreign.repository.api.Sort.Direction;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -413,8 +414,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     public void testGetDuplicateDetailIds() {
         assertTrue(CollectionUtils.containsAny(Sets.newHashSet(DETAIL_ID_1, DETAIL_ID_2),
-            usageRepository.getDuplicateDetailIds(Sets.newHashSet(DETAIL_ID_1, DETAIL_ID_2, -1L))));
-        assertTrue(CollectionUtils.isEmpty(usageRepository.getDuplicateDetailIds(Sets.newHashSet(-1L))));
+            usageRepository.getDuplicateDetailIds(Lists.newArrayList(DETAIL_ID_1, DETAIL_ID_2, -1L))));
     }
 
     private void verifyUsage(Usage usage, UsageStatusEnum status, String scenarioId, String defaultUser) {

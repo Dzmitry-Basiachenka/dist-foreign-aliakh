@@ -3,7 +3,7 @@ package com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * The validator to check whether passed value contains only digits.
+ * The validator to check whether passed value contains only digits and the value is positive.
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
@@ -11,11 +11,11 @@ import org.apache.commons.lang3.StringUtils;
  *
  * @author Ihar Suvorau
  */
-public class NumericValidator implements IValidator<String> {
+public class PositiveNumberValidator implements IValidator<String> {
 
     @Override
     public boolean isValid(String value) {
-        return StringUtils.isEmpty(value) || StringUtils.isNumeric(value.trim());
+        return StringUtils.isEmpty(value) || StringUtils.isNumeric(value);
     }
 
     @Override

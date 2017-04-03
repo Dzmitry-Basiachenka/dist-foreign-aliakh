@@ -71,7 +71,6 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     @Autowired
     private UsageCsvProcessorFactory usageCsvProcessorFactory;
 
-
     @Override
     public IUsagesFilterWidget initUsagesFilterWidget() {
         IUsagesFilterWidget result = filterController.initWidget();
@@ -168,22 +167,14 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
         return new UsagesWidget();
     }
 
-    /**
-     * Export stream source.
-     */
-    public static class ExportStreamSource implements IStreamSource {
+    private static class ExportStreamSource implements IStreamSource {
 
+        private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("MM_dd_YYYY");
         private ExecutorService executorService = Executors.newSingleThreadExecutor();
         private IUsageService usageService;
         private IUsagesFilterController controller;
 
-        /**
-         * Constructor.
-         *
-         * @param usageService instance of {@link IUsageService}
-         * @param controller   instance of {@link IUsagesController}
-         */
-        public ExportStreamSource(IUsageService usageService, IUsagesFilterController controller) {
+        private ExportStreamSource(IUsageService usageService, IUsagesFilterController controller) {
             this.usageService = usageService;
             this.controller = controller;
         }
@@ -203,28 +194,18 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
 
         @Override
         public String getFileName() {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM_dd_YYYY");
             return VaadinUtils.encodeAndBuildFileName(
-                String.format("export_usage_%s", LocalDate.now().format(formatter)), "csv");
+                String.format("export_usage_%s", LocalDate.now().format(FORMATTER)), "csv");
         }
     }
 
-    /**
-     * Error results stream source.
-     */
-    public static class ErrorResultStreamSource implements IStreamSource {
+    private static class ErrorResultStreamSource implements IStreamSource {
 
         private ExecutorService executorService = Executors.newSingleThreadExecutor();
         private CsvProcessingResult csvProcessingResult;
         private IUsageService usageService;
 
-        /**
-         * Constructor.
-         *
-         * @param csvProcessingResult information about errors
-         * @param usageService        instance of {@link IUsageService}
-         */
-        public ErrorResultStreamSource(IUsageService usageService, CsvProcessingResult csvProcessingResult) {
+        private ErrorResultStreamSource(IUsageService usageService, CsvProcessingResult csvProcessingResult) {
             this.csvProcessingResult = csvProcessingResult;
             this.usageService = usageService;
         }
@@ -240,7 +221,7 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
             try {
                 PipedOutputStream outputStream = new PipedOutputStream();
                 PipedInputStream pipedInputStream = new PipedInputStream(outputStream);
-                executorService.execute(() -> usageService.writeErrorsCsvReport(csvProcessingResult, outputStream));
+                executorService.execute(() -> usageService.writeErrorsToFile(csvProcessingResult, outputStream));
                 return pipedInputStream;
             } catch (IOException e) {
                 throw new RupRuntimeException(e);

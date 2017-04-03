@@ -1,13 +1,11 @@
 package com.copyright.rup.dist.foreign.service.impl.csvprocessor;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.test.ReportMatcher;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.UsageService;
-import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingResult.ErrorRow;
 
 import com.google.common.collect.Lists;
 
@@ -49,16 +47,14 @@ public class UsageServiceIntegrationTest {
     }
 
     @Test
-    public void testWriteErrorsCsvReport() throws Exception {
+    public void testWriteErrorsToFile() throws Exception {
         IUsageService usageService = new UsageService();
         List<String> headers = buildHeaders();
         result = new CsvProcessingResult<>(headers, "usages.csv");
         logErrors();
-        List<ErrorRow> errors = result.getErrors();
-        assertEquals(4, errors.size());
         PipedOutputStream outputStream = new PipedOutputStream();
         PipedInputStream pipedInputStream = new PipedInputStream(outputStream);
-        executorService.execute(() -> usageService.writeErrorsCsvReport(result, outputStream));
+        executorService.execute(() -> usageService.writeErrorsToFile(result, outputStream));
         FileUtils.copyInputStreamToFile(pipedInputStream, new File(PATH_TO_ACTUAL_REPORT, FILE_NAME));
         verifyReport();
     }

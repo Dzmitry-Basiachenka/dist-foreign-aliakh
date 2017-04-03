@@ -51,7 +51,6 @@ public class RangeValidatorTest {
         return Arrays.asList(new Object[][]{
             {null, StringUtils.EMPTY, 1000, 1500, true},
             {"3333", "Field value should be in range from 2000 to 5000", 2000, 5000, true},
-            {" 3333  ", "Field value should be in range from 2000 to 5000", 2000, 5000, true},
             {"333", "Field value should be in range from 2005 to 2005", 2005, 2005, false},
             {"33333", "Field value should be in range from 1000 to 5000", 1000, 5000, false},
             {"555", "Field value should be less than 5000", null, 5000, true},

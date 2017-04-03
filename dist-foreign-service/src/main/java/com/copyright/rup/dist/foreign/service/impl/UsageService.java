@@ -15,8 +15,6 @@ import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvErrorResultWr
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingResult;
 import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
-import com.google.common.collect.Sets;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,9 +65,8 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public void writeErrorsCsvReport(CsvProcessingResult<Usage> csvProcessingResult, OutputStream outputStream) {
-        CsvErrorResultWriter downloader = new CsvErrorResultWriter();
-        downloader.writeErrorsResult(outputStream, csvProcessingResult);
+    public void writeErrorsToFile(CsvProcessingResult<Usage> csvProcessingResult, OutputStream outputStream) {
+        new CsvErrorResultWriter().writeErrorsResult(outputStream, csvProcessingResult);
     }
 
     @Override
@@ -112,9 +109,9 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public Set<Long> getDuplicateDetailIds(Set<Long> detailIds) {
+    public Set<Long> getDuplicateDetailIds(List<Long> detailIds) {
         return CollectionUtils.isNotEmpty(detailIds)
-            ? Sets.newHashSet(usageRepository.getDuplicateDetailIds(detailIds))
+            ? usageRepository.getDuplicateDetailIds(detailIds)
             : Collections.emptySet();
     }
 

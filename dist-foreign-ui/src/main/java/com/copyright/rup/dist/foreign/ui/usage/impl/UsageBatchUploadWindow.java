@@ -44,7 +44,7 @@ import java.math.BigDecimal;
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
- * Date: 01/18/2017
+ * Date: 01/18/17
  *
  * @author Mikita Hladkikh
  * @author Mikalai Bezmen

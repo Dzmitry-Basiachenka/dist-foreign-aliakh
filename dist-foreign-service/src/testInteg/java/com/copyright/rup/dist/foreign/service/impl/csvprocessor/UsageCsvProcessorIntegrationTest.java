@@ -72,11 +72,12 @@ public class UsageCsvProcessorIntegrationTest {
 
     @Test
     public void testProcessorForPositivePath() throws Exception {
-        CsvProcessingResult<Usage> result = processFile("usages.csv");
-        assertEquals(2, result.getResult().size());
-        assertTrue(result.isSuccessful());
-        verifyUsage(result.getResult().get(0));
-        verifyUsageWithEmptyFields(result.getResult().get(1));
+        CsvProcessingResult<Usage> usageCsvProcessingResult = processFile("usages.csv");
+        assertNotNull(usageCsvProcessingResult);
+        assertTrue(usageCsvProcessingResult.isSuccessful());
+        assertEquals(2, usageCsvProcessingResult.getResult().size());
+        verifyUsage(usageCsvProcessingResult.getResult().get(0));
+        verifyUsageWithEmptyFields(usageCsvProcessingResult.getResult().get(1));
     }
 
     @Test
@@ -85,8 +86,7 @@ public class UsageCsvProcessorIntegrationTest {
         CsvProcessingResult<Usage> result = processFile("usages_with_errors.csv");
         PipedOutputStream outputStream = new PipedOutputStream();
         PipedInputStream pipedInputStream = new PipedInputStream(outputStream);
-        Executors.newSingleThreadExecutor()
-            .execute(() -> new UsageService().writeErrorsCsvReport(result, outputStream));
+        Executors.newSingleThreadExecutor().execute(() -> new UsageService().writeErrorsToFile(result, outputStream));
         File actual = new File(PATH_TO_ACTUAL, "errors_report.csv");
         FileUtils.copyInputStreamToFile(pipedInputStream, actual);
         File expected = new File("src/testInteg/resources/com/copyright/rup/dist/foreign/service/csv",
