@@ -13,7 +13,7 @@ import org.junit.Test;
 import java.util.Collections;
 
 /**
- * Verifies {@link DetailIdValidator}.
+ * Verifies {@link DuplicateDetailIdValidator}.
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
@@ -21,11 +21,11 @@ import java.util.Collections;
  *
  * @author Aliaksei Pchelnikau
  */
-public class DetailIdValidatorTest {
+public class DuplicateDetailIdValidatorTest {
 
     @Test
-    public void testIsValid() {
-        DetailIdValidator validator = new DetailIdValidator(Sets.newHashSet(1L));
+    public void testIsNotValid() {
+        DuplicateDetailIdValidator validator = new DuplicateDetailIdValidator(Sets.newHashSet(1L));
         Usage usage = new Usage();
         usage.setDetailId(1L);
         assertFalse(validator.isValid(usage));
@@ -34,8 +34,8 @@ public class DetailIdValidatorTest {
     }
 
     @Test
-    public void testIsNotValid() {
-        DetailIdValidator validator = new DetailIdValidator(Collections.emptySet());
+    public void testIsValid() {
+        DuplicateDetailIdValidator validator = new DuplicateDetailIdValidator(Collections.emptySet());
         Usage usage = new Usage();
         usage.setDetailId(1L);
         assertTrue(validator.isValid(usage));
@@ -46,6 +46,6 @@ public class DetailIdValidatorTest {
     @Test
     public void getErrorMessage() {
         assertEquals("Detail ID: Detail with such ID already exists",
-            new DetailIdValidator(Collections.emptySet()).getErrorMessage());
+            new DuplicateDetailIdValidator(Collections.emptySet()).getErrorMessage());
     }
 }

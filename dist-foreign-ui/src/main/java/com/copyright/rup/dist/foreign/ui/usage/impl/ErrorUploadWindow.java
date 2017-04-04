@@ -16,9 +16,9 @@ import com.vaadin.ui.Window;
 
 /**
  * Modal window that provides information about errors during uploading file.
- * <p/>
+ * <p>
  * Copyright (C) 2017 copyright.com
- * <p/>
+ * <p>
  * Date: 03/15/17
  *
  * @author Ihar Suvorau
@@ -47,7 +47,7 @@ public class ErrorUploadWindow extends Window {
     }
 
     private HorizontalLayout buildButtonsLayout(IStreamSource streamSource) {
-        Button downloadButton = Buttons.createButton("Download");
+        Button downloadButton = Buttons.createButton(ForeignUi.getMessage("button.download"));
         OnDemandFileDownloader fileDownloader = new OnDemandFileDownloader(streamSource);
         fileDownloader.extend(downloadButton);
         Button closeButton = Buttons.createCloseButton(this);

@@ -63,7 +63,7 @@ import java.util.Iterator;
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
- * Date: 01/21/2017
+ * Date: 01/21/17
  *
  * @author Mikita Hladkikh
  */

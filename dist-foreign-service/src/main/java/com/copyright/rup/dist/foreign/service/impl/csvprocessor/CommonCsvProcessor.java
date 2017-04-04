@@ -52,14 +52,14 @@ public abstract class CommonCsvProcessor<T> {
     private List<IValidator<T>> businessValidators = Lists.newArrayList();
     private List<ICsvColumn> headers = Lists.newArrayList();
     private CsvProcessingResult<T> processingResult;
-    private Map<Integer, List<String>> originalParametersMap = Maps.newHashMap();
+    private Map<Integer, List<String>> originalValuesMap = Maps.newHashMap();
 
     /**
      * Processes CSV resource from the specified stream and {@link CsvProcessingResult}
      * containing valid objects and errors data (if it was found) based on uploaded information.
      *
      * @param stream   byte array output stream
-     * @param fileName file name of uploaded file
+     * @param fileName name of uploaded file
      * @return {@link CsvProcessingResult} instance with uploaded data
      * @throws ValidationException in case of invalid file
      */
@@ -67,12 +67,12 @@ public abstract class CommonCsvProcessor<T> {
         try (ICsvListReader listReader = new CsvListReader(
             new InputStreamReader(new ByteArrayInputStream(stream.toByteArray()), StandardCharsets.UTF_8),
             CsvPreference.STANDARD_PREFERENCE)) {
-            headers = getHeaders();
-            processingResult = new CsvProcessingResult<>(getColumnsHeaders(), fileName);
+            headers = getCsvHeaders();
+            processingResult = new CsvProcessingResult<>(getScvColumnsNames(), fileName);
             validateHeader(listReader.getHeader(true));
             initValidators();
             processRows(listReader);
-            businessValidate();
+            validateBusinessRules();
         } catch (IOException | SuperCsvException e) {
             throw new ValidationException(String.format("Failed to read file: %s", e.getMessage()), e);
         }
@@ -85,18 +85,18 @@ public abstract class CommonCsvProcessor<T> {
     /**
      * @return csv file header.
      */
-    protected abstract List<ICsvColumn> getHeaders();
+    protected abstract List<ICsvColumn> getCsvHeaders();
 
     /**
-     * Deserializes csv row to item.
+     * Builds object from csv row data.
      *
      * @param params data of csv row
      * @return item
      */
-    protected abstract T deserialize(List<String> params);
+    protected abstract T build(List<String> params);
 
     /**
-     * Initializations plain validators.
+     * Initialization of plain validators.
      */
     protected void initValidators() {
         //Empty
@@ -182,9 +182,9 @@ public abstract class CommonCsvProcessor<T> {
     /**
      * Validates business rules.
      */
-    protected void businessValidate() {
+    protected void validateBusinessRules() {
         for (Map.Entry<Integer, T> entry : processingResult.getResultMap().entrySet()) {
-            businessValidate(entry.getKey(), entry.getValue());
+            validateBusinessRules(entry.getKey(), entry.getValue());
         }
     }
 
@@ -204,10 +204,10 @@ public abstract class CommonCsvProcessor<T> {
         int line = 1;
         while (true) {
             ++line;
-            List<String> originalParameters = listReader.read();
-            originalParametersMap.put(line, originalParameters);
-            if (null != originalParameters) {
-                processRow(line, originalParameters);
+            List<String> originalValues = listReader.read();
+            originalValuesMap.put(line, originalValues);
+            if (null != originalValues) {
+                processRow(line, originalValues);
             } else {
                 break;
             }
@@ -217,7 +217,7 @@ public abstract class CommonCsvProcessor<T> {
     private void processRow(int line, List<String> params) {
         List<String> trimmedParams = trimNulls(params);
         if (plainValidate(line, trimmedParams)) {
-            T item = deserialize(trimmedParams);
+            T item = build(trimmedParams);
             processingResult.addRecord(line, item);
         }
     }
@@ -225,7 +225,7 @@ public abstract class CommonCsvProcessor<T> {
     private boolean plainValidate(int line, List<String> params) {
         boolean valid = true;
         if (!Objects.equals(headers.size(), params.size())) {
-            processingResult.logError(line, originalParametersMap.get(line),
+            processingResult.logError(line, originalValuesMap.get(line),
                 String.format("Row is incorrect: Expected columns are %s actual %s", headers.size(), params.size()));
             return false;
         }
@@ -236,7 +236,7 @@ public abstract class CommonCsvProcessor<T> {
             for (IValidator<String> validator : validators) {
                 if (!validator.isValid(value)) {
                     valid = false;
-                    processingResult.logError(line, originalParametersMap.get(line),
+                    processingResult.logError(line, originalValuesMap.get(line),
                         String.format("%s: %s", field, validator.getErrorMessage()));
                 }
             }
@@ -244,26 +244,26 @@ public abstract class CommonCsvProcessor<T> {
         return valid;
     }
 
-    private void businessValidate(int line, T item) {
+    private void validateBusinessRules(int line, T item) {
         businessValidators.stream()
             .filter(validator -> !validator.isValid(item))
             .forEach(validator -> {
-                processingResult.logError(line, originalParametersMap.get(line), validator.getErrorMessage());
+                processingResult.logError(line, originalValuesMap.get(line), validator.getErrorMessage());
             });
     }
 
     private void validateHeader(String... fileHeaders) throws HeaderValidationException {
         if (ArrayUtils.isEmpty(fileHeaders) || fileHeaders.length != headers.size()) {
-            throw new HeaderValidationException(getColumnsHeaders(), fileHeaders);
+            throw new HeaderValidationException(getScvColumnsNames(), fileHeaders);
         }
         for (int i = 0; i < headers.size(); i++) {
             if (!headers.get(i).getColumnName().equalsIgnoreCase(fileHeaders[i])) {
-                throw new HeaderValidationException(getColumnsHeaders(), fileHeaders);
+                throw new HeaderValidationException(getScvColumnsNames(), fileHeaders);
             }
         }
     }
 
-    private List<String> getColumnsHeaders() {
+    private List<String> getScvColumnsNames() {
         return headers.stream()
             .map(ICsvColumn::getColumnName)
             .collect(Collectors.toList());

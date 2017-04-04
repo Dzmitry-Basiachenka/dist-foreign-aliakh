@@ -30,13 +30,13 @@ public class RangeValidator implements IValidator<String> {
         checkArgument(null != maxValue || null != minValue);
         this.minValue = minValue;
         this.maxValue = maxValue;
+        this.message = StringUtils.EMPTY;
     }
 
     @Override
     public boolean isValid(String value) {
         Integer parsedValue = parseValue(value);
         if (null == parsedValue) {
-            message = StringUtils.EMPTY;
             return true;
         } else if (null != minValue && null != maxValue) {
             message = String.format("Field value should be in range from %d to %d", minValue, maxValue);
@@ -57,7 +57,7 @@ public class RangeValidator implements IValidator<String> {
 
     private Integer parseValue(String value) {
         try {
-            return Integer.valueOf(StringUtils.trim(value));
+            return Integer.valueOf(value);
         } catch (NumberFormatException ex) {
             return null;
         }

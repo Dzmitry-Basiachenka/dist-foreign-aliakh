@@ -57,7 +57,7 @@ public interface IUsageService {
      * @param csvProcessingResult instance of {@link CsvProcessingResult}
      * @param outputStream        instance of {@link OutputStream}
      */
-    void writeErrorsCsvReport(CsvProcessingResult<Usage> csvProcessingResult, OutputStream outputStream);
+    void writeErrorsToFile(CsvProcessingResult<Usage> csvProcessingResult, OutputStream outputStream);
 
     /**
      * Inserts usages.
@@ -105,5 +105,5 @@ public interface IUsageService {
      * @param detailIds list of detail ids
      * @return set of duplicate detail ids
      */
-    Set<Long> getDuplicateDetailIds(Set<Long> detailIds);
+    Set<Long> getDuplicateDetailIds(List<Long> detailIds);
 }

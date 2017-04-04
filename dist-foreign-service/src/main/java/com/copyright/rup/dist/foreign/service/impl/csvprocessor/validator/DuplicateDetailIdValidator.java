@@ -5,7 +5,7 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import java.util.Set;
 
 /**
- * The validator to check whether detail id doesn't exist in the database.
+ * The validator to check whether Usage with such detail id exists or not.
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
@@ -13,23 +13,23 @@ import java.util.Set;
  *
  * @author Aliaksei Pchelnikau
  */
-public class DetailIdValidator implements IValidator<Usage> {
+public class DuplicateDetailIdValidator implements IValidator<Usage> {
 
     private static final String ERROR_MESSAGE = "Detail ID: Detail with such ID already exists";
-    private Set<Long> databaseDuplicates;
+    private Set<Long> duplicateDetailsIds;
 
     /**
      * Constructor.
      *
-     * @param databaseDuplicates set of duplicate details ids
+     * @param duplicateDetailsIds set of duplicate details ids
      */
-    public DetailIdValidator(Set<Long> databaseDuplicates) {
-        this.databaseDuplicates = databaseDuplicates;
+    public DuplicateDetailIdValidator(Set<Long> duplicateDetailsIds) {
+        this.duplicateDetailsIds = duplicateDetailsIds;
     }
 
     @Override
     public boolean isValid(Usage value) {
-        return !databaseDuplicates.contains(value.getDetailId());
+        return !duplicateDetailsIds.contains(value.getDetailId());
     }
 
     @Override

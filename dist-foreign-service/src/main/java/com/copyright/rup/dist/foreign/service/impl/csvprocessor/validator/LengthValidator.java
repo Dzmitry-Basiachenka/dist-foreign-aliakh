@@ -5,7 +5,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * The validator to check whether passed value is not longer then expected size.
+ * The validator to check whether passed value is not longer than expected size.
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
@@ -15,15 +15,15 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class LengthValidator implements IValidator<String> {
 
-    private Integer maxLength;
+    private final int maxLength;
 
     /**
      * Constructor.
      *
      * @param maxLength max length of the value
      */
-    public LengthValidator(Integer maxLength) {
-        checkArgument(null != maxLength && maxLength > 0);
+    public LengthValidator(int maxLength) {
+        checkArgument(maxLength > 0);
         this.maxLength = maxLength;
     }
 

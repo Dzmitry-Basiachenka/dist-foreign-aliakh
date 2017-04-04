@@ -14,11 +14,6 @@ import org.junit.Test;
 public class LengthIllegalArgumentValidatorTest {
 
     @Test(expected = IllegalArgumentException.class)
-    public void testConstructorNullValue() {
-        new LengthValidator(null);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
     public void testConstructorNegativeValue() {
         new LengthValidator(-100);
     }

@@ -16,9 +16,9 @@ import java.util.Objects;
 
 /**
  * Provide functionality for building errors result during uploading usage batch.
- * <p/>
+ * <p>
  * Copyright (C) 2017 copyright.com
- * <p/>
+ * <p>
  * Date: 03/21/17
  *
  * @author Ihar Suvorau
@@ -41,17 +41,17 @@ public class CsvErrorResultWriter {
             csvListWriter.writeHeader(header.stream().toArray(String[]::new));
             List<ErrorRow> errors = csvProcessingResult.getErrors();
             for (ErrorRow errorRow : errors) {
-                csvListWriter.write(getColumns(errorRow));
+                csvListWriter.write(getValues(errorRow));
             }
         } catch (IOException e) {
             throw new RupRuntimeException(e);
         }
     }
 
-    private List<String> getColumns(ErrorRow errorRow) {
-        List<String> columns = errorRow.getOriginalLine();
-        columns.add(Objects.toString(errorRow.getLineNumber()));
-        columns.add(String.join("; ", errorRow.getErrorMessages()));
-        return columns;
+    private List<String> getValues(ErrorRow errorRow) {
+        List<String> values = errorRow.getOriginalLine();
+        values.add(Objects.toString(errorRow.getLineNumber()));
+        values.add(String.join("; ", errorRow.getErrorMessages()));
+        return values;
     }
 }

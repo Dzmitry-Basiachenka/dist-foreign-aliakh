@@ -5,7 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.math.BigDecimal;
 
 /**
- * The validator to check whether passed value is positive numeric with 2 decimals.
+ * The validator to check whether passed value is positive number with 2 decimals.
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
@@ -29,7 +29,6 @@ public class ReportedValueValidator implements IValidator<String> {
     }
 
     private boolean isValidReportedValue(String value) {
-        String reportedValue = value.trim();
-        return reportedValue.matches(AMOUNT_REGEX) && -1 == BigDecimal.ZERO.compareTo(new BigDecimal(reportedValue));
+        return value.matches(AMOUNT_REGEX) && -1 == BigDecimal.ZERO.compareTo(new BigDecimal(value));
     }
 }

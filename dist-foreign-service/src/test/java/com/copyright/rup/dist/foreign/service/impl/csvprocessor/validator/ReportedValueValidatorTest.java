@@ -42,11 +42,8 @@ public class ReportedValueValidatorTest {
         return Arrays.asList(new Object[][]{
             {null, true},
             {StringUtils.EMPTY, true},
-            {"  125", false},
-            {"  125.2", false},
-            {"125.23  ", true},
-            {"  106.44", true},
-            {"  1024656.56   ", true},
+            {"125", false},
+            {"125.2", false},
             {"0.11", true},
             {"0.10", true},
             {"0.01", true},

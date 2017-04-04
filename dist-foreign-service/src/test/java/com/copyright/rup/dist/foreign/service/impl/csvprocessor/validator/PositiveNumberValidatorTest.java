@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 /**
- * Verifies {@link NumericValidator}.
+ * Verifies {@link PositiveNumberValidator}.
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
@@ -21,7 +21,7 @@ import java.util.Collection;
  * @author Ihar Suvorau
  */
 @RunWith(Parameterized.class)
-public class NumericValidatorTest {
+public class PositiveNumberValidatorTest {
 
     private String value;
     private boolean expectedResult;
@@ -32,7 +32,7 @@ public class NumericValidatorTest {
      * @param value          expected value
      * @param expectedResult expected result
      */
-    public NumericValidatorTest(String value, boolean expectedResult) {
+    public PositiveNumberValidatorTest(String value, boolean expectedResult) {
         this.value = value;
         this.expectedResult = expectedResult;
     }
@@ -43,16 +43,11 @@ public class NumericValidatorTest {
             {null, true},
             {StringUtils.EMPTY, true},
             {"123", true},
-            {" 123", true},
-            {"123 ", true},
             {"\u0967\u0968\u0969", true},
             {"0x20", false},
             {"0b1010", false},
             {"123L", false},
             {"2F", false},
-            {"123\n", true},
-            {"123\r", true},
-            {"123\t", true},
             {"12 3", false},
             {"12_3", false},
             {"ab2c", false},
@@ -65,7 +60,7 @@ public class NumericValidatorTest {
 
     @Test
     public void testIsValid() {
-        NumericValidator validator = new NumericValidator();
+        PositiveNumberValidator validator = new PositiveNumberValidator();
         assertEquals(expectedResult, validator.isValid(value));
         assertEquals("Field value should be positive number", validator.getErrorMessage());
     }

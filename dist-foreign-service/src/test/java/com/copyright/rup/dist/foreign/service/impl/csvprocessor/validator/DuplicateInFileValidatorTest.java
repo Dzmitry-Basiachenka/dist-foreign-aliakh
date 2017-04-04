@@ -31,16 +31,12 @@ public class DuplicateInFileValidatorTest {
         String duplicateValue = "value1";
         assertTrue(validator.isValid(duplicateValue));
         assertEquals(StringUtils.EMPTY, validator.getErrorMessage());
-
         assertFalse(validator.isValid(duplicateValue));
         assertEquals("Duplicate with Line 2", validator.getErrorMessage());
-
         assertTrue(validator.isValid(null));
         assertEquals(StringUtils.EMPTY, validator.getErrorMessage());
-
         assertFalse(validator.isValid(duplicateValue));
         assertEquals("Duplicate with Line 2, 3", validator.getErrorMessage());
-
         assertTrue(validator.isValid("value2"));
         assertEquals(StringUtils.EMPTY, validator.getErrorMessage());
     }

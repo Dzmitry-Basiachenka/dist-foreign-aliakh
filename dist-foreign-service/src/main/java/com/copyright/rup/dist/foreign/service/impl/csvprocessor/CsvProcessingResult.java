@@ -21,7 +21,7 @@ public class CsvProcessingResult<T> {
     private final List<String> headers;
     private Map<Integer, T> result = Maps.newHashMap();
     private Map<Integer, ErrorRow> errors = Maps.newTreeMap();
-    private String fileName;
+    private final String fileName;
 
     /**
      * Constructor.
@@ -54,7 +54,7 @@ public class CsvProcessingResult<T> {
     }
 
     /**
-     * Gets map of valid items.
+     * Gets line number to valid item map.
      *
      * @return the map of valid items
      */

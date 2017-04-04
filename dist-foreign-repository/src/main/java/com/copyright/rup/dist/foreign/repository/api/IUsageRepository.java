@@ -92,7 +92,7 @@ public interface IUsageRepository {
      * Gets duplicate detail ids of {@link Usage}s which are already presented in database.
      *
      * @param detailIds list of detail ids
-     * @return list of duplicate detail ids
+     * @return set of duplicate detail ids
      */
-    List<Long> getDuplicateDetailIds(Set<Long> detailIds);
+    Set<Long> getDuplicateDetailIds(List<Long> detailIds);
 }

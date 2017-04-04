@@ -15,8 +15,8 @@ import com.copyright.rup.dist.foreign.repository.api.Sort;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -123,9 +123,9 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public List<Long> getDuplicateDetailIds(Set<Long> detailIds) {
+    public Set<Long> getDuplicateDetailIds(List<Long> detailIds) {
         checkArgument(CollectionUtils.isNotEmpty(detailIds));
-        List<Long> result = Lists.newArrayList();
+        Set<Long> result = Sets.newHashSetWithExpectedSize(CollectionUtils.size(detailIds));
         for (List<Long> detailIdsPartition : Iterables.partition(detailIds, BATCH_SIZE_FOR_SELECT)) {
             result.addAll(selectList("IUsageMapper.getDuplicateDetailIds", detailIdsPartition));
         }

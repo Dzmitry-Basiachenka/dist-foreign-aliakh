@@ -34,11 +34,11 @@ dependencies {
     runtime("org.codehaus.janino:janino:${janinoVersion}")
     runtime("com.vaadin:vaadin-push:${vaadinVersion}")
     runtime("org.springframework.security:spring-security-core:${springSecurityVersion}")
-    //Java 8 compatibility
-    runtime("cglib:cglib-nodep:${cglibNodepVersion}")
 
     testCompile("nl.jqno.equalsverifier:equalsverifier:${equalsVerifierVersion}")
     testCompile("com.copyright.rup.dist.common:dist-common-test:${distCommonVersion}")
+    //Java 8 compatibility
+    testCompile("cglib:cglib-nodep:${cglibNodepVersion}")
 
     testUiCompile("com.copyright.rup.vaadin:rup-vaadin-test:${rupVaadinVersion}")
     testUiCompile project(path: ":dist-foreign-repository", configuration: "testIntegRuntime")

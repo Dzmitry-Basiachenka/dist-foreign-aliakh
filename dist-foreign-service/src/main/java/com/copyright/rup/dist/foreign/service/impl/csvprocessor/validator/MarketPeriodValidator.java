@@ -5,7 +5,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import com.copyright.rup.dist.foreign.domain.Usage;
 
 /**
- * The validator to check that market period to greater than market period from.
+ * The validator to check that 'Market Period To' greater than or equal to 'Market Period From'.
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>

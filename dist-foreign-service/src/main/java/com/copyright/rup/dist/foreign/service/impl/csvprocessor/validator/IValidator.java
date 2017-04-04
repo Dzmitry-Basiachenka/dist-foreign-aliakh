@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator;
 
 /**
- * The contract for validators. Used optional value approach (see {@link #isValid(Object)}).
+ * The contract for validators. Uses optional value approach (see {@link #isValid(Object)}).
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
