@@ -41,7 +41,8 @@ public class DomainVerifierTest {
             {UsageBatch.class},
             {Usage.class},
             {UsageDto.class},
-            {Scenario.class}
+            {Scenario.class},
+            {RightsholderTotalsHolder.class}
         };
         return Arrays.asList(testData);
     }

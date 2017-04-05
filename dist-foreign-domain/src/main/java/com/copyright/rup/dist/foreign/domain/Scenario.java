@@ -11,9 +11,9 @@ import java.math.BigDecimal;
 
 /**
  * Represents scenario.
- * <p/>
+ * <p>
  * Copyright (C) 2017 copyright.com
- * <p/>
+ * <p>
  * Date: 03/15/17
  *
  * @author Ihar Suvorau
@@ -122,7 +122,6 @@ public class Scenario extends StoredEntity<String> {
     public void setStatus(ScenarioStatusEnum status) {
         this.status = status;
     }
-
 
     @Override
     public boolean equals(Object obj) {
