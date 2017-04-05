@@ -12,6 +12,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
@@ -26,6 +27,7 @@ import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 import com.google.common.collect.Lists;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -168,6 +170,29 @@ public class UsageServiceTest {
         expectLastCall().once();
         replay(usageRepository);
         usageService.addUsagesToScenario(Lists.newArrayList(buildUsage(USAGE_ID_1), buildUsage(USAGE_ID_2)), scenario);
+        verify(usageRepository);
+    }
+
+    @Test
+    public void testgetRightsholderTotalsHoldersByScenarioId() {
+        List<RightsholderTotalsHolder> rightsholderTotalsHolders = Lists.newArrayList(new RightsholderTotalsHolder());
+        Pageable pageable = new Pageable(0, 1);
+        expect(usageRepository.getRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, StringUtils.EMPTY, pageable, null))
+            .andReturn(rightsholderTotalsHolders).once();
+        replay(usageRepository);
+        List<RightsholderTotalsHolder> result =
+            usageService.getRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, StringUtils.EMPTY, pageable, null);
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        verify(usageRepository);
+    }
+
+    @Test
+    public void getRightsholderTotalsHolderCountByScenarioId() {
+        expect(usageRepository.getRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, StringUtils.EMPTY))
+            .andReturn(5).once();
+        replay(usageRepository);
+        assertEquals(5, usageService.getRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, StringUtils.EMPTY));
         verify(usageRepository);
     }
 

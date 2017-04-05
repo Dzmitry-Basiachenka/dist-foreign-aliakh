@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
 import com.copyright.rup.common.logging.RupLogUtils;
+import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
@@ -113,6 +114,18 @@ public class UsageService implements IUsageService {
         return CollectionUtils.isNotEmpty(detailIds)
             ? usageRepository.getDuplicateDetailIds(detailIds)
             : Collections.emptySet();
+    }
+
+    @Override
+    public List<RightsholderTotalsHolder> getRightsholderTotalsHoldersByScenarioId(String scenarioId,
+                                                                                   String searchValue,
+                                                                                   Pageable pageable, Sort sort) {
+        return usageRepository.getRightsholderTotalsHoldersByScenarioId(scenarioId, searchValue, pageable, sort);
+    }
+
+    @Override
+    public int getRightsholderTotalsHolderCountByScenarioId(String scenarioId, String searchValue) {
+        return usageRepository.getRightsholderTotalsHolderCountByScenarioId(scenarioId, searchValue);
     }
 
     private void calculateUsagesGrossAmount(UsageBatch usageBatch, List<Usage> usages) {

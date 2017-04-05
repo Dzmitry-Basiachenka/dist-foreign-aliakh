@@ -23,6 +23,7 @@
         <typeAlias alias="UsageFilter" type="com.copyright.rup.dist.foreign.domain.UsageFilter"/>
         <typeAlias alias="UsageDto" type="com.copyright.rup.dist.foreign.domain.UsageDto"/>
         <typeAlias alias="Scenario" type="com.copyright.rup.dist.foreign.domain.Scenario"/>
+        <typeAlias alias="RightsholderTotalsHolder" type="com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder"/>
     </typeAliases>
 
     <typeHandlers>

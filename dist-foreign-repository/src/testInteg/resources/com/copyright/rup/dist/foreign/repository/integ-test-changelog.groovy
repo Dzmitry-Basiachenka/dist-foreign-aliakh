@@ -297,11 +297,11 @@ databaseChangeLog {
 
         rollback {
             delete(schemaName: dbAppsSchema, tableName: 'df_scenario') {
-                where "df_scenario_uid = 'b1f0b236-3ae9-4a60-9fab-61db84199d6f'"
+                where "df_scenario_uid in ('b1f0b236-3ae9-4a60-9fab-61db84199d6f', 'e27551ed-3f69-4e08-9e4f-8ac03f67595f'"
             }
 
             delete(schemaName: dbAppsSchema, tableName: 'df_usage') {
-                where "df_usage_uid = 'b1f0b236-3ae9-4a60-9fab-61db84199dss'"
+                where "df_usage_uid in ('b1f0b236-3ae9-4a60-9fab-61db84199dss', 'cf38d390-11bb-4af7-9685-e034c9c32fb6')"
             }
         }
     }
