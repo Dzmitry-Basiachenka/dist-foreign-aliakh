@@ -18,6 +18,7 @@ import com.vaadin.ui.Button;
 class ScenariosMediator implements IMediator {
 
     private Button deleteButton;
+    private Button viewButton;
 
     /**
      * Sets 'Delete' button.
@@ -28,9 +29,19 @@ class ScenariosMediator implements IMediator {
         this.deleteButton = deleteButton;
     }
 
+    /**
+     * Sets 'View' button.
+     *
+     * @param viewButton {@link Button} instance
+     */
+    public void setViewButton(Button viewButton) {
+        this.viewButton = viewButton;
+    }
+
     @Override
     public void applyPermissions() {
-       deleteButton.setVisible(ForeignSecurityUtils.hasDeleteScenarioPermission());
+        deleteButton.setVisible(ForeignSecurityUtils.hasDeleteScenarioPermission());
+        viewButton.setVisible(true);
     }
 
     /**
@@ -40,5 +51,6 @@ class ScenariosMediator implements IMediator {
      */
     void selectedScenarioChanged(Scenario scenario) {
         deleteButton.setEnabled(null != scenario);
+        viewButton.setEnabled(null != scenario);
     }
 }

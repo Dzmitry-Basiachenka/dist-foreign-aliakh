@@ -21,10 +21,10 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 /**
  * Verifies {@link ScenariosMediator}.
- * <p/>
+ * <p>
  * Copyright (C) 2017 copyright.com
- * <p/>
- * Date: 3/15/17
+ * <p>
+ * Date: 03/15/17
  *
  * @author Aliaksandr Radkevich
  */
@@ -34,6 +34,7 @@ public class ScenariosMediatorTest {
 
     private ScenariosMediator mediator;
     private Button deleteButton;
+    private Button viewButton;
 
     @Before
     public void setUp() {
@@ -41,6 +42,8 @@ public class ScenariosMediatorTest {
         mediator = new ScenariosMediator();
         deleteButton = new Button("Delete");
         mediator.setDeleteButton(deleteButton);
+        viewButton = new Button("View");
+        mediator.setViewButton(viewButton);
     }
 
     @Test
@@ -49,6 +52,7 @@ public class ScenariosMediatorTest {
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         assertFalse(deleteButton.isVisible());
+        assertTrue(viewButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -58,6 +62,7 @@ public class ScenariosMediatorTest {
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         assertFalse(deleteButton.isVisible());
+        assertTrue(viewButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -67,6 +72,7 @@ public class ScenariosMediatorTest {
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         assertTrue(deleteButton.isVisible());
+        assertTrue(viewButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -74,12 +80,14 @@ public class ScenariosMediatorTest {
     public void testSelectedScenarioChangedNullScenario() {
         mediator.selectedScenarioChanged(null);
         assertFalse(deleteButton.isEnabled());
+        assertFalse(viewButton.isEnabled());
     }
 
     @Test
     public void testSelectedScenarioChanged() {
         mediator.selectedScenarioChanged(new Scenario());
         assertTrue(deleteButton.isEnabled());
+        assertTrue(viewButton.isEnabled());
     }
 
     private void mockViewOnlyPermissions() {
