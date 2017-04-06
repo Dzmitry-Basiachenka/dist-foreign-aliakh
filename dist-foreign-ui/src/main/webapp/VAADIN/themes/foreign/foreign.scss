@@ -62,4 +62,23 @@
     .filter-field-empty-name {
         color: red;
     }
+
+    /*=== Padding for search toolbar in modal windows ===*/
+    $window-search-padding : 7px 0 0 0;
+
+    /**==== View Scenario widget ====*/
+    .view-scenario-widget {
+
+        .v-window-contents {
+            background-color: $window-background-color !important;
+        }
+
+        .search-toolbar {
+            padding: $window-search-padding;
+        }
+
+        .v-table-cell-content {
+            vertical-align: $table-vertical-align;
+        }
+    }
 }
