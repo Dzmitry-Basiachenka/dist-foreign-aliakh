@@ -93,6 +93,10 @@ public class ForeignCommonUiTest extends CommonUiTest {
      */
     protected static final String DELETE_BUTTON_ID = "Delete";
     /**
+     * Identifier for 'View' button.
+     */
+    protected static final String VIEW_BUTTON_ID = "View";
+    /**
      * Identifier for usage filter widget.
      */
     protected static final String USAGE_FILTER_WIDGET_ID = "usages-filter-widget";

@@ -14,9 +14,9 @@ import java.util.List;
 
 /**
  * Implementation of {@link IUsageBatchRepository} for MyBatis.
- * <p/>
+ * <p>
  * Copyright (C) 2017 copyright.com
- * <p/>
+ * <p>
  * Date: 02/02/2017
  *
  * @author Mikalai Bezmen

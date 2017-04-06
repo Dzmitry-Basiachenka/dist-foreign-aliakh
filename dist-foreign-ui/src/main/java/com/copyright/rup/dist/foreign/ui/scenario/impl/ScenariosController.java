@@ -20,7 +20,7 @@ import java.util.List;
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
- * Date: 3/14/17
+ * Date: 03/14/17
  *
  * @author Aliaksandr Radkevich
  * @author Mikalai Bezmen
@@ -42,6 +42,11 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
         final Scenario scenario = getWidget().getSelectedScenario();
         String message = ForeignUi.getMessage("message.confirm.delete_action", scenario.getName(), "scenario");
         Windows.showConfirmDialog(message, () -> deleteScenario(scenario));
+    }
+
+    @Override
+    public void onViewButtonClicked() {
+        // TODO {isuvorau} open ScenarioWidget and set Scenario to ScenarioController
     }
 
     @Override

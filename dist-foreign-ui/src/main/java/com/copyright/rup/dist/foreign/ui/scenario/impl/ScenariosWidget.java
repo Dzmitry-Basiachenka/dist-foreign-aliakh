@@ -41,6 +41,7 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
 
     private IScenariosController controller;
     private Button deleteButton;
+    private Button viewButton;
     private BeanContainer<String, Scenario> container;
     private Label ownerLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private Label distributionTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
@@ -55,6 +56,7 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
     @Override
     public IMediator initMediator() {
         mediator = new ScenariosMediator();
+        mediator.setViewButton(viewButton);
         mediator.setDeleteButton(deleteButton);
         mediator.selectedScenarioChanged(getSelectedScenario());
         return mediator;
@@ -101,8 +103,9 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
 
     private HorizontalLayout initButtonsLayout() {
         HorizontalLayout layout = new HorizontalLayout();
+        initViewButton();
         initDeleteButton();
-        layout.addComponents(deleteButton);
+        layout.addComponents(viewButton, deleteButton);
         layout.setSpacing(true);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "scenarios-buttons");
@@ -112,6 +115,11 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
     private void initDeleteButton() {
         deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
         deleteButton.addClickListener(event -> controller.onDeleteButtonClicked());
+    }
+
+    private void initViewButton() {
+        viewButton = Buttons.createButton(ForeignUi.getMessage("button.view"));
+        viewButton.addClickListener(event -> controller.onViewButtonClicked());
     }
 
     private void initTable() {

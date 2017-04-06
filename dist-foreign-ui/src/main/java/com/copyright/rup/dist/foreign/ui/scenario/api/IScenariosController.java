@@ -7,10 +7,10 @@ import java.util.List;
 
 /**
  * Scenarios controller interface.
- * <p/>
+ * <p>
  * Copyright (C) 2017 copyright.com
- * <p/>
- * Date: 3/14/17
+ * <p>
+ * Date: 03/14/17
  *
  * @author Aliaksandr Radkevich
  * @author Mikalai Bezmen
@@ -26,4 +26,9 @@ public interface IScenariosController extends IController<IScenariosWidget> {
      * Handles click on 'Delete' button.
      */
     void onDeleteButtonClicked();
+
+    /**
+     * Handles click on 'View' button.
+     */
+    void onViewButtonClicked();
 }

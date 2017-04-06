@@ -194,8 +194,21 @@ public class ScenariosWidgetTest {
 
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertEquals("scenarios-buttons", layout.getId());
-        assertEquals(1, layout.getComponentCount());
-        Component component = layout.getComponent(0);
+        assertEquals(2, layout.getComponentCount());
+        verifyViewButton(layout.getComponent(0));
+        verifyDeleteButton(layout.getComponent(1));
+    }
+
+    private void verifyViewButton(Component component) {
+        assertTrue(component instanceof Button);
+        Button button = (Button) component;
+        assertEquals("View", button.getCaption());
+        assertEquals("View", button.getId());
+        assertFalse(button.isEnabled());
+        assertEquals(1, button.getListeners(ClickEvent.class).size());
+    }
+
+    private void verifyDeleteButton(Component component) {
         assertTrue(component instanceof Button);
         Button button = (Button) component;
         assertEquals("Delete", button.getCaption());

@@ -35,6 +35,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Selenium test to verify UI of 'Scenarios' tab.
@@ -53,6 +54,7 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
     private ScenarioInfo scenario2 = new ScenarioInfo("Scenario 03/15/2017", "03/15/2017");
     private ScenarioInfo scenario3 = new ScenarioInfo("Scenario 02/15/2017", "02/15/2017");
     private ScenarioInfo scenario4 = new ScenarioInfo("Scenario name", "01/01/2017");
+    private static final Set<String> SCENARIOS_BUTTONS = Sets.newHashSet(VIEW_BUTTON_ID, DELETE_BUTTON_ID);
 
     private Scenario scenarioToDelete;
 
@@ -145,24 +147,32 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
     private void verifyScenariosTabManagerAndViewOnly() {
         WebElement scenarioTab = selectScenariosTab();
         WebElement buttonsLayout = assertElement(scenarioTab, By.id("scenarios-buttons"));
-        List<WebElement> buttons = findElements(buttonsLayout, By.className("v-button"));
-        assertTrue(CollectionUtils.isEmpty(buttons));
-        verifyScenariosTable(assertScenariosTable(scenarioTab));
+        verifyScenariosLayoutButton(buttonsLayout, Sets.newHashSet(VIEW_BUTTON_ID));
+        WebElement table = assertScenariosTable(scenarioTab);
+        verifyScenariosTable(table);
         verifyMetadataPanel(assertElement(scenarioTab, By.id("scenarios-metadata")));
+        verifyEmptyMetadataPanel(scenarioTab, table);
+        assertEquals(1, findElements(buttonsLayout, By.className(V_DISABLED_CLASS_NAME)).size());
     }
 
     private void verifyScenariosTabSpecialist() {
         WebElement scenarioTab = selectScenariosTab();
         WebElement buttonsLayout = assertElement(scenarioTab, By.id("scenarios-buttons"));
-        List<WebElement> buttons = findElements(buttonsLayout, By.className("v-button"));
-        assertEquals(1, CollectionUtils.size(buttons));
-        assertElement(buttonsLayout, By.id(DELETE_BUTTON_ID));
+        verifyScenariosLayoutButton(buttonsLayout, Sets.newHashSet(VIEW_BUTTON_ID, DELETE_BUTTON_ID));
         WebElement table = assertScenariosTable(scenarioTab);
         verifyScenariosTable(table);
         verifyMetadataPanel(assertElement(scenarioTab, By.id("scenarios-metadata")));
         verifyEmptyMetadataPanel(scenarioTab, table);
-        WebElement deleteButton = assertElement(buttonsLayout, By.className(V_DISABLED_CLASS_NAME));
-        assertTrue(deleteButton.getAttribute("class").contains("v-button-Delete"));
+        assertEquals(2, findElements(buttonsLayout, By.className(V_DISABLED_CLASS_NAME)).size());
+    }
+
+    @SuppressWarnings("unchecked")
+    private void verifyScenariosLayoutButton(WebElement buttonsLayout, Set<String> buttonsIds) {
+        assertTrue(SCENARIOS_BUTTONS.containsAll(buttonsIds));
+        Set<String> invisibleButtonsIds = Sets.newHashSet(CollectionUtils.subtract(SCENARIOS_BUTTONS, buttonsIds));
+        for (String invisibleButtonId : invisibleButtonsIds) {
+            assertNull(waitAndFindElement(buttonsLayout, By.id(invisibleButtonId)));
+        }
     }
 
     private WebElement assertScenariosTable(WebElement scenarioTab) {
