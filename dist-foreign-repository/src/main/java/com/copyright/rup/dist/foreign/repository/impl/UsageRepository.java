@@ -5,6 +5,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.common.repository.BaseRepository;
+import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
@@ -50,6 +51,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     private static final String FILTER_KEY = "filter";
     private static final String PAGEABLE_KEY = "pageable";
     private static final String SORT_KEY = "sort";
+    private static final String SEARCH_VALUE_KEY = "searchValue";
     private static final String SCENARIO_ID_KEY = "scenarioId";
     private static final String UPDATE_USER_KEY = "updateUser";
     private static final String USAGE_IDS_KEY = "usageIds";
@@ -130,6 +132,26 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
             result.addAll(selectList("IUsageMapper.getDuplicateDetailIds", detailIdsPartition));
         }
         return result;
+    }
+
+    @Override
+    public List<RightsholderTotalsHolder> getRightsholderTotalsHoldersByScenarioId(String scenarioId,
+                                                                                   String searchValue,
+                                                                                   Pageable pageable, Sort sort) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
+        parameters.put(SCENARIO_ID_KEY, checkNotNull(scenarioId));
+        parameters.put(SEARCH_VALUE_KEY, searchValue);
+        parameters.put(PAGEABLE_KEY, checkNotNull(pageable));
+        parameters.put(SORT_KEY, sort);
+        return selectList("IUsageMapper.getRightsholderTotalsHoldersByScenarioId", parameters);
+    }
+
+    @Override
+    public int getRightsholderTotalsHolderCountByScenarioId(String scenarioId, String searchValue) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put(SCENARIO_ID_KEY, checkNotNull(scenarioId));
+        parameters.put(SEARCH_VALUE_KEY, searchValue);
+        return selectOne("IUsageMapper.getRightsholderTotalsHolderCountByScenarioId", parameters);
     }
 
     /**

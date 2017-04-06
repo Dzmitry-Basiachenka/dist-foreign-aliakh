@@ -8,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.domain.StoredEntity;
+import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
@@ -20,6 +21,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +65,9 @@ public class UsageRepositoryIntegrationTest {
     private static final Integer FISCAL_YEAR = 2017;
     private static final String RH_ACCOUNT_NAME =
         "CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil";
+    private static final String RH_ACCOUNT_NAME_1 = "IEEE - Inst of Electrical and Electronics Engrs";
+    private static final String RH_ACCOUNT_NAME_2 = "John Wiley & Sons - Books";
+    private static final String RH_ACCOUNT_NAME_3 = "Kluwer Academic Publishers - Dordrecht";
     private static final BigDecimal GROSS_AMOUNT = new BigDecimal("54.4400000000");
     private static final Long WR_WRK_INST = 123456783L;
     private static final String WORK_TITLE = "Work Title";
@@ -304,6 +309,80 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
+    public void testgetRightsholderTotalsHoldersByScenarioIdEmptySearchValue() {
+        populateScenario();
+        List<RightsholderTotalsHolder> rightsholderTotalsHoders =
+            usageRepository.getRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, StringUtils.EMPTY,
+                new Pageable(0, 200), null);
+        assertEquals(3, rightsholderTotalsHoders.size());
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, 13461.54),
+            rightsholderTotalsHoders.get(0));
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_2, 1000002859L, 21061.54),
+            rightsholderTotalsHoders.get(1));
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_3, 1000005413L, 6892.30),
+            rightsholderTotalsHoders.get(2));
+    }
+
+    @Test
+    public void testgetRightsholderTotalsHoldersByScenarioIdNotEmptySearchValue() {
+        populateScenario();
+        List<RightsholderTotalsHolder> rightsholderTotalsHoders =
+            usageRepository.getRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, "JoHn", new Pageable(0, 200), null);
+        assertEquals(1, rightsholderTotalsHoders.size());
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_2, 1000002859L, 21061.54),
+            rightsholderTotalsHoders.get(0));
+        rightsholderTotalsHoders =
+            usageRepository.getRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, "IEEE", new Pageable(0, 200), null);
+        assertEquals(1, rightsholderTotalsHoders.size());
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, 13461.54),
+            rightsholderTotalsHoders.get(0));
+        rightsholderTotalsHoders =
+            usageRepository.getRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, "ec", new Pageable(0, 200), null);
+        assertEquals(2, rightsholderTotalsHoders.size());
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, 13461.54),
+            rightsholderTotalsHoders.get(0));
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_3, 1000005413L, 6892.30),
+            rightsholderTotalsHoders.get(1));
+    }
+
+    @Test
+    public void testgetRightsholderTotalsHoldersByScenarioIdSortByAccountNumber() {
+        populateScenario();
+        Sort accountNumberSort = new Sort("rightsholderAccountNumber", Direction.ASC);
+        List<RightsholderTotalsHolder> rightsholderTotalsHoders =
+            usageRepository.getRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, StringUtils.EMPTY,
+                new Pageable(0, 200), accountNumberSort);
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_2, 1000002859L, 21061.54),
+            rightsholderTotalsHoders.get(0));
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_3, 1000005413L, 6892.30),
+            rightsholderTotalsHoders.get(1));
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, 13461.54),
+            rightsholderTotalsHoders.get(2));
+    }
+
+    @Test
+    public void testgetRightsholderTotalsHoldersByScenarioIdSortByName() {
+        populateScenario();
+        Sort accountNumberSort = new Sort("rightsholderName", Direction.DESC);
+        List<RightsholderTotalsHolder> rightsholderTotalsHoders =
+            usageRepository.getRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, StringUtils.EMPTY,
+                new Pageable(0, 200), accountNumberSort);
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_3, 1000005413L, 6892.30),
+            rightsholderTotalsHoders.get(0));
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_2, 1000002859L, 21061.54),
+            rightsholderTotalsHoders.get(1));
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, 13461.54),
+            rightsholderTotalsHoders.get(2));
+    }
+
+    @Test
+    public void getRightsholderTotalsHolderCountByScenarioId() {
+        populateScenario();
+        assertEquals(3, usageRepository.getRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, StringUtils.EMPTY));
+        assertEquals(1, usageRepository.getRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, "IEEE"));
+    }
+
+    @Test
     public void testWriteUsagesCsvReport() throws Exception {
         PipedOutputStream outputStream = new PipedOutputStream();
         PipedInputStream inputStream = new PipedInputStream(outputStream);
@@ -461,6 +540,21 @@ public class UsageRepositoryIntegrationTest {
         usage.setGrossAmount(GROSS_AMOUNT);
         usage.setNetAmount(NET_AMOUNT);
         return usage;
+    }
+
+    private RightsholderTotalsHolder buildRightsholderTotalsHolder(String rhName, Long rhAccountNumber,
+                                                                   Double grossTotal) {
+        RightsholderTotalsHolder rightsholderTotalsHolder = new RightsholderTotalsHolder();
+        rightsholderTotalsHolder.setRightsholderName(rhName);
+        rightsholderTotalsHolder.setRightsholderAccountNumber(rhAccountNumber);
+        rightsholderTotalsHolder.setGrossTotal(BigDecimal.valueOf(grossTotal).setScale(10));
+        return rightsholderTotalsHolder;
+    }
+
+    private void populateScenario() {
+        usageRepository.addToScenario(Collections.singletonList(USAGE_ID_1), SCENARIO_ID, USER_NAME);
+        usageRepository.addToScenario(Collections.singletonList(USAGE_ID_2), SCENARIO_ID, USER_NAME);
+        usageRepository.addToScenario(Collections.singletonList(USAGE_ID_3), SCENARIO_ID, USER_NAME);
     }
 
     private void verifyUsageDtos(List<UsageDto> usageDtos, int count, String... usageIds) {

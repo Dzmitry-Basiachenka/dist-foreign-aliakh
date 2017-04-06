@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.service.api;
 
+import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
@@ -106,4 +107,25 @@ public interface IUsageService {
      * @return set of duplicate detail ids
      */
     Set<Long> getDuplicateDetailIds(List<Long> detailIds);
+
+    /**
+     * Gets {@link RightsholderTotalsHolder}s based on {@link Scenario} identifier.
+     *
+     * @param scenarioId  {@link Scenario} identifier
+     * @param searchValue search value
+     * @param pageable    instance of {@link Pageable}
+     * @param sort        instance of {@link Sort}
+     * @return list of {@link RightsholderTotalsHolder}s
+     */
+    List<RightsholderTotalsHolder> getRightsholderTotalsHoldersByScenarioId(String scenarioId, String searchValue,
+                                                                            Pageable pageable, Sort sort);
+
+    /**
+     * Gets count of {@link RightsholderTotalsHolder}s based on {@link Scenario} identifier.
+     *
+     * @param scenarioId  {@link Scenario} identifier
+     * @param searchValue search value
+     * @return count of {@link RightsholderTotalsHolder}s
+     */
+    int getRightsholderTotalsHolderCountByScenarioId(String scenarioId, String searchValue);
 }

@@ -38,6 +38,12 @@
         <result property="reportedValue" column="reported_value"/>
     </resultMap>
 
+    <resultMap id="rightsholderTotalsHolderResultMap" type="RightsholderTotalsHolder">
+        <result property="rightsholderName" column="name"/>
+        <result property="rightsholderAccountNumber" column="rh_account_number"/>
+        <result property="grossTotal" column="gross_total"/>
+    </resultMap>
+
     <resultMap id="usageResultMap" type="Usage" extends="usageAmountResultMap">
         <result property="detailId" column="detail_id"/>
         <result property="batchId" column="df_usage_batch_uid"/>
@@ -194,6 +200,33 @@
                 updated_datetime desc
             </otherwise>
         </choose>
+    </sql>
+
+    <sql id="rightsholderTotalHoldersOrderBy">
+        order by
+        <choose>
+            <when test="null != sort">
+                <choose>
+                    <when test="sort.property == 'rightsholderName'">
+                        r.name <include refid="direction"/>
+                    </when>
+                    <when test="sort.property == 'rightsholderAccountNumber'">
+                        u.rh_account_number <include refid="direction"/>
+                    </when>
+                    <when test="sort.property == 'grossTotal'">
+                        u.gross_total <include refid="direction"/>
+                    </when>
+                </choose>
+            </when>
+            <otherwise>
+                r.name asc
+            </otherwise>
+        </choose>
+    </sql>
+
+    <sql id="searchWhereClause">
+        upper(r.name) like '%' || upper(#{searchValue}) || '%' or
+        cast(u.rh_account_number as text) like '%' || #{searchValue} || '%'
     </sql>
 
     <insert id="insert" parameterType="Usage">
@@ -363,5 +396,40 @@
                 #{detailId}
             </foreach>
         )
+    </select>
+
+    <select id="getRightsholderTotalsHoldersByScenarioId" parameterType="map" resultMap="rightsholderTotalsHolderResultMap">
+        select
+            r.name,
+            u.rh_account_number,
+            u.gross_total
+        from (
+            select
+                rh_account_number,
+                sum(gross_amount) as gross_total
+            from ${schema}.df_usage
+            where df_scenario_uid = #{scenarioId}
+            group by rh_account_number) u
+        left join ${schema}.df_rightsholder r on u.rh_account_number = r.rh_account_number
+        <if test="null != searchValue">
+            where <include refid="searchWhereClause"/>
+        </if>
+        <include refid="rightsholderTotalHoldersOrderBy"/>
+        <if test="null != pageable">
+            limit #{pageable.limit}
+            offset #{pageable.offset}
+        </if>
+    </select>
+
+    <select id="getRightsholderTotalsHolderCountByScenarioId" parameterType="map" resultType="int">
+        select count(1)
+        from (
+            select distinct rh_account_number
+            from ${schema}.df_usage
+            where df_scenario_uid = #{scenarioId}) u
+        left join ${schema}.df_rightsholder r on u.rh_account_number = r.rh_account_number
+        <if test="null != searchValue">
+            where <include refid="searchWhereClause"/>
+        </if>
     </select>
 </mapper>
