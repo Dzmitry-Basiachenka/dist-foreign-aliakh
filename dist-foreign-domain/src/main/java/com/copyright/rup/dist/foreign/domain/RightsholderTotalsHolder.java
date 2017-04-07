@@ -25,9 +25,9 @@ public class RightsholderTotalsHolder {
     private String payeeName;
     private Long payeeAccountNumber;
     private BigDecimal grossTotal = BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP);
-    private BigDecimal serviceFeeTotal = BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP);
-    private BigDecimal netTotal = BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP);
-    private BigDecimal serviceFee = BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP);
+    private BigDecimal serviceFeeTotal;
+    private BigDecimal netTotal;
+    private BigDecimal serviceFee;
 
     /**
      * @return rightsholder name.
