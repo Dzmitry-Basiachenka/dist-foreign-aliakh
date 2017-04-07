@@ -3,10 +3,13 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosWidget;
 import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.widget.api.CommonController;
+
+import com.vaadin.ui.Window;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -31,6 +34,8 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
 
     @Autowired
     private IScenarioService scenarioService;
+    @Autowired
+    private ScenarioController scenarioController;
 
     @Override
     public List<Scenario> getScenarios() {
@@ -46,7 +51,11 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
 
     @Override
     public void onViewButtonClicked() {
-        // TODO {isuvorau} open ScenarioWidget and set Scenario to ScenarioController
+        scenarioController.setScenario(getWidget().getSelectedScenario());
+        IScenarioWidget scenarioWidget = scenarioController.initWidget();
+        Window scenarioWindow = (Window) scenarioWidget;
+        Windows.showModalWindow(scenarioWindow);
+        scenarioWindow.setPositionY(30);
     }
 
     @Override

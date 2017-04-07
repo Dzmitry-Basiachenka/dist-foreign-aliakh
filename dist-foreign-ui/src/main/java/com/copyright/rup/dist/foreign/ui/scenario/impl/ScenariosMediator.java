@@ -8,10 +8,10 @@ import com.vaadin.ui.Button;
 
 /**
  * Mediator for scenarios widget.
- * <p/>
+ * <p>
  * Copyright (C) 2017 copyright.com
- * <p/>
- * Date: 3/14/17
+ * <p>
+ * Date: 03/14/17
  *
  * @author Aliaksandr Radkevich
  */
