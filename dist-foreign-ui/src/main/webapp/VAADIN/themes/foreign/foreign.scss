@@ -81,4 +81,19 @@
             vertical-align: $table-vertical-align;
         }
     }
+
+    /*=== Styles for table with extended footer ===*/
+    .table-ext-footer .v-table-footer {
+        font-weight: bold;
+    }
+
+    .table-ext-footer .v-table-footer-wrap {
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#e5e5e5', endColorstr='#dcdee0');
+        background: #e5e5e5 linear-gradient(#e5e5e5, #dcdee0) !important;
+    }
+
+    .table-ext-footer .v-table-footer span {
+        display: block;
+        margin-bottom: 4px;
+    }
 }

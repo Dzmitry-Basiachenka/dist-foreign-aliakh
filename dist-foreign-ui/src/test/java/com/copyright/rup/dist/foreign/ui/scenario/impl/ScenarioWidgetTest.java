@@ -19,7 +19,6 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 
 import org.junit.Before;
@@ -97,7 +96,9 @@ public class ScenarioWidgetTest {
     }
 
     private void verifyTable(Component component) {
-        assertEquals(Table.class, component.getClass());
+        assertEquals(RightsholderTotalsHolderTable.class, component.getClass());
+        RightsholderTotalsHolderTable table = (RightsholderTotalsHolderTable) component;
+        assertEquals("<span class='label-amount'>20,000.00</span>", table.getColumnFooter("grossTotal"));
     }
 
     private void verifyButtonsLayout(Component component) {
