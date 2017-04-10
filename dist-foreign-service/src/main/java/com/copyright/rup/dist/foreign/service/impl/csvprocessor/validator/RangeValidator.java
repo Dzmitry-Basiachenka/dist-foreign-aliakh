@@ -18,7 +18,7 @@ public class RangeValidator implements IValidator<String> {
 
     private Integer minValue;
     private Integer maxValue;
-    private String message;
+    private String message = StringUtils.EMPTY;
 
     /**
      * Constructor.
@@ -30,7 +30,6 @@ public class RangeValidator implements IValidator<String> {
         checkArgument(null != maxValue || null != minValue);
         this.minValue = minValue;
         this.maxValue = maxValue;
-        this.message = StringUtils.EMPTY;
     }
 
     @Override

@@ -389,8 +389,16 @@
     </update>
 
     <select id="getDuplicateDetailIds" parameterType="list" resultType="long">
-        select detail_id
+        select distinct detail_id
         from ${schema}.df_usage
+        where detail_id in (
+            <foreach collection="collection" item="detailId" separator=", ">
+                #{detailId}
+            </foreach>
+        )
+        union
+        select distinct detail_id
+        from ${schema}.df_usage_archive
         where detail_id in (
             <foreach collection="collection" item="detailId" separator=", ">
                 #{detailId}

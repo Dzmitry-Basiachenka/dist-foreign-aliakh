@@ -127,7 +127,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     @Override
     public Set<Long> getDuplicateDetailIds(List<Long> detailIds) {
         checkArgument(CollectionUtils.isNotEmpty(detailIds));
-        Set<Long> result = Sets.newHashSetWithExpectedSize(CollectionUtils.size(detailIds));
+        Set<Long> result = Sets.newHashSetWithExpectedSize(detailIds.size());
         for (List<Long> detailIdsPartition : Iterables.partition(detailIds, BATCH_SIZE_FOR_SELECT)) {
             result.addAll(selectList("IUsageMapper.getDuplicateDetailIds", detailIdsPartition));
         }

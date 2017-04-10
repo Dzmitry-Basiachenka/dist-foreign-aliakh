@@ -656,4 +656,19 @@ databaseChangeLog {
                     newDataType: 'VARCHAR(1000)')
         }
     }
+
+    changeSet(id: '2017-04-10-00', author: 'Mikalai Bezmen <mbezmen@copyright.com>') {
+        comment('B-29761: Validate FAS Usages while loading to FDA: ' +
+                'add uniquie constraint to detail_id column in df_usage_archive table')
+
+        addUniqueConstraint(constraintName: 'iu_archive_detail_id',
+                schemaName: dbAppsSchema,
+                tablespace: dbDataTablespace,
+                tableName: 'df_usage_archive',
+                columnNames: 'detail_id')
+
+        rollback {
+            // automatic rollback
+        }
+    }
 }

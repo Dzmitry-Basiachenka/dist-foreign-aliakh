@@ -69,7 +69,7 @@ public abstract class CommonCsvProcessor<T> {
             new InputStreamReader(new ByteArrayInputStream(stream.toByteArray()), StandardCharsets.UTF_8),
             CsvPreference.STANDARD_PREFERENCE)) {
             headers = getCsvHeaders();
-            processingResult = new CsvProcessingResult<>(getScvColumnsNames(), fileName);
+            processingResult = new CsvProcessingResult<>(getCsvColumnsNames(), fileName);
             validateHeader(listReader.getHeader(true));
             initValidators();
             processRows(listReader);
@@ -255,16 +255,16 @@ public abstract class CommonCsvProcessor<T> {
 
     private void validateHeader(String... fileHeaders) throws HeaderValidationException {
         if (ArrayUtils.isEmpty(fileHeaders) || fileHeaders.length != headers.size()) {
-            throw new HeaderValidationException(getScvColumnsNames(), fileHeaders);
+            throw new HeaderValidationException(getCsvColumnsNames(), fileHeaders);
         }
         for (int i = 0; i < headers.size(); i++) {
             if (!headers.get(i).getColumnName().equalsIgnoreCase(fileHeaders[i])) {
-                throw new HeaderValidationException(getScvColumnsNames(), fileHeaders);
+                throw new HeaderValidationException(getCsvColumnsNames(), fileHeaders);
             }
         }
     }
 
-    private List<String> getScvColumnsNames() {
+    private List<String> getCsvColumnsNames() {
         return headers.stream()
             .map(ICsvColumn::getColumnName)
             .collect(Collectors.toList());
@@ -289,8 +289,8 @@ public abstract class CommonCsvProcessor<T> {
 
     private LocalDate parseDateValue(String value) {
         try {
-            return LocalDate.parse(value, DateTimeFormatter.ofPattern("M/d/uuuu", Locale.US).withResolverStyle(
-                ResolverStyle.STRICT));
+            return LocalDate.parse(value, DateTimeFormatter.ofPattern("M/d/uuuu", Locale.US)
+                .withResolverStyle(ResolverStyle.STRICT));
         } catch (DateTimeParseException e) {
             return null;
         }
