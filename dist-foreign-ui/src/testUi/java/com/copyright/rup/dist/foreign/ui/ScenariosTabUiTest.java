@@ -51,9 +51,10 @@ import java.util.Set;
 public class ScenariosTabUiTest extends ForeignCommonUiTest {
 
     private ScenarioInfo scenario1 = new ScenarioInfo("Scenario 03/16/2017", "03/16/2017");
-    private ScenarioInfo scenario2 = new ScenarioInfo("Scenario 03/15/2017", "03/15/2017");
-    private ScenarioInfo scenario3 = new ScenarioInfo("Scenario 02/15/2017", "02/15/2017");
-    private ScenarioInfo scenario4 = new ScenarioInfo("Scenario name", "01/01/2017");
+    private ScenarioInfo scenario2 = new ScenarioInfo("Scenario for viewing", "03/17/2017");
+    private ScenarioInfo scenario3 = new ScenarioInfo("Scenario 03/15/2017", "03/15/2017");
+    private ScenarioInfo scenario4 = new ScenarioInfo("Scenario 02/15/2017", "02/15/2017");
+    private ScenarioInfo scenario5 = new ScenarioInfo("Scenario name", "01/01/2017");
     private static final Set<String> SCENARIOS_BUTTONS = Sets.newHashSet(VIEW_BUTTON_ID, DELETE_BUTTON_ID);
 
     private Scenario scenarioToDelete;
@@ -104,10 +105,10 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
         loginAsSpecialist();
         WebElement scenariosTab = selectScenariosTab();
         WebElement table = assertScenariosTable(scenariosTab);
-        verifyTableRows(table, scenario1, scenario2, scenario3, scenario4);
+        verifyTableRows(table, scenario1, scenario2, scenario3, scenario4, scenario5);
         clickButtonAndWait(scenariosTab, DELETE_BUTTON_ID);
         verifyConfirmDialogAndDecline("Are you sure you want to delete 'Scenario 03/16/2017' scenario?");
-        verifyTableRows(table, scenario1, scenario2, scenario3, scenario4);
+        verifyTableRows(table, scenario1, scenario2, scenario3, scenario4, scenario5);
     }
 
     @Test
@@ -119,7 +120,7 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
         scenarioToDelete.setName("Scenario for deleting");
         scenarioToDelete.setStatus(ScenarioStatusEnum.IN_PROGRESS);
         scenarioRepository.insert(scenarioToDelete);
-        assertEquals(5, CollectionUtils.size(scenarioRepository.findAll()));
+        assertEquals(6, CollectionUtils.size(scenarioRepository.findAll()));
         usageRepository.addToScenario(Lists.newArrayList("111111111"), scenarioToDelete.getId(),
             StoredEntity.DEFAULT_USER);
         UsageFilter filter = new UsageFilter();
@@ -133,11 +134,11 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
             LocalDate.now().format(DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT)));
         WebElement scenariosTab = selectScenariosTab();
         WebElement table = assertScenariosTable(scenariosTab);
-        verifyTableRows(table, scenarioInfo, scenario1, scenario2, scenario3, scenario4);
+        verifyTableRows(table, scenarioInfo, scenario1, scenario2, scenario3, scenario4, scenario5);
         clickButtonAndWait(scenariosTab, DELETE_BUTTON_ID);
         verifyConfirmDialogAndConfirm("Are you sure you want to delete 'Scenario for deleting' scenario?");
-        verifyTableRows(table, scenario1, scenario2, scenario3, scenario4);
-        assertEquals(4, CollectionUtils.size(scenarioRepository.findAll()));
+        verifyTableRows(table, scenario1, scenario2, scenario3, scenario4, scenario5);
+        assertEquals(5, CollectionUtils.size(scenarioRepository.findAll()));
         assertEquals(0, CollectionUtils.size(usageRepository.findByFilter(filter, pageable, sort)));
         filter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         assertEquals(1, CollectionUtils.size(usageRepository.findByFilter(filter, pageable, sort)));
@@ -181,7 +182,7 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
 
     private void verifyScenariosTable(WebElement table) {
         verifyTableColumns(table, "Name", "Create Date", "Status");
-        verifyTableRows(table, scenario1, scenario2, scenario3, scenario4);
+        verifyTableRows(table, scenario1, scenario2, scenario3, scenario4, scenario5);
         verifyTableSorting(table, "name", "createDate", "status");
     }
 

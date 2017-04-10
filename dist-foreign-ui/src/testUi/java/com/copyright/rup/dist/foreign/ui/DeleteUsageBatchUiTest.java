@@ -77,10 +77,10 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
     public void testSearch() {
         loginAsSpecialist();
         WebElement window = openDeleteUsageBatchWindow();
-        WebElement searchToolbar = getSearchToolbar(window);
+        WebElement searchToolbar = assertElement(window, By.id(SEARCH_TOOLBAR_ID));
         WebElement searchField = assertElement(searchToolbar, By.className("v-textfield"));
         WebElement table = getUsageBatchesTable(window);
-        WebElement searchButton = getSearchButton(searchToolbar);
+        WebElement searchButton = assertElement(searchToolbar, By.className(SEARCH_BUTTON_ID));
         verifySearchByBatchName(searchField, searchButton, table);
         verifySearchByPaymentDate(searchField, searchButton, table);
     }
@@ -181,14 +181,6 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
         clickButtonAndWait(filterWindow, CLOSE_BUTTON_ID);
     }
 
-    private WebElement getSearchToolbar(WebElement window) {
-        return assertElement(window, By.id("search-toolbar"));
-    }
-
-    private WebElement getSearchButton(WebElement searchToolbar) {
-        return assertElement(searchToolbar, By.className("button-search"));
-    }
-
     private WebElement getUsageBatchesTable(WebElement window) {
         return assertElement(window, By.id("usage-batches-table"));
     }
@@ -249,11 +241,10 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
     }
 
     private void verifySearchToolbar(WebElement window) {
-        assertNotNull(window);
-        WebElement searchToolbar = getSearchToolbar(window);
+        WebElement searchToolbar = assertElement(window, By.id(SEARCH_TOOLBAR_ID));
         WebElement prompt = assertElement(searchToolbar, By.className("v-textfield-prompt"));
         assertEquals("Enter Batch Name or Payment Date (MM/dd/yyyy)", getValueAttribute(prompt));
-        assertNotNull(getSearchButton(searchToolbar));
+        assertElement(searchToolbar, By.className(SEARCH_BUTTON_ID));
         assertElement(searchToolbar, By.className("button-clear"));
     }
 
