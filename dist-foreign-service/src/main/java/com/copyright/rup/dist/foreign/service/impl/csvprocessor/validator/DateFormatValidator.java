@@ -20,6 +20,8 @@ import java.util.Locale;
 public class DateFormatValidator implements IValidator<String> {
 
     private static final String DATE_REGEX = "\\d{1,2}/\\d{1,2}/\\d{4}";
+    private static final DateTimeFormatter DATE_TIME_FORMATTER =
+        DateTimeFormatter.ofPattern("M/d/uuuu", Locale.US).withResolverStyle(ResolverStyle.STRICT);
 
     @Override
     public boolean isValid(String value) {
@@ -33,9 +35,7 @@ public class DateFormatValidator implements IValidator<String> {
 
     private boolean isValidDateFormat(String value) {
         try {
-            return value.matches(DATE_REGEX)
-                && null != LocalDate.parse(value,
-                DateTimeFormatter.ofPattern("M/d/uuuu", Locale.US).withResolverStyle(ResolverStyle.STRICT));
+            return value.matches(DATE_REGEX) && null != LocalDate.parse(value, DATE_TIME_FORMATTER);
         } catch (DateTimeParseException e) {
             return false;
         }
