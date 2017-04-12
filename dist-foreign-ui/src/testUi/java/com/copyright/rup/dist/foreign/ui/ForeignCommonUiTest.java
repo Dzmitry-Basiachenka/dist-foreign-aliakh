@@ -97,6 +97,14 @@ public class ForeignCommonUiTest extends CommonUiTest {
      */
     protected static final String VIEW_BUTTON_ID = "View";
     /**
+     * Identifier for search toolbar.
+     */
+    protected static final String SEARCH_TOOLBAR_ID = "search-toolbar";
+    /**
+     * Identifier for search button.
+     */
+    protected static final String SEARCH_BUTTON_ID = "button-search";
+    /**
      * Identifier for usage filter widget.
      */
     protected static final String USAGE_FILTER_WIDGET_ID = "usages-filter-widget";

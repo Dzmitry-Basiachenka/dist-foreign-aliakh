@@ -27,4 +27,7 @@
     <suppress checks="MethodLength"             files="src[/\\]testUi[/\\]java[/\\].*"/>
     <suppress checks="FileLength"               files="src[/\\]testUi[/\\]java[/\\].*"/>
 
+    <!-- suppress checks for file length longer than 500 lines-->
+    <suppress checks="FileLength"
+              files="src[/\\]main[/\\]java[/\\]com[/\\]copyright[/\\]rup[/\\]dist[/\\]foreign[/\\]domain[/\\]UsageDto.java"/>
 </suppressions>
