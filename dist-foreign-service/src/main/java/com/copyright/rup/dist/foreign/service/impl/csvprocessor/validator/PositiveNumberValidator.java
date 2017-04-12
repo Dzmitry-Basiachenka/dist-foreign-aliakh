@@ -13,9 +13,11 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class PositiveNumberValidator implements IValidator<String> {
 
+    private static final String POSITIVE_NUMBER_REGEX = "[1-9][0-9]*";
+
     @Override
     public boolean isValid(String value) {
-        return StringUtils.isEmpty(value) || StringUtils.isNumeric(value);
+        return StringUtils.isEmpty(value) || value.matches(POSITIVE_NUMBER_REGEX);
     }
 
     @Override

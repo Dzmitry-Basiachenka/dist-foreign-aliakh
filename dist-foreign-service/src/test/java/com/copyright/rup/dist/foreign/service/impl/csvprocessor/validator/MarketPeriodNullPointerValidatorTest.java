@@ -3,7 +3,7 @@ package com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator;
 import org.junit.Test;
 
 /**
- * Verifies {@link RangeValidator} in case of invalid Usage.
+ * Verifies {@link YearValidator} in case of invalid Usage.
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
