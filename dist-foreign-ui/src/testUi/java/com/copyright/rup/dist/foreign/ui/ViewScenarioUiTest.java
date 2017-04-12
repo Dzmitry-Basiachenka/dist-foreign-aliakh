@@ -49,6 +49,46 @@ public class ViewScenarioUiTest extends ForeignCommonUiTest {
         assertNull(waitAndFindElement(By.id("upload-error-window")));
     }
 
+    @Test
+    // Test case ID: 'b65f8146-c002-4675-9108-1bb8eda93527'
+    public void testSearch() {
+        loginAsSpecialist();
+        WebElement window = openViewScenarioWindow();
+        WebElement searchToolbar = assertElement(window, By.id(SEARCH_TOOLBAR_ID));
+        WebElement searchField = assertElement(searchToolbar, By.className("v-textfield"));
+        WebElement searchButton = assertElement(searchToolbar, By.className(SEARCH_BUTTON_ID));
+        WebElement table = getRightsholdersTotalsTable(window);
+        buildRightsholderTotalsHolders();
+        verifySearchByRightsholderName(searchField, searchButton, table);
+        verifySearchByRightsholderAccountNumber(searchField, searchButton, table);
+    }
+
+    private void verifySearchByRightsholderName(WebElement searchField, WebElement searchButton, WebElement table) {
+        applySearch(searchField, searchButton, "British Film Institute (BFI)");
+        verifyTableRows(table, rightsholderTotalsHolder1);
+        applySearch(searchField, searchButton, "BriTIsh film Institute (bfi)");
+        verifyTableRows(table, rightsholderTotalsHolder1);
+        applySearch(searchField, searchButton, "CCH");
+        verifyTableRows(table, rightsholderTotalsHolder2);
+        applySearch(searchField, searchButton, "T");
+        verifyTableRows(table, rightsholderTotalsHolder1, rightsholderTotalsHolder3);
+    }
+
+    private void verifySearchByRightsholderAccountNumber(WebElement searchField, WebElement searchButton,
+                                                         WebElement table) {
+        applySearch(searchField, searchButton, "1000009997");
+        verifyTableRows(table, rightsholderTotalsHolder3);
+        applySearch(searchField, searchButton, "100000");
+        verifyTableRows(table, rightsholderTotalsHolder1, rightsholderTotalsHolder2, rightsholderTotalsHolder3);
+        applySearch(searchField, searchButton, "97");
+        verifyTableRows(table, rightsholderTotalsHolder1, rightsholderTotalsHolder3);
+    }
+
+    private void applySearch(WebElement searchField, WebElement searchButton, String searchValue) {
+        sendKeysToInput(searchField, searchValue);
+        clickElementAndWait(searchButton);
+    }
+
     private void verifySearchToolbar(WebElement window) {
         WebElement searchToolbar = assertElement(window, By.id(SEARCH_TOOLBAR_ID));
         WebElement prompt = assertElement(searchToolbar, By.className("v-textfield-prompt"));
