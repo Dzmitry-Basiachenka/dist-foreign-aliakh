@@ -2,7 +2,6 @@ package com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator;
 
 import static org.junit.Assert.assertEquals;
 
-import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -12,7 +11,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 /**
- * Verifies {@link PositiveNumberValidator}.
+ * Verifies {@link YearValidator}.
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
@@ -21,7 +20,7 @@ import java.util.Collection;
  * @author Ihar Suvorau
  */
 @RunWith(Parameterized.class)
-public class PositiveNumberValidatorTest {
+public class YearValidatorTest {
 
     private String value;
     private boolean expectedResult;
@@ -32,7 +31,7 @@ public class PositiveNumberValidatorTest {
      * @param value          expected value
      * @param expectedResult expected result
      */
-    public PositiveNumberValidatorTest(String value, boolean expectedResult) {
+    public YearValidatorTest(String value, boolean expectedResult) {
         this.value = value;
         this.expectedResult = expectedResult;
     }
@@ -41,27 +40,27 @@ public class PositiveNumberValidatorTest {
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
             {null, true},
-            {StringUtils.EMPTY, true},
-            {"123", true},
+            {"1000", true},
+            {"9999", true},
+            {"1001", true},
+            {"9998", true},
+            {"999", false},
+            {"10000", false},
+            {"a111", false},
+            {"1a11", false},
+            {"11a1", false},
+            {"111a", false},
             {"0", false},
-            {"0x20", false},
-            {"0b1010", false},
-            {"123L", false},
-            {"2F", false},
-            {"12 3", false},
-            {"12_3", false},
-            {"ab2c", false},
-            {"12-3", false},
-            {"12.3", false},
-            {"-123", false},
-            {"+123", false}
+            {"-111", false},
+            {"0111", false},
+            {"1111111111", false}
         });
     }
 
     @Test
     public void testIsValid() {
-        PositiveNumberValidator validator = new PositiveNumberValidator();
+        YearValidator validator = new YearValidator();
         assertEquals(expectedResult, validator.isValid(value));
-        assertEquals("Field value should be positive number", validator.getErrorMessage());
+        assertEquals("Field value should be numeric in range from 1000 to 9999", validator.getErrorMessage());
     }
 }

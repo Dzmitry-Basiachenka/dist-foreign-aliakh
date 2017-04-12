@@ -11,9 +11,9 @@ import com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator.Duplic
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator.LengthValidator;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator.MarketPeriodValidator;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator.PositiveNumberValidator;
-import com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator.RangeValidator;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator.ReportedValueValidator;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator.RequiredValidator;
+import com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator.YearValidator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -53,7 +53,6 @@ public class UsageCsvProcessor extends CommonCsvProcessor<Usage> {
         PositiveNumberValidator positiveNumberValidator = new PositiveNumberValidator();
         LengthValidator lengthValidator_1000 = new LengthValidator(1000);
         LengthValidator lengthValidator_2000 = new LengthValidator(2000);
-        RangeValidator marketPeriodRangeValidator = new RangeValidator(1000, 9999);
         addPlainValidators(Header.DETAIL_ID, requiredValidator, positiveNumberValidator, new LengthValidator(10),
             new DuplicateInFileValidator());
         addPlainValidators(Header.TITLE, requiredValidator, lengthValidator_2000);
@@ -63,14 +62,11 @@ public class UsageCsvProcessor extends CommonCsvProcessor<Usage> {
         addPlainValidators(Header.RH_ACCT_NUMBER, requiredValidator, positiveNumberValidator, new LengthValidator(22));
         addPlainValidators(Header.PUBLISHER, lengthValidator_1000);
         addPlainValidators(Header.PUB_DATE, new DateFormatValidator());
-        addPlainValidators(Header.NUMBER_OF_COPIES, positiveNumberValidator, new RangeValidator(0, null),
-            new LengthValidator(9));
+        addPlainValidators(Header.NUMBER_OF_COPIES, positiveNumberValidator, new LengthValidator(9));
         addPlainValidators(Header.REPORTED_VALUE, requiredValidator, new ReportedValueValidator());
         addPlainValidators(Header.MARKET, requiredValidator, new LengthValidator(200));
-        addPlainValidators(Header.MARKET_PERIOD_FROM, requiredValidator, positiveNumberValidator,
-            marketPeriodRangeValidator);
-        addPlainValidators(Header.MARKET_PERIOD_TO, requiredValidator, positiveNumberValidator,
-            marketPeriodRangeValidator);
+        addPlainValidators(Header.MARKET_PERIOD_FROM, requiredValidator, new YearValidator());
+        addPlainValidators(Header.MARKET_PERIOD_TO, requiredValidator, new YearValidator());
         addPlainValidators(Header.AUTHOR, lengthValidator_2000);
     }
 
