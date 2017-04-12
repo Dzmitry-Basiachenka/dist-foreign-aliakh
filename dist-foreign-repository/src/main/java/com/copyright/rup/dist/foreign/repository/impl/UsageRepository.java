@@ -48,6 +48,12 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
      */
     // TODO {mbezmen} move to BaseRepository in dist-common
     private static final int BATCH_SIZE_FOR_SELECT = 32000;
+    /**
+     * Details ids batch size for finding duplicates. This size was obtained as (32000 / 2 = 16000)
+     * where {@code 32000} it's a max value for count of variables in statement and {@code 2} means that statement uses
+     * 'in' clause with the same parameters two times.
+     */
+    private static final int DUPLICATE_DETAILS_IDS_BATCH_SIZE = 16000;
     private static final String FILTER_KEY = "filter";
     private static final String PAGEABLE_KEY = "pageable";
     private static final String SORT_KEY = "sort";
@@ -128,7 +134,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     public Set<Long> getDuplicateDetailIds(List<Long> detailIds) {
         checkArgument(CollectionUtils.isNotEmpty(detailIds));
         Set<Long> result = Sets.newHashSetWithExpectedSize(detailIds.size());
-        for (List<Long> detailIdsPartition : Iterables.partition(detailIds, BATCH_SIZE_FOR_SELECT)) {
+        for (List<Long> detailIdsPartition : Iterables.partition(detailIds, DUPLICATE_DETAILS_IDS_BATCH_SIZE)) {
             result.addAll(selectList("IUsageMapper.getDuplicateDetailIds", detailIdsPartition));
         }
         return result;
