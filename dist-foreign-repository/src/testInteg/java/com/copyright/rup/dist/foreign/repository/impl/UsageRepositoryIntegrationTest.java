@@ -393,14 +393,14 @@ public class UsageRepositoryIntegrationTest {
             new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
         assertEquals("Detail ID,Detail Status,Usage Batch Name,Fiscal Year,RRO Account #,RRO Name,Payment Date,Title," +
                 "Article,Standard Number,Wr Wrk Inst,RH Account #,RH Name,Publisher,Pub Date,Number of Copies," +
-                "Reported value,Amt in USD,Market,Market Period From,Market Period To,Author",
+                "Reported value,Amt in USD,Gross Amt in USD,Market,Market Period From,Market Period To,Author",
             bufferedReader.readLine());
         assertEquals("6997788888,ELIGIBLE,CADRA_11Dec16,FY2017,7000813806," +
             "\"CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil\",01/11/2017," +
             "\"2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA\"," +
             "Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle,1008902112377654XX," +
             "180382914,1000009997,IEEE - Inst of Electrical and Electronics Engrs," +
-            "IEEE,09/10/2013,2502232,2500.00,13461.5400000000,Doc Del,2013,2017," +
+            "IEEE,09/10/2013,2502232,2500.00,13461.5400000000,35000.00,Doc Del,2013,2017," +
             "\"Íñigo López de Mendoza, marqués de Santillana\"", bufferedReader.readLine());
         assertNull(bufferedReader.readLine());
     }
@@ -415,7 +415,7 @@ public class UsageRepositoryIntegrationTest {
             new BufferedReader(new InputStreamReader(inputStream, Charset.defaultCharset()));
         assertEquals("Detail ID,Detail Status,Usage Batch Name,Fiscal Year,RRO Account #,RRO Name,Payment Date,Title," +
                 "Article,Standard Number,Wr Wrk Inst,RH Account #,RH Name,Publisher,Pub Date,Number of Copies," +
-                "Reported value,Amt in USD,Market,Market Period From,Market Period To,Author",
+                "Reported value,Amt in USD,Gross Amt in USD,Market,Market Period From,Market Period To,Author",
             bufferedReader.readLine());
         assertNull(bufferedReader.readLine());
     }
