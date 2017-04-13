@@ -212,8 +212,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
 
     private HorizontalLayout initButtonsLayout() {
         loadButton = Buttons.createButton(ForeignUi.getMessage("button.load"));
-        loadButton.addClickListener(
-            event -> Windows.showModalWindow(new UsageBatchUploadWindow(controller)));
+        loadButton.addClickListener(event -> Windows.showModalWindow(new UsageBatchUploadWindow(controller)));
         addToScenarioButton = Buttons.createButton(ForeignUi.getMessage("button.add_to_scenario"));
         addToScenarioButton.addClickListener(event -> onAddToScenarioClicked());
         Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));

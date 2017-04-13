@@ -82,12 +82,11 @@ public class RightsholderTotalsHolderTable extends LazyTable<RightsholderTotalsH
     private void addProperties() {
         addProperty(RIGHTSHOLDER_ACCOUNT_NUMBER_PROPERTY, Long.class, true);
         addProperty(RIGHTSHOLDER_NAME_PROPERTY, String.class, true);
-        // TODO {isuvorau} enable sorting for columns after their appearance
         addProperty(PAYEE_ACCOUNT_NUMBER_PROPERTY, Long.class, false);
         addProperty(PAYEE_NAME_PROPERTY, String.class, false);
         addProperty(GROSS_TOTAL_PROPERTY, BigDecimal.class, true);
-        addProperty(SERVICE_FEE_TOTAL_PROPERTY, BigDecimal.class, false);
-        addProperty(NET_TOTAL_PROPERTY, BigDecimal.class, false);
+        addProperty(SERVICE_FEE_TOTAL_PROPERTY, BigDecimal.class, true);
+        addProperty(NET_TOTAL_PROPERTY, BigDecimal.class, true);
         addProperty(SERVICE_FEE_PROPERTY, BigDecimal.class, false);
     }
 
@@ -106,6 +105,9 @@ public class RightsholderTotalsHolderTable extends LazyTable<RightsholderTotalsH
         LongColumnGenerator longColumnGenerator = new LongColumnGenerator();
         addGeneratedColumn(RIGHTSHOLDER_ACCOUNT_NUMBER_PROPERTY, longColumnGenerator);
         addGeneratedColumn(PAYEE_ACCOUNT_NUMBER_PROPERTY, longColumnGenerator);
-        addGeneratedColumn(GROSS_TOTAL_PROPERTY, new MoneyColumnGenerator());
+        MoneyColumnGenerator moneyColumnGenerator = new MoneyColumnGenerator();
+        addGeneratedColumn(GROSS_TOTAL_PROPERTY, moneyColumnGenerator);
+        addGeneratedColumn(SERVICE_FEE_TOTAL_PROPERTY, moneyColumnGenerator);
+        addGeneratedColumn(NET_TOTAL_PROPERTY, moneyColumnGenerator);
     }
 }

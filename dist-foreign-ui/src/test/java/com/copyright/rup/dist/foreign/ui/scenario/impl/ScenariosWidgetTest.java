@@ -205,7 +205,8 @@ public class ScenariosWidgetTest {
         assertEquals("View", button.getCaption());
         assertEquals("View", button.getId());
         assertFalse(button.isEnabled());
-        assertEquals(1, button.getListeners(ClickEvent.class).size());
+        assertTrue(button.isDisableOnClick());
+        assertEquals(2, button.getListeners(ClickEvent.class).size());
     }
 
     private void verifyDeleteButton(Component component) {
@@ -214,7 +215,8 @@ public class ScenariosWidgetTest {
         assertEquals("Delete", button.getCaption());
         assertEquals("Delete", button.getId());
         assertFalse(button.isEnabled());
-        assertEquals(1, button.getListeners(ClickEvent.class).size());
+        assertTrue(button.isDisableOnClick());
+        assertEquals(2, button.getListeners(ClickEvent.class).size());
     }
 
     private void verifySize(Component component) {

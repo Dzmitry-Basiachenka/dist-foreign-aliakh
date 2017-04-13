@@ -31,8 +31,6 @@ import java.util.List;
 @ContextConfiguration(value = "classpath:/com/copyright/rup/dist/foreign/ui/dist-foreign-ui-test-context.xml")
 public class ViewScenarioUiTest extends ForeignCommonUiTest {
 
-    private static final String SPACE = " ";
-
     private RightsholderTotalsHolder rightsholderTotalsHolder1;
     private RightsholderTotalsHolder rightsholderTotalsHolder2;
     private RightsholderTotalsHolder rightsholderTotalsHolder3;
@@ -103,7 +101,7 @@ public class ViewScenarioUiTest extends ForeignCommonUiTest {
             "Service Fee Amount", "Net Amt in USD", "Service Fee %");
         buildRightsholderTotalsHolders();
         verifyTableRows(table, rightsholderTotalsHolder1, rightsholderTotalsHolder2, rightsholderTotalsHolder3);
-        verifyTableSorting(table, "RH Account #", "RH Name", "Amt in USD");
+        verifyTableSorting(table, "RH Account #", "RH Name", "Amt in USD", "Service Fee Amount", "Net Amt in USD");
         verifyFooter(table);
     }
 
@@ -127,8 +125,8 @@ public class ViewScenarioUiTest extends ForeignCommonUiTest {
         assertEquals(StringUtils.EMPTY, cells.get(2).getText());
         assertEquals(StringUtils.EMPTY, cells.get(3).getText());
         assertEquals(String.format("%,.2f", rightsholderTotalsHolder.getGrossTotal()), cells.get(4).getText());
-        assertEquals(StringUtils.EMPTY, cells.get(5).getText());
-        assertEquals(StringUtils.EMPTY, cells.get(6).getText());
+        assertEquals(String.format("%,.2f", rightsholderTotalsHolder.getServiceFeeTotal()), cells.get(5).getText());
+        assertEquals(String.format("%,.2f", rightsholderTotalsHolder.getNetTotal()), cells.get(6).getText());
         assertEquals(StringUtils.EMPTY, cells.get(7).getText());
     }
 
@@ -136,13 +134,13 @@ public class ViewScenarioUiTest extends ForeignCommonUiTest {
         WebElement footer = assertElement(table, By.className("v-table-footer-wrap"));
         List<WebElement> cells = findElements(footer, By.className(V_TABLE_FOOTER_CONTAINER_CLASS_NAME));
         assertEquals("Totals", cells.get(0).getText());
-        assertEquals(SPACE, cells.get(1).getText());
-        assertEquals(SPACE, cells.get(2).getText());
-        assertEquals(SPACE, cells.get(3).getText());
+        assertEquals(StringUtils.SPACE, cells.get(1).getText());
+        assertEquals(StringUtils.SPACE, cells.get(2).getText());
+        assertEquals(StringUtils.SPACE, cells.get(3).getText());
         assertEquals("10,530.00", cells.get(4).getText());
-        assertEquals(SPACE, cells.get(5).getText());
-        assertEquals(SPACE, cells.get(6).getText());
-        assertEquals(SPACE, cells.get(7).getText());
+        assertEquals(StringUtils.SPACE, cells.get(5).getText());
+        assertEquals("9,000.00", cells.get(6).getText());
+        assertEquals(StringUtils.SPACE, cells.get(7).getText());
     }
 
     private WebElement openViewScenarioWindow() {
@@ -158,13 +156,16 @@ public class ViewScenarioUiTest extends ForeignCommonUiTest {
         rightsholderTotalsHolder1.setRightsholderName("British Film Institute (BFI)");
         rightsholderTotalsHolder1.setRightsholderAccountNumber(1000002797L);
         rightsholderTotalsHolder1.setGrossTotal(BigDecimal.valueOf(480).setScale(2, RoundingMode.HALF_UP));
+        rightsholderTotalsHolder1.setNetTotal(BigDecimal.valueOf(1050).setScale(2, BigDecimal.ROUND_HALF_UP));
         rightsholderTotalsHolder2 = new RightsholderTotalsHolder();
         rightsholderTotalsHolder2.setRightsholderName("CCH");
         rightsholderTotalsHolder2.setRightsholderAccountNumber(1000008666L);
         rightsholderTotalsHolder2.setGrossTotal(BigDecimal.valueOf(7650).setScale(2, RoundingMode.HALF_UP));
+        rightsholderTotalsHolder2.setNetTotal(BigDecimal.valueOf(4550).setScale(2, BigDecimal.ROUND_HALF_UP));
         rightsholderTotalsHolder3 = new RightsholderTotalsHolder();
         rightsholderTotalsHolder3.setRightsholderName("IEEE - Inst of Electrical and Electronics Engrs");
         rightsholderTotalsHolder3.setRightsholderAccountNumber(1000009997L);
         rightsholderTotalsHolder3.setGrossTotal(BigDecimal.valueOf(2400).setScale(2, RoundingMode.HALF_UP));
+        rightsholderTotalsHolder3.setNetTotal(BigDecimal.valueOf(3400).setScale(2, BigDecimal.ROUND_HALF_UP));
     }
 }

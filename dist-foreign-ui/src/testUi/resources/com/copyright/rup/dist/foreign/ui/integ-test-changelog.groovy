@@ -379,6 +379,7 @@ databaseChangeLog {
             column(name: 'number_of_copies', value: '200')
             column(name: 'reported_value', value: '3000.00')
             column(name: 'gross_amount', value: '2850.00')
+            column(name: 'net_amount', value: '2400')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -401,6 +402,7 @@ databaseChangeLog {
             column(name: 'number_of_copies', value: '200')
             column(name: 'reported_value', value: '5000.00')
             column(name: 'gross_amount', value: '4800.00')
+            column(name: 'net_amount', value: '2150')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -423,6 +425,7 @@ databaseChangeLog {
             column(name: 'number_of_copies', value: '200')
             column(name: 'reported_value', value: '2500.00')
             column(name: 'gross_amount', value: '2400.00')
+            column(name: 'net_amount', value: '3400')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -445,6 +448,7 @@ databaseChangeLog {
             column(name: 'number_of_copies', value: '200')
             column(name: 'reported_value', value: '500.00')
             column(name: 'gross_amount', value: '480.00')
+            column(name: 'net_amount', value: '1050')
         }
 
         rollback {
