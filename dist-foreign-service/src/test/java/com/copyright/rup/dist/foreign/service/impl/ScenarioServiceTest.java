@@ -59,6 +59,9 @@ public class ScenarioServiceTest {
     private static final BigDecimal REPORTED_VALUE_1 = new BigDecimal("15.34");
     private static final BigDecimal REPORTED_VALUE_2 = new BigDecimal("8.52");
     private static final BigDecimal REPORTED_VALUE_SUM = new BigDecimal("23.86");
+    private static final BigDecimal NET_AMOUNT_1 = new BigDecimal("4.0000000015");
+    private static final BigDecimal NET_AMOUNT_2 = new BigDecimal("3.0000000019");
+    private static final BigDecimal NET_AMOUNT_SUM = new BigDecimal("7.0000000034");
     private static final String USER_NAME = "User Name";
     private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
     private ScenarioService scenarioService;
@@ -114,8 +117,8 @@ public class ScenarioServiceTest {
         Capture<Scenario> captureScenarioForInsert = new Capture<>();
         Capture<Scenario> captureScenario = new Capture<>();
         UsageFilter usageFilter = new UsageFilter();
-        Usage usage1 = buildUsage(GROSS_AMOUNT_1, REPORTED_VALUE_1);
-        Usage usage2 = buildUsage(GROSS_AMOUNT_2, REPORTED_VALUE_2);
+        Usage usage1 = buildUsage(GROSS_AMOUNT_1, REPORTED_VALUE_1, NET_AMOUNT_1);
+        Usage usage2 = buildUsage(GROSS_AMOUNT_2, REPORTED_VALUE_2, NET_AMOUNT_2);
         expect(usageService.getUsagesWithAmounts(usageFilter)).andReturn(Lists.newArrayList(usage1, usage2)).once();
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         scenarioRepository.insert(capture(captureScenarioForInsert));
@@ -135,6 +138,7 @@ public class ScenarioServiceTest {
         assertEquals(DESCRIPTION, scenarioForInsert.getDescription());
         assertEquals(GROSS_AMOUNT_SUM, scenarioForInsert.getGrossTotal());
         assertEquals(REPORTED_VALUE_SUM, scenarioForInsert.getReportedTotal());
+        assertEquals(NET_AMOUNT_SUM, scenarioForInsert.getNetTotal());
         assertEquals(ScenarioStatusEnum.IN_PROGRESS, scenarioForInsert.getStatus());
         verify(scenarioRepository, usageService, RupContextUtils.class);
     }
@@ -150,11 +154,12 @@ public class ScenarioServiceTest {
         verify(usageService, scenarioRepository);
     }
 
-    private Usage buildUsage(BigDecimal grossAmount, BigDecimal reportedValue) {
+    private Usage buildUsage(BigDecimal grossAmount, BigDecimal reportedValue, BigDecimal netAmount) {
         Usage usage = new Usage();
         usage.setId(RupPersistUtils.generateUuid());
         usage.setGrossAmount(grossAmount);
         usage.setReportedValue(reportedValue);
+        usage.setNetAmount(netAmount);
         return usage;
     }
 }

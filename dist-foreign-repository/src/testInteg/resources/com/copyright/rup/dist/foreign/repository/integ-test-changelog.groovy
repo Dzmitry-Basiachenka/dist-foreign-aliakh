@@ -279,7 +279,6 @@ databaseChangeLog {
             column(name: 'gross_amount', value: '11461.54')
             column(name: 'net_amount', value: '9628.00')
             column(name: 'service_fee_amount', value: '1833.00')
-
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
