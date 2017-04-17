@@ -2,9 +2,9 @@ package com.copyright.rup.dist.foreign.domain;
 
 /**
  * Enum for usage statuses.
- * <p/>
+ * <p>
  * Copyright (C) 2017 copyright.com
- * <p/>
+ * <p>
  * Date: 01/12/2017
  *
  * @author Mikita Hladkikh

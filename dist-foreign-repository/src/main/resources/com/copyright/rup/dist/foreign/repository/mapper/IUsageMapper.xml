@@ -42,6 +42,8 @@
         <result property="rightsholderName" column="name"/>
         <result property="rightsholderAccountNumber" column="rh_account_number"/>
         <result property="grossTotal" column="gross_total"/>
+        <result property="serviceFeeTotal" column="service_fee_total"/>
+        <result property="netTotal" column="net_total"/>
     </resultMap>
 
     <resultMap id="usageResultMap" type="Usage" extends="usageAmountResultMap">
@@ -215,6 +217,12 @@
                     </when>
                     <when test="sort.property == 'grossTotal'">
                         u.gross_total <include refid="direction"/>
+                    </when>
+                    <when test="sort.property == 'serviceFeeTotal'">
+                        u.service_fee_total <include refid="direction"/>
+                    </when>
+                    <when test="sort.property == 'netTotal'">
+                        u.net_total <include refid="direction"/>
                     </when>
                 </choose>
             </when>
@@ -410,11 +418,15 @@
         select
             r.name,
             u.rh_account_number,
-            u.gross_total
+            u.gross_total,
+            u.service_fee_total,
+            u.net_total
         from (
             select
                 rh_account_number,
-                sum(gross_amount) as gross_total
+                sum(gross_amount) gross_total,
+                sum(service_fee_amount) service_fee_total,
+                sum(net_amount) net_total
             from ${schema}.df_usage
             where df_scenario_uid = #{scenarioId}
             group by rh_account_number) u

@@ -59,13 +59,13 @@ public class ScenarioWidget extends Window implements IScenarioWidget {
     @Override
     public void applySearch() {
         container = table.getContainerDataSource();
+        if (CollectionUtils.isNotEmpty(container.getContainerFilters())) {
+            container.removeAllContainerFilters();
+        }
         String searchValue = getSearchValue();
         if (StringUtils.isNotBlank(searchValue)) {
             addContainerFilter(searchValue);
         } else {
-            if (CollectionUtils.isNotEmpty(container.getContainerFilters())) {
-                container.removeAllContainerFilters();
-            }
             container.refresh();
         }
     }
@@ -79,6 +79,7 @@ public class ScenarioWidget extends Window implements IScenarioWidget {
         HorizontalLayout searchToolbar = initSearchWidget();
         table = new RightsholderTotalsHolderTable(controller, RightsholderTotalsHolderBeanQuery.class);
         table.setColumnFooter("grossTotal", CurrencyUtils.formatAsHtml(scenario.getGrossTotal()));
+        table.setColumnFooter("netTotal", CurrencyUtils.formatAsHtml(scenario.getNetTotal()));
         HorizontalLayout buttons = initButtons();
         VerticalLayout layout = new VerticalLayout(new VerticalLayout(searchToolbar), table, buttons);
         layout.setSizeFull();
@@ -109,7 +110,6 @@ public class ScenarioWidget extends Window implements IScenarioWidget {
     }
 
     private void addContainerFilter(String searchValue) {
-        container.removeAllContainerFilters();
         container.addContainerFilter(new Or(new SimpleStringFilter("rightsholderName", searchValue, true, false),
             new SimpleStringFilter("rightsholderAccountNumber", searchValue, true, false)));
     }

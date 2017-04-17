@@ -2,9 +2,9 @@ package com.copyright.rup.dist.foreign.domain;
 
 /**
  * Enum for scenario statuses.
- * <p/>
+ * <p>
  * Copyright (C) 2017 copyright.com
- * <p/>
+ * <p>
  * Date: 03/15/17
  *
  * @author Ihar Suvorau

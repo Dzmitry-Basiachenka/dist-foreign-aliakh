@@ -309,74 +309,74 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testgetRightsholderTotalsHoldersByScenarioIdEmptySearchValue() {
+    public void testGetRightsholderTotalsHoldersByScenarioIdEmptySearchValue() {
         populateScenario();
-        List<RightsholderTotalsHolder> rightsholderTotalsHoders =
+        List<RightsholderTotalsHolder> rightsholderTotalsHolders =
             usageRepository.getRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, StringUtils.EMPTY,
                 new Pageable(0, 200), null);
-        assertEquals(3, rightsholderTotalsHoders.size());
-        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, 13461.54),
-            rightsholderTotalsHoders.get(0));
-        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_2, 1000002859L, 21061.54),
-            rightsholderTotalsHoders.get(1));
-        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_3, 1000005413L, 6892.30),
-            rightsholderTotalsHoders.get(2));
+        assertEquals(3, rightsholderTotalsHolders.size());
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, 13461.54, 2153.00, 11308.00),
+            rightsholderTotalsHolders.get(0));
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_2, 1000002859L, 21061.54, 3369.00, 17692.00),
+            rightsholderTotalsHolders.get(1));
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_3, 1000005413L, 6892.30, 1102.00, 5790.00),
+            rightsholderTotalsHolders.get(2));
     }
 
     @Test
-    public void testgetRightsholderTotalsHoldersByScenarioIdNotEmptySearchValue() {
+    public void testGetRightsholderTotalsHoldersByScenarioIdNotEmptySearchValue() {
         populateScenario();
-        List<RightsholderTotalsHolder> rightsholderTotalsHoders =
+        List<RightsholderTotalsHolder> rightsholderTotalsHolders =
             usageRepository.getRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, "JoHn", new Pageable(0, 200), null);
-        assertEquals(1, rightsholderTotalsHoders.size());
-        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_2, 1000002859L, 21061.54),
-            rightsholderTotalsHoders.get(0));
-        rightsholderTotalsHoders =
+        assertEquals(1, rightsholderTotalsHolders.size());
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_2, 1000002859L, 21061.54, 3369.00, 17692.00),
+            rightsholderTotalsHolders.get(0));
+        rightsholderTotalsHolders =
             usageRepository.getRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, "IEEE", new Pageable(0, 200), null);
-        assertEquals(1, rightsholderTotalsHoders.size());
-        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, 13461.54),
-            rightsholderTotalsHoders.get(0));
-        rightsholderTotalsHoders =
+        assertEquals(1, rightsholderTotalsHolders.size());
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, 13461.54, 2153.00, 11308.00),
+            rightsholderTotalsHolders.get(0));
+        rightsholderTotalsHolders =
             usageRepository.getRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, "ec", new Pageable(0, 200), null);
-        assertEquals(2, rightsholderTotalsHoders.size());
-        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, 13461.54),
-            rightsholderTotalsHoders.get(0));
-        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_3, 1000005413L, 6892.30),
-            rightsholderTotalsHoders.get(1));
+        assertEquals(2, rightsholderTotalsHolders.size());
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, 13461.54, 2153.00, 11308.00),
+            rightsholderTotalsHolders.get(0));
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_3, 1000005413L, 6892.30, 1102.00, 5790.00),
+            rightsholderTotalsHolders.get(1));
     }
 
     @Test
-    public void testgetRightsholderTotalsHoldersByScenarioIdSortByAccountNumber() {
+    public void testGetRightsholderTotalsHoldersByScenarioIdSortByAccountNumber() {
         populateScenario();
         Sort accountNumberSort = new Sort("rightsholderAccountNumber", Direction.ASC);
-        List<RightsholderTotalsHolder> rightsholderTotalsHoders =
+        List<RightsholderTotalsHolder> rightsholderTotalsHolders =
             usageRepository.getRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, StringUtils.EMPTY,
                 new Pageable(0, 200), accountNumberSort);
-        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_2, 1000002859L, 21061.54),
-            rightsholderTotalsHoders.get(0));
-        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_3, 1000005413L, 6892.30),
-            rightsholderTotalsHoders.get(1));
-        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, 13461.54),
-            rightsholderTotalsHoders.get(2));
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_2, 1000002859L, 21061.54, 3369.00, 17692.00),
+            rightsholderTotalsHolders.get(0));
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_3, 1000005413L, 6892.30, 1102.00, 5790.00),
+            rightsholderTotalsHolders.get(1));
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, 13461.54, 2153.00, 11308.00),
+            rightsholderTotalsHolders.get(2));
     }
 
     @Test
-    public void testgetRightsholderTotalsHoldersByScenarioIdSortByName() {
+    public void testGetRightsholderTotalsHoldersByScenarioIdSortByName() {
         populateScenario();
         Sort accountNumberSort = new Sort("rightsholderName", Direction.DESC);
-        List<RightsholderTotalsHolder> rightsholderTotalsHoders =
+        List<RightsholderTotalsHolder> rightsholderTotalsHolders =
             usageRepository.getRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, StringUtils.EMPTY,
                 new Pageable(0, 200), accountNumberSort);
-        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_3, 1000005413L, 6892.30),
-            rightsholderTotalsHoders.get(0));
-        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_2, 1000002859L, 21061.54),
-            rightsholderTotalsHoders.get(1));
-        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, 13461.54),
-            rightsholderTotalsHoders.get(2));
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_3, 1000005413L, 6892.30, 1102.00, 5790.00),
+            rightsholderTotalsHolders.get(0));
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_2, 1000002859L, 21061.54, 3369.00, 17692.00),
+            rightsholderTotalsHolders.get(1));
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, 13461.54, 2153.00, 11308.00),
+            rightsholderTotalsHolders.get(2));
     }
 
     @Test
-    public void getRightsholderTotalsHolderCountByScenarioId() {
+    public void testGetRightsholderTotalsHolderCountByScenarioId() {
         populateScenario();
         assertEquals(3, usageRepository.getRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, StringUtils.EMPTY));
         assertEquals(1, usageRepository.getRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, "IEEE"));
@@ -543,11 +543,15 @@ public class UsageRepositoryIntegrationTest {
     }
 
     private RightsholderTotalsHolder buildRightsholderTotalsHolder(String rhName, Long rhAccountNumber,
-                                                                   Double grossTotal) {
+                                                                   Double grossTotal, Double serviceFeeTotal,
+                                                                   Double netTotal) {
         RightsholderTotalsHolder rightsholderTotalsHolder = new RightsholderTotalsHolder();
         rightsholderTotalsHolder.setRightsholderName(rhName);
         rightsholderTotalsHolder.setRightsholderAccountNumber(rhAccountNumber);
-        rightsholderTotalsHolder.setGrossTotal(BigDecimal.valueOf(grossTotal).setScale(10));
+        rightsholderTotalsHolder.setGrossTotal(BigDecimal.valueOf(grossTotal).setScale(10, BigDecimal.ROUND_HALF_UP));
+        rightsholderTotalsHolder.setServiceFeeTotal(
+            BigDecimal.valueOf(serviceFeeTotal).setScale(10, BigDecimal.ROUND_HALF_UP));
+        rightsholderTotalsHolder.setNetTotal(BigDecimal.valueOf(netTotal).setScale(10, BigDecimal.ROUND_HALF_UP));
         return rightsholderTotalsHolder;
     }
 

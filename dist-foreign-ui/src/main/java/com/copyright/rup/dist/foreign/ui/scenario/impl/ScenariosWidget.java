@@ -105,6 +105,7 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
         HorizontalLayout layout = new HorizontalLayout();
         initViewButton();
         initDeleteButton();
+        VaadinUtils.setButtonsAutoDisabled(viewButton, deleteButton);
         layout.addComponents(viewButton, deleteButton);
         layout.setSpacing(true);
         layout.setMargin(true);
