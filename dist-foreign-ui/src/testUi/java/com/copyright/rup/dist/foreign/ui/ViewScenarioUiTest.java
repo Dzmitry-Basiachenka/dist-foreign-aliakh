@@ -154,17 +154,17 @@ public class ViewScenarioUiTest extends ForeignCommonUiTest {
         rightsholderTotalsHolder1 = new RightsholderTotalsHolder();
         rightsholderTotalsHolder1.setRightsholderName("British Film Institute (BFI)");
         rightsholderTotalsHolder1.setRightsholderAccountNumber(1000002797L);
-        rightsholderTotalsHolder1.setGrossTotal(BigDecimal.valueOf(480.00));
-        rightsholderTotalsHolder1.setNetTotal(BigDecimal.valueOf(1050.00));
+        rightsholderTotalsHolder1.setGrossTotal(new BigDecimal("480.00"));
+        rightsholderTotalsHolder1.setNetTotal(new BigDecimal("1050.00"));
         rightsholderTotalsHolder2 = new RightsholderTotalsHolder();
         rightsholderTotalsHolder2.setRightsholderName("CCH");
         rightsholderTotalsHolder2.setRightsholderAccountNumber(1000008666L);
-        rightsholderTotalsHolder2.setGrossTotal(BigDecimal.valueOf(7650.00));
-        rightsholderTotalsHolder2.setNetTotal(BigDecimal.valueOf(4550.00));
+        rightsholderTotalsHolder2.setGrossTotal(new BigDecimal("7650.00"));
+        rightsholderTotalsHolder2.setNetTotal(new BigDecimal("4550.00"));
         rightsholderTotalsHolder3 = new RightsholderTotalsHolder();
         rightsholderTotalsHolder3.setRightsholderName("IEEE - Inst of Electrical and Electronics Engrs");
         rightsholderTotalsHolder3.setRightsholderAccountNumber(1000009997L);
-        rightsholderTotalsHolder3.setGrossTotal(BigDecimal.valueOf(2400.00));
-        rightsholderTotalsHolder3.setNetTotal(BigDecimal.valueOf(3400.00));
+        rightsholderTotalsHolder3.setGrossTotal(new BigDecimal("2400.00"));
+        rightsholderTotalsHolder3.setNetTotal(new BigDecimal("3400.00"));
     }
 }
