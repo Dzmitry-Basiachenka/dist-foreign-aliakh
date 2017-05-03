@@ -67,7 +67,7 @@ public class RightsholderTotalsHolderTable extends LazyTable<RightsholderTotalsH
             ForeignUi.getMessage("table.column.rh_account_name"),
             ForeignUi.getMessage("table.column.payee_account_number"),
             ForeignUi.getMessage("table.column.payee_account_name"),
-            ForeignUi.getMessage("table.column.amount"),
+            ForeignUi.getMessage("table.column.amount_in_usd"),
             ForeignUi.getMessage("table.column.service_fee_amount"),
             ForeignUi.getMessage("table.column.net_amount"),
             ForeignUi.getMessage("table.column.service_fee"));
