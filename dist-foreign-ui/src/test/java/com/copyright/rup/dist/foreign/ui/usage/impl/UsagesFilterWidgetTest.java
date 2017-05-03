@@ -13,10 +13,10 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
-import com.copyright.rup.dist.foreign.ui.component.LocalDateWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
 import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
+import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
 import com.google.common.collect.Sets;
 import com.vaadin.server.Sizeable.Unit;
