@@ -31,6 +31,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.File;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -235,7 +236,8 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
     private void verifyUploadedUsageBatch(UsageBatch uploadedUsageBatch, LocalDate date) {
         assertEquals(RRO_ACCOUNT_NUMBER, uploadedUsageBatch.getRro().getAccountNumber());
         assertEquals(new BigDecimal(GROSS_AMOUNT), uploadedUsageBatch.getGrossAmount());
-        assertEquals(date.getYear(), uploadedUsageBatch.getFiscalYear(), 0);
+        assertEquals(0 >= Month.JULY.compareTo(date.getMonth()) ? (date.getYear() + 1) : date.getYear(),
+            uploadedUsageBatch.getFiscalYear(), 0);
         assertEquals(date, uploadedUsageBatch.getPaymentDate());
     }
 
