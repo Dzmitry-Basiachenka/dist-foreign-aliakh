@@ -1,11 +1,5 @@
 package com.copyright.rup.dist.foreign.ui;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
-import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
-
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,7 +8,6 @@ import org.openqa.selenium.WebElement;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -30,9 +23,12 @@ import java.util.List;
 @ContextConfiguration(value = "classpath:/com/copyright/rup/dist/foreign/ui/dist-foreign-ui-test-context.xml")
 public class ViewScenarioUiTest extends ForeignCommonUiTest {
 
-    private RightsholderTotalsHolder rightsholderTotalsHolder1;
-    private RightsholderTotalsHolder rightsholderTotalsHolder2;
-    private RightsholderTotalsHolder rightsholderTotalsHolder3;
+    private String[] rightsholder1 = {"1000002797", "British Film Institute (BFI)", StringUtils.EMPTY,
+        StringUtils.EMPTY, "480.00", "0.00", "1,050.00", StringUtils.EMPTY};
+    private String[] rightsholder2 = {"1000008666", "CCH", StringUtils.EMPTY, StringUtils.EMPTY, "7,650.00", "0.00",
+        "4,550.00", StringUtils.EMPTY};
+    private String[] rightsholder3 = {"1000009997", "IEEE - Inst of Electrical and Electronics Engrs",
+        StringUtils.EMPTY, StringUtils.EMPTY, "2,400.00", "0.00", "3,400.00", StringUtils.EMPTY};
 
     @Test
     // Test cases IDs: 'ed87b9c8-5880-4bc0-a3aa-6ec733dcf491', 'c3475cfb-eb5d-4dea-96ad-d6a1228f177b',
@@ -40,10 +36,10 @@ public class ViewScenarioUiTest extends ForeignCommonUiTest {
     public void testViewScenarioWindow() {
         loginAsViewOnly();
         WebElement scenarioWindow = openViewScenarioWindow();
-        verifySearchToolbar(scenarioWindow);
-        verifyTable(scenarioWindow);
-        clickElementAndWait(assertElement(scenarioWindow, By.id(CLOSE_BUTTON_ID)));
-        assertNull(waitAndFindElement(By.id("upload-error-window")));
+        assertSearchToolbar(scenarioWindow, "Enter Rightsholder Name/Account #");
+        WebElement rightsholdersTable = assertWebElement(scenarioWindow, "rightsholders-totals-table");
+        verifyTable(rightsholdersTable);
+        clickButtonAndWait(scenarioWindow, "Close");
     }
 
     @Test
@@ -51,34 +47,49 @@ public class ViewScenarioUiTest extends ForeignCommonUiTest {
     public void testSearch() {
         loginAsSpecialist();
         WebElement window = openViewScenarioWindow();
-        WebElement searchToolbar = assertElement(window, By.id(SEARCH_TOOLBAR_ID));
-        WebElement searchField = assertElement(searchToolbar, By.className("v-textfield"));
-        WebElement searchButton = assertElement(searchToolbar, By.className(SEARCH_BUTTON_ID));
-        WebElement table = getRightsholdersTotalsTable(window);
-        buildRightsholderTotalsHolders();
+        WebElement searchToolbar = assertSearchToolbar(window, "Enter Rightsholder Name/Account #");
+        WebElement searchField = assertWebElement(searchToolbar, By.className("v-textfield"));
+        WebElement searchButton = assertWebElement(searchToolbar, By.className("button-search"));
+        WebElement table = assertWebElement(window, "rightsholders-totals-table");
         verifySearchByRightsholderName(searchField, searchButton, table);
         verifySearchByRightsholderAccountNumber(searchField, searchButton, table);
     }
 
     private void verifySearchByRightsholderName(WebElement searchField, WebElement searchButton, WebElement table) {
         applySearch(searchField, searchButton, "British Film Institute (BFI)");
-        verifyTableRows(table, rightsholderTotalsHolder1);
+        List<WebElement> rows = assertTableRowElements(table, 1);
+        assertTableRowElements(rows.get(0), rightsholder1);
+
         applySearch(searchField, searchButton, "BriTIsh film Institute (bfi)");
-        verifyTableRows(table, rightsholderTotalsHolder1);
+        rows = assertTableRowElements(table, 1);
+        assertTableRowElements(rows.get(0), rightsholder1);
+
         applySearch(searchField, searchButton, "CCH");
-        verifyTableRows(table, rightsholderTotalsHolder2);
+        rows = assertTableRowElements(table, 1);
+        assertTableRowElements(rows.get(0), rightsholder2);
+
         applySearch(searchField, searchButton, "T");
-        verifyTableRows(table, rightsholderTotalsHolder1, rightsholderTotalsHolder3);
+        rows = assertTableRowElements(table, 2);
+        assertTableRowElements(rows.get(0), rightsholder1);
+        assertTableRowElements(rows.get(1), rightsholder3);
     }
 
     private void verifySearchByRightsholderAccountNumber(WebElement searchField, WebElement searchButton,
                                                          WebElement table) {
         applySearch(searchField, searchButton, "1000009997");
-        verifyTableRows(table, rightsholderTotalsHolder3);
+        List<WebElement> rows = assertTableRowElements(table, 1);
+        assertTableRowElements(rows.get(0), rightsholder3);
+
         applySearch(searchField, searchButton, "100000");
-        verifyTableRows(table, rightsholderTotalsHolder1, rightsholderTotalsHolder2, rightsholderTotalsHolder3);
+        rows = assertTableRowElements(table, 3);
+        assertTableRowElements(rows.get(0), rightsholder1);
+        assertTableRowElements(rows.get(1), rightsholder2);
+        assertTableRowElements(rows.get(2), rightsholder3);
+
         applySearch(searchField, searchButton, "97");
-        verifyTableRows(table, rightsholderTotalsHolder1, rightsholderTotalsHolder3);
+        rows = assertTableRowElements(table, 2);
+        assertTableRowElements(rows.get(0), rightsholder1);
+        assertTableRowElements(rows.get(1), rightsholder3);
     }
 
     private void applySearch(WebElement searchField, WebElement searchButton, String searchValue) {
@@ -86,85 +97,23 @@ public class ViewScenarioUiTest extends ForeignCommonUiTest {
         clickElementAndWait(searchButton);
     }
 
-    private void verifySearchToolbar(WebElement window) {
-        WebElement searchToolbar = assertElement(window, By.id(SEARCH_TOOLBAR_ID));
-        WebElement prompt = assertElement(searchToolbar, By.className("v-textfield-prompt"));
-        assertEquals("Enter Rightsholder Name/Account #", getValueAttribute(prompt));
-        assertElement(searchToolbar, By.className(SEARCH_BUTTON_ID));
-        assertElement(searchToolbar, By.className("button-clear"));
-    }
-
-    private void verifyTable(WebElement window) {
-        WebElement table = getRightsholdersTotalsTable(window);
-        verifyTableColumns(table, "RH Account #", "RH Name", "Payee Account #", "Payee Name", "Amt in USD",
+    private void verifyTable(WebElement table) {
+        assertTableHeaderElements(table, "RH Account #", "RH Name", "Payee Account #", "Payee Name", "Amt in USD",
             "Service Fee Amount", "Net Amt in USD", "Service Fee %");
-        buildRightsholderTotalsHolders();
-        verifyTableRows(table, rightsholderTotalsHolder1, rightsholderTotalsHolder2, rightsholderTotalsHolder3);
-        verifyTableSorting(table, "RH Account #", "RH Name", "Amt in USD", "Service Fee Amount", "Net Amt in USD");
-        verifyFooter(table);
-    }
-
-    private WebElement getRightsholdersTotalsTable(WebElement window) {
-        return assertElement(window, By.id("rightsholders-totals-table"));
-    }
-
-    private void verifyTableRows(WebElement table, RightsholderTotalsHolder... rightsholderTotalsHolders) {
-        List<WebElement> rows = findElements(assertElement(table, By.className(V_TABLE_BODY_CLASS_NAME)),
-            By.tagName(HTML_TR_TAG_NAME));
-        assertEquals(rightsholderTotalsHolders.length, CollectionUtils.size(rows));
-        for (int i = 0; i < rightsholderTotalsHolders.length; i++) {
-            verifyRightsholderTotalsHolder(rows.get(i), rightsholderTotalsHolders[i]);
-        }
-    }
-
-    private void verifyRightsholderTotalsHolder(WebElement row, RightsholderTotalsHolder rightsholderTotalsHolder) {
-        List<WebElement> cells = findElements(row, By.className(V_TABLE_CELL_CONTENT_CLASS_NAME));
-        assertEquals(rightsholderTotalsHolder.getRightsholderAccountNumber().toString(), cells.get(0).getText());
-        assertEquals(rightsholderTotalsHolder.getRightsholderName(), cells.get(1).getText());
-        assertEquals(StringUtils.EMPTY, cells.get(2).getText());
-        assertEquals(StringUtils.EMPTY, cells.get(3).getText());
-        assertEquals(String.format("%,.2f", rightsholderTotalsHolder.getGrossTotal()), cells.get(4).getText());
-        assertEquals(String.format("%,.2f", rightsholderTotalsHolder.getServiceFeeTotal()), cells.get(5).getText());
-        assertEquals(String.format("%,.2f", rightsholderTotalsHolder.getNetTotal()), cells.get(6).getText());
-        assertEquals(StringUtils.EMPTY, cells.get(7).getText());
-    }
-
-    private void verifyFooter(WebElement table) {
-        WebElement footer = assertElement(table, By.className("v-table-footer-wrap"));
-        List<WebElement> cells = findElements(footer, By.className(V_TABLE_FOOTER_CONTAINER_CLASS_NAME));
-        assertEquals("Totals", cells.get(0).getText());
-        assertEquals(StringUtils.SPACE, cells.get(1).getText());
-        assertEquals(StringUtils.SPACE, cells.get(2).getText());
-        assertEquals(StringUtils.SPACE, cells.get(3).getText());
-        assertEquals("10,530.00", cells.get(4).getText());
-        assertEquals(StringUtils.SPACE, cells.get(5).getText());
-        assertEquals("9,000.00", cells.get(6).getText());
-        assertEquals(StringUtils.SPACE, cells.get(7).getText());
+        List<WebElement> rows = assertTableRowElements(table, 3);
+        assertTableRowElements(rows.get(0), rightsholder1);
+        assertTableRowElements(rows.get(1), rightsholder2);
+        assertTableRowElements(rows.get(2), rightsholder3);
+        assertTableSorting(table, "RH Account #", "RH Name", "Amt in USD", "Service Fee Amount", "Net Amt in USD");
+        assertTableFooterElements(table, "Totals", StringUtils.SPACE, StringUtils.SPACE, StringUtils.SPACE, "10,530.00",
+            StringUtils.SPACE, "9,000.00", StringUtils.SPACE);
     }
 
     private WebElement openViewScenarioWindow() {
         WebElement scenarioTab = selectScenariosTab();
         WebElement selectedScenario = waitAndFindElementByText(scenarioTab, HTML_DIV_TAG_NAME, "Scenario for viewing");
         clickElementAndWait(selectedScenario);
-        clickElementAndWait(assertElement(scenarioTab, By.id(VIEW_BUTTON_ID)));
-        return assertElement(By.id("view-scenario-widget"));
-    }
-
-    private void buildRightsholderTotalsHolders() {
-        rightsholderTotalsHolder1 = new RightsholderTotalsHolder();
-        rightsholderTotalsHolder1.setRightsholderName("British Film Institute (BFI)");
-        rightsholderTotalsHolder1.setRightsholderAccountNumber(1000002797L);
-        rightsholderTotalsHolder1.setGrossTotal(new BigDecimal("480.00"));
-        rightsholderTotalsHolder1.setNetTotal(new BigDecimal("1050.00"));
-        rightsholderTotalsHolder2 = new RightsholderTotalsHolder();
-        rightsholderTotalsHolder2.setRightsholderName("CCH");
-        rightsholderTotalsHolder2.setRightsholderAccountNumber(1000008666L);
-        rightsholderTotalsHolder2.setGrossTotal(new BigDecimal("7650.00"));
-        rightsholderTotalsHolder2.setNetTotal(new BigDecimal("4550.00"));
-        rightsholderTotalsHolder3 = new RightsholderTotalsHolder();
-        rightsholderTotalsHolder3.setRightsholderName("IEEE - Inst of Electrical and Electronics Engrs");
-        rightsholderTotalsHolder3.setRightsholderAccountNumber(1000009997L);
-        rightsholderTotalsHolder3.setGrossTotal(new BigDecimal("2400.00"));
-        rightsholderTotalsHolder3.setNetTotal(new BigDecimal("3400.00"));
+        clickElementAndWait(assertWebElement(scenarioTab, "View"));
+        return assertWebElement(By.id("view-scenario-widget"));
     }
 }

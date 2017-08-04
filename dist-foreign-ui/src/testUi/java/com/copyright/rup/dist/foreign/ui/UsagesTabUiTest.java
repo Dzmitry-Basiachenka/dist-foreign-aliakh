@@ -1,18 +1,13 @@
 package com.copyright.rup.dist.foreign.ui;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 import com.google.common.collect.Sets;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -26,17 +21,11 @@ import java.util.Set;
  */
 public class UsagesTabUiTest extends ForeignCommonUiTest {
 
-    private static final String USAGE_BATCH_NAME = "CADRA_11Dec16";
-    private static final String RRO_ACCOUNT =
-        "7000813806 - CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil";
-    private static final String FISCAL_YEAR = "2017";
     private static final String CLEAR_BATTON_ID = "Clear";
     private static final String FILTERS_HEADER_TEXT = "Filters";
-    private static final String FILTER_BUTTONS_LAYOUT_ID = "filter-buttons";
     private static final String EXPORT_BUTTON_ID = "Export";
-    private static final String DELETE_USAGE_BUTTON_ID = "Delete_Usage_Batch";
-    private static final Set<String> USAGES_BUTTONS =
-        Sets.newHashSet(LOAD_USAGE_BUTTON_ID, ADD_TO_SCENARIO_BUTTON_ID, EXPORT_BUTTON_ID, DELETE_USAGE_BUTTON_ID);
+    private static final String LOAD_BUTTON_ID = "Load";
+    private static final String CLOSE_BUTTON_ID = "Close";
 
     @Test
     // Test case IDs: '65520aa2-3a1c-4c7c-81e6-96a0a845331e', 90031f0e-1d4b-4d1c-86a6-ca5d72ae3637
@@ -108,210 +97,157 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
 
     private void verifyBatchAndUsageInformationIsDisplayedCorrectly() {
         WebElement usagesTab = selectUsagesTab();
-        WebElement filterWidget = assertElement(usagesTab, By.id(USAGE_FILTER_WIDGET_ID));
-        assertNotNull(findElementByText(filterWidget, HTML_DIV_TAG_NAME, FILTERS_HEADER_TEXT));
-        openBatchesFilterWindow(filterWidget);
-        applyBatchFilter(USAGE_BATCH_NAME);
-        clickButtonAndWait(assertElement(filterWidget, By.id(FILTER_BUTTONS_LAYOUT_ID)), APPLY_BUTTON_ID);
+        WebElement filterWidget = assertWebElement(usagesTab, "usages-filter-widget");
+        assertWebElement(filterWidget, HTML_DIV_TAG_NAME, FILTERS_HEADER_TEXT);
+        applyBatchesFilter(filterWidget, "CADRA_11Dec16");
+        clickButtonAndWait(assertWebElement(filterWidget, "filter-buttons"), "Apply");
         verifyFoundUsages(usagesTab);
     }
 
     private void verifyMultiplyUsageDataFilterAndClearFilterButton() {
         WebElement usagesTab = selectUsagesTab();
-        WebElement usagesLayout = assertElement(usagesTab, By.id(USAGE_LAYOUT_ID));
-        WebElement usagesTable = assertElement(usagesLayout, By.id(USAGE_TABLE_ID));
-        WebElement filterWidget = assertElement(usagesTab, By.id(USAGE_FILTER_WIDGET_ID));
-        assertNotNull(findElementByText(filterWidget, HTML_DIV_TAG_NAME, FILTERS_HEADER_TEXT));
-        openBatchesFilterWindow(filterWidget);
-        applyBatchFilter(USAGE_BATCH_NAME);
-        openRroFilterWindow(filterWidget);
-        applyRroFilter(RRO_ACCOUNT);
-        applyPaymentDateFilter();
-        applyFiscalYear(FISCAL_YEAR);
-        WebElement filterButtonsLayout = assertElement(filterWidget, By.id(FILTER_BUTTONS_LAYOUT_ID));
-        clickButtonAndWait(filterButtonsLayout, APPLY_BUTTON_ID);
+        WebElement filterWidget = assertWebElement(usagesTab, "usages-filter-widget");
+        assertWebElement(filterWidget, HTML_DIV_TAG_NAME, FILTERS_HEADER_TEXT);
+        applyBatchesFilter(filterWidget, "CADRA_11Dec16");
+        applyRrosFilter(filterWidget,
+            "7000813806 - CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil");
+        applyCurrentDateForDateField(assertWebElement(By.id("payment-date-filter")));
+        applyFiscalYear();
+        WebElement filterButtonsLayout = assertWebElement(filterWidget, "filter-buttons");
+        clickButtonAndWait(filterButtonsLayout, "Apply");
         verifyFoundUsages(usagesTab);
         clickButtonAndWait(filterButtonsLayout, CLEAR_BATTON_ID);
-        assertUsagesFilterEmpty(filterWidget, usagesTable);
+        assertUsagesFilterEmpty(filterWidget);
     }
 
-    private void applyFiscalYear(String fiscalYear) {
-        WebElement fiscalYearFilter = assertElement(By.id("fiscal-year-filter"));
-        WebElement fiscalYearFilterSelectButton = assertElement(By.className("v-filterselect-button"));
+    private void applyFiscalYear() {
+        WebElement fiscalYearFilter = assertWebElement(By.id("fiscal-year-filter"));
+        WebElement fiscalYearFilterSelectButton = assertWebElement(By.className("v-filterselect-button"));
         clickElementAndWait(fiscalYearFilterSelectButton);
-        WebElement fiscalYearLabel = findElementByText(fiscalYearFilter, HTML_SPAN_TAG_NAME, fiscalYear);
-        assertNotNull(fiscalYearLabel);
-        clickElementAndWait(fiscalYearLabel);
-    }
-
-    private void applyPaymentDateFilter() {
-        WebElement paymentDateFilter = assertElement(By.id(PAYMENT_DATE_FILTER_ID));
-        applyCurrentDateForDateField(paymentDateFilter);
-    }
-
-    private void applyRroFilter(String rroAccount) {
-        WebElement filterWindow = assertElement(By.id("rightsholders-filter-window"));
-        WebElement rroAccountLabel = findElementByText(filterWindow, HTML_LABEL_TAG_NAME, rroAccount);
-        assertNotNull(rroAccountLabel);
-        clickElementAndWait(rroAccountLabel);
-        clickButtonAndWait(filterWindow, SAVE_BUTTON_ID);
-    }
-
-    private void applyBatchFilter(String batchName) {
-        WebElement filterWindow = assertElement(By.id("batches-filter-window"));
-        WebElement batchLabel = findElementByText(filterWindow, HTML_LABEL_TAG_NAME, batchName);
-        assertNotNull(batchLabel);
-        clickElementAndWait(batchLabel);
-        clickButtonAndWait(filterWindow, SAVE_BUTTON_ID);
+        clickElementAndWait(assertWebElement(fiscalYearFilter, HTML_SPAN_TAG_NAME, "2017"));
     }
 
     private void verifyFoundUsages(WebElement usagesTab) {
-        WebElement usagesLayout = assertElement(usagesTab, By.id(USAGE_LAYOUT_ID));
-        WebElement usagesTable = assertElement(usagesLayout, By.id(USAGE_TABLE_ID));
-        WebElement table = assertElement(usagesTable, By.className(V_TABLE_BODY_CLASS_NAME));
-        List<WebElement> usageTableRows = findElements(table, By.tagName(HTML_TR_TAG_NAME));
-        assertEquals(1, CollectionUtils.size(usageTableRows));
-        WebElement usageTableRow = usageTableRows.get(0);
-        List<WebElement> usageValues = findElements(usageTableRow, By.tagName(HTML_TD_TAG_NAME));
-        assertEquals(23, CollectionUtils.size(usageValues));
-        verifyUsageValues(usageValues);
-    }
-
-    private void verifyUsageValues(List<WebElement> usageValues) {
-        assertTrue(getInnerHtml(usageValues.get(0)).contains("6997788888"));
-        assertTrue(getInnerHtml(usageValues.get(1)).contains("ELIGIBLE"));
-        assertTrue(getInnerHtml(usageValues.get(2)).contains("CADRA_11Dec16"));
-        assertTrue(getInnerHtml(usageValues.get(3)).contains("FY2017"));
-        assertTrue(getInnerHtml(usageValues.get(4)).contains("7000813806"));
-        assertTrue(getInnerHtml(usageValues.get(5)).contains(
-            "CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil"));
-        assertTrue(getInnerHtml(usageValues.get(6)).contains("01/11/2017"));
-        assertTrue(getInnerHtml(usageValues.get(7)).contains(
-            "2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA"));
-        assertTrue(getInnerHtml(usageValues.get(8)).contains(
-            "Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle"));
-        assertTrue(getInnerHtml(usageValues.get(9)).contains("1008902112377654XX"));
-        assertTrue(getInnerHtml(usageValues.get(10)).contains("180382914"));
-        assertTrue(getInnerHtml(usageValues.get(11)).contains("1000009997"));
-        assertTrue(getInnerHtml(usageValues.get(12)).contains("IEEE - Inst of Electrical and Electronics Engrs"));
-        assertTrue(getInnerHtml(usageValues.get(13)).contains("IEEE"));
-        assertTrue(getInnerHtml(usageValues.get(14)).contains("09/10/2013"));
-        assertTrue(getInnerHtml(usageValues.get(15)).contains("2502232"));
-        assertTrue(getInnerHtml(usageValues.get(16)).contains("2,500.00"));
-        assertTrue(getInnerHtml(usageValues.get(17)).contains("13,461.54"));
-        assertTrue(getInnerHtml(usageValues.get(18)).contains("35,000.00"));
-        assertTrue(getInnerHtml(usageValues.get(19)).contains("Doc Del"));
-        assertTrue(getInnerHtml(usageValues.get(20)).contains("2013"));
-        assertTrue(getInnerHtml(usageValues.get(21)).contains("2017"));
-        assertTrue(getInnerHtml(usageValues.get(22)).contains("Íñigo López de Mendoza, marqués de Santillana"));
+        WebElement usagesLayout = assertWebElement(usagesTab, "usages-layout");
+        WebElement usagesTable = assertWebElement(usagesLayout, "usages-table");
+        assertTableRowElements(usagesTable,
+            "6997788888",
+            "ELIGIBLE",
+            "CADRA_11Dec16",
+            "FY2017", "7000813806",
+            "CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil",
+            "01/11/2017",
+            "2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA",
+            "Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle",
+            "1008902112377654XX",
+            "180382914",
+            "1000009997",
+            "IEEE - Inst of Electrical and Electronics Engrs",
+            "IEEE",
+            "09/10/2013",
+            "2502232",
+            "2,500.00",
+            "13,461.54",
+            "35,000.00",
+            "Doc Del",
+            "2013",
+            "2017",
+            "Íñigo López de Mendoza, marqués de Santillana");
     }
 
     private WebElement verifyUsagesTab() {
         WebElement usagesTab = selectUsagesTab();
         verifyFiltersWidget(usagesTab);
-        WebElement usagesLayout = assertElement(usagesTab, By.id(USAGE_LAYOUT_ID));
+        WebElement usagesLayout = assertWebElement(usagesTab, "usages-layout");
         verifyUsagesTable(usagesLayout);
         return usagesLayout;
     }
 
     private void verifyUsagesLayoutButtonSpecialist(WebElement usagesLayout) {
-        WebElement buttonsLayout = assertElement(usagesLayout, By.id("usages-buttons"));
-        verifyUsagesLayoutButton(buttonsLayout,
-            Sets.newHashSet(ADD_TO_SCENARIO_BUTTON_ID, EXPORT_BUTTON_ID, LOAD_USAGE_BUTTON_ID, DELETE_USAGE_BUTTON_ID));
+        WebElement buttonsLayout = assertWebElement(usagesLayout, "usages-buttons");
+        verifyUsagesButtonLayout(buttonsLayout,
+            Sets.newHashSet(LOAD_BUTTON_ID, "Add_To_Scenario", EXPORT_BUTTON_ID, "Delete_Usage_Batch"));
         verifyUploadUsageWindow(buttonsLayout);
         verifyLoadUsageButton(buttonsLayout);
         verifyDeleteUsageButton(buttonsLayout);
         verifyAddToScenarioButton(buttonsLayout);
-        verifyExportButton(buttonsLayout);
     }
 
     private void verifyUsagesLayoutButtonManager(WebElement usagesLayout) {
-        WebElement buttonsLayout = assertElement(usagesLayout, By.id("usages-buttons"));
-        verifyUsagesLayoutButton(buttonsLayout, Sets.newHashSet(EXPORT_BUTTON_ID));
-        verifyExportButton(buttonsLayout);
+        WebElement buttonsLayout = assertWebElement(usagesLayout, "usages-buttons");
+        verifyUsagesButtonLayout(buttonsLayout, Sets.newHashSet(EXPORT_BUTTON_ID));
     }
 
     private void verifyUsagesLayoutButtonViewOnly(WebElement usagesLayout) {
-        WebElement buttonsLayout = assertElement(usagesLayout, By.id("usages-buttons"));
-        verifyUsagesLayoutButton(buttonsLayout, Sets.newHashSet(EXPORT_BUTTON_ID));
-        verifyExportButton(buttonsLayout);
+        WebElement buttonsLayout = assertWebElement(usagesLayout, "usages-buttons");
+        verifyUsagesButtonLayout(buttonsLayout, Sets.newHashSet(EXPORT_BUTTON_ID));
     }
 
-    @SuppressWarnings("unchecked")
-    private void verifyUsagesLayoutButton(WebElement buttonsLayout, Set<String> buttonsIds) {
-        assertTrue(USAGES_BUTTONS.containsAll(buttonsIds));
-        Set<String> invisibleButtons = Sets.newHashSet(CollectionUtils.subtract(USAGES_BUTTONS, buttonsIds));
-        for (String id : invisibleButtons) {
-            assertNull(waitAndFindElement(buttonsLayout, By.id(id)));
-        }
+    private void verifyUsagesButtonLayout(WebElement buttonsLayout, Set<String> buttonsIds) {
+        Set<String> usagesButtons =
+            Sets.newHashSet(LOAD_BUTTON_ID, "Add_To_Scenario", EXPORT_BUTTON_ID, "Delete_Usage_Batch");
+        assertButtonsToolbar(buttonsLayout, usagesButtons, buttonsIds);
     }
 
     private void verifyLoadUsageButton(WebElement buttonsLayout) {
-        WebElement button = assertElement(buttonsLayout, By.id(LOAD_USAGE_BUTTON_ID));
-        clickElementAndWait(button);
-        clickElementAndWait(assertElement(assertElement(By.id("usage-upload-window")), By.id(CLOSE_BUTTON_ID)));
+        clickButtonAndWait(buttonsLayout, LOAD_BUTTON_ID);
+        WebElement uploadWindow = assertWebElement(By.id("usage-upload-window"));
+        clickButtonAndWait(uploadWindow, CLOSE_BUTTON_ID);
     }
 
     private void verifyDeleteUsageButton(WebElement buttonsLayout) {
-        WebElement button = assertElement(buttonsLayout, By.id(DELETE_USAGE_BUTTON_ID));
-        clickElementAndWait(button);
-        clickElementAndWait(assertElement(assertElement(By.id("delete-usage-batch")), By.id(CLOSE_BUTTON_ID)));
+        clickButtonAndWait(buttonsLayout, "Delete_Usage_Batch");
+        WebElement deleteUsageWindow = assertWebElement(By.id("delete-usage-batch"));
+        clickButtonAndWait(deleteUsageWindow, CLOSE_BUTTON_ID);
     }
 
     private void verifyAddToScenarioButton(WebElement buttonsLayout) {
-        WebElement button = assertElement(buttonsLayout, By.id(ADD_TO_SCENARIO_BUTTON_ID));
-        clickElementAndWait(button);
-        clickElementAndWait(
-            findElementByText(assertElement(By.id("notification-window")), HTML_SPAN_TAG_NAME, OK_BUTTON_ID));
-    }
-
-    private void verifyExportButton(WebElement buttonsLayout) {
-        WebElement button = assertElement(buttonsLayout, By.id(EXPORT_BUTTON_ID));
-        assertTrue(button.isEnabled());
+        clickButtonAndWait(buttonsLayout, "Add_To_Scenario");
+        WebElement addToScenarionWindow = assertWebElement(By.id("notification-window"));
+        clickButtonAndWait(addToScenarionWindow, "Ok");
     }
 
     private void verifyUploadUsageWindow(WebElement buttonsLayout) {
-        clickElementAndWait(assertElement(buttonsLayout, By.id(LOAD_USAGE_BUTTON_ID)));
-        WebElement uploadWindow = assertElement(By.id("usage-upload-window"));
+        clickButtonAndWait(buttonsLayout, LOAD_BUTTON_ID);
+        WebElement uploadWindow = assertWebElement(By.id("usage-upload-window"));
         assertEquals("Upload Usage Batch", getWindowCaption(uploadWindow));
         verifyUploadElement(uploadWindow);
         verifyRightsholdersFields(uploadWindow);
         verifyDateFields(uploadWindow);
-        assertTextElement(uploadWindow, "usage-batch-name-field", "Usage Batch Name");
-        assertTextElement(uploadWindow, "gross-amount-field", "Gross Amount in USD");
-        assertElement(uploadWindow, By.id(UPLOAD_BUTTON_ID));
-        clickElementAndWait(assertElement(uploadWindow, By.id(CLOSE_BUTTON_ID)));
+        assertTextFieldElement(uploadWindow, "usage-batch-name-field", "Usage Batch Name");
+        assertTextFieldElement(uploadWindow, "gross-amount-field", "Gross Amount in USD");
+        assertWebElement(uploadWindow, "Upload");
+        clickButtonAndWait(uploadWindow, CLOSE_BUTTON_ID);
     }
 
     private void verifyUploadElement(WebElement uploadWindow) {
-        WebElement uploadField = assertElement(uploadWindow, By.id("usage-upload-component"));
-        assertNotNull(findElementByText(uploadField, HTML_SPAN_TAG_NAME, "File to Upload"));
-        assertNotNull(findElementByText(uploadField, HTML_SPAN_TAG_NAME, "*"));
-        assertElement(uploadField, By.tagName(HTML_INPUT_TAG_NAME));
-        assertNotNull(findElementByText(assertElement(uploadField, By.tagName("form")), HTML_SPAN_TAG_NAME, "Browse"));
+        WebElement uploadField = assertWebElement(uploadWindow, "usage-upload-component");
+        assertWebElement(uploadField, HTML_SPAN_TAG_NAME, "File to Upload");
+        assertWebElement(uploadField, HTML_SPAN_TAG_NAME, "*");
+        assertWebElement(uploadField, By.tagName(HTML_INPUT_TAG_NAME));
+        assertWebElement(assertWebElement(uploadField, By.tagName("form")), HTML_SPAN_TAG_NAME, "Browse");
     }
 
     private void verifyRightsholdersFields(WebElement uploadWindow) {
-        assertTextElement(uploadWindow, "rro-account-name-field", "RRO Account Name");
-        assertTextElement(uploadWindow, "rro-account-number-field", "RRO Account #");
-        assertElement(uploadWindow, By.id(VERIFY_BUTTON_ID));
+        assertTextFieldElement(uploadWindow, "rro-account-name-field", "RRO Account Name");
+        assertTextFieldElement(uploadWindow, "rro-account-number-field", "RRO Account #");
+        assertWebElement(uploadWindow, "Verify");
     }
 
     private void verifyDateFields(WebElement uploadWindow) {
         verifyPaymentDateComponent(uploadWindow, "payment-date-field");
-        assertTextElement(uploadWindow, "fiscal-year-field", "Fiscal Year");
+        assertTextFieldElement(uploadWindow, "fiscal-year-field", "Fiscal Year");
     }
 
     private void verifyUsagesTable(WebElement usagesLayout) {
-        WebElement usagesTable = assertElement(usagesLayout, By.id(USAGE_TABLE_ID));
+        WebElement usagesTable = assertWebElement(usagesLayout, "usages-table");
         verifyTableHeaderElements(usagesTable);
-        verifyTableBody(usagesTable);
-        assertElement(usagesTable, By.className("v-table-column-selector"));
-        assertUsagesTableEmpty(usagesTable);
+        assertWebElement(usagesTable, By.className("v-table-column-selector"));
+        assertTableRowElements(usagesTable, 0);
     }
 
     private void verifyTableHeaderElements(WebElement usagesTable) {
-        verifyTableColumns(usagesTable,
+        assertTableHeaderElements(usagesTable,
             "Detail ID",
             "Detail Status",
             "Usage Batch Name",
@@ -337,87 +273,59 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
             "Author");
     }
 
-    private void verifyTableBody(WebElement usagesTable) {
-        WebElement table = assertElement(usagesTable, By.className(V_TABLE_BODY_CLASS_NAME));
-        List<WebElement> tableRows = findElements(table, By.tagName(HTML_TR_TAG_NAME));
-        assertTrue(tableRows.isEmpty());
-    }
-
     private void verifyFiltersWidget(WebElement tabContainer) {
-        WebElement filterWidget = assertElement(tabContainer, By.id(USAGE_FILTER_WIDGET_ID));
-        assertNotNull(findElementByText(filterWidget, HTML_DIV_TAG_NAME, FILTERS_HEADER_TEXT));
+        WebElement filterWidget = assertWebElement(tabContainer, "usages-filter-widget");
+        assertWebElement(filterWidget, HTML_DIV_TAG_NAME, FILTERS_HEADER_TEXT);
         verifyBatchesFilter(filterWidget);
-        verifyRightsholdersFilter(filterWidget);
-        verifyPaymentDateComponent(filterWidget, PAYMENT_DATE_FILTER_ID);
-        assertComboboxElement(filterWidget, "fiscal-year-filter", HTML_SPAN_TAG_NAME, "Fiscal Year To");
+        verifyRROsFilter(filterWidget);
+        verifyPaymentDateComponent(filterWidget, "payment-date-filter");
+        assertComboboxElement(filterWidget, "fiscal-year-filter", "Fiscal Year To");
         verifyFiltersWidgetButtons(filterWidget);
     }
 
     private void verifyBatchesFilter(WebElement filterWidget) {
         openBatchesFilterWindow(filterWidget);
-        verifyFilterWindow("batches-filter-window", "Batches filter");
+        verifyFilterWindow("batches-filter-window", "Batches filter", "Enter Usage Batch name");
     }
 
-    private void verifyRightsholdersFilter(WebElement filterWidget) {
+    private void verifyRROsFilter(WebElement filterWidget) {
         openRroFilterWindow(filterWidget);
-        verifyFilterWindow("rightsholders-filter-window", "RROs filter");
+        verifyFilterWindow("rightsholders-filter-window", "RROs filter", "Enter RRO Name/Account #");
     }
 
     private void openRroFilterWindow(WebElement filterWidget) {
-        WebElement rightsholdersFilter = assertElement(filterWidget, By.id(RRO_FILTER_ID));
-        assertNotNull(findElementByText(rightsholdersFilter, HTML_DIV_TAG_NAME, "(0)"));
-        WebElement rightsholderFilterButton = findElementByText(rightsholdersFilter, HTML_SPAN_TAG_NAME, "RROs");
-        assertNotNull(rightsholderFilterButton);
+        WebElement rightsholdersFilter = assertWebElement(filterWidget, "rightsholders-filter");
+        assertWebElement(rightsholdersFilter, HTML_DIV_TAG_NAME, "(0)");
+        WebElement rightsholderFilterButton = assertWebElement(rightsholdersFilter, HTML_SPAN_TAG_NAME, "RROs");
         clickElementAndWait(rightsholderFilterButton);
     }
 
     private void openBatchesFilterWindow(WebElement filterWidget) {
-        WebElement batchesFilter = assertElement(filterWidget, By.id(BATCHES_FILTER_ID));
-        assertNotNull(findElementByText(batchesFilter, HTML_DIV_TAG_NAME, "(0)"));
-        WebElement batchesFilterButton = findElementByText(batchesFilter, HTML_SPAN_TAG_NAME, "Batches");
-        assertNotNull(batchesFilterButton);
+        WebElement batchesFilter = assertWebElement(filterWidget, "batches-filter");
+        assertWebElement(batchesFilter, HTML_DIV_TAG_NAME, "(0)");
+        WebElement batchesFilterButton = assertWebElement(batchesFilter, HTML_SPAN_TAG_NAME, "Batches");
         clickElementAndWait(batchesFilterButton);
     }
 
-    private void verifyFilterWindow(String id, String caption) {
-        WebElement filterWindow = assertElement(By.id(id));
-        assertEquals(caption, getWindowCaption(filterWindow));
-        verifySearchToolBar(filterWindow);
-        assertElement(filterWindow, By.id(SAVE_BUTTON_ID));
-        assertElement(filterWindow, By.id(CLEAR_BATTON_ID));
-        clickElementAndWait(assertElement(filterWindow, By.id(CLOSE_BUTTON_ID)));
-    }
-
-    private void verifySearchToolBar(WebElement filterWindow) {
-        WebElement searchToolBar = assertElement(filterWindow, By.id("search-toolbar"));
-        assertElement(searchToolBar, By.tagName(HTML_INPUT_TAG_NAME));
-        assertElement(searchToolBar, By.className("button-search"));
-        assertElement(searchToolBar, By.className("button-clear"));
+    private void verifyFilterWindow(String id, String windowCaption, String promptMessage) {
+        WebElement filterWindow = assertWebElement(By.id(id));
+        assertEquals(windowCaption, getWindowCaption(filterWindow));
+        assertSearchToolbar(filterWindow, promptMessage);
+        assertWebElement(filterWindow, "Save");
+        assertWebElement(filterWindow, "Clear");
+        clickButtonAndWait(filterWindow, CLOSE_BUTTON_ID);
     }
 
     private void verifyPaymentDateComponent(WebElement filterWidget, String id) {
-        WebElement paymentDateFilter = assertElement(filterWidget, By.id(id));
-        assertNotNull(findElementByText(paymentDateFilter, HTML_SPAN_TAG_NAME, "Payment Date To"));
-        assertElement(paymentDateFilter, By.className("v-datefield"));
-        assertElement(paymentDateFilter, By.className(V_DATE_FIELD_BUTTON_CLASS_NAME));
+        WebElement paymentDateFilter = assertWebElement(filterWidget, id);
+        assertWebElement(paymentDateFilter, HTML_SPAN_TAG_NAME, "Payment Date To");
+        assertWebElement(paymentDateFilter, By.className("v-datefield"));
+        assertWebElement(paymentDateFilter, By.className(V_DATE_FIELD_BUTTON_CLASS_NAME));
     }
 
     private void verifyFiltersWidgetButtons(WebElement filterWidget) {
-        WebElement buttonsContainer = assertElement(filterWidget, By.id(FILTER_BUTTONS_LAYOUT_ID));
-        assertElement(buttonsContainer, By.id(APPLY_BUTTON_ID));
-        assertElement(buttonsContainer, By.id(CLEAR_BATTON_ID));
-    }
-
-    private void assertTextElement(WebElement parentElement, String id, String caption) {
-        WebElement webElement = assertElement(parentElement, By.id(id));
-        WebElement elementContainer = getParentElement(webElement);
-        assertNotNull(findElementByText(elementContainer, HTML_SPAN_TAG_NAME, caption));
-    }
-
-    private void assertComboboxElement(WebElement parentElement, String id, String captionTagName, String caption) {
-        WebElement webElement = assertElement(parentElement, By.id(id));
-        assertNotNull(findElementByText(webElement, captionTagName, caption));
-        assertElement(webElement, By.tagName(HTML_INPUT_TAG_NAME));
-        assertElement(webElement, By.className(V_FILTER_SELECT_BUTTON_CLASS_NAME));
+        WebElement buttonsContainer = assertWebElement(filterWidget, "filter-buttons");
+        assertWebElement(buttonsContainer, "Apply");
+        assertWebElement(buttonsContainer, "Clear");
     }
 }

@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.ui;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
@@ -11,7 +10,6 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.Test;
@@ -25,6 +23,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.IntStream;
 
 /**
  * UI test to verify 'Delete Usage Batch' functionality.
@@ -39,6 +38,8 @@ import java.util.List;
 @ContextConfiguration(value = "classpath:/com/copyright/rup/dist/foreign/ui/dist-foreign-ui-test-context.xml")
 public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
 
+    private static final String CLOSE_BUTTON_ID = "Close";
+    private static final String USAGE_BATCHES_TABLE_ID = "usage-batches-table";
     private UsageBatchInfo usageBatch1 = new UsageBatchInfo("CADRA_11Dec16", "01/11/2017", "FY2017",
         "7000813806 - CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil");
     private UsageBatchInfo usageBatch2 = new UsageBatchInfo("AccessCopyright_11Dec16", "09/10/2015", "FY2016",
@@ -68,7 +69,7 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
     // '7ffd686f-5080-4d99-bf68-fd4576c58508'
     public void testDeleteUsageBatchModalWindow() {
         loginAsSpecialist();
-        WebElement window = openDeleteUsageBatchWindow();
+        WebElement window = openDeleteUsageBatchWindow(selectUsagesTab());
         verifyDeleteUsageBatchWindow(window);
     }
 
@@ -76,11 +77,11 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
     // Test cases IDs: 'b598bf3f-3068-41b8-a5d9-63876b9f2b62', '1c2e8f69-02e7-4477-83c8-24dc69f9cd1e'
     public void testSearch() {
         loginAsSpecialist();
-        WebElement window = openDeleteUsageBatchWindow();
-        WebElement searchToolbar = assertElement(window, By.id(SEARCH_TOOLBAR_ID));
-        WebElement searchField = assertElement(searchToolbar, By.className("v-textfield"));
-        WebElement table = getUsageBatchesTable(window);
-        WebElement searchButton = assertElement(searchToolbar, By.className(SEARCH_BUTTON_ID));
+        WebElement window = openDeleteUsageBatchWindow(selectUsagesTab());
+        WebElement searchToolbar = assertSearchToolbar(window, "Enter Batch Name or Payment Date (MM/dd/yyyy)");
+        WebElement searchField = assertWebElement(searchToolbar, By.className("v-textfield"));
+        WebElement table = assertWebElement(window, USAGE_BATCHES_TABLE_ID);
+        WebElement searchButton = assertWebElement(searchToolbar, By.className("button-search"));
         verifySearchByBatchName(searchField, searchButton, table);
         verifySearchByPaymentDate(searchField, searchButton, table);
     }
@@ -93,21 +94,24 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
         usageBatchRepository.insert(usageBatchToDelete);
         usageRepository.insert(buildUsage());
         loginAsSpecialist();
-        WebElement filterWidget = assertElement(By.id(USAGE_FILTER_WIDGET_ID));
+        WebElement usagesTab = selectUsagesTab();
+        WebElement filterWidget = assertWebElement(By.id("usages-filter-widget"));
         applyFilters(filterWidget, usageBatch4);
-        WebElement usagesTable = assertElement(By.id(USAGE_TABLE_ID));
-        assertUsagesTableNotEmpty(usagesTable, 1);
-        WebElement window = openDeleteUsageBatchWindow();
-        WebElement usageBatchesTable = getUsageBatchesTable(window);
+        WebElement usagesTable = assertWebElement(usagesTab, "usages-table");
+        assertTableRowElements(usagesTable, 1);
+        WebElement window = openDeleteUsageBatchWindow(usagesTab);
+        WebElement usageBatchesTable = assertWebElement(window, By.id(USAGE_BATCHES_TABLE_ID));
         verifyTableRows(usageBatchesTable, usageBatch4, usageBatch1, usageBatch2, usageBatch3);
-        clickElementAndWait(assertElement(usageBatchesTable, By.id("4b67f17c-3c32-4b55-b2a0-dabebb513304")));
-        verifyConfirmDialogAndConfirm("Are you sure you want to delete 'Batch to delete' usage batch?");
+        clickElementAndWait(assertWebElement(usageBatchesTable, "4b67f17c-3c32-4b55-b2a0-dabebb513304"));
+        WebElement confirmDialog = assertWebElement(By.id("confirm-dialog-window"));
+        assertWebElementText(confirmDialog, "Are you sure you want to delete 'Batch to delete' usage batch?");
+        clickButtonAndWait(confirmDialog, "Yes");
         verifyTableRows(usageBatchesTable, usageBatch1, usageBatch2, usageBatch3);
         clickButtonAndWait(window, CLOSE_BUTTON_ID);
-        assertUsagesFilterEmpty(filterWidget, usagesTable);
-        assertNullFilterItem(filterWidget, BATCHES_FILTER_ID, "batches-filter-window", usageBatch4.getName());
-        assertNullFilterItem(filterWidget, RRO_FILTER_ID, "rightsholders-filter-window", usageBatch4.getRro());
-        verifyFiscalYearFilter(filterWidget, " ", "2016", "2017", "2019");
+        assertUsagesFilterEmpty(filterWidget);
+        assertNullFilterItem(filterWidget, "batches-filter", "batches-filter-window", usageBatch4.getName());
+        assertNullFilterItem(filterWidget, "rightsholders-filter", "rightsholders-filter-window", usageBatch4.getRro());
+        verifyFiscalYearFilter(filterWidget, StringUtils.SPACE, "2016", "2017", "2019");
         assertEquals(0, usageBatchRepository.getCountByName(usageBatch4.getName()));
         usageBatchToDelete = null;
     }
@@ -116,17 +120,20 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
     // Test case ID: '259c2da3-46e5-4493-942b-3ae47cae7f94'
     public void testDeleteUsageBatchWithoutApproval() {
         loginAsSpecialist();
-        applyFilters(assertElement(By.id(USAGE_FILTER_WIDGET_ID)), usageBatch1);
-        WebElement usagesTable = assertElement(By.id(USAGE_TABLE_ID));
-        assertUsagesTableNotEmpty(usagesTable, 1);
-        WebElement window = openDeleteUsageBatchWindow();
-        WebElement usageBatchesTable = getUsageBatchesTable(window);
+        WebElement usagesTab = selectUsagesTab();
+        applyFilters(assertWebElement(By.id("usages-filter-widget")), usageBatch1);
+        WebElement usagesTable = assertWebElement(usagesTab, "usages-table");
+        assertTableRowElements(usagesTable, 1);
+        WebElement window = openDeleteUsageBatchWindow(usagesTab);
+        WebElement usageBatchesTable = assertWebElement(window, By.id(USAGE_BATCHES_TABLE_ID));
         verifyTableRows(usageBatchesTable, usageBatch1, usageBatch2, usageBatch3);
-        clickElementAndWait(assertElement(usageBatchesTable, By.id("56282dbc-2468-48d4-b926-93d3458a656a")));
-        verifyConfirmDialogAndDecline("Are you sure you want to delete 'CADRA_11Dec16' usage batch?");
+        clickElementAndWait(assertWebElement(usageBatchesTable, "56282dbc-2468-48d4-b926-93d3458a656a"));
+        WebElement confirmDialog = assertWebElement(By.id("confirm-dialog-window"));
+        assertWebElementText(confirmDialog, "Are you sure you want to delete 'CADRA_11Dec16' usage batch?");
+        clickButtonAndWait(confirmDialog, "Cancel");
         verifyTableRows(usageBatchesTable, usageBatch1, usageBatch2, usageBatch3);
         clickButtonAndWait(window, CLOSE_BUTTON_ID);
-        assertUsagesTableNotEmpty(usagesTable, 1);
+        assertTableRowElements(usagesTable, 1);
         assertEquals(1, usageBatchRepository.getCountByName(usageBatch1.getName()));
     }
 
@@ -134,55 +141,35 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
     // Test cases IDs: 'd79eba61-99c1-4e8b-bda8-b099facfb8d4', 'c32b46ce-6676-4526-af2f-65deb637a346'
     public void testDeleteUsageBatchAssociatedWithScenarios() {
         loginAsSpecialist();
-        applyFilters(assertElement(By.id(USAGE_FILTER_WIDGET_ID)), usageBatch1);
-        WebElement usagesTable = assertElement(By.id(USAGE_TABLE_ID));
-        assertUsagesTableNotEmpty(usagesTable, 1);
-        WebElement window = openDeleteUsageBatchWindow();
-        WebElement usageBatchesTable = getUsageBatchesTable(window);
+        WebElement usagesTab = selectUsagesTab();
+        applyFilters(assertWebElement(By.id("usages-filter-widget")), usageBatch1);
+        WebElement usagesTable = assertWebElement(usagesTab, "usages-table");
+        assertTableRowElements(usagesTable, 1);
+        WebElement window = openDeleteUsageBatchWindow(usagesTab);
+        WebElement usageBatchesTable = assertWebElement(window, By.id(USAGE_BATCHES_TABLE_ID));
         verifyTableRows(usageBatchesTable, usageBatch1, usageBatch2, usageBatch3);
-        clickElementAndWait(assertElement(usageBatchesTable, By.id("56282dbc-2468-48d4-b926-94d3458a666a")));
-        verifyNotificationWindow();
+        clickElementAndWait(assertWebElement(usageBatchesTable, "56282dbc-2468-48d4-b926-94d3458a666a"));
+        WebElement notificationWindow = assertWebElement(By.id("notification-window"));
+        assertWebElementText(notificationWindow,
+            "Usage batch cannot be deleted because it is associated with the following scenarios:\nScenario name");
+        clickButtonAndWait(notificationWindow, "Ok");
         verifyTableRows(usageBatchesTable, usageBatch1, usageBatch2, usageBatch3);
         clickButtonAndWait(window, CLOSE_BUTTON_ID);
-        assertUsagesTableNotEmpty(usagesTable, 1);
+        assertTableRowElements(usagesTable, 1);
         assertEquals(1, usageBatchRepository.getCountByName(usageBatch1.getName()));
     }
 
     private void verifyFiscalYearFilter(WebElement filterWidget, String... expectedItems) {
-        WebElement fiscalYearFilter = assertElement(filterWidget, By.id("fiscal-year-filter"));
-        clickElementAndWait(assertElement(fiscalYearFilter, By.className("v-filterselect-button")));
-        WebElement optionlist = assertElement(By.id("VAADIN_COMBOBOX_OPTIONLIST"));
-        assertEquals(expectedItems.length,
-            CollectionUtils.size(findElements(optionlist, By.tagName(HTML_TR_TAG_NAME))));
-        for (String item : expectedItems) {
-            findElementByText(optionlist, HTML_SPAN_TAG_NAME, item);
-        }
-    }
-
-    private void applyFilters(WebElement filterWidget, UsageBatchInfo usageBatchInfo) {
-        saveFilter(filterWidget, BATCHES_FILTER_ID, "batches-filter-window", usageBatchInfo.getName());
-        saveFilter(filterWidget, RRO_FILTER_ID, "rightsholders-filter-window", usageBatchInfo.getRro());
-        WebElement fiscalYearFilter = assertElement(filterWidget, By.id("fiscal-year-filter"));
-        clickElementAndWait(assertElement(fiscalYearFilter, By.className("v-filterselect-button")));
-        WebElement optionlist = assertElement(By.id("VAADIN_COMBOBOX_OPTIONLIST"));
-        WebElement fiscalYear =
-            findElementByText(optionlist, HTML_SPAN_TAG_NAME, usageBatchInfo.getFiscalYear().substring(2));
-        assertNotNull(fiscalYear);
-        clickElementAndWait(fiscalYear);
-        WebElement filterButtonsLayout = assertElement(filterWidget, By.id("filter-buttons"));
-        clickButtonAndWait(filterButtonsLayout, APPLY_BUTTON_ID);
+        WebElement fiscalYearFilter = assertWebElement(filterWidget, "fiscal-year-filter");
+        assertComboboxElement(fiscalYearFilter, expectedItems);
     }
 
     private void assertNullFilterItem(WebElement filterWidget, String filterId, String filterWindowId, String item) {
-        WebElement itemsFilter = assertElement(filterWidget, By.id(filterId));
+        WebElement itemsFilter = assertWebElement(filterWidget, filterId);
         clickElementAndWait(itemsFilter);
-        WebElement filterWindow = assertElement(By.id(filterWindowId));
+        WebElement filterWindow = assertWebElement(By.id(filterWindowId));
         assertNull(findElementByText(filterWindow, HTML_LABEL_TAG_NAME, item));
         clickButtonAndWait(filterWindow, CLOSE_BUTTON_ID);
-    }
-
-    private WebElement getUsageBatchesTable(WebElement window) {
-        return assertElement(window, By.id("usage-batches-table"));
     }
 
     private void verifySearchByBatchName(WebElement searchField, WebElement searchButton, WebElement table) {
@@ -212,62 +199,31 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
         clickElementAndWait(searchButton);
     }
 
-    private WebElement openDeleteUsageBatchWindow() {
-        clickElementAndWait(assertElement(By.id("Delete_Usage_Batch")));
-        return assertElement(By.id("delete-usage-batch"));
-    }
-
-    private void verifyNotificationWindow() {
-        WebElement notificationWindow = assertElement(By.id("notification-window"));
-        assertEquals(
-            "Usage batch cannot be deleted because it is associated with the following scenarios:\nScenario name",
-            assertElement(notificationWindow, By.className("v-label")).getText());
-        clickButtonAndWait(notificationWindow, OK_BUTTON_ID);
+    private WebElement openDeleteUsageBatchWindow(WebElement usagesTab) {
+        clickButtonAndWait(usagesTab, "Delete_Usage_Batch");
+        return assertWebElement(By.id("delete-usage-batch"));
     }
 
     private void verifyDeleteUsageBatchWindow(WebElement deleteUsageBatchWindow) {
-        assertEquals("Delete Usage Batch",
-            assertElement(deleteUsageBatchWindow, By.className(V_WINDOW_HEADER_CLASS_NAME)).getText());
-        verifySearchToolbar(deleteUsageBatchWindow);
-        verifyTable(deleteUsageBatchWindow);
-        verifyCloseButton(deleteUsageBatchWindow);
-    }
-
-    private void verifyTable(WebElement window) {
-        WebElement table = getUsageBatchesTable(window);
-        verifyTableColumns(table, "Usage Batch Name", "Payment Date", "Fiscal Year", StringUtils.EMPTY);
-        verifyTableRows(table, usageBatch1, usageBatch2, usageBatch3);
-        verifyTableSorting(table, "name", "createDate", "fiscalYear");
-    }
-
-    private void verifySearchToolbar(WebElement window) {
-        WebElement searchToolbar = assertElement(window, By.id(SEARCH_TOOLBAR_ID));
-        WebElement prompt = assertElement(searchToolbar, By.className("v-textfield-prompt"));
-        assertEquals("Enter Batch Name or Payment Date (MM/dd/yyyy)", getValueAttribute(prompt));
-        assertElement(searchToolbar, By.className(SEARCH_BUTTON_ID));
-        assertElement(searchToolbar, By.className("button-clear"));
+        assertEquals("Delete Usage Batch", getWindowCaption(deleteUsageBatchWindow));
+        assertSearchToolbar(deleteUsageBatchWindow, "Enter Batch Name or Payment Date (MM/dd/yyyy)");
+        WebElement usagesTable = assertWebElement(deleteUsageBatchWindow, By.id(USAGE_BATCHES_TABLE_ID));
+        assertTableHeaderElements(usagesTable, "Usage Batch Name", "Payment Date", "Fiscal Year", StringUtils.EMPTY);
+        assertTableRowElements(usagesTable, 3);
+        verifyTableRows(usagesTable, usageBatch1, usageBatch2, usageBatch3);
+        assertTableSorting(usagesTable, "name", "createDate", "fiscalYear");
+        clickButtonAndWait(deleteUsageBatchWindow, CLOSE_BUTTON_ID);
+        assertNull(waitAndFindElement(By.id("delete-usage-batch")));
     }
 
     private void verifyTableRows(WebElement table, UsageBatchInfo... usageBatches) {
-        List<WebElement> rows = findElements(assertElement(table, By.className(V_TABLE_BODY_CLASS_NAME)),
-            By.tagName(HTML_TR_TAG_NAME));
-        assertEquals(usageBatches.length, CollectionUtils.size(rows));
-        for (int i = 0; i < usageBatches.length; i++) {
-            verifyUsageBatch(rows.get(i), usageBatches[i]);
-        }
-    }
-
-    private void verifyUsageBatch(WebElement row, UsageBatchInfo usageBatch) {
-        List<WebElement> cells = findElements(row, By.className(V_TABLE_CELL_CONTENT_CLASS_NAME));
-        assertEquals(usageBatch.getName(), cells.get(0).getText());
-        assertEquals(usageBatch.getPaymentDate(), cells.get(1).getText());
-        assertEquals(usageBatch.getFiscalYear(), cells.get(2).getText());
-        assertElement(cells.get(3), By.className(DELETE_BUTTON_ID));
-    }
-
-    private void verifyCloseButton(WebElement window) {
-        clickElementAndWait(assertElement(window, By.id(CLOSE_BUTTON_ID)));
-        assertNull(waitAndFindElement(By.id("delete-usage-batch")));
+        List<WebElement> rowElements = assertTableRowElements(table, usageBatches.length);
+        IntStream.range(0, usageBatches.length)
+            .forEach(i -> assertTableRowElements(rowElements.get(i),
+                usageBatches[i].getName(),
+                usageBatches[i].getPaymentDate(),
+                usageBatches[i].getFiscalYear(),
+                "Delete"));
     }
 
     private UsageBatch buildUsageBatch() {
