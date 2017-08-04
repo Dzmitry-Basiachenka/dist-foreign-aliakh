@@ -23,24 +23,24 @@ public class LoginTest extends ForeignCommonUiTest {
     @Test
     public void testLoginAsViewOnly() {
         loginAsViewOnly();
-        WebElement userNameElement = assertElement(By.id(Cornerstone.USER_WIDGET_USERNAME_LABEL));
-        assertEquals(ForeignCredentials.VIEW_ONLY.getUserName(), userNameElement.getText());
-        assertTrue(logOut());
+        verifyUserNameAndLogout("fda_view@copyright.com");
     }
 
     @Test
     public void testLoginAsDistributionManager() {
         loginAsManager();
-        WebElement userNameElement = assertElement(By.id(Cornerstone.USER_WIDGET_USERNAME_LABEL));
-        assertEquals(ForeignCredentials.MANAGER.getUserName(), userNameElement.getText());
-        assertTrue(logOut());
+        verifyUserNameAndLogout("fda_manager@copyright.com");
     }
 
     @Test
     public void testLoginAsDistributionSpecialist() {
         loginAsSpecialist();
-        WebElement userNameElement = assertElement(By.id(Cornerstone.USER_WIDGET_USERNAME_LABEL));
-        assertEquals(ForeignCredentials.SPECIALIST.getUserName(), userNameElement.getText());
+        verifyUserNameAndLogout("fda_spec@copyright.com");
+    }
+
+    private void verifyUserNameAndLogout(String expectedUserName) {
+        WebElement userNameElement = assertWebElement(By.id(Cornerstone.USER_WIDGET_USERNAME_LABEL));
+        assertEquals(expectedUserName, userNameElement.getText());
         assertTrue(logOut());
     }
 }

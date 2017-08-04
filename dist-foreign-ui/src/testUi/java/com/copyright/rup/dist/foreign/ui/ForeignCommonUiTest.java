@@ -1,13 +1,18 @@
 package com.copyright.rup.dist.foreign.ui;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkArgument;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+
+import static java.util.Objects.requireNonNull;
 
 import com.copyright.rup.vaadin.test.CommonUiTest;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
+
+import com.google.common.collect.Sets;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -20,9 +25,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Common class for UI tests.
@@ -35,96 +44,6 @@ import java.util.stream.Collectors;
  * @author Darya Baraukova
  */
 public class ForeignCommonUiTest extends CommonUiTest {
-
-    /**
-     * Identifier for "Load" usage button.
-     */
-    protected static final String LOAD_USAGE_BUTTON_ID = "Load";
-    /**
-     * Identifier for usage layout.
-     */
-    protected static final String USAGE_LAYOUT_ID = "usages-layout";
-    /**
-     * Identifier for usage table.
-     */
-    protected static final String USAGE_TABLE_ID = "usages-table";
-    /**
-     * &lt;b&gt; tag name.
-     */
-    protected static final String HTML_B_TAG_NAME = "b";
-    /**
-     * Identifier for "Upload" button.
-     */
-    protected static final String UPLOAD_BUTTON_ID = "Upload";
-    /**
-     * Identifier for "Add to scenario" button.
-     */
-    protected static final String ADD_TO_SCENARIO_BUTTON_ID = "Add_To_Scenario";
-    /**
-     * Identifier for "Ok" button.
-     */
-    protected static final String OK_BUTTON_ID = "Ok";
-    /**
-     * Identifier for "Verify" button.
-     */
-    protected static final String VERIFY_BUTTON_ID = "Verify";
-    /**
-     * Identifier for 'Apply' button.
-     */
-    protected static final String APPLY_BUTTON_ID = "Apply";
-    /**
-     * Identifier for 'Close' button.
-     */
-    protected static final String CLOSE_BUTTON_ID = "Close";
-    /**
-     * Identifier for 'Yes' button.
-     */
-    protected static final String YES_BUTTON_ID = "Yes";
-    /**
-     * Identifier for 'Cancel' button.
-     */
-    protected static final String CANCEL_BUTTON_ID = "Cancel";
-    /**
-     * Identifier for 'Save' button.
-     */
-    protected static final String SAVE_BUTTON_ID = "Save";
-    /**
-     * Identifier for 'Delete' button.
-     */
-    protected static final String DELETE_BUTTON_ID = "Delete";
-    /**
-     * Identifier for 'View' button.
-     */
-    protected static final String VIEW_BUTTON_ID = "View";
-    /**
-     * Identifier for search toolbar.
-     */
-    protected static final String SEARCH_TOOLBAR_ID = "search-toolbar";
-    /**
-     * Identifier for search button.
-     */
-    protected static final String SEARCH_BUTTON_ID = "button-search";
-    /**
-     * Identifier for usage filter widget.
-     */
-    protected static final String USAGE_FILTER_WIDGET_ID = "usages-filter-widget";
-    /**
-     * Identifier for batches filter.
-     */
-    protected static final String BATCHES_FILTER_ID = "batches-filter";
-    /**
-     * Identifier for RRO filter.
-     */
-    protected static final String RRO_FILTER_ID = "rightsholders-filter";
-    /**
-     * Identifier for payment date filter.
-     */
-    protected static final String PAYMENT_DATE_FILTER_ID = "payment-date-filter";
-
-    private static final String APP_URL = "http://localhost:22000/dist-foreign-ui/";
-    private static final Dimension WINDOW_DIMENSION = new Dimension(1280, 800);
-    private static final String PASSWORD = "`123qwer";
-
     /**
      * Rule takes screenshot in case of test failure and calls driver.quit() at the end of the test.
      */
@@ -146,205 +65,156 @@ public class ForeignCommonUiTest extends CommonUiTest {
     @Before
     public void setUp() {
         initDriver();
-        getDriver().manage().window().setSize(WINDOW_DIMENSION);
+        getDriver().manage().window().setSize(new Dimension(1024, 768));
     }
 
     /**
-     * Logs into application with view only permissions.
-     */
-    protected void loginAsViewOnly() {
-        openAppPage(ForeignCredentials.VIEW_ONLY);
-    }
-
-    /**
-     * Logs in into application as Distribution Manager.
-     */
-    protected void loginAsManager() {
-        openAppPage(ForeignCredentials.MANAGER);
-    }
-
-    /**
-     * Logs in into application as Distribution Specialist.
-     */
-    protected void loginAsSpecialist() {
-        openAppPage(ForeignCredentials.SPECIALIST);
-    }
-
-    /**
-     * Logs out.
+     * Gets list of footer elements from given table.
      *
-     * @return {@code true} if logout button was clicked, {@code false} if logout button was not found.
+     * @param table           table element
+     * @param expectedFooters expected footers
+     * @return list of footer elements
+     * @throws IllegalArgumentException no footer elements in the table or expected footers don't match actual
      */
-    protected boolean logOut() {
-        WebElement logOutButton = findElementById(Cornerstone.USER_WIDGET_LOGOUT_BUTTON);
-        if (null != logOutButton) {
-            logOutButton.click();
-            return true;
-        }
-        return false;
+    //TODO {nlevyankov} move to rup-vaadin
+    List<WebElement> assertTableFooterElements(WebElement table, String... expectedFooters) {
+        WebElement footer = assertWebElement(table, By.className("v-table-footer-wrap"));
+        List<WebElement> elements = findElements(footer, By.className(V_TABLE_FOOTER_CONTAINER_CLASS_NAME));
+        int actualSize = elements.size();
+        checkArgument(Objects.equals(expectedFooters.length, actualSize),
+            String.format("The expected columns count is %s, but actual %s", expectedFooters.length, actualSize));
+        String[] elementsArray = elements.stream().map(WebElement::getText).toArray(String[]::new);
+        checkArgument(Arrays.equals(expectedFooters, elementsArray),
+            String.format("Expected footers %s, but actual %s", Arrays.toString(expectedFooters),
+                Arrays.toString(elementsArray)));
+        return elements;
     }
 
-    /**
-     * @return "Usages" tab.
-     */
-    protected WebElement selectUsagesTab() {
-        WebElement usagesTab = waitAndGetTab(assertElement(By.id(Cornerstone.MAIN_TABSHEET)), "Usages");
-        clickElementAndWait(usagesTab);
-        return usagesTab;
-    }
 
     /**
-     * @return "Scenarios" tab.
-     */
-    protected WebElement selectScenariosTab() {
-        WebElement scenariosTab = waitAndGetTab(assertElement(By.id(Cornerstone.MAIN_TABSHEET)), "Scenarios");
-        clickElementAndWait(scenariosTab);
-        return scenariosTab;
-    }
-
-    /**
-     * Finds element by locating mechanism inside parent element and verifies it for {@code null}.
+     * Verifies text field element to have concrete id and caption.
      *
      * @param parentElement parent element
-     * @param by            the element selector
-     * @return instance of {@link WebElement}
+     * @param id            id of text field
+     * @param caption       caption
+     * @return {@link WebElement} instance
+     * @see CommonUiTest#assertWebElement(By)
      */
-    protected WebElement assertElement(WebElement parentElement, By by) {
-        return checkNotNull(waitAndFindElement(parentElement, by));
+    //TODO {nlevyankov} move to rup-vaadin
+    WebElement assertTextFieldElement(WebElement parentElement, String id, String caption) {
+        WebElement webElement = assertWebElement(parentElement, id);
+        WebElement elementContainer = getParentElement(webElement);
+        assertWebElement(elementContainer, HTML_SPAN_TAG_NAME, caption);
+        return webElement;
     }
 
     /**
-     * Finds element by locating mechanism and verifies it for {@code null}.
+     * Verifies combobox element to have concrete id and caption.
      *
-     * @param by the element selector
-     * @return instance of {@link WebElement}
+     * @param parentElement parent element
+     * @param id            id of combobox
+     * @param caption       caption
+     * @return {@link WebElement} instance
+     * @see CommonUiTest#assertWebElement(By)
      */
-    protected WebElement assertElement(By by) {
-        return checkNotNull(waitAndFindElement(by));
+    //TODO {nlevyankov} move to rup-vaadin
+    WebElement assertComboboxElement(WebElement parentElement, String id, String caption) {
+        WebElement webElement = assertWebElement(parentElement, id);
+        assertWebElement(webElement, HTML_SPAN_TAG_NAME, caption);
+        assertWebElement(webElement, By.tagName(HTML_INPUT_TAG_NAME));
+        assertWebElement(webElement, By.className(V_FILTER_SELECT_BUTTON_CLASS_NAME));
+        return webElement;
     }
 
     /**
-     * Verifies columns headers for the given table.
+     * Verifies that combobox element has expected items.
      *
-     * @param table           table to verify
-     * @param expectedHeaders expected columns headers in the order they appear on UI
+     * @param element       combobox element
+     * @param expectedItems expected items
      */
-    protected void verifyTableColumns(WebElement table, String... expectedHeaders) {
-        WebElement tableHeader = assertElement(table, By.className(V_TABLE_HEADER_CLASS_NAME));
-        List<WebElement> headers = findElements(tableHeader, By.className(V_TABLE_CAPTION_CONTAINER_CLASS_NAME));
-        assertEquals(expectedHeaders.length, CollectionUtils.size(headers));
-        for (int i = 0; i < expectedHeaders.length; i++) {
-            assertEquals(expectedHeaders[i], getInnerHtml(headers.get(i)));
-        }
+    void assertComboboxElement(WebElement element, String... expectedItems) {
+        assertWebElement(element, By.tagName(HTML_INPUT_TAG_NAME));
+        clickElementAndWait(assertWebElement(element, By.className(V_FILTER_SELECT_BUTTON_CLASS_NAME)));
+        WebElement optionList = assertWebElement(By.id("VAADIN_COMBOBOX_OPTIONLIST"));
+        List<WebElement> elements = findElements(optionList, By.tagName(HTML_TR_TAG_NAME));
+        assertEquals(expectedItems.length, CollectionUtils.size(elements));
+        IntStream.range(0, expectedItems.length)
+            .forEach(i -> assertEquals(expectedItems[i], elements.get(i).getText()));
     }
 
     /**
-     * Applies current date into date element.
+     * Verifies search toolbar element.
+     * System verifies presence of toolbar, prompt message, presence of textfield, search, and clear buttons.
      *
-     * @param dateElement date element
+     * @param parentElement parent element
+     * @param promptMessage prompt message
+     * @return {@link WebElement} instance
+     * @see CommonUiTest#assertWebElement(By)
      */
-    protected void applyCurrentDateForDateField(WebElement dateElement) {
-        clickElementAndWait(assertElement(dateElement, By.className("v-datefield-button")));
-        WebElement calendarPanel = assertElement(By.className("v-datefield-calendarpanel"));
-        WebElement currentDateSlot = assertElement(calendarPanel, By.className("v-datefield-calendarpanel-day-today"));
-        clickElementAndWait(currentDateSlot);
+    //TODO {nlevyankov} move to rup-vaadin
+    WebElement assertSearchToolbar(WebElement parentElement, String promptMessage) {
+        WebElement searchToolbar = assertWebElement(parentElement, "search-toolbar");
+        WebElement prompt = assertWebElement(searchToolbar, By.className("v-textfield-prompt"));
+        assertEquals(promptMessage, prompt.getAttribute("value"));
+        assertWebElement(searchToolbar, By.className("v-textfield"));
+        assertWebElement(searchToolbar, By.className("button-search"));
+        assertWebElement(searchToolbar, By.className("button-clear"));
+        return searchToolbar;
+    }
+
+    @SuppressWarnings("unchecked")
+    void assertButtonsToolbar(WebElement buttonsLayout, Set<String> allButtonsIds,
+                              Set<String> expectedButtonsIds) {
+        assertTrue(String.format("Expected buttons %s couldn't be found", expectedButtonsIds),
+            allButtonsIds.containsAll(expectedButtonsIds));
+        Set<String> invisibleButtons =
+            Sets.<String>newHashSet(CollectionUtils.subtract(expectedButtonsIds, allButtonsIds));
+        invisibleButtons.forEach(id -> assertNull(waitAndFindElement(buttonsLayout, By.id(id))));
     }
 
     /**
-     * Asserts that usage filters are empty, "Apply" button is disabled and usages table is empty.
+     * Finds label class under given element and verifies it's text.
      *
-     * @param filterWidget {@link WebElement} representing filter widget
-     * @param usagesTable  {@link WebElement} representing usages table
+     * @param webElement   given element
+     * @param expectedText expected text
      */
-    protected void assertUsagesFilterEmpty(WebElement filterWidget, WebElement usagesTable) {
+    //TODO {nlevyankov} move to rup-vaadin
+    void assertWebElementText(WebElement webElement, String expectedText) {
+        assertEquals(expectedText, assertWebElement(webElement, By.className("v-label")).getText());
+    }
+
+    void loginAsManager() {
+        openAppPage("fda_manager@copyright.com");
+    }
+
+    void loginAsSpecialist() {
+        openAppPage("fda_spec@copyright.com");
+    }
+
+    void loginAsViewOnly() {
+        openAppPage("fda_view@copyright.com");
+    }
+
+    WebElement selectUsagesTab() {
+        return selectTab("Usages");
+    }
+
+    WebElement selectScenariosTab() {
+        return selectTab("Scenarios");
+    }
+
+    void assertUsagesFilterEmpty(WebElement filterWidget) {
         assertBatchesFilterEmpty(filterWidget);
         assertRroFilterEmpty(filterWidget);
         assertPaymentDateFilterEmpty(filterWidget);
         assertFiscalYearFilterEmpty(filterWidget);
-        assertApplyButtonDisabled(filterWidget);
-        assertUsagesTableEmpty(usagesTable);
+        assertFalse(isElementEnabled(assertWebElement(filterWidget, "Apply")));
     }
 
-    /**
-     * Choose item in filter window and click "Save" button.
-     *
-     * @param filterWidget   {@link WebElement} representing filter widget
-     * @param filterId       filter identifier
-     * @param filterWindowId filter window identifier
-     * @param item           item to choose
-     */
-    protected void saveFilter(WebElement filterWidget, String filterId, String filterWindowId, String item) {
-        clickElementAndWait(assertElement(filterWidget, By.id(filterId)));
-        WebElement filterWindow = assertElement(By.id(filterWindowId));
-        WebElement label = findElementByText(filterWindow, HTML_LABEL_TAG_NAME, item);
-        assertNotNull(label);
-        clickElementAndWait(label);
-        clickButtonAndWait(filterWindow, SAVE_BUTTON_ID);
-    }
-
-    /**
-     * Asserts that usages table is empty.
-     *
-     * @param usagesTable {@link WebElement} representing usages table
-     */
-    protected void assertUsagesTableEmpty(WebElement usagesTable) {
-        String backgroundImage =
-            assertElement(usagesTable, By.className("v-scrollable")).getCssValue("background-image");
-        assertTrue(backgroundImage.contains("img/empty_usages_table.png"));
-    }
-
-    /**
-     * Assert that usages table is not empty.
-     *
-     * @param usagesTable {@link WebElement} representing usages table
-     * @param rowsCount   count of Usages rows in table
-     */
-    protected void assertUsagesTableNotEmpty(WebElement usagesTable, int rowsCount) {
-        assertNotNull(usagesTable);
-        WebElement tableBody = assertElement(usagesTable, By.className(V_TABLE_BODY_CLASS_NAME));
-        List<WebElement> rows = findElements(tableBody, By.tagName(HTML_TR_TAG_NAME));
-        assertEquals(rowsCount, CollectionUtils.size(rows));
-    }
-
-    /**
-     * Gets attribute "value" for given element.
-     *
-     * @param element instance of {@link WebElement}
-     * @return string representation of element value
-     */
-    protected String getValueAttribute(WebElement element) {
-        assertNotNull(element);
-        return element.getAttribute("value");
-    }
-
-    /**
-     * Verifies table sorting.
-     *
-     * @param table           {@link WebElement} representing table
-     * @param sortableColumns sortable columns
-     */
-    protected void verifyTableSorting(WebElement table, String... sortableColumns) {
-        WebElement header = assertElement(table, By.className(V_TABLE_HEADER_CLASS_NAME));
-        List<WebElement> columns = findElements(header, By.className("v-table-header-sortable"));
-        assertEquals(sortableColumns.length, CollectionUtils.size(columns));
-        for (WebElement column : columns) {
-            verifyColumnSorting(header, column, "v-table-header-cell-asc");
-            verifyColumnSorting(header, column, "v-table-header-cell-desc");
-            clickElementAndWait(column);
-            ArrayUtils.contains(sortableColumns, column.getText());
-        }
-    }
-
-    /**
-     * Finds error window and verifies error messages for appropriate fields by given map. Also closes error window
-     * after verification.
-     *
-     * @param fieldNameToErrorMessageMap map of field names to their error messages
-     */
-    protected void verifyErrorWindow(Map<String, String> fieldNameToErrorMessageMap) {
-        WebElement errorWindow = findErrorWindow();
-        WebElement errorContent = assertElement(By.className("validation-error-content"));
-        List<WebElement> errorFields = findElements(errorContent, By.tagName(HTML_B_TAG_NAME));
+    void verifyErrorWindow(Map<String, String> fieldNameToErrorMessageMap) {
+        WebElement errorWindow = assertWebElement(By.className("validation-error-window"));
+        WebElement errorContent = assertWebElement(By.className("validation-error-content"));
+        List<WebElement> errorFields = findElements(errorContent, By.tagName("b"));
         List<WebElement> errorMessages = findElements(errorContent, By.tagName(HTML_SPAN_TAG_NAME));
         int errorsSize = CollectionUtils.size(fieldNameToErrorMessageMap);
         assertEquals(errorsSize, CollectionUtils.size(errorFields));
@@ -357,125 +227,89 @@ public class ForeignCommonUiTest extends CommonUiTest {
             .map(WebElement::getText)
             .collect(Collectors.toList())
             .containsAll(fieldNameToErrorMessageMap.values()));
-        clickElementAndWait(assertElement(errorWindow, By.id(OK_BUTTON_ID)));
+        clickButtonAndWait(errorWindow, "Ok");
     }
 
-    /**
-     * Finds field on window by given id and sets the value.
-     *
-     * @param window  instance of {@link WebElement} represented parent window
-     * @param fieldId identifier of field
-     * @param value   value to set
-     */
-    protected void populateField(WebElement window, String fieldId, String value) {
-        sendKeysToInput(assertElement(window, By.id(fieldId)), value);
+    void assertTableSorting(WebElement table, String... sortableColumns) {
+        WebElement header = assertWebElement(table, By.className(V_TABLE_HEADER_CLASS_NAME));
+        List<WebElement> columns = findElements(header, By.className("v-table-header-sortable"));
+        assertEquals(sortableColumns.length, CollectionUtils.size(columns));
+        columns.forEach(column -> {
+            clickElementAndWait(column);
+            assertWebElement(header, By.className("v-table-header-cell-asc"));
+            clickElementAndWait(column);
+            assertWebElement(header, By.className("v-table-header-cell-desc"));
+            clickElementAndWait(column);
+            ArrayUtils.contains(sortableColumns, column.getText());
+        });
     }
 
-    /**
-     * Verifies that confirm dialog is present on UI with expected message and clicks 'Yes' button.
-     *
-     * @param expectedLabel expected confirmation message
-     */
-    protected void verifyConfirmDialogAndConfirm(String expectedLabel) {
-        verifyConfirmDialogAndClickButton(expectedLabel, YES_BUTTON_ID);
+    void applyCurrentDateForDateField(WebElement dateElement) {
+        clickElementAndWait(assertWebElement(dateElement, By.className("v-datefield-button")));
+        WebElement calendarPanel = assertWebElement(By.className("v-datefield-calendarpanel"));
+        WebElement currentDateSlot =
+            assertWebElement(calendarPanel, By.className("v-datefield-calendarpanel-day-today"));
+        clickElementAndWait(currentDateSlot);
     }
 
-    /**
-     * Verifies that confirm dialog is present on UI with expected message and clicks 'Cancel' button.
-     *
-     * @param expectedLabel expected confirmation message
-     */
-    protected void verifyConfirmDialogAndDecline(String expectedLabel) {
-        verifyConfirmDialogAndClickButton(expectedLabel, CANCEL_BUTTON_ID);
+
+    void applyFilters(WebElement filterWidget, UsageBatchInfo usageBatchInfo) {
+        applyBatchesFilter(filterWidget, usageBatchInfo.getName());
+        applyRrosFilter(filterWidget, usageBatchInfo.getRro());
+        WebElement filterButtonsLayout = assertWebElement(filterWidget, "filter-buttons");
+        clickButtonAndWait(filterButtonsLayout, "Apply");
     }
 
-    private WebElement findErrorWindow() {
-        return assertElement(By.className("validation-error-window"));
+    void applyBatchesFilter(WebElement filterWidget, String selectItem) {
+        applyItemFilter(filterWidget, "Batches", "batches-filter-window", "Batches filter", selectItem);
     }
 
-    private void openAppPage(ForeignCredentials credentials) {
-        openPage(APP_URL, credentials.getUserName(), credentials.getPassword());
+    void applyRrosFilter(WebElement filterWidget, String selectItem) {
+        applyItemFilter(filterWidget, "RROs", "rightsholders-filter-window", "RROs filter", selectItem);
     }
 
-    private void verifyConfirmDialogAndClickButton(String expectedLabel, String buttonToClick) {
-        WebElement confirmDialog = assertElement(By.id("confirm-dialog-window"));
-        WebElement label = assertElement(confirmDialog, By.className("v-label"));
-        assertEquals(expectedLabel, label.getText());
-        clickButtonAndWait(confirmDialog, buttonToClick);
-    }
-
-    private void verifyColumnSorting(WebElement tableHeader, WebElement column, String sortStyleName) {
-        clickElementAndWait(column);
-        assertElement(tableHeader, By.className(sortStyleName));
-    }
-
-    private void assertApplyButtonDisabled(WebElement filterWidget) {
-        WebElement applyButton = assertElement(filterWidget, By.id(APPLY_BUTTON_ID));
-        assertTrue(applyButton.getAttribute("class").contains("v-disabled"));
+    private void applyItemFilter(WebElement filterWidget, String buttonId, String windowId, String windowCaption,
+                                 String selectItem) {
+        WebElement filterElement = assertWebElement(filterWidget, buttonId);
+        clickElement(filterElement, HTML_SPAN_TAG_NAME, buttonId);
+        WebElement filterWindow = assertWebElement(By.id(windowId));
+        assertWebElement(filterWindow, HTML_DIV_TAG_NAME, windowCaption);
+        WebElement item = assertWebElement(filterWindow, By.className(V_CHECKBOX_CLASS_NAME));
+        clickElement(item, HTML_LABEL_TAG_NAME, selectItem);
+        assertWebElement(filterWindow, "Close");
+        assertWebElement(filterWindow, "Clear");
+        clickButton(filterWindow, "Save");
     }
 
     private void assertFiscalYearFilterEmpty(WebElement filterWidget) {
-        WebElement fiscalYearFilterInput = assertElement(filterWidget, By.className("v-filterselect-input"));
-        assertEquals(StringUtils.EMPTY, getValueAttribute(fiscalYearFilterInput));
+        WebElement fiscalYearFilterInput = assertWebElement(filterWidget, By.className("v-filterselect-input"));
+        assertEquals(StringUtils.EMPTY, fiscalYearFilterInput.getText());
     }
 
     private void assertPaymentDateFilterEmpty(WebElement filterWidget) {
-        WebElement paymentDateFilter = assertElement(filterWidget, By.id(PAYMENT_DATE_FILTER_ID));
-        assertEquals(StringUtils.EMPTY,
-            getValueAttribute(assertElement(paymentDateFilter, By.className("v-textfield"))));
+        WebElement paymentDateFilter = assertWebElement(filterWidget, "payment-date-filter");
+        assertEquals(StringUtils.EMPTY, assertWebElement(paymentDateFilter, By.className("v-textfield")).getText());
     }
 
     private void assertRroFilterEmpty(WebElement filterWidget) {
-        WebElement rightsholdersFilter = assertElement(filterWidget, By.id(RRO_FILTER_ID));
-        assertNotNull(findElementByText(rightsholdersFilter, HTML_DIV_TAG_NAME, "(0)"));
-        WebElement rightsholderFilterButton = findElementByText(rightsholdersFilter, HTML_SPAN_TAG_NAME, "RROs");
-        assertNotNull(rightsholderFilterButton);
+        WebElement rightsholdersFilter = assertWebElement(filterWidget, "rightsholders-filter");
+        assertWebElement(rightsholdersFilter, HTML_DIV_TAG_NAME, "(0)");
     }
 
     private void assertBatchesFilterEmpty(WebElement filterWidget) {
-        WebElement batchesFilter = assertElement(filterWidget, By.id(BATCHES_FILTER_ID));
-        assertNotNull(findElementByText(batchesFilter, HTML_DIV_TAG_NAME, "(0)"));
-        WebElement batchesFilterButton = findElementByText(batchesFilter, HTML_SPAN_TAG_NAME, "Batches");
-        assertNotNull(batchesFilterButton);
+        WebElement batchesFilter = assertWebElement(filterWidget, "batches-filter");
+        assertWebElement(batchesFilter, HTML_DIV_TAG_NAME, "(0)");
     }
 
-    /**
-     * Enum with credentials for logging into application.
-     */
-    protected enum ForeignCredentials {
-        /**
-         * Credentials for view only role.
-         */
-        VIEW_ONLY("fda_view@copyright.com", PASSWORD),
-        /**
-         * Credentials for manager role.
-         */
-        MANAGER("fda_manager@copyright.com", PASSWORD),
-        /**
-         * Credentials for specialist role.
-         */
-        SPECIALIST("fda_spec@copyright.com", PASSWORD);
+    private WebElement selectTab(String caption) {
+        WebElement tabContainer = assertWebElement(By.id(Cornerstone.MAIN_TABSHEET));
+        WebElement tab = getTab(tabContainer, caption);
+        requireNonNull(tab, String.format("%s tab was not found on UI", caption));
+        waitWhileInteractionWillFinished();
+        return tab;
+    }
 
-        private String userName;
-        private String password;
-
-        /**
-         * Constructor.
-         *
-         * @param userName user name
-         * @param password password
-         */
-        ForeignCredentials(String userName, String password) {
-            this.userName = userName;
-            this.password = password;
-        }
-
-        String getUserName() {
-            return userName;
-        }
-
-        String getPassword() {
-            return password;
-        }
+    private void openAppPage(String userName) {
+        openPage("http://localhost:22000/dist-foreign-ui/", userName, "`123qwer");
     }
 }
