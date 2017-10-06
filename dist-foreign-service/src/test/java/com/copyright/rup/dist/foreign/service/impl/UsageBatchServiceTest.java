@@ -22,6 +22,8 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 import org.easymock.Capture;
 import org.junit.Before;
@@ -33,6 +35,7 @@ import org.powermock.reflect.Whitebox;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Verifies {@link UsageBatchService}.
@@ -117,8 +120,10 @@ public class UsageBatchServiceTest {
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         usageBatchRepository.insert(capture(captureUsageBatch));
         expectLastCall().once();
-        rightsholderService.updateRightsholder(rro);
-        expectLastCall().once();
+        Map<Long, Rightsholder> rightsholderMap = Maps.newHashMapWithExpectedSize(1);
+        rightsholderMap.put(RRO_ACCOUNT_NUMBER, rro);
+        expect(rightsholderService.updateAndGetRightsholders(Sets.newHashSet(rro.getAccountNumber())))
+            .andReturn(rightsholderMap).once();
         expect(usageService.insertUsages(usageBatch, usages)).andReturn(2).once();
         replay(usageBatchRepository, usageService, RupContextUtils.class);
         assertEquals(2, usageBatchService.insertUsageBatch(usageBatch, usages));

@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.integration;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
+import com.copyright.rup.dist.common.integration.rest.prm.IPrmRightsholderService;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 
 import org.junit.Test;
@@ -31,7 +32,7 @@ public class ApplicationContextTest {
             assertNotNull(context);
             assertNotNull(context.getBean(RestTemplate.class));
             assertNotNull(context.getBean(IPrmIntegrationService.class));
-            assertNotNull(context.getBean("prmRightsholderService"));
+            assertNotNull(context.getBean(IPrmRightsholderService.class));
         } catch (Exception e) {
             fail("Context is not valid: " + e.getMessage());
         }

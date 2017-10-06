@@ -1,11 +1,13 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.foreign.repository.api.IRightsholderRepository;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -53,5 +55,11 @@ public class RightsholderRepository extends BaseRepository implements IRightshol
      */
     List<Rightsholder> findAll() {
         return selectList("IRightsholderMapper.findAll");
+    }
+
+    @Override
+    public List<Rightsholder> findRightsholdersByAccountNumbers(Set<Long> accountNumbers) {
+        checkArgument(CollectionUtils.isNotEmpty(accountNumbers));
+        return selectList("IRightsholderMapper.findRightsholdersByAccountNumbers", accountNumbers);
     }
 }

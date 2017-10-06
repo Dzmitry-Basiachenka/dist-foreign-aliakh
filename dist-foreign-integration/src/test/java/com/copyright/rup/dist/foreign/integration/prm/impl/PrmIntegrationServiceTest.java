@@ -11,8 +11,9 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.foreign.integration.prm.api.IPrmRightsholderService;
+import com.copyright.rup.dist.common.integration.rest.prm.IPrmRightsholderService;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import org.junit.Before;
@@ -62,6 +63,7 @@ public class PrmIntegrationServiceTest {
 
     @Test
     public void testGetRightsholdersForEmptySet() {
+        expect(prmRightsholderService.getRightsholders(Sets.newHashSet())).andReturn(Lists.newArrayList()).once();
         replay(prmRightsholderService);
         assertTrue(prmIntegrationService.getRightsholders(Collections.emptySet()).isEmpty());
         verify(prmRightsholderService);

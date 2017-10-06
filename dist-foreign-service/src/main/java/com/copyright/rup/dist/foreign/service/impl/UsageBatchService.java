@@ -10,6 +10,8 @@ import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
+import com.google.common.collect.Sets;
+
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,7 +66,7 @@ public class UsageBatchService implements IUsageBatchService {
         LOGGER.info("Insert usage batch. Started. UsageBatchBatch={}, UserName={}", usageBatch.getName(), userName);
         usageBatchRepository.insert(usageBatch);
         LOGGER.info("Insert usage batch. Finished. UsageBatchBatch={}, UserName={}", usageBatch.getName(), userName);
-        rightsholderService.updateRightsholder(usageBatch.getRro());
+        rightsholderService.updateAndGetRightsholders(Sets.newHashSet(usageBatch.getRro().getAccountNumber()));
         return usageService.insertUsages(usageBatch, usages);
     }
 

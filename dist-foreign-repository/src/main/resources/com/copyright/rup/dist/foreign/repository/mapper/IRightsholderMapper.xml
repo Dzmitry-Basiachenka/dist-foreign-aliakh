@@ -63,4 +63,17 @@
         delete from ${schema}.df_rightsholder
         where rh_account_number = #{accountNumber}
     </delete>
+
+    <select id="findRightsholdersByAccountNumbers" parameterType="collection" resultMap="rightsholderResultMap">
+        select
+            rh_account_number,
+            name,
+            <include refid="StoredEntityMapper.additionalColumns"/>
+        from
+        ${schema}.df_rightsholder
+        where rh_account_number in
+        <foreach collection="collection" item="accountNumber" open="(" close=")" separator=",">
+            cast(#{accountNumber} as text)
+        </foreach>
+    </select>
 </mapper>

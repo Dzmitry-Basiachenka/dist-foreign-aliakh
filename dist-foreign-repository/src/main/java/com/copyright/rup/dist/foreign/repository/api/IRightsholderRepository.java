@@ -47,4 +47,12 @@ public interface IRightsholderRepository {
      * @param accountNumber acccount number of {@link Rightsholder}
      */
     void deleteByAccountNumber(Long accountNumber);
+
+    /**
+     * Finds list of {@link Rightsholder}s by account numbers.
+     *
+     * @param accountNumbers set of {@link Rightsholder}s' account numbers
+     * @return list of {@link Rightsholder}s
+     */
+    List<Rightsholder> findRightsholdersByAccountNumbers(Set<Long> accountNumbers);
 }
