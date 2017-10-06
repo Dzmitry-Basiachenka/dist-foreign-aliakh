@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.quartz;
 
 import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 
@@ -34,7 +34,8 @@ public class RightsholdersQuartzJobTest {
 
     @Test
     public void testExecuteInternal() throws Exception {
-        expect(rightsholderService.updateRightsholdersInformation()).andReturn(1).once();
+        rightsholderService.updateRightsholders();
+        expectLastCall();
         replay(rightsholderService);
         rightsholdersQuartzJob.executeInternal(null);
         verify(rightsholderService);

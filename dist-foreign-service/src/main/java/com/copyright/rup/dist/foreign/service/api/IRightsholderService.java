@@ -3,6 +3,8 @@ package com.copyright.rup.dist.foreign.service.api;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Represents interface of service for rightsholder business logic.
@@ -24,15 +26,15 @@ public interface IRightsholderService {
      * Updates infromation about rightsholders. Gets set of RRO and RH account numbers from usages, archived usages and
      * usage batches tables, make call to PRM service to get infromation about rightsholders, remove all data
      * from df_rightsholder table, and insert data from PRM to this table.
-     *
-     * @return count of updated records
      */
-    int updateRightsholdersInformation();
+    void updateRightsholders();
 
     /**
-     * Updates {@link Rightsholder} information in database table.
+     * Updates and gets a map of rightsholders by their account numbers. If there is no information about rightsholder
+     * with some account number it will be retrieved from PRM using REST call.
      *
-     * @param rightsholder instance of {@link Rightsholder} for update
+     * @param accountNumbers set of rightsholder account numbers
+     * @return map of rightsholders by their account number
      */
-    void updateRightsholder(Rightsholder rightsholder);
+    Map<Long, Rightsholder> updateAndGetRightsholders(Set<Long> accountNumbers);
 }

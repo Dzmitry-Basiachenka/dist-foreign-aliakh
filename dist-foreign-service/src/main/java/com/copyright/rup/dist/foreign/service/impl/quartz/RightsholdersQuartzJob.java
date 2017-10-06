@@ -32,6 +32,6 @@ public class RightsholdersQuartzJob extends QuartzJobBean {
 
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
-        rightsholderService.updateRightsholdersInformation();
+        rightsholderService.updateRightsholders();
     }
 }

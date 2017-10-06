@@ -1,17 +1,15 @@
 package com.copyright.rup.dist.foreign.integration.prm.impl;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.integration.rest.prm.IPrmRightsholderService;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
-import com.copyright.rup.dist.foreign.integration.prm.api.IPrmRightsholderService;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import org.perf4j.aop.Profiled;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -33,9 +31,7 @@ public class PrmIntegrationService implements IPrmIntegrationService {
     @Override
     @Profiled(tag = "integration.PrmRightsholderService.getRightsholders")
     public List<Rightsholder> getRightsholders(Set<Long> accountNumbers) {
-        return null != accountNumbers && !accountNumbers.isEmpty()
-            ? Lists.newArrayList(prmRightsholderService.getRightsholders(accountNumbers))
-            : Collections.emptyList();
+        return prmRightsholderService.getRightsholders(accountNumbers);
     }
 
     @Override

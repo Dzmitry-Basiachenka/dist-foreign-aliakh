@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Test;
@@ -109,6 +110,25 @@ public class RightsholderRepositoryIntegrationTest {
         assertTrue(rros.stream().map(Rightsholder::getName).collect(Collectors.toList())
             .containsAll(Lists.newArrayList(RH_NAME_7000813806, RH_NAME_2000017004,
                 RH_NAME_7001440663, null)));
+    }
+
+    @Test
+    public void testFindRightsholdersByAccountNumbers() {
+        List<Rightsholder> actualResult = rightsholderRepository.findRightsholdersByAccountNumbers(
+            Sets.newHashSet(RH_ACCOUNT_NUMBER_7000813806, RH_ACCOUNT_NUMBER_2000017004));
+        assertTrue(CollectionUtils.isNotEmpty(actualResult));
+        assertEquals(2, actualResult.size());
+        List<Long> accountNumbers = actualResult.stream()
+            .map(Rightsholder::getAccountNumber)
+            .collect(Collectors.toList());
+        assertTrue(accountNumbers.contains(RH_ACCOUNT_NUMBER_7000813806));
+        assertTrue(accountNumbers.contains(RH_ACCOUNT_NUMBER_2000017004));
+    }
+
+    @Test
+    public void testFindRightsholdersByAccountNumbersEmptyResult() {
+        assertTrue(CollectionUtils.isEmpty(
+            rightsholderRepository.findRightsholdersByAccountNumbers(Sets.newHashSet(1111111111L))));
     }
 
     private Rightsholder buildRightsholder() {
