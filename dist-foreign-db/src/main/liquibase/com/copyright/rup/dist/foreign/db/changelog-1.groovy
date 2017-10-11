@@ -671,4 +671,16 @@ databaseChangeLog {
             // automatic rollback
         }
     }
+
+    changeSet(id: '2017-10-11-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
+        comment('B-27862 Scenario Specific Usage Export: Add payee_account_number column')
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'payee_account_number', type: 'NUMERIC(22,0)', remarks: 'The payee account number')
+        }
+
+        rollback {
+            // automatic rollback
+        }
+    }
 }
