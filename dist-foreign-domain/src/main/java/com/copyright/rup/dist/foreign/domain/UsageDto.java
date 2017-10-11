@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.domain;
 
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.domain.StoredEntity;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -21,15 +22,19 @@ import java.time.LocalDate;
  */
 public class UsageDto extends StoredEntity<String> {
 
+    private static final BigDecimal DEFAULT_AMOUNT = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
+
     private Long detailId;
     private String batchName;
     private Integer fiscalYear;
+    //TODO {ushalamitski} Should be replaced with Rightsholder domain
     private String rroName;
     private Long rroAccountNumber;
     private LocalDate paymentDate;
     private Long wrWrkInst;
     private String workTitle;
     private String article;
+    //TODO {ushalamitski} Should be replaced with Rightsholder domain
     private Long rhAccountNumber;
     private String rhName;
     private String standardNumber;
@@ -40,377 +45,229 @@ public class UsageDto extends StoredEntity<String> {
     private Integer marketPeriodFrom;
     private Integer marketPeriodTo;
     private String author;
-    private BigDecimal grossAmount;
-    private BigDecimal reportedValue;
-    private BigDecimal batchGrossAmount;
+    private Rightsholder payee = new Rightsholder();
+    private BigDecimal grossAmount = DEFAULT_AMOUNT;
+    private BigDecimal reportedValue = DEFAULT_AMOUNT;
+    private BigDecimal batchGrossAmount = DEFAULT_AMOUNT;
+    private BigDecimal netAmount = DEFAULT_AMOUNT;
+    private BigDecimal serviceFee = DEFAULT_AMOUNT;
+    private BigDecimal serviceFeeAmount = DEFAULT_AMOUNT;
     private UsageStatusEnum status;
 
-    /**
-     * @return detail id.
-     */
     public Long getDetailId() {
         return detailId;
     }
 
-    /**
-     * Sets detail id.
-     *
-     * @param detailId detail id
-     */
     public void setDetailId(Long detailId) {
         this.detailId = detailId;
     }
 
-    /**
-     * @return batch name.
-     */
     public String getBatchName() {
         return batchName;
     }
 
-    /**
-     * Sets batch name.
-     *
-     * @param batchName batch name
-     */
     public void setBatchName(String batchName) {
         this.batchName = batchName;
     }
 
-    /**
-     * @return fiscal year.
-     */
     public Integer getFiscalYear() {
         return fiscalYear;
     }
 
-    /**
-     * Sets fiscal year.
-     *
-     * @param fiscalYear fiscal year
-     */
     public void setFiscalYear(Integer fiscalYear) {
         this.fiscalYear = fiscalYear;
     }
 
-    /**
-     * @return work identifier.
-     */
     public Long getWrWrkInst() {
         return wrWrkInst;
     }
 
-    /**
-     * Sets work identifier.
-     *
-     * @param wrWrkInst work identifier
-     */
     public void setWrWrkInst(Long wrWrkInst) {
         this.wrWrkInst = wrWrkInst;
     }
 
-    /**
-     * @return work title.
-     */
     public String getWorkTitle() {
         return workTitle;
     }
 
-    /**
-     * Sets work title.
-     *
-     * @param workTitle work title
-     */
     public void setWorkTitle(String workTitle) {
         this.workTitle = workTitle;
     }
 
-    /**
-     * @return article.
-     */
     public String getArticle() {
         return article;
     }
 
-    /**
-     * Sets article.
-     *
-     * @param article article
-     */
     public void setArticle(String article) {
         this.article = article;
     }
 
-    /**
-     * @return standard number.
-     */
     public String getStandardNumber() {
         return standardNumber;
     }
 
-    /**
-     * Sets standard number.
-     *
-     * @param standardNumber standard number
-     */
     public void setStandardNumber(String standardNumber) {
         this.standardNumber = standardNumber;
     }
 
-    /**
-     * @return publisher.
-     */
     public String getPublisher() {
         return publisher;
     }
 
-    /**
-     * Sets publisher.
-     *
-     * @param publisher publisher
-     */
     public void setPublisher(String publisher) {
         this.publisher = publisher;
     }
 
-    /**
-     * @return publication date.
-     */
     public LocalDate getPublicationDate() {
         return publicationDate;
     }
 
-    /**
-     * Sets publication date.
-     *
-     * @param publicationDate publication date
-     */
     public void setPublicationDate(LocalDate publicationDate) {
         this.publicationDate = publicationDate;
     }
 
-    /**
-     * @return market.
-     */
     public String getMarket() {
         return market;
     }
 
-    /**
-     * Sets market.
-     *
-     * @param market market
-     */
     public void setMarket(String market) {
         this.market = market;
     }
 
-    /**
-     * @return market period from.
-     */
     public Integer getMarketPeriodFrom() {
         return marketPeriodFrom;
     }
 
-    /**
-     * Sets market period from.
-     *
-     * @param marketPeriodFrom market period from
-     */
     public void setMarketPeriodFrom(Integer marketPeriodFrom) {
         this.marketPeriodFrom = marketPeriodFrom;
     }
 
-    /**
-     * @return market period to.
-     */
     public Integer getMarketPeriodTo() {
         return marketPeriodTo;
     }
 
-    /**
-     * Sets market period to.
-     *
-     * @param marketPeriodTo market period to
-     */
     public void setMarketPeriodTo(Integer marketPeriodTo) {
         this.marketPeriodTo = marketPeriodTo;
     }
 
-    /**
-     * @return author.
-     */
     public String getAuthor() {
         return author;
     }
 
-    /**
-     * Sets author.
-     *
-     * @param author author
-     */
     public void setAuthor(String author) {
         this.author = author;
     }
 
-    /**
-     * @return number of copies.
-     */
     public Integer getNumberOfCopies() {
         return numberOfCopies;
     }
 
-    /**
-     * Sets number of copies.
-     *
-     * @param numberOfCopies number of copies
-     */
     public void setNumberOfCopies(Integer numberOfCopies) {
         this.numberOfCopies = numberOfCopies;
     }
 
-    /**
-     * @return reported value.
-     */
     public BigDecimal getReportedValue() {
         return reportedValue;
     }
 
-    /**
-     * Sets reported value.
-     *
-     * @param reportedValue reported value
-     */
     public void setReportedValue(BigDecimal reportedValue) {
         this.reportedValue = reportedValue;
     }
 
-    /**
-     * @return gross amount.
-     */
     public BigDecimal getGrossAmount() {
         return grossAmount;
     }
 
-    /**
-     * Sets gross amount.
-     *
-     * @param grossAmount gross amount
-     */
     public void setGrossAmount(BigDecimal grossAmount) {
         this.grossAmount = grossAmount;
     }
 
-    /**
-     * @return batch gross amount.
-     */
     public BigDecimal getBatchGrossAmount() {
         return batchGrossAmount;
     }
 
-    /**
-     * Sets batch gross amount.
-     *
-     * @param batchGrossAmount batch gross amount
-     */
     public void setBatchGrossAmount(BigDecimal batchGrossAmount) {
         this.batchGrossAmount = batchGrossAmount;
     }
 
-    /**
-     * @return payment date.
-     */
     public LocalDate getPaymentDate() {
         return paymentDate;
     }
 
-    /**
-     * Sets payment date.
-     *
-     * @param paymentDate payment date
-     */
     public void setPaymentDate(LocalDate paymentDate) {
         this.paymentDate = paymentDate;
     }
 
-    /**
-     * @return status.
-     */
     public UsageStatusEnum getStatus() {
         return status;
     }
 
-    /**
-     * Sets status.
-     *
-     * @param status status
-     */
     public void setStatus(UsageStatusEnum status) {
         this.status = status;
     }
 
-    /**
-     * @return rro name.
-     */
     public String getRroName() {
         return rroName;
     }
 
-    /**
-     * Sets rro name.
-     *
-     * @param rroName rro name to set
-     */
     public void setRroName(String rroName) {
         this.rroName = rroName;
     }
 
-    /**
-     * @return rro account number.
-     */
     public Long getRroAccountNumber() {
         return rroAccountNumber;
     }
 
-    /**
-     * Sets rro account number.
-     *
-     * @param rroAccountNumber rro account number to set
-     */
     public void setRroAccountNumber(Long rroAccountNumber) {
         this.rroAccountNumber = rroAccountNumber;
     }
 
-    /**
-     * @return rightsholder name.
-     */
     public String getRhName() {
         return rhName;
     }
 
-    /**
-     * Sets rightsholder name.
-     *
-     * @param rhName rightsholder name to set
-     */
     public void setRhName(String rhName) {
         this.rhName = rhName;
     }
 
-    /**
-     * @return rightsholder account number.
-     */
     public Long getRhAccountNumber() {
         return rhAccountNumber;
     }
 
-    /**
-     * Sets rightsholder account number.
-     *
-     * @param rhAccountNumber rightsholder account number
-     */
     public void setRhAccountNumber(Long rhAccountNumber) {
         this.rhAccountNumber = rhAccountNumber;
+    }
+
+    public Rightsholder getPayee() {
+        return payee;
+    }
+
+    public void setPayee(Rightsholder payee) {
+        this.payee = payee;
+    }
+
+    public BigDecimal getNetAmount() {
+        return netAmount;
+    }
+
+    public void setNetAmount(BigDecimal netAmount) {
+        this.netAmount = netAmount;
+    }
+
+    public BigDecimal getServiceFee() {
+        return serviceFee;
+    }
+
+    public void setServiceFee(BigDecimal serviceFee) {
+        this.serviceFee = serviceFee;
+    }
+
+    public BigDecimal getServiceFeeAmount() {
+        return serviceFeeAmount;
+    }
+
+    public void setServiceFeeAmount(BigDecimal serviceFeeAmount) {
+        this.serviceFeeAmount = serviceFeeAmount;
     }
 
     @Override
@@ -447,6 +304,10 @@ public class UsageDto extends StoredEntity<String> {
             .append(this.reportedValue, that.reportedValue)
             .append(this.batchGrossAmount, that.batchGrossAmount)
             .append(this.status, that.status)
+            .append(this.payee, that.payee)
+            .append(this.netAmount, that.netAmount)
+            .append(this.serviceFee, that.serviceFee)
+            .append(this.serviceFeeAmount, that.serviceFeeAmount)
             .isEquals();
     }
 
@@ -477,6 +338,10 @@ public class UsageDto extends StoredEntity<String> {
             .append(reportedValue)
             .append(batchGrossAmount)
             .append(status)
+            .append(payee)
+            .append(netAmount)
+            .append(serviceFee)
+            .append(serviceFeeAmount)
             .toHashCode();
     }
 
@@ -507,6 +372,10 @@ public class UsageDto extends StoredEntity<String> {
             .append("reportedValue", reportedValue)
             .append("batchGrossAmount", batchGrossAmount)
             .append("status", status)
+            .append("payee", payee)
+            .append("netAmount", netAmount)
+            .append("serviceFee", serviceFee)
+            .append("serviceFeeAmount", serviceFeeAmount)
             .toString();
     }
 }
