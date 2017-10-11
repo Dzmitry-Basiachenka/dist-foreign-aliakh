@@ -2,11 +2,16 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioController;
 import com.copyright.rup.vaadin.ui.LongColumnGenerator;
 import com.copyright.rup.vaadin.ui.MoneyColumnGenerator;
 import com.copyright.rup.vaadin.ui.VaadinUtils;
-import com.copyright.rup.vaadin.ui.component.lazytable.IBeanLoader;
 import com.copyright.rup.vaadin.ui.component.lazytable.LazyTable;
+
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Table;
+import com.vaadin.ui.themes.BaseTheme;
 
 import java.math.BigDecimal;
 
@@ -30,16 +35,18 @@ public class RightsholderTotalsHolderTable extends LazyTable<RightsholderTotalsH
     private static final String SERVICE_FEE_TOTAL_PROPERTY = "serviceFeeTotal";
     private static final String NET_TOTAL_PROPERTY = "netTotal";
     private static final String SERVICE_FEE_PROPERTY = "serviceFee";
+    private IScenarioController controller;
 
     /**
      * Constructor.
      *
-     * @param beanLoader {@link IBeanLoader} instance
+     * @param controller {@link IScenarioController} instance
      * @param queryClass query class
      */
-    public RightsholderTotalsHolderTable(IBeanLoader<RightsholderTotalsHolder> beanLoader,
+    public RightsholderTotalsHolderTable(IScenarioController controller,
                                          Class<RightsholderTotalsHolderBeanQuery> queryClass) {
-        super(beanLoader, queryClass);
+        super(controller, queryClass);
+        this.controller = controller;
         initTable();
     }
 
@@ -103,11 +110,47 @@ public class RightsholderTotalsHolderTable extends LazyTable<RightsholderTotalsH
 
     private void addColumnsGenerators() {
         LongColumnGenerator longColumnGenerator = new LongColumnGenerator();
-        addGeneratedColumn(RIGHTSHOLDER_ACCOUNT_NUMBER_PROPERTY, longColumnGenerator);
+        addGeneratedColumn(RIGHTSHOLDER_ACCOUNT_NUMBER_PROPERTY,
+            new RightsholderAccountNumberColumnGenerator(controller));
         addGeneratedColumn(PAYEE_ACCOUNT_NUMBER_PROPERTY, longColumnGenerator);
         MoneyColumnGenerator moneyColumnGenerator = new MoneyColumnGenerator();
         addGeneratedColumn(GROSS_TOTAL_PROPERTY, moneyColumnGenerator);
         addGeneratedColumn(SERVICE_FEE_TOTAL_PROPERTY, moneyColumnGenerator);
         addGeneratedColumn(NET_TOTAL_PROPERTY, moneyColumnGenerator);
+    }
+
+    /**
+     * Button column generator for rightsholder account number column.
+     */
+    static class RightsholderAccountNumberColumnGenerator implements Table.ColumnGenerator {
+
+        private IScenarioController controller;
+
+        /**
+         * Constructor.
+         *
+         * @param controller controller instance
+         */
+        RightsholderAccountNumberColumnGenerator(IScenarioController controller) {
+            this.controller = controller;
+        }
+
+        @Override
+        public Object generateCell(Table source, Object itemId, Object columnId) {
+            Long rightsholderAccountNumber =
+                VaadinUtils.getContainerPropertyValue(source, itemId, columnId, Long.class);
+            Button buttonLink = createButtonLink(String.valueOf(rightsholderAccountNumber));
+            buttonLink.addClickListener(
+                (ClickListener) event -> controller.onRightsholderAccountNumberClicked(rightsholderAccountNumber,
+                    VaadinUtils.getContainerPropertyValue(source, itemId, RIGHTSHOLDER_NAME_PROPERTY, String.class)));
+            VaadinUtils.setButtonsAutoDisabled(buttonLink);
+            return buttonLink;
+        }
+
+        private Button createButtonLink(String caption) {
+            Button button = new Button(caption);
+            button.addStyleName(BaseTheme.BUTTON_LINK);
+            return button;
+        }
     }
 }

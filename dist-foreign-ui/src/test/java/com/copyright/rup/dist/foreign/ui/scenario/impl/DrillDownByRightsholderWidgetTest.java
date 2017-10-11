@@ -1,16 +1,11 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
 import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.reset;
-import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import com.copyright.rup.common.persist.RupPersistUtils;
-import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.vaadin.server.Sizeable.Unit;
@@ -23,61 +18,41 @@ import com.vaadin.ui.VerticalLayout;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.powermock.reflect.Whitebox;
-
-import java.math.BigDecimal;
 
 /**
- * Verifies {@link ScenarioWidget}.
+ * Verifies {@link DrillDownByRightsholderWidget}.
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
- * Date: 04/07/17
+ * Date: 10/11/17
  *
  * @author Ihar Suvorau
  */
-public class ScenarioWidgetTest {
+public class DrillDownByRightsholderWidgetTest {
 
-    private ScenarioWidget scenarioWidget;
-    private ScenarioController controller;
+    private DrillDownByRightsholderWidget widget;
 
     @Before
     public void setUp() {
-        controller = createMock(ScenarioController.class);
-        scenarioWidget = new ScenarioWidget();
-        scenarioWidget.setController(controller);
-        Scenario scenario = new Scenario();
-        scenario.setId(RupPersistUtils.generateUuid());
-        scenario.setName("Scenario name");
-        scenario.setGrossTotal(new BigDecimal("20000.00"));
-        expect(controller.getScenario()).andReturn(scenario).once();
-        replay(controller);
-        scenarioWidget.init();
-        verify(controller);
+        DrillDownByRightsholderController controller = createMock(DrillDownByRightsholderController.class);
+        widget = new DrillDownByRightsholderWidget();
+        widget.setController(controller);
+        widget.init();
         reset(controller);
     }
 
     @Test
     public void testComponentStructure() {
-        assertEquals("Scenario name", scenarioWidget.getCaption());
-        assertEquals("view-scenario-widget", scenarioWidget.getId());
-        assertEquals(95, scenarioWidget.getHeight(), 0);
-        assertEquals(Unit.PERCENTAGE, scenarioWidget.getHeightUnits());
-        assertFalse(scenarioWidget.isDraggable());
-        assertFalse(scenarioWidget.isResizable());
-        VerticalLayout content = (VerticalLayout) scenarioWidget.getContent();
+        assertEquals("drill-down-by-rightsholder-widget", widget.getId());
+        assertEquals(600, widget.getHeight(), 0);
+        assertEquals(Unit.PIXELS, widget.getHeightUnits());
+        assertEquals(1280, widget.getWidth(), 0);
+        assertEquals(Unit.PIXELS, widget.getWidthUnits());
+        VerticalLayout content = (VerticalLayout) widget.getContent();
         assertEquals(3, content.getComponentCount());
         verifySearchWidget(content.getComponent(0));
         verifyTable(content.getComponent(1));
         verifyButtonsLayout(content.getComponent(2));
-    }
-
-    @Test
-    public void testGetSearchValue() {
-        SearchWidget searchWidget = new SearchWidget(controller);
-        searchWidget.setSearchValue("search");
-        Whitebox.setInternalState(scenarioWidget, searchWidget);
-        assertEquals("search", scenarioWidget.getSearchValue());
     }
 
     private void verifySearchWidget(Component component) {
@@ -94,9 +69,8 @@ public class ScenarioWidgetTest {
     }
 
     private void verifyTable(Component component) {
-        assertEquals(RightsholderTotalsHolderTable.class, component.getClass());
-        RightsholderTotalsHolderTable table = (RightsholderTotalsHolderTable) component;
-        assertEquals("<span class='label-amount'>20,000.00</span>", table.getColumnFooter("grossTotal"));
+        assertNotNull(component);
+        assertEquals(DrillDownByRightsholderTable.class, component.getClass());
     }
 
     private void verifyButtonsLayout(Component component) {
