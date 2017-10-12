@@ -28,6 +28,7 @@ public class DrillDownByRightsholderWidget extends Window implements IDrillDownB
 
     private IDrillDownByRightsholderController controller;
     private DrillDownByRightsholderTable table;
+    private SearchWidget searchWidget;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -37,6 +38,11 @@ public class DrillDownByRightsholderWidget extends Window implements IDrillDownB
         VaadinUtils.addComponentStyle(this, "drill-down-by-rightsholder-widget");
         setContent(initContent());
         return this;
+    }
+
+    @Override
+    public String getSearchValue() {
+        return searchWidget.getSearchValue();
     }
 
     @Override
@@ -56,7 +62,7 @@ public class DrillDownByRightsholderWidget extends Window implements IDrillDownB
     }
 
     private HorizontalLayout initSearchWidget() {
-        SearchWidget searchWidget = new SearchWidget(() -> table.getContainerDataSource().refresh());
+        searchWidget = new SearchWidget(() -> table.getContainerDataSource().refresh());
         searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.usage.search_widget"));
         HorizontalLayout layout = new HorizontalLayout(searchWidget);
         VaadinUtils.setMaxComponentsWidth(layout);

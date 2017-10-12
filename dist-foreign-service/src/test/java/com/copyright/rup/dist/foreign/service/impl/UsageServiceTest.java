@@ -59,6 +59,7 @@ public class UsageServiceTest {
     private static final String USAGE_ID_2 = "Usage id 2";
     private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
     private static final String USER_NAME = "User name";
+    private static final Long RH_ACCOUNT_NUMBER = 1000001534L;
     private IUsageRepository usageRepository;
     private IUsageService usageService;
 
@@ -174,7 +175,7 @@ public class UsageServiceTest {
     }
 
     @Test
-    public void testgetRightsholderTotalsHoldersByScenarioId() {
+    public void testGetRightsholderTotalsHoldersByScenarioId() {
         List<RightsholderTotalsHolder> rightsholderTotalsHolders = Lists.newArrayList(new RightsholderTotalsHolder());
         Pageable pageable = new Pageable(0, 1);
         expect(usageRepository.getRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, StringUtils.EMPTY, pageable, null))
@@ -188,11 +189,35 @@ public class UsageServiceTest {
     }
 
     @Test
-    public void getRightsholderTotalsHolderCountByScenarioId() {
+    public void testGetRightsholderTotalsHolderCountByScenarioId() {
         expect(usageRepository.getRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, StringUtils.EMPTY))
             .andReturn(5).once();
         replay(usageRepository);
         assertEquals(5, usageService.getRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, StringUtils.EMPTY));
+        verify(usageRepository);
+    }
+
+    @Test
+    public void testGetUsagesCountByScenarioIdAndRhAccountNumber() {
+        expect(usageRepository.getUsagesCountByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER, SCENARIO_ID,
+            StringUtils.EMPTY)).andReturn(5).once();
+        replay(usageRepository);
+        assertEquals(5, usageService.getUsagesCountByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER, SCENARIO_ID,
+            StringUtils.EMPTY));
+        verify(usageRepository);
+    }
+
+    @Test
+    public void testGetUsagesByScenarioIdAndRhAccountNumber() {
+        List<UsageDto> usages = Lists.newArrayList(new UsageDto(), new UsageDto());
+        Pageable pageable = new Pageable(0, 2);
+        expect(usageRepository.getUsagesByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER, SCENARIO_ID, null, pageable,
+            null)).andReturn(usages);
+        replay(usageRepository);
+        List<UsageDto> result =
+            usageService.getUsagesByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER, SCENARIO_ID, null, pageable, null);
+        assertNotNull(result);
+        assertEquals(2, result.size());
         verify(usageRepository);
     }
 

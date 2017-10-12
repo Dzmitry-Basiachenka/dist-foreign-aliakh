@@ -93,6 +93,46 @@
         gross_amount
     </sql>
 
+    <sql id="usageDtoColumns">
+        u.df_usage_uid,
+        u.df_scenario_uid,
+        u.detail_id,
+        u.wr_wrk_inst,
+        u.work_title,
+        u.rh_account_number,
+        rh.name rh_name,
+        u.status_ind,
+        u.article,
+        u.standard_number,
+        u.publisher,
+        u.publication_date,
+        u.market,
+        u.market_period_from,
+        u.market_period_to,
+        u.author,
+        u.number_of_copies,
+        u.reported_value,
+        u.gross_amount,
+        u.service_fee_amount,
+        u.net_amount,
+        u.service_fee,
+        ub.gross_amount batch_gross_amount,
+        ub.name,
+        ub.rro_account_number,
+        rro.name rro_name,
+        ub.payment_date,
+        ub.fiscal_year,
+        u.updated_datetime
+    </sql>
+
+    <sql id="selectUsageDtos">
+        select <include refid="usageDtoColumns"/>
+        from ${schema}.df_usage u
+        join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        left join ${schema}.df_rightsholder rro on rro.rh_account_number = ub.rro_account_number
+    </sql>
+
     <sql id="usageFilter">
         <where>
             <if test="filter.usageBatchesIds.size() > 0">
@@ -117,6 +157,13 @@
                 and <![CDATA[ub.fiscal_year <= #{filter.fiscalYear}]]>
             </if>
         </where>
+    </sql>
+
+    <sql id="ifPageable">
+        <if test="null != pageable">
+            limit #{pageable.limit}
+            offset #{pageable.offset}
+        </if>
     </sql>
 
     <sql id="direction">
@@ -271,47 +318,10 @@
     </insert>
 
     <select id="findByFilter" resultMap="usageDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
-        select
-            u.df_usage_uid,
-            u.df_scenario_uid,
-            u.detail_id,
-            u.wr_wrk_inst,
-            u.work_title,
-            u.rh_account_number,
-            rh.name rh_name,
-            u.status_ind,
-            u.article,
-            u.standard_number,
-            u.publisher,
-            u.publication_date,
-            u.market,
-            u.market_period_from,
-            u.market_period_to,
-            u.author,
-            u.number_of_copies,
-            u.reported_value,
-            u.gross_amount,
-            ub.gross_amount batch_gross_amount,
-            ub.name,
-            ub.rro_account_number,
-            rro.name rro_name,
-            ub.payment_date,
-            ub.fiscal_year,
-            u.record_version,
-            u.created_by_user,
-            u.created_datetime,
-            u.updated_by_user,
-            u.updated_datetime
-        from ${schema}.df_usage u
-        join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
-        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
-        left join ${schema}.df_rightsholder rro on rro.rh_account_number = ub.rro_account_number
+        <include refid="selectUsageDtos"/>
         <include refid="usageFilter"/>
         <include refid="usageFilterOrderBy"/>
-        <if test="null != pageable">
-            limit #{pageable.limit}
-            offset #{pageable.offset}
-        </if>
+        <include refid="ifPageable"/>
     </select>
 
     <select id="findByScenarioId" resultMap="usageDtoResultMap">
@@ -492,5 +502,17 @@
         <if test="null != searchValue">
             where <include refid="searchWhereClause"/>
         </if>
+    </select>
+
+    <select id="getUsagesCountByScenarioIdAndRhAccountNumber" parameterType="map" resultType="int">
+        select count(1)
+        from ${schema}.df_usage
+        where df_scenario_uid = #{scenarioId} and rh_account_number = #{accountNumber}
+    </select>
+
+    <select id="getUsagesByScenarioIdAndRhAccountNumber" parameterType="map" resultMap="usageDtoResultMap">
+        <include refid="selectUsageDtos"/>
+        where u.df_scenario_uid = #{scenarioId} and u.rh_account_number = #{accountNumber}
+        <include refid="ifPageable"/>
     </select>
 </mapper>

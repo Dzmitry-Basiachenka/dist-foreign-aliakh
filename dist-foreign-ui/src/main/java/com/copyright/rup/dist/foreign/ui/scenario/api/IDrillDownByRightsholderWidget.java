@@ -12,4 +12,9 @@ import com.copyright.rup.vaadin.widget.api.IWidget;
  * @author Ihar Suvorau
  */
 public interface IDrillDownByRightsholderWidget extends IWidget<IDrillDownByRightsholderController> {
+
+    /**
+     * @return value from search field.
+     */
+    String getSearchValue();
 }
