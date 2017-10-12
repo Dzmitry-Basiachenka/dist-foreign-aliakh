@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
 
 import java.io.OutputStream;
+import java.io.PipedOutputStream;
 import java.util.List;
 import java.util.Set;
 
@@ -54,6 +55,14 @@ public interface IUsageRepository {
      * @param outputStream instance of {@link OutputStream}
      */
     void writeUsagesCsvReport(UsageFilter filter, OutputStream outputStream);
+
+    /**
+     * Finds usages by scenario id and writes them into the output stream in CSV format.
+     *
+     * @param scenarioId        scenario id
+     * @param pipedOutputStream instance of {@link PipedOutputStream}
+     */
+    void writeScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
 
     /**
      * Deletes all {@link Usage}s from the batch with given id.

@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.domain;
 
-import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.domain.StoredEntity;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -27,14 +26,12 @@ public class UsageDto extends StoredEntity<String> {
     private Long detailId;
     private String batchName;
     private Integer fiscalYear;
-    //TODO {ushalamitski} Should be replaced with Rightsholder domain
     private String rroName;
     private Long rroAccountNumber;
     private LocalDate paymentDate;
     private Long wrWrkInst;
     private String workTitle;
     private String article;
-    //TODO {ushalamitski} Should be replaced with Rightsholder domain
     private Long rhAccountNumber;
     private String rhName;
     private String standardNumber;
@@ -45,7 +42,8 @@ public class UsageDto extends StoredEntity<String> {
     private Integer marketPeriodFrom;
     private Integer marketPeriodTo;
     private String author;
-    private Rightsholder payee = new Rightsholder();
+    private Long payeeAccountNumber;
+    private String payeeName;
     private BigDecimal grossAmount = DEFAULT_AMOUNT;
     private BigDecimal reportedValue = DEFAULT_AMOUNT;
     private BigDecimal batchGrossAmount = DEFAULT_AMOUNT;
@@ -238,12 +236,20 @@ public class UsageDto extends StoredEntity<String> {
         this.rhAccountNumber = rhAccountNumber;
     }
 
-    public Rightsholder getPayee() {
-        return payee;
+    public Long getPayeeAccountNumber() {
+        return payeeAccountNumber;
     }
 
-    public void setPayee(Rightsholder payee) {
-        this.payee = payee;
+    public void setPayeeAccountNumber(Long payeeAccountNumber) {
+        this.payeeAccountNumber = payeeAccountNumber;
+    }
+
+    public String getPayeeName() {
+        return payeeName;
+    }
+
+    public void setPayeeName(String payeeName) {
+        this.payeeName = payeeName;
     }
 
     public BigDecimal getNetAmount() {
@@ -304,7 +310,8 @@ public class UsageDto extends StoredEntity<String> {
             .append(this.reportedValue, that.reportedValue)
             .append(this.batchGrossAmount, that.batchGrossAmount)
             .append(this.status, that.status)
-            .append(this.payee, that.payee)
+            .append(this.payeeAccountNumber, that.payeeAccountNumber)
+            .append(this.payeeName, that.payeeName)
             .append(this.netAmount, that.netAmount)
             .append(this.serviceFee, that.serviceFee)
             .append(this.serviceFeeAmount, that.serviceFeeAmount)
@@ -338,7 +345,8 @@ public class UsageDto extends StoredEntity<String> {
             .append(reportedValue)
             .append(batchGrossAmount)
             .append(status)
-            .append(payee)
+            .append(this.payeeAccountNumber)
+            .append(this.payeeName)
             .append(netAmount)
             .append(serviceFee)
             .append(serviceFeeAmount)
@@ -372,7 +380,8 @@ public class UsageDto extends StoredEntity<String> {
             .append("reportedValue", reportedValue)
             .append("batchGrossAmount", batchGrossAmount)
             .append("status", status)
-            .append("payee", payee)
+            .append("payeeAccountNumber", payeeAccountNumber)
+            .append("payeeName", payeeName)
             .append("netAmount", netAmount)
             .append("serviceFee", serviceFee)
             .append("serviceFeeAmount", serviceFeeAmount)
