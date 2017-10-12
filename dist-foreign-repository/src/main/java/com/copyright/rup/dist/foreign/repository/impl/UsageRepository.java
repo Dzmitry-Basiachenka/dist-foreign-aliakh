@@ -25,8 +25,10 @@ import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PipedOutputStream;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -83,13 +85,24 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
+    public void writeScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
+        Objects.requireNonNull(pipedOutputStream);
+        try (ScenarioUsagesCsvReportHandler handler = new ScenarioUsagesCsvReportHandler(pipedOutputStream)) {
+            if (Objects.nonNull(scenarioId)) {
+                getTemplate().select("IUsageMapper.findByScenarioId", scenarioId, handler);
+            }
+        } catch (IOException e) {
+            throw new RupRuntimeException(e);
+        }
+    }
+
+    @Override
     public void writeUsagesCsvReport(UsageFilter filter, OutputStream outputStream) {
         checkNotNull(outputStream);
         try {
             UsageCsvReportHandler handler = new UsageCsvReportHandler(outputStream);
             if (!checkNotNull(filter).isEmpty()) {
-                getTemplate()
-                    .select("IUsageMapper.findByFilter", ImmutableMap.of(FILTER_KEY, filter), handler);
+                getTemplate().select("IUsageMapper.findByFilter", ImmutableMap.of(FILTER_KEY, filter), handler);
             }
             handler.closeStream();
         } catch (IOException e) {

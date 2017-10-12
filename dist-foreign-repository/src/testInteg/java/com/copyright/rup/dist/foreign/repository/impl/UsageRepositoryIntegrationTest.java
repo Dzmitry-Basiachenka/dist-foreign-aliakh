@@ -421,6 +421,28 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
+    public void testWriteScenarioUsagesCsvReport() throws Exception {
+        PipedOutputStream outputStream = new PipedOutputStream();
+        PipedInputStream inputStream = new PipedInputStream(outputStream);
+        usageRepository.writeScenarioUsagesCsvReport(SCENARIO_ID, outputStream);
+        BufferedReader bufferedReader =
+            new BufferedReader(new InputStreamReader(inputStream, Charset.forName("utf-8")));
+        assertEquals("Detail ID,Usage Batch Name,Fiscal Year,RRO Account #,RRO Name,Payment Date,Title,Article," +
+            "Standard Number,Wr Wrk Inst,RH Account #,RH Name,Payee Account #,Payee Name,Publisher,Pub Date," +
+            "Number of Copies,Reported value,Gross Amt in USD,Service Fee Amount,Net Amt in USD,Service Fee %," +
+            "Market,Market Period From,Market Period To,Author", bufferedReader.readLine());
+        assertEquals("6997788886,JAACC_11Dec16,FY2019,7001440663,\"JAACC, Japan Academic Association for Copyright" +
+            " Clearance [T]\",08/16/2018,100 ROAD MOVIES,DIN EN 779:2012,1008902112377654XX,243904752,1000002859," +
+            "John Wiley & Sons - Books,,,IEEE,09/10/2013,250232,9900.00,11461.5400000000,1833.0000000000," +
+            "9628.0000000000,0.0,Doc Del,2013,2017,Philippe de Mézières", bufferedReader.readLine());
+        assertEquals("6213788886,JAACC_11Dec16,FY2019,7001440663,\"JAACC, Japan Academic Association for Copyright" +
+            " Clearance [T]\",08/16/2018,100 ROAD MOVIES,DIN EN 779:2012,1008902112317622XX,243904752,1000002859," +
+            "John Wiley & Sons - Books,,,IEEE,09/10/2013,100,9900.00,1200.0000000000,192.0000000000,1008.0000000000," +
+            "0.0,Doc Del,2013,2017,Philippe de Mézières", bufferedReader.readLine());
+        assertNull(bufferedReader.readLine());
+    }
+
+    @Test
     public void testDeleteUsages() {
         UsageFilter filter = new UsageFilter();
         filter.setUsageBatchesIds(Sets.newHashSet(USAGE_BATCH_ID_1));

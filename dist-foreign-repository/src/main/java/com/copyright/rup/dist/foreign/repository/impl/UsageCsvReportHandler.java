@@ -1,9 +1,9 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
-import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
-import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
+import com.copyright.rup.dist.foreign.repository.impl.BaseCsvReportHandler.DateCellProcessor;
+import com.copyright.rup.dist.foreign.repository.impl.BaseCsvReportHandler.FiscalYearCellProcessor;
 
 import com.google.common.collect.ImmutableTable;
 import com.google.common.collect.Table;
@@ -15,15 +15,11 @@ import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvBeanWriter;
 import org.supercsv.io.ICsvBeanWriter;
 import org.supercsv.prefs.CsvPreference;
-import org.supercsv.util.CsvContext;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 
 /**
  * Handles {@link ResultContext} result and writes it into output stream.
@@ -34,6 +30,7 @@ import java.util.Locale;
  *
  * @author Mikita Hladkikh
  */
+//TODO {ushalamitski} Use BaseCsvReportHandler
 public class UsageCsvReportHandler implements ResultHandler<UsageDto> {
 
     private static final Optional OPTIONAL_PROCESSOR = new Optional();
@@ -96,31 +93,6 @@ public class UsageCsvReportHandler implements ResultHandler<UsageDto> {
             beanWriter.close();
         } catch (IOException e) {
             throw new RupRuntimeException(e);
-        }
-    }
-
-    /**
-     * The cell processor to generate fiscal year value for report.
-     */
-    static class FiscalYearCellProcessor implements CellProcessor {
-
-        @Override
-        public Object execute(Object value, CsvContext context) {
-            return null != value ? UsageBatchUtils.getFiscalYear((Integer) value) : null;
-        }
-    }
-
-    /**
-     * The cell processor to generate date value in {@link RupDateUtils#US_DATE_FORMAT_PATTERN_SHORT} for report.
-     */
-    static class DateCellProcessor implements CellProcessor {
-
-        private static final DateTimeFormatter FORMATTER =
-            DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT, Locale.US);
-
-        @Override
-        public Object execute(Object value, CsvContext context) {
-            return null != value ? ((LocalDate) value).format(FORMATTER) : null;
         }
     }
 }
