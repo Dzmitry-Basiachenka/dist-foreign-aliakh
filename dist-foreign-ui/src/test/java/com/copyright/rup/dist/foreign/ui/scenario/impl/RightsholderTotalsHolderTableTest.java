@@ -8,6 +8,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioController;
+import com.copyright.rup.dist.foreign.ui.scenario.impl.RightsholderTotalsHolderTable.RightsholderAccountNumberColumnGenerator;
 import com.copyright.rup.vaadin.ui.LongColumnGenerator;
 import com.copyright.rup.vaadin.ui.MoneyColumnGenerator;
 import com.copyright.rup.vaadin.ui.component.lazytable.LazyTable;
@@ -104,7 +105,7 @@ public class RightsholderTotalsHolderTableTest {
 
     private void verifyGeneratedColumns() {
         verifyColumnGenerator(table.getColumnGenerator(RIGHTSHOLDER_ACCOUNT_NUMBER_PROPERTY),
-            LongColumnGenerator.class);
+            RightsholderAccountNumberColumnGenerator.class);
         verifyColumnGenerator(table.getColumnGenerator(PAYEE_ACCOUNT_NUMBER_PROPERTY), LongColumnGenerator.class);
         verifyColumnGenerator(table.getColumnGenerator(GROSS_TOTAL_PROPERTY), MoneyColumnGenerator.class);
     }

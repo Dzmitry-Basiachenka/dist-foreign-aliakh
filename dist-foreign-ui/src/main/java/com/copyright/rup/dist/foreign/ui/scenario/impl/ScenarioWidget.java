@@ -8,17 +8,11 @@ import com.copyright.rup.vaadin.ui.VaadinUtils;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
-import com.vaadin.data.util.filter.Or;
-import com.vaadin.data.util.filter.SimpleStringFilter;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.vaadin.addons.lazyquerycontainer.LazyQueryContainer;
 
 /**
  * Widget for viewing information about rightsholders, payee and their associated amounts grouped by rightsholder.
@@ -34,7 +28,6 @@ public class ScenarioWidget extends Window implements IScenarioWidget {
     private ScenarioController controller;
     private SearchWidget searchWidget;
     private RightsholderTotalsHolderTable table;
-    private LazyQueryContainer container;
     private Scenario scenario;
 
     @Override
@@ -58,16 +51,7 @@ public class ScenarioWidget extends Window implements IScenarioWidget {
 
     @Override
     public void applySearch() {
-        container = table.getContainerDataSource();
-        if (CollectionUtils.isNotEmpty(container.getContainerFilters())) {
-            container.removeAllContainerFilters();
-        }
-        String searchValue = getSearchValue();
-        if (StringUtils.isNotBlank(searchValue)) {
-            addContainerFilter(searchValue);
-        } else {
-            container.refresh();
-        }
+        table.getContainerDataSource().refresh();
     }
 
     @Override
@@ -76,12 +60,11 @@ public class ScenarioWidget extends Window implements IScenarioWidget {
     }
 
     private VerticalLayout initContent() {
-        HorizontalLayout searchToolbar = initSearchWidget();
         table = new RightsholderTotalsHolderTable(controller, RightsholderTotalsHolderBeanQuery.class);
         table.setColumnFooter("grossTotal", CurrencyUtils.formatAsHtml(scenario.getGrossTotal()));
         table.setColumnFooter("netTotal", CurrencyUtils.formatAsHtml(scenario.getNetTotal()));
         HorizontalLayout buttons = initButtons();
-        VerticalLayout layout = new VerticalLayout(new VerticalLayout(searchToolbar), table, buttons);
+        VerticalLayout layout = new VerticalLayout(new VerticalLayout(initSearchWidget()), table, buttons);
         layout.setSizeFull();
         layout.setExpandRatio(table, 1);
         layout.setComponentAlignment(buttons, Alignment.BOTTOM_RIGHT);
@@ -107,10 +90,5 @@ public class ScenarioWidget extends Window implements IScenarioWidget {
         buttons.setSpacing(true);
         buttons.setMargin(new MarginInfo(false, true, true, false));
         return buttons;
-    }
-
-    private void addContainerFilter(String searchValue) {
-        container.addContainerFilter(new Or(new SimpleStringFilter("rightsholderName", searchValue, true, false),
-            new SimpleStringFilter("rightsholderAccountNumber", searchValue, true, false)));
     }
 }

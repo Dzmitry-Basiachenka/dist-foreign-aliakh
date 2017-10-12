@@ -16,4 +16,12 @@ import com.copyright.rup.vaadin.widget.api.IController;
  */
 public interface IScenarioController extends IController<IScenarioWidget>, ISearchController,
     IBeanLoader<RightsholderTotalsHolder> {
+
+    /**
+     * Handles click on "Rightsholder Account Number" button.
+     *
+     * @param accountNumber    rightsholder account number
+     * @param rightsholderName rightsholder name
+     */
+    void onRightsholderAccountNumberClicked(Long accountNumber, String rightsholderName);
 }

@@ -82,6 +82,13 @@
         }
     }
 
+    /**==== Drill down by rightsholder widget ====*/
+    .drill-down-by-rightsholder-widget {
+        .search-toolbar {
+                padding: $window-search-padding;
+            }
+    }
+
     /*=== Styles for table with extended footer ===*/
     .table-ext-footer .v-table-footer {
         font-weight: bold;

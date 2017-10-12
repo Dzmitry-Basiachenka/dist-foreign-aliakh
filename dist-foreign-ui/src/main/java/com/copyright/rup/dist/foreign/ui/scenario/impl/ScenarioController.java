@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
@@ -34,6 +35,9 @@ public class ScenarioController extends CommonController<IScenarioWidget> implem
     @Autowired
     private IUsageService usageService;
 
+    @Autowired
+    private IDrillDownByRightsholderController drillDownByRightsholderController;
+
     @Override
     public int getSize() {
         return usageService.getRightsholderTotalsHolderCountByScenarioId(scenario.getId(),
@@ -53,6 +57,11 @@ public class ScenarioController extends CommonController<IScenarioWidget> implem
     }
 
     @Override
+    public void onRightsholderAccountNumberClicked(Long accountNumber, String rhName) {
+        drillDownByRightsholderController.showWidget(accountNumber, rhName, scenario);
+    }
+
+    @Override
     protected IScenarioWidget instantiateWidget() {
         return new ScenarioWidget();
     }
@@ -64,6 +73,15 @@ public class ScenarioController extends CommonController<IScenarioWidget> implem
      */
     void setScenario(Scenario scenario) {
         this.scenario = scenario;
+    }
+
+    /**
+     * Sets {@link IDrillDownByRightsholderController}.
+     *
+     * @param drillDownByRightsholderController {@link IDrillDownByRightsholderController}
+     */
+    void setDrillDownByRightsholderController(IDrillDownByRightsholderController drillDownByRightsholderController) {
+        this.drillDownByRightsholderController = drillDownByRightsholderController;
     }
 
     /**
