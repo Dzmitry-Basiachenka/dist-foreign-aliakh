@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -91,5 +92,14 @@ public class RightsholderService implements IRightsholderService {
             ? rightsholders.stream()
             .collect(Collectors.toMap(Rightsholder::getAccountNumber, rightsholder -> rightsholder))
             : Collections.emptyMap();
+    }
+
+    @Override
+    public void updateRightsholder(Rightsholder rightsholder) {
+        Objects.requireNonNull(rightsholder);
+        LOGGER.info("Update rightsholder information. Started. RhAccount#={}", rightsholder.getAccountNumber());
+        rightsholderRepository.deleteByAccountNumber(rightsholder.getAccountNumber());
+        rightsholderRepository.insert(rightsholder);
+        LOGGER.info("Update rightsholder information. Finished. RhAccount#={}", rightsholder.getAccountNumber());
     }
 }

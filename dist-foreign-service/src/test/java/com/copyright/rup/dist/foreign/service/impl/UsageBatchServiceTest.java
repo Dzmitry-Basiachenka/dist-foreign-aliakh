@@ -23,7 +23,6 @@ import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
 import org.easymock.Capture;
 import org.junit.Before;
@@ -122,8 +121,8 @@ public class UsageBatchServiceTest {
         expectLastCall().once();
         Map<Long, Rightsholder> rightsholderMap = Maps.newHashMapWithExpectedSize(1);
         rightsholderMap.put(RRO_ACCOUNT_NUMBER, rro);
-        expect(rightsholderService.updateAndGetRightsholders(Sets.newHashSet(rro.getAccountNumber())))
-            .andReturn(rightsholderMap).once();
+        rightsholderService.updateRightsholder(rro);
+        expectLastCall().once();
         expect(usageService.insertUsages(usageBatch, usages)).andReturn(2).once();
         replay(usageBatchRepository, usageService, RupContextUtils.class);
         assertEquals(2, usageBatchService.insertUsageBatch(usageBatch, usages));

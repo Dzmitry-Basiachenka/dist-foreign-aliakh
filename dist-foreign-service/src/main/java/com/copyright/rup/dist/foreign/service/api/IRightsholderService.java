@@ -37,4 +37,11 @@ public interface IRightsholderService {
      * @return map of rightsholders by their account number
      */
     Map<Long, Rightsholder> updateAndGetRightsholders(Set<Long> accountNumbers);
+
+    /**
+     * Inserts specified rightsholder into database if it does not exist.
+     *
+     * @param rightsholder {@link Rightsholder} to insert
+     */
+    void updateRightsholder(Rightsholder rightsholder);
 }
