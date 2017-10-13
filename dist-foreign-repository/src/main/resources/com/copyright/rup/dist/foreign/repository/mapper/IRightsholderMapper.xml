@@ -73,7 +73,7 @@
         ${schema}.df_rightsholder
         where rh_account_number in
         <foreach collection="collection" item="accountNumber" open="(" close=")" separator=",">
-            cast(#{accountNumber} as text)
+            #{accountNumber}
         </foreach>
     </select>
 </mapper>

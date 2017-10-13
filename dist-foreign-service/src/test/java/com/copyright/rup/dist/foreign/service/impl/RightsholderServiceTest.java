@@ -121,6 +121,18 @@ public class RightsholderServiceTest {
         verify(rightsholderRepository);
     }
 
+    @Test
+    public void testUpdateRightsholder() {
+        Rightsholder rightsholder = buildRightsholder(ACCOUNT_NUMBER_1);
+        rightsholderRepository.deleteByAccountNumber(rightsholder.getAccountNumber());
+        expectLastCall().once();
+        rightsholderRepository.insert(rightsholder);
+        expectLastCall().once();
+        replay(rightsholderRepository);
+        rightsholderService.updateRightsholder(rightsholder);
+        verify(rightsholderRepository);
+    }
+
     private Rightsholder buildRightsholder(Long accountNumber) {
         Rightsholder rightsholder = new Rightsholder();
         rightsholder.setAccountNumber(accountNumber);
