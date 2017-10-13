@@ -115,16 +115,7 @@ databaseChangeLog {
             column(name: 'gross_amount', value: '6892.30')
         }
 
-        rollback {
-            delete(schemaName: dbAppsSchema, tableName: 'df_usage') {
-                where "df_usage_uid in ('111111111', '222222222', '333333333', '444444444')"
-            }
-
-            delete(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
-                where "df_usage_batch_uid in ('56282dbc-2468-48d4-b926-93d3458a656a', " +
-                        "'56282dbc-2468-48d4-b926-94d3458a666a', '56782dbc-2158-48d4-b026-94d3458a666a')"
-            }
-        }
+        rollback ""
     }
 
     changeSet(id: '2017-02-27-00', author: 'Mikalai_Bezmen <mbezmen@copyright.com>') {
@@ -170,12 +161,7 @@ databaseChangeLog {
             column(name: 'name', value: 'JAACC, Japan Academic Association for Copyright Clearance [T]')
         }
 
-        rollback {
-            delete(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
-                where "rh_account_number in ('1000002797', '1000002859', '1000005413', '1000008666', '1000009997', " +
-                        "'2000017004', '7000813806', '7001440663')"
-            }
-        }
+        rollback ""
     }
 
     changeSet(id: '2017-03-16-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
@@ -215,15 +201,7 @@ databaseChangeLog {
             column(name: 'gross_amount', value: '11461.54')
         }
 
-        rollback {
-            delete(schemaName: dbAppsSchema, tableName: 'df_scenario') {
-                where "df_scenario_uid = 'b1f0b236-3ae9-4a60-9fab-61db84199d6f'"
-            }
-
-            delete(schemaName: dbAppsSchema, tableName: 'df_usage') {
-                where "df_usage_uid = 'b1f0b236-3ae9-4a60-9fab-61db84199dss'"
-            }
-        }
+        rollback ""
     }
 
     changeSet(id: '2017-03-16-00', author: 'Aliaksandr Radkevich <aradkevich@copyright.com>') {
@@ -331,17 +309,7 @@ databaseChangeLog {
             column(name: 'gross_amount', value: '240.00')
         }
 
-        rollback {
-            delete(schemaName: dbAppsSchema, tableName: 'df_scenario') {
-                where "df_scenario_uid in ('5c3c3412-dea5-4572-a894-15a4b87071c4', '92cfce61-9532-448e-a2bb-2ba23636debb'," +
-                        " 'b2f3bf86-8343-4f78-bdb5-20a47c6a52b8')"
-            }
-
-            delete(schemaName: dbAppsSchema, tableName: 'df_usage') {
-                where "df_usage_uid in ('47943793-4f9a-47b1-b2a8-e95a87aa58e6', '3846ead0-87ae-4d9b-8dfe-1b985d78c061'," +
-                        " 'b7ee7e4c-ec30-400b-ba49-70aaf8a4940e')"
-            }
-        }
+        rollback ""
     }
 
     changeSet(id: '2017-04-07-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
@@ -451,15 +419,6 @@ databaseChangeLog {
             column(name: 'net_amount', value: '1050')
         }
 
-        rollback {
-            delete(schemaName: dbAppsSchema, tableName: 'df_scenario') {
-                where "df_scenario_uid = '5c3c3412-dea5-4572-a894-15a4b870fa39'"
-            }
-
-            delete(schemaName: dbAppsSchema, tableName: 'df_usage') {
-                where "df_usage_uid in ('47943793-4f9a-47b1-b2a8-e95a87aa58g6', '3846ead0-87ae-4d9b-8dfe-1b985d78c062'," +
-                        " 'b7ee7e4c-ec30-400b-ba49-70aaf8a4941e', 'b7ee7e4c-ec30-400b-ba49-70aaf8a4942e')"
-            }
-        }
+        rollback ""
     }
 }
