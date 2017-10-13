@@ -119,6 +119,16 @@ public class UsageServiceTest {
     }
 
     @Test
+    public void testWriteScenarioUsagesCsvReport() {
+        PipedOutputStream outputStream = new PipedOutputStream();
+        usageRepository.writeScenarioUsagesCsvReport(SCENARIO_ID, outputStream);
+        expectLastCall().once();
+        replay(usageRepository);
+        usageService.writeScenarioUsagesCsvReport(SCENARIO_ID, outputStream);
+        verify(usageRepository);
+    }
+
+    @Test
     public void testInsertUsages() {
         mockStatic(RupContextUtils.class);
         Capture<Usage> captureUsage1 = new Capture<>();

@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.api;
 
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
+import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.ui.component.lazytable.IBeanLoader;
 import com.copyright.rup.vaadin.widget.SearchWidget.ISearchController;
 import com.copyright.rup.vaadin.widget.api.IController;
@@ -16,6 +17,11 @@ import com.copyright.rup.vaadin.widget.api.IController;
  */
 public interface IScenarioController extends IController<IScenarioWidget>, ISearchController,
     IBeanLoader<RightsholderTotalsHolder> {
+
+    /**
+     * @return instance of {@link IStreamSource} for export.
+     */
+    IStreamSource getExportScenarioUsagesStreamSource();
 
     /**
      * Handles click on "Rightsholder Account Number" button.

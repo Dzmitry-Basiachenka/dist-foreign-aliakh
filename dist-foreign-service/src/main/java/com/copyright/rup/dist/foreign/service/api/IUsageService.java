@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.repository.api.Sort;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingResult;
 
 import java.io.OutputStream;
+import java.io.PipedOutputStream;
 import java.util.List;
 import java.util.Set;
 
@@ -51,6 +52,14 @@ public interface IUsageService {
      * @param outputStream instance of {@link OutputStream}
      */
     void writeUsageCsvReport(UsageFilter filter, OutputStream outputStream);
+
+    /**
+     * Writes scenario usages into csv output stream.
+     *
+     * @param scenarioId        scenario id
+     * @param pipedOutputStream instance of {@link PipedOutputStream}
+     */
+    void writeScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
 
     /**
      * Writes errors information into csv output stream.
