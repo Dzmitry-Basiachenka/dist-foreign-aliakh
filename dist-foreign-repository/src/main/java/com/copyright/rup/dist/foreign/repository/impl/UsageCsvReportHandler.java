@@ -4,6 +4,7 @@ import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.repository.impl.BaseCsvReportHandler.DateCellProcessor;
 import com.copyright.rup.dist.foreign.repository.impl.BaseCsvReportHandler.FiscalYearCellProcessor;
+import com.copyright.rup.dist.foreign.repository.impl.BaseCsvReportHandler.ZeroBigDecimalCellProcessor;
 
 import com.google.common.collect.ImmutableTable;
 import com.google.common.collect.Table;
@@ -53,7 +54,7 @@ public class UsageCsvReportHandler implements ResultHandler<UsageDto> {
         .put("publicationDate", "Pub Date", new DateCellProcessor())
         .put("numberOfCopies", "Number of Copies", OPTIONAL_PROCESSOR)
         .put("reportedValue", "Reported value", OPTIONAL_PROCESSOR)
-        .put("grossAmount", "Amt in USD", OPTIONAL_PROCESSOR)
+        .put("grossAmount", "Amt in USD", new ZeroBigDecimalCellProcessor())
         .put("batchGrossAmount", "Gross Amt in USD", OPTIONAL_PROCESSOR)
         .put("market", "Market", OPTIONAL_PROCESSOR)
         .put("marketPeriodFrom", "Market Period From", OPTIONAL_PROCESSOR)

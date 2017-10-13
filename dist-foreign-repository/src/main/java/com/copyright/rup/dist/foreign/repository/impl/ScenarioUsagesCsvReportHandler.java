@@ -22,6 +22,7 @@ class ScenarioUsagesCsvReportHandler extends BaseCsvReportHandler {
 
     private static final Optional OPTIONAL_PROCESSOR = new Optional();
     private static final DateCellProcessor DATE_CELL_PROCESSOR = new DateCellProcessor();
+    private static final ZeroBigDecimalCellProcessor ZERO_BIG_DECIMAL_PROCESSOR = new ZeroBigDecimalCellProcessor();
 
     private static final Table<String, String, CellProcessor> PROPERTY_TABLE =
         ImmutableTable.<String, String, CellProcessor>builder()
@@ -43,9 +44,9 @@ class ScenarioUsagesCsvReportHandler extends BaseCsvReportHandler {
             .put("publicationDate", "Pub Date", new DateCellProcessor())
             .put("numberOfCopies", "Number of Copies", OPTIONAL_PROCESSOR)
             .put("reportedValue", "Reported value", OPTIONAL_PROCESSOR)
-            .put("grossAmount", "Gross Amt in USD", OPTIONAL_PROCESSOR)
-            .put("serviceFeeAmount", "Service Fee Amount", OPTIONAL_PROCESSOR)
-            .put("netAmount", "Net Amt in USD", OPTIONAL_PROCESSOR)
+            .put("grossAmount", "Gross Amt in USD", ZERO_BIG_DECIMAL_PROCESSOR)
+            .put("serviceFeeAmount", "Service Fee Amount", ZERO_BIG_DECIMAL_PROCESSOR)
+            .put("netAmount", "Net Amt in USD", ZERO_BIG_DECIMAL_PROCESSOR)
             .put("serviceFee", "Service Fee %", new ServiceFeePercentCellProcessor())
             .put("market", "Market", OPTIONAL_PROCESSOR)
             .put("marketPeriodFrom", "Market Period From", OPTIONAL_PROCESSOR)
