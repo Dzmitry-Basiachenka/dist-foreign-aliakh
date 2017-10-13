@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.dist.foreign.repository.impl.BaseCsvReportHandler.DateCellProcessor;
 import com.copyright.rup.dist.foreign.repository.impl.BaseCsvReportHandler.FiscalYearCellProcessor;
 import com.copyright.rup.dist.foreign.repository.impl.BaseCsvReportHandler.ServiceFeePercentCellProcessor;
+import com.copyright.rup.dist.foreign.repository.impl.BaseCsvReportHandler.ZeroBigDecimalCellProcessor;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.junit.Before;
@@ -31,6 +32,7 @@ public class ScenarioUsagesCsvReportHandlerTest {
 
     private static final Optional OPTIONAL_PROCESSOR = new Optional();
     private static final DateCellProcessor DATE_CELL_PROCESSOR = new DateCellProcessor();
+    private static final ZeroBigDecimalCellProcessor ZERO_BIG_DECIMAL_PROCESSOR = new ZeroBigDecimalCellProcessor();
 
     private ScenarioUsagesCsvReportHandler scenarioUsagesCsvReportHandler;
 
@@ -49,8 +51,9 @@ public class ScenarioUsagesCsvReportHandlerTest {
             OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, DATE_CELL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR,
             OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR,
             OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, DATE_CELL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR,
-            OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, new ServiceFeePercentCellProcessor(),
-            OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR};
+            ZERO_BIG_DECIMAL_PROCESSOR, ZERO_BIG_DECIMAL_PROCESSOR, ZERO_BIG_DECIMAL_PROCESSOR,
+            new ServiceFeePercentCellProcessor(), OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR,
+            OPTIONAL_PROCESSOR};
         IntStream.range(0, processors.length)
             .forEach(index -> assertEquals(processors[index].getClass(), cellProcessors[index].getClass()));
     }

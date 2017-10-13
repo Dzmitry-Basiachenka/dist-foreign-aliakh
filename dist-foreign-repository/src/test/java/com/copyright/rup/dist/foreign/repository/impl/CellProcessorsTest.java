@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import com.copyright.rup.dist.foreign.repository.impl.BaseCsvReportHandler.DateCellProcessor;
 import com.copyright.rup.dist.foreign.repository.impl.BaseCsvReportHandler.FiscalYearCellProcessor;
 import com.copyright.rup.dist.foreign.repository.impl.BaseCsvReportHandler.ServiceFeePercentCellProcessor;
+import com.copyright.rup.dist.foreign.repository.impl.BaseCsvReportHandler.ZeroBigDecimalCellProcessor;
 
 import org.junit.Test;
 
@@ -35,5 +36,16 @@ public class CellProcessorsTest {
     @Test
     public void testServiceFeePercentCellProcessor() {
         assertEquals("34.5", new ServiceFeePercentCellProcessor().execute(BigDecimal.valueOf(0.3445), null));
+    }
+
+    @Test
+    public void testZeroBigDecimalCellProcessor() {
+        assertEquals("0.00", new ZeroBigDecimalCellProcessor().execute(BigDecimal.ZERO.setScale(10), null));
+    }
+
+    @Test
+    public void testZeroBigDecimalCellProcessorNotZeroValue() {
+        assertEquals(BigDecimal.ONE.setScale(10),
+            new ZeroBigDecimalCellProcessor().execute(BigDecimal.ONE.setScale(10), null));
     }
 }
