@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.OutputStream;
+import java.io.PipedOutputStream;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
@@ -63,6 +64,11 @@ public class UsageService implements IUsageService {
     @Override
     public void writeUsageCsvReport(UsageFilter filter, OutputStream outputStream) {
         usageRepository.writeUsagesCsvReport(filter, outputStream);
+    }
+
+    @Override
+    public void writeScenarioUsagesCsvReport(String scenarioId, PipedOutputStream outputStream) {
+        usageRepository.writeScenarioUsagesCsvReport(scenarioId, outputStream);
     }
 
     @Override

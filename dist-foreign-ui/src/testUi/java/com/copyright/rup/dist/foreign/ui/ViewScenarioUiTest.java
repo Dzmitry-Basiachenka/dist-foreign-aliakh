@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui;
 
+import com.google.common.collect.Sets;
+
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,6 +11,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * UI test for scenario widget.
@@ -36,6 +40,7 @@ public class ViewScenarioUiTest extends ForeignCommonUiTest {
     public void testViewScenarioWindow() {
         loginAsViewOnly();
         WebElement scenarioWindow = openViewScenarioWindow();
+        assertButtonLayout(assertWebElement(scenarioWindow, "scenario-buttons-layout"));
         assertSearchToolbar(scenarioWindow, "Enter Rightsholder Name/Account #");
         WebElement rightsholdersTable = assertWebElement(scenarioWindow, "rightsholders-totals-table");
         verifyTable(rightsholdersTable);
@@ -53,6 +58,13 @@ public class ViewScenarioUiTest extends ForeignCommonUiTest {
         WebElement table = assertWebElement(window, "rightsholders-totals-table");
         verifySearchByRightsholderName(searchField, searchButton, table);
         verifySearchByRightsholderAccountNumber(searchField, searchButton, table);
+    }
+
+    private void assertButtonLayout(WebElement buttonLayout) {
+        Set<String> actualButtons = buttonLayout.findElements(By.className("v-button")).stream()
+            .map(webElement -> webElement.getAttribute("id"))
+            .collect(Collectors.toSet());
+        assertButtonsToolbar(buttonLayout, actualButtons, Sets.newHashSet("Export", "Close"));
     }
 
     private void verifySearchByRightsholderName(WebElement searchField, WebElement searchButton, WebElement table) {

@@ -11,6 +11,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.vaadin.server.Sizeable.Unit;
@@ -51,6 +52,7 @@ public class ScenarioWidgetTest {
         scenario.setName("Scenario name");
         scenario.setGrossTotal(new BigDecimal("20000.00"));
         expect(controller.getScenario()).andReturn(scenario).once();
+        expect(controller.getExportScenarioUsagesStreamSource()).andReturn(createMock(IStreamSource.class)).once();
         replay(controller);
         scenarioWidget.init();
         verify(controller);
@@ -102,8 +104,11 @@ public class ScenarioWidgetTest {
     private void verifyButtonsLayout(Component component) {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
-        assertEquals(1, horizontalLayout.getComponentCount());
-        Button closeButton = (Button) horizontalLayout.getComponent(0);
+        assertEquals(2, horizontalLayout.getComponentCount());
+        Button exportButton = (Button) horizontalLayout.getComponent(0);
+        assertEquals("Export", exportButton.getCaption());
+        assertEquals("Export", exportButton.getId());
+        Button closeButton = (Button) horizontalLayout.getComponent(1);
         assertEquals("Close", closeButton.getCaption());
         assertEquals("Close", closeButton.getId());
         assertTrue(horizontalLayout.isSpacing());

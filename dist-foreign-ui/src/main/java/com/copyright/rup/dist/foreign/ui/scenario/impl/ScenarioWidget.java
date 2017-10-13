@@ -5,11 +5,13 @@ import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.VaadinUtils;
+import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
@@ -67,7 +69,7 @@ public class ScenarioWidget extends Window implements IScenarioWidget {
         VerticalLayout layout = new VerticalLayout(new VerticalLayout(initSearchWidget()), table, buttons);
         layout.setSizeFull();
         layout.setExpandRatio(table, 1);
-        layout.setComponentAlignment(buttons, Alignment.BOTTOM_RIGHT);
+        layout.setComponentAlignment(buttons, Alignment.MIDDLE_CENTER);
         layout.setSpacing(true);
         return layout;
     }
@@ -86,7 +88,12 @@ public class ScenarioWidget extends Window implements IScenarioWidget {
     }
 
     private HorizontalLayout initButtons() {
-        HorizontalLayout buttons = new HorizontalLayout(Buttons.createCloseButton(this));
+        Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
+        OnDemandFileDownloader fileDownloader =
+            new OnDemandFileDownloader(controller.getExportScenarioUsagesStreamSource());
+        fileDownloader.extend(exportButton);
+        HorizontalLayout buttons = new HorizontalLayout(exportButton, Buttons.createCloseButton(this));
+        VaadinUtils.addComponentStyle(buttons, "scenario-buttons-layout");
         buttons.setSpacing(true);
         buttons.setMargin(new MarginInfo(false, true, true, false));
         return buttons;

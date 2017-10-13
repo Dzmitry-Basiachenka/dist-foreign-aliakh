@@ -11,6 +11,8 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
@@ -18,6 +20,7 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.UsageService;
+import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
 import org.easymock.Capture;
@@ -25,8 +28,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
+import java.io.PipedOutputStream;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 /**
  * Verifies {@link ScenarioController}.
@@ -103,6 +108,28 @@ public class ScenarioControllerTest {
         Scenario scenario = new Scenario();
         controller.setScenario(scenario);
         assertEquals(scenario, controller.getScenario());
+    }
+
+    @Test
+    public void testGetScenarioUsagesExportStream() {
+        IStreamSource exportScenarioUsagesStreamSource = controller.getExportScenarioUsagesStreamSource();
+        ExecutorService executorService = createMock(ExecutorService.class);
+        Whitebox.setInternalState(exportScenarioUsagesStreamSource, executorService);
+        Capture<Runnable> captureRunnable = new Capture<>();
+        executorService.execute(capture(captureRunnable));
+        expectLastCall().once();
+        replay(usageService, executorService);
+        assertNotNull(exportScenarioUsagesStreamSource.getStream());
+        Runnable runnable = captureRunnable.getValue();
+        assertNotNull(runnable);
+        assertSame(exportScenarioUsagesStreamSource, Whitebox.getInternalState(runnable, "arg$1"));
+        assertTrue(Whitebox.getInternalState(runnable, "arg$2") instanceof PipedOutputStream);
+        verify(usageService, executorService);
+    }
+
+    @Test
+    public void testGetScenarioUsagesExportFileName() {
+        assertEquals("name.csv", controller.getExportScenarioUsagesStreamSource().getFileName());
     }
 
     private Scenario buildScenario() {

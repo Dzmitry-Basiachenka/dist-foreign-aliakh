@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
+import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
@@ -8,6 +9,8 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioWidget;
+import com.copyright.rup.vaadin.ui.VaadinUtils;
+import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +18,13 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Controller class for {@link ScenarioWidget}.
@@ -62,6 +71,11 @@ public class ScenarioController extends CommonController<IScenarioWidget> implem
     }
 
     @Override
+    public IStreamSource getExportScenarioUsagesStreamSource() {
+        return new ExportScenarioUsagesStreamSource(usageService, getScenario());
+    }
+
+    @Override
     protected IScenarioWidget instantiateWidget() {
         return new ScenarioWidget();
     }
@@ -89,5 +103,35 @@ public class ScenarioController extends CommonController<IScenarioWidget> implem
      */
     Scenario getScenario() {
         return scenario;
+    }
+
+    private static class ExportScenarioUsagesStreamSource implements IStreamSource {
+
+        private ExecutorService executorService = Executors.newSingleThreadExecutor();
+        private IUsageService usageService;
+        private Scenario scenario;
+
+        private ExportScenarioUsagesStreamSource(IUsageService usageService, Scenario scenario) {
+            this.usageService = usageService;
+            this.scenario = scenario;
+        }
+
+        @Override
+        public InputStream getStream() {
+            try {
+                PipedOutputStream pipedOutputStream = new PipedOutputStream();
+                PipedInputStream pipedInputStream = new PipedInputStream(pipedOutputStream);
+                executorService.execute(
+                    () -> usageService.writeScenarioUsagesCsvReport(scenario.getId(), pipedOutputStream));
+                return pipedInputStream;
+            } catch (IOException e) {
+                throw new RupRuntimeException(e);
+            }
+        }
+
+        @Override
+        public String getFileName() {
+            return VaadinUtils.encodeAndBuildFileName(scenario.getName(), "csv");
+        }
     }
 }
