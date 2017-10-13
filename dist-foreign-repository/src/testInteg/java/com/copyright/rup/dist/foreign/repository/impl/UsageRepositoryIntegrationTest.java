@@ -376,6 +376,25 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
+    public void testGetUsagesCountByScenarioIdAndRhAccountNumber() {
+        populateScenario();
+        String usageUuid = RupPersistUtils.generateUuid();
+        usageRepository.insert(buildUsage(usageUuid, USAGE_BATCH_ID_1));
+        usageRepository.addToScenario(Collections.singletonList(usageUuid), SCENARIO_ID, USER_NAME);
+        assertEquals(1, usageRepository.getUsagesCountByScenarioIdAndRhAccountNumber(1000009997L, SCENARIO_ID, null));
+        assertEquals(3, usageRepository.getUsagesCountByScenarioIdAndRhAccountNumber(1000002859L, SCENARIO_ID, null));
+    }
+
+    @Test
+    public void testGetUsagesByScenarioIdAndRhAccountNumber() {
+        populateScenario();
+        assertEquals(1, usageRepository.getUsagesByScenarioIdAndRhAccountNumber(1000009997L, SCENARIO_ID, null,
+            new Pageable(0, 200), null).size());
+        assertEquals(3, usageRepository.getUsagesByScenarioIdAndRhAccountNumber(1000002859L, SCENARIO_ID, null,
+            new Pageable(0, 200), null).size());
+    }
+
+    @Test
     public void testGetRightsholderTotalsHolderCountByScenarioId() {
         populateScenario();
         assertEquals(3, usageRepository.getRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, StringUtils.EMPTY));

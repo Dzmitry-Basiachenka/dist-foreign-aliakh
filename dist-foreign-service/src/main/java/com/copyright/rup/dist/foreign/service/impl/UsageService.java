@@ -128,6 +128,18 @@ public class UsageService implements IUsageService {
         return usageRepository.getRightsholderTotalsHolderCountByScenarioId(scenarioId, searchValue);
     }
 
+    @Override
+    public int getUsagesCountByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue) {
+        return usageRepository.getUsagesCountByScenarioIdAndRhAccountNumber(accountNumber, scenarioId, searchValue);
+    }
+
+    @Override
+    public List<UsageDto> getUsagesByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId,
+                                                                  String searchValue, Pageable pageable, Sort sort) {
+        return usageRepository.getUsagesByScenarioIdAndRhAccountNumber(accountNumber, scenarioId, searchValue, pageable,
+            sort);
+    }
+
     private void calculateUsagesGrossAmount(UsageBatch usageBatch, List<Usage> usages) {
         BigDecimal fundPoolAmount = usageBatch.getGrossAmount();
         BigDecimal totalAmount = usages.stream().map(Usage::getReportedValue).reduce(BigDecimal.ZERO, BigDecimal::add);

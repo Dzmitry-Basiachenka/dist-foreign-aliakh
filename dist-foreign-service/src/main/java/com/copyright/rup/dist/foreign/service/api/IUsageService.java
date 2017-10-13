@@ -128,4 +128,27 @@ public interface IUsageService {
      * @return count of {@link RightsholderTotalsHolder}s
      */
     int getRightsholderTotalsHolderCountByScenarioId(String scenarioId, String searchValue);
+
+    /**
+     * Gets count of usage details based on {@link Scenario} identifier and rightsholder account number.
+     *
+     * @param accountNumber selected rightsholder account number
+     * @param scenarioId    {@link Scenario} identifier
+     * @param searchValue   search value
+     * @return count of usage details
+     */
+    int getUsagesCountByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue);
+
+    /**
+     * Gets list of {@link UsageDto}s based on {@link Scenario} identifier and rightsholder account number.
+     *
+     * @param accountNumber selected rightsholder account number
+     * @param scenarioId    {@link Scenario} identifier
+     * @param searchValue   search value
+     * @param pageable      instance of {@link Pageable}
+     * @param sort          instance of {@link Sort}
+     * @return list of {@link UsageDto}s
+     */
+    List<UsageDto> getUsagesByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue,
+                                                           Pageable pageable, Sort sort);
 }

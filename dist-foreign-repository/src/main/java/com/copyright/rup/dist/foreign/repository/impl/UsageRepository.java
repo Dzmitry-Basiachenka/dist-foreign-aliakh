@@ -173,6 +173,27 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         return selectOne("IUsageMapper.getRightsholderTotalsHolderCountByScenarioId", parameters);
     }
 
+    @Override
+    public int getUsagesCountByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
+        parameters.put("accountNumber", checkNotNull(accountNumber));
+        parameters.put(SCENARIO_ID_KEY, checkNotNull(scenarioId));
+        parameters.put(SEARCH_VALUE_KEY, searchValue);
+        return selectOne("IUsageMapper.getUsagesCountByScenarioIdAndRhAccountNumber", parameters);
+    }
+
+    @Override
+    public List<UsageDto> getUsagesByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId,
+                                                                  String searchValue, Pageable pageable, Sort sort) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(5);
+        parameters.put("accountNumber", checkNotNull(accountNumber));
+        parameters.put(SCENARIO_ID_KEY, checkNotNull(scenarioId));
+        parameters.put(SEARCH_VALUE_KEY, searchValue);
+        parameters.put(PAGEABLE_KEY, checkNotNull(pageable));
+        parameters.put(SORT_KEY, sort);
+        return selectList("IUsageMapper.getUsagesByScenarioIdAndRhAccountNumber", parameters);
+    }
+
     /**
      * Finds usage by provided detail id.
      *
