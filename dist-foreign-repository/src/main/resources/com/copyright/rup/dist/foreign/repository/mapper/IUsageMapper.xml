@@ -177,82 +177,86 @@
         </choose>
     </sql>
 
-    <sql id="usageFilterOrderBy">
-        order by
+    <sql id="chooseSortProperty">
         <choose>
-            <when test="null != sort">
-                <choose>
-                    <when test="sort.property == 'detailId'">
-                        u.detail_id <include refid="direction"/>
-                    </when>
-                    <when test="sort.property == 'batchName'">
-                        ub.name <include refid="direction"/>
-                    </when>
-                    <when test="sort.property == 'fiscalYear'">
-                        ub.fiscal_year <include refid="direction"/>
-                    </when>
-                    <when test="sort.property == 'rroAccountNumber'">
-                        ub.rro_account_number <include refid="direction"/>
-                    </when>
-                    <when test="sort.property == 'rroName'">
-                        rro.name <include refid="direction"/>
-                    </when>
-                    <when test="sort.property == 'paymentDate'">
-                        ub.payment_date <include refid="direction"/>
-                    </when>
-                    <when test="sort.property == 'workTitle'">
-                        u.work_title <include refid="direction"/>
-                    </when>
-                    <when test="sort.property == 'article'">
-                        u.article <include refid="direction"/>
-                    </when>
-                    <when test="sort.property == 'standardNumber'">
-                        u.standard_number <include refid="direction"/>
-                    </when>
-                    <when test="sort.property == 'wrWrkInst'">
-                        u.wr_wrk_inst <include refid="direction"/>
-                    </when>
-                    <when test="sort.property == 'rhAccountNumber'">
-                        u.rh_account_number <include refid="direction"/>
-                    </when>
-                    <when test="sort.property == 'rhName'">
-                        rh.name <include refid="direction"/>
-                    </when>
-                    <when test="sort.property == 'publisher'">
-                        u.publisher <include refid="direction"/>
-                    </when>
-                    <when test="sort.property == 'publicationDate'">
-                        u.publication_date <include refid="direction"/>
-                    </when>
-                    <when test="sort.property == 'numberOfCopies'">
-                        u.number_of_copies <include refid="direction"/>
-                    </when>
-                    <when test="sort.property == 'reportedValue'">
-                        u.reported_value <include refid="direction"/>
-                    </when>
-                    <when test="sort.property == 'grossAmount'">
-                        u.gross_amount <include refid="direction"/>
-                    </when>
-                    <when test="sort.property == 'market'">
-                        u.market <include refid="direction"/>
-                    </when>
-                    <when test="sort.property == 'marketPeriodFrom'">
-                        u.market_period_from <include refid="direction"/>
-                    </when>
-                    <when test="sort.property == 'marketPeriodTo'">
-                        u.market_period_to <include refid="direction"/>
-                    </when>
-                    <when test="sort.property == 'author'">
-                        u.author <include refid="direction"/>
-                    </when>
-                    <when test="sort.property == 'status'">
-                        u.status_ind <include refid="direction"/>
-                    </when>
-                </choose>
+            <when test="sort.property == 'detailId'">
+                u.detail_id <include refid="direction"/>
             </when>
-            <otherwise>
-                updated_datetime desc
-            </otherwise>
+            <when test="sort.property == 'batchName'">
+                ub.name <include refid="direction"/>
+            </when>
+            <when test="sort.property == 'fiscalYear'">
+                ub.fiscal_year <include refid="direction"/>
+            </when>
+            <when test="sort.property == 'rroAccountNumber'">
+                ub.rro_account_number <include refid="direction"/>
+            </when>
+            <when test="sort.property == 'rroName'">
+                rro.name <include refid="direction"/>
+            </when>
+            <when test="sort.property == 'paymentDate'">
+                ub.payment_date <include refid="direction"/>
+            </when>
+            <when test="sort.property == 'workTitle'">
+                u.work_title <include refid="direction"/>
+            </when>
+            <when test="sort.property == 'article'">
+                u.article <include refid="direction"/>
+            </when>
+            <when test="sort.property == 'standardNumber'">
+                u.standard_number <include refid="direction"/>
+            </when>
+            <when test="sort.property == 'wrWrkInst'">
+                u.wr_wrk_inst <include refid="direction"/>
+            </when>
+            <when test="sort.property == 'rhAccountNumber'">
+                u.rh_account_number <include refid="direction"/>
+            </when>
+            <when test="sort.property == 'rhName'">
+                rh.name <include refid="direction"/>
+            </when>
+            <when test="sort.property == 'publisher'">
+                u.publisher <include refid="direction"/>
+            </when>
+            <when test="sort.property == 'publicationDate'">
+                u.publication_date <include refid="direction"/>
+            </when>
+            <when test="sort.property == 'numberOfCopies'">
+                u.number_of_copies <include refid="direction"/>
+            </when>
+            <when test="sort.property == 'reportedValue'">
+                u.reported_value <include refid="direction"/>
+            </when>
+            <when test="sort.property == 'grossAmount'">
+                u.gross_amount <include refid="direction"/>
+            </when>
+            <when test="sort.property == 'batchGrossAmount'">
+                ub.gross_amount <include refid="direction"/>
+            </when>
+            <when test="sort.property == 'serviceFeeAmount'">
+                u.service_fee_amount <include refid="direction"/>
+            </when>
+            <when test="sort.property == 'netAmount'">
+                u.net_amount <include refid="direction"/>
+            </when>
+            <when test="sort.property == 'serviceFee'">
+                u.service_fee <include refid="direction"/>
+            </when>
+            <when test="sort.property == 'market'">
+                u.market <include refid="direction"/>
+            </when>
+            <when test="sort.property == 'marketPeriodFrom'">
+                u.market_period_from <include refid="direction"/>
+            </when>
+            <when test="sort.property == 'marketPeriodTo'">
+                u.market_period_to <include refid="direction"/>
+            </when>
+            <when test="sort.property == 'author'">
+                u.author <include refid="direction"/>
+            </when>
+            <when test="sort.property == 'status'">
+                u.status_ind <include refid="direction"/>
+            </when>
         </choose>
     </sql>
 
@@ -320,7 +324,15 @@
     <select id="findByFilter" resultMap="usageDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
         <include refid="selectUsageDtos"/>
         <include refid="usageFilter"/>
-        <include refid="usageFilterOrderBy"/>
+        order by
+        <choose>
+            <when test="null != sort">
+                <include refid="chooseSortProperty"/>
+            </when>
+            <otherwise>
+                updated_datetime desc
+            </otherwise>
+        </choose>
         <include refid="ifPageable"/>
     </select>
 
@@ -513,6 +525,15 @@
     <select id="getUsagesByScenarioIdAndRhAccountNumber" parameterType="map" resultMap="usageDtoResultMap">
         <include refid="selectUsageDtos"/>
         where u.df_scenario_uid = #{scenarioId} and u.rh_account_number = #{accountNumber}
+        order by
+        <choose>
+            <when test="null != sort">
+                <include refid="chooseSortProperty"/>
+            </when>
+            <otherwise>
+                detail_id
+            </otherwise>
+        </choose>
         <include refid="ifPageable"/>
     </select>
 </mapper>
