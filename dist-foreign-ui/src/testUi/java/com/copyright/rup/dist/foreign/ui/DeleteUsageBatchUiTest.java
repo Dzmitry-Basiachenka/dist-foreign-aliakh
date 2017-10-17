@@ -194,11 +194,6 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
         verifyTableRows(table, usageBatch2);
     }
 
-    private void applySearch(WebElement searchField, WebElement searchButton, String searchValue) {
-        sendKeysToInput(searchField, searchValue);
-        clickElementAndWait(searchButton);
-    }
-
     private WebElement openDeleteUsageBatchWindow(WebElement usagesTab) {
         clickButtonAndWait(usagesTab, "Delete_Usage_Batch");
         return assertWebElement(By.id("delete-usage-batch"));

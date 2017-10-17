@@ -11,6 +11,8 @@ import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 
+import com.google.common.collect.Lists;
+
 import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.Test;
@@ -24,8 +26,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Ui test for drill down by rightsholder widget.
@@ -105,10 +110,23 @@ public class DrillDownByRightsholderUiTest extends ForeignCommonUiTest {
     }
 
     @Test
-    // Test case ID" '8a7780c3-34a7-4f3d-9196-3018e8aaf008'
+    // Test case ID: '8a7780c3-34a7-4f3d-9196-3018e8aaf008'
     public void testSortingOnDrillDownWindow() {
         assertTableSorting(assertWebElement(drillDownWindow, "drill-down-by-rightsholder-table"),
             getExpectedColumnValuesForSorting());
+    }
+
+    @Test
+    public void testSearch() {
+        WebElement searchToolbar = assertWebElement(drillDownWindow, By.className("search-toolbar"));
+        WebElement table = assertWebElement(drillDownWindow, By.className("v-table"));
+        Map<String, List<String[]>> searchMap = new HashMap<>();
+        searchMap.put("   5248153472   ", Collections.singletonList(USAGE_2));
+        searchMap.put("Access Copyright", Lists.newArrayList(USAGE_1, USAGE_2, USAGE_3));
+        searchMap.put("2000017004", Lists.newArrayList(USAGE_1, USAGE_2, USAGE_3));
+        searchMap.put("    12345XX-79  ", Collections.singletonList(USAGE_3));
+        searchMap.put("122235139", Collections.singletonList(USAGE_1));
+        assertSearch(searchToolbar, table, searchMap);
     }
 
     private WebElement openDrillDownWindow() {
