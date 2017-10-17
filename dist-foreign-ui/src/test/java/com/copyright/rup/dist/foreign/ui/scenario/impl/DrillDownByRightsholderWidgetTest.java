@@ -49,6 +49,7 @@ public class DrillDownByRightsholderWidgetTest {
         assertEquals(1280, widget.getWidth(), 0);
         assertEquals(Unit.PIXELS, widget.getWidthUnits());
         VerticalLayout content = (VerticalLayout) widget.getContent();
+        assertEquals(new MarginInfo(false, true, true, true), content.getMargin());
         assertEquals(3, content.getComponentCount());
         verifySearchWidget(content.getComponent(0));
         verifyTable(content.getComponent(1));
@@ -81,7 +82,6 @@ public class DrillDownByRightsholderWidgetTest {
         assertEquals("Close", closeButton.getCaption());
         assertEquals("Close", closeButton.getId());
         assertTrue(horizontalLayout.isSpacing());
-        assertEquals(new MarginInfo(false, true, true, false), horizontalLayout.getMargin());
     }
 
     private void verifySize(Component component) {

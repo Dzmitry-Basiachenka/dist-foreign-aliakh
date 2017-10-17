@@ -57,6 +57,7 @@ public class DrillDownByRightsholderWidget extends Window implements IDrillDownB
         content.setSizeFull();
         content.setExpandRatio(table, 1);
         content.setSpacing(true);
+        content.setMargin(new MarginInfo(false, true, true, true));
         content.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
         return content;
     }
@@ -77,7 +78,6 @@ public class DrillDownByRightsholderWidget extends Window implements IDrillDownB
     private HorizontalLayout initButtons() {
         HorizontalLayout buttons = new HorizontalLayout(Buttons.createCloseButton(this));
         buttons.setSpacing(true);
-        buttons.setMargin(new MarginInfo(false, true, true, false));
         return buttons;
     }
 }
