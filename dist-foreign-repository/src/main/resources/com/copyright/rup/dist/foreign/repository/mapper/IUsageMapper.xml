@@ -293,6 +293,14 @@
         cast(u.rh_account_number as text) like '%' || #{searchValue} || '%'
     </sql>
 
+    <sql id="drillDownSearchWhereClause">
+        cast(u.detail_id as text) like '%' || #{searchValue} || '%' or
+        upper(u.standard_number) like '%' || upper(#{searchValue}) || '%' or
+        cast(u.wr_wrk_inst as text) like '%' || #{searchValue} || '%' or
+        upper(rro.name) like '%' || upper(#{searchValue}) || '%' or
+        cast(ub.rro_account_number as text) like '%' || #{searchValue} || '%'
+    </sql>
+
     <insert id="insert" parameterType="Usage">
         insert into ${schema}.df_usage(
             <include refid="usageColumns"/>,
@@ -518,13 +526,25 @@
 
     <select id="getUsagesCountByScenarioIdAndRhAccountNumber" parameterType="map" resultType="int">
         select count(1)
-        from ${schema}.df_usage
-        where df_scenario_uid = #{scenarioId} and rh_account_number = #{accountNumber}
+        from ${schema}.df_usage u
+        join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+        left join ${schema}.df_rightsholder rro on ub.rro_account_number = rro.rh_account_number
+        where df_scenario_uid = #{scenarioId} and u.rh_account_number = #{accountNumber}
+        <if test="null != searchValue">
+            and (
+                <include refid="drillDownSearchWhereClause"/>
+            )
+        </if>
     </select>
 
     <select id="getUsagesByScenarioIdAndRhAccountNumber" parameterType="map" resultMap="usageDtoResultMap">
         <include refid="selectUsageDtos"/>
         where u.df_scenario_uid = #{scenarioId} and u.rh_account_number = #{accountNumber}
+        <if test="null != searchValue">
+            and (
+                <include refid="drillDownSearchWhereClause"/>
+            )
+        </if>
         order by
         <choose>
             <when test="null != sort">
