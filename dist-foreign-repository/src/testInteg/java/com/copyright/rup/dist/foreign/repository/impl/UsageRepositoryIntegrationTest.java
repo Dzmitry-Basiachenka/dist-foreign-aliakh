@@ -376,7 +376,7 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testGetUsagesCountByScenarioIdAndRhAccountNumber() {
+    public void testGetUsagesCountByScenarioIdAndRhAccountNumberNullSearchValue() {
         populateScenario();
         String usageUuid = RupPersistUtils.generateUuid();
         usageRepository.insert(buildUsage(usageUuid, USAGE_BATCH_ID_1));
@@ -386,12 +386,54 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testGetUsagesByScenarioIdAndRhAccountNumber() {
+    public void testGetUsagesByScenarioIdAndRhAccountNumberNullSearchValue() {
         populateScenario();
         assertEquals(1, usageRepository.getUsagesByScenarioIdAndRhAccountNumber(1000009997L, SCENARIO_ID, null,
             new Pageable(0, 200), null).size());
         assertEquals(3, usageRepository.getUsagesByScenarioIdAndRhAccountNumber(1000002859L, SCENARIO_ID, null,
             new Pageable(0, 200), null).size());
+    }
+
+    @Test
+    public void testGetUsagesByScenarioIdAndRhAccountNumberSearchByRorName() {
+        populateScenario();
+        verifySearch("Access Copyright, The Canadian Copyright Agency", 1);
+        verifySearch("Academic", 2);
+        verifySearch("aCaDemiC", 2);
+        verifySearch("Aca demic", 0);
+    }
+
+    @Test
+    public void testGetUsagesByScenarioIdAndRhAccountNumberSearchByRorAccountNumber() {
+        populateScenario();
+        verifySearch("7001440663", 2);
+        verifySearch("0001700", 1);
+        verifySearch("70014 40663", 0);
+    }
+
+    @Test
+    public void testGetUsagesByScenarioIdAndRhAccountNumberSearchDetailId() {
+        populateScenario();
+        verifySearch("6997788885", 1);
+        verifySearch("78888", 3);
+        verifySearch("6997 788885", 0);
+    }
+
+    @Test
+    public void testGetUsagesByScenarioIdAndRhAccountNumberSearchByWrWrkInst() {
+        populateScenario();
+        verifySearch("243904752", 2);
+        verifySearch("244614", 1);
+        verifySearch("24461 4835", 0);
+    }
+
+    @Test
+    public void testGetUsagesByScenarioIdAndRhAccountNumberSearchByStandardNumber() {
+        populateScenario();
+        verifySearch("1008902002377655XX", 1);
+        verifySearch("1008902002377655xx", 1);
+        verifySearch("10089", 3);
+        verifySearch("100890 2002377655XX", 0);
     }
 
     @Test
@@ -535,6 +577,13 @@ public class UsageRepositoryIntegrationTest {
     public void testGetDuplicateDetailIds() {
         assertTrue(CollectionUtils.containsAny(Sets.newHashSet(DETAIL_ID_1, DETAIL_ID_2),
             usageRepository.getDuplicateDetailIds(Lists.newArrayList(DETAIL_ID_1, DETAIL_ID_2, -1L))));
+    }
+
+    private void verifySearch(String searchValue, int expectedSize) {
+        assertEquals(expectedSize, usageRepository.getUsagesByScenarioIdAndRhAccountNumber(1000002859L, SCENARIO_ID,
+            searchValue, new Pageable(0, 200), null).size());
+        assertEquals(expectedSize, usageRepository.getUsagesCountByScenarioIdAndRhAccountNumber(1000002859L,
+            SCENARIO_ID, searchValue));
     }
 
     private void verifyUsage(Usage usage, UsageStatusEnum status, String scenarioId, String defaultUser) {
