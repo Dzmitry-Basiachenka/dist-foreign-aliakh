@@ -4,6 +4,7 @@ import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
@@ -11,6 +12,7 @@ import com.copyright.rup.dist.foreign.domain.common.util.CalculationUtils;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
+import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvErrorResultWriter;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingResult;
@@ -48,6 +50,8 @@ public class UsageService implements IUsageService {
 
     @Autowired
     private IUsageRepository usageRepository;
+    @Autowired
+    private IUsageAuditService usageAuditService;
 
     @Override
     public List<UsageDto> getUsages(UsageFilter filter, Pageable pageable, Sort sort) {
@@ -89,6 +93,10 @@ public class UsageService implements IUsageService {
             usage.setUpdateUser(userName);
             usageRepository.insert(usage);
         });
+        // Adding data to audit table in separate loop increases performance up to 3 times
+        // while using batch with 200000 usages
+        usages.forEach(usage -> usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.LOADED,
+            String.format("Uploaded in '%s' Batch", usageBatch.getName())));
         LOGGER.info("Insert usages. Finished. UsageBatchName={}, UsagesCount={}, UserName={}", usageBatch.getName(),
             size, userName);
         return size;
@@ -96,6 +104,7 @@ public class UsageService implements IUsageService {
 
     @Override
     public void deleteUsageBatchDetails(UsageBatch usageBatch) {
+        usageAuditService.deleteActions(usageBatch.getId());
         usageRepository.deleteUsages(usageBatch.getId());
     }
 

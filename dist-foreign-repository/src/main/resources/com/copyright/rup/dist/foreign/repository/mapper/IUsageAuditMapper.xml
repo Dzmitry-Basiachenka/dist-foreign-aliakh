@@ -1,0 +1,55 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="IUsageAuditMapper">
+
+    <resultMap id="usageAuditItemResultMap" type="UsageAuditItem" extends="StoredEntityMapper.storedEntityResult">
+        <result property="id" column="df_usage_audit_uid"/>
+        <result property="usageId" column="df_usage_uid"/>
+        <result property="scenarioId" column="df_scenario_uid"/>
+        <result property="scenarioName" column="scenario_name"/>
+        <result property="actionType" column="action_type_ind"/>
+        <result property="actionReason" column="action_reason"/>
+    </resultMap>
+
+    <sql id="usageAuditItemColumns">
+        df_usage_audit_uid,
+        df_usage_uid,
+        df_scenario_uid,
+        scenario_name,
+        action_type_ind,
+        action_reason,
+        <include refid="StoredEntityMapper.additionalColumns"/>
+    </sql>
+
+    <insert id="insert" parameterType="UsageAuditItem">
+        insert into ${schema}.df_usage_audit(
+            <include refid="usageAuditItemColumns"/>
+        ) values (
+            #{id},
+            #{usageId},
+            #{scenarioId},
+            #{scenarioName},
+            #{actionType},
+            #{actionReason},
+            <include refid="StoredEntityMapper.insert"/>
+        )
+    </insert>
+
+    <delete id="deleteByBatchId" parameterType="string">
+        <!-- TODO: {ushalamitski} Adjust query by using 'USING' instead of inner select after replacement H2 with PostgreSQL -->
+        delete from ${schema}.df_usage_audit
+        where df_usage_uid in (
+            select df_usage_uid
+            from ${schema}.df_usage
+            where df_usage_batch_uid = #{batchId})
+    </delete>
+
+    <select id="findByUsageId" parameterType="string" resultMap="usageAuditItemResultMap">
+        select
+            <include refid="usageAuditItemColumns"/>
+        from ${schema}.df_usage_audit
+        where df_usage_uid = #{usageId}
+    </select>
+</mapper>

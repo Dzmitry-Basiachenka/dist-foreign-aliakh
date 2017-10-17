@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.repository.api.IUsageAuditRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
@@ -74,9 +75,10 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
 
     @Autowired
     private IUsageBatchRepository usageBatchRepository;
-
     @Autowired
     private IUsageRepository usageRepository;
+    @Autowired
+    private IUsageAuditRepository usageAuditRepository;
 
     @After
     public void tearDown() {
@@ -302,6 +304,7 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
     }
 
     private void deleteUploadedUsageBatch(String usageBatchId) {
+        usageAuditRepository.deleteByBatchId(usageBatchId);
         usageRepository.deleteUsages(usageBatchId);
         usageBatchRepository.deleteUsageBatch(usageBatchId);
     }

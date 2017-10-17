@@ -15,12 +15,14 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
+import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
@@ -61,13 +63,16 @@ public class UsageServiceTest {
     private static final String USER_NAME = "User name";
     private static final Long RH_ACCOUNT_NUMBER = 1000001534L;
     private IUsageRepository usageRepository;
+    private IUsageAuditService usageAuditService;
     private IUsageService usageService;
 
     @Before
     public void setUp() {
         usageRepository = createMock(IUsageRepository.class);
+        usageAuditService = createMock(IUsageAuditService.class);
         usageService = new UsageService();
         Whitebox.setInternalState(usageService, "usageRepository", usageRepository);
+        Whitebox.setInternalState(usageService, "usageAuditService", usageAuditService);
     }
 
     @Test
@@ -135,6 +140,7 @@ public class UsageServiceTest {
         Capture<Usage> captureUsage2 = new Capture<>();
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setGrossAmount(new BigDecimal("12.00"));
+        usageBatch.setName("ABC");
         Usage usage1 = new Usage();
         usage1.setReportedValue(BigDecimal.TEN);
         Usage usage2 = new Usage();
@@ -143,13 +149,17 @@ public class UsageServiceTest {
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         usageRepository.insert(capture(captureUsage1));
         expectLastCall().once();
+        usageAuditService.logAction(usage1.getId(), UsageActionTypeEnum.LOADED, "Uploaded in 'ABC' Batch");
+        expectLastCall().once();
         usageRepository.insert(capture(captureUsage2));
         expectLastCall().once();
-        replay(usageRepository, RupContextUtils.class);
+        usageAuditService.logAction(usage2.getId(), UsageActionTypeEnum.LOADED, "Uploaded in 'ABC' Batch");
+        expectLastCall().once();
+        replay(usageRepository, usageAuditService, RupContextUtils.class);
         assertEquals(2, usageService.insertUsages(usageBatch, usages));
         verifyUsage(captureUsage1.getValue(), new BigDecimal("10.9090909090"));
         verifyUsage(captureUsage2.getValue(), new BigDecimal("1.0909090909"));
-        verify(usageRepository, RupContextUtils.class);
+        verify(usageRepository, usageAuditService, RupContextUtils.class);
     }
 
     @Test
@@ -157,6 +167,8 @@ public class UsageServiceTest {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setId(RupPersistUtils.generateUuid());
         usageRepository.deleteUsages(usageBatch.getId());
+        expectLastCall().once();
+        usageAuditService.deleteActions(usageBatch.getId());
         expectLastCall().once();
         replay(usageRepository);
         usageService.deleteUsageBatchDetails(usageBatch);

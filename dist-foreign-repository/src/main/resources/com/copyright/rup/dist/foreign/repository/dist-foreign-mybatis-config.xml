@@ -24,6 +24,7 @@
         <typeAlias alias="UsageDto" type="com.copyright.rup.dist.foreign.domain.UsageDto"/>
         <typeAlias alias="Scenario" type="com.copyright.rup.dist.foreign.domain.Scenario"/>
         <typeAlias alias="RightsholderTotalsHolder" type="com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder"/>
+        <typeAlias alias="UsageAuditItem" type="com.copyright.rup.dist.foreign.domain.UsageAuditItem"/>
     </typeAliases>
 
     <typeHandlers>
@@ -36,5 +37,6 @@
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUsageBatchMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IRightsholderMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IScenarioMapper.xml"/>
+        <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUsageAuditMapper.xml"/>
     </mappers>
 </configuration>
