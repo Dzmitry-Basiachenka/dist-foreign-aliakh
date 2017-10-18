@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import org.apache.commons.lang3.StringUtils;
@@ -10,7 +11,10 @@ import org.openqa.selenium.WebElement;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -53,11 +57,16 @@ public class ViewScenarioUiTest extends ForeignCommonUiTest {
         loginAsSpecialist();
         WebElement window = openViewScenarioWindow();
         WebElement searchToolbar = assertSearchToolbar(window, "Enter Rightsholder Name/Account #");
-        WebElement searchField = assertWebElement(searchToolbar, By.className("v-textfield"));
-        WebElement searchButton = assertWebElement(searchToolbar, By.className("button-search"));
         WebElement table = assertWebElement(window, "rightsholders-totals-table");
-        verifySearchByRightsholderName(searchField, searchButton, table);
-        verifySearchByRightsholderAccountNumber(searchField, searchButton, table);
+        Map<String, List<String[]>> searchMap = new HashMap<>();
+        searchMap.put("British Film Institute (BFI)", Collections.singletonList(rightsholder1));
+        searchMap.put("BriTIsh film Institute (bfi)", Collections.singletonList(rightsholder1));
+        searchMap.put("CCH", Collections.singletonList(rightsholder2));
+        searchMap.put("T", Lists.newArrayList(rightsholder1, rightsholder3));
+        searchMap.put("1000009997", Collections.singletonList(rightsholder3));
+        searchMap.put("100000", Lists.newArrayList(rightsholder1, rightsholder2, rightsholder3));
+        searchMap.put("97", Lists.newArrayList(rightsholder1, rightsholder3));
+        assertSearch(searchToolbar, table, searchMap);
     }
 
     private void assertButtonLayout(WebElement buttonLayout) {
@@ -65,48 +74,6 @@ public class ViewScenarioUiTest extends ForeignCommonUiTest {
             .map(webElement -> webElement.getAttribute("id"))
             .collect(Collectors.toSet());
         assertButtonsToolbar(buttonLayout, actualButtons, Sets.newHashSet("Export", "Close"));
-    }
-
-    private void verifySearchByRightsholderName(WebElement searchField, WebElement searchButton, WebElement table) {
-        applySearch(searchField, searchButton, "British Film Institute (BFI)");
-        List<WebElement> rows = assertTableRowElements(table, 1);
-        assertTableRowElements(rows.get(0), rightsholder1);
-
-        applySearch(searchField, searchButton, "BriTIsh film Institute (bfi)");
-        rows = assertTableRowElements(table, 1);
-        assertTableRowElements(rows.get(0), rightsholder1);
-
-        applySearch(searchField, searchButton, "CCH");
-        rows = assertTableRowElements(table, 1);
-        assertTableRowElements(rows.get(0), rightsholder2);
-
-        applySearch(searchField, searchButton, "T");
-        rows = assertTableRowElements(table, 2);
-        assertTableRowElements(rows.get(0), rightsholder1);
-        assertTableRowElements(rows.get(1), rightsholder3);
-    }
-
-    private void verifySearchByRightsholderAccountNumber(WebElement searchField, WebElement searchButton,
-                                                         WebElement table) {
-        applySearch(searchField, searchButton, "1000009997");
-        List<WebElement> rows = assertTableRowElements(table, 1);
-        assertTableRowElements(rows.get(0), rightsholder3);
-
-        applySearch(searchField, searchButton, "100000");
-        rows = assertTableRowElements(table, 3);
-        assertTableRowElements(rows.get(0), rightsholder1);
-        assertTableRowElements(rows.get(1), rightsholder2);
-        assertTableRowElements(rows.get(2), rightsholder3);
-
-        applySearch(searchField, searchButton, "97");
-        rows = assertTableRowElements(table, 2);
-        assertTableRowElements(rows.get(0), rightsholder1);
-        assertTableRowElements(rows.get(1), rightsholder3);
-    }
-
-    private void applySearch(WebElement searchField, WebElement searchButton, String searchValue) {
-        sendKeysToInput(searchField, searchValue);
-        clickElementAndWait(searchButton);
     }
 
     private void verifyTable(WebElement table) {

@@ -252,6 +252,28 @@ public class ForeignCommonUiTest extends CommonUiTest {
         clickElementAndWait(currentDateSlot);
     }
 
+    void applySearch(WebElement searchField, WebElement searchButton, String searchValue) {
+        sendKeysToInput(searchField, searchValue);
+        clickElementAndWait(searchButton);
+    }
+
+    /**
+     * Verifies search functionality for specified table with expected data.
+     *
+     * @param searchToolbar search tool bar
+     * @param table         table for search
+     * @param searchInfo    key - search value, value - list of expected fields
+     */
+    void assertSearch(WebElement searchToolbar, WebElement table, Map<String, List<String[]>> searchInfo) {
+        WebElement searchField = assertWebElement(searchToolbar, By.className("v-textfield"));
+        WebElement searchButton = assertWebElement(searchToolbar, By.className("button-search"));
+        searchInfo.forEach((searchValue, rows) -> {
+            applySearch(searchField, searchButton, searchValue);
+            List<WebElement> result = assertTableRowElements(table, CollectionUtils.size(rows));
+            IntStream.range(0, CollectionUtils.size(result))
+                .forEach(i -> assertTableRowElements(result.get(i), rows.get(i)));
+        });
+    }
 
     void applyFilters(WebElement filterWidget, UsageBatchInfo usageBatchInfo) {
         applyBatchesFilter(filterWidget, usageBatchInfo.getName());
