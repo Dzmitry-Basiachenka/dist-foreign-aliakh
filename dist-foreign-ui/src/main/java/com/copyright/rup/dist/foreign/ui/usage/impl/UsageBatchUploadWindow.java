@@ -58,6 +58,7 @@ class UsageBatchUploadWindow extends Window {
     private TextField usageBatchNameField;
     private Property<String> rightsholderNameProperty;
     private Property<String> fiscalYearProperty;
+    private Rightsholder rro;
     private UploadField uploadField;
     private IUsagesController usagesController;
 
@@ -120,9 +121,6 @@ class UsageBatchUploadWindow extends Window {
     private UsageBatch buildUsageBatch() {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setName(StringUtils.trim(usageBatchNameField.getValue()));
-        Rightsholder rro = new Rightsholder();
-        rro.setAccountNumber(Long.valueOf(StringUtils.trim(accountNumberField.getValue())));
-        rro.setName(rightsholderNameProperty.getValue());
         usageBatch.setRro(rro);
         usageBatch.setPaymentDate(paymentDateWidget.getValue());
         usageBatch.setFiscalYear(UsageBatchUtils.calculateFiscalYear(paymentDateWidget.getValue()));
@@ -266,10 +264,12 @@ class UsageBatchUploadWindow extends Window {
     private Button initVerifyButton() {
         Button button = Buttons.createButton(ForeignUi.getMessage("button.verify"));
         button.setSizeFull();
-        button.addClickListener(event ->
-            rightsholderNameProperty.setValue(accountNumberField.isValid()
-                ? usagesController.getRroName(Long.valueOf(StringUtils.trim(accountNumberField.getValue())))
-                : StringUtils.EMPTY));
+        button.addClickListener(event -> {
+            if (accountNumberField.isValid()) {
+                rro = usagesController.getRro(Long.valueOf(StringUtils.trim(accountNumberField.getValue())));
+                rightsholderNameProperty.setValue(rro.getName());
+            }
+        });
         return button;
     }
 

@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.api;
 
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -55,12 +56,12 @@ public interface IUsagesController extends IController<IUsagesWidget>, IBeanLoad
     void onFilterChanged(FilterChangedEvent event);
 
     /**
-     * Gets RRO name from PRM by account number.
+     * Gets RRO from PRM by account number.
      *
      * @param rroAccountNumber RRO account number
-     * @return RRO name
+     * @return RRO {@link Rightsholder}
      */
-    String getRroName(Long rroAccountNumber);
+    Rightsholder getRro(Long rroAccountNumber);
 
     /**
      * Checks whether usage batch with provided name already exists or not.
