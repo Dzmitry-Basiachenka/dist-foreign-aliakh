@@ -24,7 +24,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PipedOutputStream;
 import java.util.List;
 import java.util.Map;
@@ -97,14 +96,12 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public void writeUsagesCsvReport(UsageFilter filter, OutputStream outputStream) {
-        checkNotNull(outputStream);
-        try {
-            UsageCsvReportHandler handler = new UsageCsvReportHandler(outputStream);
-            if (!checkNotNull(filter).isEmpty()) {
+    public void writeUsagesCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream) {
+        Objects.requireNonNull(pipedOutputStream);
+        try (UsageCsvReportHandler handler = new UsageCsvReportHandler(pipedOutputStream)) {
+            if (!Objects.requireNonNull(filter).isEmpty()) {
                 getTemplate().select("IUsageMapper.findByFilter", ImmutableMap.of(FILTER_KEY, filter), handler);
             }
-            handler.closeStream();
         } catch (IOException e) {
             throw new RupRuntimeException(e);
         }
@@ -118,15 +115,15 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
 
     @Override
     public List<Usage> findWithAmounts(UsageFilter filter) {
-        return selectList("IUsageMapper.findWithAmounts", ImmutableMap.of(FILTER_KEY, checkNotNull(filter)));
+        return selectList("IUsageMapper.findWithAmounts", ImmutableMap.of(FILTER_KEY, Objects.requireNonNull(filter)));
     }
 
     @Override
     public void addToScenario(List<String> usageIds, String scenarioId, String updateUser) {
         checkArgument(CollectionUtils.isNotEmpty(usageIds));
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
-        parameters.put(SCENARIO_ID_KEY, checkNotNull(scenarioId));
-        parameters.put(UPDATE_USER_KEY, checkNotNull(updateUser));
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        parameters.put(UPDATE_USER_KEY, Objects.requireNonNull(updateUser));
         parameters.put(STATUS_KEY, UsageStatusEnum.LOCKED);
         for (List<String> usageIdsPartition : Iterables.partition(usageIds, BATCH_SIZE_FOR_SELECT)) {
             parameters.put(USAGE_IDS_KEY, usageIdsPartition);
@@ -137,8 +134,8 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     @Override
     public void deleteFromScenario(String scenarioId, String updateUser) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
-        parameters.put(SCENARIO_ID_KEY, checkNotNull(scenarioId));
-        parameters.put(UPDATE_USER_KEY, checkNotNull(updateUser));
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        parameters.put(UPDATE_USER_KEY, Objects.requireNonNull(updateUser));
         parameters.put(STATUS_KEY, UsageStatusEnum.ELIGIBLE);
         update("IUsageMapper.deleteFromScenario", parameters);
     }
@@ -158,9 +155,9 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
                                                                                    String searchValue,
                                                                                    Pageable pageable, Sort sort) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
-        parameters.put(SCENARIO_ID_KEY, checkNotNull(scenarioId));
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put(SEARCH_VALUE_KEY, searchValue);
-        parameters.put(PAGEABLE_KEY, checkNotNull(pageable));
+        parameters.put(PAGEABLE_KEY, Objects.requireNonNull(pageable));
         parameters.put(SORT_KEY, sort);
         return selectList("IUsageMapper.getRightsholderTotalsHoldersByScenarioId", parameters);
     }
@@ -168,7 +165,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     @Override
     public int getRightsholderTotalsHolderCountByScenarioId(String scenarioId, String searchValue) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-        parameters.put(SCENARIO_ID_KEY, checkNotNull(scenarioId));
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put(SEARCH_VALUE_KEY, searchValue);
         return selectOne("IUsageMapper.getRightsholderTotalsHolderCountByScenarioId", parameters);
     }
@@ -176,8 +173,8 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     @Override
     public int getUsagesCountByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
-        parameters.put("accountNumber", checkNotNull(accountNumber));
-        parameters.put(SCENARIO_ID_KEY, checkNotNull(scenarioId));
+        parameters.put("accountNumber", Objects.requireNonNull(accountNumber));
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put(SEARCH_VALUE_KEY, searchValue);
         return selectOne("IUsageMapper.getUsagesCountByScenarioIdAndRhAccountNumber", parameters);
     }
@@ -186,10 +183,10 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     public List<UsageDto> getUsagesByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId,
                                                                   String searchValue, Pageable pageable, Sort sort) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(5);
-        parameters.put("accountNumber", checkNotNull(accountNumber));
-        parameters.put(SCENARIO_ID_KEY, checkNotNull(scenarioId));
+        parameters.put("accountNumber", Objects.requireNonNull(accountNumber));
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put(SEARCH_VALUE_KEY, searchValue);
-        parameters.put(PAGEABLE_KEY, checkNotNull(pageable));
+        parameters.put(PAGEABLE_KEY, Objects.requireNonNull(pageable));
         parameters.put(SORT_KEY, sort);
         return selectList("IUsageMapper.getUsagesByScenarioIdAndRhAccountNumber", parameters);
     }
@@ -201,6 +198,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
      * @return found {@link Usage} instance
      */
     Usage findByDetailId(Long detailId) {
-        return selectOne("IUsageMapper.findByDetailId", checkNotNull(detailId));
+        return selectOne("IUsageMapper.findByDetailId", Objects.requireNonNull(detailId));
     }
 }

@@ -66,8 +66,8 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public void writeUsageCsvReport(UsageFilter filter, OutputStream outputStream) {
-        usageRepository.writeUsagesCsvReport(filter, outputStream);
+    public void writeUsageCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream) {
+        usageRepository.writeUsagesCsvReport(filter, pipedOutputStream);
     }
 
     @Override
