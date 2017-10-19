@@ -2,14 +2,20 @@ package com.copyright.rup.dist.foreign.ui;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.repository.api.IUsageAuditRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
+import com.copyright.rup.dist.foreign.repository.api.Pageable;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.Test;
@@ -22,7 +28,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -40,15 +48,20 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
 
     private static final String CLOSE_BUTTON_ID = "Close";
     private static final String USAGE_BATCHES_TABLE_ID = "usage-batches-table";
-    private UsageBatchInfo usageBatch1 = new UsageBatchInfo("CADRA_11Dec16", "01/11/2017", "FY2017",
+    private static final String BATCH_TO_DELETE_ID = "4b67f17c-3c32-4b55-b2a0-dabebb513304";
+    private UsageBatchInfo usageBatch1 = new UsageBatchInfo("56282dbc-2468-48d4-b926-93d3458a656a", "CADRA_11Dec16",
+        "01/11/2017", "FY2017",
         "7000813806 - CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil");
-    private UsageBatchInfo usageBatch2 = new UsageBatchInfo("AccessCopyright_11Dec16", "09/10/2015", "FY2016",
+    private UsageBatchInfo usageBatch2 = new UsageBatchInfo("56282dbc-2468-48d4-b926-94d3458a666a",
+        "AccessCopyright_11Dec16", "09/10/2015", "FY2016",
         "2000017004 - Access Copyright, The Canadian Copyright Agency");
-    private UsageBatchInfo usageBatch3 = new UsageBatchInfo("JAACC_11Dec16", "08/16/2018", "FY2019",
-        "7001440663 - JAACC, Japan Academic Association for Copyright Clearance [T]");
-    private UsageBatchInfo usageBatch4 =
-        new UsageBatchInfo("Batch to delete", "07/11/2017", "FY2018", "1000002797 - British Film Institute (BFI)");
+    private UsageBatchInfo usageBatch3 = new UsageBatchInfo("56782dbc-2158-48d4-b026-94d3458a666a", "JAACC_11Dec16",
+        "08/16/2018", "FY2019", "7001440663 - JAACC, Japan Academic Association for Copyright Clearance [T]");
+    private UsageBatchInfo usageBatch4 = new UsageBatchInfo(BATCH_TO_DELETE_ID, "Batch to delete",
+        "07/11/2017", "FY2018", "1000002797 - British Film Institute (BFI)");
 
+    @Autowired
+    private IUsageAuditRepository usageAuditRepository;
     @Autowired
     private IUsageRepository usageRepository;
     @Autowired
@@ -102,7 +115,7 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
         WebElement window = openDeleteUsageBatchWindow(usagesTab);
         WebElement usageBatchesTable = assertWebElement(window, By.id(USAGE_BATCHES_TABLE_ID));
         verifyTableRows(usageBatchesTable, usageBatch4, usageBatch1, usageBatch2, usageBatch3);
-        clickElementAndWait(assertWebElement(usageBatchesTable, "4b67f17c-3c32-4b55-b2a0-dabebb513304"));
+        clickElementAndWait(assertWebElement(usageBatchesTable, BATCH_TO_DELETE_ID));
         WebElement confirmDialog = assertWebElement(By.id("confirm-dialog-window"));
         assertWebElementText(confirmDialog, "Are you sure you want to delete 'Batch to delete' usage batch?");
         clickButtonAndWait(confirmDialog, "Yes");
@@ -114,6 +127,8 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
         verifyFiscalYearFilter(filterWidget, StringUtils.SPACE, "2016", "2017", "2019");
         assertEquals(0, usageBatchRepository.getCountByName(usageBatch4.getName()));
         usageBatchToDelete = null;
+        verifyUsageAuditForNotDeletedBatches(usageBatch1.getId(), usageBatch2.getId(), usageBatch3.getId());
+        verifyUsageAuditForDeletedBatches(usageBatch4.getId());
     }
 
     @Test
@@ -135,6 +150,7 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
         clickButtonAndWait(window, CLOSE_BUTTON_ID);
         assertTableRowElements(usagesTable, 1);
         assertEquals(1, usageBatchRepository.getCountByName(usageBatch1.getName()));
+        verifyUsageAuditForNotDeletedBatches(usageBatch1.getId(), usageBatch2.getId(), usageBatch3.getId());
     }
 
     @Test
@@ -157,6 +173,25 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
         clickButtonAndWait(window, CLOSE_BUTTON_ID);
         assertTableRowElements(usagesTable, 1);
         assertEquals(1, usageBatchRepository.getCountByName(usageBatch1.getName()));
+        verifyUsageAuditForNotDeletedBatches(usageBatch1.getId(), usageBatch2.getId(), usageBatch3.getId());
+    }
+
+    private void verifyUsageAuditForNotDeletedBatches(String... batchIds) {
+        getUsageIds(batchIds).forEach(usageId ->
+            assertTrue(CollectionUtils.isNotEmpty(usageAuditRepository.findByUsageId(usageId))));
+    }
+
+    private void verifyUsageAuditForDeletedBatches(String... batchIds) {
+        getUsageIds(batchIds).forEach(usageId ->
+            assertTrue(CollectionUtils.isEmpty(usageAuditRepository.findByUsageId(usageId))));
+    }
+
+    private List<String> getUsageIds(String... batchIds) {
+        UsageFilter usageFilter = new UsageFilter();
+        usageFilter.setUsageBatchesIds(Arrays.stream(batchIds).collect(Collectors.toSet()));
+        return usageRepository.findByFilter(usageFilter, new Pageable(0, 200), null).stream()
+            .map(UsageDto::getId)
+            .collect(Collectors.toList());
     }
 
     private void verifyFiscalYearFilter(WebElement filterWidget, String... expectedItems) {
@@ -223,7 +258,7 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
 
     private UsageBatch buildUsageBatch() {
         UsageBatch usageBatch = new UsageBatch();
-        usageBatch.setId("4b67f17c-3c32-4b55-b2a0-dabebb513304");
+        usageBatch.setId(BATCH_TO_DELETE_ID);
         usageBatch.setName("Batch to delete");
         Rightsholder rro = new Rightsholder();
         rro.setAccountNumber(1000002797L);
@@ -237,7 +272,7 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
     private Usage buildUsage() {
         Usage usage = new Usage();
         usage.setId("d9d4b36f-0149-4ec8-a5b9-663eaa027b89");
-        usage.setBatchId("4b67f17c-3c32-4b55-b2a0-dabebb513304");
+        usage.setBatchId(BATCH_TO_DELETE_ID);
         usage.setDetailId(6999977777L);
         usage.setWrWrkInst(101125380L);
         usage.setWorkTitle("Understanding administrative law");

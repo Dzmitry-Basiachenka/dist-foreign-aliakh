@@ -11,6 +11,7 @@ package com.copyright.rup.dist.foreign.ui;
  */
 class UsageBatchInfo {
 
+    private String id;
     private String name;
     private String paymentDate;
     private String fiscalYear;
@@ -32,29 +33,39 @@ class UsageBatchInfo {
     }
 
     /**
-     * @return name.
+     * Constructor.
+     *
+     * @param id          usage batch identifier
+     * @param name        usage batch name
+     * @param paymentDate usage batch payment date
+     * @param fiscalYear  usage batch fiscal year
+     * @param rro         usage batch rro
      */
+    UsageBatchInfo(String id, String name, String paymentDate, String fiscalYear, String rro) {
+        this(name, paymentDate, fiscalYear, rro);
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     String getName() {
         return name;
     }
 
-    /**
-     * @return rro.
-     */
     String getRro() {
         return rro;
     }
 
-    /**
-     * @return payment date.
-     */
     String getPaymentDate() {
         return paymentDate;
     }
 
-    /**
-     * @return fiscal year.
-     */
     String getFiscalYear() {
         return fiscalYear;
     }

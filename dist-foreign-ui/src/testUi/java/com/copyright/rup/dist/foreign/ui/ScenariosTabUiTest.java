@@ -17,7 +17,6 @@ import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
 import com.copyright.rup.dist.foreign.repository.api.Sort.Direction;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -33,6 +32,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.IntStream;
@@ -124,8 +124,8 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
         scenarioToDelete.setStatus(ScenarioStatusEnum.IN_PROGRESS);
         scenarioRepository.insert(scenarioToDelete);
         assertEquals(6, CollectionUtils.size(scenarioRepository.findAll()));
-        usageRepository.addToScenario(Lists.newArrayList("111111111"), scenarioToDelete.getId(),
-            StoredEntity.DEFAULT_USER);
+        usageRepository.addToScenario(Collections.singletonList("366f0fa6-b4c5-11e7-abc4-cec278b6b50a"),
+            scenarioToDelete.getId(), StoredEntity.DEFAULT_USER);
         UsageFilter filter = new UsageFilter();
         filter.setUsageStatus(UsageStatusEnum.LOCKED);
         filter.setUsageBatchesIds(Sets.newHashSet("56282dbc-2468-48d4-b926-93d3458a656a"));

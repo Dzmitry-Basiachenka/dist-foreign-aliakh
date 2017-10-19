@@ -32,7 +32,7 @@ databaseChangeLog {
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
-            column(name: 'df_usage_uid', value: '111111111')
+            column(name: 'df_usage_uid', value: '366f0fa6-b4c5-11e7-abc4-cec278b6b50a')
             column(name: 'df_usage_batch_uid', value: '56282dbc-2468-48d4-b926-93d3458a656a')
             column(name: 'detail_id', value: '6997788888')
             column(name: 'wr_wrk_inst', value: '180382914')
@@ -53,7 +53,7 @@ databaseChangeLog {
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
-            column(name: 'df_usage_uid', value: '222222222')
+            column(name: 'df_usage_uid', value: 'f9da71d0-9b07-4204-8355-549a4206ebc5')
             column(name: 'df_usage_batch_uid', value: '56282dbc-2468-48d4-b926-94d3458a666a')
             column(name: 'detail_id', value: '6997788885')
             column(name: 'wr_wrk_inst', value: '244614835')
@@ -74,7 +74,7 @@ databaseChangeLog {
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
-            column(name: 'df_usage_uid', value: '333333333')
+            column(name: 'df_usage_uid', value: '49ed6163-e992-499a-8879-827928bef327')
             column(name: 'df_usage_batch_uid', value: '56782dbc-2158-48d4-b026-94d3458a666a')
             column(name: 'detail_id', value: '6997788882')
             column(name: 'wr_wrk_inst', value: '108738286')
@@ -95,7 +95,7 @@ databaseChangeLog {
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
-            column(name: 'df_usage_uid', value: '444444444')
+            column(name: 'df_usage_uid', value: 'e6fba668-a840-4c4a-9332-2c1703bd63e0')
             column(name: 'df_usage_batch_uid', value: '56782dbc-2158-48d4-b026-94d3458a666a')
             column(name: 'detail_id', value: '6997788884')
             column(name: 'wr_wrk_inst', value: '345870577')
@@ -113,6 +113,34 @@ databaseChangeLog {
             column(name: 'number_of_copies', value: '2630')
             column(name: 'reported_value', value: '1280.00')
             column(name: 'gross_amount', value: '6892.30')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
+            column(name: 'df_usage_audit_uid', value: '76ba5480-b3f8-11e7-abc4-cec278b6b50a')
+            column(name: 'df_usage_uid', value: '366f0fa6-b4c5-11e7-abc4-cec278b6b50a')
+            column(name: 'action_type_ind', value: 'LOADED')
+            column(name: 'action_reason', value: "Uploaded in 'CADRA_11Dec16' Batch")
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
+            column(name: 'df_usage_audit_uid', value: '7ab3eaa4-b3fa-11e7-abc4-cec278b6b50a')
+            column(name: 'df_usage_uid', value: 'f9da71d0-9b07-4204-8355-549a4206ebc5')
+            column(name: 'action_type_ind', value: 'LOADED')
+            column(name: 'action_reason', value: "Uploaded in 'AccessCopyright_11Dec16' Batch")
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
+            column(name: 'df_usage_audit_uid', value: '74867322-b3fa-11e7-abc4-cec278b6b50a')
+            column(name: 'df_usage_uid', value: '49ed6163-e992-499a-8879-827928bef327')
+            column(name: 'action_type_ind', value: 'LOADED')
+            column(name: 'action_reason', value: "Uploaded in 'JAACC_11Dec16' Batch")
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
+            column(name: 'df_usage_audit_uid', value: '6e30a5ce-b3fa-11e7-abc4-cec278b6b50a')
+            column(name: 'df_usage_uid', value: 'e6fba668-a840-4c4a-9332-2c1703bd63e0')
+            column(name: 'action_type_ind', value: 'LOADED')
+            column(name: 'action_reason', value: "Uploaded in 'JAACC_11Dec16' Batch")
         }
 
         rollback ""
@@ -199,6 +227,13 @@ databaseChangeLog {
             column(name: 'number_of_copies', value: '250232')
             column(name: 'reported_value', value: '9900')
             column(name: 'gross_amount', value: '11461.54')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
+            column(name: 'df_usage_audit_uid', value: 'c0708364-b408-11e7-abc4-cec278b6b50a')
+            column(name: 'df_usage_uid', value: 'b1f0b236-3ae9-4a60-9fab-61db84199dss')
+            column(name: 'action_type_ind', value: 'LOADED')
+            column(name: 'action_reason', value: "Uploaded in 'AccessCopyright_11Dec16' Batch")
         }
 
         rollback ""
@@ -309,6 +344,27 @@ databaseChangeLog {
             column(name: 'gross_amount', value: '240.00')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
+            column(name: 'df_usage_audit_uid', value: '222c1e92-b409-11e7-abc4-cec278b6b50a')
+            column(name: 'df_usage_uid', value: '47943793-4f9a-47b1-b2a8-e95a87aa58e6')
+            column(name: 'action_type_ind', value: 'LOADED')
+            column(name: 'action_reason', value: "Uploaded in 'JAACC_11Dec16' Batch")
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
+            column(name: 'df_usage_audit_uid', value: '2b4e257e-b409-11e7-abc4-cec278b6b50a')
+            column(name: 'df_usage_uid', value: '3846ead0-87ae-4d9b-8dfe-1b985d78c061')
+            column(name: 'action_type_ind', value: 'LOADED')
+            column(name: 'action_reason', value: "Uploaded in 'JAACC_11Dec16' Batch")
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
+            column(name: 'df_usage_audit_uid', value: '3c80739c-b409-11e7-abc4-cec278b6b50a')
+            column(name: 'df_usage_uid', value: 'b7ee7e4c-ec30-400b-ba49-70aaf8a4940e')
+            column(name: 'action_type_ind', value: 'LOADED')
+            column(name: 'action_reason', value: "Uploaded in 'JAACC_11Dec16' Batch")
+        }
+
         rollback ""
     }
 
@@ -417,6 +473,34 @@ databaseChangeLog {
             column(name: 'reported_value', value: '500.00')
             column(name: 'gross_amount', value: '480.00')
             column(name: 'net_amount', value: '1050')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
+            column(name: 'df_usage_audit_uid', value: '6aea1b34-b409-11e7-abc4-cec278b6b50a')
+            column(name: 'df_usage_uid', value: '47943793-4f9a-47b1-b2a8-e95a87aa58g6')
+            column(name: 'action_type_ind', value: 'LOADED')
+            column(name: 'action_reason', value: "Uploaded in 'JAACC_11Dec16' Batch")
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
+            column(name: 'df_usage_audit_uid', value: '7aa31ab2-b409-11e7-abc4-cec278b6b50a')
+            column(name: 'df_usage_uid', value: '3846ead0-87ae-4d9b-8dfe-1b985d78c062')
+            column(name: 'action_type_ind', value: 'LOADED')
+            column(name: 'action_reason', value: "Uploaded in 'JAACC_11Dec16' Batch")
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
+            column(name: 'df_usage_audit_uid', value: '8b490944-b409-11e7-abc4-cec278b6b50a')
+            column(name: 'df_usage_uid', value: 'b7ee7e4c-ec30-400b-ba49-70aaf8a4941e')
+            column(name: 'action_type_ind', value: 'LOADED')
+            column(name: 'action_reason', value: "Uploaded in 'JAACC_11Dec16' Batch")
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
+            column(name: 'df_usage_audit_uid', value: '97afdf1e-b409-11e7-abc4-cec278b6b50a')
+            column(name: 'df_usage_uid', value: 'b7ee7e4c-ec30-400b-ba49-70aaf8a4942e')
+            column(name: 'action_type_ind', value: 'LOADED')
+            column(name: 'action_reason', value: "Uploaded in 'JAACC_11Dec16' Batch")
         }
 
         rollback ""
