@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.mock;
 
+import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 
@@ -29,6 +30,7 @@ public class PrmIntegrationServiceMock implements IPrmIntegrationService {
 
     private Rightsholder buildRightsholder(Long accountNumber) {
         Rightsholder rightsholder = new Rightsholder();
+        rightsholder.setId(RupPersistUtils.generateUuid());
         rightsholder.setAccountNumber(accountNumber);
         rightsholder.setName("Access Copyright, The Canadian Copyright Agency");
         return rightsholder;

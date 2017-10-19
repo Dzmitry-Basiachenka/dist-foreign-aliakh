@@ -63,4 +63,25 @@ databaseChangeLog {
             // automatic rollback
         }
     }
+
+    changeSet(id: '2017-10-18-00', author: 'Aliaksandra Bayanouskaya <abayanouskaya@copyright.com>') {
+        comment('B-34404 FDA: Integrate with PRM to get Payee for each detail: implement liquibase script to add' +
+                ' df_rightsholder_uid column to df_rightsholder table')
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'df_rightsholder_uid', type: 'character varying(255)', remarks: 'The rightsholder uid')
+        }
+
+        sql("""update ${dbAppsSchema}.df_rightsholder set df_rightsholder_uid = rh_account_number""")
+
+        addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_rightsholder', columnName: 'df_rightsholder_uid',
+                columnDataType: 'character varying(255)')
+
+        addUniqueConstraint(schemaName: dbAppsSchema, tableName: 'df_rightsholder', columnNames: 'df_rightsholder_uid',
+                constraintName: 'uk_df_rightsholder')
+
+        rollback {
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_rightsholder', columnName: 'df_rightsholder_uid')
+        }
+    }
 }

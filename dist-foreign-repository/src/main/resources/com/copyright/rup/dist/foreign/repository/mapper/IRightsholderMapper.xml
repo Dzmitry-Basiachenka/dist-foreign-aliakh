@@ -5,17 +5,22 @@
 <mapper namespace="IRightsholderMapper">
 
     <resultMap id="rightsholderResultMap" type="Rightsholder" extends="StoredEntityMapper.storedEntityResult">
+        <result property="id" column="df_rightsholder_uid"/>
         <result property="accountNumber" column="rh_account_number"/>
         <result property="name" column="name"/>
     </resultMap>
 
     <resultMap id="rroResultMap" type="Rightsholder">
+        <result property="id" column="df_rightsholder_uid"/>
         <result property="accountNumber" column="rro_account_number"/>
         <result property="name" column="name"/>
     </resultMap>
 
     <select id="findRros" resultMap="rroResultMap">
-        select distinct ub.rro_account_number, r.name
+        select distinct
+            ub.rro_account_number,
+            r.name,
+            r.df_rightsholder_uid
         from ${schema}.df_usage_batch ub
         left join ${schema}.df_rightsholder r on r.rh_account_number = ub.rro_account_number
         order by r.name
@@ -23,10 +28,12 @@
 
     <insert id="insert" parameterType="Rightsholder">
         insert into ${schema}.df_rightsholder(
+            df_rightsholder_uid,
             rh_account_number,
             name,
             <include refid="StoredEntityMapper.additionalColumns"/>)
         values(
+            #{id},
             #{accountNumber},
             #{name},
             <include refid="StoredEntityMapper.insert"/>
@@ -35,6 +42,7 @@
 
     <select id="findAll" resultMap="rightsholderResultMap">
         select
+            df_rightsholder_uid,
             rh_account_number,
             name,
             <include refid="StoredEntityMapper.additionalColumns"/>
@@ -66,6 +74,7 @@
 
     <select id="findRightsholdersByAccountNumbers" parameterType="collection" resultMap="rightsholderResultMap">
         select
+            df_rightsholder_uid,
             rh_account_number,
             name,
             <include refid="StoredEntityMapper.additionalColumns"/>

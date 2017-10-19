@@ -4,11 +4,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -107,6 +106,10 @@ public class RightsholderRepositoryIntegrationTest {
         assertTrue(rros.stream().map(Rightsholder::getAccountNumber).collect(Collectors.toList())
             .containsAll(Lists.newArrayList(RH_ACCOUNT_NUMBER_7000813806, RH_ACCOUNT_NUMBER_2000017004,
                 RH_ACCOUNT_NUMBER_7001440663, RH_ACCOUNT_NUMBER_7000800832)));
+        assertTrue(rros.stream().map(Rightsholder::getId).collect(Collectors.toList())
+            .containsAll(Lists.newArrayList("05c4714b-291d-4e38-ba4a-35307434acfb",
+                "46754660-b627-46b9-a782-3f703b6853c7", "ff8b9ac9-5fca-4d57-b74e-26da209c1040",
+                "05c4714b-291d-4e38-ba4a-35307434acfb")));
         assertTrue(rros.stream().map(Rightsholder::getName).collect(Collectors.toList())
             .containsAll(Lists.newArrayList(RH_NAME_7000813806, RH_NAME_2000017004,
                 RH_NAME_7001440663, null)));
@@ -135,6 +138,7 @@ public class RightsholderRepositoryIntegrationTest {
         Rightsholder rightsholder = new Rightsholder();
         rightsholder.setAccountNumber(RH_ACCOUNT_NUMBER);
         rightsholder.setName(RH_ACCOUNT_NAME);
+        rightsholder.setId(RupPersistUtils.generateUuid());
         return rightsholder;
     }
 }
