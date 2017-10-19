@@ -24,6 +24,7 @@ import com.copyright.rup.vaadin.ui.VaadinUtils;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.io.Files;
 
 import org.apache.commons.lang3.ObjectUtils;
@@ -95,9 +96,8 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
-    public String getRroName(Long rroAccountNumber) {
-        Rightsholder rro = prmIntegrationService.getRightsholder(rroAccountNumber);
-        return null != rro ? rro.getName() : null;
+    public Rightsholder getRro(Long rroAccountNumber) {
+        return MoreObjects.firstNonNull(prmIntegrationService.getRightsholder(rroAccountNumber), new Rightsholder());
     }
 
     @Override

@@ -7,7 +7,6 @@ import static org.easymock.EasyMock.isNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
@@ -269,9 +268,10 @@ public class UsagesControllerTest {
         Rightsholder rightsholder = new Rightsholder();
         rightsholder.setName(RRO_ACCOUNT_NAME);
         rightsholder.setAccountNumber(RRO_ACCOUNT_NUMBER);
+        rightsholder.setId(RupPersistUtils.generateUuid());
         expect(prmIntegrationService.getRightsholder(RRO_ACCOUNT_NUMBER)).andReturn(rightsholder).once();
         replay(prmIntegrationService);
-        assertEquals(RRO_ACCOUNT_NAME, controller.getRroName(RRO_ACCOUNT_NUMBER));
+        assertEquals(rightsholder, controller.getRro(RRO_ACCOUNT_NUMBER));
         verify(prmIntegrationService);
     }
 
@@ -279,7 +279,7 @@ public class UsagesControllerTest {
     public void testGetNullRroName() {
         expect(prmIntegrationService.getRightsholder(RRO_ACCOUNT_NUMBER)).andReturn(null).once();
         replay(prmIntegrationService);
-        assertNull(controller.getRroName(RRO_ACCOUNT_NUMBER));
+        assertEquals(new Rightsholder(), controller.getRro(RRO_ACCOUNT_NUMBER));
         verify(prmIntegrationService);
     }
 

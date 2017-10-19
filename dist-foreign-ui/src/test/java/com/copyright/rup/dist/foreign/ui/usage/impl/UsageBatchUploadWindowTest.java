@@ -14,6 +14,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
@@ -89,7 +90,12 @@ public class UsageBatchUploadWindowTest {
 
     @Test
     public void testConstructor() {
-        expect(usagesController.getRroName(Long.valueOf(ACCOUNT_NUMBER))).andReturn("CANADIAN CERAMIC SOCIETY").once();
+        Rightsholder rro = new Rightsholder();
+        Long rroAccountNumber = Long.valueOf(ACCOUNT_NUMBER);
+        rro.setAccountNumber(rroAccountNumber);
+        rro.setName("CANADIAN CERAMIC SOCIETY");
+        rro.setId(RupPersistUtils.generateUuid());
+        expect(usagesController.getRro(rroAccountNumber)).andReturn(rro).once();
         replay(usagesController);
         window = new UsageBatchUploadWindow(usagesController);
         assertEquals("Upload Usage Batch", window.getCaption());
@@ -157,6 +163,10 @@ public class UsageBatchUploadWindowTest {
     @Test
     public void testOnUploadClickedValidFields() throws Exception {
         mockStatic(Windows.class);
+        Rightsholder rro = new Rightsholder();
+        rro.setAccountNumber(Long.valueOf(ACCOUNT_NUMBER));
+        rro.setName(RRO_NAME);
+        rro.setId(RupPersistUtils.generateUuid());
         UploadField uploadField =
             createPartialMock(UploadField.class, "getStreamToUploadedFile", "getFileName");
         UsageCsvProcessor processor = createMock(UsageCsvProcessor.class);
@@ -172,10 +182,11 @@ public class UsageBatchUploadWindowTest {
         Whitebox.setInternalState(window, "fiscalYearProperty", new ObjectProperty<>("FY2017"));
         Whitebox.setInternalState(window, GROSS_AMOUNT_FIELD, new TextField("Gross Amount", "100.00"));
         Whitebox.setInternalState(window, "rightsholderNameProperty", new ObjectProperty<>(RRO_NAME));
+        Whitebox.setInternalState(window, "rro", rro);
         expect(window.isValid()).andReturn(true).once();
         expect(usagesController.getCsvProcessor()).andReturn(processor).once();
         expect(processor.process(anyObject(), anyString())).andReturn(processingResult).once();
-        expect(usagesController.loadUsageBatch(buildUsageBatch(), processingResult.getResult()))
+        expect(usagesController.loadUsageBatch(buildUsageBatch(rro), processingResult.getResult()))
             .andReturn(1).once();
         expect(uploadField.getStreamToUploadedFile()).andReturn(createMock(ByteArrayOutputStream.class)).once();
         expect(uploadField.getFileName()).andReturn("fileName.csv").once();
@@ -350,12 +361,9 @@ public class UsageBatchUploadWindowTest {
         assertEquals("Field value should be specified", field.getRequiredError());
     }
 
-    private UsageBatch buildUsageBatch() {
+    private UsageBatch buildUsageBatch(Rightsholder rro) {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setName(USAGE_BATCH_NAME);
-        Rightsholder rro = new Rightsholder();
-        rro.setAccountNumber(Long.valueOf(ACCOUNT_NUMBER));
-        rro.setName(RRO_NAME);
         usageBatch.setRro(rro);
         usageBatch.setPaymentDate(PAYMENT_DATE);
         usageBatch.setFiscalYear(2017);
