@@ -174,24 +174,24 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public int getUsagesCountByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue) {
+    public int getCountByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
         parameters.put("accountNumber", checkNotNull(accountNumber));
         parameters.put(SCENARIO_ID_KEY, checkNotNull(scenarioId));
         parameters.put(SEARCH_VALUE_KEY, searchValue);
-        return selectOne("IUsageMapper.getUsagesCountByScenarioIdAndRhAccountNumber", parameters);
+        return selectOne("IUsageMapper.getCountByScenarioIdAndRhAccountNumber", parameters);
     }
 
     @Override
-    public List<UsageDto> getUsagesByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId,
-                                                                  String searchValue, Pageable pageable, Sort sort) {
+    public List<UsageDto> getByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId,
+                                                            String searchValue, Pageable pageable, Sort sort) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(5);
         parameters.put("accountNumber", checkNotNull(accountNumber));
         parameters.put(SCENARIO_ID_KEY, checkNotNull(scenarioId));
         parameters.put(SEARCH_VALUE_KEY, searchValue);
         parameters.put(PAGEABLE_KEY, checkNotNull(pageable));
         parameters.put(SORT_KEY, sort);
-        return selectList("IUsageMapper.getUsagesByScenarioIdAndRhAccountNumber", parameters);
+        return selectList("IUsageMapper.getByScenarioIdAndRhAccountNumber", parameters);
     }
 
     /**

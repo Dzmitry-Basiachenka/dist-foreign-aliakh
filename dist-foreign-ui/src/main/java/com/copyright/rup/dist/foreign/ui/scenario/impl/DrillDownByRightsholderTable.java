@@ -26,28 +26,28 @@ import java.time.LocalDate;
  */
 public class DrillDownByRightsholderTable extends LazyTable<UsageDetailsBeanQuery, UsageDto> {
 
-    private static final String DETAIL_ID_PROPERTY = ForeignUi.getMessage("bean.detail_id");
-    private static final String USAGE_BATCH_NAME_PROPERTY = ForeignUi.getMessage("bean.batch_name");
-    private static final String FISCAL_YEAR_PROPERTY = ForeignUi.getMessage("bean.fiscal_year");
-    private static final String RRO_NAME_PROPERTY = ForeignUi.getMessage("bean.rro_name");
-    private static final String RRO_ACCOUNT_NUMBER_PROPERTY = ForeignUi.getMessage("bean.rro_account_number");
-    private static final String PAYMENT_DATE_PROPERTY = ForeignUi.getMessage("bean.payment_date");
-    private static final String TITLE_PROPERTY = ForeignUi.getMessage("bean.work_title");
-    private static final String ARTICLE_PROPERTY = ForeignUi.getMessage("bean.article");
-    private static final String STANDARD_NUMBER_PROPERTY = ForeignUi.getMessage("bean.standard_number");
-    private static final String WR_WRK_INST_PROPERTY = ForeignUi.getMessage("bean.wr_wrk_inst");
-    private static final String PUBLISHER_PROPERTY = ForeignUi.getMessage("bean.publisher");
-    private static final String PUBLICATION_DATE_PROPERTY = ForeignUi.getMessage("bean.publication_date");
-    private static final String NUMBER_OF_COPIES_PROPERTY = ForeignUi.getMessage("bean.number_of_copies");
-    private static final String REPORTED_VALUE_PROPERTY = ForeignUi.getMessage("bean.reported_value");
-    private static final String AMT_IN_USD_PROPERTY = ForeignUi.getMessage("bean.gross_amount");
-    private static final String SERVICE_FEE_AMOUNT_PROPERTY = ForeignUi.getMessage("bean.service_fee_amount");
-    private static final String NET_AMOUNT_PROPERTY = ForeignUi.getMessage("bean.net_amount");
-    private static final String SERVICE_FEE_PROPERTY = ForeignUi.getMessage("bean.service_fee");
-    private static final String MARKET_PROPERTY = ForeignUi.getMessage("bean.market");
-    private static final String MARKET_PERIOD_FROM_PROPERTY = ForeignUi.getMessage("bean.market_period_from");
-    private static final String MARKET_PERIOD_TO_PROPERTY = ForeignUi.getMessage("bean.market_period_to");
-    private static final String AUTHOR_PROPERTY = ForeignUi.getMessage("bean.author");
+    private static final String DETAIL_ID_PROPERTY = "detailId";
+    private static final String USAGE_BATCH_NAME_PROPERTY = "batchName";
+    private static final String FISCAL_YEAR_PROPERTY = "fiscalYear";
+    private static final String RRO_NAME_PROPERTY = "rroName";
+    private static final String RRO_ACCOUNT_NUMBER_PROPERTY = "rroAccountNumber";
+    private static final String PAYMENT_DATE_PROPERTY = "paymentDate";
+    private static final String TITLE_PROPERTY = "workTitle";
+    private static final String ARTICLE_PROPERTY = "article";
+    private static final String STANDARD_NUMBER_PROPERTY = "standardNumber";
+    private static final String WR_WRK_INST_PROPERTY = "wrWrkInst";
+    private static final String PUBLISHER_PROPERTY = "publisher";
+    private static final String PUBLICATION_DATE_PROPERTY = "publicationDate";
+    private static final String NUMBER_OF_COPIES_PROPERTY = "numberOfCopies";
+    private static final String REPORTED_VALUE_PROPERTY = "reportedValue";
+    private static final String AMT_IN_USD_PROPERTY = "grossAmount";
+    private static final String SERVICE_FEE_AMOUNT_PROPERTY = "serviceFeeAmount";
+    private static final String NET_AMOUNT_PROPERTY = "netAmount";
+    private static final String SERVICE_FEE_PROPERTY = "serviceFee";
+    private static final String MARKET_PROPERTY = "market";
+    private static final String MARKET_PERIOD_FROM_PROPERTY = "marketPeriodFrom";
+    private static final String MARKET_PERIOD_TO_PROPERTY = "marketPeriodTo";
+    private static final String AUTHOR_PROPERTY = "author";
 
     /**
      * Constructor.

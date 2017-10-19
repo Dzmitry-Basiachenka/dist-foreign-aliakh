@@ -524,7 +524,7 @@
         </if>
     </select>
 
-    <select id="getUsagesCountByScenarioIdAndRhAccountNumber" parameterType="map" resultType="int">
+    <select id="getCountByScenarioIdAndRhAccountNumber" parameterType="map" resultType="int">
         select count(1)
         from ${schema}.df_usage u
         join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
@@ -537,7 +537,7 @@
         </if>
     </select>
 
-    <select id="getUsagesByScenarioIdAndRhAccountNumber" parameterType="map" resultMap="usageDtoResultMap">
+    <select id="getByScenarioIdAndRhAccountNumber" parameterType="map" resultMap="usageDtoResultMap">
         <include refid="selectUsageDtos"/>
         where u.df_scenario_uid = #{scenarioId} and u.rh_account_number = #{accountNumber}
         <if test="null != searchValue">

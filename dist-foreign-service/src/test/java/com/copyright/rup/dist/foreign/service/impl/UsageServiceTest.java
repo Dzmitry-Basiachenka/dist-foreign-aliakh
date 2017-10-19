@@ -208,24 +208,24 @@ public class UsageServiceTest {
     }
 
     @Test
-    public void testGetUsagesCountByScenarioIdAndRhAccountNumber() {
-        expect(usageRepository.getUsagesCountByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER, SCENARIO_ID,
+    public void testGetCountByScenarioIdAndRhAccountNumber() {
+        expect(usageRepository.getCountByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER, SCENARIO_ID,
             StringUtils.EMPTY)).andReturn(5).once();
         replay(usageRepository);
-        assertEquals(5, usageService.getUsagesCountByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER, SCENARIO_ID,
+        assertEquals(5, usageService.getCountByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER, SCENARIO_ID,
             StringUtils.EMPTY));
         verify(usageRepository);
     }
 
     @Test
-    public void testGetUsagesByScenarioIdAndRhAccountNumber() {
+    public void testGetByScenarioIdAndRhAccountNumber() {
         List<UsageDto> usages = Lists.newArrayList(new UsageDto(), new UsageDto());
         Pageable pageable = new Pageable(0, 2);
-        expect(usageRepository.getUsagesByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER, SCENARIO_ID, null, pageable,
+        expect(usageRepository.getByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER, SCENARIO_ID, null, pageable,
             null)).andReturn(usages);
         replay(usageRepository);
         List<UsageDto> result =
-            usageService.getUsagesByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER, SCENARIO_ID, null, pageable, null);
+            usageService.getByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER, SCENARIO_ID, null, pageable, null);
         assertNotNull(result);
         assertEquals(2, result.size());
         verify(usageRepository);
