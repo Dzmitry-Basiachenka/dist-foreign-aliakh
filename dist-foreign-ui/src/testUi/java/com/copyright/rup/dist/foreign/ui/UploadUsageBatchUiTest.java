@@ -5,6 +5,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
+import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
@@ -196,6 +198,7 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         usageBatch = uploadedUsageBatches.get(0);
         verifyUploadedUsageBatch(usageBatch, paymentDate);
         verifyUploadedUsages(usageBatch.getId());
+        verifyUsageAudit(usageBatch);
     }
 
     @Test
@@ -216,6 +219,22 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         populateFileNameField(uploadWindow, "invalid_header_usage_data_file.csv");
         clickButtonAndWait(uploadWindow, UPLOAD_BUTTON_ID);
         verifyErrorNotificationWindow();
+    }
+
+    private void verifyUsageAudit(UsageBatch batch) {
+        UsageFilter usageFilter = new UsageFilter();
+        usageFilter.setUsageBatchesIds(Collections.singleton(batch.getId()));
+        List<String> usageIds = usageRepository.findByFilter(usageFilter, new Pageable(0, 200), null).stream()
+            .map(UsageDto::getId)
+            .collect(Collectors.toList());
+        usageIds.forEach(usageId -> {
+            List<UsageAuditItem> usageAuditItems = usageAuditRepository.findByUsageId(usageId);
+            assertTrue(CollectionUtils.isNotEmpty(usageAuditItems));
+            assertEquals(1, CollectionUtils.size(usageAuditItems));
+            UsageAuditItem auditItem = usageAuditItems.get(0);
+            assertEquals(UsageActionTypeEnum.LOADED, auditItem.getActionType());
+            assertEquals(String.format("Uploaded in '%s' Batch", batch.getName()), auditItem.getActionReason());
+        });
     }
 
     private void verifyErrorNotificationWindow() {
