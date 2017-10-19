@@ -119,7 +119,7 @@ public abstract class BaseCsvReportHandler implements ResultHandler, AutoCloseab
     /**
      * The cell processor to transform zero big decimal to string for report.
      */
-    static class ZeroBigDecimalCellProcessor implements CellProcessor {
+    static class BigDecimalCellProcessor implements CellProcessor {
         @Override
         public Object execute(Object value, CsvContext context) {
             return value instanceof BigDecimal && ((BigDecimal) value).signum() == 0 ? "0.00" : value;

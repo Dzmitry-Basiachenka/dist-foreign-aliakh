@@ -5,7 +5,6 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
 
-import java.io.OutputStream;
 import java.io.PipedOutputStream;
 import java.util.List;
 import java.util.Set;
@@ -51,10 +50,10 @@ public interface IUsageRepository {
     /**
      * Finds usages according to given {@link UsageFilter} and writes them to the output stream in CSV format.
      *
-     * @param filter       instance of {@link UsageFilter}
-     * @param outputStream instance of {@link OutputStream}
+     * @param filter            instance of {@link UsageFilter}
+     * @param pipedOutputStream instance of {@link PipedOutputStream}
      */
-    void writeUsagesCsvReport(UsageFilter filter, OutputStream outputStream);
+    void writeUsagesCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream);
 
     /**
      * Finds usages by scenario id and writes them into the output stream in CSV format.

@@ -48,10 +48,10 @@ public interface IUsageService {
     /**
      * Writes usages found by filter into csv output stream.
      *
-     * @param filter       instance of {@link UsageFilter}
-     * @param outputStream instance of {@link OutputStream}
+     * @param filter            instance of {@link UsageFilter}
+     * @param pipedOutputStream instance of {@link PipedOutputStream}
      */
-    void writeUsageCsvReport(UsageFilter filter, OutputStream outputStream);
+    void writeUsageCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream);
 
     /**
      * Writes scenario usages into csv output stream.

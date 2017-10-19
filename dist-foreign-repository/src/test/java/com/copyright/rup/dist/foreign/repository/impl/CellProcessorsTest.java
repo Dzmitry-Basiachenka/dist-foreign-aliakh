@@ -2,10 +2,10 @@ package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
 
+import com.copyright.rup.dist.foreign.repository.impl.BaseCsvReportHandler.BigDecimalCellProcessor;
 import com.copyright.rup.dist.foreign.repository.impl.BaseCsvReportHandler.DateCellProcessor;
 import com.copyright.rup.dist.foreign.repository.impl.BaseCsvReportHandler.FiscalYearCellProcessor;
 import com.copyright.rup.dist.foreign.repository.impl.BaseCsvReportHandler.ServiceFeePercentCellProcessor;
-import com.copyright.rup.dist.foreign.repository.impl.BaseCsvReportHandler.ZeroBigDecimalCellProcessor;
 
 import org.junit.Test;
 
@@ -39,13 +39,13 @@ public class CellProcessorsTest {
     }
 
     @Test
-    public void testZeroBigDecimalCellProcessor() {
-        assertEquals("0.00", new ZeroBigDecimalCellProcessor().execute(BigDecimal.ZERO.setScale(10), null));
+    public void testBigDecimalCellProcessor() {
+        assertEquals("0.00", new BigDecimalCellProcessor().execute(BigDecimal.ZERO.setScale(10), null));
     }
 
     @Test
-    public void testZeroBigDecimalCellProcessorNotZeroValue() {
+    public void testBigDecimalCellProcessorNotZeroValue() {
         assertEquals(BigDecimal.ONE.setScale(10),
-            new ZeroBigDecimalCellProcessor().execute(BigDecimal.ONE.setScale(10), null));
+            new BigDecimalCellProcessor().execute(BigDecimal.ONE.setScale(10), null));
     }
 }
