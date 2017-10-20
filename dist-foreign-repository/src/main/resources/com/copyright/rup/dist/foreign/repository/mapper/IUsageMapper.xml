@@ -70,6 +70,9 @@
         <result property="marketPeriodTo" column="market_period_to"/>
         <result property="author" column="author"/>
         <result property="numberOfCopies" column="number_of_copies"/>
+        <result property="payee.id" column="payee_id"/>
+        <result property="payee.accountNumber" column="payee_account_number"/>
+        <result property="payee.name" column="payee_name"/>
     </resultMap>
 
     <sql id="usageColumns">
@@ -400,6 +403,10 @@
             u.work_title,
             u.rh_account_number,
             r.name rh_name,
+            r.df_rightsholder_uid rh_id,
+            u.payee_account_number,
+            p.name payee_name,
+            p.df_rightsholder_uid payee_id,
             u.status_ind,
             u.article,
             u.standard_number,
@@ -420,6 +427,7 @@
             u.record_version
         from ${schema}.df_usage u
         left join ${schema}.df_rightsholder r on r.rh_account_number = u.rh_account_number
+        left join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
         where u.detail_id = #{detailId}
     </select>
 
@@ -468,6 +476,7 @@
         set
             status_ind = #{status},
             df_scenario_uid = null,
+            payee_account_number = null,
             <include refid="StoredEntityMapper.update"/>
         where df_scenario_uid = #{scenarioId}
     </update>

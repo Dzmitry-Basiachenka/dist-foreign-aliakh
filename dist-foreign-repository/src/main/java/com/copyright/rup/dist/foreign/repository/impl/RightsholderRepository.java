@@ -7,6 +7,9 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.foreign.repository.api.IRightsholderRepository;
 
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Repository;
 
@@ -60,6 +63,9 @@ public class RightsholderRepository extends BaseRepository implements IRightshol
     @Override
     public List<Rightsholder> findRightsholdersByAccountNumbers(Set<Long> accountNumbers) {
         checkArgument(CollectionUtils.isNotEmpty(accountNumbers));
-        return selectList("IRightsholderMapper.findRightsholdersByAccountNumbers", accountNumbers);
+        List<Rightsholder> result = Lists.newArrayList();
+        Iterables.partition(accountNumbers, 32000).forEach(partition -> result.addAll(
+            selectList("IRightsholderMapper.findRightsholdersByAccountNumbers", partition)));
+        return result;
     }
 }

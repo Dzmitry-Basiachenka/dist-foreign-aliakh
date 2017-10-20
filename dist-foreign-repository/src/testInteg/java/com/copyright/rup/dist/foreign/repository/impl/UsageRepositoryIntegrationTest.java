@@ -598,6 +598,7 @@ public class UsageRepositoryIntegrationTest {
             SCENARIO_ID, searchValue));
     }
 
+    // TODO {aradkevich} add verification of payee account number after resolving issue with hovering test
     private void verifyUsage(Usage usage, UsageStatusEnum status, String scenarioId, String defaultUser) {
         assertNotNull(usage);
         assertEquals(status, usage.getStatus());
