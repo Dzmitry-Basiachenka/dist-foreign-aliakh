@@ -80,20 +80,10 @@ public class ScenarioController extends CommonController<IScenarioWidget> implem
         return new ScenarioWidget();
     }
 
-    /**
-     * Sets scenario.
-     *
-     * @param scenario instance of {@link Scenario}
-     */
     void setScenario(Scenario scenario) {
         this.scenario = scenario;
     }
 
-    /**
-     * Sets {@link IDrillDownByRightsholderController}.
-     *
-     * @param drillDownByRightsholderController {@link IDrillDownByRightsholderController}
-     */
     void setDrillDownByRightsholderController(IDrillDownByRightsholderController drillDownByRightsholderController) {
         this.drillDownByRightsholderController = drillDownByRightsholderController;
     }

@@ -144,14 +144,14 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public int getUsagesCountByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue) {
-        return usageRepository.getUsagesCountByScenarioIdAndRhAccountNumber(accountNumber, scenarioId, searchValue);
+    public int getCountByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue) {
+        return usageRepository.getCountByScenarioIdAndRhAccountNumber(accountNumber, scenarioId, searchValue);
     }
 
     @Override
-    public List<UsageDto> getUsagesByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId,
-                                                                  String searchValue, Pageable pageable, Sort sort) {
-        return usageRepository.getUsagesByScenarioIdAndRhAccountNumber(accountNumber, scenarioId, searchValue, pageable,
+    public List<UsageDto> getByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId,
+                                                            String searchValue, Pageable pageable, Sort sort) {
+        return usageRepository.getByScenarioIdAndRhAccountNumber(accountNumber, scenarioId, searchValue, pageable,
             sort);
     }
 

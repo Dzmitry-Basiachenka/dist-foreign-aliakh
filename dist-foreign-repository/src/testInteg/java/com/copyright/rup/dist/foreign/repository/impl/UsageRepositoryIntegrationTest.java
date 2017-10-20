@@ -376,26 +376,26 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testGetUsagesCountByScenarioIdAndRhAccountNumberNullSearchValue() {
+    public void testGetCountByScenarioIdAndRhAccountNumberNullSearchValue() {
         populateScenario();
         String usageUuid = RupPersistUtils.generateUuid();
         usageRepository.insert(buildUsage(usageUuid, USAGE_BATCH_ID_1));
         usageRepository.addToScenario(Collections.singletonList(usageUuid), SCENARIO_ID, USER_NAME);
-        assertEquals(1, usageRepository.getUsagesCountByScenarioIdAndRhAccountNumber(1000009997L, SCENARIO_ID, null));
-        assertEquals(3, usageRepository.getUsagesCountByScenarioIdAndRhAccountNumber(1000002859L, SCENARIO_ID, null));
+        assertEquals(1, usageRepository.getCountByScenarioIdAndRhAccountNumber(1000009997L, SCENARIO_ID, null));
+        assertEquals(3, usageRepository.getCountByScenarioIdAndRhAccountNumber(1000002859L, SCENARIO_ID, null));
     }
 
     @Test
-    public void testGetUsagesByScenarioIdAndRhAccountNumberNullSearchValue() {
+    public void testGetByScenarioIdAndRhAccountNumberNullSearchValue() {
         populateScenario();
-        assertEquals(1, usageRepository.getUsagesByScenarioIdAndRhAccountNumber(1000009997L, SCENARIO_ID, null,
+        assertEquals(1, usageRepository.getByScenarioIdAndRhAccountNumber(1000009997L, SCENARIO_ID, null,
             new Pageable(0, 200), null).size());
-        assertEquals(3, usageRepository.getUsagesByScenarioIdAndRhAccountNumber(1000002859L, SCENARIO_ID, null,
+        assertEquals(3, usageRepository.getByScenarioIdAndRhAccountNumber(1000002859L, SCENARIO_ID, null,
             new Pageable(0, 200), null).size());
     }
 
     @Test
-    public void testGetUsagesByScenarioIdAndRhAccountNumberSearchByRorName() {
+    public void testGetByScenarioIdAndRhAccountNumberSearchByRorName() {
         populateScenario();
         verifySearch("Access Copyright, The Canadian Copyright Agency", 1);
         verifySearch("Academic", 2);
@@ -404,7 +404,7 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testGetUsagesByScenarioIdAndRhAccountNumberSearchByRorAccountNumber() {
+    public void testGetByScenarioIdAndRhAccountNumberSearchByRorAccountNumber() {
         populateScenario();
         verifySearch("7001440663", 2);
         verifySearch("0001700", 1);
@@ -412,7 +412,7 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testGetUsagesByScenarioIdAndRhAccountNumberSearchDetailId() {
+    public void testGetByScenarioIdAndRhAccountNumberSearchDetailId() {
         populateScenario();
         verifySearch("6997788885", 1);
         verifySearch("78888", 3);
@@ -420,7 +420,7 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testGetUsagesByScenarioIdAndRhAccountNumberSearchByWrWrkInst() {
+    public void testGetByScenarioIdAndRhAccountNumberSearchByWrWrkInst() {
         populateScenario();
         verifySearch("243904752", 2);
         verifySearch("244614", 1);
@@ -428,7 +428,7 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testGetUsagesByScenarioIdAndRhAccountNumberSearchByStandardNumber() {
+    public void testGetByScenarioIdAndRhAccountNumberSearchByStandardNumber() {
         populateScenario();
         verifySearch("1008902002377655XX", 1);
         verifySearch("1008902002377655xx", 1);
@@ -580,9 +580,9 @@ public class UsageRepositoryIntegrationTest {
     }
 
     private void verifySearch(String searchValue, int expectedSize) {
-        assertEquals(expectedSize, usageRepository.getUsagesByScenarioIdAndRhAccountNumber(1000002859L, SCENARIO_ID,
+        assertEquals(expectedSize, usageRepository.getByScenarioIdAndRhAccountNumber(1000002859L, SCENARIO_ID,
             searchValue, new Pageable(0, 200), null).size());
-        assertEquals(expectedSize, usageRepository.getUsagesCountByScenarioIdAndRhAccountNumber(1000002859L,
+        assertEquals(expectedSize, usageRepository.getCountByScenarioIdAndRhAccountNumber(1000002859L,
             SCENARIO_ID, searchValue));
     }
 

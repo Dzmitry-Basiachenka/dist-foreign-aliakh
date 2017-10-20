@@ -137,7 +137,7 @@ public interface IUsageRepository {
      * @param searchValue   search value
      * @return count of usage details
      */
-    int getUsagesCountByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue);
+    int getCountByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue);
 
     /**
      * Gets list of {@link UsageDto}s based on {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier and
@@ -150,6 +150,6 @@ public interface IUsageRepository {
      * @param sort          instance of {@link Sort}
      * @return list of {@link UsageDto}s
      */
-    List<UsageDto> getUsagesByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue,
-                                                           Pageable pageable, Sort sort);
+    List<UsageDto> getByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue,
+                                                     Pageable pageable, Sort sort);
 }
