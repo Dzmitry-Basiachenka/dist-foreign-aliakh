@@ -4,6 +4,10 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
+
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -34,5 +38,10 @@ public class PrmIntegrationServiceMock implements IPrmIntegrationService {
         rightsholder.setAccountNumber(accountNumber);
         rightsholder.setName("Access Copyright, The Canadian Copyright Agency");
         return rightsholder;
+    }
+
+    @Override
+    public Table<String, String, Long> getRollUps(Collection<String> rightsholdersIds) {
+        return HashBasedTable.create();
     }
 }
