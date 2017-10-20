@@ -33,6 +33,7 @@ public class ApplicationContextTest {
             assertNotNull(context.getBean(RestTemplate.class));
             assertNotNull(context.getBean(IPrmIntegrationService.class));
             assertNotNull(context.getBean(IPrmRightsholderService.class));
+            assertNotNull(context.getBean("dist.common.integration.rest.prmRollUpService"));
         } catch (Exception e) {
             fail("Context is not valid: " + e.getMessage());
         }

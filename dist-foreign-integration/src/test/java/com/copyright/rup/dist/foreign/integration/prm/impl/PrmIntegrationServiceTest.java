@@ -12,7 +12,9 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.integration.rest.prm.IPrmRightsholderService;
+import com.copyright.rup.dist.common.integration.rest.prm.IPrmRollUpService;
 
+import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
@@ -39,12 +41,15 @@ public class PrmIntegrationServiceTest {
     private static final String RIGHTSHOLDER_NAME = "CANADIAN CERAMIC SOCIETY";
     private IPrmRightsholderService prmRightsholderService;
     private PrmIntegrationService prmIntegrationService;
+    private IPrmRollUpService prmRollUpService;
 
     @Before
     public void setUp() {
         prmIntegrationService = new PrmIntegrationService();
         prmRightsholderService = createMock(IPrmRightsholderService.class);
+        prmRollUpService = createMock(IPrmRollUpService.class);
         Whitebox.setInternalState(prmIntegrationService, "prmRightsholderService", prmRightsholderService);
+        Whitebox.setInternalState(prmIntegrationService, "prmRollUpService", prmRollUpService);
     }
 
     @Test
@@ -87,6 +92,18 @@ public class PrmIntegrationServiceTest {
         replay(prmRightsholderService);
         assertNull(prmIntegrationService.getRightsholder(ACCOUNT_NUMBER));
         verify(prmRightsholderService);
+    }
+
+    @Test
+    public void testGetRollUps() {
+        String rightsholderId = RupPersistUtils.generateUuid();
+        Set<String> rightsholdersIds = Collections.singleton(rightsholderId);
+        HashBasedTable<String, String, Long> result = HashBasedTable.create(1, 1);
+        result.put(rightsholderId, "FAS", ACCOUNT_NUMBER);
+        expect(prmRollUpService.getRollUps(rightsholdersIds)).andReturn(result).once();
+        replay(prmRollUpService);
+        assertEquals(result, prmIntegrationService.getRollUps(rightsholdersIds));
+        verify(prmRollUpService);
     }
 
     private Rightsholder buildRightsholder(Long accountNumber, String name) {
