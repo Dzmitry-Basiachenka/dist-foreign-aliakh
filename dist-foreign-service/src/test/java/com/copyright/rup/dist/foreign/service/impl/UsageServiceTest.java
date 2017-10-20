@@ -178,7 +178,7 @@ public class UsageServiceTest {
     @Test
     public void testGetUsagesWithAmounts() {
         UsageFilter usageFilter = new UsageFilter();
-        expect(usageRepository.findWithAmounts(usageFilter)).andReturn(Collections.emptyList()).once();
+        expect(usageRepository.findWithAmountsAndRightsholders(usageFilter)).andReturn(Collections.emptyList()).once();
         replay(usageRepository);
         assertTrue(CollectionUtils.isEmpty(usageService.getUsagesWithAmounts(usageFilter)));
         verify(usageRepository);

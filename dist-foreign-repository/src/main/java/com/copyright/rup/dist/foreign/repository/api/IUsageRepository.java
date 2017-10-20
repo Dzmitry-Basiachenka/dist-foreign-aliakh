@@ -77,7 +77,7 @@ public interface IUsageRepository {
      * @param filter instance of {@link UsageFilter}
      * @return the list of {@link Usage}s only with information about gross amount, net amount and reported value
      */
-    List<Usage> findWithAmounts(UsageFilter filter);
+    List<Usage> findWithAmountsAndRightsholders(UsageFilter filter);
 
     /**
      * Updates scenario id, updated user name and status to 'LOCKED' for {@link Usage}s.

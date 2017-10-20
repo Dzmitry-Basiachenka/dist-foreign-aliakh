@@ -40,6 +40,7 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.IntStream;
 
 /**
  * Integration test for {@link UsageRepository}.
@@ -515,46 +516,57 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindWithAmounts() {
+    public void testFindWithAmountsAndRightsholders() {
         UsageFilter usageFilter =
             buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.singleton(USAGE_BATCH_ID_1),
                 UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, FISCAL_YEAR);
-        verifyUsages(usageRepository.findWithAmounts(usageFilter), 1, USAGE_ID_1);
+        verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 1, USAGE_ID_1);
+    }
+
+    // TODO {abayanouskaya} Add verification for all fields
+    @Test
+    public void testVerifyFindWithAmountsAndRightsholders() {
+        UsageFilter usageFilter =
+            buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.singleton(USAGE_BATCH_ID_1),
+                UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, FISCAL_YEAR);
+        List<Usage> list = usageRepository.findWithAmountsAndRightsholders(usageFilter);
+        assertEquals(1, list.size());
+        verifyRightsholderInUsage(list.get(0));
     }
 
     @Test
-    public void testFindWithAmountsByUsageBatchFilter() {
+    public void testFindWithAmountsAndRightsholdersByUsageBatchFilter() {
         UsageFilter usageFilter =
             buildUsageFilter(Collections.emptySet(), Collections.singleton(USAGE_BATCH_ID_1), null, null, null);
-        verifyUsages(usageRepository.findWithAmounts(usageFilter), 1, USAGE_ID_1);
+        verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 1, USAGE_ID_1);
     }
 
     @Test
-    public void testFindWithAmountsByRhAccountNumberFilter() {
+    public void testFindWithAmountsAndRightsholdersByRhAccountNumberFilter() {
         UsageFilter usageFilter =
             buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.emptySet(), null, null, null);
-        verifyUsages(usageRepository.findWithAmounts(usageFilter), 1, USAGE_ID_1);
+        verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 1, USAGE_ID_1);
     }
 
     @Test
-    public void testFindWithAmountsByStatusFilter() {
+    public void testFindWithAmountsAndRightsholdersByStatusFilter() {
         UsageFilter usageFilter =
             buildUsageFilter(Collections.emptySet(), Collections.emptySet(), UsageStatusEnum.ELIGIBLE, null, null);
-        verifyUsages(usageRepository.findWithAmounts(usageFilter), 2, USAGE_ID_1, USAGE_ID_3);
+        verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 2, USAGE_ID_1, USAGE_ID_3);
     }
 
     @Test
-    public void testFindWithAmountsByPaymentDateFilter() {
+    public void testFindWithAmountsAndRightsholdersByPaymentDateFilter() {
         UsageFilter usageFilter =
             buildUsageFilter(Collections.emptySet(), Collections.emptySet(), null, PAYMENT_DATE, null);
-        verifyUsages(usageRepository.findWithAmounts(usageFilter), 2, USAGE_ID_1, USAGE_ID_2);
+        verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 2, USAGE_ID_1, USAGE_ID_2);
     }
 
     @Test
-    public void testFindWithAmountsByFiscalYearFilter() {
+    public void testFindWithAmountsAndRightsholdersByFiscalYearFilter() {
         UsageFilter usageFilter =
             buildUsageFilter(Collections.emptySet(), Collections.emptySet(), null, null, FISCAL_YEAR);
-        verifyUsages(usageRepository.findWithAmounts(usageFilter), 2, USAGE_ID_1, USAGE_ID_2);
+        verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 2, USAGE_ID_1, USAGE_ID_2);
     }
 
     @Test
@@ -654,16 +666,19 @@ public class UsageRepositoryIntegrationTest {
     private void verifyUsageDtos(List<UsageDto> usageDtos, int count, String... usageIds) {
         assertNotNull(usageDtos);
         assertEquals(count, usageDtos.size());
-        for (int i = 0; i < count; i++) {
-            assertEquals(usageIds[i], usageDtos.get(i).getId());
-        }
+        IntStream.range(0, count - 1).forEach(i -> assertEquals(usageIds[i], usageDtos.get(i).getId()));
     }
 
     private void verifyUsages(List<Usage> usages, int count, String... usageIds) {
         assertNotNull(usages);
         assertEquals(count, usages.size());
-        for (int i = 0; i < count; i++) {
-            assertEquals(usageIds[i], usages.get(i).getId());
-        }
+        IntStream.range(0, count - 1).forEach(i -> assertEquals(usageIds[i], usages.get(i).getId()));
+    }
+
+    private void verifyRightsholderInUsage(Usage usage) {
+        assertNotNull(usage);
+        assertNotNull(usage.getRightsholder().getId());
+        assertNotNull(usage.getRightsholder().getAccountNumber());
+        assertNotNull(usage.getRightsholder().getName());
     }
 }
