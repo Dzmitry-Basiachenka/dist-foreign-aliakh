@@ -110,7 +110,7 @@ public class UsageService implements IUsageService {
 
     @Override
     public List<Usage> getUsagesWithAmounts(UsageFilter filter) {
-        return usageRepository.findWithAmounts(filter);
+        return usageRepository.findWithAmountsAndRightsholders(filter);
     }
 
     @Override
