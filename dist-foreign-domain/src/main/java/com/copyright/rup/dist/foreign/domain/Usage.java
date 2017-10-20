@@ -27,7 +27,8 @@ public class Usage extends StoredEntity<String> {
     private String scenarioId;
     private Long wrWrkInst;
     private String workTitle;
-    private Rightsholder rightsholder;
+    private Rightsholder rightsholder = new Rightsholder();
+    private Rightsholder payee = new Rightsholder();
     private String article;
     private String standardNumber;
     private String publisher;
@@ -44,249 +45,126 @@ public class Usage extends StoredEntity<String> {
     private BigDecimal grossAmount = BigDecimal.ZERO;
     private UsageStatusEnum status;
 
-    /**
-     * @return detail id.
-     */
     public Long getDetailId() {
         return detailId;
     }
 
-    /**
-     * Sets detail id.
-     *
-     * @param detailId detail id
-     */
     public void setDetailId(Long detailId) {
         this.detailId = detailId;
     }
 
-    /**
-     * @return batch id.
-     */
     public String getBatchId() {
         return batchId;
     }
 
-    /**
-     * Sets batch id.
-     *
-     * @param batchId batch id
-     */
     public void setBatchId(String batchId) {
         this.batchId = batchId;
     }
 
-    /**
-     * @return scenario id.
-     */
     public String getScenarioId() {
         return scenarioId;
     }
 
-    /**
-     * Sets scenario id.
-     *
-     * @param scenarioId scenario id
-     */
     public void setScenarioId(String scenarioId) {
         this.scenarioId = scenarioId;
     }
 
-    /**
-     * @return work identifier.
-     */
     public Long getWrWrkInst() {
         return wrWrkInst;
     }
 
-    /**
-     * Sets work identifier.
-     *
-     * @param wrWrkInst work identifier
-     */
     public void setWrWrkInst(Long wrWrkInst) {
         this.wrWrkInst = wrWrkInst;
     }
 
-    /**
-     * @return work title.
-     */
     public String getWorkTitle() {
         return workTitle;
     }
 
-    /**
-     * Sets work title.
-     *
-     * @param workTitle work title
-     */
     public void setWorkTitle(String workTitle) {
         this.workTitle = workTitle;
     }
 
-    /**
-     * @return rights holder.
-     */
     public Rightsholder getRightsholder() {
         return rightsholder;
     }
 
-    /**
-     * Sets rights holder.
-     *
-     * @param rightsholder rights holder
-     */
     public void setRightsholder(Rightsholder rightsholder) {
         this.rightsholder = rightsholder;
     }
 
-    /**
-     * @return article.
-     */
     public String getArticle() {
         return article;
     }
 
-    /**
-     * Sets article.
-     *
-     * @param article article
-     */
     public void setArticle(String article) {
         this.article = article;
     }
 
-    /**
-     * @return standard number.
-     */
     public String getStandardNumber() {
         return standardNumber;
     }
 
-    /**
-     * Sets standard number.
-     *
-     * @param standardNumber standard number
-     */
     public void setStandardNumber(String standardNumber) {
         this.standardNumber = standardNumber;
     }
 
-    /**
-     * @return publisher.
-     */
     public String getPublisher() {
         return publisher;
     }
 
-    /**
-     * Sets publication date.
-     *
-     * @param publisher publisher
-     */
     public void setPublisher(String publisher) {
         this.publisher = publisher;
     }
 
-    /**
-     * @return publication date.
-     */
     public LocalDate getPublicationDate() {
         return publicationDate;
     }
 
-    /**
-     * Sets publication date.
-     *
-     * @param publicationDate publication date
-     */
     public void setPublicationDate(LocalDate publicationDate) {
         this.publicationDate = publicationDate;
     }
 
-    /**
-     * @return market.
-     */
     public String getMarket() {
         return market;
     }
 
-    /**
-     * Sets market.
-     *
-     * @param market market
-     */
     public void setMarket(String market) {
         this.market = market;
     }
 
-    /**
-     * @return market period from.
-     */
     public Integer getMarketPeriodFrom() {
         return marketPeriodFrom;
     }
 
-    /**
-     * Sets market period from.
-     *
-     * @param marketPeriodFrom market period from
-     */
     public void setMarketPeriodFrom(Integer marketPeriodFrom) {
         this.marketPeriodFrom = marketPeriodFrom;
     }
 
-    /**
-     * @return market period to.
-     */
     public Integer getMarketPeriodTo() {
         return marketPeriodTo;
     }
 
-    /**
-     * Sets market period to.
-     *
-     * @param marketPeriodTo market period to
-     */
     public void setMarketPeriodTo(Integer marketPeriodTo) {
         this.marketPeriodTo = marketPeriodTo;
     }
 
-    /**
-     * @return author.
-     */
     public String getAuthor() {
         return author;
     }
 
-    /**
-     * Sets author.
-     *
-     * @param author author
-     */
     public void setAuthor(String author) {
         this.author = author;
     }
 
-    /**
-     * @return number of copies.
-     */
     public Integer getNumberOfCopies() {
         return numberOfCopies;
     }
 
-    /**
-     * Sets number of copies.
-     *
-     * @param numberOfCopies number of copies
-     */
     public void setNumberOfCopies(Integer numberOfCopies) {
         this.numberOfCopies = numberOfCopies;
     }
 
-    /**
-     * @return reported value.
-     */
     public BigDecimal getReportedValue() {
         return reportedValue;
     }
@@ -302,9 +180,6 @@ public class Usage extends StoredEntity<String> {
         }
     }
 
-    /**
-     * @return net amount.
-     */
     public BigDecimal getNetAmount() {
         return netAmount;
     }
@@ -320,9 +195,6 @@ public class Usage extends StoredEntity<String> {
         }
     }
 
-    /**
-     * @return service fee.
-     */
     public BigDecimal getServiceFee() {
         return serviceFee;
     }
@@ -338,9 +210,6 @@ public class Usage extends StoredEntity<String> {
         }
     }
 
-    /**
-     * @return service fee amount.
-     */
     public BigDecimal getServiceFeeAmount() {
         return serviceFeeAmount;
     }
@@ -356,9 +225,6 @@ public class Usage extends StoredEntity<String> {
         }
     }
 
-    /**
-     * @return gross amount.
-     */
     public BigDecimal getGrossAmount() {
         return grossAmount;
     }
@@ -374,20 +240,20 @@ public class Usage extends StoredEntity<String> {
         }
     }
 
-    /**
-     * @return status.
-     */
     public UsageStatusEnum getStatus() {
         return status;
     }
 
-    /**
-     * Sets status.
-     *
-     * @param status status
-     */
     public void setStatus(UsageStatusEnum status) {
         this.status = status;
+    }
+
+    public Rightsholder getPayee() {
+        return payee;
+    }
+
+    public void setPayee(Rightsholder payee) {
+        this.payee = payee;
     }
 
     @Override
@@ -422,6 +288,7 @@ public class Usage extends StoredEntity<String> {
             .append(this.serviceFeeAmount, that.serviceFeeAmount)
             .append(this.grossAmount, that.grossAmount)
             .append(this.status, that.status)
+            .append(this.payee, that.payee)
             .isEquals();
     }
 
@@ -450,6 +317,7 @@ public class Usage extends StoredEntity<String> {
             .append(serviceFeeAmount)
             .append(grossAmount)
             .append(status)
+            .append(payee)
             .toHashCode();
     }
 
@@ -478,6 +346,7 @@ public class Usage extends StoredEntity<String> {
             .append("serviceFeeAmount", serviceFeeAmount)
             .append("grossAmount", grossAmount)
             .append("status", status)
+            .append("payee", payee)
             .toString();
     }
 }
