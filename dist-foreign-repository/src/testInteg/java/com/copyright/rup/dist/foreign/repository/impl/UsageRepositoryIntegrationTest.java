@@ -523,15 +523,27 @@ public class UsageRepositoryIntegrationTest {
         verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 1, USAGE_ID_1);
     }
 
-    // TODO {abayanouskaya} Add verification for all fields
     @Test
     public void testVerifyFindWithAmountsAndRightsholders() {
         UsageFilter usageFilter =
             buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.singleton(USAGE_BATCH_ID_1),
                 UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, FISCAL_YEAR);
-        List<Usage> list = usageRepository.findWithAmountsAndRightsholders(usageFilter);
-        assertEquals(1, list.size());
-        verifyRightsholderInUsage(list.get(0));
+        List<Usage> usages = usageRepository.findWithAmountsAndRightsholders(usageFilter);
+        assertEquals(1, usages.size());
+        Usage usage = usages.get(0);
+        assertEquals(USAGE_ID_1, usage.getId());
+        assertEquals(new BigDecimal("13461.5400000000"), usage.getGrossAmount());
+        assertEquals(new BigDecimal("11308.0000000000"), usage.getNetAmount());
+        assertEquals(new BigDecimal("2500.00"), usage.getReportedValue());
+        assertNotNull(usage.getCreateDate());
+        assertNotNull(usage.getUpdateDate());
+        assertEquals("SYSTEM", usage.getCreateUser());
+        assertEquals("SYSTEM", usage.getUpdateUser());
+        assertEquals(1, usage.getVersion());
+        assertNotNull(usage.getRightsholder());
+        assertEquals(1000009997L, usage.getRightsholder().getAccountNumber(), 0);
+        assertEquals("9905f006-a3e1-4061-b3d4-e7ece191103f", usage.getRightsholder().getId());
+        assertEquals("IEEE - Inst of Electrical and Electronics Engrs", usage.getRightsholder().getName());
     }
 
     @Test
@@ -676,10 +688,4 @@ public class UsageRepositoryIntegrationTest {
         IntStream.range(0, count - 1).forEach(i -> assertEquals(usageIds[i], usages.get(i).getId()));
     }
 
-    private void verifyRightsholderInUsage(Usage usage) {
-        assertNotNull(usage);
-        assertNotNull(usage.getRightsholder().getId());
-        assertNotNull(usage.getRightsholder().getAccountNumber());
-        assertNotNull(usage.getRightsholder().getName());
-    }
 }
