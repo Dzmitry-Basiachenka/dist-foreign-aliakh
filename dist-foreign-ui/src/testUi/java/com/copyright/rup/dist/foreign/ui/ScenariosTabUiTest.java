@@ -8,6 +8,7 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
+import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -124,8 +125,13 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
         scenarioToDelete.setStatus(ScenarioStatusEnum.IN_PROGRESS);
         scenarioRepository.insert(scenarioToDelete);
         assertEquals(6, CollectionUtils.size(scenarioRepository.findAll()));
-        usageRepository.addToScenario(Collections.singletonList("366f0fa6-b4c5-11e7-abc4-cec278b6b50a"),
-            scenarioToDelete.getId(), StoredEntity.DEFAULT_USER);
+        Usage usage = new Usage();
+        usage.setId("366f0fa6-b4c5-11e7-abc4-cec278b6b50a");
+        usage.setScenarioId(scenarioToDelete.getId());
+        usage.setStatus(UsageStatusEnum.LOCKED);
+        usage.getPayee().setAccountNumber(2000017004L);
+        usage.setUpdateUser("user@copyright.com");
+        usageRepository.addToScenario(Collections.singletonList(usage));
         UsageFilter filter = new UsageFilter();
         filter.setUsageStatus(UsageStatusEnum.LOCKED);
         filter.setUsageBatchesIds(Sets.newHashSet("56282dbc-2468-48d4-b926-93d3458a656a"));

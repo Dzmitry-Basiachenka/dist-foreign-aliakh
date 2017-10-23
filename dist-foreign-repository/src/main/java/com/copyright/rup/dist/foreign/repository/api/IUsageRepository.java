@@ -80,13 +80,11 @@ public interface IUsageRepository {
     List<Usage> findWithAmountsAndRightsholders(UsageFilter filter);
 
     /**
-     * Updates scenario id, updated user name and status to 'LOCKED' for {@link Usage}s.
+     * Updates scenario id, updated user name, status to 'LOCKED' and payee account number for {@link Usage}s.
      *
-     * @param usageIds   list of usage identifiers
-     * @param scenarioId scenario identifier
-     * @param updateUser name of user who performed this action
+     * @param usages list of {@link Usage}s
      */
-    void addToScenario(List<String> usageIds, String scenarioId, String updateUser);
+    void addToScenario(List<Usage> usages);
 
     /**
      * Deletes {@link Usage}s from scenario. Reverts status of {@link Usage}s

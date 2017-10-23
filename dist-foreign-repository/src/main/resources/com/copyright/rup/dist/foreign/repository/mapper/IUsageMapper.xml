@@ -47,8 +47,10 @@
     </resultMap>
 
     <resultMap id="rightsholderTotalsHolderResultMap" type="RightsholderTotalsHolder">
-        <result property="rightsholderName" column="name"/>
+        <result property="rightsholderName" column="rh_name"/>
         <result property="rightsholderAccountNumber" column="rh_account_number"/>
+        <result property="payeeName" column="payee_name"/>
+        <result property="payeeAccountNumber" column="payee_account_number"/>
         <result property="grossTotal" column="gross_total"/>
         <result property="serviceFeeTotal" column="service_fee_total"/>
         <result property="netTotal" column="net_total"/>
@@ -456,18 +458,15 @@
         <include refid="usageFilter"/>
     </select>
 
-    <update id="addToScenario" parameterType="map">
+    <update id="addToScenario" parameterType="Usage">
         update
             ${schema}.df_usage
         set
             status_ind = #{status},
             df_scenario_uid = #{scenarioId},
+            payee_account_number = #{payee.accountNumber},
             <include refid="StoredEntityMapper.update"/>
-        where df_usage_uid in (
-            <foreach collection="usageIds" item="usageId" separator=", ">
-                #{usageId}
-            </foreach>
-        )
+        where df_usage_uid = #{id}
     </update>
 
     <update id="deleteFromScenario" parameterType="map">
@@ -501,21 +500,25 @@
 
     <select id="getRightsholderTotalsHoldersByScenarioId" parameterType="map" resultMap="rightsholderTotalsHolderResultMap">
         select
-            r.name,
+            r.name rh_name,
             u.rh_account_number,
+            p.name payee_name,
+            u.payee_account_number,
             u.gross_total,
             u.service_fee_total,
             u.net_total
         from (
             select
                 rh_account_number,
+                payee_account_number,
                 sum(gross_amount) gross_total,
                 sum(service_fee_amount) service_fee_total,
                 sum(net_amount) net_total
             from ${schema}.df_usage
             where df_scenario_uid = #{scenarioId}
-            group by rh_account_number) u
+            group by rh_account_number, payee_account_number) u
         left join ${schema}.df_rightsholder r on u.rh_account_number = r.rh_account_number
+        left join ${schema}.df_rightsholder p on u.payee_account_number = p.rh_account_number
         <if test="null != searchValue">
             where <include refid="searchWhereClause"/>
         </if>

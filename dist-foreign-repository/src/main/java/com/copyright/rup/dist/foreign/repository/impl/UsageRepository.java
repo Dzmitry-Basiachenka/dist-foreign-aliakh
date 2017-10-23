@@ -45,11 +45,6 @@ import java.util.Set;
 public class UsageRepository extends BaseRepository implements IUsageRepository {
 
     /**
-     * Spring uses 2-bytes integer which max value is 32767, so set batch size to 32000 to avoid issues.
-     */
-    // TODO {mbezmen} move to BaseRepository in dist-common
-    private static final int BATCH_SIZE_FOR_SELECT = 32000;
-    /**
      * Details ids batch size for finding duplicates. This size was obtained as (32000 / 2 = 16000)
      * where {@code 32000} it's a max value for count of variables in statement and {@code 2} means that statement uses
      * 'in' clause with the same parameters two times.
@@ -61,7 +56,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     private static final String SEARCH_VALUE_KEY = "searchValue";
     private static final String SCENARIO_ID_KEY = "scenarioId";
     private static final String UPDATE_USER_KEY = "updateUser";
-    private static final String USAGE_IDS_KEY = "usageIds";
     private static final String STATUS_KEY = "status";
 
     @Override
@@ -120,16 +114,8 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public void addToScenario(List<String> usageIds, String scenarioId, String updateUser) {
-        checkArgument(CollectionUtils.isNotEmpty(usageIds));
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
-        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put(UPDATE_USER_KEY, Objects.requireNonNull(updateUser));
-        parameters.put(STATUS_KEY, UsageStatusEnum.LOCKED);
-        for (List<String> usageIdsPartition : Iterables.partition(usageIds, BATCH_SIZE_FOR_SELECT)) {
-            parameters.put(USAGE_IDS_KEY, usageIdsPartition);
-            update("IUsageMapper.addToScenario", parameters);
-        }
+    public void addToScenario(List<Usage> usages) {
+        Objects.requireNonNull(usages).forEach(usage -> update("IUsageMapper.addToScenario", usage));
     }
 
     @Override

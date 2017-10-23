@@ -8,7 +8,9 @@ import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.common.util.CalculationUtils;
+import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
@@ -18,7 +20,11 @@ import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvErrorResultWr
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingResult;
 import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.collect.Table;
+
 import org.apache.commons.collections.CollectionUtils;
+import org.perf4j.aop.Profiled;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,6 +58,8 @@ public class UsageService implements IUsageService {
     private IUsageRepository usageRepository;
     @Autowired
     private IUsageAuditService usageAuditService;
+    @Autowired
+    private IPrmIntegrationService prmIntegrationService;
 
     @Override
     public List<UsageDto> getUsages(UsageFilter filter, Pageable pageable, Sort sort) {
@@ -114,9 +122,19 @@ public class UsageService implements IUsageService {
     }
 
     @Override
+    @Profiled(tag = "service.UsageService.addToScenario_{$1.name}")
     public void addUsagesToScenario(List<Usage> usages, Scenario scenario) {
-        usageRepository.addToScenario(usages.stream().map(Usage::getId).collect(Collectors.toList()),
-            scenario.getId(), scenario.getCreateUser());
+        Table<String, String, Long> rollUps = prmIntegrationService.getRollUps(
+            usages.stream().map(usage -> usage.getRightsholder().getId()).collect(Collectors.toSet()));
+        usages.forEach(usage -> {
+            usage.setScenarioId(scenario.getId());
+            usage.setStatus(UsageStatusEnum.LOCKED);
+            usage.setUpdateUser(scenario.getCreateUser());
+            usage.getPayee()
+                .setAccountNumber(MoreObjects.firstNonNull(rollUps.get(usage.getRightsholder().getId(), "FAS"),
+                    usage.getRightsholder().getAccountNumber()));
+        });
+        usageRepository.addToScenario(usages);
     }
 
     @Override

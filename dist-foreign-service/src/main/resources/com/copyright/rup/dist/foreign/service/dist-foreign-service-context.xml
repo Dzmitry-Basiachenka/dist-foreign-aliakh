@@ -13,6 +13,7 @@
 
     <import resource="classpath:/com/copyright/rup/dist/foreign/repository/dist-foreign-repository-context.xml" />
     <import resource="classpath:/com/copyright/rup/dist/foreign/integration/dist-foreign-integration-context.xml" />
+    <import resource="classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-performance-aspect-context.xml" />
 
     <!--Transaction manager configuration-->
     <tx:annotation-driven transaction-manager="txManager"/>
