@@ -19,6 +19,7 @@ import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
+import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
@@ -26,6 +27,7 @@ import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
+import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Lists;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -65,14 +67,17 @@ public class UsageServiceTest {
     private IUsageRepository usageRepository;
     private IUsageAuditService usageAuditService;
     private IUsageService usageService;
+    private IPrmIntegrationService prmIntegrationService;
 
     @Before
     public void setUp() {
         usageRepository = createMock(IUsageRepository.class);
         usageAuditService = createMock(IUsageAuditService.class);
+        prmIntegrationService = createMock(IPrmIntegrationService.class);
         usageService = new UsageService();
         Whitebox.setInternalState(usageService, "usageRepository", usageRepository);
         Whitebox.setInternalState(usageService, "usageAuditService", usageAuditService);
+        Whitebox.setInternalState(usageService, "prmIntegrationService", prmIntegrationService);
     }
 
     @Test
@@ -189,11 +194,17 @@ public class UsageServiceTest {
         Scenario scenario = new Scenario();
         scenario.setId(SCENARIO_ID);
         scenario.setCreateUser(USER_NAME);
-        usageRepository.addToScenario(Lists.newArrayList(USAGE_ID_1, USAGE_ID_2), SCENARIO_ID, USER_NAME);
+        Usage usage1 = buildUsage(USAGE_ID_1);
+        Usage usage2 = buildUsage(USAGE_ID_2);
+        Capture<List<String>> rightsholdersIdsCapture = new Capture<>();
+        List<Usage> usages = Lists.newArrayList(usage1, usage2);
+        usageRepository.addToScenario(usages);
         expectLastCall().once();
-        replay(usageRepository);
-        usageService.addUsagesToScenario(Lists.newArrayList(buildUsage(USAGE_ID_1), buildUsage(USAGE_ID_2)), scenario);
-        verify(usageRepository);
+        expect(prmIntegrationService.getRollUps(capture(rightsholdersIdsCapture)))
+            .andReturn(HashBasedTable.create()).once();
+        replay(usageRepository, prmIntegrationService);
+        usageService.addUsagesToScenario(Lists.newArrayList(usage1, usage2), scenario);
+        verify(usageRepository, prmIntegrationService);
     }
 
     @Test
@@ -264,6 +275,8 @@ public class UsageServiceTest {
     private Usage buildUsage(String usageId) {
         Usage usage = new Usage();
         usage.setId(usageId);
+        usage.getRightsholder().setId(RupPersistUtils.generateUuid());
+        usage.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER);
         return usage;
     }
 }
