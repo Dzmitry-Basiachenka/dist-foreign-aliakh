@@ -23,6 +23,7 @@ import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 import org.easymock.Capture;
 import org.junit.Before;
@@ -109,13 +110,17 @@ public class UsageBatchServiceTest {
     }
 
     @Test
-    public void insertUsageBatch() {
+    public void insertUsageBatch() throws Exception {
         mockStatic(RupContextUtils.class);
         Capture<UsageBatch> captureUsageBatch = new Capture<>();
         UsageBatch usageBatch = new UsageBatch();
         Rightsholder rro = buildRro();
         usageBatch.setRro(rro);
-        List<Usage> usages = Lists.newArrayList(new Usage(), new Usage());
+        Usage usage1 = new Usage();
+        usage1.setRightsholder(buildRightsholder(1000001534L));
+        Usage usage2 = new Usage();
+        usage2.setRightsholder(buildRightsholder(1000009522L));
+        List<Usage> usages = Lists.newArrayList(usage1, usage2);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         usageBatchRepository.insert(capture(captureUsageBatch));
         expectLastCall().once();
@@ -123,14 +128,16 @@ public class UsageBatchServiceTest {
         rightsholderMap.put(RRO_ACCOUNT_NUMBER, rro);
         rightsholderService.updateRightsholder(rro);
         expectLastCall().once();
+        rightsholderService.updateRightsholders(Sets.newHashSet(1000001534L, 1000009522L));
+        expectLastCall().once();
         expect(usageService.insertUsages(usageBatch, usages)).andReturn(2).once();
-        replay(usageBatchRepository, usageService, RupContextUtils.class);
+        replay(usageBatchRepository, usageService, rightsholderService, RupContextUtils.class);
         assertEquals(2, usageBatchService.insertUsageBatch(usageBatch, usages));
         UsageBatch insertedUsageBatch = captureUsageBatch.getValue();
         assertNotNull(insertedUsageBatch);
         assertEquals(USER_NAME, insertedUsageBatch.getUpdateUser());
         assertEquals(USER_NAME, insertedUsageBatch.getCreateUser());
-        verify(usageBatchRepository, usageService, RupContextUtils.class);
+        verify(usageBatchRepository, usageService, rightsholderService, RupContextUtils.class);
     }
 
     @Test
@@ -149,9 +156,14 @@ public class UsageBatchServiceTest {
     }
 
     private Rightsholder buildRro() {
-        Rightsholder rightsholder = new Rightsholder();
-        rightsholder.setAccountNumber(RRO_ACCOUNT_NUMBER);
+        Rightsholder rightsholder = buildRightsholder(RRO_ACCOUNT_NUMBER);
         rightsholder.setName(RRO_NAME);
+        return rightsholder;
+    }
+
+    private Rightsholder buildRightsholder(Long accountNumber) {
+        Rightsholder rightsholder = new Rightsholder();
+        rightsholder.setAccountNumber(accountNumber);
         return rightsholder;
     }
 }

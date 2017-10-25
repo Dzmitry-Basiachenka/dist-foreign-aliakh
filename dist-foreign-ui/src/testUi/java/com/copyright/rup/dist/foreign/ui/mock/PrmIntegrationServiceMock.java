@@ -5,6 +5,7 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 
 import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Table;
 
 import java.util.Collection;
@@ -24,12 +25,15 @@ public class PrmIntegrationServiceMock implements IPrmIntegrationService {
 
     @Override
     public List<Rightsholder> getRightsholders(Set<Long> accountNumbers) {
-        throw new UnsupportedOperationException();
+        Long accountNumber = accountNumbers.iterator().next();
+        return 1000009522L == accountNumber ? Lists.newArrayList(buildRightsholder(accountNumber,
+            "Zoological Society of Pakistan [T]")) : null;
     }
 
     @Override
     public Rightsholder getRightsholder(Long accountNumber) {
-        return 2000017004L == accountNumber ? buildRightsholder(accountNumber) : null;
+        return 2000017004L == accountNumber ? buildRightsholder(accountNumber,
+            "Access Copyright, The Canadian Copyright Agency") : null;
     }
 
     @Override
@@ -37,11 +41,11 @@ public class PrmIntegrationServiceMock implements IPrmIntegrationService {
         return HashBasedTable.create();
     }
 
-    private Rightsholder buildRightsholder(Long accountNumber) {
+    private Rightsholder buildRightsholder(Long accountNumber, String name) {
         Rightsholder rightsholder = new Rightsholder();
         rightsholder.setId(RupPersistUtils.generateUuid());
         rightsholder.setAccountNumber(accountNumber);
-        rightsholder.setName("Access Copyright, The Canadian Copyright Agency");
+        rightsholder.setName(name);
         return rightsholder;
     }
 }

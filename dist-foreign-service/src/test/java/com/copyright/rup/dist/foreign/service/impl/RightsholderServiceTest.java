@@ -13,7 +13,6 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IRightsholderRepository;
-import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -25,8 +24,8 @@ import org.powermock.reflect.Whitebox;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
 
 /**
  * Verifies {@link RightsholderService}.
@@ -44,15 +43,18 @@ public class RightsholderServiceTest {
     private static final String RIGHTSHOLDER_NAME = "Rightsholder Name";
     private IRightsholderRepository rightsholderRepository;
     private IPrmIntegrationService prmIntegrationService;
-    private IRightsholderService rightsholderService;
+    private RightsholderService rightsholderService;
+    private ExecutorService executorService;
 
     @Before
     public void setUp() {
         rightsholderRepository = createMock(IRightsholderRepository.class);
         prmIntegrationService = createMock(IPrmIntegrationService.class);
+        executorService = createMock(ExecutorService.class);
         rightsholderService = new RightsholderService();
         Whitebox.setInternalState(rightsholderService, rightsholderRepository);
         Whitebox.setInternalState(rightsholderService, prmIntegrationService);
+        Whitebox.setInternalState(rightsholderService, executorService);
     }
 
     @Test
@@ -91,7 +93,7 @@ public class RightsholderServiceTest {
     }
 
     @Test
-    public void testGetRightsholdersMapByAccountNumbers() {
+    public void testDoUpdateRightsholders() {
         Rightsholder rightsholder = buildRightsholder(ACCOUNT_NUMBER_1);
         Capture<Set<Long>> accountsCapture = new Capture<>();
         Set<Long> accountNumbers = Sets.newHashSet(ACCOUNT_NUMBER_1, ACCOUNT_NUMBER_2);
@@ -102,9 +104,8 @@ public class RightsholderServiceTest {
         rightsholderRepository.insert(rightsholder);
         expectLastCall().once();
         replay(rightsholderRepository, prmIntegrationService);
-        Map<Long, Rightsholder> result = rightsholderService.updateAndGetRightsholders(accountNumbers);
+        rightsholderService.doUpdateRightsholders(accountNumbers);
         verify(rightsholderRepository, prmIntegrationService);
-        assertEquals(accountNumbers.size(), result.size());
         Set<Long> value = accountsCapture.getValue();
         assertNotNull(value);
         assertEquals(1, value.size());
@@ -112,13 +113,14 @@ public class RightsholderServiceTest {
     }
 
     @Test
-    public void testGetRightsholdersMapAllAccountsPresented() {
+    public void testGetRightsholders() throws Exception {
         Set<Long> accountNumbers = Sets.newHashSet(ACCOUNT_NUMBER_1);
-        expect(rightsholderRepository.findRightsholdersByAccountNumbers(accountNumbers))
-            .andReturn(Collections.singletonList(buildRightsholder(ACCOUNT_NUMBER_1))).once();
-        replay(rightsholderRepository);
-        rightsholderService.updateAndGetRightsholders(accountNumbers);
-        verify(rightsholderRepository);
+        Capture<Runnable> taskCapture = new Capture<>();
+        executorService.execute(capture(taskCapture));
+        expectLastCall().once();
+        replay(executorService);
+        rightsholderService.updateRightsholders(accountNumbers);
+        verify(executorService);
     }
 
     @Test

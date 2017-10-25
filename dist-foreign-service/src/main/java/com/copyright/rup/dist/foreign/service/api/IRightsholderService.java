@@ -3,7 +3,6 @@ package com.copyright.rup.dist.foreign.service.api;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -30,13 +29,12 @@ public interface IRightsholderService {
     void updateRightsholders();
 
     /**
-     * Updates and gets a map of rightsholders by their account numbers. If there is no information about rightsholder
+     * Updates rightsholders by their account numbers. If there is no information about rightsholder
      * with some account number it will be retrieved from PRM using REST call.
      *
      * @param accountNumbers set of rightsholder account numbers
-     * @return map of rightsholders by their account number
      */
-    Map<Long, Rightsholder> updateAndGetRightsholders(Set<Long> accountNumbers);
+    void updateRightsholders(Set<Long> accountNumbers);
 
     /**
      * Inserts specified rightsholder into database if it does not exist.
