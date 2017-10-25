@@ -358,6 +358,7 @@
             u.standard_number,
             u.wr_wrk_inst,
             u.rh_account_number,
+            rh.name rh_name,
             u.publisher,
             u.publication_date,
             u.number_of_copies,
@@ -371,13 +372,12 @@
             u.market_period_to,
             u.author,
             u.payee_account_number,
+            payee.name payee_name,
             ub.name,
             ub.fiscal_year,
             ub.payment_date,
             ub.rro_account_number,
-            rro.name rro_name,
-            rh.name rh_name,
-            payee.name payee_name
+            rro.name rro_name
         from ${schema}.df_usage u
         join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number

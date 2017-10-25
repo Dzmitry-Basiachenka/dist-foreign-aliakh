@@ -122,7 +122,7 @@ public abstract class BaseCsvReportHandler implements ResultHandler, AutoCloseab
     static class BigDecimalCellProcessor implements CellProcessor {
         @Override
         public Object execute(Object value, CsvContext context) {
-            return value instanceof BigDecimal && ((BigDecimal) value).signum() == 0 ? "0.00" : value;
+            return !(value instanceof BigDecimal && ((BigDecimal) value).signum() == 0) ? value : "0.00";
         }
     }
 }
