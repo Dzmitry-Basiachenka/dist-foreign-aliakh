@@ -47,7 +47,7 @@ public class UsageAuditServiceTest {
     public void logActionWithoutScenario() {
         Capture<UsageAuditItem> usageAuditItemCapture = new Capture<>();
         usageAuditRepository.insert(capture(usageAuditItemCapture));
-        expectLastCall();
+        expectLastCall().once();
         replay(usageAuditRepository);
         usageActionService.logAction(USAGE_UID, UsageActionTypeEnum.LOADED, "Uploaded in 'ABC' Batch");
         UsageAuditItem usageAuditItem = usageAuditItemCapture.getValue();
@@ -63,7 +63,7 @@ public class UsageAuditServiceTest {
     public void logActionWithScenario() {
         Capture<UsageAuditItem> usageAuditItemCapture = new Capture<>();
         usageAuditRepository.insert(capture(usageAuditItemCapture));
-        expectLastCall();
+        expectLastCall().once();
         replay(usageAuditRepository);
         usageActionService.logAction(USAGE_UID, buildScenario(), UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO,
             "Scenario ‘ABC’ was deleted");
@@ -79,7 +79,7 @@ public class UsageAuditServiceTest {
     @Test
     public void testDeleteActions() {
         usageAuditRepository.deleteByBatchId(BATCH_UID);
-        expectLastCall();
+        expectLastCall().once();
         replay(usageAuditRepository);
         usageActionService.deleteActions(BATCH_UID);
         verify(usageAuditRepository);

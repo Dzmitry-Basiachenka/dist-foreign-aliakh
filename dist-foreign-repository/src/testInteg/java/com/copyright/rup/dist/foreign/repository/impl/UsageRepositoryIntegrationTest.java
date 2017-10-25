@@ -104,9 +104,9 @@ public class UsageRepositoryIntegrationTest {
     private static final String FISCAL_YEAR_KEY = "fiscalYear";
     private static final String RRO_ACCOUNT_NUMBER_KEY = "rroAccountNumber";
     private static final String PAYMENT_DATE_KEY = "paymentDate";
-    private static final String USAGE_ID_1 = "111111111";
-    private static final String USAGE_ID_2 = "222222222";
-    private static final String USAGE_ID_3 = "444444444";
+    private static final String USAGE_ID_1 = "3ab5e80b-89c0-4d78-9675-54c7ab284450";
+    private static final String USAGE_ID_2 = "8a06905f-37ae-4e1f-8550-245277f8165c";
+    private static final String USAGE_ID_3 = "5c5f8c1c-1418-4cfd-8685-9212f4c421d1";
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
     private static final String USER_NAME = "user@copyright.com";
     private static final BigDecimal NET_AMOUNT = new BigDecimal("25.1500000000");

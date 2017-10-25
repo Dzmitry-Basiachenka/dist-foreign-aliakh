@@ -35,7 +35,7 @@ import java.util.List;
 @Transactional
 public class UsageAuditRepositoryIntegrationTest {
 
-    private static final String USAGE_UID = "111111111";
+    private static final String USAGE_UID = "3ab5e80b-89c0-4d78-9675-54c7ab284450";
 
     @Autowired
     private IUsageAuditRepository usageAuditRepository;
@@ -44,7 +44,7 @@ public class UsageAuditRepositoryIntegrationTest {
     public void testInsertAndFind() {
         UsageAuditItem usageAuditItem = buildUsageAuditItem(USAGE_UID);
         usageAuditRepository.insert(usageAuditItem);
-        usageAuditRepository.insert(buildUsageAuditItem("222222222"));
+        usageAuditRepository.insert(buildUsageAuditItem("8a06905f-37ae-4e1f-8550-245277f8165c"));
         List<UsageAuditItem> usageAuditItems = usageAuditRepository.findByUsageId(USAGE_UID);
         assertTrue(CollectionUtils.isNotEmpty(usageAuditItems));
         assertEquals(1, CollectionUtils.size(usageAuditItems));

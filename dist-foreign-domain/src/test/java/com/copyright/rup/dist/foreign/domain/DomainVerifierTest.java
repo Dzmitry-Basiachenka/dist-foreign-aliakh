@@ -33,7 +33,6 @@ public class DomainVerifierTest {
         this.classToVerify = classToVerify;
     }
 
-
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         Object[][] testData = new Object[][]{

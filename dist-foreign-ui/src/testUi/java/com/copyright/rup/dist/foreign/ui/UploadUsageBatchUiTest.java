@@ -12,10 +12,10 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageAuditRepository;
-import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
+import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
@@ -76,7 +76,7 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
     private UsageBatch usageBatch;
 
     @Autowired
-    private IUsageBatchRepository usageBatchRepository;
+    private IUsageBatchService usageBatchService;
     @Autowired
     private IUsageRepository usageRepository;
     @Autowired
@@ -85,7 +85,7 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
     @After
     public void tearDown() {
         if (null != usageBatch) {
-            deleteUploadedUsageBatch(usageBatch.getId());
+            usageBatchService.deleteUsageBatch(usageBatch);
             usageBatch = null;
         }
     }
@@ -183,7 +183,7 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
     @Test
     // Test case ID: '81989dc2-329b-4ce7-b5d6-97330d02ccd1'
     public void testUploadValidFile() {
-        List<UsageBatch> usageBatches = usageBatchRepository.findAll();
+        List<UsageBatch> usageBatches = usageBatchService.getUsageBatches();
         assertEquals(3, CollectionUtils.size(usageBatches));
         WebElement uploadWindow = openUploadUsageBatchWindow();
         populateValidValuesForUploadWindowFields(uploadWindow);
@@ -192,7 +192,7 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         WebElement successfullyUploadedWindow = assertWebElement(By.className("v-window-contents"));
         assertWebElementText(successfullyUploadedWindow, "Upload completed: 2 records were stored successfully");
         clickButtonAndWait(successfullyUploadedWindow, "Ok");
-        List<UsageBatch> uploadedUsageBatches = usageBatchRepository.findAll().stream()
+        List<UsageBatch> uploadedUsageBatches = usageBatchService.getUsageBatches().stream()
             .filter(usageBatch -> USAGE_BATCH_NAME.equals(usageBatch.getName())).collect(Collectors.toList());
         assertEquals(1, CollectionUtils.size(uploadedUsageBatches));
         usageBatch = uploadedUsageBatches.get(0);
@@ -320,12 +320,6 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         assertEquals(UsageStatusEnum.ELIGIBLE, usage.getStatus());
         assertEquals("Aarseth, Espen J.", usage.getAuthor());
         assertEquals(new BigDecimal("3364.5878761454"), usage.getGrossAmount());
-    }
-
-    private void deleteUploadedUsageBatch(String usageBatchId) {
-        usageAuditRepository.deleteByBatchId(usageBatchId);
-        usageRepository.deleteUsages(usageBatchId);
-        usageBatchRepository.deleteUsageBatch(usageBatchId);
     }
 
     private void verifyRroAccountNameField(WebElement uploadWindow, String value) {

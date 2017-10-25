@@ -35,7 +35,7 @@ databaseChangeLog {
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
-            column(name: 'df_usage_uid', value: '111111111')
+            column(name: 'df_usage_uid', value: '3ab5e80b-89c0-4d78-9675-54c7ab284450')
             column(name: 'df_usage_batch_uid', value: '56282dbc-2468-48d4-b926-93d3458a656a')
             column(name: 'detail_id', value: '6997788888')
             column(name: 'wr_wrk_inst', value: '180382914')
@@ -58,7 +58,7 @@ databaseChangeLog {
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
-            column(name: 'df_usage_uid', value: '222222222')
+            column(name: 'df_usage_uid', value: '8a06905f-37ae-4e1f-8550-245277f8165c')
             column(name: 'df_usage_batch_uid', value: '56282dbc-2468-48d4-b926-94d3458a666a')
             column(name: 'detail_id', value: '6997788885')
             column(name: 'wr_wrk_inst', value: '244614835')
@@ -81,7 +81,7 @@ databaseChangeLog {
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
-            column(name: 'df_usage_uid', value: '333333333')
+            column(name: 'df_usage_uid', value: 'a80a4ca0-3406-467a-b967-ac6e3fb187fb')
             column(name: 'df_usage_batch_uid', value: '56782dbc-2158-48d4-b026-94d3458a666a')
             column(name: 'detail_id', value: '6997788882')
             column(name: 'wr_wrk_inst', value: '108738286')
@@ -102,7 +102,7 @@ databaseChangeLog {
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
-            column(name: 'df_usage_uid', value: '444444444')
+            column(name: 'df_usage_uid', value: '5c5f8c1c-1418-4cfd-8685-9212f4c421d1')
             column(name: 'df_usage_batch_uid', value: '56782dbc-2158-48d4-b026-94d3458a666a')
             column(name: 'detail_id', value: '6997788884')
             column(name: 'wr_wrk_inst', value: '345870577')
@@ -124,16 +124,7 @@ databaseChangeLog {
             column(name: 'service_fee_amount', value: '1102.00')
         }
 
-        rollback {
-            delete(schemaName: dbAppsSchema, tableName: 'df_usage') {
-                where "df_usage_uid in ('111111111', '222222222', '333333333', '444444444')"
-            }
-
-            delete(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
-                where "df_usage_batch_uid in ('56282dbc-2468-48d4-b926-93d3458a656a', " +
-                        "'56282dbc-2468-48d4-b926-94d3458a666a', '56782dbc-2158-48d4-b026-94d3458a666a')"
-            }
-        }
+        rollback ""
     }
 
     changeSet(id: '2017-02-24-00', author: 'Mikalai_Bezmen <mbezmen@copyright.com>') {
