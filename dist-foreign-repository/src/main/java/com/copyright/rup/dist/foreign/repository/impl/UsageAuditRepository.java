@@ -1,9 +1,12 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.repository.api.IUsageAuditRepository;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -28,11 +31,13 @@ public class UsageAuditRepository extends BaseRepository implements IUsageAuditR
 
     @Override
     public void deleteByBatchId(String batchId) {
-        delete("IUsageAuditMapper.deleteByBatchId", Objects.requireNonNull(batchId));
+        checkArgument(StringUtils.isNotBlank(batchId));
+        delete("IUsageAuditMapper.deleteByBatchId", batchId);
     }
 
     @Override
     public List<UsageAuditItem> findByUsageId(String usageId) {
-        return selectList("IUsageAuditMapper.findByUsageId", Objects.requireNonNull(usageId));
+        checkArgument(StringUtils.isNotBlank(usageId));
+        return selectList("IUsageAuditMapper.findByUsageId", usageId);
     }
 }

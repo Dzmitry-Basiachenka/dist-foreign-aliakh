@@ -91,7 +91,7 @@ public class UsageServiceTest {
     }
 
     @Test
-    public void testGetUsageCountsEmptyFilter() {
+    public void testGetUsageCountEmptyFilter() {
         assertEquals(0, usageService.getUsagesCount(new UsageFilter()));
     }
 
