@@ -14,6 +14,7 @@
             <list value-type="java.lang.String">
                 <value>/com/copyright/rup/dist/foreign/db/main-changelog.groovy</value>
                 <value>/com/copyright/rup/dist/foreign/service/integ-test-changelog.groovy</value>
+                <value>/com/copyright/rup/dist/foreign/service/create-scenario-test-changelog.groovy</value>
             </list>
         </property>
         <property name="url">

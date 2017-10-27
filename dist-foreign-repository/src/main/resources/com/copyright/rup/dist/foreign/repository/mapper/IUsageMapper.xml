@@ -107,6 +107,8 @@
         u.work_title,
         u.rh_account_number,
         rh.name rh_name,
+        u.payee_account_number,
+        p.name payee_name,
         u.status_ind,
         u.article,
         u.standard_number,
@@ -137,6 +139,7 @@
         join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         left join ${schema}.df_rightsholder rro on rro.rh_account_number = ub.rro_account_number
+        left join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
     </sql>
 
     <sql id="usageFilter">

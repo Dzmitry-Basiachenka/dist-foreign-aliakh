@@ -89,7 +89,8 @@ public interface IUsageService {
      * Gets the {@link Usage}s based on {@link UsageFilter}.
      *
      * @param filter instance of {@link UsageFilter}
-     * @return the list of {@link Usage}s only with information about gross amount, net amount and reported value
+     * @return the list of {@link Usage}s only with information about gross amount, net amount, reported value and
+     * rightsholder
      */
     List<Usage> getUsagesWithAmounts(UsageFilter filter);
 

@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
 import com.copyright.rup.common.logging.RupLogUtils;
+import com.copyright.rup.dist.common.integration.rest.prm.PrmRollUpService;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -20,7 +21,6 @@ import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvErrorResultWr
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingResult;
 import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.collect.Table;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -131,8 +131,7 @@ public class UsageService implements IUsageService {
             usage.setStatus(UsageStatusEnum.LOCKED);
             usage.setUpdateUser(scenario.getCreateUser());
             usage.getPayee()
-                .setAccountNumber(MoreObjects.firstNonNull(rollUps.get(usage.getRightsholder().getId(), "FAS"),
-                    usage.getRightsholder().getAccountNumber()));
+                .setAccountNumber(PrmRollUpService.getPayeeAccountNumber(rollUps, usage.getRightsholder(), "FAS"));
         });
         usageRepository.addToScenario(usages);
     }

@@ -587,21 +587,22 @@ public class UsageRepositoryIntegrationTest {
     @Test
     public void testAddToScenario() {
         Usage usage = usageRepository.findByDetailId(DETAIL_ID_1);
-        verifyUsage(usage, UsageStatusEnum.ELIGIBLE, null, StoredEntity.DEFAULT_USER);
+        verifyUsage(usage, UsageStatusEnum.ELIGIBLE, null, StoredEntity.DEFAULT_USER, null);
         usage.getPayee().setAccountNumber(2000017004L);
         usage.setStatus(UsageStatusEnum.LOCKED);
         usage.setScenarioId(SCENARIO_ID);
         usage.setUpdateUser(USER_NAME);
         usageRepository.addToScenario(Collections.singletonList(usage));
-        verifyUsage(usageRepository.findByDetailId(DETAIL_ID_1), UsageStatusEnum.LOCKED, SCENARIO_ID, USER_NAME);
+        verifyUsage(usageRepository.findByDetailId(DETAIL_ID_1), UsageStatusEnum.LOCKED, SCENARIO_ID, USER_NAME,
+            2000017004L);
     }
 
     @Test
     public void testDeleteFromScenario() {
         verifyUsage(usageRepository.findByDetailId(DETAIL_ID_2), UsageStatusEnum.LOCKED, SCENARIO_ID,
-            StoredEntity.DEFAULT_USER);
+            StoredEntity.DEFAULT_USER, 1000002859L);
         usageRepository.deleteFromScenario(SCENARIO_ID, USER_NAME);
-        verifyUsage(usageRepository.findByDetailId(DETAIL_ID_2), UsageStatusEnum.ELIGIBLE, null, USER_NAME);
+        verifyUsage(usageRepository.findByDetailId(DETAIL_ID_2), UsageStatusEnum.ELIGIBLE, null, USER_NAME, null);
     }
 
     @Test
@@ -617,12 +618,13 @@ public class UsageRepositoryIntegrationTest {
             SCENARIO_ID, searchValue));
     }
 
-    // TODO {aradkevich} add verification of payee account number after resolving issue with hovering test
-    private void verifyUsage(Usage usage, UsageStatusEnum status, String scenarioId, String defaultUser) {
+    private void verifyUsage(Usage usage, UsageStatusEnum status, String scenarioId, String defaultUser,
+                             Long payeeAccountNumber) {
         assertNotNull(usage);
         assertEquals(status, usage.getStatus());
         assertEquals(scenarioId, usage.getScenarioId());
         assertEquals(defaultUser, usage.getUpdateUser());
+        assertEquals(payeeAccountNumber, usage.getPayee().getAccountNumber());
     }
 
     private UsageFilter buildUsageFilter(Set<Long> accountNumbers, Set<String> usageBatchIds, UsageStatusEnum status,
