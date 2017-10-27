@@ -14,10 +14,6 @@ databaseChangeLog {
             column(name: 'updated_datetime', value: '2017-02-14 11:41:52.735531+03')
         }
 
-        rollback {
-            delete(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
-                where "df_usage_batch_uid in ('56282dbc-2468-48d4-b926-93d3458a656a')"
-            }
-        }
+        rollback ""
     }
 }

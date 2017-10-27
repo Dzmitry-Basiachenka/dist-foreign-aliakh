@@ -1,0 +1,63 @@
+{
+  "response": {
+    "status": {
+      "code": "SUCCESS",
+      "message": "OK"
+    },
+    "content": [
+      "java.util.ArrayList",
+      [
+        {
+          "@class": "com.copyright.rup.party.domain.preference.OrganizationPreferenceRollup",
+          "relatedOrganizationUid": "756299b5-02ce-4f76-b0bc-ee2571cf906e",
+          "relatedExternalOrganizationKey": "7000429266",
+          "pmLicenseProductUid": "*",
+          "preferenceCode": "PAYEE",
+          "preferenceValue": "true",
+          "rollupOrganizationUid": "a5989f7c-fc6f-4e8c-88d4-2fe7bcce8d1f",
+          "rollupExternalOrganizationKey": "1000001820"
+        },
+        {
+          "@class": "com.copyright.rup.party.domain.preference.OrganizationPreferenceRollup",
+          "relatedOrganizationUid": "756299b5-02ce-4f76-b0bc-ee2571cf906e",
+          "relatedExternalOrganizationKey": "7000429266",
+          "pmLicenseProductUid": "FAS",
+          "preferenceCode": "PAYEE",
+          "preferenceValue": "true",
+          "rollupOrganizationUid": "a5989f7c-fc6f-4e8c-88d4-2fe7bcce8d1f",
+          "rollupExternalOrganizationKey": "2000017000"
+        },
+        {
+          "@class": "com.copyright.rup.party.domain.preference.OrganizationPreferenceRollup",
+          "relatedOrganizationUid": "00d4ae90-5fe7-47bf-ace1-781c8d76d4da",
+          "relatedExternalOrganizationKey": "1000001820",
+          "pmLicenseProductUid": "SAL",
+          "preferenceCode": "PAYEE",
+          "preferenceValue": "true",
+          "rollupOrganizationUid": "a5989f7c-fc6f-4e8c-88d4-2fe7bcce8d1f",
+          "rollupExternalOrganizationKey": "2000017000"
+        },
+        {
+          "@class": "com.copyright.rup.party.domain.preference.OrganizationPreferenceRollup",
+          "relatedOrganizationUid": "019acfde-91be-43aa-8871-6305642bcb2c",
+          "relatedExternalOrganizationKey": "1000024497",
+          "pmLicenseProductUid": "FAS",
+          "preferenceCode": "PAYEE",
+          "preferenceValue": "false",
+          "rollupOrganizationUid": "a5989f7c-fc6f-4e8c-88d4-2fe7bcce8d1f",
+          "rollupExternalOrganizationKey": "2000017000"
+        },
+        {
+          "@class": "com.copyright.rup.party.domain.preference.OrganizationPreferenceRollup",
+          "relatedOrganizationUid": "038bf4aa-b6cc-430a-9b32-655954d95278",
+          "relatedExternalOrganizationKey": "1000002562",
+          "pmLicenseProductUid": "*",
+          "preferenceCode": "PAYEE",
+          "preferenceValue": "true",
+          "rollupOrganizationUid": "a5989f7c-fc6f-4e8c-88d4-2fe7bcce8d1f",
+          "rollupExternalOrganizationKey": "2000017000"
+        }
+      ]
+    ]
+  }
+}

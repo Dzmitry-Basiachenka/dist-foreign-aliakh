@@ -32,16 +32,16 @@ public class PrmIntegrationServiceMock implements IPrmIntegrationService {
         return 2000017004L == accountNumber ? buildRightsholder(accountNumber) : null;
     }
 
+    @Override
+    public Table<String, String, Long> getRollUps(Collection<String> rightsholdersIds) {
+        return HashBasedTable.create();
+    }
+
     private Rightsholder buildRightsholder(Long accountNumber) {
         Rightsholder rightsholder = new Rightsholder();
         rightsholder.setId(RupPersistUtils.generateUuid());
         rightsholder.setAccountNumber(accountNumber);
         rightsholder.setName("Access Copyright, The Canadian Copyright Agency");
         return rightsholder;
-    }
-
-    @Override
-    public Table<String, String, Long> getRollUps(Collection<String> rightsholdersIds) {
-        return HashBasedTable.create();
     }
 }

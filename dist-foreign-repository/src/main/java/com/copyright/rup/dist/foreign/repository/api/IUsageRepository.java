@@ -71,7 +71,7 @@ public interface IUsageRepository {
     void deleteUsages(String batchId);
 
     /**
-     * Finds the {@link Usage}s only with information about gross amount, net amount and reported value
+     * Finds the {@link Usage}s only with information about gross amount, net amount, reported value and rightsholder
      * based on {@link UsageFilter}.
      *
      * @param filter instance of {@link UsageFilter}
