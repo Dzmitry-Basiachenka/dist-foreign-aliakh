@@ -91,8 +91,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
 
     @Override
     public void writeUsagesCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream) {
-        Objects.requireNonNull(pipedOutputStream);
-        try (UsageCsvReportHandler handler = new UsageCsvReportHandler(pipedOutputStream)) {
+        try (UsageCsvReportHandler handler = new UsageCsvReportHandler(Objects.requireNonNull(pipedOutputStream))) {
             if (!Objects.requireNonNull(filter).isEmpty()) {
                 getTemplate().select("IUsageMapper.findByFilter", ImmutableMap.of(FILTER_KEY, filter), handler);
             }

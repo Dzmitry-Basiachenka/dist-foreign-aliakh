@@ -51,7 +51,7 @@ public class UsageCsvReportHandlerTest {
             OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR,
             OPTIONAL_PROCESSOR};
         IntStream.range(0, processors.length)
-            .forEach(index -> assertEquals(processors[index].getClass(), cellProcessors[index].getClass()));
+            .forEach(index -> assertEquals(cellProcessors[index].getClass(), processors[index].getClass()));
     }
 
     @Test
@@ -60,10 +60,10 @@ public class UsageCsvReportHandlerTest {
             .toArray(new String[usagesCsvReportHandler.getPropertyTable().size()]);
         assertTrue(ArrayUtils.isNotEmpty(headers));
         assertEquals(23, headers.length);
-        assertArrayEquals(headers, new String[]{"Detail ID", "Detail Status", "Usage Batch Name",
-            "Fiscal Year", "RRO Account #", "RRO Name", "Payment Date", "Title", "Article", "Standard Number",
-            "Wr Wrk Inst", "RH Account #", "RH Name", "Publisher", "Pub Date", "Number of Copies", "Reported value",
-            "Amt in USD", "Gross Amt in USD", "Market", "Market Period From", "Market Period To", "Author"});
+        assertArrayEquals(new String[]{"Detail ID", "Detail Status", "Usage Batch Name", "Fiscal Year", "RRO Account #",
+            "RRO Name", "Payment Date", "Title", "Article", "Standard Number", "Wr Wrk Inst", "RH Account #", "RH Name",
+            "Publisher", "Pub Date", "Number of Copies", "Reported value", "Amt in USD", "Gross Amt in USD", "Market",
+            "Market Period From", "Market Period To", "Author"}, headers);
     }
 
     @Test
@@ -72,9 +72,9 @@ public class UsageCsvReportHandlerTest {
             .toArray(new String[usagesCsvReportHandler.getPropertyTable().size()]);
         assertTrue(ArrayUtils.isNotEmpty(nameMapping));
         assertEquals(23, nameMapping.length);
-        assertArrayEquals(nameMapping, new String[]{"detailId", "status", "batchName", "fiscalYear",
+        assertArrayEquals(new String[]{"detailId", "status", "batchName", "fiscalYear",
             "rroAccountNumber", "rroName", "paymentDate", "workTitle", "article", "standardNumber", "wrWrkInst",
             "rhAccountNumber", "rhName", "publisher", "publicationDate", "numberOfCopies", "reportedValue",
-            "grossAmount", "batchGrossAmount", "market", "marketPeriodFrom", "marketPeriodTo", "author",});
+            "grossAmount", "batchGrossAmount", "market", "marketPeriodFrom", "marketPeriodTo", "author",}, nameMapping);
     }
 }

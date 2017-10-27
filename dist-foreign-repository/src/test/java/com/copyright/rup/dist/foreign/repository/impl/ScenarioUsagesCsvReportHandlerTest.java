@@ -54,7 +54,7 @@ public class ScenarioUsagesCsvReportHandlerTest {
             OPTIONAL_PROCESSOR, BIG_DECIMAL_PROCESSOR, BIG_DECIMAL_PROCESSOR, new ServiceFeePercentCellProcessor(),
             OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR};
         IntStream.range(0, processors.length)
-            .forEach(index -> assertEquals(processors[index].getClass(), cellProcessors[index].getClass()));
+            .forEach(index -> assertEquals(cellProcessors[index].getClass(), processors[index].getClass()));
     }
 
     @Test
@@ -63,11 +63,11 @@ public class ScenarioUsagesCsvReportHandlerTest {
             .toArray(new String[scenarioUsagesCsvReportHandler.getPropertyTable().size()]);
         assertTrue(ArrayUtils.isNotEmpty(headers));
         assertEquals(26, headers.length);
-        assertArrayEquals(headers, new String[]{"Detail ID", "Usage Batch Name", "Fiscal Year",
-            "RRO Account #", "RRO Name", "Payment Date", "Title", "Article", "Standard Number", "Wr Wrk Inst",
-            "RH Account #", "RH Name", "Payee Account #", "Payee Name", "Publisher", "Pub Date", "Number of Copies",
-            "Reported value", "Gross Amt in USD", "Service Fee Amount", "Net Amt in USD", "Service Fee %", "Market",
-            "Market Period From", "Market Period To", "Author"});
+        assertArrayEquals(new String[]{"Detail ID", "Usage Batch Name", "Fiscal Year", "RRO Account #", "RRO Name",
+            "Payment Date", "Title", "Article", "Standard Number", "Wr Wrk Inst", "RH Account #", "RH Name",
+            "Payee Account #", "Payee Name", "Publisher", "Pub Date", "Number of Copies", "Reported value",
+            "Gross Amt in USD", "Service Fee Amount", "Net Amt in USD", "Service Fee %", "Market", "Market Period From",
+            "Market Period To", "Author"}, headers);
     }
 
     @Test
@@ -76,10 +76,10 @@ public class ScenarioUsagesCsvReportHandlerTest {
             .toArray(new String[scenarioUsagesCsvReportHandler.getPropertyTable().size()]);
         assertTrue(ArrayUtils.isNotEmpty(nameMapping));
         assertEquals(26, nameMapping.length);
-        assertArrayEquals(nameMapping, new String[]{"detailId", "batchName", "fiscalYear",
-            "rroAccountNumber", "rroName", "paymentDate", "workTitle", "article", "standardNumber", "wrWrkInst",
-            "rhAccountNumber", "rhName", "payeeAccountNumber", "payeeName", "publisher", "publicationDate",
-            "numberOfCopies", "reportedValue", "grossAmount", "serviceFeeAmount", "netAmount", "serviceFee", "market",
-            "marketPeriodFrom", "marketPeriodTo", "author"});
+        assertArrayEquals(new String[]{"detailId", "batchName", "fiscalYear", "rroAccountNumber", "rroName",
+            "paymentDate", "workTitle", "article", "standardNumber", "wrWrkInst", "rhAccountNumber", "rhName",
+            "payeeAccountNumber", "payeeName", "publisher", "publicationDate", "numberOfCopies", "reportedValue",
+            "grossAmount", "serviceFeeAmount", "netAmount", "serviceFee", "market", "marketPeriodFrom",
+            "marketPeriodTo", "author"}, nameMapping);
     }
 }
