@@ -14,12 +14,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 /**
  * Implementation of {@link IRightsholderService}.
@@ -34,6 +37,7 @@ import java.util.stream.Collectors;
 public class RightsholderService implements IRightsholderService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
+    private ExecutorService executorService;
 
     @Autowired
     private IRightsholderRepository rightsholderRepository;
@@ -64,34 +68,8 @@ public class RightsholderService implements IRightsholderService {
 
     @Override
     @Transactional
-    public Map<Long, Rightsholder> updateAndGetRightsholders(Set<Long> accountNumbers) {
-        List<Rightsholder> rightsholders = Collections.emptyList();
-        LOGGER.info("Update rightsholders information. Started. RHsCount={}", accountNumbers.size());
-        if (CollectionUtils.isNotEmpty(accountNumbers)) {
-            rightsholders = rightsholderRepository.findRightsholdersByAccountNumbers(accountNumbers);
-            Set<Long> difference = Sets.difference(accountNumbers, rightsholders.stream()
-                .map(Rightsholder::getAccountNumber)
-                .collect(Collectors.toSet()));
-            if (CollectionUtils.isNotEmpty(difference)) {
-                List<Rightsholder> prmRightsholders = prmIntegrationService.getRightsholders(difference);
-                if (CollectionUtils.isNotEmpty(prmRightsholders)) {
-                    prmRightsholders.forEach(rightsholder -> rightsholderRepository.insert(rightsholder));
-                    rightsholders.addAll(prmRightsholders);
-                    LOGGER.info("Update rightsholders information. Finished. RHsCount={}, UpdatedCount={}",
-                        accountNumbers.size(), prmRightsholders.size());
-                } else {
-                    LOGGER.warn("Update rightsholders information. Skipped. RHsCount={}, Reason=No RHs found",
-                        accountNumbers.size());
-                }
-            } else {
-                LOGGER.info("Update rightsholders information. Skipped. RHsCount={}. Rightsholders are up to date",
-                    accountNumbers.size());
-            }
-        }
-        return CollectionUtils.isNotEmpty(rightsholders)
-            ? rightsholders.stream()
-            .collect(Collectors.toMap(Rightsholder::getAccountNumber, rightsholder -> rightsholder))
-            : Collections.emptyMap();
+    public void updateRightsholders(Set<Long> accountNumbers) {
+        executorService.execute(() -> doUpdateRightsholders(accountNumbers));
     }
 
     @Override
@@ -101,5 +79,56 @@ public class RightsholderService implements IRightsholderService {
         rightsholderRepository.deleteByAccountNumber(rightsholder.getAccountNumber());
         rightsholderRepository.insert(rightsholder);
         LOGGER.info("Update rightsholder information. Finished. RhAccount#={}", rightsholder.getAccountNumber());
+    }
+
+    /**
+     * Post construct method.
+     */
+    @PostConstruct
+    void postConstruct() {
+        executorService = Executors.newSingleThreadExecutor();
+    }
+
+    /**
+     * Pre destroy method.
+     */
+    @PreDestroy
+    void preDestroy() {
+        executorService.shutdown();
+    }
+
+    /**
+     * Updates rightsholders by their account numbers. If there is no information about rightsholder
+     * with some account number it will be retrieved from PRM using REST call.
+     *
+     * @param accountNumbers set of rightsholder account numbers
+     */
+    void doUpdateRightsholders(Set<Long> accountNumbers) {
+        synchronized (this) {
+            List<Rightsholder> rightsholders;
+            LOGGER.info("Update rightsholders information. Started. RHsCount={}", accountNumbers.size());
+            if (CollectionUtils.isNotEmpty(accountNumbers)) {
+                rightsholders = rightsholderRepository.findRightsholdersByAccountNumbers(accountNumbers);
+                Set<Long> difference = Sets.difference(accountNumbers,
+                    rightsholders.stream().map(Rightsholder::getAccountNumber).collect(Collectors.toSet()));
+                if (CollectionUtils.isNotEmpty(difference)) {
+                    List<Rightsholder> prmRightsholders = prmIntegrationService.getRightsholders(difference);
+                    if (CollectionUtils.isNotEmpty(prmRightsholders)) {
+                        prmRightsholders.forEach(rightsholder -> rightsholderRepository.insert(rightsholder));
+                        rightsholders.addAll(prmRightsholders);
+                        LOGGER.info("Update rightsholders information. Finished. RHsCount={}, UpdatedCount={}",
+                            accountNumbers.size(), prmRightsholders.size());
+                    } else {
+                        LOGGER.warn(
+                            "Update rightsholders information. Skipped. RHsCount={}, Reason=No RHs found",
+                            accountNumbers.size());
+                    }
+                } else {
+                    LOGGER.info(
+                        "Update rightsholders information. Skipped. RHsCount={}. Rightsholders are up to date",
+                        accountNumbers.size());
+                }
+            }
+        }
     }
 }

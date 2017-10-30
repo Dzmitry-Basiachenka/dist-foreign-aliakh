@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of {@link IUsageBatchService}.
@@ -61,11 +62,14 @@ public class UsageBatchService implements IUsageBatchService {
         usageBatch.setId(RupPersistUtils.generateUuid());
         usageBatch.setCreateUser(userName);
         usageBatch.setUpdateUser(userName);
-        LOGGER.info("Insert usage batch. Started. UsageBatchBatch={}, UserName={}", usageBatch.getName(), userName);
+        LOGGER.info("Insert usage batch. Started. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
         usageBatchRepository.insert(usageBatch);
-        LOGGER.info("Insert usage batch. Finished. UsageBatchBatch={}, UserName={}", usageBatch.getName(), userName);
+        LOGGER.info("Insert usage batch. Finished. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
         rightsholderService.updateRightsholder(usageBatch.getRro());
-        return usageService.insertUsages(usageBatch, usages);
+        int count = usageService.insertUsages(usageBatch, usages);
+        rightsholderService.updateRightsholders(
+            usages.stream().map(usage -> usage.getRightsholder().getAccountNumber()).collect(Collectors.toSet()));
+        return count;
     }
 
     @Override
