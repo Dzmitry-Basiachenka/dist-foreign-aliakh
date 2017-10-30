@@ -51,16 +51,25 @@
 
     <select id="findAccountNumbers" resultType="long">
         select
-            distinct(ub.rro_account_number) as account_number
-        from ${schema}.df_usage_batch as ub
+            distinct rro_account_number account_number
+        from ${schema}.df_usage_batch
         union
         select
-            distinct(u.rh_account_number) as account_number
-        from ${schema}.df_usage as u
+            distinct rh_account_number account_number
+        from ${schema}.df_usage
         union
         select
-            distinct(ua.rh_account_number) as account_number
-        from ${schema}.df_usage_archive as ua
+            distinct payee_account_number account_number
+        from ${schema}.df_usage
+        where payee_account_number is not null
+        union
+        select
+            distinct rh_account_number account_number
+        from ${schema}.df_usage_archive
+        union
+        select
+            distinct payee_account_number account_number
+        from ${schema}.df_usage_archive
     </select>
 
     <delete id="deleteAll">

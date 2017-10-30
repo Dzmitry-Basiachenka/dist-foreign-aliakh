@@ -84,4 +84,19 @@ databaseChangeLog {
             dropColumn(schemaName: dbAppsSchema, tableName: 'df_rightsholder', columnName: 'df_rightsholder_uid')
         }
     }
+
+    changeSet(id: '2017-10-30-00', author: 'Aliaksandr Radkevich <aradkevich@copyright.com>') {
+        comment('B-34404 FDA: Integrate with PRM to get Payee for each detail: ' +
+                'add payee_account_number column to df_usage_archive table')
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+            column(name: 'payee_account_number', type: 'NUMERIC(22,0)', remarks: 'Payee account number') {
+                constraints(nullable: false)
+            }
+        }
+
+        rollback {
+            // automatic rollback
+        }
+    }
 }

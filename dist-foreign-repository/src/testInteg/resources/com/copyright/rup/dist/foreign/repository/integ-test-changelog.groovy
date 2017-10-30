@@ -87,6 +87,7 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: '108738286')
             column(name: 'work_title', value: '2001 tax legislation: law, explanation, and analysis : Economic Growth and Tax Relief Reconciliation Act of 2001')
             column(name: 'rh_account_number', value: '1000008666')
+            column(name: 'payee_account_number', value: '7001555635')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'article', value: 'Google Makes Super')
             column(name: 'standard_number', value: '1008902002377656XX')
@@ -147,7 +148,8 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: '180382915')
             column(name: 'work_title', value: 'High Performance Switching and Routing')
             column(name: 'rh_account_number', value: '1000159997')
-            column(name: 'status_ind', value: 'ELIGIBLE')
+            column(name: 'payee_account_number', value: '7001555529')
+            column(name: 'status_ind', value: 'LOCKED')
             column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water')
             column(name: 'standard_number', value: '1008902992377654XX')
             column(name: 'publisher', value: 'IEEE 015')
@@ -161,15 +163,7 @@ databaseChangeLog {
             column(name: 'gross_amount', value: '15514.18')
         }
 
-        rollback {
-            delete(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
-                where "df_usage_archive_uid = '55555555'"
-            }
-
-            delete(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
-                where "df_usage_batch_uid = '56282cac-2468-48d4-b346-93d3458a656a'"
-            }
-        }
+        rollback ""
     }
 
     changeSet(id: '2017-02-27-00', author: 'Mikalai_Bezmen <mbezmen@copyright.com>') {
@@ -223,12 +217,7 @@ databaseChangeLog {
             column(name: 'name', value: 'JAACC, Japan Academic Association for Copyright Clearance [T]')
         }
 
-        rollback {
-            delete(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
-                where "rh_account_number in ('1000002797', '1000002859', '1000005413', '1000008666', '1000009997', " +
-                        "'2000017004', '7000813806', '7001440663')"
-            }
-        }
+        rollback ""
     }
 
     changeSet(id: '2017-03-16-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
@@ -306,14 +295,6 @@ databaseChangeLog {
             column(name: 'service_fee_amount', value: '192.00')
         }
 
-        rollback {
-            delete(schemaName: dbAppsSchema, tableName: 'df_scenario') {
-                where "df_scenario_uid in ('b1f0b236-3ae9-4a60-9fab-61db84199d6f', 'e27551ed-3f69-4e08-9e4f-8ac03f67595f')"
-            }
-
-            delete(schemaName: dbAppsSchema, tableName: 'df_usage') {
-                where "df_usage_uid in ('b1f0b236-3ae9-4a60-9fab-61db84199dss', 'cf38d390-11bb-4af7-9685-e034c9c32fb6')"
-            }
-        }
+        rollback ""
     }
 }
