@@ -6,8 +6,10 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -69,11 +71,11 @@ public class RightsholderRepositoryIntegrationTest {
     @Test
     public void testFindAccountNumbers() {
         Set<Long> accountNumbers = rightsholderRepository.findAccountNumbers();
-        assertEquals(9, accountNumbers.size());
+        assertEquals(11, accountNumbers.size());
         assertTrue(accountNumbers.containsAll(Lists.newArrayList(RH_ACCOUNT_NUMBER_7000813806,
             RH_ACCOUNT_NUMBER_2000017004, RH_ACCOUNT_NUMBER_7001440663, RH_ACCOUNT_NUMBER_1000009997,
             RH_ACCOUNT_NUMBER_1000002859, RH_ACCOUNT_NUMBER_1000008666, RH_ACCOUNT_NUMBER_1000005413,
-            RH_ACCOUNT_NUMBER_1000159997, RH_ACCOUNT_NUMBER_7000800832)));
+            RH_ACCOUNT_NUMBER_1000159997, RH_ACCOUNT_NUMBER_7000800832, 7001555529L, 7001555635L)));
     }
 
     @Test
