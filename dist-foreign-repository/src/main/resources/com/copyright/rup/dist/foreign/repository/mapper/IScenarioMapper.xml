@@ -9,6 +9,7 @@
         <result property="name" column="name"/>
         <result property="status" column="status_ind"/>
         <result property="netTotal" column="net_total"/>
+        <result property="serviceFeeTotal" column="service_fee_total"/>
         <result property="grossTotal" column="gross_total"/>
         <result property="reportedTotal" column="reported_total"/>
         <result property="description" column="description"/>
@@ -19,6 +20,7 @@
         name,
         status_ind,
         net_total,
+        service_fee_total,
         gross_total,
         reported_total,
         description,
@@ -33,6 +35,7 @@
             #{name},
             #{status},
             #{netTotal},
+            #{serviceFeeTotal},
             #{grossTotal},
             #{reportedTotal},
             #{description},

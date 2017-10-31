@@ -34,12 +34,15 @@
         <result property="serviceFee" column="service_fee"/>
         <result property="payeeAccountNumber" column="payee_account_number"/>
         <result property="payeeName" column="payee_name"/>
+        <result property="rhParticipating" column="is_rh_participating_flag"/>
     </resultMap>
 
     <resultMap id="usageAmountResultMap" type="Usage" extends="StoredEntityMapper.storedEntityResult">
         <result property="id" column="df_usage_uid"/>
         <result property="grossAmount" column="gross_amount"/>
         <result property="netAmount" column="net_amount"/>
+        <result property="serviceFee" column="service_fee"/>
+        <result property="serviceFeeAmount" column="service_fee_amount"/>
         <result property="reportedValue" column="reported_value"/>
         <result property="rightsholder.id" column="rh_id"/>
         <result property="rightsholder.accountNumber" column="rh_account_number"/>
@@ -75,6 +78,7 @@
         <result property="payee.id" column="payee_id"/>
         <result property="payee.accountNumber" column="payee_account_number"/>
         <result property="payee.name" column="payee_name"/>
+        <result property="rhParticipating" column="is_rh_participating_flag"/>
     </resultMap>
 
     <sql id="usageColumns">
@@ -380,7 +384,8 @@
             ub.fiscal_year,
             ub.payment_date,
             ub.rro_account_number,
-            rro.name rro_name
+            rro.name rro_name,
+            u.is_rh_participating_flag
         from ${schema}.df_usage u
         join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
@@ -425,6 +430,7 @@
             u.reported_value,
             u.gross_amount,
             u.net_amount,
+            u.is_rh_participating_flag,
             u.created_datetime,
             u.updated_datetime,
             u.created_by_user,
@@ -446,6 +452,8 @@
             u.df_usage_uid,
             u.gross_amount,
             u.net_amount,
+            u.service_fee,
+            u.service_fee_amount,
             u.reported_value,
             u.created_datetime,
             u.updated_datetime,

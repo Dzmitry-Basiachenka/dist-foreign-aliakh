@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -137,6 +138,7 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(NUMBER_OF_COPIES, usage.getNumberOfCopies());
         assertEquals(REPORTED_VALUE, usage.getReportedValue());
         assertEquals(GROSS_AMOUNT, usage.getGrossAmount());
+        assertFalse(usage.isRhParticipating());
     }
 
     @Test

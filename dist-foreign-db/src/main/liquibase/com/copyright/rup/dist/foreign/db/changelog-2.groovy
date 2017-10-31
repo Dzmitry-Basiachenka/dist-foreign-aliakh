@@ -99,4 +99,38 @@ databaseChangeLog {
             // automatic rollback
         }
     }
+
+    changeSet(id: '2017-11-01-00', author: 'Darya Baraukova <dbaraukova@copyright.com>') {
+        comment('B-37941 FDA: Foundation for calculating service fee on each eligible FAS detail: ' +
+                'add is_rh_participating_flag column and update default value of service_fee column ' +
+                'in df_usage and df_usage_archive tables, add service_fee_total column into df_scenario table')
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'is_rh_participating_flag', type: 'BOOLEAN', defaultValue: false, remarks: 'RH participating flag') {
+                constraints(nullable: false)
+            }
+        }
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+            column(name: 'is_rh_participating_flag', type: 'BOOLEAN', defaultValue: false, remarks: 'RH participating flag') {
+                constraints(nullable: false)
+            }
+        }
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_scenario') {
+            column(name: 'service_fee_total', type: 'DECIMAL(38,10)', defaultValue: 0.0000000000, remarks: 'The sum of usages service fee amounts included in scenario') {
+                constraints(nullable: false)
+            }
+        }
+
+        addDefaultValue(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'service_fee', defaultValue: '0.32000')
+        addDefaultValue(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'service_fee', defaultValue: '0.32000')
+
+        rollback {
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'is_rh_participating_flag')
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'is_rh_participating_flag')
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_scenario', columnName: 'service_fee_total')
+
+            addDefaultValue(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'service_fee', defaultValue: '0.00000')
+            addDefaultValue(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'service_fee', defaultValue: '0.00000')
+        }
+    }
 }
