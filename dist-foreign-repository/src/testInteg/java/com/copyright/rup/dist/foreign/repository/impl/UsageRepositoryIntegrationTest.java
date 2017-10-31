@@ -192,7 +192,8 @@ public class UsageRepositoryIntegrationTest {
         UsageFilter usageFilter =
             buildUsageFilter(Collections.emptySet(), Collections.emptySet(), null, null, FISCAL_YEAR);
         verifyUsageDtos(usageRepository.findByFilter(usageFilter, new Pageable(0, 200),
-            new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 2, USAGE_ID_2, USAGE_ID_1);
+            new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 3, "23876f21-8ab2-4fcb-adf3-777be88eddbb", USAGE_ID_2,
+            USAGE_ID_1);
     }
 
     @Test
@@ -581,7 +582,8 @@ public class UsageRepositoryIntegrationTest {
     public void testFindWithAmountsAndRightsholdersByFiscalYearFilter() {
         UsageFilter usageFilter =
             buildUsageFilter(Collections.emptySet(), Collections.emptySet(), null, null, FISCAL_YEAR);
-        verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 2, USAGE_ID_1, USAGE_ID_2);
+        verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 3, USAGE_ID_1, USAGE_ID_2,
+            "23876f21-8ab2-4fcb-adf3-777be88eddbb");
     }
 
     @Test

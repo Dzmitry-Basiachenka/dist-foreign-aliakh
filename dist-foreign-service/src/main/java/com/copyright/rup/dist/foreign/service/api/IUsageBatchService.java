@@ -28,6 +28,11 @@ public interface IUsageBatchService {
     List<UsageBatch> getUsageBatches();
 
     /**
+     * @return list {@link UsageBatch}es not included into scenario.
+     */
+    List<UsageBatch> getUsageBatchesForFilter();
+
+    /**
      * Checks whether Usage Batch with provided name exists in database or not.
      *
      * @param name usage batch name

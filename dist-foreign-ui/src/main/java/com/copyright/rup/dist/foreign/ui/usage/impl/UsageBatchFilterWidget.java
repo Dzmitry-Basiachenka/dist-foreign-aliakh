@@ -46,7 +46,7 @@ public class UsageBatchFilterWidget extends BaseItemsFilterWidget<String, UsageB
 
     @Override
     public List<UsageBatch> loadBeans() {
-        return controller.getUsageBatches();
+        return controller.getUsageBatchesNotIncludedIntoScenario();
     }
 
     @Override

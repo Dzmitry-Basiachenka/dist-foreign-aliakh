@@ -63,6 +63,17 @@
         order by ub.updated_datetime desc
     </select>
 
+    <select id="findForFilter" parameterType="UsageStatusEnum" resultMap="usageBatchResultMap">
+        select distinct
+            ub.df_usage_batch_uid,
+            ub.name,
+            ub.updated_datetime
+        from ${schema}.df_usage_batch ub
+        join ${schema}.df_usage u on ub.df_usage_batch_uid = u.df_usage_batch_uid
+        where u.status_ind != #{status}
+        order by ub.updated_datetime desc
+    </select>
+
     <select id="getCountByName" parameterType="string" resultType="int">
         select count(name)
         from ${schema}.df_usage_batch

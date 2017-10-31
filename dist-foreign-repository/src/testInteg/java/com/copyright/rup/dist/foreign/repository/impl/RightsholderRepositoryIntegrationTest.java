@@ -71,11 +71,11 @@ public class RightsholderRepositoryIntegrationTest {
     @Test
     public void testFindAccountNumbers() {
         Set<Long> accountNumbers = rightsholderRepository.findAccountNumbers();
-        assertEquals(11, accountNumbers.size());
+        assertEquals(12, accountNumbers.size());
         assertTrue(accountNumbers.containsAll(Lists.newArrayList(RH_ACCOUNT_NUMBER_7000813806,
             RH_ACCOUNT_NUMBER_2000017004, RH_ACCOUNT_NUMBER_7001440663, RH_ACCOUNT_NUMBER_1000009997,
             RH_ACCOUNT_NUMBER_1000002859, RH_ACCOUNT_NUMBER_1000008666, RH_ACCOUNT_NUMBER_1000005413,
-            RH_ACCOUNT_NUMBER_1000159997, RH_ACCOUNT_NUMBER_7000800832, 7001555529L, 7001555635L)));
+            RH_ACCOUNT_NUMBER_1000159997, RH_ACCOUNT_NUMBER_7000800832, 7000813800L, 7001555529L, 7001555635L)));
     }
 
     @Test
@@ -104,10 +104,10 @@ public class RightsholderRepositoryIntegrationTest {
         List<Rightsholder> rros = rightsholderRepository.findRros();
         assertNotNull(rros);
         assertTrue(CollectionUtils.isNotEmpty(rros));
-        assertEquals(4, rros.size());
+        assertEquals(5, rros.size());
         assertTrue(rros.stream().map(Rightsholder::getAccountNumber).collect(Collectors.toList())
             .containsAll(Lists.newArrayList(RH_ACCOUNT_NUMBER_7000813806, RH_ACCOUNT_NUMBER_2000017004,
-                RH_ACCOUNT_NUMBER_7001440663, RH_ACCOUNT_NUMBER_7000800832)));
+                RH_ACCOUNT_NUMBER_7001440663, RH_ACCOUNT_NUMBER_7000800832, 7000813800L)));
         assertTrue(rros.stream().map(Rightsholder::getId).collect(Collectors.toList())
             .containsAll(Lists.newArrayList("05c4714b-291d-4e38-ba4a-35307434acfb",
                 "46754660-b627-46b9-a782-3f703b6853c7", "ff8b9ac9-5fca-4d57-b74e-26da209c1040",

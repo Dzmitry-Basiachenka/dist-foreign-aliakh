@@ -56,7 +56,7 @@ public class UsageBatchFilterWidgetTest {
     @Test
     public void testLoadBeans() {
         UsageBatch usageBatch = buildUsageBatch();
-        expect(controller.getUsageBatches()).andReturn(Lists.newArrayList(usageBatch)).once();
+        expect(controller.getUsageBatchesNotIncludedIntoScenario()).andReturn(Lists.newArrayList(usageBatch)).once();
         replay(controller);
         List<UsageBatch> usageBatches = usageBatchFilterWidget.loadBeans();
         assertEquals(1, usageBatches.size());
