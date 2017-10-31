@@ -21,7 +21,6 @@ import com.google.common.collect.Sets;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,11 +34,13 @@ import java.io.InputStreamReader;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.math.BigDecimal;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.IntStream;
 
 /**
@@ -110,6 +111,7 @@ public class UsageRepositoryIntegrationTest {
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
     private static final String USER_NAME = "user@copyright.com";
     private static final BigDecimal NET_AMOUNT = new BigDecimal("25.1500000000");
+    private static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
 
     @Autowired
     private UsageRepository usageRepository;
@@ -451,9 +453,9 @@ public class UsageRepositoryIntegrationTest {
         PipedInputStream inputStream = new PipedInputStream(outputStream);
         UsageFilter usageFilter = new UsageFilter();
         usageFilter.setUsageBatchesIds(Collections.singleton(USAGE_BATCH_ID_1));
-        usageRepository.writeUsagesCsvReport(usageFilter, outputStream);
+        EXECUTOR_SERVICE.execute(() -> usageRepository.writeUsagesCsvReport(usageFilter, outputStream));
         BufferedReader bufferedReader =
-            new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
+            new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
         assertEquals("Detail ID,Detail Status,Usage Batch Name,Fiscal Year,RRO Account #,RRO Name,Payment Date,Title," +
                 "Article,Standard Number,Wr Wrk Inst,RH Account #,RH Name,Publisher,Pub Date,Number of Copies," +
                 "Reported value,Amt in USD,Gross Amt in USD,Market,Market Period From,Market Period To,Author",
@@ -472,10 +474,9 @@ public class UsageRepositoryIntegrationTest {
     public void testWriteUsagesEmptyCsvReport() throws Exception {
         PipedOutputStream outputStream = new PipedOutputStream();
         PipedInputStream inputStream = new PipedInputStream(outputStream);
-        UsageFilter usageFilter = new UsageFilter();
-        usageRepository.writeUsagesCsvReport(usageFilter, outputStream);
+        EXECUTOR_SERVICE.execute(() -> usageRepository.writeUsagesCsvReport(new UsageFilter(), outputStream));
         BufferedReader bufferedReader =
-            new BufferedReader(new InputStreamReader(inputStream, Charset.defaultCharset()));
+            new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
         assertEquals("Detail ID,Detail Status,Usage Batch Name,Fiscal Year,RRO Account #,RRO Name,Payment Date,Title," +
                 "Article,Standard Number,Wr Wrk Inst,RH Account #,RH Name,Publisher,Pub Date,Number of Copies," +
                 "Reported value,Amt in USD,Gross Amt in USD,Market,Market Period From,Market Period To,Author",
@@ -483,27 +484,27 @@ public class UsageRepositoryIntegrationTest {
         assertNull(bufferedReader.readLine());
     }
 
-    // TODO {aradkevich} investigate the reason for hovering when payee account number is inserted
     @Test
-    @Ignore
     public void testWriteScenarioUsagesCsvReport() throws Exception {
         PipedOutputStream outputStream = new PipedOutputStream();
         PipedInputStream inputStream = new PipedInputStream(outputStream);
-        usageRepository.writeScenarioUsagesCsvReport(SCENARIO_ID, outputStream);
+        EXECUTOR_SERVICE.execute(() -> usageRepository.writeScenarioUsagesCsvReport(SCENARIO_ID, outputStream));
         BufferedReader bufferedReader =
-            new BufferedReader(new InputStreamReader(inputStream, Charset.forName("utf-8")));
+            new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
         assertEquals("Detail ID,Usage Batch Name,Fiscal Year,RRO Account #,RRO Name,Payment Date,Title,Article," +
             "Standard Number,Wr Wrk Inst,RH Account #,RH Name,Payee Account #,Payee Name,Publisher,Pub Date," +
             "Number of Copies,Reported value,Gross Amt in USD,Service Fee Amount,Net Amt in USD,Service Fee %," +
             "Market,Market Period From,Market Period To,Author", bufferedReader.readLine());
         assertEquals("6997788886,JAACC_11Dec16,FY2019,7001440663,\"JAACC, Japan Academic Association for Copyright" +
-            " Clearance [T]\",08/16/2018,100 ROAD MOVIES,DIN EN 779:2012,1008902112377654XX,243904752,1000002859," +
-            "John Wiley & Sons - Books,,,IEEE,09/10/2013,250232,9900.00,11461.5400000000,1833.0000000000," +
-            "9628.0000000000,0.0,Doc Del,2013,2017,Philippe de Mézières", bufferedReader.readLine());
+                " Clearance [T]\",08/16/2018,100 ROAD MOVIES,DIN EN 779:2012,1008902112377654XX,243904752,1000002859," +
+                "John Wiley & Sons - Books,1000002859,John Wiley & Sons - Books,IEEE,09/10/2013,250232,9900.00," +
+                "11461.5400000000,1833.0000000000,9628.0000000000,0.0,Doc Del,2013,2017,Philippe de Mézières",
+            bufferedReader.readLine());
         assertEquals("6213788886,JAACC_11Dec16,FY2019,7001440663,\"JAACC, Japan Academic Association for Copyright" +
-            " Clearance [T]\",08/16/2018,100 ROAD MOVIES,DIN EN 779:2012,1008902112317622XX,243904752,1000002859," +
-            "John Wiley & Sons - Books,,,IEEE,09/10/2013,100,9900.00,1200.0000000000,192.0000000000,1008.0000000000," +
-            "0.0,Doc Del,2013,2017,Philippe de Mézières", bufferedReader.readLine());
+                " Clearance [T]\",08/16/2018,100 ROAD MOVIES,DIN EN 779:2012,1008902112317622XX,243904752,1000002859," +
+                "John Wiley & Sons - Books,1000002859,John Wiley & Sons - Books,IEEE,09/10/2013,100,9900.00," +
+                "1200.0000000000,192.0000000000,1008.0000000000,0.0,Doc Del,2013,2017,Philippe de Mézières",
+            bufferedReader.readLine());
         assertNull(bufferedReader.readLine());
     }
 
