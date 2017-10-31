@@ -39,8 +39,6 @@ public class UsageBatchRepositoryIntegrationTest {
 
     private static final String USAGE_BATCH_NAME = "Batch name";
     private static final Integer FISCAL_YEAR_2017 = 2017;
-    private static final Integer FISCAL_YEAR_2016 = 2016;
-    private static final Integer FISCAL_YEAR_2019 = 2019;
     private static final Long RRO_ACCOUNT_NUMBER = 123456789L;
     private static final BigDecimal GROSS_AMOUNT = new BigDecimal("23.53");
     private static final LocalDate PAYMENT_DATE = LocalDate.of(2017, 2, 23);
@@ -54,10 +52,11 @@ public class UsageBatchRepositoryIntegrationTest {
     public void testFindFiscalYears() {
         List<Integer> fiscalYears = usageBatchRepository.findFiscalYears();
         assertNotNull(fiscalYears);
-        assertEquals(3, fiscalYears.size());
-        assertEquals(FISCAL_YEAR_2016, fiscalYears.get(0));
+        assertEquals(4, fiscalYears.size());
+        assertEquals(2016, fiscalYears.get(0), 0);
         assertEquals(FISCAL_YEAR_2017, fiscalYears.get(1));
-        assertEquals(FISCAL_YEAR_2019, fiscalYears.get(2));
+        assertEquals(2018, fiscalYears.get(2), 0);
+        assertEquals(2019, fiscalYears.get(3), 0);
     }
 
     @Test

@@ -306,7 +306,7 @@ databaseChangeLog {
             column(name: 'name', value: 'NEW_26_OCT_2017')
             column(name: 'rro_account_number', value: '7000813800')
             column(name: 'payment_date', value: '2017-10-30')
-            column(name: 'fiscal_year', value: '2017')
+            column(name: 'fiscal_year', value: '2018')
             column(name: 'gross_amount', value: '35000')
             column(name: 'updated_datetime', value: '2017-10-26 14:49:52.735531+03')
         }
