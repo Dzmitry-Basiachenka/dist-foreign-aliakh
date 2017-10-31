@@ -81,20 +81,30 @@ public class UsageBatchRepositoryIntegrationTest {
     @Test
     public void testDeleteUsageBatch() {
         String batchId = "56282dbc-2468-48d4-b926-93d3458a656a";
-        assertEquals(4, usageBatchRepository.findAll().size());
+        assertEquals(5, usageBatchRepository.findAll().size());
         usageRepository.deleteUsages(batchId);
         usageBatchRepository.deleteUsageBatch(batchId);
-        assertEquals(3, usageBatchRepository.findAll().size());
+        assertEquals(4, usageBatchRepository.findAll().size());
     }
 
     @Test
     public void testFindUsageBatch() {
         List<UsageBatch> usageBatches = usageBatchRepository.findAll();
-        assertEquals(4, usageBatches.size());
-        assertEquals("56282dbc-2468-48d4-b926-94d3458a666a", usageBatches.get(0).getId());
-        assertEquals("56282dbc-2468-48d4-b926-93d3458a656a", usageBatches.get(1).getId());
-        assertEquals("56782dbc-2158-48d4-b026-94d3458a666a", usageBatches.get(2).getId());
-        assertEquals("56282cac-2468-48d4-b346-93d3458a656a", usageBatches.get(3).getId());
+        assertEquals(5, usageBatches.size());
+        assertEquals("3f46981e-e85a-4786-9b60-ab009c4358e7", usageBatches.get(0).getId());
+        assertEquals("56282dbc-2468-48d4-b926-94d3458a666a", usageBatches.get(1).getId());
+        assertEquals("56282dbc-2468-48d4-b926-93d3458a656a", usageBatches.get(2).getId());
+        assertEquals("56782dbc-2158-48d4-b026-94d3458a666a", usageBatches.get(3).getId());
+        assertEquals("56282cac-2468-48d4-b346-93d3458a656a", usageBatches.get(4).getId());
+    }
+
+    @Test
+    public void testFindForFilterUsageBatch() {
+        List<UsageBatch> usageBatches = usageBatchRepository.findForFilter();
+        assertEquals(3, usageBatches.size());
+        verifyUsageBatch(usageBatches.get(0), "56282dbc-2468-48d4-b926-94d3458a666a", "AccessCopyright_11Dec16");
+        verifyUsageBatch(usageBatches.get(1), "56282dbc-2468-48d4-b926-93d3458a656a", "CADRA_11Dec16");
+        verifyUsageBatch(usageBatches.get(2), "56782dbc-2158-48d4-b026-94d3458a666a", "JAACC_11Dec16");
     }
 
     private UsageBatch buildUsageBatch() {
@@ -108,5 +118,10 @@ public class UsageBatchRepositoryIntegrationTest {
         usageBatch.setFiscalYear(FISCAL_YEAR_2017);
         usageBatch.setGrossAmount(GROSS_AMOUNT);
         return usageBatch;
+    }
+
+    private void verifyUsageBatch(UsageBatch usageBatch, String id, String name) {
+        assertEquals(id, usageBatch.getId());
+        assertEquals(name, usageBatch.getName());
     }
 }

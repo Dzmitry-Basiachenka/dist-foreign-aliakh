@@ -35,8 +35,8 @@ public class UsagesFilterController extends CommonController<IUsagesFilterWidget
     private IRightsholderService rightsholderService;
 
     @Override
-    public List<UsageBatch> getUsageBatches() {
-        return usageBatchService.getUsageBatches();
+    public List<UsageBatch> getUsageBatchesNotIncludedIntoScenario() {
+        return usageBatchService.getUsageBatchesForFilter();
     }
 
     @Override

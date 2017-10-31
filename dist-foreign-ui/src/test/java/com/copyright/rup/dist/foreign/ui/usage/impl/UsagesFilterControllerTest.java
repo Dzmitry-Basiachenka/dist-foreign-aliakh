@@ -61,14 +61,14 @@ public class UsagesFilterControllerTest {
     }
 
     @Test
-    public void testGetUsageBatches() {
+    public void testGetUsageBatchesForFilter() {
         IUsageBatchService usageBatchService = createMock(IUsageBatchService.class);
         Whitebox.setInternalState(controller, IUsageBatchService.class, usageBatchService);
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setName("name");
-        expect(usageBatchService.getUsageBatches()).andReturn(Lists.newArrayList(usageBatch)).once();
+        expect(usageBatchService.getUsageBatchesForFilter()).andReturn(Lists.newArrayList(usageBatch)).once();
         replay(usageBatchService);
-        List<UsageBatch> usageBatches = controller.getUsageBatches();
+        List<UsageBatch> usageBatches = controller.getUsageBatchesNotIncludedIntoScenario();
         assertEquals(1, usageBatches.size());
         assertEquals(usageBatch.getName(), usageBatches.iterator().next().getName());
         verify(usageBatchService);

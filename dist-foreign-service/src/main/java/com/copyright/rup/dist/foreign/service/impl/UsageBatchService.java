@@ -51,6 +51,11 @@ public class UsageBatchService implements IUsageBatchService {
     }
 
     @Override
+    public List<UsageBatch> getUsageBatchesForFilter() {
+        return usageBatchRepository.findForFilter();
+    }
+
+    @Override
     public boolean usageBatchExists(String name) {
         return 0 < usageBatchRepository.getCountByName(name);
     }

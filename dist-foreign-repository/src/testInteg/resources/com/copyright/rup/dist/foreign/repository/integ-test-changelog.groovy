@@ -297,4 +297,43 @@ databaseChangeLog {
 
         rollback ""
     }
+
+    changeSet(id: '2017-10-26-00', author: 'Aliaksandra Bayanouskaya <abayanouskaya@copyright.com>') {
+        comment('Inserting Usage Batch with Usages for repository integration tests')
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: '3f46981e-e85a-4786-9b60-ab009c4358e7')
+            column(name: 'name', value: 'NEW_26_OCT_2017')
+            column(name: 'rro_account_number', value: '7000813800')
+            column(name: 'payment_date', value: '2017-10-30')
+            column(name: 'fiscal_year', value: '2017')
+            column(name: 'gross_amount', value: '35000')
+            column(name: 'updated_datetime', value: '2017-10-26 14:49:52.735531+03')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '23876f21-8ab2-4fcb-adf3-777be88eddbb')
+            column(name: 'df_usage_batch_uid', value: '3f46981e-e85a-4786-9b60-ab009c4358e7')
+            column(name: 'detail_id', value: '1917718881')
+            column(name: 'wr_wrk_inst', value: '180382914')
+            column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
+            column(name: 'rh_account_number', value: '1000009997')
+            column(name: 'status_ind', value: 'LOCKED')
+            column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle')
+            column(name: 'standard_number', value: '1008902112377654XX')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2014-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
+            column(name: 'number_of_copies', value: '2502232')
+            column(name: 'reported_value', value: '2500')
+            column(name: 'gross_amount', value: '13461.54')
+            column(name: 'net_amount', value: '11308.00')
+            column(name: 'service_fee_amount', value: '2153.00')
+        }
+
+        rollback ""
+    }
 }
