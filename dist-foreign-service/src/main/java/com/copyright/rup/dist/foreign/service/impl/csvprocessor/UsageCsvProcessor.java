@@ -100,7 +100,8 @@ public class UsageCsvProcessor extends CommonCsvProcessor<Usage> {
         result.setMarketPeriodFrom(getInteger(Header.MARKET_PERIOD_FROM, params));
         result.setMarketPeriodTo(getInteger(Header.MARKET_PERIOD_TO, params));
         result.setAuthor(getString(Header.AUTHOR, params));
-        result.setStatus(UsageStatusEnum.ELIGIBLE);
+        result.setStatus(null != result.getRightsholder().getAccountNumber() &&
+            null != result.getWrWrkInst() ? UsageStatusEnum.ELIGIBLE : UsageStatusEnum.NEW);
         return result;
     }
 

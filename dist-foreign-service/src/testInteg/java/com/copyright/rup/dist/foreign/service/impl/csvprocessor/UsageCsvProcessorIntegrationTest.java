@@ -76,9 +76,12 @@ public class UsageCsvProcessorIntegrationTest {
         CsvProcessingResult<Usage> usageCsvProcessingResult = processFile("usages.csv");
         assertNotNull(usageCsvProcessingResult);
         assertTrue(usageCsvProcessingResult.isSuccessful());
-        assertEquals(2, usageCsvProcessingResult.getResult().size());
-        verifyUsage(usageCsvProcessingResult.getResult().get(0));
-        verifyUsageWithEmptyFields(usageCsvProcessingResult.getResult().get(1));
+        assertEquals(4, usageCsvProcessingResult.getResult().size());
+        verifyUsage(usageCsvProcessingResult.getResult().get(0), 234L, 123456789L, 1000009522L,
+            UsageStatusEnum.ELIGIBLE);
+        verifyUsage(usageCsvProcessingResult.getResult().get(1), 236L, null, 1000009522L, UsageStatusEnum.NEW);
+        verifyUsage(usageCsvProcessingResult.getResult().get(2), 237L, 123456789L, null, UsageStatusEnum.NEW);
+        verifyUsageWithEmptyFields(usageCsvProcessingResult.getResult().get(3));
     }
 
     @Test
@@ -95,15 +98,15 @@ public class UsageCsvProcessorIntegrationTest {
         isFilesEquals(expected, actual);
     }
 
-    private void verifyUsage(Usage usage) {
+    private void verifyUsage(Usage usage, Long detailId, Long wrWrkInst, Long rhAccountNumber, UsageStatusEnum status) {
         assertNotNull(usage);
         assertNotNull(usage.getId());
-        assertEquals(Long.valueOf(234), usage.getDetailId());
+        assertEquals(detailId, usage.getDetailId());
         assertEquals("1984", usage.getWorkTitle());
         assertEquals("Appendix: The Principles of Newspeak", usage.getArticle());
         assertEquals("9780150000000", usage.getStandardNumber());
-        assertEquals(Long.valueOf(123456789), usage.getWrWrkInst());
-        assertEquals(Long.valueOf(1000009522), usage.getRightsholder().getAccountNumber());
+        assertEquals(wrWrkInst, usage.getWrWrkInst());
+        assertEquals(rhAccountNumber, usage.getRightsholder().getAccountNumber());
         assertEquals("Publisher", usage.getPublisher());
         assertEquals(LocalDate.of(3000, 12, 22), usage.getPublicationDate());
         assertEquals(Integer.valueOf(65), usage.getNumberOfCopies());
@@ -111,7 +114,7 @@ public class UsageCsvProcessorIntegrationTest {
         assertEquals("Univ,Bus,Doc,S", usage.getMarket());
         assertEquals(Integer.valueOf(2015), usage.getMarketPeriodFrom());
         assertEquals(Integer.valueOf(2016), usage.getMarketPeriodTo());
-        assertEquals(UsageStatusEnum.ELIGIBLE, usage.getStatus());
+        assertEquals(status, usage.getStatus());
         assertEquals("Aarseth, Espen J.", usage.getAuthor());
         assertEquals(BigDecimal.ZERO, usage.getGrossAmount());
     }
@@ -132,7 +135,7 @@ public class UsageCsvProcessorIntegrationTest {
         assertEquals("Univ,Bus,Doc,S", usage.getMarket());
         assertEquals(Integer.valueOf(2015), usage.getMarketPeriodFrom());
         assertEquals(Integer.valueOf(2015), usage.getMarketPeriodTo());
-        assertEquals(UsageStatusEnum.ELIGIBLE, usage.getStatus());
+        assertEquals(UsageStatusEnum.NEW, usage.getStatus());
         assertNull(usage.getAuthor());
         assertEquals(BigDecimal.ZERO, usage.getGrossAmount());
     }
