@@ -384,8 +384,7 @@
             ub.fiscal_year,
             ub.payment_date,
             ub.rro_account_number,
-            rro.name rro_name,
-            u.is_rh_participating_flag
+            rro.name rro_name
         from ${schema}.df_usage u
         join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number

@@ -500,12 +500,12 @@ public class UsageRepositoryIntegrationTest {
         assertEquals("6997788886,JAACC_11Dec16,FY2019,7001440663,\"JAACC, Japan Academic Association for Copyright" +
                 " Clearance [T]\",08/16/2018,100 ROAD MOVIES,DIN EN 779:2012,1008902112377654XX,243904752,1000002859," +
                 "John Wiley & Sons - Books,1000002859,John Wiley & Sons - Books,IEEE,09/10/2013,250232,9900.00," +
-                "11461.5400000000,1833.0000000000,9628.0000000000,0.0,Doc Del,2013,2017,Philippe de Mézières",
+                "11461.5400000000,1833.0000000000,9628.0000000000,32.0,Doc Del,2013,2017,Philippe de Mézières",
             bufferedReader.readLine());
         assertEquals("6213788886,JAACC_11Dec16,FY2019,7001440663,\"JAACC, Japan Academic Association for Copyright" +
                 " Clearance [T]\",08/16/2018,100 ROAD MOVIES,DIN EN 779:2012,1008902112317622XX,243904752,1000002859," +
                 "John Wiley & Sons - Books,1000002859,John Wiley & Sons - Books,IEEE,09/10/2013,100,9900.00," +
-                "1200.0000000000,192.0000000000,1008.0000000000,0.0,Doc Del,2013,2017,Philippe de Mézières",
+                "1200.0000000000,192.0000000000,1008.0000000000,32.0,Doc Del,2013,2017,Philippe de Mézières",
             bufferedReader.readLine());
         assertNull(bufferedReader.readLine());
     }
