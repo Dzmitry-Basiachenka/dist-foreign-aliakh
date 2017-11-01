@@ -40,10 +40,11 @@ public class Usage extends StoredEntity<String> {
     private Integer numberOfCopies;
     private BigDecimal reportedValue = BigDecimal.ZERO;
     private BigDecimal netAmount = BigDecimal.ZERO;
-    private BigDecimal serviceFee = BigDecimal.ZERO;
+    private BigDecimal serviceFee = new BigDecimal("0.32000");
     private BigDecimal serviceFeeAmount = BigDecimal.ZERO;
     private BigDecimal grossAmount = BigDecimal.ZERO;
     private UsageStatusEnum status;
+    private boolean rhParticipating;
 
     public Long getDetailId() {
         return detailId;
@@ -256,6 +257,14 @@ public class Usage extends StoredEntity<String> {
         this.payee = payee;
     }
 
+    public boolean isRhParticipating() {
+        return rhParticipating;
+    }
+
+    public void setRhParticipating(boolean rhParticipating) {
+        this.rhParticipating = rhParticipating;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -289,6 +298,7 @@ public class Usage extends StoredEntity<String> {
             .append(this.grossAmount, that.grossAmount)
             .append(this.status, that.status)
             .append(this.payee, that.payee)
+            .append(this.rhParticipating, that.rhParticipating)
             .isEquals();
     }
 
@@ -318,6 +328,7 @@ public class Usage extends StoredEntity<String> {
             .append(grossAmount)
             .append(status)
             .append(payee)
+            .append(rhParticipating)
             .toHashCode();
     }
 
@@ -347,6 +358,7 @@ public class Usage extends StoredEntity<String> {
             .append("grossAmount", grossAmount)
             .append("status", status)
             .append("payee", payee)
+            .append("rhParticipating", rhParticipating)
             .toString();
     }
 }
