@@ -18,8 +18,8 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: '56282dbc-2468-48d4-b926-94d3458a666a')
             column(name: 'name', value: 'AccessCopyright_11Dec16')
             column(name: 'rro_account_number', value: '2000017004')
-            column(name: 'payment_date', value: '2015-09-10')
-            column(name: 'fiscal_year', value: '2016')
+            column(name: 'payment_date', value: '2018-08-16')
+            column(name: 'fiscal_year', value: '2019')
             column(name: 'gross_amount', value: '35000')
             column(name: 'updated_datetime', value: '2017-02-21 11:41:52.735531+03')
         }
@@ -28,8 +28,8 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: '56782dbc-2158-48d4-b026-94d3458a666a')
             column(name: 'name', value: 'JAACC_11Dec16')
             column(name: 'rro_account_number', value: '7001440663')
-            column(name: 'payment_date', value: '2018-08-16')
-            column(name: 'fiscal_year', value: '2019')
+            column(name: 'payment_date', value: '2015-09-10')
+            column(name: 'fiscal_year', value: '2016')
             column(name: 'gross_amount', value: '35000')
             column(name: 'updated_datetime', value: '2017-02-11 11:41:52.735531+03')
         }

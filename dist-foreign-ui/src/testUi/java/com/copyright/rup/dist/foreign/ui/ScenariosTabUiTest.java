@@ -9,7 +9,6 @@ import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
-import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
@@ -132,13 +131,6 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
         usage.getPayee().setAccountNumber(2000017004L);
         usage.setUpdateUser("user@copyright.com");
         usageRepository.addToScenario(Collections.singletonList(usage));
-        UsageFilter filter = new UsageFilter();
-        filter.setUsageStatus(UsageStatusEnum.LOCKED);
-        filter.setUsageBatchesIds(Sets.newHashSet("56282dbc-2468-48d4-b926-93d3458a656a"));
-        Pageable pageable = new Pageable(0, 100);
-        Sort sort = new Sort("status", Direction.ASC);
-        List<UsageDto> usages = usageRepository.findByFilter(filter, pageable, sort);
-        assertEquals(1, CollectionUtils.size(usages));
         ScenarioInfo scenarioInfo = new ScenarioInfo("Scenario for deleting",
             LocalDate.now().format(DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT)));
         WebElement scenariosTab = selectScenariosTab();
@@ -146,12 +138,15 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
         verifyTableRows(table, scenarioInfo, scenario1, scenario2, scenario3, scenario4, scenario5);
         clickButtonAndWait(scenariosTab, DELETE_BUTTON_ID);
         WebElement confirmDialog = assertWebElement(By.id("confirm-dialog-window"));
+        UsageFilter filter = new UsageFilter();
+        filter.setUsageBatchesIds(Sets.newHashSet("56282dbc-2468-48d4-b926-93d3458a656a"));
+        Pageable pageable = new Pageable(0, 100);
+        Sort sort = new Sort("status", Direction.ASC);
+        assertEquals(0, CollectionUtils.size(usageRepository.findByFilter(filter, pageable, sort)));
         assertWebElementText(confirmDialog, "Are you sure you want to delete 'Scenario for deleting' scenario?");
         clickButtonAndWait(confirmDialog, "Yes");
         verifyTableRows(table, scenario1, scenario2, scenario3, scenario4, scenario5);
         assertEquals(5, CollectionUtils.size(scenarioRepository.findAll()));
-        assertEquals(0, CollectionUtils.size(usageRepository.findByFilter(filter, pageable, sort)));
-        filter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         assertEquals(1, CollectionUtils.size(usageRepository.findByFilter(filter, pageable, sort)));
         scenarioToDelete = null;
     }
