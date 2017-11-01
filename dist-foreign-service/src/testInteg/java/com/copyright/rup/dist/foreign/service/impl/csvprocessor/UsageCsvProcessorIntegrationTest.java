@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.service.impl.csvprocessor;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
@@ -100,7 +101,7 @@ public class UsageCsvProcessorIntegrationTest {
         assertEquals(Long.valueOf(234), usage.getDetailId());
         assertEquals("1984", usage.getWorkTitle());
         assertEquals("Appendix: The Principles of Newspeak", usage.getArticle());
-        assertEquals("9.78015E+12", usage.getStandardNumber());
+        assertEquals("9780150000000", usage.getStandardNumber());
         assertEquals(Long.valueOf(123456789), usage.getWrWrkInst());
         assertEquals(Long.valueOf(1000009522), usage.getRightsholder().getAccountNumber());
         assertEquals("Publisher", usage.getPublisher());
@@ -120,19 +121,19 @@ public class UsageCsvProcessorIntegrationTest {
         assertNotNull(usage.getId());
         assertEquals(Long.valueOf(235), usage.getDetailId());
         assertEquals("1984", usage.getWorkTitle());
-        assertEquals(null, usage.getArticle());
-        assertEquals("9.78015E+12", usage.getStandardNumber());
-        assertEquals(Long.valueOf(123456789), usage.getWrWrkInst());
-        assertEquals(Long.valueOf(1000009522), usage.getRightsholder().getAccountNumber());
-        assertEquals(null, usage.getPublisher());
-        assertEquals(null, usage.getPublicationDate());
-        assertEquals(null, usage.getNumberOfCopies());
+        assertNull(usage.getArticle());
+        assertEquals("9780150000000", usage.getStandardNumber());
+        assertNull(usage.getWrWrkInst());
+        assertNull(usage.getRightsholder().getAccountNumber());
+        assertNull(usage.getPublisher());
+        assertNull(usage.getPublicationDate());
+        assertNull(usage.getNumberOfCopies());
         assertEquals(new BigDecimal("60.86"), usage.getReportedValue());
         assertEquals("Univ,Bus,Doc,S", usage.getMarket());
         assertEquals(Integer.valueOf(2015), usage.getMarketPeriodFrom());
         assertEquals(Integer.valueOf(2015), usage.getMarketPeriodTo());
         assertEquals(UsageStatusEnum.ELIGIBLE, usage.getStatus());
-        assertEquals(null, usage.getAuthor());
+        assertNull(usage.getAuthor());
         assertEquals(BigDecimal.ZERO, usage.getGrossAmount());
     }
 

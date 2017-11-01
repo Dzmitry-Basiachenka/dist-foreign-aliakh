@@ -58,8 +58,8 @@ public class UsageCsvProcessor extends CommonCsvProcessor<Usage> {
         addPlainValidators(Header.TITLE, requiredValidator, lengthValidator_2000);
         addPlainValidators(Header.ARTICLE, lengthValidator_1000);
         addPlainValidators(Header.STANDARD_NUMBER, requiredValidator, lengthValidator_1000);
-        addPlainValidators(Header.WR_WRK_INST, requiredValidator, positiveNumberValidator, new LengthValidator(15));
-        addPlainValidators(Header.RH_ACCT_NUMBER, requiredValidator, positiveNumberValidator, new LengthValidator(22));
+        addPlainValidators(Header.WR_WRK_INST, positiveNumberValidator, new LengthValidator(15));
+        addPlainValidators(Header.RH_ACCT_NUMBER, positiveNumberValidator, new LengthValidator(22));
         addPlainValidators(Header.PUBLISHER, lengthValidator_1000);
         addPlainValidators(Header.PUB_DATE, new DateFormatValidator());
         addPlainValidators(Header.NUMBER_OF_COPIES, positiveNumberValidator, new LengthValidator(9));
