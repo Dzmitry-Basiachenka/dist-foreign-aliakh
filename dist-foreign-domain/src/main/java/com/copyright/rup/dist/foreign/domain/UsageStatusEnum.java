@@ -12,6 +12,11 @@ package com.copyright.rup.dist.foreign.domain;
 public enum UsageStatusEnum {
 
     /**
+     * Status for usages without rhAccountNumber or wrWrkInst
+     */
+    NEW,
+
+    /**
      * Status for eligible usages.
      */
     ELIGIBLE,
