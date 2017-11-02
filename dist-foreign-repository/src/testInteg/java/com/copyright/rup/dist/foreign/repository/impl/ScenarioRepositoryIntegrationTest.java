@@ -2,7 +2,6 @@ package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
@@ -55,28 +54,6 @@ public class ScenarioRepositoryIntegrationTest {
 
     @Autowired
     private IUsageRepository usageRepository;
-
-    @Test
-    public void testInsert() {
-        Scenario scenario = scenarioRepository.findById(SCENARIO_ID);
-        assertNull(scenario);
-        scenarioRepository.insert(buildScenario(SCENARIO_ID, SCENARIO_NAME));
-        scenario = scenarioRepository.findById(SCENARIO_ID);
-        assertNotNull(scenario);
-        assertEquals(SCENARIO_ID, scenario.getId());
-        assertEquals(SCENARIO_NAME, scenario.getName());
-        assertEquals(NET_TOTAL, scenario.getNetTotal());
-        assertEquals(SERVICE_FEE_TOTAL, scenario.getServiceFeeTotal());
-        assertEquals(GROSS_TOTAL, scenario.getGrossTotal());
-        assertEquals(REPORTED_TOTAL, scenario.getReportedTotal());
-        assertEquals(ScenarioStatusEnum.IN_PROGRESS, scenario.getStatus());
-        assertEquals(DESCRIPTION, scenario.getDescription());
-        assertEquals("SYSTEM", scenario.getCreateUser());
-        assertEquals("SYSTEM", scenario.getUpdateUser());
-        assertEquals(1, scenario.getVersion());
-        assertNotNull(scenario.getCreateDate());
-        assertNotNull(scenario.getUpdateDate());
-    }
 
     @Test
     public void testGetCountByName() {

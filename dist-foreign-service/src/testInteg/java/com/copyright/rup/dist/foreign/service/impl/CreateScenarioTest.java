@@ -1,8 +1,11 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -25,6 +28,7 @@ import org.springframework.test.web.client.match.MockRestRequestMatchers;
 import org.springframework.test.web.client.response.MockRestResponseCreators;
 import org.springframework.web.client.RestTemplate;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
@@ -75,6 +79,9 @@ public class CreateScenarioTest {
             .andRespond(MockRestResponseCreators.withSuccess(
                 TestUtils.fileToString(this.getClass(), "rollups_response.json"), MediaType.APPLICATION_JSON));
         String scenarioId = scenarioService.createScenario("Test Scenario", "Scenario Description", filter);
+        List<Scenario> scenarios = scenarioService.getScenarios();
+        assertEquals(1, scenarios.size());
+        assertScenario(scenarioId, scenarios.get(0));
         assertUsage(scenarioId, 7000429266L, 2000017000L);
         assertUsage(scenarioId, 1000002859L, 1000002859L);
         assertUsage(scenarioId, 1000001820L, 1000001820L);
@@ -100,6 +107,23 @@ public class CreateScenarioTest {
         assertUsage(scenarioId, 1000001820L, 1000001820L);
         assertUsage(scenarioId, 1000024497L, 1000024497L);
         assertUsage(scenarioId, 1000002562L, 1000002562L);
+    }
+
+    private void assertScenario(String scenarioId, Scenario scenario) {
+        assertNotNull(scenario);
+        assertEquals(scenarioId, scenario.getId());
+        assertEquals("Test Scenario", scenario.getName());
+        assertEquals(new BigDecimal("22134.4600000000"), scenario.getNetTotal());
+        assertEquals(new BigDecimal("28312.0900000000"), scenario.getGrossTotal());
+        assertEquals(new BigDecimal("0.0000000000"), scenario.getServiceFeeTotal());
+        assertEquals(new BigDecimal("38520.00"), scenario.getReportedTotal());
+        assertEquals(ScenarioStatusEnum.IN_PROGRESS, scenario.getStatus());
+        assertEquals("Scenario Description", scenario.getDescription());
+        assertEquals("SYSTEM", scenario.getCreateUser());
+        assertEquals("SYSTEM", scenario.getUpdateUser());
+        assertEquals(1, scenario.getVersion());
+        assertNotNull(scenario.getCreateDate());
+        assertNotNull(scenario.getUpdateDate());
     }
 
     private void assertUsage(String scenarioId, Long rhAccountNumber, Long payeeAccountNumber) {
