@@ -228,7 +228,7 @@ public class UsageRepositoryIntegrationTest {
     public void testFindByFilterSortByStandartNumber() {
         verifyUsageDtos(usageRepository.findByFilter(
             buildFilterWithStatuses(Sets.newHashSet(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.NEW)),
-            new Pageable(0, 200), new Sort(STANDART_NUMBER_KEY, Sort.Direction.ASC)), 3, USAGE_ID_3, USAGE_ID_2);
+            new Pageable(0, 200), new Sort(STANDART_NUMBER_KEY, Sort.Direction.ASC)), 3, USAGE_ID_2, USAGE_ID_3);
     }
 
     @Test
@@ -291,14 +291,14 @@ public class UsageRepositoryIntegrationTest {
     public void testFindByFilterSortByMarketPeriodFrom() {
         verifyUsageDtos(usageRepository.findByFilter(
             buildFilterWithStatuses(Sets.newHashSet(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.NEW)),
-            new Pageable(0, 200), new Sort(MARKED_PERIOD_FROM_KEY, Sort.Direction.ASC)), 3, USAGE_ID_1, USAGE_ID_3);
+            new Pageable(0, 200), new Sort(MARKED_PERIOD_FROM_KEY, Sort.Direction.ASC)), 3, USAGE_ID_1, USAGE_ID_2);
     }
 
     @Test
     public void testFindByFilterSortByMarketPeriodTo() {
         verifyUsageDtos(usageRepository.findByFilter(
             buildFilterWithStatuses(Sets.newHashSet(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.NEW)),
-            new Pageable(0, 200), new Sort(MARKED_PERIOD_TO_KEY, Sort.Direction.ASC)), 3, USAGE_ID_1, USAGE_ID_3);
+            new Pageable(0, 200), new Sort(MARKED_PERIOD_TO_KEY, Sort.Direction.ASC)), 3, USAGE_ID_1, USAGE_ID_2);
     }
 
     @Test
@@ -500,7 +500,7 @@ public class UsageRepositoryIntegrationTest {
         PipedOutputStream outputStream = new PipedOutputStream();
         PipedInputStream inputStream = new PipedInputStream(outputStream);
         UsageFilter filter = new UsageFilter();
-        filter.setUsageStatuses(Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.ELIGIBLE));
+        filter.setUsageStatuses(Collections.emptySet());
         EXECUTOR_SERVICE.execute(() -> usageRepository.writeUsagesCsvReport(filter, outputStream));
         BufferedReader bufferedReader =
             new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));

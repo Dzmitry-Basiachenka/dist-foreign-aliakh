@@ -112,6 +112,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         applyRrosFilter(filterWidget,
             "7000813806 - CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil");
         applyCurrentDateForDateField(assertWebElement(By.id("payment-date-filter")));
+        applyStatus();
         applyFiscalYear();
         WebElement filterButtonsLayout = assertWebElement(filterWidget, "filter-buttons");
         clickButtonAndWait(filterButtonsLayout, "Apply");
@@ -120,9 +121,18 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         assertUsagesFilterEmpty(filterWidget);
     }
 
+    private void applyStatus() {
+        WebElement statusFilter = assertWebElement(By.id("status-filter"));
+        WebElement statusFilterSelectButton =
+            assertWebElement(statusFilter, By.className("v-filterselect-button"));
+        clickElementAndWait(statusFilterSelectButton);
+        clickElementAndWait(assertWebElement(statusFilter, HTML_SPAN_TAG_NAME, "ELIGIBLE"));
+    }
+
     private void applyFiscalYear() {
         WebElement fiscalYearFilter = assertWebElement(By.id("fiscal-year-filter"));
-        WebElement fiscalYearFilterSelectButton = assertWebElement(By.className("v-filterselect-button"));
+        WebElement fiscalYearFilterSelectButton =
+            assertWebElement(fiscalYearFilter, By.className("v-filterselect-button"));
         clickElementAndWait(fiscalYearFilterSelectButton);
         clickElementAndWait(assertWebElement(fiscalYearFilter, HTML_SPAN_TAG_NAME, "2017"));
     }

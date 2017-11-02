@@ -77,7 +77,8 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
         assertTableRowElements(assertWebElement(By.id("usages-table")), 0);
         clickButtonAndWait(usagesTab, "Add_To_Scenario");
         WebElement notificationWindow = assertWebElement(By.id("notification-window"));
-        assertWebElement(notificationWindow, HTML_DIV_TAG_NAME, "Please select at least one ELIGIBLE usage");
+        assertWebElement(notificationWindow, HTML_DIV_TAG_NAME,
+            "Scenario cannot be created. Please select only ELIGIBLE usages");
         clickButtonAndWait(notificationWindow, "Ok");
     }
 

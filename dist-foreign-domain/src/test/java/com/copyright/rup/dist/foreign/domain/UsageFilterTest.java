@@ -33,6 +33,7 @@ public class UsageFilterTest {
     @Test
     public void testIsEmpty() {
         UsageFilter usageFilter = new UsageFilter();
+        usageFilter.setUsageStatuses(Sets.newHashSet());
         assertTrue(usageFilter.isEmpty());
         usageFilter.setUsageBatchesIds(Sets.newHashSet());
         assertTrue(usageFilter.isEmpty());

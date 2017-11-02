@@ -21,7 +21,6 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
-import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
@@ -37,7 +36,6 @@ import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.vaadin.ui.HorizontalLayout;
 
 import org.apache.commons.lang3.StringUtils;
@@ -163,7 +161,6 @@ public class UsagesControllerTest {
         IStreamSource exportStreamSource = controller.getExportUsagesStreamSource();
         ExecutorService executorService = createMock(ExecutorService.class);
         Whitebox.setInternalState(exportStreamSource, executorService);
-        expect(filterController.getWidget()).andReturn(new UsagesFilterWidget()).once();
         Capture<Runnable> captureRunnable = new Capture<>();
         executorService.execute(capture(captureRunnable));
         expectLastCall().once();
@@ -171,11 +168,8 @@ public class UsagesControllerTest {
         assertNotNull(exportStreamSource.getStream());
         Runnable runnable = captureRunnable.getValue();
         assertNotNull(runnable);
-        UsageFilter usageFilter = new UsageFilter();
-        usageFilter.setUsageStatuses(Sets.newHashSet(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.NEW));
         assertSame(exportStreamSource, Whitebox.getInternalState(runnable, "arg$1"));
-        assertEquals(usageFilter, Whitebox.getInternalState(runnable, "arg$2"));
-        assertTrue(Whitebox.getInternalState(runnable, "arg$3") instanceof PipedOutputStream);
+        assertTrue(Whitebox.getInternalState(runnable, "arg$2") instanceof PipedOutputStream);
         verify(usageService, filterController, executorService);
     }
 

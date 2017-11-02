@@ -137,7 +137,7 @@ public class UsagesWidgetTest {
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
             .getComponent(0)).getComponent(1);
         assertTrue(addToScenarioButton.isDisableOnClick());
-        Windows.showNotificationWindow("Please select at least one ELIGIBLE usage");
+        Windows.showNotificationWindow("Scenario cannot be created. Please select only ELIGIBLE usages");
         expectLastCall().once();
         expect(controller.getSize()).andReturn(0).once();
         replay(controller, clickEvent, Windows.class);
@@ -160,7 +160,7 @@ public class UsagesWidgetTest {
             .getComponent(0)).getComponent(1);
         assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.getNewUsagesCount()).andReturn(1).once();
-        Windows.showNotificationWindow("Please select at least one ELIGIBLE usage");
+        Windows.showNotificationWindow("Scenario cannot be created. Please select only ELIGIBLE usages");
         expectLastCall().once();
         replay(controller, clickEvent, Windows.class);
         Collection<?> listeners = addToScenarioButton.getListeners(ClickEvent.class);
