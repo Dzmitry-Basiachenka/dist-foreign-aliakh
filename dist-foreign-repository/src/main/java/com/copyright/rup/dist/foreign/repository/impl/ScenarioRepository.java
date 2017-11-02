@@ -52,15 +52,4 @@ public class ScenarioRepository extends BaseRepository implements IScenarioRepos
         checkArgument(StringUtils.isNotBlank(scenarioId));
         delete("IScenarioMapper.remove", scenarioId);
     }
-
-    /**
-     * Finds {@link Scenario} by provided identifier.
-     *
-     * @param id {@link Scenario} identifier
-     * @return found {@link Scenario} instance
-     */
-    Scenario findById(String id) {
-        checkArgument(StringUtils.isNotBlank(id));
-        return selectOne("IScenarioMapper.findById", id);
-    }
 }

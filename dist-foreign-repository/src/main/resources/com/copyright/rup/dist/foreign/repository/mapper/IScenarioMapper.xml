@@ -43,13 +43,6 @@
         )
     </insert>
 
-    <select id="findById" parameterType="string" resultMap="scenarioResultMap">
-        select
-            <include refid="scenarioColumns"/>
-        from ${schema}.df_scenario
-        where df_scenario_uid = #{df_scenario_uid}
-    </select>
-
     <select id="getCountByName" parameterType="string" resultType="int">
         select count(name)
         from ${schema}.df_scenario
