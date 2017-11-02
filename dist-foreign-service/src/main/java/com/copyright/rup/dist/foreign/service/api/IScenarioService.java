@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.service.api;
 
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
 
@@ -56,4 +57,12 @@ public interface IScenarioService {
      * @param scenarioId scenario identifier
      */
     void deleteScenario(String scenarioId);
+
+    /**
+     * Gets all source RROs belonging to the {@link Scenario} with given id.
+     *
+     * @param scenarioId {@link Scenario} id
+     * @return list of source RROs for given scenario
+     */
+    List<Rightsholder> getSourceRros(String scenarioId);
 }

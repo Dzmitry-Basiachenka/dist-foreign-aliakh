@@ -2,14 +2,19 @@ package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
+
+import com.google.common.collect.Sets;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Verifies {@link ScenarioRepository}.
@@ -54,6 +60,8 @@ public class ScenarioRepositoryIntegrationTest {
 
     @Autowired
     private IUsageRepository usageRepository;
+    @Autowired
+    private IUsageBatchRepository batchRepository;
 
     @Test
     public void testGetCountByName() {
@@ -86,7 +94,7 @@ public class ScenarioRepositoryIntegrationTest {
         assertEquals(1, scenariosNames.size());
         Scenario scenario = buildScenario(SCENARIO_ID, SCENARIO_NAME);
         scenarioRepository.insert(scenario);
-        usageRepository.insert(buildUsage());
+        usageRepository.insert(buildUsage(85695423L));
         scenariosNames = scenarioRepository.findNamesByUsageBatchId(USAGE_BATCH_ID);
         assertNotNull(scenariosNames);
         assertEquals(2, scenariosNames.size());
@@ -100,12 +108,46 @@ public class ScenarioRepositoryIntegrationTest {
         assertEquals(0, scenarioRepository.getCountByName(SCENARIO_NAME));
     }
 
-    private Usage buildUsage() {
+    @Test
+    public void testFindSourceRros() {
+        scenarioRepository.insert(buildScenario(SCENARIO_ID, SCENARIO_NAME));
+        usageRepository.insert(buildUsage(65874985L));
+        UsageBatch batch = buildBatch(2000017000L);
+        batchRepository.insert(batch);
+        Usage usage = buildUsage(25685478L);
+        usage.setBatchId(batch.getId());
+        usageRepository.insert(usage);
+        // inserting different batch with the same RRO to verify that it will be returned only once
+        batch = buildBatch(2000017000L);
+        batchRepository.insert(batch);
+        usage = buildUsage(75423658L);
+        usage.setBatchId(batch.getId());
+        usageRepository.insert(usage);
+        List<Rightsholder> sourceRros = scenarioRepository.findSourceRros(SCENARIO_ID);
+        assertEquals(2, sourceRros.size());
+        assertTrue(sourceRros.stream().map(Rightsholder::getAccountNumber).collect(Collectors.toSet()).containsAll(
+            Sets.newHashSet(7001440663L, 2000017000L)));
+    }
+
+    private UsageBatch buildBatch(Long rroAccountNumber) {
+        UsageBatch batch = new UsageBatch();
+        batch.setId(RupPersistUtils.generateUuid());
+        batch.setGrossAmount(new BigDecimal("100.00"));
+        batch.setPaymentDate(LocalDate.of(2017, 1, 1));
+        batch.setFiscalYear(2017);
+        batch.setName("Batch name");
+        Rightsholder rro = new Rightsholder();
+        rro.setAccountNumber(rroAccountNumber);
+        batch.setRro(rro);
+        return batch;
+    }
+
+    private Usage buildUsage(Long detailId) {
         Usage usage = new Usage();
         usage.setId(RupPersistUtils.generateUuid());
         usage.setBatchId(USAGE_BATCH_ID);
         usage.setScenarioId(SCENARIO_ID);
-        usage.setDetailId(12345L);
+        usage.setDetailId(detailId);
         usage.setWrWrkInst(123456783L);
         usage.setWorkTitle("WorkTitle");
         Rightsholder rightsholder = new Rightsholder();

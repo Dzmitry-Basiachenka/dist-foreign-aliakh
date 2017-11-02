@@ -34,6 +34,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -144,7 +145,7 @@ public class ScenarioServiceTest {
     }
 
     @Test
-    public void testremove() {
+    public void testRemove() {
         usageService.deleteUsagesFromScenario(SCENARIO_ID);
         expectLastCall().once();
         scenarioRepository.remove(SCENARIO_ID);
@@ -152,6 +153,14 @@ public class ScenarioServiceTest {
         replay(usageService, scenarioRepository);
         scenarioService.deleteScenario(SCENARIO_ID);
         verify(usageService, scenarioRepository);
+    }
+
+    @Test
+    public void testGetSourceRros() {
+        expect(scenarioRepository.findSourceRros(SCENARIO_ID)).andReturn(Collections.emptyList()).once();
+        replay(scenarioRepository);
+        assertEquals(Collections.emptyList(), scenarioService.getSourceRros(SCENARIO_ID));
+        verify(scenarioRepository);
     }
 
     private Usage buildUsage(BigDecimal grossAmount, BigDecimal reportedValue, BigDecimal netAmount) {
