@@ -23,8 +23,7 @@ public class UsageFilter {
 
     private Set<Long> rhAccountNumbers = Sets.newHashSet();
     private Set<String> usageBatchesIds = Sets.newHashSet();
-    // Phase I only ELIGIBLE usages are displayed. Add usageStatus to isEmpty method after implementing filter by status
-    private UsageStatusEnum usageStatus = UsageStatusEnum.ELIGIBLE;
+    private Set<UsageStatusEnum> usageStatuses = Sets.newHashSet();
     private LocalDate paymentDate;
     private Integer fiscalYear;
 
@@ -44,88 +43,48 @@ public class UsageFilter {
         if (null != filter) {
             setRhAccountNumbers(filter.getRhAccountNumbers());
             setUsageBatchesIds(filter.getUsageBatchesIds());
-            setUsageStatus(filter.getUsageStatus());
+            setUsageStatuses(filter.getUsageStatuses());
             setPaymentDate(filter.getPaymentDate());
             setFiscalYear(filter.getFiscalYear());
         }
     }
 
-    /**
-     * @return a set of rightsholders account numbers.
-     */
     public Set<Long> getRhAccountNumbers() {
         return rhAccountNumbers;
     }
 
-    /**
-     * Sets rightsholders account numbers.
-     *
-     * @param rhAccountNumbers rightsholders account numbers
-     */
     public void setRhAccountNumbers(Set<Long> rhAccountNumbers) {
         this.rhAccountNumbers = rhAccountNumbers;
     }
 
-    /**
-     * @return a set of usage batches ids.
-     */
     public Set<String> getUsageBatchesIds() {
         return usageBatchesIds;
     }
 
-    /**
-     * Sets usage batches ids.
-     *
-     * @param usageBatchesIds usage batches ids
-     */
     public void setUsageBatchesIds(Set<String> usageBatchesIds) {
         this.usageBatchesIds = usageBatchesIds;
     }
 
-    /**
-     * @return instance of {@link UsageStatusEnum}.
-     */
-    public UsageStatusEnum getUsageStatus() {
-        return usageStatus;
+    public Set<UsageStatusEnum> getUsageStatuses() {
+        return usageStatuses;
     }
 
-    /**
-     * Sets usage status.
-     *
-     * @param usageStatus instance of {@link UsageStatusEnum}
-     */
-    public void setUsageStatus(UsageStatusEnum usageStatus) {
-        this.usageStatus = usageStatus;
+    public void setUsageStatuses(Set<UsageStatusEnum> usageStatuses) {
+        this.usageStatuses = usageStatuses;
     }
 
-    /**
-     * @return payment date.
-     */
     public LocalDate getPaymentDate() {
         return paymentDate;
     }
 
-    /**
-     * Sets payment date.
-     *
-     * @param paymentDate payment date
-     */
     public void setPaymentDate(LocalDate paymentDate) {
         this.paymentDate = paymentDate;
     }
 
-    /**
-     * @return fiscal year.
-     */
     public Integer getFiscalYear() {
         return fiscalYear;
     }
 
-    /**
-     * Sets fiscal year.
-     *
-     * @param fiscalYear fiscal year
-     */
     public void setFiscalYear(Integer fiscalYear) {
         this.fiscalYear = fiscalYear;
     }
@@ -152,7 +111,7 @@ public class UsageFilter {
         return new EqualsBuilder()
             .append(this.rhAccountNumbers, that.rhAccountNumbers)
             .append(this.usageBatchesIds, that.usageBatchesIds)
-            .append(this.usageStatus, that.usageStatus)
+            .append(this.usageStatuses, that.usageStatuses)
             .append(this.paymentDate, that.paymentDate)
             .append(this.fiscalYear, that.fiscalYear)
             .isEquals();
@@ -163,7 +122,7 @@ public class UsageFilter {
         return new HashCodeBuilder()
             .append(rhAccountNumbers)
             .append(usageBatchesIds)
-            .append(usageStatus)
+            .append(usageStatuses)
             .append(paymentDate)
             .append(fiscalYear)
             .toHashCode();
@@ -174,7 +133,7 @@ public class UsageFilter {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
             .append("rhAccountNumbers", rhAccountNumbers)
             .append("usageBatchesIds", usageBatchesIds)
-            .append("usageStatus", usageStatus)
+            .append("usageStatuses", usageStatuses)
             .append("paymentDate", paymentDate)
             .append("fiscalYear", fiscalYear)
             .toString();

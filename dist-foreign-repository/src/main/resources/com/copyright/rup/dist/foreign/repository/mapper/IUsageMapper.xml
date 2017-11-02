@@ -163,8 +163,11 @@
             <if test="null != filter.paymentDate">
                 and <![CDATA[ub.payment_date <= #{filter.paymentDate}]]>
             </if>
-            <if test="null != filter.usageStatus">
-                and u.status_ind = #{filter.usageStatus}
+            <if test="null != filter.usageStatuses and filter.usageStatuses.size() > 0">
+                and
+                <foreach collection="filter.usageStatuses" item="usageStatus" open="(" separator=" or " close=")">
+                    u.status_ind = #{usageStatus}
+                </foreach>
             </if>
             <if test="null != filter.fiscalYear">
                 and <![CDATA[ub.fiscal_year <= #{filter.fiscalYear}]]>
