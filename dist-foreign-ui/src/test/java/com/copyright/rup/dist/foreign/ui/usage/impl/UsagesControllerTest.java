@@ -161,16 +161,21 @@ public class UsagesControllerTest {
         IStreamSource exportStreamSource = controller.getExportUsagesStreamSource();
         ExecutorService executorService = createMock(ExecutorService.class);
         Whitebox.setInternalState(exportStreamSource, executorService);
+        IUsagesFilterWidget filterWidgetMock = createMock(IUsagesFilterWidget.class);
+        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
+        UsageFilter filter = new UsageFilter();
+        expect(filterWidgetMock.getAppliedFilter()).andReturn(filter).once();
         Capture<Runnable> captureRunnable = new Capture<>();
         executorService.execute(capture(captureRunnable));
         expectLastCall().once();
-        replay(usageService, filterController, executorService);
+        replay(usageService, filterController, filterWidgetMock, executorService);
         assertNotNull(exportStreamSource.getStream());
         Runnable runnable = captureRunnable.getValue();
         assertNotNull(runnable);
         assertSame(exportStreamSource, Whitebox.getInternalState(runnable, "arg$1"));
-        assertTrue(Whitebox.getInternalState(runnable, "arg$2") instanceof PipedOutputStream);
-        verify(usageService, filterController, executorService);
+        assertSame(filter, Whitebox.getInternalState(runnable, "arg$2"));
+        assertTrue(Whitebox.getInternalState(runnable, "arg$3") instanceof PipedOutputStream);
+        verify(usageService, filterController, filterWidgetMock, executorService);
     }
 
     @Test

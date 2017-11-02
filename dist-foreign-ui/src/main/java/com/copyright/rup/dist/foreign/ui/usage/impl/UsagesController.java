@@ -5,6 +5,8 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageFilter;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
@@ -25,6 +27,7 @@ import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.collect.Sets;
 import com.google.common.io.Files;
 
 import org.apache.commons.lang3.ObjectUtils;
@@ -86,12 +89,16 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
 
     @Override
     public int getSize() {
-        return usageService.getUsagesCount(filterController.getWidget().getAppliedFilter());
+        UsageFilter filter = filterController.getWidget().getAppliedFilter();
+        filter.setUsageStatuses(Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.ELIGIBLE));
+        return usageService.getUsagesCount(filter);
     }
 
     @Override
     public List<UsageDto> loadBeans(int startIndex, int count, Object[] sortPropertyIds, boolean... sortStates) {
-        return usageService.getUsages(filterController.getWidget().getAppliedFilter(), new Pageable(startIndex, count),
+        UsageFilter filter = filterController.getWidget().getAppliedFilter();
+        filter.setUsageStatuses(Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.ELIGIBLE));
+        return usageService.getUsages(filter, new Pageable(startIndex, count),
             Sort.create(sortPropertyIds, sortStates));
     }
 
@@ -114,8 +121,10 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
 
     @Override
     public String createScenario(String scenarioName, String description) {
+        UsageFilter filter = filterController.getWidget().getAppliedFilter();
+        filter.setUsageStatuses(Collections.singleton(UsageStatusEnum.ELIGIBLE));
         String scenarioId =
-            scenarioService.createScenario(scenarioName, description, filterController.getWidget().getAppliedFilter());
+            scenarioService.createScenario(scenarioName, description, filter);
         filterController.getWidget().clearFilter();
         return scenarioId;
     }
@@ -184,8 +193,9 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
             try {
                 PipedOutputStream outputStream = new PipedOutputStream();
                 PipedInputStream pipedInputStream = new PipedInputStream(outputStream);
-                executorService.execute(
-                    () -> usageService.writeUsageCsvReport(controller.getWidget().getAppliedFilter(), outputStream));
+                UsageFilter filter = controller.getWidget().getAppliedFilter();
+                filter.setUsageStatuses(Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.ELIGIBLE));
+                executorService.execute(() -> usageService.writeUsageCsvReport(filter, outputStream));
                 return pipedInputStream;
             } catch (IOException e) {
                 throw new RupRuntimeException(e);
