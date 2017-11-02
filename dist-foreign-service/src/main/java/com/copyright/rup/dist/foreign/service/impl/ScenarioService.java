@@ -85,6 +85,9 @@ public class ScenarioService implements IScenarioService {
         scenario.setNetTotal(usages.stream()
             .map(Usage::getNetAmount)
             .reduce(BigDecimal.ZERO.setScale(10, RoundingMode.HALF_UP), BigDecimal::add));
+        scenario.setServiceFeeTotal(usages.stream()
+            .map(Usage::getServiceFeeAmount)
+            .reduce(BigDecimal.ZERO.setScale(10, RoundingMode.HALF_UP), BigDecimal::add));
         scenario.setGrossTotal(usages.stream()
             .map(Usage::getGrossAmount)
             .reduce(BigDecimal.ZERO.setScale(10, RoundingMode.HALF_UP), BigDecimal::add));

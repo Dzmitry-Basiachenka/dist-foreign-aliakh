@@ -80,7 +80,8 @@ public interface IUsageRepository {
     List<Usage> findWithAmountsAndRightsholders(UsageFilter filter);
 
     /**
-     * Updates scenario id, updated user name, status to 'LOCKED' and payee account number for {@link Usage}s.
+     * Updates scenario id, updated user name, status to 'LOCKED', payee account number,
+     * net amount, service fee amount and RH participation status for {@link Usage}s.
      *
      * @param usages list of {@link Usage}s
      */

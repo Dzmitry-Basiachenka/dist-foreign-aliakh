@@ -48,4 +48,34 @@ public final class CalculationUtils {
         checkArgument(0 > BigDecimal.ZERO.compareTo(totalAmount));
         return fundPoolAmount.divide(totalAmount, 10, RoundingMode.HALF_UP);
     }
+
+    /**
+     * Calculates service fee amount based on given gross amount and service fee by formula:
+     * Service Fee amount = gross amount * service fee. Result has scale = 10 and rounds with
+     * {@link RoundingMode#HALF_UP}.
+     *
+     * @param grossAmount gross amount
+     * @param serviceFee  service fee
+     * @return service fee amount
+     */
+    public static BigDecimal calculateServiceFeeAmount(BigDecimal grossAmount, BigDecimal serviceFee) {
+        checkArgument(0 > BigDecimal.ZERO.compareTo(grossAmount));
+        checkArgument(0 > BigDecimal.ZERO.compareTo(serviceFee));
+        return grossAmount.multiply(serviceFee).setScale(10, BigDecimal.ROUND_HALF_UP);
+    }
+
+    /**
+     * Calculates net amount based on given gross amount and service fee amount by formula:
+     * Net amount = gross amount - service fee amount. Result has scale = 10 and rounds with
+     * {@link RoundingMode#HALF_UP}.
+     *
+     * @param grossAmount gross amount
+     * @param serviceFeeAmount  service fee amount
+     * @return net amount
+     */
+    public static BigDecimal calculateNetAmount(BigDecimal grossAmount, BigDecimal serviceFeeAmount) {
+        checkArgument(0 > BigDecimal.ZERO.compareTo(grossAmount));
+        checkArgument(0 > BigDecimal.ZERO.compareTo(serviceFeeAmount));
+        return grossAmount.subtract(serviceFeeAmount).setScale(10, BigDecimal.ROUND_HALF_UP);
+    }
 }

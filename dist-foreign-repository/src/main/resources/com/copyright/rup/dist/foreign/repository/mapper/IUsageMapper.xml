@@ -44,6 +44,7 @@
         <result property="serviceFee" column="service_fee"/>
         <result property="serviceFeeAmount" column="service_fee_amount"/>
         <result property="reportedValue" column="reported_value"/>
+        <result property="serviceFee" column="service_fee"/>
         <result property="rightsholder.id" column="rh_id"/>
         <result property="rightsholder.accountNumber" column="rh_account_number"/>
         <result property="rightsholder.name" column="rh_name"/>
@@ -457,6 +458,7 @@
             u.service_fee,
             u.service_fee_amount,
             u.reported_value,
+            u.service_fee,
             u.created_datetime,
             u.updated_datetime,
             u.created_by_user,
@@ -478,6 +480,9 @@
             status_ind = #{status},
             df_scenario_uid = #{scenarioId},
             payee_account_number = #{payee.accountNumber},
+            net_amount = #{netAmount},
+            service_fee_amount = #{serviceFeeAmount},
+            is_rh_participating_flag = #{rhParticipating},
             <include refid="StoredEntityMapper.update"/>
         where df_usage_uid = #{id}
     </update>
