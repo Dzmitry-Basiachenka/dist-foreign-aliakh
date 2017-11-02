@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 
 import java.util.List;
@@ -51,4 +52,12 @@ public interface IScenarioRepository {
      * @param scenarioId {@link Scenario} identifier
      */
     void remove(String scenarioId);
+
+    /**
+     * Finds all source RROs belonging to the {@link Scenario} with given id.
+     *
+     * @param scenarioId {@link Scenario} id
+     * @return list of source RROs for given scenario
+     */
+    List<Rightsholder> findSourceRros(String scenarioId);
 }

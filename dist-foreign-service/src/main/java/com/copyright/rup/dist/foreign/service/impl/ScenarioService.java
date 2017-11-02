@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -68,6 +69,11 @@ public class ScenarioService implements IScenarioService {
     public void deleteScenario(String scenarioId) {
         usageService.deleteUsagesFromScenario(scenarioId);
         scenarioRepository.remove(scenarioId);
+    }
+
+    @Override
+    public List<Rightsholder> getSourceRros(String scenarioId) {
+        return scenarioRepository.findSourceRros(scenarioId);
     }
 
     private Scenario buildScenario(String scenarioName, String description, List<Usage> usages) {

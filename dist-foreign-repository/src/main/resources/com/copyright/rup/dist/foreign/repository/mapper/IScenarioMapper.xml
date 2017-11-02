@@ -69,4 +69,15 @@
         delete from ${schema}.df_scenario
         where df_scenario_uid = #{scenarioId}
     </delete>
+
+    <select id="findSourceRros" parameterType="string" resultMap="IRightsholderMapper.rightsholderResultMap">
+        select distinct
+            b.rro_account_number rh_account_number,
+            r.name,
+            r.df_rightsholder_uid
+        from ${schema}.df_usage u
+        join ${schema}.df_usage_batch b on b.df_usage_batch_uid = u.df_usage_batch_uid
+        left join ${schema}.df_rightsholder r on r.rh_account_number = b.rro_account_number
+        where u.df_scenario_uid = #{scenarioId}
+    </select>
 </mapper>
