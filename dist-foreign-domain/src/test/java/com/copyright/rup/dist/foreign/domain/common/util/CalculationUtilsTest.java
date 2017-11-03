@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.domain.common.util;
 
+import static org.junit.Assert.assertEquals;
+
 import com.copyright.rup.dist.common.test.TestUtils;
 
 import org.junit.Test;
@@ -56,5 +58,17 @@ public class CalculationUtilsTest {
     @Test(expected = IllegalArgumentException.class)
     public void testCalculateConversionRateNegativeFundPoolAmount() {
         CalculationUtils.calculateConversionRate(new BigDecimal("-1"), BigDecimal.ONE);
+    }
+
+    @Test
+    public void testCalculateServiceFeeAmount() {
+        assertEquals(new BigDecimal("400.0000000000"),
+            CalculationUtils.calculateServiceFeeAmount(new BigDecimal("1250.0000000000"), new BigDecimal("0.32000")));
+    }
+
+    @Test
+    public void testCalculateNetAmount() {
+        assertEquals(new BigDecimal("500.0000000000"),
+            CalculationUtils.calculateNetAmount(new BigDecimal("1000.0000000000"), new BigDecimal("500.0000000000")));
     }
 }

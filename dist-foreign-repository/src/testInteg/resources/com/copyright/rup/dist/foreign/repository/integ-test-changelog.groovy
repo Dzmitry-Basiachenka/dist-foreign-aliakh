@@ -53,8 +53,6 @@ databaseChangeLog {
             column(name: 'number_of_copies', value: '2502232')
             column(name: 'reported_value', value: '2500')
             column(name: 'gross_amount', value: '13461.54')
-            column(name: 'net_amount', value: '11308.00')
-            column(name: 'service_fee_amount', value: '2153.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -76,8 +74,6 @@ databaseChangeLog {
             column(name: 'number_of_copies', value: '1600')
             column(name: 'reported_value', value: '1560')
             column(name: 'gross_amount', value: '8400.00')
-            column(name: 'net_amount', value: '7056.00')
-            column(name: 'service_fee_amount', value: '1344.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -121,8 +117,6 @@ databaseChangeLog {
             column(name: 'number_of_copies', value: '2630')
             column(name: 'reported_value', value: '1280.00')
             column(name: 'gross_amount', value: '6892.30')
-            column(name: 'net_amount', value: '5790.00')
-            column(name: 'service_fee_amount', value: '1102.00')
         }
 
         rollback ""

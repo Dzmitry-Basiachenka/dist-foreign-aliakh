@@ -118,6 +118,7 @@ public class UsageService implements IUsageService {
 
     @Override
     public List<Usage> getUsagesWithAmounts(UsageFilter filter) {
+        //TODO {dbaraukova} get participating flag and calculate amounts
         return usageRepository.findWithAmountsAndRightsholders(filter);
     }
 
