@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.service.impl;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -74,6 +75,12 @@ public class ScenarioService implements IScenarioService {
     @Override
     public List<Rightsholder> getSourceRros(String scenarioId) {
         return scenarioRepository.findSourceRros(scenarioId);
+    }
+
+    @Override
+    public List<RightsholderPayeePair> getRightsholdersByScenarioAndSourceRro(String scenarioId,
+                                                                              Long rroAccountNumber) {
+        return scenarioRepository.findRightsholdersByScenarioAndSourceRro(scenarioId, rroAccountNumber);
     }
 
     private Scenario buildScenario(String scenarioName, String description, List<Usage> usages) {

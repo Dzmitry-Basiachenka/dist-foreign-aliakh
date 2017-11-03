@@ -5,13 +5,18 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.repository.BaseRepository;
+import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
+
+import com.google.common.collect.Maps;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * Implementation of {@link IScenarioRepository} for MyBatis.
@@ -57,5 +62,14 @@ public class ScenarioRepository extends BaseRepository implements IScenarioRepos
     @Override
     public List<Rightsholder> findSourceRros(String scenarioId) {
         return selectList("IScenarioMapper.findSourceRros", scenarioId);
+    }
+
+    @Override
+    public List<RightsholderPayeePair> findRightsholdersByScenarioAndSourceRro(String scenarioId,
+                                                                               Long rroAccountNumber) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
+        params.put("scenarioId", Objects.requireNonNull(scenarioId));
+        params.put("rroAccountNumber", Objects.requireNonNull(rroAccountNumber));
+        return selectList("IScenarioMapper.findRightsholdersByScenarioAndSourceRro", params);
     }
 }

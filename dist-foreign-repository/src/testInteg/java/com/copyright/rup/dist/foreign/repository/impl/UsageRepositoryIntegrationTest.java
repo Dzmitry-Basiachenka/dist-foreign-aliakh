@@ -302,7 +302,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     public void testFindByFilterSortByRroAccountNumber() {
         verifyUsageDtos(usageRepository.findByFilter(new UsageFilter(), new Pageable(0, 200),
-            new Sort(RRO_ACCOUNT_NUMBER_KEY, Sort.Direction.ASC)), 2, USAGE_ID_1, USAGE_ID_3);
+            new Sort(RRO_ACCOUNT_NUMBER_KEY, Sort.Direction.ASC)), 2, USAGE_ID_3, USAGE_ID_1);
     }
 
     @Test
@@ -410,7 +410,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     public void testGetByScenarioIdAndRhAccountNumberSearchByRorAccountNumber() {
         populateScenario();
-        verifySearch("7001440663", 2);
+        verifySearch("2000017010", 2);
         verifySearch("0001700", 1);
         verifySearch("70014 40663", 0);
     }
@@ -496,13 +496,15 @@ public class UsageRepositoryIntegrationTest {
             "Standard Number,Wr Wrk Inst,RH Account #,RH Name,Payee Account #,Payee Name,Publisher,Pub Date," +
             "Number of Copies,Reported value,Gross Amt in USD,Service Fee Amount,Net Amt in USD,Service Fee %," +
             "Market,Market Period From,Market Period To,Author", bufferedReader.readLine());
-        assertEquals("6997788886,JAACC_11Dec16,FY2016,7001440663,\"JAACC, Japan Academic Association for Copyright" +
-                " Clearance [T]\",09/10/2015,100 ROAD MOVIES,DIN EN 779:2012,1008902112377654XX,243904752,1000002859," +
+        assertEquals("6997788886,JAACC_11Dec16,FY2016,2000017010," +
+                "\"JAC, Japan Academic Association for Copyright Clearance, Inc.\"," +
+                "09/10/2015,100 ROAD MOVIES,DIN EN 779:2012,1008902112377654XX,243904752,1000002859," +
                 "John Wiley & Sons - Books,1000002859,John Wiley & Sons - Books,IEEE,09/10/2013,250232,9900.00," +
                 "11461.5400000000,1833.0000000000,9628.0000000000,32.0,Doc Del,2013,2017,Philippe de Mézières",
             bufferedReader.readLine());
-        assertEquals("6213788886,JAACC_11Dec16,FY2016,7001440663,\"JAACC, Japan Academic Association for Copyright" +
-                " Clearance [T]\",09/10/2015,100 ROAD MOVIES,DIN EN 779:2012,1008902112317622XX,243904752,1000002859," +
+        assertEquals("6213788886,JAACC_11Dec16,FY2016,2000017010," +
+                "\"JAC, Japan Academic Association for Copyright Clearance, Inc.\"," +
+                "09/10/2015,100 ROAD MOVIES,DIN EN 779:2012,1008902112317622XX,243904752,1000002859," +
                 "John Wiley & Sons - Books,1000002859,John Wiley & Sons - Books,IEEE,09/10/2013,100,9900.00," +
                 "1200.0000000000,192.0000000000,1008.0000000000,32.0,Doc Del,2013,2017,Philippe de Mézières",
             bufferedReader.readLine());

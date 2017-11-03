@@ -18,8 +18,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  */
 public class RightsholderPayeePair {
 
-    private Rightsholder rightsholder;
-    private Rightsholder payee;
+    private Rightsholder rightsholder = new Rightsholder();
+    private Rightsholder payee = new Rightsholder();
 
     public Rightsholder getRightsholder() {
         return rightsholder;

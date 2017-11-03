@@ -93,7 +93,7 @@ public class UsageBatchRepositoryIntegrationTest {
         assertEquals("3f46981e-e85a-4786-9b60-ab009c4358e7", usageBatches.get(0).getId());
         assertEquals("56282dbc-2468-48d4-b926-94d3458a666a", usageBatches.get(1).getId());
         assertEquals("56282dbc-2468-48d4-b926-93d3458a656a", usageBatches.get(2).getId());
-        assertEquals("56782dbc-2158-48d4-b026-94d3458a666a", usageBatches.get(3).getId());
+        assertEquals("a5b64c3a-55d2-462e-b169-362dca6a4dd6", usageBatches.get(3).getId());
         assertEquals("56282cac-2468-48d4-b346-93d3458a656a", usageBatches.get(4).getId());
     }
 
@@ -103,7 +103,7 @@ public class UsageBatchRepositoryIntegrationTest {
         assertEquals(3, usageBatches.size());
         verifyUsageBatch(usageBatches.get(0), "56282dbc-2468-48d4-b926-94d3458a666a", "AccessCopyright_11Dec16");
         verifyUsageBatch(usageBatches.get(1), "56282dbc-2468-48d4-b926-93d3458a656a", "CADRA_11Dec16");
-        verifyUsageBatch(usageBatches.get(2), "56782dbc-2158-48d4-b026-94d3458a666a", "JAACC_11Dec16");
+        verifyUsageBatch(usageBatches.get(2), "a5b64c3a-55d2-462e-b169-362dca6a4dd6", "JAACC_11Dec16");
     }
 
     private UsageBatch buildUsageBatch() {
