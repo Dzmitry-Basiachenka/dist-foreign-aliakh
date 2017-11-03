@@ -139,4 +139,9 @@ public interface IUsagesController extends IController<IUsagesWidget>, IBeanLoad
      * @return instance of {@link UsageCsvProcessor}.
      */
     UsageCsvProcessor getCsvProcessor();
+
+    /**
+     * @return count of usages with {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#NEW} status
+     */
+    int getNewUsagesCount();
 }

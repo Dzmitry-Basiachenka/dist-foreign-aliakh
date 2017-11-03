@@ -229,12 +229,17 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
     }
 
     private void onAddToScenarioClicked() {
-        if (0 < usagesTable.getContainerDataSource().size()) {
+        if (canCreateScenario()) {
             CreateScenarioWindow window = new CreateScenarioWindow(controller);
             window.addListener(ScenarioCreateEvent.class, controller, IUsagesController.ON_SCENARIO_CREATED);
             Windows.showModalWindow(window);
         } else {
             Windows.showNotificationWindow(ForeignUi.getMessage("message.error.empty_usages"));
         }
+    }
+
+    private boolean canCreateScenario() {
+        int containerSize = usagesTable.getContainerDataSource().size();
+        return !(1 > containerSize || containerSize == controller.getNewUsagesCount());
     }
 }

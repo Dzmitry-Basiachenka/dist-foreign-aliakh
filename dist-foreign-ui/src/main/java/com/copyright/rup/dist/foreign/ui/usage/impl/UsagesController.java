@@ -95,6 +95,13 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
+    public int getNewUsagesCount() {
+        UsageFilter filter = filterController.getWidget().getAppliedFilter();
+        filter.setUsageStatuses(Collections.singleton(UsageStatusEnum.NEW));
+        return usageService.getUsagesCount(filter);
+    }
+
+    @Override
     public List<UsageDto> loadBeans(int startIndex, int count, Object[] sortPropertyIds, boolean... sortStates) {
         UsageFilter filter = filterController.getWidget().getAppliedFilter();
         filter.setUsageStatuses(Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.ELIGIBLE));

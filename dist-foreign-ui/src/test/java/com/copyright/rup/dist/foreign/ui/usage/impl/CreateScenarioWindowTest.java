@@ -1,11 +1,14 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
+import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
@@ -15,6 +18,7 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.ui.component.validator.ScenarioNameUniqueValidator;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
+import com.copyright.rup.vaadin.ui.Windows;
 
 import com.vaadin.data.Validator;
 import com.vaadin.data.validator.StringLengthValidator;
@@ -30,6 +34,9 @@ import com.vaadin.ui.VerticalLayout;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
@@ -46,6 +53,8 @@ import java.util.Iterator;
  *
  * @author Mikalai Bezmen
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({Windows.class})
 public class CreateScenarioWindowTest {
 
     private static final String SCENARIO_NAME = "Scenario Name";
@@ -80,7 +89,7 @@ public class CreateScenarioWindowTest {
     }
 
     @Test
-    public void testOnConfirmButtonClicked() {
+    public void testOnConfirmButtonClickedWithoutNewDetails() {
         ClickEvent clickEvent = createMock(ClickEvent.class);
         TextField scenarioNameField = createMock(TextField.class);
         TextArea descriptionArea = createMock(TextArea.class);
@@ -90,6 +99,7 @@ public class CreateScenarioWindowTest {
             .getComponent(2)).getComponent(0);
         expect(scenarioNameField.isValid()).andReturn(true).once();
         expect(descriptionArea.isValid()).andReturn(true).once();
+        expect(controller.getNewUsagesCount()).andReturn(0).once();
         expect(scenarioNameField.getValue()).andReturn(SCENARIO_NAME).once();
         expect(descriptionArea.getValue()).andReturn(DESCRIPTION).once();
         expect(controller.createScenario(SCENARIO_NAME, DESCRIPTION)).andReturn(RupPersistUtils.generateUuid()).once();
@@ -99,6 +109,30 @@ public class CreateScenarioWindowTest {
         ClickListener clickListener = (ClickListener) listeners.iterator().next();
         clickListener.buttonClick(clickEvent);
         verify(clickEvent, scenarioNameField, descriptionArea, controller, scenarioService);
+    }
+
+    @Test
+    public void testOnConfirmButtonClickedWithNewDetails() {
+        mockStatic(Windows.class);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        TextField scenarioNameField = createMock(TextField.class);
+        TextArea descriptionArea = createMock(TextArea.class);
+        Whitebox.setInternalState(createScenarioWindow, "scenarioNameField", scenarioNameField);
+        Whitebox.setInternalState(createScenarioWindow, "descriptionArea", descriptionArea);
+        Button confirmButton = (Button) ((HorizontalLayout) ((VerticalLayout) createScenarioWindow.getContent())
+            .getComponent(2)).getComponent(0);
+        expect(scenarioNameField.isValid()).andReturn(true).once();
+        expect(descriptionArea.isValid()).andReturn(true).once();
+        expect(controller.getNewUsagesCount()).andReturn(1).once();
+        expect(scenarioNameField.getValue()).andReturn(SCENARIO_NAME).once();
+        Windows.showModalWindow(anyObject(AddUsagesAlertWindow.class));
+        expectLastCall().once();
+        replay(clickEvent, scenarioNameField, descriptionArea, controller, scenarioService, Windows.class);
+        Collection<?> listeners = confirmButton.getListeners(ClickEvent.class);
+        assertEquals(1, listeners.size());
+        ClickListener clickListener = (ClickListener) listeners.iterator().next();
+        clickListener.buttonClick(clickEvent);
+        verify(clickEvent, scenarioNameField, descriptionArea, controller, scenarioService, Windows.class);
     }
 
     private void verifyScenarioNameField(Component component) {
