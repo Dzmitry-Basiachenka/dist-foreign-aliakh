@@ -70,6 +70,7 @@ public class UsagesWidgetTest {
     private static final String GROSS_AMOUNT_PROPERTY = "grossAmount";
     private static final String REPORTED_VALUE_PROPERTY = "reportedValue";
     private static final String BATCH_GROSS_AMOUNT_PROPERTY = "batchGrossAmount";
+    private static final String USAGES_TABLE = "usagesTable";
     private UsagesWidget usagesWidget;
     private IUsagesController controller;
 
@@ -131,19 +132,42 @@ public class UsagesWidgetTest {
     public void testAddToScenarioButtonEmptyUsagesTableClickListener() {
         mockStatic(Windows.class);
         LazyTable<UsageBeanQuery, UsageDto> usagesTable = new LazyTable<>(controller, UsageBeanQuery.class, 1);
-        Whitebox.setInternalState(usagesWidget, "usagesTable", usagesTable);
+        Whitebox.setInternalState(usagesWidget, USAGES_TABLE, usagesTable);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
             .getComponent(0)).getComponent(1);
         assertTrue(addToScenarioButton.isDisableOnClick());
-        Windows.showNotificationWindow("Please select at least one usage");
+        Windows.showNotificationWindow("Please select at least one ELIGIBLE usage");
         expectLastCall().once();
-        replay(clickEvent, Windows.class);
+        expect(controller.getSize()).andReturn(0).once();
+        replay(controller, clickEvent, Windows.class);
         Collection<?> listeners = addToScenarioButton.getListeners(ClickEvent.class);
         assertEquals(2, listeners.size());
         ClickListener clickListener = (ClickListener) listeners.iterator().next();
         clickListener.buttonClick(clickEvent);
-        verify(clickEvent, Windows.class);
+        verify(controller, clickEvent, Windows.class);
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testAddToScenarioButtonOnlyNewUsagesClickListener() {
+        mockStatic(Windows.class);
+        LazyTable<UsageBeanQuery, UsageDto> usagesTable =
+            new LazyTable<>(new UsageDtoBeanLoader(), UsageBeanQuery.class, 1);
+        Whitebox.setInternalState(usagesWidget, USAGES_TABLE, usagesTable);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
+            .getComponent(0)).getComponent(1);
+        assertTrue(addToScenarioButton.isDisableOnClick());
+        expect(controller.getNewUsagesCount()).andReturn(1).once();
+        Windows.showNotificationWindow("Please select at least one ELIGIBLE usage");
+        expectLastCall().once();
+        replay(controller, clickEvent, Windows.class);
+        Collection<?> listeners = addToScenarioButton.getListeners(ClickEvent.class);
+        assertEquals(2, listeners.size());
+        ClickListener clickListener = (ClickListener) listeners.iterator().next();
+        clickListener.buttonClick(clickEvent);
+        verify(controller, clickEvent, Windows.class);
     }
 
     @Test
@@ -152,19 +176,21 @@ public class UsagesWidgetTest {
         mockStatic(Windows.class);
         LazyTable<UsageBeanQuery, UsageDto> usagesTable =
             new LazyTable<>(new UsageDtoBeanLoader(), UsageBeanQuery.class, 1);
-        Whitebox.setInternalState(usagesWidget, "usagesTable", usagesTable);
+        Whitebox.setInternalState(usagesWidget, USAGES_TABLE, usagesTable);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
             .getComponent(0)).getComponent(1);
         assertTrue(addToScenarioButton.isDisableOnClick());
+        expect(controller.getNewUsagesCount()).andReturn(0).once();
+        expect(controller.getScenarioService()).andReturn(null).once();
         Windows.showModalWindow(anyObject(CreateScenarioWindow.class));
         expectLastCall().once();
-        replay(clickEvent, Windows.class);
+        replay(controller, clickEvent, Windows.class);
         Collection<?> listeners = addToScenarioButton.getListeners(ClickEvent.class);
         assertEquals(2, listeners.size());
         ClickListener clickListener = (ClickListener) listeners.iterator().next();
         clickListener.buttonClick(clickEvent);
-        verify(clickEvent, Windows.class);
+        verify(controller, clickEvent, Windows.class);
     }
 
     @Test
@@ -192,7 +218,7 @@ public class UsagesWidgetTest {
         QueryView queryView = createMock(QueryView.class);
         Whitebox.setInternalState(containerMock, "itemSetChangeListeners", Collections.emptyList());
         Whitebox.setInternalState(containerMock, "queryView", queryView);
-        Whitebox.setInternalState(usagesWidget, "usagesTable", usagesTableMock);
+        Whitebox.setInternalState(usagesWidget, USAGES_TABLE, usagesTableMock);
         expect(usagesTableMock.getContainerDataSource()).andReturn(containerMock).once();
         containerMock.refresh();
         expectLastCall().once();
@@ -238,9 +264,9 @@ public class UsagesWidgetTest {
     private void verifyTable(Table table) {
         assertArrayEquals(new Object[]{DETAIL_ID_PROPERTY, "status", "batchName", "fiscalYear", "rroAccountNumber",
             "rroName", "paymentDate", "workTitle", "article", "standardNumber", "wrWrkInst", "rhAccountNumber",
-            "rhName", "publisher", "publicationDate", "numberOfCopies", REPORTED_VALUE_PROPERTY, GROSS_AMOUNT_PROPERTY,
-            BATCH_GROSS_AMOUNT_PROPERTY, "market", "marketPeriodFrom", "marketPeriodTo", "author"},
-            table.getVisibleColumns());
+            "rhName", "publisher", "publicationDate", "numberOfCopies", REPORTED_VALUE_PROPERTY,
+            GROSS_AMOUNT_PROPERTY, BATCH_GROSS_AMOUNT_PROPERTY, "market", "marketPeriodFrom", "marketPeriodTo",
+            "author"}, table.getVisibleColumns());
         assertArrayEquals(
             new Object[]{"Detail ID", "Detail Status", "Usage Batch Name", "Fiscal Year", "RRO Account #",
                 "RRO Name", "Payment Date", "Title", "Article", "Standard Number", "Wr Wrk Inst", "RH Account #",

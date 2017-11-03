@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.ui.component.validator.ScenarioNameUniqueV
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.ConfirmDialogWindow.IListener;
 import com.copyright.rup.vaadin.ui.VaadinUtils;
 import com.copyright.rup.vaadin.ui.Windows;
 
@@ -103,13 +104,33 @@ public class CreateScenarioWindow extends Window {
 
     private void onConfirmButtonClicked() {
         if (isValid()) {
-            String scenarioId = controller.createScenario(StringUtils.trimToEmpty(scenarioNameField.getValue()),
-                StringUtils.trimToEmpty(descriptionArea.getValue()));
-            fireEvent(new ScenarioCreateEvent(this, scenarioId));
-            close();
+            final String scenarioName = StringUtils.trimToEmpty(scenarioNameField.getValue());
+            if (0 < controller.getNewUsagesCount()) {
+                AddUsagesAlertWindow window = new AddUsagesAlertWindow(scenarioName);
+                window.setListener(new IListener() {
+                    @Override
+                    public void onActionConfirmed() {
+                        createScenario(scenarioName);
+                    }
+
+                    @Override
+                    public void onActionDeclined() {
+                        close();
+                    }
+                });
+                Windows.showModalWindow(window);
+            } else {
+                createScenario(scenarioName);
+            }
         } else {
             Windows.showValidationErrorWindow(Lists.newArrayList(scenarioNameField, descriptionArea));
         }
+    }
+
+    private void createScenario(String scenarioName) {
+        fireEvent(new ScenarioCreateEvent(this,
+            controller.createScenario(scenarioName, StringUtils.trimToEmpty(descriptionArea.getValue()))));
+        close();
     }
 
     /**
