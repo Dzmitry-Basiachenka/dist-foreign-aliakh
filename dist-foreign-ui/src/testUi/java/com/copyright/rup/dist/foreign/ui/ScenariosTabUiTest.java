@@ -139,6 +139,7 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
         clickButtonAndWait(scenariosTab, DELETE_BUTTON_ID);
         WebElement confirmDialog = assertWebElement(By.id("confirm-dialog-window"));
         UsageFilter filter = new UsageFilter();
+        filter.setUsageStatuses(Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.ELIGIBLE));
         filter.setUsageBatchesIds(Sets.newHashSet("56282dbc-2468-48d4-b926-93d3458a656a"));
         Pageable pageable = new Pageable(0, 100);
         Sort sort = new Sort("status", Direction.ASC);

@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.common.repository.BaseRepository;
@@ -25,7 +24,6 @@ import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.io.PipedOutputStream;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -61,23 +59,21 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
 
     @Override
     public void insert(Usage usage) {
-        insert("IUsageMapper.insert", checkNotNull(usage));
+        insert("IUsageMapper.insert", Objects.requireNonNull(usage));
     }
 
     @Override
     public List<UsageDto> findByFilter(UsageFilter filter, Pageable pageable, Sort sort) {
-        Objects.requireNonNull(filter).setUsageStatuses(Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.ELIGIBLE));
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
-        parameters.put(FILTER_KEY, checkNotNull(filter));
-        parameters.put(PAGEABLE_KEY, checkNotNull(pageable));
+        parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
+        parameters.put(PAGEABLE_KEY, Objects.requireNonNull(pageable));
         parameters.put(SORT_KEY, sort);
         return selectList("IUsageMapper.findByFilter", parameters);
     }
 
     @Override
     public int getCountByFilter(UsageFilter filter) {
-        Objects.requireNonNull(filter).setUsageStatuses(Sets.newHashSet(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.NEW));
-        return selectOne("IUsageMapper.getCountByFilter", ImmutableMap.of(FILTER_KEY, checkNotNull(filter)));
+        return selectOne("IUsageMapper.getCountByFilter", ImmutableMap.of(FILTER_KEY, Objects.requireNonNull(filter)));
     }
 
     @Override
@@ -94,7 +90,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
 
     @Override
     public void writeUsagesCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream) {
-        Objects.requireNonNull(filter).setUsageStatuses(Sets.newHashSet(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.NEW));
         try (UsageCsvReportHandler handler = new UsageCsvReportHandler(Objects.requireNonNull(pipedOutputStream))) {
             if (!Objects.requireNonNull(filter).isEmpty()) {
                 getTemplate().select("IUsageMapper.findByFilter", ImmutableMap.of(FILTER_KEY, filter), handler);
@@ -112,7 +107,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
 
     @Override
     public List<Usage> findWithAmountsAndRightsholders(UsageFilter filter) {
-        Objects.requireNonNull(filter).setUsageStatuses(Collections.singleton(UsageStatusEnum.ELIGIBLE));
         return selectList("IUsageMapper.findWithAmountsAndRightsholders", ImmutableMap.of(
             FILTER_KEY, Objects.requireNonNull(filter)));
     }
