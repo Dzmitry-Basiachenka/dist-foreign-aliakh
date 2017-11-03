@@ -318,6 +318,17 @@
         cast(ub.rro_account_number as text) like '%' || #{searchValue} || '%'
     </sql>
 
+    <sql id="deleteFromScenarioSql">
+        update
+            ${schema}.df_usage
+        set
+            status_ind = #{status},
+            df_scenario_uid = null,
+            payee_account_number = null,
+            <include refid="StoredEntityMapper.update"/>
+        where df_scenario_uid = #{scenarioId}
+    </sql>
+
     <insert id="insert" parameterType="Usage">
         insert into ${schema}.df_usage(
             <include refid="usageColumns"/>,
@@ -488,14 +499,15 @@
     </update>
 
     <update id="deleteFromScenario" parameterType="map">
-        update
-            ${schema}.df_usage
-        set
-            status_ind = #{status},
-            df_scenario_uid = null,
-            payee_account_number = null,
-            <include refid="StoredEntityMapper.update"/>
-        where df_scenario_uid = #{scenarioId}
+        <include refid="deleteFromScenarioSql"/>
+    </update>
+
+    <update id="deleteFromScenarioByAccountNumbers" parameterType="map">
+        <include refid="deleteFromScenarioSql"/>
+        and rh_account_number in
+        <foreach collection="accountNumbers" item="accountNumber" separator=", " open="(" close=")">
+            #{accountNumber}
+        </foreach>
     </update>
 
     <select id="getDuplicateDetailIds" parameterType="list" resultType="long">

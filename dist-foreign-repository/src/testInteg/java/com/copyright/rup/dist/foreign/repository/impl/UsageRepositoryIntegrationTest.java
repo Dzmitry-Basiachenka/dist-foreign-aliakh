@@ -405,8 +405,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     public void testGetCountByScenarioIdAndRhAccountNumberNullSearchValue() {
         populateScenario();
-        String usageUuid = RupPersistUtils.generateUuid();
-        Usage usage = buildUsage(usageUuid, USAGE_BATCH_ID_1);
+        Usage usage = buildUsage(RupPersistUtils.generateUuid(), USAGE_BATCH_ID_1);
         usageRepository.insert(usage);
         usageRepository.addToScenario(Collections.singletonList(usage));
         assertEquals(1, usageRepository.getCountByScenarioIdAndRhAccountNumber(1000009997L, SCENARIO_ID, null));
@@ -640,6 +639,19 @@ public class UsageRepositoryIntegrationTest {
     public void testGetDuplicateDetailIds() {
         assertTrue(CollectionUtils.containsAny(Sets.newHashSet(DETAIL_ID_1, DETAIL_ID_2),
             usageRepository.getDuplicateDetailIds(Lists.newArrayList(DETAIL_ID_1, DETAIL_ID_2, -1L))));
+    }
+
+    @Test
+    public void testDeleteFromScenarioByAccountNumbers() {
+        assertEquals(SCENARIO_ID, usageRepository.findByDetailId(6997788886L).getScenarioId());
+        assertEquals(SCENARIO_ID, usageRepository.findByDetailId(6213788886L).getScenarioId());
+        Usage usage = buildUsage(RupPersistUtils.generateUuid(), USAGE_BATCH_ID_1);
+        usageRepository.insert(usage);
+        usageRepository.addToScenario(Collections.singletonList(usage));
+        usageRepository.deleteFromScenario(SCENARIO_ID, Lists.newArrayList(1000002859L), StoredEntity.DEFAULT_USER);
+        assertNull(usageRepository.findByDetailId(6997788886L).getScenarioId());
+        assertNull(usageRepository.findByDetailId(6213788886L).getScenarioId());
+        assertEquals(SCENARIO_ID, usageRepository.findByDetailId(DETAIL_ID).getScenarioId());
     }
 
     private void verifySearch(String searchValue, int expectedSize) {

@@ -140,8 +140,13 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public void deleteUsagesFromScenario(String scenarioId) {
+    public void deleteFromScenario(String scenarioId) {
         usageRepository.deleteFromScenario(scenarioId, RupContextUtils.getUserName());
+    }
+
+    @Override
+    public void deleteFromScenario(String scenarioId, List<Long> accountNumbers) {
+        usageRepository.deleteFromScenario(scenarioId, accountNumbers, RupContextUtils.getUserName());
     }
 
     @Override
