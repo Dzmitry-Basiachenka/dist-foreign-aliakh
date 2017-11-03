@@ -41,6 +41,11 @@ public class PrmIntegrationServiceMock implements IPrmIntegrationService {
         return HashBasedTable.create();
     }
 
+    @Override
+    public boolean isRightsholderParticipating(Long accountNumber) {
+        return false;
+    }
+
     private Rightsholder buildRightsholder(Long accountNumber, String name) {
         Rightsholder rightsholder = new Rightsholder();
         rightsholder.setId(RupPersistUtils.generateUuid());

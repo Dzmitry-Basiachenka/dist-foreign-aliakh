@@ -46,4 +46,20 @@ public interface IPrmIntegrationService {
      * @return roll ups for the rightsholders with specified ids
      */
     Table<String, String, Long> getRollUps(Collection<String> rightsholdersIds);
+
+    /**
+     * Checks whether {@link com.copyright.rup.dist.common.domain.Rightsholder rightsholder} is participating or not.
+     * Gets participating flag from {@link com.copyright.rup.dist.common.domain.RightsholderPreferences preferences}
+     * by specified {@code rightsholder account number} and 'FAS' product family.
+     * </br>
+     * If preferences for specified product family were not found System finds preferences for the same rightsholder
+     * account number and <b>{@code '*'}</b> ('*' is passed as a product family).
+     *
+     * @param accountNumber rightsholder account number to search
+     * @return the found rightsholder participating flag or
+     * {@code false} if there is neither no preferences for rightsholder or
+     * {@code accountNumber} is a null or
+     * {@code productFamily} is a blank string.
+     */
+    boolean isRightsholderParticipating(Long accountNumber);
 }
