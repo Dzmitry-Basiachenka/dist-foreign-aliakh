@@ -12,6 +12,7 @@ import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.common.util.CalculationUtils;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
+import com.copyright.rup.dist.foreign.integration.prm.impl.PrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
@@ -132,7 +133,8 @@ public class UsageService implements IUsageService {
             usage.setStatus(UsageStatusEnum.LOCKED);
             usage.setUpdateUser(scenario.getCreateUser());
             usage.getPayee()
-                .setAccountNumber(PrmRollUpService.getPayeeAccountNumber(rollUps, usage.getRightsholder(), "FAS"));
+                .setAccountNumber(PrmRollUpService.getPayeeAccountNumber(rollUps, usage.getRightsholder(),
+                    PrmIntegrationService.FAS_PRODUCT_FAMILY));
         });
         usageRepository.addToScenario(usages);
     }

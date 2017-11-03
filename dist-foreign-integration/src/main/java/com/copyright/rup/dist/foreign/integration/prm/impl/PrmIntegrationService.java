@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.integration.prm.impl;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.domain.RightsholderPreferences;
+import com.copyright.rup.dist.common.integration.rest.prm.IPrmRhPreferenceService;
 import com.copyright.rup.dist.common.integration.rest.prm.IPrmRightsholderService;
 import com.copyright.rup.dist.common.integration.rest.prm.IPrmRollUpService;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
@@ -8,6 +10,8 @@ import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService
 import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
 
+import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.perf4j.aop.Profiled;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -15,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -29,11 +34,19 @@ import java.util.Set;
 @Service
 public class PrmIntegrationService implements IPrmIntegrationService {
 
+    /**
+     * FAS Product Family.
+     */
+    public static final String FAS_PRODUCT_FAMILY = "FAS";
+
     @Autowired
     private IPrmRightsholderService prmRightsholderService;
     @Autowired
     @Qualifier("dist.common.integration.rest.prmRollUpService")
     private IPrmRollUpService prmRollUpService;
+    @Autowired
+    @Qualifier("dist.common.integration.rest.prmRhPreferenceService")
+    private IPrmRhPreferenceService prmRhPreferenceService;
 
     @Override
     @Profiled(tag = "integration.PrmRightsholderService.getRightsholders")
@@ -50,5 +63,21 @@ public class PrmIntegrationService implements IPrmIntegrationService {
     @Override
     public Table<String, String, Long> getRollUps(Collection<String> rightsholdersIds) {
         return prmRollUpService.getRollUps(rightsholdersIds);
+    }
+
+    @Override
+    @Profiled(tag = "integration.PrmIntegrationService.isRightsholderParticipating")
+    public boolean isRightsholderParticipating(Long accountNumber) {
+        boolean rhPraticipatingFlag = false;
+        Map<String, RightsholderPreferences> preferencesMap =
+            prmRhPreferenceService.getRightsholderPreferences(accountNumber);
+        if (MapUtils.isNotEmpty(preferencesMap)) {
+            RightsholderPreferences preferences = ObjectUtils.defaultIfNull(preferencesMap.get(FAS_PRODUCT_FAMILY),
+                preferencesMap.get(RightsholderPreferences.ALL_PRODUCTS_KEY));
+            if (null != preferences && null != preferences.isRhParticipating()) {
+                rhPraticipatingFlag = preferences.isRhParticipating();
+            }
+        }
+        return rhPraticipatingFlag;
     }
 }

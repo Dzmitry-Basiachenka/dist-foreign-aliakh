@@ -11,11 +11,14 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.domain.RightsholderPreferences;
+import com.copyright.rup.dist.common.integration.rest.prm.IPrmRhPreferenceService;
 import com.copyright.rup.dist.common.integration.rest.prm.IPrmRightsholderService;
 import com.copyright.rup.dist.common.integration.rest.prm.IPrmRollUpService;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 import org.junit.Before;
@@ -24,6 +27,7 @@ import org.powermock.reflect.Whitebox;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -39,17 +43,21 @@ public class PrmIntegrationServiceTest {
 
     private static final long ACCOUNT_NUMBER = 1000001863L;
     private static final String RIGHTSHOLDER_NAME = "CANADIAN CERAMIC SOCIETY";
+    private static final String FAS_PRODUCT_FAMILY = "FAS";
     private IPrmRightsholderService prmRightsholderService;
     private PrmIntegrationService prmIntegrationService;
     private IPrmRollUpService prmRollUpService;
+    private IPrmRhPreferenceService prmRhPreferenceService;
 
     @Before
     public void setUp() {
         prmIntegrationService = new PrmIntegrationService();
         prmRightsholderService = createMock(IPrmRightsholderService.class);
         prmRollUpService = createMock(IPrmRollUpService.class);
+        prmRhPreferenceService = createMock(IPrmRhPreferenceService.class);
         Whitebox.setInternalState(prmIntegrationService, "prmRightsholderService", prmRightsholderService);
         Whitebox.setInternalState(prmIntegrationService, "prmRollUpService", prmRollUpService);
+        Whitebox.setInternalState(prmIntegrationService, "prmRhPreferenceService", prmRhPreferenceService);
     }
 
     @Test
@@ -99,11 +107,54 @@ public class PrmIntegrationServiceTest {
         String rightsholderId = RupPersistUtils.generateUuid();
         Set<String> rightsholdersIds = Collections.singleton(rightsholderId);
         HashBasedTable<String, String, Long> result = HashBasedTable.create(1, 1);
-        result.put(rightsholderId, "FAS", ACCOUNT_NUMBER);
+        result.put(rightsholderId, FAS_PRODUCT_FAMILY, ACCOUNT_NUMBER);
         expect(prmRollUpService.getRollUps(rightsholdersIds)).andReturn(result).once();
         replay(prmRollUpService);
         assertEquals(result, prmIntegrationService.getRollUps(rightsholdersIds));
         verify(prmRollUpService);
+    }
+
+    @Test
+    public void testIsRightsholderParticipating() {
+        RightsholderPreferences preferences = new RightsholderPreferences();
+        preferences.setRhParticipating(true);
+        Map<String, RightsholderPreferences> preferencesMap = Maps.newHashMap();
+        preferencesMap.put(FAS_PRODUCT_FAMILY, preferences);
+        expect(prmRhPreferenceService.getRightsholderPreferences(ACCOUNT_NUMBER)).andReturn(preferencesMap).once();
+        replay(prmRhPreferenceService);
+        assertTrue(prmIntegrationService.isRightsholderParticipating(ACCOUNT_NUMBER));
+        verify(prmRhPreferenceService);
+    }
+
+    @Test
+    public void testIsRightsholderParticipatingAllProductsConfiguration() {
+        RightsholderPreferences preferences = new RightsholderPreferences();
+        preferences.setRhParticipating(true);
+        Map<String, RightsholderPreferences> preferencesMap = Maps.newHashMap();
+        preferencesMap.put("*", preferences);
+        expect(prmRhPreferenceService.getRightsholderPreferences(ACCOUNT_NUMBER)).andReturn(preferencesMap).once();
+        replay(prmRhPreferenceService);
+        assertTrue(prmIntegrationService.isRightsholderParticipating(ACCOUNT_NUMBER));
+        verify(prmRhPreferenceService);
+    }
+
+    @Test
+    public void testIsRightsholderParticipatingNoPreferences() {
+        expect(prmRhPreferenceService.getRightsholderPreferences(ACCOUNT_NUMBER)).andReturn(null).once();
+        replay(prmRhPreferenceService);
+        assertFalse(prmIntegrationService.isRightsholderParticipating(ACCOUNT_NUMBER));
+        verify(prmRhPreferenceService);
+    }
+
+    @Test
+    public void testIsRightsholderParticipatingNullRhParticipatingPreference() {
+        RightsholderPreferences preferences = new RightsholderPreferences();
+        Map<String, RightsholderPreferences> preferencesMap = Maps.newHashMap();
+        preferencesMap.put(FAS_PRODUCT_FAMILY, preferences);
+        expect(prmRhPreferenceService.getRightsholderPreferences(ACCOUNT_NUMBER)).andReturn(preferencesMap).once();
+        replay(prmRhPreferenceService);
+        assertFalse(prmIntegrationService.isRightsholderParticipating(ACCOUNT_NUMBER));
+        verify(prmRhPreferenceService);
     }
 
     private Rightsholder buildRightsholder(Long accountNumber, String name) {
