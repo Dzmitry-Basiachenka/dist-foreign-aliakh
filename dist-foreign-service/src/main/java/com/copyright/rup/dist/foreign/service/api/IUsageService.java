@@ -108,7 +108,17 @@ public interface IUsageService {
      *
      * @param scenarioId scenario identifier
      */
-    void deleteUsagesFromScenario(String scenarioId);
+    void deleteFromScenario(String scenarioId);
+
+    /**
+     * Deletes {@link Usage}s from {@link Scenario}. Reverts status of {@link Usage}s
+     * to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE} and set scenario id as {@code null}
+     * for usages with rightsholders from given list of account numbers.
+     *
+     * @param scenarioId     {@link Scenario} identifier
+     * @param accountNumbers list of {@link com.copyright.rup.dist.common.domain.Rightsholder}s account numbers
+     */
+    void deleteFromScenario(String scenarioId, List<Long> accountNumbers);
 
     /**
      * Gets duplicate detail ids of {@link Usage}s which are already presented in database.

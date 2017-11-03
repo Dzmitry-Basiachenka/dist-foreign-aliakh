@@ -97,6 +97,17 @@ public interface IUsageRepository {
     void deleteFromScenario(String scenarioId, String updateUser);
 
     /**
+     * Deletes {@link Usage}s from scenario. Reverts status of {@link Usage}s
+     * to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE} and set scenario id as {@code null}
+     * for usages with rightsholders from given list of account numbers.
+     *
+     * @param scenarioId     {@link com.copyright.rup.dist.foreign.domain.Scenario} id
+     * @param accountNumbers list of {@link com.copyright.rup.dist.common.domain.Rightsholder}s account numbers
+     * @param updateUser     update user
+     */
+    void deleteFromScenario(String scenarioId, List<Long> accountNumbers, String updateUser);
+
+    /**
      * Gets duplicate detail ids of {@link Usage}s which are already presented in database.
      *
      * @param detailIds list of detail ids

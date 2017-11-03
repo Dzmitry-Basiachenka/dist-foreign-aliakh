@@ -146,7 +146,7 @@ public class ScenarioServiceTest {
 
     @Test
     public void testRemove() {
-        usageService.deleteUsagesFromScenario(SCENARIO_ID);
+        usageService.deleteFromScenario(SCENARIO_ID);
         expectLastCall().once();
         scenarioRepository.remove(SCENARIO_ID);
         expectLastCall().once();

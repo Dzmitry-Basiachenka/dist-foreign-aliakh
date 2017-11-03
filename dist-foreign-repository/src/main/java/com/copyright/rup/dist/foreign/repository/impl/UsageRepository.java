@@ -126,6 +126,17 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
+    public void deleteFromScenario(String scenarioId, List<Long> accountNumbers, String updateUser) {
+        checkArgument(CollectionUtils.isNotEmpty(accountNumbers));
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        parameters.put(UPDATE_USER_KEY, Objects.requireNonNull(updateUser));
+        parameters.put(STATUS_KEY, UsageStatusEnum.ELIGIBLE);
+        parameters.put("accountNumbers", accountNumbers);
+        update("IUsageMapper.deleteFromScenarioByAccountNumbers", parameters);
+    }
+
+    @Override
     public Set<Long> getDuplicateDetailIds(List<Long> detailIds) {
         checkArgument(CollectionUtils.isNotEmpty(detailIds));
         Set<Long> result = Sets.newHashSetWithExpectedSize(detailIds.size());
