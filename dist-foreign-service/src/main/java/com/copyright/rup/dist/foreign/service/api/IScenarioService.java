@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.api;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
 
@@ -65,4 +66,14 @@ public interface IScenarioService {
      * @return list of source RROs for given scenario
      */
     List<Rightsholder> getSourceRros(String scenarioId);
+
+    /**
+     * Finds all {@link RightsholderPayeePair}s belonging to the source RRO with given account number within the
+     * scenario with given id.
+     *
+     * @param scenarioId       {@link Scenario} id
+     * @param rroAccountNumber RRO account number
+     * @return list of {@link RightsholderPayeePair}s
+     */
+    List<RightsholderPayeePair> getRightsholdersByScenarioAndSourceRro(String scenarioId, Long rroAccountNumber);
 }

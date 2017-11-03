@@ -25,9 +25,9 @@ databaseChangeLog {
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
-            column(name: 'df_usage_batch_uid', value: '56782dbc-2158-48d4-b026-94d3458a666a')
+            column(name: 'df_usage_batch_uid', value: 'a5b64c3a-55d2-462e-b169-362dca6a4dd6')
             column(name: 'name', value: 'JAACC_11Dec16')
-            column(name: 'rro_account_number', value: '7001440663')
+            column(name: 'rro_account_number', value: '2000017010')
             column(name: 'payment_date', value: '2015-09-10')
             column(name: 'fiscal_year', value: '2016')
             column(name: 'gross_amount', value: '35000')
@@ -78,7 +78,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'a80a4ca0-3406-467a-b967-ac6e3fb187fb')
-            column(name: 'df_usage_batch_uid', value: '56782dbc-2158-48d4-b026-94d3458a666a')
+            column(name: 'df_usage_batch_uid', value: 'a5b64c3a-55d2-462e-b169-362dca6a4dd6')
             column(name: 'detail_id', value: '6997788882')
             column(name: 'wr_wrk_inst', value: '108738286')
             column(name: 'work_title', value: '2001 tax legislation: law, explanation, and analysis : Economic Growth and Tax Relief Reconciliation Act of 2001')
@@ -100,7 +100,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '5c5f8c1c-1418-4cfd-8685-9212f4c421d1')
-            column(name: 'df_usage_batch_uid', value: '56782dbc-2158-48d4-b026-94d3458a666a')
+            column(name: 'df_usage_batch_uid', value: 'a5b64c3a-55d2-462e-b169-362dca6a4dd6')
             column(name: 'detail_id', value: '6997788884')
             column(name: 'wr_wrk_inst', value: '345870577')
             column(name: 'work_title', value: '10 Years Plant Molecular Biology')
@@ -207,8 +207,8 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: 'ff8b9ac9-5fca-4d57-b74e-26da209c1040')
-            column(name: 'rh_account_number', value: '7001440663')
-            column(name: 'name', value: 'JAACC, Japan Academic Association for Copyright Clearance [T]')
+            column(name: 'rh_account_number', value: '2000017010')
+            column(name: 'name', value: 'JAC, Japan Academic Association for Copyright Clearance, Inc.')
         }
 
         rollback ""
@@ -243,7 +243,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'b1f0b236-3ae9-4a60-9fab-61db84199dss')
-            column(name: 'df_usage_batch_uid', value: '56782dbc-2158-48d4-b026-94d3458a666a')
+            column(name: 'df_usage_batch_uid', value: 'a5b64c3a-55d2-462e-b169-362dca6a4dd6')
             column(name: 'df_scenario_uid', value: 'b1f0b236-3ae9-4a60-9fab-61db84199d6f')
             column(name: 'detail_id', value: '6997788886')
             column(name: 'wr_wrk_inst', value: '243904752')
@@ -268,7 +268,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'cf38d390-11bb-4af7-9685-e034c9c32fb6')
-            column(name: 'df_usage_batch_uid', value: '56782dbc-2158-48d4-b026-94d3458a666a')
+            column(name: 'df_usage_batch_uid', value: 'a5b64c3a-55d2-462e-b169-362dca6a4dd6')
             column(name: 'df_scenario_uid', value: 'b1f0b236-3ae9-4a60-9fab-61db84199d6f')
             column(name: 'detail_id', value: '6213788886')
             column(name: 'wr_wrk_inst', value: '243904752')

@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -14,6 +15,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import org.junit.Test;
@@ -26,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,7 +51,7 @@ public class ScenarioRepositoryIntegrationTest {
 
     private static final String SCENARIO_NAME = "name";
     private static final String DESCRIPTION = "description";
-    private static final String USAGE_BATCH_ID = "56782dbc-2158-48d4-b026-94d3458a666a";
+    private static final String USAGE_BATCH_ID = "a5b64c3a-55d2-462e-b169-362dca6a4dd6";
     private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
     private static final BigDecimal NET_TOTAL = new BigDecimal("204").setScale(10);
     private static final BigDecimal SERVICE_FEE_TOTAL = new BigDecimal("96").setScale(10);
@@ -126,7 +129,40 @@ public class ScenarioRepositoryIntegrationTest {
         List<Rightsholder> sourceRros = scenarioRepository.findSourceRros(SCENARIO_ID);
         assertEquals(2, sourceRros.size());
         assertTrue(sourceRros.stream().map(Rightsholder::getAccountNumber).collect(Collectors.toSet()).containsAll(
-            Sets.newHashSet(7001440663L, 2000017000L)));
+            Sets.newHashSet(2000017010L, 2000017000L)));
+    }
+
+    @Test
+    public void testFindRightsholdersByScenarioAndSourceRro() {
+        scenarioRepository.insert(buildScenario(SCENARIO_ID, SCENARIO_NAME));
+        // build one usage with different pair of rh and payee
+        Usage usage1 = buildUsage(54236984L);
+        usage1.setRightsholder(buildRightsholder(2000017004L,
+            "Access Copyright, The Canadian Copyright Agency"));
+        usage1.setPayee(buildRightsholder(2000017010L,
+            "JAC, Japan Academic Association for Copyright Clearance, Inc."));
+        // build 2 usages with the same rh and payee
+        Usage usage2 = buildUsage(30120014L);
+        Usage usage3 = buildUsage(24125874L);
+        usageRepository.insert(usage1);
+        usageRepository.insert(usage2);
+        usageRepository.insert(usage3);
+        usageRepository.addToScenario(Lists.newArrayList(usage1, usage2, usage3));
+        List<RightsholderPayeePair> result =
+            scenarioRepository.findRightsholdersByScenarioAndSourceRro(SCENARIO_ID, 2000017010L);
+        assertEquals(2, result.size());
+        result.sort(Comparator.comparing(RightsholderPayeePair::getRightsholder)
+            .thenComparing(RightsholderPayeePair::getPayee));
+        // one pair should be returned for usage 3
+        RightsholderPayeePair pair1 = result.get(0);
+        assertEquals(usage1.getRightsholder(), pair1.getRightsholder());
+        assertEquals(usage1.getPayee(), pair1.getPayee());
+        RightsholderPayeePair pair2 = result.get(1);
+        // one pair should be returned for usages 1 and 2
+        assertEquals(usage2.getRightsholder(), pair2.getRightsholder());
+        assertEquals(usage2.getPayee(), pair2.getPayee());
+        assertEquals(usage3.getRightsholder(), pair2.getRightsholder());
+        assertEquals(usage3.getPayee(), pair2.getPayee());
     }
 
     private UsageBatch buildBatch(Long rroAccountNumber) {
@@ -150,10 +186,9 @@ public class ScenarioRepositoryIntegrationTest {
         usage.setDetailId(detailId);
         usage.setWrWrkInst(123456783L);
         usage.setWorkTitle("WorkTitle");
-        Rightsholder rightsholder = new Rightsholder();
-        rightsholder.setAccountNumber(7000813806L);
-        rightsholder.setName("CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil");
-        usage.setRightsholder(rightsholder);
+        usage.setRightsholder(buildRightsholder(7000813806L,
+            "CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil"));
+        usage.setPayee(usage.getRightsholder());
         usage.setStatus(UsageStatusEnum.LOCKED);
         usage.setArticle("Article");
         usage.setStandardNumber("StandardNumber");
@@ -193,5 +228,12 @@ public class ScenarioRepositoryIntegrationTest {
         assertEquals(netAmount, scenario.getNetTotal());
         assertEquals(serviceFeeAmount, scenario.getServiceFeeTotal());
         assertEquals(reportedAmount, scenario.getReportedTotal());
+    }
+
+    private Rightsholder buildRightsholder(Long accountNumber, String name) {
+        Rightsholder rightsholder = new Rightsholder();
+        rightsholder.setAccountNumber(accountNumber);
+        rightsholder.setName(name);
+        return rightsholder;
     }
 }

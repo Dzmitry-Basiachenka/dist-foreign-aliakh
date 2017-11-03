@@ -163,6 +163,16 @@ public class ScenarioServiceTest {
         verify(scenarioRepository);
     }
 
+    @Test
+    public void testGetRightsholdersByScenarioAndSourceRro() {
+        expect(scenarioRepository.findRightsholdersByScenarioAndSourceRro(SCENARIO_ID, 2000017010L))
+            .andReturn(Collections.emptyList()).once();
+        replay(scenarioRepository);
+        assertEquals(Collections.emptyList(),
+            scenarioService.getRightsholdersByScenarioAndSourceRro(SCENARIO_ID, 2000017010L));
+        verify(scenarioRepository);
+    }
+
     private Usage buildUsage(BigDecimal grossAmount, BigDecimal reportedValue, BigDecimal netAmount) {
         Usage usage = new Usage();
         usage.setId(RupPersistUtils.generateUuid());

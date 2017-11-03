@@ -15,6 +15,13 @@
         <result property="description" column="description"/>
     </resultMap>
 
+    <resultMap id="rightsholderPayeePairResultMap" type="RightsholderPayeePair">
+        <result property="rightsholder.accountNumber" column="rh_account_number"/>
+        <result property="rightsholder.name" column="rh_name"/>
+        <result property="payee.accountNumber" column="payee_account_number"/>
+        <result property="payee.name" column="payee_name"/>
+    </resultMap>
+
     <sql id="scenarioColumns">
         df_scenario_uid,
         name,
@@ -79,5 +86,18 @@
         join ${schema}.df_usage_batch b on b.df_usage_batch_uid = u.df_usage_batch_uid
         left join ${schema}.df_rightsholder r on r.rh_account_number = b.rro_account_number
         where u.df_scenario_uid = #{scenarioId}
+    </select>
+
+    <select id="findRightsholdersByScenarioAndSourceRro" parameterType="map" resultMap="rightsholderPayeePairResultMap">
+        select distinct
+            u.rh_account_number,
+            r.name rh_name,
+            u.payee_account_number,
+            p.name payee_name
+        from ${schema}.df_usage u
+        join ${schema}.df_usage_batch b on b.df_usage_batch_uid = u.df_usage_batch_uid
+        left join ${schema}.df_rightsholder r on r.rh_account_number = u.rh_account_number
+        left join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
+        where u.df_scenario_uid = #{scenarioId} and b.rro_account_number = #{rroAccountNumber}
     </select>
 </mapper>

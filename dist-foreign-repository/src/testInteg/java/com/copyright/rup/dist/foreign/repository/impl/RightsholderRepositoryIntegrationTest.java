@@ -42,7 +42,7 @@ public class RightsholderRepositoryIntegrationTest {
     private static final Long RH_ACCOUNT_NUMBER = 12345678L;
     private static final Long RH_ACCOUNT_NUMBER_7000813806 = 7000813806L;
     private static final Long RH_ACCOUNT_NUMBER_2000017004 = 2000017004L;
-    private static final Long RH_ACCOUNT_NUMBER_7001440663 = 7001440663L;
+    private static final Long RH_ACCOUNT_NUMBER_2000017010 = 2000017010L;
     private static final Long RH_ACCOUNT_NUMBER_1000009997 = 1000009997L;
     private static final Long RH_ACCOUNT_NUMBER_1000002859 = 1000002859L;
     private static final Long RH_ACCOUNT_NUMBER_1000008666 = 1000008666L;
@@ -53,7 +53,7 @@ public class RightsholderRepositoryIntegrationTest {
     private static final String RH_NAME_7000813806 =
         "CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil";
     private static final String RH_NAME_2000017004 = "Access Copyright, The Canadian Copyright Agency";
-    private static final String RH_NAME_7001440663 = "JAACC, Japan Academic Association for Copyright Clearance [T]";
+    private static final String RH_NAME_2000017010 = "JAC, Japan Academic Association for Copyright Clearance, Inc.";
 
     @Autowired
     private RightsholderRepository rightsholderRepository;
@@ -73,7 +73,7 @@ public class RightsholderRepositoryIntegrationTest {
         Set<Long> accountNumbers = rightsholderRepository.findAccountNumbers();
         assertEquals(12, accountNumbers.size());
         assertTrue(accountNumbers.containsAll(Lists.newArrayList(RH_ACCOUNT_NUMBER_7000813806,
-            RH_ACCOUNT_NUMBER_2000017004, RH_ACCOUNT_NUMBER_7001440663, RH_ACCOUNT_NUMBER_1000009997,
+            RH_ACCOUNT_NUMBER_2000017004, RH_ACCOUNT_NUMBER_2000017010, RH_ACCOUNT_NUMBER_1000009997,
             RH_ACCOUNT_NUMBER_1000002859, RH_ACCOUNT_NUMBER_1000008666, RH_ACCOUNT_NUMBER_1000005413,
             RH_ACCOUNT_NUMBER_1000159997, RH_ACCOUNT_NUMBER_7000800832, 7000813800L, 7001555529L, 7001555635L)));
     }
@@ -107,14 +107,14 @@ public class RightsholderRepositoryIntegrationTest {
         assertEquals(5, rros.size());
         assertTrue(rros.stream().map(Rightsholder::getAccountNumber).collect(Collectors.toList())
             .containsAll(Lists.newArrayList(RH_ACCOUNT_NUMBER_7000813806, RH_ACCOUNT_NUMBER_2000017004,
-                RH_ACCOUNT_NUMBER_7001440663, RH_ACCOUNT_NUMBER_7000800832, 7000813800L)));
+                RH_ACCOUNT_NUMBER_2000017010, RH_ACCOUNT_NUMBER_7000800832, 7000813800L)));
         assertTrue(rros.stream().map(Rightsholder::getId).collect(Collectors.toList())
             .containsAll(Lists.newArrayList("05c4714b-291d-4e38-ba4a-35307434acfb",
                 "46754660-b627-46b9-a782-3f703b6853c7", "ff8b9ac9-5fca-4d57-b74e-26da209c1040",
                 "05c4714b-291d-4e38-ba4a-35307434acfb")));
         assertTrue(rros.stream().map(Rightsholder::getName).collect(Collectors.toList())
             .containsAll(Lists.newArrayList(RH_NAME_7000813806, RH_NAME_2000017004,
-                RH_NAME_7001440663, null)));
+                RH_NAME_2000017010, null)));
     }
 
     @Test
