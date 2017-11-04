@@ -180,6 +180,11 @@ public class UsageService implements IUsageService {
             sort);
     }
 
+    @Override
+    public List<String> getIdsByScenarioIdAndRhAccountNumbers(String scenarioId, List<Long> accountNumbers) {
+        return usageRepository.getIdsByScenarioIdAndRhAccountNumbers(scenarioId, accountNumbers);
+    }
+
     private void calculateUsagesGrossAmount(UsageBatch usageBatch, List<Usage> usages) {
         BigDecimal fundPoolAmount = usageBatch.getGrossAmount();
         BigDecimal totalAmount = usages.stream().map(Usage::getReportedValue).reduce(BigDecimal.ZERO, BigDecimal::add);

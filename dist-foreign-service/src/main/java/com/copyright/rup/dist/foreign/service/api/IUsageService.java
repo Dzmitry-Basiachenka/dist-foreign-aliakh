@@ -172,4 +172,14 @@ public interface IUsageService {
      */
     List<UsageDto> getByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue,
                                                      Pageable pageable, Sort sort);
+
+    /**
+     * Gets list of {@link Usage}s identifiers based on {@link Scenario} identifier and
+     * list of rightsholder account numbers.
+     *
+     * @param scenarioId     {@link Scenario} identifier
+     * @param accountNumbers list of {@link com.copyright.rup.dist.common.domain.Rightsholder}s account numbers
+     * @return list of {@link Usage}s identifiers.
+     */
+    List<String> getIdsByScenarioIdAndRhAccountNumbers(String scenarioId, List<Long> accountNumbers);
 }
