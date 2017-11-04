@@ -22,11 +22,6 @@ public enum UsageStatusEnum {
     ELIGIBLE,
 
     /**
-     * Status for ineligible usages.
-     */
-    INELIGIBLE,
-
-    /**
      * Status for usages which were added to scenario.
      */
     LOCKED

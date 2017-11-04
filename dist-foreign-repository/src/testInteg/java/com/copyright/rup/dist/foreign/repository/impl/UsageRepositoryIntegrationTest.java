@@ -109,6 +109,7 @@ public class UsageRepositoryIntegrationTest {
     private static final String RRO_ACCOUNT_NUMBER_KEY = "rroAccountNumber";
     private static final String PAYMENT_DATE_KEY = "paymentDate";
     private static final String USAGE_ID_1 = "3ab5e80b-89c0-4d78-9675-54c7ab284450";
+    private static final String USAGE_ID_2 = "8a06905f-37ae-4e1f-8550-245277f8165c";
     private static final String USAGE_ID_3 = "5c5f8c1c-1418-4cfd-8685-9212f4c421d1";
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
     private static final String USER_NAME = "user@copyright.com";
@@ -183,7 +184,7 @@ public class UsageRepositoryIntegrationTest {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             Sets.newHashSet(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.NEW), null, null);
         verifyUsageDtos(usageRepository.findByFilter(usageFilter, new Pageable(0, 200),
-            new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 2, USAGE_ID_3, USAGE_ID_1);
+            new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 3, USAGE_ID_3, USAGE_ID_2);
     }
 
     @Test
@@ -191,7 +192,7 @@ public class UsageRepositoryIntegrationTest {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             Sets.newHashSet(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.NEW), PAYMENT_DATE, null);
         verifyUsageDtos(usageRepository.findByFilter(usageFilter, new Pageable(0, 200),
-            new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 2, USAGE_ID_3, USAGE_ID_1);
+            new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 3, USAGE_ID_3, USAGE_ID_2);
     }
 
     @Test
@@ -199,140 +200,140 @@ public class UsageRepositoryIntegrationTest {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             Sets.newHashSet(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.NEW), null, FISCAL_YEAR);
         verifyUsageDtos(usageRepository.findByFilter(usageFilter, new Pageable(0, 200),
-            new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 2, USAGE_ID_3, USAGE_ID_1);
+            new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 3, USAGE_ID_3, USAGE_ID_2);
     }
 
     @Test
     public void testFindByFilterSortByDetailId() {
         verifyUsageDtos(usageRepository.findByFilter(
             buildFilterWithStatuses(Sets.newHashSet(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.NEW)),
-            new Pageable(0, 200), new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 2, USAGE_ID_3, USAGE_ID_1);
+            new Pageable(0, 200), new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 3, USAGE_ID_3, USAGE_ID_2);
     }
 
     @Test
     public void testFindByFilterSortByWorkTitle() {
         verifyUsageDtos(usageRepository.findByFilter(
             buildFilterWithStatuses(Sets.newHashSet(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.NEW)),
-            new Pageable(0, 200), new Sort(WORK_TITLE_KEY, Sort.Direction.ASC)), 2, USAGE_ID_3, USAGE_ID_1);
+            new Pageable(0, 200), new Sort(WORK_TITLE_KEY, Sort.Direction.ASC)), 3, USAGE_ID_3, USAGE_ID_2);
     }
 
     @Test
     public void testFindByFilterSortByArticle() {
         verifyUsageDtos(usageRepository.findByFilter(
             buildFilterWithStatuses(Sets.newHashSet(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.NEW)),
-            new Pageable(0, 200), new Sort(ARTICLE_KEY, Sort.Direction.ASC)), 2, USAGE_ID_3, USAGE_ID_1);
+            new Pageable(0, 200), new Sort(ARTICLE_KEY, Sort.Direction.ASC)), 3, USAGE_ID_3, USAGE_ID_1);
     }
 
     @Test
     public void testFindByFilterSortByStandartNumber() {
         verifyUsageDtos(usageRepository.findByFilter(
             buildFilterWithStatuses(Sets.newHashSet(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.NEW)),
-            new Pageable(0, 200), new Sort(STANDART_NUMBER_KEY, Sort.Direction.ASC)), 2, USAGE_ID_3, USAGE_ID_1);
+            new Pageable(0, 200), new Sort(STANDART_NUMBER_KEY, Sort.Direction.ASC)), 3, USAGE_ID_3, USAGE_ID_2);
     }
 
     @Test
     public void testFindByFilterSortByWrWrkInst() {
         verifyUsageDtos(usageRepository.findByFilter(
             buildFilterWithStatuses(Sets.newHashSet(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.NEW)),
-            new Pageable(0, 200), new Sort(WR_WRK_INST_KEY, Sort.Direction.ASC)), 2, USAGE_ID_1, USAGE_ID_3);
+            new Pageable(0, 200), new Sort(WR_WRK_INST_KEY, Sort.Direction.ASC)), 3, USAGE_ID_1, USAGE_ID_2);
     }
 
     @Test
     public void testFindByFilterSortByRhAccountNumber() {
         verifyUsageDtos(usageRepository.findByFilter(
             buildFilterWithStatuses(Sets.newHashSet(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.NEW)),
-            new Pageable(0, 200), new Sort(RH_ACCOUNT_NUMBER_KEY, Sort.Direction.ASC)), 2, USAGE_ID_3, USAGE_ID_1);
+            new Pageable(0, 200), new Sort(RH_ACCOUNT_NUMBER_KEY, Sort.Direction.ASC)), 3, USAGE_ID_2, USAGE_ID_3);
     }
 
     @Test
     public void testFindByFilterSortByPublisher() {
         verifyUsageDtos(usageRepository.findByFilter(
             buildFilterWithStatuses(Sets.newHashSet(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.NEW)),
-            new Pageable(0, 200), new Sort(PUBLISHER_KEY, Sort.Direction.ASC)), 2, USAGE_ID_1, USAGE_ID_3);
+            new Pageable(0, 200), new Sort(PUBLISHER_KEY, Sort.Direction.ASC)), 3, USAGE_ID_1, USAGE_ID_2);
     }
 
     @Test
     public void testFindByFilterSortByPublicationDate() {
         verifyUsageDtos(usageRepository.findByFilter(
             buildFilterWithStatuses(Sets.newHashSet(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.NEW)),
-            new Pageable(0, 200), new Sort(PUBLICATION_DATE_KEY, Sort.Direction.ASC)), 2, USAGE_ID_3, USAGE_ID_1);
+            new Pageable(0, 200), new Sort(PUBLICATION_DATE_KEY, Sort.Direction.ASC)), 3, USAGE_ID_3, USAGE_ID_2);
     }
 
     @Test
     public void testFindByFilterSortByNumberOfCopies() {
         verifyUsageDtos(usageRepository.findByFilter(
             buildFilterWithStatuses(Sets.newHashSet(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.NEW)),
-            new Pageable(0, 200), new Sort(NUMBER_OF_COPIES_KEY, Sort.Direction.ASC)), 2, USAGE_ID_3, USAGE_ID_1);
+            new Pageable(0, 200), new Sort(NUMBER_OF_COPIES_KEY, Sort.Direction.ASC)), 3, USAGE_ID_2, USAGE_ID_3);
     }
 
     @Test
     public void testFindByFilterSortByReportedValue() {
         verifyUsageDtos(usageRepository.findByFilter(
             buildFilterWithStatuses(Sets.newHashSet(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.NEW)),
-            new Pageable(0, 200), new Sort(REPORTED_VALUE_KEY, Sort.Direction.ASC)), 2, USAGE_ID_3, USAGE_ID_1);
+            new Pageable(0, 200), new Sort(REPORTED_VALUE_KEY, Sort.Direction.ASC)), 3, USAGE_ID_3, USAGE_ID_2);
     }
 
     @Test
     public void testFindByFilterSortByGrossAmount() {
         verifyUsageDtos(usageRepository.findByFilter(
             buildFilterWithStatuses(Sets.newHashSet(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.NEW)),
-            new Pageable(0, 200), new Sort(GROSS_AMOUNT_KEY, Sort.Direction.ASC)), 2, USAGE_ID_3, USAGE_ID_1);
+            new Pageable(0, 200), new Sort(GROSS_AMOUNT_KEY, Sort.Direction.ASC)), 3, USAGE_ID_3, USAGE_ID_2);
     }
 
     @Test
     public void testFindByFilterSortByMarket() {
         verifyUsageDtos(usageRepository.findByFilter(
             buildFilterWithStatuses(Sets.newHashSet(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.NEW)),
-            new Pageable(0, 200), new Sort(MARKET_KEY, Sort.Direction.ASC)), 2, USAGE_ID_1, USAGE_ID_3);
+            new Pageable(0, 200), new Sort(MARKET_KEY, Sort.Direction.ASC)), 3, USAGE_ID_2, USAGE_ID_1);
     }
 
     @Test
     public void testFindByFilterSortByMarketPeriodFrom() {
         verifyUsageDtos(usageRepository.findByFilter(
             buildFilterWithStatuses(Sets.newHashSet(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.NEW)),
-            new Pageable(0, 200), new Sort(MARKED_PERIOD_FROM_KEY, Sort.Direction.ASC)), 2, USAGE_ID_1, USAGE_ID_3);
+            new Pageable(0, 200), new Sort(MARKED_PERIOD_FROM_KEY, Sort.Direction.ASC)), 3, USAGE_ID_1, USAGE_ID_3);
     }
 
     @Test
     public void testFindByFilterSortByMarketPeriodTo() {
         verifyUsageDtos(usageRepository.findByFilter(
             buildFilterWithStatuses(Sets.newHashSet(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.NEW)),
-            new Pageable(0, 200), new Sort(MARKED_PERIOD_TO_KEY, Sort.Direction.ASC)), 2, USAGE_ID_1, USAGE_ID_3);
+            new Pageable(0, 200), new Sort(MARKED_PERIOD_TO_KEY, Sort.Direction.ASC)), 3, USAGE_ID_1, USAGE_ID_3);
     }
 
     @Test
     public void testFindByFilterSortByAuthor() {
         verifyUsageDtos(usageRepository.findByFilter(
             buildFilterWithStatuses(Sets.newHashSet(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.NEW)),
-            new Pageable(0, 200), new Sort(AUTHOR_KEY, Sort.Direction.ASC)), 2, USAGE_ID_1, USAGE_ID_3);
+            new Pageable(0, 200), new Sort(AUTHOR_KEY, Sort.Direction.ASC)), 3, USAGE_ID_1, USAGE_ID_3);
     }
 
     @Test
     public void testFindByFilterSortByBatchName() {
         verifyUsageDtos(usageRepository.findByFilter(
             buildFilterWithStatuses(Sets.newHashSet(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.NEW)),
-            new Pageable(0, 200), new Sort(BATCH_NAME_KEY, Sort.Direction.ASC)), 2, USAGE_ID_1, USAGE_ID_3);
+            new Pageable(0, 200), new Sort(BATCH_NAME_KEY, Sort.Direction.ASC)), 3, USAGE_ID_2, USAGE_ID_1);
     }
 
     @Test
     public void testFindByFilterSortByFiscalYear() {
         verifyUsageDtos(usageRepository.findByFilter(
             buildFilterWithStatuses(Sets.newHashSet(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.NEW)),
-            new Pageable(0, 200), new Sort(FISCAL_YEAR_KEY, Sort.Direction.ASC)), 2, USAGE_ID_3, USAGE_ID_1);
+            new Pageable(0, 200), new Sort(FISCAL_YEAR_KEY, Sort.Direction.ASC)), 3, USAGE_ID_3, USAGE_ID_1);
     }
 
     @Test
     public void testFindByFilterSortByRroAccountNumber() {
         verifyUsageDtos(usageRepository.findByFilter(
             buildFilterWithStatuses(Sets.newHashSet(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.NEW)),
-            new Pageable(0, 200), new Sort(RRO_ACCOUNT_NUMBER_KEY, Sort.Direction.ASC)), 2, USAGE_ID_3, USAGE_ID_1);
+            new Pageable(0, 200), new Sort(RRO_ACCOUNT_NUMBER_KEY, Sort.Direction.ASC)), 3, USAGE_ID_2, USAGE_ID_3);
     }
 
     @Test
     public void testFindByFilterSortByPaymentDate() {
         verifyUsageDtos(usageRepository.findByFilter(
             buildFilterWithStatuses(Sets.newHashSet(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.NEW)),
-            new Pageable(0, 200), new Sort(PAYMENT_DATE_KEY, Sort.Direction.ASC)), 2, USAGE_ID_3, USAGE_ID_1);
+            new Pageable(0, 200), new Sort(PAYMENT_DATE_KEY, Sort.Direction.ASC)), 3, USAGE_ID_3, USAGE_ID_1);
     }
 
     @Test
@@ -597,21 +598,21 @@ public class UsageRepositoryIntegrationTest {
     public void testFindWithAmountsAndRightsholdersByStatusFilter() {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             Collections.singleton(UsageStatusEnum.ELIGIBLE), null, null);
-        verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 2, USAGE_ID_1, USAGE_ID_3);
+        verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 3, USAGE_ID_1, USAGE_ID_2);
     }
 
     @Test
     public void testFindWithAmountsAndRightsholdersByPaymentDateFilter() {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             Collections.singleton(UsageStatusEnum.ELIGIBLE), PAYMENT_DATE, null);
-        verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 2, USAGE_ID_1, USAGE_ID_3);
+        verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 3, USAGE_ID_1, USAGE_ID_2);
     }
 
     @Test
     public void testFindWithAmountsAndRightsholdersByFiscalYearFilter() {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             Collections.singleton(UsageStatusEnum.ELIGIBLE), null, FISCAL_YEAR);
-        verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 2, USAGE_ID_1, USAGE_ID_3);
+        verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 3, USAGE_ID_1, USAGE_ID_2);
     }
 
     @Test
