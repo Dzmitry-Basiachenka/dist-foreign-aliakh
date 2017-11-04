@@ -1,15 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="
-            http://www.springframework.org/schema/beans
-            http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-4.1.xsd
+           http://www.springframework.org/schema/util
+           http://www.springframework.org/schema/util/spring-util-4.1.xsd">
+
+    <context:property-placeholder location="classpath:/database.properties" properties-ref="requiredProperties"/>
+    <util:properties id="requiredProperties">
+        <prop key="rup.config.dir"/>
+    </util:properties>
 
     <import resource="classpath:/com/copyright/rup/common/config/rup-properties-config.xml"/>
     <import resource="classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-context.xml"/>
 
     <bean id="dfDataSource"
-          class="com.copyright.rup.common.test.integ.db.embedded.EmbeddedH2DatabaseFactory">
+          class="com.copyright.rup.common.test.integ.db.embedded.EmbeddedPostgresDatabaseFactory">
+        <property name="version" value="9.4.4-1" />
         <property name="resourcesFromPaths">
             <list value-type="java.lang.String">
                 <value>/com/copyright/rup/dist/foreign/db/main-changelog.groovy</value>
@@ -17,9 +28,7 @@
                 <value>/com/copyright/rup/dist/foreign/service/create-scenario-test-changelog.groovy</value>
             </list>
         </property>
-        <property name="url">
-            <value>jdbc:h2:mem:db1;MVCC=true</value>
-        </property>
+        <property name="createCommonTablesOnStartup" value="false"/>
     </bean>
 
     <bean id="quartzScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">

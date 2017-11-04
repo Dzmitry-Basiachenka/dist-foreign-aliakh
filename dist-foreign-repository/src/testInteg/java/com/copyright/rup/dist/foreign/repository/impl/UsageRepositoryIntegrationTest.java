@@ -304,7 +304,7 @@ public class UsageRepositoryIntegrationTest {
     public void testFindByFilterSortByAuthor() {
         verifyUsageDtos(usageRepository.findByFilter(
             buildFilterWithStatuses(Sets.newHashSet(UsageStatusEnum.ELIGIBLE, UsageStatusEnum.NEW)),
-            new Pageable(0, 200), new Sort(AUTHOR_KEY, Sort.Direction.ASC)), 2, USAGE_ID_3, USAGE_ID_1);
+            new Pageable(0, 200), new Sort(AUTHOR_KEY, Sort.Direction.ASC)), 2, USAGE_ID_1, USAGE_ID_3);
     }
 
     @Test
