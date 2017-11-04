@@ -24,6 +24,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -42,6 +43,8 @@ import java.util.stream.Collectors;
 @ContextConfiguration(value = "classpath:/com/copyright/rup/dist/foreign/ui/dist-foreign-ui-test-context.xml")
 public class CreateScenarioUiTest extends ForeignCommonUiTest {
 
+    private static final String USAGES_FILTER_ID = "usages-filter-widget";
+    private static final String USAGES_TABLE_ID = "usages-table";
     private static final String SCENARIO_NAME = "Scenario";
     private static final String DESCRIPTION = "Description";
     private static final String CURRENT_DATE =
@@ -52,6 +55,8 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
         "2000017004 - Access Copyright, The Canadian Copyright Agency");
     private UsageBatchInfo validUsageBatch = new UsageBatchInfo("CADRA_11Dec16", "01/11/2017", "FY2017",
         "7000813806 - CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil");
+    private UsageBatchInfo usageBatchWithNewUsages = new UsageBatchInfo("Batch with NEW usages", "01/11/2017", "FY2017",
+        "1000005413 - Kluwer Academic Publishers - Dordrecht");
     private String scenarioId;
 
     @Autowired
@@ -69,17 +74,16 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
     }
 
     @Test
-    // Test case ID: 'e4b0a048-51af-4c1c-91bd-2a199747ca34'
-    public void testAddToScenarioWithoutSelectedUsages() {
+    // Test case IDs: 'e4b0a048-51af-4c1c-91bd-2a199747ca34', 'de74d602-db65-4ee0-a347-5f729f00a2ab'
+    public void testAddToScenarioWithInvalidUsages() {
         loginAsSpecialist();
         WebElement usagesTab = selectUsagesTab();
-        applyFilters(assertWebElement(By.id("usages-filter-widget")), invalidUsageBatch);
-        assertTableRowElements(assertWebElement(By.id("usages-table")), 0);
-        clickButtonAndWait(usagesTab, "Add_To_Scenario");
-        WebElement notificationWindow = assertWebElement(By.id("notification-window"));
-        assertWebElement(notificationWindow, HTML_DIV_TAG_NAME,
-            "Scenario cannot be created. Please select only ELIGIBLE usages");
-        clickButtonAndWait(notificationWindow, "Ok");
+        applyFilters(assertWebElement(By.id(USAGES_FILTER_ID)), invalidUsageBatch);
+        assertTableRowElements(assertWebElement(By.id(USAGES_TABLE_ID)), 0);
+        verifyNotificationWindow(usagesTab);
+        applyFilters(assertWebElement(By.id(USAGES_FILTER_ID)), usageBatchWithNewUsages);
+        assertTableRowElements(assertWebElement(By.id(USAGES_TABLE_ID)), 2);
+        verifyNotificationWindow(usagesTab);
     }
 
     @Test
@@ -87,7 +91,7 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
     public void testAddToScenarioWithSelectedUsages() {
         loginAsSpecialist();
         WebElement usagesTab = selectUsagesTab();
-        WebElement createScenarioWindow = assertCreateScenarioWindow(usagesTab);
+        WebElement createScenarioWindow = assertCreateScenarioWindow(usagesTab, validUsageBatch, 1);
         WebElement nameTextField = assertWebElement(createScenarioWindow, "scenario-name");
         sendKeysToInput(nameTextField, SCENARIO_NAME);
         WebElement descriptionTextField = assertWebElement(createScenarioWindow, "scenario-description");
@@ -96,8 +100,8 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
         WebElement scenarioTab = selectScenariosTab();
         verifyCreatedScenario(scenarioTab);
         selectUsagesTab();
-        assertTableRowElements(assertWebElement(By.id("usages-table")), 0);
-        assertUsagesFilterEmpty(assertWebElement(By.id("usages-filter-widget")));
+        assertTableRowElements(assertWebElement(By.id(USAGES_TABLE_ID)), 0);
+        assertUsagesFilterEmpty(assertWebElement(By.id(USAGES_FILTER_ID)));
     }
 
     @Test
@@ -105,7 +109,7 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
     public void testVerifyScenarioNameFieldValidators() {
         loginAsSpecialist();
         WebElement usagesTab = selectUsagesTab();
-        WebElement createScenarioWindow = assertCreateScenarioWindow(usagesTab);
+        WebElement createScenarioWindow = assertCreateScenarioWindow(usagesTab, validUsageBatch, 1);
         WebElement confirmButton = assertWebElement(createScenarioWindow, CONFIRM_BUTTON_ID);
         WebElement scenarioNameElement = assertWebElement(createScenarioWindow, "scenario-name");
         sendKeysToInput(scenarioNameElement, StringUtils.EMPTY);
@@ -126,16 +130,16 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
     public void testVerifyDescriptionField() {
         loginAsSpecialist();
         WebElement usagesTab = selectUsagesTab();
-        WebElement createScenarioWindow = assertCreateScenarioWindow(usagesTab);
+        WebElement createScenarioWindow = assertCreateScenarioWindow(usagesTab, validUsageBatch, 1);
         WebElement descriptionTextField = assertWebElement(createScenarioWindow, "scenario-description");
         sendKeysToInput(descriptionTextField, RandomStringUtils.randomAlphanumeric(2001));
         clickButtonAndWait(createScenarioWindow, CONFIRM_BUTTON_ID);
         verifyErrorWindow(ImmutableMap.of("Description", "Field value should not exceed 2000 characters"));
     }
 
-    private WebElement assertCreateScenarioWindow(WebElement usagesTab) {
-        applyFilters(assertWebElement(By.id("usages-filter-widget")), validUsageBatch);
-        assertTableRowElements(assertWebElement(By.id("usages-table")), 1);
+    private WebElement assertCreateScenarioWindow(WebElement usagesTab, UsageBatchInfo filteredBatch, int rowCount) {
+        applyFilters(assertWebElement(By.id(USAGES_FILTER_ID)), filteredBatch);
+        assertTableRowElements(assertWebElement(By.id(USAGES_TABLE_ID)), rowCount);
         clickButtonAndWait(usagesTab, "Add_To_Scenario");
         WebElement createScenarioWindow = assertWebElement(By.id("create-scenario-window"));
         verifyCreateScenarioWindow(createScenarioWindow);
@@ -156,10 +160,10 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
         assertEquals(SCENARIO_NAME, scenario.getName());
         assertEquals(DESCRIPTION, scenario.getDescription());
         assertEquals(ScenarioStatusEnum.IN_PROGRESS, scenario.getStatus());
-        assertEquals(new BigDecimal("13461.54").setScale(10), scenario.getGrossTotal());
-        assertEquals(new BigDecimal("9153.8472").setScale(10), scenario.getNetTotal());
+        assertEquals(new BigDecimal("13461.54").setScale(10, RoundingMode.HALF_UP), scenario.getGrossTotal());
+        assertEquals(new BigDecimal("9153.8472").setScale(10, BigDecimal.ROUND_HALF_UP), scenario.getNetTotal());
+        assertEquals(new BigDecimal("2500").setScale(2, RoundingMode.HALF_UP), scenario.getReportedTotal());
         assertEquals(new BigDecimal("4307.6928").setScale(10), scenario.getServiceFeeTotal());
-        assertEquals(new BigDecimal("2500").setScale(2), scenario.getReportedTotal());
     }
 
     private void verifyCreateScenarioWindow(WebElement createScenarioWindow) {
@@ -175,5 +179,13 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
         assertEquals(StringUtils.EMPTY, descriptionTextField.getText());
         assertWebElement(createScenarioWindow, "Cancel");
         assertWebElement(createScenarioWindow, CONFIRM_BUTTON_ID);
+    }
+
+    private void verifyNotificationWindow(WebElement usagesTab) {
+        clickButtonAndWait(usagesTab, "Add_To_Scenario");
+        WebElement notificationWindow = assertWebElement(By.id("notification-window"));
+        assertWebElement(notificationWindow, HTML_DIV_TAG_NAME,
+            "Scenario cannot be created. Please select only ELIGIBLE usages");
+        clickButtonAndWait(notificationWindow, "Ok");
     }
 }
