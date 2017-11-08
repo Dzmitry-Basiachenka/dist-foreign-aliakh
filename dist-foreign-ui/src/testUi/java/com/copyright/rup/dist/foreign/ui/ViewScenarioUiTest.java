@@ -31,12 +31,13 @@ import java.util.stream.Collectors;
 @ContextConfiguration(value = "classpath:/com/copyright/rup/dist/foreign/ui/dist-foreign-ui-test-context.xml")
 public class ViewScenarioUiTest extends ForeignCommonUiTest {
 
+    private static final String SERVICE_FEE = "0,32";
     private String[] rightsholder1 = {"1000002797", "British Film Institute (BFI)", StringUtils.EMPTY,
-        StringUtils.EMPTY, "480.00", "0.00", "1,050.00", StringUtils.EMPTY};
+        StringUtils.EMPTY, "480.00", "0.00", "1,050.00", SERVICE_FEE};
     private String[] rightsholder2 = {"1000008666", "CCH", StringUtils.EMPTY, StringUtils.EMPTY, "7,650.00", "0.00",
-        "4,550.00", StringUtils.EMPTY};
+        "4,550.00", SERVICE_FEE};
     private String[] rightsholder3 = {"1000009997", "IEEE - Inst of Electrical and Electronics Engrs",
-        StringUtils.EMPTY, StringUtils.EMPTY, "2,400.00", "0.00", "3,400.00", StringUtils.EMPTY};
+        StringUtils.EMPTY, StringUtils.EMPTY, "2,400.00", "0.00", "3,400.00", SERVICE_FEE};
 
     @Test
     // Test cases IDs: 'ed87b9c8-5880-4bc0-a3aa-6ec733dcf491', 'c3475cfb-eb5d-4dea-96ad-d6a1228f177b',
