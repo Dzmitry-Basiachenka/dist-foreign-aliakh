@@ -24,11 +24,8 @@
 
     <bean id="prmIntegrationService" class="com.copyright.rup.dist.foreign.ui.mock.PrmIntegrationServiceMock"/>
 
-    <!-- TODO {pavelliakh} replace bean factory class -->
-    <!-- with com.copyright.rup.common.test.integ.db.embedded.EmbeddedPostgresDatabaseFactory -->
-    <!-- after it get configurable field for port -->
     <bean id="dfDataSource"
-          class="com.copyright.rup.dist.foreign.ui.mock.EmbeddedPostgresDatabaseFactory">
+          class="com.copyright.rup.common.test.integ.db.embedded.EmbeddedPostgresDatabaseFactory">
         <property name="port" value="$RUP{dist.foreign.ui.db.port}" />
         <property name="version" value="9.6.5-1" />
         <property name="resourcesFromPaths">
