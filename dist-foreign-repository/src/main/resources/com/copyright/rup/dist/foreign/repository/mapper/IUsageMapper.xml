@@ -58,6 +58,7 @@
         <result property="grossTotal" column="gross_total"/>
         <result property="serviceFeeTotal" column="service_fee_total"/>
         <result property="netTotal" column="net_total"/>
+        <result property="serviceFee" column="service_fee"/>
     </resultMap>
 
     <resultMap id="usageResultMap" type="Usage" extends="usageAmountResultMap">
@@ -443,6 +444,8 @@
             u.number_of_copies,
             u.reported_value,
             u.gross_amount,
+            u.service_fee_amount,
+            u.service_fee,
             u.net_amount,
             u.is_rh_participating_flag,
             u.created_datetime,
@@ -493,6 +496,7 @@
             payee_account_number = #{payee.accountNumber},
             net_amount = #{netAmount},
             service_fee_amount = #{serviceFeeAmount},
+            service_fee = #{serviceFee},
             is_rh_participating_flag = #{rhParticipating},
             <include refid="StoredEntityMapper.update"/>
         where df_usage_uid = #{id}
@@ -536,17 +540,19 @@
             u.payee_account_number,
             u.gross_total,
             u.service_fee_total,
-            u.net_total
+            u.net_total,
+            u.service_fee
         from (
             select
                 rh_account_number,
                 payee_account_number,
                 sum(gross_amount) gross_total,
                 sum(service_fee_amount) service_fee_total,
-                sum(net_amount) net_total
+                sum(net_amount) net_total,
+                service_fee
             from ${schema}.df_usage
             where df_scenario_uid = #{scenarioId}
-            group by rh_account_number, payee_account_number) u
+            group by rh_account_number, payee_account_number, service_fee) u
         left join ${schema}.df_rightsholder r on u.rh_account_number = r.rh_account_number
         left join ${schema}.df_rightsholder p on u.payee_account_number = p.rh_account_number
         <if test="null != searchValue">

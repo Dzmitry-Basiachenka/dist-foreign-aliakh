@@ -1,0 +1,85 @@
+{
+  "response": {
+    "status": {
+      "code": "SUCCESS",
+      "message": "OK"
+    },
+    "content": [
+      "java.util.ArrayList",
+      [
+        {
+          "@class": "com.copyright.rup.party.domain.preference.OrganizationPreference",
+          "version": 1,
+          "createDate": "2017-05-15T09:24:55-0400",
+          "updateDate": "2017-05-15T09:24:55-0400",
+          "createUser": "ktarasevich@copyright.com",
+          "updateUser": "ktarasevich@copyright.com",
+          "id": "ba25b2ea-a70e-4d50-bcb7-5ad9c2a3d85c",
+          "pmOrganizationUid": "756299b5-02ce-4f76-b0bc-ee2571cf906e",
+          "name": "Institute if Film & Television Studies",
+          "pmLicenseProductUid": "*",
+          "pmPreferenceTypeUid": "baseline-is-rh-fda-participating",
+          "preferenceCode": "IS-RH-FDA-PARTICIPATING",
+          "validBeginDate": "2017-05-15T00:00:00-0400",
+          "validEndDate": "2099-01-01T00:00:00-0500",
+          "preferenceValue": "false",
+          "externalOrganizationKey": "7000429266"
+        },
+        {
+          "@class": "com.copyright.rup.party.domain.preference.OrganizationPreference",
+          "version": 1,
+          "createDate": "2017-10-31T13:58:43-0400",
+          "updateDate": "2017-10-31T13:58:43-0400",
+          "createUser": "ktarasevich@copyright.com",
+          "updateUser": "ktarasevich@copyright.com",
+          "id": "7f7aa210-a549-4d21-9e1e-0b2082c8bdd2",
+          "pmOrganizationUid": "a5989f7c-fc6f-4e8c-88d4-2fe7bcce8d1f",
+          "name": "John Wiley & Sons - Books",
+          "pmLicenseProductUid": "FAS",
+          "pmPreferenceTypeUid": "baseline-is-rh-fda-participating",
+          "preferenceCode": "IS-RH-FDA-PARTICIPATING",
+          "validBeginDate": "2017-10-01T00:00:00-0400",
+          "validEndDate": "2099-01-01T00:00:00-0500",
+          "preferenceValue": "false",
+          "externalOrganizationKey": "1000002859"
+        },
+        {
+          "@class": "com.copyright.rup.party.domain.preference.OrganizationPreference",
+          "version": 1,
+          "createDate": "2017-05-15T09:24:55-0400",
+          "updateDate": "2017-05-15T09:24:55-0400",
+          "createUser": "ktarasevich@copyright.com",
+          "updateUser": "ktarasevich@copyright.com",
+          "id": "ba25b2ea-a70e-4d50-bcb7-5ad9c2a3d85c",
+          "pmOrganizationUid": "00d4ae90-5fe7-47bf-ace1-781c8d76d4da",
+          "name": "Delhi Medical Assn",
+          "pmLicenseProductUid": "*",
+          "pmPreferenceTypeUid": "baseline-is-rh-fda-participating",
+          "preferenceCode": "IS-RH-FDA-PARTICIPATING",
+          "validBeginDate": "2017-05-15T00:00:00-0400",
+          "validEndDate": "2099-01-01T00:00:00-0500",
+          "preferenceValue": "true",
+          "externalOrganizationKey": "1000001820"
+        },
+        {
+          "@class": "com.copyright.rup.party.domain.preference.OrganizationPreference",
+          "version": 1,
+          "createDate": "2017-10-31T13:58:43-0400",
+          "updateDate": "2017-10-31T13:58:43-0400",
+          "createUser": "ktarasevich@copyright.com",
+          "updateUser": "ktarasevich@copyright.com",
+          "id": "7f7aa210-a549-4d21-9e1e-0b2082c8bdd2",
+          "pmOrganizationUid": "019acfde-91be-43aa-8871-6305642bcb2c",
+          "name": "White Horse Press",
+          "pmLicenseProductUid": "FAS",
+          "pmPreferenceTypeUid": "baseline-is-rh-fda-participating",
+          "preferenceCode": "IS-RH-FDA-PARTICIPATING",
+          "validBeginDate": "2017-10-01T00:00:00-0400",
+          "validEndDate": "2099-01-01T00:00:00-0500",
+          "preferenceValue": "true",
+          "externalOrganizationKey": "1000024497"
+        }
+      ]
+    ]
+  }
+}

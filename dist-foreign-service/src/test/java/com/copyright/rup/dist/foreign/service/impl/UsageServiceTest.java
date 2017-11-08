@@ -183,10 +183,16 @@ public class UsageServiceTest {
     @Test
     public void testGetUsagesWithAmounts() {
         UsageFilter usageFilter = new UsageFilter();
-        expect(usageRepository.findWithAmountsAndRightsholders(usageFilter)).andReturn(Collections.emptyList()).once();
-        replay(usageRepository);
-        assertTrue(CollectionUtils.isEmpty(usageService.getUsagesWithAmounts(usageFilter)));
-        verify(usageRepository);
+        Usage usage = buildUsage(USAGE_ID_1);
+        expect(usageRepository.findWithAmountsAndRightsholders(usageFilter))
+            .andReturn(Lists.newArrayList(usage)).once();
+        expect(prmIntegrationService.isRightsholderParticipating(usage.getRightsholder().getAccountNumber()))
+            .andReturn(true).once();
+        expect(prmIntegrationService.getRhParticipatingServiceFee(true))
+            .andReturn(new BigDecimal("0.16000")).once();
+        replay(usageRepository, prmIntegrationService);
+        assertTrue(CollectionUtils.isNotEmpty(usageService.getUsagesWithAmounts(usageFilter)));
+        verify(usageRepository, prmIntegrationService);
     }
 
     @Test
@@ -289,6 +295,7 @@ public class UsageServiceTest {
         usage.setId(usageId);
         usage.getRightsholder().setId(RupPersistUtils.generateUuid());
         usage.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER);
+        usage.setGrossAmount(new BigDecimal("100.00"));
         return usage;
     }
 }

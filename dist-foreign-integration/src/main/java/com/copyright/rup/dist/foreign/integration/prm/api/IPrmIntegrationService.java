@@ -4,6 +4,7 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 
 import com.google.common.collect.Table;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -62,4 +63,12 @@ public interface IPrmIntegrationService {
      * {@code productFamily} is a blank string.
      */
     boolean isRightsholderParticipating(Long accountNumber);
+
+    /**
+     * Gets service fee configuration value based on RH participating flag.
+     *
+     * @param rhParticipatingFlag RH participating flag
+     * @return RH participating service fee
+     */
+    BigDecimal getRhParticipatingServiceFee(boolean rhParticipatingFlag);
 }
