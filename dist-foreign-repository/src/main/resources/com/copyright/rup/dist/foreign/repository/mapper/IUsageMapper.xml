@@ -361,6 +361,7 @@
     <select id="findByFilter" resultMap="usageDtoResultMap" parameterType="map" fetchSize="${usageSelectFetchSize}">
         <include refid="selectUsageDtos"/>
         <include refid="usageFilter"/>
+        and u.df_scenario_uid is null
         order by
         <choose>
             <when test="null != sort">
@@ -416,6 +417,7 @@
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         left join ${schema}.df_rightsholder rro on rro.rh_account_number = ub.rro_account_number
         <include refid="usageFilter"/>
+        and u.df_scenario_uid is null
     </select>
 
     <select id="findByDetailId" resultMap="usageResultMap" parameterType="long">

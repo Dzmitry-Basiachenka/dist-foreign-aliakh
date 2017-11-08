@@ -13,6 +13,7 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
 import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
@@ -192,12 +193,14 @@ public class UsagesFilterWidgetTest {
     private void verifyFiltersLayout(Component layout) {
         assertTrue(layout instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) layout;
-        assertEquals(5, verticalLayout.getComponentCount());
+        assertEquals(6, verticalLayout.getComponentCount());
         verifyFiltersLabel(verticalLayout.getComponent(0));
         verifyItemsFilterLayout(verticalLayout.getComponent(1), "Batches");
         verifyItemsFilterLayout(verticalLayout.getComponent(2), "RROs");
         verifyDateWidget(verticalLayout.getComponent(3));
-        verifyFiscalYearComboboxComponent(verticalLayout.getComponent(4), Collections.singletonList(FISCAL_YEAR));
+        verifyStatusComboboxComponent(verticalLayout.getComponent(4),
+            Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.ELIGIBLE));
+        verifyFiscalYearComboboxComponent(verticalLayout.getComponent(5), Collections.singletonList(FISCAL_YEAR));
     }
 
     private void verifyFiltersLabel(Component component) {
@@ -221,6 +224,15 @@ public class UsagesFilterWidgetTest {
         assertTrue(StringUtils.contains(buttonStyleName, buttonCaption));
         assertTrue(StringUtils.contains(buttonStyleName, BaseTheme.BUTTON_LINK));
         assertFalse(iterator.hasNext());
+    }
+
+    private void verifyStatusComboboxComponent(Component component, Set<UsageStatusEnum> values) {
+        assertTrue(component instanceof ComboBox);
+        ComboBox comboBox = (ComboBox) component;
+        assertEquals("Status", comboBox.getCaption());
+        assertEquals(100, comboBox.getWidth(), 0);
+        assertEquals(Unit.PERCENTAGE, comboBox.getWidthUnits());
+        assertTrue(CollectionUtils.isEqualCollection(values, comboBox.getItemIds()));
     }
 
     private void verifyFiscalYearComboboxComponent(Component component, List<Integer> values) {

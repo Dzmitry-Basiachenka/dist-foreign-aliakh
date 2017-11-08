@@ -96,7 +96,8 @@ public class UsageFilter {
         return (null == rhAccountNumbers || rhAccountNumbers.isEmpty())
             && (null == usageBatchesIds || usageBatchesIds.isEmpty())
             && null == paymentDate
-            && null == fiscalYear;
+            && null == fiscalYear
+            && (null == usageStatuses || usageStatuses.isEmpty());
     }
 
     @Override

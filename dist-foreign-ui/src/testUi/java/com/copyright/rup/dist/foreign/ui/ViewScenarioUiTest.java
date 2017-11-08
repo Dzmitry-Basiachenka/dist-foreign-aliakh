@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 @ContextConfiguration(value = "classpath:/com/copyright/rup/dist/foreign/ui/dist-foreign-ui-test-context.xml")
 public class ViewScenarioUiTest extends ForeignCommonUiTest {
 
-    private static final String SERVICE_FEE = "0,32";
+    private static final String SERVICE_FEE = "0.32";
     private String[] rightsholder1 = {"1000002797", "British Film Institute (BFI)", StringUtils.EMPTY,
         StringUtils.EMPTY, "480.00", "0.00", "1,050.00", SERVICE_FEE};
     private String[] rightsholder2 = {"1000008666", "CCH", StringUtils.EMPTY, StringUtils.EMPTY, "7,650.00", "0.00",
