@@ -655,6 +655,15 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(SCENARIO_ID, usageRepository.findByDetailId(DETAIL_ID).getScenarioId());
     }
 
+    @Test
+    public void testGetByScenarioIdAndRhAccountNumbers() {
+        List<String> usagesIds = usageRepository.getIdsByScenarioIdAndRhAccountNumbers(
+            "b1f0b236-3ae9-4a60-9fab-61db84199d6f", Lists.newArrayList(1000002859L));
+        assertEquals(2, usagesIds.size());
+        assertTrue(usagesIds.containsAll(Lists.newArrayList("b1f0b236-3ae9-4a60-9fab-61db84199dss",
+            "cf38d390-11bb-4af7-9685-e034c9c32fb6")));
+    }
+
     private void verifySearch(String searchValue, int expectedSize) {
         assertEquals(expectedSize, usageRepository.getByScenarioIdAndRhAccountNumber(1000002859L, SCENARIO_ID,
             searchValue, new Pageable(0, 200), null).size());

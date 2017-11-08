@@ -187,6 +187,14 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         return selectList("IUsageMapper.getByScenarioIdAndRhAccountNumber", parameters);
     }
 
+    @Override
+    public List<String> getIdsByScenarioIdAndRhAccountNumbers(String scenarioId, List<Long> accountNumbers) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        parameters.put("accountNumbers", Objects.requireNonNull(accountNumbers));
+        return selectList("IUsageMapper.getIdsByScenarioIdAndRhAccountNumbers", parameters);
+    }
+
     /**
      * Finds usage by provided detail id.
      *

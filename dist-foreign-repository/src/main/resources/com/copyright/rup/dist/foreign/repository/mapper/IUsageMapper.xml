@@ -603,4 +603,14 @@
         </choose>
         <include refid="ifPageable"/>
     </select>
+
+    <select id="getIdsByScenarioIdAndRhAccountNumbers" resultType="string" parameterType="map">
+        select df_usage_uid
+        from ${schema}.df_usage
+        where df_scenario_uid = #{scenarioId}
+            and rh_account_number in
+            <foreach collection="accountNumbers" item="accountNumber" separator="," open="(" close=")">
+                #{accountNumber}
+            </foreach>
+    </select>
 </mapper>
