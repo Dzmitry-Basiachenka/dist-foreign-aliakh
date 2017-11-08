@@ -275,14 +275,23 @@ public class UsageServiceTest {
     public void testDeleteFromScenarioByAccountNumbers() {
         Scenario scenario = new Scenario();
         scenario.setId(SCENARIO_ID);
+        List<String> usagesIds = Lists.newArrayList(RupPersistUtils.generateUuid(), RupPersistUtils.generateUuid());
         mockStatic(RupContextUtils.class);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         List<Long> accountNumbers = Collections.singletonList(RH_ACCOUNT_NUMBER);
         usageRepository.deleteFromScenario(SCENARIO_ID, accountNumbers, USER_NAME);
         expectLastCall().once();
-        replay(usageRepository, RupContextUtils.class);
+        expect(usageRepository.getIdsByScenarioIdAndRhAccountNumbers(scenario.getId(), accountNumbers)).andReturn(
+            usagesIds).once();
+        usageAuditService.logAction(usagesIds.get(0), scenario, UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO,
+            "Action reason");
+        expectLastCall().once();
+        usageAuditService.logAction(usagesIds.get(1), scenario, UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO,
+            "Action reason");
+        expectLastCall().once();
+        replay(usageRepository, usageAuditService, RupContextUtils.class);
         usageService.deleteFromScenario(scenario, accountNumbers, "Action reason");
-        verify(usageRepository, RupContextUtils.class);
+        verify(usageRepository, usageAuditService, RupContextUtils.class);
     }
 
     private void verifyUsage(Usage usage, BigDecimal grossAmount) {
