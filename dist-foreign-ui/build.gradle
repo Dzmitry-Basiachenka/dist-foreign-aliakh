@@ -41,15 +41,6 @@ dependencies {
     testCompile("cglib:cglib-nodep:${cglibNodepVersion}")
 
     testUiCompile("com.copyright.rup.vaadin:rup-vaadin-test:${rupVaadinVersion}")
-
-    // TODO {pavelliakh} replace dependencies after EmbeddedPostgresDatabaseFactory will be updated.
-    // Dependecies for Wrapper, that overrides com.copyright.rup.common.test.integ.db.embedded.EmbeddedPostgresDatabaseFactory
-    // since it's not configurable.
-    // For lib version follow
-    // https://github.com/CopyrightClearanceCenter/rup-common/blob/master/rup-common-test-integ/build.gradle .
-    testUiCompile("ru.yandex.qatools.embed:postgresql-embedded:2.3")
-    testUiCompile("org.liquibase:liquibase-core:2.0.5")
-
     testUiCompile project(path: ":dist-foreign-repository", configuration: "testIntegRuntime")
 
     testUiWebApp project(path: ":dist-foreign-repository", configuration: "testIntegRuntime")
