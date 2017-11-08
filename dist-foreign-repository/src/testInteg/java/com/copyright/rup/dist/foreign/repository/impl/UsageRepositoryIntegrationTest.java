@@ -623,9 +623,16 @@ public class UsageRepositoryIntegrationTest {
         usage.setStatus(UsageStatusEnum.LOCKED);
         usage.setScenarioId(SCENARIO_ID);
         usage.setUpdateUser(USER_NAME);
+        BigDecimal serviceFeeAmount = new BigDecimal("2205.536").setScale(10);
+        usage.setServiceFeeAmount(serviceFeeAmount);
+        BigDecimal netAmount = new BigDecimal("4686.764").setScale(10);
+        usage.setNetAmount(netAmount);
         usageRepository.addToScenario(Collections.singletonList(usage));
-        verifyUsage(usageRepository.findByDetailId(DETAIL_ID_1), UsageStatusEnum.LOCKED, SCENARIO_ID, USER_NAME,
-            2000017004L);
+        Usage updatedUsage = usageRepository.findByDetailId(DETAIL_ID_1);
+        verifyUsage(updatedUsage, UsageStatusEnum.LOCKED, SCENARIO_ID, USER_NAME, 2000017004L);
+        assertEquals(new BigDecimal("0.32000"), usage.getServiceFee());
+        assertEquals(serviceFeeAmount, usage.getServiceFeeAmount());
+        assertEquals(netAmount, usage.getNetAmount());
     }
 
     @Test

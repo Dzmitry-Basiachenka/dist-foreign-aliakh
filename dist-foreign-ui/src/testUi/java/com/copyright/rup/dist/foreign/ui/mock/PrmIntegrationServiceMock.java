@@ -8,6 +8,7 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Table;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -44,6 +45,11 @@ public class PrmIntegrationServiceMock implements IPrmIntegrationService {
     @Override
     public boolean isRightsholderParticipating(Long accountNumber) {
         return false;
+    }
+
+    @Override
+    public BigDecimal getRhParticipatingServiceFee(boolean rhParticipatingFlag) {
+        return new BigDecimal("0.32000");
     }
 
     private Rightsholder buildRightsholder(Long accountNumber, String name) {

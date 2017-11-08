@@ -33,8 +33,6 @@ databaseChangeLog {
             column(name: 'number_of_copies', value: '250232')
             column(name: 'reported_value', value: '9900.00')
             column(name: 'gross_amount', value: '11461.54')
-            column(name: 'net_amount', value: '9628.00')
-            column(name: 'service_fee_amount', value: '0.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -56,8 +54,6 @@ databaseChangeLog {
             column(name: 'number_of_copies', value: '25')
             column(name: 'reported_value', value: '5000.00')
             column(name: 'gross_amount', value: '3100.00')
-            column(name: 'net_amount', value: '2604.00')
-            column(name: 'service_fee_amount', value: '0.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -79,8 +75,6 @@ databaseChangeLog {
             column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '15000.00')
             column(name: 'gross_amount', value: '10300.00')
-            column(name: 'net_amount', value: '7004.00')
-            column(name: 'service_fee_amount', value: '0.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -102,8 +96,6 @@ databaseChangeLog {
             column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '3000.00')
             column(name: 'gross_amount', value: '1000.00')
-            column(name: 'net_amount', value: '840.00')
-            column(name: 'service_fee_amount', value: '0.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -125,8 +117,6 @@ databaseChangeLog {
             column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '5620.00')
             column(name: 'gross_amount', value: '2450.55')
-            column(name: 'net_amount', value: '2058.46')
-            column(name: 'service_fee_amount', value: '0.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {

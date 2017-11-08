@@ -15,8 +15,10 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.perf4j.aop.Profiled;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +49,10 @@ public class PrmIntegrationService implements IPrmIntegrationService {
     @Autowired
     @Qualifier("dist.common.integration.rest.prmRhPreferenceService")
     private IPrmRhPreferenceService prmRhPreferenceService;
+    @Value("$RUP{dist.foreign.service_fee.non_participating}")
+    private BigDecimal rhNonParticipatingServiceFee;
+    @Value("$RUP{dist.foreign.service_fee.participating}")
+    private BigDecimal rhParticipatingServiceFee;
 
     @Override
     @Profiled(tag = "integration.PrmRightsholderService.getRightsholders")
@@ -79,5 +85,10 @@ public class PrmIntegrationService implements IPrmIntegrationService {
             }
         }
         return rhPraticipatingFlag;
+    }
+
+    @Override
+    public BigDecimal getRhParticipatingServiceFee(boolean rhParticipatingFlag) {
+        return rhParticipatingFlag ? rhParticipatingServiceFee : rhNonParticipatingServiceFee;
     }
 }

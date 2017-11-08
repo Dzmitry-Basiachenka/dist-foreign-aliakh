@@ -119,8 +119,18 @@ public class UsageService implements IUsageService {
 
     @Override
     public List<Usage> getUsagesWithAmounts(UsageFilter filter) {
-        //TODO {dbaraukova} get participating flag and calculate amounts
-        return usageRepository.findWithAmountsAndRightsholders(filter);
+        List<Usage> usages = usageRepository.findWithAmountsAndRightsholders(filter);
+        usages.forEach(usage -> {
+            boolean rhParticipatingFlag =
+                prmIntegrationService.isRightsholderParticipating(usage.getRightsholder().getAccountNumber());
+            usage.setRhParticipating(rhParticipatingFlag);
+            usage.setServiceFee(prmIntegrationService.getRhParticipatingServiceFee(rhParticipatingFlag));
+            usage.setServiceFeeAmount(
+                CalculationUtils.calculateServiceFeeAmount(usage.getGrossAmount(), usage.getServiceFee()));
+            usage.setNetAmount(
+                CalculationUtils.calculateNetAmount(usage.getGrossAmount(), usage.getServiceFeeAmount()));
+        });
+        return usages;
     }
 
     @Override
