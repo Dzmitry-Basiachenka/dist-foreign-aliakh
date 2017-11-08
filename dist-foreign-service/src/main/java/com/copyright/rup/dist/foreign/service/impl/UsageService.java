@@ -157,6 +157,10 @@ public class UsageService implements IUsageService {
     @Override
     public void deleteFromScenario(Scenario scenario, List<Long> accountNumbers, String reason) {
         usageRepository.deleteFromScenario(scenario.getId(), accountNumbers, RupContextUtils.getUserName());
+        usageRepository.getIdsByScenarioIdAndRhAccountNumbers(scenario.getId(), accountNumbers).forEach(
+            usageId -> usageAuditService.logAction(usageId, scenario, UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO,
+            reason)
+        );
     }
 
     @Override
