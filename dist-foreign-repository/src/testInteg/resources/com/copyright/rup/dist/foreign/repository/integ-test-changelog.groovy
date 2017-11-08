@@ -62,7 +62,7 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: '244614835')
             column(name: 'work_title', value: '15th International Conference on Environmental Degradation of Materials in Nuclear Power Systems Water Reactors')
             column(name: 'rh_account_number', value: '1000002859')
-            column(name: 'status_ind', value: 'INELIGIBLE')
+            column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'article', value: 'First-Week Protein and Energy Intakes Are Associated With 18-Month Developmental Outcomes in Extremely Low Birth Weight Infants')
             column(name: 'standard_number', value: '1008902002377655XX')
             column(name: 'publisher', value: 'John Wiley & Sons')
