@@ -184,7 +184,7 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
     // Test case ID: '81989dc2-329b-4ce7-b5d6-97330d02ccd1'
     public void testUploadValidFile() throws Exception {
         List<UsageBatch> usageBatches = usageBatchService.getUsageBatches();
-        assertEquals(3, CollectionUtils.size(usageBatches));
+        assertEquals(4, CollectionUtils.size(usageBatches));
         WebElement uploadWindow = openUploadUsageBatchWindow();
         populateValidValuesForUploadWindowFields(uploadWindow);
         LocalDate paymentDate = LocalDate.now();
