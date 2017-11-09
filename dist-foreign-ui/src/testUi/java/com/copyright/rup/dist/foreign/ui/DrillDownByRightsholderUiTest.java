@@ -51,7 +51,6 @@ public class DrillDownByRightsholderUiTest extends ForeignCommonUiTest {
     private static final String ROR_NAME = "Access Copyright, The Canadian Copyright Agency";
     private static final String PAYMENT_DATE = "09/10/2015";
     private static final String PUB_DATE = "09/10/2013";
-    private static final String ZERO_AMOUNT = "0.00";
     private static final String MIN_REPORTED_VALUE = "500.00";
     private static final String MAX_REPORTED_VALUE = "6,810.00";
     private static final BigDecimal BATCH_TOTAL_AMOUNT = new BigDecimal("12850.00");
@@ -63,17 +62,17 @@ public class DrillDownByRightsholderUiTest extends ForeignCommonUiTest {
     private static final String[] USAGE_1 = {"3982472103", BATCH_NAME, FISCAL_YEAR, ROR_ACCOUNT_NUMBER,
         ROR_NAME, PAYMENT_DATE, "40 model essays : a portable anthology", "The ritual of fast food", "12345XX-01",
         "122235139", "American Society for Nutritional Science", PUB_DATE, "370", MAX_REPORTED_VALUE,
-        MAX_REPORTED_VALUE, ZERO_AMOUNT, ZERO_AMOUNT, ZERO_AMOUNT, "Univ", "2009", "2010",
+        MAX_REPORTED_VALUE, "2,179.20", "4,630.08", SERVICE_FEE, "Univ", "2009", "2010",
         "Aaron1088.89 Jane E."};
     private static final String[] USAGE_2 = {"5248153472", BATCH_NAME, FISCAL_YEAR, ROR_ACCOUNT_NUMBER,
         ROR_NAME, PAYMENT_DATE, "Managing brand equity : capitalizing on the value of a brand name",
         "The Measurement of Brand Associations", "12345XX-89173", "122235138", "Simon & Schuster US", PUB_DATE,
-        "150", "5,540.00", "5,540.00", ZERO_AMOUNT, ZERO_AMOUNT, ZERO_AMOUNT, "Bus1088.89 Sch1088.89", "2011",
+        "150", "5,540.00", "5,540.00", "1,772.80", "3,767.20", SERVICE_FEE, "Bus1088.89 Sch1088.89", "2011",
         "2012", "Aall1088.89 Pamela R.;Hampson1088.89 Fen Osler.;Crocker1088.89 Chester A."};
     private static final String[] USAGE_3 = {"5347181578", BATCH_NAME, FISCAL_YEAR, ROR_ACCOUNT_NUMBER,
         ROR_NAME, PAYMENT_DATE, "(En)gendering the war on terror : war stories and camouflaged politics",
         "between orientalism and fundamentalism", "12345XX-79073", "122235137", "IEEE", PUB_DATE, "20",
-        MIN_REPORTED_VALUE, MIN_REPORTED_VALUE, ZERO_AMOUNT, ZERO_AMOUNT, ZERO_AMOUNT, "Univ", "2013", "2017",
+        MIN_REPORTED_VALUE, MIN_REPORTED_VALUE, "160.00", "340.00", SERVICE_FEE, "Univ", "2013", "2017",
         "Aarseth, Espen J."};
     private Scenario scenario;
     private UsageBatch batch;
@@ -167,8 +166,8 @@ public class DrillDownByRightsholderUiTest extends ForeignCommonUiTest {
             new ExpectedColumnValues("Number of Copies", "20", "370"),
             new ExpectedColumnValues("Reported value", MIN_REPORTED_VALUE, MAX_REPORTED_VALUE),
             new ExpectedColumnValues("Gross Amt in USD", MIN_REPORTED_VALUE, MAX_REPORTED_VALUE),
-            new ExpectedColumnValues("Service Fee Amount", ZERO_AMOUNT, ZERO_AMOUNT),
-            new ExpectedColumnValues("Net Amt in USD", ZERO_AMOUNT, ZERO_AMOUNT),
+            new ExpectedColumnValues("Service Fee Amount", "160.00", "2,179.20"),
+            new ExpectedColumnValues("Net Amt in USD", "340.00", "4,630.08"),
             new ExpectedColumnValues("Service Fee %", SERVICE_FEE, SERVICE_FEE),
             new ExpectedColumnValues("Market", "Bus1088.89 Sch1088.89", "Univ"),
             new ExpectedColumnValues("Market Period From", "2009", "2013"),
@@ -183,9 +182,17 @@ public class DrillDownByRightsholderUiTest extends ForeignCommonUiTest {
         initScenario();
         usageBatchRepository.insert(batch);
         scenarioRepository.insert(scenario);
-        usageRepository.insert(buildUsage(USAGE_1));
-        usageRepository.insert(buildUsage(USAGE_2));
-        usageRepository.insert(buildUsage(USAGE_3));
+        List<Usage> usages = Lists.newArrayListWithExpectedSize(3);
+        Usage usage = buildUsage(USAGE_1);
+        usages.add(usage);
+        usageRepository.insert(usage);
+        usage = buildUsage(USAGE_2);
+        usages.add(usage);
+        usageRepository.insert(usage);
+        usage = buildUsage(USAGE_3);
+        usages.add(usage);
+        usageRepository.insert(usage);
+        usageRepository.addToScenario(usages);
     }
 
     private void initScenario() {
@@ -224,6 +231,9 @@ public class DrillDownByRightsholderUiTest extends ForeignCommonUiTest {
         usage.setNumberOfCopies(Integer.valueOf(fields[12]));
         usage.setReportedValue(new BigDecimal(fields[13].replaceAll(",", StringUtils.EMPTY)));
         usage.setGrossAmount(new BigDecimal(fields[14].replaceAll(",", StringUtils.EMPTY)));
+        usage.setServiceFeeAmount(new BigDecimal(fields[15].replaceAll(",", StringUtils.EMPTY)));
+        usage.setNetAmount(new BigDecimal(fields[16].replaceAll(",", StringUtils.EMPTY)));
+        usage.setServiceFee(new BigDecimal(fields[17].replaceAll(",", StringUtils.EMPTY)));
         usage.setMarket(fields[18]);
         usage.setMarketPeriodFrom(Integer.valueOf(fields[19]));
         usage.setMarketPeriodTo(Integer.valueOf(fields[20]));
