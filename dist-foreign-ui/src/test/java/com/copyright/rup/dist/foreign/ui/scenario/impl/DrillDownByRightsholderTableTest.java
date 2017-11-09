@@ -9,6 +9,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.ui.common.util.FiscalYearColumnGenerator;
 import com.copyright.rup.dist.foreign.ui.common.util.IntegerColumnGenerator;
+import com.copyright.rup.dist.foreign.ui.common.util.PercentColumnGenerator;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IDrillDownByRightsholderController;
 import com.copyright.rup.vaadin.ui.LocalDateColumnGenerator;
 import com.copyright.rup.vaadin.ui.LongColumnGenerator;
@@ -175,7 +176,7 @@ public class DrillDownByRightsholderTableTest {
         verifyColumnGenerator(table.getColumnGenerator(AMT_IN_USD_PROPERTY), MoneyColumnGenerator.class);
         verifyColumnGenerator(table.getColumnGenerator(SERVICE_FEE_AMOUNT_PROPERTY), MoneyColumnGenerator.class);
         verifyColumnGenerator(table.getColumnGenerator(NET_AMOUNT_PROPERTY), MoneyColumnGenerator.class);
-        verifyColumnGenerator(table.getColumnGenerator(SERVICE_FEE_PROPERTY), MoneyColumnGenerator.class);
+        verifyColumnGenerator(table.getColumnGenerator(SERVICE_FEE_PROPERTY), PercentColumnGenerator.class);
     }
 
     private void verifyColumnGenerator(LazyTable.ColumnGenerator columnGenerator, Class clazz) {

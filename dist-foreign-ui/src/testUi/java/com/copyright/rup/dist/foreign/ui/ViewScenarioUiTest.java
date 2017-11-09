@@ -32,11 +32,11 @@ import java.util.stream.Collectors;
 public class ViewScenarioUiTest extends ForeignCommonUiTest {
 
     private String[] rightsholder1 = {"1000002797", "British Film Institute (BFI)", StringUtils.EMPTY,
-        StringUtils.EMPTY, "480.00", "153.60", "326.40", "0.32"};
+        StringUtils.EMPTY, "480.00", "153.60", "326.40", "32.0"};
     private String[] rightsholder2 = {"1000008666", "CCH", StringUtils.EMPTY, StringUtils.EMPTY, "6,432.00", "2,304.00",
-        "5,664.00", "0.32"};
+        "5,664.00", "32.0"};
     private String[] rightsholder3 = {"1000009997", "IEEE - Inst of Electrical and Electronics Engrs",
-        StringUtils.EMPTY, StringUtils.EMPTY, "2,400.00", "768.00", "1,632.00", "0.32"};
+        StringUtils.EMPTY, StringUtils.EMPTY, "2,400.00", "768.00", "1,632.00", "32.0"};
 
     @Test
     // Test cases IDs: 'ed87b9c8-5880-4bc0-a3aa-6ec733dcf491', 'c3475cfb-eb5d-4dea-96ad-d6a1228f177b',
