@@ -20,6 +20,7 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
 import org.junit.Before;
@@ -53,6 +54,7 @@ public class ScenarioWidgetTest {
         scenario.setGrossTotal(new BigDecimal("20000.00"));
         expect(controller.getScenario()).andReturn(scenario).once();
         expect(controller.getExportScenarioUsagesStreamSource()).andReturn(createMock(IStreamSource.class)).once();
+        expect(controller.isScenarioEmpty()).andReturn(false).once();
         replay(controller);
         scenarioWidget.init();
         verify(controller);
@@ -68,10 +70,11 @@ public class ScenarioWidgetTest {
         assertFalse(scenarioWidget.isDraggable());
         assertFalse(scenarioWidget.isResizable());
         VerticalLayout content = (VerticalLayout) scenarioWidget.getContent();
-        assertEquals(3, content.getComponentCount());
+        assertEquals(4, content.getComponentCount());
         verifySearchWidget(content.getComponent(0));
         verifyTable(content.getComponent(1));
-        verifyButtonsLayout(content.getComponent(2));
+        verifyEmptyScenarioLabel(((VerticalLayout) content.getComponent(2)).getComponent(0));
+        verifyButtonsLayout(content.getComponent(3));
     }
 
     @Test
@@ -101,14 +104,21 @@ public class ScenarioWidgetTest {
         assertEquals("<span class='label-amount'>20,000.00</span>", table.getColumnFooter("grossTotal"));
     }
 
+    private void verifyEmptyScenarioLabel(Component component) {
+        assertEquals(Label.class, component.getClass());
+        assertEquals("Scenario is empty due to all usages were excluded", ((Label) component).getValue());
+    }
+
     private void verifyButtonsLayout(Component component) {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
-        assertEquals(2, horizontalLayout.getComponentCount());
-        Button exportButton = (Button) horizontalLayout.getComponent(0);
+        assertEquals(3, horizontalLayout.getComponentCount());
+        Button excludeButton = (Button) horizontalLayout.getComponent(0);
+        assertEquals("Exclude Details", excludeButton.getCaption());
+        Button exportButton = (Button) horizontalLayout.getComponent(1);
         assertEquals("Export", exportButton.getCaption());
         assertEquals("Export", exportButton.getId());
-        Button closeButton = (Button) horizontalLayout.getComponent(1);
+        Button closeButton = (Button) horizontalLayout.getComponent(2);
         assertEquals("Close", closeButton.getCaption());
         assertEquals("Close", closeButton.getId());
         assertTrue(horizontalLayout.isSpacing());

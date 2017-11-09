@@ -15,14 +15,20 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
+import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.UsageService;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
+import com.google.common.collect.Lists;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -54,7 +60,6 @@ public class ScenarioControllerTest {
     public void setUp() {
         controller = new ScenarioController();
         controller.setScenario(buildScenario());
-        controller.initWidget();
         usageService = createMock(UsageService.class);
         Whitebox.setInternalState(controller, "usageService", usageService);
     }
@@ -64,7 +69,9 @@ public class ScenarioControllerTest {
         Capture<Pageable> pageableCapture = new Capture<>();
         expect(usageService.getRightsholderTotalsHoldersByScenarioId(eq(SCENARIO_ID), anyString(),
             capture(pageableCapture), isNull())).andReturn(Collections.emptyList()).once();
+        expect(usageService.getRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, null)).andReturn(1).once();
         replay(usageService);
+        controller.initWidget();
         List<RightsholderTotalsHolder> result = controller.loadBeans(10, 150, null);
         Pageable pageable = pageableCapture.getValue();
         assertEquals(10, pageable.getOffset());
@@ -76,8 +83,9 @@ public class ScenarioControllerTest {
 
     @Test
     public void testGetSize() {
-        expect(usageService.getRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, null)).andReturn(1).once();
+        expect(usageService.getRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, null)).andReturn(1).times(2);
         replay(usageService);
+        controller.initWidget();
         assertEquals(1, controller.getSize());
         verify(usageService);
     }
@@ -112,6 +120,7 @@ public class ScenarioControllerTest {
 
     @Test
     public void testGetScenarioUsagesExportStream() {
+        expect(usageService.getRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, null)).andReturn(1).once();
         IStreamSource exportScenarioUsagesStreamSource = controller.getExportScenarioUsagesStreamSource();
         ExecutorService executorService = createMock(ExecutorService.class);
         Whitebox.setInternalState(exportScenarioUsagesStreamSource, executorService);
@@ -119,6 +128,7 @@ public class ScenarioControllerTest {
         executorService.execute(capture(captureRunnable));
         expectLastCall().once();
         replay(usageService, executorService);
+        controller.initWidget();
         assertNotNull(exportScenarioUsagesStreamSource.getStream());
         Runnable runnable = captureRunnable.getValue();
         assertNotNull(runnable);
@@ -132,10 +142,66 @@ public class ScenarioControllerTest {
         assertEquals("name.csv", controller.getExportScenarioUsagesStreamSource().getFileName());
     }
 
+    @Test
+    public void testGetSourceRros() {
+        IScenarioService scenarioService = createMock(IScenarioService.class);
+        Whitebox.setInternalState(controller, "scenarioService", scenarioService);
+        expect(scenarioService.getSourceRros(SCENARIO_ID))
+            .andReturn(Lists.newArrayList(buildRightsholder(1000009522L, "Societa Italiana Autori ed Editori (SIAE)")))
+            .once();
+        replay(scenarioService);
+        List<Rightsholder> rros = controller.getSourceRros();
+        assertEquals(1, CollectionUtils.size(rros));
+        assertEquals(Long.valueOf(1000009522L), rros.get(0).getAccountNumber());
+        assertEquals("Societa Italiana Autori ed Editori (SIAE)", rros.get(0).getName());
+        verify(scenarioService);
+    }
+
+    @Test
+    public void testDeleteFromScenario() {
+        List<Long> accountNumbers = Lists.newArrayList(1000009522L);
+        usageService.deleteFromScenario(buildScenario(), accountNumbers, "reason");
+        expectLastCall().once();
+        replay(usageService);
+        controller.deleteFromScenario(accountNumbers, "reason");
+        verify(usageService);
+    }
+
+    @Test
+    public void testGetRightsholdersPayeePairs() {
+        IScenarioService scenarioService = createMock(IScenarioService.class);
+        Whitebox.setInternalState(controller, "scenarioService", scenarioService);
+        expect(scenarioService.getRightsholdersByScenarioAndSourceRro(SCENARIO_ID, 1000009522L))
+            .andReturn(Lists.newArrayList(buildRightsholderPayeePair())).once();
+        replay(scenarioService);
+        List<RightsholderPayeePair> pairs = controller.getRightsholdersPayeePairs(1000009522L);
+        assertEquals(1, CollectionUtils.size(pairs));
+        RightsholderPayeePair pair = pairs.get(0);
+        assertEquals(Long.valueOf(2000017001L), pair.getPayee().getAccountNumber());
+        assertEquals("ICLA, Irish Copyright Licensing Agency", pair.getPayee().getName());
+        assertEquals(Long.valueOf(2000017006L), pair.getRightsholder().getAccountNumber());
+        assertEquals("CAL, Copyright Agency Limited", pair.getRightsholder().getName());
+        verify(scenarioService);
+    }
+
     private Scenario buildScenario() {
         Scenario scenario = new Scenario();
         scenario.setId(SCENARIO_ID);
         scenario.setName(SCENARO_NAME);
         return scenario;
+    }
+
+    private Rightsholder buildRightsholder(Long accountNumber, String name) {
+        Rightsholder rightsholder = new Rightsholder();
+        rightsholder.setName(name);
+        rightsholder.setAccountNumber(accountNumber);
+        return rightsholder;
+    }
+
+    private RightsholderPayeePair buildRightsholderPayeePair() {
+        RightsholderPayeePair pair = new RightsholderPayeePair();
+        pair.setPayee(buildRightsholder(2000017001L, "ICLA, Irish Copyright Licensing Agency"));
+        pair.setRightsholder(buildRightsholder(2000017006L, "CAL, Copyright Agency Limited"));
+        return pair;
     }
 }

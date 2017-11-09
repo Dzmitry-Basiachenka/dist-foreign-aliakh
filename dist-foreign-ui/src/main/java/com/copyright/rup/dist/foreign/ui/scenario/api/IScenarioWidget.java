@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.api;
 
 import com.copyright.rup.dist.foreign.ui.scenario.impl.ScenarioController;
+import com.copyright.rup.vaadin.widget.api.IRefreshable;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
 /**
@@ -12,7 +13,7 @@ import com.copyright.rup.vaadin.widget.api.IWidget;
  *
  * @author Ihar Suvorau
  */
-public interface IScenarioWidget extends IWidget<ScenarioController> {
+public interface IScenarioWidget extends IWidget<ScenarioController>, IRefreshable {
 
     /**
      * @return value from search field.
@@ -23,4 +24,9 @@ public interface IScenarioWidget extends IWidget<ScenarioController> {
      * Applies search value for table container.
      */
     void applySearch();
+
+    /**
+     * Refresh table.
+     */
+    void refreshTable();
 }
