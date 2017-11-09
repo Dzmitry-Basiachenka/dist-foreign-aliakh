@@ -33,8 +33,8 @@ public class ViewScenarioUiTest extends ForeignCommonUiTest {
 
     private String[] rightsholder1 = {"1000002797", "British Film Institute (BFI)", StringUtils.EMPTY,
         StringUtils.EMPTY, "480.00", "153.60", "326.40", "0.32"};
-    private String[] rightsholder2 = {"1000008666", "CCH", StringUtils.EMPTY, StringUtils.EMPTY, "7,650.00", "2,448.00",
-        "5,202.00", "0.32"};
+    private String[] rightsholder2 = {"1000008666", "CCH", StringUtils.EMPTY, StringUtils.EMPTY, "6,432.00", "2,304.00",
+        "5,664.00", "0.32"};
     private String[] rightsholder3 = {"1000009997", "IEEE - Inst of Electrical and Electronics Engrs",
         StringUtils.EMPTY, StringUtils.EMPTY, "2,400.00", "768.00", "1,632.00", "0.32"};
 
@@ -84,8 +84,8 @@ public class ViewScenarioUiTest extends ForeignCommonUiTest {
         assertTableRowElements(rows.get(1), rightsholder2);
         assertTableRowElements(rows.get(2), rightsholder3);
         assertTableSorting(table, "RH Account #", "RH Name", "Amt in USD", "Service Fee Amount", "Net Amt in USD");
-        assertTableFooterElements(table, "Totals", StringUtils.SPACE, StringUtils.SPACE, StringUtils.SPACE, "10,530.00",
-           "3,369.60", "7,160.40", StringUtils.SPACE);
+        assertTableFooterElements(table, "Totals", StringUtils.SPACE, StringUtils.SPACE, StringUtils.SPACE, "9,312.00",
+            "1,689.60", "7,622.40", StringUtils.SPACE);
     }
 
     private WebElement openViewScenarioWindow() {
