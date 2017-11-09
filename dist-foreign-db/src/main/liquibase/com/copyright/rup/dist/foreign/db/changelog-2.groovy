@@ -133,4 +133,43 @@ databaseChangeLog {
             addDefaultValue(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'service_fee', defaultValue: '0.00000')
         }
     }
+
+    changeSet(id: '2017-11-08-00', author: 'Darya Baraukova <dbaraukova@copyright.com>') {
+        comment('B-37941 FDA: Foundation for calculating service fee on each eligible FAS detail: ' +
+                'remove default value and NOT NULL constraint from df_usage and df_usage_archive tables')
+
+        sql("alter table ${dbAppsSchema}.df_usage alter service_fee drop default")
+        sql("alter table ${dbAppsSchema}.df_usage_archive alter service_fee drop default")
+
+        dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'service_fee', columnDataType: 'DECIMAL(6,5)')
+        dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'service_fee', columnDataType: 'DECIMAL(6,5)')
+
+        update(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'service_fee', value: null)
+            where "df_scenario_uid is null"
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+            column(name: 'service_fee', value: null)
+            where "df_scenario_uid is null"
+        }
+
+        rollback {
+            addDefaultValue(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'service_fee', defaultValue: '0.00000')
+            addDefaultValue(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'service_fee', defaultValue: '0.00000')
+
+            update(schemaName: dbAppsSchema, tableName: 'df_usage') {
+                column(name: 'service_fee', value: 0.00000)
+                where "df_scenario_uid is null"
+            }
+
+            update(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+                column(name: 'service_fee', value: 0.00000)
+                where "df_scenario_uid is null"
+            }
+
+            addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'service_fee', columnDataType: 'DECIMAL(6,5)')
+            addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'service_fee', columnDataType: 'DECIMAL(6,5)')
+        }
+    }
 }

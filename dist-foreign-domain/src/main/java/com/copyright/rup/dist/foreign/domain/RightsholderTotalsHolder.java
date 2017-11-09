@@ -27,7 +27,7 @@ public class RightsholderTotalsHolder {
     private BigDecimal grossTotal = BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP);
     private BigDecimal serviceFeeTotal = BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP);
     private BigDecimal netTotal = BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP);
-    private BigDecimal serviceFee = new BigDecimal("0.32000");
+    private BigDecimal serviceFee;
 
     /**
      * @return rightsholder name.

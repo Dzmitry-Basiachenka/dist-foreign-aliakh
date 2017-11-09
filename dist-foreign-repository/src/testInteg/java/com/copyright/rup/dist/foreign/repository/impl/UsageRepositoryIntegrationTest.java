@@ -114,6 +114,7 @@ public class UsageRepositoryIntegrationTest {
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
     private static final String USER_NAME = "user@copyright.com";
     private static final BigDecimal NET_AMOUNT = new BigDecimal("25.1500000000");
+    private static final BigDecimal SERVICE_FEE = new BigDecimal("0.32000");
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
 
     @Autowired
@@ -568,7 +569,7 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(new BigDecimal("13461.5400000000"), usage.getGrossAmount());
         assertEquals(ZERO_AMOUNT, usage.getNetAmount());
         assertEquals(new BigDecimal("2500.00"), usage.getReportedValue());
-        assertEquals(new BigDecimal("0.32000"), usage.getServiceFee());
+        assertNull(usage.getServiceFee());
         assertNotNull(usage.getCreateDate());
         assertNotNull(usage.getUpdateDate());
         assertEquals("SYSTEM", usage.getCreateUser());
@@ -627,10 +628,11 @@ public class UsageRepositoryIntegrationTest {
         usage.setServiceFeeAmount(serviceFeeAmount);
         BigDecimal netAmount = new BigDecimal("4686.764").setScale(10);
         usage.setNetAmount(netAmount);
+        usage.setServiceFee(SERVICE_FEE);
         usageRepository.addToScenario(Collections.singletonList(usage));
         Usage updatedUsage = usageRepository.findByDetailId(DETAIL_ID_1);
         verifyUsage(updatedUsage, UsageStatusEnum.LOCKED, SCENARIO_ID, USER_NAME, 2000017004L);
-        assertEquals(new BigDecimal("0.32000"), usage.getServiceFee());
+        assertEquals(SERVICE_FEE, usage.getServiceFee());
         assertEquals(serviceFeeAmount, usage.getServiceFeeAmount());
         assertEquals(netAmount, usage.getNetAmount());
     }
@@ -743,6 +745,7 @@ public class UsageRepositoryIntegrationTest {
         rightsholderTotalsHolder.setNetTotal(BigDecimal.valueOf(netTotal).setScale(10, BigDecimal.ROUND_HALF_UP));
         rightsholderTotalsHolder.setPayeeAccountNumber(rhAccountNumber);
         rightsholderTotalsHolder.setPayeeName(rhName);
+        rightsholderTotalsHolder.setServiceFee(SERVICE_FEE);
         return rightsholderTotalsHolder;
     }
 
@@ -751,16 +754,19 @@ public class UsageRepositoryIntegrationTest {
         Usage usage = usageRepository.findByDetailId(6997788888L);
         usage.getPayee().setAccountNumber(1000009997L);
         usage.setScenarioId(SCENARIO_ID);
+        usage.setServiceFee(SERVICE_FEE);
         calculateAmounts(usage);
         usages.add(usage);
         usage = usageRepository.findByDetailId(6997788885L);
         usage.getPayee().setAccountNumber(1000002859L);
         usage.setScenarioId(SCENARIO_ID);
+        usage.setServiceFee(SERVICE_FEE);
         calculateAmounts(usage);
         usages.add(usage);
         usage = usageRepository.findByDetailId(DETAIL_ID_1);
         usage.getPayee().setAccountNumber(1000005413L);
         usage.setScenarioId(SCENARIO_ID);
+        usage.setServiceFee(SERVICE_FEE);
         calculateAmounts(usage);
         usages.add(usage);
         usageRepository.addToScenario(Lists.newArrayList(usages));

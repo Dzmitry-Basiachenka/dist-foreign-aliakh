@@ -40,7 +40,7 @@ public class Usage extends StoredEntity<String> {
     private Integer numberOfCopies;
     private BigDecimal reportedValue = BigDecimal.ZERO;
     private BigDecimal netAmount = BigDecimal.ZERO;
-    private BigDecimal serviceFee = new BigDecimal("0.32000");
+    private BigDecimal serviceFee;
     private BigDecimal serviceFeeAmount = BigDecimal.ZERO;
     private BigDecimal grossAmount = BigDecimal.ZERO;
     private UsageStatusEnum status;

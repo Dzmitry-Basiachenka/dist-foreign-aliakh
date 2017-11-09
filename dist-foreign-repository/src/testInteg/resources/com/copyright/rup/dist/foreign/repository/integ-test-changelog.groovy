@@ -264,6 +264,7 @@ databaseChangeLog {
             column(name: 'gross_amount', value: '11461.54')
             column(name: 'net_amount', value: '9628.00')
             column(name: 'service_fee_amount', value: '1833.00')
+            column(name: 'service_fee', value: '0.32000')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -289,6 +290,7 @@ databaseChangeLog {
             column(name: 'gross_amount', value: '1200.00')
             column(name: 'net_amount', value: '1008.00')
             column(name: 'service_fee_amount', value: '192.00')
+            column(name: 'service_fee', value: '0.32000')
         }
 
         rollback ""
