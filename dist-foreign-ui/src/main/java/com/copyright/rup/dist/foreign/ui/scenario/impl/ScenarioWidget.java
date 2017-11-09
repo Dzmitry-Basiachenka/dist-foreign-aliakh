@@ -86,6 +86,7 @@ public class ScenarioWidget extends Window implements IScenarioWidget {
     private VerticalLayout initContent() {
         table = new RightsholderTotalsHolderTable(controller, RightsholderTotalsHolderBeanQuery.class);
         table.setColumnFooter("grossTotal", CurrencyUtils.formatAsHtml(scenario.getGrossTotal()));
+        table.setColumnFooter("serviceFeeTotal", CurrencyUtils.formatAsHtml(scenario.getServiceFeeTotal()));
         table.setColumnFooter("netTotal", CurrencyUtils.formatAsHtml(scenario.getNetTotal()));
         initEmptyScenarioMessage();
         HorizontalLayout buttons = initButtons();

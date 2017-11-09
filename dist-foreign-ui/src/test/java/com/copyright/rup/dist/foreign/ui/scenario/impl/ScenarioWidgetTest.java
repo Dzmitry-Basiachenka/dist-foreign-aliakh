@@ -52,6 +52,8 @@ public class ScenarioWidgetTest {
         scenario.setId(RupPersistUtils.generateUuid());
         scenario.setName("Scenario name");
         scenario.setGrossTotal(new BigDecimal("20000.00"));
+        scenario.setServiceFeeTotal(new BigDecimal("6400.00"));
+        scenario.setNetTotal(new BigDecimal("13600.00"));
         expect(controller.getScenario()).andReturn(scenario).once();
         expect(controller.getExportScenarioUsagesStreamSource()).andReturn(createMock(IStreamSource.class)).once();
         expect(controller.isScenarioEmpty()).andReturn(false).once();
@@ -102,6 +104,8 @@ public class ScenarioWidgetTest {
         assertEquals(RightsholderTotalsHolderTable.class, component.getClass());
         RightsholderTotalsHolderTable table = (RightsholderTotalsHolderTable) component;
         assertEquals("<span class='label-amount'>20,000.00</span>", table.getColumnFooter("grossTotal"));
+        assertEquals("<span class='label-amount'>6,400.00</span>", table.getColumnFooter("serviceFeeTotal"));
+        assertEquals("<span class='label-amount'>13,600.00</span>", table.getColumnFooter("netTotal"));
     }
 
     private void verifyEmptyScenarioLabel(Component component) {

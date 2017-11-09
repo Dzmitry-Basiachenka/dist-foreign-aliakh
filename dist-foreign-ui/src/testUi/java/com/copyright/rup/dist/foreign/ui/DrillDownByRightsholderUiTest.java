@@ -63,17 +63,17 @@ public class DrillDownByRightsholderUiTest extends ForeignCommonUiTest {
     private static final String[] USAGE_1 = {"3982472103", BATCH_NAME, FISCAL_YEAR, ROR_ACCOUNT_NUMBER,
         ROR_NAME, PAYMENT_DATE, "40 model essays : a portable anthology", "The ritual of fast food", "12345XX-01",
         "122235139", "American Society for Nutritional Science", PUB_DATE, "370", MAX_REPORTED_VALUE,
-        MAX_REPORTED_VALUE, ZERO_AMOUNT, ZERO_AMOUNT, SERVICE_FEE, "Univ", "2009", "2010",
+        MAX_REPORTED_VALUE, ZERO_AMOUNT, ZERO_AMOUNT, ZERO_AMOUNT, "Univ", "2009", "2010",
         "Aaron1088.89 Jane E."};
     private static final String[] USAGE_2 = {"5248153472", BATCH_NAME, FISCAL_YEAR, ROR_ACCOUNT_NUMBER,
         ROR_NAME, PAYMENT_DATE, "Managing brand equity : capitalizing on the value of a brand name",
         "The Measurement of Brand Associations", "12345XX-89173", "122235138", "Simon & Schuster US", PUB_DATE,
-        "150", "5,540.00", "5,540.00", ZERO_AMOUNT, ZERO_AMOUNT, SERVICE_FEE, "Bus1088.89 Sch1088.89", "2011",
+        "150", "5,540.00", "5,540.00", ZERO_AMOUNT, ZERO_AMOUNT, ZERO_AMOUNT, "Bus1088.89 Sch1088.89", "2011",
         "2012", "Aall1088.89 Pamela R.;Hampson1088.89 Fen Osler.;Crocker1088.89 Chester A."};
     private static final String[] USAGE_3 = {"5347181578", BATCH_NAME, FISCAL_YEAR, ROR_ACCOUNT_NUMBER,
         ROR_NAME, PAYMENT_DATE, "(En)gendering the war on terror : war stories and camouflaged politics",
         "between orientalism and fundamentalism", "12345XX-79073", "122235137", "IEEE", PUB_DATE, "20",
-        MIN_REPORTED_VALUE, MIN_REPORTED_VALUE, ZERO_AMOUNT, ZERO_AMOUNT, SERVICE_FEE, "Univ", "2013", "2017",
+        MIN_REPORTED_VALUE, MIN_REPORTED_VALUE, ZERO_AMOUNT, ZERO_AMOUNT, ZERO_AMOUNT, "Univ", "2013", "2017",
         "Aarseth, Espen J."};
     private Scenario scenario;
     private UsageBatch batch;
