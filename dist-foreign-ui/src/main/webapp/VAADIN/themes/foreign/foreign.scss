@@ -82,11 +82,13 @@
         }
     }
 
-    /**==== Drill down by rightsholder widget ====*/
-    .drill-down-by-rightsholder-widget {
+    /**==== Padding for search widget ====*/
+    .drill-down-by-rightsholder-widget,
+    .exclude-rightsholders-window,
+    .exclude-source-rro-window {
         .search-toolbar {
-                padding: $window-search-padding;
-            }
+            padding: $window-search-padding;
+        }
     }
 
     /*=== Styles for table with extended footer ===*/
@@ -102,5 +104,44 @@
     .table-ext-footer .v-table-footer span {
         display: block;
         margin-bottom: 4px;
+    }
+
+    /*=== Styles for multiselect table ===*/
+    .table-multiselectable .v-table-header td {
+        padding: 0px !important;
+    }
+
+    .table-multiselectable .v-table-cell-content {
+        vertical-align: $table-vertical-align;
+    }
+
+    .table-multiselectable .v-table-caption-container-align-left p {
+        background: $v-sprites-url no-repeat 3px -120px;
+        cursor: pointer;
+        opacity: 0.8;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 20px;
+        height: 20px;
+    }
+
+    .table-multiselectable .v-table-caption-container p:hover {
+        background-position: 3px -100px;
+    }
+
+    .table-multiselectable .v-table-caption-container p.selected {
+        background-position: 3px -160px;
+    }
+
+    .table-multiselectable .v-table-caption-container p.selected:hover {
+        background-position: 3px -140px;
+    }
+
+    .table-multiselectable .v-table-caption-container p.indeterminate {
+        background-position: 3px -320px;
+    }
+
+    .table-multiselectable .v-table-caption-container p.indeterminate:hover {
+        background-position: 3px -300px;
     }
 }

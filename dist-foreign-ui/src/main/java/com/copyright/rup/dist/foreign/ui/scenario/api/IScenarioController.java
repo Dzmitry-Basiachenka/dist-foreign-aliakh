@@ -1,10 +1,15 @@
 package com.copyright.rup.dist.foreign.ui.scenario.api;
 
+import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
+import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.ui.component.lazytable.IBeanLoader;
 import com.copyright.rup.vaadin.widget.SearchWidget.ISearchController;
 import com.copyright.rup.vaadin.widget.api.IController;
+
+import java.util.List;
 
 /**
  * Interface for controller of viewing scenario widget.
@@ -30,4 +35,41 @@ public interface IScenarioController extends IController<IScenarioWidget>, ISear
      * @param rightsholderName rightsholder name
      */
     void onRightsholderAccountNumberClicked(Long accountNumber, String rightsholderName);
+
+    /**
+     * Handles click on "Exclude Details" button.
+     */
+    void onExcludeDetailsClicked();
+
+    /**
+     * @return boolean result that shows whether scenario is empty or not.
+     */
+    boolean isScenarioEmpty();
+
+    /**
+     * @return current {@link Scenario}
+     */
+    Scenario getScenario();
+
+    /**
+     * @return all source RROs belonging to the {@link Scenario}.
+     */
+    List<Rightsholder> getSourceRros();
+
+    /**
+     * Finds all {@link RightsholderPayeePair}s belonging to the source RRO with given account number within the
+     * chosen scenario.
+     *
+     * @param rroAccountNumber RRO account number
+     * @return list of {@link RightsholderPayeePair}s
+     */
+    List<RightsholderPayeePair> getRightsholdersPayeePairs(Long rroAccountNumber);
+
+    /**
+     * Exclude details by rightsholders' account numbers.
+     *
+     * @param accountNumbers list of rightsholders' account numbers
+     * @param reason         reason
+     */
+    void deleteFromScenario(List<Long> accountNumbers, String reason);
 }

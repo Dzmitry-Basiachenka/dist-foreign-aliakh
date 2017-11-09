@@ -20,6 +20,7 @@ public class RightsholderPayeePair {
 
     private Rightsholder rightsholder = new Rightsholder();
     private Rightsholder payee = new Rightsholder();
+    private boolean selected;
 
     public Rightsholder getRightsholder() {
         return rightsholder;
@@ -37,6 +38,14 @@ public class RightsholderPayeePair {
         this.payee = payee;
     }
 
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -49,6 +58,7 @@ public class RightsholderPayeePair {
         return new EqualsBuilder()
             .append(this.rightsholder, that.rightsholder)
             .append(this.payee, that.payee)
+            .append(this.selected, that.selected)
             .isEquals();
     }
 
@@ -57,6 +67,7 @@ public class RightsholderPayeePair {
         return new HashCodeBuilder()
             .append(rightsholder)
             .append(payee)
+            .append(selected)
             .toHashCode();
     }
 
@@ -65,6 +76,7 @@ public class RightsholderPayeePair {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
             .append("rightsholder", rightsholder)
             .append("payee", payee)
+            .append("selected", selected)
             .toString();
     }
 }

@@ -1,15 +1,19 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
+import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
+import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioWidget;
 import com.copyright.rup.vaadin.ui.VaadinUtils;
+import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
@@ -23,6 +27,7 @@ import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -43,7 +48,8 @@ public class ScenarioController extends CommonController<IScenarioWidget> implem
 
     @Autowired
     private IUsageService usageService;
-
+    @Autowired
+    private IScenarioService scenarioService;
     @Autowired
     private IDrillDownByRightsholderController drillDownByRightsholderController;
 
@@ -80,19 +86,39 @@ public class ScenarioController extends CommonController<IScenarioWidget> implem
         return new ScenarioWidget();
     }
 
+    @Override
+    public void onExcludeDetailsClicked() {
+        Windows.showModalWindow(new ExcludeSourceRroWindow(this));
+    }
+
+    @Override
+    public boolean isScenarioEmpty() {
+        return Objects.equals(0,
+            usageService.getRightsholderTotalsHolderCountByScenarioId(getScenario().getId(), null));
+    }
+
+    @Override
+    public List<Rightsholder> getSourceRros() {
+        return scenarioService.getSourceRros(getScenario().getId());
+    }
+
+    @Override
+    public void deleteFromScenario(List<Long> accountNumbers, String reason) {
+        usageService.deleteFromScenario(getScenario(), accountNumbers, reason);
+    }
+
+    @Override
+    public List<RightsholderPayeePair> getRightsholdersPayeePairs(Long rroAccountNumber) {
+        return scenarioService.getRightsholdersByScenarioAndSourceRro(getScenario().getId(), rroAccountNumber);
+    }
+
+    @Override
+    public Scenario getScenario() {
+        return scenario;
+    }
+
     void setScenario(Scenario scenario) {
         this.scenario = scenario;
-    }
-
-    void setDrillDownByRightsholderController(IDrillDownByRightsholderController drillDownByRightsholderController) {
-        this.drillDownByRightsholderController = drillDownByRightsholderController;
-    }
-
-    /**
-     * @return instance of {@link Scenario}.
-     */
-    Scenario getScenario() {
-        return scenario;
     }
 
     private static class ExportScenarioUsagesStreamSource implements IStreamSource {
