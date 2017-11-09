@@ -516,4 +516,72 @@ databaseChangeLog {
 
         rollback ""
     }
+
+    changeSet(id: '2017-10-31-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment('Inserting batch with NEW usages for ui tests')
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: '5fb4a015-f943-4e29-ae7b-c7301db3c15e')
+            column(name: 'name', value: 'Batch with NEW usages')
+            column(name: 'rro_account_number', value: '1000005413')
+            column(name: 'payment_date', value: '2017-01-11')
+            column(name: 'fiscal_year', value: '2017')
+            column(name: 'gross_amount', value: '35000')
+            column(name: 'updated_datetime', value: '2017-02-21 11:41:52.735531+03')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'bb266904-3334-4fa3-9b44-9d76d2cb0c4d')
+            column(name: 'df_usage_batch_uid', value: '5fb4a015-f943-4e29-ae7b-c7301db3c15e')
+            column(name: 'detail_id', value: '6909853886')
+            column(name: 'work_title', value: 'TOMATOES')
+            column(name: 'status_ind', value: 'NEW')
+            column(name: 'standard_number', value: '1112202112377654XX')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'number_of_copies', value: '10')
+            column(name: 'reported_value', value: '3000.00')
+            column(name: 'gross_amount', value: '3000.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '12605af0-338d-4424-852d-9929ff758d3f')
+            column(name: 'df_usage_batch_uid', value: '5fb4a015-f943-4e29-ae7b-c7301db3c15e')
+            column(name: 'detail_id', value: '6607723786')
+            column(name: 'wr_wrk_inst', value: '122235137')
+            column(name: 'work_title', value: 'TOMATOES')
+            column(name: 'rh_account_number', value: '1000008666')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+            column(name: 'standard_number', value: '1112202112377654XX')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'number_of_copies', value: '200')
+            column(name: 'reported_value', value: '1000.00')
+            column(name: 'gross_amount', value: '1000.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
+            column(name: 'df_usage_audit_uid', value: 'c203e8fd-8dad-432c-a439-656d43cb7253')
+            column(name: 'df_usage_uid', value: 'bb266904-3334-4fa3-9b44-9d76d2cb0c4d')
+            column(name: 'action_type_ind', value: 'LOADED')
+            column(name: 'action_reason', value: "Uploaded in 'Batch with NEW usages' Batch")
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
+            column(name: 'df_usage_audit_uid', value: '14605eda-1061-4f9d-8144-0127f92a0aaa')
+            column(name: 'df_usage_uid', value: '12605af0-338d-4424-852d-9929ff758d3f')
+            column(name: 'action_type_ind', value: 'LOADED')
+            column(name: 'action_reason', value: "Uploaded in 'Batch with NEW usages' Batch")
+        }
+
+        rollback ""
+    }
 }
