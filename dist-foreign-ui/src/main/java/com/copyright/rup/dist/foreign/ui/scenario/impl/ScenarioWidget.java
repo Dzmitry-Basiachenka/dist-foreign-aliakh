@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.VaadinUtils;
@@ -30,6 +31,7 @@ import com.vaadin.ui.Window;
  */
 public class ScenarioWidget extends Window implements IScenarioWidget {
 
+    // TODO implement ScenarioMediator to handle components state
     private ScenarioController controller;
     private SearchWidget searchWidget;
     private RightsholderTotalsHolderTable table;
@@ -75,7 +77,7 @@ public class ScenarioWidget extends Window implements IScenarioWidget {
         searchWidget.setVisible(!emptyScenario);
         emptyUsagesLayout.setVisible(emptyScenario);
         exportButton.setEnabled(!emptyScenario);
-        excludeButton.setEnabled(!emptyScenario);
+        excludeButton.setEnabled(!emptyScenario && ForeignSecurityUtils.hasExcludeFromScenarioPermission());
     }
 
     @Override
@@ -120,6 +122,7 @@ public class ScenarioWidget extends Window implements IScenarioWidget {
         fileDownloader.extend(exportButton);
         excludeButton = new Button(ForeignUi.getMessage("button.exclude.details"));
         excludeButton.addClickListener(event -> controller.onExcludeDetailsClicked());
+        excludeButton.setEnabled(ForeignSecurityUtils.hasExcludeFromScenarioPermission());
         HorizontalLayout buttons = new HorizontalLayout(excludeButton, exportButton, Buttons.createCloseButton(this));
         VaadinUtils.addComponentStyle(buttons, "scenario-buttons-layout");
         buttons.setSpacing(true);
