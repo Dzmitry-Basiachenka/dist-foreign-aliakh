@@ -156,6 +156,14 @@ public class ScenarioServiceTest {
     }
 
     @Test
+    public void testGetScenarioWithAmounts() {
+        expect(scenarioRepository.getWithAmounts(SCENARIO_ID)).andReturn(new Scenario()).once();
+        replay(scenarioRepository);
+        assertEquals(new Scenario(), scenarioService.getScenarioWithAmounts(SCENARIO_ID));
+        verify(scenarioRepository);
+    }
+
+    @Test
     public void testGetSourceRros() {
         expect(scenarioRepository.findSourceRros(SCENARIO_ID)).andReturn(Collections.emptyList()).once();
         replay(scenarioRepository);

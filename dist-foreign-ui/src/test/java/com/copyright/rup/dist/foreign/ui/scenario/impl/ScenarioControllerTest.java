@@ -20,8 +20,8 @@ import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
-import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.impl.ScenarioService;
 import com.copyright.rup.dist.foreign.service.impl.UsageService;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.widget.api.IWidget;
@@ -35,6 +35,7 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.io.PipedOutputStream;
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -55,13 +56,24 @@ public class ScenarioControllerTest {
 
     private IUsageService usageService;
     private ScenarioController controller;
+    private ScenarioService scenarioService;
+    private Scenario scenario;
 
     @Before
     public void setUp() {
+        scenario = new Scenario();
+        scenario.setId(SCENARIO_ID);
+        scenario.setDescription("Description");
+        scenario.setNetTotal(new BigDecimal("10000.00"));
+        scenario.setGrossTotal(new BigDecimal("20000.00"));
+        scenario.setReportedTotal(new BigDecimal("30000.00"));
+        scenario.setCreateUser("User@copyright.com");
         controller = new ScenarioController();
         controller.setScenario(buildScenario());
         usageService = createMock(UsageService.class);
+        scenarioService = createMock(ScenarioService.class);
         Whitebox.setInternalState(controller, "usageService", usageService);
+        Whitebox.setInternalState(controller, "scenarioService", scenarioService);
     }
 
     @Test
@@ -70,7 +82,8 @@ public class ScenarioControllerTest {
         expect(usageService.getRightsholderTotalsHoldersByScenarioId(eq(SCENARIO_ID), anyString(),
             capture(pageableCapture), isNull())).andReturn(Collections.emptyList()).once();
         expect(usageService.getRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, null)).andReturn(1).once();
-        replay(usageService);
+        expect(scenarioService.getScenarioWithAmounts(scenario.getId())).andReturn(scenario).once();
+        replay(usageService, scenarioService);
         controller.initWidget();
         List<RightsholderTotalsHolder> result = controller.loadBeans(10, 150, null);
         Pageable pageable = pageableCapture.getValue();
@@ -78,16 +91,17 @@ public class ScenarioControllerTest {
         assertEquals(150, pageable.getLimit());
         assertNotNull(result);
         assertEquals(0, result.size());
-        verify(usageService);
+        verify(usageService, scenarioService);
     }
 
     @Test
     public void testGetSize() {
         expect(usageService.getRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, null)).andReturn(1).times(2);
-        replay(usageService);
+        expect(controller.getScenarioWithAmounts()).andReturn(scenario).once();
+        replay(usageService, scenarioService);
         controller.initWidget();
         assertEquals(1, controller.getSize());
-        verify(usageService);
+        verify(usageService, scenarioService);
     }
 
     @Test
@@ -101,9 +115,9 @@ public class ScenarioControllerTest {
         Whitebox.setInternalState(controller, IWidget.class, widget);
         widget.applySearch();
         expectLastCall().once();
-        replay(widget);
+        replay(widget, scenarioService);
         controller.performSearch();
-        verify(widget);
+        verify(widget, scenarioService);
     }
 
     @Test
@@ -113,7 +127,6 @@ public class ScenarioControllerTest {
 
     @Test
     public void testSetScenario() {
-        Scenario scenario = new Scenario();
         controller.setScenario(scenario);
         assertEquals(scenario, controller.getScenario());
     }
@@ -127,14 +140,15 @@ public class ScenarioControllerTest {
         Capture<Runnable> captureRunnable = new Capture<>();
         executorService.execute(capture(captureRunnable));
         expectLastCall().once();
-        replay(usageService, executorService);
+        expect(scenarioService.getScenarioWithAmounts(scenario.getId())).andReturn(scenario).once();
+        replay(usageService, executorService, scenarioService);
         controller.initWidget();
         assertNotNull(exportScenarioUsagesStreamSource.getStream());
         Runnable runnable = captureRunnable.getValue();
         assertNotNull(runnable);
         assertSame(exportScenarioUsagesStreamSource, Whitebox.getInternalState(runnable, "arg$1"));
         assertTrue(Whitebox.getInternalState(runnable, "arg$2") instanceof PipedOutputStream);
-        verify(usageService, executorService);
+        verify(usageService, executorService, scenarioService);
     }
 
     @Test
@@ -144,7 +158,6 @@ public class ScenarioControllerTest {
 
     @Test
     public void testGetSourceRros() {
-        IScenarioService scenarioService = createMock(IScenarioService.class);
         Whitebox.setInternalState(controller, "scenarioService", scenarioService);
         expect(scenarioService.getSourceRros(SCENARIO_ID))
             .andReturn(Lists.newArrayList(buildRightsholder(1000009522L, "Societa Italiana Autori ed Editori (SIAE)")))
@@ -169,7 +182,6 @@ public class ScenarioControllerTest {
 
     @Test
     public void testGetRightsholdersPayeePairs() {
-        IScenarioService scenarioService = createMock(IScenarioService.class);
         Whitebox.setInternalState(controller, "scenarioService", scenarioService);
         expect(scenarioService.getRightsholdersByScenarioAndSourceRro(SCENARIO_ID, 1000009522L))
             .andReturn(Lists.newArrayList(buildRightsholderPayeePair())).once();
@@ -185,7 +197,6 @@ public class ScenarioControllerTest {
     }
 
     private Scenario buildScenario() {
-        Scenario scenario = new Scenario();
         scenario.setId(SCENARIO_ID);
         scenario.setName(SCENARO_NAME);
         return scenario;

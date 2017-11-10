@@ -158,13 +158,14 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
 
     private void onItemChanged(Scenario scenario) {
         if (null != scenario) {
+            Scenario scenarioWithAmounts = controller.getScenarioWithAmounts(scenario);
             ownerLabel.setValue(ForeignUi.getMessage("label.owner", scenario.getCreateUser()));
             distributionTotalLabel.setValue(ForeignUi.getMessage("label.distribution_total",
-                formatAmount(scenario.getNetTotal())));
+                formatAmount(scenarioWithAmounts.getNetTotal())));
             grossTotalLabel.setValue(ForeignUi.getMessage("label.gross_total",
-                formatAmount(scenario.getGrossTotal())));
+                formatAmount(scenarioWithAmounts.getGrossTotal())));
             reportedTotalLabel.setValue(ForeignUi.getMessage("label.reported_total",
-                formatAmount(scenario.getReportedTotal())));
+                formatAmount(scenarioWithAmounts.getReportedTotal())));
             descriptionLabel.setValue(ForeignUi.getMessage("label.description", scenario.getDescription()));
             metadataPanel.setContent(metadataLayout);
         } else {

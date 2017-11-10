@@ -35,7 +35,6 @@ public class ScenarioWidget extends Window implements IScenarioWidget {
     private ScenarioController controller;
     private SearchWidget searchWidget;
     private RightsholderTotalsHolderTable table;
-    private Scenario scenario;
     private VerticalLayout emptyUsagesLayout;
     private Button exportButton;
     private Button excludeButton;
@@ -45,7 +44,7 @@ public class ScenarioWidget extends Window implements IScenarioWidget {
     public ScenarioWidget init() {
         VaadinUtils.setMaxComponentsWidth(this);
         VaadinUtils.addComponentStyle(this, "view-scenario-widget");
-        scenario = controller.getScenario();
+        Scenario scenario = controller.getScenario();
         setCaption(scenario.getName());
         setHeight(95, Unit.PERCENTAGE);
         setDraggable(false);
@@ -83,13 +82,12 @@ public class ScenarioWidget extends Window implements IScenarioWidget {
     @Override
     public void refreshTable() {
         table.getContainerDataSource().refresh();
+        updateFooter();
     }
 
     private VerticalLayout initContent() {
         table = new RightsholderTotalsHolderTable(controller, RightsholderTotalsHolderBeanQuery.class);
-        table.setColumnFooter("grossTotal", CurrencyUtils.formatAsHtml(scenario.getGrossTotal()));
-        table.setColumnFooter("serviceFeeTotal", CurrencyUtils.formatAsHtml(scenario.getServiceFeeTotal()));
-        table.setColumnFooter("netTotal", CurrencyUtils.formatAsHtml(scenario.getNetTotal()));
+        updateFooter();
         initEmptyScenarioMessage();
         HorizontalLayout buttons = initButtons();
         VerticalLayout layout =
@@ -137,5 +135,12 @@ public class ScenarioWidget extends Window implements IScenarioWidget {
         emptyUsagesLayout = new VerticalLayout(emptyScenarioMessage);
         emptyUsagesLayout.setComponentAlignment(emptyScenarioMessage, Alignment.MIDDLE_CENTER);
         emptyUsagesLayout.setSizeFull();
+    }
+
+    private void updateFooter() {
+        Scenario scenarioWithAmounts = controller.getScenarioWithAmounts();
+        table.setColumnFooter("grossTotal", CurrencyUtils.formatAsHtml(scenarioWithAmounts.getGrossTotal()));
+        table.setColumnFooter("serviceFeeTotal", CurrencyUtils.formatAsHtml(scenarioWithAmounts.getServiceFeeTotal()));
+        table.setColumnFooter("netTotal", CurrencyUtils.formatAsHtml(scenarioWithAmounts.getNetTotal()));
     }
 }

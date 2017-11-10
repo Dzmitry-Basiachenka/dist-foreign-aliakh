@@ -63,6 +63,14 @@ public interface IScenarioRepository {
     List<Rightsholder> findSourceRros(String scenarioId);
 
     /**
+     * Gets reported total, gross amount, service fee amount and net amount for selected {@link Scenario}.
+     *
+     * @param scenarioId {@link Scenario} id
+     * @return {@link Scenario} with amounts
+     */
+    Scenario getWithAmounts(String scenarioId);
+
+    /**
      * Finds all {@link RightsholderPayeePair}s belonging to the source RRO with given account number within the
      * scenario with given id.
      *
