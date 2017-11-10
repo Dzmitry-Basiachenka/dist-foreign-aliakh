@@ -1,7 +1,9 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
+import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertArrayEquals;
@@ -10,9 +12,12 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioController;
+import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.google.common.collect.Lists;
+import com.vaadin.data.Container.Filter;
 import com.vaadin.data.Item;
+import com.vaadin.data.util.BeanContainer;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
@@ -20,8 +25,10 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
+import org.powermock.reflect.Whitebox;
 
 /**
  * Verifies {@link ExcludeSourceRroWindow}.
@@ -66,6 +73,25 @@ public class ExcludeSourceRroWindowTest {
         Table table = (Table) content.getComponent(1);
         verifyItem(table.getItem(2000017006L), "CAL, Copyright Agency Limited", 2000017006L);
         verifyItem(table.getItem(2000017004L), "Access Copyright, The Canadian Copyright Agency", 2000017004L);
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testPerformSearch() {
+        BeanContainer<Long, String> container = createMock(BeanContainer.class);
+        Whitebox.setInternalState(window, container);
+        container.removeAllContainerFilters();
+        SearchWidget searchWidget = createMock(SearchWidget.class);
+        Whitebox.setInternalState(window, searchWidget);
+        expect(searchWidget.getSearchValue()).andReturn("value").once();
+        Capture<Filter> filterCapture = new Capture<>();
+        container.addContainerFilter(capture(filterCapture));
+        expectLastCall();
+        replay(container, searchWidget);
+        window.performSearch();
+        assertTrue(filterCapture.getValue().appliesToProperty("name"));
+        assertTrue(filterCapture.getValue().appliesToProperty("accountNumber"));
+        verify(container, searchWidget);
     }
 
     private void verifyTable(Component component) {

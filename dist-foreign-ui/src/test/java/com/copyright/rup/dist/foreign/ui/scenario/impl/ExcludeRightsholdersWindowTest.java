@@ -1,7 +1,9 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
+import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertArrayEquals;
@@ -13,9 +15,12 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioController;
 import com.copyright.rup.vaadin.ui.component.SelectableTable;
+import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.google.common.collect.Lists;
+import com.vaadin.data.Container.Filter;
 import com.vaadin.data.Item;
+import com.vaadin.data.util.BeanContainer;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
@@ -23,8 +28,10 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
+import org.powermock.reflect.Whitebox;
 
 /**
  * Verifies {@link ExcludeRightsholdersWindow}.
@@ -75,6 +82,27 @@ public class ExcludeRightsholdersWindowTest {
             buildRightsholder(1000033963L, "Alfred R. Lindesmith"));
         verifyItem(table.getItem(7000425474L), buildRightsholder(2000196395L, "Advance Central Services"),
             buildRightsholder(7000425474L, "American Dialect Society"));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testPerformSearch() {
+        BeanContainer<Long, String> container = createMock(BeanContainer.class);
+        Whitebox.setInternalState(window, container);
+        container.removeAllContainerFilters();
+        SearchWidget searchWidget = createMock(SearchWidget.class);
+        Whitebox.setInternalState(window, searchWidget);
+        expect(searchWidget.getSearchValue()).andReturn("value").once();
+        Capture<Filter> filterCapture = new Capture<>();
+        container.addContainerFilter(capture(filterCapture));
+        expectLastCall();
+        replay(container, searchWidget);
+        window.performSearch();
+        assertTrue(filterCapture.getValue().appliesToProperty("payee.accountNumber"));
+        assertTrue(filterCapture.getValue().appliesToProperty("payee.name"));
+        assertTrue(filterCapture.getValue().appliesToProperty("rightsholder.accountNumber"));
+        assertTrue(filterCapture.getValue().appliesToProperty("rightsholder.name"));
+        verify(container, searchWidget);
     }
 
     private void verifyTable(Component component) {
