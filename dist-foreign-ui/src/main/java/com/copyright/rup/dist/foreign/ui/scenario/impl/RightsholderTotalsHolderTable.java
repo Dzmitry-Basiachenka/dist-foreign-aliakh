@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
+import com.copyright.rup.dist.foreign.ui.common.util.PercentColumnGenerator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioController;
 import com.copyright.rup.vaadin.ui.LongColumnGenerator;
@@ -117,6 +118,7 @@ public class RightsholderTotalsHolderTable extends LazyTable<RightsholderTotalsH
         addGeneratedColumn(GROSS_TOTAL_PROPERTY, moneyColumnGenerator);
         addGeneratedColumn(SERVICE_FEE_TOTAL_PROPERTY, moneyColumnGenerator);
         addGeneratedColumn(NET_TOTAL_PROPERTY, moneyColumnGenerator);
+        addGeneratedColumn(SERVICE_FEE_PROPERTY, new PercentColumnGenerator());
     }
 
     /**

@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.ui.common.util.FiscalYearColumnGenerator;
 import com.copyright.rup.dist.foreign.ui.common.util.IntegerColumnGenerator;
+import com.copyright.rup.dist.foreign.ui.common.util.PercentColumnGenerator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IDrillDownByRightsholderController;
 import com.copyright.rup.vaadin.ui.LocalDateColumnGenerator;
@@ -172,6 +173,6 @@ public class DrillDownByRightsholderTable extends LazyTable<UsageDetailsBeanQuer
         addGeneratedColumn(AMT_IN_USD_PROPERTY, moneyColumnGenerator);
         addGeneratedColumn(SERVICE_FEE_AMOUNT_PROPERTY, moneyColumnGenerator);
         addGeneratedColumn(NET_AMOUNT_PROPERTY, moneyColumnGenerator);
-        addGeneratedColumn(SERVICE_FEE_PROPERTY, moneyColumnGenerator);
+        addGeneratedColumn(SERVICE_FEE_PROPERTY, new PercentColumnGenerator());
     }
 }

@@ -54,7 +54,7 @@ public class DrillDownByRightsholderUiTest extends ForeignCommonUiTest {
     private static final String MIN_REPORTED_VALUE = "500.00";
     private static final String MAX_REPORTED_VALUE = "6,810.00";
     private static final BigDecimal BATCH_TOTAL_AMOUNT = new BigDecimal("12850.00");
-    private static final String SERVICE_FEE = "0.32";
+    private static final String SERVICE_FEE = "32.0";
     private static final String[] TABLE_HEADER = {"Detail ID", "Usage Batch Name", "Fiscal Year", "RRO Account #",
         "RRO Name", "Payment Date", "Title", "Article", "Standard Number", "Wr Wrk Inst", "Publisher", "Pub Date",
         "Number of Copies", "Reported value", "Gross Amt in USD", "Service Fee Amount", "Net Amt in USD",
@@ -233,7 +233,8 @@ public class DrillDownByRightsholderUiTest extends ForeignCommonUiTest {
         usage.setGrossAmount(new BigDecimal(fields[14].replaceAll(",", StringUtils.EMPTY)));
         usage.setServiceFeeAmount(new BigDecimal(fields[15].replaceAll(",", StringUtils.EMPTY)));
         usage.setNetAmount(new BigDecimal(fields[16].replaceAll(",", StringUtils.EMPTY)));
-        usage.setServiceFee(new BigDecimal(fields[17].replaceAll(",", StringUtils.EMPTY)));
+        usage.setServiceFee(new BigDecimal(fields[17].replaceAll(",", StringUtils.EMPTY)).
+            divide(new BigDecimal("100")));
         usage.setMarket(fields[18]);
         usage.setMarketPeriodFrom(Integer.valueOf(fields[19]));
         usage.setMarketPeriodTo(Integer.valueOf(fields[20]));
