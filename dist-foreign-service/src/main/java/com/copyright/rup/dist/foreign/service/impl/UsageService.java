@@ -29,6 +29,7 @@ import org.perf4j.aop.Profiled;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
@@ -155,12 +156,15 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public void deleteFromScenario(Scenario scenario, List<Long> accountNumbers, String reason) {
-        usageRepository.deleteFromScenario(scenario.getId(), accountNumbers, RupContextUtils.getUserName());
-        usageRepository.getIdsByScenarioIdAndRhAccountNumbers(scenario.getId(), accountNumbers).forEach(
-            usageId -> usageAuditService.logAction(usageId, scenario, UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO,
-            reason)
-        );
+    @Transactional
+    @Profiled(tag = "service.UsageService.deleteFromScenario")
+    public void deleteFromScenario(Scenario scenario, Long rroAccountNumber, List<Long> accountNumbers, String reason) {
+        List<String> usagesIds =
+            usageRepository.getIdsByScenarioIdRroAccountNumberRhAccountNumbers(scenario.getId(), rroAccountNumber,
+                accountNumbers);
+        usagesIds.forEach(usageId -> usageAuditService.logAction(usageId, scenario,
+            UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO, reason));
+        usageRepository.deleteFromScenario(usagesIds, RupContextUtils.getUserName());
     }
 
     @Override
@@ -192,11 +196,6 @@ public class UsageService implements IUsageService {
                                                             String searchValue, Pageable pageable, Sort sort) {
         return usageRepository.getByScenarioIdAndRhAccountNumber(accountNumber, scenarioId, searchValue, pageable,
             sort);
-    }
-
-    @Override
-    public List<String> getIdsByScenarioIdAndRhAccountNumbers(String scenarioId, List<Long> accountNumbers) {
-        return usageRepository.getIdsByScenarioIdAndRhAccountNumbers(scenarioId, accountNumbers);
     }
 
     private void calculateUsagesGrossAmount(UsageBatch usageBatch, List<Usage> usages) {

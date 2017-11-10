@@ -103,23 +103,27 @@ public interface IUsageService {
     void addUsagesToScenario(List<Usage> usages, Scenario scenario);
 
     /**
-     * Deletes {@link Usage}s from {@link Scenario}. Reverts status of {@link Usage}s
-     * to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE} and set scenario id as {@code null}.
+     * Deletes {@link Usage}s from scenario. Reverts status of {@link Usage}s
+     * to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE}, sets scenario id, payee account
+     * number, service fee to {@code null}, sets rh participating flag to {@code false}, service fee amount and net
+     * amount to 0 for given scenario.
      *
      * @param scenarioId scenario identifier
      */
     void deleteFromScenario(String scenarioId);
 
     /**
-     * Deletes {@link Usage}s from {@link Scenario}. Reverts status of {@link Usage}s
-     * to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE} and set scenario id as {@code null}
-     * for usages with rightsholders from given list of account numbers.
+     * Deletes {@link Usage}s from scenario. Reverts status of {@link Usage}s
+     * to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE}, sets scenario id, payee account
+     * number, service fee to {@code null}, sets rh participating flag to {@code false}, service fee amount and net
+     * amount to 0 for usages with rightsholders from given list of account numbers for specified RRO.
      *
-     * @param scenario       {@link Scenario}
-     * @param accountNumbers list of {@link com.copyright.rup.dist.common.domain.Rightsholder}s account numbers
-     * @param reason         reason provided by user
+     * @param scenario         {@link Scenario}
+     * @param rroAccountNumber RRO account number
+     * @param accountNumbers   list of {@link com.copyright.rup.dist.common.domain.Rightsholder}s account numbers
+     * @param reason           reason provided by user
      */
-    void deleteFromScenario(Scenario scenario, List<Long> accountNumbers, String reason);
+    void deleteFromScenario(Scenario scenario, Long rroAccountNumber, List<Long> accountNumbers, String reason);
 
     /**
      * Gets duplicate detail ids of {@link Usage}s which are already presented in database.
@@ -172,14 +176,4 @@ public interface IUsageService {
      */
     List<UsageDto> getByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue,
                                                      Pageable pageable, Sort sort);
-
-    /**
-     * Gets list of {@link Usage}s identifiers based on {@link Scenario} identifier and
-     * list of rightsholder account numbers.
-     *
-     * @param scenarioId     {@link Scenario} identifier
-     * @param accountNumbers list of {@link com.copyright.rup.dist.common.domain.Rightsholder}s account numbers
-     * @return list of {@link Usage}s identifiers.
-     */
-    List<String> getIdsByScenarioIdAndRhAccountNumbers(String scenarioId, List<Long> accountNumbers);
 }

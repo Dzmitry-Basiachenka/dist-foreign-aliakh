@@ -134,7 +134,7 @@ public class ExcludeRightsholdersWindow extends Window implements ISearchControl
             List<Long> selectedIds = rightsholdersTable.getSelectedItemsIds(Long.class);
             if (CollectionUtils.isNotEmpty(selectedIds)) {
                 Windows.showModalWindow(new ConfirmActionDialogWindow(reason -> {
-                    scenarioController.deleteFromScenario(selectedIds, reason);
+                    scenarioController.deleteFromScenario(accountNumber, selectedIds, reason);
                     scenarioController.getWidget().refresh();
                     scenarioController.getWidget().refreshTable();
                     parentWindow.close();

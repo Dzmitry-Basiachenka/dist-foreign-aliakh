@@ -279,10 +279,10 @@ public class UsageServiceTest {
         mockStatic(RupContextUtils.class);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         List<Long> accountNumbers = Collections.singletonList(RH_ACCOUNT_NUMBER);
-        usageRepository.deleteFromScenario(SCENARIO_ID, accountNumbers, USER_NAME);
+        usageRepository.deleteFromScenario(usagesIds, USER_NAME);
         expectLastCall().once();
-        expect(usageRepository.getIdsByScenarioIdAndRhAccountNumbers(scenario.getId(), accountNumbers)).andReturn(
-            usagesIds).once();
+        expect(usageRepository.getIdsByScenarioIdRroAccountNumberRhAccountNumbers(scenario.getId(), 2000017011L,
+            accountNumbers)).andReturn(usagesIds).once();
         usageAuditService.logAction(usagesIds.get(0), scenario, UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO,
             "Action reason");
         expectLastCall().once();
@@ -290,7 +290,7 @@ public class UsageServiceTest {
             "Action reason");
         expectLastCall().once();
         replay(usageRepository, usageAuditService, RupContextUtils.class);
-        usageService.deleteFromScenario(scenario, accountNumbers, "Action reason");
+        usageService.deleteFromScenario(scenario, 2000017011L, accountNumbers, "Action reason");
         verify(usageRepository, usageAuditService, RupContextUtils.class);
     }
 

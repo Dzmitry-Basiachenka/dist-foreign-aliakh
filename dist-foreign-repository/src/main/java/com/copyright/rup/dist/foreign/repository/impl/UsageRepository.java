@@ -24,6 +24,7 @@ import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.io.PipedOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -126,14 +127,15 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public void deleteFromScenario(String scenarioId, List<Long> accountNumbers, String updateUser) {
-        checkArgument(CollectionUtils.isNotEmpty(accountNumbers));
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
-        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put(UPDATE_USER_KEY, Objects.requireNonNull(updateUser));
-        parameters.put(STATUS_KEY, UsageStatusEnum.ELIGIBLE);
-        parameters.put("accountNumbers", accountNumbers);
-        update("IUsageMapper.deleteFromScenarioByAccountNumbers", parameters);
+    public void deleteFromScenario(List<String> usagesIds, String userName) {
+        checkArgument(CollectionUtils.isNotEmpty(usagesIds));
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
+        params.put(STATUS_KEY, UsageStatusEnum.ELIGIBLE);
+        params.put(UPDATE_USER_KEY, userName);
+        usagesIds.forEach(usageId -> {
+            params.put("usageId", usageId);
+            update("IUsageMapper.deleteFromScenarioByUsageId", params);
+        });
     }
 
     @Override
@@ -188,11 +190,17 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public List<String> getIdsByScenarioIdAndRhAccountNumbers(String scenarioId, List<Long> accountNumbers) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+    public List<String> getIdsByScenarioIdRroAccountNumberRhAccountNumbers(String scenarioId, Long rroAccountNumber,
+                                                                           List<Long> accountNumbers) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put("accountNumbers", Objects.requireNonNull(accountNumbers));
-        return selectList("IUsageMapper.getIdsByScenarioIdAndRhAccountNumbers", parameters);
+        parameters.put("rroAccountNumber", Objects.requireNonNull(rroAccountNumber));
+        List<String> result = new ArrayList<>(accountNumbers.size());
+        Iterables.partition(accountNumbers, 32000).forEach(partition -> {
+            parameters.put("accountNumbers", Objects.requireNonNull(partition));
+            result.addAll(selectList("IUsageMapper.getIdsByScenarioIdRroAccountNumberRhAccountNumbers", parameters));
+        });
+        return result;
     }
 
     /**

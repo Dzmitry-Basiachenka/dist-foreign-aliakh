@@ -331,7 +331,6 @@
             service_fee_amount = 0,
             net_amount = 0,
             <include refid="StoredEntityMapper.update"/>
-        where df_scenario_uid = #{scenarioId}
     </sql>
 
     <insert id="insert" parameterType="Usage">
@@ -510,14 +509,12 @@
 
     <update id="deleteFromScenario" parameterType="map">
         <include refid="deleteFromScenarioSql"/>
+        where df_scenario_uid = #{scenarioId}
     </update>
 
-    <update id="deleteFromScenarioByAccountNumbers" parameterType="map">
+    <update id="deleteFromScenarioByUsageId" parameterType="map">
         <include refid="deleteFromScenarioSql"/>
-        and rh_account_number in
-        <foreach collection="accountNumbers" item="accountNumber" separator=", " open="(" close=")">
-            #{accountNumber}
-        </foreach>
+        where df_usage_uid = #{usageId}
     </update>
 
     <select id="getDuplicateDetailIds" parameterType="list" resultType="long">
@@ -616,11 +613,13 @@
         <include refid="ifPageable"/>
     </select>
 
-    <select id="getIdsByScenarioIdAndRhAccountNumbers" resultType="string" parameterType="map">
+    <select id="getIdsByScenarioIdRroAccountNumberRhAccountNumbers" resultType="string" parameterType="map">
         select df_usage_uid
-        from ${schema}.df_usage
-        where df_scenario_uid = #{scenarioId}
-            and rh_account_number in
+        from ${schema}.df_usage u
+        join ${schema}.df_usage_batch b on u.df_usage_batch_uid = b.df_usage_batch_uid
+        where u.df_scenario_uid = #{scenarioId}
+            and b.rro_account_number = #{rroAccountNumber}
+            and u.rh_account_number in
             <foreach collection="accountNumbers" item="accountNumber" separator="," open="(" close=")">
                 #{accountNumber}
             </foreach>

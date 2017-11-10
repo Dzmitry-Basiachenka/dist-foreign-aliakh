@@ -103,8 +103,8 @@ public class ScenarioController extends CommonController<IScenarioWidget> implem
     }
 
     @Override
-    public void deleteFromScenario(List<Long> accountNumbers, String reason) {
-        usageService.deleteFromScenario(getScenario(), accountNumbers, reason);
+    public void deleteFromScenario(Long rroAccountNumber, List<Long> accountNumbers, String reason) {
+        usageService.deleteFromScenario(getScenario(), rroAccountNumber, accountNumbers, reason);
     }
 
     @Override

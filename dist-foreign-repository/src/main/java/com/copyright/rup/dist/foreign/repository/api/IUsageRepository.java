@@ -89,7 +89,9 @@ public interface IUsageRepository {
 
     /**
      * Deletes {@link Usage}s from scenario. Reverts status of {@link Usage}s
-     * to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE} and set scenario id as {@code null}.
+     * to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE} sets scenario id, payee account
+     * number, service fee to {@code null}, sets rh participating flag to {@code false}, service fee amount and net
+     * amount to 0.
      *
      * @param scenarioId scenario identifier
      * @param updateUser name of user who performed this action
@@ -98,14 +100,14 @@ public interface IUsageRepository {
 
     /**
      * Deletes {@link Usage}s from scenario. Reverts status of {@link Usage}s
-     * to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE} and set scenario id as {@code null}
-     * for usages with rightsholders from given list of account numbers.
+     * to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE}, sets scenario id, payee account
+     * number, service fee to {@code null}, sets rh participating flag to {@code false}, service fee amount and net
+     * amount to 0 for usages with given ids.
      *
-     * @param scenarioId     {@link com.copyright.rup.dist.foreign.domain.Scenario} id
-     * @param accountNumbers list of {@link com.copyright.rup.dist.common.domain.Rightsholder}s account numbers
-     * @param updateUser     update user
+     * @param usagesIds list of {@link Usage}s ids
+     * @param userName  user name
      */
-    void deleteFromScenario(String scenarioId, List<Long> accountNumbers, String updateUser);
+    void deleteFromScenario(List<String> usagesIds, String userName);
 
     /**
      * Gets duplicate detail ids of {@link Usage}s which are already presented in database.
@@ -165,11 +167,13 @@ public interface IUsageRepository {
 
     /**
      * Gets list of {@link Usage}s identifiers based on {@link com.copyright.rup.dist.foreign.domain.Scenario}
-     * identifier and list of rightsholder account numbers.
+     * identifier, RRO account number and list of rightsholder account numbers.
      *
-     * @param scenarioId     {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
-     * @param accountNumbers list of {@link com.copyright.rup.dist.common.domain.Rightsholder}s account numbers
-     * @return list of {@link Usage}s identifiers.
+     * @param scenarioId       {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
+     * @param rroAccountNumber RRO account number
+     * @param accountNumbers   list of {@link com.copyright.rup.dist.common.domain.Rightsholder}s account numbers
+     * @return list of {@link Usage}s identifiers
      */
-    List<String> getIdsByScenarioIdAndRhAccountNumbers(String scenarioId, List<Long> accountNumbers);
+    List<String> getIdsByScenarioIdRroAccountNumberRhAccountNumbers(String scenarioId, Long rroAccountNumber,
+                                                                    List<Long> accountNumbers);
 }
