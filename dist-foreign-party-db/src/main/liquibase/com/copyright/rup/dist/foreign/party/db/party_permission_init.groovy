@@ -109,4 +109,29 @@ databaseChangeLog {
             }
         }
     }
+
+    changeSet(id: '2017-11-10-00', author: 'Aliaksandr Radkevich <aradkevich@copyright.com>') {
+        comment("B-36162 FDA: Backend for Identifying and excluding details for rightsholders that roll up to the " +
+                "source RRO: add permission for excluding usages from a scenario")
+
+        //Permission to exclude usages from a scenario
+        insert(schemaName: dbCommonSchema, tableName: 'cm_permission') {
+            column(name: 'cm_permission_uid', value: 'baseline-fda-exclude-from-scenario')
+            column(name: 'permission_name', value: 'FDA_EXCLUDE_FROM_SCENARIO')
+            column(name: 'permission_descr', value: 'Permission to exclude usages from a scenario')
+            column(name: 'cm_application_area_uid', value: 'FDA')
+            column(name: 'cm_permission_type_uid', value: 'ACTION')
+            column(name: 'created_by_user', value: 'system')
+            column(name: 'updated_by_user', value: 'system')
+            column(name: 'created_datetime', value: 'now()')
+            column(name: 'updated_datetime', value: 'now()')
+            column(name: 'record_version', value: '1')
+        }
+
+        rollback {
+            delete(schemaName: dbCommonSchema, tableName: 'cm_permission') {
+                where "cm_permission_uid = 'baseline-fda-exclude-from-scenario'"
+            }
+        }
+    }
 }

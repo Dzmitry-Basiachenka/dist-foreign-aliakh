@@ -54,4 +54,11 @@ public final class ForeignSecurityUtils {
     public static boolean hasDeleteScenarioPermission() {
         return SecurityUtils.hasPermission("FDA_DELETE_SCENARIO");
     }
+
+    /**
+     * @return {@code true} if user has permission to exclude usages from scenario.
+     */
+    public static boolean hasExcludeFromScenarioPermission() {
+        return SecurityUtils.hasAnyPermission("FDA_EXCLUDE_FROM_SCENARIO");
+    }
 }
