@@ -195,13 +195,14 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
         assertEquals(StringUtils.EMPTY, labels.get(0).getText());
     }
 
+    // TODO {isuvorau} investigate test data 
     private void verifyMetadataPanel(WebElement metadataPanel) {
         List<WebElement> labels = findElements(metadataPanel, By.className(V_LABEL_CLASS_NAME));
         assertEquals(5, CollectionUtils.size(labels));
         assertEquals("Owner: SYSTEM", labels.get(0).getText());
-        assertEquals("Distribution Total: 9,000.00", labels.get(1).getText());
-        assertEquals("Gross Total: 10,000.00", labels.get(2).getText());
-        assertEquals("Reported Total: 11,000.00", labels.get(3).getText());
+        assertEquals("Distribution Total: 0.00", labels.get(1).getText());
+        assertEquals("Gross Total: 100.00", labels.get(2).getText());
+        assertEquals("Reported Total: 100.00", labels.get(3).getText());
         assertEquals("Description: Scenario description", labels.get(4).getText());
     }
 

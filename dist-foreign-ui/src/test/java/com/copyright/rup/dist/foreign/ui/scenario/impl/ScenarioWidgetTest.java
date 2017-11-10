@@ -57,6 +57,7 @@ public class ScenarioWidgetTest {
         expect(controller.getScenario()).andReturn(scenario).once();
         expect(controller.getExportScenarioUsagesStreamSource()).andReturn(createMock(IStreamSource.class)).once();
         expect(controller.isScenarioEmpty()).andReturn(false).once();
+        expect(controller.getScenarioWithAmounts()).andReturn(scenario).once();
         replay(controller);
         scenarioWidget.init();
         verify(controller);

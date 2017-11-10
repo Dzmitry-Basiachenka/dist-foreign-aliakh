@@ -105,6 +105,7 @@ public class ScenariosWidgetTest {
     @Test
     public void testRefresh() {
         expect(controller.getScenarios()).andReturn(Lists.newArrayList(scenario)).once();
+        expect(controller.getScenarioWithAmounts(scenario)).andReturn(scenario).once();
         replay(controller);
         scenariosWidget.refresh();
         verifyScenarioMetadataPanel();
@@ -116,8 +117,11 @@ public class ScenariosWidgetTest {
         scenariosWidget.selectScenario(null);
         Table table = Whitebox.getInternalState(scenariosWidget, "table");
         assertNull(table.getValue());
+        expect(controller.getScenarioWithAmounts(scenario)).andReturn(scenario).once();
+        replay(controller);
         scenariosWidget.selectScenario(SCENARIO_ID);
         assertEquals(SCENARIO_ID, table.getValue());
+        verify(controller);
     }
 
     @Test
@@ -164,8 +168,11 @@ public class ScenariosWidgetTest {
         Collection<?> listeners = table.getListeners(ValueChangeEvent.class);
         assertEquals(1, listeners.size());
         ValueChangeListener listener = (ValueChangeListener) listeners.iterator().next();
+        expect(controller.getScenarioWithAmounts(scenario)).andReturn(scenario).once();
+        replay(controller);
         verifyValueChangeListener(listener);
         verifyValueChangeListenerNoSelectedItem(listener);
+        verify(controller);
     }
 
     private void verifyValueChangeListenerNoSelectedItem(ValueChangeListener listener) {

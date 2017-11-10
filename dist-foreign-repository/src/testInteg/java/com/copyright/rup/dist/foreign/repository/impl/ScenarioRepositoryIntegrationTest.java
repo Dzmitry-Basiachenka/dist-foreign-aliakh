@@ -53,9 +53,9 @@ public class ScenarioRepositoryIntegrationTest {
     private static final String DESCRIPTION = "description";
     private static final String USAGE_BATCH_ID = "a5b64c3a-55d2-462e-b169-362dca6a4dd6";
     private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
-    private static final BigDecimal NET_TOTAL = new BigDecimal("204").setScale(10);
-    private static final BigDecimal SERVICE_FEE_TOTAL = new BigDecimal("96").setScale(10);
-    private static final BigDecimal GROSS_TOTAL = new BigDecimal("300").setScale(10);
+    private static final BigDecimal NET_TOTAL = new BigDecimal("204").setScale(10, BigDecimal.ROUND_HALF_UP);
+    private static final BigDecimal SERVICE_FEE_TOTAL = new BigDecimal("96").setScale(10, BigDecimal.ROUND_HALF_UP);
+    private static final BigDecimal GROSS_TOTAL = new BigDecimal("300").setScale(10, BigDecimal.ROUND_HALF_UP);
     private static final BigDecimal REPORTED_TOTAL = new BigDecimal("200.00");
 
     @Autowired
@@ -88,6 +88,15 @@ public class ScenarioRepositoryIntegrationTest {
         verifyScenario(scenarios.get(2), "b1f0b236-3ae9-4a60-9fab-61db84199d6f", "Scenario name",
             "The description of scenario", new BigDecimal("24000.0000000000"), new BigDecimal("16320.0000000000"),
             new BigDecimal("7680.0000000000"), new BigDecimal("18000.00"));
+    }
+
+    @Test
+    public void testGetWithAmount() {
+        Scenario scenario = scenarioRepository.getWithAmounts("b1f0b236-3ae9-4a60-9fab-61db84199d6f");
+        assertEquals(new BigDecimal("12661.5400000000"), scenario.getGrossTotal());
+        assertEquals(new BigDecimal("10636.0000000000"), scenario.getNetTotal());
+        assertEquals(new BigDecimal("2025.0000000000"), scenario.getServiceFeeTotal());
+        assertEquals(new BigDecimal("19800.00"), scenario.getReportedTotal());
     }
 
     @Test

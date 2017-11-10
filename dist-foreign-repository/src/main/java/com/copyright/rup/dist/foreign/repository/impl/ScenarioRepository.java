@@ -65,6 +65,11 @@ public class ScenarioRepository extends BaseRepository implements IScenarioRepos
     }
 
     @Override
+    public Scenario getWithAmounts(String scenarioId) {
+        return selectOne("IScenarioMapper.getWithAmounts", Objects.requireNonNull(scenarioId));
+    }
+
+    @Override
     public List<RightsholderPayeePair> findRightsholdersByScenarioAndSourceRro(String scenarioId,
                                                                                Long rroAccountNumber) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);

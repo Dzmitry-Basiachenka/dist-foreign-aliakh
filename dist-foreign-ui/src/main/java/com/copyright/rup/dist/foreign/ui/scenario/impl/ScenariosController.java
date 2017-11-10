@@ -43,6 +43,11 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
     }
 
     @Override
+    public Scenario getScenarioWithAmounts(Scenario scenario) {
+        return scenarioService.getScenarioWithAmounts(scenario.getId());
+    }
+
+    @Override
     public void onDeleteButtonClicked() {
         final Scenario scenario = getWidget().getSelectedScenario();
         String message = ForeignUi.getMessage("message.confirm.delete_action", scenario.getName(), "scenario");

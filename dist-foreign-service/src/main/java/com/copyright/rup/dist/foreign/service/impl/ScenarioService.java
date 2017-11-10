@@ -73,6 +73,11 @@ public class ScenarioService implements IScenarioService {
     }
 
     @Override
+    public Scenario getScenarioWithAmounts(String scenarioId) {
+        return scenarioRepository.getWithAmounts(scenarioId);
+    }
+
+    @Override
     public List<Rightsholder> getSourceRros(String scenarioId) {
         return scenarioRepository.findSourceRros(scenarioId);
     }

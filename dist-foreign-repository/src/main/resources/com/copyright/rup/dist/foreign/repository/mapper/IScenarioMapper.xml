@@ -89,6 +89,20 @@
         order by r.name asc
     </select>
 
+    <select id="getWithAmounts" parameterType="string" resultMap="scenarioResultMap">
+        select
+            s.df_scenario_uid,
+            s.name,
+            coalesce(sum(u.reported_value), 0) reported_total,
+            coalesce(sum(u.gross_amount), 0) gross_total,
+            coalesce(sum(u.service_fee_amount), 0) service_fee_total,
+            coalesce(sum(u.net_amount), 0) net_total
+        from ${schema}.df_scenario s
+        left join ${schema}.df_usage u on u.df_scenario_uid = s.df_scenario_uid
+        where s.df_scenario_uid = #{scenarioId}
+        group by s.df_scenario_uid, s.name
+    </select>
+
     <select id="findRightsholdersByScenarioAndSourceRro" parameterType="map" resultMap="rightsholderPayeePairResultMap">
         select distinct
             u.rh_account_number,
