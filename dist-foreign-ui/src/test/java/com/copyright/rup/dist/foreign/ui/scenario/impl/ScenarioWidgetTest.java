@@ -2,15 +2,17 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.reset;
-import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
+import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
@@ -25,6 +27,9 @@ import com.vaadin.ui.VerticalLayout;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
@@ -38,6 +43,8 @@ import java.math.BigDecimal;
  *
  * @author Ihar Suvorau
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({ForeignSecurityUtils.class})
 public class ScenarioWidgetTest {
 
     private ScenarioWidget scenarioWidget;
@@ -45,6 +52,7 @@ public class ScenarioWidgetTest {
 
     @Before
     public void setUp() {
+        mockStatic(ForeignSecurityUtils.class);
         controller = createMock(ScenarioController.class);
         scenarioWidget = new ScenarioWidget();
         scenarioWidget.setController(controller);
@@ -58,9 +66,10 @@ public class ScenarioWidgetTest {
         expect(controller.getExportScenarioUsagesStreamSource()).andReturn(createMock(IStreamSource.class)).once();
         expect(controller.isScenarioEmpty()).andReturn(false).once();
         expect(controller.getScenarioWithAmounts()).andReturn(scenario).once();
-        replay(controller);
+        expect(ForeignSecurityUtils.hasExcludeFromScenarioPermission()).andReturn(true).times(2);
+        replay(controller, ForeignSecurityUtils.class);
         scenarioWidget.init();
-        verify(controller);
+        verify(controller, ForeignSecurityUtils.class);
         reset(controller);
     }
 

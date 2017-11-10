@@ -7,12 +7,13 @@ import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.isNull;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
+import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
@@ -23,6 +24,7 @@ import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.ScenarioService;
 import com.copyright.rup.dist.foreign.service.impl.UsageService;
+import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
@@ -32,6 +34,9 @@ import org.apache.commons.collections.CollectionUtils;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.io.PipedOutputStream;
@@ -49,6 +54,8 @@ import java.util.concurrent.ExecutorService;
  *
  * @author Ihar Suvorau
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({ForeignSecurityUtils.class})
 public class ScenarioControllerTest {
 
     private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
@@ -72,6 +79,7 @@ public class ScenarioControllerTest {
         controller.setScenario(buildScenario());
         usageService = createMock(UsageService.class);
         scenarioService = createMock(ScenarioService.class);
+        mockStatic(ForeignSecurityUtils.class);
         Whitebox.setInternalState(controller, "usageService", usageService);
         Whitebox.setInternalState(controller, "scenarioService", scenarioService);
     }
@@ -83,7 +91,8 @@ public class ScenarioControllerTest {
             capture(pageableCapture), isNull())).andReturn(Collections.emptyList()).once();
         expect(usageService.getRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, null)).andReturn(1).once();
         expect(scenarioService.getScenarioWithAmounts(scenario.getId())).andReturn(scenario).once();
-        replay(usageService, scenarioService);
+        expect(ForeignSecurityUtils.hasExcludeFromScenarioPermission()).andReturn(true).times(2);
+        replay(usageService, scenarioService, ForeignSecurityUtils.class);
         controller.initWidget();
         List<RightsholderTotalsHolder> result = controller.loadBeans(10, 150, null);
         Pageable pageable = pageableCapture.getValue();
@@ -91,17 +100,18 @@ public class ScenarioControllerTest {
         assertEquals(150, pageable.getLimit());
         assertNotNull(result);
         assertEquals(0, result.size());
-        verify(usageService, scenarioService);
+        verify(usageService, scenarioService, ForeignSecurityUtils.class);
     }
 
     @Test
     public void testGetSize() {
         expect(usageService.getRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, null)).andReturn(1).times(2);
         expect(controller.getScenarioWithAmounts()).andReturn(scenario).once();
-        replay(usageService, scenarioService);
+        expect(ForeignSecurityUtils.hasExcludeFromScenarioPermission()).andReturn(true).times(2);
+        replay(usageService, scenarioService, ForeignSecurityUtils.class);
         controller.initWidget();
         assertEquals(1, controller.getSize());
-        verify(usageService, scenarioService);
+        verify(usageService, scenarioService, ForeignSecurityUtils.class);
     }
 
     @Test
@@ -141,14 +151,15 @@ public class ScenarioControllerTest {
         executorService.execute(capture(captureRunnable));
         expectLastCall().once();
         expect(scenarioService.getScenarioWithAmounts(scenario.getId())).andReturn(scenario).once();
-        replay(usageService, executorService, scenarioService);
+        expect(ForeignSecurityUtils.hasExcludeFromScenarioPermission()).andReturn(true).times(2);
+        replay(usageService, executorService, scenarioService, ForeignSecurityUtils.class);
         controller.initWidget();
         assertNotNull(exportScenarioUsagesStreamSource.getStream());
         Runnable runnable = captureRunnable.getValue();
         assertNotNull(runnable);
         assertSame(exportScenarioUsagesStreamSource, Whitebox.getInternalState(runnable, "arg$1"));
         assertTrue(Whitebox.getInternalState(runnable, "arg$2") instanceof PipedOutputStream);
-        verify(usageService, executorService, scenarioService);
+        verify(usageService, executorService, scenarioService, ForeignSecurityUtils.class);
     }
 
     @Test
