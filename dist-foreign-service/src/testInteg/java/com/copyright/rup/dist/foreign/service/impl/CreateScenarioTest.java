@@ -31,6 +31,7 @@ import org.springframework.web.client.RestTemplate;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Verifies correctness of creating a scenario.
@@ -86,8 +87,11 @@ public class CreateScenarioTest {
                 TestUtils.fileToString(this.getClass(), "rollups_response.json"), MediaType.APPLICATION_JSON));
         String scenarioId = scenarioService.createScenario("Test Scenario", "Scenario Description", filter);
         List<Scenario> scenarios = scenarioService.getScenarios();
-        assertEquals(1, scenarios.size());
-        assertScenario(scenarioId, scenarios.get(0));
+        assertEquals(2, scenarios.size());
+        assertScenario(scenarioId, scenarios.stream()
+            .filter(scenario -> scenario.getId().equals(scenarioId))
+            .collect(Collectors.toList())
+            .get(0));
         assertUsage(scenarioId, 7000429266L, 2000017000L, 3667.6928, 7793.8472);
         assertUsage(scenarioId, 1000002859L, 1000002859L, 992.00, 2108.00);
         assertUsage(scenarioId, 1000001820L, 1000001820L, 1648.00, 8652.00);

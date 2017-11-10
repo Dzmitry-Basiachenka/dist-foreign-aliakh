@@ -1,11 +1,16 @@
 package com.copyright.rup.dist.foreign.service.impl.csvprocessor;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.test.ReportMatcher;
+import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
+import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
+import com.copyright.rup.dist.foreign.repository.api.IUsageAuditRepository;
+import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.service.impl.UsageService;
 
 import com.google.common.collect.Lists;
 
@@ -13,6 +18,12 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,12 +44,22 @@ import java.util.concurrent.Executors;
  *
  * @author Ihar Suvorau
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(
+    value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
+@TransactionConfiguration
+@Transactional
 public class UsageServiceIntegrationTest {
 
     private static final String PATH_TO_ACTUAL_REPORT = "build/temp";
     private static final String FILE_NAME = "errors_report.csv";
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
     private CsvProcessingResult<Usage> result;
+
+    @Autowired
+    private IUsageService usageService;
+    @Autowired
+    private IUsageAuditRepository auditRepository;
 
     @BeforeClass
     public static void setUpTestDirectory() throws IOException {
@@ -48,7 +69,6 @@ public class UsageServiceIntegrationTest {
 
     @Test
     public void testWriteErrorsToFile() throws Exception {
-        IUsageService usageService = new UsageService();
         List<String> headers = buildHeaders();
         result = new CsvProcessingResult<>(headers, "usages.csv");
         logErrors();
@@ -57,6 +77,39 @@ public class UsageServiceIntegrationTest {
         executorService.execute(() -> usageService.writeErrorsToFile(result, outputStream));
         FileUtils.copyInputStreamToFile(pipedInputStream, new File(PATH_TO_ACTUAL_REPORT, FILE_NAME));
         verifyReport();
+    }
+
+    @Test
+    public void testDeleteFromScenario() {
+        Scenario scenario = new Scenario();
+        scenario.setId("12ec845f-0e76-4d1c-85cd-bb3fb7ca260e");
+        scenario.setName("Test Scenario for exclude");
+        usageService.deleteFromScenario(scenario, 2000017001L, Lists.newArrayList(1000000003L, 1000000004L),
+            "Exclude reason");
+        verifyExcludedUsages(scenario.getId(), true, 1000000003L, 1000000004L);
+        verifyExcludedUsages(scenario.getId(), false, 1000000001L, 1000000002L, 1000000006L);
+        verifyAuditItems(auditRepository.findByUsageId("2641e7fe-2a5a-4cdf-8879-48816d705169"));
+        verifyAuditItems(auditRepository.findByUsageId("405491b1-49a9-4b70-9cdb-d082be6a802d"));
+        assertTrue(auditRepository.findByUsageId("9f96760c-0de9-4cee-abf2-65521277281b").isEmpty());
+        assertTrue(auditRepository.findByUsageId("e4a81fad-7b0e-4c67-8df2-112c8913e45e").isEmpty());
+        assertTrue(auditRepository.findByUsageId("4ddfcb74-cb72-48f6-9ee4-8b4e05afce75").isEmpty());
+    }
+
+    private void verifyExcludedUsages(String scenarioId, boolean excluded,  Long... accountNumbers) {
+        Pageable pageable = new Pageable(0, 10);
+        for (Long accountNumber: accountNumbers) {
+            assertEquals(excluded, usageService.getByScenarioIdAndRhAccountNumber(accountNumber, scenarioId,
+                StringUtils.EMPTY, pageable, null).isEmpty());
+        }
+    }
+
+    private void verifyAuditItems(List<UsageAuditItem> auditItems) {
+        assertEquals(1, auditItems.size());
+        UsageAuditItem auditItem = auditItems.get(0);
+        assertEquals("12ec845f-0e76-4d1c-85cd-bb3fb7ca260e", auditItem.getScenarioId());
+        assertEquals(UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO, auditItem.getActionType());
+        assertEquals("Exclude reason", auditItem.getActionReason());
+        assertEquals("Test Scenario for exclude", auditItem.getScenarioName());
     }
 
     private void logErrors() {
@@ -85,11 +138,9 @@ public class UsageServiceIntegrationTest {
     }
 
     private List<String> buildHeaders() {
-        List<String> headers =
-            Lists.newArrayList("Detail ID", "Title", "Article", "Standard Number", "Wr Wrk Inst", "RH Acct Number",
-                "Publisher", "Pub Date", "Number of Copies", "Reported Value", "Market", "Market Period From",
-                "Market Period To", "Author");
-        return headers;
+        return Lists.newArrayList("Detail ID", "Title", "Article", "Standard Number", "Wr Wrk Inst", "RH Acct Number",
+            "Publisher", "Pub Date", "Number of Copies", "Reported Value", "Market", "Market Period From",
+            "Market Period To", "Author");
     }
 
     private void verifyReport() {

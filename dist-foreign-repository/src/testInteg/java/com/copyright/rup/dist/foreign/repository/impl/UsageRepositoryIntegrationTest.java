@@ -658,7 +658,8 @@ public class UsageRepositoryIntegrationTest {
         Usage usage = buildUsage(RupPersistUtils.generateUuid(), USAGE_BATCH_ID_1);
         usageRepository.insert(usage);
         usageRepository.addToScenario(Collections.singletonList(usage));
-        usageRepository.deleteFromScenario(SCENARIO_ID, Lists.newArrayList(1000002859L), USER_NAME);
+        usageRepository.deleteFromScenario(Lists.newArrayList("b1f0b236-3ae9-4a60-9fab-61db84199dss",
+            "cf38d390-11bb-4af7-9685-e034c9c32fb6"), USER_NAME);
         verifyUsageExcludedFromScenario(usageRepository.findByDetailId(6997788886L));
         verifyUsageExcludedFromScenario(usageRepository.findByDetailId(6213788886L));
         assertEquals(SCENARIO_ID, usageRepository.findByDetailId(DETAIL_ID).getScenarioId());
@@ -666,8 +667,13 @@ public class UsageRepositoryIntegrationTest {
 
     @Test
     public void testGetByScenarioIdAndRhAccountNumbers() {
-        List<String> usagesIds = usageRepository.getIdsByScenarioIdAndRhAccountNumbers(
-            "b1f0b236-3ae9-4a60-9fab-61db84199d6f", Lists.newArrayList(1000002859L));
+        Usage usage = buildUsage(RupPersistUtils.generateUuid(), USAGE_BATCH_ID_1);
+        usageRepository.insert(usage);
+        String scenarioId = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
+        usage.setScenarioId(scenarioId);
+        usageRepository.addToScenario(Collections.singletonList(usage));
+        List<String> usagesIds = usageRepository.getIdsByScenarioIdRroAccountNumberRhAccountNumbers(
+            scenarioId, 2000017010L, Lists.newArrayList(1000002859L, 7000813806L));
         assertEquals(2, usagesIds.size());
         assertTrue(usagesIds.containsAll(Lists.newArrayList("b1f0b236-3ae9-4a60-9fab-61db84199dss",
             "cf38d390-11bb-4af7-9685-e034c9c32fb6")));

@@ -66,10 +66,11 @@ public interface IScenarioController extends IController<IScenarioWidget>, ISear
     List<RightsholderPayeePair> getRightsholdersPayeePairs(Long rroAccountNumber);
 
     /**
-     * Exclude details by rightsholders' account numbers.
+     * Exclude details by rightsholders' account numbers only for given RRO.
      *
-     * @param accountNumbers list of rightsholders' account numbers
-     * @param reason         reason
+     * @param rroAccountNumber RRO account number
+     * @param accountNumbers   list of rightsholders' account numbers
+     * @param reason           reason
      */
-    void deleteFromScenario(List<Long> accountNumbers, String reason);
+    void deleteFromScenario(Long rroAccountNumber, List<Long> accountNumbers, String reason);
 }

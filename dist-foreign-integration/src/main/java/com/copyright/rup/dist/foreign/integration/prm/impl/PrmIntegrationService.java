@@ -55,7 +55,7 @@ public class PrmIntegrationService implements IPrmIntegrationService {
     private BigDecimal rhParticipatingServiceFee;
 
     @Override
-    @Profiled(tag = "integration.PrmRightsholderService.getRightsholders")
+    @Profiled(tag = "integration.PrmIntegrationService.getRightsholders")
     public List<Rightsholder> getRightsholders(Set<Long> accountNumbers) {
         return prmRightsholderService.getRightsholders(accountNumbers);
     }
@@ -67,6 +67,7 @@ public class PrmIntegrationService implements IPrmIntegrationService {
     }
 
     @Override
+    @Profiled(tag = "integration.PrmIntegrationService.getRollUps")
     public Table<String, String, Long> getRollUps(Collection<String> rightsholdersIds) {
         return prmRollUpService.getRollUps(rightsholdersIds);
     }
