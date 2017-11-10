@@ -86,6 +86,7 @@
         join ${schema}.df_usage_batch b on b.df_usage_batch_uid = u.df_usage_batch_uid
         left join ${schema}.df_rightsholder r on r.rh_account_number = b.rro_account_number
         where u.df_scenario_uid = #{scenarioId}
+        order by r.name asc
     </select>
 
     <select id="findRightsholdersByScenarioAndSourceRro" parameterType="map" resultMap="rightsholderPayeePairResultMap">
@@ -99,5 +100,6 @@
         left join ${schema}.df_rightsholder r on r.rh_account_number = u.rh_account_number
         left join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
         where u.df_scenario_uid = #{scenarioId} and b.rro_account_number = #{rroAccountNumber}
+        order by rh_name asc
     </select>
 </mapper>
