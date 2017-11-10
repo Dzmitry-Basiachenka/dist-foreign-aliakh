@@ -642,7 +642,7 @@ public class UsageRepositoryIntegrationTest {
         verifyUsage(usageRepository.findByDetailId(DETAIL_ID_2), UsageStatusEnum.LOCKED, SCENARIO_ID,
             StoredEntity.DEFAULT_USER, 1000002859L);
         usageRepository.deleteFromScenario(SCENARIO_ID, USER_NAME);
-        verifyUsage(usageRepository.findByDetailId(DETAIL_ID_2), UsageStatusEnum.ELIGIBLE, null, USER_NAME, null);
+        verifyUsageExcludedFromScenario(usageRepository.findByDetailId(DETAIL_ID_2));
     }
 
     @Test
@@ -658,9 +658,9 @@ public class UsageRepositoryIntegrationTest {
         Usage usage = buildUsage(RupPersistUtils.generateUuid(), USAGE_BATCH_ID_1);
         usageRepository.insert(usage);
         usageRepository.addToScenario(Collections.singletonList(usage));
-        usageRepository.deleteFromScenario(SCENARIO_ID, Lists.newArrayList(1000002859L), StoredEntity.DEFAULT_USER);
-        assertNull(usageRepository.findByDetailId(6997788886L).getScenarioId());
-        assertNull(usageRepository.findByDetailId(6213788886L).getScenarioId());
+        usageRepository.deleteFromScenario(SCENARIO_ID, Lists.newArrayList(1000002859L), USER_NAME);
+        verifyUsageExcludedFromScenario(usageRepository.findByDetailId(6997788886L));
+        verifyUsageExcludedFromScenario(usageRepository.findByDetailId(6213788886L));
         assertEquals(SCENARIO_ID, usageRepository.findByDetailId(DETAIL_ID).getScenarioId());
     }
 
@@ -687,6 +687,18 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(scenarioId, usage.getScenarioId());
         assertEquals(defaultUser, usage.getUpdateUser());
         assertEquals(payeeAccountNumber, usage.getPayee().getAccountNumber());
+    }
+
+    private void verifyUsageExcludedFromScenario(Usage usage) {
+        assertEquals(UsageStatusEnum.ELIGIBLE, usage.getStatus());
+        assertNull(usage.getScenarioId());
+        assertNull(usage.getPayee().getAccountNumber());
+        assertNull(usage.getServiceFee());
+        BigDecimal expectedDefaultAmount = new BigDecimal("0.0000000000");
+        assertEquals(expectedDefaultAmount, usage.getServiceFeeAmount());
+        assertEquals(expectedDefaultAmount, usage.getNetAmount());
+        assertFalse(usage.isRhParticipating());
+        assertEquals(USER_NAME, usage.getUpdateUser());
     }
 
     private UsageFilter buildUsageFilter(Set<Long> accountNumbers, Set<String> usageBatchIds,

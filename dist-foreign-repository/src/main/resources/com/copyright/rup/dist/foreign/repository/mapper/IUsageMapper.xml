@@ -326,6 +326,10 @@
             status_ind = #{status},
             df_scenario_uid = null,
             payee_account_number = null,
+            service_fee = null,
+            is_rh_participating_flag = false,
+            service_fee_amount = 0,
+            net_amount = 0,
             <include refid="StoredEntityMapper.update"/>
         where df_scenario_uid = #{scenarioId}
     </sql>
