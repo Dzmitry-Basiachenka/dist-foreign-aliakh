@@ -172,4 +172,22 @@ databaseChangeLog {
             addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'service_fee', columnDataType: 'DECIMAL(6,5)')
         }
     }
+
+    changeSet(id: '2017-11-10-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
+        comment("B-36162 Backend for Identifying and excluding details for rightsholders that roll up to the source RRO: " +
+                "remove 'fk_df_scenario_2_df_usage_audit' constraint from df_usage_audit table")
+
+        dropForeignKeyConstraint(baseTableSchemaName: dbAppsSchema, baseTableName: 'df_usage_audit',
+                constraintName: 'fk_df_scenario_2_df_usage_audit')
+
+        rollback {
+            addForeignKeyConstraint(constraintName: 'fk_df_scenario_2_df_usage_audit',
+                    baseTableSchemaName: dbAppsSchema,
+                    referencedTableSchemaName: dbAppsSchema,
+                    baseTableName: 'df_usage_audit',
+                    baseColumnNames: 'df_scenario_uid',
+                    referencedTableName: 'df_scenario',
+                    referencedColumnNames: 'df_scenario_uid')
+        }
+    }
 }
