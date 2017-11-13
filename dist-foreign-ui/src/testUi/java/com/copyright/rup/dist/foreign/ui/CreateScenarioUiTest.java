@@ -149,8 +149,11 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
     private void verifyCreatedScenario(WebElement scenarioTab) {
         assertTableRowElements(assertWebElement(scenarioTab, "scenarios-table"), SCENARIO_NAME, CURRENT_DATE,
             "IN_PROGRESS");
-        List<Scenario> scenarios = scenarioRepository.findAll().stream()
-            .filter(scenario -> SCENARIO_NAME.equals(scenario.getName())).collect(Collectors.toList());
+        List<Scenario> scenarios = scenarioRepository.findAll()
+            .stream()
+            .filter(scenario -> SCENARIO_NAME.equals(scenario.getName()))
+            .map(scenario -> scenarioRepository.getWithAmounts(scenario.getId()))
+            .collect(Collectors.toList());
         assertEquals(1, CollectionUtils.size(scenarios));
         scenarioId = scenarios.get(0).getId();
         verifyScenario(scenarios.get(0));

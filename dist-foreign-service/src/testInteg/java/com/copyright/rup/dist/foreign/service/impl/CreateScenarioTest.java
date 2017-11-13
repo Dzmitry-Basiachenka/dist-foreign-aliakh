@@ -90,6 +90,7 @@ public class CreateScenarioTest {
         assertEquals(2, scenarios.size());
         assertScenario(scenarioId, scenarios.stream()
             .filter(scenario -> scenario.getId().equals(scenarioId))
+            .map(scenario -> scenarioService.getScenarioWithAmounts(scenarioId))
             .collect(Collectors.toList())
             .get(0));
         assertUsage(scenarioId, 7000429266L, 2000017000L, 3667.6928, 7793.8472);
