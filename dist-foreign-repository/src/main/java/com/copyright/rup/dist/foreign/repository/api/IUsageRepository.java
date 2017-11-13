@@ -45,7 +45,7 @@ public interface IUsageRepository {
      * @param filter instance of {@link UsageFilter}
      * @return the count of usages
      */
-    int getCountByFilter(UsageFilter filter);
+    int findCountByFilter(UsageFilter filter);
 
     /**
      * Finds usages according to given {@link UsageFilter} and writes them to the output stream in CSV format.
@@ -115,7 +115,7 @@ public interface IUsageRepository {
      * @param detailIds list of detail ids
      * @return set of duplicate detail ids
      */
-    Set<Long> getDuplicateDetailIds(List<Long> detailIds);
+    Set<Long> findDuplicateDetailIds(List<Long> detailIds);
 
     /**
      * Gets list of {@link RightsholderTotalsHolder}s based on {@link com.copyright.rup.dist.foreign.domain.Scenario}
@@ -127,8 +127,8 @@ public interface IUsageRepository {
      * @param sort        instance of {@link Sort}
      * @return list of {@link RightsholderTotalsHolder}s
      */
-    List<RightsholderTotalsHolder> getRightsholderTotalsHoldersByScenarioId(String scenarioId, String searchValue,
-                                                                            Pageable pageable, Sort sort);
+    List<RightsholderTotalsHolder> findRightsholderTotalsHoldersByScenarioId(String scenarioId, String searchValue,
+                                                                             Pageable pageable, Sort sort);
 
     /**
      * Gets count of {@link RightsholderTotalsHolder}s based on {@link com.copyright.rup.dist.foreign.domain.Scenario}
@@ -138,7 +138,7 @@ public interface IUsageRepository {
      * @param searchValue search value
      * @return count of {@link RightsholderTotalsHolder}s
      */
-    int getRightsholderTotalsHolderCountByScenarioId(String scenarioId, String searchValue);
+    int findRightsholderTotalsHolderCountByScenarioId(String scenarioId, String searchValue);
 
     /**
      * Gets count of usage details based on {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier and
@@ -149,7 +149,7 @@ public interface IUsageRepository {
      * @param searchValue   search value
      * @return count of usage details
      */
-    int getCountByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue);
+    int findCountByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue);
 
     /**
      * Gets list of {@link UsageDto}s based on {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier and
@@ -162,8 +162,8 @@ public interface IUsageRepository {
      * @param sort          instance of {@link Sort}
      * @return list of {@link UsageDto}s
      */
-    List<UsageDto> getByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue,
-                                                     Pageable pageable, Sort sort);
+    List<UsageDto> findByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue,
+                                                      Pageable pageable, Sort sort);
 
     /**
      * Gets list of {@link Usage}s identifiers based on {@link com.copyright.rup.dist.foreign.domain.Scenario}
@@ -174,6 +174,6 @@ public interface IUsageRepository {
      * @param accountNumbers   list of {@link com.copyright.rup.dist.common.domain.Rightsholder}s account numbers
      * @return list of {@link Usage}s identifiers
      */
-    List<String> getIdsByScenarioIdRroAccountNumberRhAccountNumbers(String scenarioId, Long rroAccountNumber,
-                                                                    List<Long> accountNumbers);
+    List<String> findIdsByScenarioIdRroAccountNumberRhAccountNumbers(String scenarioId, Long rroAccountNumber,
+                                                                     List<Long> accountNumbers);
 }

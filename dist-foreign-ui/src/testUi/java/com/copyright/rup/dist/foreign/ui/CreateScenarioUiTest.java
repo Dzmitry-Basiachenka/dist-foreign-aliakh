@@ -152,7 +152,7 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
         List<Scenario> scenarios = scenarioRepository.findAll()
             .stream()
             .filter(scenario -> SCENARIO_NAME.equals(scenario.getName()))
-            .map(scenario -> scenarioRepository.getWithAmounts(scenario.getId()))
+            .map(scenario -> scenarioRepository.findWithAmounts(scenario.getId()))
             .collect(Collectors.toList());
         assertEquals(1, CollectionUtils.size(scenarios));
         scenarioId = scenarios.get(0).getId();

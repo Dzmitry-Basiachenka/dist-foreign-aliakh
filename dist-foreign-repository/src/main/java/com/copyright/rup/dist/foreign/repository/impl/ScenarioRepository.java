@@ -37,9 +37,9 @@ public class ScenarioRepository extends BaseRepository implements IScenarioRepos
     }
 
     @Override
-    public int getCountByName(String name) {
+    public int findCountByName(String name) {
         checkArgument(StringUtils.isNotBlank(name));
-        return selectOne("IScenarioMapper.getCountByName", name);
+        return selectOne("IScenarioMapper.findCountByName", name);
     }
 
     @Override
@@ -65,16 +65,16 @@ public class ScenarioRepository extends BaseRepository implements IScenarioRepos
     }
 
     @Override
-    public Scenario getWithAmounts(String scenarioId) {
-        return selectOne("IScenarioMapper.getWithAmounts", Objects.requireNonNull(scenarioId));
+    public Scenario findWithAmounts(String scenarioId) {
+        return selectOne("IScenarioMapper.findWithAmounts", Objects.requireNonNull(scenarioId));
     }
 
     @Override
-    public List<RightsholderPayeePair> findRightsholdersByScenarioAndSourceRro(String scenarioId,
-                                                                               Long rroAccountNumber) {
+    public List<RightsholderPayeePair> findRightsholdersByScenarioIdAndSourceRro(String scenarioId,
+                                                                                 Long rroAccountNumber) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
         params.put("scenarioId", Objects.requireNonNull(scenarioId));
         params.put("rroAccountNumber", Objects.requireNonNull(rroAccountNumber));
-        return selectList("IScenarioMapper.findRightsholdersByScenarioAndSourceRro", params);
+        return selectList("IScenarioMapper.findRightsholdersByScenarioIdAndSourceRro", params);
     }
 }

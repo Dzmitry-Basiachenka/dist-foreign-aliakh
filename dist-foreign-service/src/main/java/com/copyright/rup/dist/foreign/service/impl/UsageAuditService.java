@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageAuditRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
+import org.perf4j.aop.Profiled;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +38,7 @@ public class UsageAuditService implements IUsageAuditService {
     }
 
     @Override
+    @Profiled(tag = "service.UsageAuditService.deleteActions")
     public void deleteActions(String batchId) {
         usageAuditRepository.deleteByBatchId(batchId);
     }

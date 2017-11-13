@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.reset;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -49,13 +50,16 @@ public class ScenarioWidgetTest {
 
     private ScenarioWidget scenarioWidget;
     private ScenarioController controller;
+    private ScenarioMediator mediator;
 
     @Before
     public void setUp() {
         mockStatic(ForeignSecurityUtils.class);
         controller = createMock(ScenarioController.class);
+        mediator = createMock(ScenarioMediator.class);
         scenarioWidget = new ScenarioWidget();
         scenarioWidget.setController(controller);
+        Whitebox.setInternalState(scenarioWidget, "mediator", mediator);
         Scenario scenario = new Scenario();
         scenario.setId(RupPersistUtils.generateUuid());
         scenario.setName("Scenario name");
@@ -64,13 +68,11 @@ public class ScenarioWidgetTest {
         scenario.setNetTotal(new BigDecimal("13600.00"));
         expect(controller.getScenario()).andReturn(scenario).once();
         expect(controller.getExportScenarioUsagesStreamSource()).andReturn(createMock(IStreamSource.class)).once();
-        expect(controller.isScenarioEmpty()).andReturn(false).once();
         expect(controller.getScenarioWithAmounts()).andReturn(scenario).once();
-        expect(ForeignSecurityUtils.hasExcludeFromScenarioPermission()).andReturn(true).times(2);
-        replay(controller, ForeignSecurityUtils.class);
+        replay(controller, ForeignSecurityUtils.class, mediator);
         scenarioWidget.init();
         verify(controller, ForeignSecurityUtils.class);
-        reset(controller);
+        reset(controller, mediator);
     }
 
     @Test
@@ -95,6 +97,15 @@ public class ScenarioWidgetTest {
         searchWidget.setSearchValue("search");
         Whitebox.setInternalState(scenarioWidget, searchWidget);
         assertEquals("search", scenarioWidget.getSearchValue());
+    }
+
+    @Test
+    public void testRefresh() {
+        mediator.onScenarioUpdated(false);
+        expectLastCall().once();
+        replay(mediator);
+        scenarioWidget.refresh();
+        verify(mediator);
     }
 
     private void verifySearchWidget(Component component) {

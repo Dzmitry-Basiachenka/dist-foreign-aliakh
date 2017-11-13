@@ -89,9 +89,8 @@ public class ScenarioControllerTest {
         Capture<Pageable> pageableCapture = new Capture<>();
         expect(usageService.getRightsholderTotalsHoldersByScenarioId(eq(SCENARIO_ID), anyString(),
             capture(pageableCapture), isNull())).andReturn(Collections.emptyList()).once();
-        expect(usageService.getRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, null)).andReturn(1).once();
         expect(scenarioService.getScenarioWithAmounts(scenario.getId())).andReturn(scenario).once();
-        expect(ForeignSecurityUtils.hasExcludeFromScenarioPermission()).andReturn(true).times(2);
+        expect(ForeignSecurityUtils.hasExcludeFromScenarioPermission()).andReturn(true).once();
         replay(usageService, scenarioService, ForeignSecurityUtils.class);
         controller.initWidget();
         List<RightsholderTotalsHolder> result = controller.loadBeans(10, 150, null);
@@ -105,9 +104,9 @@ public class ScenarioControllerTest {
 
     @Test
     public void testGetSize() {
-        expect(usageService.getRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, null)).andReturn(1).times(2);
+        expect(usageService.getRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, null)).andReturn(1).once();
         expect(controller.getScenarioWithAmounts()).andReturn(scenario).once();
-        expect(ForeignSecurityUtils.hasExcludeFromScenarioPermission()).andReturn(true).times(2);
+        expect(ForeignSecurityUtils.hasExcludeFromScenarioPermission()).andReturn(true).once();
         replay(usageService, scenarioService, ForeignSecurityUtils.class);
         controller.initWidget();
         assertEquals(1, controller.getSize());
@@ -143,7 +142,6 @@ public class ScenarioControllerTest {
 
     @Test
     public void testGetScenarioUsagesExportStream() {
-        expect(usageService.getRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, null)).andReturn(1).once();
         IStreamSource exportScenarioUsagesStreamSource = controller.getExportScenarioUsagesStreamSource();
         ExecutorService executorService = createMock(ExecutorService.class);
         Whitebox.setInternalState(exportScenarioUsagesStreamSource, executorService);
@@ -151,7 +149,7 @@ public class ScenarioControllerTest {
         executorService.execute(capture(captureRunnable));
         expectLastCall().once();
         expect(scenarioService.getScenarioWithAmounts(scenario.getId())).andReturn(scenario).once();
-        expect(ForeignSecurityUtils.hasExcludeFromScenarioPermission()).andReturn(true).times(2);
+        expect(ForeignSecurityUtils.hasExcludeFromScenarioPermission()).andReturn(true).once();
         replay(usageService, executorService, scenarioService, ForeignSecurityUtils.class);
         controller.initWidget();
         assertNotNull(exportScenarioUsagesStreamSource.getStream());

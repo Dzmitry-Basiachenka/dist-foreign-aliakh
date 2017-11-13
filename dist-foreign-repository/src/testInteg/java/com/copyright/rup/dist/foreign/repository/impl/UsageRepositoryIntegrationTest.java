@@ -147,8 +147,8 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testGetCountByFilter() {
-        assertEquals(1, usageRepository.getCountByFilter(
+    public void testFindCountByFilter() {
+        assertEquals(1, usageRepository.findCountByFilter(
             buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.singleton(USAGE_BATCH_ID_1),
                 Collections.singleton(UsageStatusEnum.ELIGIBLE), PAYMENT_DATE, FISCAL_YEAR)));
     }
@@ -314,10 +314,10 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testGetRightsholderTotalsHoldersByScenarioIdEmptySearchValue() {
+    public void testFindRightsholderTotalsHoldersByScenarioIdEmptySearchValue() {
         populateScenario();
         List<RightsholderTotalsHolder> rightsholderTotalsHolders =
-            usageRepository.getRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, StringUtils.EMPTY,
+            usageRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, StringUtils.EMPTY,
                 new Pageable(0, 200), null);
         assertEquals(3, rightsholderTotalsHolders.size());
         assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, 13461.54, 4307.6928, 9153.8472),
@@ -329,20 +329,20 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testGetRightsholderTotalsHoldersByScenarioIdNotEmptySearchValue() {
+    public void testFindRightsholderTotalsHoldersByScenarioIdNotEmptySearchValue() {
         populateScenario();
         List<RightsholderTotalsHolder> rightsholderTotalsHolders =
-            usageRepository.getRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, "JoHn", new Pageable(0, 200), null);
+            usageRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, "JoHn", new Pageable(0, 200), null);
         assertEquals(1, rightsholderTotalsHolders.size());
         assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_2, 1000002859L, 21061.54, 4713.00, 16348.00),
             rightsholderTotalsHolders.get(0));
         rightsholderTotalsHolders =
-            usageRepository.getRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, "IEEE", new Pageable(0, 200), null);
+            usageRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, "IEEE", new Pageable(0, 200), null);
         assertEquals(1, rightsholderTotalsHolders.size());
         assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, 13461.54, 4307.6928, 9153.8472),
             rightsholderTotalsHolders.get(0));
         rightsholderTotalsHolders =
-            usageRepository.getRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, "ec", new Pageable(0, 200), null);
+            usageRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, "ec", new Pageable(0, 200), null);
         assertEquals(2, rightsholderTotalsHolders.size());
         assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, 13461.54, 4307.6928, 9153.8472),
             rightsholderTotalsHolders.get(0));
@@ -351,11 +351,11 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testGetRightsholderTotalsHoldersByScenarioIdSortByAccountNumber() {
+    public void testFindRightsholderTotalsHoldersByScenarioIdSortByAccountNumber() {
         populateScenario();
         Sort accountNumberSort = new Sort("rightsholderAccountNumber", Direction.ASC);
         List<RightsholderTotalsHolder> rightsholderTotalsHolders =
-            usageRepository.getRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, StringUtils.EMPTY,
+            usageRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, StringUtils.EMPTY,
                 new Pageable(0, 200), accountNumberSort);
         assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_2, 1000002859L, 21061.54, 4713.00, 16348.00),
             rightsholderTotalsHolders.get(0));
@@ -366,11 +366,11 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testGetRightsholderTotalsHoldersByScenarioIdSortByName() {
+    public void testFindRightsholderTotalsHoldersByScenarioIdSortByName() {
         populateScenario();
         Sort accountNumberSort = new Sort("rightsholderName", Direction.DESC);
         List<RightsholderTotalsHolder> rightsholderTotalsHolders =
-            usageRepository.getRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, StringUtils.EMPTY,
+            usageRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, StringUtils.EMPTY,
                 new Pageable(0, 200), accountNumberSort);
         assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_3, 1000005413L, 6892.30, 2205.536, 4686.764),
             rightsholderTotalsHolders.get(0));
@@ -381,26 +381,26 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testGetCountByScenarioIdAndRhAccountNumberNullSearchValue() {
+    public void testFindCountByScenarioIdAndRhAccountNumberNullSearchValue() {
         populateScenario();
         Usage usage = buildUsage(RupPersistUtils.generateUuid(), USAGE_BATCH_ID_1);
         usageRepository.insert(usage);
         usageRepository.addToScenario(Collections.singletonList(usage));
-        assertEquals(1, usageRepository.getCountByScenarioIdAndRhAccountNumber(1000009997L, SCENARIO_ID, null));
-        assertEquals(3, usageRepository.getCountByScenarioIdAndRhAccountNumber(1000002859L, SCENARIO_ID, null));
+        assertEquals(1, usageRepository.findCountByScenarioIdAndRhAccountNumber(1000009997L, SCENARIO_ID, null));
+        assertEquals(3, usageRepository.findCountByScenarioIdAndRhAccountNumber(1000002859L, SCENARIO_ID, null));
     }
 
     @Test
-    public void testGetByScenarioIdAndRhAccountNumberNullSearchValue() {
+    public void testFindByScenarioIdAndRhAccountNumberNullSearchValue() {
         populateScenario();
-        assertEquals(1, usageRepository.getByScenarioIdAndRhAccountNumber(1000009997L, SCENARIO_ID, null,
+        assertEquals(1, usageRepository.findByScenarioIdAndRhAccountNumber(1000009997L, SCENARIO_ID, null,
             new Pageable(0, 200), null).size());
-        assertEquals(3, usageRepository.getByScenarioIdAndRhAccountNumber(1000002859L, SCENARIO_ID, null,
+        assertEquals(3, usageRepository.findByScenarioIdAndRhAccountNumber(1000002859L, SCENARIO_ID, null,
             new Pageable(0, 200), null).size());
     }
 
     @Test
-    public void testGetByScenarioIdAndRhAccountNumberSearchByRorName() {
+    public void testFindByScenarioIdAndRhAccountNumberSearchByRorName() {
         populateScenario();
         verifySearch("Access Copyright, The Canadian Copyright Agency", 1);
         verifySearch("Academic", 2);
@@ -409,7 +409,7 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testGetByScenarioIdAndRhAccountNumberSearchByRorAccountNumber() {
+    public void testFindByScenarioIdAndRhAccountNumberSearchByRorAccountNumber() {
         populateScenario();
         verifySearch("2000017010", 2);
         verifySearch("0001700", 1);
@@ -417,7 +417,7 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testGetByScenarioIdAndRhAccountNumberSearchDetailId() {
+    public void testFindByScenarioIdAndRhAccountNumberSearchDetailId() {
         populateScenario();
         verifySearch("6997788885", 1);
         verifySearch("78888", 3);
@@ -425,7 +425,7 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testGetByScenarioIdAndRhAccountNumberSearchByWrWrkInst() {
+    public void testFindByScenarioIdAndRhAccountNumberSearchByWrWrkInst() {
         populateScenario();
         verifySearch("243904752", 2);
         verifySearch("244614", 1);
@@ -433,7 +433,7 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testGetByScenarioIdAndRhAccountNumberSearchByStandardNumber() {
+    public void testFindByScenarioIdAndRhAccountNumberSearchByStandardNumber() {
         populateScenario();
         verifySearch("1008902002377655XX", 1);
         verifySearch("1008902002377655xx", 1);
@@ -442,10 +442,10 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testGetRightsholderTotalsHolderCountByScenarioId() {
+    public void testFindRightsholderTotalsHolderCountByScenarioId() {
         populateScenario();
-        assertEquals(3, usageRepository.getRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, StringUtils.EMPTY));
-        assertEquals(1, usageRepository.getRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, "IEEE"));
+        assertEquals(3, usageRepository.findRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, StringUtils.EMPTY));
+        assertEquals(1, usageRepository.findRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, "IEEE"));
     }
 
     @Test
@@ -625,9 +625,9 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testGetDuplicateDetailIds() {
+    public void testFindDuplicateDetailIds() {
         assertTrue(CollectionUtils.containsAny(Sets.newHashSet(DETAIL_ID_1, DETAIL_ID_2),
-            usageRepository.getDuplicateDetailIds(Lists.newArrayList(DETAIL_ID_1, DETAIL_ID_2, -1L))));
+            usageRepository.findDuplicateDetailIds(Lists.newArrayList(DETAIL_ID_1, DETAIL_ID_2, -1L))));
     }
 
     @Test
@@ -645,13 +645,13 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testGetByScenarioIdAndRhAccountNumbers() {
+    public void testFindByScenarioIdAndRhAccountNumbers() {
         Usage usage = buildUsage(RupPersistUtils.generateUuid(), USAGE_BATCH_ID_1);
         usageRepository.insert(usage);
         String scenarioId = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
         usage.setScenarioId(scenarioId);
         usageRepository.addToScenario(Collections.singletonList(usage));
-        List<String> usagesIds = usageRepository.getIdsByScenarioIdRroAccountNumberRhAccountNumbers(
+        List<String> usagesIds = usageRepository.findIdsByScenarioIdRroAccountNumberRhAccountNumbers(
             scenarioId, 2000017010L, Lists.newArrayList(1000002859L, 7000813806L));
         assertEquals(2, usagesIds.size());
         assertTrue(usagesIds.containsAll(Lists.newArrayList("b1f0b236-3ae9-4a60-9fab-61db84199dss",
@@ -659,9 +659,9 @@ public class UsageRepositoryIntegrationTest {
     }
 
     private void verifySearch(String searchValue, int expectedSize) {
-        assertEquals(expectedSize, usageRepository.getByScenarioIdAndRhAccountNumber(1000002859L, SCENARIO_ID,
+        assertEquals(expectedSize, usageRepository.findByScenarioIdAndRhAccountNumber(1000002859L, SCENARIO_ID,
             searchValue, new Pageable(0, 200), null).size());
-        assertEquals(expectedSize, usageRepository.getCountByScenarioIdAndRhAccountNumber(1000002859L,
+        assertEquals(expectedSize, usageRepository.findCountByScenarioIdAndRhAccountNumber(1000002859L,
             SCENARIO_ID, searchValue));
     }
 

@@ -47,7 +47,7 @@ public class ScenarioService implements IScenarioService {
 
     @Override
     public boolean scenarioExists(String scenarioName) {
-        return 0 < scenarioRepository.getCountByName(scenarioName);
+        return 0 < scenarioRepository.findCountByName(scenarioName);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class ScenarioService implements IScenarioService {
 
     @Override
     public Scenario getScenarioWithAmounts(String scenarioId) {
-        return scenarioRepository.getWithAmounts(scenarioId);
+        return scenarioRepository.findWithAmounts(scenarioId);
     }
 
     @Override
@@ -85,7 +85,7 @@ public class ScenarioService implements IScenarioService {
     @Override
     public List<RightsholderPayeePair> getRightsholdersByScenarioAndSourceRro(String scenarioId,
                                                                               Long rroAccountNumber) {
-        return scenarioRepository.findRightsholdersByScenarioAndSourceRro(scenarioId, rroAccountNumber);
+        return scenarioRepository.findRightsholdersByScenarioIdAndSourceRro(scenarioId, rroAccountNumber);
     }
 
     private Scenario buildScenario(String scenarioName, String description, List<Usage> usages) {

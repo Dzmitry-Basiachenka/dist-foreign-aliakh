@@ -44,7 +44,7 @@ public interface IUsageBatchRepository {
      * @param name batch name
      * @return count of found batches
      */
-    int getCountByName(String name);
+    int findCountByName(String name);
 
     /**
      * Deletes {@link UsageBatch} with given id from database.

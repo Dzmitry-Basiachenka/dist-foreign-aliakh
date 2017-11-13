@@ -57,7 +57,7 @@ public class UsageBatchService implements IUsageBatchService {
 
     @Override
     public boolean usageBatchExists(String name) {
-        return 0 < usageBatchRepository.getCountByName(name);
+        return 0 < usageBatchRepository.findCountByName(name);
     }
 
     @Override

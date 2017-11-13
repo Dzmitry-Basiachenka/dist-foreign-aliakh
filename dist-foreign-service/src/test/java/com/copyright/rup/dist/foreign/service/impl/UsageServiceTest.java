@@ -84,7 +84,7 @@ public class UsageServiceTest {
     public void testGetUsagesCount() {
         UsageFilter filter = new UsageFilter();
         filter.setFiscalYear(2017);
-        expect(usageRepository.getCountByFilter(filter)).andReturn(1).once();
+        expect(usageRepository.findCountByFilter(filter)).andReturn(1).once();
         replay(usageRepository);
         usageService.getUsagesCount(filter);
         verify(usageRepository);
@@ -217,8 +217,8 @@ public class UsageServiceTest {
     public void testGetRightsholderTotalsHoldersByScenarioId() {
         List<RightsholderTotalsHolder> rightsholderTotalsHolders = Lists.newArrayList(new RightsholderTotalsHolder());
         Pageable pageable = new Pageable(0, 1);
-        expect(usageRepository.getRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, StringUtils.EMPTY, pageable, null))
-            .andReturn(rightsholderTotalsHolders).once();
+        expect(usageRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, StringUtils.EMPTY, pageable,
+            null)).andReturn(rightsholderTotalsHolders).once();
         replay(usageRepository);
         List<RightsholderTotalsHolder> result =
             usageService.getRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, StringUtils.EMPTY, pageable, null);
@@ -229,7 +229,7 @@ public class UsageServiceTest {
 
     @Test
     public void testGetRightsholderTotalsHolderCountByScenarioId() {
-        expect(usageRepository.getRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, StringUtils.EMPTY))
+        expect(usageRepository.findRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, StringUtils.EMPTY))
             .andReturn(5).once();
         replay(usageRepository);
         assertEquals(5, usageService.getRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, StringUtils.EMPTY));
@@ -238,7 +238,7 @@ public class UsageServiceTest {
 
     @Test
     public void testGetCountByScenarioIdAndRhAccountNumber() {
-        expect(usageRepository.getCountByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER, SCENARIO_ID,
+        expect(usageRepository.findCountByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER, SCENARIO_ID,
             StringUtils.EMPTY)).andReturn(5).once();
         replay(usageRepository);
         assertEquals(5, usageService.getCountByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER, SCENARIO_ID,
@@ -250,7 +250,7 @@ public class UsageServiceTest {
     public void testGetByScenarioIdAndRhAccountNumber() {
         List<UsageDto> usages = Lists.newArrayList(new UsageDto(), new UsageDto());
         Pageable pageable = new Pageable(0, 2);
-        expect(usageRepository.getByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER, SCENARIO_ID, null, pageable,
+        expect(usageRepository.findByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER, SCENARIO_ID, null, pageable,
             null)).andReturn(usages);
         replay(usageRepository);
         List<UsageDto> result =
@@ -281,7 +281,7 @@ public class UsageServiceTest {
         List<Long> accountNumbers = Collections.singletonList(RH_ACCOUNT_NUMBER);
         usageRepository.deleteFromScenario(usagesIds, USER_NAME);
         expectLastCall().once();
-        expect(usageRepository.getIdsByScenarioIdRroAccountNumberRhAccountNumbers(scenario.getId(), 2000017011L,
+        expect(usageRepository.findIdsByScenarioIdRroAccountNumberRhAccountNumbers(scenario.getId(), 2000017011L,
             accountNumbers)).andReturn(usagesIds).once();
         usageAuditService.logAction(usagesIds.get(0), scenario, UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO,
             "Action reason");

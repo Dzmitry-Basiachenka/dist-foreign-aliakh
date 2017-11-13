@@ -8,7 +8,7 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.repository.impl.UsageRepository;
+import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.impl.UsageService;
 
 import org.apache.commons.io.FileUtils;
@@ -58,7 +58,7 @@ public class UsageCsvProcessorIntegrationTest {
     @Autowired
     private UsageCsvProcessorFactory usageCsvProcessorFactory;
     @Autowired
-    private UsageRepository usageRepository;
+    private IUsageRepository usageRepository;
 
     @BeforeClass
     public static void setUpTestDirectory() throws IOException {

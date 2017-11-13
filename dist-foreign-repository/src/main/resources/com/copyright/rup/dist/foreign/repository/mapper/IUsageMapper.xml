@@ -282,10 +282,10 @@
         <choose>
             <when test="null != sort">
                 <choose>
-                    <when test="sort.property == 'rightsholderName'">
+                    <when test="sort.property == 'rightsholder.name'">
                         r.name <include refid="direction"/>
                     </when>
-                    <when test="sort.property == 'rightsholderAccountNumber'">
+                    <when test="sort.property == 'rightsholder.accountNumber'">
                         u.rh_account_number <include refid="direction"/>
                     </when>
                     <when test="sort.property == 'grossTotal'">
@@ -412,7 +412,7 @@
         where df_scenario_uid = #{scenarioId}
     </select>
 
-    <select id="getCountByFilter" parameterType="map" resultType="int">
+    <select id="findCountByFilter" parameterType="map" resultType="int">
         select count(1)
         from ${schema}.df_usage u
         join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
@@ -518,7 +518,7 @@
         where df_usage_uid = #{usageId}
     </update>
 
-    <select id="getDuplicateDetailIds" parameterType="list" resultType="long">
+    <select id="findDuplicateDetailIds" parameterType="list" resultType="long">
         select distinct detail_id
         from ${schema}.df_usage
         where detail_id in (
@@ -536,7 +536,7 @@
         )
     </select>
 
-    <select id="getRightsholderTotalsHoldersByScenarioId" parameterType="map" resultMap="rightsholderTotalsHolderResultMap">
+    <select id="findRightsholderTotalsHoldersByScenarioId" parameterType="map" resultMap="rightsholderTotalsHolderResultMap">
         select
             r.name rh_name,
             u.rh_account_number,
@@ -569,7 +569,7 @@
         </if>
     </select>
 
-    <select id="getRightsholderTotalsHolderCountByScenarioId" parameterType="map" resultType="int">
+    <select id="findRightsholderTotalsHolderCountByScenarioId" parameterType="map" resultType="int">
         select count(1)
         from (
             select distinct rh_account_number
@@ -581,7 +581,7 @@
         </if>
     </select>
 
-    <select id="getCountByScenarioIdAndRhAccountNumber" parameterType="map" resultType="int">
+    <select id="findCountByScenarioIdAndRhAccountNumber" parameterType="map" resultType="int">
         select count(1)
         from ${schema}.df_usage u
         join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
@@ -594,7 +594,7 @@
         </if>
     </select>
 
-    <select id="getByScenarioIdAndRhAccountNumber" parameterType="map" resultMap="usageDtoResultMap">
+    <select id="findByScenarioIdAndRhAccountNumber" parameterType="map" resultMap="usageDtoResultMap">
         <include refid="selectUsageDtos"/>
         where u.df_scenario_uid = #{scenarioId} and u.rh_account_number = #{accountNumber}
         <if test="null != searchValue">
@@ -614,7 +614,7 @@
         <include refid="ifPageable"/>
     </select>
 
-    <select id="getIdsByScenarioIdRroAccountNumberRhAccountNumbers" resultType="string" parameterType="map">
+    <select id="findIdsByScenarioIdRroAccountNumberRhAccountNumbers" resultType="string" parameterType="map">
         select df_usage_uid
         from ${schema}.df_usage u
         join ${schema}.df_usage_batch b on u.df_usage_batch_uid = b.df_usage_batch_uid
