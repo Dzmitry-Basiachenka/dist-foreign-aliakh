@@ -190,4 +190,31 @@ databaseChangeLog {
                     referencedColumnNames: 'df_scenario_uid')
         }
     }
+
+    changeSet(id: '2017-11-13-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-36162 Backend for Identifying and excluding details for rightsholders that roll up to the source RRO: " +
+                "remove net_total, gross_total, reported_total, service_fee_total columns from df_scenario table")
+
+        dropColumn(schemaName: dbAppsSchema, tableName: 'df_scenario', columnName: 'net_total')
+        dropColumn(schemaName: dbAppsSchema, tableName: 'df_scenario', columnName: 'gross_total')
+        dropColumn(schemaName: dbAppsSchema, tableName: 'df_scenario', columnName: 'reported_total')
+        dropColumn(schemaName: dbAppsSchema, tableName: 'df_scenario', columnName: 'service_fee_total')
+
+        rollback {
+            addColumn(schemaName: dbAppsSchema, tableName: 'df_scenario') {
+                column(name: 'net_total', type: 'DECIMAL(38,10)', defaultValue: 0.0000000000, remarks: 'The sum of usages net amounts included in scenario') {
+                    constraints(nullable: false)
+                }
+                column(name: 'gross_total', type: 'DECIMAL(38,10)', defaultValue: 0.0000000000, remarks: 'The sum of gross amounts included in scenario') {
+                    constraints(nullable: false)
+                }
+                column(name: 'reported_total', type: 'DECIMAL(38,2)', defaultValue: 0.00, remarks: 'The sum of reported values included in scenario') {
+                    constraints(nullable: false)
+                }
+                column(name: 'service_fee_total', type: 'DECIMAL(38,10)', defaultValue: 0.0000000000, remarks: 'The sum of usages service fee amounts included in scenario') {
+                    constraints(nullable: false)
+                }
+            }
+        }
+    }
 }

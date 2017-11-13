@@ -28,10 +28,7 @@ databaseChangeLog {
             column(name: 'df_scenario_uid', value: '12ec845f-0e76-4d1c-85cd-bb3fb7ca260e')
             column(name: 'name', value: 'Test Scenario for exclude')
             column(name: 'status_ind', value: 'IN_PROGRESS')
-            column(name: 'net_total', value: '26850.55')
-            column(name: 'reported_total', value: '38520.00')
             column(name: 'description', value: 'Scenario description')
-            column(name: 'service_fee_total', value: '8592.18')
             column(name: 'updated_datetime', value: '2017-02-14 11:45:52.735531+03')
         }
 

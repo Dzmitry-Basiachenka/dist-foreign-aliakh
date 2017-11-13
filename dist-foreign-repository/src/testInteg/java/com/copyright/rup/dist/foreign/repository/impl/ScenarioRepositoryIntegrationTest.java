@@ -53,10 +53,6 @@ public class ScenarioRepositoryIntegrationTest {
     private static final String DESCRIPTION = "description";
     private static final String USAGE_BATCH_ID = "a5b64c3a-55d2-462e-b169-362dca6a4dd6";
     private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
-    private static final BigDecimal NET_TOTAL = new BigDecimal("204").setScale(10, BigDecimal.ROUND_HALF_UP);
-    private static final BigDecimal SERVICE_FEE_TOTAL = new BigDecimal("96").setScale(10, BigDecimal.ROUND_HALF_UP);
-    private static final BigDecimal GROSS_TOTAL = new BigDecimal("300").setScale(10, BigDecimal.ROUND_HALF_UP);
-    private static final BigDecimal REPORTED_TOTAL = new BigDecimal("200.00");
 
     @Autowired
     private ScenarioRepository scenarioRepository;
@@ -80,14 +76,11 @@ public class ScenarioRepositoryIntegrationTest {
         scenarioRepository.insert(buildScenario(scenarioId, SCENARIO_NAME));
         List<Scenario> scenarios = scenarioRepository.findAll();
         assertEquals(3, scenarios.size());
-        verifyScenario(scenarios.get(0), scenarioId, SCENARIO_NAME, DESCRIPTION, GROSS_TOTAL, NET_TOTAL,
-            SERVICE_FEE_TOTAL, REPORTED_TOTAL);
+        verifyScenario(scenarios.get(0), scenarioId, SCENARIO_NAME, DESCRIPTION);
         verifyScenario(scenarios.get(1), "e27551ed-3f69-4e08-9e4f-8ac03f67595f", "Scenario name 2",
-            "The description of scenario 2", new BigDecimal("20000.0000000000"), new BigDecimal("13600.0000000000"),
-            new BigDecimal("6400.0000000000"), new BigDecimal("25000.00"));
+            "The description of scenario 2");
         verifyScenario(scenarios.get(2), "b1f0b236-3ae9-4a60-9fab-61db84199d6f", "Scenario name",
-            "The description of scenario", new BigDecimal("24000.0000000000"), new BigDecimal("16320.0000000000"),
-            new BigDecimal("7680.0000000000"), new BigDecimal("18000.00"));
+            "The description of scenario");
     }
 
     @Test
@@ -217,26 +210,17 @@ public class ScenarioRepositoryIntegrationTest {
         Scenario scenario = new Scenario();
         scenario.setId(id);
         scenario.setName(name);
-        scenario.setNetTotal(NET_TOTAL);
-        scenario.setServiceFeeTotal(SERVICE_FEE_TOTAL);
-        scenario.setGrossTotal(GROSS_TOTAL);
-        scenario.setReportedTotal(REPORTED_TOTAL);
         scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
         scenario.setDescription(DESCRIPTION);
         return scenario;
     }
 
-    private void verifyScenario(Scenario scenario, String id, String name, String description, BigDecimal grossAmount,
-                                BigDecimal netAmount, BigDecimal serviceFeeAmount, BigDecimal reportedAmount) {
+    private void verifyScenario(Scenario scenario, String id, String name, String description) {
         assertEquals(id, scenario.getId());
         assertEquals(name, scenario.getName());
         assertEquals(description, scenario.getDescription());
         assertEquals("SYSTEM", scenario.getCreateUser());
         assertEquals(ScenarioStatusEnum.IN_PROGRESS, scenario.getStatus());
-        assertEquals(grossAmount, scenario.getGrossTotal());
-        assertEquals(netAmount, scenario.getNetTotal());
-        assertEquals(serviceFeeAmount, scenario.getServiceFeeTotal());
-        assertEquals(reportedAmount, scenario.getReportedTotal());
     }
 
     private Rightsholder buildRightsholder(Long accountNumber, String name) {

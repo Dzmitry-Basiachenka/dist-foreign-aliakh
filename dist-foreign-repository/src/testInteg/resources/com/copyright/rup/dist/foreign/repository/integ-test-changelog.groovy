@@ -221,10 +221,6 @@ databaseChangeLog {
             column(name: 'df_scenario_uid', value: 'b1f0b236-3ae9-4a60-9fab-61db84199d6f')
             column(name: 'name', value: 'Scenario name')
             column(name: 'status_ind', value: 'IN_PROGRESS')
-            column(name: 'net_total', value: '16320.0000000000')
-            column(name: 'service_fee_total', value: '7680.0000000000')
-            column(name: 'gross_total', value: '24000.0000000000')
-            column(name: 'reported_total', value: '18000.00')
             column(name: 'description', value: 'The description of scenario')
             column(name: 'updated_datetime', value: '2017-02-14 11:41:52.735531+03')
         }
@@ -233,10 +229,6 @@ databaseChangeLog {
             column(name: 'df_scenario_uid', value: 'e27551ed-3f69-4e08-9e4f-8ac03f67595f')
             column(name: 'name', value: 'Scenario name 2')
             column(name: 'status_ind', value: 'IN_PROGRESS')
-            column(name: 'net_total', value: '13600.0000000000')
-            column(name: 'service_fee_total', value: '6400.0000000000')
-            column(name: 'gross_total', value: '20000.0000000000')
-            column(name: 'reported_total', value: '25000.00')
             column(name: 'description', value: 'The description of scenario 2')
             column(name: 'updated_datetime', value: '2017-03-14 12:50:42.735531+03')
         }

@@ -26,10 +26,6 @@
         df_scenario_uid,
         name,
         status_ind,
-        net_total,
-        service_fee_total,
-        gross_total,
-        reported_total,
         description,
         <include refid="StoredEntityMapper.additionalColumns"/>
     </sql>
@@ -41,10 +37,6 @@
             #{id},
             #{name},
             #{status},
-            #{netTotal},
-            #{serviceFeeTotal},
-            #{grossTotal},
-            #{reportedTotal},
             #{description},
             <include refid="StoredEntityMapper.insert"/>
         )
@@ -93,10 +85,12 @@
         select
             s.df_scenario_uid,
             s.name,
+            s.status_ind,
             coalesce(sum(u.reported_value), 0) reported_total,
             coalesce(sum(u.gross_amount), 0) gross_total,
             coalesce(sum(u.service_fee_amount), 0) service_fee_total,
-            coalesce(sum(u.net_amount), 0) net_total
+            coalesce(sum(u.net_amount), 0) net_total,
+            s.description
         from ${schema}.df_scenario s
         left join ${schema}.df_usage u on u.df_scenario_uid = s.df_scenario_uid
         where s.df_scenario_uid = #{scenarioId}
