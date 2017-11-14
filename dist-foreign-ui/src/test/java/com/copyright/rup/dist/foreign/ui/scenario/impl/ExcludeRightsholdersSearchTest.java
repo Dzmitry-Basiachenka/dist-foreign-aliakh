@@ -14,7 +14,6 @@ import com.copyright.rup.vaadin.widget.SearchWidget;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.vaadin.data.util.BeanContainer;
-import com.vaadin.ui.Window;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -89,7 +88,7 @@ public class ExcludeRightsholdersSearchTest {
         expect(scenarioController.getRightsholdersPayeePairs(1000009522L))
             .andReturn(Collections.emptyList()).once();
         replay(scenarioController);
-        window = new ExcludeRightsholdersWindow(1000009522L, scenarioController, new Window());
+        window = new ExcludeRightsholdersWindow(1000009522L, scenarioController);
         verify(scenarioController);
     }
 

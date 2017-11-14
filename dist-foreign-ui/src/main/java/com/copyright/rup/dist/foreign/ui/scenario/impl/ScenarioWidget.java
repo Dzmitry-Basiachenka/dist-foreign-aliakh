@@ -4,6 +4,8 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.impl.ExcludeRightsholdersWindow.ExcludeUsagesEvent;
+import com.copyright.rup.dist.foreign.ui.scenario.impl.ExcludeRightsholdersWindow.IExcludeUsagesListener;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.VaadinUtils;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
@@ -67,6 +69,16 @@ public class ScenarioWidget extends Window implements IScenarioWidget {
     @Override
     public String getSearchValue() {
         return searchWidget.getSearchValue();
+    }
+
+    @Override
+    public void fireWidgetEvent(Event event) {
+        fireEvent(event);
+    }
+
+    @Override
+    public void addListener(IExcludeUsagesListener listener) {
+        addListener(ExcludeUsagesEvent.class, listener, IExcludeUsagesListener.EXCLUDE_DETAILS_HANDLER);
     }
 
     @Override

@@ -19,14 +19,17 @@ import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+import com.vaadin.util.ReflectTools;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 /**
@@ -51,19 +54,16 @@ public class ExcludeRightsholdersWindow extends Window implements ISearchControl
     private Long accountNumber;
     private IScenarioController scenarioController;
     private SearchWidget searchWidget;
-    private Window parentWindow;
 
     /**
      * Constructor.
      *
      * @param rroAccountNumber   rro account number
      * @param scenarioController instance of {@link IScenarioController}
-     * @param parent             parent window
      */
-    ExcludeRightsholdersWindow(Long rroAccountNumber, IScenarioController scenarioController, Window parent) {
+    ExcludeRightsholdersWindow(Long rroAccountNumber, IScenarioController scenarioController) {
         this.accountNumber = rroAccountNumber;
         this.scenarioController = scenarioController;
-        this.parentWindow = parent;
         setCaption(ForeignUi.getMessage("window.exclude.rh", rroAccountNumber));
         initContent();
     }
@@ -79,6 +79,15 @@ public class ExcludeRightsholdersWindow extends Window implements ISearchControl
                 new SimpleStringFilter(RH_ACCOUNT_NUMBER, searchValue, true, false),
                 new SimpleStringFilter(RH_NAME, searchValue, true, false)));
         }
+    }
+
+    /**
+     * Adds {@link IExcludeUsagesListener} on window.
+     *
+     * @param listener instance of {@link IExcludeUsagesListener}
+     */
+    void addListener(IExcludeUsagesListener listener) {
+        addListener(ExcludeUsagesEvent.class, listener, IExcludeUsagesListener.EXCLUDE_DETAILS_HANDLER);
     }
 
     private void initContent() {
@@ -136,7 +145,7 @@ public class ExcludeRightsholdersWindow extends Window implements ISearchControl
                     scenarioController.deleteFromScenario(accountNumber, selectedIds, reason);
                     scenarioController.getWidget().refresh();
                     scenarioController.getWidget().refreshTable();
-                    parentWindow.close();
+                    fireEvent(new ExcludeUsagesEvent(this));
                     this.close();
                 }, ForeignUi.getMessage("window.confirm"),
                     ForeignUi.getMessage("message.confirm.exclude.rightsholders"),
@@ -151,5 +160,39 @@ public class ExcludeRightsholdersWindow extends Window implements ISearchControl
         HorizontalLayout layout = new HorizontalLayout(confirmButton, clearButton, Buttons.createCloseButton(this));
         layout.setSpacing(true);
         return layout;
+    }
+
+    /**
+     * Listener for exclude usages from scenario.
+     */
+    public interface IExcludeUsagesListener {
+
+        /**
+         * {@link #onExcludeDetails(ExcludeUsagesEvent)}.
+         */
+        Method EXCLUDE_DETAILS_HANDLER = ReflectTools.findMethod(IExcludeUsagesListener.class, "onExcludeDetails",
+            ExcludeUsagesEvent.class);
+
+        /**
+         * Handles excluding details from scenario.
+         *
+         * @param excludeUsagesEvent an instance of {@link ExcludeUsagesEvent}
+         */
+        void onExcludeDetails(ExcludeUsagesEvent excludeUsagesEvent);
+    }
+
+    /**
+     * Event appears when {@link ExcludeRightsholdersWindow} closes.
+     */
+    public static class ExcludeUsagesEvent extends Event {
+
+        /**
+         * Constructs a new event with the specified source component.
+         *
+         * @param source the source component of the event
+         */
+        private ExcludeUsagesEvent(Component source) {
+            super(source);
+        }
     }
 }

@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioController;
+import com.copyright.rup.dist.foreign.ui.scenario.impl.ExcludeRightsholdersWindow.IExcludeUsagesListener;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.LongColumnGenerator;
 import com.copyright.rup.vaadin.ui.VaadinUtils;
@@ -103,8 +104,15 @@ public class ExcludeSourceRroWindow extends Window implements ISearchController 
             Button deleteButton = Buttons.createButton(ForeignUi.getMessage("button.exclude"));
             Rightsholder rightsholder = rightsholderContainer.getItem(itemId).getBean();
             deleteButton.setId(rightsholder.getId());
-            deleteButton.addClickListener(event -> Windows.showModalWindow(
-                new ExcludeRightsholdersWindow(rightsholder.getAccountNumber(), scenarioController, this)));
+            deleteButton.addClickListener(event -> {
+                ExcludeRightsholdersWindow window =
+                    new ExcludeRightsholdersWindow(rightsholder.getAccountNumber(), scenarioController);
+                Windows.showModalWindow(window);
+                window.addListener((IExcludeUsagesListener) excludeUsagesEvent -> {
+                    close();
+                    scenarioController.fireWidgetEvent(excludeUsagesEvent);
+                });
+            });
             return deleteButton;
         });
         table.setVisibleColumns(

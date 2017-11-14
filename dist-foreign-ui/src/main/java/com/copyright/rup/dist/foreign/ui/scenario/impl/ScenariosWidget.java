@@ -66,7 +66,7 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
     public void refresh() {
         container.removeAllItems();
         container.addAll(controller.getScenarios());
-        table.select(table.firstItemId());
+        selectScenario(table.firstItemId());
     }
 
     @Override
@@ -78,6 +78,11 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
     public Scenario getSelectedScenario() {
         String itemId = Objects.toString(table.getValue(), null);
         return null != itemId ? container.getItem(itemId).getBean() : null;
+    }
+
+    @Override
+    public void refreshSelectedScenario() {
+        onItemChanged(getSelectedScenario());
     }
 
     @Override

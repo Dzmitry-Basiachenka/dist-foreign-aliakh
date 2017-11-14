@@ -12,6 +12,7 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.impl.ExcludeRightsholdersWindow.ExcludeUsagesEvent;
 import com.copyright.rup.vaadin.ui.VaadinUtils;
 import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
@@ -120,6 +121,11 @@ public class ScenarioController extends CommonController<IScenarioWidget> implem
     @Override
     public Scenario getScenarioWithAmounts() {
         return scenarioService.getScenarioWithAmounts(scenario.getId());
+    }
+
+    @Override
+    public void fireWidgetEvent(ExcludeUsagesEvent event) {
+        getWidget().fireWidgetEvent(event);
     }
 
     void setScenario(Scenario scenario) {

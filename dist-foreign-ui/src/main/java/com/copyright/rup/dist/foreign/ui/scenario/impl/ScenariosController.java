@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosWidget;
+import com.copyright.rup.dist.foreign.ui.scenario.impl.ExcludeRightsholdersWindow.IExcludeUsagesListener;
 import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
@@ -58,6 +59,7 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
     public void onViewButtonClicked() {
         scenarioController.setScenario(getWidget().getSelectedScenario());
         IScenarioWidget scenarioWidget = scenarioController.initWidget();
+        scenarioWidget.addListener((IExcludeUsagesListener) event -> getWidget().refreshSelectedScenario());
         Window scenarioWindow = (Window) scenarioWidget;
         Windows.showModalWindow(scenarioWindow);
         scenarioWindow.setPositionY(30);
