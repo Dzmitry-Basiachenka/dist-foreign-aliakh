@@ -89,11 +89,10 @@ public class ExcludeRightsholdersWindow extends Window implements ISearchControl
         VaadinUtils.addComponentStyle(this, "exclude-rightsholders-window");
         HorizontalLayout buttonsLayout = createButtonsLayout();
         Table rightsholderTable = initTable();
-        VerticalLayout layout = new VerticalLayout();
+        VerticalLayout layout = new VerticalLayout(searchWidget, rightsholderTable, buttonsLayout);
         layout.setMargin(new MarginInfo(false, true, true, true));
         layout.setSpacing(true);
         layout.setSizeFull();
-        layout.addComponents(searchWidget, rightsholderTable, buttonsLayout);
         layout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
         layout.setExpandRatio(rightsholderTable, 1);
         rightsholderContainer.addAll(scenarioController.getRightsholdersPayeePairs(accountNumber));

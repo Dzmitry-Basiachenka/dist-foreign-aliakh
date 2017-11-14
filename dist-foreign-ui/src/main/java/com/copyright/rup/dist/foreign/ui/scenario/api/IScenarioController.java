@@ -47,7 +47,7 @@ public interface IScenarioController extends IController<IScenarioWidget>, ISear
     boolean isScenarioEmpty();
 
     /**
-     * @return current {@link Scenario}
+     * @return current {@link Scenario}.
      */
     Scenario getScenario();
 

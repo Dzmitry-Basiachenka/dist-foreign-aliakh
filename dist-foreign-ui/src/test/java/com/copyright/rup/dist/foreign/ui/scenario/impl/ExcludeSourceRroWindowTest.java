@@ -60,7 +60,7 @@ public class ExcludeSourceRroWindowTest {
     public void testStructure() {
         assertEquals("Exclude Details by Source RRO", window.getCaption());
         assertEquals(500, window.getHeight(), 0);
-        assertEquals(830, window.getWidth(), 0);
+        assertEquals(880, window.getWidth(), 0);
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertEquals(3, content.getComponentCount());
         verifyTable(content.getComponent(1));

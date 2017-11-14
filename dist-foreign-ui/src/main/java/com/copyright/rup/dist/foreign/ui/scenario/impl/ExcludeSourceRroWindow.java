@@ -52,7 +52,7 @@ public class ExcludeSourceRroWindow extends Window implements ISearchController 
     ExcludeSourceRroWindow(IScenarioController scenarioController) {
         super(ForeignUi.getMessage("label.exclude.rro"));
         this.scenarioController = scenarioController;
-        setWidth(830, Unit.PIXELS);
+        setWidth(880, Unit.PIXELS);
         setHeight(500, Unit.PIXELS);
         setContent(initContent());
     }
@@ -74,11 +74,10 @@ public class ExcludeSourceRroWindow extends Window implements ISearchController 
         VaadinUtils.addComponentStyle(this, "exclude-source-rro-window");
         HorizontalLayout buttons = createButtonsToolbar(Buttons.createCancelButton(this));
         Table rightsholderTable = initTable();
-        VerticalLayout layout = new VerticalLayout();
+        VerticalLayout layout = new VerticalLayout(searchWidget, rightsholderTable, buttons);
         layout.setMargin(new MarginInfo(false, true, true, true));
         layout.setSpacing(true);
         layout.setSizeFull();
-        layout.addComponents(searchWidget, rightsholderTable, buttons);
         layout.setComponentAlignment(buttons, Alignment.BOTTOM_RIGHT);
         layout.setExpandRatio(rightsholderTable, 1);
         return layout;
