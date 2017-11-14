@@ -108,8 +108,10 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
 
     @Override
     public List<Usage> findWithAmountsAndRightsholders(UsageFilter filter) {
-        return selectList("IUsageMapper.findWithAmountsAndRightsholders", ImmutableMap.of(
-            FILTER_KEY, Objects.requireNonNull(filter)));
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
+        parameters.put(STATUS_KEY, UsageStatusEnum.ELIGIBLE);
+        return selectList("IUsageMapper.findWithAmountsAndRightsholders", parameters);
     }
 
     @Override
