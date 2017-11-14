@@ -4,6 +4,7 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.ui.scenario.impl.ExcludeRightsholdersWindow;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.ui.component.lazytable.IBeanLoader;
 import com.copyright.rup.vaadin.widget.SearchWidget.ISearchController;
@@ -78,4 +79,11 @@ public interface IScenarioController extends IController<IScenarioWidget>, ISear
      * @param reason           reason
      */
     void deleteFromScenario(Long rroAccountNumber, List<Long> accountNumbers, String reason);
+
+    /**
+     * Fires {@link ExcludeRightsholdersWindow.ExcludeUsagesEvent}.
+     *
+     * @param event an instance of {@link ExcludeRightsholdersWindow.ExcludeUsagesEvent}
+     */
+    void fireWidgetEvent(ExcludeRightsholdersWindow.ExcludeUsagesEvent event);
 }

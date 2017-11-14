@@ -54,6 +54,7 @@ import java.util.Collection;
 public class ScenariosWidgetTest {
 
     private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
+    private static final String TABLE_ID = "table";
 
     private ScenariosWidget scenariosWidget;
     private IScenariosController controller;
@@ -115,7 +116,7 @@ public class ScenariosWidgetTest {
     @Test
     public void testSelectScenario() {
         scenariosWidget.selectScenario(null);
-        Table table = Whitebox.getInternalState(scenariosWidget, "table");
+        Table table = Whitebox.getInternalState(scenariosWidget, TABLE_ID);
         assertNull(table.getValue());
         expect(controller.getScenarioWithAmounts(scenario)).andReturn(scenario).once();
         replay(controller);
@@ -126,9 +127,25 @@ public class ScenariosWidgetTest {
 
     @Test
     @SuppressWarnings("unchecked")
+    public void testRefreshSelectedScenario() {
+        Table scenariosTable = createMock(Table.class);
+        Whitebox.setInternalState(scenariosWidget, TABLE_ID, scenariosTable);
+        expect(scenariosTable.getValue()).andReturn(SCENARIO_ID).once();
+        BeanContainer<String, Scenario> container = createMock(BeanContainer.class);
+        Whitebox.setInternalState(scenariosWidget, "container", container);
+        expect(container.getItem(SCENARIO_ID)).andReturn(new BeanItem(scenario)).once();
+        expect(controller.getScenarioWithAmounts(scenario)).andReturn(scenario).once();
+        replay(controller, scenariosTable, container);
+        scenariosWidget.refreshSelectedScenario();
+        verifyScenarioMetadataPanel();
+        verify(controller, scenariosTable, container);
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
     public void testGetSelectedScenario() {
         Table scenariosTable = createMock(Table.class);
-        Whitebox.setInternalState(scenariosWidget, "table", scenariosTable);
+        Whitebox.setInternalState(scenariosWidget, TABLE_ID, scenariosTable);
         BeanContainer<String, Scenario> container = createMock(BeanContainer.class);
         Whitebox.setInternalState(scenariosWidget, "container", container);
         expect(scenariosTable.getValue()).andReturn(SCENARIO_ID).once();
@@ -141,7 +158,7 @@ public class ScenariosWidgetTest {
     @Test
     public void testGetNotSelectedScenario() {
         Table scenariosTable = createMock(Table.class);
-        Whitebox.setInternalState(scenariosWidget, "table", scenariosTable);
+        Whitebox.setInternalState(scenariosWidget, TABLE_ID, scenariosTable);
         expect(scenariosTable.getValue()).andReturn(null).once();
         replay(scenariosTable);
         assertEquals(null, scenariosWidget.getSelectedScenario());

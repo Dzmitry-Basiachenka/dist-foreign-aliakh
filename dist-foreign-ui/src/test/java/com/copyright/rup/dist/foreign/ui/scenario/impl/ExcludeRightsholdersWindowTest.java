@@ -26,7 +26,6 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window;
 
 import org.easymock.Capture;
 import org.junit.Before;
@@ -59,7 +58,7 @@ public class ExcludeRightsholdersWindowTest {
                     buildRightsholder(2000196395L, "Advance Central Services"))))
             .once();
         replay(scenarioController);
-        window = new ExcludeRightsholdersWindow(1000009522L, scenarioController, new Window());
+        window = new ExcludeRightsholdersWindow(1000009522L, scenarioController);
         verify(scenarioController);
     }
 

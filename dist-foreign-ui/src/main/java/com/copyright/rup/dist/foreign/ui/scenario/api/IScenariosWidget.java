@@ -28,4 +28,9 @@ public interface IScenariosWidget extends IWidget<IScenariosController>, IRefres
      * @return selected {@link Scenario} or {@code null} if no one selected.
      */
     Scenario getSelectedScenario();
+
+    /**
+     * Refreshes metadata information for selected {@link Scenario}.
+     */
+    void refreshSelectedScenario();
 }
