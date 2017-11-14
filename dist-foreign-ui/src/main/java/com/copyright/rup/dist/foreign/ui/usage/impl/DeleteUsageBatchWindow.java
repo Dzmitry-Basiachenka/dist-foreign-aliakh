@@ -61,7 +61,7 @@ class DeleteUsageBatchWindow extends Window {
         setWidth(700, Unit.PIXELS);
         setHeight(450, Unit.PIXELS);
         searchWidget = new SearchWidget(new SearchController());
-        searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.search_usage_batch"));
+        searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.batch.search_usage_batch"));
         Table table = initUsageBatchesTable();
         Button closeButton = Buttons.createCloseButton(this);
         VerticalLayout layout = new VerticalLayout(searchWidget, table, closeButton);
