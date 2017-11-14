@@ -10,12 +10,11 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
 import com.copyright.rup.vaadin.ui.VaadinUtils;
 
+import com.vaadin.ui.Table;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-
-import java.util.Objects;
 
 /**
  * Verifies {@link FiscalYearColumnGenerator}.
@@ -37,17 +36,17 @@ public class FiscalYearColumnGeneratorTest {
 
     @Test
     public void testGenerateCell() {
+        Table table = new Table();
         mockStatic(VaadinUtils.class);
         mockStatic(UsageBatchUtils.class);
         FiscalYearColumnGenerator fiscalYearColumnGenerator = new FiscalYearColumnGenerator();
-        expect(VaadinUtils.getContainerPropertyValue(null, ITEM_ID, COLUMN_ID, Integer.class))
+        expect(VaadinUtils.getContainerPropertyValue(table, ITEM_ID, COLUMN_ID, Integer.class))
             .andReturn(EXPECTED_VALUE).once();
         expect(UsageBatchUtils.getFiscalYear(EXPECTED_VALUE)).andReturn(FISCAL_YEAR).once();
         replay(VaadinUtils.class, UsageBatchUtils.class);
-        Object result = fiscalYearColumnGenerator.generateCell(null, ITEM_ID, COLUMN_ID);
+        Object result = fiscalYearColumnGenerator.generateCell(table, ITEM_ID, COLUMN_ID);
         assertNotNull(result);
-        assertEquals(String.class, result.getClass());
-        assertEquals(FISCAL_YEAR, Objects.toString(result));
+        assertEquals(FISCAL_YEAR, result);
         verify(VaadinUtils.class, UsageBatchUtils.class);
     }
 }
