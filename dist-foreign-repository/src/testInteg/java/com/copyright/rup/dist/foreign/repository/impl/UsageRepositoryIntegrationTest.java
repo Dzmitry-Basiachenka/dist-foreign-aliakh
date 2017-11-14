@@ -599,21 +599,24 @@ public class UsageRepositoryIntegrationTest {
     public void testFindWithAmountsAndRightsholdersByStatusFilter() {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             Collections.singleton(UsageStatusEnum.ELIGIBLE), null, null);
-        verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 3, USAGE_ID_1, USAGE_ID_2);
+        verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 3, USAGE_ID_1, USAGE_ID_2,
+            USAGE_ID_3);
     }
 
     @Test
     public void testFindWithAmountsAndRightsholdersByPaymentDateFilter() {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             Collections.singleton(UsageStatusEnum.ELIGIBLE), PAYMENT_DATE, null);
-        verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 3, USAGE_ID_1, USAGE_ID_2);
+        verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 3, USAGE_ID_1, USAGE_ID_2,
+            USAGE_ID_3);
     }
 
     @Test
     public void testFindWithAmountsAndRightsholdersByFiscalYearFilter() {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             Collections.singleton(UsageStatusEnum.ELIGIBLE), null, FISCAL_YEAR);
-        verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 3, USAGE_ID_1, USAGE_ID_2);
+        verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 3, USAGE_ID_1, USAGE_ID_2,
+            USAGE_ID_3);
     }
 
     @Test
@@ -805,7 +808,9 @@ public class UsageRepositoryIntegrationTest {
     private void verifyUsages(List<Usage> usages, int count, String... usageIds) {
         assertNotNull(usages);
         assertEquals(count, usages.size());
-        IntStream.range(0, count - 1).forEach(i -> assertEquals(usageIds[i], usages.get(i).getId()));
+        IntStream.range(0, count).forEach(i -> {
+            assertEquals(usageIds[i], usages.get(i).getId());
+            assertEquals(UsageStatusEnum.ELIGIBLE, usages.get(i).getStatus());
+        });
     }
-
 }

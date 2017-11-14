@@ -4,6 +4,14 @@ databaseChangeLog {
     changeSet(id: '2017-03-28-00', author: 'Aliaksei Pchelnikau <aliaksei_pchelnikau@epam.com>') {
         comment('Inserting Usage Batch for integration tests')
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
+            column(name: 'df_scenario_uid', value: '4c014547-06f3-4840-94ff-6249730d537d')
+            column(name: 'name', value: 'Test Scenario for exclude')
+            column(name: 'status_ind', value: 'IN_PROGRESS')
+            column(name: 'description', value: 'Scenario description')
+            column(name: 'updated_datetime', value: '2017-02-14 11:45:52.735531+03')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '31ddaa1a-e60b-44ce-a968-0ca262870358')
             column(name: 'name', value: 'CADRA_27Oct17')
@@ -12,6 +20,31 @@ databaseChangeLog {
             column(name: 'fiscal_year', value: '2017')
             column(name: 'gross_amount', value: '35000')
             column(name: 'updated_datetime', value: '2017-02-14 11:41:52.735531+03')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'fcdaea01-2439-4c51-b3e2-23649cf710c7')
+            column(name: 'df_usage_batch_uid', value: '31ddaa1a-e60b-44ce-a968-0ca262870358')
+            column(name: 'detail_id', value: '2136547853')
+            column(name: 'wr_wrk_inst', value: '471137470')
+            column(name: 'work_title', value: 'Sunbeams')
+            column(name: 'rh_account_number', value: '1000003821')
+            column(name: 'payee_account_number', value: '1000003821')
+            column(name: 'status_ind', value: 'LOCKED')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '452365874521235XX')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '100.00')
+            column(name: 'gross_amount', value: '90.63')
+            column(name: 'service_fee_amount', value: '29.00')
+            column(name: 'net_amount', value: '61.63')
+            column(name: 'df_scenario_uid', value: '4c014547-06f3-4840-94ff-6249730d537d')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -147,6 +180,12 @@ databaseChangeLog {
             column(name: 'df_rightsholder_uid', value: '00d4ae90-5fe7-47bf-ace1-781c8d76d4da')
             column(name: 'rh_account_number', value: '1000001820')
             column(name: 'name', value: 'Delhi Medical Assn')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'df_rightsholder_uid', value: '05dc9217-26d4-46ca-aa6e-18572591f3c8')
+            column(name: 'rh_account_number', value: '1000003821')
+            column(name: 'name', value: 'Abbey Publications, Inc. [L]')
         }
 
         rollback ""
