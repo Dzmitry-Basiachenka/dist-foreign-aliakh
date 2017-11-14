@@ -170,75 +170,40 @@ public class Usage extends StoredEntity<String> {
         return reportedValue;
     }
 
-    /**
-     * Sets reported value.
-     *
-     * @param reportedValue reported value
-     */
     public void setReportedValue(BigDecimal reportedValue) {
-        if (null != reportedValue) {
-            this.reportedValue = reportedValue;
-        }
+        this.reportedValue = reportedValue;
     }
 
     public BigDecimal getNetAmount() {
         return netAmount;
     }
 
-    /**
-     * Sets net amount.
-     *
-     * @param netAmount net amount
-     */
     public void setNetAmount(BigDecimal netAmount) {
-        if (null != netAmount) {
-            this.netAmount = netAmount;
-        }
+        this.netAmount = netAmount;
     }
 
     public BigDecimal getServiceFee() {
         return serviceFee;
     }
 
-    /**
-     * Sets service fee.
-     *
-     * @param serviceFee service fee
-     */
     public void setServiceFee(BigDecimal serviceFee) {
-        if (null != serviceFee) {
-            this.serviceFee = serviceFee;
-        }
+        this.serviceFee = serviceFee;
     }
 
     public BigDecimal getServiceFeeAmount() {
         return serviceFeeAmount;
     }
 
-    /**
-     * Sets service fee amount.
-     *
-     * @param serviceFeeAmount service fee amount
-     */
     public void setServiceFeeAmount(BigDecimal serviceFeeAmount) {
-        if (null != serviceFeeAmount) {
-            this.serviceFeeAmount = serviceFeeAmount;
-        }
+        this.serviceFeeAmount = serviceFeeAmount;
     }
 
     public BigDecimal getGrossAmount() {
         return grossAmount;
     }
 
-    /**
-     * Sets gross amount.
-     *
-     * @param grossAmount gross amount
-     */
     public void setGrossAmount(BigDecimal grossAmount) {
-        if (null != grossAmount) {
-            this.grossAmount = grossAmount;
-        }
+        this.grossAmount = grossAmount;
     }
 
     public UsageStatusEnum getStatus() {

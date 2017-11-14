@@ -28,10 +28,10 @@ import java.math.BigDecimal;
 public class RightsholderTotalsHolderTable extends LazyTable<RightsholderTotalsHolderBeanQuery,
     RightsholderTotalsHolder> {
 
-    private static final String RIGHTSHOLDER_NAME_PROPERTY = "rightsholderName";
-    private static final String RIGHTSHOLDER_ACCOUNT_NUMBER_PROPERTY = "rightsholderAccountNumber";
-    private static final String PAYEE_NAME_PROPERTY = "payeeName";
-    private static final String PAYEE_ACCOUNT_NUMBER_PROPERTY = "payeeAccountNumber";
+    private static final String RIGHTSHOLDER_NAME_PROPERTY = "rightsholder.name";
+    private static final String RIGHTSHOLDER_ACCOUNT_NUMBER_PROPERTY = "rightsholder.accountNumber";
+    private static final String PAYEE_NAME_PROPERTY = "payee.name";
+    private static final String PAYEE_ACCOUNT_NUMBER_PROPERTY = "payee.accountNumber";
     private static final String GROSS_TOTAL_PROPERTY = "grossTotal";
     private static final String SERVICE_FEE_TOTAL_PROPERTY = "serviceFeeTotal";
     private static final String NET_TOTAL_PROPERTY = "netTotal";
@@ -46,7 +46,7 @@ public class RightsholderTotalsHolderTable extends LazyTable<RightsholderTotalsH
      */
     public RightsholderTotalsHolderTable(IScenarioController controller,
                                          Class<RightsholderTotalsHolderBeanQuery> queryClass) {
-        super(controller, queryClass);
+        super(controller, queryClass, 1);
         this.controller = controller;
         initTable();
     }

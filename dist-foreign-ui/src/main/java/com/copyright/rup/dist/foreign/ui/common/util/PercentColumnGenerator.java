@@ -1,7 +1,10 @@
 package com.copyright.rup.dist.foreign.ui.common.util;
 
 import com.copyright.rup.vaadin.ui.VaadinUtils;
+
 import com.vaadin.ui.Table;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -16,13 +19,16 @@ import java.util.Objects;
  *
  * @author Aliaksandra Bayanouskaya
  */
+//TODO {abayanouskaya} add unit test for column generator
 public class PercentColumnGenerator implements Table.ColumnGenerator {
 
     private static final BigDecimal PERCENT_100 = new BigDecimal("100");
 
     @Override
     public Object generateCell(Table source, Object itemId, Object columnId) {
-        return Objects.toString(VaadinUtils.getContainerPropertyValue(source, itemId, columnId, BigDecimal.class).
-            multiply(PERCENT_100).setScale(1, BigDecimal.ROUND_HALF_UP));
+        BigDecimal value = VaadinUtils.getContainerPropertyValue(source, itemId, columnId, BigDecimal.class);
+        return null != value
+            ? Objects.toString(value.multiply(PERCENT_100).setScale(1, BigDecimal.ROUND_HALF_UP))
+            : StringUtils.EMPTY;
     }
 }
