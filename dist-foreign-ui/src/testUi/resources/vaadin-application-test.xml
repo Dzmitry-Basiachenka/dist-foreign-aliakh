@@ -27,7 +27,7 @@
     <bean id="dfDataSource"
           class="com.copyright.rup.common.test.integ.db.embedded.EmbeddedPostgresDatabaseFactory">
         <property name="port" value="$RUP{dist.foreign.ui.db.port}" />
-        <property name="version" value="9.6.5-1" />
+        <property name="version" value="9.4.4-1" />
         <property name="resourcesFromPaths">
             <list value-type="java.lang.String">
                 <value>/com/copyright/rup/dist/foreign/db/main-changelog.groovy</value>
