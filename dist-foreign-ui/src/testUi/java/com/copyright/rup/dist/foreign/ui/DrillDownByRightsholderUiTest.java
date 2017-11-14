@@ -229,12 +229,11 @@ public class DrillDownByRightsholderUiTest extends ForeignCommonUiTest {
         usage.setPublisher(fields[10]);
         usage.setPublicationDate(LocalDate.parse(fields[11], DateTimeFormatter.ofPattern("M/d/uuuu", Locale.US)));
         usage.setNumberOfCopies(Integer.valueOf(fields[12]));
-        usage.setReportedValue(new BigDecimal(fields[13].replaceAll(",", StringUtils.EMPTY)));
-        usage.setGrossAmount(new BigDecimal(fields[14].replaceAll(",", StringUtils.EMPTY)));
-        usage.setServiceFeeAmount(new BigDecimal(fields[15].replaceAll(",", StringUtils.EMPTY)));
-        usage.setNetAmount(new BigDecimal(fields[16].replaceAll(",", StringUtils.EMPTY)));
-        usage.setServiceFee(new BigDecimal(fields[17].replaceAll(",", StringUtils.EMPTY)).
-            divide(new BigDecimal("100")));
+        usage.setReportedValue(getAmount(fields[13]));
+        usage.setGrossAmount(getAmount(fields[14]));
+        usage.setServiceFeeAmount(getAmount(fields[15]));
+        usage.setNetAmount(getAmount(fields[16]));
+        usage.setServiceFee(getAmount(fields[17]).divide(new BigDecimal("100")));
         usage.setMarket(fields[18]);
         usage.setMarketPeriodFrom(Integer.valueOf(fields[19]));
         usage.setMarketPeriodTo(Integer.valueOf(fields[20]));
@@ -246,5 +245,9 @@ public class DrillDownByRightsholderUiTest extends ForeignCommonUiTest {
         Rightsholder rightsholder = new Rightsholder();
         rightsholder.setAccountNumber(accountNumber);
         return rightsholder;
+    }
+
+    private BigDecimal getAmount(String field) {
+        return new BigDecimal(field.replaceAll(",", StringUtils.EMPTY));
     }
 }

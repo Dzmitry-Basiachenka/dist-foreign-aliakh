@@ -758,14 +758,14 @@ public class UsageRepositoryIntegrationTest {
                                                                    Double grossTotal, Double serviceFeeTotal,
                                                                    Double netTotal) {
         RightsholderTotalsHolder rightsholderTotalsHolder = new RightsholderTotalsHolder();
-        rightsholderTotalsHolder.setRightsholderName(rhName);
-        rightsholderTotalsHolder.setRightsholderAccountNumber(rhAccountNumber);
+        rightsholderTotalsHolder.getRightsholder().setAccountNumber(rhAccountNumber);
+        rightsholderTotalsHolder.getRightsholder().setName(rhName);
+        rightsholderTotalsHolder.getPayee().setAccountNumber(rhAccountNumber);
+        rightsholderTotalsHolder.getPayee().setName(rhName);
         rightsholderTotalsHolder.setGrossTotal(BigDecimal.valueOf(grossTotal).setScale(10, BigDecimal.ROUND_HALF_UP));
         rightsholderTotalsHolder.setServiceFeeTotal(
             BigDecimal.valueOf(serviceFeeTotal).setScale(10, BigDecimal.ROUND_HALF_UP));
         rightsholderTotalsHolder.setNetTotal(BigDecimal.valueOf(netTotal).setScale(10, BigDecimal.ROUND_HALF_UP));
-        rightsholderTotalsHolder.setPayeeAccountNumber(rhAccountNumber);
-        rightsholderTotalsHolder.setPayeeName(rhName);
         rightsholderTotalsHolder.setServiceFee(SERVICE_FEE);
         return rightsholderTotalsHolder;
     }

@@ -69,13 +69,13 @@ public final class CalculationUtils {
      * Net amount = gross amount - service fee amount. Result has scale = 10 and rounds with
      * {@link RoundingMode#HALF_UP}.
      *
-     * @param grossAmount gross amount
-     * @param serviceFeeAmount  service fee amount
+     * @param grossAmount      gross amount
+     * @param serviceFeeAmount service fee amount
      * @return net amount
      */
     public static BigDecimal calculateNetAmount(BigDecimal grossAmount, BigDecimal serviceFeeAmount) {
         checkArgument(0 > BigDecimal.ZERO.compareTo(grossAmount));
         checkArgument(0 > BigDecimal.ZERO.compareTo(serviceFeeAmount));
-        return grossAmount.subtract(serviceFeeAmount).setScale(10, BigDecimal.ROUND_HALF_UP);
+        return grossAmount.subtract(serviceFeeAmount);
     }
 }
