@@ -1,8 +1,8 @@
 <included>
     <appender name="FILE_DIST_FOREIGN_PERFORMANCE_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${APP_LOG_DIR:-/r01/foreign/log}/dist-foreign-ui-performance.log</file>
+        <file>${APP_LOG_DIR:-build}/dist-foreign-ui-performance.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-            <fileNamePattern>${APP_LOG_DIR:-/r01/foreign/log}/dist-foreign-ui-performance.%i.log.zip</fileNamePattern>
+            <fileNamePattern>${APP_LOG_DIR:-build}/dist-foreign-ui-performance.%i.log.zip</fileNamePattern>
             <minIndex>1</minIndex>
             <maxIndex>21</maxIndex>
         </rollingPolicy>

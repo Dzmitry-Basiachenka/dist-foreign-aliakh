@@ -46,4 +46,26 @@ subprojects {
     tasks.test.rupCodeCoverage {
         preInstrument = true
     }
+
+    integrationTest.doFirst {
+        systemProperty "dbPidLocation", "${projectDir}/build/tmp/embeddedPostgres/postgres.pid"
+    }
+
+    //This hook used for closing PostgreSQL processes when integrationTest task was closed early
+    Runtime.runtime.addShutdownHook({
+        def pidLocation = System.getProperty("dbPidLocation")
+        if (null != pidLocation) {
+            File file = new File(pidLocation)
+            if (file.exists()) {
+                String pid = file.text
+                if (org.gradle.internal.os.OperatingSystem.current().isWindows()) {
+                    Runtime.runtime.exec("Taskkill /PID " + pid + " /F")
+                } else if (org.gradle.internal.os.OperatingSystem.current().isLinux() ||
+                        org.gradle.internal.os.OperatingSystem.current().isMacOsX()) {
+                    Runtime.runtime.exec("kill -9 " + pid)
+                }
+                file.deleteOnExit()
+            }
+        }
+    })
 }
