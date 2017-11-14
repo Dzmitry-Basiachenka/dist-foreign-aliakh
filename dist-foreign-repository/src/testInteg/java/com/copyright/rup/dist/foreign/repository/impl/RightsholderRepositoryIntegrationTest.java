@@ -45,7 +45,6 @@ public class RightsholderRepositoryIntegrationTest {
     private static final Long RH_ACCOUNT_NUMBER_2000017010 = 2000017010L;
     private static final Long RH_ACCOUNT_NUMBER_1000009997 = 1000009997L;
     private static final Long RH_ACCOUNT_NUMBER_1000002859 = 1000002859L;
-    private static final Long RH_ACCOUNT_NUMBER_1000008666 = 1000008666L;
     private static final Long RH_ACCOUNT_NUMBER_1000005413 = 1000005413L;
     private static final Long RH_ACCOUNT_NUMBER_1000159997 = 1000159997L;
     private static final Long RH_ACCOUNT_NUMBER_7000800832 = 7000800832L;
@@ -61,27 +60,27 @@ public class RightsholderRepositoryIntegrationTest {
     @Test
     public void testInsertRightsholder() {
         List<Rightsholder> rightsholders = rightsholderRepository.findAll();
-        assertEquals(8, rightsholders.size());
+        assertEquals(7, rightsholders.size());
         Rightsholder rightsholder = buildRightsholder();
         rightsholderRepository.insert(rightsholder);
         rightsholders = rightsholderRepository.findAll();
-        assertEquals(9, rightsholders.size());
+        assertEquals(8, rightsholders.size());
     }
 
     @Test
     public void testFindAccountNumbers() {
         Set<Long> accountNumbers = rightsholderRepository.findAccountNumbers();
-        assertEquals(12, accountNumbers.size());
+        assertEquals(10, accountNumbers.size());
         assertTrue(accountNumbers.containsAll(Lists.newArrayList(RH_ACCOUNT_NUMBER_7000813806,
             RH_ACCOUNT_NUMBER_2000017004, RH_ACCOUNT_NUMBER_2000017010, RH_ACCOUNT_NUMBER_1000009997,
-            RH_ACCOUNT_NUMBER_1000002859, RH_ACCOUNT_NUMBER_1000008666, RH_ACCOUNT_NUMBER_1000005413,
-            RH_ACCOUNT_NUMBER_1000159997, RH_ACCOUNT_NUMBER_7000800832, 7000813800L, 7001555529L, 7001555635L)));
+            RH_ACCOUNT_NUMBER_1000002859, RH_ACCOUNT_NUMBER_1000005413, RH_ACCOUNT_NUMBER_1000159997,
+            RH_ACCOUNT_NUMBER_7000800832, 7000813800L, 7001555529L)));
     }
 
     @Test
     public void testDeleteAll() {
         List<Rightsholder> rightsholders = rightsholderRepository.findAll();
-        assertEquals(8, rightsholders.size());
+        assertEquals(7, rightsholders.size());
         rightsholderRepository.deleteAll();
         rightsholders = rightsholderRepository.findAll();
         assertEquals(0, rightsholders.size());
@@ -90,10 +89,10 @@ public class RightsholderRepositoryIntegrationTest {
     @Test
     public void testDeleteByAccountNumber() {
         List<Rightsholder> rightsholders = rightsholderRepository.findAll();
-        assertEquals(8, rightsholders.size());
+        assertEquals(7, rightsholders.size());
         rightsholderRepository.deleteByAccountNumber(RH_ACCOUNT_NUMBER_7000813806);
         rightsholders = rightsholderRepository.findAll();
-        assertEquals(7, rightsholders.size());
+        assertEquals(6, rightsholders.size());
         assertTrue(rightsholders.stream()
             .filter(rightsholder -> RH_ACCOUNT_NUMBER_7000813806.equals(rightsholder.getAccountNumber()))
             .collect(Collectors.toList()).isEmpty());

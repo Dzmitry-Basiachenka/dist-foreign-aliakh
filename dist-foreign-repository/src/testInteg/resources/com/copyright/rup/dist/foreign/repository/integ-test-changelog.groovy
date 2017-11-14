@@ -77,28 +77,6 @@ databaseChangeLog {
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
-            column(name: 'df_usage_uid', value: 'a80a4ca0-3406-467a-b967-ac6e3fb187fb')
-            column(name: 'df_usage_batch_uid', value: 'a5b64c3a-55d2-462e-b169-362dca6a4dd6')
-            column(name: 'detail_id', value: '6997788882')
-            column(name: 'wr_wrk_inst', value: '108738286')
-            column(name: 'work_title', value: '2001 tax legislation: law, explanation, and analysis : Economic Growth and Tax Relief Reconciliation Act of 2001')
-            column(name: 'rh_account_number', value: '1000008666')
-            column(name: 'payee_account_number', value: '7001555635')
-            column(name: 'status_ind', value: 'LOCKED')
-            column(name: 'article', value: 'Google Makes Super')
-            column(name: 'standard_number', value: '1008902002377656XX')
-            column(name: 'publisher', value: 'CCH Inc')
-            column(name: 'publication_date', value: '1999-09-27')
-            column(name: 'market', value: 'Bus,Doc Del,Edu,Gov,Lib,Sch,Univ')
-            column(name: 'market_period_from', value: '2015')
-            column(name: 'market_period_to', value: '2019')
-            column(name: 'author', value: '愛染恭子')
-            column(name: 'number_of_copies', value: '16')
-            column(name: 'reported_value', value: '850')
-            column(name: 'gross_amount', value: '4577.00')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '5c5f8c1c-1418-4cfd-8685-9212f4c421d1')
             column(name: 'df_usage_batch_uid', value: 'a5b64c3a-55d2-462e-b169-362dca6a4dd6')
             column(name: 'detail_id', value: '6997788884')
@@ -135,6 +113,14 @@ databaseChangeLog {
             column(name: 'updated_datetime', value: '2017-02-02 11:41:52.735531+03')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
+            column(name: 'df_scenario_uid', value: '3210b236-1239-4a60-9fab-888b84199321')
+            column(name: 'name', value: 'Scenario name 3')
+            column(name: 'status_ind', value: 'IN_PROGRESS')
+            column(name: 'description', value: 'The description of scenario 3')
+            column(name: 'updated_datetime', value: '2017-02-01 11:41:52.735531+03')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
             column(name: 'df_usage_archive_uid', value: '55555555')
             column(name: 'df_usage_batch_uid', value: '56282cac-2468-48d4-b346-93d3458a656a')
@@ -155,6 +141,9 @@ databaseChangeLog {
             column(name: 'number_of_copies', value: '190222')
             column(name: 'reported_value', value: '2300')
             column(name: 'gross_amount', value: '15514.18')
+            column(name: 'service_fee_amount', value: '4964.5376')
+            column(name: 'net_amount', value: '10549.6424')
+            column(name: 'service_fee', value: '0.32000')
         }
 
         rollback ""
@@ -179,12 +168,6 @@ databaseChangeLog {
             column(name: 'df_rightsholder_uid', value: '8a0dbf78-d9c9-49d9-a895-05f55cfc8329')
             column(name: 'rh_account_number', value: '1000005413')
             column(name: 'name', value: 'Kluwer Academic Publishers - Dordrecht')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
-            column(name: 'df_rightsholder_uid', value: '6eb8ddf3-f08e-4c17-a0c5-5173d43a1625')
-            column(name: 'rh_account_number', value: '1000008666')
-            column(name: 'name', value: 'CCH')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
@@ -301,9 +284,18 @@ databaseChangeLog {
             column(name: 'updated_datetime', value: '2017-10-26 14:49:52.735531+03')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
+            column(name: 'df_scenario_uid', value: '1230b236-1239-4a60-9fab-123b84199123')
+            column(name: 'name', value: 'Scenario name 4')
+            column(name: 'status_ind', value: 'IN_PROGRESS')
+            column(name: 'description', value: 'The description of scenario 4')
+            column(name: 'updated_datetime', value: '2017-02-10 11:41:52.735531+03')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '23876f21-8ab2-4fcb-adf3-777be88eddbb')
             column(name: 'df_usage_batch_uid', value: '3f46981e-e85a-4786-9b60-ab009c4358e7')
+            column(name: 'df_scenario_uid', value: '1230b236-1239-4a60-9fab-123b84199123')
             column(name: 'detail_id', value: '1917718881')
             column(name: 'wr_wrk_inst', value: '180382914')
             column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
