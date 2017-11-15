@@ -521,19 +521,17 @@
     <select id="findDuplicateDetailIds" parameterType="list" resultType="long">
         select distinct detail_id
         from ${schema}.df_usage
-        where detail_id in (
-            <foreach collection="collection" item="detailId" separator=", ">
+        where detail_id in
+            <foreach collection="collection" item="detailId" open="(" separator="," close=")">
                 #{detailId}
             </foreach>
-        )
         union
         select distinct detail_id
         from ${schema}.df_usage_archive
-        where detail_id in (
-            <foreach collection="collection" item="detailId" separator=", ">
+        where detail_id in
+            <foreach collection="collection" item="detailId" open="(" separator="," close=")">
                 #{detailId}
             </foreach>
-        )
     </select>
 
     <select id="findRightsholderTotalsHoldersByScenarioId" parameterType="map" resultMap="rightsholderTotalsHolderResultMap">
