@@ -60,10 +60,10 @@ public class UsageBatchRepositoryIntegrationTest {
     }
 
     @Test
-    public void testGetCountByName() {
-        assertEquals(1, usageBatchRepository.getCountByName("JAACC_11Dec16"));
-        assertEquals(1, usageBatchRepository.getCountByName("JaAcC_11dec16"));
-        assertEquals(0, usageBatchRepository.getCountByName(USAGE_BATCH_NAME));
+    public void testFindCountByName() {
+        assertEquals(1, usageBatchRepository.findCountByName("JAACC_11Dec16"));
+        assertEquals(1, usageBatchRepository.findCountByName("JaAcC_11dec16"));
+        assertEquals(0, usageBatchRepository.findCountByName(USAGE_BATCH_NAME));
     }
 
     @Test

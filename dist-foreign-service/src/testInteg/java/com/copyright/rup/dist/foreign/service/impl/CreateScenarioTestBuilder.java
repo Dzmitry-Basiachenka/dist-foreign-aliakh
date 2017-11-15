@@ -120,7 +120,7 @@ class CreateScenarioTestBuilder {
 
         private void assertUsage(Usage usage) {
             List<UsageDto> usages =
-                usageRepository.getByScenarioIdAndRhAccountNumber(usage.getRightsholder().getAccountNumber(),
+                usageRepository.findByScenarioIdAndRhAccountNumber(usage.getRightsholder().getAccountNumber(),
                     Objects.isNull(usage.getScenarioId()) ? scenarioId : usage.getScenarioId(), null,
                     new Pageable(0, 10), null);
             assertEquals(1, usages.size());

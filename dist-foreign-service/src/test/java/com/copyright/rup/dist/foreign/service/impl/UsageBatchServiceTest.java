@@ -95,7 +95,7 @@ public class UsageBatchServiceTest {
 
     @Test
     public void testUsageBatchExists() {
-        expect(usageBatchRepository.getCountByName(BATCH_NAME)).andReturn(1).once();
+        expect(usageBatchRepository.findCountByName(BATCH_NAME)).andReturn(1).once();
         replay(usageBatchRepository);
         assertTrue(usageBatchService.usageBatchExists(BATCH_NAME));
         verify(usageBatchRepository);
@@ -103,7 +103,7 @@ public class UsageBatchServiceTest {
 
     @Test
     public void testUsageBatchDoesNotExist() {
-        expect(usageBatchRepository.getCountByName(BATCH_NAME)).andReturn(0).once();
+        expect(usageBatchRepository.findCountByName(BATCH_NAME)).andReturn(0).once();
         replay(usageBatchRepository);
         assertFalse(usageBatchService.usageBatchExists(BATCH_NAME));
         verify(usageBatchRepository);

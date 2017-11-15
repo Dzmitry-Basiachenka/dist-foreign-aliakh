@@ -2,7 +2,6 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.impl.ExcludeRightsholdersWindow.ExcludeUsagesEvent;
 import com.copyright.rup.dist.foreign.ui.scenario.impl.ExcludeRightsholdersWindow.IExcludeUsagesListener;
@@ -12,6 +11,8 @@ import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
+import com.copyright.rup.vaadin.widget.api.IMediator;
+import com.copyright.rup.vaadin.widget.api.IMediatorProvider;
 
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.shared.ui.label.ContentMode;
@@ -31,15 +32,15 @@ import com.vaadin.ui.Window;
  *
  * @author Ihar Suvorau
  */
-public class ScenarioWidget extends Window implements IScenarioWidget {
+public class ScenarioWidget extends Window implements IScenarioWidget, IMediatorProvider {
 
-    // TODO implement ScenarioMediator to handle components state
     private ScenarioController controller;
     private SearchWidget searchWidget;
     private RightsholderTotalsHolderTable table;
     private VerticalLayout emptyUsagesLayout;
     private Button exportButton;
     private Button excludeButton;
+    private ScenarioMediator mediator;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -52,7 +53,6 @@ public class ScenarioWidget extends Window implements IScenarioWidget {
         setDraggable(false);
         setResizable(false);
         setContent(initContent());
-        refresh();
         return this;
     }
 
@@ -83,18 +83,30 @@ public class ScenarioWidget extends Window implements IScenarioWidget {
 
     @Override
     public void refresh() {
-        boolean emptyScenario = controller.isScenarioEmpty();
-        table.setVisible(!emptyScenario);
-        searchWidget.setVisible(!emptyScenario);
-        emptyUsagesLayout.setVisible(emptyScenario);
-        exportButton.setEnabled(!emptyScenario);
-        excludeButton.setEnabled(!emptyScenario && ForeignSecurityUtils.hasExcludeFromScenarioPermission());
+        mediator.onScenarioUpdated(controller.isScenarioEmpty());
     }
 
     @Override
     public void refreshTable() {
         table.getContainerDataSource().refresh();
         updateFooter();
+    }
+
+    @Override
+    public IMediator initMediator() {
+        mediator = new ScenarioMediator();
+        mediator.setExcludeButton(excludeButton);
+        mediator.setExportButton(exportButton);
+        mediator.setEmptyUsagesLayout(emptyUsagesLayout);
+        mediator.setRightsholdersTable(table);
+        mediator.setSearchWidget(searchWidget);
+        return mediator;
+    }
+
+    @Override
+    public void attach() {
+        super.attach();
+        refresh();
     }
 
     private VerticalLayout initContent() {
@@ -132,7 +144,6 @@ public class ScenarioWidget extends Window implements IScenarioWidget {
         fileDownloader.extend(exportButton);
         excludeButton = new Button(ForeignUi.getMessage("button.exclude.details"));
         excludeButton.addClickListener(event -> controller.onExcludeDetailsClicked());
-        excludeButton.setEnabled(ForeignSecurityUtils.hasExcludeFromScenarioPermission());
         HorizontalLayout buttons = new HorizontalLayout(excludeButton, exportButton, Buttons.createCloseButton(this));
         VaadinUtils.addComponentStyle(buttons, "scenario-buttons-layout");
         buttons.setSpacing(true);

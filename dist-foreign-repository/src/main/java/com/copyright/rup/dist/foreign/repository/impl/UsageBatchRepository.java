@@ -47,9 +47,9 @@ public class UsageBatchRepository extends BaseRepository implements IUsageBatchR
     }
 
     @Override
-    public int getCountByName(String name) {
+    public int findCountByName(String name) {
         checkArgument(StringUtils.isNotBlank(name));
-        return selectOne("IUsageBatchMapper.getCountByName", name);
+        return selectOne("IUsageBatchMapper.findCountByName", name);
     }
 
     @Override

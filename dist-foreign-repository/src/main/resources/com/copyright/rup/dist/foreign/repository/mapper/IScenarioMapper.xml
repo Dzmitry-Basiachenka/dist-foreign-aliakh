@@ -42,7 +42,7 @@
         )
     </insert>
 
-    <select id="getCountByName" parameterType="string" resultType="int">
+    <select id="findCountByName" parameterType="string" resultType="int">
         select count(name)
         from ${schema}.df_scenario
         where upper(name) = upper(#{name})
@@ -81,7 +81,7 @@
         order by r.name asc
     </select>
 
-    <select id="getWithAmounts" parameterType="string" resultMap="scenarioResultMap">
+    <select id="findWithAmounts" parameterType="string" resultMap="scenarioResultMap">
         select
             s.df_scenario_uid,
             s.name,
@@ -97,7 +97,7 @@
         group by s.df_scenario_uid, s.name
     </select>
 
-    <select id="findRightsholdersByScenarioAndSourceRro" parameterType="map" resultMap="rightsholderPayeePairResultMap">
+    <select id="findRightsholdersByScenarioIdAndSourceRro" parameterType="map" resultMap="rightsholderPayeePairResultMap">
         select distinct
             u.rh_account_number,
             r.name rh_name,

@@ -72,7 +72,7 @@ public class UsageService implements IUsageService {
 
     @Override
     public int getUsagesCount(UsageFilter filter) {
-        return !filter.isEmpty() ? usageRepository.getCountByFilter(filter) : 0;
+        return !filter.isEmpty() ? usageRepository.findCountByFilter(filter) : 0;
     }
 
     @Override
@@ -135,7 +135,7 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    @Profiled(tag = "service.UsageService.addToScenario_{$1.name}")
+    @Profiled(tag = "service.UsageService.addToScenario")
     public void addUsagesToScenario(List<Usage> usages, Scenario scenario) {
         Table<String, String, Long> rollUps = prmIntegrationService.getRollUps(
             usages.stream().map(usage -> usage.getRightsholder().getId()).collect(Collectors.toSet()));
@@ -160,7 +160,7 @@ public class UsageService implements IUsageService {
     @Profiled(tag = "service.UsageService.deleteFromScenario")
     public void deleteFromScenario(Scenario scenario, Long rroAccountNumber, List<Long> accountNumbers, String reason) {
         List<String> usagesIds =
-            usageRepository.getIdsByScenarioIdRroAccountNumberRhAccountNumbers(scenario.getId(), rroAccountNumber,
+            usageRepository.findIdsByScenarioIdRroAccountNumberRhAccountNumbers(scenario.getId(), rroAccountNumber,
                 accountNumbers);
         usagesIds.forEach(usageId -> usageAuditService.logAction(usageId, scenario,
             UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO, reason));
@@ -170,7 +170,7 @@ public class UsageService implements IUsageService {
     @Override
     public Set<Long> getDuplicateDetailIds(List<Long> detailIds) {
         return CollectionUtils.isNotEmpty(detailIds)
-            ? usageRepository.getDuplicateDetailIds(detailIds)
+            ? usageRepository.findDuplicateDetailIds(detailIds)
             : Collections.emptySet();
     }
 
@@ -178,23 +178,23 @@ public class UsageService implements IUsageService {
     public List<RightsholderTotalsHolder> getRightsholderTotalsHoldersByScenarioId(String scenarioId,
                                                                                    String searchValue,
                                                                                    Pageable pageable, Sort sort) {
-        return usageRepository.getRightsholderTotalsHoldersByScenarioId(scenarioId, searchValue, pageable, sort);
+        return usageRepository.findRightsholderTotalsHoldersByScenarioId(scenarioId, searchValue, pageable, sort);
     }
 
     @Override
     public int getRightsholderTotalsHolderCountByScenarioId(String scenarioId, String searchValue) {
-        return usageRepository.getRightsholderTotalsHolderCountByScenarioId(scenarioId, searchValue);
+        return usageRepository.findRightsholderTotalsHolderCountByScenarioId(scenarioId, searchValue);
     }
 
     @Override
     public int getCountByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue) {
-        return usageRepository.getCountByScenarioIdAndRhAccountNumber(accountNumber, scenarioId, searchValue);
+        return usageRepository.findCountByScenarioIdAndRhAccountNumber(accountNumber, scenarioId, searchValue);
     }
 
     @Override
     public List<UsageDto> getByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId,
                                                             String searchValue, Pageable pageable, Sort sort) {
-        return usageRepository.getByScenarioIdAndRhAccountNumber(accountNumber, scenarioId, searchValue, pageable,
+        return usageRepository.findByScenarioIdAndRhAccountNumber(accountNumber, scenarioId, searchValue, pageable,
             sort);
     }
 

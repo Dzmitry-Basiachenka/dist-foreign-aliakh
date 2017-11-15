@@ -32,7 +32,7 @@ public interface IScenarioRepository {
      * @param name {@link Scenario} name
      * @return count of found {@link Scenario}s
      */
-    int getCountByName(String name);
+    int findCountByName(String name);
 
     /**
      * @return list of all {@link Scenario}s.
@@ -68,7 +68,7 @@ public interface IScenarioRepository {
      * @param scenarioId {@link Scenario} id
      * @return {@link Scenario} with amounts
      */
-    Scenario getWithAmounts(String scenarioId);
+    Scenario findWithAmounts(String scenarioId);
 
     /**
      * Finds all {@link RightsholderPayeePair}s belonging to the source RRO with given account number within the
@@ -78,5 +78,5 @@ public interface IScenarioRepository {
      * @param rroAccountNumber RRO account number
      * @return list of {@link RightsholderPayeePair}s
      */
-    List<RightsholderPayeePair> findRightsholdersByScenarioAndSourceRro(String scenarioId, Long rroAccountNumber);
+    List<RightsholderPayeePair> findRightsholdersByScenarioIdAndSourceRro(String scenarioId, Long rroAccountNumber);
 }

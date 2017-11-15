@@ -63,10 +63,10 @@ public class ScenarioRepositoryIntegrationTest {
     private IUsageBatchRepository batchRepository;
 
     @Test
-    public void testGetCountByName() {
-        assertEquals(0, scenarioRepository.getCountByName(SCENARIO_NAME));
+    public void testFindCountByName() {
+        assertEquals(0, scenarioRepository.findCountByName(SCENARIO_NAME));
         scenarioRepository.insert(buildScenario(SCENARIO_ID, SCENARIO_NAME));
-        assertEquals(1, scenarioRepository.getCountByName(SCENARIO_NAME));
+        assertEquals(1, scenarioRepository.findCountByName(SCENARIO_NAME));
     }
 
     @Test
@@ -88,8 +88,8 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
-    public void testGetWithAmount() {
-        Scenario scenario = scenarioRepository.getWithAmounts("b1f0b236-3ae9-4a60-9fab-61db84199d6f");
+    public void testFindWithAmounts() {
+        Scenario scenario = scenarioRepository.findWithAmounts("b1f0b236-3ae9-4a60-9fab-61db84199d6f");
         assertEquals(new BigDecimal("12661.5400000000"), scenario.getGrossTotal());
         assertEquals(new BigDecimal("10636.0000000000"), scenario.getNetTotal());
         assertEquals(new BigDecimal("2025.0000000000"), scenario.getServiceFeeTotal());
@@ -112,9 +112,9 @@ public class ScenarioRepositoryIntegrationTest {
     @Test
     public void testRemove() {
         scenarioRepository.insert(buildScenario(SCENARIO_ID, SCENARIO_NAME));
-        assertEquals(1, scenarioRepository.getCountByName(SCENARIO_NAME));
+        assertEquals(1, scenarioRepository.findCountByName(SCENARIO_NAME));
         scenarioRepository.remove(SCENARIO_ID);
-        assertEquals(0, scenarioRepository.getCountByName(SCENARIO_NAME));
+        assertEquals(0, scenarioRepository.findCountByName(SCENARIO_NAME));
     }
 
     @Test
@@ -139,7 +139,7 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindRightsholdersByScenarioAndSourceRro() {
+    public void testFindRightsholdersByScenarioIdAndSourceRro() {
         scenarioRepository.insert(buildScenario(SCENARIO_ID, SCENARIO_NAME));
         // build one usage with different pair of rh and payee
         Usage usage1 = buildUsage(54236984L);
@@ -155,7 +155,7 @@ public class ScenarioRepositoryIntegrationTest {
         usageRepository.insert(usage3);
         usageRepository.addToScenario(Lists.newArrayList(usage1, usage2, usage3));
         List<RightsholderPayeePair> result =
-            scenarioRepository.findRightsholdersByScenarioAndSourceRro(SCENARIO_ID, 2000017010L);
+            scenarioRepository.findRightsholdersByScenarioIdAndSourceRro(SCENARIO_ID, 2000017010L);
         assertEquals(2, result.size());
         result.sort(Comparator.comparing(RightsholderPayeePair::getRightsholder)
             .thenComparing(RightsholderPayeePair::getPayee));

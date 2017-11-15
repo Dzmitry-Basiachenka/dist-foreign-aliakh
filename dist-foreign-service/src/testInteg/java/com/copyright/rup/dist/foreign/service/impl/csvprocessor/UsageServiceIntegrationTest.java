@@ -31,9 +31,11 @@ import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.IntStream;
 
 /**
  * Verifies {@link CsvErrorResultWriter}.
@@ -97,10 +99,10 @@ public class UsageServiceIntegrationTest {
 
     private void verifyExcludedUsages(String scenarioId, boolean excluded,  Long... accountNumbers) {
         Pageable pageable = new Pageable(0, 10);
-        for (Long accountNumber: accountNumbers) {
-            assertEquals(excluded, usageService.getByScenarioIdAndRhAccountNumber(accountNumber, scenarioId,
-                StringUtils.EMPTY, pageable, null).isEmpty());
-        }
+        Arrays.stream(accountNumbers)
+            .forEach(accountNumber -> assertEquals(excluded,
+                usageService.getByScenarioIdAndRhAccountNumber(accountNumber, scenarioId,
+                    StringUtils.EMPTY, pageable, null).isEmpty()));
     }
 
     private void verifyAuditItems(List<UsageAuditItem> auditItems) {
@@ -131,9 +133,7 @@ public class UsageServiceIntegrationTest {
             Lists.newArrayList("234", "1984", "Appendix: The Principles of Newspeak", "9.78015E+12", "123456789",
                 "1000009522", "Publisher", "12/22/3000", "65", "30.86", "Univ,Bus,Doc,S", "2015", "2016",
                 "Aarseth, Espen J.");
-        for (int i = 0; i < indexesForReplace.size(); i++) {
-            columns.set(indexesForReplace.get(i), values.get(i));
-        }
+        IntStream.range(0, indexesForReplace.size()).forEach(i -> columns.set(indexesForReplace.get(i), values.get(i)));
         return columns;
     }
 

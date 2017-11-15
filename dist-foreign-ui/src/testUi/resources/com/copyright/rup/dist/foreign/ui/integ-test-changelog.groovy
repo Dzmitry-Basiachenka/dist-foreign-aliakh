@@ -297,6 +297,9 @@ databaseChangeLog {
             column(name: 'number_of_copies', value: '200')
             column(name: 'reported_value', value: '100.00')
             column(name: 'gross_amount', value: '100.00')
+            column(name: 'net_amount', value: '84.00')
+            column(name: 'service_fee', value: '0.1600')
+            column(name: 'service_fee_amount', value: '16.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {

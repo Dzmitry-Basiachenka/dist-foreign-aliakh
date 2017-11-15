@@ -89,7 +89,7 @@ public class ScenarioServiceTest {
 
     @Test
     public void testScenarioExists() {
-        expect(scenarioRepository.getCountByName(SCENARIO_NAME)).andReturn(1).once();
+        expect(scenarioRepository.findCountByName(SCENARIO_NAME)).andReturn(1).once();
         replay(scenarioRepository);
         assertTrue(scenarioService.scenarioExists(SCENARIO_NAME));
         verify(scenarioRepository);
@@ -97,7 +97,7 @@ public class ScenarioServiceTest {
 
     @Test
     public void testScenarioNotExists() {
-        expect(scenarioRepository.getCountByName(SCENARIO_NAME)).andReturn(0).once();
+        expect(scenarioRepository.findCountByName(SCENARIO_NAME)).andReturn(0).once();
         replay(scenarioRepository);
         assertFalse(scenarioService.scenarioExists(SCENARIO_NAME));
         verify(scenarioRepository);
@@ -157,7 +157,7 @@ public class ScenarioServiceTest {
 
     @Test
     public void testGetScenarioWithAmounts() {
-        expect(scenarioRepository.getWithAmounts(SCENARIO_ID)).andReturn(new Scenario()).once();
+        expect(scenarioRepository.findWithAmounts(SCENARIO_ID)).andReturn(new Scenario()).once();
         replay(scenarioRepository);
         assertEquals(new Scenario(), scenarioService.getScenarioWithAmounts(SCENARIO_ID));
         verify(scenarioRepository);
@@ -173,7 +173,7 @@ public class ScenarioServiceTest {
 
     @Test
     public void testGetRightsholdersByScenarioAndSourceRro() {
-        expect(scenarioRepository.findRightsholdersByScenarioAndSourceRro(SCENARIO_ID, 2000017010L))
+        expect(scenarioRepository.findRightsholdersByScenarioIdAndSourceRro(SCENARIO_ID, 2000017010L))
             .andReturn(Collections.emptyList()).once();
         replay(scenarioRepository);
         assertEquals(Collections.emptyList(),

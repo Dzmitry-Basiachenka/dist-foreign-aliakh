@@ -20,6 +20,7 @@ import com.google.common.collect.Sets;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.perf4j.aop.Profiled;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
@@ -73,8 +74,8 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public int getCountByFilter(UsageFilter filter) {
-        return selectOne("IUsageMapper.getCountByFilter", ImmutableMap.of(FILTER_KEY, Objects.requireNonNull(filter)));
+    public int findCountByFilter(UsageFilter filter) {
+        return selectOne("IUsageMapper.findCountByFilter", ImmutableMap.of(FILTER_KEY, Objects.requireNonNull(filter)));
     }
 
     @Override
@@ -120,6 +121,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
+    @Profiled(tag = "repository.UsageRepository.deleteFromScenario")
     public void deleteFromScenario(String scenarioId, String updateUser) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
@@ -129,6 +131,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
+    @Profiled(tag = "repository.UsageRepository.deleteFromScenario(usagesIds, userName)")
     public void deleteFromScenario(List<String> usagesIds, String userName) {
         checkArgument(CollectionUtils.isNotEmpty(usagesIds));
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
@@ -141,66 +144,65 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public Set<Long> getDuplicateDetailIds(List<Long> detailIds) {
+    public Set<Long> findDuplicateDetailIds(List<Long> detailIds) {
         checkArgument(CollectionUtils.isNotEmpty(detailIds));
         Set<Long> result = Sets.newHashSetWithExpectedSize(detailIds.size());
-        for (List<Long> detailIdsPartition : Iterables.partition(detailIds, DUPLICATE_DETAILS_IDS_BATCH_SIZE)) {
-            result.addAll(selectList("IUsageMapper.getDuplicateDetailIds", detailIdsPartition));
-        }
+        Iterables.partition(detailIds, DUPLICATE_DETAILS_IDS_BATCH_SIZE).forEach(
+            detailIdsPartition -> result.addAll(selectList("IUsageMapper.findDuplicateDetailIds", detailIdsPartition)));
         return result;
     }
 
     @Override
-    public List<RightsholderTotalsHolder> getRightsholderTotalsHoldersByScenarioId(String scenarioId,
-                                                                                   String searchValue,
-                                                                                   Pageable pageable, Sort sort) {
+    public List<RightsholderTotalsHolder> findRightsholderTotalsHoldersByScenarioId(String scenarioId,
+                                                                                    String searchValue,
+                                                                                    Pageable pageable, Sort sort) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put(SEARCH_VALUE_KEY, searchValue);
         parameters.put(PAGEABLE_KEY, Objects.requireNonNull(pageable));
         parameters.put(SORT_KEY, sort);
-        return selectList("IUsageMapper.getRightsholderTotalsHoldersByScenarioId", parameters);
+        return selectList("IUsageMapper.findRightsholderTotalsHoldersByScenarioId", parameters);
     }
 
     @Override
-    public int getRightsholderTotalsHolderCountByScenarioId(String scenarioId, String searchValue) {
+    public int findRightsholderTotalsHolderCountByScenarioId(String scenarioId, String searchValue) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put(SEARCH_VALUE_KEY, searchValue);
-        return selectOne("IUsageMapper.getRightsholderTotalsHolderCountByScenarioId", parameters);
+        return selectOne("IUsageMapper.findRightsholderTotalsHolderCountByScenarioId", parameters);
     }
 
     @Override
-    public int getCountByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue) {
+    public int findCountByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
         parameters.put("accountNumber", Objects.requireNonNull(accountNumber));
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put(SEARCH_VALUE_KEY, searchValue);
-        return selectOne("IUsageMapper.getCountByScenarioIdAndRhAccountNumber", parameters);
+        return selectOne("IUsageMapper.findCountByScenarioIdAndRhAccountNumber", parameters);
     }
 
     @Override
-    public List<UsageDto> getByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId,
-                                                            String searchValue, Pageable pageable, Sort sort) {
+    public List<UsageDto> findByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId,
+                                                             String searchValue, Pageable pageable, Sort sort) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(5);
         parameters.put("accountNumber", Objects.requireNonNull(accountNumber));
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put(SEARCH_VALUE_KEY, searchValue);
         parameters.put(PAGEABLE_KEY, Objects.requireNonNull(pageable));
         parameters.put(SORT_KEY, sort);
-        return selectList("IUsageMapper.getByScenarioIdAndRhAccountNumber", parameters);
+        return selectList("IUsageMapper.findByScenarioIdAndRhAccountNumber", parameters);
     }
 
     @Override
-    public List<String> getIdsByScenarioIdRroAccountNumberRhAccountNumbers(String scenarioId, Long rroAccountNumber,
-                                                                           List<Long> accountNumbers) {
+    public List<String> findIdsByScenarioIdRroAccountNumberRhAccountNumbers(String scenarioId, Long rroAccountNumber,
+                                                                            List<Long> accountNumbers) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put("rroAccountNumber", Objects.requireNonNull(rroAccountNumber));
         List<String> result = new ArrayList<>(accountNumbers.size());
         Iterables.partition(accountNumbers, 32000).forEach(partition -> {
             parameters.put("accountNumbers", Objects.requireNonNull(partition));
-            result.addAll(selectList("IUsageMapper.getIdsByScenarioIdRroAccountNumberRhAccountNumbers", parameters));
+            result.addAll(selectList("IUsageMapper.findIdsByScenarioIdRroAccountNumberRhAccountNumbers", parameters));
         });
         return result;
     }
