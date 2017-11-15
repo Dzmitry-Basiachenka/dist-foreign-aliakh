@@ -71,16 +71,20 @@ public class ScenarioRepositoryIntegrationTest {
 
     @Test
     public void testFindAll() {
-        assertEquals(2, scenarioRepository.findAll().size());
+        assertEquals(4, scenarioRepository.findAll().size());
         String scenarioId = RupPersistUtils.generateUuid();
         scenarioRepository.insert(buildScenario(scenarioId, SCENARIO_NAME));
         List<Scenario> scenarios = scenarioRepository.findAll();
-        assertEquals(3, scenarios.size());
+        assertEquals(5, scenarios.size());
         verifyScenario(scenarios.get(0), scenarioId, SCENARIO_NAME, DESCRIPTION);
         verifyScenario(scenarios.get(1), "e27551ed-3f69-4e08-9e4f-8ac03f67595f", "Scenario name 2",
             "The description of scenario 2");
         verifyScenario(scenarios.get(2), "b1f0b236-3ae9-4a60-9fab-61db84199d6f", "Scenario name",
             "The description of scenario");
+        verifyScenario(scenarios.get(3), "1230b236-1239-4a60-9fab-123b84199123", "Scenario name 4",
+            "The description of scenario 4");
+        verifyScenario(scenarios.get(4), "3210b236-1239-4a60-9fab-888b84199321", "Scenario name 3",
+            "The description of scenario 3");
     }
 
     @Test
