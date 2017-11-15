@@ -46,4 +46,15 @@ public class UsageRepositoryTest {
         usageRepository.findDuplicateDetailIds(detailIds);
         verify(sqlSessionTemplate);
     }
+
+    @Test
+    public void testFindIdsByScenarioIdRroAccountNumberRhAccountNumbers() {
+        List<Long> accountNumbers = LongStream.range(1000000000, 1000032001).boxed().collect(Collectors.toList());
+        expect(sqlSessionTemplate.selectList(eq("IUsageMapper.findIdsByScenarioIdRroAccountNumberRhAccountNumbers"),
+            notNull(List.class))).andReturn(Lists.newArrayList()).times(2);
+        replay(sqlSessionTemplate);
+        usageRepository.findIdsByScenarioIdRroAccountNumberRhAccountNumbers("b1f0b236-3ae9-4a60-9fab-61db84199d6f",
+            1000000000L, accountNumbers);
+        verify(sqlSessionTemplate);
+    }
 }
