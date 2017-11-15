@@ -13,7 +13,6 @@ import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageAuditRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
-import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 
@@ -224,7 +223,7 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
     private void verifyUsageAudit(UsageBatch batch) {
         UsageFilter usageFilter = new UsageFilter();
         usageFilter.setUsageBatchesIds(Collections.singleton(batch.getId()));
-        List<String> usageIds = usageRepository.findByFilter(usageFilter, new Pageable(0, 200), null).stream()
+        List<String> usageIds = usageRepository.findByFilter(usageFilter, null, null).stream()
             .map(UsageDto::getId)
             .collect(Collectors.toList());
         usageIds.forEach(usageId -> {
@@ -268,8 +267,8 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
     private void verifyUploadedUsages(String usageBatchId) {
         UsageFilter usageFilter = new UsageFilter();
         usageFilter.setUsageBatchesIds(Collections.singleton(usageBatchId));
-        List<UsageDto> usages = usageRepository.findByFilter(usageFilter, new Pageable(0, 200),
-            new Sort(DETAIL_ID_KEY, Sort.Direction.ASC));
+        List<UsageDto> usages =
+            usageRepository.findByFilter(usageFilter, null, new Sort(DETAIL_ID_KEY, Sort.Direction.ASC));
         assertNotNull(usages);
         assertEquals(2, CollectionUtils.size(usages));
         verifyUsageWithDetailId234(usages.stream()

@@ -68,7 +68,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     public List<UsageDto> findByFilter(UsageFilter filter, Pageable pageable, Sort sort) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
         parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
-        parameters.put(PAGEABLE_KEY, Objects.requireNonNull(pageable));
+        parameters.put(PAGEABLE_KEY, pageable);
         parameters.put(SORT_KEY, sort);
         return selectList("IUsageMapper.findByFilter", parameters);
     }
@@ -159,7 +159,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put(SEARCH_VALUE_KEY, searchValue);
-        parameters.put(PAGEABLE_KEY, Objects.requireNonNull(pageable));
+        parameters.put(PAGEABLE_KEY, pageable);
         parameters.put(SORT_KEY, sort);
         return selectList("IUsageMapper.findRightsholderTotalsHoldersByScenarioId", parameters);
     }
@@ -188,7 +188,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         parameters.put("accountNumber", Objects.requireNonNull(accountNumber));
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put(SEARCH_VALUE_KEY, searchValue);
-        parameters.put(PAGEABLE_KEY, Objects.requireNonNull(pageable));
+        parameters.put(PAGEABLE_KEY, pageable);
         parameters.put(SORT_KEY, sort);
         return selectList("IUsageMapper.findByScenarioIdAndRhAccountNumber", parameters);
     }

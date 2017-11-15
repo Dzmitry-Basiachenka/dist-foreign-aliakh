@@ -13,7 +13,6 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageAuditRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
-import com.copyright.rup.dist.foreign.repository.api.Pageable;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -191,7 +190,7 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
     private List<String> getUsageIds(String... batchIds) {
         UsageFilter usageFilter = new UsageFilter();
         usageFilter.setUsageBatchesIds(Arrays.stream(batchIds).collect(Collectors.toSet()));
-        return usageRepository.findByFilter(usageFilter, new Pageable(0, 200), null).stream()
+        return usageRepository.findByFilter(usageFilter, null, null).stream()
             .map(UsageDto::getId)
             .collect(Collectors.toList());
     }
