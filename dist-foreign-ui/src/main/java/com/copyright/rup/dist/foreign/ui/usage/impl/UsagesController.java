@@ -5,7 +5,6 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
-import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
@@ -92,16 +91,6 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
-    public int getNewUsagesCount() {
-        UsageFilter filter = new UsageFilter(filterController.getWidget().getAppliedFilter());
-        if (filter.getUsageStatuses().equals(Collections.singleton(UsageStatusEnum.ELIGIBLE))) {
-            return 0;
-        }
-        filter.setUsageStatuses(Collections.singleton(UsageStatusEnum.NEW));
-        return usageService.getUsagesCount(filter);
-    }
-
-    @Override
     public List<UsageDto> loadBeans(int startIndex, int count, Object[] sortPropertyIds, boolean... sortStates) {
         return usageService.getUsages(filterController.getWidget().getAppliedFilter(), new Pageable(startIndex, count),
             Sort.create(sortPropertyIds, sortStates));
@@ -172,6 +161,14 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     @Override
     public UsageCsvProcessor getCsvProcessor() {
         return usageCsvProcessorFactory.getProcessor();
+    }
+
+    @Override
+    public boolean isFilterStatusEligible() {
+        return filterController.getWidget()
+            .getAppliedFilter()
+            .getUsageStatuses()
+            .equals(Collections.singleton(UsageStatusEnum.ELIGIBLE));
     }
 
     @Override

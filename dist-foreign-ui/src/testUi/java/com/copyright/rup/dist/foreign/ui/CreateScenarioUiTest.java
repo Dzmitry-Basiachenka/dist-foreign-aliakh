@@ -6,6 +6,7 @@ import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 
@@ -80,10 +81,11 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
         WebElement usagesTab = selectUsagesTab();
         applyFilters(assertWebElement(By.id(USAGES_FILTER_ID)), invalidUsageBatch);
         assertTableRowElements(assertWebElement(By.id(USAGES_TABLE_ID)), 0);
-        verifyNotificationWindow(usagesTab);
+        verifyNotificationWindow(usagesTab, "Scenario cannot be created. Please select ELIGIBLE usages");
+        applyStatusFilter(assertWebElement(By.id(USAGES_FILTER_ID)), UsageStatusEnum.NEW.name());
         applyFilters(assertWebElement(By.id(USAGES_FILTER_ID)), usageBatchWithNewUsages);
-        assertTableRowElements(assertWebElement(By.id(USAGES_TABLE_ID)), 2);
-        verifyNotificationWindow(usagesTab);
+        assertTableRowElements(assertWebElement(By.id(USAGES_TABLE_ID)), 1);
+        verifyNotificationWindow(usagesTab, "Please apply ELIGIBLE status filter to create scenario");
     }
 
     @Test
@@ -184,11 +186,18 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
         assertWebElement(createScenarioWindow, CONFIRM_BUTTON_ID);
     }
 
-    private void verifyNotificationWindow(WebElement usagesTab) {
+    private void verifyNotificationWindow(WebElement usagesTab, String errorMessage) {
         clickButtonAndWait(usagesTab, "Add_To_Scenario");
         WebElement notificationWindow = assertWebElement(By.id("notification-window"));
-        assertWebElement(notificationWindow, HTML_DIV_TAG_NAME,
-            "Scenario cannot be created. Please select only ELIGIBLE usages");
+        assertWebElement(notificationWindow, HTML_DIV_TAG_NAME, errorMessage);
         clickButtonAndWait(notificationWindow, "Ok");
+    }
+
+    private void applyStatusFilter(WebElement filterWidget, String selectItem) {
+        WebElement statusFilter = assertWebElement(filterWidget, By.id("status-filter"));
+        WebElement statusFilterSelectButton =
+            assertWebElement(statusFilter, By.className("v-filterselect-button"));
+        clickElementAndWait(statusFilterSelectButton);
+        clickElementAndWait(assertWebElement(statusFilter, HTML_SPAN_TAG_NAME, selectItem));
     }
 }

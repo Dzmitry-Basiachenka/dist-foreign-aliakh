@@ -137,7 +137,7 @@ public class UsagesWidgetTest {
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
             .getComponent(0)).getComponent(1);
         assertTrue(addToScenarioButton.isDisableOnClick());
-        Windows.showNotificationWindow("Scenario cannot be created. Please select only ELIGIBLE usages");
+        Windows.showNotificationWindow("Scenario cannot be created. Please select ELIGIBLE usages");
         expectLastCall().once();
         expect(controller.getSize()).andReturn(0).once();
         replay(controller, clickEvent, Windows.class);
@@ -150,7 +150,7 @@ public class UsagesWidgetTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testAddToScenarioButtonOnlyNewUsagesClickListener() {
+    public void testAddToScenarioButtonInvalidFilterSelectedClickListener() {
         mockStatic(Windows.class);
         LazyTable<UsageBeanQuery, UsageDto> usagesTable =
             new LazyTable<>(new UsageDtoBeanLoader(), UsageBeanQuery.class, 1);
@@ -159,8 +159,8 @@ public class UsagesWidgetTest {
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
             .getComponent(0)).getComponent(1);
         assertTrue(addToScenarioButton.isDisableOnClick());
-        expect(controller.getNewUsagesCount()).andReturn(1).once();
-        Windows.showNotificationWindow("Scenario cannot be created. Please select only ELIGIBLE usages");
+        expect(controller.isFilterStatusEligible()).andReturn(false).once();
+        Windows.showNotificationWindow("Please apply ELIGIBLE status filter to create scenario");
         expectLastCall().once();
         replay(controller, clickEvent, Windows.class);
         Collection<?> listeners = addToScenarioButton.getListeners(ClickEvent.class);
@@ -172,7 +172,7 @@ public class UsagesWidgetTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testAddToScenarioButtonTableClickListener() {
+    public void testAddToScenarioButtonClickListener() {
         mockStatic(Windows.class);
         LazyTable<UsageBeanQuery, UsageDto> usagesTable =
             new LazyTable<>(new UsageDtoBeanLoader(), UsageBeanQuery.class, 1);
@@ -181,7 +181,7 @@ public class UsagesWidgetTest {
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
             .getComponent(0)).getComponent(1);
         assertTrue(addToScenarioButton.isDisableOnClick());
-        expect(controller.getNewUsagesCount()).andReturn(0).once();
+        expect(controller.isFilterStatusEligible()).andReturn(true).once();
         expect(controller.getScenarioService()).andReturn(null).once();
         Windows.showModalWindow(anyObject(CreateScenarioWindow.class));
         expectLastCall().once();
@@ -200,7 +200,7 @@ public class UsagesWidgetTest {
         Button deleteButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
             .getComponent(0)).getComponent(3);
         assertTrue(deleteButton.isDisableOnClick());
-        expect(controller.getUsageBatches()).andReturn(Collections.EMPTY_LIST).once();
+        expect(controller.getUsageBatches()).andReturn(Collections.emptyList()).once();
         Windows.showModalWindow(anyObject(DeleteUsageBatchWindow.class));
         expectLastCall().once();
         replay(clickEvent, Windows.class, controller);
