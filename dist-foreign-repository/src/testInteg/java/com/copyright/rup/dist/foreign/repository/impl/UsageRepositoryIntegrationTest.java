@@ -38,7 +38,6 @@ import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.Collections;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
@@ -116,7 +115,7 @@ public class UsageRepositoryIntegrationTest {
     private static final BigDecimal NET_AMOUNT = new BigDecimal("25.1500000000");
     private static final BigDecimal SERVICE_FEE = new BigDecimal("0.32000");
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
-    private static final Set<UsageStatusEnum> ELIGIBLE_STATUS = EnumSet.of(UsageStatusEnum.ELIGIBLE);
+    private static final Set<UsageStatusEnum> ELIGIBLE_STATUS = Sets.newHashSet(UsageStatusEnum.ELIGIBLE);
 
     @Autowired
     private UsageRepository usageRepository;
@@ -443,7 +442,7 @@ public class UsageRepositoryIntegrationTest {
         PipedInputStream inputStream = new PipedInputStream(outputStream);
         UsageFilter usageFilter = new UsageFilter();
         usageFilter.setUsageBatchesIds(Collections.singleton(USAGE_BATCH_ID_1));
-        usageFilter.setUsageStatuses(EnumSet.of(UsageStatusEnum.NEW, UsageStatusEnum.ELIGIBLE));
+        usageFilter.setUsageStatuses(Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.ELIGIBLE));
         EXECUTOR_SERVICE.execute(() -> usageRepository.writeUsagesCsvReport(usageFilter, outputStream));
         BufferedReader bufferedReader =
             new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
