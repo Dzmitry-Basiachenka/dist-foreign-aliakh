@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -54,16 +55,20 @@ public class RightsholderService implements IRightsholderService {
     public void updateRightsholders() {
         Set<Long> accountNumbers = rightsholderRepository.findAccountNumbers();
         LOGGER.info("Update Rightsholder information. Started. RHsCount={}", accountNumbers.size());
-        List<Rightsholder> rightsholders = prmIntegrationService.getRightsholders(accountNumbers);
-        if (CollectionUtils.isNotEmpty(rightsholders)) {
-            rightsholderRepository.deleteAll();
-            rightsholders.forEach(rightsholder -> rightsholderRepository.insert(rightsholder));
-            LOGGER.info("Update rightsholders information. Finished. RHsCount={}, UpdatedCount={}",
-                accountNumbers.size(), rightsholders.size());
-        } else {
-            LOGGER.warn("Update rightsholders information. Skipped. RHsCount={}, Reason=No RHs found",
-                accountNumbers.size());
+        List<Rightsholder> rightsholders = Collections.emptyList();
+        if (CollectionUtils.isNotEmpty(accountNumbers)) {
+            rightsholders = prmIntegrationService.getRightsholders(accountNumbers);
+            if (CollectionUtils.isNotEmpty(rightsholders)) {
+                rightsholderRepository.deleteAll();
+                rightsholders.forEach(rightsholder -> rightsholderRepository.insert(rightsholder));
+            } else {
+                LOGGER.warn("Update rightsholders information. Skipped. RHsCount={}, Reason=No RHs found",
+                    accountNumbers.size());
+                return;
+            }
         }
+        LOGGER.info("Update rightsholders information. Finished. RHsCount={}, UpdatedCount={}",
+            accountNumbers.size(), rightsholders.size());
     }
 
     @Override
