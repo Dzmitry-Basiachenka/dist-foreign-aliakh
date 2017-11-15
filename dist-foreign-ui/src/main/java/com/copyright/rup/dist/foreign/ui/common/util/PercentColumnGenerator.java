@@ -19,7 +19,6 @@ import java.util.Objects;
  *
  * @author Aliaksandra Bayanouskaya
  */
-//TODO {abayanouskaya} add unit test for column generator
 public class PercentColumnGenerator implements Table.ColumnGenerator {
 
     private static final BigDecimal PERCENT_100 = new BigDecimal("100");
