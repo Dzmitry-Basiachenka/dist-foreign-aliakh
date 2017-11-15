@@ -38,7 +38,6 @@
     </insert>
 
     <delete id="deleteByBatchId" parameterType="string">
-        <!-- TODO: {ushalamitski} Adjust query by using 'USING' instead of inner select after replacement H2 with PostgreSQL -->
         delete from ${schema}.df_usage_audit
         where df_usage_uid in (
             select df_usage_uid

@@ -217,4 +217,17 @@ databaseChangeLog {
             }
         }
     }
+
+    changeSet(id: '2017-11-15-00', author: 'Aliaksandr Radkevich <aradkevich@copyright.com>') {
+        comment('B-38293 Tech Debt, Refactoring, and Demo Feedback: add index by df_usage_uid to df_usage_audit')
+
+        createIndex(indexName: 'ix_df_usage_audit_df_usage_uid', schemaName: dbAppsSchema, tableName: 'df_usage_audit',
+                tablespace: dbIndexTablespace) {
+            column(name: 'df_usage_uid')
+        }
+
+        rollback {
+            sql("drop index ${dbAppsSchema}.ix_df_usage_audit_df_usage_uid")
+        }
+    }
 }
