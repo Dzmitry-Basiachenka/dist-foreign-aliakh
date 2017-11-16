@@ -140,6 +140,7 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
     }
 
     private WebElement assertCreateScenarioWindow(WebElement usagesTab, UsageBatchInfo filteredBatch, int rowCount) {
+        applyStatusFilter(assertWebElement(By.id(USAGES_FILTER_ID)), UsageStatusEnum.ELIGIBLE.name());
         applyFilters(assertWebElement(By.id(USAGES_FILTER_ID)), filteredBatch);
         assertTableRowElements(assertWebElement(By.id(USAGES_TABLE_ID)), rowCount);
         clickButtonAndWait(usagesTab, "Add_To_Scenario");
