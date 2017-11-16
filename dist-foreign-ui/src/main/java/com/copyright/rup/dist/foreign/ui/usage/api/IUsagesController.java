@@ -141,7 +141,8 @@ public interface IUsagesController extends IController<IUsagesWidget>, IBeanLoad
     UsageCsvProcessor getCsvProcessor();
 
     /**
-     * @return count of usages with {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#NEW} status
+     * @return true if selected status filter equals to
+     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE}, false - otherwise.
      */
-    int getNewUsagesCount();
+    boolean isFilterStatusEligible();
 }
