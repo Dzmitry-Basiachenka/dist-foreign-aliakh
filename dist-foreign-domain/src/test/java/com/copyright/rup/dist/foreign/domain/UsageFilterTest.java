@@ -33,7 +33,6 @@ public class UsageFilterTest {
     @Test
     public void testIsEmpty() {
         UsageFilter usageFilter = new UsageFilter();
-        usageFilter.setUsageStatuses(Sets.newHashSet());
         assertTrue(usageFilter.isEmpty());
         usageFilter.setUsageBatchesIds(Sets.newHashSet());
         assertTrue(usageFilter.isEmpty());
@@ -52,13 +51,13 @@ public class UsageFilterTest {
         UsageFilter uf = new UsageFilter();
         uf.setRhAccountNumbers(RH_ACCOUNT_NUMBERS);
         uf.setUsageBatchesIds(USAGE_BATCH_IDS);
-        uf.setUsageStatuses(Collections.singleton(UsageStatusEnum.ELIGIBLE));
+        uf.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         uf.setPaymentDate(PAYMENT_DATE);
         uf.setFiscalYear(FISCAL_YEAR);
         UsageFilter newUsageFilter = new UsageFilter(uf);
         assertEquals(RH_ACCOUNT_NUMBERS, newUsageFilter.getRhAccountNumbers());
         assertEquals(USAGE_BATCH_IDS, newUsageFilter.getUsageBatchesIds());
-        assertEquals(Collections.singleton(UsageStatusEnum.ELIGIBLE), newUsageFilter.getUsageStatuses());
+        assertEquals(UsageStatusEnum.ELIGIBLE, newUsageFilter.getUsageStatus());
         assertEquals(PAYMENT_DATE, newUsageFilter.getPaymentDate());
         assertEquals(FISCAL_YEAR, newUsageFilter.getFiscalYear(), 0);
     }

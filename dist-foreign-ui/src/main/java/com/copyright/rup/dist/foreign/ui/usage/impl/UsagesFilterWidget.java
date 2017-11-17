@@ -21,8 +21,6 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
-import java.util.Collections;
-
 /**
  * Widget for filtering usages.
  * <p>
@@ -134,7 +132,7 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
         statusComboBox.setItemCaptionMode(ItemCaptionMode.ID_TOSTRING);
         VaadinUtils.setMaxComponentsWidth(statusComboBox);
         statusComboBox.addValueChangeListener((ValueChangeListener) event -> {
-            usageFilter.setUsageStatuses(Collections.singleton((UsageStatusEnum) statusComboBox.getValue()));
+            usageFilter.setUsageStatus((UsageStatusEnum) statusComboBox.getValue());
             filterChanged();
         });
         VaadinUtils.addComponentStyle(statusComboBox, "status-filter");
