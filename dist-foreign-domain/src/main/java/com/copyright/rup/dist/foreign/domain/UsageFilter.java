@@ -23,7 +23,7 @@ public class UsageFilter {
 
     private Set<Long> rhAccountNumbers = Sets.newHashSet();
     private Set<String> usageBatchesIds = Sets.newHashSet();
-    private Set<UsageStatusEnum> usageStatuses = Sets.newHashSet();
+    private UsageStatusEnum usageStatus;
     private LocalDate paymentDate;
     private Integer fiscalYear;
 
@@ -43,7 +43,7 @@ public class UsageFilter {
         if (null != filter) {
             setRhAccountNumbers(filter.getRhAccountNumbers());
             setUsageBatchesIds(filter.getUsageBatchesIds());
-            setUsageStatuses(filter.getUsageStatuses());
+            setUsageStatus(filter.getUsageStatus());
             setPaymentDate(filter.getPaymentDate());
             setFiscalYear(filter.getFiscalYear());
         }
@@ -65,12 +65,12 @@ public class UsageFilter {
         this.usageBatchesIds = usageBatchesIds;
     }
 
-    public Set<UsageStatusEnum> getUsageStatuses() {
-        return usageStatuses;
+    public UsageStatusEnum getUsageStatus() {
+        return usageStatus;
     }
 
-    public void setUsageStatuses(Set<UsageStatusEnum> usageStatuses) {
-        this.usageStatuses = usageStatuses;
+    public void setUsageStatus(UsageStatusEnum usageStatus) {
+        this.usageStatus = usageStatus;
     }
 
     public LocalDate getPaymentDate() {
@@ -97,7 +97,7 @@ public class UsageFilter {
             && (null == usageBatchesIds || usageBatchesIds.isEmpty())
             && null == paymentDate
             && null == fiscalYear
-            && (null == usageStatuses || usageStatuses.isEmpty());
+            && null == usageStatus;
     }
 
     @Override
@@ -112,7 +112,7 @@ public class UsageFilter {
         return new EqualsBuilder()
             .append(this.rhAccountNumbers, that.rhAccountNumbers)
             .append(this.usageBatchesIds, that.usageBatchesIds)
-            .append(this.usageStatuses, that.usageStatuses)
+            .append(this.usageStatus, that.usageStatus)
             .append(this.paymentDate, that.paymentDate)
             .append(this.fiscalYear, that.fiscalYear)
             .isEquals();
@@ -123,7 +123,7 @@ public class UsageFilter {
         return new HashCodeBuilder()
             .append(rhAccountNumbers)
             .append(usageBatchesIds)
-            .append(usageStatuses)
+            .append(usageStatus)
             .append(paymentDate)
             .append(fiscalYear)
             .toHashCode();
@@ -134,7 +134,7 @@ public class UsageFilter {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
             .append("rhAccountNumbers", rhAccountNumbers)
             .append("usageBatchesIds", usageBatchesIds)
-            .append("usageStatuses", usageStatuses)
+            .append("usageStatus", usageStatus)
             .append("paymentDate", paymentDate)
             .append("fiscalYear", fiscalYear)
             .toString();

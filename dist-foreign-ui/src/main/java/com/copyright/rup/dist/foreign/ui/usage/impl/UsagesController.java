@@ -165,10 +165,7 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
 
     @Override
     public boolean isFilterStatusEligible() {
-        return filterController.getWidget()
-            .getAppliedFilter()
-            .getUsageStatuses()
-            .equals(Collections.singleton(UsageStatusEnum.ELIGIBLE));
+        return filterController.getWidget().getAppliedFilter().getUsageStatus().equals(UsageStatusEnum.ELIGIBLE);
     }
 
     @Override
