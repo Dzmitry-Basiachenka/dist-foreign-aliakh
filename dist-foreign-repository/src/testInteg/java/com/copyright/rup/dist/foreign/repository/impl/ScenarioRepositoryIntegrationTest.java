@@ -90,9 +90,9 @@ public class ScenarioRepositoryIntegrationTest {
     @Test
     public void testFindWithAmounts() {
         Scenario scenario = scenarioRepository.findWithAmounts("b1f0b236-3ae9-4a60-9fab-61db84199d6f");
-        assertEquals(new BigDecimal("12661.5400000000"), scenario.getGrossTotal());
-        assertEquals(new BigDecimal("10636.0000000000"), scenario.getNetTotal());
-        assertEquals(new BigDecimal("2025.0000000000"), scenario.getServiceFeeTotal());
+        assertEquals(new BigDecimal("32874.8000000000"), scenario.getGrossTotal());
+        assertEquals(new BigDecimal("22354.8000000000"), scenario.getNetTotal());
+        assertEquals(new BigDecimal("10520.0000000000"), scenario.getServiceFeeTotal());
         assertEquals(new BigDecimal("19800.00"), scenario.getReportedTotal());
     }
 

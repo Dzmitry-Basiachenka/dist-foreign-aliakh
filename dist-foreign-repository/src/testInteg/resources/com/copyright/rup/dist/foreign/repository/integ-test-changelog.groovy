@@ -52,7 +52,7 @@ databaseChangeLog {
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'number_of_copies', value: '2502232')
             column(name: 'reported_value', value: '2500')
-            column(name: 'gross_amount', value: '13461.54')
+            column(name: 'gross_amount', value: '35000.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -73,7 +73,7 @@ databaseChangeLog {
             column(name: 'author', value: 'Nanette M. Schwann')
             column(name: 'number_of_copies', value: '1600')
             column(name: 'reported_value', value: '1560')
-            column(name: 'gross_amount', value: '8400.00')
+            column(name: 'gross_amount', value: '35000.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -94,7 +94,7 @@ databaseChangeLog {
             column(name: 'author', value: 'Mirjam H. Hüberli')
             column(name: 'number_of_copies', value: '2630')
             column(name: 'reported_value', value: '1280.00')
-            column(name: 'gross_amount', value: '6892.30')
+            column(name: 'gross_amount', value: '2125.24')
         }
 
         rollback ""
@@ -122,8 +122,9 @@ databaseChangeLog {
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
-            column(name: 'df_usage_archive_uid', value: '55555555')
+            column(name: 'df_usage_archive_uid', value: '03f77c25-0c4c-4266-8a48-40f327779f12')
             column(name: 'df_usage_batch_uid', value: '56282cac-2468-48d4-b346-93d3458a656a')
+            column(name: 'df_scenario_uid', value: '3210b236-1239-4a60-9fab-888b84199321')
             column(name: 'detail_id', value: '6997788338')
             column(name: 'wr_wrk_inst', value: '180382915')
             column(name: 'work_title', value: 'High Performance Switching and Routing')
@@ -140,9 +141,9 @@ databaseChangeLog {
             column(name: 'author', value: 'Mikalai Bezmen')
             column(name: 'number_of_copies', value: '190222')
             column(name: 'reported_value', value: '2300')
-            column(name: 'gross_amount', value: '15514.18')
-            column(name: 'service_fee_amount', value: '4964.5376')
-            column(name: 'net_amount', value: '10549.6424')
+            column(name: 'gross_amount', value: '30000.00')
+            column(name: 'service_fee_amount', value: '9600.00')
+            column(name: 'net_amount', value: '20400.00')
             column(name: 'service_fee', value: '0.32000')
         }
 
@@ -236,9 +237,9 @@ databaseChangeLog {
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'number_of_copies', value: '250232')
             column(name: 'reported_value', value: '9900')
-            column(name: 'gross_amount', value: '11461.54')
-            column(name: 'net_amount', value: '9628.00')
-            column(name: 'service_fee_amount', value: '1833.00')
+            column(name: 'gross_amount', value: '16437.40')
+            column(name: 'net_amount', value: '11177.40')
+            column(name: 'service_fee_amount', value: '5260.00')
             column(name: 'service_fee', value: '0.32000')
         }
 
@@ -262,9 +263,9 @@ databaseChangeLog {
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '9900')
-            column(name: 'gross_amount', value: '1200.00')
-            column(name: 'net_amount', value: '1008.00')
-            column(name: 'service_fee_amount', value: '192.00')
+            column(name: 'gross_amount', value: '16437.40')
+            column(name: 'net_amount', value: '11177.40')
+            column(name: 'service_fee_amount', value: '5260.00')
             column(name: 'service_fee', value: '0.32000')
         }
 
@@ -300,6 +301,7 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: '180382914')
             column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
             column(name: 'rh_account_number', value: '1000009997')
+            column(name: 'payee_account_number', value: '1000009997')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle')
             column(name: 'standard_number', value: '1008902112377654XX')
@@ -311,9 +313,10 @@ databaseChangeLog {
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'number_of_copies', value: '2502232')
             column(name: 'reported_value', value: '2500')
-            column(name: 'gross_amount', value: '13461.54')
-            column(name: 'net_amount', value: '11308.00')
-            column(name: 'service_fee_amount', value: '2153.00')
+            column(name: 'gross_amount', value: '35000.00')
+            column(name: 'net_amount', value: '23800.00')
+            column(name: 'service_fee_amount', value: '11200.00')
+            column(name: 'service_fee', value: '0.32000')
         }
 
         rollback ""

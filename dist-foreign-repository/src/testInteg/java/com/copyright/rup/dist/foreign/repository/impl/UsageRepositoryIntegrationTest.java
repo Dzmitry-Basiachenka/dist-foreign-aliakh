@@ -247,7 +247,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     public void testFindByFilterSortByGrossAmount() {
         verifyUsageDtos(usageRepository.findByFilter(buildFilterWithStatuses(UsageStatusEnum.ELIGIBLE), null,
-            new Sort(GROSS_AMOUNT_KEY, Sort.Direction.ASC)), 3, USAGE_ID_3, USAGE_ID_2, USAGE_ID_1);
+            new Sort(GROSS_AMOUNT_KEY, Sort.Direction.ASC)), 3, USAGE_ID_3, USAGE_ID_1, USAGE_ID_2);
     }
 
     @Test
@@ -304,11 +304,11 @@ public class UsageRepositoryIntegrationTest {
         List<RightsholderTotalsHolder> rightsholderTotalsHolders =
             usageRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, StringUtils.EMPTY, null, null);
         assertEquals(3, rightsholderTotalsHolders.size());
-        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, 13461.54, 4307.6928, 9153.8472),
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, 35000.00, 11200.00, 23800.00),
             rightsholderTotalsHolders.get(0));
-        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_2, 1000002859L, 21061.54, 4713.00, 16348.00),
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_2, 1000002859L, 67874.80, 21720.00, 46154.80),
             rightsholderTotalsHolders.get(1));
-        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_3, 1000005413L, 6892.30, 2205.536, 4686.764),
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_3, 1000005413L, 2125.24, 680.0768, 1445.1632),
             rightsholderTotalsHolders.get(2));
     }
 
@@ -318,19 +318,19 @@ public class UsageRepositoryIntegrationTest {
         List<RightsholderTotalsHolder> rightsholderTotalsHolders =
             usageRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, "JoHn", null, null);
         assertEquals(1, rightsholderTotalsHolders.size());
-        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_2, 1000002859L, 21061.54, 4713.00, 16348.00),
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_2, 1000002859L, 67874.80, 21720.00, 46154.80),
             rightsholderTotalsHolders.get(0));
         rightsholderTotalsHolders =
             usageRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, "IEEE", null, null);
         assertEquals(1, rightsholderTotalsHolders.size());
-        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, 13461.54, 4307.6928, 9153.8472),
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, 35000.00, 11200.00, 23800.00),
             rightsholderTotalsHolders.get(0));
         rightsholderTotalsHolders =
             usageRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, "ec", null, null);
         assertEquals(2, rightsholderTotalsHolders.size());
-        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, 13461.54, 4307.6928, 9153.8472),
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, 35000.00, 11200.00, 23800.00),
             rightsholderTotalsHolders.get(0));
-        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_3, 1000005413L, 6892.30, 2205.536, 4686.764),
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_3, 1000005413L, 2125.24, 680.0768, 1445.1632),
             rightsholderTotalsHolders.get(1));
     }
 
@@ -341,11 +341,11 @@ public class UsageRepositoryIntegrationTest {
         List<RightsholderTotalsHolder> rightsholderTotalsHolders =
             usageRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, StringUtils.EMPTY, null,
                 accountNumberSort);
-        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_2, 1000002859L, 21061.54, 4713.00, 16348.00),
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_2, 1000002859L, 67874.80, 21720.00, 46154.80),
             rightsholderTotalsHolders.get(0));
-        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_3, 1000005413L, 6892.30, 2205.536, 4686.764),
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_3, 1000005413L, 2125.24, 680.0768, 1445.1632),
             rightsholderTotalsHolders.get(1));
-        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, 13461.54, 4307.6928, 9153.8472),
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, 35000.00, 11200.00, 23800.00),
             rightsholderTotalsHolders.get(2));
     }
 
@@ -356,11 +356,11 @@ public class UsageRepositoryIntegrationTest {
         List<RightsholderTotalsHolder> rightsholderTotalsHolders =
             usageRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, StringUtils.EMPTY, null,
                 accountNumberSort);
-        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_3, 1000005413L, 6892.30, 2205.536, 4686.764),
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_3, 1000005413L, 2125.24, 680.0768, 1445.1632),
             rightsholderTotalsHolders.get(0));
-        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_2, 1000002859L, 21061.54, 4713.00, 16348.00),
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_2, 1000002859L, 67874.80, 21720.00, 46154.80),
             rightsholderTotalsHolders.get(1));
-        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, 13461.54, 4307.6928, 9153.8472),
+        assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_1, 1000009997L, 35000.00, 11200.00, 23800.00),
             rightsholderTotalsHolders.get(2));
     }
 
@@ -450,7 +450,7 @@ public class UsageRepositoryIntegrationTest {
             "\"2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA\"," +
             "Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle,1008902112377654XX," +
             "180382914,1000009997,IEEE - Inst of Electrical and Electronics Engrs," +
-            "IEEE,09/10/2013,2502232,2500.00,13461.5400000000,35000.00,Doc Del,2013,2017," +
+            "IEEE,09/10/2013,2502232,2500.00,35000.0000000000,35000.00,Doc Del,2013,2017," +
             "\"Íñigo López de Mendoza, marqués de Santillana\"", bufferedReader.readLine());
         assertNull(bufferedReader.readLine());
     }
@@ -484,13 +484,13 @@ public class UsageRepositoryIntegrationTest {
                 "\"JAC, Japan Academic Association for Copyright Clearance, Inc.\"," +
                 "09/10/2015,100 ROAD MOVIES,DIN EN 779:2012,1008902112377654XX,243904752,1000002859," +
                 "John Wiley & Sons - Books,1000002859,John Wiley & Sons - Books,IEEE,09/10/2013,250232,9900.00," +
-                "11461.5400000000,1833.0000000000,9628.0000000000,32.0,Doc Del,2013,2017,Philippe de Mézières",
+                "16437.4000000000,5260.0000000000,11177.4000000000,32.0,Doc Del,2013,2017,Philippe de Mézières",
             bufferedReader.readLine());
         assertEquals("6213788886,JAACC_11Dec16,FY2016,2000017010," +
                 "\"JAC, Japan Academic Association for Copyright Clearance, Inc.\"," +
                 "09/10/2015,100 ROAD MOVIES,DIN EN 779:2012,1008902112317622XX,243904752,1000002859," +
                 "John Wiley & Sons - Books,1000002859,John Wiley & Sons - Books,IEEE,09/10/2013,100,9900.00," +
-                "1200.0000000000,192.0000000000,1008.0000000000,32.0,Doc Del,2013,2017,Philippe de Mézières",
+                "16437.4000000000,5260.0000000000,11177.4000000000,32.0,Doc Del,2013,2017,Philippe de Mézières",
             bufferedReader.readLine());
         assertNull(bufferedReader.readLine());
     }
@@ -522,7 +522,7 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(1, usages.size());
         Usage usage = usages.get(0);
         assertEquals(USAGE_ID_1, usage.getId());
-        assertEquals(new BigDecimal("13461.5400000000"), usage.getGrossAmount());
+        assertEquals(new BigDecimal("35000.0000000000"), usage.getGrossAmount());
         assertEquals(ZERO_AMOUNT, usage.getNetAmount());
         assertEquals(new BigDecimal("2500.00"), usage.getReportedValue());
         assertNull(usage.getServiceFee());
