@@ -50,13 +50,13 @@ public class CreateScenarioTest {
                 "00d4ae90-5fe7-47bf-ace1-781c8d76d4da", "038bf4aa-b6cc-430a-9b32-655954d95278",
                 "756299b5-02ce-4f76-b0bc-ee2571cf906e", "019acfde-91be-43aa-8871-6305642bcb2c")
             .expectUsages(Lists.newArrayList(
-                buildUsageForCreatedScenario(7000429266L, 2000017000L, "3667.6928", "7793.8472"),
-                buildUsageForCreatedScenario(1000002859L, 1000002859L, "992.00", "2108.00"),
-                buildUsageForCreatedScenario(1000001820L, 1000001820L, "1648.00", "8652.00"),
-                buildUsageForCreatedScenario(1000024497L, 1000024497L, "160.00", "840.00"),
-                buildUsageForCreatedScenario(1000002562L, 2000017000L, "784.176", "1666.374"),
+                buildUsageForCreatedScenario(7000429266L, 2000017000L, "2871.0528", "6100.9872"),
+                buildUsageForCreatedScenario(1000002859L, 1000002859L, "1450.0256", "3081.3044"),
+                buildUsageForCreatedScenario(1000001820L, 1000001820L, "2175.0384", "11418.9516"),
+                buildUsageForCreatedScenario(1000024497L, 1000024497L, "435.008", "2283.792"),
+                buildUsageForCreatedScenario(1000002562L, 2000017000L, "1629.8304", "3463.3896"),
                 buildUsage("4c014547-06f3-4840-94ff-6249730d537d", 1000003821L, 1000003821L, "29.00", "61.63")))
-            .expectScenario(buildScenario("21060.2212", "28312.09", "7251.8688", "38520"))
+            .expectScenario(buildScenario("26348.4248", "34909.38", "8560.9552", "38520.00"))
             .build()
             .run();
     }
@@ -71,13 +71,13 @@ public class CreateScenarioTest {
                 "00d4ae90-5fe7-47bf-ace1-781c8d76d4da", "038bf4aa-b6cc-430a-9b32-655954d95278",
                 "756299b5-02ce-4f76-b0bc-ee2571cf906e", "019acfde-91be-43aa-8871-6305642bcb2c")
             .expectUsages(Lists.newArrayList(
-                buildUsageForCreatedScenario(7000429266L, 7000429266L, "3667.6928", "7793.8472"),
-                buildUsageForCreatedScenario(1000002859L, 1000002859L, "992.00", "2108.00"),
-                buildUsageForCreatedScenario(1000001820L, 1000001820L, "3296.00", "7004.00"),
-                buildUsageForCreatedScenario(1000024497L, 1000024497L, "320.00", "680.00"),
-                buildUsageForCreatedScenario(1000002562L, 1000002562L, "784.176", "1666.374"),
+                buildUsageForCreatedScenario(7000429266L, 7000429266L, "2871.0528", "6100.9872"),
+                buildUsageForCreatedScenario(1000002859L, 1000002859L, "1450.0256", "3081.3044"),
+                buildUsageForCreatedScenario(1000001820L, 1000001820L, "4350.0768", "9243.9132"),
+                buildUsageForCreatedScenario(1000024497L, 1000024497L, "870.016", "1848.784"),
+                buildUsageForCreatedScenario(1000002562L, 1000002562L, "1629.8304", "3463.3896"),
                 buildUsage("4c014547-06f3-4840-94ff-6249730d537d", 1000003821L, 1000003821L, "29.00", "61.63")))
-            .expectScenario(buildScenario("19252.2212", "28312.09", "9059.8688", "38520"))
+            .expectScenario(buildScenario("23738.3784", "34909.38", "11171.0016", "38520.00"))
             .build()
             .run();
     }
