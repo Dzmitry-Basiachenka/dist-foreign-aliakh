@@ -25,6 +25,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'fcdaea01-2439-4c51-b3e2-23649cf710c7')
             column(name: 'df_usage_batch_uid', value: '31ddaa1a-e60b-44ce-a968-0ca262870358')
+            column(name: 'df_scenario_uid', value: '4c014547-06f3-4840-94ff-6249730d537d')
             column(name: 'detail_id', value: '2136547853')
             column(name: 'wr_wrk_inst', value: '471137470')
             column(name: 'work_title', value: 'Sunbeams')
@@ -44,7 +45,7 @@ databaseChangeLog {
             column(name: 'gross_amount', value: '90.63')
             column(name: 'service_fee_amount', value: '29.00')
             column(name: 'net_amount', value: '61.63')
-            column(name: 'df_scenario_uid', value: '4c014547-06f3-4840-94ff-6249730d537d')
+            column(name: 'service_fee', value: '0.32000')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -65,7 +66,7 @@ databaseChangeLog {
             column(name: 'author', value: 'Nanette M. Schwann')
             column(name: 'number_of_copies', value: '250232')
             column(name: 'reported_value', value: '9900.00')
-            column(name: 'gross_amount', value: '11461.54')
+            column(name: 'gross_amount', value: '8972.04')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -86,7 +87,7 @@ databaseChangeLog {
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'number_of_copies', value: '25')
             column(name: 'reported_value', value: '5000.00')
-            column(name: 'gross_amount', value: '3100.00')
+            column(name: 'gross_amount', value: '4531.33')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -107,7 +108,7 @@ databaseChangeLog {
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '15000.00')
-            column(name: 'gross_amount', value: '10300.00')
+            column(name: 'gross_amount', value: '13593.99')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -128,7 +129,7 @@ databaseChangeLog {
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '3000.00')
-            column(name: 'gross_amount', value: '1000.00')
+            column(name: 'gross_amount', value: '2718.80')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -149,7 +150,7 @@ databaseChangeLog {
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '5620.00')
-            column(name: 'gross_amount', value: '2450.55')
+            column(name: 'gross_amount', value: '5093.22')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {

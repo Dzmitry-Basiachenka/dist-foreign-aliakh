@@ -38,8 +38,9 @@ databaseChangeLog {
             column(name: 'df_scenario_uid', value: '12ec845f-0e76-4d1c-85cd-bb3fb7ca260e')
             column(name: 'detail_id', value: '100000001')
             column(name: 'wr_wrk_inst', value: '122235134')
-            column(name: 'work_title', value: '"CHICKEN BREAST ON GRILL WITH FLAMES"')
+            column(name: 'work_title', value: 'CHICKEN BREAST ON GRILL WITH FLAMES')
             column(name: 'rh_account_number', value: '1000000001')
+            column(name: 'payee_account_number', value: '1000000001')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '2558902245377325XX')
@@ -50,11 +51,12 @@ databaseChangeLog {
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Nanette M. Schwann')
             column(name: 'number_of_copies', value: '250232')
-            column(name: 'reported_value', value: '9900.00')
-            column(name: 'gross_amount', value: '10000.00')
             column(name: 'is_rh_participating_flag', value: 'false')
+            column(name: 'reported_value', value: '9900.00')
+            column(name: 'gross_amount', value: '26776.51')
+            column(name: 'service_fee_amount', value: '8568.48')
+            column(name: 'net_amount', value: '18208.03')
             column(name: 'service_fee', value: '0.32')
-            column(name: 'service_fee_amount', value: '3200.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -65,6 +67,7 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: '243904752')
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'rh_account_number', value: '1000000002')
+            column(name: 'payee_account_number', value: '1000000002')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '1003324112314587XX')
@@ -75,11 +78,12 @@ databaseChangeLog {
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'number_of_copies', value: '25')
-            column(name: 'reported_value', value: '5000.00')
-            column(name: 'gross_amount', value: '3100.00')
             column(name: 'is_rh_participating_flag', value: 'false')
+            column(name: 'reported_value', value: '5000.00')
+            column(name: 'gross_amount', value: '13523.49')
+            column(name: 'service_fee_amount', value: '4327.52')
+            column(name: 'net_amount', value: '9195.97')
             column(name: 'service_fee', value: '0.32')
-            column(name: 'service_fee_amount', value: '992.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -90,6 +94,7 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: '471137967')
             column(name: 'work_title', value: 'Cell Biology')
             column(name: 'rh_account_number', value: '1000000003')
+            column(name: 'payee_account_number', value: '1000000003')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '1003324112314587XX')
@@ -100,11 +105,12 @@ databaseChangeLog {
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'number_of_copies', value: '100')
-            column(name: 'reported_value', value: '15000.00')
-            column(name: 'gross_amount', value: '10300.00')
             column(name: 'is_rh_participating_flag', value: 'false')
+            column(name: 'reported_value', value: '15000.00')
+            column(name: 'gross_amount', value: '6509.31')
+            column(name: 'service_fee_amount', value: '2082.98')
+            column(name: 'net_amount', value: '4426.33')
             column(name: 'service_fee', value: '0.32')
-            column(name: 'service_fee_amount', value: '3296.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -115,6 +121,7 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: '122235139')
             column(name: 'work_title', value: 'BOWL OF BERRIES WITH SUGAR COOKIES')
             column(name: 'rh_account_number', value: '1000000004')
+            column(name: 'payee_account_number', value: '1000000004')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '452365874521235XX')
@@ -125,11 +132,12 @@ databaseChangeLog {
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'number_of_copies', value: '100')
-            column(name: 'reported_value', value: '3000.00')
-            column(name: 'gross_amount', value: '1000.00')
             column(name: 'is_rh_participating_flag', value: 'false')
+            column(name: 'reported_value', value: '3000.00')
+            column(name: 'gross_amount', value: '1301.86')
+            column(name: 'service_fee_amount', value: '416.60')
+            column(name: 'net_amount', value: '885.26')
             column(name: 'service_fee', value: '0.32')
-            column(name: 'service_fee_amount', value: '320.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -140,6 +148,7 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: '471137469')
             column(name: 'work_title', value: 'Solar Cells')
             column(name: 'rh_account_number', value: '1000000006')
+            column(name: 'payee_account_number', value: '1000000006')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '452365874521235XX')
@@ -150,11 +159,12 @@ databaseChangeLog {
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'number_of_copies', value: '100')
-            column(name: 'reported_value', value: '5620.00')
-            column(name: 'gross_amount', value: '2450.55')
             column(name: 'is_rh_participating_flag', value: 'false')
+            column(name: 'reported_value', value: '5620.00')
+            column(name: 'gross_amount', value: '2438.82')
+            column(name: 'service_fee_amount', value: '780.42')
+            column(name: 'net_amount', value: '1658.40')
             column(name: 'service_fee', value: '0.32')
-            column(name: 'service_fee_amount', value: '784.18')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
