@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingResult;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.UsageCsvProcessor;
+import com.copyright.rup.dist.foreign.service.impl.csvprocessor.exception.ThresholdExceededException;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.exception.ValidationException;
 import com.copyright.rup.dist.foreign.ui.component.validator.GrossAmountValidator;
 import com.copyright.rup.dist.foreign.ui.component.validator.NumberValidator;
@@ -92,8 +93,13 @@ class UsageBatchUploadWindow extends Window {
                     Windows.showNotificationWindow(ForeignUi.getMessage("message.upload_completed", usagesCount));
                 } else {
                     Windows.showModalWindow(
-                        new ErrorUploadWindow(usagesController.getErrorResultStreamSource(processingResult)));
+                        new ErrorUploadWindow(usagesController.getErrorResultStreamSource(processingResult),
+                            ForeignUi.getMessage("message.error.upload")));
                 }
+            } catch (ThresholdExceededException e) {
+                Windows.showModalWindow(
+                    new ErrorUploadWindow(usagesController.getErrorResultStreamSource(e.getProcessingResult()),
+                        e.getMessage()));
             } catch (ValidationException e) {
                 Windows.showNotificationWindow(ForeignUi.getMessage("window.error"), e.getHtmlMessage());
             }

@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.csvprocessor;
 
+import com.copyright.rup.dist.foreign.service.impl.csvprocessor.exception.ThresholdExceededException;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -18,10 +20,12 @@ import java.util.Map;
  */
 public class CsvProcessingResult<T> {
 
+    private static final int ERRORS_THRESHOLD = 2000;
     private final List<String> headers;
+    private final String fileName;
     private Map<Integer, T> result = Maps.newHashMap();
     private Map<Integer, ErrorRow> errors = Maps.newTreeMap();
-    private final String fileName;
+    private int errorCount = 0;
 
     /**
      * Constructor.
@@ -89,14 +93,20 @@ public class CsvProcessingResult<T> {
      * @param line         line number from CSV
      * @param originalRow  original row from CSV
      * @param errorMessage error message
+     * @throws ThresholdExceededException if number of errors in file more than threshold
      */
-    public void logError(Integer line, List<String> originalRow, String errorMessage) {
+    public void logError(Integer line, List<String> originalRow, String errorMessage)
+        throws ThresholdExceededException {
         ErrorRow errorRow = errors.get(line);
         if (null == errorRow) {
             errorRow = new ErrorRow(line, originalRow);
             errors.put(line, errorRow);
         }
         errorRow.addErrorMessage(errorMessage);
+        errorCount++;
+        if (ERRORS_THRESHOLD <= errorCount) {
+            throw new ThresholdExceededException(ERRORS_THRESHOLD, this);
+        }
     }
 
     /**
