@@ -48,10 +48,10 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
     private static final String CLOSE_BUTTON_ID = "Close";
     private static final String USAGE_BATCHES_TABLE_ID = "usage-batches-table";
     private static final String BATCH_TO_DELETE_ID = "4b67f17c-3c32-4b55-b2a0-dabebb513304";
-    private UsageBatchInfo usageBatch1 = new UsageBatchInfo("56282dbc-2468-48d4-b926-93d3458a656a", "CADRA_11Dec16",
+    private UsageBatchInfo usageBatch1 = new UsageBatchInfo("d2b9c16d-230a-414f-9ffb-acdb676fac0c", "CADRA_11Dec16",
         "01/11/2017", "FY2017",
         "7000813806 - CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil");
-    private UsageBatchInfo usageBatch2 = new UsageBatchInfo("56282dbc-2468-48d4-b926-94d3458a666a",
+    private UsageBatchInfo usageBatch2 = new UsageBatchInfo("3cc619da-6218-47ef-959e-5a3f19e392a4",
         "AccessCopyright_11Dec16", "09/10/2015", "FY2016",
         "2000017004 - Access Copyright, The Canadian Copyright Agency");
     private UsageBatchInfo usageBatch3 = new UsageBatchInfo("56782dbc-2158-48d4-b026-94d3458a666a", "JAACC_11Dec16",
@@ -143,7 +143,7 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
         WebElement window = openDeleteUsageBatchWindow(usagesTab);
         WebElement usageBatchesTable = assertWebElement(window, By.id(USAGE_BATCHES_TABLE_ID));
         verifyTableRows(usageBatchesTable, usageBatch1, usageBatchWithNewUsages, usageBatch2, usageBatch3);
-        clickElementAndWait(assertWebElement(usageBatchesTable, "56282dbc-2468-48d4-b926-93d3458a656a"));
+        clickElementAndWait(assertWebElement(usageBatchesTable, "d2b9c16d-230a-414f-9ffb-acdb676fac0c"));
         WebElement confirmDialog = assertWebElement(By.id("confirm-dialog-window"));
         assertWebElementText(confirmDialog, "Are you sure you want to delete 'CADRA_11Dec16' usage batch?");
         clickButtonAndWait(confirmDialog, "Cancel");
@@ -165,7 +165,7 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
         WebElement window = openDeleteUsageBatchWindow(usagesTab);
         WebElement usageBatchesTable = assertWebElement(window, By.id(USAGE_BATCHES_TABLE_ID));
         verifyTableRows(usageBatchesTable, usageBatch1, usageBatchWithNewUsages, usageBatch2, usageBatch3);
-        clickElementAndWait(assertWebElement(usageBatchesTable, "56282dbc-2468-48d4-b926-94d3458a666a"));
+        clickElementAndWait(assertWebElement(usageBatchesTable, "3cc619da-6218-47ef-959e-5a3f19e392a4"));
         WebElement notificationWindow = assertWebElement(By.id("notification-window"));
         assertWebElementText(notificationWindow,
             "Usage batch cannot be deleted because it is associated with the following scenarios:\nScenario name");
