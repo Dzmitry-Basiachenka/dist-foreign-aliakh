@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.repository.api.IUsageAuditRepository;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.impl.csvprocessor.exception.ThresholdExceededException;
 
 import com.google.common.collect.Lists;
 
@@ -114,7 +115,7 @@ public class UsageServiceIntegrationTest {
         assertEquals("Test Scenario for exclude", auditItem.getScenarioName());
     }
 
-    private void logErrors() {
+    private void logErrors() throws ThresholdExceededException{
         result.logError(2, buildOriginalLineWithErrors(Lists.newArrayList(0), Lists.newArrayList(StringUtils.EMPTY)),
             "Detail ID: Field is required and cannot be null or empty");
         result.logError(5, buildOriginalLineWithErrors(Lists.newArrayList(5), Lists.newArrayList("text")),

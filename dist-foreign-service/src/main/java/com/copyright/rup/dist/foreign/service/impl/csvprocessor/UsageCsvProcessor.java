@@ -5,6 +5,7 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.impl.csvprocessor.exception.ValidationException;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator.DateFormatValidator;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator.DuplicateDetailIdValidator;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator.DuplicateInFileValidator;
@@ -71,7 +72,7 @@ public class UsageCsvProcessor extends CommonCsvProcessor<Usage> {
     }
 
     @Override
-    protected void validateBusinessRules() {
+    protected void validateBusinessRules() throws ValidationException {
         List<Long> detailIds = getResult().getResult().stream()
             .map(Usage::getDetailId)
             .collect(Collectors.toList());

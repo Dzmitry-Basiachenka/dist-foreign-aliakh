@@ -50,7 +50,8 @@ public class ErrorUploadWindowTest {
             .andReturn(createMock(IStreamSource.class)).once();
         replay(controller);
         ErrorUploadWindow errorUploadWindow =
-            new ErrorUploadWindow(controller.getErrorResultStreamSource(csvProcessingResult));
+            new ErrorUploadWindow(controller.getErrorResultStreamSource(csvProcessingResult),
+                "The file could not be uploaded.<br>Press Download button to see detailed list of errors");
         verify(controller);
         assertFalse(errorUploadWindow.isResizable());
         assertEquals("upload-error-window", errorUploadWindow.getId());

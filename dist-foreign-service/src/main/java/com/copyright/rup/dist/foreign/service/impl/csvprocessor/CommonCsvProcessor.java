@@ -182,8 +182,10 @@ public abstract class CommonCsvProcessor<T> {
 
     /**
      * Validates business rules.
+     *
+     * @throws ValidationException in case of invalid file
      */
-    protected void validateBusinessRules() {
+    protected void validateBusinessRules() throws ValidationException {
         for (Map.Entry<Integer, T> entry : processingResult.getResultMap().entrySet()) {
             validateBusinessRules(entry.getKey(), entry.getValue());
         }
@@ -201,7 +203,7 @@ public abstract class CommonCsvProcessor<T> {
         return null != result ? result : Collections.emptyList();
     }
 
-    private void processRows(ICsvListReader listReader) throws IOException {
+    private void processRows(ICsvListReader listReader) throws IOException, ValidationException {
         int line = 1;
         while (true) {
             ++line;
@@ -215,7 +217,7 @@ public abstract class CommonCsvProcessor<T> {
         }
     }
 
-    private void processRow(int line, List<String> params) {
+    private void processRow(int line, List<String> params) throws ValidationException {
         List<String> trimmedParams = trimNulls(params);
         if (plainValidate(line, trimmedParams)) {
             T item = build(trimmedParams);
@@ -223,7 +225,7 @@ public abstract class CommonCsvProcessor<T> {
         }
     }
 
-    private boolean plainValidate(int line, List<String> params) {
+    private boolean plainValidate(int line, List<String> params) throws ValidationException {
         boolean valid = true;
         if (!Objects.equals(headers.size(), params.size())) {
             processingResult.logError(line, originalValuesMap.get(line),
@@ -245,12 +247,12 @@ public abstract class CommonCsvProcessor<T> {
         return valid;
     }
 
-    private void validateBusinessRules(int line, T item) {
-        businessValidators.stream()
-            .filter(validator -> !validator.isValid(item))
-            .forEach(validator -> {
-                processingResult.logError(line, originalValuesMap.get(line), validator.getErrorMessage());
-            });
+    private void validateBusinessRules(int line, T item) throws ValidationException {
+        List<IValidator<T>> validators =
+            businessValidators.stream().filter(validator -> !validator.isValid(item)).collect(Collectors.toList());
+        for (IValidator<T> validator : validators) {
+            processingResult.logError(line, originalValuesMap.get(line), validator.getErrorMessage());
+        }
     }
 
     private void validateHeader(String... fileHeaders) throws HeaderValidationException {

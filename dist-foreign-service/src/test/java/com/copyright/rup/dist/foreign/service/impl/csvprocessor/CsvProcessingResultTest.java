@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.foreign.service.impl.csvprocessor.exception.ThresholdExceededException;
+
 import com.google.common.collect.Lists;
 
 import org.junit.Before;
@@ -47,7 +49,7 @@ public class CsvProcessingResultTest {
     }
 
     @Test
-    public void testLogError() {
+    public void testLogError() throws ThresholdExceededException {
         List<String> originalRow = Lists.newArrayList("originalRow");
         String errorMessage = "Error message";
         Integer line = 1;

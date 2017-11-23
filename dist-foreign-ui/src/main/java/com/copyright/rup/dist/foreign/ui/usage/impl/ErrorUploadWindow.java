@@ -29,14 +29,15 @@ public class ErrorUploadWindow extends Window {
      * Constructor.
      *
      * @param streamSource {@link IStreamSource}
+     * @param labelCaption label caption
      */
-    ErrorUploadWindow(IStreamSource streamSource) {
+    ErrorUploadWindow(IStreamSource streamSource, String labelCaption) {
         setCaption(ForeignUi.getMessage("window.error"));
         setWidth(365, Unit.PIXELS);
         setHeight(150, Unit.PIXELS);
         setResizable(false);
         HorizontalLayout buttonsLayout = buildButtonsLayout(streamSource);
-        Label label = new Label(ForeignUi.getMessage("message.error.upload"), ContentMode.HTML);
+        Label label = new Label(labelCaption, ContentMode.HTML);
         VerticalLayout layout = new VerticalLayout(label, buttonsLayout);
         layout.setMargin(true);
         layout.setSpacing(true);
