@@ -16,7 +16,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 /**
  * Implementation of {@link IUsageBatchService}.
@@ -32,6 +37,8 @@ import java.util.stream.Collectors;
 public class UsageBatchService implements IUsageBatchService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
+
+    private ExecutorService executorService;
 
     @Autowired
     private IUsageBatchRepository usageBatchRepository;
@@ -72,8 +79,7 @@ public class UsageBatchService implements IUsageBatchService {
         LOGGER.info("Insert usage batch. Finished. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
         rightsholderService.updateRightsholder(usageBatch.getRro());
         int count = usageService.insertUsages(usageBatch, usages);
-        rightsholderService.updateRightsholders(
-            usages.stream().map(usage -> usage.getRightsholder().getAccountNumber()).collect(Collectors.toSet()));
+        executorService.execute(() -> updateRightsholders(usages));
         return count;
     }
 
@@ -85,5 +91,33 @@ public class UsageBatchService implements IUsageBatchService {
         usageService.deleteUsageBatchDetails(usageBatch);
         usageBatchRepository.deleteUsageBatch(usageBatch.getId());
         LOGGER.info("Delete usage batch. Finished. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
+    }
+
+    /**
+     * Post construct method.
+     */
+    @PostConstruct
+    void postConstruct() {
+        executorService = Executors.newSingleThreadExecutor();
+    }
+
+    /**
+     * Pre destroy method.
+     */
+    @PreDestroy
+    void preDestroy() {
+        executorService.shutdown();
+    }
+
+    /**
+     * Updates rightsholders based on provided list of {@link Usage}s.
+     *
+     * @param usages list of usages
+     */
+    void updateRightsholders(List<Usage> usages) {
+        synchronized (this) {
+            rightsholderService.updateRightsholders(
+                usages.stream().map(usage -> usage.getRightsholder().getAccountNumber()).collect(Collectors.toSet()));
+        }
     }
 }

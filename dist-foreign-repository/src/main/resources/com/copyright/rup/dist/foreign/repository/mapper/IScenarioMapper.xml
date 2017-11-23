@@ -69,7 +69,7 @@
         where df_scenario_uid = #{scenarioId}
     </delete>
 
-    <select id="findSourceRros" parameterType="string" resultMap="IRightsholderMapper.rightsholderResultMap">
+    <select id="findSourceRros" parameterType="string" resultMap="RightsholderMapper.rightsholderResultMap">
         select distinct
             b.rro_account_number rh_account_number,
             r.name,
