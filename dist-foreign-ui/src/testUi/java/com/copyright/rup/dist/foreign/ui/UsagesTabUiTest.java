@@ -157,7 +157,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
             "09/10/2013",
             "2502232",
             "2,500.00",
-            "13,461.54",
+            "35,000.00",
             "35,000.00",
             "Doc Del",
             "2013",

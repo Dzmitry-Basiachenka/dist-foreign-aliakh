@@ -25,7 +25,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -166,10 +165,10 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
         assertEquals(SCENARIO_NAME, scenario.getName());
         assertEquals(DESCRIPTION, scenario.getDescription());
         assertEquals(ScenarioStatusEnum.IN_PROGRESS, scenario.getStatus());
-        assertEquals(new BigDecimal("13461.54").setScale(10, RoundingMode.HALF_UP), scenario.getGrossTotal());
-        assertEquals(new BigDecimal("9153.8472").setScale(10, BigDecimal.ROUND_HALF_UP), scenario.getNetTotal());
-        assertEquals(new BigDecimal("2500").setScale(2, RoundingMode.HALF_UP), scenario.getReportedTotal());
-        assertEquals(new BigDecimal("4307.6928").setScale(10), scenario.getServiceFeeTotal());
+        assertEquals(new BigDecimal("35000").setScale(10, BigDecimal.ROUND_HALF_UP), scenario.getGrossTotal());
+        assertEquals(new BigDecimal("23800").setScale(10, BigDecimal.ROUND_HALF_UP), scenario.getNetTotal());
+        assertEquals(new BigDecimal("2500").setScale(2, BigDecimal.ROUND_HALF_UP), scenario.getReportedTotal());
+        assertEquals(new BigDecimal("11200").setScale(10, BigDecimal.ROUND_HALF_UP), scenario.getServiceFeeTotal());
     }
 
     private void verifyCreateScenarioWindow(WebElement createScenarioWindow) {

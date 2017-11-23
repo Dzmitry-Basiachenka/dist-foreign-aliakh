@@ -31,12 +31,12 @@ import java.util.stream.Collectors;
 @ContextConfiguration(value = "classpath:/com/copyright/rup/dist/foreign/ui/dist-foreign-ui-test-context.xml")
 public class ViewScenarioUiTest extends ForeignCommonUiTest {
 
-    private String[] rightsholder1 = {"1000002797", "British Film Institute (BFI)", StringUtils.EMPTY,
-        StringUtils.EMPTY, "480.00", "153.60", "326.40", "32.0"};
-    private String[] rightsholder2 = {"1000008666", "CCH", StringUtils.EMPTY, StringUtils.EMPTY, "6,432.00", "2,304.00",
-        "5,664.00", "32.0"};
+    private String[] rightsholder1 = {"1000002797", "British Film Institute (BFI)", "1000002797",
+        "British Film Institute (BFI)", "1,279.24", "409.36", "869.88", "32.0"};
+    private String[] rightsholder2 = {"1000008666", "CCH", "1000008666", "CCH", "20,467.84",
+        "6,549.71", "13,918.13", "32.0"};
     private String[] rightsholder3 = {"1000009997", "IEEE - Inst of Electrical and Electronics Engrs",
-        StringUtils.EMPTY, StringUtils.EMPTY, "2,400.00", "768.00", "1,632.00", "32.0"};
+        "1000009997", "IEEE - Inst of Electrical and Electronics Engrs", "6,396.19", "2,046.78", "4,349.41", "32.0"};
 
     @Test
     // Test cases IDs: 'ed87b9c8-5880-4bc0-a3aa-6ec733dcf491', 'c3475cfb-eb5d-4dea-96ad-d6a1228f177b',
@@ -84,8 +84,8 @@ public class ViewScenarioUiTest extends ForeignCommonUiTest {
         assertTableRowElements(rows.get(1), rightsholder2);
         assertTableRowElements(rows.get(2), rightsholder3);
         assertTableSorting(table, "RH Account #", "RH Name", "Amt in USD", "Service Fee Amount", "Net Amt in USD");
-        assertTableFooterElements(table, "Totals", StringUtils.SPACE, StringUtils.SPACE, StringUtils.SPACE, "9,312.00",
-            "3,225.60", "7,622.40", StringUtils.SPACE);
+        assertTableFooterElements(table, "Totals", StringUtils.SPACE, StringUtils.SPACE, StringUtils.SPACE, "28,143.27",
+            "9,005.85", "19,137.42", StringUtils.SPACE);
     }
 
     private WebElement openViewScenarioWindow() {

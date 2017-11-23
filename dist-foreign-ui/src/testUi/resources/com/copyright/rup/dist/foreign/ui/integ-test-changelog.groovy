@@ -5,7 +5,7 @@ databaseChangeLog {
         comment('Inserting Usage Batch with Usages for ui tests')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
-            column(name: 'df_usage_batch_uid', value: '56282dbc-2468-48d4-b926-93d3458a656a')
+            column(name: 'df_usage_batch_uid', value: 'd2b9c16d-230a-414f-9ffb-acdb676fac0c')
             column(name: 'name', value: 'CADRA_11Dec16')
             column(name: 'rro_account_number', value: '7000813806')
             column(name: 'payment_date', value: '2017-01-11')
@@ -15,7 +15,7 @@ databaseChangeLog {
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
-            column(name: 'df_usage_batch_uid', value: '56282dbc-2468-48d4-b926-94d3458a666a')
+            column(name: 'df_usage_batch_uid', value: '3cc619da-6218-47ef-959e-5a3f19e392a4')
             column(name: 'name', value: 'AccessCopyright_11Dec16')
             column(name: 'rro_account_number', value: '2000017004')
             column(name: 'payment_date', value: '2015-09-10')
@@ -36,7 +36,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '366f0fa6-b4c5-11e7-abc4-cec278b6b50a')
-            column(name: 'df_usage_batch_uid', value: '56282dbc-2468-48d4-b926-93d3458a656a')
+            column(name: 'df_usage_batch_uid', value: 'd2b9c16d-230a-414f-9ffb-acdb676fac0c')
             column(name: 'detail_id', value: '6997788888')
             column(name: 'wr_wrk_inst', value: '180382914')
             column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
@@ -52,12 +52,12 @@ databaseChangeLog {
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'number_of_copies', value: '2502232')
             column(name: 'reported_value', value: '2500')
-            column(name: 'gross_amount', value: '13461.54')
+            column(name: 'gross_amount', value: '35000.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'f9da71d0-9b07-4204-8355-549a4206ebc5')
-            column(name: 'df_usage_batch_uid', value: '56282dbc-2468-48d4-b926-94d3458a666a')
+            column(name: 'df_usage_batch_uid', value: '3cc619da-6218-47ef-959e-5a3f19e392a4')
             column(name: 'detail_id', value: '6997788885')
             column(name: 'wr_wrk_inst', value: '244614835')
             column(name: 'work_title', value: '15th International Conference on Environmental Degradation of Materials in Nuclear Power Systems Water Reactors')
@@ -73,28 +73,7 @@ databaseChangeLog {
             column(name: 'author', value: 'Nanette M. Schwann')
             column(name: 'number_of_copies', value: '1600')
             column(name: 'reported_value', value: '1560')
-            column(name: 'gross_amount', value: '8400.00')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
-            column(name: 'df_usage_uid', value: '49ed6163-e992-499a-8879-827928bef327')
-            column(name: 'df_usage_batch_uid', value: '56782dbc-2158-48d4-b026-94d3458a666a')
-            column(name: 'detail_id', value: '6997788882')
-            column(name: 'wr_wrk_inst', value: '108738286')
-            column(name: 'work_title', value: '2001 tax legislation: law, explanation, and analysis : Economic Growth and Tax Relief Reconciliation Act of 2001')
-            column(name: 'rh_account_number', value: '1000008666')
-            column(name: 'status_ind', value: 'LOCKED')
-            column(name: 'article', value: 'Google Makes Super')
-            column(name: 'standard_number', value: '1008902002377656XX')
-            column(name: 'publisher', value: 'CCH Inc')
-            column(name: 'publication_date', value: '1999-09-27')
-            column(name: 'market', value: 'Bus,Doc Del,Edu,Gov,Lib,Sch,Univ')
-            column(name: 'market_period_from', value: '2015')
-            column(name: 'market_period_to', value: '2019')
-            column(name: 'author', value: '愛染恭子')
-            column(name: 'number_of_copies', value: '16')
-            column(name: 'reported_value', value: '850')
-            column(name: 'gross_amount', value: '4577.00')
+            column(name: 'gross_amount', value: '4764.40')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -115,7 +94,7 @@ databaseChangeLog {
             column(name: 'author', value: 'Mirjam H. Hüberli')
             column(name: 'number_of_copies', value: '2630')
             column(name: 'reported_value', value: '1280.00')
-            column(name: 'gross_amount', value: '6892.30')
+            column(name: 'gross_amount', value: '3274.85')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
@@ -130,13 +109,6 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: 'f9da71d0-9b07-4204-8355-549a4206ebc5')
             column(name: 'action_type_ind', value: 'LOADED')
             column(name: 'action_reason', value: "Uploaded in 'AccessCopyright_11Dec16' Batch")
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
-            column(name: 'df_usage_audit_uid', value: '74867322-b3fa-11e7-abc4-cec278b6b50a')
-            column(name: 'df_usage_uid', value: '49ed6163-e992-499a-8879-827928bef327')
-            column(name: 'action_type_ind', value: 'LOADED')
-            column(name: 'action_reason', value: "Uploaded in 'JAACC_11Dec16' Batch")
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
@@ -217,12 +189,13 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'b1f0b236-3ae9-4a60-9fab-61db84199dss')
-            column(name: 'df_usage_batch_uid', value: '56282dbc-2468-48d4-b926-94d3458a666a')
+            column(name: 'df_usage_batch_uid', value: '3cc619da-6218-47ef-959e-5a3f19e392a4')
             column(name: 'df_scenario_uid', value: 'b1f0b236-3ae9-4a60-9fab-61db84199d6f')
             column(name: 'detail_id', value: '6997788886')
             column(name: 'wr_wrk_inst', value: '243904752')
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'rh_account_number', value: '1000002859')
+            column(name: 'payee_account_number', value: '1000002859')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '1008902112377654XX')
@@ -233,8 +206,39 @@ databaseChangeLog {
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'number_of_copies', value: '250232')
+            column(name: 'is_rh_participating_flag', value: 'false')
             column(name: 'reported_value', value: '9900')
-            column(name: 'gross_amount', value: '11461.54')
+            column(name: 'gross_amount', value: '30235.60')
+            column(name: 'service_fee_amount', value: '9675.39')
+            column(name: 'net_amount', value: '20560.21')
+            column(name: 'service_fee', value: '0.32')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '49ed6163-e992-499a-8879-827928bef327')
+            column(name: 'df_usage_batch_uid', value: '56782dbc-2158-48d4-b026-94d3458a666a')
+            column(name: 'df_scenario_uid', value: 'b1f0b236-3ae9-4a60-9fab-61db84199d6f')
+            column(name: 'detail_id', value: '6997788882')
+            column(name: 'wr_wrk_inst', value: '108738286')
+            column(name: 'work_title', value: '2001 tax legislation: law, explanation, and analysis : Economic Growth and Tax Relief Reconciliation Act of 2001')
+            column(name: 'rh_account_number', value: '1000008666')
+            column(name: 'payee_account_number', value: '1000008666')
+            column(name: 'status_ind', value: 'LOCKED')
+            column(name: 'article', value: 'Google Makes Super')
+            column(name: 'standard_number', value: '1008902002377656XX')
+            column(name: 'publisher', value: 'CCH Inc')
+            column(name: 'publication_date', value: '1999-09-27')
+            column(name: 'market', value: 'Bus,Doc Del,Edu,Gov,Lib,Sch,Univ')
+            column(name: 'market_period_from', value: '2015')
+            column(name: 'market_period_to', value: '2019')
+            column(name: 'author', value: '愛染恭子')
+            column(name: 'number_of_copies', value: '16')
+            column(name: 'is_rh_participating_flag', value: 'false')
+            column(name: 'reported_value', value: '850')
+            column(name: 'gross_amount', value: '2184.70')
+            column(name: 'service_fee_amount', value: '695.90')
+            column(name: 'net_amount', value: '1478.80')
+            column(name: 'service_fee', value: '0.32')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
@@ -242,6 +246,13 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: 'b1f0b236-3ae9-4a60-9fab-61db84199dss')
             column(name: 'action_type_ind', value: 'LOADED')
             column(name: 'action_reason', value: "Uploaded in 'AccessCopyright_11Dec16' Batch")
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
+            column(name: 'df_usage_audit_uid', value: '74867322-b3fa-11e7-abc4-cec278b6b50a')
+            column(name: 'df_usage_uid', value: '49ed6163-e992-499a-8879-827928bef327')
+            column(name: 'action_type_ind', value: 'LOADED')
+            column(name: 'action_reason', value: "Uploaded in 'JAACC_11Dec16' Batch")
         }
 
         rollback ""
@@ -285,6 +296,7 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: '122235137')
             column(name: 'work_title', value: 'TOMATOES')
             column(name: 'rh_account_number', value: '2000017003')
+            column(name: 'payee_account_number', value: '2000017003')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'article', value: '')
             column(name: 'standard_number', value: '1112202112377654XX')
@@ -295,11 +307,12 @@ databaseChangeLog {
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'number_of_copies', value: '200')
+            column(name: 'is_rh_participating_flag', value: 'true')
             column(name: 'reported_value', value: '100.00')
-            column(name: 'gross_amount', value: '100.00')
-            column(name: 'net_amount', value: '84.00')
+            column(name: 'gross_amount', value: '255.85')
+            column(name: 'net_amount', value: '214.91')
+            column(name: 'service_fee_amount', value: '40.94')
             column(name: 'service_fee', value: '0.1600')
-            column(name: 'service_fee_amount', value: '16.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -310,6 +323,7 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: '122235137')
             column(name: 'work_title', value: 'TOMATOES')
             column(name: 'rh_account_number', value: '2000017003')
+            column(name: 'payee_account_number', value: '2000017003')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'article', value: '')
             column(name: 'standard_number', value: '1112202112377654XX')
@@ -320,8 +334,12 @@ databaseChangeLog {
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'number_of_copies', value: '200')
+            column(name: 'is_rh_participating_flag', value: 'false')
             column(name: 'reported_value', value: '200.00')
-            column(name: 'gross_amount', value: '210.00')
+            column(name: 'gross_amount', value: '511.69')
+            column(name: 'net_amount', value: '347.95')
+            column(name: 'service_fee_amount', value: '163.74')
+            column(name: 'service_fee', value: '0.32')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -332,6 +350,7 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: '122235137')
             column(name: 'work_title', value: 'TOMATOES')
             column(name: 'rh_account_number', value: '2000017003')
+            column(name: 'payee_account_number', value: '2000017003')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'article', value: '')
             column(name: 'standard_number', value: '1112202112377654XX')
@@ -342,8 +361,12 @@ databaseChangeLog {
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'number_of_copies', value: '200')
+            column(name: 'is_rh_participating_flag', value: 'false')
             column(name: 'reported_value', value: '250.00')
-            column(name: 'gross_amount', value: '240.00')
+            column(name: 'gross_amount', value: '639.62')
+            column(name: 'net_amount', value: '434.94')
+            column(name: 'service_fee_amount', value: '204.68')
+            column(name: 'service_fee', value: '0.32')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
@@ -390,6 +413,7 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: '122235137')
             column(name: 'work_title', value: 'TOMATOES')
             column(name: 'rh_account_number', value: '1000008666')
+            column(name: 'payee_account_number', value: '1000008666')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'article', value: '')
             column(name: 'standard_number', value: '1112202112377654XX')
@@ -400,10 +424,11 @@ databaseChangeLog {
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'number_of_copies', value: '200')
+            column(name: 'is_rh_participating_flag', value: 'false')
             column(name: 'reported_value', value: '3000.00')
-            column(name: 'gross_amount', value: '1632.00')
-            column(name: 'net_amount', value: '2400.00')
-            column(name: 'service_fee_amount', value: '768.00')
+            column(name: 'gross_amount', value: '7675.44')
+            column(name: 'net_amount', value: '5219.30')
+            column(name: 'service_fee_amount', value: '2456.14')
             column(name: 'service_fee', value: '0.32000')
         }
 
@@ -415,6 +440,7 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: '122235137')
             column(name: 'work_title', value: 'TOMATOES')
             column(name: 'rh_account_number', value: '1000008666')
+            column(name: 'payee_account_number', value: '1000008666')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'article', value: '')
             column(name: 'standard_number', value: '1112202112377654XX')
@@ -425,10 +451,11 @@ databaseChangeLog {
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'number_of_copies', value: '200')
+            column(name: 'is_rh_participating_flag', value: 'false')
             column(name: 'reported_value', value: '5000.00')
-            column(name: 'gross_amount', value: '4800.00')
-            column(name: 'net_amount', value: '3264.00')
-            column(name: 'service_fee_amount', value: '1536.00')
+            column(name: 'gross_amount', value: '12792.40')
+            column(name: 'net_amount', value: '8698.83')
+            column(name: 'service_fee_amount', value: '4093.57')
             column(name: 'service_fee', value: '0.32000')
         }
 
@@ -440,6 +467,7 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: '122235137')
             column(name: 'work_title', value: 'TOMATOES')
             column(name: 'rh_account_number', value: '1000009997')
+            column(name: 'payee_account_number', value: '1000009997')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'article', value: '')
             column(name: 'standard_number', value: '1112202112377654XX')
@@ -450,10 +478,11 @@ databaseChangeLog {
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'number_of_copies', value: '200')
+            column(name: 'is_rh_participating_flag', value: 'false')
             column(name: 'reported_value', value: '2500.00')
-            column(name: 'gross_amount', value: '2400.00')
-            column(name: 'net_amount', value: '1632.00')
-            column(name: 'service_fee_amount', value: '768.00')
+            column(name: 'gross_amount', value: '6396.19')
+            column(name: 'net_amount', value: '4349.41')
+            column(name: 'service_fee_amount', value: '2046.78')
             column(name: 'service_fee', value: '0.32000')
         }
 
@@ -465,6 +494,7 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: '122235137')
             column(name: 'work_title', value: 'TOMATOES')
             column(name: 'rh_account_number', value: '1000002797')
+            column(name: 'payee_account_number', value: '1000002797')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'article', value: '')
             column(name: 'standard_number', value: '1112202112377654XX')
@@ -475,10 +505,11 @@ databaseChangeLog {
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'number_of_copies', value: '200')
+            column(name: 'is_rh_participating_flag', value: 'false')
             column(name: 'reported_value', value: '500.00')
-            column(name: 'gross_amount', value: '480.00')
-            column(name: 'net_amount', value: '326.40')
-            column(name: 'service_fee_amount', value: '153.60')
+            column(name: 'gross_amount', value: '1279.24')
+            column(name: 'net_amount', value: '869.88')
+            column(name: 'service_fee_amount', value: '409.36')
             column(name: 'service_fee', value: '0.32000')
         }
 
@@ -541,7 +572,7 @@ databaseChangeLog {
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'number_of_copies', value: '10')
             column(name: 'reported_value', value: '3000.00')
-            column(name: 'gross_amount', value: '3000.00')
+            column(name: 'gross_amount', value: '26250.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {

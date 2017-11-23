@@ -139,7 +139,7 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
         clickButtonAndWait(scenariosTab, DELETE_BUTTON_ID);
         WebElement confirmDialog = assertWebElement(By.id("confirm-dialog-window"));
         UsageFilter filter = new UsageFilter();
-        filter.setUsageBatchesIds(Sets.newHashSet("56282dbc-2468-48d4-b926-93d3458a656a"));
+        filter.setUsageBatchesIds(Sets.newHashSet("d2b9c16d-230a-414f-9ffb-acdb676fac0c"));
         Pageable pageable = new Pageable(0, 100);
         Sort sort = new Sort("status", Direction.ASC);
         assertEquals(0, CollectionUtils.size(usageRepository.findByFilter(filter, pageable, sort)));
@@ -198,8 +198,8 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
         List<WebElement> labels = findElements(metadataPanel, By.className(V_LABEL_CLASS_NAME));
         assertEquals(5, CollectionUtils.size(labels));
         assertEquals("Owner: SYSTEM", labels.get(0).getText());
-        assertEquals("Distribution Total: 84.00", labels.get(1).getText());
-        assertEquals("Gross Total: 100.00", labels.get(2).getText());
+        assertEquals("Distribution Total: 214.91", labels.get(1).getText());
+        assertEquals("Gross Total: 255.85", labels.get(2).getText());
         assertEquals("Reported Total: 100.00", labels.get(3).getText());
         assertEquals("Description: Scenario description", labels.get(4).getText());
     }
