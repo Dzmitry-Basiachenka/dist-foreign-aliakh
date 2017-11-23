@@ -4,12 +4,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.test.ReportMatcher;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.impl.UsageService;
+import com.copyright.rup.dist.foreign.service.impl.csvprocessor.exception.ThresholdExceededException;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -33,7 +36,6 @@ import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.concurrent.Executors;
 
 /**
@@ -53,6 +55,7 @@ import java.util.concurrent.Executors;
 public class UsageCsvProcessorIntegrationTest {
 
     private static final String PATH_TO_ACTUAL = "build/temp";
+    private static final String PATH_TO_EXPECTED = "src/testInteg/resources/com/copyright/rup/dist/foreign/service/csv";
 
     private UsageCsvProcessor processor;
     @Autowired
@@ -91,11 +94,26 @@ public class UsageCsvProcessorIntegrationTest {
         PipedOutputStream outputStream = new PipedOutputStream();
         PipedInputStream pipedInputStream = new PipedInputStream(outputStream);
         Executors.newSingleThreadExecutor().execute(() -> new UsageService().writeErrorsToFile(result, outputStream));
-        File actual = new File(PATH_TO_ACTUAL, "errors_report.csv");
-        FileUtils.copyInputStreamToFile(pipedInputStream, actual);
-        File expected = new File("src/testInteg/resources/com/copyright/rup/dist/foreign/service/csv",
-            "usages_with_errors_report.csv");
-        isFilesEquals(expected, actual);
+        FileUtils.copyInputStreamToFile(pipedInputStream, new File(PATH_TO_ACTUAL, "errors_report.csv"));
+        isFilesEquals("usages_with_errors_report.csv", "errors_report.csv");
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testProcessorErrorsExceededThreshold() throws Exception {
+        PipedOutputStream outputStream = new PipedOutputStream();
+        PipedInputStream pipedInputStream = new PipedInputStream(outputStream);
+        try {
+            processFile("usages_with_2000_errors.csv");
+            fail();
+        } catch (ThresholdExceededException ex) {
+            assertEquals("The file could not be uploaded. There are more than 2000 errors<br>" +
+                "Press Download button to see detailed list of errors", ex.getMessage());
+            Executors.newSingleThreadExecutor()
+                .execute(() -> new UsageService().writeErrorsToFile(ex.getProcessingResult(), outputStream));
+            FileUtils.copyInputStreamToFile(pipedInputStream, new File(PATH_TO_ACTUAL, "errors_2000_report.csv"));
+            isFilesEquals("usages_with_2000_errors_report.csv", "errors_2000_report.csv");
+        }
     }
 
     private void verifyUsage(Usage usage, Long detailId, Long wrWrkInst, Long rhAccountNumber, UsageStatusEnum status) {
@@ -151,13 +169,9 @@ public class UsageCsvProcessorIntegrationTest {
         return result;
     }
 
-    private void isFilesEquals(File expected, File actual) throws IOException {
-        List<String> expectedLineList = FileUtils.readLines(expected);
-        List<String> actualLineList = FileUtils.readLines(actual);
-        assertEquals(expectedLineList.size(), actualLineList.size());
-        for (int i = 0; i < expectedLineList.size(); i++) {
-            assertEquals("Line: " + i, expectedLineList.get(i), actualLineList.get(i));
-        }
+    private void isFilesEquals(String expectedFileName, String actualFileName) throws IOException {
+        assertTrue(new ReportMatcher(new File(PATH_TO_EXPECTED, expectedFileName))
+            .matches(new File(PATH_TO_ACTUAL, actualFileName)));
     }
 
     private Usage buildUsage() {
