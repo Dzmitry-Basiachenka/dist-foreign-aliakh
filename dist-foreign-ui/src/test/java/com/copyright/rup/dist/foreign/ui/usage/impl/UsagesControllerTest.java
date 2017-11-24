@@ -21,6 +21,7 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
@@ -281,6 +282,41 @@ public class UsagesControllerTest {
         replay(prmIntegrationService);
         assertEquals(new Rightsholder(), controller.getRro(RRO_ACCOUNT_NUMBER));
         verify(prmIntegrationService);
+    }
+
+    @Test
+    public void testIsFilterStatusEligibleStatusNull() {
+        IUsagesFilterWidget filterWidgetMock = createMock(IUsagesFilterWidget.class);
+        UsageFilter usageFilter = new UsageFilter();
+        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
+        expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
+        replay(filterController, filterWidgetMock);
+        assertFalse(controller.isFilterStatusEligible());
+        verify(filterController, filterWidgetMock);
+    }
+
+    @Test
+    public void testIsFilterStatusEligibleStatusNew() {
+        IUsagesFilterWidget filterWidgetMock = createMock(IUsagesFilterWidget.class);
+        UsageFilter usageFilter = new UsageFilter();
+        usageFilter.setUsageStatus(UsageStatusEnum.NEW);
+        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
+        expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
+        replay(filterController, filterWidgetMock);
+        assertFalse(controller.isFilterStatusEligible());
+        verify(filterController, filterWidgetMock);
+    }
+
+    @Test
+    public void testIsFilterStatusEligibleStatusEligible() {
+        IUsagesFilterWidget filterWidgetMock = createMock(IUsagesFilterWidget.class);
+        UsageFilter usageFilter = new UsageFilter();
+        usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
+        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
+        expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
+        replay(filterController, filterWidgetMock);
+        assertTrue(controller.isFilterStatusEligible());
+        verify(filterController, filterWidgetMock);
     }
 
     @Test
