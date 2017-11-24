@@ -1,9 +1,9 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.repository.api.ICommonRightsholderRepository;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * Represents interface of repository for rightsholders.
@@ -14,8 +14,9 @@ import java.util.Set;
  *
  * @author Mikita Hladkikh
  * @author Mikalai Bezmen
+ * @author Aliaksandr Radkevich
  */
-public interface IRightsholderRepository {
+public interface IRightsholderRepository extends ICommonRightsholderRepository {
 
     /**
      * @return list of RROs from all batches stored in DB.
@@ -23,36 +24,9 @@ public interface IRightsholderRepository {
     List<Rightsholder> findRros();
 
     /**
-     * Inserts {@link Rightsholder} into DB.
-     *
-     * @param rightsholder instance of {@link Rightsholder}
-     */
-    void insert(Rightsholder rightsholder);
-
-    /**
-     * Finds set of RRO and RH account numbers from usages, archived usages and usage batches tables.
-     *
-     * @return set of account numbers
-     */
-    Set<Long> findAccountNumbers();
-
-    /**
-     * Removes all rightsholders from df_rightsholder table.
-     */
-    void deleteAll();
-
-    /**
      * Deletes {@link Rightsholder} from database table by account number.
      *
      * @param accountNumber acccount number of {@link Rightsholder}
      */
     void deleteByAccountNumber(Long accountNumber);
-
-    /**
-     * Finds list of {@link Rightsholder}s by account numbers.
-     *
-     * @param accountNumbers set of {@link Rightsholder}s' account numbers
-     * @return list of {@link Rightsholder}s
-     */
-    List<Rightsholder> findRightsholdersByAccountNumbers(Set<Long> accountNumbers);
 }

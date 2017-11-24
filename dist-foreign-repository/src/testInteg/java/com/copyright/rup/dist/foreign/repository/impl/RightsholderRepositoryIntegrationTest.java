@@ -118,7 +118,7 @@ public class RightsholderRepositoryIntegrationTest {
 
     @Test
     public void testFindRightsholdersByAccountNumbers() {
-        List<Rightsholder> actualResult = rightsholderRepository.findRightsholdersByAccountNumbers(
+        List<Rightsholder> actualResult = rightsholderRepository.findByAccountNumbers(
             Sets.newHashSet(RH_ACCOUNT_NUMBER_7000813806, RH_ACCOUNT_NUMBER_2000017004));
         assertTrue(CollectionUtils.isNotEmpty(actualResult));
         assertEquals(2, actualResult.size());
@@ -131,8 +131,7 @@ public class RightsholderRepositoryIntegrationTest {
 
     @Test
     public void testFindRightsholdersByAccountNumbersEmptyResult() {
-        assertTrue(CollectionUtils.isEmpty(
-            rightsholderRepository.findRightsholdersByAccountNumbers(Sets.newHashSet(1111111111L))));
+        assertTrue(CollectionUtils.isEmpty(rightsholderRepository.findByAccountNumbers(Sets.newHashSet(1111111111L))));
     }
 
     private Rightsholder buildRightsholder() {

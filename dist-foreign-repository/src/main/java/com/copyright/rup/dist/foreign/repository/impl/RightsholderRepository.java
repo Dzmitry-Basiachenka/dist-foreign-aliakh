@@ -1,16 +1,11 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.common.repository.BaseRepository;
+import com.copyright.rup.dist.common.repository.impl.CommonRightsholderRepository;
 import com.copyright.rup.dist.foreign.repository.api.IRightsholderRepository;
 
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -24,48 +19,28 @@ import java.util.Set;
  * Date: 02/07/2017
  *
  * @author Mikita Hladkikh
+ * @author Aliaksandr Radkevich
  */
 @Repository
-public class RightsholderRepository extends BaseRepository implements IRightsholderRepository {
+public class RightsholderRepository extends CommonRightsholderRepository implements IRightsholderRepository {
 
     @Override
     public List<Rightsholder> findRros() {
-        return selectList("IRightsholderMapper.findRros");
-    }
-
-    @Override
-    public void insert(Rightsholder rightsholder) {
-        insert("IRightsholderMapper.insert", checkNotNull(rightsholder));
+        return selectList("RightsholderMapper.findRros");
     }
 
     @Override
     public Set<Long> findAccountNumbers() {
-        return selectSet("IRightsholderMapper.findAccountNumbers");
-    }
-
-    @Override
-    public void deleteAll() {
-        delete("IRightsholderMapper.deleteAll");
+        return selectSet("RightsholderMapper.findAccountNumbers");
     }
 
     @Override
     public void deleteByAccountNumber(Long accountNumber) {
-        delete("IRightsholderMapper.deleteByAccountNumber", checkNotNull(accountNumber));
-    }
-
-    /**
-     * @return list of all {@link Rightsholder}s from DB.
-     */
-    List<Rightsholder> findAll() {
-        return selectList("IRightsholderMapper.findAll");
+        delete("RightsholderMapper.deleteByAccountNumber", checkNotNull(accountNumber));
     }
 
     @Override
-    public List<Rightsholder> findRightsholdersByAccountNumbers(Set<Long> accountNumbers) {
-        checkArgument(CollectionUtils.isNotEmpty(accountNumbers));
-        List<Rightsholder> result = Lists.newArrayList();
-        Iterables.partition(accountNumbers, 32000).forEach(partition -> result.addAll(
-            selectList("IRightsholderMapper.findRightsholdersByAccountNumbers", partition)));
-        return result;
+    protected String getPrefix() {
+        return "df";
     }
 }

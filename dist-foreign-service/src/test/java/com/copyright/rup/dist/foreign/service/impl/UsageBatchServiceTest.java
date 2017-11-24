@@ -23,7 +23,6 @@ import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
 import org.easymock.Capture;
 import org.junit.Before;
@@ -36,6 +35,7 @@ import org.powermock.reflect.Whitebox;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
 
 /**
  * Verifies {@link UsageBatchService}.
@@ -61,16 +61,19 @@ public class UsageBatchServiceTest {
     private IUsageService usageService;
     private IRightsholderService rightsholderService;
     private UsageBatchService usageBatchService;
+    private ExecutorService executorService;
 
     @Before
     public void setUp() {
         usageBatchRepository = createMock(IUsageBatchRepository.class);
         usageService = createMock(IUsageService.class);
         rightsholderService = createMock(IRightsholderService.class);
+        executorService = createMock(ExecutorService.class);
         usageBatchService = new UsageBatchService();
         Whitebox.setInternalState(usageBatchService, "usageBatchRepository", usageBatchRepository);
         Whitebox.setInternalState(usageBatchService, "usageService", usageService);
         Whitebox.setInternalState(usageBatchService, "rightsholderService", rightsholderService);
+        Whitebox.setInternalState(usageBatchService, "executorService", executorService);
     }
 
     @Test
@@ -110,9 +113,10 @@ public class UsageBatchServiceTest {
     }
 
     @Test
-    public void insertUsageBatch() throws Exception {
+    public void testInsertUsageBatch() throws Exception {
         mockStatic(RupContextUtils.class);
         Capture<UsageBatch> captureUsageBatch = new Capture<>();
+        Capture<Runnable> runnableCapture = new Capture<>();
         UsageBatch usageBatch = new UsageBatch();
         Rightsholder rro = buildRro();
         usageBatch.setRro(rro);
@@ -128,16 +132,16 @@ public class UsageBatchServiceTest {
         rightsholderMap.put(RRO_ACCOUNT_NUMBER, rro);
         rightsholderService.updateRightsholder(rro);
         expectLastCall().once();
-        rightsholderService.updateRightsholders(Sets.newHashSet(1000001534L, 1000009522L));
+        executorService.execute(capture(runnableCapture));
         expectLastCall().once();
         expect(usageService.insertUsages(usageBatch, usages)).andReturn(2).once();
-        replay(usageBatchRepository, usageService, rightsholderService, RupContextUtils.class);
+        replay(usageBatchRepository, usageService, rightsholderService, RupContextUtils.class, executorService);
         assertEquals(2, usageBatchService.insertUsageBatch(usageBatch, usages));
         UsageBatch insertedUsageBatch = captureUsageBatch.getValue();
         assertNotNull(insertedUsageBatch);
         assertEquals(USER_NAME, insertedUsageBatch.getUpdateUser());
         assertEquals(USER_NAME, insertedUsageBatch.getCreateUser());
-        verify(usageBatchRepository, usageService, rightsholderService, RupContextUtils.class);
+        verify(usageBatchRepository, usageService, rightsholderService, RupContextUtils.class, executorService);
     }
 
     @Test
@@ -153,6 +157,17 @@ public class UsageBatchServiceTest {
         replay(usageService, usageBatchRepository, RupContextUtils.class);
         usageBatchService.deleteUsageBatch(usageBatch);
         verify(usageService, usageBatchRepository, RupContextUtils.class);
+    }
+
+    @Test
+    public void testUpdateRightsholders() {
+        Usage usage = new Usage();
+        usage.setRightsholder(buildRightsholder(1000001534L));
+        rightsholderService.updateRightsholders(Collections.singleton(1000001534L));
+        expectLastCall().once();
+        replay(rightsholderService);
+        usageBatchService.updateRightsholders(Collections.singletonList(usage));
+        verify(rightsholderService);
     }
 
     private Rightsholder buildRro() {
