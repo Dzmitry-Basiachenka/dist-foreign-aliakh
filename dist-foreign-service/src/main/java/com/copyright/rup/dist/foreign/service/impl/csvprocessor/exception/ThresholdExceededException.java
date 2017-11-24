@@ -3,7 +3,7 @@ package com.copyright.rup.dist.foreign.service.impl.csvprocessor.exception;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingResult;
 
 /**
- * Exception occurs if number of invalid rows in {@link CsvProcessingResult} more than threshold.
+ * Exception occurs if number of errors in {@link CsvProcessingResult} more than threshold.
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
@@ -22,8 +22,7 @@ public class ThresholdExceededException extends ValidationException {
      * @param processingResult instance of {@link CsvProcessingResult}
      */
     public ThresholdExceededException(int threshold, CsvProcessingResult processingResult) {
-        super(String.format("The file could not be uploaded. There are more than %s errors<br>" +
-            "Press Download button to see detailed list of errors", threshold));
+        super(String.format("The file could not be uploaded. There are more than %s errors", threshold));
         this.processingResult = processingResult;
     }
 

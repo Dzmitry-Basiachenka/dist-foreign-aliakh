@@ -99,7 +99,7 @@ class UsageBatchUploadWindow extends Window {
             } catch (ThresholdExceededException e) {
                 Windows.showModalWindow(
                     new ErrorUploadWindow(usagesController.getErrorResultStreamSource(e.getProcessingResult()),
-                        e.getMessage()));
+                        e.getMessage() + "<br>Press Download button to see detailed list of errors"));
             } catch (ValidationException e) {
                 Windows.showNotificationWindow(ForeignUi.getMessage("window.error"), e.getHtmlMessage());
             }

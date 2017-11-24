@@ -25,7 +25,7 @@ public class CsvProcessingResult<T> {
     private final String fileName;
     private Map<Integer, T> result = Maps.newHashMap();
     private Map<Integer, ErrorRow> errors = Maps.newTreeMap();
-    private int errorCount = 0;
+    private int errorsCount = 0;
 
     /**
      * Constructor.
@@ -97,14 +97,8 @@ public class CsvProcessingResult<T> {
      */
     public void logError(Integer line, List<String> originalRow, String errorMessage)
         throws ThresholdExceededException {
-        ErrorRow errorRow = errors.get(line);
-        if (null == errorRow) {
-            errorRow = new ErrorRow(line, originalRow);
-            errors.put(line, errorRow);
-        }
-        errorRow.addErrorMessage(errorMessage);
-        errorCount++;
-        if (ERRORS_THRESHOLD <= errorCount) {
+        errors.computeIfAbsent(line, errorRow -> new ErrorRow(line, originalRow)).addErrorMessage(errorMessage);
+        if (ERRORS_THRESHOLD <= ++errorsCount) {
             throw new ThresholdExceededException(ERRORS_THRESHOLD, this);
         }
     }
