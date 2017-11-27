@@ -107,8 +107,7 @@ public class UsageCsvProcessorIntegrationTest {
             processFile("usages_with_2000_errors.csv");
             fail();
         } catch (ThresholdExceededException ex) {
-            assertEquals("The file could not be uploaded. There are more than 2000 errors<br>" +
-                "Press Download button to see detailed list of errors", ex.getMessage());
+            assertEquals("The file could not be uploaded. There are more than 2000 errors", ex.getMessage());
             Executors.newSingleThreadExecutor()
                 .execute(() -> new UsageService().writeErrorsToFile(ex.getProcessingResult(), outputStream));
             FileUtils.copyInputStreamToFile(pipedInputStream, new File(PATH_TO_ACTUAL, "errors_2000_report.csv"));
