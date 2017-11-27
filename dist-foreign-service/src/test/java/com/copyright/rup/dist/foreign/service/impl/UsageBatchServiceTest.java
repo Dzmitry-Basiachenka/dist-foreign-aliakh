@@ -141,6 +141,7 @@ public class UsageBatchServiceTest {
         assertNotNull(insertedUsageBatch);
         assertEquals(USER_NAME, insertedUsageBatch.getUpdateUser());
         assertEquals(USER_NAME, insertedUsageBatch.getCreateUser());
+        assertNotNull(runnableCapture.getValue());
         verify(usageBatchRepository, usageService, rightsholderService, RupContextUtils.class, executorService);
     }
 
