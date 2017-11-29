@@ -10,6 +10,7 @@ import com.copyright.rup.vaadin.widget.api.IController;
 
 import com.google.common.collect.Lists;
 import com.vaadin.annotations.Theme;
+import com.vaadin.server.ErrorHandler;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 
@@ -46,7 +47,7 @@ public class ForeignUi extends CommonUi {
     /**
      * Gets a message associated with specified {@code key}.
      *
-     * @param key the key to get {@code message}
+     * @param key        the key to get {@code message}
      * @param parameters arguments referenced by the format specifiers in the format string
      * @return the string message
      */
@@ -74,6 +75,11 @@ public class ForeignUi extends CommonUi {
     @Override
     protected boolean hasAccessPermission() {
         return ForeignSecurityUtils.hasAccessPermission();
+    }
+
+    @Override
+    protected ErrorHandler initErrorHandler() {
+        return new ForeignErrorHandler(this);
     }
 
     @Override

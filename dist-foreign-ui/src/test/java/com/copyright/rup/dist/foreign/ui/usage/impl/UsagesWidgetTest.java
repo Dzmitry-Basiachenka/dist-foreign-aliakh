@@ -219,6 +219,8 @@ public class UsagesWidgetTest {
         Whitebox.setInternalState(containerMock, "itemSetChangeListeners", Collections.emptyList());
         Whitebox.setInternalState(containerMock, "queryView", queryView);
         Whitebox.setInternalState(usagesWidget, USAGES_TABLE, usagesTableMock);
+        usagesTableMock.refreshRowCache();
+        expectLastCall().once();
         expect(usagesTableMock.getContainerDataSource()).andReturn(containerMock).once();
         containerMock.refresh();
         expectLastCall().once();
