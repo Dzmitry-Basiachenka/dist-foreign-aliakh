@@ -17,7 +17,7 @@
         <property name="resourcesFromPaths">
             <list value-type="java.lang.String">
                 <value>/com/copyright/rup/dist/foreign/db/main-changelog.groovy</value>
-                <value>/com/copyright/rup/dist/foreign/repository/integ-test-changelog.groovy</value>
+                <value>/com/copyright/rup/dist/foreign/repository/${test.liquibase.changelog}</value>
             </list>
         </property>
         <property name="createCommonTablesOnStartup" value="false"/>
