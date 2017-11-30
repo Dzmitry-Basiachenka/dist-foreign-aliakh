@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +34,7 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/repository/dist-foreign-sql-test-context.xml"})
+@TestPropertySource(properties = {"test.liquibase.changelog=usage-batch-repository-test-data-init.groovy"})
 @TransactionConfiguration
 @Transactional
 public class UsageBatchRepositoryIntegrationTest {
@@ -80,21 +82,20 @@ public class UsageBatchRepositoryIntegrationTest {
     @Test
     public void testDeleteUsageBatch() {
         String batchId = "56282dbc-2468-48d4-b926-93d3458a656a";
-        assertEquals(5, usageBatchRepository.findAll().size());
+        assertEquals(4, usageBatchRepository.findAll().size());
         usageRepository.deleteUsages(batchId);
         usageBatchRepository.deleteUsageBatch(batchId);
-        assertEquals(4, usageBatchRepository.findAll().size());
+        assertEquals(3, usageBatchRepository.findAll().size());
     }
 
     @Test
     public void testFindUsageBatch() {
         List<UsageBatch> usageBatches = usageBatchRepository.findAll();
-        assertEquals(5, usageBatches.size());
+        assertEquals(4, usageBatches.size());
         assertEquals("3f46981e-e85a-4786-9b60-ab009c4358e7", usageBatches.get(0).getId());
         assertEquals("56282dbc-2468-48d4-b926-94d3458a666a", usageBatches.get(1).getId());
         assertEquals("56282dbc-2468-48d4-b926-93d3458a656a", usageBatches.get(2).getId());
         assertEquals("a5b64c3a-55d2-462e-b169-362dca6a4dd6", usageBatches.get(3).getId());
-        assertEquals("56282cac-2468-48d4-b346-93d3458a656a", usageBatches.get(4).getId());
     }
 
     @Test
