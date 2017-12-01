@@ -52,6 +52,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
 
     @Override
     public void refresh() {
+        usagesTable.refreshRowCache();
         LazyQueryContainer container = usagesTable.getContainerDataSource();
         container.refresh();
         if (CollectionUtils.isNotEmpty(container.getItemIds())) {
