@@ -54,7 +54,15 @@ public class PositiveNumberValidatorTest {
             {"12-3", false},
             {"12.3", false},
             {"-123", false},
-            {"+123", false}
+            {"+123", false},
+            {"1.23", false},
+            {"1.23E", false},
+            {"1.23e+", false},
+            {"1.e+2", true},
+            {"1.23e-1", false},
+            {"1.23E+1", true},
+            {"1.23e+10", true},
+            {"12.3E+1", true}
         });
     }
 

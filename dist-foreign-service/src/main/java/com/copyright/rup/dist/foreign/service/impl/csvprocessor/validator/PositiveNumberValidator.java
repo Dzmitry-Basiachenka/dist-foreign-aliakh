@@ -1,9 +1,12 @@
 package com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator;
 
+import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CommonCsvProcessor;
+
 import org.apache.commons.lang3.StringUtils;
 
 /**
  * The validator to check whether passed value contains only digits and the value is positive.
+ * Supports scientific notations for numbers (e.g. 1.1E+015).
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
@@ -13,11 +16,9 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class PositiveNumberValidator implements IValidator<String> {
 
-    private static final String POSITIVE_NUMBER_REGEX = "[1-9][0-9]*";
-
     @Override
     public boolean isValid(String value) {
-        return StringUtils.isEmpty(value) || value.matches(POSITIVE_NUMBER_REGEX);
+        return StringUtils.isEmpty(value) || CommonCsvProcessor.isPositiveNumber(value);
     }
 
     @Override

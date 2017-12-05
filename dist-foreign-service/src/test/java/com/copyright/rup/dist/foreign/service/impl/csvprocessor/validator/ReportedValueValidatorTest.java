@@ -42,12 +42,11 @@ public class ReportedValueValidatorTest {
         return Arrays.asList(new Object[][]{
             {null, true},
             {StringUtils.EMPTY, true},
-            {"125", false},
-            {"125.2", false},
-            {"0.11", true},
+            {"1", true},
+            {"125", true},
+            {"125.2", true},
             {"0.10", true},
             {"0.01", true},
-            {"0.09", true},
             {"1.00", true},
             {"10.00", true},
             {"9999999999.99", true},
@@ -55,10 +54,8 @@ public class ReportedValueValidatorTest {
             {"000125.52", false},
             {"01.44", false},
             {"10000000000.00", false},
-            {"555.9", false},
             {"105.8 9", false},
-            {"84.44415", false},
-            {"99.451", false},
+            {"84.44415", true},
             {"33..5", false},
             {"86.0.5", false},
             {"amount", false},
@@ -69,7 +66,7 @@ public class ReportedValueValidatorTest {
             {"15,687", false},
             {"0", false},
             {"0.0", false},
-            {"0.1", false},
+            {"0.1", true},
             {"0.00", false},
             {"+0.00", false},
             {"-0.00", false}
@@ -80,6 +77,6 @@ public class ReportedValueValidatorTest {
     public void testIsValid() {
         ReportedValueValidator validator = new ReportedValueValidator();
         assertEquals(expectedResult, validator.isValid(value));
-        assertEquals("Field value should be greater than 0 and contain 2 decimals", validator.getErrorMessage());
+        assertEquals("Field value should be greater than 0", validator.getErrorMessage());
     }
 }

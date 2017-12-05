@@ -153,18 +153,12 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         sendKeysToInput(assertWebElement(uploadWindow, GROSS_AMOUNT_FIELD_ID), "symbols");
         clickButtonAndWait(uploadWindow, UPLOAD_BUTTON_ID);
         Map<String, String> errors =
-            ImmutableMap.of(GROSS_AMOUNT_FIELD, "Field should be greater than 0 and contain 2 decimals");
+            ImmutableMap.of(GROSS_AMOUNT_FIELD, "Field should be greater than 0");
         verifyErrorWindow(errors);
         sendKeysToInput(assertWebElement(uploadWindow, GROSS_AMOUNT_FIELD_ID), "-555");
         clickButtonAndWait(uploadWindow, UPLOAD_BUTTON_ID);
         verifyErrorWindow(errors);
         sendKeysToInput(assertWebElement(uploadWindow, GROSS_AMOUNT_FIELD_ID), "0");
-        clickButtonAndWait(uploadWindow, UPLOAD_BUTTON_ID);
-        verifyErrorWindow(errors);
-        sendKeysToInput(assertWebElement(uploadWindow, GROSS_AMOUNT_FIELD_ID), "555");
-        clickButtonAndWait(uploadWindow, UPLOAD_BUTTON_ID);
-        verifyErrorWindow(errors);
-        sendKeysToInput(assertWebElement(uploadWindow, GROSS_AMOUNT_FIELD_ID), "555.5");
         clickButtonAndWait(uploadWindow, UPLOAD_BUTTON_ID);
         verifyErrorWindow(errors);
     }
@@ -284,7 +278,7 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         assertNotNull(usage);
         assertEquals("1984", usage.getWorkTitle());
         assertEquals(null, usage.getArticle());
-        assertEquals("9.78015E+12", usage.getStandardNumber());
+        assertEquals("9780150000000", usage.getStandardNumber());
         assertEquals(Long.valueOf(123456789), usage.getWrWrkInst());
         assertEquals(Long.valueOf(1000009522), usage.getRhAccountNumber());
         assertEquals(null, usage.getPublisher());
@@ -306,7 +300,7 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         assertNotNull(usage);
         assertEquals("1984", usage.getWorkTitle());
         assertEquals("Appendix: The Principles of Newspeak", usage.getArticle());
-        assertEquals("9.78015E+12", usage.getStandardNumber());
+        assertEquals("9780150000000", usage.getStandardNumber());
         assertEquals(Long.valueOf(123456789), usage.getWrWrkInst());
         assertEquals(Long.valueOf(1000009522), usage.getRhAccountNumber());
         assertEquals("Publisher", usage.getPublisher());
