@@ -27,6 +27,7 @@ dependencies {
     compile("com.copyright.rup.vaadin:rup-vaadin-theme:${rupVaadinVersion}")
     compile("com.copyright.rup.security.auth:rup-auth-common:${rupAuthVersion}")
     compile("ru.xpoft.vaadin:spring-vaadin-integration:${vaadinSpringIntegrationAddonVersion}")
+    compile("org.apache.commons:commons-text:${commonsTextVersion}")
 
     runtime("com.copyright.rup.security.auth:rup-auth-consumer:${rupAuthVersion}")
     runtime("com.copyright.rup.common:rup-common-web:${rupCommonWebVersion}")
