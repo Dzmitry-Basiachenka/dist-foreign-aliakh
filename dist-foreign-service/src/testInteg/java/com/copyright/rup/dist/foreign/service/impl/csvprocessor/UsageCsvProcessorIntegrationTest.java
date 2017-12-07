@@ -150,7 +150,7 @@ public class UsageCsvProcessorIntegrationTest {
         assertNull(usage.getPublisher());
         assertNull(usage.getPublicationDate());
         assertNull(usage.getNumberOfCopies());
-        assertEquals(new BigDecimal("60.86"), usage.getReportedValue());
+        assertEquals(new BigDecimal("60.80"), usage.getReportedValue());
         assertEquals("Univ,Bus,Doc,S", usage.getMarket());
         assertEquals(Integer.valueOf(2015), usage.getMarketPeriodFrom());
         assertEquals(Integer.valueOf(2015), usage.getMarketPeriodTo());

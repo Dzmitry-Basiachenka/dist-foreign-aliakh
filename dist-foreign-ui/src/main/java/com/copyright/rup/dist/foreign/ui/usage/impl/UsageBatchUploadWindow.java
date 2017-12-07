@@ -130,7 +130,8 @@ class UsageBatchUploadWindow extends Window {
         usageBatch.setRro(rro);
         usageBatch.setPaymentDate(paymentDateWidget.getValue());
         usageBatch.setFiscalYear(UsageBatchUtils.calculateFiscalYear(paymentDateWidget.getValue()));
-        usageBatch.setGrossAmount(new BigDecimal(StringUtils.trim(grossAmountField.getValue())));
+        usageBatch.setGrossAmount(
+            new BigDecimal(StringUtils.trim(grossAmountField.getValue())).setScale(2, BigDecimal.ROUND_HALF_UP));
         return usageBatch;
     }
 
@@ -180,7 +181,7 @@ class UsageBatchUploadWindow extends Window {
 
     private HorizontalLayout initRightsholderLayout() {
         HorizontalLayout horizontalLayout = new HorizontalLayout();
-        TextField accountNumber = initRighsholderAccountNumberField();
+        TextField accountNumber = initRightsholderAccountNumberField();
         TextField accountName = initRightsholderAccountNameField();
         Button verifyButton = initVerifyButton();
         verifyButton.setWidth(72, Unit.PIXELS);
@@ -209,7 +210,7 @@ class UsageBatchUploadWindow extends Window {
         return horizontalLayout;
     }
 
-    private TextField initRighsholderAccountNumberField() {
+    private TextField initRightsholderAccountNumberField() {
         accountNumberField = new TextField(ForeignUi.getMessage("label.rro_account_number"));
         setRequired(accountNumberField);
         accountNumberField.setNullRepresentation(StringUtils.EMPTY);

@@ -48,6 +48,9 @@ public class LengthValidatorTest {
             {"012356789", 10, true},
             {"01234567891", 10, false},
             {" 0123456789", 10, false},
+            {"1.23E+9", 10, true},
+            {"1.23E+10", 10, false},
+            {"125.3E+1", 10, true},
             {"0", 1, true},
             {"01", 1, false}
         });

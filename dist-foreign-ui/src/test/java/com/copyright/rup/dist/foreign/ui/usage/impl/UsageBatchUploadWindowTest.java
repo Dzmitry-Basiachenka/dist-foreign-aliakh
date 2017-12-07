@@ -76,8 +76,7 @@ public class UsageBatchUploadWindowTest {
     private static final String USAGE_BATCH_NAME = "BatchName";
     private static final String RRO_NAME = "RRO name";
     private static final String ACCOUNT_NAME = "Account Name";
-    private static final String INVALID_GROSS_AMOUNT_ERROR_MESSAGE =
-        "<div>Field should be greater than 0 and contain 2 decimals</div>\n";
+    private static final String INVALID_GROSS_AMOUNT_ERROR_MESSAGE = "<div>Field should be greater than 0</div>\n";
     private static final String GROSS_AMOUNT_FIELD = "grossAmountField";
     private static final LocalDate PAYMENT_DATE = LocalDate.of(2017, 2, 27);
     private UsageBatchUploadWindow window;
@@ -138,9 +137,7 @@ public class UsageBatchUploadWindowTest {
         window = new UsageBatchUploadWindow(usagesController);
         TextField grossAmountField = Whitebox.getInternalState(window, GROSS_AMOUNT_FIELD);
         grossAmountField.setValue("123.5684");
-        assertFalse(grossAmountField.isValid());
-        assertEquals(INVALID_GROSS_AMOUNT_ERROR_MESSAGE,
-            StringEscapeUtils.unescapeHtml4(grossAmountField.getErrorMessage().getFormattedHtmlMessage()));
+        assertTrue(grossAmountField.isValid());
         grossAmountField.setValue("0.00");
         assertFalse(grossAmountField.isValid());
         assertEquals(INVALID_GROSS_AMOUNT_ERROR_MESSAGE,

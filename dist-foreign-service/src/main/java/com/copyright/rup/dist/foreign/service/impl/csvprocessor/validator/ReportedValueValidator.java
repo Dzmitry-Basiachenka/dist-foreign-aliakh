@@ -15,7 +15,7 @@ import java.math.BigDecimal;
  */
 public class ReportedValueValidator implements IValidator<String> {
 
-    private static final String AMOUNT_REGEX = "(0|([1-9]\\d{0,9}))\\.\\d{2}";
+    private static final String AMOUNT_REGEX = "(0|([1-9]\\d{0,9}))(\\.\\d+)?";
 
     @Override
     public boolean isValid(String value) {
@@ -24,7 +24,7 @@ public class ReportedValueValidator implements IValidator<String> {
 
     @Override
     public String getErrorMessage() {
-        return "Field value should be greater than 0 and contain 2 decimals";
+        return "Field value should be greater than 0";
     }
 
     private boolean isValidReportedValue(String value) {

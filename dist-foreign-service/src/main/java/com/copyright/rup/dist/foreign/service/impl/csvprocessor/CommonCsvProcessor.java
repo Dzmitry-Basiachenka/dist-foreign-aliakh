@@ -20,6 +20,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -54,6 +55,26 @@ public abstract class CommonCsvProcessor<T> {
     private List<ICsvColumn> headers = Lists.newArrayList();
     private CsvProcessingResult<T> processingResult;
     private Map<Integer, List<String>> originalValuesMap = Maps.newHashMap();
+
+    /**
+     * Verifies is string value positive number or not.
+     *
+     * @param value the instance to verify
+     * @return {@code true} if value is positive number, {@code false} - otherwise
+     */
+    public static boolean isPositiveNumber(String value) {
+        return null != value && value.matches("[1-9]\\d*(\\.\\d*[eE][+]\\d+)?");
+    }
+
+    /**
+     * Returns parsed string from scientific format.
+     *
+     * @param value the instance to verify
+     * @return parsed string
+     */
+    public static String parseScientific(String value) {
+        return null != value ? new BigDecimal(value).toPlainString() : null;
+    }
 
     /**
      * Processes CSV resource from the specified stream and {@link CsvProcessingResult}
@@ -110,7 +131,7 @@ public abstract class CommonCsvProcessor<T> {
      * @param validators vararg of validators
      */
     @SuppressWarnings("unchecked")
-    protected void addPlainValidators(ICsvColumn column, IValidator<String>... validators) {
+    void addPlainValidators(ICsvColumn column, IValidator<String>... validators) {
         plainValidators.put(column, Lists.newArrayList(validators));
     }
 
@@ -120,7 +141,7 @@ public abstract class CommonCsvProcessor<T> {
      * @param validators vararg of validators
      */
     @SuppressWarnings("unchecked")
-    protected void addBusinessValidators(IValidator<T>... validators) {
+    void addBusinessValidators(IValidator<T>... validators) {
         businessValidators = Lists.newArrayList(validators);
     }
 
@@ -131,8 +152,9 @@ public abstract class CommonCsvProcessor<T> {
      * @param params params
      * @return null or String
      */
-    protected String getString(ICsvColumn column, List<String> params) {
-        return getValue(column, params);
+    String getString(ICsvColumn column, List<String> params) {
+        String value = getValue(column, params);
+        return null != value ? (isPositiveNumber(value) ? parseScientific(value) : value) : null;
     }
 
     /**
@@ -142,8 +164,9 @@ public abstract class CommonCsvProcessor<T> {
      * @param params params
      * @return null or Long
      */
-    protected Long getLong(ICsvColumn column, List<String> params) {
-        return NumberUtils.createLong(getValue(column, params));
+    Long getLong(ICsvColumn column, List<String> params) {
+        String value = getValue(column, params);
+        return null != value ? Long.valueOf(parseScientific(value)) : null;
     }
 
     /**
@@ -153,7 +176,7 @@ public abstract class CommonCsvProcessor<T> {
      * @param params params
      * @return null or LocalDate
      */
-    protected LocalDate getDate(ICsvColumn column, List<String> params) {
+    LocalDate getDate(ICsvColumn column, List<String> params) {
         String value = getValue(column, params);
         return null != value ? parseDateValue(value) : null;
     }
@@ -165,7 +188,7 @@ public abstract class CommonCsvProcessor<T> {
      * @param params params
      * @return null or Integer
      */
-    protected Integer getInteger(ICsvColumn column, List<String> params) {
+    Integer getInteger(ICsvColumn column, List<String> params) {
         return NumberUtils.createInteger(getValue(column, params));
     }
 
@@ -176,8 +199,9 @@ public abstract class CommonCsvProcessor<T> {
      * @param params params
      * @return null or BigDecimal
      */
-    protected BigDecimal getBigDecimal(ICsvColumn column, List<String> params) {
-        return NumberUtils.createBigDecimal(getValue(column, params));
+    BigDecimal getBigDecimal(ICsvColumn column, List<String> params) {
+        String value = getValue(column, params);
+        return null != value ? new BigDecimal(value).setScale(2, RoundingMode.HALF_UP) : null;
     }
 
     /**
@@ -235,8 +259,7 @@ public abstract class CommonCsvProcessor<T> {
         for (int i = 0; i < params.size(); i++) {
             String value = params.get(i);
             String field = headers.get(i).getColumnName();
-            List<IValidator<String>> validators = getPlainValidators(i);
-            for (IValidator<String> validator : validators) {
+            for (IValidator<String> validator : getPlainValidators(i)) {
                 if (!validator.isValid(value)) {
                     valid = false;
                     processingResult.logError(line, originalValuesMap.get(line),
@@ -267,25 +290,18 @@ public abstract class CommonCsvProcessor<T> {
     }
 
     private List<String> getCsvColumnsNames() {
-        return headers.stream()
-            .map(ICsvColumn::getColumnName)
-            .collect(Collectors.toList());
+        return headers.stream().map(ICsvColumn::getColumnName).collect(Collectors.toList());
     }
 
     private String getValue(ICsvColumn header, List<String> params) {
         return StringUtils.defaultIfBlank(params.get(header.ordinal()), null);
     }
 
-    private static List<String> trimNulls(List<String> values) {
-        List<String> result = Lists.newArrayListWithExpectedSize(values.size());
-        result.addAll(
-            values.stream()
-                .map(CommonCsvProcessor::trimNulls)
-                .collect(Collectors.toList()));
-        return result;
+    private List<String> trimNulls(List<String> values) {
+        return values.stream().map(this::trimNulls).collect(Collectors.toList());
     }
 
-    private static String trimNulls(String value) {
+    private String trimNulls(String value) {
         return null != value ? StringUtils.trim(value.replaceAll(EMPTY_STRING_REGEX, StringUtils.EMPTY)) : null;
     }
 
@@ -301,7 +317,7 @@ public abstract class CommonCsvProcessor<T> {
     /**
      * Interface to handle CSV column names.
      */
-    protected interface ICsvColumn {
+    interface ICsvColumn {
 
         /**
          * @return ordinal of the column.

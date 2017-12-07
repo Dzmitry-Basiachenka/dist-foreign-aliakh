@@ -22,7 +22,7 @@ public class GrossAmountValidator extends AbstractStringValidator {
      * Constructs a validator for amounts.
      */
     public GrossAmountValidator() {
-        super("Field should be greater than 0 and contain 2 decimals");
+        super("Field should be greater than 0");
     }
 
     @Override
