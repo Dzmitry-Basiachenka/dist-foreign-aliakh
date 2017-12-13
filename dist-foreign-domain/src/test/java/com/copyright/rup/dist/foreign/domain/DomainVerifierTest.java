@@ -43,6 +43,7 @@ public class DomainVerifierTest {
             {Scenario.class},
             {RightsholderTotalsHolder.class},
             {UsageAuditItem.class},
+            {ScenarioAuditItem.class},
             {RightsholderPayeePair.class}
         };
         return Arrays.asList(testData);
