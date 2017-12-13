@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 import com.copyright.rup.vaadin.widget.api.IMediator;
@@ -54,9 +55,10 @@ class ScenarioMediator implements IMediator {
      * Refreshes components state.
      *
      * @param scenarioEmpty is scenario empty or not
+     * @param status        {@link ScenarioStatusEnum} of selected scenario
      */
-    void onScenarioUpdated(boolean scenarioEmpty) {
-        excludeButton.setEnabled(excludeButton.isVisible() && !scenarioEmpty);
+    void onScenarioUpdated(boolean scenarioEmpty, ScenarioStatusEnum status) {
+        excludeButton.setEnabled(!scenarioEmpty && ScenarioStatusEnum.IN_PROGRESS == status);
         exportButton.setEnabled(!scenarioEmpty);
         rightsholdersTable.setVisible(!scenarioEmpty);
         searchWidget.setVisible(!scenarioEmpty);

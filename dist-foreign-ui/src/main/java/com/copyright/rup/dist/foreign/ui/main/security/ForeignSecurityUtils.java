@@ -61,4 +61,25 @@ public final class ForeignSecurityUtils {
     public static boolean hasExcludeFromScenarioPermission() {
         return SecurityUtils.hasPermission("FDA_EXCLUDE_FROM_SCENARIO");
     }
+
+    /**
+     * @return true if user has permission for submitting scenarios for the approval.
+     */
+    public static boolean hasSubmitScenarioPermission() {
+        return SecurityUtils.hasPermission("FDA_SUBMIT_SCENARIO");
+    }
+
+    /**
+     * @return true if user has permission for approving scenarios.
+     */
+    public static boolean hasApproveScenarioPermission() {
+        return SecurityUtils.hasPermission("FDA_APPROVE_SCENARIO");
+    }
+
+    /**
+     * @return true if user has permission for rejecting scenarios.
+     */
+    public static boolean hasRejectScenarioPermission() {
+        return SecurityUtils.hasPermission("FDA_REJECT_SCENARIO");
+    }
 }

@@ -14,5 +14,15 @@ public enum ScenarioStatusEnum {
     /**
      * Status for in progress scenarios.
      */
-    IN_PROGRESS
+    IN_PROGRESS,
+
+    /**
+     * Status for submitted for approval scenarios.
+     */
+    SUBMITTED,
+
+    /**
+     * Status for approved scenarios.
+     */
+    APPROVED
 }
