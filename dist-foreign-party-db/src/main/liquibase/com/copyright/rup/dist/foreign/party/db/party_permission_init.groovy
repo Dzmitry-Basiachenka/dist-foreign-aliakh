@@ -134,4 +134,48 @@ databaseChangeLog {
             }
         }
     }
+
+    changeSet(id: '2017-12-13-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-26839 Approval workflow for FAS Scenarios: add permission for submit to approval, reject and approve actions for scenario")
+
+        //Permission to submit scenario for the approval
+        insert(schemaName: dbCommonSchema, tableName: 'cm_permission') {
+            column(name: 'cm_permission_uid', value: 'baseline-fda-submit-scenario')
+            column(name: 'permission_name', value: 'FDA_SUBMIT_SCENARIO')
+            column(name: 'permission_descr', value: 'Permission to submit scenario for the approval')
+            column(name: 'cm_application_area_uid', value: 'FDA')
+            column(name: 'cm_permission_type_uid', value: 'ACTION')
+            column(name: 'created_by_user', value: 'system')
+            column(name: 'updated_by_user', value: 'system')
+        }
+
+        //Permission to approve scenario
+        insert(schemaName: dbCommonSchema, tableName: 'cm_permission') {
+            column(name: 'cm_permission_uid', value: 'baseline-fda-approve-scenario')
+            column(name: 'permission_name', value: 'FDA_APPROVE_SCENARIO')
+            column(name: 'permission_descr', value: 'Permission to approve scenario')
+            column(name: 'cm_application_area_uid', value: 'FDA')
+            column(name: 'cm_permission_type_uid', value: 'ACTION')
+            column(name: 'created_by_user', value: 'system')
+            column(name: 'updated_by_user', value: 'system')
+        }
+
+        //Permission to reject scenario
+        insert(schemaName: dbCommonSchema, tableName: 'cm_permission') {
+            column(name: 'cm_permission_uid', value: 'baseline-fda-reject-scenario')
+            column(name: 'permission_name', value: 'FDA_REJECT_SCENARIO')
+            column(name: 'permission_descr', value: 'Permission to reject scenario')
+            column(name: 'cm_application_area_uid', value: 'FDA')
+            column(name: 'cm_permission_type_uid', value: 'ACTION')
+            column(name: 'created_by_user', value: 'system')
+            column(name: 'updated_by_user', value: 'system')
+        }
+
+        rollback {
+            delete(schemaName: dbCommonSchema, tableName: 'cm_permission') {
+                where "cm_permission_uid in ('baseline-fda-submit-scenario', 'baseline-fda-approve-scenario', " +
+                        "'baseline-fda-reject-scenario')"
+            }
+        }
+    }
 }
