@@ -27,6 +27,7 @@ public class Scenario extends StoredEntity<String> {
     private BigDecimal reportedTotal = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
     private String description;
     private ScenarioStatusEnum status;
+    private ScenarioAuditItem lastAuditItem;
 
     public String getName() {
         return name;
@@ -84,6 +85,14 @@ public class Scenario extends StoredEntity<String> {
         this.status = status;
     }
 
+    public ScenarioAuditItem getLastAuditItem() {
+        return lastAuditItem;
+    }
+
+    public void setLastAuditItem(ScenarioAuditItem lastAuditItem) {
+        this.lastAuditItem = lastAuditItem;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -102,6 +111,7 @@ public class Scenario extends StoredEntity<String> {
             .append(this.reportedTotal, that.reportedTotal)
             .append(this.description, that.description)
             .append(this.status, that.status)
+            .append(this.lastAuditItem, that.lastAuditItem)
             .isEquals();
     }
 
@@ -116,6 +126,7 @@ public class Scenario extends StoredEntity<String> {
             .append(reportedTotal)
             .append(description)
             .append(status)
+            .append(lastAuditItem)
             .toHashCode();
     }
 
@@ -130,6 +141,7 @@ public class Scenario extends StoredEntity<String> {
             .append("reportedTotal", reportedTotal)
             .append("description", description)
             .append("status", status)
+            .append("lastAuditItem", lastAuditItem)
             .toString();
     }
 }
