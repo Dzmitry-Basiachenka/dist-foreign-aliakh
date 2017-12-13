@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
-    value = {"classpath:/com/copyright/rup/dist/foreign/repository/dist-foreign-sql-test-context.xml"})
+    value = {"classpath:/com/copyright/rup/dist/foreign/repository/dist-foreign-repository-test-context.xml"})
 @TestPropertySource(properties = {"test.liquibase.changelog=rightsholder-repository-test-data-init.groovy"})
 @TransactionConfiguration
 @Transactional
