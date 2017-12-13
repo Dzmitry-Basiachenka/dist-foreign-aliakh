@@ -40,8 +40,11 @@ import java.util.Objects;
 public class ScenariosWidget extends VerticalLayout implements IScenariosWidget {
 
     private IScenariosController controller;
-    private Button deleteButton;
-    private Button viewButton;
+    private Button deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
+    private Button viewButton = Buttons.createButton(ForeignUi.getMessage("button.view"));
+    private Button submitButton = Buttons.createButton(ForeignUi.getMessage("button.submit"));
+    private Button rejectButton = Buttons.createButton(ForeignUi.getMessage("button.reject"));
+    private Button approveButton = Buttons.createButton(ForeignUi.getMessage("button.approve"));
     private BeanContainer<String, Scenario> container;
     private Label ownerLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private Label distributionTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
@@ -58,6 +61,9 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
         mediator = new ScenariosMediator();
         mediator.setViewButton(viewButton);
         mediator.setDeleteButton(deleteButton);
+        mediator.setApproveButton(approveButton);
+        mediator.setRejectButton(rejectButton);
+        mediator.setSubmitButton(submitButton);
         mediator.selectedScenarioChanged(getSelectedScenario());
         return mediator;
     }
@@ -108,23 +114,17 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
 
     private HorizontalLayout initButtonsLayout() {
         HorizontalLayout layout = new HorizontalLayout();
-        initViewButton();
-        initDeleteButton();
-        VaadinUtils.setButtonsAutoDisabled(viewButton, deleteButton);
-        layout.addComponents(viewButton, deleteButton);
+        addButtonsListeners();
+        VaadinUtils.setButtonsAutoDisabled(viewButton, deleteButton, submitButton, rejectButton, approveButton);
+        layout.addComponents(viewButton, deleteButton, submitButton, rejectButton, approveButton);
         layout.setSpacing(true);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "scenarios-buttons");
         return layout;
     }
 
-    private void initDeleteButton() {
-        deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
+    private void addButtonsListeners() {
         deleteButton.addClickListener(event -> controller.onDeleteButtonClicked());
-    }
-
-    private void initViewButton() {
-        viewButton = Buttons.createButton(ForeignUi.getMessage("button.view"));
         viewButton.addClickListener(event -> controller.onViewButtonClicked());
     }
 

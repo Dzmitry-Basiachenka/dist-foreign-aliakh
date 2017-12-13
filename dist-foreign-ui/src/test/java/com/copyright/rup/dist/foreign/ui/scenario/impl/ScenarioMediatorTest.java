@@ -7,6 +7,7 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
@@ -55,7 +56,7 @@ public class ScenarioMediatorTest {
 
     @Test
     public void testApplyPermissions() {
-        expect(SecurityUtils.hasPermission(PERMISSION_NAME)).andReturn(true);
+        expect(SecurityUtils.hasPermission(PERMISSION_NAME)).andReturn(true).once();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         verify(SecurityUtils.class);
@@ -68,7 +69,7 @@ public class ScenarioMediatorTest {
 
     @Test
     public void testApplyPermissionsNoExcludePermission() {
-        expect(SecurityUtils.hasPermission(PERMISSION_NAME)).andReturn(false);
+        expect(SecurityUtils.hasPermission(PERMISSION_NAME)).andReturn(false).once();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         verify(SecurityUtils.class);
@@ -81,10 +82,10 @@ public class ScenarioMediatorTest {
 
     @Test
     public void testOnScenarioUpdatedNotEmptyScenario() {
-        expect(SecurityUtils.hasPermission(PERMISSION_NAME)).andReturn(true);
+        expect(SecurityUtils.hasPermission(PERMISSION_NAME)).andReturn(true).once();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
-        mediator.onScenarioUpdated(false);
+        mediator.onScenarioUpdated(false, ScenarioStatusEnum.IN_PROGRESS);
         verify(SecurityUtils.class);
         assertTrue(excludeButton.isEnabled());
         assertTrue(exportButton.isEnabled());
@@ -94,11 +95,25 @@ public class ScenarioMediatorTest {
     }
 
     @Test
-    public void testOnScenarioUpdatedEmptyScenario() {
-        expect(SecurityUtils.hasPermission(PERMISSION_NAME)).andReturn(true);
+    public void testOnScenarioUpdatedNotEmptyScenarioSubmitStatus() {
+        expect(SecurityUtils.hasPermission(PERMISSION_NAME)).andReturn(true).once();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
-        mediator.onScenarioUpdated(true);
+        mediator.onScenarioUpdated(false, ScenarioStatusEnum.SUBMITTED);
+        verify(SecurityUtils.class);
+        assertFalse(excludeButton.isEnabled());
+        assertTrue(exportButton.isEnabled());
+        assertTrue(table.isVisible());
+        assertFalse(emptyUsagesLayout.isVisible());
+        assertTrue(searchWidget.isVisible());
+    }
+
+    @Test
+    public void testOnScenarioUpdatedEmptyScenario() {
+        expect(SecurityUtils.hasPermission(PERMISSION_NAME)).andReturn(true).once();
+        replay(SecurityUtils.class);
+        mediator.applyPermissions();
+        mediator.onScenarioUpdated(true, ScenarioStatusEnum.IN_PROGRESS);
         verify(SecurityUtils.class);
         assertFalse(excludeButton.isEnabled());
         assertFalse(exportButton.isEnabled());
@@ -109,10 +124,10 @@ public class ScenarioMediatorTest {
 
     @Test
     public void testOnScenarioUpdatedEmptyScenarioNoExcludePermissions() {
-        expect(SecurityUtils.hasPermission(PERMISSION_NAME)).andReturn(false);
+        expect(SecurityUtils.hasPermission(PERMISSION_NAME)).andReturn(false).once();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
-        mediator.onScenarioUpdated(true);
+        mediator.onScenarioUpdated(true, ScenarioStatusEnum.IN_PROGRESS);
         verify(SecurityUtils.class);
         assertFalse(excludeButton.isVisible());
         assertFalse(excludeButton.isEnabled());

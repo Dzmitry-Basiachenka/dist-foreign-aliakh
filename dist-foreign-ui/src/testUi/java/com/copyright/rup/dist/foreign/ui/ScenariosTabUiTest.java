@@ -51,7 +51,9 @@ import java.util.stream.IntStream;
 public class ScenariosTabUiTest extends ForeignCommonUiTest {
 
     private static final String DELETE_BUTTON_ID = "Delete";
+    private static final String VIEW_BUTTON_ID = "View";
     private static final String SCENARIOS_TABLE_ID = "scenarios-table";
+    private static final String SCENARIOS_METADATA_ID = "scenarios-metadata";
     private static final String V_LABEL_CLASS_NAME = "v-label";
     private ScenarioInfo scenario1 = new ScenarioInfo("Scenario 03/16/2017", "03/16/2017");
     private ScenarioInfo scenario2 = new ScenarioInfo("Scenario for viewing", "03/17/2017");
@@ -81,7 +83,7 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
     // '0ec5c344-7a37-4b29-b501-1af30ab63f8f'
     public void testVerifyScenariosTabSpecialist() {
         loginAsSpecialist();
-        verifyScenariosTabSpecialist();
+        verifyScenariosTab(Sets.newHashSet(VIEW_BUTTON_ID, DELETE_BUTTON_ID, "Submit for Approval"));
     }
 
     @Test
@@ -89,7 +91,7 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
     // '0ec5c344-7a37-4b29-b501-1af30ab63f8f'
     public void testVerifyScenariosTabManager() {
         loginAsManager();
-        verifyScenariosTabManagerAndViewOnly();
+        verifyScenariosTab(Sets.newHashSet(VIEW_BUTTON_ID, "Apply", "Reject"));
     }
 
     @Test
@@ -97,7 +99,7 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
     // '0ec5c344-7a37-4b29-b501-1af30ab63f8f'
     public void testVerifyScenariosTabViewOnly() {
         loginAsViewOnly();
-        verifyScenariosTabManagerAndViewOnly();
+        verifyScenariosTab(Collections.singleton(VIEW_BUTTON_ID));
     }
 
     @Test
@@ -151,31 +153,21 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
         scenarioToDelete = null;
     }
 
-    private void verifyScenariosTabManagerAndViewOnly() {
+    private void verifyScenariosTab(Set<String> buttons) {
         WebElement scenariosTab = selectScenariosTab();
         WebElement buttonsLayout = assertWebElement(scenariosTab, "scenarios-buttons");
-        verifyScenariosLayoutButton(buttonsLayout, Sets.newHashSet("View"));
+        verifyScenariosLayoutButton(buttonsLayout, buttons);
         WebElement table = assertWebElement(scenariosTab, SCENARIOS_TABLE_ID);
         verifyScenariosTable(table);
-        verifyMetadataPanel(assertWebElement(scenariosTab, "scenarios-metadata"));
+        verifyMetadataPanel(assertWebElement(scenariosTab, SCENARIOS_METADATA_ID));
         verifyEmptyMetadataPanel(scenariosTab, table);
-        assertEquals(1, findElements(buttonsLayout, By.className(V_DISABLED_CLASS_NAME)).size());
-    }
-
-    private void verifyScenariosTabSpecialist() {
-        WebElement scenariosTab = selectScenariosTab();
-        WebElement buttonsLayout = assertWebElement(scenariosTab, "scenarios-buttons");
-        verifyScenariosLayoutButton(buttonsLayout, Sets.newHashSet("View", DELETE_BUTTON_ID));
-        WebElement table = assertWebElement(scenariosTab, SCENARIOS_TABLE_ID);
-        verifyScenariosTable(table);
-        verifyMetadataPanel(assertWebElement(scenariosTab, "scenarios-metadata"));
-        verifyEmptyMetadataPanel(scenariosTab, table);
-        assertEquals(2, findElements(buttonsLayout, By.className(V_DISABLED_CLASS_NAME)).size());
+        assertEquals(buttons.size(), findElements(buttonsLayout, By.className(V_DISABLED_CLASS_NAME)).size());
     }
 
     @SuppressWarnings("unchecked")
     private void verifyScenariosLayoutButton(WebElement buttonsLayout, Set<String> buttonsIds) {
-        Set<String> scenariosButton = Sets.newHashSet("View", DELETE_BUTTON_ID);
+        Set<String> scenariosButton =
+            Sets.newHashSet(VIEW_BUTTON_ID, DELETE_BUTTON_ID, "Submit for Approval", "Apply", "Reject");
         assertButtonsToolbar(buttonsLayout, scenariosButton, buttonsIds);
     }
 
@@ -188,7 +180,7 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
     private void verifyEmptyMetadataPanel(WebElement scenarioTab, WebElement table) {
         clickElementAndWait(assertWebElement(table, By.className("v-selected")));
         assertNull(waitAndFindElement(table, By.className("v-selected")));
-        WebElement metadataPanel = assertWebElement(scenarioTab, "scenarios-metadata");
+        WebElement metadataPanel = assertWebElement(scenarioTab, SCENARIOS_METADATA_ID);
         List<WebElement> labels = findElements(metadataPanel, By.className(V_LABEL_CLASS_NAME));
         assertEquals(1, CollectionUtils.size(labels));
         assertEquals(StringUtils.EMPTY, labels.get(0).getText());

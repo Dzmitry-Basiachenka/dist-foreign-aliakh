@@ -13,6 +13,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.widget.SearchWidget;
@@ -101,11 +102,15 @@ public class ScenarioWidgetTest {
 
     @Test
     public void testRefresh() {
-        mediator.onScenarioUpdated(false);
+        Scenario scenario = new Scenario();
+        scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
+        expect(controller.isScenarioEmpty()).andReturn(false).once();
+        expect(controller.getScenario()).andReturn(scenario).once();
+        mediator.onScenarioUpdated(false, ScenarioStatusEnum.IN_PROGRESS);
         expectLastCall().once();
-        replay(mediator);
+        replay(mediator, controller);
         scenarioWidget.refresh();
-        verify(mediator);
+        verify(mediator, controller);
     }
 
     private void verifySearchWidget(Component component) {

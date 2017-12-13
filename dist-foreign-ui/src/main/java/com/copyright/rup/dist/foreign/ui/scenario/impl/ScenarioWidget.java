@@ -83,7 +83,7 @@ public class ScenarioWidget extends Window implements IScenarioWidget, IMediator
 
     @Override
     public void refresh() {
-        mediator.onScenarioUpdated(controller.isScenarioEmpty());
+        mediator.onScenarioUpdated(controller.isScenarioEmpty(), controller.getScenario().getStatus());
     }
 
     @Override

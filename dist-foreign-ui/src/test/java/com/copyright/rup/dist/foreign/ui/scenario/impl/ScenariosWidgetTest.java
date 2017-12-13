@@ -218,29 +218,22 @@ public class ScenariosWidgetTest {
 
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertEquals("scenarios-buttons", layout.getId());
-        assertEquals(2, layout.getComponentCount());
-        verifyViewButton(layout.getComponent(0));
-        verifyDeleteButton(layout.getComponent(1));
+        assertEquals(5, layout.getComponentCount());
+        verifyButton(layout.getComponent(0), "View", 2);
+        verifyButton(layout.getComponent(1), "Delete", 2);
+        verifyButton(layout.getComponent(2), "Submit for Approval", 1);
+        verifyButton(layout.getComponent(3), "Reject", 1);
+        verifyButton(layout.getComponent(4), "Approve", 1);
     }
 
-    private void verifyViewButton(Component component) {
+    private void verifyButton(Component component, String caption, int listenersCount) {
         assertTrue(component instanceof Button);
         Button button = (Button) component;
-        assertEquals("View", button.getCaption());
-        assertEquals("View", button.getId());
+        assertEquals(caption, button.getCaption());
+        assertEquals(caption.replaceAll(StringUtils.SPACE, "_"), button.getId());
         assertFalse(button.isEnabled());
         assertTrue(button.isDisableOnClick());
-        assertEquals(2, button.getListeners(ClickEvent.class).size());
-    }
-
-    private void verifyDeleteButton(Component component) {
-        assertTrue(component instanceof Button);
-        Button button = (Button) component;
-        assertEquals("Delete", button.getCaption());
-        assertEquals("Delete", button.getId());
-        assertFalse(button.isEnabled());
-        assertTrue(button.isDisableOnClick());
-        assertEquals(2, button.getListeners(ClickEvent.class).size());
+        assertEquals(listenersCount, button.getListeners(ClickEvent.class).size());
     }
 
     private void verifySize(Component component) {
