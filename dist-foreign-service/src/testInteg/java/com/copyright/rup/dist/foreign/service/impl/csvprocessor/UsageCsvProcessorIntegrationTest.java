@@ -50,8 +50,8 @@ import java.util.concurrent.Executors;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
-    value = {"classpath:/com/copyright/rup/dist/foreign/service/service-test-context.xml"})
-@TestPropertySource(properties = {"test.liquibase.changelog=usage-csv-processor-service-test-data-init.groovy"})
+    value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
+@TestPropertySource(properties = {"test.liquibase.changelog=usage-csv-processor-data-init.groovy"})
 @TransactionConfiguration
 @Transactional
 public class UsageCsvProcessorIntegrationTest {

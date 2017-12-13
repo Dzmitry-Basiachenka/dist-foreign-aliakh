@@ -236,8 +236,8 @@ databaseChangeLog {
             column(name: 'is_rh_participating_flag', value: 'false')
             column(name: 'reported_value', value: '850')
             column(name: 'gross_amount', value: '2184.70')
-            column(name: 'service_fee_amount', value: '695.90')
-            column(name: 'net_amount', value: '1478.80')
+            column(name: 'service_fee_amount', value: '699.10')
+            column(name: 'net_amount', value: '1485.60')
             column(name: 'service_fee', value: '0.32')
         }
 

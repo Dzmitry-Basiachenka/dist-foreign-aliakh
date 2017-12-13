@@ -31,7 +31,7 @@
         <property name="resourcesFromPaths">
             <list value-type="java.lang.String">
                 <value>/com/copyright/rup/dist/foreign/db/main-changelog.groovy</value>
-                <value>/com/copyright/rup/dist/foreign/ui/integ-test-changelog.groovy</value>
+                <value>/com/copyright/rup/dist/foreign/ui/ui-data-init.groovy</value>
             </list>
         </property>
         <property name="createCommonTablesOnStartup" value="false"/>

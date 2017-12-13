@@ -50,8 +50,8 @@ import java.util.stream.IntStream;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
-    value = {"classpath:/com/copyright/rup/dist/foreign/service/service-test-context.xml"})
-@TestPropertySource(properties = {"test.liquibase.changelog=exclude-from-scenario-test-changelog.groovy"})
+    value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
+@TestPropertySource(properties = {"test.liquibase.changelog=usage-service-data-init.groovy"})
 @TransactionConfiguration
 @Transactional
 public class UsageServiceIntegrationTest {
