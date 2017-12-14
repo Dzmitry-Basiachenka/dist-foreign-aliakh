@@ -98,6 +98,7 @@ public class ExcludeRightsholdersWindow extends Window implements ISearchControl
         VaadinUtils.addComponentStyle(this, "exclude-rightsholders-window");
         HorizontalLayout buttonsLayout = createButtonsLayout();
         Table rightsholderTable = initTable();
+        VaadinUtils.addComponentStyle(rightsholderTable, "exclude-rightsholders-table");
         VerticalLayout layout = new VerticalLayout(searchWidget, rightsholderTable, buttonsLayout);
         layout.setMargin(new MarginInfo(false, true, true, true));
         layout.setSpacing(true);
