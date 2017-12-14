@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.api;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.vaadin.widget.api.IController;
 
 import java.util.List;
@@ -39,4 +40,11 @@ public interface IScenariosController extends IController<IScenariosWidget> {
      * Handles click on 'View' button.
      */
     void onViewButtonClicked();
+
+    /**
+     * Handles actions with {@link Scenario}.
+     *
+     * @param actionType scenario action type
+     */
+    void handleAction(ScenarioActionTypeEnum actionType);
 }

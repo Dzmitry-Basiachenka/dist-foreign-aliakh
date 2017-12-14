@@ -11,6 +11,8 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
@@ -44,6 +46,7 @@ public class ScenarioServiceTest {
     private static final String SCENARIO_NAME = "Scenario Name";
     private static final String USAGE_BATCH_ID = RupPersistUtils.generateUuid();
     private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
+    private static final String REASON = "reason";
     private ScenarioService scenarioService;
     private IScenarioRepository scenarioRepository;
     private IUsageService usageService;
@@ -98,6 +101,39 @@ public class ScenarioServiceTest {
         expect(scenarioRepository.findSourceRros(SCENARIO_ID)).andReturn(Collections.emptyList()).once();
         replay(scenarioRepository);
         assertEquals(Collections.emptyList(), scenarioService.getSourceRros(SCENARIO_ID));
+        verify(scenarioRepository);
+    }
+
+    @Test
+    public void testSubmit() {
+        Scenario scenario = new Scenario();
+        scenarioRepository.update(scenario);
+        expectLastCall().once();
+        replay(scenarioRepository);
+        scenarioService.submit(scenario, REASON);
+        assertEquals(ScenarioStatusEnum.SUBMITTED, scenario.getStatus());
+        verify(scenarioRepository);
+    }
+
+    @Test
+    public void testReject() {
+        Scenario scenario = new Scenario();
+        scenarioRepository.update(scenario);
+        expectLastCall().once();
+        replay(scenarioRepository);
+        scenarioService.reject(scenario, REASON);
+        assertEquals(ScenarioStatusEnum.IN_PROGRESS, scenario.getStatus());
+        verify(scenarioRepository);
+    }
+
+    @Test
+    public void testApprove() {
+        Scenario scenario = new Scenario();
+        scenarioRepository.update(scenario);
+        expectLastCall().once();
+        replay(scenarioRepository);
+        scenarioService.approve(scenario, REASON);
+        assertEquals(ScenarioStatusEnum.APPROVED, scenario.getStatus());
         verify(scenarioRepository);
     }
 

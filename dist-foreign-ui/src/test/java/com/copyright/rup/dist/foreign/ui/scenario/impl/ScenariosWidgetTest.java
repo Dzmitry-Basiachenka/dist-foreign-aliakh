@@ -16,7 +16,6 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
 import com.copyright.rup.vaadin.ui.DateColumnGenerator;
 
-import com.google.common.collect.Lists;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -40,6 +39,7 @@ import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.Collections;
 
 /**
  * Verifies {@link ScenariosWidget}.
@@ -72,7 +72,7 @@ public class ScenariosWidgetTest {
         scenario.setGrossTotal(new BigDecimal("20000.00"));
         scenario.setReportedTotal(new BigDecimal("30000.00"));
         scenario.setCreateUser("User@copyright.com");
-        expect(controller.getScenarios()).andReturn(Lists.newArrayList(scenario)).once();
+        expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).once();
         replay(controller);
         scenariosWidget.init();
         scenariosWidget.initMediator();
@@ -105,7 +105,7 @@ public class ScenariosWidgetTest {
 
     @Test
     public void testRefresh() {
-        expect(controller.getScenarios()).andReturn(Lists.newArrayList(scenario)).once();
+        expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).once();
         expect(controller.getScenarioWithAmounts(scenario)).andReturn(scenario).once();
         replay(controller);
         scenariosWidget.refresh();
@@ -219,21 +219,21 @@ public class ScenariosWidgetTest {
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertEquals("scenarios-buttons", layout.getId());
         assertEquals(5, layout.getComponentCount());
-        verifyButton(layout.getComponent(0), "View", 2);
-        verifyButton(layout.getComponent(1), "Delete", 2);
-        verifyButton(layout.getComponent(2), "Submit for Approval", 1);
-        verifyButton(layout.getComponent(3), "Reject", 1);
-        verifyButton(layout.getComponent(4), "Approve", 1);
+        verifyButton(layout.getComponent(0), "View");
+        verifyButton(layout.getComponent(1), "Delete");
+        verifyButton(layout.getComponent(2), "Submit for Approval");
+        verifyButton(layout.getComponent(3), "Reject");
+        verifyButton(layout.getComponent(4), "Approve");
     }
 
-    private void verifyButton(Component component, String caption, int listenersCount) {
+    private void verifyButton(Component component, String caption) {
         assertTrue(component instanceof Button);
         Button button = (Button) component;
         assertEquals(caption, button.getCaption());
         assertEquals(caption.replaceAll(StringUtils.SPACE, "_"), button.getId());
         assertFalse(button.isEnabled());
         assertTrue(button.isDisableOnClick());
-        assertEquals(listenersCount, button.getListeners(ClickEvent.class).size());
+        assertEquals(2, button.getListeners(ClickEvent.class).size());
     }
 
     private void verifySize(Component component) {

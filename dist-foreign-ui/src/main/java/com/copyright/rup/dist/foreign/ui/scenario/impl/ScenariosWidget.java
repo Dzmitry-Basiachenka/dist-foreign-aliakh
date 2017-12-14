@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
 import com.copyright.rup.dist.common.domain.BaseEntity;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosWidget;
@@ -126,6 +127,9 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
     private void addButtonsListeners() {
         deleteButton.addClickListener(event -> controller.onDeleteButtonClicked());
         viewButton.addClickListener(event -> controller.onViewButtonClicked());
+        submitButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.SUBMITTED));
+        rejectButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.REJECTED));
+        approveButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.APPROVED));
     }
 
     private void initTable() {

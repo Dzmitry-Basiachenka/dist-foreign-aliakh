@@ -55,6 +55,13 @@ public interface IScenarioRepository {
     void remove(String scenarioId);
 
     /**
+     * Updates {@link Scenario}.
+     *
+     * @param scenario scenario to update
+     */
+    void update(Scenario scenario);
+
+    /**
      * Finds all source RROs belonging to the {@link Scenario} with given id.
      *
      * @param scenarioId {@link Scenario} id

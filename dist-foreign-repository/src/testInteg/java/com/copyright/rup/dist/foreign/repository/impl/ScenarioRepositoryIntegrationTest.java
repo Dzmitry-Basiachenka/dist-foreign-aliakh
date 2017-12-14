@@ -120,6 +120,24 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
+    public void testUpdate() {
+        Scenario scenario = scenarioRepository.findWithAmounts("3210b236-1239-4a60-9fab-888b84199321");
+        scenario.setName("New scenario name");
+        scenario.setStatus(ScenarioStatusEnum.SUBMITTED);
+        scenario.setDescription("New scenario description");
+        scenarioRepository.update(scenario);
+        Scenario updatedScenario = scenarioRepository.findWithAmounts("3210b236-1239-4a60-9fab-888b84199321");
+        assertNotNull(updatedScenario);
+        assertEquals(ScenarioStatusEnum.SUBMITTED, updatedScenario.getStatus());
+        assertEquals("New scenario name", updatedScenario.getName());
+        assertEquals("New scenario description", updatedScenario.getDescription());
+        assertEquals(scenario.getGrossTotal(), updatedScenario.getGrossTotal());
+        assertEquals(scenario.getReportedTotal(), updatedScenario.getReportedTotal());
+        assertEquals(scenario.getNetTotal(), updatedScenario.getNetTotal());
+        assertEquals(scenario.getServiceFeeTotal(), updatedScenario.getServiceFeeTotal());
+    }
+
+    @Test
     public void testFindSourceRros() {
         scenarioRepository.insert(buildScenario(SCENARIO_ID, SCENARIO_NAME));
         usageRepository.insert(buildUsage(65874985L));

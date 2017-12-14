@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
+import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
@@ -12,6 +13,7 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Scenario service implementation.
@@ -34,9 +37,10 @@ import java.util.List;
 @Service
 public class ScenarioService implements IScenarioService {
 
+    private static final Logger LOGGER = RupLogUtils.getLogger();
+
     @Autowired
     private IScenarioRepository scenarioRepository;
-
     @Autowired
     private IUsageService usageService;
 
@@ -88,6 +92,38 @@ public class ScenarioService implements IScenarioService {
         return scenarioRepository.findRightsholdersByScenarioIdAndSourceRro(scenarioId, rroAccountNumber);
     }
 
+    @Override
+    @Transactional
+    public void submit(Scenario scenario, String reason) {
+        Objects.requireNonNull(scenario);
+        String userName = RupContextUtils.getUserName();
+        LOGGER.info("Submit scenario for approval. Started. {}, User={}, Reason={}", logScenario(scenario), userName,
+            reason);
+        changeScenarioState(scenario, ScenarioStatusEnum.SUBMITTED, userName);
+        LOGGER.info("Submit scenario for approval. Finished. {}, User={}, Reason={}", logScenario(scenario), userName,
+            reason);
+    }
+
+    @Override
+    @Transactional
+    public void reject(Scenario scenario, String reason) {
+        Objects.requireNonNull(scenario);
+        String userName = RupContextUtils.getUserName();
+        LOGGER.info("Reject scenario. Started. {}, User={}, Reason={}", logScenario(scenario), userName, reason);
+        changeScenarioState(scenario, ScenarioStatusEnum.IN_PROGRESS, userName);
+        LOGGER.info("Reject scenario. Started. {}, User={}, Reason={}", logScenario(scenario), userName, reason);
+    }
+
+    @Override
+    @Transactional
+    public void approve(Scenario scenario, String reason) {
+        Objects.requireNonNull(scenario);
+        String userName = RupContextUtils.getUserName();
+        LOGGER.info("Approve scenario. Started. {}, User={}, Reason={}", logScenario(scenario), userName, reason);
+        changeScenarioState(scenario, ScenarioStatusEnum.APPROVED, userName);
+        LOGGER.info("Approve scenario. Started. {}, User={}, Reason={}", logScenario(scenario), userName, reason);
+    }
+
     private Scenario buildScenario(String scenarioName, String description, List<Usage> usages) {
         Scenario scenario = new Scenario();
         scenario.setId(RupPersistUtils.generateUuid());
@@ -110,5 +146,16 @@ public class ScenarioService implements IScenarioService {
         scenario.setCreateUser(userName);
         scenario.setUpdateUser(userName);
         return scenario;
+    }
+
+    //TODO {isuvorau} insert log scenario action
+    private void changeScenarioState(Scenario scenario, ScenarioStatusEnum status, String userName) {
+        scenario.setStatus(status);
+        scenario.setUpdateUser(userName);
+        scenarioRepository.update(scenario);
+    }
+
+    private String logScenario(Scenario scenario) {
+        return String.format("ScenarioName=%s, Status=%s", scenario.getName(), scenario.getStatus());
     }
 }
