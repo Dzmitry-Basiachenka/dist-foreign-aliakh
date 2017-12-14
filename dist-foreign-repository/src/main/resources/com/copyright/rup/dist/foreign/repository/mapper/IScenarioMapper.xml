@@ -42,6 +42,16 @@
         )
     </insert>
 
+    <update id="update" parameterType="Scenario">
+        update ${schema}.df_scenario
+        set
+            name = #{name},
+            description = #{description},
+            status_ind = #{status},
+            <include refid="StoredEntityMapper.update"/>
+        where df_scenario_uid = #{id}
+    </update>
+
     <select id="findCountByName" parameterType="string" resultType="int">
         select count(name)
         from ${schema}.df_scenario

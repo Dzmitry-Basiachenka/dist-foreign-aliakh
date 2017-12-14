@@ -164,7 +164,6 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
         assertEquals(buttons.size(), findElements(buttonsLayout, By.className(V_DISABLED_CLASS_NAME)).size());
     }
 
-    @SuppressWarnings("unchecked")
     private void verifyScenariosLayoutButton(WebElement buttonsLayout, Set<String> buttonsIds) {
         Set<String> scenariosButton =
             Sets.newHashSet(VIEW_BUTTON_ID, DELETE_BUTTON_ID, "Submit for Approval", "Apply", "Reject");

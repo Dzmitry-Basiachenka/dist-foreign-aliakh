@@ -84,4 +84,28 @@ public interface IScenarioService {
      * @return list of {@link RightsholderPayeePair}s
      */
     List<RightsholderPayeePair> getRightsholdersByScenarioAndSourceRro(String scenarioId, Long rroAccountNumber);
+
+    /**
+     * Submits given scenario for approval with provided reason if any.
+     *
+     * @param scenario scenario instance
+     * @param reason   reason specified by user
+     */
+    void submit(Scenario scenario, String reason);
+
+    /**
+     * Rejects given scenario with provided reason if any.
+     *
+     * @param scenario scenario instance
+     * @param reason   reason specified by user
+     */
+    void reject(Scenario scenario, String reason);
+
+    /**
+     * Approves given scenario with provided reason if any.
+     *
+     * @param scenario scenario instance
+     * @param reason   reason specified by user
+     */
+    void approve(Scenario scenario, String reason);
 }
