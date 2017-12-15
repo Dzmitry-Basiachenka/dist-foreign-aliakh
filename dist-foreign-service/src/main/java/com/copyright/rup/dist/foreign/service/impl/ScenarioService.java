@@ -5,14 +5,17 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
+import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,6 +46,8 @@ public class ScenarioService implements IScenarioService {
     private IScenarioRepository scenarioRepository;
     @Autowired
     private IUsageService usageService;
+    @Autowired
+    private IScenarioAuditService scenarioAuditService;
 
     @Override
     public List<Scenario> getScenarios() {
@@ -66,6 +71,7 @@ public class ScenarioService implements IScenarioService {
         Scenario scenario = buildScenario(scenarioName, description, usages);
         scenarioRepository.insert(scenario);
         usageService.addUsagesToScenario(usages, scenario);
+        scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY);
         return scenario.getId();
     }
 
@@ -99,7 +105,7 @@ public class ScenarioService implements IScenarioService {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Submit scenario for approval. Started. {}, User={}, Reason={}", logScenario(scenario), userName,
             reason);
-        changeScenarioState(scenario, ScenarioStatusEnum.SUBMITTED, userName);
+        changeScenarioState(scenario, ScenarioStatusEnum.SUBMITTED, ScenarioActionTypeEnum.SUBMITTED, userName, reason);
         LOGGER.info("Submit scenario for approval. Finished. {}, User={}, Reason={}", logScenario(scenario), userName,
             reason);
     }
@@ -110,7 +116,8 @@ public class ScenarioService implements IScenarioService {
         Objects.requireNonNull(scenario);
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Reject scenario. Started. {}, User={}, Reason={}", logScenario(scenario), userName, reason);
-        changeScenarioState(scenario, ScenarioStatusEnum.IN_PROGRESS, userName);
+        changeScenarioState(scenario, ScenarioStatusEnum.IN_PROGRESS, ScenarioActionTypeEnum.REJECTED, userName,
+            reason);
         LOGGER.info("Reject scenario. Started. {}, User={}, Reason={}", logScenario(scenario), userName, reason);
     }
 
@@ -120,7 +127,7 @@ public class ScenarioService implements IScenarioService {
         Objects.requireNonNull(scenario);
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Approve scenario. Started. {}, User={}, Reason={}", logScenario(scenario), userName, reason);
-        changeScenarioState(scenario, ScenarioStatusEnum.APPROVED, userName);
+        changeScenarioState(scenario, ScenarioStatusEnum.APPROVED, ScenarioActionTypeEnum.APPROVED, userName, reason);
         LOGGER.info("Approve scenario. Started. {}, User={}, Reason={}", logScenario(scenario), userName, reason);
     }
 
@@ -148,11 +155,12 @@ public class ScenarioService implements IScenarioService {
         return scenario;
     }
 
-    //TODO {isuvorau} insert log scenario action
-    private void changeScenarioState(Scenario scenario, ScenarioStatusEnum status, String userName) {
+    private void changeScenarioState(Scenario scenario, ScenarioStatusEnum status, ScenarioActionTypeEnum action,
+                                     String userName, String reason) {
         scenario.setStatus(status);
         scenario.setUpdateUser(userName);
         scenarioRepository.update(scenario);
+        scenarioAuditService.logAction(scenario.getId(), action, reason);
     }
 
     private String logScenario(Scenario scenario) {

@@ -1,9 +1,12 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
+import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -11,8 +14,10 @@ import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
+import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -42,6 +47,8 @@ class CreateScenarioTestBuilder {
     private IScenarioService scenarioService;
     @Autowired
     private IUsageRepository usageRepository;
+    @Autowired
+    private IScenarioAuditService scenarioAuditService;
     @Autowired
     private RestTemplate restTemplate;
 
@@ -96,6 +103,7 @@ class CreateScenarioTestBuilder {
             scenarioId = scenarioService.createScenario("Test Scenario", "Scenario Description", usageFilter);
             assertScenario();
             assertUsages();
+            assertScenarioActions();
         }
 
         private void assertScenario() {
@@ -112,6 +120,13 @@ class CreateScenarioTestBuilder {
             assertEquals("SYSTEM", scenario.getCreateUser());
             assertEquals("SYSTEM", scenario.getUpdateUser());
             assertEquals(1, scenario.getVersion());
+        }
+
+        private void assertScenarioActions() {
+            List<ScenarioAuditItem> actions = scenarioAuditService.getActions(scenarioId);
+            assertTrue(CollectionUtils.isNotEmpty(actions));
+            assertEquals(1, CollectionUtils.size(actions));
+            assertEquals(ScenarioActionTypeEnum.ADDED_USAGES, actions.get(0).getActionType());
         }
 
         private void assertUsages() {
