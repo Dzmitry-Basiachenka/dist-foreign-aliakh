@@ -12,8 +12,10 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
+import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
@@ -50,14 +52,19 @@ public class ScenarioServiceTest {
     private ScenarioService scenarioService;
     private IScenarioRepository scenarioRepository;
     private IUsageService usageService;
+    private IScenarioAuditService scenarioAuditService;
+    private Scenario scenario = new Scenario();
 
     @Before
     public void setUp() {
+        scenario.setId(RupPersistUtils.generateUuid());
         scenarioRepository = createMock(IScenarioRepository.class);
         usageService = createMock(IUsageService.class);
+        scenarioAuditService = createMock(IScenarioAuditService.class);
         scenarioService = new ScenarioService();
         Whitebox.setInternalState(scenarioService, "scenarioRepository", scenarioRepository);
         Whitebox.setInternalState(scenarioService, "usageService", usageService);
+        Whitebox.setInternalState(scenarioService, "scenarioAuditService", scenarioAuditService);
     }
 
     @Test
@@ -106,35 +113,38 @@ public class ScenarioServiceTest {
 
     @Test
     public void testSubmit() {
-        Scenario scenario = new Scenario();
         scenarioRepository.update(scenario);
         expectLastCall().once();
-        replay(scenarioRepository);
+        scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.SUBMITTED, REASON);
+        expectLastCall().once();
+        replay(scenarioRepository, scenarioAuditService);
         scenarioService.submit(scenario, REASON);
         assertEquals(ScenarioStatusEnum.SUBMITTED, scenario.getStatus());
-        verify(scenarioRepository);
+        verify(scenarioRepository, scenarioAuditService);
     }
 
     @Test
     public void testReject() {
-        Scenario scenario = new Scenario();
         scenarioRepository.update(scenario);
         expectLastCall().once();
-        replay(scenarioRepository);
+        scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.REJECTED, REASON);
+        expectLastCall().once();
+        replay(scenarioRepository, scenarioAuditService);
         scenarioService.reject(scenario, REASON);
         assertEquals(ScenarioStatusEnum.IN_PROGRESS, scenario.getStatus());
-        verify(scenarioRepository);
+        verify(scenarioRepository, scenarioAuditService);
     }
 
     @Test
     public void testApprove() {
-        Scenario scenario = new Scenario();
         scenarioRepository.update(scenario);
         expectLastCall().once();
-        replay(scenarioRepository);
+        scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.APPROVED, REASON);
+        expectLastCall().once();
+        replay(scenarioRepository, scenarioAuditService);
         scenarioService.approve(scenario, REASON);
         assertEquals(ScenarioStatusEnum.APPROVED, scenario.getStatus());
-        verify(scenarioRepository);
+        verify(scenarioRepository, scenarioAuditService);
     }
 
     @Test
