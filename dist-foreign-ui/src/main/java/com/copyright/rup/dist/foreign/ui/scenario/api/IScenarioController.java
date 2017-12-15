@@ -53,9 +53,9 @@ public interface IScenarioController extends IController<IScenarioWidget>, ISear
     Scenario getScenario();
 
     /**
-     * @return scenario {@link Scenario} with calculated amounts.
+     * @return scenario {@link Scenario} with calculated amounts and last audit action.
      */
-    Scenario getScenarioWithAmounts();
+    Scenario getScenarioWithAmountsAndLastAction();
 
     /**
      * @return all source RROs belonging to the {@link Scenario}.

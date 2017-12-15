@@ -161,7 +161,7 @@ public class ScenarioWidget extends Window implements IScenarioWidget, IMediator
     }
 
     private void updateFooter() {
-        Scenario scenarioWithAmounts = controller.getScenarioWithAmounts();
+        Scenario scenarioWithAmounts = controller.getScenarioWithAmountsAndLastAction();
         table.setColumnFooter("grossTotal", CurrencyUtils.formatAsHtml(scenarioWithAmounts.getGrossTotal()));
         table.setColumnFooter("serviceFeeTotal", CurrencyUtils.formatAsHtml(scenarioWithAmounts.getServiceFeeTotal()));
         table.setColumnFooter("netTotal", CurrencyUtils.formatAsHtml(scenarioWithAmounts.getNetTotal()));

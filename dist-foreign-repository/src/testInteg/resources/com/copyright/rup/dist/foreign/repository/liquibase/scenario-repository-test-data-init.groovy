@@ -188,6 +188,33 @@ databaseChangeLog {
             column(name: 'service_fee', value: '0.32000')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_audit') {
+            column(name: 'df_scenario_audit_uid', value: '826c6125-96b4-49a7-8c62-24ca807d439d')
+            column(name: 'df_scenario_uid', value: 'b1f0b236-3ae9-4a60-9fab-61db84199d6f')
+            column(name: 'action_type_ind', value: 'ADDED_USAGES')
+            column(name: 'action_reason', value: 'Usages were added to scenario')
+            column(name: 'created_datetime', value: '2017-03-01 11:41:52.735531+03')
+            column(name: 'updated_datetime', value: '2017-03-01 11:41:52.735531+03')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_audit') {
+            column(name: 'df_scenario_audit_uid', value: 'dd62d1ed-de98-4708-8869-1333baf1bed4')
+            column(name: 'df_scenario_uid', value: 'b1f0b236-3ae9-4a60-9fab-61db84199d6f')
+            column(name: 'action_type_ind', value: 'SUBMITTED')
+            column(name: 'action_reason', value: 'Scenario submitted for approval')
+            column(name: 'created_datetime', value: '2017-03-10 11:41:58.735531+03')
+            column(name: 'updated_datetime', value: '2017-03-10 11:41:58.735531+03')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_audit') {
+            column(name: 'df_scenario_audit_uid', value: 'f6368ad8-4c70-4877-9a34-00a03fc7ec26')
+            column(name: 'df_scenario_uid', value: 'b1f0b236-3ae9-4a60-9fab-61db84199d6f')
+            column(name: 'action_type_ind', value: 'APPROVED')
+            column(name: 'action_reason', value: 'Scenario approved by manager')
+            column(name: 'created_datetime', value: '2017-04-10 11:28:58.735531+03')
+            column(name: 'updated_datetime', value: '2017-04-10 11:28:58.735531+03')
+        }
+
         rollback ""
     }
 }

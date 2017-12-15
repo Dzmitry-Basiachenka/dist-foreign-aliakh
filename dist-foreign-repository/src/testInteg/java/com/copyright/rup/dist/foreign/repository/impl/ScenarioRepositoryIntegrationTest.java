@@ -8,6 +8,8 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
+import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
@@ -55,10 +57,10 @@ public class ScenarioRepositoryIntegrationTest {
     private static final String DESCRIPTION = "description";
     private static final String USAGE_BATCH_ID = "a5b64c3a-55d2-462e-b169-362dca6a4dd6";
     private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
+    private static final String SCENARIO_WITH_AUDIT_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
 
     @Autowired
     private ScenarioRepository scenarioRepository;
-
     @Autowired
     private IUsageRepository usageRepository;
     @Autowired
@@ -90,8 +92,11 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindWithAmounts() {
-        Scenario scenario = scenarioRepository.findWithAmounts("b1f0b236-3ae9-4a60-9fab-61db84199d6f");
+    public void testFindWithAmountsAndLastAction() {
+        Scenario scenario = scenarioRepository.findWithAmountsAndLastAction(SCENARIO_WITH_AUDIT_ID);
+        ScenarioAuditItem scenarioAuditItem = scenario.getLastAuditItem();
+        assertEquals(ScenarioActionTypeEnum.APPROVED, scenarioAuditItem.getActionType());
+        assertEquals("Scenario approved by manager", scenarioAuditItem.getActionReason());
         assertEquals(new BigDecimal("32874.8000000000"), scenario.getGrossTotal());
         assertEquals(new BigDecimal("22354.8000000000"), scenario.getNetTotal());
         assertEquals(new BigDecimal("10520.0000000000"), scenario.getServiceFeeTotal());
@@ -121,12 +126,13 @@ public class ScenarioRepositoryIntegrationTest {
 
     @Test
     public void testUpdate() {
-        Scenario scenario = scenarioRepository.findWithAmounts("3210b236-1239-4a60-9fab-888b84199321");
+        Scenario scenario = scenarioRepository.findWithAmountsAndLastAction("3210b236-1239-4a60-9fab-888b84199321");
         scenario.setName("New scenario name");
         scenario.setStatus(ScenarioStatusEnum.SUBMITTED);
         scenario.setDescription("New scenario description");
         scenarioRepository.update(scenario);
-        Scenario updatedScenario = scenarioRepository.findWithAmounts("3210b236-1239-4a60-9fab-888b84199321");
+        Scenario updatedScenario =
+            scenarioRepository.findWithAmountsAndLastAction("3210b236-1239-4a60-9fab-888b84199321");
         assertNotNull(updatedScenario);
         assertEquals(ScenarioStatusEnum.SUBMITTED, updatedScenario.getStatus());
         assertEquals("New scenario name", updatedScenario.getName());

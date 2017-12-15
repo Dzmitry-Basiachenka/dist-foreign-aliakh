@@ -65,8 +65,8 @@ public class ScenarioRepository extends BaseRepository implements IScenarioRepos
     }
 
     @Override
-    public Scenario findWithAmounts(String scenarioId) {
-        return selectOne("IScenarioMapper.findWithAmounts", Objects.requireNonNull(scenarioId));
+    public Scenario findWithAmountsAndLastAction(String scenarioId) {
+        return selectOne("IScenarioMapper.findWithAmountsAndLastAction", Objects.requireNonNull(scenarioId));
     }
 
     @Override

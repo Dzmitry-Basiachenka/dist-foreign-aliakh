@@ -69,7 +69,7 @@ public class ScenarioWidgetTest {
         scenario.setNetTotal(new BigDecimal("13600.00"));
         expect(controller.getScenario()).andReturn(scenario).once();
         expect(controller.getExportScenarioUsagesStreamSource()).andReturn(createMock(IStreamSource.class)).once();
-        expect(controller.getScenarioWithAmounts()).andReturn(scenario).once();
+        expect(controller.getScenarioWithAmountsAndLastAction()).andReturn(scenario).once();
         replay(controller, ForeignSecurityUtils.class, mediator);
         scenarioWidget.init();
         verify(controller, ForeignSecurityUtils.class);

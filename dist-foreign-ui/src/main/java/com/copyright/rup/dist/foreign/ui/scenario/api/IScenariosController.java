@@ -24,12 +24,12 @@ public interface IScenariosController extends IController<IScenariosWidget> {
     List<Scenario> getScenarios();
 
     /**
-     * Gets {@link Scenario} with calculated amounts.
+     * Gets {@link Scenario} with calculated amounts and last audit action.
      *
      * @param scenario selected {@link Scenario}
      * @return scenario {@link Scenario}
      */
-    Scenario getScenarioWithAmounts(Scenario scenario);
+    Scenario getScenarioWithAmountsAndLastAction(Scenario scenario);
 
     /**
      * Handles click on 'Delete' button.

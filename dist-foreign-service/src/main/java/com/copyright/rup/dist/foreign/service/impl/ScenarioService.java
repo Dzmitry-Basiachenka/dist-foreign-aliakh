@@ -77,8 +77,8 @@ public class ScenarioService implements IScenarioService {
     }
 
     @Override
-    public Scenario getScenarioWithAmounts(String scenarioId) {
-        return scenarioRepository.findWithAmounts(scenarioId);
+    public Scenario getScenarioWithAmountsAndLastAction(String scenarioId) {
+        return scenarioRepository.findWithAmountsAndLastAction(scenarioId);
     }
 
     @Override
