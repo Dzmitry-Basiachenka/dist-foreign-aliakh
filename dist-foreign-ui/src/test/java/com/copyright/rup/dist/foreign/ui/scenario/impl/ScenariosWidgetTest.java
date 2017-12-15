@@ -106,7 +106,7 @@ public class ScenariosWidgetTest {
     @Test
     public void testRefresh() {
         expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).once();
-        expect(controller.getScenarioWithAmounts(scenario)).andReturn(scenario).once();
+        expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
         replay(controller);
         scenariosWidget.refresh();
         verifyScenarioMetadataPanel();
@@ -118,7 +118,7 @@ public class ScenariosWidgetTest {
         scenariosWidget.selectScenario(null);
         Table table = Whitebox.getInternalState(scenariosWidget, TABLE_ID);
         assertNull(table.getValue());
-        expect(controller.getScenarioWithAmounts(scenario)).andReturn(scenario).once();
+        expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
         replay(controller);
         scenariosWidget.selectScenario(SCENARIO_ID);
         assertEquals(SCENARIO_ID, table.getValue());
@@ -134,7 +134,7 @@ public class ScenariosWidgetTest {
         BeanContainer<String, Scenario> container = createMock(BeanContainer.class);
         Whitebox.setInternalState(scenariosWidget, "container", container);
         expect(container.getItem(SCENARIO_ID)).andReturn(new BeanItem(scenario)).once();
-        expect(controller.getScenarioWithAmounts(scenario)).andReturn(scenario).once();
+        expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
         replay(controller, scenariosTable, container);
         scenariosWidget.refreshSelectedScenario();
         verifyScenarioMetadataPanel();
@@ -185,7 +185,7 @@ public class ScenariosWidgetTest {
         Collection<?> listeners = table.getListeners(ValueChangeEvent.class);
         assertEquals(1, listeners.size());
         ValueChangeListener listener = (ValueChangeListener) listeners.iterator().next();
-        expect(controller.getScenarioWithAmounts(scenario)).andReturn(scenario).once();
+        expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
         replay(controller);
         verifyValueChangeListener(listener);
         verifyValueChangeListenerNoSelectedItem(listener);

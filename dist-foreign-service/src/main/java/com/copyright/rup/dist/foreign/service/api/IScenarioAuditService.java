@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.service.api;
 
-import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 
@@ -20,11 +19,11 @@ public interface IScenarioAuditService {
     /**
      * Logs scenario action.
      *
-     * @param scenario     instance of {@link Scenario}
+     * @param scenarioId   scenario identifier
      * @param actionType   scenario action type
      * @param actionReason action reason
      */
-    void logAction(Scenario scenario, ScenarioActionTypeEnum actionType, String actionReason);
+    void logAction(String scenarioId, ScenarioActionTypeEnum actionType, String actionReason);
 
     /**
      * Deletes scenario actions by scenario identifier.
