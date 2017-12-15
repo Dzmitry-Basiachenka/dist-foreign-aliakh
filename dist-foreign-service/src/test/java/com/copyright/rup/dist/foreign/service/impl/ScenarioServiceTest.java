@@ -98,9 +98,11 @@ public class ScenarioServiceTest {
         expectLastCall().once();
         scenarioRepository.remove(SCENARIO_ID);
         expectLastCall().once();
-        replay(usageService, scenarioRepository);
+        scenarioAuditService.deleteActions(SCENARIO_ID);
+        expectLastCall().once();
+        replay(usageService, scenarioRepository, scenarioAuditService);
         scenarioService.deleteScenario(SCENARIO_ID);
-        verify(usageService, scenarioRepository);
+        verify(usageService, scenarioRepository, scenarioAuditService);
     }
 
     @Test
