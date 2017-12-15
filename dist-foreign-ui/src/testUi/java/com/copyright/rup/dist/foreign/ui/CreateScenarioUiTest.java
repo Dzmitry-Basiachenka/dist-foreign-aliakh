@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
+import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -62,12 +63,15 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
     @Autowired
     private IScenarioRepository scenarioRepository;
     @Autowired
+    private IScenarioAuditService scenarioAuditService;
+    @Autowired
     private IUsageRepository usageRepository;
 
     @After
     public void tearDown() {
         if (null != scenarioId) {
             usageRepository.deleteFromScenario(scenarioId, StoredEntity.DEFAULT_USER);
+            scenarioAuditService.deleteActions(scenarioId);
             scenarioRepository.remove(scenarioId);
             scenarioId = null;
         }

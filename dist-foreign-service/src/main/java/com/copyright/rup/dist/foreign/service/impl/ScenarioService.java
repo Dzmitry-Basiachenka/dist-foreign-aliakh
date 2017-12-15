@@ -79,6 +79,7 @@ public class ScenarioService implements IScenarioService {
     @Transactional
     public void deleteScenario(String scenarioId) {
         usageService.deleteFromScenario(scenarioId);
+        scenarioAuditService.deleteActions(scenarioId);
         scenarioRepository.remove(scenarioId);
     }
 
