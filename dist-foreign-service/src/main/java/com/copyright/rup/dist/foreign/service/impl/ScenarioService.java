@@ -77,10 +77,13 @@ public class ScenarioService implements IScenarioService {
 
     @Override
     @Transactional
-    public void deleteScenario(String scenarioId) {
-        usageService.deleteFromScenario(scenarioId);
-        scenarioAuditService.deleteActions(scenarioId);
-        scenarioRepository.remove(scenarioId);
+    public void deleteScenario(Scenario scenario) {
+        String userName = RupContextUtils.getUserName();
+        LOGGER.info("Delete scenario. Started. {}, User={}", logScenario(scenario), userName);
+        usageService.deleteFromScenario(scenario.getId());
+        scenarioAuditService.deleteActions(scenario.getId());
+        scenarioRepository.remove(scenario.getId());
+        LOGGER.info("Delete scenario. Finished. {}, User={}", logScenario(scenario), userName);
     }
 
     @Override

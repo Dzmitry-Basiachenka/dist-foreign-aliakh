@@ -74,7 +74,8 @@ public class ScenarioAuditServiceTest {
     @Test
     public void testGetActions() {
         expect(scenarioAuditRepository.findByScenarioId(SCENARIO_UID))
-            .andReturn(Lists.newArrayList(new ScenarioAuditItem(), new ScenarioAuditItem()));
+            .andReturn(Lists.newArrayList(new ScenarioAuditItem(), new ScenarioAuditItem()))
+            .once();
         replay(scenarioAuditRepository);
         List<ScenarioAuditItem> auditItems = scenarioAuditService.getActions(SCENARIO_UID);
         assertTrue(CollectionUtils.isNotEmpty(auditItems));

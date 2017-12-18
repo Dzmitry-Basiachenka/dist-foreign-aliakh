@@ -27,7 +27,7 @@ public class Scenario extends StoredEntity<String> {
     private BigDecimal reportedTotal = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
     private String description;
     private ScenarioStatusEnum status;
-    private ScenarioAuditItem lastAuditItem;
+    private ScenarioAuditItem auditItem;
 
     public String getName() {
         return name;
@@ -85,12 +85,12 @@ public class Scenario extends StoredEntity<String> {
         this.status = status;
     }
 
-    public ScenarioAuditItem getLastAuditItem() {
-        return lastAuditItem;
+    public ScenarioAuditItem getAuditItem() {
+        return auditItem;
     }
 
-    public void setLastAuditItem(ScenarioAuditItem lastAuditItem) {
-        this.lastAuditItem = lastAuditItem;
+    public void setAuditItem(ScenarioAuditItem auditItem) {
+        this.auditItem = auditItem;
     }
 
     @Override
@@ -111,7 +111,7 @@ public class Scenario extends StoredEntity<String> {
             .append(this.reportedTotal, that.reportedTotal)
             .append(this.description, that.description)
             .append(this.status, that.status)
-            .append(this.lastAuditItem, that.lastAuditItem)
+            .append(this.auditItem, that.auditItem)
             .isEquals();
     }
 
@@ -126,7 +126,7 @@ public class Scenario extends StoredEntity<String> {
             .append(reportedTotal)
             .append(description)
             .append(status)
-            .append(lastAuditItem)
+            .append(auditItem)
             .toHashCode();
     }
 
@@ -141,7 +141,7 @@ public class Scenario extends StoredEntity<String> {
             .append("reportedTotal", reportedTotal)
             .append("description", description)
             .append("status", status)
-            .append("lastAuditItem", lastAuditItem)
+            .append("auditItem", auditItem)
             .toString();
     }
 }

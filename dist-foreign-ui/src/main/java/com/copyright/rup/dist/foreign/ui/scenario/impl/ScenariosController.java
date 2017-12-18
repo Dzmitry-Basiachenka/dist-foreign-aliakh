@@ -125,7 +125,7 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
     }
 
     private void deleteScenario(Scenario scenario) {
-        scenarioService.deleteScenario(scenario.getId());
+        scenarioService.deleteScenario(scenario);
         getWidget().refresh();
     }
 }

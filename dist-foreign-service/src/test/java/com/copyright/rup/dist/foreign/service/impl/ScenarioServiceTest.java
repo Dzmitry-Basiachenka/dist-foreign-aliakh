@@ -94,14 +94,14 @@ public class ScenarioServiceTest {
 
     @Test
     public void testRemove() {
-        usageService.deleteFromScenario(SCENARIO_ID);
+        usageService.deleteFromScenario(scenario.getId());
         expectLastCall().once();
-        scenarioRepository.remove(SCENARIO_ID);
+        scenarioRepository.remove(scenario.getId());
         expectLastCall().once();
-        scenarioAuditService.deleteActions(SCENARIO_ID);
+        scenarioAuditService.deleteActions(scenario.getId());
         expectLastCall().once();
         replay(usageService, scenarioRepository, scenarioAuditService);
-        scenarioService.deleteScenario(SCENARIO_ID);
+        scenarioService.deleteScenario(scenario);
         verify(usageService, scenarioRepository, scenarioAuditService);
     }
 
