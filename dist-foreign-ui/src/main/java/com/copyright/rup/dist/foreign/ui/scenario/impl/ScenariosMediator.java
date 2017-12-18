@@ -24,26 +24,6 @@ class ScenariosMediator implements IMediator {
     private Button rejectButton;
     private Button approveButton;
 
-    public void setDeleteButton(Button deleteButton) {
-        this.deleteButton = deleteButton;
-    }
-
-    public void setViewButton(Button viewButton) {
-        this.viewButton = viewButton;
-    }
-
-    public void setSubmitButton(Button submitButton) {
-        this.submitButton = submitButton;
-    }
-
-    public void setRejectButton(Button rejectButton) {
-        this.rejectButton = rejectButton;
-    }
-
-    public void setApproveButton(Button approveButton) {
-        this.approveButton = approveButton;
-    }
-
     @Override
     public void applyPermissions() {
         deleteButton.setVisible(ForeignSecurityUtils.hasDeleteScenarioPermission());
@@ -51,6 +31,26 @@ class ScenariosMediator implements IMediator {
         rejectButton.setVisible(ForeignSecurityUtils.hasRejectScenarioPermission());
         approveButton.setVisible(ForeignSecurityUtils.hasApproveScenarioPermission());
         viewButton.setVisible(true);
+    }
+
+    void setDeleteButton(Button deleteButton) {
+        this.deleteButton = deleteButton;
+    }
+
+    void setViewButton(Button viewButton) {
+        this.viewButton = viewButton;
+    }
+
+    void setSubmitButton(Button submitButton) {
+        this.submitButton = submitButton;
+    }
+
+    void setRejectButton(Button rejectButton) {
+        this.rejectButton = rejectButton;
+    }
+
+    void setApproveButton(Button approveButton) {
+        this.approveButton = approveButton;
     }
 
     /**
@@ -63,9 +63,9 @@ class ScenariosMediator implements IMediator {
             viewButton.setEnabled(true);
             ScenarioStatusEnum status = scenario.getStatus();
             boolean isInProgressState = ScenarioStatusEnum.IN_PROGRESS == status;
-            boolean isSubmittedState = ScenarioStatusEnum.SUBMITTED == status;
             deleteButton.setEnabled(isInProgressState);
             submitButton.setEnabled(isInProgressState);
+            boolean isSubmittedState = ScenarioStatusEnum.SUBMITTED == status;
             rejectButton.setEnabled(isSubmittedState);
             approveButton.setEnabled(isSubmittedState);
         } else {
