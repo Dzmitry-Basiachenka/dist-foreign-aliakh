@@ -115,7 +115,7 @@ public class ScenarioServiceTest {
 
     @Test
     public void testSubmit() {
-        scenarioRepository.update(scenario);
+        scenarioRepository.updateStatus(scenario);
         expectLastCall().once();
         scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.SUBMITTED, REASON);
         expectLastCall().once();
@@ -127,7 +127,7 @@ public class ScenarioServiceTest {
 
     @Test
     public void testReject() {
-        scenarioRepository.update(scenario);
+        scenarioRepository.updateStatus(scenario);
         expectLastCall().once();
         scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.REJECTED, REASON);
         expectLastCall().once();
@@ -139,7 +139,7 @@ public class ScenarioServiceTest {
 
     @Test
     public void testApprove() {
-        scenarioRepository.update(scenario);
+        scenarioRepository.updateStatus(scenario);
         expectLastCall().once();
         scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.APPROVED, REASON);
         expectLastCall().once();

@@ -165,7 +165,7 @@ databaseChangeLog {
             column(name: 'updated_by_user', value: 'system')
         }
 
-        // Mapping for Distribution Specialist role
+        // Mapping for Distribution Manager role
         insert(schemaName: dbCommonSchema, tableName: 'cm_role_to_permission_map') {
             column(name: 'cm_role_uid', value: 'baseline-fda-distribution-manager')
             column(name: 'cm_permission_uid', value: 'baseline-fda-approve-scenario')
@@ -174,7 +174,6 @@ databaseChangeLog {
             column(name: 'updated_by_user', value: 'system')
         }
 
-        // Mapping for Distribution Specialist role
         insert(schemaName: dbCommonSchema, tableName: 'cm_role_to_permission_map') {
             column(name: 'cm_role_uid', value: 'baseline-fda-distribution-manager')
             column(name: 'cm_permission_uid', value: 'baseline-fda-reject-scenario')

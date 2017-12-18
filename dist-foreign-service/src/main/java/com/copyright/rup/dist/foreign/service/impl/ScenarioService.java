@@ -102,34 +102,19 @@ public class ScenarioService implements IScenarioService {
     @Override
     @Transactional
     public void submit(Scenario scenario, String reason) {
-        Objects.requireNonNull(scenario);
-        String userName = RupContextUtils.getUserName();
-        LOGGER.info("Submit scenario for approval. Started. {}, User={}, Reason={}", logScenario(scenario), userName,
-            reason);
-        changeScenarioState(scenario, ScenarioStatusEnum.SUBMITTED, ScenarioActionTypeEnum.SUBMITTED, userName, reason);
-        LOGGER.info("Submit scenario for approval. Finished. {}, User={}, Reason={}", logScenario(scenario), userName,
-            reason);
+        changeScenarioState(scenario, ScenarioStatusEnum.SUBMITTED, ScenarioActionTypeEnum.SUBMITTED, reason);
     }
 
     @Override
     @Transactional
     public void reject(Scenario scenario, String reason) {
-        Objects.requireNonNull(scenario);
-        String userName = RupContextUtils.getUserName();
-        LOGGER.info("Reject scenario. Started. {}, User={}, Reason={}", logScenario(scenario), userName, reason);
-        changeScenarioState(scenario, ScenarioStatusEnum.IN_PROGRESS, ScenarioActionTypeEnum.REJECTED, userName,
-            reason);
-        LOGGER.info("Reject scenario. Started. {}, User={}, Reason={}", logScenario(scenario), userName, reason);
+        changeScenarioState(scenario, ScenarioStatusEnum.IN_PROGRESS, ScenarioActionTypeEnum.REJECTED, reason);
     }
 
     @Override
     @Transactional
     public void approve(Scenario scenario, String reason) {
-        Objects.requireNonNull(scenario);
-        String userName = RupContextUtils.getUserName();
-        LOGGER.info("Approve scenario. Started. {}, User={}, Reason={}", logScenario(scenario), userName, reason);
-        changeScenarioState(scenario, ScenarioStatusEnum.APPROVED, ScenarioActionTypeEnum.APPROVED, userName, reason);
-        LOGGER.info("Approve scenario. Started. {}, User={}, Reason={}", logScenario(scenario), userName, reason);
+        changeScenarioState(scenario, ScenarioStatusEnum.APPROVED, ScenarioActionTypeEnum.APPROVED, reason);
     }
 
     private Scenario buildScenario(String scenarioName, String description, List<Usage> usages) {
@@ -157,10 +142,13 @@ public class ScenarioService implements IScenarioService {
     }
 
     private void changeScenarioState(Scenario scenario, ScenarioStatusEnum status, ScenarioActionTypeEnum action,
-                                     String userName, String reason) {
+                                     String reason) {
+        Objects.requireNonNull(scenario);
+        String userName = RupContextUtils.getUserName();
         scenario.setStatus(status);
         scenario.setUpdateUser(userName);
-        scenarioRepository.update(scenario);
+        LOGGER.info("Change scenario status. {}, User={}, Reason={}", logScenario(scenario), userName, reason);
+        scenarioRepository.updateStatus(scenario);
         scenarioAuditService.logAction(scenario.getId(), action, reason);
     }
 

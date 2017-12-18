@@ -125,18 +125,16 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
-    public void testUpdate() {
+    public void testUpdateStatus() {
         Scenario scenario = scenarioRepository.findWithAmountsAndLastAction("3210b236-1239-4a60-9fab-888b84199321");
-        scenario.setName("New scenario name");
         scenario.setStatus(ScenarioStatusEnum.SUBMITTED);
-        scenario.setDescription("New scenario description");
-        scenarioRepository.update(scenario);
+        scenarioRepository.updateStatus(scenario);
         Scenario updatedScenario =
             scenarioRepository.findWithAmountsAndLastAction("3210b236-1239-4a60-9fab-888b84199321");
         assertNotNull(updatedScenario);
         assertEquals(ScenarioStatusEnum.SUBMITTED, updatedScenario.getStatus());
-        assertEquals("New scenario name", updatedScenario.getName());
-        assertEquals("New scenario description", updatedScenario.getDescription());
+        assertEquals(scenario.getName(), updatedScenario.getName());
+        assertEquals(scenario.getDescription(), updatedScenario.getDescription());
         assertEquals(scenario.getGrossTotal(), updatedScenario.getGrossTotal());
         assertEquals(scenario.getReportedTotal(), updatedScenario.getReportedTotal());
         assertEquals(scenario.getNetTotal(), updatedScenario.getNetTotal());
