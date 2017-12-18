@@ -13,7 +13,7 @@
         <result property="grossTotal" column="gross_total"/>
         <result property="reportedTotal" column="reported_total"/>
         <result property="description" column="description"/>
-        <association property="lastAuditItem" resultMap="IScenarioAuditMapper.scenarioAuditItemResultMap" columnPrefix="action_"/>
+        <association property="auditItem" resultMap="IScenarioAuditMapper.scenarioAuditItemResultMap" columnPrefix="action_"/>
     </resultMap>
 
     <resultMap id="rightsholderPayeePairResultMap" type="RightsholderPayeePair">
@@ -113,13 +113,14 @@
             a1.record_version action_record_version
         from ${schema}.df_scenario s
         left join ${schema}.df_usage u on u.df_scenario_uid = s.df_scenario_uid
-        left join ${schema}.df_scenario_audit a1 ON s.df_scenario_uid = a1.df_scenario_uid
-        left join ${schema}.df_scenario_audit a2 ON s.df_scenario_uid = a2.df_scenario_uid
-        <![CDATA[
-            and a1.created_datetime < a2.created_datetime
-        ]]>
-        where s.df_scenario_uid = #{scenarioId} and a2.df_scenario_uid is null
-        group by s.df_scenario_uid, s.name, a1.df_scenario_audit_uid
+        left join ${schema}.df_scenario_audit a1 on s.df_scenario_uid = a1.df_scenario_uid
+        left join ${schema}.df_scenario_audit a2 on s.df_scenario_uid = a2.df_scenario_uid
+            <![CDATA[and a1.created_datetime < a2.created_datetime]]>
+        where s.df_scenario_uid = #{scenarioId}
+            and a2.df_scenario_uid is null
+        group by s.df_scenario_uid,
+            s.name,
+            a1.df_scenario_audit_uid
     </select>
 
     <select id="findRightsholdersByScenarioIdAndSourceRro" parameterType="map" resultMap="rightsholderPayeePairResultMap">

@@ -12,37 +12,19 @@ package com.copyright.rup.dist.foreign.domain;
 public enum ScenarioActionTypeEnum {
 
     /**
-     * Action type for approve {@link Scenario}.
+     * Action type for add usages to {@link Scenario}.
      */
-    APPROVED("Approved"),
-
-    /**
-     * Action type for reject {@link Scenario}.
-     */
-    REJECTED("Rejected"),
-
+    ADDED_USAGES,
     /**
      * Action type for submit {@link Scenario}.
      */
-    SUBMITTED("Submitted"),
-
+    SUBMITTED,
     /**
-     * Action type for add usages to {@link Scenario}.
+     * Action type for approve {@link Scenario}.
      */
-    ADDED_USAGES("Added usages");
-
-    private final String description;
-
+    APPROVED,
     /**
-     * Constructor.
-     *
-     * @param description scenario action description.
+     * Action type for reject {@link Scenario}.
      */
-    ScenarioActionTypeEnum(String description) {
-        this.description = description;
-    }
-
-    public String getDescription() {
-        return description;
-    }
+    REJECTED
 }

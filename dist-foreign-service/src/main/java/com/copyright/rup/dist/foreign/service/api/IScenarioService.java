@@ -55,9 +55,9 @@ public interface IScenarioService {
     /**
      * Deletes {@link Scenario} by given identifier.
      *
-     * @param scenarioId scenario identifier
+     * @param scenario instance of {@link Scenario}
      */
-    void deleteScenario(String scenarioId);
+    void deleteScenario(Scenario scenario);
 
     /**
      * Gets reported total, gross amount, service fee amount, net amount and last audit action

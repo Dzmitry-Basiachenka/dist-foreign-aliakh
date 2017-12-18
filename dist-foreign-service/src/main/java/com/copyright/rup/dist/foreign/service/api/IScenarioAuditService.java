@@ -36,7 +36,7 @@ public interface IScenarioAuditService {
      * Returns list of scenario actions.
      *
      * @param scenarioId scenario identifier
-     * @return list of scenario {@link ScenarioAuditItem}.
+     * @return list of {@link ScenarioAuditItem}s
      */
     List<ScenarioAuditItem> getActions(String scenarioId);
 }

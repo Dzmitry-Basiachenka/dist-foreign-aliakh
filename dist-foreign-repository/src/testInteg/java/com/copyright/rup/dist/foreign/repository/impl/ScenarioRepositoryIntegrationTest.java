@@ -94,7 +94,7 @@ public class ScenarioRepositoryIntegrationTest {
     @Test
     public void testFindWithAmountsAndLastAction() {
         Scenario scenario = scenarioRepository.findWithAmountsAndLastAction(SCENARIO_WITH_AUDIT_ID);
-        ScenarioAuditItem scenarioAuditItem = scenario.getLastAuditItem();
+        ScenarioAuditItem scenarioAuditItem = scenario.getAuditItem();
         assertEquals(ScenarioActionTypeEnum.APPROVED, scenarioAuditItem.getActionType());
         assertEquals("Scenario approved by manager", scenarioAuditItem.getActionReason());
         assertEquals(new BigDecimal("32874.8000000000"), scenario.getGrossTotal());
