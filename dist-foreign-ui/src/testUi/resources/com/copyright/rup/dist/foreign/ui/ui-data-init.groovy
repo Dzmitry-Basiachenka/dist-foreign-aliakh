@@ -390,6 +390,51 @@ databaseChangeLog {
             column(name: 'action_reason', value: "Uploaded in 'JAACC_11Dec16' Batch")
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_audit') {
+            column(name: 'df_scenario_audit_uid', value: '7f95ddb3-d3d2-4a40-b370-f5be358b8146')
+            column(name: 'df_scenario_uid', value: '92cfce61-9532-448e-a2bb-2ba23636debb')
+            column(name: 'action_type_ind', value: 'ADDED_USAGES')
+            column(name: 'action_reason', value: '')
+            column(name: 'created_datetime', value: '2017-02-15')
+            column(name: 'created_by_user', value: 'spec@copyright.com')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_audit') {
+            column(name: 'df_scenario_audit_uid', value: '009f22cb-4d05-410a-b8a5-cb951f17285a')
+            column(name: 'df_scenario_uid', value: 'b2f3bf86-8343-4f78-bdb5-20a47c6a52b8')
+            column(name: 'action_type_ind', value: 'ADDED_USAGES')
+            column(name: 'action_reason', value: '')
+            column(name: 'created_datetime', value: '2017-03-15')
+            column(name: 'created_by_user', value: 'spec@copyright.com')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_audit') {
+            column(name: 'df_scenario_audit_uid', value: 'eecea40e-82dd-4a14-bffd-a03686d514de')
+            column(name: 'df_scenario_uid', value: '5c3c3412-dea5-4572-a894-15a4b87071c4')
+            column(name: 'action_type_ind', value: 'ADDED_USAGES')
+            column(name: 'action_reason', value: '')
+            column(name: 'created_datetime', value: '2017-03-16')
+            column(name: 'created_by_user', value: 'spec@copyright.com')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_audit') {
+            column(name: 'df_scenario_audit_uid', value: '2a699680-53a2-4d38-af72-ad7dea068205')
+            column(name: 'df_scenario_uid', value: '5c3c3412-dea5-4572-a894-15a4b87071c4')
+            column(name: 'action_type_ind', value: 'SUBMITTED')
+            column(name: 'action_reason', value: 'submitted')
+            column(name: 'created_datetime', value: '2017-03-17')
+            column(name: 'created_by_user', value: 'spec@copyright.com')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_audit') {
+            column(name: 'df_scenario_audit_uid', value: '193c7216-a814-4f7e-bfbe-ae91659ac34f')
+            column(name: 'df_scenario_uid', value: '5c3c3412-dea5-4572-a894-15a4b87071c4')
+            column(name: 'action_type_ind', value: 'REJECTED')
+            column(name: 'action_reason', value: 'rejected')
+            column(name: 'created_datetime', value: '2017-03-18')
+            column(name: 'created_by_user', value: 'manager@copyright.com')
+        }
+
         rollback ""
     }
 

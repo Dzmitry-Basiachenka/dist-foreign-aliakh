@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IActionHandler;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioHistoryController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosWidget;
@@ -44,6 +45,8 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
 
     private Map<ScenarioActionTypeEnum, IActionHandler> actionHandlers;
 
+    @Autowired
+    private IScenarioHistoryController scenarioHistoryController;
     @Autowired
     private IScenarioService scenarioService;
     @Autowired
@@ -92,7 +95,7 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
 
     @Override
     protected IScenariosWidget instantiateWidget() {
-        return new ScenariosWidget();
+        return new ScenariosWidget(scenarioHistoryController);
     }
 
     /**
@@ -120,7 +123,6 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
         Scenario scenario = widget.getSelectedScenario();
         scenario.setUpdateUser(SecurityUtils.getUserName());
         actionHandler.handleAction(scenario, reason);
-        widget.refreshSelectedScenario();
         widget.refresh();
     }
 

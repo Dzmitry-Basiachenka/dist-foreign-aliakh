@@ -187,12 +187,16 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
 
     private void verifyMetadataPanel(WebElement metadataPanel) {
         List<WebElement> labels = findElements(metadataPanel, By.className(V_LABEL_CLASS_NAME));
-        assertEquals(5, CollectionUtils.size(labels));
+        assertEquals(9, CollectionUtils.size(labels));
         assertEquals("Owner: SYSTEM", labels.get(0).getText());
         assertEquals("Distribution Total: 214.91", labels.get(1).getText());
         assertEquals("Gross Total: 255.85", labels.get(2).getText());
         assertEquals("Reported Total: 100.00", labels.get(3).getText());
         assertEquals("Description: Scenario description", labels.get(4).getText());
+        assertEquals("Type: REJECTED", labels.get(5).getText());
+        assertEquals("User: manager@copyright.com", labels.get(6).getText());
+        assertEquals("Date: 03/18/2017 12:00 AM", labels.get(7).getText());
+        assertEquals("Reason: rejected", labels.get(8).getText());
     }
 
     private void verifyTableRows(WebElement table, ScenarioInfo... scenariosInfo) {

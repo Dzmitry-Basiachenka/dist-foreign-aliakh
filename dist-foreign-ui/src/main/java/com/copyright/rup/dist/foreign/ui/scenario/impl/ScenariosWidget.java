@@ -1,14 +1,19 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
+import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.domain.BaseEntity;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
+import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioHistoryController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioHistoryWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.DateColumnGenerator;
 import com.copyright.rup.vaadin.ui.VaadinUtils;
+import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.widget.api.IMediator;
 
@@ -16,14 +21,18 @@ import com.vaadin.data.util.BeanContainer;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
+import com.vaadin.ui.themes.BaseTheme;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -40,6 +49,7 @@ import java.util.Objects;
  */
 public class ScenariosWidget extends VerticalLayout implements IScenariosWidget {
 
+    private IScenarioHistoryController scenarioHistoryController;
     private IScenariosController controller;
     private Button deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
     private Button viewButton = Buttons.createButton(ForeignUi.getMessage("button.view"));
@@ -52,10 +62,23 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
     private Label reportedTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private Label grossTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private Label descriptionLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private Label actionType = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private Label actionCreatedUser = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private Label actionCreatedDate = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private Label actionReason = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private Table table;
     private Panel metadataPanel;
     private VerticalLayout metadataLayout;
     private ScenariosMediator mediator;
+
+    /**
+     * Controller.
+     *
+     * @param historyController instance of {@link IScenarioHistoryController}
+     */
+    public ScenariosWidget(IScenarioHistoryController historyController) {
+        this.scenarioHistoryController = historyController;
+    }
 
     @Override
     public IMediator initMediator() {
@@ -74,6 +97,7 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
         container.removeAllItems();
         container.addAll(controller.getScenarios());
         selectScenario(table.firstItemId());
+        refreshSelectedScenario();
     }
 
     @Override
@@ -159,10 +183,28 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
         metadataPanel.setSizeFull();
         VaadinUtils.addComponentStyle(metadataPanel, "scenarios-metadata");
         metadataLayout = new VerticalLayout(ownerLabel, distributionTotalLabel, grossTotalLabel, reportedTotalLabel,
-            descriptionLabel);
+            descriptionLabel, initScenarioActionLayout());
         metadataLayout.setSpacing(true);
         metadataLayout.setMargin(new MarginInfo(false, true, false, true));
         VaadinUtils.setMaxComponentsWidth(metadataLayout);
+    }
+
+    private VerticalLayout initScenarioActionLayout() {
+        VerticalLayout layout = new VerticalLayout(actionType, actionCreatedUser, actionCreatedDate, actionReason);
+        VaadinUtils.addComponentStyle(layout, "scenario-last-action");
+        layout.setCaption(ForeignUi.getMessage("label.scenario.action"));
+        Button viewAllActions = new Button(ForeignUi.getMessage("button.caption.view_all_actions"));
+        viewAllActions.addStyleName(BaseTheme.BUTTON_LINK);
+        viewAllActions.addClickListener(event -> {
+            IScenarioHistoryWidget scenarioHistoryWidget = scenarioHistoryController.initWidget();
+            scenarioHistoryWidget.populateHistory(getSelectedScenario());
+            Windows.showModalWindow((Window) scenarioHistoryWidget);
+        });
+        layout.addComponent(viewAllActions);
+        layout.setComponentAlignment(viewAllActions, Alignment.BOTTOM_RIGHT);
+        VaadinUtils.setMaxComponentsWidth(layout, actionType, actionCreatedUser, actionCreatedDate, actionReason);
+        VaadinUtils.setButtonsAutoDisabled(viewAllActions);
+        return layout;
     }
 
     private void onItemChanged(Scenario scenario) {
@@ -176,6 +218,17 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
             reportedTotalLabel.setValue(ForeignUi.getMessage("label.reported_total",
                 formatAmount(scenarioWithAmounts.getReportedTotal())));
             descriptionLabel.setValue(ForeignUi.getMessage("label.description", scenario.getDescription()));
+            ScenarioAuditItem lastAction = scenarioWithAmounts.getAuditItem();
+            if (Objects.nonNull(lastAction)) {
+                actionType.setValue(formatLabel(ForeignUi.getMessage("label.scenario.last_action.action_type"),
+                    lastAction.getActionType()));
+                actionCreatedUser.setValue(formatLabel(ForeignUi.getMessage("label.scenario.last_action.action_user"),
+                    lastAction.getCreateUser()));
+                actionCreatedDate.setValue(formatLabel(ForeignUi.getMessage("label.scenario.last_action.action_date"),
+                    DateFormatUtils.format(lastAction.getCreateDate(), RupDateUtils.US_DATETIME_FORMAT_PATTERN_LONG)));
+                actionReason.setValue(formatLabel(ForeignUi.getMessage("label.scenario.last_action.action_reason"),
+                    lastAction.getActionReason()));
+            }
             metadataPanel.setContent(metadataLayout);
         } else {
             metadataPanel.setContent(new Label());
@@ -185,5 +238,9 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
 
     private String formatAmount(BigDecimal amount) {
         return CurrencyUtils.formatAsHtml(amount.setScale(2, BigDecimal.ROUND_HALF_UP));
+    }
+
+    private String formatLabel(String caption, Object value) {
+        return ForeignUi.getMessage("label.format.label_with_caption", caption, value);
     }
 }
