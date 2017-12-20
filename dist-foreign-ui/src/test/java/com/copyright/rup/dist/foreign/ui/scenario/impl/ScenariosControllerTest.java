@@ -149,8 +149,6 @@ public class ScenariosControllerTest {
         Whitebox.setInternalState(scenariosController, "widget", scenariosWidget);
         Scenario scenario = new Scenario();
         expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
-        scenariosWidget.refreshSelectedScenario();
-        expectLastCall().once();
         scenariosWidget.refresh();
         expectLastCall().once();
         IActionHandler handler = createMock(IActionHandler.class);

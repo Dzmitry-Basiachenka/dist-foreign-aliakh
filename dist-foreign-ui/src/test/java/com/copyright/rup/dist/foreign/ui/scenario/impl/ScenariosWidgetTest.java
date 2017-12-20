@@ -13,6 +13,8 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
+import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
 import com.copyright.rup.vaadin.ui.DateColumnGenerator;
 
@@ -38,8 +40,11 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 
 /**
  * Verifies {@link ScenariosWidget}.
@@ -61,9 +66,9 @@ public class ScenariosWidgetTest {
     private Scenario scenario;
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         controller = createMock(IScenariosController.class);
-        scenariosWidget = new ScenariosWidget();
+        scenariosWidget = new ScenariosWidget(new ScenarioHistoryController());
         scenariosWidget.setController(controller);
         scenario = new Scenario();
         scenario.setId(SCENARIO_ID);
@@ -72,6 +77,7 @@ public class ScenariosWidgetTest {
         scenario.setGrossTotal(new BigDecimal("20000.00"));
         scenario.setReportedTotal(new BigDecimal("30000.00"));
         scenario.setCreateUser("User@copyright.com");
+        scenario.setAuditItem(buildScenarioAuditItem());
         expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).once();
         replay(controller);
         scenariosWidget.init();
@@ -106,7 +112,7 @@ public class ScenariosWidgetTest {
     @Test
     public void testRefresh() {
         expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).once();
-        expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
+        expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).times(2);
         replay(controller);
         scenariosWidget.refresh();
         verifyScenarioMetadataPanel();
@@ -252,7 +258,7 @@ public class ScenariosWidgetTest {
         assertEquals(new MarginInfo(false, true, false, true), layout.getMargin());
         assertEquals(100, layout.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, layout.getWidthUnits());
-        assertEquals(5, layout.getComponentCount());
+        assertEquals(6, layout.getComponentCount());
         verifyMetadataLabel(layout.getComponent(0), "<b>Owner: </b>User@copyright.com");
         verifyMetadataLabel(layout.getComponent(1),
             "<b>Distribution Total: </b><span class='label-amount'>10,000.00</span>");
@@ -261,10 +267,29 @@ public class ScenariosWidgetTest {
         verifyMetadataLabel(layout.getComponent(3),
             "<b>Reported Total: </b><span class='label-amount'>30,000.00</span>");
         verifyMetadataLabel(layout.getComponent(4), "<b>Description: </b>Description");
+        assertTrue(layout.getComponent(5) instanceof VerticalLayout);
+        VerticalLayout lastActionLayout = (VerticalLayout) layout.getComponent(5);
+        assertEquals(5, lastActionLayout.getComponentCount());
+        verifyMetadataLabel(lastActionLayout.getComponent(0), "<b>Type:</b> ADDED_USAGES");
+        verifyMetadataLabel(lastActionLayout.getComponent(1), "<b>User:</b> user@copyright.com");
+        verifyMetadataLabel(lastActionLayout.getComponent(2), "<b>Date:</b> 12/24/2016 12:00 AM");
+        verifyMetadataLabel(lastActionLayout.getComponent(3), "<b>Reason:</b> ");
+        assertTrue(lastActionLayout.getComponent(4) instanceof Button);
+        assertEquals("View All Actions", lastActionLayout.getComponent(4).getCaption());
     }
 
     private void verifyMetadataLabel(Component component, String expectedValue) {
         assertTrue(component instanceof Label);
         assertEquals(expectedValue, ((Label) component).getValue());
+    }
+
+    private ScenarioAuditItem buildScenarioAuditItem() throws Exception {
+        ScenarioAuditItem scenarioAuditItem = new ScenarioAuditItem();
+        scenarioAuditItem.setActionType(ScenarioActionTypeEnum.ADDED_USAGES);
+        scenarioAuditItem.setActionReason(StringUtils.EMPTY);
+        scenarioAuditItem.setCreateUser("user@copyright.com");
+        scenarioAuditItem.setCreateDate(
+            Date.from(LocalDate.of(2016, 12, 24).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        return scenarioAuditItem;
     }
 }

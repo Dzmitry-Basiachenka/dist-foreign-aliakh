@@ -144,4 +144,9 @@
     .table-multiselectable .v-table-caption-container p.indeterminate:hover {
         background-position: 3px -300px;
     }
+
+    /**==== Scenario last action label ====*/
+    .scenario-last-action .v-label {
+        padding-left: 20px;
+    }
 }
