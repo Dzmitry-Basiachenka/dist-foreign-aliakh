@@ -53,8 +53,8 @@ public class ScenarioHistoryUiTest extends ForeignCommonUiTest {
         assertTableHeaderElements(table, "Type", "User", "Date", "Reason");
         assertTableSorting(table, new String[]{});
         List<WebElement> rows = assertTableRowElements(table, 3);
-        assertTableRowElements(rows.get(0), "REJECTED", "manager@copyright.com", "03/18/2017 12:00 AM", "rejected");
-        assertTableRowElements(rows.get(1), "SUBMITTED", "spec@copyright.com", "03/17/2017 12:00 AM", "submitted");
-        assertTableRowElements(rows.get(2), "ADDED_USAGES", "spec@copyright.com", "03/16/2017 12:00 AM", "");
+        assertTableRowElements(rows.get(0), "REJECTED", "fda_manager@copyright.com", "03/18/2017 12:00 AM", "rejected");
+        assertTableRowElements(rows.get(1), "SUBMITTED", "fda_spec@copyright.com", "03/17/2017 12:00 AM", "submitted");
+        assertTableRowElements(rows.get(2), "ADDED_USAGES", "fda_spec@copyright.com", "03/16/2017 12:00 AM", "");
     }
 }
