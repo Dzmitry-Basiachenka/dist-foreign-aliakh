@@ -194,7 +194,7 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
         assertEquals("Reported Total: 100.00", labels.get(3).getText());
         assertEquals("Description: Scenario description", labels.get(4).getText());
         assertEquals("Type: REJECTED", labels.get(5).getText());
-        assertEquals("User: manager@copyright.com", labels.get(6).getText());
+        assertEquals("User: fda_manager@copyright.com", labels.get(6).getText());
         assertEquals("Date: 03/18/2017 12:00 AM", labels.get(7).getText());
         assertEquals("Reason: rejected", labels.get(8).getText());
     }

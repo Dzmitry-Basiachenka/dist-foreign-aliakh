@@ -396,7 +396,7 @@ databaseChangeLog {
             column(name: 'action_type_ind', value: 'ADDED_USAGES')
             column(name: 'action_reason', value: '')
             column(name: 'created_datetime', value: '2017-02-15')
-            column(name: 'created_by_user', value: 'spec@copyright.com')
+            column(name: 'created_by_user', value: 'fda_spec@copyright.com')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_audit') {
@@ -405,7 +405,7 @@ databaseChangeLog {
             column(name: 'action_type_ind', value: 'ADDED_USAGES')
             column(name: 'action_reason', value: '')
             column(name: 'created_datetime', value: '2017-03-15')
-            column(name: 'created_by_user', value: 'spec@copyright.com')
+            column(name: 'created_by_user', value: 'fda_spec@copyright.com')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_audit') {
@@ -414,7 +414,7 @@ databaseChangeLog {
             column(name: 'action_type_ind', value: 'ADDED_USAGES')
             column(name: 'action_reason', value: '')
             column(name: 'created_datetime', value: '2017-03-16')
-            column(name: 'created_by_user', value: 'spec@copyright.com')
+            column(name: 'created_by_user', value: 'fda_spec@copyright.com')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_audit') {
@@ -423,7 +423,7 @@ databaseChangeLog {
             column(name: 'action_type_ind', value: 'SUBMITTED')
             column(name: 'action_reason', value: 'submitted')
             column(name: 'created_datetime', value: '2017-03-17')
-            column(name: 'created_by_user', value: 'spec@copyright.com')
+            column(name: 'created_by_user', value: 'fda_spec@copyright.com')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_audit') {
@@ -432,7 +432,7 @@ databaseChangeLog {
             column(name: 'action_type_ind', value: 'REJECTED')
             column(name: 'action_reason', value: 'rejected')
             column(name: 'created_datetime', value: '2017-03-18')
-            column(name: 'created_by_user', value: 'manager@copyright.com')
+            column(name: 'created_by_user', value: 'fda_manager@copyright.com')
         }
 
         rollback ""
