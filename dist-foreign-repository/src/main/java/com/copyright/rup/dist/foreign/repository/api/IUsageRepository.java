@@ -176,4 +176,13 @@ public interface IUsageRepository {
      */
     List<String> findIdsByScenarioIdRroAccountNumberRhAccountNumbers(String scenarioId, Long rroAccountNumber,
                                                                      List<Long> accountNumbers);
+
+    /**
+     * Finds {@link Usage} by provided detail id.
+     *
+     * @param detailId usage details id
+     * @return found {@link Usage} instance
+     */
+    Usage findByDetailId(Long detailId);
+
 }

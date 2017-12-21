@@ -207,13 +207,8 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         return result;
     }
 
-    /**
-     * Finds usage by provided detail id.
-     *
-     * @param detailId usage details id
-     * @return found {@link Usage} instance
-     */
-    Usage findByDetailId(Long detailId) {
+    @Override
+    public Usage findByDetailId(Long detailId) {
         return selectOne("IUsageMapper.findByDetailId", Objects.requireNonNull(detailId));
     }
 }
