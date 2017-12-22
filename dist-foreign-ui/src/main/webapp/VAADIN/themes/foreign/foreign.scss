@@ -149,4 +149,9 @@
     .scenario-last-action .v-label {
         padding-left: 20px;
     }
+
+    /**==== Allows line wrapping in scenario history table ====*/
+    .scenario-history-table .v-table-cell-wrapper {
+        white-space: normal;
+    }
 }

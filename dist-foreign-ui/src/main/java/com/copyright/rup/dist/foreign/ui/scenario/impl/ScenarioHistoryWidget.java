@@ -87,6 +87,7 @@ public class ScenarioHistoryWidget extends Window implements IScenarioHistoryWid
         );
         table.addGeneratedColumn("createDate", new DateColumnGenerator(RupDateUtils.US_DATETIME_FORMAT_PATTERN_LONG));
         table.setSizeFull();
+        table.setColumnWidth("createDate", 115);
         table.setColumnExpandRatio("actionReason", 1);
         table.setSortEnabled(false);
         VaadinUtils.addComponentStyle(table, "scenario-history-table");
