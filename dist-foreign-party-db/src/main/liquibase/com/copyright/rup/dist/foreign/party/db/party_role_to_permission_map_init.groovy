@@ -193,4 +193,24 @@ databaseChangeLog {
             }
         }
     }
+
+    changeSet(id: '2018-01-03-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-39911 Send FAS Scenario to LM (UI): map permissions for send scenario to LM action")
+
+        // Mapping for Distribution Specialist role
+        insert(schemaName: dbCommonSchema, tableName: 'cm_role_to_permission_map') {
+            column(name: 'cm_role_uid', value: 'baseline-fda-distribution-specialist')
+            column(name: 'cm_permission_uid', value: 'baseline-fda-distribute-scenario')
+            column(name: 'is_permitted_flag', value: 'true')
+            column(name: 'created_by_user', value: 'system')
+            column(name: 'updated_by_user', value: 'system')
+        }
+
+        rollback {
+            delete(schemaName: dbCommonSchema, tableName: 'cm_role_to_permission_map') {
+                where "cm_role_uid = 'baseline-fda-distribution-specialist' " +
+                        "and cm_permission_uid = 'baseline-fda-distribute-scenario'"
+            }
+        }
+    }
 }
