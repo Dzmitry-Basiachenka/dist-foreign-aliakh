@@ -21,6 +21,7 @@ import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
 import com.google.common.collect.Lists;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -146,6 +147,18 @@ public class ScenarioServiceTest {
         replay(scenarioRepository, scenarioAuditService);
         scenarioService.approve(scenario, REASON);
         assertEquals(ScenarioStatusEnum.APPROVED, scenario.getStatus());
+        verify(scenarioRepository, scenarioAuditService);
+    }
+
+    @Test
+    public void testSendToLm() {
+        scenarioRepository.updateStatus(scenario);
+        expectLastCall().once();
+        scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.SENT_TO_LM, StringUtils.EMPTY);
+        expectLastCall().once();
+        replay(scenarioRepository, scenarioAuditService);
+        scenarioService.sendToLm(scenario);
+        assertEquals(ScenarioStatusEnum.SENT_TO_LM, scenario.getStatus());
         verify(scenarioRepository, scenarioAuditService);
     }
 

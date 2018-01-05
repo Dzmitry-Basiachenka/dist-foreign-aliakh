@@ -26,5 +26,9 @@ public enum ScenarioActionTypeEnum {
     /**
      * Action type for reject {@link Scenario}.
      */
-    REJECTED
+    REJECTED,
+    /**
+     * Action type for sending {@link Scenario} to LM.
+     */
+    SENT_TO_LM,
 }

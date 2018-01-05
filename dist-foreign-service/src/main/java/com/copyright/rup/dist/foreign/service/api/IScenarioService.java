@@ -78,7 +78,7 @@ public interface IScenarioService {
 
     /**
      * Finds all {@link RightsholderPayeePair}s belonging to the source RRO with given account number within the
-     * scenario with given id.
+     * {@link Scenario} with given id.
      *
      * @param scenarioId       {@link Scenario} id
      * @param rroAccountNumber RRO account number
@@ -87,26 +87,33 @@ public interface IScenarioService {
     List<RightsholderPayeePair> getRightsholdersByScenarioAndSourceRro(String scenarioId, Long rroAccountNumber);
 
     /**
-     * Submits given scenario for approval with provided reason if any.
+     * Submits given {@link Scenario} for approval with provided reason if any.
      *
-     * @param scenario scenario instance
+     * @param scenario {@link Scenario} instance
      * @param reason   reason specified by user
      */
     void submit(Scenario scenario, String reason);
 
     /**
-     * Rejects given scenario with provided reason if any.
+     * Rejects given {@link Scenario} with provided reason if any.
      *
-     * @param scenario scenario instance
+     * @param scenario {@link Scenario} instance
      * @param reason   reason specified by user
      */
     void reject(Scenario scenario, String reason);
 
     /**
-     * Approves given scenario with provided reason if any.
+     * Approves given {@link Scenario} with provided reason if any.
      *
-     * @param scenario scenario instance
+     * @param scenario {@link Scenario} instance
      * @param reason   reason specified by user
      */
     void approve(Scenario scenario, String reason);
+
+    /**
+     * Sends given {@link Scenario} to LM.
+     *
+     * @param scenario {@link Scenario} instance
+     */
+    void sendToLm(Scenario scenario);
 }
