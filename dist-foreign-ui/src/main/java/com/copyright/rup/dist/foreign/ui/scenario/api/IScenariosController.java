@@ -47,4 +47,9 @@ public interface IScenariosController extends IController<IScenariosWidget> {
      * @param actionType scenario action type
      */
     void handleAction(ScenarioActionTypeEnum actionType);
+
+    /**
+     * Handles send to LM action.
+     */
+    void sendToLm();
 }
