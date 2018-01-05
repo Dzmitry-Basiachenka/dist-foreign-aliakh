@@ -63,23 +63,30 @@ public final class ForeignSecurityUtils {
     }
 
     /**
-     * @return true if user has permission for submitting scenarios for the approval.
+     * @return {@code true} if user has permission for submitting scenarios for the approval.
      */
     public static boolean hasSubmitScenarioPermission() {
         return SecurityUtils.hasPermission("FDA_SUBMIT_SCENARIO");
     }
 
     /**
-     * @return true if user has permission for approving scenarios.
+     * @return {@code true} if user has permission for approving scenarios.
      */
     public static boolean hasApproveScenarioPermission() {
         return SecurityUtils.hasPermission("FDA_APPROVE_SCENARIO");
     }
 
     /**
-     * @return true if user has permission for rejecting scenarios.
+     * @return {@code true} if user has permission for rejecting scenarios.
      */
     public static boolean hasRejectScenarioPermission() {
         return SecurityUtils.hasPermission("FDA_REJECT_SCENARIO");
+    }
+
+    /**
+     * @return {@code true} if user has permission for sending scenarios to LM.
+     */
+    public static boolean hasSendScenarioToLmPermission() {
+        return SecurityUtils.hasPermission("FDA_DISTRIBUTE_SCENARIO");
     }
 }

@@ -94,6 +94,11 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
     }
 
     @Override
+    public void sendToLm() {
+        //TODO {isuvorau} Use service logic after implementing
+    }
+
+    @Override
     protected IScenariosWidget instantiateWidget() {
         return new ScenariosWidget(scenarioHistoryController);
     }
