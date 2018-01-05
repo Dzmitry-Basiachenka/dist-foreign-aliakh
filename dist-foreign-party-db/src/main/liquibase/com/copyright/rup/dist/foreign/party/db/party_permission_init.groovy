@@ -178,4 +178,25 @@ databaseChangeLog {
             }
         }
     }
+
+    changeSet(id: '2018-01-03-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-39911 Send FAS Scenario to LM (UI): add permission for send scenario to LM action")
+
+        //Permission to send scenario to LM
+        insert(schemaName: dbCommonSchema, tableName: 'cm_permission') {
+            column(name: 'cm_permission_uid', value: 'baseline-fda-distribute-scenario')
+            column(name: 'permission_name', value: 'FDA_DISTRIBUTE_SCENARIO')
+            column(name: 'permission_descr', value: 'Permission to to send scenario to LM')
+            column(name: 'cm_application_area_uid', value: 'FDA')
+            column(name: 'cm_permission_type_uid', value: 'ACTION')
+            column(name: 'created_by_user', value: 'system')
+            column(name: 'updated_by_user', value: 'system')
+        }
+
+        rollback {
+            delete(schemaName: dbCommonSchema, tableName: 'cm_permission') {
+                where "cm_permission_uid = 'baseline-fda-distribute-scenario'"
+            }
+        }
+    }
 }
