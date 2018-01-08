@@ -1,0 +1,130 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="IUsageArchiveMapper">
+
+    <insert id="insert" parameterType="Usage">
+        insert into ${schema}.df_usage_archive(
+            df_usage_archive_uid,
+            <include refid="IUsageMapper.usageColumns"/>,
+            service_fee,
+            service_fee_amount,
+            net_amount,
+            payee_account_number,
+            is_rh_participating_flag,
+        <include refid="StoredEntityMapper.additionalColumns"/>)
+        values(
+            #{id},
+            #{batchId},
+            #{scenarioId},
+            #{detailId},
+            #{wrWrkInst},
+            #{workTitle},
+            #{rightsholder.accountNumber},
+            #{status},
+            #{article},
+            #{standardNumber},
+            #{publisher},
+            #{publicationDate},
+            #{market},
+            #{marketPeriodFrom},
+            #{marketPeriodTo},
+            #{author},
+            #{numberOfCopies},
+            #{reportedValue},
+            #{grossAmount},
+            #{serviceFee},
+            #{serviceFeeAmount},
+            #{netAmount},
+            #{payee.accountNumber},
+            #{rhParticipating},
+            <include refid="StoredEntityMapper.insert"/>
+        )
+    </insert>
+
+    <select id="findRightsholderTotalsHolderCountByScenarioId" parameterType="map" resultType="int">
+        select count(1)
+        from (
+            select distinct rh_account_number
+            from ${schema}.df_usage_archive
+            where df_scenario_uid = #{scenarioId}) u
+            left join ${schema}.df_rightsholder r on u.rh_account_number = r.rh_account_number
+        <if test="null != searchValue">
+            where <include refid="IUsageMapper.searchWhereClause"/>
+        </if>
+    </select>
+
+    <select id="findRightsholderTotalsHoldersByScenarioId" parameterType="map" resultMap="IUsageMapper.rightsholderTotalsHolderResultMap">
+        select
+            r.name rh_name,
+            u.rh_account_number,
+            p.name payee_name,
+            u.payee_account_number,
+            u.gross_total,
+            u.service_fee_total,
+            u.net_total,
+            u.service_fee
+        from (
+            select
+                rh_account_number,
+                payee_account_number,
+                sum(gross_amount) gross_total,
+                sum(service_fee_amount) service_fee_total,
+                sum(net_amount) net_total,
+                service_fee
+            from ${schema}.df_usage_archive
+            where df_scenario_uid = #{scenarioId}
+            group by rh_account_number, payee_account_number, service_fee) u
+        left join ${schema}.df_rightsholder r on u.rh_account_number = r.rh_account_number
+        left join ${schema}.df_rightsholder p on u.payee_account_number = p.rh_account_number
+        <if test="null != searchValue">
+            where <include refid="IUsageMapper.searchWhereClause"/>
+        </if>
+        <include refid="IUsageMapper.rightsholderTotalHoldersOrderBy"/>
+        <if test="null != pageable">
+            limit #{pageable.limit}
+            offset #{pageable.offset}
+        </if>
+    </select>
+
+    <select id="findByScenarioIdAndRhAccountNumber" parameterType="map" resultMap="IUsageMapper.usageDtoResultMap">
+        select
+            u.df_usage_archive_uid,
+            <include refid="IUsageMapper.usageDtoColumns"/>
+        from ${schema}.df_usage_archive u
+        join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        left join ${schema}.df_rightsholder rro on rro.rh_account_number = ub.rro_account_number
+        left join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
+        where u.df_scenario_uid = #{scenarioId} and u.rh_account_number = #{accountNumber}
+        <if test="null != searchValue">
+            and (
+            <include refid="IUsageMapper.drillDownSearchWhereClause"/>
+            )
+        </if>
+        order by
+        <choose>
+            <when test="null != sort">
+                <include refid="IUsageMapper.chooseSortProperty"/>
+            </when>
+            <otherwise>
+                detail_id
+            </otherwise>
+        </choose>
+        <include refid="IUsageMapper.ifPageable"/>
+    </select>
+
+    <select id="findCountByScenarioIdAndRhAccountNumber" parameterType="map" resultType="int">
+        select count(1)
+        from ${schema}.df_usage_archive u
+        join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+        left join ${schema}.df_rightsholder rro on ub.rro_account_number = rro.rh_account_number
+        where df_scenario_uid = #{scenarioId} and u.rh_account_number = #{accountNumber}
+        <if test="null != searchValue">
+            and (
+            <include refid="IUsageMapper.drillDownSearchWhereClause"/>
+            )
+        </if>
+    </select>
+</mapper>

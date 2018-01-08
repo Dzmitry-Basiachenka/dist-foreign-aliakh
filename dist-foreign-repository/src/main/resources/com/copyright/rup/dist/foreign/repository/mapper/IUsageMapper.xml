@@ -83,7 +83,6 @@
     </resultMap>
 
     <sql id="usageColumns">
-        df_usage_uid,
         df_usage_batch_uid,
         df_scenario_uid,
         detail_id,
@@ -105,7 +104,6 @@
     </sql>
 
     <sql id="usageDtoColumns">
-        u.df_usage_uid,
         u.df_scenario_uid,
         u.detail_id,
         u.wr_wrk_inst,
@@ -139,7 +137,9 @@
     </sql>
 
     <sql id="selectUsageDtos">
-        select <include refid="usageDtoColumns"/>
+        select
+            u.df_usage_uid,
+            <include refid="usageDtoColumns"/>
         from ${schema}.df_usage u
         join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
@@ -194,82 +194,82 @@
     <sql id="chooseSortProperty">
         <choose>
             <when test="sort.property == 'detailId'">
-                u.detail_id <include refid="direction"/>
+                u.detail_id <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'batchName'">
-                ub.name <include refid="direction"/>
+                ub.name <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'fiscalYear'">
-                ub.fiscal_year <include refid="direction"/>
+                ub.fiscal_year <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'rroAccountNumber'">
-                ub.rro_account_number <include refid="direction"/>
+                ub.rro_account_number <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'rroName'">
-                rro.name <include refid="direction"/>
+                rro.name <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'paymentDate'">
-                ub.payment_date <include refid="direction"/>
+                ub.payment_date <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'workTitle'">
-                u.work_title <include refid="direction"/>
+                u.work_title <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'article'">
-                u.article <include refid="direction"/>
+                u.article <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'standardNumber'">
-                u.standard_number <include refid="direction"/>
+                u.standard_number <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'wrWrkInst'">
-                u.wr_wrk_inst <include refid="direction"/>
+                u.wr_wrk_inst <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'rhAccountNumber'">
-                u.rh_account_number <include refid="direction"/>
+                u.rh_account_number <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'rhName'">
-                rh.name <include refid="direction"/>
+                rh.name <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'publisher'">
-                u.publisher <include refid="direction"/>
+                u.publisher <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'publicationDate'">
-                u.publication_date <include refid="direction"/>
+                u.publication_date <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'numberOfCopies'">
-                u.number_of_copies <include refid="direction"/>
+                u.number_of_copies <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'reportedValue'">
-                u.reported_value <include refid="direction"/>
+                u.reported_value <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'grossAmount'">
-                u.gross_amount <include refid="direction"/>
+                u.gross_amount <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'batchGrossAmount'">
-                ub.gross_amount <include refid="direction"/>
+                ub.gross_amount <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'serviceFeeAmount'">
-                u.service_fee_amount <include refid="direction"/>
+                u.service_fee_amount <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'netAmount'">
-                u.net_amount <include refid="direction"/>
+                u.net_amount <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'serviceFee'">
-                u.service_fee <include refid="direction"/>
+                u.service_fee <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'market'">
-                u.market <include refid="direction"/>
+                u.market <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'marketPeriodFrom'">
-                u.market_period_from <include refid="direction"/>
+                u.market_period_from <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'marketPeriodTo'">
-                u.market_period_to <include refid="direction"/>
+                u.market_period_to <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'author'">
-                u.author <include refid="direction"/>
+                u.author <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'status'">
-                u.status_ind <include refid="direction"/>
+                u.status_ind <include refid="IUsageMapper.direction"/>
             </when>
         </choose>
     </sql>
@@ -280,19 +280,19 @@
             <when test="null != sort">
                 <choose>
                     <when test="sort.property == 'rightsholder.name'">
-                        r.name <include refid="direction"/>
+                        r.name <include refid="IUsageMapper.direction"/>
                     </when>
                     <when test="sort.property == 'rightsholder.accountNumber'">
-                        u.rh_account_number <include refid="direction"/>
+                        u.rh_account_number <include refid="IUsageMapper.direction"/>
                     </when>
                     <when test="sort.property == 'grossTotal'">
-                        u.gross_total <include refid="direction"/>
+                        u.gross_total <include refid="IUsageMapper.direction"/>
                     </when>
                     <when test="sort.property == 'serviceFeeTotal'">
-                        u.service_fee_total <include refid="direction"/>
+                        u.service_fee_total <include refid="IUsageMapper.direction"/>
                     </when>
                     <when test="sort.property == 'netTotal'">
-                        u.net_total <include refid="direction"/>
+                        u.net_total <include refid="IUsageMapper.direction"/>
                     </when>
                 </choose>
             </when>
@@ -331,6 +331,7 @@
 
     <insert id="insert" parameterType="Usage">
         insert into ${schema}.df_usage(
+            df_usage_uid,
             <include refid="usageColumns"/>,
             <include refid="StoredEntityMapper.additionalColumns"/>)
         values(
