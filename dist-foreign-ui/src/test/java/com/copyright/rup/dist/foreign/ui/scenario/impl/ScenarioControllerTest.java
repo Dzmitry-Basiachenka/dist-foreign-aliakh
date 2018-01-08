@@ -25,6 +25,7 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.ScenarioService;
 import com.copyright.rup.dist.foreign.service.impl.UsageService;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioWidget;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
@@ -59,7 +60,6 @@ import java.util.concurrent.ExecutorService;
 public class ScenarioControllerTest {
 
     private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
-    private static final String SCENARO_NAME = "name";
 
     private IUsageService usageService;
     private ScenarioController controller;
@@ -120,7 +120,7 @@ public class ScenarioControllerTest {
 
     @Test
     public void testApplySearch() {
-        ScenarioWidget widget = createMock(ScenarioWidget.class);
+        IScenarioWidget widget = createMock(IScenarioWidget.class);
         Whitebox.setInternalState(controller, IWidget.class, widget);
         widget.applySearch();
         expectLastCall().once();
@@ -162,7 +162,7 @@ public class ScenarioControllerTest {
 
     @Test
     public void testGetScenarioUsagesExportFileName() {
-        assertEquals("name.csv", controller.getExportScenarioUsagesStreamSource().getFileName());
+        assertEquals("Scenario_name.csv", controller.getExportScenarioUsagesStreamSource().getFileName());
     }
 
     @Test
@@ -207,7 +207,7 @@ public class ScenarioControllerTest {
 
     private Scenario buildScenario() {
         scenario.setId(SCENARIO_ID);
-        scenario.setName(SCENARO_NAME);
+        scenario.setName("Scenario name");
         return scenario;
     }
 

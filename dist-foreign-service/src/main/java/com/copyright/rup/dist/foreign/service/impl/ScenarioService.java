@@ -120,6 +120,14 @@ public class ScenarioService implements IScenarioService {
         changeScenarioState(scenario, ScenarioStatusEnum.APPROVED, ScenarioActionTypeEnum.APPROVED, reason);
     }
 
+    @Override
+    @Transactional
+    public void sendToLm(Scenario scenario) {
+        //TODO {isuvorau} move details to archived and send to LM
+        changeScenarioState(scenario, ScenarioStatusEnum.SENT_TO_LM, ScenarioActionTypeEnum.SENT_TO_LM,
+            StringUtils.EMPTY);
+    }
+
     private Scenario buildScenario(String scenarioName, String description, List<Usage> usages) {
         Scenario scenario = new Scenario();
         scenario.setId(RupPersistUtils.generateUuid());

@@ -95,7 +95,9 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
 
     @Override
     public void sendToLm() {
-        //TODO {isuvorau} Use service logic after implementing
+        Scenario scenario = getWidget().getSelectedScenario();
+        Windows.showConfirmDialog(ForeignUi.getMessage("window.notification_message.send_scenario", scenario.getName()),
+            () -> sendToLM(scenario));
     }
 
     @Override
@@ -129,6 +131,20 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
         scenario.setUpdateUser(SecurityUtils.getUserName());
         actionHandler.handleAction(scenario, reason);
         widget.refresh();
+    }
+
+    /**
+     * Sends specified scenario to LM.
+     *
+     * @param scenario selected {@link Scenario}
+     */
+    void sendToLM(Scenario scenario) {
+        try {
+            scenarioService.sendToLm(scenario);
+            getWidget().refresh();
+        } catch (RuntimeException e) {
+            Windows.showNotificationWindow(e.getMessage());
+        }
     }
 
     private void deleteScenario(Scenario scenario) {

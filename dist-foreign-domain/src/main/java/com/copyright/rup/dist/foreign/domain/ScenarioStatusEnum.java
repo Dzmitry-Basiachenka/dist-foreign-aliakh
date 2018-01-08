@@ -24,5 +24,10 @@ public enum ScenarioStatusEnum {
     /**
      * Status for approved scenarios.
      */
-    APPROVED
+    APPROVED,
+
+    /**
+     * Status for sent to LM scenarios.
+     */
+    SENT_TO_LM
 }

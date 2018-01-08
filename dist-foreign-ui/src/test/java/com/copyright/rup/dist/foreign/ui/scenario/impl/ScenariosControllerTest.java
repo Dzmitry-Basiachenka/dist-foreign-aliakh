@@ -167,6 +167,36 @@ public class ScenariosControllerTest {
         verify(Windows.class);
     }
 
+    @Test
+    public void testSendToLm() {
+        mockStatic(Windows.class);
+        IScenariosWidget scenariosWidget = createMock(IScenariosWidget.class);
+        Whitebox.setInternalState(scenariosController, scenariosWidget);
+        Scenario scenario = new Scenario();
+        scenario.setName("Scenario");
+        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
+        expect(Windows.showConfirmDialog(
+            eq("Are you sure that you want to send scenario <i><b>Scenario</b></i> to Liability Manager?"),
+            anyObject(ConfirmDialogWindow.IListener.class))).andReturn(new Window()).once();
+        replay(Windows.class, scenariosWidget);
+        scenariosController.sendToLm();
+        verify(Windows.class, scenariosWidget);
+    }
+
+    @Test
+    public void testSendScenarioToLm() {
+        IScenariosWidget scenariosWidget = createMock(IScenariosWidget.class);
+        Whitebox.setInternalState(scenariosController, scenariosWidget);
+        Scenario scenario = new Scenario();
+        scenariosWidget.refresh();
+        expectLastCall().once();
+        scenarioService.sendToLm(scenario);
+        expectLastCall().once();
+        replay(scenariosWidget, scenarioService);
+        scenariosController.sendToLM(scenario);
+        verify(scenariosWidget, scenarioService);
+    }
+
     private Scenario buildScenario() {
         Scenario scenario = new Scenario();
         scenario.setId(SCENARIO_ID);
