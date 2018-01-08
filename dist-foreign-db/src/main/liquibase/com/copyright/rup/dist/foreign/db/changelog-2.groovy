@@ -286,4 +286,13 @@ databaseChangeLog {
             dropTable(tableName: 'df_scenario_audit', schemaName: dbAppsSchema)
         }
     }
+
+    changeSet(id: '2018-01-08-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-22206 Send FAS Scenario to LM (backend): remove fk_df_usage_2_df_usage_audit constraint from df_usage_audit table")
+
+        dropForeignKeyConstraint(baseTableSchemaName: dbAppsSchema, baseTableName: 'df_usage_audit',
+                constraintName: 'fk_df_usage_2_df_usage_audit')
+
+        rollback ""
+    }
 }
