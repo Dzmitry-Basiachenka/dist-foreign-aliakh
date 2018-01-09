@@ -388,38 +388,7 @@
     </select>
 
     <select id="findDtoByScenarioId" resultMap="usageDtoResultMap">
-        select
-            u.detail_id,
-            u.work_title,
-            u.article,
-            u.standard_number,
-            u.wr_wrk_inst,
-            u.rh_account_number,
-            rh.name rh_name,
-            u.publisher,
-            u.publication_date,
-            u.number_of_copies,
-            u.reported_value,
-            u.gross_amount,
-            u.service_fee_amount,
-            u.net_amount,
-            u.service_fee,
-            u.market,
-            u.market_period_from,
-            u.market_period_to,
-            u.author,
-            u.payee_account_number,
-            payee.name payee_name,
-            ub.name,
-            ub.fiscal_year,
-            ub.payment_date,
-            ub.rro_account_number,
-            rro.name rro_name
-        from ${schema}.df_usage u
-        join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
-        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
-        left join ${schema}.df_rightsholder payee on payee.rh_account_number = u.payee_account_number
-        left join ${schema}.df_rightsholder rro on rro.rh_account_number = ub.rro_account_number
+        <include refid="selectUsageDtos"/>
         where df_scenario_uid = #{scenarioId}
     </select>
 

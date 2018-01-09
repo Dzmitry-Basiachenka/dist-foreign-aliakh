@@ -147,7 +147,7 @@ public class ScenarioController extends CommonController<IScenarioWidget> implem
                 PipedOutputStream pipedOutputStream = new PipedOutputStream();
                 PipedInputStream pipedInputStream = new PipedInputStream(pipedOutputStream);
                 executorService.execute(
-                    () -> usageService.writeScenarioUsagesCsvReport(scenario.getId(), pipedOutputStream));
+                    () -> usageService.writeScenarioUsagesCsvReport(scenario, pipedOutputStream));
                 return pipedInputStream;
             } catch (IOException e) {
                 throw new RupRuntimeException(e);
