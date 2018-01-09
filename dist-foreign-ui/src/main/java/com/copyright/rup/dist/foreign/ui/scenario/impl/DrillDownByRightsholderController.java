@@ -45,15 +45,14 @@ public class DrillDownByRightsholderController extends CommonController<IDrillDo
 
     @Override
     public int getSize() {
-        return usageService.getCountByScenarioIdAndRhAccountNumber(selectedRightsholderAccountNumber,
-            selectedScenario.getId(), getWidget().getSearchValue());
+        return usageService.getCountByScenarioAndRhAccountNumber(selectedRightsholderAccountNumber,
+            selectedScenario, getWidget().getSearchValue());
     }
 
     @Override
     public List<UsageDto> loadBeans(int startIndex, int count, Object[] sortPropertyIds, boolean... sortStates) {
-        return usageService.getByScenarioIdAndRhAccountNumber(selectedRightsholderAccountNumber,
-            selectedScenario.getId(), getWidget().getSearchValue(), new Pageable(startIndex, count),
-            Sort.create(sortPropertyIds, sortStates));
+        return usageService.getByScenarioAndRhAccountNumber(selectedRightsholderAccountNumber, selectedScenario,
+            getWidget().getSearchValue(), new Pageable(startIndex, count), Sort.create(sortPropertyIds, sortStates));
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.integration.rest.prm.PrmRollUpService;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
@@ -11,8 +12,10 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.common.util.CalculationUtils;
+import com.copyright.rup.dist.foreign.domain.common.util.ForeignLogUtils;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.integration.prm.impl.PrmIntegrationService;
+import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
@@ -58,6 +61,8 @@ public class UsageService implements IUsageService {
 
     @Autowired
     private IUsageRepository usageRepository;
+    @Autowired
+    private IUsageArchiveRepository usageArchiveRepository;
     @Autowired
     private IUsageAuditService usageAuditService;
     @Autowired
@@ -175,26 +180,47 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public List<RightsholderTotalsHolder> getRightsholderTotalsHoldersByScenarioId(String scenarioId,
-                                                                                   String searchValue,
-                                                                                   Pageable pageable, Sort sort) {
-        return usageRepository.findRightsholderTotalsHoldersByScenarioId(scenarioId, searchValue, pageable, sort);
+    public void moveToArchive(Scenario scenario) {
+        LOGGER.info("Move details to archive. Started. {}", ForeignLogUtils.scenario(scenario));
+        List<Usage> usages = usageRepository.findByScenarioId(scenario.getId());
+        usages.forEach(usageArchiveRepository::insert);
+        usageRepository.deleteByScenarioId(scenario.getId());
+        LOGGER.info("Move details to archive. Finished. {}, UsagesCount={}", ForeignLogUtils.scenario(scenario),
+            usages.size());
     }
 
     @Override
-    public int getRightsholderTotalsHolderCountByScenarioId(String scenarioId, String searchValue) {
-        return usageRepository.findRightsholderTotalsHolderCountByScenarioId(scenarioId, searchValue);
+    public List<RightsholderTotalsHolder> getRightsholderTotalsHoldersByScenario(Scenario scenario,
+                                                                                 String searchValue,
+                                                                                 Pageable pageable, Sort sort) {
+        return ScenarioStatusEnum.SENT_TO_LM == scenario.getStatus()
+            ? usageArchiveRepository.findRightsholderTotalsHoldersByScenarioId(scenario.getId(), searchValue, pageable,
+            sort)
+            : usageRepository.findRightsholderTotalsHoldersByScenarioId(scenario.getId(), searchValue, pageable, sort);
     }
 
     @Override
-    public int getCountByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue) {
-        return usageRepository.findCountByScenarioIdAndRhAccountNumber(accountNumber, scenarioId, searchValue);
+    public int getRightsholderTotalsHolderCountByScenario(Scenario scenario, String searchValue) {
+        return ScenarioStatusEnum.SENT_TO_LM == scenario.getStatus()
+            ? usageArchiveRepository.findRightsholderTotalsHolderCountByScenarioId(scenario.getId(), searchValue)
+            : usageRepository.findRightsholderTotalsHolderCountByScenarioId(scenario.getId(), searchValue);
     }
 
     @Override
-    public List<UsageDto> getByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId,
-                                                            String searchValue, Pageable pageable, Sort sort) {
-        return usageRepository.findByScenarioIdAndRhAccountNumber(accountNumber, scenarioId, searchValue, pageable,
+    public int getCountByScenarioAndRhAccountNumber(Long accountNumber, Scenario scenario, String searchValue) {
+        return ScenarioStatusEnum.SENT_TO_LM == scenario.getStatus()
+            ? usageArchiveRepository.findCountByScenarioIdAndRhAccountNumber(scenario.getId(), accountNumber,
+            searchValue)
+            : usageRepository.findCountByScenarioIdAndRhAccountNumber(accountNumber, scenario.getId(), searchValue);
+    }
+
+    @Override
+    public List<UsageDto> getByScenarioAndRhAccountNumber(Long accountNumber, Scenario scenario,
+                                                          String searchValue, Pageable pageable, Sort sort) {
+        return ScenarioStatusEnum.SENT_TO_LM == scenario.getStatus()
+            ? usageArchiveRepository.findByScenarioIdAndRhAccountNumber(scenario.getId(), accountNumber, searchValue,
+            pageable, sort)
+            : usageRepository.findByScenarioIdAndRhAccountNumber(accountNumber, scenario.getId(), searchValue, pageable,
             sort);
     }
 

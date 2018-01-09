@@ -91,8 +91,8 @@ public class UsageServiceIntegrationTest {
         scenario.setName("Test Scenario for exclude");
         usageService.deleteFromScenario(scenario, 2000017001L, Lists.newArrayList(1000000003L, 1000000004L),
             "Exclude reason");
-        verifyExcludedUsages(scenario.getId(), true, 1000000003L, 1000000004L);
-        verifyExcludedUsages(scenario.getId(), false, 1000000001L, 1000000002L, 1000000006L);
+        verifyExcludedUsages(scenario, true, 1000000003L, 1000000004L);
+        verifyExcludedUsages(scenario, false, 1000000001L, 1000000002L, 1000000006L);
         verifyAuditItems(auditRepository.findByUsageId("2641e7fe-2a5a-4cdf-8879-48816d705169"));
         verifyAuditItems(auditRepository.findByUsageId("405491b1-49a9-4b70-9cdb-d082be6a802d"));
         assertTrue(auditRepository.findByUsageId("9f96760c-0de9-4cee-abf2-65521277281b").isEmpty());
@@ -100,12 +100,12 @@ public class UsageServiceIntegrationTest {
         assertTrue(auditRepository.findByUsageId("4ddfcb74-cb72-48f6-9ee4-8b4e05afce75").isEmpty());
     }
 
-    private void verifyExcludedUsages(String scenarioId, boolean excluded,  Long... accountNumbers) {
+    private void verifyExcludedUsages(Scenario scenario, boolean excluded, Long... accountNumbers) {
         Pageable pageable = new Pageable(0, 10);
         Arrays.stream(accountNumbers)
             .forEach(accountNumber -> assertEquals(excluded,
-                usageService.getByScenarioIdAndRhAccountNumber(accountNumber, scenarioId,
-                    StringUtils.EMPTY, pageable, null).isEmpty()));
+                usageService.getByScenarioAndRhAccountNumber(accountNumber, scenario, StringUtils.EMPTY, pageable,
+                    null).isEmpty()));
     }
 
     private void verifyAuditItems(List<UsageAuditItem> auditItems) {
@@ -117,7 +117,7 @@ public class UsageServiceIntegrationTest {
         assertEquals("Test Scenario for exclude", auditItem.getScenarioName());
     }
 
-    private void logErrors() throws ThresholdExceededException{
+    private void logErrors() throws ThresholdExceededException {
         result.logError(2, buildOriginalLineWithErrors(Lists.newArrayList(0), Lists.newArrayList(StringUtils.EMPTY)),
             "Detail ID: Field is required and cannot be null or empty");
         result.logError(5, buildOriginalLineWithErrors(Lists.newArrayList(5), Lists.newArrayList("text")),
