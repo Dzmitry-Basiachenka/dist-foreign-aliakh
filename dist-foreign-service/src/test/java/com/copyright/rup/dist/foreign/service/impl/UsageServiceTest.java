@@ -142,9 +142,13 @@ public class UsageServiceTest {
         PipedOutputStream outputStream = new PipedOutputStream();
         usageRepository.writeScenarioUsagesCsvReport(SCENARIO_ID, outputStream);
         expectLastCall().once();
-        replay(usageRepository);
-        usageService.writeScenarioUsagesCsvReport(SCENARIO_ID, outputStream);
-        verify(usageRepository);
+        usageArchiveRepository.writeScenarioUsagesCsvReport(SCENARIO_ID, outputStream);
+        expectLastCall().once();
+        replay(usageRepository, usageArchiveRepository);
+        usageService.writeScenarioUsagesCsvReport(scenario, outputStream);
+        scenario.setStatus(ScenarioStatusEnum.SENT_TO_LM);
+        usageService.writeScenarioUsagesCsvReport(scenario, outputStream);
+        verify(usageRepository, usageArchiveRepository);
     }
 
     @Test

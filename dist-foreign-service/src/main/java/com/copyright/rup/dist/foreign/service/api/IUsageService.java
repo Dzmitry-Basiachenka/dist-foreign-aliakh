@@ -56,10 +56,10 @@ public interface IUsageService {
     /**
      * Writes scenario usages into csv output stream.
      *
-     * @param scenarioId        scenario id
+     * @param scenario          {@link Scenario}
      * @param pipedOutputStream instance of {@link PipedOutputStream}
      */
-    void writeScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
+    void writeScenarioUsagesCsvReport(Scenario scenario, PipedOutputStream pipedOutputStream);
 
     /**
      * Writes errors information into csv output stream.

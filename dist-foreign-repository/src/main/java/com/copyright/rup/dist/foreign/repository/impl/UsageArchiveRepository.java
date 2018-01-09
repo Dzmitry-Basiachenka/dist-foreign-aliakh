@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
+import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -12,6 +13,8 @@ import com.google.common.collect.Maps;
 
 import org.springframework.stereotype.Repository;
 
+import java.io.IOException;
+import java.io.PipedOutputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -77,5 +80,17 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put(SEARCH_VALUE_KEY, searchValue);
         return selectOne("IUsageArchiveMapper.findCountByScenarioIdAndRhAccountNumber", parameters);
+    }
+
+    @Override
+    public void writeScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
+        Objects.requireNonNull(pipedOutputStream);
+        try (ScenarioUsagesCsvReportHandler handler = new ScenarioUsagesCsvReportHandler(pipedOutputStream)) {
+            if (Objects.nonNull(scenarioId)) {
+                getTemplate().select("IUsageArchiveMapper.findDtoByScenarioId", scenarioId, handler);
+            }
+        } catch (IOException e) {
+            throw new RupRuntimeException(e);
+        }
     }
 }

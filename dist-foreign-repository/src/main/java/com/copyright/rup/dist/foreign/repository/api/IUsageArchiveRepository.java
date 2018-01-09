@@ -4,6 +4,7 @@ import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 
+import java.io.PipedOutputStream;
 import java.util.List;
 
 /**
@@ -71,4 +72,12 @@ public interface IUsageArchiveRepository {
      * @return count of usage details
      */
     int findCountByScenarioIdAndRhAccountNumber(String scenarioId, Long accountNumber, String searchValue);
+
+    /**
+     * Finds usages by scenario id and writes them into the output stream in CSV format.
+     *
+     * @param scenarioId        scenario id
+     * @param pipedOutputStream instance of {@link PipedOutputStream}
+     */
+    void writeScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
 }

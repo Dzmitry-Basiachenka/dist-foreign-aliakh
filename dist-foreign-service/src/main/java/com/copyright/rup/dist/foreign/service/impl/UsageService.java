@@ -86,8 +86,12 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public void writeScenarioUsagesCsvReport(String scenarioId, PipedOutputStream outputStream) {
-        usageRepository.writeScenarioUsagesCsvReport(scenarioId, outputStream);
+    public void writeScenarioUsagesCsvReport(Scenario scenario, PipedOutputStream outputStream) {
+        if (ScenarioStatusEnum.SENT_TO_LM == scenario.getStatus()) {
+            usageArchiveRepository.writeScenarioUsagesCsvReport(scenario.getId(), outputStream);
+        } else {
+            usageRepository.writeScenarioUsagesCsvReport(scenario.getId(), outputStream);
+        }
     }
 
     @Override
