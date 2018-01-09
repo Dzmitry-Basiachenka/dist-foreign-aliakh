@@ -74,6 +74,11 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
+    public List<Usage> findByScenarioId(String scenarioId) {
+        return selectList("IUsageMapper.findByScenarioId", Objects.requireNonNull(scenarioId));
+    }
+
+    @Override
     public int findCountByFilter(UsageFilter filter) {
         return selectOne("IUsageMapper.findCountByFilter", ImmutableMap.of(FILTER_KEY, Objects.requireNonNull(filter)));
     }
@@ -83,7 +88,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         Objects.requireNonNull(pipedOutputStream);
         try (ScenarioUsagesCsvReportHandler handler = new ScenarioUsagesCsvReportHandler(pipedOutputStream)) {
             if (Objects.nonNull(scenarioId)) {
-                getTemplate().select("IUsageMapper.findByScenarioId", scenarioId, handler);
+                getTemplate().select("IUsageMapper.findDtoByScenarioId", scenarioId, handler);
             }
         } catch (IOException e) {
             throw new RupRuntimeException(e);
@@ -105,6 +110,12 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     public void deleteUsages(String batchId) {
         checkArgument(StringUtils.isNotBlank(batchId));
         delete("IUsageMapper.deleteUsages", batchId);
+    }
+
+    @Override
+    public void deleteByScenarioId(String scenarioId) {
+        checkArgument(StringUtils.isNotBlank(scenarioId));
+        delete("IUsageMapper.deleteByScenarioId", scenarioId);
     }
 
     @Override

@@ -14,12 +14,14 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
+import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
@@ -64,20 +66,27 @@ public class UsageServiceTest {
     private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
     private static final String USER_NAME = "User name";
     private static final Long RH_ACCOUNT_NUMBER = 1000001534L;
+    private Scenario scenario;
     private IUsageRepository usageRepository;
+    private IUsageArchiveRepository usageArchiveRepository;
     private IUsageAuditService usageAuditService;
     private IUsageService usageService;
     private IPrmIntegrationService prmIntegrationService;
 
     @Before
     public void setUp() {
+        scenario = new Scenario();
+        scenario.setId(SCENARIO_ID);
+        scenario.setCreateUser(USER_NAME);
         usageRepository = createMock(IUsageRepository.class);
         usageAuditService = createMock(IUsageAuditService.class);
         prmIntegrationService = createMock(IPrmIntegrationService.class);
+        usageArchiveRepository = createMock(IUsageArchiveRepository.class);
         usageService = new UsageService();
         Whitebox.setInternalState(usageService, "usageRepository", usageRepository);
         Whitebox.setInternalState(usageService, "usageAuditService", usageAuditService);
         Whitebox.setInternalState(usageService, "prmIntegrationService", prmIntegrationService);
+        Whitebox.setInternalState(usageService, "usageArchiveRepository", usageArchiveRepository);
     }
 
     @Test
@@ -197,9 +206,6 @@ public class UsageServiceTest {
 
     @Test
     public void testAddUsagesToScenario() {
-        Scenario scenario = new Scenario();
-        scenario.setId(SCENARIO_ID);
-        scenario.setCreateUser(USER_NAME);
         Usage usage1 = buildUsage(USAGE_ID_1);
         Usage usage2 = buildUsage(USAGE_ID_2);
         Capture<List<String>> rightsholdersIdsCapture = new Capture<>();
@@ -214,50 +220,65 @@ public class UsageServiceTest {
     }
 
     @Test
-    public void testGetRightsholderTotalsHoldersByScenarioId() {
+    public void testGetRightsholderTotalsHoldersByScenario() {
         List<RightsholderTotalsHolder> rightsholderTotalsHolders = Lists.newArrayList(new RightsholderTotalsHolder());
         Pageable pageable = new Pageable(0, 1);
         expect(usageRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, StringUtils.EMPTY, pageable,
             null)).andReturn(rightsholderTotalsHolders).once();
-        replay(usageRepository);
-        List<RightsholderTotalsHolder> result =
-            usageService.getRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, StringUtils.EMPTY, pageable, null);
-        assertNotNull(result);
-        assertEquals(1, result.size());
-        verify(usageRepository);
+        expect(usageArchiveRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, StringUtils.EMPTY,
+            pageable, null)).andReturn(rightsholderTotalsHolders).once();
+        replay(usageRepository, usageArchiveRepository);
+        assertResult(
+            usageService.getRightsholderTotalsHoldersByScenario(scenario, StringUtils.EMPTY, pageable, null), 1);
+        scenario.setStatus(ScenarioStatusEnum.SENT_TO_LM);
+        assertResult(
+            usageService.getRightsholderTotalsHoldersByScenario(scenario, StringUtils.EMPTY, pageable, null), 1);
+        verify(usageRepository, usageArchiveRepository);
     }
 
     @Test
-    public void testGetRightsholderTotalsHolderCountByScenarioId() {
+    public void testGetRightsholderTotalsHolderCountByScenario() {
         expect(usageRepository.findRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, StringUtils.EMPTY))
             .andReturn(5).once();
-        replay(usageRepository);
-        assertEquals(5, usageService.getRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, StringUtils.EMPTY));
-        verify(usageRepository);
+        expect(usageArchiveRepository.findRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, StringUtils.EMPTY))
+            .andReturn(3).once();
+        replay(usageRepository, usageArchiveRepository);
+        assertEquals(5, usageService.getRightsholderTotalsHolderCountByScenario(scenario, StringUtils.EMPTY));
+        scenario.setStatus(ScenarioStatusEnum.SENT_TO_LM);
+        assertEquals(3, usageService.getRightsholderTotalsHolderCountByScenario(scenario, StringUtils.EMPTY));
+        verify(usageRepository, usageArchiveRepository);
     }
 
     @Test
-    public void testGetCountByScenarioIdAndRhAccountNumber() {
+    public void testGetCountByScenarioAndRhAccountNumber() {
         expect(usageRepository.findCountByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER, SCENARIO_ID,
             StringUtils.EMPTY)).andReturn(5).once();
-        replay(usageRepository);
-        assertEquals(5, usageService.getCountByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER, SCENARIO_ID,
+        expect(usageArchiveRepository.findCountByScenarioIdAndRhAccountNumber(SCENARIO_ID, RH_ACCOUNT_NUMBER,
+            StringUtils.EMPTY)).andReturn(3).once();
+        replay(usageRepository, usageArchiveRepository);
+        assertEquals(5, usageService.getCountByScenarioAndRhAccountNumber(RH_ACCOUNT_NUMBER, scenario,
             StringUtils.EMPTY));
-        verify(usageRepository);
+        scenario.setStatus(ScenarioStatusEnum.SENT_TO_LM);
+        assertEquals(3, usageService.getCountByScenarioAndRhAccountNumber(RH_ACCOUNT_NUMBER, scenario,
+            StringUtils.EMPTY));
+        verify(usageRepository, usageArchiveRepository);
     }
 
     @Test
-    public void testGetByScenarioIdAndRhAccountNumber() {
+    public void testGetByScenarioAndRhAccountNumber() {
         List<UsageDto> usages = Lists.newArrayList(new UsageDto(), new UsageDto());
         Pageable pageable = new Pageable(0, 2);
         expect(usageRepository.findByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER, SCENARIO_ID, null, pageable,
-            null)).andReturn(usages);
-        replay(usageRepository);
-        List<UsageDto> result =
-            usageService.getByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER, SCENARIO_ID, null, pageable, null);
-        assertNotNull(result);
-        assertEquals(2, result.size());
-        verify(usageRepository);
+            null)).andReturn(usages).once();
+        expect(usageArchiveRepository.findByScenarioIdAndRhAccountNumber(SCENARIO_ID, RH_ACCOUNT_NUMBER, null, pageable,
+            null)).andReturn(usages).once();
+        replay(usageRepository, usageArchiveRepository);
+        assertResult(
+            usageService.getByScenarioAndRhAccountNumber(RH_ACCOUNT_NUMBER, scenario, null, pageable, null), 2);
+        scenario.setStatus(ScenarioStatusEnum.SENT_TO_LM);
+        assertResult(
+            usageService.getByScenarioAndRhAccountNumber(RH_ACCOUNT_NUMBER, scenario, null, pageable, null), 2);
+        verify(usageRepository, usageArchiveRepository);
     }
 
     @Test
@@ -273,8 +294,6 @@ public class UsageServiceTest {
 
     @Test
     public void testDeleteFromScenarioByAccountNumbers() {
-        Scenario scenario = new Scenario();
-        scenario.setId(SCENARIO_ID);
         List<String> usagesIds = Lists.newArrayList(RupPersistUtils.generateUuid(), RupPersistUtils.generateUuid());
         mockStatic(RupContextUtils.class);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
@@ -292,6 +311,28 @@ public class UsageServiceTest {
         replay(usageRepository, usageAuditService, RupContextUtils.class);
         usageService.deleteFromScenario(scenario, 2000017011L, accountNumbers, "Action reason");
         verify(usageRepository, usageAuditService, RupContextUtils.class);
+    }
+
+    @Test
+    public void testMoveToArchived() {
+        Usage usage1 = buildUsage(RupPersistUtils.generateUuid());
+        Usage usage2=  buildUsage(RupPersistUtils.generateUuid());
+        List<Usage> usages = Lists.newArrayList(usage1, usage2);
+        expect(usageRepository.findByScenarioId(scenario.getId())).andReturn(usages).once();
+        usageArchiveRepository.insert(usage1);
+        expectLastCall().once();
+        usageArchiveRepository.insert(usage2);
+        expectLastCall().once();
+        usageRepository.deleteByScenarioId(scenario.getId());
+        expectLastCall().once();
+        replay(usageRepository, usageArchiveRepository);
+        usageService.moveToArchive(scenario);
+        verify(usageRepository, usageArchiveRepository);
+    }
+
+    private void assertResult(List<?> result, int size) {
+        assertNotNull(result);
+        assertEquals(size, result.size());
     }
 
     private void verifyUsage(Usage usage, BigDecimal grossAmount) {

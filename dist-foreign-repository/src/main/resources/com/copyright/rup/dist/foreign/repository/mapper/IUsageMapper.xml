@@ -374,7 +374,20 @@
         <include refid="ifPageable"/>
     </select>
 
-    <select id="findByScenarioId" resultMap="usageDtoResultMap">
+    <select id="findByScenarioId" resultMap="usageResultMap" parameterType="string">
+        select
+            df_usage_uid,
+            <include refid="usageColumns"/>,
+            service_fee,
+            service_fee_amount,
+            net_amount,
+            payee_account_number,
+            is_rh_participating_flag
+        from ${schema}.df_usage
+        where df_scenario_uid = #{scenarioId}
+    </select>
+
+    <select id="findDtoByScenarioId" resultMap="usageDtoResultMap">
         select
             u.detail_id,
             u.work_title,
@@ -464,6 +477,11 @@
     <delete id="deleteUsages" parameterType="string">
         delete from ${schema}.df_usage
         where df_usage_batch_uid = #{batchId}
+    </delete>
+
+    <delete id="deleteByScenarioId" parameterType="string">
+        delete from ${schema}.df_usage
+        where df_scenario_uid = #{scenarioId}
     </delete>
 
     <select id="findWithAmountsAndRightsholders" parameterType="map" resultMap="usageAmountResultMap">

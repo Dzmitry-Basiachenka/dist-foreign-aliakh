@@ -87,7 +87,7 @@ public class ScenarioControllerTest {
     @Test
     public void testLoadBeans() {
         Capture<Pageable> pageableCapture = new Capture<>();
-        expect(usageService.getRightsholderTotalsHoldersByScenarioId(eq(SCENARIO_ID), anyString(),
+        expect(usageService.getRightsholderTotalsHoldersByScenario(eq(scenario), anyString(),
             capture(pageableCapture), isNull())).andReturn(Collections.emptyList()).once();
         expect(scenarioService.getScenarioWithAmountsAndLastAction(scenario.getId())).andReturn(scenario).once();
         expect(ForeignSecurityUtils.hasExcludeFromScenarioPermission()).andReturn(true).once();
@@ -104,7 +104,7 @@ public class ScenarioControllerTest {
 
     @Test
     public void testGetSize() {
-        expect(usageService.getRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, null)).andReturn(1).once();
+        expect(usageService.getRightsholderTotalsHolderCountByScenario(scenario, null)).andReturn(1).once();
         expect(controller.getScenarioWithAmountsAndLastAction()).andReturn(scenario).once();
         expect(ForeignSecurityUtils.hasExcludeFromScenarioPermission()).andReturn(true).once();
         replay(usageService, scenarioService, ForeignSecurityUtils.class);

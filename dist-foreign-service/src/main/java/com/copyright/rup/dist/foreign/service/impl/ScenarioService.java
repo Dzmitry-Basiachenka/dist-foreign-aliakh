@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
+import com.copyright.rup.dist.foreign.domain.common.util.ForeignLogUtils;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
 import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
@@ -16,6 +17,7 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
 import org.apache.commons.lang3.StringUtils;
+import org.perf4j.aop.Profiled;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -79,11 +81,11 @@ public class ScenarioService implements IScenarioService {
     @Transactional
     public void deleteScenario(Scenario scenario) {
         String userName = RupContextUtils.getUserName();
-        LOGGER.info("Delete scenario. Started. {}, User={}", logScenario(scenario), userName);
+        LOGGER.info("Delete scenario. Started. {}, User={}", ForeignLogUtils.scenario(scenario), userName);
         usageService.deleteFromScenario(scenario.getId());
         scenarioAuditService.deleteActions(scenario.getId());
         scenarioRepository.remove(scenario.getId());
-        LOGGER.info("Delete scenario. Finished. {}, User={}", logScenario(scenario), userName);
+        LOGGER.info("Delete scenario. Finished. {}, User={}", ForeignLogUtils.scenario(scenario), userName);
     }
 
     @Override
@@ -122,10 +124,15 @@ public class ScenarioService implements IScenarioService {
 
     @Override
     @Transactional
+    @Profiled(tag = "service.ScenarioService.sendToLm")
     public void sendToLm(Scenario scenario) {
-        //TODO {isuvorau} move details to archived and send to LM
+        LOGGER.info("Send scenario to LM. Started. {}, User={}", ForeignLogUtils.scenario(scenario),
+            RupContextUtils.getUserName());
+        usageService.moveToArchive(scenario);
         changeScenarioState(scenario, ScenarioStatusEnum.SENT_TO_LM, ScenarioActionTypeEnum.SENT_TO_LM,
             StringUtils.EMPTY);
+        LOGGER.info("Send scenario to LM. Finished. {}, User={}", ForeignLogUtils.scenario(scenario),
+            RupContextUtils.getUserName());
     }
 
     private Scenario buildScenario(String scenarioName, String description, List<Usage> usages) {
@@ -158,12 +165,9 @@ public class ScenarioService implements IScenarioService {
         String userName = RupContextUtils.getUserName();
         scenario.setStatus(status);
         scenario.setUpdateUser(userName);
-        LOGGER.info("Change scenario status. {}, User={}, Reason={}", logScenario(scenario), userName, reason);
+        LOGGER.info("Change scenario status. {}, User={}, Reason={}", ForeignLogUtils.scenario(scenario), userName,
+            reason);
         scenarioRepository.updateStatus(scenario);
         scenarioAuditService.logAction(scenario.getId(), action, reason);
-    }
-
-    private String logScenario(Scenario scenario) {
-        return String.format("ScenarioName=%s, Status=%s", scenario.getName(), scenario.getStatus());
     }
 }

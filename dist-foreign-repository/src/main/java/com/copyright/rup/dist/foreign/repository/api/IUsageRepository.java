@@ -40,12 +40,20 @@ public interface IUsageRepository {
     List<UsageDto> findByFilter(UsageFilter filter, Pageable pageable, Sort sort);
 
     /**
-     * Gets usages count based on applied filter.
+     * Finds usages count based on applied filter.
      *
      * @param filter instance of {@link UsageFilter}
      * @return the count of usages
      */
     int findCountByFilter(UsageFilter filter);
+
+    /**
+     * Finds usages based on scenario identifier.
+     *
+     * @param scenarioId scenario id
+     * @return the list of {@link Usage}
+     */
+    List<Usage> findByScenarioId(String scenarioId);
 
     /**
      * Finds usages according to given {@link UsageFilter} and writes them to the output stream in CSV format.
@@ -69,6 +77,13 @@ public interface IUsageRepository {
      * @param batchId {@link com.copyright.rup.dist.foreign.domain.UsageBatch} id
      */
     void deleteUsages(String batchId);
+
+    /**
+     * Deletes all {@link Usage}s for specified scenario.
+     *
+     * @param scenarioId scenario identifier
+     */
+    void deleteByScenarioId(String scenarioId);
 
     /**
      * Finds the {@link Usage}s only with information about gross amount, net amount, reported value and rightsholder

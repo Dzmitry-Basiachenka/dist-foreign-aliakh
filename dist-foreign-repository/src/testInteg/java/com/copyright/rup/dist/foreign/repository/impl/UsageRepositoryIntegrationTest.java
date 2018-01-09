@@ -508,6 +508,21 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
+    public void testFindByScenarioId() {
+        List<Usage> usages = usageRepository.findByScenarioId(SCENARIO_ID);
+        assertEquals(2, usages.size());
+        usages.forEach(
+            usage -> verifyUsage(usage, UsageStatusEnum.LOCKED, SCENARIO_ID, StoredEntity.DEFAULT_USER, 1000002859L));
+    }
+
+    @Test
+    public void testDeleteByScenarioId() {
+        assertEquals(2, usageRepository.findByScenarioId(SCENARIO_ID).size());
+        usageRepository.deleteByScenarioId(SCENARIO_ID);
+        assertTrue(usageRepository.findByScenarioId(SCENARIO_ID).isEmpty());
+    }
+
+    @Test
     public void testFindWithAmountsAndRightsholders() {
         UsageFilter usageFilter =
             buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.singleton(USAGE_BATCH_ID_1),

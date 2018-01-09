@@ -56,14 +56,13 @@ public class ScenarioController extends CommonController<IScenarioWidget> implem
 
     @Override
     public int getSize() {
-        return usageService.getRightsholderTotalsHolderCountByScenarioId(scenario.getId(),
-            getWidget().getSearchValue());
+        return usageService.getRightsholderTotalsHolderCountByScenario(scenario, getWidget().getSearchValue());
     }
 
     @Override
     public List<RightsholderTotalsHolder> loadBeans(int startIndex, int count, Object[] sortPropertyIds,
                                                     boolean... sortStates) {
-        return usageService.getRightsholderTotalsHoldersByScenarioId(scenario.getId(), getWidget().getSearchValue(),
+        return usageService.getRightsholderTotalsHoldersByScenario(scenario, getWidget().getSearchValue(),
             new Pageable(startIndex, count), Sort.create(sortPropertyIds, sortStates));
     }
 
@@ -94,8 +93,7 @@ public class ScenarioController extends CommonController<IScenarioWidget> implem
 
     @Override
     public boolean isScenarioEmpty() {
-        return Objects.equals(0,
-            usageService.getRightsholderTotalsHolderCountByScenarioId(getScenario().getId(), null));
+        return Objects.equals(0, usageService.getRightsholderTotalsHolderCountByScenario(getScenario(), null));
     }
 
     @Override

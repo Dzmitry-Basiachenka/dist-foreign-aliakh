@@ -134,46 +134,53 @@ public interface IUsageService {
     Set<Long> getDuplicateDetailIds(List<Long> detailIds);
 
     /**
-     * Gets {@link RightsholderTotalsHolder}s based on {@link Scenario} identifier.
+     * Moves {@link Usage}s to the archive for given {@link Scenario}.
      *
-     * @param scenarioId  {@link Scenario} identifier
+     * @param scenario {@link Scenario}
+     */
+    void moveToArchive(Scenario scenario);
+
+    /**
+     * Gets {@link RightsholderTotalsHolder}s based on {@link Scenario}.
+     *
+     * @param scenario    instance of {@link Scenario}
      * @param searchValue search value
      * @param pageable    instance of {@link Pageable}
      * @param sort        instance of {@link Sort}
      * @return list of {@link RightsholderTotalsHolder}s
      */
-    List<RightsholderTotalsHolder> getRightsholderTotalsHoldersByScenarioId(String scenarioId, String searchValue,
-                                                                            Pageable pageable, Sort sort);
+    List<RightsholderTotalsHolder> getRightsholderTotalsHoldersByScenario(Scenario scenario, String searchValue,
+                                                                          Pageable pageable, Sort sort);
 
     /**
-     * Gets count of {@link RightsholderTotalsHolder}s based on {@link Scenario} identifier.
+     * Gets count of {@link RightsholderTotalsHolder}s based on {@link Scenario}.
      *
-     * @param scenarioId  {@link Scenario} identifier
+     * @param scenario    instance of {@link Scenario}
      * @param searchValue search value
      * @return count of {@link RightsholderTotalsHolder}s
      */
-    int getRightsholderTotalsHolderCountByScenarioId(String scenarioId, String searchValue);
+    int getRightsholderTotalsHolderCountByScenario(Scenario scenario, String searchValue);
 
     /**
-     * Gets count of usage details based on {@link Scenario} identifier and rightsholder account number.
+     * Gets count of usage details based on {@link Scenario} and rightsholder account number.
      *
      * @param accountNumber selected rightsholder account number
-     * @param scenarioId    {@link Scenario} identifier
+     * @param scenario      instance of {@link Scenario}
      * @param searchValue   search value
      * @return count of usage details
      */
-    int getCountByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue);
+    int getCountByScenarioAndRhAccountNumber(Long accountNumber, Scenario scenario, String searchValue);
 
     /**
-     * Gets list of {@link UsageDto}s based on {@link Scenario} identifier and rightsholder account number.
+     * Gets list of {@link UsageDto}s based on {@link Scenario} and rightsholder account number.
      *
      * @param accountNumber selected rightsholder account number
-     * @param scenarioId    {@link Scenario} identifier
+     * @param scenario      instance of {@link Scenario}
      * @param searchValue   search value
      * @param pageable      instance of {@link Pageable}
      * @param sort          instance of {@link Sort}
      * @return list of {@link UsageDto}s
      */
-    List<UsageDto> getByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue,
-                                                     Pageable pageable, Sort sort);
+    List<UsageDto> getByScenarioAndRhAccountNumber(Long accountNumber, Scenario scenario, String searchValue,
+                                                   Pageable pageable, Sort sort);
 }
