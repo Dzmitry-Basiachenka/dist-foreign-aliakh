@@ -1,0 +1,17 @@
+{
+  "details" : [ {
+    "rh_account_number" : "1000010023",
+    "product_family" : "FAS",
+    "royalty_amount" : 100.00,
+    "detail_id" : "10000001",
+    "wr_wrk_inst" : "123456789",
+    "work_title" : "Work title"
+  }, {
+    "rh_account_number" : "1000010023",
+    "product_family" : "FAS",
+    "royalty_amount" : 100.00,
+    "detail_id" : "10000002",
+    "wr_wrk_inst" : "123456789",
+    "work_title" : "Work title"
+  } ]
+}
