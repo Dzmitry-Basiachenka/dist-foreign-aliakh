@@ -1,10 +1,4 @@
-package com.copyright.rup.dist.foreign.integration.lm.api.domain;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+package com.copyright.rup.dist.foreign.domain;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -22,28 +16,13 @@ import java.math.BigDecimal;
  *
  * @author Ihar Suvorau
  */
-@JsonInclude(Include.NON_NULL)
 public class LiabilityDetail {
 
-    @JsonProperty(value = "rh_account_number")
-    @JsonSerialize(using = ToStringSerializer.class)
     private Long rhAccountNumber;
-
-    @JsonProperty(value = "product_family")
     private String productFamily = "FAS";
-
-    @JsonProperty(value = "detail_id")
-    @JsonSerialize(using = ToStringSerializer.class)
     private Long detailId;
-
-    @JsonProperty(value = "royalty_amount")
     private BigDecimal royaltyAmount = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
-
-    @JsonProperty(value = "wr_wrk_inst")
-    @JsonSerialize(using = ToStringSerializer.class)
     private Long wrWrkInst;
-
-    @JsonProperty(value = "work_title")
     private String workTitle;
 
     public Long getRhAccountNumber() {
