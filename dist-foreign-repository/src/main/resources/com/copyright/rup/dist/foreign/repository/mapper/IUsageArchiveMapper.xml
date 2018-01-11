@@ -4,6 +4,14 @@
 
 <mapper namespace="IUsageArchiveMapper">
 
+    <resultMap id="liabilityDetailMap" type="LiabilityDetail" extends="StoredEntityMapper.storedEntityResult">
+        <result property="rhAccountNumber" column="rh_account_number"/>
+        <result property="detailId" column="detail_id"/>
+        <result property="royaltyAmount" column="net_amount"/>
+        <result property="wrWrkInst" column="wr_wrk_inst"/>
+        <result property="workTitle" column="work_title"/>
+    </resultMap>
+
     <insert id="insert" parameterType="Usage">
         insert into ${schema}.df_usage_archive(
             df_usage_archive_uid,
@@ -137,6 +145,17 @@
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         left join ${schema}.df_rightsholder rro on rro.rh_account_number = ub.rro_account_number
         left join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
+        where df_scenario_uid = #{scenarioId}
+    </select>
+
+    <select id="findLiabilityDetailsByScenarioId" resultMap="liabilityDetailMap" parameterType="string">
+        select
+            rh_account_number,
+            detail_id,
+            net_amount,
+            wr_wrk_inst,
+            work_title
+        from ${schema}.df_usage_archive
         where df_scenario_uid = #{scenarioId}
     </select>
 </mapper>
