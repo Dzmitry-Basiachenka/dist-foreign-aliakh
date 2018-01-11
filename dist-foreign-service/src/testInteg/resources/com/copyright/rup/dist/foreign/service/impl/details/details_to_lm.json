@@ -1,0 +1,36 @@
+{
+  "details": [
+    {
+      "rh_account_number": "1000003821",
+      "product_family": "FAS",
+      "royalty_amount": 61.63,
+      "detail_id": "2136547853",
+      "wr_wrk_inst": "471137470",
+      "work_title": "Sunbeams"
+    },
+    {
+      "rh_account_number": "7000429266",
+      "product_family": "FAS",
+      "royalty_amount": 2871.05,
+      "detail_id": "1213548254",
+      "wr_wrk_inst": "122235134",
+      "work_title": "\"CHICKEN BREAST ON GRILL WITH FLAMES\""
+    },
+    {
+      "rh_account_number": "1000002859",
+      "product_family": "FAS",
+      "royalty_amount": 1450.03,
+      "detail_id": "2536984578",
+      "wr_wrk_inst": "243904752",
+      "work_title": "100 ROAD MOVIES"
+    },
+    {
+      "rh_account_number": "1000001820",
+      "product_family": "FAS",
+      "royalty_amount": 4350.08,
+      "detail_id": "3658212548",
+      "wr_wrk_inst": "471137967",
+      "work_title": "Cell Biology"
+    }
+  ]
+}

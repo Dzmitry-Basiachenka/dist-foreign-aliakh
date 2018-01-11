@@ -4,6 +4,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import com.copyright.rup.dist.common.integration.rest.prm.IPrmRightsholderService;
+import com.copyright.rup.dist.foreign.integration.lm.impl.producer.LiabilityDetailProducer;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 
 import org.junit.Test;
@@ -33,6 +34,7 @@ public class ApplicationContextTest {
             assertNotNull(context.getBean(RestTemplate.class));
             assertNotNull(context.getBean(IPrmIntegrationService.class));
             assertNotNull(context.getBean(IPrmRightsholderService.class));
+            assertNotNull(context.getBean(LiabilityDetailProducer.class));
             assertNotNull(context.getBean("dist.common.integration.rest.prmRollUpService"));
         } catch (Exception e) {
             fail("Context is not valid: " + e.getMessage());
