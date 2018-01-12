@@ -108,8 +108,9 @@ class CreateScenarioTestBuilder {
 
         private void assertScenario() {
             assertEquals(2, scenarioService.getScenarios().size());
-            Scenario scenario = scenarioService.getScenarioWithAmountsAndLastAction(scenarioId);
-            assertEquals(scenarioId, scenario.getId());
+            expectedScenario.setId(scenarioId);
+            Scenario scenario = scenarioService.getScenarioWithAmountsAndLastAction(expectedScenario);
+            assertEquals(expectedScenario.getId(), scenario.getId());
             assertEquals(expectedScenario.getName(), scenario.getName());
             assertEquals(expectedScenario.getNetTotal(), scenario.getNetTotal());
             assertEquals(expectedScenario.getGrossTotal(), scenario.getGrossTotal());

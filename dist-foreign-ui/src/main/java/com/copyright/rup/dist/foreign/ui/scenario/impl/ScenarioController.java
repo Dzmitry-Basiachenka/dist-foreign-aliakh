@@ -118,7 +118,7 @@ public class ScenarioController extends CommonController<IScenarioWidget> implem
 
     @Override
     public Scenario getScenarioWithAmountsAndLastAction() {
-        return scenarioService.getScenarioWithAmountsAndLastAction(scenario.getId());
+        return scenarioService.getScenarioWithAmountsAndLastAction(scenario);
     }
 
     @Override

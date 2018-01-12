@@ -103,6 +103,17 @@ public class ScenarioServiceTest {
     }
 
     @Test
+    public void testGetScenarioWithAmountsAndLastAction() {
+        expect(scenarioRepository.findWithAmountsAndLastAction(scenario.getId())).andReturn(scenario).once();
+        expect(scenarioRepository.findArchivedWithAmountsAndLastAction(scenario.getId())).andReturn(scenario).once();
+        replay(scenarioRepository);
+        assertSame(scenario, scenarioService.getScenarioWithAmountsAndLastAction(scenario));
+        scenario.setStatus(ScenarioStatusEnum.SENT_TO_LM);
+        assertSame(scenario, scenarioService.getScenarioWithAmountsAndLastAction(scenario));
+        verify(scenarioRepository);
+    }
+
+    @Test
     public void testRemove() {
         usageService.deleteFromScenario(scenario.getId());
         expectLastCall().once();

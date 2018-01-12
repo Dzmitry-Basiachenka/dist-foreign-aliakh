@@ -52,6 +52,16 @@ databaseChangeLog {
             column(name: 'updated_datetime', value: '2017-10-26 14:49:52.735531+03')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: 'd398d6d7-9cbd-4f83-8d5e-90a005bf26c2')
+            column(name: 'name', value: 'NEW_01_JAN_2018')
+            column(name: 'rro_account_number', value: '7000813800')
+            column(name: 'payment_date', value: '2018-01-01')
+            column(name: 'fiscal_year', value: '2018')
+            column(name: 'gross_amount', value: '1000')
+            column(name: 'updated_datetime', value: '2017-10-26 14:49:52.735531+03')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
             column(name: 'df_scenario_uid', value: '3210b236-1239-4a60-9fab-888b84199321')
             column(name: 'name', value: 'Scenario name 3')
@@ -81,6 +91,14 @@ databaseChangeLog {
             column(name: 'name', value: 'Scenario name 4')
             column(name: 'status_ind', value: 'IN_PROGRESS')
             column(name: 'description', value: 'The description of scenario 4')
+            column(name: 'updated_datetime', value: '2017-02-10 11:41:52.735531+03')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
+            column(name: 'df_scenario_uid', value: '8a6a6b15-6922-4fda-b40c-5097fcbd256e')
+            column(name: 'name', value: 'Scenario name 5')
+            column(name: 'status_ind', value: 'SENT_TO_LM')
+            column(name: 'description', value: 'The description of scenario 5')
             column(name: 'updated_datetime', value: '2017-02-10 11:41:52.735531+03')
         }
 
@@ -188,6 +206,32 @@ databaseChangeLog {
             column(name: 'service_fee', value: '0.32000')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+            column(name: 'df_usage_archive_uid', value: '94839e3f-c69a-45f3-b236-a363408ef937')
+            column(name: 'df_usage_batch_uid', value: 'd398d6d7-9cbd-4f83-8d5e-90a005bf26c2')
+            column(name: 'df_scenario_uid', value: '8a6a6b15-6922-4fda-b40c-5097fcbd256e')
+            column(name: 'detail_id', value: '6997788358')
+            column(name: 'wr_wrk_inst', value: '180382915')
+            column(name: 'work_title', value: 'High Performance Switching and Routing')
+            column(name: 'rh_account_number', value: '1000159997')
+            column(name: 'payee_account_number', value: '7001555529')
+            column(name: 'status_ind', value: 'LOCKED')
+            column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water')
+            column(name: 'standard_number', value: '1008902992377654XX')
+            column(name: 'publisher', value: 'IEEE 015')
+            column(name: 'publication_date', value: '2014-09-11')
+            column(name: 'market', value: 'Play Market')
+            column(name: 'market_period_from', value: '2014')
+            column(name: 'market_period_to', value: '2018')
+            column(name: 'author', value: 'Iñigo López de Mendoza, marqués de Santillana')
+            column(name: 'number_of_copies', value: '190222')
+            column(name: 'reported_value', value: '1000')
+            column(name: 'gross_amount', value: '1000.00')
+            column(name: 'service_fee_amount', value: '320.00')
+            column(name: 'net_amount', value: '680.00')
+            column(name: 'service_fee', value: '0.32000')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_audit') {
             column(name: 'df_scenario_audit_uid', value: '826c6125-96b4-49a7-8c62-24ca807d439d')
             column(name: 'df_scenario_uid', value: 'b1f0b236-3ae9-4a60-9fab-61db84199d6f')
@@ -213,6 +257,41 @@ databaseChangeLog {
             column(name: 'action_reason', value: 'Scenario approved by manager')
             column(name: 'created_datetime', value: '2017-04-10 11:28:58.735531+03')
             column(name: 'updated_datetime', value: '2017-04-10 11:28:58.735531+03')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_audit') {
+            column(name: 'df_scenario_audit_uid', value: 'bbfc7a16-2372-44e3-a9e5-f284873f2438')
+            column(name: 'df_scenario_uid', value: '8a6a6b15-6922-4fda-b40c-5097fcbd256e')
+            column(name: 'action_type_ind', value: 'ADDED_USAGES')
+            column(name: 'action_reason', value: 'Usages were added to scenario')
+            column(name: 'created_datetime', value: '2017-03-01 11:41:52.735531+03')
+            column(name: 'updated_datetime', value: '2017-03-01 11:41:52.735531+03')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_audit') {
+            column(name: 'df_scenario_audit_uid', value: 'e09a69c3-d153-4e22-81b4-7ce13869cb57')
+            column(name: 'df_scenario_uid', value: '8a6a6b15-6922-4fda-b40c-5097fcbd256e')
+            column(name: 'action_type_ind', value: 'SUBMITTED')
+            column(name: 'action_reason', value: 'Scenario submitted for approval')
+            column(name: 'created_datetime', value: '2017-03-10 11:41:58.735531+03')
+            column(name: 'updated_datetime', value: '2017-03-10 11:41:58.735531+03')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_audit') {
+            column(name: 'df_scenario_audit_uid', value: '88a05a1a-c81a-4266-a194-a0cf47df36cc')
+            column(name: 'df_scenario_uid', value: '8a6a6b15-6922-4fda-b40c-5097fcbd256e')
+            column(name: 'action_type_ind', value: 'APPROVED')
+            column(name: 'action_reason', value: 'Scenario approved by manager')
+            column(name: 'created_datetime', value: '2017-04-10 11:28:58.735531+03')
+            column(name: 'updated_datetime', value: '2017-04-10 11:28:58.735531+03')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_audit') {
+            column(name: 'df_scenario_audit_uid', value: '8d36af79-8bf4-4edc-8954-eb99c770f9e6')
+            column(name: 'df_scenario_uid', value: '8a6a6b15-6922-4fda-b40c-5097fcbd256e')
+            column(name: 'action_type_ind', value: 'SENT_TO_LM')
+            column(name: 'created_datetime', value: '2017-06-10 11:28:58.735531+03')
+            column(name: 'updated_datetime', value: '2017-06-10 11:28:58.735531+03')
         }
 
         rollback ""
