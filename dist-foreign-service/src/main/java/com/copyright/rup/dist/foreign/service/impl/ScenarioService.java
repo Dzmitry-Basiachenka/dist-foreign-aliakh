@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.service.impl;
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.foreign.domain.LiabilityDetail;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
@@ -10,12 +11,15 @@ import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.domain.common.util.ForeignLogUtils;
+import com.copyright.rup.dist.foreign.integration.lm.api.ILmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
+import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.perf4j.aop.Profiled;
 import org.slf4j.Logger;
@@ -50,6 +54,10 @@ public class ScenarioService implements IScenarioService {
     private IUsageService usageService;
     @Autowired
     private IScenarioAuditService scenarioAuditService;
+    @Autowired
+    private ILmIntegrationService lmIntegrationService;
+    @Autowired
+    private IUsageArchiveRepository usageArchiveRepository;
 
     @Override
     public List<Scenario> getScenarios() {
@@ -129,8 +137,14 @@ public class ScenarioService implements IScenarioService {
         LOGGER.info("Send scenario to LM. Started. {}, User={}", ForeignLogUtils.scenario(scenario),
             RupContextUtils.getUserName());
         usageService.moveToArchive(scenario);
-        changeScenarioState(scenario, ScenarioStatusEnum.SENT_TO_LM, ScenarioActionTypeEnum.SENT_TO_LM,
-            StringUtils.EMPTY);
+        List<LiabilityDetail> details = usageArchiveRepository.findLiabilityDetailsByScenarioId(scenario.getId());
+        if (CollectionUtils.isNotEmpty(details)) {
+            changeScenarioState(scenario, ScenarioStatusEnum.SENT_TO_LM, ScenarioActionTypeEnum.SENT_TO_LM,
+                StringUtils.EMPTY);
+            lmIntegrationService.sendToLm(details);
+        } else {
+            throw new RuntimeException("Could not send scenario to LM. Scenario is empty");
+        }
         LOGGER.info("Send scenario to LM. Finished. {}, User={}", ForeignLogUtils.scenario(scenario),
             RupContextUtils.getUserName());
     }

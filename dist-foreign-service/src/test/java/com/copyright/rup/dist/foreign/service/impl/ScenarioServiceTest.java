@@ -11,10 +11,13 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.foreign.domain.LiabilityDetail;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
+import com.copyright.rup.dist.foreign.integration.lm.api.ILmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
+import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
@@ -54,6 +57,8 @@ public class ScenarioServiceTest {
     private IScenarioRepository scenarioRepository;
     private IUsageService usageService;
     private IScenarioAuditService scenarioAuditService;
+    private IUsageArchiveRepository usageArchiveRepository;
+    private ILmIntegrationService lmIntegrationService;
     private Scenario scenario = new Scenario();
 
     @Before
@@ -61,11 +66,15 @@ public class ScenarioServiceTest {
         scenario.setId(RupPersistUtils.generateUuid());
         scenarioRepository = createMock(IScenarioRepository.class);
         usageService = createMock(IUsageService.class);
+        usageArchiveRepository = createMock(IUsageArchiveRepository.class);
+        lmIntegrationService = createMock(ILmIntegrationService.class);
         scenarioAuditService = createMock(IScenarioAuditService.class);
         scenarioService = new ScenarioService();
         Whitebox.setInternalState(scenarioService, "scenarioRepository", scenarioRepository);
         Whitebox.setInternalState(scenarioService, "usageService", usageService);
         Whitebox.setInternalState(scenarioService, "scenarioAuditService", scenarioAuditService);
+        Whitebox.setInternalState(scenarioService, "usageArchiveRepository", usageArchiveRepository);
+        Whitebox.setInternalState(scenarioService, "lmIntegrationService", lmIntegrationService);
     }
 
     @Test
@@ -156,10 +165,14 @@ public class ScenarioServiceTest {
         expectLastCall().once();
         scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.SENT_TO_LM, StringUtils.EMPTY);
         expectLastCall().once();
-        replay(scenarioRepository, scenarioAuditService);
+        expect(usageArchiveRepository.findLiabilityDetailsByScenarioId(scenario.getId()))
+            .andReturn(Collections.singletonList(new LiabilityDetail())).once();
+        lmIntegrationService.sendToLm(Collections.singletonList(new LiabilityDetail()));
+        expectLastCall().once();
+        replay(scenarioRepository, scenarioAuditService, usageArchiveRepository, lmIntegrationService);
         scenarioService.sendToLm(scenario);
         assertEquals(ScenarioStatusEnum.SENT_TO_LM, scenario.getStatus());
-        verify(scenarioRepository, scenarioAuditService);
+        verify(scenarioRepository, scenarioAuditService, usageArchiveRepository, lmIntegrationService);
     }
 
     @Test

@@ -5,11 +5,14 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
            http://www.springframework.org/schema/context
-           http://www.springframework.org/schema/context/spring-context-4.1.xsd">
+           http://www.springframework.org/schema/context/spring-context-4.1.xsd
+           http://camel.apache.org/schema/spring
+           http://camel.apache.org/schema/spring/camel-spring-2.18.3.xsd">
 
     <import resource="classpath:/com/copyright/rup/common/config/rup-properties-config.xml"/>
     <import resource="classpath:/com/copyright/rup/dist/common/integration/rest/prm/prm-rollup-context.xml"/>
     <import resource="classpath:/com/copyright/rup/dist/common/integration/rest/prm/prm-rh-preference-context.xml"/>
+    <import resource="classpath:/com/copyright/rup/dist/foreign/integration/dist-foreign-broker-config.xml"/>
 
     <bean id="applicationName" class="java.lang.String">
         <constructor-arg value="dist.foreign"/>
@@ -24,4 +27,29 @@
         <constructor-arg value="$RUP{dist.common.integration.rest.prm.url}"/>
         <constructor-arg ref="restTemplate"/>
     </bean>
+
+    <bean id="df.integration.liabilityDetailProducer"
+          class="com.copyright.rup.dist.foreign.integration.lm.impl.producer.LiabilityDetailProducer">
+        <property name="endPoint" value="direct:df.integration.liabilityDetail"/>
+    </bean>
+
+    <camelContext id="df.integration.camelContext" xmlns="http://camel.apache.org/schema/spring">
+        <contextScan/>
+        <template id="df.integration.producerTemplate"/>
+
+        <endpoint id="df.integration.internal.usage.endpoint" uri="direct:df.integration.liabilityDetail"/>
+        <endpoint id="df.integration.lm.detail.endpoint" uri="$RUP{dist.foreign.integration.lm.detail.endpoint}"/>
+
+        <redeliveryPolicyProfile id="defaultRedeliveryPolicy"
+                                 maximumRedeliveries="10"
+                                 redeliveryDelay="60000"/> <!-- 1 min -->
+
+        <route>
+            <from ref="df.integration.internal.usage.endpoint"/>
+            <marshal>
+                <custom ref="df.integration.liabilityDetailsMarshaller"/>
+            </marshal>
+            <to ref="df.integration.lm.detail.endpoint"/>
+        </route>
+    </camelContext>
 </beans>
