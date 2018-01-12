@@ -89,7 +89,7 @@ public class ScenarioControllerTest {
         Capture<Pageable> pageableCapture = new Capture<>();
         expect(usageService.getRightsholderTotalsHoldersByScenario(eq(scenario), anyString(),
             capture(pageableCapture), isNull())).andReturn(Collections.emptyList()).once();
-        expect(scenarioService.getScenarioWithAmountsAndLastAction(scenario.getId())).andReturn(scenario).once();
+        expect(scenarioService.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
         expect(ForeignSecurityUtils.hasExcludeFromScenarioPermission()).andReturn(true).once();
         replay(usageService, scenarioService, ForeignSecurityUtils.class);
         controller.initWidget();
@@ -148,7 +148,7 @@ public class ScenarioControllerTest {
         Capture<Runnable> captureRunnable = new Capture<>();
         executorService.execute(capture(captureRunnable));
         expectLastCall().once();
-        expect(scenarioService.getScenarioWithAmountsAndLastAction(scenario.getId())).andReturn(scenario).once();
+        expect(scenarioService.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
         expect(ForeignSecurityUtils.hasExcludeFromScenarioPermission()).andReturn(true).once();
         replay(usageService, executorService, scenarioService, ForeignSecurityUtils.class);
         controller.initWidget();

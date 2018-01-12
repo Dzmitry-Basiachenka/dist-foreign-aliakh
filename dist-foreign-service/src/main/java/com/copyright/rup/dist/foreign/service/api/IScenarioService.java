@@ -63,10 +63,10 @@ public interface IScenarioService {
      * Gets reported total, gross amount, service fee amount, net amount and last audit action
      * for selected {@link Scenario}.
      *
-     * @param scenarioId {@link Scenario} id
+     * @param scenario instance of {@link Scenario}
      * @return {@link Scenario} with amounts
      */
-    Scenario getScenarioWithAmountsAndLastAction(String scenarioId);
+    Scenario getScenarioWithAmountsAndLastAction(Scenario scenario);
 
     /**
      * Gets all source RROs belonging to the {@link Scenario} with given id.

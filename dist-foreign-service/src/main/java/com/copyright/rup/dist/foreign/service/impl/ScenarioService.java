@@ -97,8 +97,10 @@ public class ScenarioService implements IScenarioService {
     }
 
     @Override
-    public Scenario getScenarioWithAmountsAndLastAction(String scenarioId) {
-        return scenarioRepository.findWithAmountsAndLastAction(scenarioId);
+    public Scenario getScenarioWithAmountsAndLastAction(Scenario scenario) {
+        return ScenarioStatusEnum.SENT_TO_LM == scenario.getStatus()
+            ? scenarioRepository.findArchivedWithAmountsAndLastAction(scenario.getId())
+            : scenarioRepository.findWithAmountsAndLastAction(scenario.getId());
     }
 
     @Override

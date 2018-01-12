@@ -79,6 +79,15 @@ public interface IScenarioRepository {
     Scenario findWithAmountsAndLastAction(String scenarioId);
 
     /**
+     * Gets reported total, gross amount, service fee amount, net amount and last audited action
+     * for selected {@link Scenario} base on archived usages.
+     *
+     * @param scenarioId {@link Scenario} id
+     * @return {@link Scenario} with amounts
+     */
+    Scenario findArchivedWithAmountsAndLastAction(String scenarioId);
+
+    /**
      * Finds all {@link RightsholderPayeePair}s belonging to the source RRO with given account number within the
      * scenario with given id.
      *

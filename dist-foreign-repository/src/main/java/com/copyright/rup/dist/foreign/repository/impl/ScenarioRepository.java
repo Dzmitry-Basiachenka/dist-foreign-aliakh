@@ -70,6 +70,11 @@ public class ScenarioRepository extends BaseRepository implements IScenarioRepos
     }
 
     @Override
+    public Scenario findArchivedWithAmountsAndLastAction(String scenarioId) {
+        return selectOne("IScenarioMapper.findArchivedWithAmountsAndLastAction", Objects.requireNonNull(scenarioId));
+    }
+
+    @Override
     public void updateStatus(Scenario scenario) {
         update("IScenarioMapper.updateStatus", Objects.requireNonNull(scenario));
     }

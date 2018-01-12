@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
@@ -75,20 +76,22 @@ public class ScenarioRepositoryIntegrationTest {
 
     @Test
     public void testFindAll() {
-        assertEquals(4, scenarioRepository.findAll().size());
+        assertEquals(5, scenarioRepository.findAll().size());
         String scenarioId = RupPersistUtils.generateUuid();
         scenarioRepository.insert(buildScenario(scenarioId, SCENARIO_NAME));
         List<Scenario> scenarios = scenarioRepository.findAll();
-        assertEquals(5, scenarios.size());
-        verifyScenario(scenarios.get(0), scenarioId, SCENARIO_NAME, DESCRIPTION);
+        assertEquals(6, scenarios.size());
+        verifyScenario(scenarios.get(0), scenarioId, SCENARIO_NAME, DESCRIPTION, ScenarioStatusEnum.IN_PROGRESS);
         verifyScenario(scenarios.get(1), "e27551ed-3f69-4e08-9e4f-8ac03f67595f", "Scenario name 2",
-            "The description of scenario 2");
+            "The description of scenario 2", ScenarioStatusEnum.IN_PROGRESS);
         verifyScenario(scenarios.get(2), "b1f0b236-3ae9-4a60-9fab-61db84199d6f", "Scenario name",
-            "The description of scenario");
+            "The description of scenario", ScenarioStatusEnum.IN_PROGRESS);
         verifyScenario(scenarios.get(3), "1230b236-1239-4a60-9fab-123b84199123", "Scenario name 4",
-            "The description of scenario 4");
-        verifyScenario(scenarios.get(4), "3210b236-1239-4a60-9fab-888b84199321", "Scenario name 3",
-            "The description of scenario 3");
+            "The description of scenario 4", ScenarioStatusEnum.IN_PROGRESS);
+        verifyScenario(scenarios.get(4), "8a6a6b15-6922-4fda-b40c-5097fcbd256e", "Scenario name 5",
+            "The description of scenario 5", ScenarioStatusEnum.SENT_TO_LM);
+        verifyScenario(scenarios.get(5), "3210b236-1239-4a60-9fab-888b84199321", "Scenario name 3",
+            "The description of scenario 3", ScenarioStatusEnum.IN_PROGRESS);
     }
 
     @Test
@@ -101,6 +104,19 @@ public class ScenarioRepositoryIntegrationTest {
         assertEquals(new BigDecimal("22354.8000000000"), scenario.getNetTotal());
         assertEquals(new BigDecimal("10520.0000000000"), scenario.getServiceFeeTotal());
         assertEquals(new BigDecimal("19800.00"), scenario.getReportedTotal());
+    }
+
+    @Test
+    public void testFindArchivedWithAmountsAndLastAction() {
+        Scenario scenario =
+            scenarioRepository.findArchivedWithAmountsAndLastAction("8a6a6b15-6922-4fda-b40c-5097fcbd256e");
+        ScenarioAuditItem scenarioAuditItem = scenario.getAuditItem();
+        assertEquals(ScenarioActionTypeEnum.SENT_TO_LM, scenarioAuditItem.getActionType());
+        assertNull(scenarioAuditItem.getActionReason());
+        assertEquals(new BigDecimal("1000.0000000000"), scenario.getGrossTotal());
+        assertEquals(new BigDecimal("680.0000000000"), scenario.getNetTotal());
+        assertEquals(new BigDecimal("320.0000000000"), scenario.getServiceFeeTotal());
+        assertEquals(new BigDecimal("1000.00"), scenario.getReportedTotal());
     }
 
     @Test
@@ -243,12 +259,13 @@ public class ScenarioRepositoryIntegrationTest {
         return scenario;
     }
 
-    private void verifyScenario(Scenario scenario, String id, String name, String description) {
+    private void verifyScenario(Scenario scenario, String id, String name, String description,
+                                ScenarioStatusEnum status) {
         assertEquals(id, scenario.getId());
         assertEquals(name, scenario.getName());
         assertEquals(description, scenario.getDescription());
         assertEquals("SYSTEM", scenario.getCreateUser());
-        assertEquals(ScenarioStatusEnum.IN_PROGRESS, scenario.getStatus());
+        assertEquals(status, scenario.getStatus());
     }
 
     private Rightsholder buildRightsholder(Long accountNumber, String name) {

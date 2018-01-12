@@ -52,11 +52,21 @@ public class ScenariosControllerTest {
     private static final String SCENARIO_NAME = "Scenario name";
     private ScenariosController scenariosController;
     private IScenarioService scenarioService;
+    private ScenarioController scenarioController;
+    private Scenario scenario;
+    private IScenariosWidget scenariosWidget;
+    private IScenarioWidget scenarioWidget;
 
     @Before
     public void setUp() {
         scenarioService = createMock(IScenarioService.class);
         scenariosController = new ScenariosController();
+        buildScenario();
+        scenarioController = createMock(ScenarioController.class);
+        Whitebox.setInternalState(scenariosController, "scenarioController", scenarioController);
+        scenariosWidget = createMock(IScenariosWidget.class);
+        scenarioWidget = new ScenarioWidget();
+        Whitebox.setInternalState(scenariosController, "widget", scenariosWidget);
         mockStatic(SecurityUtils.class);
         expect(SecurityUtils.getUserName()).andReturn("user@copyright.com").anyTimes();
         replay(SecurityUtils.class);
@@ -81,9 +91,6 @@ public class ScenariosControllerTest {
     @Test
     public void testOnDeleteButtonClicked() {
         mockStatic(Windows.class);
-        IScenariosWidget scenariosWidget = createMock(IScenariosWidget.class);
-        Whitebox.setInternalState(scenariosController, "widget", scenariosWidget);
-        Scenario scenario = buildScenario();
         expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
         expect(Windows.showConfirmDialog(
             eq("Are you sure you want to delete <i><b>'" + SCENARIO_NAME + "'</b></i> scenario?"),
@@ -95,13 +102,7 @@ public class ScenariosControllerTest {
 
     @Test
     public void testOnViewButtonClicked() {
-        ScenarioController scenarioController = createMock(ScenarioController.class);
-        Whitebox.setInternalState(scenariosController, "scenarioController", scenarioController);
         mockStatic(Windows.class);
-        IScenariosWidget scenariosWidget = createMock(IScenariosWidget.class);
-        IScenarioWidget scenarioWidget = new ScenarioWidget();
-        Whitebox.setInternalState(scenariosController, "widget", scenariosWidget);
-        Scenario scenario = buildScenario();
         expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
         scenarioController.setScenario(scenario);
         expectLastCall().once();
@@ -115,39 +116,48 @@ public class ScenariosControllerTest {
 
     @Test
     public void testHandleAction() throws Exception {
+        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
+        scenarioController.setScenario(scenario);
+        expectLastCall().once();
+        expect(scenarioController.isScenarioEmpty()).andReturn(false).once();
         mockStatic(Windows.class);
         Windows.showModalWindow(anyObject(ConfirmActionDialogWindow.class));
         expectLastCall().once();
-        replay(Windows.class);
+        replay(Windows.class, scenarioController, scenariosWidget);
         scenariosController.handleAction(ScenarioActionTypeEnum.SUBMITTED);
-        verify(Windows.class);
+        verify(Windows.class, scenarioController, scenariosWidget);
     }
 
     @Test
     public void testHandleActionApproved() {
+        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
+        scenarioController.setScenario(scenario);
+        expectLastCall().once();
+        expect(scenarioController.isScenarioEmpty()).andReturn(false).once();
         mockStatic(Windows.class);
         Windows.showModalWindow(anyObject(ConfirmActionDialogWindow.class));
         expectLastCall().once();
-        replay(Windows.class);
+        replay(Windows.class, scenarioController, scenariosWidget);
         scenariosController.handleAction(ScenarioActionTypeEnum.APPROVED);
-        verify(Windows.class);
+        verify(Windows.class, scenarioController, scenariosWidget);
     }
 
     @Test
     public void testHandleActionRejected() {
+        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
+        scenarioController.setScenario(scenario);
+        expectLastCall().once();
+        expect(scenarioController.isScenarioEmpty()).andReturn(false).once();
         mockStatic(Windows.class);
         Windows.showModalWindow(anyObject(ConfirmActionDialogWindow.class));
         expectLastCall().once();
-        replay(Windows.class);
+        replay(Windows.class, scenarioController, scenariosWidget);
         scenariosController.handleAction(ScenarioActionTypeEnum.REJECTED);
-        verify(Windows.class);
+        verify(Windows.class, scenarioController, scenariosWidget);
     }
 
     @Test
     public void testApplyScenarioAction() {
-        IScenariosWidget scenariosWidget = createMock(IScenariosWidget.class);
-        Whitebox.setInternalState(scenariosController, "widget", scenariosWidget);
-        Scenario scenario = new Scenario();
         expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
         scenariosWidget.refresh();
         expectLastCall().once();
@@ -170,9 +180,6 @@ public class ScenariosControllerTest {
     @Test
     public void testSendToLm() {
         mockStatic(Windows.class);
-        IScenariosWidget scenariosWidget = createMock(IScenariosWidget.class);
-        Whitebox.setInternalState(scenariosController, scenariosWidget);
-        Scenario scenario = new Scenario();
         scenario.setName("Scenario");
         expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
         expect(Windows.showConfirmDialog(
@@ -185,9 +192,6 @@ public class ScenariosControllerTest {
 
     @Test
     public void testSendScenarioToLm() {
-        IScenariosWidget scenariosWidget = createMock(IScenariosWidget.class);
-        Whitebox.setInternalState(scenariosController, scenariosWidget);
-        Scenario scenario = new Scenario();
         scenariosWidget.refresh();
         expectLastCall().once();
         scenarioService.sendToLm(scenario);
@@ -197,10 +201,9 @@ public class ScenariosControllerTest {
         verify(scenariosWidget, scenarioService);
     }
 
-    private Scenario buildScenario() {
-        Scenario scenario = new Scenario();
+    private void buildScenario() {
+        scenario = new Scenario();
         scenario.setId(SCENARIO_ID);
         scenario.setName(SCENARIO_NAME);
-        return scenario;
     }
 }

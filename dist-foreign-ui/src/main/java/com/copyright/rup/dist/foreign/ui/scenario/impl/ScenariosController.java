@@ -59,7 +59,7 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
 
     @Override
     public Scenario getScenarioWithAmountsAndLastAction(Scenario scenario) {
-        return scenarioService.getScenarioWithAmountsAndLastAction(scenario.getId());
+        return scenarioService.getScenarioWithAmountsAndLastAction(scenario);
     }
 
     @Override
@@ -81,15 +81,20 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
 
     @Override
     public void handleAction(ScenarioActionTypeEnum actionType) {
-        IActionHandler actionHandler = actionHandlers.get(actionType);
-        if (null != actionHandler) {
-            Window window = new ConfirmActionDialogWindow(
-                reason -> applyScenarioAction(actionHandler, reason),
-                ForeignUi.getMessage("window.confirm"), ForeignUi.getMessage("message.confirm.action"),
-                ForeignUi.getMessage("button.yes"), ForeignUi.getMessage("button.cancel"),
-                new StringLengthValidator(ForeignUi.getMessage("field.error.length", 1024), 0, 1024, true)
-            );
-            Windows.showModalWindow(window);
+        scenarioController.setScenario(getWidget().getSelectedScenario());
+        if (!scenarioController.isScenarioEmpty()) {
+            IActionHandler actionHandler = actionHandlers.get(actionType);
+            if (null != actionHandler) {
+                Window window = new ConfirmActionDialogWindow(
+                    reason -> applyScenarioAction(actionHandler, reason),
+                    ForeignUi.getMessage("window.confirm"), ForeignUi.getMessage("message.confirm.action"),
+                    ForeignUi.getMessage("button.yes"), ForeignUi.getMessage("button.cancel"),
+                    new StringLengthValidator(ForeignUi.getMessage("field.error.length", 1024), 0, 1024, true)
+                );
+                Windows.showModalWindow(window);
+            }
+        } else {
+            Windows.showNotificationWindow(ForeignUi.getMessage("message.warning.submit_empty_scenario"));
         }
     }
 
