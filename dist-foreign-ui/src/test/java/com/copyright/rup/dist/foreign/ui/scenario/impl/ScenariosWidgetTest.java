@@ -262,11 +262,11 @@ public class ScenariosWidgetTest {
         assertEquals(6, layout.getComponentCount());
         verifyMetadataLabel(layout.getComponent(0), "<b>Owner: </b>User@copyright.com");
         verifyMetadataLabel(layout.getComponent(1),
-            "<b>Distribution Total: </b><span class='label-amount'>10,000.00</span>");
+            "<b>Net Amt in USD: </b><span class='label-amount'>10,000.00</span>");
         verifyMetadataLabel(layout.getComponent(2),
-            "<b>Gross Total: </b><span class='label-amount'>20,000.00</span>");
+            "<b>Gross Amt in USD: </b><span class='label-amount'>20,000.00</span>");
         verifyMetadataLabel(layout.getComponent(3),
-            "<b>Reported Total: </b><span class='label-amount'>30,000.00</span>");
+            "<b>Reported Value Total: </b><span class='label-amount'>30,000.00</span>");
         verifyMetadataLabel(layout.getComponent(4), "<b>Description: </b>Description");
         assertTrue(layout.getComponent(5) instanceof VerticalLayout);
         VerticalLayout lastActionLayout = (VerticalLayout) layout.getComponent(5);

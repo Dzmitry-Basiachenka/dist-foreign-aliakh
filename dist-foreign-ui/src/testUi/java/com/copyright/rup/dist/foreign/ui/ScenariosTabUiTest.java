@@ -209,9 +209,9 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
         List<WebElement> labels = findElements(metadataPanel, By.className(V_LABEL_CLASS_NAME));
         assertEquals(9, CollectionUtils.size(labels));
         assertEquals("Owner: " + metadata.get(0), labels.get(0).getText());
-        assertEquals("Distribution Total: " + metadata.get(1), labels.get(1).getText());
-        assertEquals("Gross Total: " + metadata.get(2), labels.get(2).getText());
-        assertEquals("Reported Total: " + metadata.get(3), labels.get(3).getText());
+        assertEquals("Net Amt in USD: " + metadata.get(1), labels.get(1).getText());
+        assertEquals("Gross Amt in USD: " + metadata.get(2), labels.get(2).getText());
+        assertEquals("Reported Value Total: " + metadata.get(3), labels.get(3).getText());
         assertEquals("Description: " + metadata.get(4), labels.get(4).getText());
         assertEquals("Type: " + metadata.get(5), labels.get(5).getText());
         assertEquals("User: " + metadata.get(6), labels.get(6).getText());
