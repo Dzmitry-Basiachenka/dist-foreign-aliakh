@@ -146,10 +146,10 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
     void sendToLM(Scenario scenario) {
         try {
             scenarioService.sendToLm(scenario);
-            getWidget().refresh();
         } catch (RuntimeException e) {
             Windows.showNotificationWindow(e.getMessage());
         }
+        getWidget().refresh();
     }
 
     private void deleteScenario(Scenario scenario) {

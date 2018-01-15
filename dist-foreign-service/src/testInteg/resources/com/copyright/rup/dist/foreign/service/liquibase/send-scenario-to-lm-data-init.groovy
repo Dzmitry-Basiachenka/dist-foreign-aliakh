@@ -22,8 +22,8 @@ databaseChangeLog {
             column(name: 'updated_datetime', value: '2017-02-14 11:41:52.735531+03')
         }
 
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
-            column(name: 'df_usage_archive_uid', value: 'fcdaea01-2439-4c51-b3e2-23649cf710c7')
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'fcdaea01-2439-4c51-b3e2-23649cf710c7')
             column(name: 'df_usage_batch_uid', value: '31ddaa1a-e60b-44ce-a968-0ca262870358')
             column(name: 'df_scenario_uid', value: '4c014547-06f3-4840-94ff-6249730d537d')
             column(name: 'detail_id', value: '2136547853')
@@ -48,8 +48,8 @@ databaseChangeLog {
             column(name: 'service_fee', value: '0.32000')
         }
 
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
-            column(name: 'df_usage_archive_uid', value: 'b1f0b236-3ae9-4a60-9fab-61db84199dss')
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'b1f0b236-3ae9-4a60-9fab-61db84199dss')
             column(name: 'df_usage_batch_uid', value: '31ddaa1a-e60b-44ce-a968-0ca262870358')
             column(name: 'df_scenario_uid', value: '4c014547-06f3-4840-94ff-6249730d537d')
             column(name: 'detail_id', value: '1213548254')
@@ -74,8 +74,8 @@ databaseChangeLog {
             column(name: 'service_fee', value: '0.32000')
         }
 
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
-            column(name: 'df_usage_archive_uid', value: 'cf38d390-11bb-4af7-9685-e034c9c32fb6')
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'cf38d390-11bb-4af7-9685-e034c9c32fb6')
             column(name: 'df_usage_batch_uid', value: '31ddaa1a-e60b-44ce-a968-0ca262870358')
             column(name: 'df_scenario_uid', value: '4c014547-06f3-4840-94ff-6249730d537d')
             column(name: 'detail_id', value: '2536984578')
@@ -100,8 +100,8 @@ databaseChangeLog {
             column(name: 'service_fee', value: '0.32000')
         }
 
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
-            column(name: 'df_usage_archive_uid', value: 'd0816728-4726-483d-91ff-8f24fa605e01')
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'd0816728-4726-483d-91ff-8f24fa605e01')
             column(name: 'df_usage_batch_uid', value: '31ddaa1a-e60b-44ce-a968-0ca262870358')
             column(name: 'df_scenario_uid', value: '4c014547-06f3-4840-94ff-6249730d537d')
             column(name: 'detail_id', value: '3658212548')

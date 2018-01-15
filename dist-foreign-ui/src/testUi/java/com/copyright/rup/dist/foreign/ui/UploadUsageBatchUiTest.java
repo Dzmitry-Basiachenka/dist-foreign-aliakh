@@ -153,7 +153,7 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         sendKeysToInput(assertWebElement(uploadWindow, GROSS_AMOUNT_FIELD_ID), "symbols");
         clickButtonAndWait(uploadWindow, UPLOAD_BUTTON_ID);
         Map<String, String> errors =
-            ImmutableMap.of(GROSS_AMOUNT_FIELD, "Field should be greater than 0");
+            ImmutableMap.of(GROSS_AMOUNT_FIELD, "Field value should be positive number and not exceed 10 digits");
         verifyErrorWindow(errors);
         sendKeysToInput(assertWebElement(uploadWindow, GROSS_AMOUNT_FIELD_ID), "-555");
         clickButtonAndWait(uploadWindow, UPLOAD_BUTTON_ID);

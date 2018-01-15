@@ -184,13 +184,14 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public void moveToArchive(Scenario scenario) {
+    public List<Usage> moveToArchive(Scenario scenario) {
         LOGGER.info("Move details to archive. Started. {}", ForeignLogUtils.scenario(scenario));
         List<Usage> usages = usageRepository.findByScenarioId(scenario.getId());
         usages.forEach(usageArchiveRepository::insert);
         usageRepository.deleteByScenarioId(scenario.getId());
         LOGGER.info("Move details to archive. Finished. {}, UsagesCount={}", ForeignLogUtils.scenario(scenario),
             usages.size());
+        return usages;
     }
 
     @Override

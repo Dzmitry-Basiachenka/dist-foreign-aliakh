@@ -320,7 +320,7 @@ public class UsageServiceTest {
     @Test
     public void testMoveToArchived() {
         Usage usage1 = buildUsage(RupPersistUtils.generateUuid());
-        Usage usage2=  buildUsage(RupPersistUtils.generateUuid());
+        Usage usage2 = buildUsage(RupPersistUtils.generateUuid());
         List<Usage> usages = Lists.newArrayList(usage1, usage2);
         expect(usageRepository.findByScenarioId(scenario.getId())).andReturn(usages).once();
         usageArchiveRepository.insert(usage1);

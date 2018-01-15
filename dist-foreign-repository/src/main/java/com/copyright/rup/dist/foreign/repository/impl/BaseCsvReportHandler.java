@@ -41,7 +41,7 @@ public abstract class BaseCsvReportHandler implements ResultHandler, AutoCloseab
      * Constructor.
      *
      * @param outputStream {@link PipedOutputStream} instance
-     * @throws RupRuntimeException when liability details can't be written to the CSV report
+     * @throws RupRuntimeException when usage details can't be written to the CSV report
      */
     BaseCsvReportHandler(PipedOutputStream outputStream) throws RupRuntimeException {
         Objects.requireNonNull(outputStream);

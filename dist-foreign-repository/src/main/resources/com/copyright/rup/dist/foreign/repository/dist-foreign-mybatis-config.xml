@@ -28,7 +28,6 @@
         <typeAlias alias="UsageAuditItem" type="com.copyright.rup.dist.foreign.domain.UsageAuditItem"/>
         <typeAlias alias="ScenarioAuditItem" type="com.copyright.rup.dist.foreign.domain.ScenarioAuditItem"/>
         <typeAlias alias="UsageStatusEnum" type="com.copyright.rup.dist.foreign.domain.UsageStatusEnum"/>
-        <typeAlias alias="LiabilityDetail" type="com.copyright.rup.dist.foreign.domain.LiabilityDetail"/>
     </typeAliases>
 
     <typeHandlers>

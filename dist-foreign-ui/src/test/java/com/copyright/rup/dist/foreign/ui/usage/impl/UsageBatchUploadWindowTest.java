@@ -76,7 +76,8 @@ public class UsageBatchUploadWindowTest {
     private static final String USAGE_BATCH_NAME = "BatchName";
     private static final String RRO_NAME = "RRO name";
     private static final String ACCOUNT_NAME = "Account Name";
-    private static final String INVALID_GROSS_AMOUNT_ERROR_MESSAGE = "<div>Field should be greater than 0</div>\n";
+    private static final String INVALID_GROSS_AMOUNT_ERROR_MESSAGE =
+        "<div>Field value should be positive number and not exceed 10 digits</div>\n";
     private static final String GROSS_AMOUNT_FIELD = "grossAmountField";
     private static final LocalDate PAYMENT_DATE = LocalDate.of(2017, 2, 27);
     private UsageBatchUploadWindow window;

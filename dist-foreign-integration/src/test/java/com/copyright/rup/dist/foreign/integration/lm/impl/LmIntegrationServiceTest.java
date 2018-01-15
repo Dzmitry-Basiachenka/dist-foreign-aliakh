@@ -5,10 +5,11 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 
-import com.copyright.rup.dist.foreign.domain.LiabilityDetail;
+import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.integration.lm.api.ILmIntegrationService;
-import com.copyright.rup.dist.foreign.integration.lm.impl.domain.LiabilityDetailMessage;
-import com.copyright.rup.dist.foreign.integration.lm.impl.producer.LiabilityDetailProducer;
+import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsage;
+import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsageMessage;
+import com.copyright.rup.dist.foreign.integration.lm.impl.producer.ExternalUsageProducer;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -32,38 +33,36 @@ public class LmIntegrationServiceTest {
 
     private static final Map<String, Object> HEADER = ImmutableMap.of("source", "FDA");
     private ILmIntegrationService lmIntegrationService;
-    private LiabilityDetailProducer liabilityDetailProducer;
+    private ExternalUsageProducer externalUsageProducer;
+    private ExternalUsage externalUsage;
 
     @Before
     public void setUp() {
         lmIntegrationService = new LmIntegrationService();
-        liabilityDetailProducer = createMock(LiabilityDetailProducer.class);
+        externalUsageProducer = createMock(ExternalUsageProducer.class);
         Whitebox.setInternalState(lmIntegrationService, "batchSize", 2);
-        Whitebox.setInternalState(lmIntegrationService, "liabilityDetailProducer", liabilityDetailProducer);
+        Whitebox.setInternalState(lmIntegrationService, "externalUsageProducer", externalUsageProducer);
+        externalUsage = new ExternalUsage(new Usage());
     }
+
 
     @Test
     public void testSendToLmSingleMessage() {
-        liabilityDetailProducer.send(
-            new LiabilityDetailMessage(HEADER, Lists.newArrayList(new LiabilityDetail(), new LiabilityDetail())));
+        externalUsageProducer.send(new ExternalUsageMessage(HEADER, Lists.newArrayList(externalUsage, externalUsage)));
         expectLastCall().once();
-        replay(liabilityDetailProducer);
-        lmIntegrationService.sendToLm(
-            Lists.newArrayList(new LiabilityDetail(), new LiabilityDetail()));
-        verify(liabilityDetailProducer);
+        replay(externalUsageProducer);
+        lmIntegrationService.sendToLm(Lists.newArrayList(externalUsage, externalUsage));
+        verify(externalUsageProducer);
     }
 
     @Test
     public void testSendToLmNotSingleMessages() {
-        liabilityDetailProducer.send(
-            new LiabilityDetailMessage(HEADER, Lists.newArrayList(new LiabilityDetail(), new LiabilityDetail())));
+        externalUsageProducer.send(new ExternalUsageMessage(HEADER, Lists.newArrayList(externalUsage, externalUsage)));
         expectLastCall().once();
-        liabilityDetailProducer.send(
-            new LiabilityDetailMessage(HEADER, Lists.newArrayList(new LiabilityDetail())));
+        externalUsageProducer.send(new ExternalUsageMessage(HEADER, Lists.newArrayList(externalUsage)));
         expectLastCall().once();
-        replay(liabilityDetailProducer);
-        lmIntegrationService.sendToLm(
-            Lists.newArrayList(new LiabilityDetail(), new LiabilityDetail(), new LiabilityDetail()));
-        verify(liabilityDetailProducer);
+        replay(externalUsageProducer);
+        lmIntegrationService.sendToLm(Lists.newArrayList(externalUsage, externalUsage, externalUsage));
+        verify(externalUsageProducer);
     }
 }

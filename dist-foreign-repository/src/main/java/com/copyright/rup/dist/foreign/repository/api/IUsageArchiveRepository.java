@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
-import com.copyright.rup.dist.foreign.domain.LiabilityDetail;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -81,12 +80,4 @@ public interface IUsageArchiveRepository {
      * @param pipedOutputStream instance of {@link PipedOutputStream}
      */
     void writeScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
-
-    /**
-     * Finds {@link LiabilityDetail}s for specified scenario.
-     *
-     * @param scenarioId scenario id
-     * @return list of {@link LiabilityDetail}
-     */
-    List<LiabilityDetail> findLiabilityDetailsByScenarioId(String scenarioId);
 }

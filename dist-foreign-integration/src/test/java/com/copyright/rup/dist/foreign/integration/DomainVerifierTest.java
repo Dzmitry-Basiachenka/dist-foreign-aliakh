@@ -1,9 +1,16 @@
 package com.copyright.rup.dist.foreign.integration;
 
 import com.copyright.rup.dist.common.test.TestUtils;
-import com.copyright.rup.dist.foreign.integration.lm.impl.domain.LiabilityDetailMessage;
+import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsage;
+import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsageMessage;
+import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsageWrapper;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * Verifies {@link Object#equals(Object)}, {@link Object#hashCode()},
@@ -15,10 +22,32 @@ import org.junit.Test;
  *
  * @author Ihar Suvorau
  */
+@RunWith(Parameterized.class)
 public class DomainVerifierTest {
+
+    private Class classToVerify;
+
+    /**
+     * Constructs new test for given class.
+     *
+     * @param classToVerify class to verify
+     */
+    public DomainVerifierTest(Class classToVerify) {
+        this.classToVerify = classToVerify;
+    }
+
+    @Parameterized.Parameters
+    public static Collection<Object[]> data() {
+        Object[][] testData = new Object[][]{
+            {ExternalUsage.class},
+            {ExternalUsageWrapper.class},
+            {ExternalUsageMessage.class}
+        };
+        return Arrays.asList(testData);
+    }
 
     @Test
     public void testPojoStructureAndBehavior() {
-        TestUtils.validatePojo(LiabilityDetailMessage.class);
+        TestUtils.validatePojo(classToVerify);
     }
 }
