@@ -5,8 +5,10 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 
-import com.copyright.rup.dist.foreign.domain.LiabilityDetail;
-import com.copyright.rup.dist.foreign.integration.lm.impl.domain.LiabilityDetailMessage;
+import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsage;
+import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsageMessage;
+import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsageWrapper;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -19,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Verifies {@link LiabilityDetailProducer}.
+ * Verifies {@link ExternalUsageProducer}.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -27,29 +29,29 @@ import java.util.Map;
  *
  * @author Ihar Suvorau
  */
-public class LiabilityDetailProducerTest {
+public class ExternalUsageProducerTest {
 
     private static final String END_POINT = "test";
     private static final Map<String, Object> HEADERS = ImmutableMap.of("source", "FDA");
 
     private ProducerTemplate template;
-    private LiabilityDetailProducer producer;
+    private ExternalUsageProducer producer;
 
     @Before
     public void setUp() {
         template = createMock(ProducerTemplate.class);
-        producer = new LiabilityDetailProducer();
+        producer = new ExternalUsageProducer();
         producer.setProducerTemplate(template);
         producer.setEndPoint(END_POINT);
     }
 
     @Test
     public void testSendMessage() {
-        List<LiabilityDetail> liabilityDetails = Collections.singletonList(new LiabilityDetail());
-        template.sendBodyAndHeaders(END_POINT, liabilityDetails, HEADERS);
+        List<ExternalUsage> externalUsages = Collections.singletonList(new ExternalUsage(new Usage()));
+        template.sendBodyAndHeaders(END_POINT, new ExternalUsageWrapper(externalUsages), HEADERS);
         expectLastCall().once();
         replay(template);
-        producer.send(new LiabilityDetailMessage(HEADERS, liabilityDetails));
+        producer.send(new ExternalUsageMessage(HEADERS, externalUsages));
         verify(template);
     }
 }

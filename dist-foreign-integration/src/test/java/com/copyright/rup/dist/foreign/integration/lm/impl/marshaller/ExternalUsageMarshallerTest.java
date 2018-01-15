@@ -7,7 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Verifies {@link LiabilityDetailsMarshaller}.
+ * Verifies {@link ExternalUsageMarshaller}.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -15,27 +15,27 @@ import org.junit.Test;
  *
  * @author Ihar Suvorau
  */
-public class LiabilityDetailsMarshallerTest {
+public class ExternalUsageMarshallerTest {
 
-    private LiabilityDetailsMarshaller liabilityDetailsMarshaller;
+    private ExternalUsageMarshaller externalUsageMarshaller;
 
     @Before
     public void setUp() {
-        liabilityDetailsMarshaller = new LiabilityDetailsMarshaller();
+        externalUsageMarshaller = new ExternalUsageMarshaller();
     }
 
     @Test
     public void testGetObjectMapper() {
-        assertNotNull(liabilityDetailsMarshaller.getObjectMapper());
+        assertNotNull(externalUsageMarshaller.getObjectMapper());
     }
 
     @Test
     public void testGetTypeReference() {
-        assertEquals(LiabilityDetailsMarshaller.TYPE_REFERENCE, liabilityDetailsMarshaller.getTypeReference());
+        assertEquals(ExternalUsageMarshaller.TYPE_REFERENCE, externalUsageMarshaller.getTypeReference());
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void testUnmarshal() throws Exception {
-        liabilityDetailsMarshaller.unmarshal(null, null);
+        externalUsageMarshaller.unmarshal(null, null);
     }
 }

@@ -1,6 +1,4 @@
-package com.copyright.rup.dist.foreign.integration.lm.impl.domain;
-
-import com.copyright.rup.dist.foreign.domain.LiabilityDetail;
+package com.copyright.rup.dist.foreign.integration.lm.api.domain;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -12,32 +10,32 @@ import java.util.Map;
 
 /**
  * Message to be sent to LM.
- * Contains source in header and list of liability detail belonging to the scenario.
+ * Contains source in header and list of external usages belonging to the scenario.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
- * Date: 01/11/18
+ * Date: 1/15/18
  *
  * @author Ihar Suvorau
  */
-public class LiabilityDetailMessage {
+public class ExternalUsageMessage {
 
-    private final List<LiabilityDetail> liabilityDetails;
+    private final List<ExternalUsage> externalUsages;
     private final Map<String, Object> headers;
 
     /**
      * Constructor.
      *
-     * @param headers          map of headers
-     * @param liabilityDetails list of {@link LiabilityDetail}s
+     * @param headers        map of headers
+     * @param externalUsages list of {@link ExternalUsage}
      */
-    public LiabilityDetailMessage(Map<String, Object> headers, List<LiabilityDetail> liabilityDetails) {
+    public ExternalUsageMessage(Map<String, Object> headers, List<ExternalUsage> externalUsages) {
         this.headers = headers;
-        this.liabilityDetails = liabilityDetails;
+        this.externalUsages = externalUsages;
     }
 
-    public List<LiabilityDetail> getLiabilityDetails() {
-        return liabilityDetails;
+    public List<ExternalUsage> getExternalUsages() {
+        return externalUsages;
     }
 
     public Map<String, Object> getHeaders() {
@@ -52,10 +50,10 @@ public class LiabilityDetailMessage {
         if (null == obj || this.getClass() != obj.getClass()) {
             return false;
         }
-        LiabilityDetailMessage that = (LiabilityDetailMessage) obj;
+        ExternalUsageMessage that = (ExternalUsageMessage) obj;
         return new EqualsBuilder()
             .append(this.headers, that.headers)
-            .append(this.liabilityDetails, that.liabilityDetails)
+            .append(this.externalUsages, that.externalUsages)
             .isEquals();
     }
 
@@ -63,7 +61,7 @@ public class LiabilityDetailMessage {
     public int hashCode() {
         return new HashCodeBuilder()
             .append(headers)
-            .append(liabilityDetails)
+            .append(externalUsages)
             .toHashCode();
     }
 
@@ -71,7 +69,8 @@ public class LiabilityDetailMessage {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
             .append("headers", headers)
-            .append("liabilityDetails", liabilityDetails)
+            .append("externalUsages", externalUsages)
             .toString();
     }
 }
+

@@ -137,8 +137,9 @@ public interface IUsageService {
      * Moves {@link Usage}s to the archive for given {@link Scenario}.
      *
      * @param scenario {@link Scenario}
+     * @return list of moved to archived {@link Usage}s
      */
-    void moveToArchive(Scenario scenario);
+    List<Usage> moveToArchive(Scenario scenario);
 
     /**
      * Gets {@link RightsholderTotalsHolder}s based on {@link Scenario}.

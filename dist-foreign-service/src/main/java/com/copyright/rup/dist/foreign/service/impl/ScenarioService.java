@@ -3,7 +3,6 @@ package com.copyright.rup.dist.foreign.service.impl;
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.foreign.domain.LiabilityDetail;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
@@ -12,8 +11,8 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.domain.common.util.ForeignLogUtils;
 import com.copyright.rup.dist.foreign.integration.lm.api.ILmIntegrationService;
+import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsage;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
-import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
@@ -31,6 +30,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Scenario service implementation.
@@ -56,8 +56,6 @@ public class ScenarioService implements IScenarioService {
     private IScenarioAuditService scenarioAuditService;
     @Autowired
     private ILmIntegrationService lmIntegrationService;
-    @Autowired
-    private IUsageArchiveRepository usageArchiveRepository;
 
     @Override
     public List<Scenario> getScenarios() {
@@ -138,12 +136,11 @@ public class ScenarioService implements IScenarioService {
     public void sendToLm(Scenario scenario) {
         LOGGER.info("Send scenario to LM. Started. {}, User={}", ForeignLogUtils.scenario(scenario),
             RupContextUtils.getUserName());
-        usageService.moveToArchive(scenario);
-        List<LiabilityDetail> details = usageArchiveRepository.findLiabilityDetailsByScenarioId(scenario.getId());
-        if (CollectionUtils.isNotEmpty(details)) {
+        List<Usage> usages = usageService.moveToArchive(scenario);
+        if (CollectionUtils.isNotEmpty(usages)) {
             changeScenarioState(scenario, ScenarioStatusEnum.SENT_TO_LM, ScenarioActionTypeEnum.SENT_TO_LM,
                 StringUtils.EMPTY);
-            lmIntegrationService.sendToLm(details);
+            lmIntegrationService.sendToLm(usages.stream().map(ExternalUsage::new).collect(Collectors.toList()));
         } else {
             throw new RuntimeException("Could not send scenario to LM. Scenario is empty");
         }

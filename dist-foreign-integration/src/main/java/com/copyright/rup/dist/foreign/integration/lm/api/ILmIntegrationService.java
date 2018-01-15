@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.integration.lm.api;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
-import com.copyright.rup.dist.foreign.domain.LiabilityDetail;
+import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsage;
 
 import java.util.List;
 
@@ -17,10 +17,10 @@ import java.util.List;
 public interface ILmIntegrationService {
 
     /**
-     * Sends list of {@link LiabilityDetail}s to LM.
+     * Sends list of {@link ExternalUsage}s to LM.
      *
-     * @param liabilityDetails list of {@link LiabilityDetail}s
+     * @param externalUsages list of {@link ExternalUsage}s
      * @throws RupRuntimeException in case when message is failed to send
      */
-    void sendToLm(List<LiabilityDetail> liabilityDetails) throws RupRuntimeException;
+    void sendToLm(List<ExternalUsage> externalUsages) throws RupRuntimeException;
 }

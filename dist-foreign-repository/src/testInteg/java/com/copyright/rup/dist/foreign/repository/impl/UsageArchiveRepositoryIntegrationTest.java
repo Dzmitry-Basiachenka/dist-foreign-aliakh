@@ -5,7 +5,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
-import com.copyright.rup.dist.foreign.domain.LiabilityDetail;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -32,7 +31,6 @@ import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.Executors;
 
 /**
@@ -229,18 +227,6 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindLiabilityDetailsByScenarioId() {
-        List<LiabilityDetail> liabilityDetails = usageArchiveRepository.findLiabilityDetailsByScenarioId(SCENARIO_ID);
-        assertEquals(3, liabilityDetails.size());
-        verifyLiabilityDetail(liabilityDetails.get(0), 1000009997L, 6997788888L, "23800.0000000000", 180382914L,
-            "2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA");
-        verifyLiabilityDetail(liabilityDetails.get(1), 1000005413L, 6997788884L, "1445.1632000000", 345870577L,
-            "10 Years Plant Molecular Biology");
-        verifyLiabilityDetail(liabilityDetails.get(2), 1000002859L, 6997788886L, "46154.8000000000", 243904752L,
-            "100 ROAD MOVIES");
-    }
-
-    @Test
     public void testWriteScenarioUsagesCsvReport() throws Exception {
         PipedOutputStream outputStream = new PipedOutputStream();
         PipedInputStream inputStream = new PipedInputStream(outputStream);
@@ -321,15 +307,5 @@ public class UsageArchiveRepositoryIntegrationTest {
         usage.setGrossAmount(GROSS_AMOUNT);
         usage.setNetAmount(new BigDecimal("25.1500000000"));
         return usage;
-    }
-    
-    private void verifyLiabilityDetail(LiabilityDetail detail, Long accountNumber, Long detailId, String amount,
-                                       Long wrWrkInst, String workTitle) {
-        assertEquals(accountNumber, detail.getRhAccountNumber());
-        assertEquals("FAS", detail.getProductFamily());
-        assertEquals(detailId, detail.getDetailId());
-        assertEquals(amount, Objects.toString(detail.getRoyaltyAmount()));
-        assertEquals(wrWrkInst, detail.getWrWrkInst());
-        assertEquals(workTitle, detail.getWorkTitle());
     }
 }

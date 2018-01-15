@@ -2,7 +2,6 @@ package com.copyright.rup.dist.foreign.repository.impl;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.common.repository.BaseRepository;
-import com.copyright.rup.dist.foreign.domain.LiabilityDetail;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -81,11 +80,6 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put(SEARCH_VALUE_KEY, searchValue);
         return selectOne("IUsageArchiveMapper.findCountByScenarioIdAndRhAccountNumber", parameters);
-    }
-
-    @Override
-    public List<LiabilityDetail> findLiabilityDetailsByScenarioId(String scenarioId) {
-        return selectList("IUsageArchiveMapper.findLiabilityDetailsByScenarioId", Objects.requireNonNull(scenarioId));
     }
 
     @Override

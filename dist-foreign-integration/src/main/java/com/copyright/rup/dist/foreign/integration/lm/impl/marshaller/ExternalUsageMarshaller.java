@@ -1,8 +1,8 @@
 package com.copyright.rup.dist.foreign.integration.lm.impl.marshaller;
 
 import com.copyright.rup.dist.common.integration.camel.CommonMarshaller;
-import com.copyright.rup.dist.foreign.domain.LiabilityDetail;
-import com.copyright.rup.dist.foreign.integration.lm.impl.serializer.LiabilityDetailSerializer;
+import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsage;
+import com.copyright.rup.dist.foreign.integration.lm.impl.serializer.ExternalUsageSerializer;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import java.io.InputStream;
 
 /**
- * Liability detail marshaller to send {@link LiabilityDetail}s to LM.
+ * External usages marshaller to send {@link ExternalUsage}s to LM.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -22,19 +22,19 @@ import java.io.InputStream;
  *
  * @author Ihar Suvorau
  */
-@Component("df.integration.liabilityDetailsMarshaller")
-public class LiabilityDetailsMarshaller extends CommonMarshaller {
+@Component("df.integration.externalUsageMarshaller")
+public class ExternalUsageMarshaller extends CommonMarshaller {
 
     /**
      * Usages marshaller {@link TypeReference}.
      */
-    static final TypeReference<LiabilityDetail> TYPE_REFERENCE = new TypeReference<LiabilityDetail>() {
+    static final TypeReference<ExternalUsage> TYPE_REFERENCE = new TypeReference<ExternalUsage>() {
     };
 
     @Override
     protected ObjectMapper getObjectMapper() {
         SimpleModule simpleModule = new SimpleModule();
-        simpleModule.addSerializer(new LiabilityDetailSerializer());
+        simpleModule.addSerializer(new ExternalUsageSerializer());
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(simpleModule);
         return objectMapper;

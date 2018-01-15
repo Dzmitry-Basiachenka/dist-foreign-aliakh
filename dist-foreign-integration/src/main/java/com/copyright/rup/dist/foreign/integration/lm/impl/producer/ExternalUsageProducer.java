@@ -4,7 +4,8 @@ import static com.google.common.base.Preconditions.checkArgument;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.common.integration.camel.IProducer;
-import com.copyright.rup.dist.foreign.integration.lm.impl.domain.LiabilityDetailMessage;
+import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsageMessage;
+import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsageWrapper;
 
 import org.apache.camel.CamelExecutionException;
 import org.apache.camel.ProducerTemplate;
@@ -21,7 +22,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
  *
  * @author Ihar Suvorau
  */
-public class LiabilityDetailProducer implements IProducer<LiabilityDetailMessage> {
+public class ExternalUsageProducer implements IProducer<ExternalUsageMessage> {
 
     @Autowired
     @Qualifier("df.integration.producerTemplate")
@@ -49,9 +50,10 @@ public class LiabilityDetailProducer implements IProducer<LiabilityDetailMessage
     }
 
     @Override
-    public void send(LiabilityDetailMessage message) throws RupRuntimeException {
+    public void send(ExternalUsageMessage message) throws RupRuntimeException {
         try {
-            producerTemplate.sendBodyAndHeaders(endPoint, message.getLiabilityDetails(), message.getHeaders());
+            producerTemplate.sendBodyAndHeaders(endPoint, new ExternalUsageWrapper(message.getExternalUsages()),
+                message.getHeaders());
         } catch (CamelExecutionException e) {
             throw new RupRuntimeException("Exception appeared while sending usages to LM", e);
         }

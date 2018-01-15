@@ -28,16 +28,16 @@
         <constructor-arg ref="restTemplate"/>
     </bean>
 
-    <bean id="df.integration.liabilityDetailProducer"
-          class="com.copyright.rup.dist.foreign.integration.lm.impl.producer.LiabilityDetailProducer">
-        <property name="endPoint" value="direct:df.integration.liabilityDetail"/>
+    <bean id="df.integration.externalUsageProducer"
+          class="com.copyright.rup.dist.foreign.integration.lm.impl.producer.ExternalUsageProducer">
+        <property name="endPoint" value="direct:df.integration.externalUsage"/>
     </bean>
 
     <camelContext id="df.integration.camelContext" xmlns="http://camel.apache.org/schema/spring">
         <contextScan/>
         <template id="df.integration.producerTemplate"/>
 
-        <endpoint id="df.integration.internal.usage.endpoint" uri="direct:df.integration.liabilityDetail"/>
+        <endpoint id="df.integration.internal.usage.endpoint" uri="direct:df.integration.externalUsage"/>
         <endpoint id="df.integration.lm.detail.endpoint" uri="$RUP{dist.foreign.integration.lm.detail.endpoint}"/>
 
         <redeliveryPolicyProfile id="defaultRedeliveryPolicy"
@@ -47,7 +47,7 @@
         <route>
             <from ref="df.integration.internal.usage.endpoint"/>
             <marshal>
-                <custom ref="df.integration.liabilityDetailsMarshaller"/>
+                <custom ref="df.integration.externalUsageMarshaller"/>
             </marshal>
             <to ref="df.integration.lm.detail.endpoint"/>
         </route>

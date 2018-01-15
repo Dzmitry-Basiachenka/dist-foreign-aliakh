@@ -4,7 +4,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
-import com.copyright.rup.dist.foreign.domain.LiabilityDetail;
+import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsage;
+import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsageWrapper;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -24,7 +27,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 
 /**
- * Verifies {@link LiabilityDetailSerializer}.
+ * Verifies {@link ExternalUsageSerializer}.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -32,13 +35,13 @@ import java.util.Collections;
  *
  * @author Ihar Suvorau
  */
-public class LiabilityDetailSerializerTest {
+public class ExternalUsageSerializerTest {
 
-    private LiabilityDetailSerializer liabilityDetailSerializer;
+    private ExternalUsageSerializer externalUsageSerializer;
 
     @Before
     public void setUp() throws Exception {
-        liabilityDetailSerializer = new LiabilityDetailSerializer();
+        externalUsageSerializer = new ExternalUsageSerializer();
     }
 
     @Test
@@ -46,19 +49,19 @@ public class LiabilityDetailSerializerTest {
         StringWriter stringWriter = new StringWriter();
         JsonGenerator jsonGenerator = new JsonFactory().createGenerator(stringWriter);
         jsonGenerator.setPrettyPrinter(new DefaultPrettyPrinter());
-        liabilityDetailSerializer.serialize(
-            Lists.newArrayList(buildLiabilityDetail(10000001L), buildLiabilityDetail(10000002L)), jsonGenerator,
-            new DefaultSerializerProvider.Impl());
+        externalUsageSerializer.serialize(
+            new ExternalUsageWrapper(Lists.newArrayList(buildExternalUsage(10000001L), buildExternalUsage(10000002L))),
+            jsonGenerator, new DefaultSerializerProvider.Impl());
         jsonGenerator.close();
         assertNotNull(stringWriter);
-        assertEquals(getFileAsString("liability_detail_message.json"), stringWriter.toString());
+        assertEquals(getFileAsString("external_usage_message.json"), stringWriter.toString());
     }
 
     @Test
     public void testSerializeEmptyMessage() throws Exception {
         StringWriter stringWriter = new StringWriter();
         JsonGenerator jsonGenerator = new JsonFactory().createGenerator(stringWriter);
-        liabilityDetailSerializer.serialize(Collections.emptyList(), jsonGenerator,
+        externalUsageSerializer.serialize(new ExternalUsageWrapper(Collections.emptyList()), jsonGenerator,
             new DefaultSerializerProvider.Impl());
         jsonGenerator.close();
         assertNotNull(stringWriter);
@@ -68,7 +71,7 @@ public class LiabilityDetailSerializerTest {
     private String getFileAsString(String resourceName) {
         String result = null;
         try {
-            result = Resources.toString(LiabilityDetailSerializerTest.class.getResource(resourceName),
+            result = Resources.toString(ExternalUsageSerializerTest.class.getResource(resourceName),
                 StandardCharsets.UTF_8);
         } catch (IOException e) {
             fail();
@@ -76,14 +79,15 @@ public class LiabilityDetailSerializerTest {
         return StringUtils.strip(result);
     }
 
-    private LiabilityDetail buildLiabilityDetail(Long detailId) {
-        LiabilityDetail liabilityDetail = new LiabilityDetail();
-        liabilityDetail.setRhAccountNumber(1000010023L);
-        liabilityDetail.setDetailId(detailId);
-        liabilityDetail.setProductFamily("FAS");
-        liabilityDetail.setRoyaltyAmount(new BigDecimal("100.00"));
-        liabilityDetail.setWorkTitle("Work title");
-        liabilityDetail.setWrWrkInst(123456789L);
-        return liabilityDetail;
+    private ExternalUsage buildExternalUsage(Long detailId) {
+        Usage usage = new Usage();
+        Rightsholder rightsholder = new Rightsholder();
+        rightsholder.setAccountNumber(1000010023L);
+        usage.setRightsholder(rightsholder);
+        usage.setDetailId(detailId);
+        usage.setNetAmount(new BigDecimal("100.00"));
+        usage.setWorkTitle("Work title");
+        usage.setWrWrkInst(123456789L);
+        return new ExternalUsage(usage);
     }
 }
