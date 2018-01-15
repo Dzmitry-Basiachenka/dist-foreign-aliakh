@@ -59,7 +59,7 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
     private Button sendToLmButton = Buttons.createButton(ForeignUi.getMessage("button.send_to_lm"));
     private BeanContainer<String, Scenario> container;
     private Label ownerLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
-    private Label distributionTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private Label netTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private Label reportedTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private Label grossTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private Label descriptionLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
@@ -186,7 +186,7 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
         metadataPanel = new Panel();
         metadataPanel.setSizeFull();
         VaadinUtils.addComponentStyle(metadataPanel, "scenarios-metadata");
-        metadataLayout = new VerticalLayout(ownerLabel, distributionTotalLabel, grossTotalLabel, reportedTotalLabel,
+        metadataLayout = new VerticalLayout(ownerLabel, netTotalLabel, grossTotalLabel, reportedTotalLabel,
             descriptionLabel, initScenarioActionLayout());
         metadataLayout.setSpacing(true);
         metadataLayout.setMargin(new MarginInfo(false, true, false, true));
@@ -215,9 +215,9 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
         if (null != scenario) {
             Scenario scenarioWithAmounts = controller.getScenarioWithAmountsAndLastAction(scenario);
             ownerLabel.setValue(ForeignUi.getMessage("label.owner", scenario.getCreateUser()));
-            distributionTotalLabel.setValue(ForeignUi.getMessage("label.distribution_total",
+            netTotalLabel.setValue(ForeignUi.getMessage("label.net_amount_in_usd",
                 formatAmount(scenarioWithAmounts.getNetTotal())));
-            grossTotalLabel.setValue(ForeignUi.getMessage("label.gross_total",
+            grossTotalLabel.setValue(ForeignUi.getMessage("label.gross_amount_in_usd",
                 formatAmount(scenarioWithAmounts.getGrossTotal())));
             reportedTotalLabel.setValue(ForeignUi.getMessage("label.reported_total",
                 formatAmount(scenarioWithAmounts.getReportedTotal())));
