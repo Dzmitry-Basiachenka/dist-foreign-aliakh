@@ -333,6 +333,7 @@
         insert into ${schema}.df_usage(
             df_usage_uid,
             <include refid="usageColumns"/>,
+            payee_account_number,
             <include refid="StoredEntityMapper.additionalColumns"/>)
         values(
             #{id},
@@ -354,6 +355,7 @@
             #{numberOfCopies},
             #{reportedValue},
             #{grossAmount},
+            #{payee.accountNumber},
             <include refid="StoredEntityMapper.insert"/>
         )
     </insert>
