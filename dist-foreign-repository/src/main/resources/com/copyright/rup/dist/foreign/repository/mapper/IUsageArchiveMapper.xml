@@ -139,4 +139,9 @@
         left join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
         where df_scenario_uid = #{scenarioId}
     </select>
+
+    <delete id="deleteArchivedUsagesByScenarioId" parameterType="string">
+        delete from ${schema}.df_usage_archive
+        where df_scenario_uid = #{scenarioId}
+    </delete>
 </mapper>

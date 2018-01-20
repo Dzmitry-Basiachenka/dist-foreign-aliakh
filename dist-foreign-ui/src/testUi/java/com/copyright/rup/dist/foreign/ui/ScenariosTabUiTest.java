@@ -1,19 +1,24 @@
 package com.copyright.rup.dist.foreign.ui;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioAuditRepository;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
+import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
+import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
@@ -34,10 +39,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.IntStream;
 
@@ -55,6 +62,8 @@ import java.util.stream.IntStream;
 public class ScenariosTabUiTest extends ForeignCommonUiTest {
 
     private static final String DELETE_BUTTON_ID = "Delete";
+    private static final String SEND_TO_LM_BUTTON_ID = "Send_to_LM";
+    private static final String APPROVE_BUTTON_ID = "Approve";
     private static final String VIEW_BUTTON_ID = "View";
     private static final String YES_BUTTON_ID = "Yes";
     private static final String SCENARIOS_TABLE_ID = "scenarios-table";
@@ -64,6 +73,7 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
     private static final String SPECIALIST = "fda_spec@copyright.com";
     private static final String SUBMITTED = "SUBMITTED";
     private static final String SUBMIT_REASON = "To Submit";
+    private String scenarioName = "FDA_aut_test_1";
     private ScenarioInfo scenario1 = new ScenarioInfo("Scenario 03/16/2017", "03/16/2017");
     private ScenarioInfo scenario2 = new ScenarioInfo("Scenario for viewing", "03/17/2017");
     private ScenarioInfo scenario3 = new ScenarioInfo("Scenario 03/15/2017", "03/15/2017");
@@ -77,6 +87,10 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
     private IScenarioAuditRepository scenarioAuditRepository;
     @Autowired
     private IUsageRepository usageRepository;
+    @Autowired
+    private IUsageBatchRepository usageBatchRepository;
+    @Autowired
+    private IUsageArchiveRepository usageArchiveRepository;
 
     @After
     public void tearDown() {
@@ -114,6 +128,34 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
         verifyScenariosTab(Collections.singleton(VIEW_BUTTON_ID));
     }
 
+    /**
+     * Test checks that Delete button disabled for scenarios in status SUBMITTED, APPROVED, SENT_TO_LM.
+     */
+    @Test
+    // Test case ID: '4968f20d-4ea1-4fa9-89f4-c1cf4ef8a194'
+    public void testIsDeleteButtonDisabled() throws SQLException {
+        buildAndPopulateSubmittedScenario();
+        loginAsSpecialist();
+        WebElement scenariosTab = selectScenariosTab();
+        selectScenario(scenariosTab, scenarioName);
+        assertFalse(isElementEnabled(assertWebElement(By.id(DELETE_BUTTON_ID))));
+        loginAsManager();
+        scenariosTab = selectScenariosTab();
+        selectScenario(scenariosTab, scenarioName);
+        applyScenarioAction(APPROVE_BUTTON_ID, StringUtils.EMPTY);
+        loginAsSpecialist();
+        scenariosTab = selectScenariosTab();
+        selectScenario(scenariosTab, scenarioName);
+        assertFalse(isElementEnabled(assertWebElement(By.id(DELETE_BUTTON_ID))));
+        clickButtonAndWait(scenariosTab, SEND_TO_LM_BUTTON_ID);
+        clickButtonAndWait(assertWebElement(By.id("confirm-dialog-window")), YES_BUTTON_ID);
+        selectScenario(scenariosTab, scenarioName);
+        assertFalse(isElementEnabled(assertWebElement(By.id(DELETE_BUTTON_ID))));
+
+        usageArchiveRepository.deleteArchivedUsagesByScenarioId(newScenario.getId());
+        usageBatchRepository.deleteUsageBatch("b36ce9bb-643b-464b-baf1-c2829d4d3742");
+    }
+
     @Test
     // Test cases IDs: '5d5d0ab7-c54f-42c9-85a4-556c8c642f2b', 'a7bcccac-d762-4110-ba04-4a13f4919064'
     public void testDeleteScenarioCanceled() {
@@ -146,7 +188,7 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
         Sort sort = new Sort("status", Direction.ASC);
         assertEquals(0, CollectionUtils.size(usageRepository.findByFilter(filter, pageable, sort)));
         assertWebElementText(confirmDialog, "Are you sure you want to delete 'NEW scenario' scenario?");
-        clickButtonAndWait(confirmDialog, "Yes");
+        clickButtonAndWait(confirmDialog, YES_BUTTON_ID);
         verifyTableRows(table, scenario1, scenario2, scenario3, scenario4, scenario5);
         assertEquals(5, CollectionUtils.size(scenarioRepository.findAll()));
         assertEquals(1, CollectionUtils.size(usageRepository.findByFilter(filter, pageable, sort)));
@@ -158,17 +200,31 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
     public void testScenarioWorkflowWithAudit() {
         loginAsSpecialist();
         buildAndPopulateScenario();
-        applyScenarioAction("Submit_for_Approval", SUBMIT_REASON,
-            Lists.newArrayList(SUBMITTED, SPECIALIST, SUBMIT_REASON));
-        switchUser(MANAGER);
-        applyScenarioAction("Reject", "To Reject", Lists.newArrayList("REJECTED", MANAGER, "To Reject"));
-        switchUser(SPECIALIST);
-        applyScenarioAction("Submit_for_Approval", SUBMIT_REASON,
-            Lists.newArrayList(SUBMITTED, SPECIALIST, SUBMIT_REASON));
-        switchUser(MANAGER);
-        applyScenarioAction("Approve", "To Approve", Lists.newArrayList("APPROVED", MANAGER, "To Approve"));
+        applyScenarioAction("Submit_for_Approval", SUBMIT_REASON);
+        verifyAdditionalInfo(Lists.newArrayList(SUBMITTED, SPECIALIST, SUBMIT_REASON));
+        loginAsManager();
+        applyScenarioAction("Reject", "To Reject");
+        verifyAdditionalInfo(Lists.newArrayList("REJECTED", MANAGER, "To Reject"));
+        loginAsSpecialist();
+        applyScenarioAction("Submit_for_Approval", SUBMIT_REASON);
+        verifyAdditionalInfo(Lists.newArrayList(SUBMITTED, SPECIALIST, SUBMIT_REASON));
+        loginAsManager();
+        applyScenarioAction("Approve", "To Approve");
+        verifyAdditionalInfo(Lists.newArrayList("APPROVED", MANAGER, "To Approve"));
         clickElementAndWait(assertWebElement(By.className("v-button-link")));
         verifyScenarioHistory();
+    }
+
+    @Override
+    protected void loginAsManager() {
+        logOut();
+        super.loginAsManager();
+    }
+
+    @Override
+    protected void loginAsSpecialist() {
+        logOut();
+        super.loginAsSpecialist();
     }
 
     private void verifyScenariosTab(Set<String> buttons) {
@@ -205,6 +261,12 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
         assertEquals(StringUtils.EMPTY, labels.get(0).getText());
     }
 
+    private void verifyAdditionalInfo(List<String> additionalInfo) {
+        additionalInfo.addAll(0,
+            Lists.newArrayList("SYSTEM", "29,400.00", "35,000.00", "2,500.00", "NEW description"));
+        verifyMetadataPanel(assertWebElement(selectScenariosTab(), SCENARIOS_METADATA_ID), additionalInfo);
+    }
+
     private void verifyMetadataPanel(WebElement metadataPanel, List<String> metadata) {
         List<WebElement> labels = findElements(metadataPanel, By.className(V_LABEL_CLASS_NAME));
         assertEquals(9, CollectionUtils.size(labels));
@@ -226,14 +288,13 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
                 "IN_PROGRESS"));
     }
 
-    private void applyScenarioAction(String actionButton, String reason, List<String> additionalInfo) {
+    private void applyScenarioAction(String actionButton, String reason) {
         WebElement scenariosTab = selectScenariosTab();
         clickButtonAndWait(scenariosTab, actionButton);
-        WebElement confirmDialog = assertWebElement(By.id("confirm-action-dialog-window"));
+        WebElement confirmDialog;
+        confirmDialog = assertWebElement(By.id("confirm-action-dialog-window"));
         sendKeysToInput(assertWebElement(confirmDialog, By.className("v-textfield")), reason);
-        clickElementAndWait(assertWebElement(confirmDialog, By.id(YES_BUTTON_ID)));
-        additionalInfo.addAll(0, Lists.newArrayList("SYSTEM", "29,400.00", "35,000.00", "2,500.00", "NEW description"));
-        verifyMetadataPanel(assertWebElement(scenariosTab, SCENARIOS_METADATA_ID), additionalInfo);
+        clickButtonAndWait(confirmDialog, YES_BUTTON_ID);
     }
 
     private void verifyScenarioHistory() {
@@ -253,9 +314,16 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
         });
     }
 
-    private void switchUser(String userName) {
-        logOut();
-        loginIfNeeded(userName, "`123qwer");
+    /**
+     * Used to find row in scenario table.
+     */
+    private void selectScenario(WebElement scenariosTab, String name) {
+        WebElement scenariosTable = assertWebElement(scenariosTab, SCENARIOS_TABLE_ID);
+        WebElement selectedValue = findElement(scenariosTable, By.className("v-selected"));
+        if (Objects.nonNull(selectedValue)) {
+            selectedValue.click();
+        }
+        findElementByText(scenariosTable, HTML_DIV_TAG_NAME, name).click();
     }
 
     private void buildAndPopulateScenario() {
@@ -274,6 +342,58 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
         usage.setNetAmount(new BigDecimal("29400.00"));
         usage.setUpdateUser("user@copyright.com");
         usageRepository.addToScenario(Collections.singletonList(usage));
+    }
+
+    private void buildAndPopulateSubmittedScenario() {
+        newScenario = new Scenario();
+        newScenario.setId("90f7d0de-321b-403e-9e96-f6e553fc1c00");
+        newScenario.setName(scenarioName);
+        newScenario.setStatus(ScenarioStatusEnum.SUBMITTED);
+        newScenario.setDescription("");
+        scenarioRepository.insert(newScenario);
+        buildAndPopulateUsageBatch("b36ce9bb-643b-464b-baf1-c2829d4d3742");
+        buildAndPopulateLockedUsage("b36ce9bb-643b-464b-baf1-c2829d4d3742", newScenario.getId());
+    }
+
+    private void buildAndPopulateUsageBatch(String usageBatchId) {
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatch.setId(usageBatchId);
+        usageBatch.setName("aut_test_2");
+        usageBatch.setRro(new Rightsholder());
+        usageBatch.getRro().setAccountNumber(1000002137L);
+        usageBatch.setPaymentDate(LocalDate.of(2018, 01, 18));
+        usageBatch.setFiscalYear(2018);
+        usageBatch.setGrossAmount(new BigDecimal("100.00"));
+        usageBatchRepository.insert(usageBatch);
+    }
+
+    private void buildAndPopulateLockedUsage(String batchId, String scenarioId) {
+        Usage usage = new Usage();
+        usage.setId("72ebe2af-484d-4cd3-a193-7fd5448fcc6e");
+        usage.setScenarioId(scenarioId);
+        usage.setBatchId(batchId);
+        usage.setDetailId(2317370L);
+        usage.setWrWrkInst(123456789L);
+        usage.setWorkTitle("1984");
+        usage.setRightsholder(new Rightsholder());
+        usage.getRightsholder().setAccountNumber(7000813806L);
+        usage.setPayee(new Rightsholder());
+        usage.getPayee().setAccountNumber(7000813806L);
+        usage.setStatus(UsageStatusEnum.LOCKED);
+        usage.setArticle("Appendix: The Principles of Newspeak");
+        usage.setStandardNumber("9780000000000");
+        usage.setPublicationDate(LocalDate.of(2003, 12, 12));
+        usage.setMarket("Univ,Bus,Doc,S");
+        usage.setMarketPeriodFrom(2015);
+        usage.setMarketPeriodTo(2015);
+        usage.setAuthor("Aarseth, Espen J.");
+        usage.setReportedValue(new BigDecimal("30.86"));
+        usage.setNetAmount(new BigDecimal("42.0000000008"));
+        usage.setServiceFee(new BigDecimal("0.16000"));
+        usage.setServiceFeeAmount(new BigDecimal("8.0000000002"));
+        usage.setGrossAmount(new BigDecimal("50.0000000010"));
+        usage.setRhParticipating(true);
+        usageRepository.insert(usage);
     }
 
     private static class ScenarioInfo {
