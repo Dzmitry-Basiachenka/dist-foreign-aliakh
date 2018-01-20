@@ -93,9 +93,4 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
             throw new RupRuntimeException(e);
         }
     }
-
-    @Override
-    public void deleteArchivedUsagesByScenarioId(String scenarioId){
-        delete("IUsageArchiveMapper.deleteArchivedUsagesByScenarioId", scenarioId);
-    }
 }
