@@ -80,13 +80,4 @@ public interface IUsageArchiveRepository {
      * @param pipedOutputStream instance of {@link PipedOutputStream}
      */
     void writeScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
-
-    /**
-     * Method to remove usages from archive.
-     *
-     * Used only in tests.
-     *
-     * @param scenarioId id of scenario for remove usages
-     */
-    void deleteArchivedUsagesByScenarioId(String scenarioId);
 }
