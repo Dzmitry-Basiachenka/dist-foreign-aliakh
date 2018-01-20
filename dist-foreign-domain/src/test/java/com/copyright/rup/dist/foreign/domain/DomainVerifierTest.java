@@ -37,6 +37,7 @@ public class DomainVerifierTest {
     public static Collection<Object[]> data() {
         Object[][] testData = new Object[][]{
             {UsageFilter.class},
+            {AuditFilter.class},
             {UsageBatch.class},
             {Usage.class},
             {UsageDto.class},

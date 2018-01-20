@@ -12,6 +12,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.foreign.domain.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
@@ -332,6 +333,37 @@ public class UsageServiceTest {
         replay(usageRepository, usageArchiveRepository);
         usageService.moveToArchive(scenario);
         verify(usageRepository, usageArchiveRepository);
+    }
+
+    @Test
+    public void testGetAuditItemsCount() {
+        AuditFilter filter = new AuditFilter();
+        expect(usageRepository.findCountForAudit(filter)).andReturn(1).once();
+        replay(usageRepository);
+        assertEquals(1, usageService.getAuditItemsCount(filter));
+        verify(usageRepository);
+    }
+
+    @Test
+    public void testGetForAudit() {
+        AuditFilter filter = new AuditFilter();
+        Pageable pageable = new Pageable(0, 10);
+        Sort sort = Sort.create(new Object[]{"detailId"}, false);
+        expect(usageRepository.findForAudit(filter, pageable, sort)).andReturn(Collections.emptyList()).once();
+        replay(usageRepository);
+        assertEquals(Collections.emptyList(), usageService.getForAudit(filter, pageable, sort));
+        verify(usageRepository);
+    }
+
+    @Test
+    public void writeAuditCsvReport() {
+        AuditFilter filter = new AuditFilter();
+        PipedOutputStream stream = new PipedOutputStream();
+        usageRepository.writeAuditCsvReport(filter, stream);
+        expectLastCall().once();
+        replay(usageRepository);
+        usageService.writeAuditCsvReport(filter, stream);
+        verify(usageRepository);
     }
 
     private void assertResult(List<?> result, int size) {

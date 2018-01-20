@@ -2,6 +2,9 @@ package com.copyright.rup.dist.foreign.service.api;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
+import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
+
+import java.util.List;
 
 /**
  * Interface for usage audit service.
@@ -11,6 +14,7 @@ import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
  * Date: 10/16/2017
  *
  * @author Uladzislau_Shalamitski
+ * @author Aliaksandr Radkevich
  */
 public interface IUsageAuditService {
 
@@ -39,4 +43,12 @@ public interface IUsageAuditService {
      * @param usageId usage identifier
      */
     void deleteActions(String usageId);
+
+    /**
+     * Gets all actions for usage with given id.
+     *
+     * @param usageId usage id
+     * @return list of {@link UsageAuditItem}
+     */
+    List<UsageAuditItem> getUsageAudit(String usageId);
 }

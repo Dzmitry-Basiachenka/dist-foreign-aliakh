@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.common.repository.BaseRepository;
+import com.copyright.rup.dist.foreign.domain.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -226,5 +227,33 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     @Override
     public List<Long> findWrWrkInstsByStatus(UsageStatusEnum status) {
         return selectList("IUsageMapper.findWrWrkInstsByStatus", Objects.requireNonNull(status));
+    }
+
+    @Override
+    public int findCountForAudit(AuditFilter filter) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(1);
+        params.put(FILTER_KEY, Objects.requireNonNull(filter));
+        return selectOne("IUsageMapper.findCountForAudit", params);
+    }
+
+    @Override
+    public List<UsageDto> findForAudit(AuditFilter filter, Pageable pageable, Sort sort) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
+        params.put(FILTER_KEY, Objects.requireNonNull(filter));
+        params.put("pageable", pageable);
+        params.put("sort", sort);
+        return selectList("IUsageMapper.findForAudit", params);
+    }
+
+    @Override
+    public void writeAuditCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) {
+        Objects.requireNonNull(pipedOutputStream);
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(1);
+        params.put(FILTER_KEY, Objects.requireNonNull(filter));
+        try (AuditCsvReportHandler handler = new AuditCsvReportHandler(pipedOutputStream)) {
+            getTemplate().select("IUsageMapper.findForAuditExport", params, handler);
+        } catch (IOException e) {
+            throw new RupRuntimeException(e);
+        }
     }
 }

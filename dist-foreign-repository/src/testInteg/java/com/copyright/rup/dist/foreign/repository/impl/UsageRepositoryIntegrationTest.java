@@ -8,12 +8,14 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.StoredEntity;
+import com.copyright.rup.dist.foreign.domain.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.common.util.CalculationUtils;
+import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
 import com.copyright.rup.dist.foreign.repository.api.Sort.Direction;
 
@@ -32,6 +34,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
@@ -39,6 +42,7 @@ import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
@@ -112,11 +116,14 @@ public class UsageRepositoryIntegrationTest {
     private static final String USAGE_ID_1 = "3ab5e80b-89c0-4d78-9675-54c7ab284450";
     private static final String USAGE_ID_2 = "8a06905f-37ae-4e1f-8550-245277f8165c";
     private static final String USAGE_ID_3 = "5c5f8c1c-1418-4cfd-8685-9212f4c421d1";
+    private static final String USAGE_ID_4 = "d9ca07b5-8282-4a81-9b9d-e4480f529d34";
+    private static final String USAGE_ID_5 = "a71a0544-128e-41c0-b6b0-cfbbea6d2182";
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
     private static final String USER_NAME = "user@copyright.com";
     private static final BigDecimal NET_AMOUNT = new BigDecimal("25.1500000000");
     private static final BigDecimal SERVICE_FEE = new BigDecimal("0.32000");
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
+    private static final String BATCH_ID = "e0af666b-cbb7-4054-9906-12daa1fbd76e";
 
     @Autowired
     private UsageRepository usageRepository;
@@ -661,6 +668,119 @@ public class UsageRepositoryIntegrationTest {
         assertTrue(CollectionUtils.isNotEmpty(wrWrkInsts));
         assertEquals(2, wrWrkInsts.size());
         assertTrue(wrWrkInsts.containsAll(Lists.newArrayList(930480146L, 922859149L)));
+    }
+
+    @Test
+    public void testFindForAuditByStatus() {
+        AuditFilter filter = new AuditFilter();
+        filter.setStatuses(EnumSet.of(UsageStatusEnum.WORK_FOUND));
+        assertEquals(1, usageRepository.findCountForAudit(filter));
+        List<UsageDto> usages = usageRepository.findForAudit(filter, new Pageable(0, 10), null);
+        verifyUsageDtos(usages, 1, USAGE_ID_4);
+    }
+
+    @Test
+    public void testFindForAuditByBatch() {
+        AuditFilter filter = new AuditFilter();
+        filter.setBatchesIds(Collections.singleton(BATCH_ID));
+        assertEquals(2, usageRepository.findCountForAudit(filter));
+        List<UsageDto> usages = usageRepository.findForAudit(filter, new Pageable(0, 10), null);
+        verifyUsageDtos(usages, 2, USAGE_ID_5, USAGE_ID_4);
+    }
+
+    @Test
+    public void testFindForAuditByRightsholders() {
+        AuditFilter filter = new AuditFilter();
+        filter.setRhAccountNumbers(Collections.singleton(1000002475L));
+        assertEquals(1, usageRepository.findCountForAudit(filter));
+        List<UsageDto> usages = usageRepository.findForAudit(filter, new Pageable(0, 10), null);
+        verifyUsageDtos(usages, 1, USAGE_ID_4);
+    }
+
+    @Test
+    public void testFindForAuditBySearch() {
+        AuditFilter filter = new AuditFilter();
+        filter.setSearchValue("5423214587");
+        assertEquals(1, usageRepository.findCountForAudit(filter));
+        List<UsageDto> usages = usageRepository.findForAudit(filter, new Pageable(0, 10), null);
+        verifyUsageDtos(usages, 1, USAGE_ID_5);
+        filter.setSearchValue("Nitrates");
+        assertEquals(1, usageRepository.findCountForAudit(filter));
+        usages = usageRepository.findForAudit(filter, new Pageable(0, 10), null);
+        verifyUsageDtos(usages, 1, USAGE_ID_4);
+        filter.setSearchValue("103658926");
+        assertEquals(1, usageRepository.findCountForAudit(filter));
+        usages = usageRepository.findForAudit(filter, new Pageable(0, 10), null);
+        verifyUsageDtos(usages, 1, USAGE_ID_4);
+    }
+
+    @Test
+    public void testFindForAuditPageable() {
+        AuditFilter filter = new AuditFilter();
+        filter.setBatchesIds(Collections.singleton(BATCH_ID));
+        assertEquals(2, usageRepository.findCountForAudit(filter));
+        List<UsageDto> usages = usageRepository.findForAudit(filter, new Pageable(0, 1), null);
+        verifyUsageDtos(usages, 1, USAGE_ID_5);
+        usages = usageRepository.findForAudit(filter, new Pageable(1, 1), null);
+        verifyUsageDtos(usages, 1, USAGE_ID_4);
+    }
+
+    @Test
+    public void testWriteAuditCsvReport() throws IOException {
+        PipedOutputStream outputStream = new PipedOutputStream();
+        PipedInputStream inputStream = new PipedInputStream(outputStream);
+        AuditFilter filter = new AuditFilter();
+        filter.setBatchesIds(Collections.singleton(BATCH_ID));
+        EXECUTOR_SERVICE.execute(() -> usageRepository.writeAuditCsvReport(filter, outputStream));
+        BufferedReader bufferedReader =
+            new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+        assertEquals("Detail ID,Detail Status,Usage Batch Name,Payment Date,RH Account #,RH Name,Wr Wrk Inst,Title," +
+            "Standard Number,Amt in USD,Service Fee %,Scenario Name", bufferedReader.readLine());
+        assertEquals("5423214587,LOCKED,Audit Test batch,02/12/2021,1000002475,,243904752,100 ROAD MOVIES," +
+            "1008902112317622XX,800.4000000000,16.0,Sent To LM Scenario", bufferedReader.readLine());
+        assertEquals("8457965214,WORK_FOUND,Audit Test batch,02/12/2021,,,103658926,Nitrates,5475802112214578XX," +
+            "16437.4000000000,32.0,", bufferedReader.readLine());
+        assertNull(bufferedReader.readLine());
+    }
+
+    @Test
+    public void testFindForAuditWithSort() {
+        AuditFilter filter = new AuditFilter();
+        filter.setBatchesIds(Collections.singleton(BATCH_ID));
+        verifyUsageDtos(findForAuditWithSort(filter, "detailId", true), 2, USAGE_ID_5, USAGE_ID_4);
+        verifyUsageDtos(findForAuditWithSort(filter, "detailId", false), 2, USAGE_ID_4, USAGE_ID_5);
+        verifyUsageDtos(findForAuditWithSort(filter, "status", true), 2, USAGE_ID_5, USAGE_ID_4);
+        verifyUsageDtos(findForAuditWithSort(filter, "status", false), 2, USAGE_ID_4, USAGE_ID_5);
+        verifyUsageDtos(findForAuditWithSort(filter, "rhAccountNumber", true), 2, USAGE_ID_5, USAGE_ID_4);
+        verifyUsageDtos(findForAuditWithSort(filter, "rhAccountNumber", false), 2, USAGE_ID_4, USAGE_ID_5);
+        verifyUsageDtos(findForAuditWithSort(filter, "rhName", true), 2, USAGE_ID_5, USAGE_ID_4);
+        verifyUsageDtos(findForAuditWithSort(filter, "rhName", false), 2, USAGE_ID_5, USAGE_ID_4);
+        verifyUsageDtos(findForAuditWithSort(filter, "wrWrkInst", false), 2, USAGE_ID_5, USAGE_ID_4);
+        verifyUsageDtos(findForAuditWithSort(filter, "wrWrkInst", true), 2, USAGE_ID_4, USAGE_ID_5);
+        verifyUsageDtos(findForAuditWithSort(filter, "workTitle", true), 2, USAGE_ID_5, USAGE_ID_4);
+        verifyUsageDtos(findForAuditWithSort(filter, "workTitle", false), 2, USAGE_ID_4, USAGE_ID_5);
+        verifyUsageDtos(findForAuditWithSort(filter, "standardNumber", true), 2, USAGE_ID_5, USAGE_ID_4);
+        verifyUsageDtos(findForAuditWithSort(filter, "standardNumber", false), 2, USAGE_ID_4, USAGE_ID_5);
+        verifyUsageDtos(findForAuditWithSort(filter, "grossAmount", true), 2, USAGE_ID_5, USAGE_ID_4);
+        verifyUsageDtos(findForAuditWithSort(filter, "grossAmount", false), 2, USAGE_ID_4, USAGE_ID_5);
+        verifyUsageDtos(findForAuditWithSort(filter, "serviceFee", true), 2, USAGE_ID_5, USAGE_ID_4);
+        verifyUsageDtos(findForAuditWithSort(filter, "serviceFee", false), 2, USAGE_ID_4, USAGE_ID_5);
+        verifyUsageDtos(findForAuditWithSort(filter, "scenarioName", true), 2, USAGE_ID_5, USAGE_ID_4);
+        verifyUsageDtos(findForAuditWithSort(filter, "scenarioName", false), 2, USAGE_ID_4, USAGE_ID_5);
+        filter.setBatchesIds(Sets.newHashSet(BATCH_ID, "74b736f2-81ce-41fa-bd8e-574299232458"));
+        String usageId1 = "5f381f98-2235-4104-b9ed-36df8d515b52";
+        String usageId2 = "cfca053a-e0ed-44b1-81b8-e11d3d62eefe";
+        verifyUsageDtos(findForAuditWithSort(filter, "batchName", true), 4, USAGE_ID_5, USAGE_ID_4, usageId1, usageId2);
+        verifyUsageDtos(findForAuditWithSort(filter, "batchName", false), 4, usageId1, usageId2, USAGE_ID_5,
+            USAGE_ID_4);
+        verifyUsageDtos(findForAuditWithSort(filter, "paymentDate", true), 4, usageId1, usageId2, USAGE_ID_5,
+            USAGE_ID_4);
+        verifyUsageDtos(findForAuditWithSort(filter, "paymentDate", false), 4, USAGE_ID_5, USAGE_ID_4, usageId1,
+            usageId2);
+    }
+
+    private List<UsageDto> findForAuditWithSort(AuditFilter filter, String property, boolean order) {
+        return usageRepository.findForAudit(filter, new Pageable(0, 10), Sort.create(new Object[]{property}, order));
     }
 
     private void verifySearch(String searchValue, int expectedSize) {

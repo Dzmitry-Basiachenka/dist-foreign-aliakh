@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.main.api;
 
+import com.copyright.rup.dist.foreign.ui.audit.api.IAuditController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CreateScenarioWindow.ScenarioCreateEvent;
@@ -43,4 +44,9 @@ public interface IMainWidgetController extends IController<IMainWidget>, ITabCha
      * @param event {@link ScenarioCreateEvent}
      */
     void onScenarioCreated(ScenarioCreateEvent event);
+
+    /**
+     * @return {@link IAuditController}.
+     */
+    IAuditController getAuditController();
 }

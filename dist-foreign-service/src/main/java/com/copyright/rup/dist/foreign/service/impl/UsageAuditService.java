@@ -12,6 +12,8 @@ import org.perf4j.aop.Profiled;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Implementation of {@link IUsageAuditService}.
  * <p>
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
  * Date: 10/16/2017
  *
  * @author Uladzislau_Shalamitski
+ * @author Aliaksandr Radkevich
  */
 @Service
 public class UsageAuditService implements IUsageAuditService {
@@ -42,6 +45,11 @@ public class UsageAuditService implements IUsageAuditService {
     @Profiled(tag = "service.UsageAuditService.deleteActions")
     public void deleteActions(String batchId) {
         usageAuditRepository.deleteByBatchId(batchId);
+    }
+
+    @Override
+    public List<UsageAuditItem> getUsageAudit(String usageId) {
+        return usageAuditRepository.findByUsageId(usageId);
     }
 
     private UsageAuditItem buildUsageAuditItem(String usageId, Scenario scenario, UsageActionTypeEnum actionType,

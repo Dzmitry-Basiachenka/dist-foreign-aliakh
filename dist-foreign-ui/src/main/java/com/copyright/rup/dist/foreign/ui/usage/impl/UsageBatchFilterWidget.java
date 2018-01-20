@@ -2,7 +2,6 @@ package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
 import com.copyright.rup.vaadin.ui.VaadinUtils;
 import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
@@ -10,8 +9,10 @@ import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.FilterSaveEvent
 import com.copyright.rup.vaadin.ui.component.filter.IFilterWindowController;
 import com.copyright.rup.vaadin.widget.BaseItemsFilterWidget;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Supplier;
 
 /**
  * Widget provides functionality for configuring items filter widget for usage batches.
@@ -25,28 +26,28 @@ import java.util.Set;
 public class UsageBatchFilterWidget extends BaseItemsFilterWidget<String, UsageBatch>
     implements IFilterWindowController<String, UsageBatch> {
 
+    private final Supplier<List<UsageBatch>> supplier;
     private Set<String> selectedItemsIds;
-    private IUsagesFilterController controller;
 
     /**
-     * Controller.
+     * Constructor.
      *
-     * @param controller controller of UsagesFilterController
+     * @param supplier {@link UsageBatch}es supplier
      */
-    public UsageBatchFilterWidget(IUsagesFilterController controller) {
+    public UsageBatchFilterWidget(Supplier<List<UsageBatch>> supplier) {
         super(ForeignUi.getMessage("label.batches"));
-        this.controller = controller;
+        this.supplier = supplier;
+    }
+
+    @Override
+    public Collection<UsageBatch> loadBeans() {
+        return supplier.get();
     }
 
     @Override
     public void reset() {
         selectedItemsIds = null;
         super.reset();
-    }
-
-    @Override
-    public List<UsageBatch> loadBeans() {
-        return controller.getUsageBatchesNotIncludedIntoScenario();
     }
 
     @Override
@@ -74,7 +75,7 @@ public class UsageBatchFilterWidget extends BaseItemsFilterWidget<String, UsageB
         FilterWindow<String, UsageBatch> filterWindow =
             Windows.showFilterWindow(ForeignUi.getMessage("window.batches_filter"), this, "name");
         filterWindow.setSelectedItemsIds(selectedItemsIds);
-        filterWindow.setSearchPromptString("Enter Usage Batch name");
+        filterWindow.setSearchPromptString(ForeignUi.getMessage("prompt.batch"));
         VaadinUtils.addComponentStyle(filterWindow, "batches-filter-window");
         return filterWindow;
     }

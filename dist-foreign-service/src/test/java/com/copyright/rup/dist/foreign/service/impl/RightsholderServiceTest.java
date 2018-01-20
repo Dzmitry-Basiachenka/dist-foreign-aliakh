@@ -62,6 +62,15 @@ public class RightsholderServiceTest {
         verify(rightsholderRepository);
     }
 
+    @Test
+    public void testGetFromUsages() {
+        expect(rightsholderRepository.findFromUsages()).andReturn(Collections.emptyList()).once();
+        replay(rightsholderRepository);
+        assertEquals(Collections.emptyList(), rightsholderService.getFromUsages());
+        verify(rightsholderRepository);
+
+    }
+
     private Rightsholder buildRightsholder(Long accountNumber) {
         Rightsholder rightsholder = new Rightsholder();
         rightsholder.setAccountNumber(accountNumber);

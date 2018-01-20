@@ -9,7 +9,6 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
 import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.FilterSaveEvent;
@@ -43,23 +42,20 @@ public class RightsholderFilterWidgetTest {
     private static final String RIGHTSHOLDER_NAME = "Rightsholder";
 
     private RightsholderFilterWidget rightsholderFilterWidget;
-    private IUsagesFilterController controller;
+    private Rightsholder rightsholder;
 
     @Before
     public void setUp() {
-        controller = createMock(IUsagesFilterController.class);
-        rightsholderFilterWidget = new RightsholderFilterWidget(controller);
+        rightsholder = buildRightsholder();
+        rightsholderFilterWidget =
+            new RightsholderFilterWidget("RROs", () -> Lists.newArrayList(rightsholder));
     }
 
     @Test
     public void testLoadBeans() {
-        Rightsholder rightsholder = buildRightsholder();
-        expect(controller.getRros()).andReturn(Lists.newArrayList(rightsholder)).once();
-        replay(controller);
         List<Rightsholder> rightsholders = rightsholderFilterWidget.loadBeans();
         assertEquals(1, rightsholders.size());
         assertEquals(rightsholder, rightsholders.get(0));
-        verify(controller);
     }
 
     @Test
@@ -69,12 +65,11 @@ public class RightsholderFilterWidgetTest {
 
     @Test
     public void testGetBeanItemCaption() {
-        assertEquals("12345678 - Rightsholder", rightsholderFilterWidget.getBeanItemCaption(buildRightsholder()));
+        assertEquals("12345678 - Rightsholder", rightsholderFilterWidget.getBeanItemCaption(rightsholder));
     }
 
     @Test
     public void testGetBeanItemCaptionNullName() {
-        Rightsholder rightsholder = buildRightsholder();
         rightsholder.setName(null);
         assertEquals("12345678 - <span class=\"filter-field-empty-name\">RRO is absent in PRM</span>",
             rightsholderFilterWidget.getBeanItemCaption(rightsholder));
@@ -82,7 +77,7 @@ public class RightsholderFilterWidgetTest {
 
     @Test
     public void testGetIdForBean() {
-        assertEquals(ACCOUNT_NUMBER, rightsholderFilterWidget.getIdForBean(buildRightsholder()));
+        assertEquals(ACCOUNT_NUMBER, rightsholderFilterWidget.getIdForBean(rightsholder));
     }
 
     @Test
@@ -106,7 +101,7 @@ public class RightsholderFilterWidgetTest {
         expect(filterWindow.getId()).andReturn("id").once();
         filterWindow.addStyleName("rightsholders-filter-window");
         expectLastCall().once();
-        filterWindow.setSearchPromptString("Enter RRO Name/Account #");
+        filterWindow.setSearchPromptString("Enter Rightsholder Name/Account #");
         expectLastCall().once();
         replay(filterWindow, Windows.class);
         rightsholderFilterWidget.showFilterWindow();
@@ -114,9 +109,9 @@ public class RightsholderFilterWidgetTest {
     }
 
     private Rightsholder buildRightsholder() {
-        Rightsholder rightsholder = new Rightsholder();
-        rightsholder.setAccountNumber(ACCOUNT_NUMBER);
-        rightsholder.setName(RIGHTSHOLDER_NAME);
-        return rightsholder;
+        Rightsholder newRightsholder = new Rightsholder();
+        newRightsholder.setAccountNumber(ACCOUNT_NUMBER);
+        newRightsholder.setName(RIGHTSHOLDER_NAME);
+        return newRightsholder;
     }
 }

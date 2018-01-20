@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.service.impl;
 
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.integration.rest.prm.PrmRollUpService;
+import com.copyright.rup.dist.foreign.domain.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
@@ -51,6 +52,7 @@ import java.util.stream.Collectors;
  *
  * @author Aliaksei Pchelnikau
  * @author Mikalai Bezmen
+ * @author Aliaksandr Radkevich
  */
 @Service
 public class UsageService implements IUsageService {
@@ -228,6 +230,21 @@ public class UsageService implements IUsageService {
             pageable, sort)
             : usageRepository.findByScenarioIdAndRhAccountNumber(accountNumber, scenario.getId(), searchValue, pageable,
             sort);
+    }
+
+    @Override
+    public int getAuditItemsCount(AuditFilter filter) {
+        return usageRepository.findCountForAudit(filter);
+    }
+
+    @Override
+    public List<UsageDto> getForAudit(AuditFilter filter, Pageable pageable, Sort sort) {
+        return usageRepository.findForAudit(filter, pageable, sort);
+    }
+
+    @Override
+    public void writeAuditCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) {
+        usageRepository.writeAuditCsvReport(filter, pipedOutputStream);
     }
 
     private void calculateUsagesGrossAmount(UsageBatch usageBatch, List<Usage> usages) {

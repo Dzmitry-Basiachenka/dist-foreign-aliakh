@@ -2,7 +2,6 @@ package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
 import com.copyright.rup.vaadin.ui.VaadinUtils;
 import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
@@ -14,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Set;
+import java.util.function.Supplier;
 
 /**
  * Widget provides functionality for configuring items filter widget for rightsholders.
@@ -28,16 +28,19 @@ public class RightsholderFilterWidget extends BaseItemsFilterWidget<Long, Rights
     implements IFilterWindowController<Long, Rightsholder> {
 
     private Set<Long> selectedItemsIds;
-    private IUsagesFilterController controller;
+    private final String caption;
+    private final Supplier<List<Rightsholder>> supplier;
 
     /**
      * Controller.
      *
-     * @param controller controller of UsagesFilterController
+     * @param caption  window caption
+     * @param supplier {@link Rightsholder}s supplier
      */
-    public RightsholderFilterWidget(IUsagesFilterController controller) {
-        super(ForeignUi.getMessage("label.rightsholders"));
-        this.controller = controller;
+    public RightsholderFilterWidget(String caption, Supplier<List<Rightsholder>> supplier) {
+        super(caption);
+        this.caption = caption;
+        this.supplier = supplier;
     }
 
     @Override
@@ -48,7 +51,7 @@ public class RightsholderFilterWidget extends BaseItemsFilterWidget<Long, Rights
 
     @Override
     public List<Rightsholder> loadBeans() {
-        return controller.getRros();
+        return supplier.get();
     }
 
     @Override
@@ -78,9 +81,10 @@ public class RightsholderFilterWidget extends BaseItemsFilterWidget<Long, Rights
     @Override
     public FilterWindow<Long, Rightsholder> showFilterWindow() {
         FilterWindow<Long, Rightsholder> filterWindow =
-            Windows.showFilterWindow(ForeignUi.getMessage("window.rros_filter"), this, "name", "accountNumber");
+            Windows.showFilterWindow(ForeignUi.getMessage("window.filter_format", caption), this, "name",
+                "accountNumber");
         filterWindow.setSelectedItemsIds(selectedItemsIds);
-        filterWindow.setSearchPromptString("Enter RRO Name/Account #");
+        filterWindow.setSearchPromptString(ForeignUi.getMessage("prompt.rightsholder"));
         VaadinUtils.addComponentStyle(filterWindow, "rightsholders-filter-window");
         return filterWindow;
     }

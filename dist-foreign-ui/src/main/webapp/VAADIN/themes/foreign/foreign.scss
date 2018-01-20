@@ -58,6 +58,13 @@
         background-position: center center;
     }
 
+    /*=== Styles for Usages table ===*/
+    .empty-audit-table .v-table-body {
+        background-image: url("img/empty_audit_table.png");
+        background-repeat: no-repeat;
+        background-position: center center;
+    }
+
     /*=== Styles for filters ===*/
     .filter-field-empty-name {
         color: red;
@@ -85,7 +92,8 @@
     /**==== Padding for search widget ====*/
     .drill-down-by-rightsholder-widget,
     .exclude-rightsholders-window,
-    .exclude-source-rro-window {
+    .exclude-source-rro-window,
+    .audit-widget {
         .search-toolbar {
             padding: $window-search-padding;
         }

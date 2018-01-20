@@ -51,6 +51,7 @@ public class UsageDto extends StoredEntity<String> {
     private BigDecimal serviceFee = DEFAULT_AMOUNT;
     private BigDecimal serviceFeeAmount = DEFAULT_AMOUNT;
     private UsageStatusEnum status;
+    private String scenarioName;
 
     public Long getDetailId() {
         return detailId;
@@ -276,6 +277,14 @@ public class UsageDto extends StoredEntity<String> {
         this.serviceFeeAmount = serviceFeeAmount;
     }
 
+    public String getScenarioName() {
+        return scenarioName;
+    }
+
+    public void setScenarioName(String scenarioName) {
+        this.scenarioName = scenarioName;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -315,6 +324,7 @@ public class UsageDto extends StoredEntity<String> {
             .append(this.netAmount, that.netAmount)
             .append(this.serviceFee, that.serviceFee)
             .append(this.serviceFeeAmount, that.serviceFeeAmount)
+            .append(this.scenarioName, that.scenarioName)
             .isEquals();
     }
 
@@ -350,6 +360,7 @@ public class UsageDto extends StoredEntity<String> {
             .append(netAmount)
             .append(serviceFee)
             .append(serviceFeeAmount)
+            .append(scenarioName)
             .toHashCode();
     }
 
@@ -385,6 +396,7 @@ public class UsageDto extends StoredEntity<String> {
             .append("netAmount", netAmount)
             .append("serviceFee", serviceFee)
             .append("serviceFeeAmount", serviceFeeAmount)
+            .append("scenarioName", scenarioName)
             .toString();
     }
 }

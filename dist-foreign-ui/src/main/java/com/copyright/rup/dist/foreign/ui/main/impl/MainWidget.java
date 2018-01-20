@@ -9,7 +9,6 @@ import com.copyright.rup.vaadin.ui.VaadinUtils;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.widget.api.ITabChangeController;
 
-import com.vaadin.ui.Label;
 import com.vaadin.ui.TabSheet;
 
 /**
@@ -33,7 +32,7 @@ public class MainWidget extends TabSheet implements IMainWidget {
         usagesWidget.addListener(ScenarioCreateEvent.class, controller, IMainWidgetController.ON_SCENARIO_CREATED);
         addTab(usagesWidget, ForeignUi.getMessage("tab.usages"));
         addTab(controller.getScenariosController().initWidget(), ForeignUi.getMessage("tab.scenario"));
-        addTab(new Label(), ForeignUi.getMessage("tab.audit"));
+        addTab(controller.getAuditController().initWidget(), ForeignUi.getMessage("tab.audit"));
         addListener(TabSheet.SelectedTabChangeEvent.class, controller, ITabChangeController.TAB_CHANGE_HANDLER);
         return this;
     }

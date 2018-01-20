@@ -11,7 +11,6 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
-import static org.powermock.api.easymock.PowerMock.mockStaticPartial;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
@@ -43,13 +42,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.io.PipedOutputStream;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -63,8 +60,6 @@ import java.util.concurrent.ExecutorService;
  *
  * @author Aliaksandr Radkevich
  */
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({LocalDate.class, UsagesController.class})
 public class UsagesControllerTest {
 
     private static final String RRO_ACCOUNT_NAME = "Account Name";
@@ -195,13 +190,8 @@ public class UsagesControllerTest {
 
     @Test
     public void testGetExportFileName() {
-        mockStaticPartial(LocalDate.class, "now");
-        expect(LocalDate.now()).andReturn(LocalDate.of(2017, 1, 2)).once();
-        expect(LocalDate.now()).andReturn(LocalDate.of(2009, 11, 22)).once();
-        replay(LocalDate.class, UsagesController.class);
-        assertEquals("export_usage_01_02_2017.csv", controller.getExportUsagesStreamSource().getFileName());
-        assertEquals("export_usage_11_22_2009.csv", controller.getExportUsagesStreamSource().getFileName());
-        verify(LocalDate.class, UsagesController.class);
+        assertEquals("export_usage_" + LocalDate.now().format(DateTimeFormatter.ofPattern("MM_dd_YYYY")) + ".csv",
+            controller.getExportUsagesStreamSource().getFileName());
     }
 
     @Test
