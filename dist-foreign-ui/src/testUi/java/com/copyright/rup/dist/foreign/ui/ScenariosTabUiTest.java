@@ -139,11 +139,11 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
         WebElement scenariosTab = selectScenariosTab();
         selectScenario(scenariosTab, scenarioName);
         assertFalse(isElementEnabled(assertWebElement(By.id(DELETE_BUTTON_ID))));
-        loginAsManager();
+        relogin(MANAGER);
         scenariosTab = selectScenariosTab();
         selectScenario(scenariosTab, scenarioName);
         applyScenarioAction(APPROVE_BUTTON_ID, StringUtils.EMPTY);
-        loginAsSpecialist();
+        relogin(SPECIALIST);
         scenariosTab = selectScenariosTab();
         selectScenario(scenariosTab, scenarioName);
         assertFalse(isElementEnabled(assertWebElement(By.id(DELETE_BUTTON_ID))));
@@ -201,29 +201,17 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
         buildAndPopulateScenario();
         applyScenarioAction("Submit_for_Approval", SUBMIT_REASON);
         verifyAdditionalInfo(Lists.newArrayList(SUBMITTED, SPECIALIST, SUBMIT_REASON));
-        loginAsManager();
+        relogin(MANAGER);
         applyScenarioAction("Reject", "To Reject");
         verifyAdditionalInfo(Lists.newArrayList("REJECTED", MANAGER, "To Reject"));
-        loginAsSpecialist();
+        relogin(SPECIALIST);
         applyScenarioAction("Submit_for_Approval", SUBMIT_REASON);
         verifyAdditionalInfo(Lists.newArrayList(SUBMITTED, SPECIALIST, SUBMIT_REASON));
-        loginAsManager();
+        relogin(MANAGER);
         applyScenarioAction("Approve", "To Approve");
         verifyAdditionalInfo(Lists.newArrayList("APPROVED", MANAGER, "To Approve"));
         clickElementAndWait(assertWebElement(By.className("v-button-link")));
         verifyScenarioHistory();
-    }
-
-    @Override
-    protected void loginAsManager() {
-        logOut();
-        super.loginAsManager();
-    }
-
-    @Override
-    protected void loginAsSpecialist() {
-        logOut();
-        super.loginAsSpecialist();
     }
 
     private void verifyScenariosTab(Set<String> buttons) {
