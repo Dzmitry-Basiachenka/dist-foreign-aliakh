@@ -195,6 +195,17 @@ public class ForeignCommonUiTest extends CommonUiTest {
         openAppPage("fda_view@copyright.com");
     }
 
+    /**
+     * Logs out and logs in under specified credentials.
+     *
+     * @param userName user name
+     */
+    void relogin(String userName) {
+        waitWhileInteractionWillFinished();
+        assertTrue(logOut());
+        openAppPage(userName);
+    }
+
     WebElement selectUsagesTab() {
         return selectTab("Usages");
     }
