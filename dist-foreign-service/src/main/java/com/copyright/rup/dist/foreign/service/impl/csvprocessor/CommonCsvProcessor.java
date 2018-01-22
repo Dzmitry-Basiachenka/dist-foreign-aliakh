@@ -10,6 +10,7 @@ import com.google.common.collect.Maps;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.perf4j.aop.Profiled;
 import org.supercsv.exception.SuperCsvException;
 import org.supercsv.io.CsvListReader;
 import org.supercsv.io.ICsvListReader;
@@ -85,6 +86,7 @@ public abstract class CommonCsvProcessor<T> {
      * @return {@link CsvProcessingResult} instance with uploaded data
      * @throws ValidationException in case of invalid file
      */
+    @Profiled(tag = "service.CommonCsvProcessor.process__{$1}")
     public CsvProcessingResult<T> process(ByteArrayOutputStream stream, String fileName) throws ValidationException {
         try (ICsvListReader listReader = new CsvListReader(
             new InputStreamReader(new ByteArrayInputStream(stream.toByteArray()), StandardCharsets.UTF_8),

@@ -100,6 +100,7 @@ public class UsageService implements IUsageService {
     }
 
     @Override
+    @Profiled(tag = "service.UsageService.insertUsages")
     public int insertUsages(UsageBatch usageBatch, List<Usage> usages) {
         String userName = RupContextUtils.getUserName();
         int size = usages.size();

@@ -37,6 +37,8 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 import org.apache.commons.lang3.StringUtils;
+import org.perf4j.StopWatch;
+import org.perf4j.slf4j.Slf4JStopWatch;
 
 import java.math.BigDecimal;
 
@@ -83,10 +85,12 @@ class UsageBatchUploadWindow extends Window {
      */
     void onUploadClicked() {
         if (isValid()) {
+            String fileName = uploadField.getFileName();
+            StopWatch stopWatch = new Slf4JStopWatch("ui.UsageBatchUploadWindow.uploadUsageBatch_" + fileName);
             try {
                 UsageCsvProcessor processor = usagesController.getCsvProcessor();
                 CsvProcessingResult<Usage> processingResult =
-                    processor.process(uploadField.getStreamToUploadedFile(), uploadField.getFileName());
+                    processor.process(uploadField.getStreamToUploadedFile(), fileName);
                 if (processingResult.isSuccessful()) {
                     int usagesCount = usagesController.loadUsageBatch(buildUsageBatch(), processingResult.getResult());
                     close();
@@ -102,6 +106,8 @@ class UsageBatchUploadWindow extends Window {
                         e.getMessage() + "<br>Press Download button to see detailed list of errors"));
             } catch (ValidationException e) {
                 Windows.showNotificationWindow(ForeignUi.getMessage("window.error"), e.getHtmlMessage());
+            } finally {
+                stopWatch.stop();
             }
         } else {
             Windows.showValidationErrorWindow(

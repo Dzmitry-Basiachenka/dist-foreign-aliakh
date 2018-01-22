@@ -28,6 +28,7 @@ public class UsageAuditService implements IUsageAuditService {
     private IUsageAuditRepository usageAuditRepository;
 
     @Override
+    @Profiled(tag = "service.UsageAuditService.logAction(usageId, actionType, actionReason)")
     public void logAction(String usageId, UsageActionTypeEnum actionType, String actionReason) {
         usageAuditRepository.insert(buildUsageAuditItem(usageId, null, actionType, actionReason));
     }
