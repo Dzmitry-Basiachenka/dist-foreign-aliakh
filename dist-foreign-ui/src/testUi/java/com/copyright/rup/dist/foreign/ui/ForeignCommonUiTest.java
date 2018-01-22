@@ -202,7 +202,7 @@ public class ForeignCommonUiTest extends CommonUiTest {
      */
     void relogin(String userName) {
         waitWhileInteractionWillFinished();
-        assertTrue(logOut());
+        clickElementAndWait(assertWebElement(By.id("logout-layout-logout-button")));
         openAppPage(userName);
     }
 
