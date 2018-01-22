@@ -610,4 +610,10 @@
                 #{accountNumber}
             </foreach>
     </select>
+
+    <select id="findWrWrkInstsByStatus" resultType="long" parameterType="UsageStatusEnum">
+        select distinct wr_wrk_inst
+        from ${schema}.df_usage
+        where status_ind = #{status}
+    </select>
 </mapper>

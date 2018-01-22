@@ -4,6 +4,7 @@ import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
 import java.io.PipedOutputStream;
 import java.util.List;
@@ -199,5 +200,13 @@ public interface IUsageRepository {
      * @return found {@link Usage} instance
      */
     Usage findByDetailId(Long detailId);
+
+    /**
+     * Finds list of Wr Wrk Insts from non-archived usages by {@link UsageStatusEnum}.
+     *
+     * @param status {@link UsageStatusEnum} instance
+     * @return list of found Wr Wrk Insts
+     */
+    List<Long> findWrWrkInstsByStatus(UsageStatusEnum status);
 
 }
