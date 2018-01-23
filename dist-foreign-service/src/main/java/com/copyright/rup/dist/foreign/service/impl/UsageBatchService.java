@@ -10,6 +10,7 @@ import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
+import org.perf4j.aop.Profiled;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -69,6 +70,7 @@ public class UsageBatchService implements IUsageBatchService {
 
     @Override
     @Transactional
+    @Profiled(tag = "service.UsageBatchService.insertUsageBatch")
     public int insertUsageBatch(UsageBatch usageBatch, List<Usage> usages) {
         String userName = RupContextUtils.getUserName();
         usageBatch.setId(RupPersistUtils.generateUuid());
