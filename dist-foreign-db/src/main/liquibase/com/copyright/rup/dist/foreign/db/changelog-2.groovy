@@ -295,4 +295,37 @@ databaseChangeLog {
 
         rollback ""
     }
+
+    changeSet(id: '2018-01-16-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-39287 Tech Debt, Refactoring, and Demo Feedback: add missing not null constrains to df_usage, " +
+                "df_usage_archive, df_scenario_audit tables")
+
+        addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_scenario_audit',
+                columnName: 'df_scenario_uid', columnDataType: 'VARCHAR(255)')
+        addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage',
+                columnName: 'work_title', columnDataType: 'VARCHAR(2000)')
+        addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage',
+                columnName: 'standard_number', columnDataType: 'VARCHAR(1000)')
+        addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_archive',
+                columnName: 'df_scenario_uid', columnDataType: 'VARCHAR(255)')
+        addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_archive',
+                columnName: 'work_title', columnDataType: 'VARCHAR(2000)')
+        addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_archive',
+                columnName: 'standard_number', columnDataType: 'VARCHAR(1000)')
+
+        rollback {
+            dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_scenario_audit',
+                    columnName: 'df_scenario_uid', columnDataType: 'VARCHAR(255)')
+            dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage',
+                    columnName: 'work_title', columnDataType: 'VARCHAR(2000)')
+            dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage',
+                    columnName: 'standard_number', columnDataType: 'VARCHAR(1000)')
+            dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_archive',
+                    columnName: 'df_scenario_uid', columnDataType: 'VARCHAR(255)')
+            dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_archive',
+                    columnName: 'work_title', columnDataType: 'VARCHAR(2000)')
+            dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_archive',
+                    columnName: 'standard_number', columnDataType: 'VARCHAR(1000)')
+        }
+    }
 }
