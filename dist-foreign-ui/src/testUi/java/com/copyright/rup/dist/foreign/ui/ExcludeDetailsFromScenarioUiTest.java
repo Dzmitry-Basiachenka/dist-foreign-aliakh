@@ -279,6 +279,7 @@ public class ExcludeDetailsFromScenarioUiTest extends ForeignCommonUiTest {
         usage.setServiceFee(new BigDecimal("0.32"));
         usage.setServiceFeeAmount(new BigDecimal(serviceFeeAmount));
         usage.setNetAmount(new BigDecimal(netAmount));
+        usage.setWorkTitle("2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA");
         return usage;
     }
 
