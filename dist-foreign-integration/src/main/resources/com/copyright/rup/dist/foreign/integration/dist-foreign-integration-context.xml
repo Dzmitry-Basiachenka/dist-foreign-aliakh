@@ -28,6 +28,13 @@
         <constructor-arg ref="restTemplate"/>
     </bean>
 
+    <bean id="dist.common.integration.rmsService" class="com.copyright.rup.dist.common.integration.rest.rms.RmsService">
+        <constructor-arg ref="restTemplate"/>
+        <constructor-arg value="$RUP{dist.foreign.integration.rest.rms.url}"/>
+        <constructor-arg value="$RUP{dist.foreign.integration.rest.rms.request_partition_size}"/>
+        <constructor-arg value="true"/>
+    </bean>
+
     <bean id="df.integration.externalUsageProducer"
           class="com.copyright.rup.dist.foreign.integration.lm.impl.producer.ExternalUsageProducer">
         <property name="endPoint" value="direct:df.integration.externalUsage"/>
