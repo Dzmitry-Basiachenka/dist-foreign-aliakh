@@ -8,3 +8,4 @@ Detail IDDe,TitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTit
 a,1984,Appendix: The Principles of Newspeak,9.78015E+12,0,0,Publisher,12/22/3000,6 5,30.8,"Univ,Bus,Doc,S",12.3,12l,"Aarseth, Espen J.",9,Detail ID: Field value should be positive number; Wr Wrk Inst: Field value should be positive number; RH Acct Number: Field value should be positive number; Number of Copies: Field value should be positive number; Market Period From: Field value should be numeric in range from 1000 to 9999; Market Period To: Field value should be numeric in range from 1000 to 9999
 ,,,,,,,,,,,,,,,10,Row is incorrect: Expected columns are 14 actual 15
 ,,,,,,,,,,,,,11,Row is incorrect: Expected columns are 14 actual 13
+70082687,A.M.A. ARCHIVES OF DERMATOLOGY,,0096-5359,,1000004570,AMERICAN MEDICAL ASSOCIATION,1/1/2001,,2457.47,"Bus, Doc Del",2015,2016,,13,Wr Wrk Inst: Field value cannot be null or empty if RH Acct Number field value is presented

@@ -84,8 +84,8 @@ public class UsageCsvProcessorIntegrationTest {
         assertEquals(4, usageCsvProcessingResult.getResult().size());
         verifyUsage(usageCsvProcessingResult.getResult().get(0), 234L, 123456789L, 1000009522L,
             UsageStatusEnum.ELIGIBLE);
-        verifyUsage(usageCsvProcessingResult.getResult().get(1), 236L, null, 1000009522L, UsageStatusEnum.NEW);
-        verifyUsage(usageCsvProcessingResult.getResult().get(2), 237L, 123456789L, null, UsageStatusEnum.NEW);
+        verifyUsage(usageCsvProcessingResult.getResult().get(1), 236L, null, null, UsageStatusEnum.NEW);
+        verifyUsage(usageCsvProcessingResult.getResult().get(2), 237L, 123456789L, null, UsageStatusEnum.WORK_FOUND);
         verifyUsageWithEmptyFields(usageCsvProcessingResult.getResult().get(3));
     }
 

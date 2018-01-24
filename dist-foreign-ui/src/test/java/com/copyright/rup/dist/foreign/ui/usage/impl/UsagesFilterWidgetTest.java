@@ -19,6 +19,7 @@ import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
@@ -198,8 +199,9 @@ public class UsagesFilterWidgetTest {
         verifyItemsFilterLayout(verticalLayout.getComponent(1), "Batches");
         verifyItemsFilterLayout(verticalLayout.getComponent(2), "RROs");
         verifyDateWidget(verticalLayout.getComponent(3));
-        verifyStatusComboboxComponent(verticalLayout.getComponent(4),
-            Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.ELIGIBLE));
+        verifyStatusComboboxComponent(verticalLayout.getComponent(4), Lists.newArrayList(UsageStatusEnum.NEW,
+            UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.SENT_FOR_RA,
+            UsageStatusEnum.ELIGIBLE));
         verifyFiscalYearComboboxComponent(verticalLayout.getComponent(5), Collections.singletonList(FISCAL_YEAR));
     }
 
@@ -226,7 +228,7 @@ public class UsagesFilterWidgetTest {
         assertFalse(iterator.hasNext());
     }
 
-    private void verifyStatusComboboxComponent(Component component, Set<UsageStatusEnum> values) {
+    private void verifyStatusComboboxComponent(Component component, List<UsageStatusEnum> values) {
         assertTrue(component instanceof ComboBox);
         ComboBox comboBox = (ComboBox) component;
         assertEquals("Status", comboBox.getCaption());

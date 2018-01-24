@@ -11,7 +11,7 @@ import com.copyright.rup.vaadin.ui.VaadinUtils;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
-import com.google.common.collect.Sets;
+import com.google.common.collect.Lists;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.AbstractSelect.ItemCaptionMode;
@@ -127,8 +127,9 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
 
     private void initStatusFilter() {
         statusComboBox = new ComboBox(ForeignUi.getMessage("label.statuses"),
-            new BeanItemContainer<>(UsageStatusEnum.class,
-                Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.ELIGIBLE)));
+            new BeanItemContainer<>(UsageStatusEnum.class, Lists.newArrayList(UsageStatusEnum.NEW,
+                UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.SENT_FOR_RA,
+                UsageStatusEnum.ELIGIBLE)));
         statusComboBox.setItemCaptionMode(ItemCaptionMode.ID_TOSTRING);
         VaadinUtils.setMaxComponentsWidth(statusComboBox);
         statusComboBox.addValueChangeListener((ValueChangeListener) event -> {

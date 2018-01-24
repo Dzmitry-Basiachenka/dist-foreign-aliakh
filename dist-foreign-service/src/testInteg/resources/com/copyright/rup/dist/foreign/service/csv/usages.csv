@@ -1,6 +1,6 @@
 detail Id,Title,Article,standard number,WR WRK INST,RH Acct Number,Publisher,Pub Date,Number of Copies,Reported Value,Market,Market Period From,Market Period To,Author
 234,1984,Appendix: The Principles of Newspeak,9780150000000,123456789,1000009522,"Publisher",12/22/3000,65,30.86,"Univ,Bus,Doc,S",2015,2016,"Aarseth, Espen J."
-236,1984,Appendix: The Principles of Newspeak,9780150000000,,1000009522,"Publisher",12/22/3000,65,30.862,"Univ,Bus,Doc,S",2015,2016,"Aarseth, Espen J."
+236,1984,Appendix: The Principles of Newspeak,9780150000000,,,"Publisher",12/22/3000,65,30.862,"Univ,Bus,Doc,S",2015,2016,"Aarseth, Espen J."
 237,1984,Appendix: The Principles of Newspeak,9780150000000,123456789,,"Publisher",12/22/3000,65,30.86333,"Univ,Bus,Doc,S",2015,2016,"Aarseth, Espen J."
 235,"1984",Na,9780150000000,Na,null,"null","N/A",null,60.8,"Univ,Bus,Doc,S",2015,2015,
 
