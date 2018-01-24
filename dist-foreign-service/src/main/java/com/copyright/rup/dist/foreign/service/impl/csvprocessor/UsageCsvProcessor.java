@@ -14,6 +14,7 @@ import com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator.Market
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator.PositiveNumberValidator;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator.ReportedValueValidator;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator.RequiredValidator;
+import com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator.RightsholderWrWrkInstValidator;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator.YearValidator;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -77,7 +79,8 @@ public class UsageCsvProcessor extends CommonCsvProcessor<Usage> {
             .map(Usage::getDetailId)
             .collect(Collectors.toList());
         Set<Long> detailIdDuplicates = usageService.getDuplicateDetailIds(detailIds);
-        addBusinessValidators(new DuplicateDetailIdValidator(detailIdDuplicates), new MarketPeriodValidator());
+        addBusinessValidators(new DuplicateDetailIdValidator(detailIdDuplicates), new MarketPeriodValidator(),
+            new RightsholderWrWrkInstValidator());
         super.validateBusinessRules();
     }
 
@@ -101,9 +104,17 @@ public class UsageCsvProcessor extends CommonCsvProcessor<Usage> {
         result.setMarketPeriodFrom(getInteger(Header.MARKET_PERIOD_FROM, params));
         result.setMarketPeriodTo(getInteger(Header.MARKET_PERIOD_TO, params));
         result.setAuthor(getString(Header.AUTHOR, params));
-        result.setStatus(null != result.getRightsholder().getAccountNumber() &&
-            null != result.getWrWrkInst() ? UsageStatusEnum.ELIGIBLE : UsageStatusEnum.NEW);
+        result.setStatus(isEligible(result) ? UsageStatusEnum.ELIGIBLE
+            : isWorkFound(result) ? UsageStatusEnum.WORK_FOUND : UsageStatusEnum.NEW);
         return result;
+    }
+
+    private boolean isEligible(Usage usage) {
+        return Objects.nonNull(usage.getRightsholder().getAccountNumber()) && Objects.nonNull(usage.getWrWrkInst());
+    }
+
+    private boolean isWorkFound(Usage usage) {
+        return Objects.isNull(usage.getRightsholder().getAccountNumber()) && Objects.nonNull(usage.getWrWrkInst());
     }
 
     private enum Header implements ICsvColumn {
