@@ -655,6 +655,14 @@ public class UsageRepositoryIntegrationTest {
             "cf38d390-11bb-4af7-9685-e034c9c32fb6")));
     }
 
+    @Test
+    public void testFindWrWrkInstsByStatus() {
+        List<Long> wrWrkInsts = usageRepository.findWrWrkInstsByStatus(UsageStatusEnum.RH_NOT_FOUND);
+        assertTrue(CollectionUtils.isNotEmpty(wrWrkInsts));
+        assertEquals(2, wrWrkInsts.size());
+        assertTrue(wrWrkInsts.containsAll(Lists.newArrayList(930480146L, 922859149L)));
+    }
+
     private void verifySearch(String searchValue, int expectedSize) {
         assertEquals(expectedSize, usageRepository.findByScenarioIdAndRhAccountNumber(1000002859L, SCENARIO_ID,
             searchValue, null, null).size());
