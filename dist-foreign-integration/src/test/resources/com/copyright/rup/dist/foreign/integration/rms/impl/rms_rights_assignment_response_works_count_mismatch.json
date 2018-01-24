@@ -1,0 +1,15 @@
+{
+  "response": {
+    "status": {
+      "code": "SUCCESS",
+      "message": "OK"
+    },
+    "content": {
+      "@class": "com.copyright.rup.rms.rights.domain.JobInfo",
+      "jobId": "2aa2c93d-6819-446a-a97f-49c32da792b8",
+      "name": "Job from REST on 01/19/2018 02:00 AM",
+      "totalWorks": 1,
+      "status": "PREPARING"
+    }
+  }
+}
