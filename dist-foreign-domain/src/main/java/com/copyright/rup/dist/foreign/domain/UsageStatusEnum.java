@@ -8,13 +8,29 @@ package com.copyright.rup.dist.foreign.domain;
  * Date: 01/12/2017
  *
  * @author Mikita Hladkikh
+ * @author Uladzislau Shalamitski
  */
 public enum UsageStatusEnum {
 
     /**
-     * Status for usages without rhAccountNumber or wrWrkInst
+     * Status for usages without rhAccountNumber and wrWrkInst
      */
     NEW,
+
+    /**
+     * Status for usages with wrWrkInst and without rhAccountNumber
+     */
+    WORK_FOUND,
+
+    /**
+     * Status for usages with rhAccountNumber not found in RMS
+     */
+    RH_NOT_FOUND,
+
+    /**
+     * Status for usages that were sent to RA
+     */
+    SENT_FOR_RA,
 
     /**
      * Status for eligible usages.
