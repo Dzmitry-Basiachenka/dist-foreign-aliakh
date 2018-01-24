@@ -199,4 +199,25 @@ databaseChangeLog {
             }
         }
     }
+
+    changeSet(id: '2018-01-24-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-29578 Reconcile RHs for IN_PROGRESS scenario: add permission for rightsholders reconciling")
+
+        //Permission to reconcile rightsholders
+        insert(schemaName: dbCommonSchema, tableName: 'cm_permission') {
+            column(name: 'cm_permission_uid', value: 'baseline-fda-reconcile-rightsholders')
+            column(name: 'permission_name', value: 'FDA_RECONCILE_RIGHTSHOLDERS')
+            column(name: 'permission_descr', value: 'Permission to reconcile rightsholders')
+            column(name: 'cm_application_area_uid', value: 'FDA')
+            column(name: 'cm_permission_type_uid', value: 'ACTION')
+            column(name: 'created_by_user', value: 'system')
+            column(name: 'updated_by_user', value: 'system')
+        }
+
+        rollback {
+            delete(schemaName: dbCommonSchema, tableName: 'cm_permission') {
+                where "cm_permission_uid = 'baseline-fda-reconcile-rightsholders'"
+            }
+        }
+    }
 }

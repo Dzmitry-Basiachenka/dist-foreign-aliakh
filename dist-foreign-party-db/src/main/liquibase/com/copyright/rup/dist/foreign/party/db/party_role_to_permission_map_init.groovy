@@ -213,4 +213,23 @@ databaseChangeLog {
             }
         }
     }
+
+    changeSet(id: '2018-01-24-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-29578 Reconcile RHs for IN_PROGRESS scenario: for map permissions for rightsholders reconciling")
+
+        insert(schemaName: dbCommonSchema, tableName: 'cm_role_to_permission_map') {
+            column(name: 'cm_role_uid', value: 'baseline-fda-distribution-specialist')
+            column(name: 'cm_permission_uid', value: 'baseline-fda-reconcile-rightsholders')
+            column(name: 'is_permitted_flag', value: 'true')
+            column(name: 'created_by_user', value: 'system')
+            column(name: 'updated_by_user', value: 'system')
+        }
+
+        rollback {
+            delete(schemaName: dbCommonSchema, tableName: 'cm_role_to_permission_map') {
+                where "cm_role_uid = 'baseline-fda-distribution-specialist' " +
+                        "and cm_permission_uid = 'baseline-fda-reconcile-rightsholders'"
+            }
+        }
+    }
 }
