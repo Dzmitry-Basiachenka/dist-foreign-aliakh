@@ -89,4 +89,11 @@ public final class ForeignSecurityUtils {
     public static boolean hasSendScenarioToLmPermission() {
         return SecurityUtils.hasPermission("FDA_DISTRIBUTE_SCENARIO");
     }
+
+    /**
+     * @return {@code true} if user has permission for reconciling rightsholders.
+     */
+    public static boolean hasReconcileRightsholdersPermission() {
+        return SecurityUtils.hasPermission("FDA_RECONCILE_RIGHTSHOLDERS");
+    }
 }

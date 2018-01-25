@@ -80,6 +80,11 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
     }
 
     @Override
+    public void onReconcileRightsholdersButtonClicked() {
+        //TODO {isuvorau} apply logic after implementing
+    }
+
+    @Override
     public void handleAction(ScenarioActionTypeEnum actionType) {
         scenarioController.setScenario(getWidget().getSelectedScenario());
         if (!scenarioController.isScenarioEmpty()) {

@@ -57,6 +57,8 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
     private Button rejectButton = Buttons.createButton(ForeignUi.getMessage("button.reject"));
     private Button approveButton = Buttons.createButton(ForeignUi.getMessage("button.approve"));
     private Button sendToLmButton = Buttons.createButton(ForeignUi.getMessage("button.send_to_lm"));
+    private Button reconcileRightsholdersButton =
+        Buttons.createButton(ForeignUi.getMessage("button.reconcile_rightsholders"));
     private BeanContainer<String, Scenario> container;
     private Label ownerLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private Label netTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
@@ -90,6 +92,7 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
         mediator.setRejectButton(rejectButton);
         mediator.setSubmitButton(submitButton);
         mediator.setSendToLmButton(sendToLmButton);
+        mediator.setReconcileRightsholdersButton(reconcileRightsholdersButton);
         mediator.selectedScenarioChanged(getSelectedScenario());
         return mediator;
     }
@@ -142,9 +145,10 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
     private HorizontalLayout initButtonsLayout() {
         HorizontalLayout layout = new HorizontalLayout();
         addButtonsListeners();
-        VaadinUtils.setButtonsAutoDisabled(viewButton, deleteButton, submitButton, rejectButton, approveButton,
-            sendToLmButton);
-        layout.addComponents(viewButton, deleteButton, submitButton, rejectButton, approveButton, sendToLmButton);
+        VaadinUtils.setButtonsAutoDisabled(viewButton, deleteButton, reconcileRightsholdersButton, submitButton,
+            rejectButton, approveButton, sendToLmButton);
+        layout.addComponents(viewButton, deleteButton, reconcileRightsholdersButton, submitButton, rejectButton,
+            approveButton, sendToLmButton);
         layout.setSpacing(true);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "scenarios-buttons");
@@ -154,6 +158,7 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
     private void addButtonsListeners() {
         deleteButton.addClickListener(event -> controller.onDeleteButtonClicked());
         viewButton.addClickListener(event -> controller.onViewButtonClicked());
+        reconcileRightsholdersButton.addClickListener(event -> controller.onReconcileRightsholdersButtonClicked());
         submitButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.SUBMITTED));
         rejectButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.REJECTED));
         approveButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.APPROVED));

@@ -52,4 +52,9 @@ public interface IScenariosController extends IController<IScenariosWidget> {
      * Handles send to LM action.
      */
     void sendToLm();
+
+    /**
+     * Handles click on 'Reconcile Rightsholders' button.
+     */
+    void onReconcileRightsholdersButtonClicked();
 }
