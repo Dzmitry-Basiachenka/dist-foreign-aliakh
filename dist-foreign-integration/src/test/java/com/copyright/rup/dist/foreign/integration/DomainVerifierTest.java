@@ -4,6 +4,8 @@ import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsage;
 import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsageMessage;
 import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsageWrapper;
+import com.copyright.rup.dist.foreign.integration.rms.api.RightsAssignmentRequest;
+import com.copyright.rup.dist.foreign.integration.rms.api.RightsAssignmentResult;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,7 +43,9 @@ public class DomainVerifierTest {
         Object[][] testData = new Object[][]{
             {ExternalUsage.class},
             {ExternalUsageWrapper.class},
-            {ExternalUsageMessage.class}
+            {ExternalUsageMessage.class},
+            {RightsAssignmentRequest.class},
+            {RightsAssignmentResult.class}
         };
         return Arrays.asList(testData);
     }

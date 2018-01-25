@@ -1,0 +1,14 @@
+{
+  "response": {
+    "status": {
+      "code": "SUCCESS",
+      "message": "OK"
+    },
+    "content": {
+      "@class": "com.copyright.rup.rms.rights.domain.JobInfo",
+      "name": "Job from REST on 01/19/2018 02:00 AM",
+      "totalWorks": 2,
+      "status": "PREPARING"
+    }
+  }
+}
