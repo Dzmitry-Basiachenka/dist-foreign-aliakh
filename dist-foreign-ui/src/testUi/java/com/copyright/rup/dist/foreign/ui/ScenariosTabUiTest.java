@@ -73,7 +73,7 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
     private static final String SPECIALIST = "fda_spec@copyright.com";
     private static final String SUBMITTED = "SUBMITTED";
     private static final String SUBMIT_REASON = "To Submit";
-    private String scenarioName = "FDA_aut_test_1";
+    private static final String SCENARIO_NAME = "FDA_aut_test_1";
     private ScenarioInfo scenario1 = new ScenarioInfo("Scenario 03/16/2017", "03/16/2017");
     private ScenarioInfo scenario2 = new ScenarioInfo("Scenario for viewing", "03/17/2017");
     private ScenarioInfo scenario3 = new ScenarioInfo("Scenario 03/15/2017", "03/15/2017");
@@ -128,28 +128,25 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
         verifyScenariosTab(Collections.singleton(VIEW_BUTTON_ID));
     }
 
-    /**
-     * Test checks that Delete button disabled for scenarios in status SUBMITTED, APPROVED, SENT_TO_LM.
-     */
     @Test
     // Test case ID: '4968f20d-4ea1-4fa9-89f4-c1cf4ef8a194'
     public void testIsDeleteButtonDisabled() throws SQLException {
         buildAndPopulateSubmittedScenario();
         loginAsSpecialist();
         WebElement scenariosTab = selectScenariosTab();
-        selectScenario(scenariosTab, scenarioName);
+        selectScenario(scenariosTab, SCENARIO_NAME);
         assertFalse(isElementEnabled(assertWebElement(By.id(DELETE_BUTTON_ID))));
         relogin(MANAGER);
         scenariosTab = selectScenariosTab();
-        selectScenario(scenariosTab, scenarioName);
+        selectScenario(scenariosTab, SCENARIO_NAME);
         applyScenarioAction(APPROVE_BUTTON_ID, StringUtils.EMPTY);
         relogin(SPECIALIST);
         scenariosTab = selectScenariosTab();
-        selectScenario(scenariosTab, scenarioName);
+        selectScenario(scenariosTab, SCENARIO_NAME);
         assertFalse(isElementEnabled(assertWebElement(By.id(DELETE_BUTTON_ID))));
         clickButtonAndWait(scenariosTab, SEND_TO_LM_BUTTON_ID);
         clickButtonAndWait(assertWebElement(By.id("confirm-dialog-window")), YES_BUTTON_ID);
-        selectScenario(scenariosTab, scenarioName);
+        selectScenario(scenariosTab, SCENARIO_NAME);
         assertFalse(isElementEnabled(assertWebElement(By.id(DELETE_BUTTON_ID))));
         usageArchiveRepository.deleteByScenarioId(newScenario.getId());
         usageBatchRepository.deleteUsageBatch("b36ce9bb-643b-464b-baf1-c2829d4d3742");
@@ -300,16 +297,13 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
         });
     }
 
-    /**
-     * Used to find row in scenario table.
-     */
-    private void selectScenario(WebElement scenariosTab, String name) {
+    private void selectScenario(WebElement scenariosTab, String scenarioName) {
         WebElement scenariosTable = assertWebElement(scenariosTab, SCENARIOS_TABLE_ID);
         WebElement selectedValue = findElement(scenariosTable, By.className("v-selected"));
         if (Objects.nonNull(selectedValue)) {
             clickElementAndWait(selectedValue);
         }
-        clickElementAndWait(assertWebElement(scenariosTable, HTML_DIV_TAG_NAME, name));
+        clickElementAndWait(assertWebElement(scenariosTable, HTML_DIV_TAG_NAME, scenarioName));
     }
 
     private void buildAndPopulateScenario() {
@@ -333,7 +327,7 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
     private void buildAndPopulateSubmittedScenario() {
         newScenario = new Scenario();
         newScenario.setId("90f7d0de-321b-403e-9e96-f6e553fc1c00");
-        newScenario.setName(scenarioName);
+        newScenario.setName(SCENARIO_NAME);
         newScenario.setStatus(ScenarioStatusEnum.SUBMITTED);
         scenarioRepository.insert(newScenario);
         buildAndPopulateUsageBatch("b36ce9bb-643b-464b-baf1-c2829d4d3742");
@@ -360,9 +354,7 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
         usage.setDetailId(2317370L);
         usage.setWrWrkInst(123456789L);
         usage.setWorkTitle("1984");
-        usage.setRightsholder(new Rightsholder());
         usage.getRightsholder().setAccountNumber(7000813806L);
-        usage.setPayee(new Rightsholder());
         usage.getPayee().setAccountNumber(7000813806L);
         usage.setStatus(UsageStatusEnum.LOCKED);
         usage.setArticle("Appendix: The Principles of Newspeak");
