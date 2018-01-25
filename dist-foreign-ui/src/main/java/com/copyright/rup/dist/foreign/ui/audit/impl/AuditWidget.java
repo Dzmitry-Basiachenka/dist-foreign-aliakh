@@ -131,7 +131,7 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
             ForeignUi.getMessage("table.column.payment_date"),
             ForeignUi.getMessage("table.column.rh_account_number"),
             ForeignUi.getMessage("table.column.rh_account_name"),
-            ForeignUi.getMessage("table.column.wrWrkInst"),
+            ForeignUi.getMessage("table.column.wr_wrk_inst"),
             ForeignUi.getMessage("table.column.work_title"),
             ForeignUi.getMessage("table.column.standard_number"),
             ForeignUi.getMessage("table.column.gross_amount"),

@@ -89,7 +89,7 @@ public class DrillDownByRightsholderTable extends LazyTable<UsageDetailsBeanQuer
             ForeignUi.getMessage("table.column.work_title"),
             ForeignUi.getMessage("table.column.article"),
             ForeignUi.getMessage("table.column.standard_number"),
-            ForeignUi.getMessage("table.column.wrWrkInst"),
+            ForeignUi.getMessage("table.column.wr_wrk_inst"),
             ForeignUi.getMessage("table.column.publisher"),
             ForeignUi.getMessage("table.column.publication_date"),
             ForeignUi.getMessage("table.column.number_of_copies"),
