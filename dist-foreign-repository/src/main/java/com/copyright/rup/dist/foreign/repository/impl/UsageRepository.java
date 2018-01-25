@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.common.repository.BaseRepository;
@@ -20,6 +21,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.perf4j.aop.Profiled;
 import org.springframework.stereotype.Repository;
@@ -58,7 +60,9 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     private static final String SEARCH_VALUE_KEY = "searchValue";
     private static final String SCENARIO_ID_KEY = "scenarioId";
     private static final String UPDATE_USER_KEY = "updateUser";
+    private static final String USAGE_ID_KEY = "usageId";
     private static final String STATUS_KEY = "status";
+    private static final String RH_ACCOUNT_NUMBER_KEY = "rhAccountNumber";
 
     @Override
     public void insert(Usage usage) {
@@ -254,6 +258,38 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
             getTemplate().select("IUsageMapper.findForAuditExport", params, handler);
         } catch (IOException e) {
             throw new RupRuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<Usage> findByStatuses(UsageStatusEnum... statuses) {
+        checkArgument(ArrayUtils.isNotEmpty(statuses));
+        checkUsageStatuses(statuses);
+        return selectList("IUsageMapper.findByStatuses", statuses);
+    }
+
+    @Override
+    public void updateStatus(String usageId, UsageStatusEnum status) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        checkArgument(StringUtils.isNotBlank(usageId));
+        parameters.put(USAGE_ID_KEY, usageId);
+        parameters.put(STATUS_KEY, Objects.requireNonNull(status));
+        update("IUsageMapper.updateStatus", parameters);
+    }
+
+    @Override
+    public void updateStatusAndRhAccountNumber(String usageId, UsageStatusEnum status, Long rhAccountNumber) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
+        checkArgument(StringUtils.isNotBlank(usageId));
+        parameters.put(USAGE_ID_KEY, usageId);
+        parameters.put(STATUS_KEY, Objects.requireNonNull(status));
+        parameters.put(RH_ACCOUNT_NUMBER_KEY, Objects.requireNonNull(rhAccountNumber));
+        update("IUsageMapper.updateStatusAndRhAccountNumber", parameters);
+    }
+
+    private void checkUsageStatuses(UsageStatusEnum... usageStatuses) {
+        for (UsageStatusEnum usageStatus : usageStatuses) {
+            checkNotNull(usageStatus);
         }
     }
 }

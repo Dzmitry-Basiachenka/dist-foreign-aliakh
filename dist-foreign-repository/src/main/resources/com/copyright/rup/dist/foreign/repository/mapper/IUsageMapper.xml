@@ -762,4 +762,30 @@
             </if>
         </where>
     </sql>
+
+    <select id="findByStatuses" resultMap="usageResultMap">
+        select
+            df_usage_uid,
+            <include refid="usageColumns"/>
+        from ${schema}.df_usage
+        where
+            status_ind in
+            <foreach collection="array" item="status" open="(" separator="," close=")">
+                #{status}
+            </foreach>
+    </select>
+
+    <update id="updateStatus" parameterType="map">
+        update ${schema}.df_usage
+        set status_ind = #{status}
+        where df_usage_uid = #{usageId}
+    </update>
+
+    <update id="updateStatusAndRhAccountNumber" parameterType="map">
+        update ${schema}.df_usage
+        set
+            status_ind = #{status},
+            rh_account_number = #{rhAccountNumber}
+        where df_usage_uid = #{usageId}
+    </update>
 </mapper>

@@ -237,4 +237,29 @@ public interface IUsageRepository {
      * @throws RupRuntimeException in case when IOException appears during writing report
      */
     void writeAuditCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) throws RupRuntimeException;
+
+    /**
+     * Finds list of {@link Usage}s by array of {@link UsageStatusEnum}s.
+     *
+     * @param statuses the array of {@link UsageStatusEnum}s
+     * @return the list of {@link Usage}s
+     */
+    List<Usage> findByStatuses(UsageStatusEnum... statuses);
+
+    /**
+     * Updates status of {@link Usage} based on usage identifier.
+     *
+     * @param usageId usage identifier
+     * @param status  instance of {@link UsageStatusEnum}
+     */
+    void updateStatus(String usageId, UsageStatusEnum status);
+
+    /**
+     * Updates status and RH account number of {@link Usage} based on usage identifier.
+     *
+     * @param usageId         usage identifier
+     * @param status          instance of {@link UsageStatusEnum}
+     * @param rhAccountNumber RH account number
+     */
+    void updateStatusAndRhAccountNumber(String usageId, UsageStatusEnum status, Long rhAccountNumber);
 }

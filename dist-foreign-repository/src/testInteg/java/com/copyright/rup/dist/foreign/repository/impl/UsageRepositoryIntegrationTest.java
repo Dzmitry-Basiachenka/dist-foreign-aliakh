@@ -783,6 +783,39 @@ public class UsageRepositoryIntegrationTest {
         return usageRepository.findForAudit(filter, new Pageable(0, 10), Sort.create(new Object[]{property}, order));
     }
 
+    @Test
+    public void testFindByStatuses() {
+        List<Usage> usages =
+            usageRepository.findByStatuses(UsageStatusEnum.WORK_FOUND, UsageStatusEnum.SENT_FOR_RA);
+        assertEquals(2, CollectionUtils.size(usages));
+        Usage usageSentForRa = usages.get(0);
+        assertEquals("0b0f5100-01bd-11e8-8f1a-0800200c9a66", usageSentForRa.getId());
+        assertEquals(UsageStatusEnum.SENT_FOR_RA, usageSentForRa.getStatus());
+        Usage usageWorkFound = usages.get(1);
+        assertEquals("d9ca07b5-8282-4a81-9b9d-e4480f529d34", usageWorkFound.getId());
+        assertEquals(UsageStatusEnum.WORK_FOUND, usageWorkFound.getStatus());
+    }
+
+    @Test
+    public void updateStatus() {
+        Usage usage = usageRepository.findByDetailId(8457965214L);
+        assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
+        usageRepository.updateStatus(usage.getId(), UsageStatusEnum.RH_NOT_FOUND);
+        usage = usageRepository.findByDetailId(8457965214L);
+        assertEquals(UsageStatusEnum.RH_NOT_FOUND, usage.getStatus());
+    }
+
+    @Test
+    public void updateStatusAndRhAccountNumber() {
+        Usage usage = usageRepository.findByDetailId(8457965214L);
+        assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
+        assertNull(usage.getRightsholder().getAccountNumber());
+        usageRepository.updateStatusAndRhAccountNumber(usage.getId(), UsageStatusEnum.RH_NOT_FOUND, RH_ACCOUNT_NUMBER);
+        usage = usageRepository.findByDetailId(8457965214L);
+        assertEquals(UsageStatusEnum.RH_NOT_FOUND, usage.getStatus());
+        assertEquals(RH_ACCOUNT_NUMBER, usage.getRightsholder().getAccountNumber());
+    }
+
     private void verifySearch(String searchValue, int expectedSize) {
         assertEquals(expectedSize, usageRepository.findByScenarioIdAndRhAccountNumber(1000002859L, SCENARIO_ID,
             searchValue, null, null).size());
