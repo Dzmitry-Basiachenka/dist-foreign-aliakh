@@ -295,7 +295,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
 
     private void verifyBatchesFilter(WebElement filterWidget) {
         openBatchesFilterWindow(filterWidget);
-        verifyFilterWindow("batches-filter-window", "Batches filter", "Enter Usage Batch name");
+        verifyFilterWindow("batches-filter-window", "Batches filter", "Enter Usage Batch Name");
     }
 
     private void verifyRROsFilter(WebElement filterWidget) {
