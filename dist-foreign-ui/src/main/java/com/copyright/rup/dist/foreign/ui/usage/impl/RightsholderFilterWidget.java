@@ -28,19 +28,22 @@ public class RightsholderFilterWidget extends BaseItemsFilterWidget<Long, Rights
     implements IFilterWindowController<Long, Rightsholder> {
 
     private Set<Long> selectedItemsIds;
+    private final String searchPrompt;
     private final String caption;
     private final Supplier<List<Rightsholder>> supplier;
 
     /**
      * Controller.
      *
-     * @param caption  window caption
-     * @param supplier {@link Rightsholder}s supplier
+     * @param caption      window caption
+     * @param searchPrompt search field prompt
+     * @param supplier     {@link Rightsholder}s supplier
      */
-    public RightsholderFilterWidget(String caption, Supplier<List<Rightsholder>> supplier) {
+    public RightsholderFilterWidget(String caption, String searchPrompt, Supplier<List<Rightsholder>> supplier) {
         super(caption);
         this.caption = caption;
         this.supplier = supplier;
+        this.searchPrompt = searchPrompt;
     }
 
     @Override
@@ -84,7 +87,7 @@ public class RightsholderFilterWidget extends BaseItemsFilterWidget<Long, Rights
             Windows.showFilterWindow(ForeignUi.getMessage("window.filter_format", caption), this, "name",
                 "accountNumber");
         filterWindow.setSelectedItemsIds(selectedItemsIds);
-        filterWindow.setSearchPromptString(ForeignUi.getMessage("prompt.rightsholder"));
+        filterWindow.setSearchPromptString(searchPrompt);
         VaadinUtils.addComponentStyle(filterWindow, "rightsholders-filter-window");
         return filterWindow;
     }

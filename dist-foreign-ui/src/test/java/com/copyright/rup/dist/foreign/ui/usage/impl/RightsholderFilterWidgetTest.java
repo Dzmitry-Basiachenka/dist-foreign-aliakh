@@ -48,7 +48,7 @@ public class RightsholderFilterWidgetTest {
     public void setUp() {
         rightsholder = buildRightsholder();
         rightsholderFilterWidget =
-            new RightsholderFilterWidget("RROs", () -> Lists.newArrayList(rightsholder));
+            new RightsholderFilterWidget("RROs", "Enter RRO Name/Account #", () -> Lists.newArrayList(rightsholder));
     }
 
     @Test
@@ -101,7 +101,7 @@ public class RightsholderFilterWidgetTest {
         expect(filterWindow.getId()).andReturn("id").once();
         filterWindow.addStyleName("rightsholders-filter-window");
         expectLastCall().once();
-        filterWindow.setSearchPromptString("Enter Rightsholder Name/Account #");
+        filterWindow.setSearchPromptString("Enter RRO Name/Account #");
         expectLastCall().once();
         replay(filterWindow, Windows.class);
         rightsholderFilterWidget.showFilterWindow();
