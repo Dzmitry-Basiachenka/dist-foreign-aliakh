@@ -24,7 +24,8 @@
         <result property="reportedValue" column="reported_value"/>
         <result property="grossAmount" column="gross_amount"/>
         <result property="batchGrossAmount" column="batch_gross_amount"/>
-        <result property="batchName" column="name"/>
+        <result property="batchName" column="batch_name"/>
+        <result property="scenarioName" column="scenario_name"/>
         <result property="rroAccountNumber" column="rro_account_number"/>
         <result property="rroName" column="rro_name"/>
         <result property="paymentDate" column="payment_date"/>
@@ -128,7 +129,7 @@
         u.net_amount,
         u.service_fee,
         ub.gross_amount batch_gross_amount,
-        ub.name,
+        ub.name batch_name,
         ub.rro_account_number,
         rro.name rro_name,
         ub.payment_date,
@@ -616,4 +617,149 @@
         from ${schema}.df_usage
         where status_ind = #{status}
     </select>
+
+    <select id="findCountForAudit" resultType="int" parameterType="map">
+        select
+            (select count(1) usage_count
+            from ${schema}.df_usage u
+            join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
+            left join ${schema}.df_scenario s on s.df_scenario_uid = u.df_scenario_uid
+            <include refid="auditFilterWhereClause"/>) +
+            (select count(1) usage_count
+            from ${schema}.df_usage_archive u
+            join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
+            left join ${schema}.df_scenario s on s.df_scenario_uid = u.df_scenario_uid
+            <include refid="auditFilterWhereClause"/>)
+    </select>
+
+    <select id="findForAudit" resultMap="usageDtoResultMap" parameterType="map">
+        <include refid="findForAuditSql"/>
+        <include refid="ifPageable"/>
+    </select>
+
+    <select id="findForAuditExport" parameterType="map" resultMap="usageDtoResultMap">
+        <include refid="findForAuditSql"/>
+    </select>
+
+    <sql id="findForAuditSql">
+        select
+            u.df_usage_uid,
+            detail_id,
+            u.status_ind,
+            u.df_usage_batch_uid,
+            ub.name batch_name,
+            ub.payment_date,
+            u.rh_account_number,
+            r.name rh_name,
+            wr_wrk_inst,
+            work_title,
+            standard_number,
+            u.gross_amount,
+            service_fee,
+            u.updated_datetime,
+            s.name scenario_name
+        from ${schema}.df_usage u
+        join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
+        left join ${schema}.df_rightsholder r on r.rh_account_number = u.rh_account_number
+        left join ${schema}.df_scenario s on s.df_scenario_uid = u.df_scenario_uid
+        <include refid="auditFilterWhereClause"/>
+        union
+        select
+            df_usage_archive_uid df_usage_uid,
+            detail_id,
+            u.status_ind,
+            u.df_usage_batch_uid,
+            ub.name batch_name,
+            ub.payment_date,
+            u.rh_account_number,
+            r.name rh_name,
+            wr_wrk_inst,
+            work_title,
+            standard_number,
+            u.gross_amount,
+            service_fee,
+            u.updated_datetime,
+            s.name scenario_name
+        from ${schema}.df_usage_archive u
+        join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
+        left join ${schema}.df_rightsholder r on r.rh_account_number = u.rh_account_number
+        left join ${schema}.df_scenario s on s.df_scenario_uid = u.df_scenario_uid
+        <include refid="auditFilterWhereClause"/>
+        order by
+        <choose>
+            <when test="null != sort">
+                <choose>
+                    <when test="sort.property == 'detailId'">
+                        detail_id
+                    </when>
+                    <when test="sort.property == 'status'">
+                        status_ind
+                    </when>
+                    <when test="sort.property == 'batchName'">
+                        batch_name
+                    </when>
+                    <when test="sort.property == 'paymentDate'">
+                        payment_date
+                    </when>
+                    <when test="sort.property == 'rhAccountNumber'">
+                        rh_account_number
+                    </when>
+                    <when test="sort.property == 'rhName'">
+                        rh_name
+                    </when>
+                    <when test="sort.property == 'wrWrkInst'">
+                        wr_wrk_inst
+                    </when>
+                    <when test="sort.property == 'workTitle'">
+                        work_title
+                    </when>
+                    <when test="sort.property == 'standardNumber'">
+                        standard_number
+                    </when>
+                    <when test="sort.property == 'grossAmount'">
+                        gross_amount
+                    </when>
+                    <when test="sort.property == 'serviceFee'">
+                        service_fee
+                    </when>
+                    <when test="sort.property == 'scenarioName'">
+                        scenario_name
+                    </when>
+                </choose>
+                <include refid="IUsageMapper.direction"/>
+            </when>
+            <otherwise>
+                updated_datetime desc
+            </otherwise>
+        </choose>
+    </sql>
+
+    <sql id="auditFilterWhereClause">
+        <where>
+            <if test="!filter.rhAccountNumbers.isEmpty()">
+                u.rh_account_number in
+                <foreach collection="filter.rhAccountNumbers" item="accountNumber" separator="," open="(" close=")">
+                    #{accountNumber}
+                </foreach>
+            </if>
+            <if test="!filter.batchesIds.isEmpty()">
+                and ub.df_usage_batch_uid in
+                <foreach collection="filter.batchesIds" item="batchId" separator="," open="(" close=")">
+                    #{batchId}
+                </foreach>
+            </if>
+            <if test="!filter.statuses.isEmpty()">
+                and u.status_ind in
+                <foreach collection="filter.statuses" item="status" separator="," open="(" close=")">
+                    #{status}
+                </foreach>
+            </if>
+            <if test="null != filter.searchValue">
+                and (
+                    cast(detail_id as text) like '%' || #{filter.searchValue} || '%' or
+                    cast(wr_wrk_inst as text) like '%' || #{filter.searchValue} || '%' or
+                    upper(work_title) like '%' || upper(#{filter.searchValue}) || '%')
+            </if>
+        </where>
+    </sql>
 </mapper>

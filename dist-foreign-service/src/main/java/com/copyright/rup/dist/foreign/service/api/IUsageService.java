@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.service.api;
 
+import com.copyright.rup.common.exception.RupRuntimeException;
+import com.copyright.rup.dist.foreign.domain.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -24,6 +26,7 @@ import java.util.Set;
  *
  * @author Aliaksei Pchelnikau
  * @author Mikalai Bezmen
+ * @author Aliaksandr Radkevich
  */
 public interface IUsageService {
 
@@ -184,4 +187,31 @@ public interface IUsageService {
      */
     List<UsageDto> getByScenarioAndRhAccountNumber(Long accountNumber, Scenario scenario, String searchValue,
                                                    Pageable pageable, Sort sort);
+
+    /**
+     * Gets count of items by filter.
+     *
+     * @param filter {@link AuditFilter}
+     * @return count of items by filter
+     */
+    int getAuditItemsCount(AuditFilter filter);
+
+    /**
+     * Gets list of {@link UsageDto}s by filter.
+     *
+     * @param filter   {@link AuditFilter}
+     * @param pageable {@link Pageable}
+     * @param sort     {@link Sort}
+     * @return list of {@link Usage}s
+     */
+    List<UsageDto> getForAudit(AuditFilter filter, Pageable pageable, Sort sort);
+
+    /**
+     * Writes usages found by {@link AuditFilter} into CSV output stream.
+     *
+     * @param filter            {@link AuditFilter}
+     * @param pipedOutputStream instance of {@link PipedOutputStream}
+     * @throws RupRuntimeException in case when IOException appears during writing report
+     */
+    void writeAuditCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) throws RupRuntimeException;
 }

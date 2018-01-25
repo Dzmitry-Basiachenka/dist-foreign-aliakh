@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
+import com.copyright.rup.common.exception.RupRuntimeException;
+import com.copyright.rup.dist.foreign.domain.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -209,4 +211,30 @@ public interface IUsageRepository {
      */
     List<Long> findWrWrkInstsByStatus(UsageStatusEnum status);
 
+    /**
+     * Finds count of {@link UsageDto}s by specified {@link AuditFilter}.
+     *
+     * @param filter {@link AuditFilter}
+     * @return count of {@link Usage}s matching filter
+     */
+    int findCountForAudit(AuditFilter filter);
+
+    /**
+     * Finds list of {@link UsageDto}s matching specified filter.
+     *
+     * @param filter   {@link AuditFilter}
+     * @param pageable limit and offset
+     * @param sort     sort criteria
+     * @return list of {@link Usage}s
+     */
+    List<UsageDto> findForAudit(AuditFilter filter, Pageable pageable, Sort sort);
+
+    /**
+     * Finds usages by given {@link AuditFilter} and writes them to the given {@link PipedOutputStream}.
+     *
+     * @param filter            filter
+     * @param pipedOutputStream stream
+     * @throws RupRuntimeException in case when IOException appears during writing report
+     */
+    void writeAuditCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) throws RupRuntimeException;
 }

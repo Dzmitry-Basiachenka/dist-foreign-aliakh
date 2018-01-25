@@ -10,22 +10,19 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
-import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
 import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.FilterSaveEvent;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
-import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.util.List;
+import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -44,24 +41,11 @@ public class UsageBatchFilterWidgetTest {
     private static final String USAGE_BATCH_NAME = "Usage batch";
     private static final String USAGE_BATCH_ID = "Usage batch id";
 
-    private IUsagesFilterController controller;
     private UsageBatchFilterWidget usageBatchFilterWidget;
 
     @Before
     public void setUp() {
-        controller = EasyMock.createMock(IUsagesFilterController.class);
-        usageBatchFilterWidget = new UsageBatchFilterWidget(controller);
-    }
-
-    @Test
-    public void testLoadBeans() {
-        UsageBatch usageBatch = buildUsageBatch();
-        expect(controller.getUsageBatchesNotIncludedIntoScenario()).andReturn(Lists.newArrayList(usageBatch)).once();
-        replay(controller);
-        List<UsageBatch> usageBatches = usageBatchFilterWidget.loadBeans();
-        assertEquals(1, usageBatches.size());
-        assertEquals(usageBatch, usageBatches.get(0));
-        verify(controller);
+        usageBatchFilterWidget = new UsageBatchFilterWidget(Collections::emptyList);
     }
 
     @Test
@@ -100,7 +84,7 @@ public class UsageBatchFilterWidgetTest {
         expect(filterWindow.getId()).andReturn("id").once();
         filterWindow.addStyleName("batches-filter-window");
         expectLastCall().once();
-        filterWindow.setSearchPromptString("Enter Usage Batch name");
+        filterWindow.setSearchPromptString("Enter Usage Batch Name");
         expectLastCall().once();
         replay(filterWindow, Windows.class);
         usageBatchFilterWidget.showFilterWindow();

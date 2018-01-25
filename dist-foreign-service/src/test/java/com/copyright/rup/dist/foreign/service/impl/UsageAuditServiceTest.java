@@ -2,12 +2,15 @@ package com.copyright.rup.dist.foreign.service.impl;
 
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 
+import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
@@ -17,6 +20,9 @@ import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies {@link UsageAuditService}.
@@ -82,6 +88,16 @@ public class UsageAuditServiceTest {
         expectLastCall().once();
         replay(usageAuditRepository);
         usageActionService.deleteActions(BATCH_UID);
+        verify(usageAuditRepository);
+    }
+
+    @Test
+    public void testGetUsageAudit() {
+        String usageId = RupPersistUtils.generateUuid();
+        List<UsageAuditItem> items = Collections.emptyList();
+        expect(usageAuditRepository.findByUsageId(usageId)).andReturn(items).once();
+        replay(usageAuditRepository);
+        assertSame(items, usageActionService.getUsageAudit(usageId));
         verify(usageAuditRepository);
     }
 

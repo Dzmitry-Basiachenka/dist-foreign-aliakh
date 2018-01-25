@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.main.impl;
 
+import com.copyright.rup.dist.foreign.ui.audit.api.IAuditController;
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidget;
 import com.copyright.rup.dist.foreign.ui.main.api.IMainWidgetController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
@@ -31,6 +32,8 @@ public class MainWidgetController extends TabController<IMainWidget> implements 
     private IUsagesController usagesController;
     @Autowired
     private IScenariosController scenariosController;
+    @Autowired
+    private IAuditController auditController;
 
     @Override
     public IUsagesController getUsagesController() {
@@ -46,6 +49,11 @@ public class MainWidgetController extends TabController<IMainWidget> implements 
     public void onScenarioCreated(ScenarioCreateEvent event) {
         selectTab(scenariosController.getWidget());
         scenariosController.getWidget().selectScenario(event.getScenarioId());
+    }
+
+    @Override
+    public IAuditController getAuditController() {
+        return auditController;
     }
 
     @Override

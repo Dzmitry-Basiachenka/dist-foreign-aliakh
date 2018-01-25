@@ -1,0 +1,104 @@
+package com.copyright.rup.dist.foreign.ui.audit.impl;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import com.copyright.rup.dist.foreign.ui.usage.impl.RightsholderFilterWidget;
+import com.copyright.rup.dist.foreign.ui.usage.impl.UsageBatchFilterWidget;
+import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.IFilterSaveListener;
+import com.copyright.rup.vaadin.ui.themes.Cornerstone;
+import com.copyright.rup.vaadin.widget.BaseItemsFilterWidget;
+
+import com.vaadin.server.Sizeable.Unit;
+import com.vaadin.shared.ui.MarginInfo;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.powermock.reflect.Whitebox;
+
+/**
+ * Verifies {@link AuditFilterWidget}.
+ * <p>
+ * Copyright (C) 2018 copyright.com
+ * <p>
+ * Date: 1/23/18
+ *
+ * @author Aliaksandr Radkevich
+ */
+public class AuditFilterWidgetTest {
+
+    private AuditFilterWidget widget;
+
+    @Before
+    public void setUp() {
+        widget = new AuditFilterWidget();
+        widget.init();
+    }
+
+    @Test
+    public void testLayout() {
+        assertTrue(widget.isSpacing());
+        assertEquals(new MarginInfo(true), widget.getMargin());
+        assertEquals("audit-filter-widget", widget.getStyleName());
+        assertEquals(5, widget.getComponentCount());
+        Component component = widget.getComponent(0);
+        assertTrue(component instanceof Label);
+        verifyLabel((Label) component);
+        component = widget.getComponent(1);
+        assertTrue(component instanceof RightsholderFilterWidget);
+        verifyFilterWidget((RightsholderFilterWidget) component, "Rightsholders");
+        component = widget.getComponent(2);
+        assertTrue(component instanceof UsageBatchFilterWidget);
+        verifyFilterWidget((UsageBatchFilterWidget) component, "Batches");
+        component = widget.getComponent(3);
+        assertTrue(component instanceof StatusFilterWidget);
+        verifyFilterWidget((StatusFilterWidget) component, "Status");
+        component = widget.getComponent(4);
+        assertTrue(component instanceof HorizontalLayout);
+        verifyButtonsLayout((HorizontalLayout) component);
+        assertEquals(Alignment.MIDDLE_RIGHT, widget.getComponentAlignment(component));
+    }
+
+    private void verifyLabel(Label label) {
+        assertEquals("Filters", label.getValue());
+        assertEquals(Cornerstone.LABEL_H2, label.getStyleName());
+    }
+
+    private void verifyFilterWidget(BaseItemsFilterWidget filterWidget, String caption) {
+        assertEquals(caption, Whitebox.getInternalState(filterWidget, Button.class).getCaption());
+        assertNotNull(Whitebox.getInternalState(filterWidget, IFilterSaveListener.class));
+    }
+
+    private void verifyButtonsLayout(HorizontalLayout layout) {
+        assertTrue(layout.isSpacing());
+        verifySize(layout, Unit.PERCENTAGE, 100, Unit.PIXELS, -1);
+        assertEquals("filter-buttons", layout.getStyleName());
+        assertEquals("filter-buttons", layout.getId());
+        assertEquals(2, layout.getComponentCount());
+        Component component = layout.getComponent(0);
+        assertTrue(component instanceof Button);
+        verifyButton((Button) component, "Apply");
+        component = layout.getComponent(1);
+        assertTrue(component instanceof Button);
+        verifyButton((Button) component, "Clear");
+    }
+
+    private void verifyButton(Button button, String caption) {
+        assertEquals(caption, button.getCaption());
+        assertEquals(1, button.getListeners(ClickEvent.class).size());
+    }
+
+    private void verifySize(Component component, Unit widthUnit, float width, Unit heightUnit, float height) {
+        assertEquals(width, component.getWidth(), 0);
+        assertEquals(height, component.getHeight(), 0);
+        assertEquals(heightUnit, component.getHeightUnits());
+        assertEquals(widthUnit, component.getWidthUnits());
+    }
+}

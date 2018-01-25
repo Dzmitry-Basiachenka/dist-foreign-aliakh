@@ -40,6 +40,11 @@ public class RightsholderRepository extends CommonRightsholderRepository impleme
     }
 
     @Override
+    public List<Rightsholder> findFromUsages() {
+        return selectList("RightsholderMapper.findFromUsages");
+    }
+
+    @Override
     protected String getPrefix() {
         return "df";
     }

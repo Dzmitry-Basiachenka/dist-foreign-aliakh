@@ -106,7 +106,7 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
     }
 
     private HorizontalLayout buildUsageBatchFilter() {
-        usageBatchFilterWidget = new UsageBatchFilterWidget(controller);
+        usageBatchFilterWidget = new UsageBatchFilterWidget(() -> controller.getUsageBatchesNotIncludedIntoScenario());
         usageBatchFilterWidget.addFilterSaveListener(saveEvent -> {
             usageFilter.setUsageBatchesIds(saveEvent.getSelectedItemsIds());
             filterChanged();
@@ -116,7 +116,8 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
     }
 
     private HorizontalLayout buildRroAccountNumberFilter() {
-        rightsholderFilterWidget = new RightsholderFilterWidget(controller);
+        rightsholderFilterWidget =
+            new RightsholderFilterWidget(ForeignUi.getMessage("label.rros"), () -> controller.getRros());
         rightsholderFilterWidget.addFilterSaveListener(saveEvent -> {
             usageFilter.setRhAccountNumbers(saveEvent.getSelectedItemsIds());
             filterChanged();
@@ -126,7 +127,7 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
     }
 
     private void initStatusFilter() {
-        statusComboBox = new ComboBox(ForeignUi.getMessage("label.statuses"),
+        statusComboBox = new ComboBox(ForeignUi.getMessage("label.status"),
             new BeanItemContainer<>(UsageStatusEnum.class, Lists.newArrayList(UsageStatusEnum.NEW,
                 UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.SENT_FOR_RA,
                 UsageStatusEnum.ELIGIBLE)));

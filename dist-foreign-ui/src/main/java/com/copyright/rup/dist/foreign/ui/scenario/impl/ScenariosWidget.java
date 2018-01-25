@@ -224,13 +224,13 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
             descriptionLabel.setValue(ForeignUi.getMessage("label.description", scenario.getDescription()));
             ScenarioAuditItem lastAction = scenarioWithAmounts.getAuditItem();
             if (Objects.nonNull(lastAction)) {
-                actionType.setValue(formatLabel(ForeignUi.getMessage("label.scenario.last_action.action_type"),
+                actionType.setValue(formatLabel(ForeignUi.getMessage("label.action_type"),
                     lastAction.getActionType()));
-                actionCreatedUser.setValue(formatLabel(ForeignUi.getMessage("label.scenario.last_action.action_user"),
+                actionCreatedUser.setValue(formatLabel(ForeignUi.getMessage("label.action_user"),
                     lastAction.getCreateUser()));
-                actionCreatedDate.setValue(formatLabel(ForeignUi.getMessage("label.scenario.last_action.action_date"),
+                actionCreatedDate.setValue(formatLabel(ForeignUi.getMessage("label.action_date"),
                     DateFormatUtils.format(lastAction.getCreateDate(), RupDateUtils.US_DATETIME_FORMAT_PATTERN_LONG)));
-                actionReason.setValue(formatLabel(ForeignUi.getMessage("label.scenario.last_action.action_reason"),
+                actionReason.setValue(formatLabel(ForeignUi.getMessage("label.action_reason"),
                     lastAction.getActionReason()));
             }
             metadataPanel.setContent(metadataLayout);

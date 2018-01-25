@@ -27,4 +27,9 @@ public interface IRightsholderService extends ICommonRightsholderService {
      * @param rightsholder {@link Rightsholder} to insert
      */
     void updateRightsholder(Rightsholder rightsholder);
+
+    /**
+     * @return list of {@link Rightsholder}s from usages.
+     */
+    List<Rightsholder> getFromUsages();
 }

@@ -26,7 +26,12 @@ public interface IRightsholderRepository extends ICommonRightsholderRepository {
     /**
      * Deletes {@link Rightsholder} from database table by account number.
      *
-     * @param accountNumber acccount number of {@link Rightsholder}
+     * @param accountNumber account number of {@link Rightsholder}
      */
     void deleteByAccountNumber(Long accountNumber);
+
+    /**
+     * @return list of distinct {@link Rightsholder}s from all usages.
+     */
+    List<Rightsholder> findFromUsages();
 }

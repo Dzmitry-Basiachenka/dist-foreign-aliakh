@@ -56,4 +56,9 @@ public class RightsholderService extends CommonRightsholderService implements IR
         rightsholderRepository.insert(rightsholder);
         LOGGER.info("Update rightsholder information. Finished. RhAccount#={}", rightsholder.getAccountNumber());
     }
+
+    @Override
+    public List<Rightsholder> getFromUsages() {
+        return rightsholderRepository.findFromUsages();
+    }
 }

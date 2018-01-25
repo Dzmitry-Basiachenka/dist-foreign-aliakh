@@ -124,6 +124,16 @@ public class RightsholderRepositoryIntegrationTest {
         assertTrue(CollectionUtils.isEmpty(rightsholderRepository.findByAccountNumbers(Sets.newHashSet(1111111111L))));
     }
 
+    @Test
+    public void testFindFromUsages() {
+        List<Rightsholder> rightsholders = rightsholderRepository.findFromUsages();
+        assertEquals(4, rightsholders.size());
+        assertTrue(rightsholders.stream()
+            .map(Rightsholder::getAccountNumber)
+            .collect(Collectors.toList())
+            .containsAll(Sets.newHashSet(1000159997L, 1000009997L, 1000002859L, 1000005413L)));
+    }
+
     private Rightsholder buildRightsholder() {
         Rightsholder rightsholder = new Rightsholder();
         rightsholder.setAccountNumber(12345678L);

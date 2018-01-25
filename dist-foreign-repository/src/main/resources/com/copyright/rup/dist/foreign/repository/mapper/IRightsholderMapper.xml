@@ -47,4 +47,18 @@
         delete from ${schema}.df_rightsholder
         where rh_account_number = #{accountNumber}
     </delete>
+
+    <select id="findFromUsages" resultMap="rightsholderResultMap">
+        select distinct on (u.rh_account_number)
+            u.rh_account_number,
+            r.name
+        from ${schema}.df_usage u
+        left join ${schema}.df_rightsholder r on u.rh_account_number = r.rh_account_number
+        union
+        select distinct on (ua.rh_account_number)
+            ua.rh_account_number,
+            r.name
+        from ${schema}.df_usage_archive ua
+        left join ${schema}.df_rightsholder r on ua.rh_account_number = r.rh_account_number
+    </select>
 </mapper>
