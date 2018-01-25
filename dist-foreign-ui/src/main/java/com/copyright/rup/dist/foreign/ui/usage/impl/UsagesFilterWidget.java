@@ -116,8 +116,10 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
     }
 
     private HorizontalLayout buildRroAccountNumberFilter() {
-        rightsholderFilterWidget =
-            new RightsholderFilterWidget(ForeignUi.getMessage("label.rros"), () -> controller.getRros());
+        rightsholderFilterWidget = new RightsholderFilterWidget(
+            ForeignUi.getMessage("label.rros"),
+            ForeignUi.getMessage("prompt.rro"),
+            () -> controller.getRros());
         rightsholderFilterWidget.addFilterSaveListener(saveEvent -> {
             usageFilter.setRhAccountNumbers(saveEvent.getSelectedItemsIds());
             filterChanged();
