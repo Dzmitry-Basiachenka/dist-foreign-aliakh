@@ -109,7 +109,8 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
     // '0ec5c344-7a37-4b29-b501-1af30ab63f8f'
     public void testVerifyScenariosTabSpecialist() {
         loginAsSpecialist();
-        verifyScenariosTab(Sets.newHashSet(VIEW_BUTTON_ID, DELETE_BUTTON_ID, "Submit for Approval", "Send to LM"));
+        verifyScenariosTab(Sets.newHashSet(VIEW_BUTTON_ID, DELETE_BUTTON_ID, "Reconcile Rightsholders",
+            "Submit for Approval", "Send to LM"));
     }
 
     @Test
@@ -225,8 +226,8 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
     }
 
     private void verifyScenariosLayoutButton(WebElement buttonsLayout, Set<String> buttonsIds) {
-        Set<String> scenariosButton =
-            Sets.newHashSet(VIEW_BUTTON_ID, DELETE_BUTTON_ID, "Submit for Approval", "Apply", "Reject", "Send to LM");
+        Set<String> scenariosButton = Sets.newHashSet(VIEW_BUTTON_ID, DELETE_BUTTON_ID, "Reconcile Rightsholders",
+            "Submit for Approval", "Apply", "Reject", "Send to LM");
         assertButtonsToolbar(buttonsLayout, scenariosButton, buttonsIds);
     }
 
