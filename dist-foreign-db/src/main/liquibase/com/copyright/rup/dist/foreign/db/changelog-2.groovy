@@ -328,4 +328,20 @@ databaseChangeLog {
                     columnName: 'standard_number', columnDataType: 'VARCHAR(1000)')
         }
     }
+
+    changeSet(id: '2018-01-26-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
+        comment("B-09525 Refine upload logic and introduce new statuses: remove not null constraints of work_title columns")
+
+        dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage',
+                columnName: 'work_title', columnDataType: 'VARCHAR(2000)')
+        dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_archive',
+                columnName: 'work_title', columnDataType: 'VARCHAR(2000)')
+
+        rollback {
+            addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage',
+                    columnName: 'work_title', columnDataType: 'VARCHAR(2000)')
+            addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_archive',
+                    columnName: 'work_title', columnDataType: 'VARCHAR(2000)')
+        }
+    }
 }
