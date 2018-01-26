@@ -6,20 +6,27 @@ import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.integration.rest.rms.IRmsService;
+import com.copyright.rup.dist.foreign.integration.rms.api.IRmsRightsAssignmentService;
+import com.copyright.rup.dist.foreign.integration.rms.api.RightsAssignmentResult;
+import com.copyright.rup.dist.foreign.integration.rms.api.RightsAssignmentResult.RightsAssignmentResultStatusEnum;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 import org.apache.commons.lang3.time.DateUtils;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
+import org.powermock.reflect.Whitebox;
 
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link RmsIntegrationService}.
@@ -32,17 +39,20 @@ import java.util.List;
  */
 public class RmsIntegrationServiceTest {
 
-    private static final Long WR_WRK_INST_1 = 154L;
-    private static final Long WR_WRK_INST_2 = 258L;
+    private static final Long WR_WRK_INST_1 = 122799407L;
+    private static final Long WR_WRK_INST_2 = 123565461L;
     private static final Date CURRENT_DATE = new Date();
     private RmsIntegrationService rmsIntegrationService;
     private IRmsService rmsService;
+    private IRmsRightsAssignmentService rmsRightsAssignmentService;
 
     @Before
     public void setUp() {
         rmsService = createMock(IRmsService.class);
+        rmsRightsAssignmentService = createMock(IRmsRightsAssignmentService.class);
         rmsIntegrationService = new RmsIntegrationService();
-        rmsIntegrationService.setRmsService(rmsService);
+        Whitebox.setInternalState(rmsIntegrationService, IRmsService.class, rmsService);
+        Whitebox.setInternalState(rmsIntegrationService, IRmsRightsAssignmentService.class, rmsRightsAssignmentService);
     }
 
     @Test
@@ -55,5 +65,17 @@ public class RmsIntegrationServiceTest {
         assertTrue(rmsIntegrationService.getAllRmsGrants(wrWrkInsts).isEmpty());
         assertTrue(DateUtils.isSameDay(CURRENT_DATE, dateCapture.getValue()));
         verify(rmsService);
+    }
+
+    @Test
+    public void testSendForRightsAssignment() {
+        Set<Long> wrWrkInsts = Sets.newHashSet(WR_WRK_INST_1);
+        RightsAssignmentResult result = new RightsAssignmentResult(RightsAssignmentResultStatusEnum.SUCCESS);
+        result.setJobId("d4127dbb-9ab8-46a3-b952-b9517deff116");
+        expect(rmsRightsAssignmentService.sendForRightsAssignment(wrWrkInsts))
+            .andReturn(result).once();
+        replay(rmsRightsAssignmentService);
+        assertSame(result, rmsIntegrationService.sendForRightsAssignment(wrWrkInsts));
+        verify(rmsRightsAssignmentService);
     }
 }

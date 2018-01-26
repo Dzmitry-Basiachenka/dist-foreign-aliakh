@@ -23,4 +23,12 @@ public interface IRmsIntegrationService {
      * @return set of {@link RmsGrant}s
      */
     Set<RmsGrant> getAllRmsGrants(List<Long> wrWrkInsts);
+
+    /**
+     * Sends set of Wr Wrk Insts to RMS for rights assignment.
+     *
+     * @param wrWrkInst set of Wr Wrk Insts
+     * @return {@link RightsAssignmentResult} instance
+     */
+    RightsAssignmentResult sendForRightsAssignment(Set<Long> wrWrkInst);
 }
