@@ -207,6 +207,40 @@ databaseChangeLog {
             column(name: 'service_fee', value: '0.32000')
         }
 
+        // testFindByStatuses
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: 'dc945c30-01bc-11e8-8f1a-0800200c9a66')
+            column(name: 'name', value: 'JAACC_12Dec20')
+            column(name: 'rro_account_number', value: '2000017010')
+            column(name: 'payment_date', value: '2020-12-12')
+            column(name: 'fiscal_year', value: '2020')
+            column(name: 'gross_amount', value: '35000')
+            column(name: 'updated_datetime', value: '2017-02-11 11:41:52.735531+03')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '0b0f5100-01bd-11e8-8f1a-0800200c9a66')
+            column(name: 'df_usage_batch_uid', value: 'dc945c30-01bc-11e8-8f1a-0800200c9a66')
+            column(name: 'detail_id', value: '3539748198')
+            column(name: 'wr_wrk_inst', value: '922859149')
+            column(name: 'work_title', value: 'Psychiatric services')
+            column(name: 'status_ind', value: 'SENT_FOR_RA')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '1008902112316635XX')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '9900')
+            column(name: 'gross_amount', value: '16437.40')
+            column(name: 'net_amount', value: '11177.40')
+            column(name: 'service_fee_amount', value: '5260.00')
+            column(name: 'service_fee', value: '0.32000')
+        }
+
         //testFindWrWrkInstsByStatus
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '74b736f2-81ce-41fa-bd8e-574299232458')
