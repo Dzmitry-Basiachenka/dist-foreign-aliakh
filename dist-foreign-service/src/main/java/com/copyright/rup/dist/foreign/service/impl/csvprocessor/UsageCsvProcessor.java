@@ -58,7 +58,7 @@ public class UsageCsvProcessor extends CommonCsvProcessor<Usage> {
         LengthValidator lengthValidator_2000 = new LengthValidator(2000);
         addPlainValidators(Header.DETAIL_ID, requiredValidator, positiveNumberValidator, new LengthValidator(10),
             new DuplicateInFileValidator());
-        addPlainValidators(Header.TITLE, requiredValidator, lengthValidator_2000);
+        addPlainValidators(Header.TITLE, lengthValidator_2000);
         addPlainValidators(Header.ARTICLE, lengthValidator_1000);
         addPlainValidators(Header.STANDARD_NUMBER, requiredValidator, lengthValidator_1000);
         addPlainValidators(Header.WR_WRK_INST, positiveNumberValidator, new LengthValidator(15));

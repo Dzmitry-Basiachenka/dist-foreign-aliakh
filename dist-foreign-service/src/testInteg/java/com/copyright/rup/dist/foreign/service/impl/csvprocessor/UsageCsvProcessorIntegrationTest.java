@@ -14,6 +14,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.impl.UsageService;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.exception.ThresholdExceededException;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
@@ -37,6 +38,7 @@ import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.concurrent.Executors;
 
 /**
@@ -58,6 +60,7 @@ public class UsageCsvProcessorIntegrationTest {
 
     private static final String PATH_TO_ACTUAL = "build/temp";
     private static final String PATH_TO_EXPECTED = "src/testInteg/resources/com/copyright/rup/dist/foreign/service/csv";
+    private static final String TITLE = "1984";
 
     private UsageCsvProcessor processor;
     @Autowired
@@ -81,12 +84,13 @@ public class UsageCsvProcessorIntegrationTest {
         CsvProcessingResult<Usage> usageCsvProcessingResult = processFile("usages.csv");
         assertNotNull(usageCsvProcessingResult);
         assertTrue(usageCsvProcessingResult.isSuccessful());
-        assertEquals(4, usageCsvProcessingResult.getResult().size());
-        verifyUsage(usageCsvProcessingResult.getResult().get(0), 234L, 123456789L, 1000009522L,
-            UsageStatusEnum.ELIGIBLE);
-        verifyUsage(usageCsvProcessingResult.getResult().get(1), 236L, null, null, UsageStatusEnum.NEW);
-        verifyUsage(usageCsvProcessingResult.getResult().get(2), 237L, 123456789L, null, UsageStatusEnum.WORK_FOUND);
-        verifyUsageWithEmptyFields(usageCsvProcessingResult.getResult().get(3));
+        List<Usage> result = usageCsvProcessingResult.getResult();
+        assertEquals(5, CollectionUtils.size(result));
+        verifyUsage(result.get(0), 234L, 123456789L, 1000009522L, UsageStatusEnum.ELIGIBLE, TITLE);
+        verifyUsage(result.get(1), 236L, null, null, UsageStatusEnum.NEW, TITLE);
+        verifyUsage(result.get(2), 237L, 123456789L, null, UsageStatusEnum.WORK_FOUND, TITLE);
+        verifyUsage(result.get(3), 238L, 123456789L, 1000009522L, UsageStatusEnum.ELIGIBLE, null);
+        verifyUsageWithEmptyFields(result.get(4));
     }
 
     @Test
@@ -117,11 +121,12 @@ public class UsageCsvProcessorIntegrationTest {
         }
     }
 
-    private void verifyUsage(Usage usage, Long detailId, Long wrWrkInst, Long rhAccountNumber, UsageStatusEnum status) {
+    private void verifyUsage(Usage usage, Long detailId, Long wrWrkInst, Long rhAccountNumber, UsageStatusEnum status,
+                             String title) {
         assertNotNull(usage);
         assertNotNull(usage.getId());
         assertEquals(detailId, usage.getDetailId());
-        assertEquals("1984", usage.getWorkTitle());
+        assertEquals(title, usage.getWorkTitle());
         assertEquals("Appendix: The Principles of Newspeak", usage.getArticle());
         assertEquals("9780150000000", usage.getStandardNumber());
         assertEquals(wrWrkInst, usage.getWrWrkInst());
@@ -142,7 +147,7 @@ public class UsageCsvProcessorIntegrationTest {
         assertNotNull(usage);
         assertNotNull(usage.getId());
         assertEquals(Long.valueOf(235), usage.getDetailId());
-        assertEquals("1984", usage.getWorkTitle());
+        assertEquals(TITLE, usage.getWorkTitle());
         assertNull(usage.getArticle());
         assertEquals("9780150000000", usage.getStandardNumber());
         assertNull(usage.getWrWrkInst());
