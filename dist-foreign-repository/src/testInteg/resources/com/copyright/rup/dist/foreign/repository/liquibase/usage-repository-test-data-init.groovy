@@ -241,63 +241,6 @@ databaseChangeLog {
             column(name: 'service_fee', value: '0.32000')
         }
 
-        //testFindWrWrkInstsByStatus
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
-            column(name: 'df_usage_batch_uid', value: '74b736f2-81ce-41fa-bd8e-574299232458')
-            column(name: 'name', value: 'JAACC_12Dec20')
-            column(name: 'rro_account_number', value: '2000017010')
-            column(name: 'payment_date', value: '2020-12-12')
-            column(name: 'fiscal_year', value: '2020')
-            column(name: 'gross_amount', value: '35000')
-            column(name: 'updated_datetime', value: '2017-02-11 11:41:52.735531+03')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
-            column(name: 'df_usage_uid', value: '5f381f98-2235-4104-b9ed-36df8d515b52')
-            column(name: 'df_usage_batch_uid', value: '74b736f2-81ce-41fa-bd8e-574299232458')
-            column(name: 'detail_id', value: '7474631212')
-            column(name: 'wr_wrk_inst', value: '930480146')
-            column(name: 'work_title', value: 'Psychiatry')
-            column(name: 'status_ind', value: 'RH_NOT_FOUND')
-            column(name: 'article', value: 'DIN EN 779:2012')
-            column(name: 'standard_number', value: '1008902112319595XX')
-            column(name: 'publisher', value: 'IEEE')
-            column(name: 'publication_date', value: '2013-09-10')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'number_of_copies', value: '100')
-            column(name: 'reported_value', value: '9900')
-            column(name: 'gross_amount', value: '16437.40')
-            column(name: 'net_amount', value: '11177.40')
-            column(name: 'service_fee_amount', value: '5260.00')
-            column(name: 'service_fee', value: '0.32000')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
-            column(name: 'df_usage_uid', value: 'cfca053a-e0ed-44b1-81b8-e11d3d62eefe')
-            column(name: 'df_usage_batch_uid', value: '74b736f2-81ce-41fa-bd8e-574299232458')
-            column(name: 'detail_id', value: '3539748199')
-            column(name: 'wr_wrk_inst', value: '922859149')
-            column(name: 'work_title', value: 'Psychiatric services')
-            column(name: 'status_ind', value: 'RH_NOT_FOUND')
-            column(name: 'article', value: 'DIN EN 779:2012')
-            column(name: 'standard_number', value: '1008902112316635XX')
-            column(name: 'publisher', value: 'IEEE')
-            column(name: 'publication_date', value: '2013-09-10')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'number_of_copies', value: '100')
-            column(name: 'reported_value', value: '9900')
-            column(name: 'gross_amount', value: '16437.40')
-            column(name: 'net_amount', value: '11177.40')
-            column(name: 'service_fee_amount', value: '5260.00')
-            column(name: 'service_fee', value: '0.32000')
-        }
-
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
             column(name: 'df_scenario_uid', value: '979c981c-6a3a-46f3-bbd7-83d322ce9136')
             column(name: 'name', value: 'Sent To LM Scenario')

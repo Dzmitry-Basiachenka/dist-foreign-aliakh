@@ -612,12 +612,6 @@
             </foreach>
     </select>
 
-    <select id="findWrWrkInstsByStatus" resultType="long" parameterType="UsageStatusEnum">
-        select distinct wr_wrk_inst
-        from ${schema}.df_usage
-        where status_ind = #{status}
-    </select>
-
     <select id="findCountForAudit" resultType="int" parameterType="map">
         select
             (select count(1) usage_count

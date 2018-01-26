@@ -204,14 +204,6 @@ public interface IUsageRepository {
     Usage findByDetailId(Long detailId);
 
     /**
-     * Finds list of Wr Wrk Insts from non-archived usages by {@link UsageStatusEnum}.
-     *
-     * @param status {@link UsageStatusEnum} instance
-     * @return list of found Wr Wrk Insts
-     */
-    List<Long> findWrWrkInstsByStatus(UsageStatusEnum status);
-
-    /**
      * Finds count of {@link UsageDto}s by specified {@link AuditFilter}.
      *
      * @param filter {@link AuditFilter}

@@ -227,11 +227,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     public Usage findByDetailId(Long detailId) {
         return selectOne("IUsageMapper.findByDetailId", Objects.requireNonNull(detailId));
     }
-    
-    @Override
-    public List<Long> findWrWrkInstsByStatus(UsageStatusEnum status) {
-        return selectList("IUsageMapper.findWrWrkInstsByStatus", Objects.requireNonNull(status));
-    }
 
     @Override
     public int findCountForAudit(AuditFilter filter) {

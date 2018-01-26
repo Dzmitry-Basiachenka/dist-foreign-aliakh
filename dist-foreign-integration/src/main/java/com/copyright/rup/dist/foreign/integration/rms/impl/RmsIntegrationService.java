@@ -3,6 +3,8 @@ package com.copyright.rup.dist.foreign.integration.rms.impl;
 import com.copyright.rup.dist.common.domain.RmsGrant;
 import com.copyright.rup.dist.common.integration.rest.rms.IRmsService;
 import com.copyright.rup.dist.foreign.integration.rms.api.IRmsIntegrationService;
+import com.copyright.rup.dist.foreign.integration.rms.api.IRmsRightsAssignmentService;
+import com.copyright.rup.dist.foreign.integration.rms.api.RightsAssignmentResult;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -30,18 +32,17 @@ public class RmsIntegrationService implements IRmsIntegrationService {
     @Qualifier("dist.common.integration.rmsService")
     private IRmsService rmsService;
 
+    @Autowired
+    private IRmsRightsAssignmentService rmsRightsAssignmentService;
+
     @Override
     public Set<RmsGrant> getAllRmsGrants(List<Long> wrWrkInsts) {
         return rmsService.getAllRmsGrants(wrWrkInsts,
             Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
     }
 
-    /**
-     * Sets instance of {@link IRmsService}.
-     *
-     * @param rmsService instance of {@link IRmsService} to set
-     */
-    void setRmsService(IRmsService rmsService) {
-        this.rmsService = rmsService;
+    @Override
+    public RightsAssignmentResult sendForRightsAssignment(Set<Long> wrWrkInst) {
+        return rmsRightsAssignmentService.sendForRightsAssignment(wrWrkInst);
     }
 }
