@@ -334,13 +334,9 @@ databaseChangeLog {
 
         dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage',
                 columnName: 'work_title', columnDataType: 'VARCHAR(2000)')
-        dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_archive',
-                columnName: 'work_title', columnDataType: 'VARCHAR(2000)')
 
         rollback {
             addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage',
-                    columnName: 'work_title', columnDataType: 'VARCHAR(2000)')
-            addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_archive',
                     columnName: 'work_title', columnDataType: 'VARCHAR(2000)')
         }
     }

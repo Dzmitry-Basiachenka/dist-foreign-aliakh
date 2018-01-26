@@ -1,7 +1,5 @@
 package com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import com.copyright.rup.dist.foreign.domain.Usage;
 
 import java.util.Objects;
@@ -20,7 +18,7 @@ public class RightsholderWrWrkInstValidator implements IValidator<Usage> {
 
     @Override
     public boolean isValid(Usage usage) {
-        checkNotNull(usage);
+        Objects.requireNonNull(usage);
         return !(Objects.nonNull(usage.getRightsholder().getAccountNumber()) && Objects.isNull(usage.getWrWrkInst()));
     }
 
