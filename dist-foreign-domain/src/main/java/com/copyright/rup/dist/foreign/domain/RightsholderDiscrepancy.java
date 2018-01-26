@@ -7,6 +7,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.math.BigDecimal;
+
 /**
  * Contains information about rightsholder getting from FDA and RMS.
  * <p/>
@@ -22,6 +24,8 @@ public class RightsholderDiscrepancy {
     private String workTitle;
     private Rightsholder oldRightsholder;
     private Rightsholder newRightsholder;
+    private BigDecimal oldServiceFee;
+    private BigDecimal newServiceFee;
 
     public Long getWrWrkInst() {
         return wrWrkInst;
@@ -55,6 +59,22 @@ public class RightsholderDiscrepancy {
         this.newRightsholder = newRightsholder;
     }
 
+    public BigDecimal getOldServiceFee() {
+        return oldServiceFee;
+    }
+
+    public void setOldServiceFee(BigDecimal oldServiceFee) {
+        this.oldServiceFee = oldServiceFee;
+    }
+
+    public BigDecimal getNewServiceFee() {
+        return newServiceFee;
+    }
+
+    public void setNewServiceFee(BigDecimal newServiceFee) {
+        this.newServiceFee = newServiceFee;
+    }
+
     @Override
     public boolean equals(Object object) {
         if (object == this) {
@@ -69,6 +89,8 @@ public class RightsholderDiscrepancy {
             .append(this.workTitle, that.workTitle)
             .append(this.oldRightsholder, that.oldRightsholder)
             .append(this.newRightsholder, that.newRightsholder)
+            .append(this.oldServiceFee, that.oldServiceFee)
+            .append(this.newServiceFee, that.newServiceFee)
             .isEquals();
     }
 
@@ -79,6 +101,8 @@ public class RightsholderDiscrepancy {
             .append(workTitle)
             .append(oldRightsholder)
             .append(newRightsholder)
+            .append(oldServiceFee)
+            .append(newServiceFee)
             .toHashCode();
     }
 
@@ -89,6 +113,8 @@ public class RightsholderDiscrepancy {
             .append("workTitle", workTitle)
             .append("oldRightsholder", oldRightsholder)
             .append("newRightsholder", newRightsholder)
+            .append("oldServiceFee", oldServiceFee)
+            .append("newServiceFee", newServiceFee)
             .toString();
     }
 }

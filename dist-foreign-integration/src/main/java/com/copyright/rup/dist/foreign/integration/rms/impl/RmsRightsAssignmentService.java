@@ -82,9 +82,9 @@ class RmsRightsAssignmentService implements IRmsRightsAssignmentService {
             new HttpEntity<>(objectMapper.writeValueAsString(new RightsAssignmentRequest(wrWrkInst)),
                 buildRequestHeader());
         LOGGER.debug("Send for Rights Assignment. Request={}", request);
-        RmsRighstsAssignmentHandler righstsAssignmentHandler =
-            new RmsRighstsAssignmentHandler(restTemplate, wrWrkInst.size());
-        return righstsAssignmentHandler.handleResponse(rightsAssignmentUrl, request);
+        RmsRightsAssignmentHandler rightsAssignmentHandler =
+            new RmsRightsAssignmentHandler(restTemplate, wrWrkInst.size());
+        return rightsAssignmentHandler.handleResponse(rightsAssignmentUrl, request);
     }
 
     private HttpHeaders buildRequestHeader() {
@@ -94,11 +94,11 @@ class RmsRightsAssignmentService implements IRmsRightsAssignmentService {
         return requestHeaders;
     }
 
-    private static class RmsRighstsAssignmentHandler extends CommonRestHandler<RightsAssignmentResult> {
+    private static class RmsRightsAssignmentHandler extends CommonRestHandler<RightsAssignmentResult> {
 
         private int wrWrkInstsCount;
 
-        private RmsRighstsAssignmentHandler(RestTemplate restTemplate, int wrWrkInstsCount) {
+        private RmsRightsAssignmentHandler(RestTemplate restTemplate, int wrWrkInstsCount) {
             super(restTemplate);
             this.wrWrkInstsCount = wrWrkInstsCount;
         }
