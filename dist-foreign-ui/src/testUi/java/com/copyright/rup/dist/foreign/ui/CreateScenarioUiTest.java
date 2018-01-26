@@ -52,12 +52,10 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
         LocalDate.now().format(DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT));
     private static final String CONFIRM_BUTTON_ID = "Confirm";
     private static final String SCENARIO_NAME_FIELD = "Scenario name";
-    private UsageBatchInfo invalidUsageBatch = new UsageBatchInfo("CADRA_11Dec16", "01/11/2017", "FY2017",
-        "2000017004 - Access Copyright, The Canadian Copyright Agency");
+    private static final String APPLY_ELIGIBLE_MESSAGE = "Please apply ELIGIBLE status filter to create scenario";
+
     private UsageBatchInfo validUsageBatch = new UsageBatchInfo("CADRA_11Dec16", "01/11/2017", "FY2017",
         "7000813806 - CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil");
-    private UsageBatchInfo usageBatchWithNewUsages = new UsageBatchInfo("Batch with NEW usages", "01/11/2017", "FY2017",
-        "1000005413 - Kluwer Academic Publishers - Dordrecht");
     private String scenarioId;
 
     @Autowired
@@ -78,17 +76,22 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
     }
 
     @Test
-    // Test case IDs: 'e4b0a048-51af-4c1c-91bd-2a199747ca34', 'de74d602-db65-4ee0-a347-5f729f00a2ab'
-    public void testAddToScenarioWithInvalidUsages() {
+    // Test case IDs: 'e4b0a048-51af-4c1c-91bd-2a199747ca34', 'de74d602-db65-4ee0-a347-5f729f00a2ab',
+    // '6f5e7868-d9fd-49fa-be83-ef7a6061e313'
+    public void testAddUsagesToScenarioInDifferentStatuses() {
         loginAsSpecialist();
         WebElement usagesTab = selectUsagesTab();
-        applyFilters(assertWebElement(By.id(USAGES_FILTER_ID)), invalidUsageBatch);
-        assertTableRowElements(assertWebElement(By.id(USAGES_TABLE_ID)), 0);
-        verifyNotificationWindow(usagesTab, "Scenario cannot be created. Please select ELIGIBLE usages");
-        applyStatusFilter(assertWebElement(By.id(USAGES_FILTER_ID)), UsageStatusEnum.NEW.name());
-        applyFilters(assertWebElement(By.id(USAGES_FILTER_ID)), usageBatchWithNewUsages);
-        assertTableRowElements(assertWebElement(By.id(USAGES_TABLE_ID)), 1);
-        verifyNotificationWindow(usagesTab, "Please apply ELIGIBLE status filter to create scenario");
+        UsageBatchInfo nonexistentBatch = new UsageBatchInfo("CADRA_11Dec16", null, null,
+            "2000017004 - Access Copyright, The Canadian Copyright Agency");
+        UsageBatchInfo batch = new UsageBatchInfo("Batch with usages in different statuses", null, null,
+            "1000005413 - Kluwer Academic Publishers - Dordrecht");
+        applyFiltersAndVerifyNotification(usagesTab, nonexistentBatch, UsageStatusEnum.ELIGIBLE, 0,
+            "Scenario cannot be created. Please select ELIGIBLE usages");
+        applyFiltersAndVerifyNotification(usagesTab, batch, UsageStatusEnum.NEW, 1, APPLY_ELIGIBLE_MESSAGE);
+        applyFiltersAndVerifyNotification(usagesTab, batch, UsageStatusEnum.WORK_FOUND, 1, APPLY_ELIGIBLE_MESSAGE);
+        applyFiltersAndVerifyNotification(usagesTab, batch, UsageStatusEnum.RH_NOT_FOUND, 1, APPLY_ELIGIBLE_MESSAGE);
+        applyFiltersAndVerifyNotification(usagesTab, batch, UsageStatusEnum.SENT_FOR_RA, 1, APPLY_ELIGIBLE_MESSAGE);
+        applyFiltersAndVerifyCreateScenarioWindow(usagesTab, batch, UsageStatusEnum.ELIGIBLE, 1);
     }
 
     @Test
@@ -190,18 +193,36 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
         assertWebElement(createScenarioWindow, CONFIRM_BUTTON_ID);
     }
 
-    private void verifyNotificationWindow(WebElement usagesTab, String errorMessage) {
-        clickButtonAndWait(usagesTab, "Add_To_Scenario");
+    private void verifyNotificationWindow(String errorMessage) {
         WebElement notificationWindow = assertWebElement(By.id("notification-window"));
         assertWebElement(notificationWindow, HTML_DIV_TAG_NAME, errorMessage);
         clickButtonAndWait(notificationWindow, "Ok");
     }
 
     private void applyStatusFilter(WebElement filterWidget, String selectItem) {
+        clickButton(filterWidget, "Clear");
         WebElement statusFilter = assertWebElement(filterWidget, By.id("status-filter"));
-        WebElement statusFilterSelectButton =
-            assertWebElement(statusFilter, By.className("v-filterselect-button"));
-        clickElementAndWait(statusFilterSelectButton);
+        clickElementAndWait(assertWebElement(statusFilter, By.className(V_FILTER_SELECT_BUTTON_CLASS_NAME)));
         clickElementAndWait(assertWebElement(statusFilter, HTML_SPAN_TAG_NAME, selectItem));
+    }
+
+    private void applyFiltersAndVerifyNotification(WebElement usagesTab, UsageBatchInfo batchInfo,
+                                                   UsageStatusEnum status, int count, String message) {
+        applyFiltersAndVerifyTable(batchInfo, status, count);
+        clickButtonAndWait(usagesTab, "Add_To_Scenario");
+        verifyNotificationWindow(message);
+    }
+
+    private void applyFiltersAndVerifyCreateScenarioWindow(WebElement usagesTab, UsageBatchInfo batchInfo,
+                                                           UsageStatusEnum status, int count) {
+        applyFiltersAndVerifyTable(batchInfo, status, count);
+        clickButtonAndWait(usagesTab, "Add_To_Scenario");
+        verifyCreateScenarioWindow(assertWebElement(By.id("create-scenario-window")));
+    }
+
+    private void applyFiltersAndVerifyTable(UsageBatchInfo batchInfo, UsageStatusEnum status, int count) {
+        applyStatusFilter(assertWebElement(By.id(USAGES_FILTER_ID)), status.name());
+        applyFilters(assertWebElement(By.id(USAGES_FILTER_ID)), batchInfo);
+        assertTableRowElements(assertWebElement(By.id(USAGES_TABLE_ID)), count);
     }
 }

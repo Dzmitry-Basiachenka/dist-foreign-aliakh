@@ -59,7 +59,8 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
     private UsageBatchInfo usageBatch4 = new UsageBatchInfo(BATCH_TO_DELETE_ID, "Batch to delete",
         "07/11/2017", "FY2018", "1000002797 - British Film Institute (BFI)");
     private UsageBatchInfo usageBatchWithNewUsages = new UsageBatchInfo("5fb4a015-f943-4e29-ae7b-c7301db3c15e",
-        "Batch with NEW usages", "01/11/2017", "FY2017", "1000005413 - Kluwer Academic Publishers - Dordrecht");
+        "Batch with usages in different statuses", "01/11/2017", "FY2017",
+        "1000005413 - Kluwer Academic Publishers - Dordrecht");
 
     @Autowired
     private IUsageAuditRepository usageAuditRepository;

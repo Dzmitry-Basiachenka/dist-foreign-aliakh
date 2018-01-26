@@ -289,6 +289,8 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         verifyBatchesFilter(filterWidget);
         verifyRROsFilter(filterWidget);
         verifyPaymentDateComponent(filterWidget, "payment-date-filter");
+        assertComboboxElement(assertWebElement(By.id("status-filter")),
+            " ", "NEW", "WORK_FOUND", "RH_NOT_FOUND", "SENT_FOR_RA", "ELIGIBLE");
         assertComboboxElement(filterWidget, "fiscal-year-filter", "Fiscal Year To");
         verifyFiltersWidgetButtons(filterWidget);
     }
