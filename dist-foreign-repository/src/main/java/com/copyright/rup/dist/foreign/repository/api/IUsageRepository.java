@@ -106,6 +106,14 @@ public interface IUsageRepository {
     void addToScenario(List<Usage> usages);
 
     /**
+     * Updates RH account number, payee account number, net amount, service fee amount and RH participation status
+     * for {@link Usage}s.
+     *
+     * @param usages list of {@link Usage}s
+     */
+    void updateRhPayeeAndAmounts(List<Usage> usages);
+
+    /**
      * Deletes {@link Usage}s from scenario. Reverts status of {@link Usage}s
      * to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE} sets scenario id, payee account
      * number, service fee to {@code null}, sets rh participating flag to {@code false}, service fee amount and net

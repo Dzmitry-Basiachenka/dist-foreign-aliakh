@@ -141,14 +141,15 @@ public class UsageService implements IUsageService {
         usages.forEach(usage -> {
             boolean rhParticipatingFlag =
                 prmIntegrationService.isRightsholderParticipating(usage.getRightsholder().getAccountNumber());
-            usage.setRhParticipating(rhParticipatingFlag);
-            usage.setServiceFee(prmIntegrationService.getRhParticipatingServiceFee(rhParticipatingFlag));
-            usage.setServiceFeeAmount(
-                CalculationUtils.calculateServiceFeeAmount(usage.getGrossAmount(), usage.getServiceFee()));
-            usage.setNetAmount(
-                CalculationUtils.calculateNetAmount(usage.getGrossAmount(), usage.getServiceFeeAmount()));
+            CalculationUtils.recalculateUsage(usage, rhParticipatingFlag,
+                prmIntegrationService.getRhParticipatingServiceFee(rhParticipatingFlag));
         });
         return usages;
+    }
+
+    @Override
+    public List<Usage> getUsagesByScenarioId(String scenarioId) {
+        return usageRepository.findByScenarioId(scenarioId);
     }
 
     @Override
@@ -165,6 +166,18 @@ public class UsageService implements IUsageService {
                     PrmIntegrationService.FAS_PRODUCT_FAMILY));
         });
         usageRepository.addToScenario(usages);
+    }
+
+    @Override
+    public void updateRhPayeeAndAmounts(List<Usage> usages) {
+        usages.forEach(usage -> {
+            boolean rhParticipatingFlag =
+                prmIntegrationService.isRightsholderParticipating(usage.getRightsholder().getAccountNumber());
+            CalculationUtils.recalculateUsage(usage, rhParticipatingFlag,
+                prmIntegrationService.getRhParticipatingServiceFee(rhParticipatingFlag));
+            usage.setUpdateUser(RupContextUtils.getUserName());
+        });
+        usageRepository.updateRhPayeeAndAmounts(usages);
     }
 
     @Override

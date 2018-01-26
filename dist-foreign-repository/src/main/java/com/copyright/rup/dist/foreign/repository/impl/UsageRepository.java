@@ -137,6 +137,11 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
+    public void updateRhPayeeAndAmounts(List<Usage> usages) {
+        Objects.requireNonNull(usages).forEach(usage -> update("IUsageMapper.updateRhPayeeAndAmounts", usage));
+    }
+
+    @Override
     @Profiled(tag = "repository.UsageRepository.deleteFromScenario")
     public void deleteFromScenario(String scenarioId, String updateUser) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);

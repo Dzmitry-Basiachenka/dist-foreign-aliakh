@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -203,6 +204,15 @@ public class UsageServiceTest {
     }
 
     @Test
+    public void testGetUsagesByScenario() {
+        List<Usage> usages = Collections.singletonList(new Usage());
+        expect(usageRepository.findByScenarioId(scenario.getId())).andReturn(usages).once();
+        replay(usageRepository);
+        assertSame(usages, usageService.getUsagesByScenarioId(scenario.getId()));
+        verify(usageRepository);
+    }
+
+    @Test
     public void testGetUsagesWithAmounts() {
         UsageFilter usageFilter = new UsageFilter();
         Usage usage = buildUsage(USAGE_ID_1);
@@ -303,6 +313,21 @@ public class UsageServiceTest {
         replay(usageRepository, RupContextUtils.class);
         usageService.deleteFromScenario(SCENARIO_ID);
         verify(usageRepository, RupContextUtils.class);
+    }
+
+    @Test
+    public void testUpdateRhPayeeAndAmounts() {
+        Usage usage = buildUsage(RupPersistUtils.generateUuid());
+        expect(prmIntegrationService.isRightsholderParticipating(1000001534L)).andReturn(false).once();
+        expect(prmIntegrationService.getRhParticipatingServiceFee(false)).andReturn(new BigDecimal("0.16")).once();
+        usageRepository.updateRhPayeeAndAmounts(Collections.singletonList(usage));
+        expectLastCall().once();
+        replay(usageRepository, prmIntegrationService);
+        usageService.updateRhPayeeAndAmounts(Collections.singletonList(usage));
+        assertEquals(new BigDecimal("0.16"), usage.getServiceFee());
+        assertEquals(new BigDecimal("16.0000000000"), usage.getServiceFeeAmount());
+        assertEquals(new BigDecimal("84.0000000000"), usage.getNetAmount());
+        verify(usageRepository, prmIntegrationService);
     }
 
     @Test
@@ -430,6 +455,9 @@ public class UsageServiceTest {
         usage.getRightsholder().setId(RupPersistUtils.generateUuid());
         usage.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER);
         usage.setGrossAmount(new BigDecimal("100.00"));
+        usage.setNetAmount(new BigDecimal("68.0000000000"));
+        usage.setServiceFeeAmount(new BigDecimal("32.0000000000"));
+        usage.setServiceFee(new BigDecimal("0.32"));
         return usage;
     }
 }

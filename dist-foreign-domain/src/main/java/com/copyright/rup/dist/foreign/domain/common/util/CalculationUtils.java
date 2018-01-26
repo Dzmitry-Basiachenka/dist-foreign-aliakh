@@ -2,6 +2,8 @@ package com.copyright.rup.dist.foreign.domain.common.util;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
+import com.copyright.rup.dist.foreign.domain.Usage;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
@@ -77,5 +79,21 @@ public final class CalculationUtils {
         checkArgument(0 > BigDecimal.ZERO.compareTo(grossAmount));
         checkArgument(0 > BigDecimal.ZERO.compareTo(serviceFeeAmount));
         return grossAmount.subtract(serviceFeeAmount);
+    }
+
+    /**
+     * Recalculates service fee and net amounts for specified {@link Usage} based on service fee value.
+     *
+     * @param usage               {@link Usage} to recalculate
+     * @param rhParticipationFlag rh participating flag
+     * @param serviceFee          service fee value
+     * @return recalculates {@link Usage}
+     */
+    public static Usage recalculateUsage(Usage usage, boolean rhParticipationFlag, BigDecimal serviceFee) {
+        usage.setRhParticipating(rhParticipationFlag);
+        usage.setServiceFee(serviceFee);
+        usage.setServiceFeeAmount(calculateServiceFeeAmount(usage.getGrossAmount(), usage.getServiceFee()));
+        usage.setNetAmount(calculateNetAmount(usage.getGrossAmount(), usage.getServiceFeeAmount()));
+        return usage;
     }
 }

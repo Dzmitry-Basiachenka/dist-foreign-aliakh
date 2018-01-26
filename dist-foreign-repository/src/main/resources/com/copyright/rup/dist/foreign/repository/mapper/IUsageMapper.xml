@@ -379,14 +379,35 @@
 
     <select id="findByScenarioId" resultMap="usageResultMap" parameterType="string">
         select
-            df_usage_uid,
-            <include refid="usageColumns"/>,
-            service_fee,
-            service_fee_amount,
-            net_amount,
-            payee_account_number,
-            is_rh_participating_flag
-        from ${schema}.df_usage
+            u.df_usage_uid,
+            u.df_usage_batch_uid,
+            u.df_scenario_uid,
+            u.detail_id,
+            u.wr_wrk_inst,
+            u.work_title,
+            u.rh_account_number,
+            rh.name rh_name,
+            u.status_ind,
+            u.article,
+            u.standard_number,
+            u.publisher,
+            u.publication_date,
+            u.market,
+            u.market_period_from,
+            u.market_period_to,
+            u.author,
+            u.number_of_copies,
+            u.reported_value,
+            u.gross_amount,
+            u.service_fee,
+            u.service_fee_amount,
+            u.net_amount,
+            u.payee_account_number,
+            p.name payee_name,
+            u.is_rh_participating_flag
+        from ${schema}.df_usage u
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        left join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
         where df_scenario_uid = #{scenarioId}
     </select>
 
@@ -487,6 +508,20 @@
         set
             status_ind = #{status},
             df_scenario_uid = #{scenarioId},
+            payee_account_number = #{payee.accountNumber},
+            net_amount = #{netAmount},
+            service_fee_amount = #{serviceFeeAmount},
+            service_fee = #{serviceFee},
+            is_rh_participating_flag = #{rhParticipating},
+            <include refid="StoredEntityMapper.update"/>
+        where df_usage_uid = #{id}
+    </update>
+
+    <update id="updateRhPayeeAndAmounts" parameterType="Usage">
+        update
+            ${schema}.df_usage
+        set
+            rh_account_number = #{rightsholder.accountNumber},
             payee_account_number = #{payee.accountNumber},
             net_amount = #{netAmount},
             service_fee_amount = #{serviceFeeAmount},

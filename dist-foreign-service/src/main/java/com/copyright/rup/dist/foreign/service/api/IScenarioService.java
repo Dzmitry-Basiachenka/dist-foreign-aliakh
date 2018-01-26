@@ -1,11 +1,13 @@
 package com.copyright.rup.dist.foreign.service.api;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Interface for scenario service.
@@ -116,4 +118,19 @@ public interface IScenarioService {
      * @param scenario {@link Scenario} instance
      */
     void sendToLm(Scenario scenario);
+
+    /**
+     * Finds all {@link RightsholderDiscrepancy}ies for specified {@link Scenario} using RMS service.
+     *
+     * @param scenario {@link Scenario} instance
+     * @return set of {@link RightsholderDiscrepancy}ies
+     */
+    Set<RightsholderDiscrepancy> getRightsholderDiscrepancies(Scenario scenario);
+
+    /**
+     * Updates usages participation flag and amounts for specified {@link Scenario} using PRM service.
+     *
+     * @param scenario {@link Scenario} instance
+     */
+    void updateRhParticipationAndAmounts(Scenario scenario);
 }

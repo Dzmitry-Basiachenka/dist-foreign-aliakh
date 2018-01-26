@@ -12,10 +12,12 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IActionHandler;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IReconcileRightsholdersController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosWidget;
 import com.copyright.rup.vaadin.security.SecurityUtils;
@@ -23,6 +25,7 @@ import com.copyright.rup.vaadin.ui.ConfirmActionDialogWindow;
 import com.copyright.rup.vaadin.ui.ConfirmDialogWindow;
 import com.copyright.rup.vaadin.ui.Windows;
 
+import com.google.common.collect.Sets;
 import com.vaadin.ui.Window;
 
 import org.junit.Before;
@@ -33,6 +36,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Collections;
+import java.util.Set;
 
 /**
  * Verifies {@link ScenariosController}.
@@ -112,6 +116,39 @@ public class ScenariosControllerTest {
         replay(scenariosWidget, scenarioController, Windows.class);
         scenariosController.onViewButtonClicked();
         verify(scenariosWidget, scenarioController, Windows.class);
+    }
+
+    @Test
+    public void testOnReconcileRightsholdersButtonClickedNoDiscrepancies() {
+        mockStatic(Windows.class);
+        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
+        expect(scenarioService.getRightsholderDiscrepancies(scenario)).andReturn(Collections.emptySet());
+        expect(Windows.showConfirmDialog(eq("There are no rightsholders updates for scenario " +
+                "<i><b>Scenario name</b></i>. Do you want to update service fee?"),
+            anyObject(ConfirmDialogWindow.IListener.class))).andReturn(null).once();
+        replay(scenariosWidget, scenarioService, Windows.class);
+        scenariosController.onReconcileRightsholdersButtonClicked();
+        verify(scenariosWidget, scenarioService, Windows.class);
+    }
+
+    @Test
+    public void testOnReconcileRightsholdersButtonClickedWithDiscrepancies() {
+        mockStatic(Windows.class);
+        IReconcileRightsholdersController reconcileRightsholdersController =
+            createMock(IReconcileRightsholdersController.class);
+        Whitebox.setInternalState(scenariosController, "reconcileRightsholdersController",
+            reconcileRightsholdersController);
+        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
+        Set<RightsholderDiscrepancy> discrepancies = Sets.newHashSet(new RightsholderDiscrepancy());
+        expect(scenarioService.getRightsholderDiscrepancies(scenario)).andReturn(discrepancies);
+        Windows.showModalWindow(anyObject(RightsholderDiscrepanciesWindow.class));
+        expectLastCall().once();
+        reconcileRightsholdersController.setDiscrepancies(discrepancies);
+        expectLastCall().once();
+        expect(reconcileRightsholdersController.getDiscrepancies()).andReturn(discrepancies).once();
+        replay(scenariosWidget, scenarioService, reconcileRightsholdersController, Windows.class);
+        scenariosController.onReconcileRightsholdersButtonClicked();
+        verify(scenariosWidget, scenarioService, reconcileRightsholdersController, Windows.class);
     }
 
     @Test

@@ -2,7 +2,7 @@ package com.copyright.rup.dist.foreign.ui.scenario.api;
 
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * Interface for rightsholder controller.
@@ -16,16 +16,16 @@ import java.util.List;
 public interface IReconcileRightsholdersController {
 
     /**
-     * @return list of {@link RightsholderDiscrepancy}ies.
+     * @return set of {@link RightsholderDiscrepancy}ies.
      */
-    List<RightsholderDiscrepancy> getDiscrepancies();
+    Set<RightsholderDiscrepancy> getDiscrepancies();
 
     /**
-     * Sets list of {@link RightsholderDiscrepancy}ies.
+     * Sets set of {@link RightsholderDiscrepancy}ies.
      *
-     * @param discrepancies list of {@link RightsholderDiscrepancy}ies
+     * @param discrepancies set of {@link RightsholderDiscrepancy}ies
      */
-    void setDiscrepancies(List<RightsholderDiscrepancy> discrepancies);
+    void setDiscrepancies(Set<RightsholderDiscrepancy> discrepancies);
 
     /**
      * Approves reconciliation of rightsholders.

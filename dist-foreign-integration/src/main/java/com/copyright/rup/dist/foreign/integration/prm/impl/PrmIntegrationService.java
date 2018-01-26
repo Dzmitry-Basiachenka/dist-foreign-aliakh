@@ -75,17 +75,17 @@ public class PrmIntegrationService implements IPrmIntegrationService {
     @Override
     @Profiled(tag = "integration.PrmIntegrationService.isRightsholderParticipating")
     public boolean isRightsholderParticipating(Long accountNumber) {
-        boolean rhPraticipatingFlag = false;
+        boolean rhParticipatingFlag = false;
         Map<String, RightsholderPreferences> preferencesMap =
             prmRhPreferenceService.getRightsholderPreferences(accountNumber);
         if (MapUtils.isNotEmpty(preferencesMap)) {
             RightsholderPreferences preferences = ObjectUtils.defaultIfNull(preferencesMap.get(FAS_PRODUCT_FAMILY),
                 preferencesMap.get(RightsholderPreferences.ALL_PRODUCTS_KEY));
             if (null != preferences && null != preferences.isRhParticipating()) {
-                rhPraticipatingFlag = preferences.isRhParticipating();
+                rhParticipatingFlag = preferences.isRhParticipating();
             }
         }
-        return rhPraticipatingFlag;
+        return rhParticipatingFlag;
     }
 
     @Override

@@ -1,16 +1,20 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
-import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.replayAll;
 import static org.powermock.api.easymock.PowerMock.verify;
+import static org.powermock.api.easymock.PowerMock.verifyAll;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
@@ -18,11 +22,15 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.integration.lm.api.ILmIntegrationService;
 import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsage;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
+import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
+import com.copyright.rup.dist.foreign.service.api.IRmsGrantsService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
@@ -58,6 +66,8 @@ public class ScenarioServiceTest {
     private IUsageService usageService;
     private IScenarioAuditService scenarioAuditService;
     private ILmIntegrationService lmIntegrationService;
+    private IRmsGrantsService rmsGrantsService;
+    private IRightsholderService rightsholderService;
     private Scenario scenario = new Scenario();
 
     @Before
@@ -67,11 +77,15 @@ public class ScenarioServiceTest {
         usageService = createMock(IUsageService.class);
         lmIntegrationService = createMock(ILmIntegrationService.class);
         scenarioAuditService = createMock(IScenarioAuditService.class);
+        rmsGrantsService = createMock(IRmsGrantsService.class);
+        rightsholderService = createMock(IRightsholderService.class);
         scenarioService = new ScenarioService();
         Whitebox.setInternalState(scenarioService, "scenarioRepository", scenarioRepository);
         Whitebox.setInternalState(scenarioService, "usageService", usageService);
         Whitebox.setInternalState(scenarioService, "scenarioAuditService", scenarioAuditService);
         Whitebox.setInternalState(scenarioService, "lmIntegrationService", lmIntegrationService);
+        Whitebox.setInternalState(scenarioService, "rmsGrantsService", rmsGrantsService);
+        Whitebox.setInternalState(scenarioService, "rightsholderService", rightsholderService);
     }
 
     @Test
@@ -190,5 +204,52 @@ public class ScenarioServiceTest {
         assertEquals(Collections.emptyList(),
             scenarioService.getRightsholdersByScenarioAndSourceRro(SCENARIO_ID, 2000017010L));
         verify(scenarioRepository);
+    }
+
+    @Test
+    public void testGetRightsholderDiscrepancies() {
+        expect(usageService.getUsagesByScenarioId(scenario.getId())).andReturn(
+            Lists.newArrayList(buildUsage(1L, 2000017010L), buildUsage(2L, 2000017010L))).once();
+        expect(rmsGrantsService.getAccountNumbersByWrWrkInsts(Lists.newArrayList(1L, 2L))).andReturn(
+            ImmutableMap.of(1L, 2000017010L, 2L, 1000000001L)).once();
+        expect(rightsholderService.updateAndGetRightsholders(Sets.newHashSet(2000017010L, 1000000001L))).andReturn(
+            ImmutableMap.of(2000017010L, buildRightsholder(2000017010L), 1000000001L, buildRightsholder(1000000001L)))
+            .once();
+        replayAll();
+        assertEquals(Sets.newHashSet(buildDiscrepancy(2L, 2000017010L, 1000000001L)),
+            scenarioService.getRightsholderDiscrepancies(scenario));
+        verifyAll();
+    }
+
+    @Test
+    public void testUpdateRhParticipationAndAmounts() {
+        List<Usage> usages = Collections.singletonList(buildUsage(1L, 2000017010L));
+        expect(usageService.getUsagesByScenarioId(scenario.getId())).andReturn(usages).once();
+        usageService.updateRhPayeeAndAmounts(usages);
+        expectLastCall().once();
+        replayAll();
+        scenarioService.updateRhParticipationAndAmounts(scenario);
+        verifyAll();
+    }
+
+    private Usage buildUsage(Long wrWrkInst, Long accountNumber) {
+        Usage usage = new Usage();
+        usage.setWrWrkInst(wrWrkInst);
+        usage.getRightsholder().setAccountNumber(accountNumber);
+        return usage;
+    }
+
+    private RightsholderDiscrepancy buildDiscrepancy(Long wrWrkInst, Long oldAccountNumber, Long newAccountNumber) {
+        RightsholderDiscrepancy rightsholderDiscrepancy = new RightsholderDiscrepancy();
+        rightsholderDiscrepancy.setOldRightsholder(buildRightsholder(oldAccountNumber));
+        rightsholderDiscrepancy.setNewRightsholder(buildRightsholder(newAccountNumber));
+        rightsholderDiscrepancy.setWrWrkInst(wrWrkInst);
+        return rightsholderDiscrepancy;
+    }
+
+    private Rightsholder buildRightsholder(Long accountNumber) {
+        Rightsholder rightsholder = new Rightsholder();
+        rightsholder.setAccountNumber(accountNumber);
+        return rightsholder;
     }
 }

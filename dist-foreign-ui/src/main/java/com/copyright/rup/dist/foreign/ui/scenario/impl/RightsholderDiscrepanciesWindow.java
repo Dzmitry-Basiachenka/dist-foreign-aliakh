@@ -2,14 +2,19 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IReconcileRightsholdersController;
+import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.LongColumnGenerator;
 import com.copyright.rup.vaadin.ui.VaadinUtils;
 
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
-
-import java.util.List;
+import com.vaadin.ui.Window;
 
 /**
  * Represents component to display rightsholder discrepancies.
@@ -20,7 +25,7 @@ import java.util.List;
  *
  * @author Ihar Suvorau
  */
-public class RightsholderDiscrepanciesWindow extends VerticalLayout {
+public class RightsholderDiscrepanciesWindow extends Window {
 
     private static final String WR_WRK_INST_PROPERTY = "wrWrkInst";
     private static final String WORK_TITLE_PROPERTY = "workTitle";
@@ -29,34 +34,53 @@ public class RightsholderDiscrepanciesWindow extends VerticalLayout {
     private static final String NEW_RIGHTSHOLDER_ACCOUNT_NUMBER_PROPERTY = "newRightsholder.accountNumber";
     private static final String NEW_RIGHTSHOLDER_NAME_PROPERTY = "newRightsholder.name";
     private BeanItemContainer<RightsholderDiscrepancy> container;
+    private IReconcileRightsholdersController controller;
 
     /**
      * Constructor.
      *
-     * @param rightsholderDiscrepancies list of {@link RightsholderDiscrepancy}ies
+     * @param reconcileRightsholdersController instance of {@link IReconcileRightsholdersController}
      */
-    public RightsholderDiscrepanciesWindow(List<RightsholderDiscrepancy> rightsholderDiscrepancies) {
+    public RightsholderDiscrepanciesWindow(IReconcileRightsholdersController reconcileRightsholdersController) {
         setWidth(900, Unit.PIXELS);
-        setHeight(500, Unit.PIXELS);
-        initContent();
-        populateDiscrepancies(rightsholderDiscrepancies);
+        setHeight(530, Unit.PIXELS);
+        setContent(initContent());
+        setCaption(ForeignUi.getMessage("label.reconcile_rightsholders"));
+        this.controller = reconcileRightsholdersController;
+        populateDiscrepancies();
         VaadinUtils.addComponentStyle(this, "rightsholder-discrepancies-window");
     }
 
-    private void populateDiscrepancies(List<RightsholderDiscrepancy> rightsholderDiscrepancies) {
+    private void populateDiscrepancies() {
         container.removeAllItems();
-        container.addAll(rightsholderDiscrepancies);
+        container.addAll(controller.getDiscrepancies());
         container.sort(new Object[]{RIGHTSHOLDER_ACCOUNT_NUMBER_PROPERTY, NEW_RIGHTSHOLDER_ACCOUNT_NUMBER_PROPERTY},
             new boolean[]{true, true});
     }
 
-    private void initContent() {
+    private Component initContent() {
         Table discrepanciesTable = initDiscrepanciesTable();
-        this.addComponents(discrepanciesTable);
-        this.setMargin(true);
-        this.setSpacing(true);
-        this.setSizeFull();
-        this.setExpandRatio(discrepanciesTable, 1.0f);
+        HorizontalLayout buttons = initButtons();
+        VerticalLayout content = new VerticalLayout(discrepanciesTable, buttons);
+        content.setMargin(true);
+        content.setSpacing(true);
+        content.setSizeFull();
+        content.setExpandRatio(discrepanciesTable, 1.0f);
+        content.setComponentAlignment(buttons, Alignment.BOTTOM_RIGHT);
+        return content;
+    }
+
+    private HorizontalLayout initButtons() {
+        HorizontalLayout buttonsLayout = new HorizontalLayout();
+        Button approveButton = Buttons.createButton(ForeignUi.getMessage("button.approve"));
+        approveButton.addClickListener(event -> {
+            controller.approveReconciliation();
+            this.close();
+        });
+        buttonsLayout.addComponents(approveButton, Buttons.createCancelButton(this));
+        buttonsLayout.setSpacing(true);
+        VaadinUtils.addComponentStyle(buttonsLayout, "rightsholder-discrepancies-buttons-layout");
+        return buttonsLayout;
     }
 
     private Table initDiscrepanciesTable() {
