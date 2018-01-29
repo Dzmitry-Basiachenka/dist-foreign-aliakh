@@ -19,6 +19,7 @@ public class RightsAssignmentResult {
 
     private RightsAssignmentResultStatusEnum status;
     private String jobId;
+    private String errorMessage;
 
     /**
      * Constructor.
@@ -45,6 +46,14 @@ public class RightsAssignmentResult {
         return jobId;
     }
 
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
+
     /**
      * Checks whether rights assignment process was successful or not.
      *
@@ -67,6 +76,7 @@ public class RightsAssignmentResult {
         return new EqualsBuilder()
             .append(this.status, that.status)
             .append(this.jobId, that.jobId)
+            .append(this.errorMessage, that.errorMessage)
             .isEquals();
     }
 
@@ -75,6 +85,7 @@ public class RightsAssignmentResult {
         return new HashCodeBuilder()
             .append(status)
             .append(jobId)
+            .append(errorMessage)
             .toHashCode();
     }
 
@@ -83,6 +94,7 @@ public class RightsAssignmentResult {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
             .append("status", status)
             .append("jobId", jobId)
+            .append("errorMessage", errorMessage)
             .toString();
     }
 

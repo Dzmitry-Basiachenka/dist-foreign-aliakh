@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.service.impl;
 
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.integration.rest.prm.PrmRollUpService;
+import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
@@ -16,6 +17,8 @@ import com.copyright.rup.dist.foreign.domain.common.util.CalculationUtils;
 import com.copyright.rup.dist.foreign.domain.common.util.ForeignLogUtils;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.integration.prm.impl.PrmIntegrationService;
+import com.copyright.rup.dist.foreign.integration.rms.api.IRmsIntegrationService;
+import com.copyright.rup.dist.foreign.integration.rms.api.RightsAssignmentResult;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
@@ -69,6 +72,8 @@ public class UsageService implements IUsageService {
     private IUsageAuditService usageAuditService;
     @Autowired
     private IPrmIntegrationService prmIntegrationService;
+    @Autowired
+    private IRmsIntegrationService rmsIntegrationService;
 
     @Override
     public List<UsageDto> getUsages(UsageFilter filter, Pageable pageable, Sort sort) {
@@ -245,6 +250,33 @@ public class UsageService implements IUsageService {
     @Override
     public void writeAuditCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) {
         usageRepository.writeAuditCsvReport(filter, pipedOutputStream);
+    }
+
+    @Override
+    @Transactional
+    @Profiled(tag = "service.UsageService.sendForRightsAssignment")
+    public void sendForRightsAssignment() {
+        List<Usage> usages = usageRepository.findByStatuses(UsageStatusEnum.RH_NOT_FOUND);
+        LOGGER.info("Send for Rights Assignment. Started. UsagesCount={}", LogUtils.size(usages));
+        if (CollectionUtils.isNotEmpty(usages)) {
+            RightsAssignmentResult result = rmsIntegrationService.sendForRightsAssignment(
+                usages.stream().map(Usage::getWrWrkInst).collect(Collectors.toSet()));
+            if (result.isSuccessful()) {
+                String jobId = result.getJobId();
+                usages.forEach(usage -> {
+                    usageRepository.updateStatus(usage.getId(), UsageStatusEnum.SENT_FOR_RA);
+                    usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.SENT_FOR_RA,
+                        String.format("Sent for RA: job id '%s'", jobId));
+                });
+                LOGGER.info("Send for Rights Assignment. Finished. UsagesCount={}, JobId={}", LogUtils.size(usages),
+                    result.getJobId());
+            } else {
+                LOGGER.warn("Send for Rights Assignment. Failed. Reason={}, DetailsIds={}", result.getErrorMessage(),
+                    usages.stream().map(Usage::getDetailId).collect(Collectors.toList()));
+            }
+        } else {
+            LOGGER.info("Send for Rights Assignment. Skipped. Reason=There are no usages for sending");
+        }
     }
 
     private void calculateUsagesGrossAmount(UsageBatch usageBatch, List<Usage> usages) {

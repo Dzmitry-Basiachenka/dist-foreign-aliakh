@@ -57,7 +57,7 @@ public class RmsRightsAssignmentServiceTest {
                 "rms_rights_assignment_response.json")).once();
         replay(restTemplate);
         assertEquals(buildRightsAssignmentResult(RightsAssignmentResultStatusEnum.SUCCESS,
-            "2aa2c93d-6819-446a-a97f-49c32da792b8"),
+            "2aa2c93d-6819-446a-a97f-49c32da792b8", null),
             rightsAssignmentService.sendForRightsAssignment(Sets.newHashSet(162205190L, 123160519L)));
         verify(restTemplate);
     }
@@ -68,7 +68,9 @@ public class RmsRightsAssignmentServiceTest {
             .andReturn(TestUtils.fileToString(RmsRightsAssignmentServiceTest.class,
                 "rms_rights_assignment_response_works_count_mismatch.json")).once();
         replay(restTemplate);
-        assertEquals(buildRightsAssignmentResult(RightsAssignmentResultStatusEnum.RA_ERROR, null),
+        assertEquals(buildRightsAssignmentResult(RightsAssignmentResultStatusEnum.RA_ERROR, null,
+            "Works count doesn't match or job id is blank. RequestWorksCount=2, ResponseWorksCount=1, " +
+                "JobId=2aa2c93d-6819-446a-a97f-49c32da792b8"),
             rightsAssignmentService.sendForRightsAssignment(Sets.newHashSet(162205190L, 123160519L)));
         verify(restTemplate);
     }
@@ -79,7 +81,8 @@ public class RmsRightsAssignmentServiceTest {
             .andReturn(TestUtils.fileToString(RmsRightsAssignmentServiceTest.class,
                 "rms_rights_assignment_response_no_job_id.json")).once();
         replay(restTemplate);
-        assertEquals(buildRightsAssignmentResult(RightsAssignmentResultStatusEnum.RA_ERROR, null),
+        assertEquals(buildRightsAssignmentResult(RightsAssignmentResultStatusEnum.RA_ERROR, null,
+            "Works count doesn't match or job id is blank. RequestWorksCount=2, ResponseWorksCount=2, JobId=null"),
             rightsAssignmentService.sendForRightsAssignment(Sets.newHashSet(162205190L, 123160519L)));
         verify(restTemplate);
     }
@@ -98,9 +101,11 @@ public class RmsRightsAssignmentServiceTest {
         return requestHeaders;
     }
 
-    private RightsAssignmentResult buildRightsAssignmentResult(RightsAssignmentResultStatusEnum status, String jobId) {
+    private RightsAssignmentResult buildRightsAssignmentResult(RightsAssignmentResultStatusEnum status, String jobId,
+                                                               String errorMessage) {
         RightsAssignmentResult result = new RightsAssignmentResult(status);
         result.setJobId(jobId);
+        result.setErrorMessage(errorMessage);
         return result;
     }
 }
