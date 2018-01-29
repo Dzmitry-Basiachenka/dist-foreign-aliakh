@@ -17,6 +17,11 @@ public enum UsageActionTypeEnum {
     LOADED,
 
     /**
+     * Action type for sending {@link Usage} to RMS for Rights Assignment.
+     */
+    SENT_FOR_RA,
+
+    /**
      * Action type for adding {@link Usage} to {@link Scenario}.
      */
     ADDED_TO_SCENARIO,

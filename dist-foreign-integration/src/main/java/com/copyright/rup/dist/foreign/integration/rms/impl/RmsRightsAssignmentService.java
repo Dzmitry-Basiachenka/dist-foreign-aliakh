@@ -3,7 +3,6 @@ package com.copyright.rup.dist.foreign.integration.rms.impl;
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.integration.rest.CommonRestHandler;
 import com.copyright.rup.dist.common.integration.util.JsonUtils;
-import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.integration.rms.api.IRmsRightsAssignmentService;
 import com.copyright.rup.dist.foreign.integration.rms.api.RightsAssignmentRequest;
 import com.copyright.rup.dist.foreign.integration.rms.api.RightsAssignmentResult;
@@ -42,9 +41,8 @@ import javax.annotation.PostConstruct;
 @Service("df.integration.rmsRightsAssignmentService")
 class RmsRightsAssignmentService implements IRmsRightsAssignmentService {
 
-    private static final String SEND_FOR_RA_INVALID_RESPONSE_FAILED_MESSAGE =
-        "Handle rights assignment response. Failed. Reason=Works count doesn't match or job id is blank. " +
-            "RequestWorksCount={}, ResponseWorksCount={}, JobId={}";
+    private static final String SEND_FOR_RA_INVALID_RESPONSE_MESSAGE_FORMAT =
+        "Works count doesn't match or job id is blank. RequestWorksCount=%s, ResponseWorksCount=%s, JobId=%s";
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired
@@ -58,12 +56,11 @@ class RmsRightsAssignmentService implements IRmsRightsAssignmentService {
     @Override
     public RightsAssignmentResult sendForRightsAssignment(Set<Long> wrWrkInst) {
         try {
-            LOGGER.info("Send for Rights Assignment. Started. WrWrkIntsCount={}",
-                LogUtils.size(Objects.requireNonNull(wrWrkInst)));
-            return doRightsAssignmentRequest(wrWrkInst);
+            return doRightsAssignmentRequest(Objects.requireNonNull(wrWrkInst));
         } catch (IOException e) {
             LOGGER.error("Problem with processing (parsing, generating) JSON content", e);
         }
+        //TODO {dbaraukova} add error message
         return new RightsAssignmentResult(RightsAssignmentResultStatusEnum.RA_ERROR);
     }
 
@@ -125,11 +122,10 @@ class RmsRightsAssignmentService implements IRmsRightsAssignmentService {
             String jobId = JsonUtils.getStringValue(response.get("jobId"));
             if (wrWrkInstsCount == totalWorks && StringUtils.isNotBlank(jobId)) {
                 result.setJobId(jobId);
-                LOGGER.info("Send for Rights Assignment. Finished. WrWrkIntsCount={}, Result={}", wrWrkInstsCount,
-                    result);
             } else {
                 result.setStatus(RightsAssignmentResultStatusEnum.RA_ERROR);
-                LOGGER.warn(SEND_FOR_RA_INVALID_RESPONSE_FAILED_MESSAGE, wrWrkInstsCount, totalWorks, jobId);
+                result.setErrorMessage(
+                    String.format(SEND_FOR_RA_INVALID_RESPONSE_MESSAGE_FORMAT, wrWrkInstsCount, totalWorks, jobId));
             }
             return result;
         }

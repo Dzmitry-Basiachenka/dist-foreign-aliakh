@@ -214,4 +214,12 @@ public interface IUsageService {
      * @throws RupRuntimeException in case when IOException appears during writing report
      */
     void writeAuditCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) throws RupRuntimeException;
+
+    /**
+     * Finds list of {@link Usage}s with {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#RH_NOT_FOUND}
+     * status and sends Wr Wrk Insts to RMS for rights assignment.
+     * Updates {@link Usage}s status to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#SENT_FOR_RA}
+     * and writes audit with job id information only after successful sending.
+     */
+    void sendForRightsAssignment();
 }

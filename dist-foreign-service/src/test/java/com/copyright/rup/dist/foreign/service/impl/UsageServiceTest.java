@@ -21,7 +21,11 @@ import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
+import com.copyright.rup.dist.foreign.integration.rms.api.IRmsIntegrationService;
+import com.copyright.rup.dist.foreign.integration.rms.api.RightsAssignmentResult;
+import com.copyright.rup.dist.foreign.integration.rms.api.RightsAssignmentResult.RightsAssignmentResultStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
@@ -32,6 +36,7 @@ import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -73,6 +78,7 @@ public class UsageServiceTest {
     private IUsageAuditService usageAuditService;
     private IUsageService usageService;
     private IPrmIntegrationService prmIntegrationService;
+    private IRmsIntegrationService rmsIntegrationService;
 
     @Before
     public void setUp() {
@@ -83,11 +89,13 @@ public class UsageServiceTest {
         usageAuditService = createMock(IUsageAuditService.class);
         prmIntegrationService = createMock(IPrmIntegrationService.class);
         usageArchiveRepository = createMock(IUsageArchiveRepository.class);
+        rmsIntegrationService = createMock(IRmsIntegrationService.class);
         usageService = new UsageService();
         Whitebox.setInternalState(usageService, "usageRepository", usageRepository);
         Whitebox.setInternalState(usageService, "usageAuditService", usageAuditService);
         Whitebox.setInternalState(usageService, "prmIntegrationService", prmIntegrationService);
         Whitebox.setInternalState(usageService, "usageArchiveRepository", usageArchiveRepository);
+        Whitebox.setInternalState(usageService, "rmsIntegrationService", rmsIntegrationService);
     }
 
     @Test
@@ -366,6 +374,43 @@ public class UsageServiceTest {
         verify(usageRepository);
     }
 
+    @Test
+    public void testSendForRightsAssignment() {
+        RightsAssignmentResult result = new RightsAssignmentResult(RightsAssignmentResultStatusEnum.SUCCESS);
+        result.setJobId("b5015e54-c38a-4fc8-b889-c644640085a4");
+        expect(usageRepository.findByStatuses(UsageStatusEnum.RH_NOT_FOUND))
+            .andReturn(Lists.newArrayList(buildUsage(USAGE_ID_1))).once();
+        expect(rmsIntegrationService.sendForRightsAssignment(Sets.newHashSet(123160519L)))
+            .andReturn(result).once();
+        usageRepository.updateStatus(USAGE_ID_1, UsageStatusEnum.SENT_FOR_RA);
+        expectLastCall().once();
+        usageAuditService.logAction(USAGE_ID_1, UsageActionTypeEnum.SENT_FOR_RA,
+            "Sent for RA: job id 'b5015e54-c38a-4fc8-b889-c644640085a4'");
+        replay(usageRepository, rmsIntegrationService, usageAuditService);
+        usageService.sendForRightsAssignment();
+        verify(usageRepository, rmsIntegrationService, usageAuditService);
+    }
+
+    @Test
+    public void testSendForRightsAssignmentRaError() {
+        expect(usageRepository.findByStatuses(UsageStatusEnum.RH_NOT_FOUND))
+            .andReturn(Lists.newArrayList(buildUsage(USAGE_ID_1))).once();
+        expect(rmsIntegrationService.sendForRightsAssignment(Sets.newHashSet(123160519L)))
+            .andReturn(new RightsAssignmentResult(RightsAssignmentResultStatusEnum.RA_ERROR)).once();
+        replay(usageRepository, rmsIntegrationService, usageAuditService);
+        usageService.sendForRightsAssignment();
+        verify(usageRepository, rmsIntegrationService, usageAuditService);
+    }
+
+    @Test
+    public void testSendForRightsAssignmentNoUsagesForRa() {
+        expect(usageRepository.findByStatuses(UsageStatusEnum.RH_NOT_FOUND))
+            .andReturn(Collections.emptyList()).once();
+        replay(usageRepository, rmsIntegrationService, usageAuditService);
+        usageService.sendForRightsAssignment();
+        verify(usageRepository, rmsIntegrationService, usageAuditService);
+    }
+
     private void assertResult(List<?> result, int size) {
         assertNotNull(result);
         assertEquals(size, result.size());
@@ -381,6 +426,7 @@ public class UsageServiceTest {
     private Usage buildUsage(String usageId) {
         Usage usage = new Usage();
         usage.setId(usageId);
+        usage.setWrWrkInst(123160519L);
         usage.getRightsholder().setId(RupPersistUtils.generateUuid());
         usage.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER);
         usage.setGrossAmount(new BigDecimal("100.00"));
