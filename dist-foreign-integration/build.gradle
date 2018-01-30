@@ -9,5 +9,5 @@ dependencies {
     compile("commons-collections:commons-collections:${commonsCollectionsVersion}")
 
     testCompile("com.copyright.rup.dist.common:dist-common-test:${distCommonVersion}")
-    testRuntime("com.copyright.rup.common:rup-common-config:${rupCommonConfigVersion}")
+    testRuntime("com.copyright.rup.common:rup-common-config:${rupCommonVersion}")
 }
