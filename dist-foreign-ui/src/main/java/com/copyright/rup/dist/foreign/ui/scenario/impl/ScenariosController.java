@@ -91,6 +91,7 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
         Set<RightsholderDiscrepancy> discrepancies = scenarioService.getRightsholderDiscrepancies(scenario);
         if (CollectionUtils.isNotEmpty(discrepancies)) {
             reconcileRightsholdersController.setDiscrepancies(discrepancies);
+            reconcileRightsholdersController.setScenario(scenario);
             Windows.showModalWindow(new RightsholderDiscrepanciesWindow(reconcileRightsholdersController));
         } else {
             Windows.showConfirmDialog(ForeignUi.getMessage("window.reconcile_rightsholders", scenario.getName()),

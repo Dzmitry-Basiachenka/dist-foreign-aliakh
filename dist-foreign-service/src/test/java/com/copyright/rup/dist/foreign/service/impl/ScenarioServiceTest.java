@@ -7,6 +7,7 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.replayAll;
 import static org.powermock.api.easymock.PowerMock.verify;
@@ -14,6 +15,7 @@ import static org.powermock.api.easymock.PowerMock.verifyAll;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.integration.rest.prm.PrmRollUpService;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
@@ -21,6 +23,7 @@ import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.integration.lm.api.ILmIntegrationService;
 import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsage;
+import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IRmsGrantsService;
@@ -28,6 +31,7 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
+import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -42,6 +46,7 @@ import org.powermock.reflect.Whitebox;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link ScenarioService}.
@@ -54,7 +59,7 @@ import java.util.List;
  * @author Mikalai Bezmen
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(RupContextUtils.class)
+@PrepareForTest({RupContextUtils.class, PrmRollUpService.class})
 public class ScenarioServiceTest {
 
     private static final String SCENARIO_NAME = "Scenario Name";
@@ -208,16 +213,20 @@ public class ScenarioServiceTest {
 
     @Test
     public void testGetRightsholderDiscrepancies() {
-        expect(usageService.getUsagesByScenarioId(scenario.getId())).andReturn(
-            Lists.newArrayList(buildUsage(1L, 2000017010L), buildUsage(2L, 2000017010L))).once();
-        expect(rmsGrantsService.getAccountNumbersByWrWrkInsts(Lists.newArrayList(1L, 2L))).andReturn(
-            ImmutableMap.of(1L, 2000017010L, 2L, 1000000001L)).once();
-        expect(rightsholderService.updateAndGetRightsholders(Sets.newHashSet(2000017010L, 1000000001L))).andReturn(
-            ImmutableMap.of(2000017010L, buildRightsholder(2000017010L), 1000000001L, buildRightsholder(1000000001L)))
-            .once();
+        expect(usageService.getUsagesByScenarioId(scenario.getId()))
+            .andReturn(Lists.newArrayList(buildUsage(1L, 2000017010L), buildUsage(2L, 2000017010L))).once();
+        expect(rmsGrantsService.getAccountNumbersByWrWrkInsts(Lists.newArrayList(1L, 2L)))
+            .andReturn(ImmutableMap.of(1L, 2000017010L, 2L, 1000000001L)).once();
+        expect(rightsholderService.updateAndGetRightsholders(Sets.newHashSet(2000017010L, 1000000001L)))
+            .andReturn(ImmutableMap.of(2000017010L, buildRightsholder(2000017010L), 1000000001L,
+                buildRightsholder(1000000001L))).once();
         replayAll();
-        assertEquals(Sets.newHashSet(buildDiscrepancy(2L, 2000017010L, 1000000001L)),
-            scenarioService.getRightsholderDiscrepancies(scenario));
+        Set<RightsholderDiscrepancy> discrepancies = scenarioService.getRightsholderDiscrepancies(scenario);
+        assertEquals(1, discrepancies.size());
+        RightsholderDiscrepancy discrepancy = discrepancies.iterator().next();
+        assertEquals(2L, discrepancy.getWrWrkInst(), 0);
+        assertEquals(2000017010L, discrepancy.getOldRightsholder().getAccountNumber(), 0);
+        assertEquals(1000000001L, discrepancy.getNewRightsholder().getAccountNumber(), 0);
         verifyAll();
     }
 
@@ -229,6 +238,37 @@ public class ScenarioServiceTest {
         expectLastCall().once();
         replayAll();
         scenarioService.updateRhParticipationAndAmounts(scenario);
+        verifyAll();
+    }
+
+    @Test
+    public void testApproveOwnershipChanges() {
+        IPrmIntegrationService prmIntegrationService = createMock(IPrmIntegrationService.class);
+        Whitebox.setInternalState(scenarioService, "prmIntegrationService", prmIntegrationService);
+        mockStatic(PrmRollUpService.class);
+        RightsholderDiscrepancy discrepancy1 = buildDiscrepancy(1L, 2000017010L, 1000000001L);
+        RightsholderDiscrepancy discrepancy2 = buildDiscrepancy(2L, 2000017020L, 1000000002L);
+        Set<RightsholderDiscrepancy> discrepancies = Sets.newLinkedHashSet();
+        discrepancies.add(discrepancy1);
+        discrepancies.add(discrepancy2);
+        List<Usage> usages = Lists.newArrayList(buildUsage(1L, 2000017010L), buildUsage(2L, 2000017020L));
+        expect(usageService.getUsagesByScenarioId(scenario.getId())).andReturn(usages).once();
+        Rightsholder rightsholder1 = discrepancy1.getNewRightsholder();
+        Rightsholder rightsholder2 = discrepancy2.getNewRightsholder();
+        expect(prmIntegrationService.getRollUps(Sets.newHashSet(rightsholder1.getId(), rightsholder2.getId())))
+            .andReturn(HashBasedTable.create()).once();
+        expect(PrmRollUpService.getPayeeAccountNumber(HashBasedTable.create(), rightsholder1, "FAS"))
+            .andReturn(1000000003L);
+        expect(PrmRollUpService.getPayeeAccountNumber(HashBasedTable.create(), rightsholder2, "FAS"))
+            .andReturn(1000000004L);
+        usageService.updateRhPayeeAndAmounts(usages);
+        expectLastCall().once();
+        replayAll();
+        scenarioService.approveOwnershipChanges(scenario, discrepancies);
+        assertEquals(1000000001L, usages.get(0).getRightsholder().getAccountNumber(), 0);
+        assertEquals(1000000002L, usages.get(1).getRightsholder().getAccountNumber(), 0);
+        assertEquals(1000000003L, usages.get(0).getPayee().getAccountNumber(), 0);
+        assertEquals(1000000004L, usages.get(1).getPayee().getAccountNumber(), 0);
         verifyAll();
     }
 
@@ -250,6 +290,7 @@ public class ScenarioServiceTest {
     private Rightsholder buildRightsholder(Long accountNumber) {
         Rightsholder rightsholder = new Rightsholder();
         rightsholder.setAccountNumber(accountNumber);
+        rightsholder.setId(RupPersistUtils.generateUuid());
         return rightsholder;
     }
 }

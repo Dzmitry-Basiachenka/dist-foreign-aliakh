@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.service.impl;
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.integration.rest.prm.PrmRollUpService;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
@@ -14,6 +15,8 @@ import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.domain.common.util.ForeignLogUtils;
 import com.copyright.rup.dist.foreign.integration.lm.api.ILmIntegrationService;
 import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsage;
+import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
+import com.copyright.rup.dist.foreign.integration.prm.impl.PrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IRmsGrantsService;
@@ -24,6 +27,7 @@ import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.google.common.collect.Table;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -35,6 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -69,6 +74,8 @@ public class ScenarioService implements IScenarioService {
     private IRmsGrantsService rmsGrantsService;
     @Autowired
     private IRightsholderService rightsholderService;
+    @Autowired
+    private IPrmIntegrationService prmIntegrationService;
 
     @Override
     public List<Scenario> getScenarios() {
@@ -188,6 +195,34 @@ public class ScenarioService implements IScenarioService {
     @Profiled(tag = "service.ScenarioService.updateRhParticipationAndAmounts")
     public void updateRhParticipationAndAmounts(Scenario scenario) {
         usageService.updateRhPayeeAndAmounts(usageService.getUsagesByScenarioId(scenario.getId()));
+    }
+
+    @Override
+    @Transactional
+    @Profiled(tag = "service.ScenarioService.approveOwnershipChanges")
+    public void approveOwnershipChanges(Scenario scenario, Set<RightsholderDiscrepancy> discrepancies) {
+        LOGGER.info("Approve Ownership Changes. Started. {}, RhDiscrepanciesCount={}",
+            ForeignLogUtils.scenario(Objects.requireNonNull(scenario)), LogUtils.size(discrepancies));
+        Map<Long, List<Usage>> groupedByWrWrkInstUsages = usageService.getUsagesByScenarioId(scenario.getId())
+            .stream()
+            .collect(Collectors.groupingBy(Usage::getWrWrkInst));
+        Table<String, String, Long> rollUps = prmIntegrationService.getRollUps(discrepancies.stream()
+            .map(discrepancy -> discrepancy.getNewRightsholder().getId())
+            .collect(Collectors.toSet()));
+        discrepancies.forEach(discrepancy -> {
+                Rightsholder newRightsholder = discrepancy.getNewRightsholder();
+                Long payeeAccountNumber = PrmRollUpService.getPayeeAccountNumber(rollUps, newRightsholder,
+                    PrmIntegrationService.FAS_PRODUCT_FAMILY);
+                groupedByWrWrkInstUsages.get(discrepancy.getWrWrkInst()).forEach(usage -> {
+                    usage.setRightsholder(newRightsholder);
+                    usage.getPayee().setAccountNumber(payeeAccountNumber);
+                });
+            }
+        );
+        usageService.updateRhPayeeAndAmounts(
+            groupedByWrWrkInstUsages.values().stream().flatMap(Collection::stream).collect(Collectors.toList()));
+        LOGGER.info("Approve Ownership Changes. Finished. {}, RhDiscrepanciesCount={}",
+            ForeignLogUtils.scenario(scenario), LogUtils.size(discrepancies));
     }
 
     private Set<RightsholderDiscrepancy> getDiscrepanciesForNewRightsholder(List<Usage> usages, Long newAccountNumber,

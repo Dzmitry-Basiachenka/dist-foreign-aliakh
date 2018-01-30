@@ -145,6 +145,8 @@ public class ScenariosControllerTest {
         expectLastCall().once();
         reconcileRightsholdersController.setDiscrepancies(discrepancies);
         expectLastCall().once();
+        reconcileRightsholdersController.setScenario(scenario);
+        expectLastCall().once();
         expect(reconcileRightsholdersController.getDiscrepancies()).andReturn(discrepancies).once();
         replay(scenariosWidget, scenarioService, reconcileRightsholdersController, Windows.class);
         scenariosController.onReconcileRightsholdersButtonClicked();

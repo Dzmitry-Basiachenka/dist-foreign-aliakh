@@ -106,7 +106,7 @@ public interface IUsageRepository {
     void addToScenario(List<Usage> usages);
 
     /**
-     * Updates RH account number, payee account number, net amount, service fee amount and RH participation status
+     * Updates RH account number, payee account number, net amount, service fee amount and RH participation flag
      * for {@link Usage}s.
      *
      * @param usages list of {@link Usage}s

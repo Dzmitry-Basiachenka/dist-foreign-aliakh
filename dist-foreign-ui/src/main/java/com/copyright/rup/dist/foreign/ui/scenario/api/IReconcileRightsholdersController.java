@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.api;
 
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
+import com.copyright.rup.dist.foreign.domain.Scenario;
 
 import java.util.Set;
 
@@ -31,4 +32,11 @@ public interface IReconcileRightsholdersController {
      * Approves reconciliation of rightsholders.
      */
     void approveReconciliation();
+
+    /**
+     * Sets {@link Scenario}.
+     *
+     * @param scenario instance of {@link Scenario}
+     */
+    void setScenario(Scenario scenario);
 }
