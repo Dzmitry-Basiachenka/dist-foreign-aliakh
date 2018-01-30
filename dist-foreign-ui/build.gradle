@@ -30,8 +30,8 @@ dependencies {
     compile("org.apache.commons:commons-text:${commonsTextVersion}")
 
     runtime("com.copyright.rup.security.auth:rup-auth-consumer:${rupAuthVersion}")
-    runtime("com.copyright.rup.common:rup-common-web:${rupCommonWebVersion}")
-    runtime("com.copyright.rup.common:rup-common-config:${rupCommonConfigVersion}")
+    runtime("com.copyright.rup.common:rup-common-web:${rupCommonVersion}")
+    runtime("com.copyright.rup.common:rup-common-config:${rupCommonVersion}")
     runtime("org.codehaus.janino:janino:${janinoVersion}")
     runtime("com.vaadin:vaadin-push:${vaadinVersion}")
     runtime("org.springframework.security:spring-security-core:${springSecurityVersion}")
