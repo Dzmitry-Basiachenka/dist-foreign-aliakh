@@ -784,7 +784,7 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void updateStatus() {
+    public void testUpdateStatus() {
         Usage usage = usageRepository.findByDetailId(8457965214L);
         assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
         usageRepository.updateStatus(usage.getId(), UsageStatusEnum.RH_NOT_FOUND);
@@ -793,7 +793,7 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void updateStatusAndRhAccountNumber() {
+    public void testUpdateStatusAndRhAccountNumber() {
         Usage usage = usageRepository.findByDetailId(8457965214L);
         assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
         assertNull(usage.getRightsholder().getAccountNumber());
@@ -801,6 +801,27 @@ public class UsageRepositoryIntegrationTest {
         usage = usageRepository.findByDetailId(8457965214L);
         assertEquals(UsageStatusEnum.RH_NOT_FOUND, usage.getStatus());
         assertEquals(RH_ACCOUNT_NUMBER, usage.getRightsholder().getAccountNumber());
+    }
+
+    @Test
+    public void testUpdateRhPayeeAndAmounts() {
+        Usage usage = usageRepository.findByDetailId(6997788886L);
+        assertEquals(1000002859L, usage.getRightsholder().getAccountNumber(), 0);
+        assertEquals(new BigDecimal("16437.4000000000"), usage.getGrossAmount());
+        assertEquals(new BigDecimal("11177.4000000000"), usage.getNetAmount());
+        assertEquals(new BigDecimal("5260.0000000000"), usage.getServiceFeeAmount());
+        assertEquals(new BigDecimal("0.32000"), usage.getServiceFee());
+        usage.getRightsholder().setAccountNumber(1000000001L);
+        usage.setServiceFee(new BigDecimal("0.16000"));
+        usage.setNetAmount(new BigDecimal("13807.4000000000"));
+        usage.setServiceFeeAmount(new BigDecimal("2630.0000000000"));
+        usageRepository.updateRhPayeeAndAmounts(Collections.singletonList(usage));
+        usage = usageRepository.findByDetailId(6997788886L);
+        assertEquals(1000000001L, usage.getRightsholder().getAccountNumber(), 0);
+        assertEquals(new BigDecimal("13807.4000000000"), usage.getNetAmount());
+        assertEquals(new BigDecimal("2630.0000000000"), usage.getServiceFeeAmount());
+        assertEquals(new BigDecimal("0.16000"), usage.getServiceFee());
+        usage.getRightsholder().setAccountNumber(1000000001L);
     }
 
     private void verifySearch(String searchValue, int expectedSize) {

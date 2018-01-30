@@ -1,10 +1,12 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
+import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IActionHandler;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IReconcileRightsholdersController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioHistoryController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
@@ -19,6 +21,7 @@ import com.google.common.collect.Maps;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.ui.Window;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -26,6 +29,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
@@ -51,6 +55,8 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
     private IScenarioService scenarioService;
     @Autowired
     private ScenarioController scenarioController;
+    @Autowired
+    private IReconcileRightsholdersController reconcileRightsholdersController;
 
     @Override
     public List<Scenario> getScenarios() {
@@ -81,7 +87,18 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
 
     @Override
     public void onReconcileRightsholdersButtonClicked() {
-        //TODO {isuvorau} apply logic after implementing
+        Scenario scenario = getWidget().getSelectedScenario();
+        Set<RightsholderDiscrepancy> discrepancies = scenarioService.getRightsholderDiscrepancies(scenario);
+        if (CollectionUtils.isNotEmpty(discrepancies)) {
+            reconcileRightsholdersController.setDiscrepancies(discrepancies);
+            Windows.showModalWindow(new RightsholderDiscrepanciesWindow(reconcileRightsholdersController));
+        } else {
+            Windows.showConfirmDialog(ForeignUi.getMessage("window.reconcile_rightsholders", scenario.getName()),
+                () -> {
+                    scenarioService.updateRhParticipationAndAmounts(scenario);
+                    getWidget().refreshSelectedScenario();
+                });
+        }
     }
 
     @Override
@@ -106,7 +123,7 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
     @Override
     public void sendToLm() {
         Scenario scenario = getWidget().getSelectedScenario();
-        Windows.showConfirmDialog(ForeignUi.getMessage("window.notification_message.send_scenario", scenario.getName()),
+        Windows.showConfirmDialog(ForeignUi.getMessage("window.send_scenario", scenario.getName()),
             () -> sendToLM(scenario));
     }
 

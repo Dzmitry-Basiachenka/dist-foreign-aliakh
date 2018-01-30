@@ -98,12 +98,28 @@ public interface IUsageService {
     List<Usage> getUsagesWithAmounts(UsageFilter filter);
 
     /**
+     * Gets the {@link Usage}s based on {@link Scenario} identifier.
+     *
+     * @param scenarioId identifier of {@link Scenario}
+     * @return the list of {@link Usage}s
+     */
+    List<Usage> getUsagesByScenarioId(String scenarioId);
+
+    /**
      * Updates {@link Scenario} id, updated user name and status to 'LOCKED' for {@link Usage}s.
      *
      * @param usages   list of {@link Usage}s
      * @param scenario {@link Scenario}
      */
     void addUsagesToScenario(List<Usage> usages, Scenario scenario);
+
+    /**
+     * Updates RH account number, payee account number, net amount, service fee amount and RH participation status
+     * for {@link Usage}s.
+     *
+     * @param usages list of {@link Usage}s
+     */
+    void updateRhPayeeAndAmounts(List<Usage> usages);
 
     /**
      * Deletes {@link Usage}s from scenario. Reverts status of {@link Usage}s
