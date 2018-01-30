@@ -2,7 +2,7 @@ databaseChangeLog {
     property(file: 'database.properties')
 
     changeSet(id: '2017-17-02-00', author: 'Mikalai_Bezmen <mbezmen@copyright.com>') {
-        comment('Inserting Usage Batch with Usages for ui tests')
+        comment('Insert predefined data for ViewScenarioUiTest')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: 'd2b9c16d-230a-414f-9ffb-acdb676fac0c')
@@ -118,11 +118,7 @@ databaseChangeLog {
             column(name: 'action_reason', value: "Uploaded in 'JAACC_11Dec16' Batch")
         }
 
-        rollback ""
-    }
-
-    changeSet(id: '2017-02-27-00', author: 'Mikalai_Bezmen <mbezmen@copyright.com>') {
-        comment('Inserting Rightsholders for ui tests')
+        // borders between existed changesets, because now rollback can be executed only on a single changeset
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: 'e9c9f51b-6048-4474-848a-2db1c410e463')
@@ -172,94 +168,7 @@ databaseChangeLog {
             column(name: 'name', value: 'JAACC, Japan Academic Association for Copyright Clearance [T]')
         }
 
-        rollback ""
-    }
-
-    changeSet(id: '2017-03-16-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
-        comment('Inserting scenario for ui tests')
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
-            column(name: 'df_scenario_uid', value: 'b1f0b236-3ae9-4a60-9fab-61db84199d6f')
-            column(name: 'name', value: 'Scenario name')
-            column(name: 'status_ind', value: 'IN_PROGRESS')
-            column(name: 'description', value: 'The description of scenario')
-            column(name: 'created_datetime', value: '2017-01-01')
-            column(name: 'updated_datetime', value: '2017-01-01')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
-            column(name: 'df_usage_uid', value: 'b1f0b236-3ae9-4a60-9fab-61db84199dss')
-            column(name: 'df_usage_batch_uid', value: '3cc619da-6218-47ef-959e-5a3f19e392a4')
-            column(name: 'df_scenario_uid', value: 'b1f0b236-3ae9-4a60-9fab-61db84199d6f')
-            column(name: 'detail_id', value: '6997788886')
-            column(name: 'wr_wrk_inst', value: '243904752')
-            column(name: 'work_title', value: '100 ROAD MOVIES')
-            column(name: 'rh_account_number', value: '1000002859')
-            column(name: 'payee_account_number', value: '1000002859')
-            column(name: 'status_ind', value: 'LOCKED')
-            column(name: 'article', value: 'DIN EN 779:2012')
-            column(name: 'standard_number', value: '1008902112377654XX')
-            column(name: 'publisher', value: 'IEEE')
-            column(name: 'publication_date', value: '2013-09-10')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'number_of_copies', value: '250232')
-            column(name: 'is_rh_participating_flag', value: 'false')
-            column(name: 'reported_value', value: '9900')
-            column(name: 'gross_amount', value: '30235.60')
-            column(name: 'service_fee_amount', value: '9675.39')
-            column(name: 'net_amount', value: '20560.21')
-            column(name: 'service_fee', value: '0.32')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
-            column(name: 'df_usage_uid', value: '49ed6163-e992-499a-8879-827928bef327')
-            column(name: 'df_usage_batch_uid', value: '56782dbc-2158-48d4-b026-94d3458a666a')
-            column(name: 'df_scenario_uid', value: 'b1f0b236-3ae9-4a60-9fab-61db84199d6f')
-            column(name: 'detail_id', value: '6997788882')
-            column(name: 'wr_wrk_inst', value: '108738286')
-            column(name: 'work_title', value: '2001 tax legislation: law, explanation, and analysis : Economic Growth and Tax Relief Reconciliation Act of 2001')
-            column(name: 'rh_account_number', value: '1000008666')
-            column(name: 'payee_account_number', value: '1000008666')
-            column(name: 'status_ind', value: 'LOCKED')
-            column(name: 'article', value: 'Google Makes Super')
-            column(name: 'standard_number', value: '1008902002377656XX')
-            column(name: 'publisher', value: 'CCH Inc')
-            column(name: 'publication_date', value: '1999-09-27')
-            column(name: 'market', value: 'Bus,Doc Del,Edu,Gov,Lib,Sch,Univ')
-            column(name: 'market_period_from', value: '2015')
-            column(name: 'market_period_to', value: '2019')
-            column(name: 'author', value: '愛染恭子')
-            column(name: 'number_of_copies', value: '16')
-            column(name: 'is_rh_participating_flag', value: 'false')
-            column(name: 'reported_value', value: '850')
-            column(name: 'gross_amount', value: '2184.70')
-            column(name: 'service_fee_amount', value: '699.10')
-            column(name: 'net_amount', value: '1485.60')
-            column(name: 'service_fee', value: '0.32')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
-            column(name: 'df_usage_audit_uid', value: 'c0708364-b408-11e7-abc4-cec278b6b50a')
-            column(name: 'df_usage_uid', value: 'b1f0b236-3ae9-4a60-9fab-61db84199dss')
-            column(name: 'action_type_ind', value: 'LOADED')
-            column(name: 'action_reason', value: "Uploaded in 'AccessCopyright_11Dec16' Batch")
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
-            column(name: 'df_usage_audit_uid', value: '74867322-b3fa-11e7-abc4-cec278b6b50a')
-            column(name: 'df_usage_uid', value: '49ed6163-e992-499a-8879-827928bef327')
-            column(name: 'action_type_ind', value: 'LOADED')
-            column(name: 'action_reason', value: "Uploaded in 'JAACC_11Dec16' Batch")
-        }
-
-        rollback ""
-    }
-
-    changeSet(id: '2017-03-16-00', author: 'Aliaksandr Radkevich <aradkevich@copyright.com>') {
-        comment('Inserting scenarios for ui tests')
+        // borders between existed changesets, because now rollback can be executed only on a single changeset
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
             column(name: 'df_scenario_uid', value: '5c3c3412-dea5-4572-a894-15a4b87071c4')
@@ -435,11 +344,7 @@ databaseChangeLog {
             column(name: 'created_by_user', value: 'fda_manager@copyright.com')
         }
 
-        rollback ""
-    }
-
-    changeSet(id: '2017-04-07-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
-        comment('Inserting scenario with usages with different rightsholders for ui tests')
+        // borders between existed changesets, because now rollback can be executed only on a single changeset
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
             column(name: 'df_scenario_uid', value: '5c3c3412-dea5-4572-a894-15a4b870fa39')
@@ -586,152 +491,14 @@ databaseChangeLog {
             column(name: 'action_reason', value: "Uploaded in 'JAACC_11Dec16' Batch")
         }
 
-        rollback ""
-    }
-
-    changeSet(id: '2017-10-31-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
-        comment('Inserting batch with usages in different statuses for ui tests')
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
-            column(name: 'df_usage_batch_uid', value: '5fb4a015-f943-4e29-ae7b-c7301db3c15e')
-            column(name: 'name', value: 'Batch with usages in different statuses')
-            column(name: 'rro_account_number', value: '1000005413')
-            column(name: 'payment_date', value: '2017-01-11')
-            column(name: 'fiscal_year', value: '2017')
-            column(name: 'gross_amount', value: '35000')
-            column(name: 'updated_datetime', value: '2017-02-21 11:41:52.735531+03')
+        rollback {
+            delete(schemaName: dbAppsSchema, tableName: 'df_rightsholder'){}
+            delete(schemaName: dbAppsSchema, tableName: 'df_scenario_audit'){}
+            delete(schemaName: dbAppsSchema, tableName: 'df_usage_audit'){}
+            delete(schemaName: dbAppsSchema, tableName: 'df_usage'){}
+            delete(schemaName: dbAppsSchema, tableName: 'df_usage_archive'){}
+            delete(schemaName: dbAppsSchema, tableName: 'df_usage_batch'){}
+            delete(schemaName: dbAppsSchema, tableName: 'df_scenario'){}
         }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
-            column(name: 'df_usage_uid', value: 'e5fb5f1b-097c-41ac-a01d-55453cbbb4f9')
-            column(name: 'df_usage_batch_uid', value: '5fb4a015-f943-4e29-ae7b-c7301db3c15e')
-            column(name: 'detail_id', value: '6607723791')
-            column(name: 'work_title', value: 'TOMATOES')
-            column(name: 'wr_wrk_inst', value: 589647588)
-            column(name: 'status_ind', value: 'WORK_FOUND')
-            column(name: 'standard_number', value: '1112202112377654XX')
-            column(name: 'publisher', value: 'IEEE')
-            column(name: 'publication_date', value: '2013-09-10')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'number_of_copies', value: '10')
-            column(name: 'reported_value', value: '3000.00')
-            column(name: 'gross_amount', value: '26250.00')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
-            column(name: 'df_usage_uid', value: '1e4cf625-6857-4f01-87d5-1123e06d7b7b')
-            column(name: 'df_usage_batch_uid', value: '5fb4a015-f943-4e29-ae7b-c7301db3c15e')
-            column(name: 'detail_id', value: '6607723792')
-            column(name: 'work_title', value: 'TOMATOES')
-            column(name: 'wr_wrk_inst', value: 589647588)
-            column(name: 'status_ind', value: 'RH_NOT_FOUND')
-            column(name: 'standard_number', value: '1112202112377654XX')
-            column(name: 'publisher', value: 'IEEE')
-            column(name: 'publication_date', value: '2013-09-10')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'number_of_copies', value: '10')
-            column(name: 'reported_value', value: '3000.00')
-            column(name: 'gross_amount', value: '26250.00')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
-            column(name: 'df_usage_uid', value: '2929a193-5978-40e7-a85f-9a545e4bbb91')
-            column(name: 'df_usage_batch_uid', value: '5fb4a015-f943-4e29-ae7b-c7301db3c15e')
-            column(name: 'detail_id', value: '6607723793')
-            column(name: 'work_title', value: 'TOMATOES')
-            column(name: 'wr_wrk_inst', value: 589647588)
-            column(name: 'status_ind', value: 'SENT_FOR_RA')
-            column(name: 'standard_number', value: '1112202112377654XX')
-            column(name: 'publisher', value: 'IEEE')
-            column(name: 'publication_date', value: '2013-09-10')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'number_of_copies', value: '10')
-            column(name: 'reported_value', value: '3000.00')
-            column(name: 'gross_amount', value: '26250.00')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
-            column(name: 'df_usage_uid', value: 'bb266904-3334-4fa3-9b44-9d76d2cb0c4d')
-            column(name: 'df_usage_batch_uid', value: '5fb4a015-f943-4e29-ae7b-c7301db3c15e')
-            column(name: 'detail_id', value: '6909853886')
-            column(name: 'work_title', value: 'TOMATOES')
-            column(name: 'status_ind', value: 'NEW')
-            column(name: 'standard_number', value: '1112202112377654XX')
-            column(name: 'publisher', value: 'IEEE')
-            column(name: 'publication_date', value: '2013-09-10')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'number_of_copies', value: '10')
-            column(name: 'reported_value', value: '3000.00')
-            column(name: 'gross_amount', value: '26250.00')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
-            column(name: 'df_usage_uid', value: '12605af0-338d-4424-852d-9929ff758d3f')
-            column(name: 'df_usage_batch_uid', value: '5fb4a015-f943-4e29-ae7b-c7301db3c15e')
-            column(name: 'detail_id', value: '6607723786')
-            column(name: 'wr_wrk_inst', value: '122235137')
-            column(name: 'work_title', value: 'TOMATOES')
-            column(name: 'rh_account_number', value: '1000008666')
-            column(name: 'status_ind', value: 'ELIGIBLE')
-            column(name: 'standard_number', value: '1112202112377654XX')
-            column(name: 'publisher', value: 'IEEE')
-            column(name: 'publication_date', value: '2013-09-10')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'number_of_copies', value: '200')
-            column(name: 'reported_value', value: '1000.00')
-            column(name: 'gross_amount', value: '1000.00')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
-            column(name: 'df_usage_audit_uid', value: 'c203e8fd-8dad-432c-a439-656d43cb7253')
-            column(name: 'df_usage_uid', value: 'bb266904-3334-4fa3-9b44-9d76d2cb0c4d')
-            column(name: 'action_type_ind', value: 'LOADED')
-            column(name: 'action_reason', value: "Uploaded in 'Batch with usages in different statuses' Batch")
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
-            column(name: 'df_usage_audit_uid', value: '14605eda-1061-4f9d-8144-0127f92a0aaa')
-            column(name: 'df_usage_uid', value: '12605af0-338d-4424-852d-9929ff758d3f')
-            column(name: 'action_type_ind', value: 'LOADED')
-            column(name: 'action_reason', value: "Uploaded in 'Batch with usages in different statuses' Batch")
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
-            column(name: 'df_usage_audit_uid', value: 'd1748fbc-1f1d-4bc0-b9ca-3b506f1f5f11')
-            column(name: 'df_usage_uid', value: 'e5fb5f1b-097c-41ac-a01d-55453cbbb4f9')
-            column(name: 'action_type_ind', value: 'LOADED')
-            column(name: 'action_reason', value: "Uploaded in 'Batch with usages in different statuses' Batch")
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
-            column(name: 'df_usage_audit_uid', value: '096a5b38-12a9-4259-8292-ad85bf2115f2')
-            column(name: 'df_usage_uid', value: '1e4cf625-6857-4f01-87d5-1123e06d7b7b')
-            column(name: 'action_type_ind', value: 'LOADED')
-            column(name: 'action_reason', value: "Uploaded in 'Batch with usages in different statuses' Batch")
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
-            column(name: 'df_usage_audit_uid', value: 'dcffe4a7-1aeb-4d95-b28b-66f32911b3b2')
-            column(name: 'df_usage_uid', value: '2929a193-5978-40e7-a85f-9a545e4bbb91')
-            column(name: 'action_type_ind', value: 'LOADED')
-            column(name: 'action_reason', value: "Uploaded in 'Batch with usages in different statuses' Batch")
-        }
-
-        rollback ""
     }
 }

@@ -1,30 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:p="http://www.springframework.org/schema/p"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
        xmlns:rup="http://www.copyright.com/rup/config"
-       xsi:schemaLocation="
-            http://www.springframework.org/schema/beans
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
             http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
             http://www.springframework.org/schema/context
             http://www.springframework.org/schema/context/spring-context-4.1.xsd
+            http://www.springframework.org/schema/util
+            http://www.springframework.org/schema/util/spring-util-4.1.xsd
             http://www.copyright.com/rup/config
             http://www.copyright.com/rup/config.xsd">
 
     <import resource="classpath:/com/copyright/rup/common/config/rup-properties-config.xml"/>
     <import resource="classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-context.xml"/>
+    <import resource="classpath:/com/copyright/rup/dist/foreign/test/integ/db-postgres-placeholder.xml"/>
 
     <rup:config-locations id="test.db.properties" >
         classpath:/database.properties
     </rup:config-locations>
 
-    <bean id="dfDataSource" class="com.copyright.rup.common.config.db.RupBasicDataSource"
-          destroy-method="close"
-          p:driverClassName="org.postgresql.Driver"
-          p:url="jdbc:postgresql://localhost:$RUP{dist.foreign.ui.db.port}/$RUP{dbRupDatabase}"
-          p:username="$RUP{dbRupUsername}"
-          p:password="$RUP{dbRupPassword}"/>
+    <bean id="dfDataSource" class="com.copyright.rup.common.test.integ.db.embedded.EmbeddedPostgresDatabaseFactory">
+        <property name="port" value="$RUP{dist.foreign.ui.db.port}"/>
+        <property name="version" value="9.4.4-1"/>
+        <property name="resourcesFromPaths">
+            <list value-type="java.lang.String">
+                <!--is reserved for common changelogs for all tests-->
+            </list>
+        </property>
+        <property name="createCommonTablesOnStartup" value="false"/>
+    </bean>
+
+    <util:map id="changelogs" map-class="java.util.HashMap" key-type="java.lang.String" value-type="java.lang.String">
+        <entry key="com.copyright.rup.dist.foreign.ui.CreateScenarioUiTest"
+               value="com/copyright/rup/dist/foreign/ui/liquibase/create-scenario-ui-test-data-init.groovy"/>
+        <entry key="com.copyright.rup.dist.foreign.ui.DeleteUsageBatchUiTest"
+               value="com/copyright/rup/dist/foreign/ui/liquibase/delete-usage-batch-ui-test-data-init.groovy"/>
+        <entry key="com.copyright.rup.dist.foreign.ui.DrillDownByRightsholderUiTest"
+               value="com/copyright/rup/dist/foreign/ui/liquibase/drill-down-by-rightsholder-ui-test-data-init.groovy"/>
+        <entry key="com.copyright.rup.dist.foreign.ui.ScenarioHistoryUiTest"
+               value="com/copyright/rup/dist/foreign/ui/liquibase/scenario-history-ui-test-data-init.groovy"/>
+        <entry key="com.copyright.rup.dist.foreign.ui.ScenariosTabUiTest"
+               value="com/copyright/rup/dist/foreign/ui/liquibase/scenarios-tab-ui-test-data-init.groovy"/>
+        <entry key="com.copyright.rup.dist.foreign.ui.UploadUsageBatchUiTest"
+               value="com/copyright/rup/dist/foreign/ui/liquibase/upload-usage-batch-ui-test-data-init.groovy"/>
+        <entry key="com.copyright.rup.dist.foreign.ui.UsagesTabUiTest"
+               value="com/copyright/rup/dist/foreign/ui/liquibase/usages-tab-ui-test-data-init.groovy"/>
+        <entry key="com.copyright.rup.dist.foreign.ui.ViewScenarioUiTest"
+               value="com/copyright/rup/dist/foreign/ui/liquibase/view-scenario-ui-test-data-init.groovy"/>
+    </util:map>
 
     <bean id="quartzScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
         <!--Stub Scheduler for quartz job-->

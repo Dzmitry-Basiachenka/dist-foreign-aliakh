@@ -43,6 +43,7 @@ dependencies {
 
     testUiCompile("com.copyright.rup.vaadin:rup-vaadin-test:${rupVaadinVersion}")
     testUiCompile project(path: ":dist-foreign-repository", configuration: "testIntegRuntime")
+    testUiRuntime("org.springframework:spring-test:${rupJava.standardDependencies.spring.version}")
 
     testUiWebApp project(path: ":dist-foreign-repository", configuration: "testIntegRuntime")
 }
@@ -77,6 +78,9 @@ war {
 
 afterEvaluate {
     appBeforeIntegrationTest.doFirst {
+        systemProperty "dbPidLocation", "${projectDir}/build/tmp/embeddedPostgres/postgresUi.pid"
+    }
+    uiTest.doFirst {
         systemProperty "dbPidLocation", "${projectDir}/build/tmp/embeddedPostgres/postgresUi.pid"
     }
 }
