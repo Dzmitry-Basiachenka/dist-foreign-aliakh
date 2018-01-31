@@ -50,5 +50,6 @@
             <include refid="usageAuditItemColumns"/>
         from ${schema}.df_usage_audit
         where df_usage_uid = #{usageId}
+        order by created_datetime desc
     </select>
 </mapper>

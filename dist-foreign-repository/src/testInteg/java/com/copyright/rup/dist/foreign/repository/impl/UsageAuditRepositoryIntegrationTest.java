@@ -44,28 +44,35 @@ public class UsageAuditRepositoryIntegrationTest {
 
     @Test
     public void testInsertAndFind() {
-        UsageAuditItem usageAuditItem = buildUsageAuditItem(USAGE_UID);
-        usageAuditRepository.insert(usageAuditItem);
-        usageAuditRepository.insert(buildUsageAuditItem("8a06905f-37ae-4e1f-8550-245277f8165c"));
+        UsageAuditItem loadAction = buildUsageAuditItem(USAGE_UID, UsageActionTypeEnum.LOADED);
+        usageAuditRepository.insert(loadAction);
+        usageAuditRepository.insert(buildUsageAuditItem("8a06905f-37ae-4e1f-8550-245277f8165c",
+            UsageActionTypeEnum.LOADED));
         List<UsageAuditItem> usageAuditItems = usageAuditRepository.findByUsageId(USAGE_UID);
         assertTrue(CollectionUtils.isNotEmpty(usageAuditItems));
         assertEquals(1, CollectionUtils.size(usageAuditItems));
-        assertEquals(usageAuditItem, usageAuditItems.get(0));
+        assertEquals(loadAction, usageAuditItems.get(0));
+        UsageAuditItem excludeAction = buildUsageAuditItem(USAGE_UID, UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO);
+        usageAuditRepository.insert(excludeAction);
+        usageAuditItems = usageAuditRepository.findByUsageId(USAGE_UID);
+        assertEquals(2, CollectionUtils.size(usageAuditItems));
+        assertEquals(excludeAction.getActionType(), usageAuditItems.get(0).getActionType());
+        assertEquals(loadAction.getActionType(), usageAuditItems.get(1).getActionType());
     }
 
     @Test
     public void testDeleteByBatchId() {
-        usageAuditRepository.insert(buildUsageAuditItem(USAGE_UID));
+        usageAuditRepository.insert(buildUsageAuditItem(USAGE_UID, UsageActionTypeEnum.LOADED));
         assertEquals(1, CollectionUtils.size(usageAuditRepository.findByUsageId(USAGE_UID)));
         usageAuditRepository.deleteByBatchId("56282dbc-2468-48d4-b926-93d3458a656a");
         assertTrue(CollectionUtils.isEmpty(usageAuditRepository.findByUsageId(USAGE_UID)));
     }
 
-    private UsageAuditItem buildUsageAuditItem(String usageId) {
+    private UsageAuditItem buildUsageAuditItem(String usageId, UsageActionTypeEnum actionType) {
         UsageAuditItem usageAuditItem = new UsageAuditItem();
         usageAuditItem.setId(RupPersistUtils.generateUuid());
         usageAuditItem.setUsageId(usageId);
-        usageAuditItem.setActionType(UsageActionTypeEnum.LOADED);
+        usageAuditItem.setActionType(actionType);
         usageAuditItem.setActionReason("Uploaded in ‘CADRA_11Dec16’ Batch");
         return usageAuditItem;
     }

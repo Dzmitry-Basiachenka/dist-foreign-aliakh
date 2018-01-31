@@ -251,11 +251,12 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
 
     @Override
     public void writeAuditCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) {
-        Objects.requireNonNull(pipedOutputStream);
-        Map<String, Object> params = Maps.newHashMapWithExpectedSize(1);
-        params.put(FILTER_KEY, Objects.requireNonNull(filter));
-        try (AuditCsvReportHandler handler = new AuditCsvReportHandler(pipedOutputStream)) {
-            getTemplate().select("IUsageMapper.findForAuditExport", params, handler);
+        try (AuditCsvReportHandler handler = new AuditCsvReportHandler(Objects.requireNonNull(pipedOutputStream))) {
+            if (!Objects.requireNonNull(filter).isEmpty()) {
+                Map<String, Object> params = Maps.newHashMapWithExpectedSize(1);
+                params.put(FILTER_KEY, filter);
+                getTemplate().select("IUsageMapper.findForAudit", params, handler);
+            }
         } catch (IOException e) {
             throw new RupRuntimeException(e);
         }

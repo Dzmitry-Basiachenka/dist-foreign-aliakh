@@ -68,7 +68,6 @@ public class RightsholderServiceTest {
         replay(rightsholderRepository);
         assertEquals(Collections.emptyList(), rightsholderService.getFromUsages());
         verify(rightsholderRepository);
-
     }
 
     private Rightsholder buildRightsholder(Long accountNumber) {

@@ -21,14 +21,13 @@ import java.io.PipedOutputStream;
 class AuditCsvReportHandler extends BaseCsvReportHandler {
 
     private static final Optional OPTIONAL_PROCESSOR = new Optional();
-    private static final DateCellProcessor DATE_CELL_PROCESSOR = new DateCellProcessor();
 
     private static final Table<String, String, CellProcessor> PROPERTY_TABLE =
         ImmutableTable.<String, String, CellProcessor>builder()
             .put("detailId", "Detail ID", OPTIONAL_PROCESSOR)
             .put("status", "Detail Status", OPTIONAL_PROCESSOR)
             .put("batchName", "Usage Batch Name", OPTIONAL_PROCESSOR)
-            .put("paymentDate", "Payment Date", DATE_CELL_PROCESSOR)
+            .put("paymentDate", "Payment Date", new DateCellProcessor())
             .put("rhAccountNumber", "RH Account #", OPTIONAL_PROCESSOR)
             .put("rhName", "RH Name", OPTIONAL_PROCESSOR)
             .put("wrWrkInst", "Wr Wrk Inst", OPTIONAL_PROCESSOR)

@@ -215,7 +215,7 @@ public interface IUsageRepository {
      * Finds count of {@link UsageDto}s by specified {@link AuditFilter}.
      *
      * @param filter {@link AuditFilter}
-     * @return count of {@link Usage}s matching filter
+     * @return count of {@link UsageDto}s matching filter
      */
     int findCountForAudit(AuditFilter filter);
 
@@ -225,7 +225,7 @@ public interface IUsageRepository {
      * @param filter   {@link AuditFilter}
      * @param pageable limit and offset
      * @param sort     sort criteria
-     * @return list of {@link Usage}s
+     * @return list of {@link UsageDto}s
      */
     List<UsageDto> findForAudit(AuditFilter filter, Pageable pageable, Sort sort);
 
