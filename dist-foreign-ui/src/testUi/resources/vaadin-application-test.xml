@@ -13,6 +13,8 @@
     </bean>
 
     <bean id="prmIntegrationService" class="com.copyright.rup.dist.foreign.ui.mock.PrmIntegrationServiceMock"/>
+    <bean id="rmsGrantsService" class="com.copyright.rup.dist.foreign.ui.mock.RmsGrantsServiceMock"/>
+    <bean id="rightsholderService" class="com.copyright.rup.dist.foreign.ui.mock.RightsholderServiceMock"/>
 
     <bean id="dfDataSource"
           class="com.copyright.rup.common.test.integ.db.embedded.EmbeddedPostgresDatabaseFactory">
