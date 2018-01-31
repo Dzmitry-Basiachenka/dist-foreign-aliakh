@@ -218,7 +218,7 @@ public interface IUsageService {
      * @param filter   {@link AuditFilter}
      * @param pageable {@link Pageable}
      * @param sort     {@link Sort}
-     * @return list of {@link Usage}s
+     * @return list of {@link UsageDto}s
      */
     List<UsageDto> getForAudit(AuditFilter filter, Pageable pageable, Sort sort);
 

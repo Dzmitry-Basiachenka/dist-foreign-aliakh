@@ -662,15 +662,6 @@
     </select>
 
     <select id="findForAudit" resultMap="usageDtoResultMap" parameterType="map">
-        <include refid="findForAuditSql"/>
-        <include refid="ifPageable"/>
-    </select>
-
-    <select id="findForAuditExport" parameterType="map" resultMap="usageDtoResultMap">
-        <include refid="findForAuditSql"/>
-    </select>
-
-    <sql id="findForAuditSql">
         select
             u.df_usage_uid,
             detail_id,
@@ -761,7 +752,8 @@
                 updated_datetime desc
             </otherwise>
         </choose>
-    </sql>
+        <include refid="ifPageable"/>
+    </select>
 
     <sql id="auditFilterWhereClause">
         <where>

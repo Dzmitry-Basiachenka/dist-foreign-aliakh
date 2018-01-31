@@ -125,6 +125,7 @@ public class AuditWidgetTest {
         assertTrue(table.getColumnGenerator("grossAmount") instanceof MoneyColumnGenerator);
         assertTrue(table.getColumnGenerator("paymentDate") instanceof LocalDateColumnGenerator);
         assertTrue(table.getColumnGenerator("serviceFee") instanceof PercentColumnGenerator);
+        assertTrue(table.isColumnCollapsingAllowed());
     }
 
     private void verifySize(Component component, Unit widthUnit, float width, Unit heightUnit, float height) {

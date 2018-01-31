@@ -138,6 +138,7 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
             ForeignUi.getMessage("table.column.service_fee"),
             ForeignUi.getMessage("table.column.scenario_name"));
         addColumnsGenerators();
+        table.setColumnCollapsingAllowed(true);
     }
 
     private void addColumnsGenerators() {

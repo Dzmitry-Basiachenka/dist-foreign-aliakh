@@ -736,6 +736,18 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
+    public void testWriteAuditEmptyCsvReport() throws IOException {
+        PipedOutputStream outputStream = new PipedOutputStream();
+        PipedInputStream inputStream = new PipedInputStream(outputStream);
+        EXECUTOR_SERVICE.execute(() -> usageRepository.writeAuditCsvReport(new AuditFilter(), outputStream));
+        BufferedReader bufferedReader =
+            new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+        assertEquals("Detail ID,Detail Status,Usage Batch Name,Payment Date,RH Account #,RH Name,Wr Wrk Inst,Title," +
+            "Standard Number,Amt in USD,Service Fee %,Scenario Name", bufferedReader.readLine());
+        assertNull(bufferedReader.readLine());
+    }
+
+    @Test
     public void testFindForAuditWithSort() {
         AuditFilter filter = new AuditFilter();
         filter.setBatchesIds(Collections.singleton(BATCH_ID));
