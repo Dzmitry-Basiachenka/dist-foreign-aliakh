@@ -133,4 +133,12 @@ public interface IScenarioService {
      * @param scenario {@link Scenario} instance
      */
     void updateRhParticipationAndAmounts(Scenario scenario);
+
+    /**
+     * Approves ownership changes for {@link Scenario}.
+     *
+     * @param scenario      instance of {@link Scenario}
+     * @param discrepancies set of {@link RightsholderDiscrepancy}ies
+     */
+    void approveOwnershipChanges(Scenario scenario, Set<RightsholderDiscrepancy> discrepancies);
 }
