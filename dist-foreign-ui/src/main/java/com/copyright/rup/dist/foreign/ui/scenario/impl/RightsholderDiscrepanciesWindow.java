@@ -6,7 +6,9 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.IReconcileRightsholdersCon
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.LongColumnGenerator;
 import com.copyright.rup.vaadin.ui.VaadinUtils;
+import com.copyright.rup.vaadin.ui.Windows;
 
+import com.google.common.collect.Sets;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -15,6 +17,11 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+
+import org.apache.commons.collections.CollectionUtils;
+
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * Represents component to display rightsholder discrepancies.
@@ -74,8 +81,18 @@ public class RightsholderDiscrepanciesWindow extends Window {
         HorizontalLayout buttonsLayout = new HorizontalLayout();
         Button approveButton = Buttons.createButton(ForeignUi.getMessage("button.approve"));
         approveButton.addClickListener(event -> {
-            controller.approveReconciliation();
-            this.close();
+            Set<Long> prohibitedAccountNumbers = Sets.newHashSet();
+            controller.getDiscrepancies().stream()
+                .filter(discrepancy -> Objects.isNull(discrepancy.getNewRightsholder().getAccountNumber()))
+                .forEach(discrepancy ->
+                    prohibitedAccountNumbers.add(discrepancy.getOldRightsholder().getAccountNumber()));
+            if (CollectionUtils.isEmpty(prohibitedAccountNumbers)) {
+                controller.approveReconciliation();
+                this.close();
+            } else {
+                Windows.showNotificationWindow(
+                    ForeignUi.getMessage("window.prohibition_approval", prohibitedAccountNumbers));
+            }
         });
         buttonsLayout.addComponents(approveButton, Buttons.createCancelButton(this));
         buttonsLayout.setSpacing(true);
