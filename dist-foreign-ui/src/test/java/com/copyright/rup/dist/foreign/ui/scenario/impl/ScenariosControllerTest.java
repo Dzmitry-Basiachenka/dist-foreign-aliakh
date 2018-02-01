@@ -122,7 +122,7 @@ public class ScenariosControllerTest {
     public void testOnReconcileRightsholdersButtonClickedNoDiscrepancies() {
         mockStatic(Windows.class);
         expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
-        expect(scenarioService.getRightsholderDiscrepancies(scenario)).andReturn(Collections.emptySet());
+        expect(scenarioService.getRightsholderDiscrepancies(scenario)).andReturn(Collections.emptySet()).once();
         expect(Windows.showConfirmDialog(eq("There are no rightsholders updates for scenario " +
                 "<i><b>Scenario name</b></i>. Do you want to update service fee?"),
             anyObject(ConfirmDialogWindow.IListener.class))).andReturn(null).once();
@@ -142,7 +142,7 @@ public class ScenariosControllerTest {
             reconcileRightsholdersController);
         expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
         Set<RightsholderDiscrepancy> discrepancies = Sets.newHashSet(new RightsholderDiscrepancy());
-        expect(scenarioService.getRightsholderDiscrepancies(scenario)).andReturn(discrepancies);
+        expect(scenarioService.getRightsholderDiscrepancies(scenario)).andReturn(discrepancies).once();
         Windows.showModalWindow(anyObject(RightsholderDiscrepanciesWindow.class));
         expectLastCall().once();
         reconcileRightsholdersController.setDiscrepancies(discrepancies);

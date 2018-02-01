@@ -87,8 +87,11 @@ public class RightsholderDiscrepanciesWindow extends Window {
                 .forEach(discrepancy ->
                     prohibitedAccountNumbers.add(discrepancy.getOldRightsholder().getAccountNumber()));
             if (CollectionUtils.isEmpty(prohibitedAccountNumbers)) {
-                controller.approveReconciliation();
-                this.close();
+                Windows.showConfirmDialog(
+                    ForeignUi.getMessage("message.confirm.approve", controller.getScenario().getName()), () -> {
+                        controller.approveReconciliation();
+                        this.close();
+                    });
             } else {
                 Windows.showNotificationWindow(
                     ForeignUi.getMessage("window.prohibition_approval", prohibitedAccountNumbers));

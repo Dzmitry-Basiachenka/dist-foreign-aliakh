@@ -114,7 +114,7 @@ public interface IUsageService {
     void addUsagesToScenario(List<Usage> usages, Scenario scenario);
 
     /**
-     * Updates RH account number, payee account number, net amount, service fee amount and RH participation flag
+     * Updates RH account number, payee account number, net amount, service fee amount and RH participating flag
      * for {@link Usage}s.
      *
      * @param usages list of {@link Usage}s

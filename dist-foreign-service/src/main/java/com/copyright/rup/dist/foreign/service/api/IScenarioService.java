@@ -128,7 +128,7 @@ public interface IScenarioService {
     Set<RightsholderDiscrepancy> getRightsholderDiscrepancies(Scenario scenario);
 
     /**
-     * Updates usages participation flag and amounts for specified {@link Scenario} using PRM service.
+     * Updates usages participating flag and amounts for specified {@link Scenario} using PRM service.
      *
      * @param scenario {@link Scenario} instance
      */
