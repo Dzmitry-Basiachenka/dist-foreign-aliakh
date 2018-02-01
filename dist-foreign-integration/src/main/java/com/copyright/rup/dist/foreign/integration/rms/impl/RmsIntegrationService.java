@@ -42,7 +42,7 @@ public class RmsIntegrationService implements IRmsIntegrationService {
     }
 
     @Override
-    public RightsAssignmentResult sendForRightsAssignment(Set<Long> wrWrkInst) {
-        return rmsRightsAssignmentService.sendForRightsAssignment(wrWrkInst);
+    public RightsAssignmentResult sendForRightsAssignment(Set<Long> wrWrkInsts) {
+        return rmsRightsAssignmentService.sendForRightsAssignment(wrWrkInsts);
     }
 }

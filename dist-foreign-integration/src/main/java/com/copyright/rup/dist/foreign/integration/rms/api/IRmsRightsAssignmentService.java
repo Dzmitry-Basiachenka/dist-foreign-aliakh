@@ -16,8 +16,8 @@ public interface IRmsRightsAssignmentService {
     /**
      * Sends set of Wr Wrk Insts to RMS for rights assignment.
      *
-     * @param wrWrkInst set of Wr Wrk Insts
+     * @param wrWrkInsts set of Wr Wrk Insts
      * @return {@link RightsAssignmentResult} instance
      */
-    RightsAssignmentResult sendForRightsAssignment(Set<Long> wrWrkInst);
+    RightsAssignmentResult sendForRightsAssignment(Set<Long> wrWrkInsts);
 }
