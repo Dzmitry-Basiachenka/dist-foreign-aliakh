@@ -54,14 +54,14 @@ class RmsRightsAssignmentService implements IRmsRightsAssignmentService {
     private ObjectMapper objectMapper;
 
     @Override
-    public RightsAssignmentResult sendForRightsAssignment(Set<Long> wrWrkInst) {
+    public RightsAssignmentResult sendForRightsAssignment(Set<Long> wrWrkInsts) {
         try {
-            return doRightsAssignmentRequest(Objects.requireNonNull(wrWrkInst));
+            return doRightsAssignmentRequest(Objects.requireNonNull(wrWrkInsts));
         } catch (IOException e) {
-            LOGGER.error("Problem with processing (parsing, generating) JSON content", e);
+            RightsAssignmentResult result = new RightsAssignmentResult(RightsAssignmentResultStatusEnum.RA_ERROR);
+            result.setErrorMessage("Problem with processing (parsing, generating) JSON content. Exception=" + e);
+            return result;
         }
-        //TODO {dbaraukova} add error message
-        return new RightsAssignmentResult(RightsAssignmentResultStatusEnum.RA_ERROR);
     }
 
     /**
@@ -74,13 +74,13 @@ class RmsRightsAssignmentService implements IRmsRightsAssignmentService {
             .pathSegment("jobs/wrwrkinst").build().toUriString();
     }
 
-    private RightsAssignmentResult doRightsAssignmentRequest(Set<Long> wrWrkInst) throws IOException {
+    private RightsAssignmentResult doRightsAssignmentRequest(Set<Long> wrWrkInsts) throws IOException {
         HttpEntity<String> request =
-            new HttpEntity<>(objectMapper.writeValueAsString(new RightsAssignmentRequest(wrWrkInst)),
+            new HttpEntity<>(objectMapper.writeValueAsString(new RightsAssignmentRequest(wrWrkInsts)),
                 buildRequestHeader());
         LOGGER.debug("Send for Rights Assignment. Request={}", request);
         RmsRightsAssignmentHandler rightsAssignmentHandler =
-            new RmsRightsAssignmentHandler(restTemplate, wrWrkInst.size());
+            new RmsRightsAssignmentHandler(restTemplate, wrWrkInsts.size());
         return rightsAssignmentHandler.handleResponse(rightsAssignmentUrl, request);
     }
 

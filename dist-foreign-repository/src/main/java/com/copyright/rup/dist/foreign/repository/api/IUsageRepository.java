@@ -239,9 +239,9 @@ public interface IUsageRepository {
     void writeAuditCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) throws RupRuntimeException;
 
     /**
-     * Finds list of {@link Usage}s by array of {@link UsageStatusEnum}s.
+     * Finds list of {@link Usage}s by array of {@link UsageStatusEnum} items.
      *
-     * @param statuses the array of {@link UsageStatusEnum}s
+     * @param statuses the array of {@link UsageStatusEnum} items
      * @return the list of {@link Usage}s
      */
     List<Usage> findByStatuses(UsageStatusEnum... statuses);

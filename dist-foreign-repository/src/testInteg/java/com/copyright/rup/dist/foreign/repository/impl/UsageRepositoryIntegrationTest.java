@@ -729,7 +729,7 @@ public class UsageRepositoryIntegrationTest {
         assertEquals("Detail ID,Detail Status,Usage Batch Name,Payment Date,RH Account #,RH Name,Wr Wrk Inst,Title," +
             "Standard Number,Amt in USD,Service Fee %,Scenario Name", bufferedReader.readLine());
         assertEquals("5423214587,LOCKED,Audit Test batch,02/12/2021,1000002475,,243904752,100 ROAD MOVIES," +
-            "1008902112317622XX,800.4000000000,16.0,Sent To LM Scenario", bufferedReader.readLine());
+            "1008902112317622XX,11177.4000000000,16.0,Sent To LM Scenario", bufferedReader.readLine());
         assertEquals("8457965214,WORK_FOUND,Audit Test batch,02/12/2021,,,103658926,Nitrates,5475802112214578XX," +
             "16437.4000000000,32.0,", bufferedReader.readLine());
         assertNull(bufferedReader.readLine());

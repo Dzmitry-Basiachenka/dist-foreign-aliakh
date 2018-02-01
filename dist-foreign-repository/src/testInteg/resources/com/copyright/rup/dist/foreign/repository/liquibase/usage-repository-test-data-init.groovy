@@ -279,8 +279,8 @@ databaseChangeLog {
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '9900')
-            column(name: 'gross_amount', value: '800.40')
-            column(name: 'net_amount', value: '11177.40')
+            column(name: 'gross_amount', value: '11177.40')
+            column(name: 'net_amount', value: '800.40')
             column(name: 'service_fee_amount', value: '5260.00')
             column(name: 'service_fee', value: '0.16000')
         }
