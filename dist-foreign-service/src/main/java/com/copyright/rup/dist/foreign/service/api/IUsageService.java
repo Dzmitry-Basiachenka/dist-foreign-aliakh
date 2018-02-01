@@ -238,4 +238,11 @@ public interface IUsageService {
      * and writes audit with job id information only after successful sending.
      */
     void sendForRightsAssignment();
+
+    /**
+     * Finds list of {@link Usage}s with {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#WORK_FOUND} and
+     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#SENT_FOR_RA} statuses and sends Wr Wrk Insts to RMS
+     * to get Grants.
+     */
+    void updateRightsholders();
 }

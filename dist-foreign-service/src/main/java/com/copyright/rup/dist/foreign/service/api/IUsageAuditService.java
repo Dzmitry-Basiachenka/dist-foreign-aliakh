@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Interface for usage audit service.
@@ -26,6 +27,15 @@ public interface IUsageAuditService {
      * @param actionReason action reason
      */
     void logAction(String usageId, UsageActionTypeEnum actionType, String actionReason);
+
+    /**
+     * Logs usage action for multiple usages based on set of usage identifiers.
+     *
+     * @param usageIds     set of usage identifiers
+     * @param actionType   usage action type
+     * @param actionReason action reason
+     */
+    void logAction(Set<String> usageIds, UsageActionTypeEnum actionType, String actionReason);
 
     /**
      * Logs usage action with {@link Scenario}.

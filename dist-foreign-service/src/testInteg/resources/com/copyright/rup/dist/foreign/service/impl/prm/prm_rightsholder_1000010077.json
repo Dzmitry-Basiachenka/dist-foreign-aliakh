@@ -1,0 +1,56 @@
+{
+  "response": {
+    "status": {
+      "code": "SUCCESS",
+      "message": "OK"
+    },
+    "content": [
+      "java.util.ArrayList",
+      [
+        {
+          "@class": "com.copyright.rup.party.domain.organization.Organization",
+          "version": 3,
+          "createDate": "2013-03-23T02:25:07-0400",
+          "updateDate": "2015-12-10T09:57:30-0500",
+          "createUser": "pmOrganizationLoad",
+          "updateUser": "Bulk update: Jira CQUE-64",
+          "id": "85f864f2-30a5-4215-ac4f-f1f541901218",
+          "name": "American College of Physicians - Journals",
+          "extOrgKey": "1000000322",
+          "extOrgSource": "EBUSINESS",
+          "defaultCurrencyID": "USD",
+          "defaultOrgAccountID": "6f9aa2c1-91c3-44a0-86e0-ad7c54ac689a",
+          "defaultLanguageID": "en",
+          "notForProfit": "false",
+          "organizationTypeID": "RH",
+          "articleSearchAllowed": true,
+          "organizationSubType": "COMPANY"
+        },
+        {
+          "@class": "com.copyright.rup.party.domain.organization.Organization",
+          "version": 3,
+          "createDate": "2013-03-23T02:25:19-0400",
+          "updateDate": "2018-01-22T09:23:54-0500",
+          "createUser": "pmOrganizationLoad",
+          "updateUser": "Darya Pylskaya",
+          "id": "abf348f3-f6d7-4d24-b087-4812b78e140d",
+          "name": "Cambridge University Press - US - Books",
+          "extOrgKey": "1000010077",
+          "extOrgSource": "EBUSINESS",
+          "defaultCurrencyID": "USD",
+          "defaultOrgAccountID": "a4c32a15-01ae-4a1f-8560-cd9a93e3c9c5",
+          "defaultLanguageID": "en",
+          "notForProfit": "false",
+          "organizationTypeID": "RH",
+          "articleSearchAllowed": true,
+          "taxAddressLine1": "line1",
+          "taxAddressCity": "city",
+          "taxAddressState": "st",
+          "taxAddressCountry": "MO",
+          "taxAddressZipCode": "123",
+          "organizationSubType": "COMPANY"
+        }
+      ]
+    ]
+  }
+}

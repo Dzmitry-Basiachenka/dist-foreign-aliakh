@@ -255,11 +255,19 @@ public interface IUsageRepository {
     void updateStatus(String usageId, UsageStatusEnum status);
 
     /**
-     * Updates status and RH account number of {@link Usage} based on usage identifier.
+     * Updates status of {@link Usage}s based on set of {@link Usage} identifiers.
      *
-     * @param usageId         usage identifier
+     * @param usageIds  set of usages identifier
+     * @param status    instance of {@link UsageStatusEnum}
+     */
+    void updateStatus(Set<String> usageIds, UsageStatusEnum status);
+
+    /**
+     * Updates status and RH account number of {@link Usage} based on set of {@link Usage} identifiers.
+     *
+     * @param usageIds        set of usage identifiers
      * @param status          instance of {@link UsageStatusEnum}
      * @param rhAccountNumber RH account number
      */
-    void updateStatusAndRhAccountNumber(String usageId, UsageStatusEnum status, Long rhAccountNumber);
+    void updateStatusAndRhAccountNumber(Set<String> usageIds, UsageStatusEnum status, Long rhAccountNumber);
 }

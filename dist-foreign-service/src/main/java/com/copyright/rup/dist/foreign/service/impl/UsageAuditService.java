@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Implementation of {@link IUsageAuditService}.
@@ -33,7 +34,12 @@ public class UsageAuditService implements IUsageAuditService {
     @Override
     @Profiled(tag = "service.UsageAuditService.logAction(usageId, actionType, actionReason)")
     public void logAction(String usageId, UsageActionTypeEnum actionType, String actionReason) {
-        usageAuditRepository.insert(buildUsageAuditItem(usageId, null, actionType, actionReason));
+        logAction(usageId, null, actionType, actionReason);
+    }
+
+    @Override
+    public void logAction(Set<String> usageIds, UsageActionTypeEnum actionType, String actionReason) {
+        usageIds.stream().forEach(usageId -> logAction(usageId, null, actionType, actionReason));
     }
 
     @Override

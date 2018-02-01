@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.common.repository.BaseRepository;
@@ -21,7 +20,6 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.perf4j.aop.Profiled;
 import org.springframework.stereotype.Repository;
@@ -264,9 +262,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
 
     @Override
     public List<Usage> findByStatuses(UsageStatusEnum... statuses) {
-        checkArgument(ArrayUtils.isNotEmpty(statuses));
-        checkUsageStatuses(statuses);
-        return selectList("IUsageMapper.findByStatuses", statuses);
+        return selectList("IUsageMapper.findByStatuses", Objects.requireNonNull(statuses));
     }
 
     @Override
@@ -279,18 +275,25 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public void updateStatusAndRhAccountNumber(String usageId, UsageStatusEnum status, Long rhAccountNumber) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
-        checkArgument(StringUtils.isNotBlank(usageId));
-        parameters.put(USAGE_ID_KEY, usageId);
+    public void updateStatus(Set<String> usageIds, UsageStatusEnum status) {
+        checkArgument(CollectionUtils.isNotEmpty(usageIds));
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(STATUS_KEY, Objects.requireNonNull(status));
-        parameters.put(RH_ACCOUNT_NUMBER_KEY, Objects.requireNonNull(rhAccountNumber));
-        update("IUsageMapper.updateStatusAndRhAccountNumber", parameters);
+        Iterables.partition(usageIds, 32000).forEach(partition -> {
+            parameters.put("usageIds", partition);
+            update("IUsageMapper.updateStatusAndRhAccountNumber", parameters);
+        });
     }
 
-    private void checkUsageStatuses(UsageStatusEnum... usageStatuses) {
-        for (UsageStatusEnum usageStatus : usageStatuses) {
-            checkNotNull(usageStatus);
-        }
+    @Override
+    public void updateStatusAndRhAccountNumber(Set<String> usageIds, UsageStatusEnum status, Long rhAccountNumber) {
+        checkArgument(CollectionUtils.isNotEmpty(usageIds));
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
+        parameters.put(STATUS_KEY, Objects.requireNonNull(status));
+        parameters.put(RH_ACCOUNT_NUMBER_KEY, Objects.requireNonNull(rhAccountNumber));
+        Iterables.partition(usageIds, 32000).forEach(partition -> {
+            parameters.put("usageIds", partition);
+            update("IUsageMapper.updateStatusAndRhAccountNumber", parameters);
+        });
     }
 }

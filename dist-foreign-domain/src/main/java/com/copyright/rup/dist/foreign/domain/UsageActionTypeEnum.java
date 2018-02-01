@@ -17,6 +17,16 @@ public enum UsageActionTypeEnum {
     LOADED,
 
     /**
+     * Action type for rightsholder of {@link Usage} found in RMS.
+     */
+    RH_FOUND,
+
+    /**
+     * Action type for rightsholder of {@link Usage} not found in RMS.
+     */
+    RH_NOT_FOUND,
+
+    /**
      * Action type for sending {@link Usage} to RMS for Rights Assignment.
      */
     SENT_FOR_RA,
