@@ -805,8 +805,13 @@
     <update id="updateStatusAndRhAccountNumber" parameterType="map">
         update ${schema}.df_usage
         set
-            status_ind = #{status},
-            rh_account_number = #{rhAccountNumber}
-        where df_usage_uid = #{usageId}
+            <if test="null != rhAccountNumber">
+                rh_account_number = #{rhAccountNumber},
+            </if>
+            status_ind = #{status}
+        where df_usage_uid in
+            <foreach collection="usageIds" item="usageId" open="(" separator="," close=")">
+                #{usageId}
+            </foreach>
     </update>
 </mapper>

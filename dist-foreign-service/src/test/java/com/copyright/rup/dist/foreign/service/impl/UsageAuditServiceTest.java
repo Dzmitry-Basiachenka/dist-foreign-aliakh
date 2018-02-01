@@ -16,6 +16,8 @@ import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.repository.impl.UsageAuditRepository;
 
+import com.google.common.collect.ImmutableSet;
+
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,16 +39,18 @@ public class UsageAuditServiceTest {
 
     private static final String SCENARIO_UID = "2f9259de-b274-11e7-abc4-cec278b6b50a";
     private static final String USAGE_UID = "4eef3a40-b274-11e7-abc4-cec278b6b50a";
+    private static final String USAGE_UID_2 = "5eef3a40-b274-11e7-abc4-cec278b6b50a";
     private static final String BATCH_UID = "f2104232-b274-11e7-abc4-cec278b6b50a";
+    private static final String REASON = "Uploaded in 'ABC' Batch";
 
-    private UsageAuditService usageActionService;
+    private UsageAuditService usageAuditService;
     private UsageAuditRepository usageAuditRepository;
 
     @Before
     public void setUp() {
-        usageActionService = new UsageAuditService();
+        usageAuditService = new UsageAuditService();
         usageAuditRepository = createMock(UsageAuditRepository.class);
-        Whitebox.setInternalState(usageActionService, "usageAuditRepository", usageAuditRepository);
+        Whitebox.setInternalState(usageAuditService, "usageAuditRepository", usageAuditRepository);
     }
 
     @Test
@@ -55,13 +59,24 @@ public class UsageAuditServiceTest {
         usageAuditRepository.insert(capture(usageAuditItemCapture));
         expectLastCall().once();
         replay(usageAuditRepository);
-        usageActionService.logAction(USAGE_UID, UsageActionTypeEnum.LOADED, "Uploaded in 'ABC' Batch");
-        UsageAuditItem usageAuditItem = usageAuditItemCapture.getValue();
-        assertEquals("Uploaded in 'ABC' Batch", usageAuditItem.getActionReason());
-        assertEquals(USAGE_UID, usageAuditItem.getUsageId());
-        assertNull(usageAuditItem.getScenarioId());
-        assertNull(usageAuditItem.getScenarioName());
-        assertEquals(UsageActionTypeEnum.LOADED, usageAuditItem.getActionType());
+        usageAuditService.logAction(USAGE_UID, UsageActionTypeEnum.LOADED, REASON);
+        verifyCapturedAuditItem(usageAuditItemCapture, USAGE_UID);
+        verify(usageAuditRepository);
+    }
+
+    @Test
+    public void logActionWithUsageIds() {
+        Capture<UsageAuditItem> usageAuditItemCapture1 = new Capture<>();
+        usageAuditRepository.insert(capture(usageAuditItemCapture1));
+        expectLastCall().once();
+        Capture<UsageAuditItem> usageAuditItemCapture2 = new Capture<>();
+        usageAuditRepository.insert(capture(usageAuditItemCapture2));
+        expectLastCall().once();
+        replay(usageAuditRepository);
+        usageAuditService.logAction(ImmutableSet.of(USAGE_UID, USAGE_UID_2),
+            UsageActionTypeEnum.LOADED, REASON);
+        verifyCapturedAuditItem(usageAuditItemCapture1, USAGE_UID);
+        verifyCapturedAuditItem(usageAuditItemCapture2, USAGE_UID_2);
         verify(usageAuditRepository);
     }
 
@@ -71,7 +86,7 @@ public class UsageAuditServiceTest {
         usageAuditRepository.insert(capture(usageAuditItemCapture));
         expectLastCall().once();
         replay(usageAuditRepository);
-        usageActionService.logAction(USAGE_UID, buildScenario(), UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO,
+        usageAuditService.logAction(USAGE_UID, buildScenario(), UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO,
             "Scenario ‘ABC’ was deleted");
         UsageAuditItem usageAuditItem = usageAuditItemCapture.getValue();
         assertEquals("Scenario ‘ABC’ was deleted", usageAuditItem.getActionReason());
@@ -87,7 +102,7 @@ public class UsageAuditServiceTest {
         usageAuditRepository.deleteByBatchId(BATCH_UID);
         expectLastCall().once();
         replay(usageAuditRepository);
-        usageActionService.deleteActions(BATCH_UID);
+        usageAuditService.deleteActions(BATCH_UID);
         verify(usageAuditRepository);
     }
 
@@ -97,8 +112,17 @@ public class UsageAuditServiceTest {
         List<UsageAuditItem> items = Collections.emptyList();
         expect(usageAuditRepository.findByUsageId(usageId)).andReturn(items).once();
         replay(usageAuditRepository);
-        assertSame(items, usageActionService.getUsageAudit(usageId));
+        assertSame(items, usageAuditService.getUsageAudit(usageId));
         verify(usageAuditRepository);
+    }
+
+    private void verifyCapturedAuditItem(Capture<UsageAuditItem> usageAuditItemCapture, String expectedUsageItemId) {
+        UsageAuditItem usageAuditItem = usageAuditItemCapture.getValue();
+        assertEquals(REASON, usageAuditItem.getActionReason());
+        assertEquals(expectedUsageItemId, usageAuditItem.getUsageId());
+        assertNull(usageAuditItem.getScenarioId());
+        assertNull(usageAuditItem.getScenarioName());
+        assertEquals(UsageActionTypeEnum.LOADED, usageAuditItem.getActionType());
     }
 
     private Scenario buildScenario() {

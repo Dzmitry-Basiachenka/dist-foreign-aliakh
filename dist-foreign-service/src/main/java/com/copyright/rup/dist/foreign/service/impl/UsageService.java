@@ -23,12 +23,16 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
+import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
+import com.copyright.rup.dist.foreign.service.api.IRmsGrantsService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvErrorResultWriter;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingResult;
 import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -42,7 +46,9 @@ import java.io.OutputStream;
 import java.io.PipedOutputStream;
 import java.math.BigDecimal;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -74,6 +80,10 @@ public class UsageService implements IUsageService {
     private IPrmIntegrationService prmIntegrationService;
     @Autowired
     private IRmsIntegrationService rmsIntegrationService;
+    @Autowired
+    private IRmsGrantsService rmsGrantsService;
+    @Autowired
+    private IRightsholderService rightsholderService;
 
     @Override
     public List<UsageDto> getUsages(UsageFilter filter, Pageable pageable, Sort sort) {
@@ -290,6 +300,40 @@ public class UsageService implements IUsageService {
         } else {
             LOGGER.info("Send for Rights Assignment. Skipped. Reason=There are no usages for sending");
         }
+    }
+
+    @Override
+    public void updateRightsholders() {
+        List<Usage> usages = usageRepository.findByStatuses(UsageStatusEnum.WORK_FOUND);
+        if (CollectionUtils.isNotEmpty(usages)) {
+            updateWorkFoundUsagesRightsholders(usages);
+        }
+    }
+
+    private void updateWorkFoundUsagesRightsholders(List<Usage> usages) {
+        Map<Long, Set<String>> wrWrkInstToUsageIds = usages.stream().collect(
+            Collectors.groupingBy(Usage::getWrWrkInst, HashMap::new, Collectors
+                .mapping(Usage::getId, Collectors.toSet())));
+
+        Map<Long, Long> wrWrkInstToAccountNumber =
+            rmsGrantsService.getAccountNumbersByWrWrkInsts(Lists.newArrayList(wrWrkInstToUsageIds.keySet()));
+
+        wrWrkInstToAccountNumber.forEach((wrWrkInst, rhAccountNumber) -> {
+            Set<String> usageIds = wrWrkInstToUsageIds.get(wrWrkInst);
+            usageRepository.updateStatusAndRhAccountNumber(usageIds, UsageStatusEnum.ELIGIBLE,
+                rhAccountNumber);
+            usageAuditService.logAction(usageIds, UsageActionTypeEnum.RH_FOUND,
+                String.format("Rightsholder account %s was found in RMS", rhAccountNumber));
+        });
+        rightsholderService.updateRightsholders(Sets.newHashSet(wrWrkInstToAccountNumber.values()));
+
+        wrWrkInstToUsageIds.forEach((wrWrkInst, usageIds) -> {
+            if (!wrWrkInstToAccountNumber.containsKey(wrWrkInst)) {
+                usageRepository.updateStatus(usageIds, UsageStatusEnum.RH_NOT_FOUND);
+                usageAuditService.logAction(usageIds, UsageActionTypeEnum.RH_NOT_FOUND,
+                    String.format("Rightsholder account for %s was not found in RMS", wrWrkInst));
+            }
+        });
     }
 
     private void calculateUsagesGrossAmount(UsageBatch usageBatch, List<Usage> usages) {

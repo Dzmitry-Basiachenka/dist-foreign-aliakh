@@ -47,8 +47,8 @@ public class CreateScenarioTest {
     public void testCreateScenario() {
         testBuilder
             .withFilter(buildUsageFilter())
-            .expectPreferences("preferences_response.json")
-            .expectRollups("rollups_response.json", "a5989f7c-fc6f-4e8c-88d4-2fe7bcce8d1f",
+            .expectPreferences("prm/preferences_response.json")
+            .expectRollups("prm/rollups_response.json", "a5989f7c-fc6f-4e8c-88d4-2fe7bcce8d1f",
                 "00d4ae90-5fe7-47bf-ace1-781c8d76d4da", "038bf4aa-b6cc-430a-9b32-655954d95278",
                 "756299b5-02ce-4f76-b0bc-ee2571cf906e", "019acfde-91be-43aa-8871-6305642bcb2c")
             .expectUsages(Lists.newArrayList(
@@ -68,8 +68,8 @@ public class CreateScenarioTest {
     public void testCreateScenarioNoRollupsNoPreferences() {
         testBuilder
             .withFilter(buildUsageFilter())
-            .expectPreferences("not_found_response.json")
-            .expectRollups("not_found_response.json", "a5989f7c-fc6f-4e8c-88d4-2fe7bcce8d1f",
+            .expectPreferences("prm/not_found_response.json")
+            .expectRollups("prm/not_found_response.json", "a5989f7c-fc6f-4e8c-88d4-2fe7bcce8d1f",
                 "00d4ae90-5fe7-47bf-ace1-781c8d76d4da", "038bf4aa-b6cc-430a-9b32-655954d95278",
                 "756299b5-02ce-4f76-b0bc-ee2571cf906e", "019acfde-91be-43aa-8871-6305642bcb2c")
             .expectUsages(Lists.newArrayList(

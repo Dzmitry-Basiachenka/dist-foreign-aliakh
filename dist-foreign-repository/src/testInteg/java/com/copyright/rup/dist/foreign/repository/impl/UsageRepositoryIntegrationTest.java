@@ -19,6 +19,7 @@ import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
 import com.copyright.rup.dist.foreign.repository.api.Sort.Direction;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
@@ -778,10 +779,6 @@ public class UsageRepositoryIntegrationTest {
         verifyUsageDtos(findForAuditWithSort(filter, "paymentDate", false), 2, USAGE_ID_5, USAGE_ID_4);
     }
 
-    private List<UsageDto> findForAuditWithSort(AuditFilter filter, String property, boolean order) {
-        return usageRepository.findForAudit(filter, new Pageable(0, 10), Sort.create(new Object[]{property}, order));
-    }
-
     @Test
     public void testFindByStatuses() {
         List<Usage> usages =
@@ -796,7 +793,7 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testUpdateStatus() {
+    public void testUpdateStatusWithUsageId() {
         Usage usage = usageRepository.findByDetailId(8457965214L);
         assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
         usageRepository.updateStatus(usage.getId(), UsageStatusEnum.RH_NOT_FOUND);
@@ -805,14 +802,34 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
+    public void testUpdateStatusWithUsageIds() {
+        Usage usage1 = usageRepository.findByDetailId(8457965214L);
+        assertEquals(UsageStatusEnum.WORK_FOUND, usage1.getStatus());
+        Usage usage2 = usageRepository.findByDetailId(3539748198L);
+        assertEquals(UsageStatusEnum.SENT_FOR_RA, usage2.getStatus());
+        usageRepository.updateStatus(ImmutableSet.of(usage1.getId(), usage2.getId()), UsageStatusEnum.RH_NOT_FOUND);
+        usage1 = usageRepository.findByDetailId(8457965214L);
+        assertEquals(UsageStatusEnum.RH_NOT_FOUND, usage1.getStatus());
+        usage2 = usageRepository.findByDetailId(3539748198L);
+        assertEquals(UsageStatusEnum.RH_NOT_FOUND, usage2.getStatus());
+    }
+
+    @Test
     public void testUpdateStatusAndRhAccountNumber() {
-        Usage usage = usageRepository.findByDetailId(8457965214L);
-        assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
-        assertNull(usage.getRightsholder().getAccountNumber());
-        usageRepository.updateStatusAndRhAccountNumber(usage.getId(), UsageStatusEnum.RH_NOT_FOUND, RH_ACCOUNT_NUMBER);
-        usage = usageRepository.findByDetailId(8457965214L);
-        assertEquals(UsageStatusEnum.RH_NOT_FOUND, usage.getStatus());
-        assertEquals(RH_ACCOUNT_NUMBER, usage.getRightsholder().getAccountNumber());
+        Usage usage1 = usageRepository.findByDetailId(8457965214L);
+        assertEquals(UsageStatusEnum.WORK_FOUND, usage1.getStatus());
+        assertNull(usage1.getRightsholder().getAccountNumber());
+        Usage usage2 = usageRepository.findByDetailId(3539748198L);
+        assertEquals(UsageStatusEnum.SENT_FOR_RA, usage2.getStatus());
+        assertNull(usage2.getRightsholder().getAccountNumber());
+        usageRepository.updateStatusAndRhAccountNumber(ImmutableSet.of(usage1.getId(), usage2.getId()),
+            UsageStatusEnum.ELIGIBLE, RH_ACCOUNT_NUMBER);
+        usage1 = usageRepository.findByDetailId(8457965214L);
+        assertEquals(UsageStatusEnum.ELIGIBLE, usage1.getStatus());
+        assertEquals(RH_ACCOUNT_NUMBER, usage1.getRightsholder().getAccountNumber());
+        usage2 = usageRepository.findByDetailId(3539748198L);
+        assertEquals(UsageStatusEnum.ELIGIBLE, usage2.getStatus());
+        assertEquals(RH_ACCOUNT_NUMBER, usage2.getRightsholder().getAccountNumber());
     }
 
     @Test
@@ -834,6 +851,10 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(new BigDecimal("2630.0000000000"), usage.getServiceFeeAmount());
         assertEquals(new BigDecimal("0.16000"), usage.getServiceFee());
         usage.getRightsholder().setAccountNumber(1000000001L);
+    }
+
+    private List<UsageDto> findForAuditWithSort(AuditFilter filter, String property, boolean order) {
+        return usageRepository.findForAudit(filter, new Pageable(0, 10), Sort.create(new Object[]{property}, order));
     }
 
     private void verifySearch(String searchValue, int expectedSize) {
