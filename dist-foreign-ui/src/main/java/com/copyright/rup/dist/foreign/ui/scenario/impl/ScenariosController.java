@@ -95,11 +95,9 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
             Windows.showModalWindow(new RightsholderDiscrepanciesWindow(reconcileRightsholdersController));
         } else {
             Windows.showConfirmDialog(ForeignUi.getMessage("window.reconcile_rightsholders", scenario.getName()),
-                () -> {
-                    scenarioService.updateRhParticipationAndAmounts(scenario);
-                    getWidget().refreshSelectedScenario();
-                });
+                () -> scenarioService.updateRhParticipationAndAmounts(scenario));
         }
+        getWidget().refreshSelectedScenario();
     }
 
     @Override

@@ -3,19 +3,13 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
-import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IReconcileRightsholdersController;
-import com.copyright.rup.vaadin.ui.Windows;
 
-import com.google.common.collect.Sets;
-
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
-import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -49,16 +43,7 @@ public class ReconcileRightsholdersController implements IReconcileRightsholders
 
     @Override
     public void approveReconciliation() {
-        Set<Long> prohibitedAccountNumbers = Sets.newHashSet();
-        rightsholderDiscrepancies.stream()
-            .filter(discrepancy -> Objects.isNull(discrepancy.getNewRightsholder().getAccountNumber()))
-            .forEach(discrepancy -> prohibitedAccountNumbers.add(discrepancy.getOldRightsholder().getAccountNumber()));
-        if (CollectionUtils.isEmpty(prohibitedAccountNumbers)) {
-            scenarioService.approveOwnershipChanges(scenario, rightsholderDiscrepancies);
-        } else {
-            Windows.showNotificationWindow(
-                ForeignUi.getMessage("window.prohibition_approval", prohibitedAccountNumbers));
-        }
+        scenarioService.approveOwnershipChanges(scenario, rightsholderDiscrepancies);
     }
 
     @Override

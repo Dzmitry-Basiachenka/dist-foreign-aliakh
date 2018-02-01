@@ -4,7 +4,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
-import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
@@ -61,19 +60,6 @@ public class ReconcileRightsholdersControllerTest {
         replay(scenarioService);
         controller.approveReconciliation();
         verify(scenarioService);
-    }
-
-    @Test
-    public void testApproveReconciliationWithProhibitedDiscrepancies() {
-        mockStatic(Windows.class);
-        Set<RightsholderDiscrepancy> discrepancies =
-            Collections.singleton(buildRightsholderDiscrepancy(100009522L, null));
-        controller.setDiscrepancies(discrepancies);
-        Windows.showNotificationWindow("Sorry, <i><b>[100009522]</b></i> account(s) could not be updated");
-        expectLastCall().once();
-        replay(Windows.class);
-        controller.approveReconciliation();
-        verify(Windows.class);
     }
 
     private RightsholderDiscrepancy buildRightsholderDiscrepancy(Long oldAccountNumber, Long newAccountNumber) {
