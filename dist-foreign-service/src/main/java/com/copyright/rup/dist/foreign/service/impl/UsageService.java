@@ -303,10 +303,15 @@ public class UsageService implements IUsageService {
     }
 
     @Override
+    //TODO {pliakh} adjust implementation to avoid copy-paste for WORK_FOUND and SENT_FOR_RA usages handling
     public void updateRightsholders() {
         List<Usage> usages = usageRepository.findByStatuses(UsageStatusEnum.WORK_FOUND);
         if (CollectionUtils.isNotEmpty(usages)) {
             updateWorkFoundUsagesRightsholders(usages);
+        }
+        usages = usageRepository.findByStatuses(UsageStatusEnum.SENT_FOR_RA);
+        if (CollectionUtils.isNotEmpty(usages)) {
+            updateSentForRaUsagesRightsholders(usages);
         }
     }
 
@@ -334,6 +339,22 @@ public class UsageService implements IUsageService {
                     String.format("Rightsholder account for %s was not found in RMS", wrWrkInst));
             }
         });
+    }
+
+    private void updateSentForRaUsagesRightsholders(List<Usage> usages) {
+        Map<Long, Set<String>> wrWrkInstToUsageIds = usages.stream().collect(
+            Collectors.groupingBy(Usage::getWrWrkInst, HashMap::new, Collectors
+                .mapping(Usage::getId, Collectors.toSet())));
+        Map<Long, Long> wrWrkInstToAccountNumber =
+            rmsGrantsService.getAccountNumbersByWrWrkInsts(Lists.newArrayList(wrWrkInstToUsageIds.keySet()));
+        wrWrkInstToAccountNumber.forEach((wrWrkInst, rhAccountNumber) -> {
+            Set<String> usageIds = wrWrkInstToUsageIds.get(wrWrkInst);
+            usageRepository.updateStatusAndRhAccountNumber(usageIds, UsageStatusEnum.ELIGIBLE,
+                rhAccountNumber);
+            usageAuditService.logAction(usageIds, UsageActionTypeEnum.RH_FOUND,
+                String.format("Rightsholder account %s was found in RMS", rhAccountNumber));
+        });
+        rightsholderService.updateRightsholders(Sets.newHashSet(wrWrkInstToAccountNumber.values()));
     }
 
     private void calculateUsagesGrossAmount(UsageBatch usageBatch, List<Usage> usages) {

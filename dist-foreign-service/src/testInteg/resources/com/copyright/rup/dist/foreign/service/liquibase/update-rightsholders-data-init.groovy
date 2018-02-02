@@ -5,6 +5,7 @@ databaseChangeLog {
         comment('Inserting test data for UpdateRightsholders test')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'df_rightsholder_uid', value: '75e057ac-7c24-4ae7-a0f5-aa75ea0895e6')
             column(name: 'rh_account_number', value: '1000009522')
             column(name: 'name', value: 'Zoological Society of Pakistan [T]')
             column(name: 'record_version', value: '1')
@@ -12,10 +13,10 @@ databaseChangeLog {
             column(name: 'created_datetime', value: '2018-01-26 09:00:00.118116-05')
             column(name: 'updated_by_user', value: 'SYSTEM')
             column(name: 'updated_datetime', value: '2018-01-26 09:00:00.118116-05')
-            column(name: 'df_rightsholder_uid', value: '75e057ac-7c24-4ae7-a0f5-aa75ea0895e6')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'df_rightsholder_uid', value: 'd311340c-60e8-4df1-bbe1-788ba2ed9a15')
             column(name: 'rh_account_number', value: '1000023401')
             column(name: 'name', value: 'American City Business Journals, Inc.')
             column(name: 'record_version', value: '1')
@@ -23,7 +24,17 @@ databaseChangeLog {
             column(name: 'created_datetime', value: '2018-01-26 09:00:00.118116-05')
             column(name: 'updated_by_user', value: 'SYSTEM')
             column(name: 'updated_datetime', value: '2018-01-26 09:00:00.118116-05')
-            column(name: 'df_rightsholder_uid', value: 'd311340c-60e8-4df1-bbe1-788ba2ed9a15')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'df_rightsholder_uid', value: 'abf348f3-f6d7-4d24-b087-4812b78e140d')
+            column(name: 'rh_account_number', value: '1000010077')
+            column(name: 'name', value: 'Cambridge University Press - US - Books')
+            column(name: 'record_version', value: '1')
+            column(name: 'created_by_user', value: 'SYSTEM')
+            column(name: 'created_datetime', value: '2018-01-26 09:00:00.118116-05')
+            column(name: 'updated_by_user', value: 'SYSTEM')
+            column(name: 'updated_datetime', value: '2018-01-26 09:00:00.118116-05')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
