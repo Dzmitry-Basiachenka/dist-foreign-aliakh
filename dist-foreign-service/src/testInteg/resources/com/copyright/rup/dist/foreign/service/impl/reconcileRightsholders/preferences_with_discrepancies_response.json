@@ -1,0 +1,67 @@
+{
+  "response": {
+    "status": {
+      "code": "SUCCESS",
+      "message": "OK"
+    },
+    "content": [
+      "java.util.ArrayList",
+      [
+        {
+          "@class": "com.copyright.rup.party.domain.preference.OrganizationPreference",
+          "version": 1,
+          "createDate": "2017-05-15T09:24:55-0400",
+          "updateDate": "2017-05-15T09:24:55-0400",
+          "createUser": "isuvorau@copyright.com",
+          "updateUser": "isuvorau@copyright.com",
+          "id": "ba25b2ea-a70e-4d50-bcb7-5ad9c2a3d80c",
+          "pmOrganizationUid": "05dc9217-26d4-46ca-aa6e-18572591f3c8",
+          "name": "24 Images",
+          "pmLicenseProductUid": "*",
+          "pmPreferenceTypeUid": "baseline-is-rh-fda-participating",
+          "preferenceCode": "IS-RH-FDA-PARTICIPATING",
+          "validBeginDate": "2017-05-15T00:00:00-0400",
+          "validEndDate": "2099-01-01T00:00:00-0500",
+          "preferenceValue": "true",
+          "externalOrganizationKey": "2000152614"
+        },
+        {
+          "@class": "com.copyright.rup.party.domain.preference.OrganizationPreference",
+          "version": 1,
+          "createDate": "2017-05-15T09:24:55-0400",
+          "updateDate": "2017-05-15T09:24:55-0400",
+          "createUser": "isuvorau@copyright.com",
+          "updateUser": "isuvorau@copyright.com",
+          "id": "ba25b2ea-a70e-4d50-bcb7-5ad9c2a3d81c",
+          "pmOrganizationUid": "05dc9217-26d4-46ca-aa6e-18572591f3c8",
+          "name": "Access Intelligence LLC (MD)",
+          "pmLicenseProductUid": "*",
+          "pmPreferenceTypeUid": "baseline-is-rh-fda-participating",
+          "preferenceCode": "IS-RH-FDA-PARTICIPATING",
+          "validBeginDate": "2017-05-15T00:00:00-0400",
+          "validEndDate": "2099-01-01T00:00:00-0500",
+          "preferenceValue": "false",
+          "externalOrganizationKey": "1000002137"
+        },
+        {
+          "@class": "com.copyright.rup.party.domain.preference.OrganizationPreference",
+          "version": 1,
+          "createDate": "2017-05-15T09:24:55-0400",
+          "updateDate": "2017-05-15T09:24:55-0400",
+          "createUser": "isuvorau@copyright.com",
+          "updateUser": "isuvorau@copyright.com",
+          "id": "ba25b2ea-a70e-4d50-bcb7-5ad9c2a3d82c",
+          "pmOrganizationUid": "05dc9217-26d4-46ca-aa6e-18572591f3c8",
+          "name": "American College of Physicians - Journals",
+          "pmLicenseProductUid": "*",
+          "pmPreferenceTypeUid": "baseline-is-rh-fda-participating",
+          "preferenceCode": "IS-RH-FDA-PARTICIPATING",
+          "validBeginDate": "2017-05-15T00:00:00-0400",
+          "validEndDate": "2099-01-01T00:00:00-0500",
+          "preferenceValue": "false",
+          "externalOrganizationKey": "1000000322"
+        }
+      ]
+    ]
+  }
+}

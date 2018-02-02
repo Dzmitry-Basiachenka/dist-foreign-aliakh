@@ -1,0 +1,31 @@
+{
+  "response": {
+    "status": {
+      "code": "SUCCESS",
+      "message": "OK"
+    },
+    "content": {
+      "@class": "com.copyright.rup.rms.rights.domain.WorksResponse",
+      "requestedWorkCount": "1",
+      "processedWorkCount": "1",
+      "foundWorkCount": "1",
+      "rights": [
+        {
+          "wr_wrk_inst": "471137470",
+          "status": "DENY",
+          "type_of_use": "DIGITAL",
+          "market": "CORPORATE",
+          "distribution": "INTERNAL",
+          "region": "WORLDWIDE",
+          "right_begin_date": "10/26/1000",
+          "right_end_date": "12/31/3000",
+          "ownership_begin_date": "01/01/1000",
+          "ownership_end_date": "12/31/3000",
+          "agreement_begin_date": "01/01/1000",
+          "agreement_end_date": "12/31/3000",
+          "wg_owner_org_number": "1000003821"
+        }
+      ]
+    }
+  }
+}
