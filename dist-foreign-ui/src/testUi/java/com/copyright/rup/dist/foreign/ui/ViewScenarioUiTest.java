@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui;
 
+import com.copyright.rup.common.test.integ.db.embedded.UpdateDatabaseForClassTestExecutionListener;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
@@ -9,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Collections;
@@ -29,6 +32,8 @@ import java.util.stream.Collectors;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(value = "classpath:/com/copyright/rup/dist/foreign/ui/dist-foreign-ui-test-context.xml")
+@TestExecutionListeners(value = UpdateDatabaseForClassTestExecutionListener.class,
+    mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS)
 public class ViewScenarioUiTest extends ForeignCommonUiTest {
 
     private String[] rightsholder1 = {"1000002797", "British Film Institute (BFI)", "1000002797",
