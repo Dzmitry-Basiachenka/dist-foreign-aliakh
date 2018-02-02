@@ -45,10 +45,6 @@ import org.springframework.web.client.RestTemplate;
 @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 public class UpdateRightsholdersTest {
 
-    private static final String RH_WAS_FOUND_REASON = "Rightsholder account %s was found in RMS";
-    private static final String RH_WAS_NOT_FOUND_REASON = "Rightsholder account for %s was not found in RMS";
-    private MockRestServiceServer mockServer;
-
     @Autowired
     private IUsageRepository usageRepository;
     @Autowired
@@ -57,12 +53,16 @@ public class UpdateRightsholdersTest {
     private IUsageAuditService usageAuditService;
     @Autowired
     private RestTemplate restTemplate;
+    private MockRestServiceServer mockServer;
 
     @Test
     public void testUpdateRights() {
         mockServer = MockRestServiceServer.createServer(restTemplate);
-        expectRmsCall("rms/rms_grants_request.json", "rms/rms_grants_response.json");
-        expectPrmCall("prm/prm_rightsholder_1000010077_response.json");
+        expectRmsCall("rms/rms_grants_request_work_found_usages.json",
+            "rms/rms_grants_response_work_found_usages.json");
+        expectRmsCall("rms/rms_grants_request_sent_for_ra_usages.json",
+            "rms/rms_grants_response_sent_for_ra_usages.json");
+        expectPrmCall();
         usageService.updateRightsholders();
         mockServer.verify();
         assertUsages();
@@ -73,6 +73,7 @@ public class UpdateRightsholdersTest {
         assertTrue(CollectionUtils.isEmpty(usageRepository.findByStatuses(UsageStatusEnum.WORK_FOUND)));
         assertUsage(8963602L, UsageStatusEnum.NEW, null);
         assertUsage(8963606L, UsageStatusEnum.SENT_FOR_RA, null);
+        assertUsage(8963605L, UsageStatusEnum.ELIGIBLE, 1000000322L);
         assertUsage(8963603L, UsageStatusEnum.ELIGIBLE, 1000010077L);
         assertUsage(8963601L, UsageStatusEnum.ELIGIBLE, 1000009522L);
         assertUsage(8963609L, UsageStatusEnum.LOCKED, 1000009522L);
@@ -87,8 +88,9 @@ public class UpdateRightsholdersTest {
     }
 
     private void assertAudit() {
-        assertAudit("b77e72d6-ef71-4f4b-a00b-5800e43e5bee", String.format(RH_WAS_FOUND_REASON, 1000010077));
-        assertAudit("8aded52d-9507-4883-ab4c-fd2e029298af", String.format(RH_WAS_NOT_FOUND_REASON, 854030731));
+        assertAudit("b77e72d6-ef71-4f4b-a00b-5800e43e5bee", "Rightsholder account 1000010077 was found in RMS");
+        assertAudit("11853c83-780a-4533-ad01-dde87c8b8592", "Rightsholder account 1000000322 was found in RMS");
+        assertAudit("8aded52d-9507-4883-ab4c-fd2e029298af", "Rightsholder account for 854030731 was not found in RMS");
     }
 
     private void assertAudit(String usageId, String reason) {
@@ -107,13 +109,13 @@ public class UpdateRightsholdersTest {
                     MediaType.APPLICATION_JSON));
     }
 
-    private void expectPrmCall(String prmResponseFileName) {
+    private void expectPrmCall() {
         mockServer.expect(MockRestRequestMatchers
             .requestTo(
-                "http://localhost:8080/party-rest/organization/extorgkeys?extOrgKeys%5B%5D=1000010077&fmt=json"))
+                "http://localhost:8080/party-rest/organization/extorgkeys?extOrgKeys%5B%5D=1000000322&fmt=json"))
             .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
-            .andRespond(
-                MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), prmResponseFileName),
-                    MediaType.APPLICATION_JSON));
+            .andRespond(MockRestResponseCreators.withSuccess(
+                TestUtils.fileToString(this.getClass(), "prm/prm_response_rightsholder_1000000322.json"),
+                MediaType.APPLICATION_JSON));
     }
 }
