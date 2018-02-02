@@ -99,14 +99,14 @@ public interface IUsageRepository {
 
     /**
      * Updates scenario id, updated user name, status to 'LOCKED', payee account number,
-     * net amount, service fee amount and RH participation status for {@link Usage}s.
+     * net amount, service fee amount and RH participating flag for {@link Usage}s.
      *
      * @param usages list of {@link Usage}s
      */
     void addToScenario(List<Usage> usages);
 
     /**
-     * Updates RH account number, payee account number, net amount, service fee amount and RH participation flag
+     * Updates RH account number, payee account number, net amount, service fee amount and RH participating flag
      * for {@link Usage}s.
      *
      * @param usages list of {@link Usage}s

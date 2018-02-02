@@ -151,7 +151,7 @@ public class UsageService implements IUsageService {
         usages.forEach(usage -> {
             boolean rhParticipatingFlag =
                 prmIntegrationService.isRightsholderParticipating(usage.getRightsholder().getAccountNumber());
-            CalculationUtils.recalculateUsage(usage, rhParticipatingFlag,
+            CalculationUtils.recalculateAmounts(usage, rhParticipatingFlag,
                 prmIntegrationService.getRhParticipatingServiceFee(rhParticipatingFlag));
         });
         return usages;
@@ -183,7 +183,7 @@ public class UsageService implements IUsageService {
         usages.forEach(usage -> {
             boolean rhParticipatingFlag =
                 prmIntegrationService.isRightsholderParticipating(usage.getRightsholder().getAccountNumber());
-            CalculationUtils.recalculateUsage(usage, rhParticipatingFlag,
+            CalculationUtils.recalculateAmounts(usage, rhParticipatingFlag,
                 prmIntegrationService.getRhParticipatingServiceFee(rhParticipatingFlag));
             usage.setUpdateUser(RupContextUtils.getUserName());
         });

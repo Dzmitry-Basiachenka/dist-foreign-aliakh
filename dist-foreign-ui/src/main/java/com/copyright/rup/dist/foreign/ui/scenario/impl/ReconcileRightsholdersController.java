@@ -50,4 +50,9 @@ public class ReconcileRightsholdersController implements IReconcileRightsholders
     public void setScenario(Scenario scenario) {
         this.scenario = scenario;
     }
+
+    @Override
+    public Scenario getScenario() {
+        return scenario;
+    }
 }

@@ -169,7 +169,6 @@ public class ScenarioService implements IScenarioService {
     }
 
     @Override
-    @Transactional
     @Profiled(tag = "service.ScenarioService.getRightsholderDiscrepancies")
     public Set<RightsholderDiscrepancy> getRightsholderDiscrepancies(Scenario scenario) {
         LOGGER.info("Get ownership changes. Started. {}", ForeignLogUtils.scenario(Objects.requireNonNull(scenario)));
@@ -191,14 +190,11 @@ public class ScenarioService implements IScenarioService {
     }
 
     @Override
-    @Transactional
-    @Profiled(tag = "service.ScenarioService.updateRhParticipationAndAmounts")
     public void updateRhParticipationAndAmounts(Scenario scenario) {
         usageService.updateRhPayeeAndAmounts(usageService.getUsagesByScenarioId(scenario.getId()));
     }
 
     @Override
-    @Transactional
     @Profiled(tag = "service.ScenarioService.approveOwnershipChanges")
     public void approveOwnershipChanges(Scenario scenario, Set<RightsholderDiscrepancy> discrepancies) {
         LOGGER.info("Approve Ownership Changes. Started. {}, RhDiscrepanciesCount={}",

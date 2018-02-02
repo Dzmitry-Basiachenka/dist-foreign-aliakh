@@ -39,4 +39,9 @@ public interface IReconcileRightsholdersController {
      * @param scenario instance of {@link Scenario}
      */
     void setScenario(Scenario scenario);
+
+    /**
+     * @return an instance of {@link Scenario}.
+     */
+    Scenario getScenario();
 }
