@@ -1,0 +1,23 @@
+{
+  "response": {
+    "status": {
+      "code": "SUCCESS",
+      "message": "OK"
+    },
+    "content": [
+      "java.util.ArrayList",
+      [
+        {
+          "@class": "com.copyright.rup.party.domain.preference.OrganizationPreferenceRollup",
+          "relatedOrganizationUid": "f0ba198d-14fd-49c9-a2c3-ffc65b2f14af",
+          "relatedExternalOrganizationKey": "1000002137",
+          "pmLicenseProductUid": "FAS",
+          "preferenceCode": "PAYEE",
+          "preferenceValue": "true",
+          "rollupOrganizationUid": "a5989f7c-fc6f-4e8c-88d4-2fe7bcce8d1f",
+          "rollupExternalOrganizationKey": "1000001820"
+        }
+      ]
+    ]
+  }
+}

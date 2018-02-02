@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.dist.common.test.JsonMatcher;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
-import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
@@ -46,6 +45,10 @@ import org.springframework.web.client.RestTemplate;
 @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 public class UpdateRightsholdersTest {
 
+    private static final String RH_WAS_FOUND_REASON = "Rightsholder account %s was found in RMS";
+    private static final String RH_WAS_NOT_FOUND_REASON = "Rightsholder account for %s was not found in RMS";
+    private MockRestServiceServer mockServer;
+
     @Autowired
     private IUsageRepository usageRepository;
     @Autowired
@@ -54,15 +57,12 @@ public class UpdateRightsholdersTest {
     private IUsageAuditService usageAuditService;
     @Autowired
     private RestTemplate restTemplate;
-    private MockRestServiceServer mockServer;
-    private static final String RH_WAS_FOUND_REASON = "Rightsholder account %s was found in RMS";
-    private static final String RH_WAS_NOT_FOUND_REASON = "Rightsholder account for %s was not found in RMS";
 
     @Test
     public void testUpdateRights() {
         mockServer = MockRestServiceServer.createServer(restTemplate);
         expectRmsCall("rms/rms_grants_request.json", "rms/rms_grants_response.json");
-        expectPrmCall("prm/prm_rightsholder_1000010077.json");
+        expectPrmCall("prm/prm_rightsholder_1000010077_response.json");
         usageService.updateRightsholders();
         mockServer.verify();
         assertUsages();
@@ -92,20 +92,19 @@ public class UpdateRightsholdersTest {
     }
 
     private void assertAudit(String usageId, String reason) {
-        UsageAuditItem usageAudit = usageAuditService.getUsageAudit(usageId).get(0);
-        assertEquals(reason, usageAudit.getActionReason());
+        assertEquals(reason, usageAuditService.getUsageAudit(usageId).get(0).getActionReason());
     }
 
     private void expectRmsCall(String rmsRequestFileName, String rmsResponseFileName) {
-        String request = TestUtils.fileToString(this.getClass(), rmsRequestFileName);
-        String response = TestUtils.fileToString(this.getClass(), rmsResponseFileName);
         mockServer.expect(MockRestRequestMatchers
             .requestTo("http://localhost:9051/rms-rights-rest/all-rights/"))
             .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
             .andExpect(MockRestRequestMatchers.content()
-                .string(new JsonMatcher(request, Lists.newArrayList("period_end_date"))))
+                .string(new JsonMatcher(TestUtils.fileToString(this.getClass(), rmsRequestFileName),
+                    Lists.newArrayList("period_end_date"))))
             .andRespond(
-                MockRestResponseCreators.withSuccess(response, MediaType.APPLICATION_JSON));
+                MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), rmsResponseFileName),
+                    MediaType.APPLICATION_JSON));
     }
 
     private void expectPrmCall(String prmResponseFileName) {

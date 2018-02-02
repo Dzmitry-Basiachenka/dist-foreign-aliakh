@@ -1,0 +1,37 @@
+{
+  "response": {
+    "status": {
+      "code": "SUCCESS",
+      "message": "OK"
+    },
+    "content": [
+      "java.util.ArrayList",
+      [
+        {
+          "@class": "com.copyright.rup.party.domain.organization.Organization",
+          "version": 1,
+          "createDate": "2013-03-23T02:25:19-0400",
+          "updateDate": "2018-01-22T09:23:54-0500",
+          "createUser": "pmOrganizationLoad",
+          "updateUser": "Ihar Suvorau",
+          "id": "f0ba198d-14fd-49c9-a2c3-ffc65b2f14af",
+          "name": "CAccess Intelligence LLC (MD)",
+          "extOrgKey": "1000002137",
+          "extOrgSource": "EBUSINESS",
+          "defaultCurrencyID": "USD",
+          "defaultOrgAccountID": "f0ba198d-14fd-49c9-a2c3-ffc65b2f14af",
+          "defaultLanguageID": "en",
+          "notForProfit": "false",
+          "organizationTypeID": "RH",
+          "articleSearchAllowed": true,
+          "taxAddressLine1": "line1",
+          "taxAddressCity": "city",
+          "taxAddressState": "st",
+          "taxAddressCountry": "MO",
+          "taxAddressZipCode": "123",
+          "organizationSubType": "COMPANY"
+        }
+      ]
+    ]
+  }
+}
