@@ -261,6 +261,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
+    @Profiled(tag = "repository.UsageRepository.findByStatus")
     public List<Usage> findByStatuses(UsageStatusEnum... statuses) {
         return selectList("IUsageMapper.findByStatuses", Objects.requireNonNull(statuses));
     }
@@ -275,6 +276,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
+    @Profiled(tag = "repository.UsageRepository.updateStatus(usageIds)")
     public void updateStatus(Set<String> usageIds, UsageStatusEnum status) {
         checkArgument(CollectionUtils.isNotEmpty(usageIds));
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
@@ -286,6 +288,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
+    @Profiled(tag = "repository.UsageRepository.updateStatusAndRhAccountNumber(usageIds)")
     public void updateStatusAndRhAccountNumber(Set<String> usageIds, UsageStatusEnum status, Long rhAccountNumber) {
         checkArgument(CollectionUtils.isNotEmpty(usageIds));
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);

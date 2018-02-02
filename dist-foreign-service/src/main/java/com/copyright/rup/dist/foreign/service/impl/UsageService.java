@@ -36,7 +36,9 @@ import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.perf4j.StopWatch;
 import org.perf4j.aop.Profiled;
+import org.perf4j.slf4j.Slf4JStopWatch;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,6 +52,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 /**
@@ -303,58 +306,81 @@ public class UsageService implements IUsageService {
     }
 
     @Override
+    @Profiled(tag = "service.UsageService.updateRightsholders")
     //TODO {pliakh} adjust implementation to avoid copy-paste for WORK_FOUND and SENT_FOR_RA usages handling
     public void updateRightsholders() {
         List<Usage> usages = usageRepository.findByStatuses(UsageStatusEnum.WORK_FOUND);
         if (CollectionUtils.isNotEmpty(usages)) {
-            updateWorkFoundUsagesRightsholders(usages);
+            LOGGER.info("Get usage rightsholders. Started. UsagesStatus={}, UsagesCount={}", UsageStatusEnum.WORK_FOUND,
+                LogUtils.size(usages));
+            long eligibleUsagesCount = updateWorkFoundUsagesRightsholders(usages);
+            LOGGER.info("Get usage rightsholders. Finished. UsagesStatus={}, UsagesCount={}, EligibleUsagesCount={}",
+                UsageStatusEnum.WORK_FOUND, LogUtils.size(usages), eligibleUsagesCount);
+        } else {
+            LOGGER.info("Get usage rightsholders. Skipped. Reason=There are no WORK_FOUND usages.");
         }
         usages = usageRepository.findByStatuses(UsageStatusEnum.SENT_FOR_RA);
         if (CollectionUtils.isNotEmpty(usages)) {
-            updateSentForRaUsagesRightsholders(usages);
+            LOGGER.info("Get usage rightsholders. Started. UsagesStatus={}, UsagesCount={}",
+                UsageStatusEnum.SENT_FOR_RA, LogUtils.size(usages));
+            long eligibleUsagesCount = updateSentForRaUsagesRightsholders(usages);
+            LOGGER.info("Get usage rightsholders. Finished. UsagesStatus={}, UsagesCount={}, EligibleUsagesCount={}",
+                UsageStatusEnum.SENT_FOR_RA, LogUtils.size(usages), eligibleUsagesCount);
+        } else {
+            LOGGER.info("Get usage rightsholders. Skipped. Reason=There are no SENT_FOR_RA usages.");
         }
     }
 
-    private void updateWorkFoundUsagesRightsholders(List<Usage> usages) {
+    private long updateWorkFoundUsagesRightsholders(List<Usage> usages) {
+        StopWatch stopWatch = new Slf4JStopWatch("service.UsageService.updateRightsholders(WORK_FOUND)");
         Map<Long, Set<String>> wrWrkInstToUsageIds = usages.stream().collect(
-            Collectors.groupingBy(Usage::getWrWrkInst, HashMap::new, Collectors
-                .mapping(Usage::getId, Collectors.toSet())));
+                Collectors.groupingBy(Usage::getWrWrkInst, HashMap::new, Collectors
+                    .mapping(Usage::getId, Collectors.toSet())));
 
-        Map<Long, Long> wrWrkInstToAccountNumber =
-            rmsGrantsService.getAccountNumbersByWrWrkInsts(Lists.newArrayList(wrWrkInstToUsageIds.keySet()));
+            Map<Long, Long> wrWrkInstToAccountNumber =
+                rmsGrantsService.getAccountNumbersByWrWrkInsts(Lists.newArrayList(wrWrkInstToUsageIds.keySet()));
 
-        wrWrkInstToAccountNumber.forEach((wrWrkInst, rhAccountNumber) -> {
-            Set<String> usageIds = wrWrkInstToUsageIds.get(wrWrkInst);
-            usageRepository.updateStatusAndRhAccountNumber(usageIds, UsageStatusEnum.ELIGIBLE,
-                rhAccountNumber);
-            usageAuditService.logAction(usageIds, UsageActionTypeEnum.RH_FOUND,
-                String.format("Rightsholder account %s was found in RMS", rhAccountNumber));
-        });
-        rightsholderService.updateRightsholders(Sets.newHashSet(wrWrkInstToAccountNumber.values()));
+        AtomicLong eligibleUsagesCount = new AtomicLong();
+            wrWrkInstToAccountNumber.forEach((wrWrkInst, rhAccountNumber) -> {
+                Set<String> usageIds = wrWrkInstToUsageIds.get(wrWrkInst);
+                usageRepository.updateStatusAndRhAccountNumber(usageIds, UsageStatusEnum.ELIGIBLE,
+                    rhAccountNumber);
+                eligibleUsagesCount.addAndGet(wrWrkInstToUsageIds.get(wrWrkInst).size());
+                usageAuditService.logAction(usageIds, UsageActionTypeEnum.RH_FOUND,
+                    String.format("Rightsholder account %s was found in RMS", rhAccountNumber));
+            });
+            rightsholderService.updateRightsholders(Sets.newHashSet(wrWrkInstToAccountNumber.values()));
 
-        wrWrkInstToUsageIds.forEach((wrWrkInst, usageIds) -> {
-            if (!wrWrkInstToAccountNumber.containsKey(wrWrkInst)) {
-                usageRepository.updateStatus(usageIds, UsageStatusEnum.RH_NOT_FOUND);
-                usageAuditService.logAction(usageIds, UsageActionTypeEnum.RH_NOT_FOUND,
-                    String.format("Rightsholder account for %s was not found in RMS", wrWrkInst));
-            }
-        });
+            wrWrkInstToUsageIds.forEach((wrWrkInst, usageIds) -> {
+                if (!wrWrkInstToAccountNumber.containsKey(wrWrkInst)) {
+                    usageRepository.updateStatus(usageIds, UsageStatusEnum.RH_NOT_FOUND);
+                    usageAuditService.logAction(usageIds, UsageActionTypeEnum.RH_NOT_FOUND,
+                        String.format("Rightsholder account for %s was not found in RMS", wrWrkInst));
+                }
+            });
+        stopWatch.stop();
+        return eligibleUsagesCount.longValue();
     }
 
-    private void updateSentForRaUsagesRightsholders(List<Usage> usages) {
+    private long updateSentForRaUsagesRightsholders(List<Usage> usages) {
+        StopWatch stopWatch = new Slf4JStopWatch("service.UsageService.updateRightsholders(SENT_FOR_RA)");
         Map<Long, Set<String>> wrWrkInstToUsageIds = usages.stream().collect(
             Collectors.groupingBy(Usage::getWrWrkInst, HashMap::new, Collectors
                 .mapping(Usage::getId, Collectors.toSet())));
         Map<Long, Long> wrWrkInstToAccountNumber =
             rmsGrantsService.getAccountNumbersByWrWrkInsts(Lists.newArrayList(wrWrkInstToUsageIds.keySet()));
+        AtomicLong eligibleUsagesCount = new AtomicLong();
         wrWrkInstToAccountNumber.forEach((wrWrkInst, rhAccountNumber) -> {
             Set<String> usageIds = wrWrkInstToUsageIds.get(wrWrkInst);
             usageRepository.updateStatusAndRhAccountNumber(usageIds, UsageStatusEnum.ELIGIBLE,
                 rhAccountNumber);
+            eligibleUsagesCount.addAndGet(wrWrkInstToUsageIds.get(wrWrkInst).size());
             usageAuditService.logAction(usageIds, UsageActionTypeEnum.RH_FOUND,
                 String.format("Rightsholder account %s was found in RMS", rhAccountNumber));
         });
         rightsholderService.updateRightsholders(Sets.newHashSet(wrWrkInstToAccountNumber.values()));
+        stopWatch.stop();
+        return eligibleUsagesCount.longValue();
     }
 
     private void calculateUsagesGrossAmount(UsageBatch usageBatch, List<Usage> usages) {
