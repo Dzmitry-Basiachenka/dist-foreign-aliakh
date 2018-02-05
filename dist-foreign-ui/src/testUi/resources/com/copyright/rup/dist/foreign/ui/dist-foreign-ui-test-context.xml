@@ -49,6 +49,8 @@
                value="com/copyright/rup/dist/foreign/ui/liquibase/usages-tab-ui-test-data-init.groovy"/>
         <entry key="com.copyright.rup.dist.foreign.ui.ViewScenarioUiTest"
                value="com/copyright/rup/dist/foreign/ui/liquibase/view-scenario-ui-test-data-init.groovy"/>
+        <entry key="com.copyright.rup.dist.foreign.ui.ReconcileRightsholdersUiTest"
+               value="com/copyright/rup/dist/foreign/ui/liquibase/reconcile-rightsholders-ui-test-data-init.groovy"/>
     </util:map>
 
     <bean id="quartzScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
