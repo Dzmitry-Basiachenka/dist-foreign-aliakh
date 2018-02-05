@@ -4,6 +4,7 @@ import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.DateColumnGenerator;
+import com.copyright.rup.vaadin.ui.VaadinUtils;
 
 import com.vaadin.data.util.BeanContainer;
 import com.vaadin.ui.Alignment;
@@ -36,6 +37,7 @@ class UsageHistoryWindow extends Window {
         setContent(initContent(usageAuditItems));
         setWidth(700, Unit.PIXELS);
         setHeight(300, Unit.PIXELS);
+        VaadinUtils.addComponentStyle(this, "usage-history-window");
     }
 
     private Table initTable(List<UsageAuditItem> usageAuditItems) {

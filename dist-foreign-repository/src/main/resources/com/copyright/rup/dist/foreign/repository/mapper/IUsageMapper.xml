@@ -749,7 +749,7 @@
                 <include refid="IUsageMapper.direction"/>
             </when>
             <otherwise>
-                updated_datetime desc
+                detail_id asc
             </otherwise>
         </choose>
         <include refid="ifPageable"/>

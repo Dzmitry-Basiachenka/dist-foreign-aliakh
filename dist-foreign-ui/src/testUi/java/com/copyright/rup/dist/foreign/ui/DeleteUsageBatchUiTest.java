@@ -127,7 +127,7 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
         clickButtonAndWait(confirmDialog, "Yes");
         verifyTableRows(usageBatchesTable, usageBatch1, usageBatchWithNewUsages, usageBatch2, usageBatch3);
         clickButtonAndWait(window, CLOSE_BUTTON_ID);
-        assertUsagesFilterEmpty(filterWidget);
+        assertFiltersEmpty(filterWidget);
         assertNullFilterItem(filterWidget, "batches-filter", "batches-filter-window", usageBatch4.getName());
         assertNullFilterItem(filterWidget, "rightsholders-filter", "rightsholders-filter-window", usageBatch4.getRro());
         verifyFiscalYearFilter(filterWidget, StringUtils.SPACE, "2016", "2017", "2019");

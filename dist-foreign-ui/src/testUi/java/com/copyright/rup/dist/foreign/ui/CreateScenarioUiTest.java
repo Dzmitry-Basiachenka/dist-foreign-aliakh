@@ -113,7 +113,7 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
         verifyCreatedScenario(scenarioTab);
         selectUsagesTab();
         assertTableRowElements(assertWebElement(By.id(USAGES_TABLE_ID)), 0);
-        assertUsagesFilterEmpty(assertWebElement(By.id(USAGES_FILTER_ID)));
+        assertFiltersEmpty(assertWebElement(By.id(USAGES_FILTER_ID)));
     }
 
     @Test

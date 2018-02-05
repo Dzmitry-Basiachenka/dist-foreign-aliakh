@@ -31,7 +31,6 @@ import java.util.Set;
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS)
 public class UsagesTabUiTest extends ForeignCommonUiTest {
 
-    private static final String CLEAR_BATTON_ID = "Clear";
     private static final String FILTERS_HEADER_TEXT = "Filters";
     private static final String EXPORT_BUTTON_ID = "Export";
     private static final String LOAD_BUTTON_ID = "Load";
@@ -127,8 +126,8 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         WebElement filterButtonsLayout = assertWebElement(filterWidget, "filter-buttons");
         clickButtonAndWait(filterButtonsLayout, "Apply");
         verifyFoundUsages(usagesTab);
-        clickButtonAndWait(filterButtonsLayout, CLEAR_BATTON_ID);
-        assertUsagesFilterEmpty(filterWidget);
+        clickButtonAndWait(filterButtonsLayout, "Clear");
+        assertFiltersEmpty(filterWidget);
     }
 
     private void applyStatus() {
