@@ -101,10 +101,10 @@ class CreateScenarioTestBuilder {
             expectGetPreferences(expectedPreferencesJson);
             expectGetRollups(expectedRollupsJson, expectedRollupsIds);
             scenarioId = scenarioService.createScenario("Test Scenario", "Scenario Description", usageFilter);
-            mockServer.verify();
             assertScenario();
             assertUsages();
             assertScenarioActions();
+            mockServer.verify();
         }
 
         private void assertScenario() {

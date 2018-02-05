@@ -12,7 +12,7 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 /**
- * Verifies {@link GetRightsQuartzJob}.
+ * Verifies {@link UpdateRightsQuartzJob}.
  * <p/>
  * Copyright (C) 2018 copyright.com
  * <p/>
@@ -20,16 +20,16 @@ import org.powermock.reflect.Whitebox;
  *
  * @author Aliaksandr Liakh
  */
-public class GetRightsQuartzJobTest {
+public class UpdateRightsQuartzJobTest {
 
     private IUsageService usageService;
-    private GetRightsQuartzJob getRightsQuartzJob;
+    private UpdateRightsQuartzJob updateRightsQuartzJob;
 
     @Before
     public void setUp() {
         usageService = createMock(IUsageService.class);
-        getRightsQuartzJob = new GetRightsQuartzJob();
-        Whitebox.setInternalState(getRightsQuartzJob, "usageService", usageService);
+        updateRightsQuartzJob = new UpdateRightsQuartzJob();
+        Whitebox.setInternalState(updateRightsQuartzJob, "usageService", usageService);
     }
 
     @Test
@@ -37,7 +37,7 @@ public class GetRightsQuartzJobTest {
         usageService.updateRightsholders();
         expectLastCall();
         replay(usageService);
-        getRightsQuartzJob.executeInternal(null);
+        updateRightsQuartzJob.executeInternal(null);
         verify(usageService);
     }
 }

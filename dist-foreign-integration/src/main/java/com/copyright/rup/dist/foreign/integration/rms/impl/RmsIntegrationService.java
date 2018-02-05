@@ -25,7 +25,7 @@ import java.util.Set;
  *
  * @author Aliaksandr Liakh
  */
-@Service("sf.integration.rmsIntegrationService")
+@Service("df.integration.rmsIntegrationService")
 public class RmsIntegrationService implements IRmsIntegrationService {
 
     @Autowired
