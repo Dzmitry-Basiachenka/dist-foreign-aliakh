@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.impl.RightsholderFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.UsageBatchFilterWidget;
+import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.VaadinUtils;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 
@@ -83,16 +84,17 @@ public class AuditFilterWidget extends VerticalLayout implements IAuditFilterWid
             filter.setBatchesIds(event.getSelectedItemsIds());
             filterChanged();
         });
+        VaadinUtils.addComponentStyle(usageBatchFilterWidget, "audit-batches-filter");
     }
 
     private void initRightsholdersFilter() {
         rightsholderFilterWidget = new RightsholderFilterWidget(ForeignUi.getMessage("label.rightsholders"),
-            ForeignUi.getMessage("prompt.rightsholder"),
-            () -> controller.getRightsholders());
+            ForeignUi.getMessage("prompt.rightsholder"), () -> controller.getRightsholders());
         rightsholderFilterWidget.addFilterSaveListener(event -> {
             filter.setRhAccountNumbers(event.getSelectedItemsIds());
             filterChanged();
         });
+        VaadinUtils.addComponentStyle(rightsholderFilterWidget, "audit-rightsholders-filter");
     }
 
     private void initStatusesFilterWidget() {
@@ -101,12 +103,13 @@ public class AuditFilterWidget extends VerticalLayout implements IAuditFilterWid
             filter.setStatuses(event.getSelectedItemsIds());
             filterChanged();
         });
+        VaadinUtils.addComponentStyle(statusFilterWidget, "audit-statuses-filter");
     }
 
     private HorizontalLayout initButtonsLayout() {
-        applyButton = new Button(ForeignUi.getMessage("button.apply"));
+        applyButton = Buttons.createButton(ForeignUi.getMessage("button.apply"));
         applyButton.addClickListener(event -> applyFilter());
-        Button clearButton = new Button(ForeignUi.getMessage("button.clear"));
+        Button clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
         clearButton.addClickListener(event -> clearFilter());
         HorizontalLayout layout = new HorizontalLayout(applyButton, clearButton);
         layout.setSpacing(true);

@@ -98,10 +98,12 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
         toolbar.setComponentAlignment(searchWidget, Alignment.MIDDLE_CENTER);
         toolbar.setExpandRatio(searchWidget, 1f);
         toolbar.setMargin(new MarginInfo(false, true, false, true));
+        VaadinUtils.addComponentStyle(toolbar, "audit-toolbar");
         VerticalLayout layout = new VerticalLayout(toolbar, table);
         layout.setSizeFull();
         layout.setExpandRatio(table, 1f);
         layout.setSpacing(true);
+        VaadinUtils.addComponentStyle(layout, "audit-layout");
         addComponents(filterWidget, layout);
     }
 
@@ -139,6 +141,7 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
             ForeignUi.getMessage("table.column.scenario_name"));
         addColumnsGenerators();
         table.setColumnCollapsingAllowed(true);
+        VaadinUtils.addComponentStyle(table, "audit-table");
     }
 
     private void addColumnsGenerators() {

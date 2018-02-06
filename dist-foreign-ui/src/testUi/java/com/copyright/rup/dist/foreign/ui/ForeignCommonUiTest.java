@@ -214,9 +214,12 @@ public class ForeignCommonUiTest extends CommonUiTest {
         return selectTab("Scenarios");
     }
 
-    void assertUsagesFilterEmpty(WebElement filterWidget) {
-        assertBatchesFilterEmpty(filterWidget);
-        assertRroFilterEmpty(filterWidget);
+    WebElement selectAuditTab() {
+        return selectTab("Audit");
+    }
+
+    void assertFiltersEmpty(WebElement filterWidget) {
+        assertFilterEmpty(filterWidget, "batches-filter", "rightsholders-filter");
         assertPaymentDateFilterEmpty(filterWidget);
         assertFiscalYearFilterEmpty(filterWidget);
         assertFalse(isElementEnabled(assertWebElement(filterWidget, "Apply")));
@@ -301,6 +304,20 @@ public class ForeignCommonUiTest extends CommonUiTest {
         applyItemFilter(filterWidget, "RROs", "rightsholders-filter-window", "RROs filter", selectItem);
     }
 
+    void applyRightsholdersFilter(WebElement filterWidget, String selectItem) {
+        applyItemFilter(filterWidget, "Rightsholders", "rightsholders-filter-window", "Rightsholders filter",
+            selectItem);
+    }
+
+    void applyAuditStatusFilter(WebElement filterWidget, String selectItem) {
+        applyItemFilter(filterWidget, "Status", "status-filter-window", "Status filter", selectItem);
+    }
+
+    void assertFilterEmpty(WebElement filterWidget, String... filterId) {
+        Arrays.asList(filterId)
+            .forEach(id -> assertWebElement(assertWebElement(filterWidget, id), HTML_DIV_TAG_NAME, "(0)"));
+    }
+
     private void applyItemFilter(WebElement filterWidget, String buttonId, String windowId, String windowCaption,
                                  String selectItem) {
         WebElement filterElement = assertWebElement(filterWidget, buttonId);
@@ -322,16 +339,6 @@ public class ForeignCommonUiTest extends CommonUiTest {
     private void assertPaymentDateFilterEmpty(WebElement filterWidget) {
         WebElement paymentDateFilter = assertWebElement(filterWidget, "payment-date-filter");
         assertEquals(StringUtils.EMPTY, assertWebElement(paymentDateFilter, By.className("v-textfield")).getText());
-    }
-
-    private void assertRroFilterEmpty(WebElement filterWidget) {
-        WebElement rightsholdersFilter = assertWebElement(filterWidget, "rightsholders-filter");
-        assertWebElement(rightsholdersFilter, HTML_DIV_TAG_NAME, "(0)");
-    }
-
-    private void assertBatchesFilterEmpty(WebElement filterWidget) {
-        WebElement batchesFilter = assertWebElement(filterWidget, "batches-filter");
-        assertWebElement(batchesFilter, HTML_DIV_TAG_NAME, "(0)");
     }
 
     private WebElement selectTab(String caption) {
