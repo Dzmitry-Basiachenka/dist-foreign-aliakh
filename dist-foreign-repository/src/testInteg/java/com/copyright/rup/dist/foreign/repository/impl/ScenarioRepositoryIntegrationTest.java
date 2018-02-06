@@ -133,6 +133,15 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
+    public void testFindNamesByUsageBatchIdForArchiveUsage() {
+        List<String> scenariosNames =
+            scenarioRepository.findNamesByUsageBatchId("56282cac-2468-48d4-b346-93d3458a656a");
+        assertNotNull(scenariosNames);
+        assertEquals(1, scenariosNames.size());
+        assertEquals("Scenario name 3", scenariosNames.get(0));
+    }
+
+    @Test
     public void testRemove() {
         scenarioRepository.insert(buildScenario(SCENARIO_ID, SCENARIO_NAME));
         assertEquals(1, scenarioRepository.findCountByName(SCENARIO_NAME));

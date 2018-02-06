@@ -90,7 +90,12 @@
         where df_scenario_uid in (
             select df_scenario_uid
             from ${schema}.df_usage
-            where df_usage_batch_uid = #{df_usage_batch_id})
+            where df_usage_batch_uid = #{df_usage_batch_id}
+            union
+            select df_scenario_uid
+            from ${schema}.df_usage_archive
+            where df_usage_batch_uid = #{df_usage_batch_id}
+        )
     </select>
 
     <delete id="remove" parameterType="string">
