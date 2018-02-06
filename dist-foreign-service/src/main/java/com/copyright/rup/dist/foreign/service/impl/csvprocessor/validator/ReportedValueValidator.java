@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * The validator to check whether passed value is positive number with 2 decimals.
@@ -24,10 +25,11 @@ public class ReportedValueValidator implements IValidator<String> {
 
     @Override
     public String getErrorMessage() {
-        return "Field value should be greater than 0";
+        return "Field value should be greater than 0 after rounding";
     }
 
     private boolean isValidReportedValue(String value) {
-        return value.matches(AMOUNT_REGEX) && -1 == BigDecimal.ZERO.compareTo(new BigDecimal(value));
+        return value.matches(AMOUNT_REGEX)
+            && -1 == BigDecimal.ZERO.compareTo(new BigDecimal(value).setScale(2, RoundingMode.HALF_UP));
     }
 }

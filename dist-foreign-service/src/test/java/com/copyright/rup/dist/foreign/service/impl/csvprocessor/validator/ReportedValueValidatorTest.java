@@ -50,6 +50,8 @@ public class ReportedValueValidatorTest {
             {"1.00", true},
             {"10.00", true},
             {"9999999999.99", true},
+            {"0.005", true},
+            {"0.004", false},
             {"999999999999", false},
             {"000125.52", false},
             {"01.44", false},
@@ -77,6 +79,6 @@ public class ReportedValueValidatorTest {
     public void testIsValid() {
         ReportedValueValidator validator = new ReportedValueValidator();
         assertEquals(expectedResult, validator.isValid(value));
-        assertEquals("Field value should be greater than 0", validator.getErrorMessage());
+        assertEquals("Field value should be greater than 0 after rounding", validator.getErrorMessage());
     }
 }
