@@ -66,17 +66,6 @@ public class UsageRepositoryTest {
     }
 
     @Test
-    public void testUpdateStatus() {
-        Set<String> usageIds = Sets.newHashSetWithExpectedSize(32002);
-        IntStream.range(1, 32002).forEach(i -> usageIds.add(RupPersistUtils.generateUuid()));
-        expect(sqlSessionTemplate.update(eq("IUsageMapper.updateStatusAndRhAccountNumber"),
-            notNull(List.class))).andReturn(0).times(2);
-        replay(sqlSessionTemplate);
-        usageRepository.updateStatus(Sets.newHashSet(usageIds), UsageStatusEnum.RH_NOT_FOUND);
-        verify(sqlSessionTemplate);
-    }
-
-    @Test
     public void testUpdateStatusAndRhAccountNumber() {
         Set<String> usageIds = Sets.newHashSetWithExpectedSize(32002);
         IntStream.range(1, 32002).forEach(i -> usageIds.add(RupPersistUtils.generateUuid()));

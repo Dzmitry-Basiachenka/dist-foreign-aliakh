@@ -56,17 +56,18 @@ public class UpdateRightsholdersTest {
     private MockRestServiceServer mockServer;
 
     @Test
+    // Test case ID: 'f3568a18-28f1-4807-933f-f8fe4a7396d6'
     public void testUpdateRights() {
         mockServer = MockRestServiceServer.createServer(restTemplate);
-        expectRmsCall("rms/rms_grants_request_work_found_usages.json",
-            "rms/rms_grants_response_work_found_usages.json");
-        expectRmsCall("rms/rms_grants_request_sent_for_ra_usages.json",
-            "rms/rms_grants_response_sent_for_ra_usages.json");
+        expectRmsCall("rms/rms_grants_work_found_usages_request.json",
+            "rms/rms_grants_work_found_usages_response.json");
+        expectRmsCall("rms/rms_grants_sent_for_ra_usages_request.json",
+            "rms/rms_grants_sent_for_ra_usages_response.json");
         expectPrmCall();
         usageService.updateRightsholders();
-        mockServer.verify();
         assertUsages();
         assertAudit();
+        mockServer.verify();
     }
 
     private void assertUsages() {
@@ -115,7 +116,7 @@ public class UpdateRightsholdersTest {
                 "http://localhost:8080/party-rest/organization/extorgkeys?extOrgKeys%5B%5D=1000000322&fmt=json"))
             .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
             .andRespond(MockRestResponseCreators.withSuccess(
-                TestUtils.fileToString(this.getClass(), "prm/prm_response_rightsholder_1000000322.json"),
+                TestUtils.fileToString(this.getClass(), "prm/rightsholder_1000000322_response.json"),
                 MediaType.APPLICATION_JSON));
     }
 }

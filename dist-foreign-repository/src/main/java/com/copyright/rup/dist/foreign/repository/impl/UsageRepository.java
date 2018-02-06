@@ -276,19 +276,13 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    @Profiled(tag = "repository.UsageRepository.updateStatus(usageIds)")
+    @Profiled(tag = "repository.UsageRepository.updateStatus")
     public void updateStatus(Set<String> usageIds, UsageStatusEnum status) {
-        checkArgument(CollectionUtils.isNotEmpty(usageIds));
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-        parameters.put(STATUS_KEY, Objects.requireNonNull(status));
-        Iterables.partition(usageIds, 32000).forEach(partition -> {
-            parameters.put("usageIds", partition);
-            update("IUsageMapper.updateStatusAndRhAccountNumber", parameters);
-        });
+        usageIds.forEach(usageId -> updateStatus(usageId, status));
     }
 
     @Override
-    @Profiled(tag = "repository.UsageRepository.updateStatusAndRhAccountNumber(usageIds)")
+    @Profiled(tag = "repository.UsageRepository.updateStatusAndRhAccountNumber")
     public void updateStatusAndRhAccountNumber(Set<String> usageIds, UsageStatusEnum status, Long rhAccountNumber) {
         checkArgument(CollectionUtils.isNotEmpty(usageIds));
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);

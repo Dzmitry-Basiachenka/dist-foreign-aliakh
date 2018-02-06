@@ -7,7 +7,7 @@ import org.quartz.JobExecutionContext;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
 /**
- * Quartz job to to get rights for usages.
+ * Quartz job to update usages rights.
  * <p/>
  * Copyright (C) 2018 copyright.com
  * <p/>
@@ -16,7 +16,7 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
  * @author Aliaksandr Liakh
  */
 @DisallowConcurrentExecution
-public class GetRightsQuartzJob extends QuartzJobBean {
+public class UpdateRightsQuartzJob extends QuartzJobBean {
 
     private IUsageService usageService;
 

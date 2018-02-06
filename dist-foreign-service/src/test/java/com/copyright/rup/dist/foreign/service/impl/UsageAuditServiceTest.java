@@ -54,7 +54,7 @@ public class UsageAuditServiceTest {
     }
 
     @Test
-    public void logActionWithoutScenario() {
+    public void testLogActionWithoutScenario() {
         Capture<UsageAuditItem> usageAuditItemCapture = new Capture<>();
         usageAuditRepository.insert(capture(usageAuditItemCapture));
         expectLastCall().once();
@@ -65,7 +65,7 @@ public class UsageAuditServiceTest {
     }
 
     @Test
-    public void logActionWithUsageIds() {
+    public void testLogActionWithUsageIds() {
         Capture<UsageAuditItem> usageAuditItemCapture1 = new Capture<>();
         usageAuditRepository.insert(capture(usageAuditItemCapture1));
         expectLastCall().once();
@@ -81,7 +81,7 @@ public class UsageAuditServiceTest {
     }
 
     @Test
-    public void logActionWithScenario() {
+    public void testLogActionWithScenario() {
         Capture<UsageAuditItem> usageAuditItemCapture = new Capture<>();
         usageAuditRepository.insert(capture(usageAuditItemCapture));
         expectLastCall().once();
