@@ -90,12 +90,12 @@ public class RightsholderTotalsHolderTable extends LazyTable<RightsholderTotalsH
     private void addProperties() {
         addProperty(RIGHTSHOLDER_ACCOUNT_NUMBER_PROPERTY, Long.class, true);
         addProperty(RIGHTSHOLDER_NAME_PROPERTY, String.class, true);
-        addProperty(PAYEE_ACCOUNT_NUMBER_PROPERTY, Long.class, false);
-        addProperty(PAYEE_NAME_PROPERTY, String.class, false);
+        addProperty(PAYEE_ACCOUNT_NUMBER_PROPERTY, Long.class, true);
+        addProperty(PAYEE_NAME_PROPERTY, String.class, true);
         addProperty(GROSS_TOTAL_PROPERTY, BigDecimal.class, true);
         addProperty(SERVICE_FEE_TOTAL_PROPERTY, BigDecimal.class, true);
         addProperty(NET_TOTAL_PROPERTY, BigDecimal.class, true);
-        addProperty(SERVICE_FEE_PROPERTY, BigDecimal.class, false);
+        addProperty(SERVICE_FEE_PROPERTY, BigDecimal.class, true);
     }
 
     private void setColumnsSizes() {

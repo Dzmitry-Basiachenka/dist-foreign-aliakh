@@ -286,11 +286,20 @@
                     <when test="sort.property == 'rightsholder.accountNumber'">
                         u.rh_account_number <include refid="IUsageMapper.direction"/>
                     </when>
+                    <when test="sort.property == 'payee.name'">
+                        p.name <include refid="IUsageMapper.direction"/>
+                    </when>
+                    <when test="sort.property == 'payee.accountNumber'">
+                        p.rh_account_number <include refid="IUsageMapper.direction"/>
+                    </when>
                     <when test="sort.property == 'grossTotal'">
                         u.gross_total <include refid="IUsageMapper.direction"/>
                     </when>
                     <when test="sort.property == 'serviceFeeTotal'">
                         u.service_fee_total <include refid="IUsageMapper.direction"/>
+                    </when>
+                    <when test="sort.property == 'serviceFee'">
+                        u.service_fee <include refid="IUsageMapper.direction"/>
                     </when>
                     <when test="sort.property == 'netTotal'">
                         u.net_total <include refid="IUsageMapper.direction"/>

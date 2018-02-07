@@ -88,7 +88,8 @@ public class ViewScenarioUiTest extends ForeignCommonUiTest {
         assertTableRowElements(rows.get(0), rightsholder1);
         assertTableRowElements(rows.get(1), rightsholder2);
         assertTableRowElements(rows.get(2), rightsholder3);
-        assertTableSorting(table, "RH Account #", "RH Name", "Amt in USD", "Service Fee Amount", "Net Amt in USD");
+        assertTableSorting(table, "RH Account #", "RH Name", "Payee Account #", "Payee Name", "Amt in USD",
+            "Service Fee Amount", "Net Amt in USD", "Service Fee %");
         assertTableFooterElements(table, "Totals", StringUtils.SPACE, StringUtils.SPACE, StringUtils.SPACE, "28,143.27",
             "9,005.85", "19,137.42", StringUtils.SPACE);
     }
