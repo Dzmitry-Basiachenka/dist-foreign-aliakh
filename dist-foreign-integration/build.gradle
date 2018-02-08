@@ -4,9 +4,9 @@ dependencies {
     compile project(':dist-foreign-domain')
 
     compile("com.copyright.rup.dist.common:dist-common-integration:${distCommonVersion}")
-    compile("org.springframework:spring-web:${rupJava.standardDependencies.spring.version}")
-    compile("org.perf4j:perf4j:${perf4jVersion}")
     compile("commons-collections:commons-collections:${commonsCollectionsVersion}")
+    compile("org.perf4j:perf4j:${perf4jVersion}")
+    compile("org.springframework:spring-web:${rupJava.standardDependencies.spring.version}")
 
     testCompile("com.copyright.rup.dist.common:dist-common-test:${distCommonVersion}")
     testRuntime("com.copyright.rup.common:rup-common-config:${rupCommonVersion}")

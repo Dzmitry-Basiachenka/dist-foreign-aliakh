@@ -3,10 +3,10 @@ dependencies {
     compile project(':dist-foreign-repository')
     compile project(':dist-foreign-integration')
 
+    compile("com.copyright.rup.dist.common:dist-common-service:${distCommonVersion}")
+    compile("org.perf4j:perf4j:${perf4jVersion}")
     compile("org.quartz-scheduler:quartz:${quartzVersion}")
     compile("org.springframework:spring-context-support:${rupJava.standardDependencies.spring.version}")
-    compile("org.perf4j:perf4j:${perf4jVersion}")
-    compile("com.copyright.rup.dist.common:dist-common-service:${distCommonVersion}")
 
     runtime("commons-jexl:commons-jexl:${jexlVersion}")
     runtime("org.aspectj:aspectjweaver:${aspectjVersion}")
