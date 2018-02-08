@@ -9,6 +9,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.ui.scenario.api.IReconcileRightsholdersController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
 import com.copyright.rup.vaadin.ui.LongColumnGenerator;
 
 import com.vaadin.server.Sizeable.Unit;
@@ -38,9 +39,11 @@ public class RightsholderDiscrepanciesWindowTest {
     public void testConstructor() {
         IReconcileRightsholdersController rightsholderDiscrepancyController =
             createMock(IReconcileRightsholdersController.class);
+        IScenariosController scenariosController = createMock(IScenariosController.class);
         expect(rightsholderDiscrepancyController.getDiscrepancies()).andReturn(Collections.emptySet()).once();
         replay(rightsholderDiscrepancyController);
-        RightsholderDiscrepanciesWindow window = new RightsholderDiscrepanciesWindow(rightsholderDiscrepancyController);
+        RightsholderDiscrepanciesWindow window =
+            new RightsholderDiscrepanciesWindow(rightsholderDiscrepancyController, scenariosController);
         assertEquals("Reconcile Rightsholders", window.getCaption());
         verify(rightsholderDiscrepancyController);
         assertEquals(900, window.getWidth(), 0);

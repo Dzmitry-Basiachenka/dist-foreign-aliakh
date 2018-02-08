@@ -88,16 +88,24 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
     @Override
     public void onReconcileRightsholdersButtonClicked() {
         Scenario scenario = getWidget().getSelectedScenario();
-        Set<RightsholderDiscrepancy> discrepancies = scenarioService.getRightsholderDiscrepancies(scenario);
-        if (CollectionUtils.isNotEmpty(discrepancies)) {
-            reconcileRightsholdersController.setDiscrepancies(discrepancies);
-            reconcileRightsholdersController.setScenario(scenario);
-            Windows.showModalWindow(new RightsholderDiscrepanciesWindow(reconcileRightsholdersController));
+        scenarioController.setScenario(scenario);
+        if (!scenarioController.isScenarioEmpty()) {
+            Set<RightsholderDiscrepancy> discrepancies = scenarioService.getRightsholderDiscrepancies(scenario);
+            if (CollectionUtils.isNotEmpty(discrepancies)) {
+                reconcileRightsholdersController.setDiscrepancies(discrepancies);
+                reconcileRightsholdersController.setScenario(scenario);
+                Windows.showModalWindow(new RightsholderDiscrepanciesWindow(reconcileRightsholdersController, this));
+            } else {
+                Windows.showConfirmDialog(ForeignUi.getMessage("window.reconcile_rightsholders", scenario.getName()),
+                    () -> {
+                        scenarioService.updateRhParticipationAndAmounts(scenario);
+                        getWidget().refreshSelectedScenario();
+                    });
+            }
         } else {
-            Windows.showConfirmDialog(ForeignUi.getMessage("window.reconcile_rightsholders", scenario.getName()),
-                () -> scenarioService.updateRhParticipationAndAmounts(scenario));
+            Windows.showNotificationWindow(
+                ForeignUi.getMessage("message.warning.action_for_empty_scenario", "recalculated"));
         }
-        getWidget().refreshSelectedScenario();
     }
 
     @Override
@@ -115,7 +123,8 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
                 Windows.showModalWindow(window);
             }
         } else {
-            Windows.showNotificationWindow(ForeignUi.getMessage("message.warning.submit_empty_scenario"));
+            Windows.showNotificationWindow(
+                ForeignUi.getMessage("message.warning.action_for_empty_scenario", "submitted for approval"));
         }
     }
 
