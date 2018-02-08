@@ -1,16 +1,12 @@
-import com.copyright.rup.scm.gradle.plugins.PluginUtils
 import fi.jasoft.plugin.GradleVaadinPlugin
 import fi.jasoft.plugin.tasks.CompileThemeTask
-import org.apache.tools.ant.filters.ReplaceTokens
+
+import java.util.concurrent.TimeUnit
 
 apply plugin: 'rup-war-ui'
 
 if (!project.plugins.findPlugin(GradleVaadinPlugin)) {
     project.apply(plugin: GradleVaadinPlugin)
-}
-
-rupTomcat {
-    tomcatVersion = '8.0.33'
 }
 
 vaadin {
@@ -25,21 +21,17 @@ dependencies {
 
     compile("com.copyright.rup.vaadin:rup-vaadin-core:${rupVaadinVersion}")
     compile("com.copyright.rup.vaadin:rup-vaadin-theme:${rupVaadinVersion}")
-    compile("com.copyright.rup.security.auth:rup-auth-common:${rupAuthVersion}")
-    compile("ru.xpoft.vaadin:spring-vaadin-integration:${vaadinSpringIntegrationAddonVersion}")
-    compile("org.apache.commons:commons-text:${commonsTextVersion}")
 
-    runtime("com.copyright.rup.security.auth:rup-auth-consumer:${rupAuthVersion}")
-    runtime("com.copyright.rup.common:rup-common-web:${rupCommonVersion}")
     runtime("com.copyright.rup.common:rup-common-config:${rupCommonVersion}")
-    runtime("org.codehaus.janino:janino:${janinoVersion}")
+    runtime("com.copyright.rup.common:rup-common-web:${rupCommonVersion}")
+    runtime("com.copyright.rup.security.auth:rup-auth-consumer:${rupAuthVersion}")
     runtime("com.vaadin:vaadin-push:${vaadinVersion}")
+    runtime("org.codehaus.janino:janino:${janinoVersion}")
     runtime("org.springframework.security:spring-security-core:${springSecurityVersion}")
+    runtime("ru.xpoft.vaadin:spring-vaadin-integration:${vaadinSpringIntegrationAddonVersion}")
 
-    testCompile("nl.jqno.equalsverifier:equalsverifier:${equalsVerifierVersion}")
     testCompile("com.copyright.rup.dist.common:dist-common-test:${distCommonVersion}")
-    //Java 8 compatibility
-    testCompile("cglib:cglib-nodep:${cglibNodepVersion}")
+    testCompile("org.apache.commons:commons-text:${commonsTextVersion}")
 
     testUiCompile("com.copyright.rup.vaadin:rup-vaadin-test:${rupVaadinVersion}")
     testUiCompile project(path: ":dist-foreign-repository", configuration: "testIntegRuntime")
@@ -56,9 +48,32 @@ rupWarUi {
 }
 
 uiTest {
-    //Execute only on Local environment or test server until resolving issue with running Selenium Webdriver on Jenkinks
-    boolean isOnTestServer = ['prd1cmbuild5.copyright.com', 'prd1cmbuild6.copyright.com'].contains(PluginUtils.getHost())
-    onlyIf { !PluginUtils.onBuildServer() || isOnTestServer }
+    doFirst {
+        systemProperty "dbPidLocation", "${buildDir}/tmp/embeddedPostgres/postgresUi.pid"
+        //This hook used for closing PostgreSQL processes when uiTest task was closed early
+        Runtime.runtime.addShutdownHook({
+            def pidLocation = System.getProperty("dbPidLocation")
+            if (null != pidLocation) {
+                File file = new File(pidLocation)
+                if (file.exists()) {
+                    String pid = file.text
+                    project.logger.info("$PLUGIN_KEY about to kill embeded postgress with PID $pid")
+                    def killProcess = null
+                    if (org.gradle.internal.os.OperatingSystem.current().isWindows()) {
+                        killProcess = Runtime.runtime.exec("Taskkill /PID $pid /F")
+                    } else if (org.gradle.internal.os.OperatingSystem.current().isUnix()) {
+                        killProcess = Runtime.runtime.exec("kill -9 $pid")
+                    }
+                    if (killProcess?.waitFor(10, TimeUnit.SECONDS)) {
+                        project.logger.info("$PLUGIN_KEY has killed embeded postgress with PID $pid , exitCode is ${killProcess.exitValue()}")
+                    } else {
+                        project.logger.warn("$PLUGIN_KEY encountered kill timeout for embeded postgress PID $pid")
+                    }
+                    file.deleteOnExit()
+                }
+            }
+        })
+    }
 
     testLogging {
         // UI tests are generally slower and fewer in number, so log the start of each test
@@ -71,16 +86,10 @@ task compileVaadinTheme(type: CompileThemeTask, group: "rupVaadin")
 war {
     dependsOn 'compileVaadinTheme'
     exclude '**/*.scss'
-    filesMatching("**/*.xml") {
-        filter(ReplaceTokens, tokens: ['vaadinProductionMode': 'true'])
-    }
 }
 
 afterEvaluate {
     appBeforeIntegrationTest.doFirst {
-        systemProperty "dbPidLocation", "${projectDir}/build/tmp/embeddedPostgres/postgresUi.pid"
-    }
-    uiTest.doFirst {
         systemProperty "dbPidLocation", "${projectDir}/build/tmp/embeddedPostgres/postgresUi.pid"
     }
 }
