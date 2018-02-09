@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IReconcileRightsholdersController;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.LongColumnGenerator;
 import com.copyright.rup.vaadin.ui.VaadinUtils;
@@ -42,18 +43,22 @@ public class RightsholderDiscrepanciesWindow extends Window {
     private static final String NEW_RIGHTSHOLDER_NAME_PROPERTY = "newRightsholder.name";
     private BeanItemContainer<RightsholderDiscrepancy> container;
     private IReconcileRightsholdersController controller;
+    private IScenariosController scenariosController;
 
     /**
      * Constructor.
      *
      * @param reconcileRightsholdersController instance of {@link IReconcileRightsholdersController}
+     * @param scenariosController              instance of {@link IScenariosController}
      */
-    public RightsholderDiscrepanciesWindow(IReconcileRightsholdersController reconcileRightsholdersController) {
+    public RightsholderDiscrepanciesWindow(IReconcileRightsholdersController reconcileRightsholdersController,
+                                           IScenariosController scenariosController) {
         setWidth(900, Unit.PIXELS);
         setHeight(530, Unit.PIXELS);
         setContent(initContent());
         setCaption(ForeignUi.getMessage("label.reconcile_rightsholders"));
         this.controller = reconcileRightsholdersController;
+        this.scenariosController = scenariosController;
         populateDiscrepancies();
         VaadinUtils.addComponentStyle(this, "rightsholder-discrepancies-window");
     }
@@ -91,6 +96,7 @@ public class RightsholderDiscrepanciesWindow extends Window {
                     ForeignUi.getMessage("message.confirm.approve", controller.getScenario().getName()), () -> {
                         controller.approveReconciliation();
                         this.close();
+                        scenariosController.getWidget().refreshSelectedScenario();
                     });
             } else {
                 Windows.showNotificationWindow(

@@ -126,8 +126,6 @@ public class ScenariosControllerTest {
         expect(Windows.showConfirmDialog(eq("There are no rightsholders updates for scenario " +
                 "<i><b>Scenario name</b></i>. Do you want to update service fee?"),
             anyObject(ConfirmDialogWindow.IListener.class))).andReturn(null).once();
-        scenariosWidget.refreshSelectedScenario();
-        expectLastCall().once();
         replay(scenariosWidget, scenarioService, Windows.class);
         scenariosController.onReconcileRightsholdersButtonClicked();
         verify(scenariosWidget, scenarioService, Windows.class);
@@ -148,8 +146,6 @@ public class ScenariosControllerTest {
         reconcileRightsholdersController.setDiscrepancies(discrepancies);
         expectLastCall().once();
         reconcileRightsholdersController.setScenario(scenario);
-        expectLastCall().once();
-        scenariosWidget.refreshSelectedScenario();
         expectLastCall().once();
         expect(reconcileRightsholdersController.getDiscrepancies()).andReturn(discrepancies).once();
         replay(scenariosWidget, scenarioService, reconcileRightsholdersController, Windows.class);
