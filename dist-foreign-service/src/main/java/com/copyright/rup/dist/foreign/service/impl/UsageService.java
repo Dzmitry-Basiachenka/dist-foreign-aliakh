@@ -35,7 +35,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.perf4j.StopWatch;
 import org.perf4j.aop.Profiled;
 import org.perf4j.slf4j.Slf4JStopWatch;

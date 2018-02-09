@@ -14,7 +14,7 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 
 import com.google.common.collect.ImmutableMap;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
