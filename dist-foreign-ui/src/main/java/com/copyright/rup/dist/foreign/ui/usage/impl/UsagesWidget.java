@@ -21,7 +21,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.VerticalLayout;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.vaadin.addons.lazyquerycontainer.LazyQueryContainer;
 
 import java.math.BigDecimal;
