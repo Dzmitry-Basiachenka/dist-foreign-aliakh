@@ -796,22 +796,28 @@ public class UsageRepositoryIntegrationTest {
     public void testUpdateStatusWithUsageId() {
         Usage usage = usageRepository.findByDetailId(8457965214L);
         assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
+        assertEquals(USER_NAME, usage.getUpdateUser());
         usageRepository.updateStatus(usage.getId(), UsageStatusEnum.RH_NOT_FOUND);
         usage = usageRepository.findByDetailId(8457965214L);
         assertEquals(UsageStatusEnum.RH_NOT_FOUND, usage.getStatus());
+        assertEquals(StoredEntity.DEFAULT_USER, usage.getUpdateUser());
     }
 
     @Test
     public void testUpdateStatusWithUsageIds() {
         Usage usage1 = usageRepository.findByDetailId(8457965214L);
         assertEquals(UsageStatusEnum.WORK_FOUND, usage1.getStatus());
+        assertEquals(USER_NAME, usage1.getUpdateUser());
         Usage usage2 = usageRepository.findByDetailId(3539748198L);
         assertEquals(UsageStatusEnum.SENT_FOR_RA, usage2.getStatus());
+        assertEquals(USER_NAME, usage2.getUpdateUser());
         usageRepository.updateStatus(ImmutableSet.of(usage1.getId(), usage2.getId()), UsageStatusEnum.RH_NOT_FOUND);
         usage1 = usageRepository.findByDetailId(8457965214L);
         assertEquals(UsageStatusEnum.RH_NOT_FOUND, usage1.getStatus());
+        assertEquals(StoredEntity.DEFAULT_USER, usage1.getUpdateUser());
         usage2 = usageRepository.findByDetailId(3539748198L);
         assertEquals(UsageStatusEnum.RH_NOT_FOUND, usage2.getStatus());
+        assertEquals(StoredEntity.DEFAULT_USER, usage2.getUpdateUser());
     }
 
     @Test
