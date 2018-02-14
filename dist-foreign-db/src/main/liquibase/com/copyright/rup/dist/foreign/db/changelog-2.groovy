@@ -340,4 +340,22 @@ databaseChangeLog {
                     columnName: 'work_title', columnDataType: 'VARCHAR(2000)')
         }
     }
+
+    changeSet(id: '2018-02-14-00', author: 'Darya Baraukova <dbaraukova@copyright.com>') {
+        comment("B-41176 FDA: get paid information from LM: " +
+                "add columns for storing paid information into df_usage_archive table")
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+            column(name: 'distribution_name', type: 'VARCHAR(255)', remarks: 'Distribution name')
+            column(name: 'distribution_date', type: 'TIMESTAMPTZ', remarks: 'Distribution date')
+            column(name: 'period_end_date', type: 'TIMESTAMPTZ', remarks: 'Period end date')
+            column(name: 'ccc_event_id', type: 'VARCHAR(255)', remarks: 'CCC event identifier')
+            column(name: 'check_number', type: 'VARCHAR(128)', remarks: 'Check number')
+            column(name: 'check_date', type: 'TIMESTAMPTZ', remarks: 'Check date')
+        }
+
+        rollback {
+            //automatic rollback
+        }
+    }
 }
