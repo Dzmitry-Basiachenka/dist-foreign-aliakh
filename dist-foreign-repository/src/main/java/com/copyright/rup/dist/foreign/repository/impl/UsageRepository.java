@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 import static com.google.common.base.Preconditions.checkArgument;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
+import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.foreign.domain.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
@@ -272,6 +273,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         checkArgument(StringUtils.isNotBlank(usageId));
         parameters.put(USAGE_ID_KEY, usageId);
         parameters.put(STATUS_KEY, Objects.requireNonNull(status));
+        parameters.put(UPDATE_USER_KEY, StoredEntity.DEFAULT_USER);
         update("IUsageMapper.updateStatus", parameters);
     }
 
@@ -288,6 +290,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
         parameters.put(STATUS_KEY, Objects.requireNonNull(status));
         parameters.put(RH_ACCOUNT_NUMBER_KEY, Objects.requireNonNull(rhAccountNumber));
+        parameters.put(UPDATE_USER_KEY, StoredEntity.DEFAULT_USER);
         Iterables.partition(usageIds, 32000).forEach(partition -> {
             parameters.put("usageIds", partition);
             update("IUsageMapper.updateStatusAndRhAccountNumber", parameters);

@@ -807,7 +807,8 @@
 
     <update id="updateStatus" parameterType="map">
         update ${schema}.df_usage
-        set status_ind = #{status}
+        set status_ind = #{status},
+            <include refid="StoredEntityMapper.update"/>
         where df_usage_uid = #{usageId}
     </update>
 
@@ -815,7 +816,8 @@
         update ${schema}.df_usage
         set
             status_ind = #{status},
-            rh_account_number = #{rhAccountNumber}
+            rh_account_number = #{rhAccountNumber},
+            <include refid="StoredEntityMapper.update"/>
         where df_usage_uid in
             <foreach collection="usageIds" item="usageId" open="(" separator="," close=")">
                 #{usageId}
