@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.integration.rms.impl;
 
-import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.integration.rest.CommonRestHandler;
 import com.copyright.rup.dist.common.integration.util.JsonUtils;
 import com.copyright.rup.dist.foreign.integration.rms.api.IRmsRightsAssignmentService;
@@ -13,7 +12,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -43,7 +41,6 @@ class RmsRightsAssignmentService implements IRmsRightsAssignmentService {
 
     private static final String SEND_FOR_RA_INVALID_RESPONSE_MESSAGE_FORMAT =
         "Works count doesn't match or job id is blank. RequestWorksCount=%s, ResponseWorksCount=%s, JobId=%s";
-    private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired
     private RestTemplate restTemplate;
@@ -78,7 +75,6 @@ class RmsRightsAssignmentService implements IRmsRightsAssignmentService {
         HttpEntity<String> request =
             new HttpEntity<>(objectMapper.writeValueAsString(new RightsAssignmentRequest(wrWrkInsts)),
                 buildRequestHeader());
-        LOGGER.debug("Send for Rights Assignment. Request={}", request);
         RmsRightsAssignmentHandler rightsAssignmentHandler =
             new RmsRightsAssignmentHandler(restTemplate, wrWrkInsts.size());
         return rightsAssignmentHandler.handleResponse(rightsAssignmentUrl, request);
