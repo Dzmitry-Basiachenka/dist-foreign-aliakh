@@ -51,6 +51,7 @@ public class UsageDto extends StoredEntity<String> {
     private BigDecimal serviceFee = DEFAULT_AMOUNT;
     private BigDecimal serviceFeeAmount = DEFAULT_AMOUNT;
     private UsageStatusEnum status;
+    private String productFamily;
     private String scenarioName;
 
     public Long getDetailId() {
@@ -205,6 +206,14 @@ public class UsageDto extends StoredEntity<String> {
         this.status = status;
     }
 
+    public String getProductFamily() {
+        return productFamily;
+    }
+
+    public void setProductFamily(String productFamily) {
+        this.productFamily = productFamily;
+    }
+
     public String getRroName() {
         return rroName;
     }
@@ -319,6 +328,7 @@ public class UsageDto extends StoredEntity<String> {
             .append(this.reportedValue, that.reportedValue)
             .append(this.batchGrossAmount, that.batchGrossAmount)
             .append(this.status, that.status)
+            .append(this.productFamily, that.productFamily)
             .append(this.payeeAccountNumber, that.payeeAccountNumber)
             .append(this.payeeName, that.payeeName)
             .append(this.netAmount, that.netAmount)
@@ -355,6 +365,7 @@ public class UsageDto extends StoredEntity<String> {
             .append(reportedValue)
             .append(batchGrossAmount)
             .append(status)
+            .append(productFamily)
             .append(this.payeeAccountNumber)
             .append(this.payeeName)
             .append(netAmount)
@@ -391,6 +402,7 @@ public class UsageDto extends StoredEntity<String> {
             .append("reportedValue", reportedValue)
             .append("batchGrossAmount", batchGrossAmount)
             .append("status", status)
+            .append("productFamily", productFamily)
             .append("payeeAccountNumber", payeeAccountNumber)
             .append("payeeName", payeeName)
             .append("netAmount", netAmount)

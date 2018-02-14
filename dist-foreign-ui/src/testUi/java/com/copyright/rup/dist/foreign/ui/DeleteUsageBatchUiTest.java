@@ -281,6 +281,7 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
         usage.setBatchId(BATCH_TO_DELETE_ID);
         usage.setDetailId(6999977777L);
         usage.setWrWrkInst(101125380L);
+        usage.setProductFamily("FAS");
         usage.setWorkTitle("Understanding administrative law");
         Rightsholder rightsholder = new Rightsholder();
         rightsholder.setAccountNumber(1000006746L);

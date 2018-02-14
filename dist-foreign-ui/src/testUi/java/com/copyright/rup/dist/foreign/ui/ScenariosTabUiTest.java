@@ -366,6 +366,7 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
         usage.setStandardNumber("9780000000000");
         usage.setPublicationDate(LocalDate.of(2003, 12, 12));
         usage.setMarket("Univ,Bus,Doc,S");
+        usage.setProductFamily("FAS");
         usage.setMarketPeriodFrom(2015);
         usage.setMarketPeriodTo(2015);
         usage.setAuthor("Aarseth, Espen J.");

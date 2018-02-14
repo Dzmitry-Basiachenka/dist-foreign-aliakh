@@ -309,6 +309,7 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         usageDto.setWrWrkInst(wrWrkInst);
         usageDto.setRhAccountNumber(rhAccountNumber);
         usageDto.setPublisher(publisher);
+        usageDto.setProductFamily("FAS");
         usageDto.setPublicationDate(publicationDate);
         usageDto.setNumberOfCopies(numberOfCopies);
         usageDto.setReportedValue(reportedValue);

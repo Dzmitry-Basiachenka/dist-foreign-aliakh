@@ -23,6 +23,7 @@
             #{workTitle},
             #{rightsholder.accountNumber},
             #{status},
+            #{productFamily},
             #{article},
             #{standardNumber},
             #{publisher},

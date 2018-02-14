@@ -12,6 +12,7 @@
         <result property="rhAccountNumber" column="rh_account_number"/>
         <result property="rhName" column="rh_name"/>
         <result property="status" column="status_ind"/>
+        <result property="productFamily" column="product_family"/>
         <result property="article" column="article"/>
         <result property="standardNumber" column="standard_number"/>
         <result property="publisher" column="publisher"/>
@@ -46,6 +47,7 @@
         <result property="serviceFeeAmount" column="service_fee_amount"/>
         <result property="reportedValue" column="reported_value"/>
         <result property="status" column="status_ind"/>
+        <result property="productFamily" column="product_family"/>
         <result property="rightsholder.id" column="rh_id"/>
         <result property="rightsholder.accountNumber" column="rh_account_number"/>
         <result property="rightsholder.name" column="rh_name"/>
@@ -91,6 +93,7 @@
         work_title,
         rh_account_number,
         status_ind,
+        product_family,
         article,
         standard_number,
         publisher,
@@ -114,6 +117,7 @@
         u.payee_account_number,
         p.name payee_name,
         u.status_ind,
+        u.product_family,
         u.article,
         u.standard_number,
         u.publisher,
@@ -354,6 +358,7 @@
             #{workTitle},
             #{rightsholder.accountNumber},
             #{status},
+            #{productFamily},
             #{article},
             #{standardNumber},
             #{publisher},
@@ -397,6 +402,7 @@
             u.rh_account_number,
             rh.name rh_name,
             u.status_ind,
+            u.product_family,
             u.article,
             u.standard_number,
             u.publisher,
@@ -450,6 +456,7 @@
             p.name payee_name,
             p.df_rightsholder_uid payee_id,
             u.status_ind,
+            u.product_family,
             u.article,
             u.standard_number,
             u.publisher,
@@ -501,6 +508,7 @@
             u.updated_by_user,
             u.record_version,
             u.status_ind,
+            u.product_family,
             r.df_rightsholder_uid rh_id,
             u.rh_account_number,
             r.name rh_name
@@ -675,6 +683,7 @@
             u.df_usage_uid,
             detail_id,
             u.status_ind,
+            u.product_family,
             u.df_usage_batch_uid,
             ub.name batch_name,
             ub.payment_date,
@@ -697,6 +706,7 @@
             df_usage_archive_uid df_usage_uid,
             detail_id,
             u.status_ind,
+            u.product_family,
             u.df_usage_batch_uid,
             ub.name batch_name,
             ub.payment_date,

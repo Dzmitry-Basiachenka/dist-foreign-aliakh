@@ -106,6 +106,7 @@ public class UsageCsvProcessor extends CommonCsvProcessor<Usage> {
         result.setAuthor(getString(Header.AUTHOR, params));
         result.setStatus(isEligible(result) ? UsageStatusEnum.ELIGIBLE
             : isWorkFound(result) ? UsageStatusEnum.WORK_FOUND : UsageStatusEnum.NEW);
+        result.setProductFamily("FAS");
         return result;
     }
 
