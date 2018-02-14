@@ -245,6 +245,7 @@ public class ScenarioRepositoryIntegrationTest {
             "CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil"));
         usage.setPayee(usage.getRightsholder());
         usage.setStatus(UsageStatusEnum.LOCKED);
+        usage.setProductFamily("FAS");
         usage.setArticle("Article");
         usage.setStandardNumber("StandardNumber");
         usage.setPublisher("Publisher");

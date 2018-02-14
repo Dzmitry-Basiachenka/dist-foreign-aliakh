@@ -44,6 +44,7 @@ public class Usage extends StoredEntity<String> {
     private BigDecimal serviceFeeAmount = BigDecimal.ZERO;
     private BigDecimal grossAmount = BigDecimal.ZERO;
     private UsageStatusEnum status;
+    private String productFamily;
     private boolean rhParticipating;
 
     public Long getDetailId() {
@@ -214,6 +215,14 @@ public class Usage extends StoredEntity<String> {
         this.status = status;
     }
 
+    public String getProductFamily() {
+        return productFamily;
+    }
+
+    public void setProductFamily(String productFamily) {
+        this.productFamily = productFamily;
+    }
+
     public Rightsholder getPayee() {
         return payee;
     }
@@ -262,6 +271,7 @@ public class Usage extends StoredEntity<String> {
             .append(this.serviceFeeAmount, that.serviceFeeAmount)
             .append(this.grossAmount, that.grossAmount)
             .append(this.status, that.status)
+            .append(this.productFamily, that.productFamily)
             .append(this.payee, that.payee)
             .append(this.rhParticipating, that.rhParticipating)
             .isEquals();
@@ -292,6 +302,7 @@ public class Usage extends StoredEntity<String> {
             .append(serviceFeeAmount)
             .append(grossAmount)
             .append(status)
+            .append(productFamily)
             .append(payee)
             .append(rhParticipating)
             .toHashCode();
@@ -322,6 +333,7 @@ public class Usage extends StoredEntity<String> {
             .append("serviceFeeAmount", serviceFeeAmount)
             .append("grossAmount", grossAmount)
             .append("status", status)
+            .append("productFamily", productFamily)
             .append("payee", payee)
             .append("rhParticipating", rhParticipating)
             .toString();

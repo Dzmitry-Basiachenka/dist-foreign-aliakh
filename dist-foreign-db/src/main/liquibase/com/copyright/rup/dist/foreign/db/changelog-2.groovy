@@ -358,4 +358,25 @@ databaseChangeLog {
             //automatic rollback
         }
     }
+
+    changeSet(id: '2018-02-14-01', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
+        comment("B-41251 Introduce product family (foundation): add product_family column to df_usage and df_usage_archive tables")
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'product_family', type: 'VARCHAR(128)', remarks: 'Product family', value: 'FAS')
+        }
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+            column(name: 'product_family', type: 'VARCHAR(128)', remarks: 'Product family', value: 'FAS')
+        }
+
+        addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage',
+                columnName: 'product_family', columnDataType: 'VARCHAR(128)')
+        addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_archive',
+                columnName: 'product_family', columnDataType: 'VARCHAR(128)')
+
+        rollback {
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'product_family')
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'product_family')
+        }
+    }
 }

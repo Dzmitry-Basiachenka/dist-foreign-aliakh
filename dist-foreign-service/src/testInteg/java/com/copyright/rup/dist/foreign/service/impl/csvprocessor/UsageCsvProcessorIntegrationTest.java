@@ -61,6 +61,7 @@ public class UsageCsvProcessorIntegrationTest {
     private static final String PATH_TO_ACTUAL = "build/temp";
     private static final String PATH_TO_EXPECTED = "src/testInteg/resources/com/copyright/rup/dist/foreign/service/csv";
     private static final String TITLE = "1984";
+    private static final String PRODUCT_FAMILY = "FAS";
 
     private UsageCsvProcessor processor;
     @Autowired
@@ -140,6 +141,7 @@ public class UsageCsvProcessorIntegrationTest {
         assertEquals(Integer.valueOf(2016), usage.getMarketPeriodTo());
         assertEquals(status, usage.getStatus());
         assertEquals("Aarseth, Espen J.", usage.getAuthor());
+        assertEquals(PRODUCT_FAMILY, usage.getProductFamily());
         assertEquals(BigDecimal.ZERO, usage.getGrossAmount());
     }
 
@@ -161,6 +163,7 @@ public class UsageCsvProcessorIntegrationTest {
         assertEquals(Integer.valueOf(2015), usage.getMarketPeriodTo());
         assertEquals(UsageStatusEnum.NEW, usage.getStatus());
         assertNull(usage.getAuthor());
+        assertEquals(PRODUCT_FAMILY, usage.getProductFamily());
         assertEquals(BigDecimal.ZERO, usage.getGrossAmount());
     }
 
@@ -191,6 +194,7 @@ public class UsageCsvProcessorIntegrationTest {
         rightsholder.setAccountNumber(1000006746L);
         usage.setRightsholder(rightsholder);
         usage.setStatus(UsageStatusEnum.ELIGIBLE);
+        usage.setProductFamily(PRODUCT_FAMILY);
         usage.setArticle("Fox, William F.");
         usage.setStandardNumber("1008902112365655XX");
         usage.setPublisher("IEEE");

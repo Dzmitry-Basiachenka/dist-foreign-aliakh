@@ -294,6 +294,7 @@ public class UsageArchiveRepositoryIntegrationTest {
         usage.getRightsholder().setName("CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil");
         usage.getPayee().setAccountNumber(2000017004L);
         usage.setStatus(UsageStatusEnum.LOCKED);
+        usage.setProductFamily("FAS");
         usage.setArticle(ARTICLE);
         usage.setStandardNumber(STANDARD_NUMBER);
         usage.setPublisher(PUBLISHER);

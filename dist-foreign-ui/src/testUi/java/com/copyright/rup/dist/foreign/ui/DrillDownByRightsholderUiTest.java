@@ -231,6 +231,7 @@ public class DrillDownByRightsholderUiTest extends ForeignCommonUiTest {
         usage.setStandardNumber(fields[8]);
         usage.setWrWrkInst(Long.valueOf(fields[9]));
         usage.setPublisher(fields[10]);
+        usage.setProductFamily("FAS");
         usage.setPublicationDate(LocalDate.parse(fields[11], DateTimeFormatter.ofPattern("M/d/uuuu", Locale.US)));
         usage.setNumberOfCopies(Integer.valueOf(fields[12]));
         usage.setReportedValue(getAmount(fields[13]));

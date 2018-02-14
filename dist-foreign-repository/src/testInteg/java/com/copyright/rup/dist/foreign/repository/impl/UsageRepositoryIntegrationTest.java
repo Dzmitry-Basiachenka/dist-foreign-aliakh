@@ -82,6 +82,7 @@ public class UsageRepositoryIntegrationTest {
     private static final BigDecimal ZERO_AMOUNT = BigDecimal.ZERO.setScale(10);
     private static final Long WR_WRK_INST = 123456783L;
     private static final String WORK_TITLE = "Work Title";
+    private static final String PRODUCT_FAMILY = "FAS";
     private static final String ARTICLE = "Article";
     private static final String STANDART_NUMBER = "StandardNumber";
     private static final String PUBLISHER = "Publisher";
@@ -141,6 +142,7 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(RH_ACCOUNT_NUMBER, usage.getRightsholder().getAccountNumber());
         assertEquals(RH_ACCOUNT_NAME, usage.getRightsholder().getName());
         assertEquals(UsageStatusEnum.ELIGIBLE, usage.getStatus());
+        assertEquals(PRODUCT_FAMILY, usage.getProductFamily());
         assertEquals(ARTICLE, usage.getArticle());
         assertEquals(STANDART_NUMBER, usage.getStandardNumber());
         assertEquals(PUBLISHER, usage.getPublisher());
@@ -920,6 +922,7 @@ public class UsageRepositoryIntegrationTest {
         usage.getRightsholder().setName(RH_ACCOUNT_NAME);
         usage.getPayee().setAccountNumber(2000017004L);
         usage.setStatus(UsageStatusEnum.ELIGIBLE);
+        usage.setProductFamily(PRODUCT_FAMILY);
         usage.setArticle(ARTICLE);
         usage.setStandardNumber(STANDART_NUMBER);
         usage.setPublisher(PUBLISHER);

@@ -272,6 +272,7 @@ public class ExcludeDetailsFromScenarioUiTest extends ForeignCommonUiTest {
         usage.setPublisher("IEEE");
         usage.setPublicationDate(LocalDate.of(2013, 9, 10));
         usage.setMarket("Doc Del");
+        usage.setProductFamily("FAS");
         usage.setMarketPeriodFrom(2013);
         usage.setMarketPeriodTo(2017);
         usage.setNumberOfCopies(25);
