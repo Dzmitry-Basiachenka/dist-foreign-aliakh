@@ -153,7 +153,11 @@ public class AuditTabUiTest extends ForeignCommonUiTest {
             "Standard Number",
             "Amt in USD",
             "Service Fee %",
-            "Scenario Name");
+            "Scenario Name",
+            "Check #",
+            "Check Date",
+            "Event ID",
+            "Dist. Name");
     }
 
     private void verifyFiltersWidget(WebElement tabContainer) {

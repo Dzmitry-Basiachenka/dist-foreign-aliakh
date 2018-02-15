@@ -725,16 +725,22 @@ public class UsageRepositoryIntegrationTest {
         PipedOutputStream outputStream = new PipedOutputStream();
         PipedInputStream inputStream = new PipedInputStream(outputStream);
         AuditFilter filter = new AuditFilter();
-        filter.setBatchesIds(Collections.singleton(BATCH_ID));
+        filter.setBatchesIds(
+            Sets.newHashSet("7802802a-1f96-4d7a-8a27-b0bfd43936b0", "56282dbc-2468-48d4-b926-94d3458a666a"));
+        filter.setRhAccountNumbers(Collections.singleton(1000002859L));
         EXECUTOR_SERVICE.execute(() -> usageRepository.writeAuditCsvReport(filter, outputStream));
         BufferedReader bufferedReader =
             new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
         assertEquals("Detail ID,Detail Status,Usage Batch Name,Payment Date,RH Account #,RH Name,Wr Wrk Inst,Title," +
-            "Standard Number,Amt in USD,Service Fee %,Scenario Name", bufferedReader.readLine());
-        assertEquals("5423214587,LOCKED,Audit Test batch,02/12/2021,1000002475,,243904752,100 ROAD MOVIES," +
-            "1008902112317622XX,11177.4000000000,16.0,Sent To LM Scenario", bufferedReader.readLine());
-        assertEquals("8457965214,WORK_FOUND,Audit Test batch,02/12/2021,,,103658926,Nitrates,5475802112214578XX," +
-            "16437.4000000000,32.0,", bufferedReader.readLine());
+            "Standard Number,Amt in USD,Service Fee %,Scenario Name,Check #,Check Date,Event ID,Dist. Name",
+            bufferedReader.readLine());
+        assertEquals("5423214888,PAID,Paid batch,02/12/2021,1000002859,John Wiley & Sons - Books,243904752," +
+            "100 ROAD MOVIES,1008902112317555XX,1000.0000000000,16.0,Paid Scenario,578945,03/15/2017,53256," +
+            "FDA March 17", bufferedReader.readLine());
+        assertEquals("6997788885,ELIGIBLE,AccessCopyright_11Dec16,08/16/2018,1000002859," +
+            "John Wiley & Sons - Books,244614835,15th International Conference on Environmental Degradation of " +
+            "Materials in Nuclear Power Systems Water Reactors,1008902002377655XX,35000.0000000000,0.0,,,,,",
+            bufferedReader.readLine());
         assertNull(bufferedReader.readLine());
     }
 
@@ -746,7 +752,8 @@ public class UsageRepositoryIntegrationTest {
         BufferedReader bufferedReader =
             new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
         assertEquals("Detail ID,Detail Status,Usage Batch Name,Payment Date,RH Account #,RH Name,Wr Wrk Inst,Title," +
-            "Standard Number,Amt in USD,Service Fee %,Scenario Name", bufferedReader.readLine());
+            "Standard Number,Amt in USD,Service Fee %,Scenario Name,Check #,Check Date,Event ID,Dist. Name",
+            bufferedReader.readLine());
         assertNull(bufferedReader.readLine());
     }
 

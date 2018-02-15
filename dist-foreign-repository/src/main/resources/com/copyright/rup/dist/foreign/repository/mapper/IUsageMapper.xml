@@ -37,6 +37,10 @@
         <result property="payeeAccountNumber" column="payee_account_number"/>
         <result property="payeeName" column="payee_name"/>
         <result property="rhParticipating" column="is_rh_participating_flag"/>
+        <result property="checkNumber" column="check_number"/>
+        <result property="checkDate" column="check_date"/>
+        <result property="cccEventId" column="ccc_event_id"/>
+        <result property="distributionName" column="distribution_name"/>
     </resultMap>
 
     <resultMap id="usageAmountResultMap" type="Usage" extends="StoredEntityMapper.storedEntityResult">
@@ -695,7 +699,11 @@
             u.gross_amount,
             service_fee,
             u.updated_datetime,
-            s.name scenario_name
+            s.name scenario_name,
+            null check_number,
+            null check_date,
+            null ccc_event_id,
+            null distribution_name
         from ${schema}.df_usage u
         join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
         left join ${schema}.df_rightsholder r on r.rh_account_number = u.rh_account_number
@@ -718,7 +726,11 @@
             u.gross_amount,
             service_fee,
             u.updated_datetime,
-            s.name scenario_name
+            s.name scenario_name,
+            u.check_number,
+            u.check_date,
+            u.ccc_event_id,
+            u.distribution_name
         from ${schema}.df_usage_archive u
         join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
         left join ${schema}.df_rightsholder r on r.rh_account_number = u.rh_account_number
@@ -763,6 +775,18 @@
                     </when>
                     <when test="sort.property == 'scenarioName'">
                         scenario_name
+                    </when>
+                    <when test="sort.property == 'checkNumber'">
+                        check_number
+                    </when>
+                    <when test="sort.property == 'checkDate'">
+                        check_date
+                    </when>
+                    <when test="sort.property == 'cccEventId'">
+                        ccc_event_id
+                    </when>
+                    <when test="sort.property == 'distributionName'">
+                        distribution_name
                     </when>
                 </choose>
                 <include refid="IUsageMapper.direction"/>

@@ -124,8 +124,13 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
         table.addProperty("grossAmount", BigDecimal.class, true);
         table.addProperty("serviceFee", BigDecimal.class, true);
         table.addProperty("scenarioName", String.class, true);
+        table.addProperty("checkNumber", String.class, true);
+        table.addProperty("checkDate", LocalDate.class, true);
+        table.addProperty("cccEventId", String.class, true);
+        table.addProperty("distributionName", String.class, true);
         table.setVisibleColumns("detailId", "status", "batchName", "paymentDate", "rhAccountNumber", "rhName",
-            "wrWrkInst", "workTitle", "standardNumber", "grossAmount", "serviceFee", "scenarioName");
+            "wrWrkInst", "workTitle", "standardNumber", "grossAmount", "serviceFee", "scenarioName", "checkNumber",
+            "checkDate", "cccEventId", "distributionName");
         table.setColumnHeaders(
             ForeignUi.getMessage("table.column.detail_id"),
             ForeignUi.getMessage("table.column.usage_status"),
@@ -138,7 +143,11 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
             ForeignUi.getMessage("table.column.standard_number"),
             ForeignUi.getMessage("table.column.gross_amount"),
             ForeignUi.getMessage("table.column.service_fee"),
-            ForeignUi.getMessage("table.column.scenario_name"));
+            ForeignUi.getMessage("table.column.scenario_name"),
+            ForeignUi.getMessage("table.column.check_number"),
+            ForeignUi.getMessage("table.column.check_date"),
+            ForeignUi.getMessage("table.column.event_id"),
+            ForeignUi.getMessage("table.column.distribution_name"));
         addColumnsGenerators();
         table.setColumnCollapsingAllowed(true);
         VaadinUtils.addComponentStyle(table, "audit-table");
@@ -146,10 +155,12 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
 
     private void addColumnsGenerators() {
         LongColumnGenerator longColumnGenerator = new LongColumnGenerator();
+        LocalDateColumnGenerator localDateColumnGenerator = new LocalDateColumnGenerator();
         table.addGeneratedColumn("wrWrkInst", longColumnGenerator);
         table.addGeneratedColumn("rhAccountNumber", longColumnGenerator);
         table.addGeneratedColumn("grossAmount", new MoneyColumnGenerator());
-        table.addGeneratedColumn("paymentDate", new LocalDateColumnGenerator());
+        table.addGeneratedColumn("paymentDate", localDateColumnGenerator);
+        table.addGeneratedColumn("checkDate", localDateColumnGenerator);
         table.addGeneratedColumn("serviceFee", new PercentColumnGenerator());
         table.addGeneratedColumn("detailId", (ColumnGenerator) (source, itemId, columnId) -> {
             String detailId =

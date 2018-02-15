@@ -36,6 +36,10 @@ class AuditCsvReportHandler extends BaseCsvReportHandler {
             .put("grossAmount", "Amt in USD", new BigDecimalCellProcessor())
             .put("serviceFee", "Service Fee %", new ServiceFeePercentCellProcessor())
             .put("scenarioName", "Scenario Name", OPTIONAL_PROCESSOR)
+            .put("checkNumber", "Check #", OPTIONAL_PROCESSOR)
+            .put("checkDate", "Check Date", new DateCellProcessor())
+            .put("cccEventId", "Event ID", OPTIONAL_PROCESSOR)
+            .put("distributionName", "Dist. Name", OPTIONAL_PROCESSOR)
             .build();
 
     /**
