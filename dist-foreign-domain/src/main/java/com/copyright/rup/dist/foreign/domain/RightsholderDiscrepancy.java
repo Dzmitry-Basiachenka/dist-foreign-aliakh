@@ -20,6 +20,7 @@ public class RightsholderDiscrepancy {
 
     private Long wrWrkInst;
     private String workTitle;
+    private String productFamily;
     private Rightsholder oldRightsholder;
     private Rightsholder newRightsholder;
 
@@ -37,6 +38,14 @@ public class RightsholderDiscrepancy {
 
     public void setWorkTitle(String workTitle) {
         this.workTitle = workTitle;
+    }
+
+    public String getProductFamily() {
+        return productFamily;
+    }
+
+    public void setProductFamily(String productFamily) {
+        this.productFamily = productFamily;
     }
 
     public Rightsholder getOldRightsholder() {
@@ -67,6 +76,7 @@ public class RightsholderDiscrepancy {
         return new EqualsBuilder()
             .append(this.wrWrkInst, that.wrWrkInst)
             .append(this.workTitle, that.workTitle)
+            .append(this.productFamily, that.productFamily)
             .append(this.oldRightsholder, that.oldRightsholder)
             .append(this.newRightsholder, that.newRightsholder)
             .isEquals();
@@ -77,6 +87,7 @@ public class RightsholderDiscrepancy {
         return new HashCodeBuilder()
             .append(wrWrkInst)
             .append(workTitle)
+            .append(productFamily)
             .append(oldRightsholder)
             .append(newRightsholder)
             .toHashCode();
@@ -87,6 +98,7 @@ public class RightsholderDiscrepancy {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
             .append("wrWrkInst", wrWrkInst)
             .append("workTitle", workTitle)
+            .append("productFamily", productFamily)
             .append("oldRightsholder", oldRightsholder)
             .append("newRightsholder", newRightsholder)
             .toString();

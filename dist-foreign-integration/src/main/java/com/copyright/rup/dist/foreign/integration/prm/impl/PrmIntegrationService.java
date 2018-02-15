@@ -36,11 +36,6 @@ import java.util.Set;
 @Service
 public class PrmIntegrationService implements IPrmIntegrationService {
 
-    /**
-     * FAS Product Family.
-     */
-    public static final String FAS_PRODUCT_FAMILY = "FAS";
-
     @Autowired
     private IPrmRightsholderService prmRightsholderService;
     @Autowired
@@ -74,12 +69,12 @@ public class PrmIntegrationService implements IPrmIntegrationService {
 
     @Override
     @Profiled(tag = "integration.PrmIntegrationService.isRightsholderParticipating")
-    public boolean isRightsholderParticipating(Long accountNumber) {
+    public boolean isRightsholderParticipating(Long accountNumber, String productFamily) {
         boolean rhParticipatingFlag = false;
         Map<String, RightsholderPreferences> preferencesMap =
             prmRhPreferenceService.getRightsholderPreferences(accountNumber);
         if (MapUtils.isNotEmpty(preferencesMap)) {
-            RightsholderPreferences preferences = ObjectUtils.defaultIfNull(preferencesMap.get(FAS_PRODUCT_FAMILY),
+            RightsholderPreferences preferences = ObjectUtils.defaultIfNull(preferencesMap.get(productFamily),
                 preferencesMap.get(RightsholderPreferences.ALL_PRODUCTS_KEY));
             if (null != preferences && null != preferences.isRhParticipating()) {
                 rhParticipatingFlag = preferences.isRhParticipating();

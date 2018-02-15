@@ -16,7 +16,6 @@ import com.copyright.rup.dist.foreign.domain.common.util.ForeignLogUtils;
 import com.copyright.rup.dist.foreign.integration.lm.api.ILmIntegrationService;
 import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsage;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
-import com.copyright.rup.dist.foreign.integration.prm.impl.PrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IRmsGrantsService;
@@ -208,7 +207,7 @@ public class ScenarioService implements IScenarioService {
         discrepancies.forEach(discrepancy -> {
                 Rightsholder newRightsholder = discrepancy.getNewRightsholder();
                 Long payeeAccountNumber = PrmRollUpService.getPayeeAccountNumber(rollUps, newRightsholder,
-                    PrmIntegrationService.FAS_PRODUCT_FAMILY);
+                    discrepancy.getProductFamily());
                 groupedByWrWrkInstUsages.get(discrepancy.getWrWrkInst()).forEach(usage -> {
                     usage.setRightsholder(newRightsholder);
                     usage.getPayee().setAccountNumber(payeeAccountNumber);
@@ -240,6 +239,7 @@ public class ScenarioService implements IScenarioService {
             rightsholdersMap.computeIfAbsent(newAccountNumber, this::buildRightsholder));
         rightsholderDiscrepancy.setWrWrkInst(usage.getWrWrkInst());
         rightsholderDiscrepancy.setWorkTitle(usage.getWorkTitle());
+        rightsholderDiscrepancy.setProductFamily(usage.getProductFamily());
         return rightsholderDiscrepancy;
     }
 
