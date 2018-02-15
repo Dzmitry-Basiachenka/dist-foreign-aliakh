@@ -43,7 +43,7 @@ public class PrmIntegrationServiceMock implements IPrmIntegrationService {
     }
 
     @Override
-    public boolean isRightsholderParticipating(Long accountNumber) {
+    public boolean isRightsholderParticipating(Long accountNumber, String productFamily) {
         return false;
     }
 

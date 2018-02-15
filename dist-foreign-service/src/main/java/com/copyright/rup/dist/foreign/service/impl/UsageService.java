@@ -16,7 +16,6 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.common.util.CalculationUtils;
 import com.copyright.rup.dist.foreign.domain.common.util.ForeignLogUtils;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
-import com.copyright.rup.dist.foreign.integration.prm.impl.PrmIntegrationService;
 import com.copyright.rup.dist.foreign.integration.rms.api.IRmsIntegrationService;
 import com.copyright.rup.dist.foreign.integration.rms.api.RightsAssignmentResult;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
@@ -153,7 +152,8 @@ public class UsageService implements IUsageService {
         List<Usage> usages = usageRepository.findWithAmountsAndRightsholders(filter);
         usages.forEach(usage -> {
             boolean rhParticipatingFlag =
-                prmIntegrationService.isRightsholderParticipating(usage.getRightsholder().getAccountNumber());
+                prmIntegrationService.isRightsholderParticipating(usage.getRightsholder().getAccountNumber(),
+                    usage.getProductFamily());
             CalculationUtils.recalculateAmounts(usage, rhParticipatingFlag,
                 prmIntegrationService.getRhParticipatingServiceFee(rhParticipatingFlag));
         });
@@ -174,9 +174,8 @@ public class UsageService implements IUsageService {
             usage.setScenarioId(scenario.getId());
             usage.setStatus(UsageStatusEnum.LOCKED);
             usage.setUpdateUser(scenario.getCreateUser());
-            usage.getPayee()
-                .setAccountNumber(PrmRollUpService.getPayeeAccountNumber(rollUps, usage.getRightsholder(),
-                    PrmIntegrationService.FAS_PRODUCT_FAMILY));
+            usage.getPayee().setAccountNumber(
+                PrmRollUpService.getPayeeAccountNumber(rollUps, usage.getRightsholder(), usage.getProductFamily()));
         });
         usageRepository.addToScenario(usages);
     }
@@ -185,7 +184,8 @@ public class UsageService implements IUsageService {
     public void updateRhPayeeAndAmounts(List<Usage> usages) {
         usages.forEach(usage -> {
             boolean rhParticipatingFlag =
-                prmIntegrationService.isRightsholderParticipating(usage.getRightsholder().getAccountNumber());
+                prmIntegrationService.isRightsholderParticipating(usage.getRightsholder().getAccountNumber(),
+                    usage.getProductFamily());
             CalculationUtils.recalculateAmounts(usage, rhParticipatingFlag,
                 prmIntegrationService.getRhParticipatingServiceFee(rhParticipatingFlag));
             usage.setUpdateUser(RupContextUtils.getUserName());

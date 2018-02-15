@@ -122,7 +122,7 @@ public class PrmIntegrationServiceTest {
         preferencesMap.put(FAS_PRODUCT_FAMILY, preferences);
         expect(prmRhPreferenceService.getRightsholderPreferences(ACCOUNT_NUMBER)).andReturn(preferencesMap).once();
         replay(prmRhPreferenceService);
-        assertTrue(prmIntegrationService.isRightsholderParticipating(ACCOUNT_NUMBER));
+        assertTrue(prmIntegrationService.isRightsholderParticipating(ACCOUNT_NUMBER, FAS_PRODUCT_FAMILY));
         verify(prmRhPreferenceService);
     }
 
@@ -134,7 +134,7 @@ public class PrmIntegrationServiceTest {
         preferencesMap.put("*", preferences);
         expect(prmRhPreferenceService.getRightsholderPreferences(ACCOUNT_NUMBER)).andReturn(preferencesMap).once();
         replay(prmRhPreferenceService);
-        assertTrue(prmIntegrationService.isRightsholderParticipating(ACCOUNT_NUMBER));
+        assertTrue(prmIntegrationService.isRightsholderParticipating(ACCOUNT_NUMBER, FAS_PRODUCT_FAMILY));
         verify(prmRhPreferenceService);
     }
 
@@ -142,7 +142,7 @@ public class PrmIntegrationServiceTest {
     public void testIsRightsholderParticipatingNoPreferences() {
         expect(prmRhPreferenceService.getRightsholderPreferences(ACCOUNT_NUMBER)).andReturn(null).once();
         replay(prmRhPreferenceService);
-        assertFalse(prmIntegrationService.isRightsholderParticipating(ACCOUNT_NUMBER));
+        assertFalse(prmIntegrationService.isRightsholderParticipating(ACCOUNT_NUMBER, FAS_PRODUCT_FAMILY));
         verify(prmRhPreferenceService);
     }
 
@@ -153,7 +153,7 @@ public class PrmIntegrationServiceTest {
         preferencesMap.put(FAS_PRODUCT_FAMILY, preferences);
         expect(prmRhPreferenceService.getRightsholderPreferences(ACCOUNT_NUMBER)).andReturn(preferencesMap).once();
         replay(prmRhPreferenceService);
-        assertFalse(prmIntegrationService.isRightsholderParticipating(ACCOUNT_NUMBER));
+        assertFalse(prmIntegrationService.isRightsholderParticipating(ACCOUNT_NUMBER, FAS_PRODUCT_FAMILY));
         verify(prmRhPreferenceService);
     }
 

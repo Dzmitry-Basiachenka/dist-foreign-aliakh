@@ -51,18 +51,19 @@ public interface IPrmIntegrationService {
     /**
      * Checks whether {@link com.copyright.rup.dist.common.domain.Rightsholder rightsholder} is participating or not.
      * Gets participating flag from {@link com.copyright.rup.dist.common.domain.RightsholderPreferences preferences}
-     * by specified {@code rightsholder account number} and 'FAS' product family.
+     * by specified rightsholder account number and product family.
      * </br>
      * If preferences for specified product family were not found System finds preferences for the same rightsholder
      * account number and <b>{@code '*'}</b> ('*' is passed as a product family).
      *
      * @param accountNumber rightsholder account number to search
+     * @param productFamily product family
      * @return the found rightsholder participating flag or
      * {@code false} if there is neither no preferences for rightsholder or
      * {@code accountNumber} is a null or
      * {@code productFamily} is a blank string.
      */
-    boolean isRightsholderParticipating(Long accountNumber);
+    boolean isRightsholderParticipating(Long accountNumber, String productFamily);
 
     /**
      * Gets service fee configuration value based on RH participating flag.

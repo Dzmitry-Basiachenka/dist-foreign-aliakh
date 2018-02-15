@@ -218,7 +218,8 @@ public class UsageServiceTest {
         Usage usage = buildUsage(USAGE_ID_1);
         expect(usageRepository.findWithAmountsAndRightsholders(usageFilter))
             .andReturn(Lists.newArrayList(usage)).once();
-        expect(prmIntegrationService.isRightsholderParticipating(usage.getRightsholder().getAccountNumber()))
+        expect(prmIntegrationService.isRightsholderParticipating(usage.getRightsholder().getAccountNumber(),
+            usage.getProductFamily()))
             .andReturn(true).once();
         expect(prmIntegrationService.getRhParticipatingServiceFee(true))
             .andReturn(new BigDecimal("0.16000")).once();
@@ -318,7 +319,8 @@ public class UsageServiceTest {
     @Test
     public void testUpdateRhPayeeAndAmounts() {
         Usage usage = buildUsage(RupPersistUtils.generateUuid());
-        expect(prmIntegrationService.isRightsholderParticipating(1000001534L)).andReturn(false).once();
+        expect(prmIntegrationService.isRightsholderParticipating(usage.getRightsholder().getAccountNumber(),
+            usage.getProductFamily())).andReturn(false).once();
         expect(prmIntegrationService.getRhParticipatingServiceFee(false)).andReturn(new BigDecimal("0.16")).once();
         usageRepository.updateRhPayeeAndAmounts(Collections.singletonList(usage));
         expectLastCall().once();
@@ -458,6 +460,7 @@ public class UsageServiceTest {
         usage.setNetAmount(new BigDecimal("68.0000000000"));
         usage.setServiceFeeAmount(new BigDecimal("32.0000000000"));
         usage.setServiceFee(new BigDecimal("0.32"));
+        usage.setProductFamily("FAS");
         return usage;
     }
 }

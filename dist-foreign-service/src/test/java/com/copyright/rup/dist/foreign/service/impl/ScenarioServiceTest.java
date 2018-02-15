@@ -284,6 +284,7 @@ public class ScenarioServiceTest {
         rightsholderDiscrepancy.setOldRightsholder(buildRightsholder(oldAccountNumber));
         rightsholderDiscrepancy.setNewRightsholder(buildRightsholder(newAccountNumber));
         rightsholderDiscrepancy.setWrWrkInst(wrWrkInst);
+        rightsholderDiscrepancy.setProductFamily("FAS");
         return rightsholderDiscrepancy;
     }
 

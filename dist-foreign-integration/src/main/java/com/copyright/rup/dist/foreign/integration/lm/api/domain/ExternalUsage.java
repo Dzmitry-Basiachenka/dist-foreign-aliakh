@@ -32,7 +32,7 @@ public class ExternalUsage {
     private Long rhAccountNumber;
 
     @JsonProperty(value = "product_family")
-    private String productFamily = "FAS";
+    private String productFamily;
 
     @JsonProperty(value = "detail_id")
     @JsonSerialize(using = ToStringSerializer.class)
@@ -55,6 +55,7 @@ public class ExternalUsage {
      */
     public ExternalUsage(Usage usage) {
         this.rhAccountNumber = usage.getRightsholder().getAccountNumber();
+        this.productFamily = usage.getProductFamily();
         this.detailId = usage.getDetailId();
         this.workTitle = usage.getWorkTitle();
         this.royaltyAmount = usage.getNetAmount().setScale(2, BigDecimal.ROUND_HALF_UP);

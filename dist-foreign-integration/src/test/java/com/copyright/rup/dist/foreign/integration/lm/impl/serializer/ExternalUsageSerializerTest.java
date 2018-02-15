@@ -88,6 +88,7 @@ public class ExternalUsageSerializerTest {
         usage.setNetAmount(new BigDecimal("100.00"));
         usage.setWorkTitle("Work title");
         usage.setWrWrkInst(123456789L);
+        usage.setProductFamily("FAS");
         return new ExternalUsage(usage);
     }
 }
