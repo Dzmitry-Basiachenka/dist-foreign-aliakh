@@ -170,6 +170,12 @@
                     ub.rro_account_number = #{rhAccountNumber}
                 </foreach>
             </if>
+            <if test="filter.productFamilies.size() > 0">
+                and
+                <foreach collection="filter.productFamilies" item="productFamily" open="(" separator=" or " close=")">
+                    u.product_family = #{productFamily}
+                </foreach>
+            </if>
             <if test="null != filter.paymentDate">
                 and <![CDATA[ub.payment_date <= #{filter.paymentDate}]]>
             </if>
@@ -202,6 +208,9 @@
 
     <sql id="chooseSortProperty">
         <choose>
+            <when test="sort.property == 'productFamily'">
+                u.product_family <include refid="IUsageMapper.direction"/>
+            </when>
             <when test="sort.property == 'detailId'">
                 u.detail_id <include refid="IUsageMapper.direction"/>
             </when>
@@ -740,6 +749,9 @@
         <choose>
             <when test="null != sort">
                 <choose>
+                    <when test="sort.property == 'productFamily'">
+                        product_family
+                    </when>
                     <when test="sort.property == 'detailId'">
                         detail_id
                     </when>
@@ -816,6 +828,12 @@
                 and u.status_ind in
                 <foreach collection="filter.statuses" item="status" separator="," open="(" close=")">
                     #{status}
+                </foreach>
+            </if>
+            <if test="!filter.productFamilies.isEmpty()">
+                and u.product_family in
+                <foreach collection="filter.productFamilies" item="productFamily" open="(" separator="," close=")">
+                    #{productFamily}
                 </foreach>
             </if>
             <if test="null != filter.searchValue">

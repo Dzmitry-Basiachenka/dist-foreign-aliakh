@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -23,6 +24,7 @@ public class UsageFilter {
 
     private Set<Long> rhAccountNumbers = Sets.newHashSet();
     private Set<String> usageBatchesIds = Sets.newHashSet();
+    private Set<String> productFamilies = Sets.newHashSet();
     private UsageStatusEnum usageStatus;
     private LocalDate paymentDate;
     private Integer fiscalYear;
@@ -46,6 +48,7 @@ public class UsageFilter {
             setUsageStatus(filter.getUsageStatus());
             setPaymentDate(filter.getPaymentDate());
             setFiscalYear(filter.getFiscalYear());
+            setProductFamilies(filter.getProductFamilies());
         }
     }
 
@@ -73,6 +76,14 @@ public class UsageFilter {
         this.usageStatus = usageStatus;
     }
 
+    public Set<String> getProductFamilies() {
+        return productFamilies;
+    }
+
+    public void setProductFamilies(Set<String> productFamilies) {
+        this.productFamilies = productFamilies;
+    }
+
     public LocalDate getPaymentDate() {
         return paymentDate;
     }
@@ -93,8 +104,9 @@ public class UsageFilter {
      * @return {@code true} if filter does not contain any criteria, otherwise {@code false}.
      */
     public boolean isEmpty() {
-        return (null == rhAccountNumbers || rhAccountNumbers.isEmpty())
-            && (null == usageBatchesIds || usageBatchesIds.isEmpty())
+        return CollectionUtils.isEmpty(rhAccountNumbers)
+            && CollectionUtils.isEmpty(usageBatchesIds)
+            && CollectionUtils.isEmpty(productFamilies)
             && null == paymentDate
             && null == fiscalYear
             && null == usageStatus;
@@ -113,6 +125,7 @@ public class UsageFilter {
             .append(this.rhAccountNumbers, that.rhAccountNumbers)
             .append(this.usageBatchesIds, that.usageBatchesIds)
             .append(this.usageStatus, that.usageStatus)
+            .append(this.productFamilies, that.productFamilies)
             .append(this.paymentDate, that.paymentDate)
             .append(this.fiscalYear, that.fiscalYear)
             .isEquals();
@@ -124,6 +137,7 @@ public class UsageFilter {
             .append(rhAccountNumbers)
             .append(usageBatchesIds)
             .append(usageStatus)
+            .append(productFamilies)
             .append(paymentDate)
             .append(fiscalYear)
             .toHashCode();
@@ -135,6 +149,7 @@ public class UsageFilter {
             .append("rhAccountNumbers", rhAccountNumbers)
             .append("usageBatchesIds", usageBatchesIds)
             .append("usageStatus", usageStatus)
+            .append("productFamilies", productFamilies)
             .append("paymentDate", paymentDate)
             .append("fiscalYear", fiscalYear)
             .toString();

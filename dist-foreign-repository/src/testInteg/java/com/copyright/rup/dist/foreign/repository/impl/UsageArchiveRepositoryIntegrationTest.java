@@ -101,6 +101,7 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertEquals(NUMBER_OF_COPIES, usageDto.getNumberOfCopies());
         assertEquals(REPORTED_VALUE, usageDto.getReportedValue());
         assertEquals(GROSS_AMOUNT, usageDto.getGrossAmount());
+        assertEquals("FAS", usageDto.getProductFamily());
     }
 
 
