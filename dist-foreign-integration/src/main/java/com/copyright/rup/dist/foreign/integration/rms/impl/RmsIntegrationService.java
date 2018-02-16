@@ -10,9 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -37,8 +35,7 @@ public class RmsIntegrationService implements IRmsIntegrationService {
 
     @Override
     public Set<RmsGrant> getAllRmsGrants(List<Long> wrWrkInsts) {
-        return rmsService.getAllRmsGrants(wrWrkInsts,
-            Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
+        return rmsService.getAllRmsGrants(wrWrkInsts, LocalDate.now());
     }
 
     @Override

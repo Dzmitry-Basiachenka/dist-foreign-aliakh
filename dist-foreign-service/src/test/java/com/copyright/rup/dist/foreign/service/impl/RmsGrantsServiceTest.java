@@ -22,7 +22,6 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -165,10 +164,10 @@ public class RmsGrantsServiceTest {
         rmsGrant.setMarket(grantDistributionAttributes.get(1));
         rmsGrant.setTypeOfUse(grantDistributionAttributes.get(2));
         rmsGrant.setStatus("GRANT");
-        rmsGrant.setRightBeginDate(Date.valueOf(LocalDate.of(2013, 01, 05)));
-        rmsGrant.setRightEndDate(Date.valueOf(LocalDate.of(3000, 12, 31)));
-        rmsGrant.setAgreementBeginDate(Date.valueOf(LocalDate.of(2013, 01, 05)));
-        rmsGrant.setAgreementEndDate(Date.valueOf(LocalDate.of(3000, 12, 31)));
+        rmsGrant.setRightBeginDate(LocalDate.of(2013, 01, 05));
+        rmsGrant.setRightEndDate(LocalDate.of(3000, 12, 31));
+        rmsGrant.setAgreementBeginDate(LocalDate.of(2013, 01, 05));
+        rmsGrant.setAgreementEndDate(LocalDate.of(3000, 12, 31));
         return rmsGrant;
     }
 }

@@ -6,6 +6,7 @@ import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
@@ -17,14 +18,13 @@ import com.copyright.rup.dist.foreign.integration.rms.api.RightsAssignmentResult
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
-import org.apache.commons.lang3.time.DateUtils;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
+import java.time.LocalDate;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -41,7 +41,7 @@ public class RmsIntegrationServiceTest {
 
     private static final Long WR_WRK_INST_1 = 122799407L;
     private static final Long WR_WRK_INST_2 = 123565461L;
-    private static final Date CURRENT_DATE = new Date();
+    private static final LocalDate CURRENT_DATE = LocalDate.now();
     private RmsIntegrationService rmsIntegrationService;
     private IRmsService rmsService;
     private IRmsRightsAssignmentService rmsRightsAssignmentService;
@@ -58,12 +58,12 @@ public class RmsIntegrationServiceTest {
     @Test
     public void testGetAllRmsGrants() {
         List<Long> wrWrkInsts = Lists.newArrayList(WR_WRK_INST_1, WR_WRK_INST_2);
-        Capture<Date> dateCapture = new Capture<>();
-        expect(rmsService.getAllRmsGrants(eq(wrWrkInsts), capture(dateCapture)))
+        Capture<LocalDate> localDateCapture = new Capture<>();
+        expect(rmsService.getAllRmsGrants(eq(wrWrkInsts), capture(localDateCapture)))
             .andReturn(Collections.emptySet()).once();
         replay(rmsService);
         assertTrue(rmsIntegrationService.getAllRmsGrants(wrWrkInsts).isEmpty());
-        assertTrue(DateUtils.isSameDay(CURRENT_DATE, dateCapture.getValue()));
+        assertEquals(CURRENT_DATE, localDateCapture.getValue());
         verify(rmsService);
     }
 
