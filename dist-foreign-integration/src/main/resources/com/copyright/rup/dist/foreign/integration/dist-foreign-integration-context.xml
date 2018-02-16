@@ -21,6 +21,7 @@
     <context:component-scan base-package="com.copyright.rup.dist.foreign.integration"/>
 
     <bean id="restTemplate" class="org.springframework.web.client.RestTemplate"/>
+    <bean id="asyncRestTemplate" class="org.springframework.web.client.AsyncRestTemplate"/>
 
     <bean id="dist.common.integration.prmRightsholderService"
           class="com.copyright.rup.dist.common.integration.rest.prm.PrmRightsholderService">
