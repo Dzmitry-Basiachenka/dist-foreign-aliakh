@@ -21,7 +21,16 @@
     <context:component-scan base-package="com.copyright.rup.dist.foreign.integration"/>
 
     <bean id="restTemplate" class="org.springframework.web.client.RestTemplate"/>
-    <bean id="asyncRestTemplate" class="org.springframework.web.client.AsyncRestTemplate"/>
+
+    <bean id="asyncRequestFactory" class="org.springframework.http.client.HttpComponentsAsyncClientHttpRequestFactory">
+        <property name="connectionRequestTimeout" value="$RUP{dist.foreign.integration.async.rest.factory.connection.request.timeout}"/>
+        <property name="connectTimeout" value="$RUP{dist.foreign.integration.async.rest.factory.connect.timeout}"/>
+        <property name="readTimeout" value="$RUP{dist.foreign.integration.async.rest.factory.read.timeout}"/>
+    </bean>
+
+    <bean id="asyncRestTemplate" class="org.springframework.web.client.AsyncRestTemplate">
+        <constructor-arg ref="asyncRequestFactory"/>
+    </bean>
 
     <bean id="dist.common.integration.prmRightsholderService"
           class="com.copyright.rup.dist.common.integration.rest.prm.PrmRightsholderService">

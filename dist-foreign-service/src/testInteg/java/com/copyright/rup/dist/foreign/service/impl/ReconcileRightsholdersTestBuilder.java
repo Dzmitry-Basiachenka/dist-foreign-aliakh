@@ -15,12 +15,14 @@ import com.google.common.collect.Lists;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.test.web.client.match.MockRestRequestMatchers;
 import org.springframework.test.web.client.response.MockRestResponseCreators;
+import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -60,6 +62,10 @@ public class ReconcileRightsholdersTestBuilder {
     private IUsageService usageService;
     @Autowired
     private RestTemplate restTemplate;
+    @Autowired
+    private AsyncRestTemplate asyncRestTemplate;
+    @Value("$RUP{dist.foreign.integration.rest.prm.rollups.async}")
+    private boolean prmRollUpAsync;
 
     Runner build() {
         return new Runner();
@@ -114,9 +120,11 @@ public class ReconcileRightsholdersTestBuilder {
     class Runner {
 
         private MockRestServiceServer mockServer;
+        private MockRestServiceServer asyncMockServer;
 
         Runner() {
             this.mockServer = MockRestServiceServer.createServer(restTemplate);
+            this.asyncMockServer = MockRestServiceServer.createServer(asyncRestTemplate);
         }
 
         void run() {
@@ -133,6 +141,7 @@ public class ReconcileRightsholdersTestBuilder {
             scenarioService.approveOwnershipChanges(expectedScenario, discrepancies);
             assertUsages();
             mockServer.verify();
+            asyncMockServer.verify();
         }
 
         private void prepareRmsExpectations() {
@@ -147,7 +156,7 @@ public class ReconcileRightsholdersTestBuilder {
         }
 
         private void expectGetRollups() {
-            mockServer.expect(MockRestRequestMatchers
+            (prmRollUpAsync ? asyncMockServer : mockServer).expect(MockRestRequestMatchers
                 .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelprefrollup?orgIds%5B%5D=" +
                     expectedRollupsIds + "&relationshipCode=PARENT&prefCodes%5B%5D=payee"))
                 .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
