@@ -245,4 +245,19 @@ public interface IUsageService {
      * to get Grants.
      */
     void updateRightsholders();
+
+
+    /**
+     * Retrieves list of product families of non archived details.
+     *
+     * @return list of product families
+     */
+    List<String> getProductFamilies();
+
+    /**
+     * Retrieves list of product families of both archived and non archived details.
+     *
+     * @return list of product families
+     */
+    List<String> getProductFamiliesForAudit();
 }

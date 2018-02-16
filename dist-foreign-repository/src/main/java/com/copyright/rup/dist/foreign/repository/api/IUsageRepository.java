@@ -270,4 +270,18 @@ public interface IUsageRepository {
      * @param rhAccountNumber RH account number
      */
     void updateStatusAndRhAccountNumber(Set<String> usageIds, UsageStatusEnum status, Long rhAccountNumber);
+
+    /**
+     * Retrieves list of product families of non archived details.
+     *
+     * @return list of product families
+     */
+    List<String> findProductFamilies();
+
+    /**
+     * Retrieves list of product families of both archived and non archived details.
+     *
+     * @return list of product families
+     */
+    List<String> findProductFamiliesForAudit();
 }

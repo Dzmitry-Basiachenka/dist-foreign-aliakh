@@ -296,4 +296,14 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
             update("IUsageMapper.updateStatusAndRhAccountNumber", parameters);
         });
     }
+
+    @Override
+    public List<String> findProductFamilies() {
+        return selectList("IUsageMapper.findProductFamilies");
+    }
+
+    @Override
+    public List<String> findProductFamiliesForAudit() {
+        return selectList("IUsageMapper.findProductFamiliesForAudit");
+    }
 }

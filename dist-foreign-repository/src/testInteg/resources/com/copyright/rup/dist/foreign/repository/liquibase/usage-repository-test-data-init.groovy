@@ -370,6 +370,36 @@ databaseChangeLog {
             column(name: 'period_end_date', value: '2017-03-15 11:41:52.735531+03')
         }
 
+        //testFindProductFamilies
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: 'e855bf85-236c-42e7-9b12-8d68dd747bbe')
+            column(name: 'name', value: 'Batch with NTS')
+            column(name: 'rro_account_number', value: '2000017010')
+            column(name: 'payment_date', value: '2021-02-12')
+            column(name: 'fiscal_year', value: '2020')
+            column(name: 'gross_amount', value: '10.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '4dd8cdf8-ca10-422e-bdd5-3220105e6379')
+            column(name: 'df_usage_batch_uid', value: 'e855bf85-236c-42e7-9b12-8d68dd747bbe')
+            column(name: 'detail_id', value: '8457965289')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '5475802112214578XX')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'reported_value', value: '30.86')
+            column(name: 'gross_amount', value: '16.40')
+            column(name: 'created_by_user', value: 'user@copyright.com')
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+        }
+
         rollback ""
     }
 }
