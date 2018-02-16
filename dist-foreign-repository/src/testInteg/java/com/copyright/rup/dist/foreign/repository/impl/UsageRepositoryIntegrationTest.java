@@ -120,6 +120,10 @@ public class UsageRepositoryIntegrationTest {
     private static final String USAGE_ID_3 = "5c5f8c1c-1418-4cfd-8685-9212f4c421d1";
     private static final String USAGE_ID_4 = "d9ca07b5-8282-4a81-9b9d-e4480f529d34";
     private static final String USAGE_ID_5 = "a71a0544-128e-41c0-b6b0-cfbbea6d2182";
+    private static final String USAGE_ID_6 = "0b0f5100-01bd-11e8-8f1a-0800200c9a66";
+    private static final String USAGE_ID_7 = "cf38d390-11bb-4af7-9685-e034c9c32fb6";
+    private static final String USAGE_ID_8 = "b1f0b236-3ae9-4a60-9fab-61db84199dss";
+    private static final String USAGE_ID_9 = "3900eea0-1231-11e8-b566-0800200c9a66";
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
     private static final String USER_NAME = "user@copyright.com";
     private static final BigDecimal NET_AMOUNT = new BigDecimal("25.1500000000");
@@ -161,54 +165,62 @@ public class UsageRepositoryIntegrationTest {
     public void testFindCountByFilter() {
         assertEquals(1, usageRepository.findCountByFilter(
             buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.singleton(USAGE_BATCH_ID_1),
-                UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, FISCAL_YEAR)));
+                Collections.singleton(PRODUCT_FAMILY), UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, FISCAL_YEAR)));
     }
 
     @Test
     public void testFindByFilter() {
         UsageFilter usageFilter =
             buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.singleton(USAGE_BATCH_ID_1),
-                UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, FISCAL_YEAR);
+                Collections.singleton(PRODUCT_FAMILY), UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, FISCAL_YEAR);
         verifyUsageDtos(usageRepository.findByFilter(usageFilter, null, new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 1,
             USAGE_ID_1);
     }
 
     @Test
     public void testFindByUsageBatchFilter() {
-        UsageFilter usageFilter =
-            buildUsageFilter(Collections.emptySet(), Collections.singleton(USAGE_BATCH_ID_1), null, null, null);
+        UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.singleton(USAGE_BATCH_ID_1),
+            Collections.emptySet(), null, null, null);
         verifyUsageDtos(usageRepository.findByFilter(usageFilter, null, new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 1,
             USAGE_ID_1);
     }
 
     @Test
     public void testFindByRhAccountNumberFilter() {
-        UsageFilter usageFilter =
-            buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.emptySet(), null, null, null);
+        UsageFilter usageFilter = buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.emptySet(),
+            Collections.emptySet(), null, null, null);
         verifyUsageDtos(usageRepository.findByFilter(usageFilter, null, new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 1,
             USAGE_ID_1);
     }
 
     @Test
+    public void testFindByProductFamiliesFilter() {
+        UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
+            Collections.singleton(PRODUCT_FAMILY), null, null, null);
+        verifyUsageDtos(usageRepository.findByFilter(usageFilter, null, new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 5,
+            USAGE_ID_6, USAGE_ID_3, USAGE_ID_2, USAGE_ID_1, USAGE_ID_4);
+    }
+
+    @Test
     public void testFindByStatusFilter() {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
-            UsageStatusEnum.ELIGIBLE, null, null);
+            Collections.emptySet(), UsageStatusEnum.ELIGIBLE, null, null);
         verifyUsageDtos(usageRepository.findByFilter(usageFilter, null, new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 3,
             USAGE_ID_3, USAGE_ID_2, USAGE_ID_1);
     }
 
     @Test
     public void testFindByPaymentDateFilterSortByWorkTitle() {
-        UsageFilter usageFilter =
-            buildUsageFilter(Collections.emptySet(), Collections.emptySet(), null, PAYMENT_DATE, null);
+        UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
+            Collections.emptySet(), null, PAYMENT_DATE, null);
         verifyUsageDtos(usageRepository.findByFilter(usageFilter, null, new Sort(WORK_TITLE_KEY, Sort.Direction.ASC)),
             3, USAGE_ID_3, USAGE_ID_2, USAGE_ID_1);
     }
 
     @Test
     public void testFindByFiscalYearFilterSortByArticle() {
-        UsageFilter usageFilter =
-            buildUsageFilter(Collections.emptySet(), Collections.emptySet(), null, null, FISCAL_YEAR);
+        UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
+            Collections.emptySet(), null, null, FISCAL_YEAR);
         verifyUsageDtos(usageRepository.findByFilter(usageFilter, null, new Sort(ARTICLE_KEY, Sort.Direction.ASC)), 3,
             USAGE_ID_3, USAGE_ID_1, USAGE_ID_2);
     }
@@ -536,7 +548,7 @@ public class UsageRepositoryIntegrationTest {
     public void testFindWithAmountsAndRightsholders() {
         UsageFilter usageFilter =
             buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.singleton(USAGE_BATCH_ID_1),
-                UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, FISCAL_YEAR);
+                Collections.singleton(PRODUCT_FAMILY), UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, FISCAL_YEAR);
         verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 1, USAGE_ID_1);
     }
 
@@ -544,7 +556,7 @@ public class UsageRepositoryIntegrationTest {
     public void testVerifyFindWithAmountsAndRightsholders() {
         UsageFilter usageFilter =
             buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.singleton(USAGE_BATCH_ID_1),
-                UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, FISCAL_YEAR);
+                Collections.singleton(PRODUCT_FAMILY), UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, FISCAL_YEAR);
         List<Usage> usages = usageRepository.findWithAmountsAndRightsholders(usageFilter);
         assertEquals(1, usages.size());
         Usage usage = usages.get(0);
@@ -567,21 +579,29 @@ public class UsageRepositoryIntegrationTest {
     @Test
     public void testFindWithAmountsAndRightsholdersByUsageBatchFilter() {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.singleton(USAGE_BATCH_ID_1),
-            UsageStatusEnum.ELIGIBLE, null, null);
+            Collections.emptySet(), UsageStatusEnum.ELIGIBLE, null, null);
         verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 1, USAGE_ID_1);
     }
 
     @Test
     public void testFindWithAmountsAndRightsholdersByRhAccountNumberFilter() {
         UsageFilter usageFilter = buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.emptySet(),
-            UsageStatusEnum.ELIGIBLE, null, null);
+            Collections.emptySet(), UsageStatusEnum.ELIGIBLE, null, null);
         verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 1, USAGE_ID_1);
+    }
+
+    @Test
+    public void testFindWithAmountsAndRightsholdersByProductFamiliesFilter() {
+        UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
+            Collections.singleton(PRODUCT_FAMILY), UsageStatusEnum.ELIGIBLE, null, null);
+        verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 3, USAGE_ID_1, USAGE_ID_2,
+            USAGE_ID_3);
     }
 
     @Test
     public void testFindWithAmountsAndRightsholdersByStatusFilter() {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
-            UsageStatusEnum.ELIGIBLE, null, null);
+            Collections.emptySet(), UsageStatusEnum.ELIGIBLE, null, null);
         verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 3, USAGE_ID_1, USAGE_ID_2,
             USAGE_ID_3);
     }
@@ -589,7 +609,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     public void testFindWithAmountsAndRightsholdersByPaymentDateFilter() {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
-            UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, null);
+            Collections.emptySet(), UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, null);
         verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 3, USAGE_ID_1, USAGE_ID_2,
             USAGE_ID_3);
     }
@@ -597,7 +617,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     public void testFindWithAmountsAndRightsholdersByFiscalYearFilter() {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
-            UsageStatusEnum.ELIGIBLE, null, FISCAL_YEAR);
+            Collections.emptySet(), UsageStatusEnum.ELIGIBLE, null, FISCAL_YEAR);
         verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 3, USAGE_ID_1, USAGE_ID_2,
             USAGE_ID_3);
     }
@@ -644,8 +664,7 @@ public class UsageRepositoryIntegrationTest {
         Usage usage = buildUsage(RupPersistUtils.generateUuid(), USAGE_BATCH_ID_1);
         usageRepository.insert(usage);
         usageRepository.addToScenario(Collections.singletonList(usage));
-        usageRepository.deleteFromScenario(Lists.newArrayList("b1f0b236-3ae9-4a60-9fab-61db84199dss",
-            "cf38d390-11bb-4af7-9685-e034c9c32fb6"), USER_NAME);
+        usageRepository.deleteFromScenario(Lists.newArrayList(USAGE_ID_8, USAGE_ID_7), USER_NAME);
         verifyUsageExcludedFromScenario(usageRepository.findByDetailId(6997788886L));
         verifyUsageExcludedFromScenario(usageRepository.findByDetailId(6213788886L));
         assertEquals(SCENARIO_ID, usageRepository.findByDetailId(DETAIL_ID).getScenarioId());
@@ -661,8 +680,7 @@ public class UsageRepositoryIntegrationTest {
         List<String> usagesIds = usageRepository.findIdsByScenarioIdRroAccountNumberRhAccountNumbers(
             scenarioId, 2000017010L, Lists.newArrayList(1000002859L, 7000813806L));
         assertEquals(2, usagesIds.size());
-        assertTrue(usagesIds.containsAll(Lists.newArrayList("b1f0b236-3ae9-4a60-9fab-61db84199dss",
-            "cf38d390-11bb-4af7-9685-e034c9c32fb6")));
+        assertTrue(usagesIds.containsAll(Lists.newArrayList(USAGE_ID_8, USAGE_ID_7)));
     }
 
     @Test
@@ -690,6 +708,16 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(1, usageRepository.findCountForAudit(filter));
         List<UsageDto> usages = usageRepository.findForAudit(filter, new Pageable(0, 10), null);
         verifyUsageDtos(usages, 1, USAGE_ID_4);
+    }
+
+    @Test
+    public void testFindForAuditByProductFamilies() {
+        AuditFilter filter = new AuditFilter();
+        filter.setProductFamilies(Collections.singleton(PRODUCT_FAMILY));
+        assertEquals(9, usageRepository.findCountForAudit(filter));
+        List<UsageDto> usages = usageRepository.findForAudit(filter, new Pageable(0, 10), null);
+        verifyUsageDtos(usages, 9, USAGE_ID_6, USAGE_ID_5, USAGE_ID_9, USAGE_ID_7, USAGE_ID_3, USAGE_ID_2, USAGE_ID_8,
+            USAGE_ID_1, USAGE_ID_4);
     }
 
     @Test
@@ -886,6 +914,7 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(scenarioId, usage.getScenarioId());
         assertEquals(defaultUser, usage.getUpdateUser());
         assertEquals(payeeAccountNumber, usage.getPayee().getAccountNumber());
+        assertEquals(PRODUCT_FAMILY, usage.getProductFamily());
     }
 
     private void verifyUsageExcludedFromScenario(Usage usage) {
@@ -898,16 +927,19 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(expectedDefaultAmount, usage.getNetAmount());
         assertFalse(usage.isRhParticipating());
         assertEquals(USER_NAME, usage.getUpdateUser());
+        assertEquals(PRODUCT_FAMILY, usage.getProductFamily());
     }
 
     private UsageFilter buildUsageFilter(Set<Long> accountNumbers, Set<String> usageBatchIds,
-                                         UsageStatusEnum status, LocalDate paymentDate, Integer fiscalYear) {
+                                         Set<String> productFamilies, UsageStatusEnum status,
+                                         LocalDate paymentDate, Integer fiscalYear) {
         UsageFilter usageFilter = buildFilterWithStatuses(status);
         usageFilter.setRhAccountNumbers(accountNumbers);
         usageFilter.setUsageStatus(status);
         usageFilter.setUsageBatchesIds(usageBatchIds);
         usageFilter.setPaymentDate(paymentDate);
         usageFilter.setFiscalYear(fiscalYear);
+        usageFilter.setProductFamilies(productFamilies);
         return usageFilter;
     }
 

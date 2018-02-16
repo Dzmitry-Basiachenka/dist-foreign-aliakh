@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Set;
 
@@ -23,6 +24,7 @@ public class AuditFilter {
 
     private Set<Long> rhAccountNumbers = Sets.newHashSet();
     private Set<String> batchesIds = Sets.newHashSet();
+    private Set<String> productFamilies = Sets.newHashSet();
     private Set<UsageStatusEnum> statuses = Sets.newHashSet();
     private String searchValue;
 
@@ -43,6 +45,7 @@ public class AuditFilter {
         setBatchesIds(filter.getBatchesIds());
         setRhAccountNumbers(filter.getRhAccountNumbers());
         setSearchValue(filter.getSearchValue());
+        setProductFamilies(filter.getProductFamilies());
     }
 
     public Set<Long> getRhAccountNumbers() {
@@ -77,8 +80,19 @@ public class AuditFilter {
         this.statuses = statuses;
     }
 
+    public Set<String> getProductFamilies() {
+        return productFamilies;
+    }
+
+    public void setProductFamilies(Set<String> productFamilies) {
+        this.productFamilies = productFamilies;
+    }
+
     public boolean isEmpty() {
-        return rhAccountNumbers.isEmpty() && batchesIds.isEmpty() && statuses.isEmpty()
+        return CollectionUtils.isEmpty(rhAccountNumbers)
+            && CollectionUtils.isEmpty(batchesIds)
+            && CollectionUtils.isEmpty(statuses)
+            && CollectionUtils.isEmpty(productFamilies)
             && StringUtils.isBlank(searchValue);
     }
 
@@ -95,6 +109,7 @@ public class AuditFilter {
             .append(this.rhAccountNumbers, that.rhAccountNumbers)
             .append(this.batchesIds, that.batchesIds)
             .append(this.statuses, that.statuses)
+            .append(this.productFamilies, that.productFamilies)
             .append(this.searchValue, that.searchValue)
             .isEquals();
     }
@@ -105,6 +120,7 @@ public class AuditFilter {
             .append(rhAccountNumbers)
             .append(batchesIds)
             .append(statuses)
+            .append(productFamilies)
             .append(searchValue)
             .toHashCode();
     }
@@ -115,6 +131,7 @@ public class AuditFilter {
             .append("rhAccountNumbers", rhAccountNumbers)
             .append("batchesIds", batchesIds)
             .append("statuses", statuses)
+            .append("productFamilies", productFamilies)
             .append("searchValue", searchValue)
             .toString();
     }
