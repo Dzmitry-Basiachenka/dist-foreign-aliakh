@@ -53,6 +53,10 @@ public class UsageDto extends StoredEntity<String> {
     private UsageStatusEnum status;
     private String productFamily;
     private String scenarioName;
+    private String checkNumber;
+    private LocalDate checkDate;
+    private String cccEventId;
+    private String distributionName;
 
     public Long getDetailId() {
         return detailId;
@@ -294,6 +298,37 @@ public class UsageDto extends StoredEntity<String> {
         this.scenarioName = scenarioName;
     }
 
+    public String getCheckNumber() {
+        return checkNumber;
+    }
+
+    public void setCheckNumber(String checkNumber) {
+        this.checkNumber = checkNumber;
+    }
+
+    public LocalDate getCheckDate() {
+        return checkDate;
+    }
+
+    public void setCheckDate(LocalDate checkDate) {
+        this.checkDate = checkDate;
+    }
+
+    public String getCccEventId() {
+        return cccEventId;
+    }
+
+    public void setCccEventId(String cccEventId) {
+        this.cccEventId = cccEventId;
+    }
+    public String getDistributionName() {
+        return distributionName;
+    }
+
+    public void setDistributionName(String distributionName) {
+        this.distributionName = distributionName;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -335,6 +370,10 @@ public class UsageDto extends StoredEntity<String> {
             .append(this.serviceFee, that.serviceFee)
             .append(this.serviceFeeAmount, that.serviceFeeAmount)
             .append(this.scenarioName, that.scenarioName)
+            .append(this.checkNumber, that.checkNumber)
+            .append(this.checkDate, that.checkDate)
+            .append(this.cccEventId, that.cccEventId)
+            .append(this.distributionName, that.distributionName)
             .isEquals();
     }
 
@@ -366,12 +405,16 @@ public class UsageDto extends StoredEntity<String> {
             .append(batchGrossAmount)
             .append(status)
             .append(productFamily)
-            .append(this.payeeAccountNumber)
-            .append(this.payeeName)
+            .append(payeeAccountNumber)
+            .append(payeeName)
             .append(netAmount)
             .append(serviceFee)
             .append(serviceFeeAmount)
             .append(scenarioName)
+            .append(checkNumber)
+            .append(checkDate)
+            .append(cccEventId)
+            .append(distributionName)
             .toHashCode();
     }
 
@@ -409,6 +452,10 @@ public class UsageDto extends StoredEntity<String> {
             .append("serviceFee", serviceFee)
             .append("serviceFeeAmount", serviceFeeAmount)
             .append("scenarioName", scenarioName)
+            .append("checkNumber", checkNumber)
+            .append("checkDate", checkDate)
+            .append("cccEventId", cccEventId)
+            .append("distributionName", distributionName)
             .toString();
     }
 }

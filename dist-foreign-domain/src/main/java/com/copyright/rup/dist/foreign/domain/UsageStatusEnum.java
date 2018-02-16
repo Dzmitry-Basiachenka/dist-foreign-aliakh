@@ -40,5 +40,10 @@ public enum UsageStatusEnum {
     /**
      * Status for usages which were added to scenario.
      */
-    LOCKED
+    LOCKED,
+
+    /**
+     * Status for paid usages.
+     */
+    PAID
 }
