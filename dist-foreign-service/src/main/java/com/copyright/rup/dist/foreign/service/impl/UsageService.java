@@ -331,6 +331,16 @@ public class UsageService implements IUsageService {
         }
     }
 
+    @Override
+    public List<String> getProductFamilies() {
+        return usageRepository.findProductFamilies();
+    }
+
+    @Override
+    public List<String> getProductFamiliesForAudit() {
+        return usageRepository.findProductFamiliesForAudit();
+    }
+
     private long updateWorkFoundUsagesRightsholders(List<Usage> usages) {
         StopWatch stopWatch = new Slf4JStopWatch("service.UsageService.updateRightsholders(WORK_FOUND)");
         Map<Long, Set<String>> wrWrkInstToUsageIds = usages.stream().collect(

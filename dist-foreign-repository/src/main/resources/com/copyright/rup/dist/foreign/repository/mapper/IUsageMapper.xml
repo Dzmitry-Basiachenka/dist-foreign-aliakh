@@ -875,4 +875,24 @@
                 #{usageId}
             </foreach>
     </update>
+
+    <select id="findProductFamilies" resultType="string">
+        select
+            distinct product_family
+        from ${schema}.df_usage
+        order by
+            product_family asc
+    </select>
+
+    <select id="findProductFamiliesForAudit" resultType="string">
+        select
+            distinct product_family
+        from ${schema}.df_usage
+        union
+        select
+            distinct product_family
+        from ${schema}.df_usage_archive
+        order by
+            product_family asc
+    </select>
 </mapper>
