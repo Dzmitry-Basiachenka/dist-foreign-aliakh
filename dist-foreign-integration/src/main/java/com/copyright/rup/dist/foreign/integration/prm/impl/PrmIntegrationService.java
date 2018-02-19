@@ -39,8 +39,13 @@ public class PrmIntegrationService implements IPrmIntegrationService {
     @Autowired
     private IPrmRightsholderService prmRightsholderService;
     @Autowired
+    @Qualifier("dist.common.integration.rest.async.prmRollUpService")
+    private IPrmRollUpService prmRollUpAsyncService;
+    @Autowired
     @Qualifier("dist.common.integration.rest.prmRollUpService")
     private IPrmRollUpService prmRollUpService;
+    @Value("$RUP{dist.foreign.integration.rest.prm.rollups.async}")
+    private boolean prmRollUpAsync;
     @Autowired
     @Qualifier("dist.common.integration.rest.prmRhPreferenceService")
     private IPrmRhPreferenceService prmRhPreferenceService;
@@ -64,7 +69,9 @@ public class PrmIntegrationService implements IPrmIntegrationService {
     @Override
     @Profiled(tag = "integration.PrmIntegrationService.getRollUps")
     public Table<String, String, Long> getRollUps(Collection<String> rightsholdersIds) {
-        return prmRollUpService.getRollUps(rightsholdersIds);
+        return prmRollUpAsync
+            ? prmRollUpAsyncService.getRollUps(rightsholdersIds)
+            : prmRollUpService.getRollUps(rightsholdersIds);
     }
 
     @Override
