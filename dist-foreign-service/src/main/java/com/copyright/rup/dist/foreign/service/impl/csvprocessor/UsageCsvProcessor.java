@@ -60,7 +60,7 @@ public class UsageCsvProcessor extends CommonCsvProcessor<Usage> {
             new DuplicateInFileValidator());
         addPlainValidators(Header.TITLE, lengthValidator_2000);
         addPlainValidators(Header.ARTICLE, lengthValidator_1000);
-        addPlainValidators(Header.STANDARD_NUMBER, requiredValidator, lengthValidator_1000);
+        addPlainValidators(Header.STANDARD_NUMBER, lengthValidator_1000);
         addPlainValidators(Header.WR_WRK_INST, positiveNumberValidator, new LengthValidator(15));
         addPlainValidators(Header.RH_ACCT_NUMBER, positiveNumberValidator, new LengthValidator(22));
         addPlainValidators(Header.PUBLISHER, lengthValidator_1000);

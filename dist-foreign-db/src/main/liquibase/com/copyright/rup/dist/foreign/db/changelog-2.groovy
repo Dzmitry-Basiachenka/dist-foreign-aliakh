@@ -379,4 +379,21 @@ databaseChangeLog {
             dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'product_family')
         }
     }
+
+    changeSet(id: '2018-02-19-00', author: 'Darya Baraukova <dbaraukova@copyright.com>') {
+        comment("B-41295 FDA: Relax validation rules for uploading Usage data: " +
+                "drop NOT NULL constraint for standard_number column in df_usage and df_usage_archive tables")
+
+        dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage',
+                columnName: 'standard_number', columnDataType: 'VARCHAR(1000)')
+        dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_archive',
+                columnName: 'standard_number', columnDataType: 'VARCHAR(1000)')
+
+        rollback {
+            addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage',
+                    columnName: 'standard_number', columnDataType: 'VARCHAR(1000)')
+            addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_archive',
+                    columnName: 'standard_number', columnDataType: 'VARCHAR(1000)')
+        }
+    }
 }
