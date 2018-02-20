@@ -104,13 +104,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         addProperties();
         addColumnGenerators();
         setColumnsWidth();
-
-        usagesTable
-            .setVisibleColumns(DETAIL_ID_PROPERTY, "status", "batchName", "fiscalYear", "rroAccountNumber", "rroName",
-                "paymentDate", "workTitle", "article", "standardNumber", "wrWrkInst", "rhAccountNumber",
-                "rhName", "publisher", "publicationDate", "numberOfCopies", REPORTED_VALUE_PROPERTY,
-                GROSS_AMOUNT_PROPERTY, BATCH_GROSS_AMOUNT_PROPERTY, "market", "marketPeriodFrom", "marketPeriodTo",
-                "author");
+        setVisibleColumns();
         setColumnHeaders();
         usagesTable.setSizeFull();
         usagesTable.setColumnCollapsingAllowed(true);
@@ -127,6 +121,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         usagesTable.addProperty("id", String.class, true);
         usagesTable.addProperty(DETAIL_ID_PROPERTY, Long.class, true);
         usagesTable.addProperty("status", String.class, true);
+        usagesTable.addProperty("productFamily", String.class, true);
         usagesTable.addProperty("batchName", String.class, true);
         usagesTable.addProperty("fiscalYear", String.class, true);
         usagesTable.addProperty("rroAccountNumber", Long.class, true);
@@ -151,30 +146,59 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
     }
 
     private void setColumnHeaders() {
-        usagesTable
-            .setColumnHeaders(ForeignUi.getMessage("table.column.detail_id"),
-                ForeignUi.getMessage("table.column.usage_status"),
-                ForeignUi.getMessage("table.column.batch_name"),
-                ForeignUi.getMessage("table.column.fiscal_year"),
-                ForeignUi.getMessage("table.column.rro_account_number"),
-                ForeignUi.getMessage("table.column.rro_account_name"),
-                ForeignUi.getMessage("table.column.payment_date"),
-                ForeignUi.getMessage("table.column.work_title"),
-                ForeignUi.getMessage("table.column.article"),
-                ForeignUi.getMessage("table.column.standard_number"),
-                ForeignUi.getMessage("table.column.wr_wrk_inst"),
-                ForeignUi.getMessage("table.column.rh_account_number"),
-                ForeignUi.getMessage("table.column.rh_account_name"),
-                ForeignUi.getMessage("table.column.publisher"),
-                ForeignUi.getMessage("table.column.publication_date"),
-                ForeignUi.getMessage("table.column.number_of_copies"),
-                ForeignUi.getMessage("table.column.reported_value"),
-                ForeignUi.getMessage("table.column.gross_amount"),
-                ForeignUi.getMessage("table.column.batch_gross_amount"),
-                ForeignUi.getMessage("table.column.market"),
-                ForeignUi.getMessage("table.column.market_period_from"),
-                ForeignUi.getMessage("table.column.market_period_to"),
-                ForeignUi.getMessage("table.column.author"));
+        usagesTable.setColumnHeaders(
+            ForeignUi.getMessage("table.column.detail_id"),
+            ForeignUi.getMessage("table.column.usage_status"),
+            ForeignUi.getMessage("table.column.product_family"),
+            ForeignUi.getMessage("table.column.batch_name"),
+            ForeignUi.getMessage("table.column.fiscal_year"),
+            ForeignUi.getMessage("table.column.rro_account_number"),
+            ForeignUi.getMessage("table.column.rro_account_name"),
+            ForeignUi.getMessage("table.column.payment_date"),
+            ForeignUi.getMessage("table.column.work_title"),
+            ForeignUi.getMessage("table.column.article"),
+            ForeignUi.getMessage("table.column.standard_number"),
+            ForeignUi.getMessage("table.column.wr_wrk_inst"),
+            ForeignUi.getMessage("table.column.rh_account_number"),
+            ForeignUi.getMessage("table.column.rh_account_name"),
+            ForeignUi.getMessage("table.column.publisher"),
+            ForeignUi.getMessage("table.column.publication_date"),
+            ForeignUi.getMessage("table.column.number_of_copies"),
+            ForeignUi.getMessage("table.column.reported_value"),
+            ForeignUi.getMessage("table.column.gross_amount"),
+            ForeignUi.getMessage("table.column.batch_gross_amount"),
+            ForeignUi.getMessage("table.column.market"),
+            ForeignUi.getMessage("table.column.market_period_from"),
+            ForeignUi.getMessage("table.column.market_period_to"),
+            ForeignUi.getMessage("table.column.author"));
+    }
+
+    private void setVisibleColumns() {
+        usagesTable.setVisibleColumns(
+            DETAIL_ID_PROPERTY,
+            "status",
+            "productFamily",
+            "batchName",
+            "fiscalYear",
+            "rroAccountNumber",
+            "rroName",
+            "paymentDate",
+            "workTitle",
+            "article",
+            "standardNumber",
+            "wrWrkInst",
+            "rhAccountNumber",
+            "rhName",
+            "publisher",
+            "publicationDate",
+            "numberOfCopies",
+            REPORTED_VALUE_PROPERTY,
+            GROSS_AMOUNT_PROPERTY,
+            BATCH_GROSS_AMOUNT_PROPERTY,
+            "market",
+            "marketPeriodFrom",
+            "marketPeriodTo",
+            "author");
     }
 
     private void addColumnGenerators() {

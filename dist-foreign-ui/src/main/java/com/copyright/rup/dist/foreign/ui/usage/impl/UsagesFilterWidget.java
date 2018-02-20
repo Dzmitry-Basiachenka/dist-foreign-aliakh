@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.ui.common.ProductFamilyFilterWidget;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
@@ -39,6 +40,7 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
     private IUsagesFilterController controller;
     private RightsholderFilterWidget rightsholderFilterWidget;
     private UsageBatchFilterWidget usageBatchFilterWidget;
+    private ProductFamilyFilterWidget productFamilyFilterWidget;
     private UsageFilter usageFilter = new UsageFilter();
     private UsageFilter appliedUsageFilter = new UsageFilter();
     private BeanItemContainer<Integer> fiscalYearContainer;
@@ -70,6 +72,7 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
         usageFilter = new UsageFilter();
         rightsholderFilterWidget.reset();
         usageBatchFilterWidget.reset();
+        productFamilyFilterWidget.reset();
         applyFilter();
     }
 
@@ -99,10 +102,21 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
         initPaymentDateFilter();
         initFiscalYearFilter();
         initStatusFilter();
-        VerticalLayout verticalLayout = new VerticalLayout(buildFiltersHeaderLabel(), buildUsageBatchFilter(),
-            buildRroAccountNumberFilter(), paymentDateWidget, statusComboBox, fiscalYearComboBox);
+        VerticalLayout verticalLayout = new VerticalLayout(buildFiltersHeaderLabel(), buildProductFamiliesFilter(),
+            buildUsageBatchFilter(), buildRroAccountNumberFilter(), paymentDateWidget, statusComboBox,
+            fiscalYearComboBox);
         verticalLayout.setSpacing(true);
         return verticalLayout;
+    }
+
+    private HorizontalLayout buildProductFamiliesFilter() {
+        productFamilyFilterWidget = new ProductFamilyFilterWidget(controller.getProductFamilies());
+        productFamilyFilterWidget.addFilterSaveListener(saveEvent -> {
+            usageFilter.setProductFamilies(saveEvent.getSelectedItemsIds());
+            filterChanged();
+        });
+        VaadinUtils.addComponentStyle(productFamilyFilterWidget, "product-families-filter");
+        return productFamilyFilterWidget;
     }
 
     private HorizontalLayout buildUsageBatchFilter() {

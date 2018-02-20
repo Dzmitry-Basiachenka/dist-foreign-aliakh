@@ -442,7 +442,7 @@ public class UsageServiceTest {
 
     @Test
     public void testGetProductFamilies() {
-        expect(usageRepository.findProductFamilies())
+        expect(usageRepository.findProductFamiliesForFilter())
             .andReturn(Lists.newArrayList(FAS_PRODUCT_FAMILY, NTS_PRODUCT_FAMILY))
             .once();
         replay(usageRepository);
@@ -454,7 +454,7 @@ public class UsageServiceTest {
 
     @Test
     public void testGetProductFamiliesForAudit() {
-        expect(usageRepository.findProductFamiliesForAudit())
+        expect(usageRepository.findProductFamiliesForAuditFilter())
             .andReturn(Lists.newArrayList(FAS_PRODUCT_FAMILY, NTS_PRODUCT_FAMILY))
             .once();
         replay(usageRepository);

@@ -152,6 +152,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         assertTableRowElements(usagesTable,
             "6997788888",
             "ELIGIBLE",
+            "FAS",
             "CADRA_11Dec16",
             "FY2017", "7000813806",
             "CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil",
@@ -269,6 +270,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         assertTableHeaderElements(usagesTable,
             "Detail ID",
             "Detail Status",
+            "Product Family",
             "Usage Batch Name",
             "Fiscal Year",
             "RRO Account #",
@@ -295,6 +297,7 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     private void verifyFiltersWidget(WebElement tabContainer) {
         WebElement filterWidget = assertWebElement(tabContainer, "usages-filter-widget");
         assertWebElement(filterWidget, HTML_DIV_TAG_NAME, FILTERS_HEADER_TEXT);
+        verifyProductFamiliesFilter(filterWidget);
         verifyBatchesFilter(filterWidget);
         verifyRROsFilter(filterWidget);
         verifyPaymentDateComponent(filterWidget, "payment-date-filter");
@@ -302,6 +305,11 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
             " ", "NEW", "WORK_FOUND", "RH_NOT_FOUND", "SENT_FOR_RA", "ELIGIBLE");
         assertComboboxElement(filterWidget, "fiscal-year-filter", "Fiscal Year To");
         verifyFiltersWidgetButtons(filterWidget);
+    }
+
+    private void verifyProductFamiliesFilter(WebElement filterWidget) {
+        openProductFamiliesFilterWindow(filterWidget);
+        verifyFilterWindow("product-families-filter-window", "Product Families filter");
     }
 
     private void verifyBatchesFilter(WebElement filterWidget) {
@@ -312,6 +320,12 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
     private void verifyRROsFilter(WebElement filterWidget) {
         openRroFilterWindow(filterWidget);
         verifyFilterWindow("rightsholders-filter-window", "RROs filter", "Enter RRO Name/Account #");
+    }
+
+    private void openProductFamiliesFilterWindow(WebElement filterWidget) {
+        WebElement productFamiliesFilter = assertWebElement(filterWidget, "product-families-filter");
+        assertWebElement(productFamiliesFilter, HTML_DIV_TAG_NAME, "(0)");
+        clickElementAndWait(assertWebElement(productFamiliesFilter, HTML_SPAN_TAG_NAME, "Product Families"));
     }
 
     private void openRroFilterWindow(WebElement filterWidget) {
@@ -332,9 +346,20 @@ public class UsagesTabUiTest extends ForeignCommonUiTest {
         WebElement filterWindow = assertWebElement(By.id(id));
         assertEquals(windowCaption, getWindowCaption(filterWindow));
         assertSearchToolbar(filterWindow, promptMessage);
+        verifyFilterWindowButtons(filterWindow);
+        clickButtonAndWait(filterWindow, CLOSE_BUTTON_ID);
+    }
+
+    private void verifyFilterWindow(String id, String windowCaption) {
+        WebElement filterWindow = assertWebElement(By.id(id));
+        assertEquals(windowCaption, getWindowCaption(filterWindow));
+        verifyFilterWindowButtons(filterWindow);
+        clickButtonAndWait(filterWindow, CLOSE_BUTTON_ID);
+    }
+
+    private void verifyFilterWindowButtons(WebElement filterWindow) {
         assertWebElement(filterWindow, "Save");
         assertWebElement(filterWindow, "Clear");
-        clickButtonAndWait(filterWindow, CLOSE_BUTTON_ID);
     }
 
     private void verifyPaymentDateComponent(WebElement filterWidget, String id) {

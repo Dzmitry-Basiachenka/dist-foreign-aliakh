@@ -32,4 +32,9 @@ public interface IUsagesFilterController extends IFilterController<IUsagesFilter
      * @return list of rightsholders.
      */
     List<Rightsholder> getRros();
+
+    /**
+     * @return list of product families.
+     */
+    List<String> getProductFamilies();
 }

@@ -876,15 +876,15 @@
             </foreach>
     </update>
 
-    <select id="findProductFamilies" resultType="string">
+    <select id="findProductFamiliesForFilter" resultType="string">
         select
             distinct product_family
         from ${schema}.df_usage
-        order by
-            product_family asc
+        where status_ind != #{status}
+        order by product_family asc
     </select>
 
-    <select id="findProductFamiliesForAudit" resultType="string">
+    <select id="findProductFamiliesForAuditFilter" resultType="string">
         select
             distinct product_family
         from ${schema}.df_usage
@@ -892,7 +892,6 @@
         select
             distinct product_family
         from ${schema}.df_usage_archive
-        order by
-            product_family asc
+        order by product_family asc
     </select>
 </mapper>
