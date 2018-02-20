@@ -54,6 +54,7 @@ public class AuditTabUiTest extends ForeignCommonUiTest {
 
     @Test
     // Test case IDs: 4d4b48a9-63b3-460c-a353-b7773c9ff77e, 4e3b9e05-abff-442f-a7a3-00317a026988
+    //TODO {dbaraukova} adjust test to filter by Event ID and Dist. Name
     public void testVerifyAuditTabFilters() {
         loginAsViewOnly();
         WebElement auditTab = verifyAuditTab();
