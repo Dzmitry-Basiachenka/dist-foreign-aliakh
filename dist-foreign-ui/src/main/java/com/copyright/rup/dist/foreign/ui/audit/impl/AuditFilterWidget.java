@@ -15,7 +15,10 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Interface for audit filter widget.
@@ -32,6 +35,8 @@ public class AuditFilterWidget extends VerticalLayout implements IAuditFilterWid
     private RightsholderFilterWidget rightsholderFilterWidget;
     private UsageBatchFilterWidget usageBatchFilterWidget;
     private StatusFilterWidget statusFilterWidget;
+    private TextField cccEventIdField;
+    private TextField distributionNameField;
     private AuditFilter filter = new AuditFilter();
     private AuditFilter appliedFilter = new AuditFilter();
     private Button applyButton;
@@ -43,8 +48,10 @@ public class AuditFilterWidget extends VerticalLayout implements IAuditFilterWid
         initRightsholdersFilter();
         initUsageBatchesFilter();
         initStatusesFilterWidget();
-        addComponents(buildFiltersHeaderLabel(), rightsholderFilterWidget, usageBatchFilterWidget,
-            statusFilterWidget, buttonsLayout);
+        initEventIdField();
+        initDistributionNameField();
+        addComponents(buildFiltersHeaderLabel(), rightsholderFilterWidget, usageBatchFilterWidget, statusFilterWidget,
+            cccEventIdField, distributionNameField, buttonsLayout);
         setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
         setMargin(true);
         setSpacing(true);
@@ -69,6 +76,8 @@ public class AuditFilterWidget extends VerticalLayout implements IAuditFilterWid
         usageBatchFilterWidget.reset();
         rightsholderFilterWidget.reset();
         statusFilterWidget.reset();
+        cccEventIdField.setValue(null);
+        distributionNameField.setValue(null);
         filter = new AuditFilter();
         applyFilter();
     }
@@ -108,7 +117,7 @@ public class AuditFilterWidget extends VerticalLayout implements IAuditFilterWid
 
     private HorizontalLayout initButtonsLayout() {
         applyButton = Buttons.createButton(ForeignUi.getMessage("button.apply"));
-        applyButton.addClickListener(event -> applyFilter());
+        applyButton.addClickListener(event -> trimFilterValues());
         Button clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
         clearButton.addClickListener(event -> clearFilter());
         HorizontalLayout layout = new HorizontalLayout(applyButton, clearButton);
@@ -126,5 +135,36 @@ public class AuditFilterWidget extends VerticalLayout implements IAuditFilterWid
         Label filterHeaderLabel = new Label(ForeignUi.getMessage("label.filters"));
         filterHeaderLabel.addStyleName(Cornerstone.LABEL_H2);
         return filterHeaderLabel;
+    }
+
+    private void initEventIdField() {
+        cccEventIdField = createTextField(ForeignUi.getMessage("label.event_id"));
+        cccEventIdField.addTextChangeListener(event -> {
+            filter.setCccEventId(StringUtils.trimToNull(event.getText()));
+            filterChanged();
+        });
+        VaadinUtils.addComponentStyle(cccEventIdField, "ccc-event-id-filter");
+    }
+
+    private void initDistributionNameField() {
+        distributionNameField = createTextField(ForeignUi.getMessage("label.distribution_name"));
+        distributionNameField.addTextChangeListener(event -> {
+            filter.setDistributionName(StringUtils.trimToNull(event.getText()));
+            filterChanged();
+        });
+        VaadinUtils.addComponentStyle(distributionNameField, "distribution-name-filter");
+    }
+
+    private TextField createTextField(String caption) {
+        TextField textField = new TextField(caption);
+        VaadinUtils.setMaxComponentsWidth(textField);
+        textField.setNullRepresentation(StringUtils.EMPTY);
+        return textField;
+    }
+
+    private void trimFilterValues() {
+        cccEventIdField.setValue(StringUtils.trimToNull(cccEventIdField.getValue()));
+        distributionNameField.setValue(StringUtils.trimToNull(distributionNameField.getValue()));
+        applyFilter();
     }
 }

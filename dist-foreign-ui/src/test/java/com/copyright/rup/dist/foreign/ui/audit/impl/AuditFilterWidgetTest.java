@@ -10,6 +10,7 @@ import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.IFilterSaveList
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.widget.BaseItemsFilterWidget;
 
+import com.vaadin.server.Sizeable;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
@@ -18,6 +19,7 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.TextField;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -47,7 +49,7 @@ public class AuditFilterWidgetTest {
         assertTrue(widget.isSpacing());
         assertEquals(new MarginInfo(true), widget.getMargin());
         assertEquals("audit-filter-widget", widget.getStyleName());
-        assertEquals(5, widget.getComponentCount());
+        assertEquals(7, widget.getComponentCount());
         Component component = widget.getComponent(0);
         assertTrue(component instanceof Label);
         verifyLabel((Label) component);
@@ -60,7 +62,9 @@ public class AuditFilterWidgetTest {
         component = widget.getComponent(3);
         assertTrue(component instanceof StatusFilterWidget);
         verifyFilterWidget((StatusFilterWidget) component, "Status");
-        component = widget.getComponent(4);
+        verifyTextField(widget.getComponent(4), "Event ID");
+        verifyTextField(widget.getComponent(5), "Dist. Name");
+        component = widget.getComponent(6);
         assertTrue(component instanceof HorizontalLayout);
         verifyButtonsLayout((HorizontalLayout) component);
         assertEquals(Alignment.MIDDLE_RIGHT, widget.getComponentAlignment(component));
@@ -74,6 +78,15 @@ public class AuditFilterWidgetTest {
     private void verifyFilterWidget(BaseItemsFilterWidget filterWidget, String caption) {
         assertEquals(caption, Whitebox.getInternalState(filterWidget, Button.class).getCaption());
         assertNotNull(Whitebox.getInternalState(filterWidget, IFilterSaveListener.class));
+    }
+
+    private void verifyTextField(Component component, String caption) {
+        assertNotNull(component);
+        assertEquals(TextField.class, component.getClass());
+        TextField textField = (TextField) component;
+        assertEquals(caption, textField.getCaption());
+        assertEquals(100, textField.getWidth(), 0);
+        assertEquals(Sizeable.Unit.PERCENTAGE, textField.getWidthUnits());
     }
 
     private void verifyButtonsLayout(HorizontalLayout layout) {

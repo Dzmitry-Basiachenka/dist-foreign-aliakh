@@ -26,6 +26,8 @@ public class AuditFilter {
     private Set<String> batchesIds = Sets.newHashSet();
     private Set<String> productFamilies = Sets.newHashSet();
     private Set<UsageStatusEnum> statuses = Sets.newHashSet();
+    private String cccEventId;
+    private String distributionName;
     private String searchValue;
 
     /**
@@ -44,6 +46,8 @@ public class AuditFilter {
         setStatuses(filter.getStatuses());
         setBatchesIds(filter.getBatchesIds());
         setRhAccountNumbers(filter.getRhAccountNumbers());
+        setCccEventId(filter.getCccEventId());
+        setDistributionName(filter.getDistributionName());
         setSearchValue(filter.getSearchValue());
         setProductFamilies(filter.getProductFamilies());
     }
@@ -88,11 +92,29 @@ public class AuditFilter {
         this.productFamilies = productFamilies;
     }
 
+    public String getCccEventId() {
+        return cccEventId;
+    }
+
+    public void setCccEventId(String cccEventId) {
+        this.cccEventId = cccEventId;
+    }
+
+    public String getDistributionName() {
+        return distributionName;
+    }
+
+    public void setDistributionName(String distributionName) {
+        this.distributionName = distributionName;
+    }
+
     public boolean isEmpty() {
         return CollectionUtils.isEmpty(rhAccountNumbers)
             && CollectionUtils.isEmpty(batchesIds)
             && CollectionUtils.isEmpty(statuses)
             && CollectionUtils.isEmpty(productFamilies)
+            && StringUtils.isBlank(cccEventId)
+            && StringUtils.isBlank(distributionName)
             && StringUtils.isBlank(searchValue);
     }
 
@@ -110,6 +132,8 @@ public class AuditFilter {
             .append(this.batchesIds, that.batchesIds)
             .append(this.statuses, that.statuses)
             .append(this.productFamilies, that.productFamilies)
+            .append(this.cccEventId, that.cccEventId)
+            .append(this.distributionName, that.distributionName)
             .append(this.searchValue, that.searchValue)
             .isEquals();
     }
@@ -121,6 +145,8 @@ public class AuditFilter {
             .append(batchesIds)
             .append(statuses)
             .append(productFamilies)
+            .append(cccEventId)
+            .append(distributionName)
             .append(searchValue)
             .toHashCode();
     }
@@ -132,6 +158,8 @@ public class AuditFilter {
             .append("batchesIds", batchesIds)
             .append("statuses", statuses)
             .append("productFamilies", productFamilies)
+            .append("cccEventId", cccEventId)
+            .append("distributionName", distributionName)
             .append("searchValue", searchValue)
             .toString();
     }

@@ -677,74 +677,71 @@
             </foreach>
     </select>
 
+    <sql id="selectArchivedCountForAuditSql">
+        (select count(1) usage_count
+        from ${schema}.df_usage_archive u
+        join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
+        left join ${schema}.df_scenario s on s.df_scenario_uid = u.df_scenario_uid
+        <include refid="archivedAuditFilterWhereClause"/>)
+    </sql>
+
     <select id="findCountForAudit" resultType="int" parameterType="map">
         select
-            (select count(1) usage_count
-            from ${schema}.df_usage u
-            join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
-            left join ${schema}.df_scenario s on s.df_scenario_uid = u.df_scenario_uid
-            <include refid="auditFilterWhereClause"/>) +
-            (select count(1) usage_count
-            from ${schema}.df_usage_archive u
-            join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
-            left join ${schema}.df_scenario s on s.df_scenario_uid = u.df_scenario_uid
-            <include refid="auditFilterWhereClause"/>)
+        <choose>
+            <when test="null != filter.cccEventId || null != filter.distributionName">
+                 <include refid="selectArchivedCountForAuditSql"/>
+            </when>
+            <otherwise>
+                (select count(1) usage_count
+                from ${schema}.df_usage u
+                join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
+                left join ${schema}.df_scenario s on s.df_scenario_uid = u.df_scenario_uid
+                <where>
+                    <include refid="commonAuditFilterWhereClause"/>
+                </where>) +
+                <include refid="selectArchivedCountForAuditSql"/>
+            </otherwise>
+        </choose>
     </select>
 
     <select id="findForAudit" resultMap="usageDtoResultMap" parameterType="map">
-        select
-            u.df_usage_uid,
-            detail_id,
-            u.status_ind,
-            u.product_family,
-            u.df_usage_batch_uid,
-            ub.name batch_name,
-            ub.payment_date,
-            u.rh_account_number,
-            r.name rh_name,
-            wr_wrk_inst,
-            work_title,
-            standard_number,
-            u.gross_amount,
-            service_fee,
-            u.updated_datetime,
-            s.name scenario_name,
-            null check_number,
-            null check_date,
-            null ccc_event_id,
-            null distribution_name
-        from ${schema}.df_usage u
-        join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
-        left join ${schema}.df_rightsholder r on r.rh_account_number = u.rh_account_number
-        left join ${schema}.df_scenario s on s.df_scenario_uid = u.df_scenario_uid
-        <include refid="auditFilterWhereClause"/>
-        union
-        select
-            df_usage_archive_uid df_usage_uid,
-            detail_id,
-            u.status_ind,
-            u.product_family,
-            u.df_usage_batch_uid,
-            ub.name batch_name,
-            ub.payment_date,
-            u.rh_account_number,
-            r.name rh_name,
-            wr_wrk_inst,
-            work_title,
-            standard_number,
-            u.gross_amount,
-            service_fee,
-            u.updated_datetime,
-            s.name scenario_name,
-            u.check_number,
-            u.check_date,
-            u.ccc_event_id,
-            u.distribution_name
-        from ${schema}.df_usage_archive u
-        join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
-        left join ${schema}.df_rightsholder r on r.rh_account_number = u.rh_account_number
-        left join ${schema}.df_scenario s on s.df_scenario_uid = u.df_scenario_uid
-        <include refid="auditFilterWhereClause"/>
+        <choose>
+            <when test="null != filter.cccEventId || null != filter.distributionName">
+                <include refid="selectArchivedUsagesForAuditSql"/>
+            </when>
+            <otherwise>
+                select
+                u.df_usage_uid,
+                detail_id,
+                u.status_ind,
+                u.product_family,
+                u.df_usage_batch_uid,
+                ub.name batch_name,
+                ub.payment_date,
+                u.rh_account_number,
+                r.name rh_name,
+                wr_wrk_inst,
+                work_title,
+                standard_number,
+                u.gross_amount,
+                service_fee,
+                u.updated_datetime,
+                s.name scenario_name,
+                null check_number,
+                null check_date,
+                null ccc_event_id,
+                null distribution_name
+                from ${schema}.df_usage u
+                join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
+                left join ${schema}.df_rightsholder r on r.rh_account_number = u.rh_account_number
+                left join ${schema}.df_scenario s on s.df_scenario_uid = u.df_scenario_uid
+                <where>
+                    <include refid="commonAuditFilterWhereClause"/>
+                </where>
+                union
+                <include refid="selectArchivedUsagesForAuditSql"/>
+            </otherwise>
+        </choose>
         order by
         <choose>
             <when test="null != sort">
@@ -810,39 +807,78 @@
         <include refid="ifPageable"/>
     </select>
 
-    <sql id="auditFilterWhereClause">
+    <sql id="selectArchivedUsagesForAuditSql">
+        select
+            df_usage_archive_uid df_usage_uid,
+            detail_id,
+            u.status_ind,
+            u.product_family,
+            u.df_usage_batch_uid,
+            ub.name batch_name,
+            ub.payment_date,
+            u.rh_account_number,
+            r.name rh_name,
+            wr_wrk_inst,
+            work_title,
+            standard_number,
+            u.gross_amount,
+            service_fee,
+            u.updated_datetime,
+            s.name scenario_name,
+            u.check_number,
+            u.check_date,
+            u.ccc_event_id,
+            u.distribution_name
+        from ${schema}.df_usage_archive u
+        join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
+        left join ${schema}.df_rightsholder r on r.rh_account_number = u.rh_account_number
+        left join ${schema}.df_scenario s on s.df_scenario_uid = u.df_scenario_uid
+        <include refid="archivedAuditFilterWhereClause"/>
+    </sql>
+
+    <sql id="archivedAuditFilterWhereClause">
         <where>
-            <if test="!filter.rhAccountNumbers.isEmpty()">
-                u.rh_account_number in
-                <foreach collection="filter.rhAccountNumbers" item="accountNumber" separator="," open="(" close=")">
-                    #{accountNumber}
-                </foreach>
+            <include refid="commonAuditFilterWhereClause"/>
+            <if test="null != filter.cccEventId">
+                and upper(ccc_event_id) like '%' || upper(#{filter.cccEventId}) || '%'
             </if>
-            <if test="!filter.batchesIds.isEmpty()">
-                and ub.df_usage_batch_uid in
-                <foreach collection="filter.batchesIds" item="batchId" separator="," open="(" close=")">
-                    #{batchId}
-                </foreach>
-            </if>
-            <if test="!filter.statuses.isEmpty()">
-                and u.status_ind in
-                <foreach collection="filter.statuses" item="status" separator="," open="(" close=")">
-                    #{status}
-                </foreach>
-            </if>
-            <if test="!filter.productFamilies.isEmpty()">
-                and u.product_family in
-                <foreach collection="filter.productFamilies" item="productFamily" open="(" separator="," close=")">
-                    #{productFamily}
-                </foreach>
-            </if>
-            <if test="null != filter.searchValue">
-                and (
-                    cast(detail_id as text) like '%' || #{filter.searchValue} || '%' or
-                    cast(wr_wrk_inst as text) like '%' || #{filter.searchValue} || '%' or
-                    upper(work_title) like '%' || upper(#{filter.searchValue}) || '%')
+            <if test="null != filter.distributionName">
+                and upper(distribution_name) like '%' || upper(#{filter.distributionName}) || '%'
             </if>
         </where>
+    </sql>
+
+    <sql id="commonAuditFilterWhereClause">
+        <if test="!filter.rhAccountNumbers.isEmpty()">
+            u.rh_account_number in
+            <foreach collection="filter.rhAccountNumbers" item="accountNumber" separator="," open="(" close=")">
+                #{accountNumber}
+            </foreach>
+        </if>
+        <if test="!filter.batchesIds.isEmpty()">
+            and ub.df_usage_batch_uid in
+            <foreach collection="filter.batchesIds" item="batchId" separator="," open="(" close=")">
+                #{batchId}
+            </foreach>
+        </if>
+        <if test="!filter.statuses.isEmpty()">
+            and u.status_ind in
+            <foreach collection="filter.statuses" item="status" separator="," open="(" close=")">
+                #{status}
+            </foreach>
+        </if>
+        <if test="!filter.productFamilies.isEmpty()">
+            and u.product_family in
+            <foreach collection="filter.productFamilies" item="productFamily" open="(" separator="," close=")">
+                #{productFamily}
+            </foreach>
+        </if>
+        <if test="null != filter.searchValue">
+            and (
+                cast(detail_id as text) like '%' || #{filter.searchValue} || '%' or
+                cast(wr_wrk_inst as text) like '%' || #{filter.searchValue} || '%' or
+                upper(work_title) like '%' || upper(#{filter.searchValue}) || '%')
+        </if>
     </sql>
 
     <select id="findByStatuses" resultMap="usageResultMap">
