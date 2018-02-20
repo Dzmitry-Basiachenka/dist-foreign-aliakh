@@ -87,4 +87,11 @@ public interface IUsageArchiveRepository {
      * @param scenarioId id of scenario for remove usages
      */
     void deleteByScenarioId(String scenarioId);
+
+    /**
+     * Updates paid information for {@link UsageDto} by detail id.
+     *
+     * @param usage {@link UsageDto} instance
+     */
+    void updatePaidInfo(UsageDto usage);
 }
