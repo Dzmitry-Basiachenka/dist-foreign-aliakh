@@ -19,6 +19,7 @@
         <typeAlias alias="Rightsholder" type="com.copyright.rup.dist.common.domain.Rightsholder"/>
         <typeAlias alias="StoredEntity" type="com.copyright.rup.dist.common.domain.StoredEntity"/>
         <typeAlias alias="Usage" type="com.copyright.rup.dist.foreign.domain.Usage"/>
+        <typeAlias alias="PaidUsage" type="com.copyright.rup.dist.foreign.domain.PaidUsage"/>
         <typeAlias alias="UsageBatch" type="com.copyright.rup.dist.foreign.domain.UsageBatch"/>
         <typeAlias alias="UsageFilter" type="com.copyright.rup.dist.foreign.domain.UsageFilter"/>
         <typeAlias alias="UsageDto" type="com.copyright.rup.dist.foreign.domain.UsageDto"/>

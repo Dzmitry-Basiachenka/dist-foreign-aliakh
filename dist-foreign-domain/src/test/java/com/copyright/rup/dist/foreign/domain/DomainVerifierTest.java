@@ -41,6 +41,7 @@ public class DomainVerifierTest {
             {UsageBatch.class},
             {Usage.class},
             {UsageDto.class},
+            {PaidUsage.class},
             {Scenario.class},
             {RightsholderTotalsHolder.class},
             {UsageAuditItem.class},

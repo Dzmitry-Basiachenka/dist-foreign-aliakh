@@ -1,0 +1,120 @@
+package com.copyright.rup.dist.foreign.domain;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.time.LocalDate;
+
+/**
+ * Represents paid usage domain object.
+ * <p>
+ * Copyright (C) 2018 copyright.com
+ * <p>
+ * Date: 02/20/18
+ *
+ * @author Darya Baraukova
+ */
+public class PaidUsage extends Usage {
+
+    private String checkNumber;
+    private LocalDate checkDate;
+    private String cccEventId;
+    private String distributionName;
+    private LocalDate distributionDate;
+    private LocalDate periodEndDate;
+
+    public String getCheckNumber() {
+        return checkNumber;
+    }
+
+    public void setCheckNumber(String checkNumber) {
+        this.checkNumber = checkNumber;
+    }
+
+    public LocalDate getCheckDate() {
+        return checkDate;
+    }
+
+    public void setCheckDate(LocalDate checkDate) {
+        this.checkDate = checkDate;
+    }
+
+    public String getCccEventId() {
+        return cccEventId;
+    }
+
+    public void setCccEventId(String cccEventId) {
+        this.cccEventId = cccEventId;
+    }
+    public String getDistributionName() {
+        return distributionName;
+    }
+
+    public void setDistributionName(String distributionName) {
+        this.distributionName = distributionName;
+    }
+
+    public LocalDate getDistributionDate() {
+        return distributionDate;
+    }
+
+    public void setDistributionDate(LocalDate distributionDate) {
+        this.distributionDate = distributionDate;
+    }
+
+    public LocalDate getPeriodEndDate() {
+        return periodEndDate;
+    }
+
+    public void setPeriodEndDate(LocalDate periodEndDate) {
+        this.periodEndDate = periodEndDate;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (null == obj || this.getClass() != obj.getClass()) {
+            return false;
+        }
+        PaidUsage that = (PaidUsage) obj;
+        return new EqualsBuilder()
+            .appendSuper(super.equals(obj))
+            .append(this.checkNumber, that.checkNumber)
+            .append(this.checkDate, that.checkDate)
+            .append(this.cccEventId, that.cccEventId)
+            .append(this.distributionName, that.distributionName)
+            .append(this.distributionDate, that.distributionDate)
+            .append(this.periodEndDate, that.periodEndDate)
+            .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+            .appendSuper(super.hashCode())
+            .append(checkNumber)
+            .append(checkDate)
+            .append(cccEventId)
+            .append(distributionName)
+            .append(distributionDate)
+            .append(periodEndDate)
+            .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+            .appendSuper(super.toString())
+            .append("checkNumber", checkNumber)
+            .append("checkDate", checkDate)
+            .append("cccEventId", cccEventId)
+            .append("distributionName", distributionName)
+            .append("distributionDate", distributionDate)
+            .append("periodEndDate", periodEndDate)
+            .toString();
+    }
+}

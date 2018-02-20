@@ -6,6 +6,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -270,9 +272,13 @@ public class UsageArchiveRepositoryIntegrationTest {
                 1000002859L, null, null, null);
         assertTrue(CollectionUtils.isNotEmpty(usages));
         assertEquals(1, usages.size());
-        UsageDto paidUsage = usages.get(0);
-        veridyPaidUsage(paidUsage, UsageStatusEnum.LOCKED, 1000002859L, null, null, null, null, null, null);
-        paidUsage.setPayeeAccountNumber(1000005413L);
+        UsageDto usage = usages.get(0);
+        veridyPaidUsage(usage, UsageStatusEnum.LOCKED, 1000002859L, null, null, null, null, null, null);
+        PaidUsage paidUsage = new PaidUsage();
+        Rightsholder payee = new Rightsholder();
+        payee.setAccountNumber(1000005413L);
+        paidUsage.setPayee(payee);
+        paidUsage.setId("7241b7e0-6ab8-4483-896d-fd485c574293");
         paidUsage.setCheckNumber("578945");
         paidUsage.setCheckDate(PAID_DATE);
         paidUsage.setCccEventId("53256");
@@ -286,8 +292,8 @@ public class UsageArchiveRepositoryIntegrationTest {
                 1000002859L, null, null, null);
         assertTrue(CollectionUtils.isNotEmpty(usages));
         assertEquals(1, usages.size());
-        paidUsage = usages.get(0);
-        veridyPaidUsage(paidUsage, UsageStatusEnum.PAID, 1000005413L, "578945", PAID_DATE, "53256", "FDA March 17",
+        usage = usages.get(0);
+        veridyPaidUsage(usage, UsageStatusEnum.PAID, 1000005413L, "578945", PAID_DATE, "53256", "FDA March 17",
             PAID_DATE, PAID_DATE);
     }
 
