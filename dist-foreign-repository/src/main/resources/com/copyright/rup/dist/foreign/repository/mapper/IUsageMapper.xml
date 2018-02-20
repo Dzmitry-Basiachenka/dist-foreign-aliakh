@@ -41,6 +41,8 @@
         <result property="checkDate" column="check_date"/>
         <result property="cccEventId" column="ccc_event_id"/>
         <result property="distributionName" column="distribution_name"/>
+        <result property="distributionDate" column="distribution_date"/>
+        <result property="periodEndDate" column="period_end_date"/>
     </resultMap>
 
     <resultMap id="usageAmountResultMap" type="Usage" extends="StoredEntityMapper.storedEntityResult">

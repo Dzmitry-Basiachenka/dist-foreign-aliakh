@@ -57,6 +57,8 @@ public class UsageDto extends StoredEntity<String> {
     private LocalDate checkDate;
     private String cccEventId;
     private String distributionName;
+    private LocalDate distributionDate;
+    private LocalDate periodEndDate;
 
     public Long getDetailId() {
         return detailId;
@@ -329,6 +331,22 @@ public class UsageDto extends StoredEntity<String> {
         this.distributionName = distributionName;
     }
 
+    public LocalDate getDistributionDate() {
+        return distributionDate;
+    }
+
+    public void setDistributionDate(LocalDate distributionDate) {
+        this.distributionDate = distributionDate;
+    }
+
+    public LocalDate getPeriodEndDate() {
+        return periodEndDate;
+    }
+
+    public void setPeriodEndDate(LocalDate periodEndDate) {
+        this.periodEndDate = periodEndDate;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -374,6 +392,8 @@ public class UsageDto extends StoredEntity<String> {
             .append(this.checkDate, that.checkDate)
             .append(this.cccEventId, that.cccEventId)
             .append(this.distributionName, that.distributionName)
+            .append(this.distributionDate, that.distributionDate)
+            .append(this.periodEndDate, that.periodEndDate)
             .isEquals();
     }
 
@@ -415,6 +435,8 @@ public class UsageDto extends StoredEntity<String> {
             .append(checkDate)
             .append(cccEventId)
             .append(distributionName)
+            .append(distributionDate)
+            .append(periodEndDate)
             .toHashCode();
     }
 
@@ -456,6 +478,8 @@ public class UsageDto extends StoredEntity<String> {
             .append("checkDate", checkDate)
             .append("cccEventId", cccEventId)
             .append("distributionName", distributionName)
+            .append("distributionDate", distributionDate)
+            .append("periodEndDate", periodEndDate)
             .toString();
     }
 }

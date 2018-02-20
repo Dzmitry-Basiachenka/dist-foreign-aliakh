@@ -92,7 +92,13 @@
     <select id="findByScenarioIdAndRhAccountNumber" parameterType="map" resultMap="IUsageMapper.usageDtoResultMap">
         select
             u.df_usage_archive_uid,
-            <include refid="IUsageMapper.usageDtoColumns"/>
+            <include refid="IUsageMapper.usageDtoColumns"/>,
+            u.check_number,
+            u.check_date,
+            u.ccc_event_id,
+            u.distribution_name,
+            u.distribution_date,
+            u.period_end_date
         from ${schema}.df_usage_archive u
         join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
@@ -145,4 +151,18 @@
         delete from ${schema}.df_usage_archive
         where df_scenario_uid = #{scenarioId}
     </delete>
+
+    <update id="updatePaidInfo" parameterType="UsageDto">
+        update ${schema}.df_usage_archive
+        set payee_account_number = #{payeeAccountNumber},
+            check_number = #{checkNumber},
+            check_date = #{checkDate},
+            status_ind = #{status},
+            ccc_event_id = #{cccEventId},
+            distribution_name = #{distributionName},
+            distribution_date = #{distributionDate},
+            period_end_date = #{periodEndDate},
+            <include refid="StoredEntityMapper.update"/>
+        where detail_id = #{detailId}
+    </update>
 </mapper>

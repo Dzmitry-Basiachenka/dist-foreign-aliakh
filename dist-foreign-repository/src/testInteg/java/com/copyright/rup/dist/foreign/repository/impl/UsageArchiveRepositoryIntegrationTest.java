@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
@@ -13,6 +14,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
 import com.copyright.rup.dist.foreign.repository.api.Sort.Direction;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -66,6 +68,7 @@ public class UsageArchiveRepositoryIntegrationTest {
     private static final String AUTHOR = "Author";
     private static final BigDecimal REPORTED_VALUE = new BigDecimal("11.25");
     private static final LocalDate PUBLICATION_DATE = LocalDate.of(2016, 11, 3);
+    private static final LocalDate PAID_DATE = LocalDate.of(2016, 11, 3);
     private static final Long DETAIL_ID = 12345L;
     private static final Integer NUMBER_OF_COPIES = 155;
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
@@ -258,6 +261,48 @@ public class UsageArchiveRepositoryIntegrationTest {
             "John Wiley & Sons - Books,IEEE,09/10/2013,250232,9900.00,67874.8000000000,21720.0000000000," +
             "46154.8000000000,32.0,Doc Del,2013,2017,Philippe de Mézières", bufferedReader.readLine());
         assertNull(bufferedReader.readLine());
+    }
+
+    @Test
+    public void testUpdatePaidInfo() {
+        List<UsageDto> usages =
+            usageArchiveRepository.findByScenarioIdAndRhAccountNumber("98caae9b-2f20-4c6d-b2af-3190a1115c48",
+                1000002859L, null, null, null);
+        assertTrue(CollectionUtils.isNotEmpty(usages));
+        assertEquals(1, usages.size());
+        UsageDto paidUsage = usages.get(0);
+        veridyPaidUsage(paidUsage, UsageStatusEnum.LOCKED, 1000002859L, null, null, null, null, null, null);
+        paidUsage.setPayeeAccountNumber(1000005413L);
+        paidUsage.setCheckNumber("578945");
+        paidUsage.setCheckDate(PAID_DATE);
+        paidUsage.setCccEventId("53256");
+        paidUsage.setDistributionName("FDA March 17");
+        paidUsage.setDistributionDate(PAID_DATE);
+        paidUsage.setPeriodEndDate(PAID_DATE);
+        paidUsage.setStatus(UsageStatusEnum.PAID);
+        usageArchiveRepository.updatePaidInfo(paidUsage);
+        usages =
+            usageArchiveRepository.findByScenarioIdAndRhAccountNumber("98caae9b-2f20-4c6d-b2af-3190a1115c48",
+                1000002859L, null, null, null);
+        assertTrue(CollectionUtils.isNotEmpty(usages));
+        assertEquals(1, usages.size());
+        paidUsage = usages.get(0);
+        veridyPaidUsage(paidUsage, UsageStatusEnum.PAID, 1000005413L, "578945", PAID_DATE, "53256", "FDA March 17",
+            PAID_DATE, PAID_DATE);
+    }
+
+    private void veridyPaidUsage(UsageDto paidUsage, UsageStatusEnum status, Long payeeAccountNumber,
+                                 String checkNumber, LocalDate checkDate, String cccEventId, String distName,
+                                 LocalDate distDate, LocalDate periodEndDate) {
+        assertEquals(5423214888L, paidUsage.getDetailId(), 0);
+        assertEquals(status, paidUsage.getStatus());
+        assertEquals(payeeAccountNumber, paidUsage.getPayeeAccountNumber(), 0);
+        assertEquals(checkNumber, paidUsage.getCheckNumber());
+        assertEquals(checkDate, paidUsage.getCheckDate());
+        assertEquals(cccEventId, paidUsage.getCccEventId());
+        assertEquals(distName, paidUsage.getDistributionName());
+        assertEquals(distDate, paidUsage.getDistributionDate());
+        assertEquals(periodEndDate, paidUsage.getPeriodEndDate());
     }
 
     private void verifySearch(String searchValue, int expectedSize) {

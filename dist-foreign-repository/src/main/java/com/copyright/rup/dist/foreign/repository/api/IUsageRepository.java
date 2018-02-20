@@ -257,8 +257,8 @@ public interface IUsageRepository {
     /**
      * Updates status of {@link Usage}s based on set of {@link Usage} identifiers.
      *
-     * @param usageIds  set of usages identifier
-     * @param status    instance of {@link UsageStatusEnum}
+     * @param usageIds set of usages identifier
+     * @param status   instance of {@link UsageStatusEnum}
      */
     void updateStatus(Set<String> usageIds, UsageStatusEnum status);
 
