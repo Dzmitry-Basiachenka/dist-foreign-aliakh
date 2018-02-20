@@ -51,8 +51,8 @@ public class RmsIntegrationServiceTest {
         rmsService = createMock(IRmsService.class);
         rmsRightsAssignmentService = createMock(IRmsRightsAssignmentService.class);
         rmsIntegrationService = new RmsIntegrationService();
-        Whitebox.setInternalState(rmsIntegrationService, IRmsService.class, rmsService);
-        Whitebox.setInternalState(rmsIntegrationService, IRmsRightsAssignmentService.class, rmsRightsAssignmentService);
+        Whitebox.setInternalState(rmsIntegrationService, "rmsService", rmsService);
+        Whitebox.setInternalState(rmsIntegrationService, "rmsRightsAssignmentService", rmsRightsAssignmentService);
     }
 
     @Test
