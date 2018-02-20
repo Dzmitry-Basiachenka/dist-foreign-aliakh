@@ -33,6 +33,8 @@ dependencies {
     testCompile("com.copyright.rup.dist.common:dist-common-test:${distCommonVersion}")
     testCompile("org.apache.commons:commons-text:${commonsTextVersion}")
 
+    testRuntime("cglib:cglib-nodep:${cglibNodepVersion}")
+
     testUiCompile("com.copyright.rup.vaadin:rup-vaadin-test:${rupVaadinVersion}")
     testUiCompile project(path: ":dist-foreign-repository", configuration: "testIntegRuntime")
     testUiRuntime("org.springframework:spring-test:${rupJava.standardDependencies.spring.version}")
