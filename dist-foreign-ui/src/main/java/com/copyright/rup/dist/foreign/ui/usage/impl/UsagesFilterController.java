@@ -4,6 +4,7 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
+import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
@@ -30,9 +31,10 @@ public class UsagesFilterController extends CommonController<IUsagesFilterWidget
 
     @Autowired
     private IUsageBatchService usageBatchService;
-
     @Autowired
     private IRightsholderService rightsholderService;
+    @Autowired
+    private IUsageService usageService;
 
     @Override
     public List<UsageBatch> getUsageBatchesNotIncludedIntoScenario() {
@@ -42,6 +44,11 @@ public class UsagesFilterController extends CommonController<IUsagesFilterWidget
     @Override
     public List<Rightsholder> getRros() {
         return rightsholderService.getRros();
+    }
+
+    @Override
+    public List<String> getProductFamilies() {
+        return usageService.getProductFamilies();
     }
 
     @Override

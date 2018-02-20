@@ -333,12 +333,12 @@ public class UsageService implements IUsageService {
 
     @Override
     public List<String> getProductFamilies() {
-        return usageRepository.findProductFamilies();
+        return usageRepository.findProductFamiliesForFilter();
     }
 
     @Override
     public List<String> getProductFamiliesForAudit() {
-        return usageRepository.findProductFamiliesForAudit();
+        return usageRepository.findProductFamiliesForAuditFilter();
     }
 
     private long updateWorkFoundUsagesRightsholders(List<Usage> usages) {

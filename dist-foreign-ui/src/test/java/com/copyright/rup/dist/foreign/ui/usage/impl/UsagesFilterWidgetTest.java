@@ -76,7 +76,8 @@ public class UsagesFilterWidgetTest {
 
     @Test
     public void testInit() {
-        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
+        expectGetFiscalYearsCall();
+        expectGetProductFamiliesCall();
         replay(usagesFilterController);
         assertSame(widget, widget.init());
         assertEquals(2, widget.getComponentCount());
@@ -88,7 +89,9 @@ public class UsagesFilterWidgetTest {
 
     @Test
     public void testApplyFilter() {
-        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).times(2);
+        expectGetFiscalYearsCall();
+        expectGetProductFamiliesCall();
+        expectGetFiscalYearsCall();
         replay(usagesFilterController);
         widget.init();
         widget.clearFilter();
@@ -111,7 +114,8 @@ public class UsagesFilterWidgetTest {
 
     @Test
     public void testFilterChangedEmptyFilter() {
-        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
+        expectGetFiscalYearsCall();
+        expectGetProductFamiliesCall();
         replay(usagesFilterController);
         widget.init();
         Button applyButton = getApplyButton();
@@ -123,7 +127,8 @@ public class UsagesFilterWidgetTest {
 
     @Test
     public void testGetController() {
-        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
+        expectGetFiscalYearsCall();
+        expectGetProductFamiliesCall();
         replay(usagesFilterController);
         widget.init();
         UsagesFilterController controller = new UsagesFilterController();
@@ -134,21 +139,29 @@ public class UsagesFilterWidgetTest {
 
     @Test
     public void testClearFilter() {
-        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).times(2);
+        expectGetFiscalYearsCall();
+        expectGetProductFamiliesCall();
+        expectGetFiscalYearsCall();
         replay(usagesFilterController);
         widget.init();
         Button applyButton = getApplyButton();
         assertTrue(widget.getFilter().getRhAccountNumbers().isEmpty());
         assertTrue(widget.getAppliedFilter().getRhAccountNumbers().isEmpty());
-        Set<Long> accountNumbers = Sets.newHashSet(ACCOUNT_NUMBER);
-        widget.getFilter().setRhAccountNumbers(accountNumbers);
+        assertTrue(widget.getFilter().getProductFamilies().isEmpty());
+        assertTrue(widget.getAppliedFilter().getProductFamilies().isEmpty());
+        widget.getFilter().setRhAccountNumbers(Sets.newHashSet(ACCOUNT_NUMBER));
+        widget.getFilter().setProductFamilies(Sets.newHashSet("FAS", "NTS"));
         applyButton.setEnabled(true);
         applyButton.click();
         assertFalse(widget.getFilter().getRhAccountNumbers().isEmpty());
         assertFalse(widget.getAppliedFilter().getRhAccountNumbers().isEmpty());
+        assertFalse(widget.getFilter().getProductFamilies().isEmpty());
+        assertFalse(widget.getAppliedFilter().getProductFamilies().isEmpty());
         widget.clearFilter();
         assertTrue(widget.getFilter().getRhAccountNumbers().isEmpty());
         assertTrue(widget.getAppliedFilter().getRhAccountNumbers().isEmpty());
+        assertTrue(widget.getFilter().getProductFamilies().isEmpty());
+        assertTrue(widget.getAppliedFilter().getProductFamilies().isEmpty());
         assertFalse(applyButton.isEnabled());
         LocalDateWidget localDateWidget =
             Whitebox.getInternalState(widget, "paymentDateWidget", UsagesFilterWidget.class);
@@ -162,7 +175,8 @@ public class UsagesFilterWidgetTest {
     public void verifyApplyButtonClickListener() {
         mockStatic(Windows.class);
         ClickEvent clickEvent = createMock(ClickEvent.class);
-        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
+        expectGetFiscalYearsCall();
+        expectGetProductFamiliesCall();
         Windows.showNotificationWindow("Apply filter clicked");
         expectLastCall().once();
         replay(clickEvent, Windows.class, usagesFilterController);
@@ -175,7 +189,9 @@ public class UsagesFilterWidgetTest {
     @Test
     public void verifyButtonClickListener() {
         ClickEvent clickEvent = createMock(ClickEvent.class);
-        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).times(2);
+        expectGetFiscalYearsCall();
+        expectGetProductFamiliesCall();
+        expectGetFiscalYearsCall();
         replay(clickEvent, usagesFilterController);
         widget.init();
         Set<Long> accountNumbers = Sets.newHashSet(ACCOUNT_NUMBER);
@@ -194,15 +210,16 @@ public class UsagesFilterWidgetTest {
     private void verifyFiltersLayout(Component layout) {
         assertTrue(layout instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) layout;
-        assertEquals(6, verticalLayout.getComponentCount());
+        assertEquals(7, verticalLayout.getComponentCount());
         verifyFiltersLabel(verticalLayout.getComponent(0));
-        verifyItemsFilterLayout(verticalLayout.getComponent(1), "Batches");
-        verifyItemsFilterLayout(verticalLayout.getComponent(2), "RROs");
-        verifyDateWidget(verticalLayout.getComponent(3));
-        verifyStatusComboboxComponent(verticalLayout.getComponent(4), Lists.newArrayList(UsageStatusEnum.NEW,
+        verifyItemsFilterLayout(verticalLayout.getComponent(1), "Product Families");
+        verifyItemsFilterLayout(verticalLayout.getComponent(2), "Batches");
+        verifyItemsFilterLayout(verticalLayout.getComponent(3), "RROs");
+        verifyDateWidget(verticalLayout.getComponent(4));
+        verifyStatusComboboxComponent(verticalLayout.getComponent(5), Lists.newArrayList(UsageStatusEnum.NEW,
             UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.SENT_FOR_RA,
             UsageStatusEnum.ELIGIBLE));
-        verifyFiscalYearComboboxComponent(verticalLayout.getComponent(5), Collections.singletonList(FISCAL_YEAR));
+        verifyFiscalYearComboboxComponent(verticalLayout.getComponent(6), Collections.singletonList(FISCAL_YEAR));
     }
 
     private void verifyFiltersLabel(Component component) {
@@ -223,7 +240,6 @@ public class UsagesFilterWidgetTest {
         assertEquals(2, button.getListeners(Button.ClickEvent.class).size());
         assertTrue(button.isDisableOnClick());
         String buttonStyleName = button.getStyleName();
-        assertTrue(StringUtils.contains(buttonStyleName, buttonCaption));
         assertTrue(StringUtils.contains(buttonStyleName, BaseTheme.BUTTON_LINK));
         assertFalse(iterator.hasNext());
     }
@@ -277,5 +293,17 @@ public class UsagesFilterWidgetTest {
 
     private Button getApplyButton() {
         return Whitebox.getInternalState(widget, "applyButton", UsagesFilterWidget.class);
+    }
+
+    private void expectGetFiscalYearsCall() {
+        expect(usagesFilterController.getFiscalYears())
+            .andReturn(Collections.singletonList(FISCAL_YEAR))
+            .once();
+    }
+
+    private void expectGetProductFamiliesCall() {
+        expect(usagesFilterController.getProductFamilies())
+            .andReturn(Collections.singletonList("FAS"))
+            .once();
     }
 }

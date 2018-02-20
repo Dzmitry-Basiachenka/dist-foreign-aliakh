@@ -466,11 +466,11 @@ public class UsageRepositoryIntegrationTest {
         EXECUTOR_SERVICE.execute(() -> usageRepository.writeUsagesCsvReport(usageFilter, outputStream));
         BufferedReader bufferedReader =
             new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-        assertEquals("Detail ID,Detail Status,Usage Batch Name,Fiscal Year,RRO Account #,RRO Name,Payment Date,Title," +
-                "Article,Standard Number,Wr Wrk Inst,RH Account #,RH Name,Publisher,Pub Date,Number of Copies," +
-                "Reported value,Amt in USD,Gross Amt in USD,Market,Market Period From,Market Period To,Author",
-            bufferedReader.readLine());
-        assertEquals("6997788888,ELIGIBLE,CADRA_11Dec16,FY2017,7000813806," +
+        assertEquals("Detail ID,Detail Status,Product Family,Usage Batch Name,Fiscal Year,RRO Account #,RRO Name," +
+            "Payment Date,Title,Article,Standard Number,Wr Wrk Inst,RH Account #,RH Name,Publisher," +
+            "Pub Date,Number of Copies,Reported value,Amt in USD,Gross Amt in USD,Market,Market Period From," +
+            "Market Period To,Author", bufferedReader.readLine());
+        assertEquals("6997788888,ELIGIBLE,FAS,CADRA_11Dec16,FY2017,7000813806," +
             "\"CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil\",01/11/2017," +
             "\"2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA\"," +
             "Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle,1008902112377654XX," +
@@ -487,10 +487,10 @@ public class UsageRepositoryIntegrationTest {
         EXECUTOR_SERVICE.execute(() -> usageRepository.writeUsagesCsvReport(new UsageFilter(), outputStream));
         BufferedReader bufferedReader =
             new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-        assertEquals("Detail ID,Detail Status,Usage Batch Name,Fiscal Year,RRO Account #,RRO Name,Payment Date,Title," +
-                "Article,Standard Number,Wr Wrk Inst,RH Account #,RH Name,Publisher,Pub Date,Number of Copies," +
-                "Reported value,Amt in USD,Gross Amt in USD,Market,Market Period From,Market Period To,Author",
-            bufferedReader.readLine());
+        assertEquals("Detail ID,Detail Status,Product Family,Usage Batch Name,Fiscal Year,RRO Account #,RRO Name," +
+            "Payment Date,Title,Article,Standard Number,Wr Wrk Inst,RH Account #,RH Name,Publisher,Pub Date," +
+            "Number of Copies,Reported value,Amt in USD,Gross Amt in USD,Market,Market Period From," +
+            "Market Period To,Author", bufferedReader.readLine());
         assertNull(bufferedReader.readLine());
     }
 
@@ -761,14 +761,14 @@ public class UsageRepositoryIntegrationTest {
         BufferedReader bufferedReader =
             new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
         assertEquals("Detail ID,Detail Status,Usage Batch Name,Payment Date,RH Account #,RH Name,Wr Wrk Inst,Title," +
-            "Standard Number,Amt in USD,Service Fee %,Scenario Name,Check #,Check Date,Event ID,Dist. Name",
+                "Standard Number,Amt in USD,Service Fee %,Scenario Name,Check #,Check Date,Event ID,Dist. Name",
             bufferedReader.readLine());
         assertEquals("5423214888,PAID,Paid batch,02/12/2021,1000002859,John Wiley & Sons - Books,243904752," +
             "100 ROAD MOVIES,1008902112317555XX,1000.0000000000,16.0,Paid Scenario,578945,03/15/2017,53256," +
             "FDA March 17", bufferedReader.readLine());
         assertEquals("6997788885,ELIGIBLE,AccessCopyright_11Dec16,08/16/2018,1000002859," +
-            "John Wiley & Sons - Books,244614835,15th International Conference on Environmental Degradation of " +
-            "Materials in Nuclear Power Systems Water Reactors,1008902002377655XX,35000.0000000000,0.0,,,,,",
+                "John Wiley & Sons - Books,244614835,15th International Conference on Environmental Degradation of " +
+                "Materials in Nuclear Power Systems Water Reactors,1008902002377655XX,35000.0000000000,0.0,,,,,",
             bufferedReader.readLine());
         assertNull(bufferedReader.readLine());
     }
@@ -781,7 +781,7 @@ public class UsageRepositoryIntegrationTest {
         BufferedReader bufferedReader =
             new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
         assertEquals("Detail ID,Detail Status,Usage Batch Name,Payment Date,RH Account #,RH Name,Wr Wrk Inst,Title," +
-            "Standard Number,Amt in USD,Service Fee %,Scenario Name,Check #,Check Date,Event ID,Dist. Name",
+                "Standard Number,Amt in USD,Service Fee %,Scenario Name,Check #,Check Date,Event ID,Dist. Name",
             bufferedReader.readLine());
         assertNull(bufferedReader.readLine());
     }
@@ -898,16 +898,16 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindProductFamilies() {
-        List<String> productFamilies = usageRepository.findProductFamilies();
+    public void testFindProductFamiliesForFilter() {
+        List<String> productFamilies = usageRepository.findProductFamiliesForFilter();
         assertEquals(2, CollectionUtils.size(productFamilies));
         assertEquals(PRODUCT_FAMILY, productFamilies.get(0));
         assertEquals("NTS", productFamilies.get(1));
     }
 
     @Test
-    public void testFindProductFamiliesForAudit() {
-        List<String> productFamilies = usageRepository.findProductFamiliesForAudit();
+    public void testFindProductFamiliesForAuditFilter() {
+        List<String> productFamilies = usageRepository.findProductFamiliesForAuditFilter();
         assertEquals(2, CollectionUtils.size(productFamilies));
         assertEquals(PRODUCT_FAMILY, productFamilies.get(0));
         assertEquals("NTS", productFamilies.get(1));

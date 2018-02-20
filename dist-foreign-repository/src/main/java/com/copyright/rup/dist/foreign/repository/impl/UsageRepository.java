@@ -298,12 +298,12 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public List<String> findProductFamilies() {
-        return selectList("IUsageMapper.findProductFamilies");
+    public List<String> findProductFamiliesForFilter() {
+        return selectList("IUsageMapper.findProductFamiliesForFilter", UsageStatusEnum.LOCKED);
     }
 
     @Override
-    public List<String> findProductFamiliesForAudit() {
-        return selectList("IUsageMapper.findProductFamiliesForAudit");
+    public List<String> findProductFamiliesForAuditFilter() {
+        return selectList("IUsageMapper.findProductFamiliesForAuditFilter");
     }
 }

@@ -28,6 +28,7 @@ import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.ui.component.lazytable.IBeanLoader;
 import com.copyright.rup.vaadin.ui.component.lazytable.LazyTable;
 
+import com.google.common.collect.Lists;
 import com.vaadin.server.Extension;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
@@ -264,45 +265,23 @@ public class UsagesWidgetTest {
     }
 
     private void verifyTable(Table table) {
-        assertArrayEquals(new Object[]{DETAIL_ID_PROPERTY, "status", "batchName", "fiscalYear", "rroAccountNumber",
-            "rroName", "paymentDate", "workTitle", "article", "standardNumber", "wrWrkInst", "rhAccountNumber",
-            "rhName", "publisher", "publicationDate", "numberOfCopies", REPORTED_VALUE_PROPERTY,
+        assertArrayEquals(new Object[]{DETAIL_ID_PROPERTY, "status", "productFamily", "batchName", "fiscalYear",
+            "rroAccountNumber", "rroName", "paymentDate", "workTitle", "article", "standardNumber", "wrWrkInst",
+            "rhAccountNumber", "rhName", "publisher", "publicationDate", "numberOfCopies", REPORTED_VALUE_PROPERTY,
             GROSS_AMOUNT_PROPERTY, BATCH_GROSS_AMOUNT_PROPERTY, "market", "marketPeriodFrom", "marketPeriodTo",
             "author"}, table.getVisibleColumns());
-        assertArrayEquals(
-            new Object[]{"Detail ID", "Detail Status", "Usage Batch Name", "Fiscal Year", "RRO Account #",
-                "RRO Name", "Payment Date", "Title", "Article", "Standard Number", "Wr Wrk Inst", "RH Account #",
-                "RH Name", "Publisher", "Pub Date", "Number of Copies", "Reported value", "Amt in USD",
-                "Gross Amt in USD", "Market", "Market Period From", "Market Period To", "Author"},
+        assertArrayEquals(new Object[]{"Detail ID", "Detail Status", "Product Family", "Usage Batch Name",
+                "Fiscal Year", "RRO Account #", "RRO Name", "Payment Date", "Title", "Article", "Standard Number",
+                "Wr Wrk Inst", "RH Account #", "RH Name", "Publisher", "Pub Date", "Number of Copies", "Reported value",
+                "Amt in USD", "Gross Amt in USD", "Market", "Market Period From", "Market Period To", "Author"},
             table.getColumnHeaders());
-        Collection<?> containerPropertyIds = table.getContainerPropertyIds();
-
-        assertTrue(containerPropertyIds.contains("id"));
-        assertTrue(containerPropertyIds.contains(DETAIL_ID_PROPERTY));
-        assertTrue(containerPropertyIds.contains("batchName"));
-        assertTrue(containerPropertyIds.contains("fiscalYear"));
-        assertTrue(containerPropertyIds.contains("rroAccountNumber"));
-        assertTrue(containerPropertyIds.contains("rroName"));
-        assertTrue(containerPropertyIds.contains("paymentDate"));
-        assertTrue(containerPropertyIds.contains("workTitle"));
-        assertTrue(containerPropertyIds.contains("article"));
-        assertTrue(containerPropertyIds.contains("standardNumber"));
-        assertTrue(containerPropertyIds.contains("wrWrkInst"));
-        assertTrue(containerPropertyIds.contains("rhAccountNumber"));
-        assertTrue(containerPropertyIds.contains("rhName"));
-        assertTrue(containerPropertyIds.contains("publisher"));
-        assertTrue(containerPropertyIds.contains("publicationDate"));
-        assertTrue(containerPropertyIds.contains("numberOfCopies"));
-        assertTrue(containerPropertyIds.contains(REPORTED_VALUE_PROPERTY));
-        assertTrue(containerPropertyIds.contains(GROSS_AMOUNT_PROPERTY));
-        assertTrue(containerPropertyIds.contains("market"));
-        assertTrue(containerPropertyIds.contains("marketPeriodFrom"));
-        assertTrue(containerPropertyIds.contains("marketPeriodTo"));
-        assertTrue(containerPropertyIds.contains("author"));
-        assertTrue(containerPropertyIds.contains("status"));
+        assertTrue(CollectionUtils.containsAll(table.getContainerPropertyIds(), Lists.newArrayList("id",
+            DETAIL_ID_PROPERTY, "productFamily", "batchName", "fiscalYear", "rroAccountNumber", "rroName",
+            "paymentDate", "workTitle", "article", "standardNumber", "wrWrkInst", "rhAccountNumber", "rhName",
+            "publisher", "publicationDate", "numberOfCopies", REPORTED_VALUE_PROPERTY, GROSS_AMOUNT_PROPERTY, "market",
+            "marketPeriodFrom", "author", "status")));
         assertTrue(table.isColumnCollapsingAllowed());
         assertFalse(table.isColumnCollapsible(DETAIL_ID_PROPERTY));
-
         assertEquals(135, table.getColumnWidth("rroName"));
         assertEquals(135, table.getColumnWidth("article"));
         assertEquals(135, table.getColumnWidth("publisher"));
@@ -314,7 +293,6 @@ public class UsagesWidgetTest {
         assertEquals(100, table.getColumnWidth(REPORTED_VALUE_PROPERTY));
         assertEquals(100, table.getColumnWidth(GROSS_AMOUNT_PROPERTY));
         assertEquals(100, table.getColumnWidth(BATCH_GROSS_AMOUNT_PROPERTY));
-
         verifyGeneratedColumns(table);
         verifySize(table);
     }

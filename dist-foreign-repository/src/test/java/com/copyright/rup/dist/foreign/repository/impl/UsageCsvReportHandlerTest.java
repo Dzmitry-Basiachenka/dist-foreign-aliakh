@@ -43,13 +43,13 @@ public class UsageCsvReportHandlerTest {
         CellProcessor[] processors = usagesCsvReportHandler.getPropertyTable().values()
             .toArray(new CellProcessor[usagesCsvReportHandler.getPropertyTable().size()]);
         assertTrue(ArrayUtils.isNotEmpty(processors));
-        assertEquals(23, processors.length);
+        assertEquals(24, processors.length);
         CellProcessor[] cellProcessors = {OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR,
-            new FiscalYearCellProcessor(), OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, DATE_CELL_PROCESSOR,
+            OPTIONAL_PROCESSOR, new FiscalYearCellProcessor(), OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR,
+            DATE_CELL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR,
+            OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, DATE_CELL_PROCESSOR, OPTIONAL_PROCESSOR,
             OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR,
-            OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, DATE_CELL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR,
-            OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR,
-            OPTIONAL_PROCESSOR};
+            OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR};
         IntStream.range(0, processors.length)
             .forEach(index -> assertEquals(cellProcessors[index].getClass(), processors[index].getClass()));
     }
@@ -59,11 +59,11 @@ public class UsageCsvReportHandlerTest {
         String[] headers = usagesCsvReportHandler.getPropertyTable().columnKeySet()
             .toArray(new String[usagesCsvReportHandler.getPropertyTable().size()]);
         assertTrue(ArrayUtils.isNotEmpty(headers));
-        assertEquals(23, headers.length);
-        assertArrayEquals(new String[]{"Detail ID", "Detail Status", "Usage Batch Name", "Fiscal Year", "RRO Account #",
-            "RRO Name", "Payment Date", "Title", "Article", "Standard Number", "Wr Wrk Inst", "RH Account #", "RH Name",
-            "Publisher", "Pub Date", "Number of Copies", "Reported value", "Amt in USD", "Gross Amt in USD", "Market",
-            "Market Period From", "Market Period To", "Author"}, headers);
+        assertEquals(24, headers.length);
+        assertArrayEquals(new String[]{"Detail ID", "Detail Status", "Product Family", "Usage Batch Name",
+            "Fiscal Year", "RRO Account #", "RRO Name", "Payment Date", "Title", "Article", "Standard Number",
+            "Wr Wrk Inst", "RH Account #", "RH Name", "Publisher", "Pub Date", "Number of Copies", "Reported value",
+            "Amt in USD", "Gross Amt in USD", "Market", "Market Period From", "Market Period To", "Author"}, headers);
     }
 
     @Test
@@ -71,8 +71,8 @@ public class UsageCsvReportHandlerTest {
         String[] nameMapping = usagesCsvReportHandler.getPropertyTable().rowKeySet()
             .toArray(new String[usagesCsvReportHandler.getPropertyTable().size()]);
         assertTrue(ArrayUtils.isNotEmpty(nameMapping));
-        assertEquals(23, nameMapping.length);
-        assertArrayEquals(new String[]{"detailId", "status", "batchName", "fiscalYear",
+        assertEquals(24, nameMapping.length);
+        assertArrayEquals(new String[]{"detailId", "status", "productFamily", "batchName", "fiscalYear",
             "rroAccountNumber", "rroName", "paymentDate", "workTitle", "article", "standardNumber", "wrWrkInst",
             "rhAccountNumber", "rhName", "publisher", "publicationDate", "numberOfCopies", "reportedValue",
             "grossAmount", "batchGrossAmount", "market", "marketPeriodFrom", "marketPeriodTo", "author",}, nameMapping);
