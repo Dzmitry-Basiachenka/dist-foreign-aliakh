@@ -27,6 +27,7 @@ import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IRmsGrantsService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.IWorkMatchingService;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvErrorResultWriter;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingResult;
 import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
@@ -89,6 +90,8 @@ public class UsageService implements IUsageService {
     private IRmsGrantsService rmsGrantsService;
     @Autowired
     private IRightsholderService rightsholderService;
+    @Autowired
+    private IWorkMatchingService workMatchingService;
 
     @Override
     public List<UsageDto> getUsages(UsageFilter filter, Pageable pageable, Sort sort) {
@@ -369,6 +372,38 @@ public class UsageService implements IUsageService {
         }
         LOGGER.info("Update paid information. Finished. UsagesCount={}, UpdatedCount={}", LogUtils.size(usages),
             updated);
+    }
+
+    @Override
+    @Transactional
+    public void findWorksAndUpdateStatuses() {
+        List<Usage> usages = usageRepository.findUsagesWithBlankWrWrkInst();
+        if (CollectionUtils.isNotEmpty(usages)) {
+            findWorksByIdno(usages);
+            findWorksByTitle(usages);
+        }
+    }
+
+    private List<Usage> findWorksByIdno(List<Usage> usages) {
+        List<Usage> matchedByIdno = workMatchingService.matchByIdno(usages);
+        if (CollectionUtils.isNotEmpty(matchedByIdno)) {
+            usageRepository.updateStatusAndWrWrkInst(matchedByIdno);
+            matchedByIdno.forEach(usage -> usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
+                String.format("Wr Wrk Inst %s was found in PI by standard number %s", usage.getWrWrkInst(),
+                    usage.getStandardNumber())));
+        }
+        return matchedByIdno;
+    }
+
+    private List<Usage> findWorksByTitle(List<Usage> usages) {
+        List<Usage> matchedByTitle = workMatchingService.matchByTitle(usages);
+        if (CollectionUtils.isNotEmpty(matchedByTitle)) {
+            usageRepository.updateStatusAndWrWrkInst(matchedByTitle);
+            matchedByTitle.forEach(usage -> usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
+                String.format("Wr Wrk Inst %s was found in PI by title '%s'", usage.getWrWrkInst(),
+                    usage.getWorkTitle())));
+        }
+        return matchedByTitle;
     }
 
     private long updateWorkFoundUsagesRightsholders(List<Usage> usages) {

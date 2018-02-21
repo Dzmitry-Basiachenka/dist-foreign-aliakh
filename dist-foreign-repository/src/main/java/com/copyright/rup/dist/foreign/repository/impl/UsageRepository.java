@@ -20,7 +20,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
-import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.perf4j.aop.Profiled;
 import org.springframework.stereotype.Repository;
@@ -305,5 +305,16 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     @Override
     public List<String> findProductFamiliesForAuditFilter() {
         return selectList("IUsageMapper.findProductFamiliesForAuditFilter");
+    }
+
+    @Override
+    public List<Usage> findUsagesWithBlankWrWrkInst() {
+        return selectList("IUsageMapper.findUsagesWithBlankWrWrkInst", UsageStatusEnum.NEW);
+    }
+
+    @Override
+    public void updateStatusAndWrWrkInst(List<Usage> usages) {
+        checkArgument(CollectionUtils.isNotEmpty(usages));
+        usages.forEach(usage -> update("IUsageMapper.updateStatusAndWrWrkInst", usage));
     }
 }

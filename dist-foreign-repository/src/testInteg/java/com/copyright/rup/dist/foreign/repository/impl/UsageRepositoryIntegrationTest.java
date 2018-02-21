@@ -125,6 +125,8 @@ public class UsageRepositoryIntegrationTest {
     private static final String USAGE_ID_8 = "b1f0b236-3ae9-4a60-9fab-61db84199dss";
     private static final String USAGE_ID_9 = "3900eea0-1231-11e8-b566-0800200c9a66";
     private static final String USAGE_ID_10 = "4dd8cdf8-ca10-422e-bdd5-3220105e6379";
+    private static final String USAGE_ID_11 = "7db6455e-5249-44db-801a-307f1c239310";
+    private static final String USAGE_ID_12 = "593c49c3-eb5b-477b-8556-f7a4725df2b3";
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
     private static final String USER_NAME = "user@copyright.com";
     private static final BigDecimal NET_AMOUNT = new BigDecimal("25.1500000000");
@@ -198,8 +200,8 @@ public class UsageRepositoryIntegrationTest {
     public void testFindByProductFamiliesFilter() {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             Collections.singleton(PRODUCT_FAMILY), null, null, null);
-        verifyUsageDtos(usageRepository.findByFilter(usageFilter, null, new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 5,
-            USAGE_ID_6, USAGE_ID_3, USAGE_ID_2, USAGE_ID_1, USAGE_ID_4);
+        verifyUsageDtos(usageRepository.findByFilter(usageFilter, null, new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 7,
+            USAGE_ID_11, USAGE_ID_12, USAGE_ID_6, USAGE_ID_3, USAGE_ID_2, USAGE_ID_1, USAGE_ID_4);
     }
 
     @Test
@@ -715,10 +717,10 @@ public class UsageRepositoryIntegrationTest {
     public void testFindForAuditByProductFamilies() {
         AuditFilter filter = new AuditFilter();
         filter.setProductFamilies(Collections.singleton(PRODUCT_FAMILY));
-        assertEquals(9, usageRepository.findCountForAudit(filter));
-        List<UsageDto> usages = usageRepository.findForAudit(filter, new Pageable(0, 10), null);
-        verifyUsageDtos(usages, 9, USAGE_ID_6, USAGE_ID_5, USAGE_ID_9, USAGE_ID_7, USAGE_ID_3, USAGE_ID_2, USAGE_ID_8,
-            USAGE_ID_1, USAGE_ID_4);
+        assertEquals(11, usageRepository.findCountForAudit(filter));
+        List<UsageDto> usages = usageRepository.findForAudit(filter, new Pageable(0, 20), null);
+        verifyUsageDtos(usages, 11, USAGE_ID_11, USAGE_ID_12, USAGE_ID_6, USAGE_ID_5, USAGE_ID_9, USAGE_ID_7,
+            USAGE_ID_3, USAGE_ID_2, USAGE_ID_8, USAGE_ID_1, USAGE_ID_4);
     }
 
     @Test
@@ -823,7 +825,7 @@ public class UsageRepositoryIntegrationTest {
             usageRepository.findByStatuses(UsageStatusEnum.WORK_FOUND, UsageStatusEnum.SENT_FOR_RA);
         assertEquals(2, CollectionUtils.size(usages));
         Usage usageSentForRa = usages.get(0);
-        assertEquals("0b0f5100-01bd-11e8-8f1a-0800200c9a66", usageSentForRa.getId());
+        assertEquals(USAGE_ID_6, usageSentForRa.getId());
         assertEquals(UsageStatusEnum.SENT_FOR_RA, usageSentForRa.getStatus());
         Usage usageWorkFound = usages.get(1);
         assertEquals("d9ca07b5-8282-4a81-9b9d-e4480f529d34", usageWorkFound.getId());
@@ -911,6 +913,23 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(2, CollectionUtils.size(productFamilies));
         assertEquals(PRODUCT_FAMILY, productFamilies.get(0));
         assertEquals("NTS", productFamilies.get(1));
+    }
+
+    @Test
+    public void testUpdateStatusAndWrWrkInst() {
+        List<Usage> usages = usageRepository.findUsagesWithBlankWrWrkInst();
+        assertEquals(2, usages.size());
+        usages.forEach(usage -> {
+            usage.setWrWrkInst(WR_WRK_INST);
+            usage.setStatus(UsageStatusEnum.WORK_FOUND);
+        });
+        usageRepository.updateStatusAndWrWrkInst(usages);
+        usages.forEach(usage -> {
+            Usage updatedUsage = usageRepository.findByDetailId(usage.getDetailId());
+            assertEquals(WR_WRK_INST, updatedUsage.getWrWrkInst());
+            assertEquals(UsageStatusEnum.WORK_FOUND, updatedUsage.getStatus());
+            assertEquals(StoredEntity.DEFAULT_USER, updatedUsage.getUpdateUser());
+        });
     }
 
     private List<UsageDto> findForAuditWithSort(AuditFilter filter, String property, boolean order) {

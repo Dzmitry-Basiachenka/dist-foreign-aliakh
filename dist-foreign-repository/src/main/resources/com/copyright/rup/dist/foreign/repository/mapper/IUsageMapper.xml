@@ -932,4 +932,22 @@
         from ${schema}.df_usage_archive
         order by product_family asc
     </select>
+
+    <select id="findUsagesWithBlankWrWrkInst" resultMap="usageResultMap">
+        select
+            df_usage_uid,
+            <include refid="usageColumns"/>
+        from ${schema}.df_usage
+        where wr_wrk_inst is null
+            and status_ind = #{status}
+    </select>
+
+    <update id="updateStatusAndWrWrkInst" parameterType="Usage">
+        update ${schema}.df_usage
+        set
+            status_ind = #{status},
+            wr_wrk_inst = #{wrWrkInst},
+            <include refid="StoredEntityMapper.update"/>
+        where df_usage_uid = #{id}
+    </update>
 </mapper>

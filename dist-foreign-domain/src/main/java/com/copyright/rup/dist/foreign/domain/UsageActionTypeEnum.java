@@ -17,6 +17,11 @@ public enum UsageActionTypeEnum {
     LOADED,
 
     /**
+     * Action type for successfully found work.
+     */
+    WORK_FOUND,
+
+    /**
      * Action type for successful finding rightsholder of {@link Usage} in RMS.
      */
     RH_FOUND,
