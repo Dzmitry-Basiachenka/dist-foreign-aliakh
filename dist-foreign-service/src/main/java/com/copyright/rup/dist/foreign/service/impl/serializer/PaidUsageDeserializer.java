@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.integration.lm.impl.serializer;
+package com.copyright.rup.dist.foreign.service.impl.serializer;
 
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.integration.util.JsonUtils;

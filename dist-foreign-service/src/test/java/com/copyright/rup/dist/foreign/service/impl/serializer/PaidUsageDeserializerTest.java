@@ -1,11 +1,11 @@
-package com.copyright.rup.dist.foreign.integration.lm.impl.serializer;
+package com.copyright.rup.dist.foreign.service.impl.serializer;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
-import com.copyright.rup.dist.foreign.integration.lm.impl.marshaller.PaidUsageUnmarshaller;
+import com.copyright.rup.dist.foreign.service.impl.marshaller.PaidUsageUnmarshaller;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
