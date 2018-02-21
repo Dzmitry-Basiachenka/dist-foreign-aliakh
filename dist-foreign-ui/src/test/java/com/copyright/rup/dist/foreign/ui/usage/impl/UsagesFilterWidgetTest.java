@@ -76,8 +76,9 @@ public class UsagesFilterWidgetTest {
 
     @Test
     public void testInit() {
-        expectGetFiscalYearsCall();
-        expectGetProductFamiliesCall();
+        expect(usagesFilterController.getFiscalYears())
+            .andReturn(Collections.singletonList(FISCAL_YEAR))
+            .once();
         replay(usagesFilterController);
         assertSame(widget, widget.init());
         assertEquals(2, widget.getComponentCount());
@@ -89,9 +90,9 @@ public class UsagesFilterWidgetTest {
 
     @Test
     public void testApplyFilter() {
-        expectGetFiscalYearsCall();
-        expectGetProductFamiliesCall();
-        expectGetFiscalYearsCall();
+        expect(usagesFilterController.getFiscalYears())
+            .andReturn(Collections.singletonList(FISCAL_YEAR))
+            .times(2);
         replay(usagesFilterController);
         widget.init();
         widget.clearFilter();
@@ -114,8 +115,9 @@ public class UsagesFilterWidgetTest {
 
     @Test
     public void testFilterChangedEmptyFilter() {
-        expectGetFiscalYearsCall();
-        expectGetProductFamiliesCall();
+        expect(usagesFilterController.getFiscalYears())
+            .andReturn(Collections.singletonList(FISCAL_YEAR))
+            .once();
         replay(usagesFilterController);
         widget.init();
         Button applyButton = getApplyButton();
@@ -127,8 +129,9 @@ public class UsagesFilterWidgetTest {
 
     @Test
     public void testGetController() {
-        expectGetFiscalYearsCall();
-        expectGetProductFamiliesCall();
+        expect(usagesFilterController.getFiscalYears())
+            .andReturn(Collections.singletonList(FISCAL_YEAR))
+            .once();
         replay(usagesFilterController);
         widget.init();
         UsagesFilterController controller = new UsagesFilterController();
@@ -139,9 +142,9 @@ public class UsagesFilterWidgetTest {
 
     @Test
     public void testClearFilter() {
-        expectGetFiscalYearsCall();
-        expectGetProductFamiliesCall();
-        expectGetFiscalYearsCall();
+        expect(usagesFilterController.getFiscalYears())
+            .andReturn(Collections.singletonList(FISCAL_YEAR))
+            .times(2);
         replay(usagesFilterController);
         widget.init();
         Button applyButton = getApplyButton();
@@ -175,8 +178,9 @@ public class UsagesFilterWidgetTest {
     public void verifyApplyButtonClickListener() {
         mockStatic(Windows.class);
         ClickEvent clickEvent = createMock(ClickEvent.class);
-        expectGetFiscalYearsCall();
-        expectGetProductFamiliesCall();
+        expect(usagesFilterController.getFiscalYears())
+            .andReturn(Collections.singletonList(FISCAL_YEAR))
+            .once();
         Windows.showNotificationWindow("Apply filter clicked");
         expectLastCall().once();
         replay(clickEvent, Windows.class, usagesFilterController);
@@ -189,9 +193,9 @@ public class UsagesFilterWidgetTest {
     @Test
     public void verifyButtonClickListener() {
         ClickEvent clickEvent = createMock(ClickEvent.class);
-        expectGetFiscalYearsCall();
-        expectGetProductFamiliesCall();
-        expectGetFiscalYearsCall();
+        expect(usagesFilterController.getFiscalYears())
+            .andReturn(Collections.singletonList(FISCAL_YEAR))
+            .times(2);
         replay(clickEvent, usagesFilterController);
         widget.init();
         Set<Long> accountNumbers = Sets.newHashSet(ACCOUNT_NUMBER);
@@ -293,17 +297,5 @@ public class UsagesFilterWidgetTest {
 
     private Button getApplyButton() {
         return Whitebox.getInternalState(widget, "applyButton", UsagesFilterWidget.class);
-    }
-
-    private void expectGetFiscalYearsCall() {
-        expect(usagesFilterController.getFiscalYears())
-            .andReturn(Collections.singletonList(FISCAL_YEAR))
-            .once();
-    }
-
-    private void expectGetProductFamiliesCall() {
-        expect(usagesFilterController.getProductFamilies())
-            .andReturn(Collections.singletonList("FAS"))
-            .once();
     }
 }

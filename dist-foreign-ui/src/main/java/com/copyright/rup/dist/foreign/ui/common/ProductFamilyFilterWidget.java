@@ -10,6 +10,7 @@ import com.copyright.rup.vaadin.widget.BaseItemsFilterWidget;
 
 import java.util.List;
 import java.util.Set;
+import java.util.function.Supplier;
 
 /**
  * Widget provides functionality for configuring items filter widget for product families.
@@ -24,16 +25,16 @@ public class ProductFamilyFilterWidget extends BaseItemsFilterWidget<String, Str
     implements IFilterWindowController<String, String> {
 
     private Set<String> selectedItemsIds;
-    private final List<String> productFamilies;
+    private final Supplier<List<String>> supplier;
 
     /**
      * Controller.
      *
-     * @param productFamilies product families
+     * @param supplier product families supplier
      */
-    public ProductFamilyFilterWidget(List<String> productFamilies) {
+    public ProductFamilyFilterWidget(Supplier<List<String>> supplier) {
         super(ForeignUi.getMessage("label.product_families"));
-        this.productFamilies = productFamilies;
+        this.supplier = supplier;
     }
 
     @Override
@@ -44,7 +45,7 @@ public class ProductFamilyFilterWidget extends BaseItemsFilterWidget<String, Str
 
     @Override
     public List<String> loadBeans() {
-        return productFamilies;
+        return supplier.get();
     }
 
     @Override

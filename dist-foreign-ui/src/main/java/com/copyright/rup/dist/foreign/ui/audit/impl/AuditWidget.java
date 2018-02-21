@@ -111,9 +111,19 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
         table = new LazyTable<>(controller, UsageBeanQuery.class);
         container = table.getContainerDataSource();
         table.setSizeFull();
+        addProperties();
+        setVisibleColumns();
+        setColumnHeaders();
+        addColumnsGenerators();
+        table.setColumnCollapsingAllowed(true);
+        VaadinUtils.addComponentStyle(table, "audit-table");
+    }
+
+    private void addProperties() {
         table.addProperty("id", String.class, false);
         table.addProperty("detailId", Long.class, true);
         table.addProperty("status", String.class, true);
+        table.addProperty("productFamily", String.class, true);
         table.addProperty("batchName", String.class, true);
         table.addProperty("paymentDate", LocalDate.class, true);
         table.addProperty("rhAccountNumber", Long.class, true);
@@ -128,12 +138,13 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
         table.addProperty("checkDate", LocalDate.class, true);
         table.addProperty("cccEventId", String.class, true);
         table.addProperty("distributionName", String.class, true);
-        table.setVisibleColumns("detailId", "status", "batchName", "paymentDate", "rhAccountNumber", "rhName",
-            "wrWrkInst", "workTitle", "standardNumber", "grossAmount", "serviceFee", "scenarioName", "checkNumber",
-            "checkDate", "cccEventId", "distributionName");
+    }
+
+    private void setColumnHeaders() {
         table.setColumnHeaders(
             ForeignUi.getMessage("table.column.detail_id"),
             ForeignUi.getMessage("table.column.usage_status"),
+            ForeignUi.getMessage("table.column.product_family"),
             ForeignUi.getMessage("table.column.batch_name"),
             ForeignUi.getMessage("table.column.payment_date"),
             ForeignUi.getMessage("table.column.rh_account_number"),
@@ -148,9 +159,27 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
             ForeignUi.getMessage("table.column.check_date"),
             ForeignUi.getMessage("table.column.event_id"),
             ForeignUi.getMessage("table.column.distribution_name"));
-        addColumnsGenerators();
-        table.setColumnCollapsingAllowed(true);
-        VaadinUtils.addComponentStyle(table, "audit-table");
+    }
+
+    private void setVisibleColumns() {
+        table.setVisibleColumns(
+            "detailId",
+            "status",
+            "productFamily",
+            "batchName",
+            "paymentDate",
+            "rhAccountNumber",
+            "rhName",
+            "wrWrkInst",
+            "workTitle",
+            "standardNumber",
+            "grossAmount",
+            "serviceFee",
+            "scenarioName",
+            "checkNumber",
+            "checkDate",
+            "cccEventId",
+            "distributionName");
     }
 
     private void addColumnsGenerators() {

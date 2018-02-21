@@ -4,6 +4,7 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
+import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterController;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
@@ -29,6 +30,8 @@ import java.util.List;
 public class AuditFilterController extends CommonController<IAuditFilterWidget> implements IAuditFilterController {
 
     @Autowired
+    private IUsageService usageService;
+    @Autowired
     private IUsageBatchService usageBatchService;
     @Autowired
     private IRightsholderService rightsholderService;
@@ -46,5 +49,10 @@ public class AuditFilterController extends CommonController<IAuditFilterWidget> 
     @Override
     protected IAuditFilterWidget instantiateWidget() {
         return new AuditFilterWidget();
+    }
+
+    @Override
+    public List<String> getProductFamilies() {
+        return usageService.getProductFamiliesForAudit();
     }
 }

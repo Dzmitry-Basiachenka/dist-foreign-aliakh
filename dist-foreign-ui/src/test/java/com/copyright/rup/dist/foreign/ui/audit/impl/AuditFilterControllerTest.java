@@ -11,7 +11,11 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
+import com.copyright.rup.dist.foreign.service.api.IUsageService;
 
+import com.google.common.collect.Lists;
+
+import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -33,12 +37,15 @@ public class AuditFilterControllerTest {
     private AuditFilterController controller;
     private IUsageBatchService usageBatchService;
     private IRightsholderService rightsholderService;
+    private IUsageService usageService;
 
     @Before
     public void setUp() {
         controller = new AuditFilterController();
         usageBatchService = createMock(IUsageBatchService.class);
         rightsholderService = createMock(IRightsholderService.class);
+        usageService = createMock(IUsageService.class);
+        Whitebox.setInternalState(controller, "usageService", usageService);
         Whitebox.setInternalState(controller, "usageBatchService", usageBatchService);
         Whitebox.setInternalState(controller, "rightsholderService", rightsholderService);
     }
@@ -64,5 +71,18 @@ public class AuditFilterControllerTest {
     @Test
     public void testInstantiateWidget() {
         assertTrue(controller.instantiateWidget() instanceof AuditFilterWidget);
+    }
+
+    @Test
+    public void testGetProductFamilies() {
+        List<String> expectedProductFamilies = Lists.newArrayList("FAS", "NTS");
+        expect(usageService.getProductFamiliesForAudit())
+            .andReturn(expectedProductFamilies)
+            .once();
+        replay(usageService);
+        List<String> productFamilies = controller.getProductFamilies();
+        assertTrue(CollectionUtils.isNotEmpty(productFamilies));
+        assertTrue(CollectionUtils.isEqualCollection(expectedProductFamilies, productFamilies));
+        verify(usageService);
     }
 }
