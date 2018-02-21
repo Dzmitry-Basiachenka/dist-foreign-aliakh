@@ -37,6 +37,11 @@ public enum UsageActionTypeEnum {
     SENT_FOR_RA,
 
     /**
+     * Action type for changing {@link Usage}'s status to {@link UsageStatusEnum#ELIGIBLE} and product family to "NTS".
+     */
+    ELIGIBLE_FOR_NTS,
+
+    /**
      * Action type for adding {@link Usage} to {@link Scenario}.
      */
     ADDED_TO_SCENARIO,

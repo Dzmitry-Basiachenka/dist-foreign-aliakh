@@ -950,4 +950,13 @@
             <include refid="StoredEntityMapper.update"/>
         where df_usage_uid = #{id}
     </update>
+
+    <update id="updateStatusAndProductFamily" parameterType="map">
+        update ${schema}.df_usage
+        set
+            status_ind = #{status},
+            product_family = #{productFamily},
+            <include refid="StoredEntityMapper.update"/>
+        where df_usage_uid = #{id}
+    </update>
 </mapper>

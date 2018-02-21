@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
 import com.copyright.rup.common.logging.RupLogUtils;
+import com.copyright.rup.dist.common.domain.BaseEntity;
 import com.copyright.rup.dist.common.integration.rest.prm.PrmRollUpService;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.AuditFilter;
@@ -32,7 +33,9 @@ import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvErrorResultWr
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingResult;
 import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
 
@@ -52,8 +55,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -377,10 +382,18 @@ public class UsageService implements IUsageService {
     @Override
     @Transactional
     public void findWorksAndUpdateStatuses() {
-        List<Usage> usages = usageRepository.findUsagesWithBlankWrWrkInst();
+        List<Usage> usages = ImmutableList.copyOf(usageRepository.findUsagesWithBlankWrWrkInst());
         if (CollectionUtils.isNotEmpty(usages)) {
-            findWorksByIdno(usages);
-            findWorksByTitle(usages);
+            List<Usage> matchedByIdno = findWorksByIdno(usages);
+            List<Usage> matchedByTitle = findWorksByTitle(usages);
+            Set<String> matchedUsagesIds = Sets.newHashSet();
+            matchedUsagesIds.addAll(matchedByIdno.stream().map(BaseEntity::getId).collect(Collectors.toSet()));
+            matchedUsagesIds.addAll(matchedByTitle.stream().map(BaseEntity::getId).collect(Collectors.toSet()));
+            List<Usage> nonMatchedUsages = Lists.newArrayList(usages)
+                .stream()
+                .filter(usage -> !matchedUsagesIds.contains(usage.getId()))
+                .collect(Collectors.toList());
+            makeUsagesEligibleForNts(ImmutableList.copyOf(nonMatchedUsages));
         }
     }
 
@@ -404,6 +417,25 @@ public class UsageService implements IUsageService {
                     usage.getWorkTitle())));
         }
         return matchedByTitle;
+    }
+
+    private void makeUsagesEligibleForNts(List<Usage> usages) {
+        makeUsagesEligibleForNts(UsageGroup.STANDARD_NUMBER.group(usages),
+            "Detail was made eligible for NTS because sum of gross amounts, " +
+                "grouped by standard number, is less than $100");
+        makeUsagesEligibleForNts(UsageGroup.WORK_TITLE.group(usages),
+            "Detail was made eligible for NTS because sum of gross amounts, " +
+                "grouped by work title, is less than $100");
+        makeUsagesEligibleForNts(UsageGroup.SELF.group(usages),
+            "Detail was made eligible for NTS because gross amount is less than $100");
+    }
+
+    private void makeUsagesEligibleForNts(List<Usage> usages, String actionReason) {
+        if (CollectionUtils.isNotEmpty(usages)) {
+            usageRepository.updateStatusAndProductFamily(usages);
+            usages.forEach(usage ->
+                usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.ELIGIBLE_FOR_NTS, actionReason));
+        }
     }
 
     private long updateWorkFoundUsagesRightsholders(List<Usage> usages) {
@@ -466,5 +498,54 @@ public class UsageService implements IUsageService {
             CalculationUtils.calculateUsdAmount(usage.getReportedValue(), conversionRate)));
         LOGGER.info(CALCULATION_FINISHED_LOG_MESSAGE, usageBatch.getName(), usageBatch.getGrossAmount(), totalAmount,
             conversionRate);
+    }
+
+    private static class UsageGroup<T> {
+
+        private static final BigDecimal GROSS_AMOUNT_LIMIT = BigDecimal.valueOf(100L);
+
+        private static final UsageGroup<String> STANDARD_NUMBER = new UsageGroup<>(
+            Usage::getStandardNumber,
+            usage -> null != usage.getStandardNumber()
+        );
+        private static final UsageGroup<String> WORK_TITLE = new UsageGroup<>(
+            Usage::getWorkTitle,
+            usage -> null == usage.getStandardNumber() && null != usage.getWorkTitle()
+        );
+        private static final UsageGroup<Usage> SELF = new UsageGroup<>(
+            usage -> usage,
+            usage -> null == usage.getStandardNumber() && null == usage.getWorkTitle()
+        );
+
+        private final Function<Usage, T> mapper;
+        private final Function<Usage, Boolean> predicate;
+
+        UsageGroup(Function<Usage, T> mapper, Function<Usage, Boolean> predicate) {
+            this.mapper = mapper;
+            this.predicate = predicate;
+        }
+
+        List<Usage> group(List<Usage> usages) {
+            Map<T, BigDecimal> valueToGrossAmount = Maps.newHashMap();
+            usages.forEach(usage -> {
+                if (predicate.apply(usage)) {
+                    T value = mapper.apply(usage);
+                    BigDecimal grossAmount = valueToGrossAmount.computeIfAbsent(value, key -> BigDecimal.ZERO);
+                    valueToGrossAmount.put(value, grossAmount.add(usage.getGrossAmount()));
+                }
+            });
+            Set<T> filteredValues = valueToGrossAmount
+                .entrySet()
+                .stream()
+                .filter(entry -> entry.getValue().compareTo(GROSS_AMOUNT_LIMIT) < 0)
+                .map(Entry::getKey)
+                .collect(Collectors.toSet());
+            return usages
+                .stream()
+                .filter(usage -> filteredValues.contains(mapper.apply(usage)))
+                .peek(usage -> usage.setStatus(UsageStatusEnum.ELIGIBLE))
+                .peek(usage -> usage.setProductFamily("NTS"))
+                .collect(Collectors.toList());
+        }
     }
 }

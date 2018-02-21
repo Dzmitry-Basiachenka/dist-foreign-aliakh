@@ -293,6 +293,13 @@ public interface IUsageRepository {
     void updateStatusAndWrWrkInst(List<Usage> usages);
 
     /**
+     * Updates {@link Usage}s status and product family.
+     *
+     * @param usages list of {@link Usage}s to update
+     */
+    void updateStatusAndProductFamily(List<Usage> usages);
+
+    /**
      * @return list of {@link Usage}s that does not have Wr Wrk Inst.
      */
     List<Usage> findUsagesWithBlankWrWrkInst();
