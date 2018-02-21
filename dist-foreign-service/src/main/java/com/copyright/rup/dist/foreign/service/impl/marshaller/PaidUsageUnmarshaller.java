@@ -1,8 +1,8 @@
-package com.copyright.rup.dist.foreign.integration.lm.impl.marshaller;
+package com.copyright.rup.dist.foreign.service.impl.marshaller;
 
 import com.copyright.rup.dist.common.integration.camel.CommonMarshaller;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
-import com.copyright.rup.dist.foreign.integration.lm.impl.serializer.PaidUsageDeserializer;
+import com.copyright.rup.dist.foreign.service.impl.serializer.PaidUsageDeserializer;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,7 +23,7 @@ import java.util.List;
  *
  * @author Darya Baraukova
  */
-@Component("df.integration.paidUsageUnmarshaller")
+@Component("df.service.paidUsageUnmarshaller")
 public class PaidUsageUnmarshaller extends CommonMarshaller {
 
     private static final TypeReference<List<PaidUsage>> TYPE_REFERENCE =
