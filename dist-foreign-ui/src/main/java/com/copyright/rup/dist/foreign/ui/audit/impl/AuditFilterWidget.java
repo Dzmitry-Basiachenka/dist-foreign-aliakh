@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.audit.impl;
 import com.copyright.rup.dist.foreign.domain.AuditFilter;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterController;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterWidget;
+import com.copyright.rup.dist.foreign.ui.common.ProductFamilyFilterWidget;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.impl.RightsholderFilterWidget;
@@ -37,6 +38,7 @@ public class AuditFilterWidget extends VerticalLayout implements IAuditFilterWid
     private StatusFilterWidget statusFilterWidget;
     private TextField cccEventIdField;
     private TextField distributionNameField;
+    private ProductFamilyFilterWidget productFamilyFilterWidget;
     private AuditFilter filter = new AuditFilter();
     private AuditFilter appliedFilter = new AuditFilter();
     private Button applyButton;
@@ -46,12 +48,13 @@ public class AuditFilterWidget extends VerticalLayout implements IAuditFilterWid
     public AuditFilterWidget init() {
         HorizontalLayout buttonsLayout = initButtonsLayout();
         initRightsholdersFilter();
+        initProductFamiliesFilter();
         initUsageBatchesFilter();
         initStatusesFilterWidget();
         initEventIdField();
         initDistributionNameField();
-        addComponents(buildFiltersHeaderLabel(), rightsholderFilterWidget, usageBatchFilterWidget, statusFilterWidget,
-            cccEventIdField, distributionNameField, buttonsLayout);
+        addComponents(buildFiltersHeaderLabel(), productFamilyFilterWidget, rightsholderFilterWidget,
+            usageBatchFilterWidget, statusFilterWidget, cccEventIdField, distributionNameField, buttonsLayout);
         setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
         setMargin(true);
         setSpacing(true);
@@ -76,6 +79,7 @@ public class AuditFilterWidget extends VerticalLayout implements IAuditFilterWid
         usageBatchFilterWidget.reset();
         rightsholderFilterWidget.reset();
         statusFilterWidget.reset();
+        productFamilyFilterWidget.reset();
         cccEventIdField.setValue(null);
         distributionNameField.setValue(null);
         filter = new AuditFilter();
@@ -85,6 +89,16 @@ public class AuditFilterWidget extends VerticalLayout implements IAuditFilterWid
     @Override
     public AuditFilter getAppliedFilter() {
         return appliedFilter;
+    }
+
+    private HorizontalLayout initProductFamiliesFilter() {
+        productFamilyFilterWidget = new ProductFamilyFilterWidget(() -> controller.getProductFamilies());
+        productFamilyFilterWidget.addFilterSaveListener(saveEvent -> {
+            filter.setProductFamilies(saveEvent.getSelectedItemsIds());
+            filterChanged();
+        });
+        VaadinUtils.addComponentStyle(productFamilyFilterWidget, "product-families-filter");
+        return productFamilyFilterWidget;
     }
 
     private void initUsageBatchesFilter() {

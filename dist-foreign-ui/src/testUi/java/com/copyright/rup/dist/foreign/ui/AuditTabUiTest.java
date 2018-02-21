@@ -35,22 +35,25 @@ import java.util.Map;
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS)
 public class AuditTabUiTest extends ForeignCommonUiTest {
 
-    private static final String[] USAGE_1 = {"6997788882", "LOCKED", "AccessCopyright_11Dec16", "09/10/2015",
-        "1000008666", "CCH", "108738286", "2001 tax legislation: law, explanation, and analysis : Economic Growth " +
-        "and Tax Relief Reconciliation Act of 2001", "1008902002377656XX", "2,500.00", "32.0", "Scenario name"};
-    private static final String[] USAGE_2 = {"6997788885", "ELIGIBLE", "CADRA_11Dec16", "01/11/2017", "1000002859",
-        "John Wiley & Sons - Books", "244614835", "15th International Conference on Environmental Degradation of " +
-        "Materials in Nuclear Power Systems Water Reactors", "1008902002377655XX", "6,000.00", "0.0",
-        StringUtils.EMPTY};
-    private static final String[] USAGE_3 = {"6997788886", "LOCKED", "AccessCopyright_11Dec16", "09/10/2015",
-        "1000002859", "John Wiley & Sons - Books", "243904752", "100 ROAD MOVIES", "1008902112377654XX", "7,500.00",
-        "32.0", "Scenario name"};
-    private static final String[] USAGE_4 = {"6997788888", "ELIGIBLE", "CADRA_11Dec16", "01/11/2017", "1000009997",
-        "IEEE - Inst of Electrical and Electronics Engrs", "180382914",
+    private static final String FAS_PRODUCT_FAMILY = "FAS";
+    private static final String FILTERS_HEADER_TEXT = "Filters";
+    private static final String FILTER_COUNTER_TEXT = "(0)";
+
+    private static final String[] USAGE_1 = {"6997788882", "LOCKED", FAS_PRODUCT_FAMILY, "AccessCopyright_11Dec16",
+        "09/10/2015", "1000008666", "CCH", "108738286", "2001 tax legislation: law, explanation, and analysis : " +
+        "Economic Growth and Tax Relief Reconciliation Act of 2001", "1008902002377656XX", "2,500.00", "32.0",
+        "Scenario name"};
+    private static final String[] USAGE_2 = {"6997788885", "ELIGIBLE", FAS_PRODUCT_FAMILY, "CADRA_11Dec16",
+        "01/11/2017", "1000002859", "John Wiley & Sons - Books", "244614835", "15th International Conference on " +
+        "Environmental Degradation of Materials in Nuclear Power Systems Water Reactors", "1008902002377655XX",
+        "6,000.00", "0.0", StringUtils.EMPTY};
+    private static final String[] USAGE_3 = {"6997788886", "LOCKED", FAS_PRODUCT_FAMILY, "AccessCopyright_11Dec16",
+        "09/10/2015", "1000002859", "John Wiley & Sons - Books", "243904752", "100 ROAD MOVIES", "1008902112377654XX",
+        "7,500.00", "32.0", "Scenario name"};
+    private static final String[] USAGE_4 = {"6997788888", "ELIGIBLE", FAS_PRODUCT_FAMILY, "CADRA_11Dec16",
+        "01/11/2017", "1000009997", "IEEE - Inst of Electrical and Electronics Engrs", "180382914",
         "2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA",
         "1008902112377654XX", "9,000.00", "0.0", StringUtils.EMPTY};
-
-    private static final String FILTERS_HEADER_TEXT = "Filters";
 
     @Test
     // Test case IDs: 4d4b48a9-63b3-460c-a353-b7773c9ff77e, 4e3b9e05-abff-442f-a7a3-00317a026988
@@ -145,6 +148,7 @@ public class AuditTabUiTest extends ForeignCommonUiTest {
         assertTableHeaderElements(auditTable,
             "Detail ID",
             "Detail Status",
+            "Product Family",
             "Usage Batch Name",
             "Payment Date",
             "RH Account #",
@@ -164,10 +168,16 @@ public class AuditTabUiTest extends ForeignCommonUiTest {
     private void verifyFiltersWidget(WebElement tabContainer) {
         WebElement filterWidget = assertWebElement(tabContainer, "audit-filter-widget");
         assertWebElement(filterWidget, HTML_DIV_TAG_NAME, FILTERS_HEADER_TEXT);
+        verifyProductFamiliesFilter(filterWidget);
         verifyRightsholdersFilter(filterWidget);
         verifyBatchesFilter(filterWidget);
         verifyStatusFilter(filterWidget);
         verifyFiltersWidgetButtons(filterWidget);
+    }
+
+    private void verifyProductFamiliesFilter(WebElement filterWidget) {
+        openProductFamiliesFilterWindow(filterWidget);
+        clickButtonAndWait(verifyFilterWindow("product-families-filter-window", "Product Families filter"), "Close");
     }
 
     private void verifyBatchesFilter(WebElement filterWidget) {
@@ -186,22 +196,29 @@ public class AuditTabUiTest extends ForeignCommonUiTest {
         clickButtonAndWait(verifyFilterWindow("status-filter-window", "Status filter"), "Close");
     }
 
+    private void openProductFamiliesFilterWindow(WebElement filterWidget) {
+        WebElement batchesFilter = assertWebElement(filterWidget, "product-families-filter");
+        assertWebElement(batchesFilter, HTML_DIV_TAG_NAME, FILTER_COUNTER_TEXT);
+        WebElement batchesFilterButton = assertWebElement(batchesFilter, HTML_SPAN_TAG_NAME, "Product Families");
+        clickElementAndWait(batchesFilterButton);
+    }
+
     private void openRightsholderFilterWindow(WebElement filterWidget) {
         WebElement rightsholdersFilter = assertWebElement(filterWidget, "audit-rightsholders-filter");
-        assertWebElement(rightsholdersFilter, HTML_DIV_TAG_NAME, "(0)");
+        assertWebElement(rightsholdersFilter, HTML_DIV_TAG_NAME, FILTER_COUNTER_TEXT);
         clickElementAndWait(assertWebElement(rightsholdersFilter, HTML_SPAN_TAG_NAME, "Rightsholders"));
     }
 
     private void openBatchesFilterWindow(WebElement filterWidget) {
         WebElement batchesFilter = assertWebElement(filterWidget, "audit-batches-filter");
-        assertWebElement(batchesFilter, HTML_DIV_TAG_NAME, "(0)");
+        assertWebElement(batchesFilter, HTML_DIV_TAG_NAME, FILTER_COUNTER_TEXT);
         WebElement batchesFilterButton = assertWebElement(batchesFilter, HTML_SPAN_TAG_NAME, "Batches");
         clickElementAndWait(batchesFilterButton);
     }
 
     private void openStatusFilterWindow(WebElement filterWidget) {
         WebElement statusesFilter = assertWebElement(filterWidget, "audit-statuses-filter");
-        assertWebElement(statusesFilter, HTML_DIV_TAG_NAME, "(0)");
+        assertWebElement(statusesFilter, HTML_DIV_TAG_NAME, FILTER_COUNTER_TEXT);
         clickElementAndWait(assertWebElement(statusesFilter, HTML_SPAN_TAG_NAME, "Status"));
     }
 

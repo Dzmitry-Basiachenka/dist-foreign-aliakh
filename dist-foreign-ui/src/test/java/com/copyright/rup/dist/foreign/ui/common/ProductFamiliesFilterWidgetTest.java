@@ -42,7 +42,7 @@ public class ProductFamiliesFilterWidgetTest {
 
     @Before
     public void setUp() {
-        productFamilyFilterWidget = new ProductFamilyFilterWidget(Collections.emptyList());
+        productFamilyFilterWidget = new ProductFamilyFilterWidget(Collections::emptyList);
     }
 
     @Test

@@ -26,4 +26,9 @@ public interface IAuditFilterController extends IFilterController<IAuditFilterWi
      * @return list of {@link UsageBatch}es.
      */
     List<UsageBatch> getUsageBatches();
+
+    /**
+     * @return list of product families.
+     */
+    List<String> getProductFamilies();
 }

@@ -113,13 +113,13 @@ public class AuditWidgetTest {
 
     private void verifyTable(LazyTable table) {
         verifySize(table, Unit.PERCENTAGE, 100, Unit.PERCENTAGE, 100);
-        assertArrayEquals(new Object[]{"detailId", "status", "batchName", "paymentDate", "rhAccountNumber", "rhName",
-                "wrWrkInst", "workTitle", "standardNumber", "grossAmount", "serviceFee", "scenarioName", "checkNumber",
-                "checkDate", "cccEventId", "distributionName"},
+        assertArrayEquals(new Object[]{"detailId", "status", "productFamily", "batchName", "paymentDate",
+                "rhAccountNumber", "rhName", "wrWrkInst", "workTitle", "standardNumber", "grossAmount", "serviceFee",
+                "scenarioName", "checkNumber", "checkDate", "cccEventId", "distributionName"},
             table.getVisibleColumns());
-        assertArrayEquals(new Object[]{"Detail ID", "Detail Status", "Usage Batch Name", "Payment Date", "RH Account #",
-                "RH Name", "Wr Wrk Inst", "Title", "Standard Number", "Amt in USD", "Service Fee %", "Scenario Name",
-                "Check #", "Check Date", "Event ID", "Dist. Name"},
+        assertArrayEquals(new Object[]{"Detail ID", "Detail Status", "Product Family", "Usage Batch Name",
+                "Payment Date", "RH Account #", "RH Name", "Wr Wrk Inst", "Title", "Standard Number", "Amt in USD",
+                "Service Fee %", "Scenario Name", "Check #", "Check Date", "Event ID", "Dist. Name"},
             table.getColumnHeaders());
         assertNotNull(table.getColumnGenerator("detailId"));
         assertTrue(table.getColumnGenerator("wrWrkInst") instanceof LongColumnGenerator);

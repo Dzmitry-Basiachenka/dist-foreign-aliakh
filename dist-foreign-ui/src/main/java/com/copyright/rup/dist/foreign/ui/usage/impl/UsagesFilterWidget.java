@@ -110,7 +110,7 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
     }
 
     private HorizontalLayout buildProductFamiliesFilter() {
-        productFamilyFilterWidget = new ProductFamilyFilterWidget(controller.getProductFamilies());
+        productFamilyFilterWidget = new ProductFamilyFilterWidget(() -> controller.getProductFamilies());
         productFamilyFilterWidget.addFilterSaveListener(saveEvent -> {
             usageFilter.setProductFamilies(saveEvent.getSelectedItemsIds());
             filterChanged();
