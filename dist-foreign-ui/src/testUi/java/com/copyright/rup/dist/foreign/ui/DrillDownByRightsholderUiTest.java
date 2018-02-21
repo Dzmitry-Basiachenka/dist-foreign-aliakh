@@ -59,25 +59,21 @@ public class DrillDownByRightsholderUiTest extends ForeignCommonUiTest {
     private static final String MAX_REPORTED_VALUE = "6,810.00";
     private static final BigDecimal BATCH_TOTAL_AMOUNT = new BigDecimal("12850.00");
     private static final String SERVICE_FEE = "32.0";
-    private static final String[] TABLE_HEADER = {"Detail ID", "Usage Batch Name", "Fiscal Year", "RRO Account #",
-        "RRO Name", "Payment Date", "Title", "Article", "Standard Number", "Wr Wrk Inst", "Publisher", "Pub Date",
-        "Number of Copies", "Reported value", "Gross Amt in USD", "Service Fee Amount", "Net Amt in USD",
-        "Service Fee %", "Market", "Market Period From", "Market Period To", "Author"};
-    private static final String[] USAGE_1 = {"3982472103", BATCH_NAME, FISCAL_YEAR, ROR_ACCOUNT_NUMBER,
-        ROR_NAME, PAYMENT_DATE, "40 model essays : a portable anthology", "The ritual of fast food", "12345XX-01",
-        "122235139", "American Society for Nutritional Science", PUB_DATE, "370", MAX_REPORTED_VALUE,
-        MAX_REPORTED_VALUE, "2,179.20", "4,630.08", SERVICE_FEE, "Univ", "2009", "2010",
-        "Aaron1088.89 Jane E."};
-    private static final String[] USAGE_2 = {"5248153472", BATCH_NAME, FISCAL_YEAR, ROR_ACCOUNT_NUMBER,
-        ROR_NAME, PAYMENT_DATE, "Managing brand equity : capitalizing on the value of a brand name",
+    private static final String FAS_PRODUCT_FAMILY = "FAS";
+    private static final String[] USAGE_1 = {"3982472103", BATCH_NAME, FAS_PRODUCT_FAMILY, FISCAL_YEAR,
+        ROR_ACCOUNT_NUMBER, ROR_NAME, PAYMENT_DATE, "40 model essays : a portable anthology", "The ritual of fast food",
+        "12345XX-01", "122235139", "American Society for Nutritional Science", PUB_DATE, "370", MAX_REPORTED_VALUE,
+        MAX_REPORTED_VALUE, "2,179.20", "4,630.08", SERVICE_FEE, "Univ", "2009", "2010", "Aaron1088.89 Jane E."};
+    private static final String[] USAGE_2 = {"5248153472", BATCH_NAME, FAS_PRODUCT_FAMILY, FISCAL_YEAR,
+        ROR_ACCOUNT_NUMBER, ROR_NAME, PAYMENT_DATE, "Managing brand equity : capitalizing on the value of a brand name",
         "The Measurement of Brand Associations", "12345XX-89173", "122235138", "Simon & Schuster US", PUB_DATE,
         "150", "5,540.00", "5,540.00", "1,772.80", "3,767.20", SERVICE_FEE, "Bus1088.89 Sch1088.89", "2011",
         "2012", "Aall1088.89 Pamela R.;Hampson1088.89 Fen Osler.;Crocker1088.89 Chester A."};
-    private static final String[] USAGE_3 = {"5347181578", BATCH_NAME, FISCAL_YEAR, ROR_ACCOUNT_NUMBER,
-        ROR_NAME, PAYMENT_DATE, "(En)gendering the war on terror : war stories and camouflaged politics",
-        "between orientalism and fundamentalism", "12345XX-79073", "122235137", "IEEE", PUB_DATE, "20",
-        MIN_REPORTED_VALUE, MIN_REPORTED_VALUE, "160.00", "340.00", SERVICE_FEE, "Univ", "2013", "2017",
-        "Aarseth, Espen J."};
+    private static final String[] USAGE_3 = {"5347181578", BATCH_NAME, FAS_PRODUCT_FAMILY, FISCAL_YEAR,
+        ROR_ACCOUNT_NUMBER, ROR_NAME, PAYMENT_DATE, "(En)gendering the war on terror : " +
+        "war stories and camouflaged politics", "between orientalism and fundamentalism", "12345XX-79073", "122235137",
+        "IEEE", PUB_DATE, "20", MIN_REPORTED_VALUE, MIN_REPORTED_VALUE, "160.00", "340.00", SERVICE_FEE, "Univ", "2013",
+        "2017", "Aarseth, Espen J."};
     private Scenario scenario;
     private UsageBatch batch;
     private WebElement drillDownWindow;
@@ -144,7 +140,10 @@ public class DrillDownByRightsholderUiTest extends ForeignCommonUiTest {
     }
 
     private void verifyTable(WebElement table) {
-        assertTableHeaderElements(table, TABLE_HEADER);
+        assertTableHeaderElements(table, "Detail ID", "Usage Batch Name", "Product Family", "Fiscal Year",
+            "RRO Account #", "RRO Name", "Payment Date", "Title", "Article", "Standard Number", "Wr Wrk Inst",
+            "Publisher", "Pub Date", "Number of Copies", "Reported value", "Gross Amt in USD", "Service Fee Amount",
+            "Net Amt in USD", "Service Fee %", "Market", "Market Period From", "Market Period To", "Author");
         List<WebElement> rows = assertTableRowElements(table, 3);
         assertTableRowElements(rows.get(0), USAGE_1);
         assertTableRowElements(rows.get(1), USAGE_2);
@@ -155,14 +154,14 @@ public class DrillDownByRightsholderUiTest extends ForeignCommonUiTest {
         return new ExpectedColumnValues[]{
             new ExpectedColumnValues("Detail ID", "3982472103", "5347181578"),
             new ExpectedColumnValues("Usage Batch Name", BATCH_NAME, BATCH_NAME),
+            new ExpectedColumnValues("Product Family", FAS_PRODUCT_FAMILY, FAS_PRODUCT_FAMILY),
             new ExpectedColumnValues("Fiscal Year", FISCAL_YEAR, FISCAL_YEAR),
             new ExpectedColumnValues("RRO Account #", ROR_ACCOUNT_NUMBER, ROR_ACCOUNT_NUMBER),
             new ExpectedColumnValues("RRO Name", ROR_NAME, ROR_NAME),
             new ExpectedColumnValues("Payment Date", PAYMENT_DATE, PAYMENT_DATE),
             new ExpectedColumnValues("Title", "40 model essays : a portable anthology",
                 "Managing brand equity : capitalizing on the value of a brand name"),
-            new ExpectedColumnValues("Article", "between orientalism and fundamentalism",
-                "The ritual of fast food"),
+            new ExpectedColumnValues("Article", "between orientalism and fundamentalism", "The ritual of fast food"),
             new ExpectedColumnValues("Standard Number", "12345XX-01", "12345XX-89173"),
             new ExpectedColumnValues("Wr Wrk Inst", "122235137", "122235139"),
             new ExpectedColumnValues("Publisher", "American Society for Nutritional Science", "Simon & Schuster US"),
@@ -226,23 +225,23 @@ public class DrillDownByRightsholderUiTest extends ForeignCommonUiTest {
         usage.setScenarioId(scenario.getId());
         usage.setRightsholder(buildRightsholder(1000005413L));
         usage.setStatus(UsageStatusEnum.LOCKED);
-        usage.setWorkTitle(fields[6]);
-        usage.setArticle(fields[7]);
-        usage.setStandardNumber(fields[8]);
-        usage.setWrWrkInst(Long.valueOf(fields[9]));
-        usage.setPublisher(fields[10]);
+        usage.setWorkTitle(fields[7]);
+        usage.setArticle(fields[8]);
+        usage.setStandardNumber(fields[9]);
+        usage.setWrWrkInst(Long.valueOf(fields[10]));
+        usage.setPublisher(fields[11]);
         usage.setProductFamily("FAS");
-        usage.setPublicationDate(LocalDate.parse(fields[11], DateTimeFormatter.ofPattern("M/d/uuuu", Locale.US)));
-        usage.setNumberOfCopies(Integer.valueOf(fields[12]));
-        usage.setReportedValue(getAmount(fields[13]));
-        usage.setGrossAmount(getAmount(fields[14]));
-        usage.setServiceFeeAmount(getAmount(fields[15]));
-        usage.setNetAmount(getAmount(fields[16]));
-        usage.setServiceFee(getAmount(fields[17]).divide(new BigDecimal("100")));
-        usage.setMarket(fields[18]);
-        usage.setMarketPeriodFrom(Integer.valueOf(fields[19]));
-        usage.setMarketPeriodTo(Integer.valueOf(fields[20]));
-        usage.setAuthor(fields[21]);
+        usage.setPublicationDate(LocalDate.parse(fields[12], DateTimeFormatter.ofPattern("M/d/uuuu", Locale.US)));
+        usage.setNumberOfCopies(Integer.valueOf(fields[13]));
+        usage.setReportedValue(getAmount(fields[14]));
+        usage.setGrossAmount(getAmount(fields[15]));
+        usage.setServiceFeeAmount(getAmount(fields[16]));
+        usage.setNetAmount(getAmount(fields[17]));
+        usage.setServiceFee(getAmount(fields[18]).divide(new BigDecimal("100")));
+        usage.setMarket(fields[19]);
+        usage.setMarketPeriodFrom(Integer.valueOf(fields[20]));
+        usage.setMarketPeriodTo(Integer.valueOf(fields[21]));
+        usage.setAuthor(fields[22]);
         return usage;
     }
 
