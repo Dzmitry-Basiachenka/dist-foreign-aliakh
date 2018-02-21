@@ -400,6 +400,66 @@ databaseChangeLog {
             column(name: 'updated_by_user', value: 'user@copyright.com')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: 'c10a11c6-dae3-43d7-a632-c682542b1209')
+            column(name: 'name', value: 'Works without WrWrkInst test')
+            column(name: 'rro_account_number', value: '2000017010')
+            column(name: 'payment_date', value: '2021-02-12')
+            column(name: 'fiscal_year', value: '2020')
+            column(name: 'gross_amount', value: '2000.00')
+            column(name: 'updated_datetime', value: '2017-02-11 11:41:52.735531+03')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '593c49c3-eb5b-477b-8556-f7a4725df2b3')
+            column(name: 'df_usage_batch_uid', value: 'c10a11c6-dae3-43d7-a632-c682542b1209')
+            column(name: 'detail_id', value: '547365495')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
+            column(name: 'status_ind', value: 'NEW')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '2192-3558')
+            column(name: 'publisher', value: 'Network for Science')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'reported_value', value: '30.86')
+            column(name: 'gross_amount', value: '16.40')
+            column(name: 'created_by_user', value: 'user@copyright.com')
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '10000')
+            column(name: 'gross_amount', value: '10000.00')
+            column(name: 'net_amount', value: '8400.00')
+            column(name: 'service_fee_amount', value: '1600.00')
+            column(name: 'service_fee', value: '0.16000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '7db6455e-5249-44db-801a-307f1c239310')
+            column(name: 'df_usage_batch_uid', value: 'c10a11c6-dae3-43d7-a632-c682542b1209')
+            column(name: 'detail_id', value: '95463875')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
+            column(name: 'status_ind', value: 'NEW')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '2192-3566')
+            column(name: 'publisher', value: 'Network for Science')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'number_of_copies', value: '250232')
+            column(name: 'reported_value', value: '10000')
+            column(name: 'gross_amount', value: '10000.00')
+            column(name: 'net_amount', value: '8400.00')
+            column(name: 'service_fee_amount', value: '1600.00')
+            column(name: 'service_fee', value: '0.16000')
+        }
+
         rollback ""
     }
 }

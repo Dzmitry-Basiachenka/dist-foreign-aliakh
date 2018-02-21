@@ -284,4 +284,16 @@ public interface IUsageRepository {
      * @return list of product families
      */
     List<String> findProductFamiliesForAuditFilter();
+
+    /**
+     * Updates {@link Usage}s status and WrWrkInst.
+     *
+     * @param usages list of {@link Usage}s to update
+     */
+    void updateStatusAndWrWrkInst(List<Usage> usages);
+
+    /**
+     * @return list of {@link Usage}s that does not have Wr Wrk Inst.
+     */
+    List<Usage> findUsagesWithBlankWrWrkInst();
 }

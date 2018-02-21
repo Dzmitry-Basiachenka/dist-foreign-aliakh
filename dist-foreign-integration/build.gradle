@@ -8,6 +8,7 @@ dependencies {
     compile("org.perf4j:perf4j:${perf4jVersion}")
     compile("org.springframework:spring-web:${rupJava.standardDependencies.spring.version}")
     compile("org.apache.httpcomponents:httpasyncclient:${httpAsyncClientVersion}")
+    compile("com.copyright.rup.es.api:rup-es-api:${rupEsApiVersion}")
 
     testCompile("com.copyright.rup.dist.common:dist-common-test:${distCommonVersion}")
     testRuntime("com.copyright.rup.common:rup-common-config:${rupCommonVersion}")

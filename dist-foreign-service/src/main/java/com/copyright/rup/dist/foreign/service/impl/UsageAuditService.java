@@ -40,7 +40,7 @@ public class UsageAuditService implements IUsageAuditService {
     @Override
     @Profiled(tag = "service.UsageAuditService.logAction(usageIds, {$1}, actionReason)")
     public void logAction(Set<String> usageIds, UsageActionTypeEnum actionType, String actionReason) {
-        usageIds.stream().forEach(usageId -> logAction(usageId, null, actionType, actionReason));
+        usageIds.forEach(usageId -> logAction(usageId, null, actionType, actionReason));
     }
 
     @Override

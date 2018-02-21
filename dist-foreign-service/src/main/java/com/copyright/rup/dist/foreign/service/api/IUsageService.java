@@ -269,4 +269,10 @@ public interface IUsageService {
      * @param usages list of {@link PaidUsage}s to update
      */
     void updatePaidInfo(List<PaidUsage> usages);
+
+    /**
+     * Finds Wr Wrk Insts for {@link Usage}s that do not have it and updates statuses depending on whether work was
+     * found or not.
+     */
+    void findWorksAndUpdateStatuses();
 }
