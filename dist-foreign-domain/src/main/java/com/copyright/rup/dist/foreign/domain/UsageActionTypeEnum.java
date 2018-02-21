@@ -44,5 +44,10 @@ public enum UsageActionTypeEnum {
     /**
      * Action type for sending {@link Usage} to LM.
      */
-    SENT_TO_LM
+    SENT_TO_LM,
+
+    /**
+     * Action type for paid {@link Usage}.
+     */
+    PAID
 }

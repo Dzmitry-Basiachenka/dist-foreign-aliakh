@@ -4,6 +4,7 @@ import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.integration.rest.prm.PrmRollUpService;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.AuditFilter;
+import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
@@ -70,6 +71,8 @@ public class UsageService implements IUsageService {
 
     private static final String CALCULATION_FINISHED_LOG_MESSAGE = "Calculated usages gross amount. " +
         "UsageBatchName={}, FundPoolAmount={}, TotalAmount={}, ConversionRate={}";
+    private static final String UPDATE_PAID_INFO_FAILED_LOG_MESSAGE = "Update paid information. Not found usages. " +
+        "UsagesCount={}, UpdatedCount={}, NotFoundDetailIds:{}";
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired
@@ -339,6 +342,33 @@ public class UsageService implements IUsageService {
     @Override
     public List<String> getProductFamiliesForAudit() {
         return usageRepository.findProductFamiliesForAuditFilter();
+    }
+
+    @Override
+    @Transactional
+    public void updatePaidInfo(List<PaidUsage> usages) {
+        LOGGER.info("Update paid information. Started. UsagesCount={}", LogUtils.size(usages));
+        int updated = 0;
+        Set<Long> notFoundDetailsIds = Sets.newHashSet();
+        for (PaidUsage paidUsage : usages) {
+            Usage usage = usageRepository.findByDetailId(paidUsage.getDetailId());
+            if (null != usage) {
+                String usageId = usage.getId();
+                paidUsage.setId(usageId);
+                paidUsage.setStatus(UsageStatusEnum.PAID);
+                usageArchiveRepository.updatePaidInfo(paidUsage);
+                usageAuditService.logAction(usageId, UsageActionTypeEnum.PAID,
+                    "Usage has been paid according to information from the LM");
+                updated++;
+            } else {
+                notFoundDetailsIds.add(paidUsage.getDetailId());
+            }
+        }
+        if (CollectionUtils.isNotEmpty(notFoundDetailsIds)) {
+            LOGGER.warn(UPDATE_PAID_INFO_FAILED_LOG_MESSAGE, LogUtils.size(usages), updated, notFoundDetailsIds);
+        }
+        LOGGER.info("Update paid information. Finished. UsagesCount={}, UpdatedCount={}", LogUtils.size(usages),
+            updated);
     }
 
     private long updateWorkFoundUsagesRightsholders(List<Usage> usages) {

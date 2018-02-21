@@ -152,9 +152,9 @@
         where df_scenario_uid = #{scenarioId}
     </delete>
 
-    <update id="updatePaidInfo" parameterType="UsageDto">
+    <update id="updatePaidInfo" parameterType="PaidUsage">
         update ${schema}.df_usage_archive
-        set payee_account_number = #{payeeAccountNumber},
+        set payee_account_number = #{payee.accountNumber},
             check_number = #{checkNumber},
             check_date = #{checkDate},
             status_ind = #{status},
@@ -163,6 +163,6 @@
             distribution_date = #{distributionDate},
             period_end_date = #{periodEndDate},
             <include refid="StoredEntityMapper.update"/>
-        where detail_id = #{detailId}
+        where df_usage_archive_uid = #{id}
     </update>
 </mapper>

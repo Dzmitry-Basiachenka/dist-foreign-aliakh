@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.service.api;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.foreign.domain.AuditFilter;
+import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -260,4 +261,12 @@ public interface IUsageService {
      * @return list of product families
      */
     List<String> getProductFamiliesForAudit();
+
+    /**
+     * Updates paid infromation for {@link PaidUsage}s
+     * and status to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#PAID}.
+     *
+     * @param usages list of {@link PaidUsage}s to update
+     */
+    void updatePaidInfo(List<PaidUsage> usages);
 }

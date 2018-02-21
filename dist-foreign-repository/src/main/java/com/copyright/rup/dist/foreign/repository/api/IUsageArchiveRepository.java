@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
+import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -89,9 +90,9 @@ public interface IUsageArchiveRepository {
     void deleteByScenarioId(String scenarioId);
 
     /**
-     * Updates paid information for {@link UsageDto} by detail id.
+     * Updates paid information for {@link PaidUsage} by id.
      *
-     * @param usage {@link UsageDto} instance
+     * @param usage {@link PaidUsage} instance
      */
-    void updatePaidInfo(UsageDto usage);
+    void updatePaidInfo(PaidUsage usage);
 }
