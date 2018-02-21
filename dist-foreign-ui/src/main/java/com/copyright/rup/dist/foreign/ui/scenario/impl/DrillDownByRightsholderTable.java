@@ -29,6 +29,7 @@ public class DrillDownByRightsholderTable extends LazyTable<UsageDetailsBeanQuer
 
     private static final String DETAIL_ID_PROPERTY = "detailId";
     private static final String USAGE_BATCH_NAME_PROPERTY = "batchName";
+    private static final String PRODUCT_FAMILY = "productFamily";
     private static final String FISCAL_YEAR_PROPERTY = "fiscalYear";
     private static final String RRO_NAME_PROPERTY = "rroName";
     private static final String RRO_ACCOUNT_NUMBER_PROPERTY = "rroAccountNumber";
@@ -82,6 +83,7 @@ public class DrillDownByRightsholderTable extends LazyTable<UsageDetailsBeanQuer
         setColumnHeaders(
             ForeignUi.getMessage("table.column.detail_id"),
             ForeignUi.getMessage("table.column.batch_name"),
+            ForeignUi.getMessage("table.column.product_family"),
             ForeignUi.getMessage("table.column.fiscal_year"),
             ForeignUi.getMessage("table.column.rro_account_number"),
             ForeignUi.getMessage("table.column.rro_account_name"),
@@ -108,6 +110,7 @@ public class DrillDownByRightsholderTable extends LazyTable<UsageDetailsBeanQuer
         setVisibleColumns(
             DETAIL_ID_PROPERTY,
             USAGE_BATCH_NAME_PROPERTY,
+            PRODUCT_FAMILY,
             FISCAL_YEAR_PROPERTY,
             RRO_ACCOUNT_NUMBER_PROPERTY,
             RRO_NAME_PROPERTY,
@@ -133,6 +136,7 @@ public class DrillDownByRightsholderTable extends LazyTable<UsageDetailsBeanQuer
     private void addProperties() {
         addProperty(DETAIL_ID_PROPERTY, Long.class, true);
         addProperty(USAGE_BATCH_NAME_PROPERTY, String.class, true);
+        addProperty(PRODUCT_FAMILY, String.class, true);
         addProperty(FISCAL_YEAR_PROPERTY, Integer.class, true);
         addProperty(RRO_ACCOUNT_NUMBER_PROPERTY, Long.class, true);
         addProperty(RRO_NAME_PROPERTY, String.class, true);

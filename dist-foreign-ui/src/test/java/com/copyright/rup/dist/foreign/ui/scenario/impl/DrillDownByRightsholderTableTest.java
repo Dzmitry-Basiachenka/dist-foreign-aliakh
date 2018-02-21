@@ -16,12 +16,15 @@ import com.copyright.rup.vaadin.ui.LongColumnGenerator;
 import com.copyright.rup.vaadin.ui.MoneyColumnGenerator;
 import com.copyright.rup.vaadin.ui.component.lazytable.LazyTable;
 
+import com.google.common.collect.Lists;
 import com.vaadin.server.Sizeable.Unit;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Verifies {@link DrillDownByRightsholderTable}.
@@ -36,6 +39,7 @@ public class DrillDownByRightsholderTableTest {
 
     private static final String DETAIL_ID_PROPERTY = "detailId";
     private static final String USAGE_BATCH_NAME_PROPERTY = "batchName";
+    private static final String PRODUCT_FAMILY_PROPERTY = "productFamily";
     private static final String FISCAL_YEAR_PROPERTY = "fiscalYear";
     private static final String RRO_NAME_PROPERTY = "rroName";
     private static final String RRO_ACCOUNT_NUMBER_PROPERTY = "rroAccountNumber";
@@ -84,34 +88,21 @@ public class DrillDownByRightsholderTableTest {
 
     private void verifyProperties() {
         Collection<?> containerPropertyIds = table.getContainerPropertyIds();
-        assertTrue(containerPropertyIds.contains(DETAIL_ID_PROPERTY));
-        assertTrue(containerPropertyIds.contains(USAGE_BATCH_NAME_PROPERTY));
-        assertTrue(containerPropertyIds.contains(FISCAL_YEAR_PROPERTY));
-        assertTrue(containerPropertyIds.contains(RRO_NAME_PROPERTY));
-        assertTrue(containerPropertyIds.contains(RRO_ACCOUNT_NUMBER_PROPERTY));
-        assertTrue(containerPropertyIds.contains(PAYMENT_DATE_PROPERTY));
-        assertTrue(containerPropertyIds.contains(TITLE_PROPERTY));
-        assertTrue(containerPropertyIds.contains(ARTICLE_PROPERTY));
-        assertTrue(containerPropertyIds.contains(STANDARD_NUMBER_PROPERTY));
-        assertTrue(containerPropertyIds.contains(WR_WRK_INST_PROPERTY));
-        assertTrue(containerPropertyIds.contains(PUBLISHER_PROPERTY));
-        assertTrue(containerPropertyIds.contains(PUBLICATION_DATE_PROPERTY));
-        assertTrue(containerPropertyIds.contains(NUMBER_OF_COPIES_PROPERTY));
-        assertTrue(containerPropertyIds.contains(REPORTED_VALUE_PROPERTY));
-        assertTrue(containerPropertyIds.contains(AMT_IN_USD_PROPERTY));
-        assertTrue(containerPropertyIds.contains(SERVICE_FEE_AMOUNT_PROPERTY));
-        assertTrue(containerPropertyIds.contains(NET_AMOUNT_PROPERTY));
-        assertTrue(containerPropertyIds.contains(SERVICE_FEE_PROPERTY));
-        assertTrue(containerPropertyIds.contains(MARKET_PROPERTY));
-        assertTrue(containerPropertyIds.contains(MARKET_PERIOD_FROM_PROPERTY));
-        assertTrue(containerPropertyIds.contains(MARKET_PERIOD_TO_PROPERTY));
-        assertTrue(containerPropertyIds.contains(AUTHOR_PROPERTY));
+        List<String> expectedContainerPropertyIds = Lists.newArrayList(DETAIL_ID_PROPERTY, USAGE_BATCH_NAME_PROPERTY,
+            PRODUCT_FAMILY_PROPERTY, FISCAL_YEAR_PROPERTY, RRO_NAME_PROPERTY, RRO_ACCOUNT_NUMBER_PROPERTY,
+            PAYMENT_DATE_PROPERTY, TITLE_PROPERTY, ARTICLE_PROPERTY, STANDARD_NUMBER_PROPERTY, WR_WRK_INST_PROPERTY,
+            PUBLISHER_PROPERTY, PUBLICATION_DATE_PROPERTY, NUMBER_OF_COPIES_PROPERTY, REPORTED_VALUE_PROPERTY,
+            AMT_IN_USD_PROPERTY, SERVICE_FEE_AMOUNT_PROPERTY, NET_AMOUNT_PROPERTY, SERVICE_FEE_PROPERTY,
+            MARKET_PROPERTY, MARKET_PERIOD_FROM_PROPERTY, MARKET_PERIOD_TO_PROPERTY, AUTHOR_PROPERTY);
+        assertEquals(CollectionUtils.size(expectedContainerPropertyIds), CollectionUtils.size(containerPropertyIds));
+        assertTrue(CollectionUtils.containsAll(expectedContainerPropertyIds, containerPropertyIds));
     }
 
     private void verifyVisibleColumns() {
         assertArrayEquals(new Object[]{
                 DETAIL_ID_PROPERTY,
                 USAGE_BATCH_NAME_PROPERTY,
+                PRODUCT_FAMILY_PROPERTY,
                 FISCAL_YEAR_PROPERTY,
                 RRO_ACCOUNT_NUMBER_PROPERTY,
                 RRO_NAME_PROPERTY,
@@ -139,6 +130,7 @@ public class DrillDownByRightsholderTableTest {
         assertArrayEquals(new Object[]{
                 "Detail ID",
                 "Usage Batch Name",
+                "Product Family",
                 "Fiscal Year",
                 "RRO Account #",
                 "RRO Name",
