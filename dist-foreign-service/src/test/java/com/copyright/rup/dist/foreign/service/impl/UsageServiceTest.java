@@ -34,6 +34,7 @@ import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.IWorkMatchingService;
 import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
 import com.google.common.collect.HashBasedTable;
@@ -83,6 +84,7 @@ public class UsageServiceTest {
     private IUsageService usageService;
     private IPrmIntegrationService prmIntegrationService;
     private IRmsIntegrationService rmsIntegrationService;
+    private IWorkMatchingService workMatchingService;
 
     @Before
     public void setUp() {
@@ -94,12 +96,14 @@ public class UsageServiceTest {
         prmIntegrationService = createMock(IPrmIntegrationService.class);
         usageArchiveRepository = createMock(IUsageArchiveRepository.class);
         rmsIntegrationService = createMock(IRmsIntegrationService.class);
+        workMatchingService = createMock(IWorkMatchingService.class);
         usageService = new UsageService();
         Whitebox.setInternalState(usageService, "usageRepository", usageRepository);
         Whitebox.setInternalState(usageService, "usageAuditService", usageAuditService);
         Whitebox.setInternalState(usageService, "prmIntegrationService", prmIntegrationService);
         Whitebox.setInternalState(usageService, "usageArchiveRepository", usageArchiveRepository);
         Whitebox.setInternalState(usageService, "rmsIntegrationService", rmsIntegrationService);
+        Whitebox.setInternalState(usageService, "workMatchingService", workMatchingService);
     }
 
     @Test
@@ -497,6 +501,33 @@ public class UsageServiceTest {
         replay(usageRepository, usageArchiveRepository, usageAuditService);
         usageService.updatePaidInfo(Collections.singletonList(paidUsage));
         verify(usageRepository, usageArchiveRepository, usageAuditService);
+    }
+
+    @Test
+    public void testFindWorksAndUpdateStatuses() {
+        Usage usage1 = buildUsage(USAGE_ID_1);
+        usage1.setStandardNumber("10.1147/RD.206.0542");
+        Usage usage2 = buildUsage(USAGE_ID_2);
+        usage2.setWorkTitle("Merry.go.round");
+        List<Usage> usages = Lists.newArrayList(usage1, usage2);
+        List<Usage> matchedByIdno = Lists.newArrayList(usage1);
+        List<Usage> matchedByTitle = Lists.newArrayList(usage2);
+        expect(usageRepository.findUsagesWithBlankWrWrkInst()).andReturn(usages).once();
+        expect(workMatchingService.matchByIdno(usages)).andReturn(matchedByIdno).once();
+        expect(workMatchingService.matchByTitle(usages)).andReturn(matchedByTitle).once();
+        usageRepository.updateStatusAndWrWrkInst(matchedByIdno);
+        expectLastCall().once();
+        usageRepository.updateStatusAndWrWrkInst(matchedByTitle);
+        expectLastCall().once();
+        usageAuditService.logAction(usage1.getId(), UsageActionTypeEnum.WORK_FOUND,
+            "Wr Wrk Inst 123160519 was found in PI by standard number 10.1147/RD.206.0542");
+        expectLastCall().once();
+        usageAuditService.logAction(usage2.getId(), UsageActionTypeEnum.WORK_FOUND,
+            "Wr Wrk Inst 123160519 was found in PI by title 'Merry.go.round'");
+        expectLastCall().once();
+        replay(usageRepository, workMatchingService, usageAuditService);
+        usageService.findWorksAndUpdateStatuses();
+        verify(usageRepository, workMatchingService, usageAuditService);
     }
 
     private void assertResult(List<?> result, int size) {
