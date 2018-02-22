@@ -60,16 +60,6 @@ public class PiIntegrationService implements IPiIntegrationService {
     private RupEsApi rupEsApi;
     private ObjectMapper mapper;
 
-    /**
-     * Initializes search API.
-     */
-    @PostConstruct
-    void init() {
-        rupEsApi = RupEsApi.of(cluster, node);
-        mapper = new ObjectMapper();
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    }
-
     @Override
     public Map<String, Long> findWrWrkInstsByIdno(Set<String> idnos) {
         LOGGER.info("Search works by IDNOs. Started. IDNOsCount={}", idnos.size());
@@ -81,10 +71,27 @@ public class PiIntegrationService implements IPiIntegrationService {
 
     @Override
     public Map<String, Long> findWrWrkInstsByTitles(Set<String> titles) {
-        LOGGER.info("Search works by IDNOs. Started. IDNOsCount={}", titles.size());
+        LOGGER.info("Search works by titles. Started. TitlesCount={}", titles.size());
         Map<String, Long> wrWrkInstMap = match("title", titles, Work::getTitle);
-        LOGGER.info("Search works by IDNOs. Finished. IDNOsCount={}", titles.size());
+        LOGGER.info("Search works by titles. Finished. TitlesCount={}", titles.size());
         return wrWrkInstMap;
+    }
+
+    /**
+     * @return an instance of {@link RupEsApi}.
+     */
+    protected RupEsApi initRupEsApi() {
+        return RupEsApi.of(cluster, node);
+    }
+
+    /**
+     * Initializes search API.
+     */
+    @PostConstruct
+    void init() {
+        rupEsApi = initRupEsApi();
+        mapper = new ObjectMapper();
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     private Map<String, Long> match(String field, Set<String> searchValues, Function<Work, List<String>> workFunction) {
