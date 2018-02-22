@@ -152,6 +152,12 @@
         where df_scenario_uid = #{scenarioId}
     </delete>
 
+    <select id="findIdByDetailId" resultType="string" parameterType="long">
+        select df_usage_archive_uid
+        from ${schema}.df_usage_archive
+        where detail_id = #{detailId}
+    </select>
+
     <update id="updatePaidInfo" parameterType="PaidUsage">
         update ${schema}.df_usage_archive
         set payee_account_number = #{payee.accountNumber},

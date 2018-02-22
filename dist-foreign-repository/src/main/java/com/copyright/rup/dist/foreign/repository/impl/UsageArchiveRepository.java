@@ -101,6 +101,11 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
     }
 
     @Override
+    public String findIdByDetailId(Long detailId) {
+        return selectOne("IUsageArchiveMapper.findIdByDetailId", Objects.requireNonNull(detailId));
+    }
+
+    @Override
     public void updatePaidInfo(PaidUsage usage) {
         update("IUsageArchiveMapper.updatePaidInfo", Objects.requireNonNull(usage));
     }
