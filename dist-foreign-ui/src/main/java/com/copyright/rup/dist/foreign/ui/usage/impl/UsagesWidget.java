@@ -255,10 +255,14 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
 
     private void onAddToScenarioClicked() {
         if (0 < usagesTable.getContainerDataSource().size()) {
-            if (controller.isFilterStatusEligible()) {
-                CreateScenarioWindow window = new CreateScenarioWindow(controller);
-                window.addListener(ScenarioCreateEvent.class, controller, IUsagesController.ON_SCENARIO_CREATED);
-                Windows.showModalWindow(window);
+            if (controller.isProductFamilyAndStatusFiltersApplied()) {
+                if (controller.isSingleProductFamilySelected()) {
+                    CreateScenarioWindow window = new CreateScenarioWindow(controller);
+                    window.addListener(ScenarioCreateEvent.class, controller, IUsagesController.ON_SCENARIO_CREATED);
+                    Windows.showModalWindow(window);
+                } else {
+                    Windows.showNotificationWindow(ForeignUi.getMessage("message.error.create_scenario"));
+                }
             } else {
                 Windows.showNotificationWindow(ForeignUi.getMessage("message.error.invalid_filter"));
             }

@@ -56,7 +56,8 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
         LocalDate.now().format(DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT));
     private static final String CONFIRM_BUTTON_ID = "Confirm";
     private static final String SCENARIO_NAME_FIELD = "Scenario name";
-    private static final String APPLY_ELIGIBLE_MESSAGE = "Please apply ELIGIBLE status filter to create scenario";
+    private static final String APPLY_FILTERS_MESSAGE =
+        "Please apply Product Family filter and ELIGIBLE status filter to create scenario";
 
     private UsageBatchInfo validUsageBatch = new UsageBatchInfo("CADRA_11Dec16", "01/11/2017", "FY2017",
         "7000813806 - CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil");
@@ -90,11 +91,11 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
         UsageBatchInfo batch = new UsageBatchInfo("Batch with usages in different statuses", null, null,
             "1000005413 - Kluwer Academic Publishers - Dordrecht");
         applyFiltersAndVerifyNotification(usagesTab, nonexistentBatch, UsageStatusEnum.ELIGIBLE, 0,
-            "Scenario cannot be created. Please select ELIGIBLE usages");
-        applyFiltersAndVerifyNotification(usagesTab, batch, UsageStatusEnum.NEW, 1, APPLY_ELIGIBLE_MESSAGE);
-        applyFiltersAndVerifyNotification(usagesTab, batch, UsageStatusEnum.WORK_FOUND, 1, APPLY_ELIGIBLE_MESSAGE);
-        applyFiltersAndVerifyNotification(usagesTab, batch, UsageStatusEnum.RH_NOT_FOUND, 1, APPLY_ELIGIBLE_MESSAGE);
-        applyFiltersAndVerifyNotification(usagesTab, batch, UsageStatusEnum.SENT_FOR_RA, 1, APPLY_ELIGIBLE_MESSAGE);
+            "Scenario cannot be created. There are no usages to include into scenario");
+        applyFiltersAndVerifyNotification(usagesTab, batch, UsageStatusEnum.NEW, 1, APPLY_FILTERS_MESSAGE);
+        applyFiltersAndVerifyNotification(usagesTab, batch, UsageStatusEnum.WORK_FOUND, 1, APPLY_FILTERS_MESSAGE);
+        applyFiltersAndVerifyNotification(usagesTab, batch, UsageStatusEnum.RH_NOT_FOUND, 1, APPLY_FILTERS_MESSAGE);
+        applyFiltersAndVerifyNotification(usagesTab, batch, UsageStatusEnum.SENT_FOR_RA, 1, APPLY_FILTERS_MESSAGE);
         applyFiltersAndVerifyCreateScenarioWindow(usagesTab, batch, UsageStatusEnum.ELIGIBLE, 1);
     }
 
@@ -151,6 +152,7 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
 
     private WebElement assertCreateScenarioWindow(WebElement usagesTab, UsageBatchInfo filteredBatch, int rowCount) {
         applyStatusFilter(assertWebElement(By.id(USAGES_FILTER_ID)), UsageStatusEnum.ELIGIBLE.name());
+        applyProductFamiliesFilter(assertWebElement(By.id(USAGES_FILTER_ID)), "FAS");
         applyFilters(assertWebElement(By.id(USAGES_FILTER_ID)), filteredBatch);
         assertTableRowElements(assertWebElement(By.id(USAGES_TABLE_ID)), rowCount);
         clickButtonAndWait(usagesTab, "Add_To_Scenario");
@@ -226,6 +228,7 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
 
     private void applyFiltersAndVerifyTable(UsageBatchInfo batchInfo, UsageStatusEnum status, int count) {
         applyStatusFilter(assertWebElement(By.id(USAGES_FILTER_ID)), status.name());
+        applyProductFamiliesFilter(assertWebElement(By.id(USAGES_FILTER_ID)), "FAS");
         applyFilters(assertWebElement(By.id(USAGES_FILTER_ID)), batchInfo);
         assertTableRowElements(assertWebElement(By.id(USAGES_TABLE_ID)), count);
     }

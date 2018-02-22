@@ -141,8 +141,13 @@ public interface IUsagesController extends IController<IUsagesWidget>, IBeanLoad
     UsageCsvProcessor getCsvProcessor();
 
     /**
-     * @return true if selected status filter equals to
-     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE}, false - otherwise.
+     * @return {@code true} if product family filter is not empty and selected status filter equals to
+     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE}, {@code false} - otherwise.
      */
-    boolean isFilterStatusEligible();
+    boolean isProductFamilyAndStatusFiltersApplied();
+
+    /**
+     * @return {@code true} if product family filter contains only FAS, {@code false} - otherwise.
+     */
+    boolean isSingleProductFamilySelected();
 }
