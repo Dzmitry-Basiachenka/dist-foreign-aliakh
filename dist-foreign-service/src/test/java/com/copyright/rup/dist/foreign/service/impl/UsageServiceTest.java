@@ -478,16 +478,15 @@ public class UsageServiceTest {
         paidUsage.setCheckNumber("578945");
         paidUsage.setCccEventId("53256");
         paidUsage.setDistributionName("FDA March 17");
-        Usage usage = buildUsage(USAGE_ID_1);
-        expect(usageRepository.findByDetailId(12345678L)).andReturn(usage).once();
+        expect(usageArchiveRepository.findIdByDetailId(12345678L)).andReturn(USAGE_ID_1).once();
         usageArchiveRepository.updatePaidInfo(paidUsage);
         expectLastCall().once();
         usageAuditService.logAction(USAGE_ID_1, UsageActionTypeEnum.PAID,
             "Usage has been paid according to information from the LM");
         expectLastCall().once();
-        replay(usageRepository, usageArchiveRepository, usageAuditService);
+        replay(usageArchiveRepository, usageAuditService);
         usageService.updatePaidInfo(Collections.singletonList(paidUsage));
-        verify(usageRepository, usageArchiveRepository, usageAuditService);
+        verify(usageArchiveRepository, usageAuditService);
     }
 
     @Test
@@ -497,10 +496,10 @@ public class UsageServiceTest {
         paidUsage.setCheckNumber("578945");
         paidUsage.setCccEventId("53256");
         paidUsage.setDistributionName("FDA March 17");
-        expect(usageRepository.findByDetailId(12345678L)).andReturn(null).once();
-        replay(usageRepository, usageArchiveRepository, usageAuditService);
+        expect(usageArchiveRepository.findIdByDetailId(12345678L)).andReturn(null).once();
+        replay(usageArchiveRepository, usageAuditService);
         usageService.updatePaidInfo(Collections.singletonList(paidUsage));
-        verify(usageRepository, usageArchiveRepository, usageAuditService);
+        verify(usageArchiveRepository, usageAuditService);
     }
 
     @Test

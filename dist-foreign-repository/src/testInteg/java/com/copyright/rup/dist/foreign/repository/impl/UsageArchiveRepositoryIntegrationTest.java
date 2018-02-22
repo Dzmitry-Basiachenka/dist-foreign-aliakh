@@ -266,6 +266,11 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
+    public void testFindIdByDetailId() {
+        assertEquals("7241b7e0-6ab8-4483-896d-fd485c574293", usageArchiveRepository.findIdByDetailId(5423214888L));
+    }
+
+    @Test
     public void testUpdatePaidInfo() {
         List<UsageDto> usages =
             usageArchiveRepository.findByScenarioIdAndRhAccountNumber("98caae9b-2f20-4c6d-b2af-3190a1115c48",

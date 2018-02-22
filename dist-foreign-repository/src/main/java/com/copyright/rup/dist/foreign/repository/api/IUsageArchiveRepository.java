@@ -90,6 +90,14 @@ public interface IUsageArchiveRepository {
     void deleteByScenarioId(String scenarioId);
 
     /**
+     * Finds {@link Usage} id from archive by provided detail id.
+     *
+     * @param detailId usage detail id
+     * @return found {@link Usage} id
+     */
+    String findIdByDetailId(Long detailId);
+
+    /**
      * Updates paid information for {@link PaidUsage} by id.
      *
      * @param usage {@link PaidUsage} instance

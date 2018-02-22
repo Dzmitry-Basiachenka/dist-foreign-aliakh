@@ -40,6 +40,7 @@ import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.perf4j.StopWatch;
 import org.perf4j.aop.Profiled;
 import org.perf4j.slf4j.Slf4JStopWatch;
@@ -359,9 +360,8 @@ public class UsageService implements IUsageService {
         int updated = 0;
         Set<Long> notFoundDetailsIds = Sets.newHashSet();
         for (PaidUsage paidUsage : usages) {
-            Usage usage = usageRepository.findByDetailId(paidUsage.getDetailId());
-            if (null != usage) {
-                String usageId = usage.getId();
+            String usageId = usageArchiveRepository.findIdByDetailId(paidUsage.getDetailId());
+            if (StringUtils.isNotBlank(usageId)) {
                 paidUsage.setId(usageId);
                 paidUsage.setStatus(UsageStatusEnum.PAID);
                 usageArchiveRepository.updatePaidInfo(paidUsage);
