@@ -7,12 +7,17 @@ import com.copyright.rup.dist.foreign.service.api.IWorkMatchingService;
 
 import com.google.common.collect.Lists;
 
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -33,36 +38,37 @@ public class WorkMatchingService implements IWorkMatchingService {
     @Override
     public List<Usage> matchByTitle(List<Usage> usages) {
         Set<String> idnos = usages.stream()
-            .filter(usage -> null == usage.getStandardNumber() && null != usage.getWorkTitle())
+            .filter(usage -> Objects.isNull(usage.getStandardNumber()) && Objects.nonNull(usage.getWorkTitle()))
             .map(Usage::getWorkTitle)
             .collect(Collectors.toSet());
-        Map<String, Long> wrWrkInstsByTitles = piIntegrationService.findWrWrkInstsByTitles(idnos);
-        List<Usage> result = Lists.newArrayList();
-        usages.forEach(usage -> {
-            usage.setWrWrkInst(wrWrkInstsByTitles.get(usage.getStandardNumber()));
-            if (null != usage.getWrWrkInst()) {
-                usage.setStatus(UsageStatusEnum.WORK_FOUND);
-                result.add(usage);
-            }
-        });
-        return result;
+        return CollectionUtils.isNotEmpty(idnos)
+            ? computeResult(usages, piIntegrationService.findWrWrkInstsByTitles(idnos), Usage::getWorkTitle)
+            : Collections.emptyList();
     }
 
     @Override
     public List<Usage> matchByIdno(List<Usage> usages) {
         Set<String> titles = usages.stream()
-            .filter(usage -> null != usage.getStandardNumber())
+            .filter(usage -> Objects.nonNull(usage.getStandardNumber()))
             .map(Usage::getStandardNumber)
             .collect(Collectors.toSet());
-        Map<String, Long> wrWrkInstsByIdno = piIntegrationService.findWrWrkInstsByIdno(titles);
+        return CollectionUtils.isNotEmpty(titles)
+            ? computeResult(usages, piIntegrationService.findWrWrkInstsByIdno(titles), Usage::getStandardNumber)
+            : Collections.emptyList();
+    }
+
+    private List<Usage> computeResult(List<Usage> usages, Map<String, Long> wrWrkInstsMap,
+                                      Function<Usage, String> function) {
         List<Usage> result = Lists.newArrayList();
-        usages.forEach(usage -> {
-            usage.setWrWrkInst(wrWrkInstsByIdno.get(usage.getStandardNumber()));
-            if (null != usage.getWrWrkInst()) {
-                usage.setStatus(UsageStatusEnum.WORK_FOUND);
-                result.add(usage);
-            }
-        });
+        if (MapUtils.isNotEmpty(wrWrkInstsMap)) {
+            usages.forEach(usage -> {
+                usage.setWrWrkInst(wrWrkInstsMap.get(function.apply(usage)));
+                if (Objects.nonNull(usage.getWrWrkInst())) {
+                    usage.setStatus(UsageStatusEnum.WORK_FOUND);
+                    result.add(usage);
+                }
+            });
+        }
         return result;
     }
 }
