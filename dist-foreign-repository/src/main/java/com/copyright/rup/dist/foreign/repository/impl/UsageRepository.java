@@ -317,4 +317,10 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         checkArgument(CollectionUtils.isNotEmpty(usages));
         usages.forEach(usage -> update("IUsageMapper.updateStatusAndWrWrkInst", usage));
     }
+
+    @Override
+    public void updateStatusAndProductFamily(List<Usage> usages) {
+        checkArgument(CollectionUtils.isNotEmpty(usages));
+        usages.forEach(usage -> update("IUsageMapper.updateStatusAndProductFamily", usage));
+    }
 }
