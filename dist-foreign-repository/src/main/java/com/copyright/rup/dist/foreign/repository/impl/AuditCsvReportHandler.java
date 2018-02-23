@@ -26,6 +26,7 @@ class AuditCsvReportHandler extends BaseCsvReportHandler {
         ImmutableTable.<String, String, CellProcessor>builder()
             .put("detailId", "Detail ID", OPTIONAL_PROCESSOR)
             .put("status", "Detail Status", OPTIONAL_PROCESSOR)
+            .put("productFamily", "Product Family", OPTIONAL_PROCESSOR)
             .put("batchName", "Usage Batch Name", OPTIONAL_PROCESSOR)
             .put("paymentDate", "Payment Date", new DateCellProcessor())
             .put("rhAccountNumber", "RH Account #", OPTIONAL_PROCESSOR)
