@@ -183,6 +183,7 @@ databaseChangeLog {
             column(name: 'service_fee', value: '0.32000')
         }
 
+        //testFindIdByDetailId
         //testUpdatePaidInfo
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
             column(name: 'df_scenario_uid', value: '98caae9b-2f20-4c6d-b2af-3190a1115c48')
