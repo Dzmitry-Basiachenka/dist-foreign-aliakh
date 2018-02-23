@@ -33,7 +33,6 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
-import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.IWorkMatchingService;
 import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
@@ -44,6 +43,7 @@ import com.google.common.collect.Sets;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
+import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -74,14 +74,24 @@ public class UsageServiceTest {
     private static final String NTS_PRODUCT_FAMILY = "NTS";
     private static final String USAGE_ID_1 = "Usage id 1";
     private static final String USAGE_ID_2 = "Usage id 2";
+    private static final String USAGE_ID_3 = "Usage id 3";
     private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
     private static final String USER_NAME = "User name";
     private static final Long RH_ACCOUNT_NUMBER = 1000001534L;
+    private static final String ACTION_REASON_1 =
+        "Detail was made eligible for NTS because sum of gross amounts, grouped by standard number, is less than $100";
+    private static final String ACTION_REASON_2 =
+        "Detail was made eligible for NTS because sum of gross amounts, grouped by work title, is less than $100";
+    private static final String ACTION_REASON_3 =
+        "Detail was made eligible for NTS because gross amount is less than $100";
+    private static final String USAGE_ID = "usageId";
+    private static final String STANDARD_NUMBER = "standardNumber";
+    private static final String WORK_TITLE = "workTitle";
     private Scenario scenario;
     private IUsageRepository usageRepository;
     private IUsageArchiveRepository usageArchiveRepository;
     private IUsageAuditService usageAuditService;
-    private IUsageService usageService;
+    private UsageService usageService;
     private IPrmIntegrationService prmIntegrationService;
     private IRmsIntegrationService rmsIntegrationService;
     private IWorkMatchingService workMatchingService;
@@ -508,7 +518,11 @@ public class UsageServiceTest {
         usage1.setStandardNumber("10.1147/RD.206.0542");
         Usage usage2 = buildUsage(USAGE_ID_2);
         usage2.setWorkTitle("Merry.go.round");
-        List<Usage> usages = Lists.newArrayList(usage1, usage2);
+        Usage usage3 = buildUsage(USAGE_ID_3);
+        usage3.setGrossAmount(new BigDecimal("99.00"));
+        usage3.setStandardNumber(null);
+        usage3.setWorkTitle(null);
+        List<Usage> usages = Lists.newArrayList(usage1, usage2, usage3);
         List<Usage> matchedByIdno = Lists.newArrayList(usage1);
         List<Usage> matchedByTitle = Lists.newArrayList(usage2);
         expect(usageRepository.findUsagesWithBlankWrWrkInst()).andReturn(usages).once();
@@ -518,15 +532,93 @@ public class UsageServiceTest {
         expectLastCall().once();
         usageRepository.updateStatusAndWrWrkInst(matchedByTitle);
         expectLastCall().once();
+        usageRepository.updateStatusAndProductFamily(Lists.newArrayList(usage3));
+        expectLastCall().once();
         usageAuditService.logAction(usage1.getId(), UsageActionTypeEnum.WORK_FOUND,
             "Wr Wrk Inst 123160519 was found in PI by standard number 10.1147/RD.206.0542");
         expectLastCall().once();
         usageAuditService.logAction(usage2.getId(), UsageActionTypeEnum.WORK_FOUND,
             "Wr Wrk Inst 123160519 was found in PI by title 'Merry.go.round'");
         expectLastCall().once();
+        usageAuditService.logAction(usage3.getId(), UsageActionTypeEnum.ELIGIBLE_FOR_NTS, ACTION_REASON_3);
+        expectLastCall().once();
         replay(usageRepository, workMatchingService, usageAuditService);
         usageService.findWorksAndUpdateStatuses();
         verify(usageRepository, workMatchingService, usageAuditService);
+    }
+
+    @Test
+    public void testMakeUsagesEligibleForNtsGroupByStandardNumber() {
+        List<Usage> usages = Lists.newArrayList();
+        usages.add(buildUsageWithStandardNumber(USAGE_ID + "1", STANDARD_NUMBER + "1", 99));
+        usages.add(buildUsageWithStandardNumber(USAGE_ID + "2", STANDARD_NUMBER + "2", 100));
+        usages.add(buildUsageWithStandardNumber(USAGE_ID + "3", STANDARD_NUMBER + "3", 50));
+        usages.add(buildUsageWithStandardNumber(USAGE_ID + "4", STANDARD_NUMBER + "3", 49));
+        usages.add(buildUsageWithStandardNumber(USAGE_ID + "5", STANDARD_NUMBER + "4", 50));
+        usages.add(buildUsageWithStandardNumber(USAGE_ID + "6", STANDARD_NUMBER + "4", 50));
+        Capture<List<Usage>> usagesCapture = new Capture<>();
+        usageRepository.updateStatusAndProductFamily(capture(usagesCapture));
+        EasyMock.expectLastCall();
+        usageAuditService.logAction(usages.get(0).getId(), UsageActionTypeEnum.ELIGIBLE_FOR_NTS, ACTION_REASON_1);
+        expectLastCall().once();
+        usageAuditService.logAction(usages.get(2).getId(), UsageActionTypeEnum.ELIGIBLE_FOR_NTS, ACTION_REASON_1);
+        expectLastCall().once();
+        usageAuditService.logAction(usages.get(3).getId(), UsageActionTypeEnum.ELIGIBLE_FOR_NTS, ACTION_REASON_1);
+        expectLastCall().once();
+        replay(usageRepository, usageAuditService);
+        usageService.makeUsagesEligibleForNts(usages);
+        List<Usage> actualUsages = usagesCapture.getValue();
+        assertEquals(3, actualUsages.size());
+        verifyUsagesEligibleForNts(actualUsages.get(0), USAGE_ID + "1");
+        verifyUsagesEligibleForNts(actualUsages.get(1), USAGE_ID + "3");
+        verifyUsagesEligibleForNts(actualUsages.get(2), USAGE_ID + "4");
+        verify(usageRepository, usageAuditService);
+    }
+
+    @Test
+    public void testMakeUsagesEligibleForNtsGroupByWorkTitle() {
+        List<Usage> usages = Lists.newArrayList();
+        usages.add(buildUsageWithWorkTitle(USAGE_ID + "1", WORK_TITLE + "1", 99));
+        usages.add(buildUsageWithWorkTitle(USAGE_ID + "2", WORK_TITLE + "2", 100));
+        usages.add(buildUsageWithWorkTitle(USAGE_ID + "3", WORK_TITLE + "3", 50));
+        usages.add(buildUsageWithWorkTitle(USAGE_ID + "4", WORK_TITLE + "3", 49));
+        usages.add(buildUsageWithWorkTitle(USAGE_ID + "5", WORK_TITLE + "4", 50));
+        usages.add(buildUsageWithWorkTitle(USAGE_ID + "6", WORK_TITLE + "4", 50));
+        Capture<List<Usage>> usagesCapture = new Capture<>();
+        usageRepository.updateStatusAndProductFamily(capture(usagesCapture));
+        EasyMock.expectLastCall();
+        usageAuditService.logAction(usages.get(0).getId(), UsageActionTypeEnum.ELIGIBLE_FOR_NTS, ACTION_REASON_2);
+        expectLastCall().once();
+        usageAuditService.logAction(usages.get(2).getId(), UsageActionTypeEnum.ELIGIBLE_FOR_NTS, ACTION_REASON_2);
+        expectLastCall().once();
+        usageAuditService.logAction(usages.get(3).getId(), UsageActionTypeEnum.ELIGIBLE_FOR_NTS, ACTION_REASON_2);
+        expectLastCall().once();
+        replay(usageRepository, usageAuditService);
+        usageService.makeUsagesEligibleForNts(usages);
+        List<Usage> actualUsages = usagesCapture.getValue();
+        assertEquals(3, actualUsages.size());
+        verifyUsagesEligibleForNts(actualUsages.get(0), USAGE_ID + "1");
+        verifyUsagesEligibleForNts(actualUsages.get(1), USAGE_ID + "3");
+        verifyUsagesEligibleForNts(actualUsages.get(2), USAGE_ID + "4");
+        verify(usageRepository, usageAuditService);
+    }
+
+    @Test
+    public void testMakeUsagesEligibleForNtsGroupBySelf() {
+        List<Usage> usages = Lists.newArrayList();
+        usages.add(buildUsage(USAGE_ID + "1", 99));
+        usages.add(buildUsage(USAGE_ID + "2", 100));
+        Capture<List<Usage>> usagesCapture = new Capture<>();
+        usageRepository.updateStatusAndProductFamily(capture(usagesCapture));
+        EasyMock.expectLastCall();
+        usageAuditService.logAction(usages.get(0).getId(), UsageActionTypeEnum.ELIGIBLE_FOR_NTS, ACTION_REASON_3);
+        expectLastCall().once();
+        replay(usageRepository, usageAuditService);
+        usageService.makeUsagesEligibleForNts(usages);
+        List<Usage> actualUsages = usagesCapture.getValue();
+        assertEquals(1, actualUsages.size());
+        verifyUsagesEligibleForNts(actualUsages.get(0), USAGE_ID + "1");
+        verify(usageRepository, usageAuditService);
     }
 
     private void assertResult(List<?> result, int size) {
@@ -553,5 +645,37 @@ public class UsageServiceTest {
         usage.setServiceFee(new BigDecimal("0.32"));
         usage.setProductFamily("FAS");
         return usage;
+    }
+
+    private Usage buildUsageWithStandardNumber(String id, String standardNumber, int grossAmount) {
+        Usage usage = new Usage();
+        usage.setId(id);
+        usage.setStandardNumber(standardNumber);
+        usage.setGrossAmount(BigDecimal.valueOf(grossAmount));
+        return usage;
+    }
+
+    private Usage buildUsageWithWorkTitle(String id, String workTitle, int grossAmount) {
+        Usage usage = new Usage();
+        usage.setId(id);
+        usage.setStandardNumber(null);
+        usage.setWorkTitle(workTitle);
+        usage.setGrossAmount(BigDecimal.valueOf(grossAmount));
+        return usage;
+    }
+
+    private Usage buildUsage(String id, int grossAmount) {
+        Usage usage = new Usage();
+        usage.setId(id);
+        usage.setStandardNumber(null);
+        usage.setWorkTitle(null);
+        usage.setGrossAmount(BigDecimal.valueOf(grossAmount));
+        return usage;
+    }
+
+    private void verifyUsagesEligibleForNts(Usage usage, String usageId) {
+        assertEquals(usageId, usage.getId());
+        assertEquals(UsageStatusEnum.ELIGIBLE, usage.getStatus());
+        assertEquals(NTS_PRODUCT_FAMILY, usage.getProductFamily());
     }
 }

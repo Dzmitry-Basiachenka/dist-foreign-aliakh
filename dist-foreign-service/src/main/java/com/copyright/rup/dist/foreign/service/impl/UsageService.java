@@ -397,6 +397,23 @@ public class UsageService implements IUsageService {
         }
     }
 
+    /**
+     * Updates eligible for NTS {@link Usage}s: changes status to {@link UsageStatusEnum#ELIGIBLE} and
+     * product family to NTS if gross amount is less than $100.
+     *
+     * @param usages list of {@link Usage}s
+     */
+    void makeUsagesEligibleForNts(List<Usage> usages) {
+        makeUsagesEligibleForNts(UsageGroup.STANDARD_NUMBER.group(usages),
+            "Detail was made eligible for NTS because sum of gross amounts, " +
+                "grouped by standard number, is less than $100");
+        makeUsagesEligibleForNts(UsageGroup.WORK_TITLE.group(usages),
+            "Detail was made eligible for NTS because sum of gross amounts, " +
+                "grouped by work title, is less than $100");
+        makeUsagesEligibleForNts(UsageGroup.SELF.group(usages),
+            "Detail was made eligible for NTS because gross amount is less than $100");
+    }
+
     private List<Usage> findWorksByIdno(List<Usage> usages) {
         List<Usage> matchedByIdno = workMatchingService.matchByIdno(usages);
         if (CollectionUtils.isNotEmpty(matchedByIdno)) {
@@ -417,17 +434,6 @@ public class UsageService implements IUsageService {
                     usage.getWorkTitle())));
         }
         return matchedByTitle;
-    }
-
-    private void makeUsagesEligibleForNts(List<Usage> usages) {
-        makeUsagesEligibleForNts(UsageGroup.STANDARD_NUMBER.group(usages),
-            "Detail was made eligible for NTS because sum of gross amounts, " +
-                "grouped by standard number, is less than $100");
-        makeUsagesEligibleForNts(UsageGroup.WORK_TITLE.group(usages),
-            "Detail was made eligible for NTS because sum of gross amounts, " +
-                "grouped by work title, is less than $100");
-        makeUsagesEligibleForNts(UsageGroup.SELF.group(usages),
-            "Detail was made eligible for NTS because gross amount is less than $100");
     }
 
     private void makeUsagesEligibleForNts(List<Usage> usages, String actionReason) {
