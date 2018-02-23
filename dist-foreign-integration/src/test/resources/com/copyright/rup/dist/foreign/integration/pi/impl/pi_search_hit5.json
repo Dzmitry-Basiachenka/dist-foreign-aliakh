@@ -1,0 +1,30 @@
+{
+  "catalogRank": 99,
+  "mainTitle": "Annuaire de la communication en Rhône-Alpes",
+  "fullTitle": "Annuaire de la communication en Rhône-Alpes",
+  "mainIdno": "1140-9126",
+  "mainIdnoType": "VALISSN",
+  "mainLang": "French",
+  "mainPubCountry": "France",
+  "mainPublisher": "Intermédia",
+  "pubCountry": [
+    "France"
+  ],
+  "publisher": [
+    "Intermédia"
+  ],
+  "language": [
+    "French"
+  ],
+  "title": [
+    "Annuaire de la communication en Rhône-Alpes"
+  ],
+  "idno": [
+    "1140-9126"
+  ],
+  "issn": "1140-9126",
+  "wrWrkInst": "156427025",
+  "pubType": "Journal",
+  "dataSource": "ace60dcb-8f12-4959-8033-236c2e9b3145",
+  "routingId": 3
+}

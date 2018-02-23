@@ -1,0 +1,52 @@
+{
+  "catalogRank": 99,
+  "mainTitle": "Forbidden rites",
+  "fullTitle": "Forbidden rites : a necromancer's manual of the fifteenth century",
+  "mainIdno": "978-0-271-01750-1",
+  "mainIdnoType": "VALISBN13",
+  "mainLang": "English",
+  "mainPubCountry": "United States of America",
+  "mainPublisher": "PENNSYLVANIA STATE UNIVERSITY PRESS",
+  "pubCountry": [
+    "United States of America"
+  ],
+  "author": [
+    "KIECKHEFER, RICHARD"
+  ],
+  "publisher": [
+    "PENNSYLVANIA STATE UNIVERSITY PRESS"
+  ],
+  "language": [
+    "English"
+  ],
+  "title": [
+    "FORBIDDEN RITES : A NECROMANCER'S MANUAL OF THE FIFTEENTH CENTURY",
+    "Forbidden rites : a necromancer's manual of the fifteenth century",
+    "Forbidden rites",
+    "a necromancer's manual of the fifteenth century",
+    "MAGIC IN HISTORY"
+  ],
+  "idno": [
+    "978-0-271-01750-1",
+    "0-271-01750-3",
+    "97026745"
+  ],
+  "isbn10": "0-271-01750-3",
+  "isbn13": "978-0-271-01750-1",
+  "wrWrkInst": "123059057",
+  "subject": [
+    "REL100000",
+    "OCC028000",
+    "MAGIC_HISTORY",
+    "DEMONOLOGY",
+    "DEMONOLOGY",
+    "MAGIC_HISTORY",
+    "HRQX2",
+    "HRQX9",
+    "VXWM"
+  ],
+  "pubType": "Book",
+  "dataSource": "eeb701e5-7b36-46a5-9df4-704ab6ea1bb1",
+  "startDate": "19980101",
+  "routingId": 9
+}
