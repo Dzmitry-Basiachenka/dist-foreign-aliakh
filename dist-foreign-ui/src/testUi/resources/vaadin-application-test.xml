@@ -8,10 +8,6 @@
     <import resource="classpath:/com/copyright/rup/dist/foreign/ui/dist-foreign-ui-context.xml"/>
     <import resource="classpath:/com/copyright/rup/dist/foreign/test/integ/db-postgres-placeholder.xml"/>
 
-    <bean id="quartzScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
-        <!--Stub Scheduler for quartz job-->
-    </bean>
-
     <bean id="prmIntegrationService" class="com.copyright.rup.dist.foreign.ui.mock.PrmIntegrationServiceMock"/>
     <bean id="rmsGrantsService" class="com.copyright.rup.dist.foreign.ui.mock.RmsGrantsServiceMock"/>
     <bean id="rightsholderService" class="com.copyright.rup.dist.foreign.ui.mock.RightsholderServiceMock"/>
