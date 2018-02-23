@@ -240,24 +240,24 @@ public class UsageArchiveRepositoryIntegrationTest {
             .execute(() -> usageArchiveRepository.writeScenarioUsagesCsvReport(SCENARIO_ID, outputStream));
         BufferedReader bufferedReader =
             new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-        assertEquals("Detail ID,Usage Batch Name,Fiscal Year,RRO Account #,RRO Name,Payment Date,Title,Article," +
-            "Standard Number,Wr Wrk Inst,RH Account #,RH Name,Payee Account #,Payee Name,Publisher,Pub Date," +
-            "Number of Copies,Reported value,Gross Amt in USD,Service Fee Amount,Net Amt in USD,Service Fee %," +
-            "Market,Market Period From,Market Period To,Author", bufferedReader.readLine());
-        assertEquals("6997788888,CADRA_11Dec16,FY2017,7000813806,,01/11/2017," +
+        assertEquals("Detail ID,Usage Batch Name,Product Family,Fiscal Year,RRO Account #,RRO Name,Payment Date," +
+            "Title,Article,Standard Number,Wr Wrk Inst,RH Account #,RH Name,Payee Account #,Payee Name,Publisher," +
+            "Pub Date,Number of Copies,Reported value,Gross Amt in USD,Service Fee Amount,Net Amt in USD," +
+            "Service Fee %,Market,Market Period From,Market Period To,Author", bufferedReader.readLine());
+        assertEquals("6997788888,CADRA_11Dec16,FAS,FY2017,7000813806,,01/11/2017," +
             "\"2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, " +
             "USA\",Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle," +
             "1008902112377654XX,180382914,1000009997,IEEE - Inst of Electrical and Electronics Engrs,1000009997," +
             "IEEE - Inst of Electrical and Electronics Engrs,IEEE,09/10/2013,2502232,2500.00,35000.0000000000," +
             "11200.0000000000,23800.0000000000,32.0,Doc Del,2013,2017," +
             "\"Íñigo López de Mendoza, marqués de Santillana\"", bufferedReader.readLine());
-        assertEquals("6997788884,JAACC_11Dec16,FY2016,2000017010," +
+        assertEquals("6997788884,JAACC_11Dec16,FAS,FY2016,2000017010," +
             "\"JAC, Japan Academic Association for Copyright Clearance, Inc.\",09/10/2015," +
             "10 Years Plant Molecular Biology,DIN EN 779:2012,1008902002377655XX,345870577,1000005413," +
             "Kluwer Academic Publishers - Dordrecht,1000005413,Kluwer Academic Publishers - Dordrecht," +
             "McGraw-Hill,12/31/2009,2630,1280.00,2125.2400000000,680.0768000000,1445.1632000000,32.0,Edu,2015," +
             "2019,Mirjam H. Hüberli", bufferedReader.readLine());
-        assertEquals("6997788886,JAACC_11Dec16,FY2016,2000017010," +
+        assertEquals("6997788886,JAACC_11Dec16,FAS,FY2016,2000017010," +
             "\"JAC, Japan Academic Association for Copyright Clearance, Inc.\",09/10/2015,100 ROAD MOVIES," +
             "DIN EN 779:2012,1008902112377654XX,243904752,1000002859,John Wiley & Sons - Books,1000002859," +
             "John Wiley & Sons - Books,IEEE,09/10/2013,250232,9900.00,67874.8000000000,21720.0000000000," +

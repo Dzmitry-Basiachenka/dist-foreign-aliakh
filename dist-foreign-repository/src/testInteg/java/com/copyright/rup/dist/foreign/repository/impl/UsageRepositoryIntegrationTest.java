@@ -507,17 +507,17 @@ public class UsageRepositoryIntegrationTest {
         EXECUTOR_SERVICE.execute(() -> usageRepository.writeScenarioUsagesCsvReport(SCENARIO_ID, outputStream));
         BufferedReader bufferedReader =
             new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-        assertEquals("Detail ID,Usage Batch Name,Fiscal Year,RRO Account #,RRO Name,Payment Date,Title,Article," +
-            "Standard Number,Wr Wrk Inst,RH Account #,RH Name,Payee Account #,Payee Name,Publisher,Pub Date," +
-            "Number of Copies,Reported value,Gross Amt in USD,Service Fee Amount,Net Amt in USD,Service Fee %," +
-            "Market,Market Period From,Market Period To,Author", bufferedReader.readLine());
-        assertEquals("6997788886,JAACC_11Dec16,FY2016,2000017010," +
+        assertEquals("Detail ID,Usage Batch Name,Product Family,Fiscal Year,RRO Account #,RRO Name,Payment Date," +
+            "Title,Article,Standard Number,Wr Wrk Inst,RH Account #,RH Name,Payee Account #,Payee Name,Publisher," +
+            "Pub Date,Number of Copies,Reported value,Gross Amt in USD,Service Fee Amount,Net Amt in USD," +
+            "Service Fee %,Market,Market Period From,Market Period To,Author", bufferedReader.readLine());
+        assertEquals("6997788886,JAACC_11Dec16,FAS,FY2016,2000017010," +
                 "\"JAC, Japan Academic Association for Copyright Clearance, Inc.\"," +
                 "09/10/2015,100 ROAD MOVIES,DIN EN 779:2012,1008902112377654XX,243904752,1000002859," +
                 "John Wiley & Sons - Books,1000002859,John Wiley & Sons - Books,IEEE,09/10/2013,250232,9900.00," +
                 "16437.4000000000,5260.0000000000,11177.4000000000,32.0,Doc Del,2013,2017,Philippe de Mézières",
             bufferedReader.readLine());
-        assertEquals("6213788886,JAACC_11Dec16,FY2016,2000017010," +
+        assertEquals("6213788886,JAACC_11Dec16,FAS,FY2016,2000017010," +
                 "\"JAC, Japan Academic Association for Copyright Clearance, Inc.\"," +
                 "09/10/2015,100 ROAD MOVIES,DIN EN 779:2012,1008902112317622XX,243904752,1000002859," +
                 "John Wiley & Sons - Books,1000002859,John Wiley & Sons - Books,IEEE,09/10/2013,100,9900.00," +
@@ -766,13 +766,13 @@ public class UsageRepositoryIntegrationTest {
         EXECUTOR_SERVICE.execute(() -> usageRepository.writeAuditCsvReport(filter, outputStream));
         BufferedReader bufferedReader =
             new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-        assertEquals("Detail ID,Detail Status,Usage Batch Name,Payment Date,RH Account #,RH Name,Wr Wrk Inst,Title," +
-                "Standard Number,Amt in USD,Service Fee %,Scenario Name,Check #,Check Date,Event ID,Dist. Name",
-            bufferedReader.readLine());
-        assertEquals("5423214888,PAID,Paid batch,02/12/2021,1000002859,John Wiley & Sons - Books,243904752," +
+        assertEquals("Detail ID,Detail Status,Product Family,Usage Batch Name,Payment Date,RH Account #,RH Name," +
+            "Wr Wrk Inst,Title,Standard Number,Amt in USD,Service Fee %,Scenario Name,Check #,Check Date,Event ID," +
+            "Dist. Name", bufferedReader.readLine());
+        assertEquals("5423214888,PAID,FAS,Paid batch,02/12/2021,1000002859,John Wiley & Sons - Books,243904752," +
             "100 ROAD MOVIES,1008902112317555XX,1000.0000000000,16.0,Paid Scenario,578945,03/15/2017,53256," +
             "FDA March 17", bufferedReader.readLine());
-        assertEquals("6997788885,ELIGIBLE,AccessCopyright_11Dec16,08/16/2018,1000002859," +
+        assertEquals("6997788885,ELIGIBLE,FAS,AccessCopyright_11Dec16,08/16/2018,1000002859," +
                 "John Wiley & Sons - Books,244614835,15th International Conference on Environmental Degradation of " +
                 "Materials in Nuclear Power Systems Water Reactors,1008902002377655XX,35000.0000000000,0.0,,,,,",
             bufferedReader.readLine());
@@ -786,9 +786,9 @@ public class UsageRepositoryIntegrationTest {
         EXECUTOR_SERVICE.execute(() -> usageRepository.writeAuditCsvReport(new AuditFilter(), outputStream));
         BufferedReader bufferedReader =
             new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-        assertEquals("Detail ID,Detail Status,Usage Batch Name,Payment Date,RH Account #,RH Name,Wr Wrk Inst,Title," +
-                "Standard Number,Amt in USD,Service Fee %,Scenario Name,Check #,Check Date,Event ID,Dist. Name",
-            bufferedReader.readLine());
+        assertEquals("Detail ID,Detail Status,Product Family,Usage Batch Name,Payment Date,RH Account #,RH Name," +
+            "Wr Wrk Inst,Title,Standard Number,Amt in USD,Service Fee %,Scenario Name,Check #,Check Date,Event ID," +
+            "Dist. Name", bufferedReader.readLine());
         assertNull(bufferedReader.readLine());
     }
 
