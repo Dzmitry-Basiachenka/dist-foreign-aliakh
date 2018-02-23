@@ -138,7 +138,7 @@ public class UsagesWidgetTest {
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
             .getComponent(0)).getComponent(1);
         assertTrue(addToScenarioButton.isDisableOnClick());
-        Windows.showNotificationWindow("Scenario cannot be created. Please select ELIGIBLE usages");
+        Windows.showNotificationWindow("Scenario cannot be created. There are no usages to include into scenario");
         expectLastCall().once();
         expect(controller.getSize()).andReturn(0).once();
         replay(controller, clickEvent, Windows.class);
@@ -160,8 +160,9 @@ public class UsagesWidgetTest {
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
             .getComponent(0)).getComponent(1);
         assertTrue(addToScenarioButton.isDisableOnClick());
-        expect(controller.isFilterStatusEligible()).andReturn(false).once();
-        Windows.showNotificationWindow("Please apply ELIGIBLE status filter to create scenario");
+        expect(controller.isProductFamilyAndStatusFiltersApplied()).andReturn(false).once();
+        Windows.showNotificationWindow(
+            "Please apply Product Family filter and ELIGIBLE status filter to create scenario");
         expectLastCall().once();
         replay(controller, clickEvent, Windows.class);
         Collection<?> listeners = addToScenarioButton.getListeners(ClickEvent.class);
@@ -182,7 +183,30 @@ public class UsagesWidgetTest {
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
             .getComponent(0)).getComponent(1);
         assertTrue(addToScenarioButton.isDisableOnClick());
-        expect(controller.isFilterStatusEligible()).andReturn(true).once();
+        expect(controller.isProductFamilyAndStatusFiltersApplied()).andReturn(true).once();
+        expect(controller.isSingleProductFamilySelected()).andReturn(false).once();
+        Windows.showNotificationWindow("Scenario cannot be created. Select only one product family at a time");
+        expectLastCall().once();
+        replay(controller, clickEvent, Windows.class);
+        Collection<?> listeners = addToScenarioButton.getListeners(ClickEvent.class);
+        assertEquals(2, listeners.size());
+        ClickListener clickListener = (ClickListener) listeners.iterator().next();
+        clickListener.buttonClick(clickEvent);
+        verify(controller, clickEvent, Windows.class);
+    }
+
+    @Test
+    public void testAddToScenarioButtonClickListenerFasProductFamily() {
+        mockStatic(Windows.class);
+        LazyTable<UsageBeanQuery, UsageDto> usagesTable =
+            new LazyTable<>(new UsageDtoBeanLoader(), UsageBeanQuery.class, 1);
+        Whitebox.setInternalState(usagesWidget, USAGES_TABLE, usagesTable);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
+            .getComponent(0)).getComponent(1);
+        assertTrue(addToScenarioButton.isDisableOnClick());
+        expect(controller.isProductFamilyAndStatusFiltersApplied()).andReturn(true).once();
+        expect(controller.isSingleProductFamilySelected()).andReturn(true).once();
         expect(controller.getScenarioService()).andReturn(null).once();
         Windows.showModalWindow(anyObject(CreateScenarioWindow.class));
         expectLastCall().once();

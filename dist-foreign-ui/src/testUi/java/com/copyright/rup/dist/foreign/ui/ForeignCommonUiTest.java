@@ -296,6 +296,11 @@ public class ForeignCommonUiTest extends CommonUiTest {
         clickButtonAndWait(filterButtonsLayout, "Apply");
     }
 
+    void applyProductFamiliesFilter(WebElement filterWidget, String selectItem) {
+        applyItemFilter(filterWidget, "Product_Families", "product-families-filter-window", "Product Families filter",
+            selectItem);
+    }
+
     void applyBatchesFilter(WebElement filterWidget, String selectItem) {
         applyItemFilter(filterWidget, "Batches", "batches-filter-window", "Batches filter", selectItem);
     }
@@ -321,7 +326,7 @@ public class ForeignCommonUiTest extends CommonUiTest {
     private void applyItemFilter(WebElement filterWidget, String buttonId, String windowId, String windowCaption,
                                  String selectItem) {
         WebElement filterElement = assertWebElement(filterWidget, buttonId);
-        clickElement(filterElement, HTML_SPAN_TAG_NAME, buttonId);
+        clickElement(filterElement, HTML_SPAN_TAG_NAME, buttonId.replace("_", " "));
         WebElement filterWindow = assertWebElement(By.id(windowId));
         assertWebElement(filterWindow, HTML_DIV_TAG_NAME, windowCaption);
         WebElement item = assertWebElement(filterWindow, By.className(V_CHECKBOX_CLASS_NAME));

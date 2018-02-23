@@ -36,6 +36,7 @@ import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.vaadin.ui.HorizontalLayout;
 
 import org.apache.commons.lang3.StringUtils;
@@ -275,37 +276,85 @@ public class UsagesControllerTest {
     }
 
     @Test
-    public void testIsFilterStatusEligibleStatusNull() {
+    public void testIsProductFamilyAndStatusFiltersAppliedStatusNull() {
         IUsagesFilterWidget filterWidgetMock = createMock(IUsagesFilterWidget.class);
         UsageFilter usageFilter = new UsageFilter();
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
         replay(filterController, filterWidgetMock);
-        assertFalse(controller.isFilterStatusEligible());
+        assertFalse(controller.isProductFamilyAndStatusFiltersApplied());
         verify(filterController, filterWidgetMock);
     }
 
     @Test
-    public void testIsFilterStatusEligibleStatusNew() {
+    public void testIsProductFamilyAndStatusFiltersAppliedStatusNew() {
         IUsagesFilterWidget filterWidgetMock = createMock(IUsagesFilterWidget.class);
         UsageFilter usageFilter = new UsageFilter();
         usageFilter.setUsageStatus(UsageStatusEnum.NEW);
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
         replay(filterController, filterWidgetMock);
-        assertFalse(controller.isFilterStatusEligible());
+        assertFalse(controller.isProductFamilyAndStatusFiltersApplied());
         verify(filterController, filterWidgetMock);
     }
 
     @Test
-    public void testIsFilterStatusEligibleStatusEligible() {
+    public void testIsProductFamilyAndStatusFiltersAppliedWithProductFamilies() {
+        IUsagesFilterWidget filterWidgetMock = createMock(IUsagesFilterWidget.class);
+        UsageFilter usageFilter = new UsageFilter();
+        usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
+        usageFilter.setProductFamilies(Sets.newHashSet("FAS", "NTS"));
+        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
+        expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
+        replay(filterController, filterWidgetMock);
+        assertTrue(controller.isProductFamilyAndStatusFiltersApplied());
+        verify(filterController, filterWidgetMock);
+    }
+
+    @Test
+    public void testIsProductFamilyAndStatusFiltersAppliedWithoutProductFamilies() {
         IUsagesFilterWidget filterWidgetMock = createMock(IUsagesFilterWidget.class);
         UsageFilter usageFilter = new UsageFilter();
         usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
         replay(filterController, filterWidgetMock);
-        assertTrue(controller.isFilterStatusEligible());
+        assertFalse(controller.isProductFamilyAndStatusFiltersApplied());
+        verify(filterController, filterWidgetMock);
+    }
+
+    @Test
+    public void testIsSingleProductFamilySelectedFas() {
+        IUsagesFilterWidget filterWidgetMock = createMock(IUsagesFilterWidget.class);
+        UsageFilter usageFilter = new UsageFilter();
+        usageFilter.setProductFamilies(Sets.newHashSet("FAS"));
+        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
+        expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
+        replay(filterController, filterWidgetMock);
+        assertTrue(controller.isSingleProductFamilySelected());
+        verify(filterController, filterWidgetMock);
+    }
+
+    @Test
+    public void testIsSingleProductFamilySelectedNts() {
+        IUsagesFilterWidget filterWidgetMock = createMock(IUsagesFilterWidget.class);
+        UsageFilter usageFilter = new UsageFilter();
+        usageFilter.setProductFamilies(Sets.newHashSet("NTS"));
+        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
+        expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
+        replay(filterController, filterWidgetMock);
+        assertFalse(controller.isSingleProductFamilySelected());
+        verify(filterController, filterWidgetMock);
+    }
+
+    @Test
+    public void testIsSingleProductFamilySelectedNoSelection() {
+        IUsagesFilterWidget filterWidgetMock = createMock(IUsagesFilterWidget.class);
+        UsageFilter usageFilter = new UsageFilter();
+        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
+        expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
+        replay(filterController, filterWidgetMock);
+        assertFalse(controller.isSingleProductFamilySelected());
         verify(filterController, filterWidgetMock);
     }
 

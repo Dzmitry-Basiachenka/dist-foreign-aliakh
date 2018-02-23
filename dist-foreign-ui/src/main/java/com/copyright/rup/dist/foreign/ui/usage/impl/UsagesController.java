@@ -5,6 +5,7 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
@@ -29,6 +30,7 @@ import com.copyright.rup.vaadin.widget.api.CommonController;
 import com.google.common.base.MoreObjects;
 import com.google.common.io.Files;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -41,6 +43,7 @@ import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -165,8 +168,16 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
-    public boolean isFilterStatusEligible() {
-        return UsageStatusEnum.ELIGIBLE == filterController.getWidget().getAppliedFilter().getUsageStatus();
+    public boolean isProductFamilyAndStatusFiltersApplied() {
+        UsageFilter filter = filterController.getWidget().getAppliedFilter();
+        return UsageStatusEnum.ELIGIBLE == filter.getUsageStatus()
+            && CollectionUtils.isNotEmpty(filter.getProductFamilies());
+    }
+
+    @Override
+    public boolean isSingleProductFamilySelected() {
+        Set<String> productFamilies = filterController.getWidget().getAppliedFilter().getProductFamilies();
+        return 1 == CollectionUtils.size(productFamilies) && productFamilies.contains("FAS");
     }
 
     @Override
