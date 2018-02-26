@@ -15,6 +15,7 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.google.common.collect.ImmutableMap;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
@@ -56,8 +57,12 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
         LocalDate.now().format(DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT));
     private static final String CONFIRM_BUTTON_ID = "Confirm";
     private static final String SCENARIO_NAME_FIELD = "Scenario name";
+    private static final String FAS_PRODUCT_FAMILY = "FAS";
+    private static final String NTS_PRODUCT_FAMILY = "NTS";
     private static final String APPLY_FILTERS_MESSAGE =
         "Please apply Product Family filter and ELIGIBLE status filter to create scenario";
+    private static final String SELECT_ONE_PRODUCT_FAMILY_MESSAGE =
+        "Scenario cannot be created. Select only one product family at a time";
 
     private UsageBatchInfo validUsageBatch = new UsageBatchInfo("CADRA_11Dec16", "01/11/2017", "FY2017",
         "7000813806 - CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil");
@@ -92,11 +97,20 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
             "1000005413 - Kluwer Academic Publishers - Dordrecht");
         applyFiltersAndVerifyNotification(usagesTab, nonexistentBatch, UsageStatusEnum.ELIGIBLE, 0,
             "Scenario cannot be created. There are no usages to include into scenario");
-        applyFiltersAndVerifyNotification(usagesTab, batch, UsageStatusEnum.NEW, 1, APPLY_FILTERS_MESSAGE);
-        applyFiltersAndVerifyNotification(usagesTab, batch, UsageStatusEnum.WORK_FOUND, 1, APPLY_FILTERS_MESSAGE);
-        applyFiltersAndVerifyNotification(usagesTab, batch, UsageStatusEnum.RH_NOT_FOUND, 1, APPLY_FILTERS_MESSAGE);
-        applyFiltersAndVerifyNotification(usagesTab, batch, UsageStatusEnum.SENT_FOR_RA, 1, APPLY_FILTERS_MESSAGE);
-        applyFiltersAndVerifyCreateScenarioWindow(usagesTab, batch, UsageStatusEnum.ELIGIBLE, 1);
+        applyFiltersAndVerifyNotification(usagesTab, batch, UsageStatusEnum.NEW, 1, APPLY_FILTERS_MESSAGE,
+            FAS_PRODUCT_FAMILY);
+        applyFiltersAndVerifyNotification(usagesTab, batch, UsageStatusEnum.WORK_FOUND, 1, APPLY_FILTERS_MESSAGE,
+            FAS_PRODUCT_FAMILY);
+        applyFiltersAndVerifyNotification(usagesTab, batch, UsageStatusEnum.RH_NOT_FOUND, 1, APPLY_FILTERS_MESSAGE,
+            FAS_PRODUCT_FAMILY);
+        applyFiltersAndVerifyNotification(usagesTab, batch, UsageStatusEnum.SENT_FOR_RA, 1, APPLY_FILTERS_MESSAGE,
+            FAS_PRODUCT_FAMILY);
+        applyFiltersAndVerifyNotification(usagesTab, batch, UsageStatusEnum.ELIGIBLE, 2, APPLY_FILTERS_MESSAGE);
+        applyFiltersAndVerifyNotification(usagesTab, batch, UsageStatusEnum.ELIGIBLE, 2,
+            SELECT_ONE_PRODUCT_FAMILY_MESSAGE, FAS_PRODUCT_FAMILY, NTS_PRODUCT_FAMILY);
+        applyFiltersAndVerifyNotification(usagesTab, batch, UsageStatusEnum.ELIGIBLE, 1,
+            SELECT_ONE_PRODUCT_FAMILY_MESSAGE, NTS_PRODUCT_FAMILY);
+        applyFiltersAndVerifyCreateScenarioWindow(usagesTab, batch, UsageStatusEnum.ELIGIBLE, 1, FAS_PRODUCT_FAMILY);
     }
 
     @Test
@@ -213,23 +227,29 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
     }
 
     private void applyFiltersAndVerifyNotification(WebElement usagesTab, UsageBatchInfo batchInfo,
-                                                   UsageStatusEnum status, int count, String message) {
-        applyFiltersAndVerifyTable(batchInfo, status, count);
+                                                   UsageStatusEnum status, int count, String message,
+                                                   String... productFamilies) {
+        applyFiltersAndVerifyTable(batchInfo, status, count, productFamilies);
         clickButtonAndWait(usagesTab, "Add_To_Scenario");
         verifyNotificationWindow(message);
     }
 
     private void applyFiltersAndVerifyCreateScenarioWindow(WebElement usagesTab, UsageBatchInfo batchInfo,
-                                                           UsageStatusEnum status, int count) {
-        applyFiltersAndVerifyTable(batchInfo, status, count);
+                                                           UsageStatusEnum status, int count,
+                                                           String... productFamilies) {
+        applyFiltersAndVerifyTable(batchInfo, status, count, productFamilies);
         clickButtonAndWait(usagesTab, "Add_To_Scenario");
         verifyCreateScenarioWindow(assertWebElement(By.id("create-scenario-window")));
     }
 
-    private void applyFiltersAndVerifyTable(UsageBatchInfo batchInfo, UsageStatusEnum status, int count) {
-        applyStatusFilter(assertWebElement(By.id(USAGES_FILTER_ID)), status.name());
-        applyProductFamiliesFilter(assertWebElement(By.id(USAGES_FILTER_ID)), "FAS");
-        applyFilters(assertWebElement(By.id(USAGES_FILTER_ID)), batchInfo);
+    private void applyFiltersAndVerifyTable(UsageBatchInfo batchInfo, UsageStatusEnum status, int count,
+                                            String... productFamilies) {
+        WebElement filter = assertWebElement(By.id(USAGES_FILTER_ID));
+        applyStatusFilter(filter, status.name());
+        if (ArrayUtils.isNotEmpty(productFamilies)) {
+            applyProductFamiliesFilter(filter, productFamilies);
+        }
+        applyFilters(filter, batchInfo);
         assertTableRowElements(assertWebElement(By.id(USAGES_TABLE_ID)), count);
     }
 }

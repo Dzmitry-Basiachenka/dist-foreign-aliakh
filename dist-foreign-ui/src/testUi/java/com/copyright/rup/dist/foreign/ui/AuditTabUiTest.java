@@ -115,6 +115,7 @@ public class AuditTabUiTest extends ForeignCommonUiTest {
     private void verifyFilters(WebElement auditTab) {
         WebElement filterWidget = assertWebElement(auditTab, "audit-filter-widget");
         assertWebElement(filterWidget, HTML_DIV_TAG_NAME, FILTERS_HEADER_TEXT);
+        applyProductFamiliesFilter(filterWidget, "FAS");
         applyRightsholdersFilter(filterWidget, "1000002859 - John Wiley & Sons - Books");
         applyBatchesFilter(filterWidget, "CADRA_11Dec16");
         applyAuditStatusFilter(filterWidget, "ELIGIBLE");
