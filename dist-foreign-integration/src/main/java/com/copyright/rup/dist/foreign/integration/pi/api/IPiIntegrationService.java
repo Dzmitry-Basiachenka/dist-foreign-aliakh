@@ -24,7 +24,7 @@ public interface IPiIntegrationService {
      * @param idnos set of IDNOs to search works by
      * @return map with IDNOs as keys and Wr Wrk Insts as values
      */
-    Map<String, Long> findWrWrkInstsByIdno(Set<String> idnos);
+    Map<String, Long> findWrWrkInstsByIdnos(Set<String> idnos);
 
     /**
      * Finds Wr Wrk Insts for given set of titles.

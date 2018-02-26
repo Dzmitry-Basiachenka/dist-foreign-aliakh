@@ -71,7 +71,7 @@ public class WorkMatchingServiceTest {
             buildUsage(standardNumber2, null),
             buildUsage(null, null));
         Map<String, Long> resultMap = ImmutableMap.of(standardNumber1, 112930820L, standardNumber2, 155941698L);
-        expect(piIntegrationService.findWrWrkInstsByIdno(Sets.newHashSet(standardNumber1, standardNumber2)))
+        expect(piIntegrationService.findWrWrkInstsByIdnos(Sets.newHashSet(standardNumber1, standardNumber2)))
             .andReturn(resultMap).once();
         replay(piIntegrationService);
         List<Usage> result = workMatchingService.matchByIdno(usages);

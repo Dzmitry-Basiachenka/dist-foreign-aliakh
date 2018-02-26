@@ -72,7 +72,7 @@ public class PiIntegrationServiceTest {
         expectGetSearchResponse();
         replay(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3, searchHit4, searchHit5,
             searchHit6, searchHit7);
-        Map<String, Long> result = piIntegrationService.findWrWrkInstsByIdno(Sets.newHashSet("0-271-01750-3",
+        Map<String, Long> result = piIntegrationService.findWrWrkInstsByIdnos(Sets.newHashSet("0-271-01750-3",
             "978-0-271-01751-8", "ETOCRN066582498", "10.1353/PGN.1999.0081", "1140-9126", "978-0-08-027365-5",
             "1633-1370"));
         assertEquals(5, result.size());

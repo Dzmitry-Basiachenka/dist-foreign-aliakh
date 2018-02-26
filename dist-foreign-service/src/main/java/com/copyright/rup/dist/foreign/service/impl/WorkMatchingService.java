@@ -5,13 +5,12 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.service.api.IWorkMatchingService;
 
-import com.google.common.collect.Lists;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -37,29 +36,29 @@ public class WorkMatchingService implements IWorkMatchingService {
 
     @Override
     public List<Usage> matchByTitle(List<Usage> usages) {
-        Set<String> idnos = usages.stream()
+        Set<String> titles = usages.stream()
             .filter(usage -> Objects.isNull(usage.getStandardNumber()) && Objects.nonNull(usage.getWorkTitle()))
             .map(Usage::getWorkTitle)
             .collect(Collectors.toSet());
-        return CollectionUtils.isNotEmpty(idnos)
-            ? computeResult(usages, piIntegrationService.findWrWrkInstsByTitles(idnos), Usage::getWorkTitle)
+        return CollectionUtils.isNotEmpty(titles)
+            ? computeResult(usages, piIntegrationService.findWrWrkInstsByTitles(titles), Usage::getWorkTitle)
             : Collections.emptyList();
     }
 
     @Override
     public List<Usage> matchByIdno(List<Usage> usages) {
-        Set<String> titles = usages.stream()
+        Set<String> idnos = usages.stream()
             .filter(usage -> Objects.nonNull(usage.getStandardNumber()))
             .map(Usage::getStandardNumber)
             .collect(Collectors.toSet());
-        return CollectionUtils.isNotEmpty(titles)
-            ? computeResult(usages, piIntegrationService.findWrWrkInstsByIdno(titles), Usage::getStandardNumber)
+        return CollectionUtils.isNotEmpty(idnos)
+            ? computeResult(usages, piIntegrationService.findWrWrkInstsByIdnos(idnos), Usage::getStandardNumber)
             : Collections.emptyList();
     }
 
     private List<Usage> computeResult(List<Usage> usages, Map<String, Long> wrWrkInstsMap,
                                       Function<Usage, String> function) {
-        List<Usage> result = Lists.newArrayList();
+        List<Usage> result = new ArrayList<>(wrWrkInstsMap.size());
         if (MapUtils.isNotEmpty(wrWrkInstsMap)) {
             usages.forEach(usage -> {
                 usage.setWrWrkInst(wrWrkInstsMap.get(function.apply(usage)));
