@@ -16,6 +16,9 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
 import com.copyright.rup.dist.foreign.repository.api.Sort.Direction;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
@@ -35,6 +38,7 @@ import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executors;
 
 /**
@@ -266,8 +270,11 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindIdByDetailId() {
-        assertEquals("7241b7e0-6ab8-4483-896d-fd485c574293", usageArchiveRepository.findIdByDetailId(5423214888L));
+    public void testFindDetailIdToIdMap() {
+        Map<Long, String> resultMap = ImmutableMap.of(5423214888L, "7241b7e0-6ab8-4483-896d-fd485c574293", 5423214999L,
+            "ce9a7770-1ae6-11e8-b566-0800200c9a66");
+        assertEquals(resultMap,
+            usageArchiveRepository.findDetailIdToIdMap(Lists.newArrayList(5423214888L, 5423214999L)));
     }
 
     @Test

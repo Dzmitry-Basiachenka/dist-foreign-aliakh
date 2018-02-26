@@ -152,15 +152,21 @@
         where df_scenario_uid = #{scenarioId}
     </delete>
 
-    <select id="findIdByDetailId" resultType="string" parameterType="long">
-        select df_usage_archive_uid
+    <select id="findDetailIdToUsageIdMap" resultType="map" parameterType="list">
+        select
+            cast(detail_id as text) detail_id,
+            df_usage_archive_uid
         from ${schema}.df_usage_archive
-        where detail_id = #{detailId}
+        where detail_id in
+        <foreach collection="list" item="detailId" separator="," open="(" close=")">
+            #{detailId}
+        </foreach>
     </select>
 
     <update id="updatePaidInfo" parameterType="PaidUsage">
         update ${schema}.df_usage_archive
-        set payee_account_number = #{payee.accountNumber},
+        set
+            payee_account_number = #{payee.accountNumber},
             check_number = #{checkNumber},
             check_date = #{checkDate},
             status_ind = #{status},
