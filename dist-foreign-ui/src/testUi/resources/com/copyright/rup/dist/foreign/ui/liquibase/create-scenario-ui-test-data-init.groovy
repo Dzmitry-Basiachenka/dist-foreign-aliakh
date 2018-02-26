@@ -364,6 +364,24 @@ databaseChangeLog {
             column(name: 'gross_amount', value: '1000.00')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '917568df-cd78-4919-934f-1b59a79a9f95')
+            column(name: 'df_usage_batch_uid', value: '5fb4a015-f943-4e29-ae7b-c7301db3c15e')
+            column(name: 'detail_id', value: '6607723787')
+            column(name: 'rh_account_number', value: '1000008666')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'number_of_copies', value: '2')
+            column(name: 'reported_value', value: '10.00')
+            column(name: 'gross_amount', value: '10.00')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
             column(name: 'df_usage_audit_uid', value: 'c203e8fd-8dad-432c-a439-656d43cb7253')
             column(name: 'df_usage_uid', value: 'bb266904-3334-4fa3-9b44-9d76d2cb0c4d')
