@@ -922,7 +922,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     public void testUpdateStatusAndWrWrkInst() {
         List<Usage> usages = usageRepository.findUsagesWithBlankWrWrkInst();
-        assertEquals(2, usages.size());
+        assertEquals(4, usages.size());
         usages.forEach(usage -> {
             usage.setWrWrkInst(WR_WRK_INST);
             usage.setStatus(UsageStatusEnum.WORK_FOUND);

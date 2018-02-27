@@ -425,7 +425,7 @@ public class UsageService implements IUsageService {
         if (CollectionUtils.isNotEmpty(matchedByIdno)) {
             usageRepository.updateStatusAndWrWrkInst(matchedByIdno);
             matchedByIdno.forEach(usage -> usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
-                String.format("Wr Wrk Inst %s was found in PI by standard number %s", usage.getWrWrkInst(),
+                String.format("Wr Wrk Inst %s was found by standard number %s", usage.getWrWrkInst(),
                     usage.getStandardNumber())));
         }
         return matchedByIdno;
@@ -436,7 +436,7 @@ public class UsageService implements IUsageService {
         if (CollectionUtils.isNotEmpty(matchedByTitle)) {
             usageRepository.updateStatusAndWrWrkInst(matchedByTitle);
             matchedByTitle.forEach(usage -> usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
-                String.format("Wr Wrk Inst %s was found in PI by title '%s'", usage.getWrWrkInst(),
+                String.format("Wr Wrk Inst %s was found by title \"%s\"", usage.getWrWrkInst(),
                     usage.getWorkTitle())));
         }
         return matchedByTitle;

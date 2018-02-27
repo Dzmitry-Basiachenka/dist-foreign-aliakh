@@ -44,7 +44,6 @@ import com.google.common.collect.Sets;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
-import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -538,10 +537,10 @@ public class UsageServiceTest {
         usageRepository.updateStatusAndProductFamily(Lists.newArrayList(usage3));
         expectLastCall().once();
         usageAuditService.logAction(usage1.getId(), UsageActionTypeEnum.WORK_FOUND,
-            "Wr Wrk Inst 123160519 was found in PI by standard number 10.1147/RD.206.0542");
+            "Wr Wrk Inst 123160519 was found by standard number 10.1147/RD.206.0542");
         expectLastCall().once();
         usageAuditService.logAction(usage2.getId(), UsageActionTypeEnum.WORK_FOUND,
-            "Wr Wrk Inst 123160519 was found in PI by title 'Merry.go.round'");
+            "Wr Wrk Inst 123160519 was found by title \"Merry.go.round\"");
         expectLastCall().once();
         usageAuditService.logAction(usage3.getId(), UsageActionTypeEnum.ELIGIBLE_FOR_NTS, ACTION_REASON_3);
         expectLastCall().once();
@@ -561,7 +560,7 @@ public class UsageServiceTest {
         usages.add(buildUsageWithStandardNumber(USAGE_ID + "6", STANDARD_NUMBER + "4", 50));
         Capture<List<Usage>> usagesCapture = new Capture<>();
         usageRepository.updateStatusAndProductFamily(capture(usagesCapture));
-        EasyMock.expectLastCall();
+        expectLastCall().once();
         usageAuditService.logAction(usages.get(0).getId(), UsageActionTypeEnum.ELIGIBLE_FOR_NTS, ACTION_REASON_1);
         expectLastCall().once();
         usageAuditService.logAction(usages.get(2).getId(), UsageActionTypeEnum.ELIGIBLE_FOR_NTS, ACTION_REASON_1);
@@ -589,7 +588,7 @@ public class UsageServiceTest {
         usages.add(buildUsageWithWorkTitle(USAGE_ID + "6", WORK_TITLE + "4", 50));
         Capture<List<Usage>> usagesCapture = new Capture<>();
         usageRepository.updateStatusAndProductFamily(capture(usagesCapture));
-        EasyMock.expectLastCall();
+        expectLastCall().once();
         usageAuditService.logAction(usages.get(0).getId(), UsageActionTypeEnum.ELIGIBLE_FOR_NTS, ACTION_REASON_2);
         expectLastCall().once();
         usageAuditService.logAction(usages.get(2).getId(), UsageActionTypeEnum.ELIGIBLE_FOR_NTS, ACTION_REASON_2);
@@ -613,7 +612,7 @@ public class UsageServiceTest {
         usages.add(buildUsage(USAGE_ID + "2", 100));
         Capture<List<Usage>> usagesCapture = new Capture<>();
         usageRepository.updateStatusAndProductFamily(capture(usagesCapture));
-        EasyMock.expectLastCall();
+        expectLastCall().once();
         usageAuditService.logAction(usages.get(0).getId(), UsageActionTypeEnum.ELIGIBLE_FOR_NTS, ACTION_REASON_3);
         expectLastCall().once();
         replay(usageRepository, usageAuditService);

@@ -10,6 +10,7 @@ import com.copyright.rup.es.api.domain.RupSearchHit;
 import com.copyright.rup.es.api.domain.RupSearchResults;
 import com.copyright.rup.es.api.request.RupSearchRequest;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Maps;
@@ -60,11 +61,24 @@ public class PiIntegrationService implements IPiIntegrationService {
     private RupEsApi rupEsApi;
     private ObjectMapper mapper;
 
+    /**
+     * Normalizes IDNO by the following rules:
+     * 1. trims special characters on both ends of string
+     * 2. removes all dashes
+     * 3. makes all letters upper case.
+     *
+     * @param idno IDNO to be normalized
+     * @return normalized IDNO
+     */
+    private static String normalizeIdno(String idno) {
+        return StringUtils.upperCase(StringUtils.replace(StringUtils.trim(idno), "[-]", StringUtils.EMPTY));
+    }
+
     @Override
-    public Map<String, Long> findWrWrkInstsByIdno(Set<String> idnos) {
+    public Map<String, Long> findWrWrkInstsByIdnos(Set<String> idnos) {
         LOGGER.info("Search works by IDNOs. Started. IDNOsCount={}", idnos.size());
         Set<String> normalized = idnos.stream().map(PiIntegrationService::normalizeIdno).collect(Collectors.toSet());
-        Map<String, Long> wrWrkInstMap = match("idno", normalized, Work::getIdno);
+        Map<String, Long> wrWrkInstMap = match("idno", normalized, Work::getIdnos);
         LOGGER.info("Search works by IDNOs. Finished. IDNOsCount={}", idnos.size());
         return wrWrkInstMap;
     }
@@ -72,7 +86,7 @@ public class PiIntegrationService implements IPiIntegrationService {
     @Override
     public Map<String, Long> findWrWrkInstsByTitles(Set<String> titles) {
         LOGGER.info("Search works by titles. Started. TitlesCount={}", titles.size());
-        Map<String, Long> wrWrkInstMap = match("title", titles, Work::getTitle);
+        Map<String, Long> wrWrkInstMap = match("title", titles, Work::getTitles);
         LOGGER.info("Search works by titles. Finished. TitlesCount={}", titles.size());
         return wrWrkInstMap;
     }
@@ -175,24 +189,13 @@ public class PiIntegrationService implements IPiIntegrationService {
             .append('"');
     }
 
-    /**
-     * Normalizes IDNO by the following rules:
-     * 1. trims special characters on both ends of string
-     * 2. removes all dashes
-     * 3. makes all letters upper case.
-     *
-     * @param idno IDNO to be normalized
-     * @return normalized IDNO
-     */
-    private static String normalizeIdno(String idno) {
-        return StringUtils.upperCase(StringUtils.replace(StringUtils.trim(idno), "[-]", StringUtils.EMPTY));
-    }
-
     private static class Work {
 
         private Long wrWrkInst;
-        private List<String> idno;
-        private List<String> title;
+        @JsonProperty("idno")
+        private List<String> idnos;
+        @JsonProperty("title")
+        private List<String> titles;
 
         public Work() {
             // default constructor
@@ -206,8 +209,8 @@ public class PiIntegrationService implements IPiIntegrationService {
             this.wrWrkInst = wrWrkInst;
         }
 
-        public List<String> getIdno() {
-            return idno;
+        public List<String> getIdnos() {
+            return idnos;
         }
 
         /**
@@ -215,16 +218,16 @@ public class PiIntegrationService implements IPiIntegrationService {
          *
          * @param idnos list of IDNOS
          */
-        public void setIdno(List<String> idnos) {
-            this.idno = idnos.stream().map(PiIntegrationService::normalizeIdno).collect(Collectors.toList());
+        public void setIdnos(List<String> idnos) {
+            this.idnos = idnos.stream().map(PiIntegrationService::normalizeIdno).collect(Collectors.toList());
         }
 
-        public List<String> getTitle() {
-            return title;
+        public List<String> getTitles() {
+            return titles;
         }
 
-        public void setTitle(List<String> title) {
-            this.title = title;
+        public void setTitles(List<String> titles) {
+            this.titles = titles;
         }
 
         @Override
@@ -238,8 +241,8 @@ public class PiIntegrationService implements IPiIntegrationService {
             Work that = (Work) o;
             return new EqualsBuilder()
                     .append(this.wrWrkInst, that.wrWrkInst)
-                    .append(this.idno, that.idno)
-                    .append(this.title, that.title)
+                    .append(this.idnos, that.idnos)
+                    .append(this.titles, that.titles)
                     .isEquals();
         }
 
@@ -247,8 +250,8 @@ public class PiIntegrationService implements IPiIntegrationService {
         public int hashCode() {
             return new HashCodeBuilder()
                     .append(wrWrkInst)
-                    .append(idno)
-                    .append(title)
+                    .append(idnos)
+                    .append(titles)
                     .toHashCode();
         }
 
@@ -257,8 +260,8 @@ public class PiIntegrationService implements IPiIntegrationService {
             return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                     .appendSuper(super.toString())
                     .append("wrWrkInst", wrWrkInst)
-                    .append("idno", idno)
-                    .append("title", title)
+                    .append("idnos", idnos)
+                    .append("titles", titles)
                     .toString();
         }
     }
