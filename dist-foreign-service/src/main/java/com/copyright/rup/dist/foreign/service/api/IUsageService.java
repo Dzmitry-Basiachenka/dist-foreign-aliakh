@@ -247,7 +247,6 @@ public interface IUsageService {
      */
     void updateRightsholders();
 
-
     /**
      * Retrieves list of product families of non archived details.
      *

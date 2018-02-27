@@ -149,5 +149,5 @@ public interface IUsagesController extends IController<IUsagesWidget>, IBeanLoad
     /**
      * @return {@code true} if product family filter contains only FAS, {@code false} - otherwise.
      */
-    boolean isSingleProductFamilySelected();
+    boolean isOnlyFasProductFamilySelected();
 }

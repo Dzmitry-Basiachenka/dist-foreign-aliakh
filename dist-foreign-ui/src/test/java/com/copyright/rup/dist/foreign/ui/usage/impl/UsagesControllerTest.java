@@ -324,37 +324,37 @@ public class UsagesControllerTest {
     }
 
     @Test
-    public void testIsSingleProductFamilySelectedFas() {
+    public void testIsOnlyFasProductFamilySelectedFas() {
         IUsagesFilterWidget filterWidgetMock = createMock(IUsagesFilterWidget.class);
         UsageFilter usageFilter = new UsageFilter();
         usageFilter.setProductFamilies(Sets.newHashSet("FAS"));
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
         replay(filterController, filterWidgetMock);
-        assertTrue(controller.isSingleProductFamilySelected());
+        assertTrue(controller.isOnlyFasProductFamilySelected());
         verify(filterController, filterWidgetMock);
     }
 
     @Test
-    public void testIsSingleProductFamilySelectedNts() {
+    public void testIsOnlyFasProductFamilySelectedNts() {
         IUsagesFilterWidget filterWidgetMock = createMock(IUsagesFilterWidget.class);
         UsageFilter usageFilter = new UsageFilter();
         usageFilter.setProductFamilies(Sets.newHashSet("NTS"));
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
         replay(filterController, filterWidgetMock);
-        assertFalse(controller.isSingleProductFamilySelected());
+        assertFalse(controller.isOnlyFasProductFamilySelected());
         verify(filterController, filterWidgetMock);
     }
 
     @Test
-    public void testIsSingleProductFamilySelectedNoSelection() {
+    public void testIsOnlyFasProductFamilySelectedNoSelection() {
         IUsagesFilterWidget filterWidgetMock = createMock(IUsagesFilterWidget.class);
         UsageFilter usageFilter = new UsageFilter();
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
         replay(filterController, filterWidgetMock);
-        assertFalse(controller.isSingleProductFamilySelected());
+        assertFalse(controller.isOnlyFasProductFamilySelected());
         verify(filterController, filterWidgetMock);
     }
 
