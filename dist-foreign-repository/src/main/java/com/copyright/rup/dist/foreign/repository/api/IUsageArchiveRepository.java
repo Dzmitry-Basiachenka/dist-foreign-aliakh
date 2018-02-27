@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 
 import java.io.PipedOutputStream;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Interface for Usage archive repository.
@@ -90,12 +91,12 @@ public interface IUsageArchiveRepository {
     void deleteByScenarioId(String scenarioId);
 
     /**
-     * Finds {@link Usage} id from archive by provided detail id.
+     * Finds detail id to {@link Usage} id map from archive by provided detail id.
      *
-     * @param detailId usage detail id
-     * @return found {@link Usage} id
+     * @param detailIds list of usage detail ids
+     * @return found {@link Usage} detail id to id map
      */
-    String findIdByDetailId(Long detailId);
+    Map<Long, String> findDetailIdToIdMap(List<Long> detailIds);
 
     /**
      * Updates paid information for {@link PaidUsage} by id.

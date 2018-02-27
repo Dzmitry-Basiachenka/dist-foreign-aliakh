@@ -37,6 +37,7 @@ import com.copyright.rup.dist.foreign.service.api.IWorkMatchingService;
 import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
 import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
@@ -488,7 +489,8 @@ public class UsageServiceTest {
         paidUsage.setCheckNumber("578945");
         paidUsage.setCccEventId("53256");
         paidUsage.setDistributionName("FDA March 17");
-        expect(usageArchiveRepository.findIdByDetailId(12345678L)).andReturn(USAGE_ID_1).once();
+        expect(usageArchiveRepository.findDetailIdToIdMap(Lists.newArrayList(12345678L)))
+            .andReturn(ImmutableMap.of(12345678L, USAGE_ID_1)).once();
         usageArchiveRepository.updatePaidInfo(paidUsage);
         expectLastCall().once();
         usageAuditService.logAction(USAGE_ID_1, UsageActionTypeEnum.PAID,
@@ -506,7 +508,8 @@ public class UsageServiceTest {
         paidUsage.setCheckNumber("578945");
         paidUsage.setCccEventId("53256");
         paidUsage.setDistributionName("FDA March 17");
-        expect(usageArchiveRepository.findIdByDetailId(12345678L)).andReturn(null).once();
+        expect(usageArchiveRepository.findDetailIdToIdMap(Lists.newArrayList(12345678L)))
+            .andReturn(Collections.emptyMap()).once();
         replay(usageArchiveRepository, usageAuditService);
         usageService.updatePaidInfo(Collections.singletonList(paidUsage));
         verify(usageArchiveRepository, usageAuditService);

@@ -40,6 +40,7 @@ import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.perf4j.StopWatch;
 import org.perf4j.aop.Profiled;
@@ -79,7 +80,7 @@ public class UsageService implements IUsageService {
     private static final String CALCULATION_FINISHED_LOG_MESSAGE = "Calculated usages gross amount. " +
         "UsageBatchName={}, FundPoolAmount={}, TotalAmount={}, ConversionRate={}";
     private static final String UPDATE_PAID_INFO_FAILED_LOG_MESSAGE = "Update paid information. Not found usages. " +
-        "UsagesCount={}, UpdatedCount={}, NotFoundDetailIds:{}";
+        "UsagesCount={}, UpdatedCount={}, NotFoundDetailIds={}";
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired
@@ -357,26 +358,31 @@ public class UsageService implements IUsageService {
     @Transactional
     public void updatePaidInfo(List<PaidUsage> usages) {
         LOGGER.info("Update paid information. Started. UsagesCount={}", LogUtils.size(usages));
-        int updated = 0;
         Set<Long> notFoundDetailsIds = Sets.newHashSet();
-        for (PaidUsage paidUsage : usages) {
-            String usageId = usageArchiveRepository.findIdByDetailId(paidUsage.getDetailId());
-            if (StringUtils.isNotBlank(usageId)) {
-                paidUsage.setId(usageId);
-                paidUsage.setStatus(UsageStatusEnum.PAID);
-                usageArchiveRepository.updatePaidInfo(paidUsage);
-                usageAuditService.logAction(usageId, UsageActionTypeEnum.PAID,
-                    "Usage has been paid according to information from the LM");
-                updated++;
-            } else {
-                notFoundDetailsIds.add(paidUsage.getDetailId());
+        Map<Long, String> detailIdToIdMap = usageArchiveRepository.findDetailIdToIdMap(
+            Lists.newArrayList(usages.stream().map(Usage::getDetailId).collect(Collectors.toList())));
+        if (MapUtils.isNotEmpty(detailIdToIdMap)) {
+            for (PaidUsage paidUsage : usages) {
+                String usageId = detailIdToIdMap.get(paidUsage.getDetailId());
+                if (StringUtils.isNotBlank(usageId)) {
+                    paidUsage.setId(usageId);
+                    paidUsage.setStatus(UsageStatusEnum.PAID);
+                    usageArchiveRepository.updatePaidInfo(paidUsage);
+                    usageAuditService.logAction(usageId, UsageActionTypeEnum.PAID,
+                        "Usage has been paid according to information from the LM");
+                } else {
+                    notFoundDetailsIds.add(paidUsage.getDetailId());
+                }
             }
+        } else {
+            LOGGER.warn(UPDATE_PAID_INFO_FAILED_LOG_MESSAGE, LogUtils.size(usages), 0, notFoundDetailsIds);
         }
         if (CollectionUtils.isNotEmpty(notFoundDetailsIds)) {
-            LOGGER.warn(UPDATE_PAID_INFO_FAILED_LOG_MESSAGE, LogUtils.size(usages), updated, notFoundDetailsIds);
+            LOGGER.warn(UPDATE_PAID_INFO_FAILED_LOG_MESSAGE, LogUtils.size(usages),
+                usages.size() - notFoundDetailsIds.size(), notFoundDetailsIds);
         }
         LOGGER.info("Update paid information. Finished. UsagesCount={}, UpdatedCount={}", LogUtils.size(usages),
-            updated);
+            usages.size() - notFoundDetailsIds.size());
     }
 
     @Override

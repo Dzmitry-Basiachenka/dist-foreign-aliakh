@@ -10,8 +10,11 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
 
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 
+import org.apache.ibatis.session.ResultContext;
+import org.apache.ibatis.session.ResultHandler;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
@@ -101,12 +104,41 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
     }
 
     @Override
-    public String findIdByDetailId(Long detailId) {
-        return selectOne("IUsageArchiveMapper.findIdByDetailId", Objects.requireNonNull(detailId));
+    public Map<Long, String> findDetailIdToIdMap(List<Long> detailIds) {
+        MapResultHandler handler = new MapResultHandler();
+        Objects.requireNonNull(detailIds);
+        Iterables.partition(detailIds, 32000)
+            .forEach(
+                partition -> getTemplate().select("IUsageArchiveMapper.findDetailIdToUsageIdMap", partition, handler));
+        return handler.getResult();
     }
 
     @Override
     public void updatePaidInfo(PaidUsage usage) {
         update("IUsageArchiveMapper.updatePaidInfo", Objects.requireNonNull(usage));
+    }
+
+    /**
+     * Handler to collect data into map. MyBatis returns keys in different case depending on the database driver,
+     * so both upper case and lower case are used to get value from resultContext.
+     */
+    private static class MapResultHandler implements ResultHandler<Map<String, String>> {
+
+        private Map<Long, String> result = Maps.newHashMap();
+
+        @Override
+        public void handleResult(ResultContext<? extends Map<String, String>> resultContext) {
+            Map<String, String> object = resultContext.getResultObject();
+            String detailId = object.get("detail_id");
+            if (null != detailId) {
+                result.put(Long.valueOf(detailId), object.get("df_usage_archive_uid"));
+            } else {
+                result.put(Long.valueOf(object.get("DETAIL_ID")), object.get("DF_USAGE_ARCHIVE_UID"));
+            }
+        }
+
+        private Map<Long, String> getResult() {
+            return result;
+        }
     }
 }
