@@ -39,7 +39,7 @@ public class PrmIntegrationService implements IPrmIntegrationService {
     @Autowired
     private IPrmRightsholderService prmRightsholderService;
     @Autowired
-    @Qualifier("dist.common.integration.rest.async.prmRollUpService")
+    @Qualifier("dist.common.integration.rest.prmRollUpAsyncService")
     private IPrmRollUpService prmRollUpAsyncService;
     @Autowired
     @Qualifier("dist.common.integration.rest.prmRollUpService")
