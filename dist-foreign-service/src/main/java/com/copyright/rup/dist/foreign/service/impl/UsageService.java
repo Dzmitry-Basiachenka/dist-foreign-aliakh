@@ -31,6 +31,7 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.IWorkMatchingService;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvErrorResultWriter;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingResult;
+import com.copyright.rup.dist.foreign.service.impl.util.Paginator;
 import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
 import com.google.common.collect.ImmutableList;
@@ -47,6 +48,7 @@ import org.perf4j.aop.Profiled;
 import org.perf4j.slf4j.Slf4JStopWatch;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -99,6 +101,8 @@ public class UsageService implements IUsageService {
     private IRightsholderService rightsholderService;
     @Autowired
     private IWorkMatchingService workMatchingService;
+    @Value("$RUP{dist.foreign.database.usages.page.size}")
+    private int pageSize;
 
     @Override
     public List<UsageDto> getUsages(UsageFilter filter, Pageable pageable, Sort sort) {
@@ -388,19 +392,24 @@ public class UsageService implements IUsageService {
     @Override
     @Transactional
     public void findWorksAndUpdateStatuses() {
-        List<Usage> usages = ImmutableList.copyOf(usageRepository.findUsagesWithBlankWrWrkInst());
-        if (CollectionUtils.isNotEmpty(usages)) {
-            List<Usage> matchedByIdno = findWorksByIdno(usages);
-            List<Usage> matchedByTitle = findWorksByTitle(usages);
-            Set<String> matchedUsagesIds = Sets.newHashSet();
-            matchedUsagesIds.addAll(matchedByIdno.stream().map(BaseEntity::getId).collect(Collectors.toSet()));
-            matchedUsagesIds.addAll(matchedByTitle.stream().map(BaseEntity::getId).collect(Collectors.toSet()));
-            List<Usage> nonMatchedUsages = Lists.newArrayList(usages)
-                .stream()
-                .filter(usage -> !matchedUsagesIds.contains(usage.getId()))
-                .collect(Collectors.toList());
-            makeUsagesEligibleForNts(ImmutableList.copyOf(nonMatchedUsages));
-        }
+        final int count = usageRepository.findCountWithBlankWrWrkInst();
+        LOGGER.info("Read usages count. Count={}", count);
+        new Paginator(count, pageSize).getPageables().forEach(pageable -> {
+            LOGGER.info("Read usages by page. Offset={}, Limit={}", pageable.getOffset(), pageable.getLimit());
+            List<Usage> usages = ImmutableList.copyOf(usageRepository.findUsagesWithBlankWrWrkInst(pageable));
+            if (CollectionUtils.isNotEmpty(usages)) {
+                List<Usage> matchedByIdno = findWorksByIdno(usages);
+                List<Usage> matchedByTitle = findWorksByTitle(usages);
+                Set<String> matchedUsagesIds = Sets.newHashSet();
+                matchedUsagesIds.addAll(matchedByIdno.stream().map(BaseEntity::getId).collect(Collectors.toSet()));
+                matchedUsagesIds.addAll(matchedByTitle.stream().map(BaseEntity::getId).collect(Collectors.toSet()));
+                List<Usage> nonMatchedUsages = Lists.newArrayList(usages)
+                    .stream()
+                    .filter(usage -> !matchedUsagesIds.contains(usage.getId()))
+                    .collect(Collectors.toList());
+                makeUsagesEligibleForNts(ImmutableList.copyOf(nonMatchedUsages));
+            }
+        });
     }
 
     /**

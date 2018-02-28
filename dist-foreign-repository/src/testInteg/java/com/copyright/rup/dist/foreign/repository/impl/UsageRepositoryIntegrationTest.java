@@ -921,7 +921,7 @@ public class UsageRepositoryIntegrationTest {
 
     @Test
     public void testUpdateStatusAndWrWrkInst() {
-        List<Usage> usages = usageRepository.findUsagesWithBlankWrWrkInst();
+        List<Usage> usages = usageRepository.findUsagesWithBlankWrWrkInst(new Pageable(0, 1000));
         assertEquals(4, usages.size());
         usages.forEach(usage -> {
             usage.setWrWrkInst(WR_WRK_INST);

@@ -300,7 +300,19 @@ public interface IUsageRepository {
     void updateStatusAndProductFamily(List<Usage> usages);
 
     /**
+     * Reads count of usages that does not have Wr Wrk Inst.
+     * The method must be consistent with {@link IUsageRepository#findUsagesWithBlankWrWrkInst(Pageable)}.
+     *
      * @return list of {@link Usage}s that does not have Wr Wrk Inst.
      */
-    List<Usage> findUsagesWithBlankWrWrkInst();
+    int findCountWithBlankWrWrkInst();
+
+    /**
+     * Reads usages that does not have Wr Wrk Inst.
+     * The method must be consistent with {@link IUsageRepository#findCountWithBlankWrWrkInst()}.
+     *
+     * @param pageable instance of {@link Pageable}
+     * @return list of {@link Usage}s that does not have Wr Wrk Inst.
+     */
+    List<Usage> findUsagesWithBlankWrWrkInst(Pageable pageable);
 }
