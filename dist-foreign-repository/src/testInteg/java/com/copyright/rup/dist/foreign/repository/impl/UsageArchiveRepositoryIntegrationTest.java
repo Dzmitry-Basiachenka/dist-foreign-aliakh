@@ -37,6 +37,8 @@ import java.io.PipedOutputStream;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -74,7 +76,8 @@ public class UsageArchiveRepositoryIntegrationTest {
     private static final String AUTHOR = "Author";
     private static final BigDecimal REPORTED_VALUE = new BigDecimal("11.25");
     private static final LocalDate PUBLICATION_DATE = LocalDate.of(2016, 11, 3);
-    private static final LocalDate PAID_DATE = LocalDate.of(2016, 11, 3);
+    private static final OffsetDateTime PAID_DATE =
+        LocalDate.of(2016, 11, 3).atStartOfDay(ZoneId.systemDefault()).toOffsetDateTime();
     private static final Long DETAIL_ID = 12345L;
     private static final Integer NUMBER_OF_COPIES = 155;
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
@@ -285,7 +288,7 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertTrue(CollectionUtils.isNotEmpty(usages));
         assertEquals(1, usages.size());
         UsageDto usage = usages.get(0);
-        veridyPaidUsage(usage, UsageStatusEnum.LOCKED, 1000002859L, null, null, null, null, null, null);
+        verifyPaidUsage(usage, UsageStatusEnum.LOCKED, 1000002859L, null, null, null, null, null, null);
         PaidUsage paidUsage = new PaidUsage();
         Rightsholder payee = new Rightsholder();
         payee.setAccountNumber(1000005413L);
@@ -305,22 +308,23 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertTrue(CollectionUtils.isNotEmpty(usages));
         assertEquals(1, usages.size());
         usage = usages.get(0);
-        veridyPaidUsage(usage, UsageStatusEnum.PAID, 1000005413L, "578945", PAID_DATE, "53256", "FDA March 17",
+        verifyPaidUsage(usage, UsageStatusEnum.PAID, 1000005413L, "578945", PAID_DATE, "53256", "FDA March 17",
             PAID_DATE, PAID_DATE);
     }
 
-    private void veridyPaidUsage(UsageDto paidUsage, UsageStatusEnum status, Long payeeAccountNumber,
-                                 String checkNumber, LocalDate checkDate, String cccEventId, String distName,
-                                 LocalDate distDate, LocalDate periodEndDate) {
-        assertEquals(5423214888L, paidUsage.getDetailId(), 0);
-        assertEquals(status, paidUsage.getStatus());
-        assertEquals(payeeAccountNumber, paidUsage.getPayeeAccountNumber(), 0);
-        assertEquals(checkNumber, paidUsage.getCheckNumber());
-        assertEquals(checkDate, paidUsage.getCheckDate());
-        assertEquals(cccEventId, paidUsage.getCccEventId());
-        assertEquals(distName, paidUsage.getDistributionName());
-        assertEquals(distDate, paidUsage.getDistributionDate());
-        assertEquals(periodEndDate, paidUsage.getPeriodEndDate());
+    private void verifyPaidUsage(UsageDto actualUsageDto, UsageStatusEnum status, Long payeeAccountNumber,
+                                 String checkNumber, OffsetDateTime checkDate, String cccEventId,
+                                 String distributionName, OffsetDateTime distributionDate,
+                                 OffsetDateTime periodEndDate) {
+        assertEquals(5423214888L, actualUsageDto.getDetailId(), 0);
+        assertEquals(status, actualUsageDto.getStatus());
+        assertEquals(payeeAccountNumber, actualUsageDto.getPayeeAccountNumber(), 0);
+        assertEquals(checkNumber, actualUsageDto.getCheckNumber());
+        assertEquals(checkDate, actualUsageDto.getCheckDate());
+        assertEquals(cccEventId, actualUsageDto.getCccEventId());
+        assertEquals(distributionName, actualUsageDto.getDistributionName());
+        assertEquals(distributionDate, actualUsageDto.getDistributionDate());
+        assertEquals(periodEndDate, actualUsageDto.getPeriodEndDate());
     }
 
     private void verifySearch(String searchValue, int expectedSize) {
