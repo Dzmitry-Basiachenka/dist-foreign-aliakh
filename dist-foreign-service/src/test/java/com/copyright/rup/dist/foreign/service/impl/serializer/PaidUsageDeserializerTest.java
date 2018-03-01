@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
-import java.time.ZoneOffset;
 import java.util.List;
 
 /**
@@ -50,14 +49,11 @@ public class PaidUsageDeserializerTest {
             assertEquals(69977681, usage.getDetailId(), 0);
             assertEquals(1000002859, usage.getPayee().getAccountNumber(), 0);
             assertEquals("578945", usage.getCheckNumber());
-            assertEquals(LocalDate.of(2017, 1, 15).atStartOfDay(ZoneOffset.systemDefault()).toOffsetDateTime(),
-                usage.getCheckDate());
+            assertEquals(LocalDate.of(2017, 1, 15), usage.getCheckDate());
             assertEquals("53256", usage.getCccEventId());
             assertEquals("FDA March 17", usage.getDistributionName());
-            assertEquals(LocalDate.of(2017, 1, 14).atStartOfDay(ZoneOffset.systemDefault()).toOffsetDateTime(),
-                usage.getDistributionDate());
-            assertEquals(LocalDate.of(2017, 1, 16).atStartOfDay(ZoneOffset.systemDefault()).toOffsetDateTime(),
-                usage.getPeriodEndDate());
+            assertEquals(LocalDate.of(2017, 1, 14), usage.getDistributionDate());
+            assertEquals(LocalDate.of(2017, 1, 16), usage.getPeriodEndDate());
         } catch (IOException e) {
             fail();
         }

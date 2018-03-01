@@ -33,7 +33,6 @@
 
     <typeHandlers>
         <typeHandler handler="org.apache.ibatis.type.LocalDateTypeHandler" />
-        <typeHandler handler="org.apache.ibatis.type.OffsetDateTimeTypeHandler"/>
     </typeHandlers>
 
     <mappers>

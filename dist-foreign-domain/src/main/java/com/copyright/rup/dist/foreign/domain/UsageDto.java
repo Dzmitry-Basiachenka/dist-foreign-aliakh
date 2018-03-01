@@ -9,7 +9,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.OffsetDateTime;
 
 /**
  * Represents usage with usage batch.
@@ -55,11 +54,11 @@ public class UsageDto extends StoredEntity<String> {
     private String productFamily;
     private String scenarioName;
     private String checkNumber;
-    private OffsetDateTime checkDate;
+    private LocalDate checkDate;
     private String cccEventId;
     private String distributionName;
-    private OffsetDateTime distributionDate;
-    private OffsetDateTime periodEndDate;
+    private LocalDate distributionDate;
+    private LocalDate periodEndDate;
 
     public Long getDetailId() {
         return detailId;
@@ -309,11 +308,11 @@ public class UsageDto extends StoredEntity<String> {
         this.checkNumber = checkNumber;
     }
 
-    public OffsetDateTime getCheckDate() {
+    public LocalDate getCheckDate() {
         return checkDate;
     }
 
-    public void setCheckDate(OffsetDateTime checkDate) {
+    public void setCheckDate(LocalDate checkDate) {
         this.checkDate = checkDate;
     }
 
@@ -332,19 +331,19 @@ public class UsageDto extends StoredEntity<String> {
         this.distributionName = distributionName;
     }
 
-    public OffsetDateTime getDistributionDate() {
+    public LocalDate getDistributionDate() {
         return distributionDate;
     }
 
-    public void setDistributionDate(OffsetDateTime distributionDate) {
+    public void setDistributionDate(LocalDate distributionDate) {
         this.distributionDate = distributionDate;
     }
 
-    public OffsetDateTime getPeriodEndDate() {
+    public LocalDate getPeriodEndDate() {
         return periodEndDate;
     }
 
-    public void setPeriodEndDate(OffsetDateTime periodEndDate) {
+    public void setPeriodEndDate(LocalDate periodEndDate) {
         this.periodEndDate = periodEndDate;
     }
 
