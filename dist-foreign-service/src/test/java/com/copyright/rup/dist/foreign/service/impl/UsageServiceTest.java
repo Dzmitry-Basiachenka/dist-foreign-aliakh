@@ -576,9 +576,9 @@ public class UsageServiceTest {
         usageService.makeUsagesEligibleForNts(usages);
         List<Usage> actualUsages = usagesCapture.getValue();
         assertEquals(3, actualUsages.size());
-        verifyUsagesEligibleForNts(actualUsages.get(0), USAGE_ID + "1");
-        verifyUsagesEligibleForNts(actualUsages.get(1), USAGE_ID + "3");
-        verifyUsagesEligibleForNts(actualUsages.get(2), USAGE_ID + "4");
+        verifyUsagesEligibleForNts(actualUsages.get(0), USAGE_ID + "3");
+        verifyUsagesEligibleForNts(actualUsages.get(1), USAGE_ID + "4");
+        verifyUsagesEligibleForNts(actualUsages.get(2), USAGE_ID + "1");
         verify(usageRepository, usageAuditService);
     }
 
@@ -604,9 +604,9 @@ public class UsageServiceTest {
         usageService.makeUsagesEligibleForNts(usages);
         List<Usage> actualUsages = usagesCapture.getValue();
         assertEquals(3, actualUsages.size());
-        verifyUsagesEligibleForNts(actualUsages.get(0), USAGE_ID + "1");
-        verifyUsagesEligibleForNts(actualUsages.get(1), USAGE_ID + "3");
-        verifyUsagesEligibleForNts(actualUsages.get(2), USAGE_ID + "4");
+        verifyUsagesEligibleForNts(actualUsages.get(0), USAGE_ID + "3");
+        verifyUsagesEligibleForNts(actualUsages.get(1), USAGE_ID + "4");
+        verifyUsagesEligibleForNts(actualUsages.get(2), USAGE_ID + "1");
         verify(usageRepository, usageAuditService);
     }
 

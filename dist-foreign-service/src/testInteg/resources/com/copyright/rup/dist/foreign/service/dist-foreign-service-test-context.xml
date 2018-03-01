@@ -37,4 +37,5 @@
     <bean id="df.service.paidUsageConsumer"
           class="com.copyright.rup.dist.foreign.service.impl.mock.MockPaidUsageConsumer"/>
 
+    <bean id="piIntegrationService" class="com.copyright.rup.dist.foreign.service.impl.mock.PiIntegrationServiceMock"/>
 </beans>
