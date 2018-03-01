@@ -16,12 +16,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -70,8 +68,8 @@ public class PiIntegrationService implements IPiIntegrationService {
      * @param idno IDNO to be normalized
      * @return normalized IDNO
      */
-    private static String normalizeIdno(String idno) {
-        return StringUtils.upperCase(StringUtils.replace(StringUtils.trim(idno), "[-]", StringUtils.EMPTY));
+    public static String normalizeIdno(String idno) {
+        return StringUtils.upperCase(StringUtils.replace(StringUtils.trim(idno), "-", StringUtils.EMPTY));
     }
 
     @Override
@@ -130,6 +128,8 @@ public class PiIntegrationService implements IPiIntegrationService {
             try {
                 LOGGER.trace("Search hit={}", rupSearchHit.getSource());
                 Work work = mapper.readValue(rupSearchHit.getSource(), Work.class);
+                work.idnos =
+                    work.getIdnos().stream().map(PiIntegrationService::normalizeIdno).collect(Collectors.toList());
                 function.apply(work).forEach(key -> {
                     if (searchValues.contains(key)) {
                         Long newValue = work.getWrWrkInst();
@@ -143,9 +143,11 @@ public class PiIntegrationService implements IPiIntegrationService {
                 LOGGER.warn("Could not map results.", e);
             }
         });
-        LOGGER.debug("More than one match found for the following search values: {}",
-            duplicates.stream().collect(Collectors.joining(",")));
-        duplicates.forEach(wrWrkInstMap::remove);
+        if (CollectionUtils.isNotEmpty(duplicates)) {
+            LOGGER.debug("More than one match found for the following search values: {}",
+                duplicates.stream().collect(Collectors.joining(",")));
+            duplicates.forEach(wrWrkInstMap::remove);
+        }
         return wrWrkInstMap;
     }
 
@@ -201,33 +203,8 @@ public class PiIntegrationService implements IPiIntegrationService {
             // default constructor
         }
 
-        public Long getWrWrkInst() {
-            return wrWrkInst;
-        }
-
         public void setWrWrkInst(Long wrWrkInst) {
             this.wrWrkInst = wrWrkInst;
-        }
-
-        public List<String> getIdnos() {
-            return idnos;
-        }
-
-        /**
-         * Sets a list of IDNOS, preliminary normalizing them.
-         *
-         * @param idnos list of IDNOS
-         */
-        public void setIdnos(List<String> idnos) {
-            this.idnos = idnos.stream().map(PiIntegrationService::normalizeIdno).collect(Collectors.toList());
-        }
-
-        public List<String> getTitles() {
-            return titles;
-        }
-
-        public void setTitles(List<String> titles) {
-            this.titles = titles;
         }
 
         @Override
@@ -255,14 +232,16 @@ public class PiIntegrationService implements IPiIntegrationService {
                     .toHashCode();
         }
 
-        @Override
-        public String toString() {
-            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                    .appendSuper(super.toString())
-                    .append("wrWrkInst", wrWrkInst)
-                    .append("idnos", idnos)
-                    .append("titles", titles)
-                    .toString();
+        private Long getWrWrkInst() {
+            return wrWrkInst;
+        }
+
+        private List<String> getIdnos() {
+            return idnos;
+        }
+
+        private List<String> getTitles() {
+            return titles;
         }
     }
 }

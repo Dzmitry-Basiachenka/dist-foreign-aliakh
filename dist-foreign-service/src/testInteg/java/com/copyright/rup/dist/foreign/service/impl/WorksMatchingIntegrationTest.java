@@ -55,7 +55,7 @@ public class WorksMatchingIntegrationTest {
     private static final String FAS_PRODUCT_FAMILY = "FAS";
 
     @Test
-    public void testExecuteInternal() throws JobExecutionException {
+    public void testFindWorksAndUpdateStatuses() throws JobExecutionException {
         usageService.findWorksAndUpdateStatuses();
         verifyUsage(5487125469L, 123059057L, UsageStatusEnum.WORK_FOUND, FAS_PRODUCT_FAMILY,
             "Wr Wrk Inst 123059057 was found by standard number 978-0-271-01750-1");

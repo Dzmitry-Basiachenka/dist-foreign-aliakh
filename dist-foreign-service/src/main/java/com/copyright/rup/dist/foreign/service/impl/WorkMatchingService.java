@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.service.impl;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
+import com.copyright.rup.dist.foreign.integration.pi.impl.PiIntegrationService;
 import com.copyright.rup.dist.foreign.service.api.IWorkMatchingService;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -52,7 +53,8 @@ public class WorkMatchingService implements IWorkMatchingService {
             .map(Usage::getStandardNumber)
             .collect(Collectors.toSet());
         return CollectionUtils.isNotEmpty(idnos)
-            ? computeResult(usages, piIntegrationService.findWrWrkInstsByIdnos(idnos), Usage::getStandardNumber)
+            ? computeResult(usages, piIntegrationService.findWrWrkInstsByIdnos(idnos),
+            usage -> PiIntegrationService.normalizeIdno(usage.getStandardNumber()))
             : Collections.emptyList();
     }
 
