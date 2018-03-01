@@ -36,7 +36,6 @@ import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
 
@@ -55,14 +54,15 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -539,34 +539,34 @@ public class UsageService implements IUsageService {
         );
 
         private final Function<Usage, T> mapper;
-        private final Function<Usage, Boolean> predicate;
+        private final Predicate<Usage> predicate;
 
-        UsageGroup(Function<Usage, T> mapper, Function<Usage, Boolean> predicate) {
+        UsageGroup(Function<Usage, T> mapper, Predicate<Usage> predicate) {
             this.mapper = mapper;
             this.predicate = predicate;
         }
 
         List<Usage> group(List<Usage> usages) {
-            Map<T, BigDecimal> valueToGrossAmount = Maps.newHashMap();
-            usages.forEach(usage -> {
-                if (predicate.apply(usage)) {
-                    T value = mapper.apply(usage);
-                    BigDecimal grossAmount = valueToGrossAmount.computeIfAbsent(value, key -> BigDecimal.ZERO);
-                    valueToGrossAmount.put(value, grossAmount.add(usage.getGrossAmount()));
-                }
-            });
-            Set<T> filteredValues = valueToGrossAmount
-                .entrySet()
-                .stream()
-                .filter(entry -> entry.getValue().compareTo(GROSS_AMOUNT_LIMIT) < 0)
-                .map(Entry::getKey)
-                .collect(Collectors.toSet());
-            return usages
-                .stream()
-                .filter(usage -> filteredValues.contains(mapper.apply(usage)))
-                .peek(usage -> usage.setStatus(UsageStatusEnum.ELIGIBLE))
-                .peek(usage -> usage.setProductFamily("NTS"))
-                .collect(Collectors.toList());
+            List<Usage> ntsUsages = new ArrayList<>();
+            usages.stream()
+                .filter(predicate)
+                .collect(Collectors.groupingBy(mapper))
+                .forEach((key, usagesGroup) -> {
+                    if (GROSS_AMOUNT_LIMIT.compareTo(sumUsagesGrossAmount(usagesGroup)) > 0) {
+                        usagesGroup.forEach(usage -> {
+                            usage.setStatus(UsageStatusEnum.ELIGIBLE);
+                            usage.setProductFamily("NTS");
+                        });
+                        ntsUsages.addAll(usagesGroup);
+                    }
+                });
+            return ntsUsages;
+        }
+
+        private BigDecimal sumUsagesGrossAmount(List<Usage> usages) {
+            return usages.stream()
+                .map(Usage::getGrossAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
         }
     }
 }
