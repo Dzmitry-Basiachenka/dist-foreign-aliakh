@@ -308,16 +308,8 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public int findCountWithBlankWrWrkInst() {
-        return selectOne("IUsageMapper.findCountWithBlankWrWrkInst", UsageStatusEnum.NEW);
-    }
-
-    @Override
-    public List<Usage> findUsagesWithBlankWrWrkInst(Pageable pageable) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-        parameters.put(STATUS_KEY, Objects.requireNonNull(UsageStatusEnum.NEW));
-        parameters.put(PAGEABLE_KEY, pageable);
-        return selectList("IUsageMapper.findUsagesWithBlankWrWrkInst", parameters);
+    public List<Usage> findUsagesWithBlankWrWrkInst() {
+        return selectList("IUsageMapper.findUsagesWithBlankWrWrkInst", UsageStatusEnum.NEW);
     }
 
     @Override

@@ -114,7 +114,6 @@ public class UsageServiceTest {
         Whitebox.setInternalState(usageService, "usageArchiveRepository", usageArchiveRepository);
         Whitebox.setInternalState(usageService, "rmsIntegrationService", rmsIntegrationService);
         Whitebox.setInternalState(usageService, "workMatchingService", workMatchingService);
-        Whitebox.setInternalState(usageService, "pageSize", 1000);
     }
 
     @Test
@@ -528,9 +527,7 @@ public class UsageServiceTest {
         List<Usage> usages = Lists.newArrayList(usage1, usage2, usage3);
         List<Usage> matchedByIdno = Lists.newArrayList(usage1);
         List<Usage> matchedByTitle = Lists.newArrayList(usage2);
-        expect(usageRepository.findCountWithBlankWrWrkInst()).andReturn(usages.size()).once();
-        Capture<Pageable> pageableCapture = new Capture<>();
-        expect(usageRepository.findUsagesWithBlankWrWrkInst(capture(pageableCapture))).andReturn(usages).once();
+        expect(usageRepository.findUsagesWithBlankWrWrkInst()).andReturn(usages).once();
         expect(workMatchingService.matchByIdno(usages)).andReturn(matchedByIdno).once();
         expect(workMatchingService.matchByTitle(usages)).andReturn(matchedByTitle).once();
         usageRepository.updateStatusAndWrWrkInst(matchedByIdno);
@@ -549,8 +546,6 @@ public class UsageServiceTest {
         expectLastCall().once();
         replay(usageRepository, workMatchingService, usageAuditService);
         usageService.findWorksAndUpdateStatuses();
-        assertEquals(0, pageableCapture.getValue().getOffset());
-        assertEquals(1000, pageableCapture.getValue().getLimit());
         verify(usageRepository, workMatchingService, usageAuditService);
     }
 
