@@ -933,22 +933,13 @@
         order by product_family asc
     </select>
 
-    <select id="findCountWithBlankWrWrkInst" resultType="int">
-        select
-            count(1)
-        from ${schema}.df_usage
-        where wr_wrk_inst is null
-            and status_ind = #{status}
-    </select>
-
-    <select id="findUsagesWithBlankWrWrkInst" parameterType="map" resultMap="usageResultMap">
+    <select id="findUsagesWithBlankWrWrkInst" resultMap="usageResultMap">
         select
             df_usage_uid,
             <include refid="usageColumns"/>
         from ${schema}.df_usage
         where wr_wrk_inst is null
             and status_ind = #{status}
-        <include refid="ifPageable"/>
     </select>
 
     <update id="updateStatusAndWrWrkInst" parameterType="Usage">
