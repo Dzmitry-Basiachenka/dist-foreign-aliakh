@@ -5,8 +5,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.repository.impl.BaseCsvReportHandler.BigDecimalCellProcessor;
-import com.copyright.rup.dist.foreign.repository.impl.BaseCsvReportHandler.DateCellProcessor;
 import com.copyright.rup.dist.foreign.repository.impl.BaseCsvReportHandler.FiscalYearCellProcessor;
+import com.copyright.rup.dist.foreign.repository.impl.BaseCsvReportHandler.LocalDateCellProcessor;
 import com.copyright.rup.dist.foreign.repository.impl.BaseCsvReportHandler.ServiceFeePercentCellProcessor;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -31,7 +31,7 @@ import java.util.stream.IntStream;
 public class ScenarioUsagesCsvReportHandlerTest {
 
     private static final Optional OPTIONAL_PROCESSOR = new Optional();
-    private static final DateCellProcessor DATE_CELL_PROCESSOR = new DateCellProcessor();
+    private static final LocalDateCellProcessor LOCAL_DATE_CELL_PROCESSOR = new LocalDateCellProcessor();
     private static final BigDecimalCellProcessor BIG_DECIMAL_PROCESSOR = new BigDecimalCellProcessor();
 
     private ScenarioUsagesCsvReportHandler scenarioUsagesCsvReportHandler;
@@ -48,12 +48,12 @@ public class ScenarioUsagesCsvReportHandlerTest {
         assertTrue(ArrayUtils.isNotEmpty(processors));
         assertEquals(27, processors.length);
         CellProcessor[] cellProcessors = {OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR,
-            new FiscalYearCellProcessor(), OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, DATE_CELL_PROCESSOR,
+            new FiscalYearCellProcessor(), OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, LOCAL_DATE_CELL_PROCESSOR,
             OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR,
-            OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, DATE_CELL_PROCESSOR,
-            OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, BIG_DECIMAL_PROCESSOR, BIG_DECIMAL_PROCESSOR,
-            new ServiceFeePercentCellProcessor(), OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR,
-            OPTIONAL_PROCESSOR};
+            OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR,
+            LOCAL_DATE_CELL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR,
+            BIG_DECIMAL_PROCESSOR, BIG_DECIMAL_PROCESSOR, new ServiceFeePercentCellProcessor(), OPTIONAL_PROCESSOR,
+            OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR};
         IntStream.range(0, processors.length)
             .forEach(index -> assertEquals(cellProcessors[index].getClass(), processors[index].getClass()));
     }

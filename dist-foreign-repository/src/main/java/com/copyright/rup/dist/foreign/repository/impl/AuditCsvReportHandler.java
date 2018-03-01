@@ -28,7 +28,7 @@ class AuditCsvReportHandler extends BaseCsvReportHandler {
             .put("status", "Detail Status", OPTIONAL_PROCESSOR)
             .put("productFamily", "Product Family", OPTIONAL_PROCESSOR)
             .put("batchName", "Usage Batch Name", OPTIONAL_PROCESSOR)
-            .put("paymentDate", "Payment Date", new DateCellProcessor())
+            .put("paymentDate", "Payment Date", new LocalDateCellProcessor())
             .put("rhAccountNumber", "RH Account #", OPTIONAL_PROCESSOR)
             .put("rhName", "RH Name", OPTIONAL_PROCESSOR)
             .put("wrWrkInst", "Wr Wrk Inst", OPTIONAL_PROCESSOR)
@@ -38,7 +38,7 @@ class AuditCsvReportHandler extends BaseCsvReportHandler {
             .put("serviceFee", "Service Fee %", new ServiceFeePercentCellProcessor())
             .put("scenarioName", "Scenario Name", OPTIONAL_PROCESSOR)
             .put("checkNumber", "Check #", OPTIONAL_PROCESSOR)
-            .put("checkDate", "Check Date", new DateCellProcessor())
+            .put("checkDate", "Check Date", new OffsetDateTimeCellProcessor())
             .put("cccEventId", "Event ID", OPTIONAL_PROCESSOR)
             .put("distributionName", "Dist. Name", OPTIONAL_PROCESSOR)
             .build();

@@ -21,7 +21,7 @@ import java.io.PipedOutputStream;
 class ScenarioUsagesCsvReportHandler extends BaseCsvReportHandler {
 
     private static final Optional OPTIONAL_PROCESSOR = new Optional();
-    private static final DateCellProcessor DATE_CELL_PROCESSOR = new DateCellProcessor();
+    private static final LocalDateCellProcessor LOCAL_DATE_CELL_PROCESSOR = new LocalDateCellProcessor();
     private static final BigDecimalCellProcessor BIG_DECIMAL_PROCESSOR = new BigDecimalCellProcessor();
 
     private static final Table<String, String, CellProcessor> PROPERTY_TABLE =
@@ -32,7 +32,7 @@ class ScenarioUsagesCsvReportHandler extends BaseCsvReportHandler {
             .put("fiscalYear", "Fiscal Year", new FiscalYearCellProcessor())
             .put("rroAccountNumber", "RRO Account #", OPTIONAL_PROCESSOR)
             .put("rroName", "RRO Name", OPTIONAL_PROCESSOR)
-            .put("paymentDate", "Payment Date", DATE_CELL_PROCESSOR)
+            .put("paymentDate", "Payment Date", LOCAL_DATE_CELL_PROCESSOR)
             .put("workTitle", "Title", OPTIONAL_PROCESSOR)
             .put("article", "Article", OPTIONAL_PROCESSOR)
             .put("standardNumber", "Standard Number", OPTIONAL_PROCESSOR)
@@ -42,7 +42,7 @@ class ScenarioUsagesCsvReportHandler extends BaseCsvReportHandler {
             .put("payeeAccountNumber", "Payee Account #", OPTIONAL_PROCESSOR)
             .put("payeeName", "Payee Name", OPTIONAL_PROCESSOR)
             .put("publisher", "Publisher", OPTIONAL_PROCESSOR)
-            .put("publicationDate", "Pub Date", new DateCellProcessor())
+            .put("publicationDate", "Pub Date", LOCAL_DATE_CELL_PROCESSOR)
             .put("numberOfCopies", "Number of Copies", OPTIONAL_PROCESSOR)
             .put("reportedValue", "Reported value", OPTIONAL_PROCESSOR)
             .put("grossAmount", "Gross Amt in USD", OPTIONAL_PROCESSOR)
