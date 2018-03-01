@@ -73,14 +73,14 @@ public class PiIntegrationServiceTest {
         replay(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3, searchHit4, searchHit5,
             searchHit6, searchHit7);
         Map<String, Long> result = piIntegrationService.findWrWrkInstsByIdnos(Sets.newHashSet("0-271-01750-3",
-            "978-0-271-01751-8", "ETOCRN066582498", "10.1353/PGN.1999.0081", "1140-9126", "978-0-08-027365-5",
+            "978-0-271-01751-8", " etocr-N06658249-8 ", "10.1353/PGN.1999.0081", "1140-9126", "978-0-08-027365-5",
             "1633-1370"));
         assertEquals(5, result.size());
-        assertEquals(123059057L, result.get("0-271-01750-3"), 0);
-        assertEquals(123059058L, result.get("978-0-271-01751-8"), 0);
+        assertEquals(123059057L, result.get("0271017503"), 0);
+        assertEquals(123059058L, result.get("9780271017518"), 0);
         assertEquals(421802499L, result.get("ETOCRN066582498"), 0);
         assertEquals(345993258L, result.get("10.1353/PGN.1999.0081"), 0);
-        assertEquals(156427025L, result.get("1140-9126"), 0);
+        assertEquals(156427025L, result.get("11409126"), 0);
         verify(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3, searchHit4, searchHit5,
             searchHit6, searchHit7);
     }
@@ -119,6 +119,11 @@ public class PiIntegrationServiceTest {
         expect(searchResults.getHits()).andReturn(searchHits).once();
         expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).once();
         expectSearchHits();
+    }
+
+    @Test
+    public void testNormalizeIdno() {
+        assertEquals("IDNO123456789", PiIntegrationService.normalizeIdno(" Id-no-123-456-789- "));
     }
 
     private void expectSearchHits() {
