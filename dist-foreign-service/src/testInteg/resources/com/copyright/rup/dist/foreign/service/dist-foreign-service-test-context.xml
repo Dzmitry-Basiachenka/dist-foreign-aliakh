@@ -30,10 +30,6 @@
         <property name="createCommonTablesOnStartup" value="false"/>
     </bean>
 
-    <bean id="quartzScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
-        <!--Stub Scheduler for quartz job-->
-    </bean>
-
     <bean id="df.service.paidUsageConsumer"
           class="com.copyright.rup.dist.foreign.service.impl.mock.MockPaidUsageConsumer"/>
 

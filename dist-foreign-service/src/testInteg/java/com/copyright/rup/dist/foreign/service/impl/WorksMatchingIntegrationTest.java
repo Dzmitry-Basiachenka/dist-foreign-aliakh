@@ -12,7 +12,6 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
@@ -43,7 +42,8 @@ public class WorksMatchingIntegrationTest {
         "Detail was made eligible for NTS because sum of gross amounts, grouped by work title, is less than $100";
     private static final String NTS_BY_SELF_MESSAGE =
         "Detail was made eligible for NTS because gross amount is less than $100";
-
+    private static final String NTS_PRODUCT_FAMILY = "NTS";
+    private static final String FAS_PRODUCT_FAMILY = "FAS";
     @Autowired
     private IUsageService usageService;
     @Autowired
@@ -51,11 +51,8 @@ public class WorksMatchingIntegrationTest {
     @Autowired
     private IUsageAuditRepository auditRepository;
 
-    private static final String NTS_PRODUCT_FAMILY = "NTS";
-    private static final String FAS_PRODUCT_FAMILY = "FAS";
-
     @Test
-    public void testFindWorksAndUpdateStatuses() throws JobExecutionException {
+    public void testFindWorksAndUpdateStatuses() {
         usageService.findWorksAndUpdateStatuses();
         verifyUsage(5487125469L, 123059057L, UsageStatusEnum.WORK_FOUND, FAS_PRODUCT_FAMILY,
             "Wr Wrk Inst 123059057 was found by standard number 978-0-271-01750-1");
