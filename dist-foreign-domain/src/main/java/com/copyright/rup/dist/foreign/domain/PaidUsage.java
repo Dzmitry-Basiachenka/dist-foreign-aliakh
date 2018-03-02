@@ -5,7 +5,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 
 /**
  * Represents paid usage domain object.
@@ -19,11 +19,11 @@ import java.time.LocalDate;
 public class PaidUsage extends Usage {
 
     private String checkNumber;
-    private LocalDate checkDate;
+    private OffsetDateTime checkDate;
     private String cccEventId;
     private String distributionName;
-    private LocalDate distributionDate;
-    private LocalDate periodEndDate;
+    private OffsetDateTime distributionDate;
+    private OffsetDateTime periodEndDate;
 
     public String getCheckNumber() {
         return checkNumber;
@@ -33,11 +33,11 @@ public class PaidUsage extends Usage {
         this.checkNumber = checkNumber;
     }
 
-    public LocalDate getCheckDate() {
+    public OffsetDateTime getCheckDate() {
         return checkDate;
     }
 
-    public void setCheckDate(LocalDate checkDate) {
+    public void setCheckDate(OffsetDateTime checkDate) {
         this.checkDate = checkDate;
     }
 
@@ -56,19 +56,19 @@ public class PaidUsage extends Usage {
         this.distributionName = distributionName;
     }
 
-    public LocalDate getDistributionDate() {
+    public OffsetDateTime getDistributionDate() {
         return distributionDate;
     }
 
-    public void setDistributionDate(LocalDate distributionDate) {
+    public void setDistributionDate(OffsetDateTime distributionDate) {
         this.distributionDate = distributionDate;
     }
 
-    public LocalDate getPeriodEndDate() {
+    public OffsetDateTime getPeriodEndDate() {
         return periodEndDate;
     }
 
-    public void setPeriodEndDate(LocalDate periodEndDate) {
+    public void setPeriodEndDate(OffsetDateTime periodEndDate) {
         this.periodEndDate = periodEndDate;
     }
 

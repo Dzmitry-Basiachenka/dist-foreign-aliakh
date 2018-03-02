@@ -20,6 +20,7 @@ import java.io.PipedOutputStream;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.Objects;
@@ -35,6 +36,8 @@ import java.util.Objects;
  */
 public abstract class BaseCsvReportHandler implements ResultHandler, AutoCloseable {
 
+    private static final DateTimeFormatter DATE_FORMATTER =
+        DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT, Locale.US);
     private ICsvBeanWriter beanWriter;
 
     /**
@@ -90,16 +93,26 @@ public abstract class BaseCsvReportHandler implements ResultHandler, AutoCloseab
     }
 
     /**
-     * The cell processor to generate date value in {@link RupDateUtils#US_DATE_FORMAT_PATTERN_SHORT} for report.
+     * The cell processor to generate date value in {@link RupDateUtils#US_DATE_FORMAT_PATTERN_SHORT} for report
+     * for {@link java.time.OffsetDateTime} type fields.
      */
-    static class DateCellProcessor implements CellProcessor {
-
-        private static final DateTimeFormatter FORMATTER =
-            DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT, Locale.US);
+    static class OffsetDateTimeCellProcessor implements CellProcessor {
 
         @Override
         public Object execute(Object value, CsvContext context) {
-            return null != value ? ((LocalDate) value).format(FORMATTER) : null;
+            return null != value ? ((OffsetDateTime) value).format(DATE_FORMATTER) : null;
+        }
+    }
+
+    /**
+     * The cell processor to generate date value in {@link RupDateUtils#US_DATE_FORMAT_PATTERN_SHORT} for report
+     * for {@link java.time.LocalDate} type fields.
+     */
+    static class LocalDateCellProcessor implements CellProcessor {
+
+        @Override
+        public Object execute(Object value, CsvContext context) {
+            return null != value ? ((LocalDate) value).format(DATE_FORMATTER) : null;
         }
     }
 

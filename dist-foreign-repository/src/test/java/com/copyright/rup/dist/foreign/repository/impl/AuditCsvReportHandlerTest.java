@@ -5,7 +5,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.repository.impl.BaseCsvReportHandler.BigDecimalCellProcessor;
-import com.copyright.rup.dist.foreign.repository.impl.BaseCsvReportHandler.DateCellProcessor;
+import com.copyright.rup.dist.foreign.repository.impl.BaseCsvReportHandler.LocalDateCellProcessor;
+import com.copyright.rup.dist.foreign.repository.impl.BaseCsvReportHandler.OffsetDateTimeCellProcessor;
 import com.copyright.rup.dist.foreign.repository.impl.BaseCsvReportHandler.ServiceFeePercentCellProcessor;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -45,9 +46,10 @@ public class AuditCsvReportHandlerTest {
         assertTrue(ArrayUtils.isNotEmpty(processors));
         assertEquals(17, processors.length);
         CellProcessor[] cellProcessors = {OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR,
-            OPTIONAL_PROCESSOR, new DateCellProcessor(), OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR,
-            OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, new BigDecimalCellProcessor(), new ServiceFeePercentCellProcessor(),
-            OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, new DateCellProcessor(), OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR};
+            OPTIONAL_PROCESSOR, new LocalDateCellProcessor(), OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR,
+            OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, new BigDecimalCellProcessor(),
+            new ServiceFeePercentCellProcessor(), OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR,
+            new OffsetDateTimeCellProcessor(), OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR};
         IntStream.range(0, processors.length)
             .forEach(index -> assertEquals(cellProcessors[index].getClass(), processors[index].getClass()));
     }
