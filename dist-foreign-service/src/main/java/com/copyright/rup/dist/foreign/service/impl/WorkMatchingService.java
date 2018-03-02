@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.service.api.IWorkMatchingService;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
+import org.perf4j.aop.Profiled;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +36,7 @@ public class WorkMatchingService implements IWorkMatchingService {
     @Autowired
     private IPiIntegrationService piIntegrationService;
 
+    @Profiled(tag = "service.WorkMatchingService.matchByTitle")
     @Override
     public List<Usage> matchByTitle(List<Usage> usages) {
         Set<String> titles = usages.stream()
@@ -46,6 +48,7 @@ public class WorkMatchingService implements IWorkMatchingService {
             : Collections.emptyList();
     }
 
+    @Profiled(tag = "service.WorkMatchingService.matchByIdno")
     @Override
     public List<Usage> matchByIdno(List<Usage> usages) {
         Set<String> idnos = usages.stream()

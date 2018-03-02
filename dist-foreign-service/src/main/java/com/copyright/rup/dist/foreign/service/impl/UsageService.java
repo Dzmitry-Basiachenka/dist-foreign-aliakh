@@ -388,6 +388,7 @@ public class UsageService implements IUsageService {
             usages.size() - notFoundDetailsIds.size());
     }
 
+    @Profiled(tag = "service.UsageService.findWorksAndUpdateStatuses")
     @Override
     @Transactional
     @Scheduled(cron = "$RUP{dist.foreign.service.schedule.works_match}")
@@ -413,7 +414,8 @@ public class UsageService implements IUsageService {
      *
      * @param usages list of {@link Usage}s
      */
-    void makeUsagesEligibleForNts(List<Usage> usages) {
+    @Profiled(tag = "service.UsageService.makeUsagesEligibleForNts")
+    public void makeUsagesEligibleForNts(List<Usage> usages) {
         makeUsagesEligibleForNts(UsageGroup.STANDARD_NUMBER.group(usages),
             "Detail was made eligible for NTS because sum of gross amounts, " +
                 "grouped by standard number, is less than $100");
