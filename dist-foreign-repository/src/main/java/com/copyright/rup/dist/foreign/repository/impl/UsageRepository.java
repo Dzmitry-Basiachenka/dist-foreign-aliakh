@@ -307,17 +307,20 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         return selectList("IUsageMapper.findProductFamiliesForAuditFilter");
     }
 
+    @Profiled(tag = "repository.UsageRepository.findUsagesWithBlankWrWrkInst")
     @Override
     public List<Usage> findUsagesWithBlankWrWrkInst() {
         return selectList("IUsageMapper.findUsagesWithBlankWrWrkInst", UsageStatusEnum.NEW);
     }
 
+    @Profiled(tag = "repository.UsageRepository.updateStatusAndWrWrkInst")
     @Override
     public void updateStatusAndWrWrkInst(List<Usage> usages) {
         checkArgument(CollectionUtils.isNotEmpty(usages));
         usages.forEach(usage -> update("IUsageMapper.updateStatusAndWrWrkInst", usage));
     }
 
+    @Profiled(tag = "repository.UsageRepository.updateStatusAndProductFamily")
     @Override
     public void updateStatusAndProductFamily(List<Usage> usages) {
         checkArgument(CollectionUtils.isNotEmpty(usages));

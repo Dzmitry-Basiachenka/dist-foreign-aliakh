@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.integration.pi.impl;
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.es.api.RupEsApi;
+import com.copyright.rup.es.api.RupEsApiRuntimeException;
 import com.copyright.rup.es.api.RupQueryStringQueryBuilder;
 import com.copyright.rup.es.api.RupResponseBase;
 import com.copyright.rup.es.api.RupSearchResponse;
@@ -20,6 +21,8 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.elasticsearch.ElasticsearchException;
+import org.perf4j.aop.Profiled;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -56,7 +59,6 @@ public class PiIntegrationService implements IPiIntegrationService {
     @Value("$RUP{dist.foreign.integration.works.pi.index}")
     private String piIndex;
 
-    private RupEsApi rupEsApi;
     private ObjectMapper mapper;
 
     /**
@@ -72,6 +74,7 @@ public class PiIntegrationService implements IPiIntegrationService {
         return StringUtils.upperCase(StringUtils.replace(StringUtils.trim(idno), "-", StringUtils.EMPTY));
     }
 
+    @Profiled(tag = "integration.PiIntegrationService.findWrWrkInstsByIdnos")
     @Override
     public Map<String, Long> findWrWrkInstsByIdnos(Set<String> idnos) {
         LOGGER.info("Search works by IDNOs. Started. IDNOsCount={}", idnos.size());
@@ -81,6 +84,7 @@ public class PiIntegrationService implements IPiIntegrationService {
         return wrWrkInstMap;
     }
 
+    @Profiled(tag = "integration.PiIntegrationService.findWrWrkInstsByTitles")
     @Override
     public Map<String, Long> findWrWrkInstsByTitles(Set<String> titles) {
         LOGGER.info("Search works by titles. Started. TitlesCount={}", titles.size());
@@ -92,7 +96,7 @@ public class PiIntegrationService implements IPiIntegrationService {
     /**
      * @return an instance of {@link RupEsApi}.
      */
-    protected RupEsApi initRupEsApi() {
+    protected RupEsApi getRupEsApi() {
         return RupEsApi.of(cluster, node);
     }
 
@@ -101,7 +105,6 @@ public class PiIntegrationService implements IPiIntegrationService {
      */
     @PostConstruct
     void init() {
-        rupEsApi = initRupEsApi();
         mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
@@ -152,6 +155,7 @@ public class PiIntegrationService implements IPiIntegrationService {
     }
 
     private RupSearchResponse doSearch(String field, Set<String> values) {
+        RupSearchResponse searchResponse = null;
         String queryString = buildQueryString(field, values);
         if (StringUtils.isNotEmpty(queryString)) {
             LOGGER.debug("Search works. Query={}", queryString);
@@ -162,9 +166,13 @@ public class PiIntegrationService implements IPiIntegrationService {
             request.setSearchType(RupSearchRequest.RupSearchType.DFS_QUERY_AND_FETCH);
             request.setFields("wrWrkInst", "idno", "title");
             request.setFetchSource(true);
-            return rupEsApi.search(request);
+            try {
+                searchResponse = getRupEsApi().search(request);
+            } catch (RupEsApiRuntimeException | ElasticsearchException e) {
+                LOGGER.warn("Search works failed. Unable to connect to RupEsApi.", e);
+            }
         }
-        return null;
+        return searchResponse;
     }
 
     private String buildQueryString(String field, Set<String> values) {

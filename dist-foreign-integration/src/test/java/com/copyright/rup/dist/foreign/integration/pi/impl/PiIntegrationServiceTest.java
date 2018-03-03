@@ -21,7 +21,6 @@ import com.google.common.collect.Sets;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
-import org.powermock.reflect.Whitebox;
 
 import java.util.List;
 import java.util.Map;
@@ -54,7 +53,7 @@ public class PiIntegrationServiceTest {
     public void setUp() {
         piIntegrationService = new PiIntegrationServiceMock();
         piIntegrationService.init();
-        rupEsApi = Whitebox.getInternalState(piIntegrationService, "rupEsApi");
+        rupEsApi = piIntegrationService.getRupEsApi();
         searchHit1 = createMock(RupSearchHit.class);
         searchHit2 = createMock(RupSearchHit.class);
         searchHit3 = createMock(RupSearchHit.class);
@@ -144,9 +143,11 @@ public class PiIntegrationServiceTest {
 
     private static class PiIntegrationServiceMock extends PiIntegrationService {
 
+        private RupEsApi rupEsApiMock = createMock(RupEsApi.class);
+
         @Override
-        protected RupEsApi initRupEsApi() {
-            return createMock(RupEsApi.class);
+        protected RupEsApi getRupEsApi() {
+            return rupEsApiMock;
         }
     }
 }

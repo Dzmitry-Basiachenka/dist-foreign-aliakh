@@ -13,7 +13,7 @@
     <context-param>
         <description>Vaadin production mode</description>
         <param-name>productionMode</param-name>
-        <param-value>@vaadinProductionMode@</param-value>
+        <param-value>true</param-value>
     </context-param>
 
     <context-param>
