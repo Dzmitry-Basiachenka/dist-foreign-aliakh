@@ -713,29 +713,34 @@
             </when>
             <otherwise>
                 select
-                u.df_usage_uid,
-                detail_id,
-                u.status_ind,
-                u.product_family,
-                u.df_usage_batch_uid,
-                ub.name batch_name,
-                ub.payment_date,
-                u.rh_account_number,
-                r.name rh_name,
-                wr_wrk_inst,
-                work_title,
-                standard_number,
-                u.gross_amount,
-                service_fee,
-                u.updated_datetime,
-                s.name scenario_name,
-                null check_number,
-                null check_date,
-                null ccc_event_id,
-                null distribution_name
+                    u.df_usage_uid,
+                    detail_id,
+                    u.status_ind,
+                    u.product_family,
+                    u.df_usage_batch_uid,
+                    ub.name batch_name,
+                    ub.payment_date,
+                    u.rh_account_number,
+                    rh.name rh_name,
+                    u.payee_account_number,
+                    payee.name payee_name,
+                    wr_wrk_inst,
+                    work_title,
+                    standard_number,
+                    u.gross_amount,
+                    service_fee,
+                    u.updated_datetime,
+                    s.name scenario_name,
+                    null check_number,
+                    null check_date,
+                    null ccc_event_id,
+                    null distribution_name,
+                    null distribution_date,
+                    null period_end_date
                 from ${schema}.df_usage u
                 join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
-                left join ${schema}.df_rightsholder r on r.rh_account_number = u.rh_account_number
+                left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+                left join ${schema}.df_rightsholder payee on payee.rh_account_number = u.payee_account_number
                 left join ${schema}.df_scenario s on s.df_scenario_uid = u.df_scenario_uid
                 <where>
                     <include refid="commonAuditFilterWhereClause"/>
@@ -769,6 +774,12 @@
                     <when test="sort.property == 'rhName'">
                         rh_name
                     </when>
+                    <when test="sort.property == 'payeeAccountNumber'">
+                        payee_account_number
+                    </when>
+                    <when test="sort.property == 'payeeName'">
+                        payee_name
+                    </when>
                     <when test="sort.property == 'wrWrkInst'">
                         wr_wrk_inst
                     </when>
@@ -799,6 +810,12 @@
                     <when test="sort.property == 'distributionName'">
                         distribution_name
                     </when>
+                    <when test="sort.property == 'distributionDate'">
+                        distribution_date
+                    </when>
+                    <when test="sort.property == 'periodEndDate'">
+                        period_end_date
+                    </when>
                 </choose>
                 <include refid="IUsageMapper.direction"/>
             </when>
@@ -819,7 +836,9 @@
             ub.name batch_name,
             ub.payment_date,
             u.rh_account_number,
-            r.name rh_name,
+            rh.name rh_name,
+            u.payee_account_number,
+            payee.name payee_name,
             wr_wrk_inst,
             work_title,
             standard_number,
@@ -830,10 +849,13 @@
             u.check_number,
             u.check_date,
             u.ccc_event_id,
-            u.distribution_name
+            u.distribution_name,
+            u.distribution_date,
+            u.period_end_date
         from ${schema}.df_usage_archive u
         join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
-        left join ${schema}.df_rightsholder r on r.rh_account_number = u.rh_account_number
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        left join ${schema}.df_rightsholder payee on payee.rh_account_number = u.payee_account_number
         left join ${schema}.df_scenario s on s.df_scenario_uid = u.df_scenario_uid
         <include refid="archivedAuditFilterWhereClause"/>
     </sql>

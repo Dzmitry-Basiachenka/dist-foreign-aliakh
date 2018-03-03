@@ -31,6 +31,8 @@ import java.util.stream.IntStream;
 public class AuditCsvReportHandlerTest {
 
     private static final Optional OPTIONAL_PROCESSOR = new Optional();
+    private static final OffsetDateTimeCellProcessor OFFSET_DATE_TIME_CELL_PROCESSOR =
+        new OffsetDateTimeCellProcessor();
 
     private AuditCsvReportHandler auditCsvReportHandler;
 
@@ -44,12 +46,13 @@ public class AuditCsvReportHandlerTest {
         CellProcessor[] processors = auditCsvReportHandler.getPropertyTable().values()
             .toArray(new CellProcessor[auditCsvReportHandler.getPropertyTable().size()]);
         assertTrue(ArrayUtils.isNotEmpty(processors));
-        assertEquals(17, processors.length);
+        assertEquals(21, processors.length);
         CellProcessor[] cellProcessors = {OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR,
             OPTIONAL_PROCESSOR, new LocalDateCellProcessor(), OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR,
-            OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, new BigDecimalCellProcessor(),
-            new ServiceFeePercentCellProcessor(), OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR,
-            new OffsetDateTimeCellProcessor(), OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR};
+            OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR,
+            new BigDecimalCellProcessor(), new ServiceFeePercentCellProcessor(), OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR,
+            OFFSET_DATE_TIME_CELL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OFFSET_DATE_TIME_CELL_PROCESSOR,
+            OFFSET_DATE_TIME_CELL_PROCESSOR};
         IntStream.range(0, processors.length)
             .forEach(index -> assertEquals(cellProcessors[index].getClass(), processors[index].getClass()));
     }
@@ -59,10 +62,11 @@ public class AuditCsvReportHandlerTest {
         String[] headers = auditCsvReportHandler.getPropertyTable().columnKeySet()
             .toArray(new String[auditCsvReportHandler.getPropertyTable().size()]);
         assertTrue(ArrayUtils.isNotEmpty(headers));
-        assertEquals(17, headers.length);
+        assertEquals(21, headers.length);
         assertArrayEquals(new String[]{"Detail ID", "Detail Status", "Product Family", "Usage Batch Name",
-            "Payment Date", "RH Account #", "RH Name", "Wr Wrk Inst", "Title", "Standard Number", "Amt in USD",
-            "Service Fee %", "Scenario Name", "Check #", "Check Date", "Event ID", "Dist. Name"}, headers);
+            "Payment Date", "RH Account #", "RH Name", "Payee Account #", "Payee Name", "Wr Wrk Inst", "Title",
+            "Standard Number", "Amt in USD", "Service Fee %", "Scenario Name", "Check #", "Check Date", "Event ID",
+            "Dist. Name", "Dist. Date", "Period Ending"}, headers);
     }
 
     @Test
@@ -70,9 +74,10 @@ public class AuditCsvReportHandlerTest {
         String[] nameMapping = auditCsvReportHandler.getPropertyTable().rowKeySet()
             .toArray(new String[auditCsvReportHandler.getPropertyTable().size()]);
         assertTrue(ArrayUtils.isNotEmpty(nameMapping));
-        assertEquals(17, nameMapping.length);
+        assertEquals(21, nameMapping.length);
         assertArrayEquals(new String[]{"detailId", "status", "productFamily", "batchName", "paymentDate",
-            "rhAccountNumber", "rhName", "wrWrkInst", "workTitle", "standardNumber", "grossAmount", "serviceFee",
-            "scenarioName", "checkNumber", "checkDate", "cccEventId", "distributionName"}, nameMapping);
+            "rhAccountNumber", "rhName", "payeeAccountNumber", "payeeName", "wrWrkInst", "workTitle", "standardNumber",
+            "grossAmount", "serviceFee", "scenarioName", "checkNumber", "checkDate", "cccEventId", "distributionName",
+            "distributionDate", "periodEndDate"}, nameMapping);
     }
 }

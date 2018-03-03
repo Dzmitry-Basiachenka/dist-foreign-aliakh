@@ -130,6 +130,8 @@ public class UsageRepositoryIntegrationTest {
     private static final String USAGE_ID_12 = "593c49c3-eb5b-477b-8556-f7a4725df2b3";
     private static final String USAGE_ID_13 = "66a7c2c0-3b09-48ad-9aa5-a6d0822226c7";
     private static final String USAGE_ID_14 = "0c099fc0-e6f5-43c0-b2d5-ad971f974c10";
+    private static final String USAGE_ID_15 = "0d85f51d-212b-4181-9972-3154cad74bd0";
+    private static final String USAGE_ID_16 = "1cb766c6-7c49-489a-bd8f-9b8b052f5785";
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
     private static final String USER_NAME = "user@copyright.com";
     private static final BigDecimal NET_AMOUNT = new BigDecimal("25.1500000000");
@@ -721,10 +723,11 @@ public class UsageRepositoryIntegrationTest {
     public void testFindForAuditByProductFamilies() {
         AuditFilter filter = new AuditFilter();
         filter.setProductFamilies(Collections.singleton(PRODUCT_FAMILY_FAS));
-        assertEquals(13, usageRepository.findCountForAudit(filter));
+        assertEquals(15, usageRepository.findCountForAudit(filter));
         List<UsageDto> usages = usageRepository.findForAudit(filter, new Pageable(0, 20), null);
-        verifyUsageDtos(usages, 13, USAGE_ID_11, USAGE_ID_14, USAGE_ID_12, USAGE_ID_13, USAGE_ID_6, USAGE_ID_5,
-            USAGE_ID_9, USAGE_ID_7, USAGE_ID_3, USAGE_ID_2, USAGE_ID_8, USAGE_ID_1, USAGE_ID_4);
+        verifyUsageDtos(usages, 15, USAGE_ID_11, USAGE_ID_14, USAGE_ID_12, USAGE_ID_13,
+            USAGE_ID_6, USAGE_ID_16, USAGE_ID_15, USAGE_ID_5, USAGE_ID_9, USAGE_ID_7, USAGE_ID_3, USAGE_ID_2,
+            USAGE_ID_8, USAGE_ID_1, USAGE_ID_4);
     }
 
     @Test
@@ -767,14 +770,14 @@ public class UsageRepositoryIntegrationTest {
         BufferedReader bufferedReader =
             new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
         assertEquals("Detail ID,Detail Status,Product Family,Usage Batch Name,Payment Date,RH Account #,RH Name," +
-            "Wr Wrk Inst,Title,Standard Number,Amt in USD,Service Fee %,Scenario Name,Check #,Check Date,Event ID," +
-            "Dist. Name", bufferedReader.readLine());
-        assertEquals("5423214888,PAID,FAS,Paid batch,02/12/2021,1000002859,John Wiley & Sons - Books,243904752," +
-            "100 ROAD MOVIES,1008902112317555XX,1000.0000000000,16.0,Paid Scenario,578945,03/15/2017,53256," +
-            "FDA March 17", bufferedReader.readLine());
+            "Payee Account #,Payee Name,Wr Wrk Inst,Title,Standard Number,Amt in USD,Service Fee %,Scenario Name," +
+            "Check #,Check Date,Event ID,Dist. Name,Dist. Date,Period Ending", bufferedReader.readLine());
+        assertEquals("5423214888,PAID,FAS,Paid batch,02/12/2021,1000002859,John Wiley & Sons - Books,1000002859," +
+            "John Wiley & Sons - Books,243904752,100 ROAD MOVIES,1008902112317555XX,1000.0000000000,16.0," +
+            "Paid Scenario,578945,03/15/2017,53256,FDA March 17,03/15/2017,03/15/2017", bufferedReader.readLine());
         assertEquals("6997788885,ELIGIBLE,FAS,AccessCopyright_11Dec16,08/16/2018,1000002859," +
-                "John Wiley & Sons - Books,244614835,15th International Conference on Environmental Degradation of " +
-                "Materials in Nuclear Power Systems Water Reactors,1008902002377655XX,35000.0000000000,0.0,,,,,",
+                "John Wiley & Sons - Books,,,244614835,15th International Conference on Environmental Degradation of " +
+                "Materials in Nuclear Power Systems Water Reactors,1008902002377655XX,35000.0000000000,0.0,,,,,,,",
             bufferedReader.readLine());
         assertNull(bufferedReader.readLine());
     }
@@ -787,8 +790,8 @@ public class UsageRepositoryIntegrationTest {
         BufferedReader bufferedReader =
             new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
         assertEquals("Detail ID,Detail Status,Product Family,Usage Batch Name,Payment Date,RH Account #,RH Name," +
-            "Wr Wrk Inst,Title,Standard Number,Amt in USD,Service Fee %,Scenario Name,Check #,Check Date,Event ID," +
-            "Dist. Name", bufferedReader.readLine());
+            "Payee Account #,Payee Name,Wr Wrk Inst,Title,Standard Number,Amt in USD,Service Fee %,Scenario Name," +
+            "Check #,Check Date,Event ID,Dist. Name,Dist. Date,Period Ending", bufferedReader.readLine());
         assertNull(bufferedReader.readLine());
     }
 
@@ -821,6 +824,23 @@ public class UsageRepositoryIntegrationTest {
         verifyUsageDtos(findForAuditWithSort(filter, "batchName", false), 2, USAGE_ID_5, USAGE_ID_4);
         verifyUsageDtos(findForAuditWithSort(filter, "paymentDate", true), 2, USAGE_ID_5, USAGE_ID_4);
         verifyUsageDtos(findForAuditWithSort(filter, "paymentDate", false), 2, USAGE_ID_5, USAGE_ID_4);
+        filter.setBatchesIds(Sets.newHashSet("48bfe456-fbc1-436e-8762-baca46a0e09c"));
+        verifyUsageDtos(findForAuditWithSort(filter, "payeeAccountNumber", true), 2, USAGE_ID_16, USAGE_ID_15);
+        verifyUsageDtos(findForAuditWithSort(filter, "payeeAccountNumber", false), 2, USAGE_ID_15, USAGE_ID_16);
+        verifyUsageDtos(findForAuditWithSort(filter, "payeeName", true), 2, USAGE_ID_16, USAGE_ID_15);
+        verifyUsageDtos(findForAuditWithSort(filter, "payeeName", false), 2, USAGE_ID_15, USAGE_ID_16);
+        verifyUsageDtos(findForAuditWithSort(filter, "checkNumber", true), 2, USAGE_ID_15, USAGE_ID_16);
+        verifyUsageDtos(findForAuditWithSort(filter, "checkNumber", false), 2, USAGE_ID_16, USAGE_ID_15);
+        verifyUsageDtos(findForAuditWithSort(filter, "checkDate", true), 2, USAGE_ID_15, USAGE_ID_16);
+        verifyUsageDtos(findForAuditWithSort(filter, "checkDate", false), 2, USAGE_ID_16, USAGE_ID_15);
+        verifyUsageDtos(findForAuditWithSort(filter, "cccEventId", true), 2, USAGE_ID_15, USAGE_ID_16);
+        verifyUsageDtos(findForAuditWithSort(filter, "cccEventId", false), 2, USAGE_ID_16, USAGE_ID_15);
+        verifyUsageDtos(findForAuditWithSort(filter, "distributionName", true), 2, USAGE_ID_16, USAGE_ID_15);
+        verifyUsageDtos(findForAuditWithSort(filter, "distributionName", false), 2, USAGE_ID_15, USAGE_ID_16);
+        verifyUsageDtos(findForAuditWithSort(filter, "distributionDate", true), 2, USAGE_ID_15, USAGE_ID_16);
+        verifyUsageDtos(findForAuditWithSort(filter, "distributionDate", false), 2, USAGE_ID_16, USAGE_ID_15);
+        verifyUsageDtos(findForAuditWithSort(filter, "periodEndDate", true), 2, USAGE_ID_15, USAGE_ID_16);
+        verifyUsageDtos(findForAuditWithSort(filter, "periodEndDate", false), 2, USAGE_ID_16, USAGE_ID_15);
     }
 
     @Test

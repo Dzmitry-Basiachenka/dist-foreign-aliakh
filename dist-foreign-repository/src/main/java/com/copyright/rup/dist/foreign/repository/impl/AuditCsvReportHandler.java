@@ -21,6 +21,8 @@ import java.io.PipedOutputStream;
 class AuditCsvReportHandler extends BaseCsvReportHandler {
 
     private static final Optional OPTIONAL_PROCESSOR = new Optional();
+    private static final OffsetDateTimeCellProcessor OFFSET_DATE_TIME_CELL_PROCESSOR =
+        new OffsetDateTimeCellProcessor();
 
     private static final Table<String, String, CellProcessor> PROPERTY_TABLE =
         ImmutableTable.<String, String, CellProcessor>builder()
@@ -31,6 +33,8 @@ class AuditCsvReportHandler extends BaseCsvReportHandler {
             .put("paymentDate", "Payment Date", new LocalDateCellProcessor())
             .put("rhAccountNumber", "RH Account #", OPTIONAL_PROCESSOR)
             .put("rhName", "RH Name", OPTIONAL_PROCESSOR)
+            .put("payeeAccountNumber", "Payee Account #", OPTIONAL_PROCESSOR)
+            .put("payeeName", "Payee Name", OPTIONAL_PROCESSOR)
             .put("wrWrkInst", "Wr Wrk Inst", OPTIONAL_PROCESSOR)
             .put("workTitle", "Title", OPTIONAL_PROCESSOR)
             .put("standardNumber", "Standard Number", OPTIONAL_PROCESSOR)
@@ -38,9 +42,11 @@ class AuditCsvReportHandler extends BaseCsvReportHandler {
             .put("serviceFee", "Service Fee %", new ServiceFeePercentCellProcessor())
             .put("scenarioName", "Scenario Name", OPTIONAL_PROCESSOR)
             .put("checkNumber", "Check #", OPTIONAL_PROCESSOR)
-            .put("checkDate", "Check Date", new OffsetDateTimeCellProcessor())
+            .put("checkDate", "Check Date", OFFSET_DATE_TIME_CELL_PROCESSOR)
             .put("cccEventId", "Event ID", OPTIONAL_PROCESSOR)
             .put("distributionName", "Dist. Name", OPTIONAL_PROCESSOR)
+            .put("distributionDate", "Dist. Date", OFFSET_DATE_TIME_CELL_PROCESSOR)
+            .put("periodEndDate", "Period Ending", OFFSET_DATE_TIME_CELL_PROCESSOR)
             .build();
 
     /**
