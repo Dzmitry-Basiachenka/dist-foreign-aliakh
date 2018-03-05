@@ -58,6 +58,8 @@ public class WorksMatchingIntegrationTest {
             "Wr Wrk Inst 123059057 was found by standard number 978-0-271-01750-1");
         verifyUsage(5236985478L, 123059057L, UsageStatusEnum.WORK_FOUND, FAS_PRODUCT_FAMILY,
             "Wr Wrk Inst 123059057 was found by title \"Forbidden rites\"");
+        verifyUsage(3254125478L, 123059057L, UsageStatusEnum.WORK_FOUND, FAS_PRODUCT_FAMILY,
+            "Wr Wrk Inst 123059057 was found by title \"Forbidden rites\"");
         verifyUsage(5544213254L, 123059057L, UsageStatusEnum.WORK_FOUND, FAS_PRODUCT_FAMILY,
             "Wr Wrk Inst 123059057 was found by standard number 978-0-271-01750-1");
         verifyUsage(5896325874L, null, UsageStatusEnum.NEW, FAS_PRODUCT_FAMILY);
@@ -69,6 +71,7 @@ public class WorksMatchingIntegrationTest {
         verifyUsage(5420136521L, null, UsageStatusEnum.NEW, FAS_PRODUCT_FAMILY);
         verifyUsage(5487414477L, null, UsageStatusEnum.NEW, FAS_PRODUCT_FAMILY);
         verifyUsage(3200110141L, null, UsageStatusEnum.NEW, FAS_PRODUCT_FAMILY);
+        verifyUsage(6325412547L, null, UsageStatusEnum.NEW, FAS_PRODUCT_FAMILY);
         verifyUsage(2154874521L, null, UsageStatusEnum.ELIGIBLE, NTS_PRODUCT_FAMILY, NTS_BY_STANDARD_NUMBER_MESSAGE);
         verifyUsage(1254874596L, null, UsageStatusEnum.ELIGIBLE, NTS_PRODUCT_FAMILY, NTS_BY_STANDARD_NUMBER_MESSAGE);
         verifyUsage(4125487962L, null, UsageStatusEnum.ELIGIBLE, NTS_PRODUCT_FAMILY, NTS_BY_STANDARD_NUMBER_MESSAGE);

@@ -39,24 +39,28 @@ public class WorkMatchingService implements IWorkMatchingService {
     @Profiled(tag = "service.WorkMatchingService.matchByTitle")
     @Override
     public List<Usage> matchByTitle(List<Usage> usages) {
-        Set<String> titles = usages.stream()
+        List<Usage> filteredUsages = usages.stream()
             .filter(usage -> Objects.isNull(usage.getStandardNumber()) && Objects.nonNull(usage.getWorkTitle()))
+            .collect(Collectors.toList());
+        Set<String> titles = filteredUsages.stream()
             .map(Usage::getWorkTitle)
             .collect(Collectors.toSet());
         return CollectionUtils.isNotEmpty(titles)
-            ? computeResult(usages, piIntegrationService.findWrWrkInstsByTitles(titles), Usage::getWorkTitle)
+            ? computeResult(filteredUsages, piIntegrationService.findWrWrkInstsByTitles(titles), Usage::getWorkTitle)
             : Collections.emptyList();
     }
 
     @Profiled(tag = "service.WorkMatchingService.matchByIdno")
     @Override
     public List<Usage> matchByIdno(List<Usage> usages) {
-        Set<String> idnos = usages.stream()
+        List<Usage> filteredUsages = usages.stream()
             .filter(usage -> Objects.nonNull(usage.getStandardNumber()))
+            .collect(Collectors.toList());
+        Set<String> idnos = filteredUsages.stream()
             .map(Usage::getStandardNumber)
             .collect(Collectors.toSet());
         return CollectionUtils.isNotEmpty(idnos)
-            ? computeResult(usages, piIntegrationService.findWrWrkInstsByIdnos(idnos),
+            ? computeResult(filteredUsages, piIntegrationService.findWrWrkInstsByIdnos(idnos),
             usage -> PiIntegrationService.normalizeIdno(usage.getStandardNumber()))
             : Collections.emptyList();
     }

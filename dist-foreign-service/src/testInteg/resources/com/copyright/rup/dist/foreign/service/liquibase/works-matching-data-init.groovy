@@ -135,6 +135,46 @@ databaseChangeLog {
             column(name: 'gross_amount', value: '51.00')
         }
 
+        // one detail with standard number, equal titles, work found by title
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '363ac3fe-20db-4db7-a967-57963c98aa05')
+            column(name: 'df_usage_batch_uid', value: '55d014d1-b1d9-428a-be8a-10defe718ae5')
+            column(name: 'detail_id', value: '3254125478')
+            column(name: 'status_ind', value: 'NEW')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'work_title', value: 'Forbidden rites')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Nanette M. Schwann')
+            column(name: 'number_of_copies', value: '90')
+            column(name: 'reported_value', value: '101.00')
+            column(name: 'gross_amount', value: '101.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'cec47d5f-0df9-43df-a1e2-76b03fa0ce96')
+            column(name: 'df_usage_batch_uid', value: '55d014d1-b1d9-428a-be8a-10defe718ae5')
+            column(name: 'detail_id', value: '6325412547')
+            column(name: 'status_ind', value: 'NEW')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'work_title', value: 'Forbidden rites')
+            column(name: 'standard_number', value: '0-325-01548-2')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Nanette M. Schwann')
+            column(name: 'number_of_copies', value: '90')
+            column(name: 'reported_value', value: '101.00')
+            column(name: 'gross_amount', value: '101.00')
+        }
+
         // standard number, no title, less than $100
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '2186a1ed-62d1-4034-a6a6-ea9e61835b60')
