@@ -13,6 +13,7 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditController;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterController;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterWidget;
+import com.copyright.rup.dist.foreign.ui.common.util.OffsetDateTimeColumnGenerator;
 import com.copyright.rup.dist.foreign.ui.common.util.PercentColumnGenerator;
 import com.copyright.rup.vaadin.ui.LocalDateColumnGenerator;
 import com.copyright.rup.vaadin.ui.LongColumnGenerator;
@@ -126,7 +127,7 @@ public class AuditWidgetTest {
         assertTrue(table.getColumnGenerator("rhAccountNumber") instanceof LongColumnGenerator);
         assertTrue(table.getColumnGenerator("grossAmount") instanceof MoneyColumnGenerator);
         assertTrue(table.getColumnGenerator("paymentDate") instanceof LocalDateColumnGenerator);
-        assertTrue(table.getColumnGenerator("checkDate") instanceof LocalDateColumnGenerator);
+        assertTrue(table.getColumnGenerator("checkDate") instanceof OffsetDateTimeColumnGenerator);
         assertTrue(table.getColumnGenerator("serviceFee") instanceof PercentColumnGenerator);
         assertTrue(table.isColumnCollapsingAllowed());
     }

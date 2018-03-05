@@ -4,6 +4,7 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditController;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterWidget;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditWidget;
+import com.copyright.rup.dist.foreign.ui.common.util.OffsetDateTimeColumnGenerator;
 import com.copyright.rup.dist.foreign.ui.common.util.PercentColumnGenerator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
@@ -32,6 +33,7 @@ import org.vaadin.addons.lazyquerycontainer.LazyQueryContainer;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.Objects;
 
 /**
@@ -135,7 +137,7 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
         table.addProperty("serviceFee", BigDecimal.class, true);
         table.addProperty("scenarioName", String.class, true);
         table.addProperty("checkNumber", String.class, true);
-        table.addProperty("checkDate", LocalDate.class, true);
+        table.addProperty("checkDate", OffsetDateTime.class, true);
         table.addProperty("cccEventId", String.class, true);
         table.addProperty("distributionName", String.class, true);
     }
@@ -184,12 +186,11 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
 
     private void addColumnsGenerators() {
         LongColumnGenerator longColumnGenerator = new LongColumnGenerator();
-        LocalDateColumnGenerator localDateColumnGenerator = new LocalDateColumnGenerator();
         table.addGeneratedColumn("wrWrkInst", longColumnGenerator);
         table.addGeneratedColumn("rhAccountNumber", longColumnGenerator);
         table.addGeneratedColumn("grossAmount", new MoneyColumnGenerator());
-        table.addGeneratedColumn("paymentDate", localDateColumnGenerator);
-        table.addGeneratedColumn("checkDate", localDateColumnGenerator);
+        table.addGeneratedColumn("paymentDate", new LocalDateColumnGenerator());
+        table.addGeneratedColumn("checkDate", new OffsetDateTimeColumnGenerator());
         table.addGeneratedColumn("serviceFee", new PercentColumnGenerator());
         table.addGeneratedColumn("detailId", (ColumnGenerator) (source, itemId, columnId) -> {
             String detailId =
