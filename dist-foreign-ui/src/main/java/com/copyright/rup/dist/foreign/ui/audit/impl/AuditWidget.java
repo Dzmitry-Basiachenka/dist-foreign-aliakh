@@ -130,6 +130,8 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
         table.addProperty("paymentDate", LocalDate.class, true);
         table.addProperty("rhAccountNumber", Long.class, true);
         table.addProperty("rhName", String.class, true);
+        table.addProperty("payeeAccountNumber", Long.class, true);
+        table.addProperty("payeeName", String.class, true);
         table.addProperty("wrWrkInst", Long.class, true);
         table.addProperty("workTitle", String.class, true);
         table.addProperty("standardNumber", String.class, true);
@@ -140,6 +142,8 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
         table.addProperty("checkDate", OffsetDateTime.class, true);
         table.addProperty("cccEventId", String.class, true);
         table.addProperty("distributionName", String.class, true);
+        table.addProperty("distributionDate", OffsetDateTime.class, true);
+        table.addProperty("periodEndDate", OffsetDateTime.class, true);
     }
 
     private void setColumnHeaders() {
@@ -151,6 +155,8 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
             ForeignUi.getMessage("table.column.payment_date"),
             ForeignUi.getMessage("table.column.rh_account_number"),
             ForeignUi.getMessage("table.column.rh_account_name"),
+            ForeignUi.getMessage("table.column.payee_account_number"),
+            ForeignUi.getMessage("table.column.payee_name"),
             ForeignUi.getMessage("table.column.wr_wrk_inst"),
             ForeignUi.getMessage("table.column.work_title"),
             ForeignUi.getMessage("table.column.standard_number"),
@@ -160,7 +166,9 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
             ForeignUi.getMessage("table.column.check_number"),
             ForeignUi.getMessage("table.column.check_date"),
             ForeignUi.getMessage("table.column.event_id"),
-            ForeignUi.getMessage("table.column.distribution_name"));
+            ForeignUi.getMessage("table.column.distribution_name"),
+            ForeignUi.getMessage("table.column.distribution_date"),
+            ForeignUi.getMessage("table.column.period_end_date"));
     }
 
     private void setVisibleColumns() {
@@ -172,6 +180,8 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
             "paymentDate",
             "rhAccountNumber",
             "rhName",
+            "payeeAccountNumber",
+            "payeeName",
             "wrWrkInst",
             "workTitle",
             "standardNumber",
@@ -181,16 +191,22 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
             "checkNumber",
             "checkDate",
             "cccEventId",
-            "distributionName");
+            "distributionName",
+            "distributionDate",
+            "periodEndDate");
     }
 
     private void addColumnsGenerators() {
         LongColumnGenerator longColumnGenerator = new LongColumnGenerator();
+        OffsetDateTimeColumnGenerator offsetDateTimeColumnGenerator = new OffsetDateTimeColumnGenerator();
         table.addGeneratedColumn("wrWrkInst", longColumnGenerator);
         table.addGeneratedColumn("rhAccountNumber", longColumnGenerator);
+        table.addGeneratedColumn("payeeAccountNumber", longColumnGenerator);
         table.addGeneratedColumn("grossAmount", new MoneyColumnGenerator());
         table.addGeneratedColumn("paymentDate", new LocalDateColumnGenerator());
-        table.addGeneratedColumn("checkDate", new OffsetDateTimeColumnGenerator());
+        table.addGeneratedColumn("checkDate", offsetDateTimeColumnGenerator);
+        table.addGeneratedColumn("distributionDate", offsetDateTimeColumnGenerator);
+        table.addGeneratedColumn("periodEndDate", offsetDateTimeColumnGenerator);
         table.addGeneratedColumn("serviceFee", new PercentColumnGenerator());
         table.addGeneratedColumn("detailId", (ColumnGenerator) (source, itemId, columnId) -> {
             String detailId =

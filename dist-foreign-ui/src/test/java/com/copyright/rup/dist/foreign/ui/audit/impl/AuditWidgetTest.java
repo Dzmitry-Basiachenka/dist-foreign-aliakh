@@ -115,19 +115,24 @@ public class AuditWidgetTest {
     private void verifyTable(LazyTable table) {
         verifySize(table, Unit.PERCENTAGE, 100, Unit.PERCENTAGE, 100);
         assertArrayEquals(new Object[]{"detailId", "status", "productFamily", "batchName", "paymentDate",
-                "rhAccountNumber", "rhName", "wrWrkInst", "workTitle", "standardNumber", "grossAmount", "serviceFee",
-                "scenarioName", "checkNumber", "checkDate", "cccEventId", "distributionName"},
+                "rhAccountNumber", "rhName", "payeeAccountNumber", "payeeName", "wrWrkInst", "workTitle",
+                "standardNumber", "grossAmount", "serviceFee", "scenarioName", "checkNumber", "checkDate",
+                "cccEventId", "distributionName", "distributionDate", "periodEndDate"},
             table.getVisibleColumns());
         assertArrayEquals(new Object[]{"Detail ID", "Detail Status", "Product Family", "Usage Batch Name",
-                "Payment Date", "RH Account #", "RH Name", "Wr Wrk Inst", "Title", "Standard Number", "Amt in USD",
-                "Service Fee %", "Scenario Name", "Check #", "Check Date", "Event ID", "Dist. Name"},
+                "Payment Date", "RH Account #", "RH Name", "Payee Account #", "Payee Name", "Wr Wrk Inst",
+                "Title", "Standard Number", "Amt in USD", "Service Fee %", "Scenario Name", "Check #", "Check Date",
+                "Event ID", "Dist. Name", "Dist. Date", "Period Ending"},
             table.getColumnHeaders());
         assertNotNull(table.getColumnGenerator("detailId"));
         assertTrue(table.getColumnGenerator("wrWrkInst") instanceof LongColumnGenerator);
         assertTrue(table.getColumnGenerator("rhAccountNumber") instanceof LongColumnGenerator);
+        assertTrue(table.getColumnGenerator("payeeAccountNumber") instanceof LongColumnGenerator);
         assertTrue(table.getColumnGenerator("grossAmount") instanceof MoneyColumnGenerator);
         assertTrue(table.getColumnGenerator("paymentDate") instanceof LocalDateColumnGenerator);
         assertTrue(table.getColumnGenerator("checkDate") instanceof OffsetDateTimeColumnGenerator);
+        assertTrue(table.getColumnGenerator("distributionDate") instanceof OffsetDateTimeColumnGenerator);
+        assertTrue(table.getColumnGenerator("periodEndDate") instanceof OffsetDateTimeColumnGenerator);
         assertTrue(table.getColumnGenerator("serviceFee") instanceof PercentColumnGenerator);
         assertTrue(table.isColumnCollapsingAllowed());
     }

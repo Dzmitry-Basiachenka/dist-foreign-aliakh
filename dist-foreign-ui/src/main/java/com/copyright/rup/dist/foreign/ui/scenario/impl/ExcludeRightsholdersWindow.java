@@ -126,7 +126,7 @@ public class ExcludeRightsholdersWindow extends Window implements ISearchControl
         rightsholdersTable.setColumnHeaders(
             StringUtils.EMPTY,
             ForeignUi.getMessage("table.column.payee_account_number"),
-            ForeignUi.getMessage("table.column.payee_account_name"),
+            ForeignUi.getMessage("table.column.payee_name"),
             ForeignUi.getMessage("table.column.rh_account_number"),
             ForeignUi.getMessage("table.column.rh_account_name")
         );
