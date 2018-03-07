@@ -30,4 +30,6 @@
     <!-- suppress checks for file length longer than 500 lines-->
     <suppress checks="FileLength"
               files="src[/\\]main[/\\]java[/\\]com[/\\]copyright[/\\]rup[/\\]dist[/\\]foreign[/\\]domain[/\\]UsageDto.java"/>
+    <suppress checks="FileLength"
+              files="src[/\\]main[/\\]java[/\\]com[/\\]copyright[/\\]rup[/\\]dist[/\\]foreign[/\\]service[/\\]impl[/\\]UsageService.java"/>
 </suppressions>

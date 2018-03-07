@@ -13,12 +13,12 @@ package com.copyright.rup.dist.foreign.domain;
 public enum UsageStatusEnum {
 
     /**
-     * Status for usages without rhAccountNumber and wrWrkInst
+     * Status for usages without rhAccountNumber and wrWrkInst.
      */
     NEW,
 
     /**
-     * Status for usages with wrWrkInst and without rhAccountNumber
+     * Status for usages with wrWrkInst and without rhAccountNumber.
      */
     WORK_FOUND,
 
@@ -28,12 +28,17 @@ public enum UsageStatusEnum {
     WORK_RESEARCH,
 
     /**
-     * Status for usages with rhAccountNumber not found in RMS
+     * Status for usages with WrWrkInst not found.
+     */
+    WORK_NOT_FOUND,
+
+    /**
+     * Status for usages with rhAccountNumber not found in RMS.
      */
     RH_NOT_FOUND,
 
     /**
-     * Status for usages that were sent to RA
+     * Status for usages that were sent to RA.
      */
     SENT_FOR_RA,
 

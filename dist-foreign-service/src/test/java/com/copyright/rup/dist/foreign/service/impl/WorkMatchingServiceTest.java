@@ -48,8 +48,7 @@ public class WorkMatchingServiceTest {
         String title2 = "Theological roots of Pentecostalism";
         List<Usage> usages = Lists.newArrayList(
             buildUsage(null, title1),
-            buildUsage(null, title2),
-            buildUsage(null, null));
+            buildUsage(null, title2));
         Map<String, Long> resultMap = ImmutableMap.of(title1, 112930820L, title2, 155941698L);
         expect(piIntegrationService.findWrWrkInstsByTitles(Sets.newHashSet(title1, title2)))
             .andReturn(resultMap).once();
@@ -68,8 +67,7 @@ public class WorkMatchingServiceTest {
         String standardNumber2 = "0-918062-08-X";
         List<Usage> usages = Lists.newArrayList(
             buildUsage(standardNumber1, null),
-            buildUsage(standardNumber2, null),
-            buildUsage(null, null));
+            buildUsage(standardNumber2, null));
         Map<String, Long> resultMap = ImmutableMap.of(standardNumber1, 112930820L, standardNumber2, 155941698L);
         expect(piIntegrationService.findWrWrkInstsByIdnos(Sets.newHashSet(standardNumber1, standardNumber2)))
             .andReturn(resultMap).once();

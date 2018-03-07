@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
 import com.copyright.rup.common.logging.RupLogUtils;
-import com.copyright.rup.dist.common.domain.BaseEntity;
 import com.copyright.rup.dist.common.integration.rest.prm.PrmRollUpService;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.AuditFilter;
@@ -29,11 +28,11 @@ import com.copyright.rup.dist.foreign.service.api.IRmsGrantsService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.IWorkMatchingService;
+import com.copyright.rup.dist.foreign.service.impl.WorksMatchingJob.UsageGroupEnum;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvErrorResultWriter;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingResult;
 import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
@@ -53,15 +52,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -78,10 +75,13 @@ import java.util.stream.Collectors;
 @Service
 public class UsageService implements IUsageService {
 
+    private static final BigDecimal GROSS_AMOUNT_LIMIT = BigDecimal.valueOf(100L);
     private static final String CALCULATION_FINISHED_LOG_MESSAGE = "Calculated usages gross amount. " +
         "UsageBatchName={}, FundPoolAmount={}, TotalAmount={}, ConversionRate={}";
     private static final String UPDATE_PAID_INFO_FAILED_LOG_MESSAGE = "Update paid information. Not found usages. " +
         "UsagesCount={}, UpdatedCount={}, NotFoundDetailIds={}";
+    private static final long UNIDENTIFIED_WR_WRK_INST = 123050824L;
+
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired
@@ -400,72 +400,53 @@ public class UsageService implements IUsageService {
             usages.size() - notFoundDetailsIds.size());
     }
 
-    @Profiled(tag = "service.UsageService.findWorksAndUpdateStatuses")
+    @Override
+    public List<Usage> getUsagesWithBlankWrWrkInst() {
+        return usageRepository.findUsagesWithBlankWrWrkInst();
+    }
+
     @Override
     @Transactional
-    @Scheduled(cron = "$RUP{dist.foreign.service.schedule.works_match}")
-    public void findWorksAndUpdateStatuses() {
-        List<Usage> usages = ImmutableList.copyOf(usageRepository.findUsagesWithBlankWrWrkInst());
-        if (CollectionUtils.isNotEmpty(usages)) {
-            List<Usage> matchedByIdno = findWorksByIdno(usages);
-            List<Usage> matchedByTitle = findWorksByTitle(usages);
-            Set<String> matchedUsagesIds = Sets.newHashSet();
-            matchedUsagesIds.addAll(matchedByIdno.stream().map(BaseEntity::getId).collect(Collectors.toSet()));
-            matchedUsagesIds.addAll(matchedByTitle.stream().map(BaseEntity::getId).collect(Collectors.toSet()));
-            List<Usage> nonMatchedUsages = Lists.newArrayList(usages)
-                .stream()
-                .filter(usage -> !matchedUsagesIds.contains(usage.getId()))
-                .collect(Collectors.toList());
-            makeUsagesEligibleForNts(ImmutableList.copyOf(nonMatchedUsages));
-        }
-    }
-
-    /**
-     * Updates eligible for NTS {@link Usage}s: changes status to {@link UsageStatusEnum#ELIGIBLE} and
-     * product family to NTS if gross amount is less than $100.
-     *
-     * @param usages list of {@link Usage}s
-     */
-    @Profiled(tag = "service.UsageService.makeUsagesEligibleForNts")
-    public void makeUsagesEligibleForNts(List<Usage> usages) {
-        makeUsagesEligibleForNts(UsageGroup.STANDARD_NUMBER.group(usages),
-            "Detail was made eligible for NTS because sum of gross amounts, " +
-                "grouped by standard number, is less than $100");
-        makeUsagesEligibleForNts(UsageGroup.WORK_TITLE.group(usages),
-            "Detail was made eligible for NTS because sum of gross amounts, " +
-                "grouped by work title, is less than $100");
-        makeUsagesEligibleForNts(UsageGroup.SELF.group(usages),
-            "Detail was made eligible for NTS because gross amount is less than $100");
-    }
-
-    private List<Usage> findWorksByIdno(List<Usage> usages) {
+    public void matchByIdno(List<Usage> usages) {
+        StopWatch stopWatch = new StopWatch();
         List<Usage> matchedByIdno = workMatchingService.matchByIdno(usages);
+        stopWatch.lap("matchWorks.byIdno_findByIdno");
         if (CollectionUtils.isNotEmpty(matchedByIdno)) {
             usageRepository.updateStatusAndWrWrkInst(matchedByIdno);
+            stopWatch.lap("matchWorks.byIdno_updateUsages");
             matchedByIdno.forEach(usage -> usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
                 String.format("Wr Wrk Inst %s was found by standard number %s", usage.getWrWrkInst(),
                     usage.getStandardNumber())));
+            stopWatch.lap("matchWorks.byIdno_writeAudit");
         }
-        return matchedByIdno;
+        updateUsagesStatusAndWriteAudit(usages, UsageGroupEnum.STANDARD_NUMBER);
+        stopWatch.stop("matchWorks.byIdno_determineNtsAndUpdate");
     }
 
-    private List<Usage> findWorksByTitle(List<Usage> usages) {
+    @Override
+    @Transactional
+    public void matchByTitle(List<Usage> usages) {
+        StopWatch stopWatch = new StopWatch();
         List<Usage> matchedByTitle = workMatchingService.matchByTitle(usages);
+        stopWatch.lap("matchWorks.byIdno_findByTitle");
         if (CollectionUtils.isNotEmpty(matchedByTitle)) {
             usageRepository.updateStatusAndWrWrkInst(matchedByTitle);
+            stopWatch.lap("matchWorks.byTitle_updateUsages");
             matchedByTitle.forEach(usage -> usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
                 String.format("Wr Wrk Inst %s was found by title \"%s\"", usage.getWrWrkInst(),
                     usage.getWorkTitle())));
+            stopWatch.lap("matchWorks.byTitle_writeAudit");
         }
-        return matchedByTitle;
+        updateUsagesStatusAndWriteAudit(usages, UsageGroupEnum.TITLE);
+        stopWatch.stop("matchWorks.byTitle_determineNtsAndUpdate");
     }
 
-    private void makeUsagesEligibleForNts(List<Usage> usages, String actionReason) {
-        if (CollectionUtils.isNotEmpty(usages)) {
-            usageRepository.updateStatusAndProductFamily(usages);
-            usages.forEach(usage ->
-                usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.ELIGIBLE_FOR_NTS, actionReason));
-        }
+    @Override
+    @Transactional
+    public void updateStatusForUsagesWithNoStandardNumberAndTitle(List<Usage> usages) {
+        StopWatch stopWatch = new StopWatch();
+        updateUsagesStatusAndWriteAudit(usages, UsageGroupEnum.SINGLE_USAGE);
+        stopWatch.stop("matchWorks.noIdnoNoTitle_determineNtsAndUpdate");
     }
 
     private long updateWorkFoundUsagesRightsholders(List<Usage> usages) {
@@ -530,52 +511,39 @@ public class UsageService implements IUsageService {
             conversionRate);
     }
 
-    private static class UsageGroup<T> {
+    private void updateUsagesStatusAndWriteAudit(List<Usage> usages, UsageGroupEnum usageGroup) {
+        usages.stream()
+            .filter(usage -> UsageStatusEnum.NEW == usage.getStatus())
+            .collect(Collectors.groupingBy(usageGroup.getMappingFunction()))
+            .forEach((key, usagesGroup) -> {
+                if (GROSS_AMOUNT_LIMIT.compareTo(sumUsagesGrossAmount(usagesGroup)) > 0) {
+                    usagesGroup.forEach(usage -> {
+                        usage.setStatus(UsageStatusEnum.ELIGIBLE);
+                        usage.setProductFamily("NTS");
+                        usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.ELIGIBLE_FOR_NTS,
+                            usageGroup.getNtsEligibleReason());
+                    });
+                } else {
+                    usagesGroup.forEach(usage -> {
+                        if (Objects.isNull(usage.getStandardNumber()) && Objects.isNull(usage.getWorkTitle())) {
+                            usage.setWrWrkInst(UNIDENTIFIED_WR_WRK_INST);
+                            usage.setStatus(UsageStatusEnum.WORK_FOUND);
+                            usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
+                                "Usage assigned unidentified work due to blank standard number and title");
+                        } else {
+                            usage.setStatus(UsageStatusEnum.WORK_NOT_FOUND);
+                            usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_NOT_FOUND,
+                                usageGroup.getWorkNotFoundReasonFunction().apply(usage));
+                        }
+                    });
+                }
+            });
+        usageRepository.updateStatusAndProductFamily(usages);
+    }
 
-        private static final BigDecimal GROSS_AMOUNT_LIMIT = BigDecimal.valueOf(100L);
-
-        private static final UsageGroup<String> STANDARD_NUMBER = new UsageGroup<>(
-            Usage::getStandardNumber,
-            usage -> null != usage.getStandardNumber()
-        );
-        private static final UsageGroup<String> WORK_TITLE = new UsageGroup<>(
-            Usage::getWorkTitle,
-            usage -> null == usage.getStandardNumber() && null != usage.getWorkTitle()
-        );
-        private static final UsageGroup<Usage> SELF = new UsageGroup<>(
-            usage -> usage,
-            usage -> null == usage.getStandardNumber() && null == usage.getWorkTitle()
-        );
-
-        private final Function<Usage, T> mapper;
-        private final Predicate<Usage> predicate;
-
-        UsageGroup(Function<Usage, T> mapper, Predicate<Usage> predicate) {
-            this.mapper = mapper;
-            this.predicate = predicate;
-        }
-
-        List<Usage> group(List<Usage> usages) {
-            List<Usage> ntsUsages = new ArrayList<>();
-            usages.stream()
-                .filter(predicate)
-                .collect(Collectors.groupingBy(mapper))
-                .forEach((key, usagesGroup) -> {
-                    if (GROSS_AMOUNT_LIMIT.compareTo(sumUsagesGrossAmount(usagesGroup)) > 0) {
-                        usagesGroup.forEach(usage -> {
-                            usage.setStatus(UsageStatusEnum.ELIGIBLE);
-                            usage.setProductFamily("NTS");
-                        });
-                        ntsUsages.addAll(usagesGroup);
-                    }
-                });
-            return ntsUsages;
-        }
-
-        private BigDecimal sumUsagesGrossAmount(List<Usage> usages) {
-            return usages.stream()
-                .map(Usage::getGrossAmount)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-        }
+    private BigDecimal sumUsagesGrossAmount(List<Usage> usages) {
+        return usages.stream()
+            .map(Usage::getGrossAmount)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

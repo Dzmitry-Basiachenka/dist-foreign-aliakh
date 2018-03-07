@@ -8,7 +8,6 @@ import com.copyright.rup.dist.foreign.service.api.IWorkMatchingService;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
-import org.perf4j.aop.Profiled;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,31 +35,23 @@ public class WorkMatchingService implements IWorkMatchingService {
     @Autowired
     private IPiIntegrationService piIntegrationService;
 
-    @Profiled(tag = "service.WorkMatchingService.matchByTitle")
     @Override
     public List<Usage> matchByTitle(List<Usage> usages) {
-        List<Usage> filteredUsages = usages.stream()
-            .filter(usage -> Objects.isNull(usage.getStandardNumber()) && Objects.nonNull(usage.getWorkTitle()))
-            .collect(Collectors.toList());
-        Set<String> titles = filteredUsages.stream()
+        Set<String> titles = usages.stream()
             .map(Usage::getWorkTitle)
             .collect(Collectors.toSet());
         return CollectionUtils.isNotEmpty(titles)
-            ? computeResult(filteredUsages, piIntegrationService.findWrWrkInstsByTitles(titles), Usage::getWorkTitle)
+            ? computeResult(usages, piIntegrationService.findWrWrkInstsByTitles(titles), Usage::getWorkTitle)
             : Collections.emptyList();
     }
 
-    @Profiled(tag = "service.WorkMatchingService.matchByIdno")
     @Override
     public List<Usage> matchByIdno(List<Usage> usages) {
-        List<Usage> filteredUsages = usages.stream()
-            .filter(usage -> Objects.nonNull(usage.getStandardNumber()))
-            .collect(Collectors.toList());
-        Set<String> idnos = filteredUsages.stream()
+        Set<String> idnos = usages.stream()
             .map(Usage::getStandardNumber)
             .collect(Collectors.toSet());
         return CollectionUtils.isNotEmpty(idnos)
-            ? computeResult(filteredUsages, piIntegrationService.findWrWrkInstsByIdnos(idnos),
+            ? computeResult(usages, piIntegrationService.findWrWrkInstsByIdnos(idnos),
             usage -> PiIntegrationService.normalizeIdno(usage.getStandardNumber()))
             : Collections.emptyList();
     }

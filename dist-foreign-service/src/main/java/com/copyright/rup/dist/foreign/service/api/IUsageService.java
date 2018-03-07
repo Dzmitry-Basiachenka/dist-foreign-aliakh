@@ -271,8 +271,28 @@ public interface IUsageService {
     void updatePaidInfo(List<PaidUsage> usages);
 
     /**
-     * Finds Wr Wrk Insts for {@link Usage}s that do not have it and updates statuses depending on whether work was
-     * found or not.
+     * @return list of {@link Usage}s that does not have Wr Wrk Inst.
      */
-    void findWorksAndUpdateStatuses();
+    List<Usage> getUsagesWithBlankWrWrkInst();
+
+    /**
+     * Finds works by standard numbers and updates {@link Usage}s status and Wr Wrk Inst.
+     *
+     * @param usages list of {@link Usage}s with not blank standard number
+     */
+    void matchByIdno(List<Usage> usages);
+
+    /**
+     * Finds works by standard numbers and updates {@link Usage}s status and Wr Wrk Inst.
+     *
+     * @param usages list of {@link Usage}s with not blank title
+     */
+    void matchByTitle(List<Usage> usages);
+
+    /**
+     * Updates {@link Usage}s status and Wr Wrk Inst.
+     *
+     * @param usages list of {@link Usage}s with not blank standard number and title
+     */
+    void updateStatusForUsagesWithNoStandardNumberAndTitle(List<Usage> usages);
 }
