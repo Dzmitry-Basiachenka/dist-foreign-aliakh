@@ -61,6 +61,7 @@ class UsageBatchUploadWindow extends Window {
     private TextField usageBatchNameField;
     private Property<String> rightsholderNameProperty;
     private Property<String> fiscalYearProperty;
+    private Property<String> productFamilyProperty;
     private Rightsholder rro;
     private UploadField uploadField;
     private IUsagesController usagesController;
@@ -76,7 +77,7 @@ class UsageBatchUploadWindow extends Window {
         setCaption(ForeignUi.getMessage("window.upload_usage_batch"));
         setResizable(false);
         setWidth(440, Unit.PIXELS);
-        setHeight(305, Unit.PIXELS);
+        setHeight(350, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "usage-upload-window");
     }
 
@@ -185,19 +186,24 @@ class UsageBatchUploadWindow extends Window {
         return usageBatchNameField;
     }
 
-    private HorizontalLayout initRightsholderLayout() {
-        HorizontalLayout horizontalLayout = new HorizontalLayout();
+    private VerticalLayout initRightsholderLayout() {
+        VerticalLayout verticalLayout = new VerticalLayout();
+        HorizontalLayout rroAccountLayout = new HorizontalLayout();
         TextField accountNumber = initRightsholderAccountNumberField();
-        TextField accountName = initRightsholderAccountNameField();
+        TextField productFamily = initProductFamilyField();
         Button verifyButton = initVerifyButton();
         verifyButton.setWidth(72, Unit.PIXELS);
-        horizontalLayout.addComponents(accountNumber, accountName, verifyButton);
-        horizontalLayout.setSpacing(true);
-        horizontalLayout.setSizeFull();
-        horizontalLayout.setExpandRatio(accountNumber, 0.35f);
-        horizontalLayout.setExpandRatio(accountName, 0.65f);
-        horizontalLayout.setComponentAlignment(verifyButton, Alignment.BOTTOM_RIGHT);
-        return horizontalLayout;
+        rroAccountLayout.addComponents(accountNumber, productFamily, verifyButton);
+        rroAccountLayout.setSpacing(true);
+        rroAccountLayout.setSizeFull();
+        rroAccountLayout.setExpandRatio(accountNumber, 0.62f);
+        rroAccountLayout.setExpandRatio(productFamily, 0.38f);
+        rroAccountLayout.setComponentAlignment(verifyButton, Alignment.BOTTOM_RIGHT);
+        TextField accountName = initRightsholderAccountNameField();
+        accountName.setSizeFull();
+        verticalLayout.addComponents(rroAccountLayout, accountName);
+        verticalLayout.setSpacing(true);
+        return verticalLayout;
     }
 
     private HorizontalLayout initPaymentDataLayout() {
@@ -227,7 +233,10 @@ class UsageBatchUploadWindow extends Window {
         VaadinUtils.setMaxComponentsWidth(accountNumberField);
         VaadinUtils.addComponentStyle(accountNumberField, "rro-account-number-field");
         accountNumberField.addValueChangeListener(
-            (ValueChangeListener) event -> rightsholderNameProperty.setValue(StringUtils.EMPTY));
+            (ValueChangeListener) event -> {
+                rightsholderNameProperty.setValue(StringUtils.EMPTY);
+                productFamilyProperty.setValue(StringUtils.EMPTY);
+            });
         return accountNumberField;
     }
 
@@ -274,6 +283,17 @@ class UsageBatchUploadWindow extends Window {
         return grossAmountField;
     }
 
+    private TextField initProductFamilyField() {
+        productFamilyProperty = new ObjectProperty<>(StringUtils.EMPTY);
+        TextField productFamilyField =
+            new TextField(ForeignUi.getMessage("label.product_family"), productFamilyProperty);
+        productFamilyField.setReadOnly(true);
+        productFamilyField.setNullRepresentation(StringUtils.EMPTY);
+        VaadinUtils.setMaxComponentsWidth(productFamilyField);
+        VaadinUtils.addComponentStyle(productFamilyField, "product-family-field");
+        return productFamilyField;
+    }
+
     private Button initVerifyButton() {
         Button button = Buttons.createButton(ForeignUi.getMessage("button.verify"));
         button.setSizeFull();
@@ -281,6 +301,7 @@ class UsageBatchUploadWindow extends Window {
             if (accountNumberField.isValid()) {
                 rro = usagesController.getRro(Long.valueOf(StringUtils.trim(accountNumberField.getValue())));
                 rightsholderNameProperty.setValue(rro.getName());
+                productFamilyProperty.setValue(2000017000 == rro.getAccountNumber() ? "CLA_FAS" : "FAS");
             }
         });
         return button;

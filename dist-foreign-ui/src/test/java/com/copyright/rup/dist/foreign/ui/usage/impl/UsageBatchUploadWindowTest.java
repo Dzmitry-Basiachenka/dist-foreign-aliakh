@@ -90,18 +90,23 @@ public class UsageBatchUploadWindowTest {
 
     @Test
     public void testConstructor() {
-        Rightsholder rro = new Rightsholder();
+        Rightsholder fasRro = new Rightsholder();
         Long rroAccountNumber = Long.valueOf(ACCOUNT_NUMBER);
-        rro.setAccountNumber(rroAccountNumber);
-        rro.setName("CANADIAN CERAMIC SOCIETY");
-        rro.setId(RupPersistUtils.generateUuid());
-        expect(usagesController.getRro(rroAccountNumber)).andReturn(rro).once();
+        fasRro.setAccountNumber(rroAccountNumber);
+        fasRro.setName("CANADIAN CERAMIC SOCIETY");
+        fasRro.setId(RupPersistUtils.generateUuid());
+        Rightsholder claRro = new Rightsholder();
+        claRro.setAccountNumber(2000017000L);
+        claRro.setName("CLA, The Copyright Licensing Agency Ltd.");
+        claRro.setId(RupPersistUtils.generateUuid());
+        expect(usagesController.getRro(rroAccountNumber)).andReturn(fasRro).once();
+        expect(usagesController.getRro(2000017000L)).andReturn(claRro).once();
         replay(usagesController);
         window = new UsageBatchUploadWindow(usagesController);
         assertEquals("Upload Usage Batch", window.getCaption());
         assertEquals(440, window.getWidth(), 0);
         assertEquals(Unit.PIXELS, window.getWidthUnits());
-        assertEquals(305, window.getHeight(), 0);
+        assertEquals(350, window.getHeight(), 0);
         assertEquals(Unit.PIXELS, window.getHeightUnits());
         verifyRootLayout(window.getContent());
         verify(usagesController);
@@ -180,6 +185,7 @@ public class UsageBatchUploadWindowTest {
         Whitebox.setInternalState(window, "fiscalYearProperty", new ObjectProperty<>("FY2017"));
         Whitebox.setInternalState(window, GROSS_AMOUNT_FIELD, new TextField("Gross Amount", "100.00"));
         Whitebox.setInternalState(window, "rightsholderNameProperty", new ObjectProperty<>(RRO_NAME));
+        Whitebox.setInternalState(window, "productFamilyProperty", new ObjectProperty<>("FAS"));
         Whitebox.setInternalState(window, "rro", rro);
         expect(window.isValid()).andReturn(true).once();
         expect(usagesController.getCsvProcessor()).andReturn(processor).once();
@@ -273,12 +279,14 @@ public class UsageBatchUploadWindowTest {
     }
 
     private void verifyRightsholdersComponents(Component component) {
-        assertTrue(component instanceof HorizontalLayout);
-        HorizontalLayout horizontalLayout = (HorizontalLayout) component;
-        assertEquals(3, horizontalLayout.getComponentCount());
-        Component numberComponent = horizontalLayout.getComponent(0);
-        Component nameComponent = horizontalLayout.getComponent(1);
-        Component verifyComponent = horizontalLayout.getComponent(2);
+        assertTrue(component instanceof VerticalLayout);
+        VerticalLayout verticalLayout = (VerticalLayout) component;
+        assertEquals(2, verticalLayout.getComponentCount());
+        HorizontalLayout rroAccountLayout = (HorizontalLayout) verticalLayout.getComponent(0);
+        assertEquals(3, rroAccountLayout.getComponentCount());
+        Component numberComponent = rroAccountLayout.getComponent(0);
+        Component productFamilyComponent = rroAccountLayout.getComponent(1);
+        Component verifyComponent = rroAccountLayout.getComponent(2);
         TextField numberField = verifyTextField(numberComponent, "RRO Account #");
         assertEquals(100, numberField.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, numberField.getWidthUnits());
@@ -291,24 +299,35 @@ public class UsageBatchUploadWindowTest {
         Collection<?> listeners = numberField.getListeners(ValueChangeEvent.class);
         assertTrue(CollectionUtils.isNotEmpty(listeners));
         assertEquals(1, listeners.size());
-        TextField nameField = verifyTextField(nameComponent, "RRO Account Name");
+        TextField nameField = verifyTextField(verticalLayout.getComponent(1), "RRO Account Name");
         assertTrue(nameField.isReadOnly());
+        TextField productFamilyField = verifyTextField(productFamilyComponent, "Product Family");
+        assertTrue(productFamilyField.isReadOnly());
         assertTrue(verifyComponent instanceof Button);
         Button verifyButton = (Button) verifyComponent;
         assertEquals("Verify", verifyComponent.getCaption());
         assertEquals(1, verifyButton.getListeners(ClickEvent.class).size());
         assertEquals(StringUtils.EMPTY, nameField.getValue());
+        assertEquals(StringUtils.EMPTY, productFamilyField.getValue());
         verifyButton.click();
         assertEquals(StringUtils.EMPTY, nameField.getValue());
+        assertEquals(StringUtils.EMPTY, productFamilyField.getValue());
         numberField.setValue("value");
         verifyButton.click();
         assertEquals(StringUtils.EMPTY, nameField.getValue());
+        assertEquals(StringUtils.EMPTY, productFamilyField.getValue());
         numberField.setValue("123456789874541246");
         verifyButton.click();
         assertEquals(StringUtils.EMPTY, nameField.getValue());
+        assertEquals(StringUtils.EMPTY, productFamilyField.getValue());
         numberField.setValue(ACCOUNT_NUMBER);
         verifyButton.click();
         assertEquals("CANADIAN CERAMIC SOCIETY", nameField.getValue());
+        assertEquals("FAS", productFamilyField.getValue());
+        numberField.setValue("2000017000");
+        verifyButton.click();
+        assertEquals("CLA, The Copyright Licensing Agency Ltd.", nameField.getValue());
+        assertEquals("CLA_FAS", productFamilyField.getValue());
     }
 
     private void verifyDateComponents(Component component) {
