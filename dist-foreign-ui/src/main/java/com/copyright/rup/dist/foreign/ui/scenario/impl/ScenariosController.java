@@ -136,6 +136,11 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
     }
 
     @Override
+    public void refreshScenario() {
+        // TODO {isuvorau} call service method after implementation
+    }
+
+    @Override
     protected IScenariosWidget instantiateWidget() {
         return new ScenariosWidget(scenarioHistoryController);
     }
