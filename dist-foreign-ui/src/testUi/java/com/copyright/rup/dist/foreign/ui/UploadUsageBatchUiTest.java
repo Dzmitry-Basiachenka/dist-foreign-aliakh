@@ -135,17 +135,17 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         WebElement uploadWindow = openUploadUsageBatchWindow();
         populateValidValuesForUploadWindowFields(uploadWindow);
         populateRroAccountNumberField(uploadWindow, StringUtils.EMPTY);
-        verifyRroAccountNameField(uploadWindow, StringUtils.EMPTY);
+        verifyRroAccountNameAndProductFamilyFields(uploadWindow, StringUtils.EMPTY);
         clickButtonAndWait(uploadWindow, UPLOAD_BUTTON_ID);
         verifyErrorWindow(ImmutableMap.of(RRO_ACCOUNT_NUMBER_FIELD, COMMON_EMPTY_FIELD_MESSAGE, RRO_ACCOUNT_NAME_FIELD,
             RRO_ACCOUNT_NAME_EMPTY_FIELD_MESSAGE));
         populateRroAccountNumberField(uploadWindow, "symbols");
-        verifyRroAccountNameField(uploadWindow, StringUtils.EMPTY);
+        verifyRroAccountNameAndProductFamilyFields(uploadWindow, StringUtils.EMPTY);
         clickButtonAndWait(uploadWindow, UPLOAD_BUTTON_ID);
         verifyErrorWindow(ImmutableMap.of(RRO_ACCOUNT_NUMBER_FIELD, "Field value should contain numeric values only",
             RRO_ACCOUNT_NAME_FIELD, RRO_ACCOUNT_NAME_EMPTY_FIELD_MESSAGE));
         populateRroAccountNumberField(uploadWindow, "555");
-        verifyRroAccountNameField(uploadWindow, StringUtils.EMPTY);
+        verifyRroAccountNameAndProductFamilyFields(uploadWindow, StringUtils.EMPTY);
         clickButtonAndWait(uploadWindow, UPLOAD_BUTTON_ID);
         verifyErrorWindow(ImmutableMap.of(RRO_ACCOUNT_NAME_FIELD, RRO_ACCOUNT_NAME_EMPTY_FIELD_MESSAGE));
     }
@@ -336,8 +336,9 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
                 new BigDecimal("60.86"), MARKET, 2015, 2016, null, UsageStatusEnum.ELIGIBLE));
     }
 
-    private void verifyRroAccountNameField(WebElement uploadWindow, String value) {
+    private void verifyRroAccountNameAndProductFamilyFields(WebElement uploadWindow, String value) {
         assertEquals(value, getInnerHtml(assertWebElement(uploadWindow, "rro-account-name-field")));
+        assertEquals(value, getInnerHtml(assertWebElement(uploadWindow, "product-family-field")));
     }
 
     private void populateValidValuesForUploadWindowFields(WebElement uploadWindow) {
