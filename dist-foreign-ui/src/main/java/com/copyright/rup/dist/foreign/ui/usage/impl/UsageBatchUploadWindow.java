@@ -301,7 +301,8 @@ class UsageBatchUploadWindow extends Window {
             if (accountNumberField.isValid()) {
                 rro = usagesController.getRro(Long.valueOf(StringUtils.trim(accountNumberField.getValue())));
                 rightsholderNameProperty.setValue(rro.getName());
-                productFamilyProperty.setValue(2000017000 == rro.getAccountNumber() ? "CLA_FAS" : "FAS");
+                productFamilyProperty.setValue(
+                    null != rro.getAccountNumber() && 2000017000 == rro.getAccountNumber() ? "CLA_FAS" : "FAS");
             }
         });
         return button;
