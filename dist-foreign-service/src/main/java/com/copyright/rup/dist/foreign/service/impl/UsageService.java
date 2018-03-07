@@ -133,23 +133,26 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    @Profiled(tag = "service.UsageService.insertUsages")
     public int insertUsages(UsageBatch usageBatch, List<Usage> usages) {
+        StopWatch stopWatch = new Slf4JStopWatch();
         String userName = RupContextUtils.getUserName();
         int size = usages.size();
         LOGGER.info("Insert usages. Started. UsageBatchName={}, UsagesCount={}, UserName={}", usageBatch.getName(),
             size, userName);
         calculateUsagesGrossAmount(usageBatch, usages);
+        stopWatch.lap("usage.insert_calculateGrossAmount");
         usages.forEach(usage -> {
             usage.setBatchId(usageBatch.getId());
             usage.setCreateUser(userName);
             usage.setUpdateUser(userName);
             usageRepository.insert(usage);
         });
+        stopWatch.lap("usage.insert.stored");
         // Adding data to audit table in separate loop increases performance up to 3 times
         // while using batch with 200000 usages
         String reason = "Uploaded in '" + usageBatch.getName() + "' Batch";
         usages.forEach(usage -> usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.LOADED, reason));
+        stopWatch.stop("usage.insert_logAction");
         LOGGER.info("Insert usages. Finished. UsageBatchName={}, UsagesCount={}, UserName={}", usageBatch.getName(),
             size, userName);
         return size;
@@ -180,10 +183,11 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    @Profiled(tag = "service.UsageService.addToScenario")
     public void addUsagesToScenario(List<Usage> usages, Scenario scenario) {
+        StopWatch stopWatch = new Slf4JStopWatch();
         Table<String, String, Long> rollUps = prmIntegrationService.getRollUps(
             usages.stream().map(usage -> usage.getRightsholder().getId()).collect(Collectors.toSet()));
+        stopWatch.lap("usage.addToScenario_getRollups");
         usages.forEach(usage -> {
             usage.setScenarioId(scenario.getId());
             usage.setStatus(UsageStatusEnum.LOCKED);
@@ -191,7 +195,9 @@ public class UsageService implements IUsageService {
             usage.getPayee().setAccountNumber(
                 PrmRollUpService.getPayeeAccountNumber(rollUps, usage.getRightsholder(), usage.getProductFamily()));
         });
+        stopWatch.lap("usage.addToScenario_setPayee");
         usageRepository.addToScenario(usages);
+        stopWatch.stop("usage.addToScenario_addScenarioId");
     }
 
     @Override
@@ -225,6 +231,7 @@ public class UsageService implements IUsageService {
     }
 
     @Override
+    @Profiled(tag = "service.UsageService.getDuplicateDetailIds")
     public Set<Long> getDuplicateDetailIds(List<Long> detailIds) {
         return CollectionUtils.isNotEmpty(detailIds)
             ? usageRepository.findDuplicateDetailIds(detailIds)
@@ -233,12 +240,16 @@ public class UsageService implements IUsageService {
 
     @Override
     public List<Usage> moveToArchive(Scenario scenario) {
+        StopWatch stopWatch = new StopWatch();
         LOGGER.info("Move details to archive. Started. {}", ForeignLogUtils.scenario(scenario));
         List<Usage> usages = usageRepository.findByScenarioId(scenario.getId());
+        stopWatch.lap("usage.moveToArchive_findByScenarioId");
         usages.forEach(usageArchiveRepository::insert);
+        stopWatch.lap("usage.moveToArchive_insertIntoArchive");
         usageRepository.deleteByScenarioId(scenario.getId());
         LOGGER.info("Move details to archive. Finished. {}, UsagesCount={}", ForeignLogUtils.scenario(scenario),
             usages.size());
+        stopWatch.stop("usage.moveToArchive_deleteByScenarioId");
         return usages;
     }
 

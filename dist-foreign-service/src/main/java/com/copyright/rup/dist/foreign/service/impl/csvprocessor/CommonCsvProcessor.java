@@ -10,7 +10,7 @@ import com.google.common.collect.Maps;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.perf4j.aop.Profiled;
+import org.perf4j.StopWatch;
 import org.supercsv.exception.SuperCsvException;
 import org.supercsv.io.CsvListReader;
 import org.supercsv.io.ICsvListReader;
@@ -86,19 +86,26 @@ public abstract class CommonCsvProcessor<T> {
      * @return {@link CsvProcessingResult} instance with uploaded data
      * @throws ValidationException in case of invalid file
      */
-    @Profiled(tag = "service.CommonCsvProcessor.process__{$1}")
     public CsvProcessingResult<T> process(ByteArrayOutputStream stream, String fileName) throws ValidationException {
+        String stopWatchTag = "file.process_" + fileName;
+        StopWatch stopWatch = new StopWatch(stopWatchTag);
         try (ICsvListReader listReader = new CsvListReader(
             new InputStreamReader(new ByteArrayInputStream(stream.toByteArray()), StandardCharsets.UTF_8),
             CsvPreference.STANDARD_PREFERENCE)) {
             headers = getCsvHeaders();
+            stopWatch.lap(stopWatchTag + "_getCsvHeaders");
             processingResult = new CsvProcessingResult<>(getCsvColumnsNames(), fileName);
             validateHeader(listReader.getHeader(true));
+            stopWatch.lap(stopWatchTag + "_validateHeader");
             initValidators();
             processRows(listReader);
+            stopWatch.lap(stopWatchTag + "_processRows");
             validateBusinessRules();
+            stopWatch.lap(stopWatchTag + "_validate");
         } catch (IOException | SuperCsvException e) {
             throw new ValidationException(String.format("Failed to read file: %s", e.getMessage()), e);
+        } finally {
+            stopWatch.stop();
         }
         if (processingResult.isEmpty()) {
             throw new ValidationException("File does not contain data");
