@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioUsageFilter;
+import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
@@ -21,6 +22,7 @@ import com.copyright.rup.vaadin.ui.ConfirmActionDialogWindow;
 import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.ui.Window;
@@ -150,6 +152,12 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
     @Override
     public void refreshScenario() {
         // TODO {isuvorau} call service method after implementation
+        List<UsageDto> usages = Lists.newArrayList();
+        if (CollectionUtils.isNotEmpty(usages)) {
+            Windows.showModalWindow(new RefreshScenarioWindow(usages));
+        } else {
+            Windows.showNotificationWindow(ForeignUi.getMessage("message.info.refresh_scenario.nothing_to_add"));
+        }
     }
 
     @Override
@@ -163,7 +171,7 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
                 appendCriterionMessage(sb, "label.product_family", filter.getProductFamily());
             }
             if (CollectionUtils.isNotEmpty(filter.getUsageBatchesIds())) {
-                appendCriterionMessage(sb, ForeignUi.getMessage("label.batch_in"),
+                appendCriterionMessage(sb, "label.batch_in",
                     StringUtils.join(filter.getUsageBatchesIds(), LIST_SEPARATOR));
             }
             if (CollectionUtils.isNotEmpty(filter.getRhAccountNumbers())) {
