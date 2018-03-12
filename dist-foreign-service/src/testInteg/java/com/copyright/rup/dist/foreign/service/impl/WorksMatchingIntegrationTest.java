@@ -8,7 +8,6 @@ import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageAuditRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
-import com.copyright.rup.dist.foreign.service.api.IUsageService;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,7 +44,7 @@ public class WorksMatchingIntegrationTest {
     private static final String NTS_PRODUCT_FAMILY = "NTS";
     private static final String FAS_PRODUCT_FAMILY = "FAS";
     @Autowired
-    private IUsageService usageService;
+    private WorksMatchingJob worksMatchingJob;
     @Autowired
     private IUsageRepository usageRepository;
     @Autowired
@@ -53,7 +52,7 @@ public class WorksMatchingIntegrationTest {
 
     @Test
     public void testFindWorksAndUpdateStatuses() {
-        usageService.findWorksAndUpdateStatuses();
+        worksMatchingJob.findWorksAndUpdateStatuses();
         verifyUsage(5487125469L, 123059057L, UsageStatusEnum.WORK_FOUND, FAS_PRODUCT_FAMILY,
             "Wr Wrk Inst 123059057 was found by standard number 978-0-271-01750-1");
         verifyUsage(5236985478L, 123059057L, UsageStatusEnum.WORK_FOUND, FAS_PRODUCT_FAMILY,
@@ -62,16 +61,28 @@ public class WorksMatchingIntegrationTest {
             "Wr Wrk Inst 123059057 was found by title \"Forbidden rites\"");
         verifyUsage(5544213254L, 123059057L, UsageStatusEnum.WORK_FOUND, FAS_PRODUCT_FAMILY,
             "Wr Wrk Inst 123059057 was found by standard number 978-0-271-01750-1");
-        verifyUsage(5896325874L, null, UsageStatusEnum.NEW, FAS_PRODUCT_FAMILY);
-        verifyUsage(5425874236L, null, UsageStatusEnum.NEW, FAS_PRODUCT_FAMILY);
-        verifyUsage(2254475587L, null, UsageStatusEnum.NEW, FAS_PRODUCT_FAMILY);
-        verifyUsage(3652124587L, null, UsageStatusEnum.NEW, FAS_PRODUCT_FAMILY);
-        verifyUsage(3654214587L, null, UsageStatusEnum.NEW, FAS_PRODUCT_FAMILY);
-        verifyUsage(2301002001L, null, UsageStatusEnum.NEW, FAS_PRODUCT_FAMILY);
-        verifyUsage(5420136521L, null, UsageStatusEnum.NEW, FAS_PRODUCT_FAMILY);
-        verifyUsage(5487414477L, null, UsageStatusEnum.NEW, FAS_PRODUCT_FAMILY);
-        verifyUsage(3200110141L, null, UsageStatusEnum.NEW, FAS_PRODUCT_FAMILY);
-        verifyUsage(6325412547L, null, UsageStatusEnum.NEW, FAS_PRODUCT_FAMILY);
+        verifyUsage(5896325874L, null, UsageStatusEnum.WORK_NOT_FOUND, FAS_PRODUCT_FAMILY,
+            "Wr Wrk Inst was not found by standard number 0-325-01548-2");
+        verifyUsage(5425874236L, null, UsageStatusEnum.WORK_NOT_FOUND, FAS_PRODUCT_FAMILY,
+            "Wr Wrk Inst was not found by standard number 0-325-01548-2");
+        verifyUsage(2254475587L, null, UsageStatusEnum.WORK_FOUND, FAS_PRODUCT_FAMILY,
+            "Usage assigned unidentified work due to blank standard number and title");
+        verifyUsage(3652124587L, null, UsageStatusEnum.WORK_NOT_FOUND, FAS_PRODUCT_FAMILY,
+            "Wr Wrk Inst was not found by standard number 10.1353/PGN.1999.0081");
+        verifyUsage(3654214587L, null, UsageStatusEnum.WORK_NOT_FOUND, FAS_PRODUCT_FAMILY,
+            "Wr Wrk Inst was not found by standard number 10.1353/PGN.1999.0081");
+        verifyUsage(2301002001L, null, UsageStatusEnum.WORK_NOT_FOUND, FAS_PRODUCT_FAMILY,
+            "Wr Wrk Inst was not found by standard number 978-0-08-027365-5");
+        verifyUsage(5420136521L, null, UsageStatusEnum.WORK_NOT_FOUND, FAS_PRODUCT_FAMILY,
+            "Wr Wrk Inst was not found by standard number ETOCRN066582498");
+        verifyUsage(5487414477L, null, UsageStatusEnum.WORK_NOT_FOUND, FAS_PRODUCT_FAMILY,
+            "Wr Wrk Inst was not found by standard number ETOCRN066582498");
+        verifyUsage(3200110141L, null, UsageStatusEnum.WORK_NOT_FOUND, FAS_PRODUCT_FAMILY,
+            "Wr Wrk Inst was not found by standard number ETOCRN066582498");
+        verifyUsage(6325412547L, null, UsageStatusEnum.WORK_NOT_FOUND, FAS_PRODUCT_FAMILY,
+            "Wr Wrk Inst was not found by standard number 0-325-01548-2");
+        verifyUsage(2365888447L, null, UsageStatusEnum.WORK_NOT_FOUND, FAS_PRODUCT_FAMILY,
+            "Wr Wrk Inst was not found by title \"Fall guys in the florentine flood\"");
         verifyUsage(2154874521L, null, UsageStatusEnum.ELIGIBLE, NTS_PRODUCT_FAMILY, NTS_BY_STANDARD_NUMBER_MESSAGE);
         verifyUsage(1254874596L, null, UsageStatusEnum.ELIGIBLE, NTS_PRODUCT_FAMILY, NTS_BY_STANDARD_NUMBER_MESSAGE);
         verifyUsage(4125487962L, null, UsageStatusEnum.ELIGIBLE, NTS_PRODUCT_FAMILY, NTS_BY_STANDARD_NUMBER_MESSAGE);

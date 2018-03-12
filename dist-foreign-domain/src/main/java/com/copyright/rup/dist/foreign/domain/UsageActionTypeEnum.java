@@ -22,6 +22,11 @@ public enum UsageActionTypeEnum {
     WORK_FOUND,
 
     /**
+     * Action type for case when work was not found.
+     */
+    WORK_NOT_FOUND,
+
+    /**
      * Action type for successful finding rightsholder of {@link Usage} in RMS.
      */
     RH_FOUND,

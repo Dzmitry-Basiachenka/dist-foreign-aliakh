@@ -313,7 +313,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         return selectList("IUsageMapper.findUsagesWithBlankWrWrkInst", UsageStatusEnum.NEW);
     }
 
-    @Profiled(tag = "repository.UsageRepository.updateStatusAndWrWrkInst")
     @Override
     public void updateStatusAndWrWrkInst(List<Usage> usages) {
         checkArgument(CollectionUtils.isNotEmpty(usages));
