@@ -148,7 +148,9 @@ public interface IUsagesController extends IController<IUsagesWidget>, IBeanLoad
     boolean isProductFamilyAndStatusFiltersApplied();
 
     /**
-     * @return {@code true} if product family filter contains only FAS, {@code false} - otherwise.
+     * @return {@code true} if product family filter contains single product family (except for NTS),
+     * {@code false} - otherwise.
      */
-    boolean isOnlyFasProductFamilySelected();
+    //TODO {dbaraukova} remove check that product family is not NTS after implementing create NTS scenario logic
+    boolean isSigleProductFamilySelected();
 }

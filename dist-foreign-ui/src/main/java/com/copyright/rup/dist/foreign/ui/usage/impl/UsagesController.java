@@ -175,9 +175,9 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
-    public boolean isOnlyFasProductFamilySelected() {
+    public boolean isSigleProductFamilySelected() {
         Set<String> productFamilies = filterController.getWidget().getAppliedFilter().getProductFamilies();
-        return 1 == CollectionUtils.size(productFamilies) && productFamilies.contains("FAS");
+        return 1 == CollectionUtils.size(productFamilies) && !productFamilies.contains("NTS");
     }
 
     @Override
