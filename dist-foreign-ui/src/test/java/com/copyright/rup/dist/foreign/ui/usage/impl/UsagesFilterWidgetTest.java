@@ -221,8 +221,8 @@ public class UsagesFilterWidgetTest {
         verifyItemsFilterLayout(verticalLayout.getComponent(3), "RROs");
         verifyDateWidget(verticalLayout.getComponent(4));
         verifyStatusComboboxComponent(verticalLayout.getComponent(5), Lists.newArrayList(UsageStatusEnum.NEW,
-            UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.SENT_FOR_RA,
-            UsageStatusEnum.ELIGIBLE));
+            UsageStatusEnum.WORK_FOUND, UsageStatusEnum.WORK_RESEARCH, UsageStatusEnum.RH_NOT_FOUND,
+            UsageStatusEnum.SENT_FOR_RA, UsageStatusEnum.ELIGIBLE));
         verifyFiscalYearComboboxComponent(verticalLayout.getComponent(6), Collections.singletonList(FISCAL_YEAR));
     }
 

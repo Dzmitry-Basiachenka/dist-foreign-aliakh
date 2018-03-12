@@ -145,8 +145,8 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
     private void initStatusFilter() {
         statusComboBox = new ComboBox(ForeignUi.getMessage("label.status"),
             new BeanItemContainer<>(UsageStatusEnum.class, Lists.newArrayList(UsageStatusEnum.NEW,
-                UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.SENT_FOR_RA,
-                UsageStatusEnum.ELIGIBLE)));
+                UsageStatusEnum.WORK_FOUND, UsageStatusEnum.WORK_RESEARCH, UsageStatusEnum.RH_NOT_FOUND,
+                UsageStatusEnum.SENT_FOR_RA, UsageStatusEnum.ELIGIBLE)));
         statusComboBox.setItemCaptionMode(ItemCaptionMode.ID_TOSTRING);
         VaadinUtils.setMaxComponentsWidth(statusComboBox);
         statusComboBox.addValueChangeListener((ValueChangeListener) event -> {

@@ -121,7 +121,7 @@ public class UsageServiceIntegrationTest {
         result.logError(2, buildOriginalLineWithErrors(Lists.newArrayList(0), Lists.newArrayList(StringUtils.EMPTY)),
             "Detail ID: Field is required and cannot be null or empty");
         result.logError(5, buildOriginalLineWithErrors(Lists.newArrayList(5), Lists.newArrayList("text")),
-            "RH Acct Number: Field value should be numeric");
+            "RH Account #: Field value should be numeric");
         List<String> lines =
             buildOriginalLineWithErrors(Lists.newArrayList(0), Lists.newArrayList("text more then 10 symbols"));
         result.logError(3, lines, "Detail ID: Field value should be numeric");
@@ -141,7 +141,7 @@ public class UsageServiceIntegrationTest {
     }
 
     private List<String> buildHeaders() {
-        return Lists.newArrayList("Detail ID", "Title", "Article", "Standard Number", "Wr Wrk Inst", "RH Acct Number",
+        return Lists.newArrayList("Detail ID", "Title", "Article", "Standard Number", "Wr Wrk Inst", "RH Account #",
             "Publisher", "Pub Date", "Number of Copies", "Reported Value", "Market", "Market Period From",
             "Market Period To", "Author");
     }

@@ -23,7 +23,7 @@ public class RightsholderWrWrkInstValidatorTest {
 
     @Test
     public void testErrorMessage() {
-        assertEquals("Wr Wrk Inst: Field value cannot be null or empty if RH Acct Number field value is presented",
+        assertEquals("Wr Wrk Inst: Field value cannot be null or empty if RH Account # field value is presented",
             validator.getErrorMessage());
     }
 

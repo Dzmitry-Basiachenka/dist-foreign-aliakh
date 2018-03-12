@@ -240,7 +240,7 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
         WebElement errorWindow = assertWebElement(By.id("notification-window"));
         assertEquals("Error", getWindowCaption(errorWindow));
         assertWebElementText(errorWindow, "Columns headers are incorrect. Expected columns headers are:\n" +
-            "Detail ID\nTitle\nArticle\nStandard Number\nWr Wrk Inst\nRH Acct Number\nPublisher\nPub Date\n" +
+            "Detail ID\nTitle\nArticle\nStandard Number\nWr Wrk Inst\nRH Account #\nPublisher\nPub Date\n" +
             "Number of Copies\nReported Value\nMarket\nMarket Period From\nMarket Period To\nAuthor");
         clickButtonAndWait(errorWindow, "Ok");
         assertNull(waitAndFindElement(By.id("notification-window")));

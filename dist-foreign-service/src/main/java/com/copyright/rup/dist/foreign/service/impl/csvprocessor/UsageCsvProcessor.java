@@ -123,7 +123,7 @@ public class UsageCsvProcessor extends CommonCsvProcessor<Usage> {
         ARTICLE("Article"),
         STANDARD_NUMBER("Standard Number"),
         WR_WRK_INST("Wr Wrk Inst"),
-        RH_ACCT_NUMBER("RH Acct Number"),
+        RH_ACCT_NUMBER("RH Account #"),
         PUBLISHER("Publisher"),
         PUB_DATE("Pub Date"),
         NUMBER_OF_COPIES("Number of Copies"),
