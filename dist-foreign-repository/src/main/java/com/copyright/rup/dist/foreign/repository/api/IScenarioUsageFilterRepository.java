@@ -26,7 +26,7 @@ public interface IScenarioUsageFilterRepository {
      * Inserts all RH account numbers values related to the specified filter.
      *
      * @param filterId         the id of filter.
-     * @param rhAccountNumbers the set of account numbers.
+     * @param rhAccountNumbers the set of RH account numbers.
      */
     void insertRhAccountNumbers(String filterId, Set<Long> rhAccountNumbers);
 
@@ -34,7 +34,7 @@ public interface IScenarioUsageFilterRepository {
      * Inserts all usage batches ids related to the specified filter.
      *
      * @param filterId        the id of filter.
-     * @param usageBatchesIds the set of license numbers.
+     * @param usageBatchesIds the set of usage batches ids.
      */
     void insertUsageBatchesIds(String filterId, Set<String> usageBatchesIds);
 
@@ -42,7 +42,7 @@ public interface IScenarioUsageFilterRepository {
      * Finds filter for scenario with specified id.
      *
      * @param scenarioId the id of scenario.
-     * @return list of filter for scenario.
+     * @return usage filter instance or null, if scenario has no usage filter
      */
     ScenarioUsageFilter findByScenarioId(String scenarioId);
 
