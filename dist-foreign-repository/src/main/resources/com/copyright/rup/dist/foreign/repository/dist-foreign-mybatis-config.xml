@@ -28,6 +28,7 @@
         <typeAlias alias="RightsholderPayeePair" type="com.copyright.rup.dist.foreign.domain.RightsholderPayeePair"/>
         <typeAlias alias="UsageAuditItem" type="com.copyright.rup.dist.foreign.domain.UsageAuditItem"/>
         <typeAlias alias="ScenarioAuditItem" type="com.copyright.rup.dist.foreign.domain.ScenarioAuditItem"/>
+        <typeAlias alias="ScenarioUsageFilter" type="com.copyright.rup.dist.foreign.domain.ScenarioUsageFilter"/>
         <typeAlias alias="UsageStatusEnum" type="com.copyright.rup.dist.foreign.domain.UsageStatusEnum"/>
     </typeAliases>
 
@@ -46,5 +47,6 @@
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IScenarioMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IUsageAuditMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IScenarioAuditMapper.xml"/>
+        <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IScenarioUsageFilterMapper.xml"/>
     </mappers>
 </configuration>
