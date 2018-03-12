@@ -162,4 +162,25 @@
     .scenario-history-table .v-table-cell-wrapper {
         white-space: normal;
     }
+
+    /**==== Scenario Metadata label ====*/
+    .scenarios-metadata .v-label ul, .scenarios-metadata .v-label li {
+    	list-style-type: none;
+    	padding-left: 0px;
+    	margin: 0px;
+    }
+
+    .scenarios-metadata .v-label ul {
+    	padding-left: 20px;
+    }
+
+    .label-note b {
+    	color: #CC0033;
+    }
+
+    .label-note {
+    	font-size: 14px;
+    	color: #000099;
+    	font-weight: bold;
+    }
 }

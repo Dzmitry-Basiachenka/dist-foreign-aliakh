@@ -62,4 +62,9 @@ public interface IScenariosController extends IController<IScenariosWidget> {
      * Handles refresh Scenario action.
      */
     void refreshScenario();
+
+    /**
+     * @return HTML filter representation for selected scenario.
+     */
+    String getCriteriaHtmlRepresentation();
 }

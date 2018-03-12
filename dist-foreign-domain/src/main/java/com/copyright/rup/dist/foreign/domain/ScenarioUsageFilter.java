@@ -8,6 +8,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -85,6 +86,18 @@ public class ScenarioUsageFilter extends StoredEntity<String> {
 
     public void setFiscalYear(Integer fiscalYear) {
         this.fiscalYear = fiscalYear;
+    }
+
+    /**
+     * @return {@code true} if filter does not contain any criteria, otherwise {@code false}.
+     */
+    public boolean isEmpty() {
+        return CollectionUtils.isEmpty(rhAccountNumbers)
+            && CollectionUtils.isEmpty(usageBatchesIds)
+            && null == productFamily
+            && null == paymentDate
+            && null == fiscalYear
+            && null == usageStatus;
     }
 
     @Override

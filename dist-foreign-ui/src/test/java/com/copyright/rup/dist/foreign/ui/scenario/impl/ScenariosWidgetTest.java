@@ -60,6 +60,7 @@ public class ScenariosWidgetTest {
 
     private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
     private static final String TABLE_ID = "table";
+    private static final String SELECTION_CRITERIA = "<b>Selection Criteria:</b>";
 
     private ScenariosWidget scenariosWidget;
     private IScenariosController controller;
@@ -113,6 +114,7 @@ public class ScenariosWidgetTest {
     public void testRefresh() {
         expect(controller.getScenarios()).andReturn(Collections.singletonList(scenario)).once();
         expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).times(2);
+        expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).times(2);
         replay(controller);
         scenariosWidget.refresh();
         verifyScenarioMetadataPanel();
@@ -125,6 +127,7 @@ public class ScenariosWidgetTest {
         Table table = Whitebox.getInternalState(scenariosWidget, TABLE_ID);
         assertNull(table.getValue());
         expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
+        expect(controller.getCriteriaHtmlRepresentation()).andReturn(StringUtils.EMPTY).once();
         replay(controller);
         scenariosWidget.selectScenario(SCENARIO_ID);
         assertEquals(SCENARIO_ID, table.getValue());
@@ -141,6 +144,7 @@ public class ScenariosWidgetTest {
         Whitebox.setInternalState(scenariosWidget, "container", container);
         expect(container.getItem(SCENARIO_ID)).andReturn(new BeanItem(scenario)).once();
         expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
+        expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
         replay(controller, scenariosTable, container);
         scenariosWidget.refreshSelectedScenario();
         verifyScenarioMetadataPanel();
@@ -192,6 +196,7 @@ public class ScenariosWidgetTest {
         assertEquals(1, listeners.size());
         ValueChangeListener listener = (ValueChangeListener) listeners.iterator().next();
         expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
+        expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
         replay(controller);
         verifyValueChangeListener(listener);
         verifyValueChangeListenerNoSelectedItem(listener);
@@ -261,7 +266,7 @@ public class ScenariosWidgetTest {
         assertEquals(new MarginInfo(false, true, false, true), layout.getMargin());
         assertEquals(100, layout.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, layout.getWidthUnits());
-        assertEquals(6, layout.getComponentCount());
+        assertEquals(7, layout.getComponentCount());
         verifyMetadataLabel(layout.getComponent(0), "<b>Owner: </b>User@copyright.com");
         verifyMetadataLabel(layout.getComponent(1),
             "<b>Net Amt in USD: </b><span class='label-amount'>10,000.00</span>");
@@ -270,8 +275,9 @@ public class ScenariosWidgetTest {
         verifyMetadataLabel(layout.getComponent(3),
             "<b>Reported Value Total: </b><span class='label-amount'>30,000.00</span>");
         verifyMetadataLabel(layout.getComponent(4), "<b>Description: </b>Description");
-        assertTrue(layout.getComponent(5) instanceof VerticalLayout);
-        VerticalLayout lastActionLayout = (VerticalLayout) layout.getComponent(5);
+        verifyMetadataLabel(layout.getComponent(5), SELECTION_CRITERIA);
+        assertTrue(layout.getComponent(6) instanceof VerticalLayout);
+        VerticalLayout lastActionLayout = (VerticalLayout) layout.getComponent(6);
         assertEquals(5, lastActionLayout.getComponentCount());
         verifyMetadataLabel(lastActionLayout.getComponent(0), "<b>Type:</b> ADDED_USAGES");
         verifyMetadataLabel(lastActionLayout.getComponent(1), "<b>User:</b> user@copyright.com");
