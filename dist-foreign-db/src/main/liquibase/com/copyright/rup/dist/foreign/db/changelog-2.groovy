@@ -400,10 +400,10 @@ databaseChangeLog {
     changeSet(id: '2018-03-05-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
         comment("B-40635 FDA: Refresh in-progress scenario with newly eligible details: adding Liquibase scripts to store filters")
 
-        createTable(tableName: 'df_usage_filter', schemaName: dbAppsSchema, tablespace: dbDataTablespace,
+        createTable(tableName: 'df_scenario_usage_filter', schemaName: dbAppsSchema, tablespace: dbDataTablespace,
                 remarks: 'Table for storing usages filters') {
 
-            column(name: 'df_usage_filter_uid', type: 'VARCHAR(255)', remarks: 'The unique identifier for usage filter') {
+            column(name: 'df_scenario_usage_filter_uid', type: 'VARCHAR(255)', remarks: 'The unique identifier for usage filter') {
                 constraints(nullable: false)
             }
             column(name: 'df_scenario_uid', type: 'VARCHAR(255)', remarks: 'The unique identifier of related scenario') {
@@ -438,17 +438,17 @@ databaseChangeLog {
             }
         }
 
-        addPrimaryKey(schemaName: dbAppsSchema, tableName: 'df_usage_filter', tablespace: dbIndexTablespace,
-                columnNames: 'df_usage_filter_uid', constraintName: 'pk_df_usage_filter_uid')
+        addPrimaryKey(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter', tablespace: dbIndexTablespace,
+                columnNames: 'df_scenario_usage_filter_uid', constraintName: 'pk_df_scenario_usage_filter_uid')
 
-        addForeignKeyConstraint(constraintName: 'fk_df_usage_filter_2_df_scenario',
-                baseTableSchemaName: dbAppsSchema, baseTableName: 'df_usage_filter', baseColumnNames: 'df_scenario_uid',
+        addForeignKeyConstraint(constraintName: 'fk_df_scenario_usage_filter_2_df_scenario',
+                baseTableSchemaName: dbAppsSchema, baseTableName: 'df_scenario_usage_filter', baseColumnNames: 'df_scenario_uid',
                 referencedTableSchemaName: dbAppsSchema, referencedTableName: 'df_scenario', referencedColumnNames: 'df_scenario_uid')
 
-        createTable(tableName: 'df_usage_filter_to_rh_account_numbers_map', schemaName: dbAppsSchema, tablespace: dbDataTablespace,
+        createTable(tableName: 'df_scenario_usage_filter_to_rh_account_numbers_map', schemaName: dbAppsSchema, tablespace: dbDataTablespace,
                 remarks: 'Table to map one to many relation between usage filter and rightsholder account numbers') {
 
-            column(name: 'df_usage_filter_uid', type: 'VARCHAR(255)', remarks: 'The unique identifier of usage filter') {
+            column(name: 'df_scenario_usage_filter_uid', type: 'VARCHAR(255)', remarks: 'The unique identifier of usage filter') {
                 constraints(nullable: false)
             }
             column(name: 'rh_account_number', type: 'NUMERIC(22,0)', remarks: 'The rightsholder account number') {
@@ -471,20 +471,20 @@ databaseChangeLog {
             }
         }
 
-        addPrimaryKey(tableName: 'df_usage_filter_to_rh_account_numbers_map', columnNames: 'df_usage_filter_uid, rh_account_number',
-                constraintName: 'pk_df_usage_filter_to_rh_account_numbers_map', schemaName: dbAppsSchema, tablespace: dbDataTablespace)
+        addPrimaryKey(tableName: 'df_scenario_usage_filter_to_rh_account_numbers_map', columnNames: 'df_scenario_usage_filter_uid, rh_account_number',
+                constraintName: 'pk_df_scenario_usage_filter_to_rh_account_numbers_map', schemaName: dbAppsSchema, tablespace: dbDataTablespace)
 
-        addForeignKeyConstraint(constraintName: 'fk_df_usage_filter_to_rh_account_numbers_map_2_df_usage_filter',
-                baseTableSchemaName: dbAppsSchema, baseTableName: 'df_usage_filter_to_rh_account_numbers_map', baseColumnNames: 'df_usage_filter_uid',
-                referencedTableSchemaName: dbAppsSchema, referencedTableName: 'df_usage_filter', referencedColumnNames: 'df_usage_filter_uid')
-        addForeignKeyConstraint(constraintName: 'fk_df_usage_filter_to_rh_account_numbers_map_2_df_rightsholder',
-                baseTableSchemaName: dbAppsSchema, baseTableName: 'df_usage_filter_to_rh_account_numbers_map', baseColumnNames: 'rh_account_number',
+        addForeignKeyConstraint(constraintName: 'fk_df_scenario_usage_filter_to_rh_account_numbers_map_2_df_scenario_usage_filter',
+                baseTableSchemaName: dbAppsSchema, baseTableName: 'df_scenario_usage_filter_to_rh_account_numbers_map', baseColumnNames: 'df_scenario_usage_filter_uid',
+                referencedTableSchemaName: dbAppsSchema, referencedTableName: 'df_scenario_usage_filter', referencedColumnNames: 'df_scenario_usage_filter_uid')
+        addForeignKeyConstraint(constraintName: 'fk_df_scenario_usage_filter_to_rh_account_numbers_map_2_df_rightsholder',
+                baseTableSchemaName: dbAppsSchema, baseTableName: 'df_scenario_usage_filter_to_rh_account_numbers_map', baseColumnNames: 'rh_account_number',
                 referencedTableSchemaName: dbAppsSchema, referencedTableName: 'df_rightsholder', referencedColumnNames: 'rh_account_number')
 
-        createTable(tableName: 'df_usage_filter_to_usage_batches_ids_map', schemaName: dbAppsSchema, tablespace: dbDataTablespace,
+        createTable(tableName: 'df_scenario_usage_filter_to_usage_batches_ids_map', schemaName: dbAppsSchema, tablespace: dbDataTablespace,
                 remarks: 'Table to map one to many relation between usage filter and usage batches ids') {
 
-            column(name: 'df_usage_filter_uid', type: 'VARCHAR(255)', remarks: 'The unique identifier of usage filter') {
+            column(name: 'df_scenario_usage_filter_uid', type: 'VARCHAR(255)', remarks: 'The unique identifier of usage filter') {
                 constraints(nullable: false)
             }
             column(name: 'df_usage_batch_uid', type: 'VARCHAR(255)', remarks: 'The unique identifier of usage batch') {
@@ -507,20 +507,20 @@ databaseChangeLog {
             }
         }
 
-        addPrimaryKey(tableName: 'df_usage_filter_to_usage_batches_ids_map', columnNames: 'df_usage_filter_uid, df_usage_batch_uid',
-                constraintName: 'pk_df_usage_filter_to_usage_batches_ids_map', schemaName: dbAppsSchema, tablespace: dbDataTablespace)
+        addPrimaryKey(tableName: 'df_scenario_usage_filter_to_usage_batches_ids_map', columnNames: 'df_scenario_usage_filter_uid, df_usage_batch_uid',
+                constraintName: 'pk_df_scenario_usage_filter_to_usage_batches_ids_map', schemaName: dbAppsSchema, tablespace: dbDataTablespace)
 
-        addForeignKeyConstraint(constraintName: 'fk_df_usage_filter_to_usage_batches_ids_map_2_df_usage_filter',
-                baseTableSchemaName: dbAppsSchema, baseTableName: 'df_usage_filter_to_usage_batches_ids_map', baseColumnNames: 'df_usage_filter_uid',
-                referencedTableSchemaName: dbAppsSchema, referencedTableName: 'df_usage_filter', referencedColumnNames: 'df_usage_filter_uid')
-        addForeignKeyConstraint(constraintName: 'fk_df_usage_filter_to_usage_batches_ids_map_2_df_usage_batch',
-                baseTableSchemaName: dbAppsSchema, baseTableName: 'df_usage_filter_to_usage_batches_ids_map', baseColumnNames: 'df_usage_batch_uid',
+        addForeignKeyConstraint(constraintName: 'fk_df_scenario_usage_filter_to_usage_batches_ids_map_2_df_scenario_usage_filter',
+                baseTableSchemaName: dbAppsSchema, baseTableName: 'df_scenario_usage_filter_to_usage_batches_ids_map', baseColumnNames: 'df_scenario_usage_filter_uid',
+                referencedTableSchemaName: dbAppsSchema, referencedTableName: 'df_scenario_usage_filter', referencedColumnNames: 'df_scenario_usage_filter_uid')
+        addForeignKeyConstraint(constraintName: 'fk_df_scenario_usage_filter_to_usage_batches_ids_map_2_df_usage_batch',
+                baseTableSchemaName: dbAppsSchema, baseTableName: 'df_scenario_usage_filter_to_usage_batches_ids_map', baseColumnNames: 'df_usage_batch_uid',
                 referencedTableSchemaName: dbAppsSchema, referencedTableName: 'df_usage_batch', referencedColumnNames: 'df_usage_batch_uid')
 
         rollback {
-            dropTable(tableName: 'df_usage_filter_to_usage_batches_ids_map', schemaName: dbAppsSchema)
-            dropTable(tableName: 'df_usage_filter_to_rh_account_numbers_map', schemaName: dbAppsSchema)
-            dropTable(tableName: 'df_usage_filter', schemaName: dbAppsSchema)
+            dropTable(tableName: 'df_scenario_usage_filter_to_usage_batches_ids_map', schemaName: dbAppsSchema)
+            dropTable(tableName: 'df_scenario_usage_filter_to_rh_account_numbers_map', schemaName: dbAppsSchema)
+            dropTable(tableName: 'df_scenario_usage_filter', schemaName: dbAppsSchema)
         }
     }
 }

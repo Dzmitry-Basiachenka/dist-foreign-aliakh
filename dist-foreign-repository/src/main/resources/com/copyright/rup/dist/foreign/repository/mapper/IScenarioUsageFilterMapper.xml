@@ -1,0 +1,113 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ScenarioUsageFilterMapper">
+
+    <resultMap id="scenarioUsageFilterResult" type="ScenarioUsageFilter" extends="StoredEntityMapper.storedEntityResult">
+        <id property="id" column="df_scenario_usage_filter_uid"/>
+        <result property="scenarioId" column="df_scenario_uid"/>
+        <result property="productFamily" column="product_family"/>
+        <result property="usageStatus" column="status_ind"/>
+        <result property="paymentDate" column="payment_date"/>
+        <result property="fiscalYear" column="fiscal_year"/>
+        <collection property="rhAccountNumbers" javaType="java.util.Set" ofType="java.lang.Long">
+            <result column="rh_account_number"/>
+        </collection>
+        <collection property="usageBatchesIds" javaType="java.util.Set" ofType="java.lang.String">
+            <result column="df_usage_batch_uid"/>
+        </collection>
+    </resultMap>
+
+    <insert id="insert" parameterType="ScenarioUsageFilter">
+        insert into ${schema}.df_scenario_usage_filter(
+            df_scenario_usage_filter_uid,
+            df_scenario_uid,
+            product_family,
+            status_ind,
+            payment_date,
+            fiscal_year,
+            <include refid="StoredEntityMapper.additionalColumns"/>
+        ) values (
+            #{id},
+            #{scenarioId},
+            #{productFamily},
+            #{usageStatus},
+            #{paymentDate},
+            #{fiscalYear},
+            <include refid="StoredEntityMapper.insert"/>
+        )
+    </insert>
+
+    <insert id="insertRhAccountNumbers" parameterType="map">
+        insert into ${schema}.df_scenario_usage_filter_to_rh_account_numbers_map(
+            df_scenario_usage_filter_uid,
+            rh_account_number,
+            <include refid="StoredEntityMapper.additionalColumns"/>
+        ) values (
+            #{filterId},
+            #{rhAccountNumber},
+            <include refid="StoredEntityMapper.insert"/>
+        )
+    </insert>
+
+    <insert id="insertUsageBatchesIds" parameterType="map">
+        insert into ${schema}.df_scenario_usage_filter_to_usage_batches_ids_map(
+            df_scenario_usage_filter_uid,
+            df_usage_batch_uid,
+            <include refid="StoredEntityMapper.additionalColumns"/>
+        ) values (
+            #{filterId},
+            #{usageBatchId},
+            <include refid="StoredEntityMapper.insert"/>
+        )
+    </insert>
+
+    <select id="findByScenarioId" parameterType="string" resultMap="scenarioUsageFilterResult">
+        select
+            f.df_scenario_usage_filter_uid,
+            f.df_scenario_uid,
+            f.product_family,
+            f.status_ind,
+            f.payment_date,
+            f.fiscal_year,
+            f.created_datetime,
+            f.updated_datetime,
+            f.created_by_user,
+            f.updated_by_user,
+            f.record_version,
+            an.rh_account_number,
+            ub.df_usage_batch_uid
+        from ${schema}.df_scenario_usage_filter f
+        left join ${schema}.df_scenario_usage_filter_to_rh_account_numbers_map an on f.df_scenario_usage_filter_uid = an.df_scenario_usage_filter_uid
+        left join ${schema}.df_scenario_usage_filter_to_usage_batches_ids_map ub on f.df_scenario_usage_filter_uid = ub.df_scenario_usage_filter_uid
+        where f.df_scenario_uid = #{scenarioId}
+    </select>
+
+    <delete id="deleteByScenarioId" parameterType="string">
+        delete from ${schema}.df_scenario_usage_filter
+        where df_scenario_uid = #{scenarioId}
+    </delete>
+
+    <delete id="deleteRhAccountNumbersByScenarioId" parameterType="string">
+        delete from
+            ${schema}.df_scenario_usage_filter_to_rh_account_numbers_map
+        where
+            df_scenario_usage_filter_uid in (
+                select df_scenario_usage_filter_uid
+                from ${schema}.df_scenario_usage_filter
+                where df_scenario_uid = #{scenarioId}
+            )
+    </delete>
+
+    <delete id="deleteUsageBatchesIdsByScenarioId" parameterType="string">
+        delete from
+            ${schema}.df_scenario_usage_filter_to_usage_batches_ids_map
+        where
+            df_scenario_usage_filter_uid in (
+                select df_scenario_usage_filter_uid
+                from ${schema}.df_scenario_usage_filter
+                where df_scenario_uid = #{scenarioId}
+            )
+    </delete>
+</mapper>
