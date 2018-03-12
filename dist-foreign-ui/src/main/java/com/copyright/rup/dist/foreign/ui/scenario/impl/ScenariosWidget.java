@@ -59,6 +59,7 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
     private Button sendToLmButton = Buttons.createButton(ForeignUi.getMessage("button.send_to_lm"));
     private Button reconcileRightsholdersButton =
         Buttons.createButton(ForeignUi.getMessage("button.reconcile_rightsholders"));
+    private Button refreshScenarioButton = Buttons.createButton(ForeignUi.getMessage("button.refresh_scenario"));
     private BeanContainer<String, Scenario> container;
     private Label ownerLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private Label netTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
@@ -93,6 +94,7 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
         mediator.setSubmitButton(submitButton);
         mediator.setSendToLmButton(sendToLmButton);
         mediator.setReconcileRightsholdersButton(reconcileRightsholdersButton);
+        mediator.setRefreshScenarioButton(refreshScenarioButton);
         mediator.selectedScenarioChanged(getSelectedScenario());
         return mediator;
     }
@@ -146,9 +148,9 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
         HorizontalLayout layout = new HorizontalLayout();
         addButtonsListeners();
         VaadinUtils.setButtonsAutoDisabled(viewButton, deleteButton, reconcileRightsholdersButton, submitButton,
-            rejectButton, approveButton, sendToLmButton);
+            rejectButton, approveButton, sendToLmButton, refreshScenarioButton);
         layout.addComponents(viewButton, deleteButton, reconcileRightsholdersButton, submitButton, rejectButton,
-            approveButton, sendToLmButton);
+            approveButton, sendToLmButton, refreshScenarioButton);
         layout.setSpacing(true);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "scenarios-buttons");
@@ -163,6 +165,7 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
         rejectButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.REJECTED));
         approveButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.APPROVED));
         sendToLmButton.addClickListener(event -> controller.sendToLm());
+        refreshScenarioButton.addClickListener(event -> controller.refreshScenario());
     }
 
     private void initTable() {

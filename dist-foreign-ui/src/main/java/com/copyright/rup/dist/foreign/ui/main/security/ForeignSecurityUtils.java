@@ -96,4 +96,11 @@ public final class ForeignSecurityUtils {
     public static boolean hasReconcileRightsholdersPermission() {
         return SecurityUtils.hasPermission("FDA_RECONCILE_RIGHTSHOLDERS");
     }
+
+    /**
+     * @return {@code true} if user has permission for scenario refreshing.
+     */
+    public static boolean hasRefreshScenarioPermission() {
+        return SecurityUtils.hasPermission("FDA_REFRESH_SCENARIO");
+    }
 }

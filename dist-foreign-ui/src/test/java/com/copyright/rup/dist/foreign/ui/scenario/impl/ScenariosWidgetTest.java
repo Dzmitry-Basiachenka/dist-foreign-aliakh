@@ -224,7 +224,7 @@ public class ScenariosWidgetTest {
 
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertEquals("scenarios-buttons", layout.getId());
-        assertEquals(7, layout.getComponentCount());
+        assertEquals(8, layout.getComponentCount());
         verifyButton(layout.getComponent(0), "View");
         verifyButton(layout.getComponent(1), "Delete");
         verifyButton(layout.getComponent(2), "Reconcile Rightsholders");
@@ -232,6 +232,7 @@ public class ScenariosWidgetTest {
         verifyButton(layout.getComponent(4), "Reject");
         verifyButton(layout.getComponent(5), "Approve");
         verifyButton(layout.getComponent(6), "Send to LM");
+        verifyButton(layout.getComponent(7), "Refresh Scenario");
     }
 
     private void verifyButton(Component component, String caption) {

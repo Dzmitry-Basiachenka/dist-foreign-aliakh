@@ -41,6 +41,7 @@ public class ScenariosMediatorTest {
     private Button rejectButton;
     private Button approveButton;
     private Button sendToLmButton;
+    private Button refreshScenarioButton;
 
     @Before
     public void setUp() {
@@ -60,6 +61,8 @@ public class ScenariosMediatorTest {
         mediator.setApproveButton(approveButton);
         sendToLmButton = new Button("Send to LM");
         mediator.setSendToLmButton(sendToLmButton);
+        refreshScenarioButton = new Button("Refresh Scenario");
+        mediator.setRefreshScenarioButton(refreshScenarioButton);
     }
 
     @Test
@@ -74,6 +77,7 @@ public class ScenariosMediatorTest {
         assertFalse(rejectButton.isVisible());
         assertFalse(approveButton.isVisible());
         assertFalse(sendToLmButton.isVisible());
+        assertFalse(refreshScenarioButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -89,6 +93,7 @@ public class ScenariosMediatorTest {
         assertTrue(rejectButton.isVisible());
         assertTrue(approveButton.isVisible());
         assertFalse(sendToLmButton.isVisible());
+        assertFalse(refreshScenarioButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -104,6 +109,7 @@ public class ScenariosMediatorTest {
         assertFalse(rejectButton.isVisible());
         assertFalse(approveButton.isVisible());
         assertTrue(sendToLmButton.isVisible());
+        assertTrue(refreshScenarioButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -117,6 +123,7 @@ public class ScenariosMediatorTest {
         assertFalse(rejectButton.isEnabled());
         assertFalse(approveButton.isEnabled());
         assertFalse(sendToLmButton.isEnabled());
+        assertFalse(refreshScenarioButton.isEnabled());
     }
 
     @Test
@@ -131,6 +138,7 @@ public class ScenariosMediatorTest {
         assertFalse(rejectButton.isEnabled());
         assertFalse(approveButton.isEnabled());
         assertFalse(sendToLmButton.isEnabled());
+        assertTrue(refreshScenarioButton.isEnabled());
     }
 
     @Test
@@ -145,6 +153,7 @@ public class ScenariosMediatorTest {
         assertTrue(rejectButton.isEnabled());
         assertTrue(approveButton.isEnabled());
         assertFalse(sendToLmButton.isEnabled());
+        assertFalse(refreshScenarioButton.isEnabled());
     }
 
     @Test
@@ -159,6 +168,7 @@ public class ScenariosMediatorTest {
         assertFalse(rejectButton.isEnabled());
         assertFalse(approveButton.isEnabled());
         assertTrue(sendToLmButton.isEnabled());
+        assertFalse(refreshScenarioButton.isEnabled());
     }
 
     @Test
@@ -173,6 +183,7 @@ public class ScenariosMediatorTest {
         assertFalse(rejectButton.isEnabled());
         assertFalse(approveButton.isEnabled());
         assertFalse(sendToLmButton.isEnabled());
+        assertFalse(refreshScenarioButton.isEnabled());
     }
 
     private void mockViewOnlyPermissions() {
@@ -191,5 +202,6 @@ public class ScenariosMediatorTest {
         expect(SecurityUtils.hasPermission("FDA_RECONCILE_RIGHTSHOLDERS")).andReturn(true).once();
         expect(SecurityUtils.hasPermission("FDA_SUBMIT_SCENARIO")).andReturn(true).once();
         expect(SecurityUtils.hasPermission("FDA_DISTRIBUTE_SCENARIO")).andReturn(true).once();
+        expect(SecurityUtils.hasPermission("FDA_REFRESH_SCENARIO")).andReturn(true).once();
     }
 }

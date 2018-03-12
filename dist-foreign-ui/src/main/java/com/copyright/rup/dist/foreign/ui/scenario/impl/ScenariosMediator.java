@@ -25,6 +25,7 @@ class ScenariosMediator implements IMediator {
     private Button approveButton;
     private Button sendToLmButton;
     private Button reconcileRightsholdersButton;
+    private Button refreshScenarioButton;
 
     @Override
     public void applyPermissions() {
@@ -34,6 +35,7 @@ class ScenariosMediator implements IMediator {
         approveButton.setVisible(ForeignSecurityUtils.hasApproveScenarioPermission());
         sendToLmButton.setVisible(ForeignSecurityUtils.hasSendScenarioToLmPermission());
         reconcileRightsholdersButton.setVisible(ForeignSecurityUtils.hasReconcileRightsholdersPermission());
+        refreshScenarioButton.setVisible(ForeignSecurityUtils.hasRefreshScenarioPermission());
         viewButton.setVisible(true);
     }
 
@@ -65,6 +67,10 @@ class ScenariosMediator implements IMediator {
         this.reconcileRightsholdersButton = reconcileRightsholdersButton;
     }
 
+    void setRefreshScenarioButton(Button refreshScenarioButton) {
+        this.refreshScenarioButton = refreshScenarioButton;
+    }
+
     /**
      * Handles buttons state depending on selected {@link Scenario}.
      *
@@ -77,6 +83,7 @@ class ScenariosMediator implements IMediator {
             boolean isInProgressState = ScenarioStatusEnum.IN_PROGRESS == status;
             deleteButton.setEnabled(isInProgressState);
             submitButton.setEnabled(isInProgressState);
+            refreshScenarioButton.setEnabled(isInProgressState);
             reconcileRightsholdersButton.setEnabled(isInProgressState);
             boolean isSubmittedState = ScenarioStatusEnum.SUBMITTED == status;
             rejectButton.setEnabled(isSubmittedState);
@@ -90,6 +97,7 @@ class ScenariosMediator implements IMediator {
             approveButton.setEnabled(false);
             sendToLmButton.setEnabled(false);
             reconcileRightsholdersButton.setEnabled(false);
+            refreshScenarioButton.setEnabled(false);
         }
     }
 }
