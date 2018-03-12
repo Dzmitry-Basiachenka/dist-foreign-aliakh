@@ -95,11 +95,12 @@ public interface IUsagesController extends IController<IUsagesWidget>, IBeanLoad
     /**
      * Inserts usage batch and it's usages.
      *
-     * @param usageBatch {@link UsageBatch} instance
-     * @param usages     list of {@link Usage}s
+     * @param usageBatch    {@link UsageBatch} instance
+     * @param usages        list of {@link Usage}s
+     * @param productFamily product family
      * @return count of inserted usages
      */
-    int loadUsageBatch(UsageBatch usageBatch, List<Usage> usages);
+    int loadUsageBatch(UsageBatch usageBatch, List<Usage> usages, String productFamily);
 
     /**
      * Creates a scenario by entered scenario name and description.

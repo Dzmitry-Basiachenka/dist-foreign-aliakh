@@ -134,9 +134,9 @@ public class UsageBatchServiceTest {
         expectLastCall().once();
         executorService.execute(capture(runnableCapture));
         expectLastCall().once();
-        expect(usageService.insertUsages(usageBatch, usages)).andReturn(2).once();
+        expect(usageService.insertUsages(usageBatch, usages, "FAS")).andReturn(2).once();
         replay(usageBatchRepository, usageService, rightsholderService, RupContextUtils.class, executorService);
-        assertEquals(2, usageBatchService.insertUsageBatch(usageBatch, usages));
+        assertEquals(2, usageBatchService.insertUsageBatch(usageBatch, usages, "FAS"));
         UsageBatch insertedUsageBatch = captureUsageBatch.getValue();
         assertNotNull(insertedUsageBatch);
         assertEquals(USER_NAME, insertedUsageBatch.getUpdateUser());

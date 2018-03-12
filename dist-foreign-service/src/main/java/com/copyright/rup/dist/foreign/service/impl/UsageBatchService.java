@@ -70,7 +70,7 @@ public class UsageBatchService implements IUsageBatchService {
 
     @Override
     @Transactional
-    public int insertUsageBatch(UsageBatch usageBatch, List<Usage> usages) {
+    public int insertUsageBatch(UsageBatch usageBatch, List<Usage> usages, String productFamily) {
         StopWatch stopWatch = new StopWatch();
         String userName = RupContextUtils.getUserName();
         usageBatch.setId(RupPersistUtils.generateUuid());
@@ -82,7 +82,7 @@ public class UsageBatchService implements IUsageBatchService {
         LOGGER.info("Insert usage batch. Finished. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
         rightsholderService.updateRightsholder(usageBatch.getRro());
         stopWatch.lap("usageBatch.load_updateRro");
-        int count = usageService.insertUsages(usageBatch, usages);
+        int count = usageService.insertUsages(usageBatch, usages, productFamily);
         stopWatch.lap("usageBatch.load_insertUsages");
         executorService.execute(() -> updateRightsholders(usages));
         stopWatch.stop("usageBatch.load_updateRhs");
