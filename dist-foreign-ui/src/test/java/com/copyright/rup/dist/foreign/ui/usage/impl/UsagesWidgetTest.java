@@ -184,7 +184,7 @@ public class UsagesWidgetTest {
             .getComponent(0)).getComponent(1);
         assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.isProductFamilyAndStatusFiltersApplied()).andReturn(true).once();
-        expect(controller.isOnlyFasProductFamilySelected()).andReturn(false).once();
+        expect(controller.isSigleProductFamilySelected()).andReturn(false).once();
         Windows.showNotificationWindow("Scenario cannot be created. Select only one product family at a time");
         expectLastCall().once();
         replay(controller, clickEvent, Windows.class);
@@ -206,7 +206,7 @@ public class UsagesWidgetTest {
             .getComponent(0)).getComponent(1);
         assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.isProductFamilyAndStatusFiltersApplied()).andReturn(true).once();
-        expect(controller.isOnlyFasProductFamilySelected()).andReturn(true).once();
+        expect(controller.isSigleProductFamilySelected()).andReturn(true).once();
         expect(controller.getScenarioService()).andReturn(null).once();
         Windows.showModalWindow(anyObject(CreateScenarioWindow.class));
         expectLastCall().once();

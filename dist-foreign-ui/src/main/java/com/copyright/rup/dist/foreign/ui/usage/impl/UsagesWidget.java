@@ -260,7 +260,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
     private void onAddToScenarioClicked() {
         if (0 < usagesTable.getContainerDataSource().size()) {
             if (controller.isProductFamilyAndStatusFiltersApplied()) {
-                if (controller.isOnlyFasProductFamilySelected()) {
+                if (controller.isSigleProductFamilySelected()) {
                     CreateScenarioWindow window = new CreateScenarioWindow(controller);
                     window.addListener(ScenarioCreateEvent.class, controller, IUsagesController.ON_SCENARIO_CREATED);
                     Windows.showModalWindow(window);
