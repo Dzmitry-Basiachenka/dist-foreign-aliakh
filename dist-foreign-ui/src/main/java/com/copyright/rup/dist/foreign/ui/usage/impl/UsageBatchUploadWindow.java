@@ -95,7 +95,8 @@ class UsageBatchUploadWindow extends Window {
                     processor.process(uploadField.getStreamToUploadedFile(), fileName);
                 stopWatch.lap(stopWatchTag + "_fileProcessed");
                 if (processingResult.isSuccessful()) {
-                    int usagesCount = usagesController.loadUsageBatch(buildUsageBatch(), processingResult.getResult());
+                    int usagesCount = usagesController.loadUsageBatch(buildUsageBatch(), processingResult.getResult(),
+                        productFamilyProperty.getValue());
                     stopWatch.lap(stopWatchTag + "_stored");
                     close();
                     Windows.showNotificationWindow(ForeignUi.getMessage("message.upload_completed", usagesCount));

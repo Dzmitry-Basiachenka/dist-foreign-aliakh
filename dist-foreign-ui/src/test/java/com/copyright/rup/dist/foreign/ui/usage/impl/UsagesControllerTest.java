@@ -69,6 +69,7 @@ public class UsagesControllerTest {
     private static final String SCENARIO_NAME = "Scenario Name";
     private static final String DESCRIPTION = "Description";
     private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
+    private static final String FAS_PRODUCT_FAMILY = "FAS";
     private UsagesController controller;
     private UsageService usageService;
     private IUsagesFilterController filterController;
@@ -235,9 +236,9 @@ public class UsagesControllerTest {
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         filterWidgetMock.clearFilter();
         expectLastCall().once();
-        expect(usageBatchService.insertUsageBatch(usageBatch, usages)).andReturn(1).once();
+        expect(usageBatchService.insertUsageBatch(usageBatch, usages, FAS_PRODUCT_FAMILY)).andReturn(1).once();
         replay(usageBatchService, filterController, filterWidgetMock);
-        assertEquals(1, controller.loadUsageBatch(usageBatch, usages));
+        assertEquals(1, controller.loadUsageBatch(usageBatch, usages, FAS_PRODUCT_FAMILY));
         verify(usageBatchService, filterController, filterWidgetMock);
     }
 
@@ -303,7 +304,7 @@ public class UsagesControllerTest {
         IUsagesFilterWidget filterWidgetMock = createMock(IUsagesFilterWidget.class);
         UsageFilter usageFilter = new UsageFilter();
         usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
-        usageFilter.setProductFamilies(Sets.newHashSet("FAS", "NTS"));
+        usageFilter.setProductFamilies(Sets.newHashSet(FAS_PRODUCT_FAMILY, "NTS"));
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
         replay(filterController, filterWidgetMock);
@@ -327,7 +328,7 @@ public class UsagesControllerTest {
     public void testIsOnlyFasProductFamilySelectedFas() {
         IUsagesFilterWidget filterWidgetMock = createMock(IUsagesFilterWidget.class);
         UsageFilter usageFilter = new UsageFilter();
-        usageFilter.setProductFamilies(Sets.newHashSet("FAS"));
+        usageFilter.setProductFamilies(Sets.newHashSet(FAS_PRODUCT_FAMILY));
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
         replay(filterController, filterWidgetMock);

@@ -201,7 +201,7 @@ public class UsageServiceTest {
         usageAuditService.logAction(usage2.getId(), UsageActionTypeEnum.LOADED, "Uploaded in 'ABC' Batch");
         expectLastCall().once();
         replay(usageRepository, usageAuditService, RupContextUtils.class);
-        assertEquals(2, usageService.insertUsages(usageBatch, usages));
+        assertEquals(2, usageService.insertUsages(usageBatch, usages, "FAS"));
         verifyUsage(captureUsage1.getValue(), new BigDecimal("10.9090909090"));
         verifyUsage(captureUsage2.getValue(), new BigDecimal("1.0909090909"));
         verify(usageRepository, usageAuditService, RupContextUtils.class);
