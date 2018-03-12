@@ -49,6 +49,13 @@ public final class ForeignSecurityUtils {
     }
 
     /**
+     * @return {@code true} if user has permission to send usages for work research.
+     */
+    public static boolean hasSendForWorkResearchPermission() {
+        return SecurityUtils.hasPermission("FDA_SEND_FOR_WORK_RESEARCH");
+    }
+
+    /**
      * @return {@code true} if user has permission to delete scenarios.
      */
     public static boolean hasDeleteScenarioPermission() {

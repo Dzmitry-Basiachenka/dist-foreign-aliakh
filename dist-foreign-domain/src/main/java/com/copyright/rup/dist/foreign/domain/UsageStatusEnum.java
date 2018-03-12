@@ -23,6 +23,11 @@ public enum UsageStatusEnum {
     WORK_FOUND,
 
     /**
+     * Detail submitted to Data Ops for research.
+     */
+    WORK_RESEARCH,
+
+    /**
      * Status for usages with rhAccountNumber not found in RMS
      */
     RH_NOT_FOUND,

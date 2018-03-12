@@ -33,6 +33,7 @@ public class UsagesMediatorTest {
     private Button deleteButton;
     private Button loadButton;
     private Button addToScenarioButton;
+    private Button sendForResearchButton;
     private UsagesMediator mediator;
 
     @Before
@@ -40,10 +41,12 @@ public class UsagesMediatorTest {
         deleteButton = new Button();
         loadButton = new Button();
         addToScenarioButton = new Button();
+        sendForResearchButton = new Button();
         mediator = new UsagesMediator();
         mediator.setLoadUsageButton(loadButton);
         mediator.setDeleteUsageButton(deleteButton);
         mediator.setAddToScenarioButton(addToScenarioButton);
+        mediator.setSendForResearchButton(sendForResearchButton);
     }
 
     @Test
@@ -54,6 +57,7 @@ public class UsagesMediatorTest {
         assertFalse(deleteButton.isVisible());
         assertFalse(loadButton.isVisible());
         assertFalse(addToScenarioButton.isVisible());
+        assertFalse(sendForResearchButton.isVisible());
     }
 
     @Test
@@ -64,6 +68,7 @@ public class UsagesMediatorTest {
         assertFalse(deleteButton.isVisible());
         assertFalse(loadButton.isVisible());
         assertFalse(addToScenarioButton.isVisible());
+        assertFalse(sendForResearchButton.isVisible());
     }
 
     @Test
@@ -74,6 +79,7 @@ public class UsagesMediatorTest {
         assertTrue(deleteButton.isVisible());
         assertTrue(loadButton.isVisible());
         assertTrue(addToScenarioButton.isVisible());
+        assertTrue(sendForResearchButton.isVisible());
     }
 
     private void mockViewOnlyPermissions() {
@@ -95,5 +101,6 @@ public class UsagesMediatorTest {
         expect(SecurityUtils.hasPermission("FDA_DELETE_USAGE")).andReturn(true).anyTimes();
         expect(SecurityUtils.hasPermission("FDA_LOAD_USAGE")).andReturn(true).anyTimes();
         expect(SecurityUtils.hasPermission("FDA_CREATE_EDIT_SCENARIO")).andReturn(true).anyTimes();
+        expect(SecurityUtils.hasPermission("FDA_SEND_FOR_WORK_RESEARCH")).andReturn(true).anyTimes();
     }
 }

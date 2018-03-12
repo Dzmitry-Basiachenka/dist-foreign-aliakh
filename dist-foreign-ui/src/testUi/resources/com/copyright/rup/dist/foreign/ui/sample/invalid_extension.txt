@@ -1,2 +1,2 @@
-Detail ID,Title,Article,Wr Wrk Inst,RH Acct Number,Publisher,Pub Date,Number of Copies,Reported Value,Market,Market Period From,Market Period To,Author
+Detail ID,Title,Article,Wr Wrk Inst,RH Account #,Publisher,Pub Date,Number of Copies,Reported Value,Market,Market Period From,Market Period To,Author
 10000000,1984,Appendix: The Principles of Newspeak,123456789,1000009522,,12/12/3000,,30.86,"Univ,Bus,Doc,S",2015,2015,"Aarseth, Espen J."

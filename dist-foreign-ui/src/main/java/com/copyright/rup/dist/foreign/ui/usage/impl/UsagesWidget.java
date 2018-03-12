@@ -48,6 +48,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
     private LazyTable<UsageBeanQuery, UsageDto> usagesTable;
     private Button loadButton;
     private Button deleteButton;
+    private Button sendForResearchButton;
     private Button addToScenarioButton;
 
     @Override
@@ -84,6 +85,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         mediator.setLoadUsageButton(loadButton);
         mediator.setDeleteUsageButton(deleteButton);
         mediator.setAddToScenarioButton(addToScenarioButton);
+        mediator.setSendForResearchButton(sendForResearchButton);
         return mediator;
     }
 
@@ -243,10 +245,12 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
         OnDemandFileDownloader fileDownloader = new OnDemandFileDownloader(controller.getExportUsagesStreamSource());
         fileDownloader.extend(exportButton);
+        sendForResearchButton = Buttons.createButton(ForeignUi.getMessage("button.send_for_research"));
         deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete_usage_batch"));
         deleteButton.addClickListener(event -> Windows.showModalWindow(new DeleteUsageBatchWindow(controller)));
         VaadinUtils.setButtonsAutoDisabled(loadButton, addToScenarioButton, deleteButton);
-        HorizontalLayout layout = new HorizontalLayout(loadButton, addToScenarioButton, exportButton, deleteButton);
+        HorizontalLayout layout = new HorizontalLayout(loadButton, addToScenarioButton, exportButton, deleteButton,
+            sendForResearchButton);
         layout.setSpacing(true);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "usages-buttons");

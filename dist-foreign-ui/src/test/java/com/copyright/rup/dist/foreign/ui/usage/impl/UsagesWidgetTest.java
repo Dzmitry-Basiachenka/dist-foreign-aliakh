@@ -267,6 +267,8 @@ public class UsagesWidgetTest {
         expectLastCall().once();
         mediator.setAddToScenarioButton(anyObject(Button.class));
         expectLastCall().once();
+        mediator.setSendForResearchButton(anyObject(Button.class));
+        expectLastCall().once();
         replay(UsagesMediator.class, mediator);
         assertNotNull(usagesWidget.initMediator());
         verify(UsagesMediator.class, mediator);
@@ -275,7 +277,7 @@ public class UsagesWidgetTest {
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(true), layout.getMargin());
-        assertEquals(4, layout.getComponentCount());
+        assertEquals(5, layout.getComponentCount());
         assertEquals("Load", layout.getComponent(0).getCaption());
         assertEquals("Add To Scenario", layout.getComponent(1).getCaption());
         Component component = layout.getComponent(2);
@@ -284,8 +286,8 @@ public class UsagesWidgetTest {
         assertTrue(CollectionUtils.isNotEmpty(extensions));
         assertEquals(1, extensions.size());
         assertTrue(extensions.iterator().next() instanceof OnDemandFileDownloader);
-        component = layout.getComponent(3);
-        assertEquals("Delete Usage Batch", component.getCaption());
+        assertEquals("Delete Usage Batch", layout.getComponent(3).getCaption());
+        assertEquals("Send for Research", layout.getComponent(4).getCaption());
     }
 
     private void verifyTable(Table table) {

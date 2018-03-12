@@ -24,6 +24,6 @@ public class RightsholderWrWrkInstValidator implements IValidator<Usage> {
 
     @Override
     public String getErrorMessage() {
-        return "Wr Wrk Inst: Field value cannot be null or empty if RH Acct Number field value is presented";
+        return "Wr Wrk Inst: Field value cannot be null or empty if RH Account # field value is presented";
     }
 }

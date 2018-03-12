@@ -1,4 +1,4 @@
-Detail ID,Title,Article,Standard Number,Wr Wrk Inst,RH Acct Number,Publisher,Pub Date,Number of Copies,Reported Value,Market,Market Period From,Market Period To,Author
+Detail ID,Title,Article,Standard Number,Wr Wrk Inst,RH Account #,Publisher,Pub Date,Number of Copies,Reported Value,Market,Market Period From,Market Period To,Author
 ,,,,,,,,,,,,,
 200,"1984",Na,"9.78015E+12",123456789,1000009522,"null","N/A",null,60.86,"Univ,Bus,Doc,S",2015,2014,
 200,"1984",Na,"9.78015E+12",123456789,1000009522,"null","N/A",null,60.86,"Univ,Bus,Doc,S",2015,2016,

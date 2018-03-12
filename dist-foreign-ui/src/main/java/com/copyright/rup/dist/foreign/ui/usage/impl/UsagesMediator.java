@@ -19,6 +19,7 @@ class UsagesMediator implements IMediator {
     private Button loadUsageButton;
     private Button deleteUsageButton;
     private Button addToScenarioButton;
+    private Button sendForResearchButton;
 
     /**
      * Sets load usage button.
@@ -47,10 +48,20 @@ class UsagesMediator implements IMediator {
         this.addToScenarioButton = addToScenarioButton;
     }
 
+    /**
+     * Sets send for research button.
+     *
+     * @param sendForResearchButton send for research button
+     */
+    void setSendForResearchButton(Button sendForResearchButton) {
+        this.sendForResearchButton = sendForResearchButton;
+    }
+
     @Override
     public void applyPermissions() {
         loadUsageButton.setVisible(ForeignSecurityUtils.hasLoadUsagePermission());
         deleteUsageButton.setVisible(ForeignSecurityUtils.hasDeleteUsagePermission());
         addToScenarioButton.setVisible(ForeignSecurityUtils.hasCreateEditScenarioPermission());
+        sendForResearchButton.setVisible(ForeignSecurityUtils.hasSendForWorkResearchPermission());
     }
 }
