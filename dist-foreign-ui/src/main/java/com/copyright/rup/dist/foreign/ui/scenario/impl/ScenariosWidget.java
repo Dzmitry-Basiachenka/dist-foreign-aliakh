@@ -66,6 +66,7 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
     private Label reportedTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private Label grossTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private Label descriptionLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private Label selectionCriteriaLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private Label actionType = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private Label actionCreatedUser = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private Label actionCreatedDate = new Label(StringUtils.EMPTY, ContentMode.HTML);
@@ -195,7 +196,7 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
         metadataPanel.setSizeFull();
         VaadinUtils.addComponentStyle(metadataPanel, "scenarios-metadata");
         metadataLayout = new VerticalLayout(ownerLabel, netTotalLabel, grossTotalLabel, reportedTotalLabel,
-            descriptionLabel, initScenarioActionLayout());
+            descriptionLabel, selectionCriteriaLabel, initScenarioActionLayout());
         metadataLayout.setSpacing(true);
         metadataLayout.setMargin(new MarginInfo(false, true, false, true));
         VaadinUtils.setMaxComponentsWidth(metadataLayout);
@@ -230,6 +231,7 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
             reportedTotalLabel.setValue(ForeignUi.getMessage("label.reported_total",
                 formatAmount(scenarioWithAmounts.getReportedTotal())));
             descriptionLabel.setValue(ForeignUi.getMessage("label.description", scenario.getDescription()));
+            selectionCriteriaLabel.setValue(controller.getCriteriaHtmlRepresentation());
             ScenarioAuditItem lastAction = scenarioWithAmounts.getAuditItem();
             if (Objects.nonNull(lastAction)) {
                 actionType.setValue(formatLabel(ForeignUi.getMessage("label.action_type"),
