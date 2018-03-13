@@ -18,9 +18,9 @@ public enum UsageStatusEnum {
     NEW,
 
     /**
-     * Status for usages with wrWrkInst and without rhAccountNumber.
+     * Status for usages with WrWrkInst not found.
      */
-    WORK_FOUND,
+    WORK_NOT_FOUND,
 
     /**
      * Detail submitted to Data Ops for research.
@@ -28,9 +28,9 @@ public enum UsageStatusEnum {
     WORK_RESEARCH,
 
     /**
-     * Status for usages with WrWrkInst not found.
+     * Status for usages with wrWrkInst and without rhAccountNumber.
      */
-    WORK_NOT_FOUND,
+    WORK_FOUND,
 
     /**
      * Status for usages with rhAccountNumber not found in RMS.
