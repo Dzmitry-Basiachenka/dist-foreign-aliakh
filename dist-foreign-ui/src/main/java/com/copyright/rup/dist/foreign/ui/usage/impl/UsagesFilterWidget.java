@@ -22,6 +22,8 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
+import java.util.List;
+
 /**
  * Widget for filtering usages.
  * <p>
@@ -143,10 +145,11 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
     }
 
     private void initStatusFilter() {
+        List<UsageStatusEnum> statuses = Lists.newArrayList(UsageStatusEnum.values());
+        statuses.remove(UsageStatusEnum.LOCKED);
+        statuses.remove(UsageStatusEnum.PAID);
         statusComboBox = new ComboBox(ForeignUi.getMessage("label.status"),
-            new BeanItemContainer<>(UsageStatusEnum.class, Lists.newArrayList(UsageStatusEnum.NEW,
-                UsageStatusEnum.WORK_FOUND, UsageStatusEnum.WORK_RESEARCH, UsageStatusEnum.RH_NOT_FOUND,
-                UsageStatusEnum.SENT_FOR_RA, UsageStatusEnum.ELIGIBLE)));
+            new BeanItemContainer<>(UsageStatusEnum.class, statuses));
         statusComboBox.setItemCaptionMode(ItemCaptionMode.ID_TOSTRING);
         VaadinUtils.setMaxComponentsWidth(statusComboBox);
         statusComboBox.addValueChangeListener((ValueChangeListener) event -> {
