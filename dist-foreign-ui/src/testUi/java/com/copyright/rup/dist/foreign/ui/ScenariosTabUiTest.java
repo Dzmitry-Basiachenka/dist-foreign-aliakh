@@ -114,7 +114,7 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
     public void testVerifyScenariosTabSpecialist() {
         loginAsSpecialist();
         verifyScenariosTab(Sets.newHashSet(VIEW_BUTTON_ID, DELETE_BUTTON_ID, "Reconcile Rightsholders",
-            "Submit for Approval", "Send to LM"));
+            "Submit for Approval", "Send to LM", "Refresh Scenario"));
     }
 
     @Test
@@ -231,7 +231,7 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
 
     private void verifyScenariosLayoutButton(WebElement buttonsLayout, Set<String> buttonsIds) {
         Set<String> scenariosButton = Sets.newHashSet(VIEW_BUTTON_ID, DELETE_BUTTON_ID, "Reconcile Rightsholders",
-            "Submit for Approval", "Apply", "Reject", "Send to LM");
+            "Submit for Approval", "Apply", "Reject", "Send to LM", "Refresh Scenario");
         assertButtonsToolbar(buttonsLayout, scenariosButton, buttonsIds);
     }
 
@@ -258,16 +258,17 @@ public class ScenariosTabUiTest extends ForeignCommonUiTest {
 
     private void verifyMetadataPanel(WebElement metadataPanel, List<String> metadata) {
         List<WebElement> labels = findElements(metadataPanel, By.className(V_LABEL_CLASS_NAME));
-        assertEquals(9, CollectionUtils.size(labels));
+        assertEquals(10, CollectionUtils.size(labels));
         assertEquals("Owner: " + metadata.get(0), labels.get(0).getText());
         assertEquals("Net Amt in USD: " + metadata.get(1), labels.get(1).getText());
         assertEquals("Gross Amt in USD: " + metadata.get(2), labels.get(2).getText());
         assertEquals("Reported Value Total: " + metadata.get(3), labels.get(3).getText());
         assertEquals("Description: " + metadata.get(4), labels.get(4).getText());
-        assertEquals("Type: " + metadata.get(5), labels.get(5).getText());
-        assertEquals("User: " + metadata.get(6), labels.get(6).getText());
-        assertNotNull(labels.get(7).getText());
-        assertEquals("Reason: " + metadata.get(7), labels.get(8).getText());
+        assertEquals("Selection Criteria:", labels.get(5).getText());
+        assertEquals("Type: " + metadata.get(5), labels.get(6).getText());
+        assertEquals("User: " + metadata.get(6), labels.get(7).getText());
+        assertNotNull(labels.get(8).getText());
+        assertEquals("Reason: " + metadata.get(7), labels.get(9).getText());
     }
 
     private void verifyTableRows(WebElement table, ScenarioInfo... scenariosInfo) {
