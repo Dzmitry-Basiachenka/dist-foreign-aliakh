@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator;
 
 import static org.junit.Assert.assertEquals;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -40,6 +41,7 @@ public class YearValidatorTest {
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
             {null, true},
+            {StringUtils.EMPTY, true},
             {"1000", true},
             {"9999", true},
             {"1001", true},
