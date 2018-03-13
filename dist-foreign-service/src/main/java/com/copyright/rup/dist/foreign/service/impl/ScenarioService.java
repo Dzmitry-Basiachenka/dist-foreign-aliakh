@@ -99,14 +99,14 @@ public class ScenarioService implements IScenarioService {
     public String createScenario(String scenarioName, String description, UsageFilter usageFilter) {
         StopWatch stopWatch = new Slf4JStopWatch();
         List<Usage> usages = usageService.getUsagesWithAmounts(usageFilter);
-        stopWatch.lap("scenario.create_getUsagesWithAmounts");
+        stopWatch.lap("scenario.create_1_getUsagesWithAmounts");
         Scenario scenario = buildScenario(scenarioName, description, usages);
         scenarioRepository.insert(scenario);
-        stopWatch.lap("scenario.create_insertScenario");
+        stopWatch.lap("scenario.create_2_insertScenario");
         usageService.addUsagesToScenario(usages, scenario);
-        stopWatch.lap("scenario.create_addUsagesToScenario");
+        stopWatch.lap("scenario.create_3_addUsagesToScenario");
         scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY);
-        stopWatch.stop("scenario.create_logAction");
+        stopWatch.stop("scenario.create_4_logAddedUsagesAction");
         return scenario.getId();
     }
 
@@ -160,19 +160,19 @@ public class ScenarioService implements IScenarioService {
     @Override
     @Transactional
     public void sendToLm(Scenario scenario) {
-        StopWatch stopWatch = new StopWatch();
+        StopWatch stopWatch = new Slf4JStopWatch();
         LOGGER.info("Send scenario to LM. Started. {}, User={}", ForeignLogUtils.scenario(scenario),
             RupContextUtils.getUserName());
         List<Usage> usages = usageService.moveToArchive(scenario);
-        stopWatch.lap("scenario.sendToLm_moveToArchive");
+        stopWatch.lap("scenario.sendToLm_1_moveToArchive");
         if (CollectionUtils.isNotEmpty(usages)) {
             changeScenarioState(scenario, ScenarioStatusEnum.SENT_TO_LM, ScenarioActionTypeEnum.SENT_TO_LM,
                 StringUtils.EMPTY);
-            stopWatch.lap("scenario.sendToLm_changeScenarioState");
+            stopWatch.lap("scenario.sendToLm_2_changeScenarioState");
             lmIntegrationService.sendToLm(usages.stream().map(ExternalUsage::new).collect(Collectors.toList()));
             LOGGER.info("Send scenario to LM. Finished. {}, User={}", ForeignLogUtils.scenario(scenario),
                 RupContextUtils.getUserName());
-            stopWatch.stop("scenario.sendToLm_sendUsages");
+            stopWatch.stop("scenario.sendToLm_3_sendUsages");
         } else {
             stopWatch.stop();
             throw new RupRuntimeException(String.format("Send scenario to LM. Failed. %s. Reason=Scenario is empty",

@@ -8,7 +8,6 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageAuditRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
-import org.perf4j.aop.Profiled;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,13 +31,11 @@ public class UsageAuditService implements IUsageAuditService {
     private IUsageAuditRepository usageAuditRepository;
 
     @Override
-    @Profiled(tag = "service.UsageAuditService.logAction(usageId, actionType, actionReason)")
     public void logAction(String usageId, UsageActionTypeEnum actionType, String actionReason) {
         logAction(usageId, null, actionType, actionReason);
     }
 
     @Override
-    @Profiled(tag = "service.UsageAuditService.logAction(usageIds, {$1}, actionReason)")
     public void logAction(Set<String> usageIds, UsageActionTypeEnum actionType, String actionReason) {
         usageIds.forEach(usageId -> logAction(usageId, null, actionType, actionReason));
     }
@@ -49,7 +46,6 @@ public class UsageAuditService implements IUsageAuditService {
     }
 
     @Override
-    @Profiled(tag = "service.UsageAuditService.deleteActions")
     public void deleteActions(String batchId) {
         usageAuditRepository.deleteByBatchId(batchId);
     }
