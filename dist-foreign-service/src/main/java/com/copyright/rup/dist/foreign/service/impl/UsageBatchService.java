@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
 import org.perf4j.StopWatch;
+import org.perf4j.slf4j.Slf4JStopWatch;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -71,21 +72,21 @@ public class UsageBatchService implements IUsageBatchService {
     @Override
     @Transactional
     public int insertUsageBatch(UsageBatch usageBatch, List<Usage> usages) {
-        StopWatch stopWatch = new StopWatch();
+        StopWatch stopWatch = new Slf4JStopWatch();
         String userName = RupContextUtils.getUserName();
         usageBatch.setId(RupPersistUtils.generateUuid());
         usageBatch.setCreateUser(userName);
         usageBatch.setUpdateUser(userName);
         LOGGER.info("Insert usage batch. Started. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
         usageBatchRepository.insert(usageBatch);
-        stopWatch.lap("usageBatch.load_inserted");
+        stopWatch.lap("usageBatch.load_1_inserted");
         LOGGER.info("Insert usage batch. Finished. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
         rightsholderService.updateRightsholder(usageBatch.getRro());
-        stopWatch.lap("usageBatch.load_updateRro");
+        stopWatch.lap("usageBatch.load_2_updateRro");
         int count = usageService.insertUsages(usageBatch, usages);
-        stopWatch.lap("usageBatch.load_insertUsages");
+        stopWatch.lap("usageBatch.load_3_insertUsages");
         executorService.execute(() -> updateRightsholders(usages));
-        stopWatch.stop("usageBatch.load_updateRhs");
+        stopWatch.stop("usageBatch.load_4_updateRhs");
         return count;
     }
 

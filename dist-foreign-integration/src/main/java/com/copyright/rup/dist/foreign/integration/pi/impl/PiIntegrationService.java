@@ -23,6 +23,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.elasticsearch.ElasticsearchException;
 import org.perf4j.StopWatch;
+import org.perf4j.slf4j.Slf4JStopWatch;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -108,7 +109,7 @@ public class PiIntegrationService implements IPiIntegrationService {
     }
 
     private Map<String, Long> match(String field, Set<String> searchValues, Function<Work, List<String>> workFunction) {
-        StopWatch stopWatch = new StopWatch();
+        StopWatch stopWatch = new Slf4JStopWatch();
         Map<String, Long> result = Collections.emptyMap();
         RupSearchResponse searchResponse = doSearch(field, searchValues);
         stopWatch.lap("matchWorks.doSearch");

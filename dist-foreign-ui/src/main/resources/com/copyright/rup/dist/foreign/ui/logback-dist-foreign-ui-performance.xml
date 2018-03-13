@@ -17,7 +17,7 @@
 
     <!-- Perf4J appender -->
     <appender name="PERFORMANCE" class="org.perf4j.logback.AsyncCoalescingStatisticsAppender">
-        <param name="TimeSlice" value="${DIST_FOREIGN_PERF_LOG_SLICE_TIME:-3600000}"/> <!--1 hour-->
+        <param name="TimeSlice" value="${DIST_PERF_LOG_SLICE_TIME:-1800000}"/> <!--30 min-->
         <appender-ref ref="FILE_DIST_FOREIGN_PERFORMANCE_APPENDER"/>
     </appender>
 

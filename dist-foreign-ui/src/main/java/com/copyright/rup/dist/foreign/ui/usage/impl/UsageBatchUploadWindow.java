@@ -87,17 +87,16 @@ class UsageBatchUploadWindow extends Window {
     void onUploadClicked() {
         if (isValid()) {
             String fileName = uploadField.getFileName();
-            String stopWatchTag = "usageBatch.upload_" + fileName;
-            StopWatch stopWatch = new Slf4JStopWatch(stopWatchTag);
+            StopWatch stopWatch = new Slf4JStopWatch();
             try {
                 UsageCsvProcessor processor = usagesController.getCsvProcessor();
                 processor.setProductFamily(productFamilyProperty.getValue());
                 CsvProcessingResult<Usage> processingResult =
                     processor.process(uploadField.getStreamToUploadedFile(), fileName);
-                stopWatch.lap(stopWatchTag + "_fileProcessed");
+                stopWatch.lap("usageBatch.load_fileProcessed");
                 if (processingResult.isSuccessful()) {
                     int usagesCount = usagesController.loadUsageBatch(buildUsageBatch(), processingResult.getResult());
-                    stopWatch.lap(stopWatchTag + "_stored");
+                    stopWatch.lap("usageBatch.load_stored");
                     close();
                     Windows.showNotificationWindow(ForeignUi.getMessage("message.upload_completed", usagesCount));
                 } else {

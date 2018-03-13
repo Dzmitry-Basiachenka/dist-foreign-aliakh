@@ -11,6 +11,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.perf4j.StopWatch;
+import org.perf4j.slf4j.Slf4JStopWatch;
 import org.supercsv.exception.SuperCsvException;
 import org.supercsv.io.CsvListReader;
 import org.supercsv.io.ICsvListReader;
@@ -87,21 +88,19 @@ public abstract class CommonCsvProcessor<T> {
      * @throws ValidationException in case of invalid file
      */
     public CsvProcessingResult<T> process(ByteArrayOutputStream stream, String fileName) throws ValidationException {
-        String stopWatchTag = "file.process_" + fileName;
-        StopWatch stopWatch = new StopWatch(stopWatchTag);
+        StopWatch stopWatch = new Slf4JStopWatch();
         try (ICsvListReader listReader = new CsvListReader(
             new InputStreamReader(new ByteArrayInputStream(stream.toByteArray()), StandardCharsets.UTF_8),
             CsvPreference.STANDARD_PREFERENCE)) {
             headers = getCsvHeaders();
-            stopWatch.lap(stopWatchTag + "_getCsvHeaders");
+            stopWatch.lap("file.process_1_getCsvHeaders");
             processingResult = new CsvProcessingResult<>(getCsvColumnsNames(), fileName);
             validateHeader(listReader.getHeader(true));
-            stopWatch.lap(stopWatchTag + "_validateHeader");
+            stopWatch.lap("file.process_2_validateHeader");
             initValidators();
             processRows(listReader);
-            stopWatch.lap(stopWatchTag + "_processRows");
+            stopWatch.lap("file.process_3_processRows");
             validateBusinessRules();
-            stopWatch.lap(stopWatchTag + "_validate");
         } catch (IOException | SuperCsvException e) {
             throw new ValidationException(String.format("Failed to read file: %s", e.getMessage()), e);
         } finally {
@@ -235,6 +234,7 @@ public abstract class CommonCsvProcessor<T> {
     }
 
     private void processRows(ICsvListReader listReader) throws IOException, ValidationException {
+        StopWatch stopWatch = new Slf4JStopWatch();
         int line = 1;
         while (true) {
             ++line;
@@ -242,10 +242,12 @@ public abstract class CommonCsvProcessor<T> {
             originalValuesMap.put(line, originalValues);
             if (null != originalValues) {
                 processRow(line, originalValues);
+                stopWatch.lap("file.process_3_processRow");
             } else {
                 break;
             }
         }
+        stopWatch.stop();
     }
 
     private void processRow(int line, List<String> params) throws ValidationException {

@@ -140,19 +140,19 @@ public class UsageService implements IUsageService {
         LOGGER.info("Insert usages. Started. UsageBatchName={}, UsagesCount={}, UserName={}", usageBatch.getName(),
             size, userName);
         calculateUsagesGrossAmount(usageBatch, usages);
-        stopWatch.lap("usage.insert_calculateGrossAmount");
+        stopWatch.lap("usageBatch.load_3_1_calculateGrossAmount");
         usages.forEach(usage -> {
             usage.setBatchId(usageBatch.getId());
             usage.setCreateUser(userName);
             usage.setUpdateUser(userName);
             usageRepository.insert(usage);
         });
-        stopWatch.lap("usage.insert.stored");
+        stopWatch.lap("usageBatch.load_3_2.storedUsages");
         // Adding data to audit table in separate loop increases performance up to 3 times
         // while using batch with 200000 usages
         String reason = "Uploaded in '" + usageBatch.getName() + "' Batch";
         usages.forEach(usage -> usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.LOADED, reason));
-        stopWatch.stop("usage.insert_logAction");
+        stopWatch.stop("usageBatch.load_3_3_logLoadedAction");
         LOGGER.info("Insert usages. Finished. UsageBatchName={}, UsagesCount={}, UserName={}", usageBatch.getName(),
             size, userName);
         return size;
@@ -187,7 +187,7 @@ public class UsageService implements IUsageService {
         StopWatch stopWatch = new Slf4JStopWatch();
         Table<String, String, Long> rollUps = prmIntegrationService.getRollUps(
             usages.stream().map(usage -> usage.getRightsholder().getId()).collect(Collectors.toSet()));
-        stopWatch.lap("usage.addToScenario_getRollups");
+        stopWatch.lap("scenario.create_3_1_getRollups");
         usages.forEach(usage -> {
             usage.setScenarioId(scenario.getId());
             usage.setStatus(UsageStatusEnum.LOCKED);
@@ -195,9 +195,9 @@ public class UsageService implements IUsageService {
             usage.getPayee().setAccountNumber(
                 PrmRollUpService.getPayeeAccountNumber(rollUps, usage.getRightsholder(), usage.getProductFamily()));
         });
-        stopWatch.lap("usage.addToScenario_setPayee");
+        stopWatch.lap("scenario.create_3_2_setPayeeAndStatus");
         usageRepository.addToScenario(usages);
-        stopWatch.stop("usage.addToScenario_addScenarioId");
+        stopWatch.stop("scenario.create_3_3_addScenarioIdToUsages");
     }
 
     @Override
@@ -231,7 +231,6 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    @Profiled(tag = "service.UsageService.getDuplicateDetailIds")
     public Set<Long> getDuplicateDetailIds(List<Long> detailIds) {
         return CollectionUtils.isNotEmpty(detailIds)
             ? usageRepository.findDuplicateDetailIds(detailIds)
@@ -240,7 +239,7 @@ public class UsageService implements IUsageService {
 
     @Override
     public List<Usage> moveToArchive(Scenario scenario) {
-        StopWatch stopWatch = new StopWatch();
+        StopWatch stopWatch = new Slf4JStopWatch();
         LOGGER.info("Move details to archive. Started. {}", ForeignLogUtils.scenario(scenario));
         List<Usage> usages = usageRepository.findByScenarioId(scenario.getId());
         stopWatch.lap("usage.moveToArchive_findByScenarioId");
@@ -407,7 +406,7 @@ public class UsageService implements IUsageService {
     @Override
     @Transactional
     public void matchByIdno(List<Usage> usages) {
-        StopWatch stopWatch = new StopWatch();
+        StopWatch stopWatch = new Slf4JStopWatch();
         List<Usage> matchedByIdno = workMatchingService.matchByIdno(usages);
         stopWatch.lap("matchWorks.byIdno_findByIdno");
         if (CollectionUtils.isNotEmpty(matchedByIdno)) {
@@ -425,7 +424,7 @@ public class UsageService implements IUsageService {
     @Override
     @Transactional
     public void matchByTitle(List<Usage> usages) {
-        StopWatch stopWatch = new StopWatch();
+        StopWatch stopWatch = new Slf4JStopWatch();
         List<Usage> matchedByTitle = workMatchingService.matchByTitle(usages);
         stopWatch.lap("matchWorks.byIdno_findByTitle");
         if (CollectionUtils.isNotEmpty(matchedByTitle)) {
@@ -443,7 +442,7 @@ public class UsageService implements IUsageService {
     @Override
     @Transactional
     public void updateStatusForUsagesWithNoStandardNumberAndTitle(List<Usage> usages) {
-        StopWatch stopWatch = new StopWatch();
+        StopWatch stopWatch = new Slf4JStopWatch();
         updateUsagesStatusAndWriteAudit(usages, UsageGroupEnum.SINGLE_USAGE);
         stopWatch.stop("matchWorks.noIdnoNoTitle_determineNtsAndUpdate");
     }

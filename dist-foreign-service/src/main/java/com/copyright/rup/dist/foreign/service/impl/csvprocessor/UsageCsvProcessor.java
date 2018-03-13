@@ -17,6 +17,8 @@ import com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator.Requir
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator.RightsholderWrWrkInstValidator;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator.YearValidator;
 
+import org.perf4j.StopWatch;
+import org.perf4j.slf4j.Slf4JStopWatch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -80,13 +82,16 @@ public class UsageCsvProcessor extends CommonCsvProcessor<Usage> {
 
     @Override
     protected void validateBusinessRules() throws ValidationException {
+        StopWatch stopWatch = new Slf4JStopWatch();
         List<Long> detailIds = getResult().getResult().stream()
             .map(Usage::getDetailId)
             .collect(Collectors.toList());
         Set<Long> detailIdDuplicates = usageService.getDuplicateDetailIds(detailIds);
+        stopWatch.lap("file.process_4_1_getDuplicateDetailIds");
         addBusinessValidators(new DuplicateDetailIdValidator(detailIdDuplicates), new MarketPeriodValidator(),
             new RightsholderWrWrkInstValidator());
         super.validateBusinessRules();
+        stopWatch.lap("file.process_4_2_validateBusinessRules");
     }
 
     @Override
