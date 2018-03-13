@@ -2,7 +2,6 @@ package com.copyright.rup.dist.foreign.ui.audit.impl;
 
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -23,6 +22,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -40,7 +40,7 @@ public class StatusFilterWidgetTest {
 
     private static final String SELECTED_ITEMS_IDS = "selectedItemsIds";
 
-    private StatusFilterWidget widget = new StatusFilterWidget();
+    private final StatusFilterWidget widget = new StatusFilterWidget();
 
     @Test
     public void testLoadBeans() {
@@ -78,7 +78,7 @@ public class StatusFilterWidgetTest {
         mockStatic(Windows.class);
         FilterWindow filterWindow = createMock(FilterWindow.class);
         expect(Windows.showFilterWindow("Status filter", widget)).andReturn(filterWindow).once();
-        filterWindow.setSelectedItemsIds(null);
+        filterWindow.setSelectedItemsIds(new HashSet());
         expectLastCall().once();
         expect(filterWindow.getId()).andReturn(null).once();
         filterWindow.setId("status-filter-window");
@@ -94,6 +94,6 @@ public class StatusFilterWidgetTest {
     public void testReset() {
         Whitebox.setInternalState(widget, SELECTED_ITEMS_IDS, Sets.newHashSet(UsageStatusEnum.ELIGIBLE));
         widget.reset();
-        assertNull(Whitebox.getInternalState(widget, SELECTED_ITEMS_IDS));
+        assertEquals(new HashSet<>(), Whitebox.getInternalState(widget, SELECTED_ITEMS_IDS));
     }
 }

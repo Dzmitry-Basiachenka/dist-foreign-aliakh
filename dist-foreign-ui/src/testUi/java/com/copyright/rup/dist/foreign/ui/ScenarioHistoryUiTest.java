@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import com.copyright.rup.common.test.integ.db.embedded.UpdateDatabaseForClassTestExecutionListener;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
@@ -27,11 +28,12 @@ import java.util.List;
 @ContextConfiguration(value = "classpath:/com/copyright/rup/dist/foreign/ui/dist-foreign-ui-test-context.xml")
 @TestExecutionListeners(value = UpdateDatabaseForClassTestExecutionListener.class,
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS)
-public class ScenarioHistoryUiTest extends ForeignCommonUiTest {
+public class ScenarioHistoryUiTest extends ForeignCommonUiTestProvider {
 
     private WebElement scenarioHistoryWigdet;
 
     @Override
+    @Before
     public void setUp() {
         super.setUp();
         loginAsViewOnly();

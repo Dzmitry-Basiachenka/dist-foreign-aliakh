@@ -819,11 +819,7 @@ public class UsageRepositoryIntegrationTest {
         verifyUsageDtos(findForAuditWithSort(filter, "serviceFee", false), 2, USAGE_ID_4, USAGE_ID_5);
         verifyUsageDtos(findForAuditWithSort(filter, "scenarioName", true), 2, USAGE_ID_5, USAGE_ID_4);
         verifyUsageDtos(findForAuditWithSort(filter, "scenarioName", false), 2, USAGE_ID_4, USAGE_ID_5);
-        filter.setBatchesIds(Sets.newHashSet(BATCH_ID, "74b736f2-81ce-41fa-bd8e-574299232458"));
-        verifyUsageDtos(findForAuditWithSort(filter, "batchName", true), 2, USAGE_ID_5, USAGE_ID_4);
-        verifyUsageDtos(findForAuditWithSort(filter, "batchName", false), 2, USAGE_ID_5, USAGE_ID_4);
-        verifyUsageDtos(findForAuditWithSort(filter, "paymentDate", true), 2, USAGE_ID_5, USAGE_ID_4);
-        verifyUsageDtos(findForAuditWithSort(filter, "paymentDate", false), 2, USAGE_ID_5, USAGE_ID_4);
+        verifyFilterForTwoBatches(filter);
         filter.setBatchesIds(Sets.newHashSet("48bfe456-fbc1-436e-8762-baca46a0e09c"));
         verifyUsageDtos(findForAuditWithSort(filter, "payeeAccountNumber", true), 2, USAGE_ID_16, USAGE_ID_15);
         verifyUsageDtos(findForAuditWithSort(filter, "payeeAccountNumber", false), 2, USAGE_ID_15, USAGE_ID_16);
@@ -973,6 +969,14 @@ public class UsageRepositoryIntegrationTest {
             assertEquals(UsageStatusEnum.ELIGIBLE, updatedUsage.getStatus());
             assertEquals(PRODUCT_FAMILY_NTS, updatedUsage.getProductFamily());
         });
+    }
+
+    private void verifyFilterForTwoBatches(AuditFilter filter) {
+        filter.setBatchesIds(Sets.newHashSet(BATCH_ID, "74b736f2-81ce-41fa-bd8e-574299232458"));
+        verifyUsageDtos(findForAuditWithSort(filter, "batchName", true), 2, USAGE_ID_5, USAGE_ID_4);
+        verifyUsageDtos(findForAuditWithSort(filter, "batchName", false), 2, USAGE_ID_5, USAGE_ID_4);
+        verifyUsageDtos(findForAuditWithSort(filter, "paymentDate", true), 2, USAGE_ID_5, USAGE_ID_4);
+        verifyUsageDtos(findForAuditWithSort(filter, "paymentDate", false), 2, USAGE_ID_5, USAGE_ID_4);
     }
 
     private List<UsageDto> findForAuditWithSort(AuditFilter filter, String property, boolean order) {

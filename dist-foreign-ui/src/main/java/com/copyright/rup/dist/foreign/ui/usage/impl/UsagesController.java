@@ -187,11 +187,11 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
 
     private static class ErrorResultStreamSource implements IStreamSource {
 
-        private ExecutorService executorService = Executors.newSingleThreadExecutor();
-        private CsvProcessingResult csvProcessingResult;
-        private IUsageService usageService;
+        private final ExecutorService executorService = Executors.newSingleThreadExecutor();
+        private final IUsageService usageService;
+        private final CsvProcessingResult csvProcessingResult;
 
-        private ErrorResultStreamSource(IUsageService usageService, CsvProcessingResult csvProcessingResult) {
+        ErrorResultStreamSource(IUsageService usageService, CsvProcessingResult csvProcessingResult) {
             this.csvProcessingResult = csvProcessingResult;
             this.usageService = usageService;
         }

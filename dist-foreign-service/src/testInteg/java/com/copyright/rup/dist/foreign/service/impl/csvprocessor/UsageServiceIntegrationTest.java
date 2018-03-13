@@ -58,7 +58,7 @@ public class UsageServiceIntegrationTest {
 
     private static final String PATH_TO_ACTUAL_REPORT = "build/temp";
     private static final String FILE_NAME = "errors_report.csv";
-    private ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
     private CsvProcessingResult<Usage> result;
 
     @Autowired

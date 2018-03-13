@@ -23,9 +23,9 @@ public class CsvProcessingResult<T> {
     private static final int ERRORS_THRESHOLD = 2000;
     private final List<String> headers;
     private final String fileName;
-    private Map<Integer, T> result = Maps.newHashMap();
-    private Map<Integer, ErrorRow> errors = Maps.newTreeMap();
-    private int errorsCount = 0;
+    private final Map<Integer, T> result = Maps.newHashMap();
+    private final Map<Integer, ErrorRow> errors = Maps.newTreeMap();
+    private int errorsCount;
 
     /**
      * Constructor.
@@ -125,9 +125,15 @@ public class CsvProcessingResult<T> {
     public static class ErrorRow {
         private final Integer lineNumber;
         private final List<String> originalRow;
-        private List<String> errorMessages = Lists.newArrayList();
+        private final List<String> errorMessages = Lists.newArrayList();
 
-        private ErrorRow(Integer lineNumber, List<String> originalLine) {
+        /**
+         * Constructor.
+         *
+         * @param lineNumber   line number
+         * @param originalLine original line
+         */
+        ErrorRow(Integer lineNumber, List<String> originalLine) {
             this.lineNumber = lineNumber;
             this.originalRow = originalLine;
         }

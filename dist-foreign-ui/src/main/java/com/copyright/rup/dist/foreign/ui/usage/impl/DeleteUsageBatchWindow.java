@@ -46,9 +46,9 @@ class DeleteUsageBatchWindow extends Window {
 
     private static final String PAYMENT_DATE_PROPERTY = "paymentDate";
 
-    private IUsagesController controller;
-    private BeanContainer<String, UsageBatch> container;
+    private final IUsagesController controller;
     private final SearchWidget searchWidget;
+    private BeanContainer<String, UsageBatch> container;
 
     /**
      * Constructor.
@@ -132,7 +132,7 @@ class DeleteUsageBatchWindow extends Window {
      */
     static class PaymentDateFilter implements Filter {
 
-        private String searchValue;
+        private final String searchValue;
 
         /**
          * Constructor.

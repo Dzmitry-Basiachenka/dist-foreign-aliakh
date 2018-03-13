@@ -45,8 +45,8 @@ public class ReportWidget extends MenuBar implements IReportWidget {
 
     private static class ReportSelectCommand implements Command {
 
-        private IController reportController;
-        private String reportCaption;
+        private final IController reportController;
+        private final String reportCaption;
 
         /**
          * Constructor.

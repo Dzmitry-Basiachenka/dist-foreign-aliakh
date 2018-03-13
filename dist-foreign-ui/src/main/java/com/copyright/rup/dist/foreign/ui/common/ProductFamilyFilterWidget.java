@@ -8,6 +8,9 @@ import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.FilterSaveEvent
 import com.copyright.rup.vaadin.ui.component.filter.IFilterWindowController;
 import com.copyright.rup.vaadin.widget.BaseItemsFilterWidget;
 
+import org.apache.commons.collections4.CollectionUtils;
+
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -24,7 +27,7 @@ import java.util.function.Supplier;
 public class ProductFamilyFilterWidget extends BaseItemsFilterWidget<String, String>
     implements IFilterWindowController<String, String> {
 
-    private Set<String> selectedItemsIds;
+    private final Set<String> selectedItemsIds = new HashSet<>();
     private final Supplier<List<String>> supplier;
 
     /**
@@ -39,7 +42,7 @@ public class ProductFamilyFilterWidget extends BaseItemsFilterWidget<String, Str
 
     @Override
     public void reset() {
-        selectedItemsIds = null;
+        selectedItemsIds.clear();
         super.reset();
     }
 
@@ -60,7 +63,11 @@ public class ProductFamilyFilterWidget extends BaseItemsFilterWidget<String, Str
 
     @Override
     public void onSave(FilterSaveEvent<String> event) {
-        selectedItemsIds = event.getSelectedItemsIds();
+        Set<String> itemsIds = event.getSelectedItemsIds();
+        selectedItemsIds.clear();
+        if (CollectionUtils.isNotEmpty(itemsIds)) {
+            selectedItemsIds.addAll(itemsIds);
+        }
     }
 
     @Override

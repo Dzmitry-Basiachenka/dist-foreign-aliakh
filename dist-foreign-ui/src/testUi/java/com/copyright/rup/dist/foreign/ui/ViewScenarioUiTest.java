@@ -34,13 +34,13 @@ import java.util.stream.Collectors;
 @ContextConfiguration(value = "classpath:/com/copyright/rup/dist/foreign/ui/dist-foreign-ui-test-context.xml")
 @TestExecutionListeners(value = UpdateDatabaseForClassTestExecutionListener.class,
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS)
-public class ViewScenarioUiTest extends ForeignCommonUiTest {
+public class ViewScenarioUiTest extends ForeignCommonUiTestProvider {
 
-    private String[] rightsholder1 = {"1000002797", "British Film Institute (BFI)", "1000002797",
+    private final String[] rightsholder1 = {"1000002797", "British Film Institute (BFI)", "1000002797",
         "British Film Institute (BFI)", "1,279.24", "409.36", "869.88", "32.0"};
-    private String[] rightsholder2 = {"1000008666", "CCH", "1000008666", "CCH", "20,467.84",
+    private final String[] rightsholder2 = {"1000008666", "CCH", "1000008666", "CCH", "20,467.84",
         "6,549.71", "13,918.13", "32.0"};
-    private String[] rightsholder3 = {"1000009997", "IEEE - Inst of Electrical and Electronics Engrs",
+    private final String[] rightsholder3 = {"1000009997", "IEEE - Inst of Electrical and Electronics Engrs",
         "1000009997", "IEEE - Inst of Electrical and Electronics Engrs", "6,396.19", "2,046.78", "4,349.41", "32.0"};
 
     @Test

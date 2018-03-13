@@ -132,11 +132,11 @@ public class ScenarioController extends CommonController<IScenarioWidget> implem
 
     private static class ExportScenarioUsagesStreamSource implements IStreamSource {
 
-        private ExecutorService executorService = Executors.newSingleThreadExecutor();
-        private IUsageService usageService;
-        private Scenario scenario;
+        private final ExecutorService executorService = Executors.newSingleThreadExecutor();
+        private final IUsageService usageService;
+        private final Scenario scenario;
 
-        private ExportScenarioUsagesStreamSource(IUsageService usageService, Scenario scenario) {
+        ExportScenarioUsagesStreamSource(IUsageService usageService, Scenario scenario) {
             this.usageService = usageService;
             this.scenario = scenario;
         }

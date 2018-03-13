@@ -16,7 +16,7 @@ import java.util.Set;
 public class DuplicateDetailIdValidator implements IValidator<Usage> {
 
     private static final String ERROR_MESSAGE = "Detail ID: Detail with such ID already exists";
-    private Set<Long> duplicateDetailsIds;
+    private final Set<Long> duplicateDetailsIds;
 
     /**
      * Constructor.

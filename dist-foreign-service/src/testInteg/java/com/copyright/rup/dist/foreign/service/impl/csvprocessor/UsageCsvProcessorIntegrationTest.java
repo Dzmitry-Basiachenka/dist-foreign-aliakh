@@ -13,6 +13,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.impl.UsageService;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.exception.ThresholdExceededException;
+import com.copyright.rup.dist.foreign.service.impl.csvprocessor.exception.ValidationException;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FileUtils;
@@ -168,7 +169,7 @@ public class UsageCsvProcessorIntegrationTest {
         assertEquals(BigDecimal.ZERO, usage.getGrossAmount());
     }
 
-    private CsvProcessingResult<Usage> processFile(String file) throws Exception {
+    private CsvProcessingResult<Usage> processFile(String file) throws IOException, ValidationException {
         CsvProcessingResult<Usage> result;
         try (InputStream stream = this.getClass()
             .getResourceAsStream("/com/copyright/rup/dist/foreign/service/csv/" + file);
@@ -179,7 +180,7 @@ public class UsageCsvProcessorIntegrationTest {
         return result;
     }
 
-    private void isFilesEquals(String expectedFileName, String actualFileName) throws IOException {
+    private void isFilesEquals(String expectedFileName, String actualFileName) {
         assertTrue(new ReportMatcher(new File(PATH_TO_EXPECTED, expectedFileName))
             .matches(new File(PATH_TO_ACTUAL, actualFileName)));
     }

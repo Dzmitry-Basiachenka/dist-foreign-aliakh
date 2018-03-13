@@ -62,8 +62,12 @@ public class PrmIntegrationService implements IPrmIntegrationService {
 
     @Override
     public Rightsholder getRightsholder(Long accountNumber) {
+        Rightsholder result = null;
         List<Rightsholder> rightsholders = getRightsholders(Sets.newHashSet(accountNumber));
-        return !rightsholders.isEmpty() ? rightsholders.get(0) : null;
+        if (!rightsholders.isEmpty()) {
+            result = rightsholders.get(0);
+        }
+        return result;
     }
 
     @Override

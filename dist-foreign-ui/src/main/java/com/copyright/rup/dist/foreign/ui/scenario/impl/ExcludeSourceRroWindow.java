@@ -41,7 +41,7 @@ public class ExcludeSourceRroWindow extends Window implements ISearchController 
     private static final String NAME_PROPERTY = "name";
     private static final String EXCLUDE_PROPERTY = "exclude";
 
-    private IScenarioController scenarioController;
+    private final IScenarioController scenarioController;
     private BeanContainer<Long, Rightsholder> rightsholderContainer;
     private SearchWidget searchWidget;
 

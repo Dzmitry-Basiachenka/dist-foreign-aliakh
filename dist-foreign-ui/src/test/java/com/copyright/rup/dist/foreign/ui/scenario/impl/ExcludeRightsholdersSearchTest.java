@@ -45,8 +45,8 @@ public class ExcludeRightsholdersSearchTest {
         buildPair(1000004191L, "Klasing & Co [T]", 1000004271L, "Keith-Stevens Inc"),
         buildPair(7000425425L, "Kelton Publications", 7000425807L, "Desktop Communications"),
         buildPair(7000427902L, "Bruggemann US Inc.", 7000427971L, "New York State College of Ceramics [T]"));
-    private String value;
-    private Set<RightsholderPayeePair> expectedResult;
+    private final String value;
+    private final Set<RightsholderPayeePair> expectedResult;
     private ExcludeRightsholdersWindow window;
 
     /**
@@ -80,6 +80,21 @@ public class ExcludeRightsholdersSearchTest {
                 {"100000 4271", Collections.emptySet()}
             }
         );
+    }
+
+    private static RightsholderPayeePair buildPair(Long payeeAccountNumber, String payeeName, Long rhAccountNumber,
+                                                   String rhName) {
+        RightsholderPayeePair pair = new RightsholderPayeePair();
+        pair.setPayee(buildRightsholder(payeeAccountNumber, payeeName));
+        pair.setRightsholder(buildRightsholder(rhAccountNumber, rhName));
+        return pair;
+    }
+
+    private static Rightsholder buildRightsholder(Long accountNumber, String name) {
+        Rightsholder rightsholder = new Rightsholder();
+        rightsholder.setAccountNumber(accountNumber);
+        rightsholder.setName(name);
+        return rightsholder;
     }
 
     @Before
@@ -116,20 +131,5 @@ public class ExcludeRightsholdersSearchTest {
         container.setBeanIdProperty("rightsholder.accountNumber");
         container.addAll(CONTAINER_DATA);
         return container;
-    }
-
-    private static RightsholderPayeePair buildPair(Long payeeAccountNumber, String payeeName, Long rhAccountNumber,
-                                                   String rhName) {
-        RightsholderPayeePair pair = new RightsholderPayeePair();
-        pair.setPayee(buildRightsholder(payeeAccountNumber, payeeName));
-        pair.setRightsholder(buildRightsholder(rhAccountNumber, rhName));
-        return pair;
-    }
-
-    private static Rightsholder buildRightsholder(Long accountNumber, String name) {
-        Rightsholder rightsholder = new Rightsholder();
-        rightsholder.setAccountNumber(accountNumber);
-        rightsholder.setName(name);
-        return rightsholder;
     }
 }

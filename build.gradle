@@ -38,8 +38,10 @@ subprojects {
 
     // Enabling pmd fail on error (disabled by rup-plugin)
     pmd {
+        toolVersion = '6.1.0'
         ignoreFailures = false
         ruleSetFiles = files("${styleCheckConfigDir}pmd_rules.xml")
+        ruleSets = []
     }
     [pmdMain, pmdTest, pmdTestInteg]*.ignoreFailures = false
 

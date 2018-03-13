@@ -38,9 +38,11 @@ public class Sort {
      * identifiers and sort states are not empty, {@code null} - otherwise
      */
     public static Sort create(Object[] sortPropertyIds, boolean... sortStates) {
-        return ArrayUtils.isNotEmpty(sortPropertyIds) && ArrayUtils.isNotEmpty(sortStates)
-            ? new Sort(String.valueOf(sortPropertyIds[0]), Sort.Direction.of(sortStates[0]))
-            : null;
+        Sort result = null;
+        if (ArrayUtils.isNotEmpty(sortPropertyIds) && ArrayUtils.isNotEmpty(sortStates)) {
+            result = new Sort(String.valueOf(sortPropertyIds[0]), Sort.Direction.of(sortStates[0]));
+        }
+        return result;
     }
 
     /**

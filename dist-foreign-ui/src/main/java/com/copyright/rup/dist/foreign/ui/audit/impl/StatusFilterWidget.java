@@ -11,7 +11,10 @@ import com.copyright.rup.vaadin.widget.BaseItemsFilterWidget;
 
 import com.google.common.collect.Lists;
 
+import org.apache.commons.collections4.CollectionUtils;
+
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -26,7 +29,7 @@ import java.util.Set;
 class StatusFilterWidget extends BaseItemsFilterWidget<UsageStatusEnum, UsageStatusEnum> implements
     IFilterWindowController<UsageStatusEnum, UsageStatusEnum> {
 
-    private Set<UsageStatusEnum> selectedItemsIds;
+    private final Set<UsageStatusEnum> selectedItemsIds = new HashSet<>();
 
     /**
      * Constructor.
@@ -57,7 +60,11 @@ class StatusFilterWidget extends BaseItemsFilterWidget<UsageStatusEnum, UsageSta
 
     @Override
     public void onSave(FilterSaveEvent<UsageStatusEnum> event) {
-        selectedItemsIds = event.getSelectedItemsIds();
+        Set<UsageStatusEnum> itemsIds = event.getSelectedItemsIds();
+        selectedItemsIds.clear();
+        if (CollectionUtils.isNotEmpty(itemsIds)) {
+            selectedItemsIds.addAll(itemsIds);
+        }
     }
 
     @Override
@@ -71,7 +78,7 @@ class StatusFilterWidget extends BaseItemsFilterWidget<UsageStatusEnum, UsageSta
 
     @Override
     public void reset() {
-        selectedItemsIds = null;
+        selectedItemsIds.clear();
         super.reset();
     }
 }

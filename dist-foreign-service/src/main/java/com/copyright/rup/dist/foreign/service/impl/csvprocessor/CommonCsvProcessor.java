@@ -51,11 +51,11 @@ public abstract class CommonCsvProcessor<T> {
      */
     private static final String EMPTY_STRING_REGEX = "^\\s*(([nN][uU][lL][lL])|([nN][aA])|([nN]/[aA]))\\s*$";
 
-    private Map<ICsvColumn, List<IValidator<String>>> plainValidators = Maps.newHashMap();
+    private final Map<ICsvColumn, List<IValidator<String>>> plainValidators = Maps.newHashMap();
+    private final Map<Integer, List<String>> originalValuesMap = Maps.newHashMap();
     private List<IValidator<T>> businessValidators = Lists.newArrayList();
     private List<ICsvColumn> headers = Lists.newArrayList();
     private CsvProcessingResult<T> processingResult;
-    private Map<Integer, List<String>> originalValuesMap = Maps.newHashMap();
 
     /**
      * Verifies is string value positive number or not.
@@ -129,9 +129,7 @@ public abstract class CommonCsvProcessor<T> {
     /**
      * Initialization of plain validators.
      */
-    protected void initValidators() {
-        //Empty
-    }
+    protected abstract void initValidators();
 
     /**
      * Puts validators by given column.
@@ -163,7 +161,7 @@ public abstract class CommonCsvProcessor<T> {
      */
     String getString(ICsvColumn column, List<String> params) {
         String value = getValue(column, params);
-        return null != value ? (isPositiveNumber(value) ? parseScientific(value) : value) : null;
+        return null != value ? isPositiveNumber(value) ? parseScientific(value) : value : null;
     }
 
     /**
@@ -259,12 +257,12 @@ public abstract class CommonCsvProcessor<T> {
     }
 
     private boolean plainValidate(int line, List<String> params) throws ValidationException {
-        boolean valid = true;
         if (!Objects.equals(headers.size(), params.size())) {
             processingResult.logError(line, originalValuesMap.get(line),
                 String.format("Row is incorrect: Expected columns are %s actual %s", headers.size(), params.size()));
             return false;
         }
+        boolean valid = true;
         for (int i = 0; i < params.size(); i++) {
             String value = params.get(i);
             String field = headers.get(i).getColumnName();

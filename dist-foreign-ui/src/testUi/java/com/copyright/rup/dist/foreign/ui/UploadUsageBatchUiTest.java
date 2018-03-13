@@ -23,7 +23,6 @@ import com.google.common.collect.Maps;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
@@ -57,7 +56,7 @@ import java.util.stream.IntStream;
 @ContextConfiguration(value = "classpath:/com/copyright/rup/dist/foreign/ui/dist-foreign-ui-test-context.xml")
 @TestExecutionListeners(value = UpdateDatabaseForClassTestExecutionListener.class,
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS)
-public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
+public class UploadUsageBatchUiTest extends ForeignCommonUiTestProvider {
 
     private static final String COMMON_EMPTY_FIELD_MESSAGE = "Field value should be specified";
     private static final String RRO_ACCOUNT_NAME_EMPTY_FIELD_MESSAGE =
@@ -77,7 +76,6 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
     private static final String WORK_TITLE = "1984";
     private static final String STANDARD_NUMBER = "9780150000000";
     private static final String MARKET = "Univ,Bus,Doc,S";
-    private UsageBatch usageBatch;
 
     @Autowired
     private IUsageBatchService usageBatchService;
@@ -85,14 +83,6 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
     private IUsageRepository usageRepository;
     @Autowired
     private IUsageAuditRepository usageAuditRepository;
-
-    @After
-    public void tearDown() {
-        if (null != usageBatch) {
-            usageBatchService.deleteUsageBatch(usageBatch);
-            usageBatch = null;
-        }
-    }
 
     @Test
     // Test case ID: '1b30b405-0431-4f96-81ca-9c9ff65a32f1'
@@ -180,7 +170,7 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
 
     @Test
     // Test case IDs: '81989dc2-329b-4ce7-b5d6-97330d02ccd1', '237a7240-db1a-4826-9a64-e786b4de851b'
-    public void testUploadValidFile() throws Exception {
+    public void testUploadValidFile() {
         assertEquals(4, CollectionUtils.size(usageBatchService.getUsageBatches()));
         WebElement uploadWindow = openUploadUsageBatchWindow();
         populateValidValuesForUploadWindowFields(uploadWindow);
@@ -194,10 +184,11 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
             .filter(usageBatch -> USAGE_BATCH_NAME.equals(usageBatch.getName()))
             .collect(Collectors.toList());
         assertEquals(1, CollectionUtils.size(uploadedUsageBatches));
-        usageBatch = uploadedUsageBatches.get(0);
+        UsageBatch usageBatch = uploadedUsageBatches.get(0);
         verifyUploadedUsageBatch(usageBatch, LocalDate.now());
         verifyUploadedUsages(usageBatch.getId());
         verifyUsageAudit(usageBatch);
+        usageBatchService.deleteUsageBatch(usageBatch);
     }
 
     @Test
@@ -259,7 +250,7 @@ public class UploadUsageBatchUiTest extends ForeignCommonUiTest {
     private void verifyUploadedUsageBatch(UsageBatch uploadedUsageBatch, LocalDate date) {
         assertEquals(RRO_ACCOUNT_NUMBER, uploadedUsageBatch.getRro().getAccountNumber());
         assertEquals(new BigDecimal(GROSS_AMOUNT), uploadedUsageBatch.getGrossAmount());
-        assertEquals(0 >= Month.JULY.compareTo(date.getMonth()) ? (date.getYear() + 1) : date.getYear(),
+        assertEquals(0 >= Month.JULY.compareTo(date.getMonth()) ? date.getYear() + 1 : date.getYear(),
             uploadedUsageBatch.getFiscalYear(), 0);
         assertEquals(date, uploadedUsageBatch.getPaymentDate());
     }

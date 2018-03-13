@@ -35,9 +35,9 @@ import java.time.format.DateTimeFormatter;
  */
 public class CreateScenarioWindow extends Window {
 
+    private final IUsagesController controller;
     private TextField scenarioNameField;
     private TextArea descriptionArea;
-    private IUsagesController controller;
 
     /**
      * Constructor.
@@ -117,7 +117,7 @@ public class CreateScenarioWindow extends Window {
      */
     public static class ScenarioCreateEvent extends Event {
 
-        private String scenarioId;
+        private final String scenarioId;
 
         /**
          * Constructor.
@@ -125,7 +125,7 @@ public class CreateScenarioWindow extends Window {
          * @param source     event source
          * @param scenarioId created scenarios id
          */
-        private ScenarioCreateEvent(Component source, String scenarioId) {
+        ScenarioCreateEvent(Component source, String scenarioId) {
             super(source);
             this.scenarioId = scenarioId;
         }

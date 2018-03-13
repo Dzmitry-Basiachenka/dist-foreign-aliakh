@@ -23,9 +23,9 @@ import java.util.Collection;
 @RunWith(Parameterized.class)
 public class CalculationUtilsCalculateUsdAmountTest {
 
-    private BigDecimal expectedUsdAmount;
-    private BigDecimal amount;
-    private BigDecimal conversionRate;
+    private final BigDecimal expectedUsdAmount;
+    private final BigDecimal amount;
+    private final BigDecimal conversionRate;
 
     /**
      * Constructor.

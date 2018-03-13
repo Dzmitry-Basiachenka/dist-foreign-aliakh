@@ -44,8 +44,8 @@ public class ExcludeSourceRroSearchTest {
         buildRightsholder(1000004191L, "Klasing & Co [T]"),
         buildRightsholder(7000425425L, "Kelton Publications"),
         buildRightsholder(7000427902L, "Bruggemann US Inc."));
-    private String value;
-    private Set<Rightsholder> expectedResult;
+    private final String value;
+    private final Set<Rightsholder> expectedResult;
     private ExcludeSourceRroWindow window;
 
     /**
@@ -73,6 +73,13 @@ public class ExcludeSourceRroSearchTest {
                 {"10000", Sets.newHashSet(CONTAINER_DATA.get(0), CONTAINER_DATA.get(1))}
             }
         );
+    }
+
+    private static Rightsholder buildRightsholder(Long accountNumber, String name) {
+        Rightsholder rightsholder = new Rightsholder();
+        rightsholder.setAccountNumber(accountNumber);
+        rightsholder.setName(name);
+        return rightsholder;
     }
 
     @Before
@@ -104,12 +111,5 @@ public class ExcludeSourceRroSearchTest {
         container.setBeanIdProperty("accountNumber");
         container.addAll(CONTAINER_DATA);
         return container;
-    }
-
-    private static Rightsholder buildRightsholder(Long accountNumber, String name) {
-        Rightsholder rightsholder = new Rightsholder();
-        rightsholder.setAccountNumber(accountNumber);
-        rightsholder.setName(name);
-        return rightsholder;
     }
 }

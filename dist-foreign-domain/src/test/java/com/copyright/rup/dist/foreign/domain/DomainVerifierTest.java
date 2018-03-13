@@ -22,7 +22,7 @@ import java.util.Collection;
 @RunWith(Parameterized.class)
 public class DomainVerifierTest {
 
-    private Class classToVerify;
+    private final Class classToVerify;
 
     /**
      * Constructs new test for given class.

@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import com.google.common.collect.Sets;
 
-import org.junit.AfterClass;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,7 +34,7 @@ import java.util.Set;
 public final class ForeignSecurityUtilsTest {
 
     private static final String FDA_ACCESS_APPLICATION = "FDA_ACCESS_APPLICATION";
-    private Set<String> permissions;
+    private final Set<String> permissions;
 
     /**
      * Constructor.
@@ -67,8 +67,8 @@ public final class ForeignSecurityUtilsTest {
         SecurityContextHolder.setContext(context);
     }
 
-    @AfterClass
-    public static void tearDown() {
+    @After
+    public void tearDown() {
         SecurityContextHolder.clearContext();
     }
 
@@ -93,14 +93,14 @@ public final class ForeignSecurityUtilsTest {
     private static class MockSecurityContext implements SecurityContext {
 
         private static final String USER_NAME = "User@copyright.com";
-        private Set<GrantedAuthority> grantedAuthorities = Sets.newHashSet();
+        private final Set<GrantedAuthority> grantedAuthorities = Sets.newHashSet();
 
         /**
          * Sets authorities.
          *
          * @param userPermissions the Set of permissions.
          */
-        public void setGrantedAuthorities(Set<String> userPermissions) {
+        void setGrantedAuthorities(Set<String> userPermissions) {
             grantedAuthorities.clear();
             for (String permission : userPermissions) {
                 grantedAuthorities.add(new SimpleGrantedAuthority(permission));

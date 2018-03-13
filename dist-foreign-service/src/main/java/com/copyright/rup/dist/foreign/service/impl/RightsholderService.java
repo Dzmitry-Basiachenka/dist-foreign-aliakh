@@ -28,7 +28,7 @@ public class RightsholderService extends CommonRightsholderService implements IR
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
-    private IRightsholderRepository rightsholderRepository;
+    private final IRightsholderRepository rightsholderRepository;
 
     /**
      * Constructor.

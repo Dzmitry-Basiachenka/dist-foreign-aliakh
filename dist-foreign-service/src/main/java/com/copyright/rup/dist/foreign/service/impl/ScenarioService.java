@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
+import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
@@ -174,7 +175,7 @@ public class ScenarioService implements IScenarioService {
             stopWatch.stop("scenario.sendToLm_sendUsages");
         } else {
             stopWatch.stop();
-            throw new RuntimeException(String.format("Send scenario to LM. Failed. %s. Reason=Scenario is empty",
+            throw new RupRuntimeException(String.format("Send scenario to LM. Failed. %s. Reason=Scenario is empty",
                 ForeignLogUtils.scenario(scenario)));
         }
     }

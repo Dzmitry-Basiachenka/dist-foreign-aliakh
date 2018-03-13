@@ -121,8 +121,8 @@ public class ReconcileRightsholdersTestBuilder {
      */
     class Runner {
 
-        private MockRestServiceServer mockServer;
-        private MockRestServiceServer asyncMockServer;
+        private final MockRestServiceServer mockServer;
+        private final MockRestServiceServer asyncMockServer;
 
         Runner() {
             this.mockServer = MockRestServiceServer.createServer(restTemplate);

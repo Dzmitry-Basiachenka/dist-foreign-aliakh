@@ -35,13 +35,12 @@ import org.powermock.modules.junit4.PowerMockRunner;
 public class ScenarioMediatorTest {
 
     private static final String PERMISSION_NAME = "FDA_EXCLUDE_FROM_SCENARIO";
-
+    private final Button excludeButton = new Button();
+    private final Button exportButton = new Button();
+    private final SearchWidget searchWidget = new SearchWidget(() -> {/*stub*/});
+    private final Table table = new Table();
+    private final VerticalLayout emptyUsagesLayout = new VerticalLayout();
     private ScenarioMediator mediator;
-    private Button excludeButton = new Button();
-    private Button exportButton = new Button();
-    private SearchWidget searchWidget = new SearchWidget(() -> {/*stub*/});
-    private Table table = new Table();
-    private VerticalLayout emptyUsagesLayout = new VerticalLayout();
 
     @Before
     public void setUp() {

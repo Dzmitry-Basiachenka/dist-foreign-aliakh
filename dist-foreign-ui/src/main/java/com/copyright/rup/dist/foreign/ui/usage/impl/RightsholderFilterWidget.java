@@ -9,8 +9,10 @@ import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.FilterSaveEvent
 import com.copyright.rup.vaadin.ui.component.filter.IFilterWindowController;
 import com.copyright.rup.vaadin.widget.BaseItemsFilterWidget;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -27,10 +29,10 @@ import java.util.function.Supplier;
 public class RightsholderFilterWidget extends BaseItemsFilterWidget<Long, Rightsholder>
     implements IFilterWindowController<Long, Rightsholder> {
 
-    private Set<Long> selectedItemsIds;
     private final String searchPrompt;
     private final String caption;
     private final Supplier<List<Rightsholder>> supplier;
+    private final Set<Long> selectedItemsIds = new HashSet<>();
 
     /**
      * Controller.
@@ -48,7 +50,7 @@ public class RightsholderFilterWidget extends BaseItemsFilterWidget<Long, Rights
 
     @Override
     public void reset() {
-        selectedItemsIds = null;
+        selectedItemsIds.clear();
         super.reset();
     }
 
@@ -73,7 +75,11 @@ public class RightsholderFilterWidget extends BaseItemsFilterWidget<Long, Rights
 
     @Override
     public void onSave(FilterSaveEvent<Long> event) {
-        selectedItemsIds = event.getSelectedItemsIds();
+        Set<Long> itemsIds = event.getSelectedItemsIds();
+        selectedItemsIds.clear();
+        if (CollectionUtils.isNotEmpty(itemsIds)) {
+            selectedItemsIds.addAll(itemsIds);
+        }
     }
 
     @Override

@@ -29,7 +29,7 @@ import java.util.Set;
 @ContextConfiguration(value = "classpath:/com/copyright/rup/dist/foreign/ui/dist-foreign-ui-test-context.xml")
 @TestExecutionListeners(value = UpdateDatabaseForClassTestExecutionListener.class,
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS)
-public class UsagesTabUiTest extends ForeignCommonUiTest {
+public class UsagesTabUiTest extends ForeignCommonUiTestProvider {
 
     private static final String FILTERS_HEADER_TEXT = "Filters";
     private static final String EXPORT_BUTTON_ID = "Export";

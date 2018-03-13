@@ -18,11 +18,7 @@ public class HeaderValidationException extends ValidationException {
 
     private static final String ERROR_MESSAGE = "Columns headers are incorrect. Expected columns headers are:%n%s";
     private static final String ERROR_MESSAGE_WITH_FILE_HEADERS = ERROR_MESSAGE + "%nFile headers:%n%s";
-    private List<String> expectedHeaders;
-
-    private static String getJoinedHeaders(String... fileHeaders) {
-        return ArrayUtils.isNotEmpty(fileHeaders) ? String.join(", ", fileHeaders) : "''";
-    }
+    private final List<String> expectedHeaders;
 
     /**
      * Constructor.
@@ -34,6 +30,10 @@ public class HeaderValidationException extends ValidationException {
         super(String.format(ERROR_MESSAGE_WITH_FILE_HEADERS, String.join(", ", expectedHeaders),
             getJoinedHeaders(fileHeaders)));
         this.expectedHeaders = expectedHeaders;
+    }
+
+    private static String getJoinedHeaders(String... fileHeaders) {
+        return ArrayUtils.isNotEmpty(fileHeaders) ? String.join(", ", fileHeaders) : "''";
     }
 
     @Override

@@ -143,7 +143,7 @@ public class PiIntegrationServiceTest {
 
     private static class PiIntegrationServiceMock extends PiIntegrationService {
 
-        private RupEsApi rupEsApiMock = createMock(RupEsApi.class);
+        private final RupEsApi rupEsApiMock = createMock(RupEsApi.class);
 
         @Override
         protected RupEsApi getRupEsApi() {

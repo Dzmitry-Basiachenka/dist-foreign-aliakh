@@ -89,9 +89,9 @@ class RmsRightsAssignmentService implements IRmsRightsAssignmentService {
 
     private static class RmsRightsAssignmentHandler extends CommonRestHandler<RightsAssignmentResult> {
 
-        private int wrWrkInstsCount;
+        private final int wrWrkInstsCount;
 
-        private RmsRightsAssignmentHandler(RestTemplate restTemplate, int wrWrkInstsCount) {
+        RmsRightsAssignmentHandler(RestTemplate restTemplate, int wrWrkInstsCount) {
             super(restTemplate);
             this.wrWrkInstsCount = wrWrkInstsCount;
         }

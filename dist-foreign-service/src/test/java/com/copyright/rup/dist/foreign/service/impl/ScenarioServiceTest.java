@@ -66,6 +66,7 @@ public class ScenarioServiceTest {
     private static final String USAGE_BATCH_ID = RupPersistUtils.generateUuid();
     private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
     private static final String REASON = "reason";
+    private final Scenario scenario = new Scenario();
     private ScenarioService scenarioService;
     private IScenarioRepository scenarioRepository;
     private IUsageService usageService;
@@ -73,7 +74,6 @@ public class ScenarioServiceTest {
     private ILmIntegrationService lmIntegrationService;
     private IRmsGrantsService rmsGrantsService;
     private IRightsholderService rightsholderService;
-    private Scenario scenario = new Scenario();
 
     @Before
     public void setUp() {

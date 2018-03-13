@@ -46,7 +46,7 @@ import java.util.stream.IntStream;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(value = "classpath:/com/copyright/rup/dist/foreign/ui/dist-foreign-ui-test-context.xml")
-public class ExcludeDetailsFromScenarioUiTest extends ForeignCommonUiTest {
+public class ExcludeDetailsFromScenarioUiTest extends ForeignCommonUiTestProvider {
 
     private static final String EXCLUDE_BUTTON_ID = "Exclude";
     private static final String EXCLUDE_TABLE_ID = "exclude-rightsholders-table";
@@ -56,14 +56,14 @@ public class ExcludeDetailsFromScenarioUiTest extends ForeignCommonUiTest {
     private static final String USAGE_ID_2 = RupPersistUtils.generateUuid();
     private static final String USAGE_ID_3 = RupPersistUtils.generateUuid();
     private static final String USAGE_ID_4 = RupPersistUtils.generateUuid();
-    private RightsholderInfo rightsholder1 = new RightsholderInfo(StringUtils.EMPTY, "1000000001",
+    private final RightsholderInfo rightsholder1 = new RightsholderInfo(StringUtils.EMPTY, "1000000001",
         "Rothchild Consultants", "1000000001", "Rothchild Consultants");
-    private RightsholderInfo rightsholder2 = new RightsholderInfo(StringUtils.EMPTY, "1000000002",
+    private final RightsholderInfo rightsholder2 = new RightsholderInfo(StringUtils.EMPTY, "1000000002",
         "Royal Society of Victoria", "1000000002", "Royal Society of Victoria");
-    private RightsholderInfo rightsholder3 = new RightsholderInfo(StringUtils.EMPTY, "1000000003",
+    private final RightsholderInfo rightsholder3 = new RightsholderInfo(StringUtils.EMPTY, "1000000003",
         "South African Institute of Mining and Metallurgy", "1000000003",
         "South African Institute of Mining and Metallurgy");
-    private RightsholderInfo rightsholder4 = new RightsholderInfo(StringUtils.EMPTY, "1000000004",
+    private final RightsholderInfo rightsholder4 = new RightsholderInfo(StringUtils.EMPTY, "1000000004",
         "Computers for Design and Construction", "1000000004", "Computers for Design and Construction");
 
     @Autowired
@@ -298,13 +298,13 @@ public class ExcludeDetailsFromScenarioUiTest extends ForeignCommonUiTest {
 
     private static class RightsholderInfo {
 
-        private String selected;
-        private String payeeAccountNumber;
-        private String payeeAccountName;
-        private String rhAccountNumber;
-        private String rhAccountName;
+        private final String selected;
+        private final String payeeAccountNumber;
+        private final String payeeAccountName;
+        private final String rhAccountNumber;
+        private final String rhAccountName;
 
-        private RightsholderInfo(String selected, String payeeAccountNumber, String payeeAccountName,
+        RightsholderInfo(String selected, String payeeAccountNumber, String payeeAccountName,
                                  String rhAccountNumber, String rhAccountName) {
             this.selected = selected;
             this.payeeAccountNumber = payeeAccountNumber;

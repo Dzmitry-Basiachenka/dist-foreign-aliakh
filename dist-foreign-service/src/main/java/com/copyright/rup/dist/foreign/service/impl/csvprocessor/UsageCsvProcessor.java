@@ -59,23 +59,23 @@ public class UsageCsvProcessor extends CommonCsvProcessor<Usage> {
     protected void initValidators() {
         RequiredValidator requiredValidator = new RequiredValidator();
         PositiveNumberValidator positiveNumberValidator = new PositiveNumberValidator();
-        LengthValidator lengthValidator_1000 = new LengthValidator(1000);
-        LengthValidator lengthValidator_2000 = new LengthValidator(2000);
+        LengthValidator lengthValidator1000 = new LengthValidator(1000);
+        LengthValidator lengthValidator2000 = new LengthValidator(2000);
         addPlainValidators(Header.DETAIL_ID, requiredValidator, positiveNumberValidator, new LengthValidator(10),
             new DuplicateInFileValidator());
-        addPlainValidators(Header.TITLE, lengthValidator_2000);
-        addPlainValidators(Header.ARTICLE, lengthValidator_1000);
-        addPlainValidators(Header.STANDARD_NUMBER, lengthValidator_1000);
+        addPlainValidators(Header.TITLE, lengthValidator2000);
+        addPlainValidators(Header.ARTICLE, lengthValidator1000);
+        addPlainValidators(Header.STANDARD_NUMBER, lengthValidator1000);
         addPlainValidators(Header.WR_WRK_INST, positiveNumberValidator, new LengthValidator(15));
         addPlainValidators(Header.RH_ACCT_NUMBER, positiveNumberValidator, new LengthValidator(22));
-        addPlainValidators(Header.PUBLISHER, lengthValidator_1000);
+        addPlainValidators(Header.PUBLISHER, lengthValidator1000);
         addPlainValidators(Header.PUB_DATE, new DateFormatValidator());
         addPlainValidators(Header.NUMBER_OF_COPIES, positiveNumberValidator, new LengthValidator(9));
         addPlainValidators(Header.REPORTED_VALUE, requiredValidator, new ReportedValueValidator());
         addPlainValidators(Header.MARKET, requiredValidator, new LengthValidator(200));
         addPlainValidators(Header.MARKET_PERIOD_FROM, requiredValidator, new YearValidator());
         addPlainValidators(Header.MARKET_PERIOD_TO, requiredValidator, new YearValidator());
-        addPlainValidators(Header.AUTHOR, lengthValidator_2000);
+        addPlainValidators(Header.AUTHOR, lengthValidator2000);
     }
 
     @Override

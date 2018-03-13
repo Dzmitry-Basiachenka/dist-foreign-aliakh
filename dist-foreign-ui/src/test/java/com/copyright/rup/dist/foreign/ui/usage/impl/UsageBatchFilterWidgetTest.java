@@ -23,6 +23,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -79,7 +80,7 @@ public class UsageBatchFilterWidgetTest {
         mockStatic(Windows.class);
         Windows.showFilterWindow("Batches filter", usageBatchFilterWidget, "name");
         expectLastCall().andReturn(filterWindow).once();
-        filterWindow.setSelectedItemsIds(null);
+        filterWindow.setSelectedItemsIds(new HashSet<>());
         expectLastCall().once();
         expect(filterWindow.getId()).andReturn("id").once();
         filterWindow.addStyleName("batches-filter-window");

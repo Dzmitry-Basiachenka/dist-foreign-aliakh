@@ -36,7 +36,7 @@ public class RightsholderTotalsHolderTable extends LazyTable<RightsholderTotalsH
     private static final String SERVICE_FEE_TOTAL_PROPERTY = "serviceFeeTotal";
     private static final String NET_TOTAL_PROPERTY = "netTotal";
     private static final String SERVICE_FEE_PROPERTY = "serviceFee";
-    private IScenarioController controller;
+    private final IScenarioController controller;
 
     /**
      * Constructor.
@@ -44,8 +44,8 @@ public class RightsholderTotalsHolderTable extends LazyTable<RightsholderTotalsH
      * @param controller {@link IScenarioController} instance
      * @param queryClass query class
      */
-    public RightsholderTotalsHolderTable(IScenarioController controller,
-                                         Class<RightsholderTotalsHolderBeanQuery> queryClass) {
+    RightsholderTotalsHolderTable(IScenarioController controller,
+                                  Class<RightsholderTotalsHolderBeanQuery> queryClass) {
         super(controller, queryClass, 1);
         this.controller = controller;
         initTable();
@@ -126,7 +126,7 @@ public class RightsholderTotalsHolderTable extends LazyTable<RightsholderTotalsH
      */
     static class RightsholderAccountNumberColumnGenerator implements Table.ColumnGenerator {
 
-        private IScenarioController controller;
+        private final IScenarioController controller;
 
         /**
          * Constructor.

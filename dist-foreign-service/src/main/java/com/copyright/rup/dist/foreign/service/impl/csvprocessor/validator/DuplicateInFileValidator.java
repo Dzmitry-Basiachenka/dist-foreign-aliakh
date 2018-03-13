@@ -25,7 +25,7 @@ public class DuplicateInFileValidator implements IValidator<String> {
     /**
      * Key is item, value is the list with numbers of lines where it was met.
      */
-    private Map<String, List<Integer>> existingLines = Maps.newHashMap();
+    private final Map<String, List<Integer>> existingLines = Maps.newHashMap();
     private int line = 1;
     private String errorMessage = StringUtils.EMPTY;
 

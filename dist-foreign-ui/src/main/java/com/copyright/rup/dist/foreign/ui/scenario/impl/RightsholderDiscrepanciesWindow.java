@@ -33,7 +33,7 @@ import java.util.Set;
  *
  * @author Ihar Suvorau
  */
-public class RightsholderDiscrepanciesWindow extends Window {
+class RightsholderDiscrepanciesWindow extends Window {
 
     private static final String WR_WRK_INST_PROPERTY = "wrWrkInst";
     private static final String WORK_TITLE_PROPERTY = "workTitle";
@@ -41,9 +41,9 @@ public class RightsholderDiscrepanciesWindow extends Window {
     private static final String RIGHTSHOLDER_NAME_PROPERTY = "oldRightsholder.name";
     private static final String NEW_RIGHTSHOLDER_ACCOUNT_NUMBER_PROPERTY = "newRightsholder.accountNumber";
     private static final String NEW_RIGHTSHOLDER_NAME_PROPERTY = "newRightsholder.name";
+    private final IReconcileRightsholdersController controller;
+    private final IScenariosController scenariosController;
     private BeanItemContainer<RightsholderDiscrepancy> container;
-    private IReconcileRightsholdersController controller;
-    private IScenariosController scenariosController;
 
     /**
      * Constructor.
@@ -51,8 +51,8 @@ public class RightsholderDiscrepanciesWindow extends Window {
      * @param reconcileRightsholdersController instance of {@link IReconcileRightsholdersController}
      * @param scenariosController              instance of {@link IScenariosController}
      */
-    public RightsholderDiscrepanciesWindow(IReconcileRightsholdersController reconcileRightsholdersController,
-                                           IScenariosController scenariosController) {
+    RightsholderDiscrepanciesWindow(IReconcileRightsholdersController reconcileRightsholdersController,
+                                    IScenariosController scenariosController) {
         setWidth(900, Unit.PIXELS);
         setHeight(530, Unit.PIXELS);
         setContent(initContent());

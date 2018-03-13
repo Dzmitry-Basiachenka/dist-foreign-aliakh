@@ -51,6 +51,6 @@ public final class UsageBatchUtils {
      * @return Fiscal Year value
      */
     public static int calculateFiscalYear(LocalDate paymentDate) {
-        return 0 >= Month.JULY.compareTo(paymentDate.getMonth()) ? (paymentDate.getYear() + 1) : paymentDate.getYear();
+        return 0 >= Month.JULY.compareTo(paymentDate.getMonth()) ? paymentDate.getYear() + 1 : paymentDate.getYear();
     }
 }
