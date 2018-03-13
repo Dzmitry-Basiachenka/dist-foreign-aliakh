@@ -78,6 +78,7 @@ public class UsageCsvProcessorIntegrationTest {
     @Before
     public void setUp() {
         processor = usageCsvProcessorFactory.getProcessor();
+        processor.setProductFamily(PRODUCT_FAMILY);
     }
 
     @Test
@@ -141,7 +142,7 @@ public class UsageCsvProcessorIntegrationTest {
         assertEquals(Integer.valueOf(2016), usage.getMarketPeriodTo());
         assertEquals(status, usage.getStatus());
         assertEquals("Aarseth, Espen J.", usage.getAuthor());
-        assertNull(usage.getProductFamily());
+        assertEquals(PRODUCT_FAMILY, usage.getProductFamily());
         assertEquals(BigDecimal.ZERO, usage.getGrossAmount());
     }
 
@@ -163,7 +164,7 @@ public class UsageCsvProcessorIntegrationTest {
         assertEquals(Integer.valueOf(2015), usage.getMarketPeriodTo());
         assertEquals(UsageStatusEnum.NEW, usage.getStatus());
         assertNull(usage.getAuthor());
-        assertNull(usage.getProductFamily());
+        assertEquals(PRODUCT_FAMILY, usage.getProductFamily());
         assertEquals(BigDecimal.ZERO, usage.getGrossAmount());
     }
 

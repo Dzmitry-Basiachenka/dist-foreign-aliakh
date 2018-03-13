@@ -91,12 +91,12 @@ class UsageBatchUploadWindow extends Window {
             StopWatch stopWatch = new Slf4JStopWatch(stopWatchTag);
             try {
                 UsageCsvProcessor processor = usagesController.getCsvProcessor();
+                processor.setProductFamily(productFamilyProperty.getValue());
                 CsvProcessingResult<Usage> processingResult =
                     processor.process(uploadField.getStreamToUploadedFile(), fileName);
                 stopWatch.lap(stopWatchTag + "_fileProcessed");
                 if (processingResult.isSuccessful()) {
-                    int usagesCount = usagesController.loadUsageBatch(buildUsageBatch(), processingResult.getResult(),
-                        productFamilyProperty.getValue());
+                    int usagesCount = usagesController.loadUsageBatch(buildUsageBatch(), processingResult.getResult());
                     stopWatch.lap(stopWatchTag + "_stored");
                     close();
                     Windows.showNotificationWindow(ForeignUi.getMessage("message.upload_completed", usagesCount));

@@ -236,9 +236,9 @@ public class UsagesControllerTest {
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         filterWidgetMock.clearFilter();
         expectLastCall().once();
-        expect(usageBatchService.insertUsageBatch(usageBatch, usages, FAS_PRODUCT_FAMILY)).andReturn(1).once();
+        expect(usageBatchService.insertUsageBatch(usageBatch, usages)).andReturn(1).once();
         replay(usageBatchService, filterController, filterWidgetMock);
-        assertEquals(1, controller.loadUsageBatch(usageBatch, usages, FAS_PRODUCT_FAMILY));
+        assertEquals(1, controller.loadUsageBatch(usageBatch, usages));
         verify(usageBatchService, filterController, filterWidgetMock);
     }
 

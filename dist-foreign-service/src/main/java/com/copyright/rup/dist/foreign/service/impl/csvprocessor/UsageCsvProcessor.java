@@ -42,8 +42,13 @@ import java.util.stream.Collectors;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class UsageCsvProcessor extends CommonCsvProcessor<Usage> {
 
+    private String productFamily;
     @Autowired
     private IUsageService usageService;
+
+    public void setProductFamily(String productFamily) {
+        this.productFamily = productFamily;
+    }
 
     @Override
     protected List<ICsvColumn> getCsvHeaders() {
@@ -106,6 +111,7 @@ public class UsageCsvProcessor extends CommonCsvProcessor<Usage> {
         result.setAuthor(getString(Header.AUTHOR, params));
         result.setStatus(isEligible(result) ? UsageStatusEnum.ELIGIBLE
             : isWorkFound(result) ? UsageStatusEnum.WORK_FOUND : UsageStatusEnum.NEW);
+        result.setProductFamily(productFamily);
         return result;
     }
 

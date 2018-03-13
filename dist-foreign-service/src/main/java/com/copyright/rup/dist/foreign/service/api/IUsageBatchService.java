@@ -45,10 +45,9 @@ public interface IUsageBatchService {
      *
      * @param usageBatch    {@link UsageBatch} instance
      * @param usages        list of {@link Usage}s
-     * @param productFamily product family
      * @return count of inserted usages
      */
-    int insertUsageBatch(UsageBatch usageBatch, List<Usage> usages, String productFamily);
+    int insertUsageBatch(UsageBatch usageBatch, List<Usage> usages);
 
     /**
      * Deletes given {@link UsageBatch} and all it's usage details.
