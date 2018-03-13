@@ -32,7 +32,7 @@ import java.util.List;
  */
 public class PaidUsageDeserializerTest {
 
-    private PaidUsageUnmarshaller unmarshaller = new PaidUsageUnmarshaller();
+    private final PaidUsageUnmarshaller unmarshaller = new PaidUsageUnmarshaller();
 
     @Test
     @SuppressWarnings("unchecked")

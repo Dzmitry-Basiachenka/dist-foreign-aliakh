@@ -13,7 +13,7 @@ import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingRes
  */
 public class ThresholdExceededException extends ValidationException {
 
-    private CsvProcessingResult processingResult;
+    private final CsvProcessingResult processingResult;
 
     /**
      * Constructor.

@@ -16,6 +16,7 @@ import com.google.common.collect.Lists;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
@@ -47,7 +48,7 @@ import java.util.Map;
 @ContextConfiguration(value = "classpath:/com/copyright/rup/dist/foreign/ui/dist-foreign-ui-test-context.xml")
 @TestExecutionListeners(value = UpdateDatabaseForClassTestExecutionListener.class,
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS)
-public class DrillDownByRightsholderUiTest extends ForeignCommonUiTest {
+public class DrillDownByRightsholderUiTest extends ForeignCommonUiTestProvider {
 
     private static final String BATCH_NAME = "AccessCopyright_10Dec17";
     private static final String FISCAL_YEAR = "FY2016";
@@ -86,6 +87,7 @@ public class DrillDownByRightsholderUiTest extends ForeignCommonUiTest {
     private IScenarioRepository scenarioRepository;
 
     @Override
+    @Before
     public void setUp() {
         super.setUp();
         insertTestData();
@@ -99,8 +101,6 @@ public class DrillDownByRightsholderUiTest extends ForeignCommonUiTest {
         scenarioRepository.remove(scenario.getId());
         usageRepository.deleteUsages(batch.getId());
         usageBatchRepository.deleteUsageBatch(batch.getId());
-        scenario = null;
-        batch = null;
     }
 
     @Test

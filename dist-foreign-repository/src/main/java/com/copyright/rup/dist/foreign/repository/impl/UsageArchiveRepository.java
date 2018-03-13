@@ -124,7 +124,7 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
      */
     private static class MapResultHandler implements ResultHandler<Map<String, String>> {
 
-        private Map<Long, String> result = Maps.newHashMap();
+        private final Map<Long, String> result = Maps.newHashMap();
 
         @Override
         public void handleResult(ResultContext<? extends Map<String, String>> resultContext) {

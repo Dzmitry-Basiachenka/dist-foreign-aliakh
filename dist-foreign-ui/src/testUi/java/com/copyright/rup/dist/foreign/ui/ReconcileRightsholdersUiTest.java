@@ -32,14 +32,14 @@ import java.util.stream.Collectors;
 @ContextConfiguration(value = "classpath:/com/copyright/rup/dist/foreign/ui/dist-foreign-ui-test-context.xml")
 @TestExecutionListeners(value = UpdateDatabaseForClassTestExecutionListener.class,
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS)
-public class ReconcileRightsholdersUiTest extends ForeignCommonUiTest {
+public class ReconcileRightsholdersUiTest extends ForeignCommonUiTestProvider {
 
-    private String[] discrepancy1 =
+    private final String[] discrepancy1 =
         {"1000002797", "British Film Institute (BFI)", "1000000001", "Rothchild Consultants", "122235137", "TOMATOES"};
-    private String[] discrepancy2 =
+    private final String[] discrepancy2 =
         {"1000008666", "CCH", "1000000001", "Rothchild Consultants", "122235137", "TOMATOES"};
-    private String[] discrepancy3 = {"1000009997", "IEEE - Inst of Electrical and Electronics Engrs", "1000000002",
-        "Royal Society of Victoria", "122235139", "TOMATOES"};
+    private final String[] discrepancy3 = {"1000009997", "IEEE - Inst of Electrical and Electronics Engrs",
+        "1000000002", "Royal Society of Victoria", "122235139", "TOMATOES"};
 
     @Test
     // Test case IDs: 1874f014-cb17-479c-a4bc-ec77547e39c0, 4245b194-1cef-42f3-b908-1417c3d74b4d

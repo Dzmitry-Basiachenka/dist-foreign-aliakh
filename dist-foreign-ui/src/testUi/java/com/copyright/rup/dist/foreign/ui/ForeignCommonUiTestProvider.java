@@ -43,7 +43,7 @@ import java.util.stream.IntStream;
  *
  * @author Darya Baraukova
  */
-public class ForeignCommonUiTest extends CommonUiTest {
+public class ForeignCommonUiTestProvider extends CommonUiTest {
     /**
      * Rule takes screenshot in case of test failure and calls driver.quit() at the end of the test.
      */

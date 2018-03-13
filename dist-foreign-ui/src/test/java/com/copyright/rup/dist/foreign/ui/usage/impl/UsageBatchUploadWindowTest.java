@@ -305,6 +305,11 @@ public class UsageBatchUploadWindowTest {
         assertTrue(nameField.isReadOnly());
         TextField productFamilyField = verifyTextField(productFamilyComponent, "Product Family");
         assertTrue(productFamilyField.isReadOnly());
+        assertVerifyButton(verifyComponent, numberField, nameField, productFamilyField);
+    }
+
+    private void assertVerifyButton(Component verifyComponent, TextField numberField, TextField nameField,
+                                    TextField productFamilyField) {
         assertTrue(verifyComponent instanceof Button);
         Button verifyButton = (Button) verifyComponent;
         assertEquals("Verify", verifyComponent.getCaption());

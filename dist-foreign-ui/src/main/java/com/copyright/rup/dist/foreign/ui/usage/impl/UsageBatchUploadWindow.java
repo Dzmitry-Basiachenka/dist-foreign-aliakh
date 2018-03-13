@@ -54,6 +54,7 @@ import java.math.BigDecimal;
  */
 class UsageBatchUploadWindow extends Window {
 
+    private final IUsagesController usagesController;
     private TextField accountNumberField;
     private TextField accountNameField;
     private LocalDateWidget paymentDateWidget;
@@ -64,7 +65,6 @@ class UsageBatchUploadWindow extends Window {
     private Property<String> productFamilyProperty;
     private Rightsholder rro;
     private UploadField uploadField;
-    private IUsagesController usagesController;
 
     /**
      * Constructor.

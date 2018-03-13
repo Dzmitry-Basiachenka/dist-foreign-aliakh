@@ -49,28 +49,28 @@ import java.util.Objects;
  */
 public class ScenariosWidget extends VerticalLayout implements IScenariosWidget {
 
-    private IScenarioHistoryController scenarioHistoryController;
-    private IScenariosController controller;
-    private Button deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
-    private Button viewButton = Buttons.createButton(ForeignUi.getMessage("button.view"));
-    private Button submitButton = Buttons.createButton(ForeignUi.getMessage("button.submit"));
-    private Button rejectButton = Buttons.createButton(ForeignUi.getMessage("button.reject"));
-    private Button approveButton = Buttons.createButton(ForeignUi.getMessage("button.approve"));
-    private Button sendToLmButton = Buttons.createButton(ForeignUi.getMessage("button.send_to_lm"));
-    private Button reconcileRightsholdersButton =
+    private final IScenarioHistoryController scenarioHistoryController;
+    private final Button deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
+    private final Button viewButton = Buttons.createButton(ForeignUi.getMessage("button.view"));
+    private final Button submitButton = Buttons.createButton(ForeignUi.getMessage("button.submit"));
+    private final Button rejectButton = Buttons.createButton(ForeignUi.getMessage("button.reject"));
+    private final Button approveButton = Buttons.createButton(ForeignUi.getMessage("button.approve"));
+    private final Button sendToLmButton = Buttons.createButton(ForeignUi.getMessage("button.send_to_lm"));
+    private final Button reconcileRightsholdersButton =
         Buttons.createButton(ForeignUi.getMessage("button.reconcile_rightsholders"));
-    private Button refreshScenarioButton = Buttons.createButton(ForeignUi.getMessage("button.refresh_scenario"));
+    private final Button refreshScenarioButton = Buttons.createButton(ForeignUi.getMessage("button.refresh_scenario"));
+    private final Label ownerLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label netTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label reportedTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label grossTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label descriptionLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label selectionCriteriaLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label actionType = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label actionCreatedUser = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label actionCreatedDate = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label actionReason = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private IScenariosController controller;
     private BeanContainer<String, Scenario> container;
-    private Label ownerLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
-    private Label netTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
-    private Label reportedTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
-    private Label grossTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
-    private Label descriptionLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
-    private Label selectionCriteriaLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
-    private Label actionType = new Label(StringUtils.EMPTY, ContentMode.HTML);
-    private Label actionCreatedUser = new Label(StringUtils.EMPTY, ContentMode.HTML);
-    private Label actionCreatedDate = new Label(StringUtils.EMPTY, ContentMode.HTML);
-    private Label actionReason = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private Table table;
     private Panel metadataPanel;
     private VerticalLayout metadataLayout;
@@ -81,7 +81,7 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
      *
      * @param historyController instance of {@link IScenarioHistoryController}
      */
-    public ScenariosWidget(IScenarioHistoryController historyController) {
+    ScenariosWidget(IScenarioHistoryController historyController) {
         this.scenarioHistoryController = historyController;
     }
 

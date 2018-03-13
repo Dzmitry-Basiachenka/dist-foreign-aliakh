@@ -35,7 +35,7 @@ import java.util.Set;
 @PrepareForTest({Windows.class})
 public class ReconcileRightsholdersControllerTest {
 
-    private ReconcileRightsholdersController controller = new ReconcileRightsholdersController();
+    private final ReconcileRightsholdersController controller = new ReconcileRightsholdersController();
 
     @Test
     public void testGetSetRightsholderDiscrepancies() {

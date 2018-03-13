@@ -24,9 +24,9 @@ import java.util.Collection;
 @RunWith(Parameterized.class)
 public class MarketPeriodValidatorTest {
 
-    private Integer marketPeriodFrom;
-    private Integer marketPeriodTo;
-    private boolean expectedResult;
+    private final Integer marketPeriodFrom;
+    private final Integer marketPeriodTo;
+    private final boolean expectedResult;
 
     /**
      * Constructor.

@@ -26,8 +26,8 @@ public class UsageBatchUtilsGetFiscalYearTest {
     private static final String FY_2017 = "FY2017";
     private static final String FY_2018 = "FY2018";
 
-    private String expectedFiscalYear;
-    private LocalDate paymentDate;
+    private final String expectedFiscalYear;
+    private final LocalDate paymentDate;
 
     /**
      * Constructor.

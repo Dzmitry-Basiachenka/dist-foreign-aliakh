@@ -38,7 +38,7 @@ public abstract class BaseCsvReportHandler implements ResultHandler, AutoCloseab
 
     private static final DateTimeFormatter DATE_FORMATTER =
         DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT, Locale.US);
-    private ICsvBeanWriter beanWriter;
+    private final ICsvBeanWriter beanWriter;
 
     /**
      * Constructor.

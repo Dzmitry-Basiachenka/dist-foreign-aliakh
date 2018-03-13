@@ -18,7 +18,7 @@ import org.openqa.selenium.WebElement;
  *
  * @author Darya Baraukova
  */
-public class LoginTest extends ForeignCommonUiTest {
+public class LoginTest extends ForeignCommonUiTestProvider {
 
     @Test
     public void testLoginAsViewOnly() {

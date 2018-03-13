@@ -12,8 +12,8 @@ package com.copyright.rup.dist.foreign.repository.api;
 // TODO {mbezmen} move to dist-common
 public class Pageable {
 
-    private int offset;
-    private int limit;
+    private final int offset;
+    private final int limit;
 
     /**
      * Constructor.

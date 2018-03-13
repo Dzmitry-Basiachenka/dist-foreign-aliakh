@@ -18,7 +18,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
@@ -47,7 +46,7 @@ import java.util.stream.Collectors;
 @ContextConfiguration(value = "classpath:/com/copyright/rup/dist/foreign/ui/dist-foreign-ui-test-context.xml")
 @TestExecutionListeners(value = UpdateDatabaseForClassTestExecutionListener.class,
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS)
-public class CreateScenarioUiTest extends ForeignCommonUiTest {
+public class CreateScenarioUiTest extends ForeignCommonUiTestProvider {
 
     private static final String USAGES_FILTER_ID = "usages-filter-widget";
     private static final String USAGES_TABLE_ID = "usages-table";
@@ -64,9 +63,8 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
     private static final String SELECT_ONE_PRODUCT_FAMILY_MESSAGE =
         "Scenario cannot be created. Select only one product family at a time";
 
-    private UsageBatchInfo validUsageBatch = new UsageBatchInfo("CADRA_11Dec16", "01/11/2017", "FY2017",
+    private final UsageBatchInfo validUsageBatch = new UsageBatchInfo("CADRA_11Dec16", "01/11/2017", "FY2017",
         "7000813806 - CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil");
-    private String scenarioId;
 
     @Autowired
     private IScenarioRepository scenarioRepository;
@@ -74,16 +72,6 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
     private IScenarioAuditService scenarioAuditService;
     @Autowired
     private IUsageRepository usageRepository;
-
-    @After
-    public void tearDown() {
-        if (null != scenarioId) {
-            usageRepository.deleteFromScenario(scenarioId, StoredEntity.DEFAULT_USER);
-            scenarioAuditService.deleteActions(scenarioId);
-            scenarioRepository.remove(scenarioId);
-            scenarioId = null;
-        }
-    }
 
     @Test
     // Test case IDs: 'e4b0a048-51af-4c1c-91bd-2a199747ca34', 'de74d602-db65-4ee0-a347-5f729f00a2ab',
@@ -184,8 +172,11 @@ public class CreateScenarioUiTest extends ForeignCommonUiTest {
             .map(scenario -> scenarioRepository.findWithAmountsAndLastAction(scenario.getId()))
             .collect(Collectors.toList());
         assertEquals(1, CollectionUtils.size(scenarios));
-        scenarioId = scenarios.get(0).getId();
         verifyScenario(scenarios.get(0));
+        String scenarioId = scenarios.get(0).getId();
+        usageRepository.deleteFromScenario(scenarioId, StoredEntity.DEFAULT_USER);
+        scenarioAuditService.deleteActions(scenarioId);
+        scenarioRepository.remove(scenarioId);
     }
 
     private void verifyScenario(Scenario scenario) {

@@ -67,7 +67,7 @@ public class ScenariosWidgetTest {
     private Scenario scenario;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         controller = createMock(IScenariosController.class);
         scenariosWidget = new ScenariosWidget(new ScenarioHistoryController());
         scenariosWidget.setController(controller);
@@ -292,7 +292,7 @@ public class ScenariosWidgetTest {
         assertEquals(expectedValue, ((Label) component).getValue());
     }
 
-    private ScenarioAuditItem buildScenarioAuditItem() throws Exception {
+    private ScenarioAuditItem buildScenarioAuditItem() {
         ScenarioAuditItem scenarioAuditItem = new ScenarioAuditItem();
         scenarioAuditItem.setActionType(ScenarioActionTypeEnum.ADDED_USAGES);
         scenarioAuditItem.setActionReason(StringUtils.EMPTY);

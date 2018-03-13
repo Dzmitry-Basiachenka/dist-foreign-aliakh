@@ -4,7 +4,9 @@ import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
@@ -22,7 +24,7 @@ import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 
-import org.junit.AfterClass;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -52,6 +54,11 @@ import java.util.ResourceBundle;
 public class ForeignUiTest {
 
     private ForeignUi foreignUi;
+
+    @After
+    public void tearDown() {
+        SecurityContextHolder.clearContext();
+    }
 
     @Before
     public void setUp() {
@@ -86,23 +93,21 @@ public class ForeignUiTest {
 
     @Test
     public void testHasAccessPermissionTrue() {
-        final boolean expectedResult = true;
         mockStatic(ForeignSecurityUtils.class);
-        expect(ForeignSecurityUtils.hasAccessPermission()).andReturn(expectedResult).once();
+        expect(ForeignSecurityUtils.hasAccessPermission()).andReturn(true).once();
         replay(ForeignSecurityUtils.class);
         boolean result = foreignUi.hasAccessPermission();
-        assertEquals(expectedResult, result);
+        assertTrue(result);
         verify(ForeignSecurityUtils.class);
     }
 
     @Test
     public void testHasAccessPermissionFalse() {
-        final boolean expectedResult = false;
         mockStatic(ForeignSecurityUtils.class);
-        expect(ForeignSecurityUtils.hasAccessPermission()).andReturn(expectedResult).once();
+        expect(ForeignSecurityUtils.hasAccessPermission()).andReturn(false).once();
         replay(ForeignSecurityUtils.class);
         boolean result = foreignUi.hasAccessPermission();
-        assertEquals(expectedResult, result);
+        assertFalse(result);
         verify(ForeignSecurityUtils.class);
     }
 
@@ -150,11 +155,6 @@ public class ForeignUiTest {
         replay(controller);
         assertEquals(mainWidget, foreignUi.initMainWidget());
         verify(controller);
-    }
-
-    @AfterClass
-    public static void tearDown() {
-        SecurityContextHolder.clearContext();
     }
 
     private static class MockSecurityContext implements SecurityContext {

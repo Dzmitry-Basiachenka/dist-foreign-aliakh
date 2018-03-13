@@ -26,9 +26,9 @@ public class ExportStreamSource implements IStreamSource {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("MM_dd_YYYY");
 
-    private ExecutorService executorService = Executors.newSingleThreadExecutor();
-    private IReportWriter reportWriter;
-    private String fileNamePrefix;
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private final IReportWriter reportWriter;
+    private final String fileNamePrefix;
 
     /**
      * Constructor.

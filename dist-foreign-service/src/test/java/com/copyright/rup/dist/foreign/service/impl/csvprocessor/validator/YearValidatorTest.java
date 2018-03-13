@@ -23,8 +23,8 @@ import java.util.Collection;
 @RunWith(Parameterized.class)
 public class YearValidatorTest {
 
-    private String value;
-    private boolean expectedResult;
+    private final String value;
+    private final boolean expectedResult;
 
     /**
      * Constructor.

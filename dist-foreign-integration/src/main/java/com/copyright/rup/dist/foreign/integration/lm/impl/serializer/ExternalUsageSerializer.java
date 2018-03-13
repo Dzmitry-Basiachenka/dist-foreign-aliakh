@@ -20,7 +20,7 @@ import java.io.IOException;
  */
 public class ExternalUsageSerializer extends StdSerializer<ExternalUsageWrapper> {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     /**
      * Constructor.

@@ -22,6 +22,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Collections;
+import java.util.HashSet;
 
 /**
  * Verifies {@link ProductFamilyFilterWidget}.
@@ -77,7 +78,7 @@ public class ProductFamiliesFilterWidgetTest {
         mockStatic(Windows.class);
         Windows.showFilterWindow("Product Families filter", productFamilyFilterWidget);
         expectLastCall().andReturn(filterWindow).once();
-        filterWindow.setSelectedItemsIds(null);
+        filterWindow.setSelectedItemsIds(new HashSet<>());
         expectLastCall().once();
         filterWindow.setWidth(350, Unit.PIXELS);
         expectLastCall().once();

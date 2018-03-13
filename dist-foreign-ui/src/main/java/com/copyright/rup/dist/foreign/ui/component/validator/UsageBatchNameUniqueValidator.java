@@ -19,7 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 public class UsageBatchNameUniqueValidator extends AbstractStringValidator {
 
     private static final String ERROR_MESSAGE = ForeignUi.getMessage("message.error.unique_name", "Usage Batch");
-    private IUsagesController usagesController;
+    private final IUsagesController usagesController;
 
     /**
      * Constructs.

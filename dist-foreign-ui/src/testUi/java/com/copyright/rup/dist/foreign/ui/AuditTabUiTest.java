@@ -33,7 +33,7 @@ import java.util.Map;
 @ContextConfiguration(value = "classpath:/com/copyright/rup/dist/foreign/ui/dist-foreign-ui-test-context.xml")
 @TestExecutionListeners(value = UpdateDatabaseForClassTestExecutionListener.class,
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS)
-public class AuditTabUiTest extends ForeignCommonUiTest {
+public class AuditTabUiTest extends ForeignCommonUiTestProvider {
 
     private static final String FAS_PRODUCT_FAMILY = "FAS";
     private static final String FILTERS_HEADER_TEXT = "Filters";

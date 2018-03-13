@@ -19,7 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 public class ScenarioNameUniqueValidator extends AbstractStringValidator {
 
     private static final String ERROR_MESSAGE = ForeignUi.getMessage("message.error.unique_name", "Scenario");
-    private IScenarioService scenarioService;
+    private final IScenarioService scenarioService;
 
     /**
      * Constructor.

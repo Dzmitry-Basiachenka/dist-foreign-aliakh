@@ -32,8 +32,8 @@ import java.util.Collection;
 @RunWith(Parameterized.class)
 public class PaymentDateFilterTest {
 
-    private String searchValue;
-    private boolean expectedResult;
+    private final String searchValue;
+    private final boolean expectedResult;
 
     /**
      * Constructor.

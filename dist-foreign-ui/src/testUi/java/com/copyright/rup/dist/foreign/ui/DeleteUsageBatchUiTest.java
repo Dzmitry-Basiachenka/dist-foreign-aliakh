@@ -17,7 +17,6 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
@@ -47,41 +46,31 @@ import java.util.stream.IntStream;
 @ContextConfiguration(value = "classpath:/com/copyright/rup/dist/foreign/ui/dist-foreign-ui-test-context.xml")
 @TestExecutionListeners(value = UpdateDatabaseForClassTestExecutionListener.class,
     mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS)
-public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
+public class DeleteUsageBatchUiTest extends ForeignCommonUiTestProvider {
 
     private static final String CLOSE_BUTTON_ID = "Close";
     private static final String USAGE_BATCHES_TABLE_ID = "usage-batches-table";
     private static final String BATCH_TO_DELETE_ID = "4b67f17c-3c32-4b55-b2a0-dabebb513304";
-    private UsageBatchInfo usageBatch1 = new UsageBatchInfo("d2b9c16d-230a-414f-9ffb-acdb676fac0c", "CADRA_11Dec16",
-        "01/11/2017", "FY2017",
-        "7000813806 - CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil");
-    private UsageBatchInfo usageBatch2 = new UsageBatchInfo("3cc619da-6218-47ef-959e-5a3f19e392a4",
+    private final UsageBatchInfo usageBatch2 = new UsageBatchInfo("3cc619da-6218-47ef-959e-5a3f19e392a4",
         "AccessCopyright_11Dec16", "09/10/2015", "FY2016",
         "2000017004 - Access Copyright, The Canadian Copyright Agency");
-    private UsageBatchInfo usageBatch3 = new UsageBatchInfo("56782dbc-2158-48d4-b026-94d3458a666a", "JAACC_11Dec16",
-        "08/16/2018", "FY2019", "7001440663 - JAACC, Japan Academic Association for Copyright Clearance [T]");
-    private UsageBatchInfo usageBatch4 = new UsageBatchInfo(BATCH_TO_DELETE_ID, "Batch to delete",
+    private final UsageBatchInfo usageBatch3 = new UsageBatchInfo("56782dbc-2158-48d4-b026-94d3458a666a",
+        "JAACC_11Dec16", "08/16/2018", "FY2019",
+        "7001440663 - JAACC, Japan Academic Association for Copyright Clearance [T]");
+    private final UsageBatchInfo usageBatch4 = new UsageBatchInfo(BATCH_TO_DELETE_ID, "Batch to delete",
         "07/11/2017", "FY2018", "1000002797 - British Film Institute (BFI)");
-    private UsageBatchInfo usageBatchWithNewUsages = new UsageBatchInfo("5fb4a015-f943-4e29-ae7b-c7301db3c15e",
+    private final UsageBatchInfo usageBatchWithNewUsages = new UsageBatchInfo("5fb4a015-f943-4e29-ae7b-c7301db3c15e",
         "Batch with usages in different statuses", "01/11/2017", "FY2017",
         "1000005413 - Kluwer Academic Publishers - Dordrecht");
-
+    private final UsageBatchInfo usageBatch1 = new UsageBatchInfo("d2b9c16d-230a-414f-9ffb-acdb676fac0c",
+        "CADRA_11Dec16", "01/11/2017", "FY2017",
+        "7000813806 - CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil");
     @Autowired
     private IUsageAuditRepository usageAuditRepository;
     @Autowired
     private IUsageRepository usageRepository;
     @Autowired
     private IUsageBatchRepository usageBatchRepository;
-    private UsageBatch usageBatchToDelete;
-
-    @After
-    public void tearDown() {
-        if (null != usageBatchToDelete) {
-            usageBatchRepository.deleteUsageBatch(usageBatchToDelete.getId());
-            usageRepository.deleteUsages(usageBatchToDelete.getId());
-            usageBatchToDelete = null;
-        }
-    }
 
     @Test
     // Test cases IDs: 'fa7466eb-7d5d-4068-877a-835522f1deeb', '18eb492e-5ec1-4c87-ac1c-be9ed9facbdb',
@@ -109,7 +98,7 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
     // Test cases IDs: '251507d4-af2d-4f5f-a4d0-772b70804f83', '0de548a6-6e56-4141-95fb-71931e7f1c7d',
     // 'af0b68e7-236a-4f21-8691-a6c6192d153c'
     public void testDeleteUsageBatchWithApproval() {
-        usageBatchToDelete = buildUsageBatch();
+        UsageBatch usageBatchToDelete = buildUsageBatch();
         usageBatchRepository.insert(usageBatchToDelete);
         usageRepository.insert(buildUsage());
         loginAsSpecialist();
@@ -132,9 +121,10 @@ public class DeleteUsageBatchUiTest extends ForeignCommonUiTest {
         assertNullFilterItem(filterWidget, "rightsholders-filter", "rightsholders-filter-window", usageBatch4.getRro());
         verifyFiscalYearFilter(filterWidget, StringUtils.SPACE, "2016", "2017", "2019");
         assertEquals(0, usageBatchRepository.findCountByName(usageBatch4.getName()));
-        usageBatchToDelete = null;
         verifyUsageAuditForNotDeletedBatches(usageBatch1.getId(), usageBatch2.getId(), usageBatch3.getId());
         verifyUsageAuditForDeletedBatches(usageBatch4.getId());
+        usageBatchRepository.deleteUsageBatch(usageBatchToDelete.getId());
+        usageRepository.deleteUsages(usageBatchToDelete.getId());
     }
 
     @Test

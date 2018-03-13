@@ -23,9 +23,9 @@ import java.util.Collection;
 @RunWith(Parameterized.class)
 public class LengthValidatorTest {
 
-    private String value;
-    private boolean expectedResult;
-    private int length;
+    private final String value;
+    private final boolean expectedResult;
+    private final int length;
 
     /**
      * Constructor.

@@ -22,9 +22,9 @@ import java.util.Collection;
 @RunWith(Parameterized.class)
 public class NumberValidatorTest {
 
-    private String number;
-    private boolean expectedResult;
-    private NumberValidator validator = new NumberValidator();
+    private final String number;
+    private final boolean expectedResult;
+    private final NumberValidator validator = new NumberValidator();
 
     /**
      * Constructor.

@@ -208,14 +208,6 @@ public class PiIntegrationService implements IPiIntegrationService {
         @JsonProperty("title")
         private List<String> titles;
 
-        public Work() {
-            // default constructor
-        }
-
-        public void setWrWrkInst(Long wrWrkInst) {
-            this.wrWrkInst = wrWrkInst;
-        }
-
         @Override
         public boolean equals(Object o) {
             if (this == o) {
@@ -226,19 +218,23 @@ public class PiIntegrationService implements IPiIntegrationService {
             }
             Work that = (Work) o;
             return new EqualsBuilder()
-                    .append(this.wrWrkInst, that.wrWrkInst)
-                    .append(this.idnos, that.idnos)
-                    .append(this.titles, that.titles)
-                    .isEquals();
+                .append(this.wrWrkInst, that.wrWrkInst)
+                .append(this.idnos, that.idnos)
+                .append(this.titles, that.titles)
+                .isEquals();
         }
 
         @Override
         public int hashCode() {
             return new HashCodeBuilder()
-                    .append(wrWrkInst)
-                    .append(idnos)
-                    .append(titles)
-                    .toHashCode();
+                .append(wrWrkInst)
+                .append(idnos)
+                .append(titles)
+                .toHashCode();
+        }
+
+        public void setWrWrkInst(Long wrWrkInst) {
+            this.wrWrkInst = wrWrkInst;
         }
 
         private Long getWrWrkInst() {

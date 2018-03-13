@@ -22,6 +22,7 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -96,7 +97,7 @@ public class RightsholderFilterWidgetTest {
         mockStatic(Windows.class);
         Windows.showFilterWindow("RROs filter", rightsholderFilterWidget, "name", "accountNumber");
         expectLastCall().andReturn(filterWindow).once();
-        filterWindow.setSelectedItemsIds(null);
+        filterWindow.setSelectedItemsIds(new HashSet<>());
         expectLastCall().once();
         expect(filterWindow.getId()).andReturn("id").once();
         filterWindow.addStyleName("rightsholders-filter-window");

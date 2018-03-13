@@ -48,11 +48,10 @@ public class ExcludeRightsholdersWindow extends Window implements ISearchControl
     private static final String RH_ACCOUNT_NUMBER = "rightsholder.accountNumber";
     private static final String RH_NAME = "rightsholder.name";
     private static final String SELECTED = "selected";
-
+    private final Long accountNumber;
+    private final IScenarioController scenarioController;
     private BeanContainer<Long, RightsholderPayeePair> rightsholderContainer;
     private SelectableTable rightsholdersTable;
-    private Long accountNumber;
-    private IScenarioController scenarioController;
     private SearchWidget searchWidget;
 
     /**
@@ -192,7 +191,7 @@ public class ExcludeRightsholdersWindow extends Window implements ISearchControl
          *
          * @param source the source component of the event
          */
-        private ExcludeUsagesEvent(Component source) {
+        ExcludeUsagesEvent(Component source) {
             super(source);
         }
     }

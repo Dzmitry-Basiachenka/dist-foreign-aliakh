@@ -19,7 +19,7 @@ import org.junit.Test;
  */
 public class RightsholderWrWrkInstValidatorTest {
 
-    private RightsholderWrWrkInstValidator validator = new RightsholderWrWrkInstValidator();
+    private final RightsholderWrWrkInstValidator validator = new RightsholderWrWrkInstValidator();
 
     @Test
     public void testErrorMessage() {

@@ -23,9 +23,9 @@ import java.util.Collection;
 @RunWith(Parameterized.class)
 public class CalculationUtilsCalculateConversionRateTest {
 
-    private BigDecimal expectedRate;
-    private BigDecimal fundPoolAmount;
-    private BigDecimal totalAmount;
+    private final BigDecimal expectedRate;
+    private final BigDecimal fundPoolAmount;
+    private final BigDecimal totalAmount;
 
     /**
      * Constructor.

@@ -9,7 +9,10 @@ import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.FilterSaveEvent
 import com.copyright.rup.vaadin.ui.component.filter.IFilterWindowController;
 import com.copyright.rup.vaadin.widget.BaseItemsFilterWidget;
 
+import org.apache.commons.collections4.CollectionUtils;
+
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -27,7 +30,7 @@ public class UsageBatchFilterWidget extends BaseItemsFilterWidget<String, UsageB
     implements IFilterWindowController<String, UsageBatch> {
 
     private final Supplier<List<UsageBatch>> supplier;
-    private Set<String> selectedItemsIds;
+    private final Set<String> selectedItemsIds = new HashSet<>();
 
     /**
      * Constructor.
@@ -46,7 +49,7 @@ public class UsageBatchFilterWidget extends BaseItemsFilterWidget<String, UsageB
 
     @Override
     public void reset() {
-        selectedItemsIds = null;
+        selectedItemsIds.clear();
         super.reset();
     }
 
@@ -62,7 +65,11 @@ public class UsageBatchFilterWidget extends BaseItemsFilterWidget<String, UsageB
 
     @Override
     public void onSave(FilterSaveEvent<String> event) {
-        selectedItemsIds = event.getSelectedItemsIds();
+        Set<String> itemsIds = event.getSelectedItemsIds();
+        selectedItemsIds.clear();
+        if (CollectionUtils.isNotEmpty(itemsIds)) {
+            selectedItemsIds.addAll(itemsIds);
+        }
     }
 
     @Override
