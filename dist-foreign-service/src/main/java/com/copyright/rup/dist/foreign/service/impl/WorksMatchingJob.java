@@ -40,10 +40,18 @@ public class WorksMatchingJob {
         if (CollectionUtils.isNotEmpty(usages)) {
             Map<UsageGroupEnum, List<Usage>> usageGroups = usages.stream()
                 .collect(Collectors.groupingBy(UsageGroupEnum.getGroupingFunction()));
-            usageService.matchByIdno(usageGroups.get(UsageGroupEnum.STANDARD_NUMBER));
-            usageService.matchByTitle(usageGroups.get(UsageGroupEnum.TITLE));
-            usageService.updateStatusForUsagesWithNoStandardNumberAndTitle(
-                usageGroups.get(UsageGroupEnum.SINGLE_USAGE));
+            List<Usage> usagesByStandardNumber = usageGroups.get(UsageGroupEnum.STANDARD_NUMBER);
+            if (CollectionUtils.isNotEmpty(usagesByStandardNumber)) {
+                usageService.matchByIdno(usagesByStandardNumber);
+            }
+            List<Usage> usagesByTitle = usageGroups.get(UsageGroupEnum.TITLE);
+            if (CollectionUtils.isNotEmpty(usagesByTitle)) {
+                usageService.matchByTitle(usagesByTitle);
+            }
+            List<Usage> usagesWithNoStandardNumberAndTitle = usageGroups.get(UsageGroupEnum.SINGLE_USAGE);
+            if (CollectionUtils.isNotEmpty(usagesWithNoStandardNumberAndTitle)) {
+                usageService.updateStatusForUsagesWithNoStandardNumberAndTitle(usagesWithNoStandardNumberAndTitle);
+            }
         }
     }
 
