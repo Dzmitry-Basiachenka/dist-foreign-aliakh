@@ -87,16 +87,6 @@ public class ScenarioUsageFilterRepositoryIntegrationTest {
         assertNull(scenarioUsageFilterRepository.findByScenarioId(SCENARIO_ID));
     }
 
-    private void assertScenarioUsageFilter(ScenarioUsageFilter usageFilter) {
-        assertNotNull(usageFilter);
-        assertEquals(FILTER_ID, usageFilter.getId());
-        assertEquals(SCENARIO_ID, usageFilter.getScenarioId());
-        assertEquals(PRODUCT_FAMILY, usageFilter.getProductFamily());
-        assertEquals(USAGE_STATUS, usageFilter.getUsageStatus());
-        assertEquals(PAYMENT_DATE, usageFilter.getPaymentDate());
-        assertEquals(FISCAL_YEAR, usageFilter.getFiscalYear());
-    }
-
     private ScenarioUsageFilter buildScenarioUsageFilter() {
         ScenarioUsageFilter usageFilter = new ScenarioUsageFilter();
         usageFilter.setId(FILTER_ID);
@@ -108,5 +98,15 @@ public class ScenarioUsageFilterRepositoryIntegrationTest {
         usageFilter.setRhAccountNumbers(RH_ACCOUNT_NUMBERS);
         usageFilter.setUsageBatchesIds(USAGE_BATCHES_IDS);
         return usageFilter;
+    }
+
+    private void assertScenarioUsageFilter(ScenarioUsageFilter usageFilter) {
+        assertNotNull(usageFilter);
+        assertEquals(FILTER_ID, usageFilter.getId());
+        assertEquals(SCENARIO_ID, usageFilter.getScenarioId());
+        assertEquals(PRODUCT_FAMILY, usageFilter.getProductFamily());
+        assertEquals(USAGE_STATUS, usageFilter.getUsageStatus());
+        assertEquals(PAYMENT_DATE, usageFilter.getPaymentDate());
+        assertEquals(FISCAL_YEAR, usageFilter.getFiscalYear());
     }
 }
