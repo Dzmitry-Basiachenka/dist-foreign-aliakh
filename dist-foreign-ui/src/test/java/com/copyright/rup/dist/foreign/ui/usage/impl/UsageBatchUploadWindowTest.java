@@ -189,8 +189,10 @@ public class UsageBatchUploadWindowTest {
         Whitebox.setInternalState(window, "rro", rro);
         expect(window.isValid()).andReturn(true).once();
         expect(usagesController.getCsvProcessor()).andReturn(processor).once();
+        processor.setProductFamily("FAS");
+        expectLastCall().once();
         expect(processor.process(anyObject(), anyString())).andReturn(processingResult).once();
-        expect(usagesController.loadUsageBatch(buildUsageBatch(rro), processingResult.getResult(), "FAS"))
+        expect(usagesController.loadUsageBatch(buildUsageBatch(rro), processingResult.getResult()))
             .andReturn(1).once();
         expect(uploadField.getStreamToUploadedFile()).andReturn(createMock(ByteArrayOutputStream.class)).once();
         expect(uploadField.getFileName()).andReturn("fileName.csv").once();

@@ -133,7 +133,7 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public int insertUsages(UsageBatch usageBatch, List<Usage> usages, String productFamily) {
+    public int insertUsages(UsageBatch usageBatch, List<Usage> usages) {
         StopWatch stopWatch = new Slf4JStopWatch();
         String userName = RupContextUtils.getUserName();
         int size = usages.size();
@@ -143,7 +143,6 @@ public class UsageService implements IUsageService {
         stopWatch.lap("usage.insert_calculateGrossAmount");
         usages.forEach(usage -> {
             usage.setBatchId(usageBatch.getId());
-            usage.setProductFamily(productFamily);
             usage.setCreateUser(userName);
             usage.setUpdateUser(userName);
             usageRepository.insert(usage);
