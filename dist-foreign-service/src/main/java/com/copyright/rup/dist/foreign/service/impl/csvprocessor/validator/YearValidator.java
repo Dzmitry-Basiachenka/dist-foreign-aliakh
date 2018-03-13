@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * The validator to check if value is numeric and in range from 1000 to 9999.
  * <p>
@@ -15,7 +17,7 @@ public class YearValidator implements IValidator<String> {
 
     @Override
     public boolean isValid(String value) {
-        return null == value || value.matches(YEAR_REGEX);
+        return StringUtils.isEmpty(value) || value.matches(YEAR_REGEX);
     }
 
     @Override
