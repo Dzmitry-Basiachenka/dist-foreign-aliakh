@@ -52,11 +52,11 @@ public class CreateScenarioTest {
                 "00d4ae90-5fe7-47bf-ace1-781c8d76d4da", "038bf4aa-b6cc-430a-9b32-655954d95278",
                 "756299b5-02ce-4f76-b0bc-ee2571cf906e", "019acfde-91be-43aa-8871-6305642bcb2c")
             .expectUsages(Lists.newArrayList(
-                buildUsageForCreatedScenario(7000429266L, 2000017000L, "2871.0528", "6100.9872"),
+                buildUsageForCreatedScenario(7000429266L, 1000009997L, "2871.0528", "6100.9872"),
                 buildUsageForCreatedScenario(1000002859L, 1000002859L, "1450.0256", "3081.3044"),
                 buildUsageForCreatedScenario(1000001820L, 1000001820L, "2175.0384", "11418.9516"),
                 buildUsageForCreatedScenario(1000024497L, 1000024497L, "435.008", "2283.792"),
-                buildUsageForCreatedScenario(1000002562L, 2000017000L, "1629.8304", "3463.3896"),
+                buildUsageForCreatedScenario(1000002562L, 1000009997L, "1629.8304", "3463.3896"),
                 buildUsage("4c014547-06f3-4840-94ff-6249730d537d", 1000003821L, 1000003821L, "29.00", "61.63")))
             .expectScenario(buildScenario("26348.4248", "34909.38", "8560.9552", "38520.00"))
             .build()

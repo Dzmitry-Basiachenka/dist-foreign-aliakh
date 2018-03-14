@@ -45,6 +45,7 @@ import org.perf4j.aop.Profiled;
 import org.perf4j.slf4j.Slf4JStopWatch;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -81,6 +82,9 @@ public class UsageService implements IUsageService {
     private static final String UPDATE_PAID_INFO_FAILED_LOG_MESSAGE = "Update paid information. Not found usages. " +
         "UsagesCount={}, UpdatedCount={}, NotFoundDetailIds={}";
     private static final long UNIDENTIFIED_WR_WRK_INST = 123050824L;
+    private static final Long CLA_PAYEE = 2000017000L;
+    @Value("$RUP{dist.foreign.service_fee.cla_payee}")
+    private BigDecimal claPayeeServiceFee;
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
@@ -196,6 +200,7 @@ public class UsageService implements IUsageService {
     }
 
     @Override
+    //TODO {dbaraukova} add integration test to cover case when Payee is CLA
     public void addUsagesToScenario(List<Usage> usages, Scenario scenario) {
         StopWatch stopWatch = new Slf4JStopWatch();
         Table<String, String, Long> rollUps = prmIntegrationService.getRollUps(
@@ -207,6 +212,10 @@ public class UsageService implements IUsageService {
             usage.setUpdateUser(scenario.getCreateUser());
             usage.getPayee().setAccountNumber(
                 PrmRollUpService.getPayeeAccountNumber(rollUps, usage.getRightsholder(), usage.getProductFamily()));
+            //usages that have CLA as Payee should get 10% service fee
+            if (CLA_PAYEE.equals(usage.getPayee().getAccountNumber())) {
+                CalculationUtils.recalculateAmounts(usage, usage.isRhParticipating(), claPayeeServiceFee);
+            }
         });
         stopWatch.lap("scenario.create_3_2_setPayeeAndStatus");
         usageRepository.addToScenario(usages);
