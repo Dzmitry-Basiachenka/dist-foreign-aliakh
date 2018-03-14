@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -12,10 +13,19 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
+import com.copyright.rup.dist.foreign.domain.ScenarioUsageFilter;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageFilter;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
+import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
+import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IActionHandler;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IReconcileRightsholdersController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioWidget;
@@ -25,6 +35,7 @@ import com.copyright.rup.vaadin.ui.ConfirmActionDialogWindow;
 import com.copyright.rup.vaadin.ui.ConfirmDialogWindow;
 import com.copyright.rup.vaadin.ui.Windows;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 import com.vaadin.ui.Window;
 
@@ -35,6 +46,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Set;
 
@@ -230,6 +242,86 @@ public class ScenariosControllerTest {
     }
 
     @Test
+    public void testOnRefreshScenarioButtonClickedNullFilter() {
+        mockStatic(Windows.class);
+        IScenarioUsageFilterService scenarioUsageFilterService = createMock(IScenarioUsageFilterService.class);
+        Whitebox.setInternalState(scenariosController, scenarioUsageFilterService);
+        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
+        expect(scenarioUsageFilterService.getByScenarioId(SCENARIO_ID)).andReturn(null);
+        Windows.showNotificationWindow("There are no usages that meet the criteria");
+        expectLastCall().once();
+        replay(Windows.class, scenariosWidget, scenarioUsageFilterService);
+        scenariosController.onRefreshScenarioButtonClicked();
+        verify(Windows.class, scenariosWidget, scenarioUsageFilterService);
+    }
+
+    @Test
+    public void testOnRefreshScenarioButtonClickedNotNullFilter() {
+        mockStatic(Windows.class);
+        IScenarioUsageFilterService scenarioUsageFilterService = createMock(IScenarioUsageFilterService.class);
+        Whitebox.setInternalState(scenariosController, scenarioUsageFilterService);
+        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
+        expect(scenarioUsageFilterService.getByScenarioId(SCENARIO_ID)).andReturn(new ScenarioUsageFilter());
+        IUsageService usageService = createMock(IUsageService.class);
+        Whitebox.setInternalState(scenariosController, usageService);
+        UsageDto usageDto = new UsageDto();
+        usageDto.setId(RupPersistUtils.generateUuid());
+        expect(usageService.getUsages(new UsageFilter(new ScenarioUsageFilter()), null, null)).andReturn(
+            Collections.singletonList(usageDto)).once();
+        Windows.showModalWindow(anyObject(RefreshScenarioWindow.class));
+        expectLastCall().once();
+        replay(Windows.class, scenariosWidget, scenarioUsageFilterService, usageService);
+        scenariosController.onRefreshScenarioButtonClicked();
+        verify(Windows.class, scenariosWidget, scenarioUsageFilterService, usageService);
+    }
+
+    @Test
+    public void testRefreshScenario() {
+        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
+        scenarioService.refreshScenario(scenario);
+        expectLastCall().once();
+        scenariosWidget.refreshSelectedScenario();
+        expectLastCall().once();
+        replay(scenariosWidget, scenarioService);
+        scenariosController.refreshScenario();
+        verify(scenariosWidget, scenarioService);
+    }
+
+    @Test
+    public void testGetCriteriaHtmlRepresentation() {
+        IScenarioUsageFilterService scenarioUsageFilterService = createMock(IScenarioUsageFilterService.class);
+        Whitebox.setInternalState(scenariosController, scenarioUsageFilterService);
+        expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
+        ScenarioUsageFilter scenarioUsageFilter = new ScenarioUsageFilter();
+        scenarioUsageFilter.setFiscalYear(2018);
+        scenarioUsageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
+        scenarioUsageFilter.setProductFamily("FAS");
+        scenarioUsageFilter.setRhAccountNumbers(Sets.newHashSet(1000000001L, 1000000002L));
+        scenarioUsageFilter.setPaymentDate(LocalDate.of(2010, 1, 1));
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatch.setId("batchId");
+        usageBatch.setName("BatchName");
+        scenarioUsageFilter.setUsageBatches(Collections.singleton(usageBatch));
+        expect(scenarioUsageFilterService.getByScenarioId(SCENARIO_ID)).andReturn(scenarioUsageFilter);
+        IRightsholderService rightsholderService = createMock(IRightsholderService.class);
+        Whitebox.setInternalState(scenariosController, rightsholderService);
+        expect(rightsholderService.updateAndGetRightsholders(Sets.newHashSet(1000000001L, 1000000002L))).andReturn(
+            ImmutableMap.of(1000000001L, buildRightsholder(1000000001L, "Rothchild Consultants"), 1000000002L,
+                buildRightsholder(1000000002L, "Royal Society of Victoria"))).once();
+        replay(scenariosWidget, scenarioUsageFilterService, rightsholderService);
+        String result = scenariosController.getCriteriaHtmlRepresentation();
+        assertTrue(result.contains("<b>Selection Criteria:</b>"));
+        assertTrue(result.contains("<li><b><i>Product Family </i></b>(FAS)</li>"));
+        assertTrue(result.contains("<li><b><i>Batch in </i></b>(BatchName)</li>"));
+        assertTrue(result.contains("<li><b><i>RRO in </i></b>(1000000001: Rothchild Consultants, " +
+            "1000000002: Royal Society of Victoria)</li>"));
+        assertTrue(result.contains("<li><b><i>Payment Date To </i></b>(01/01/2010)</li>"));
+        assertTrue(result.contains("<li><b><i>Status </i></b>(ELIGIBLE)</li>"));
+        assertTrue(result.contains("<li><b><i>Fiscal Year To </i></b>(2018)</li>"));
+        verify(scenariosWidget, scenarioUsageFilterService, rightsholderService);
+    }
+
+    @Test
     public void testSendScenarioToLm() {
         scenariosWidget.refresh();
         expectLastCall().once();
@@ -244,5 +336,12 @@ public class ScenariosControllerTest {
         scenario = new Scenario();
         scenario.setId(SCENARIO_ID);
         scenario.setName(SCENARIO_NAME);
+    }
+
+    private Rightsholder buildRightsholder(Long accountNumber, String name) {
+        Rightsholder rightsholder = new Rightsholder();
+        rightsholder.setName(name);
+        rightsholder.setAccountNumber(accountNumber);
+        return rightsholder;
     }
 }

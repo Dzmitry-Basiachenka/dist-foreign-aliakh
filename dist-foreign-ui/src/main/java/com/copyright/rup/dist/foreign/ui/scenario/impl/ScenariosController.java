@@ -6,9 +6,13 @@ import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioUsageFilter;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
+import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
+import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IActionHandler;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IReconcileRightsholdersController;
@@ -22,7 +26,6 @@ import com.copyright.rup.vaadin.ui.ConfirmActionDialogWindow;
 import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.ui.Window;
@@ -71,6 +74,10 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
     private IReconcileRightsholdersController reconcileRightsholdersController;
     @Autowired
     private IRightsholderService rightsholderService;
+    @Autowired
+    private IUsageService usageService;
+    @Autowired
+    private IScenarioUsageFilterService scenarioUsageFilterService;
 
     @Override
     public List<Scenario> getScenarios() {
@@ -150,29 +157,41 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
     }
 
     @Override
-    public void refreshScenario() {
-        // TODO {isuvorau} call service method after implementation
-        List<UsageDto> usages = Lists.newArrayList();
-        if (CollectionUtils.isNotEmpty(usages)) {
-            Windows.showModalWindow(new RefreshScenarioWindow(usages));
+    public void onRefreshScenarioButtonClicked() {
+        ScenarioUsageFilter filter =
+            scenarioUsageFilterService.getByScenarioId(getWidget().getSelectedScenario().getId());
+        if (Objects.nonNull(filter)) {
+            List<UsageDto> usages = usageService.getUsages(new UsageFilter(filter), null, null);
+            if (CollectionUtils.isNotEmpty(usages)) {
+                Windows.showModalWindow(new RefreshScenarioWindow(usages, this));
+            } else {
+                Windows.showNotificationWindow(ForeignUi.getMessage("message.info.refresh_scenario.nothing_to_add"));
+            }
         } else {
             Windows.showNotificationWindow(ForeignUi.getMessage("message.info.refresh_scenario.nothing_to_add"));
         }
     }
 
     @Override
+    public void refreshScenario() {
+        scenarioService.refreshScenario(getWidget().getSelectedScenario());
+        getWidget().refreshSelectedScenario();
+    }
+
+    @Override
     public String getCriteriaHtmlRepresentation() {
-        // TODO {isuvorau} call service method to get ScenarioUsageFilter by selected scenario id
-        ScenarioUsageFilter filter = new ScenarioUsageFilter();
+        ScenarioUsageFilter filter =
+            scenarioUsageFilterService.getByScenarioId(getWidget().getSelectedScenario().getId());
         StringBuilder sb = new StringBuilder(ForeignUi.getMessage("label.criteria"));
-        if (!filter.isEmpty()) {
+        if (Objects.nonNull(filter)) {
             sb.append("<ul>");
             if (Objects.nonNull(filter.getProductFamily())) {
                 appendCriterionMessage(sb, "label.product_family", filter.getProductFamily());
             }
-            if (CollectionUtils.isNotEmpty(filter.getUsageBatchesIds())) {
-                appendCriterionMessage(sb, "label.batch_in",
-                    StringUtils.join(filter.getUsageBatchesIds(), LIST_SEPARATOR));
+            if (CollectionUtils.isNotEmpty(filter.getUsageBatches())) {
+                appendCriterionMessage(sb, "label.batch_in", StringUtils.join(
+                    filter.getUsageBatches().stream().map(UsageBatch::getName).collect(Collectors.toList()),
+                    LIST_SEPARATOR));
             }
             if (CollectionUtils.isNotEmpty(filter.getRhAccountNumbers())) {
                 appendCriterionMessage(sb, "label.rro_in", StringUtils.join(generateRightsholderList(
@@ -246,7 +265,7 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
     }
 
     private void appendCriterionMessage(StringBuilder builder, String criterionName, Object values) {
-        builder.append(String.format("<li><b><i>%s </i></b> (%s)</li>", ForeignUi.getMessage(criterionName), values));
+        builder.append(String.format("<li><b><i>%s </i></b>(%s)</li>", ForeignUi.getMessage(criterionName), values));
     }
 
     private Collection<String> generateRightsholderList(Map<Long, Rightsholder> rightsholderMap) {

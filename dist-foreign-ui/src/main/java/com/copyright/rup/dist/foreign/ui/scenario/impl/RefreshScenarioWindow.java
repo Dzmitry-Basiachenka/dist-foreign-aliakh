@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.ui.common.util.FiscalYearColumnGenerator;
 import com.copyright.rup.dist.foreign.ui.common.util.IntegerColumnGenerator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.LocalDateColumnGenerator;
 import com.copyright.rup.vaadin.ui.LongColumnGenerator;
@@ -34,6 +35,7 @@ import java.util.List;
  */
 public class RefreshScenarioWindow extends Window {
 
+    private final IScenariosController controller;
     private BeanContainer<String, UsageDto> container;
     private Table usagesTable;
     private HorizontalLayout buttonsLayout;
@@ -41,9 +43,11 @@ public class RefreshScenarioWindow extends Window {
     /**
      * Constructor.
      *
-     * @param usageDtos usageDtos for adding to scenario
+     * @param usageDtos  usageDtos for adding to scenario
+     * @param controller instance of {@link IScenariosController}
      */
-    public RefreshScenarioWindow(List<UsageDto> usageDtos) {
+    public RefreshScenarioWindow(List<UsageDto> usageDtos, IScenariosController controller) {
+        this.controller = controller;
         setCaption(ForeignUi.getMessage("label.refresh_scenario"));
         setWidth(800, Unit.PIXELS);
         setHeight(400, Unit.PIXELS);
@@ -69,7 +73,10 @@ public class RefreshScenarioWindow extends Window {
     private void initButtonsLayout() {
         buttonsLayout = new HorizontalLayout();
         Button continueButton = Buttons.createOkButton();
-        continueButton.addClickListener(e -> close());
+        continueButton.addClickListener(e -> {
+            controller.refreshScenario();
+            close();
+        });
         buttonsLayout.addComponents(continueButton, Buttons.createCancelButton(this));
         buttonsLayout.setSpacing(true);
     }

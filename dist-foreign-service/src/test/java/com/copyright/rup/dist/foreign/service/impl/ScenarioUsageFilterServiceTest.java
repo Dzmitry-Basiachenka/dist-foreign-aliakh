@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
 import static org.easymock.EasyMock.anyObject;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.same;
@@ -59,7 +60,7 @@ public class ScenarioUsageFilterServiceTest {
         ScenarioUsageFilter expectedUsageFilter = buildScenarioUsageFilter();
         scenarioUsageFilterRepository.insertRhAccountNumbers(anyObject(String.class), same(RH_ACCOUNT_NUMBERS));
         expectLastCall().once();
-        scenarioUsageFilterRepository.insertUsageBatchesIds(anyObject(String.class), same(USAGE_BATCHES_IDS));
+        scenarioUsageFilterRepository.insertUsageBatchesIds(anyObject(String.class), eq(USAGE_BATCHES_IDS));
         expectLastCall().once();
         scenarioUsageFilterRepository.insert(expectedUsageFilter);
         expectLastCall().once();

@@ -14,9 +14,12 @@
         <collection property="rhAccountNumbers" javaType="java.util.Set" ofType="java.lang.Long">
             <result column="rh_account_number"/>
         </collection>
-        <collection property="usageBatchesIds" javaType="java.util.Set" ofType="java.lang.String">
-            <result column="df_usage_batch_uid"/>
-        </collection>
+        <collection property="usageBatches" javaType="java.util.Set" resultMap="UsageBatch"/>
+    </resultMap>
+
+    <resultMap id="UsageBatch" type="UsageBatch">
+        <result property="id" column="df_usage_batch_uid"/>
+        <result property="name" column="name"/>
     </resultMap>
 
     <insert id="insert" parameterType="ScenarioUsageFilter">
@@ -77,10 +80,12 @@
             f.updated_by_user,
             f.record_version,
             an.rh_account_number,
-            ub.df_usage_batch_uid
+            b.df_usage_batch_uid,
+            b.name
         from ${schema}.df_scenario_usage_filter f
         left join ${schema}.df_scenario_usage_filter_to_rh_account_numbers_map an on f.df_scenario_usage_filter_uid = an.df_scenario_usage_filter_uid
         left join ${schema}.df_scenario_usage_filter_to_usage_batches_ids_map ub on f.df_scenario_usage_filter_uid = ub.df_scenario_usage_filter_uid
+        left join ${schema}.df_usage_batch b on ub.df_usage_batch_uid = b.df_usage_batch_uid
         where f.df_scenario_uid = #{scenarioId}
     </select>
 
