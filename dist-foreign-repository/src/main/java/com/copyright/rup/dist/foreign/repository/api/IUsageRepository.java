@@ -67,6 +67,15 @@ public interface IUsageRepository {
     void writeUsagesCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream);
 
     /**
+     * Finds usages according to given {@link UsageFilter} and writes them to the output stream in CSV format.
+     *
+     * @param filter            instance of {@link UsageFilter}
+     * @param pipedOutputStream instance of {@link PipedOutputStream}
+     * @return usages written into csv report
+     */
+    List<UsageDto> getAndWriteUsagesForResearch(UsageFilter filter, PipedOutputStream pipedOutputStream);
+
+    /**
      * Finds usages by scenario id and writes them into the output stream in CSV format.
      *
      * @param scenarioId        scenario id

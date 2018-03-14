@@ -83,6 +83,7 @@ public class UsagesWidgetTest {
         usagesWidget.setController(controller);
         expect(controller.initUsagesFilterWidget()).andReturn(filterWidget).once();
         expect(controller.getExportUsagesStreamSource()).andReturn(createMock(IStreamSource.class)).once();
+        expect(controller.getSendForResearchUsagesStreamSource()).andReturn(createMock(IStreamSource.class)).once();
         replay(controller);
         usagesWidget.init();
         verify(controller);

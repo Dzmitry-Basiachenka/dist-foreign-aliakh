@@ -370,10 +370,45 @@ databaseChangeLog {
             column(name: 'period_end_date', value: '2017-03-15 11:41:52.735531+03')
         }
 
-        //testFindProductFamilies
+        //testWriteIntoCsvAndGetUsagesForResearch
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: 'e855bf85-236c-42e7-9b12-8d68dd747bbe')
             column(name: 'name', value: 'Batch with NTS')
+            column(name: 'rro_account_number', value: '2000017010')
+            column(name: 'payment_date', value: '2021-02-12')
+            column(name: 'fiscal_year', value: '2020')
+            column(name: 'gross_amount', value: '500.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'e2b3c369-3084-41ad-92b5-62197660d645')
+            column(name: 'df_usage_batch_uid', value: 'e855bf85-236c-42e7-9b12-8d68dd747bbe')
+            column(name: 'detail_id', value: '547365434')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
+            column(name: 'status_ind', value: 'WORK_NOT_FOUND')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '2192-3558')
+            column(name: 'publisher', value: 'Network for Science')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'created_by_user', value: 'user@copyright.com')
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '500.00')
+            column(name: 'gross_amount', value: '500.00')
+            column(name: 'net_amount', value: '420.00')
+            column(name: 'service_fee_amount', value: '80.00')
+            column(name: 'service_fee', value: '0.16000')
+        }
+
+        //testFindProductFamilies
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: 'cb597f4e-f636-447f-8710-0436d8994d10')
+            column(name: 'name', value: 'Batch with usages in WORK_NOT_FOUND status')
             column(name: 'rro_account_number', value: '2000017010')
             column(name: 'payment_date', value: '2021-02-12')
             column(name: 'fiscal_year', value: '2020')

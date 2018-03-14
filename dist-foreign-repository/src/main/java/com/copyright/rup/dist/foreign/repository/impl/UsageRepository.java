@@ -17,6 +17,7 @@ import com.copyright.rup.dist.foreign.repository.api.Sort;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
@@ -108,6 +109,20 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         } catch (IOException e) {
             throw new RupRuntimeException(e);
         }
+    }
+
+    @Override
+    public List<UsageDto> getAndWriteUsagesForResearch(UsageFilter filter, PipedOutputStream pipedOutputStream) {
+        List<UsageDto> usageDtos = Lists.newArrayList();
+        try (UsageCsvReportHandler handler = new UsageCsvReportHandler(Objects.requireNonNull(pipedOutputStream))) {
+            if (!Objects.requireNonNull(filter).isEmpty()) {
+                usageDtos = selectList("IUsageMapper.findByFilter", ImmutableMap.of(FILTER_KEY, filter));
+                usageDtos.forEach(handler::handleResult);
+            }
+        } catch (IOException e) {
+            throw new RupRuntimeException(e);
+        }
+        return usageDtos;
     }
 
     @Override

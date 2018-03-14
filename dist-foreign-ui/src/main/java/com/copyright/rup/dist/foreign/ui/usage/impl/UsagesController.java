@@ -153,6 +153,12 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
+    public IStreamSource getSendForResearchUsagesStreamSource() {
+        return new ExportStreamSource("send_for_research_", pipedStream ->
+            usageService.sendForResearch(filterController.getWidget().getAppliedFilter(), pipedStream));
+    }
+
+    @Override
     public IStreamSource getErrorResultStreamSource(CsvProcessingResult csvProcessingResult) {
         return new ErrorResultStreamSource(usageService, csvProcessingResult);
     }
@@ -178,6 +184,11 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     public boolean isSigleProductFamilySelected() {
         Set<String> productFamilies = filterController.getWidget().getAppliedFilter().getProductFamilies();
         return 1 == CollectionUtils.size(productFamilies) && !productFamilies.contains("NTS");
+    }
+
+    @Override
+    public boolean isWorkNotFoundStatusApplied() {
+        return UsageStatusEnum.WORK_NOT_FOUND == filterController.getWidget().getAppliedFilter().getUsageStatus();
     }
 
     @Override

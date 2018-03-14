@@ -119,6 +119,19 @@ public class UsageService implements IUsageService {
     }
 
     @Override
+    @Transactional
+    public void sendForResearch(UsageFilter filter, PipedOutputStream pipedOutputStream) {
+        StopWatch stopWatch = new Slf4JStopWatch();
+        List<UsageDto> usageDtos = usageRepository.getAndWriteUsagesForResearch(filter, pipedOutputStream);
+        stopWatch.lap("usage.sendForResearch.getAndWriteUsagesForResearch");
+        usageDtos.forEach(usageDto -> usageRepository.updateStatus(usageDto.getId(), UsageStatusEnum.WORK_RESEARCH));
+        stopWatch.lap("usage.sendForResearch.updateStatus");
+        usageDtos.forEach(usageDto -> usageAuditService.logAction(usageDto.getId(), UsageActionTypeEnum.WORK_RESEARCH,
+            "Usage detail was sent for research"));
+        stopWatch.stop("usage.sendForResearch.logAction");
+    }
+
+    @Override
     public void writeScenarioUsagesCsvReport(Scenario scenario, PipedOutputStream outputStream) {
         if (ScenarioStatusEnum.SENT_TO_LM == scenario.getStatus()) {
             usageArchiveRepository.writeScenarioUsagesCsvReport(scenario.getId(), outputStream);

@@ -132,12 +132,17 @@ public class UsageRepositoryIntegrationTest {
     private static final String USAGE_ID_14 = "0c099fc0-e6f5-43c0-b2d5-ad971f974c10";
     private static final String USAGE_ID_15 = "0d85f51d-212b-4181-9972-3154cad74bd0";
     private static final String USAGE_ID_16 = "1cb766c6-7c49-489a-bd8f-9b8b052f5785";
+    private static final String USAGE_ID_17 = "e2b3c369-3084-41ad-92b5-62197660d645";
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
     private static final String USER_NAME = "user@copyright.com";
     private static final BigDecimal NET_AMOUNT = new BigDecimal("25.1500000000");
     private static final BigDecimal SERVICE_FEE = new BigDecimal("0.32000");
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
     private static final String BATCH_ID = "e0af666b-cbb7-4054-9906-12daa1fbd76e";
+    private static final String EXPORT_HEADERS = "Detail ID,Detail Status,Product Family,Usage Batch Name," +
+        "Fiscal Year,RRO Account #,RRO Name,Payment Date,Title,Article,Standard Number,Wr Wrk Inst,RH Account #," +
+        "RH Name,Publisher,Pub Date,Number of Copies,Reported value,Amt in USD,Gross Amt in USD,Market," +
+        "Market Period From,Market Period To,Author";
 
     @Autowired
     private UsageRepository usageRepository;
@@ -205,9 +210,9 @@ public class UsageRepositoryIntegrationTest {
     public void testFindByProductFamiliesFilter() {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             Collections.singleton(PRODUCT_FAMILY_FAS), null, null, null);
-        verifyUsageDtos(usageRepository.findByFilter(usageFilter, null, new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 9,
-            USAGE_ID_11, USAGE_ID_14, USAGE_ID_12, USAGE_ID_13, USAGE_ID_6, USAGE_ID_3, USAGE_ID_2, USAGE_ID_1,
-            USAGE_ID_4);
+        verifyUsageDtos(usageRepository.findByFilter(usageFilter, null, new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)),
+            10, USAGE_ID_11, USAGE_ID_14, USAGE_ID_17, USAGE_ID_12, USAGE_ID_13, USAGE_ID_6, USAGE_ID_3, USAGE_ID_2,
+            USAGE_ID_1, USAGE_ID_4);
     }
 
     @Test
@@ -466,6 +471,33 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
+    public void testGetAndWriteUsagesForResearch() throws IOException {
+        PipedOutputStream outputStream = new PipedOutputStream();
+        PipedInputStream inputStream = new PipedInputStream(outputStream);
+        UsageFilter usageFilter = new UsageFilter();
+        usageFilter.setUsageStatus(UsageStatusEnum.WORK_NOT_FOUND);
+        EXECUTOR_SERVICE.execute(() -> usageRepository.getAndWriteUsagesForResearch(usageFilter, outputStream));
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+        assertEquals(EXPORT_HEADERS, bufferedReader.readLine());
+        assertEquals("547365434,WORK_NOT_FOUND,FAS,Batch with NTS,FY2020,2000017010," +
+            "\"JAC, Japan Academic Association for Copyright Clearance, Inc.\",02/12/2021," +
+            "Wissenschaft & Forschung Japan,DIN EN 779:2012,2192-3558,,,,Network for Science,09/10/2013,100,500.00," +
+            "500.0000000000,500.00,Doc Del,2013,2017,Philippe de Mézières", bufferedReader.readLine());
+        assertNull(bufferedReader.readLine());
+    }
+
+    @Test
+    public void testGetAndWriteUsagesForResearchEmptyReport() throws IOException {
+        PipedOutputStream outputStream = new PipedOutputStream();
+        PipedInputStream inputStream = new PipedInputStream(outputStream);
+        EXECUTOR_SERVICE.execute(
+            () -> usageRepository.getAndWriteUsagesForResearch(new UsageFilter(), outputStream));
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+        assertEquals(EXPORT_HEADERS, bufferedReader.readLine());
+        assertNull(bufferedReader.readLine());
+    }
+
+    @Test
     public void testWriteUsagesCsvReport() throws Exception {
         PipedOutputStream outputStream = new PipedOutputStream();
         PipedInputStream inputStream = new PipedInputStream(outputStream);
@@ -474,10 +506,7 @@ public class UsageRepositoryIntegrationTest {
         EXECUTOR_SERVICE.execute(() -> usageRepository.writeUsagesCsvReport(usageFilter, outputStream));
         BufferedReader bufferedReader =
             new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-        assertEquals("Detail ID,Detail Status,Product Family,Usage Batch Name,Fiscal Year,RRO Account #,RRO Name," +
-            "Payment Date,Title,Article,Standard Number,Wr Wrk Inst,RH Account #,RH Name,Publisher," +
-            "Pub Date,Number of Copies,Reported value,Amt in USD,Gross Amt in USD,Market,Market Period From," +
-            "Market Period To,Author", bufferedReader.readLine());
+        assertEquals(EXPORT_HEADERS, bufferedReader.readLine());
         assertEquals("6997788888,ELIGIBLE,FAS,CADRA_11Dec16,FY2017,7000813806," +
             "\"CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil\",01/11/2017," +
             "\"2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA\"," +
@@ -495,10 +524,7 @@ public class UsageRepositoryIntegrationTest {
         EXECUTOR_SERVICE.execute(() -> usageRepository.writeUsagesCsvReport(new UsageFilter(), outputStream));
         BufferedReader bufferedReader =
             new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-        assertEquals("Detail ID,Detail Status,Product Family,Usage Batch Name,Fiscal Year,RRO Account #,RRO Name," +
-            "Payment Date,Title,Article,Standard Number,Wr Wrk Inst,RH Account #,RH Name,Publisher,Pub Date," +
-            "Number of Copies,Reported value,Amt in USD,Gross Amt in USD,Market,Market Period From," +
-            "Market Period To,Author", bufferedReader.readLine());
+        assertEquals(EXPORT_HEADERS, bufferedReader.readLine());
         assertNull(bufferedReader.readLine());
     }
 
@@ -723,9 +749,9 @@ public class UsageRepositoryIntegrationTest {
     public void testFindForAuditByProductFamilies() {
         AuditFilter filter = new AuditFilter();
         filter.setProductFamilies(Collections.singleton(PRODUCT_FAMILY_FAS));
-        assertEquals(15, usageRepository.findCountForAudit(filter));
+        assertEquals(16, usageRepository.findCountForAudit(filter));
         List<UsageDto> usages = usageRepository.findForAudit(filter, new Pageable(0, 20), null);
-        verifyUsageDtos(usages, 15, USAGE_ID_11, USAGE_ID_14, USAGE_ID_12, USAGE_ID_13,
+        verifyUsageDtos(usages, 16, USAGE_ID_11, USAGE_ID_14, USAGE_ID_17, USAGE_ID_12, USAGE_ID_13,
             USAGE_ID_6, USAGE_ID_16, USAGE_ID_15, USAGE_ID_5, USAGE_ID_9, USAGE_ID_7, USAGE_ID_3, USAGE_ID_2,
             USAGE_ID_8, USAGE_ID_1, USAGE_ID_4);
     }
