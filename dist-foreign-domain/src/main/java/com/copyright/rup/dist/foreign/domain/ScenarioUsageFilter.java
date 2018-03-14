@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.domain;
 
+import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.common.domain.StoredEntity;
 
 import com.google.common.collect.Sets;
@@ -11,6 +12,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -24,6 +26,8 @@ import java.util.Set;
  */
 public class ScenarioUsageFilter extends StoredEntity<String> {
 
+    private static final int ONE = 1;
+
     private String scenarioId;
     private Set<Long> rhAccountNumbers = Sets.newHashSet();
     private Set<String> usageBatchesIds = Sets.newHashSet();
@@ -31,6 +35,34 @@ public class ScenarioUsageFilter extends StoredEntity<String> {
     private UsageStatusEnum usageStatus;
     private LocalDate paymentDate;
     private Integer fiscalYear;
+
+    /**
+     * Default constructor.
+     */
+    public ScenarioUsageFilter() {
+        // default constructor
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param usageFilter {@link UsageFilter}
+     */
+    public ScenarioUsageFilter(UsageFilter usageFilter) {
+        Objects.requireNonNull(usageFilter);
+        this.rhAccountNumbers = usageFilter.getRhAccountNumbers();
+        this.usageBatchesIds = usageFilter.getUsageBatchesIds();
+        Objects.requireNonNull(usageFilter.getProductFamilies());
+        if (ONE == usageFilter.getProductFamilies().size()) {
+            this.productFamily = Objects.requireNonNull(usageFilter.getProductFamilies().iterator().next());
+        } else {
+            throw new RupRuntimeException("Usage filter must have only 1 product family to create scenario " +
+                "but actually is: " + usageFilter.getProductFamilies());
+        }
+        this.usageStatus = usageFilter.getUsageStatus();
+        this.paymentDate = usageFilter.getPaymentDate();
+        this.fiscalYear = usageFilter.getFiscalYear();
+    }
 
     public String getScenarioId() {
         return scenarioId;

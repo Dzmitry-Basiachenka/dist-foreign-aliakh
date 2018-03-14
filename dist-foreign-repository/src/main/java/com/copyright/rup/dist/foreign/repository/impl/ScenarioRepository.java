@@ -37,6 +37,11 @@ public class ScenarioRepository extends BaseRepository implements IScenarioRepos
     }
 
     @Override
+    public void refresh(Scenario scenario) {
+        insert("IScenarioMapper.refresh", checkNotNull(scenario));
+    }
+
+    @Override
     public int findCountByName(String name) {
         checkArgument(StringUtils.isNotBlank(name));
         return selectOne("IScenarioMapper.findCountByName", name);

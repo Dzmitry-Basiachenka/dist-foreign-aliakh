@@ -523,4 +523,31 @@ databaseChangeLog {
             dropTable(tableName: 'df_scenario_usage_filter', schemaName: dbAppsSchema)
         }
     }
+
+    changeSet(id: '2018-03-14-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("B-40635 FDA: Refresh in-progress scenario with newly eligible details: remove unnecessary 'not null' constraints")
+
+        dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter',
+                columnName: 'status_ind', columnDataType: 'VARCHAR(16)')
+        dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter',
+                columnName: 'payment_date', columnDataType: 'DATE')
+        dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter',
+                columnName: 'fiscal_year', columnDataType: 'NUMERIC(4,0)')
+
+        dropForeignKeyConstraint(baseTableSchemaName: dbAppsSchema, baseTableName: 'df_scenario_usage_filter_to_rh_account_numbers_map',
+                constraintName: 'fk_df_scenario_usage_filter_to_rh_account_numbers_map_2_df_rightsholder')
+
+        rollback {
+            addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter',
+                    columnName: 'status_ind', columnDataType: 'VARCHAR(16)')
+            addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter',
+                    columnName: 'payment_date', columnDataType: 'DATE')
+            addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter',
+                    columnName: 'fiscal_year', columnDataType: 'NUMERIC(4,0)')
+
+            addForeignKeyConstraint(constraintName: 'fk_df_scenario_usage_filter_to_rh_account_numbers_map_2_df_rightsholder',
+                    baseTableSchemaName: dbAppsSchema, baseTableName: 'df_scenario_usage_filter_to_rh_account_numbers_map', baseColumnNames: 'rh_account_number',
+                    referencedTableSchemaName: dbAppsSchema, referencedTableName: 'df_rightsholder', referencedColumnNames: 'rh_account_number')
+        }
+    }
 }

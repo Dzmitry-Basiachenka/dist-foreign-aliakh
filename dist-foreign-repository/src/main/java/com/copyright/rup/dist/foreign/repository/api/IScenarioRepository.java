@@ -27,6 +27,13 @@ public interface IScenarioRepository {
     void insert(Scenario scenario);
 
     /**
+     * Refreshes {@link Scenario} in database.
+     *
+     * @param scenario {@link Scenario} instance
+     */
+    void refresh(Scenario scenario);
+
+    /**
      * Gets {@link Scenario}s count with specified name.
      *
      * @param name {@link Scenario} name

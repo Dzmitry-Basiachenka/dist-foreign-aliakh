@@ -63,6 +63,13 @@
         )
     </insert>
 
+    <update id="refresh" parameterType="Scenario">
+        update ${schema}.df_scenario
+        set
+            <include refid="StoredEntityMapper.update"/>
+        where df_scenario_uid = #{id}
+    </update>
+
     <update id="updateStatus" parameterType="Scenario">
         update ${schema}.df_scenario
         set

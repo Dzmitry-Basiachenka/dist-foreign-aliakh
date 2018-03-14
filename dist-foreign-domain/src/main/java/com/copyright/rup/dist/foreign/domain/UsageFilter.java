@@ -9,6 +9,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -50,6 +51,21 @@ public class UsageFilter {
             setFiscalYear(filter.getFiscalYear());
             setProductFamilies(filter.getProductFamilies());
         }
+    }
+
+    /**
+     * Constructs new filter based on previously stored one.
+     *
+     * @param usageFilter instance of {@link ScenarioUsageFilter}
+     */
+    public UsageFilter(ScenarioUsageFilter usageFilter) {
+        Objects.requireNonNull(usageFilter);
+        setRhAccountNumbers(usageFilter.getRhAccountNumbers());
+        setUsageBatchesIds(usageFilter.getUsageBatchesIds());
+        setUsageStatus(usageFilter.getUsageStatus());
+        setPaymentDate(usageFilter.getPaymentDate());
+        setFiscalYear(usageFilter.getFiscalYear());
+        setProductFamilies(Sets.newHashSet(usageFilter.getProductFamily()));
     }
 
     public Set<Long> getRhAccountNumbers() {
