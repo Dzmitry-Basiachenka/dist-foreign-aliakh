@@ -128,6 +128,11 @@ public interface IUsagesController extends IController<IUsagesWidget>, IBeanLoad
     IStreamSource getExportUsagesStreamSource();
 
     /**
+     * @return instance of {@link IStreamSource} for sending for research.
+     */
+    IStreamSource getSendForResearchUsagesStreamSource();
+
+    /**
      * Return instance of {@link IStreamSource} for errors result.
      *
      * @param csvProcessingResult information about errors
@@ -152,4 +157,10 @@ public interface IUsagesController extends IController<IUsagesWidget>, IBeanLoad
      */
     //TODO {dbaraukova} remove check that product family is not NTS after implementing create NTS scenario logic
     boolean isSigleProductFamilySelected();
+
+    /**
+     * @return {@code true} if {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#WORK_NOT_FOUND}
+     * status applied, otherwise {@code false}.
+     */
+    boolean isWorkNotFoundStatusApplied();
 }

@@ -73,6 +73,22 @@ public abstract class BaseCsvReportHandler implements ResultHandler, AutoCloseab
         }
     }
 
+    /**
+     * Writes object into CSV report.
+     *
+     * @param object object to write into CSV report
+     * @throws RupRuntimeException when usage details can't be written to the CSV report
+     */
+    public void handleResult(Object object) throws RupRuntimeException {
+        try {
+            beanWriter.write(object,
+                getPropertyTable().rowKeySet().toArray(new String[getPropertyTable().size()]),
+                getPropertyTable().values().toArray(new CellProcessor[getPropertyTable().size()]));
+        } catch (IOException e) {
+            throw new RupRuntimeException(e);
+        }
+    }
+
     @Override
     public void close() {
         try {

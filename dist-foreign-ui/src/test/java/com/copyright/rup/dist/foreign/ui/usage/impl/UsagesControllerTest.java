@@ -155,6 +155,29 @@ public class UsagesControllerTest {
     }
 
     @Test
+    public void testSendForResearchUsagesStreamSource() {
+        IStreamSource exportStreamSource = controller.getSendForResearchUsagesStreamSource();
+        ExecutorService executorService = createMock(ExecutorService.class);
+        Whitebox.setInternalState(exportStreamSource, executorService);
+        Capture<Runnable> captureRunnable = new Capture<>();
+        executorService.execute(capture(captureRunnable));
+        expectLastCall().once();
+        replay(usageService, executorService);
+        assertNotNull(exportStreamSource.getStream());
+        Runnable runnable = captureRunnable.getValue();
+        assertNotNull(runnable);
+        assertSame(exportStreamSource, Whitebox.getInternalState(runnable, "arg$1"));
+        assertTrue(Whitebox.getInternalState(runnable, "arg$2") instanceof PipedOutputStream);
+        verify(usageService, executorService);
+    }
+
+    @Test
+    public void testSendForResearchUsagesStreamSourceFileName() {
+        assertEquals("send_for_research_" + LocalDate.now().format(DateTimeFormatter.ofPattern("MM_dd_YYYY")) + ".csv",
+            controller.getSendForResearchUsagesStreamSource().getFileName());
+    }
+
+    @Test
     public void testGetExportStream() {
         IStreamSource exportStreamSource = controller.getExportUsagesStreamSource();
         ExecutorService executorService = createMock(ExecutorService.class);
@@ -321,6 +344,30 @@ public class UsagesControllerTest {
         expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
         replay(filterController, filterWidgetMock);
         assertFalse(controller.isProductFamilyAndStatusFiltersApplied());
+        verify(filterController, filterWidgetMock);
+    }
+
+    @Test
+    public void testIsWorkNotFoundStatusApplied() {
+        IUsagesFilterWidget filterWidgetMock = createMock(IUsagesFilterWidget.class);
+        UsageFilter usageFilter = new UsageFilter();
+        usageFilter.setUsageStatus(UsageStatusEnum.WORK_NOT_FOUND);
+        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
+        expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
+        replay(filterController, filterWidgetMock);
+        assertTrue(controller.isWorkNotFoundStatusApplied());
+        verify(filterController, filterWidgetMock);
+    }
+
+    @Test
+    public void testIsWorkNotFoundStatusAppliedWorkFound() {
+        IUsagesFilterWidget filterWidgetMock = createMock(IUsagesFilterWidget.class);
+        UsageFilter usageFilter = new UsageFilter();
+        usageFilter.setUsageStatus(UsageStatusEnum.WORK_FOUND);
+        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
+        expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
+        replay(filterController, filterWidgetMock);
+        assertFalse(controller.isWorkNotFoundStatusApplied());
         verify(filterController, filterWidgetMock);
     }
 

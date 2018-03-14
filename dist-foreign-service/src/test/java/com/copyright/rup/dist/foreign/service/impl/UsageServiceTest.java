@@ -140,6 +140,40 @@ public class UsageServiceTest {
     }
 
     @Test
+    public void testSendForResearch() {
+        UsageFilter filter = new UsageFilter();
+        PipedOutputStream outputStream = new PipedOutputStream();
+        String usageId1 = RupPersistUtils.generateUuid();
+        String usageId2 = RupPersistUtils.generateUuid();
+        expect(usageRepository.getAndWriteUsagesForResearch(filter, outputStream))
+            .andReturn(Lists.newArrayList(buildUsageDto(usageId1), buildUsageDto(usageId2)))
+            .once();
+        usageRepository.updateStatus(usageId1, UsageStatusEnum.WORK_RESEARCH);
+        expectLastCall().once();
+        usageRepository.updateStatus(usageId2, UsageStatusEnum.WORK_RESEARCH);
+        expectLastCall().once();
+        usageAuditService.logAction(usageId1, UsageActionTypeEnum.WORK_RESEARCH, "Usage detail was sent for research");
+        expectLastCall().once();
+        usageAuditService.logAction(usageId2, UsageActionTypeEnum.WORK_RESEARCH, "Usage detail was sent for research");
+        expectLastCall().once();
+        replay(usageRepository, usageAuditService);
+        usageService.sendForResearch(filter, outputStream);
+        verify(usageRepository, usageAuditService);
+    }
+
+    @Test
+    public void testSendForResearchNoUsages() {
+        UsageFilter filter = new UsageFilter();
+        PipedOutputStream outputStream = new PipedOutputStream();
+        expect(usageRepository.getAndWriteUsagesForResearch(filter, outputStream))
+            .andReturn(Collections.emptyList())
+            .once();
+        replay(usageRepository, usageAuditService);
+        usageService.sendForResearch(filter, outputStream);
+        verify(usageRepository, usageAuditService);
+    }
+
+    @Test
     public void testWriteUsageCsvReport() {
         PipedOutputStream outputStream = new PipedOutputStream();
         UsageFilter usageFilter = new UsageFilter();
@@ -524,5 +558,11 @@ public class UsageServiceTest {
         usage.setServiceFee(new BigDecimal("0.32"));
         usage.setProductFamily("FAS");
         return usage;
+    }
+
+    private UsageDto buildUsageDto(String usageId) {
+        UsageDto usageDto = new UsageDto();
+        usageDto.setId(usageId);
+        return usageDto;
     }
 }
