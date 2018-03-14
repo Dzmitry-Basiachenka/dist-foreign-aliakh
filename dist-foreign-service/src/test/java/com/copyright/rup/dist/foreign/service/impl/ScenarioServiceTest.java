@@ -20,7 +20,10 @@ import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
+import com.copyright.rup.dist.foreign.domain.ScenarioUsageFilter;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageFilter;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.integration.lm.api.ILmIntegrationService;
 import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsage;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
@@ -28,6 +31,7 @@ import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IRmsGrantsService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
+import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
@@ -44,6 +48,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -66,6 +71,7 @@ public class ScenarioServiceTest {
     private static final String USAGE_BATCH_ID = RupPersistUtils.generateUuid();
     private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
     private static final String REASON = "reason";
+    private static final String PRODUCT_FAMILY = "FAS";
     private final Scenario scenario = new Scenario();
     private ScenarioService scenarioService;
     private IScenarioRepository scenarioRepository;
@@ -74,6 +80,7 @@ public class ScenarioServiceTest {
     private ILmIntegrationService lmIntegrationService;
     private IRmsGrantsService rmsGrantsService;
     private IRightsholderService rightsholderService;
+    private IScenarioUsageFilterService scenarioUsageFilterService;
 
     @Before
     public void setUp() {
@@ -84,6 +91,7 @@ public class ScenarioServiceTest {
         scenarioAuditService = createMock(IScenarioAuditService.class);
         rmsGrantsService = createMock(IRmsGrantsService.class);
         rightsholderService = createMock(IRightsholderService.class);
+        scenarioUsageFilterService = createMock(IScenarioUsageFilterService.class);
         scenarioService = new ScenarioService();
         Whitebox.setInternalState(scenarioService, "scenarioRepository", scenarioRepository);
         Whitebox.setInternalState(scenarioService, "usageService", usageService);
@@ -91,6 +99,24 @@ public class ScenarioServiceTest {
         Whitebox.setInternalState(scenarioService, "lmIntegrationService", lmIntegrationService);
         Whitebox.setInternalState(scenarioService, "rmsGrantsService", rmsGrantsService);
         Whitebox.setInternalState(scenarioService, "rightsholderService", rightsholderService);
+        Whitebox.setInternalState(scenarioService, "scenarioUsageFilterService", scenarioUsageFilterService);
+    }
+
+    @Test
+    public void testRefresh() {
+        ScenarioUsageFilter scenarioUsageFilter = buildScenarioUsageFilter();
+        expect(scenarioUsageFilterService.getByScenarioId(scenario.getId())).andReturn(scenarioUsageFilter).once();
+        List<Usage> usages = Collections.singletonList(buildUsage(1L, 2000017010L));
+        expect(usageService.getUsagesWithAmounts(new UsageFilter(scenarioUsageFilter))).andReturn(usages).once();
+        scenarioRepository.refresh(scenario);
+        expectLastCall().once();
+        usageService.addUsagesToScenario(usages, scenario);
+        expectLastCall().once();
+        scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY);
+        expectLastCall().once();
+        replay(usageService, scenarioRepository, scenarioAuditService, scenarioUsageFilterService);
+        scenarioService.refreshScenario(scenario);
+        verify(usageService, scenarioRepository, scenarioAuditService, scenarioUsageFilterService);
     }
 
     @Test
@@ -135,11 +161,13 @@ public class ScenarioServiceTest {
         expectLastCall().once();
         scenarioRepository.remove(scenario.getId());
         expectLastCall().once();
+        scenarioUsageFilterService.removeByScenarioId(scenario.getId());
+        expectLastCall().once();
         scenarioAuditService.deleteActions(scenario.getId());
         expectLastCall().once();
-        replay(usageService, scenarioRepository, scenarioAuditService);
+        replay(usageService, scenarioRepository, scenarioAuditService, scenarioUsageFilterService);
         scenarioService.deleteScenario(scenario);
-        verify(usageService, scenarioRepository, scenarioAuditService);
+        verify(usageService, scenarioRepository, scenarioAuditService, scenarioUsageFilterService);
     }
 
     @Test
@@ -284,7 +312,7 @@ public class ScenarioServiceTest {
         rightsholderDiscrepancy.setOldRightsholder(buildRightsholder(oldAccountNumber));
         rightsholderDiscrepancy.setNewRightsholder(buildRightsholder(newAccountNumber));
         rightsholderDiscrepancy.setWrWrkInst(wrWrkInst);
-        rightsholderDiscrepancy.setProductFamily("FAS");
+        rightsholderDiscrepancy.setProductFamily(PRODUCT_FAMILY);
         return rightsholderDiscrepancy;
     }
 
@@ -293,5 +321,18 @@ public class ScenarioServiceTest {
         rightsholder.setAccountNumber(accountNumber);
         rightsholder.setId(RupPersistUtils.generateUuid());
         return rightsholder;
+    }
+
+    private ScenarioUsageFilter buildScenarioUsageFilter() {
+        ScenarioUsageFilter usageFilter = new ScenarioUsageFilter();
+        usageFilter.setId(RupPersistUtils.generateUuid());
+        usageFilter.setScenarioId(SCENARIO_ID);
+        usageFilter.setProductFamily(PRODUCT_FAMILY);
+        usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
+        usageFilter.setPaymentDate(LocalDate.now());
+        usageFilter.setFiscalYear(LocalDate.now().getYear());
+        usageFilter.setRhAccountNumbers(Collections.singleton(2000017004L));
+        usageFilter.setUsageBatchesIds(Collections.singleton("e1c64cac-3f2b-4105-8056-6660e1ec461a"));
+        return usageFilter;
     }
 }

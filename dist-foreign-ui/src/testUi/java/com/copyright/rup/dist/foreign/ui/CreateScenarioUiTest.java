@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
+import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -72,6 +73,8 @@ public class CreateScenarioUiTest extends ForeignCommonUiTestProvider {
     private IScenarioAuditService scenarioAuditService;
     @Autowired
     private IUsageRepository usageRepository;
+    @Autowired
+    private IScenarioUsageFilterService scenarioUsageFilterService;
 
     @Test
     // Test case IDs: 'e4b0a048-51af-4c1c-91bd-2a199747ca34', 'de74d602-db65-4ee0-a347-5f729f00a2ab',
@@ -176,6 +179,7 @@ public class CreateScenarioUiTest extends ForeignCommonUiTestProvider {
         String scenarioId = scenarios.get(0).getId();
         usageRepository.deleteFromScenario(scenarioId, StoredEntity.DEFAULT_USER);
         scenarioAuditService.deleteActions(scenarioId);
+        scenarioUsageFilterService.removeByScenarioId(scenarioId);
         scenarioRepository.remove(scenarioId);
     }
 

@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -120,6 +121,7 @@ public class CreateScenarioTest {
     private UsageFilter buildUsageFilter() {
         UsageFilter filter = new UsageFilter();
         filter.setUsageBatchesIds(Collections.singleton("31ddaa1a-e60b-44ce-a968-0ca262870358"));
+        filter.setProductFamilies(Sets.newHashSet("FAS"));
         return filter;
     }
 }

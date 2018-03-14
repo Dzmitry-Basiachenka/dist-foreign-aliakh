@@ -62,6 +62,13 @@ public interface IScenarioService {
     void deleteScenario(Scenario scenario);
 
     /**
+     * Refreshes {@link Scenario} by usage filter, if ones exists.
+     *
+     * @param scenario instance of {@link Scenario}
+     */
+    void refreshScenario(Scenario scenario);
+
+    /**
      * Gets reported total, gross amount, service fee amount, net amount and last audit action
      * for selected {@link Scenario}.
      *

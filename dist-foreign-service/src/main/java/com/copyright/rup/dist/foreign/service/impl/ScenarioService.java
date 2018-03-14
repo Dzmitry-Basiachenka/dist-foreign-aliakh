@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
+import com.copyright.rup.dist.foreign.domain.ScenarioUsageFilter;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.domain.common.util.ForeignLogUtils;
@@ -22,6 +23,7 @@ import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IRmsGrantsService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
+import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
@@ -78,6 +80,8 @@ public class ScenarioService implements IScenarioService {
     private IRightsholderService rightsholderService;
     @Autowired
     private IPrmIntegrationService prmIntegrationService;
+    @Autowired
+    private IScenarioUsageFilterService scenarioUsageFilterService;
 
     @Override
     public List<Scenario> getScenarios() {
@@ -105,8 +109,10 @@ public class ScenarioService implements IScenarioService {
         stopWatch.lap("scenario.create_2_insertScenario");
         usageService.addUsagesToScenario(usages, scenario);
         stopWatch.lap("scenario.create_3_addUsagesToScenario");
+        scenarioUsageFilterService.insert(scenario.getId(), new ScenarioUsageFilter(usageFilter));
+        stopWatch.lap("scenario.create_4_insertScenarioUsageFilter");
         scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY);
-        stopWatch.stop("scenario.create_4_logAddedUsagesAction");
+        stopWatch.stop("scenario.create_5_logAddedUsagesAction");
         return scenario.getId();
     }
 
@@ -117,8 +123,28 @@ public class ScenarioService implements IScenarioService {
         LOGGER.info("Delete scenario. Started. {}, User={}", ForeignLogUtils.scenario(scenario), userName);
         usageService.deleteFromScenario(scenario.getId());
         scenarioAuditService.deleteActions(scenario.getId());
+        scenarioUsageFilterService.removeByScenarioId(scenario.getId());
         scenarioRepository.remove(scenario.getId());
         LOGGER.info("Delete scenario. Finished. {}, User={}", ForeignLogUtils.scenario(scenario), userName);
+    }
+
+    @Override
+    @Transactional
+    public void refreshScenario(Scenario scenario) {
+        StopWatch stopWatch = new Slf4JStopWatch();
+        ScenarioUsageFilter usageFilter = scenarioUsageFilterService.getByScenarioId(scenario.getId());
+        stopWatch.lap("scenario.refresh_1_getByScenarioId");
+        if (null != usageFilter) {
+            List<Usage> usages = usageService.getUsagesWithAmounts(new UsageFilter(usageFilter));
+            stopWatch.lap("scenario.refresh_2_getUsagesWithAmounts");
+            scenarioRepository.refresh(scenario);
+            stopWatch.lap("scenario.refresh_3_updateScenario");
+            usageService.addUsagesToScenario(usages, scenario);
+            stopWatch.lap("scenario.refresh_4_addUsagesToScenario");
+            scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY);
+            stopWatch.lap("scenario.refresh_5_logAction");
+        }
+        stopWatch.stop();
     }
 
     @Override
