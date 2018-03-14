@@ -33,6 +33,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -113,11 +114,15 @@ public class PiIntegrationService implements IPiIntegrationService {
         Map<String, Long> result = Collections.emptyMap();
         RupSearchResponse searchResponse = doSearch(field, searchValues);
         stopWatch.lap("matchWorks.doSearch");
-        if (null != searchResponse && RupResponseBase.Status.SUCCESS == searchResponse.getStatus()) {
-            RupSearchResults results = searchResponse.getResults();
-            List<RupSearchHit> hits = results.getHits();
-            if (!hits.isEmpty()) {
-                result = mapWorks(searchValues, hits, workFunction);
+        if (Objects.nonNull(searchResponse)) {
+            if (RupResponseBase.Status.SUCCESS == searchResponse.getStatus()) {
+                RupSearchResults results = searchResponse.getResults();
+                List<RupSearchHit> hits = results.getHits();
+                if (CollectionUtils.isNotEmpty(hits)) {
+                    result = mapWorks(searchValues, hits, workFunction);
+                }
+            } else {
+                LOGGER.warn("Search works. Failed. SearchResponse={}", searchResponse);
             }
         }
         stopWatch.stop("matchWorks.handleResponse");
@@ -130,30 +135,45 @@ public class PiIntegrationService implements IPiIntegrationService {
         Set<String> duplicates = Sets.newHashSet();
         Map<String, Long> wrWrkInstMap = Maps.newHashMap();
         hits.forEach(rupSearchHit -> {
-            try {
-                LOGGER.trace("Search hit={}", rupSearchHit.getSource());
-                Work work = mapper.readValue(rupSearchHit.getSource(), Work.class);
-                work.idnos =
-                    work.getIdnos().stream().map(PiIntegrationService::normalizeIdno).collect(Collectors.toList());
-                function.apply(work).forEach(key -> {
-                    if (searchValues.contains(key)) {
-                        Long newValue = work.getWrWrkInst();
-                        Long oldValue = wrWrkInstMap.putIfAbsent(key, newValue);
-                        if (null != oldValue && !oldValue.equals(newValue)) {
-                            duplicates.add(key);
+            if (Objects.nonNull(rupSearchHit)) {
+                try {
+                    LOGGER.trace("Search hit={}", rupSearchHit.getSource());
+                    Work work = readWork(rupSearchHit);
+                    function.apply(work).forEach(key -> {
+                        if (searchValues.contains(key)) {
+                            Long newValue = work.getWrWrkInst();
+                            Long oldValue = wrWrkInstMap.putIfAbsent(key, newValue);
+                            if (Objects.nonNull(oldValue) && !oldValue.equals(newValue)) {
+                                duplicates.add(key);
+                            }
                         }
-                    }
-                });
-            } catch (IOException e) {
-                LOGGER.warn("Could not map results.", e);
+                    });
+                } catch (IOException e) {
+                    LOGGER.warn("Search works. Could not map results.", e);
+                }
             }
         });
         if (CollectionUtils.isNotEmpty(duplicates)) {
-            LOGGER.debug("More than one match found for the following search values: {}",
+            LOGGER.debug("Search works. More than one match found for the following search values: {}",
                 duplicates.stream().collect(Collectors.joining(",")));
             duplicates.forEach(wrWrkInstMap::remove);
         }
         return wrWrkInstMap;
+    }
+
+    private Work readWork(RupSearchHit rupSearchHit) throws IOException {
+        Work work = mapper.readValue(rupSearchHit.getSource(), Work.class);
+        if (Objects.isNull(work.getIdnos())) {
+            work.idnos = Collections.emptyList();
+            LOGGER.warn("Search works. IDNOs list is NULL. RupSearchHit={}", rupSearchHit);
+        } else {
+            work.idnos = work.getIdnos().stream().map(PiIntegrationService::normalizeIdno).collect(Collectors.toList());
+        }
+        if (Objects.isNull(work.getTitles())) {
+            work.titles = Collections.emptyList();
+            LOGGER.warn("Search works. Titles list is NULL. RupSearchHit={}", rupSearchHit);
+        }
+        return work;
     }
 
     private RupSearchResponse doSearch(String field, Set<String> values) {
