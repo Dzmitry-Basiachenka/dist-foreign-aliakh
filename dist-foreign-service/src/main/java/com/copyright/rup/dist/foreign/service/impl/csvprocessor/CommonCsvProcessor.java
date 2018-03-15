@@ -104,6 +104,7 @@ public abstract class CommonCsvProcessor<T> {
         } catch (IOException | SuperCsvException e) {
             throw new ValidationException(String.format("Failed to read file: %s", e.getMessage()), e);
         } finally {
+            originalValuesMap.clear();
             stopWatch.stop();
         }
         if (processingResult.isEmpty()) {

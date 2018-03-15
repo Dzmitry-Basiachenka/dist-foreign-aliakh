@@ -45,7 +45,7 @@ public class CsvProcessingResultTest {
         result.addRecord(1, item);
         assertTrue(result.isSuccessful());
         assertFalse(result.isEmpty());
-        assertEquals(item, result.getResult().get(0));
+        assertEquals(item, result.getResult().iterator().next());
     }
 
     @Test

@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.service.api;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -47,7 +48,7 @@ public interface IUsageBatchService {
      * @param usages        list of {@link Usage}s
      * @return count of inserted usages
      */
-    int insertUsageBatch(UsageBatch usageBatch, List<Usage> usages);
+    int insertUsageBatch(UsageBatch usageBatch, Collection<Usage> usages);
 
     /**
      * Deletes given {@link UsageBatch} and all it's usage details.

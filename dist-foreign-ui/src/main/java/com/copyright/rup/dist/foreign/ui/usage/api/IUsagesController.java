@@ -15,6 +15,7 @@ import com.copyright.rup.vaadin.widget.api.IController;
 import com.vaadin.util.ReflectTools;
 
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -99,7 +100,7 @@ public interface IUsagesController extends IController<IUsagesWidget>, IBeanLoad
      * @param usages        list of {@link Usage}s
      * @return count of inserted usages
      */
-    int loadUsageBatch(UsageBatch usageBatch, List<Usage> usages);
+    int loadUsageBatch(UsageBatch usageBatch, Collection<Usage> usages);
 
     /**
      * Creates a scenario by entered scenario name and description.
