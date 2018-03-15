@@ -43,8 +43,8 @@ public interface IUsageBatchService {
     /**
      * Inserts usage batch, it's usages and RRO.
      *
-     * @param usageBatch    {@link UsageBatch} instance
-     * @param usages        list of {@link Usage}s
+     * @param usageBatch {@link UsageBatch} instance
+     * @param usages     list of {@link Usage}s
      * @return count of inserted usages
      */
     int insertUsageBatch(UsageBatch usageBatch, List<Usage> usages);

@@ -166,7 +166,7 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
         rejectButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.REJECTED));
         approveButton.addClickListener(event -> controller.handleAction(ScenarioActionTypeEnum.APPROVED));
         sendToLmButton.addClickListener(event -> controller.sendToLm());
-        refreshScenarioButton.addClickListener(event -> controller.refreshScenario());
+        refreshScenarioButton.addClickListener(event -> controller.onRefreshScenarioButtonClicked());
     }
 
     private void initTable() {

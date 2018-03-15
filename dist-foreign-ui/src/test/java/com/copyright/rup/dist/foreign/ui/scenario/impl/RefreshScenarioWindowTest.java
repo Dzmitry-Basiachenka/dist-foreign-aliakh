@@ -39,7 +39,7 @@ public class RefreshScenarioWindowTest {
 
     @Test
     public void testStructure() {
-        RefreshScenarioWindow window = new RefreshScenarioWindow(Lists.newArrayList());
+        RefreshScenarioWindow window = new RefreshScenarioWindow(Lists.newArrayList(), null);
         assertEquals("Refresh Scenario", window.getCaption());
         assertEquals(400, window.getHeight(), 0);
         assertEquals(800, window.getWidth(), 0);

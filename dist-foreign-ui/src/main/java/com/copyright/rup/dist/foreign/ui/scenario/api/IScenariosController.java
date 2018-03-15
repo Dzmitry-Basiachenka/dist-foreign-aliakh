@@ -59,7 +59,12 @@ public interface IScenariosController extends IController<IScenariosWidget> {
     void onReconcileRightsholdersButtonClicked();
 
     /**
-     * Handles refresh Scenario action.
+     * Handles click on 'Refresh Scenario' button.
+     */
+    void onRefreshScenarioButtonClicked();
+
+    /**
+     * Refreshes selected scenario.
      */
     void refreshScenario();
 

@@ -58,7 +58,7 @@ public class ScenarioUsageFilterRepositoryIntegrationTest {
         ScenarioUsageFilter expectedUsageFilter = scenarioUsageFilterRepository.findByScenarioId(SCENARIO_ID);
         assertScenarioUsageFilter(expectedUsageFilter);
         assertEquals(0, expectedUsageFilter.getRhAccountNumbers().size());
-        assertEquals(0, expectedUsageFilter.getUsageBatchesIds().size());
+        assertEquals(0, expectedUsageFilter.getUsageBatches().size());
     }
 
     @Test
