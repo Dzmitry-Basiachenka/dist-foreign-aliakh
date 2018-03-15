@@ -549,20 +549,6 @@
         where df_usage_uid = #{id}
     </update>
 
-    <update id="updateRhPayeeAndAmounts" parameterType="Usage">
-        update
-            ${schema}.df_usage
-        set
-            rh_account_number = #{rightsholder.accountNumber},
-            payee_account_number = #{payee.accountNumber},
-            net_amount = #{netAmount},
-            service_fee_amount = #{serviceFeeAmount},
-            service_fee = #{serviceFee},
-            is_rh_participating_flag = #{rhParticipating},
-            <include refid="StoredEntityMapper.update"/>
-        where df_usage_uid = #{id}
-    </update>
-
     <update id="deleteFromScenario" parameterType="map">
         <include refid="deleteFromScenarioSql"/>
         where df_scenario_uid = #{scenarioId}
@@ -964,20 +950,18 @@
             and status_ind = #{status}
     </select>
 
-    <update id="updateStatusAndWrWrkInst" parameterType="Usage">
+    <update id="update" parameterType="Usage">
         update ${schema}.df_usage
         set
             status_ind = #{status},
             wr_wrk_inst = #{wrWrkInst},
-            <include refid="StoredEntityMapper.update"/>
-        where df_usage_uid = #{id}
-    </update>
-
-    <update id="updateStatusAndProductFamily" parameterType="map">
-        update ${schema}.df_usage
-        set
-            status_ind = #{status},
             product_family = #{productFamily},
+            rh_account_number = #{rightsholder.accountNumber},
+            payee_account_number = #{payee.accountNumber},
+            net_amount = #{netAmount},
+            service_fee_amount = #{serviceFeeAmount},
+            service_fee = #{serviceFee},
+            is_rh_participating_flag = #{rhParticipating},
             <include refid="StoredEntityMapper.update"/>
         where df_usage_uid = #{id}
     </update>
