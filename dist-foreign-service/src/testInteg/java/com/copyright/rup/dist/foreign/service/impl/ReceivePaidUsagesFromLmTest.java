@@ -8,7 +8,7 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.service.impl.mock.MockPaidUsageConsumer;
+import com.copyright.rup.dist.foreign.service.impl.mock.PaidUsageConsumerMock;
 
 import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
@@ -44,7 +44,7 @@ public class ReceivePaidUsagesFromLmTest {
     private ProducerTemplate template;
     @Autowired
     @Qualifier("df.service.paidUsageConsumer")
-    private MockPaidUsageConsumer paidUsageConsumer;
+    private PaidUsageConsumerMock paidUsageConsumer;
     @Autowired
     private IUsageService usageService;
 

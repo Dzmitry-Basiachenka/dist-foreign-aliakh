@@ -16,7 +16,7 @@ import java.util.concurrent.CountDownLatch;
  *
  * @author Darya Baraukova
  */
-public class MockPaidUsageConsumer extends PaidUsageConsumer {
+public class PaidUsageConsumerMock extends PaidUsageConsumer {
 
     private CountDownLatch latch;
 

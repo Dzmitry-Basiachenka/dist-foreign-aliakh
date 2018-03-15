@@ -104,11 +104,20 @@ public class UsageBatchService implements IUsageBatchService {
     }
 
     /**
+     * Gets instance of {@link ExecutorService}.
+     *
+     * @return instance of {@link ExecutorService}
+     */
+    protected ExecutorService getExecutorService() {
+        return Executors.newSingleThreadExecutor();
+    }
+
+    /**
      * Post construct method.
      */
     @PostConstruct
     void postConstruct() {
-        executorService = Executors.newSingleThreadExecutor();
+        executorService = getExecutorService();
     }
 
     /**
