@@ -42,6 +42,7 @@ import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Triple;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -76,6 +77,7 @@ public class UsageServiceTest {
     private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
     private static final String USER_NAME = "User name";
     private static final Long RH_ACCOUNT_NUMBER = 1000001534L;
+    private static final String RH_ID = RupPersistUtils.generateUuid();
     private Scenario scenario;
     private IUsageRepository usageRepository;
     private IUsageArchiveRepository usageArchiveRepository;
@@ -250,6 +252,15 @@ public class UsageServiceTest {
     }
 
     @Test
+    public void testGetUsagesByScenarioIdForRefresh() {
+        List<Usage> usages = Collections.singletonList(new Usage());
+        expect(usageRepository.findByScenarioId(scenario.getId())).andReturn(usages).once();
+        replay(usageRepository);
+        assertSame(usages, usageService.getUsagesByScenarioId(scenario.getId()));
+        verify(usageRepository);
+    }
+
+    @Test
     public void testGetUsagesWithAmounts() {
         UsageFilter usageFilter = new UsageFilter();
         Usage usage = buildUsage(USAGE_ID_1);
@@ -389,6 +400,26 @@ public class UsageServiceTest {
         replay(usageRepository, usageArchiveRepository);
         usageService.moveToArchive(scenario);
         verify(usageRepository, usageArchiveRepository);
+    }
+
+    @Test
+    public void testRecalculateUsagesForRefresh() {
+        UsageFilter filter = new UsageFilter();
+        Usage usage1 = buildUsage(RupPersistUtils.generateUuid());
+        Usage usage2 = buildUsageWithPayee(RupPersistUtils.generateUuid());
+        expect(usageRepository.findRightsholdersInformation(SCENARIO_ID)).andReturn(
+            ImmutableMap.of(usage2.getRightsholder().getAccountNumber(),
+                Triple.of(usage2.getRightsholder().getId(), usage2.isRhParticipating(),
+                    usage2.getPayee().getAccountNumber()))).once();
+        expect(usageRepository.findWithAmountsAndRightsholders(filter)).andReturn(Collections.singletonList(usage1))
+            .once();
+        expect(prmIntegrationService.getRollUps(Collections.EMPTY_SET)).andReturn(HashBasedTable.create()).once();
+        expect(prmIntegrationService.getRhParticipatingServiceFee(false)).andReturn(new BigDecimal("0.32")).once();
+        usageRepository.addToScenario(Collections.singletonList(usage1));
+        expectLastCall().once();
+        replay(usageRepository, prmIntegrationService);
+        usageService.recalculateUsagesForRefresh(filter, scenario);
+        verify(usageRepository, prmIntegrationService);
     }
 
     @Test
@@ -534,13 +565,20 @@ public class UsageServiceTest {
         Usage usage = new Usage();
         usage.setId(usageId);
         usage.setWrWrkInst(123160519L);
-        usage.getRightsholder().setId(RupPersistUtils.generateUuid());
+        usage.getRightsholder().setId(RH_ID);
         usage.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER);
         usage.setGrossAmount(new BigDecimal("100.00"));
         usage.setNetAmount(new BigDecimal("68.0000000000"));
         usage.setServiceFeeAmount(new BigDecimal("32.0000000000"));
         usage.setServiceFee(new BigDecimal("0.32"));
         usage.setProductFamily("FAS");
+        return usage;
+    }
+
+    private Usage buildUsageWithPayee(String usageId) {
+        Usage usage = buildUsage(usageId);
+        usage.getPayee().setId(RupPersistUtils.generateUuid());
+        usage.getPayee().setAccountNumber(RH_ACCOUNT_NUMBER);
         return usage;
     }
 

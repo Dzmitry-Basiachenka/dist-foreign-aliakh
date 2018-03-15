@@ -441,6 +441,18 @@
         where df_scenario_uid = #{scenarioId}
     </select>
 
+    <select id="findRightsholdersInformation" resultMap="usageResultMap" parameterType="string">
+        select distinct
+            u.rh_account_number,
+            rh.df_rightsholder_uid rh_id,
+            u.payee_account_number,
+            u.is_rh_participating_flag
+        from ${schema}.df_usage u
+        join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
+        where df_scenario_uid = #{scenarioId}
+    </select>
+
     <select id="findDtoByScenarioId" resultMap="usageDtoResultMap">
         <include refid="selectUsageDtos"/>
         where df_scenario_uid = #{scenarioId}

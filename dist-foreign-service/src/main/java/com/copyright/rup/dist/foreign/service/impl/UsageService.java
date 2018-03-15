@@ -40,6 +40,7 @@ import com.google.common.collect.Table;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Triple;
 import org.perf4j.StopWatch;
 import org.perf4j.aop.Profiled;
 import org.perf4j.slf4j.Slf4JStopWatch;
@@ -196,8 +197,43 @@ public class UsageService implements IUsageService {
     }
 
     @Override
+    public void recalculateUsagesForRefresh(UsageFilter filter, Scenario scenario) {
+        StopWatch stopWatch = new Slf4JStopWatch();
+        Map<Long, Triple<String, Boolean, Long>> rhInfo = getRightsholdersInformation(scenario.getId());
+        stopWatch.lap("scenario.refresh_2_1_getRightsholdersInformation");
+        List<Usage> newUsages = usageRepository.findWithAmountsAndRightsholders(filter);
+        stopWatch.lap("scenario.refresh_2_2_findWithAmountsAndRightsholders");
+        Set<String> rightsholdersIds = newUsages.stream().map(usage -> usage.getRightsholder().getId())
+            .collect(Collectors.toSet());
+        rightsholdersIds.removeAll(rhInfo.values().stream().map(Triple::getLeft).collect(Collectors.toSet()));
+        Table<String, String, Long> rollUps = prmIntegrationService.getRollUps(rightsholdersIds);
+        stopWatch.lap("scenario.refresh_2_3_getRollUps");
+        newUsages.forEach(usage -> {
+            final long rhAccountNumber = usage.getRightsholder().getAccountNumber();
+            Triple<String, Boolean, Long> info = rhInfo.get(rhAccountNumber);
+            usage.getPayee().setAccountNumber(null == info
+                ? PrmRollUpService.getPayeeAccountNumber(rollUps, usage.getRightsholder(), usage.getProductFamily())
+                : info.getRight());
+            boolean rhParticipating = null == info
+                ? prmIntegrationService.isRightsholderParticipating(rhAccountNumber, usage.getProductFamily())
+                : info.getMiddle();
+            addScenarioInfo(usage, scenario);
+            CalculationUtils.recalculateAmounts(usage, rhParticipating,
+                CLA_PAYEE.equals(usage.getPayee().getAccountNumber()) ? claPayeeServiceFee
+                    : prmIntegrationService.getRhParticipatingServiceFee(rhParticipating));
+        });
+        usageRepository.addToScenario(newUsages);
+        stopWatch.stop("scenario.refresh_2_4_addToScenario");
+    }
+
+    @Override
     public List<Usage> getUsagesByScenarioId(String scenarioId) {
         return usageRepository.findByScenarioId(scenarioId);
+    }
+
+    @Override
+    public Map<Long, Triple<String, Boolean, Long>> getRightsholdersInformation(String scenarioId) {
+        return usageRepository.findRightsholdersInformation(scenarioId);
     }
 
     @Override
@@ -207,11 +243,9 @@ public class UsageService implements IUsageService {
             usages.stream().map(usage -> usage.getRightsholder().getId()).collect(Collectors.toSet()));
         stopWatch.lap("scenario.create_3_1_getRollups");
         usages.forEach(usage -> {
-            usage.setScenarioId(scenario.getId());
-            usage.setStatus(UsageStatusEnum.LOCKED);
-            usage.setUpdateUser(scenario.getCreateUser());
             usage.getPayee().setAccountNumber(
                 PrmRollUpService.getPayeeAccountNumber(rollUps, usage.getRightsholder(), usage.getProductFamily()));
+            addScenarioInfo(usage, scenario);
             //usages that have CLA as Payee should get 10% service fee
             if (CLA_PAYEE.equals(usage.getPayee().getAccountNumber())) {
                 CalculationUtils.recalculateAmounts(usage, usage.isRhParticipating(), claPayeeServiceFee);
@@ -560,6 +594,12 @@ public class UsageService implements IUsageService {
                 }
             });
         usageRepository.update(usages);
+    }
+
+    private void addScenarioInfo(Usage usage, Scenario scenario) {
+        usage.setScenarioId(scenario.getId());
+        usage.setStatus(UsageStatusEnum.LOCKED);
+        usage.setUpdateUser(scenario.getCreateUser());
     }
 
     private BigDecimal sumUsagesGrossAmount(List<Usage> usages) {

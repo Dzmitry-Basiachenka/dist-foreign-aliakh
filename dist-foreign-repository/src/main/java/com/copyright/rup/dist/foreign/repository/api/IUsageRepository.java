@@ -8,8 +8,11 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
+import org.apache.commons.lang3.tuple.Triple;
+
 import java.io.PipedOutputStream;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -57,6 +60,15 @@ public interface IUsageRepository {
      * @return the list of {@link Usage}
      */
     List<Usage> findByScenarioId(String scenarioId);
+
+    /**
+     * Finds rightsholder information based on scenario identifier.
+     *
+     * @param scenarioId scenario id
+     * @return map of rightsholder information where key is rh account number and value is {@link Triple} of
+     * rightsholder id, participating flag and payee account number
+     */
+    Map<Long, Triple<String, Boolean, Long>> findRightsholdersInformation(String scenarioId);
 
     /**
      * Finds usages according to given {@link UsageFilter} and writes them to the output stream in CSV format.

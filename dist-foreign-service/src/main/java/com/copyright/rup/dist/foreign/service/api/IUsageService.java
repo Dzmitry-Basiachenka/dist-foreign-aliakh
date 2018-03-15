@@ -13,10 +13,13 @@ import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingResult;
 
+import org.apache.commons.lang3.tuple.Triple;
+
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -115,6 +118,23 @@ public interface IUsageService {
      * @return the list of {@link Usage}s
      */
     List<Usage> getUsagesByScenarioId(String scenarioId);
+
+    /**
+     * Finds rightsholder information based on scenario identifier.
+     *
+     * @param scenarioId scenario id
+     * @return map of rightsholder information where key is rh account number and value is {@link Triple} of
+     * rightsholder id, participating flag and payee account number
+     */
+    Map<Long, Triple<String, Boolean, Long>> getRightsholdersInformation(String scenarioId);
+
+    /**
+     * Gets the {@link Usage}s based on {@link UsageFilter}, recalculates amounts and add to scenario.
+     *
+     * @param filter   instance of {@link UsageFilter}
+     * @param scenario instance of {@link Scenario}
+     */
+    void recalculateUsagesForRefresh(UsageFilter filter, Scenario scenario);
 
     /**
      * Updates {@link Scenario} id, updated user name and status to 'LOCKED' for {@link Usage}s.
