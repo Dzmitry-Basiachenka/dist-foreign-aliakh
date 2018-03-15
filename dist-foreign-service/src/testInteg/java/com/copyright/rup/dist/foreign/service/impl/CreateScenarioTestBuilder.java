@@ -21,8 +21,6 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 
-import com.google.common.collect.Sets;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -153,10 +151,9 @@ class CreateScenarioTestBuilder {
             assertNotNull(actualUsageFilter);
             assertEquals(scenarioId, actualUsageFilter.getScenarioId());
             assertTrue(actualUsageFilter.getRhAccountNumbers().isEmpty());
-            assertEquals(Sets.newHashSet("31ddaa1a-e60b-44ce-a968-0ca262870358"),
-                actualUsageFilter.getUsageBatchesIds());
-            assertEquals("FAS", actualUsageFilter.getProductFamily());
-            assertNull(actualUsageFilter.getUsageStatus());
+            assertEquals(usageFilter.getUsageBatchesIds(), actualUsageFilter.getUsageBatchesIds());
+            assertEquals(usageFilter.getProductFamilies().iterator().next(), actualUsageFilter.getProductFamily());
+            assertEquals(UsageStatusEnum.ELIGIBLE, actualUsageFilter.getUsageStatus());
             assertNull(actualUsageFilter.getPaymentDate());
             assertNull(actualUsageFilter.getFiscalYear());
         }

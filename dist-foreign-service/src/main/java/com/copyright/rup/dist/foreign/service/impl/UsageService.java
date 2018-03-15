@@ -200,7 +200,6 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    //TODO {dbaraukova} add integration test to cover case when Payee is CLA
     public void addUsagesToScenario(List<Usage> usages, Scenario scenario) {
         StopWatch stopWatch = new Slf4JStopWatch();
         Table<String, String, Long> rollUps = prmIntegrationService.getRollUps(

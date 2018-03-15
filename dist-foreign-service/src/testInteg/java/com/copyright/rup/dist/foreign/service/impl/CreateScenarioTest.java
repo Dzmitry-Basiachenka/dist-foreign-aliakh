@@ -4,6 +4,7 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -45,11 +46,11 @@ public class CreateScenarioTest {
     // c3719d14-c4a2-4809-911a-915e3e1a7e91, ae37e5a6-88dd-48ae-bd5a-4a12134236ac, ee8ebb66-3584-4aaa-9c44-93e384428efb,
     // 15a4527f-f28e-4ab9-aed7-f5caf3ce5569, 9f2663b9-6006-46cf-a741-cb774ce69754
     @Test
-    public void testCreateScenario() {
+    public void testCreateFasScenario() {
         testBuilder
-            .withFilter(buildUsageFilter())
+            .withFilter(buildUsageFilter("31ddaa1a-e60b-44ce-a968-0ca262870358", "FAS"))
             .expectPreferences("prm/preferences_response.json")
-            .expectRollups("prm/rollups_response.json", "a5989f7c-fc6f-4e8c-88d4-2fe7bcce8d1f",
+            .expectRollups("prm/fas_rollups_response.json", "a5989f7c-fc6f-4e8c-88d4-2fe7bcce8d1f",
                 "00d4ae90-5fe7-47bf-ace1-781c8d76d4da", "038bf4aa-b6cc-430a-9b32-655954d95278",
                 "756299b5-02ce-4f76-b0bc-ee2571cf906e", "019acfde-91be-43aa-8871-6305642bcb2c")
             .expectUsages(Lists.newArrayList(
@@ -66,9 +67,9 @@ public class CreateScenarioTest {
 
     // Test Case ID: e9a0e8f2-2ef1-4608-8221-1beb116a0748
     @Test
-    public void testCreateScenarioNoRollupsNoPreferences() {
+    public void testCreateFasScenarioNoRollupsNoPreferences() {
         testBuilder
-            .withFilter(buildUsageFilter())
+            .withFilter(buildUsageFilter("31ddaa1a-e60b-44ce-a968-0ca262870358", "FAS"))
             .expectPreferences("prm/not_found_response.json")
             .expectRollups("prm/not_found_response.json", "a5989f7c-fc6f-4e8c-88d4-2fe7bcce8d1f",
                 "00d4ae90-5fe7-47bf-ace1-781c8d76d4da", "038bf4aa-b6cc-430a-9b32-655954d95278",
@@ -81,6 +82,25 @@ public class CreateScenarioTest {
                 buildUsageForCreatedScenario(1000002562L, 1000002562L, "1629.8304", "3463.3896"),
                 buildUsage("4c014547-06f3-4840-94ff-6249730d537d", 1000003821L, 1000003821L, "29.00", "61.63")))
             .expectScenario(buildScenario("23738.3784", "34909.38", "11171.0016", "38520.00"))
+            .build()
+            .run();
+    }
+
+    @Test
+    public void testCreateClaScenario() {
+        testBuilder
+            .withFilter(buildUsageFilter("ce0ca941-1e16-4a3b-a991-b596189b4f22", "CLA_FAS"))
+            .expectPreferences("prm/not_found_response.json")
+            .expectRollups("prm/cla_rollups_response.json", "b0e6b1f6-89e9-4767-b143-db0f49f32769",
+                "624dcf73-a30f-4381-b6aa-c86d17198bd5", "60080587-a225-439c-81af-f016cb33aeac",
+                "37338ed1-7083-45e2-a96b-5872a7de3a98", "f366285a-ce46-48b0-96ee-cd35d62fb243")
+            .expectUsages(Lists.newArrayList(
+                buildUsageForCreatedScenario(2000133267L, 2000017000L, "897.204", "8074.836"),
+                buildUsageForCreatedScenario(2000073957L, 2000073957L, "1450.0256", "3081.3044"),
+                buildUsageForCreatedScenario(7001508482L, 7001508482L, "4350.0768", "9243.9132"),
+                buildUsageForCreatedScenario(1000024950L, 1000024950L, "870.016", "1848.784"),
+                buildUsageForCreatedScenario(2000139286L, 2000017000L, "509.322", "4583.898")))
+            .expectScenario(buildScenario("26832.7356", "34909.38", "8076.6444", "38520.00"))
             .build()
             .run();
     }
@@ -118,10 +138,11 @@ public class CreateScenarioTest {
         return rightsholder;
     }
 
-    private UsageFilter buildUsageFilter() {
+    private UsageFilter buildUsageFilter(String batchId, String productFamily) {
         UsageFilter filter = new UsageFilter();
-        filter.setUsageBatchesIds(Collections.singleton("31ddaa1a-e60b-44ce-a968-0ca262870358"));
-        filter.setProductFamilies(Sets.newHashSet("FAS"));
+        filter.setUsageBatchesIds(Collections.singleton(batchId));
+        filter.setProductFamilies(Sets.newHashSet(productFamily));
+        filter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         return filter;
     }
 }
