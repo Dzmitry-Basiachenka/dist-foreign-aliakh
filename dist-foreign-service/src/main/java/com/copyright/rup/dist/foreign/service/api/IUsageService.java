@@ -15,6 +15,7 @@ import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingRes
 
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -85,11 +86,11 @@ public interface IUsageService {
     /**
      * Inserts usages.
      *
-     * @param usageBatch    usage batch
-     * @param usages        list of {@link Usage}s
+     * @param usageBatch usage batch
+     * @param usages     list of {@link Usage}s
      * @return count of inserted usages
      */
-    int insertUsages(UsageBatch usageBatch, List<Usage> usages);
+    int insertUsages(UsageBatch usageBatch, Collection<Usage> usages);
 
     /**
      * Deletes all {@link Usage}s associated with the given {@link UsageBatch}.

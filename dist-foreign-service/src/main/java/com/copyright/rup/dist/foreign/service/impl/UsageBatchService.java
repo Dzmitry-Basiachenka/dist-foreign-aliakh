@@ -17,7 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
@@ -71,7 +73,7 @@ public class UsageBatchService implements IUsageBatchService {
 
     @Override
     @Transactional
-    public int insertUsageBatch(UsageBatch usageBatch, List<Usage> usages) {
+    public int insertUsageBatch(UsageBatch usageBatch, Collection<Usage> usages) {
         StopWatch stopWatch = new Slf4JStopWatch();
         String userName = RupContextUtils.getUserName();
         usageBatch.setId(RupPersistUtils.generateUuid());
@@ -85,7 +87,8 @@ public class UsageBatchService implements IUsageBatchService {
         stopWatch.lap("usageBatch.load_2_updateRro");
         int count = usageService.insertUsages(usageBatch, usages);
         stopWatch.lap("usageBatch.load_3_insertUsages");
-        executorService.execute(() -> updateRightsholders(usages));
+        executorService.execute(() -> updateRightsholders(
+            usages.stream().map(usage -> usage.getRightsholder().getAccountNumber()).collect(Collectors.toSet())));
         stopWatch.stop("usageBatch.load_4_updateRhs");
         return count;
     }
@@ -119,12 +122,11 @@ public class UsageBatchService implements IUsageBatchService {
     /**
      * Updates rightsholders based on provided list of {@link Usage}s.
      *
-     * @param usages list of usages
+     * @param rightsholdersIds list of rightsholdersIds
      */
-    void updateRightsholders(List<Usage> usages) {
+    void updateRightsholders(Set<Long> rightsholdersIds) {
         synchronized (this) {
-            rightsholderService.updateRightsholders(
-                usages.stream().map(usage -> usage.getRightsholder().getAccountNumber()).collect(Collectors.toSet()));
+            rightsholderService.updateRightsholders(rightsholdersIds);
         }
     }
 }

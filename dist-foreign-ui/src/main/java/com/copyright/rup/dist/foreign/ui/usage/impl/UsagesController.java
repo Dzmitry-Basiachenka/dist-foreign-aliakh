@@ -41,6 +41,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -109,7 +110,7 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
-    public int loadUsageBatch(UsageBatch usageBatch, List<Usage> usages) {
+    public int loadUsageBatch(UsageBatch usageBatch, Collection<Usage> usages) {
         int result = usageBatchService.insertUsageBatch(usageBatch, usages);
         filterController.getWidget().clearFilter();
         return result;

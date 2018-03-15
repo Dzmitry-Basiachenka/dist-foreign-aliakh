@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.service.impl.csvprocessor.exception.Thresh
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -53,8 +54,8 @@ public class CsvProcessingResult<T> {
      *
      * @return the list of valid items
      */
-    public List<T> getResult() {
-        return Lists.newArrayList(result.values());
+    public Collection<T> getResult() {
+        return result.values();
     }
 
     /**

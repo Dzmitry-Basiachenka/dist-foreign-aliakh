@@ -53,6 +53,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -150,7 +151,7 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public int insertUsages(UsageBatch usageBatch, List<Usage> usages) {
+    public int insertUsages(UsageBatch usageBatch, Collection<Usage> usages) {
         StopWatch stopWatch = new Slf4JStopWatch();
         String userName = RupContextUtils.getUserName();
         int size = usages.size();
@@ -223,13 +224,14 @@ public class UsageService implements IUsageService {
 
     @Override
     public void updateRhPayeeAndAmounts(List<Usage> usages) {
+        String userName = RupContextUtils.getUserName();
         usages.forEach(usage -> {
             boolean rhParticipatingFlag =
                 prmIntegrationService.isRightsholderParticipating(usage.getRightsholder().getAccountNumber(),
                     usage.getProductFamily());
             CalculationUtils.recalculateAmounts(usage, rhParticipatingFlag,
                 prmIntegrationService.getRhParticipatingServiceFee(rhParticipatingFlag));
-            usage.setUpdateUser(RupContextUtils.getUserName());
+            usage.setUpdateUser(userName);
         });
         usageRepository.updateRhPayeeAndAmounts(usages);
     }
@@ -520,7 +522,7 @@ public class UsageService implements IUsageService {
         return eligibleUsagesCount.longValue();
     }
 
-    private void calculateUsagesGrossAmount(UsageBatch usageBatch, List<Usage> usages) {
+    private void calculateUsagesGrossAmount(UsageBatch usageBatch, Collection<Usage> usages) {
         BigDecimal fundPoolAmount = usageBatch.getGrossAmount();
         BigDecimal totalAmount = usages.stream().map(Usage::getReportedValue).reduce(BigDecimal.ZERO, BigDecimal::add);
         BigDecimal conversionRate = CalculationUtils.calculateConversionRate(fundPoolAmount, totalAmount);

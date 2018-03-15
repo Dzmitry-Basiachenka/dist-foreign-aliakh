@@ -23,6 +23,7 @@ import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 import org.easymock.Capture;
 import org.junit.Before;
@@ -162,12 +163,10 @@ public class UsageBatchServiceTest {
 
     @Test
     public void testUpdateRightsholders() {
-        Usage usage = new Usage();
-        usage.setRightsholder(buildRightsholder(1000001534L));
         rightsholderService.updateRightsholders(Collections.singleton(1000001534L));
         expectLastCall().once();
         replay(rightsholderService);
-        usageBatchService.updateRightsholders(Collections.singletonList(usage));
+        usageBatchService.updateRightsholders(Sets.newHashSet(1000001534L));
         verify(rightsholderService);
     }
 

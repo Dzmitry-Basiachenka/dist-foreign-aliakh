@@ -15,6 +15,8 @@ import com.copyright.rup.dist.foreign.service.impl.UsageService;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.exception.ThresholdExceededException;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.exception.ValidationException;
 
+import com.google.common.collect.Lists;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -87,7 +89,7 @@ public class UsageCsvProcessorIntegrationTest {
         CsvProcessingResult<Usage> usageCsvProcessingResult = processFile("usages.csv");
         assertNotNull(usageCsvProcessingResult);
         assertTrue(usageCsvProcessingResult.isSuccessful());
-        List<Usage> result = usageCsvProcessingResult.getResult();
+        List<Usage> result = Lists.newArrayList(usageCsvProcessingResult.getResult());
         assertEquals(5, CollectionUtils.size(result));
         verifyUsage(result.get(0), 234L, 123456789L, 1000009522L, UsageStatusEnum.ELIGIBLE, TITLE);
         verifyUsage(result.get(1), 236L, null, null, UsageStatusEnum.NEW, TITLE);
