@@ -1,8 +1,6 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.test.TestUtils;
@@ -10,7 +8,6 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
-import com.copyright.rup.dist.foreign.domain.ScenarioUsageFilter;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -19,9 +16,6 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
-import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
-
-import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -69,8 +63,6 @@ class RefreshScenarioTestBuilder {
     @Autowired
     private IScenarioAuditService scenarioAuditService;
     @Autowired
-    private IScenarioUsageFilterService scenarioUsageFilterService;
-    @Autowired
     private RestTemplate restTemplate;
     @Autowired
     private AsyncRestTemplate asyncRestTemplate;
@@ -116,18 +108,21 @@ class RefreshScenarioTestBuilder {
             createRestServer();
             expectGetPreferences(expectedPreferencesJson);
             expectGetRollups(expectedRollupsJson, expectedRollupsIds);
-            Scenario scenario = scenarioRepository.findAll().get(0);
+            Scenario scenario = scenarioRepository.findAll()
+                .stream()
+                .filter(s -> s.getId().equals(expectedScenarioId))
+                .findFirst()
+                .get();
             scenarioService.refreshScenario(scenario);
             mockServer.verify();
             asyncMockServer.verify();
             assertScenario();
             expectedUsages.forEach(this::assertUsage);
             assertScenarioActions();
-            assertScenarioUsageFilter();
         }
 
         private void assertScenario() {
-            assertEquals(1, scenarioService.getScenarios().size());
+            assertEquals(2, scenarioService.getScenarios().size());
             expectedScenario.setId(expectedScenarioId);
             Scenario scenario = scenarioService.getScenarioWithAmountsAndLastAction(expectedScenario);
             assertEquals(expectedScenario.getId(), scenario.getId());
@@ -148,19 +143,6 @@ class RefreshScenarioTestBuilder {
             assertTrue(CollectionUtils.isNotEmpty(actions));
             assertEquals(1, CollectionUtils.size(actions));
             assertEquals(ScenarioActionTypeEnum.ADDED_USAGES, actions.get(0).getActionType());
-        }
-
-        private void assertScenarioUsageFilter() {
-            ScenarioUsageFilter actualUsageFilter = scenarioUsageFilterService.getByScenarioId(expectedScenarioId);
-            assertNotNull(actualUsageFilter);
-            assertEquals(expectedScenarioId, actualUsageFilter.getScenarioId());
-            assertTrue(actualUsageFilter.getRhAccountNumbers().isEmpty());
-            assertEquals(Sets.newHashSet("31ddaa1a-e60b-44ce-a968-0ca262870358"),
-                actualUsageFilter.getUsageBatchesIds());
-            assertEquals("FAS", actualUsageFilter.getProductFamily());
-            assertEquals(UsageStatusEnum.ELIGIBLE, actualUsageFilter.getUsageStatus());
-            assertNull(actualUsageFilter.getFiscalYear());
-            assertNull(actualUsageFilter.getPaymentDate());
         }
 
         private void assertUsage(Usage usage) {
