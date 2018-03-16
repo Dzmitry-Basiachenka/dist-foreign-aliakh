@@ -354,22 +354,6 @@ public class UsageServiceTest {
     }
 
     @Test
-    public void testUpdateRhPayeeAndAmounts() {
-        Usage usage = buildUsage(RupPersistUtils.generateUuid());
-        expect(prmIntegrationService.isRightsholderParticipating(usage.getRightsholder().getAccountNumber(),
-            usage.getProductFamily())).andReturn(false).once();
-        expect(prmIntegrationService.getRhParticipatingServiceFee(false)).andReturn(new BigDecimal("0.16")).once();
-        usageRepository.updateRhPayeeAndAmounts(Collections.singletonList(usage));
-        expectLastCall().once();
-        replay(usageRepository, prmIntegrationService);
-        usageService.updateRhPayeeAndAmounts(Collections.singletonList(usage));
-        assertEquals(new BigDecimal("0.16"), usage.getServiceFee());
-        assertEquals(new BigDecimal("16.0000000000"), usage.getServiceFeeAmount());
-        assertEquals(new BigDecimal("84.0000000000"), usage.getNetAmount());
-        verify(usageRepository, prmIntegrationService);
-    }
-
-    @Test
     public void testDeleteFromScenarioByAccountNumbers() {
         List<String> usagesIds = Lists.newArrayList(RupPersistUtils.generateUuid(), RupPersistUtils.generateUuid());
         mockStatic(RupContextUtils.class);

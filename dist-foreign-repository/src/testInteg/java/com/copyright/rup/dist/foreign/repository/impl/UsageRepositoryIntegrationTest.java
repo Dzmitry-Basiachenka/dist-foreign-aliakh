@@ -936,7 +936,7 @@ public class UsageRepositoryIntegrationTest {
         usage.setServiceFee(new BigDecimal("0.16000"));
         usage.setNetAmount(new BigDecimal("13807.4000000000"));
         usage.setServiceFeeAmount(new BigDecimal("2630.0000000000"));
-        usageRepository.updateRhPayeeAndAmounts(Collections.singletonList(usage));
+        usageRepository.update(Collections.singletonList(usage));
         usage = usageRepository.findByDetailId(6997788886L);
         assertEquals(1000000001L, usage.getRightsholder().getAccountNumber(), 0);
         assertEquals(new BigDecimal("13807.4000000000"), usage.getNetAmount());
@@ -969,7 +969,7 @@ public class UsageRepositoryIntegrationTest {
             usage.setWrWrkInst(WR_WRK_INST);
             usage.setStatus(UsageStatusEnum.WORK_FOUND);
         });
-        usageRepository.updateStatusAndWrWrkInst(usages);
+        usageRepository.update(usages);
         usages.forEach(usage -> {
             Usage updatedUsage = usageRepository.findByDetailId(usage.getDetailId());
             assertEquals(WR_WRK_INST, updatedUsage.getWrWrkInst());
@@ -989,7 +989,7 @@ public class UsageRepositoryIntegrationTest {
             usage.setStatus(UsageStatusEnum.ELIGIBLE);
             usage.setProductFamily(PRODUCT_FAMILY_NTS);
         });
-        usageRepository.updateStatusAndProductFamily(usages);
+        usageRepository.update(usages);
         usages.forEach(usage -> {
             Usage updatedUsage = usageRepository.findByDetailId(usage.getDetailId());
             assertEquals(UsageStatusEnum.ELIGIBLE, updatedUsage.getStatus());

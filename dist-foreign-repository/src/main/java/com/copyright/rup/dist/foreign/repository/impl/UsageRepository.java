@@ -21,7 +21,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.perf4j.aop.Profiled;
 import org.springframework.stereotype.Repository;
@@ -148,11 +148,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     @Override
     public void addToScenario(List<Usage> usages) {
         Objects.requireNonNull(usages).forEach(usage -> update("IUsageMapper.addToScenario", usage));
-    }
-
-    @Override
-    public void updateRhPayeeAndAmounts(List<Usage> usages) {
-        Objects.requireNonNull(usages).forEach(usage -> update("IUsageMapper.updateRhPayeeAndAmounts", usage));
     }
 
     @Override
@@ -328,16 +323,10 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         return selectList("IUsageMapper.findUsagesWithBlankWrWrkInst", UsageStatusEnum.NEW);
     }
 
+    @Profiled(tag = "repository.UsageRepository.update")
     @Override
-    public void updateStatusAndWrWrkInst(List<Usage> usages) {
+    public void update(List<Usage> usages) {
         checkArgument(CollectionUtils.isNotEmpty(usages));
-        usages.forEach(usage -> update("IUsageMapper.updateStatusAndWrWrkInst", usage));
-    }
-
-    @Profiled(tag = "repository.UsageRepository.updateStatusAndProductFamily")
-    @Override
-    public void updateStatusAndProductFamily(List<Usage> usages) {
-        checkArgument(CollectionUtils.isNotEmpty(usages));
-        usages.forEach(usage -> update("IUsageMapper.updateStatusAndProductFamily", usage));
+        usages.forEach(usage -> update("IUsageMapper.update", usage));
     }
 }

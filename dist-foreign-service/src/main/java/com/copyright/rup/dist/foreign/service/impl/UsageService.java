@@ -233,7 +233,7 @@ public class UsageService implements IUsageService {
                 prmIntegrationService.getRhParticipatingServiceFee(rhParticipatingFlag));
             usage.setUpdateUser(userName);
         });
-        usageRepository.updateRhPayeeAndAmounts(usages);
+        usageRepository.update(usages);
     }
 
     @Override
@@ -433,7 +433,7 @@ public class UsageService implements IUsageService {
         List<Usage> matchedByIdno = workMatchingService.matchByIdno(usages);
         stopWatch.lap("matchWorks.byIdno_findByIdno");
         if (CollectionUtils.isNotEmpty(matchedByIdno)) {
-            usageRepository.updateStatusAndWrWrkInst(matchedByIdno);
+            usageRepository.update(matchedByIdno);
             stopWatch.lap("matchWorks.byIdno_updateUsages");
             matchedByIdno.forEach(usage -> usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
                 String.format("Wr Wrk Inst %s was found by standard number %s", usage.getWrWrkInst(),
@@ -451,7 +451,7 @@ public class UsageService implements IUsageService {
         List<Usage> matchedByTitle = workMatchingService.matchByTitle(usages);
         stopWatch.lap("matchWorks.byIdno_findByTitle");
         if (CollectionUtils.isNotEmpty(matchedByTitle)) {
-            usageRepository.updateStatusAndWrWrkInst(matchedByTitle);
+            usageRepository.update(matchedByTitle);
             stopWatch.lap("matchWorks.byTitle_updateUsages");
             matchedByTitle.forEach(usage -> usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
                 String.format("Wr Wrk Inst %s was found by title \"%s\"", usage.getWrWrkInst(),
@@ -559,7 +559,7 @@ public class UsageService implements IUsageService {
                     });
                 }
             });
-        usageRepository.updateStatusAndProductFamily(usages);
+        usageRepository.update(usages);
     }
 
     private BigDecimal sumUsagesGrossAmount(List<Usage> usages) {
