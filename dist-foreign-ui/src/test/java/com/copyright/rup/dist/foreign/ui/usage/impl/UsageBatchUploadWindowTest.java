@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.anyString;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.createPartialMock;
@@ -101,6 +102,7 @@ public class UsageBatchUploadWindowTest {
         claRro.setId(RupPersistUtils.generateUuid());
         expect(usagesController.getRro(rroAccountNumber)).andReturn(fasRro).once();
         expect(usagesController.getRro(2000017000L)).andReturn(claRro).once();
+        expect(usagesController.getRro(20000170L)).andReturn(new Rightsholder()).once();
         replay(usagesController);
         window = new UsageBatchUploadWindow(usagesController);
         assertEquals("Upload Usage Batch", window.getCaption());
@@ -335,6 +337,10 @@ public class UsageBatchUploadWindowTest {
         verifyButton.click();
         assertEquals("CLA, The Copyright Licensing Agency Ltd.", nameField.getValue());
         assertEquals("CLA_FAS", productFamilyField.getValue());
+        numberField.setValue("20000170");
+        verifyButton.click();
+        assertNull(nameField.getValue());
+        assertEquals(StringUtils.EMPTY, productFamilyField.getValue());
     }
 
     private void verifyDateComponents(Component component) {
