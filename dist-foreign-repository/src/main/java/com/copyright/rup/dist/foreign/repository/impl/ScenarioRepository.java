@@ -38,7 +38,7 @@ public class ScenarioRepository extends BaseRepository implements IScenarioRepos
 
     @Override
     public void refresh(Scenario scenario) {
-        update("IScenarioMapper.refresh", checkNotNull(scenario));
+        update("IScenarioMapper.refresh", Objects.requireNonNull(scenario));
     }
 
     @Override

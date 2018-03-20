@@ -29,7 +29,6 @@ import java.util.Set;
 @Repository
 public class ScenarioUsageFilterRepository extends BaseRepository implements IScenarioUsageFilterRepository {
 
-    private static final String FILTER_ID_KEY = "filterId";
     private static final String CREATE_USER_KEY = "createUser";
     private static final String UPDATE_USER_KEY = "updateUser";
 
@@ -45,7 +44,7 @@ public class ScenarioUsageFilterRepository extends BaseRepository implements ISc
         checkArgument(StringUtils.isNotBlank(filterId));
         checkArgument(CollectionUtils.isNotEmpty(rhAccountNumbers));
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
-        params.put(FILTER_ID_KEY, filterId);
+        params.put("filterId", filterId);
         rhAccountNumbers.forEach(rhAccountNumber -> {
             params.put("rhAccountNumber", rhAccountNumber);
             params.put(CREATE_USER_KEY, StoredEntity.DEFAULT_USER);
@@ -59,7 +58,7 @@ public class ScenarioUsageFilterRepository extends BaseRepository implements ISc
         checkArgument(StringUtils.isNotBlank(filterId));
         checkArgument(CollectionUtils.isNotEmpty(usageBatchesIds));
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
-        params.put(FILTER_ID_KEY, filterId);
+        params.put("filterId", filterId);
         usageBatchesIds.forEach(usageBatchesId -> {
             params.put("usageBatchId", usageBatchesId);
             params.put(CREATE_USER_KEY, StoredEntity.DEFAULT_USER);

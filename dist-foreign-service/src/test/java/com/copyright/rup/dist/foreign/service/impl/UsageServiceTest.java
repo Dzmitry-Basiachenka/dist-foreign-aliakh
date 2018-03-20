@@ -42,7 +42,6 @@ import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Triple;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -408,9 +407,7 @@ public class UsageServiceTest {
         Usage usage1 = buildUsage(RupPersistUtils.generateUuid());
         Usage usage2 = buildUsageWithPayee(RupPersistUtils.generateUuid());
         expect(usageRepository.findRightsholdersInformation(SCENARIO_ID)).andReturn(
-            ImmutableMap.of(usage2.getRightsholder().getAccountNumber(),
-                Triple.of(usage2.getRightsholder().getId(), usage2.isRhParticipating(),
-                    usage2.getPayee().getAccountNumber()))).once();
+            ImmutableMap.of(usage2.getRightsholder().getAccountNumber(), usage2)).once();
         expect(usageRepository.findWithAmountsAndRightsholders(filter)).andReturn(Collections.singletonList(usage1))
             .once();
         expect(prmIntegrationService.getRollUps(Collections.EMPTY_SET)).andReturn(HashBasedTable.create()).once();

@@ -52,7 +52,7 @@ public class RefreshScenarioWindow extends Window {
         setWidth(800, Unit.PIXELS);
         setHeight(400, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "refresh-scenario-window");
-        this.setContent(initContent());
+        setContent(initContent());
         container.addAll(usageDtos);
     }
 

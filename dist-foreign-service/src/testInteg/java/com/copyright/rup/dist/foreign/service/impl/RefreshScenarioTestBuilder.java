@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.test.TestUtils;
@@ -10,11 +9,9 @@ import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
-import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
-import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 
@@ -31,8 +28,9 @@ import org.springframework.test.web.client.response.MockRestResponseCreators;
 import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
+import java.util.stream.IntStream;
 
 /**
  * Builder for {@link RefreshScenarioTest}.
@@ -113,7 +111,7 @@ class RefreshScenarioTestBuilder {
                 .stream()
                 .filter(s -> s.getId().equals(expectedScenarioId))
                 .findFirst()
-                .get();
+                .orElse(null);
             scenarioService.refreshScenario(scenario);
             mockServer.verify();
             asyncMockServer.verify();
@@ -147,20 +145,17 @@ class RefreshScenarioTestBuilder {
         }
 
         private void assertUsages() {
-            expectedUsages.forEach(usage -> {
-                List<UsageDto> usages =
-                    usageRepository.findByScenarioIdAndRhAccountNumber(usage.getRightsholder().getAccountNumber(),
-                        Objects.isNull(usage.getScenarioId()) ? expectedScenarioId : usage.getScenarioId(), null,
-                        new Pageable(0, 10), null);
-                UsageDto result = usages.stream()
-                    .filter(usageDto -> usage.getPayee().getAccountNumber().equals(usageDto.getPayeeAccountNumber())
-                        && UsageStatusEnum.LOCKED == usageDto.getStatus()
-                        && "SYSTEM".equals(usageDto.getUpdateUser())
-                        && usage.getServiceFeeAmount().equals(usageDto.getServiceFeeAmount())
-                        && usage.getNetAmount().equals(usageDto.getNetAmount()))
-                    .findFirst()
-                    .orElse(null);
-                assertNotNull(result);
+            List<Usage> usages = usageRepository.findByScenarioId(expectedScenarioId);
+            usages.sort(Comparator.comparing(Usage::getDetailId));
+            IntStream.range(0, expectedUsages.size()).forEach(i -> {
+                Usage actualUsage = usages.get(i);
+                Usage expectedUsage = expectedUsages.get(i);
+                assertEquals(expectedUsage.getDetailId(), actualUsage.getDetailId());
+                assertEquals(expectedUsage.getPayee().getAccountNumber(), actualUsage.getPayee().getAccountNumber(), 0);
+                assertEquals(UsageStatusEnum.LOCKED, actualUsage.getStatus());
+                assertEquals("SYSTEM", actualUsage.getUpdateUser());
+                assertEquals(expectedUsage.getServiceFeeAmount(), actualUsage.getServiceFeeAmount());
+                assertEquals(expectedUsage.getNetAmount(), actualUsage.getNetAmount());
             });
         }
 

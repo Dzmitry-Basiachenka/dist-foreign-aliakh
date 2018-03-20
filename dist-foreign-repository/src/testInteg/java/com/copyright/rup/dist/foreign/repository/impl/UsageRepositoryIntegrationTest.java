@@ -25,7 +25,6 @@ import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -577,12 +576,12 @@ public class UsageRepositoryIntegrationTest {
 
     @Test
     public void testFindRightsholdersInformation() {
-        Map<Long, Triple<String, Boolean, Long>> rhInfo = usageRepository.findRightsholdersInformation(SCENARIO_ID);
+        Map<Long, Usage> rhInfo = usageRepository.findRightsholdersInformation(SCENARIO_ID);
         assertEquals(1, rhInfo.size());
-        Entry<Long, Triple<String, Boolean, Long>> entry = rhInfo.entrySet().iterator().next();
+        Entry<Long, Usage> entry = rhInfo.entrySet().iterator().next();
         assertEquals(1000002859L, entry.getKey(), 0);
-        assertEquals(1000002859L, entry.getValue().getRight(), 0);
-        assertFalse(entry.getValue().getMiddle());
+        assertEquals(1000002859L, entry.getValue().getPayee().getAccountNumber(), 0);
+        assertFalse(entry.getValue().isRhParticipating());
     }
 
     @Test
