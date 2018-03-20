@@ -208,6 +208,7 @@ public class UsagesWidgetTest {
         assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.isProductFamilyAndStatusFiltersApplied()).andReturn(true).once();
         expect(controller.isSigleProductFamilySelected()).andReturn(true).once();
+        expect(controller.getSelectedProductFamily()).andReturn("FAS").once();
         expect(controller.getScenarioService()).andReturn(null).once();
         Windows.showModalWindow(anyObject(CreateScenarioWindow.class));
         expectLastCall().once();

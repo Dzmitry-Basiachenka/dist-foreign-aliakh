@@ -58,6 +58,7 @@ public class CreateScenarioWindowTest {
     public void setUp() {
         controller = createMock(IUsagesController.class);
         scenarioService = createMock(IScenarioService.class);
+        expect(controller.getSelectedProductFamily()).andReturn("FAS").once();
         expect(controller.getScenarioService()).andReturn(scenarioService).once();
         replay(controller);
         createScenarioWindow = new CreateScenarioWindow(controller);
