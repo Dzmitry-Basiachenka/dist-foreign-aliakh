@@ -23,6 +23,7 @@ import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Triple;
 import org.perf4j.aop.Profiled;
 import org.springframework.stereotype.Repository;
 
@@ -81,6 +82,13 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     @Override
     public List<Usage> findByScenarioId(String scenarioId) {
         return selectList("IUsageMapper.findByScenarioId", Objects.requireNonNull(scenarioId));
+    }
+
+    @Override
+    public Map<Long, Triple<String, Boolean, Long>> findRightsholdersInformation(String scenarioId) {
+        RightsholdersInfoResultHandler handler = new RightsholdersInfoResultHandler();
+        getTemplate().select("IUsageMapper.findRightsholdersInformation", Objects.requireNonNull(scenarioId), handler);
+        return handler.getRhToIdParticipatingStatusAndPayee();
     }
 
     @Override

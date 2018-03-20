@@ -41,14 +41,13 @@ public class RefreshScenarioTest {
         testBuilder
             .withScenario("e6e2fe6c-4c47-4ca1-bf32-591af4c13060")
             .expectPreferences("prm/preferences_response.json")
-            .expectRollups("prm/fas_rollups_response.json", "038bf4aa-b6cc-430a-9b32-655954d95278",
-                "019acfde-91be-43aa-8871-6305642bcb2c")
+            .expectRollups("prm/fas_rollups_response.json", "019acfde-91be-43aa-8871-6305642bcb2c")
             .expectUsages(Lists.newArrayList(
                 buildUsageForCreatedScenario(7000429266L, 1000009997L, "2871.0528", "6100.9872"),
                 buildUsageForCreatedScenario(1000002859L, 1000002859L, "1450.0256", "3081.3044"),
                 buildUsageForCreatedScenario(1000001820L, 1000001820L, "2175.0384", "11418.9516"),
                 buildUsageForCreatedScenario(1000024497L, 1000024497L, "435.008", "2283.792"),
-                buildUsageForCreatedScenario(1000002562L, 1000009997L, "1629.8304", "3463.3896")))
+                buildUsageForCreatedScenario(1000001820L, 1000001820L, "1629.8304", "3463.3896")))
             .expectScenario(buildScenario("26348.4248", "34909.38", "8560.9552", "38520.00"))
             .build()
             .run();

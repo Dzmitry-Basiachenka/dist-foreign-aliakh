@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.test.TestUtils;
@@ -117,7 +118,7 @@ class RefreshScenarioTestBuilder {
             mockServer.verify();
             asyncMockServer.verify();
             assertScenario();
-            expectedUsages.forEach(this::assertUsage);
+            assertUsages();
             assertScenarioActions();
         }
 
@@ -145,18 +146,22 @@ class RefreshScenarioTestBuilder {
             assertEquals(ScenarioActionTypeEnum.ADDED_USAGES, actions.get(0).getActionType());
         }
 
-        private void assertUsage(Usage usage) {
-            List<UsageDto> usages =
-                usageRepository.findByScenarioIdAndRhAccountNumber(usage.getRightsholder().getAccountNumber(),
-                    Objects.isNull(usage.getScenarioId()) ? expectedScenarioId : usage.getScenarioId(), null,
-                    new Pageable(0, 10), null);
-            assertEquals(1, usages.size());
-            UsageDto usageDto = usages.get(0);
-            assertEquals(usage.getPayee().getAccountNumber(), usageDto.getPayeeAccountNumber(), 0);
-            assertEquals(UsageStatusEnum.LOCKED, usageDto.getStatus());
-            assertEquals("SYSTEM", usageDto.getUpdateUser());
-            assertEquals(usage.getServiceFeeAmount(), usageDto.getServiceFeeAmount());
-            assertEquals(usage.getNetAmount(), usageDto.getNetAmount());
+        private void assertUsages() {
+            expectedUsages.forEach(usage -> {
+                List<UsageDto> usages =
+                    usageRepository.findByScenarioIdAndRhAccountNumber(usage.getRightsholder().getAccountNumber(),
+                        Objects.isNull(usage.getScenarioId()) ? expectedScenarioId : usage.getScenarioId(), null,
+                        new Pageable(0, 10), null);
+                UsageDto result = usages.stream()
+                    .filter(usageDto -> usage.getPayee().getAccountNumber().equals(usageDto.getPayeeAccountNumber())
+                        && UsageStatusEnum.LOCKED == usageDto.getStatus()
+                        && "SYSTEM".equals(usageDto.getUpdateUser())
+                        && usage.getServiceFeeAmount().equals(usageDto.getServiceFeeAmount())
+                        && usage.getNetAmount().equals(usageDto.getNetAmount()))
+                    .findFirst()
+                    .orElse(null);
+                assertNotNull(result);
+            });
         }
 
         private void createRestServer() {

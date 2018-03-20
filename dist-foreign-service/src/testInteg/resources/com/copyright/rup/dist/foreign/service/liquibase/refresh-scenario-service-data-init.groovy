@@ -131,7 +131,7 @@ databaseChangeLog {
             column(name: 'detail_id', value: '2136547852')
             column(name: 'wr_wrk_inst', value: '471137469')
             column(name: 'work_title', value: 'Solar Cells')
-            column(name: 'rh_account_number', value: '1000002562')
+            column(name: 'rh_account_number', value: '1000001820')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'FAS')
             column(name: 'article', value: 'DIN EN 779:2012')
@@ -179,12 +179,6 @@ databaseChangeLog {
             column(name: 'df_rightsholder_uid', value: '019acfde-91be-43aa-8871-6305642bcb2c')
             column(name: 'rh_account_number', value: '1000024497')
             column(name: 'name', value: 'White Horse Press')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
-            column(name: 'df_rightsholder_uid', value: '038bf4aa-b6cc-430a-9b32-655954d95278')
-            column(name: 'rh_account_number', value: '1000002562')
-            column(name: 'name', value: 'Pall Mall Press/Phaidon Press')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {

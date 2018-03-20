@@ -25,6 +25,7 @@ import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,8 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -570,6 +573,16 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(2, usages.size());
         usages.forEach(
             usage -> verifyUsage(usage, UsageStatusEnum.LOCKED, SCENARIO_ID, StoredEntity.DEFAULT_USER, 1000002859L));
+    }
+
+    @Test
+    public void testFindRightsholdersInformation() {
+        Map<Long, Triple<String, Boolean, Long>> rhInfo = usageRepository.findRightsholdersInformation(SCENARIO_ID);
+        assertEquals(1, rhInfo.size());
+        Entry<Long, Triple<String, Boolean, Long>> entry = rhInfo.entrySet().iterator().next();
+        assertEquals(1000002859L, entry.getKey(), 0);
+        assertEquals(1000002859L, entry.getValue().getRight(), 0);
+        assertFalse(entry.getValue().getMiddle());
     }
 
     @Test

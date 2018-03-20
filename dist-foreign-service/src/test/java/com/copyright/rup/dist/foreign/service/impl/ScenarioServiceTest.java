@@ -103,14 +103,12 @@ public class ScenarioServiceTest {
     }
 
     @Test
-    public void testRefresh() {
+    public void testRefreshScenario() {
         ScenarioUsageFilter scenarioUsageFilter = buildScenarioUsageFilter();
         expect(scenarioUsageFilterService.getByScenarioId(scenario.getId())).andReturn(scenarioUsageFilter).once();
-        List<Usage> usages = Collections.singletonList(buildUsage(1L, 2000017010L));
-        expect(usageService.getUsagesWithAmounts(new UsageFilter(scenarioUsageFilter))).andReturn(usages).once();
-        scenarioRepository.refresh(scenario);
+        usageService.recalculateUsagesForRefresh(new UsageFilter(scenarioUsageFilter), scenario);
         expectLastCall().once();
-        usageService.addUsagesToScenario(usages, scenario);
+        scenarioRepository.refresh(scenario);
         expectLastCall().once();
         scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY);
         expectLastCall().once();

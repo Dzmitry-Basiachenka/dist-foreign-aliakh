@@ -135,14 +135,12 @@ public class ScenarioService implements IScenarioService {
         ScenarioUsageFilter usageFilter = scenarioUsageFilterService.getByScenarioId(scenario.getId());
         stopWatch.lap("scenario.refresh_1_getByScenarioId");
         if (null != usageFilter) {
-            List<Usage> usages = usageService.getUsagesWithAmounts(new UsageFilter(usageFilter));
-            stopWatch.lap("scenario.refresh_2_getUsagesWithAmounts");
+            usageService.recalculateUsagesForRefresh(new UsageFilter(usageFilter), scenario);
+            stopWatch.lap("scenario.refresh_2_recalculateUsagesForRefresh");
             scenarioRepository.refresh(scenario);
             stopWatch.lap("scenario.refresh_3_updateScenario");
-            usageService.addUsagesToScenario(usages, scenario);
-            stopWatch.lap("scenario.refresh_4_addUsagesToScenario");
             scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY);
-            stopWatch.lap("scenario.refresh_5_logAction");
+            stopWatch.lap("scenario.refresh_4_logAction");
         }
         stopWatch.stop();
     }
