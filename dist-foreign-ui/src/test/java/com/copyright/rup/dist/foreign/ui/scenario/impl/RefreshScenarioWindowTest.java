@@ -33,9 +33,6 @@ import org.junit.Test;
 public class RefreshScenarioWindowTest {
 
     private static final String DETAIL_ID_PROPERTY = "detailId";
-    private static final String GROSS_AMOUNT_PROPERTY = "grossAmount";
-    private static final String REPORTED_VALUE_PROPERTY = "reportedValue";
-    private static final String BATCH_GROSS_AMOUNT_PROPERTY = "batchGrossAmount";
 
     @Test
     public void testStructure() {
@@ -54,8 +51,8 @@ public class RefreshScenarioWindowTest {
         Table table = (Table) component;
         assertArrayEquals(new Object[]{DETAIL_ID_PROPERTY, "status", "productFamily", "batchName", "fiscalYear",
             "rroAccountNumber", "rroName", "paymentDate", "workTitle", "article", "standardNumber", "wrWrkInst",
-            "rhAccountNumber", "rhName", "publisher", "publicationDate", "numberOfCopies", REPORTED_VALUE_PROPERTY,
-            GROSS_AMOUNT_PROPERTY, BATCH_GROSS_AMOUNT_PROPERTY, "market", "marketPeriodFrom", "marketPeriodTo",
+            "rhAccountNumber", "rhName", "publisher", "publicationDate", "numberOfCopies", "reportedValue",
+            "grossAmount", "batchGrossAmount", "market", "marketPeriodFrom", "marketPeriodTo",
             "author"}, table.getVisibleColumns());
         assertArrayEquals(new Object[]{"Detail ID", "Detail Status", "Product Family", "Usage Batch Name",
                 "Fiscal Year", "RRO Account #", "RRO Name", "Payment Date", "Title", "Article", "Standard Number",
@@ -89,8 +86,8 @@ public class RefreshScenarioWindowTest {
         verifyColumnGenerator(table.getColumnGenerator("rroAccountNumber"), LongColumnGenerator.class);
         verifyColumnGenerator(table.getColumnGenerator("publicationDate"), LocalDateColumnGenerator.class);
         verifyColumnGenerator(table.getColumnGenerator("paymentDate"), LocalDateColumnGenerator.class);
-        verifyColumnGenerator(table.getColumnGenerator(REPORTED_VALUE_PROPERTY), MoneyColumnGenerator.class);
-        verifyColumnGenerator(table.getColumnGenerator(GROSS_AMOUNT_PROPERTY), MoneyColumnGenerator.class);
+        verifyColumnGenerator(table.getColumnGenerator("reportedValue"), MoneyColumnGenerator.class);
+        verifyColumnGenerator(table.getColumnGenerator("grossAmount"), MoneyColumnGenerator.class);
     }
 
     private void verifyColumnGenerator(Table.ColumnGenerator columnGenerator, Class clazz) {

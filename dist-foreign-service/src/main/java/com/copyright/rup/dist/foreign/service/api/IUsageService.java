@@ -13,8 +13,6 @@ import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingResult;
 
-import org.apache.commons.lang3.tuple.Triple;
-
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
 import java.util.Collection;
@@ -123,10 +121,10 @@ public interface IUsageService {
      * Finds rightsholder information based on scenario identifier.
      *
      * @param scenarioId scenario id
-     * @return map of rightsholder information where key is rh account number and value is {@link Triple} of
-     * rightsholder id, participating flag and payee account number
+     * @return map where key is rightsholder account number, value is {@link Usage} with rightsholder, participating
+     * status and payee account number
      */
-    Map<Long, Triple<String, Boolean, Long>> getRightsholdersInformation(String scenarioId);
+    Map<Long, Usage> getRightsholdersInformation(String scenarioId);
 
     /**
      * Gets the {@link Usage}s based on {@link UsageFilter}, recalculates amounts and add to scenario.

@@ -1,9 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
-import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 
-import org.apache.commons.lang3.tuple.Triple;
 import org.apache.ibatis.session.ResultContext;
 import org.apache.ibatis.session.ResultHandler;
 
@@ -11,7 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Result handler for building rightsholder information based on {@link ResultContext}.
+ * Result handler for mapping usages with rightsholder, participating status and payee account number on rightsholder
+ * account number based on {@link ResultContext}.
  * <p/>
  * Copyright (C) 2018 copyright.com
  * <p/>
@@ -21,21 +20,19 @@ import java.util.Map;
  */
 class RightsholdersInfoResultHandler implements ResultHandler {
 
-    private final Map<Long, Triple<String, Boolean, Long>> rhToIdParticipatingStatusAndPayee = new HashMap<>();
+    private final Map<Long, Usage> rhToUsageMap = new HashMap<>();
 
     @Override
     public void handleResult(ResultContext context) {
         Usage usage = (Usage) context.getResultObject();
-        Rightsholder rightsholder = usage.getRightsholder();
-        rhToIdParticipatingStatusAndPayee.put(rightsholder.getAccountNumber(),
-            Triple.of(rightsholder.getId(), usage.isRhParticipating(), usage.getPayee().getAccountNumber()));
+        rhToUsageMap.put(usage.getRightsholder().getAccountNumber(), usage);
     }
 
     /**
-     * @return map with rh information where key is rightsholder account number, value is {@link Triple} of
-     * rightsholder id, participating status and payee account number.
+     * @return map where key is rightsholder account number, value is {@link Usage} with rightsholder, participating
+     * status and payee account number.
      */
-    Map<Long, Triple<String, Boolean, Long>> getRhToIdParticipatingStatusAndPayee() {
-        return rhToIdParticipatingStatusAndPayee;
+    Map<Long, Usage> getRhToUsageMap() {
+        return rhToUsageMap;
     }
 }
