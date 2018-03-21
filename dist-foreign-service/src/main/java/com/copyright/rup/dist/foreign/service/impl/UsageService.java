@@ -30,8 +30,6 @@ import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.IWorkMatchingService;
 import com.copyright.rup.dist.foreign.service.impl.WorksMatchingJob.UsageGroupEnum;
-import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvErrorResultWriter;
-import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingResult;
 import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
 import com.google.common.collect.Lists;
@@ -85,11 +83,9 @@ public class UsageService implements IUsageService {
         "UsagesCount={}, UpdatedCount={}, NotFoundDetailIds={}";
     private static final long UNIDENTIFIED_WR_WRK_INST = 123050824L;
     private static final Long CLA_PAYEE = 2000017000L;
+    private static final Logger LOGGER = RupLogUtils.getLogger();
     @Value("$RUP{dist.foreign.service_fee.cla_payee}")
     private BigDecimal claPayeeServiceFee;
-
-    private static final Logger LOGGER = RupLogUtils.getLogger();
-
     @Autowired
     private IUsageRepository usageRepository;
     @Autowired
@@ -146,11 +142,6 @@ public class UsageService implements IUsageService {
         } else {
             usageRepository.writeScenarioUsagesCsvReport(scenario.getId(), outputStream);
         }
-    }
-
-    @Override
-    public void writeErrorsToFile(CsvProcessingResult<Usage> csvProcessingResult, OutputStream outputStream) {
-        new CsvErrorResultWriter().writeErrorsResult(outputStream, csvProcessingResult);
     }
 
     @Override

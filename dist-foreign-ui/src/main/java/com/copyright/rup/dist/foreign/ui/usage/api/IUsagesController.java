@@ -5,8 +5,8 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
-import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingResult;
-import com.copyright.rup.dist.foreign.service.impl.csvprocessor.UsageCsvProcessor;
+import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.ProcessingResult;
+import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CreateScenarioWindow.ScenarioCreateEvent;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.ui.component.lazytable.IBeanLoader;
@@ -136,15 +136,19 @@ public interface IUsagesController extends IController<IUsagesWidget>, IBeanLoad
     /**
      * Return instance of {@link IStreamSource} for errors result.
      *
-     * @param csvProcessingResult information about errors
+     * @param fileName         name of processed file
+     * @param processingResult information about errors
      * @return instance of {@link IStreamSource}
      */
-    IStreamSource getErrorResultStreamSource(CsvProcessingResult csvProcessingResult);
+    IStreamSource getErrorResultStreamSource(String fileName, ProcessingResult processingResult);
 
     /**
-     * @return instance of {@link UsageCsvProcessor}.
+     * Gets instance of processor for given product family.
+     *
+     * @param productFamily product family
+     * @return instance of {@link UsageCsvProcessor}
      */
-    UsageCsvProcessor getCsvProcessor();
+    UsageCsvProcessor getCsvProcessor(String productFamily);
 
     /**
      * @return selected product family from filter
