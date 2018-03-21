@@ -32,6 +32,7 @@ import com.google.common.io.Files;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -175,6 +176,11 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
+    public String getSelectedProductFamily() {
+        return isSigleProductFamilySelected() ? getSelectedProductFamilies().iterator().next() : StringUtils.EMPTY;
+    }
+
+    @Override
     public boolean isProductFamilyAndStatusFiltersApplied() {
         UsageFilter filter = filterController.getWidget().getAppliedFilter();
         return UsageStatusEnum.ELIGIBLE == filter.getUsageStatus()
@@ -183,7 +189,7 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
 
     @Override
     public boolean isSigleProductFamilySelected() {
-        Set<String> productFamilies = filterController.getWidget().getAppliedFilter().getProductFamilies();
+        Set<String> productFamilies = getSelectedProductFamilies();
         return 1 == CollectionUtils.size(productFamilies) && !productFamilies.contains("NTS");
     }
 
@@ -195,6 +201,10 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     @Override
     protected IUsagesWidget instantiateWidget() {
         return new UsagesWidget();
+    }
+
+    private Set<String> getSelectedProductFamilies() {
+        return filterController.getWidget().getAppliedFilter().getProductFamilies();
     }
 
     private static class ErrorResultStreamSource implements IStreamSource {

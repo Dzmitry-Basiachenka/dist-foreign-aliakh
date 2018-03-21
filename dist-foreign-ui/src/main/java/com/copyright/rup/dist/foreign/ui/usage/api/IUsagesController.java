@@ -96,8 +96,8 @@ public interface IUsagesController extends IController<IUsagesWidget>, IBeanLoad
     /**
      * Inserts usage batch and it's usages.
      *
-     * @param usageBatch    {@link UsageBatch} instance
-     * @param usages        list of {@link Usage}s
+     * @param usageBatch {@link UsageBatch} instance
+     * @param usages     list of {@link Usage}s
      * @return count of inserted usages
      */
     int loadUsageBatch(UsageBatch usageBatch, Collection<Usage> usages);
@@ -145,6 +145,12 @@ public interface IUsagesController extends IController<IUsagesWidget>, IBeanLoad
      * @return instance of {@link UsageCsvProcessor}.
      */
     UsageCsvProcessor getCsvProcessor();
+
+    /**
+     * @return selected product family from filter
+     * or empty string in case when filter is empty or more than one product family selected.
+     */
+    String getSelectedProductFamily();
 
     /**
      * @return {@code true} if product family filter is not empty and selected status filter equals to
