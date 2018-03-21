@@ -33,6 +33,7 @@ public class AuditCsvReportHandlerTest {
     private static final Optional OPTIONAL_PROCESSOR = new Optional();
     private static final OffsetDateTimeCellProcessor OFFSET_DATE_TIME_CELL_PROCESSOR =
         new OffsetDateTimeCellProcessor();
+    private static final LocalDateCellProcessor LOCAL_DATE_CELL_PROCESSOR = new LocalDateCellProcessor();
 
     private AuditCsvReportHandler auditCsvReportHandler;
 
@@ -52,7 +53,7 @@ public class AuditCsvReportHandlerTest {
             OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR,
             new BigDecimalCellProcessor(), new ServiceFeePercentCellProcessor(), OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR,
             OFFSET_DATE_TIME_CELL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OFFSET_DATE_TIME_CELL_PROCESSOR,
-            OFFSET_DATE_TIME_CELL_PROCESSOR};
+            LOCAL_DATE_CELL_PROCESSOR};
         IntStream.range(0, processors.length)
             .forEach(index -> assertEquals(cellProcessors[index].getClass(), processors[index].getClass()));
     }

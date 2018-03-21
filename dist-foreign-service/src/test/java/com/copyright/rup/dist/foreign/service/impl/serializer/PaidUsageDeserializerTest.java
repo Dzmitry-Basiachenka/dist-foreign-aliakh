@@ -17,6 +17,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
@@ -56,8 +57,7 @@ public class PaidUsageDeserializerTest {
             assertEquals("FDA March 17", usage.getDistributionName());
             assertEquals(OffsetDateTime.of(2017, 1, 14, 5, 0, 0, 0, ZoneOffset.ofHours(0)).toInstant(),
                 usage.getDistributionDate().toInstant());
-            assertEquals(OffsetDateTime.of(2017, 1, 16, 5, 0, 0, 0, ZoneOffset.ofHours(0)).toInstant(),
-                usage.getPeriodEndDate().toInstant());
+            assertEquals(LocalDate.of(2017, 1, 16), usage.getPeriodEndDate());
         } catch (IOException e) {
             fail();
         }
