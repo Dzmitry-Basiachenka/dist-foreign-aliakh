@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
+import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.domain.BaseEntity;
 import com.copyright.rup.dist.common.integration.rest.prm.PrmRollUpService;
@@ -457,37 +458,47 @@ public class UsageService implements IUsageService {
     @Override
     @Transactional
     public void matchByIdno(List<Usage> usages) {
-        StopWatch stopWatch = new Slf4JStopWatch();
-        List<Usage> matchedByIdno = workMatchingService.matchByIdno(usages);
-        stopWatch.lap("matchWorks.byIdno_findByIdno");
-        if (CollectionUtils.isNotEmpty(matchedByIdno)) {
-            usageRepository.update(matchedByIdno);
-            stopWatch.lap("matchWorks.byIdno_updateUsages");
-            matchedByIdno.forEach(usage -> usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
-                String.format("Wr Wrk Inst %s was found by standard number %s", usage.getWrWrkInst(),
-                    usage.getStandardNumber())));
-            stopWatch.lap("matchWorks.byIdno_writeAudit");
+        try {
+            StopWatch stopWatch = new Slf4JStopWatch();
+            List<Usage> matchedByIdno = workMatchingService.matchByIdno(usages);
+            stopWatch.lap("matchWorks.byIdno_findByIdno");
+            if (CollectionUtils.isNotEmpty(matchedByIdno)) {
+                usageRepository.update(matchedByIdno);
+                stopWatch.lap("matchWorks.byIdno_updateUsages");
+                matchedByIdno.forEach(
+                    usage -> usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
+                        String.format("Wr Wrk Inst %s was found by standard number %s", usage.getWrWrkInst(),
+                            usage.getStandardNumber())));
+                stopWatch.lap("matchWorks.byIdno_writeAudit");
+            }
+            updateUsagesStatusAndWriteAudit(usages, UsageGroupEnum.STANDARD_NUMBER);
+            stopWatch.stop("matchWorks.byIdno_determineNtsAndUpdate");
+        } catch (RupRuntimeException e) {
+            LOGGER.warn("Search works by IDNOs failed. Unable to connect to RupEsApi.", e);
         }
-        updateUsagesStatusAndWriteAudit(usages, UsageGroupEnum.STANDARD_NUMBER);
-        stopWatch.stop("matchWorks.byIdno_determineNtsAndUpdate");
     }
 
     @Override
     @Transactional
     public void matchByTitle(List<Usage> usages) {
         StopWatch stopWatch = new Slf4JStopWatch();
-        List<Usage> matchedByTitle = workMatchingService.matchByTitle(usages);
-        stopWatch.lap("matchWorks.byIdno_findByTitle");
-        if (CollectionUtils.isNotEmpty(matchedByTitle)) {
-            usageRepository.update(matchedByTitle);
-            stopWatch.lap("matchWorks.byTitle_updateUsages");
-            matchedByTitle.forEach(usage -> usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
-                String.format("Wr Wrk Inst %s was found by title \"%s\"", usage.getWrWrkInst(),
-                    usage.getWorkTitle())));
-            stopWatch.lap("matchWorks.byTitle_writeAudit");
+        try {
+            List<Usage> matchedByTitle = workMatchingService.matchByTitle(usages);
+            stopWatch.lap("matchWorks.byIdno_findByTitle");
+            if (CollectionUtils.isNotEmpty(matchedByTitle)) {
+                usageRepository.update(matchedByTitle);
+                stopWatch.lap("matchWorks.byTitle_updateUsages");
+                matchedByTitle.forEach(
+                    usage -> usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
+                        String.format("Wr Wrk Inst %s was found by title \"%s\"", usage.getWrWrkInst(),
+                            usage.getWorkTitle())));
+                stopWatch.lap("matchWorks.byTitle_writeAudit");
+            }
+            updateUsagesStatusAndWriteAudit(usages, UsageGroupEnum.TITLE);
+            stopWatch.stop("matchWorks.byTitle_determineNtsAndUpdate");
+        } catch (RupRuntimeException e) {
+            LOGGER.warn("Search works by titles failed. Unable to connect to RupEsApi.", e);
         }
-        updateUsagesStatusAndWriteAudit(usages, UsageGroupEnum.TITLE);
-        stopWatch.stop("matchWorks.byTitle_determineNtsAndUpdate");
     }
 
     @Override

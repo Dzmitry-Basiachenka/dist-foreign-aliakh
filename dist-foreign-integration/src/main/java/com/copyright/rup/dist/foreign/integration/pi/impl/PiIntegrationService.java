@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.integration.pi.impl;
 
+import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.es.api.RupEsApi;
@@ -191,7 +192,7 @@ public class PiIntegrationService implements IPiIntegrationService {
             try {
                 searchResponse = getRupEsApi().search(request);
             } catch (RupEsApiRuntimeException | ElasticsearchException e) {
-                LOGGER.warn("Search works failed. Unable to connect to RupEsApi.", e);
+                throw new RupRuntimeException("Unable to connect to RupEsApi", e);
             }
         }
         return searchResponse;
