@@ -9,12 +9,12 @@ import com.copyright.rup.es.api.RupQueryStringQueryBuilder;
 import com.copyright.rup.es.api.RupResponseBase;
 import com.copyright.rup.es.api.RupSearchResponse;
 import com.copyright.rup.es.api.domain.RupSearchHit;
-import com.copyright.rup.es.api.domain.RupSearchResults;
 import com.copyright.rup.es.api.request.RupSearchRequest;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
@@ -30,7 +30,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -61,6 +63,8 @@ public class PiIntegrationService implements IPiIntegrationService {
     private String node;
     @Value("$RUP{dist.foreign.integration.works.pi.index}")
     private String piIndex;
+    @Value("$RUP{dist.foreign.integration.works.pi.max_parameters_size}")
+    private int maxParametersSize;
 
     private ObjectMapper mapper;
 
@@ -112,21 +116,25 @@ public class PiIntegrationService implements IPiIntegrationService {
 
     private Map<String, Long> match(String field, Set<String> searchValues, Function<Work, List<String>> workFunction) {
         StopWatch stopWatch = new Slf4JStopWatch();
-        Map<String, Long> result = Collections.emptyMap();
-        RupSearchResponse searchResponse = doSearch(field, searchValues);
-        stopWatch.lap("matchWorks.doSearch");
-        if (Objects.nonNull(searchResponse)) {
-            if (RupResponseBase.Status.SUCCESS == searchResponse.getStatus()) {
-                RupSearchResults results = searchResponse.getResults();
-                List<RupSearchHit> hits = results.getHits();
-                if (CollectionUtils.isNotEmpty(hits)) {
-                    result = mapWorks(searchValues, hits, workFunction);
+        Map<String, Long> result = new HashMap<>();
+        List<RupSearchHit> searchHits = new ArrayList<>();
+        Iterables.partition(searchValues, maxParametersSize).forEach(partition -> {
+            Set<String> subset = Sets.newHashSet(partition);
+            RupSearchResponse searchResponse = doSearch(field, subset);
+            if (Objects.nonNull(searchResponse)) {
+                if (RupResponseBase.Status.SUCCESS == searchResponse.getStatus()) {
+                    searchHits.addAll(searchResponse.getResults().getHits());
+                } else {
+                    throw new RupRuntimeException("Search works failed due to request did not succeeded");
                 }
-            } else {
-                LOGGER.warn("Search works. Failed. SearchResponse={}", searchResponse);
             }
+        });
+        stopWatch.lap("matchWorks.doSearch");
+        if (CollectionUtils.isNotEmpty(searchHits)) {
+            result.putAll(mapWorks(searchValues, searchHits, workFunction));
         }
         stopWatch.stop("matchWorks.handleResponse");
+        LOGGER.debug("Search works. SearchHitsCount={}, WorksCount={}", searchHits.size(), result.size());
         return result;
     }
 

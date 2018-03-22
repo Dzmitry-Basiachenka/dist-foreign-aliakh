@@ -21,6 +21,7 @@ import com.google.common.collect.Sets;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
+import org.powermock.reflect.Whitebox;
 
 import java.util.List;
 import java.util.Map;
@@ -53,6 +54,7 @@ public class PiIntegrationServiceTest {
     public void setUp() {
         piIntegrationService = new PiIntegrationServiceMock();
         piIntegrationService.init();
+        Whitebox.setInternalState(piIntegrationService, "maxParametersSize", 5);
         rupEsApi = piIntegrationService.getRupEsApi();
         searchHit1 = createMock(RupSearchHit.class);
         searchHit2 = createMock(RupSearchHit.class);
@@ -111,12 +113,13 @@ public class PiIntegrationServiceTest {
     }
 
     private void expectGetSearchResponse() {
-        expect(searchResponse.getStatus()).andReturn(RupResponseBase.Status.SUCCESS).once();
-        expect(searchResponse.getResults()).andReturn(searchResults).once();
-        List<RupSearchHit> searchHits = Lists.newArrayList(searchHit1, searchHit2, searchHit3, searchHit4, searchHit5,
-            searchHit6, searchHit7);
-        expect(searchResults.getHits()).andReturn(searchHits).once();
-        expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).once();
+        expect(searchResponse.getStatus()).andReturn(RupResponseBase.Status.SUCCESS).times(2);
+        expect(searchResponse.getResults()).andReturn(searchResults).times(2);
+        List<RupSearchHit> searchHits1 = Lists.newArrayList(searchHit1, searchHit2, searchHit3, searchHit4, searchHit5);
+        List<RupSearchHit> searchHits2 = Lists.newArrayList(searchHit6, searchHit7);
+        expect(searchResults.getHits()).andReturn(searchHits1).once();
+        expect(searchResults.getHits()).andReturn(searchHits2).once();
+        expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).times(2);
         expectSearchHits();
     }
 
