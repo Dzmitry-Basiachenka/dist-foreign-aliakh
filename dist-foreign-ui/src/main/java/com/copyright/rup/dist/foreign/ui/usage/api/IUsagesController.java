@@ -170,4 +170,9 @@ public interface IUsagesController extends IController<IUsagesWidget>, IBeanLoad
      * status applied, otherwise {@code false}.
      */
     boolean isWorkNotFoundStatusApplied();
+
+    /**
+     * Resets filter.
+     */
+    void clearFilter();
 }

@@ -17,7 +17,6 @@ import com.copyright.rup.dist.foreign.repository.api.Sort;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
@@ -27,8 +26,10 @@ import org.perf4j.aop.Profiled;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PipedOutputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -119,17 +120,18 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public List<UsageDto> getAndWriteUsagesForResearch(UsageFilter filter, PipedOutputStream pipedOutputStream) {
-        List<UsageDto> usageDtos = Lists.newArrayList();
-        try (UsageCsvReportHandler handler = new UsageCsvReportHandler(Objects.requireNonNull(pipedOutputStream))) {
+    public Set<String> writeUsagesForResearchAndFindIds(UsageFilter filter, OutputStream outputStream) {
+        Set<String> usageIds = new HashSet<>();
+        try (SendForResearchCsvReportHandler handler =
+                 new SendForResearchCsvReportHandler(Objects.requireNonNull(outputStream))) {
             if (!Objects.requireNonNull(filter).isEmpty()) {
-                usageDtos = selectList("IUsageMapper.findByFilter", ImmutableMap.of(FILTER_KEY, filter));
-                usageDtos.forEach(handler::handleResult);
+                getTemplate().select("IUsageMapper.findByFilter", ImmutableMap.of(FILTER_KEY, filter), handler);
+                usageIds = handler.getUsagesIds();
             }
         } catch (IOException e) {
             throw new RupRuntimeException(e);
         }
-        return usageDtos;
+        return usageIds;
     }
 
     @Override
@@ -285,19 +287,16 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public void updateStatus(String usageId, UsageStatusEnum status) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-        checkArgument(StringUtils.isNotBlank(usageId));
-        parameters.put(USAGE_ID_KEY, usageId);
-        parameters.put(STATUS_KEY, Objects.requireNonNull(status));
-        parameters.put(UPDATE_USER_KEY, StoredEntity.DEFAULT_USER);
-        update("IUsageMapper.updateStatus", parameters);
-    }
-
-    @Override
     @Profiled(tag = "repository.UsageRepository.updateStatus")
     public void updateStatus(Set<String> usageIds, UsageStatusEnum status) {
-        usageIds.forEach(usageId -> updateStatus(usageId, status));
+        checkArgument(CollectionUtils.isNotEmpty(usageIds));
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
+        parameters.put(STATUS_KEY, Objects.requireNonNull(status));
+        parameters.put(UPDATE_USER_KEY, StoredEntity.DEFAULT_USER);
+        usageIds.forEach(usageId -> {
+            parameters.put(USAGE_ID_KEY, usageId);
+            update("IUsageMapper.updateStatus", parameters);
+        });
     }
 
     @Override

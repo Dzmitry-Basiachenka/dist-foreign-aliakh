@@ -63,10 +63,10 @@ public interface IUsageService {
      * Writes usages found by filter into CSV output stream and
      * change status to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#WORK_RESEARCH}.
      *
-     * @param filter            instance of {@link UsageFilter}
-     * @param pipedOutputStream instance of {@link PipedOutputStream}
+     * @param filter       instance of {@link UsageFilter}
+     * @param outputStream instance of {@link OutputStream}
      */
-    void sendForResearch(UsageFilter filter, PipedOutputStream pipedOutputStream);
+    void sendForResearch(UsageFilter filter, OutputStream outputStream);
 
     /**
      * Writes scenario usages into csv output stream.

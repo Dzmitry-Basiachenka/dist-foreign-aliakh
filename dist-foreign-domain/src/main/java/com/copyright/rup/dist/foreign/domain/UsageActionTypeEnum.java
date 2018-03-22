@@ -27,6 +27,11 @@ public enum UsageActionTypeEnum {
     WORK_NOT_FOUND,
 
     /**
+     * Action type for sending {@link Usage} for research.
+     */
+    WORK_RESEARCH,
+
+    /**
      * Action type for successful finding rightsholder of {@link Usage} in RMS.
      */
     RH_FOUND,
@@ -35,11 +40,6 @@ public enum UsageActionTypeEnum {
      * Action type for unsuccessful finding rightsholder of {@link Usage} in RMS.
      */
     RH_NOT_FOUND,
-
-    /**
-     * Action type for sending {@link Usage} for research.
-     */
-    WORK_RESEARCH,
 
     /**
      * Action type for sending {@link Usage} to RMS for Rights Assignment.

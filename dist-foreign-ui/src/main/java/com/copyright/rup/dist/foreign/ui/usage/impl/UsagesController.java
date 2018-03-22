@@ -16,6 +16,7 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingResult;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.UsageCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csvprocessor.UsageCsvProcessorFactory;
+import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.common.ExportStreamSource;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
@@ -156,7 +157,7 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
 
     @Override
     public IStreamSource getSendForResearchUsagesStreamSource() {
-        return new ExportStreamSource("send_for_research_", pipedStream ->
+        return new ByteArrayStreamSource("send_for_research_", pipedStream ->
             usageService.sendForResearch(filterController.getWidget().getAppliedFilter(), pipedStream));
     }
 
@@ -196,6 +197,11 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     @Override
     public boolean isWorkNotFoundStatusApplied() {
         return UsageStatusEnum.WORK_NOT_FOUND == filterController.getWidget().getAppliedFilter().getUsageStatus();
+    }
+
+    @Override
+    public void clearFilter() {
+        filterController.getWidget().clearFilter();
     }
 
     @Override

@@ -50,10 +50,14 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 import java.io.PipedOutputStream;
 import java.math.BigDecimal;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link UsageService}.
@@ -143,15 +147,15 @@ public class UsageServiceTest {
     @Test
     public void testSendForResearch() {
         UsageFilter filter = new UsageFilter();
-        PipedOutputStream outputStream = new PipedOutputStream();
+        OutputStream outputStream = new ByteArrayOutputStream();
         String usageId1 = RupPersistUtils.generateUuid();
         String usageId2 = RupPersistUtils.generateUuid();
-        expect(usageRepository.getAndWriteUsagesForResearch(filter, outputStream))
-            .andReturn(Lists.newArrayList(buildUsageDto(usageId1), buildUsageDto(usageId2)))
+        Set<String> usageIds = new HashSet<>();
+        Collections.addAll(usageIds, usageId1, usageId2);
+        expect(usageRepository.writeUsagesForResearchAndFindIds(filter, outputStream))
+            .andReturn(usageIds)
             .once();
-        usageRepository.updateStatus(usageId1, UsageStatusEnum.WORK_RESEARCH);
-        expectLastCall().once();
-        usageRepository.updateStatus(usageId2, UsageStatusEnum.WORK_RESEARCH);
+        usageRepository.updateStatus(usageIds, UsageStatusEnum.WORK_RESEARCH);
         expectLastCall().once();
         usageAuditService.logAction(usageId1, UsageActionTypeEnum.WORK_RESEARCH, "Usage detail was sent for research");
         expectLastCall().once();
@@ -165,9 +169,9 @@ public class UsageServiceTest {
     @Test
     public void testSendForResearchNoUsages() {
         UsageFilter filter = new UsageFilter();
-        PipedOutputStream outputStream = new PipedOutputStream();
-        expect(usageRepository.getAndWriteUsagesForResearch(filter, outputStream))
-            .andReturn(Collections.emptyList())
+        OutputStream outputStream = new ByteArrayOutputStream();
+        expect(usageRepository.writeUsagesForResearchAndFindIds(filter, outputStream))
+            .andReturn(Collections.emptySet())
             .once();
         replay(usageRepository, usageAuditService);
         usageService.sendForResearch(filter, outputStream);
@@ -458,9 +462,11 @@ public class UsageServiceTest {
             .andReturn(Lists.newArrayList(buildUsage(USAGE_ID_1))).once();
         expect(rmsIntegrationService.sendForRightsAssignment(Sets.newHashSet(123160519L)))
             .andReturn(result).once();
-        usageRepository.updateStatus(USAGE_ID_1, UsageStatusEnum.SENT_FOR_RA);
+        Set<String> usageIds = new HashSet<>();
+        Collections.addAll(usageIds, USAGE_ID_1);
+        usageRepository.updateStatus(usageIds, UsageStatusEnum.SENT_FOR_RA);
         expectLastCall().once();
-        usageAuditService.logAction(USAGE_ID_1, UsageActionTypeEnum.SENT_FOR_RA,
+        usageAuditService.logAction(usageIds, UsageActionTypeEnum.SENT_FOR_RA,
             "Sent for RA: job id 'b5015e54-c38a-4fc8-b889-c644640085a4'");
         replay(usageRepository, rmsIntegrationService, usageAuditService);
         usageService.sendForRightsAssignment();
@@ -577,11 +583,5 @@ public class UsageServiceTest {
         usage.getPayee().setId(RupPersistUtils.generateUuid());
         usage.getPayee().setAccountNumber(RH_ACCOUNT_NUMBER);
         return usage;
-    }
-
-    private UsageDto buildUsageDto(String usageId) {
-        UsageDto usageDto = new UsageDto();
-        usageDto.setId(usageId);
-        return usageDto;
     }
 }

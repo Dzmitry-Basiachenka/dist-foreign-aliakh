@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
+import java.io.OutputStream;
 import java.io.PipedOutputStream;
 import java.util.List;
 import java.util.Map;
@@ -77,13 +78,14 @@ public interface IUsageRepository {
     void writeUsagesCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream);
 
     /**
-     * Finds usages according to given {@link UsageFilter} and writes them to the output stream in CSV format.
+     * Writes usages found by filter into the output stream in CSV format
+     * and returns identifiers of those usages.
      *
-     * @param filter            instance of {@link UsageFilter}
-     * @param pipedOutputStream instance of {@link PipedOutputStream}
-     * @return usages written into csv report
+     * @param filter       instance of {@link UsageFilter}
+     * @param outputStream instance of {@link OutputStream}
+     * @return identifiers of usages written into CSV report
      */
-    List<UsageDto> getAndWriteUsagesForResearch(UsageFilter filter, PipedOutputStream pipedOutputStream);
+    Set<String> writeUsagesForResearchAndFindIds(UsageFilter filter, OutputStream outputStream);
 
     /**
      * Finds usages by scenario id and writes them into the output stream in CSV format.
@@ -256,14 +258,6 @@ public interface IUsageRepository {
      * @return the list of {@link Usage}s
      */
     List<Usage> findByStatuses(UsageStatusEnum... statuses);
-
-    /**
-     * Updates status of {@link Usage} based on usage identifier.
-     *
-     * @param usageId usage identifier
-     * @param status  instance of {@link UsageStatusEnum}
-     */
-    void updateStatus(String usageId, UsageStatusEnum status);
 
     /**
      * Updates status of {@link Usage}s based on set of {@link Usage} identifiers.

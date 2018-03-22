@@ -11,9 +11,9 @@ import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.LocalDateColumnGenerator;
 import com.copyright.rup.vaadin.ui.LongColumnGenerator;
 import com.copyright.rup.vaadin.ui.MoneyColumnGenerator;
+import com.copyright.rup.vaadin.ui.NotificationWindow;
 import com.copyright.rup.vaadin.ui.VaadinUtils;
 import com.copyright.rup.vaadin.ui.Windows;
-import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.ui.component.lazytable.LazyTable;
 
@@ -249,8 +249,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         OnDemandFileDownloader fileDownloader = new OnDemandFileDownloader(controller.getExportUsagesStreamSource());
         fileDownloader.extend(exportButton);
         sendForResearchButton = Buttons.createButton(ForeignUi.getMessage("button.send_for_research"));
-        SendForResearchFileDownloader sendForResearchDownloader =
-            new SendForResearchFileDownloader(controller.getSendForResearchUsagesStreamSource());
+        SendForResearchFileDownloader sendForResearchDownloader = new SendForResearchFileDownloader(controller);
         sendForResearchDownloader.extend(sendForResearchButton);
         // Click listener and second isWorkNotFoundStatusApplied() call were added due to problem with
         // modal window appearance in chrome browser
@@ -258,6 +257,10 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
             if (!controller.isWorkNotFoundStatusApplied()) {
                 Windows.showNotificationWindow(
                     ForeignUi.getMessage("message.error.invalid_filter_to_send_for_research"));
+            } else {
+                NotificationWindow window = new NotificationWindow(ForeignUi.getMessage("message.send_for_research"));
+                window.addCloseListener(closeEvent -> controller.clearFilter());
+                Windows.showModalWindow(window);
             }
         });
         deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete_usage_batch"));
@@ -289,15 +292,18 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         }
     }
 
-    private class SendForResearchFileDownloader extends OnDemandFileDownloader {
+    private static class SendForResearchFileDownloader extends OnDemandFileDownloader {
+
+        private final IUsagesController controller;
 
         /**
          * Controller.
          *
-         * @param streamSource stream source for file to download
+         * @param controller instance of {@link IUsagesController}
          */
-        SendForResearchFileDownloader(IStreamSource streamSource) {
-            super(streamSource);
+        SendForResearchFileDownloader(IUsagesController controller) {
+            super(controller.getSendForResearchUsagesStreamSource());
+            this.controller = controller;
         }
 
         @Override
