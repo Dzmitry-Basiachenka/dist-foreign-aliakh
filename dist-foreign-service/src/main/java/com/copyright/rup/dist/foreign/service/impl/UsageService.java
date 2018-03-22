@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
 import com.copyright.rup.common.logging.RupLogUtils;
+import com.copyright.rup.dist.common.domain.BaseEntity;
 import com.copyright.rup.dist.common.integration.rest.prm.PrmRollUpService;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.AuditFilter;
@@ -125,13 +126,15 @@ public class UsageService implements IUsageService {
 
     @Override
     @Transactional
-    public void sendForResearch(UsageFilter filter, PipedOutputStream pipedOutputStream) {
+    public void sendForResearch(UsageFilter filter, OutputStream outputStream) {
         StopWatch stopWatch = new Slf4JStopWatch();
-        List<UsageDto> usageDtos = usageRepository.getAndWriteUsagesForResearch(filter, pipedOutputStream);
-        stopWatch.lap("usage.sendForResearch.getAndWriteUsagesForResearch");
-        usageDtos.forEach(usageDto -> usageRepository.updateStatus(usageDto.getId(), UsageStatusEnum.WORK_RESEARCH));
+        Set<String> usageIds = usageRepository.writeUsagesForResearchAndFindIds(filter, outputStream);
+        stopWatch.lap("usage.sendForResearch.writeUsagesForResearchAndFindIds");
+        if (CollectionUtils.isNotEmpty(usageIds)) {
+            usageRepository.updateStatus(usageIds, UsageStatusEnum.WORK_RESEARCH);
+        }
         stopWatch.lap("usage.sendForResearch.updateStatus");
-        usageDtos.forEach(usageDto -> usageAuditService.logAction(usageDto.getId(), UsageActionTypeEnum.WORK_RESEARCH,
+        usageIds.forEach(usageId -> usageAuditService.logAction(usageId, UsageActionTypeEnum.WORK_RESEARCH,
             "Usage detail was sent for research"));
         stopWatch.stop("usage.sendForResearch.logAction");
     }
@@ -370,12 +373,12 @@ public class UsageService implements IUsageService {
             RightsAssignmentResult result = rmsIntegrationService.sendForRightsAssignment(
                 usages.stream().map(Usage::getWrWrkInst).collect(Collectors.toSet()));
             if (result.isSuccessful()) {
-                String jobId = result.getJobId();
-                usages.forEach(usage -> {
-                    usageRepository.updateStatus(usage.getId(), UsageStatusEnum.SENT_FOR_RA);
-                    usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.SENT_FOR_RA,
-                        String.format("Sent for RA: job id '%s'", jobId));
-                });
+                Set<String> usageIds = usages.stream()
+                    .map(BaseEntity::getId)
+                    .collect(Collectors.toSet());
+                usageRepository.updateStatus(usageIds, UsageStatusEnum.SENT_FOR_RA);
+                usageAuditService.logAction(usageIds, UsageActionTypeEnum.SENT_FOR_RA,
+                    String.format("Sent for RA: job id '%s'", result.getJobId()));
                 LOGGER.info("Send for Rights Assignment. Finished. UsagesCount={}, JobId={}", LogUtils.size(usages),
                     result.getJobId());
             } else {

@@ -473,12 +473,12 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testGetAndWriteUsagesForResearch() throws IOException {
+    public void testWriteUsagesForResearchAndFindIds() throws IOException {
         PipedOutputStream outputStream = new PipedOutputStream();
         PipedInputStream inputStream = new PipedInputStream(outputStream);
         UsageFilter usageFilter = new UsageFilter();
         usageFilter.setUsageStatus(UsageStatusEnum.WORK_NOT_FOUND);
-        EXECUTOR_SERVICE.execute(() -> usageRepository.getAndWriteUsagesForResearch(usageFilter, outputStream));
+        EXECUTOR_SERVICE.execute(() -> usageRepository.writeUsagesForResearchAndFindIds(usageFilter, outputStream));
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
         assertEquals(EXPORT_HEADERS, bufferedReader.readLine());
         assertEquals("547365434,WORK_NOT_FOUND,FAS,Batch with NTS,FY2020,2000017010," +
@@ -489,11 +489,11 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testGetAndWriteUsagesForResearchEmptyReport() throws IOException {
+    public void testWriteUsagesForResearchAndFindIdsEmptyReport() throws IOException {
         PipedOutputStream outputStream = new PipedOutputStream();
         PipedInputStream inputStream = new PipedInputStream(outputStream);
         EXECUTOR_SERVICE.execute(
-            () -> usageRepository.getAndWriteUsagesForResearch(new UsageFilter(), outputStream));
+            () -> usageRepository.writeUsagesForResearchAndFindIds(new UsageFilter(), outputStream));
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
         assertEquals(EXPORT_HEADERS, bufferedReader.readLine());
         assertNull(bufferedReader.readLine());
@@ -888,17 +888,6 @@ public class UsageRepositoryIntegrationTest {
         Usage usageWorkFound = usages.get(1);
         assertEquals("d9ca07b5-8282-4a81-9b9d-e4480f529d34", usageWorkFound.getId());
         assertEquals(UsageStatusEnum.WORK_FOUND, usageWorkFound.getStatus());
-    }
-
-    @Test
-    public void testUpdateStatusWithUsageId() {
-        Usage usage = usageRepository.findByDetailId(8457965214L);
-        assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
-        assertEquals(USER_NAME, usage.getUpdateUser());
-        usageRepository.updateStatus(usage.getId(), UsageStatusEnum.RH_NOT_FOUND);
-        usage = usageRepository.findByDetailId(8457965214L);
-        assertEquals(UsageStatusEnum.RH_NOT_FOUND, usage.getStatus());
-        assertEquals(StoredEntity.DEFAULT_USER, usage.getUpdateUser());
     }
 
     @Test

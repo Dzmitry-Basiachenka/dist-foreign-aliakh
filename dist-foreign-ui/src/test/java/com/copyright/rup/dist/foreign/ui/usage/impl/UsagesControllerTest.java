@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
+import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
@@ -45,6 +46,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
+import java.io.OutputStream;
 import java.io.PipedOutputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -156,19 +158,14 @@ public class UsagesControllerTest {
 
     @Test
     public void testSendForResearchUsagesStreamSource() {
-        IStreamSource exportStreamSource = controller.getSendForResearchUsagesStreamSource();
-        ExecutorService executorService = createMock(ExecutorService.class);
-        Whitebox.setInternalState(exportStreamSource, executorService);
-        Capture<Runnable> captureRunnable = new Capture<>();
-        executorService.execute(capture(captureRunnable));
+        IUsagesFilterWidget filterWidgetMock = createMock(IUsagesFilterWidget.class);
+        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
+        expect(filterWidgetMock.getAppliedFilter()).andReturn(new UsageFilter()).once();
+        usageService.sendForResearch(anyObject(UsageFilter.class), anyObject(OutputStream.class));
         expectLastCall().once();
-        replay(usageService, executorService);
-        assertNotNull(exportStreamSource.getStream());
-        Runnable runnable = captureRunnable.getValue();
-        assertNotNull(runnable);
-        assertSame(exportStreamSource, Whitebox.getInternalState(runnable, "arg$1"));
-        assertTrue(Whitebox.getInternalState(runnable, "arg$2") instanceof PipedOutputStream);
-        verify(usageService, executorService);
+        replay(usageService, filterWidgetMock, filterController);
+        assertNotNull(controller.getSendForResearchUsagesStreamSource().getStream());
+        verify(usageService, filterWidgetMock, filterController);
     }
 
     @Test

@@ -4,6 +4,7 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.repository.impl.BaseCsvReportHandler.FiscalYearCellProcessor;
 import com.copyright.rup.dist.foreign.repository.impl.BaseCsvReportHandler.LocalDateCellProcessor;
 
@@ -32,7 +33,7 @@ public class UsageCsvReportHandlerTest {
     private static final LocalDateCellProcessor LOCAL_DATE_CELL_PROCESSOR =
         new LocalDateCellProcessor();
 
-    private UsageCsvReportHandler usagesCsvReportHandler;
+    private UsageCsvReportHandler<UsageDto> usagesCsvReportHandler;
 
     @Before
     public void setUp() throws IOException {

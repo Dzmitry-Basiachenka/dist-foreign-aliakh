@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.common.exception.RupRuntimeException;
+import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
 
 import com.google.common.collect.Table;
@@ -15,8 +16,8 @@ import org.supercsv.prefs.CsvPreference;
 import org.supercsv.util.CsvContext;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.PipedOutputStream;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
@@ -32,9 +33,10 @@ import java.util.Objects;
  * <p>
  * Date: 10/11/2017
  *
+ * @param <T> the type of object that will be written into report
  * @author Uladzislau_Shalamitski
  */
-public abstract class BaseCsvReportHandler implements ResultHandler, AutoCloseable {
+public abstract class BaseCsvReportHandler<T extends StoredEntity<String>> implements ResultHandler<T>, AutoCloseable {
 
     private static final DateTimeFormatter DATE_FORMATTER =
         DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT, Locale.US);
@@ -43,10 +45,10 @@ public abstract class BaseCsvReportHandler implements ResultHandler, AutoCloseab
     /**
      * Constructor.
      *
-     * @param outputStream {@link PipedOutputStream} instance
+     * @param outputStream {@link OutputStream} instance
      * @throws RupRuntimeException when usage details can't be written to the CSV report
      */
-    BaseCsvReportHandler(PipedOutputStream outputStream) throws RupRuntimeException {
+    BaseCsvReportHandler(OutputStream outputStream) throws RupRuntimeException {
         Objects.requireNonNull(outputStream);
         beanWriter = new CsvBeanWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8),
             CsvPreference.STANDARD_PREFERENCE);
@@ -63,25 +65,9 @@ public abstract class BaseCsvReportHandler implements ResultHandler, AutoCloseab
     abstract Table<String, String, CellProcessor> getPropertyTable();
 
     @Override
-    public void handleResult(ResultContext context) throws RupRuntimeException {
+    public void handleResult(ResultContext<? extends T> context) throws RupRuntimeException {
         try {
             beanWriter.write(context.getResultObject(),
-                getPropertyTable().rowKeySet().toArray(new String[getPropertyTable().size()]),
-                getPropertyTable().values().toArray(new CellProcessor[getPropertyTable().size()]));
-        } catch (IOException e) {
-            throw new RupRuntimeException(e);
-        }
-    }
-
-    /**
-     * Writes object into CSV report.
-     *
-     * @param object object to write into CSV report
-     * @throws RupRuntimeException when usage details can't be written to the CSV report
-     */
-    public void handleResult(Object object) throws RupRuntimeException {
-        try {
-            beanWriter.write(object,
                 getPropertyTable().rowKeySet().toArray(new String[getPropertyTable().size()]),
                 getPropertyTable().values().toArray(new CellProcessor[getPropertyTable().size()]));
         } catch (IOException e) {

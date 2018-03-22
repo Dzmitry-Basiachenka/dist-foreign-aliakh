@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
+import com.copyright.rup.dist.common.domain.StoredEntity;
+
 import com.google.common.collect.ImmutableTable;
 import com.google.common.collect.Table;
 
@@ -7,18 +9,19 @@ import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 
 import java.io.IOException;
-import java.io.PipedOutputStream;
+import java.io.OutputStream;
 
 /**
- * Writes usages into a {@link PipedOutputStream} connected to the {@link java.io.PipedInputStream}.
+ * Writes usages into an {@link OutputStream}.
  * <p/>
  * Copyright (C) 2017 copyright.com
  * <p/>
  * Date: 02/06/2017
  *
+ * @param <T> the type of object that will be written into report
  * @author Mikita Hladkikh
  */
-class UsageCsvReportHandler extends BaseCsvReportHandler {
+class UsageCsvReportHandler<T extends StoredEntity<String>> extends BaseCsvReportHandler<T> {
 
     private static final Optional OPTIONAL_PROCESSOR = new Optional();
     private static final LocalDateCellProcessor LOCAL_DATE_CELL_PROCESSOR = new LocalDateCellProcessor();
@@ -54,11 +57,11 @@ class UsageCsvReportHandler extends BaseCsvReportHandler {
     /**
      * Constructor.
      *
-     * @param pipedOutputStream instance of {@link PipedOutputStream}
+     * @param outputStream instance of {@link OutputStream}
      * @throws IOException if header cannot be written
      */
-    UsageCsvReportHandler(PipedOutputStream pipedOutputStream) throws IOException {
-        super(pipedOutputStream);
+    UsageCsvReportHandler(OutputStream outputStream) throws IOException {
+        super(outputStream);
     }
 
     @Override
