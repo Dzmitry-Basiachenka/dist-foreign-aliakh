@@ -16,7 +16,78 @@
         </encoder>
     </appender>
 
-    <logger name="com.copyright.rup.dist" level="${DIST_FOREIGN_UI_LOG_LEVEL:-${GEN_LOG_LEVEL:-debug}}" additivity="false">
+    <property name="logLevel" value="${DIST_FOREIGN_LOG_LEVEL:-${GEN_LOG_LEVEL:-debug}}" />
+
+    <property name="logLevelUi" value="${DIST_FOREIGN_UI_LOG_LEVEL:-${logLevel}}" />
+    <property name="logLevelService" value="${DIST_FOREIGN_SERVICE_LOG_LEVEL:-${logLevel}}" />
+    <property name="logLevelIntegration" value="${DIST_FOREIGN_INTEGRATION_LOG_LEVEL:-${logLevel}}" />
+
+    <property name="logLevelIntegrationLm" value="${DIST_FOREIGN_INTEGRATION_LM_LOG_LEVEL:-${logLevelIntegration}}" />
+    <property name="logLevelIntegrationPi" value="${DIST_FOREIGN_INTEGRATION_PI_LOG_LEVEL:-${logLevelIntegration}}" />
+    <property name="logLevelIntegrationPrm" value="${DIST_FOREIGN_INTEGRATION_PRM_LOG_LEVEL:-${logLevelIntegration}}" />
+    <property name="logLevelIntegrationRms" value="${DIST_FOREIGN_INTEGRATION_RMS_LOG_LEVEL:-${logLevelIntegration}}" />
+
+    <logger name="com.copyright.rup.dist.foreign" level="${logLevel}" additivity="false">
+        <appender-ref ref="FILE_DIST_FOREIGN_UI" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+
+    <logger name="com.copyright.rup.dist.common" level="${logLevel}" additivity="false">
+        <appender-ref ref="FILE_DIST_FOREIGN_UI" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+
+    <logger name="com.copyright.rup.dist.foreign.ui" level="${logLevelUi}" additivity="false">
+        <appender-ref ref="FILE_DIST_FOREIGN_UI" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+
+    <logger name="com.copyright.rup.dist.foreign.service" level="${logLevelService}" additivity="false">
+        <appender-ref ref="FILE_DIST_FOREIGN_UI" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+
+    <logger name="com.copyright.rup.dist.common.service" level="${logLevelService}" additivity="false">
+        <appender-ref ref="FILE_DIST_FOREIGN_UI" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+
+    <logger name="com.copyright.rup.dist.foreign.integration" level="${logLevelIntegration}" additivity="false">
+        <appender-ref ref="FILE_DIST_FOREIGN_UI" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+
+    <logger name="com.copyright.rup.dist.common.integration" level="${logLevelIntegration}" additivity="false">
+        <appender-ref ref="FILE_DIST_FOREIGN_UI" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+
+    <logger name="com.copyright.rup.dist.foreign.integration.lm.impl" level="${logLevelIntegrationLm}" additivity="false">
+        <appender-ref ref="FILE_DIST_FOREIGN_UI" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+
+    <logger name="com.copyright.rup.dist.foreign.integration.pi.impl" level="${logLevelIntegrationPi}" additivity="false">
+        <appender-ref ref="FILE_DIST_FOREIGN_UI" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+
+    <logger name="com.copyright.rup.dist.foreign.integration.prm.impl" level="${logLevelIntegrationPrm}" additivity="false">
+        <appender-ref ref="FILE_DIST_FOREIGN_UI" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+
+    <logger name="com.copyright.rup.dist.common.integration.rest.prm" level="${logLevelIntegrationPrm}" additivity="false">
+        <appender-ref ref="FILE_DIST_FOREIGN_UI" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+
+    <logger name="com.copyright.rup.dist.foreign.integration.rms.impl" level="${logLevelIntegrationRms}" additivity="false">
+        <appender-ref ref="FILE_DIST_FOREIGN_UI" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+
+    <logger name="com.copyright.rup.dist.common.integration.rest.rms" level="${logLevelIntegrationRms}" additivity="false">
         <appender-ref ref="FILE_DIST_FOREIGN_UI" />
         <appender-ref ref="STDOUT" />
     </logger>
