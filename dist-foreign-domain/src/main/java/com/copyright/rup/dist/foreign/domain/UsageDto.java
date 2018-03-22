@@ -59,7 +59,7 @@ public class UsageDto extends StoredEntity<String> {
     private String cccEventId;
     private String distributionName;
     private OffsetDateTime distributionDate;
-    private OffsetDateTime periodEndDate;
+    private LocalDate periodEndDate;
 
     public Long getDetailId() {
         return detailId;
@@ -340,11 +340,11 @@ public class UsageDto extends StoredEntity<String> {
         this.distributionDate = distributionDate;
     }
 
-    public OffsetDateTime getPeriodEndDate() {
+    public LocalDate getPeriodEndDate() {
         return periodEndDate;
     }
 
-    public void setPeriodEndDate(OffsetDateTime periodEndDate) {
+    public void setPeriodEndDate(LocalDate periodEndDate) {
         this.periodEndDate = periodEndDate;
     }
 

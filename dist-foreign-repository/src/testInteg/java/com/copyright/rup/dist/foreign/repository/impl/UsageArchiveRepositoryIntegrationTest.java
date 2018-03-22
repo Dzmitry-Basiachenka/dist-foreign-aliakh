@@ -299,7 +299,7 @@ public class UsageArchiveRepositoryIntegrationTest {
         paidUsage.setCccEventId("53256");
         paidUsage.setDistributionName("FDA March 17");
         paidUsage.setDistributionDate(PAID_DATE);
-        paidUsage.setPeriodEndDate(PAID_DATE);
+        paidUsage.setPeriodEndDate(PUBLICATION_DATE);
         paidUsage.setStatus(UsageStatusEnum.PAID);
         usageArchiveRepository.updatePaidInfo(paidUsage);
         usages =
@@ -309,13 +309,13 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertEquals(1, usages.size());
         usage = usages.get(0);
         verifyPaidUsage(usage, UsageStatusEnum.PAID, 1000005413L, "578945", PAID_DATE, "53256", "FDA March 17",
-            PAID_DATE, PAID_DATE);
+            PAID_DATE, PUBLICATION_DATE);
     }
 
     private void verifyPaidUsage(UsageDto actualUsageDto, UsageStatusEnum status, Long payeeAccountNumber,
                                  String checkNumber, OffsetDateTime checkDate, String cccEventId,
                                  String distributionName, OffsetDateTime distributionDate,
-                                 OffsetDateTime periodEndDate) {
+                                 LocalDate periodEndDate) {
         assertEquals(5423214888L, actualUsageDto.getDetailId(), 0);
         assertEquals(status, actualUsageDto.getStatus());
         assertEquals(payeeAccountNumber, actualUsageDto.getPayeeAccountNumber(), 0);

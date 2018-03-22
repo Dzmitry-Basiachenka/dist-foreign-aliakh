@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
@@ -60,7 +61,7 @@ public class PaidUsageDeserializer extends JsonDeserializer<List<PaidUsage>> {
         usage.setCccEventId(JsonUtils.getStringValue(jsonNode.get("ccc_event_id")));
         usage.setDistributionName(JsonUtils.getStringValue(jsonNode.get("distribution_name")));
         usage.setDistributionDate(getOffsetDateTimeFromLong(jsonNode.get("distribution_date")));
-        usage.setPeriodEndDate(getOffsetDateTimeFromLong(jsonNode.get("period_end_date")));
+        usage.setPeriodEndDate(getLocalDateValueFromEpoch(jsonNode.get("period_end_date")));
         return usage;
     }
 
@@ -68,6 +69,13 @@ public class PaidUsageDeserializer extends JsonDeserializer<List<PaidUsage>> {
     private OffsetDateTime getOffsetDateTimeFromLong(JsonNode node) {
         return null != node
             ? Instant.ofEpochMilli(node.asLong()).atZone(ZoneOffset.systemDefault()).toOffsetDateTime()
+            : null;
+    }
+
+    // TODO {pliakh} move to dist-common
+    private LocalDate getLocalDateValueFromEpoch(JsonNode node) {
+        return null != node
+            ? LocalDate.from(Instant.ofEpochMilli(node.asLong()).atZone(ZoneOffset.systemDefault()).toLocalDate())
             : null;
     }
 }

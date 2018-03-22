@@ -132,7 +132,7 @@ public class AuditWidgetTest {
         assertTrue(table.getColumnGenerator("paymentDate") instanceof LocalDateColumnGenerator);
         assertTrue(table.getColumnGenerator("checkDate") instanceof OffsetDateTimeColumnGenerator);
         assertTrue(table.getColumnGenerator("distributionDate") instanceof OffsetDateTimeColumnGenerator);
-        assertTrue(table.getColumnGenerator("periodEndDate") instanceof OffsetDateTimeColumnGenerator);
+        assertTrue(table.getColumnGenerator("periodEndDate") instanceof LocalDateColumnGenerator);
         assertTrue(table.getColumnGenerator("serviceFee") instanceof PercentColumnGenerator);
         assertTrue(table.isColumnCollapsingAllowed());
     }

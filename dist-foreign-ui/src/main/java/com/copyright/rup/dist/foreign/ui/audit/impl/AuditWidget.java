@@ -143,7 +143,7 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
         table.addProperty("cccEventId", String.class, true);
         table.addProperty("distributionName", String.class, true);
         table.addProperty("distributionDate", OffsetDateTime.class, true);
-        table.addProperty("periodEndDate", OffsetDateTime.class, true);
+        table.addProperty("periodEndDate", LocalDate.class, true);
     }
 
     private void setColumnHeaders() {
@@ -206,7 +206,7 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
         table.addGeneratedColumn("paymentDate", new LocalDateColumnGenerator());
         table.addGeneratedColumn("checkDate", offsetDateTimeColumnGenerator);
         table.addGeneratedColumn("distributionDate", offsetDateTimeColumnGenerator);
-        table.addGeneratedColumn("periodEndDate", offsetDateTimeColumnGenerator);
+        table.addGeneratedColumn("periodEndDate", new LocalDateColumnGenerator());
         table.addGeneratedColumn("serviceFee", new PercentColumnGenerator());
         table.addGeneratedColumn("detailId", (ColumnGenerator) (source, itemId, columnId) -> {
             String detailId =
