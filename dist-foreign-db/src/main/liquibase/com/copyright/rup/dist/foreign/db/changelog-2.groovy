@@ -550,4 +550,18 @@ databaseChangeLog {
                     referencedTableSchemaName: dbAppsSchema, referencedTableName: 'df_rightsholder', referencedColumnNames: 'rh_account_number')
         }
     }
+
+    changeSet(id: '2018-03-22-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-40635 FDA: Refresh in-progress scenario with newly eligible details: remove unnecessary foreign key")
+
+        preConditions(onFail: 'MARK_RAN') {
+            foreignKeyConstraintExists(schemaName: dbAppsSchema, foreignKeyTableName: 'df_scenario_usage_filter_to_usage_batches_ids_map',
+                    foreignKeyName: 'fk_df_scenario_usage_filter_to_usage_batches_ids_map_2_df_usage_batch')
+        }
+
+        dropForeignKeyConstraint(baseTableSchemaName: dbAppsSchema, baseTableName: 'df_scenario_usage_filter_to_usage_batches_ids_map',
+                constraintName: 'fk_df_scenario_usage_filter_to_usage_batches_ids_map_2_df_usage_batch')
+
+        rollback ""
+    }
 }
