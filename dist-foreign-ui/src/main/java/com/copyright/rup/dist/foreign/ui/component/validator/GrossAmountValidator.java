@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.component.validator;
 
-import com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator.ReportedValueValidator;
+import com.copyright.rup.dist.foreign.service.impl.csv.validator.ReportedValueValidator;
 
 import com.vaadin.data.validator.AbstractStringValidator;
 

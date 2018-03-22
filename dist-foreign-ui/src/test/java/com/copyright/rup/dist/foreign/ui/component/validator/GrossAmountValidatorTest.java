@@ -7,7 +7,7 @@ import static org.powermock.api.easymock.PowerMock.expectNew;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
-import com.copyright.rup.dist.foreign.service.impl.csvprocessor.validator.ReportedValueValidator;
+import com.copyright.rup.dist.foreign.service.impl.csv.validator.ReportedValueValidator;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

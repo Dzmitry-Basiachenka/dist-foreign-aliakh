@@ -11,7 +11,6 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
-import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingResult;
 
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
@@ -75,14 +74,6 @@ public interface IUsageService {
      * @param pipedOutputStream instance of {@link PipedOutputStream}
      */
     void writeScenarioUsagesCsvReport(Scenario scenario, PipedOutputStream pipedOutputStream);
-
-    /**
-     * Writes errors information into csv output stream.
-     *
-     * @param csvProcessingResult instance of {@link CsvProcessingResult}
-     * @param outputStream        instance of {@link OutputStream}
-     */
-    void writeErrorsToFile(CsvProcessingResult<Usage> csvProcessingResult, OutputStream outputStream);
 
     /**
      * Inserts usages.

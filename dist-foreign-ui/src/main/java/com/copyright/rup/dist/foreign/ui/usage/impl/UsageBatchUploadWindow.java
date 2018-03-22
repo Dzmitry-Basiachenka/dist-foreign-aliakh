@@ -4,10 +4,10 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
-import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingResult;
-import com.copyright.rup.dist.foreign.service.impl.csvprocessor.UsageCsvProcessor;
-import com.copyright.rup.dist.foreign.service.impl.csvprocessor.exception.ThresholdExceededException;
-import com.copyright.rup.dist.foreign.service.impl.csvprocessor.exception.ValidationException;
+import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.ProcessingResult;
+import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.ThresholdExceededException;
+import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.ValidationException;
+import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.component.validator.GrossAmountValidator;
 import com.copyright.rup.dist.foreign.ui.component.validator.NumberValidator;
 import com.copyright.rup.dist.foreign.ui.component.validator.UsageBatchNameUniqueValidator;
@@ -86,27 +86,26 @@ class UsageBatchUploadWindow extends Window {
      */
     void onUploadClicked() {
         if (isValid()) {
-            String fileName = uploadField.getFileName();
             StopWatch stopWatch = new Slf4JStopWatch();
             try {
-                UsageCsvProcessor processor = usagesController.getCsvProcessor();
-                processor.setProductFamily(productFamilyProperty.getValue());
-                CsvProcessingResult<Usage> processingResult =
-                    processor.process(uploadField.getStreamToUploadedFile(), fileName);
+                UsageCsvProcessor processor = usagesController.getCsvProcessor(productFamilyProperty.getValue());
+                ProcessingResult<Usage> processingResult = processor.process(uploadField.getStreamToUploadedFile());
                 stopWatch.lap("usageBatch.load_fileProcessed");
                 if (processingResult.isSuccessful()) {
-                    int usagesCount = usagesController.loadUsageBatch(buildUsageBatch(), processingResult.getResult());
+                    int usagesCount = usagesController.loadUsageBatch(buildUsageBatch(), processingResult.get());
                     stopWatch.lap("usageBatch.load_stored");
                     close();
                     Windows.showNotificationWindow(ForeignUi.getMessage("message.upload_completed", usagesCount));
                 } else {
                     Windows.showModalWindow(
-                        new ErrorUploadWindow(usagesController.getErrorResultStreamSource(processingResult),
+                        new ErrorUploadWindow(
+                            usagesController.getErrorResultStreamSource(uploadField.getFileName(), processingResult),
                             ForeignUi.getMessage("message.error.upload")));
                 }
             } catch (ThresholdExceededException e) {
                 Windows.showModalWindow(
-                    new ErrorUploadWindow(usagesController.getErrorResultStreamSource(e.getProcessingResult()),
+                    new ErrorUploadWindow(
+                        usagesController.getErrorResultStreamSource(uploadField.getFileName(), e.getProcessingResult()),
                         e.getMessage() + "<br>Press Download button to see detailed list of errors"));
             } catch (ValidationException e) {
                 Windows.showNotificationWindow(ForeignUi.getMessage("window.error"), e.getHtmlMessage());

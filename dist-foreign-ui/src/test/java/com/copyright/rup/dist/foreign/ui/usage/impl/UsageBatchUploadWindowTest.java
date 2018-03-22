@@ -1,12 +1,12 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import static org.easymock.EasyMock.anyObject;
-import static org.easymock.EasyMock.anyString;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.createPartialMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
@@ -19,8 +19,8 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
-import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingResult;
-import com.copyright.rup.dist.foreign.service.impl.csvprocessor.UsageCsvProcessor;
+import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.ProcessingResult;
+import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.component.validator.GrossAmountValidator;
 import com.copyright.rup.dist.foreign.ui.component.validator.NumberValidator;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
@@ -57,7 +57,6 @@ import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 
 /**
@@ -172,12 +171,11 @@ public class UsageBatchUploadWindowTest {
         rro.setAccountNumber(Long.valueOf(ACCOUNT_NUMBER));
         rro.setName(RRO_NAME);
         rro.setId(RupPersistUtils.generateUuid());
-        UploadField uploadField =
-            createPartialMock(UploadField.class, "getStreamToUploadedFile", "getFileName");
+        UploadField uploadField = createPartialMock(UploadField.class, "getStreamToUploadedFile");
         UsageCsvProcessor processor = createMock(UsageCsvProcessor.class);
         LocalDateWidget paymentDateWidget = new LocalDateWidget("Payment Date");
         paymentDateWidget.setValue(PAYMENT_DATE);
-        CsvProcessingResult<Usage> processingResult = buildCsvProcessingResult();
+        ProcessingResult<Usage> processingResult = buildCsvProcessingResult();
         window = createPartialMock(UsageBatchUploadWindow.class, "isValid");
         Whitebox.setInternalState(window, "usagesController", usagesController);
         Whitebox.setInternalState(window, "uploadField", uploadField);
@@ -190,14 +188,10 @@ public class UsageBatchUploadWindowTest {
         Whitebox.setInternalState(window, "productFamilyProperty", new ObjectProperty<>("FAS"));
         Whitebox.setInternalState(window, "rro", rro);
         expect(window.isValid()).andReturn(true).once();
-        expect(usagesController.getCsvProcessor()).andReturn(processor).once();
-        processor.setProductFamily("FAS");
-        expectLastCall().once();
-        expect(processor.process(anyObject(), anyString())).andReturn(processingResult).once();
-        expect(usagesController.loadUsageBatch(buildUsageBatch(rro), processingResult.getResult()))
-            .andReturn(1).once();
+        expect(usagesController.getCsvProcessor("FAS")).andReturn(processor).once();
+        expect(processor.process(anyObject())).andReturn(processingResult).once();
+        expect(usagesController.loadUsageBatch(buildUsageBatch(rro), processingResult.get())).andReturn(1).once();
         expect(uploadField.getStreamToUploadedFile()).andReturn(createMock(ByteArrayOutputStream.class)).once();
-        expect(uploadField.getFileName()).andReturn("fileName.csv").once();
         Windows.showNotificationWindow("Upload completed: 1 records were stored successfully");
         expectLastCall().once();
         replay(window, usagesController, Windows.class, processor, uploadField);
@@ -215,10 +209,13 @@ public class UsageBatchUploadWindowTest {
         assertFalse(validator.isValid(null));
     }
 
-    private CsvProcessingResult<Usage> buildCsvProcessingResult() {
-        CsvProcessingResult<Usage> processingResult =
-            new CsvProcessingResult<>(Collections.emptyList(), "fileName.csv");
-        processingResult.addRecord(1, new Usage());
+    private ProcessingResult<Usage> buildCsvProcessingResult() {
+        ProcessingResult<Usage> processingResult = new ProcessingResult<>();
+        try {
+            Whitebox.invokeMethod(processingResult, "addRecord", new Usage());
+        } catch (Exception e) {
+            fail();
+        }
         return processingResult;
     }
 

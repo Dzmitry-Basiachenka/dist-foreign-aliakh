@@ -8,7 +8,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 
-import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingResult;
+import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
@@ -28,7 +28,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
 import java.util.Collection;
-import java.util.Collections;
 
 /**
  * Verifies {@link ErrorUploadWindow}.
@@ -45,12 +44,12 @@ public class ErrorUploadWindowTest {
     @Test
     public void testComponentStructure() {
         IUsagesController controller = createMock(IUsagesController.class);
-        CsvProcessingResult csvProcessingResult = new CsvProcessingResult(Collections.emptyList(), StringUtils.EMPTY);
-        expect(controller.getErrorResultStreamSource(csvProcessingResult))
+        ProcessingResult processingResult = new ProcessingResult();
+        expect(controller.getErrorResultStreamSource(StringUtils.EMPTY, processingResult))
             .andReturn(createMock(IStreamSource.class)).once();
         replay(controller);
         ErrorUploadWindow errorUploadWindow =
-            new ErrorUploadWindow(controller.getErrorResultStreamSource(csvProcessingResult),
+            new ErrorUploadWindow(controller.getErrorResultStreamSource(StringUtils.EMPTY, processingResult),
                 "The file could not be uploaded.<br>Press Download button to see detailed list of errors");
         verify(controller);
         assertFalse(errorUploadWindow.isResizable());

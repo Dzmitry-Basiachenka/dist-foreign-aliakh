@@ -27,7 +27,7 @@ import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.impl.UsageService;
-import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingResult;
+import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
@@ -193,9 +193,9 @@ public class UsagesControllerTest {
 
     @Test
     public void testGetErrorsStream() {
-        CsvProcessingResult csvProcessingResult = new CsvProcessingResult(Collections.emptyList(), StringUtils.EMPTY);
+        ProcessingResult csvProcessingResult = new ProcessingResult();
         IStreamSource errorStreamSource =
-            controller.getErrorResultStreamSource(csvProcessingResult);
+            controller.getErrorResultStreamSource(StringUtils.EMPTY, csvProcessingResult);
         ExecutorService executorService = createMock(ExecutorService.class);
         Whitebox.setInternalState(errorStreamSource, executorService);
         Capture<Runnable> captureRunnable = new Capture<>();
@@ -218,9 +218,9 @@ public class UsagesControllerTest {
 
     @Test
     public void testGetErrorsFileName() {
-        CsvProcessingResult csvProcessingResult = new CsvProcessingResult(Collections.emptyList(), "fileName.csv");
+        ProcessingResult csvProcessingResult = new ProcessingResult();
         assertEquals("Error_for_fileName.csv",
-            controller.getErrorResultStreamSource(csvProcessingResult).getFileName());
+            controller.getErrorResultStreamSource("fileName.csv", csvProcessingResult).getFileName());
     }
 
     @Test

@@ -13,9 +13,8 @@ import com.copyright.rup.dist.foreign.repository.api.Sort;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.service.impl.csvprocessor.CsvProcessingResult;
-import com.copyright.rup.dist.foreign.service.impl.csvprocessor.UsageCsvProcessor;
-import com.copyright.rup.dist.foreign.service.impl.csvprocessor.UsageCsvProcessorFactory;
+import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.ProcessingResult;
+import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.common.ExportStreamSource;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
@@ -75,8 +74,6 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     private IPrmIntegrationService prmIntegrationService;
     @Autowired
     private IScenarioService scenarioService;
-    @Autowired
-    private UsageCsvProcessorFactory usageCsvProcessorFactory;
 
     @Override
     public IUsagesFilterWidget initUsagesFilterWidget() {
@@ -162,8 +159,8 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
-    public IStreamSource getErrorResultStreamSource(CsvProcessingResult csvProcessingResult) {
-        return new ErrorResultStreamSource(usageService, csvProcessingResult);
+    public IStreamSource getErrorResultStreamSource(String fileName, ProcessingResult processingResult) {
+        return new ErrorResultStreamSource(fileName, processingResult);
     }
 
     @Override
@@ -172,8 +169,8 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
-    public UsageCsvProcessor getCsvProcessor() {
-        return usageCsvProcessorFactory.getProcessor();
+    public UsageCsvProcessor getCsvProcessor(String productFamily) {
+        return new UsageCsvProcessor(productFamily);
     }
 
     @Override
@@ -216,18 +213,18 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     private static class ErrorResultStreamSource implements IStreamSource {
 
         private final ExecutorService executorService = Executors.newSingleThreadExecutor();
-        private final IUsageService usageService;
-        private final CsvProcessingResult csvProcessingResult;
+        private final ProcessingResult processingResult;
+        private final String fileName;
 
-        ErrorResultStreamSource(IUsageService usageService, CsvProcessingResult csvProcessingResult) {
-            this.csvProcessingResult = csvProcessingResult;
-            this.usageService = usageService;
+        ErrorResultStreamSource(String fileName, ProcessingResult processingResult) {
+            this.fileName = fileName;
+            this.processingResult = processingResult;
         }
 
         @Override
         public String getFileName() {
             return VaadinUtils.encodeAndBuildFileName(
-                String.format("Error_for_%s", Files.getNameWithoutExtension(csvProcessingResult.getFileName())), "csv");
+                String.format("Error_for_%s", Files.getNameWithoutExtension(fileName)), "csv");
         }
 
         @Override
@@ -235,7 +232,7 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
             try {
                 PipedOutputStream outputStream = new PipedOutputStream();
                 PipedInputStream pipedInputStream = new PipedInputStream(outputStream);
-                executorService.execute(() -> usageService.writeErrorsToFile(csvProcessingResult, outputStream));
+                executorService.execute(() -> processingResult.writeToFile(outputStream));
                 return pipedInputStream;
             } catch (IOException e) {
                 throw new RupRuntimeException(e);
