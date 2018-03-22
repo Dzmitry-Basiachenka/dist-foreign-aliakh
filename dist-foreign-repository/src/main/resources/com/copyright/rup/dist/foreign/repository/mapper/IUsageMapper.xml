@@ -449,7 +449,7 @@
             u.is_rh_participating_flag
         from ${schema}.df_usage u
         join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
-        join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
+        left join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
         where df_scenario_uid = #{scenarioId}
     </select>
 
