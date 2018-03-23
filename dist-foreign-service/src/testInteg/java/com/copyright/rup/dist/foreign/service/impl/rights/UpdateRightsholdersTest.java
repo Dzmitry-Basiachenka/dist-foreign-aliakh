@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.service.impl;
+package com.copyright.rup.dist.foreign.service.impl.rights;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -8,8 +8,9 @@ import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
+import com.copyright.rup.dist.foreign.service.api.IRightsService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
-import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.impl.RightsholderService;
 
 import com.google.common.collect.Lists;
 
@@ -50,7 +51,7 @@ public class UpdateRightsholdersTest {
     @Autowired
     private IUsageRepository usageRepository;
     @Autowired
-    private IUsageService usageService;
+    private IRightsService rightsService;
     @Autowired
     private IUsageAuditService usageAuditService;
     @Autowired
@@ -68,12 +69,10 @@ public class UpdateRightsholdersTest {
     public void testUpdateRights() {
         mockServer = MockRestServiceServer.createServer(restTemplate);
         asyncMockServer = MockRestServiceServer.createServer(asyncRestTemplate);
-        expectRmsCall("rms/rms_grants_work_found_usages_request.json",
-            "rms/rms_grants_work_found_usages_response.json");
-        expectRmsCall("rms/rms_grants_sent_for_ra_usages_request.json",
-            "rms/rms_grants_sent_for_ra_usages_response.json");
+        expectRmsCall("rms_grants_work_found_usages_request.json", "rms_grants_work_found_usages_response.json");
+        expectRmsCall("rms_grants_sent_for_ra_usages_request.json", "rms_grants_sent_for_ra_usages_response.json");
         expectPrmCall();
-        usageService.updateRightsholders();
+        rightsService.updateRightsholders();
         assertUsages();
         assertAudit();
         mockServer.verify();
@@ -126,7 +125,7 @@ public class UpdateRightsholdersTest {
                 "http://localhost:8080/party-rest/organization/extorgkeys?extOrgKeys%5B%5D=1000000322&fmt=json"))
             .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
             .andRespond(MockRestResponseCreators.withSuccess(
-                TestUtils.fileToString(this.getClass(), "prm/rightsholder_1000000322_response.json"),
+                TestUtils.fileToString(RightsholderService.class, "prm/rightsholder_1000000322_response.json"),
                 MediaType.APPLICATION_JSON));
     }
 }

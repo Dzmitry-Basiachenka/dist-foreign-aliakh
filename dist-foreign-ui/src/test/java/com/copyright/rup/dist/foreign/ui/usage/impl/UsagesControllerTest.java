@@ -24,6 +24,7 @@ import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
+import com.copyright.rup.dist.foreign.service.api.IResearchService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.impl.UsageService;
@@ -79,6 +80,7 @@ public class UsagesControllerTest {
     private IUsageBatchService usageBatchService;
     private IPrmIntegrationService prmIntegrationService;
     private IScenarioService scenarioService;
+    private IResearchService researchService;
 
     @Before
     public void setUp() {
@@ -89,13 +91,15 @@ public class UsagesControllerTest {
         usagesWidget = createMock(IUsagesWidget.class);
         scenarioService = createMock(IScenarioService.class);
         prmIntegrationService = createMock(IPrmIntegrationService.class);
-        Whitebox.setInternalState(controller, "usageBatchService", usageBatchService);
-        Whitebox.setInternalState(controller, "usageService", usageService);
-        Whitebox.setInternalState(controller, "usageBatchService", usageBatchService);
+        researchService = createMock(IResearchService.class);
+        Whitebox.setInternalState(controller, usageBatchService);
+        Whitebox.setInternalState(controller, usageService);
+        Whitebox.setInternalState(controller, usageBatchService);
         Whitebox.setInternalState(controller, IWidget.class, usagesWidget);
-        Whitebox.setInternalState(controller, "filterController", filterController);
-        Whitebox.setInternalState(controller, "prmIntegrationService", prmIntegrationService);
-        Whitebox.setInternalState(controller, "scenarioService", scenarioService);
+        Whitebox.setInternalState(controller, filterController);
+        Whitebox.setInternalState(controller, prmIntegrationService);
+        Whitebox.setInternalState(controller, scenarioService);
+        Whitebox.setInternalState(controller, researchService);
     }
 
     @Test
@@ -161,7 +165,7 @@ public class UsagesControllerTest {
         IUsagesFilterWidget filterWidgetMock = createMock(IUsagesFilterWidget.class);
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         expect(filterWidgetMock.getAppliedFilter()).andReturn(new UsageFilter()).once();
-        usageService.sendForResearch(anyObject(UsageFilter.class), anyObject(OutputStream.class));
+        researchService.sendForResearch(anyObject(UsageFilter.class), anyObject(OutputStream.class));
         expectLastCall().once();
         replay(usageService, filterWidgetMock, filterController);
         assertNotNull(controller.getSendForResearchUsagesStreamSource().getStream());

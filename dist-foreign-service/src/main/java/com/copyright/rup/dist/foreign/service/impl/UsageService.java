@@ -1,8 +1,6 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
-import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.common.logging.RupLogUtils;
-import com.copyright.rup.dist.common.domain.BaseEntity;
 import com.copyright.rup.dist.common.integration.rest.prm.PrmRollUpService;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.AuditFilter;
@@ -19,18 +17,12 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.common.util.CalculationUtils;
 import com.copyright.rup.dist.foreign.domain.common.util.ForeignLogUtils;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
-import com.copyright.rup.dist.foreign.integration.rms.api.IRmsIntegrationService;
-import com.copyright.rup.dist.foreign.integration.rms.api.RightsAssignmentResult;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
-import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
-import com.copyright.rup.dist.foreign.service.api.IRmsGrantsService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.service.api.IWorkMatchingService;
-import com.copyright.rup.dist.foreign.service.impl.WorksMatchingJob.UsageGroupEnum;
 import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
 import com.google.common.collect.Lists;
@@ -46,21 +38,16 @@ import org.perf4j.slf4j.Slf4JStopWatch;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.OutputStream;
 import java.io.PipedOutputStream;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 /**
@@ -76,13 +63,10 @@ import java.util.stream.Collectors;
  */
 @Service
 public class UsageService implements IUsageService {
-
-    private static final BigDecimal GROSS_AMOUNT_LIMIT = BigDecimal.valueOf(100L);
     private static final String CALCULATION_FINISHED_LOG_MESSAGE = "Calculated usages gross amount. " +
         "UsageBatchName={}, FundPoolAmount={}, TotalAmount={}, ConversionRate={}";
     private static final String UPDATE_PAID_INFO_FAILED_LOG_MESSAGE = "Update paid information. Not found usages. " +
         "UsagesCount={}, UpdatedCount={}, NotFoundDetailIds={}";
-    private static final long UNIDENTIFIED_WR_WRK_INST = 123050824L;
     private static final Long CLA_PAYEE = 2000017000L;
     private static final Logger LOGGER = RupLogUtils.getLogger();
     @Value("$RUP{dist.foreign.service_fee.cla_payee}")
@@ -95,14 +79,6 @@ public class UsageService implements IUsageService {
     private IUsageAuditService usageAuditService;
     @Autowired
     private IPrmIntegrationService prmIntegrationService;
-    @Autowired
-    private IRmsIntegrationService rmsIntegrationService;
-    @Autowired
-    private IRmsGrantsService rmsGrantsService;
-    @Autowired
-    private IRightsholderService rightsholderService;
-    @Autowired
-    private IWorkMatchingService workMatchingService;
 
     @Override
     public List<UsageDto> getUsages(UsageFilter filter, Pageable pageable, Sort sort) {
@@ -119,21 +95,6 @@ public class UsageService implements IUsageService {
     @Override
     public void writeUsageCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream) {
         usageRepository.writeUsagesCsvReport(filter, pipedOutputStream);
-    }
-
-    @Override
-    @Transactional
-    public void sendForResearch(UsageFilter filter, OutputStream outputStream) {
-        StopWatch stopWatch = new Slf4JStopWatch();
-        Set<String> usageIds = usageRepository.writeUsagesForResearchAndFindIds(filter, outputStream);
-        stopWatch.lap("usage.sendForResearch.writeUsagesForResearchAndFindIds");
-        if (CollectionUtils.isNotEmpty(usageIds)) {
-            usageRepository.updateStatus(usageIds, UsageStatusEnum.WORK_RESEARCH);
-        }
-        stopWatch.lap("usage.sendForResearch.updateStatus");
-        usageIds.forEach(usageId -> usageAuditService.logAction(usageId, UsageActionTypeEnum.WORK_RESEARCH,
-            "Usage detail was sent for research"));
-        stopWatch.stop("usage.sendForResearch.logAction");
     }
 
     @Override
@@ -355,61 +316,6 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    @Transactional
-    @Profiled(tag = "service.UsageService.sendForRightsAssignment")
-    @Scheduled(cron = "$RUP{dist.foreign.service.schedule.send_for_ra}")
-    public void sendForRightsAssignment() {
-        List<Usage> usages = usageRepository.findByStatuses(UsageStatusEnum.RH_NOT_FOUND);
-        LOGGER.info("Send for Rights Assignment. Started. UsagesCount={}", LogUtils.size(usages));
-        if (CollectionUtils.isNotEmpty(usages)) {
-            RightsAssignmentResult result = rmsIntegrationService.sendForRightsAssignment(
-                usages.stream().map(Usage::getWrWrkInst).collect(Collectors.toSet()));
-            if (result.isSuccessful()) {
-                Set<String> usageIds = usages.stream()
-                    .map(BaseEntity::getId)
-                    .collect(Collectors.toSet());
-                usageRepository.updateStatus(usageIds, UsageStatusEnum.SENT_FOR_RA);
-                usageAuditService.logAction(usageIds, UsageActionTypeEnum.SENT_FOR_RA,
-                    String.format("Sent for RA: job id '%s'", result.getJobId()));
-                LOGGER.info("Send for Rights Assignment. Finished. UsagesCount={}, JobId={}", LogUtils.size(usages),
-                    result.getJobId());
-            } else {
-                LOGGER.warn("Send for Rights Assignment. Failed. Reason={}, DetailsIds={}", result.getErrorMessage(),
-                    usages.stream().map(Usage::getDetailId).collect(Collectors.toList()));
-            }
-        } else {
-            LOGGER.info("Send for Rights Assignment. Skipped. Reason=There are no usages for sending");
-        }
-    }
-
-    @Override
-    @Profiled(tag = "service.UsageService.updateRightsholders")
-    @Scheduled(cron = "$RUP{dist.foreign.service.schedule.get_rights}")
-    //TODO {pliakh} adjust implementation to avoid copy-paste for WORK_FOUND and SENT_FOR_RA usages handling
-    public void updateRightsholders() {
-        List<Usage> usages = usageRepository.findByStatuses(UsageStatusEnum.WORK_FOUND);
-        if (CollectionUtils.isNotEmpty(usages)) {
-            LOGGER.info("Get usage rightsholders. Started. UsagesStatus={}, UsagesCount={}", UsageStatusEnum.WORK_FOUND,
-                LogUtils.size(usages));
-            long eligibleUsagesCount = updateWorkFoundUsagesRightsholders(usages);
-            LOGGER.info("Get usage rightsholders. Finished. UsagesStatus={}, UsagesCount={}, EligibleUsagesCount={}",
-                UsageStatusEnum.WORK_FOUND, LogUtils.size(usages), eligibleUsagesCount);
-        } else {
-            LOGGER.info("Get usage rightsholders. Skipped. Reason=There are no WORK_FOUND usages.");
-        }
-        usages = usageRepository.findByStatuses(UsageStatusEnum.SENT_FOR_RA);
-        if (CollectionUtils.isNotEmpty(usages)) {
-            LOGGER.info("Get usage rightsholders. Started. UsagesStatus={}, UsagesCount={}",
-                UsageStatusEnum.SENT_FOR_RA, LogUtils.size(usages));
-            long eligibleUsagesCount = updateSentForRaUsagesRightsholders(usages);
-            LOGGER.info("Get usage rightsholders. Finished. UsagesStatus={}, UsagesCount={}, EligibleUsagesCount={}",
-                UsageStatusEnum.SENT_FOR_RA, LogUtils.size(usages), eligibleUsagesCount);
-        } else {
-            LOGGER.info("Get usage rightsholders. Skipped. Reason=There are no SENT_FOR_RA usages.");
-        }
-    }
-
-    @Override
     public List<String> getProductFamilies() {
         return usageRepository.findProductFamiliesForFilter();
     }
@@ -455,112 +361,6 @@ public class UsageService implements IUsageService {
         return usageRepository.findUsagesWithBlankWrWrkInst();
     }
 
-    @Override
-    @Transactional
-    public void matchByIdno(List<Usage> usages) {
-        try {
-            StopWatch stopWatch = new Slf4JStopWatch();
-            List<Usage> matchedByIdno = workMatchingService.matchByIdno(usages);
-            stopWatch.lap("matchWorks.byIdno_findByIdno");
-            if (CollectionUtils.isNotEmpty(matchedByIdno)) {
-                usageRepository.update(matchedByIdno);
-                stopWatch.lap("matchWorks.byIdno_updateUsages");
-                matchedByIdno.forEach(
-                    usage -> usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
-                        String.format("Wr Wrk Inst %s was found by standard number %s", usage.getWrWrkInst(),
-                            usage.getStandardNumber())));
-                stopWatch.lap("matchWorks.byIdno_writeAudit");
-            }
-            updateUsagesStatusAndWriteAudit(usages, UsageGroupEnum.STANDARD_NUMBER);
-            stopWatch.stop("matchWorks.byIdno_determineNtsAndUpdate");
-        } catch (RupRuntimeException e) {
-            LOGGER.warn("Search works by IDNOs failed. Unable to connect to RupEsApi.", e);
-        }
-    }
-
-    @Override
-    @Transactional
-    public void matchByTitle(List<Usage> usages) {
-        StopWatch stopWatch = new Slf4JStopWatch();
-        try {
-            List<Usage> matchedByTitle = workMatchingService.matchByTitle(usages);
-            stopWatch.lap("matchWorks.byIdno_findByTitle");
-            if (CollectionUtils.isNotEmpty(matchedByTitle)) {
-                usageRepository.update(matchedByTitle);
-                stopWatch.lap("matchWorks.byTitle_updateUsages");
-                matchedByTitle.forEach(
-                    usage -> usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
-                        String.format("Wr Wrk Inst %s was found by title \"%s\"", usage.getWrWrkInst(),
-                            usage.getWorkTitle())));
-                stopWatch.lap("matchWorks.byTitle_writeAudit");
-            }
-            updateUsagesStatusAndWriteAudit(usages, UsageGroupEnum.TITLE);
-            stopWatch.stop("matchWorks.byTitle_determineNtsAndUpdate");
-        } catch (RupRuntimeException e) {
-            LOGGER.warn("Search works by titles failed. Unable to connect to RupEsApi.", e);
-        }
-    }
-
-    @Override
-    @Transactional
-    public void updateStatusForUsagesWithNoStandardNumberAndTitle(List<Usage> usages) {
-        StopWatch stopWatch = new Slf4JStopWatch();
-        updateUsagesStatusAndWriteAudit(usages, UsageGroupEnum.SINGLE_USAGE);
-        stopWatch.stop("matchWorks.noIdnoNoTitle_determineNtsAndUpdate");
-    }
-
-    private long updateWorkFoundUsagesRightsholders(List<Usage> usages) {
-        StopWatch stopWatch = new Slf4JStopWatch("service.UsageService.updateRightsholders(WORK_FOUND)");
-        Map<Long, Set<String>> wrWrkInstToUsageIds = usages.stream().collect(
-            Collectors.groupingBy(Usage::getWrWrkInst, HashMap::new, Collectors
-                .mapping(Usage::getId, Collectors.toSet())));
-
-        Map<Long, Long> wrWrkInstToAccountNumber =
-            rmsGrantsService.getAccountNumbersByWrWrkInsts(Lists.newArrayList(wrWrkInstToUsageIds.keySet()));
-
-        AtomicLong eligibleUsagesCount = new AtomicLong();
-        wrWrkInstToAccountNumber.forEach((wrWrkInst, rhAccountNumber) -> {
-            Set<String> usageIds = wrWrkInstToUsageIds.get(wrWrkInst);
-            usageRepository.updateStatusAndRhAccountNumber(usageIds, UsageStatusEnum.ELIGIBLE,
-                rhAccountNumber);
-            eligibleUsagesCount.addAndGet(usageIds.size());
-            usageAuditService.logAction(usageIds, UsageActionTypeEnum.RH_FOUND,
-                String.format("Rightsholder account %s was found in RMS", rhAccountNumber));
-        });
-        rightsholderService.updateRightsholders(Sets.newHashSet(wrWrkInstToAccountNumber.values()));
-
-        wrWrkInstToUsageIds.forEach((wrWrkInst, usageIds) -> {
-            if (!wrWrkInstToAccountNumber.containsKey(wrWrkInst)) {
-                usageRepository.updateStatus(usageIds, UsageStatusEnum.RH_NOT_FOUND);
-                usageAuditService.logAction(usageIds, UsageActionTypeEnum.RH_NOT_FOUND,
-                    String.format("Rightsholder account for %s was not found in RMS", wrWrkInst));
-            }
-        });
-        stopWatch.stop();
-        return eligibleUsagesCount.longValue();
-    }
-
-    private long updateSentForRaUsagesRightsholders(List<Usage> usages) {
-        StopWatch stopWatch = new Slf4JStopWatch("service.UsageService.updateRightsholders(SENT_FOR_RA)");
-        Map<Long, Set<String>> wrWrkInstToUsageIds = usages.stream().collect(
-            Collectors.groupingBy(Usage::getWrWrkInst, HashMap::new, Collectors
-                .mapping(Usage::getId, Collectors.toSet())));
-        Map<Long, Long> wrWrkInstToAccountNumber =
-            rmsGrantsService.getAccountNumbersByWrWrkInsts(Lists.newArrayList(wrWrkInstToUsageIds.keySet()));
-        AtomicLong eligibleUsagesCount = new AtomicLong();
-        wrWrkInstToAccountNumber.forEach((wrWrkInst, rhAccountNumber) -> {
-            Set<String> usageIds = wrWrkInstToUsageIds.get(wrWrkInst);
-            usageRepository.updateStatusAndRhAccountNumber(usageIds, UsageStatusEnum.ELIGIBLE,
-                rhAccountNumber);
-            eligibleUsagesCount.addAndGet(usageIds.size());
-            usageAuditService.logAction(usageIds, UsageActionTypeEnum.RH_FOUND,
-                String.format("Rightsholder account %s was found in RMS", rhAccountNumber));
-        });
-        rightsholderService.updateRightsholders(Sets.newHashSet(wrWrkInstToAccountNumber.values()));
-        stopWatch.stop();
-        return eligibleUsagesCount.longValue();
-    }
-
     private void calculateUsagesGrossAmount(UsageBatch usageBatch, Collection<Usage> usages) {
         BigDecimal fundPoolAmount = usageBatch.getGrossAmount();
         BigDecimal totalAmount = usages.stream().map(Usage::getReportedValue).reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -571,45 +371,9 @@ public class UsageService implements IUsageService {
             conversionRate);
     }
 
-    private void updateUsagesStatusAndWriteAudit(List<Usage> usages, UsageGroupEnum usageGroup) {
-        usages.stream()
-            .filter(usage -> UsageStatusEnum.NEW == usage.getStatus())
-            .collect(Collectors.groupingBy(usageGroup.getMappingFunction()))
-            .forEach((key, usagesGroup) -> {
-                if (GROSS_AMOUNT_LIMIT.compareTo(sumUsagesGrossAmount(usagesGroup)) > 0) {
-                    usagesGroup.forEach(usage -> {
-                        usage.setStatus(UsageStatusEnum.ELIGIBLE);
-                        usage.setProductFamily("NTS");
-                        usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.ELIGIBLE_FOR_NTS,
-                            usageGroup.getNtsEligibleReason());
-                    });
-                } else {
-                    usagesGroup.forEach(usage -> {
-                        if (Objects.isNull(usage.getStandardNumber()) && Objects.isNull(usage.getWorkTitle())) {
-                            usage.setWrWrkInst(UNIDENTIFIED_WR_WRK_INST);
-                            usage.setStatus(UsageStatusEnum.WORK_FOUND);
-                            usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
-                                "Usage assigned unidentified work due to blank standard number and title");
-                        } else {
-                            usage.setStatus(UsageStatusEnum.WORK_NOT_FOUND);
-                            usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_NOT_FOUND,
-                                usageGroup.getWorkNotFoundReasonFunction().apply(usage));
-                        }
-                    });
-                }
-            });
-        usageRepository.update(usages);
-    }
-
     private void addScenarioInfo(Usage usage, Scenario scenario) {
         usage.setScenarioId(scenario.getId());
         usage.setStatus(UsageStatusEnum.LOCKED);
         usage.setUpdateUser(scenario.getCreateUser());
-    }
-
-    private BigDecimal sumUsagesGrossAmount(List<Usage> usages) {
-        return usages.stream()
-            .map(Usage::getGrossAmount)
-            .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

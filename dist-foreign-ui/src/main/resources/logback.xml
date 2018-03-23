@@ -1,12 +1,15 @@
 <configuration>
 
-    <include resource="com/copyright/rup/dist/foreign/ui/logback-dist-foreign-ui.xml" />
-    <include resource="com/copyright/rup/dist/foreign/ui/logback-dist-foreign-ui-performance.xml" />
+    <include resource="com/copyright/rup/dist/foreign/ui/logback-dist-foreign-ui.xml"/>
+    <include resource="com/copyright/rup/dist/foreign/ui/logback-dist-foreign-ui-performance.xml"/>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
             <evaluator>
-                <expression>return level <![CDATA[ >= ]]> WARN || (logger.startsWith("com.copyright.rup.dist.foreign.ui") <![CDATA[ && ]]> level <![CDATA[ >= ]]> INFO );</expression>
+                <expression>return level <![CDATA[ >= ]]> WARN ||
+                    (logger.startsWith("com.copyright.rup.dist.foreign.ui") <![CDATA[ && ]]> level <![CDATA[ >= ]]> INFO
+                    );
+                </expression>
             </evaluator>
             <OnMismatch>DENY</OnMismatch>
             <OnMatch>ACCEPT</OnMatch>
@@ -16,85 +19,57 @@
         </encoder>
     </appender>
 
-    <property name="logLevel" value="${DIST_FOREIGN_LOG_LEVEL:-${GEN_LOG_LEVEL:-debug}}" />
+    <property name="logLevel" value="${DIST_FOREIGN_LOG_LEVEL:-info}}"/>
+    <property name="logLevelRights" value="${DIST_FOREIGN_RIGHTS_LOG_LEVEL:-${logLevel}}"/>
+    <property name="logLevelResearch" value="${DIST_FOREIGN_RESEARCH_LOG_LEVEL:-${logLevel}}"/>
+    <property name="logLevelMatching" value="${DIST_FOREIGN_MATCHING_LOG_LEVEL:-${logLevel}}"/>
+    <property name="logLevelService" value="${DIST_FOREIGN_SERVICE_LOG_LEVEL:-${logLevel}}"/>
+    <property name="logLevelIntegrationCommon" value="${DIST_COMMON_INTEGRATION_LOG_LEVEL:-${logLevel}}"/>
 
-    <property name="logLevelUi" value="${DIST_FOREIGN_UI_LOG_LEVEL:-${logLevel}}" />
-    <property name="logLevelService" value="${DIST_FOREIGN_SERVICE_LOG_LEVEL:-${logLevel}}" />
-    <property name="logLevelIntegration" value="${DIST_FOREIGN_INTEGRATION_LOG_LEVEL:-${logLevel}}" />
-
-    <property name="logLevelIntegrationLm" value="${DIST_FOREIGN_INTEGRATION_LM_LOG_LEVEL:-${logLevelIntegration}}" />
-    <property name="logLevelIntegrationPi" value="${DIST_FOREIGN_INTEGRATION_PI_LOG_LEVEL:-${logLevelIntegration}}" />
-    <property name="logLevelIntegrationPrm" value="${DIST_FOREIGN_INTEGRATION_PRM_LOG_LEVEL:-${logLevelIntegration}}" />
-    <property name="logLevelIntegrationRms" value="${DIST_FOREIGN_INTEGRATION_RMS_LOG_LEVEL:-${logLevelIntegration}}" />
-
-    <logger name="com.copyright.rup.dist.foreign" level="${logLevel}" additivity="false">
-        <appender-ref ref="FILE_DIST_FOREIGN_UI" />
-        <appender-ref ref="STDOUT" />
+    <logger name="com.copyright.rup.dist" level="${logLevel}" additivity="false">
+        <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
+        <appender-ref ref="STDOUT"/>
     </logger>
 
-    <logger name="com.copyright.rup.dist.common" level="${logLevel}" additivity="false">
-        <appender-ref ref="FILE_DIST_FOREIGN_UI" />
-        <appender-ref ref="STDOUT" />
+    <logger name="com.copyright.rup.dist.common.integration" level="${logLevelIntegrationCommon}" additivity="false">
+        <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
+        <appender-ref ref="STDOUT"/>
     </logger>
 
-    <logger name="com.copyright.rup.dist.foreign.ui" level="${logLevelUi}" additivity="false">
-        <appender-ref ref="FILE_DIST_FOREIGN_UI" />
-        <appender-ref ref="STDOUT" />
+    <logger name="com.copyright.rup.dist.foreign.service.impl" level="${logLevelService}" additivity="false">
+        <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
+        <appender-ref ref="STDOUT"/>
     </logger>
 
-    <logger name="com.copyright.rup.dist.foreign.service" level="${logLevelService}" additivity="false">
-        <appender-ref ref="FILE_DIST_FOREIGN_UI" />
-        <appender-ref ref="STDOUT" />
+    <!--Loggers for Rights related logic-->
+    <logger name="com.copyright.rup.dist.common.integration.rest.rms" level="${logLevelRights}" additivity="false">
+        <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
+        <appender-ref ref="STDOUT"/>
+    </logger>
+    <logger name="com.copyright.rup.dist.foreign.integration.rms.impl" level="${logLevelRights}" additivity="false">
+        <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
+        <appender-ref ref="STDOUT"/>
     </logger>
 
-    <logger name="com.copyright.rup.dist.common.service" level="${logLevelService}" additivity="false">
-        <appender-ref ref="FILE_DIST_FOREIGN_UI" />
-        <appender-ref ref="STDOUT" />
+    <logger name="com.copyright.rup.dist.foreign.service.impl.rights" level="${logLevelRights}" additivity="false">
+        <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
+        <appender-ref ref="STDOUT"/>
     </logger>
 
-    <logger name="com.copyright.rup.dist.foreign.integration" level="${logLevelIntegration}" additivity="false">
-        <appender-ref ref="FILE_DIST_FOREIGN_UI" />
-        <appender-ref ref="STDOUT" />
+    <!--Loggers for Matching logic-->
+    <logger name="com.copyright.rup.dist.foreign.integration.pi.impl" level="${logLevelMatching}" additivity="false">
+        <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
+        <appender-ref ref="STDOUT"/>
     </logger>
 
-    <logger name="com.copyright.rup.dist.common.integration" level="${logLevelIntegration}" additivity="false">
-        <appender-ref ref="FILE_DIST_FOREIGN_UI" />
-        <appender-ref ref="STDOUT" />
-    </logger>
-
-    <logger name="com.copyright.rup.dist.foreign.integration.lm.impl" level="${logLevelIntegrationLm}" additivity="false">
-        <appender-ref ref="FILE_DIST_FOREIGN_UI" />
-        <appender-ref ref="STDOUT" />
-    </logger>
-
-    <logger name="com.copyright.rup.dist.foreign.integration.pi.impl" level="${logLevelIntegrationPi}" additivity="false">
-        <appender-ref ref="FILE_DIST_FOREIGN_UI" />
-        <appender-ref ref="STDOUT" />
-    </logger>
-
-    <logger name="com.copyright.rup.dist.foreign.integration.prm.impl" level="${logLevelIntegrationPrm}" additivity="false">
-        <appender-ref ref="FILE_DIST_FOREIGN_UI" />
-        <appender-ref ref="STDOUT" />
-    </logger>
-
-    <logger name="com.copyright.rup.dist.common.integration.rest.prm" level="${logLevelIntegrationPrm}" additivity="false">
-        <appender-ref ref="FILE_DIST_FOREIGN_UI" />
-        <appender-ref ref="STDOUT" />
-    </logger>
-
-    <logger name="com.copyright.rup.dist.foreign.integration.rms.impl" level="${logLevelIntegrationRms}" additivity="false">
-        <appender-ref ref="FILE_DIST_FOREIGN_UI" />
-        <appender-ref ref="STDOUT" />
-    </logger>
-
-    <logger name="com.copyright.rup.dist.common.integration.rest.rms" level="${logLevelIntegrationRms}" additivity="false">
-        <appender-ref ref="FILE_DIST_FOREIGN_UI" />
-        <appender-ref ref="STDOUT" />
+    <logger name="com.copyright.rup.dist.foreign.service.impl.matching" level="${logLevelMatching}" additivity="false">
+        <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
+        <appender-ref ref="STDOUT"/>
     </logger>
 
     <root level="INFO">
-        <appender-ref ref="FILE_DIST_FOREIGN_UI" />
-        <appender-ref ref="STDOUT" />
+        <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
+        <appender-ref ref="STDOUT"/>
     </root>
 
 </configuration>

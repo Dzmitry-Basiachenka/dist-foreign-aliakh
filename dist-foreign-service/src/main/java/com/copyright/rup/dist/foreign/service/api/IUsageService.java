@@ -12,7 +12,6 @@ import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
 
-import java.io.OutputStream;
 import java.io.PipedOutputStream;
 import java.util.Collection;
 import java.util.List;
@@ -57,15 +56,6 @@ public interface IUsageService {
      * @param pipedOutputStream instance of {@link PipedOutputStream}
      */
     void writeUsageCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream);
-
-    /**
-     * Writes usages found by filter into CSV output stream and
-     * change status to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#WORK_RESEARCH}.
-     *
-     * @param filter       instance of {@link UsageFilter}
-     * @param outputStream instance of {@link OutputStream}
-     */
-    void sendForResearch(UsageFilter filter, OutputStream outputStream);
 
     /**
      * Writes scenario usages into csv output stream.
@@ -252,21 +242,6 @@ public interface IUsageService {
     void writeAuditCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) throws RupRuntimeException;
 
     /**
-     * Finds list of {@link Usage}s with {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#RH_NOT_FOUND}
-     * status and sends Wr Wrk Insts to RMS for rights assignment.
-     * Updates {@link Usage}s status to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#SENT_FOR_RA}
-     * and writes audit with job id information only after successful sending.
-     */
-    void sendForRightsAssignment();
-
-    /**
-     * Finds list of {@link Usage}s with {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#WORK_FOUND} and
-     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#SENT_FOR_RA} statuses and sends Wr Wrk Insts to RMS
-     * to get Grants.
-     */
-    void updateRightsholders();
-
-    /**
      * Retrieves list of product families of non archived details.
      *
      * @return list of product families
@@ -293,24 +268,4 @@ public interface IUsageService {
      */
     List<Usage> getUsagesWithBlankWrWrkInst();
 
-    /**
-     * Finds works by standard numbers and updates {@link Usage}s status and Wr Wrk Inst.
-     *
-     * @param usages list of {@link Usage}s with not blank standard number
-     */
-    void matchByIdno(List<Usage> usages);
-
-    /**
-     * Finds works by standard numbers and updates {@link Usage}s status and Wr Wrk Inst.
-     *
-     * @param usages list of {@link Usage}s with not blank title
-     */
-    void matchByTitle(List<Usage> usages);
-
-    /**
-     * Updates {@link Usage}s status and Wr Wrk Inst.
-     *
-     * @param usages list of {@link Usage}s with not blank standard number and title
-     */
-    void updateStatusForUsagesWithNoStandardNumberAndTitle(List<Usage> usages);
 }

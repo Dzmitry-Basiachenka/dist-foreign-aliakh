@@ -23,11 +23,7 @@ import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
-import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
-import com.copyright.rup.dist.foreign.integration.rms.api.IRmsIntegrationService;
-import com.copyright.rup.dist.foreign.integration.rms.api.RightsAssignmentResult;
-import com.copyright.rup.dist.foreign.integration.rms.api.RightsAssignmentResult.RightsAssignmentResultStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
@@ -38,7 +34,6 @@ import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -50,14 +45,10 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
 import java.io.PipedOutputStream;
 import java.math.BigDecimal;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Verifies {@link UsageService}.
@@ -87,7 +78,6 @@ public class UsageServiceTest {
     private IUsageAuditService usageAuditService;
     private UsageService usageService;
     private IPrmIntegrationService prmIntegrationService;
-    private IRmsIntegrationService rmsIntegrationService;
 
     @Before
     public void setUp() {
@@ -98,13 +88,11 @@ public class UsageServiceTest {
         usageAuditService = createMock(IUsageAuditService.class);
         prmIntegrationService = createMock(IPrmIntegrationService.class);
         usageArchiveRepository = createMock(IUsageArchiveRepository.class);
-        rmsIntegrationService = createMock(IRmsIntegrationService.class);
         usageService = new UsageService();
         Whitebox.setInternalState(usageService, "usageRepository", usageRepository);
         Whitebox.setInternalState(usageService, "usageAuditService", usageAuditService);
         Whitebox.setInternalState(usageService, "prmIntegrationService", prmIntegrationService);
         Whitebox.setInternalState(usageService, "usageArchiveRepository", usageArchiveRepository);
-        Whitebox.setInternalState(usageService, "rmsIntegrationService", rmsIntegrationService);
     }
 
     @Test
@@ -142,40 +130,6 @@ public class UsageServiceTest {
         List<UsageDto> result = usageService.getUsages(new UsageFilter(), null, null);
         assertNotNull(result);
         assertTrue(result.isEmpty());
-    }
-
-    @Test
-    public void testSendForResearch() {
-        UsageFilter filter = new UsageFilter();
-        OutputStream outputStream = new ByteArrayOutputStream();
-        String usageId1 = RupPersistUtils.generateUuid();
-        String usageId2 = RupPersistUtils.generateUuid();
-        Set<String> usageIds = new HashSet<>();
-        Collections.addAll(usageIds, usageId1, usageId2);
-        expect(usageRepository.writeUsagesForResearchAndFindIds(filter, outputStream))
-            .andReturn(usageIds)
-            .once();
-        usageRepository.updateStatus(usageIds, UsageStatusEnum.WORK_RESEARCH);
-        expectLastCall().once();
-        usageAuditService.logAction(usageId1, UsageActionTypeEnum.WORK_RESEARCH, "Usage detail was sent for research");
-        expectLastCall().once();
-        usageAuditService.logAction(usageId2, UsageActionTypeEnum.WORK_RESEARCH, "Usage detail was sent for research");
-        expectLastCall().once();
-        replay(usageRepository, usageAuditService);
-        usageService.sendForResearch(filter, outputStream);
-        verify(usageRepository, usageAuditService);
-    }
-
-    @Test
-    public void testSendForResearchNoUsages() {
-        UsageFilter filter = new UsageFilter();
-        OutputStream outputStream = new ByteArrayOutputStream();
-        expect(usageRepository.writeUsagesForResearchAndFindIds(filter, outputStream))
-            .andReturn(Collections.emptySet())
-            .once();
-        replay(usageRepository, usageAuditService);
-        usageService.sendForResearch(filter, outputStream);
-        verify(usageRepository, usageAuditService);
     }
 
     @Test
@@ -452,45 +406,6 @@ public class UsageServiceTest {
         replay(usageRepository);
         usageService.writeAuditCsvReport(filter, stream);
         verify(usageRepository);
-    }
-
-    @Test
-    public void testSendForRightsAssignment() {
-        RightsAssignmentResult result = new RightsAssignmentResult(RightsAssignmentResultStatusEnum.SUCCESS);
-        result.setJobId("b5015e54-c38a-4fc8-b889-c644640085a4");
-        expect(usageRepository.findByStatuses(UsageStatusEnum.RH_NOT_FOUND))
-            .andReturn(Lists.newArrayList(buildUsage(USAGE_ID_1))).once();
-        expect(rmsIntegrationService.sendForRightsAssignment(Sets.newHashSet(123160519L)))
-            .andReturn(result).once();
-        Set<String> usageIds = new HashSet<>();
-        Collections.addAll(usageIds, USAGE_ID_1);
-        usageRepository.updateStatus(usageIds, UsageStatusEnum.SENT_FOR_RA);
-        expectLastCall().once();
-        usageAuditService.logAction(usageIds, UsageActionTypeEnum.SENT_FOR_RA,
-            "Sent for RA: job id 'b5015e54-c38a-4fc8-b889-c644640085a4'");
-        replay(usageRepository, rmsIntegrationService, usageAuditService);
-        usageService.sendForRightsAssignment();
-        verify(usageRepository, rmsIntegrationService, usageAuditService);
-    }
-
-    @Test
-    public void testSendForRightsAssignmentRaError() {
-        expect(usageRepository.findByStatuses(UsageStatusEnum.RH_NOT_FOUND))
-            .andReturn(Lists.newArrayList(buildUsage(USAGE_ID_1))).once();
-        expect(rmsIntegrationService.sendForRightsAssignment(Sets.newHashSet(123160519L)))
-            .andReturn(new RightsAssignmentResult(RightsAssignmentResultStatusEnum.RA_ERROR)).once();
-        replay(usageRepository, rmsIntegrationService, usageAuditService);
-        usageService.sendForRightsAssignment();
-        verify(usageRepository, rmsIntegrationService, usageAuditService);
-    }
-
-    @Test
-    public void testSendForRightsAssignmentNoUsagesForRa() {
-        expect(usageRepository.findByStatuses(UsageStatusEnum.RH_NOT_FOUND))
-            .andReturn(Collections.emptyList()).once();
-        replay(usageRepository, rmsIntegrationService, usageAuditService);
-        usageService.sendForRightsAssignment();
-        verify(usageRepository, rmsIntegrationService, usageAuditService);
     }
 
     @Test

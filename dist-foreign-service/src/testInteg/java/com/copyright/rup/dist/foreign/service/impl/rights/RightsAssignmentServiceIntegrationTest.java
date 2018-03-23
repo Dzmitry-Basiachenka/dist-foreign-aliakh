@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.service.impl;
+package com.copyright.rup.dist.foreign.service.impl.rights;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -9,8 +9,8 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
+import com.copyright.rup.dist.foreign.service.api.IRightsService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
-import com.copyright.rup.dist.foreign.service.api.IUsageService;
 
 import com.google.common.collect.Sets;
 
@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Verifies functionality for sending usages to RMS for righsts assignment.
+ * Verifies functionality for sending usages to RMS for rights assignment.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -45,12 +45,12 @@ import java.util.stream.Collectors;
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
 @TestPropertySource(properties = {"test.liquibase.changelog=send-usages-for-ra-data-init.groovy"})
-public class SendUsagesForRightsAssignmentTest {
+public class RightsAssignmentServiceIntegrationTest {
 
     @Autowired
     private IUsageRepository usageRepository;
     @Autowired
-    private IUsageService usageService;
+    private IRightsService rightsAssigmentService;
     @Autowired
     private IUsageAuditService usageAuditService;
     @Autowired
@@ -64,11 +64,12 @@ public class SendUsagesForRightsAssignmentTest {
             .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
             .andExpect(MockRestRequestMatchers.content()
                 .string(new JsonMatcher(
-                    StringUtils.trim(TestUtils.fileToString(this.getClass(), "rms/rights_assignment_request.json")))))
+                    StringUtils.trim(
+                        TestUtils.fileToString(this.getClass(), "rights_assignment_request.json")))))
             .andRespond(MockRestResponseCreators.withSuccess(
-                TestUtils.fileToString(this.getClass(), "rms/rights_assignment_response.json"),
+                TestUtils.fileToString(this.getClass(), "rights_assignment_response.json"),
                 MediaType.APPLICATION_JSON));
-        usageService.sendForRightsAssignment();
+        rightsAssigmentService.sendForRightsAssignment();
         List<Usage> usages = usageRepository.findByStatuses(UsageStatusEnum.SENT_FOR_RA);
         assertTrue(CollectionUtils.isNotEmpty(usages));
         assertEquals(4, usages.size());

@@ -26,7 +26,7 @@ import org.powermock.reflect.Whitebox;
 import java.util.List;
 
 /**
- * Verifies {@link UsageAuditService}.
+ * Verifies {@link ScenarioAuditService}.
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
