@@ -30,4 +30,11 @@ public interface IWorkMatchingService {
      * @return list of matched {@link Usage}s
      */
     List<Usage> matchByTitle(List<Usage> usages);
+
+    /**
+     * Updates {@link Usage}s status and Wr Wrk Inst.
+     *
+     * @param usages list of {@link Usage}s with not blank standard number and title
+     */
+    void updateStatusForUsagesWithNoStandardNumberAndTitle(List<Usage> usages);
 }

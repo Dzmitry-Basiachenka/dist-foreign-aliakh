@@ -10,6 +10,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
+import com.copyright.rup.dist.foreign.service.api.IResearchService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
@@ -68,6 +69,8 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     private IUsageBatchService usageBatchService;
     @Autowired
     private IUsageService usageService;
+    @Autowired
+    private IResearchService researchService;
     @Autowired
     private IUsagesFilterController filterController;
     @Autowired
@@ -155,7 +158,7 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     @Override
     public IStreamSource getSendForResearchUsagesStreamSource() {
         return new ByteArrayStreamSource("send_for_research_", pipedStream ->
-            usageService.sendForResearch(filterController.getWidget().getAppliedFilter(), pipedStream));
+            researchService.sendForResearch(filterController.getWidget().getAppliedFilter(), pipedStream));
     }
 
     @Override

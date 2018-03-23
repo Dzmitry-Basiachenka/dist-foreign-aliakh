@@ -1,7 +1,8 @@
-package com.copyright.rup.dist.foreign.service.impl;
+package com.copyright.rup.dist.foreign.service.impl.matching;
 
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.IWorkMatchingService;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.perf4j.aop.Profiled;
@@ -29,6 +30,8 @@ public class WorksMatchingJob {
 
     @Autowired
     private IUsageService usageService;
+    @Autowired
+    private IWorkMatchingService matchingService;
 
     /**
      * Finds works and updates WrWrkInsts and statuses of {@link Usage}s.
@@ -42,15 +45,15 @@ public class WorksMatchingJob {
                 .collect(Collectors.groupingBy(UsageGroupEnum.getGroupingFunction()));
             List<Usage> usagesByStandardNumber = usageGroups.get(UsageGroupEnum.STANDARD_NUMBER);
             if (CollectionUtils.isNotEmpty(usagesByStandardNumber)) {
-                usageService.matchByIdno(usagesByStandardNumber);
+                matchingService.matchByIdno(usagesByStandardNumber);
             }
             List<Usage> usagesByTitle = usageGroups.get(UsageGroupEnum.TITLE);
             if (CollectionUtils.isNotEmpty(usagesByTitle)) {
-                usageService.matchByTitle(usagesByTitle);
+                matchingService.matchByTitle(usagesByTitle);
             }
             List<Usage> usagesWithNoStandardNumberAndTitle = usageGroups.get(UsageGroupEnum.SINGLE_USAGE);
             if (CollectionUtils.isNotEmpty(usagesWithNoStandardNumberAndTitle)) {
-                usageService.updateStatusForUsagesWithNoStandardNumberAndTitle(usagesWithNoStandardNumberAndTitle);
+                matchingService.updateStatusForUsagesWithNoStandardNumberAndTitle(usagesWithNoStandardNumberAndTitle);
             }
         }
     }
@@ -120,6 +123,12 @@ public class WorksMatchingJob {
             }
         };
 
+        private static Function<Usage, UsageGroupEnum> getGroupingFunction() {
+            return usage -> Objects.isNull(usage.getStandardNumber())
+                ? Objects.isNull(usage.getWorkTitle()) ? SINGLE_USAGE : TITLE
+                : STANDARD_NUMBER;
+        }
+
         /**
          * @return {@link Function} for grouping {@link Usage}s.
          */
@@ -136,11 +145,5 @@ public class WorksMatchingJob {
          * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#WORK_NOT_FOUND} for {@link Usage}.
          */
         abstract Function<Usage, String> getWorkNotFoundReasonFunction();
-
-        private static Function<Usage, UsageGroupEnum> getGroupingFunction() {
-            return usage -> Objects.isNull(usage.getStandardNumber())
-                ? Objects.isNull(usage.getWorkTitle()) ? SINGLE_USAGE : TITLE
-                : STANDARD_NUMBER;
-        }
     }
 }

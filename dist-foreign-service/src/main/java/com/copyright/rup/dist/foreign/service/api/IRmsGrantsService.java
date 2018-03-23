@@ -19,7 +19,7 @@ public interface IRmsGrantsService {
      *
      * @param wrWrkInsts list of wr wrk insts
      * @return map from WrWrkInsts to rightsholders' account numbers,
-     *         WrWrkInsts without suitable grants not presented in key set
+     * WrWrkInsts without suitable grants not presented in key set
      */
     Map<Long, Long> getAccountNumbersByWrWrkInsts(List<Long> wrWrkInsts);
 }
