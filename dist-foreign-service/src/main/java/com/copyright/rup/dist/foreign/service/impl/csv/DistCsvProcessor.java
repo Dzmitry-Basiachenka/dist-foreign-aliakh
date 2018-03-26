@@ -49,6 +49,7 @@ public class DistCsvProcessor<T> {
     private final IConverter<T> converter;
     private final CsvParser parser = new CsvParser(settings);
     private final String[] expectedHeaders;
+    private boolean validateHeaders;
 
     /**
      * Constructor.
@@ -57,12 +58,22 @@ public class DistCsvProcessor<T> {
      * @param headers   headers to process
      */
     public DistCsvProcessor(IConverter<T> converter, String... headers) {
+        this(converter, true, headers);
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param converter       converter for bean
+     * @param validateHeaders flag to enable or disable headers validation
+     * @param headers         headers to process
+     */
+    public DistCsvProcessor(IConverter<T> converter, boolean validateHeaders, String... headers) {
         this.converter = requireNonNull(converter);
         this.expectedHeaders = requireNonNull(headers);
         settings.getFormat().setLineSeparator("\n");
-        //need to validate headers, so no need to extract it automatically
-        settings.setHeaderExtractionEnabled(false);
         settings.setHeaders(expectedHeaders);
+        setValidateHeaders(validateHeaders);
         initPlainValidators();
         initBusinessValidators();
     }
@@ -79,6 +90,16 @@ public class DistCsvProcessor<T> {
     }
 
     /**
+     * Sets whether header validation is needed.
+     *
+     * @param validateHeaders true if validation is needed, false - otherwise
+     */
+    public void setValidateHeaders(boolean validateHeaders) {
+        this.validateHeaders = validateHeaders;
+        settings.setHeaderExtractionEnabled(!validateHeaders);
+    }
+
+    /**
      * Processes CSV resource from the specified stream and {@link ProcessingResult}
      * containing valid objects and errors data (if it was found) based on uploaded information.
      *
@@ -89,8 +110,10 @@ public class DistCsvProcessor<T> {
         ProcessingResult<T> result = new ProcessingResult<>(expectedHeaders);
         try (ByteArrayInputStream is = new ByteArrayInputStream(stream.toByteArray())) {
             parser.beginParsing(is, StandardCharsets.UTF_8);
-            //first row contains header. take it first
-            validateHeader(parser.parseNext());
+            if (validateHeaders) {
+                //first row contains header. take it first
+                validateHeader(parser.parseNext());
+            }
             String[] row;
             while (null != (row = parser.parseNext())) {
                 process(trimNulls(row), parser.getContext(), result);

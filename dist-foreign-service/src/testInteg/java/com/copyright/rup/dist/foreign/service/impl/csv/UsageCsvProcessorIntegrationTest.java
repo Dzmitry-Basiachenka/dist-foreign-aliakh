@@ -10,6 +10,7 @@ import com.copyright.rup.dist.common.test.ReportMatcher;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.HeaderValidationException;
+import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.ThresholdExceededException;
 
 import com.google.common.collect.Lists;
@@ -109,7 +110,7 @@ public class UsageCsvProcessorIntegrationTest {
     }
 
     @Test
-    public void testProcessorForInvalidHeader() throws Exception {
+    public void testProcessorForInvalidHeaderWithHeaderValidation() throws Exception {
         try {
             processFile("invalid_header_usage_data_file.csv");
             fail();
@@ -122,6 +123,12 @@ public class UsageCsvProcessorIntegrationTest {
                     "<li>Market Period To</li><li>Author</li></ul>",
                 e.getHtmlMessage());
         }
+    }
+
+    @Test
+    public void testProcessorWithInvalidHeaderWithoutHeaderValidation() throws Exception {
+        ProcessingResult<Usage> result = processFile("invalid_header_usage_data_file.csv", false);
+        assertTrue(result.isSuccessful());
     }
 
     private void logErrors(DistCsvProcessor.ProcessingResult<Usage> result) {
@@ -153,12 +160,18 @@ public class UsageCsvProcessorIntegrationTest {
     }
 
     private DistCsvProcessor.ProcessingResult<Usage> processFile(String file) throws IOException {
+        return processFile(file, true);
+    }
+
+    private DistCsvProcessor.ProcessingResult<Usage> processFile(String file, boolean validateHeaders)
+        throws IOException {
         DistCsvProcessor.ProcessingResult<Usage> result;
         try (InputStream stream = this.getClass()
             .getResourceAsStream("/com/copyright/rup/dist/foreign/service/csv/" + file);
              ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             IOUtils.copy(stream, outputStream);
             UsageCsvProcessor processor = new UsageCsvProcessor(PRODUCT_FAMILY);
+            processor.setValidateHeaders(validateHeaders);
             result = processor.process(outputStream);
         }
         return result;
