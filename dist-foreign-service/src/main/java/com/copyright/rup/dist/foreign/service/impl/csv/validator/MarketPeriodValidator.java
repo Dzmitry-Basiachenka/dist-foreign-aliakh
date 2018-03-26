@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.service.impl.csv.validator;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor;
 
 /**
  * The validator to check that 'Market Period To' greater than or equal to 'Market Period From'.
@@ -13,7 +14,7 @@ import com.copyright.rup.dist.foreign.domain.Usage;
  *
  * @author Ihar Suvorau
  */
-public class MarketPeriodValidator implements IValidator<Usage> {
+public class MarketPeriodValidator implements DistCsvProcessor.IValidator<Usage> {
 
     @Override
     public boolean isValid(Usage usage) {

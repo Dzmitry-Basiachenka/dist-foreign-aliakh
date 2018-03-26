@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.csv.validator;
 
+import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -19,7 +21,7 @@ import java.util.stream.Collectors;
  *
  * @author Aliaksei Pchelnikau
  */
-public class DuplicateInFileValidator implements IValidator<String> {
+public class DuplicateInFileValidator implements DistCsvProcessor.IValidator<String> {
 
     private static final String ERROR_MESSAGE = "Duplicate with";
     /**

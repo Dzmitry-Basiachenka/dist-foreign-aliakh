@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.csv.validator;
 
+import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor;
+
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
@@ -14,7 +16,7 @@ import java.math.RoundingMode;
  *
  * @author Ihar Suvorau
  */
-public class ReportedValueValidator implements IValidator<String> {
+public class ReportedValueValidator implements DistCsvProcessor.IValidator<String> {
 
     private static final String AMOUNT_REGEX = "(0|([1-9]\\d{0,9}))(\\.\\d+)?";
 

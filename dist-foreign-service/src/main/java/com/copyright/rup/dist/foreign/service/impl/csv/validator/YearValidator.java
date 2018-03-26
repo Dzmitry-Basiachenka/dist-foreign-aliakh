@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.csv.validator;
 
+import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor;
+
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -11,7 +13,7 @@ import org.apache.commons.lang3.StringUtils;
  *
  * @author Ihar Suvorau
  */
-public class YearValidator implements IValidator<String> {
+public class YearValidator implements DistCsvProcessor.IValidator<String> {
 
     private static final String YEAR_REGEX = "[1-9]\\d{3}";
 

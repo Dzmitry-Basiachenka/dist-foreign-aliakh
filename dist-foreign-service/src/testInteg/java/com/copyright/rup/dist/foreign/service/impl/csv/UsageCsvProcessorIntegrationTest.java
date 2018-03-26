@@ -98,13 +98,14 @@ public class UsageCsvProcessorIntegrationTest {
 
     @Test
     public void testWriteErrorsToFile() throws Exception {
-        DistCsvProcessor.ProcessingResult<Usage> result = new DistCsvProcessor.ProcessingResult<>();
+        DistCsvProcessor.ProcessingResult<Usage> result =
+            new DistCsvProcessor.ProcessingResult<>(UsageCsvProcessor.getColumns());
         logErrors(result);
         PipedOutputStream outputStream = new PipedOutputStream();
         PipedInputStream pipedInputStream = new PipedInputStream(outputStream);
         Executors.newSingleThreadExecutor().execute(() -> result.writeToFile(outputStream));
-        FileUtils.copyInputStreamToFile(pipedInputStream, new File(PATH_TO_ACTUAL, ERRORS_REPORT_CSV));
-        isFilesEquals(ERRORS_REPORT_CSV, ERRORS_REPORT_CSV);
+        FileUtils.copyInputStreamToFile(pipedInputStream, new File(PATH_TO_ACTUAL, "errorsToFile.csv"));
+        isFilesEquals(ERRORS_REPORT_CSV, "errorsToFile.csv");
     }
 
     @Test
