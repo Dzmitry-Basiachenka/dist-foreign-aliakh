@@ -165,7 +165,7 @@ public class UsageBatchUploadWindowTest {
     }
 
     @Test
-    public void testOnUploadClickedValidFields() throws Exception {
+    public void testOnUploadClickedValidFields() {
         mockStatic(Windows.class);
         Rightsholder rro = new Rightsholder();
         rro.setAccountNumber(Long.valueOf(ACCOUNT_NUMBER));

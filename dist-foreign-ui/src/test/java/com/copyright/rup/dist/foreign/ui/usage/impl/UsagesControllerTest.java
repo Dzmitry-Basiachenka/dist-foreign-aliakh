@@ -197,7 +197,7 @@ public class UsagesControllerTest {
 
     @Test
     public void testGetErrorsStream() {
-        ProcessingResult csvProcessingResult = new ProcessingResult();
+        ProcessingResult csvProcessingResult = Whitebox.newInstance(ProcessingResult.class);
         IStreamSource errorStreamSource =
             controller.getErrorResultStreamSource(StringUtils.EMPTY, csvProcessingResult);
         ExecutorService executorService = createMock(ExecutorService.class);
@@ -222,7 +222,7 @@ public class UsagesControllerTest {
 
     @Test
     public void testGetErrorsFileName() {
-        ProcessingResult csvProcessingResult = new ProcessingResult();
+        ProcessingResult csvProcessingResult = Whitebox.newInstance(ProcessingResult.class);
         assertEquals("Error_for_fileName.csv",
             controller.getErrorResultStreamSource("fileName.csv", csvProcessingResult).getFileName());
     }
