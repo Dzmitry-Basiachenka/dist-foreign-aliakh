@@ -323,7 +323,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         return selectList("IUsageMapper.findProductFamiliesForAuditFilter");
     }
 
-    @Profiled(tag = "repository.UsageRepository.findUsagesWithBlankWrWrkInst")
     @Override
     public List<Usage> findUsagesWithBlankWrWrkInst() {
         return selectList("IUsageMapper.findUsagesWithBlankWrWrkInst", UsageStatusEnum.NEW);

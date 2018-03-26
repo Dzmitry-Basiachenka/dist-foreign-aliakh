@@ -5,7 +5,8 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.IWorkMatchingService;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.perf4j.aop.Profiled;
+import org.perf4j.StopWatch;
+import org.perf4j.slf4j.Slf4JStopWatch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -36,26 +37,31 @@ public class WorksMatchingJob {
     /**
      * Finds works and updates WrWrkInsts and statuses of {@link Usage}s.
      */
-    @Profiled(tag = "matchWorks.findWorksAndUpdateStatuses")
     @Scheduled(cron = "$RUP{dist.foreign.service.schedule.works_match}")
     public void findWorksAndUpdateStatuses() {
+        StopWatch stopWatch = new Slf4JStopWatch();
         List<Usage> usages = usageService.getUsagesWithBlankWrWrkInst();
+        stopWatch.lap("usage.matchWorks_1_getUsagesWithBlankWrWrkInst");
         if (CollectionUtils.isNotEmpty(usages)) {
             Map<UsageGroupEnum, List<Usage>> usageGroups = usages.stream()
                 .collect(Collectors.groupingBy(UsageGroupEnum.getGroupingFunction()));
             List<Usage> usagesByStandardNumber = usageGroups.get(UsageGroupEnum.STANDARD_NUMBER);
             if (CollectionUtils.isNotEmpty(usagesByStandardNumber)) {
                 matchingService.matchByIdno(usagesByStandardNumber);
+                stopWatch.lap("usage.matchWorks_2_matchByIdno");
             }
             List<Usage> usagesByTitle = usageGroups.get(UsageGroupEnum.TITLE);
             if (CollectionUtils.isNotEmpty(usagesByTitle)) {
                 matchingService.matchByTitle(usagesByTitle);
+                stopWatch.lap("usage.matchWorks_3_matchByTitle");
             }
             List<Usage> usagesWithNoStandardNumberAndTitle = usageGroups.get(UsageGroupEnum.SINGLE_USAGE);
             if (CollectionUtils.isNotEmpty(usagesWithNoStandardNumberAndTitle)) {
                 matchingService.updateStatusForUsagesWithNoStandardNumberAndTitle(usagesWithNoStandardNumberAndTitle);
+                stopWatch.lap("usage.matchWorks_4_updateStatusForUsagesWithNoStandardNumberAndTitle");
             }
         }
+        stopWatch.stop("usage.matchWorks_findWorksAndUpdateStatuses");
     }
 
     /**
