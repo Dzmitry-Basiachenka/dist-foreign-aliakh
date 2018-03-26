@@ -296,7 +296,8 @@ public interface IUsageRepository {
     List<Usage> findUsagesWithBlankWrWrkInst();
 
     /**
-     * Updates given list of {@link Usage}s.
+     * Updates given list of {@link Usage}s. Update affects not all fields. For exact list of affected fields please
+     * see implementation.
      *
      * @param usages list of {@link Usage}s
      */
