@@ -26,6 +26,7 @@ import com.vaadin.ui.VerticalLayout;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
+import org.powermock.reflect.Whitebox;
 
 import java.util.Collection;
 
@@ -44,7 +45,7 @@ public class ErrorUploadWindowTest {
     @Test
     public void testComponentStructure() {
         IUsagesController controller = createMock(IUsagesController.class);
-        ProcessingResult processingResult = new ProcessingResult();
+        ProcessingResult processingResult = Whitebox.newInstance(ProcessingResult.class);
         expect(controller.getErrorResultStreamSource(StringUtils.EMPTY, processingResult))
             .andReturn(createMock(IStreamSource.class)).once();
         replay(controller);

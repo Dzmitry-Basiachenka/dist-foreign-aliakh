@@ -279,7 +279,7 @@ public class DistCsvProcessor<T> {
          *
          * @param fileHeaders array of headers
          */
-        ProcessingResult(String... fileHeaders) {
+        public ProcessingResult(String... fileHeaders) {
             this.fileHeaders = Arrays.asList(fileHeaders);
         }
 
