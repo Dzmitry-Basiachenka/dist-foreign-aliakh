@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.csv.validator;
 
+import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor;
+
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDate;
@@ -17,7 +19,7 @@ import java.util.Locale;
  *
  * @author Ihar Suvorau
  */
-public class DateFormatValidator implements IValidator<String> {
+public class DateFormatValidator implements DistCsvProcessor.IValidator<String> {
 
     private static final String DATE_REGEX = "\\d{1,2}/\\d{1,2}/\\d{4}";
     private static final DateTimeFormatter DATE_TIME_FORMATTER =

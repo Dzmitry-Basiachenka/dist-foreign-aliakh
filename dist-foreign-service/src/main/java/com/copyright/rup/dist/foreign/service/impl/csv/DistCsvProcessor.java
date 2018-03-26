@@ -1,7 +1,8 @@
 package com.copyright.rup.dist.foreign.service.impl.csv;
 
+import static java.util.Objects.requireNonNull;
+
 import com.copyright.rup.common.exception.RupRuntimeException;
-import com.copyright.rup.dist.foreign.service.impl.csv.validator.IValidator;
 
 import com.univocity.parsers.common.ParsingContext;
 import com.univocity.parsers.csv.CsvParser;
@@ -56,8 +57,8 @@ public class DistCsvProcessor<T> {
      * @param headers   headers to process
      */
     public DistCsvProcessor(IConverter<T> converter, String... headers) {
-        this.converter = converter;
-        this.expectedHeaders = headers;
+        this.converter = requireNonNull(converter);
+        this.expectedHeaders = requireNonNull(headers);
         settings.getFormat().setLineSeparator("\n");
         //need to validate headers, so no need to extract it automatically
         settings.setHeaderExtractionEnabled(false);
@@ -85,7 +86,7 @@ public class DistCsvProcessor<T> {
      * @return {@link ProcessingResult} instance with uploaded data
      */
     public ProcessingResult<T> process(ByteArrayOutputStream stream) {
-        ProcessingResult<T> result = new ProcessingResult<>();
+        ProcessingResult<T> result = new ProcessingResult<>(expectedHeaders);
         try (ByteArrayInputStream is = new ByteArrayInputStream(stream.toByteArray())) {
             parser.beginParsing(is, StandardCharsets.UTF_8);
             //first row contains header. take it first
@@ -171,7 +172,7 @@ public class DistCsvProcessor<T> {
     }
 
     private boolean plainValidate(String[] row, long line, ProcessingResult result) {
-        if (!Objects.equals(settings.getHeaders().length, row.length)) {
+        if (!Objects.equals(expectedHeaders.length, row.length)) {
             result.logError(line, row,
                 String.format("Row is incorrect: Expected columns are %s actual %s", settings.getHeaders().length,
                     row.length));
@@ -231,6 +232,32 @@ public class DistCsvProcessor<T> {
     }
 
     /**
+     * The contract for validators. Uses optional value approach (see {@link #isValid(Object)}).
+     * <p>
+     * Copyright (C) 2017 copyright.com
+     * <p>
+     * Date: 02/24/17
+     *
+     * @param <T> the type of object for validation
+     * @author Aliaksei Pchelnikau
+     */
+    public interface IValidator<T> {
+
+        /**
+         * Performs validation of passed instance.
+         *
+         * @param value the instance to validate
+         * @return the result of validation: {@code true} value passed validation otherwise {@code false}
+         */
+        boolean isValid(T value);
+
+        /**
+         * @return the error message.
+         */
+        String getErrorMessage();
+    }
+
+    /**
      * Processing results of CSV file.
      * <p>
      * Copyright (C) 2018 copyright.com
@@ -244,7 +271,17 @@ public class DistCsvProcessor<T> {
         private static final int ERRORS_THRESHOLD = 2000;
         private final Map<Long, ErrorRow> errors = new TreeMap<>();
         private final List<T> result = new ArrayList<>();
+        private final List<String> fileHeaders;
         private int errorsCount;
+
+        /**
+         * Constructor.
+         *
+         * @param fileHeaders array of headers
+         */
+        ProcessingResult(String... fileHeaders) {
+            this.fileHeaders = Arrays.asList(fileHeaders);
+        }
 
         /**
          * @return result of processing.
@@ -277,7 +314,7 @@ public class DistCsvProcessor<T> {
          */
         public void writeToFile(OutputStream outputStream) {
             CsvWriter writer = new CsvWriter(outputStream, new CsvWriterSettings());
-            List<String> headers = new ArrayList<>(Arrays.asList(UsageCsvProcessor.getColumns()));
+            List<String> headers = new ArrayList<>(fileHeaders);
             headers.add("Line");
             headers.add("Error Reason");
             writer.writeHeaders(headers);

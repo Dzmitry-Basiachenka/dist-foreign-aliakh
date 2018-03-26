@@ -2,6 +2,8 @@ package com.copyright.rup.dist.foreign.service.impl.csv.validator;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
+import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor;
+
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
@@ -16,7 +18,7 @@ import java.math.BigDecimal;
  *
  * @author Ihar Suvorau
  */
-public class LengthValidator implements IValidator<String> {
+public class LengthValidator implements DistCsvProcessor.IValidator<String> {
 
     private final int maxLength;
 

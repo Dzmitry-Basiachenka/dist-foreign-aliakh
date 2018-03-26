@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.csv.validator;
 
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor;
 
 import java.util.Objects;
 
@@ -14,7 +15,7 @@ import java.util.Objects;
  *
  * @author Uladzislau Shalamitski
  */
-public class RightsholderWrWrkInstValidator implements IValidator<Usage> {
+public class RightsholderWrWrkInstValidator implements DistCsvProcessor.IValidator<Usage> {
 
     @Override
     public boolean isValid(Usage usage) {

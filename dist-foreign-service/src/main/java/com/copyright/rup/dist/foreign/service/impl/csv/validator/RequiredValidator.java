@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.csv.validator;
 
+import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor;
+
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -11,7 +13,7 @@ import org.apache.commons.lang3.StringUtils;
  *
  * @author Aliaksei Pchelnikau
  */
-public class RequiredValidator implements IValidator<String> {
+public class RequiredValidator implements DistCsvProcessor.IValidator<String> {
 
     @Override
     public boolean isValid(String value) {
