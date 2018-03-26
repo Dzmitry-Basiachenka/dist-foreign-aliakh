@@ -474,10 +474,10 @@ databaseChangeLog {
         addPrimaryKey(tableName: 'df_scenario_usage_filter_to_rh_account_numbers_map', columnNames: 'df_scenario_usage_filter_uid, rh_account_number',
                 constraintName: 'pk_df_scenario_usage_filter_to_rh_account_numbers_map', schemaName: dbAppsSchema, tablespace: dbDataTablespace)
 
-        addForeignKeyConstraint(constraintName: 'fk_df_scenario_usage_filter_to_rh_account_numbers_map_2_df_scenario_usage_filter',
+        addForeignKeyConstraint(constraintName: 'fk_filter_to_rh_account_numbers_map_2_df_scenario_usage_filter',
                 baseTableSchemaName: dbAppsSchema, baseTableName: 'df_scenario_usage_filter_to_rh_account_numbers_map', baseColumnNames: 'df_scenario_usage_filter_uid',
                 referencedTableSchemaName: dbAppsSchema, referencedTableName: 'df_scenario_usage_filter', referencedColumnNames: 'df_scenario_usage_filter_uid')
-        addForeignKeyConstraint(constraintName: 'fk_df_scenario_usage_filter_to_rh_account_numbers_map_2_df_rightsholder',
+        addForeignKeyConstraint(constraintName: 'fk_filter_to_rh_account_numbers_map_2_df_rightsholder',
                 baseTableSchemaName: dbAppsSchema, baseTableName: 'df_scenario_usage_filter_to_rh_account_numbers_map', baseColumnNames: 'rh_account_number',
                 referencedTableSchemaName: dbAppsSchema, referencedTableName: 'df_rightsholder', referencedColumnNames: 'rh_account_number')
 
@@ -510,10 +510,10 @@ databaseChangeLog {
         addPrimaryKey(tableName: 'df_scenario_usage_filter_to_usage_batches_ids_map', columnNames: 'df_scenario_usage_filter_uid, df_usage_batch_uid',
                 constraintName: 'pk_df_scenario_usage_filter_to_usage_batches_ids_map', schemaName: dbAppsSchema, tablespace: dbDataTablespace)
 
-        addForeignKeyConstraint(constraintName: 'fk_df_scenario_usage_filter_to_usage_batches_ids_map_2_df_scenario_usage_filter',
+        addForeignKeyConstraint(constraintName: 'fk_filter_to_usage_batches_ids_map_2_df_scenario_usage_filter',
                 baseTableSchemaName: dbAppsSchema, baseTableName: 'df_scenario_usage_filter_to_usage_batches_ids_map', baseColumnNames: 'df_scenario_usage_filter_uid',
                 referencedTableSchemaName: dbAppsSchema, referencedTableName: 'df_scenario_usage_filter', referencedColumnNames: 'df_scenario_usage_filter_uid')
-        addForeignKeyConstraint(constraintName: 'fk_df_scenario_usage_filter_to_usage_batches_ids_map_2_df_usage_batch',
+        addForeignKeyConstraint(constraintName: 'fk_filter_to_usage_batches_ids_map_2_df_usage_batch',
                 baseTableSchemaName: dbAppsSchema, baseTableName: 'df_scenario_usage_filter_to_usage_batches_ids_map', baseColumnNames: 'df_usage_batch_uid',
                 referencedTableSchemaName: dbAppsSchema, referencedTableName: 'df_usage_batch', referencedColumnNames: 'df_usage_batch_uid')
 
@@ -534,9 +534,6 @@ databaseChangeLog {
         dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter',
                 columnName: 'fiscal_year', columnDataType: 'NUMERIC(4,0)')
 
-        dropForeignKeyConstraint(baseTableSchemaName: dbAppsSchema, baseTableName: 'df_scenario_usage_filter_to_rh_account_numbers_map',
-                constraintName: 'fk_df_scenario_usage_filter_to_rh_account_numbers_map_2_df_rightsholder')
-
         rollback {
             addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter',
                     columnName: 'status_ind', columnDataType: 'VARCHAR(16)')
@@ -544,23 +541,33 @@ databaseChangeLog {
                     columnName: 'payment_date', columnDataType: 'DATE')
             addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter',
                     columnName: 'fiscal_year', columnDataType: 'NUMERIC(4,0)')
-
-            addForeignKeyConstraint(constraintName: 'fk_df_scenario_usage_filter_to_rh_account_numbers_map_2_df_rightsholder',
-                    baseTableSchemaName: dbAppsSchema, baseTableName: 'df_scenario_usage_filter_to_rh_account_numbers_map', baseColumnNames: 'rh_account_number',
-                    referencedTableSchemaName: dbAppsSchema, referencedTableName: 'df_rightsholder', referencedColumnNames: 'rh_account_number')
         }
     }
 
     changeSet(id: '2018-03-22-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
-        comment("B-40635 FDA: Refresh in-progress scenario with newly eligible details: remove unnecessary foreign key")
+        comment("B-40635 FDA: Refresh in-progress scenario with newly eligible details: remove fk_filter_to_usage_batches_ids_map_2_df_usage_batch foreign key")
 
         preConditions(onFail: 'MARK_RAN') {
             foreignKeyConstraintExists(schemaName: dbAppsSchema, foreignKeyTableName: 'df_scenario_usage_filter_to_usage_batches_ids_map',
-                    foreignKeyName: 'fk_df_scenario_usage_filter_to_usage_batches_ids_map_2_df_usage_batch')
+                    foreignKeyName: 'fk_filter_to_usage_batches_ids_map_2_df_usage_batch')
         }
 
         dropForeignKeyConstraint(baseTableSchemaName: dbAppsSchema, baseTableName: 'df_scenario_usage_filter_to_usage_batches_ids_map',
-                constraintName: 'fk_df_scenario_usage_filter_to_usage_batches_ids_map_2_df_usage_batch')
+                constraintName: 'fk_filter_to_usage_batches_ids_map_2_df_usage_batch')
+
+        rollback ""
+    }
+
+    changeSet(id: '2018-03-23-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-40635 FDA: Refresh in-progress scenario with newly eligible details: remove fk_filter_to_rh_account_numbers_map_2_df_rightsholder foreign key")
+
+        preConditions(onFail: 'MARK_RAN') {
+            foreignKeyConstraintExists(schemaName: dbAppsSchema, foreignKeyTableName: 'df_scenario_usage_filter_to_rh_account_numbers_map',
+                    foreignKeyName: 'fk_filter_to_rh_account_numbers_map_2_df_rightsholder')
+        }
+
+        dropForeignKeyConstraint(baseTableSchemaName: dbAppsSchema, baseTableName: 'df_scenario_usage_filter_to_rh_account_numbers_map',
+                constraintName: 'fk_filter_to_rh_account_numbers_map_2_df_rightsholder')
 
         rollback ""
     }
