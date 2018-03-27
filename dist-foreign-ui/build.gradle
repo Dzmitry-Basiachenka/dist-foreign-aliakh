@@ -1,8 +1,6 @@
 import fi.jasoft.plugin.GradleVaadinPlugin
 import fi.jasoft.plugin.tasks.CompileThemeTask
 
-import java.util.concurrent.TimeUnit
-
 apply plugin: 'rup-war-ui'
 
 if (!project.plugins.findPlugin(GradleVaadinPlugin)) {
@@ -21,6 +19,7 @@ dependencies {
 
     compile("com.copyright.rup.vaadin:rup-vaadin-core:${rupVaadinVersion}")
     compile("com.copyright.rup.vaadin:rup-vaadin-theme:${rupVaadinVersion}")
+    compile("com.vaadin:vaadin-spring:${vaadinSpringVersion}")
 
     runtime("com.copyright.rup.common:rup-common-config:${rupCommonVersion}")
     runtime("com.copyright.rup.common:rup-common-web:${rupCommonVersion}")
@@ -28,59 +27,11 @@ dependencies {
     runtime("com.vaadin:vaadin-push:${vaadinVersion}")
     runtime("org.codehaus.janino:janino:${janinoVersion}")
     runtime("org.springframework.security:spring-security-core:${springSecurityVersion}")
-    runtime("ru.xpoft.vaadin:spring-vaadin-integration:${vaadinSpringIntegrationAddonVersion}")
 
     testCompile("com.copyright.rup.dist.common:dist-common-test:${distCommonVersion}")
     testCompile("org.apache.commons:commons-text:${commonsTextVersion}")
 
     testRuntime("cglib:cglib-nodep:${cglibNodepVersion}")
-
-    testUiCompile("com.copyright.rup.vaadin:rup-vaadin-test:${rupVaadinVersion}")
-    testUiCompile project(path: ":dist-foreign-repository", configuration: "testIntegRuntime")
-    testUiRuntime("org.springframework:spring-test:${rupJava.standardDependencies.spring.version}")
-
-    testUiWebApp project(path: ":dist-foreign-repository", configuration: "testIntegRuntime")
-}
-
-rupWarUi {
-    embeddedTomcat {
-        httpPort = 22000
-        stopPort = 22001
-    }
-}
-
-uiTest {
-    doFirst {
-        systemProperty "dbPidLocation", "${buildDir}/tmp/embeddedPostgres/postgresUi.pid"
-        //This hook used for closing PostgreSQL processes when uiTest task was closed early
-        Runtime.runtime.addShutdownHook({
-            def pidLocation = System.getProperty("dbPidLocation")
-            if (null != pidLocation) {
-                File file = new File(pidLocation)
-                if (file.exists()) {
-                    String pid = file.text
-                    project.logger.info("$PLUGIN_KEY about to kill embeded postgress with PID $pid")
-                    def killProcess = null
-                    if (org.gradle.internal.os.OperatingSystem.current().isWindows()) {
-                        killProcess = Runtime.runtime.exec("Taskkill /PID $pid /F")
-                    } else if (org.gradle.internal.os.OperatingSystem.current().isUnix()) {
-                        killProcess = Runtime.runtime.exec("kill -9 $pid")
-                    }
-                    if (killProcess?.waitFor(10, TimeUnit.SECONDS)) {
-                        project.logger.info("$PLUGIN_KEY has killed embeded postgress with PID $pid , exitCode is ${killProcess.exitValue()}")
-                    } else {
-                        project.logger.warn("$PLUGIN_KEY encountered kill timeout for embeded postgress PID $pid")
-                    }
-                    file.deleteOnExit()
-                }
-            }
-        })
-    }
-
-    testLogging {
-        // UI tests are generally slower and fewer in number, so log the start of each test
-        events 'started', 'skipped', 'failed'
-    }
 }
 
 task compileVaadinTheme(type: CompileThemeTask, group: "rupVaadin")

@@ -4,7 +4,7 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioController;
@@ -12,7 +12,9 @@ import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.vaadin.data.util.BeanContainer;
+import com.vaadin.data.provider.ListDataProvider;
+import com.vaadin.server.SerializablePredicate;
+import com.vaadin.ui.Grid;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -92,24 +94,20 @@ public class ExcludeSourceRroSearchTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     // Test cases IDs: '351993c0-bba7-449a-b2a5-65b69615979f', '7f2cb98c-7cce-4c7c-9d5a-110128ba0264'
     public void testSearch() {
-        BeanContainer<Long, Rightsholder> container = buildContainer();
-        Whitebox.setInternalState(window, container);
         SearchWidget searchWidget = createMock(SearchWidget.class);
         Whitebox.setInternalState(window, searchWidget);
+        Grid grid = createMock(Grid.class);
+        Whitebox.setInternalState(window, grid);
+        ListDataProvider provider = new ListDataProvider(Collections.EMPTY_LIST);
+        expect(grid.getDataProvider()).andReturn(provider).once();
         expect(searchWidget.getSearchValue()).andReturn(value).once();
-        replay(searchWidget);
+        replay(searchWidget, grid);
         window.performSearch();
-        assertEquals(expectedResult.size(), container.size());
-        expectedResult.forEach(result -> assertEquals(result, container.getItem(result.getAccountNumber()).getBean()));
-        verify(searchWidget);
-    }
-
-    private BeanContainer<Long, Rightsholder> buildContainer() {
-        BeanContainer<Long, Rightsholder> container = new BeanContainer<>(Rightsholder.class);
-        container.setBeanIdProperty("accountNumber");
-        container.addAll(CONTAINER_DATA);
-        return container;
+        SerializablePredicate filter = provider.getFilter();
+        expectedResult.forEach(result -> assertTrue(filter.test(result)));
+        verify(searchWidget, grid);
     }
 }

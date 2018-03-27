@@ -1,8 +1,6 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -25,24 +23,6 @@ public class SortTest {
     @Before
     public void setUp() {
         sort = new Sort(PROPERTY, DIRECTION);
-    }
-
-    @Test
-    public void testCreate() {
-        sort = Sort.create(new Object[]{PROPERTY}, true);
-        assertNotNull(sort);
-        assertEquals(PROPERTY, sort.getProperty());
-        assertEquals(DIRECTION.getValue(), sort.getDirection());
-    }
-
-    @Test
-    public void testCreateWithoutSortStates() {
-        assertNull(Sort.create(new Object[]{PROPERTY}));
-    }
-
-    @Test
-    public void testCreateWithoutSortPropertyIds() {
-        assertNull(Sort.create(null, true));
     }
 
     @Test

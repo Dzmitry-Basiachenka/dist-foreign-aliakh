@@ -1,8 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.common;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
-import com.copyright.rup.vaadin.ui.VaadinUtils;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
+import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import java.io.IOException;
 import java.io.InputStream;

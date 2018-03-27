@@ -6,15 +6,19 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
+import com.copyright.rup.dist.foreign.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IDrillDownByRightsholderWidget;
-import com.copyright.rup.vaadin.ui.Windows;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
+import com.vaadin.data.provider.QuerySortOrder;
+import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.ui.Window;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -49,10 +53,16 @@ public class DrillDownByRightsholderController extends CommonController<IDrillDo
             selectedScenario, getWidget().getSearchValue());
     }
 
+
     @Override
-    public List<UsageDto> loadBeans(int startIndex, int count, Object[] sortPropertyIds, boolean... sortStates) {
+    public List<UsageDto> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders) {
+        Sort sort = null;
+        if (CollectionUtils.isNotEmpty(sortOrders)) {
+            QuerySortOrder sortOrder = sortOrders.get(0);
+            sort = new Sort(sortOrder.getSorted(), Direction.of(SortDirection.ASCENDING == sortOrder.getDirection()));
+        }
         return usageService.getByScenarioAndRhAccountNumber(selectedRightsholderAccountNumber, selectedScenario,
-            getWidget().getSearchValue(), new Pageable(startIndex, count), Sort.create(sortPropertyIds, sortStates));
+            getWidget().getSearchValue(), new Pageable(startIndex, count), sort);
     }
 
     @Override

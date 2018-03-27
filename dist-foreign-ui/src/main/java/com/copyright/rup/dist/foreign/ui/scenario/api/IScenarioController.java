@@ -6,9 +6,10 @@ import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.ui.scenario.impl.ExcludeRightsholdersWindow;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
-import com.copyright.rup.vaadin.ui.component.lazytable.IBeanLoader;
 import com.copyright.rup.vaadin.widget.SearchWidget.ISearchController;
 import com.copyright.rup.vaadin.widget.api.IController;
+
+import com.vaadin.data.provider.QuerySortOrder;
 
 import java.util.List;
 
@@ -21,8 +22,7 @@ import java.util.List;
  *
  * @author Ihar Suvorau
  */
-public interface IScenarioController extends IController<IScenarioWidget>, ISearchController,
-    IBeanLoader<RightsholderTotalsHolder> {
+public interface IScenarioController extends IController<IScenarioWidget>, ISearchController {
 
     /**
      * @return instance of {@link IStreamSource} for export.
@@ -86,4 +86,19 @@ public interface IScenarioController extends IController<IScenarioWidget>, ISear
      * @param event an instance of {@link ExcludeRightsholdersWindow.ExcludeUsagesEvent}
      */
     void fireWidgetEvent(ExcludeRightsholdersWindow.ExcludeUsagesEvent event);
+
+    /**
+     * @return number of items.
+     */
+    int getSize();
+
+    /**
+     * Loads specified number of beans from the storage with given start index.
+     *
+     * @param startIndex start index
+     * @param count      items count to load
+     * @param sortOrders sort orders
+     * @return list of items to be displayed on UI
+     */
+    List<RightsholderTotalsHolder> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders);
 }

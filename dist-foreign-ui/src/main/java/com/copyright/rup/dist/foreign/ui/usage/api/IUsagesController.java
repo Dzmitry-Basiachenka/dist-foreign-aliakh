@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.api;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -9,9 +10,9 @@ import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.Processi
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CreateScenarioWindow.ScenarioCreateEvent;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
-import com.copyright.rup.vaadin.ui.component.lazytable.IBeanLoader;
 import com.copyright.rup.vaadin.widget.api.IController;
 
+import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.util.ReflectTools;
 
 import java.lang.reflect.Method;
@@ -28,7 +29,7 @@ import java.util.List;
  * @author Mikita Hladkikh
  * @author Mikalai Bezmen
  */
-public interface IUsagesController extends IController<IUsagesWidget>, IBeanLoader<UsageDto> {
+public interface IUsagesController extends IController<IUsagesWidget> {
 
     /**
      * {@link #onFilterChanged(FilterChangedEvent)}.
@@ -73,6 +74,21 @@ public interface IUsagesController extends IController<IUsagesWidget>, IBeanLoad
     boolean usageBatchExists(String name);
 
     /**
+     * @return number of items.
+     */
+    int getSize();
+
+    /**
+     * Loads specified number of beans from the storage with given start index.
+     *
+     * @param startIndex start index
+     * @param count      items count to load
+     * @param sortOrders sort orders
+     * @return list of items to be displayed on UI
+     */
+    List<UsageDto> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders);
+
+    /**
      * @return list of {@link UsageBatch}es available for deleting.
      */
     List<UsageBatch> getUsageBatches();
@@ -103,13 +119,13 @@ public interface IUsagesController extends IController<IUsagesWidget>, IBeanLoad
     int loadUsageBatch(UsageBatch usageBatch, Collection<Usage> usages);
 
     /**
-     * Creates a scenario by entered scenario name and description.
+     * Creates a {@link Scenario} by entered scenario name and description.
      *
      * @param scenarioName name of scenario
      * @param description  description for creating scenario
-     * @return created scenario id
+     * @return created scenario
      */
-    String createScenario(String scenarioName, String description);
+    Scenario createScenario(String scenarioName, String description);
 
     /**
      * @return instance of {@link IScenarioService}.

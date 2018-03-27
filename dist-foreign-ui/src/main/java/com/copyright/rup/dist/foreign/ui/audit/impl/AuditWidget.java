@@ -1,39 +1,36 @@
 package com.copyright.rup.dist.foreign.ui.audit.impl;
 
+import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditController;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterWidget;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditWidget;
-import com.copyright.rup.dist.foreign.ui.common.util.OffsetDateTimeColumnGenerator;
-import com.copyright.rup.dist.foreign.ui.common.util.PercentColumnGenerator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
-import com.copyright.rup.dist.foreign.ui.usage.impl.UsageBeanQuery;
 import com.copyright.rup.vaadin.ui.Buttons;
-import com.copyright.rup.vaadin.ui.LocalDateColumnGenerator;
-import com.copyright.rup.vaadin.ui.LongColumnGenerator;
-import com.copyright.rup.vaadin.ui.MoneyColumnGenerator;
-import com.copyright.rup.vaadin.ui.VaadinUtils;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
-import com.copyright.rup.vaadin.ui.component.lazytable.LazyTable;
+import com.copyright.rup.vaadin.util.CurrencyUtils;
+import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
+import com.vaadin.data.ValueProvider;
+import com.vaadin.data.provider.DataProvider;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Grid;
+import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
-import com.vaadin.ui.Table.ColumnGenerator;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.themes.BaseTheme;
+import com.vaadin.ui.themes.ValoTheme;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.vaadin.addons.lazyquerycontainer.LazyQueryContainer;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 /**
@@ -50,9 +47,9 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
     private static final String EMPTY_STYLE_NAME = "empty-audit-table";
 
     private IAuditController controller;
-    private LazyTable<UsageBeanQuery, UsageDto> table;
-    private LazyQueryContainer container;
     private SearchWidget searchWidget;
+    private Grid<UsageDto> auditGrid;
+    private DataProvider<UsageDto, Void> dataProvider;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -71,12 +68,7 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
 
     @Override
     public void refresh() {
-        container.refresh();
-        if (CollectionUtils.isNotEmpty(container.getItemIds())) {
-            table.removeStyleName(EMPTY_STYLE_NAME);
-        } else {
-            table.addStyleName(EMPTY_STYLE_NAME);
-        }
+        dataProvider.refreshAll();
     }
 
     @Override
@@ -85,7 +77,23 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
     }
 
     private void initContent() {
-        initTable();
+        dataProvider = DataProvider.fromCallbacks(
+            query -> controller.loadBeans(query.getOffset(), query.getLimit(), query.getSortOrders()).stream(),
+            query -> {
+                int size = controller.getSize();
+                if (0 < size) {
+                    auditGrid.removeStyleName(EMPTY_STYLE_NAME);
+                } else {
+                    auditGrid.addStyleName(EMPTY_STYLE_NAME);
+                }
+                return size;
+            });
+        auditGrid = new Grid<>(dataProvider);
+        auditGrid.setSelectionMode(SelectionMode.NONE);
+        VaadinUtils.addComponentStyle(auditGrid, "audit-grid");
+        auditGrid.setSizeFull();
+        addColumns();
+        auditGrid.getColumns().forEach(column -> column.setSortable(true));
         IAuditFilterWidget filterWidget = controller.getAuditFilterController().initWidget();
         filterWidget.addListener(FilterChangedEvent.class, controller, IAuditController.ON_FILTER_CHANGED);
         searchWidget = new SearchWidget(this::refresh);
@@ -101,120 +109,69 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
         toolbar.setExpandRatio(searchWidget, 1f);
         toolbar.setMargin(new MarginInfo(false, true, false, true));
         VaadinUtils.addComponentStyle(toolbar, "audit-toolbar");
-        VerticalLayout layout = new VerticalLayout(toolbar, table);
+        VerticalLayout layout = new VerticalLayout(toolbar, auditGrid);
         layout.setSizeFull();
-        layout.setExpandRatio(table, 1f);
+        layout.setExpandRatio(auditGrid, 1f);
+        layout.setMargin(false);
         layout.setSpacing(true);
         VaadinUtils.addComponentStyle(layout, "audit-layout");
         addComponents(filterWidget, layout);
     }
 
-    private void initTable() {
-        table = new LazyTable<>(controller, UsageBeanQuery.class);
-        container = table.getContainerDataSource();
-        table.setSizeFull();
-        addProperties();
-        setVisibleColumns();
-        setColumnHeaders();
-        addColumnsGenerators();
-        table.setColumnCollapsingAllowed(true);
-        VaadinUtils.addComponentStyle(table, "audit-table");
-    }
-
-    private void addProperties() {
-        table.addProperty("id", String.class, false);
-        table.addProperty("detailId", Long.class, true);
-        table.addProperty("status", String.class, true);
-        table.addProperty("productFamily", String.class, true);
-        table.addProperty("batchName", String.class, true);
-        table.addProperty("paymentDate", LocalDate.class, true);
-        table.addProperty("rhAccountNumber", Long.class, true);
-        table.addProperty("rhName", String.class, true);
-        table.addProperty("payeeAccountNumber", Long.class, true);
-        table.addProperty("payeeName", String.class, true);
-        table.addProperty("wrWrkInst", Long.class, true);
-        table.addProperty("workTitle", String.class, true);
-        table.addProperty("standardNumber", String.class, true);
-        table.addProperty("grossAmount", BigDecimal.class, true);
-        table.addProperty("serviceFee", BigDecimal.class, true);
-        table.addProperty("scenarioName", String.class, true);
-        table.addProperty("checkNumber", String.class, true);
-        table.addProperty("checkDate", OffsetDateTime.class, true);
-        table.addProperty("cccEventId", String.class, true);
-        table.addProperty("distributionName", String.class, true);
-        table.addProperty("distributionDate", OffsetDateTime.class, true);
-        table.addProperty("periodEndDate", LocalDate.class, true);
-    }
-
-    private void setColumnHeaders() {
-        table.setColumnHeaders(
-            ForeignUi.getMessage("table.column.detail_id"),
-            ForeignUi.getMessage("table.column.usage_status"),
-            ForeignUi.getMessage("table.column.product_family"),
-            ForeignUi.getMessage("table.column.batch_name"),
-            ForeignUi.getMessage("table.column.payment_date"),
-            ForeignUi.getMessage("table.column.rh_account_number"),
-            ForeignUi.getMessage("table.column.rh_account_name"),
-            ForeignUi.getMessage("table.column.payee_account_number"),
-            ForeignUi.getMessage("table.column.payee_name"),
-            ForeignUi.getMessage("table.column.wr_wrk_inst"),
-            ForeignUi.getMessage("table.column.work_title"),
-            ForeignUi.getMessage("table.column.standard_number"),
-            ForeignUi.getMessage("table.column.gross_amount"),
-            ForeignUi.getMessage("table.column.service_fee"),
-            ForeignUi.getMessage("table.column.scenario_name"),
-            ForeignUi.getMessage("table.column.check_number"),
-            ForeignUi.getMessage("table.column.check_date"),
-            ForeignUi.getMessage("table.column.event_id"),
-            ForeignUi.getMessage("table.column.distribution_name"),
-            ForeignUi.getMessage("table.column.distribution_date"),
-            ForeignUi.getMessage("table.column.period_end_date"));
-    }
-
-    private void setVisibleColumns() {
-        table.setVisibleColumns(
-            "detailId",
-            "status",
-            "productFamily",
-            "batchName",
-            "paymentDate",
-            "rhAccountNumber",
-            "rhName",
-            "payeeAccountNumber",
-            "payeeName",
-            "wrWrkInst",
-            "workTitle",
-            "standardNumber",
-            "grossAmount",
-            "serviceFee",
-            "scenarioName",
-            "checkNumber",
-            "checkDate",
-            "cccEventId",
-            "distributionName",
-            "distributionDate",
-            "periodEndDate");
-    }
-
-    private void addColumnsGenerators() {
-        LongColumnGenerator longColumnGenerator = new LongColumnGenerator();
-        OffsetDateTimeColumnGenerator offsetDateTimeColumnGenerator = new OffsetDateTimeColumnGenerator();
-        table.addGeneratedColumn("wrWrkInst", longColumnGenerator);
-        table.addGeneratedColumn("rhAccountNumber", longColumnGenerator);
-        table.addGeneratedColumn("payeeAccountNumber", longColumnGenerator);
-        table.addGeneratedColumn("grossAmount", new MoneyColumnGenerator());
-        table.addGeneratedColumn("paymentDate", new LocalDateColumnGenerator());
-        table.addGeneratedColumn("checkDate", offsetDateTimeColumnGenerator);
-        table.addGeneratedColumn("distributionDate", offsetDateTimeColumnGenerator);
-        table.addGeneratedColumn("periodEndDate", new LocalDateColumnGenerator());
-        table.addGeneratedColumn("serviceFee", new PercentColumnGenerator());
-        table.addGeneratedColumn("detailId", (ColumnGenerator) (source, itemId, columnId) -> {
-            String detailId =
-                Objects.toString(VaadinUtils.getContainerPropertyValue(source, itemId, columnId, Long.class));
+    private void addColumns() {
+        auditGrid.addComponentColumn(usage -> {
+            String detailId = Objects.toString(usage.getDetailId());
             Button button = Buttons.createButton(detailId);
-            button.addStyleName(BaseTheme.BUTTON_LINK);
-            button.addClickListener(event -> controller.showUsageHistory(Objects.toString(itemId), detailId));
+            button.addStyleName(ValoTheme.BUTTON_LINK);
+            button.addClickListener(event -> controller.showUsageHistory(usage.getId(), detailId));
             return button;
-        });
+        })
+            .setCaption(ForeignUi.getMessage("table.column.detail_id"))
+            .setSortProperty("detailId")
+            .setWidth(100);
+        addColumn(UsageDto::getStatus, "table.column.usage_status", "status", 115);
+        addColumn(UsageDto::getProductFamily, "table.column.product_family", "productFamily", 125);
+        addColumn(UsageDto::getBatchName, "table.column.batch_name", "batchName", 140);
+        addColumn(usage -> getStringFromDate(usage.getPaymentDate()), "table.column.payment_date", "paymentDate", 115);
+        addColumn(UsageDto::getRhAccountNumber, "table.column.rh_account_number", "rhAccountNumber", 115);
+        addColumn(UsageDto::getRhName, "table.column.rh_account_name", "rhName", 300);
+        addColumn(UsageDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", 110);
+        addColumn(UsageDto::getWorkTitle, "table.column.work_title", "workTitle", 300);
+        addColumn(UsageDto::getStandardNumber, "table.column.standard_number", "standardNumber", 140);
+        auditGrid.addColumn(usage -> CurrencyUtils.format(usage.getGrossAmount(), null))
+            .setCaption(ForeignUi.getMessage("table.column.gross_amount"))
+            .setSortProperty("grossAmount")
+            .setHidable(true)
+            .setStyleGenerator(item -> "v-align-right")
+            .setWidth(100);
+        addColumn(usage -> {
+            BigDecimal value = usage.getServiceFee();
+            return Objects.nonNull(value)
+                ? Objects.toString(value.multiply(new BigDecimal("100")).setScale(1, BigDecimal.ROUND_HALF_UP))
+                : StringUtils.EMPTY;
+        }, "table.column.service_fee", "serviceFee", 115);
+        addColumn(UsageDto::getScenarioName, "table.column.scenario_name", "scenarioName", 125);
+        addColumn(UsageDto::getCheckNumber, "table.column.check_number", "checkNumber", 85);
+        addColumn(usage -> getStringFromDate(usage.getCheckDate()), "table.column.check_date", "checkDate", 105);
+        addColumn(UsageDto::getCccEventId, "table.column.event_id", "cccEventId", 85);
+        addColumn(UsageDto::getDistributionName, "table.column.distribution_name", "distributionName", 110);
+    }
+
+    private void addColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, String sort, double width) {
+        auditGrid.addColumn(provider)
+            .setCaption(ForeignUi.getMessage(captionProperty))
+            .setSortProperty(sort)
+            .setHidable(true)
+            .setWidth(width);
+    }
+
+    private String getStringFromDate(LocalDate date) {
+        return null != date ? date.format(
+            DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT)) : StringUtils.EMPTY;
+    }
+
+    private String getStringFromDate(OffsetDateTime date) {
+        return null != date ? date.format(
+            DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT)) : StringUtils.EMPTY;
     }
 }

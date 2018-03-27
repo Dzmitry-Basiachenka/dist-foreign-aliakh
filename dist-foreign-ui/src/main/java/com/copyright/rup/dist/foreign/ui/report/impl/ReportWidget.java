@@ -3,8 +3,8 @@ package com.copyright.rup.dist.foreign.ui.report.impl;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportWidget;
-import com.copyright.rup.vaadin.ui.VaadinUtils;
-import com.copyright.rup.vaadin.ui.Windows;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
+import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.api.IController;
 
 import com.vaadin.ui.MenuBar;

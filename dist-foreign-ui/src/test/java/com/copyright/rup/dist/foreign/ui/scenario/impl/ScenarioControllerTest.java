@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
+import static junit.framework.TestCase.assertTrue;
+
 import static org.easymock.EasyMock.anyString;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
@@ -10,7 +12,6 @@ import static org.easymock.EasyMock.isNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
@@ -32,6 +33,7 @@ import com.copyright.rup.vaadin.widget.api.IWidget;
 import com.google.common.collect.Lists;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -104,7 +106,8 @@ public class ScenarioControllerTest {
 
     @Test
     public void testGetSize() {
-        expect(usageService.getRightsholderTotalsHolderCountByScenario(scenario, null)).andReturn(1).once();
+        expect(usageService.getRightsholderTotalsHolderCountByScenario(scenario, StringUtils.EMPTY)).andReturn(1)
+            .once();
         expect(controller.getScenarioWithAmountsAndLastAction()).andReturn(scenario).once();
         expect(ForeignSecurityUtils.hasExcludeFromScenarioPermission()).andReturn(true).once();
         replay(usageService, scenarioService, ForeignSecurityUtils.class);

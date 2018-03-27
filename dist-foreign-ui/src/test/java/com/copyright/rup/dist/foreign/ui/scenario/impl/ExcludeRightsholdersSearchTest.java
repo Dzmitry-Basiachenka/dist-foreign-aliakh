@@ -4,16 +4,17 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioController;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.vaadin.data.util.BeanContainer;
+import com.vaadin.data.provider.ListDataProvider;
+import com.vaadin.server.SerializablePredicate;
+import com.vaadin.ui.Grid;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -40,7 +41,7 @@ import java.util.Set;
 @RunWith(Parameterized.class)
 public class ExcludeRightsholdersSearchTest {
 
-    private static final List<RightsholderPayeePair> CONTAINER_DATA = Lists.newArrayList(
+    private static final List<RightsholderPayeePair> CONTAINER_DATA = Arrays.asList(
         buildPair(1000000413L, "Times Mirror Magazines, Inc. [T]", 1000004155L, "Spectator Limited"),
         buildPair(1000004191L, "Klasing & Co [T]", 1000004271L, "Keith-Stevens Inc"),
         buildPair(7000425425L, "Kelton Publications", 7000425807L, "Desktop Communications"),
@@ -70,7 +71,7 @@ public class ExcludeRightsholdersSearchTest {
                 {"BruGgemAnn us Inc.", Collections.singleton(CONTAINER_DATA.get(3))},
                 {"Spectator Limited", Collections.singleton(CONTAINER_DATA.get(0))},
                 {"State College", Collections.singleton(CONTAINER_DATA.get(3))},
-                {"desktop coMmUniCations", Collections.singleton(CONTAINER_DATA.get(0))},
+                {"desktop coMmUniCations", Collections.singleton(CONTAINER_DATA.get(2))},
                 {"Keith-St evens Inc", Collections.emptySet()},
                 {"7000427902", Collections.singleton(CONTAINER_DATA.get(3))},
                 {"70004 27902", Collections.emptySet()},
@@ -101,35 +102,29 @@ public class ExcludeRightsholdersSearchTest {
     public void setUp() {
         IScenarioController scenarioController = createMock(ScenarioController.class);
         expect(scenarioController.getRightsholdersPayeePairs(1000009522L))
-            .andReturn(Collections.emptyList()).once();
+            .andReturn(CONTAINER_DATA).once();
         replay(scenarioController);
         window = new ExcludeRightsholdersWindow(1000009522L, scenarioController);
         verify(scenarioController);
     }
 
-    @Test
+
     // Test case IDs: 'eb607c0b-0398-47cb-b492-e7adf1de6bc2', '4d96b57d-b1c0-44e2-b24c-29db8b1aef3d',
     // '6322bcf8-05cb-4a27-b97d-0332671edecc', '62e035f1-8d07-4121-b489-52028dcbfe7d'
+    @Test
+    @SuppressWarnings("unchecked")
     public void testSearch() {
-        BeanContainer<Long, RightsholderPayeePair> container = buildContainer();
-        Whitebox.setInternalState(window, container);
         SearchWidget searchWidget = createMock(SearchWidget.class);
         Whitebox.setInternalState(window, searchWidget);
+        Grid grid = createMock(Grid.class);
+        Whitebox.setInternalState(window, grid);
+        ListDataProvider provider = new ListDataProvider(Collections.EMPTY_LIST);
+        expect(grid.getDataProvider()).andReturn(provider).once();
         expect(searchWidget.getSearchValue()).andReturn(value).once();
-        replay(searchWidget);
+        replay(searchWidget, grid);
         window.performSearch();
-        assertEquals(expectedResult.size(), container.size());
-        expectedResult.forEach(result -> assertEquals(result,
-            container.getItem(result.getRightsholder().getAccountNumber()).getBean()));
-        verify(searchWidget);
-    }
-
-    private BeanContainer<Long, RightsholderPayeePair> buildContainer() {
-        BeanContainer<Long, RightsholderPayeePair> container = new BeanContainer<>(RightsholderPayeePair.class);
-        container.addNestedContainerBean("payee");
-        container.addNestedContainerBean("rightsholder");
-        container.setBeanIdProperty("rightsholder.accountNumber");
-        container.addAll(CONTAINER_DATA);
-        return container;
+        SerializablePredicate filter = provider.getFilter();
+        expectedResult.forEach(result -> assertTrue(filter.test(result)));
+        verify(searchWidget, grid);
     }
 }

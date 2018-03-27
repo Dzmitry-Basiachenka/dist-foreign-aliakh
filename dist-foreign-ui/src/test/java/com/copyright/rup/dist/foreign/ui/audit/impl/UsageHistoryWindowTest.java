@@ -1,28 +1,28 @@
 package com.copyright.rup.dist.foreign.ui.audit.impl;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
-import com.copyright.rup.vaadin.ui.DateColumnGenerator;
 
 import com.google.common.collect.Lists;
-import com.vaadin.data.Container;
-import com.vaadin.data.util.BeanContainer;
+import com.google.common.collect.Sets;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.Table;
+import com.vaadin.ui.Grid;
+import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.VerticalLayout;
 
 import org.junit.Test;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Verifies {@link UsageHistoryWindow}.
@@ -35,11 +35,9 @@ import org.junit.Test;
  */
 public class UsageHistoryWindowTest {
 
-    private UsageAuditItem item;
-
     @Test
     public void testLayout() {
-        item = new UsageAuditItem();
+        UsageAuditItem item = new UsageAuditItem();
         item.setId(RupPersistUtils.generateUuid());
         item.setActionReason("Action reason");
         item.setActionType(UsageActionTypeEnum.LOADED);
@@ -60,26 +58,20 @@ public class UsageHistoryWindowTest {
         assertEquals(2, layout.getComponentCount());
         Component component = layout.getComponent(0);
         assertEquals(1f, layout.getExpandRatio(component), 0);
-        assertTrue(component instanceof Table);
-        verifyTable((Table) component);
+        assertTrue(component instanceof Grid);
+        verifyGrid((Grid) component);
         component = layout.getComponent(1);
         assertTrue(component instanceof Button);
         verifyButton((Button) component);
     }
 
-    private void verifyTable(Table table) {
-        assertNull(table.getCaption());
-        verifySize(table, Unit.PERCENTAGE, 100, Unit.PERCENTAGE, 100);
-        assertArrayEquals(new Object[]{"actionType", "createDate", "actionReason", "createUser"},
-            table.getVisibleColumns());
-        assertArrayEquals(new Object[]{"Type", "Date", "Reason", "User"}, table.getColumnHeaders());
-        assertTrue(table.getColumnGenerator("createDate") instanceof DateColumnGenerator);
-        Container dataSource = table.getContainerDataSource();
-        assertTrue(dataSource instanceof BeanContainer);
-        BeanContainer beanContainer = (BeanContainer) dataSource;
-        assertNotNull(beanContainer.getBeanIdResolver());
-        assertEquals(1, beanContainer.size());
-        assertEquals(item, beanContainer.getItem(item.getId()).getBean());
+    @SuppressWarnings("unchecked")
+    private void verifyGrid(Grid grid) {
+        assertNull(grid.getCaption());
+        verifySize(grid, Unit.PERCENTAGE, 100, Unit.PERCENTAGE, 100);
+        List<Column> columns = grid.getColumns();
+        assertEquals(Sets.newHashSet("Type", "Date", "Reason", "User"),
+            columns.stream().map(Column::getCaption).collect(Collectors.toSet()));
     }
 
     private void verifyButton(Button button) {

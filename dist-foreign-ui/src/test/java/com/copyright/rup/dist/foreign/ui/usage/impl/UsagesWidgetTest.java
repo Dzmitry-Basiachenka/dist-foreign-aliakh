@@ -1,11 +1,10 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
+import static junit.framework.Assert.assertNotNull;
+
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
@@ -16,19 +15,13 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
-import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
-import com.copyright.rup.vaadin.ui.LocalDateColumnGenerator;
-import com.copyright.rup.vaadin.ui.LongColumnGenerator;
-import com.copyright.rup.vaadin.ui.MoneyColumnGenerator;
-import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
-import com.copyright.rup.vaadin.ui.component.lazytable.IBeanLoader;
-import com.copyright.rup.vaadin.ui.component.lazytable.LazyTable;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 
-import com.google.common.collect.Lists;
+import com.vaadin.data.provider.DataProvider;
 import com.vaadin.server.Extension;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
@@ -36,23 +29,24 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.Grid;
+import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 
-import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
-import org.vaadin.addons.lazyquerycontainer.LazyQueryContainer;
-import org.vaadin.addons.lazyquerycontainer.QueryView;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Verifies {@link UsagesWidget}.
@@ -67,11 +61,6 @@ import java.util.List;
 @PrepareForTest({UsagesWidget.class, Windows.class})
 public class UsagesWidgetTest {
 
-    private static final String DETAIL_ID_PROPERTY = "detailId";
-    private static final String GROSS_AMOUNT_PROPERTY = "grossAmount";
-    private static final String REPORTED_VALUE_PROPERTY = "reportedValue";
-    private static final String BATCH_GROSS_AMOUNT_PROPERTY = "batchGrossAmount";
-    private static final String USAGES_TABLE = "usagesTable";
     private UsagesWidget usagesWidget;
     private IUsagesController controller;
 
@@ -102,7 +91,7 @@ public class UsagesWidgetTest {
         verifySize(layout);
         assertEquals(2, layout.getComponentCount());
         verifyButtonsLayout((HorizontalLayout) layout.getComponent(0));
-        verifyTable((Table) layout.getComponent(1));
+        verifyGrid((Grid) layout.getComponent(1));
         assertEquals(1, layout.getExpandRatio(layout.getComponent(1)), 0);
     }
 
@@ -133,8 +122,8 @@ public class UsagesWidgetTest {
     @SuppressWarnings("unchecked")
     public void testAddToScenarioButtonEmptyUsagesTableClickListener() {
         mockStatic(Windows.class);
-        LazyTable<UsageBeanQuery, UsageDto> usagesTable = new LazyTable<>(controller, UsageBeanQuery.class, 1);
-        Whitebox.setInternalState(usagesWidget, USAGES_TABLE, usagesTable);
+        Grid grid = new Grid();
+        Whitebox.setInternalState(usagesWidget, grid);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
             .getComponent(0)).getComponent(1);
@@ -154,13 +143,13 @@ public class UsagesWidgetTest {
     @SuppressWarnings("unchecked")
     public void testAddToScenarioButtonInvalidFilterSelectedClickListener() {
         mockStatic(Windows.class);
-        LazyTable<UsageBeanQuery, UsageDto> usagesTable =
-            new LazyTable<>(new UsageDtoBeanLoader(), UsageBeanQuery.class, 1);
-        Whitebox.setInternalState(usagesWidget, USAGES_TABLE, usagesTable);
+        Grid grid = new Grid();
+        Whitebox.setInternalState(usagesWidget, grid);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
             .getComponent(0)).getComponent(1);
         assertTrue(addToScenarioButton.isDisableOnClick());
+        expect(controller.getSize()).andReturn(1).once();
         expect(controller.isProductFamilyAndStatusFiltersApplied()).andReturn(false).once();
         Windows.showNotificationWindow(
             "Please apply Product Family filter and ELIGIBLE status filter to create scenario");
@@ -177,13 +166,13 @@ public class UsagesWidgetTest {
     @SuppressWarnings("unchecked")
     public void testAddToScenarioButtonClickListener() {
         mockStatic(Windows.class);
-        LazyTable<UsageBeanQuery, UsageDto> usagesTable =
-            new LazyTable<>(new UsageDtoBeanLoader(), UsageBeanQuery.class, 1);
-        Whitebox.setInternalState(usagesWidget, USAGES_TABLE, usagesTable);
+        Grid grid = new Grid();
+        Whitebox.setInternalState(usagesWidget, grid);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
             .getComponent(0)).getComponent(1);
         assertTrue(addToScenarioButton.isDisableOnClick());
+        expect(controller.getSize()).andReturn(1).once();
         expect(controller.isProductFamilyAndStatusFiltersApplied()).andReturn(true).once();
         expect(controller.isSigleProductFamilySelected()).andReturn(false).once();
         Windows.showNotificationWindow("Scenario cannot be created. Select only one product family at a time");
@@ -199,13 +188,13 @@ public class UsagesWidgetTest {
     @Test
     public void testAddToScenarioButtonClickListenerFasProductFamily() {
         mockStatic(Windows.class);
-        LazyTable<UsageBeanQuery, UsageDto> usagesTable =
-            new LazyTable<>(new UsageDtoBeanLoader(), UsageBeanQuery.class, 1);
-        Whitebox.setInternalState(usagesWidget, USAGES_TABLE, usagesTable);
+        Grid grid = new Grid();
+        Whitebox.setInternalState(usagesWidget, grid);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
             .getComponent(0)).getComponent(1);
         assertTrue(addToScenarioButton.isDisableOnClick());
+        expect(controller.getSize()).andReturn(1).once();
         expect(controller.isProductFamilyAndStatusFiltersApplied()).andReturn(true).once();
         expect(controller.isSigleProductFamilySelected()).andReturn(true).once();
         expect(controller.getSelectedProductFamily()).andReturn("FAS").once();
@@ -240,23 +229,13 @@ public class UsagesWidgetTest {
 
     @Test
     public void testRefresh() {
-        LazyTable usagesTableMock = createMock(LazyTable.class);
-        LazyQueryContainer containerMock = createMock(LazyQueryContainer.class);
-        QueryView queryView = createMock(QueryView.class);
-        Whitebox.setInternalState(containerMock, "itemSetChangeListeners", Collections.emptyList());
-        Whitebox.setInternalState(containerMock, "queryView", queryView);
-        Whitebox.setInternalState(usagesWidget, USAGES_TABLE, usagesTableMock);
-        usagesTableMock.refreshRowCache();
+        DataProvider dataProvider = createMock(DataProvider.class);
+        Whitebox.setInternalState(usagesWidget, dataProvider);
+        dataProvider.refreshAll();
         expectLastCall().once();
-        expect(usagesTableMock.getContainerDataSource()).andReturn(containerMock).once();
-        containerMock.refresh();
-        expectLastCall().once();
-        expect(containerMock.getItemIds()).andReturn(Collections.emptyList()).once();
-        usagesTableMock.addStyleName("empty-usages-table");
-        expectLastCall().once();
-        replay(usagesTableMock, containerMock, queryView);
+        replay(dataProvider);
         usagesWidget.refresh();
-        verify(usagesTableMock, containerMock, queryView);
+        verify(dataProvider);
     }
 
     @Test
@@ -292,53 +271,14 @@ public class UsagesWidgetTest {
         assertEquals("Send for Research", layout.getComponent(4).getCaption());
     }
 
-    private void verifyTable(Table table) {
-        assertArrayEquals(new Object[]{DETAIL_ID_PROPERTY, "status", "productFamily", "batchName", "fiscalYear",
-            "rroAccountNumber", "rroName", "paymentDate", "workTitle", "article", "standardNumber", "wrWrkInst",
-            "rhAccountNumber", "rhName", "publisher", "publicationDate", "numberOfCopies", REPORTED_VALUE_PROPERTY,
-            GROSS_AMOUNT_PROPERTY, BATCH_GROSS_AMOUNT_PROPERTY, "market", "marketPeriodFrom", "marketPeriodTo",
-            "author"}, table.getVisibleColumns());
-        assertArrayEquals(new Object[]{"Detail ID", "Detail Status", "Product Family", "Usage Batch Name",
-                "Fiscal Year", "RRO Account #", "RRO Name", "Payment Date", "Title", "Article", "Standard Number",
-                "Wr Wrk Inst", "RH Account #", "RH Name", "Publisher", "Pub Date", "Number of Copies", "Reported value",
-                "Amt in USD", "Gross Amt in USD", "Market", "Market Period From", "Market Period To", "Author"},
-            table.getColumnHeaders());
-        assertTrue(CollectionUtils.containsAll(table.getContainerPropertyIds(), Lists.newArrayList("id",
-            DETAIL_ID_PROPERTY, "productFamily", "batchName", "fiscalYear", "rroAccountNumber", "rroName",
-            "paymentDate", "workTitle", "article", "standardNumber", "wrWrkInst", "rhAccountNumber", "rhName",
-            "publisher", "publicationDate", "numberOfCopies", REPORTED_VALUE_PROPERTY, GROSS_AMOUNT_PROPERTY, "market",
-            "marketPeriodFrom", "author", "status")));
-        assertTrue(table.isColumnCollapsingAllowed());
-        assertFalse(table.isColumnCollapsible(DETAIL_ID_PROPERTY));
-        assertEquals(135, table.getColumnWidth("rroName"));
-        assertEquals(135, table.getColumnWidth("article"));
-        assertEquals(135, table.getColumnWidth("publisher"));
-        assertEquals(135, table.getColumnWidth("market"));
-        assertEquals(135, table.getColumnWidth("batchName"));
-        assertEquals(300, table.getColumnWidth("workTitle"));
-        assertEquals(300, table.getColumnWidth("rhName"));
-        assertEquals(300, table.getColumnWidth("author"));
-        assertEquals(100, table.getColumnWidth(REPORTED_VALUE_PROPERTY));
-        assertEquals(100, table.getColumnWidth(GROSS_AMOUNT_PROPERTY));
-        assertEquals(100, table.getColumnWidth(BATCH_GROSS_AMOUNT_PROPERTY));
-        verifyGeneratedColumns(table);
-        verifySize(table);
-    }
-
-    private void verifyGeneratedColumns(Table table) {
-        verifyColumnGenerator(table.getColumnGenerator(DETAIL_ID_PROPERTY), LongColumnGenerator.class);
-        verifyColumnGenerator(table.getColumnGenerator("wrWrkInst"), LongColumnGenerator.class);
-        verifyColumnGenerator(table.getColumnGenerator("rhAccountNumber"), LongColumnGenerator.class);
-        verifyColumnGenerator(table.getColumnGenerator("rroAccountNumber"), LongColumnGenerator.class);
-        verifyColumnGenerator(table.getColumnGenerator("publicationDate"), LocalDateColumnGenerator.class);
-        verifyColumnGenerator(table.getColumnGenerator("paymentDate"), LocalDateColumnGenerator.class);
-        verifyColumnGenerator(table.getColumnGenerator(REPORTED_VALUE_PROPERTY), MoneyColumnGenerator.class);
-        verifyColumnGenerator(table.getColumnGenerator(GROSS_AMOUNT_PROPERTY), MoneyColumnGenerator.class);
-    }
-
-    private void verifyColumnGenerator(Table.ColumnGenerator columnGenerator, Class clazz) {
-        assertNotNull(columnGenerator);
-        assertEquals(clazz, columnGenerator.getClass());
+    private void verifyGrid(Grid grid) {
+        List<Column> columns = grid.getColumns();
+        assertEquals(Arrays.asList("Detail ID", "Detail Status", "Product Family", "Usage Batch Name",
+            "Fiscal Year", "RRO Account #", "RRO Name", "Payment Date", "Title", "Article", "Standard Number",
+            "Wr Wrk Inst", "RH Account #", "RH Name", "Publisher", "Pub Date", "Number of Copies", "Reported value",
+            "Amt in USD", "Gross Amt in USD", "Market", "Market Period From", "Market Period To", "Author"),
+            columns.stream().map(Column::getCaption).collect(Collectors.toList()));
+        verifySize(grid);
     }
 
     private void verifySize(Component component) {
@@ -346,18 +286,5 @@ public class UsagesWidgetTest {
         assertEquals(100, component.getHeight(), 0);
         assertEquals(Unit.PERCENTAGE, component.getHeightUnits());
         assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
-    }
-
-    private static class UsageDtoBeanLoader implements IBeanLoader<UsageDto> {
-
-        @Override
-        public int getSize() {
-            return 1;
-        }
-
-        @Override
-        public List<UsageDto> loadBeans(int startIndex, int count, Object[] sortPropertyIds, boolean... sortStates) {
-            return Collections.singletonList(new UsageDto());
-        }
     }
 }

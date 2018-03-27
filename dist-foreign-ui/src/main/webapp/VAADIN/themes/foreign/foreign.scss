@@ -51,18 +51,47 @@
         }
     }
 
-    /*=== Styles for Usages table ===*/
-    .empty-usages-table .v-table-body {
+    /*=== Styles for grid components ===*/
+    .v-grid {
+        background: white;
+    }
+
+    .v-grid-cell-focused:before {
+        display: none !important;
+    }
+
+    .v-grid-tablewrapper th {
+	    cursor: pointer;
+    }
+
+    .v-grid-footer .v-grid-column-footer-content {
+    	font-size: 12px;
+    }
+
+    .v-assistive-device-only-label  label {
+        font-size:0;
+        width: 0px;
+    }
+
+    /*=== Styles for Usages grid ===*/
+    .empty-usages-grid .v-grid-tablewrapper {
         background-image: url("img/empty_usages_table.png");
         background-repeat: no-repeat;
         background-position: center center;
     }
 
-    /*=== Styles for Usages table ===*/
-    .empty-audit-table .v-table-body {
+    /*=== Styles for Audit grid ===*/
+    .empty-audit-grid .v-grid-tablewrapper {
         background-image: url("img/empty_audit_table.png");
         background-repeat: no-repeat;
         background-position: center center;
+    }
+
+    /*=== Styles for Batches grid ===*/
+    .usage-batches-grid .v-grid-tablewrapper .v-grid-row > td,
+    .exclude-details-by-rro-grid .v-grid-tablewrapper .v-grid-row > td {
+        height: 33px !important;
+        line-height: 33px !important;
     }
 
     /*=== Styles for filters ===*/
@@ -100,57 +129,8 @@
     }
 
     /*=== Styles for table with extended footer ===*/
-    .table-ext-footer .v-table-footer {
-        font-weight: bold;
-    }
-
-    .table-ext-footer .v-table-footer-wrap {
-        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#e5e5e5', endColorstr='#dcdee0');
-        background: #e5e5e5 linear-gradient(#e5e5e5, #dcdee0) !important;
-    }
-
-    .table-ext-footer .v-table-footer span {
-        display: block;
-        margin-bottom: 4px;
-    }
-
-    /*=== Styles for multiselect table ===*/
-    .table-multiselectable .v-table-header td {
-        padding: 0px !important;
-    }
-
-    .table-multiselectable .v-table-cell-content {
-        vertical-align: $table-vertical-align;
-    }
-
-    .table-multiselectable .v-table-caption-container-align-left p {
-        background: $v-sprites-url no-repeat 3px -120px;
-        cursor: pointer;
-        opacity: 0.8;
-        margin: 0 !important;
-        padding: 0 !important;
-        width: 20px;
-        height: 20px;
-    }
-
-    .table-multiselectable .v-table-caption-container p:hover {
-        background-position: 3px -100px;
-    }
-
-    .table-multiselectable .v-table-caption-container p.selected {
-        background-position: 3px -160px;
-    }
-
-    .table-multiselectable .v-table-caption-container p.selected:hover {
-        background-position: 3px -140px;
-    }
-
-    .table-multiselectable .v-table-caption-container p.indeterminate {
-        background-position: 3px -320px;
-    }
-
-    .table-multiselectable .v-table-caption-container p.indeterminate:hover {
-        background-position: 3px -300px;
+    .v-grid-footer .v-grid-column-footer-content {
+    	font-size: 11px;
     }
 
     /**==== Scenario last action label ====*/
@@ -183,4 +163,8 @@
     	color: #000099;
     	font-weight: bold;
     }
+
+   .v-label-white-space-normal {
+        white-space: normal;
+   }
 }

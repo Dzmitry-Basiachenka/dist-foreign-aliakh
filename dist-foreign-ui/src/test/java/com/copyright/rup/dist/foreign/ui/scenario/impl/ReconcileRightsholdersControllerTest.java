@@ -11,7 +11,7 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
-import com.copyright.rup.vaadin.ui.Windows;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

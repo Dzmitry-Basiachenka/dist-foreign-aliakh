@@ -4,24 +4,20 @@ import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioController;
 import com.copyright.rup.vaadin.ui.Buttons;
-import com.copyright.rup.vaadin.ui.ConfirmActionDialogWindow;
-import com.copyright.rup.vaadin.ui.LongColumnGenerator;
-import com.copyright.rup.vaadin.ui.VaadinUtils;
-import com.copyright.rup.vaadin.ui.Windows;
-import com.copyright.rup.vaadin.ui.component.SelectableTable;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
+import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 import com.copyright.rup.vaadin.widget.SearchWidget.ISearchController;
 
-import com.vaadin.data.util.BeanContainer;
-import com.vaadin.data.util.filter.Or;
-import com.vaadin.data.util.filter.SimpleStringFilter;
+import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.Grid;
+import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.util.ReflectTools;
@@ -31,6 +27,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Represents window with ability to exclude RH details for Source RRO.
@@ -43,15 +41,9 @@ import java.util.List;
  */
 public class ExcludeRightsholdersWindow extends Window implements ISearchController {
 
-    private static final String PAYEE_ACCOUNT_NUMBER = "payee.accountNumber";
-    private static final String PAYEE_NAME = "payee.name";
-    private static final String RH_ACCOUNT_NUMBER = "rightsholder.accountNumber";
-    private static final String RH_NAME = "rightsholder.name";
-    private static final String SELECTED = "selected";
     private final Long accountNumber;
     private final IScenarioController scenarioController;
-    private BeanContainer<Long, RightsholderPayeePair> rightsholderContainer;
-    private SelectableTable rightsholdersTable;
+    private Grid<RightsholderPayeePair> rightsholdersGrid;
     private SearchWidget searchWidget;
 
     /**
@@ -69,14 +61,16 @@ public class ExcludeRightsholdersWindow extends Window implements ISearchControl
 
     @Override
     public void performSearch() {
-        rightsholderContainer.removeAllContainerFilters();
+        ListDataProvider<RightsholderPayeePair> dataProvider =
+            (ListDataProvider<RightsholderPayeePair>) rightsholdersGrid.getDataProvider();
+        dataProvider.clearFilters();
         String searchValue = searchWidget.getSearchValue();
-        if (StringUtils.isNotEmpty(searchValue)) {
-            rightsholderContainer.addContainerFilter(new Or(
-                new SimpleStringFilter(PAYEE_ACCOUNT_NUMBER, searchValue, true, false),
-                new SimpleStringFilter(PAYEE_NAME, searchValue, true, false),
-                new SimpleStringFilter(RH_ACCOUNT_NUMBER, searchValue, true, false),
-                new SimpleStringFilter(RH_NAME, searchValue, true, false)));
+        if (StringUtils.isNotBlank(searchValue)) {
+            dataProvider.setFilter(pair ->
+                caseInsensitiveContains(pair.getPayee().getAccountNumber().toString(), searchValue)
+                    || caseInsensitiveContains(pair.getPayee().getName(), searchValue)
+                    || caseInsensitiveContains(pair.getRightsholder().getAccountNumber().toString(), searchValue)
+                    || caseInsensitiveContains(pair.getRightsholder().getName(), searchValue));
         }
     }
 
@@ -95,71 +89,71 @@ public class ExcludeRightsholdersWindow extends Window implements ISearchControl
         searchWidget = new SearchWidget(this);
         searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.scenario.search_widget.rh_payee"));
         VaadinUtils.addComponentStyle(this, "exclude-rightsholders-window");
+        initGrid();
         HorizontalLayout buttonsLayout = createButtonsLayout();
-        Table rightsholderTable = initTable();
-        VaadinUtils.addComponentStyle(rightsholderTable, "exclude-rightsholders-table");
-        VerticalLayout layout = new VerticalLayout(searchWidget, rightsholderTable, buttonsLayout);
+        VerticalLayout layout = new VerticalLayout(searchWidget, rightsholdersGrid, buttonsLayout);
         layout.setMargin(new MarginInfo(false, true, true, true));
-        layout.setSpacing(true);
         layout.setSizeFull();
         layout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
-        layout.setExpandRatio(rightsholderTable, 1);
-        rightsholderContainer.addAll(scenarioController.getRightsholdersPayeePairs(accountNumber));
+        layout.setExpandRatio(rightsholdersGrid, 1);
         setContent(layout);
     }
 
-    private Table initTable() {
-        rightsholderContainer = new BeanContainer<>(RightsholderPayeePair.class);
-        rightsholderContainer.addNestedContainerBean("payee");
-        rightsholderContainer.addNestedContainerBean("rightsholder");
-        rightsholderContainer.setBeanIdProperty(RH_ACCOUNT_NUMBER);
-        rightsholdersTable = new SelectableTable(rightsholderContainer);
-        rightsholdersTable.setSizeFull();
-        rightsholdersTable.setVisibleColumns(
-            SELECTED,
-            PAYEE_ACCOUNT_NUMBER,
-            PAYEE_NAME,
-            RH_ACCOUNT_NUMBER,
-            RH_NAME
-        );
-        rightsholdersTable.setColumnHeaders(
-            StringUtils.EMPTY,
-            ForeignUi.getMessage("table.column.payee_account_number"),
-            ForeignUi.getMessage("table.column.payee_name"),
-            ForeignUi.getMessage("table.column.rh_account_number"),
-            ForeignUi.getMessage("table.column.rh_account_name")
-        );
-        rightsholdersTable.addCheckboxColumn(SELECTED);
-        rightsholdersTable.addGeneratedColumn(PAYEE_ACCOUNT_NUMBER, new LongColumnGenerator());
-        rightsholdersTable.addGeneratedColumn(RH_ACCOUNT_NUMBER, new LongColumnGenerator());
-        rightsholdersTable.setImmediate(true);
-        return rightsholdersTable;
+    private void initGrid() {
+        rightsholdersGrid = new Grid<>();
+        rightsholdersGrid.setItems(scenarioController.getRightsholdersPayeePairs(accountNumber));
+        rightsholdersGrid.setSelectionMode(SelectionMode.MULTI);
+        rightsholdersGrid.setSizeFull();
+        VaadinUtils.addComponentStyle(rightsholdersGrid, "exclude-rightsholders-table");
+        addColumns();
+    }
+
+    private void addColumns() {
+        rightsholdersGrid.addColumn(rightsholderPayeePair -> rightsholderPayeePair.getPayee().getAccountNumber())
+            .setCaption(ForeignUi.getMessage("table.column.payee_account_number"))
+            .setSortProperty("payee.accountNumber");
+        rightsholdersGrid.addColumn(rightsholderPayeePair -> rightsholderPayeePair.getPayee().getName())
+            .setCaption(ForeignUi.getMessage("table.column.payee_name"))
+            .setSortProperty("payee.name");
+        rightsholdersGrid.addColumn(rightsholderPayeePair -> rightsholderPayeePair.getRightsholder().getAccountNumber())
+            .setCaption(ForeignUi.getMessage("table.column.rh_account_number"))
+            .setSortProperty("rightsholder.accountNumber");
+        rightsholdersGrid.addColumn(rightsholderPayeePair -> rightsholderPayeePair.getRightsholder().getName())
+            .setCaption(ForeignUi.getMessage("table.column.rh_account_name"))
+            .setSortProperty("rightsholder.name");
     }
 
     private HorizontalLayout createButtonsLayout() {
         Button confirmButton = Buttons.createButton(ForeignUi.getMessage("button.confirm"));
         confirmButton.addClickListener(event -> {
-            List<Long> selectedIds = rightsholdersTable.getSelectedItemsIds(Long.class);
-            if (CollectionUtils.isNotEmpty(selectedIds)) {
-                Windows.showModalWindow(new ConfirmActionDialogWindow(reason -> {
-                    scenarioController.deleteFromScenario(accountNumber, selectedIds, reason);
-                    scenarioController.getWidget().refresh();
-                    scenarioController.getWidget().refreshTable();
-                    fireEvent(new ExcludeUsagesEvent(this));
-                    this.close();
-                }, ForeignUi.getMessage("window.confirm"),
+            Set<RightsholderPayeePair> selectedPairs = rightsholdersGrid.getSelectedItems();
+            if (CollectionUtils.isNotEmpty(selectedPairs)) {
+                Windows.showConfirmDialogWithReason(
+                    ForeignUi.getMessage("window.confirm"),
                     ForeignUi.getMessage("message.confirm.exclude.rightsholders"),
-                    ForeignUi.getMessage("button.yes"), ForeignUi.getMessage("button.cancel"),
-                    new StringLengthValidator(ForeignUi.getMessage("field.error.length", 1024), 0, 1024, false)));
+                    ForeignUi.getMessage("button.yes"),
+                    ForeignUi.getMessage("button.cancel"),
+                    reason -> {
+                        List<Long> selectedIds = selectedPairs.stream()
+                            .map(pair -> pair.getRightsholder().getAccountNumber())
+                            .collect(Collectors.toList());
+                        scenarioController.deleteFromScenario(accountNumber, selectedIds, reason);
+                        scenarioController.getWidget().refresh();
+                        scenarioController.getWidget().refreshTable();
+                        fireEvent(new ExcludeUsagesEvent(this));
+                        this.close();
+                    }, new StringLengthValidator(ForeignUi.getMessage("field.error.length", 1024), 0, 1024));
             } else {
                 Windows.showNotificationWindow(ForeignUi.getMessage("message.exclude.empty"));
             }
         });
         Button clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
-        clearButton.addClickListener(event -> rightsholdersTable.clearSelection());
-        HorizontalLayout layout = new HorizontalLayout(confirmButton, clearButton, Buttons.createCloseButton(this));
-        layout.setSpacing(true);
-        return layout;
+        clearButton.addClickListener(event -> rightsholdersGrid.getSelectionModel().deselectAll());
+        return new HorizontalLayout(confirmButton, clearButton, Buttons.createCloseButton(this));
+    }
+
+    private Boolean caseInsensitiveContains(String where, String what) {
+        return StringUtils.contains(StringUtils.lowerCase(where), StringUtils.lowerCase(what));
     }
 
     /**

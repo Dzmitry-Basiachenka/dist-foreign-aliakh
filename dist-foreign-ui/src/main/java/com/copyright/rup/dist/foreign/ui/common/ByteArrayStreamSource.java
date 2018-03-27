@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.common;
 
-import com.copyright.rup.vaadin.ui.VaadinUtils;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
+import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

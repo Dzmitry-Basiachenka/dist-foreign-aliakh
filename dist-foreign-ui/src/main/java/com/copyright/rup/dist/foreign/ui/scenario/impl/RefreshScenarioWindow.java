@@ -1,28 +1,32 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
-import com.copyright.rup.dist.common.domain.BaseEntity;
+import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
-import com.copyright.rup.dist.foreign.ui.common.util.FiscalYearColumnGenerator;
-import com.copyright.rup.dist.foreign.ui.common.util.IntegerColumnGenerator;
+import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
 import com.copyright.rup.vaadin.ui.Buttons;
-import com.copyright.rup.vaadin.ui.LocalDateColumnGenerator;
-import com.copyright.rup.vaadin.ui.LongColumnGenerator;
-import com.copyright.rup.vaadin.ui.MoneyColumnGenerator;
-import com.copyright.rup.vaadin.ui.VaadinUtils;
+import com.copyright.rup.vaadin.util.CurrencyUtils;
+import com.copyright.rup.vaadin.util.VaadinUtils;
 
-import com.vaadin.data.util.BeanContainer;
-import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.data.ValueProvider;
+import com.vaadin.data.provider.CallbackDataProvider.CountCallback;
+import com.vaadin.data.provider.CallbackDataProvider.FetchCallback;
+import com.vaadin.data.provider.DataProvider;
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Grid;
+import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
-import java.util.List;
+import org.apache.commons.lang3.StringUtils;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Widget displays information about usages that will be added to scenario after refreshing.
@@ -36,24 +40,26 @@ import java.util.List;
 public class RefreshScenarioWindow extends Window {
 
     private final IScenariosController controller;
-    private BeanContainer<String, UsageDto> container;
-    private Table usagesTable;
+    private final DataProvider<UsageDto, Void> dataProvider;
+    private Grid<UsageDto> grid;
     private HorizontalLayout buttonsLayout;
 
     /**
      * Constructor.
      *
-     * @param usageDtos  usageDtos for adding to scenario
-     * @param controller instance of {@link IScenariosController}
+     * @param fetchCallback callback for fetching a stream of items
+     * @param countCallback callback for counting the number of items
+     * @param controller    instance of {@link IScenariosController}
      */
-    public RefreshScenarioWindow(List<UsageDto> usageDtos, IScenariosController controller) {
+    public RefreshScenarioWindow(FetchCallback<UsageDto, Void> fetchCallback,
+                                 CountCallback<UsageDto, Void> countCallback, IScenariosController controller) {
         this.controller = controller;
         setCaption(ForeignUi.getMessage("label.refresh_scenario"));
         setWidth(800, Unit.PIXELS);
         setHeight(400, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "refresh-scenario-window");
+        dataProvider = DataProvider.fromCallbacks(fetchCallback, countCallback);
         setContent(initContent());
-        container.addAll(usageDtos);
     }
 
     private VerticalLayout initContent() {
@@ -61,8 +67,8 @@ public class RefreshScenarioWindow extends Window {
         label.setStyleName("label-note");
         initButtonsLayout();
         initTable();
-        VerticalLayout content = new VerticalLayout(label, usagesTable, buttonsLayout);
-        content.setExpandRatio(usagesTable, 1);
+        VerticalLayout content = new VerticalLayout(label, grid, buttonsLayout);
+        content.setExpandRatio(grid, 1);
         content.setSizeFull();
         content.setSpacing(true);
         content.setMargin(true);
@@ -82,91 +88,73 @@ public class RefreshScenarioWindow extends Window {
     }
 
     private void initTable() {
-        container = new BeanContainer<>(UsageDto.class);
-        container.setBeanIdResolver(BaseEntity::getId);
-        usagesTable = new Table(null, container);
-        usagesTable.setSizeFull();
-        setVisibleColumns();
-        setColumnHeaders();
-        setColumnGenerators();
-        usagesTable.setColumnCollapsingAllowed(true);
-        usagesTable.setColumnCollapsible("detailId", false);
+        grid = new Grid<>(dataProvider);
+        grid.setSizeFull();
+        addColumns();
+        grid.setSelectionMode(SelectionMode.NONE);
         VaadinUtils.addComponentStyle(this, "refresh-usages-table");
     }
 
-    private void setColumnHeaders() {
-        usagesTable.setColumnHeaders(
-            ForeignUi.getMessage("table.column.detail_id"),
-            ForeignUi.getMessage("table.column.usage_status"),
-            ForeignUi.getMessage("table.column.product_family"),
-            ForeignUi.getMessage("table.column.batch_name"),
-            ForeignUi.getMessage("table.column.fiscal_year"),
-            ForeignUi.getMessage("table.column.rro_account_number"),
-            ForeignUi.getMessage("table.column.rro_account_name"),
-            ForeignUi.getMessage("table.column.payment_date"),
-            ForeignUi.getMessage("table.column.work_title"),
-            ForeignUi.getMessage("table.column.article"),
-            ForeignUi.getMessage("table.column.standard_number"),
-            ForeignUi.getMessage("table.column.wr_wrk_inst"),
-            ForeignUi.getMessage("table.column.rh_account_number"),
-            ForeignUi.getMessage("table.column.rh_account_name"),
-            ForeignUi.getMessage("table.column.publisher"),
-            ForeignUi.getMessage("table.column.publication_date"),
-            ForeignUi.getMessage("table.column.number_of_copies"),
-            ForeignUi.getMessage("table.column.reported_value"),
-            ForeignUi.getMessage("table.column.gross_amount"),
-            ForeignUi.getMessage("table.column.batch_gross_amount"),
-            ForeignUi.getMessage("table.column.market"),
-            ForeignUi.getMessage("table.column.market_period_from"),
-            ForeignUi.getMessage("table.column.market_period_to"),
-            ForeignUi.getMessage("table.column.author"));
+    private void addColumns() {
+        addColumn(UsageDto::getDetailId, "table.column.detail_id", "detailId", false, 100);
+        addColumn(UsageDto::getStatus, "table.column.usage_status", "status");
+        addColumn(UsageDto::getProductFamily, "table.column.product_family", "productFamily");
+        addColumn(UsageDto::getBatchName, "table.column.batch_name", "batchName", true, 135);
+        addColumn(usage -> UsageBatchUtils.getFiscalYear(usage.getFiscalYear()), "table.column.fiscal_year",
+            "fiscalYear");
+        addColumn(UsageDto::getRroAccountNumber, "table.column.rro_account_number", "rroAccountNumber");
+        addColumn(UsageDto::getRroName, "table.column.rro_account_name", "rroName", true, 135);
+        addColumn(usage -> getStringFromDate(usage.getPaymentDate()), "table.column.payment_date", "paymentDate");
+        addColumn(UsageDto::getWorkTitle, "table.column.work_title", "workTitle", true, 300);
+        addColumn(UsageDto::getArticle, "table.column.article", "article", true, 135);
+        addColumn(UsageDto::getStandardNumber, "table.column.standard_number", "standardNumber", true, 125);
+        addColumn(UsageDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst");
+        addColumn(UsageDto::getRhAccountNumber, "table.column.rh_account_number", "rhAccountNumber");
+        addColumn(UsageDto::getRhName, "table.column.rh_account_name", "rhName", true, 300);
+        addColumn(UsageDto::getPublisher, "table.column.publisher", "publisher", true, 135);
+        addColumn(usage -> getStringFromDate(usage.getPublicationDate()), "table.column.publication_date",
+            "publicationDate", true, 80);
+        addColumn(UsageDto::getNumberOfCopies, "table.column.number_of_copies", "numberOfCopies");
+        addColumn(usage -> CurrencyUtils.format(usage.getReportedValue(), null), "table.column.reported_value",
+            "reportedValue", "v-align-right", 113);
+        addColumn(usage -> CurrencyUtils.format(usage.getGrossAmount(), null), "table.column.gross_amount",
+            "grossAmount", "v-align-right", 120);
+        addColumn(usage -> CurrencyUtils.format(usage.getBatchGrossAmount(), null), "table.column.batch_gross_amount",
+            "batchGrossAmount", "v-align-right", 120);
+        addColumn(UsageDto::getMarket, "table.column.market", "market", true, 135);
+        addColumn(UsageDto::getMarketPeriodFrom, "table.column.market_period_from", "marketPeriodFrom");
+        addColumn(UsageDto::getMarketPeriodTo, "table.column.market_period_to", "marketPeriodTo");
+        addColumn(UsageDto::getAuthor, "table.column.author", "author", true, 300);
     }
 
-    private void setVisibleColumns() {
-        usagesTable.setVisibleColumns(
-            "detailId",
-            "status",
-            "productFamily",
-            "batchName",
-            "fiscalYear",
-            "rroAccountNumber",
-            "rroName",
-            "paymentDate",
-            "workTitle",
-            "article",
-            "standardNumber",
-            "wrWrkInst",
-            "rhAccountNumber",
-            "rhName",
-            "publisher",
-            "publicationDate",
-            "numberOfCopies",
-            "reportedValue",
-            "grossAmount",
-            "batchGrossAmount",
-            "market",
-            "marketPeriodFrom",
-            "marketPeriodTo",
-            "author");
+    private void addColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, String sort) {
+        grid.addColumn(provider)
+            .setCaption(ForeignUi.getMessage(captionProperty))
+            .setSortProperty(sort)
+            .setHidable(true);
     }
 
-    private void setColumnGenerators() {
-        IntegerColumnGenerator integerColumnGenerator = new IntegerColumnGenerator();
-        usagesTable.addGeneratedColumn("numberOfCopies", integerColumnGenerator);
-        usagesTable.addGeneratedColumn("marketPeriodFrom", integerColumnGenerator);
-        usagesTable.addGeneratedColumn("marketPeriodTo", integerColumnGenerator);
-        usagesTable.addGeneratedColumn("fiscalYear", new FiscalYearColumnGenerator());
-        LongColumnGenerator longColumnGenerator = new LongColumnGenerator();
-        usagesTable.addGeneratedColumn("detailId", longColumnGenerator);
-        usagesTable.addGeneratedColumn("wrWrkInst", longColumnGenerator);
-        usagesTable.addGeneratedColumn("rhAccountNumber", longColumnGenerator);
-        usagesTable.addGeneratedColumn("rroAccountNumber", longColumnGenerator);
-        LocalDateColumnGenerator localDateColumnGenerator = new LocalDateColumnGenerator();
-        usagesTable.addGeneratedColumn("publicationDate", localDateColumnGenerator);
-        usagesTable.addGeneratedColumn("paymentDate", localDateColumnGenerator);
-        MoneyColumnGenerator moneyColumnGenerator = new MoneyColumnGenerator();
-        usagesTable.addGeneratedColumn("reportedValue", moneyColumnGenerator);
-        usagesTable.addGeneratedColumn("grossAmount", moneyColumnGenerator);
-        usagesTable.addGeneratedColumn("batchGrossAmount", moneyColumnGenerator);
+    private void addColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, String sort, boolean isHidable,
+                           double width) {
+        grid.addColumn(provider)
+            .setCaption(ForeignUi.getMessage(captionProperty))
+            .setSortProperty(sort)
+            .setHidable(isHidable)
+            .setWidth(width);
+    }
+
+    private void addColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, String sort, String style,
+                           double width) {
+        grid.addColumn(provider)
+            .setCaption(ForeignUi.getMessage(captionProperty))
+            .setSortProperty(sort)
+            .setHidable(true)
+            .setStyleGenerator(item -> style)
+            .setWidth(width);
+    }
+
+    private String getStringFromDate(LocalDate date) {
+        return null != date ? date.format(
+            DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT)) : StringUtils.EMPTY;
     }
 }

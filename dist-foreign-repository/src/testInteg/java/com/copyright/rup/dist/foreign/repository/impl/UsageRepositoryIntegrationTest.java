@@ -1007,7 +1007,8 @@ public class UsageRepositoryIntegrationTest {
     }
 
     private List<UsageDto> findForAuditWithSort(AuditFilter filter, String property, boolean order) {
-        return usageRepository.findForAudit(filter, new Pageable(0, 10), Sort.create(new Object[]{property}, order));
+        return usageRepository.findForAudit(filter, new Pageable(0, 10),
+            new Sort(property, order ? Direction.ASC : Direction.DESC));
     }
 
     private void verifySearch(String searchValue, int expectedSize) {

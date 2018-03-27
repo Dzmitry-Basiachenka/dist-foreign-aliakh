@@ -1,18 +1,21 @@
-package com.copyright.rup.dist.foreign.ui.usage.impl;
+package com.copyright.rup.dist.foreign.ui.common;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.vaadin.ui.VaadinUtils;
-import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.FilterSaveEvent;
 import com.copyright.rup.vaadin.ui.component.filter.IFilterWindowController;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
+import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.BaseItemsFilterWidget;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import com.vaadin.data.ValueProvider;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -26,13 +29,13 @@ import java.util.function.Supplier;
  *
  * @author Mikalai Bezmen
  */
-public class RightsholderFilterWidget extends BaseItemsFilterWidget<Long, Rightsholder>
-    implements IFilterWindowController<Long, Rightsholder> {
+public class RightsholderFilterWidget extends BaseItemsFilterWidget<Rightsholder>
+    implements IFilterWindowController<Rightsholder> {
 
     private final String searchPrompt;
     private final String caption;
     private final Supplier<List<Rightsholder>> supplier;
-    private final Set<Long> selectedItemsIds = new HashSet<>();
+    private final Set<Rightsholder> selectedItemsIds = Sets.newHashSet();
 
     /**
      * Controller.
@@ -74,8 +77,8 @@ public class RightsholderFilterWidget extends BaseItemsFilterWidget<Long, Rights
     }
 
     @Override
-    public void onSave(FilterSaveEvent<Long> event) {
-        Set<Long> itemsIds = event.getSelectedItemsIds();
+    public void onSave(FilterSaveEvent<Rightsholder> event) {
+        Set<Rightsholder> itemsIds = event.getSelectedItemsIds();
         selectedItemsIds.clear();
         if (CollectionUtils.isNotEmpty(itemsIds)) {
             selectedItemsIds.addAll(itemsIds);
@@ -83,15 +86,11 @@ public class RightsholderFilterWidget extends BaseItemsFilterWidget<Long, Rights
     }
 
     @Override
-    public Long getIdForBean(Rightsholder rightsholder) {
-        return rightsholder.getAccountNumber();
-    }
-
-    @Override
-    public FilterWindow<Long, Rightsholder> showFilterWindow() {
-        FilterWindow<Long, Rightsholder> filterWindow =
-            Windows.showFilterWindow(ForeignUi.getMessage("window.filter_format", caption), this, "name",
-                "accountNumber");
+    public FilterWindow<Rightsholder> showFilterWindow() {
+        FilterWindow<Rightsholder> filterWindow =
+            Windows.showFilterWindow(ForeignUi.getMessage("window.filter_format", caption), this,
+                (ValueProvider<Rightsholder, List<String>>) rightsholder -> Lists.newArrayList(rightsholder.getName(),
+                    rightsholder.getAccountNumber().toString()));
         filterWindow.setSelectedItemsIds(selectedItemsIds);
         filterWindow.setSearchPromptString(searchPrompt);
         VaadinUtils.addComponentStyle(filterWindow, "rightsholders-filter-window");

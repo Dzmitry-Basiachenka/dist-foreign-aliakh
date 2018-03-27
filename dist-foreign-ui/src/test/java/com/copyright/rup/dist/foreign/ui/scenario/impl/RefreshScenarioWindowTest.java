@@ -1,25 +1,22 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import com.copyright.rup.vaadin.ui.LocalDateColumnGenerator;
-import com.copyright.rup.vaadin.ui.LongColumnGenerator;
-import com.copyright.rup.vaadin.ui.MoneyColumnGenerator;
-
-import com.google.common.collect.Lists;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.Grid;
+import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 
 import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Verifies {@link RefreshScenarioWindow}.
@@ -32,37 +29,28 @@ import org.junit.Test;
  */
 public class RefreshScenarioWindowTest {
 
-    private static final String DETAIL_ID_PROPERTY = "detailId";
-
     @Test
     public void testStructure() {
-        RefreshScenarioWindow window = new RefreshScenarioWindow(Lists.newArrayList(), null);
+        RefreshScenarioWindow window = new RefreshScenarioWindow(value -> null, value -> 0, null);
         assertEquals("Refresh Scenario", window.getCaption());
         assertEquals(400, window.getHeight(), 0);
         assertEquals(800, window.getWidth(), 0);
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertEquals(3, content.getComponentCount());
-        verifyTable(content.getComponent(1));
+        verifyGrid(content.getComponent(1));
         verifyButtonsLayout(content.getComponent(2));
     }
 
-    private void verifyTable(Component component) {
-        assertTrue(component instanceof Table);
-        Table table = (Table) component;
-        assertArrayEquals(new Object[]{DETAIL_ID_PROPERTY, "status", "productFamily", "batchName", "fiscalYear",
-            "rroAccountNumber", "rroName", "paymentDate", "workTitle", "article", "standardNumber", "wrWrkInst",
-            "rhAccountNumber", "rhName", "publisher", "publicationDate", "numberOfCopies", "reportedValue",
-            "grossAmount", "batchGrossAmount", "market", "marketPeriodFrom", "marketPeriodTo",
-            "author"}, table.getVisibleColumns());
-        assertArrayEquals(new Object[]{"Detail ID", "Detail Status", "Product Family", "Usage Batch Name",
-                "Fiscal Year", "RRO Account #", "RRO Name", "Payment Date", "Title", "Article", "Standard Number",
-                "Wr Wrk Inst", "RH Account #", "RH Name", "Publisher", "Pub Date", "Number of Copies", "Reported value",
-                "Amt in USD", "Gross Amt in USD", "Market", "Market Period From", "Market Period To", "Author"},
-            table.getColumnHeaders());
-        assertTrue(table.isColumnCollapsingAllowed());
-        assertFalse(table.isColumnCollapsible(DETAIL_ID_PROPERTY));
-        verifyGeneratedColumns(table);
-        verifySize(table);
+    private void verifyGrid(Component component) {
+        assertTrue(component instanceof Grid);
+        Grid grid = (Grid) component;
+        List<Column> columns = grid.getColumns();
+        assertEquals(Arrays.asList("Detail ID", "Detail Status", "Product Family", "Usage Batch Name",
+            "Fiscal Year", "RRO Account #", "RRO Name", "Payment Date", "Title", "Article", "Standard Number",
+            "Wr Wrk Inst", "RH Account #", "RH Name", "Publisher", "Pub Date", "Number of Copies", "Reported value",
+            "Amt in USD", "Gross Amt in USD", "Market", "Market Period From", "Market Period To", "Author"),
+            columns.stream().map(Column::getCaption).collect(Collectors.toList()));
+        verifySize(grid);
     }
 
     private void verifyButtonsLayout(Component component) {
@@ -77,22 +65,6 @@ public class RefreshScenarioWindowTest {
         assertEquals("Cancel", cancelButton.getId());
         assertTrue(horizontalLayout.isSpacing());
         assertEquals(new MarginInfo(false, false, false, false), horizontalLayout.getMargin());
-    }
-
-    private void verifyGeneratedColumns(Table table) {
-        verifyColumnGenerator(table.getColumnGenerator(DETAIL_ID_PROPERTY), LongColumnGenerator.class);
-        verifyColumnGenerator(table.getColumnGenerator("wrWrkInst"), LongColumnGenerator.class);
-        verifyColumnGenerator(table.getColumnGenerator("rhAccountNumber"), LongColumnGenerator.class);
-        verifyColumnGenerator(table.getColumnGenerator("rroAccountNumber"), LongColumnGenerator.class);
-        verifyColumnGenerator(table.getColumnGenerator("publicationDate"), LocalDateColumnGenerator.class);
-        verifyColumnGenerator(table.getColumnGenerator("paymentDate"), LocalDateColumnGenerator.class);
-        verifyColumnGenerator(table.getColumnGenerator("reportedValue"), MoneyColumnGenerator.class);
-        verifyColumnGenerator(table.getColumnGenerator("grossAmount"), MoneyColumnGenerator.class);
-    }
-
-    private void verifyColumnGenerator(Table.ColumnGenerator columnGenerator, Class clazz) {
-        assertNotNull(columnGenerator);
-        assertEquals(clazz, columnGenerator.getClass());
     }
 
     private void verifySize(Component component) {

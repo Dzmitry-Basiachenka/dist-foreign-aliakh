@@ -5,17 +5,16 @@ import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IReconcileRightsholdersController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
 import com.copyright.rup.vaadin.ui.Buttons;
-import com.copyright.rup.vaadin.ui.LongColumnGenerator;
-import com.copyright.rup.vaadin.ui.VaadinUtils;
-import com.copyright.rup.vaadin.ui.Windows;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
+import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.google.common.collect.Sets;
-import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.Grid;
+import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
@@ -35,15 +34,9 @@ import java.util.Set;
  */
 class RightsholderDiscrepanciesWindow extends Window {
 
-    private static final String WR_WRK_INST_PROPERTY = "wrWrkInst";
-    private static final String WORK_TITLE_PROPERTY = "workTitle";
-    private static final String RIGHTSHOLDER_ACCOUNT_NUMBER_PROPERTY = "oldRightsholder.accountNumber";
-    private static final String RIGHTSHOLDER_NAME_PROPERTY = "oldRightsholder.name";
-    private static final String NEW_RIGHTSHOLDER_ACCOUNT_NUMBER_PROPERTY = "newRightsholder.accountNumber";
-    private static final String NEW_RIGHTSHOLDER_NAME_PROPERTY = "newRightsholder.name";
     private final IReconcileRightsholdersController controller;
     private final IScenariosController scenariosController;
-    private BeanItemContainer<RightsholderDiscrepancy> container;
+    private Grid<RightsholderDiscrepancy> grid;
 
     /**
      * Constructor.
@@ -59,25 +52,18 @@ class RightsholderDiscrepanciesWindow extends Window {
         setCaption(ForeignUi.getMessage("label.reconcile_rightsholders"));
         this.controller = reconcileRightsholdersController;
         this.scenariosController = scenariosController;
-        populateDiscrepancies();
+        grid.setItems(controller.getDiscrepancies());
         VaadinUtils.addComponentStyle(this, "rightsholder-discrepancies-window");
     }
 
-    private void populateDiscrepancies() {
-        container.removeAllItems();
-        container.addAll(controller.getDiscrepancies());
-        container.sort(new Object[]{RIGHTSHOLDER_ACCOUNT_NUMBER_PROPERTY, NEW_RIGHTSHOLDER_ACCOUNT_NUMBER_PROPERTY},
-            new boolean[]{true, true});
-    }
-
     private Component initContent() {
-        Table discrepanciesTable = initDiscrepanciesTable();
+        initGrid();
         HorizontalLayout buttons = initButtons();
-        VerticalLayout content = new VerticalLayout(discrepanciesTable, buttons);
+        VerticalLayout content = new VerticalLayout(grid, buttons);
         content.setMargin(true);
         content.setSpacing(true);
         content.setSizeFull();
-        content.setExpandRatio(discrepanciesTable, 1.0f);
+        content.setExpandRatio(grid, 1.0f);
         content.setComponentAlignment(buttons, Alignment.BOTTOM_RIGHT);
         return content;
     }
@@ -109,47 +95,35 @@ class RightsholderDiscrepanciesWindow extends Window {
         return buttonsLayout;
     }
 
-    private Table initDiscrepanciesTable() {
-        Table discrepanciesTable = new Table(null, initContainer());
-        setVisibleColumns(discrepanciesTable);
-        setColumnHeaders(discrepanciesTable);
-        addGeneratedColumns(discrepanciesTable);
-        discrepanciesTable.setSizeFull();
-        VaadinUtils.addComponentStyle(discrepanciesTable, "rightsholder-discrepancies-table");
-        return discrepanciesTable;
+    private void initGrid() {
+        grid = new Grid<>();
+        addColumns();
+        grid.setSizeFull();
+        grid.setSelectionMode(SelectionMode.NONE);
+        VaadinUtils.addComponentStyle(grid, "rightsholder-discrepancies-grid");
     }
 
-    private BeanItemContainer<RightsholderDiscrepancy> initContainer() {
-        container = new BeanItemContainer<>(RightsholderDiscrepancy.class);
-        container.addNestedContainerBean("oldRightsholder");
-        container.addNestedContainerBean("newRightsholder");
-        return container;
-    }
-
-    private void setVisibleColumns(Table discrepanciesTable) {
-        discrepanciesTable.setVisibleColumns(
-            RIGHTSHOLDER_ACCOUNT_NUMBER_PROPERTY,
-            RIGHTSHOLDER_NAME_PROPERTY,
-            NEW_RIGHTSHOLDER_ACCOUNT_NUMBER_PROPERTY,
-            NEW_RIGHTSHOLDER_NAME_PROPERTY,
-            WR_WRK_INST_PROPERTY,
-            WORK_TITLE_PROPERTY);
-    }
-
-    private void addGeneratedColumns(Table discrepanciesTable) {
-        LongColumnGenerator longColumnGenerator = new LongColumnGenerator();
-        discrepanciesTable.addGeneratedColumn(WR_WRK_INST_PROPERTY, longColumnGenerator);
-        discrepanciesTable.addGeneratedColumn(RIGHTSHOLDER_ACCOUNT_NUMBER_PROPERTY, longColumnGenerator);
-        discrepanciesTable.addGeneratedColumn(NEW_RIGHTSHOLDER_ACCOUNT_NUMBER_PROPERTY, longColumnGenerator);
-    }
-
-    private void setColumnHeaders(Table discrepanciesTable) {
-        discrepanciesTable.setColumnHeaders(
-            ForeignUi.getMessage("table.column.rh_account_number"),
-            ForeignUi.getMessage("table.column.rh_account_name"),
-            ForeignUi.getMessage("table.column.new_rh_account_number"),
-            ForeignUi.getMessage("table.column.new_rh_name"),
-            ForeignUi.getMessage("table.column.wr_wrk_inst"),
-            ForeignUi.getMessage("table.column.work_title"));
+    private void addColumns() {
+        grid.addColumn(discrepancy -> discrepancy.getOldRightsholder().getAccountNumber())
+            .setCaption(ForeignUi.getMessage("table.column.rh_account_number"))
+            .setSortProperty("oldRightsholder.rhAccountNumber")
+            .setWidth(115);
+        grid.addColumn(discrepancy -> discrepancy.getOldRightsholder().getName())
+            .setCaption(ForeignUi.getMessage("table.column.rh_account_name"))
+            .setSortProperty("oldRightsholder.rhName");
+        grid.addColumn(discrepancy -> discrepancy.getNewRightsholder().getAccountNumber())
+            .setCaption(ForeignUi.getMessage("table.column.new_rh_account_number"))
+            .setSortProperty("newRightsholder.rhAccountNumber")
+            .setWidth(140);
+        grid.addColumn(discrepancy -> discrepancy.getNewRightsholder().getName())
+            .setCaption(ForeignUi.getMessage("table.column.new_rh_name"))
+            .setSortProperty("newRightsholder.rhName");
+        grid.addColumn(RightsholderDiscrepancy::getWrWrkInst)
+            .setCaption(ForeignUi.getMessage("table.column.wr_wrk_inst"))
+            .setSortProperty("wrWrkInst")
+            .setWidth(110);
+        grid.addColumn(RightsholderDiscrepancy::getWorkTitle)
+            .setCaption(ForeignUi.getMessage("table.column.work_title"))
+            .setSortProperty("workTitle");
     }
 }

@@ -1,34 +1,37 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
-import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioController;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
-import com.google.common.collect.Lists;
-import com.vaadin.data.Container.Filter;
-import com.vaadin.data.Item;
-import com.vaadin.data.util.BeanContainer;
+import com.vaadin.data.provider.ListDataProvider;
+import com.vaadin.server.SerializablePredicate;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.Grid;
+import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 
-import org.easymock.Capture;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 /**
  * Verifies {@link ExcludeSourceRroWindow}.
@@ -47,7 +50,7 @@ public class ExcludeSourceRroWindowTest {
     public void setUp() {
         IScenarioController scenarioController = createMock(ScenarioController.class);
         expect(scenarioController.getSourceRros())
-            .andReturn(Lists.newArrayList(
+            .andReturn(Arrays.asList(
                 buildRightsholder(2000017004L, "Access Copyright, The Canadian Copyright Agency"),
                 buildRightsholder(2000017006L, "CAL, Copyright Agency Limited")))
             .once();
@@ -63,47 +66,34 @@ public class ExcludeSourceRroWindowTest {
         assertEquals(880, window.getWidth(), 0);
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertEquals(3, content.getComponentCount());
-        verifyTable(content.getComponent(1));
+        verifyGrid(content.getComponent(1));
         verifyButtonsLayout(content.getComponent(2));
-    }
-
-    @Test
-    public void testContent() {
-        VerticalLayout content = (VerticalLayout) window.getContent();
-        Table table = (Table) content.getComponent(1);
-        verifyItem(table.getItem(2000017006L), "CAL, Copyright Agency Limited", 2000017006L);
-        verifyItem(table.getItem(2000017004L), "Access Copyright, The Canadian Copyright Agency", 2000017004L);
     }
 
     @Test
     @SuppressWarnings("unchecked")
     public void testPerformSearch() {
-        BeanContainer<Long, String> container = createMock(BeanContainer.class);
-        Whitebox.setInternalState(window, container);
-        container.removeAllContainerFilters();
         SearchWidget searchWidget = createMock(SearchWidget.class);
         Whitebox.setInternalState(window, searchWidget);
-        expect(searchWidget.getSearchValue()).andReturn("value").once();
-        Capture<Filter> filterCapture = new Capture<>();
-        container.addContainerFilter(capture(filterCapture));
-        expectLastCall();
-        replay(container, searchWidget);
+        Grid grid = createMock(Grid.class);
+        Whitebox.setInternalState(window, grid);
+        ListDataProvider provider = new ListDataProvider(Collections.EMPTY_LIST);
+        expect(grid.getDataProvider()).andReturn(provider).once();
+        expect(searchWidget.getSearchValue()).andReturn("Access").once();
+        replay(searchWidget, grid);
         window.performSearch();
-        assertTrue(filterCapture.getValue().appliesToProperty("name"));
-        assertTrue(filterCapture.getValue().appliesToProperty("accountNumber"));
-        verify(container, searchWidget);
+        SerializablePredicate filter = provider.getFilter();
+        assertTrue(filter.test(buildRightsholder(2000017004L, "Access Copyright, The Canadian Copyright Agency")));
+        assertFalse(filter.test(buildRightsholder(2000017006L, "CAL, Copyright Agency Limited")));
+        verify(searchWidget, grid);
     }
 
-    private void verifyTable(Component component) {
-        assertEquals(Table.class, component.getClass());
-        Table table = (Table) component;
-        assertArrayEquals(new Object[]{"accountNumber", "name", "exclude"}, table.getVisibleColumns());
-        assertArrayEquals(new Object[]{"Source RRO Account #", "Source RRO Name", ""}, table.getColumnHeaders());
-    }
-
-    private void verifyItem(Item item, String name, Long accountNumber) {
-        assertEquals(name, item.getItemProperty("name").getValue());
-        assertEquals(accountNumber, item.getItemProperty("accountNumber").getValue());
+    private void verifyGrid(Component component) {
+        assertEquals(Grid.class, component.getClass());
+        Grid grid = (Grid) component;
+        List<Column> columns = grid.getColumns();
+        assertEquals(Arrays.asList("Source RRO Account #", "Source RRO Name", StringUtils.EMPTY),
+            columns.stream().map(Column::getCaption).collect(Collectors.toList()));
     }
 
     private void verifyButtonsLayout(Component component) {

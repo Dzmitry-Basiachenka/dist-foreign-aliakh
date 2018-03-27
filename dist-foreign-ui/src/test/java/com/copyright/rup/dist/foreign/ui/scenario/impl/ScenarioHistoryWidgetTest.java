@@ -2,20 +2,23 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
 
 import static org.easymock.EasyMock.createMock;
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.Table;
+import com.vaadin.ui.Grid;
+import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.VerticalLayout;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Verifies {@link ScenarioHistoryWidget}.
@@ -47,7 +50,7 @@ public class ScenarioHistoryWidgetTest {
         VerticalLayout content = (VerticalLayout) widget.getContent();
         assertEquals(new MarginInfo(true, true, true, true), content.getMargin());
         assertEquals(2, content.getComponentCount());
-        verifyTable(content.getComponent(0));
+        verifyGrid(content.getComponent(0));
         verifyButton(content.getComponent(1));
     }
 
@@ -59,12 +62,11 @@ public class ScenarioHistoryWidgetTest {
         assertTrue(closeButton.isEnabled());
     }
 
-    private void verifyTable(Component component) {
-        assertTrue(component instanceof Table);
-        Table table = (Table) component;
-        assertFalse(table.isSortEnabled());
-        assertArrayEquals(new Object[]{"Type", "User", "Date", "Reason"}, table.getColumnHeaders());
-        assertArrayEquals(new Object[]{"actionType", "createUser", "createDate", "actionReason"},
-            table.getVisibleColumns());
+    private void verifyGrid(Component component) {
+        assertTrue(component instanceof Grid);
+        Grid grid = (Grid) component;
+        List<Column> columns = grid.getColumns();
+        assertEquals(Arrays.asList("Type", "User", "Date", "Reason"),
+            columns.stream().map(Column::getCaption).collect(Collectors.toList()));
     }
 }

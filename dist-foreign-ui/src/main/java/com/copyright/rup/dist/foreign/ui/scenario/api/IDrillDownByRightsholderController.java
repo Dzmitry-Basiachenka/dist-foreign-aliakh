@@ -2,8 +2,11 @@ package com.copyright.rup.dist.foreign.ui.scenario.api;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
-import com.copyright.rup.vaadin.ui.component.lazytable.IBeanLoader;
 import com.copyright.rup.vaadin.widget.api.IController;
+
+import com.vaadin.data.provider.QuerySortOrder;
+
+import java.util.List;
 
 /**
  * Controller interface for {@link IDrillDownByRightsholderWidget}.
@@ -15,7 +18,7 @@ import com.copyright.rup.vaadin.widget.api.IController;
  * @author Ihar Suvorau
  */
 public interface IDrillDownByRightsholderController
-    extends IController<IDrillDownByRightsholderWidget>, IBeanLoader<UsageDto> {
+    extends IController<IDrillDownByRightsholderWidget> {
 
     /**
      * Initializes and shows {@link IDrillDownByRightsholderWidget}.
@@ -26,4 +29,19 @@ public interface IDrillDownByRightsholderController
      * @param scenario      selected {@link Scenario}
      */
     void showWidget(Long accountNumber, String rhName, Scenario scenario);
+
+    /**
+     * @return number of items.
+     */
+    int getSize();
+
+    /**
+     * Loads specified number of beans from the storage with given start index.
+     *
+     * @param startIndex start index
+     * @param count      items count to load
+     * @param sortOrders sort orders
+     * @return list of items to be displayed on UI
+     */
+    List<UsageDto> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders);
 }

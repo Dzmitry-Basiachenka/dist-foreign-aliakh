@@ -4,25 +4,27 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.ui.scenario.api.IReconcileRightsholdersController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
-import com.copyright.rup.vaadin.ui.LongColumnGenerator;
 
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.Grid;
+import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Verifies {@link RightsholderDiscrepanciesWindow}.
@@ -50,24 +52,19 @@ public class RightsholderDiscrepanciesWindowTest {
         assertEquals(530, window.getHeight(), 0);
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertEquals(2, content.getComponentCount());
-        verifyTable(content.getComponent(0));
+        verifyGrid(content.getComponent(0));
         verifyButtonsLayout(content.getComponent(1));
     }
 
-    private void verifyTable(Component component) {
-        assertTrue(component instanceof Table);
-        Table table = (Table) component;
-        verifySize(table);
-        assertEquals("rightsholder-discrepancies-table", table.getId());
-        assertArrayEquals(
-            new Object[]{"oldRightsholder.accountNumber", "oldRightsholder.name", "newRightsholder.accountNumber",
-                "newRightsholder.name", "wrWrkInst", "workTitle"}, table.getVisibleColumns());
-        assertArrayEquals(
-            new Object[]{"RH Account #", "RH Name", "New RH Account #", "New RH Name", "Wr Wrk Inst", "Title"},
-            table.getColumnHeaders());
-        assertTrue(table.getColumnGenerator("oldRightsholder.accountNumber") instanceof LongColumnGenerator);
-        assertTrue(table.getColumnGenerator("newRightsholder.accountNumber") instanceof LongColumnGenerator);
-        assertTrue(table.getColumnGenerator("wrWrkInst") instanceof LongColumnGenerator);
+    private void verifyGrid(Component component) {
+        assertTrue(component instanceof Grid);
+        Grid grid = (Grid) component;
+        verifySize(grid);
+        assertEquals("rightsholder-discrepancies-grid", grid.getId());
+        List<Column> columns = grid.getColumns();
+        assertEquals(
+            Arrays.asList("RH Account #", "RH Name", "New RH Account #", "New RH Name", "Wr Wrk Inst", "Title"),
+            columns.stream().map(Column::getCaption).collect(Collectors.toList()));
     }
 
     private void verifySize(Component component) {

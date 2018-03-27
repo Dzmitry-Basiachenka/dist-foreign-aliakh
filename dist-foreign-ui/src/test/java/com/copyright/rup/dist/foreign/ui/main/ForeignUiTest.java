@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.ui.main;
 
-import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
@@ -18,7 +17,6 @@ import com.copyright.rup.dist.foreign.ui.main.impl.MainWidgetController;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportController;
 import com.copyright.rup.dist.foreign.ui.report.impl.ReportWidget;
-import com.copyright.rup.vaadin.ui.RupConverterFactory;
 
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Button;
@@ -117,21 +115,17 @@ public class ForeignUiTest {
         SecurityContextHolder.setContext(context);
         IMainWidgetController controller = createMock(IMainWidgetController.class);
         IReportController reportController = createMock(IReportController.class);
-        VaadinSession session = createMock(VaadinSession.class);
         mockStatic(ForeignSecurityUtils.class);
-        mockStatic(VaadinSession.class);
         MainWidget mainWidget = new MainWidget();
         Whitebox.setInternalState(foreignUi, controller);
         Whitebox.setInternalState(foreignUi, reportController);
         expect(controller.initWidget()).andReturn(mainWidget).once();
         expect(reportController.initWidget()).andReturn(new ReportWidget()).once();
-        expect(VaadinSession.getCurrent()).andReturn(session).once();
-        session.setConverterFactory(anyObject(RupConverterFactory.class));
         controller.refreshWidget();
         expectLastCall().once();
-        replay(controller, reportController, ForeignSecurityUtils.class, session, VaadinSession.class);
+        replay(controller, reportController, ForeignSecurityUtils.class);
         foreignUi.initUi();
-        verify(controller, reportController, ForeignSecurityUtils.class, session, VaadinSession.class);
+        verify(controller, reportController, ForeignSecurityUtils.class);
     }
 
     @Test

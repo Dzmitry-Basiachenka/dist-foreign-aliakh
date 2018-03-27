@@ -2,11 +2,11 @@ package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.vaadin.ui.Buttons;
-import com.copyright.rup.vaadin.ui.VaadinUtils;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
+import com.copyright.rup.vaadin.util.VaadinUtils;
 
-import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
@@ -40,7 +40,6 @@ public class ErrorUploadWindow extends Window {
         Label label = new Label(labelCaption, ContentMode.HTML);
         VerticalLayout layout = new VerticalLayout(label, buttonsLayout);
         layout.setMargin(true);
-        layout.setSpacing(true);
         layout.setSizeFull();
         layout.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
         setContent(layout);
@@ -54,7 +53,6 @@ public class ErrorUploadWindow extends Window {
         Button closeButton = Buttons.createCloseButton(this);
         HorizontalLayout buttonsLayout = new HorizontalLayout();
         buttonsLayout.addComponents(downloadButton, closeButton);
-        buttonsLayout.setSpacing(true);
         return buttonsLayout;
     }
 }

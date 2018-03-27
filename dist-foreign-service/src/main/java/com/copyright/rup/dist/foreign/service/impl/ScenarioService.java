@@ -100,7 +100,7 @@ public class ScenarioService implements IScenarioService {
 
     @Override
     @Transactional
-    public String createScenario(String scenarioName, String description, UsageFilter usageFilter) {
+    public Scenario createScenario(String scenarioName, String description, UsageFilter usageFilter) {
         StopWatch stopWatch = new Slf4JStopWatch();
         List<Usage> usages = usageService.getUsagesWithAmounts(usageFilter);
         stopWatch.lap("scenario.create_1_getUsagesWithAmounts");
@@ -113,7 +113,7 @@ public class ScenarioService implements IScenarioService {
         stopWatch.lap("scenario.create_4_insertScenarioUsageFilter");
         scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY);
         stopWatch.stop("scenario.create_5_logAddedUsagesAction");
-        return scenario.getId();
+        return scenario;
     }
 
     @Override

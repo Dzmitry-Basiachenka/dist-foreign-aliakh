@@ -2,8 +2,8 @@ package com.copyright.rup.dist.foreign.ui.main;
 
 import com.copyright.rup.dist.common.integration.IntegrationConnectionException;
 import com.copyright.rup.vaadin.ui.CommonErrorHandler;
-import com.copyright.rup.vaadin.ui.NotificationWindow;
 import com.copyright.rup.vaadin.ui.component.downloader.FileDownloadException;
+import com.copyright.rup.vaadin.ui.component.window.NotificationWindow;
 
 import com.vaadin.server.ErrorEvent;
 import com.vaadin.ui.UI;
@@ -40,9 +40,7 @@ public class ForeignErrorHandler extends CommonErrorHandler {
             window.setCaption(ForeignUi.getMessage("window.caption.connection_problem"));
             return window;
         } else if (fileDownloadExceptionPresent(event)) {
-            Window window = new NotificationWindow(ForeignUi.getMessage("message.report.generate_error"));
-            window.setImmediate(true);
-            return window;
+            return new NotificationWindow(ForeignUi.getMessage("message.report.generate_error"));
         }
         return super.initErrorWindow(event);
     }

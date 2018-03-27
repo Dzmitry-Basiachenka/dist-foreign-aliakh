@@ -1,12 +1,13 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
+import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 import com.copyright.rup.vaadin.widget.api.IMediator;
 
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Table;
+import com.vaadin.ui.Grid;
 import com.vaadin.ui.VerticalLayout;
 
 /**
@@ -22,7 +23,7 @@ class ScenarioMediator implements IMediator {
 
     private Button excludeButton;
     private Button exportButton;
-    private Table rightsholdersTable;
+    private Grid<RightsholderTotalsHolder> rightsholderGrid;
     private SearchWidget searchWidget;
     private VerticalLayout emptyUsagesLayout;
 
@@ -39,8 +40,8 @@ class ScenarioMediator implements IMediator {
         this.exportButton = exportButton;
     }
 
-    void setRightsholdersTable(Table rightsholdersTable) {
-        this.rightsholdersTable = rightsholdersTable;
+    public void setRightsholderGrid(Grid<RightsholderTotalsHolder> rightsholderGrid) {
+        this.rightsholderGrid = rightsholderGrid;
     }
 
     void setSearchWidget(SearchWidget searchWidget) {
@@ -60,7 +61,7 @@ class ScenarioMediator implements IMediator {
     void onScenarioUpdated(boolean scenarioEmpty, ScenarioStatusEnum status) {
         excludeButton.setEnabled(!scenarioEmpty && ScenarioStatusEnum.IN_PROGRESS == status);
         exportButton.setEnabled(!scenarioEmpty);
-        rightsholdersTable.setVisible(!scenarioEmpty);
+        rightsholderGrid.setVisible(!scenarioEmpty);
         searchWidget.setVisible(!scenarioEmpty);
         emptyUsagesLayout.setVisible(scenarioEmpty);
     }

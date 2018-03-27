@@ -69,9 +69,6 @@ public class UsagesControllerTest {
     private static final String RRO_ACCOUNT_NAME = "Account Name";
     private static final String USAGE_BATCH_ID = RupPersistUtils.generateUuid();
     private static final Long RRO_ACCOUNT_NUMBER = 12345678L;
-    private static final String SCENARIO_NAME = "Scenario Name";
-    private static final String DESCRIPTION = "Description";
-    private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
     private static final String FAS_PRODUCT_FAMILY = "FAS";
     private UsagesController controller;
     private UsageService usageService;
@@ -419,7 +416,7 @@ public class UsagesControllerTest {
         verify(usagesWidgetMock, eventMock);
     }
 
-    @Test
+/*    @Test
     public void testCreateScenario() {
         IUsagesFilterWidget filterWidgetMock = createMock(IUsagesFilterWidget.class);
         UsageFilter usageFilter = new UsageFilter();
@@ -431,5 +428,5 @@ public class UsagesControllerTest {
         replay(scenarioService, filterController, filterWidgetMock);
         assertEquals(SCENARIO_ID, controller.createScenario(SCENARIO_NAME, DESCRIPTION));
         verify(scenarioService, filterController, filterWidgetMock);
-    }
+    }*/
 }

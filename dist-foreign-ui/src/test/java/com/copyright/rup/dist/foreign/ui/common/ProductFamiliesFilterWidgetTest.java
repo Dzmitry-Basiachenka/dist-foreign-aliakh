@@ -8,9 +8,9 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
-import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.FilterSaveEvent;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.google.common.collect.Sets;
 import com.vaadin.server.Sizeable.Unit;
@@ -57,11 +57,6 @@ public class ProductFamiliesFilterWidgetTest {
     }
 
     @Test
-    public void testGetIdForBean() {
-        assertEquals(FAS_PRODUCT_FAMILY, productFamilyFilterWidget.getIdForBean(FAS_PRODUCT_FAMILY));
-    }
-
-    @Test
     public void testOnSave() {
         FilterSaveEvent<String> filterSaveEvent = createMock(FilterSaveEvent.class);
         expect(filterSaveEvent.getSelectedItemsIds())
@@ -74,7 +69,7 @@ public class ProductFamiliesFilterWidgetTest {
 
     @Test
     public void testShowFilterWindow() {
-        FilterWindow<String, String> filterWindow = createMock(FilterWindow.class);
+        FilterWindow<String> filterWindow = createMock(FilterWindow.class);
         mockStatic(Windows.class);
         Windows.showFilterWindow("Product Families filter", productFamilyFilterWidget);
         expectLastCall().andReturn(filterWindow).once();

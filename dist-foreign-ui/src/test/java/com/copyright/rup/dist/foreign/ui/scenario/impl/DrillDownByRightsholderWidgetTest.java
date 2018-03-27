@@ -2,10 +2,12 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.reset;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.vaadin.server.Sizeable.Unit;
@@ -13,6 +15,8 @@ import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.Grid;
+import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
@@ -57,21 +61,33 @@ public class DrillDownByRightsholderWidgetTest {
     }
 
     private void verifySearchWidget(Component component) {
-        assertTrue(component instanceof VerticalLayout);
-        VerticalLayout verticalLayout = (VerticalLayout) component;
-        HorizontalLayout horizontalLayout = (HorizontalLayout) verticalLayout.getComponent(0);
+        assertTrue(component instanceof HorizontalLayout);
+        HorizontalLayout horizontalLayout = (HorizontalLayout) component;
         assertEquals(1, horizontalLayout.getComponentCount());
         SearchWidget searchWidget = (SearchWidget) horizontalLayout.getComponent(0);
         assertEquals(60, searchWidget.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, searchWidget.getWidthUnits());
         assertEquals(Alignment.MIDDLE_CENTER, horizontalLayout.getComponentAlignment(searchWidget));
         assertTrue(horizontalLayout.isSpacing());
-        verifySize(horizontalLayout);
+        assertEquals(100, horizontalLayout.getWidth(), 0);
+        assertEquals(Unit.PERCENTAGE, horizontalLayout.getWidthUnits());
     }
 
     private void verifyTable(Component component) {
         assertNotNull(component);
-        assertEquals(DrillDownByRightsholderTable.class, component.getClass());
+        assertTrue(component instanceof Grid);
+        Grid<UsageDto> grid = (Grid<UsageDto>) component;
+        assertTrue(grid.getStyleName().contains("drill-down-by-rightsholder-table"));
+        verifySize(grid);
+        grid.getColumns().forEach(column -> {
+            assertTrue(column.isSortable());
+            assertTrue(column.isResizable());
+        });
+        assertArrayEquals(new String[]{"Detail ID", "Usage Batch Name", "Product Family", "Fiscal Year",
+                "RRO Account #", "RRO Name", "Payment Date", "Title", "Article", "Standard Number", "Wr Wrk Inst",
+                "Publisher", "Pub Date", "Number of Copies", "Reported value", "Gross Amt in USD", "Service Fee Amount",
+                "Net Amt in USD", "Service Fee %", "Market", "Market Period From", "Market Period To", "Author"},
+            grid.getColumns().stream().map(Column::getCaption).toArray());
     }
 
     private void verifyButtonsLayout(Component component) {

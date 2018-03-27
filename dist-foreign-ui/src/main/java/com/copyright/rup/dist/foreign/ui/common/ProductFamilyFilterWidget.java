@@ -1,11 +1,11 @@
 package com.copyright.rup.dist.foreign.ui.common;
 
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.vaadin.ui.VaadinUtils;
-import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.FilterSaveEvent;
 import com.copyright.rup.vaadin.ui.component.filter.IFilterWindowController;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
+import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.BaseItemsFilterWidget;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -24,11 +24,11 @@ import java.util.function.Supplier;
  *
  * @author Uladzislau Shalamitski
  */
-public class ProductFamilyFilterWidget extends BaseItemsFilterWidget<String, String>
-    implements IFilterWindowController<String, String> {
+public class ProductFamilyFilterWidget extends BaseItemsFilterWidget<String>
+    implements IFilterWindowController<String> {
 
-    private final Set<String> selectedItemsIds = new HashSet<>();
     private final Supplier<List<String>> supplier;
+    private final Set<String> selectedItemsIds = new HashSet<>();
 
     /**
      * Controller.
@@ -71,13 +71,8 @@ public class ProductFamilyFilterWidget extends BaseItemsFilterWidget<String, Str
     }
 
     @Override
-    public String getIdForBean(String productFamily) {
-        return productFamily;
-    }
-
-    @Override
-    public FilterWindow<String, String> showFilterWindow() {
-        FilterWindow<String, String> filterWindow =
+    public FilterWindow<String> showFilterWindow() {
+        FilterWindow<String> filterWindow =
             Windows.showFilterWindow(ForeignUi.getMessage("window.caption.product_family_filter"), this);
         filterWindow.setSelectedItemsIds(selectedItemsIds);
         filterWindow.setWidth(350, Unit.PIXELS);
