@@ -18,11 +18,11 @@ import com.copyright.rup.vaadin.widget.api.IWidget;
 public interface IScenariosWidget extends IWidget<IScenariosController>, IRefreshable, IMediatorProvider {
 
     /**
-     * Selects {@link Scenario} with specified id.
+     * Selects specified {@link Scenario} in grid.
      *
-     * @param scenarioId scenario id to be selected
+     * @param scenario scenario to select
      */
-    void selectScenario(Object scenarioId);
+    void selectScenario(Scenario scenario);
 
     /**
      * @return selected {@link Scenario} or {@code null} if no one selected.

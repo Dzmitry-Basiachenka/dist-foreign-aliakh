@@ -5,8 +5,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.ui.common.ProductFamilyFilterWidget;
-import com.copyright.rup.dist.foreign.ui.usage.impl.RightsholderFilterWidget;
-import com.copyright.rup.dist.foreign.ui.usage.impl.UsageBatchFilterWidget;
+import com.copyright.rup.dist.foreign.ui.common.RightsholderFilterWidget;
+import com.copyright.rup.dist.foreign.ui.common.UsageBatchFilterWidget;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.IFilterSaveListener;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.widget.BaseItemsFilterWidget;

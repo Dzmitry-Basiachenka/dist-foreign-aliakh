@@ -1,19 +1,24 @@
 package com.copyright.rup.dist.foreign.ui.audit.impl;
 
+import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.vaadin.ui.Buttons;
-import com.copyright.rup.vaadin.ui.DateColumnGenerator;
-import com.copyright.rup.vaadin.ui.VaadinUtils;
+import com.copyright.rup.vaadin.util.VaadinUtils;
 
-import com.vaadin.data.util.BeanContainer;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Table;
+import com.vaadin.ui.Grid;
+import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
+import org.apache.commons.lang3.StringUtils;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Modal window for displaying usage history.
@@ -40,32 +45,43 @@ class UsageHistoryWindow extends Window {
         VaadinUtils.addComponentStyle(this, "usage-history-window");
     }
 
-    private Table initTable(List<UsageAuditItem> usageAuditItems) {
-        BeanContainer<String, UsageAuditItem> container = new BeanContainer<>(UsageAuditItem.class);
-        container.setBeanIdResolver(UsageAuditItem::getId);
-        container.addAll(usageAuditItems);
-        Table table = new Table();
-        table.setContainerDataSource(container);
-        table.setSizeFull();
-        table.setVisibleColumns("actionType", "createDate", "actionReason", "createUser");
-        table.addGeneratedColumn("createDate", new DateColumnGenerator());
-        table.setColumnHeaders(
-            ForeignUi.getMessage("label.action_type"),
-            ForeignUi.getMessage("label.action_date"),
-            ForeignUi.getMessage("label.action_reason"),
-            ForeignUi.getMessage("label.action_user"));
-        return table;
+    private Grid initGrid(List<UsageAuditItem> usageAuditItems) {
+        Grid<UsageAuditItem> grid = new Grid<>();
+        grid.setSelectionMode(SelectionMode.NONE);
+        grid.setItems(usageAuditItems);
+        grid.setSizeFull();
+        VaadinUtils.addComponentStyle(grid, "usage-batches-grid");
+        grid.setSizeFull();
+        grid.addColumn(UsageAuditItem::getActionType)
+            .setCaption(ForeignUi.getMessage("label.action_type"))
+            .setSortProperty("actionType");
+        grid.addColumn(UsageAuditItem::getCreateUser)
+            .setCaption(ForeignUi.getMessage("label.action_user"))
+            .setSortProperty("createUser");
+        grid.addColumn(item -> getStringFromDate(item.getCreateDate()))
+            .setCaption(ForeignUi.getMessage("label.action_date"))
+            .setSortProperty("createDate");
+        grid.addColumn(UsageAuditItem::getActionReason)
+            .setCaption(ForeignUi.getMessage("label.action_reason"))
+            .setSortProperty("actionReason")
+            .setExpandRatio(1);
+        return grid;
     }
 
     private VerticalLayout initContent(List<UsageAuditItem> usageAuditItems) {
-        Table table = initTable(usageAuditItems);
+        Grid grid = initGrid(usageAuditItems);
         Button closeButton = Buttons.createCloseButton(this);
-        VerticalLayout content = new VerticalLayout(table, closeButton);
+        VerticalLayout content = new VerticalLayout(grid, closeButton);
         content.setComponentAlignment(closeButton, Alignment.BOTTOM_RIGHT);
         content.setMargin(true);
         content.setSpacing(true);
         content.setSizeFull();
-        content.setExpandRatio(table, 1f);
+        content.setExpandRatio(grid, 1f);
         return content;
+    }
+
+    private String getStringFromDate(Date date) {
+        return null != date ? new SimpleDateFormat(RupDateUtils.US_DATETIME_FORMAT_PATTERN_LONG, Locale.getDefault())
+            .format(date) : StringUtils.EMPTY;
     }
 }

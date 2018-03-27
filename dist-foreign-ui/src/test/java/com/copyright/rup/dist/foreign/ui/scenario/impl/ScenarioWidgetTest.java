@@ -23,9 +23,12 @@ import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.Grid;
+import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.components.grid.FooterRow;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -35,6 +38,9 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Verifies {@link ScenarioWidget}.
@@ -87,7 +93,7 @@ public class ScenarioWidgetTest {
         VerticalLayout content = (VerticalLayout) scenarioWidget.getContent();
         assertEquals(4, content.getComponentCount());
         verifySearchWidget(content.getComponent(0));
-        verifyTable(content.getComponent(1));
+        verifyGrid(content.getComponent(1));
         verifyEmptyScenarioLabel(((VerticalLayout) content.getComponent(2)).getComponent(0));
         verifyButtonsLayout(content.getComponent(3));
     }
@@ -126,12 +132,18 @@ public class ScenarioWidgetTest {
         verifySize(horizontalLayout);
     }
 
-    private void verifyTable(Component component) {
-        assertEquals(RightsholderTotalsHolderTable.class, component.getClass());
-        RightsholderTotalsHolderTable table = (RightsholderTotalsHolderTable) component;
-        assertEquals("<span class='label-amount'>20,000.00</span>", table.getColumnFooter("grossTotal"));
-        assertEquals("<span class='label-amount'>6,400.00</span>", table.getColumnFooter("serviceFeeTotal"));
-        assertEquals("<span class='label-amount'>13,600.00</span>", table.getColumnFooter("netTotal"));
+    private void verifyGrid(Component component) {
+        assertTrue(component instanceof Grid);
+        Grid grid = (Grid) component;
+        List<Column> columns = grid.getColumns();
+        assertEquals(Arrays.asList("RH Account #", "RH Name", "Payee Account #", "Payee Name", "Amt in USD",
+            "Service Fee Amount", "Net Amt in USD", "Service Fee %"),
+            columns.stream().map(Column::getCaption).collect(Collectors.toList()));
+        assertTrue(grid.isFooterVisible());
+        FooterRow footerRow = grid.getFooterRow(0);
+        assertEquals("20,000.00", footerRow.getCell("grossTotal").getText());
+        assertEquals("6,400.00", footerRow.getCell("serviceFeeTotal").getText());
+        assertEquals("13,600.00", footerRow.getCell("netTotal").getText());
     }
 
     private void verifyEmptyScenarioLabel(Component component) {

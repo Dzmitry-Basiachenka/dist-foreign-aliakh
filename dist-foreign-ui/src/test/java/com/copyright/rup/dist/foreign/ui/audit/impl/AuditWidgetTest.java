@@ -5,27 +5,21 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.reset;
 import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditController;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterController;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterWidget;
-import com.copyright.rup.dist.foreign.ui.common.util.OffsetDateTimeColumnGenerator;
-import com.copyright.rup.dist.foreign.ui.common.util.PercentColumnGenerator;
-import com.copyright.rup.vaadin.ui.LocalDateColumnGenerator;
-import com.copyright.rup.vaadin.ui.LongColumnGenerator;
-import com.copyright.rup.vaadin.ui.MoneyColumnGenerator;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
-import com.copyright.rup.vaadin.ui.component.lazytable.LazyTable;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.Grid;
+import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
@@ -33,6 +27,10 @@ import com.vaadin.ui.VerticalLayout;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Verifies {@link AuditWidget}.
@@ -74,67 +72,51 @@ public class AuditWidgetTest {
         assertTrue(component instanceof IAuditFilterWidget);
         component = widget.getSecondComponent();
         assertTrue(component instanceof VerticalLayout);
-        verifyTableLayout((VerticalLayout) component);
+        verifyGridLayout((VerticalLayout) component);
     }
 
-    private void verifyTableLayout(VerticalLayout layout) {
+    private void verifyGridLayout(VerticalLayout layout) {
         verifySize(layout, Unit.PERCENTAGE, 100, Unit.PERCENTAGE, 100);
         assertTrue(layout.isSpacing());
         assertEquals(2, layout.getComponentCount());
-        Component component = layout.getComponent(0);
-        assertTrue(component instanceof HorizontalLayout);
-        verifyToolbar((HorizontalLayout) component);
-        component = layout.getComponent(1);
-        assertTrue(component instanceof LazyTable);
-        verifyTable((LazyTable) component);
+        verifyToolbar(layout.getComponent(0));
+        verifyGrid(layout.getComponent(1));
     }
 
-    private void verifyToolbar(HorizontalLayout layout) {
+    private void verifyToolbar(Component component) {
+        assertTrue(component instanceof HorizontalLayout);
+        HorizontalLayout layout = (HorizontalLayout) component;
         verifySize(layout, Unit.PERCENTAGE, 100, Unit.PIXELS, -1);
         assertEquals(new MarginInfo(false, true, false, true), layout.getMargin());
         assertEquals(2, layout.getComponentCount());
-        Component component = layout.getComponent(0);
-        assertTrue(component instanceof Button);
-        verifyExportButton((Button) component);
-        component = layout.getComponent(1);
-        assertTrue(component instanceof SearchWidget);
-        verifySearchWidget((SearchWidget) component);
+        verifyExportButton(layout.getComponent(0));
+        verifySearchWidget(layout.getComponent(1));
     }
 
-    private void verifySearchWidget(SearchWidget searchWidget) {
+    private void verifySearchWidget(Component component) {
+        assertTrue(component instanceof SearchWidget);
+        SearchWidget searchWidget = (SearchWidget) component;
         verifySize(searchWidget, Unit.PERCENTAGE, 75, Unit.PIXELS, -1);
         assertEquals("Enter Detail ID or Wr Wrk Inst or Work Title",
-            Whitebox.getInternalState(searchWidget, TextField.class).getInputPrompt());
+            Whitebox.getInternalState(searchWidget, TextField.class).getPlaceholder());
     }
 
-    private void verifyExportButton(Button button) {
+    private void verifyExportButton(Component component) {
+        assertTrue(component instanceof Button);
+        Button button = (Button) component;
         assertEquals("Export", button.getCaption());
         assertEquals(1, button.getExtensions().size());
     }
 
-    private void verifyTable(LazyTable table) {
-        verifySize(table, Unit.PERCENTAGE, 100, Unit.PERCENTAGE, 100);
-        assertArrayEquals(new Object[]{"detailId", "status", "productFamily", "batchName", "paymentDate",
-                "rhAccountNumber", "rhName", "payeeAccountNumber", "payeeName", "wrWrkInst", "workTitle",
-                "standardNumber", "grossAmount", "serviceFee", "scenarioName", "checkNumber", "checkDate",
-                "cccEventId", "distributionName", "distributionDate", "periodEndDate"},
-            table.getVisibleColumns());
-        assertArrayEquals(new Object[]{"Detail ID", "Detail Status", "Product Family", "Usage Batch Name",
-                "Payment Date", "RH Account #", "RH Name", "Payee Account #", "Payee Name", "Wr Wrk Inst",
-                "Title", "Standard Number", "Amt in USD", "Service Fee %", "Scenario Name", "Check #", "Check Date",
-                "Event ID", "Dist. Name", "Dist. Date", "Period Ending"},
-            table.getColumnHeaders());
-        assertNotNull(table.getColumnGenerator("detailId"));
-        assertTrue(table.getColumnGenerator("wrWrkInst") instanceof LongColumnGenerator);
-        assertTrue(table.getColumnGenerator("rhAccountNumber") instanceof LongColumnGenerator);
-        assertTrue(table.getColumnGenerator("payeeAccountNumber") instanceof LongColumnGenerator);
-        assertTrue(table.getColumnGenerator("grossAmount") instanceof MoneyColumnGenerator);
-        assertTrue(table.getColumnGenerator("paymentDate") instanceof LocalDateColumnGenerator);
-        assertTrue(table.getColumnGenerator("checkDate") instanceof OffsetDateTimeColumnGenerator);
-        assertTrue(table.getColumnGenerator("distributionDate") instanceof OffsetDateTimeColumnGenerator);
-        assertTrue(table.getColumnGenerator("periodEndDate") instanceof LocalDateColumnGenerator);
-        assertTrue(table.getColumnGenerator("serviceFee") instanceof PercentColumnGenerator);
-        assertTrue(table.isColumnCollapsingAllowed());
+    private void verifyGrid(Component component) {
+        assertTrue(component instanceof Grid);
+        Grid grid = (Grid) component;
+        verifySize(grid, Unit.PERCENTAGE, 100, Unit.PERCENTAGE, 100);
+        List<Column> columns = grid.getColumns();
+        assertEquals(Arrays.asList("Detail ID", "Detail Status", "Product Family", "Usage Batch Name",
+            "Payment Date", "RH Account #", "RH Name", "Wr Wrk Inst", "Title", "Standard Number", "Amt in USD",
+            "Service Fee %", "Scenario Name", "Check #", "Check Date", "Event ID", "Dist. Name"),
+            columns.stream().map(Column::getCaption).collect(Collectors.toList()));
     }
 
     private void verifySize(Component component, Unit widthUnit, float width, Unit heightUnit, float height) {

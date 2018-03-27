@@ -34,14 +34,14 @@ public interface IReconcileRightsholdersController {
     void approveReconciliation();
 
     /**
+     * @return an instance of {@link Scenario}.
+     */
+    Scenario getScenario();
+
+    /**
      * Sets {@link Scenario}.
      *
      * @param scenario instance of {@link Scenario}
      */
     void setScenario(Scenario scenario);
-
-    /**
-     * @return an instance of {@link Scenario}.
-     */
-    Scenario getScenario();
 }

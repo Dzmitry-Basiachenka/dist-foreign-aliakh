@@ -1,16 +1,19 @@
 package com.copyright.rup.dist.foreign.ui.audit.impl;
 
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.AuditFilter;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterController;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterWidget;
 import com.copyright.rup.dist.foreign.ui.common.ProductFamilyFilterWidget;
+import com.copyright.rup.dist.foreign.ui.common.RightsholderFilterWidget;
+import com.copyright.rup.dist.foreign.ui.common.UsageBatchFilterWidget;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
-import com.copyright.rup.dist.foreign.ui.usage.impl.RightsholderFilterWidget;
-import com.copyright.rup.dist.foreign.ui.usage.impl.UsageBatchFilterWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
-import com.copyright.rup.vaadin.ui.VaadinUtils;
+import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.IFilterSaveListener;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
+import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -20,6 +23,8 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.stream.Collectors;
 
 /**
  * Interface for audit filter widget.
@@ -80,8 +85,8 @@ public class AuditFilterWidget extends VerticalLayout implements IAuditFilterWid
         rightsholderFilterWidget.reset();
         statusFilterWidget.reset();
         productFamilyFilterWidget.reset();
-        cccEventIdField.setValue(null);
-        distributionNameField.setValue(null);
+        cccEventIdField.setValue(StringUtils.EMPTY);
+        distributionNameField.setValue(StringUtils.EMPTY);
         filter = new AuditFilter();
         applyFilter();
     }
@@ -103,8 +108,9 @@ public class AuditFilterWidget extends VerticalLayout implements IAuditFilterWid
 
     private void initUsageBatchesFilter() {
         usageBatchFilterWidget = new UsageBatchFilterWidget(() -> controller.getUsageBatches());
-        usageBatchFilterWidget.addFilterSaveListener(event -> {
-            filter.setBatchesIds(event.getSelectedItemsIds());
+        usageBatchFilterWidget.addFilterSaveListener((IFilterSaveListener<UsageBatch>) event -> {
+            filter.setBatchesIds(
+                event.getSelectedItemsIds().stream().map(UsageBatch::getId).collect(Collectors.toSet()));
             filterChanged();
         });
         VaadinUtils.addComponentStyle(usageBatchFilterWidget, "audit-batches-filter");
@@ -113,8 +119,11 @@ public class AuditFilterWidget extends VerticalLayout implements IAuditFilterWid
     private void initRightsholdersFilter() {
         rightsholderFilterWidget = new RightsholderFilterWidget(ForeignUi.getMessage("label.rightsholders"),
             ForeignUi.getMessage("prompt.rightsholder"), () -> controller.getRightsholders());
-        rightsholderFilterWidget.addFilterSaveListener(event -> {
-            filter.setRhAccountNumbers(event.getSelectedItemsIds());
+        rightsholderFilterWidget.addFilterSaveListener((IFilterSaveListener<Rightsholder>) event -> {
+            filter.setRhAccountNumbers(event.getSelectedItemsIds()
+                .stream()
+                .map(Rightsholder::getAccountNumber)
+                .collect(Collectors.toSet()));
             filterChanged();
         });
         VaadinUtils.addComponentStyle(rightsholderFilterWidget, "audit-rightsholders-filter");
@@ -153,8 +162,8 @@ public class AuditFilterWidget extends VerticalLayout implements IAuditFilterWid
 
     private void initEventIdField() {
         cccEventIdField = createTextField(ForeignUi.getMessage("label.event_id"));
-        cccEventIdField.addTextChangeListener(event -> {
-            filter.setCccEventId(StringUtils.trimToNull(event.getText()));
+        cccEventIdField.addValueChangeListener(event -> {
+            filter.setCccEventId(StringUtils.trimToNull(event.getValue()));
             filterChanged();
         });
         VaadinUtils.addComponentStyle(cccEventIdField, "ccc-event-id-filter");
@@ -162,8 +171,8 @@ public class AuditFilterWidget extends VerticalLayout implements IAuditFilterWid
 
     private void initDistributionNameField() {
         distributionNameField = createTextField(ForeignUi.getMessage("label.distribution_name"));
-        distributionNameField.addTextChangeListener(event -> {
-            filter.setDistributionName(StringUtils.trimToNull(event.getText()));
+        distributionNameField.addValueChangeListener(event -> {
+            filter.setDistributionName(StringUtils.trimToNull(event.getValue()));
             filterChanged();
         });
         VaadinUtils.addComponentStyle(distributionNameField, "distribution-name-filter");
@@ -172,13 +181,12 @@ public class AuditFilterWidget extends VerticalLayout implements IAuditFilterWid
     private TextField createTextField(String caption) {
         TextField textField = new TextField(caption);
         VaadinUtils.setMaxComponentsWidth(textField);
-        textField.setNullRepresentation(StringUtils.EMPTY);
         return textField;
     }
 
     private void trimFilterValues() {
-        cccEventIdField.setValue(StringUtils.trimToNull(cccEventIdField.getValue()));
-        distributionNameField.setValue(StringUtils.trimToNull(distributionNameField.getValue()));
+        cccEventIdField.setValue(StringUtils.trim(cccEventIdField.getValue()));
+        distributionNameField.setValue(StringUtils.trim(distributionNameField.getValue()));
         applyFilter();
     }
 }

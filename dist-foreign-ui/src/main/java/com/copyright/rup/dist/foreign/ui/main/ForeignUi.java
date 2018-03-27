@@ -11,6 +11,7 @@ import com.copyright.rup.vaadin.widget.api.IController;
 import com.google.common.collect.Lists;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.ErrorHandler;
+import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 
@@ -33,6 +34,7 @@ import java.util.ResourceBundle;
 @org.springframework.stereotype.Component("dist.foreignUi")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Theme("foreign")
+@SpringUI(path = "/*")
 public class ForeignUi extends CommonUi {
 
     private static final ResourceBundle MESSAGES =

@@ -31,12 +31,13 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.IReconcileRightsholdersCon
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosWidget;
 import com.copyright.rup.vaadin.security.SecurityUtils;
-import com.copyright.rup.vaadin.ui.ConfirmActionDialogWindow;
-import com.copyright.rup.vaadin.ui.ConfirmDialogWindow;
-import com.copyright.rup.vaadin.ui.Windows;
+import com.copyright.rup.vaadin.ui.component.window.ConfirmActionDialogWindow;
+import com.copyright.rup.vaadin.ui.component.window.ConfirmDialogWindow;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
+import com.vaadin.data.Validator;
 import com.vaadin.ui.Window;
 
 import org.junit.Before;
@@ -172,7 +173,8 @@ public class ScenariosControllerTest {
         expectLastCall().once();
         expect(scenarioController.isScenarioEmpty()).andReturn(false).once();
         mockStatic(Windows.class);
-        Windows.showModalWindow(anyObject(ConfirmActionDialogWindow.class));
+        Windows.showConfirmDialogWithReason(eq("Confirm action"), eq("Are you sure you want to perform action?"),
+            eq("Yes"), eq("Cancel"), anyObject(ConfirmActionDialogWindow.IListener.class), anyObject(Validator.class));
         expectLastCall().once();
         replay(Windows.class, scenarioController, scenariosWidget);
         scenariosController.handleAction(ScenarioActionTypeEnum.SUBMITTED);
@@ -186,7 +188,8 @@ public class ScenariosControllerTest {
         expectLastCall().once();
         expect(scenarioController.isScenarioEmpty()).andReturn(false).once();
         mockStatic(Windows.class);
-        Windows.showModalWindow(anyObject(ConfirmActionDialogWindow.class));
+        Windows.showConfirmDialogWithReason(eq("Confirm action"), eq("Are you sure you want to perform action?"),
+            eq("Yes"), eq("Cancel"), anyObject(ConfirmActionDialogWindow.IListener.class), anyObject(Validator.class));
         expectLastCall().once();
         replay(Windows.class, scenarioController, scenariosWidget);
         scenariosController.handleAction(ScenarioActionTypeEnum.APPROVED);
@@ -200,7 +203,8 @@ public class ScenariosControllerTest {
         expectLastCall().once();
         expect(scenarioController.isScenarioEmpty()).andReturn(false).once();
         mockStatic(Windows.class);
-        Windows.showModalWindow(anyObject(ConfirmActionDialogWindow.class));
+        Windows.showConfirmDialogWithReason(eq("Confirm action"), eq("Are you sure you want to perform action?"),
+            eq("Yes"), eq("Cancel"), anyObject(ConfirmActionDialogWindow.IListener.class), anyObject(Validator.class));
         expectLastCall().once();
         replay(Windows.class, scenarioController, scenariosWidget);
         scenariosController.handleAction(ScenarioActionTypeEnum.REJECTED);
@@ -266,8 +270,7 @@ public class ScenariosControllerTest {
         Whitebox.setInternalState(scenariosController, usageService);
         UsageDto usageDto = new UsageDto();
         usageDto.setId(RupPersistUtils.generateUuid());
-        expect(usageService.getUsages(new UsageFilter(new ScenarioUsageFilter()), null, null)).andReturn(
-            Collections.singletonList(usageDto)).once();
+        expect(usageService.getUsagesCount(new UsageFilter(new ScenarioUsageFilter()))).andReturn(1).once();
         Windows.showModalWindow(anyObject(RefreshScenarioWindow.class));
         expectLastCall().once();
         replay(Windows.class, scenariosWidget, scenarioUsageFilterService, usageService);

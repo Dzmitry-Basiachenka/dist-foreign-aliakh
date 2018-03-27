@@ -4,7 +4,6 @@ import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.powermock.api.easymock.PowerMock.createMock;
@@ -21,31 +20,27 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
-import com.copyright.rup.dist.foreign.ui.component.validator.GrossAmountValidator;
-import com.copyright.rup.dist.foreign.ui.component.validator.NumberValidator;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.security.SecurityUtils;
-import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.ui.component.upload.UploadField;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
 import com.google.common.collect.Lists;
-import com.vaadin.data.Property.ValueChangeEvent;
-import com.vaadin.data.Validator;
-import com.vaadin.data.util.ObjectProperty;
+import com.vaadin.data.Binder;
+import com.vaadin.data.HasValue.ValueChangeEvent;
+import com.vaadin.data.ValidationResult;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
-import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.text.StringEscapeUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -57,7 +52,8 @@ import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Verifies {@link UsageBatchUploadWindow}.
@@ -77,7 +73,7 @@ public class UsageBatchUploadWindowTest {
     private static final String RRO_NAME = "RRO name";
     private static final String ACCOUNT_NAME = "Account Name";
     private static final String INVALID_GROSS_AMOUNT_ERROR_MESSAGE =
-        "<div>Field value should be positive number and not exceed 10 digits</div>\n";
+        "Field value should be positive number and not exceed 10 digits";
     private static final String GROSS_AMOUNT_FIELD = "grossAmountField";
     private static final LocalDate PAYMENT_DATE = LocalDate.of(2017, 2, 27);
     private UsageBatchUploadWindow window;
@@ -115,7 +111,7 @@ public class UsageBatchUploadWindowTest {
 
     @Test
     public void testIsValid() {
-        expect(usagesController.usageBatchExists(USAGE_BATCH_NAME)).andReturn(false).once();
+        expect(usagesController.usageBatchExists(USAGE_BATCH_NAME)).andReturn(false).times(2);
         replay(usagesController);
         window = new UsageBatchUploadWindow(usagesController);
         assertFalse(window.isValid());
@@ -143,24 +139,12 @@ public class UsageBatchUploadWindowTest {
         replay(usagesController);
         window = new UsageBatchUploadWindow(usagesController);
         TextField grossAmountField = Whitebox.getInternalState(window, GROSS_AMOUNT_FIELD);
-        grossAmountField.setValue("123.5684");
-        assertTrue(grossAmountField.isValid());
-        grossAmountField.setValue("0.00");
-        assertFalse(grossAmountField.isValid());
-        assertEquals(INVALID_GROSS_AMOUNT_ERROR_MESSAGE,
-            StringEscapeUtils.unescapeHtml4(grossAmountField.getErrorMessage().getFormattedHtmlMessage()));
-        grossAmountField.setValue("value");
-        assertFalse(grossAmountField.isValid());
-        assertEquals(INVALID_GROSS_AMOUNT_ERROR_MESSAGE,
-            StringEscapeUtils.unescapeHtml4(grossAmountField.getErrorMessage().getFormattedHtmlMessage()));
-        grossAmountField.setValue("10000000000.00");
-        assertFalse(grossAmountField.isValid());
-        assertEquals(INVALID_GROSS_AMOUNT_ERROR_MESSAGE,
-            StringEscapeUtils.unescapeHtml4(grossAmountField.getErrorMessage().getFormattedHtmlMessage()));
-        grossAmountField.setValue("9999999999.99");
-        assertTrue(grossAmountField.isValid());
-        grossAmountField.setValue("98.12");
-        assertTrue(grossAmountField.isValid());
+        Binder binder = Whitebox.getInternalState(window, "binder");
+        validateField(grossAmountField, "123.5684", binder, true);
+        validateField(grossAmountField, "0.00", binder, false);
+        validateField(grossAmountField, "value", binder, false);
+        validateField(grossAmountField, "10000000000.00", binder, false);
+        validateField(grossAmountField, "9999999999.99", binder, true);
         verify(usagesController);
     }
 
@@ -182,10 +166,10 @@ public class UsageBatchUploadWindowTest {
         Whitebox.setInternalState(window, "usageBatchNameField", new TextField("Usage Batch Name", USAGE_BATCH_NAME));
         Whitebox.setInternalState(window, "accountNumberField", new TextField("RRO Account #", ACCOUNT_NUMBER));
         Whitebox.setInternalState(window, "paymentDateWidget", paymentDateWidget);
-        Whitebox.setInternalState(window, "fiscalYearProperty", new ObjectProperty<>("FY2017"));
+        Whitebox.setInternalState(window, "fiscalYearField", new TextField("FY2017"));
         Whitebox.setInternalState(window, GROSS_AMOUNT_FIELD, new TextField("Gross Amount", "100.00"));
-        Whitebox.setInternalState(window, "rightsholderNameProperty", new ObjectProperty<>(RRO_NAME));
-        Whitebox.setInternalState(window, "productFamilyProperty", new ObjectProperty<>("FAS"));
+        Whitebox.setInternalState(window, "accountNameField", new TextField(RRO_NAME));
+        Whitebox.setInternalState(window, "productFamilyField", new TextField("Product Family", "FAS"));
         Whitebox.setInternalState(window, "rro", rro);
         expect(window.isValid()).andReturn(true).once();
         expect(usagesController.getCsvProcessor("FAS")).andReturn(processor).once();
@@ -197,16 +181,6 @@ public class UsageBatchUploadWindowTest {
         replay(window, usagesController, Windows.class, processor, uploadField);
         window.onUploadClicked();
         verify(window, usagesController, Windows.class, processor, uploadField);
-    }
-
-    @Test
-    public void testCsvFileExtensionValidator() {
-        UsageBatchUploadWindow.CsvFileExtensionValidator validator =
-            new UsageBatchUploadWindow.CsvFileExtensionValidator();
-        assertEquals("File extension is incorrect", validator.getErrorMessage());
-        assertTrue(validator.isValid("file.csv"));
-        assertFalse(validator.isValid("file.txt"));
-        assertFalse(validator.isValid(null));
     }
 
     private ProcessingResult<Usage> buildCsvProcessingResult() {
@@ -236,14 +210,12 @@ public class UsageBatchUploadWindowTest {
         TextField textField = (TextField) component;
         assertEquals(100, component.getWidth(), 0);
         assertEquals(StringUtils.EMPTY, textField.getValue());
-        verifyRequiredField(textField);
     }
 
     private void verifyUploadComponent(Component component) {
         assertTrue(component instanceof UploadField);
         assertEquals(100, component.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, component.getWidthUnits());
-        // TODO {aradkevich} verify field is required after making adjustments to UploadField in rup-vaadin
     }
 
     private void verifyButtonsLayout(Component component) {
@@ -258,7 +230,7 @@ public class UsageBatchUploadWindowTest {
 
     private void verifyLoadClickListener(Button loadButton) {
         mockStatic(Windows.class);
-        Collection<? extends Field<?>> fields = Lists.newArrayList(
+        Collection<? extends AbstractField<?>> fields = Lists.newArrayList(
             Whitebox.getInternalState(window, "usageBatchNameField"),
             Whitebox.getInternalState(window, "uploadField"),
             Whitebox.getInternalState(window, "accountNumberField"),
@@ -283,23 +255,18 @@ public class UsageBatchUploadWindowTest {
         assertTrue(component instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) component;
         assertEquals(2, verticalLayout.getComponentCount());
-        HorizontalLayout rroAccountLayout = (HorizontalLayout) verticalLayout.getComponent(0);
-        assertEquals(3, rroAccountLayout.getComponentCount());
+        HorizontalLayout horizontalLayout = (HorizontalLayout) verticalLayout.getComponent(0);
+        assertEquals(2, horizontalLayout.getComponentCount());
+        HorizontalLayout rroAccountLayout = (HorizontalLayout) horizontalLayout.getComponent(0);
         Component numberComponent = rroAccountLayout.getComponent(0);
         Component productFamilyComponent = rroAccountLayout.getComponent(1);
-        Component verifyComponent = rroAccountLayout.getComponent(2);
+        Component verifyComponent = horizontalLayout.getComponent(1);
         TextField numberField = verifyTextField(numberComponent, "RRO Account #");
         assertEquals(100, numberField.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, numberField.getWidthUnits());
-        verifyRequiredField(numberField);
-        assertEquals(StringUtils.EMPTY, numberField.getNullRepresentation());
-        Collection<Validator> validators = numberField.getValidators();
-        assertTrue(CollectionUtils.isNotEmpty(validators));
-        assertEquals(2, validators.size());
-        assertTrue(validators.iterator().next() instanceof NumberValidator);
         Collection<?> listeners = numberField.getListeners(ValueChangeEvent.class);
         assertTrue(CollectionUtils.isNotEmpty(listeners));
-        assertEquals(1, listeners.size());
+        assertEquals(2, listeners.size());
         TextField nameField = verifyTextField(verticalLayout.getComponent(1), "RRO Account Name");
         assertTrue(nameField.isReadOnly());
         TextField productFamilyField = verifyTextField(productFamilyComponent, "Product Family");
@@ -336,7 +303,7 @@ public class UsageBatchUploadWindowTest {
         assertEquals("CLA_FAS", productFamilyField.getValue());
         numberField.setValue("20000170");
         verifyButton.click();
-        assertNull(nameField.getValue());
+        assertEquals(StringUtils.EMPTY, nameField.getValue());
         assertEquals(StringUtils.EMPTY, productFamilyField.getValue());
     }
 
@@ -349,7 +316,6 @@ public class UsageBatchUploadWindowTest {
         assertTrue(paymentDateComponent instanceof LocalDateWidget);
         LocalDateWidget widget = (LocalDateWidget) paymentDateComponent;
         assertEquals("Payment Date", widget.getCaption());
-        verifyRequiredField(widget);
         TextField fiscalYearField = verifyTextField(fiscalYearComponent, "Fiscal Year");
         assertTrue(fiscalYearField.isReadOnly());
         assertEquals(StringUtils.EMPTY, fiscalYearField.getValue());
@@ -361,13 +327,6 @@ public class UsageBatchUploadWindowTest {
         TextField grossAmountField = verifyTextField(component, "Gross Amount in USD");
         assertEquals(100, grossAmountField.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, grossAmountField.getWidthUnits());
-        verifyRequiredField(grossAmountField);
-        assertEquals(StringUtils.EMPTY, grossAmountField.getNullRepresentation());
-        Collection<Validator> validators = grossAmountField.getValidators();
-        assertTrue(CollectionUtils.isNotEmpty(validators));
-        assertEquals(1, validators.size());
-        Iterator<Validator> iterator = validators.iterator();
-        assertTrue(iterator.next() instanceof GrossAmountValidator);
     }
 
     private void verifyGrossAmount(Component component) {
@@ -377,15 +336,18 @@ public class UsageBatchUploadWindowTest {
         verifyGrossAmountComponent(horizontalLayout.getComponent(0));
     }
 
+    private void validateField(TextField field, String value, Binder binder, boolean isValid) {
+        field.setValue(value);
+        List<ValidationResult> errors = binder.validate().getValidationErrors();
+        List<String> errorMessages =
+            errors.stream().map(ValidationResult::getErrorMessage).collect(Collectors.toList());
+        assertEquals(!isValid, errorMessages.contains(INVALID_GROSS_AMOUNT_ERROR_MESSAGE));
+    }
+
     private TextField verifyTextField(Component component, String caption) {
         assertTrue(component instanceof TextField);
         assertEquals(caption, component.getCaption());
         return (TextField) component;
-    }
-
-    private void verifyRequiredField(AbstractField field) {
-        assertTrue(field.isRequired());
-        assertEquals("Field value should be specified", field.getRequiredError());
     }
 
     private UsageBatch buildUsageBatch(Rightsholder rro) {

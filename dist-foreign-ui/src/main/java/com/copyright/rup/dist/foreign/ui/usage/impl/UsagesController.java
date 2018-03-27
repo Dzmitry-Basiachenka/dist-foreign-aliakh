@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -10,6 +11,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
+import com.copyright.rup.dist.foreign.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
@@ -24,12 +26,14 @@ import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesWidget;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CreateScenarioWindow.ScenarioCreateEvent;
-import com.copyright.rup.vaadin.ui.VaadinUtils;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
+import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.io.Files;
+import com.vaadin.data.provider.QuerySortOrder;
+import com.vaadin.shared.data.sort.SortDirection;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -96,9 +100,14 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
-    public List<UsageDto> loadBeans(int startIndex, int count, Object[] sortPropertyIds, boolean... sortStates) {
-        return usageService.getUsages(filterController.getWidget().getAppliedFilter(), new Pageable(startIndex, count),
-            Sort.create(sortPropertyIds, sortStates));
+    public List<UsageDto> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders) {
+        Sort sort = null;
+        if (CollectionUtils.isNotEmpty(sortOrders)) {
+            QuerySortOrder sortOrder = sortOrders.get(0);
+            sort = new Sort(sortOrder.getSorted(), Direction.of(SortDirection.ASCENDING == sortOrder.getDirection()));
+        }
+        return usageService
+            .getUsages(filterController.getWidget().getAppliedFilter(), new Pageable(startIndex, count), sort);
     }
 
     @Override
@@ -119,11 +128,11 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
-    public String createScenario(String scenarioName, String description) {
-        String scenarioId =
-            scenarioService.createScenario(scenarioName, description, filterController.getWidget().getAppliedFilter());
+    public Scenario createScenario(String scenarioName, String description) {
+        Scenario scenario = scenarioService.createScenario(scenarioName, description,
+            filterController.getWidget().getAppliedFilter());
         filterController.getWidget().clearFilter();
-        return scenarioId;
+        return scenario;
     }
 
     @Override

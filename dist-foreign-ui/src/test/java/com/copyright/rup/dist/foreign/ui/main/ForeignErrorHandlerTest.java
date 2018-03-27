@@ -10,9 +10,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 
 import com.copyright.rup.dist.common.integration.IntegrationConnectionException;
-import com.copyright.rup.vaadin.ui.ErrorWindow;
-import com.copyright.rup.vaadin.ui.NotificationWindow;
 import com.copyright.rup.vaadin.ui.component.downloader.FileDownloadException;
+import com.copyright.rup.vaadin.ui.component.window.ErrorWindow;
+import com.copyright.rup.vaadin.ui.component.window.NotificationWindow;
 
 import com.vaadin.server.ErrorEvent;
 import com.vaadin.ui.UI;

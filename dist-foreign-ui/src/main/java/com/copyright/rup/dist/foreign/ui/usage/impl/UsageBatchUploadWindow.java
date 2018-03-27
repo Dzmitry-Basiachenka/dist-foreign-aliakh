@@ -8,25 +8,20 @@ import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.Processi
 import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.ThresholdExceededException;
 import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.ValidationException;
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
-import com.copyright.rup.dist.foreign.ui.component.validator.GrossAmountValidator;
-import com.copyright.rup.dist.foreign.ui.component.validator.NumberValidator;
-import com.copyright.rup.dist.foreign.ui.component.validator.UsageBatchNameUniqueValidator;
+import com.copyright.rup.dist.foreign.service.impl.csv.validator.ReportedValueValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.ui.Buttons;
-import com.copyright.rup.vaadin.ui.VaadinUtils;
-import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.ui.component.upload.UploadField;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
+import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
 import com.google.common.collect.Lists;
-import com.vaadin.data.Property;
-import com.vaadin.data.Property.ValueChangeListener;
-import com.vaadin.data.util.ObjectProperty;
-import com.vaadin.data.validator.AbstractStringValidator;
+import com.vaadin.data.Binder;
+import com.vaadin.data.converter.StringToBigDecimalConverter;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.shared.ui.MarginInfo;
-import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComponentContainer;
@@ -54,17 +49,20 @@ import java.math.BigDecimal;
  */
 class UsageBatchUploadWindow extends Window {
 
+    private static final String EMPTY_FIELD_MESSAGE = "field.error.empty";
+
     private final IUsagesController usagesController;
+    private final Binder<UsageBatch> binder = new Binder<>();
+    private final Binder<String> uploadBinder = new Binder<>();
     private TextField accountNumberField;
     private TextField accountNameField;
+    private TextField productFamilyField;
     private LocalDateWidget paymentDateWidget;
     private TextField grossAmountField;
     private TextField usageBatchNameField;
-    private Property<String> rightsholderNameProperty;
-    private Property<String> fiscalYearProperty;
-    private Property<String> productFamilyProperty;
     private Rightsholder rro;
     private UploadField uploadField;
+    private TextField fiscalYearField;
 
     /**
      * Constructor.
@@ -88,7 +86,7 @@ class UsageBatchUploadWindow extends Window {
         if (isValid()) {
             StopWatch stopWatch = new Slf4JStopWatch();
             try {
-                UsageCsvProcessor processor = usagesController.getCsvProcessor(productFamilyProperty.getValue());
+                UsageCsvProcessor processor = usagesController.getCsvProcessor(productFamilyField.getValue());
                 ProcessingResult<Usage> processingResult = processor.process(uploadField.getStreamToUploadedFile());
                 stopWatch.lap("usageBatch.load_fileProcessed");
                 if (processingResult.isSuccessful()) {
@@ -99,13 +97,13 @@ class UsageBatchUploadWindow extends Window {
                 } else {
                     Windows.showModalWindow(
                         new ErrorUploadWindow(
-                            usagesController.getErrorResultStreamSource(uploadField.getFileName(), processingResult),
+                            usagesController.getErrorResultStreamSource(uploadField.getValue(), processingResult),
                             ForeignUi.getMessage("message.error.upload")));
                 }
             } catch (ThresholdExceededException e) {
                 Windows.showModalWindow(
                     new ErrorUploadWindow(
-                        usagesController.getErrorResultStreamSource(uploadField.getFileName(), e.getProcessingResult()),
+                        usagesController.getErrorResultStreamSource(uploadField.getValue(), e.getProcessingResult()),
                         e.getMessage() + "<br>Press Download button to see detailed list of errors"));
             } catch (ValidationException e) {
                 Windows.showNotificationWindow(ForeignUi.getMessage("window.error"), e.getHtmlMessage());
@@ -125,12 +123,7 @@ class UsageBatchUploadWindow extends Window {
      * @return {@code true} if all inputs are valid, {@code false} - otherwise
      */
     boolean isValid() {
-        return usageBatchNameField.isValid()
-            && uploadField.isValid()
-            && accountNumberField.isValid()
-            && accountNameField.isValid()
-            && paymentDateWidget.isValid()
-            && grossAmountField.isValid();
+        return binder.isValid() && uploadBinder.isValid();
     }
 
     private UsageBatch buildUsageBatch() {
@@ -149,17 +142,22 @@ class UsageBatchUploadWindow extends Window {
         VerticalLayout rootLayout = new VerticalLayout();
         rootLayout.addComponents(initUsageBatchNameField(), initUploadField(), initRightsholderLayout(),
             initPaymentDataLayout(), initGrossAmountLayout(), buttonsLayout);
-        rootLayout.setSpacing(true);
         rootLayout.setMargin(new MarginInfo(true, true, false, true));
         VaadinUtils.setMaxComponentsWidth(rootLayout);
         rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
+        binder.validate();
         return rootLayout;
     }
 
     private UploadField initUploadField() {
         uploadField = new UploadField();
         uploadField.setSizeFull();
-        uploadField.addValidator(new CsvFileExtensionValidator());
+        uploadField.setRequiredIndicatorVisible(true);
+        uploadBinder.forField(uploadField)
+            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .withValidator(value -> StringUtils.endsWith(value, ".csv"),
+                ForeignUi.getMessage("error.upload_file.invalid_extension"))
+            .bind(s -> s, (s, v) -> s = v).validate();
         VaadinUtils.setMaxComponentsWidth(uploadField);
         VaadinUtils.addComponentStyle(uploadField, "usage-upload-component");
         return uploadField;
@@ -171,18 +169,19 @@ class UsageBatchUploadWindow extends Window {
         uploadButton.addClickListener(event -> onUploadClicked());
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         horizontalLayout.addComponents(uploadButton, closeButton);
-        horizontalLayout.setSpacing(true);
         return horizontalLayout;
     }
 
     private TextField initUsageBatchNameField() {
         usageBatchNameField = new TextField(ForeignUi.getMessage("label.usage_batch_name"));
-        usageBatchNameField.addValidator(
-            new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50, false));
-        usageBatchNameField.addValidator(new UsageBatchNameUniqueValidator(usagesController));
-        setRequired(usageBatchNameField);
+        usageBatchNameField.setRequiredIndicatorVisible(true);
+        binder.forField(usageBatchNameField)
+            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
+            .withValidator(value -> !usagesController.usageBatchExists(StringUtils.trimToEmpty(value)),
+                ForeignUi.getMessage("message.error.unique_name", "Usage Batch"))
+            .bind(UsageBatch::getName, UsageBatch::setName);
         usageBatchNameField.setSizeFull();
-        usageBatchNameField.setImmediate(true);
         VaadinUtils.setMaxComponentsWidth(usageBatchNameField);
         VaadinUtils.addComponentStyle(usageBatchNameField, "usage-batch-name-field");
         return usageBatchNameField;
@@ -195,23 +194,25 @@ class UsageBatchUploadWindow extends Window {
         TextField productFamily = initProductFamilyField();
         Button verifyButton = initVerifyButton();
         verifyButton.setWidth(72, Unit.PIXELS);
-        rroAccountLayout.addComponents(accountNumber, productFamily, verifyButton);
-        rroAccountLayout.setSpacing(true);
+        rroAccountLayout.addComponents(accountNumber, productFamily);
         rroAccountLayout.setSizeFull();
         rroAccountLayout.setExpandRatio(accountNumber, 0.62f);
         rroAccountLayout.setExpandRatio(productFamily, 0.38f);
-        rroAccountLayout.setComponentAlignment(verifyButton, Alignment.BOTTOM_RIGHT);
+        HorizontalLayout horizontalLayout = new HorizontalLayout(rroAccountLayout, verifyButton);
+        horizontalLayout.setSizeFull();
+        horizontalLayout.setExpandRatio(rroAccountLayout, 1);
+        horizontalLayout.setComponentAlignment(verifyButton, Alignment.BOTTOM_RIGHT);
         TextField accountName = initRightsholderAccountNameField();
         accountName.setSizeFull();
-        verticalLayout.addComponents(rroAccountLayout, accountName);
-        verticalLayout.setSpacing(true);
+        verticalLayout.addComponents(horizontalLayout, accountName);
+        verticalLayout.setMargin(false);
+        verticalLayout.setSizeFull();
         return verticalLayout;
     }
 
     private HorizontalLayout initPaymentDataLayout() {
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         horizontalLayout.addComponents(initPaymentDateWidget(), initFiscalYearField());
-        horizontalLayout.setSpacing(true);
         horizontalLayout.setSizeFull();
         return horizontalLayout;
     }
@@ -219,56 +220,56 @@ class UsageBatchUploadWindow extends Window {
     private HorizontalLayout initGrossAmountLayout() {
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         horizontalLayout.addComponents(initGrossAmountField(), new Label());
-        horizontalLayout.setSpacing(true);
         horizontalLayout.setSizeFull();
         return horizontalLayout;
     }
 
     private TextField initRightsholderAccountNumberField() {
         accountNumberField = new TextField(ForeignUi.getMessage("label.rro_account_number"));
-        setRequired(accountNumberField);
-        accountNumberField.setNullRepresentation(StringUtils.EMPTY);
-        accountNumberField.setImmediate(true);
-        accountNumberField.addValidator(new NumberValidator());
-        accountNumberField.addValidator(
-            new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 10), 0, 10, false));
+        accountNumberField.setRequiredIndicatorVisible(true);
+        binder.forField(accountNumberField)
+            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.number_length", 10), 0, 10))
+            .withValidator(value -> StringUtils.isNumeric(StringUtils.trim(value)),
+                "Field value should contain numeric values only")
+            .bind(usageBatch -> usageBatch.getRro().getAccountNumber().toString(),
+                (usageBatch, s) -> usageBatch.getRro().setAccountNumber(Long.valueOf(s)));
         VaadinUtils.setMaxComponentsWidth(accountNumberField);
         VaadinUtils.addComponentStyle(accountNumberField, "rro-account-number-field");
-        accountNumberField.addValueChangeListener(
-            (ValueChangeListener) event -> {
-                rightsholderNameProperty.setValue(StringUtils.EMPTY);
-                productFamilyProperty.setValue(StringUtils.EMPTY);
-            });
+        accountNumberField.addValueChangeListener(event -> {
+            accountNameField.setValue(StringUtils.EMPTY);
+            productFamilyField.setValue(StringUtils.EMPTY);
+        });
         return accountNumberField;
     }
 
     private LocalDateWidget initPaymentDateWidget() {
         paymentDateWidget = new LocalDateWidget(ForeignUi.getMessage("label.payment_date"));
         VaadinUtils.setMaxComponentsWidth(accountNumberField);
-        setRequired(paymentDateWidget);
         paymentDateWidget.addValueChangeListener(event ->
-            fiscalYearProperty.setValue(UsageBatchUtils.getFiscalYear(paymentDateWidget.getValue())));
+            fiscalYearField.setValue(UsageBatchUtils.getFiscalYear(paymentDateWidget.getValue())));
+        binder.forField(paymentDateWidget)
+            .asRequired(ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .bind(UsageBatch::getPaymentDate, UsageBatch::setPaymentDate);
         VaadinUtils.addComponentStyle(paymentDateWidget, "payment-date-field");
         return paymentDateWidget;
     }
 
     private TextField initRightsholderAccountNameField() {
-        rightsholderNameProperty = new ObjectProperty<>(StringUtils.EMPTY);
-        accountNameField = new TextField(ForeignUi.getMessage("label.rro_account_name"), rightsholderNameProperty);
-        accountNameField.setRequired(true);
-        accountNameField.setRequiredError(ForeignUi.getMessage("field.error.rro_name.empty"));
+        accountNameField = new TextField(ForeignUi.getMessage("label.rro_account_name"));
+        accountNameField.setRequiredIndicatorVisible(true);
         accountNameField.setReadOnly(true);
-        accountNameField.setNullRepresentation(StringUtils.EMPTY);
+        binder.forField(accountNameField)
+            .asRequired(ForeignUi.getMessage("field.error.rro_name.empty"))
+            .bind(usageBatch -> usageBatch.getRro().getName(), (usageBatch, s) -> usageBatch.getRro().setName(s));
         VaadinUtils.setMaxComponentsWidth(accountNameField);
         VaadinUtils.addComponentStyle(accountNameField, "rro-account-name-field");
         return accountNameField;
     }
 
     private TextField initFiscalYearField() {
-        fiscalYearProperty = new ObjectProperty<>(StringUtils.EMPTY);
-        TextField fiscalYearField = new TextField(ForeignUi.getMessage("label.fiscal_year"), fiscalYearProperty);
+        fiscalYearField = new TextField(ForeignUi.getMessage("label.fiscal_year"));
         fiscalYearField.setReadOnly(true);
-        fiscalYearField.setNullRepresentation(StringUtils.EMPTY);
         VaadinUtils.setMaxComponentsWidth(fiscalYearField);
         VaadinUtils.addComponentStyle(fiscalYearField, "fiscal-year-field");
         return fiscalYearField;
@@ -276,21 +277,21 @@ class UsageBatchUploadWindow extends Window {
 
     private TextField initGrossAmountField() {
         grossAmountField = new TextField(ForeignUi.getMessage("label.gross_amount_usd"));
-        setRequired(grossAmountField);
-        grossAmountField.setNullRepresentation(StringUtils.EMPTY);
-        grossAmountField.setImmediate(true);
-        grossAmountField.addValidator(new GrossAmountValidator());
+        grossAmountField.setRequiredIndicatorVisible(true);
+        binder.forField(grossAmountField)
+            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .withValidator(value -> new ReportedValueValidator().isValid(StringUtils.trimToEmpty(value)),
+                "Field value should be positive number and not exceed 10 digits")
+            .withConverter(new StringToBigDecimalConverter("Field should be numeric"))
+            .bind(UsageBatch::getGrossAmount, UsageBatch::setGrossAmount);
         VaadinUtils.setMaxComponentsWidth(grossAmountField);
         VaadinUtils.addComponentStyle(grossAmountField, "gross-amount-field");
         return grossAmountField;
     }
 
     private TextField initProductFamilyField() {
-        productFamilyProperty = new ObjectProperty<>(StringUtils.EMPTY);
-        TextField productFamilyField =
-            new TextField(ForeignUi.getMessage("label.product_family"), productFamilyProperty);
+        productFamilyField = new TextField(ForeignUi.getMessage("label.product_family"));
         productFamilyField.setReadOnly(true);
-        productFamilyField.setNullRepresentation(StringUtils.EMPTY);
         VaadinUtils.setMaxComponentsWidth(productFamilyField);
         VaadinUtils.addComponentStyle(productFamilyField, "product-family-field");
         return productFamilyField;
@@ -298,40 +299,19 @@ class UsageBatchUploadWindow extends Window {
 
     private Button initVerifyButton() {
         Button button = Buttons.createButton(ForeignUi.getMessage("button.verify"));
-        button.setSizeFull();
         button.addClickListener(event -> {
-            if (accountNumberField.isValid()) {
+            if (null == accountNumberField.getErrorMessage()) {
                 rro = usagesController.getRro(Long.valueOf(StringUtils.trim(accountNumberField.getValue())));
-                rightsholderNameProperty.setValue(rro.getName());
                 if (StringUtils.isNotBlank(rro.getName())) {
-                    productFamilyProperty.setValue(
+                    accountNameField.setValue(rro.getName());
+                    productFamilyField.setValue(
                         Long.valueOf(2000017000).equals(rro.getAccountNumber()) ? "CLA_FAS" : "FAS");
+                } else {
+                    accountNameField.clear();
+                    productFamilyField.clear();
                 }
             }
         });
         return button;
-    }
-
-    private void setRequired(AbstractField field) {
-        field.setRequired(true);
-        field.setRequiredError(ForeignUi.getMessage("field.error.empty"));
-    }
-
-    /**
-     * Validator for CSV file extension.
-     */
-    static class CsvFileExtensionValidator extends AbstractStringValidator {
-
-        /**
-         * Constructor.
-         */
-        CsvFileExtensionValidator() {
-            super(ForeignUi.getMessage("error.upload_file.invalid_extension"));
-        }
-
-        @Override
-        protected boolean isValidValue(String value) {
-            return StringUtils.endsWith(value, ".csv");
-        }
     }
 }

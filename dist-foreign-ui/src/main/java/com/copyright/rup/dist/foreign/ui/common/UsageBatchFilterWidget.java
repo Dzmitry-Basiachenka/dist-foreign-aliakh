@@ -1,18 +1,20 @@
-package com.copyright.rup.dist.foreign.ui.usage.impl;
+package com.copyright.rup.dist.foreign.ui.common;
 
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.vaadin.ui.VaadinUtils;
-import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.FilterSaveEvent;
 import com.copyright.rup.vaadin.ui.component.filter.IFilterWindowController;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
+import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.BaseItemsFilterWidget;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import com.vaadin.data.ValueProvider;
 
 import org.apache.commons.collections4.CollectionUtils;
 
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -26,11 +28,11 @@ import java.util.function.Supplier;
  *
  * @author Mikalai Bezmen
  */
-public class UsageBatchFilterWidget extends BaseItemsFilterWidget<String, UsageBatch>
-    implements IFilterWindowController<String, UsageBatch> {
+public class UsageBatchFilterWidget extends BaseItemsFilterWidget<UsageBatch>
+    implements IFilterWindowController<UsageBatch> {
 
     private final Supplier<List<UsageBatch>> supplier;
-    private final Set<String> selectedItemsIds = new HashSet<>();
+    private final Set<UsageBatch> selectedItemsIds = Sets.newHashSet();
 
     /**
      * Constructor.
@@ -43,14 +45,14 @@ public class UsageBatchFilterWidget extends BaseItemsFilterWidget<String, UsageB
     }
 
     @Override
-    public Collection<UsageBatch> loadBeans() {
-        return supplier.get();
-    }
-
-    @Override
     public void reset() {
         selectedItemsIds.clear();
         super.reset();
+    }
+
+    @Override
+    public List<UsageBatch> loadBeans() {
+        return supplier.get();
     }
 
     @Override
@@ -64,8 +66,8 @@ public class UsageBatchFilterWidget extends BaseItemsFilterWidget<String, UsageB
     }
 
     @Override
-    public void onSave(FilterSaveEvent<String> event) {
-        Set<String> itemsIds = event.getSelectedItemsIds();
+    public void onSave(FilterSaveEvent<UsageBatch> event) {
+        Set<UsageBatch> itemsIds = event.getSelectedItemsIds();
         selectedItemsIds.clear();
         if (CollectionUtils.isNotEmpty(itemsIds)) {
             selectedItemsIds.addAll(itemsIds);
@@ -73,14 +75,10 @@ public class UsageBatchFilterWidget extends BaseItemsFilterWidget<String, UsageB
     }
 
     @Override
-    public String getIdForBean(UsageBatch usageBatch) {
-        return usageBatch.getId();
-    }
-
-    @Override
-    public FilterWindow<String, UsageBatch> showFilterWindow() {
-        FilterWindow<String, UsageBatch> filterWindow =
-            Windows.showFilterWindow(ForeignUi.getMessage("window.batches_filter"), this, "name");
+    public FilterWindow<UsageBatch> showFilterWindow() {
+        FilterWindow<UsageBatch> filterWindow =
+            Windows.showFilterWindow(ForeignUi.getMessage("window.batches_filter"), this,
+                (ValueProvider<UsageBatch, List<String>>) bean -> Lists.newArrayList(bean.getName()));
         filterWindow.setSelectedItemsIds(selectedItemsIds);
         filterWindow.setSearchPromptString(ForeignUi.getMessage("prompt.batch"));
         VaadinUtils.addComponentStyle(filterWindow, "batches-filter-window");

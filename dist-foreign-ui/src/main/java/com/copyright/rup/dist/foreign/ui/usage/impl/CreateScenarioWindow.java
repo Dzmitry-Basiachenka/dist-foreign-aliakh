@@ -1,14 +1,15 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.common.date.RupDateUtils;
-import com.copyright.rup.dist.foreign.ui.component.validator.ScenarioNameUniqueValidator;
+import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.ui.Buttons;
-import com.copyright.rup.vaadin.ui.VaadinUtils;
-import com.copyright.rup.vaadin.ui.Windows;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
+import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.google.common.collect.Lists;
+import com.vaadin.data.Binder;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -25,7 +26,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Modal window that provides functionality for creating {@link com.copyright.rup.dist.foreign.domain.Scenario}.
+ * Modal window that provides functionality for creating {@link Scenario}.
  * <p/>
  * Copyright (C) 2017 copyright.com
  * <p/>
@@ -36,6 +37,7 @@ import java.time.format.DateTimeFormatter;
 public class CreateScenarioWindow extends Window {
 
     private final IUsagesController controller;
+    private final Binder<Scenario> binder = new Binder<>();
     private TextField scenarioNameField;
     private TextArea descriptionArea;
 
@@ -75,31 +77,30 @@ public class CreateScenarioWindow extends Window {
 
     private void initDescriptionArea() {
         descriptionArea = new TextArea(ForeignUi.getMessage("field.description"));
-        descriptionArea.setValidationVisible(false);
+        binder.forField(descriptionArea)
+            .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 2000), 0, 2000))
+            .bind(Scenario::getDescription, Scenario::setDescription);
         VaadinUtils.setMaxComponentsWidth(descriptionArea);
-        descriptionArea.addValidator(
-            new StringLengthValidator(ForeignUi.getMessage("field.error.length", 2000), 0, 2000, false));
         VaadinUtils.addComponentStyle(descriptionArea, "scenario-description");
     }
 
     private void initScenarioNameField() {
         scenarioNameField = new TextField(ForeignUi.getMessage("field.scenario_name"));
-        scenarioNameField.setValidationVisible(false);
+        binder.forField(scenarioNameField)
+            .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
+            .withValidator(value -> !controller.getScenarioService().scenarioExists(value),
+                ForeignUi.getMessage("message.error.unique_name", "Scenario"))
+            .asRequired(ForeignUi.getMessage("field.error.empty"))
+            .bind(Scenario::getName, Scenario::setName);
         VaadinUtils.setMaxComponentsWidth(scenarioNameField);
         VaadinUtils.addComponentStyle(scenarioNameField, "scenario-name");
-        scenarioNameField.setNullRepresentation(StringUtils.EMPTY);
         scenarioNameField.setValue(
             ForeignUi.getMessage("field.scenario_name.default", controller.getSelectedProductFamily(),
                 LocalDate.now().format(DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT))));
-        scenarioNameField.setRequired(true);
-        scenarioNameField.setRequiredError(ForeignUi.getMessage("field.error.empty"));
-        scenarioNameField.addValidator(
-            new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50, false));
-        scenarioNameField.addValidator(new ScenarioNameUniqueValidator(controller.getScenarioService()));
     }
 
     private boolean isValid() {
-        return scenarioNameField.isValid() && descriptionArea.isValid();
+        return binder.isValid();
     }
 
     private void onConfirmButtonClicked() {
@@ -114,28 +115,28 @@ public class CreateScenarioWindow extends Window {
     }
 
     /**
-     * Event that is thrown when new {@link com.copyright.rup.dist.foreign.domain.Scenario} is created.
+     * Event that is thrown when new {@link Scenario} is created.
      */
     public static class ScenarioCreateEvent extends Event {
 
-        private final String scenarioId;
+        private final Scenario scenario;
 
         /**
          * Constructor.
          *
-         * @param source     event source
-         * @param scenarioId created scenarios id
+         * @param source   event source
+         * @param scenario created {@link Scenario}
          */
-        ScenarioCreateEvent(Component source, String scenarioId) {
+        ScenarioCreateEvent(Component source, Scenario scenario) {
             super(source);
-            this.scenarioId = scenarioId;
+            this.scenario = scenario;
         }
 
         /**
-         * @return scenario id.
+         * @return {@link Scenario}.
          */
-        public String getScenarioId() {
-            return scenarioId;
+        public Scenario getScenarioId() {
+            return scenario;
         }
     }
 }

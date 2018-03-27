@@ -2,11 +2,11 @@ package com.copyright.rup.dist.foreign.ui.audit.impl;
 
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
-import com.copyright.rup.vaadin.ui.VaadinUtils;
-import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.FilterSaveEvent;
 import com.copyright.rup.vaadin.ui.component.filter.IFilterWindowController;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
+import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.BaseItemsFilterWidget;
 
 import com.google.common.collect.Lists;
@@ -26,8 +26,8 @@ import java.util.Set;
  *
  * @author Aliaksandr Radkevich
  */
-class StatusFilterWidget extends BaseItemsFilterWidget<UsageStatusEnum, UsageStatusEnum> implements
-    IFilterWindowController<UsageStatusEnum, UsageStatusEnum> {
+class StatusFilterWidget extends BaseItemsFilterWidget<UsageStatusEnum>
+    implements IFilterWindowController<UsageStatusEnum> {
 
     private final Set<UsageStatusEnum> selectedItemsIds = new HashSet<>();
 
@@ -54,11 +54,6 @@ class StatusFilterWidget extends BaseItemsFilterWidget<UsageStatusEnum, UsageSta
     }
 
     @Override
-    public UsageStatusEnum getIdForBean(UsageStatusEnum status) {
-        return status;
-    }
-
-    @Override
     public void onSave(FilterSaveEvent<UsageStatusEnum> event) {
         Set<UsageStatusEnum> itemsIds = event.getSelectedItemsIds();
         selectedItemsIds.clear();
@@ -68,8 +63,8 @@ class StatusFilterWidget extends BaseItemsFilterWidget<UsageStatusEnum, UsageSta
     }
 
     @Override
-    public FilterWindow<UsageStatusEnum, UsageStatusEnum> showFilterWindow() {
-        FilterWindow<UsageStatusEnum, UsageStatusEnum> filterWindow =
+    public FilterWindow<UsageStatusEnum> showFilterWindow() {
+        FilterWindow<UsageStatusEnum> filterWindow =
             Windows.showFilterWindow(ForeignUi.getMessage("window.status_filter"), this);
         filterWindow.setSelectedItemsIds(selectedItemsIds);
         VaadinUtils.addComponentStyle(filterWindow, "status-filter-window");

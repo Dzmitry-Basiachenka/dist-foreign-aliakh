@@ -1,35 +1,26 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
-import com.copyright.rup.common.date.RupDateUtils;
-import com.copyright.rup.dist.common.domain.BaseEntity;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
-import com.copyright.rup.dist.foreign.ui.common.util.FiscalYearColumnGenerator;
+import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.ui.Buttons;
-import com.copyright.rup.vaadin.ui.LocalDateColumnGenerator;
-import com.copyright.rup.vaadin.ui.VaadinUtils;
-import com.copyright.rup.vaadin.ui.Windows;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
+import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 import com.copyright.rup.vaadin.widget.SearchWidget.ISearchController;
 
-import com.vaadin.data.Container.Filter;
-import com.vaadin.data.Item;
-import com.vaadin.data.Property;
-import com.vaadin.data.util.BeanContainer;
-import com.vaadin.data.util.filter.Or;
-import com.vaadin.data.util.filter.SimpleStringFilter;
+import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Table;
-import com.vaadin.ui.Table.ColumnGenerator;
+import com.vaadin.ui.Grid;
+import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -44,11 +35,9 @@ import java.util.List;
  */
 class DeleteUsageBatchWindow extends Window {
 
-    private static final String PAYMENT_DATE_PROPERTY = "paymentDate";
-
-    private final IUsagesController controller;
     private final SearchWidget searchWidget;
-    private BeanContainer<String, UsageBatch> container;
+    private final IUsagesController controller;
+    private Grid<UsageBatch> grid;
 
     /**
      * Constructor.
@@ -62,46 +51,40 @@ class DeleteUsageBatchWindow extends Window {
         setHeight(450, Unit.PIXELS);
         searchWidget = new SearchWidget(new SearchController());
         searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.batch.search_usage_batch"));
-        Table table = initUsageBatchesTable();
+        initUsageBatchesGrid();
         Button closeButton = Buttons.createCloseButton(this);
-        VerticalLayout layout = new VerticalLayout(searchWidget, table, closeButton);
-        layout.setMargin(true);
-        layout.setSpacing(true);
+        VerticalLayout layout = new VerticalLayout(searchWidget, grid, closeButton);
         layout.setSizeFull();
-        layout.setExpandRatio(table, 1);
+        layout.setExpandRatio(grid, 1);
         layout.setComponentAlignment(closeButton, Alignment.MIDDLE_RIGHT);
         setContent(layout);
         VaadinUtils.addComponentStyle(this, "delete-usage-batch");
     }
 
-    private Table initUsageBatchesTable() {
-        container = new BeanContainer<>(UsageBatch.class);
-        container.setBeanIdResolver(BaseEntity::getId);
-        container.addAll(controller.getUsageBatches());
-        Table table = new Table(null, container);
-        VaadinUtils.addComponentStyle(table, "usage-batches-table");
-        table.setSizeFull();
-        table.addGeneratedColumn(PAYMENT_DATE_PROPERTY, new LocalDateColumnGenerator(
-            RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT));
-        table.addGeneratedColumn("fiscalYear", new FiscalYearColumnGenerator());
-        table.addGeneratedColumn("delete", (ColumnGenerator) (source, itemId, columnId) -> {
+    private void initUsageBatchesGrid() {
+        grid = new Grid<>();
+        grid.setItems(controller.getUsageBatches());
+        grid.setSelectionMode(SelectionMode.NONE);
+        grid.setSizeFull();
+        grid.addColumn(UsageBatch::getName)
+            .setCaption(ForeignUi.getMessage("table.column.batch_name"))
+            .setSortProperty("name")
+            .setExpandRatio(1);
+        grid.addColumn(UsageBatch::getPaymentDate)
+            .setCaption(ForeignUi.getMessage("table.column.payment_date"))
+            .setSortProperty("paymentDate")
+            .setWidth(115);
+        grid.addColumn(batch -> UsageBatchUtils.getFiscalYear(batch.getFiscalYear()))
+            .setCaption(ForeignUi.getMessage("table.column.fiscal_year"))
+            .setSortProperty("fiscalYear")
+            .setWidth(110);
+        grid.addComponentColumn(batch -> {
             Button deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
-            UsageBatch usageBatch = container.getItem(itemId).getBean();
-            deleteButton.setId(usageBatch.getId());
-            deleteButton.addClickListener(event -> deleteUsageBatch(usageBatch));
+            deleteButton.setId(batch.getId());
+            deleteButton.addClickListener(event -> deleteUsageBatch(batch));
             return deleteButton;
-        });
-        table.setVisibleColumns("name", PAYMENT_DATE_PROPERTY, "fiscalYear", "delete");
-        table.setColumnHeaders(
-            ForeignUi.getMessage("table.column.batch_name"),
-            ForeignUi.getMessage("table.column.payment_date"),
-            ForeignUi.getMessage("table.column.fiscal_year"),
-            StringUtils.EMPTY);
-        table.setColumnWidth("delete", 65);
-        table.setColumnWidth(PAYMENT_DATE_PROPERTY, 100);
-        table.setColumnWidth("fiscalYear", 80);
-        table.setColumnExpandRatio("name", 1);
-        return table;
+        }).setId("delete").setWidth(90);
+        VaadinUtils.addComponentStyle(grid, "usage-batches-grid");
     }
 
     private void deleteUsageBatch(UsageBatch usageBatch) {
@@ -123,38 +106,7 @@ class DeleteUsageBatchWindow extends Window {
 
     private void performDelete(UsageBatch usageBatch) {
         controller.deleteUsageBatch(usageBatch);
-        container.removeItem(usageBatch.getId());
-    }
-
-    /**
-     * {@link Filter} implementation for payment date property. Provides ability to filter by payment date in
-     * format MM/dd/yyyy ({@link LocalDate#toString()} returns date in format yyyy-MM-dd).
-     */
-    static class PaymentDateFilter implements Filter {
-
-        private final String searchValue;
-
-        /**
-         * Constructor.
-         *
-         * @param searchValue search value
-         */
-        PaymentDateFilter(String searchValue) {
-            this.searchValue = searchValue;
-        }
-
-        @Override
-        public boolean passesFilter(Object itemId, Item item) throws UnsupportedOperationException {
-            Property<?> property = item.getItemProperty(PAYMENT_DATE_PROPERTY);
-            LocalDate date = (LocalDate) property.getValue();
-            String paymentDate = date.format(DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT));
-            return paymentDate.contains(searchValue);
-        }
-
-        @Override
-        public boolean appliesToProperty(Object propertyId) {
-            return PAYMENT_DATE_PROPERTY.equals(propertyId);
-        }
+        grid.setItems(controller.getUsageBatches());
     }
 
     /**
@@ -164,12 +116,17 @@ class DeleteUsageBatchWindow extends Window {
 
         @Override
         public void performSearch() {
-            container.removeAllContainerFilters();
+            ListDataProvider<UsageBatch> dataProvider = (ListDataProvider<UsageBatch>) grid.getDataProvider();
+            dataProvider.clearFilters();
             String searchValue = searchWidget.getSearchValue();
             if (StringUtils.isNotBlank(searchValue)) {
-                container.addContainerFilter(new Or(new SimpleStringFilter("name", searchValue, true, false),
-                    new PaymentDateFilter(searchValue)));
+                dataProvider.setFilter(batch -> caseInsensitiveContains(batch.getName(), searchValue) ||
+                    caseInsensitiveContains(batch.getPaymentDate().format(DateTimeFormatter.ISO_DATE), searchValue));
             }
+        }
+
+        private Boolean caseInsensitiveContains(String where, String what) {
+            return StringUtils.contains(StringUtils.lowerCase(where), StringUtils.lowerCase(what));
         }
     }
 }

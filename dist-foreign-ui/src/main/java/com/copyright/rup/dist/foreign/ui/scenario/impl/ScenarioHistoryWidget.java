@@ -1,22 +1,26 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
 import com.copyright.rup.common.date.RupDateUtils;
-import com.copyright.rup.dist.common.domain.BaseEntity;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioHistoryController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioHistoryWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
-import com.copyright.rup.vaadin.ui.DateColumnGenerator;
-import com.copyright.rup.vaadin.ui.VaadinUtils;
+import com.copyright.rup.vaadin.util.VaadinUtils;
 
-import com.vaadin.data.util.BeanContainer;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Table;
+import com.vaadin.ui.Grid;
+import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+
+import org.apache.commons.lang3.StringUtils;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Implementation of {@link IScenarioHistoryWidget}.
@@ -30,7 +34,7 @@ import com.vaadin.ui.Window;
 public class ScenarioHistoryWidget extends Window implements IScenarioHistoryWidget {
 
     private IScenarioHistoryController controller;
-    private BeanContainer<String, ScenarioAuditItem> container;
+    private Grid<ScenarioAuditItem> grid;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -49,10 +53,9 @@ public class ScenarioHistoryWidget extends Window implements IScenarioHistoryWid
 
     @Override
     public void populateHistory(Scenario scenario) {
-        container.removeAllItems();
         if (null != scenario) {
             setCaption(ForeignUi.getMessage("window.caption.scenario_history", scenario.getName()));
-            container.addAll(controller.getActions(scenario.getId()));
+            grid.setItems(controller.getActions(scenario.getId()));
         }
     }
 
@@ -62,35 +65,34 @@ public class ScenarioHistoryWidget extends Window implements IScenarioHistoryWid
         layout.setMargin(true);
         layout.setSizeFull();
         Button closeButton = Buttons.createCloseButton(this);
-        Table table = initActionsTable();
-        layout.addComponents(table, closeButton);
+        initActionsGrid();
+        layout.addComponents(grid, closeButton);
         layout.setComponentAlignment(closeButton, Alignment.BOTTOM_RIGHT);
-        layout.setExpandRatio(table, 1);
+        layout.setExpandRatio(grid, 1);
         return layout;
     }
 
-    private Table initActionsTable() {
-        container = new BeanContainer<>(ScenarioAuditItem.class);
-        container.setBeanIdResolver(BaseEntity::getId);
-        Table table = new Table(null, container);
-        table.setVisibleColumns(
-            "actionType",
-            "createUser",
-            "createDate",
-            "actionReason"
-        );
-        table.setColumnHeaders(
-            ForeignUi.getMessage("table.column.type"),
-            ForeignUi.getMessage("table.column.action.user"),
-            ForeignUi.getMessage("table.column.date"),
-            ForeignUi.getMessage("table.column.action.reason")
-        );
-        table.addGeneratedColumn("createDate", new DateColumnGenerator(RupDateUtils.US_DATETIME_FORMAT_PATTERN_LONG));
-        table.setSizeFull();
-        table.setColumnWidth("createDate", 115);
-        table.setColumnExpandRatio("actionReason", 1);
-        table.setSortEnabled(false);
-        VaadinUtils.addComponentStyle(table, "scenario-history-table");
-        return table;
+    private void initActionsGrid() {
+        grid = new Grid<>();
+        grid.setSelectionMode(SelectionMode.NONE);
+        grid.addColumn(ScenarioAuditItem::getActionType)
+            .setCaption(ForeignUi.getMessage("table.column.type"))
+            .setSortProperty("oldRightsholder.rhAccountNumber");
+        grid.addColumn(ScenarioAuditItem::getCreateUser)
+            .setCaption(ForeignUi.getMessage("table.column.action.user"))
+            .setSortProperty("oldRightsholder.rhName");
+        grid.addColumn(auditItem -> getStringFromDate(auditItem.getCreateDate()))
+            .setCaption(ForeignUi.getMessage("table.column.date"))
+            .setSortProperty("newRightsholder.rhAccountNumber");
+        grid.addColumn(ScenarioAuditItem::getActionReason)
+            .setCaption(ForeignUi.getMessage("table.column.action.reason"))
+            .setSortProperty("newRightsholder.rhName");
+        grid.setSizeFull();
+        VaadinUtils.addComponentStyle(grid, "scenario-history-grid");
+    }
+
+    private String getStringFromDate(Date date) {
+        return null != date ? new SimpleDateFormat(RupDateUtils.US_DATETIME_FORMAT_PATTERN_LONG, Locale.getDefault())
+            .format(date) : StringUtils.EMPTY;
     }
 }

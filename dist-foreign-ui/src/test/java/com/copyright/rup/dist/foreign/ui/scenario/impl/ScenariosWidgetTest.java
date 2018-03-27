@@ -5,7 +5,6 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.reset;
 import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
@@ -16,24 +15,20 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
-import com.copyright.rup.vaadin.ui.DateColumnGenerator;
 
-import com.vaadin.data.Property;
-import com.vaadin.data.Property.ValueChangeEvent;
-import com.vaadin.data.Property.ValueChangeListener;
-import com.vaadin.data.util.BeanContainer;
-import com.vaadin.data.util.BeanItem;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.Grid;
+import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
-import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,9 +37,11 @@ import org.powermock.reflect.Whitebox;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Verifies {@link ScenariosWidget}.
@@ -59,7 +56,7 @@ import java.util.Date;
 public class ScenariosWidgetTest {
 
     private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
-    private static final String TABLE_ID = "table";
+    private static final String GRID_ID = "scenarioGrid";
     private static final String SELECTION_CRITERIA = "<b>Selection Criteria:</b>";
 
     private ScenariosWidget scenariosWidget;
@@ -98,8 +95,8 @@ public class ScenariosWidgetTest {
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(2, layout.getComponentCount());
         component = layout.getComponent(0);
-        assertTrue(component instanceof Table);
-        verifyTable((Table) component);
+        assertTrue(component instanceof Grid);
+        verifyGrid((Grid) component);
         component = layout.getComponent(1);
         assertTrue(component instanceof Panel);
         verifyPanel((Panel) component);
@@ -123,108 +120,62 @@ public class ScenariosWidgetTest {
 
     @Test
     public void testSelectScenario() {
-        scenariosWidget.selectScenario(null);
-        Table table = Whitebox.getInternalState(scenariosWidget, TABLE_ID);
-        assertNull(table.getValue());
+        Grid grid = Whitebox.getInternalState(scenariosWidget, GRID_ID);
+        assertTrue(CollectionUtils.isEmpty(grid.getSelectedItems()));
         expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(StringUtils.EMPTY).once();
         replay(controller);
-        scenariosWidget.selectScenario(SCENARIO_ID);
-        assertEquals(SCENARIO_ID, table.getValue());
+        scenariosWidget.selectScenario(scenario);
+        assertEquals(scenario, grid.getSelectedItems().iterator().next());
         verify(controller);
     }
 
     @Test
     @SuppressWarnings("unchecked")
     public void testRefreshSelectedScenario() {
-        Table scenariosTable = createMock(Table.class);
-        Whitebox.setInternalState(scenariosWidget, TABLE_ID, scenariosTable);
-        expect(scenariosTable.getValue()).andReturn(SCENARIO_ID).once();
-        BeanContainer<String, Scenario> container = createMock(BeanContainer.class);
-        Whitebox.setInternalState(scenariosWidget, "container", container);
-        expect(container.getItem(SCENARIO_ID)).andReturn(new BeanItem(scenario)).once();
+        Grid grid = createMock(Grid.class);
+        Whitebox.setInternalState(scenariosWidget, GRID_ID, grid);
+        expect(grid.getSelectedItems()).andReturn(Collections.singleton(scenario)).once();
         expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
         expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
-        replay(controller, scenariosTable, container);
+        replay(controller, grid);
         scenariosWidget.refreshSelectedScenario();
         verifyScenarioMetadataPanel();
-        verify(controller, scenariosTable, container);
+        verify(controller, grid);
     }
 
     @Test
     @SuppressWarnings("unchecked")
     public void testGetSelectedScenario() {
-        Table scenariosTable = createMock(Table.class);
-        Whitebox.setInternalState(scenariosWidget, TABLE_ID, scenariosTable);
-        BeanContainer<String, Scenario> container = createMock(BeanContainer.class);
-        Whitebox.setInternalState(scenariosWidget, "container", container);
-        expect(scenariosTable.getValue()).andReturn(SCENARIO_ID).once();
-        expect(container.getItem(SCENARIO_ID)).andReturn(new BeanItem(scenario)).once();
-        replay(scenariosTable, container);
+        Grid grid = createMock(Grid.class);
+        Whitebox.setInternalState(scenariosWidget, GRID_ID, grid);
+        expect(grid.getSelectedItems()).andReturn(Collections.singleton(scenario)).once();
+        replay(grid);
         assertEquals(scenario, scenariosWidget.getSelectedScenario());
-        verify(scenariosTable, container);
+        verify(grid);
     }
 
     @Test
     public void testGetNotSelectedScenario() {
-        Table scenariosTable = createMock(Table.class);
-        Whitebox.setInternalState(scenariosWidget, TABLE_ID, scenariosTable);
-        expect(scenariosTable.getValue()).andReturn(null).once();
-        replay(scenariosTable);
+        Grid grid = createMock(Grid.class);
+        Whitebox.setInternalState(scenariosWidget, GRID_ID, grid);
+        expect(grid.getSelectedItems()).andReturn(Collections.EMPTY_SET).once();
+        replay(grid);
         assertEquals(null, scenariosWidget.getSelectedScenario());
-        verify(scenariosTable);
+        verify(grid);
     }
 
     private void verifyPanel(Panel panel) {
         verifySize(panel);
-        Component content = panel.getContent();
-        assertTrue(content instanceof Label);
-        Label label = (Label) content;
-        assertEquals(StringUtils.EMPTY, label.getValue());
+        assertNull(panel.getContent());
     }
 
-    private void verifyTable(Table table) {
-        verifySize(table);
-        assertEquals("scenarios-table", table.getId());
-        assertArrayEquals(new Object[]{"name", "createDate", "status"}, table.getVisibleColumns());
-        assertArrayEquals(new Object[]{"Name", "Create Date", "Status"}, table.getColumnHeaders());
-        assertEquals(100, table.getColumnWidth("createDate"));
-        assertEquals(130, table.getColumnWidth("status"));
-        assertEquals(1, table.getColumnExpandRatio("name"), 0);
-        assertTrue(table.getColumnGenerator("createDate") instanceof DateColumnGenerator);
-        Collection<?> listeners = table.getListeners(ValueChangeEvent.class);
-        assertEquals(1, listeners.size());
-        ValueChangeListener listener = (ValueChangeListener) listeners.iterator().next();
-        expect(controller.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
-        expect(controller.getCriteriaHtmlRepresentation()).andReturn(SELECTION_CRITERIA).once();
-        replay(controller);
-        verifyValueChangeListener(listener);
-        verifyValueChangeListenerNoSelectedItem(listener);
-        verify(controller);
-    }
-
-    private void verifyValueChangeListenerNoSelectedItem(ValueChangeListener listener) {
-        ValueChangeEvent eventMock = createMock(ValueChangeEvent.class);
-        Property propertyMock = createMock(Property.class);
-        expect(propertyMock.getValue()).andReturn(RupPersistUtils.generateUuid()).once();
-        expect(eventMock.getProperty()).andReturn(propertyMock).once();
-        replay(eventMock, propertyMock);
-        listener.valueChange(eventMock);
-        verify(eventMock, propertyMock);
-        reset(eventMock, propertyMock);
-    }
-
-    private void verifyValueChangeListener(ValueChangeListener listener) {
-        ValueChangeEvent eventMock = createMock(ValueChangeEvent.class);
-        Property propertyMock = createMock(Property.class);
-        expect(propertyMock.getValue()).andReturn(SCENARIO_ID).once();
-        expect(eventMock.getProperty()).andReturn(propertyMock).once();
-        replay(eventMock, propertyMock);
-        listener.valueChange(eventMock);
-        verifyScenarioMetadataPanel();
-        Button deleteButton = (Button) ((HorizontalLayout) scenariosWidget.getComponent(0)).getComponent(0);
-        assertTrue(deleteButton.isEnabled());
-        verify(eventMock, propertyMock);
+    private void verifyGrid(Grid grid) {
+        verifySize(grid);
+        assertEquals("scenarios-table", grid.getId());
+        List<Column> columns = grid.getColumns();
+        assertEquals(Arrays.asList("Name", "Create Date", "Status"),
+            columns.stream().map(Column::getCaption).collect(Collectors.toList()));
     }
 
     private void verifyButtonsLayout(HorizontalLayout layout) {

@@ -1,7 +1,5 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 /**
  * Represents domain to hold property and direction for sorting.
  * <p>
@@ -26,23 +24,6 @@ public class Sort {
     public Sort(String property, Direction direction) {
         this.property = property;
         this.direction = direction.getValue();
-    }
-
-    /**
-     * Creates {@link Sort} object with specified sort property identifier as first of sortPropertyIds parameter
-     * and sort state as first of sortStates parameter.
-     *
-     * @param sortPropertyIds sort property identifiers
-     * @param sortStates      sort states
-     * @return instance of {@link Sort} with specified {@link Sort#property} and {@link Sort#direction} if sort property
-     * identifiers and sort states are not empty, {@code null} - otherwise
-     */
-    public static Sort create(Object[] sortPropertyIds, boolean... sortStates) {
-        Sort result = null;
-        if (ArrayUtils.isNotEmpty(sortPropertyIds) && ArrayUtils.isNotEmpty(sortStates)) {
-            result = new Sort(String.valueOf(sortPropertyIds[0]), Sort.Direction.of(sortStates[0]));
-        }
-        return result;
     }
 
     /**

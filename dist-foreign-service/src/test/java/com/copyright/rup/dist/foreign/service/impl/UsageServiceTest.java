@@ -28,6 +28,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
+import com.copyright.rup.dist.foreign.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
@@ -390,7 +391,7 @@ public class UsageServiceTest {
     public void testGetForAudit() {
         AuditFilter filter = new AuditFilter();
         Pageable pageable = new Pageable(0, 10);
-        Sort sort = Sort.create(new Object[]{"detailId"}, false);
+        Sort sort = new Sort("detailId", Direction.DESC);
         expect(usageRepository.findForAudit(filter, pageable, sort)).andReturn(Collections.emptyList()).once();
         replay(usageRepository);
         assertEquals(Collections.emptyList(), usageService.getForAudit(filter, pageable, sort));

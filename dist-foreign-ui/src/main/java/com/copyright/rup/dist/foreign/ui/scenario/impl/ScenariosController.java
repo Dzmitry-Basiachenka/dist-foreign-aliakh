@@ -9,6 +9,9 @@ import com.copyright.rup.dist.foreign.domain.ScenarioUsageFilter;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
+import com.copyright.rup.dist.foreign.repository.api.Pageable;
+import com.copyright.rup.dist.foreign.repository.api.Sort;
+import com.copyright.rup.dist.foreign.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
@@ -22,12 +25,13 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.impl.ExcludeRightsholdersWindow.IExcludeUsagesListener;
 import com.copyright.rup.vaadin.security.SecurityUtils;
-import com.copyright.rup.vaadin.ui.ConfirmActionDialogWindow;
-import com.copyright.rup.vaadin.ui.Windows;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import com.google.common.collect.Maps;
+import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.data.validator.StringLengthValidator;
+import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.ui.Window;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -135,13 +139,13 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
         if (!scenarioController.isScenarioEmpty()) {
             IActionHandler actionHandler = actionHandlers.get(actionType);
             if (null != actionHandler) {
-                Window window = new ConfirmActionDialogWindow(
+                Windows.showConfirmDialogWithReason(
+                    ForeignUi.getMessage("window.confirm"),
+                    ForeignUi.getMessage("message.confirm.action"),
+                    ForeignUi.getMessage("button.yes"),
+                    ForeignUi.getMessage("button.cancel"),
                     reason -> applyScenarioAction(actionHandler, reason),
-                    ForeignUi.getMessage("window.confirm"), ForeignUi.getMessage("message.confirm.action"),
-                    ForeignUi.getMessage("button.yes"), ForeignUi.getMessage("button.cancel"),
-                    new StringLengthValidator(ForeignUi.getMessage("field.error.length", 1024), 0, 1024, true)
-                );
-                Windows.showModalWindow(window);
+                    new StringLengthValidator(ForeignUi.getMessage("field.error.length", 1024), 0, 1024));
             }
         } else {
             Windows.showNotificationWindow(
@@ -161,9 +165,12 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
         ScenarioUsageFilter filter =
             scenarioUsageFilterService.getByScenarioId(getWidget().getSelectedScenario().getId());
         if (Objects.nonNull(filter)) {
-            List<UsageDto> usages = usageService.getUsages(new UsageFilter(filter), null, null);
-            if (CollectionUtils.isNotEmpty(usages)) {
-                Windows.showModalWindow(new RefreshScenarioWindow(usages, this));
+            UsageFilter usageFilter = new UsageFilter(filter);
+            if (0 < getSize(usageFilter)) {
+                Windows.showModalWindow(new RefreshScenarioWindow(
+                    query ->
+                        loadBeans(query.getOffset(), query.getLimit(), query.getSortOrders(), usageFilter).stream(),
+                    query -> getSize(usageFilter), this));
             } else {
                 Windows.showNotificationWindow(ForeignUi.getMessage("message.info.refresh_scenario.nothing_to_add"));
             }
@@ -277,5 +284,19 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
             }
             return rightsholderRepresentation;
         }).collect(Collectors.toList());
+    }
+
+    private List<UsageDto> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders,
+                                     UsageFilter usageFilter) {
+        Sort sort = null;
+        if (CollectionUtils.isNotEmpty(sortOrders)) {
+            QuerySortOrder sortOrder = sortOrders.get(0);
+            sort = new Sort(sortOrder.getSorted(), Direction.of(SortDirection.ASCENDING == sortOrder.getDirection()));
+        }
+        return usageService.getUsages(usageFilter, new Pageable(startIndex, count), sort);
+    }
+
+    private int getSize(UsageFilter filter) {
+        return usageService.getUsagesCount(filter);
     }
 }

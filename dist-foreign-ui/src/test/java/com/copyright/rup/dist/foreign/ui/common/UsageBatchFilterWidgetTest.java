@@ -1,6 +1,9 @@
-package com.copyright.rup.dist.foreign.ui.usage.impl;
+package com.copyright.rup.dist.foreign.ui.common;
 
+import static org.easymock.EasyMock.capture;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.same;
 import static org.junit.Assert.assertEquals;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
@@ -8,14 +11,15 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
-import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
-import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.FilterSaveEvent;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.google.common.collect.Sets;
+import com.vaadin.data.ValueProvider;
 
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +28,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -60,13 +65,8 @@ public class UsageBatchFilterWidgetTest {
     }
 
     @Test
-    public void testGetIdForBean() {
-        assertEquals(USAGE_BATCH_ID, usageBatchFilterWidget.getIdForBean(buildUsageBatch()));
-    }
-
-    @Test
     public void testOnSave() {
-        FilterSaveEvent<String> filterSaveEvent = createMock(FilterSaveEvent.class);
+        FilterSaveEvent filterSaveEvent = createMock(FilterSaveEvent.class);
         Set usageBatches = Sets.newHashSet(USAGE_BATCH_NAME);
         expect(filterSaveEvent.getSelectedItemsIds()).andReturn(usageBatches).once();
         replay(filterSaveEvent);
@@ -76,9 +76,10 @@ public class UsageBatchFilterWidgetTest {
 
     @Test
     public void testShowFilterWindow() {
-        FilterWindow<Long, Rightsholder> filterWindow = createMock(FilterWindow.class);
+        FilterWindow filterWindow = createMock(FilterWindow.class);
         mockStatic(Windows.class);
-        Windows.showFilterWindow("Batches filter", usageBatchFilterWidget, "name");
+        Capture<ValueProvider<UsageBatch, List<String>>> providerCapture = new Capture<>();
+        Windows.showFilterWindow(eq("Batches filter"), same(usageBatchFilterWidget), capture(providerCapture));
         expectLastCall().andReturn(filterWindow).once();
         filterWindow.setSelectedItemsIds(new HashSet<>());
         expectLastCall().once();
@@ -89,6 +90,7 @@ public class UsageBatchFilterWidgetTest {
         expectLastCall().once();
         replay(filterWindow, Windows.class);
         usageBatchFilterWidget.showFilterWindow();
+        assertEquals(Collections.singletonList(USAGE_BATCH_NAME), providerCapture.getValue().apply(buildUsageBatch()));
         verify(filterWindow, Windows.class);
     }
 

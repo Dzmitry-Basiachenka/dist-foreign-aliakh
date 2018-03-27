@@ -1,27 +1,33 @@
-package com.copyright.rup.dist.foreign.ui.usage.impl;
+package com.copyright.rup.dist.foreign.ui.common;
 
+import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.same;
 import static org.junit.Assert.assertEquals;
-import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.FilterSaveEvent;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.vaadin.data.ValueProvider;
 
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -77,13 +83,8 @@ public class RightsholderFilterWidgetTest {
     }
 
     @Test
-    public void testGetIdForBean() {
-        assertEquals(ACCOUNT_NUMBER, rightsholderFilterWidget.getIdForBean(rightsholder));
-    }
-
-    @Test
     public void testOnSave() {
-        FilterSaveEvent<Long> filterSaveEvent = createMock(FilterSaveEvent.class);
+        FilterSaveEvent filterSaveEvent = createMock(FilterSaveEvent.class);
         Set accountNumbers = Sets.newHashSet(ACCOUNT_NUMBER);
         expect(filterSaveEvent.getSelectedItemsIds()).andReturn(accountNumbers).once();
         replay(filterSaveEvent);
@@ -93,9 +94,10 @@ public class RightsholderFilterWidgetTest {
 
     @Test
     public void testShowFilterWindow() {
-        FilterWindow<Long, Rightsholder> filterWindow = createMock(FilterWindow.class);
+        FilterWindow filterWindow = createMock(FilterWindow.class);
         mockStatic(Windows.class);
-        Windows.showFilterWindow("RROs filter", rightsholderFilterWidget, "name", "accountNumber");
+        Capture<ValueProvider<Rightsholder, List<String>>> providerCapture = new Capture<>();
+        Windows.showFilterWindow(eq("RROs filter"), same(rightsholderFilterWidget), capture(providerCapture));
         expectLastCall().andReturn(filterWindow).once();
         filterWindow.setSelectedItemsIds(new HashSet<>());
         expectLastCall().once();
@@ -106,6 +108,7 @@ public class RightsholderFilterWidgetTest {
         expectLastCall().once();
         replay(filterWindow, Windows.class);
         rightsholderFilterWidget.showFilterWindow();
+        assertEquals(Arrays.asList(RIGHTSHOLDER_NAME, "12345678"), providerCapture.getValue().apply(rightsholder));
         verify(filterWindow, Windows.class);
     }
 

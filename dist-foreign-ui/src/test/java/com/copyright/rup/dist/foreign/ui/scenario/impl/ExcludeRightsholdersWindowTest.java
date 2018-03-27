@@ -1,36 +1,38 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
-import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioController;
-import com.copyright.rup.vaadin.ui.component.SelectableTable;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.google.common.collect.Lists;
-import com.vaadin.data.Container.Filter;
-import com.vaadin.data.Item;
-import com.vaadin.data.util.BeanContainer;
+import com.vaadin.data.provider.ListDataProvider;
+import com.vaadin.server.SerializablePredicate;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.Grid;
+import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
-import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
+import org.powermock.api.easymock.PowerMock;
 import org.powermock.reflect.Whitebox;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Verifies {@link ExcludeRightsholdersWindow}.
@@ -69,56 +71,38 @@ public class ExcludeRightsholdersWindowTest {
         assertEquals(830, window.getWidth(), 0);
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertEquals(3, content.getComponentCount());
-        verifyTable(content.getComponent(1));
+        verifyGrid(content.getComponent(1));
         verifyButtonsLayout(content.getComponent(2));
-    }
-
-    @Test
-    public void testContent() {
-        VerticalLayout content = (VerticalLayout) window.getContent();
-        SelectableTable table = (SelectableTable) content.getComponent(1);
-        verifyItem(table.getItem(1000033963L), buildRightsholder(2000148821L, "ABR Company, Ltd"),
-            buildRightsholder(1000033963L, "Alfred R. Lindesmith"));
-        verifyItem(table.getItem(7000425474L), buildRightsholder(2000196395L, "Advance Central Services"),
-            buildRightsholder(7000425474L, "American Dialect Society"));
     }
 
     @Test
     @SuppressWarnings("unchecked")
     public void testPerformSearch() {
-        BeanContainer<Long, String> container = createMock(BeanContainer.class);
-        Whitebox.setInternalState(window, container);
-        container.removeAllContainerFilters();
         SearchWidget searchWidget = createMock(SearchWidget.class);
         Whitebox.setInternalState(window, searchWidget);
-        expect(searchWidget.getSearchValue()).andReturn("value").once();
-        Capture<Filter> filterCapture = new Capture<>();
-        container.addContainerFilter(capture(filterCapture));
-        expectLastCall();
-        replay(container, searchWidget);
+        Grid grid = createMock(Grid.class);
+        Whitebox.setInternalState(window, grid);
+        ListDataProvider provider = new ListDataProvider(Collections.EMPTY_LIST);
+        expect(grid.getDataProvider()).andReturn(provider).once();
+        expect(searchWidget.getSearchValue()).andReturn("1000033963").once();
+        PowerMock.replay(searchWidget, grid);
         window.performSearch();
-        assertTrue(filterCapture.getValue().appliesToProperty("payee.accountNumber"));
-        assertTrue(filterCapture.getValue().appliesToProperty("payee.name"));
-        assertTrue(filterCapture.getValue().appliesToProperty("rightsholder.accountNumber"));
-        assertTrue(filterCapture.getValue().appliesToProperty("rightsholder.name"));
-        verify(container, searchWidget);
+        SerializablePredicate filter = provider.getFilter();
+        assertTrue(filter.test(buildRightsholderPayeePair(
+            buildRightsholder(1000033963L, "Alfred R. Lindesmith"),
+            buildRightsholder(2000148821L, "ABR Company, Ltd"))));
+        assertFalse(filter.test(buildRightsholderPayeePair(
+            buildRightsholder(7000425474L, "American Dialect Society"),
+            buildRightsholder(2000196395L, "Advance Central Services"))));
+        PowerMock.verify(searchWidget, grid);
     }
 
-    private void verifyTable(Component component) {
-        assertEquals(SelectableTable.class, component.getClass());
-        SelectableTable table = (SelectableTable) component;
-        assertArrayEquals(new Object[]{"selected", "payee.accountNumber", "payee.name", "rightsholder.accountNumber",
-            "rightsholder.name"}, table.getVisibleColumns());
-        assertArrayEquals(new Object[]{"<p/>", "Payee Account #", "Payee Name", "RH Account #", "RH Name"},
-            table.getColumnHeaders());
-    }
-
-    private void verifyItem(Item item, Rightsholder payee, Rightsholder rightsholder) {
-        assertNotNull(item);
-        assertEquals(payee.getAccountNumber(), item.getItemProperty("payee.accountNumber").getValue());
-        assertEquals(payee.getName(), item.getItemProperty("payee.name").getValue());
-        assertEquals(rightsholder.getAccountNumber(), item.getItemProperty("rightsholder.accountNumber").getValue());
-        assertEquals(rightsholder.getName(), item.getItemProperty("rightsholder.name").getValue());
+    private void verifyGrid(Component component) {
+        assertEquals(Grid.class, component.getClass());
+        Grid grid = (Grid) component;
+        List<Column> columns = grid.getColumns();
+        assertEquals(Arrays.asList("Payee Account #", "Payee Name", "RH Account #", "RH Name"),
+            columns.stream().map(Column::getCaption).collect(Collectors.toList()));
     }
 
     private void verifyButtonsLayout(Component component) {

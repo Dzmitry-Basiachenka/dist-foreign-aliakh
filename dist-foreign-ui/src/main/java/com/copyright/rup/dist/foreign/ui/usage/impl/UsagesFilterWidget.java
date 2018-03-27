@@ -1,21 +1,23 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
+import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.common.ProductFamilyFilterWidget;
+import com.copyright.rup.dist.foreign.ui.common.RightsholderFilterWidget;
+import com.copyright.rup.dist.foreign.ui.common.UsageBatchFilterWidget;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
-import com.copyright.rup.vaadin.ui.VaadinUtils;
+import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.IFilterSaveListener;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
+import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
 import com.google.common.collect.Lists;
-import com.vaadin.data.Property.ValueChangeListener;
-import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.ui.AbstractSelect.ItemCaptionMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.HorizontalLayout;
@@ -23,6 +25,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Widget for filtering usages.
@@ -37,23 +40,20 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
 
     private Button applyButton;
     private LocalDateWidget paymentDateWidget;
-    private ComboBox fiscalYearComboBox;
-    private ComboBox statusComboBox;
+    private ComboBox<Integer> fiscalYearComboBox;
+    private ComboBox<UsageStatusEnum> statusComboBox;
     private IUsagesFilterController controller;
     private RightsholderFilterWidget rightsholderFilterWidget;
     private UsageBatchFilterWidget usageBatchFilterWidget;
     private ProductFamilyFilterWidget productFamilyFilterWidget;
     private UsageFilter usageFilter = new UsageFilter();
     private UsageFilter appliedUsageFilter = new UsageFilter();
-    private BeanItemContainer<Integer> fiscalYearContainer;
 
     @Override
     @SuppressWarnings("unchecked")
     public UsagesFilterWidget init() {
         addComponents(initFiltersLayout(), initButtonsLayout());
         VaadinUtils.setMaxComponentsWidth(this);
-        setMargin(true);
-        setSpacing(true);
         VaadinUtils.addComponentStyle(this, "usages-filter-widget");
         return this;
     }
@@ -67,10 +67,9 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
 
     @Override
     public void clearFilter() {
-        paymentDateWidget.setInternalValue(null);
-        fiscalYearComboBox.setValue(null);
-        statusComboBox.setValue(null);
-        refreshFiscalYearComboBox();
+        paymentDateWidget.clear();
+        fiscalYearComboBox.clear();
+        statusComboBox.clear();
         usageFilter = new UsageFilter();
         rightsholderFilterWidget.reset();
         usageBatchFilterWidget.reset();
@@ -107,7 +106,7 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
         VerticalLayout verticalLayout = new VerticalLayout(buildFiltersHeaderLabel(), buildProductFamiliesFilter(),
             buildUsageBatchFilter(), buildRroAccountNumberFilter(), paymentDateWidget, statusComboBox,
             fiscalYearComboBox);
-        verticalLayout.setSpacing(true);
+        verticalLayout.setMargin(false);
         return verticalLayout;
     }
 
@@ -123,8 +122,9 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
 
     private HorizontalLayout buildUsageBatchFilter() {
         usageBatchFilterWidget = new UsageBatchFilterWidget(() -> controller.getUsageBatchesNotIncludedIntoScenario());
-        usageBatchFilterWidget.addFilterSaveListener(saveEvent -> {
-            usageFilter.setUsageBatchesIds(saveEvent.getSelectedItemsIds());
+        usageBatchFilterWidget.addFilterSaveListener((IFilterSaveListener<UsageBatch>) saveEvent -> {
+            usageFilter.setUsageBatchesIds(
+                saveEvent.getSelectedItemsIds().stream().map(UsageBatch::getId).collect(Collectors.toSet()));
             filterChanged();
         });
         VaadinUtils.addComponentStyle(usageBatchFilterWidget, "batches-filter");
@@ -136,8 +136,11 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
             ForeignUi.getMessage("label.rros"),
             ForeignUi.getMessage("prompt.rro"),
             () -> controller.getRros());
-        rightsholderFilterWidget.addFilterSaveListener(saveEvent -> {
-            usageFilter.setRhAccountNumbers(saveEvent.getSelectedItemsIds());
+        rightsholderFilterWidget.addFilterSaveListener((IFilterSaveListener<Rightsholder>) saveEvent -> {
+            usageFilter.setRhAccountNumbers(saveEvent.getSelectedItemsIds()
+                .stream()
+                .map(Rightsholder::getAccountNumber)
+                .collect(Collectors.toSet()));
             filterChanged();
         });
         VaadinUtils.addComponentStyle(rightsholderFilterWidget, "rightsholders-filter");
@@ -148,24 +151,21 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
         List<UsageStatusEnum> statuses = Lists.newArrayList(UsageStatusEnum.values());
         statuses.remove(UsageStatusEnum.LOCKED);
         statuses.remove(UsageStatusEnum.PAID);
-        statusComboBox = new ComboBox(ForeignUi.getMessage("label.status"),
-            new BeanItemContainer<>(UsageStatusEnum.class, statuses));
-        statusComboBox.setItemCaptionMode(ItemCaptionMode.ID_TOSTRING);
+        statusComboBox = new ComboBox<>(ForeignUi.getMessage("label.status"), statuses);
         VaadinUtils.setMaxComponentsWidth(statusComboBox);
-        statusComboBox.addValueChangeListener((ValueChangeListener) event -> {
-            usageFilter.setUsageStatus((UsageStatusEnum) statusComboBox.getValue());
+        statusComboBox.addValueChangeListener(event -> {
+            usageFilter.setUsageStatus(statusComboBox.getValue());
             filterChanged();
         });
         VaadinUtils.addComponentStyle(statusComboBox, "status-filter");
     }
 
     private void initFiscalYearFilter() {
-        fiscalYearContainer = new BeanItemContainer<>(Integer.class, getController().getFiscalYears());
-        fiscalYearComboBox = new ComboBox(ForeignUi.getMessage("label.fiscal_year_to"), fiscalYearContainer);
-        fiscalYearComboBox.setItemCaptionMode(ItemCaptionMode.ID_TOSTRING);
+        fiscalYearComboBox =
+            new ComboBox<>(ForeignUi.getMessage("label.fiscal_year_to"), getController().getFiscalYears());
         VaadinUtils.setMaxComponentsWidth(fiscalYearComboBox);
-        fiscalYearComboBox.addValueChangeListener((ValueChangeListener) event -> {
-            usageFilter.setFiscalYear((Integer) fiscalYearComboBox.getValue());
+        fiscalYearComboBox.addValueChangeListener(event -> {
+            usageFilter.setFiscalYear(fiscalYearComboBox.getValue());
             filterChanged();
         });
         VaadinUtils.addComponentStyle(fiscalYearComboBox, "fiscal-year-filter");
@@ -173,7 +173,7 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
 
     private void initPaymentDateFilter() {
         paymentDateWidget = new LocalDateWidget(ForeignUi.getMessage("label.payment_date_to"));
-        paymentDateWidget.addValueChangeListener((ValueChangeListener) event -> {
+        paymentDateWidget.addValueChangeListener(event -> {
             usageFilter.setPaymentDate(paymentDateWidget.getValue());
             filterChanged();
         });
@@ -193,7 +193,6 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
         Button clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
         clearButton.addClickListener(event -> clearFilter());
         HorizontalLayout horizontalLayout = new HorizontalLayout(applyButton, clearButton);
-        horizontalLayout.setSpacing(true);
         VaadinUtils.setMaxComponentsWidth(horizontalLayout, applyButton, clearButton);
         VaadinUtils.addComponentStyle(horizontalLayout, "filter-buttons");
         return horizontalLayout;
@@ -201,10 +200,5 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
 
     private void filterChanged() {
         applyButton.setEnabled(!usageFilter.equals(appliedUsageFilter));
-    }
-
-    private void refreshFiscalYearComboBox() {
-        fiscalYearContainer.removeAllItems();
-        fiscalYearContainer.addAll(getController().getFiscalYears());
     }
 }

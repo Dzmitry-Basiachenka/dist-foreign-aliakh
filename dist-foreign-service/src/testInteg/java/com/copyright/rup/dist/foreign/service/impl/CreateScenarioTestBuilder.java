@@ -113,7 +113,7 @@ class CreateScenarioTestBuilder {
             createRestServer();
             expectGetPreferences(expectedPreferencesJson);
             expectGetRollups(expectedRollupsJson, expectedRollupsIds);
-            scenarioId = scenarioService.createScenario("Test Scenario", "Scenario Description", usageFilter);
+            scenarioId = scenarioService.createScenario("Test Scenario", "Scenario Description", usageFilter).getId();
             mockServer.verify();
             asyncMockServer.verify();
             assertScenario();

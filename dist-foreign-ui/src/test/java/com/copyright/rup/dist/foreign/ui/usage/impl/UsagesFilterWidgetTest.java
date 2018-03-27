@@ -15,12 +15,13 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
-import com.copyright.rup.vaadin.ui.Windows;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
@@ -31,7 +32,6 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.themes.BaseTheme;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -72,13 +72,11 @@ public class UsagesFilterWidgetTest {
         usagesFilterController = createMock(IUsagesFilterController.class);
         widget = new UsagesFilterWidget();
         widget.setController(usagesFilterController);
+        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
     }
 
     @Test
     public void testInit() {
-        expect(usagesFilterController.getFiscalYears())
-            .andReturn(Collections.singletonList(FISCAL_YEAR))
-            .once();
         replay(usagesFilterController);
         assertSame(widget, widget.init());
         assertEquals(2, widget.getComponentCount());
@@ -90,9 +88,6 @@ public class UsagesFilterWidgetTest {
 
     @Test
     public void testApplyFilter() {
-        expect(usagesFilterController.getFiscalYears())
-            .andReturn(Collections.singletonList(FISCAL_YEAR))
-            .times(2);
         replay(usagesFilterController);
         widget.init();
         widget.clearFilter();
@@ -115,9 +110,6 @@ public class UsagesFilterWidgetTest {
 
     @Test
     public void testFilterChangedEmptyFilter() {
-        expect(usagesFilterController.getFiscalYears())
-            .andReturn(Collections.singletonList(FISCAL_YEAR))
-            .once();
         replay(usagesFilterController);
         widget.init();
         Button applyButton = getApplyButton();
@@ -129,9 +121,6 @@ public class UsagesFilterWidgetTest {
 
     @Test
     public void testGetController() {
-        expect(usagesFilterController.getFiscalYears())
-            .andReturn(Collections.singletonList(FISCAL_YEAR))
-            .once();
         replay(usagesFilterController);
         widget.init();
         UsagesFilterController controller = new UsagesFilterController();
@@ -142,9 +131,6 @@ public class UsagesFilterWidgetTest {
 
     @Test
     public void testClearFilter() {
-        expect(usagesFilterController.getFiscalYears())
-            .andReturn(Collections.singletonList(FISCAL_YEAR))
-            .times(2);
         replay(usagesFilterController);
         widget.init();
         Button applyButton = getApplyButton();
@@ -178,9 +164,6 @@ public class UsagesFilterWidgetTest {
     public void verifyApplyButtonClickListener() {
         mockStatic(Windows.class);
         ClickEvent clickEvent = createMock(ClickEvent.class);
-        expect(usagesFilterController.getFiscalYears())
-            .andReturn(Collections.singletonList(FISCAL_YEAR))
-            .once();
         Windows.showNotificationWindow("Apply filter clicked");
         expectLastCall().once();
         replay(clickEvent, Windows.class, usagesFilterController);
@@ -193,9 +176,6 @@ public class UsagesFilterWidgetTest {
     @Test
     public void verifyButtonClickListener() {
         ClickEvent clickEvent = createMock(ClickEvent.class);
-        expect(usagesFilterController.getFiscalYears())
-            .andReturn(Collections.singletonList(FISCAL_YEAR))
-            .times(2);
         replay(clickEvent, usagesFilterController);
         widget.init();
         Set<Long> accountNumbers = Sets.newHashSet(ACCOUNT_NUMBER);
@@ -221,7 +201,7 @@ public class UsagesFilterWidgetTest {
         verifyItemsFilterLayout(verticalLayout.getComponent(3), "RROs");
         verifyDateWidget(verticalLayout.getComponent(4));
         verifyStatusComboboxComponent(verticalLayout.getComponent(5), Lists.newArrayList(UsageStatusEnum.NEW,
-            UsageStatusEnum.WORK_FOUND, UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.WORK_RESEARCH,
+            UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.WORK_RESEARCH, UsageStatusEnum.WORK_FOUND,
             UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.SENT_FOR_RA, UsageStatusEnum.ELIGIBLE));
         verifyFiscalYearComboboxComponent(verticalLayout.getComponent(6), Collections.singletonList(FISCAL_YEAR));
     }
@@ -243,8 +223,7 @@ public class UsagesFilterWidgetTest {
         assertEquals(buttonCaption, button.getCaption());
         assertEquals(2, button.getListeners(Button.ClickEvent.class).size());
         assertTrue(button.isDisableOnClick());
-        String buttonStyleName = button.getStyleName();
-        assertTrue(StringUtils.contains(buttonStyleName, BaseTheme.BUTTON_LINK));
+        assertTrue(StringUtils.contains(button.getStyleName(), Cornerstone.BUTTON_LINK));
         assertFalse(iterator.hasNext());
     }
 
@@ -254,9 +233,11 @@ public class UsagesFilterWidgetTest {
         assertEquals("Status", comboBox.getCaption());
         assertEquals(100, comboBox.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, comboBox.getWidthUnits());
-        Collection<?> itemIds = comboBox.getItemIds();
+        ListDataProvider<UsageStatusEnum> listDataProvider =
+            (ListDataProvider<UsageStatusEnum>) comboBox.getDataProvider();
+        Collection<?> itemIds = listDataProvider.getItems();
         assertEquals(7, itemIds.size());
-        assertTrue(CollectionUtils.isEqualCollection(values, itemIds));
+        assertEquals(values, itemIds);
     }
 
     private void verifyFiscalYearComboboxComponent(Component component, List<Integer> values) {
@@ -265,7 +246,7 @@ public class UsagesFilterWidgetTest {
         assertEquals("Fiscal Year To", comboBox.getCaption());
         assertEquals(100, comboBox.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, comboBox.getWidthUnits());
-        assertTrue(CollectionUtils.isEqualCollection(values, comboBox.getItemIds()));
+        assertEquals(values, ((ListDataProvider<Integer>) comboBox.getDataProvider()).getItems());
     }
 
     private void verifyDateWidget(Component component) {

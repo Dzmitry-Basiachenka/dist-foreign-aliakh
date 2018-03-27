@@ -12,7 +12,7 @@ import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Table;
+import com.vaadin.ui.Grid;
 import com.vaadin.ui.VerticalLayout;
 
 import org.junit.Before;
@@ -38,7 +38,7 @@ public class ScenarioMediatorTest {
     private final Button excludeButton = new Button();
     private final Button exportButton = new Button();
     private final SearchWidget searchWidget = new SearchWidget(() -> {/*stub*/});
-    private final Table table = new Table();
+    private final Grid grid = new Grid();
     private final VerticalLayout emptyUsagesLayout = new VerticalLayout();
     private ScenarioMediator mediator;
 
@@ -49,7 +49,7 @@ public class ScenarioMediatorTest {
         mediator.setExcludeButton(excludeButton);
         mediator.setExportButton(exportButton);
         mediator.setSearchWidget(searchWidget);
-        mediator.setRightsholdersTable(table);
+        mediator.setRightsholderGrid(grid);
         mediator.setEmptyUsagesLayout(emptyUsagesLayout);
     }
 
@@ -61,7 +61,7 @@ public class ScenarioMediatorTest {
         verify(SecurityUtils.class);
         assertTrue(excludeButton.isVisible());
         assertTrue(exportButton.isVisible());
-        assertTrue(table.isVisible());
+        assertTrue(grid.isVisible());
         assertTrue(emptyUsagesLayout.isVisible());
         assertTrue(searchWidget.isVisible());
     }
@@ -74,7 +74,7 @@ public class ScenarioMediatorTest {
         verify(SecurityUtils.class);
         assertFalse(excludeButton.isVisible());
         assertTrue(exportButton.isVisible());
-        assertTrue(table.isVisible());
+        assertTrue(grid.isVisible());
         assertTrue(emptyUsagesLayout.isVisible());
         assertTrue(searchWidget.isVisible());
     }
@@ -88,7 +88,7 @@ public class ScenarioMediatorTest {
         verify(SecurityUtils.class);
         assertTrue(excludeButton.isEnabled());
         assertTrue(exportButton.isEnabled());
-        assertTrue(table.isVisible());
+        assertTrue(grid.isVisible());
         assertFalse(emptyUsagesLayout.isVisible());
         assertTrue(searchWidget.isVisible());
     }
@@ -102,7 +102,7 @@ public class ScenarioMediatorTest {
         verify(SecurityUtils.class);
         assertFalse(excludeButton.isEnabled());
         assertTrue(exportButton.isEnabled());
-        assertTrue(table.isVisible());
+        assertTrue(grid.isVisible());
         assertFalse(emptyUsagesLayout.isVisible());
         assertTrue(searchWidget.isVisible());
     }
@@ -116,7 +116,7 @@ public class ScenarioMediatorTest {
         verify(SecurityUtils.class);
         assertFalse(excludeButton.isEnabled());
         assertFalse(exportButton.isEnabled());
-        assertFalse(table.isVisible());
+        assertFalse(grid.isVisible());
         assertTrue(emptyUsagesLayout.isVisible());
         assertFalse(searchWidget.isVisible());
     }
@@ -131,7 +131,7 @@ public class ScenarioMediatorTest {
         assertFalse(excludeButton.isVisible());
         assertFalse(excludeButton.isEnabled());
         assertFalse(exportButton.isEnabled());
-        assertFalse(table.isVisible());
+        assertFalse(grid.isVisible());
         assertTrue(emptyUsagesLayout.isVisible());
         assertFalse(searchWidget.isVisible());
     }

@@ -9,9 +9,9 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.vaadin.ui.Windows;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.FilterSaveEvent;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -55,11 +55,6 @@ public class StatusFilterWidgetTest {
     @Test
     public void testGetBeanItemCaption() {
         assertEquals("ELIGIBLE", widget.getBeanItemCaption(UsageStatusEnum.ELIGIBLE));
-    }
-
-    @Test
-    public void testGetIdForBean() {
-        assertEquals(UsageStatusEnum.ELIGIBLE, widget.getIdForBean(UsageStatusEnum.ELIGIBLE));
     }
 
     @Test
