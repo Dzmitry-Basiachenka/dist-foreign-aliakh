@@ -1,8 +1,7 @@
-package com.copyright.rup.dist.foreign.service.impl.marshaller;
+package com.copyright.rup.dist.foreign.service.impl.usage.paid;
 
 import com.copyright.rup.dist.common.integration.camel.CommonMarshaller;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
-import com.copyright.rup.dist.foreign.service.impl.serializer.PaidUsageDeserializer;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

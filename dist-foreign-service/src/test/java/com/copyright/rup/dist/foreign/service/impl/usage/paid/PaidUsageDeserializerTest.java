@@ -1,11 +1,10 @@
-package com.copyright.rup.dist.foreign.service.impl.serializer;
+package com.copyright.rup.dist.foreign.service.impl.usage.paid;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
-import com.copyright.rup.dist.foreign.service.impl.marshaller.PaidUsageUnmarshaller;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
@@ -37,7 +36,7 @@ public class PaidUsageDeserializerTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testDeserialize() throws Exception {
+    public void testDeserialize() {
         try (InputStream inputStream = PaidUsageDeserializerTest.class.getResourceAsStream(
             "paid_usages_message.json")) {
             String jsonString = CharStreams.toString(new InputStreamReader(inputStream, Charsets.UTF_8));

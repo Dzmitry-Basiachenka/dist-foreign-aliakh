@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.service.impl.consumer;
+package com.copyright.rup.dist.foreign.service.impl.usage.paid;
 
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.integration.camel.IConsumer;
