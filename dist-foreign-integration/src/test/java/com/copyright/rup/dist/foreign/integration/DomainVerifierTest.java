@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.integration;
 
 import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.foreign.integration.crm.CrmRightsDistributionRequest;
 import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsage;
 import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsageMessage;
 import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsageWrapper;
@@ -41,9 +42,10 @@ public class DomainVerifierTest {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         Object[][] testData = new Object[][]{
+            {CrmRightsDistributionRequest.class},
             {ExternalUsage.class},
-            {ExternalUsageWrapper.class},
             {ExternalUsageMessage.class},
+            {ExternalUsageWrapper.class},
             {RightsAssignmentRequest.class},
             {RightsAssignmentResult.class}
         };
