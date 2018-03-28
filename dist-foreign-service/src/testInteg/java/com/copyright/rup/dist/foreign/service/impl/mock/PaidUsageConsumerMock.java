@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.mock;
 
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
-import com.copyright.rup.dist.foreign.service.impl.consumer.PaidUsageConsumer;
+import com.copyright.rup.dist.foreign.service.impl.usage.paid.PaidUsageConsumer;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
