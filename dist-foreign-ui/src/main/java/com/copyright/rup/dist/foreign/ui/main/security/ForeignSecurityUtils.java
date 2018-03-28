@@ -35,6 +35,13 @@ public final class ForeignSecurityUtils {
     }
 
     /**
+     * @return {@code true} if user has permission to load researched usages.
+     */
+    public static boolean hasLoadResearchedUsagePermission() {
+        return SecurityUtils.hasPermission("FDA_LOAD_RESEARCHED_USAGE");
+    }
+
+    /**
      * @return {@code true} if user has permission to delete usages.
      */
     public static boolean hasDeleteUsagePermission() {
