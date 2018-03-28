@@ -4,7 +4,7 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.Scenario;
-import com.copyright.rup.dist.foreign.domain.UsageFilter;
+import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import java.util.List;
 import java.util.Set;

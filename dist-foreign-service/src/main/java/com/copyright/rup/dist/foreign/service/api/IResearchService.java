@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.service.api;
 
-import com.copyright.rup.dist.foreign.domain.UsageFilter;
+import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import java.io.OutputStream;
 

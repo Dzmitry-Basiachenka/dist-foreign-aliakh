@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.audit.impl;
 
-import com.copyright.rup.dist.foreign.domain.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
 import com.copyright.rup.dist.foreign.repository.api.Sort.Direction;

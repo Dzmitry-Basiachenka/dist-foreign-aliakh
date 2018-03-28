@@ -13,8 +13,8 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
-import com.copyright.rup.dist.foreign.domain.ScenarioUsageFilter;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioUsageFilterRepository;
 
 import org.junit.Before;

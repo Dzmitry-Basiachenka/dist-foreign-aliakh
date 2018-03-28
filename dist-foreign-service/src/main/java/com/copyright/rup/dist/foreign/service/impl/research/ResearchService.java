@@ -1,8 +1,8 @@
 package com.copyright.rup.dist.foreign.service.impl.research;
 
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
-import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;

@@ -3,8 +3,8 @@ package com.copyright.rup.dist.foreign.service.impl;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
-import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;

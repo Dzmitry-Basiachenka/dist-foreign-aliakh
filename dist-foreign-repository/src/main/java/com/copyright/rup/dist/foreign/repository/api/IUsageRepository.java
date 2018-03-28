@@ -1,12 +1,12 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
-import com.copyright.rup.dist.foreign.domain.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
-import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
+import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import java.io.OutputStream;
 import java.io.PipedOutputStream;

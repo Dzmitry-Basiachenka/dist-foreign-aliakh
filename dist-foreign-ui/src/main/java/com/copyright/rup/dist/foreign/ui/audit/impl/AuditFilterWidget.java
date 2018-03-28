@@ -1,8 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.audit.impl;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.foreign.domain.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterController;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterWidget;
 import com.copyright.rup.dist.foreign.ui.common.ProductFamilyFilterWidget;
