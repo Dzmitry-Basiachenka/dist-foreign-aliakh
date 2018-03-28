@@ -164,7 +164,7 @@ public class WorkMatchingService implements IWorkMatchingService {
                             usage.setWrWrkInst(UNIDENTIFIED_WR_WRK_INST);
                             usage.setStatus(UsageStatusEnum.WORK_FOUND);
                             auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
-                                "Usage assigned unidentified work due to blank standard number and title");
+                                "Usage assigned unidentified work due to empty standard number and title");
                         } else {
                             usage.setStatus(UsageStatusEnum.WORK_NOT_FOUND);
                             auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_NOT_FOUND,

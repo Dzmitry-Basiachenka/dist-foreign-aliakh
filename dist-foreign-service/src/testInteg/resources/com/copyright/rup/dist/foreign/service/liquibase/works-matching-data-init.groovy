@@ -30,8 +30,27 @@ databaseChangeLog {
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'number_of_copies', value: '100')
-            column(name: 'reported_value', value: '101.00')
-            column(name: 'gross_amount', value: '101.00')
+            column(name: 'reported_value', value: '100.00')
+            column(name: 'gross_amount', value: '100.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'd906069c-3266-11e8-b467-0ed5f89f718b')
+            column(name: 'df_usage_batch_uid', value: '55d014d1-b1d9-428a-be8a-10defe718ae5')
+            column(name: 'detail_id', value: '2551245126')
+            column(name: 'rh_account_number', value: '1000024497')
+            column(name: 'status_ind', value: 'NEW')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'number_of_copies', value: '10')
+            column(name: 'reported_value', value: '110.00')
+            column(name: 'gross_amount', value: '110.00')
         }
 
         // no standard number, no title, less than $100
@@ -91,9 +110,6 @@ databaseChangeLog {
             column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '100.00')
             column(name: 'gross_amount', value: '90.63')
-            column(name: 'service_fee_amount', value: '29.00')
-            column(name: 'net_amount', value: '61.63')
-            column(name: 'service_fee', value: '0.32000')
         }
 
         // standard number, no title, more than $100

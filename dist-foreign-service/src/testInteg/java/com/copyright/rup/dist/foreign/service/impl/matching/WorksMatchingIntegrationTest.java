@@ -66,7 +66,9 @@ public class WorksMatchingIntegrationTest {
         verifyUsage(5425874236L, null, UsageStatusEnum.WORK_NOT_FOUND, FAS_PRODUCT_FAMILY,
             "Wr Wrk Inst was not found by standard number 0-325-01548-2");
         verifyUsage(2254475587L, 123050824L, UsageStatusEnum.WORK_FOUND, FAS_PRODUCT_FAMILY,
-            "Usage assigned unidentified work due to blank standard number and title");
+            "Usage assigned unidentified work due to empty standard number and title");
+        verifyUsage(2551245126L, 123050824L, UsageStatusEnum.WORK_FOUND, FAS_PRODUCT_FAMILY,
+            "Usage assigned unidentified work due to empty standard number and title");
         verifyUsage(3652124587L, null, UsageStatusEnum.WORK_NOT_FOUND, FAS_PRODUCT_FAMILY,
             "Wr Wrk Inst was not found by standard number 10.1353/PGN.1999.0081");
         verifyUsage(3654214587L, null, UsageStatusEnum.WORK_NOT_FOUND, FAS_PRODUCT_FAMILY,
