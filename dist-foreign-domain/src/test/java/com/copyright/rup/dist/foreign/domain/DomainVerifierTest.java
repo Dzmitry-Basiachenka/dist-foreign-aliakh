@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.domain;
 
 import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
+import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

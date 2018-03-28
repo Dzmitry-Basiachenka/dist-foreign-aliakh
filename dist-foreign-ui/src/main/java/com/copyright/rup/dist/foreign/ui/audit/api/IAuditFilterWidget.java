@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.audit.api;
 
-import com.copyright.rup.dist.foreign.domain.AuditFilter;
+import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.vaadin.widget.api.IFilterWidget;
 
 /**

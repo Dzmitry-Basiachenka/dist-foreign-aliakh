@@ -1,7 +1,9 @@
-package com.copyright.rup.dist.foreign.domain;
+package com.copyright.rup.dist.foreign.domain.filter;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.common.domain.StoredEntity;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
 import com.google.common.collect.Sets;
 

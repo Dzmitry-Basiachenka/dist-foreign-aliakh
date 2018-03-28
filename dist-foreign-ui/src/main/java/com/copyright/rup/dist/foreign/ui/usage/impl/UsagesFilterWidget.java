@@ -2,8 +2,8 @@ package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
-import com.copyright.rup.dist.foreign.domain.UsageFilter;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.ui.common.ProductFamilyFilterWidget;
 import com.copyright.rup.dist.foreign.ui.common.RightsholderFilterWidget;
 import com.copyright.rup.dist.foreign.ui.common.UsageBatchFilterWidget;
@@ -78,11 +78,6 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
     }
 
     @Override
-    public void setController(IUsagesFilterController controller) {
-        this.controller = controller;
-    }
-
-    @Override
     public UsageFilter getFilter() {
         return usageFilter;
     }
@@ -97,6 +92,11 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
      */
     IUsagesFilterController getController() {
         return controller;
+    }
+
+    @Override
+    public void setController(IUsagesFilterController controller) {
+        this.controller = controller;
     }
 
     private VerticalLayout initFiltersLayout() {

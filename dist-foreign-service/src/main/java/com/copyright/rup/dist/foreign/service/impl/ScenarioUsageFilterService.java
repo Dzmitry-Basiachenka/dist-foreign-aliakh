@@ -3,7 +3,7 @@ package com.copyright.rup.dist.foreign.service.impl;
 import static com.google.common.base.Preconditions.checkArgument;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
-import com.copyright.rup.dist.foreign.domain.ScenarioUsageFilter;
+import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioUsageFilterRepository;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 

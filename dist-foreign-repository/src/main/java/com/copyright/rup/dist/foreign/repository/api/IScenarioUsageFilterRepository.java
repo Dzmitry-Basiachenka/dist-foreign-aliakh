@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
-import com.copyright.rup.dist.foreign.domain.ScenarioUsageFilter;
+import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
 
 import java.util.Set;
 

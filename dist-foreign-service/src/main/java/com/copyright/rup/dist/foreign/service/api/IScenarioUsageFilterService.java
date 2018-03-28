@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.service.api;
 
-import com.copyright.rup.dist.foreign.domain.ScenarioUsageFilter;
+import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
 
 /**
  * Represents interface of service for scenario usages filters.

@@ -1,4 +1,6 @@
-package com.copyright.rup.dist.foreign.domain;
+package com.copyright.rup.dist.foreign.domain.filter;
+
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
 import com.google.common.collect.Sets;
 
