@@ -571,4 +571,18 @@ databaseChangeLog {
 
         rollback ""
     }
+
+    changeSet(id: '2018-03-29-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-41014 [ALL] Tech Debt, Refactoring, and Demo Feedback: remove df_scenario_uid and scenario_name columns from df_usage_audit table")
+
+        dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_audit', columnName: 'df_scenario_uid')
+        dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_audit', columnName: 'scenario_name')
+
+        rollback {
+            addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
+                column(name: 'df_scenario_uid', type: 'VARCHAR(255)', remarks: 'The identifier of scenario')
+                column(name: 'scenario_name', type: 'VARCHAR(255)', remarks: 'The name of scenario')
+            }
+        }
+    }
 }

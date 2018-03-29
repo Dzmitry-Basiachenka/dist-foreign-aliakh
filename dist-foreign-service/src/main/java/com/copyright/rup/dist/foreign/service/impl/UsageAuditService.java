@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
-import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.repository.api.IUsageAuditRepository;
@@ -32,17 +31,12 @@ public class UsageAuditService implements IUsageAuditService {
 
     @Override
     public void logAction(String usageId, UsageActionTypeEnum actionType, String actionReason) {
-        logAction(usageId, null, actionType, actionReason);
+        usageAuditRepository.insert(buildUsageAuditItem(usageId, actionType, actionReason));
     }
 
     @Override
     public void logAction(Set<String> usageIds, UsageActionTypeEnum actionType, String actionReason) {
-        usageIds.forEach(usageId -> logAction(usageId, null, actionType, actionReason));
-    }
-
-    @Override
-    public void logAction(String usageId, Scenario scenario, UsageActionTypeEnum actionType, String actionReason) {
-        usageAuditRepository.insert(buildUsageAuditItem(usageId, scenario, actionType, actionReason));
+        usageIds.forEach(usageId -> logAction(usageId, actionType, actionReason));
     }
 
     @Override
@@ -55,13 +49,10 @@ public class UsageAuditService implements IUsageAuditService {
         return usageAuditRepository.findByUsageId(usageId);
     }
 
-    private UsageAuditItem buildUsageAuditItem(String usageId, Scenario scenario, UsageActionTypeEnum actionType,
-                                               String actionReason) {
+    private UsageAuditItem buildUsageAuditItem(String usageId, UsageActionTypeEnum actionType, String actionReason) {
         UsageAuditItem usageAuditItem = new UsageAuditItem();
         usageAuditItem.setId(RupPersistUtils.generateUuid());
         usageAuditItem.setUsageId(usageId);
-        usageAuditItem.setScenarioId(null != scenario ? scenario.getId() : null);
-        usageAuditItem.setScenarioName(null != scenario ? scenario.getName() : null);
         usageAuditItem.setActionType(actionType);
         usageAuditItem.setActionReason(actionReason);
         String userName = RupContextUtils.getUserName();
