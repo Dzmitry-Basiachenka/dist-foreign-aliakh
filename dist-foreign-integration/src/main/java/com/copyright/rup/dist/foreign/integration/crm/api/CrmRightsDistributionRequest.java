@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.integration.crm;
+package com.copyright.rup.dist.foreign.integration.crm.api;
 
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;

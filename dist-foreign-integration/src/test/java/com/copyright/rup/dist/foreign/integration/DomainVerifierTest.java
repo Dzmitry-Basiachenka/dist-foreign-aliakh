@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.integration;
 
 import com.copyright.rup.dist.common.test.TestUtils;
-import com.copyright.rup.dist.foreign.integration.crm.CrmRightsDistributionRequest;
+import com.copyright.rup.dist.foreign.integration.crm.api.CrmRightsDistributionRequest;
 import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsage;
 import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsageMessage;
 import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsageWrapper;

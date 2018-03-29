@@ -23,6 +23,7 @@
     <property name="logLevelRights" value="${DIST_FOREIGN_RIGHTS_LOG_LEVEL:-${logLevel}}"/>
     <property name="logLevelResearch" value="${DIST_FOREIGN_RESEARCH_LOG_LEVEL:-${logLevel}}"/>
     <property name="logLevelMatching" value="${DIST_FOREIGN_MATCHING_LOG_LEVEL:-${logLevel}}"/>
+    <property name="logLevelArchiving" value="${DIST_FOREIGN_ARCHIVING_LOG_LEVEL:-${logLevel}}"/>
     <property name="logLevelService" value="${DIST_FOREIGN_SERVICE_LOG_LEVEL:-${logLevel}}"/>
     <property name="logLevelIntegrationCommon" value="${DIST_COMMON_INTEGRATION_LOG_LEVEL:-${logLevel}}"/>
 
@@ -55,6 +56,14 @@
         <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
         <appender-ref ref="STDOUT"/>
     </logger>
+
+    <!--Loggers for Rights related logic-->
+    <logger name="com.copyright.rup.dist.foreign.integration.crm.impl" level="${logLevelArchiving}" additivity="false">
+        <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <!--TODO {dbaraukova} add configuration for service logic -->
 
     <!--Loggers for Matching logic-->
     <logger name="com.copyright.rup.dist.foreign.integration.pi.impl" level="${logLevelMatching}" additivity="false">
