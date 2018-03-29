@@ -17,7 +17,6 @@ import com.vaadin.ui.Button;
 class UsagesMediator implements IMediator {
 
     private Button loadUsageBatchButton;
-    private Button loadResearchedUsagesButton;
     private Button deleteUsageButton;
     private Button addToScenarioButton;
     private Button sendForResearchButton;
@@ -29,15 +28,6 @@ class UsagesMediator implements IMediator {
      */
     void setLoadUsageBatchButton(Button loadUsageBatchButton) {
         this.loadUsageBatchButton = loadUsageBatchButton;
-    }
-
-    /**
-     * Sets load researched details button.
-     *
-     * @param loadResearchedUsagesButton load researched details button
-     */
-    void setLoadResearchedUsagesButton(Button loadResearchedUsagesButton) {
-        this.loadResearchedUsagesButton = loadResearchedUsagesButton;
     }
 
     /**
@@ -70,7 +60,6 @@ class UsagesMediator implements IMediator {
     @Override
     public void applyPermissions() {
         loadUsageBatchButton.setVisible(ForeignSecurityUtils.hasLoadUsagePermission());
-        loadResearchedUsagesButton.setVisible(ForeignSecurityUtils.hasLoadResearchedUsagePermission());
         deleteUsageButton.setVisible(ForeignSecurityUtils.hasDeleteUsagePermission());
         addToScenarioButton.setVisible(ForeignSecurityUtils.hasCreateEditScenarioPermission());
         sendForResearchButton.setVisible(ForeignSecurityUtils.hasSendForWorkResearchPermission());
