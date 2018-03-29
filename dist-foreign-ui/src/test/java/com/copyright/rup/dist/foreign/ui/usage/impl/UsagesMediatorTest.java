@@ -31,7 +31,8 @@ import org.powermock.modules.junit4.PowerMockRunner;
 public class UsagesMediatorTest {
 
     private Button deleteButton;
-    private Button loadButton;
+    private Button loadUsageBatchButton;
+    private Button loadResearchedUsagesButton;
     private Button addToScenarioButton;
     private Button sendForResearchButton;
     private UsagesMediator mediator;
@@ -39,11 +40,13 @@ public class UsagesMediatorTest {
     @Before
     public void setUp() {
         deleteButton = new Button();
-        loadButton = new Button();
+        loadUsageBatchButton = new Button();
+        loadResearchedUsagesButton = new Button();
         addToScenarioButton = new Button();
         sendForResearchButton = new Button();
         mediator = new UsagesMediator();
-        mediator.setLoadUsageButton(loadButton);
+        mediator.setLoadUsageBatchButton(loadUsageBatchButton);
+        mediator.setLoadResearchedUsagesButton(loadResearchedUsagesButton);
         mediator.setDeleteUsageButton(deleteButton);
         mediator.setAddToScenarioButton(addToScenarioButton);
         mediator.setSendForResearchButton(sendForResearchButton);
@@ -55,7 +58,8 @@ public class UsagesMediatorTest {
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         assertFalse(deleteButton.isVisible());
-        assertFalse(loadButton.isVisible());
+        assertFalse(loadUsageBatchButton.isVisible());
+        assertFalse(loadResearchedUsagesButton.isVisible());
         assertFalse(addToScenarioButton.isVisible());
         assertFalse(sendForResearchButton.isVisible());
     }
@@ -66,7 +70,8 @@ public class UsagesMediatorTest {
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         assertFalse(deleteButton.isVisible());
-        assertFalse(loadButton.isVisible());
+        assertFalse(loadUsageBatchButton.isVisible());
+        assertFalse(loadResearchedUsagesButton.isVisible());
         assertFalse(addToScenarioButton.isVisible());
         assertFalse(sendForResearchButton.isVisible());
     }
@@ -77,7 +82,8 @@ public class UsagesMediatorTest {
         replay(SecurityUtils.class);
         mediator.applyPermissions();
         assertTrue(deleteButton.isVisible());
-        assertTrue(loadButton.isVisible());
+        assertTrue(loadUsageBatchButton.isVisible());
+        assertTrue(loadResearchedUsagesButton.isVisible());
         assertTrue(addToScenarioButton.isVisible());
         assertTrue(sendForResearchButton.isVisible());
     }
@@ -100,6 +106,7 @@ public class UsagesMediatorTest {
         expect(SecurityUtils.hasPermission("FDA_ACCESS_APPLICATION")).andReturn(true).anyTimes();
         expect(SecurityUtils.hasPermission("FDA_DELETE_USAGE")).andReturn(true).anyTimes();
         expect(SecurityUtils.hasPermission("FDA_LOAD_USAGE")).andReturn(true).anyTimes();
+        expect(SecurityUtils.hasPermission("FDA_LOAD_RESEARCHED_USAGE")).andReturn(true).anyTimes();
         expect(SecurityUtils.hasPermission("FDA_CREATE_EDIT_SCENARIO")).andReturn(true).anyTimes();
         expect(SecurityUtils.hasPermission("FDA_SEND_FOR_WORK_RESEARCH")).andReturn(true).anyTimes();
     }

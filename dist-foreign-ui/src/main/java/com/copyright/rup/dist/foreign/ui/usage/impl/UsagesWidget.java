@@ -75,7 +75,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
     @Override
     public UsagesMediator initMediator() {
         UsagesMediator mediator = new UsagesMediator();
-        mediator.setLoadUsageButton(loadButton);
+        mediator.setLoadUsageBatchButton(loadButton);
         mediator.setDeleteUsageButton(deleteButton);
         mediator.setAddToScenarioButton(addToScenarioButton);
         mediator.setSendForResearchButton(sendForResearchButton);
