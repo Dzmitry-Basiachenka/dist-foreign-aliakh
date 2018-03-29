@@ -32,7 +32,6 @@ public class UsagesMediatorTest {
 
     private Button deleteButton;
     private Button loadUsageBatchButton;
-    private Button loadResearchedUsagesButton;
     private Button addToScenarioButton;
     private Button sendForResearchButton;
     private UsagesMediator mediator;
@@ -41,12 +40,10 @@ public class UsagesMediatorTest {
     public void setUp() {
         deleteButton = new Button();
         loadUsageBatchButton = new Button();
-        loadResearchedUsagesButton = new Button();
         addToScenarioButton = new Button();
         sendForResearchButton = new Button();
         mediator = new UsagesMediator();
         mediator.setLoadUsageBatchButton(loadUsageBatchButton);
-        mediator.setLoadResearchedUsagesButton(loadResearchedUsagesButton);
         mediator.setDeleteUsageButton(deleteButton);
         mediator.setAddToScenarioButton(addToScenarioButton);
         mediator.setSendForResearchButton(sendForResearchButton);
@@ -59,7 +56,6 @@ public class UsagesMediatorTest {
         mediator.applyPermissions();
         assertFalse(deleteButton.isVisible());
         assertFalse(loadUsageBatchButton.isVisible());
-        assertFalse(loadResearchedUsagesButton.isVisible());
         assertFalse(addToScenarioButton.isVisible());
         assertFalse(sendForResearchButton.isVisible());
     }
@@ -71,7 +67,6 @@ public class UsagesMediatorTest {
         mediator.applyPermissions();
         assertFalse(deleteButton.isVisible());
         assertFalse(loadUsageBatchButton.isVisible());
-        assertFalse(loadResearchedUsagesButton.isVisible());
         assertFalse(addToScenarioButton.isVisible());
         assertFalse(sendForResearchButton.isVisible());
     }
@@ -83,7 +78,6 @@ public class UsagesMediatorTest {
         mediator.applyPermissions();
         assertTrue(deleteButton.isVisible());
         assertTrue(loadUsageBatchButton.isVisible());
-        assertTrue(loadResearchedUsagesButton.isVisible());
         assertTrue(addToScenarioButton.isVisible());
         assertTrue(sendForResearchButton.isVisible());
     }
