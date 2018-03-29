@@ -7,8 +7,6 @@
     <resultMap id="usageAuditItemResultMap" type="UsageAuditItem" extends="StoredEntityMapper.storedEntityResult">
         <result property="id" column="df_usage_audit_uid"/>
         <result property="usageId" column="df_usage_uid"/>
-        <result property="scenarioId" column="df_scenario_uid"/>
-        <result property="scenarioName" column="scenario_name"/>
         <result property="actionType" column="action_type_ind"/>
         <result property="actionReason" column="action_reason"/>
     </resultMap>
@@ -16,8 +14,6 @@
     <sql id="usageAuditItemColumns">
         df_usage_audit_uid,
         df_usage_uid,
-        df_scenario_uid,
-        scenario_name,
         action_type_ind,
         action_reason,
         <include refid="StoredEntityMapper.additionalColumns"/>
@@ -29,8 +25,6 @@
         ) values (
             #{id},
             #{usageId},
-            #{scenarioId},
-            #{scenarioName},
             #{actionType},
             #{actionReason},
             <include refid="StoredEntityMapper.insert"/>

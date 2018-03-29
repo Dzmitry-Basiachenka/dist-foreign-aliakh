@@ -7,11 +7,9 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
-import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.repository.impl.UsageAuditRepository;
@@ -37,7 +35,6 @@ import java.util.List;
  */
 public class UsageAuditServiceTest {
 
-    private static final String SCENARIO_UID = "2f9259de-b274-11e7-abc4-cec278b6b50a";
     private static final String USAGE_UID = "4eef3a40-b274-11e7-abc4-cec278b6b50a";
     private static final String USAGE_UID_2 = "5eef3a40-b274-11e7-abc4-cec278b6b50a";
     private static final String BATCH_UID = "f2104232-b274-11e7-abc4-cec278b6b50a";
@@ -54,7 +51,7 @@ public class UsageAuditServiceTest {
     }
 
     @Test
-    public void testLogActionWithoutScenario() {
+    public void testLogAction() {
         Capture<UsageAuditItem> usageAuditItemCapture = new Capture<>();
         usageAuditRepository.insert(capture(usageAuditItemCapture));
         expectLastCall().once();
@@ -81,23 +78,6 @@ public class UsageAuditServiceTest {
     }
 
     @Test
-    public void testLogActionWithScenario() {
-        Capture<UsageAuditItem> usageAuditItemCapture = new Capture<>();
-        usageAuditRepository.insert(capture(usageAuditItemCapture));
-        expectLastCall().once();
-        replay(usageAuditRepository);
-        usageAuditService.logAction(USAGE_UID, buildScenario(), UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO,
-            "Scenario ‘ABC’ was deleted");
-        UsageAuditItem usageAuditItem = usageAuditItemCapture.getValue();
-        assertEquals("Scenario ‘ABC’ was deleted", usageAuditItem.getActionReason());
-        assertEquals(USAGE_UID, usageAuditItem.getUsageId());
-        assertEquals(SCENARIO_UID, usageAuditItem.getScenarioId());
-        assertEquals("scenario name", usageAuditItem.getScenarioName());
-        assertEquals(UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO, usageAuditItem.getActionType());
-        verify(usageAuditRepository);
-    }
-
-    @Test
     public void testDeleteActions() {
         usageAuditRepository.deleteByBatchId(BATCH_UID);
         expectLastCall().once();
@@ -120,15 +100,6 @@ public class UsageAuditServiceTest {
         UsageAuditItem usageAuditItem = usageAuditItemCapture.getValue();
         assertEquals(REASON, usageAuditItem.getActionReason());
         assertEquals(expectedUsageItemId, usageAuditItem.getUsageId());
-        assertNull(usageAuditItem.getScenarioId());
-        assertNull(usageAuditItem.getScenarioName());
         assertEquals(UsageActionTypeEnum.LOADED, usageAuditItem.getActionType());
-    }
-
-    private Scenario buildScenario() {
-        Scenario scenario = new Scenario();
-        scenario.setId(SCENARIO_UID);
-        scenario.setName("scenario name");
-        return scenario;
     }
 }

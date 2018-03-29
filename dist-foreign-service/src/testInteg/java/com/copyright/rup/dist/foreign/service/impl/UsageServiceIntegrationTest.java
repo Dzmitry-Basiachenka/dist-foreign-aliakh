@@ -74,9 +74,7 @@ public class UsageServiceIntegrationTest {
     private void verifyAuditItems(List<UsageAuditItem> auditItems) {
         assertEquals(1, auditItems.size());
         UsageAuditItem auditItem = auditItems.get(0);
-        assertEquals("12ec845f-0e76-4d1c-85cd-bb3fb7ca260e", auditItem.getScenarioId());
         assertEquals(UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO, auditItem.getActionType());
         assertEquals("Exclude reason", auditItem.getActionReason());
-        assertEquals("Test Scenario for exclude", auditItem.getScenarioName());
     }
 }

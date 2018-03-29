@@ -332,10 +332,10 @@ public class UsageServiceTest {
         expectLastCall().once();
         expect(usageRepository.findIdsByScenarioIdRroAccountNumberRhAccountNumbers(scenario.getId(), 2000017011L,
             accountNumbers)).andReturn(usagesIds).once();
-        usageAuditService.logAction(usagesIds.get(0), scenario, UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO,
+        usageAuditService.logAction(usagesIds.get(0), UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO,
             "Action reason");
         expectLastCall().once();
-        usageAuditService.logAction(usagesIds.get(1), scenario, UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO,
+        usageAuditService.logAction(usagesIds.get(1), UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO,
             "Action reason");
         expectLastCall().once();
         replay(usageRepository, usageAuditService, RupContextUtils.class);

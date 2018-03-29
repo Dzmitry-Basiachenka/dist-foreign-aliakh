@@ -18,8 +18,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 public class UsageAuditItem extends StoredEntity<String> {
 
     private String usageId;
-    private String scenarioId;
-    private String scenarioName;
     private UsageActionTypeEnum actionType;
     private String actionReason;
 
@@ -29,22 +27,6 @@ public class UsageAuditItem extends StoredEntity<String> {
 
     public void setUsageId(String usageId) {
         this.usageId = usageId;
-    }
-
-    public String getScenarioId() {
-        return scenarioId;
-    }
-
-    public void setScenarioId(String scenarioId) {
-        this.scenarioId = scenarioId;
-    }
-
-    public String getScenarioName() {
-        return scenarioName;
-    }
-
-    public void setScenarioName(String scenarioName) {
-        this.scenarioName = scenarioName;
     }
 
     public UsageActionTypeEnum getActionType() {
@@ -75,8 +57,6 @@ public class UsageAuditItem extends StoredEntity<String> {
         return new EqualsBuilder()
             .appendSuper(super.equals(obj))
             .append(usageId, that.usageId)
-            .append(scenarioId, that.scenarioId)
-            .append(scenarioName, that.scenarioName)
             .append(actionType, that.actionType)
             .append(actionReason, that.actionReason)
             .isEquals();
@@ -87,8 +67,6 @@ public class UsageAuditItem extends StoredEntity<String> {
         return new HashCodeBuilder()
             .appendSuper(super.hashCode())
             .append(usageId)
-            .append(scenarioId)
-            .append(scenarioName)
             .append(actionType)
             .append(actionReason)
             .toHashCode();
@@ -99,8 +77,6 @@ public class UsageAuditItem extends StoredEntity<String> {
         return new ToStringBuilder(this)
             .appendSuper(super.toString())
             .append("usageId", usageId)
-            .append("scenarioId", scenarioId)
-            .append("scenarioName", scenarioName)
             .append("actionType", actionType)
             .append("actionReason", actionReason)
             .toString();

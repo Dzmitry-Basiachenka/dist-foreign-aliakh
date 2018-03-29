@@ -238,8 +238,8 @@ public class UsageService implements IUsageService {
         List<String> usagesIds =
             usageRepository.findIdsByScenarioIdRroAccountNumberRhAccountNumbers(scenario.getId(), rroAccountNumber,
                 accountNumbers);
-        usagesIds.forEach(usageId -> usageAuditService.logAction(usageId, scenario,
-            UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO, reason));
+        usagesIds.forEach(
+            usageId -> usageAuditService.logAction(usageId, UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO, reason));
         usageRepository.deleteFromScenario(usagesIds, RupContextUtils.getUserName());
     }
 

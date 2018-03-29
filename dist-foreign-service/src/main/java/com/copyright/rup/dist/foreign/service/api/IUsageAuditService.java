@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.service.api;
 
-import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 
@@ -20,7 +19,7 @@ import java.util.Set;
 public interface IUsageAuditService {
 
     /**
-     * Logs usage action without {@link Scenario}.
+     * Logs usage action.
      *
      * @param usageId      usage identifier
      * @param actionType   usage action type
@@ -36,16 +35,6 @@ public interface IUsageAuditService {
      * @param actionReason action reason
      */
     void logAction(Set<String> usageIds, UsageActionTypeEnum actionType, String actionReason);
-
-    /**
-     * Logs usage action with {@link Scenario}.
-     *
-     * @param usageId      usage identifier
-     * @param scenario     instance of {@link Scenario}
-     * @param actionType   usage action type
-     * @param actionReason action reason
-     */
-    void logAction(String usageId, Scenario scenario, UsageActionTypeEnum actionType, String actionReason);
 
     /**
      * Deletes usage actions by usage identifier.
