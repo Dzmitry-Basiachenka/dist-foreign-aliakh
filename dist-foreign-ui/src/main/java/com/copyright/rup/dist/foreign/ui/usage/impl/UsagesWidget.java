@@ -46,7 +46,8 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
     private IUsagesController controller;
     private DataProvider<UsageDto, Void> dataProvider;
     private Grid<UsageDto> usagesGrid;
-    private Button loadButton;
+    private Button loadUsageBatchButton;
+    private Button loadResearchedUsagesButton;
     private Button deleteButton;
     private Button sendForResearchButton;
     private Button addToScenarioButton;
@@ -75,7 +76,8 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
     @Override
     public UsagesMediator initMediator() {
         UsagesMediator mediator = new UsagesMediator();
-        mediator.setLoadUsageBatchButton(loadButton);
+        mediator.setLoadUsageBatchButton(loadUsageBatchButton);
+        mediator.setLoadResearchedUsagesButton(loadResearchedUsagesButton);
         mediator.setDeleteUsageButton(deleteButton);
         mediator.setAddToScenarioButton(addToScenarioButton);
         mediator.setSendForResearchButton(sendForResearchButton);
@@ -174,8 +176,11 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
     }
 
     private HorizontalLayout initButtonsLayout() {
-        loadButton = Buttons.createButton(ForeignUi.getMessage("button.load"));
-        loadButton.addClickListener(event -> Windows.showModalWindow(new UsageBatchUploadWindow(controller)));
+        loadUsageBatchButton = Buttons.createButton(ForeignUi.getMessage("button.load_usage_batch"));
+        loadUsageBatchButton.addClickListener(event -> Windows.showModalWindow(new UsageBatchUploadWindow(controller)));
+        loadResearchedUsagesButton = Buttons.createButton(ForeignUi.getMessage("button.load_researched_usages"));
+        loadResearchedUsagesButton.addClickListener(event ->
+            Windows.showModalWindow(new ResearchedUsagesUploadWindow(controller)));
         addToScenarioButton = Buttons.createButton(ForeignUi.getMessage("button.add_to_scenario"));
         addToScenarioButton.addClickListener(event -> onAddToScenarioClicked());
         Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
@@ -198,9 +203,10 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         });
         deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete_usage_batch"));
         deleteButton.addClickListener(event -> Windows.showModalWindow(new DeleteUsageBatchWindow(controller)));
-        VaadinUtils.setButtonsAutoDisabled(loadButton, addToScenarioButton, deleteButton);
-        HorizontalLayout layout =
-            new HorizontalLayout(loadButton, addToScenarioButton, exportButton, deleteButton, sendForResearchButton);
+        VaadinUtils.setButtonsAutoDisabled(loadUsageBatchButton, loadResearchedUsagesButton, addToScenarioButton,
+            deleteButton);
+        HorizontalLayout layout = new HorizontalLayout(loadUsageBatchButton, loadResearchedUsagesButton,
+            addToScenarioButton, exportButton, deleteButton, sendForResearchButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "usages-buttons");
         return layout;

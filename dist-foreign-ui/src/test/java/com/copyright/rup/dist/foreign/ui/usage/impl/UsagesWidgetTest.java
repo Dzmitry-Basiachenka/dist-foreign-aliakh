@@ -1,10 +1,9 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
-import static junit.framework.Assert.assertNotNull;
-
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
@@ -15,7 +14,6 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
-import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
@@ -101,21 +99,38 @@ public class UsagesWidgetTest {
     }
 
     @Test
-    public void testLoadButtonClickListener() {
+    public void testLoadUsageBatchButtonClickListener() {
         mockStatic(Windows.class);
-        IPrmIntegrationService prmIntegrationService = createMock(IPrmIntegrationService.class);
         ClickEvent clickEvent = createMock(ClickEvent.class);
-        Button loadButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
+        Button loadUsageBatchButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
             .getComponent(0)).getComponent(0);
-        assertTrue(loadButton.isDisableOnClick());
+        assertTrue(loadUsageBatchButton.isDisableOnClick());
         Windows.showModalWindow(anyObject(UsageBatchUploadWindow.class));
         expectLastCall().once();
-        replay(clickEvent, Windows.class, controller, prmIntegrationService);
-        Collection<?> listeners = loadButton.getListeners(ClickEvent.class);
+        replay(clickEvent, Windows.class, controller);
+        Collection<?> listeners = loadUsageBatchButton.getListeners(ClickEvent.class);
         assertEquals(2, listeners.size());
         ClickListener clickListener = (ClickListener) listeners.iterator().next();
         clickListener.buttonClick(clickEvent);
-        verify(clickEvent, Windows.class, controller, prmIntegrationService);
+        verify(clickEvent, Windows.class, controller);
+    }
+
+    @Test
+    public void testLoadResearchedUsagesButtonClickListener() {
+        mockStatic(Windows.class);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        Button loadResearchedUsagesButton =
+            (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
+                .getComponent(0)).getComponent(1);
+        assertTrue(loadResearchedUsagesButton.isDisableOnClick());
+        Windows.showModalWindow(anyObject(ResearchedUsagesUploadWindow.class));
+        expectLastCall().once();
+        replay(clickEvent, Windows.class, controller);
+        Collection<?> listeners = loadResearchedUsagesButton.getListeners(ClickEvent.class);
+        assertEquals(2, listeners.size());
+        ClickListener clickListener = (ClickListener) listeners.iterator().next();
+        clickListener.buttonClick(clickEvent);
+        verify(clickEvent, Windows.class, controller);
     }
 
     @Test
@@ -126,7 +141,7 @@ public class UsagesWidgetTest {
         Whitebox.setInternalState(usagesWidget, grid);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
-            .getComponent(0)).getComponent(1);
+            .getComponent(0)).getComponent(2);
         assertTrue(addToScenarioButton.isDisableOnClick());
         Windows.showNotificationWindow("Scenario cannot be created. There are no usages to include into scenario");
         expectLastCall().once();
@@ -147,7 +162,7 @@ public class UsagesWidgetTest {
         Whitebox.setInternalState(usagesWidget, grid);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
-            .getComponent(0)).getComponent(1);
+            .getComponent(0)).getComponent(2);
         assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.getSize()).andReturn(1).once();
         expect(controller.isProductFamilyAndStatusFiltersApplied()).andReturn(false).once();
@@ -170,7 +185,7 @@ public class UsagesWidgetTest {
         Whitebox.setInternalState(usagesWidget, grid);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
-            .getComponent(0)).getComponent(1);
+            .getComponent(0)).getComponent(2);
         assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.getSize()).andReturn(1).once();
         expect(controller.isProductFamilyAndStatusFiltersApplied()).andReturn(true).once();
@@ -192,7 +207,7 @@ public class UsagesWidgetTest {
         Whitebox.setInternalState(usagesWidget, grid);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
-            .getComponent(0)).getComponent(1);
+            .getComponent(0)).getComponent(2);
         assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.getSize()).andReturn(1).once();
         expect(controller.isProductFamilyAndStatusFiltersApplied()).andReturn(true).once();
@@ -214,7 +229,7 @@ public class UsagesWidgetTest {
         mockStatic(Windows.class);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button deleteButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
-            .getComponent(0)).getComponent(3);
+            .getComponent(0)).getComponent(4);
         assertTrue(deleteButton.isDisableOnClick());
         expect(controller.getUsageBatches()).andReturn(Collections.emptyList()).once();
         Windows.showModalWindow(anyObject(DeleteUsageBatchWindow.class));
@@ -246,6 +261,8 @@ public class UsagesWidgetTest {
         expectLastCall().once();
         mediator.setLoadUsageBatchButton(anyObject(Button.class));
         expectLastCall().once();
+        mediator.setLoadResearchedUsagesButton(anyObject(Button.class));
+        expectLastCall().once();
         mediator.setAddToScenarioButton(anyObject(Button.class));
         expectLastCall().once();
         mediator.setSendForResearchButton(anyObject(Button.class));
@@ -258,17 +275,18 @@ public class UsagesWidgetTest {
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(true), layout.getMargin());
-        assertEquals(5, layout.getComponentCount());
-        assertEquals("Load", layout.getComponent(0).getCaption());
-        assertEquals("Add To Scenario", layout.getComponent(1).getCaption());
-        Component component = layout.getComponent(2);
+        assertEquals(6, layout.getComponentCount());
+        assertEquals("Load Usage Batch", layout.getComponent(0).getCaption());
+        assertEquals("Load Researched Details", layout.getComponent(1).getCaption());
+        assertEquals("Add To Scenario", layout.getComponent(2).getCaption());
+        Component component = layout.getComponent(3);
         assertEquals("Export", component.getCaption());
         Collection<Extension> extensions = component.getExtensions();
         assertTrue(CollectionUtils.isNotEmpty(extensions));
         assertEquals(1, extensions.size());
         assertTrue(extensions.iterator().next() instanceof OnDemandFileDownloader);
-        assertEquals("Delete Usage Batch", layout.getComponent(3).getCaption());
-        assertEquals("Send for Research", layout.getComponent(4).getCaption());
+        assertEquals("Delete Usage Batch", layout.getComponent(4).getCaption());
+        assertEquals("Send for Research", layout.getComponent(5).getCaption());
     }
 
     private void verifyGrid(Grid grid) {
