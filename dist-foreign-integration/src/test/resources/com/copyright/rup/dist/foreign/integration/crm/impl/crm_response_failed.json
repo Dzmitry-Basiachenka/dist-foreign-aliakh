@@ -1,0 +1,10 @@
+{
+  "list": {
+    "error":{
+      "key":"12345",
+      "messages":{
+        "string":"Invalid Currency value provided"
+      }
+    }
+  }
+}

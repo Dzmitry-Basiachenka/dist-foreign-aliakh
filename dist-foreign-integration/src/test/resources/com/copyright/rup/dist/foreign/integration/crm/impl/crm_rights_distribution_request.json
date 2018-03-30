@@ -1,0 +1,33 @@
+{
+  "list": {
+    "rightsDistribution": [
+      {
+        "cccEventId": "53256",
+        "product": "FAS",
+        "rorAccountNumber": "1000012755",
+        "payeeAccountNumber": "1000010022",
+        "royaltyAmount": 1019.99,
+        "currency": "USD",
+        "licenseCreateDate": "01-16-2017T12:00:00 AM",
+        "serviceFeeAmount": 479.99,
+        "wrWrkInst": "127778306",
+        "publicationName": "Adaptations",
+        "author": "Cartmell, Deborah.",
+        "chapterArticleTitle": "Routledge",
+        "omOrderDetailNumber": "34312312",
+        "totalAmount": 1499.99,
+        "periodEndDate": "06/16/2017",
+        "publicationDate": "12/12/2006",
+        "numberOfCopies": 10006,
+        "adjustmentFlag": false,
+        "passThroughFlag": true,
+        "market": "Univ,Bus,Doc,S",
+        "marketPeriodFrom": 2016,
+        "marketPeriodTo": 2016,
+        "licenseeAccountNumber": "7001047151",
+        "createUser": "FDA Distribution",
+        "status": "D - Distributed"
+      }
+    ]
+  }
+}
