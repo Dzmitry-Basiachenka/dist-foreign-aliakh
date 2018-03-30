@@ -49,7 +49,8 @@ public class DomainVerifierTest {
             {UsageAuditItem.class},
             {ScenarioAuditItem.class},
             {RightsholderPayeePair.class},
-            {RightsholderDiscrepancy.class}
+            {RightsholderDiscrepancy.class},
+            {ResearchedUsage.class}
         };
         return Arrays.asList(testData);
     }
