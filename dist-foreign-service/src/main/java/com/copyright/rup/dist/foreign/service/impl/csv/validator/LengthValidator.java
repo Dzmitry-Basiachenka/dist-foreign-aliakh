@@ -32,14 +32,6 @@ public class LengthValidator implements DistCsvProcessor.IValidator<String> {
         this.maxLength = maxLength;
     }
 
-    private static boolean isPositiveNumber(String value) {
-        return null != value && value.matches("[1-9]\\d*(\\.\\d*[eE][+]\\d+)?");
-    }
-
-    private static String parseScientific(String value) {
-        return null != value ? new BigDecimal(value).toPlainString() : null;
-    }
-
     @Override
     public boolean isValid(String value) {
         return StringUtils.isEmpty(value) || isValidValue(value);
@@ -52,5 +44,13 @@ public class LengthValidator implements DistCsvProcessor.IValidator<String> {
 
     private boolean isValidValue(String value) {
         return isPositiveNumber(value) ? parseScientific(value).length() <= maxLength : value.length() <= maxLength;
+    }
+
+    private boolean isPositiveNumber(String value) {
+        return null != value && value.matches("[1-9]\\d*(\\.\\d*[eE][+]\\d+)?");
+    }
+
+    private String parseScientific(String value) {
+        return null != value ? new BigDecimal(value).toPlainString() : null;
     }
 }
