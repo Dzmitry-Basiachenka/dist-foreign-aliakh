@@ -102,6 +102,12 @@
             select df_scenario_uid
             from ${schema}.df_usage_archive
             where df_usage_batch_uid = #{df_usage_batch_id}
+            union
+            select s.df_scenario_uid
+            from ${schema}.df_scenario s
+            left join ${schema}.df_scenario_usage_filter f on s.df_scenario_uid = f.df_scenario_uid
+            left join ${schema}.df_scenario_usage_filter_to_usage_batches_ids_map ub on f.df_scenario_usage_filter_uid = ub.df_scenario_usage_filter_uid
+            where ub.df_usage_batch_uid = #{df_usage_batch_id}
         )
     </select>
 
