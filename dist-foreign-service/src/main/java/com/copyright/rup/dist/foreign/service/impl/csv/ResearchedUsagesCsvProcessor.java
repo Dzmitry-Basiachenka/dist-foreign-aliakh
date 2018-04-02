@@ -122,10 +122,10 @@ public class ResearchedUsagesCsvProcessor extends DistCsvProcessor<ResearchedUsa
 
         @Override
         public ResearchedUsage convert(String... row) {
-            ResearchedUsage usage = new ResearchedUsage();
-            usage.setDetailId(getLong(row, Header.DETAIL_ID));
-            usage.setWrWrkInst(getLong(row, Header.WR_WRK_INST));
-            return usage;
+            ResearchedUsage researchedUsage = new ResearchedUsage();
+            researchedUsage.setDetailId(getLong(row, Header.DETAIL_ID));
+            researchedUsage.setWrWrkInst(getLong(row, Header.WR_WRK_INST));
+            return researchedUsage;
         }
     }
 }

@@ -977,4 +977,13 @@
             <include refid="StoredEntityMapper.update"/>
         where df_usage_uid = #{id}
     </update>
+
+    <update id="updateResearchedUsage" parameterType="map">
+        update ${schema}.df_usage
+        set
+            wr_wrk_inst = #{wrWrkInst},
+            status_ind = #{status},
+            <include refid="StoredEntityMapper.update"/>
+        where detail_id = #{detailId}
+    </update>
 </mapper>

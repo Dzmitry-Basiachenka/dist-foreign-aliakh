@@ -14,6 +14,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
+import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
@@ -21,6 +22,7 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
@@ -33,6 +35,7 @@ import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
 import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 
@@ -466,6 +469,37 @@ public class UsageServiceTest {
         replay(usageArchiveRepository, usageAuditService);
         usageService.updatePaidInfo(Collections.singletonList(paidUsage));
         verify(usageArchiveRepository, usageAuditService);
+    }
+
+    @Test
+    public void testLoadResearchedUsages() {
+        long detailId1 = 12345678L;
+        long detailId2 = 23456789L;
+        ResearchedUsage researchedUsage1 = new ResearchedUsage();
+        researchedUsage1.setDetailId(detailId1);
+        researchedUsage1.setWrWrkInst(987654321L);
+        ResearchedUsage researchedUsage2 = new ResearchedUsage();
+        researchedUsage2.setDetailId(detailId2);
+        researchedUsage2.setWrWrkInst(876543210L);
+        List<ResearchedUsage> researchedUsages = ImmutableList.of(researchedUsage1, researchedUsage2);
+        usageRepository.updateResearchedUsages(researchedUsages);
+        Usage usage1 = new Usage();
+        usage1.setId(RupPersistUtils.generateUuid());
+        usage1.setDetailId(detailId1);
+        Usage usage2 = new Usage();
+        usage2.setId(RupPersistUtils.generateUuid());
+        usage2.setDetailId(detailId2);
+        List<Usage> usages = ImmutableList.of(usage1, usage2);
+        expect(usageRepository.findByStatuses(UsageStatusEnum.WORK_FOUND)).andReturn(usages).once();
+        usageAuditService.logAction(usage1.getId(), UsageActionTypeEnum.WORK_FOUND,
+            "Wr Wrk Inst 987654321 was added based on research");
+        expectLastCall().once();
+        usageAuditService.logAction(usage2.getId(), UsageActionTypeEnum.WORK_FOUND,
+            "Wr Wrk Inst 876543210 was added based on research");
+        expectLastCall().once();
+        replay(usageRepository, usageAuditService);
+        usageService.loadResearchedUsages(researchedUsages);
+        verify(usageRepository, usageAuditService);
     }
 
     private void assertResult(List<?> result, int size) {
