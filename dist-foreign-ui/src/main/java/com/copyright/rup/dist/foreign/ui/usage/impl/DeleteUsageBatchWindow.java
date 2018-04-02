@@ -83,7 +83,9 @@ class DeleteUsageBatchWindow extends Window {
             deleteButton.setId(batch.getId());
             deleteButton.addClickListener(event -> deleteUsageBatch(batch));
             return deleteButton;
-        }).setId("delete").setWidth(90);
+        }).setId("delete")
+            .setWidth(90)
+            .setSortable(false);
         VaadinUtils.addComponentStyle(grid, "usage-batches-grid");
     }
 

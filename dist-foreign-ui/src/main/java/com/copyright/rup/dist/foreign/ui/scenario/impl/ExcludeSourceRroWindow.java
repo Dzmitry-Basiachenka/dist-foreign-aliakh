@@ -119,6 +119,7 @@ public class ExcludeSourceRroWindow extends Window implements ISearchController 
                 });
             });
             return deleteButton;
-        }).setWidth(95);
+        }).setWidth(95)
+            .setSortable(false);
     }
 }

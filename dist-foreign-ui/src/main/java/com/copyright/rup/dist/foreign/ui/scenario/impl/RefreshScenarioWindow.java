@@ -131,7 +131,8 @@ public class RefreshScenarioWindow extends Window {
         grid.addColumn(provider)
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setSortProperty(sort)
-            .setHidable(true);
+            .setHidable(true)
+            .setSortable(true);
     }
 
     private void addColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, String sort, boolean isHidable,
@@ -140,6 +141,7 @@ public class RefreshScenarioWindow extends Window {
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setSortProperty(sort)
             .setHidable(isHidable)
+            .setSortable(true)
             .setWidth(width);
     }
 
@@ -149,6 +151,7 @@ public class RefreshScenarioWindow extends Window {
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setSortProperty(sort)
             .setHidable(true)
+            .setSortable(true)
             .setStyleGenerator(item -> style)
             .setWidth(width);
     }
