@@ -53,10 +53,10 @@ public class ResearchedUsagesCsvProcessorIntegrationTest {
     public void testProcessor() throws Exception {
         ProcessingResult<ResearchedUsage> result = processFile("researched_usages.csv");
         assertNotNull(result);
-        List<ResearchedUsage> usages = result.get();
-        assertEquals(2, CollectionUtils.size(usages));
-        verifyUsage(usages.get(0), 12345678, 987654321);
-        verifyUsage(usages.get(1), 23456789, 876543210);
+        List<ResearchedUsage> researchedUsages = result.get();
+        assertEquals(2, CollectionUtils.size(researchedUsages));
+        verifyResearchedUsage(researchedUsages.get(0), 12345678, 987654321);
+        verifyResearchedUsage(researchedUsages.get(1), 23456789, 876543210);
     }
 
     @Test
@@ -141,9 +141,9 @@ public class ResearchedUsagesCsvProcessorIntegrationTest {
         return result;
     }
 
-    private void verifyUsage(ResearchedUsage usage, long detailId, long wrWrkInst) {
-        assertNotNull(usage);
-        assertEquals(detailId, usage.getDetailId().longValue());
-        assertEquals(wrWrkInst, usage.getWrWrkInst().longValue());
+    private void verifyResearchedUsage(ResearchedUsage researchedUsage, long detailId, long wrWrkInst) {
+        assertNotNull(researchedUsage);
+        assertEquals(detailId, researchedUsage.getDetailId().longValue());
+        assertEquals(wrWrkInst, researchedUsage.getWrWrkInst().longValue());
     }
 }

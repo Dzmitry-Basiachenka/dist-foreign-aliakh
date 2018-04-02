@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
+import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -10,6 +11,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -302,4 +304,11 @@ public interface IUsageRepository {
      * @param usages list of {@link Usage}s
      */
     void update(List<Usage> usages);
+
+    /**
+     * Updates researched usage details.
+     *
+     * @param researchedUsages collection of {@link ResearchedUsage}s
+     */
+    void updateResearchedUsages(Collection<ResearchedUsage> researchedUsages);
 }

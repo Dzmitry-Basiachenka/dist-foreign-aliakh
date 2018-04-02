@@ -5,6 +5,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.common.repository.BaseRepository;
+import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -29,6 +30,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -333,5 +335,18 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     public void update(List<Usage> usages) {
         checkArgument(CollectionUtils.isNotEmpty(usages));
         usages.forEach(usage -> update("IUsageMapper.update", usage));
+    }
+
+    @Override
+    public void updateResearchedUsages(Collection<ResearchedUsage> researchedUsages) {
+        Objects.requireNonNull(researchedUsages);
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
+        parameters.put(UPDATE_USER_KEY, StoredEntity.DEFAULT_USER);
+        parameters.put(STATUS_KEY, UsageStatusEnum.WORK_FOUND);
+        researchedUsages.forEach(researchedUsage -> {
+            parameters.put("detailId", researchedUsage.getDetailId());
+            parameters.put("wrWrkInst", researchedUsage.getWrWrkInst());
+            update("IUsageMapper.updateResearchedUsage", parameters);
+        });
     }
 }

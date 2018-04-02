@@ -4,6 +4,7 @@ import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.integration.rest.prm.PrmRollUpService;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
+import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
@@ -359,6 +360,27 @@ public class UsageService implements IUsageService {
     @Override
     public List<Usage> getUsagesWithBlankWrWrkInst() {
         return usageRepository.findUsagesWithBlankWrWrkInst();
+    }
+
+    @Override
+    @Transactional
+    public void loadResearchedUsages(Collection<ResearchedUsage> researchedUsages) {
+        LOGGER.info("Load researched usages. Started. ResearchedUsagesCount={}", LogUtils.size(researchedUsages));
+        StopWatch stopWatch = new Slf4JStopWatch();
+        usageRepository.updateResearchedUsages(researchedUsages);
+        stopWatch.lap("usage.loadResearchedUsages_1_updateResearchedUsage");
+        Map<Long, String> detailIdToId = usageRepository.findByStatuses(UsageStatusEnum.WORK_FOUND)
+            .stream()
+            .collect(Collectors.toMap(Usage::getDetailId, Usage::getId));
+        stopWatch.lap("usage.loadResearchedUsages_2_findByStatuses");
+        researchedUsages.forEach(researchedUsage -> {
+                usageAuditService.logAction(detailIdToId.get(researchedUsage.getDetailId()),
+                    UsageActionTypeEnum.WORK_FOUND,
+                    String.format("Wr Wrk Inst %s was added based on research", researchedUsage.getWrWrkInst()));
+            }
+        );
+        stopWatch.stop("usage.loadResearchedUsages_3_logAction");
+        LOGGER.info("Load researched usages. Finished. ResearchedUsagesCount={}", LogUtils.size(researchedUsages));
     }
 
     private void calculateUsagesGrossAmount(UsageBatch usageBatch, Collection<Usage> usages) {

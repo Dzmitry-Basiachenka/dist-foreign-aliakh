@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.service.api;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
+import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -268,4 +269,10 @@ public interface IUsageService {
      */
     List<Usage> getUsagesWithBlankWrWrkInst();
 
+    /**
+     * Updates researched usage details.
+     *
+     * @param researchedUsages collection of {@link ResearchedUsage}s
+     */
+    void loadResearchedUsages(Collection<ResearchedUsage> researchedUsages);
 }
