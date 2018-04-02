@@ -45,16 +45,6 @@ public class UsageRepositoryTest {
     }
 
     @Test
-    public void testFindDuplicateDetailIds() {
-        List<Long> detailIds = LongStream.range(1000000000, 1000016001).boxed().collect(Collectors.toList());
-        expect(sqlSessionTemplate.selectList(eq("IUsageMapper.findDuplicateDetailIds"),
-            notNull(List.class))).andReturn(Lists.newArrayList()).times(2);
-        replay(sqlSessionTemplate);
-        usageRepository.findDuplicateDetailIds(detailIds);
-        verify(sqlSessionTemplate);
-    }
-
-    @Test
     public void testFindIdsByScenarioIdRroAccountNumberRhAccountNumbers() {
         List<Long> accountNumbers = LongStream.range(1000000000, 1000032001).boxed().collect(Collectors.toList());
         expect(sqlSessionTemplate.selectList(eq("IUsageMapper.findIdsByScenarioIdRroAccountNumberRhAccountNumbers"),

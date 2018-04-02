@@ -1,5 +1,9 @@
 package com.copyright.rup.dist.foreign.service.impl.csv;
 
+import static org.easymock.EasyMock.anyLong;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -9,6 +13,7 @@ import static org.junit.Assert.fail;
 import com.copyright.rup.dist.common.test.ReportMatcher;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.HeaderValidationException;
 import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.ThresholdExceededException;
@@ -165,6 +170,9 @@ public class UsageCsvProcessorIntegrationTest {
 
     private DistCsvProcessor.ProcessingResult<Usage> processFile(String file, boolean validateHeaders)
         throws IOException {
+        final IUsageService usageService = createMock(IUsageService.class);
+        expect(usageService.isDetailIdExists(anyLong())).andReturn(false).anyTimes();
+        replay(usageService);
         DistCsvProcessor.ProcessingResult<Usage> result;
         try (InputStream stream = this.getClass()
             .getResourceAsStream("/com/copyright/rup/dist/foreign/service/csv/" + file);
