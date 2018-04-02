@@ -120,11 +120,11 @@ public class DrillDownByRightsholderWidget extends Window implements IDrillDownB
             return Objects.nonNull(value)
                 ? Objects.toString(value.multiply(new BigDecimal("100")).setScale(1, BigDecimal.ROUND_HALF_UP))
                 : StringUtils.EMPTY;
-        }, "table.column.service_fee", "service_fee", true, 115);
+        }, "table.column.service_fee", "serviceFee", true, 115);
         addColumn(UsageDto::getMarket, "table.column.market", "market", true, 115);
         addColumn(UsageDto::getMarketPeriodFrom, "table.column.market_period_from", "marketPeriodFrom", true, 150);
         addColumn(UsageDto::getMarketPeriodTo, "table.column.market_period_to", "marketPeriodTo", true, 145);
-        addColumn(UsageDto::getAuthor, "table.column.author", "author");
+        addColumn(UsageDto::getAuthor, "table.column.author", "author", true, 90);
     }
 
     private void addColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, String sort) {

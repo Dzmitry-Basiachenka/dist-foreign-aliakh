@@ -145,7 +145,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
             "publicationDate", true, 90);
         addColumn(UsageDto::getNumberOfCopies, "table.column.number_of_copies", "numberOfCopies", true, 140);
         addColumn(usage -> CurrencyUtils.format(usage.getReportedValue(), null), "table.column.reported_value",
-            "v-align-right", true, 130);
+            "reportedValue", "v-align-right", 130);
         addColumn(usage -> CurrencyUtils.format(usage.getGrossAmount(), null), "table.column.gross_amount",
             "grossAmount", "v-align-right", 110);
         addColumn(usage -> CurrencyUtils.format(usage.getBatchGrossAmount(), null), "table.column.batch_gross_amount",
