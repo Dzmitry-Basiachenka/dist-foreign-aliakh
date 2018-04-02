@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
@@ -44,6 +45,7 @@ import javax.annotation.PostConstruct;
  *
  * @author Darya Baraukova
  */
+@Service("df.integration.сrmService")
 public class CrmService implements ICrmService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
