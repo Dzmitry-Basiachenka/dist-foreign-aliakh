@@ -301,4 +301,124 @@ databaseChangeLog {
 
         rollback ""
     }
+
+    changeSet(id: '2018-04-02-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment('Adding scenario filters for ScenarioRepositoryIntegrationTest')
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
+            column(name: 'df_scenario_uid', value: '095f3df4-c8a7-4dba-9a8f-7dce0b61c40a')
+            column(name: 'name', value: 'Scenario with excluded usages')
+            column(name: 'status_ind', value: 'IN_PROGRESS')
+            column(name: 'description', value: 'The description of scenario 6')
+            column(name: 'record_version', value: '1')
+            column(name: 'created_by_user', value: 'SYSTEM')
+            column(name: 'created_datetime', value: '2018-03-30 17:47:24')
+            column(name: 'updated_by_user', value: 'SYSTEM')
+            column(name: 'updated_datetime', value: '2018-03-30 17:47:24')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
+            column(name: 'df_scenario_usage_filter_uid', value: '7459ee74-363b-11e8-b467-0ed5f89f718b')
+            column(name: 'df_scenario_uid', value: 'b1f0b236-3ae9-4a60-9fab-61db84199d6f')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+            column(name: 'record_version', value: '1')
+            column(name: 'created_by_user', value: 'SYSTEM')
+            column(name: 'created_datetime', value: '2018-03-30 17:47:24')
+            column(name: 'updated_by_user', value: 'SYSTEM')
+            column(name: 'updated_datetime', value: '2018-03-30 17:47:24')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
+            column(name: 'df_scenario_usage_filter_uid', value: '8f83dfce-363c-11e8-b467-0ed5f89f718b')
+            column(name: 'df_scenario_uid', value: '1230b236-1239-4a60-9fab-123b84199123')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+            column(name: 'record_version', value: '1')
+            column(name: 'created_by_user', value: 'SYSTEM')
+            column(name: 'created_datetime', value: '2018-03-30 17:47:24')
+            column(name: 'updated_by_user', value: 'SYSTEM')
+            column(name: 'updated_datetime', value: '2018-03-30 17:47:24')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
+            column(name: 'df_scenario_usage_filter_uid', value: '09a754c4-363e-11e8-b467-0ed5f89f718b')
+            column(name: 'df_scenario_uid', value: '3210b236-1239-4a60-9fab-888b84199321')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+            column(name: 'record_version', value: '1')
+            column(name: 'created_by_user', value: 'SYSTEM')
+            column(name: 'created_datetime', value: '2018-03-30 17:47:24')
+            column(name: 'updated_by_user', value: 'SYSTEM')
+            column(name: 'updated_datetime', value: '2018-03-30 17:47:24')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
+            column(name: 'df_scenario_usage_filter_uid', value: '27ec001a-363e-11e8-b467-0ed5f89f718b')
+            column(name: 'df_scenario_uid', value: 'e27551ed-3f69-4e08-9e4f-8ac03f67595f')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+            column(name: 'record_version', value: '1')
+            column(name: 'created_by_user', value: 'SYSTEM')
+            column(name: 'created_datetime', value: '2018-03-30 17:47:24')
+            column(name: 'updated_by_user', value: 'SYSTEM')
+            column(name: 'updated_datetime', value: '2018-03-30 17:47:24')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
+            column(name: 'df_scenario_usage_filter_uid', value: '2c0df248-363e-11e8-b467-0ed5f89f718b')
+            column(name: 'df_scenario_uid', value: '8a6a6b15-6922-4fda-b40c-5097fcbd256e')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+            column(name: 'record_version', value: '1')
+            column(name: 'created_by_user', value: 'SYSTEM')
+            column(name: 'created_datetime', value: '2018-03-30 17:47:24')
+            column(name: 'updated_by_user', value: 'SYSTEM')
+            column(name: 'updated_datetime', value: '2018-03-30 17:47:24')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
+            column(name: 'df_scenario_usage_filter_uid', value: '3956ce16-4649-46a9-95da-337953436479')
+            column(name: 'df_scenario_uid', value: '095f3df4-c8a7-4dba-9a8f-7dce0b61c40a')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+            column(name: 'record_version', value: '1')
+            column(name: 'created_by_user', value: 'SYSTEM')
+            column(name: 'created_datetime', value: '2018-03-30 17:47:24')
+            column(name: 'updated_by_user', value: 'SYSTEM')
+            column(name: 'updated_datetime', value: '2018-03-30 17:47:24')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter_to_usage_batches_ids_map') {
+            column(name: 'df_scenario_usage_filter_uid', value: '7459ee74-363b-11e8-b467-0ed5f89f718b')
+            column(name: 'df_usage_batch_uid', value: 'a5b64c3a-55d2-462e-b169-362dca6a4dd6')
+            column(name: 'record_version', value: '1')
+            column(name: 'created_by_user', value: 'SYSTEM')
+            column(name: 'created_datetime', value: '2018-03-30 17:47:24')
+            column(name: 'updated_by_user', value: 'SYSTEM')
+            column(name: 'updated_datetime', value: '2018-03-30 17:47:24')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter_to_usage_batches_ids_map') {
+            column(name: 'df_scenario_usage_filter_uid', value: '8f83dfce-363c-11e8-b467-0ed5f89f718b')
+            column(name: 'df_usage_batch_uid', value: '3f46981e-e85a-4786-9b60-ab009c4358e7')
+            column(name: 'record_version', value: '1')
+            column(name: 'created_by_user', value: 'SYSTEM')
+            column(name: 'created_datetime', value: '2018-03-30 17:47:24')
+            column(name: 'updated_by_user', value: 'SYSTEM')
+            column(name: 'updated_datetime', value: '2018-03-30 17:47:24')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter_to_usage_batches_ids_map') {
+            column(name: 'df_scenario_usage_filter_uid', value: '3956ce16-4649-46a9-95da-337953436479')
+            column(name: 'df_usage_batch_uid', value: '4eff2685-4895-45a1-a886-c41a0f98204b')
+            column(name: 'record_version', value: '1')
+            column(name: 'created_by_user', value: 'SYSTEM')
+            column(name: 'created_datetime', value: '2018-03-30 17:47:24')
+            column(name: 'updated_by_user', value: 'SYSTEM')
+            column(name: 'updated_datetime', value: '2018-03-30 17:47:24')
+        }
+
+        rollback ""
+    }
 }

@@ -127,7 +127,7 @@ public class DeleteUsageBatchWindowTest {
 
 
     @Test
-    public void testDeleteClickListener() {
+    public void testDeleteClickListenerWithAssociatedScenarios() {
         mockStatic(Windows.class);
         Window confirmWindowCapture = createMock(Window.class);
         VerticalLayout content = (VerticalLayout) deleteWindow.getContent();

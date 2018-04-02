@@ -76,21 +76,23 @@ public class ScenarioRepositoryIntegrationTest {
 
     @Test
     public void testFindAll() {
-        assertEquals(5, scenarioRepository.findAll().size());
+        assertEquals(6, scenarioRepository.findAll().size());
         String scenarioId = RupPersistUtils.generateUuid();
         scenarioRepository.insert(buildScenario(scenarioId, SCENARIO_NAME));
         List<Scenario> scenarios = scenarioRepository.findAll();
-        assertEquals(6, scenarios.size());
+        assertEquals(7, scenarios.size());
         verifyScenario(scenarios.get(0), scenarioId, SCENARIO_NAME, DESCRIPTION, ScenarioStatusEnum.IN_PROGRESS);
-        verifyScenario(scenarios.get(1), "e27551ed-3f69-4e08-9e4f-8ac03f67595f", "Scenario name 2",
+        verifyScenario(scenarios.get(1), "095f3df4-c8a7-4dba-9a8f-7dce0b61c40a", "Scenario with excluded usages",
+            "The description of scenario 6", ScenarioStatusEnum.IN_PROGRESS);
+        verifyScenario(scenarios.get(2), "e27551ed-3f69-4e08-9e4f-8ac03f67595f", "Scenario name 2",
             "The description of scenario 2", ScenarioStatusEnum.IN_PROGRESS);
-        verifyScenario(scenarios.get(2), "b1f0b236-3ae9-4a60-9fab-61db84199d6f", "Scenario name",
+        verifyScenario(scenarios.get(3), "b1f0b236-3ae9-4a60-9fab-61db84199d6f", "Scenario name",
             "The description of scenario", ScenarioStatusEnum.IN_PROGRESS);
-        verifyScenario(scenarios.get(3), "1230b236-1239-4a60-9fab-123b84199123", "Scenario name 4",
+        verifyScenario(scenarios.get(4), "1230b236-1239-4a60-9fab-123b84199123", "Scenario name 4",
             "The description of scenario 4", ScenarioStatusEnum.IN_PROGRESS);
-        verifyScenario(scenarios.get(4), "8a6a6b15-6922-4fda-b40c-5097fcbd256e", "Scenario name 5",
+        verifyScenario(scenarios.get(5), "8a6a6b15-6922-4fda-b40c-5097fcbd256e", "Scenario name 5",
             "The description of scenario 5", ScenarioStatusEnum.SENT_TO_LM);
-        verifyScenario(scenarios.get(5), "3210b236-1239-4a60-9fab-888b84199321", "Scenario name 3",
+        verifyScenario(scenarios.get(6), "3210b236-1239-4a60-9fab-888b84199321", "Scenario name 3",
             "The description of scenario 3", ScenarioStatusEnum.IN_PROGRESS);
     }
 
@@ -139,6 +141,15 @@ public class ScenarioRepositoryIntegrationTest {
         assertNotNull(scenariosNames);
         assertEquals(1, scenariosNames.size());
         assertEquals("Scenario name 3", scenariosNames.get(0));
+    }
+
+    @Test
+    public void testFindNamesByUsageBatchIdAssociatedWithFilterOnly() {
+        List<String> scenariosNames =
+            scenarioRepository.findNamesByUsageBatchId("4eff2685-4895-45a1-a886-c41a0f98204b");
+        assertNotNull(scenariosNames);
+        assertEquals(1, scenariosNames.size());
+        assertEquals("Scenario with excluded usages", scenariosNames.get(0));
     }
 
     @Test
