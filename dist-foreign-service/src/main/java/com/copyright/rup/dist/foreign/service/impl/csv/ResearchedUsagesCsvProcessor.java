@@ -1,12 +1,10 @@
 package com.copyright.rup.dist.foreign.service.impl.csv;
 
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
-import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.DuplicateInFileValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.LengthValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.PositiveNumberValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.RequiredValidator;
-import com.copyright.rup.dist.foreign.service.impl.csv.validator.UsageStatusEnumValidator;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -48,14 +46,7 @@ public class ResearchedUsagesCsvProcessor extends DistCsvProcessor<ResearchedUsa
         PositiveNumberValidator positiveNumberValidator = new PositiveNumberValidator();
         addPlainValidators(Header.DETAIL_ID, requiredValidator, positiveNumberValidator, new LengthValidator(10),
             new DuplicateInFileValidator());
-        addPlainValidators(Header.STATUS, requiredValidator,
-            new UsageStatusEnumValidator(UsageStatusEnum.WORK_RESEARCH));
         addPlainValidators(Header.WR_WRK_INST, requiredValidator, positiveNumberValidator, new LengthValidator(15));
-    }
-
-    @Override
-    protected void initBusinessValidators() {
-        // todo {aliakh} duplicateValidator will be added after its implementation
     }
 
     /**

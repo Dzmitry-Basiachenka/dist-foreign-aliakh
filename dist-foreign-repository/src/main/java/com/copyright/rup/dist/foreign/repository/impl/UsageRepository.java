@@ -183,8 +183,8 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public int findCountByDetailId(Long detailId) {
-        return selectOne("IUsageMapper.findCountByDetailId", Objects.requireNonNull(detailId));
+    public int findCountActiveAndArchivedByDetailId(Long detailId) {
+        return selectOne("IUsageMapper.findCountActiveAndArchivedByDetailId", Objects.requireNonNull(detailId));
     }
 
     @Override
@@ -342,5 +342,15 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
             parameters.put("wrWrkInst", researchedUsage.getWrWrkInst());
             update("IUsageMapper.updateResearchedUsage", parameters);
         });
+    }
+
+    @Override
+    public int findCountByDetailId(Long detailId) {
+        return selectOne("IUsageMapper.findCountByDetailId", Objects.requireNonNull(detailId));
+    }
+
+    @Override
+    public UsageStatusEnum findStatusByDetailId(Long detailId) {
+        return selectOne("IUsageMapper.findStatusByDetailId", Objects.requireNonNull(detailId));
     }
 }

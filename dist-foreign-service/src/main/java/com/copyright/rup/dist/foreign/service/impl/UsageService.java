@@ -246,7 +246,7 @@ public class UsageService implements IUsageService {
 
     @Override
     public boolean isDetailIdExists(Long detailId) {
-        return 0 != usageRepository.findCountByDetailId(detailId);
+        return 0 != usageRepository.findCountActiveAndArchivedByDetailId(detailId);
     }
 
     @Override
@@ -379,6 +379,16 @@ public class UsageService implements IUsageService {
         );
         stopWatch.stop("usage.loadResearchedUsages_3_logAction");
         LOGGER.info("Load researched usages. Finished. ResearchedUsagesCount={}", LogUtils.size(researchedUsages));
+    }
+
+    @Override
+    public int findCountByDetailId(Long detailId) {
+        return usageRepository.findCountByDetailId(detailId);
+    }
+
+    @Override
+    public UsageStatusEnum findStatusByDetailId(Long detailId) {
+        return usageRepository.findStatusByDetailId(detailId);
     }
 
     private void calculateUsagesGrossAmount(UsageBatch usageBatch, Collection<Usage> usages) {

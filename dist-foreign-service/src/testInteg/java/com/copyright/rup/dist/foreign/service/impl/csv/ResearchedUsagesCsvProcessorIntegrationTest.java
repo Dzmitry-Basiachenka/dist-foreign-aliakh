@@ -7,15 +7,25 @@ import static org.junit.Assert.fail;
 
 import com.copyright.rup.dist.common.test.ReportMatcher;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
+import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.HeaderValidationException;
 import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.ThresholdExceededException;
+import com.copyright.rup.dist.foreign.service.impl.csv.validator.ResearchedUsageDetailIdValidator;
+import com.copyright.rup.dist.foreign.service.impl.csv.validator.ResearchedUsageStatusValidator;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -37,11 +47,19 @@ import java.util.concurrent.Executors;
  *
  * @author Aliaksandr Liakh
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(
+    value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
+@TestPropertySource(properties = {"test.liquibase.changelog=researched-usages-csv-processor-data-init.groovy"})
+@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 public class ResearchedUsagesCsvProcessorIntegrationTest {
 
     private static final String PATH_TO_ACTUAL_REPORTS = "build/temp";
     private static final String PACKAGE = "/com/copyright/rup/dist/foreign/service/csv/researched_usages";
     private static final String PATH_TO_EXPECTED_REPORTS = "src/testInteg/resources" + PACKAGE;
+
+    @Autowired
+    private IUsageService usageService;
 
     @BeforeClass
     public static void setUpTestDirectory() throws IOException {
@@ -135,7 +153,8 @@ public class ResearchedUsagesCsvProcessorIntegrationTest {
              ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
             IOUtils.copy(is, baos);
             ResearchedUsagesCsvProcessor processor = new ResearchedUsagesCsvProcessor();
-            processor.setValidateHeaders(true);
+            processor.addBusinessValidators(new ResearchedUsageDetailIdValidator(usageService),
+                new ResearchedUsageStatusValidator(usageService));
             result = processor.process(baos);
         }
         return result;

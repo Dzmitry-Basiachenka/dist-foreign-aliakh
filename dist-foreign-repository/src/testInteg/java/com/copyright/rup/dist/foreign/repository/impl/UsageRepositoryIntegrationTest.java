@@ -702,10 +702,10 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindCountByDetailId() {
-        assertEquals(0, usageRepository.findCountByDetailId(-1L));
-        assertEquals(1, usageRepository.findCountByDetailId(6997788888L));
-        assertEquals(1, usageRepository.findCountByDetailId(5423214587L));
+    public void testfindCountActiveAndArchivedByDetailId() {
+        assertEquals(0, usageRepository.findCountActiveAndArchivedByDetailId(-1L));
+        assertEquals(1, usageRepository.findCountActiveAndArchivedByDetailId(6997788888L));
+        assertEquals(1, usageRepository.findCountActiveAndArchivedByDetailId(5423214587L));
     }
 
     @Test
