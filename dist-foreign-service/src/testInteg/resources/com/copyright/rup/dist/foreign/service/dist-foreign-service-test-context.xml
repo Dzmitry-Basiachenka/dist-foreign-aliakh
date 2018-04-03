@@ -18,15 +18,28 @@
     <import resource="classpath:/com/copyright/rup/common/config/rup-properties-config.xml"/>
     <import resource="classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-context.xml"/>
 
-    <bean id="dfDataSource"
-          class="com.copyright.rup.common.test.integ.db.embedded.EmbeddedPostgresDatabaseFactory">
-        <property name="version" value="9.4.4-1" />
-        <property name="resourcesFromPaths">
+    <bean id="defaultChangelog" class="org.springframework.beans.factory.config.ListFactoryBean">
+        <property name="sourceList">
             <list value-type="java.lang.String">
                 <value>/com/copyright/rup/dist/foreign/db/main-changelog.groovy</value>
-                <value>/com/copyright/rup/dist/foreign/service/liquibase/${test.liquibase.changelog}</value>
             </list>
         </property>
+    </bean>
+
+    <bean id="extendedChangelog" parent="defaultChangelog"
+          class="org.springframework.beans.factory.config.ListFactoryBean">
+        <property name="sourceList">
+            <list value-type="java.lang.String" merge="true">
+                <value>/com/copyright/rup/dist/foreign/service/liquibase/${test.liquibase.changelog:#{null}}</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="dfDataSource"
+          class="com.copyright.rup.common.test.integ.db.embedded.EmbeddedPostgresDatabaseFactory">
+        <property name="version" value="9.4.4-1"/>
+        <property name="resourcesFromPaths"
+                  value="#{'${test.liquibase.changelog:}'.equals('') ? defaultChangelog : extendedChangelog}"/>
         <property name="createCommonTablesOnStartup" value="false"/>
     </bean>
 

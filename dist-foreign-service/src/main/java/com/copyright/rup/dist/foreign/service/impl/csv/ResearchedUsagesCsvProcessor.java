@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.service.impl.csv.validator.RequiredValidat
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -26,18 +27,17 @@ public class ResearchedUsagesCsvProcessor extends DistCsvProcessor<ResearchedUsa
     /**
      * Constructor.
      */
-    public ResearchedUsagesCsvProcessor() {
-        super(new ResearchedUsageConverter(), getColumns());
+    ResearchedUsagesCsvProcessor() {
+        super(new ResearchedUsageConverter(), true, getColumns());
     }
 
     /**
      * @return array of expected columns in CSV file.
      */
-    public static String[] getColumns() {
+    private static List<String> getColumns() {
         return Stream.of(Header.values())
             .map(Header::getColumnName)
-            .collect(Collectors.toList())
-            .toArray(new String[]{});
+            .collect(Collectors.toList());
     }
 
     @Override

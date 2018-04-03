@@ -39,6 +39,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -110,7 +111,7 @@ public class ResearchedUsagesUploadWindowTest {
     }
 
     private ProcessingResult<ResearchedUsage> buildCsvProcessingResult() {
-        ProcessingResult<ResearchedUsage> processingResult = new ProcessingResult<>();
+        ProcessingResult<ResearchedUsage> processingResult = new ProcessingResult<>(new ArrayList<>());
         try {
             Whitebox.invokeMethod(processingResult, "addRecord", new ResearchedUsage());
         } catch (Exception e) {
