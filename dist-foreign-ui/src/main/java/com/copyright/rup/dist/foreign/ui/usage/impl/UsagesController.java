@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
@@ -17,6 +18,7 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.ProcessingResult;
+import com.copyright.rup.dist.foreign.service.impl.csv.ResearchedUsagesCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.common.ExportStreamSource;
@@ -128,6 +130,11 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
+    public void loadResearchedUsages(Collection<ResearchedUsage> researchedUsages) {
+        usageService.loadResearchedUsages(researchedUsages);
+    }
+
+    @Override
     public Scenario createScenario(String scenarioName, String description) {
         Scenario scenario = scenarioService.createScenario(scenarioName, description,
             filterController.getWidget().getAppliedFilter());
@@ -183,6 +190,11 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     @Override
     public UsageCsvProcessor getCsvProcessor(String productFamily) {
         return new UsageCsvProcessor(productFamily);
+    }
+
+    @Override
+    public ResearchedUsagesCsvProcessor getResearchedUsagesCsvProcessor() {
+        return new ResearchedUsagesCsvProcessor();
     }
 
     @Override

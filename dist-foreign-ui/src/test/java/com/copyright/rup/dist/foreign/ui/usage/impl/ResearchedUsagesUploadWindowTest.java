@@ -1,15 +1,22 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
+import static org.easymock.EasyMock.anyObject;
+import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.createPartialMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
+import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.ProcessingResult;
+import com.copyright.rup.dist.foreign.service.impl.csv.ResearchedUsagesCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.ui.component.upload.UploadField;
@@ -31,6 +38,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -62,7 +70,7 @@ public class ResearchedUsagesUploadWindowTest {
         assertEquals("Upload Researched Details", window.getCaption());
         assertEquals(440, window.getWidth(), 0);
         assertEquals(Unit.PIXELS, window.getWidthUnits());
-        assertEquals(130, window.getHeight(), 0);
+        assertEquals(120, window.getHeight(), 0);
         assertEquals(Unit.PIXELS, window.getHeightUnits());
         verifyRootLayout(window.getContent());
         verify(usagesController);
@@ -77,6 +85,38 @@ public class ResearchedUsagesUploadWindowTest {
         Whitebox.getInternalState(uploadField, TextField.class).setValue("test.csv");
         assertTrue(window.isValid());
         verify(usagesController);
+    }
+
+    @Test
+    public void testOnUploadClickedValidFields() {
+        mockStatic(Windows.class);
+        UploadField uploadField = createPartialMock(UploadField.class, "getStreamToUploadedFile");
+        ResearchedUsagesCsvProcessor processor = createMock(ResearchedUsagesCsvProcessor.class);
+        ProcessingResult<ResearchedUsage> processingResult = buildCsvProcessingResult();
+        window = createPartialMock(ResearchedUsagesUploadWindow.class, "isValid");
+        Whitebox.setInternalState(window, "usagesController", usagesController);
+        Whitebox.setInternalState(window, "uploadField", uploadField);
+        expect(window.isValid()).andReturn(true).once();
+        expect(usagesController.getResearchedUsagesCsvProcessor()).andReturn(processor).once();
+        expect(processor.process(anyObject())).andReturn(processingResult).once();
+        usagesController.loadResearchedUsages(processingResult.get());
+        expectLastCall().once();
+        expect(uploadField.getStreamToUploadedFile()).andReturn(createMock(ByteArrayOutputStream.class)).once();
+        Windows.showNotificationWindow("Upload completed: 1 records were stored successfully");
+        expectLastCall().once();
+        replay(window, usagesController, Windows.class, processor, uploadField);
+        window.onUploadClicked();
+        verify(window, usagesController, Windows.class, processor, uploadField);
+    }
+
+    private ProcessingResult<ResearchedUsage> buildCsvProcessingResult() {
+        ProcessingResult<ResearchedUsage> processingResult = new ProcessingResult<>();
+        try {
+            Whitebox.invokeMethod(processingResult, "addRecord", new ResearchedUsage());
+        } catch (Exception e) {
+            fail();
+        }
+        return processingResult;
     }
 
     private void verifyRootLayout(Component component) {
