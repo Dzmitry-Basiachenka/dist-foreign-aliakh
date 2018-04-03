@@ -571,7 +571,7 @@
         where df_usage_uid = #{usageId}
     </update>
 
-    <select id="findCountByDetailId" parameterType="long" resultType="int">
+    <select id="findCountActiveAndArchivedByDetailId" parameterType="long" resultType="int">
         select max(detail_id_count)
             from (
                 select count(1) as detail_id_count
@@ -982,4 +982,16 @@
             <include refid="StoredEntityMapper.update"/>
         where detail_id = #{detailId}
     </update>
+
+    <select id="findCountByDetailId" parameterType="long" resultType="int">
+        select count(1)
+        from ${schema}.df_usage
+        where detail_id = #{detailId}
+    </select>
+
+    <select id="findStatusByDetailId" parameterType="long" resultType="UsageStatusEnum">
+        select status_ind
+        from ${schema}.df_usage
+        where detail_id = #{detailId}
+    </select>
 </mapper>

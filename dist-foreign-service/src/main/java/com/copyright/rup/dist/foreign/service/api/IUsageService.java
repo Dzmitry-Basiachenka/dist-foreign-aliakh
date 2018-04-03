@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
@@ -274,4 +275,20 @@ public interface IUsageService {
      * @param researchedUsages collection of {@link ResearchedUsage}s
      */
     void loadResearchedUsages(Collection<ResearchedUsage> researchedUsages);
+
+    /**
+     * Finds count of usages by detail id.
+     *
+     * @param detailId usage detail id
+     * @return count of usages
+     */
+    int findCountByDetailId(Long detailId);
+
+    /**
+     * Finds usage status by detail id.
+     *
+     * @param detailId usage detail id
+     * @return usage status
+     */
+    UsageStatusEnum findStatusByDetailId(Long detailId);
 }
