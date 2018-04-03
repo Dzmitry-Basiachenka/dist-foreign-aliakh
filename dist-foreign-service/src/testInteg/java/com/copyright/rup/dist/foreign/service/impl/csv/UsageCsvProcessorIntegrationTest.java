@@ -1,5 +1,10 @@
 package com.copyright.rup.dist.foreign.service.impl.csv;
 
+import static org.easymock.EasyMock.anyLong;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -9,9 +14,11 @@ import static org.junit.Assert.fail;
 import com.copyright.rup.dist.common.test.ReportMatcher;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.HeaderValidationException;
 import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.ThresholdExceededException;
+import com.copyright.rup.dist.foreign.service.impl.csv.validator.DuplicateDetailIdValidator;
 
 import com.google.common.collect.Lists;
 
@@ -88,13 +95,15 @@ public class UsageCsvProcessorIntegrationTest {
     }
 
     @Test
+    public void testProcessorWithDuplicateDetailsError() throws Exception {
+        DistCsvProcessor.ProcessingResult<Usage> result = processFile("usages.csv", true, true);
+        assertFileWithErrorUsages("usages_with_duplicate_id_errors.csv", result);
+    }
+
+    @Test
     public void testProcessorForNegativePath() throws Exception {
         DistCsvProcessor.ProcessingResult<Usage> result = processFile("usages_with_errors.csv");
-        PipedOutputStream outputStream = new PipedOutputStream();
-        PipedInputStream pipedInputStream = new PipedInputStream(outputStream);
-        Executors.newSingleThreadExecutor().execute(() -> result.writeToFile(outputStream));
-        FileUtils.copyInputStreamToFile(pipedInputStream, new File(PATH_TO_ACTUAL, ERRORS_REPORT_CSV));
-        isFilesEquals("usages_with_errors_report.csv", ERRORS_REPORT_CSV);
+        assertFileWithErrorUsages("usages_with_errors_report.csv", result);
     }
 
     @Test
@@ -127,7 +136,7 @@ public class UsageCsvProcessorIntegrationTest {
 
     @Test
     public void testProcessorWithInvalidHeaderWithoutHeaderValidation() throws Exception {
-        ProcessingResult<Usage> result = processFile("invalid_header_usage_data_file.csv", false);
+        ProcessingResult<Usage> result = processFile("invalid_header_usage_data_file.csv", false, false);
         assertTrue(result.isSuccessful());
     }
 
@@ -154,16 +163,27 @@ public class UsageCsvProcessorIntegrationTest {
         return columns;
     }
 
+    private void assertFileWithErrorUsages(String expectedFileName,
+                                           DistCsvProcessor.ProcessingResult<Usage> actualProcessingResult)
+        throws IOException {
+        PipedOutputStream outputStream = new PipedOutputStream();
+        PipedInputStream pipedInputStream = new PipedInputStream(outputStream);
+        Executors.newSingleThreadExecutor().execute(() -> actualProcessingResult.writeToFile(outputStream));
+        FileUtils.copyInputStreamToFile(pipedInputStream, new File(PATH_TO_ACTUAL, ERRORS_REPORT_CSV));
+        isFilesEquals(expectedFileName, ERRORS_REPORT_CSV);
+    }
+
     private void isFilesEquals(String expectedFileName, String actualFileName) {
         assertTrue(new ReportMatcher(new File(PATH_TO_EXPECTED, expectedFileName))
             .matches(new File(PATH_TO_ACTUAL, actualFileName)));
     }
 
     private DistCsvProcessor.ProcessingResult<Usage> processFile(String file) throws IOException {
-        return processFile(file, true);
+        return processFile(file, true, false);
     }
 
-    private DistCsvProcessor.ProcessingResult<Usage> processFile(String file, boolean validateHeaders)
+    private DistCsvProcessor.ProcessingResult<Usage> processFile(String file, boolean validateHeaders,
+                                                                 boolean isDetailIdExistsResult)
         throws IOException {
         DistCsvProcessor.ProcessingResult<Usage> result;
         try (InputStream stream = this.getClass()
@@ -171,8 +191,13 @@ public class UsageCsvProcessorIntegrationTest {
              ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             IOUtils.copy(stream, outputStream);
             UsageCsvProcessor processor = new UsageCsvProcessor(PRODUCT_FAMILY);
+            IUsageService usageService = createMock(IUsageService.class);
+            expect(usageService.isDetailIdExists(anyLong())).andReturn(isDetailIdExistsResult).anyTimes();
+            processor.addBusinessValidators(new DuplicateDetailIdValidator(usageService));
+            replay(usageService);
             processor.setValidateHeaders(validateHeaders);
             result = processor.process(outputStream);
+            verify(usageService);
         }
         return result;
     }
