@@ -24,10 +24,12 @@
         select
             distinct rro_account_number account_number
         from ${schema}.df_usage_batch
+        where rro_account_number is not null
         union
         select
             distinct rh_account_number account_number
         from ${schema}.df_usage
+        where rh_account_number is not null
         union
         select
             distinct payee_account_number account_number
@@ -37,10 +39,12 @@
         select
             distinct rh_account_number account_number
         from ${schema}.df_usage_archive
+        where rh_account_number is not null
         union
         select
             distinct payee_account_number account_number
         from ${schema}.df_usage_archive
+        where payee_account_number is not null
     </select>
 
     <delete id="deleteByAccountNumber" parameterType="long">
@@ -54,11 +58,13 @@
             r.name
         from ${schema}.df_usage u
         left join ${schema}.df_rightsholder r on u.rh_account_number = r.rh_account_number
+        where u.rh_account_number is not null
         union
         select distinct on (ua.rh_account_number)
             ua.rh_account_number,
             r.name
         from ${schema}.df_usage_archive ua
         left join ${schema}.df_rightsholder r on ua.rh_account_number = r.rh_account_number
+        where ua.rh_account_number is not null
     </select>
 </mapper>
