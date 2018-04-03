@@ -104,4 +104,12 @@ public interface IUsageArchiveRepository {
      * @param usage {@link PaidUsage} instance
      */
     void updatePaidInfo(PaidUsage usage);
+
+    /**
+     * Finds list of {@link PaidUsage}s with {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#PAID} status.
+     *
+     * @param limit limitation for selection
+     * @return list of found {@link PaidUsage}s
+     */
+    List<PaidUsage> findPaid(int limit);
 }

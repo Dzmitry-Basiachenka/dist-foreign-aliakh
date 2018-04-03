@@ -19,12 +19,21 @@ import java.time.OffsetDateTime;
  */
 public class PaidUsage extends Usage {
 
+    private Long rroAccountNumber;
     private String checkNumber;
     private OffsetDateTime checkDate;
     private String cccEventId;
     private String distributionName;
     private OffsetDateTime distributionDate;
     private LocalDate periodEndDate;
+
+    public Long getRroAccountNumber() {
+        return rroAccountNumber;
+    }
+
+    public void setRroAccountNumber(Long rroAccountNumber) {
+        this.rroAccountNumber = rroAccountNumber;
+    }
 
     public String getCheckNumber() {
         return checkNumber;
@@ -84,6 +93,7 @@ public class PaidUsage extends Usage {
         PaidUsage that = (PaidUsage) obj;
         return new EqualsBuilder()
             .appendSuper(super.equals(obj))
+            .append(this.rroAccountNumber, that.rroAccountNumber)
             .append(this.checkNumber, that.checkNumber)
             .append(this.checkDate, that.checkDate)
             .append(this.cccEventId, that.cccEventId)
@@ -97,6 +107,7 @@ public class PaidUsage extends Usage {
     public int hashCode() {
         return new HashCodeBuilder()
             .appendSuper(super.hashCode())
+            .append(rroAccountNumber)
             .append(checkNumber)
             .append(checkDate)
             .append(cccEventId)
@@ -110,6 +121,7 @@ public class PaidUsage extends Usage {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
             .appendSuper(super.toString())
+            .append("rroAccountNumber", rroAccountNumber)
             .append("checkNumber", checkNumber)
             .append("checkDate", checkDate)
             .append("cccEventId", cccEventId)
