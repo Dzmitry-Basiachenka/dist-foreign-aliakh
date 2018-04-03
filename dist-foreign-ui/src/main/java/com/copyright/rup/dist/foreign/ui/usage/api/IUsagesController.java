@@ -1,12 +1,14 @@
 package com.copyright.rup.dist.foreign.ui.usage.api;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.ProcessingResult;
+import com.copyright.rup.dist.foreign.service.impl.csv.ResearchedUsagesCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CreateScenarioWindow.ScenarioCreateEvent;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
@@ -119,6 +121,13 @@ public interface IUsagesController extends IController<IUsagesWidget> {
     int loadUsageBatch(UsageBatch usageBatch, Collection<Usage> usages);
 
     /**
+     * Updates researched usage details.
+     *
+     * @param researchedUsages collection of {@link ResearchedUsage}s
+     */
+    void loadResearchedUsages(Collection<ResearchedUsage> researchedUsages);
+
+    /**
      * Creates a {@link Scenario} by entered scenario name and description.
      *
      * @param scenarioName name of scenario
@@ -165,6 +174,13 @@ public interface IUsagesController extends IController<IUsagesWidget> {
      * @return instance of {@link UsageCsvProcessor}
      */
     UsageCsvProcessor getCsvProcessor(String productFamily);
+
+    /**
+     * Gets instance of CSV processor for researched usage details.
+     *
+     * @return instance of {@link ResearchedUsagesCsvProcessor}
+     */
+    ResearchedUsagesCsvProcessor getResearchedUsagesCsvProcessor();
 
     /**
      * @return selected product family from filter

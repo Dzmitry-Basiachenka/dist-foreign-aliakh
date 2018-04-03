@@ -1,9 +1,10 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
-import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.ProcessingResult;
+import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.ThresholdExceededException;
 import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.ValidationException;
-import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
+import com.copyright.rup.dist.foreign.service.impl.csv.ResearchedUsagesCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -52,7 +53,7 @@ class ResearchedUsagesUploadWindow extends Window {
         setCaption(ForeignUi.getMessage("window.upload_researched_usages"));
         setResizable(false);
         setWidth(440, Unit.PIXELS);
-        setHeight(130, Unit.PIXELS);
+        setHeight(120, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "researched-usages-upload-window");
     }
 
@@ -63,21 +64,27 @@ class ResearchedUsagesUploadWindow extends Window {
         if (isValid()) {
             StopWatch stopWatch = new Slf4JStopWatch();
             try {
-                // TODO {aliakh} replace with actual CSV processor after its implementation
-                UsageCsvProcessor processor = usagesController.getCsvProcessor(null);
-                ProcessingResult<Usage> processingResult = processor.process(uploadField.getStreamToUploadedFile());
+                ResearchedUsagesCsvProcessor processor = usagesController.getResearchedUsagesCsvProcessor();
+                ProcessingResult<ResearchedUsage> processingResult =
+                    processor.process(uploadField.getStreamToUploadedFile());
                 stopWatch.lap("researchedUsages.load_fileProcessed");
                 if (processingResult.isSuccessful()) {
-                    int usagesCount = 0;
+                    int count = processingResult.get().size();
+                    usagesController.loadResearchedUsages(processingResult.get());
                     stopWatch.lap("researchedUsages.load_stored");
                     close();
-                    Windows.showNotificationWindow(ForeignUi.getMessage("message.upload_completed", usagesCount));
+                    Windows.showNotificationWindow(ForeignUi.getMessage("message.upload_completed", count));
                 } else {
                     Windows.showModalWindow(
                         new ErrorUploadWindow(
                             usagesController.getErrorResultStreamSource(uploadField.getValue(), processingResult),
                             ForeignUi.getMessage("message.error.upload")));
                 }
+            } catch (ThresholdExceededException e) {
+                Windows.showModalWindow(
+                    new ErrorUploadWindow(
+                        usagesController.getErrorResultStreamSource(uploadField.getValue(), e.getProcessingResult()),
+                        e.getMessage() + "<br>Press Download button to see detailed list of errors"));
             } catch (ValidationException e) {
                 Windows.showNotificationWindow(ForeignUi.getMessage("window.error"), e.getHtmlMessage());
             } finally {
