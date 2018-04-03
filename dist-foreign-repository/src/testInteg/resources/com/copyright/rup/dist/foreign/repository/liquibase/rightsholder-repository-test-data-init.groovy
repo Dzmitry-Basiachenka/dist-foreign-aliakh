@@ -189,4 +189,31 @@ databaseChangeLog {
 
         rollback ""
     }
+
+    changeSet(id: '2018-04-03-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment('Insert test usage with empty RH to ensure it is not retrieved by testFindFromUsages()')
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '23876f21-8ab2-4fcb-adf3-777be88eddbb')
+            column(name: 'df_usage_batch_uid', value: 'a5b64c3a-55d2-462e-b169-362dca6a4dd6')
+            column(name: 'detail_id', value: '1917718881')
+            column(name: 'wr_wrk_inst', value: '180382914')
+            column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
+            column(name: 'status_ind', value: 'RH_NOT_FOUND')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle')
+            column(name: 'standard_number', value: '1008902112377654XX')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2014-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
+            column(name: 'number_of_copies', value: '2502232')
+            column(name: 'reported_value', value: '2500')
+            column(name: 'gross_amount', value: '35000.00')
+        }
+
+        rollback ""
+    }
 }
