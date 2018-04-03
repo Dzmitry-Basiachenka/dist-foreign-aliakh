@@ -32,4 +32,6 @@
               files="src[/\\]main[/\\]java[/\\]com[/\\]copyright[/\\]rup[/\\]dist[/\\]foreign[/\\]domain[/\\]UsageDto.java"/>
     <suppress checks="FileLength"
               files="src[/\\]main[/\\]java[/\\]com[/\\]copyright[/\\]rup[/\\]dist[/\\]foreign[/\\]service[/\\]impl[/\\]UsageService.java"/>
+    <suppress checks="FileLength"
+              files="src[/\\]main[/\\]java[/\\]com[/\\]copyright[/\\]rup[/\\]dist[/\\]foreign[/\\]service[/\\]impl[/\\]csv[/\\]DistCsvProcessor.java"/>
 </suppressions>

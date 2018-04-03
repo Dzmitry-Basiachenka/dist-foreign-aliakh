@@ -245,10 +245,8 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public Set<Long> getDuplicateDetailIds(List<Long> detailIds) {
-        return CollectionUtils.isNotEmpty(detailIds)
-            ? usageRepository.findDuplicateDetailIds(detailIds)
-            : Collections.emptySet();
+    public boolean isDetailIdExists(Long detailId) {
+        return 0 != usageRepository.findCountByDetailId(detailId);
     }
 
     @Override

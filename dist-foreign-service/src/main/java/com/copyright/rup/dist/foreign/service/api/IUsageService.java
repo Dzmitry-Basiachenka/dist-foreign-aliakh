@@ -17,7 +17,6 @@ import java.io.PipedOutputStream;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Represents interface of service for usage business logic.
@@ -156,12 +155,12 @@ public interface IUsageService {
     void deleteFromScenario(Scenario scenario, Long rroAccountNumber, List<Long> accountNumbers, String reason);
 
     /**
-     * Gets duplicate detail ids of {@link Usage}s which are already presented in database.
+     * Checks if provided detail id exists in database.
      *
-     * @param detailIds list of detail ids
-     * @return set of duplicate detail ids
+     * @param detailId detail id to search
+     * @return {@code true} if detail id is present, {@code false} otherwise
      */
-    Set<Long> getDuplicateDetailIds(List<Long> detailIds);
+    boolean isDetailIdExists(Long detailId);
 
     /**
      * Moves {@link Usage}s to the archive for given {@link Scenario}.

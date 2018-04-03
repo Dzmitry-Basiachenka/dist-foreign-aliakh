@@ -702,9 +702,10 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindDuplicateDetailIds() {
-        assertTrue(CollectionUtils.containsAny(Sets.newHashSet(DETAIL_ID_1, DETAIL_ID_2),
-            usageRepository.findDuplicateDetailIds(Lists.newArrayList(DETAIL_ID_1, DETAIL_ID_2, -1L))));
+    public void testFindCountByDetailId() {
+        assertEquals(0, usageRepository.findCountByDetailId(-1L));
+        assertEquals(1, usageRepository.findCountByDetailId(6997788888L));
+        assertEquals(1, usageRepository.findCountByDetailId(5423214587L));
     }
 
     @Test

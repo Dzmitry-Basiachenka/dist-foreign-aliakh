@@ -19,7 +19,6 @@ import com.copyright.rup.dist.foreign.repository.api.Sort;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -56,7 +55,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
      * where {@code 32000} it's a max value for count of variables in statement and {@code 2} means that statement uses
      * 'in' clause with the same parameters two times.
      */
-    private static final int DUPLICATE_DETAILS_IDS_BATCH_SIZE = 16000;
     private static final String FILTER_KEY = "filter";
     private static final String PAGEABLE_KEY = "pageable";
     private static final String SORT_KEY = "sort";
@@ -185,12 +183,8 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public Set<Long> findDuplicateDetailIds(List<Long> detailIds) {
-        checkArgument(CollectionUtils.isNotEmpty(detailIds));
-        Set<Long> result = Sets.newHashSetWithExpectedSize(detailIds.size());
-        Iterables.partition(detailIds, DUPLICATE_DETAILS_IDS_BATCH_SIZE).forEach(
-            detailIdsPartition -> result.addAll(selectList("IUsageMapper.findDuplicateDetailIds", detailIdsPartition)));
-        return result;
+    public int findCountByDetailId(Long detailId) {
+        return selectOne("IUsageMapper.findCountByDetailId", Objects.requireNonNull(detailId));
     }
 
     @Override

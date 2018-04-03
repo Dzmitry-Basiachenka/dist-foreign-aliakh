@@ -151,12 +151,12 @@ public interface IUsageRepository {
     void deleteFromScenario(List<String> usagesIds, String userName);
 
     /**
-     * Gets duplicate detail ids of {@link Usage}s which are already presented in database.
+     * Finds count of usages by provided detail id.
      *
-     * @param detailIds list of detail ids
-     * @return set of duplicate detail ids
+     * @param detailId detail id to search
+     * @return 1 if detail id is present, 0 otherwise
      */
-    Set<Long> findDuplicateDetailIds(List<Long> detailIds);
+    int findCountByDetailId(Long detailId);
 
     /**
      * Gets list of {@link RightsholderTotalsHolder}s based on {@link com.copyright.rup.dist.foreign.domain.Scenario}
