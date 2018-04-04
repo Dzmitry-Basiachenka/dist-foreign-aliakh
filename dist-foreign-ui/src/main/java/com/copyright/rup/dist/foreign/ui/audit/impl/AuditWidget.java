@@ -135,6 +135,8 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
         addColumn(usage -> getStringFromDate(usage.getPaymentDate()), "table.column.payment_date", "paymentDate", 115);
         addColumn(UsageDto::getRhAccountNumber, "table.column.rh_account_number", "rhAccountNumber", 115);
         addColumn(UsageDto::getRhName, "table.column.rh_account_name", "rhName", 300);
+        addColumn(UsageDto::getPayeeAccountNumber, "table.column.payee_account_number", "payeeAccountNumber", 115);
+        addColumn(UsageDto::getPayeeName, "table.column.payee_name", "payeeName", 300);
         addColumn(UsageDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", 110);
         addColumn(UsageDto::getWorkTitle, "table.column.work_title", "workTitle", 300);
         addColumn(UsageDto::getStandardNumber, "table.column.standard_number", "standardNumber", 140);
@@ -155,6 +157,10 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
         addColumn(usage -> getStringFromDate(usage.getCheckDate()), "table.column.check_date", "checkDate", 105);
         addColumn(UsageDto::getCccEventId, "table.column.event_id", "cccEventId", 85);
         addColumn(UsageDto::getDistributionName, "table.column.distribution_name", "distributionName", 110);
+        addColumn(usage -> getStringFromDate(usage.getDistributionDate()), "table.column.distribution_date",
+            "distributionDate", 105);
+        addColumn(usage -> getStringFromDate(usage.getPeriodEndDate()), "table.column.period_end_date", "periodEndDate",
+            115);
     }
 
     private void addColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, String sort, double width) {
