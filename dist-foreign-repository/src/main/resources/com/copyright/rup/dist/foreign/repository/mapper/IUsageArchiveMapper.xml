@@ -188,8 +188,16 @@
         where df_usage_archive_uid = #{id}
     </update>
 
-    <select id="findPaid" resultMap="paidUsageResultMap" parameterType="map">
+    <update id="updateStatusById" parameterType="map">
+        update ${schema}.df_usage_archive
+        set status_ind = #{status},
+            <include refid="StoredEntityMapper.update"/>
+        where df_usage_archive_uid = #{usageId}
+    </update>
+
+    <select id="findByIdAndStatus" resultMap="paidUsageResultMap" parameterType="map">
         select
+            u.df_usage_archive_uid df_usage_uid,
             u.detail_id,
             u.rh_account_number,
             u.payee_account_number,
@@ -216,6 +224,15 @@
         from ${schema}.df_usage_archive u
         join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
         where u.status_ind = #{status}
-        limit #{limit}
+            and u.df_usage_archive_uid in
+            <foreach collection="usageIds" item="usageId" separator="," open="(" close=")">
+                #{usageId}
+            </foreach>
+    </select>
+
+    <select id="findPaidIds" parameterType="UsageStatusEnum" resultType="string">
+        select df_usage_archive_uid
+        from ${schema}.df_usage_archive
+        where status_ind = #{status}
     </select>
 </mapper>

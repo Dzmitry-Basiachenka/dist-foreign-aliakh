@@ -255,7 +255,8 @@ databaseChangeLog {
             column(name: 'service_fee', value: '0.16000')
         }
 
-        //testFindPaid
+        //testFindByIdsAndStatus
+        //testFindPaidIds
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
             column(name: 'df_scenario_uid', value: 'a72989e0-370d-11e8-b566-0800200c9a66')
             column(name: 'name', value: 'Paid Scenario 1')

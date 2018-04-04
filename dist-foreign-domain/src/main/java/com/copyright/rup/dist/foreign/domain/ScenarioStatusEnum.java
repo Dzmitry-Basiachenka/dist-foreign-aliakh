@@ -29,5 +29,10 @@ public enum ScenarioStatusEnum {
     /**
      * Status for sent to LM scenarios.
      */
-    SENT_TO_LM
+    SENT_TO_LM,
+
+    /**
+     * Status for archived scenarios.
+     */
+    ARCHIVED
 }

@@ -4,10 +4,12 @@ import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
 import java.io.PipedOutputStream;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Interface for Usage archive repository.
@@ -106,10 +108,26 @@ public interface IUsageArchiveRepository {
     void updatePaidInfo(PaidUsage usage);
 
     /**
-     * Finds list of {@link PaidUsage}s with {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#PAID} status.
+     * Updates usages status by provided id.
      *
-     * @param limit limitation for selection
+     * @param usageIds set of usages ids
+     * @param status   {@link UsageStatusEnum}
+     */
+    void updateStatus(Set<String> usageIds, UsageStatusEnum status);
+
+    /**
+     * Finds list of {@link PaidUsage}s by provided ids and status.
+     *
+     * @param usageIds list of usages ids
+     * @param status   {@link UsageStatusEnum} instance
      * @return list of found {@link PaidUsage}s
      */
-    List<PaidUsage> findPaid(int limit);
+    List<PaidUsage> findByIdAndStatus(List<String> usageIds, UsageStatusEnum status);
+
+    /**
+     * Finds usages ids with {@link UsageStatusEnum#PAID} status.
+     *
+     * @return list of found usages ids
+     */
+    List<String> findPaidIds();
 }

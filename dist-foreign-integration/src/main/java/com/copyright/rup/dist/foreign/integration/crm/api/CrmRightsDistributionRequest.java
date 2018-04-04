@@ -119,11 +119,9 @@ public class CrmRightsDistributionRequest {
      * Constructor for creating request to the CRM service.
      *
      * @param usage            {@link PaidUsage} instance
-     * @param rroAccountNumber RRO account number
      */
-    public CrmRightsDistributionRequest(PaidUsage usage, Long rroAccountNumber) {
+    public CrmRightsDistributionRequest(PaidUsage usage) {
         Objects.requireNonNull(usage);
-        Objects.requireNonNull(rroAccountNumber);
         this.cccEventId = usage.getCccEventId();
         this.rorAccountNumber = usage.getRightsholder().getAccountNumber();
         this.payeeAccountNumber = usage.getPayee().getAccountNumber();
@@ -143,7 +141,7 @@ public class CrmRightsDistributionRequest {
         this.market = usage.getMarket();
         this.marketPeriodFrom = usage.getMarketPeriodFrom();
         this.marketPeriodTo = usage.getMarketPeriodTo();
-        this.licenseeAccountNumber = rroAccountNumber;
+        this.licenseeAccountNumber = usage.getRroAccountNumber();
     }
 
     public String getCccEventId() {

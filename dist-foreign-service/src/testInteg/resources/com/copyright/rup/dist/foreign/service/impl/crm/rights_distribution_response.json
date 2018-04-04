@@ -1,0 +1,10 @@
+{
+  "list": {
+    "error": {
+      "key": 5423214522,
+      "message": {
+        "string": "Required field not provided - CCC Event Identifier"
+      }
+    }
+  }
+}

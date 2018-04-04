@@ -2,7 +2,7 @@ package com.copyright.rup.dist.foreign.integration.crm.api;
 
 import com.google.common.collect.Sets;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -19,7 +19,7 @@ import java.util.Set;
  */
 public class CrmResult {
 
-    private final Set<String> invalidDetailIds = Sets.newHashSet();
+    private final Set<Long> invalidDetailIds = Sets.newHashSet();
     private CrmResultStatusEnum crmResultStatus;
 
     /**
@@ -31,26 +31,15 @@ public class CrmResult {
         this.crmResultStatus = crmResultStatus;
     }
 
-    /**
-     * @return {@link CrmResultStatusEnum} instance.
-     */
     public CrmResultStatusEnum getCrmResultStatus() {
         return crmResultStatus;
     }
 
-    /**
-     * Sets {@link CrmResultStatusEnum} instance.
-     *
-     * @param crmResultStatus {@link CrmResultStatusEnum} instance
-     */
     public void setCrmResultStatus(CrmResultStatusEnum crmResultStatus) {
         this.crmResultStatus = crmResultStatus;
     }
 
-    /**
-     * @return set of invalid detail ids.
-     */
-    public Set<String> getInvalidDetailIds() {
+    public Set<Long> getInvalidDetailIds() {
         return invalidDetailIds;
     }
 
@@ -59,10 +48,20 @@ public class CrmResult {
      *
      * @param detailId detail id
      */
-    public void addInvalidDetailId(String detailId) {
-        if (StringUtils.isNotBlank(detailId)) {
+    public void addInvalidDetailId(Long detailId) {
+        if (null != detailId) {
             invalidDetailIds.add(detailId);
         }
+    }
+
+    /**
+     * Checks whether send to CRM process was successful or not.
+     *
+     * @return {@code true} - if status is {@link CrmResultStatusEnum#SUCCESS} and list of invalid detail ids is empty,
+     * {@code false} - otherwise
+     */
+    public boolean isSuccessful() {
+        return CrmResultStatusEnum.SUCCESS == crmResultStatus && CollectionUtils.isEmpty(invalidDetailIds);
     }
 
     @Override
