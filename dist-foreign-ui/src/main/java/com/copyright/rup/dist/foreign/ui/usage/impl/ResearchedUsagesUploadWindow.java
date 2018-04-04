@@ -84,7 +84,7 @@ class ResearchedUsagesUploadWindow extends Window {
                 Windows.showModalWindow(
                     new ErrorUploadWindow(
                         usagesController.getErrorResultStreamSource(uploadField.getValue(), e.getProcessingResult()),
-                        e.getMessage() + "<br>Press Download button to see detailed list of errors"));
+                        e.getMessage() + ForeignUi.getMessage("message.error.upload.threshold.exceeded")));
             } catch (ValidationException e) {
                 Windows.showNotificationWindow(ForeignUi.getMessage("window.error"), e.getHtmlMessage());
             } finally {

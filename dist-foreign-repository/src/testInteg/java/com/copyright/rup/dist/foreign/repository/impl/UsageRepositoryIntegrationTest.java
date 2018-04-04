@@ -48,6 +48,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -702,10 +703,10 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testfindCountActiveAndArchivedByDetailId() {
-        assertEquals(0, usageRepository.findCountActiveAndArchivedByDetailId(-1L));
-        assertEquals(1, usageRepository.findCountActiveAndArchivedByDetailId(6997788888L));
-        assertEquals(1, usageRepository.findCountActiveAndArchivedByDetailId(5423214587L));
+    public void testFindCountByDetailIdAndStatus() {
+        assertEquals(0, usageRepository.findCountByDetailIdAndStatus(-1L, Optional.empty()));
+        assertEquals(1, usageRepository.findCountByDetailIdAndStatus(6997788888L, Optional.empty()));
+        assertEquals(1, usageRepository.findCountByDetailIdAndStatus(5423214587L, Optional.empty()));
     }
 
     @Test

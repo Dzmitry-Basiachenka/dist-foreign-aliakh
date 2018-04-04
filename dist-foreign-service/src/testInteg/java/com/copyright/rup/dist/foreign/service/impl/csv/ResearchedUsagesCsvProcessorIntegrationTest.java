@@ -11,8 +11,7 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.HeaderValidationException;
 import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.ThresholdExceededException;
-import com.copyright.rup.dist.foreign.service.impl.csv.validator.ResearchedUsageDetailIdValidator;
-import com.copyright.rup.dist.foreign.service.impl.csv.validator.ResearchedUsageStatusValidator;
+import com.copyright.rup.dist.foreign.service.impl.csv.validator.ResearchedUsageValidator;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FileUtils;
@@ -21,8 +20,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -51,11 +48,10 @@ import java.util.concurrent.Executors;
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
 @TestPropertySource(properties = {"test.liquibase.changelog=researched-usages-csv-processor-data-init.groovy"})
-@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 public class ResearchedUsagesCsvProcessorIntegrationTest {
 
     private static final String PATH_TO_ACTUAL_REPORTS = "build/temp";
-    private static final String PACKAGE = "/com/copyright/rup/dist/foreign/service/csv/researched_usages";
+    private static final String PACKAGE = "/com/copyright/rup/dist/foreign/service/csv/usage/researched";
     private static final String PATH_TO_EXPECTED_REPORTS = "src/testInteg/resources" + PACKAGE;
 
     @Autowired
@@ -153,8 +149,7 @@ public class ResearchedUsagesCsvProcessorIntegrationTest {
              ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
             IOUtils.copy(is, baos);
             ResearchedUsagesCsvProcessor processor = new ResearchedUsagesCsvProcessor();
-            processor.addBusinessValidators(new ResearchedUsageDetailIdValidator(usageService),
-                new ResearchedUsageStatusValidator(usageService));
+            processor.addBusinessValidators(new ResearchedUsageValidator(usageService));
             result = processor.process(baos);
         }
         return result;

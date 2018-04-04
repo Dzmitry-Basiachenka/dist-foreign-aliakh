@@ -48,6 +48,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -245,8 +246,8 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public boolean isDetailIdExists(Long detailId) {
-        return 0 != usageRepository.findCountActiveAndArchivedByDetailId(detailId);
+    public boolean isDetailIdExists(Long detailId, Optional<UsageStatusEnum> statusOpt) {
+        return 0 != usageRepository.findCountByDetailIdAndStatus(detailId, statusOpt);
     }
 
     @Override
@@ -379,16 +380,6 @@ public class UsageService implements IUsageService {
         );
         stopWatch.stop("usage.loadResearchedUsages_3_logAction");
         LOGGER.info("Load researched usages. Finished. ResearchedUsagesCount={}", LogUtils.size(researchedUsages));
-    }
-
-    @Override
-    public int findCountByDetailId(Long detailId) {
-        return usageRepository.findCountByDetailId(detailId);
-    }
-
-    @Override
-    public UsageStatusEnum findStatusByDetailId(Long detailId) {
-        return usageRepository.findStatusByDetailId(detailId);
     }
 
     private void calculateUsagesGrossAmount(UsageBatch usageBatch, Collection<Usage> usages) {
