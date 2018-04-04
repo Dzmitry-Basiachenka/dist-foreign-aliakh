@@ -48,18 +48,8 @@ public class DistCsvProcessor<T> {
     private final List<IValidator<T>> businessValidators = new ArrayList<>();
     private final IConverter<T> converter;
     private final CsvParser parser = new CsvParser(settings);
-    private final String[] expectedHeaders;
+    private final List<String> expectedHeaders;
     private boolean validateHeaders;
-
-    /**
-     * Constructor.
-     *
-     * @param converter converter for bean
-     * @param headers   headers to process
-     */
-    public DistCsvProcessor(IConverter<T> converter, String... headers) {
-        this(converter, true, headers);
-    }
 
     /**
      * Constructor.
@@ -68,14 +58,13 @@ public class DistCsvProcessor<T> {
      * @param validateHeaders flag to enable or disable headers validation
      * @param headers         headers to process
      */
-    public DistCsvProcessor(IConverter<T> converter, boolean validateHeaders, String... headers) {
+    public DistCsvProcessor(IConverter<T> converter, boolean validateHeaders, List<String> headers) {
         this.converter = requireNonNull(converter);
         this.expectedHeaders = requireNonNull(headers);
         settings.getFormat().setLineSeparator("\n");
-        settings.setHeaders(expectedHeaders);
+        settings.setHeaders(headers.toArray(new String[0]));
         setValidateHeaders(validateHeaders);
         initPlainValidators();
-        initBusinessValidators();
     }
 
     private static String[] trimNulls(String... values) {
@@ -92,11 +81,11 @@ public class DistCsvProcessor<T> {
     /**
      * Sets whether header validation is needed.
      *
-     * @param validateHeaders true if validation is needed, false - otherwise
+     * @param validateHeadersFlag true if validation is needed, false - otherwise
      */
-    public void setValidateHeaders(boolean validateHeaders) {
-        this.validateHeaders = validateHeaders;
-        settings.setHeaderExtractionEnabled(!validateHeaders);
+    public void setValidateHeaders(boolean validateHeadersFlag) {
+        this.validateHeaders = validateHeadersFlag;
+        settings.setHeaderExtractionEnabled(!validateHeadersFlag);
     }
 
     /**
@@ -125,13 +114,6 @@ public class DistCsvProcessor<T> {
             throw new ValidationException("File does not contain data");
         }
         return result;
-    }
-
-    /**
-     * Method is used to initialize business validators.
-     */
-    protected void initBusinessValidators() {
-
     }
 
     /**
@@ -173,11 +155,11 @@ public class DistCsvProcessor<T> {
     }
 
     private void validateHeader(String... fileHeaders) throws HeaderValidationException {
-        if (ArrayUtils.isEmpty(fileHeaders) || fileHeaders.length != expectedHeaders.length) {
+        if (ArrayUtils.isEmpty(fileHeaders) || fileHeaders.length != expectedHeaders.size()) {
             throw new HeaderValidationException(expectedHeaders, fileHeaders);
         }
-        for (int i = 0; i < expectedHeaders.length; i++) {
-            if (!expectedHeaders[i].equalsIgnoreCase(fileHeaders[i])) {
+        for (int i = 0; i < expectedHeaders.size(); i++) {
+            if (!expectedHeaders.get(i).equalsIgnoreCase(fileHeaders[i])) {
                 throw new HeaderValidationException(expectedHeaders, fileHeaders);
             }
         }
@@ -195,7 +177,7 @@ public class DistCsvProcessor<T> {
     }
 
     private boolean plainValidate(String[] row, long line, ProcessingResult result) {
-        if (!Objects.equals(expectedHeaders.length, row.length)) {
+        if (!Objects.equals(expectedHeaders.size(), row.length)) {
             result.logError(line, row,
                 String.format("Row is incorrect: Expected columns are %s actual %s", settings.getHeaders().length,
                     row.length));
@@ -302,8 +284,8 @@ public class DistCsvProcessor<T> {
          *
          * @param fileHeaders array of headers
          */
-        public ProcessingResult(String... fileHeaders) {
-            this.fileHeaders = Arrays.asList(fileHeaders);
+        public ProcessingResult(List<String> fileHeaders) {
+            this.fileHeaders = requireNonNull(fileHeaders);
         }
 
         /**
@@ -428,10 +410,10 @@ public class DistCsvProcessor<T> {
          * @param expectedHeaders expected headers
          * @param fileHeaders     actual headers
          */
-        HeaderValidationException(String[] expectedHeaders, String... fileHeaders) {
+        HeaderValidationException(List<String> expectedHeaders, String... fileHeaders) {
             super(String.format(ERROR_MESSAGE_WITH_FILE_HEADERS, String.join(", ", expectedHeaders),
                 getJoinedHeaders(fileHeaders)));
-            this.expectedHeaders = Arrays.asList(expectedHeaders);
+            this.expectedHeaders = expectedHeaders;
         }
 
         private static String getJoinedHeaders(String... fileHeaders) {

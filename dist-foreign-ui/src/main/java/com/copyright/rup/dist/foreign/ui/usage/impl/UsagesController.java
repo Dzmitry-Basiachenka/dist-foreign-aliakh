@@ -17,11 +17,10 @@ import com.copyright.rup.dist.foreign.service.api.IResearchService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.service.impl.csv.ResearchedUsagesCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
-import com.copyright.rup.dist.foreign.service.impl.csv.validator.DuplicateDetailIdValidator;
-import com.copyright.rup.dist.foreign.service.impl.csv.validator.ResearchedUsageValidator;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.common.ExportStreamSource;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
@@ -85,6 +84,8 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     private IPrmIntegrationService prmIntegrationService;
     @Autowired
     private IScenarioService scenarioService;
+    @Autowired
+    private CsvProcessorFactory csvProcessorFactory;
 
     @Override
     public IUsagesFilterWidget initUsagesFilterWidget() {
@@ -191,16 +192,12 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
 
     @Override
     public UsageCsvProcessor getCsvProcessor(String productFamily) {
-        UsageCsvProcessor usageCsvProcessor = new UsageCsvProcessor(productFamily);
-        usageCsvProcessor.addBusinessValidators(new DuplicateDetailIdValidator(usageService));
-        return usageCsvProcessor;
+        return csvProcessorFactory.getUsageCsvProcessor(productFamily);
     }
 
     @Override
     public ResearchedUsagesCsvProcessor getResearchedUsagesCsvProcessor() {
-        ResearchedUsagesCsvProcessor processor = new ResearchedUsagesCsvProcessor();
-        processor.addBusinessValidators(new ResearchedUsageValidator(usageService));
-        return processor;
+        return csvProcessorFactory.getResearchedUsagesCsvProcessor();
     }
 
     @Override

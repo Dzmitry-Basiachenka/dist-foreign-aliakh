@@ -7,6 +7,8 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 /**
  * Verifies {@link DistCsvProcessor.ProcessingResult}.
  * <p>
@@ -22,7 +24,7 @@ public class ProcessingResultTest {
 
     @Before
     public void setUp() {
-        result = new DistCsvProcessor.ProcessingResult<>();
+        result = new DistCsvProcessor.ProcessingResult<>(new ArrayList<>());
     }
 
     @Test

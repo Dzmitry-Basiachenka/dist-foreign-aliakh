@@ -7,11 +7,9 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.DateFormatValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.DuplicateInFileValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.LengthValidator;
-import com.copyright.rup.dist.foreign.service.impl.csv.validator.MarketPeriodValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.PositiveNumberValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ReportedValueValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.RequiredValidator;
-import com.copyright.rup.dist.foreign.service.impl.csv.validator.RightsholderWrWrkInstValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.YearValidator;
 
 import org.apache.commons.lang3.StringUtils;
@@ -23,6 +21,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -44,18 +43,14 @@ public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
      *
      * @param productFamily product family.
      */
-    public UsageCsvProcessor(String productFamily) {
-        super(new UsageConverter(productFamily), getColumns());
+    UsageCsvProcessor(String productFamily) {
+        super(new UsageConverter(productFamily), true, getColumns());
     }
 
-    /**
-     * @return array of expected columns in csv file.
-     */
-    public static String[] getColumns() {
+    static List<String> getColumns() {
         return Stream.of(Header.values())
             .map(Header::getColumnName)
-            .collect(Collectors.toList())
-            .toArray(new String[]{});
+            .collect(Collectors.toList());
     }
 
     @Override
@@ -79,11 +74,6 @@ public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
         addPlainValidators(Header.MARKET_PERIOD_FROM, requiredValidator, new YearValidator());
         addPlainValidators(Header.MARKET_PERIOD_TO, requiredValidator, new YearValidator());
         addPlainValidators(Header.AUTHOR, lengthValidator2000);
-    }
-
-    @Override
-    protected void initBusinessValidators() {
-        addBusinessValidators(new MarketPeriodValidator(), new RightsholderWrWrkInstValidator());
     }
 
     /**

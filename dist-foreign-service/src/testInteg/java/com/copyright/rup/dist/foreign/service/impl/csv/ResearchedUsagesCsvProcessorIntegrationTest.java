@@ -7,11 +7,9 @@ import static org.junit.Assert.fail;
 
 import com.copyright.rup.dist.common.test.ReportMatcher;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
-import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.HeaderValidationException;
 import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.ThresholdExceededException;
-import com.copyright.rup.dist.foreign.service.impl.csv.validator.ResearchedUsageValidator;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FileUtils;
@@ -55,7 +53,7 @@ public class ResearchedUsagesCsvProcessorIntegrationTest {
     private static final String PATH_TO_EXPECTED_REPORTS = "src/testInteg/resources" + PACKAGE;
 
     @Autowired
-    private IUsageService usageService;
+    private CsvProcessorFactory csvProcessorFactory;
 
     @BeforeClass
     public static void setUpTestDirectory() throws IOException {
@@ -148,8 +146,7 @@ public class ResearchedUsagesCsvProcessorIntegrationTest {
         try (InputStream is = this.getClass().getResourceAsStream(PACKAGE + "/" + fileName);
              ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
             IOUtils.copy(is, baos);
-            ResearchedUsagesCsvProcessor processor = new ResearchedUsagesCsvProcessor();
-            processor.addBusinessValidators(new ResearchedUsageValidator(usageService));
+            ResearchedUsagesCsvProcessor processor = csvProcessorFactory.getResearchedUsagesCsvProcessor();
             result = processor.process(baos);
         }
         return result;

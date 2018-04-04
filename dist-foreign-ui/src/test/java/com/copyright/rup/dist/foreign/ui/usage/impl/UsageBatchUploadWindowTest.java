@@ -51,6 +51,7 @@ import org.powermock.reflect.Whitebox;
 import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -184,7 +185,7 @@ public class UsageBatchUploadWindowTest {
     }
 
     private ProcessingResult<Usage> buildCsvProcessingResult() {
-        ProcessingResult<Usage> processingResult = new ProcessingResult<>();
+        ProcessingResult<Usage> processingResult = new ProcessingResult<>(new ArrayList<>());
         try {
             Whitebox.invokeMethod(processingResult, "addRecord", new Usage());
         } catch (Exception e) {

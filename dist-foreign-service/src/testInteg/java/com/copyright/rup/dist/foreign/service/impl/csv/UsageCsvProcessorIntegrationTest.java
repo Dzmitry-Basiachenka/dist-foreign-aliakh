@@ -1,11 +1,5 @@
 package com.copyright.rup.dist.foreign.service.impl.csv;
 
-import static org.easymock.EasyMock.anyLong;
-import static org.easymock.EasyMock.anyObject;
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -15,11 +9,9 @@ import static org.junit.Assert.fail;
 import com.copyright.rup.dist.common.test.ReportMatcher;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.HeaderValidationException;
 import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.ThresholdExceededException;
-import com.copyright.rup.dist.foreign.service.impl.csv.validator.DuplicateDetailIdValidator;
 
 import com.google.common.collect.Lists;
 
@@ -29,6 +21,11 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -41,7 +38,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.stream.IntStream;
 
@@ -54,6 +50,10 @@ import java.util.stream.IntStream;
  *
  * @author Aliaksei Pchelnikau
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(
+    value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
+@TestPropertySource(properties = {"test.liquibase.changelog=usages-csv-processor-data-init.groovy"})
 public class UsageCsvProcessorIntegrationTest {
 
     private static final String PATH_TO_ACTUAL = "build/temp";
@@ -61,6 +61,8 @@ public class UsageCsvProcessorIntegrationTest {
     private static final String TITLE = "1984";
     private static final String PRODUCT_FAMILY = "FAS";
     private static final String ERRORS_REPORT_CSV = "errors_report.csv";
+    @Autowired
+    private CsvProcessorFactory csvProcessorFactory;
 
     @BeforeClass
     public static void setUpTestDirectory() throws IOException {
@@ -70,7 +72,7 @@ public class UsageCsvProcessorIntegrationTest {
 
     @Test
     public void testProcessor() throws Exception {
-        DistCsvProcessor.ProcessingResult<Usage> result = processFile("usages.csv");
+        DistCsvProcessor.ProcessingResult<Usage> result = processFile("usages.csv", true);
         assertNotNull(result);
         List<Usage> usages = result.get();
         assertEquals(5, CollectionUtils.size(usages));
@@ -86,7 +88,7 @@ public class UsageCsvProcessorIntegrationTest {
         PipedOutputStream outputStream = new PipedOutputStream();
         PipedInputStream pipedInputStream = new PipedInputStream(outputStream);
         try {
-            processFile("usages_with_2000_errors.csv");
+            processFile("usages_with_2000_errors.csv", true);
             fail();
         } catch (ThresholdExceededException ex) {
             assertEquals("The file could not be uploaded. There are more than 2000 errors", ex.getMessage());
@@ -97,14 +99,8 @@ public class UsageCsvProcessorIntegrationTest {
     }
 
     @Test
-    public void testProcessorWithDuplicateDetailsError() throws Exception {
-        DistCsvProcessor.ProcessingResult<Usage> result = processFile("usages.csv", true, true);
-        assertFileWithErrorUsages("usages_with_duplicate_id_errors.csv", result);
-    }
-
-    @Test
     public void testProcessorForNegativePath() throws Exception {
-        DistCsvProcessor.ProcessingResult<Usage> result = processFile("usages_with_errors.csv");
+        DistCsvProcessor.ProcessingResult<Usage> result = processFile("usages_with_errors.csv", true);
         assertFileWithErrorUsages("usages_with_errors_report.csv", result);
     }
 
@@ -123,7 +119,7 @@ public class UsageCsvProcessorIntegrationTest {
     @Test
     public void testProcessorForInvalidHeaderWithHeaderValidation() throws Exception {
         try {
-            processFile("invalid_header_usage_data_file.csv");
+            processFile("invalid_header_usage_data_file.csv", true);
             fail();
         } catch (HeaderValidationException e) {
             assertEquals(
@@ -138,7 +134,7 @@ public class UsageCsvProcessorIntegrationTest {
 
     @Test
     public void testProcessorWithInvalidHeaderWithoutHeaderValidation() throws Exception {
-        ProcessingResult<Usage> result = processFile("invalid_header_usage_data_file.csv", false, false);
+        ProcessingResult<Usage> result = processFile("invalid_header_usage_data_file.csv", false);
         assertTrue(result.isSuccessful());
     }
 
@@ -180,27 +176,16 @@ public class UsageCsvProcessorIntegrationTest {
             .matches(new File(PATH_TO_ACTUAL, actualFileName)));
     }
 
-    private DistCsvProcessor.ProcessingResult<Usage> processFile(String file) throws IOException {
-        return processFile(file, true, false);
-    }
-
-    private DistCsvProcessor.ProcessingResult<Usage> processFile(String file, boolean validateHeaders,
-                                                                 boolean isDetailIdExistsResult)
+    private DistCsvProcessor.ProcessingResult<Usage> processFile(String file, boolean validateHeaders)
         throws IOException {
         DistCsvProcessor.ProcessingResult<Usage> result;
         try (InputStream stream = this.getClass()
             .getResourceAsStream("/com/copyright/rup/dist/foreign/service/csv/" + file);
              ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             IOUtils.copy(stream, outputStream);
-            UsageCsvProcessor processor = new UsageCsvProcessor(PRODUCT_FAMILY);
-            IUsageService usageService = createMock(IUsageService.class);
-            expect(usageService.isDetailIdExists(anyLong(), anyObject(Optional.class)))
-                .andReturn(isDetailIdExistsResult).anyTimes();
-            processor.addBusinessValidators(new DuplicateDetailIdValidator(usageService));
-            replay(usageService);
+            UsageCsvProcessor processor = csvProcessorFactory.getUsageCsvProcessor(PRODUCT_FAMILY);
             processor.setValidateHeaders(validateHeaders);
             result = processor.process(outputStream);
-            verify(usageService);
         }
         return result;
     }
