@@ -21,8 +21,7 @@ import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.Processi
 import com.copyright.rup.dist.foreign.service.impl.csv.ResearchedUsagesCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.DuplicateDetailIdValidator;
-import com.copyright.rup.dist.foreign.service.impl.csv.validator.ResearchedUsageDetailIdValidator;
-import com.copyright.rup.dist.foreign.service.impl.csv.validator.ResearchedUsageStatusValidator;
+import com.copyright.rup.dist.foreign.service.impl.csv.validator.ResearchedUsageValidator;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.common.ExportStreamSource;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
@@ -200,8 +199,7 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     @Override
     public ResearchedUsagesCsvProcessor getResearchedUsagesCsvProcessor() {
         ResearchedUsagesCsvProcessor processor = new ResearchedUsagesCsvProcessor();
-        processor.addBusinessValidators(new ResearchedUsageDetailIdValidator(usageService),
-            new ResearchedUsageStatusValidator(usageService));
+        processor.addBusinessValidators(new ResearchedUsageValidator(usageService));
         return processor;
     }
 

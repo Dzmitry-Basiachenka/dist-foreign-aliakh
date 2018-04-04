@@ -6,9 +6,10 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor;
 
 import java.util.Objects;
+import java.util.Optional;
 
 /**
- * The validator for status of {@link ResearchedUsage}.
+ * The validator for {@link ResearchedUsage}.
  * <p/>
  * Copyright (C) 2018 copyright.com
  * <p/>
@@ -16,7 +17,7 @@ import java.util.Objects;
  *
  * @author Aliaksandr Liakh
  */
-public class ResearchedUsageStatusValidator implements DistCsvProcessor.IValidator<ResearchedUsage> {
+public class ResearchedUsageValidator implements DistCsvProcessor.IValidator<ResearchedUsage> {
 
     private final IUsageService usageService;
 
@@ -25,19 +26,18 @@ public class ResearchedUsageStatusValidator implements DistCsvProcessor.IValidat
      *
      * @param usageService instance of {@link IUsageService}
      */
-    public ResearchedUsageStatusValidator(IUsageService usageService) {
+    public ResearchedUsageValidator(IUsageService usageService) {
         this.usageService = usageService;
     }
 
     @Override
     public boolean isValid(ResearchedUsage researchedUsage) {
-        UsageStatusEnum status =
-            usageService.findStatusByDetailId(Objects.requireNonNull(researchedUsage).getDetailId());
-        return null == status || UsageStatusEnum.WORK_RESEARCH == status;
+        return usageService.isDetailIdExists(Objects.requireNonNull(researchedUsage).getDetailId(),
+            Optional.of(UsageStatusEnum.WORK_RESEARCH));
     }
 
     @Override
     public String getErrorMessage() {
-        return "Usage detail doesn’t have WORK_RESEARCH status";
+        return "Detail with such ID doesn’t exist in the system or usage detail doesn’t have WORK_RESEARCH status";
     }
 }

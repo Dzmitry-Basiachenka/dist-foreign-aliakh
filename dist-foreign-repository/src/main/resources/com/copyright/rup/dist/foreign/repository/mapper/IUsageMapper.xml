@@ -571,16 +571,23 @@
         where df_usage_uid = #{usageId}
     </update>
 
-    <select id="findCountActiveAndArchivedByDetailId" parameterType="long" resultType="int">
-        select max(detail_id_count)
+    <select id="findCountByDetailIdAndStatus" parameterType="map" resultType="int">
+        select count(1)
             from (
-                select count(1) as detail_id_count
+                select detail_id
                 from ${schema}.df_usage
                 where detail_id = #{detailId}
+                <if test="null != status">
+                    and status_ind = #{status}
+                </if>
             union
-                select count(1) as detail_id_count
+                select detail_id
                 from ${schema}.df_usage_archive
-                where detail_id = #{detailId}) as detail_id_counts
+                where detail_id = #{detailId}
+                <if test="null != status">
+                    and status_ind = #{status}
+                </if>
+            ) as detail_id;
     </select>
 
     <select id="findRightsholderTotalsHoldersByScenarioId" parameterType="map" resultMap="rightsholderTotalsHolderResultMap">
@@ -982,16 +989,4 @@
             <include refid="StoredEntityMapper.update"/>
         where detail_id = #{detailId}
     </update>
-
-    <select id="findCountByDetailId" parameterType="long" resultType="int">
-        select count(1)
-        from ${schema}.df_usage
-        where detail_id = #{detailId}
-    </select>
-
-    <select id="findStatusByDetailId" parameterType="long" resultType="UsageStatusEnum">
-        select status_ind
-        from ${schema}.df_usage
-        where detail_id = #{detailId}
-    </select>
 </mapper>

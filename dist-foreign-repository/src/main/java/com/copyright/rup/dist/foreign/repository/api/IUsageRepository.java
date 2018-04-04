@@ -14,6 +14,7 @@ import java.io.PipedOutputStream;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -151,12 +152,13 @@ public interface IUsageRepository {
     void deleteFromScenario(List<String> usagesIds, String userName);
 
     /**
-     * Finds count of active and archived usages by provided detail id.
+     * Finds count of all usages by detail id and optional status.
      *
-     * @param detailId detail id to search
-     * @return 1 if detail id is present, 0 otherwise
+     * @param detailId detail id of usage
+     * @param statusOpt optional status of usage
+     * @return count of usages
      */
-    int findCountActiveAndArchivedByDetailId(Long detailId);
+    int findCountByDetailIdAndStatus(Long detailId, Optional<UsageStatusEnum> statusOpt);
 
     /**
      * Gets list of {@link RightsholderTotalsHolder}s based on {@link com.copyright.rup.dist.foreign.domain.Scenario}
@@ -311,20 +313,4 @@ public interface IUsageRepository {
      * @param researchedUsages collection of {@link ResearchedUsage}s
      */
     void updateResearchedUsages(Collection<ResearchedUsage> researchedUsages);
-
-    /**
-     * Finds count of usages by detail id.
-     *
-     * @param detailId usage detail id
-     * @return count of usages
-     */
-    int findCountByDetailId(Long detailId);
-
-    /**
-     * Finds usage status by detail id.
-     *
-     * @param detailId usage detail id
-     * @return usage status
-     */
-    UsageStatusEnum findStatusByDetailId(Long detailId);
 }

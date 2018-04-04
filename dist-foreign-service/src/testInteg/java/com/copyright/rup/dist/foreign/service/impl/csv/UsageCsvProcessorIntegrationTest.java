@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.csv;
 
 import static org.easymock.EasyMock.anyLong;
+import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
@@ -40,6 +41,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.stream.IntStream;
 
@@ -192,7 +194,8 @@ public class UsageCsvProcessorIntegrationTest {
             IOUtils.copy(stream, outputStream);
             UsageCsvProcessor processor = new UsageCsvProcessor(PRODUCT_FAMILY);
             IUsageService usageService = createMock(IUsageService.class);
-            expect(usageService.isDetailIdExists(anyLong())).andReturn(isDetailIdExistsResult).anyTimes();
+            expect(usageService.isDetailIdExists(anyLong(), anyObject(Optional.class)))
+                .andReturn(isDetailIdExistsResult).anyTimes();
             processor.addBusinessValidators(new DuplicateDetailIdValidator(usageService));
             replay(usageService);
             processor.setValidateHeaders(validateHeaders);
