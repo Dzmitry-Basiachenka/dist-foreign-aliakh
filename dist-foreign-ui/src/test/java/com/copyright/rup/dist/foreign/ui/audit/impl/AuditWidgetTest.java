@@ -114,8 +114,9 @@ public class AuditWidgetTest {
         verifySize(grid, Unit.PERCENTAGE, 100, Unit.PERCENTAGE, 100);
         List<Column> columns = grid.getColumns();
         assertEquals(Arrays.asList("Detail ID", "Detail Status", "Product Family", "Usage Batch Name",
-            "Payment Date", "RH Account #", "RH Name", "Wr Wrk Inst", "Title", "Standard Number", "Amt in USD",
-            "Service Fee %", "Scenario Name", "Check #", "Check Date", "Event ID", "Dist. Name"),
+            "Payment Date", "RH Account #", "RH Name", "Payee Account #", "Payee Name", "Wr Wrk Inst", "Title",
+            "Standard Number", "Amt in USD", "Service Fee %", "Scenario Name", "Check #", "Check Date", "Event ID",
+            "Dist. Name", "Dist. Date", "Period Ending"),
             columns.stream().map(Column::getCaption).collect(Collectors.toList()));
     }
 
