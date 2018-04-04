@@ -1,0 +1,6 @@
+Detail ID,Title,Article,Standard Number,Wr Wrk Inst,RH Account #,Publisher,Pub Date,Number of Copies,Reported Value,Market,Market Period From,Market Period To,Author,Line,Error Reason
+234,1984,Appendix: The Principles of Newspeak,9780150000000,123456789,1000009522,Publisher,12/22/3000,65,30.86,"Univ,Bus,Doc,S",2015,2016,"Aarseth, Espen J.",2,Detail ID: Detail with such ID already exists
+236,1984,Appendix: The Principles of Newspeak,9780150000000,,,Publisher,12/22/3000,65,30.862,"Univ,Bus,Doc,S",2015,2016,"Aarseth, Espen J.",3,Detail ID: Detail with such ID already exists
+237,1984,Appendix: The Principles of Newspeak,9780150000000,123456789,,Publisher,12/22/3000,65,30.86333,"Univ,Bus,Doc,S",2015,2016,"Aarseth, Espen J.",4,Detail ID: Detail with such ID already exists
+238,,Appendix: The Principles of Newspeak,9780150000000,123456789,999999999999999999,Publisher,12/22/3000,65,30.86,"Univ,Bus,Doc,S",2015,2016,"Aarseth, Espen J.",5,Detail ID: Detail with such ID already exists
+235,1984,,9780150000000,,,,,,60.8,"Univ,Bus,Doc,S",2015,2015,,6,Detail ID: Detail with such ID already exists

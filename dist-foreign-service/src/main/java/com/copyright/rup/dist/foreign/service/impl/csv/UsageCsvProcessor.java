@@ -83,7 +83,6 @@ public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
 
     @Override
     protected void initBusinessValidators() {
-        //TODO {nlevyankov} add Duplicate Validator
         addBusinessValidators(new MarketPeriodValidator(), new RightsholderWrWrkInstValidator());
     }
 
