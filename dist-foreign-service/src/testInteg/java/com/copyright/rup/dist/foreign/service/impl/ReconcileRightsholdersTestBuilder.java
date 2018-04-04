@@ -66,8 +66,6 @@ public class ReconcileRightsholdersTestBuilder {
     private AsyncRestTemplate asyncRestTemplate;
     @Value("$RUP{dist.foreign.integration.rest.prm.rollups.async}")
     private boolean prmRollUpAsync;
-    @Value("$RUP{dist.foreign.integration.rest.rms.grants.async}")
-    private boolean rmsGrantsAsync;
 
     Runner build() {
         return new Runner();
@@ -147,7 +145,7 @@ public class ReconcileRightsholdersTestBuilder {
         }
 
         private void prepareRmsExpectations() {
-            (rmsGrantsAsync ? asyncMockServer : mockServer).expect(MockRestRequestMatchers
+            mockServer.expect(MockRestRequestMatchers
                 .requestTo("http://localhost:9051/rms-rights-rest/all-rights/"))
                 .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
                 .andExpect(MockRestRequestMatchers.content()

@@ -9,7 +9,6 @@ import com.copyright.rup.dist.foreign.integration.rms.api.RightsAssignmentResult
 import org.perf4j.aop.Profiled;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -29,15 +28,8 @@ import java.util.Set;
 public class RmsIntegrationService implements IRmsIntegrationService {
 
     @Autowired
-    @Qualifier("dist.common.integration.rmsAsyncService")
-    private IRmsService rmsAsyncService;
-
-    @Autowired
     @Qualifier("dist.common.integration.rmsService")
     private IRmsService rmsService;
-
-    @Value("$RUP{dist.foreign.integration.rest.rms.grants.async}")
-    private boolean rmsGrantsAsync;
 
     @Autowired
     private IRmsRightsAssignmentService rmsRightsAssignmentService;
@@ -45,9 +37,7 @@ public class RmsIntegrationService implements IRmsIntegrationService {
     @Override
     @Profiled(tag = "integration.RmsIntegrationService.getAllRmsGrants")
     public Set<RmsGrant> getAllRmsGrants(List<Long> wrWrkInsts) {
-        return rmsGrantsAsync
-            ? rmsAsyncService.getAllRmsGrants(wrWrkInsts, LocalDate.now())
-            : rmsService.getAllRmsGrants(wrWrkInsts, LocalDate.now());
+        return rmsService.getAllRmsGrants(wrWrkInsts, LocalDate.now());
     }
 
     @Override

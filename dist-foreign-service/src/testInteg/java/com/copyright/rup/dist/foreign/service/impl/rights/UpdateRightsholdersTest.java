@@ -18,7 +18,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
@@ -29,7 +28,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.test.web.client.match.MockRestRequestMatchers;
 import org.springframework.test.web.client.response.MockRestResponseCreators;
-import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -56,19 +54,12 @@ public class UpdateRightsholdersTest {
     private IUsageAuditService usageAuditService;
     @Autowired
     private RestTemplate restTemplate;
-    @Autowired
-    private AsyncRestTemplate asyncRestTemplate;
-    @Value("$RUP{dist.foreign.integration.rest.rms.grants.async}")
-    private boolean rmsGrantsAsync;
 
     private MockRestServiceServer mockServer;
-    private MockRestServiceServer asyncMockServer;
 
     @Test
-    // Test case ID: 'f3568a18-28f1-4807-933f-f8fe4a7396d6'
     public void testUpdateRights() {
         mockServer = MockRestServiceServer.createServer(restTemplate);
-        asyncMockServer = MockRestServiceServer.createServer(asyncRestTemplate);
         expectRmsCall("rms_grants_work_found_usages_request.json", "rms_grants_work_found_usages_response.json");
         expectRmsCall("rms_grants_sent_for_ra_usages_request.json", "rms_grants_sent_for_ra_usages_response.json");
         expectPrmCall();
@@ -76,7 +67,6 @@ public class UpdateRightsholdersTest {
         assertUsages();
         assertAudit();
         mockServer.verify();
-        asyncMockServer.verify();
     }
 
     private void assertUsages() {
@@ -108,8 +98,8 @@ public class UpdateRightsholdersTest {
     }
 
     private void expectRmsCall(String rmsRequestFileName, String rmsResponseFileName) {
-        (rmsGrantsAsync ? asyncMockServer : mockServer).expect(MockRestRequestMatchers
-            .requestTo("http://localhost:9051/rms-rights-rest/all-rights/"))
+        mockServer
+            .expect(MockRestRequestMatchers.requestTo("http://localhost:9051/rms-rights-rest/all-rights/"))
             .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
             .andExpect(MockRestRequestMatchers.content()
                 .string(new JsonMatcher(TestUtils.fileToString(this.getClass(), rmsRequestFileName),
