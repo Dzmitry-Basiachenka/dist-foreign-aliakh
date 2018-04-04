@@ -312,6 +312,36 @@ public class UsageArchiveRepositoryIntegrationTest {
             PAID_DATE, PUBLICATION_DATE);
     }
 
+    @Test
+    public void testFindPaidRroAccountNumbers() {
+        List<PaidUsage> paidUsages = usageArchiveRepository.findPaid(1);
+        assertTrue(CollectionUtils.isNotEmpty(paidUsages));
+        assertEquals(1, paidUsages.size());
+        PaidUsage paidUsage = paidUsages.get(0);
+        assertEquals(Long.valueOf("7000813806"), paidUsage.getRroAccountNumber());
+        assertEquals(Long.valueOf("5423214622"), paidUsage.getDetailId());
+        assertEquals(Long.valueOf("1000002859"), paidUsage.getRightsholder().getAccountNumber());
+        assertEquals(Long.valueOf("1000002859"), paidUsage.getPayee().getAccountNumber());
+        assertEquals(Long.valueOf("243904752"), paidUsage.getWrWrkInst());
+        assertEquals("100 ROAD MOVIES", paidUsage.getWorkTitle());
+        assertEquals("DIN EN 779:2012", paidUsage.getArticle());
+        assertEquals("Philippe de Mézières", paidUsage.getAuthor());
+        assertEquals(PUBLICATION_DATE, paidUsage.getPublicationDate());
+        assertEquals(Integer.valueOf(100), paidUsage.getNumberOfCopies());
+        assertEquals("Doc Del", paidUsage.getMarket());
+        assertEquals(Integer.valueOf(2013), paidUsage.getMarketPeriodFrom());
+        assertEquals(Integer.valueOf(2017), paidUsage.getMarketPeriodTo());
+        assertEquals(new BigDecimal("80.0000000000"), paidUsage.getNetAmount());
+        assertEquals(new BigDecimal("420.0000000000"), paidUsage.getServiceFeeAmount());
+        assertEquals(new BigDecimal("500.0000000000"), paidUsage.getGrossAmount());
+        assertEquals("578945", paidUsage.getCheckNumber());
+        assertEquals(PAID_DATE, paidUsage.getCheckDate());
+        assertEquals("53256", paidUsage.getCccEventId());
+        assertEquals("FDA March 17", paidUsage.getDistributionName());
+        assertEquals(PAID_DATE, paidUsage.getDistributionDate());
+        assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaid(0)));
+    }
+
     private void verifyPaidUsage(UsageDto actualUsageDto, UsageStatusEnum status, Long payeeAccountNumber,
                                  String checkNumber, OffsetDateTime checkDate, String cccEventId,
                                  String distributionName, OffsetDateTime distributionDate,

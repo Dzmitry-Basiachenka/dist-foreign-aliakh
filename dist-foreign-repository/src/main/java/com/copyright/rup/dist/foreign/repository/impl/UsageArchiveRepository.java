@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.Sort;
@@ -116,6 +117,14 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
     @Override
     public void updatePaidInfo(PaidUsage usage) {
         update("IUsageArchiveMapper.updatePaidInfo", Objects.requireNonNull(usage));
+    }
+
+    @Override
+    public List<PaidUsage> findPaid(int limit) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put("status", UsageStatusEnum.PAID);
+        parameters.put("limit", limit);
+        return selectList("IUsageArchiveMapper.findPaid", parameters);
     }
 
     /**
