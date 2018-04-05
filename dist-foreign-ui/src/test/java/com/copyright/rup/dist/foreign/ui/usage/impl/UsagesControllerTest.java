@@ -18,6 +18,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -261,6 +262,20 @@ public class UsagesControllerTest {
         replay(usageBatchService, filterController, filterWidgetMock);
         assertEquals(1, controller.loadUsageBatch(usageBatch, usages));
         verify(usageBatchService, filterController, filterWidgetMock);
+    }
+
+    @Test
+    public void testLoadResearchedUsages() {
+        IUsagesFilterWidget filterWidgetMock = createMock(IUsagesFilterWidget.class);
+        List<ResearchedUsage> researchedUsages = Lists.newArrayList(new ResearchedUsage());
+        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
+        filterWidgetMock.clearFilter();
+        expectLastCall().once();
+        usageService.loadResearchedUsages(researchedUsages);
+        expectLastCall().once();
+        replay(usageService, filterController, filterWidgetMock);
+        controller.loadResearchedUsages(researchedUsages);
+        verify(usageService, filterController, filterWidgetMock);
     }
 
     @Test
