@@ -34,7 +34,7 @@ import java.util.ResourceBundle;
 @org.springframework.stereotype.Component("dist.foreignUi")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Theme("foreign")
-@SpringUI(path = "/*")
+@SpringUI
 public class ForeignUi extends CommonUi {
 
     private static final ResourceBundle MESSAGES =
