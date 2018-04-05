@@ -344,7 +344,8 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertEquals("FDA March 17", paidUsage.getDistributionName());
         assertEquals(PAID_DATE, paidUsage.getDistributionDate());
         assertTrue(CollectionUtils.isEmpty(
-            usageArchiveRepository.findByIdAndStatus(Collections.singletonList(PAID_USAGE_ID), UsageStatusEnum.ARCHIVED)));
+            usageArchiveRepository.findByIdAndStatus(Collections.singletonList(PAID_USAGE_ID),
+                UsageStatusEnum.ARCHIVED)));
     }
 
     @Test
