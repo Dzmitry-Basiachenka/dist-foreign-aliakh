@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
+import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;

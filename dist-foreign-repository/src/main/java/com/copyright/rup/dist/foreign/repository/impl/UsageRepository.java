@@ -5,6 +5,8 @@ import static com.google.common.base.Preconditions.checkArgument;
 import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.common.repository.BaseRepository;
+import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -13,8 +15,6 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
-import com.copyright.rup.dist.foreign.repository.api.Pageable;
-import com.copyright.rup.dist.foreign.repository.api.Sort;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;

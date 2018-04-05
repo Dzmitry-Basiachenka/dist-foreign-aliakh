@@ -47,6 +47,7 @@ public class PrmIntegrationServiceTest {
     private IPrmRightsholderService prmRightsholderService;
     private PrmIntegrationService prmIntegrationService;
     private IPrmRollUpService prmRollUpService;
+    private IPrmRollUpService prmRollUpAsyncService;
     private IPrmRhPreferenceService prmRhPreferenceService;
 
     @Before
@@ -54,9 +55,11 @@ public class PrmIntegrationServiceTest {
         prmIntegrationService = new PrmIntegrationService();
         prmRightsholderService = createMock(IPrmRightsholderService.class);
         prmRollUpService = createMock(IPrmRollUpService.class);
+        prmRollUpAsyncService = createMock(IPrmRollUpService.class);
         prmRhPreferenceService = createMock(IPrmRhPreferenceService.class);
         Whitebox.setInternalState(prmIntegrationService, "prmRightsholderService", prmRightsholderService);
         Whitebox.setInternalState(prmIntegrationService, "prmRollUpService", prmRollUpService);
+        Whitebox.setInternalState(prmIntegrationService, "prmRollUpAsyncService", prmRollUpAsyncService);
         Whitebox.setInternalState(prmIntegrationService, "prmRhPreferenceService", prmRhPreferenceService);
     }
 
@@ -112,6 +115,19 @@ public class PrmIntegrationServiceTest {
         replay(prmRollUpService);
         assertEquals(result, prmIntegrationService.getRollUps(rightsholdersIds));
         verify(prmRollUpService);
+    }
+
+    @Test
+    public void testGetRollUpsWithAsyncImpl() {
+        Whitebox.setInternalState(prmIntegrationService, "prmRollUpAsync", true);
+        String rightsholderId = RupPersistUtils.generateUuid();
+        Set<String> rightsholdersIds = Collections.singleton(rightsholderId);
+        HashBasedTable<String, String, Long> result = HashBasedTable.create(1, 1);
+        result.put(rightsholderId, FAS_PRODUCT_FAMILY, ACCOUNT_NUMBER);
+        expect(prmRollUpAsyncService.getRollUps(rightsholdersIds)).andReturn(result).once();
+        replay(prmRollUpAsyncService);
+        assertEquals(result, prmIntegrationService.getRollUps(rightsholdersIds));
+        verify(prmRollUpAsyncService);
     }
 
     @Test

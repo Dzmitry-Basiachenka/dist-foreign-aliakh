@@ -1,10 +1,10 @@
 package com.copyright.rup.dist.foreign.ui.audit.impl;
 
+import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
-import com.copyright.rup.dist.foreign.repository.api.Pageable;
-import com.copyright.rup.dist.foreign.repository.api.Sort;
-import com.copyright.rup.dist.foreign.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditController;
