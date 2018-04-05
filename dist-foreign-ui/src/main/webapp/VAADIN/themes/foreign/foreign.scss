@@ -167,4 +167,9 @@
    .v-label-white-space-normal {
         white-space: normal;
    }
+
+   /**==== Error for upload field ====*/
+   .usage-upload-window .v-customcomponent-error .v-textfield, .researched-usages-upload-window .v-customcomponent-error .v-textfield {
+        border:red 1px solid !important;
+   }
 }
