@@ -45,14 +45,6 @@
         <constructor-arg value="true"/>
     </bean>
 
-    <bean id="dist.common.integration.rmsAsyncService" class="com.copyright.rup.dist.common.integration.rest.rms.RmsAsyncService">
-        <constructor-arg ref="restTemplate"/>
-        <constructor-arg ref="asyncRestTemplate"/>
-        <constructor-arg value="$RUP{dist.foreign.integration.rest.rms.url}"/>
-        <constructor-arg value="$RUP{dist.foreign.integration.rest.rms.request_partition_size}"/>
-        <constructor-arg value="true"/>
-    </bean>
-
     <bean id="df.integration.externalUsageProducer"
           class="com.copyright.rup.dist.foreign.integration.lm.impl.producer.ExternalUsageProducer">
         <property name="endPoint" value="direct:df.integration.externalUsage"/>
