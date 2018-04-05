@@ -8,6 +8,7 @@ import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IDrillDownByRightsholderController;
@@ -58,6 +59,8 @@ public class ScenarioController extends CommonController<IScenarioWidget> implem
     private IScenarioService scenarioService;
     @Autowired
     private IDrillDownByRightsholderController drillDownByRightsholderController;
+    @Autowired
+    private IReportService reportService;
 
     @Override
     public int getSize() {
@@ -87,7 +90,7 @@ public class ScenarioController extends CommonController<IScenarioWidget> implem
 
     @Override
     public IStreamSource getExportScenarioUsagesStreamSource() {
-        return new ExportScenarioUsagesStreamSource(usageService, getScenario());
+        return new ExportScenarioUsagesStreamSource(reportService, getScenario());
     }
 
     @Override
@@ -125,6 +128,10 @@ public class ScenarioController extends CommonController<IScenarioWidget> implem
         return scenario;
     }
 
+    void setScenario(Scenario scenario) {
+        this.scenario = scenario;
+    }
+
     @Override
     public Scenario getScenarioWithAmountsAndLastAction() {
         return scenarioService.getScenarioWithAmountsAndLastAction(scenario);
@@ -135,18 +142,14 @@ public class ScenarioController extends CommonController<IScenarioWidget> implem
         getWidget().fireWidgetEvent(event);
     }
 
-    void setScenario(Scenario scenario) {
-        this.scenario = scenario;
-    }
-
     private static class ExportScenarioUsagesStreamSource implements IStreamSource {
 
         private final ExecutorService executorService = Executors.newSingleThreadExecutor();
-        private final IUsageService usageService;
+        private final IReportService reportService;
         private final Scenario scenario;
 
-        ExportScenarioUsagesStreamSource(IUsageService usageService, Scenario scenario) {
-            this.usageService = usageService;
+        ExportScenarioUsagesStreamSource(IReportService reportService, Scenario scenario) {
+            this.reportService = reportService;
             this.scenario = scenario;
         }
 
@@ -156,7 +159,7 @@ public class ScenarioController extends CommonController<IScenarioWidget> implem
                 PipedOutputStream pipedOutputStream = new PipedOutputStream();
                 PipedInputStream pipedInputStream = new PipedInputStream(pipedOutputStream);
                 executorService.execute(
-                    () -> usageService.writeScenarioUsagesCsvReport(scenario, pipedOutputStream));
+                    () -> reportService.writeScenarioUsagesCsvReport(scenario, pipedOutputStream));
                 return pipedInputStream;
             } catch (IOException e) {
                 throw new RupRuntimeException(e);

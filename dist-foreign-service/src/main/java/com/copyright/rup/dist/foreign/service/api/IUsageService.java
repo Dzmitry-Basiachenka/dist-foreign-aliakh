@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.service.api;
 
-import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
@@ -14,7 +13,6 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
-import java.io.PipedOutputStream;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -50,22 +48,6 @@ public interface IUsageService {
      * @return count of usages
      */
     int getUsagesCount(UsageFilter filter);
-
-    /**
-     * Writes usages found by filter into csv output stream.
-     *
-     * @param filter            instance of {@link UsageFilter}
-     * @param pipedOutputStream instance of {@link PipedOutputStream}
-     */
-    void writeUsageCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream);
-
-    /**
-     * Writes scenario usages into csv output stream.
-     *
-     * @param scenario          {@link Scenario}
-     * @param pipedOutputStream instance of {@link PipedOutputStream}
-     */
-    void writeScenarioUsagesCsvReport(Scenario scenario, PipedOutputStream pipedOutputStream);
 
     /**
      * Inserts usages.
@@ -159,7 +141,7 @@ public interface IUsageService {
     /**
      * Checks if provided detail id exists in database.
      *
-     * @param detailId detail id of usage
+     * @param detailId  detail id of usage
      * @param statusOpt optional status of usage
      * @return {@code true} if detail id is present, {@code false} otherwise
      */
@@ -234,15 +216,6 @@ public interface IUsageService {
      * @return list of {@link UsageDto}s
      */
     List<UsageDto> getForAudit(AuditFilter filter, Pageable pageable, Sort sort);
-
-    /**
-     * Writes usages found by {@link AuditFilter} into CSV output stream.
-     *
-     * @param filter            {@link AuditFilter}
-     * @param pipedOutputStream instance of {@link PipedOutputStream}
-     * @throws RupRuntimeException in case when IOException appears during writing report
-     */
-    void writeAuditCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) throws RupRuntimeException;
 
     /**
      * Retrieves list of product families of non archived details.

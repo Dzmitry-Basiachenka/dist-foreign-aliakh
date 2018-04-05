@@ -49,7 +49,7 @@ import java.util.concurrent.Executors;
 public class ResearchedUsagesCsvProcessorIntegrationTest {
 
     private static final String PATH_TO_ACTUAL_REPORTS = "build/temp";
-    private static final String PACKAGE = "/com/copyright/rup/dist/foreign/service/csv/usage/researched";
+    private static final String PACKAGE = "/com/copyright/rup/dist/foreign/service/impl/usage/researched";
     private static final String PATH_TO_EXPECTED_REPORTS = "src/testInteg/resources" + PACKAGE;
 
     @Autowired
