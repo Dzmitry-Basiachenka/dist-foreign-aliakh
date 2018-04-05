@@ -69,9 +69,9 @@ public class ResearchedUsagesUploadWindowTest {
         replay(usagesController);
         window = new ResearchedUsagesUploadWindow(usagesController);
         assertEquals("Upload Researched Details", window.getCaption());
-        assertEquals(440, window.getWidth(), 0);
+        assertEquals(400, window.getWidth(), 0);
         assertEquals(Unit.PIXELS, window.getWidthUnits());
-        assertEquals(120, window.getHeight(), 0);
+        assertEquals(135, window.getHeight(), 0);
         assertEquals(Unit.PIXELS, window.getHeightUnits());
         verifyRootLayout(window.getContent());
         verify(usagesController);

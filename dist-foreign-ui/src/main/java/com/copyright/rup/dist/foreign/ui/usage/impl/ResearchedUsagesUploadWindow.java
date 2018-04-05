@@ -52,8 +52,8 @@ class ResearchedUsagesUploadWindow extends Window {
         setContent(initRootLayout());
         setCaption(ForeignUi.getMessage("window.upload_researched_usages"));
         setResizable(false);
-        setWidth(440, Unit.PIXELS);
-        setHeight(120, Unit.PIXELS);
+        setWidth(400, Unit.PIXELS);
+        setHeight(135, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "researched-usages-upload-window");
     }
 
@@ -104,6 +104,7 @@ class ResearchedUsagesUploadWindow extends Window {
 
     private ComponentContainer initRootLayout() {
         HorizontalLayout buttonsLayout = initButtonsLayout();
+        buttonsLayout.setMargin(new MarginInfo(true, false, true, false));
         VerticalLayout rootLayout = new VerticalLayout();
         rootLayout.addComponents(initUploadField(), buttonsLayout);
         rootLayout.setSpacing(true);
@@ -129,11 +130,12 @@ class ResearchedUsagesUploadWindow extends Window {
 
     private HorizontalLayout initButtonsLayout() {
         Button closeButton = Buttons.createCloseButton(this);
+        closeButton.setWidth(73, Unit.PIXELS);
         Button uploadButton = Buttons.createButton(ForeignUi.getMessage("button.upload"));
+        uploadButton.setWidth(73, Unit.PIXELS);
         uploadButton.addClickListener(event -> onUploadClicked());
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         horizontalLayout.addComponents(uploadButton, closeButton);
-        horizontalLayout.setSpacing(true);
         return horizontalLayout;
     }
 }
