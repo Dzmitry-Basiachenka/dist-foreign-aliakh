@@ -46,7 +46,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.PipedOutputStream;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Collections;
@@ -98,20 +97,6 @@ public class UsageService implements IUsageService {
     @Override
     public int getUsagesCount(UsageFilter filter) {
         return !filter.isEmpty() ? usageRepository.findCountByFilter(filter) : 0;
-    }
-
-    @Override
-    public void writeUsageCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream) {
-        usageRepository.writeUsagesCsvReport(filter, pipedOutputStream);
-    }
-
-    @Override
-    public void writeScenarioUsagesCsvReport(Scenario scenario, PipedOutputStream outputStream) {
-        if (ScenarioStatusEnum.SENT_TO_LM == scenario.getStatus()) {
-            usageArchiveRepository.writeScenarioUsagesCsvReport(scenario.getId(), outputStream);
-        } else {
-            usageRepository.writeScenarioUsagesCsvReport(scenario.getId(), outputStream);
-        }
     }
 
     @Override
@@ -317,11 +302,6 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public void writeAuditCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) {
-        usageRepository.writeAuditCsvReport(filter, pipedOutputStream);
-    }
-
-    @Override
     public List<String> getProductFamilies() {
         return usageRepository.findProductFamiliesForFilter();
     }
@@ -378,11 +358,10 @@ public class UsageService implements IUsageService {
             .stream()
             .collect(Collectors.toMap(Usage::getDetailId, Usage::getId));
         stopWatch.lap("usage.loadResearchedUsages_2_findByStatuses");
-        researchedUsages.forEach(researchedUsage -> {
-                usageAuditService.logAction(detailIdToId.get(researchedUsage.getDetailId()),
-                    UsageActionTypeEnum.WORK_FOUND,
-                    String.format("Wr Wrk Inst %s was added based on research", researchedUsage.getWrWrkInst()));
-            }
+        researchedUsages.forEach(
+            researchedUsage -> usageAuditService.logAction(detailIdToId.get(researchedUsage.getDetailId()),
+                UsageActionTypeEnum.WORK_FOUND,
+                String.format("Wr Wrk Inst %s was added based on research", researchedUsage.getWrWrkInst()))
         );
         stopWatch.stop("usage.loadResearchedUsages_3_logAction");
         LOGGER.info("Load researched usages. Finished. ResearchedUsagesCount={}", LogUtils.size(researchedUsages));

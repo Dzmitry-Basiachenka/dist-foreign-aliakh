@@ -57,7 +57,7 @@ import java.util.stream.IntStream;
 public class UsageCsvProcessorIntegrationTest {
 
     private static final String PATH_TO_ACTUAL = "build/temp";
-    private static final String PACKAGE = "/com/copyright/rup/dist/foreign/service/csv/usage";
+    private static final String PACKAGE = "/com/copyright/rup/dist/foreign/service/impl/usage";
     private static final String PATH_TO_EXPECTED = "src/testInteg/resources" + PACKAGE;
     private static final String TITLE = "1984";
     private static final String PRODUCT_FAMILY = "FAS";

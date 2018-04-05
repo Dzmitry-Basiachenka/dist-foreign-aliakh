@@ -49,7 +49,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import java.io.PipedOutputStream;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
@@ -134,31 +133,6 @@ public class UsageServiceTest {
         List<UsageDto> result = usageService.getUsages(new UsageFilter(), null, null);
         assertNotNull(result);
         assertTrue(result.isEmpty());
-    }
-
-    @Test
-    public void testWriteUsageCsvReport() {
-        PipedOutputStream outputStream = new PipedOutputStream();
-        UsageFilter usageFilter = new UsageFilter();
-        usageRepository.writeUsagesCsvReport(usageFilter, outputStream);
-        expectLastCall().once();
-        replay(usageRepository);
-        usageService.writeUsageCsvReport(usageFilter, outputStream);
-        verify(usageRepository);
-    }
-
-    @Test
-    public void testWriteScenarioUsagesCsvReport() {
-        PipedOutputStream outputStream = new PipedOutputStream();
-        usageRepository.writeScenarioUsagesCsvReport(SCENARIO_ID, outputStream);
-        expectLastCall().once();
-        usageArchiveRepository.writeScenarioUsagesCsvReport(SCENARIO_ID, outputStream);
-        expectLastCall().once();
-        replay(usageRepository, usageArchiveRepository);
-        usageService.writeScenarioUsagesCsvReport(scenario, outputStream);
-        scenario.setStatus(ScenarioStatusEnum.SENT_TO_LM);
-        usageService.writeScenarioUsagesCsvReport(scenario, outputStream);
-        verify(usageRepository, usageArchiveRepository);
     }
 
     @Test
@@ -398,17 +372,6 @@ public class UsageServiceTest {
         expect(usageRepository.findForAudit(filter, pageable, sort)).andReturn(Collections.emptyList()).once();
         replay(usageRepository);
         assertEquals(Collections.emptyList(), usageService.getForAudit(filter, pageable, sort));
-        verify(usageRepository);
-    }
-
-    @Test
-    public void writeAuditCsvReport() {
-        AuditFilter filter = new AuditFilter();
-        PipedOutputStream stream = new PipedOutputStream();
-        usageRepository.writeAuditCsvReport(filter, stream);
-        expectLastCall().once();
-        replay(usageRepository);
-        usageService.writeAuditCsvReport(filter, stream);
         verify(usageRepository);
     }
 

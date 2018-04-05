@@ -13,6 +13,7 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
+import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
@@ -86,6 +87,8 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     private IScenarioService scenarioService;
     @Autowired
     private CsvProcessorFactory csvProcessorFactory;
+    @Autowired
+    private IReportService reportService;
 
     @Override
     public IUsagesFilterWidget initUsagesFilterWidget() {
@@ -170,7 +173,7 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     @Override
     public IStreamSource getExportUsagesStreamSource() {
         return new ExportStreamSource("export_usage_",
-            pipedStream -> usageService.writeUsageCsvReport(filterController.getWidget().getAppliedFilter(),
+            pipedStream -> reportService.writeUsageCsvReport(filterController.getWidget().getAppliedFilter(),
                 pipedStream));
     }
 
