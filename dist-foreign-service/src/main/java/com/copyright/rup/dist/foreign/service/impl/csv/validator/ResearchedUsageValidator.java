@@ -38,6 +38,6 @@ public class ResearchedUsageValidator implements DistCsvProcessor.IValidator<Res
 
     @Override
     public String getErrorMessage() {
-        return "Detail with such ID doesn’t exist in the system or usage detail doesn’t have WORK_RESEARCH status";
+        return "Detail with such ID doesn't exist in the system or usage detail doesn't have WORK_RESEARCH status";
     }
 }
