@@ -4,8 +4,6 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor;
 
-import java.util.Optional;
-
 /**
  * The validator to check whether usage with detail id is present in database.
  * <p>
@@ -30,7 +28,7 @@ public class DuplicateDetailIdValidator implements DistCsvProcessor.IValidator<U
 
     @Override
     public boolean isValid(Usage usage) {
-        return !usageService.isDetailIdExists(usage.getDetailId(), Optional.empty());
+        return !usageService.isDetailIdExists(usage.getDetailId());
     }
 
     @Override

@@ -14,8 +14,6 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Optional;
-
 /**
  * Verifies {@link DuplicateDetailIdValidator}.
  * <p>
@@ -40,7 +38,7 @@ public class DuplicateDetailIdValidatorTest {
     public void testIsNotValid() {
         Usage usage = new Usage();
         usage.setDetailId(1L);
-        expect(usageService.isDetailIdExists(usage.getDetailId(), Optional.empty())).andReturn(true).once();
+        expect(usageService.isDetailIdExists(usage.getDetailId())).andReturn(true).once();
         replay(usageService);
         assertFalse(duplicateDetailIdValidator.isValid(usage));
         verify(usageService);
@@ -50,7 +48,7 @@ public class DuplicateDetailIdValidatorTest {
     public void testIsValid() {
         Usage usage = new Usage();
         usage.setDetailId(1L);
-        expect(usageService.isDetailIdExists(usage.getDetailId(), Optional.empty())).andReturn(false).once();
+        expect(usageService.isDetailIdExists(usage.getDetailId())).andReturn(false).once();
         replay(usageService);
         assertTrue(duplicateDetailIdValidator.isValid(usage));
         verify(usageService);

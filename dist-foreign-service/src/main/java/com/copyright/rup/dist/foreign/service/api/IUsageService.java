@@ -16,7 +16,6 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * Represents interface of service for usage business logic.
@@ -141,11 +140,21 @@ public interface IUsageService {
     /**
      * Checks if provided detail id exists in database.
      *
-     * @param detailId  detail id of usage
-     * @param statusOpt optional status of usage
+     * @param detailId   detail id of usage
+     * @param statusEnum status of usage
      * @return {@code true} if detail id is present, {@code false} otherwise
      */
-    boolean isDetailIdExists(Long detailId, Optional<UsageStatusEnum> statusOpt);
+    boolean isDetailIdExists(Long detailId, UsageStatusEnum statusEnum);
+
+
+    /**
+     * Checks if provided detail id exists in database.
+     *
+     * @param detailId detail id of usage
+     * @return {@code true} if detail id is present, {@code false} otherwise
+     */
+    boolean isDetailIdExists(Long detailId);
+
 
     /**
      * Moves {@link Usage}s to the archive for given {@link Scenario}.
