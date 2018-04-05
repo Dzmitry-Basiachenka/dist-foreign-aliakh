@@ -55,5 +55,10 @@ public enum UsageStatusEnum {
     /**
      * Status for paid usages.
      */
-    PAID
+    PAID,
+
+    /**
+     * Status for sent to CRM usages.
+     */
+    ARCHIVED
 }

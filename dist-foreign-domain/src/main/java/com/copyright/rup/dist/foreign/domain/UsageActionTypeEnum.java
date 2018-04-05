@@ -69,5 +69,10 @@ public enum UsageActionTypeEnum {
     /**
      * Action type for paid {@link Usage}.
      */
-    PAID
+    PAID,
+
+    /**
+     * Action type for {@link Usage} sent to CRM.
+     */
+    ARCHIVED
 }

@@ -17,6 +17,9 @@ import com.copyright.rup.dist.foreign.domain.common.util.CalculationUtils;
 import com.copyright.rup.dist.foreign.domain.common.util.ForeignLogUtils;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.integration.crm.api.CrmResult;
+import com.copyright.rup.dist.foreign.integration.crm.api.CrmRightsDistributionRequest;
+import com.copyright.rup.dist.foreign.integration.crm.api.ICrmIntegrationService;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
@@ -26,6 +29,7 @@ import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
@@ -81,6 +85,8 @@ public class UsageService implements IUsageService {
     private IUsageAuditService usageAuditService;
     @Autowired
     private IPrmIntegrationService prmIntegrationService;
+    @Autowired
+    private ICrmIntegrationService crmIntegrationService;
 
     @Override
     public List<UsageDto> getUsages(UsageFilter filter, Pageable pageable, Sort sort) {
@@ -380,6 +386,66 @@ public class UsageService implements IUsageService {
         );
         stopWatch.stop("usage.loadResearchedUsages_3_logAction");
         LOGGER.info("Load researched usages. Finished. ResearchedUsagesCount={}", LogUtils.size(researchedUsages));
+    }
+
+    @Override
+    //TODO {dbaraukova} add @Scheduled(cron = "$RUP{dist.foreign.service.schedule.sendToCrm}
+    public void sendToCrm() {
+        List<String> paidUsagesIds = usageArchiveRepository.findPaidIds();
+        LOGGER.info("Send to CRM. Started. PaidUsagesCount={}", LogUtils.size(paidUsagesIds));
+        int archivedUsagesCount = 0;
+        if (CollectionUtils.isNotEmpty(paidUsagesIds)) {
+            Set<Long> invalidDetailIds = Sets.newHashSet();
+            StopWatch stopWatch = new Slf4JStopWatch();
+            for (List<String> ids : Iterables.partition(paidUsagesIds, 128)) {
+                List<PaidUsage> paidUsages = usageArchiveRepository.findByIdAndStatus(ids, UsageStatusEnum.PAID);
+                if (CollectionUtils.isNotEmpty(paidUsages)) {
+                    CrmResult result =
+                        crmIntegrationService.sendRightsDistributionRequests(
+                            buildCrmRightsDistributionRequest(paidUsages));
+                    stopWatch.lap("usage.sendToCrm_1_sendRightsDistributionRequests");
+                    if (result.isSuccessful()) {
+                        Set<String> usagesIds = paidUsages.stream().map(PaidUsage::getId).collect(Collectors.toSet());
+                        updateReportedUsages(usagesIds, stopWatch);
+                        archivedUsagesCount += usagesIds.size();
+                    } else {
+                        Set<Long> invalidIds = result.getInvalidDetailIds();
+                        if (CollectionUtils.isNotEmpty(invalidIds) && paidUsages.size() != invalidIds.size()) {
+                            Set<String> usagesIds = paidUsages.stream()
+                                .filter(paidUsage -> !invalidIds.contains(paidUsage.getDetailId()))
+                                .map(PaidUsage::getId)
+                                .collect(Collectors.toSet());
+                            if (CollectionUtils.isNotEmpty(usagesIds)) {
+                                updateReportedUsages(usagesIds, stopWatch);
+                                archivedUsagesCount += usagesIds.size();
+                            }
+                        }
+                        invalidDetailIds.addAll(result.getInvalidDetailIds());
+                    }
+                }
+            }
+            LOGGER.info("Send to CRM. Finished. PaidUsagesCount={}, ArchivedUsagesCount={}, NotReportedUsagesCount={}",
+                LogUtils.size(paidUsagesIds), archivedUsagesCount, invalidDetailIds.size());
+            LOGGER.trace("Send to CRM. Finished. PaidUsagesCount={}, ArchivedUsagesCount={}, NotReportedDetailIds={}",
+                LogUtils.size(paidUsagesIds), archivedUsagesCount, invalidDetailIds);
+            //TODO {dbaraukova} change scenario status to ARCHIVED if all usages were sent to CRM
+        } else {
+            LOGGER.info("Send to CRM. Skipped. PaidUsagesCount={}, Reason=There are no usages to report",
+                LogUtils.size(paidUsagesIds));
+        }
+    }
+
+    private List<CrmRightsDistributionRequest> buildCrmRightsDistributionRequest(List<PaidUsage> paidUsages) {
+        List<CrmRightsDistributionRequest> requests = Lists.newArrayListWithExpectedSize(paidUsages.size());
+        paidUsages.forEach(paidUsage -> requests.add(new CrmRightsDistributionRequest(paidUsage)));
+        return requests;
+    }
+
+    private void updateReportedUsages(Set<String> usagesIds, StopWatch stopWatch) {
+        usageArchiveRepository.updateStatus(usagesIds, UsageStatusEnum.ARCHIVED);
+        stopWatch.lap("usage.sendToCrm_2_updateStatus");
+        usageAuditService.logAction(usagesIds, UsageActionTypeEnum.ARCHIVED, "Usage was sent to CRM");
+        stopWatch.stop("usage.sendToCrm_3_logAction");
     }
 
     private void calculateUsagesGrossAmount(UsageBatch usageBatch, Collection<Usage> usages) {

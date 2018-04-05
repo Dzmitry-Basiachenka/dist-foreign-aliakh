@@ -1,6 +1,9 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 import com.copyright.rup.common.exception.RupRuntimeException;
+import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
@@ -14,6 +17,7 @@ import com.copyright.rup.dist.foreign.repository.api.Sort;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.ibatis.session.ResultContext;
 import org.apache.ibatis.session.ResultHandler;
 import org.springframework.stereotype.Repository;
@@ -23,6 +27,7 @@ import java.io.PipedOutputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Implementation of Usage archive repository.
@@ -120,11 +125,28 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
     }
 
     @Override
-    public List<PaidUsage> findPaid(int limit) {
+    public void updateStatus(Set<String> usageIds, UsageStatusEnum status) {
+        checkArgument(CollectionUtils.isNotEmpty(usageIds));
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
+        parameters.put("status", Objects.requireNonNull(status));
+        parameters.put("updateUser", StoredEntity.DEFAULT_USER);
+        usageIds.forEach(usageId -> {
+            parameters.put("usageId", usageId);
+            update("IUsageArchiveMapper.updateStatusById", parameters);
+        });
+    }
+
+    @Override
+    public List<PaidUsage> findByIdAndStatus(List<String> usageIds, UsageStatusEnum status) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-        parameters.put("status", UsageStatusEnum.PAID);
-        parameters.put("limit", limit);
-        return selectList("IUsageArchiveMapper.findPaid", parameters);
+        parameters.put("status", status);
+        parameters.put("usageIds", Objects.requireNonNull(usageIds));
+        return selectList("IUsageArchiveMapper.findByIdAndStatus", parameters);
+    }
+
+    @Override
+    public List<String> findPaidIds() {
+        return selectList("IUsageArchiveMapper.findPaidIds", UsageStatusEnum.PAID);
     }
 
     /**

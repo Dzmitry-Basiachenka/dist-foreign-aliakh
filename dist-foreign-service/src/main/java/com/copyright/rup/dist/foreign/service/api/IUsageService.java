@@ -277,4 +277,13 @@ public interface IUsageService {
      * @param researchedUsages collection of {@link ResearchedUsage}s
      */
     void loadResearchedUsages(Collection<ResearchedUsage> researchedUsages);
+
+    /**
+     * Gets list of {@link PaidUsage} available for sending to CRM.
+     * Sends {@link PaidUsage} to CRM and updates their status to
+     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ARCHIVED}.
+     * Also updates scenario status to {@link com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum#ARCHIVED}
+     * if all usages from scenario were sent to CRM.
+     */
+    void sendToCrm();
 }

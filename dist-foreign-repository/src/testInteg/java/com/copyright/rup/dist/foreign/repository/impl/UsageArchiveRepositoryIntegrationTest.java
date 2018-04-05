@@ -39,6 +39,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -81,6 +82,7 @@ public class UsageArchiveRepositoryIntegrationTest {
     private static final Long DETAIL_ID = 12345L;
     private static final Integer NUMBER_OF_COPIES = 155;
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
+    private static final String PAID_USAGE_ID = "c0d30ec0-370d-11e8-b566-0800200c9a66";
 
     @Autowired
     private IUsageArchiveRepository usageArchiveRepository;
@@ -313,11 +315,13 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindPaidRroAccountNumbers() {
-        List<PaidUsage> paidUsages = usageArchiveRepository.findPaid(1);
+    public void testFindByIdsAndStatus() {
+        List<PaidUsage> paidUsages =
+            usageArchiveRepository.findByIdAndStatus(Collections.singletonList(PAID_USAGE_ID), UsageStatusEnum.PAID);
         assertTrue(CollectionUtils.isNotEmpty(paidUsages));
         assertEquals(1, paidUsages.size());
         PaidUsage paidUsage = paidUsages.get(0);
+        assertEquals("c0d30ec0-370d-11e8-b566-0800200c9a66", paidUsage.getId());
         assertEquals(Long.valueOf("7000813806"), paidUsage.getRroAccountNumber());
         assertEquals(Long.valueOf("5423214622"), paidUsage.getDetailId());
         assertEquals(Long.valueOf("1000002859"), paidUsage.getRightsholder().getAccountNumber());
@@ -339,7 +343,16 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertEquals("53256", paidUsage.getCccEventId());
         assertEquals("FDA March 17", paidUsage.getDistributionName());
         assertEquals(PAID_DATE, paidUsage.getDistributionDate());
-        assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaid(0)));
+        assertTrue(CollectionUtils.isEmpty(
+            usageArchiveRepository.findByIdAndStatus(Collections.singletonList(PAID_USAGE_ID), UsageStatusEnum.ARCHIVED)));
+    }
+
+    @Test
+    public void testFindPaidIds() {
+        List<String> usagesIds = usageArchiveRepository.findPaidIds();
+        assertTrue(CollectionUtils.isNotEmpty(usagesIds));
+        assertEquals(1, usagesIds.size());
+        assertEquals(PAID_USAGE_ID, usagesIds.get(0));
     }
 
     private void verifyPaidUsage(UsageDto actualUsageDto, UsageStatusEnum status, Long payeeAccountNumber,

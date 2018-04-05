@@ -92,10 +92,10 @@ public class CrmServiceTest {
             crmService.parseResponse(TestUtils.fileToString(CrmServiceTest.class, "crm_response_failed.json"),
                 new CrmResult(CrmResultStatusEnum.SUCCESS), Collections.emptyMap());
         assertEquals(CrmResultStatusEnum.CRM_ERROR, actualResult.getCrmResultStatus());
-        Set<String> invalidIds = actualResult.getInvalidDetailIds();
+        Set<Long> invalidIds = actualResult.getInvalidDetailIds();
         assertTrue(CollectionUtils.isNotEmpty(invalidIds));
         assertEquals(1, invalidIds.size());
-        assertTrue(invalidIds.contains("12345"));
+        assertTrue(invalidIds.contains(12345L));
     }
 
     private String formatJson(Object objectToFormat) throws IOException {
@@ -110,6 +110,7 @@ public class CrmServiceTest {
         Rightsholder payee = new Rightsholder();
         payee.setAccountNumber(1000010022L);
         PaidUsage paidUsage = new PaidUsage();
+        paidUsage.setRroAccountNumber(7001047151L);
         paidUsage.setCccEventId("53256");
         paidUsage.setRightsholder(rightsholder);
         paidUsage.setPayee(payee);
@@ -129,7 +130,7 @@ public class CrmServiceTest {
         paidUsage.setMarket("Univ,Bus,Doc,S");
         paidUsage.setMarketPeriodFrom(2016);
         paidUsage.setMarketPeriodTo(2016);
-        return new CrmRightsDistributionRequest(paidUsage, 7001047151L);
+        return new CrmRightsDistributionRequest(paidUsage);
     }
 
 }

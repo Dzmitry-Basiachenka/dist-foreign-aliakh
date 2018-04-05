@@ -90,13 +90,14 @@ public class CrmService implements ICrmService {
      * @throws IOException when {@link CrmRightsDistributionRequest} cannot be converted to JSON or request cannot be
      *                     sent to CRM service.
      */
+    //TODO {dbaraukova} analyze loggers
     CrmResult doSendRightsDistributionRequests(List<CrmRightsDistributionRequest> requests) throws IOException {
         CrmResult result = new CrmResult(CrmResultStatusEnum.SUCCESS);
-        LOGGER.info("Send liability details to CRM. Started. RequestsCount={}", requests.size());
+        LOGGER.info("Send usages to CRM. Started. RequestsCount={}", requests.size());
         for (List<CrmRightsDistributionRequest> batchRequests : Iterables.partition(requests, 128)) {
             HttpEntity<String> crmRequest = new HttpEntity<>(objectMapper.writeValueAsString(
                 new CrmRightsDistributionRequestWrapper(batchRequests)), buildRequestHeader());
-            LOGGER.debug("RightsDistributionRequest={}", crmRequest);
+            LOGGER.trace("Send usages to CRM. RightsDistributionRequest={}", crmRequest);
             result = parseResponse(
                 restTemplate.postForObject(crmRightsDistributionRequestsUrl, crmRequest, String.class), result,
                 buildRightsDistributionRequestMap(batchRequests));
@@ -124,16 +125,14 @@ public class CrmService implements ICrmService {
                 for (JsonNode errorNode : errorNodes) {
                     JsonNode key = errorNode.findValue("key");
                     List<JsonNode> errorMessages = errorNode.findValues("string");
-                    crmResult.addInvalidDetailId(key.asText());
-                    LOGGER.warn("Send liability details to CRM. Failed. Key={}, Request={}, ErrorMessage={}", key,
+                    crmResult.addInvalidDetailId(key.asLong());
+                    LOGGER.warn("Send usages to CRM. Failed. DetailId={}, Request={}, ErrorMessage={}", key,
                         requestMap.get(key.asLong()), errorMessages);
                 }
-            } else {
-                LOGGER.debug("CRMResponse={}", crmResult);
             }
         } else {
-            LOGGER.warn("Send liability details to CRM. Failed. Couldn't parse. Response={}, JsonNode={}", response,
-                jsonNode);
+            LOGGER.warn("Send usages to CRM. Failed. Reason=Couldn't parse response. Response={}, JsonNode={}",
+                response, jsonNode);
         }
         return crmResult;
     }

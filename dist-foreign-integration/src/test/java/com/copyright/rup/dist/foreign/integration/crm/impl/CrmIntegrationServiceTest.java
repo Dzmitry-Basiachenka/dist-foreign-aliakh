@@ -43,7 +43,7 @@ public class CrmIntegrationServiceTest {
     @Test
     public void testSendRightsDistributionRequests() {
         CrmResult result = new CrmResult(CrmResultStatusEnum.SUCCESS);
-        CrmRightsDistributionRequest request = new CrmRightsDistributionRequest(new PaidUsage(), 123456789L);
+        CrmRightsDistributionRequest request = new CrmRightsDistributionRequest(new PaidUsage());
         List<CrmRightsDistributionRequest> requests = Collections.singletonList(request);
         expect(crmService.sendRightsDistributionRequests(requests)).andReturn(result).once();
         replay(crmService);
