@@ -57,7 +57,8 @@ import java.util.stream.IntStream;
 public class UsageCsvProcessorIntegrationTest {
 
     private static final String PATH_TO_ACTUAL = "build/temp";
-    private static final String PATH_TO_EXPECTED = "src/testInteg/resources/com/copyright/rup/dist/foreign/service/csv";
+    private static final String PACKAGE = "/com/copyright/rup/dist/foreign/service/csv/usage";
+    private static final String PATH_TO_EXPECTED = "src/testInteg/resources" + PACKAGE;
     private static final String TITLE = "1984";
     private static final String PRODUCT_FAMILY = "FAS";
     private static final String ERRORS_REPORT_CSV = "errors_report.csv";
@@ -180,7 +181,7 @@ public class UsageCsvProcessorIntegrationTest {
         throws IOException {
         DistCsvProcessor.ProcessingResult<Usage> result;
         try (InputStream stream = this.getClass()
-            .getResourceAsStream("/com/copyright/rup/dist/foreign/service/csv/" + file);
+            .getResourceAsStream(PACKAGE + "/" + file);
              ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             IOUtils.copy(stream, outputStream);
             UsageCsvProcessor processor = csvProcessorFactory.getUsageCsvProcessor(PRODUCT_FAMILY);
