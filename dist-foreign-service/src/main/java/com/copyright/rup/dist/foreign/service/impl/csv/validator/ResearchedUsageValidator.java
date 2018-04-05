@@ -6,7 +6,6 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor;
 
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * The validator for {@link ResearchedUsage}.
@@ -33,7 +32,7 @@ public class ResearchedUsageValidator implements DistCsvProcessor.IValidator<Res
     @Override
     public boolean isValid(ResearchedUsage researchedUsage) {
         return usageService.isDetailIdExists(Objects.requireNonNull(researchedUsage).getDetailId(),
-            Optional.of(UsageStatusEnum.WORK_RESEARCH));
+            UsageStatusEnum.WORK_RESEARCH);
     }
 
     @Override

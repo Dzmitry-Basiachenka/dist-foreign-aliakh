@@ -34,7 +34,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -184,11 +183,11 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public int findCountByDetailIdAndStatus(Long detailId, Optional<UsageStatusEnum> statusOpt) {
+    public int findCountByDetailIdAndStatus(Long detailId, UsageStatusEnum statusEnum) {
         Map<String, Object> parameters = Maps.newHashMap();
         parameters.put("detailId", Objects.requireNonNull(detailId));
-        if (statusOpt.isPresent()) {
-            parameters.put(STATUS_KEY, statusOpt.get());
+        if (Objects.nonNull(statusEnum)) {
+            parameters.put(STATUS_KEY, statusEnum);
         }
         return selectOne("IUsageMapper.findCountByDetailIdAndStatus", parameters);
     }

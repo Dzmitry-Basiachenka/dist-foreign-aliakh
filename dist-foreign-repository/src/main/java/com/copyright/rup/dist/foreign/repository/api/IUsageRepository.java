@@ -16,7 +16,6 @@ import java.io.PipedOutputStream;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -156,11 +155,11 @@ public interface IUsageRepository {
     /**
      * Finds count of all usages by detail id and optional status.
      *
-     * @param detailId detail id of usage
-     * @param statusOpt optional status of usage
+     * @param detailId   detail id of usage
+     * @param statusEnum status of usage
      * @return count of usages
      */
-    int findCountByDetailIdAndStatus(Long detailId, Optional<UsageStatusEnum> statusOpt);
+    int findCountByDetailIdAndStatus(Long detailId, UsageStatusEnum statusEnum);
 
     /**
      * Gets list of {@link RightsholderTotalsHolder}s based on {@link com.copyright.rup.dist.foreign.domain.Scenario}
