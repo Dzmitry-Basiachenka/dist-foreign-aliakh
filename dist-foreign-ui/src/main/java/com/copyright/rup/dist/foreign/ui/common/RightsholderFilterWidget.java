@@ -34,21 +34,25 @@ public class RightsholderFilterWidget extends BaseItemsFilterWidget<Rightsholder
 
     private final String searchPrompt;
     private final String caption;
+    private final String rightsholderNotFoundString;
     private final Supplier<List<Rightsholder>> supplier;
     private final Set<Rightsholder> selectedItemsIds = Sets.newHashSet();
 
     /**
      * Controller.
      *
-     * @param caption      window caption
-     * @param searchPrompt search field prompt
-     * @param supplier     {@link Rightsholder}s supplier
+     * @param caption                    window caption
+     * @param searchPrompt               search field prompt
+     * @param rightsholderNotFoundString a string to be shown as righstholder name if the name is blank
+     * @param supplier                   {@link Rightsholder}s supplier
      */
-    public RightsholderFilterWidget(String caption, String searchPrompt, Supplier<List<Rightsholder>> supplier) {
+    public RightsholderFilterWidget(String caption, String searchPrompt, String rightsholderNotFoundString,
+                                    Supplier<List<Rightsholder>> supplier) {
         super(caption);
         this.caption = caption;
         this.supplier = supplier;
         this.searchPrompt = searchPrompt;
+        this.rightsholderNotFoundString = rightsholderNotFoundString;
     }
 
     @Override
@@ -69,11 +73,8 @@ public class RightsholderFilterWidget extends BaseItemsFilterWidget<Rightsholder
 
     @Override
     public String getBeanItemCaption(Rightsholder rightsholder) {
-        String rightsholderName = rightsholder.getName();
-        return String.format("%s - %s", rightsholder.getAccountNumber(),
-            StringUtils.isNotBlank(rightsholderName)
-                ? rightsholder.getName()
-                : ForeignUi.getMessage("message.error.rro_not_found"));
+        String rightsholderName = StringUtils.defaultIfBlank(rightsholder.getName(), rightsholderNotFoundString);
+        return String.format("%s - %s", rightsholder.getAccountNumber(), rightsholderName);
     }
 
     @Override

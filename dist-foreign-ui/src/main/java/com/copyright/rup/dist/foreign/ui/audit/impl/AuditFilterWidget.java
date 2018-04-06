@@ -117,8 +117,11 @@ public class AuditFilterWidget extends VerticalLayout implements IAuditFilterWid
     }
 
     private void initRightsholdersFilter() {
-        rightsholderFilterWidget = new RightsholderFilterWidget(ForeignUi.getMessage("label.rightsholders"),
-            ForeignUi.getMessage("prompt.rightsholder"), () -> controller.getRightsholders());
+        rightsholderFilterWidget = new RightsholderFilterWidget(
+            ForeignUi.getMessage("label.rightsholders"),
+            ForeignUi.getMessage("prompt.rightsholder"),
+            ForeignUi.getMessage("message.error.rh_not_found"),
+            () -> controller.getRightsholders());
         rightsholderFilterWidget.addFilterSaveListener((IFilterSaveListener<Rightsholder>) event -> {
             filter.setRhAccountNumbers(event.getSelectedItemsIds()
                 .stream()

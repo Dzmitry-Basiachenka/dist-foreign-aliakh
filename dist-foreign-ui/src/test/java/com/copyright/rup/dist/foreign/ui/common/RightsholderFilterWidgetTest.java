@@ -55,7 +55,9 @@ public class RightsholderFilterWidgetTest {
     public void setUp() {
         rightsholder = buildRightsholder();
         rightsholderFilterWidget =
-            new RightsholderFilterWidget("RROs", "Enter RRO Name/Account #", () -> Lists.newArrayList(rightsholder));
+            new RightsholderFilterWidget("Rightsholders", "Enter Rightsholder Name/Account #",
+                "<span class=\"filter-field-empty-name\">Rightsholder is absent in PRM</span>",
+                () -> Lists.newArrayList(rightsholder));
     }
 
     @Test
@@ -78,7 +80,7 @@ public class RightsholderFilterWidgetTest {
     @Test
     public void testGetBeanItemCaptionNullName() {
         rightsholder.setName(null);
-        assertEquals("12345678 - <span class=\"filter-field-empty-name\">RRO is absent in PRM</span>",
+        assertEquals("12345678 - <span class=\"filter-field-empty-name\">Rightsholder is absent in PRM</span>",
             rightsholderFilterWidget.getBeanItemCaption(rightsholder));
     }
 
@@ -97,14 +99,15 @@ public class RightsholderFilterWidgetTest {
         FilterWindow filterWindow = createMock(FilterWindow.class);
         mockStatic(Windows.class);
         Capture<ValueProvider<Rightsholder, List<String>>> providerCapture = new Capture<>();
-        Windows.showFilterWindow(eq("RROs filter"), same(rightsholderFilterWidget), capture(providerCapture));
+        Windows.showFilterWindow(eq("Rightsholders filter"), same(rightsholderFilterWidget),
+            capture(providerCapture));
         expectLastCall().andReturn(filterWindow).once();
         filterWindow.setSelectedItemsIds(new HashSet<>());
         expectLastCall().once();
         expect(filterWindow.getId()).andReturn("id").once();
         filterWindow.addStyleName("rightsholders-filter-window");
         expectLastCall().once();
-        filterWindow.setSearchPromptString("Enter RRO Name/Account #");
+        filterWindow.setSearchPromptString("Enter Rightsholder Name/Account #");
         expectLastCall().once();
         replay(filterWindow, Windows.class);
         rightsholderFilterWidget.showFilterWindow();

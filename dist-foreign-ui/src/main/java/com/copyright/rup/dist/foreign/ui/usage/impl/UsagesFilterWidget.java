@@ -135,6 +135,7 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
         rightsholderFilterWidget = new RightsholderFilterWidget(
             ForeignUi.getMessage("label.rros"),
             ForeignUi.getMessage("prompt.rro"),
+            ForeignUi.getMessage("message.error.rro_not_found"),
             () -> controller.getRros());
         rightsholderFilterWidget.addFilterSaveListener((IFilterSaveListener<Rightsholder>) saveEvent -> {
             usageFilter.setRhAccountNumbers(saveEvent.getSelectedItemsIds()
