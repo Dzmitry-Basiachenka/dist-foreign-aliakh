@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.PipedOutputStream;
 
@@ -22,6 +23,7 @@ import java.io.PipedOutputStream;
  * @author Nikita Levyankov
  */
 //TODO {dbaraukova} implement integration tests for this service.
+@Service
 public class ReportService implements IReportService {
     @Autowired
     private IUsageRepository usageRepository;
