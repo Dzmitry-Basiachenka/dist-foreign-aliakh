@@ -158,6 +158,7 @@ class UsageBatchUploadWindow extends Window {
             .withValidator(value -> StringUtils.endsWith(value, ".csv"),
                 ForeignUi.getMessage("error.upload_file.invalid_extension"))
             .bind(s -> s, (s, v) -> s = v).validate();
+        uploadField.addSucceededListener(event -> uploadBinder.validate());
         VaadinUtils.setMaxComponentsWidth(uploadField);
         VaadinUtils.addComponentStyle(uploadField, "usage-upload-component");
         return uploadField;

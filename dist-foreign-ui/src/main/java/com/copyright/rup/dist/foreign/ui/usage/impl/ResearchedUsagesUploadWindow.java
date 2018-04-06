@@ -123,6 +123,7 @@ class ResearchedUsagesUploadWindow extends Window {
             .withValidator(value -> StringUtils.endsWith(value, ".csv"),
                 ForeignUi.getMessage("error.upload_file.invalid_extension"))
             .bind(source -> source, (bean, fieldValue) -> bean = fieldValue).validate();
+        uploadField.addSucceededListener(event -> uploadBinder.validate());
         VaadinUtils.setMaxComponentsWidth(uploadField);
         VaadinUtils.addComponentStyle(uploadField, "researched-usages-upload-component");
         return uploadField;
