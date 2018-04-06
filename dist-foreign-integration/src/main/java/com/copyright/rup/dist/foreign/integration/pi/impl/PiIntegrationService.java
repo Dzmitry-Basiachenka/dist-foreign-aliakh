@@ -11,12 +11,8 @@ import com.copyright.rup.es.api.RupSearchResponse;
 import com.copyright.rup.es.api.domain.RupSearchHit;
 import com.copyright.rup.es.api.request.RupSearchRequest;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -30,15 +26,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
@@ -55,6 +47,7 @@ import javax.annotation.PostConstruct;
 @Service
 public class PiIntegrationService implements IPiIntegrationService {
 
+    private static final int EXPECTED_SEARCH_HITS_COUNT = 1;
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Value("$RUP{dist.foreign.integration.works.cluster}")
@@ -63,37 +56,22 @@ public class PiIntegrationService implements IPiIntegrationService {
     private String node;
     @Value("$RUP{dist.foreign.integration.works.pi.index}")
     private String piIndex;
-    @Value("$RUP{dist.foreign.integration.works.pi.max_parameters_size}")
-    private int maxParametersSize;
 
     private ObjectMapper mapper;
-
-    /**
-     * Normalizes IDNO by the following rules:
-     * 1. trims special characters on both ends of string
-     * 2. removes all dashes
-     * 3. makes all letters upper case.
-     *
-     * @param idno IDNO to be normalized
-     * @return normalized IDNO
-     */
-    public static String normalizeIdno(String idno) {
-        return StringUtils.upperCase(StringUtils.replace(StringUtils.trim(idno), "-", StringUtils.EMPTY));
-    }
+    private RupEsApi rupEsApi;
 
     @Override
-    public Map<String, Long> findWrWrkInstsByIdnos(Set<String> idnos) {
-        LOGGER.info("Search works by IDNOs. Started. IDNOsCount={}", idnos.size());
-        Set<String> normalized = idnos.stream().map(PiIntegrationService::normalizeIdno).collect(Collectors.toSet());
-        Map<String, Long> wrWrkInstMap = match("idno", normalized, Work::getIdnos);
-        LOGGER.info("Search works by IDNOs. Finished. IDNOsCount={}", idnos.size());
+    public Map<String, Long> findWrWrkInstsByIdnos(Map<String, String> idnoToTitleMap) {
+        LOGGER.info("Search works by IDNOs. Started. IDNOsCount={}", idnoToTitleMap.size());
+        Map<String, Long> wrWrkInstMap = matchByIdno(idnoToTitleMap);
+        LOGGER.info("Search works by IDNOs. Finished. IDNOsCount={}", idnoToTitleMap.size());
         return wrWrkInstMap;
     }
 
     @Override
     public Map<String, Long> findWrWrkInstsByTitles(Set<String> titles) {
         LOGGER.info("Search works by titles. Started. TitlesCount={}", titles.size());
-        Map<String, Long> wrWrkInstMap = match("title", titles, Work::getTitles);
+        Map<String, Long> wrWrkInstMap = matchByTitle(titles);
         LOGGER.info("Search works by titles. Finished. TitlesCount={}", titles.size());
         return wrWrkInstMap;
     }
@@ -102,7 +80,10 @@ public class PiIntegrationService implements IPiIntegrationService {
      * @return an instance of {@link RupEsApi}.
      */
     protected RupEsApi getRupEsApi() {
-        return RupEsApi.of(cluster, node);
+        if (null == rupEsApi) {
+            rupEsApi = RupEsApi.of(cluster, node);
+        }
+        return rupEsApi;
     }
 
     /**
@@ -114,88 +95,114 @@ public class PiIntegrationService implements IPiIntegrationService {
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
-    private Map<String, Long> match(String field, Set<String> searchValues, Function<Work, List<String>> workFunction) {
+    private Map<String, Long> matchByIdno(Map<String, String> idnoToTitleMap) {
         StopWatch stopWatch = new Slf4JStopWatch();
         Map<String, Long> result = new HashMap<>();
-        List<RupSearchHit> searchHits = new ArrayList<>();
-        Iterables.partition(searchValues, maxParametersSize).forEach(partition -> {
-            Set<String> subset = Sets.newHashSet(partition);
-            RupSearchResponse searchResponse = doSearch(field, subset);
-            if (Objects.nonNull(searchResponse)) {
-                if (RupResponseBase.Status.SUCCESS == searchResponse.getStatus()) {
-                    searchHits.addAll(searchResponse.getResults().getHits());
+        idnoToTitleMap.forEach((idno, title) -> {
+            RupSearchResponse searchMainResponse = doSearch("idno", idno);
+            if (Objects.nonNull(searchMainResponse)
+                && RupResponseBase.Status.SUCCESS == searchMainResponse.getStatus()) {
+                List<RupSearchHit> searchHits = searchMainResponse.getResults().getHits();
+                if (CollectionUtils.isNotEmpty(searchHits)) {
+                    if (EXPECTED_SEARCH_HITS_COUNT == searchHits.size()) {
+                        result.put(idno, getWrWrkInstFromSearchHit(searchHits, idno, StringUtils.EMPTY));
+                    } else {
+                        List<RupSearchHit> filteredByMainTitleHits = searchHits.stream()
+                            .filter(searchHit -> {
+                                List<Object> mainTitles = searchHit.getFields().get("mainTitle");
+                                return Objects.nonNull(mainTitles)
+                                    && CollectionUtils.isNotEmpty(mainTitles)
+                                    && Objects.equals(title, mainTitles.get(0).toString());
+                            }).collect(Collectors.toList());
+                        if (CollectionUtils.isEmpty(filteredByMainTitleHits)) {
+                            LOGGER.debug("Search works. Work not found by IDNO={}, mainTitle={}", idno, title);
+                        } else if (EXPECTED_SEARCH_HITS_COUNT == filteredByMainTitleHits.size()) {
+                            result.put(idno, getWrWrkInstFromSearchHit(filteredByMainTitleHits, idno, title));
+                        } else {
+                            LOGGER.debug("Search works by IDNOs. More than one match found by INDO={}, mainTitle={}",
+                                idno, title);
+                            filteredByMainTitleHits.forEach(
+                                rupSearchHit -> LOGGER.debug("Search hit={}", rupSearchHit.getSource()));
+                        }
+                    }
                 } else {
-                    throw new RupRuntimeException("Search works failed due to request did not succeeded");
+                    LOGGER.info("Search works. Work not found by IDNO={}, mainTitle={}", idno, StringUtils.EMPTY);
                 }
+            } else {
+                throw new RupRuntimeException("Search works failed due to request did not succeed");
             }
         });
-        stopWatch.lap("matchWorks.doSearch");
-        if (CollectionUtils.isNotEmpty(searchHits)) {
-            result.putAll(mapWorks(searchValues, searchHits, workFunction));
-        }
-        stopWatch.stop("matchWorks.handleResponse");
-        LOGGER.debug("Search works. SearchHitsCount={}, WorksCount={}", searchHits.size(), result.size());
+        stopWatch.stop("matchWorks.doSearch");
+        LOGGER.info("Search works. IDNOsCount={}, WorksFoundCount={}", idnoToTitleMap.size(), result.size());
         return result;
     }
 
-    private Map<String, Long> mapWorks(Set<String> searchValues,
-                                       List<RupSearchHit> hits,
-                                       Function<Work, List<String>> function) {
-        Set<String> duplicates = Sets.newHashSet();
-        Map<String, Long> wrWrkInstMap = Maps.newHashMap();
-        hits.forEach(rupSearchHit -> {
+    private Long getWrWrkInstFromSearchHit(List<RupSearchHit> searchHits, String idno, String title) {
+        Long wrWrkInst = null;
+        try {
+            wrWrkInst = mapper.readValue(searchHits.iterator().next().getSource(), Work.class).getWrWrkInst();
+            LOGGER.debug("Search works. WrWrkInst={} found by IDNO={}, mainTitle={}", wrWrkInst, idno, title);
+        } catch (IOException e) {
+            LOGGER.warn("Search works. Could not map results by IDNO={}, mainTitle={}. {}", idno, title,
+                e.getMessage());
+        }
+        return wrWrkInst;
+    }
+
+    private Map<String, Long> matchByTitle(Set<String> titles) {
+        StopWatch stopWatch = new Slf4JStopWatch();
+        Map<String, Long> result = new HashMap<>();
+        titles.forEach(title -> {
+            RupSearchResponse searchResponse = doSearch("mainTitle", title);
+            if (Objects.nonNull(searchResponse) && RupResponseBase.Status.SUCCESS == searchResponse.getStatus()) {
+                List<RupSearchHit> searchHits = searchResponse.getResults().getHits();
+                if (CollectionUtils.isNotEmpty(searchHits)) {
+                    Long wrWrkInst = getWrWrkInstByTitle(title, searchHits);
+                    if (Objects.nonNull(wrWrkInst)) {
+                        result.put(title, wrWrkInst);
+                        LOGGER.debug("Search works. WrWrkInst={} found by title={}", wrWrkInst, title);
+                    }
+                } else {
+                    LOGGER.info("Search works. Work not found by title={}", title);
+                }
+            } else {
+                throw new RupRuntimeException("Search works failed due to request did not succeed");
+            }
+        });
+        stopWatch.stop("matchWorks.doSearch");
+        LOGGER.info("Search works. TitlesCount={}, WorksFoundCount={}", titles.size(), result.size());
+        return result;
+    }
+
+    private Long getWrWrkInstByTitle(String title, List<RupSearchHit> hits) {
+        Long wrWrkInst = null;
+        if (EXPECTED_SEARCH_HITS_COUNT == hits.size()) {
+            RupSearchHit rupSearchHit = hits.iterator().next();
             if (Objects.nonNull(rupSearchHit)) {
                 try {
-                    LOGGER.trace("Search hit={}", rupSearchHit.getSource());
-                    Work work = readWork(rupSearchHit);
-                    function.apply(work).forEach(key -> {
-                        if (searchValues.contains(key)) {
-                            Long newValue = work.getWrWrkInst();
-                            Long oldValue = wrWrkInstMap.putIfAbsent(key, newValue);
-                            if (Objects.nonNull(oldValue) && !oldValue.equals(newValue)) {
-                                duplicates.add(key);
-                            }
-                        }
-                    });
+                    wrWrkInst = mapper.readValue(rupSearchHit.getSource(), Work.class).getWrWrkInst();
+                    LOGGER.debug("Search works. WrWrkInst={} found by title={}", title);
                 } catch (IOException e) {
                     LOGGER.warn("Search works. Could not map results.", e);
                 }
             }
-        });
-        if (CollectionUtils.isNotEmpty(duplicates)) {
-            LOGGER.debug("Search works. More than one match found for the following search values: {}",
-                duplicates.stream().collect(Collectors.joining(",")));
-            duplicates.forEach(wrWrkInstMap::remove);
-        }
-        return wrWrkInstMap;
-    }
-
-    private Work readWork(RupSearchHit rupSearchHit) throws IOException {
-        Work work = mapper.readValue(rupSearchHit.getSource(), Work.class);
-        if (Objects.isNull(work.getIdnos())) {
-            work.idnos = Collections.emptyList();
-            LOGGER.warn("Search works. IDNOs list is NULL. RupSearchHit={}", rupSearchHit);
         } else {
-            work.idnos = work.getIdnos().stream().map(PiIntegrationService::normalizeIdno).collect(Collectors.toList());
+            LOGGER.info("Search works by titles. More than one match found by title={}", title);
+            hits.forEach(rupSearchHit -> LOGGER.debug("Search hit={}", rupSearchHit.getSource()));
         }
-        if (Objects.isNull(work.getTitles())) {
-            work.titles = Collections.emptyList();
-            LOGGER.warn("Search works. Titles list is NULL. RupSearchHit={}", rupSearchHit);
-        }
-        return work;
+        return wrWrkInst;
     }
 
-    private RupSearchResponse doSearch(String field, Set<String> values) {
+    private RupSearchResponse doSearch(String field, String value) {
         RupSearchResponse searchResponse = null;
-        String queryString = buildQueryString(field, values);
+        String queryString = buildQueryString(field, value);
         if (StringUtils.isNotEmpty(queryString)) {
-            LOGGER.debug("Search works. Query={}", queryString);
             RupSearchRequest request = RupSearchRequest.of(piIndex);
             RupQueryStringQueryBuilder builder = RupQueryStringQueryBuilder.of(queryString);
             request.setQueryBuilder(builder);
             request.setTypes("work");
             request.setSearchType(RupSearchRequest.RupSearchType.DFS_QUERY_AND_FETCH);
-            request.setFields("wrWrkInst", "idno", "title");
+            request.setFields("idno", "mainTitle");
             request.setFetchSource(true);
             try {
                 searchResponse = getRupEsApi().search(request);
@@ -206,21 +213,14 @@ public class PiIntegrationService implements IPiIntegrationService {
         return searchResponse;
     }
 
-    private String buildQueryString(String field, Set<String> values) {
+    private String buildQueryString(String field, String value) {
         StringBuilder builder = new StringBuilder();
-        append(builder, field, values);
+        append(builder, field, value);
         return builder.toString();
     }
 
-    private void append(StringBuilder builder, String field, Set<String> values) {
-        if (CollectionUtils.isNotEmpty(values)) {
-            Iterator<String> iterator = values.iterator();
-            appendValue(builder, field, iterator.next());
-            while (iterator.hasNext()) {
-                builder.append(" OR ");
-                appendValue(builder, field, iterator.next());
-            }
-        }
+    private void append(StringBuilder builder, String field, String value) {
+        appendValue(builder, field, value);
     }
 
     private void appendValue(StringBuilder builder, String field, String value) {
@@ -233,10 +233,6 @@ public class PiIntegrationService implements IPiIntegrationService {
     private static class Work {
 
         private Long wrWrkInst;
-        @JsonProperty("idno")
-        private List<String> idnos;
-        @JsonProperty("title")
-        private List<String> titles;
 
         @Override
         public boolean equals(Object o) {
@@ -249,8 +245,6 @@ public class PiIntegrationService implements IPiIntegrationService {
             Work that = (Work) o;
             return new EqualsBuilder()
                 .append(this.wrWrkInst, that.wrWrkInst)
-                .append(this.idnos, that.idnos)
-                .append(this.titles, that.titles)
                 .isEquals();
         }
 
@@ -258,8 +252,6 @@ public class PiIntegrationService implements IPiIntegrationService {
         public int hashCode() {
             return new HashCodeBuilder()
                 .append(wrWrkInst)
-                .append(idnos)
-                .append(titles)
                 .toHashCode();
         }
 
@@ -269,14 +261,6 @@ public class PiIntegrationService implements IPiIntegrationService {
 
         private Long getWrWrkInst() {
             return wrWrkInst;
-        }
-
-        private List<String> getIdnos() {
-            return idnos;
-        }
-
-        private List<String> getTitles() {
-            return titles;
         }
     }
 }

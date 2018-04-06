@@ -1,12 +1,16 @@
 package com.copyright.rup.dist.foreign.service.impl.matching;
 
+import com.copyright.rup.common.logging.RupLogUtils;
+import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.IWorkMatchingService;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.perf4j.StopWatch;
 import org.perf4j.slf4j.Slf4JStopWatch;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -29,6 +33,8 @@ import java.util.stream.Collectors;
 @Component
 public class WorksMatchingJob {
 
+    private static final Logger LOGGER = RupLogUtils.getLogger();
+
     @Autowired
     private IUsageService usageService;
     @Autowired
@@ -43,6 +49,7 @@ public class WorksMatchingJob {
         List<Usage> usages = usageService.getUsagesWithBlankWrWrkInst();
         stopWatch.lap("usage.matchWorks_1_getUsagesWithBlankWrWrkInst");
         if (CollectionUtils.isNotEmpty(usages)) {
+            LOGGER.info("Search works. Started. UsagesCount={}", LogUtils.size(usages));
             Map<UsageGroupEnum, List<Usage>> usageGroups = usages.stream()
                 .collect(Collectors.groupingBy(UsageGroupEnum.getGroupingFunction()));
             List<Usage> usagesByStandardNumber = usageGroups.get(UsageGroupEnum.STANDARD_NUMBER);
@@ -60,6 +67,11 @@ public class WorksMatchingJob {
                 matchingService.updateStatusForUsagesWithNoStandardNumberAndTitle(usagesWithNoStandardNumberAndTitle);
                 stopWatch.lap("usage.matchWorks_4_updateStatusForUsagesWithNoStandardNumberAndTitle");
             }
+            List<Usage> usagesWithWork = usages.stream()
+                .filter(usage -> UsageStatusEnum.WORK_FOUND == usage.getStatus())
+                .collect(Collectors.toList());
+            LOGGER.info("Search works. Finished. UsagesCount={}, UsagesWithWorksCount={}", LogUtils.size(usages),
+                LogUtils.size(usagesWithWork));
         }
         stopWatch.stop("usage.matchWorks_findWorksAndUpdateStatuses");
     }

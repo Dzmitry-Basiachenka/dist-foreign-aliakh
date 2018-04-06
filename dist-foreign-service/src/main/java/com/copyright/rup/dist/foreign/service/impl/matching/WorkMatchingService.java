@@ -6,7 +6,6 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
-import com.copyright.rup.dist.foreign.integration.pi.impl.PiIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IWorkMatchingService;
@@ -24,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -122,12 +122,11 @@ public class WorkMatchingService implements IWorkMatchingService {
     }
 
     private List<Usage> doMatchByIdno(List<Usage> usages) {
-        Set<String> idnos = usages.stream()
-            .map(Usage::getStandardNumber)
-            .collect(Collectors.toSet());
-        return CollectionUtils.isNotEmpty(idnos)
-            ? computeResult(usages, piIntegrationService.findWrWrkInstsByIdnos(idnos),
-            usage -> PiIntegrationService.normalizeIdno(usage.getStandardNumber()))
+        Map<String, String> idnoToTitleMap = new HashMap<>();
+        usages.forEach(usage -> idnoToTitleMap.put(usage.getStandardNumber(), usage.getWorkTitle()));
+        return MapUtils.isNotEmpty(idnoToTitleMap)
+            ? computeResult(usages, piIntegrationService.findWrWrkInstsByIdnos(idnoToTitleMap),
+            Usage::getStandardNumber)
             : Collections.emptyList();
     }
 

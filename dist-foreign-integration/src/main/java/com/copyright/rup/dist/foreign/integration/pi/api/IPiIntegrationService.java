@@ -15,16 +15,16 @@ import java.util.Set;
 public interface IPiIntegrationService {
 
     /**
-     * Finds Wr Wrk Insts for given set of IDNOs.
-     * If work for particular IDNO is found and they uniquely corresponds to each other, then they will be
+     * Finds Wr Wrk Insts for given map of IDNOs and titles.
+     * If work for particular IDNO and title is found and they uniquely corresponds to each other, then they will be
      * returned in resulting map.
-     * If work for particular IDNO is not found or multiple IDNOs correspond to one Wr Wrk Inst -
+     * If work for particular IDNO and title is not found or multiple IDNOs correspond to one Wr Wrk Inst -
      * resulting map will not contain mapping for such IDNOs.
      *
-     * @param idnos set of IDNOs to search works by
+     * @param idnoToTitleMap map of IDNOs to title to search works by
      * @return map with IDNOs as keys and Wr Wrk Insts as values
      */
-    Map<String, Long> findWrWrkInstsByIdnos(Set<String> idnos);
+    Map<String, Long> findWrWrkInstsByIdnos(Map<String, String> idnoToTitleMap);
 
     /**
      * Finds Wr Wrk Insts for given set of titles.

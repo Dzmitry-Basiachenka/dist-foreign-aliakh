@@ -14,7 +14,6 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
-import com.copyright.rup.dist.foreign.integration.pi.impl.PiIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 
@@ -22,6 +21,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -84,12 +84,11 @@ public class WorkMatchingServiceTest {
         String standardNumber1 = "978-0-918062-08-6";
         String standardNumber2 = "0-918062-08-X";
         List<Usage> usages = Lists.newArrayList(
-            buildUsage(standardNumber1, null),
-            buildUsage(standardNumber2, null));
-        Map<String, Long> resultMap = ImmutableMap.of(
-            PiIntegrationService.normalizeIdno(standardNumber1), 112930820L,
-            PiIntegrationService.normalizeIdno(standardNumber2), 155941698L);
-        expect(piIntegrationService.findWrWrkInstsByIdnos(Sets.newHashSet(standardNumber1, standardNumber2)))
+            buildUsage(standardNumber1, StringUtils.EMPTY),
+            buildUsage(standardNumber2, StringUtils.EMPTY));
+        Map<String, Long> resultMap = ImmutableMap.of(standardNumber1, 112930820L, standardNumber2, 155941698L);
+        expect(piIntegrationService.findWrWrkInstsByIdnos(
+            ImmutableMap.of(standardNumber1, StringUtils.EMPTY, standardNumber2, StringUtils.EMPTY)))
             .andReturn(resultMap).once();
         usageRepository.update(anyObject());
         expectLastCall().times(2);
@@ -99,8 +98,7 @@ public class WorkMatchingServiceTest {
         List<Usage> result = workMatchingService.matchByIdno(usages);
         result.forEach(usage -> {
             assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
-            assertEquals(resultMap.get(PiIntegrationService.normalizeIdno(usage.getStandardNumber())),
-                usage.getWrWrkInst());
+            assertEquals(resultMap.get(usage.getStandardNumber()), usage.getWrWrkInst());
         });
         verify(piIntegrationService, usageRepository, auditService);
     }
