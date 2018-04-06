@@ -177,7 +177,7 @@ public class UsageBatchUploadWindowTest {
         expect(processor.process(anyObject())).andReturn(processingResult).once();
         expect(usagesController.loadUsageBatch(buildUsageBatch(rro), processingResult.get())).andReturn(1).once();
         expect(uploadField.getStreamToUploadedFile()).andReturn(createMock(ByteArrayOutputStream.class)).once();
-        Windows.showNotificationWindow("Upload completed: 1 records were stored successfully");
+        Windows.showNotificationWindow("Upload completed: 1 record(s) were stored successfully");
         expectLastCall().once();
         replay(window, usagesController, Windows.class, processor, uploadField);
         window.onUploadClicked();
