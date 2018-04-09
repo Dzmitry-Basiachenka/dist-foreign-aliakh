@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.repository.api;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 
 import java.util.List;
 
@@ -69,6 +70,14 @@ public interface IScenarioRepository {
     void updateStatus(Scenario scenario);
 
     /**
+     * Updates scenarios status by provided ids.
+     *
+     * @param scenarioIds list of scenarios ids
+     * @param status      {@link ScenarioStatusEnum} instance
+     */
+    void updateStatus(List<String> scenarioIds, ScenarioStatusEnum status);
+
+    /**
      * Finds all source RROs belonging to the {@link Scenario} with given id.
      *
      * @param scenarioId {@link Scenario} id
@@ -103,4 +112,12 @@ public interface IScenarioRepository {
      * @return list of {@link RightsholderPayeePair}s
      */
     List<RightsholderPayeePair> findRightsholdersByScenarioIdAndSourceRro(String scenarioId, Long rroAccountNumber);
+
+    /**
+     * Finds scenarios ids in {@link ScenarioStatusEnum#SENT_TO_LM} containing only usages
+     * in {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ARCHIVED} status.
+     *
+     * @return list of found scenarios ids
+     */
+    List<String> findFullPaidIds();
 }

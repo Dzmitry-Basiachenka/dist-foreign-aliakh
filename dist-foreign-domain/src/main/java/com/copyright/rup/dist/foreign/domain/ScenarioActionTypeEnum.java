@@ -31,4 +31,8 @@ public enum ScenarioActionTypeEnum {
      * Action type for sending {@link Scenario} to LM.
      */
     SENT_TO_LM,
+    /**
+     * Action type for archive {@link Scenario}.
+     */
+    ARCHIVED
 }

@@ -78,6 +78,15 @@
         where df_scenario_uid = #{id}
     </update>
 
+    <!--TODO {dbaraukova} analyze is it possible to combine with query above-->
+    <update id="updateStatusById" parameterType="map">
+        update ${schema}.df_scenario
+        set
+            status_ind = #{status},
+            <include refid="StoredEntityMapper.update"/>
+        where df_scenario_uid = #{scenarioId}
+    </update>
+
     <select id="findCountByName" parameterType="string" resultType="int">
         select count(name)
         from ${schema}.df_scenario
@@ -172,5 +181,20 @@
         left join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
         where u.df_scenario_uid = #{scenarioId} and b.rro_account_number = #{rroAccountNumber}
         order by rh_name asc
+    </select>
+
+    <select id="findFullPaidIds" parameterType="map" resultType="string">
+        select df_scenario_uid
+        from ${schema}.df_scenario
+        where status_ind = #{scenarioStatus}
+            and df_scenario_uid in
+                (select ua.df_scenario_uid
+                 from ${schema}.df_usage_archive ua
+                 where ua.status_ind = #{usageStatus}
+                 group by ua.df_scenario_uid
+                 having count(df_usage_archive_uid) =
+                     (select count(u.df_usage_archive_uid)
+                      from ${schema}.df_usage_archive u
+                      where u.df_scenario_uid = ua.df_scenario_uid))
     </select>
 </mapper>
