@@ -6,9 +6,14 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.dist.common.test.JsonMatcher;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
+import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
+import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
+import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 
@@ -48,6 +53,10 @@ import java.util.List;
 public class SendToCrmIntegrationTest {
 
     @Autowired
+    private IScenarioService scenarioService;
+    @Autowired
+    private IScenarioAuditService scenarioAuditService;
+    @Autowired
     private IUsageService usageService;
     @Autowired
     private IUsageAuditService usageAuditService;
@@ -72,7 +81,7 @@ public class SendToCrmIntegrationTest {
         verifyUsages("0d1829eb-de35-4f93-bb36-2a7435263051", UsageStatusEnum.ARCHIVED);
         verifyUsages("9e356e22-57b3-49b3-af99-155093a9dc0a", UsageStatusEnum.PAID);
         verifyUsages("feefdfd2-71fe-4c0a-a701-9dacffa9bccb", UsageStatusEnum.LOCKED);
-        //TODO {dbaraukova} add veirifcation for scenario
+        verifyScenarios();
         mockServer.verify();
     }
 
@@ -91,6 +100,22 @@ public class SendToCrmIntegrationTest {
             assertEquals(1, auditItems.size());
             assertEquals("Usage was sent to CRM", auditItems.get(0).getActionReason());
         }
+    }
+
+    private void verifyScenarios() {
+        List<Scenario> scenarios = scenarioService.getScenarios();
+        assertTrue(CollectionUtils.isNotEmpty(scenarios));
+        assertEquals(2, scenarios.size());
+        Scenario scenario = scenarios.get(0);
+        assertEquals("cb7e3237-50c3-46a5-938e-46afd8c1e0bf", scenario.getId());
+        assertEquals(ScenarioStatusEnum.ARCHIVED, scenario.getStatus());
+        List<ScenarioAuditItem> auditItems = scenarioAuditService.getActions(scenario.getId());
+        assertTrue(CollectionUtils.isNotEmpty(auditItems));
+        assertEquals(1, auditItems.size());
+        assertEquals("Usages from scenario were sent to CRM", auditItems.get(0).getActionReason());
+        scenario = scenarios.get(1);
+        assertEquals("221c5a30-1937-4bf6-977f-93741f9b20f1", scenario.getId());
+        assertEquals(ScenarioStatusEnum.SENT_TO_LM, scenario.getStatus());
     }
 
     private String formatJson(Object objectToFormat) throws IOException {

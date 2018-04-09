@@ -25,6 +25,7 @@ import com.copyright.rup.dist.foreign.integration.crm.api.ICrmIntegrationService
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
+import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
@@ -43,6 +44,7 @@ import org.perf4j.slf4j.Slf4JStopWatch;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,6 +73,10 @@ public class UsageService implements IUsageService {
         "UsageBatchName={}, FundPoolAmount={}, TotalAmount={}, ConversionRate={}";
     private static final String UPDATE_PAID_INFO_FAILED_LOG_MESSAGE = "Update paid information. Not found usages. " +
         "UsagesCount={}, UpdatedCount={}, NotFoundDetailIds={}";
+    private static final String SEND_TO_CRM_FINISHED_INFO_LOG_MESSAGE = "Send to CRM. Finished. PaidUsagesCount={}, " +
+        "ArchivedUsagesCount={}, NotReportedUsagesCount={}, ArchivedScenariosCount={}";
+    private static final String SEND_TO_CRM_FINISHED_DEBUG_LOG_MESSAGE = "Send to CRM. Finished. PaidUsagesCount={}, " +
+        "ArchivedUsagesCount={}, ArchivedScenariosCount={}, NotReportedDetailIds={}";
     private static final Long CLA_PAYEE = 2000017000L;
     private static final Logger LOGGER = RupLogUtils.getLogger();
     @Value("$RUP{dist.foreign.service_fee.cla_payee}")
@@ -81,6 +87,8 @@ public class UsageService implements IUsageService {
     private IUsageArchiveRepository usageArchiveRepository;
     @Autowired
     private IUsageAuditService usageAuditService;
+    @Autowired
+    private IScenarioService scenarioService;
     @Autowired
     private IPrmIntegrationService prmIntegrationService;
     @Autowired
@@ -372,7 +380,7 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    //TODO {dbaraukova} add @Scheduled(cron = "$RUP{dist.foreign.service.schedule.sendToCrm}
+    @Scheduled(cron = "$RUP{dist.foreign.service.schedule.send_to_crm}")
     public void sendToCrm() {
         List<String> paidUsagesIds = usageArchiveRepository.findPaidIds();
         LOGGER.info("Send to CRM. Started. PaidUsagesCount={}", LogUtils.size(paidUsagesIds));
@@ -407,11 +415,11 @@ public class UsageService implements IUsageService {
                     }
                 }
             }
-            LOGGER.info("Send to CRM. Finished. PaidUsagesCount={}, ArchivedUsagesCount={}, NotReportedUsagesCount={}",
-                LogUtils.size(paidUsagesIds), archivedUsagesCount, invalidDetailIds.size());
-            LOGGER.trace("Send to CRM. Finished. PaidUsagesCount={}, ArchivedUsagesCount={}, NotReportedDetailIds={}",
-                LogUtils.size(paidUsagesIds), archivedUsagesCount, invalidDetailIds);
-            //TODO {dbaraukova} change scenario status to ARCHIVED if all usages were sent to CRM
+            int archivedScenariosCount = scenarioService.archiveScenarios();
+            LOGGER.info(SEND_TO_CRM_FINISHED_INFO_LOG_MESSAGE, LogUtils.size(paidUsagesIds), archivedUsagesCount,
+                invalidDetailIds.size(), archivedScenariosCount);
+            LOGGER.trace(SEND_TO_CRM_FINISHED_DEBUG_LOG_MESSAGE, LogUtils.size(paidUsagesIds), archivedUsagesCount,
+                archivedScenariosCount, invalidDetailIds);
         } else {
             LOGGER.info("Send to CRM. Skipped. PaidUsagesCount={}, Reason=There are no usages to report",
                 LogUtils.size(paidUsagesIds));

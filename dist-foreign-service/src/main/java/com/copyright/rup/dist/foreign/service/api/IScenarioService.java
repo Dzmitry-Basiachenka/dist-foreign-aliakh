@@ -148,4 +148,12 @@ public interface IScenarioService {
      * @param discrepancies set of {@link RightsholderDiscrepancy}ies
      */
     void approveOwnershipChanges(Scenario scenario, Set<RightsholderDiscrepancy> discrepancies);
+
+    /**
+     * Updates scenario status to {@link com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum#ARCHIVED} if
+     * all usages are in {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ARCHIVED} status.
+     *
+     * @return count of archieved scenarios
+     */
+    int archiveScenarios();
 }

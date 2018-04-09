@@ -21,6 +21,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,11 +77,11 @@ public class ScenarioRepositoryIntegrationTest {
 
     @Test
     public void testFindAll() {
-        assertEquals(6, scenarioRepository.findAll().size());
+        assertEquals(9, scenarioRepository.findAll().size());
         String scenarioId = RupPersistUtils.generateUuid();
         scenarioRepository.insert(buildScenario(scenarioId, SCENARIO_NAME));
         List<Scenario> scenarios = scenarioRepository.findAll();
-        assertEquals(7, scenarios.size());
+        assertEquals(10, scenarios.size());
         verifyScenario(scenarios.get(0), scenarioId, SCENARIO_NAME, DESCRIPTION, ScenarioStatusEnum.IN_PROGRESS);
         verifyScenario(scenarios.get(1), "095f3df4-c8a7-4dba-9a8f-7dce0b61c40a", "Scenario with excluded usages",
             "The description of scenario 6", ScenarioStatusEnum.IN_PROGRESS);
@@ -94,6 +95,12 @@ public class ScenarioRepositoryIntegrationTest {
             "The description of scenario 5", ScenarioStatusEnum.SENT_TO_LM);
         verifyScenario(scenarios.get(6), "3210b236-1239-4a60-9fab-888b84199321", "Scenario name 3",
             "The description of scenario 3", ScenarioStatusEnum.IN_PROGRESS);
+        verifyScenario(scenarios.get(7), "005a33fc-26c5-4e0d-afd3-1d581b62ec70", "Partially Paid Scenario",
+            "Not all usages are paid", ScenarioStatusEnum.SENT_TO_LM);
+        verifyScenario(scenarios.get(8), "a9ee7491-d166-47cd-b36f-fe80ee7450f1", "Fully Paid Scenario",
+            "All usages are paid and reported to CRM", ScenarioStatusEnum.SENT_TO_LM);
+        verifyScenario(scenarios.get(9), "a386bd74-c112-4b19-b9b7-c5e4f18c7fcd", "Archived Scenario",
+            "Scenario already archived", ScenarioStatusEnum.ARCHIVED);
     }
 
     @Test
@@ -229,6 +236,14 @@ public class ScenarioRepositoryIntegrationTest {
         assertEquals(usage2.getPayee(), pair2.getPayee());
         assertEquals(usage3.getRightsholder(), pair2.getRightsholder());
         assertEquals(usage3.getPayee(), pair2.getPayee());
+    }
+
+    @Test
+    public void testFindFullPaidIds() {
+        List<String> scenariosIds = scenarioRepository.findFullPaidIds();
+        assertTrue(CollectionUtils.isNotEmpty(scenariosIds));
+        assertEquals(1, scenariosIds.size());
+        assertEquals("a9ee7491-d166-47cd-b36f-fe80ee7450f1", scenariosIds.get(0));
     }
 
     private UsageBatch buildBatch(Long rroAccountNumber) {

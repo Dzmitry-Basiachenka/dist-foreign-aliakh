@@ -257,6 +257,24 @@ public class ScenarioService implements IScenarioService {
             ForeignLogUtils.scenario(scenario), LogUtils.size(discrepancies));
     }
 
+    @Override
+    @Transactional
+    @Profiled(tag = "service.ScenarioService.archiveScenarios")
+    public int archiveScenarios() {
+        LOGGER.info("Archive scenarios. Started.");
+        List<String> paidIds = scenarioRepository.findFullPaidIds();
+        int archivedCount = paidIds.size();
+        if (CollectionUtils.isNotEmpty(paidIds)) {
+            scenarioRepository.updateStatus(paidIds, ScenarioStatusEnum.ARCHIVED);
+            paidIds.forEach(id -> scenarioAuditService.logAction(id, ScenarioActionTypeEnum.ARCHIVED,
+                "Usages from scenario were sent to CRM"));
+            LOGGER.info("Archive scenarios. Finished. ArchivedCount={}", archivedCount);
+        } else {
+            LOGGER.info("Archive scenarios. Skipped. Reason=There are no scenarios to archive");
+        }
+        return archivedCount;
+    }
+
     private Set<RightsholderDiscrepancy> getDiscrepanciesForNewRightsholder(List<Usage> usages, Long newAccountNumber,
                                                                             Map<Long, Rightsholder> rightsholdersMap) {
         Set<RightsholderDiscrepancy> rightsholderDiscrepancies = Sets.newHashSet();

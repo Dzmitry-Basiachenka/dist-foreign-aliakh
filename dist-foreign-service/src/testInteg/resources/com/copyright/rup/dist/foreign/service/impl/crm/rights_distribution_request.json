@@ -53,6 +53,32 @@
         "licenseeAccountNumber": "1000005413",
         "createUser": "FDA Distribution",
         "status": "D - Distributed"
+      },
+      {
+        "product": "FAS",
+        "rorAccountNumber": "1000002859",
+        "payeeAccountNumber": "1000002859",
+        "royaltyAmount": 80.0000000000,
+        "currency": "USD",
+        "licenseCreateDate": "03-11-2016T12:00:00 AM",
+        "serviceFeeAmount": 420.0000000000,
+        "wrWrkInst": "243904752",
+        "publicationName": "100 ROAD MOVIES",
+        "author": "Philippe de Mézières",
+        "chapterArticleTitle": "DIN EN 779:2012",
+        "omOrderDetailNumber": "5423214544",
+        "totalAmount": 500.0000000000,
+        "periodEndDate": "03/11/2016",
+        "publicationDate": "11/03/2016",
+        "numberOfCopies": 100,
+        "adjustmentFlag": false,
+        "passThroughFlag": true,
+        "market": "Doc Del",
+        "marketPeriodFrom": 2013,
+        "marketPeriodTo": 2016,
+        "licenseeAccountNumber": "1000005413",
+        "createUser": "FDA Distribution",
+        "status": "D - Distributed"
       }
     ]
   }

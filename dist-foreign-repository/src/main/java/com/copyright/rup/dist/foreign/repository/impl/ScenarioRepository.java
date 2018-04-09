@@ -4,9 +4,12 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
 
 import com.google.common.collect.Maps;
@@ -85,11 +88,30 @@ public class ScenarioRepository extends BaseRepository implements IScenarioRepos
     }
 
     @Override
+    public void updateStatus(List<String> scenarioIds, ScenarioStatusEnum status) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
+        params.put("status", Objects.requireNonNull(status));
+        params.put("updateUser", StoredEntity.DEFAULT_USER);
+        scenarioIds.forEach(scenarioId -> {
+            params.put("scenarioId", scenarioId);
+            update("IScenarioMapper.updateStatusById", params);
+        });
+    }
+
+    @Override
     public List<RightsholderPayeePair> findRightsholdersByScenarioIdAndSourceRro(String scenarioId,
                                                                                  Long rroAccountNumber) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
         params.put("scenarioId", Objects.requireNonNull(scenarioId));
         params.put("rroAccountNumber", Objects.requireNonNull(rroAccountNumber));
         return selectList("IScenarioMapper.findRightsholdersByScenarioIdAndSourceRro", params);
+    }
+
+    @Override
+    public List<String> findFullPaidIds() {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
+        params.put("usageStatus", UsageStatusEnum.ARCHIVED);
+        params.put("scenarioStatus", ScenarioStatusEnum.SENT_TO_LM);
+        return selectList("IScenarioMapper.findFullPaidIds", params);
     }
 }
