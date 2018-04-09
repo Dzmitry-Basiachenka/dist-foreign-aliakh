@@ -15,16 +15,15 @@ import com.copyright.rup.es.api.domain.RupSearchHit;
 import com.copyright.rup.es.api.domain.RupSearchResults;
 import com.copyright.rup.es.api.request.RupSearchRequest;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
-import org.powermock.reflect.Whitebox;
 
-import java.util.List;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Verifies {@link PiIntegrationService}.
@@ -54,7 +53,6 @@ public class PiIntegrationServiceTest {
     public void setUp() {
         piIntegrationService = new PiIntegrationServiceMock();
         piIntegrationService.init();
-        Whitebox.setInternalState(piIntegrationService, "maxParametersSize", 5);
         rupEsApi = piIntegrationService.getRupEsApi();
         searchHit1 = createMock(RupSearchHit.class);
         searchHit2 = createMock(RupSearchHit.class);
@@ -73,15 +71,21 @@ public class PiIntegrationServiceTest {
         expectGetSearchResponse();
         replay(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3, searchHit4, searchHit5,
             searchHit6, searchHit7);
-        Map<String, Long> result = piIntegrationService.findWrWrkInstsByIdnos(Sets.newHashSet("0-271-01750-3",
-            "978-0-271-01751-8", " etocr-N06658249-8 ", "10.1353/PGN.1999.0081", "1140-9126", "978-0-08-027365-5",
-            "1633-1370"));
+        Map<String, String> idnoToTitleMap = new LinkedHashMap<>();
+        idnoToTitleMap.put("978-0-271-01751-8", null);
+        idnoToTitleMap.put("0-271-01750-3", null);
+        idnoToTitleMap.put(" etocr-N06658249-8 ", null);
+        idnoToTitleMap.put("10.1353/PGN.1999.0081", null);
+        idnoToTitleMap.put("1140-9126", null);
+        idnoToTitleMap.put("978-0-08-027365-5", null);
+        idnoToTitleMap.put("1633-1370", null);
+        Map<String, Long> result = piIntegrationService.findWrWrkInstsByIdnos(idnoToTitleMap);
         assertEquals(5, result.size());
-        assertEquals(123059057L, result.get("0271017503"), 0);
-        assertEquals(123059058L, result.get("9780271017518"), 0);
-        assertEquals(421802499L, result.get("ETOCRN066582498"), 0);
-        assertEquals(345993258L, result.get("10.1353/PGN.1999.0081"), 0);
-        assertEquals(156427025L, result.get("11409126"), 0);
+        assertEquals(123059057L, result.get("978-0-271-01751-8"), 0);
+        assertEquals(123059058L, result.get("0-271-01750-3"), 0);
+        assertEquals(156427025L, result.get("1140-9126"), 0);
+        assertEquals(112942199L, result.get("978-0-08-027365-5"), 0);
+        assertEquals(113747840L, result.get("1633-1370"), 0);
         verify(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3, searchHit4, searchHit5,
             searchHit6, searchHit7);
     }
@@ -91,48 +95,43 @@ public class PiIntegrationServiceTest {
         expectGetSearchResponse();
         replay(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3, searchHit4, searchHit5,
             searchHit6, searchHit7);
-        Map<String, Long> result = piIntegrationService.findWrWrkInstsByTitles(Sets.newHashSet(
-            "Forbidden rites",
-            "Forbidden rites : a necromancer's manual of the fifteenth century",
-            "Kieckhefer, Richard, Forbidden Rites: A Necromancer's Manual of the Fifteenth Century",
-            "Forbidden Rites: A Necromancer's Manual of the Fifteenth Century (review)",
-            "Annuaire de la communication en Rhône-Alpes",
-            "Ocular Tissue Culture",
-            "Ocular tissue culture",
-            "Lieux du livre en Rhône-Alpes"));
+        Set<String> titles = new LinkedHashSet<>();
+        titles.add("Forbidden rites");
+        titles.add("Forbidden rites : a necromancer's manual of the fifteenth century");
+        titles.add("Kieckhefer, Richard, Forbidden Rites: A Necromancer's Manual of the Fifteenth Century");
+        titles.add("Forbidden Rites: A Necromancer's Manual of the Fifteenth Century (review)");
+        titles.add("Annuaire de la communication en Rhône-Alpes");
+        titles.add("Ocular Tissue Culture");
+        titles.add("Lieux du livre en Rhône-Alpes");
+        Map<String, Long> result = piIntegrationService.findWrWrkInstsByTitles(titles);
         assertEquals(5, result.size());
-        assertEquals(421802499L,
-            result.get("Kieckhefer, Richard, Forbidden Rites: A Necromancer's Manual of the Fifteenth Century"), 0);
-        assertEquals(345993258L,
-            result.get("Forbidden Rites: A Necromancer's Manual of the Fifteenth Century (review)"), 0);
+        assertEquals(123059057L, result.get("Forbidden rites"), 0);
+        assertEquals(123059058L,
+            result.get("Forbidden rites : a necromancer's manual of the fifteenth century"), 0);
         assertEquals(156427025L, result.get("Annuaire de la communication en Rhône-Alpes"), 0);
         assertEquals(112942199L, result.get("Ocular Tissue Culture"), 0);
-        assertEquals(113747840L, result.get("Ocular tissue culture"), 0);
+        assertEquals(113747840L, result.get("Lieux du livre en Rhône-Alpes"), 0);
         verify(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3, searchHit4, searchHit5,
             searchHit6, searchHit7);
     }
 
     private void expectGetSearchResponse() {
-        expect(searchResponse.getStatus()).andReturn(RupResponseBase.Status.SUCCESS).times(2);
-        expect(searchResponse.getResults()).andReturn(searchResults).times(2);
-        List<RupSearchHit> searchHits1 = Lists.newArrayList(searchHit1, searchHit2, searchHit3, searchHit4, searchHit5);
-        List<RupSearchHit> searchHits2 = Lists.newArrayList(searchHit6, searchHit7);
-        expect(searchResults.getHits()).andReturn(searchHits1).once();
-        expect(searchResults.getHits()).andReturn(searchHits2).once();
-        expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).times(2);
+        expect(searchResponse.getStatus()).andReturn(RupResponseBase.Status.SUCCESS).times(7);
+        expect(searchResponse.getResults()).andReturn(searchResults).times(7);
+        expect(searchResults.getHits()).andReturn(Collections.singletonList(searchHit1)).once();
+        expect(searchResults.getHits()).andReturn(Collections.singletonList(searchHit2)).once();
+        expect(searchResults.getHits()).andReturn(Collections.emptyList()).once();
+        expect(searchResults.getHits()).andReturn(Collections.emptyList()).once();
+        expect(searchResults.getHits()).andReturn(Collections.singletonList(searchHit5)).once();
+        expect(searchResults.getHits()).andReturn(Collections.singletonList(searchHit6)).once();
+        expect(searchResults.getHits()).andReturn(Collections.singletonList(searchHit7)).once();
+        expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).times(7);
         expectSearchHits();
-    }
-
-    @Test
-    public void testNormalizeIdno() {
-        assertEquals("IDNO123456789", PiIntegrationService.normalizeIdno(" Id-no-123-456-789- "));
     }
 
     private void expectSearchHits() {
         expectSearchHitSource(searchHit1, "pi_search_hit1.json");
         expectSearchHitSource(searchHit2, "pi_search_hit2.json");
-        expectSearchHitSource(searchHit3, "pi_search_hit3.json");
-        expectSearchHitSource(searchHit4, "pi_search_hit4.json");
         expectSearchHitSource(searchHit5, "pi_search_hit5.json");
         expectSearchHitSource(searchHit6, "pi_search_hit6.json");
         expectSearchHitSource(searchHit7, "pi_search_hit7.json");
@@ -140,8 +139,7 @@ public class PiIntegrationServiceTest {
 
     private void expectSearchHitSource(RupSearchHit searchHit, String sourceFileName) {
         expect(searchHit.getSource())
-            .andReturn(TestUtils.fileToString(PiIntegrationServiceTest.class, sourceFileName))
-            .times(2);
+            .andReturn(TestUtils.fileToString(PiIntegrationServiceTest.class, sourceFileName)).once();
     }
 
     private static class PiIntegrationServiceMock extends PiIntegrationService {
