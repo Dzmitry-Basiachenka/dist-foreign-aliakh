@@ -13,8 +13,6 @@ import com.copyright.rup.dist.foreign.service.impl.matching.WorksMatchingJob.Usa
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
-import org.perf4j.StopWatch;
-import org.perf4j.slf4j.Slf4JStopWatch;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,58 +56,50 @@ public class WorkMatchingService implements IWorkMatchingService {
     @Transactional
     public List<Usage> matchByIdno(List<Usage> usages) {
         List<Usage> result = new ArrayList<>();
+        LOGGER.info("Search works by IDNOs. Started. IDNOsCount={}", usages.size());
         try {
-            StopWatch stopWatch = new Slf4JStopWatch();
             result = doMatchByIdno(usages);
-            stopWatch.lap("matchWorks.byIdno_findByIdno");
             if (CollectionUtils.isNotEmpty(result)) {
                 usageRepository.update(result);
-                stopWatch.lap("matchWorks.byIdno_updateUsages");
                 result.forEach(
                     usage -> auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
                         String.format("Wr Wrk Inst %s was found by standard number %s", usage.getWrWrkInst(),
                             usage.getStandardNumber())));
-                stopWatch.lap("matchWorks.byIdno_writeAudit");
             }
             updateUsagesStatusAndWriteAudit(usages, UsageGroupEnum.STANDARD_NUMBER);
-            stopWatch.stop("matchWorks.byIdno_determineNtsAndUpdate");
         } catch (RupRuntimeException e) {
-            LOGGER.warn("Search works by IDNOs failed. Unable to connect to RupEsApi.", e);
+            LOGGER.warn("Search works by IDNOs. Failed. Reason=Unable to connect to RupEsApi.", e);
         }
+        LOGGER.info("Search works by IDNOs. Finished. IDNOsCount={}, WorksFound={}", usages.size(), result.size());
         return result;
     }
 
     @Override
     @Transactional
     public List<Usage> matchByTitle(List<Usage> usages) {
-        StopWatch stopWatch = new Slf4JStopWatch();
         List<Usage> result = new ArrayList<>();
+        LOGGER.info("Search works by Title. Started. TitlesCount={}", usages.size());
         try {
             result = doMatchByTitle(usages);
-            stopWatch.lap("matchWorks.byIdno_findByTitle");
             if (CollectionUtils.isNotEmpty(result)) {
                 usageRepository.update(result);
-                stopWatch.lap("matchWorks.byTitle_updateUsages");
                 result.forEach(
                     usage -> auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
                         String.format("Wr Wrk Inst %s was found by title \"%s\"", usage.getWrWrkInst(),
                             usage.getWorkTitle())));
-                stopWatch.lap("matchWorks.byTitle_writeAudit");
             }
             updateUsagesStatusAndWriteAudit(usages, UsageGroupEnum.TITLE);
-            stopWatch.stop("matchWorks.byTitle_determineNtsAndUpdate");
         } catch (RupRuntimeException e) {
-            LOGGER.warn("Search works by titles failed. Unable to connect to RupEsApi.", e);
+            LOGGER.warn("Search works by Title. Failed. Reason=Unable to connect to RupEsApi.", e);
         }
+        LOGGER.info("Search works by Title. Finished. TitlesCount={}, WorksFound={}", usages.size(), result.size());
         return result;
     }
 
     @Override
     @Transactional
     public void updateStatusForUsagesWithNoStandardNumberAndTitle(List<Usage> usages) {
-        StopWatch stopWatch = new Slf4JStopWatch();
         updateUsagesStatusAndWriteAudit(usages, UsageGroupEnum.SINGLE_USAGE);
-        stopWatch.stop("matchWorks.noIdnoNoTitle_determineNtsAndUpdate");
     }
 
     private List<Usage> doMatchByTitle(List<Usage> usages) {

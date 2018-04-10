@@ -19,8 +19,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.elasticsearch.ElasticsearchException;
-import org.perf4j.StopWatch;
-import org.perf4j.slf4j.Slf4JStopWatch;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -62,18 +60,12 @@ public class PiIntegrationService implements IPiIntegrationService {
 
     @Override
     public Map<String, Long> findWrWrkInstsByIdnos(Map<String, String> idnoToTitleMap) {
-        LOGGER.info("Search works by IDNOs. Started. IDNOsCount={}", idnoToTitleMap.size());
-        Map<String, Long> wrWrkInstMap = matchByIdno(idnoToTitleMap);
-        LOGGER.info("Search works by IDNOs. Finished. IDNOsCount={}", idnoToTitleMap.size());
-        return wrWrkInstMap;
+        return matchByIdno(idnoToTitleMap);
     }
 
     @Override
     public Map<String, Long> findWrWrkInstsByTitles(Set<String> titles) {
-        LOGGER.info("Search works by titles. Started. TitlesCount={}", titles.size());
-        Map<String, Long> wrWrkInstMap = matchByTitle(titles);
-        LOGGER.info("Search works by titles. Finished. TitlesCount={}", titles.size());
-        return wrWrkInstMap;
+        return matchByTitle(titles);
     }
 
     /**
@@ -96,7 +88,6 @@ public class PiIntegrationService implements IPiIntegrationService {
     }
 
     private Map<String, Long> matchByIdno(Map<String, String> idnoToTitleMap) {
-        StopWatch stopWatch = new Slf4JStopWatch();
         Map<String, Long> result = new HashMap<>();
         idnoToTitleMap.forEach((idno, title) -> {
             RupSearchResponse searchMainResponse = doSearch("idno", idno);
@@ -105,52 +96,52 @@ public class PiIntegrationService implements IPiIntegrationService {
                 List<RupSearchHit> searchHits = searchMainResponse.getResults().getHits();
                 if (CollectionUtils.isNotEmpty(searchHits)) {
                     if (EXPECTED_SEARCH_HITS_COUNT == searchHits.size()) {
-                        result.put(idno, getWrWrkInstFromSearchHit(searchHits, idno, StringUtils.EMPTY));
+                        Long wrWrkInst = getWrWrkInstFromSearchHit(searchHits, idno, title);
+                        LOGGER.trace("Search works. By IDNO. IDNO={}, Title={}, WrWrkInst={}, Hits={}", idno, title,
+                            wrWrkInst, searchHits);
+                        result.put(idno, wrWrkInst);
                     } else {
-                        List<RupSearchHit> filteredByMainTitleHits = searchHits.stream()
+                        List<RupSearchHit> filteredByTitleHits = searchHits.stream()
                             .filter(searchHit -> {
                                 List<Object> mainTitles = searchHit.getFields().get("mainTitle");
-                                return Objects.nonNull(mainTitles)
-                                    && CollectionUtils.isNotEmpty(mainTitles)
-                                    && Objects.equals(title, mainTitles.get(0).toString());
+                                return CollectionUtils.isNotEmpty(mainTitles)
+                                    && StringUtils.equalsIgnoreCase(title, mainTitles.get(0).toString());
                             }).collect(Collectors.toList());
-                        if (CollectionUtils.isEmpty(filteredByMainTitleHits)) {
-                            LOGGER.debug("Search works. Work not found by IDNO={}, mainTitle={}", idno, title);
-                        } else if (EXPECTED_SEARCH_HITS_COUNT == filteredByMainTitleHits.size()) {
-                            result.put(idno, getWrWrkInstFromSearchHit(filteredByMainTitleHits, idno, title));
+                        if (EXPECTED_SEARCH_HITS_COUNT == filteredByTitleHits.size()) {
+                            Long wrWrkInst = getWrWrkInstFromSearchHit(filteredByTitleHits, idno, title);
+                            LOGGER.trace("Search works. By IDNO and Title. IDNO={}, Title={}, WrWrkInst={}, Hits={}",
+                                idno, title, wrWrkInst, searchHits);
+                            result.put(idno, wrWrkInst);
                         } else {
-                            LOGGER.debug("Search works by IDNOs. More than one match found by INDO={}, mainTitle={}",
-                                idno, title);
-                            filteredByMainTitleHits.forEach(
-                                rupSearchHit -> LOGGER.debug("Search hit={}", rupSearchHit.getSource()));
+                            LOGGER.debug(
+                                "Search works. By IDNO and Title. IDNO={}, Title={}, WrWrkInst=MultiResults, Hits={}",
+                                idno, title,
+                                searchHits.stream().map(RupSearchHit::getSource).collect(Collectors.joining(";")));
                         }
                     }
                 } else {
-                    LOGGER.info("Search works. Work not found by IDNO={}, mainTitle={}", idno, StringUtils.EMPTY);
+                    LOGGER.debug("Search works. By IDNO and Title. IDNO={}, Title={}, WrWrkInst=Not Found, Hits=Empty",
+                        idno, title);
                 }
             } else {
                 throw new RupRuntimeException("Search works failed due to request did not succeed");
             }
         });
-        stopWatch.stop("matchWorks.doSearch");
-        LOGGER.info("Search works. IDNOsCount={}, WorksFoundCount={}", idnoToTitleMap.size(), result.size());
         return result;
     }
 
     private Long getWrWrkInstFromSearchHit(List<RupSearchHit> searchHits, String idno, String title) {
-        Long wrWrkInst = null;
+        Long wrWrkInst;
         try {
             wrWrkInst = mapper.readValue(searchHits.iterator().next().getSource(), Work.class).getWrWrkInst();
-            LOGGER.debug("Search works. WrWrkInst={} found by IDNO={}, mainTitle={}", wrWrkInst, idno, title);
         } catch (IOException e) {
-            LOGGER.warn("Search works. Could not map results by IDNO={}, mainTitle={}. {}", idno, title,
-                e.getMessage());
+            throw new RupRuntimeException(
+                String.format("Search works. Failed. IDNO=%s, Title=%s, Reason=Could read response", idno, title), e);
         }
         return wrWrkInst;
     }
 
     private Map<String, Long> matchByTitle(Set<String> titles) {
-        StopWatch stopWatch = new Slf4JStopWatch();
         Map<String, Long> result = new HashMap<>();
         titles.forEach(title -> {
             RupSearchResponse searchResponse = doSearch("mainTitle", title);
@@ -160,17 +151,12 @@ public class PiIntegrationService implements IPiIntegrationService {
                     Long wrWrkInst = getWrWrkInstByTitle(title, searchHits);
                     if (Objects.nonNull(wrWrkInst)) {
                         result.put(title, wrWrkInst);
-                        LOGGER.debug("Search works. WrWrkInst={} found by title={}", wrWrkInst, title);
                     }
-                } else {
-                    LOGGER.info("Search works. Work not found by title={}", title);
                 }
             } else {
                 throw new RupRuntimeException("Search works failed due to request did not succeed");
             }
         });
-        stopWatch.stop("matchWorks.doSearch");
-        LOGGER.info("Search works. TitlesCount={}, WorksFoundCount={}", titles.size(), result.size());
         return result;
     }
 
@@ -181,14 +167,11 @@ public class PiIntegrationService implements IPiIntegrationService {
             if (Objects.nonNull(rupSearchHit)) {
                 try {
                     wrWrkInst = mapper.readValue(rupSearchHit.getSource(), Work.class).getWrWrkInst();
-                    LOGGER.debug("Search works. WrWrkInst={} found by title={}", title);
                 } catch (IOException e) {
-                    LOGGER.warn("Search works. Could not map results.", e);
+                    throw new RupRuntimeException(
+                        String.format("Search works. Failed. Title=%s, Reason=Could read response", title), e);
                 }
             }
-        } else {
-            LOGGER.info("Search works by titles. More than one match found by title={}", title);
-            hits.forEach(rupSearchHit -> LOGGER.debug("Search hit={}", rupSearchHit.getSource()));
         }
         return wrWrkInst;
     }
@@ -255,12 +238,12 @@ public class PiIntegrationService implements IPiIntegrationService {
                 .toHashCode();
         }
 
-        public void setWrWrkInst(Long wrWrkInst) {
-            this.wrWrkInst = wrWrkInst;
-        }
-
         private Long getWrWrkInst() {
             return wrWrkInst;
+        }
+
+        public void setWrWrkInst(Long wrWrkInst) {
+            this.wrWrkInst = wrWrkInst;
         }
     }
 }
