@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.service.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.common.test.JsonEndpointMatcher;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -16,6 +17,8 @@ import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
 
+import org.apache.camel.EndpointInject;
+import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.Builder;
@@ -34,6 +37,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -62,6 +66,8 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
     private AsyncRestTemplate asyncRestTemplate;
     @Value("$RUP{dist.foreign.integration.rest.prm.rollups.async}")
     private boolean prmRollUpAsync;
+    @EndpointInject(context = "df.integration.camelContext", uri = "mock:sf.processor.detail")
+    private MockEndpoint mockLmEndPoint;
 
     private MockRestServiceServer mockServer;
     private MockRestServiceServer asyncMockServer;
@@ -73,6 +79,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
     private String expectedPreferencesJsonFile;
     private String expectedRollupsJsonFile;
     private List<String> expectedRightsholdersIds;
+    private String expectedLmDetailsJsonFile;
 
     public WorkflowIntegrationTestBuilder withUsagesCsvFile(String csvFile) {
         this.usagesCsvFile = csvFile;
@@ -105,6 +112,11 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
+    public WorkflowIntegrationTestBuilder expectLmDetails(String jsonFile) {
+        this.expectedLmDetailsJsonFile = jsonFile;
+        return this;
+    }
+
     @Override
     public Runner build() {
         return new Runner();
@@ -113,20 +125,16 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
     /**
      * Test runner class.
      */
-    public class Runner implements Runnable {
+    public class Runner {
 
         private Scenario scenario;
 
-        @Override
-        public void run() {
-            try {
-                loadUsageBatch();
-                addToScenario();
-                scenarioService.submit(scenario, "Submitting scenario for testing purposes");
-                scenarioService.approve(scenario, "Approving scenario for testing purposes");
-            } catch (Exception e) {
-                throw new AssertionError("Exception was thrown", e);
-            }
+        public void run() throws IOException, InterruptedException {
+            loadUsageBatch();
+            addToScenario();
+            scenarioService.submit(scenario, "Submitting scenario for testing purposes");
+            scenarioService.approve(scenario, "Approving scenario for testing purposes");
+            sendScenarioToLm();
         }
 
         private void loadUsageBatch() throws IOException {
@@ -182,6 +190,19 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
         private String buildRollupRequestString() {
             return "http://localhost:8080/party-rest/orgPreference/orgrelprefrollup?orgIds%5B%5D=" +
                 StringUtils.join(expectedRightsholdersIds, ",") + "&relationshipCode=PARENT&prefCodes%5B%5D=payee";
+        }
+
+        private void sendScenarioToLm() throws InterruptedException {
+            expectSendToLm();
+            scenarioService.sendToLm(scenario);
+            mockLmEndPoint.assertIsSatisfied();
+        }
+
+        private void expectSendToLm() {
+            String expectedJson = TestUtils.fileToString(this.getClass(), expectedLmDetailsJsonFile);
+            mockLmEndPoint.expectedMessageCount(1);
+            mockLmEndPoint.expectedHeaderReceived("source", "FDA");
+            mockLmEndPoint.expects(new JsonEndpointMatcher(mockLmEndPoint, Collections.singletonList(expectedJson)));
         }
     }
 }
