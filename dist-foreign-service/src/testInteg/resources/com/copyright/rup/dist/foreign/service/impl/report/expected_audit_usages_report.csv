@@ -1,0 +1,4 @@
+Detail ID,Detail Status,Product Family,Usage Batch Name,Payment Date,RH Account #,RH Name,Payee Account #,Payee Name,Wr Wrk Inst,Title,Standard Number,Amt in USD,Service Fee %,Scenario Name,Check #,Check Date,Event ID,Dist. Name,Dist. Date,Period Ending
+100000003,ELIGIBLE,FAS,Test Batch 2,01/11/2017,1000000003,South African Institute of Mining and Metallurgy,,,471137967,Cell Biology,1003324112314587XX,6509.3100000000,0.0,,,,,,,
+100000004,ELIGIBLE,FAS,Test Batch 2,01/11/2017,1000000004,Computers for Design and Construction,,,122235139,BOWL OF BERRIES WITH SUGAR COOKIES,452365874521235XX,1301.8600000000,0.0,,,,,,,
+100000005,ELIGIBLE,FAS,Test Batch 2,01/11/2017,1000000006,Januz Marketing Communications,,,471137469,Solar Cells,452365874521235XX,2438.8200000000,0.0,,,,,,,
