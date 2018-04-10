@@ -37,6 +37,7 @@ import java.util.Set;
 public class PrmIntegrationService implements IPrmIntegrationService {
 
     @Autowired
+    @Qualifier("dist.common.integration.rest.prmRightsholderAsyncService")
     private IPrmRightsholderService prmRightsholderService;
     @Autowired
     @Qualifier("dist.common.integration.rest.prmRollUpAsyncService")

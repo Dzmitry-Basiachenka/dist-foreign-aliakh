@@ -3,7 +3,6 @@ package com.copyright.rup.dist.foreign.integration;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
-import com.copyright.rup.dist.common.integration.rest.prm.IPrmRightsholderService;
 import com.copyright.rup.dist.foreign.integration.lm.impl.producer.ExternalUsageProducer;
 import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
@@ -34,9 +33,11 @@ public class ApplicationContextTest {
             assertNotNull(context);
             assertNotNull(context.getBean(RestTemplate.class));
             assertNotNull(context.getBean(IPrmIntegrationService.class));
-            assertNotNull(context.getBean(IPrmRightsholderService.class));
+            assertNotNull(context.getBean("dist.common.integration.rest.prmRightsholderService"));
+            assertNotNull(context.getBean("dist.common.integration.rest.prmRightsholderAsyncService"));
             assertNotNull(context.getBean(ExternalUsageProducer.class));
             assertNotNull(context.getBean("dist.common.integration.rest.prmRollUpService"));
+            assertNotNull(context.getBean("dist.common.integration.rest.prmRollUpAsyncService"));
             assertNotNull(context.getBean(IPiIntegrationService.class));
         } catch (Exception e) {
             fail("Context is not valid: " + e.getMessage());
