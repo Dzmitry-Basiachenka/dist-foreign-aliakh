@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.service.impl.usage.paid;
 
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.integration.util.JsonUtils;
+import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -19,6 +20,7 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Implementation of {@link JsonDeserializer} for list of {@link PaidUsage}s.
@@ -72,10 +74,11 @@ public class PaidUsageDeserializer extends JsonDeserializer<List<PaidUsage>> {
             : null;
     }
 
-    // TODO {pliakh} move to dist-common
     private LocalDate getLocalDateValueFromEpoch(JsonNode node) {
-        return null != node
-            ? LocalDate.from(Instant.ofEpochMilli(node.asLong()).atZone(ZoneOffset.systemDefault()).toLocalDate())
-            : null;
+        LocalDate result = null;
+        if (Objects.nonNull(node)) {
+            result = CommonDateUtils.getLocalDateFromLong(node.asLong());
+        }
+        return result;
     }
 }
