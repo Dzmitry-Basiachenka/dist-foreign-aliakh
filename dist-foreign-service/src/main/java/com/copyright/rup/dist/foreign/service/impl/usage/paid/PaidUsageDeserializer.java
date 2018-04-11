@@ -15,10 +15,8 @@ import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 
 import java.io.IOException;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Objects;
 
@@ -67,11 +65,12 @@ public class PaidUsageDeserializer extends JsonDeserializer<List<PaidUsage>> {
         return usage;
     }
 
-    // TODO {pliakh} move to dist-common
     private OffsetDateTime getOffsetDateTimeFromLong(JsonNode node) {
-        return null != node
-            ? Instant.ofEpochMilli(node.asLong()).atZone(ZoneOffset.systemDefault()).toOffsetDateTime()
-            : null;
+        OffsetDateTime result = null;
+        if (Objects.nonNull(node)) {
+            result = CommonDateUtils.getOffsetDateTimeFromLong(node.asLong());
+        }
+        return result;
     }
 
     private LocalDate getLocalDateValueFromEpoch(JsonNode node) {
