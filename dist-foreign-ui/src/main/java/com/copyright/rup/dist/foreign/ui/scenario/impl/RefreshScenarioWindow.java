@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
 import com.copyright.rup.common.date.RupDateUtils;
+import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
@@ -22,11 +23,6 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
-
-import org.apache.commons.lang3.StringUtils;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 /**
  * Widget displays information about usages that will be added to scenario after refreshing.
@@ -104,7 +100,8 @@ public class RefreshScenarioWindow extends Window {
             "fiscalYear");
         addColumn(UsageDto::getRroAccountNumber, "table.column.rro_account_number", "rroAccountNumber");
         addColumn(UsageDto::getRroName, "table.column.rro_account_name", "rroName", true, 135);
-        addColumn(usage -> getStringFromDate(usage.getPaymentDate()), "table.column.payment_date", "paymentDate");
+        addColumn(usage -> CommonDateUtils.format(usage.getPaymentDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
+            "table.column.payment_date", "paymentDate");
         addColumn(UsageDto::getWorkTitle, "table.column.work_title", "workTitle", true, 300);
         addColumn(UsageDto::getArticle, "table.column.article", "article", true, 135);
         addColumn(UsageDto::getStandardNumber, "table.column.standard_number", "standardNumber", true, 125);
@@ -112,8 +109,9 @@ public class RefreshScenarioWindow extends Window {
         addColumn(UsageDto::getRhAccountNumber, "table.column.rh_account_number", "rhAccountNumber");
         addColumn(UsageDto::getRhName, "table.column.rh_account_name", "rhName", true, 300);
         addColumn(UsageDto::getPublisher, "table.column.publisher", "publisher", true, 135);
-        addColumn(usage -> getStringFromDate(usage.getPublicationDate()), "table.column.publication_date",
-            "publicationDate", true, 80);
+        addColumn(usage ->
+            CommonDateUtils.format(usage.getPublicationDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
+            "table.column.publication_date", "publicationDate", true, 80);
         addColumn(UsageDto::getNumberOfCopies, "table.column.number_of_copies", "numberOfCopies");
         addColumn(usage -> CurrencyUtils.format(usage.getReportedValue(), null), "table.column.reported_value",
             "reportedValue", "v-align-right", 113);
@@ -154,10 +152,5 @@ public class RefreshScenarioWindow extends Window {
             .setSortable(true)
             .setStyleGenerator(item -> style)
             .setWidth(width);
-    }
-
-    private String getStringFromDate(LocalDate date) {
-        return null != date ? date.format(
-            DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT)) : StringUtils.EMPTY;
     }
 }

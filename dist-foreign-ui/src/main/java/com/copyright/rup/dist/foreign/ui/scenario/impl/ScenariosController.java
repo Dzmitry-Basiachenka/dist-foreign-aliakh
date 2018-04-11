@@ -5,6 +5,7 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
+import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
@@ -41,7 +42,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -205,8 +205,8 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
                     rightsholderService.updateAndGetRightsholders(filter.getRhAccountNumbers())), LIST_SEPARATOR));
             }
             if (Objects.nonNull(filter.getPaymentDate())) {
-                appendCriterionMessage(sb, "label.payment_date_to", filter.getPaymentDate()
-                    .format(DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT)));
+                appendCriterionMessage(sb, "label.payment_date_to",
+                    CommonDateUtils.format(filter.getPaymentDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT));
             }
             if (Objects.nonNull(filter.getUsageStatus())) {
                 appendCriterionMessage(sb, "label.status", filter.getUsageStatus());

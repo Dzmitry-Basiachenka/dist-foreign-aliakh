@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
 import com.copyright.rup.common.date.RupDateUtils;
+import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IDrillDownByRightsholderController;
@@ -23,8 +24,6 @@ import com.vaadin.ui.Window;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 /**
@@ -97,15 +96,17 @@ public class DrillDownByRightsholderWidget extends Window implements IDrillDownB
         addColumn(usageDto -> "FY" + usageDto.getFiscalYear(), "table.column.fiscal_year", "fiscalYear", true, 105);
         addColumn(UsageDto::getRroAccountNumber, "table.column.rro_account_number", "rroAccountNumber", true, 125);
         addColumn(UsageDto::getRroName, "table.column.rro_account_name", "rroName", true, 135);
-        addColumn(usageDto -> getStringFromDate(usageDto.getPaymentDate()), "table.column.payment_date", "paymentDate",
-            true, 115);
+        addColumn(usageDto ->
+            CommonDateUtils.format(usageDto.getPaymentDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
+            "table.column.payment_date", "paymentDate", true, 115);
         addColumn(UsageDto::getWorkTitle, "table.column.work_title", "workTitle");
         addColumn(UsageDto::getArticle, "table.column.article", "article");
         addColumn(UsageDto::getStandardNumber, "table.column.standard_number", "standardNumber", true, 140);
         addColumn(UsageDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", true, 110);
         addColumn(UsageDto::getPublisher, "table.column.publisher", "publisher", true, 135);
-        addColumn(usageDto -> getStringFromDate(usageDto.getPublicationDate()), "table.column.publication_date",
-            "publicationDate", true, 90);
+        addColumn(usageDto ->
+            CommonDateUtils.format(usageDto.getPublicationDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
+            "table.column.publication_date", "publicationDate", true, 90);
         addColumn(UsageDto::getNumberOfCopies, "table.column.number_of_copies", "numberOfCopies", true, 140);
         addColumn(usageDto -> CurrencyUtils.format(usageDto.getReportedValue(), null), "table.column.reported_value",
             "reportedValue", STYLE_ALIGN_RIGHT, 130);
@@ -161,10 +162,5 @@ public class DrillDownByRightsholderWidget extends Window implements IDrillDownB
         layout.setWidth(100, Unit.PERCENTAGE);
         layout.setComponentAlignment(searchWidget, Alignment.MIDDLE_CENTER);
         return layout;
-    }
-
-    private String getStringFromDate(LocalDate date) {
-        return null != date ? date.format(DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT))
-            : StringUtils.EMPTY;
     }
 }

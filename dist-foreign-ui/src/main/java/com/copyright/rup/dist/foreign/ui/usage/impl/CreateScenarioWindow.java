@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.common.date.RupDateUtils;
+import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
@@ -23,7 +24,6 @@ import com.vaadin.ui.Window;
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 /**
  * Modal window that provides functionality for creating {@link Scenario}.
@@ -96,7 +96,7 @@ public class CreateScenarioWindow extends Window {
         VaadinUtils.addComponentStyle(scenarioNameField, "scenario-name");
         scenarioNameField.setValue(
             ForeignUi.getMessage("field.scenario_name.default", controller.getSelectedProductFamily(),
-                LocalDate.now().format(DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT))));
+                CommonDateUtils.format(LocalDate.now(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT)));
     }
 
     private boolean isValid() {

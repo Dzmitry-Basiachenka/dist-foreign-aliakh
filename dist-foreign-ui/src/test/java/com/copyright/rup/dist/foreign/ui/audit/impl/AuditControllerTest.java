@@ -12,6 +12,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
@@ -35,7 +36,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
@@ -155,7 +155,7 @@ public class AuditControllerTest {
         IStreamSource streamSource = controller.getExportUsagesStreamSource();
         assertTrue(streamSource instanceof ExportStreamSource);
         assertNotNull(streamSource.getStream());
-        assertEquals("export_usage_audit_" + LocalDate.now().format(DateTimeFormatter.ofPattern("MM_dd_YYYY")) + ".csv",
+        assertEquals("export_usage_audit_" + CommonDateUtils.format(LocalDate.now(), "MM_dd_YYYY") + ".csv",
             streamSource.getFileName());
     }
 

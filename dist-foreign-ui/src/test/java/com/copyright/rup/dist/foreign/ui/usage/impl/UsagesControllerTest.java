@@ -18,6 +18,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
@@ -51,7 +52,6 @@ import org.powermock.reflect.Whitebox;
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -172,7 +172,7 @@ public class UsagesControllerTest {
 
     @Test
     public void testSendForResearchUsagesStreamSourceFileName() {
-        assertEquals("send_for_research_" + LocalDate.now().format(DateTimeFormatter.ofPattern("MM_dd_YYYY")) + ".csv",
+        assertEquals("send_for_research_" + CommonDateUtils.format(LocalDate.now(), "MM_dd_YYYY") + ".csv",
             controller.getSendForResearchUsagesStreamSource().getFileName());
     }
 
@@ -214,7 +214,7 @@ public class UsagesControllerTest {
 
     @Test
     public void testGetExportFileName() {
-        assertEquals("export_usage_" + LocalDate.now().format(DateTimeFormatter.ofPattern("MM_dd_YYYY")) + ".csv",
+        assertEquals("export_usage_" + CommonDateUtils.format(LocalDate.now(), "MM_dd_YYYY") + ".csv",
             controller.getExportUsagesStreamSource().getFileName());
     }
 

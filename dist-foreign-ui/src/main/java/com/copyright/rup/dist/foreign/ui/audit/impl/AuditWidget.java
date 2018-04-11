@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.audit.impl;
 
 import com.copyright.rup.common.date.RupDateUtils;
+import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditController;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterWidget;
@@ -28,7 +29,6 @@ import com.vaadin.ui.themes.ValoTheme;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
@@ -132,7 +132,8 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
         addColumn(UsageDto::getStatus, "table.column.usage_status", "status", 115);
         addColumn(UsageDto::getProductFamily, "table.column.product_family", "productFamily", 125);
         addColumn(UsageDto::getBatchName, "table.column.batch_name", "batchName", 140);
-        addColumn(usage -> getStringFromDate(usage.getPaymentDate()), "table.column.payment_date", "paymentDate", 115);
+        addColumn(usage -> CommonDateUtils.format(usage.getPaymentDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
+            "table.column.payment_date", "paymentDate", 115);
         addColumn(UsageDto::getRhAccountNumber, "table.column.rh_account_number", "rhAccountNumber", 115);
         addColumn(UsageDto::getRhName, "table.column.rh_account_name", "rhName", 300);
         addColumn(UsageDto::getPayeeAccountNumber, "table.column.payee_account_number", "payeeAccountNumber", 115);
@@ -159,8 +160,8 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
         addColumn(UsageDto::getDistributionName, "table.column.distribution_name", "distributionName", 110);
         addColumn(usage -> getStringFromDate(usage.getDistributionDate()), "table.column.distribution_date",
             "distributionDate", 105);
-        addColumn(usage -> getStringFromDate(usage.getPeriodEndDate()), "table.column.period_end_date", "periodEndDate",
-            115);
+        addColumn(usage -> CommonDateUtils.format(usage.getPeriodEndDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
+            "table.column.period_end_date", "periodEndDate", 115);
     }
 
     private void addColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, String sort, double width) {
@@ -169,11 +170,6 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
             .setSortProperty(sort)
             .setHidable(true)
             .setWidth(width);
-    }
-
-    private String getStringFromDate(LocalDate date) {
-        return null != date ? date.format(
-            DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT)) : StringUtils.EMPTY;
     }
 
     private String getStringFromDate(OffsetDateTime date) {

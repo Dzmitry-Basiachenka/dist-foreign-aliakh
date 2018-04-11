@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.common;
 
+import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
@@ -8,7 +9,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 /**
  * An implementation of {@link com.vaadin.server.StreamResource.StreamSource}.
@@ -21,8 +21,6 @@ import java.time.format.DateTimeFormatter;
  * @author Uladzislau Shalamitski
  */
 public class ByteArrayStreamSource implements IStreamSource {
-
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("MM_dd_YYYY");
 
     private final ISendForResearchReportWriter reportWriter;
     private final String fileNamePrefix;
@@ -47,7 +45,8 @@ public class ByteArrayStreamSource implements IStreamSource {
 
     @Override
     public String getFileName() {
-        return VaadinUtils.encodeAndBuildFileName(fileNamePrefix + LocalDate.now().format(FORMATTER), "csv");
+        return VaadinUtils.encodeAndBuildFileName(fileNamePrefix +
+            CommonDateUtils.format(LocalDate.now(), "MM_dd_YYYY"), "csv");
     }
 
     /**
