@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.service.impl.csv;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.DateFormatValidator;
@@ -18,11 +19,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.time.format.ResolverStyle;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -160,17 +157,12 @@ public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
         }
 
         private static LocalDate getDate(String[] row, ICsvColumn column) {
+            LocalDate result = null;
             String value = getValue(row, column);
-            return null != value ? parseDateValue(value) : null;
-        }
-
-        private static LocalDate parseDateValue(String value) {
-            try {
-                return LocalDate.parse(value, DateTimeFormatter.ofPattern("M/d/uuuu", Locale.US)
-                    .withResolverStyle(ResolverStyle.STRICT));
-            } catch (DateTimeParseException e) {
-                return null;
+            if (Objects.nonNull(value)) {
+                result = CommonDateUtils.parseLocalDate(value, "M/d/uuuu");
             }
+            return result;
         }
 
         @Override

@@ -48,6 +48,8 @@ public class DateFormatValidatorTest {
             {"1/1/2017", true},
             {"01/01/0017", true},
             {"02/29/2016", true},
+            {"0000002/29/2016", false},
+            {"02/0000029/2016", false},
             {"02/29/2017", false},
             {"01/01/-2017", false},
             {"13/01/2017", false},
