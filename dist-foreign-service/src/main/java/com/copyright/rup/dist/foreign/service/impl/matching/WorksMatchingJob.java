@@ -1,9 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.matching;
 
 import com.copyright.rup.common.logging.RupLogUtils;
-import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
-import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.IWorkMatchingService;
 
@@ -12,14 +10,12 @@ import org.perf4j.StopWatch;
 import org.perf4j.slf4j.Slf4JStopWatch;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * This class is responsible for running scheduled processes for getting works and setting statuses for {@link Usage}s.
@@ -39,6 +35,8 @@ public class WorksMatchingJob {
     private IUsageService usageService;
     @Autowired
     private IWorkMatchingService matchingService;
+    @Value("$RUP{dist.foreign.integration.works.pi.batch_size}")
+    private int batchSize;
 
     /**
      * Finds works and updates WrWrkInsts and statuses of {@link Usage}s.
@@ -46,33 +44,24 @@ public class WorksMatchingJob {
     @Scheduled(cron = "$RUP{dist.foreign.service.schedule.works_match}")
     public void findWorksAndUpdateStatuses() {
         StopWatch stopWatch = new Slf4JStopWatch();
-        List<Usage> usages = usageService.getUsagesWithBlankWrWrkInst();
-        stopWatch.lap("usage.matchWorks_1_getUsagesWithBlankWrWrkInst");
-        if (CollectionUtils.isNotEmpty(usages)) {
-            LOGGER.info("Search works. Started. UsagesCount={}", LogUtils.size(usages));
-            Map<UsageGroupEnum, List<Usage>> usageGroups = usages.stream()
-                .collect(Collectors.groupingBy(UsageGroupEnum.getGroupingFunction()));
-            List<Usage> usagesByStandardNumber = usageGroups.get(UsageGroupEnum.STANDARD_NUMBER);
+        int standardNumbersCount = usageService.getStandardNumbersCount();
+        LOGGER.info("Search works. Started. UsagesCount={}", standardNumbersCount);
+        for (int i = 0; i < standardNumbersCount; i += batchSize) {
+            List<Usage> usagesByStandardNumber = usageService.getUsagesWithStandardNumber(batchSize);
             if (CollectionUtils.isNotEmpty(usagesByStandardNumber)) {
                 matchingService.matchByIdno(usagesByStandardNumber);
-                stopWatch.lap("usage.matchWorks_2_matchByIdno");
             }
-            List<Usage> usagesByTitle = usageGroups.get(UsageGroupEnum.TITLE);
+        }
+        int titlesCount = usageService.getTitlesCount();
+        for (int i = 0; i < titlesCount; i += batchSize) {
+            List<Usage> usagesByTitle = usageService.getUsagesWithTitle(batchSize);
             if (CollectionUtils.isNotEmpty(usagesByTitle)) {
                 matchingService.matchByTitle(usagesByTitle);
-                stopWatch.lap("usage.matchWorks_3_matchByTitle");
             }
-            List<Usage> usagesWithNoStandardNumberAndTitle = usageGroups.get(UsageGroupEnum.SINGLE_USAGE);
-            if (CollectionUtils.isNotEmpty(usagesWithNoStandardNumberAndTitle)) {
-                matchingService.updateStatusForUsagesWithNoStandardNumberAndTitle(usagesWithNoStandardNumberAndTitle);
-                stopWatch.lap("usage.matchWorks_4_updateStatusForUsagesWithNoStandardNumberAndTitle");
-            }
-            List<Usage> usagesWithWork = usages.stream()
-                .filter(usage -> UsageStatusEnum.WORK_FOUND == usage.getStatus())
-                .collect(Collectors.toList());
-            LOGGER.info("Search works. Finished. UsagesCount={}, UsagesWithWorksCount={}", LogUtils.size(usages),
-                LogUtils.size(usagesWithWork));
         }
+        matchingService.updateStatusForUsagesWithNoStandardNumberAndTitle(
+            usageService.getUsagesWithoutStandardNumberAndTitle());
+        LOGGER.info("Search works. Finished. UsagesCount={}", standardNumbersCount);
         stopWatch.stop("usage.matchWorks_findWorksAndUpdateStatuses");
     }
 
@@ -85,10 +74,6 @@ public class WorksMatchingJob {
          * Enum constant to separate groups of {@link Usage}s with standard number.
          */
         STANDARD_NUMBER {
-            @Override
-            Function<Usage, String> getMappingFunction() {
-                return Usage::getStandardNumber;
-            }
 
             @Override
             String getNtsEligibleReason() {
@@ -105,10 +90,6 @@ public class WorksMatchingJob {
          * Enum constant to separate groups of {@link Usage}s with work title.
          */
         TITLE {
-            @Override
-            Function<Usage, String> getMappingFunction() {
-                return Usage::getWorkTitle;
-            }
 
             @Override
             String getNtsEligibleReason() {
@@ -125,10 +106,6 @@ public class WorksMatchingJob {
          * Enum constant to separate groups of {@link Usage}s that don't have standard number and work title.
          */
         SINGLE_USAGE {
-            @Override
-            Function<Usage, Usage> getMappingFunction() {
-                return usage -> usage;
-            }
 
             @Override
             String getNtsEligibleReason() {
@@ -140,17 +117,6 @@ public class WorksMatchingJob {
                 return usage -> "Usage has no standard number and title";
             }
         };
-
-        private static Function<Usage, UsageGroupEnum> getGroupingFunction() {
-            return usage -> Objects.isNull(usage.getStandardNumber())
-                ? Objects.isNull(usage.getWorkTitle()) ? SINGLE_USAGE : TITLE
-                : STANDARD_NUMBER;
-        }
-
-        /**
-         * @return {@link Function} for grouping {@link Usage}s.
-         */
-        abstract Function<Usage, ?> getMappingFunction();
 
         /**
          * @return reason for making {@link Usage}
