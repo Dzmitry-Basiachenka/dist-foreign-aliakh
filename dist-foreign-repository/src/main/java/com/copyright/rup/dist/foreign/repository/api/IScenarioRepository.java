@@ -119,5 +119,5 @@ public interface IScenarioRepository {
      *
      * @return list of found scenarios ids
      */
-    List<String> findFullPaidIds();
+    List<String> findIdsForArchiving();
 }

@@ -239,8 +239,8 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindFullPaidIds() {
-        List<String> scenariosIds = scenarioRepository.findFullPaidIds();
+    public void testFindIdsForArchiving() {
+        List<String> scenariosIds = scenarioRepository.findIdsForArchiving();
         assertTrue(CollectionUtils.isNotEmpty(scenariosIds));
         assertEquals(1, scenariosIds.size());
         assertEquals("a9ee7491-d166-47cd-b36f-fe80ee7450f1", scenariosIds.get(0));

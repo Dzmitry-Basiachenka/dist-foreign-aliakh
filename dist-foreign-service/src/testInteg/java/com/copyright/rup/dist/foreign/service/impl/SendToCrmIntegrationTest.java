@@ -112,7 +112,7 @@ public class SendToCrmIntegrationTest {
         List<ScenarioAuditItem> auditItems = scenarioAuditService.getActions(scenario.getId());
         assertTrue(CollectionUtils.isNotEmpty(auditItems));
         assertEquals(1, auditItems.size());
-        assertEquals("Usages from scenario were sent to CRM", auditItems.get(0).getActionReason());
+        assertEquals("All usages from scenario have been sent to CRM", auditItems.get(0).getActionReason());
         scenario = scenarios.get(1);
         assertEquals("221c5a30-1937-4bf6-977f-93741f9b20f1", scenario.getId());
         assertEquals(ScenarioStatusEnum.SENT_TO_LM, scenario.getStatus());

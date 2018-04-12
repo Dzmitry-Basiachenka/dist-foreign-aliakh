@@ -261,13 +261,13 @@ public class ScenarioService implements IScenarioService {
     @Transactional
     @Profiled(tag = "service.ScenarioService.archiveScenarios")
     public int archiveScenarios() {
-        LOGGER.info("Archive scenarios. Started.");
-        List<String> paidIds = scenarioRepository.findFullPaidIds();
+        List<String> paidIds = scenarioRepository.findIdsForArchiving();
+        LOGGER.info("Archive scenarios. Started. PaidScenariosCount={}", LogUtils.size(paidIds));
         int archivedCount = paidIds.size();
         if (CollectionUtils.isNotEmpty(paidIds)) {
             scenarioRepository.updateStatus(paidIds, ScenarioStatusEnum.ARCHIVED);
-            paidIds.forEach(id -> scenarioAuditService.logAction(id, ScenarioActionTypeEnum.ARCHIVED,
-                "Usages from scenario were sent to CRM"));
+            scenarioAuditService.logAction(Sets.newHashSet(paidIds), ScenarioActionTypeEnum.ARCHIVED,
+                "All usages from scenario have been sent to CRM");
             LOGGER.info("Archive scenarios. Finished. ArchivedCount={}", archivedCount);
         } else {
             LOGGER.info("Archive scenarios. Skipped. Reason=There are no scenarios to archive");
