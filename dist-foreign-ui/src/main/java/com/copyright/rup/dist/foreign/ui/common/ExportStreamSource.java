@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.common;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
+import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
@@ -9,7 +10,6 @@ import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -23,8 +23,6 @@ import java.util.concurrent.Executors;
  * @author Aliaksandr Radkevich
  */
 public class ExportStreamSource implements IStreamSource {
-
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("MM_dd_YYYY");
 
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
     private final IReportWriter reportWriter;
@@ -55,7 +53,8 @@ public class ExportStreamSource implements IStreamSource {
 
     @Override
     public String getFileName() {
-        return VaadinUtils.encodeAndBuildFileName(fileNamePrefix + LocalDate.now().format(FORMATTER), "csv");
+        return VaadinUtils.encodeAndBuildFileName(fileNamePrefix +
+            CommonDateUtils.format(LocalDate.now(), "MM_dd_YYYY"), "csv");
     }
 
     /**

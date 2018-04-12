@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.common.domain.StoredEntity;
+import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
 
 import com.google.common.collect.Table;
@@ -114,7 +115,7 @@ public abstract class BaseCsvReportHandler<T extends StoredEntity<String>> imple
 
         @Override
         public Object execute(Object value, CsvContext context) {
-            return null != value ? ((LocalDate) value).format(DATE_FORMATTER) : null;
+            return CommonDateUtils.format((LocalDate) value, RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT);
         }
     }
 

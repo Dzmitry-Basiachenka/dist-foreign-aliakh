@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.common.date.RupDateUtils;
+import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
@@ -24,11 +25,6 @@ import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.VerticalLayout;
-
-import org.apache.commons.lang3.StringUtils;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 /**
  * Main widget for usages.
@@ -132,8 +128,8 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
             "fiscalYear", true, 105);
         addColumn(UsageDto::getRroAccountNumber, "table.column.rro_account_number", "rroAccountNumber", true, 125);
         addColumn(UsageDto::getRroName, "table.column.rro_account_name", "rroName", true, 135);
-        addColumn(usage -> getStringFromDate(usage.getPaymentDate()), "table.column.payment_date", "paymentDate",
-            true, 115);
+        addColumn(usage -> CommonDateUtils.format(usage.getPaymentDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
+            "table.column.payment_date", "paymentDate", true, 115);
         addColumn(UsageDto::getWorkTitle, "table.column.work_title", "workTitle", true, 300);
         addColumn(UsageDto::getArticle, "table.column.article", "article", true, 135);
         addColumn(UsageDto::getStandardNumber, "table.column.standard_number", "standardNumber", true, 140);
@@ -141,8 +137,9 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         addColumn(UsageDto::getRhAccountNumber, "table.column.rh_account_number", "rhAccountNumber", true, 115);
         addColumn(UsageDto::getRhName, "table.column.rh_account_name", "rhName", true, 300);
         addColumn(UsageDto::getPublisher, "table.column.publisher", "publisher", true, 135);
-        addColumn(usage -> getStringFromDate(usage.getPublicationDate()), "table.column.publication_date",
-            "publicationDate", true, 90);
+        addColumn(usage ->
+            CommonDateUtils.format(usage.getPublicationDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
+            "table.column.publication_date", "publicationDate", true, 90);
         addColumn(UsageDto::getNumberOfCopies, "table.column.number_of_copies", "numberOfCopies", true, 140);
         addColumn(usage -> CurrencyUtils.format(usage.getReportedValue(), null), "table.column.reported_value",
             "reportedValue", "v-align-right", 130);
@@ -228,11 +225,6 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         } else {
             Windows.showNotificationWindow(ForeignUi.getMessage("message.error.empty_usages"));
         }
-    }
-
-    private String getStringFromDate(LocalDate date) {
-        return null != date ? date.format(
-            DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT)) : StringUtils.EMPTY;
     }
 
     private static class SendForResearchFileDownloader extends OnDemandFileDownloader {

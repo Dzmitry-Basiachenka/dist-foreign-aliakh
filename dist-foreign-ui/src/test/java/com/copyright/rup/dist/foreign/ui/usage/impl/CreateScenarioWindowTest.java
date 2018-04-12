@@ -9,6 +9,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.date.RupDateUtils;
+import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 
@@ -23,7 +24,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 /**
  * Verifies {@link CreateScenarioWindow}.
@@ -37,7 +37,7 @@ import java.time.format.DateTimeFormatter;
 public class CreateScenarioWindowTest {
 
     private static final String DATE =
-        LocalDate.now().format(DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT));
+        CommonDateUtils.format(LocalDate.now(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT);
     private CreateScenarioWindow createScenarioWindow;
 
     @Before
@@ -70,8 +70,8 @@ public class CreateScenarioWindowTest {
         assertNotNull(component);
         TextField scenarioNameField = (TextField) component;
         assertEquals("Scenario name", scenarioNameField.getCaption());
-        assertEquals(String.format("FAS Distribution %s", LocalDate.now().format(
-            DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT))), scenarioNameField.getValue());
+        assertEquals(String.format("FAS Distribution %s", CommonDateUtils.format(LocalDate.now(),
+            RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT)), scenarioNameField.getValue());
         assertEquals("scenario-name", scenarioNameField.getId());
     }
 
