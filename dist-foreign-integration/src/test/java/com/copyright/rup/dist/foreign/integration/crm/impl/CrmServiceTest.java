@@ -81,7 +81,7 @@ public class CrmServiceTest {
     public void testParseResponse() throws IOException {
         CrmResult actualResult =
             crmService.parseResponse(TestUtils.fileToString(CrmServiceTest.class, "crm_response.json"),
-                new CrmResult(CrmResultStatusEnum.SUCCESS), Collections.emptyMap());
+                Collections.emptyMap());
         assertEquals(CrmResultStatusEnum.SUCCESS, actualResult.getCrmResultStatus());
         assertTrue(CollectionUtils.isEmpty(actualResult.getInvalidDetailIds()));
     }
@@ -90,7 +90,7 @@ public class CrmServiceTest {
     public void testParseInvalidResponse() throws IOException {
         CrmResult actualResult =
             crmService.parseResponse(TestUtils.fileToString(CrmServiceTest.class, "crm_response_failed.json"),
-                new CrmResult(CrmResultStatusEnum.SUCCESS), Collections.emptyMap());
+                Collections.emptyMap());
         assertEquals(CrmResultStatusEnum.CRM_ERROR, actualResult.getCrmResultStatus());
         Set<Long> invalidIds = actualResult.getInvalidDetailIds();
         assertTrue(CollectionUtils.isNotEmpty(invalidIds));
