@@ -23,8 +23,6 @@ import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -39,8 +37,6 @@ import java.util.Objects;
  */
 public abstract class BaseCsvReportHandler<T extends StoredEntity<String>> implements ResultHandler<T>, AutoCloseable {
 
-    private static final DateTimeFormatter DATE_FORMATTER =
-        DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT, Locale.US);
     private final ICsvBeanWriter beanWriter;
 
     /**
@@ -103,7 +99,7 @@ public abstract class BaseCsvReportHandler<T extends StoredEntity<String>> imple
 
         @Override
         public Object execute(Object value, CsvContext context) {
-            return null != value ? ((OffsetDateTime) value).format(DATE_FORMATTER) : null;
+            return CommonDateUtils.format((OffsetDateTime) value, RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT);
         }
     }
 
