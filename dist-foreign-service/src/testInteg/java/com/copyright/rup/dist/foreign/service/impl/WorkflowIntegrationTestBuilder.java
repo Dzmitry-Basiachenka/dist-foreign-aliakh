@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.test.JsonEndpointMatcher;
+import com.copyright.rup.dist.common.test.JsonMatcher;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.Scenario;
@@ -87,10 +88,8 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
     @Autowired
     private UsageArchiveRepository usageArchiveRepository;
 
-    private MockRestServiceServer mockServer;
-    private MockRestServiceServer asyncMockServer;
-
     private String usagesCsvFile;
+    private String productFamily;
     private UsageBatch usageBatch;
     private UsageFilter usageFilter;
     private int expectedInsertedUsagesCount;
@@ -100,9 +99,17 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
     private String expectedLmDetailsJsonFile;
     private String expectedPaidUsagesJsonFile;
     private List<Long> expectedPaidDetailsIds;
+    private String expectedCrmRequestJsonFile;
+    private String expectedCrmResponseJsonFile;
+    private List<Long> expectedArchivedDetailsIds;
 
     public WorkflowIntegrationTestBuilder withUsagesCsvFile(String csvFile) {
         this.usagesCsvFile = csvFile;
+        return this;
+    }
+
+    public WorkflowIntegrationTestBuilder withProductFamily(String productFamilyToUse) {
+        this.productFamily = productFamilyToUse;
         return this;
     }
 
@@ -147,6 +154,17 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
+    public WorkflowIntegrationTestBuilder expectCrmReporting(String requestJsonFile, String responseJsonFile) {
+        this.expectedCrmRequestJsonFile = requestJsonFile;
+        this.expectedCrmResponseJsonFile = responseJsonFile;
+        return this;
+    }
+
+    public WorkflowIntegrationTestBuilder expectArchivedDetailsIds(Long... detailsIds) {
+        this.expectedArchivedDetailsIds = Arrays.asList(detailsIds);
+        return this;
+    }
+
     @Override
     public Runner build() {
         return new Runner();
@@ -157,6 +175,9 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
      */
     public class Runner {
 
+        private MockRestServiceServer mockServer;
+        private MockRestServiceServer asyncMockServer;
+
         private Scenario scenario;
 
         public void run() throws IOException, InterruptedException {
@@ -166,10 +187,11 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
             scenarioService.approve(scenario, "Approving scenario for testing purposes");
             sendScenarioToLm();
             receivePaidUsagesFromLm();
+            sendUsagesToCrm();
         }
 
         private void loadUsageBatch() throws IOException {
-            UsageCsvProcessor csvProcessor = csvProcessorFactory.getUsageCsvProcessor("CLA_FAS");
+            UsageCsvProcessor csvProcessor = csvProcessorFactory.getUsageCsvProcessor(productFamily);
             ProcessingResult<Usage> result = csvProcessor.process(getCsvOutputStream());
             assertTrue(result.isSuccessful());
             List<Usage> usages = result.get();
@@ -178,7 +200,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
         }
 
         private ByteArrayOutputStream getCsvOutputStream() throws IOException {
-            String csvText = TestUtils.fileToString(getClass(), usagesCsvFile);
+            String csvText = TestUtils.fileToString(this.getClass(), usagesCsvFile);
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             IOUtils.write(csvText, out, StandardCharsets.UTF_8);
             return out;
@@ -201,21 +223,19 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
         }
 
         private void expectGetPreferences() {
-            mockServer.expect(MockRestRequestMatchers
-                .requestTo("http://localhost:8080/party-rest/orgPreference/all?fmt=json"))
+            String responseBody = TestUtils.fileToString(this.getClass(), expectedPreferencesJsonFile);
+            mockServer.expect(
+                MockRestRequestMatchers.requestTo("http://localhost:8080/party-rest/orgPreference/all?fmt=json"))
                 .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
-                .andRespond(MockRestResponseCreators.withSuccess(
-                    TestUtils.fileToString(this.getClass(), expectedPreferencesJsonFile),
-                    MediaType.APPLICATION_JSON));
+                .andRespond(MockRestResponseCreators.withSuccess(responseBody, MediaType.APPLICATION_JSON));
         }
 
         private void expectGetRollups() {
-            (prmRollUpAsync ? asyncMockServer : mockServer).expect(MockRestRequestMatchers
-                .requestTo(buildRollupRequestString()))
+            String responseBody = TestUtils.fileToString(this.getClass(), expectedRollupsJsonFile);
+            (prmRollUpAsync ? asyncMockServer : mockServer).expect(
+                MockRestRequestMatchers.requestTo(buildRollupRequestString()))
                 .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
-                .andRespond(MockRestResponseCreators.withSuccess(
-                    TestUtils.fileToString(this.getClass(), expectedRollupsJsonFile),
-                    MediaType.APPLICATION_JSON));
+                .andRespond(MockRestResponseCreators.withSuccess(responseBody, MediaType.APPLICATION_JSON));
         }
 
         private String buildRollupRequestString() {
@@ -251,10 +271,40 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
         }
 
         private void assertPaidUsages() {
-            Map<Long, String> detailIdToIdMap = usageArchiveRepository.findDetailIdToIdMap(expectedPaidDetailsIds);
+            int usageCount = findPaidUsagesCountByDetailIdsAndStatus(expectedPaidDetailsIds, UsageStatusEnum.PAID);
+            assertEquals(expectedPaidDetailsIds.size(), usageCount);
+        }
+
+        private int findPaidUsagesCountByDetailIdsAndStatus(List<Long> detailIds, UsageStatusEnum status) {
+            Map<Long, String> detailIdToIdMap = usageArchiveRepository.findDetailIdToIdMap(detailIds);
             List<String> usageIds = new ArrayList<>(detailIdToIdMap.values());
-            List<PaidUsage> paidUsages = usageArchiveRepository.findByIdAndStatus(usageIds, UsageStatusEnum.PAID);
-            assertEquals(expectedPaidDetailsIds.size(), paidUsages.size());
+            List<PaidUsage> usages = usageArchiveRepository.findByIdAndStatus(usageIds, status);
+            return usages.size();
+        }
+
+        private void sendUsagesToCrm() throws IOException {
+            createRestServer();
+            expectSendToCrm();
+            usageService.sendToCrm();
+            mockServer.verify();
+            assertArchivedUsages();
+        }
+
+        private void expectSendToCrm() throws IOException {
+            String requestBody = TestUtils.fileToString(this.getClass(), expectedCrmRequestJsonFile);
+            String responseBody = TestUtils.fileToString(this.getClass(), expectedCrmResponseJsonFile);
+            List<String> excludedFields = Collections.singletonList("licenseCreateDate");
+            mockServer.expect(MockRestRequestMatchers.requestTo(
+                "http://localhost:9061/legacy-integration-rest/insertCCCRightsDistribution"))
+                .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
+                .andExpect(MockRestRequestMatchers.content().string(new JsonMatcher(requestBody, excludedFields)))
+                .andRespond(MockRestResponseCreators.withSuccess(responseBody, MediaType.APPLICATION_JSON));
+        }
+
+        private void assertArchivedUsages() {
+            int usageCount =
+                findPaidUsagesCountByDetailIdsAndStatus(expectedArchivedDetailsIds, UsageStatusEnum.ARCHIVED);
+            assertEquals(expectedArchivedDetailsIds.size(), usageCount);
         }
     }
 }

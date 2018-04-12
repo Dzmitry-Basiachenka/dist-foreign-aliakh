@@ -41,7 +41,8 @@ public class WorkflowIntegrationTest {
     @Test
     public void testClaWorkflow() throws Exception {
         testBuilder
-            .withUsagesCsvFile("workflow/usages.csv")
+            .withUsagesCsvFile("usages/usages_for_workflow.csv")
+            .withProductFamily("CLA_FAS")
             .withUsageBatch(buildUsageBatch())
             .withUsageFilter(buildUsageFilter())
             .expectInsertedUsagesCount(5)
@@ -49,9 +50,11 @@ public class WorkflowIntegrationTest {
             .expectRollups("prm/cla_rollups_response.json", "b0e6b1f6-89e9-4767-b143-db0f49f32769",
                 "624dcf73-a30f-4381-b6aa-c86d17198bd5", "60080587-a225-439c-81af-f016cb33aeac",
                 "37338ed1-7083-45e2-a96b-5872a7de3a98", "f366285a-ce46-48b0-96ee-cd35d62fb243")
-            .expectLmDetails("workflow/cla_details_to_lm.json")
-            .expectPaidUsagesFromLm("workflow/cla_paid_usages.json")
+            .expectLmDetails("details/cla_details_to_lm.json")
+            .expectPaidUsagesFromLm("lm/paid_usages_cla.json")
             .expectPaidDetailsIds(10081014L, 10125063L, 10081015L, 10191994L, 10014924L)
+            .expectCrmReporting("crm/cla_rights_distribution_request.json", "crm/cla_rights_distribution_response.json")
+            .expectArchivedDetailsIds(10081014L, 10125063L, 10081015L, 10191994L, 10014924L)
             .build()
             .run();
     }
