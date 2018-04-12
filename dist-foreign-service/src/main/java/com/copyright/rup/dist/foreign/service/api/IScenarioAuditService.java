@@ -4,6 +4,7 @@ import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Interface for scenario audit service.
@@ -24,6 +25,15 @@ public interface IScenarioAuditService {
      * @param actionReason action reason
      */
     void logAction(String scenarioId, ScenarioActionTypeEnum actionType, String actionReason);
+
+    /**
+     * Logs scenario action for multiple scenarios based on set of scenario identifiers.
+     *
+     * @param scenarioIds  scenarios ids
+     * @param actionType   {@link ScenarioActionTypeEnum} instance
+     * @param actionReason action reason
+     */
+    void logAction(Set<String> scenarioIds, ScenarioActionTypeEnum actionType, String actionReason);
 
     /**
      * Deletes scenario actions by scenario identifier.

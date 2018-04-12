@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Implementation of {@link IScenarioAuditService}.
@@ -30,6 +31,11 @@ public class ScenarioAuditService implements IScenarioAuditService {
     @Override
     public void logAction(String scenarioId, ScenarioActionTypeEnum actionType, String actionReason) {
         scenarioAuditRepository.insert(buildScenarioAuditItem(scenarioId, actionType, actionReason));
+    }
+
+    @Override
+    public void logAction(Set<String> scenarioIds, ScenarioActionTypeEnum actionType, String actionReason) {
+        scenarioIds.forEach(scenarioId -> logAction(scenarioId, actionType, actionReason));
     }
 
     @Override

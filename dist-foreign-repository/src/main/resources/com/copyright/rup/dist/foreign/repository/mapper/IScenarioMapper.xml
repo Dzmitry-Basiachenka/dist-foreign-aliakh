@@ -70,15 +70,6 @@
         where df_scenario_uid = #{id}
     </update>
 
-    <update id="updateStatus" parameterType="Scenario">
-        update ${schema}.df_scenario
-        set
-            status_ind = #{status},
-            <include refid="StoredEntityMapper.update"/>
-        where df_scenario_uid = #{id}
-    </update>
-
-    <!--TODO {dbaraukova} analyze is it possible to combine with query above-->
     <update id="updateStatusById" parameterType="map">
         update ${schema}.df_scenario
         set
@@ -183,7 +174,7 @@
         order by rh_name asc
     </select>
 
-    <select id="findFullPaidIds" parameterType="map" resultType="string">
+    <select id="findIdsForArchiving" parameterType="map" resultType="string">
         select df_scenario_uid
         from ${schema}.df_scenario
         where status_ind = #{scenarioStatus}

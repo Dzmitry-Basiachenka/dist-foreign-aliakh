@@ -45,7 +45,7 @@ import javax.annotation.PostConstruct;
  *
  * @author Darya Baraukova
  */
-@Service("df.integration.сrmService")
+@Service
 public class CrmService implements ICrmService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
@@ -90,16 +90,15 @@ public class CrmService implements ICrmService {
      * @throws IOException when {@link CrmRightsDistributionRequest} cannot be converted to JSON or request cannot be
      *                     sent to CRM service.
      */
-    //TODO {dbaraukova} analyze loggers
     CrmResult doSendRightsDistributionRequests(List<CrmRightsDistributionRequest> requests) throws IOException {
         CrmResult result = new CrmResult(CrmResultStatusEnum.SUCCESS);
-        LOGGER.info("Send usages to CRM. Started. RequestsCount={}", requests.size());
+        LOGGER.info("Send rights distribution requests. Started. RequestsCount={}", requests.size());
         for (List<CrmRightsDistributionRequest> batchRequests : Iterables.partition(requests, 128)) {
             HttpEntity<String> crmRequest = new HttpEntity<>(objectMapper.writeValueAsString(
                 new CrmRightsDistributionRequestWrapper(batchRequests)), buildRequestHeader());
-            LOGGER.trace("Send usages to CRM. RightsDistributionRequest={}", crmRequest);
+            LOGGER.trace("Send rights distribution request. Request={}", crmRequest);
             result = parseResponse(
-                restTemplate.postForObject(crmRightsDistributionRequestsUrl, crmRequest, String.class), result,
+                restTemplate.postForObject(crmRightsDistributionRequestsUrl, crmRequest, String.class),
                 buildRightsDistributionRequestMap(batchRequests));
         }
         return result;
@@ -109,15 +108,16 @@ public class CrmService implements ICrmService {
      * Parses response from CRM service.
      *
      * @param response   the response of the request
-     * @param crmResult  the instance or CRM result
      * @param requestMap detail id to request map
      * @return the {@link CrmResult} instances
      * @throws IOException if response cannot be parsed
      */
-    CrmResult parseResponse(String response, CrmResult crmResult, Map<Long, String> requestMap)
+    CrmResult parseResponse(String response, Map<Long, String> requestMap)
         throws IOException {
+        LOGGER.trace("Parse rights distribution response. Response={}", response);
         JsonNode jsonNode = JsonUtils.readJsonTree(objectMapper, response);
         JsonNode list = jsonNode.get("list");
+        CrmResult crmResult = new CrmResult(CrmResultStatusEnum.SUCCESS);
         if (null != list) {
             List<JsonNode> errorNodes = list.findValues("error");
             if (CollectionUtils.isNotEmpty(errorNodes)) {

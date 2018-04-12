@@ -84,7 +84,11 @@ public class ScenarioRepository extends BaseRepository implements IScenarioRepos
 
     @Override
     public void updateStatus(Scenario scenario) {
-        update("IScenarioMapper.updateStatus", Objects.requireNonNull(scenario));
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
+        params.put("status", Objects.requireNonNull(scenario.getStatus()));
+        params.put("scenarioId", Objects.requireNonNull(scenario.getId()));
+        params.put("updateUser", StoredEntity.DEFAULT_USER);
+        update("IScenarioMapper.updateStatusById", params);
     }
 
     @Override
@@ -108,10 +112,10 @@ public class ScenarioRepository extends BaseRepository implements IScenarioRepos
     }
 
     @Override
-    public List<String> findFullPaidIds() {
+    public List<String> findIdsForArchiving() {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
         params.put("usageStatus", UsageStatusEnum.ARCHIVED);
         params.put("scenarioStatus", ScenarioStatusEnum.SENT_TO_LM);
-        return selectList("IScenarioMapper.findFullPaidIds", params);
+        return selectList("IScenarioMapper.findIdsForArchiving", params);
     }
 }
