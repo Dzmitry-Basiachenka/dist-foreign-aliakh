@@ -50,6 +50,8 @@ public class WorkflowIntegrationTest {
                 "624dcf73-a30f-4381-b6aa-c86d17198bd5", "60080587-a225-439c-81af-f016cb33aeac",
                 "37338ed1-7083-45e2-a96b-5872a7de3a98", "f366285a-ce46-48b0-96ee-cd35d62fb243")
             .expectLmDetails("workflow/cla_details_to_lm.json")
+            .expectPaidUsagesFromLm("workflow/cla_paid_usages.json")
+            .expectPaidDetailsIds(10081014L, 10125063L, 10081015L, 10191994L, 10014924L)
             .build()
             .run();
     }
