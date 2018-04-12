@@ -1,0 +1,59 @@
+{
+  "details": [
+    {
+      "rh_account_number": "2000133267",
+      "rollup_account_number": "2000017000",
+      "detail_id": "10081014",
+      "distribution_name": "FDA April 18",
+      "distribution_date": 1523145600000,
+      "ccc_event_id": "53255",
+      "check_number": "578940",
+      "check_date": 1523318400000,
+      "period_end_date": 1523491200000
+    },
+    {
+      "rh_account_number": "2000073957",
+      "rollup_account_number": "2000073957",
+      "detail_id": "10125063",
+      "distribution_name": "FDA April 18",
+      "distribution_date": 1523145600000,
+      "ccc_event_id": "53256",
+      "check_number": "578941",
+      "check_date": 1523318400000,
+      "period_end_date": 1523491200000
+    },
+    {
+      "rh_account_number": "7001508482",
+      "rollup_account_number": "7001508482",
+      "detail_id": "10081015",
+      "distribution_name": "FDA April 18",
+      "distribution_date": 1523145600000,
+      "ccc_event_id": "53257",
+      "check_number": "578942",
+      "check_date": 1523318400000,
+      "period_end_date": 1523491200000
+    },
+    {
+      "rh_account_number": "1000024950",
+      "rollup_account_number": "1000024950",
+      "detail_id": "10191994",
+      "distribution_name": "FDA April 18",
+      "distribution_date": 1523145600000,
+      "ccc_event_id": "53258",
+      "check_number": "578943",
+      "check_date": 1523318400000,
+      "period_end_date": 1523491200000
+    },
+    {
+      "rh_account_number": "2000139286",
+      "rollup_account_number": "2000017000",
+      "detail_id": "10014924",
+      "distribution_name": "FDA April 18",
+      "distribution_date": 1523145600000,
+      "ccc_event_id": "53259",
+      "check_number": "578944",
+      "check_date": 1523318400000,
+      "period_end_date": 1523491200000
+    }
+  ]
+}
