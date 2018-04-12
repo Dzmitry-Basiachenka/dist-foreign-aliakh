@@ -14,7 +14,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collections;
@@ -40,7 +39,7 @@ public class WorkflowIntegrationTest {
     private WorkflowIntegrationTestBuilder testBuilder;
 
     @Test
-    public void testWorkflow() throws IOException {
+    public void testClaWorkflow() throws Exception {
         testBuilder
             .withUsagesCsvFile("workflow/usages.csv")
             .withUsageBatch(buildUsageBatch())
@@ -50,6 +49,7 @@ public class WorkflowIntegrationTest {
             .expectRollups("prm/cla_rollups_response.json", "b0e6b1f6-89e9-4767-b143-db0f49f32769",
                 "624dcf73-a30f-4381-b6aa-c86d17198bd5", "60080587-a225-439c-81af-f016cb33aeac",
                 "37338ed1-7083-45e2-a96b-5872a7de3a98", "f366285a-ce46-48b0-96ee-cd35d62fb243")
+            .expectLmDetails("workflow/cla_details_to_lm.json")
             .build()
             .run();
     }
