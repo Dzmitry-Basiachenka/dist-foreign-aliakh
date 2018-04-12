@@ -29,8 +29,6 @@ import com.vaadin.ui.themes.ValoTheme;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
-import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 /**
@@ -155,11 +153,13 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
         }, "table.column.service_fee", "serviceFee", 115);
         addColumn(UsageDto::getScenarioName, "table.column.scenario_name", "scenarioName", 125);
         addColumn(UsageDto::getCheckNumber, "table.column.check_number", "checkNumber", 85);
-        addColumn(usage -> getStringFromDate(usage.getCheckDate()), "table.column.check_date", "checkDate", 105);
+        addColumn(usage -> CommonDateUtils.format(usage.getCheckDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
+            "table.column.check_date", "checkDate", 105);
         addColumn(UsageDto::getCccEventId, "table.column.event_id", "cccEventId", 85);
         addColumn(UsageDto::getDistributionName, "table.column.distribution_name", "distributionName", 110);
-        addColumn(usage -> getStringFromDate(usage.getDistributionDate()), "table.column.distribution_date",
-            "distributionDate", 105);
+        addColumn(usage ->
+            CommonDateUtils.format(usage.getDistributionDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
+            "table.column.distribution_date", "distributionDate", 105);
         addColumn(usage -> CommonDateUtils.format(usage.getPeriodEndDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
             "table.column.period_end_date", "periodEndDate", 115);
     }
@@ -170,10 +170,5 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
             .setSortProperty(sort)
             .setHidable(true)
             .setWidth(width);
-    }
-
-    private String getStringFromDate(OffsetDateTime date) {
-        return null != date ? date.format(
-            DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT)) : StringUtils.EMPTY;
     }
 }
