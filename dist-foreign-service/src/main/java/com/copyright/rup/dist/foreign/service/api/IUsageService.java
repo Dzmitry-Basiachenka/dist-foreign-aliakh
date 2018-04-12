@@ -261,18 +261,20 @@ public interface IUsageService {
     /**
      * Gets list of {@link Usage}s that have standard numbers.
      *
-     * @param limit maximum size of list
+     * @param limit  maximum size of list
+     * @param offset number of excluded records
      * @return list of {@link Usage}s
      */
-    List<Usage> getUsagesWithStandardNumber(int limit);
+    List<Usage> getUsagesWithStandardNumber(int limit, int offset);
 
     /**
      * Gets list of {@link Usage}s that have no standard numbers but have titles.
      *
-     * @param limit maximum size of list
+     * @param limit  maximum size of list
+     * @param offset number of excluded records
      * @return list of {@link Usage}s
      */
-    List<Usage> getUsagesWithTitle(int limit);
+    List<Usage> getUsagesWithTitle(int limit, int offset);
 
     /**
      * @return list of {@link Usage}s without standard number and title with with {@link UsageStatusEnum#NEW} status.

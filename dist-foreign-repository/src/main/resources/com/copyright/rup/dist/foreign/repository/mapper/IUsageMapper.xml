@@ -988,7 +988,9 @@
         from ${schema}.df_usage
         where standard_number is not null
             and status_ind = #{status}
+        order by standard_number
         limit #{limit}
+        offset #{offset}
     </select>
 
     <select id="findWithTitle" resultMap="usageResultMap" parameterType="map">
@@ -1000,7 +1002,9 @@
         where standard_number is null
             and work_title is not null
             and status_ind = #{status}
+        order by work_title
         limit #{limit}
+        offset #{offset}
     </select>
 
     <select id="findByStandardNumberAndStatus" resultMap="usageResultMap" parameterType="map">

@@ -997,7 +997,7 @@ public class UsageRepositoryIntegrationTest {
 
     @Test
     public void testFindWithStandardNumber() {
-        List<Usage> usages = usageRepository.findWithStandardNumber(10);
+        List<Usage> usages = usageRepository.findWithStandardNumber(10, 0);
         assertEquals(4, usages.size());
         assertTrue(usages.stream()
             .map(Usage::getStandardNumber)
@@ -1007,7 +1007,7 @@ public class UsageRepositoryIntegrationTest {
 
     @Test
     public void testFindWithTitle() {
-        List<Usage> usages = usageRepository.findWithTitle(10);
+        List<Usage> usages = usageRepository.findWithTitle(10, 0);
         assertEquals(2, usages.size());
         assertTrue(usages.stream()
             .map(Usage::getWorkTitle)
