@@ -18,6 +18,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
@@ -28,6 +29,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.test.web.client.match.MockRestRequestMatchers;
 import org.springframework.test.web.client.response.MockRestResponseCreators;
+import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -54,12 +56,18 @@ public class UpdateRightsholdersTest {
     private IUsageAuditService usageAuditService;
     @Autowired
     private RestTemplate restTemplate;
+    @Autowired
+    private AsyncRestTemplate asyncRestTemplate;
+    @Value("$RUP{dist.foreign.integration.rest.prm.rightsholder.async}")
+    private boolean prmRightsholderAsync;
 
     private MockRestServiceServer mockServer;
+    private MockRestServiceServer asyncMockServer;
 
     @Test
     public void testUpdateRights() {
         mockServer = MockRestServiceServer.createServer(restTemplate);
+        asyncMockServer = MockRestServiceServer.createServer(asyncRestTemplate);
         expectRmsCall("rms_grants_work_found_usages_request.json", "rms_grants_work_found_usages_response.json");
         expectRmsCall("rms_grants_sent_for_ra_usages_request.json", "rms_grants_sent_for_ra_usages_response.json");
         expectPrmCall();
@@ -67,6 +75,7 @@ public class UpdateRightsholdersTest {
         assertUsages();
         assertAudit();
         mockServer.verify();
+        asyncMockServer.verify();
     }
 
     private void assertUsages() {
@@ -110,7 +119,7 @@ public class UpdateRightsholdersTest {
     }
 
     private void expectPrmCall() {
-        mockServer.expect(MockRestRequestMatchers
+        (prmRightsholderAsync ? asyncMockServer : mockServer).expect(MockRestRequestMatchers
             .requestTo(
                 "http://localhost:8080/party-rest/organization/extorgkeys?extOrgKeys%5B%5D=1000000322&fmt=json"))
             .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))

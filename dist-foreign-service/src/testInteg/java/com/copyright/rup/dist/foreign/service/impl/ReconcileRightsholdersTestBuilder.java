@@ -66,6 +66,8 @@ public class ReconcileRightsholdersTestBuilder {
     private AsyncRestTemplate asyncRestTemplate;
     @Value("$RUP{dist.foreign.integration.rest.prm.rollups.async}")
     private boolean prmRollUpAsync;
+    @Value("$RUP{dist.foreign.integration.rest.prm.rightsholder.async}")
+    private boolean prmRightsholderAsync;
 
     Runner build() {
         return new Runner();
@@ -166,7 +168,7 @@ public class ReconcileRightsholdersTestBuilder {
         }
 
         private void expectPrmCall() {
-            mockServer.expect(MockRestRequestMatchers
+            (prmRightsholderAsync ? asyncMockServer : mockServer).expect(MockRestRequestMatchers
                 .requestTo(
                     "http://localhost:8080/party-rest/organization/extorgkeys?extOrgKeys%5B%5D=1000002137&fmt=json"))
                 .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))

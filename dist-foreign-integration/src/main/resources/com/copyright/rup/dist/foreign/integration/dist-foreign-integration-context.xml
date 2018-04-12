@@ -32,10 +32,19 @@
         <constructor-arg ref="asyncRequestFactory"/>
     </bean>
 
-    <bean id="dist.common.integration.prmRightsholderService"
+    <bean id="dist.common.integration.rest.prmRightsholderService"
           class="com.copyright.rup.dist.common.integration.rest.prm.PrmRightsholderService">
         <constructor-arg value="$RUP{dist.common.integration.rest.prm.url}"/>
         <constructor-arg ref="restTemplate"/>
+    </bean>
+
+    <bean id="dist.common.integration.rest.prmRightsholderAsyncService"
+          class="com.copyright.rup.dist.common.integration.rest.prm.PrmRightsholderAsyncService">
+        <constructor-arg value="$RUP{dist.common.integration.rest.prm.url}"/>
+        <constructor-arg ref="restTemplate"/>
+        <constructor-arg ref="asyncRestTemplate"/>
+        <constructor-arg value="$RUP{dist.foreign.integration.rest.prm.rightsholder.async.rate_limiter_permits}"/>
+        <constructor-arg value="$RUP{dist.foreign.integration.rest.prm.rightsholder.async}"/>
     </bean>
 
     <bean id="dist.common.integration.rmsService" class="com.copyright.rup.dist.common.integration.rest.rms.RmsService">
