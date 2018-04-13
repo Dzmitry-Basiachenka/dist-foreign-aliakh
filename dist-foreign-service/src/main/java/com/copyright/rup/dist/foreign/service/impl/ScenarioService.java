@@ -259,16 +259,16 @@ public class ScenarioService implements IScenarioService {
 
     @Override
     @Transactional
-    @Profiled(tag = "service.ScenarioService.archiveScenarios")
-    public int archiveScenarios() {
-        List<String> paidIds = scenarioRepository.findIdsForArchiving();
-        LOGGER.info("Archive scenarios. Started. PaidScenariosCount={}", LogUtils.size(paidIds));
-        int archivedCount = paidIds.size();
-        if (CollectionUtils.isNotEmpty(paidIds)) {
-            scenarioRepository.updateStatus(paidIds, ScenarioStatusEnum.ARCHIVED);
-            scenarioAuditService.logAction(Sets.newHashSet(paidIds), ScenarioActionTypeEnum.ARCHIVED,
+    public int archiveScenarios(List<String> paidUsageIds) {
+        List<String> paidScenariosIds = scenarioRepository.findIdsForArchiving(paidUsageIds);
+        LOGGER.info("Archive scenarios. Started. PaidScenariosCount={}", LogUtils.size(paidScenariosIds));
+        int archivedCount = paidScenariosIds.size();
+        if (CollectionUtils.isNotEmpty(paidScenariosIds)) {
+            scenarioRepository.updateStatus(paidScenariosIds, ScenarioStatusEnum.ARCHIVED);
+            scenarioAuditService.logAction(Sets.newHashSet(paidScenariosIds), ScenarioActionTypeEnum.ARCHIVED,
                 "All usages from scenario have been sent to CRM");
-            LOGGER.info("Archive scenarios. Finished. ArchivedCount={}", archivedCount);
+            LOGGER.info("Archive scenarios. Finished. PaidScenariosCount={}, ArchivedCount={}",
+                LogUtils.size(paidScenariosIds), archivedCount);
         } else {
             LOGGER.info("Archive scenarios. Skipped. Reason=There are no scenarios to archive");
         }
