@@ -41,7 +41,7 @@ public class WorkflowIntegrationTest {
     @Test
     public void testClaWorkflow() throws Exception {
         testBuilder
-            .withUsagesCsvFile("usages/usages_for_workflow.csv")
+            .withUsagesCsvFile("usage/usages_for_workflow.csv")
             .withProductFamily("CLA_FAS")
             .withUsageBatch(buildUsageBatch())
             .withUsageFilter(buildUsageFilter())
