@@ -296,9 +296,36 @@ public interface IUsageRepository {
     List<String> findProductFamiliesForAuditFilter();
 
     /**
-     * @return list of {@link Usage}s that does not have Wr Wrk Inst.
+     * Finds list of {@link Usage}s that have standard numbers.
+     *
+     * @param limit selection limit
+     * @return list of {@link Usage}s
      */
-    List<Usage> findUsagesWithBlankWrWrkInst();
+    List<Usage> findWithStandardNumber(int limit);
+
+    /**
+     * Finds list of {@link Usage}s that have no standard numbers but have titles.
+     *
+     * @param limit selection limit
+     * @return list of {@link Usage}s
+     */
+    List<Usage> findWithTitle(int limit);
+
+    /**
+     * @return list of {@link Usage}s without standard number and title with with {@link UsageStatusEnum#NEW} status.
+     */
+    List<Usage> findWithoutStandardNumberAndTitle();
+
+    /**
+     * @return count of unique standard numbers among {@link Usage}s with {@link UsageStatusEnum#NEW} status.
+     */
+    int findStandardNumbersCount();
+
+    /**
+     * @return count of unique titles among {@link Usage}s without standard number and with
+     * {@link UsageStatusEnum#NEW} status.
+     */
+    int findTitlesCount();
 
     /**
      * Updates given list of {@link Usage}s. Update affects not all fields. For exact list of affected fields please
@@ -307,6 +334,38 @@ public interface IUsageRepository {
      * @param usages list of {@link Usage}s
      */
     void update(List<Usage> usages);
+
+    /**
+     * Updates status and Wr Wrk Inst for given list of {@link Usage}s based on standard numbers.
+     *
+     * @param usages list of {@link Usage}s
+     */
+    void updateStatusAndWrWrkInstByStandardNumber(List<Usage> usages);
+
+    /**
+     * Updates status and Wr Wrk Inst for given list of {@link Usage}s based on work titles.
+     *
+     * @param usages list of {@link Usage}s
+     */
+    void updateStatusAndWrWrkInstByTitle(List<Usage> usages);
+
+    /**
+     * Finds list of {@link Usage}s by standard number and status.
+     *
+     * @param standardNumber standard number to find
+     * @param status         instance of {@link UsageStatusEnum}
+     * @return list of {@link Usage}s
+     */
+    List<Usage> findByStandardNumberAndStatus(String standardNumber, UsageStatusEnum status);
+
+    /**
+     * Finds list of {@link Usage}s by work title and status.
+     *
+     * @param title  work title to find
+     * @param status instance of {@link UsageStatusEnum}
+     * @return list of {@link Usage}s
+     */
+    List<Usage> findByTitleAndStatus(String title, UsageStatusEnum status);
 
     /**
      * Updates researched usage details.

@@ -956,12 +956,79 @@
         order by product_family asc
     </select>
 
-    <select id="findUsagesWithBlankWrWrkInst" resultMap="usageResultMap">
+    <select id="findStandardNumbersCount" resultType="int">
+        select count(1)
+        from (
+            select distinct
+                standard_number,
+                work_title
+            from ${schema}.df_usage
+            where standard_number is not null
+                and status_ind = #{status}) standardNumbers
+    </select>
+
+    <select id="findTitlesCount" resultType="int">
+        select count(1)
+        from (
+            select distinct
+                standard_number,
+                work_title
+            from ${schema}.df_usage
+            where standard_number is null
+                and work_title is not null
+                and status_ind = #{status}) titles
+    </select>
+
+    <select id="findWithStandardNumber" resultMap="usageResultMap" parameterType="map">
+        select distinct
+            standard_number,
+            work_title,
+            product_family,
+            status_ind
+        from ${schema}.df_usage
+        where standard_number is not null
+            and status_ind = #{status}
+        limit #{limit}
+    </select>
+
+    <select id="findWithTitle" resultMap="usageResultMap" parameterType="map">
+        select distinct
+            work_title,
+            product_family,
+            status_ind
+        from ${schema}.df_usage
+        where standard_number is null
+            and work_title is not null
+            and status_ind = #{status}
+        limit #{limit}
+    </select>
+
+    <select id="findByStandardNumberAndStatus" resultMap="usageResultMap" parameterType="map">
         select
             df_usage_uid,
             <include refid="usageColumns"/>
         from ${schema}.df_usage
-        where wr_wrk_inst is null
+        where status_ind = #{status}
+            and standard_number = #{standardNumber}
+    </select>
+
+    <select id="findByTitleAndStatus" resultMap="usageResultMap" parameterType="map">
+        select
+            df_usage_uid,
+            <include refid="usageColumns"/>
+        from ${schema}.df_usage
+        where work_title = #{workTitle}
+            and standard_number is null
+            and status_ind = #{status}
+    </select>
+
+    <select id="findWithoutStandardNumberAndTitle" resultMap="usageResultMap">
+        select
+            df_usage_uid,
+            <include refid="usageColumns"/>
+        from ${schema}.df_usage
+        where standard_number is null
+            and work_title is null
             and status_ind = #{status}
     </select>
 
@@ -979,6 +1046,29 @@
             is_rh_participating_flag = #{rhParticipating},
             <include refid="StoredEntityMapper.update"/>
         where df_usage_uid = #{id}
+    </update>
+
+    <update id="updateStatusAndWrWrkInstByStandardNumber" parameterType="map">
+        update ${schema}.df_usage
+        set
+            status_ind = #{usage.status},
+            wr_wrk_inst = #{usage.wrWrkInst},
+            product_family = #{usage.productFamily},
+            <include refid="StoredEntityMapper.update"/>
+        where standard_number = #{usage.standardNumber}
+            and status_ind = #{status}
+    </update>
+
+    <update id="updateStatusAndWrWrkInstByTitle" parameterType="map">
+        update ${schema}.df_usage
+        set
+            status_ind = #{usage.status},
+            wr_wrk_inst = #{usage.wrWrkInst},
+            product_family = #{usage.productFamily},
+            <include refid="StoredEntityMapper.update"/>
+        where standard_number is null
+            and work_title = #{usage.workTitle}
+            and status_ind = #{status}
     </update>
 
     <update id="updateResearchedUsage" parameterType="map">

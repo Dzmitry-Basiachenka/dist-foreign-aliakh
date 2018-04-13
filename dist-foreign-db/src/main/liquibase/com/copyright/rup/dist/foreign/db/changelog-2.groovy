@@ -585,4 +585,21 @@ databaseChangeLog {
             }
         }
     }
+
+    changeSet(id: '2018-04-11-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment('B-42473 Spike: FDA: Refine PI integration to improve matching results: add indexes by standard_number and work_title to df_usage')
+
+        createIndex(indexName: 'ix_df_usage_standard_number', schemaName: dbAppsSchema, tableName: 'df_usage', tablespace: dbIndexTablespace) {
+            column(name: 'standard_number')
+        }
+
+        createIndex(indexName: 'ix_df_usage_work_title', schemaName: dbAppsSchema, tableName: 'df_usage', tablespace: dbIndexTablespace) {
+            column(name: 'work_title')
+        }
+
+        rollback {
+            sql("drop index ${dbAppsSchema}.ix_df_usage_standard_number")
+            sql("drop index ${dbAppsSchema}.ix_df_usage_work_title")
+        }
+    }
 }

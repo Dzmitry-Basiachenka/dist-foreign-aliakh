@@ -325,8 +325,50 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public List<Usage> findUsagesWithBlankWrWrkInst() {
-        return selectList("IUsageMapper.findUsagesWithBlankWrWrkInst", UsageStatusEnum.NEW);
+    public int findStandardNumbersCount() {
+        return selectOne("IUsageMapper.findStandardNumbersCount", UsageStatusEnum.NEW);
+    }
+
+    @Override
+    public int findTitlesCount() {
+        return selectOne("IUsageMapper.findTitlesCount", UsageStatusEnum.NEW);
+    }
+
+    @Override
+    public List<Usage> findWithStandardNumber(int limit) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put(STATUS_KEY, UsageStatusEnum.NEW);
+        parameters.put("limit", limit);
+        return selectList("IUsageMapper.findWithStandardNumber", parameters);
+    }
+
+    @Override
+    public List<Usage> findWithTitle(int limit) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put(STATUS_KEY, UsageStatusEnum.NEW);
+        parameters.put("limit", limit);
+        return selectList("IUsageMapper.findWithTitle", parameters);
+    }
+
+    @Override
+    public List<Usage> findByStandardNumberAndStatus(String standardNumber, UsageStatusEnum status) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put(STATUS_KEY, Objects.requireNonNull(status));
+        parameters.put("standardNumber", Objects.requireNonNull(standardNumber));
+        return selectList("IUsageMapper.findByStandardNumberAndStatus", parameters);
+    }
+
+    @Override
+    public List<Usage> findByTitleAndStatus(String title, UsageStatusEnum status) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put(STATUS_KEY, Objects.requireNonNull(status));
+        parameters.put("workTitle", Objects.requireNonNull(title));
+        return selectList("IUsageMapper.findByTitleAndStatus", parameters);
+    }
+
+    @Override
+    public List<Usage> findWithoutStandardNumberAndTitle() {
+        return selectList("IUsageMapper.findWithoutStandardNumberAndTitle", UsageStatusEnum.NEW);
     }
 
     @Profiled(tag = "repository.UsageRepository.update")
@@ -334,6 +376,30 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     public void update(List<Usage> usages) {
         checkArgument(CollectionUtils.isNotEmpty(usages));
         usages.forEach(usage -> update("IUsageMapper.update", usage));
+    }
+
+    @Override
+    public void updateStatusAndWrWrkInstByStandardNumber(List<Usage> usages) {
+        checkArgument(CollectionUtils.isNotEmpty(usages));
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
+        parameters.put(STATUS_KEY, UsageStatusEnum.NEW);
+        parameters.put(UPDATE_USER_KEY, StoredEntity.DEFAULT_USER);
+        usages.forEach(usage -> {
+            parameters.put("usage", usage);
+            update("IUsageMapper.updateStatusAndWrWrkInstByStandardNumber", parameters);
+        });
+    }
+
+    @Override
+    public void updateStatusAndWrWrkInstByTitle(List<Usage> usages) {
+        checkArgument(CollectionUtils.isNotEmpty(usages));
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
+        parameters.put(STATUS_KEY, UsageStatusEnum.NEW);
+        parameters.put(UPDATE_USER_KEY, StoredEntity.DEFAULT_USER);
+        usages.forEach(usage -> {
+            parameters.put("usage", usage);
+            update("IUsageMapper.updateStatusAndWrWrkInstByTitle", parameters);
+        });
     }
 
     @Override

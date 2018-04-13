@@ -60,13 +60,26 @@ public class WorkMatchingService implements IWorkMatchingService {
         try {
             result = doMatchByIdno(usages);
             if (CollectionUtils.isNotEmpty(result)) {
-                usageRepository.update(result);
-                result.forEach(
-                    usage -> auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
-                        String.format("Wr Wrk Inst %s was found by standard number %s", usage.getWrWrkInst(),
-                            usage.getStandardNumber())));
+                usageRepository.updateStatusAndWrWrkInstByStandardNumber(result);
+                result.stream()
+                    .map(Usage::getStandardNumber)
+                    .collect(Collectors.toSet())
+                    .forEach(standardNumber -> usageRepository.findByStandardNumberAndStatus(standardNumber,
+                        UsageStatusEnum.WORK_FOUND)
+                        .forEach(usage -> auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
+                            String.format("Wr Wrk Inst %s was found by standard number %s", usage.getWrWrkInst(),
+                                usage.getStandardNumber()))));
             }
-            updateUsagesStatusAndWriteAudit(usages, UsageGroupEnum.STANDARD_NUMBER);
+            usages.stream()
+                .filter(usage -> Objects.equals(UsageStatusEnum.NEW, usage.getStatus()))
+                .map(Usage::getStandardNumber)
+                .collect(Collectors.toSet())
+                .forEach(standardNumber -> {
+                    List<Usage> usagesByStandardNumber =
+                        usageRepository.findByStandardNumberAndStatus(standardNumber, UsageStatusEnum.NEW);
+                    updateUsagesStatusAndWriteAudit(usagesByStandardNumber, UsageGroupEnum.STANDARD_NUMBER);
+                    usageRepository.updateStatusAndWrWrkInstByStandardNumber(usagesByStandardNumber);
+                });
         } catch (RupRuntimeException e) {
             LOGGER.warn("Search works by IDNOs. Failed. Reason=Unable to connect to RupEsApi.", e);
         }
@@ -82,13 +95,24 @@ public class WorkMatchingService implements IWorkMatchingService {
         try {
             result = doMatchByTitle(usages);
             if (CollectionUtils.isNotEmpty(result)) {
-                usageRepository.update(result);
-                result.forEach(
-                    usage -> auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
-                        String.format("Wr Wrk Inst %s was found by title \"%s\"", usage.getWrWrkInst(),
-                            usage.getWorkTitle())));
+                usageRepository.updateStatusAndWrWrkInstByTitle(result);
+                result.stream()
+                    .map(Usage::getWorkTitle)
+                    .collect(Collectors.toSet())
+                    .forEach(title -> usageRepository.findByTitleAndStatus(title, UsageStatusEnum.WORK_FOUND)
+                        .forEach(usage -> auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
+                            String.format("Wr Wrk Inst %s was found by title \"%s\"", usage.getWrWrkInst(),
+                                usage.getWorkTitle()))));
             }
-            updateUsagesStatusAndWriteAudit(usages, UsageGroupEnum.TITLE);
+            usages.stream()
+                .filter(usage -> Objects.equals(UsageStatusEnum.NEW, usage.getStatus()))
+                .map(Usage::getWorkTitle)
+                .collect(Collectors.toSet())
+                .forEach(title -> {
+                    List<Usage> usagesByTitle = usageRepository.findByTitleAndStatus(title, UsageStatusEnum.NEW);
+                    updateUsagesStatusAndWriteAudit(usagesByTitle, UsageGroupEnum.TITLE);
+                    usageRepository.updateStatusAndWrWrkInstByTitle(usagesByTitle);
+                });
         } catch (RupRuntimeException e) {
             LOGGER.warn("Search works by Title. Failed. Reason=Unable to connect to RupEsApi.", e);
         }
@@ -99,7 +123,9 @@ public class WorkMatchingService implements IWorkMatchingService {
     @Override
     @Transactional
     public void updateStatusForUsagesWithNoStandardNumberAndTitle(List<Usage> usages) {
-        updateUsagesStatusAndWriteAudit(usages, UsageGroupEnum.SINGLE_USAGE);
+        usages.forEach(
+            usage -> updateUsagesStatusAndWriteAudit(Collections.singletonList(usage), UsageGroupEnum.SINGLE_USAGE));
+        usageRepository.update(usages);
     }
 
     private List<Usage> doMatchByTitle(List<Usage> usages) {
@@ -136,33 +162,27 @@ public class WorkMatchingService implements IWorkMatchingService {
     }
 
     private void updateUsagesStatusAndWriteAudit(List<Usage> usages, UsageGroupEnum usageGroup) {
-        usages.stream()
-            .filter(usage -> UsageStatusEnum.NEW == usage.getStatus())
-            .collect(Collectors.groupingBy(usageGroup.getMappingFunction()))
-            .forEach((key, usagesGroup) -> {
-                if (GROSS_AMOUNT_LIMIT.compareTo(sumUsagesGrossAmount(usagesGroup)) > 0) {
-                    usagesGroup.forEach(usage -> {
-                        usage.setStatus(UsageStatusEnum.ELIGIBLE);
-                        usage.setProductFamily("NTS");
-                        auditService.logAction(usage.getId(), UsageActionTypeEnum.ELIGIBLE_FOR_NTS,
-                            usageGroup.getNtsEligibleReason());
-                    });
+        if (GROSS_AMOUNT_LIMIT.compareTo(sumUsagesGrossAmount(usages)) > 0) {
+            usages.forEach(usage -> {
+                usage.setStatus(UsageStatusEnum.ELIGIBLE);
+                usage.setProductFamily("NTS");
+                auditService.logAction(usage.getId(), UsageActionTypeEnum.ELIGIBLE_FOR_NTS,
+                    usageGroup.getNtsEligibleReason());
+            });
+        } else {
+            usages.forEach(usage -> {
+                if (Objects.isNull(usage.getStandardNumber()) && Objects.isNull(usage.getWorkTitle())) {
+                    usage.setWrWrkInst(UNIDENTIFIED_WR_WRK_INST);
+                    usage.setStatus(UsageStatusEnum.WORK_FOUND);
+                    auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
+                        "Usage assigned unidentified work due to empty standard number and title");
                 } else {
-                    usagesGroup.forEach(usage -> {
-                        if (Objects.isNull(usage.getStandardNumber()) && Objects.isNull(usage.getWorkTitle())) {
-                            usage.setWrWrkInst(UNIDENTIFIED_WR_WRK_INST);
-                            usage.setStatus(UsageStatusEnum.WORK_FOUND);
-                            auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
-                                "Usage assigned unidentified work due to empty standard number and title");
-                        } else {
-                            usage.setStatus(UsageStatusEnum.WORK_NOT_FOUND);
-                            auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_NOT_FOUND,
-                                usageGroup.getWorkNotFoundReasonFunction().apply(usage));
-                        }
-                    });
+                    usage.setStatus(UsageStatusEnum.WORK_NOT_FOUND);
+                    auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_NOT_FOUND,
+                        usageGroup.getWorkNotFoundReasonFunction().apply(usage));
                 }
             });
-        usageRepository.update(usages);
+        }
     }
 
     private BigDecimal sumUsagesGrossAmount(List<Usage> usages) {

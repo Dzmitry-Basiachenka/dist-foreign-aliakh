@@ -465,9 +465,6 @@ databaseChangeLog {
             column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '10000')
             column(name: 'gross_amount', value: '10000.00')
-            column(name: 'net_amount', value: '8400.00')
-            column(name: 'service_fee_amount', value: '1600.00')
-            column(name: 'service_fee', value: '0.16000')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -488,9 +485,6 @@ databaseChangeLog {
             column(name: 'number_of_copies', value: '250232')
             column(name: 'reported_value', value: '10000')
             column(name: 'gross_amount', value: '10000.00')
-            column(name: 'net_amount', value: '8400.00')
-            column(name: 'service_fee_amount', value: '1600.00')
-            column(name: 'service_fee', value: '0.16000')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -523,9 +517,6 @@ databaseChangeLog {
             column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '10000')
             column(name: 'gross_amount', value: '10000.00')
-            column(name: 'net_amount', value: '8400.00')
-            column(name: 'service_fee_amount', value: '1600.00')
-            column(name: 'service_fee', value: '0.16000')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -546,9 +537,81 @@ databaseChangeLog {
             column(name: 'number_of_copies', value: '250232')
             column(name: 'reported_value', value: '10000')
             column(name: 'gross_amount', value: '10000.00')
-            column(name: 'net_amount', value: '8400.00')
-            column(name: 'service_fee_amount', value: '1600.00')
-            column(name: 'service_fee', value: '0.16000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'dcc794ba-42aa-481d-937b-8f431929a611')
+            column(name: 'df_usage_batch_uid', value: '6aa177f1-2d53-4c98-82bf-da7f78ae70fb')
+            column(name: 'detail_id', value: '995463873')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
+            column(name: 'status_ind', value: 'NEW')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'publisher', value: 'Network for Science')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'number_of_copies', value: '250232')
+            column(name: 'reported_value', value: '10000')
+            column(name: 'gross_amount', value: '10000.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '47d48889-76b5-4957-aca0-2a7850a09f92')
+            column(name: 'df_usage_batch_uid', value: '6aa177f1-2d53-4c98-82bf-da7f78ae70fb')
+            column(name: 'detail_id', value: '995463874')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
+            column(name: 'status_ind', value: 'NEW')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'publisher', value: 'Network for Science')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'number_of_copies', value: '250232')
+            column(name: 'reported_value', value: '10000')
+            column(name: 'gross_amount', value: '10000.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'c5ea47b0-b269-4791-9aa7-76308fe835e6')
+            column(name: 'df_usage_batch_uid', value: '6aa177f1-2d53-4c98-82bf-da7f78ae70fb')
+            column(name: 'detail_id', value: '995463877')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'work_title', value: '100 ROAD MOVIES')
+            column(name: 'status_ind', value: 'NEW')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'publisher', value: 'Network for Science')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'number_of_copies', value: '250232')
+            column(name: 'reported_value', value: '10000')
+            column(name: 'gross_amount', value: '10000.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'b53bb4f3-9eee-4732-8e3d-0c88722081d8')
+            column(name: 'df_usage_batch_uid', value: '6aa177f1-2d53-4c98-82bf-da7f78ae70fb')
+            column(name: 'detail_id', value: '995463879')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'status_ind', value: 'NEW')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'publisher', value: 'Network for Science')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'number_of_copies', value: '250232')
+            column(name: 'reported_value', value: '10000')
+            column(name: 'gross_amount', value: '10000.00')
         }
 
         //testFindForAuditWithSort

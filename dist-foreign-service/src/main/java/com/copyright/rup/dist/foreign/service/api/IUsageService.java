@@ -249,9 +249,35 @@ public interface IUsageService {
     void updatePaidInfo(List<PaidUsage> usages);
 
     /**
-     * @return list of {@link Usage}s that does not have Wr Wrk Inst.
+     * @return count of {@link Usage}s with standard number and {@link UsageStatusEnum#NEW} status.
      */
-    List<Usage> getUsagesWithBlankWrWrkInst();
+    int getStandardNumbersCount();
+
+    /**
+     * @return count of {@link Usage}s without standard number, with title and {@link UsageStatusEnum#NEW} status.
+     */
+    int getTitlesCount();
+
+    /**
+     * Gets list of {@link Usage}s that have standard numbers.
+     *
+     * @param limit maximum size of list
+     * @return list of {@link Usage}s
+     */
+    List<Usage> getUsagesWithStandardNumber(int limit);
+
+    /**
+     * Gets list of {@link Usage}s that have no standard numbers but have titles.
+     *
+     * @param limit maximum size of list
+     * @return list of {@link Usage}s
+     */
+    List<Usage> getUsagesWithTitle(int limit);
+
+    /**
+     * @return list of {@link Usage}s without standard number and title with with {@link UsageStatusEnum#NEW} status.
+     */
+    List<Usage> getUsagesWithoutStandardNumberAndTitle();
 
     /**
      * Updates researched usage details.

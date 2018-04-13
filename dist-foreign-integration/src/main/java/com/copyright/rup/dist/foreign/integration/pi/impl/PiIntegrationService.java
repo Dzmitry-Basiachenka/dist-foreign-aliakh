@@ -13,6 +13,7 @@ import com.copyright.rup.es.api.request.RupSearchRequest;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Iterables;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -50,8 +51,8 @@ public class PiIntegrationService implements IPiIntegrationService {
 
     @Value("$RUP{dist.foreign.integration.works.cluster}")
     private String cluster;
-    @Value("$RUP{dist.foreign.integration.works.node}")
-    private String node;
+    @Value("#{'$RUP{dist.foreign.integration.works.node}'.split(',')}")
+    private List<String> nodes;
     @Value("$RUP{dist.foreign.integration.works.pi.index}")
     private String piIndex;
 
@@ -72,8 +73,8 @@ public class PiIntegrationService implements IPiIntegrationService {
      * @return an instance of {@link RupEsApi}.
      */
     protected RupEsApi getRupEsApi() {
-        if (null == rupEsApi) {
-            rupEsApi = RupEsApi.of(cluster, node);
+        if (Objects.isNull(rupEsApi)) {
+            rupEsApi = RupEsApi.of(cluster, Iterables.toArray(nodes, String.class));
         }
         return rupEsApi;
     }
@@ -136,7 +137,8 @@ public class PiIntegrationService implements IPiIntegrationService {
             wrWrkInst = mapper.readValue(searchHits.iterator().next().getSource(), Work.class).getWrWrkInst();
         } catch (IOException e) {
             throw new RupRuntimeException(
-                String.format("Search works. Failed. IDNO=%s, Title=%s, Reason=Could read response", idno, title), e);
+                String.format("Search works. Failed. IDNO=%s, Title=%s, Reason=Could not read response", idno, title),
+                e);
         }
         return wrWrkInst;
     }
@@ -169,7 +171,7 @@ public class PiIntegrationService implements IPiIntegrationService {
                     wrWrkInst = mapper.readValue(rupSearchHit.getSource(), Work.class).getWrWrkInst();
                 } catch (IOException e) {
                     throw new RupRuntimeException(
-                        String.format("Search works. Failed. Title=%s, Reason=Could read response", title), e);
+                        String.format("Search works. Failed. Title=%s, Reason=Could not read response", title), e);
                 }
             }
         }

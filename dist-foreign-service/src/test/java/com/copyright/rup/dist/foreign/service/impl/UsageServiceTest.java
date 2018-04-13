@@ -465,6 +465,49 @@ public class UsageServiceTest {
         verify(usageRepository, usageAuditService);
     }
 
+    @Test
+    public void testGetStandardNumbersCount() {
+        expect(usageRepository.findStandardNumbersCount()).andReturn(10).once();
+        replay(usageRepository);
+        assertEquals(10, usageService.getStandardNumbersCount());
+        verify(usageRepository);
+    }
+
+    @Test
+    public void testGetTitlesCount() {
+        expect(usageRepository.findTitlesCount()).andReturn(10).once();
+        replay(usageRepository);
+        assertEquals(10, usageService.getTitlesCount());
+        verify(usageRepository);
+    }
+
+    @Test
+    public void testGetUsagesWithStandardNumber() {
+        List<Usage> usages = Collections.singletonList(buildUsage(USAGE_ID_1));
+        expect(usageRepository.findWithStandardNumber(10)).andReturn(usages).once();
+        replay(usageRepository);
+        assertEquals(usages, usageService.getUsagesWithStandardNumber(10));
+        verify(usageRepository);
+    }
+
+    @Test
+    public void testGetUsagesWithTitle() {
+        List<Usage> usages = Collections.singletonList(buildUsage(USAGE_ID_1));
+        expect(usageRepository.findWithTitle(10)).andReturn(usages).once();
+        replay(usageRepository);
+        assertEquals(usages, usageService.getUsagesWithTitle(10));
+        verify(usageRepository);
+    }
+
+    @Test
+    public void testGetUsagesWithoutStandardNumberAndTitle() {
+        List<Usage> usages = Collections.singletonList(buildUsage(USAGE_ID_1));
+        expect(usageRepository.findWithoutStandardNumberAndTitle()).andReturn(usages).once();
+        replay(usageRepository);
+        assertEquals(usages, usageService.getUsagesWithoutStandardNumberAndTitle());
+        verify(usageRepository);
+    }
+
     private void assertResult(List<?> result, int size) {
         assertNotNull(result);
         assertEquals(size, result.size());

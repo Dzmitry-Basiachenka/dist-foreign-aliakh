@@ -355,8 +355,28 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public List<Usage> getUsagesWithBlankWrWrkInst() {
-        return usageRepository.findUsagesWithBlankWrWrkInst();
+    public int getStandardNumbersCount() {
+        return usageRepository.findStandardNumbersCount();
+    }
+
+    @Override
+    public int getTitlesCount() {
+        return usageRepository.findTitlesCount();
+    }
+
+    @Override
+    public List<Usage> getUsagesWithStandardNumber(int limit) {
+        return usageRepository.findWithStandardNumber(limit);
+    }
+
+    @Override
+    public List<Usage> getUsagesWithTitle(int limit) {
+        return usageRepository.findWithTitle(limit);
+    }
+
+    @Override
+    public List<Usage> getUsagesWithoutStandardNumberAndTitle() {
+        return usageRepository.findWithoutStandardNumberAndTitle();
     }
 
     @Override

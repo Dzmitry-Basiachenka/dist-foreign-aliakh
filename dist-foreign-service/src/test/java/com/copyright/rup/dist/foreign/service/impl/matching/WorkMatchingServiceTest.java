@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.service.impl.matching;
 
-import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.anyString;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
@@ -26,6 +25,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -60,14 +60,18 @@ public class WorkMatchingServiceTest {
     public void testMatchByTitle() {
         String title1 = "The theological roots of Pentecostalism";
         String title2 = "Theological roots of Pentecostalism";
-        List<Usage> usages = Lists.newArrayList(
-            buildUsage(null, title1),
-            buildUsage(null, title2));
+        Usage usage1 = buildUsage(null, title1);
+        Usage usage2 = buildUsage(null, title2);
+        List<Usage> usages = Lists.newArrayList(usage1, usage2);
         Map<String, Long> resultMap = ImmutableMap.of(title1, 112930820L, title2, 155941698L);
         expect(piIntegrationService.findWrWrkInstsByTitles(Sets.newHashSet(title1, title2)))
             .andReturn(resultMap).once();
-        usageRepository.update(anyObject());
-        expectLastCall().times(2);
+        usageRepository.updateStatusAndWrWrkInstByTitle(usages);
+        expectLastCall().once();
+        expect(usageRepository.findByTitleAndStatus(title1, UsageStatusEnum.WORK_FOUND))
+            .andReturn(Collections.singletonList(usage1)).once();
+        expect(usageRepository.findByTitleAndStatus(title2, UsageStatusEnum.WORK_FOUND))
+            .andReturn(Collections.singletonList(usage2)).once();
         auditService.logAction(anyString(), eq(UsageActionTypeEnum.WORK_FOUND), anyString());
         expectLastCall().times(2);
         replay(piIntegrationService, usageRepository, auditService);
@@ -83,15 +87,19 @@ public class WorkMatchingServiceTest {
     public void testMatchByIdno() {
         String standardNumber1 = "978-0-918062-08-6";
         String standardNumber2 = "0-918062-08-X";
-        List<Usage> usages = Lists.newArrayList(
-            buildUsage(standardNumber1, StringUtils.EMPTY),
-            buildUsage(standardNumber2, StringUtils.EMPTY));
+        Usage usage1 = buildUsage(standardNumber1, StringUtils.EMPTY);
+        Usage usage2 = buildUsage(standardNumber2, StringUtils.EMPTY);
+        List<Usage> usages = Lists.newArrayList(usage1, usage2);
         Map<String, Long> resultMap = ImmutableMap.of(standardNumber1, 112930820L, standardNumber2, 155941698L);
         expect(piIntegrationService.findWrWrkInstsByIdnos(
             ImmutableMap.of(standardNumber1, StringUtils.EMPTY, standardNumber2, StringUtils.EMPTY)))
             .andReturn(resultMap).once();
-        usageRepository.update(anyObject());
-        expectLastCall().times(2);
+        usageRepository.updateStatusAndWrWrkInstByStandardNumber(usages);
+        expectLastCall().once();
+        expect(usageRepository.findByStandardNumberAndStatus(standardNumber1, UsageStatusEnum.WORK_FOUND))
+            .andReturn(Collections.singletonList(usage1)).once();
+        expect(usageRepository.findByStandardNumberAndStatus(standardNumber2, UsageStatusEnum.WORK_FOUND))
+            .andReturn(Collections.singletonList(usage2)).once();
         auditService.logAction(anyString(), eq(UsageActionTypeEnum.WORK_FOUND), anyString());
         expectLastCall().times(2);
         replay(piIntegrationService, usageRepository, auditService);
