@@ -227,17 +227,20 @@ public class UsageServiceTest {
     }
 
     @Test
-    public void testGetRightsholderTotalsHoldersByScenario() {
+    public void testGetRightsholderTotalsHoldersBySentToLmScenario() {
         List<RightsholderTotalsHolder> rightsholderTotalsHolders = Lists.newArrayList(new RightsholderTotalsHolder());
         Pageable pageable = new Pageable(0, 1);
         expect(usageRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, StringUtils.EMPTY, pageable,
             null)).andReturn(rightsholderTotalsHolders).once();
         expect(usageArchiveRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, StringUtils.EMPTY,
-            pageable, null)).andReturn(rightsholderTotalsHolders).once();
+            pageable, null)).andReturn(rightsholderTotalsHolders).times(2);
         replay(usageRepository, usageArchiveRepository);
         assertResult(
             usageService.getRightsholderTotalsHoldersByScenario(scenario, StringUtils.EMPTY, pageable, null), 1);
         scenario.setStatus(ScenarioStatusEnum.SENT_TO_LM);
+        assertResult(
+            usageService.getRightsholderTotalsHoldersByScenario(scenario, StringUtils.EMPTY, pageable, null), 1);
+        scenario.setStatus(ScenarioStatusEnum.ARCHIVED);
         assertResult(
             usageService.getRightsholderTotalsHoldersByScenario(scenario, StringUtils.EMPTY, pageable, null), 1);
         verify(usageRepository, usageArchiveRepository);
@@ -248,10 +251,12 @@ public class UsageServiceTest {
         expect(usageRepository.findRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, StringUtils.EMPTY))
             .andReturn(5).once();
         expect(usageArchiveRepository.findRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, StringUtils.EMPTY))
-            .andReturn(3).once();
+            .andReturn(3).times(2);
         replay(usageRepository, usageArchiveRepository);
         assertEquals(5, usageService.getRightsholderTotalsHolderCountByScenario(scenario, StringUtils.EMPTY));
         scenario.setStatus(ScenarioStatusEnum.SENT_TO_LM);
+        assertEquals(3, usageService.getRightsholderTotalsHolderCountByScenario(scenario, StringUtils.EMPTY));
+        scenario.setStatus(ScenarioStatusEnum.ARCHIVED);
         assertEquals(3, usageService.getRightsholderTotalsHolderCountByScenario(scenario, StringUtils.EMPTY));
         verify(usageRepository, usageArchiveRepository);
     }
@@ -261,11 +266,14 @@ public class UsageServiceTest {
         expect(usageRepository.findCountByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER, SCENARIO_ID,
             StringUtils.EMPTY)).andReturn(5).once();
         expect(usageArchiveRepository.findCountByScenarioIdAndRhAccountNumber(SCENARIO_ID, RH_ACCOUNT_NUMBER,
-            StringUtils.EMPTY)).andReturn(3).once();
+            StringUtils.EMPTY)).andReturn(3).times(2);
         replay(usageRepository, usageArchiveRepository);
         assertEquals(5, usageService.getCountByScenarioAndRhAccountNumber(RH_ACCOUNT_NUMBER, scenario,
             StringUtils.EMPTY));
         scenario.setStatus(ScenarioStatusEnum.SENT_TO_LM);
+        assertEquals(3, usageService.getCountByScenarioAndRhAccountNumber(RH_ACCOUNT_NUMBER, scenario,
+            StringUtils.EMPTY));
+        scenario.setStatus(ScenarioStatusEnum.ARCHIVED);
         assertEquals(3, usageService.getCountByScenarioAndRhAccountNumber(RH_ACCOUNT_NUMBER, scenario,
             StringUtils.EMPTY));
         verify(usageRepository, usageArchiveRepository);
@@ -278,11 +286,14 @@ public class UsageServiceTest {
         expect(usageRepository.findByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER, SCENARIO_ID, null, pageable,
             null)).andReturn(usages).once();
         expect(usageArchiveRepository.findByScenarioIdAndRhAccountNumber(SCENARIO_ID, RH_ACCOUNT_NUMBER, null, pageable,
-            null)).andReturn(usages).once();
+            null)).andReturn(usages).times(2);
         replay(usageRepository, usageArchiveRepository);
         assertResult(
             usageService.getByScenarioAndRhAccountNumber(RH_ACCOUNT_NUMBER, scenario, null, pageable, null), 2);
         scenario.setStatus(ScenarioStatusEnum.SENT_TO_LM);
+        assertResult(
+            usageService.getByScenarioAndRhAccountNumber(RH_ACCOUNT_NUMBER, scenario, null, pageable, null), 2);
+        scenario.setStatus(ScenarioStatusEnum.ARCHIVED);
         assertResult(
             usageService.getByScenarioAndRhAccountNumber(RH_ACCOUNT_NUMBER, scenario, null, pageable, null), 2);
         verify(usageRepository, usageArchiveRepository);
