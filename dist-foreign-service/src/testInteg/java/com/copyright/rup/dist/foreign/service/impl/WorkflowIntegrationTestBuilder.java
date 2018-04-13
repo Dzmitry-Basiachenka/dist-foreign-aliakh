@@ -8,12 +8,18 @@ import com.copyright.rup.dist.common.test.JsonMatcher;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
+import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
+import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
-import com.copyright.rup.dist.foreign.repository.impl.UsageArchiveRepository;
+import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
+import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
+import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.WorkflowIntegrationTestBuilder.Runner;
@@ -22,6 +28,8 @@ import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.Processi
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.mock.PaidUsageConsumerMock;
 
+import com.google.common.collect.Maps;
+
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
@@ -29,6 +37,7 @@ import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.Builder;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,10 +56,12 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * Builder for {@link WorkflowIntegrationTest}.
@@ -86,7 +97,11 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
     @Qualifier("df.service.paidUsageConsumer")
     private PaidUsageConsumerMock paidUsageConsumer;
     @Autowired
-    private UsageArchiveRepository usageArchiveRepository;
+    private IUsageArchiveRepository usageArchiveRepository;
+    @Autowired
+    private IScenarioAuditService scenarioAuditService;
+    @Autowired
+    private IUsageAuditService usageAuditService;
 
     private String usagesCsvFile;
     private String productFamily;
@@ -102,6 +117,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
     private String expectedCrmRequestJsonFile;
     private String expectedCrmResponseJsonFile;
     private List<Long> expectedArchivedDetailsIds;
+    private final Map<Long, List<Pair<UsageActionTypeEnum, String>>> expectedUsagesAudit = Maps.newHashMap();
 
     public WorkflowIntegrationTestBuilder withUsagesCsvFile(String csvFile) {
         this.usagesCsvFile = csvFile;
@@ -165,6 +181,12 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
+    public WorkflowIntegrationTestBuilder expectUsageAudit(Long detailId,
+                                                           List<Pair<UsageActionTypeEnum, String>> usageAudit) {
+        this.expectedUsagesAudit.put(detailId, usageAudit);
+        return this;
+    }
+
     @Override
     public Runner build() {
         return new Runner();
@@ -188,6 +210,8 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
             sendScenarioToLm();
             receivePaidUsagesFromLm();
             sendUsagesToCrm();
+            verifyScenarioAudit();
+            verifyUsagesAudit();
         }
 
         private void loadUsageBatch() throws IOException {
@@ -305,6 +329,54 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
             int usageCount =
                 findPaidUsagesCountByDetailIdsAndStatus(expectedArchivedDetailsIds, UsageStatusEnum.ARCHIVED);
             assertEquals(expectedArchivedDetailsIds.size(), usageCount);
+        }
+
+        private void verifyScenarioAudit() {
+            assertEquals(buildExpectedScenarioAudit(), buildActualScenarioAudit());
+        }
+
+        private List<Pair<ScenarioActionTypeEnum, String>> buildExpectedScenarioAudit() {
+            return Arrays.asList(
+                Pair.of(ScenarioActionTypeEnum.ADDED_USAGES, ""),
+                Pair.of(ScenarioActionTypeEnum.SUBMITTED, "Submitting scenario for testing purposes"),
+                Pair.of(ScenarioActionTypeEnum.APPROVED, "Approving scenario for testing purposes"),
+                Pair.of(ScenarioActionTypeEnum.SENT_TO_LM, ""),
+                Pair.of(ScenarioActionTypeEnum.ARCHIVED, "All usages from scenario have been sent to CRM"));
+        }
+
+        private List<Pair<ScenarioActionTypeEnum, String>> buildActualScenarioAudit() {
+            return scenarioAuditService.getActions(scenario.getId()).stream()
+                .sorted(Comparator.comparing(ScenarioAuditItem::getCreateDate))
+                .map(a -> Pair.of(a.getActionType(), a.getActionReason()))
+                .collect(Collectors.toList());
+        }
+
+        private void verifyUsagesAudit() {
+            assertEquals(expectedUsagesAudit, buildUsageAuditMapForAssertion());
+        }
+
+        private Map<Long, List<Pair<UsageActionTypeEnum, String>>> buildUsageAuditMapForAssertion() {
+            return expectedUsagesAudit.keySet().stream()
+                .collect(Collectors.toMap(
+                    detailId -> detailId,
+                    this::getUsageAuditActionTypeAndMessagePairs
+                ));
+        }
+
+        private List<Pair<UsageActionTypeEnum, String>> getUsageAuditActionTypeAndMessagePairs(Long detailId) {
+            return getUsageAuditByDetailId(detailId).stream()
+                .sorted(Comparator.comparing(UsageAuditItem::getCreateDate))
+                .map(a -> Pair.of(a.getActionType(), a.getActionReason()))
+                .collect(Collectors.toList());
+        }
+
+        private List<UsageAuditItem> getUsageAuditByDetailId(Long detailId) {
+            String usageId = getUsageIdByDetailId(detailId);
+            return usageAuditService.getUsageAudit(usageId);
+        }
+
+        private String getUsageIdByDetailId(Long detailId) {
+            return usageArchiveRepository.findDetailIdToIdMap(Collections.singletonList(detailId)).get(detailId);
         }
     }
 }
