@@ -1,10 +1,12 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +18,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies application workflow.
@@ -40,6 +44,7 @@ public class WorkflowIntegrationTest {
 
     @Test
     public void testClaWorkflow() throws Exception {
+        List<Pair<UsageActionTypeEnum, String>> expectedUsageAudit = buildExpectedUsageAudit();
         testBuilder
             .withUsagesCsvFile("usage/usages_for_workflow.csv")
             .withProductFamily("CLA_FAS")
@@ -55,6 +60,11 @@ public class WorkflowIntegrationTest {
             .expectPaidDetailsIds(10081014L, 10125063L, 10081015L, 10191994L, 10014924L)
             .expectCrmReporting("crm/cla_rights_distribution_request.json", "crm/cla_rights_distribution_response.json")
             .expectArchivedDetailsIds(10081014L, 10125063L, 10081015L, 10191994L, 10014924L)
+            .expectUsageAudit(10081014L, expectedUsageAudit)
+            .expectUsageAudit(10125063L, expectedUsageAudit)
+            .expectUsageAudit(10081015L, expectedUsageAudit)
+            .expectUsageAudit(10191994L, expectedUsageAudit)
+            .expectUsageAudit(10014924L, expectedUsageAudit)
             .build()
             .run();
     }
@@ -82,5 +92,12 @@ public class WorkflowIntegrationTest {
         rro.setAccountNumber(2000017000L);
         rro.setName("CLA, The Copyright Licensing Agency Ltd.");
         return rro;
+    }
+
+    private List<Pair<UsageActionTypeEnum, String>> buildExpectedUsageAudit() {
+        return Arrays.asList(
+            Pair.of(UsageActionTypeEnum.LOADED, "Uploaded in 'Test_Batch' Batch"),
+            Pair.of(UsageActionTypeEnum.PAID, "Usage has been paid according to information from the LM"),
+            Pair.of(UsageActionTypeEnum.ARCHIVED, "Usage was sent to CRM"));
     }
 }
