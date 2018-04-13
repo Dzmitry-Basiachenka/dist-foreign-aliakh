@@ -602,4 +602,16 @@ databaseChangeLog {
             sql("drop index ${dbAppsSchema}.ix_df_usage_work_title")
         }
     }
+
+    changeSet(id: '2018-04-13-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
+        comment("B-41014 [ALL] Tech Debt, Refactoring, and Demo Feedback : remove not null constraint of work_title column in table df_usage_archive")
+
+        dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_archive',
+                columnName: 'work_title', columnDataType: 'VARCHAR(2000)')
+
+        rollback {
+            addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_archive',
+                    columnName: 'work_title', columnDataType: 'VARCHAR(2000)')
+        }
+    }
 }
