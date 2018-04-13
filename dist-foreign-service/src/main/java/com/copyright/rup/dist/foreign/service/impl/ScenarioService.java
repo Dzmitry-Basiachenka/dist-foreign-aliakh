@@ -44,6 +44,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -64,6 +65,8 @@ import java.util.stream.Collectors;
 @Service
 public class ScenarioService implements IScenarioService {
 
+    private static final EnumSet<ScenarioStatusEnum> ARCHIVED_SCENARIO_STATUSES =
+        EnumSet.of(ScenarioStatusEnum.SENT_TO_LM, ScenarioStatusEnum.ARCHIVED);
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired
@@ -147,7 +150,7 @@ public class ScenarioService implements IScenarioService {
 
     @Override
     public Scenario getScenarioWithAmountsAndLastAction(Scenario scenario) {
-        return ScenarioStatusEnum.SENT_TO_LM == scenario.getStatus()
+        return ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())
             ? scenarioRepository.findArchivedWithAmountsAndLastAction(scenario.getId())
             : scenarioRepository.findWithAmountsAndLastAction(scenario.getId());
     }

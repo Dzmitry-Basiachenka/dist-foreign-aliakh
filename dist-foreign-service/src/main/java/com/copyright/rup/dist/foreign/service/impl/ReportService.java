@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.PipedOutputStream;
+import java.util.EnumSet;
 
 /**
  * Implements {@link IReportService}.
@@ -25,6 +26,10 @@ import java.io.PipedOutputStream;
 //TODO {dbaraukova} implement integration tests for this service.
 @Service
 public class ReportService implements IReportService {
+
+    private static final EnumSet<ScenarioStatusEnum> ARCHIVED_SCENARIO_STATUSES =
+        EnumSet.of(ScenarioStatusEnum.SENT_TO_LM, ScenarioStatusEnum.ARCHIVED);
+
     @Autowired
     private IUsageRepository usageRepository;
     @Autowired
@@ -37,7 +42,7 @@ public class ReportService implements IReportService {
 
     @Override
     public void writeScenarioUsagesCsvReport(Scenario scenario, PipedOutputStream outputStream) {
-        if (ScenarioStatusEnum.SENT_TO_LM == scenario.getStatus()) {
+        if (ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())) {
             usageArchiveRepository.writeScenarioUsagesCsvReport(scenario.getId(), outputStream);
         } else {
             usageRepository.writeScenarioUsagesCsvReport(scenario.getId(), outputStream);
