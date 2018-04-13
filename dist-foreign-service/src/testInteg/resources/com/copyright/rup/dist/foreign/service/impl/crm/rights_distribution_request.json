@@ -24,7 +24,7 @@
         "market": "Doc Del",
         "marketPeriodFrom": 2013,
         "marketPeriodTo": 2016,
-        "licenseeAccountNumber": "1000005413",
+        "arAccountNumber": "1000005413",
         "createUser": "FDA Distribution",
         "status": "D - Distributed"
       },
@@ -50,7 +50,7 @@
         "market": "Doc Del",
         "marketPeriodFrom": 2013,
         "marketPeriodTo": 2016,
-        "licenseeAccountNumber": "1000005413",
+        "arAccountNumber": "1000005413",
         "createUser": "FDA Distribution",
         "status": "D - Distributed"
       },
@@ -76,7 +76,7 @@
         "market": "Doc Del",
         "marketPeriodFrom": 2013,
         "marketPeriodTo": 2016,
-        "licenseeAccountNumber": "1000005413",
+        "arAccountNumber": "1000005413",
         "createUser": "FDA Distribution",
         "status": "D - Distributed"
       }
