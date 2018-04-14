@@ -131,8 +131,7 @@ public class CrmService implements ICrmService {
                 }
             }
         } else {
-            LOGGER.warn("Send usages to CRM. Failed. Reason=Couldn't parse response. Response={}, JsonNode={}",
-                response, jsonNode);
+            LOGGER.warn("Send usages to CRM. Failed. Reason=Couldn't parse response. Response={}", response);
         }
         return crmResult;
     }

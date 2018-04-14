@@ -120,7 +120,7 @@ public class ScenarioRepository extends BaseRepository implements IScenarioRepos
         params.put("scenarioStatus", ScenarioStatusEnum.SENT_TO_LM);
         List<String> result = new ArrayList<>(paidUsagesIds.size());
         Iterables.partition(paidUsagesIds, 32000).forEach(partition -> {
-            params.put("usageIds", Objects.requireNonNull(partition));
+            params.put("usageIds", partition);
             result.addAll(selectList("IScenarioMapper.findIdsForArchiving", params));
         });
         return result;

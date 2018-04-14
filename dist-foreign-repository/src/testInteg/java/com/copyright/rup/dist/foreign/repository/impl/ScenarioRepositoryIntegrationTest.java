@@ -247,7 +247,6 @@ public class ScenarioRepositoryIntegrationTest {
         scenariosIds =
             scenarioRepository.findIdsForArchiving(Collections.singletonList("2f235210-36af-4c7e-a5a3-25fc2e0668a2"));
         assertTrue(CollectionUtils.isNotEmpty(scenariosIds));
-        assertTrue(CollectionUtils.isNotEmpty(scenariosIds));
         assertEquals(1, scenariosIds.size());
         assertEquals("a9ee7491-d166-47cd-b36f-fe80ee7450f1", scenariosIds.get(0));
     }
