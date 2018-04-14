@@ -90,16 +90,34 @@ public class UsageArchiveRepositoryIntegrationTest {
     @Test
     public void testInsert() {
         usageArchiveRepository.insert(
-            buildUsage(RupPersistUtils.generateUuid(), "56282dbc-2468-48d4-b926-93d3458a656a", WORK_TITLE));
-        verifyUsage(WORK_TITLE);
+            buildUsage(RupPersistUtils.generateUuid(), "56282dbc-2468-48d4-b926-93d3458a656a"));
+        List<UsageDto> usageDtos = usageArchiveRepository.findByScenarioIdAndRhAccountNumber(
+            "b1f0b236-3ae9-4a60-9fab-61db84199d6f", RH_ACCOUNT_NUMBER, null, null, null);
+        assertEquals(1, usageDtos.size());
+        UsageDto usageDto = usageDtos.get(0);
+        assertNotNull(usageDto);
+        assertEquals(DETAIL_ID, usageDto.getDetailId());
+        assertEquals("CADRA_11Dec16", usageDto.getBatchName());
+        assertEquals(WR_WRK_INST, usageDto.getWrWrkInst());
+        assertEquals(2017, usageDto.getFiscalYear(), 0);
+        assertEquals(RH_ACCOUNT_NUMBER, usageDto.getRhAccountNumber(), 0);
+        assertEquals(2000017004L, usageDto.getPayeeAccountNumber(), 0);
+        assertEquals(WORK_TITLE, usageDto.getWorkTitle());
+        assertEquals(UsageStatusEnum.LOCKED, usageDto.getStatus());
+        assertEquals(ARTICLE, usageDto.getArticle());
+        assertEquals(STANDARD_NUMBER, usageDto.getStandardNumber());
+        assertEquals(PUBLISHER, usageDto.getPublisher());
+        assertEquals(PUBLICATION_DATE, usageDto.getPublicationDate());
+        assertEquals(MARKET, usageDto.getMarket());
+        assertEquals(MARKED_PERIOD_FROM, usageDto.getMarketPeriodFrom());
+        assertEquals(MARKED_PERIOD_TO, usageDto.getMarketPeriodTo());
+        assertEquals(AUTHOR, usageDto.getAuthor());
+        assertEquals(NUMBER_OF_COPIES, usageDto.getNumberOfCopies());
+        assertEquals(REPORTED_VALUE, usageDto.getReportedValue());
+        assertEquals(GROSS_AMOUNT, usageDto.getGrossAmount());
+        assertEquals("FAS", usageDto.getProductFamily());
     }
 
-    @Test
-    public void testInsertWithNullWorkTitle() {
-        usageArchiveRepository.insert(
-            buildUsage(RupPersistUtils.generateUuid(), "56282dbc-2468-48d4-b926-93d3458a656a", null));
-        verifyUsage(null);
-    }
 
     @Test
     public void testFindRightsholderTotalsHoldersByScenarioIdEmptySearchValue() {
@@ -338,34 +356,6 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertEquals(PAID_USAGE_ID, usagesIds.get(0));
     }
 
-    private void verifyUsage(String workTitle) {
-        List<UsageDto> usageDtos = usageArchiveRepository.findByScenarioIdAndRhAccountNumber(
-            "b1f0b236-3ae9-4a60-9fab-61db84199d6f", RH_ACCOUNT_NUMBER, null, null, null);
-        assertEquals(1, usageDtos.size());
-        UsageDto usageDto = usageDtos.get(0);
-        assertNotNull(usageDto);
-        assertEquals(DETAIL_ID, usageDto.getDetailId());
-        assertEquals("CADRA_11Dec16", usageDto.getBatchName());
-        assertEquals(WR_WRK_INST, usageDto.getWrWrkInst());
-        assertEquals(2017, usageDto.getFiscalYear(), 0);
-        assertEquals(RH_ACCOUNT_NUMBER, usageDto.getRhAccountNumber(), 0);
-        assertEquals(2000017004L, usageDto.getPayeeAccountNumber(), 0);
-        assertEquals(workTitle, usageDto.getWorkTitle());
-        assertEquals(UsageStatusEnum.LOCKED, usageDto.getStatus());
-        assertEquals(ARTICLE, usageDto.getArticle());
-        assertEquals(STANDARD_NUMBER, usageDto.getStandardNumber());
-        assertEquals(PUBLISHER, usageDto.getPublisher());
-        assertEquals(PUBLICATION_DATE, usageDto.getPublicationDate());
-        assertEquals(MARKET, usageDto.getMarket());
-        assertEquals(MARKED_PERIOD_FROM, usageDto.getMarketPeriodFrom());
-        assertEquals(MARKED_PERIOD_TO, usageDto.getMarketPeriodTo());
-        assertEquals(AUTHOR, usageDto.getAuthor());
-        assertEquals(NUMBER_OF_COPIES, usageDto.getNumberOfCopies());
-        assertEquals(REPORTED_VALUE, usageDto.getReportedValue());
-        assertEquals(GROSS_AMOUNT, usageDto.getGrossAmount());
-        assertEquals("FAS", usageDto.getProductFamily());
-    }
-
     private void verifyPaidUsage(UsageDto actualUsageDto, UsageStatusEnum status, Long payeeAccountNumber,
                                  String checkNumber, OffsetDateTime checkDate, String cccEventId,
                                  String distributionName, OffsetDateTime distributionDate,
@@ -404,14 +394,14 @@ public class UsageArchiveRepositoryIntegrationTest {
         return rightsholderTotalsHolder;
     }
 
-    private Usage buildUsage(String usageId, String usageBatchId, String workTitle) {
+    private Usage buildUsage(String usageId, String usageBatchId) {
         Usage usage = new Usage();
         usage.setId(usageId);
         usage.setBatchId(usageBatchId);
         usage.setScenarioId("b1f0b236-3ae9-4a60-9fab-61db84199d6f");
         usage.setDetailId(DETAIL_ID);
         usage.setWrWrkInst(WR_WRK_INST);
-        usage.setWorkTitle(workTitle);
+        usage.setWorkTitle(WORK_TITLE);
         usage.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER);
         usage.getRightsholder().setName("CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil");
         usage.getPayee().setAccountNumber(2000017004L);
