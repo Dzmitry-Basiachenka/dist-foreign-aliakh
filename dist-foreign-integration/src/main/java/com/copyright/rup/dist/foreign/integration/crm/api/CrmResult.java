@@ -6,6 +6,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -49,7 +50,7 @@ public class CrmResult {
      * @param detailId detail id
      */
     public void addInvalidDetailId(Long detailId) {
-        if (null != detailId) {
+        if (Objects.nonNull(detailId)) {
             invalidDetailIds.add(detailId);
         }
     }
