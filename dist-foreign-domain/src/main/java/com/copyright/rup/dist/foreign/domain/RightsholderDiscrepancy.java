@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.domain;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.domain.StoredEntity;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -16,7 +17,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  *
  * @author Ihar Suvorau
  */
-public class RightsholderDiscrepancy {
+public class RightsholderDiscrepancy extends StoredEntity<String> {
 
     private Long wrWrkInst;
     private String workTitle;
@@ -74,6 +75,7 @@ public class RightsholderDiscrepancy {
         }
         RightsholderDiscrepancy that = (RightsholderDiscrepancy) object;
         return new EqualsBuilder()
+            .appendSuper(super.equals(object))
             .append(this.wrWrkInst, that.wrWrkInst)
             .append(this.workTitle, that.workTitle)
             .append(this.productFamily, that.productFamily)
@@ -85,6 +87,7 @@ public class RightsholderDiscrepancy {
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
+            .appendSuper(super.hashCode())
             .append(wrWrkInst)
             .append(workTitle)
             .append(productFamily)
@@ -96,6 +99,7 @@ public class RightsholderDiscrepancy {
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+            .appendSuper(super.toString())
             .append("wrWrkInst", wrWrkInst)
             .append("workTitle", workTitle)
             .append("productFamily", productFamily)
