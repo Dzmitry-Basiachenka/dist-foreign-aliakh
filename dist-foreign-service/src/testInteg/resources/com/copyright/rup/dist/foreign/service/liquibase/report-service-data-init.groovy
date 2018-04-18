@@ -2,7 +2,7 @@ databaseChangeLog {
     property(file: 'database.properties')
 
     changeSet(id: '2018-04-09-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
-        comment('Inserting data for export scenario usages test')
+        comment('Inserting data for reporting service integration test')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '034873b3-97fa-475a-9a2a-191e8ec988b3')
@@ -11,7 +11,11 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
             column(name: 'gross_amount', value: '40300.00')
-            column(name: 'updated_datetime', value: '2017-02-14 11:41:52.735531+03')
+            column(name: 'record_version', value: '1')
+            column(name: 'created_by_user', value: 'SYSTEM')
+            column(name: 'created_datetime', value: '2017-02-14 11:25:52.735531+03')
+            column(name: 'updated_by_user', value: 'SYSTEM')
+            column(name: 'updated_datetime', value: '2017-02-14 11:25:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -21,7 +25,11 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
             column(name: 'gross_amount', value: '10250.00')
-            column(name: 'updated_datetime', value: '2017-02-14 11:41:52.735531+03')
+            column(name: 'record_version', value: '1')
+            column(name: 'created_by_user', value: 'SYSTEM')
+            column(name: 'created_datetime', value: '2017-02-14 11:35:52.735531+03')
+            column(name: 'updated_by_user', value: 'SYSTEM')
+            column(name: 'updated_datetime', value: '2017-02-14 11:35:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
@@ -29,6 +37,10 @@ databaseChangeLog {
             column(name: 'name', value: 'Test Scenario')
             column(name: 'status_ind', value: 'IN_PROGRESS')
             column(name: 'description', value: 'Scenario description')
+            column(name: 'record_version', value: '1')
+            column(name: 'created_by_user', value: 'SYSTEM')
+            column(name: 'created_datetime', value: '2017-02-14 11:45:52.735531+03')
+            column(name: 'updated_by_user', value: 'SYSTEM')
             column(name: 'updated_datetime', value: '2017-02-14 11:45:52.735531+03')
         }
 
@@ -214,6 +226,66 @@ databaseChangeLog {
             column(name: 'df_rightsholder_uid', value: '1da0461a-92f9-40cc-a3c1-9b972505b9c9')
             column(name: 'rh_account_number', value: '2000017001')
             column(name: 'name', value: 'CFC/ Center Fran dexploitation du droit de Copie')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
+            column(name: 'df_usage_audit_uid', value: 'c44d7e52-8bf8-4e8e-85b4-542b6d6e1b86')
+            column(name: 'df_usage_uid', value: '9f96760c-0de9-4cee-abf2-65521277281b')
+            column(name: 'action_type_ind', value: 'LOADED')
+            column(name: 'action_reason', value: 'Uploaded in \'Test Batch 1\' Batch')
+            column(name: 'record_version', value: '1')
+            column(name: 'created_by_user', value: 'SYSTEM')
+            column(name: 'created_datetime', value: '2017-02-14 11:25:52.735531+03')
+            column(name: 'updated_by_user', value: 'SYSTEM')
+            column(name: 'updated_datetime', value: '2017-02-14 11:25:52.735531+03')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
+            column(name: 'df_usage_audit_uid', value: '8a5afe55-5a5f-4893-aee1-96ac1361c033')
+            column(name: 'df_usage_uid', value: 'e4a81fad-7b0e-4c67-8df2-112c8913e45e')
+            column(name: 'action_type_ind', value: 'LOADED')
+            column(name: 'action_reason', value: 'Uploaded in \'Test Batch 1\' Batch')
+            column(name: 'record_version', value: '1')
+            column(name: 'created_by_user', value: 'SYSTEM')
+            column(name: 'created_datetime', value: '2017-02-14 11:25:52.735531+03')
+            column(name: 'updated_by_user', value: 'SYSTEM')
+            column(name: 'updated_datetime', value: '2017-02-14 11:25:52.735531+03')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
+            column(name: 'df_usage_audit_uid', value: 'cc7ba64a-b947-49ee-9e11-e6ba94ff7071')
+            column(name: 'df_usage_uid', value: '2641e7fe-2a5a-4cdf-8879-48816d705169')
+            column(name: 'action_type_ind', value: 'LOADED')
+            column(name: 'action_reason', value: 'Uploaded in \'Test Batch 2\' Batch')
+            column(name: 'record_version', value: '1')
+            column(name: 'created_by_user', value: 'SYSTEM')
+            column(name: 'created_datetime', value: '2017-02-14 11:35:52.735531+03')
+            column(name: 'updated_by_user', value: 'SYSTEM')
+            column(name: 'updated_datetime', value: '2017-02-14 11:35:52.735531+03')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
+            column(name: 'df_usage_audit_uid', value: 'd34b1830-8aa3-4e48-aeea-bca4682e090f')
+            column(name: 'df_usage_uid', value: '405491b1-49a9-4b70-9cdb-d082be6a802d')
+            column(name: 'action_type_ind', value: 'LOADED')
+            column(name: 'action_reason', value: 'Uploaded in \'Test Batch 2\' Batch')
+            column(name: 'record_version', value: '1')
+            column(name: 'created_by_user', value: 'SYSTEM')
+            column(name: 'created_datetime', value: '2017-02-14 11:35:52.735531+03')
+            column(name: 'updated_by_user', value: 'SYSTEM')
+            column(name: 'updated_datetime', value: '2017-02-14 11:35:52.735531+03')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
+            column(name: 'df_usage_audit_uid', value: 'd8134fef-9d0e-4126-9d7b-9340917bacc5')
+            column(name: 'df_usage_uid', value: '4ddfcb74-cb72-48f6-9ee4-8b4e05afce75')
+            column(name: 'action_type_ind', value: 'LOADED')
+            column(name: 'action_reason', value: 'Uploaded in \'Test Batch 2\' Batch')
+            column(name: 'record_version', value: '1')
+            column(name: 'created_by_user', value: 'SYSTEM')
+            column(name: 'created_datetime', value: '2017-02-14 11:35:52.735531+03')
+            column(name: 'updated_by_user', value: 'SYSTEM')
+            column(name: 'updated_datetime', value: '2017-02-14 11:35:52.735531+03')
         }
 
         rollback ""
