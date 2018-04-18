@@ -157,12 +157,7 @@ public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
         }
 
         private static LocalDate getDate(String[] row, ICsvColumn column) {
-            LocalDate result = null;
-            String value = getValue(row, column);
-            if (Objects.nonNull(value)) {
-                result = CommonDateUtils.parseLocalDate(value, "M/d/uuuu");
-            }
-            return result;
+            return CommonDateUtils.parseLocalDate(getValue(row, column), "M/d/uuuu");
         }
 
         @Override
