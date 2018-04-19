@@ -602,4 +602,74 @@ databaseChangeLog {
             sql("drop index ${dbAppsSchema}.ix_df_usage_work_title")
         }
     }
+
+    changeSet(id: '2018-04-17-00', author: 'Ihar Suvorau <isuvorau@copyright.com') {
+        comment('B-42925 FDA: Tune Performance for Reconciling Rightsholders: add df_rightsholder_discrepancy table')
+
+        createTable(tableName: 'df_rightsholder_discrepancy', schemaName: dbAppsSchema, tablespace: dbDataTablespace,
+                remarks: 'The table to store rightsholder discrepancies for scenario reconciliation') {
+
+            column(name: 'df_rightsholder_discrepancy_uid', type: 'VARCHAR(255)', remarks: 'The rightsholder discrepancy identifier') {
+                constraints(nullable: false)
+            }
+
+            column(name: 'df_scenario_uid', type: 'VARCHAR(255)', remarks: 'The Scenario identifier') {
+                constraints(nullable: false)
+            }
+
+            column(name: 'wr_wrk_inst', type: 'NUMERIC(15,0)', remarks: 'The work identifier') {
+                constraints(nullable: false)
+            }
+
+            column(name: 'old_rh_account_number', type: 'NUMERIC(22,0)', remarks: 'The old rightsholder account number') {
+                constraints(nullable: false)
+            }
+
+            column(name: 'new_rh_account_number', type: 'NUMERIC(22,0)', remarks: 'The new rightsholder account number')
+
+            column(name: 'work_title', type: 'VARCHAR(2000)', remarks: 'The rightsholder discrepancy work title')
+
+            column(name: 'product_family', type: 'VARCHAR(128)', remarks: 'The rightsholder discrepancy product family') {
+                constraints(nullable: false)
+            }
+
+            column(name: 'record_version', type: 'INTEGER', defaultValue: '1',
+                    remarks: 'The latest version of this record, used for optimistic locking') {
+                constraints(nullable: false)
+            }
+
+            column(name: 'created_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM', remarks: 'The user name who created this record') {
+                constraints(nullable: false)
+            }
+
+            column(name: 'created_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()', remarks: 'The date and time this record was created') {
+                constraints(nullable: false)
+            }
+
+            column(name: 'updated_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who updated this record; when a record is first created, this will be the same as the created_by_user') {
+                constraints(nullable: false)
+            }
+
+            column(name: 'updated_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created; when a record is first created, this will be the same as the created_datetime') {
+                constraints(nullable: false)
+            }
+        }
+
+        addPrimaryKey(schemaName: dbAppsSchema, tableName: 'df_rightsholder_discrepancy', tablespace: dbIndexTablespace,
+                columnNames: 'df_rightsholder_discrepancy_uid', constraintName: 'pk_df_rightsholder_discrepancy')
+
+        addForeignKeyConstraint(constraintName: 'fk_df_rightsholder_discrepancy_2_df_scenario',
+                baseTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_rightsholder_discrepancy',
+                baseColumnNames: 'df_scenario_uid',
+                referencedTableSchemaName: dbAppsSchema,
+                referencedTableName: 'df_scenario',
+                referencedColumnNames: 'df_scenario_uid')
+
+        rollback {
+            // automatic rollback
+        }
+    }
 }
