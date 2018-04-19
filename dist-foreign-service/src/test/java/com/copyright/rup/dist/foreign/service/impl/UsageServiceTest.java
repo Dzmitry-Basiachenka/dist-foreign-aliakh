@@ -196,6 +196,15 @@ public class UsageServiceTest {
     }
 
     @Test
+    public void testGetUsagesForReconcile() {
+        List<Usage> usages = Collections.singletonList(new Usage());
+        expect(usageRepository.findForReconcile(scenario.getId())).andReturn(usages).once();
+        replay(usageRepository);
+        assertSame(usages, usageService.getUsagesForReconcile(scenario.getId()));
+        verify(usageRepository);
+    }
+
+    @Test
     public void testGetUsagesWithAmounts() {
         UsageFilter usageFilter = new UsageFilter();
         Usage usage = buildUsage(USAGE_ID_1);

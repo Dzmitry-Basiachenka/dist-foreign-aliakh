@@ -73,7 +73,6 @@ import java.util.stream.IntStream;
 public class UsageRepositoryIntegrationTest {
 
     private static final String USAGE_BATCH_ID_1 = "56282dbc-2468-48d4-b926-93d3458a656a";
-    private static final String USAGE_ID = RupPersistUtils.generateUuid();
     private static final Long RH_ACCOUNT_NUMBER = 7000813806L;
     private static final LocalDate PAYMENT_DATE = LocalDate.of(2018, 12, 11);
     private static final Integer FISCAL_YEAR = 2019;
@@ -89,7 +88,6 @@ public class UsageRepositoryIntegrationTest {
     private static final String STANDARD_NUMBER_2 = "2192-3558";
     private static final Long DETAIL_ID = 12345L;
     private static final Long DETAIL_ID_1 = 6997788884L;
-    private static final Long DETAIL_ID_2 = 6997788886L;
     private static final String DETAIL_ID_KEY = "detailId";
     private static final String USAGE_ID_1 = "3ab5e80b-89c0-4d78-9675-54c7ab284450";
     private static final String USAGE_ID_2 = "8a06905f-37ae-4e1f-8550-245277f8165c";
@@ -129,10 +127,11 @@ public class UsageRepositoryIntegrationTest {
 
     @Test
     public void testInsert() {
-        usageRepository.insert(buildUsage(USAGE_ID, USAGE_BATCH_ID_1));
+        String usageId = RupPersistUtils.generateUuid();
+        usageRepository.insert(buildUsage(usageId, USAGE_BATCH_ID_1));
         Usage usage = usageRepository.findByDetailId(DETAIL_ID);
         assertNotNull(usage);
-        assertEquals(USAGE_ID, usage.getId());
+        assertEquals(usageId, usage.getId());
         assertEquals(SCENARIO_ID, usage.getScenarioId());
         assertEquals(WR_WRK_INST, usage.getWrWrkInst());
         assertEquals("Work Title", usage.getWorkTitle());
@@ -220,7 +219,7 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindByFilterSortByStandartNumber() {
+    public void testFindByFilterSortByStandardNumber() {
         verifyUsageDtos(usageRepository.findByFilter(buildFilterWithStatuses(UsageStatusEnum.ELIGIBLE), null,
             new Sort("standardNumber", Sort.Direction.ASC)), 4, USAGE_ID_2, USAGE_ID_3, USAGE_ID_1, USAGE_ID_10);
     }
@@ -553,6 +552,20 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
+    public void testFindForReconcile() {
+        List<Usage> usages = usageRepository.findForReconcile(SCENARIO_ID);
+        assertEquals(2, usages.size());
+        usages.forEach(usage -> {
+            assertEquals(243904752L, usage.getWrWrkInst(), 0);
+            assertEquals(1000002859L, usage.getRightsholder().getAccountNumber(), 0);
+            assertEquals("John Wiley & Sons - Books", usage.getRightsholder().getName());
+            assertEquals("100 ROAD MOVIES", usage.getWorkTitle());
+            assertEquals(PRODUCT_FAMILY_FAS, usage.getProductFamily());
+            assertNotNull(usage.getGrossAmount());
+        });
+    }
+
+    @Test
     public void testFindRightsholdersInformation() {
         Map<Long, Usage> rhInfo = usageRepository.findRightsholdersInformation(SCENARIO_ID);
         assertEquals(1, rhInfo.size());
@@ -670,10 +683,10 @@ public class UsageRepositoryIntegrationTest {
 
     @Test
     public void testDeleteFromScenario() {
-        verifyUsage(usageRepository.findByDetailId(DETAIL_ID_2), UsageStatusEnum.LOCKED, SCENARIO_ID,
+        verifyUsage(usageRepository.findByDetailId(6997788886L), UsageStatusEnum.LOCKED, SCENARIO_ID,
             StoredEntity.DEFAULT_USER, 1000002859L);
         usageRepository.deleteFromScenario(SCENARIO_ID, USER_NAME);
-        verifyUsageExcludedFromScenario(usageRepository.findByDetailId(DETAIL_ID_2));
+        verifyUsageExcludedFromScenario(usageRepository.findByDetailId(6997788886L));
     }
 
     @Test

@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
+import static org.easymock.EasyMock.capture;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -25,6 +27,7 @@ import com.copyright.rup.dist.foreign.integration.lm.api.ILmIntegrationService;
 import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsage;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
+import com.copyright.rup.dist.foreign.service.api.IRightsholderDiscrepancyService;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IRmsGrantsService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
@@ -38,6 +41,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import org.apache.commons.lang3.StringUtils;
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -76,10 +80,11 @@ public class ScenarioServiceTest {
     private IRmsGrantsService rmsGrantsService;
     private IRightsholderService rightsholderService;
     private IScenarioUsageFilterService scenarioUsageFilterService;
+    private IRightsholderDiscrepancyService rightsholderDiscrepancyService;
 
     @Before
     public void setUp() {
-        scenario.setId(RupPersistUtils.generateUuid());
+        scenario.setId(SCENARIO_ID);
         scenarioRepository = createMock(IScenarioRepository.class);
         usageService = createMock(IUsageService.class);
         lmIntegrationService = createMock(ILmIntegrationService.class);
@@ -87,6 +92,7 @@ public class ScenarioServiceTest {
         rmsGrantsService = createMock(IRmsGrantsService.class);
         rightsholderService = createMock(IRightsholderService.class);
         scenarioUsageFilterService = createMock(IScenarioUsageFilterService.class);
+        rightsholderDiscrepancyService = createMock(IRightsholderDiscrepancyService.class);
         scenarioService = new ScenarioService();
         Whitebox.setInternalState(scenarioService, "scenarioRepository", scenarioRepository);
         Whitebox.setInternalState(scenarioService, "usageService", usageService);
@@ -95,6 +101,7 @@ public class ScenarioServiceTest {
         Whitebox.setInternalState(scenarioService, "rmsGrantsService", rmsGrantsService);
         Whitebox.setInternalState(scenarioService, "rightsholderService", rightsholderService);
         Whitebox.setInternalState(scenarioService, "scenarioUsageFilterService", scenarioUsageFilterService);
+        Whitebox.setInternalState(scenarioService, "rightsholderDiscrepancyService", rightsholderDiscrepancyService);
     }
 
     @Test
@@ -124,8 +131,8 @@ public class ScenarioServiceTest {
 
     @Test
     public void testGetScenarioWithAmountsAndLastAction() {
-        expect(scenarioRepository.findWithAmountsAndLastAction(scenario.getId())).andReturn(scenario).once();
-        expect(scenarioRepository.findArchivedWithAmountsAndLastAction(scenario.getId())).andReturn(scenario).times(2);
+        expect(scenarioRepository.findWithAmountsAndLastAction(SCENARIO_ID)).andReturn(scenario).once();
+        expect(scenarioRepository.findArchivedWithAmountsAndLastAction(SCENARIO_ID)).andReturn(scenario).times(2);
         replay(scenarioRepository);
         assertSame(scenario, scenarioService.getScenarioWithAmountsAndLastAction(scenario));
         scenario.setStatus(ScenarioStatusEnum.SENT_TO_LM);
@@ -137,14 +144,15 @@ public class ScenarioServiceTest {
 
     @Test
     public void testRemove() {
-        usageService.deleteFromScenario(scenario.getId());
+        usageService.deleteFromScenario(SCENARIO_ID);
         expectLastCall().once();
-        scenarioRepository.remove(scenario.getId());
+        scenarioRepository.remove(SCENARIO_ID);
         expectLastCall().once();
-        scenarioUsageFilterService.removeByScenarioId(scenario.getId());
+        scenarioUsageFilterService.removeByScenarioId(SCENARIO_ID);
         expectLastCall().once();
-        scenarioAuditService.deleteActions(scenario.getId());
+        scenarioAuditService.deleteActions(SCENARIO_ID);
         expectLastCall().once();
+        rightsholderDiscrepancyService.deleteDiscrepanciesByScenarioId(SCENARIO_ID);
         replay(usageService, scenarioRepository, scenarioAuditService, scenarioUsageFilterService);
         scenarioService.deleteScenario(scenario);
         verify(usageService, scenarioRepository, scenarioAuditService, scenarioUsageFilterService);
@@ -162,7 +170,7 @@ public class ScenarioServiceTest {
     public void testSubmit() {
         scenarioRepository.updateStatus(scenario);
         expectLastCall().once();
-        scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.SUBMITTED, REASON);
+        scenarioAuditService.logAction(SCENARIO_ID, ScenarioActionTypeEnum.SUBMITTED, REASON);
         expectLastCall().once();
         replay(scenarioRepository, scenarioAuditService);
         scenarioService.submit(scenario, REASON);
@@ -174,7 +182,7 @@ public class ScenarioServiceTest {
     public void testReject() {
         scenarioRepository.updateStatus(scenario);
         expectLastCall().once();
-        scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.REJECTED, REASON);
+        scenarioAuditService.logAction(SCENARIO_ID, ScenarioActionTypeEnum.REJECTED, REASON);
         expectLastCall().once();
         replay(scenarioRepository, scenarioAuditService);
         scenarioService.reject(scenario, REASON);
@@ -186,7 +194,7 @@ public class ScenarioServiceTest {
     public void testApprove() {
         scenarioRepository.updateStatus(scenario);
         expectLastCall().once();
-        scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.APPROVED, REASON);
+        scenarioAuditService.logAction(SCENARIO_ID, ScenarioActionTypeEnum.APPROVED, REASON);
         expectLastCall().once();
         replay(scenarioRepository, scenarioAuditService);
         scenarioService.approve(scenario, REASON);
@@ -198,7 +206,7 @@ public class ScenarioServiceTest {
     public void testSendToLm() {
         scenarioRepository.updateStatus(scenario);
         expectLastCall().once();
-        scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.SENT_TO_LM, StringUtils.EMPTY);
+        scenarioAuditService.logAction(SCENARIO_ID, ScenarioActionTypeEnum.SENT_TO_LM, StringUtils.EMPTY);
         expectLastCall().once();
         expect(usageService.moveToArchive(scenario)).andReturn(Collections.singletonList(new Usage())).once();
         lmIntegrationService.sendToLm(Collections.singletonList(new ExternalUsage(new Usage())));
@@ -221,15 +229,19 @@ public class ScenarioServiceTest {
 
     @Test
     public void testGetRightsholderDiscrepancies() {
-        expect(usageService.getUsagesByScenarioId(scenario.getId()))
+        expect(usageService.getUsagesForReconcile(SCENARIO_ID))
             .andReturn(Lists.newArrayList(buildUsage(1L, 2000017010L), buildUsage(2L, 2000017010L))).once();
         expect(rmsGrantsService.getAccountNumbersByWrWrkInsts(Lists.newArrayList(1L, 2L)))
             .andReturn(ImmutableMap.of(1L, 2000017010L, 2L, 1000000001L)).once();
         expect(rightsholderService.updateAndGetRightsholders(Sets.newHashSet(2000017010L, 1000000001L)))
             .andReturn(ImmutableMap.of(2000017010L, buildRightsholder(2000017010L), 1000000001L,
                 buildRightsholder(1000000001L))).once();
+        Capture<List<RightsholderDiscrepancy>> discrepanciesCapture = new Capture<>();
+        rightsholderDiscrepancyService.insertDiscrepancies(capture(discrepanciesCapture), eq(SCENARIO_ID));
+        expectLastCall().once();
         replayAll();
-        Set<RightsholderDiscrepancy> discrepancies = scenarioService.getRightsholderDiscrepancies(scenario);
+        scenarioService.getRightsholderDiscrepancies(scenario);
+        List<RightsholderDiscrepancy> discrepancies = discrepanciesCapture.getValue();
         assertEquals(1, discrepancies.size());
         RightsholderDiscrepancy discrepancy = discrepancies.iterator().next();
         assertEquals(2L, discrepancy.getWrWrkInst(), 0);
@@ -241,7 +253,7 @@ public class ScenarioServiceTest {
     @Test
     public void testUpdateRhParticipationAndAmounts() {
         List<Usage> usages = Collections.singletonList(buildUsage(1L, 2000017010L));
-        expect(usageService.getUsagesByScenarioId(scenario.getId())).andReturn(usages).once();
+        expect(usageService.getUsagesByScenarioId(SCENARIO_ID)).andReturn(usages).once();
         usageService.updateRhPayeeAndAmounts(usages);
         expectLastCall().once();
         replayAll();
@@ -260,7 +272,7 @@ public class ScenarioServiceTest {
         discrepancies.add(discrepancy1);
         discrepancies.add(discrepancy2);
         List<Usage> usages = Lists.newArrayList(buildUsage(1L, 2000017010L), buildUsage(2L, 2000017020L));
-        expect(usageService.getUsagesByScenarioId(scenario.getId())).andReturn(usages).once();
+        expect(usageService.getUsagesForReconcile(SCENARIO_ID)).andReturn(usages).once();
         Rightsholder rightsholder1 = discrepancy1.getNewRightsholder();
         Rightsholder rightsholder2 = discrepancy2.getNewRightsholder();
         expect(prmIntegrationService.getRollUps(Sets.newHashSet(rightsholder1.getId(), rightsholder2.getId())))

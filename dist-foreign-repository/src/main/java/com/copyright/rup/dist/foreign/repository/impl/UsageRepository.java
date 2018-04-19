@@ -85,6 +85,11 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
+    public List<Usage> findForReconcile(String scenarioId) {
+        return selectList("IUsageMapper.findForReconcile", Objects.requireNonNull(scenarioId));
+    }
+
+    @Override
     public Map<Long, Usage> findRightsholdersInformation(String scenarioId) {
         RightsholdersInfoResultHandler handler = new RightsholdersInfoResultHandler();
         getTemplate().select("IUsageMapper.findRightsholdersInformation", Objects.requireNonNull(scenarioId), handler);

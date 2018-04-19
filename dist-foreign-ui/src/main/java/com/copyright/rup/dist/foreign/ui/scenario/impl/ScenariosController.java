@@ -13,6 +13,7 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.service.api.IRightsholderDiscrepancyService;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
@@ -26,6 +27,7 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.impl.ExcludeRightsholdersWindow.IExcludeUsagesListener;
 import com.copyright.rup.vaadin.security.SecurityUtils;
+import com.copyright.rup.vaadin.ui.component.window.ConfirmDialogWindow.IListener;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
@@ -82,6 +84,8 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
     private IUsageService usageService;
     @Autowired
     private IScenarioUsageFilterService scenarioUsageFilterService;
+    @Autowired
+    private IRightsholderDiscrepancyService rightsholderDiscrepancyService;
 
     @Override
     public List<Scenario> getScenarios() {
@@ -122,9 +126,17 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
                 Windows.showModalWindow(new RightsholderDiscrepanciesWindow(reconcileRightsholdersController, this));
             } else {
                 Windows.showConfirmDialog(ForeignUi.getMessage("window.reconcile_rightsholders", scenario.getName()),
-                    () -> {
-                        scenarioService.updateRhParticipationAndAmounts(scenario);
-                        getWidget().refreshSelectedScenario();
+                    new IListener() {
+                        @Override
+                        public void onActionConfirmed() {
+                            scenarioService.updateRhParticipationAndAmounts(scenario);
+                            getWidget().refreshSelectedScenario();
+                        }
+
+                        @Override
+                        public void onActionDeclined() {
+                            rightsholderDiscrepancyService.deleteDiscrepanciesByScenarioId(scenario.getId());
+                        }
                     });
             }
         } else {

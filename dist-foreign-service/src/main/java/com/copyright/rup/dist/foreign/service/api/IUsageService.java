@@ -82,6 +82,14 @@ public interface IUsageService {
     List<Usage> getUsagesByScenarioId(String scenarioId);
 
     /**
+     * Gets the {@link Usage}s for reconcile based on {@link Scenario} identifier.
+     *
+     * @param scenarioId identifier of {@link Scenario}
+     * @return the list of {@link Usage}s
+     */
+    List<Usage> getUsagesForReconcile(String scenarioId);
+
+    /**
      * Finds rightsholder information based on scenario identifier.
      *
      * @param scenarioId scenario id
