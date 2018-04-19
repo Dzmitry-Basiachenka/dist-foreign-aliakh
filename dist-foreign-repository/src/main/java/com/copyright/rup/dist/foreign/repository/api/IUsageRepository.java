@@ -298,21 +298,23 @@ public interface IUsageRepository {
     /**
      * Finds list of {@link Usage}s that have standard numbers.
      *
-     * @param limit selection limit
+     * @param limit  maximum size of list
+     * @param offset number of excluded records
      * @return list of {@link Usage}s
      */
-    List<Usage> findWithStandardNumber(int limit);
+    List<Usage> findWithStandardNumber(int limit, int offset);
 
     /**
      * Finds list of {@link Usage}s that have no standard numbers but have titles.
      *
-     * @param limit selection limit
+     * @param limit  maximum size of list
+     * @param offset number of excluded records
      * @return list of {@link Usage}s
      */
-    List<Usage> findWithTitle(int limit);
+    List<Usage> findWithTitle(int limit, int offset);
 
     /**
-     * @return list of {@link Usage}s without standard number and title with with {@link UsageStatusEnum#NEW} status.
+     * @return list of {@link Usage}s without standard number and title with {@link UsageStatusEnum#NEW} status.
      */
     List<Usage> findWithoutStandardNumberAndTitle();
 

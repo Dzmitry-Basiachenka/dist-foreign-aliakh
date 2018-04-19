@@ -495,18 +495,18 @@ public class UsageServiceTest {
     @Test
     public void testGetUsagesWithStandardNumber() {
         List<Usage> usages = Collections.singletonList(buildUsage(USAGE_ID_1));
-        expect(usageRepository.findWithStandardNumber(10)).andReturn(usages).once();
+        expect(usageRepository.findWithStandardNumber(10, 0)).andReturn(usages).once();
         replay(usageRepository);
-        assertEquals(usages, usageService.getUsagesWithStandardNumber(10));
+        assertEquals(usages, usageService.getUsagesWithStandardNumber(10, 0));
         verify(usageRepository);
     }
 
     @Test
     public void testGetUsagesWithTitle() {
         List<Usage> usages = Collections.singletonList(buildUsage(USAGE_ID_1));
-        expect(usageRepository.findWithTitle(10)).andReturn(usages).once();
+        expect(usageRepository.findWithTitle(10, 0)).andReturn(usages).once();
         replay(usageRepository);
-        assertEquals(usages, usageService.getUsagesWithTitle(10));
+        assertEquals(usages, usageService.getUsagesWithTitle(10, 0));
         verify(usageRepository);
     }
 

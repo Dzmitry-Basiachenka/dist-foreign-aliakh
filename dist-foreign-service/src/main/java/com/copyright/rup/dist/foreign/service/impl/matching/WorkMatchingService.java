@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.service.impl.matching;
 
-import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
@@ -9,7 +8,6 @@ import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IWorkMatchingService;
-import com.copyright.rup.dist.foreign.service.impl.matching.WorksMatchingJob.UsageGroupEnum;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
@@ -55,34 +53,29 @@ public class WorkMatchingService implements IWorkMatchingService {
     @Override
     @Transactional
     public List<Usage> matchByIdno(List<Usage> usages) {
-        List<Usage> result = new ArrayList<>();
         LOGGER.info("Search works by IDNOs. Started. IDNOsCount={}", usages.size());
-        try {
-            result = doMatchByIdno(usages);
-            if (CollectionUtils.isNotEmpty(result)) {
-                usageRepository.updateStatusAndWrWrkInstByStandardNumber(result);
-                result.stream()
-                    .map(Usage::getStandardNumber)
-                    .collect(Collectors.toSet())
-                    .forEach(standardNumber -> usageRepository.findByStandardNumberAndStatus(standardNumber,
-                        UsageStatusEnum.WORK_FOUND)
-                        .forEach(usage -> auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
-                            String.format("Wr Wrk Inst %s was found by standard number %s", usage.getWrWrkInst(),
-                                usage.getStandardNumber()))));
-            }
-            usages.stream()
-                .filter(usage -> Objects.equals(UsageStatusEnum.NEW, usage.getStatus()))
+        List<Usage> result = doMatchByIdno(usages);
+        if (CollectionUtils.isNotEmpty(result)) {
+            usageRepository.updateStatusAndWrWrkInstByStandardNumber(result);
+            result.stream()
                 .map(Usage::getStandardNumber)
                 .collect(Collectors.toSet())
-                .forEach(standardNumber -> {
-                    List<Usage> usagesByStandardNumber =
-                        usageRepository.findByStandardNumberAndStatus(standardNumber, UsageStatusEnum.NEW);
-                    updateUsagesStatusAndWriteAudit(usagesByStandardNumber, UsageGroupEnum.STANDARD_NUMBER);
-                    usageRepository.updateStatusAndWrWrkInstByStandardNumber(usagesByStandardNumber);
-                });
-        } catch (RupRuntimeException e) {
-            LOGGER.warn("Search works by IDNOs. Failed. Reason=Unable to connect to RupEsApi.", e);
+                .forEach(standardNumber -> usageRepository.findByStandardNumberAndStatus(standardNumber,
+                    UsageStatusEnum.WORK_FOUND)
+                    .forEach(usage -> auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
+                        String.format("Wr Wrk Inst %s was found by standard number %s", usage.getWrWrkInst(),
+                            usage.getStandardNumber()))));
         }
+        usages.stream()
+            .filter(usage -> Objects.equals(UsageStatusEnum.NEW, usage.getStatus()))
+            .map(Usage::getStandardNumber)
+            .collect(Collectors.toSet())
+            .forEach(standardNumber -> {
+                List<Usage> usagesByStandardNumber =
+                    usageRepository.findByStandardNumberAndStatus(standardNumber, UsageStatusEnum.NEW);
+                updateUsagesStatusAndWriteAudit(usagesByStandardNumber, UsageGroupEnum.STANDARD_NUMBER);
+                usageRepository.updateStatusAndWrWrkInstByStandardNumber(usagesByStandardNumber);
+            });
         LOGGER.info("Search works by IDNOs. Finished. IDNOsCount={}, WorksFound={}", usages.size(), result.size());
         return result;
     }
@@ -90,33 +83,28 @@ public class WorkMatchingService implements IWorkMatchingService {
     @Override
     @Transactional
     public List<Usage> matchByTitle(List<Usage> usages) {
-        List<Usage> result = new ArrayList<>();
-        LOGGER.info("Search works by Title. Started. TitlesCount={}", usages.size());
-        try {
-            result = doMatchByTitle(usages);
-            if (CollectionUtils.isNotEmpty(result)) {
-                usageRepository.updateStatusAndWrWrkInstByTitle(result);
-                result.stream()
-                    .map(Usage::getWorkTitle)
-                    .collect(Collectors.toSet())
-                    .forEach(title -> usageRepository.findByTitleAndStatus(title, UsageStatusEnum.WORK_FOUND)
-                        .forEach(usage -> auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
-                            String.format("Wr Wrk Inst %s was found by title \"%s\"", usage.getWrWrkInst(),
-                                usage.getWorkTitle()))));
-            }
-            usages.stream()
-                .filter(usage -> Objects.equals(UsageStatusEnum.NEW, usage.getStatus()))
+        LOGGER.info("Search works by Titles. Started. TitlesCount={}", usages.size());
+        List<Usage> result = doMatchByTitle(usages);
+        if (CollectionUtils.isNotEmpty(result)) {
+            usageRepository.updateStatusAndWrWrkInstByTitle(result);
+            result.stream()
                 .map(Usage::getWorkTitle)
                 .collect(Collectors.toSet())
-                .forEach(title -> {
-                    List<Usage> usagesByTitle = usageRepository.findByTitleAndStatus(title, UsageStatusEnum.NEW);
-                    updateUsagesStatusAndWriteAudit(usagesByTitle, UsageGroupEnum.TITLE);
-                    usageRepository.updateStatusAndWrWrkInstByTitle(usagesByTitle);
-                });
-        } catch (RupRuntimeException e) {
-            LOGGER.warn("Search works by Title. Failed. Reason=Unable to connect to RupEsApi.", e);
+                .forEach(title -> usageRepository.findByTitleAndStatus(title, UsageStatusEnum.WORK_FOUND)
+                    .forEach(usage -> auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
+                        String.format("Wr Wrk Inst %s was found by title \"%s\"", usage.getWrWrkInst(),
+                            usage.getWorkTitle()))));
         }
-        LOGGER.info("Search works by Title. Finished. TitlesCount={}, WorksFound={}", usages.size(), result.size());
+        usages.stream()
+            .filter(usage -> Objects.equals(UsageStatusEnum.NEW, usage.getStatus()))
+            .map(Usage::getWorkTitle)
+            .collect(Collectors.toSet())
+            .forEach(title -> {
+                List<Usage> usagesByTitle = usageRepository.findByTitleAndStatus(title, UsageStatusEnum.NEW);
+                updateUsagesStatusAndWriteAudit(usagesByTitle, UsageGroupEnum.TITLE);
+                usageRepository.updateStatusAndWrWrkInstByTitle(usagesByTitle);
+            });
+        LOGGER.info("Search works by Titles. Finished. TitlesCount={}, WorksFound={}", usages.size(), result.size());
         return result;
     }
 
@@ -189,5 +177,65 @@ public class WorkMatchingService implements IWorkMatchingService {
         return usages.stream()
             .map(Usage::getGrossAmount)
             .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    private enum UsageGroupEnum {
+
+        /**
+         * Enum constant to separate groups of {@link Usage}s with standard number.
+         */
+        STANDARD_NUMBER {
+            @Override
+            String getNtsEligibleReason() {
+                return "Detail was made eligible for NTS because sum of gross amounts, grouped by standard number, " +
+                    "is less than $100";
+            }
+
+            @Override
+            Function<Usage, String> getWorkNotFoundReasonFunction() {
+                return usage -> "Wr Wrk Inst was not found by standard number " + usage.getStandardNumber();
+            }
+        },
+        /**
+         * Enum constant to separate groups of {@link Usage}s with work title.
+         */
+        TITLE {
+            @Override
+            String getNtsEligibleReason() {
+                return "Detail was made eligible for NTS because sum of gross amounts, grouped by work title, " +
+                    "is less than $100";
+            }
+
+            @Override
+            Function<Usage, String> getWorkNotFoundReasonFunction() {
+                return usage -> "Wr Wrk Inst was not found by title \"" + usage.getWorkTitle() + "\"";
+            }
+        },
+        /**
+         * Enum constant to separate groups of {@link Usage}s that don't have standard number and work title.
+         */
+        SINGLE_USAGE {
+            @Override
+            String getNtsEligibleReason() {
+                return "Detail was made eligible for NTS because gross amount is less than $100";
+            }
+
+            @Override
+            Function<Usage, String> getWorkNotFoundReasonFunction() {
+                return usage -> "Usage has no standard number and title";
+            }
+        };
+
+        /**
+         * @return reason for making {@link Usage}
+         * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE} for NTS.
+         */
+        abstract String getNtsEligibleReason();
+
+        /**
+         * @return {@link Function} for building reason for setting status
+         * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#WORK_NOT_FOUND} for {@link Usage}.
+         */
+        abstract Function<Usage, String> getWorkNotFoundReasonFunction();
     }
 }

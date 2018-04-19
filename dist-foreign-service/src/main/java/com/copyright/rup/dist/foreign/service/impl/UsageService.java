@@ -368,13 +368,13 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public List<Usage> getUsagesWithStandardNumber(int limit) {
-        return usageRepository.findWithStandardNumber(limit);
+    public List<Usage> getUsagesWithStandardNumber(int limit, int offset) {
+        return usageRepository.findWithStandardNumber(limit, offset);
     }
 
     @Override
-    public List<Usage> getUsagesWithTitle(int limit) {
-        return usageRepository.findWithTitle(limit);
+    public List<Usage> getUsagesWithTitle(int limit, int offset) {
+        return usageRepository.findWithTitle(limit, offset);
     }
 
     @Override

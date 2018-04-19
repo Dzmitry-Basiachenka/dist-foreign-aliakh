@@ -9,7 +9,6 @@ import static org.junit.Assert.assertEquals;
 
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.es.api.RupEsApi;
-import com.copyright.rup.es.api.RupResponseBase;
 import com.copyright.rup.es.api.RupSearchResponse;
 import com.copyright.rup.es.api.domain.RupSearchHit;
 import com.copyright.rup.es.api.domain.RupSearchResults;
@@ -116,7 +115,6 @@ public class PiIntegrationServiceTest {
     }
 
     private void expectGetSearchResponse() {
-        expect(searchResponse.getStatus()).andReturn(RupResponseBase.Status.SUCCESS).times(7);
         expect(searchResponse.getResults()).andReturn(searchResults).times(7);
         expect(searchResults.getHits()).andReturn(Collections.singletonList(searchHit1)).once();
         expect(searchResults.getHits()).andReturn(Collections.singletonList(searchHit2)).once();

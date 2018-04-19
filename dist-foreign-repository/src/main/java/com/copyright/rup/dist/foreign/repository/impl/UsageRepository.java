@@ -335,18 +335,20 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public List<Usage> findWithStandardNumber(int limit) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+    public List<Usage> findWithStandardNumber(int limit, int offset) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
         parameters.put(STATUS_KEY, UsageStatusEnum.NEW);
         parameters.put("limit", limit);
+        parameters.put("offset", offset);
         return selectList("IUsageMapper.findWithStandardNumber", parameters);
     }
 
     @Override
-    public List<Usage> findWithTitle(int limit) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+    public List<Usage> findWithTitle(int limit, int offset) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
         parameters.put(STATUS_KEY, UsageStatusEnum.NEW);
         parameters.put("limit", limit);
+        parameters.put("offset", offset);
         return selectList("IUsageMapper.findWithTitle", parameters);
     }
 
