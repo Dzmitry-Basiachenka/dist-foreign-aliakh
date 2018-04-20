@@ -6,6 +6,7 @@ import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
+import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IRightsholderDiscrepancyRepository;
 
 import com.google.common.collect.Maps;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Implementation of {@link IRightsholderDiscrepancyRepository}.
@@ -29,12 +31,14 @@ import java.util.Map;
 @Repository
 public class RightsholderDiscrepancyRepository extends BaseRepository implements IRightsholderDiscrepancyRepository {
 
+    private static final String STATUS_KEY = "status";
+    private static final String SCENARIO_ID_KEY = "scenarioId";
+
     @Override
     public void insertAll(List<RightsholderDiscrepancy> rightsholderDiscrepancies, String scenarioId) {
         checkArgument(CollectionUtils.isNotEmpty(rightsholderDiscrepancies));
-        checkArgument(StringUtils.isNotBlank(scenarioId));
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-        parameters.put("scenarioId", scenarioId);
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         rightsholderDiscrepancies.forEach(rightsholderDiscrepancy -> {
             parameters.put("rightsholderDiscrepancy", rightsholderDiscrepancy);
             insert("IRightsholderDiscrepancyMapper.insert", parameters);
@@ -42,17 +46,47 @@ public class RightsholderDiscrepancyRepository extends BaseRepository implements
     }
 
     @Override
-    public List<RightsholderDiscrepancy> findByScenarioId(String scenarioId, Pageable pageable, Sort sort) {
-        checkArgument(StringUtils.isNotBlank(scenarioId));
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
-        parameters.put("scenarioId", scenarioId);
-        parameters.put("pageable", pageable);
-        parameters.put("sort", sort);
-        return selectList("IRightsholderDiscrepancyMapper.findByScenarioId", parameters);
+    public int findInProgressCountByScenarioId(String scenarioId) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        parameters.put(STATUS_KEY, RightsholderDiscrepancyStatusEnum.IN_PROGRESS);
+        return selectOne("IRightsholderDiscrepancyMapper.findCountByScenarioId", parameters);
     }
 
     @Override
-    public void deleteByScenarioId(String scenarioId) {
-        delete("IRightsholderDiscrepancyMapper.deleteByScenarioId", scenarioId);
+    public List<Long> findProhibitedAccountNumbers(String scenarioId) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        parameters.put(STATUS_KEY, RightsholderDiscrepancyStatusEnum.IN_PROGRESS);
+        return selectList("IRightsholderDiscrepancyMapper.findProhibitedAccountNumbers", parameters);
+    }
+
+    @Override
+    public List<RightsholderDiscrepancy> findByScenarioIdAndStatus(String scenarioId,
+                                                                   RightsholderDiscrepancyStatusEnum status,
+                                                                   Pageable pageable, Sort sort) {
+        checkArgument(StringUtils.isNotBlank(scenarioId));
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
+        parameters.put(SCENARIO_ID_KEY, scenarioId);
+        parameters.put(STATUS_KEY, Objects.requireNonNull(status));
+        parameters.put("pageable", pageable);
+        parameters.put("sort", sort);
+        return selectList("IRightsholderDiscrepancyMapper.findByScenarioIdAndStatus", parameters);
+    }
+
+    @Override
+    public void deleteByScenarioIdAndStatus(String scenarioId, RightsholderDiscrepancyStatusEnum status) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        parameters.put(STATUS_KEY, status);
+        delete("IRightsholderDiscrepancyMapper.deleteByScenarioIdAndStatus", parameters);
+    }
+
+    @Override
+    public void approveByScenarioId(String scenarioId) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        parameters.put(STATUS_KEY, RightsholderDiscrepancyStatusEnum.APPROVED);
+        update("IRightsholderDiscrepancyMapper.approveByScenarioId", parameters);
     }
 }

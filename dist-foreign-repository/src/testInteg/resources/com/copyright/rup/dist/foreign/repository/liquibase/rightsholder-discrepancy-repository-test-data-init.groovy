@@ -138,7 +138,7 @@ databaseChangeLog {
             column(name: 'new_rh_account_number', value: '1000005413')
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'status_ind', value: 'APPROVED')
+            column(name: 'status_ind', value: 'IN_PROGRESS')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder_discrepancy') {
@@ -146,10 +146,9 @@ databaseChangeLog {
             column(name: 'df_scenario_uid', value: 'b1f0b236-3ae9-4a60-9fab-61db84199d6f')
             column(name: 'wr_wrk_inst', value: '180382914')
             column(name: 'old_rh_account_number', value: '1000009997')
-            column(name: 'new_rh_account_number', value: '7000813806')
             column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
             column(name: 'product_family', value: 'FAS')
-            column(name: 'status_ind', value: 'APPROVED')
+            column(name: 'status_ind', value: 'IN_PROGRESS')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
@@ -174,12 +173,6 @@ databaseChangeLog {
             column(name: 'df_rightsholder_uid', value: 'a0663c51-87c6-4d03-8683-7640f12ae8c1')
             column(name: 'rh_account_number', value: '1000005413')
             column(name: 'name', value: 'Kluwer Academic Publishers - Dordrecht')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
-            column(name: 'df_rightsholder_uid', value: '05c4714b-291d-4e38-ba4a-35307434acfb')
-            column(name: 'rh_account_number', value: '7000813806')
-            column(name: 'name', value: 'CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil')
         }
 
         rollback ""

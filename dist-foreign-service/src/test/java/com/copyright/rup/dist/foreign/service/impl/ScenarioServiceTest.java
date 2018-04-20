@@ -19,6 +19,7 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.integration.rest.prm.PrmRollUpService;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
+import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
@@ -49,9 +50,9 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Verifies {@link ScenarioService}.
@@ -152,7 +153,8 @@ public class ScenarioServiceTest {
         expectLastCall().once();
         scenarioAuditService.deleteActions(SCENARIO_ID);
         expectLastCall().once();
-        rightsholderDiscrepancyService.deleteDiscrepanciesByScenarioId(SCENARIO_ID);
+        rightsholderDiscrepancyService.deleteDiscrepanciesByScenarioIdAndStatus(SCENARIO_ID,
+            RightsholderDiscrepancyStatusEnum.APPROVED);
         replay(usageService, scenarioRepository, scenarioAuditService, scenarioUsageFilterService);
         scenarioService.deleteScenario(scenario);
         verify(usageService, scenarioRepository, scenarioAuditService, scenarioUsageFilterService);
@@ -228,7 +230,7 @@ public class ScenarioServiceTest {
     }
 
     @Test
-    public void testGetRightsholderDiscrepancies() {
+    public void testSaveRightsholderDiscrepancies() {
         expect(usageService.getUsagesForReconcile(SCENARIO_ID))
             .andReturn(Lists.newArrayList(buildUsage(1L, 2000017010L), buildUsage(2L, 2000017010L))).once();
         expect(rmsGrantsService.getAccountNumbersByWrWrkInsts(Lists.newArrayList(1L, 2L)))
@@ -237,10 +239,12 @@ public class ScenarioServiceTest {
             .andReturn(ImmutableMap.of(2000017010L, buildRightsholder(2000017010L), 1000000001L,
                 buildRightsholder(1000000001L))).once();
         Capture<List<RightsholderDiscrepancy>> discrepanciesCapture = new Capture<>();
+        expect(rightsholderDiscrepancyService.getInProgressDiscrepanciesCountByScenarioId(SCENARIO_ID))
+            .andReturn(2).once();
         rightsholderDiscrepancyService.insertDiscrepancies(capture(discrepanciesCapture), eq(SCENARIO_ID));
         expectLastCall().once();
         replayAll();
-        scenarioService.getRightsholderDiscrepancies(scenario);
+        scenarioService.saveRightsholderDiscrepancies(scenario);
         List<RightsholderDiscrepancy> discrepancies = discrepanciesCapture.getValue();
         assertEquals(1, discrepancies.size());
         RightsholderDiscrepancy discrepancy = discrepancies.iterator().next();
@@ -268,9 +272,11 @@ public class ScenarioServiceTest {
         mockStatic(PrmRollUpService.class);
         RightsholderDiscrepancy discrepancy1 = buildDiscrepancy(1L, 2000017010L, 1000000001L);
         RightsholderDiscrepancy discrepancy2 = buildDiscrepancy(2L, 2000017020L, 1000000002L);
-        Set<RightsholderDiscrepancy> discrepancies = Sets.newLinkedHashSet();
+        List<RightsholderDiscrepancy> discrepancies = new ArrayList<>();
         discrepancies.add(discrepancy1);
         discrepancies.add(discrepancy2);
+        expect(rightsholderDiscrepancyService.getDiscrepanciesByScenarioIdAndStatus(SCENARIO_ID,
+            RightsholderDiscrepancyStatusEnum.IN_PROGRESS, null, null)).andReturn(discrepancies).once();
         List<Usage> usages = Lists.newArrayList(buildUsage(1L, 2000017010L), buildUsage(2L, 2000017020L));
         expect(usageService.getUsagesForReconcile(SCENARIO_ID)).andReturn(usages).once();
         Rightsholder rightsholder1 = discrepancy1.getNewRightsholder();
@@ -283,8 +289,10 @@ public class ScenarioServiceTest {
             .andReturn(1000000004L);
         usageService.updateRhPayeeAndAmounts(usages);
         expectLastCall().once();
+        rightsholderDiscrepancyService.approveDiscrepanciesByScenarioId(SCENARIO_ID);
+        expectLastCall().once();
         replayAll();
-        scenarioService.approveOwnershipChanges(scenario, discrepancies);
+        scenarioService.approveOwnershipChanges(scenario);
         assertEquals(1000000001L, usages.get(0).getRightsholder().getAccountNumber(), 0);
         assertEquals(1000000002L, usages.get(1).getRightsholder().getAccountNumber(), 0);
         assertEquals(1000000003L, usages.get(0).getPayee().getAccountNumber(), 0);

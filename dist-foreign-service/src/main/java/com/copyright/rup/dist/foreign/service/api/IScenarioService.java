@@ -1,13 +1,11 @@
 package com.copyright.rup.dist.foreign.service.api;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * Interface for scenario service.
@@ -127,12 +125,11 @@ public interface IScenarioService {
     void sendToLm(Scenario scenario);
 
     /**
-     * Finds all {@link RightsholderDiscrepancy}ies for specified {@link Scenario} using RMS service.
+     * Finds all discrepancies for specified {@link Scenario} using RMS service and saves in database.
      *
      * @param scenario {@link Scenario} instance
-     * @return set of {@link RightsholderDiscrepancy}ies
      */
-    Set<RightsholderDiscrepancy> getRightsholderDiscrepancies(Scenario scenario);
+    void saveRightsholderDiscrepancies(Scenario scenario);
 
     /**
      * Updates usages participating flag and amounts for specified {@link Scenario} using PRM service.
@@ -144,10 +141,9 @@ public interface IScenarioService {
     /**
      * Approves ownership changes for {@link Scenario}.
      *
-     * @param scenario      instance of {@link Scenario}
-     * @param discrepancies set of {@link RightsholderDiscrepancy}ies
+     * @param scenario instance of {@link Scenario}
      */
-    void approveOwnershipChanges(Scenario scenario, Set<RightsholderDiscrepancy> discrepancies);
+    void approveOwnershipChanges(Scenario scenario);
 
     /**
      * Updates scenario status to {@link com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum#ARCHIVED} if

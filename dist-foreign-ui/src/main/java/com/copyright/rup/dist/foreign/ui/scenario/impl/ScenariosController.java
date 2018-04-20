@@ -6,7 +6,6 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
-import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
@@ -27,7 +26,6 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.impl.ExcludeRightsholdersWindow.IExcludeUsagesListener;
 import com.copyright.rup.vaadin.security.SecurityUtils;
-import com.copyright.rup.vaadin.ui.component.window.ConfirmDialogWindow.IListener;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
@@ -48,7 +46,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
@@ -119,24 +116,15 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
         Scenario scenario = getWidget().getSelectedScenario();
         scenarioController.setScenario(scenario);
         if (!scenarioController.isScenarioEmpty()) {
-            Set<RightsholderDiscrepancy> discrepancies = scenarioService.getRightsholderDiscrepancies(scenario);
-            if (CollectionUtils.isNotEmpty(discrepancies)) {
-                reconcileRightsholdersController.setDiscrepancies(discrepancies);
+            scenarioService.saveRightsholderDiscrepancies(scenario);
+            if (0 < rightsholderDiscrepancyService.getInProgressDiscrepanciesCountByScenarioId(scenario.getId())) {
                 reconcileRightsholdersController.setScenario(scenario);
                 Windows.showModalWindow(new RightsholderDiscrepanciesWindow(reconcileRightsholdersController, this));
             } else {
                 Windows.showConfirmDialog(ForeignUi.getMessage("window.reconcile_rightsholders", scenario.getName()),
-                    new IListener() {
-                        @Override
-                        public void onActionConfirmed() {
-                            scenarioService.updateRhParticipationAndAmounts(scenario);
-                            getWidget().refreshSelectedScenario();
-                        }
-
-                        @Override
-                        public void onActionDeclined() {
-                            rightsholderDiscrepancyService.deleteDiscrepanciesByScenarioId(scenario.getId());
-                        }
+                    () -> {
+                        scenarioService.updateRhParticipationAndAmounts(scenario);
+                        getWidget().refreshSelectedScenario();
                     });
             }
         } else {
