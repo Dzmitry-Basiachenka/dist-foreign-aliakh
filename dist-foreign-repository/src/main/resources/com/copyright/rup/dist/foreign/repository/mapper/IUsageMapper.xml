@@ -441,6 +441,20 @@
         where df_scenario_uid = #{scenarioId}
     </select>
 
+    <select id="findForReconcile" resultMap="usageResultMap" parameterType="string">
+        select
+            u.df_usage_uid,
+            u.wr_wrk_inst,
+            u.work_title,
+            u.rh_account_number,
+            rh.name rh_name,
+            u.product_family,
+            u.gross_amount
+        from ${schema}.df_usage u
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        where df_scenario_uid = #{scenarioId}
+    </select>
+
     <select id="findRightsholdersInformation" resultMap="usageResultMap" parameterType="string">
         select distinct
             u.rh_account_number,

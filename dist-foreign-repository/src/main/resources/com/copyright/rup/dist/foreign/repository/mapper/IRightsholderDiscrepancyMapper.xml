@@ -62,6 +62,7 @@
             old_rh_account_number,
             new_rh_account_number,
             wr_wrk_inst,
+            work_title,
             product_family,
             <include refid="StoredEntityMapper.additionalColumns"/>
         ) values (
@@ -70,6 +71,7 @@
             #{rightsholderDiscrepancy.oldRightsholder.accountNumber},
             #{rightsholderDiscrepancy.newRightsholder.accountNumber},
             #{rightsholderDiscrepancy.wrWrkInst},
+            #{rightsholderDiscrepancy.workTitle},
             #{rightsholderDiscrepancy.productFamily},
             now(),
             now(),

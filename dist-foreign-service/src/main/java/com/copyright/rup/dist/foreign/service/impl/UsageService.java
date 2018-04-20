@@ -191,6 +191,11 @@ public class UsageService implements IUsageService {
     }
 
     @Override
+    public List<Usage> getUsagesForReconcile(String scenarioId) {
+        return usageRepository.findForReconcile(scenarioId);
+    }
+
+    @Override
     public Map<Long, Usage> getRightsholdersInformation(String scenarioId) {
         return usageRepository.findRightsholdersInformation(scenarioId);
     }

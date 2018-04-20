@@ -87,13 +87,11 @@ public final class CalculationUtils {
      * @param usage               {@link Usage} to recalculate
      * @param rhParticipatingFlag rh participating flag
      * @param serviceFee          service fee value
-     * @return recalculates {@link Usage}
      */
-    public static Usage recalculateAmounts(Usage usage, boolean rhParticipatingFlag, BigDecimal serviceFee) {
+    public static void recalculateAmounts(Usage usage, boolean rhParticipatingFlag, BigDecimal serviceFee) {
         usage.setRhParticipating(rhParticipatingFlag);
         usage.setServiceFee(serviceFee);
-        usage.setServiceFeeAmount(calculateServiceFeeAmount(usage.getGrossAmount(), usage.getServiceFee()));
+        usage.setServiceFeeAmount(calculateServiceFeeAmount(usage.getGrossAmount(), serviceFee));
         usage.setNetAmount(calculateNetAmount(usage.getGrossAmount(), usage.getServiceFeeAmount()));
-        return usage;
     }
 }

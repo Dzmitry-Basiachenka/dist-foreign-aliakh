@@ -65,6 +65,14 @@ public interface IUsageRepository {
     List<Usage> findByScenarioId(String scenarioId);
 
     /**
+     * Finds {@link Usage}s for reconcile based on scenario identifier.
+     *
+     * @param scenarioId scenario identifier
+     * @return the list of {@link Usage}
+     */
+    List<Usage> findForReconcile(String scenarioId);
+
+    /**
      * Finds rightsholder information based on scenario identifier.
      *
      * @param scenarioId scenario id
