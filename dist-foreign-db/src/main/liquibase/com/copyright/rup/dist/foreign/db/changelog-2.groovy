@@ -633,6 +633,10 @@ databaseChangeLog {
                 constraints(nullable: false)
             }
 
+            column(name: 'status_ind', type: 'VARCHAR(16)', remarks: 'The rightsholder discrepancy status') {
+                constraints(nullable: false)
+            }
+
             column(name: 'record_version', type: 'INTEGER', defaultValue: '1',
                     remarks: 'The latest version of this record, used for optimistic locking') {
                 constraints(nullable: false)

@@ -57,6 +57,7 @@ databaseChangeLog {
             column(name: 'new_rh_account_number', value: '1000005413')
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'product_family', value: 'FAS')
+            column(name: 'status_ind', value: 'APPROVED')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -137,6 +138,7 @@ databaseChangeLog {
             column(name: 'new_rh_account_number', value: '1000005413')
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'product_family', value: 'FAS')
+            column(name: 'status_ind', value: 'APPROVED')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder_discrepancy') {
@@ -147,6 +149,7 @@ databaseChangeLog {
             column(name: 'new_rh_account_number', value: '7000813806')
             column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
             column(name: 'product_family', value: 'FAS')
+            column(name: 'status_ind', value: 'APPROVED')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {

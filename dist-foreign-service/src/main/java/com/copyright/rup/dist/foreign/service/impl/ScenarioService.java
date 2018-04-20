@@ -7,6 +7,7 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.integration.rest.prm.PrmRollUpService;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
+import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
@@ -311,6 +312,7 @@ public class ScenarioService implements IScenarioService {
         rightsholderDiscrepancy.setWrWrkInst(usage.getWrWrkInst());
         rightsholderDiscrepancy.setWorkTitle(usage.getWorkTitle());
         rightsholderDiscrepancy.setProductFamily(usage.getProductFamily());
+        rightsholderDiscrepancy.setStatus(RightsholderDiscrepancyStatusEnum.IN_PROGRESS);
         String userName = RupContextUtils.getUserName();
         rightsholderDiscrepancy.setCreateUser(userName);
         rightsholderDiscrepancy.setUpdateUser(userName);

@@ -9,6 +9,7 @@
         <result property="wrWrkInst" column="wr_wrk_inst"/>
         <result property="workTitle" column="work_title"/>
         <result property="productFamily" column="product_family"/>
+        <result property="status" column="status_ind"/>
         <association property="oldRightsholder" javaType="Rightsholder">
             <result property="id" column="old_rh_id"/>
             <result property="accountNumber" column="old_rh_account_number"/>
@@ -31,7 +32,7 @@
             </otherwise>
         </choose>
     </sql>
-    
+
     <sql id="chooseSortProperty">
         <choose>
             <when test="sort.property == 'wrWrkInst'">
@@ -64,6 +65,7 @@
             wr_wrk_inst,
             work_title,
             product_family,
+            status_ind,
             <include refid="StoredEntityMapper.additionalColumns"/>
         ) values (
             #{rightsholderDiscrepancy.id},
@@ -73,6 +75,7 @@
             #{rightsholderDiscrepancy.wrWrkInst},
             #{rightsholderDiscrepancy.workTitle},
             #{rightsholderDiscrepancy.productFamily},
+            #{rightsholderDiscrepancy.status},
             now(),
             now(),
             #{rightsholderDiscrepancy.createUser},
