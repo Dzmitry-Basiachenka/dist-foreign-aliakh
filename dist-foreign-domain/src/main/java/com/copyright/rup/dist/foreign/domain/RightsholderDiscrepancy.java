@@ -24,6 +24,7 @@ public class RightsholderDiscrepancy extends StoredEntity<String> {
     private String productFamily;
     private Rightsholder oldRightsholder;
     private Rightsholder newRightsholder;
+    private RightsholderDiscrepancyStatusEnum status;
 
     public Long getWrWrkInst() {
         return wrWrkInst;
@@ -65,6 +66,14 @@ public class RightsholderDiscrepancy extends StoredEntity<String> {
         this.newRightsholder = newRightsholder;
     }
 
+    public RightsholderDiscrepancyStatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(RightsholderDiscrepancyStatusEnum status) {
+        this.status = status;
+    }
+
     @Override
     public boolean equals(Object object) {
         if (object == this) {
@@ -81,6 +90,7 @@ public class RightsholderDiscrepancy extends StoredEntity<String> {
             .append(this.productFamily, that.productFamily)
             .append(this.oldRightsholder, that.oldRightsholder)
             .append(this.newRightsholder, that.newRightsholder)
+            .append(this.status, that.status)
             .isEquals();
     }
 
@@ -93,6 +103,7 @@ public class RightsholderDiscrepancy extends StoredEntity<String> {
             .append(productFamily)
             .append(oldRightsholder)
             .append(newRightsholder)
+            .append(status)
             .toHashCode();
     }
 
@@ -105,6 +116,7 @@ public class RightsholderDiscrepancy extends StoredEntity<String> {
             .append("productFamily", productFamily)
             .append("oldRightsholder", oldRightsholder)
             .append("newRightsholder", newRightsholder)
+            .append("status", status)
             .toString();
     }
 }

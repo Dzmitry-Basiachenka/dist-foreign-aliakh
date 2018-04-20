@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
+import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IRightsholderDiscrepancyRepository;
 
 import org.junit.Test;
@@ -82,6 +83,7 @@ public class RightsholderDiscrepancyRepositoryIntegrationTest {
         rightsholderDiscrepancy.setProductFamily("FAS");
         rightsholderDiscrepancy.setWorkTitle("Work title");
         rightsholderDiscrepancy.setWrWrkInst(123456789L);
+        rightsholderDiscrepancy.setStatus(RightsholderDiscrepancyStatusEnum.APPROVED);
         rightsholderDiscrepancy.setId(RupPersistUtils.generateUuid());
         rightsholderDiscrepancy.setCreateUser("SYSTEM");
         rightsholderDiscrepancy.setUpdateUser("SYSTEM");
