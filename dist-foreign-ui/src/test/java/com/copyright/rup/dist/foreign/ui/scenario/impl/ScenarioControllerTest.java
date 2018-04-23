@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
 import static junit.framework.TestCase.assertTrue;
 
+import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.anyString;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
@@ -19,15 +20,18 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.service.api.IRightsholderDiscrepancyService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.ScenarioService;
 import com.copyright.rup.dist.foreign.service.impl.UsageService;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioWidget;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
 import com.google.common.collect.Lists;
@@ -58,7 +62,7 @@ import java.util.concurrent.ExecutorService;
  * @author Ihar Suvorau
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ForeignSecurityUtils.class})
+@PrepareForTest({ForeignSecurityUtils.class, Windows.class})
 public class ScenarioControllerTest {
 
     private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
@@ -169,10 +173,43 @@ public class ScenarioControllerTest {
     }
 
     @Test
+    public void testOnExcludeDetailsClickedWithDiscrepancies() {
+        mockStatic(Windows.class);
+        IRightsholderDiscrepancyService rightsholderDiscrepancyService =
+            createMock(IRightsholderDiscrepancyService.class);
+        Whitebox.setInternalState(controller, rightsholderDiscrepancyService);
+        expect(rightsholderDiscrepancyService.getDiscrepanciesCountByScenarioIdAndStatus(SCENARIO_ID,
+            RightsholderDiscrepancyStatusEnum.APPROVED)).andReturn(1).once();
+        Windows.showNotificationWindow("Details can not be excluded after reconciliation");
+        expectLastCall().once();
+        replay(rightsholderDiscrepancyService, Windows.class);
+        controller.onExcludeDetailsClicked();
+        verify(rightsholderDiscrepancyService, Windows.class);
+    }
+
+    @Test
+    public void testOnExcludeDetailsClickedWithoutDiscrepancies() {
+        mockStatic(Windows.class);
+        IRightsholderDiscrepancyService rightsholderDiscrepancyService =
+            createMock(IRightsholderDiscrepancyService.class);
+        Whitebox.setInternalState(controller, rightsholderDiscrepancyService);
+        expect(rightsholderDiscrepancyService.getDiscrepanciesCountByScenarioIdAndStatus(SCENARIO_ID,
+            RightsholderDiscrepancyStatusEnum.APPROVED)).andReturn(0).once();
+        Windows.showModalWindow(anyObject(ExcludeSourceRroWindow.class));
+        expectLastCall().once();
+        expect(scenarioService.getSourceRros(SCENARIO_ID)).andReturn(
+            Collections.singletonList(buildRightsholder(1000009522L, "Societa Italiana Autori ed Editori (SIAE)")))
+            .once();
+        replay(rightsholderDiscrepancyService, scenarioService, Windows.class);
+        controller.onExcludeDetailsClicked();
+        verify(rightsholderDiscrepancyService, scenarioService, Windows.class);
+    }
+
+    @Test
     public void testGetSourceRros() {
         Whitebox.setInternalState(controller, "scenarioService", scenarioService);
-        expect(scenarioService.getSourceRros(SCENARIO_ID))
-            .andReturn(Lists.newArrayList(buildRightsholder(1000009522L, "Societa Italiana Autori ed Editori (SIAE)")))
+        expect(scenarioService.getSourceRros(SCENARIO_ID)).andReturn(
+            Collections.singletonList(buildRightsholder(1000009522L, "Societa Italiana Autori ed Editori (SIAE)")))
             .once();
         replay(scenarioService);
         List<Rightsholder> rros = controller.getSourceRros();
@@ -196,7 +233,7 @@ public class ScenarioControllerTest {
     public void testGetRightsholdersPayeePairs() {
         Whitebox.setInternalState(controller, "scenarioService", scenarioService);
         expect(scenarioService.getRightsholdersByScenarioAndSourceRro(SCENARIO_ID, 1000009522L))
-            .andReturn(Lists.newArrayList(buildRightsholderPayeePair())).once();
+            .andReturn(Collections.singletonList(buildRightsholderPayeePair())).once();
         replay(scenarioService);
         List<RightsholderPayeePair> pairs = controller.getRightsholdersPayeePairs(1000009522L);
         assertEquals(1, CollectionUtils.size(pairs));

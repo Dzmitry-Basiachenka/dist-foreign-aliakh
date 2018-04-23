@@ -5,12 +5,15 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
+import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
+import com.copyright.rup.dist.foreign.service.api.IRightsholderDiscrepancyService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioWidget;
@@ -61,6 +64,8 @@ public class ScenarioController extends CommonController<IScenarioWidget> implem
     private IDrillDownByRightsholderController drillDownByRightsholderController;
     @Autowired
     private IReportService reportService;
+    @Autowired
+    private IRightsholderDiscrepancyService rightsholderDiscrepancyService;
 
     @Override
     public int getSize() {
@@ -100,7 +105,12 @@ public class ScenarioController extends CommonController<IScenarioWidget> implem
 
     @Override
     public void onExcludeDetailsClicked() {
-        Windows.showModalWindow(new ExcludeSourceRroWindow(this));
+        if (0 < rightsholderDiscrepancyService.getDiscrepanciesCountByScenarioIdAndStatus(scenario.getId(),
+            RightsholderDiscrepancyStatusEnum.APPROVED)) {
+            Windows.showNotificationWindow(ForeignUi.getMessage("message.info.exclude_details.reconciled_scenario"));
+        } else {
+            Windows.showModalWindow(new ExcludeSourceRroWindow(this));
+        }
     }
 
     @Override

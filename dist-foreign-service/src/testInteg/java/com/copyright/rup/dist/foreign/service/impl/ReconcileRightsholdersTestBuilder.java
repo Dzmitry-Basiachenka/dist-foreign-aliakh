@@ -141,7 +141,7 @@ public class ReconcileRightsholdersTestBuilder {
                 expectGetRollups();
             }
             expectGetPreferences();
-            scenarioService.saveRightsholderDiscrepancies(expectedScenario);
+            scenarioService.getOwnershipChanges(expectedScenario);
             assertDiscrepancies();
             scenarioService.approveOwnershipChanges(expectedScenario);
             assertUsages();

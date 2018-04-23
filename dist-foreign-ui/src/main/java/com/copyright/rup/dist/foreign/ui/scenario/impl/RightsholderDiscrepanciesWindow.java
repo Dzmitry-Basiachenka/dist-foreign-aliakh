@@ -51,6 +51,7 @@ class RightsholderDiscrepanciesWindow extends Window {
         setCaption(ForeignUi.getMessage("label.reconcile_rightsholders"));
         this.controller = reconcileRightsholdersController;
         this.scenariosController = scenariosController;
+        this.addCloseListener(event -> controller.deleteInProgressDiscrepancies());
         VaadinUtils.addComponentStyle(this, "rightsholder-discrepancies-window");
     }
 
@@ -83,12 +84,7 @@ class RightsholderDiscrepanciesWindow extends Window {
                     ForeignUi.getMessage("window.prohibition_approval", prohibitedAccountNumbers));
             }
         });
-        Button cancelButton = Buttons.createButton(ForeignUi.getMessage("button.cancel"));
-        cancelButton.addClickListener(event -> {
-            controller.deleteInProgressDiscrepancies();
-            this.close();
-        });
-        buttonsLayout.addComponents(approveButton, cancelButton);
+        buttonsLayout.addComponents(approveButton, Buttons.createCancelButton(this));
         buttonsLayout.setSpacing(true);
         VaadinUtils.addComponentStyle(buttonsLayout, "rightsholder-discrepancies-buttons-layout");
         return buttonsLayout;
@@ -103,6 +99,7 @@ class RightsholderDiscrepanciesWindow extends Window {
         addColumns();
         grid.setSizeFull();
         grid.setSelectionMode(SelectionMode.NONE);
+        grid.getColumns().forEach(column -> column.setSortable(true));
         VaadinUtils.addComponentStyle(grid, "rightsholder-discrepancies-grid");
     }
 

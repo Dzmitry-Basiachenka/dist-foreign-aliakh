@@ -27,13 +27,13 @@ public interface IRightsholderDiscrepancyRepository {
     void insertAll(List<RightsholderDiscrepancy> rightsholderDiscrepancies, String scenarioId);
 
     /**
-     * Finds {@link RightsholderDiscrepancy}ies in {@link RightsholderDiscrepancyStatusEnum#IN_PROGRESS} status count
-     * based on scenario identifier.
+     * Finds {@link RightsholderDiscrepancy}ies count based on scenario identifier and status.
      *
      * @param scenarioId the scenario identifier
+     * @param status     instance of {@link RightsholderDiscrepancyStatusEnum}
      * @return count of {@link RightsholderDiscrepancy}ies
      */
-    int findInProgressCountByScenarioId(String scenarioId);
+    int findCountByScenarioIdAndStatus(String scenarioId, RightsholderDiscrepancyStatusEnum status);
 
     /**
      * Finds list of old rightsholder account numbers where new account number is empty for specified scenario.

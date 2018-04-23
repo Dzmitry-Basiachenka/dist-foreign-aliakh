@@ -14,6 +14,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
@@ -137,10 +138,10 @@ public class ScenariosControllerTest {
             createMock(IRightsholderDiscrepancyService.class);
         Whitebox.setInternalState(scenariosController, rightsholderDiscrepancyService);
         expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
-        scenarioService.saveRightsholderDiscrepancies(scenario);
+        scenarioService.getOwnershipChanges(scenario);
         expectLastCall().once();
-        expect(rightsholderDiscrepancyService.getInProgressDiscrepanciesCountByScenarioId(SCENARIO_ID))
-            .andReturn(0).once();
+        expect(rightsholderDiscrepancyService.getDiscrepanciesCountByScenarioIdAndStatus(SCENARIO_ID,
+            RightsholderDiscrepancyStatusEnum.IN_PROGRESS)).andReturn(0).once();
         expect(Windows.showConfirmDialog(eq("There are no rightsholders updates for scenario " +
                 "<i><b>Scenario name</b></i>. Do you want to update service fee?"),
             anyObject(ConfirmDialogWindow.IListener.class))).andReturn(null).once();
@@ -160,10 +161,10 @@ public class ScenariosControllerTest {
             createMock(IRightsholderDiscrepancyService.class);
         Whitebox.setInternalState(scenariosController, rightsholderDiscrepancyService);
         expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
-        scenarioService.saveRightsholderDiscrepancies(scenario);
+        scenarioService.getOwnershipChanges(scenario);
         expectLastCall().once();
-        expect(rightsholderDiscrepancyService.getInProgressDiscrepanciesCountByScenarioId(SCENARIO_ID))
-            .andReturn(5).once();
+        expect(rightsholderDiscrepancyService.getDiscrepanciesCountByScenarioIdAndStatus(SCENARIO_ID,
+            RightsholderDiscrepancyStatusEnum.IN_PROGRESS)).andReturn(5).once();
         Windows.showModalWindow(anyObject(RightsholderDiscrepanciesWindow.class));
         expectLastCall().once();
         reconcileRightsholdersController.setScenario(scenario);

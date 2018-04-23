@@ -33,8 +33,8 @@ public class RightsholderDiscrepancyService implements IRightsholderDiscrepancyS
     }
 
     @Override
-    public int getInProgressDiscrepanciesCountByScenarioId(String scenarioId) {
-        return rightsholderDiscrepancyRepository.findInProgressCountByScenarioId(scenarioId);
+    public int getDiscrepanciesCountByScenarioIdAndStatus(String scenarioId, RightsholderDiscrepancyStatusEnum status) {
+        return rightsholderDiscrepancyRepository.findCountByScenarioIdAndStatus(scenarioId, status);
     }
 
     @Override
