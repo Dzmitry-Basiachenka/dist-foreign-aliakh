@@ -6,7 +6,6 @@ import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.DateFormatValidator;
-import com.copyright.rup.dist.foreign.service.impl.csv.validator.DuplicateInFileValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.LengthValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.PositiveNumberValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ReportedValueValidator;
@@ -56,8 +55,6 @@ public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
         PositiveNumberValidator positiveNumberValidator = new PositiveNumberValidator();
         LengthValidator lengthValidator1000 = new LengthValidator(1000);
         LengthValidator lengthValidator2000 = new LengthValidator(2000);
-        addPlainValidators(Header.DETAIL_ID, requiredValidator, positiveNumberValidator, new LengthValidator(10),
-            new DuplicateInFileValidator());
         addPlainValidators(Header.TITLE, lengthValidator2000);
         addPlainValidators(Header.ARTICLE, lengthValidator1000);
         addPlainValidators(Header.STANDARD_NUMBER, lengthValidator1000);
@@ -77,7 +74,6 @@ public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
      * Headers to support.
      */
     private enum Header implements ICsvColumn {
-        DETAIL_ID("Detail ID"),
         TITLE("Title"),
         ARTICLE("Article"),
         STANDARD_NUMBER("Standard Number"),
@@ -164,7 +160,6 @@ public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
         public Usage convert(String... row) {
             Usage result = new Usage();
             result.setId(RupPersistUtils.generateUuid());
-            result.setDetailId(getLong(row, Header.DETAIL_ID));
             result.setWorkTitle(getString(row, Header.TITLE));
             result.setArticle(getString(row, Header.ARTICLE));
             result.setStandardNumber(getString(row, Header.STANDARD_NUMBER));

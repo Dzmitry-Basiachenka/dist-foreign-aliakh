@@ -77,10 +77,10 @@ public class UsageCsvProcessorIntegrationTest {
         assertNotNull(result);
         List<Usage> usages = result.get();
         assertEquals(5, CollectionUtils.size(usages));
-        verifyUsage(usages.get(0), 234L, 123456789L, 1000009522L, UsageStatusEnum.ELIGIBLE, TITLE);
-        verifyUsage(usages.get(1), 236L, null, null, UsageStatusEnum.NEW, TITLE);
-        verifyUsage(usages.get(2), 237L, 123456789L, null, UsageStatusEnum.WORK_FOUND, TITLE);
-        verifyUsage(usages.get(3), 238L, 123456789L, 999999999999999999L, UsageStatusEnum.ELIGIBLE, null);
+        verifyUsage(usages.get(0), 123456789L, 1000009522L, UsageStatusEnum.ELIGIBLE, TITLE);
+        verifyUsage(usages.get(1), null, null, UsageStatusEnum.NEW, TITLE);
+        verifyUsage(usages.get(2), 123456789L, null, UsageStatusEnum.WORK_FOUND, TITLE);
+        verifyUsage(usages.get(3), 123456789L, 999999999999999999L, UsageStatusEnum.ELIGIBLE, null);
         verifyUsageWithEmptyFields(usages.get(4));
     }
 
@@ -124,11 +124,22 @@ public class UsageCsvProcessorIntegrationTest {
             fail();
         } catch (HeaderValidationException e) {
             assertEquals(
-                "Columns headers are incorrect. Expected columns headers are:\n<ul>" +
-                    "<li>Detail ID</li><li>Title</li><li>Article</li><li>Standard Number</li>" +
-                    "<li>Wr Wrk Inst</li><li>RH Account #</li><li>Publisher</li><li>Pub Date</li>" +
-                    "<li>Number of Copies</li><li>Reported Value</li><li>Market</li><li>Market Period From</li>" +
-                    "<li>Market Period To</li><li>Author</li></ul>",
+                "Columns headers are incorrect. Expected columns headers are:\n" +
+                    "<ul>" +
+                    "<li>Title</li>" +
+                    "<li>Article</li>" +
+                    "<li>Standard Number</li>" +
+                    "<li>Wr Wrk Inst</li>" +
+                    "<li>RH Account #</li>" +
+                    "<li>Publisher</li>" +
+                    "<li>Pub Date</li>" +
+                    "<li>Number of Copies</li>" +
+                    "<li>Reported Value</li>" +
+                    "<li>Market</li>" +
+                    "<li>Market Period From</li>" +
+                    "<li>Market Period To</li>" +
+                    "<li>Author</li>" +
+                    "</ul>",
                 e.getHtmlMessage());
         }
     }
@@ -191,11 +202,9 @@ public class UsageCsvProcessorIntegrationTest {
         return result;
     }
 
-    private void verifyUsage(Usage usage, Long detailId, Long wrWrkInst, Long rhAccountNumber, UsageStatusEnum status,
-                             String title) {
+    private void verifyUsage(Usage usage, Long wrWrkInst, Long rhAccountNumber, UsageStatusEnum status, String title) {
         assertNotNull(usage);
         assertNotNull(usage.getId());
-        assertEquals(detailId, usage.getDetailId());
         assertEquals(title, usage.getWorkTitle());
         assertEquals("Appendix: The Principles of Newspeak", usage.getArticle());
         assertEquals("9780150000000", usage.getStandardNumber());
@@ -217,7 +226,6 @@ public class UsageCsvProcessorIntegrationTest {
     private void verifyUsageWithEmptyFields(Usage usage) {
         assertNotNull(usage);
         assertNotNull(usage.getId());
-        assertEquals(Long.valueOf(235), usage.getDetailId());
         assertEquals(TITLE, usage.getWorkTitle());
         assertNull(usage.getArticle());
         assertEquals("9780150000000", usage.getStandardNumber());

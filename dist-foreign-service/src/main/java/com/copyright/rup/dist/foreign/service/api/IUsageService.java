@@ -146,23 +146,13 @@ public interface IUsageService {
     void deleteFromScenario(Scenario scenario, Long rroAccountNumber, List<Long> accountNumbers, String reason);
 
     /**
-     * Checks if provided detail id exists in database.
+     * Checks if usage with usage id and status exists in database.
      *
-     * @param detailId   detail id of usage
+     * @param usageId    usage id
      * @param statusEnum status of usage
      * @return {@code true} if detail id is present, {@code false} otherwise
      */
-    boolean isDetailIdExists(Long detailId, UsageStatusEnum statusEnum);
-
-
-    /**
-     * Checks if provided detail id exists in database.
-     *
-     * @param detailId detail id of usage
-     * @return {@code true} if detail id is present, {@code false} otherwise
-     */
-    boolean isDetailIdExists(Long detailId);
-
+    boolean isUsageIdExists(String usageId, UsageStatusEnum statusEnum);
 
     /**
      * Moves {@link Usage}s to the archive for given {@link Scenario}.

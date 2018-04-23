@@ -31,7 +31,7 @@ public class ResearchedUsageValidator implements DistCsvProcessor.IValidator<Res
 
     @Override
     public boolean isValid(ResearchedUsage researchedUsage) {
-        return usageService.isDetailIdExists(Objects.requireNonNull(researchedUsage).getDetailId(),
+        return usageService.isUsageIdExists(Objects.requireNonNull(researchedUsage).getUsageId(),
             UsageStatusEnum.WORK_RESEARCH);
     }
 

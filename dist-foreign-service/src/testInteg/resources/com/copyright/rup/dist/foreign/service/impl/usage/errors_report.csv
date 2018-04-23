@@ -1,4 +1,4 @@
-Detail ID,Title,Article,Standard Number,Wr Wrk Inst,RH Account #,Publisher,Pub Date,Number of Copies,Reported Value,Market,Market Period From,Market Period To,Author,Line,Error Reason
+Title,Article,Standard Number,Wr Wrk Inst,RH Account #,Publisher,Pub Date,Number of Copies,Reported Value,Market,Market Period From,Market Period To,Author,Line,Error Reason
 ,1984,Appendix: The Principles of Newspeak,9.78015E+12,123456789,1000009522,Publisher,12/22/3000,65,30.86,"Univ,Bus,Doc,S",2015,2016,"Aarseth, Espen J.",2,Detail ID: Field is required and cannot be null or empty
 text more then 10 symbols,1984,Appendix: The Principles of Newspeak,9.78015E+12,123456789,1000009522,Publisher,12/22/3000,65,30.86,"Univ,Bus,Doc,S",2015,2016,"Aarseth, Espen J.",3,Detail ID: Field value should be numeric; Detail ID: Field max length is 10 characters
 234,1984,Appendix: The Principles of Newspeak,9.78015E+12,123456789,text,Publisher,12/22/3000,65,30.86,"Univ,Bus,Doc,S",2015,2016,"Aarseth, Espen J.",5,RH Account #: Field value should be numeric

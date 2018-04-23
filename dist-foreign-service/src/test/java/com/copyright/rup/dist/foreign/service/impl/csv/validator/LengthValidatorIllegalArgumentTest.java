@@ -11,7 +11,7 @@ import org.junit.Test;
  *
  * @author Ihar Suvorau
  */
-public class LengthIllegalArgumentValidatorTest {
+public class LengthValidatorIllegalArgumentTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testConstructorNegativeValue() {
