@@ -192,9 +192,9 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
             .setCaption(ForeignUi.getMessage("table.column.create_date"))
             .setSortProperty("createDate")
             .setWidth(100);
-        scenarioGrid.addColumn(Scenario::getStatus)
+        scenarioGrid.addColumn(scenario -> scenario.getStatus().name())
             .setCaption(ForeignUi.getMessage("table.column.status"))
-            .setSortProperty("createDate")
+            .setSortProperty("status")
             .setWidth(130);
     }
 
