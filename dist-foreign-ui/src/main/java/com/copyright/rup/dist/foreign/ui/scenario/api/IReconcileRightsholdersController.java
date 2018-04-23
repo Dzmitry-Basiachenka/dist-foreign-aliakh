@@ -3,7 +3,9 @@ package com.copyright.rup.dist.foreign.ui.scenario.api;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 
-import java.util.Set;
+import com.vaadin.data.provider.QuerySortOrder;
+
+import java.util.List;
 
 /**
  * Interface for rightsholder controller.
@@ -15,18 +17,6 @@ import java.util.Set;
  * @author Ihar Suvorau
  */
 public interface IReconcileRightsholdersController {
-
-    /**
-     * @return set of {@link RightsholderDiscrepancy}ies.
-     */
-    Set<RightsholderDiscrepancy> getDiscrepancies();
-
-    /**
-     * Sets set of {@link RightsholderDiscrepancy}ies.
-     *
-     * @param discrepancies set of {@link RightsholderDiscrepancy}ies
-     */
-    void setDiscrepancies(Set<RightsholderDiscrepancy> discrepancies);
 
     /**
      * Approves reconciliation of rightsholders.
@@ -44,4 +34,29 @@ public interface IReconcileRightsholdersController {
      * @param scenario instance of {@link Scenario}
      */
     void setScenario(Scenario scenario);
+
+    /**
+     * @return number of items.
+     */
+    int getSize();
+
+    /**
+     * Loads specified number of beans from the storage with given start index.
+     *
+     * @param startIndex start index
+     * @param count      items count to load
+     * @param sortOrders sort orders
+     * @return list of items to be displayed on UI
+     */
+    List<RightsholderDiscrepancy> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders);
+
+    /**
+     * @return list of old rightsholder account numbers where new account number is empty.
+     */
+    List<Long> getProhibitedAccountNumbers();
+
+    /**
+     * Deletes rightsholder discrepancies with IN_PROGRESS status.
+     */
+    void deleteInProgressDiscrepancies();
 }

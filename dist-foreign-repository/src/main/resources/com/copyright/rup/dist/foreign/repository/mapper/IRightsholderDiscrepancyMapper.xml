@@ -84,7 +84,21 @@
         )
     </insert>
 
-    <select id="findByScenarioId" parameterType="map" resultMap="rightsholderDiscrepancyResultMap">
+    <select id="findCountByScenarioId" parameterType="map" resultType="int">
+        select count(1)
+        from ${schema}.df_rightsholder_discrepancy
+        where df_scenario_uid = #{scenarioId}
+            and status_ind = #{status}
+    </select>
+
+    <select id="findProhibitedAccountNumbers" parameterType="map" resultType="long">
+        select distinct old_rh_account_number
+        from ${schema}.df_rightsholder_discrepancy
+        where new_rh_account_number is null
+            and status_ind = #{status}
+    </select>
+
+    <select id="findByScenarioIdAndStatus" parameterType="map" resultMap="rightsholderDiscrepancyResultMap">
         select
             d.df_rightsholder_discrepancy_uid,
             d.old_rh_account_number,
@@ -105,6 +119,7 @@
         left join ${schema}.df_rightsholder new_rh on new_rh.rh_account_number = d.new_rh_account_number
         left join ${schema}.df_rightsholder old_rh on old_rh.rh_account_number = d.old_rh_account_number
         where d.df_scenario_uid = #{scenarioId}
+            and status_ind = #{status}
         order by
         <choose>
             <when test="null != sort">
@@ -120,8 +135,15 @@
         </if>
     </select>
 
-    <delete id="deleteByScenarioId" parameterType="string">
+    <delete id="deleteByScenarioIdAndStatus" parameterType="map">
         delete from ${schema}.df_rightsholder_discrepancy
         where df_scenario_uid = #{scenarioId}
+            and status_ind = #{status}
     </delete>
+
+    <update id="approveByScenarioId" parameterType="map">
+        update ${schema}.df_rightsholder_discrepancy
+        set status_ind = #{status}
+        where df_scenario_uid = #{scenarioId}
+    </update>
 </mapper>

@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
 import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
@@ -22,7 +21,6 @@ import com.vaadin.ui.VerticalLayout;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,7 +40,6 @@ public class RightsholderDiscrepanciesWindowTest {
         IReconcileRightsholdersController rightsholderDiscrepancyController =
             createMock(IReconcileRightsholdersController.class);
         IScenariosController scenariosController = createMock(IScenariosController.class);
-        expect(rightsholderDiscrepancyController.getDiscrepancies()).andReturn(Collections.emptySet()).once();
         replay(rightsholderDiscrepancyController);
         RightsholderDiscrepanciesWindow window =
             new RightsholderDiscrepanciesWindow(rightsholderDiscrepancyController, scenariosController);

@@ -8,7 +8,7 @@ import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
-import com.google.common.collect.Sets;
+import com.vaadin.data.provider.DataProvider;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
@@ -20,8 +20,7 @@ import com.vaadin.ui.Window;
 
 import org.apache.commons.collections4.CollectionUtils;
 
-import java.util.Objects;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Represents component to display rightsholder discrepancies.
@@ -52,7 +51,6 @@ class RightsholderDiscrepanciesWindow extends Window {
         setCaption(ForeignUi.getMessage("label.reconcile_rightsholders"));
         this.controller = reconcileRightsholdersController;
         this.scenariosController = scenariosController;
-        grid.setItems(controller.getDiscrepancies());
         VaadinUtils.addComponentStyle(this, "rightsholder-discrepancies-window");
     }
 
@@ -72,11 +70,7 @@ class RightsholderDiscrepanciesWindow extends Window {
         HorizontalLayout buttonsLayout = new HorizontalLayout();
         Button approveButton = Buttons.createButton(ForeignUi.getMessage("button.approve"));
         approveButton.addClickListener(event -> {
-            Set<Long> prohibitedAccountNumbers = Sets.newHashSet();
-            controller.getDiscrepancies().stream()
-                .filter(discrepancy -> Objects.isNull(discrepancy.getNewRightsholder().getAccountNumber()))
-                .forEach(discrepancy ->
-                    prohibitedAccountNumbers.add(discrepancy.getOldRightsholder().getAccountNumber()));
+            List<Long> prohibitedAccountNumbers = controller.getProhibitedAccountNumbers();
             if (CollectionUtils.isEmpty(prohibitedAccountNumbers)) {
                 Windows.showConfirmDialog(
                     ForeignUi.getMessage("message.confirm.approve", controller.getScenario().getName()), () -> {
@@ -89,14 +83,23 @@ class RightsholderDiscrepanciesWindow extends Window {
                     ForeignUi.getMessage("window.prohibition_approval", prohibitedAccountNumbers));
             }
         });
-        buttonsLayout.addComponents(approveButton, Buttons.createCancelButton(this));
+        Button cancelButton = Buttons.createButton(ForeignUi.getMessage("button.cancel"));
+        cancelButton.addClickListener(event -> {
+            controller.deleteInProgressDiscrepancies();
+            this.close();
+        });
+        buttonsLayout.addComponents(approveButton, cancelButton);
         buttonsLayout.setSpacing(true);
         VaadinUtils.addComponentStyle(buttonsLayout, "rightsholder-discrepancies-buttons-layout");
         return buttonsLayout;
     }
 
     private void initGrid() {
-        grid = new Grid<>();
+        DataProvider<RightsholderDiscrepancy, Void> dataProvider = DataProvider.fromCallbacks(
+            query -> controller.loadBeans(query.getOffset(), query.getLimit(), query.getSortOrders()).stream(),
+            query -> controller.getSize()
+        );
+        grid = new Grid<>(dataProvider);
         addColumns();
         grid.setSizeFull();
         grid.setSelectionMode(SelectionMode.NONE);

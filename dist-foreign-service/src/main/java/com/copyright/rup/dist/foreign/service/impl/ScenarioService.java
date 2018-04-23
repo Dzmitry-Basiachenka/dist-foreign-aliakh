@@ -134,7 +134,8 @@ public class ScenarioService implements IScenarioService {
         usageService.deleteFromScenario(scenarioId);
         scenarioAuditService.deleteActions(scenarioId);
         scenarioUsageFilterService.removeByScenarioId(scenarioId);
-        rightsholderDiscrepancyService.deleteDiscrepanciesByScenarioId(scenarioId);
+        rightsholderDiscrepancyService.deleteDiscrepanciesByScenarioIdAndStatus(scenarioId,
+            RightsholderDiscrepancyStatusEnum.APPROVED);
         scenarioRepository.remove(scenarioId);
         LOGGER.info("Delete scenario. Finished. {}, User={}", ForeignLogUtils.scenario(scenario), userName);
     }
@@ -216,8 +217,8 @@ public class ScenarioService implements IScenarioService {
     }
 
     @Override
-    @Profiled(tag = "service.ScenarioService.getRightsholderDiscrepancies")
-    public Set<RightsholderDiscrepancy> getRightsholderDiscrepancies(Scenario scenario) {
+    @Profiled(tag = "service.ScenarioService.saveRightsholderDiscrepancies")
+    public void saveRightsholderDiscrepancies(Scenario scenario) {
         LOGGER.info("Get ownership changes. Started. {}", ForeignLogUtils.scenario(Objects.requireNonNull(scenario)));
         //TODO {isuvorau} compare performance for selecting new object instead of 'Usage'
         Map<Long, List<Usage>> groupedByWrWrkInstUsages = usageService.getUsagesForReconcile(scenario.getId())
@@ -233,12 +234,12 @@ public class ScenarioService implements IScenarioService {
             partition.forEach(entry -> discrepancies.addAll(
                 getDiscrepanciesForNewRightsholder(entry.getValue(), wrWrkInstToRightsholderMap.get(entry.getKey()),
                     rightsholdersMap)));
-            rightsholderDiscrepancyService.insertDiscrepancies(discrepancies, scenario.getId());
+            if (CollectionUtils.isNotEmpty(discrepancies)) {
+                rightsholderDiscrepancyService.insertDiscrepancies(discrepancies, scenario.getId());
+            }
         });
-        LOGGER.info("Get ownership changes. Finished. {}, RhDiscrepanciesCount={}",
-            ForeignLogUtils.scenario(scenario), groupedByWrWrkInstUsages.size());
-        //TODO {isuvorau} replace return type to 'void' and rename method after adding lazy loading
-        return Sets.newHashSet();
+        LOGGER.info("Get ownership changes. Finished. {}, RhDiscrepanciesCount={}", ForeignLogUtils.scenario(scenario),
+            rightsholderDiscrepancyService.getInProgressDiscrepanciesCountByScenarioId(scenario.getId()));
     }
 
     @Override
@@ -248,7 +249,10 @@ public class ScenarioService implements IScenarioService {
 
     @Override
     @Profiled(tag = "service.ScenarioService.approveOwnershipChanges")
-    public void approveOwnershipChanges(Scenario scenario, Set<RightsholderDiscrepancy> discrepancies) {
+    public void approveOwnershipChanges(Scenario scenario) {
+        List<RightsholderDiscrepancy> discrepancies =
+            rightsholderDiscrepancyService.getDiscrepanciesByScenarioIdAndStatus(scenario.getId(),
+                RightsholderDiscrepancyStatusEnum.IN_PROGRESS, null, null);
         LOGGER.info("Approve Ownership Changes. Started. {}, RhDiscrepanciesCount={}",
             ForeignLogUtils.scenario(Objects.requireNonNull(scenario)), LogUtils.size(discrepancies));
         Map<Long, List<Usage>> groupedByWrWrkInstUsages = usageService.getUsagesForReconcile(scenario.getId())
@@ -269,6 +273,7 @@ public class ScenarioService implements IScenarioService {
         );
         usageService.updateRhPayeeAndAmounts(
             groupedByWrWrkInstUsages.values().stream().flatMap(Collection::stream).collect(Collectors.toList()));
+        rightsholderDiscrepancyService.approveDiscrepanciesByScenarioId(scenario.getId());
         LOGGER.info("Approve Ownership Changes. Finished. {}, RhDiscrepanciesCount={}",
             ForeignLogUtils.scenario(scenario), LogUtils.size(discrepancies));
     }

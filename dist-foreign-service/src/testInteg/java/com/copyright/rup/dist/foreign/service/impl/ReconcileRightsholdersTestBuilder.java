@@ -5,8 +5,10 @@ import static org.junit.Assert.assertEquals;
 import com.copyright.rup.dist.common.test.JsonMatcher;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
+import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.service.api.IRightsholderDiscrepancyService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 
@@ -61,6 +63,8 @@ public class ReconcileRightsholdersTestBuilder {
     @Autowired
     private IUsageService usageService;
     @Autowired
+    private IRightsholderDiscrepancyService rightsholderDiscrepancyService;
+    @Autowired
     private RestTemplate restTemplate;
     @Autowired
     private AsyncRestTemplate asyncRestTemplate;
@@ -110,10 +114,9 @@ public class ReconcileRightsholdersTestBuilder {
         return this;
     }
 
-    ReconcileRightsholdersTestBuilder reset() {
+    void reset() {
         this.expectedDiscrepancies = new HashSet<>();
         this.expectedUsages = new ArrayList<>();
-        return this;
     }
 
     /**
@@ -138,9 +141,9 @@ public class ReconcileRightsholdersTestBuilder {
                 expectGetRollups();
             }
             expectGetPreferences();
-            Set<RightsholderDiscrepancy> discrepancies = scenarioService.getRightsholderDiscrepancies(expectedScenario);
-            assertDiscrepancies(discrepancies);
-            scenarioService.approveOwnershipChanges(expectedScenario, discrepancies);
+            scenarioService.saveRightsholderDiscrepancies(expectedScenario);
+            assertDiscrepancies();
+            scenarioService.approveOwnershipChanges(expectedScenario);
             assertUsages();
             mockServer.verify();
             asyncMockServer.verify();
@@ -185,7 +188,10 @@ public class ReconcileRightsholdersTestBuilder {
                     TestUtils.fileToString(this.getClass(), expectedPreferencesJson), MediaType.APPLICATION_JSON));
         }
 
-        private void assertDiscrepancies(Set<RightsholderDiscrepancy> discrepancies) {
+        private void assertDiscrepancies() {
+            List<RightsholderDiscrepancy> discrepancies =
+                rightsholderDiscrepancyService.getDiscrepanciesByScenarioIdAndStatus(expectedScenario.getId(),
+                    RightsholderDiscrepancyStatusEnum.IN_PROGRESS, null, null);
             expectedDiscrepancies.forEach(expected -> {
                 Long oldAccountNumber = expected.getOldRightsholder().getAccountNumber();
                 Long newAccountNumber = expected.getNewRightsholder().getAccountNumber();

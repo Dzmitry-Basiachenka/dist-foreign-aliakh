@@ -1,16 +1,25 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
+import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
+import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.service.api.IRightsholderDiscrepancyService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IReconcileRightsholdersController;
 
+import com.vaadin.data.provider.QuerySortOrder;
+import com.vaadin.shared.data.sort.SortDirection;
+
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * Implementation of {@link IReconcileRightsholdersController}.
@@ -25,25 +34,16 @@ import java.util.Set;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ReconcileRightsholdersController implements IReconcileRightsholdersController {
 
-    private Set<RightsholderDiscrepancy> rightsholderDiscrepancies;
     private Scenario scenario;
 
     @Autowired
     private IScenarioService scenarioService;
-
-    @Override
-    public Set<RightsholderDiscrepancy> getDiscrepancies() {
-        return rightsholderDiscrepancies;
-    }
-
-    @Override
-    public void setDiscrepancies(Set<RightsholderDiscrepancy> discrepancies) {
-        this.rightsholderDiscrepancies = discrepancies;
-    }
+    @Autowired
+    private IRightsholderDiscrepancyService rightsholderDiscrepancyService;
 
     @Override
     public void approveReconciliation() {
-        scenarioService.approveOwnershipChanges(scenario, rightsholderDiscrepancies);
+        scenarioService.approveOwnershipChanges(scenario);
     }
 
     @Override
@@ -54,5 +54,32 @@ public class ReconcileRightsholdersController implements IReconcileRightsholders
     @Override
     public void setScenario(Scenario scenario) {
         this.scenario = scenario;
+    }
+
+    @Override
+    public int getSize() {
+        return rightsholderDiscrepancyService.getInProgressDiscrepanciesCountByScenarioId(scenario.getId());
+    }
+
+    @Override
+    public List<RightsholderDiscrepancy> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders) {
+        Sort sort = null;
+        if (CollectionUtils.isNotEmpty(sortOrders)) {
+            QuerySortOrder sortOrder = sortOrders.iterator().next();
+            sort = new Sort(sortOrder.getSorted(), Direction.of(SortDirection.ASCENDING == sortOrder.getDirection()));
+        }
+        return rightsholderDiscrepancyService.getDiscrepanciesByScenarioIdAndStatus(scenario.getId(),
+            RightsholderDiscrepancyStatusEnum.IN_PROGRESS, new Pageable(startIndex, count), sort);
+    }
+
+    @Override
+    public List<Long> getProhibitedAccountNumbers() {
+        return rightsholderDiscrepancyService.getProhibitedAccountNumbers(scenario.getId());
+    }
+
+    @Override
+    public void deleteInProgressDiscrepancies() {
+        rightsholderDiscrepancyService.deleteDiscrepanciesByScenarioIdAndStatus(scenario.getId(),
+            RightsholderDiscrepancyStatusEnum.IN_PROGRESS);
     }
 }

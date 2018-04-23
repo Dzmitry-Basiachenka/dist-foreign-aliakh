@@ -22,8 +22,8 @@ public class RightsholderDiscrepancy extends StoredEntity<String> {
     private Long wrWrkInst;
     private String workTitle;
     private String productFamily;
-    private Rightsholder oldRightsholder;
-    private Rightsholder newRightsholder;
+    private Rightsholder oldRightsholder = new Rightsholder();
+    private Rightsholder newRightsholder = new Rightsholder();
     private RightsholderDiscrepancyStatusEnum status;
 
     public Long getWrWrkInst() {

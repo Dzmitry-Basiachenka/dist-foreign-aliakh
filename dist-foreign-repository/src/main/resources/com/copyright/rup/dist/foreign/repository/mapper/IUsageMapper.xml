@@ -448,10 +448,14 @@
             u.work_title,
             u.rh_account_number,
             rh.name rh_name,
+            u.payee_account_number,
+            p.name payee_name,
             u.product_family,
+            u.status_ind,
             u.gross_amount
         from ${schema}.df_usage u
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        left join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
         where df_scenario_uid = #{scenarioId}
     </select>
 

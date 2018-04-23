@@ -8,7 +8,6 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.google.common.collect.Sets;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,8 +47,6 @@ public class ReconcileRightsholdersTest {
     }
 
     @Test
-    @Ignore
-    //TODO {isuvorau} fix test after main implementation
     public void testReconciliationWithoutDiscrepancies() {
         testBuilder
             .forScenario(buildScenario("be66bae9-fa89-499a-8485-fb9e445bedd9", "Test Reconcile rightsholders 1"))
@@ -63,7 +60,6 @@ public class ReconcileRightsholdersTest {
     }
 
     @Test
-    @Ignore
     public void testReconciliationWithDiscrepancies() {
         testBuilder
             .forScenario(buildScenario("04263c90-cb54-44f0-b354-a901586e5801", "Test Reconcile rightsholders 2"))

@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.service.impl;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
+import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IRightsholderDiscrepancyRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderDiscrepancyService;
 
@@ -32,12 +33,29 @@ public class RightsholderDiscrepancyService implements IRightsholderDiscrepancyS
     }
 
     @Override
-    public List<RightsholderDiscrepancy> getDiscrepanciesByScenarioId(String scenarioId, Pageable pageable, Sort sort) {
-        return rightsholderDiscrepancyRepository.findByScenarioId(scenarioId, pageable, sort);
+    public int getInProgressDiscrepanciesCountByScenarioId(String scenarioId) {
+        return rightsholderDiscrepancyRepository.findInProgressCountByScenarioId(scenarioId);
     }
 
     @Override
-    public void deleteDiscrepanciesByScenarioId(String scenarioId) {
-        rightsholderDiscrepancyRepository.deleteByScenarioId(scenarioId);
+    public List<Long> getProhibitedAccountNumbers(String scenarioId) {
+        return rightsholderDiscrepancyRepository.findProhibitedAccountNumbers(scenarioId);
+    }
+
+    @Override
+    public List<RightsholderDiscrepancy> getDiscrepanciesByScenarioIdAndStatus(String scenarioId,
+                                                                               RightsholderDiscrepancyStatusEnum status,
+                                                                               Pageable pageable, Sort sort) {
+        return rightsholderDiscrepancyRepository.findByScenarioIdAndStatus(scenarioId, status, pageable, sort);
+    }
+
+    @Override
+    public void deleteDiscrepanciesByScenarioIdAndStatus(String scenarioId, RightsholderDiscrepancyStatusEnum status) {
+        rightsholderDiscrepancyRepository.deleteByScenarioIdAndStatus(scenarioId, status);
+    }
+
+    @Override
+    public void approveDiscrepanciesByScenarioId(String scenarioId) {
+        rightsholderDiscrepancyRepository.approveByScenarioId(scenarioId);
     }
 }
