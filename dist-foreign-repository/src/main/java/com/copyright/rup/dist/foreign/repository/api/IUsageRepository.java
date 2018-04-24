@@ -161,7 +161,7 @@ public interface IUsageRepository {
     void deleteFromScenario(List<String> usagesIds, String userName);
 
     /**
-     * Finds count of all usages by usage id and optional status.
+     * Finds count of all usages by usage id and status.
      *
      * @param usageId    usage id
      * @param statusEnum status of usage

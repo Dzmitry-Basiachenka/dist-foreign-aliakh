@@ -595,16 +595,12 @@
                 select df_usage_uid
                 from ${schema}.df_usage
                 where df_usage_uid = #{usageId}
-                <if test="null != status">
                     and status_ind = #{status}
-                </if>
             union
                 select df_usage_archive_uid
                 from ${schema}.df_usage_archive
                 where df_usage_archive_uid = #{usageId}
-                <if test="null != status">
                     and status_ind = #{status}
-                </if>
             ) as usage_uid;
     </select>
 

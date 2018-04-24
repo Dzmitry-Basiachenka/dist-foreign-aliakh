@@ -189,11 +189,9 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
 
     @Override
     public int findCountByUsageIdAndStatus(String usageId, UsageStatusEnum statusEnum) {
-        Map<String, Object> parameters = Maps.newHashMap();
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(USAGE_ID_KEY, Objects.requireNonNull(usageId));
-        if (Objects.nonNull(statusEnum)) {
-            parameters.put(STATUS_KEY, statusEnum);
-        }
+        parameters.put(STATUS_KEY, Objects.requireNonNull(statusEnum));
         return selectOne("IUsageMapper.findCountByUsageIdAndStatus", parameters);
     }
 
