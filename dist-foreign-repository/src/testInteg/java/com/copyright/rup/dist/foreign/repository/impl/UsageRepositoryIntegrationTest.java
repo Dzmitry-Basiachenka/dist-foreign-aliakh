@@ -691,9 +691,9 @@ public class UsageRepositoryIntegrationTest {
 
     @Test
     public void testFindCountByDetailIdAndStatus() {
-        assertEquals(0, usageRepository.findCountByDetailIdAndStatus(-1L, null));
-        assertEquals(1, usageRepository.findCountByDetailIdAndStatus(6997788888L, null));
-        assertEquals(1, usageRepository.findCountByDetailIdAndStatus(5423214587L, null));
+        assertEquals(0, usageRepository.findCountByUsageIdAndStatus("", null));
+        assertEquals(1, usageRepository.findCountByUsageIdAndStatus("3ab5e80b-89c0-4d78-9675-54c7ab284450", null));
+        assertEquals(1, usageRepository.findCountByUsageIdAndStatus("a71a0544-128e-41c0-b6b0-cfbbea6d2182", null));
     }
 
     @Test

@@ -252,13 +252,8 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public boolean isDetailIdExists(Long detailId, UsageStatusEnum statusEnum) {
-        return 0 != usageRepository.findCountByDetailIdAndStatus(detailId, statusEnum);
-    }
-
-    @Override
-    public boolean isDetailIdExists(Long detailId) {
-        return isDetailIdExists(detailId, null);
+    public boolean isUsageIdExists(String usageId, UsageStatusEnum statusEnum) {
+        return 0 != usageRepository.findCountByUsageIdAndStatus(usageId, statusEnum);
     }
 
     @Override

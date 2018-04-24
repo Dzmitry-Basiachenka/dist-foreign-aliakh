@@ -67,8 +67,8 @@ public class ResearchedUsagesCsvProcessorIntegrationTest {
         assertNotNull(result);
         List<ResearchedUsage> researchedUsages = result.get();
         assertEquals(2, CollectionUtils.size(researchedUsages));
-        verifyResearchedUsage(researchedUsages.get(0), 12345678, 987654321);
-        verifyResearchedUsage(researchedUsages.get(1), 23456789, 876543210);
+        verifyResearchedUsage(researchedUsages.get(0), "e1108526-5945-4a30-971e-91e584b4bc88", 987654321);
+        verifyResearchedUsage(researchedUsages.get(1), "9f717d69-785a-4f25-ae60-8d90c1f334cc", 876543210);
     }
 
     @Test
@@ -152,9 +152,9 @@ public class ResearchedUsagesCsvProcessorIntegrationTest {
         return result;
     }
 
-    private void verifyResearchedUsage(ResearchedUsage researchedUsage, long detailId, long wrWrkInst) {
+    private void verifyResearchedUsage(ResearchedUsage researchedUsage, String usageId, long wrWrkInst) {
         assertNotNull(researchedUsage);
-        assertEquals(detailId, researchedUsage.getDetailId().longValue());
+        assertEquals(usageId, researchedUsage.getUsageId());
         assertEquals(wrWrkInst, researchedUsage.getWrWrkInst().longValue());
     }
 }

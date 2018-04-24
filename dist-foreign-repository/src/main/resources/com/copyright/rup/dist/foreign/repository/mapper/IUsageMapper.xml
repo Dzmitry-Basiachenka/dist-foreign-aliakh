@@ -589,23 +589,23 @@
         where df_usage_uid = #{usageId}
     </update>
 
-    <select id="findCountByDetailIdAndStatus" parameterType="map" resultType="int">
+    <select id="findCountByUsageIdAndStatus" parameterType="map" resultType="int">
         select count(1)
             from (
-                select detail_id
+                select df_usage_uid
                 from ${schema}.df_usage
-                where detail_id = #{detailId}
+                where df_usage_uid = #{usageId}
                 <if test="null != status">
                     and status_ind = #{status}
                 </if>
             union
-                select detail_id
+                select df_usage_archive_uid
                 from ${schema}.df_usage_archive
-                where detail_id = #{detailId}
+                where df_usage_archive_uid = #{usageId}
                 <if test="null != status">
                     and status_ind = #{status}
                 </if>
-            ) as detail_id;
+            ) as usage_uid;
     </select>
 
     <select id="findRightsholderTotalsHoldersByScenarioId" parameterType="map" resultMap="rightsholderTotalsHolderResultMap">

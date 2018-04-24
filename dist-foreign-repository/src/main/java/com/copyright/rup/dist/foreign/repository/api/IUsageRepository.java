@@ -161,13 +161,13 @@ public interface IUsageRepository {
     void deleteFromScenario(List<String> usagesIds, String userName);
 
     /**
-     * Finds count of all usages by detail id and optional status.
+     * Finds count of all usages by usage id and optional status.
      *
-     * @param detailId   detail id of usage
+     * @param usageId    usage id
      * @param statusEnum status of usage
      * @return count of usages
      */
-    int findCountByDetailIdAndStatus(Long detailId, UsageStatusEnum statusEnum);
+    int findCountByUsageIdAndStatus(String usageId, UsageStatusEnum statusEnum);
 
     /**
      * Gets list of {@link RightsholderTotalsHolder}s based on {@link com.copyright.rup.dist.foreign.domain.Scenario}

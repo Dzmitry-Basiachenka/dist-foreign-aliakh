@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.service.impl.csv;
 
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.service.impl.csv.validator.DuplicateDetailIdValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.MarketPeriodValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ResearchedUsageValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.RightsholderWrWrkInstValidator;
@@ -32,8 +31,7 @@ public class CsvProcessorFactory {
      */
     public UsageCsvProcessor getUsageCsvProcessor(String productFamily) {
         UsageCsvProcessor processor = new UsageCsvProcessor(productFamily);
-        processor.addBusinessValidators(new MarketPeriodValidator(), new RightsholderWrWrkInstValidator(),
-            new DuplicateDetailIdValidator(usageService));
+        processor.addBusinessValidators(new MarketPeriodValidator(), new RightsholderWrWrkInstValidator());
         return processor;
     }
 

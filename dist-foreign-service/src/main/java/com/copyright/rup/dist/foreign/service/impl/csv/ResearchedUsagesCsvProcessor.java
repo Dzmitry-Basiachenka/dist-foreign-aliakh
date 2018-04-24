@@ -44,7 +44,7 @@ public class ResearchedUsagesCsvProcessor extends DistCsvProcessor<ResearchedUsa
     protected void initPlainValidators() {
         RequiredValidator requiredValidator = new RequiredValidator();
         PositiveNumberValidator positiveNumberValidator = new PositiveNumberValidator();
-        addPlainValidators(Header.DETAIL_ID, requiredValidator, positiveNumberValidator, new LengthValidator(10),
+        addPlainValidators(Header.DETAIL_ID, requiredValidator, new LengthValidator(36),
             new DuplicateInFileValidator());
         addPlainValidators(Header.WR_WRK_INST, requiredValidator, positiveNumberValidator, new LengthValidator(15));
     }
@@ -106,6 +106,10 @@ public class ResearchedUsagesCsvProcessor extends DistCsvProcessor<ResearchedUsa
             return StringUtils.defaultIfBlank(row[header.ordinal()], null);
         }
 
+        private static String getString(String[] row, ICsvColumn column) {
+            return getValue(row, column);
+        }
+
         private static Long getLong(String[] row, ICsvColumn column) {
             String value = getValue(row, column);
             return null != value ? Long.valueOf(parseScientific(value)) : null;
@@ -118,7 +122,7 @@ public class ResearchedUsagesCsvProcessor extends DistCsvProcessor<ResearchedUsa
         @Override
         public ResearchedUsage convert(String... row) {
             ResearchedUsage researchedUsage = new ResearchedUsage();
-            researchedUsage.setDetailId(getLong(row, Header.DETAIL_ID));
+            researchedUsage.setUsageId(getString(row, Header.DETAIL_ID));
             researchedUsage.setWrWrkInst(getLong(row, Header.WR_WRK_INST));
             return researchedUsage;
         }
