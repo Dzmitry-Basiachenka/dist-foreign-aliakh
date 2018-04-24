@@ -76,7 +76,7 @@ public class AuditCsvReportHandlerTest {
             .toArray(new String[auditCsvReportHandler.getPropertyTable().size()]);
         assertTrue(ArrayUtils.isNotEmpty(nameMapping));
         assertEquals(21, nameMapping.length);
-        assertArrayEquals(new String[]{"detailId", "status", "productFamily", "batchName", "paymentDate",
+        assertArrayEquals(new String[]{"id", "status", "productFamily", "batchName", "paymentDate",
             "rhAccountNumber", "rhName", "payeeAccountNumber", "payeeName", "wrWrkInst", "workTitle", "standardNumber",
             "grossAmount", "serviceFee", "scenarioName", "checkNumber", "checkDate", "cccEventId", "distributionName",
             "distributionDate", "periodEndDate"}, nameMapping);

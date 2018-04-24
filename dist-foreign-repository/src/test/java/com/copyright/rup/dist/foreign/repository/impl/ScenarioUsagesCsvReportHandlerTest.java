@@ -77,7 +77,7 @@ public class ScenarioUsagesCsvReportHandlerTest {
             .toArray(new String[scenarioUsagesCsvReportHandler.getPropertyTable().size()]);
         assertTrue(ArrayUtils.isNotEmpty(nameMapping));
         assertEquals(27, nameMapping.length);
-        assertArrayEquals(new String[]{"detailId", "batchName", "productFamily", "fiscalYear", "rroAccountNumber",
+        assertArrayEquals(new String[]{"id", "batchName", "productFamily", "fiscalYear", "rroAccountNumber",
             "rroName", "paymentDate", "workTitle", "article", "standardNumber", "wrWrkInst", "rhAccountNumber",
             "rhName", "payeeAccountNumber", "payeeName", "publisher", "publicationDate", "numberOfCopies",
             "reportedValue", "grossAmount", "serviceFeeAmount", "netAmount", "serviceFee", "market", "marketPeriodFrom",

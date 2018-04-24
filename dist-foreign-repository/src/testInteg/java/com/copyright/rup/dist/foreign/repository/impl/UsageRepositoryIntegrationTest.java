@@ -19,6 +19,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.common.util.CalculationUtils;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.repository.impl.util.CsvUtils;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
@@ -35,13 +36,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -117,10 +115,8 @@ public class UsageRepositoryIntegrationTest {
     private static final BigDecimal SERVICE_FEE = new BigDecimal("0.32000");
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
     private static final String BATCH_ID = "e0af666b-cbb7-4054-9906-12daa1fbd76e";
-    private static final String EXPORT_HEADERS = "Detail ID,Detail Status,Product Family,Usage Batch Name," +
-        "Fiscal Year,RRO Account #,RRO Name,Payment Date,Title,Article,Standard Number,Wr Wrk Inst,RH Account #," +
-        "RH Name,Publisher,Pub Date,Number of Copies,Reported value,Amt in USD,Gross Amt in USD,Market," +
-        "Market Period From,Market Period To,Author";
+    private static final String PACKAGE = "/com/copyright/rup/dist/foreign/repository/impl/csv";
+    private static final String PATH_TO_EXPECTED = "src/testInteg/resources" + PACKAGE;
 
     @Autowired
     private UsageRepository usageRepository;
@@ -456,13 +452,10 @@ public class UsageRepositoryIntegrationTest {
         UsageFilter usageFilter = new UsageFilter();
         usageFilter.setUsageStatus(UsageStatusEnum.WORK_NOT_FOUND);
         EXECUTOR_SERVICE.execute(() -> usageRepository.writeUsagesForResearchAndFindIds(usageFilter, outputStream));
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-        assertEquals(EXPORT_HEADERS, bufferedReader.readLine());
-        assertEquals("547365434,WORK_NOT_FOUND,FAS,Batch with NTS,FY2020,2000017010," +
-            "\"JAC, Japan Academic Association for Copyright Clearance, Inc.\",02/12/2021," +
-            "Wissenschaft & Forschung Japan,DIN EN 779:2012,2192-3558,,,,Network for Science,09/10/2013,100,500.00," +
-            "500.0000000000,500.00,Doc Del,2013,2017,Philippe de Mézières", bufferedReader.readLine());
-        assertNull(bufferedReader.readLine());
+        List<String> actualCsv = CsvUtils.readLines(inputStream);
+        List<String> expectedCsv = CsvUtils.readLines(PATH_TO_EXPECTED, "usages_for_research.csv");
+        assertEquals(2, actualCsv.size());
+        assertEquals(expectedCsv, actualCsv);
     }
 
     @Test
@@ -471,9 +464,10 @@ public class UsageRepositoryIntegrationTest {
         PipedInputStream inputStream = new PipedInputStream(outputStream);
         EXECUTOR_SERVICE.execute(
             () -> usageRepository.writeUsagesForResearchAndFindIds(new UsageFilter(), outputStream));
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-        assertEquals(EXPORT_HEADERS, bufferedReader.readLine());
-        assertNull(bufferedReader.readLine());
+        List<String> actualCsv = CsvUtils.readLines(inputStream);
+        List<String> expectedCsv = CsvUtils.readLines(PATH_TO_EXPECTED, "usages_for_research_empty.csv");
+        assertEquals(1, actualCsv.size());
+        assertEquals(expectedCsv, actualCsv);
     }
 
     @Test
@@ -483,17 +477,10 @@ public class UsageRepositoryIntegrationTest {
         UsageFilter usageFilter = new UsageFilter();
         usageFilter.setUsageBatchesIds(Collections.singleton(USAGE_BATCH_ID_1));
         EXECUTOR_SERVICE.execute(() -> usageRepository.writeUsagesCsvReport(usageFilter, outputStream));
-        BufferedReader bufferedReader =
-            new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-        assertEquals(EXPORT_HEADERS, bufferedReader.readLine());
-        assertEquals("6997788888,ELIGIBLE,FAS,CADRA_11Dec16,FY2017,7000813806," +
-            "\"CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil\",01/11/2017," +
-            "\"2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA\"," +
-            "Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle,1008902112377654XX," +
-            "180382914,1000009997,IEEE - Inst of Electrical and Electronics Engrs," +
-            "IEEE,09/10/2013,2502232,2500.00,35000.0000000000,35000.00,Doc Del,2013,2017," +
-            "\"Íñigo López de Mendoza, marqués de Santillana\"", bufferedReader.readLine());
-        assertNull(bufferedReader.readLine());
+        List<String> actualCsv = CsvUtils.readLines(inputStream);
+        List<String> expectedCsv = CsvUtils.readLines(PATH_TO_EXPECTED, "usages_report.csv");
+        assertEquals(2, actualCsv.size());
+        assertEquals(expectedCsv, actualCsv);
     }
 
     @Test
@@ -501,10 +488,10 @@ public class UsageRepositoryIntegrationTest {
         PipedOutputStream outputStream = new PipedOutputStream();
         PipedInputStream inputStream = new PipedInputStream(outputStream);
         EXECUTOR_SERVICE.execute(() -> usageRepository.writeUsagesCsvReport(new UsageFilter(), outputStream));
-        BufferedReader bufferedReader =
-            new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-        assertEquals(EXPORT_HEADERS, bufferedReader.readLine());
-        assertNull(bufferedReader.readLine());
+        List<String> actualCsv = CsvUtils.readLines(inputStream);
+        List<String> expectedCsv = CsvUtils.readLines(PATH_TO_EXPECTED, "usages_report_empty.csv");
+        assertEquals(1, actualCsv.size());
+        assertEquals(expectedCsv, actualCsv);
     }
 
     @Test
@@ -512,25 +499,10 @@ public class UsageRepositoryIntegrationTest {
         PipedOutputStream outputStream = new PipedOutputStream();
         PipedInputStream inputStream = new PipedInputStream(outputStream);
         EXECUTOR_SERVICE.execute(() -> usageRepository.writeScenarioUsagesCsvReport(SCENARIO_ID, outputStream));
-        BufferedReader bufferedReader =
-            new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-        assertEquals("Detail ID,Usage Batch Name,Product Family,Fiscal Year,RRO Account #,RRO Name,Payment Date," +
-            "Title,Article,Standard Number,Wr Wrk Inst,RH Account #,RH Name,Payee Account #,Payee Name,Publisher," +
-            "Pub Date,Number of Copies,Reported value,Gross Amt in USD,Service Fee Amount,Net Amt in USD," +
-            "Service Fee %,Market,Market Period From,Market Period To,Author", bufferedReader.readLine());
-        assertEquals("6997788886,JAACC_11Dec16,FAS,FY2016,2000017010," +
-                "\"JAC, Japan Academic Association for Copyright Clearance, Inc.\"," +
-                "09/10/2015,100 ROAD MOVIES,DIN EN 779:2012,1008902112377654XX,243904752,1000002859," +
-                "John Wiley & Sons - Books,1000002859,John Wiley & Sons - Books,IEEE,09/10/2013,250232,9900.00," +
-                "16437.4000000000,5260.0000000000,11177.4000000000,32.0,Doc Del,2013,2017,Philippe de Mézières",
-            bufferedReader.readLine());
-        assertEquals("6213788886,JAACC_11Dec16,FAS,FY2016,2000017010," +
-                "\"JAC, Japan Academic Association for Copyright Clearance, Inc.\"," +
-                "09/10/2015,100 ROAD MOVIES,DIN EN 779:2012,1008902112317622XX,243904752,1000002859," +
-                "John Wiley & Sons - Books,1000002859,John Wiley & Sons - Books,IEEE,09/10/2013,100,9900.00," +
-                "16437.4000000000,5260.0000000000,11177.4000000000,32.0,Doc Del,2013,2017,Philippe de Mézières",
-            bufferedReader.readLine());
-        assertNull(bufferedReader.readLine());
+        List<String> actualCsv = CsvUtils.readLines(inputStream);
+        List<String> expectedCsv = CsvUtils.readLines(PATH_TO_EXPECTED, "scenario_usages_report.csv");
+        assertEquals(3, actualCsv.size());
+        assertEquals(expectedCsv, actualCsv);
     }
 
     @Test
@@ -691,9 +663,12 @@ public class UsageRepositoryIntegrationTest {
 
     @Test
     public void testFindCountByDetailIdAndStatus() {
-        assertEquals(0, usageRepository.findCountByUsageIdAndStatus("", null));
-        assertEquals(1, usageRepository.findCountByUsageIdAndStatus("3ab5e80b-89c0-4d78-9675-54c7ab284450", null));
-        assertEquals(1, usageRepository.findCountByUsageIdAndStatus("a71a0544-128e-41c0-b6b0-cfbbea6d2182", null));
+        assertEquals(0, usageRepository.findCountByUsageIdAndStatus("d9ca07b5-8282-4a81-9b9d-e4480f529d34",
+            UsageStatusEnum.NEW));
+        assertEquals(1, usageRepository.findCountByUsageIdAndStatus("3ab5e80b-89c0-4d78-9675-54c7ab284450",
+            UsageStatusEnum.ELIGIBLE));
+        assertEquals(1, usageRepository.findCountByUsageIdAndStatus("a71a0544-128e-41c0-b6b0-cfbbea6d2182",
+            UsageStatusEnum.LOCKED));
     }
 
     @Test
@@ -797,19 +772,10 @@ public class UsageRepositoryIntegrationTest {
             Sets.newHashSet("7802802a-1f96-4d7a-8a27-b0bfd43936b0", "56282dbc-2468-48d4-b926-94d3458a666a"));
         filter.setRhAccountNumbers(Collections.singleton(1000002859L));
         EXECUTOR_SERVICE.execute(() -> usageRepository.writeAuditCsvReport(filter, outputStream));
-        BufferedReader bufferedReader =
-            new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-        assertEquals("Detail ID,Detail Status,Product Family,Usage Batch Name,Payment Date,RH Account #,RH Name," +
-            "Payee Account #,Payee Name,Wr Wrk Inst,Title,Standard Number,Amt in USD,Service Fee %,Scenario Name," +
-            "Check #,Check Date,Event ID,Dist. Name,Dist. Date,Period Ending", bufferedReader.readLine());
-        assertEquals("5423214888,PAID,FAS,Paid batch,02/12/2021,1000002859,John Wiley & Sons - Books,1000002859," +
-            "John Wiley & Sons - Books,243904752,100 ROAD MOVIES,1008902112317555XX,1000.0000000000,16.0," +
-            "Paid Scenario,578945,03/15/2017,53256,FDA March 17,03/15/2017,03/15/2017", bufferedReader.readLine());
-        assertEquals("6997788885,ELIGIBLE,FAS,AccessCopyright_11Dec16,08/16/2018,1000002859," +
-                "John Wiley & Sons - Books,,,244614835,15th International Conference on Environmental Degradation of " +
-                "Materials in Nuclear Power Systems Water Reactors,1008902002377655XX,35000.0000000000,0.0,,,,,,,",
-            bufferedReader.readLine());
-        assertNull(bufferedReader.readLine());
+        List<String> actualCsv = CsvUtils.readLines(inputStream);
+        List<String> expectedCsv = CsvUtils.readLines(PATH_TO_EXPECTED, "audit_report.csv");
+        assertEquals(3, actualCsv.size());
+        assertEquals(expectedCsv, actualCsv);
     }
 
     @Test
@@ -817,12 +783,10 @@ public class UsageRepositoryIntegrationTest {
         PipedOutputStream outputStream = new PipedOutputStream();
         PipedInputStream inputStream = new PipedInputStream(outputStream);
         EXECUTOR_SERVICE.execute(() -> usageRepository.writeAuditCsvReport(new AuditFilter(), outputStream));
-        BufferedReader bufferedReader =
-            new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-        assertEquals("Detail ID,Detail Status,Product Family,Usage Batch Name,Payment Date,RH Account #,RH Name," +
-            "Payee Account #,Payee Name,Wr Wrk Inst,Title,Standard Number,Amt in USD,Service Fee %,Scenario Name," +
-            "Check #,Check Date,Event ID,Dist. Name,Dist. Date,Period Ending", bufferedReader.readLine());
-        assertNull(bufferedReader.readLine());
+        List<String> actualCsv = CsvUtils.readLines(inputStream);
+        List<String> expectedCsv = CsvUtils.readLines(PATH_TO_EXPECTED, "audit_report_empty.csv");
+        assertEquals(1, actualCsv.size());
+        assertEquals(expectedCsv, actualCsv);
     }
 
     @Test
