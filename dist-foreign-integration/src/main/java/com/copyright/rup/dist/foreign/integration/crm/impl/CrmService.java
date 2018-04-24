@@ -112,7 +112,7 @@ public class CrmService implements ICrmService {
      * @return the {@link CrmResult} instances
      * @throws IOException if response cannot be parsed
      */
-    CrmResult parseResponse(String response, Map<Long, String> requestMap)
+    CrmResult parseResponse(String response, Map<String, String> requestMap)
         throws IOException {
         LOGGER.trace("Parse rights distribution response. Response={}", response);
         JsonNode jsonNode = JsonUtils.readJsonTree(objectMapper, response);
@@ -125,9 +125,9 @@ public class CrmService implements ICrmService {
                 for (JsonNode errorNode : errorNodes) {
                     JsonNode key = errorNode.findValue("key");
                     List<JsonNode> errorMessages = errorNode.findValues("string");
-                    crmResult.addInvalidDetailId(key.asLong());
+                    crmResult.addInvalidUsageId(key.asText());
                     LOGGER.warn("Send usages to CRM. Failed. DetailId={}, Request={}, ErrorMessage={}", key,
-                        requestMap.get(key.asLong()), errorMessages);
+                        requestMap.get(key.asText()), errorMessages);
                 }
             }
         } else {
@@ -136,8 +136,8 @@ public class CrmService implements ICrmService {
         return crmResult;
     }
 
-    private Map<Long, String> buildRightsDistributionRequestMap(List<CrmRightsDistributionRequest> requests) {
-        Map<Long, String> map = Maps.newHashMapWithExpectedSize(requests.size());
+    private Map<String, String> buildRightsDistributionRequestMap(List<CrmRightsDistributionRequest> requests) {
+        Map<String, String> map = Maps.newHashMapWithExpectedSize(requests.size());
         requests.forEach(request -> map.put(request.getOmOrderDetailNumber(), request.toString()));
         return map;
     }

@@ -55,7 +55,7 @@ public class PaidUsageDeserializer extends JsonDeserializer<List<PaidUsage>> {
     private PaidUsage deserializeLiability(JsonNode jsonNode) {
         PaidUsage usage = new PaidUsage();
         usage.getPayee().setAccountNumber(JsonUtils.getLongValueFromString(jsonNode.get("rollup_account_number")));
-        usage.setDetailId(JsonUtils.getLongValueFromString(jsonNode.get("detail_id")));
+        usage.setId(JsonUtils.getStringValue(jsonNode.get("detail_id")));
         usage.setCheckNumber(JsonUtils.getStringValue(jsonNode.get("check_number")));
         usage.setCheckDate(getOffsetDateTimeFromLong(jsonNode.get("check_date")));
         usage.setCccEventId(JsonUtils.getStringValue(jsonNode.get("ccc_event_id")));

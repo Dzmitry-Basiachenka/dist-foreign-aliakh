@@ -35,8 +35,7 @@ public class ExternalUsage {
     private String productFamily;
 
     @JsonProperty(value = "detail_id")
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long detailId;
+    private String usageId;
 
     @JsonProperty(value = "royalty_amount")
     private BigDecimal royaltyAmount = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
@@ -56,7 +55,7 @@ public class ExternalUsage {
     public ExternalUsage(Usage usage) {
         this.rhAccountNumber = usage.getRightsholder().getAccountNumber();
         this.productFamily = usage.getProductFamily();
-        this.detailId = usage.getDetailId();
+        this.usageId = usage.getId();
         this.workTitle = usage.getWorkTitle();
         this.royaltyAmount = usage.getNetAmount().setScale(2, BigDecimal.ROUND_HALF_UP);
         this.wrWrkInst = usage.getWrWrkInst();
@@ -78,12 +77,12 @@ public class ExternalUsage {
         this.productFamily = productFamily;
     }
 
-    public Long getDetailId() {
-        return detailId;
+    public String getUsageId() {
+        return usageId;
     }
 
-    public void setDetailId(Long detailId) {
-        this.detailId = detailId;
+    public void setUsageId(String usageId) {
+        this.usageId = usageId;
     }
 
     public BigDecimal getRoyaltyAmount() {
@@ -122,7 +121,7 @@ public class ExternalUsage {
         return new EqualsBuilder()
             .append(rhAccountNumber, that.rhAccountNumber)
             .append(productFamily, that.productFamily)
-            .append(detailId, that.detailId)
+            .append(usageId, that.usageId)
             .append(royaltyAmount, that.royaltyAmount)
             .append(wrWrkInst, that.wrWrkInst)
             .append(workTitle, that.workTitle)
@@ -134,7 +133,7 @@ public class ExternalUsage {
         return new HashCodeBuilder()
             .append(rhAccountNumber)
             .append(productFamily)
-            .append(detailId)
+            .append(usageId)
             .append(royaltyAmount)
             .append(wrWrkInst)
             .append(workTitle)
@@ -146,7 +145,7 @@ public class ExternalUsage {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
             .append("rhAccountNumber", rhAccountNumber)
             .append("productFamily", productFamily)
-            .append("detailId", detailId)
+            .append("usageId", usageId)
             .append("royaltyAmount", royaltyAmount)
             .append("wrWrkInst", wrWrkInst)
             .append("workTitle", workTitle)

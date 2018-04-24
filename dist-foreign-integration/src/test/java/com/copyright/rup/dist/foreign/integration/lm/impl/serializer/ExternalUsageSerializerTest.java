@@ -50,7 +50,9 @@ public class ExternalUsageSerializerTest {
         JsonGenerator jsonGenerator = new JsonFactory().createGenerator(stringWriter);
         jsonGenerator.setPrettyPrinter(new DefaultPrettyPrinter());
         externalUsageSerializer.serialize(
-            new ExternalUsageWrapper(Lists.newArrayList(buildExternalUsage(10000001L), buildExternalUsage(10000002L))),
+            new ExternalUsageWrapper(Lists.newArrayList(
+                buildExternalUsage("5bd86764-d57b-443f-9891-adb57adb22fb"),
+                buildExternalUsage("59e217bf-8704-43a7-8272-9ca486ba21e3"))),
             jsonGenerator, new DefaultSerializerProvider.Impl());
         jsonGenerator.close();
         assertNotNull(stringWriter);
@@ -79,12 +81,12 @@ public class ExternalUsageSerializerTest {
         return StringUtils.strip(result);
     }
 
-    private ExternalUsage buildExternalUsage(Long detailId) {
+    private ExternalUsage buildExternalUsage(String usageId) {
         Usage usage = new Usage();
+        usage.setId(usageId);
         Rightsholder rightsholder = new Rightsholder();
         rightsholder.setAccountNumber(1000010023L);
         usage.setRightsholder(rightsholder);
-        usage.setDetailId(detailId);
         usage.setNetAmount(new BigDecimal("100.00"));
         usage.setWorkTitle("Work title");
         usage.setWrWrkInst(123456789L);
