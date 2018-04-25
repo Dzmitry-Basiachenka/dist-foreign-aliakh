@@ -77,8 +77,8 @@ public class RightsService implements IRightsService {
                 LOGGER.info("Send for Rights Assignment. Finished. UsagesCount={}, JobId={}", LogUtils.size(usages),
                     result.getJobId());
             } else {
-                LOGGER.warn("Send for Rights Assignment. Failed. Reason={}, DetailsIds={}", result.getErrorMessage(),
-                    usages.stream().map(Usage::getDetailId).collect(Collectors.toList()));
+                LOGGER.warn("Send for Rights Assignment. Failed. Reason={}, UsagesIds={}", result.getErrorMessage(),
+                    usages.stream().map(Usage::getId).collect(Collectors.toList()));
             }
         } else {
             LOGGER.info("Send for Rights Assignment. Skipped. Reason=There are no usages for sending");

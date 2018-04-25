@@ -16,9 +16,6 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -45,7 +42,6 @@ import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -111,7 +107,6 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertEquals(1, usageDtos.size());
         UsageDto usageDto = usageDtos.get(0);
         assertNotNull(usageDto);
-        assertEquals(DETAIL_ID, usageDto.getDetailId());
         assertEquals("CADRA_11Dec16", usageDto.getBatchName());
         assertEquals(WR_WRK_INST, usageDto.getWrWrkInst());
         assertEquals(2017, usageDto.getFiscalYear(), 0);
@@ -230,9 +225,9 @@ public class UsageArchiveRepositoryIntegrationTest {
 
     @Test
     public void testFindByScenarioIdAndRhAccountNumberSearchDetailId() {
-        verifySearch("6997788886", 1);
-        verifySearch("78888", 1);
-        verifySearch("69977 88886", 0);
+        verifySearch("2f660585-35a1-48a5-a506-904c725cda11", 1);
+        verifySearch("48a5", 1);
+        verifySearch("49", 0);
     }
 
     @Test
@@ -262,14 +257,6 @@ public class UsageArchiveRepositoryIntegrationTest {
         PipedInputStream pis = new PipedInputStream(pos);
         EXECUTOR.execute(() -> usageArchiveRepository.writeScenarioUsagesCsvReport(SCENARIO_ID, pos));
         verifyCsv(pis, "archive_scenario_usages_report.csv");
-    }
-
-    @Test
-    public void testFindDetailIdToIdMap() {
-        Map<Long, String> resultMap = ImmutableMap.of(5423214888L, "7241b7e0-6ab8-4483-896d-fd485c574293", 5423214999L,
-            "ce9a7770-1ae6-11e8-b566-0800200c9a66");
-        assertEquals(resultMap,
-            usageArchiveRepository.findDetailIdToIdMap(Lists.newArrayList(5423214888L, 5423214999L)));
     }
 
     @Test
@@ -313,7 +300,6 @@ public class UsageArchiveRepositoryIntegrationTest {
         PaidUsage paidUsage = paidUsages.get(0);
         assertEquals("c0d30ec0-370d-11e8-b566-0800200c9a66", paidUsage.getId());
         assertEquals(Long.valueOf("7000813806"), paidUsage.getRroAccountNumber());
-        assertEquals(Long.valueOf("5423214622"), paidUsage.getDetailId());
         assertEquals(Long.valueOf("1000002859"), paidUsage.getRightsholder().getAccountNumber());
         assertEquals(Long.valueOf("1000002859"), paidUsage.getPayee().getAccountNumber());
         assertEquals(Long.valueOf("243904752"), paidUsage.getWrWrkInst());
@@ -350,7 +336,6 @@ public class UsageArchiveRepositoryIntegrationTest {
                                  String checkNumber, OffsetDateTime checkDate, String cccEventId,
                                  String distributionName, OffsetDateTime distributionDate,
                                  LocalDate periodEndDate) {
-        assertEquals(5423214888L, actualUsageDto.getDetailId(), 0);
         assertEquals(status, actualUsageDto.getStatus());
         assertEquals(payeeAccountNumber, actualUsageDto.getPayeeAccountNumber(), 0);
         assertEquals(checkNumber, actualUsageDto.getCheckNumber());

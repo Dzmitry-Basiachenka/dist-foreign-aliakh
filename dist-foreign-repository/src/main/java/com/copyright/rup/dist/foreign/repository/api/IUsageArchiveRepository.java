@@ -10,7 +10,6 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
 import java.io.PipedOutputStream;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -93,14 +92,6 @@ public interface IUsageArchiveRepository {
      * @param scenarioId id of scenario for remove usages
      */
     void deleteByScenarioId(String scenarioId);
-
-    /**
-     * Finds detail id to {@link Usage} id map from archive by provided detail id.
-     *
-     * @param detailIds list of usage detail ids
-     * @return found {@link Usage} detail id to id map
-     */
-    Map<Long, String> findDetailIdToIdMap(List<Long> detailIds);
 
     /**
      * Updates paid information for {@link PaidUsage} by id.

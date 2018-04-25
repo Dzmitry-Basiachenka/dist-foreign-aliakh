@@ -80,18 +80,18 @@ public class UpdateRightsholdersTest {
 
     private void assertUsages() {
         assertTrue(CollectionUtils.isEmpty(usageRepository.findByStatuses(UsageStatusEnum.WORK_FOUND)));
-        assertUsage(8963602L, UsageStatusEnum.NEW, null);
-        assertUsage(8963606L, UsageStatusEnum.SENT_FOR_RA, null);
-        assertUsage(8963605L, UsageStatusEnum.ELIGIBLE, 1000000322L);
-        assertUsage(8963603L, UsageStatusEnum.ELIGIBLE, 1000010077L);
-        assertUsage(8963601L, UsageStatusEnum.ELIGIBLE, 1000009522L);
-        assertUsage(8963609L, UsageStatusEnum.LOCKED, 1000009522L);
-        assertUsage(8963607L, UsageStatusEnum.RH_NOT_FOUND, null);
-        assertUsage(8963604L, UsageStatusEnum.RH_NOT_FOUND, null);
+        assertUsage("2de40e13-d353-44ce-b6bb-a11383ba9fb9", UsageStatusEnum.NEW, null);
+        assertUsage("e6378e17-b0c9-420f-aa5c-a653156339d2", UsageStatusEnum.SENT_FOR_RA, null);
+        assertUsage("11853c83-780a-4533-ad01-dde87c8b8592", UsageStatusEnum.ELIGIBLE, 1000000322L);
+        assertUsage("b77e72d6-ef71-4f4b-a00b-5800e43e5bee", UsageStatusEnum.ELIGIBLE, 1000010077L);
+        assertUsage("37c4d727-caeb-4a7f-b11a-34e313b0bfcc", UsageStatusEnum.ELIGIBLE, 1000009522L);
+        assertUsage("ff321d96-04bd-11e8-ba89-0ed5f89f718b", UsageStatusEnum.LOCKED, 1000009522L);
+        assertUsage("19ca7776-48c8-472e-acfe-d49b6e8780ce", UsageStatusEnum.RH_NOT_FOUND, null);
+        assertUsage("8aded52d-9507-4883-ab4c-fd2e029298af", UsageStatusEnum.RH_NOT_FOUND, null);
     }
 
-    private void assertUsage(Long detailId, UsageStatusEnum expectedStatus, Long expectedRhAccounNumber) {
-        Usage usage = usageRepository.findByDetailId(detailId);
+    private void assertUsage(String usageId, UsageStatusEnum expectedStatus, Long expectedRhAccounNumber) {
+        Usage usage = usageRepository.findById(usageId);
         assertEquals(expectedStatus, usage.getStatus());
         assertEquals(expectedRhAccounNumber, usage.getRightsholder().getAccountNumber());
     }

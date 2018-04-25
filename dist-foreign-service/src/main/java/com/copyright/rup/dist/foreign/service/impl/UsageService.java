@@ -36,7 +36,6 @@ import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.perf4j.StopWatch;
 import org.perf4j.aop.Profiled;
@@ -73,7 +72,7 @@ public class UsageService implements IUsageService {
     private static final String CALCULATION_FINISHED_LOG_MESSAGE = "Calculated usages gross amount. " +
         "UsageBatchName={}, FundPoolAmount={}, TotalAmount={}, ConversionRate={}";
     private static final String UPDATE_PAID_INFO_FAILED_LOG_MESSAGE = "Update paid information. Not found usages. " +
-        "UsagesCount={}, UpdatedCount={}, NotFoundDetailIds={}";
+        "UsagesCount={}, UpdatedCount={}, NotFoundUsageIds={}";
     private static final String SEND_TO_CRM_FINISHED_INFO_LOG_MESSAGE = "Send to CRM. Finished. PaidUsagesCount={}, " +
         "ArchivedUsagesCount={}, NotReportedUsagesCount={}, ArchivedScenariosCount={}";
     private static final String SEND_TO_CRM_FINISHED_DEBUG_LOG_MESSAGE = "Send to CRM. Finished. PaidUsagesCount={}, " +
@@ -330,12 +329,9 @@ public class UsageService implements IUsageService {
     @Transactional
     public void updatePaidInfo(List<PaidUsage> usages) {
         LOGGER.info("Update paid information. Started. UsagesCount={}", LogUtils.size(usages));
-        Set<Long> notFoundDetailsIds = Sets.newHashSet();
-        Map<Long, String> detailIdToIdMap = usageArchiveRepository.findDetailIdToIdMap(
-            Lists.newArrayList(usages.stream().map(Usage::getDetailId).collect(Collectors.toList())));
-        if (MapUtils.isNotEmpty(detailIdToIdMap)) {
+        Set<String> notFoundUsageIds = Sets.newHashSet();
             for (PaidUsage paidUsage : usages) {
-                String usageId = detailIdToIdMap.get(paidUsage.getDetailId());
+                String usageId = paidUsage.getId();
                 if (StringUtils.isNotBlank(usageId)) {
                     paidUsage.setId(usageId);
                     paidUsage.setStatus(UsageStatusEnum.PAID);
@@ -343,18 +339,15 @@ public class UsageService implements IUsageService {
                     usageAuditService.logAction(usageId, UsageActionTypeEnum.PAID,
                         "Usage has been paid according to information from the LM");
                 } else {
-                    notFoundDetailsIds.add(paidUsage.getDetailId());
+                    notFoundUsageIds.add(usageId);
                 }
             }
-        } else {
-            LOGGER.warn(UPDATE_PAID_INFO_FAILED_LOG_MESSAGE, LogUtils.size(usages), 0, notFoundDetailsIds);
-        }
-        if (CollectionUtils.isNotEmpty(notFoundDetailsIds)) {
+        if (CollectionUtils.isNotEmpty(notFoundUsageIds)) {
             LOGGER.warn(UPDATE_PAID_INFO_FAILED_LOG_MESSAGE, LogUtils.size(usages),
-                usages.size() - notFoundDetailsIds.size(), notFoundDetailsIds);
+                usages.size() - notFoundUsageIds.size(), notFoundUsageIds);
         }
         LOGGER.info("Update paid information. Finished. UsagesCount={}, UpdatedCount={}", LogUtils.size(usages),
-            usages.size() - notFoundDetailsIds.size());
+            usages.size() - notFoundUsageIds.size());
     }
 
     @Override
@@ -389,16 +382,12 @@ public class UsageService implements IUsageService {
         StopWatch stopWatch = new Slf4JStopWatch();
         usageRepository.updateResearchedUsages(researchedUsages);
         stopWatch.lap("usage.loadResearchedUsages_1_updateResearchedUsage");
-        Map<Long, String> detailIdToId = usageRepository.findByStatuses(UsageStatusEnum.WORK_FOUND)
-            .stream()
-            .collect(Collectors.toMap(Usage::getDetailId, Usage::getId));
-        stopWatch.lap("usage.loadResearchedUsages_2_findByStatuses");
         researchedUsages.forEach(
-            researchedUsage -> usageAuditService.logAction(detailIdToId.get(researchedUsage.getDetailId()),
+            researchedUsage -> usageAuditService.logAction(researchedUsage.getUsageId(),
                 UsageActionTypeEnum.WORK_FOUND,
                 String.format("Wr Wrk Inst %s was added based on research", researchedUsage.getWrWrkInst()))
         );
-        stopWatch.stop("usage.loadResearchedUsages_3_logAction");
+        stopWatch.stop("usage.loadResearchedUsages_2_logAction");
         LOGGER.info("Load researched usages. Finished. ResearchedUsagesCount={}", LogUtils.size(researchedUsages));
     }
 

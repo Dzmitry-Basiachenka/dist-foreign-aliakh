@@ -43,11 +43,12 @@ public class RefreshScenarioTest {
             .expectPreferences("prm/preferences_response.json")
             .expectRollups("prm/fas_rollups_response.json", "019acfde-91be-43aa-8871-6305642bcb2c")
             .expectUsages(Lists.newArrayList(
-                buildUsage(1213548254L, 7000429266L, 1000009997L, "2871.0528", "6100.9872"),
-                buildUsage(2136547852L, 1000001820L, 1000001820L, "1629.8304", "3463.3896"),
-                buildUsage(2536984578L, 1000002859L, 1000002859L, "1450.0256", "3081.3044"),
-                buildUsage(3658212548L, 1000001820L, 1000001820L, "2175.0384", "11418.9516"),
-                buildUsage(56958745236L, 1000024497L, 1000024497L, "435.008", "2283.792")))
+                buildUsage("0e49fd89-f094-4023-b729-afe240272ebe", 1000024497L, 1000024497L, "435.008", "2283.792"),
+                buildUsage("b1f0b236-3ae9-4a60-9fab-61db84199dss", 7000429266L, 1000009997L, "2871.0528", "6100.9872"),
+                buildUsage("cbda7c0d-c455-4d9f-b097-89db8d933264", 1000001820L, 1000001820L, "1629.8304", "3463.3896"),
+                buildUsage("cf38d390-11bb-4af7-9685-e034c9c32fb6", 1000002859L, 1000002859L, "1450.0256", "3081.3044"),
+                buildUsage("d0816728-4726-483d-91ff-8f24fa605e01", 1000001820L, 1000001820L, "2175.0384",
+                    "11418.9516")))
             .expectScenario(buildScenario("26348.4248", "34909.38", "8560.9552", "38520.00"))
             .build()
             .run();
@@ -61,11 +62,11 @@ public class RefreshScenarioTest {
             .expectRollups("prm/cla_rollups_response.json", "624dcf73-a30f-4381-b6aa-c86d17198bd5",
                 "37338ed1-7083-45e2-a96b-5872a7de3a98")
             .expectUsages(Lists.newArrayList(
-                buildUsage(1213548300L, 2000133267L, 2000017000L, "897.204", "8074.836"),
-                buildUsage(2136547304L, 2000139286L, 2000017000L, "509.322", "4583.898"),
-                buildUsage(2536984301L, 2000073957L, 2000073957L, "1450.0256", "3081.3044"),
-                buildUsage(3658212302L, 7001508482L, 7001508482L, "4350.0768", "9243.9132"),
-                buildUsage(56958745303L, 1000024950L, 1000024950L, "870.016", "1848.784")))
+                buildUsage("007aff49-831c-46ab-9528-2e043f7564e9", 2000073957L, 2000073957L, "1450.0256", "3081.3044"),
+                buildUsage("3c3a3329-d64c-45a9-962c-f247e4bbf3b6", 2000139286L, 2000017000L, "509.322", "4583.898"),
+                buildUsage("455681ae-a02d-4cb9-a881-fcdc46cc5585", 7001508482L, 7001508482L, "4350.0768", "9243.9132"),
+                buildUsage("8fc81e08-3611-4697-8059-6c970ee5d643", 2000133267L, 2000017000L, "897.204", "8074.836"),
+                buildUsage("ec5c39b5-4c16-40a7-b1c8-730320971f11", 1000024950L, 1000024950L, "870.016", "1848.784")))
             .expectScenario(buildScenario("26832.7356", "34909.38", "8076.6444", "38520.00"))
             .build()
             .run();
@@ -82,10 +83,10 @@ public class RefreshScenarioTest {
         return scenario;
     }
 
-    private Usage buildUsage(Long detailId, Long rhAccountNumber, Long payeeAccountNumber,
+    private Usage buildUsage(String usageId, Long rhAccountNumber, Long payeeAccountNumber,
                              String serviceFeeAmount, String netAmount) {
         Usage usage = new Usage();
-        usage.setDetailId(detailId);
+        usage.setId(usageId);
         usage.setRightsholder(buildRightsholder(rhAccountNumber));
         usage.setPayee(buildRightsholder(payeeAccountNumber));
         usage.setServiceFeeAmount(new BigDecimal(serviceFeeAmount).setScale(10, BigDecimal.ROUND_HALF_UP));

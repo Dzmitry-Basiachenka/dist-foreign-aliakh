@@ -228,14 +228,13 @@ public interface IUsageRepository {
      */
     List<String> findIdsByScenarioIdRroAccountNumberRhAccountNumbers(String scenarioId, Long rroAccountNumber,
                                                                      List<Long> accountNumbers);
-
     /**
-     * Finds {@link Usage} by provided detail id.
+     * Finds {@link Usage} by usage id.
      *
-     * @param detailId usage details id
+     * @param usageId usage id
      * @return found {@link Usage} instance
      */
-    Usage findByDetailId(Long detailId);
+    Usage findById(String usageId);
 
     /**
      * Finds count of {@link UsageDto}s by specified {@link AuditFilter}.

@@ -6,7 +6,6 @@
 
     <resultMap id="usageDtoResultMap" type="UsageDto" extends="StoredEntityMapper.storedEntityResult">
         <result property="id" column="df_usage_uid"/>
-        <result property="detailId" column="detail_id"/>
         <result property="wrWrkInst" column="wr_wrk_inst"/>
         <result property="workTitle" column="work_title"/>
         <result property="rhAccountNumber" column="rh_account_number"/>
@@ -71,6 +70,27 @@
     </resultMap>
 
     <resultMap id="usageResultMap" type="Usage" extends="usageAmountResultMap">
+        <result property="batchId" column="df_usage_batch_uid"/>
+        <result property="scenarioId" column="df_scenario_uid"/>
+        <result property="wrWrkInst" column="wr_wrk_inst"/>
+        <result property="workTitle" column="work_title"/>
+        <result property="article" column="article"/>
+        <result property="standardNumber" column="standard_number"/>
+        <result property="publisher" column="publisher"/>
+        <result property="publicationDate" column="publication_date"/>
+        <result property="market" column="market"/>
+        <result property="marketPeriodFrom" column="market_period_from"/>
+        <result property="marketPeriodTo" column="market_period_to"/>
+        <result property="author" column="author"/>
+        <result property="numberOfCopies" column="number_of_copies"/>
+        <result property="payee.id" column="payee_id"/>
+        <result property="payee.accountNumber" column="payee_account_number"/>
+        <result property="payee.name" column="payee_name"/>
+        <result property="rhParticipating" column="is_rh_participating_flag"/>
+    </resultMap>
+
+    <!--TODO {aliakh} will be removed after database clean-up -->
+    <resultMap id="usageResultMapWithDetailId" type="Usage" extends="usageAmountResultMap">
         <result property="detailId" column="detail_id"/>
         <result property="batchId" column="df_usage_batch_uid"/>
         <result property="scenarioId" column="df_scenario_uid"/>
@@ -115,7 +135,6 @@
 
     <sql id="usageDtoColumns">
         u.df_scenario_uid,
-        u.detail_id,
         u.wr_wrk_inst,
         u.work_title,
         u.rh_account_number,
@@ -214,7 +233,7 @@
                 u.product_family <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'detailId'">
-                u.detail_id <include refid="IUsageMapper.direction"/>
+                u.df_usage_uid <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'batchName'">
                 ub.name <include refid="IUsageMapper.direction"/>
@@ -337,7 +356,7 @@
     </sql>
 
     <sql id="drillDownSearchWhereClause">
-        cast(u.detail_id as text) like '%' || #{searchValue} || '%' or
+        ${detail_uid} like '%' || #{searchValue} || '%' or
         upper(u.standard_number) like '%' || upper(#{searchValue}) || '%' or
         cast(u.wr_wrk_inst as text) like '%' || #{searchValue} || '%' or
         upper(rro.name) like '%' || upper(#{searchValue}) || '%' or
@@ -406,7 +425,7 @@
         <include refid="ifPageable"/>
     </select>
 
-    <select id="findByScenarioId" resultMap="usageResultMap" parameterType="string">
+    <select id="findByScenarioId" resultMap="usageResultMapWithDetailId" parameterType="string">
         select
             u.df_usage_uid,
             u.df_usage_batch_uid,
@@ -486,12 +505,11 @@
         and u.df_scenario_uid is null
     </select>
 
-    <select id="findByDetailId" resultMap="usageResultMap" parameterType="long">
+    <select id="findById" resultMap="usageResultMap" parameterType="string">
         select
             u.df_usage_uid,
             u.df_usage_batch_uid,
             u.df_scenario_uid,
-            u.detail_id,
             u.wr_wrk_inst,
             u.work_title,
             u.rh_account_number,
@@ -525,7 +543,7 @@
         from ${schema}.df_usage u
         left join ${schema}.df_rightsholder r on r.rh_account_number = u.rh_account_number
         left join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
-        where u.detail_id = #{detailId}
+        where u.df_usage_uid = #{usageId}
     </select>
 
     <delete id="deleteUsages" parameterType="string">
@@ -657,7 +675,9 @@
         where df_scenario_uid = #{scenarioId} and u.rh_account_number = #{accountNumber}
         <if test="null != searchValue">
             and (
-                <include refid="drillDownSearchWhereClause"/>
+                <include refid="drillDownSearchWhereClause">
+                    <property name="detail_uid" value="u.df_usage_uid"/>
+                </include>
             )
         </if>
     </select>
@@ -667,7 +687,9 @@
         where u.df_scenario_uid = #{scenarioId} and u.rh_account_number = #{accountNumber}
         <if test="null != searchValue">
             and (
-                <include refid="drillDownSearchWhereClause"/>
+                <include refid="drillDownSearchWhereClause">
+                    <property name="detail_uid" value="u.df_usage_uid"/>
+                </include>
             )
         </if>
         order by
@@ -676,7 +698,7 @@
                 <include refid="chooseSortProperty"/>
             </when>
             <otherwise>
-                detail_id
+                df_usage_uid
             </otherwise>
         </choose>
         <include refid="ifPageable"/>
@@ -714,7 +736,9 @@
                 join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
                 left join ${schema}.df_scenario s on s.df_scenario_uid = u.df_scenario_uid
                 <where>
-                    <include refid="commonAuditFilterWhereClause"/>
+                    <include refid="commonAuditFilterWhereClause">
+                        <property name="detail_uid" value="u.df_usage_uid"/>
+                    </include>
                 </where>) +
                 <include refid="selectArchivedCountForAuditSql"/>
             </otherwise>
@@ -729,7 +753,6 @@
             <otherwise>
                 select
                     u.df_usage_uid,
-                    detail_id,
                     u.status_ind,
                     u.product_family,
                     u.df_usage_batch_uid,
@@ -758,7 +781,9 @@
                 left join ${schema}.df_rightsholder payee on payee.rh_account_number = u.payee_account_number
                 left join ${schema}.df_scenario s on s.df_scenario_uid = u.df_scenario_uid
                 <where>
-                    <include refid="commonAuditFilterWhereClause"/>
+                    <include refid="commonAuditFilterWhereClause">
+                        <property name="detail_uid" value="u.df_usage_uid"/>
+                    </include>
                 </where>
                 union
                 <include refid="selectArchivedUsagesForAuditSql"/>
@@ -772,7 +797,7 @@
                         product_family
                     </when>
                     <when test="sort.property == 'detailId'">
-                        detail_id
+                        df_usage_uid
                     </when>
                     <when test="sort.property == 'status'">
                         status_ind
@@ -835,7 +860,7 @@
                 <include refid="IUsageMapper.direction"/>
             </when>
             <otherwise>
-                detail_id asc
+                df_usage_uid asc
             </otherwise>
         </choose>
         <include refid="ifPageable"/>
@@ -844,7 +869,6 @@
     <sql id="selectArchivedUsagesForAuditSql">
         select
             df_usage_archive_uid df_usage_uid,
-            detail_id,
             u.status_ind,
             u.product_family,
             u.df_usage_batch_uid,
@@ -877,7 +901,9 @@
 
     <sql id="archivedAuditFilterWhereClause">
         <where>
-            <include refid="commonAuditFilterWhereClause"/>
+            <include refid="commonAuditFilterWhereClause">
+                <property name="detail_uid" value="u.df_usage_archive_uid"/>
+            </include>
             <if test="null != filter.cccEventId">
                 and upper(ccc_event_id) like '%' || upper(#{filter.cccEventId}) || '%'
             </if>
@@ -914,7 +940,7 @@
         </if>
         <if test="null != filter.searchValue">
             and (
-                cast(detail_id as text) like '%' || #{filter.searchValue} || '%' or
+                ${detail_uid} like '%' || #{filter.searchValue} || '%' or
                 cast(wr_wrk_inst as text) like '%' || #{filter.searchValue} || '%' or
                 upper(work_title) like '%' || upper(#{filter.searchValue}) || '%')
         </if>
@@ -1095,6 +1121,6 @@
             wr_wrk_inst = #{wrWrkInst},
             status_ind = #{status},
             <include refid="StoredEntityMapper.update"/>
-        where detail_id = #{detailId}
+        where df_usage_uid = #{usageId}
     </update>
 </mapper>

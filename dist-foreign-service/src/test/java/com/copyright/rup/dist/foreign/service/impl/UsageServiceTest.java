@@ -25,7 +25,6 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
-import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
@@ -424,12 +423,10 @@ public class UsageServiceTest {
     @Test
     public void testUpdatePaidInfo() {
         PaidUsage paidUsage = new PaidUsage();
-        paidUsage.setDetailId(12345678L);
+        paidUsage.setId(USAGE_ID_1);
         paidUsage.setCheckNumber("578945");
         paidUsage.setCccEventId("53256");
         paidUsage.setDistributionName("FDA March 17");
-        expect(usageArchiveRepository.findDetailIdToIdMap(Lists.newArrayList(12345678L)))
-            .andReturn(ImmutableMap.of(12345678L, USAGE_ID_1)).once();
         usageArchiveRepository.updatePaidInfo(paidUsage);
         expectLastCall().once();
         usageAuditService.logAction(USAGE_ID_1, UsageActionTypeEnum.PAID,
@@ -441,39 +438,23 @@ public class UsageServiceTest {
     }
 
     @Test
-    public void testUpdatePaidInfoNotFoundUsage() {
-        PaidUsage paidUsage = new PaidUsage();
-        paidUsage.setDetailId(12345678L);
-        paidUsage.setCheckNumber("578945");
-        paidUsage.setCccEventId("53256");
-        paidUsage.setDistributionName("FDA March 17");
-        expect(usageArchiveRepository.findDetailIdToIdMap(Lists.newArrayList(12345678L)))
-            .andReturn(Collections.emptyMap()).once();
-        replay(usageArchiveRepository, usageAuditService);
-        usageService.updatePaidInfo(Collections.singletonList(paidUsage));
-        verify(usageArchiveRepository, usageAuditService);
-    }
-
-    @Test
     public void testLoadResearchedUsages() {
-        long detailId1 = 12345678L;
-        long detailId2 = 23456789L;
+        String usageId1 = "721ca627-09bc-4204-99f4-6acae415fa5d";
+        String usageId2 = "9c07f6dd-382e-4cbb-8cd1-ab9f51413e0a";
         ResearchedUsage researchedUsage1 = new ResearchedUsage();
-        researchedUsage1.setDetailId(detailId1);
+        researchedUsage1.setUsageId(usageId1);
         researchedUsage1.setWrWrkInst(987654321L);
         ResearchedUsage researchedUsage2 = new ResearchedUsage();
-        researchedUsage2.setDetailId(detailId2);
+        researchedUsage2.setUsageId(usageId2);
         researchedUsage2.setWrWrkInst(876543210L);
         List<ResearchedUsage> researchedUsages = ImmutableList.of(researchedUsage1, researchedUsage2);
         usageRepository.updateResearchedUsages(researchedUsages);
         Usage usage1 = new Usage();
         usage1.setId(RupPersistUtils.generateUuid());
-        usage1.setDetailId(detailId1);
+        usage1.setId(usageId1);
         Usage usage2 = new Usage();
         usage2.setId(RupPersistUtils.generateUuid());
-        usage2.setDetailId(detailId2);
-        List<Usage> usages = ImmutableList.of(usage1, usage2);
-        expect(usageRepository.findByStatuses(UsageStatusEnum.WORK_FOUND)).andReturn(usages).once();
+        usage2.setId(usageId2);
         usageAuditService.logAction(usage1.getId(), UsageActionTypeEnum.WORK_FOUND,
             "Wr Wrk Inst 987654321 was added based on research");
         expectLastCall().once();

@@ -146,11 +146,11 @@ class RefreshScenarioTestBuilder {
 
         private void assertUsages() {
             List<Usage> usages = usageRepository.findByScenarioId(expectedScenarioId);
-            usages.sort(Comparator.comparing(Usage::getDetailId));
+            usages.sort(Comparator.comparing(Usage::getId));
             IntStream.range(0, expectedUsages.size()).forEach(i -> {
                 Usage actualUsage = usages.get(i);
                 Usage expectedUsage = expectedUsages.get(i);
-                assertEquals(expectedUsage.getDetailId(), actualUsage.getDetailId());
+                assertEquals(expectedUsage.getId(), actualUsage.getId());
                 assertEquals(expectedUsage.getPayee().getAccountNumber(), actualUsage.getPayee().getAccountNumber(), 0);
                 assertEquals(UsageStatusEnum.LOCKED, actualUsage.getStatus());
                 assertEquals("SYSTEM", actualUsage.getUpdateUser());

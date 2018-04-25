@@ -101,7 +101,7 @@
 
     <select id="findByScenarioIdAndRhAccountNumber" parameterType="map" resultMap="IUsageMapper.usageDtoResultMap">
         select
-            u.df_usage_archive_uid,
+            u.df_usage_archive_uid df_usage_uid,
             <include refid="IUsageMapper.usageDtoColumns"/>,
             u.check_number,
             u.check_date,
@@ -117,7 +117,9 @@
         where u.df_scenario_uid = #{scenarioId} and u.rh_account_number = #{accountNumber}
         <if test="null != searchValue">
             and (
-            <include refid="IUsageMapper.drillDownSearchWhereClause"/>
+            <include refid="IUsageMapper.drillDownSearchWhereClause">
+                <property name="detail_uid" value="u.df_usage_archive_uid"/>
+            </include>
             )
         </if>
         order by
@@ -126,7 +128,7 @@
                 <include refid="IUsageMapper.chooseSortProperty"/>
             </when>
             <otherwise>
-                detail_id
+                df_usage_archive_uid
             </otherwise>
         </choose>
         <include refid="IUsageMapper.ifPageable"/>
@@ -140,7 +142,9 @@
         where df_scenario_uid = #{scenarioId} and u.rh_account_number = #{accountNumber}
         <if test="null != searchValue">
             and (
-            <include refid="IUsageMapper.drillDownSearchWhereClause"/>
+            <include refid="IUsageMapper.drillDownSearchWhereClause">
+                <property name="detail_uid" value="u.df_usage_archive_uid"/>
+            </include>
             )
         </if>
     </select>
@@ -161,17 +165,6 @@
         delete from ${schema}.df_usage_archive
         where df_scenario_uid = #{scenarioId}
     </delete>
-
-    <select id="findDetailIdToUsageIdMap" resultType="map" parameterType="list">
-        select
-            cast(detail_id as text) detail_id,
-            df_usage_archive_uid
-        from ${schema}.df_usage_archive
-        where detail_id in
-        <foreach collection="list" item="detailId" separator="," open="(" close=")">
-            #{detailId}
-        </foreach>
-    </select>
 
     <update id="updatePaidInfo" parameterType="PaidUsage">
         update ${schema}.df_usage_archive
@@ -198,7 +191,6 @@
     <select id="findByIdAndStatus" resultMap="paidUsageResultMap" parameterType="map">
         select
             u.df_usage_archive_uid df_usage_uid,
-            u.detail_id,
             u.rh_account_number,
             u.payee_account_number,
             u.wr_wrk_inst,
