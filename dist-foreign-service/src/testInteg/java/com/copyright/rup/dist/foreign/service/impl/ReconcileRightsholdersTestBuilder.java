@@ -205,7 +205,7 @@ public class ReconcileRightsholdersTestBuilder {
 
         private void assertUsages() {
             List<Usage> usages = usageService.getUsagesByScenarioId(expectedScenario.getId());
-            usages.sort(Comparator.comparing(Usage::getDetailId));
+            usages.sort(Comparator.comparing(Usage::getId));
             assertEquals(expectedUsages.size(), CollectionUtils.size(usages));
             IntStream.range(0, usages.size()).forEach(i -> assertUsage(expectedUsages.get(i), usages.get(i)));
         }

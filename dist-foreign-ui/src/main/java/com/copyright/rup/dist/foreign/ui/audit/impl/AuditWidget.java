@@ -118,7 +118,7 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
 
     private void addColumns() {
         auditGrid.addComponentColumn(usage -> {
-            String detailId = Objects.toString(usage.getDetailId());
+            String detailId = Objects.toString(usage.getId());
             Button button = Buttons.createButton(detailId);
             button.addStyleName(ValoTheme.BUTTON_LINK);
             button.addClickListener(event -> controller.showUsageHistory(usage.getId(), detailId));

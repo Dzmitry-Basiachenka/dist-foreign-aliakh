@@ -182,7 +182,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         params.put(STATUS_KEY, UsageStatusEnum.ELIGIBLE);
         params.put(UPDATE_USER_KEY, userName);
         usagesIds.forEach(usageId -> {
-            params.put("usageId", usageId);
+            params.put(USAGE_ID_KEY, usageId);
             update("IUsageMapper.deleteFromScenarioByUsageId", params);
         });
     }
@@ -251,8 +251,8 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public Usage findByDetailId(Long detailId) {
-        return selectOne("IUsageMapper.findByDetailId", Objects.requireNonNull(detailId));
+    public Usage findById(String usageId) {
+        return selectOne("IUsageMapper.findById", Objects.requireNonNull(usageId));
     }
 
     @Override
@@ -414,7 +414,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         parameters.put(UPDATE_USER_KEY, StoredEntity.DEFAULT_USER);
         parameters.put(STATUS_KEY, UsageStatusEnum.WORK_FOUND);
         researchedUsages.forEach(researchedUsage -> {
-            parameters.put("detailId", researchedUsage.getDetailId());
+            parameters.put(USAGE_ID_KEY, researchedUsage.getUsageId());
             parameters.put("wrWrkInst", researchedUsage.getWrWrkInst());
             update("IUsageMapper.updateResearchedUsage", parameters);
         });

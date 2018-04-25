@@ -53,8 +53,9 @@ public class ReconcileRightsholdersTest {
             .expectRmsCall("reconcileRightsholders/rms_no_discrepancies_request.json",
                 "reconcileRightsholders/rms_no_discrepancies_response.json")
             .expectPreferences("reconcileRightsholders/preferences_no_discrepancies_response.json")
-            .expectUsages(buildUsage(2136547853L, 1000003821L, 1000003821L, 471137470L, "1000.00", "840.00", "160.00",
-                SERVICE_FEE_16))
+            .expectUsages(
+                buildUsage("fcdaea01-2439-4c51-b3e2-23649cf710c7", 1000003821L, 1000003821L, 471137470L, "1000.00",
+                    "840.00", "160.00", SERVICE_FEE_16))
             .build()
             .run();
     }
@@ -75,18 +76,18 @@ public class ReconcileRightsholdersTest {
                 buildDiscrepancy(1000000026L, 1000002137L, 122799407L),
                 buildDiscrepancy(1000000322L, 2000152614L, 123636551L)))
             .expectUsages(
-                buildUsage(1136547850L, 2000152614L, 2000152614L, 127778305L, "5000.00", "4200.00", "800.00",
-                    SERVICE_FEE_16),
-                buildUsage(1136547851L, 1000002137L, 1000001820L, 122861189L, "1000.00", "680.00", "320.00",
-                    SERVICE_FEE_32),
-                buildUsage(1136547852L, 2000152614L, 2000152614L, 123647460L, "200.00", "168.00", "32.00",
-                    SERVICE_FEE_16),
-                buildUsage(1136547853L, 1000002137L, 1000001820L, 122799407L, "1800.00", "1224.00", "576.00",
-                    SERVICE_FEE_32),
-                buildUsage(1136547854L, 2000152614L, 2000152614L, 123636551L, "4500.00", "3780.00", "720.00",
-                    SERVICE_FEE_16),
-                buildUsage(1136547855L, 1000000322L, 1000000322L, 123642505L, "2500.00", "1700.00", "800.00",
-                    SERVICE_FEE_32))
+                buildUsage("4713282c-c698-4ffb-8de1-44863d48954f", 2000152614L, 2000152614L, 127778305L, "5000.00",
+                    "4200.00", "800.00", SERVICE_FEE_16),
+                buildUsage("cf2b4a25-d786-4fee-9c7f-5bec12b017c1", 1000000322L, 1000000322L, 123642505L, "2500.00",
+                    "1700.00", "800.00", SERVICE_FEE_32),
+                buildUsage("d2da6044-7ff7-4b5d-984a-69978b9e0678", 1000002137L, 1000001820L, 122799407L, "1800.00",
+                    "1224.00", "576.00", SERVICE_FEE_32),
+                buildUsage("daf2483b-a7b4-415b-81d2-adb328423661", 1000002137L, 1000001820L, 122861189L, "1000.00",
+                    "680.00", "320.00", SERVICE_FEE_32),
+                buildUsage("f1d2c084-973b-4c88-9b45-d4060d87b4ba", 2000152614L, 2000152614L, 123636551L, "4500.00",
+                    "3780.00", "720.00", SERVICE_FEE_16),
+                buildUsage("f9f5d608-c6e7-49dd-b658-174522b0549e", 2000152614L, 2000152614L, 123647460L, "200.00",
+                    "168.00", "32.00", SERVICE_FEE_16))
             .build()
             .run();
     }
@@ -113,10 +114,10 @@ public class ReconcileRightsholdersTest {
         return rightsholder;
     }
 
-    private Usage buildUsage(Long detailId, Long rhAccountNumber, Long payeeAccountNumber, Long wrWrkInst,
+    private Usage buildUsage(String usageId, Long rhAccountNumber, Long payeeAccountNumber, Long wrWrkInst,
                              String grossAmount, String netAmount, String serviceFeeAmount, String serviceFee) {
         Usage usage = new Usage();
-        usage.setDetailId(detailId);
+        usage.setId(usageId);
         usage.getRightsholder().setAccountNumber(rhAccountNumber);
         usage.getPayee().setAccountNumber(payeeAccountNumber);
         usage.setWrWrkInst(wrWrkInst);

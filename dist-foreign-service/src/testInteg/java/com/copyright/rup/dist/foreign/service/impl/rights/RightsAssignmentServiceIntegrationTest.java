@@ -30,6 +30,7 @@ import org.springframework.test.web.client.response.MockRestResponseCreators;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -56,6 +57,11 @@ public class RightsAssignmentServiceIntegrationTest {
     @Autowired
     private RestTemplate restTemplate;
 
+    private static final Set<String> USAGE_IDS = Sets.newHashSet(
+        "d82aaf46-8837-4e59-a158-d485d01f9a16",
+        "427f017c-688b-4c89-9560-c3ea01e55134",
+        "55710948-f203-4547-92b9-3c4526ac32c5");
+
     // Test Case ID: af51f1a4-66a6-4d70-b475-50007454f864
     @Test
     public void testSendForRightsAssignment() {
@@ -74,7 +80,7 @@ public class RightsAssignmentServiceIntegrationTest {
         assertTrue(CollectionUtils.isNotEmpty(usages));
         assertEquals(4, usages.size());
         usages.stream()
-            .filter(usage -> Sets.newHashSet(254690L, 254691L, 254692L).contains(usage.getDetailId()))
+            .filter(usage -> USAGE_IDS.contains(usage.getId()))
             .collect(Collectors.toList())
             .forEach(usage -> {
                 List<UsageAuditItem> auditItems = usageAuditService.getUsageAudit(usage.getId());

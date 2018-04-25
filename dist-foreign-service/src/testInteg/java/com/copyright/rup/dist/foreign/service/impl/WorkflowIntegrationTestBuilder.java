@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.dist.common.test.JsonEndpointMatcher;
 import com.copyright.rup.dist.common.test.JsonMatcher;
 import com.copyright.rup.dist.common.test.TestUtils;
-import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
@@ -53,7 +52,6 @@ import org.springframework.web.client.RestTemplate;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -61,6 +59,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -104,6 +103,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
     private IUsageAuditService usageAuditService;
 
     private String usagesCsvFile;
+    private List<String> predefinedUsageIds;
     private String productFamily;
     private UsageBatch usageBatch;
     private UsageFilter usageFilter;
@@ -113,14 +113,15 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
     private List<String> expectedRightsholdersIds;
     private String expectedLmDetailsJsonFile;
     private String expectedPaidUsagesJsonFile;
-    private List<Long> expectedPaidDetailsIds;
+    private List<String> expectedPaidUsageIds;
     private String expectedCrmRequestJsonFile;
     private String expectedCrmResponseJsonFile;
-    private List<Long> expectedArchivedDetailsIds;
-    private final Map<Long, List<Pair<UsageActionTypeEnum, String>>> expectedUsagesAudit = Maps.newHashMap();
+    private List<String> expectedArchivedUsageIds;
+    private final Map<String, List<Pair<UsageActionTypeEnum, String>>> expectedUsagesAudit = Maps.newHashMap();
 
-    public WorkflowIntegrationTestBuilder withUsagesCsvFile(String csvFile) {
+    public WorkflowIntegrationTestBuilder withUsagesCsvFile(String csvFile, String... usageIds) {
         this.usagesCsvFile = csvFile;
+        this.predefinedUsageIds = Arrays.asList(usageIds);
         return this;
     }
 
@@ -165,8 +166,8 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
-    public WorkflowIntegrationTestBuilder expectPaidDetailsIds(Long... detailsIds) {
-        this.expectedPaidDetailsIds = Arrays.asList(detailsIds);
+    public WorkflowIntegrationTestBuilder expectPaidDetailsIds(String... usageIds) {
+        this.expectedPaidUsageIds = Arrays.asList(usageIds);
         return this;
     }
 
@@ -176,14 +177,14 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
-    public WorkflowIntegrationTestBuilder expectArchivedDetailsIds(Long... detailsIds) {
-        this.expectedArchivedDetailsIds = Arrays.asList(detailsIds);
+    public WorkflowIntegrationTestBuilder expectArchivedDetailsIds(String... usageIds) {
+        this.expectedArchivedUsageIds = Arrays.asList(usageIds);
         return this;
     }
 
-    public WorkflowIntegrationTestBuilder expectUsageAudit(Long detailId,
+    public WorkflowIntegrationTestBuilder expectUsageAudit(String usageId,
                                                            List<Pair<UsageActionTypeEnum, String>> usageAudit) {
-        this.expectedUsagesAudit.put(detailId, usageAudit);
+        this.expectedUsagesAudit.put(usageId, usageAudit);
         return this;
     }
 
@@ -219,8 +220,20 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
             ProcessingResult<Usage> result = csvProcessor.process(getCsvOutputStream());
             assertTrue(result.isSuccessful());
             List<Usage> usages = result.get();
+            setPredefinedUsageIds(usages);
             int usagesInsertedCount = usageBatchService.insertUsageBatch(usageBatch, usages);
             assertEquals(expectedInsertedUsagesCount, usagesInsertedCount);
+        }
+
+        // predefined usage ids are used, otherwise during every test run the usage ids will be random
+        private void setPredefinedUsageIds(List<Usage> usages) {
+            AtomicInteger usageId = new AtomicInteger(0);
+            usages.forEach(usage -> {
+                    usage.setId(predefinedUsageIds.get(usageId.getAndIncrement()));
+                    // TODO {aliakh} will be removed after database clean-up
+                    usage.setDetailId((long) usageId.get());
+                }
+            );
         }
 
         private ByteArrayOutputStream getCsvOutputStream() throws IOException {
@@ -295,15 +308,12 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
         }
 
         private void assertPaidUsages() {
-            int usageCount = findPaidUsagesCountByDetailIdsAndStatus(expectedPaidDetailsIds, UsageStatusEnum.PAID);
-            assertEquals(expectedPaidDetailsIds.size(), usageCount);
+            assertEquals(expectedPaidUsageIds.size(),
+                findPaidUsagesCountByUsageIdsAndStatus(expectedPaidUsageIds, UsageStatusEnum.PAID));
         }
 
-        private int findPaidUsagesCountByDetailIdsAndStatus(List<Long> detailIds, UsageStatusEnum status) {
-            Map<Long, String> detailIdToIdMap = usageArchiveRepository.findDetailIdToIdMap(detailIds);
-            List<String> usageIds = new ArrayList<>(detailIdToIdMap.values());
-            List<PaidUsage> usages = usageArchiveRepository.findByIdAndStatus(usageIds, status);
-            return usages.size();
+        private int findPaidUsagesCountByUsageIdsAndStatus(List<String> usageIds, UsageStatusEnum status) {
+            return usageArchiveRepository.findByIdAndStatus(usageIds, status).size();
         }
 
         private void sendUsagesToCrm() throws IOException {
@@ -326,9 +336,8 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
         }
 
         private void assertArchivedUsages() {
-            int usageCount =
-                findPaidUsagesCountByDetailIdsAndStatus(expectedArchivedDetailsIds, UsageStatusEnum.ARCHIVED);
-            assertEquals(expectedArchivedDetailsIds.size(), usageCount);
+            assertEquals(expectedArchivedUsageIds.size(),
+                findPaidUsagesCountByUsageIdsAndStatus(expectedArchivedUsageIds, UsageStatusEnum.ARCHIVED));
         }
 
         private void verifyScenarioAudit() {
@@ -355,28 +364,19 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
             assertEquals(expectedUsagesAudit, buildUsageAuditMapForAssertion());
         }
 
-        private Map<Long, List<Pair<UsageActionTypeEnum, String>>> buildUsageAuditMapForAssertion() {
+        private Map<String, List<Pair<UsageActionTypeEnum, String>>> buildUsageAuditMapForAssertion() {
             return expectedUsagesAudit.keySet().stream()
                 .collect(Collectors.toMap(
-                    detailId -> detailId,
+                    usageId -> usageId,
                     this::getUsageAuditActionTypeAndMessagePairs
                 ));
         }
 
-        private List<Pair<UsageActionTypeEnum, String>> getUsageAuditActionTypeAndMessagePairs(Long detailId) {
-            return getUsageAuditByDetailId(detailId).stream()
+        private List<Pair<UsageActionTypeEnum, String>> getUsageAuditActionTypeAndMessagePairs(String usageId) {
+            return usageAuditService.getUsageAudit(usageId).stream()
                 .sorted(Comparator.comparing(UsageAuditItem::getCreateDate))
-                .map(a -> Pair.of(a.getActionType(), a.getActionReason()))
+                .map(usageAuditItem -> Pair.of(usageAuditItem.getActionType(), usageAuditItem.getActionReason()))
                 .collect(Collectors.toList());
-        }
-
-        private List<UsageAuditItem> getUsageAuditByDetailId(Long detailId) {
-            String usageId = getUsageIdByDetailId(detailId);
-            return usageAuditService.getUsageAudit(usageId);
-        }
-
-        private String getUsageIdByDetailId(Long detailId) {
-            return usageArchiveRepository.findDetailIdToIdMap(Collections.singletonList(detailId)).get(detailId);
         }
     }
 }

@@ -89,9 +89,8 @@ public class UsageRepositoryIntegrationTest {
     private static final String WORK_TITLE = "Wissenschaft & Forschung Japan";
     private static final String PRODUCT_FAMILY_FAS = "FAS";
     private static final String PRODUCT_FAMILY_NTS = "NTS";
-    private static final String STANDARD_NUMBER_2 = "2192-3558";
     private static final Long DETAIL_ID = 12345L;
-    private static final Long DETAIL_ID_1 = 6997788884L;
+    private static final String STANDARD_NUMBER_2 = "2192-3558";
     private static final String DETAIL_ID_KEY = "detailId";
     private static final String USAGE_ID_1 = "3ab5e80b-89c0-4d78-9675-54c7ab284450";
     private static final String USAGE_ID_2 = "8a06905f-37ae-4e1f-8550-245277f8165c";
@@ -116,6 +115,7 @@ public class UsageRepositoryIntegrationTest {
     private static final String USAGE_ID_21 = "47d48889-76b5-4957-aca0-2a7850a09f92";
     private static final String USAGE_ID_22 = "c5ea47b0-b269-4791-9aa7-76308fe835e6";
     private static final String USAGE_ID_23 = "b53bb4f3-9eee-4732-8e3d-0c88722081d8";
+    private static final String USAGE_ID_24 = "5c5f8c1c-1418-4cfd-8685-9212f4c421d1";
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
     private static final String USER_NAME = "user@copyright.com";
     private static final BigDecimal SERVICE_FEE = new BigDecimal("0.32000");
@@ -138,7 +138,7 @@ public class UsageRepositoryIntegrationTest {
     public void testInsert() {
         String usageId = RupPersistUtils.generateUuid();
         usageRepository.insert(buildUsage(usageId, USAGE_BATCH_ID_1));
-        Usage usage = usageRepository.findByDetailId(DETAIL_ID);
+        Usage usage = usageRepository.findById(usageId);
         assertNotNull(usage);
         assertEquals(usageId, usage.getId());
         assertEquals(SCENARIO_ID, usage.getScenarioId());
@@ -199,8 +199,8 @@ public class UsageRepositoryIntegrationTest {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             Collections.singleton(PRODUCT_FAMILY_FAS), null, null, null);
         verifyUsageDtos(usageRepository.findByFilter(usageFilter, null, new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)),
-            16, USAGE_ID_11, USAGE_ID_14, USAGE_ID_17, USAGE_ID_12, USAGE_ID_13, USAGE_ID_18, USAGE_ID_19, USAGE_ID_20,
-            USAGE_ID_21, USAGE_ID_22, USAGE_ID_23, USAGE_ID_6, USAGE_ID_3, USAGE_ID_2, USAGE_ID_1, USAGE_ID_4);
+            16, USAGE_ID_6, USAGE_ID_14, USAGE_ID_1, USAGE_ID_21, USAGE_ID_12, USAGE_ID_24, USAGE_ID_13, USAGE_ID_18,
+            USAGE_ID_11, USAGE_ID_2, USAGE_ID_19, USAGE_ID_23, USAGE_ID_22, USAGE_ID_4, USAGE_ID_20, USAGE_ID_17);
     }
 
     @Test
@@ -208,7 +208,7 @@ public class UsageRepositoryIntegrationTest {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             Collections.emptySet(), UsageStatusEnum.ELIGIBLE, null, null);
         verifyUsageDtos(usageRepository.findByFilter(usageFilter, null, new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 4,
-            USAGE_ID_3, USAGE_ID_2, USAGE_ID_1, USAGE_ID_10);
+            USAGE_ID_1, USAGE_ID_10, USAGE_ID_3, USAGE_ID_2);
     }
 
     @Test
@@ -228,7 +228,7 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindByFilterSortByStandardNumber() {
+    public void testFindByFilterSortByStandartNumber() {
         verifyUsageDtos(usageRepository.findByFilter(buildFilterWithStatuses(UsageStatusEnum.ELIGIBLE), null,
             new Sort("standardNumber", Sort.Direction.ASC)), 4, USAGE_ID_2, USAGE_ID_3, USAGE_ID_1, USAGE_ID_10);
     }
@@ -429,9 +429,9 @@ public class UsageRepositoryIntegrationTest {
     @Test
     public void testFindByScenarioIdAndRhAccountNumberSearchDetailId() {
         populateScenario();
-        verifySearch("6997788885", 1);
-        verifySearch("78888", 3);
-        verifySearch("6997 788885", 0);
+        verifySearch("b1f0b236-3ae9-4a60-9fab-61db84199dss", 1);
+        verifySearch("4a60", 1);
+        verifySearch("4a", 2);
     }
 
     @Test
@@ -631,7 +631,7 @@ public class UsageRepositoryIntegrationTest {
 
     @Test
     public void testAddToScenario() {
-        Usage usage = usageRepository.findByDetailId(DETAIL_ID_1);
+        Usage usage = usageRepository.findById(USAGE_ID_24);
         verifyUsage(usage, UsageStatusEnum.ELIGIBLE, null, StoredEntity.DEFAULT_USER, null);
         usage.getPayee().setAccountNumber(2000017004L);
         usage.setStatus(UsageStatusEnum.LOCKED);
@@ -643,7 +643,7 @@ public class UsageRepositoryIntegrationTest {
         usage.setNetAmount(netAmount);
         usage.setServiceFee(SERVICE_FEE);
         usageRepository.addToScenario(Collections.singletonList(usage));
-        Usage updatedUsage = usageRepository.findByDetailId(DETAIL_ID_1);
+        Usage updatedUsage = usageRepository.findById(USAGE_ID_24);
         verifyUsage(updatedUsage, UsageStatusEnum.LOCKED, SCENARIO_ID, USER_NAME, 2000017004L);
         assertEquals(SERVICE_FEE, usage.getServiceFee());
         assertEquals(serviceFeeAmount, usage.getServiceFeeAmount());
@@ -652,10 +652,10 @@ public class UsageRepositoryIntegrationTest {
 
     @Test
     public void testDeleteFromScenario() {
-        verifyUsage(usageRepository.findByDetailId(6997788886L), UsageStatusEnum.LOCKED, SCENARIO_ID,
-            StoredEntity.DEFAULT_USER, 1000002859L);
+        verifyUsage(usageRepository.findById(USAGE_ID_8), UsageStatusEnum.LOCKED,
+            SCENARIO_ID, StoredEntity.DEFAULT_USER, 1000002859L);
         usageRepository.deleteFromScenario(SCENARIO_ID, USER_NAME);
-        verifyUsageExcludedFromScenario(usageRepository.findByDetailId(6997788886L));
+        verifyUsageExcludedFromScenario(usageRepository.findById(USAGE_ID_8));
     }
 
     @Test
@@ -670,26 +670,26 @@ public class UsageRepositoryIntegrationTest {
 
     @Test
     public void testDeleteFromScenarioByAccountNumbers() {
-        assertEquals(SCENARIO_ID, usageRepository.findByDetailId(6997788886L).getScenarioId());
-        assertEquals(SCENARIO_ID, usageRepository.findByDetailId(6213788886L).getScenarioId());
-        Usage usage = buildUsage(RupPersistUtils.generateUuid(), USAGE_BATCH_ID_1);
+        assertEquals(SCENARIO_ID, usageRepository.findById(USAGE_ID_8).getScenarioId());
+        assertEquals(SCENARIO_ID, usageRepository.findById(USAGE_ID_7).getScenarioId());
+        String usageId = RupPersistUtils.generateUuid();
+        Usage usage = buildUsage(usageId, USAGE_BATCH_ID_1);
         usageRepository.insert(usage);
         usageRepository.addToScenario(Collections.singletonList(usage));
         usageRepository.deleteFromScenario(Lists.newArrayList(USAGE_ID_8, USAGE_ID_7), USER_NAME);
-        verifyUsageExcludedFromScenario(usageRepository.findByDetailId(6997788886L));
-        verifyUsageExcludedFromScenario(usageRepository.findByDetailId(6213788886L));
-        assertEquals(SCENARIO_ID, usageRepository.findByDetailId(DETAIL_ID).getScenarioId());
+        verifyUsageExcludedFromScenario(usageRepository.findById(USAGE_ID_8));
+        verifyUsageExcludedFromScenario(usageRepository.findById(USAGE_ID_7));
+        assertEquals(SCENARIO_ID, usageRepository.findById(usageId).getScenarioId());
     }
 
     @Test
     public void testFindByScenarioIdAndRhAccountNumbers() {
         Usage usage = buildUsage(RupPersistUtils.generateUuid(), USAGE_BATCH_ID_1);
         usageRepository.insert(usage);
-        String scenarioId = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
-        usage.setScenarioId(scenarioId);
+        usage.setScenarioId(SCENARIO_ID);
         usageRepository.addToScenario(Collections.singletonList(usage));
         List<String> usagesIds = usageRepository.findIdsByScenarioIdRroAccountNumberRhAccountNumbers(
-            scenarioId, 2000017010L, Lists.newArrayList(1000002859L, 7000813806L));
+            SCENARIO_ID, 2000017010L, Lists.newArrayList(1000002859L, 7000813806L));
         assertEquals(2, usagesIds.size());
         assertTrue(usagesIds.containsAll(Lists.newArrayList(USAGE_ID_8, USAGE_ID_7)));
     }
@@ -727,15 +727,15 @@ public class UsageRepositoryIntegrationTest {
         filter.setProductFamilies(Collections.singleton(PRODUCT_FAMILY_FAS));
         assertEquals(22, usageRepository.findCountForAudit(filter));
         List<UsageDto> usages = usageRepository.findForAudit(filter, new Pageable(0, 25), null);
-        verifyUsageDtos(usages, 22, USAGE_ID_11, USAGE_ID_14, USAGE_ID_17, USAGE_ID_12, USAGE_ID_13, USAGE_ID_18,
-            USAGE_ID_19, USAGE_ID_20, USAGE_ID_21, USAGE_ID_22, USAGE_ID_23, USAGE_ID_6, USAGE_ID_16, USAGE_ID_15,
-            USAGE_ID_5, USAGE_ID_9, USAGE_ID_7, USAGE_ID_3, USAGE_ID_2, USAGE_ID_8, USAGE_ID_1, USAGE_ID_4);
+        verifyUsageDtos(usages, 22, USAGE_ID_6, USAGE_ID_14, USAGE_ID_15, USAGE_ID_16, USAGE_ID_9, USAGE_ID_1,
+            USAGE_ID_21, USAGE_ID_12, USAGE_ID_24, USAGE_ID_13, USAGE_ID_18, USAGE_ID_11, USAGE_ID_2, USAGE_ID_19,
+            USAGE_ID_5, USAGE_ID_8, USAGE_ID_23, USAGE_ID_22, USAGE_ID_7, USAGE_ID_4, USAGE_ID_20, USAGE_ID_17);
     }
 
     @Test
     public void testFindForAuditBySearch() {
         AuditFilter filter = new AuditFilter();
-        filter.setSearchValue("5423214587");
+        filter.setSearchValue("a71a0544-128e-41c0-b6b0-cfbbea6d2182");
         assertEquals(1, usageRepository.findCountForAudit(filter));
         List<UsageDto> usages = usageRepository.findForAudit(filter, new Pageable(0, 10), null);
         verifyUsageDtos(usages, 1, USAGE_ID_5);
@@ -743,7 +743,7 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(1, usageRepository.findCountForAudit(filter));
         usages = usageRepository.findForAudit(filter, new Pageable(0, 10), null);
         verifyUsageDtos(usages, 1, USAGE_ID_4);
-        filter.setSearchValue("103658926");
+        filter.setSearchValue("d9ca07b5-8282-4a81-9b9d-e4480f529d34");
         assertEquals(1, usageRepository.findCountForAudit(filter));
         usages = usageRepository.findForAudit(filter, new Pageable(0, 10), null);
         verifyUsageDtos(usages, 1, USAGE_ID_4);
@@ -833,48 +833,48 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(USAGE_ID_6, usageSentForRa.getId());
         assertEquals(UsageStatusEnum.SENT_FOR_RA, usageSentForRa.getStatus());
         Usage usageWorkFound = usages.get(1);
-        assertEquals("d9ca07b5-8282-4a81-9b9d-e4480f529d34", usageWorkFound.getId());
+        assertEquals(USAGE_ID_4, usageWorkFound.getId());
         assertEquals(UsageStatusEnum.WORK_FOUND, usageWorkFound.getStatus());
     }
 
     @Test
     public void testUpdateStatusWithUsageIds() {
-        Usage usage1 = usageRepository.findByDetailId(8457965214L);
+        Usage usage1 = usageRepository.findById(USAGE_ID_4);
         assertEquals(UsageStatusEnum.WORK_FOUND, usage1.getStatus());
         assertEquals(USER_NAME, usage1.getUpdateUser());
-        Usage usage2 = usageRepository.findByDetailId(3539748198L);
+        Usage usage2 = usageRepository.findById(USAGE_ID_6);
         assertEquals(UsageStatusEnum.SENT_FOR_RA, usage2.getStatus());
         assertEquals(USER_NAME, usage2.getUpdateUser());
         usageRepository.updateStatus(ImmutableSet.of(usage1.getId(), usage2.getId()), UsageStatusEnum.RH_NOT_FOUND);
-        usage1 = usageRepository.findByDetailId(8457965214L);
+        usage1 = usageRepository.findById(USAGE_ID_4);
         assertEquals(UsageStatusEnum.RH_NOT_FOUND, usage1.getStatus());
         assertEquals(StoredEntity.DEFAULT_USER, usage1.getUpdateUser());
-        usage2 = usageRepository.findByDetailId(3539748198L);
+        usage2 = usageRepository.findById(USAGE_ID_6);
         assertEquals(UsageStatusEnum.RH_NOT_FOUND, usage2.getStatus());
         assertEquals(StoredEntity.DEFAULT_USER, usage2.getUpdateUser());
     }
 
     @Test
     public void testUpdateStatusAndRhAccountNumber() {
-        Usage usage1 = usageRepository.findByDetailId(8457965214L);
+        Usage usage1 = usageRepository.findById(USAGE_ID_4);
         assertEquals(UsageStatusEnum.WORK_FOUND, usage1.getStatus());
         assertNull(usage1.getRightsholder().getAccountNumber());
-        Usage usage2 = usageRepository.findByDetailId(3539748198L);
+        Usage usage2 = usageRepository.findById(USAGE_ID_6);
         assertEquals(UsageStatusEnum.SENT_FOR_RA, usage2.getStatus());
         assertNull(usage2.getRightsholder().getAccountNumber());
         usageRepository.updateStatusAndRhAccountNumber(ImmutableSet.of(usage1.getId(), usage2.getId()),
             UsageStatusEnum.ELIGIBLE, RH_ACCOUNT_NUMBER);
-        usage1 = usageRepository.findByDetailId(8457965214L);
+        usage1 = usageRepository.findById(USAGE_ID_4);
         assertEquals(UsageStatusEnum.ELIGIBLE, usage1.getStatus());
         assertEquals(RH_ACCOUNT_NUMBER, usage1.getRightsholder().getAccountNumber());
-        usage2 = usageRepository.findByDetailId(3539748198L);
+        usage2 = usageRepository.findById(USAGE_ID_6);
         assertEquals(UsageStatusEnum.ELIGIBLE, usage2.getStatus());
         assertEquals(RH_ACCOUNT_NUMBER, usage2.getRightsholder().getAccountNumber());
     }
 
     @Test
     public void testUpdateRhPayeeAndAmounts() {
-        Usage usage = usageRepository.findByDetailId(6997788886L);
+        Usage usage = usageRepository.findById(USAGE_ID_8);
         assertEquals(1000002859L, usage.getRightsholder().getAccountNumber(), 0);
         assertEquals(new BigDecimal("16437.4000000000"), usage.getGrossAmount());
         assertEquals(new BigDecimal("11177.4000000000"), usage.getNetAmount());
@@ -885,7 +885,7 @@ public class UsageRepositoryIntegrationTest {
         usage.setNetAmount(new BigDecimal("13807.4000000000"));
         usage.setServiceFeeAmount(new BigDecimal("2630.0000000000"));
         usageRepository.update(Collections.singletonList(usage));
-        usage = usageRepository.findByDetailId(6997788886L);
+        usage = usageRepository.findById(USAGE_ID_8);
         assertEquals(1000000001L, usage.getRightsholder().getAccountNumber(), 0);
         assertEquals(new BigDecimal("13807.4000000000"), usage.getNetAmount());
         assertEquals(new BigDecimal("2630.0000000000"), usage.getServiceFeeAmount());
@@ -912,8 +912,8 @@ public class UsageRepositoryIntegrationTest {
     @Test
     public void testUpdateStatusAndProductFamily() {
         List<Usage> usages = Lists.newArrayList(
-            usageRepository.findByDetailId(547365496L),
-            usageRepository.findByDetailId(547365496L)
+            usageRepository.findById("66a7c2c0-3b09-48ad-9aa5-a6d0822226c7"),
+            usageRepository.findById("66a7c2c0-3b09-48ad-9aa5-a6d0822226c7")
         );
         assertEquals(2, usages.size());
         usages.forEach(usage -> {
@@ -922,7 +922,7 @@ public class UsageRepositoryIntegrationTest {
         });
         usageRepository.update(usages);
         usages.forEach(usage -> {
-            Usage updatedUsage = usageRepository.findByDetailId(usage.getDetailId());
+            Usage updatedUsage = usageRepository.findById(usage.getId());
             assertEquals(UsageStatusEnum.ELIGIBLE, updatedUsage.getStatus());
             assertEquals(PRODUCT_FAMILY_NTS, updatedUsage.getProductFamily());
         });
@@ -930,25 +930,25 @@ public class UsageRepositoryIntegrationTest {
 
     @Test
     public void testUpdateResearchedUsages() {
-        long detailId1 = 547365497L;
-        long detailId2 = 954638765L;
-        Usage usage1 = usageRepository.findByDetailId(detailId1);
+        String usageId1 = "721ca627-09bc-4204-99f4-6acae415fa5d";
+        String usageId2 = "9c07f6dd-382e-4cbb-8cd1-ab9f51413e0a";
+        Usage usage1 = usageRepository.findById(usageId1);
         assertEquals(UsageStatusEnum.WORK_RESEARCH, usage1.getStatus());
         assertNull(usage1.getWrWrkInst());
-        Usage usage2 = usageRepository.findByDetailId(detailId2);
+        Usage usage2 = usageRepository.findById(usageId2);
         assertEquals(UsageStatusEnum.WORK_RESEARCH, usage2.getStatus());
         assertNull(usage2.getWrWrkInst());
         ResearchedUsage researchedUsage1 = new ResearchedUsage();
-        researchedUsage1.setDetailId(detailId1);
+        researchedUsage1.setUsageId(usageId1);
         researchedUsage1.setWrWrkInst(180382916L);
         ResearchedUsage researchedUsage2 = new ResearchedUsage();
-        researchedUsage2.setDetailId(detailId2);
+        researchedUsage2.setUsageId(usageId2);
         researchedUsage2.setWrWrkInst(854030733L);
         usageRepository.updateResearchedUsages(Lists.newArrayList(researchedUsage1, researchedUsage2));
-        usage1 = usageRepository.findByDetailId(detailId1);
+        usage1 = usageRepository.findById(usageId1);
         assertEquals(UsageStatusEnum.WORK_FOUND, usage1.getStatus());
         assertEquals(180382916L, usage1.getWrWrkInst().longValue());
-        usage2 = usageRepository.findByDetailId(detailId2);
+        usage2 = usageRepository.findById(usageId2);
         assertEquals(UsageStatusEnum.WORK_FOUND, usage2.getStatus());
         assertEquals(854030733L, usage2.getWrWrkInst().longValue());
     }
@@ -1147,19 +1147,19 @@ public class UsageRepositoryIntegrationTest {
 
     private void populateScenario() {
         List<Usage> usages = Lists.newArrayListWithExpectedSize(3);
-        Usage usage = usageRepository.findByDetailId(6997788888L);
+        Usage usage = usageRepository.findById("3ab5e80b-89c0-4d78-9675-54c7ab284450");
         usage.getPayee().setAccountNumber(1000009997L);
         usage.setScenarioId(SCENARIO_ID);
         usage.setServiceFee(SERVICE_FEE);
         calculateAmounts(usage);
         usages.add(usage);
-        usage = usageRepository.findByDetailId(6997788885L);
+        usage = usageRepository.findById("8a06905f-37ae-4e1f-8550-245277f8165c");
         usage.getPayee().setAccountNumber(1000002859L);
         usage.setScenarioId(SCENARIO_ID);
         usage.setServiceFee(SERVICE_FEE);
         calculateAmounts(usage);
         usages.add(usage);
-        usage = usageRepository.findByDetailId(DETAIL_ID_1);
+        usage = usageRepository.findById(USAGE_ID_24);
         usage.getPayee().setAccountNumber(1000005413L);
         usage.setScenarioId(SCENARIO_ID);
         usage.setServiceFee(SERVICE_FEE);

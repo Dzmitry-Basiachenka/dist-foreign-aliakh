@@ -3,7 +3,7 @@
     {
       "rh_account_number": "2000133267",
       "rollup_account_number": "2000017000",
-      "detail_id": "10081014",
+      "detail_id": "2bffdf90-db90-4d92-a15e-03fbc739a0d5",
       "distribution_name": "FDA April 18",
       "distribution_date": 1523145600000,
       "ccc_event_id": "53255",
@@ -14,7 +14,7 @@
     {
       "rh_account_number": "2000073957",
       "rollup_account_number": "2000073957",
-      "detail_id": "10125063",
+      "detail_id": "5e8307ee-be63-45d3-b074-17052fbcddda",
       "distribution_name": "FDA April 18",
       "distribution_date": 1523145600000,
       "ccc_event_id": "53256",
@@ -25,7 +25,7 @@
     {
       "rh_account_number": "7001508482",
       "rollup_account_number": "7001508482",
-      "detail_id": "10081015",
+      "detail_id": "5f0f7397-6cb6-4538-b3dc-9364ed302e95",
       "distribution_name": "FDA April 18",
       "distribution_date": 1523145600000,
       "ccc_event_id": "53257",
@@ -36,7 +36,7 @@
     {
       "rh_account_number": "1000024950",
       "rollup_account_number": "1000024950",
-      "detail_id": "10191994",
+      "detail_id": "ae72ce15-d501-4c0f-b224-3ffca884e0f3",
       "distribution_name": "FDA April 18",
       "distribution_date": 1523145600000,
       "ccc_event_id": "53258",
@@ -47,7 +47,7 @@
     {
       "rh_account_number": "2000139286",
       "rollup_account_number": "2000017000",
-      "detail_id": "10014924",
+      "detail_id": "f85a6579-9461-4fa1-948f-734f0a3b3963",
       "distribution_name": "FDA April 18",
       "distribution_date": 1523145600000,
       "ccc_event_id": "53259",
