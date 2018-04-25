@@ -22,7 +22,6 @@ import java.time.LocalDate;
  */
 public class Usage extends StoredEntity<String> {
 
-    private Long detailId;
     private String batchId;
     private String scenarioId;
     private Long wrWrkInst;
@@ -46,14 +45,6 @@ public class Usage extends StoredEntity<String> {
     private UsageStatusEnum status;
     private String productFamily;
     private boolean rhParticipating;
-
-    public Long getDetailId() {
-        return detailId;
-    }
-
-    public void setDetailId(Long detailId) {
-        this.detailId = detailId;
-    }
 
     public String getBatchId() {
         return batchId;
@@ -250,7 +241,6 @@ public class Usage extends StoredEntity<String> {
         Usage that = (Usage) obj;
         return new EqualsBuilder()
             .appendSuper(super.equals(obj))
-            .append(this.detailId, that.detailId)
             .append(this.batchId, that.batchId)
             .append(this.scenarioId, that.scenarioId)
             .append(this.wrWrkInst, that.wrWrkInst)
@@ -281,7 +271,6 @@ public class Usage extends StoredEntity<String> {
     public int hashCode() {
         return new HashCodeBuilder()
             .appendSuper(super.hashCode())
-            .append(detailId)
             .append(batchId)
             .append(scenarioId)
             .append(wrWrkInst)
@@ -312,7 +301,6 @@ public class Usage extends StoredEntity<String> {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
             .appendSuper(super.toString())
-            .append("detailId", detailId)
             .append("batchId", batchId)
             .append("scenarioId", scenarioId)
             .append("wrWrkInst", wrWrkInst)

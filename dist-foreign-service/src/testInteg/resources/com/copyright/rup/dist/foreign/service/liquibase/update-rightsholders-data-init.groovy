@@ -54,7 +54,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'ff321d96-04bd-11e8-ba89-0ed5f89f718b')
             column(name: 'df_usage_batch_uid', value: '38f41b1f-989d-42c2-9ea2-94b3565bea0f')
-            column(name: 'detail_id', value: '8963609')
             column(name: 'wr_wrk_inst', value: '127778306')
             column(name: 'work_title', value: 'ACP journal club')
             column(name: 'rh_account_number', value: '1000009522')
@@ -82,7 +81,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '37c4d727-caeb-4a7f-b11a-34e313b0bfcc')
             column(name: 'df_usage_batch_uid', value: '38f41b1f-989d-42c2-9ea2-94b3565bea0f')
-            column(name: 'detail_id', value: '8963601')
             column(name: 'wr_wrk_inst', value: '127778305')
             column(name: 'work_title', value: 'ACP journal club')
             column(name: 'rh_account_number', value: '1000009522')
@@ -110,7 +108,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '2de40e13-d353-44ce-b6bb-a11383ba9fb9')
             column(name: 'df_usage_batch_uid', value: '38f41b1f-989d-42c2-9ea2-94b3565bea0f')
-            column(name: 'detail_id', value: '8963602')
             column(name: 'status_ind', value: 'NEW')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '9780000000000')
@@ -133,7 +130,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'b77e72d6-ef71-4f4b-a00b-5800e43e5bee')
             column(name: 'df_usage_batch_uid', value: '38f41b1f-989d-42c2-9ea2-94b3565bea0f')
-            column(name: 'detail_id', value: '8963603')
             column(name: 'wr_wrk_inst', value: '254030731')
             column(name: 'work_title', value: 'Akropolites: Nicaean Empire')
             column(name: 'status_ind', value: 'WORK_FOUND')
@@ -160,7 +156,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '8aded52d-9507-4883-ab4c-fd2e029298af')
             column(name: 'df_usage_batch_uid', value: '38f41b1f-989d-42c2-9ea2-94b3565bea0f')
-            column(name: 'detail_id', value: '8963604')
             column(name: 'wr_wrk_inst', value: '854030731')
             column(name: 'work_title', value: '(En)gendering the war on terror : war stories and camouflaged politics')
             column(name: 'status_ind', value: 'WORK_FOUND')
@@ -187,7 +182,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '11853c83-780a-4533-ad01-dde87c8b8592')
             column(name: 'df_usage_batch_uid', value: '38f41b1f-989d-42c2-9ea2-94b3565bea0f')
-            column(name: 'detail_id', value: '8963605')
             column(name: 'wr_wrk_inst', value: '122824345')
             column(name: 'work_title', value: 'ACP journal club')
             column(name: 'status_ind', value: 'SENT_FOR_RA')
@@ -214,7 +208,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'e6378e17-b0c9-420f-aa5c-a653156339d2')
             column(name: 'df_usage_batch_uid', value: '38f41b1f-989d-42c2-9ea2-94b3565bea0f')
-            column(name: 'detail_id', value: '8963606')
             column(name: 'wr_wrk_inst', value: '854030732')
             column(name: 'work_title', value: '(En)gendering the war on terror : war stories and camouflaged politics')
             column(name: 'status_ind', value: 'SENT_FOR_RA')
@@ -241,7 +234,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '19ca7776-48c8-472e-acfe-d49b6e8780ce')
             column(name: 'df_usage_batch_uid', value: '38f41b1f-989d-42c2-9ea2-94b3565bea0f')
-            column(name: 'detail_id', value: '8963607')
             column(name: 'wr_wrk_inst', value: '346768461')
             column(name: 'work_title', value: 'ACI structural journal')
             column(name: 'status_ind', value: 'RH_NOT_FOUND')

@@ -55,7 +55,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '3ab5e80b-89c0-4d78-9675-54c7ab284450')
             column(name: 'df_usage_batch_uid', value: '56282dbc-2468-48d4-b926-93d3458a656a')
-            column(name: 'detail_id', value: '6997788888')
             column(name: 'wr_wrk_inst', value: '180382914')
             column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
             column(name: 'rh_account_number', value: '1000009997')
@@ -77,7 +76,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '8a06905f-37ae-4e1f-8550-245277f8165c')
             column(name: 'df_usage_batch_uid', value: '56282dbc-2468-48d4-b926-94d3458a666a')
-            column(name: 'detail_id', value: '6997788885')
             column(name: 'wr_wrk_inst', value: '244614835')
             column(name: 'work_title', value: '15th International Conference on Environmental Degradation of Materials in Nuclear Power Systems Water Reactors')
             column(name: 'rh_account_number', value: '1000002859')
@@ -99,7 +97,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '5c5f8c1c-1418-4cfd-8685-9212f4c421d1')
             column(name: 'df_usage_batch_uid', value: 'a5b64c3a-55d2-462e-b169-362dca6a4dd6')
-            column(name: 'detail_id', value: '6997788884')
             column(name: 'wr_wrk_inst', value: '345870577')
             column(name: 'work_title', value: '10 Years Plant Molecular Biology')
             column(name: 'rh_account_number', value: '1000005413')
@@ -122,7 +119,6 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: '23876f21-8ab2-4fcb-adf3-777be88eddbb')
             column(name: 'df_usage_batch_uid', value: '3f46981e-e85a-4786-9b60-ab009c4358e7')
             column(name: 'df_scenario_uid', value: '1230b236-1239-4a60-9fab-123b84199123')
-            column(name: 'detail_id', value: '1917718881')
             column(name: 'wr_wrk_inst', value: '180382914')
             column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
             column(name: 'rh_account_number', value: '1000009997')

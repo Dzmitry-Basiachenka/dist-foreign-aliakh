@@ -89,7 +89,6 @@ public class UsageRepositoryIntegrationTest {
     private static final String WORK_TITLE = "Wissenschaft & Forschung Japan";
     private static final String PRODUCT_FAMILY_FAS = "FAS";
     private static final String PRODUCT_FAMILY_NTS = "NTS";
-    private static final Long DETAIL_ID = 12345L;
     private static final String STANDARD_NUMBER_2 = "2192-3558";
     private static final String DETAIL_ID_KEY = "detailId";
     private static final String USAGE_ID_1 = "3ab5e80b-89c0-4d78-9675-54c7ab284450";
@@ -1106,7 +1105,6 @@ public class UsageRepositoryIntegrationTest {
         usage.setId(usageId);
         usage.setBatchId(usageBatchId);
         usage.setScenarioId(SCENARIO_ID);
-        usage.setDetailId(DETAIL_ID);
         usage.setWrWrkInst(WR_WRK_INST);
         usage.setWorkTitle("Work Title");
         usage.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER);

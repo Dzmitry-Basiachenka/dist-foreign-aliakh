@@ -26,7 +26,6 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: 'fcdaea01-2439-4c51-b3e2-23649cf710c7')
             column(name: 'df_usage_batch_uid', value: '31ddaa1a-e60b-44ce-a968-0ca262870358')
             column(name: 'df_scenario_uid', value: '4c014547-06f3-4840-94ff-6249730d537d')
-            column(name: 'detail_id', value: '2136547853')
             column(name: 'wr_wrk_inst', value: '471137470')
             column(name: 'work_title', value: 'Sunbeams')
             column(name: 'rh_account_number', value: '1000003821')
@@ -52,7 +51,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'b1f0b236-3ae9-4a60-9fab-61db84199dss')
             column(name: 'df_usage_batch_uid', value: '31ddaa1a-e60b-44ce-a968-0ca262870358')
-            column(name: 'detail_id', value: '1213548254')
             column(name: 'wr_wrk_inst', value: '122235134')
             column(name: 'work_title', value: '"CHICKEN BREAST ON GRILL WITH FLAMES"')
             column(name: 'rh_account_number', value: '7000429266')
@@ -74,7 +72,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'cf38d390-11bb-4af7-9685-e034c9c32fb6')
             column(name: 'df_usage_batch_uid', value: '31ddaa1a-e60b-44ce-a968-0ca262870358')
-            column(name: 'detail_id', value: '2536984578')
             column(name: 'wr_wrk_inst', value: '243904752')
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'rh_account_number', value: '1000002859')
@@ -96,7 +93,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'd0816728-4726-483d-91ff-8f24fa605e01')
             column(name: 'df_usage_batch_uid', value: '31ddaa1a-e60b-44ce-a968-0ca262870358')
-            column(name: 'detail_id', value: '3658212548')
             column(name: 'wr_wrk_inst', value: '471137967')
             column(name: 'work_title', value: 'Cell Biology')
             column(name: 'rh_account_number', value: '1000001820')
@@ -118,7 +114,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '0e49fd89-f094-4023-b729-afe240272ebe')
             column(name: 'df_usage_batch_uid', value: '31ddaa1a-e60b-44ce-a968-0ca262870358')
-            column(name: 'detail_id', value: '56958745236')
             column(name: 'wr_wrk_inst', value: '122235139')
             column(name: 'work_title', value: 'BOWL OF BERRIES WITH SUGAR COOKIES')
             column(name: 'rh_account_number', value: '1000024497')
@@ -140,7 +135,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'cbda7c0d-c455-4d9f-b097-89db8d933264')
             column(name: 'df_usage_batch_uid', value: '31ddaa1a-e60b-44ce-a968-0ca262870358')
-            column(name: 'detail_id', value: '2136547852')
             column(name: 'wr_wrk_inst', value: '471137469')
             column(name: 'work_title', value: 'Solar Cells')
             column(name: 'rh_account_number', value: '1000002562')
@@ -172,7 +166,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '8fc81e08-3611-4697-8059-6c970ee5d643')
             column(name: 'df_usage_batch_uid', value: 'ce0ca941-1e16-4a3b-a991-b596189b4f22')
-            column(name: 'detail_id', value: '1213548300')
             column(name: 'wr_wrk_inst', value: '122235134')
             column(name: 'work_title', value: '"CHICKEN BREAST ON GRILL WITH FLAMES"')
             column(name: 'rh_account_number', value: '2000133267')
@@ -194,7 +187,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '007aff49-831c-46ab-9528-2e043f7564e9')
             column(name: 'df_usage_batch_uid', value: 'ce0ca941-1e16-4a3b-a991-b596189b4f22')
-            column(name: 'detail_id', value: '2536984301')
             column(name: 'wr_wrk_inst', value: '243904752')
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'rh_account_number', value: '2000073957')
@@ -216,7 +208,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '455681ae-a02d-4cb9-a881-fcdc46cc5585')
             column(name: 'df_usage_batch_uid', value: 'ce0ca941-1e16-4a3b-a991-b596189b4f22')
-            column(name: 'detail_id', value: '3658212302')
             column(name: 'wr_wrk_inst', value: '471137967')
             column(name: 'work_title', value: 'Cell Biology')
             column(name: 'rh_account_number', value: '7001508482')
@@ -238,7 +229,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'ec5c39b5-4c16-40a7-b1c8-730320971f11')
             column(name: 'df_usage_batch_uid', value: 'ce0ca941-1e16-4a3b-a991-b596189b4f22')
-            column(name: 'detail_id', value: '56958745303')
             column(name: 'wr_wrk_inst', value: '122235139')
             column(name: 'work_title', value: 'BOWL OF BERRIES WITH SUGAR COOKIES')
             column(name: 'rh_account_number', value: '1000024950')
@@ -260,7 +250,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '3c3a3329-d64c-45a9-962c-f247e4bbf3b6')
             column(name: 'df_usage_batch_uid', value: 'ce0ca941-1e16-4a3b-a991-b596189b4f22')
-            column(name: 'detail_id', value: '2136547304')
             column(name: 'wr_wrk_inst', value: '471137469')
             column(name: 'work_title', value: 'Solar Cells')
             column(name: 'rh_account_number', value: '2000139286')

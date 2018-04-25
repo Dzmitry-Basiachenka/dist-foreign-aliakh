@@ -24,7 +24,6 @@ databaseChangeLog {
             column(name: 'df_usage_archive_uid', value: '6a833980-17e3-11e8-b566-0800200c9a66')
             column(name: 'df_usage_batch_uid', value: '64a6ace0-17e3-11e8-b566-0800200c9a66')
             column(name: 'df_scenario_uid', value: '5b9ab240-17e3-11e8-b566-0800200c9a66')
-            column(name: 'detail_id', value: '5423214321')
             column(name: 'product_family', value: 'FAS')
             column(name: 'wr_wrk_inst', value: '243904752')
             column(name: 'work_title', value: '100 ROAD MOVIES')

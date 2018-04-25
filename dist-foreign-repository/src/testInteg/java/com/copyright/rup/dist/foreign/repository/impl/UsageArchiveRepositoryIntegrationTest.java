@@ -80,7 +80,6 @@ public class UsageArchiveRepositoryIntegrationTest {
     private static final LocalDate PUBLICATION_DATE = LocalDate.of(2016, 11, 3);
     private static final OffsetDateTime PAID_DATE =
         LocalDate.of(2016, 11, 3).atStartOfDay(ZoneId.systemDefault()).toOffsetDateTime();
-    private static final Long DETAIL_ID = 12345L;
     private static final Integer NUMBER_OF_COPIES = 155;
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
     private static final String PAID_USAGE_ID = "c0d30ec0-370d-11e8-b566-0800200c9a66";
@@ -100,8 +99,8 @@ public class UsageArchiveRepositoryIntegrationTest {
 
     @Test
     public void testInsert() {
-        usageArchiveRepository.insert(
-            buildUsage(RupPersistUtils.generateUuid(), "56282dbc-2468-48d4-b926-93d3458a656a"));
+        String usageId = RupPersistUtils.generateUuid();
+        usageArchiveRepository.insert(buildUsage(usageId, "56282dbc-2468-48d4-b926-93d3458a656a"));
         List<UsageDto> usageDtos = usageArchiveRepository.findByScenarioIdAndRhAccountNumber(
             "b1f0b236-3ae9-4a60-9fab-61db84199d6f", RH_ACCOUNT_NUMBER, null, null, null);
         assertEquals(1, usageDtos.size());
@@ -336,6 +335,7 @@ public class UsageArchiveRepositoryIntegrationTest {
                                  String checkNumber, OffsetDateTime checkDate, String cccEventId,
                                  String distributionName, OffsetDateTime distributionDate,
                                  LocalDate periodEndDate) {
+        assertEquals("7241b7e0-6ab8-4483-896d-fd485c574293", actualUsageDto.getId());
         assertEquals(status, actualUsageDto.getStatus());
         assertEquals(payeeAccountNumber, actualUsageDto.getPayeeAccountNumber(), 0);
         assertEquals(checkNumber, actualUsageDto.getCheckNumber());
@@ -374,7 +374,6 @@ public class UsageArchiveRepositoryIntegrationTest {
         usage.setId(usageId);
         usage.setBatchId(usageBatchId);
         usage.setScenarioId("b1f0b236-3ae9-4a60-9fab-61db84199d6f");
-        usage.setDetailId(DETAIL_ID);
         usage.setWrWrkInst(WR_WRK_INST);
         usage.setWorkTitle(WORK_TITLE);
         usage.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER);

@@ -89,32 +89,9 @@
         <result property="rhParticipating" column="is_rh_participating_flag"/>
     </resultMap>
 
-    <!--TODO {aliakh} will be removed after database clean-up -->
-    <resultMap id="usageResultMapWithDetailId" type="Usage" extends="usageAmountResultMap">
-        <result property="detailId" column="detail_id"/>
-        <result property="batchId" column="df_usage_batch_uid"/>
-        <result property="scenarioId" column="df_scenario_uid"/>
-        <result property="wrWrkInst" column="wr_wrk_inst"/>
-        <result property="workTitle" column="work_title"/>
-        <result property="article" column="article"/>
-        <result property="standardNumber" column="standard_number"/>
-        <result property="publisher" column="publisher"/>
-        <result property="publicationDate" column="publication_date"/>
-        <result property="market" column="market"/>
-        <result property="marketPeriodFrom" column="market_period_from"/>
-        <result property="marketPeriodTo" column="market_period_to"/>
-        <result property="author" column="author"/>
-        <result property="numberOfCopies" column="number_of_copies"/>
-        <result property="payee.id" column="payee_id"/>
-        <result property="payee.accountNumber" column="payee_account_number"/>
-        <result property="payee.name" column="payee_name"/>
-        <result property="rhParticipating" column="is_rh_participating_flag"/>
-    </resultMap>
-
     <sql id="usageColumns">
         df_usage_batch_uid,
         df_scenario_uid,
-        detail_id,
         wr_wrk_inst,
         work_title,
         rh_account_number,
@@ -387,7 +364,6 @@
             #{id},
             #{batchId},
             #{scenarioId},
-            #{detailId},
             #{wrWrkInst},
             #{workTitle},
             #{rightsholder.accountNumber},
@@ -425,12 +401,11 @@
         <include refid="ifPageable"/>
     </select>
 
-    <select id="findByScenarioId" resultMap="usageResultMapWithDetailId" parameterType="string">
+    <select id="findByScenarioId" resultMap="usageResultMap" parameterType="string">
         select
             u.df_usage_uid,
             u.df_usage_batch_uid,
             u.df_scenario_uid,
-            u.detail_id,
             u.wr_wrk_inst,
             u.work_title,
             u.rh_account_number,

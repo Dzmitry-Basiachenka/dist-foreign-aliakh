@@ -16,17 +16,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  */
 public class ResearchedUsage {
 
-    private Long detailId; // TODO {aliakh} will be deleted after refactoring of UsageRepository
     private String usageId;
     private Long wrWrkInst;
-
-    public Long getDetailId() {
-        return detailId;
-    }
-
-    public void setDetailId(Long detailId) {
-        this.detailId = detailId;
-    }
 
     public String getUsageId() {
         return usageId;
@@ -54,7 +45,6 @@ public class ResearchedUsage {
         }
         ResearchedUsage that = (ResearchedUsage) obj;
         return new EqualsBuilder()
-            .append(this.detailId, that.detailId)
             .append(this.usageId, that.usageId)
             .append(this.wrWrkInst, that.wrWrkInst)
             .isEquals();
@@ -63,7 +53,6 @@ public class ResearchedUsage {
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
-            .append(detailId)
             .append(usageId)
             .append(wrWrkInst)
             .toHashCode();
@@ -72,7 +61,6 @@ public class ResearchedUsage {
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-            .append("detailId", detailId)
             .append("usageId", usageId)
             .append("wrWrkInst", wrWrkInst)
             .toString();
