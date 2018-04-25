@@ -11,6 +11,7 @@ import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
+import com.copyright.rup.dist.common.test.ReportMatcher;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -19,14 +20,15 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.common.util.CalculationUtils;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
-import com.copyright.rup.dist.foreign.repository.impl.util.CsvUtils;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,10 +38,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -47,7 +53,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -113,13 +119,20 @@ public class UsageRepositoryIntegrationTest {
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
     private static final String USER_NAME = "user@copyright.com";
     private static final BigDecimal SERVICE_FEE = new BigDecimal("0.32000");
-    private static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
+    private static final Executor EXECUTOR = Executors.newCachedThreadPool();
     private static final String BATCH_ID = "e0af666b-cbb7-4054-9906-12daa1fbd76e";
+    private static final String PATH_TO_ACTUAL_REPORTS = "build/temp";
     private static final String PACKAGE = "/com/copyright/rup/dist/foreign/repository/impl/csv";
-    private static final String PATH_TO_EXPECTED = "src/testInteg/resources" + PACKAGE;
+    private static final String PATH_TO_EXPECTED_REPORTS = "src/testInteg/resources" + PACKAGE;
 
     @Autowired
     private UsageRepository usageRepository;
+
+    @BeforeClass
+    public static void setUpTestDirectory() throws IOException {
+        FileUtils.deleteQuietly(Paths.get(PATH_TO_ACTUAL_REPORTS).toFile());
+        Files.createDirectory(Paths.get(PATH_TO_ACTUAL_REPORTS));
+    }
 
     @Test
     public void testInsert() {
@@ -447,62 +460,46 @@ public class UsageRepositoryIntegrationTest {
 
     @Test
     public void testWriteUsagesForResearchAndFindIds() throws IOException {
-        PipedOutputStream outputStream = new PipedOutputStream();
-        PipedInputStream inputStream = new PipedInputStream(outputStream);
+        PipedOutputStream pos = new PipedOutputStream();
+        PipedInputStream pis = new PipedInputStream(pos);
         UsageFilter usageFilter = new UsageFilter();
         usageFilter.setUsageStatus(UsageStatusEnum.WORK_NOT_FOUND);
-        EXECUTOR_SERVICE.execute(() -> usageRepository.writeUsagesForResearchAndFindIds(usageFilter, outputStream));
-        List<String> actualCsv = CsvUtils.readLines(inputStream);
-        List<String> expectedCsv = CsvUtils.readLines(PATH_TO_EXPECTED, "usages_for_research.csv");
-        assertEquals(2, actualCsv.size());
-        assertEquals(expectedCsv, actualCsv);
+        EXECUTOR.execute(() -> usageRepository.writeUsagesForResearchAndFindIds(usageFilter, pos));
+        verifyCsv(pis, "usages_for_research.csv");
     }
 
     @Test
     public void testWriteUsagesForResearchAndFindIdsEmptyReport() throws IOException {
-        PipedOutputStream outputStream = new PipedOutputStream();
-        PipedInputStream inputStream = new PipedInputStream(outputStream);
-        EXECUTOR_SERVICE.execute(
-            () -> usageRepository.writeUsagesForResearchAndFindIds(new UsageFilter(), outputStream));
-        List<String> actualCsv = CsvUtils.readLines(inputStream);
-        List<String> expectedCsv = CsvUtils.readLines(PATH_TO_EXPECTED, "usages_for_research_empty.csv");
-        assertEquals(1, actualCsv.size());
-        assertEquals(expectedCsv, actualCsv);
+        PipedOutputStream pos = new PipedOutputStream();
+        PipedInputStream pis = new PipedInputStream(pos);
+        EXECUTOR.execute(() -> usageRepository.writeUsagesForResearchAndFindIds(new UsageFilter(), pos));
+        verifyCsv(pis, "usages_for_research_empty.csv");
     }
 
     @Test
     public void testWriteUsagesCsvReport() throws Exception {
-        PipedOutputStream outputStream = new PipedOutputStream();
-        PipedInputStream inputStream = new PipedInputStream(outputStream);
+        PipedOutputStream pos = new PipedOutputStream();
+        PipedInputStream pis = new PipedInputStream(pos);
         UsageFilter usageFilter = new UsageFilter();
         usageFilter.setUsageBatchesIds(Collections.singleton(USAGE_BATCH_ID_1));
-        EXECUTOR_SERVICE.execute(() -> usageRepository.writeUsagesCsvReport(usageFilter, outputStream));
-        List<String> actualCsv = CsvUtils.readLines(inputStream);
-        List<String> expectedCsv = CsvUtils.readLines(PATH_TO_EXPECTED, "usages_report.csv");
-        assertEquals(2, actualCsv.size());
-        assertEquals(expectedCsv, actualCsv);
+        EXECUTOR.execute(() -> usageRepository.writeUsagesCsvReport(usageFilter, pos));
+        verifyCsv(pis, "usages_report.csv");
     }
 
     @Test
     public void testWriteUsagesEmptyCsvReport() throws Exception {
-        PipedOutputStream outputStream = new PipedOutputStream();
-        PipedInputStream inputStream = new PipedInputStream(outputStream);
-        EXECUTOR_SERVICE.execute(() -> usageRepository.writeUsagesCsvReport(new UsageFilter(), outputStream));
-        List<String> actualCsv = CsvUtils.readLines(inputStream);
-        List<String> expectedCsv = CsvUtils.readLines(PATH_TO_EXPECTED, "usages_report_empty.csv");
-        assertEquals(1, actualCsv.size());
-        assertEquals(expectedCsv, actualCsv);
+        PipedOutputStream pos = new PipedOutputStream();
+        PipedInputStream pis = new PipedInputStream(pos);
+        EXECUTOR.execute(() -> usageRepository.writeUsagesCsvReport(new UsageFilter(), pos));
+        verifyCsv(pis, "usages_report_empty.csv");
     }
 
     @Test
     public void testWriteScenarioUsagesCsvReport() throws Exception {
-        PipedOutputStream outputStream = new PipedOutputStream();
-        PipedInputStream inputStream = new PipedInputStream(outputStream);
-        EXECUTOR_SERVICE.execute(() -> usageRepository.writeScenarioUsagesCsvReport(SCENARIO_ID, outputStream));
-        List<String> actualCsv = CsvUtils.readLines(inputStream);
-        List<String> expectedCsv = CsvUtils.readLines(PATH_TO_EXPECTED, "scenario_usages_report.csv");
-        assertEquals(3, actualCsv.size());
-        assertEquals(expectedCsv, actualCsv);
+        PipedOutputStream pos = new PipedOutputStream();
+        PipedInputStream pis = new PipedInputStream(pos);
+        EXECUTOR.execute(() -> usageRepository.writeScenarioUsagesCsvReport(SCENARIO_ID, pos));
+        verifyCsv(pis, "scenario_usages_report.csv");
     }
 
     @Test
@@ -765,28 +762,22 @@ public class UsageRepositoryIntegrationTest {
 
     @Test
     public void testWriteAuditCsvReport() throws IOException {
-        PipedOutputStream outputStream = new PipedOutputStream();
-        PipedInputStream inputStream = new PipedInputStream(outputStream);
+        PipedOutputStream pos = new PipedOutputStream();
+        PipedInputStream pis = new PipedInputStream(pos);
         AuditFilter filter = new AuditFilter();
         filter.setBatchesIds(
             Sets.newHashSet("7802802a-1f96-4d7a-8a27-b0bfd43936b0", "56282dbc-2468-48d4-b926-94d3458a666a"));
         filter.setRhAccountNumbers(Collections.singleton(1000002859L));
-        EXECUTOR_SERVICE.execute(() -> usageRepository.writeAuditCsvReport(filter, outputStream));
-        List<String> actualCsv = CsvUtils.readLines(inputStream);
-        List<String> expectedCsv = CsvUtils.readLines(PATH_TO_EXPECTED, "audit_report.csv");
-        assertEquals(3, actualCsv.size());
-        assertEquals(expectedCsv, actualCsv);
+        EXECUTOR.execute(() -> usageRepository.writeAuditCsvReport(filter, pos));
+        verifyCsv(pis, "audit_report.csv");
     }
 
     @Test
     public void testWriteAuditEmptyCsvReport() throws IOException {
-        PipedOutputStream outputStream = new PipedOutputStream();
-        PipedInputStream inputStream = new PipedInputStream(outputStream);
-        EXECUTOR_SERVICE.execute(() -> usageRepository.writeAuditCsvReport(new AuditFilter(), outputStream));
-        List<String> actualCsv = CsvUtils.readLines(inputStream);
-        List<String> expectedCsv = CsvUtils.readLines(PATH_TO_EXPECTED, "audit_report_empty.csv");
-        assertEquals(1, actualCsv.size());
-        assertEquals(expectedCsv, actualCsv);
+        PipedOutputStream pos = new PipedOutputStream();
+        PipedInputStream pis = new PipedInputStream(pos);
+        EXECUTOR.execute(() -> usageRepository.writeAuditCsvReport(new AuditFilter(), pos));
+        verifyCsv(pis, "audit_report_empty.csv");
     }
 
     @Test
@@ -1196,5 +1187,11 @@ public class UsageRepositoryIntegrationTest {
             assertEquals(usageIds[i], usages.get(i).getId());
             assertEquals(UsageStatusEnum.ELIGIBLE, usages.get(i).getStatus());
         });
+    }
+
+    private void verifyCsv(InputStream is, String fileName) throws IOException {
+        FileUtils.copyInputStreamToFile(is, new File(PATH_TO_ACTUAL_REPORTS, fileName));
+        assertTrue(new ReportMatcher(new File(PATH_TO_EXPECTED_REPORTS, fileName))
+            .matches(new File(PATH_TO_ACTUAL_REPORTS, fileName)));
     }
 }

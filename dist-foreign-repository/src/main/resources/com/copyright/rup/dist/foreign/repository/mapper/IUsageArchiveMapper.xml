@@ -147,7 +147,7 @@
 
     <select id="findDtoByScenarioId" resultMap="IUsageMapper.usageDtoResultMap">
         select
-            u.df_usage_archive_uid,
+            u.df_usage_archive_uid df_usage_uid,
             <include refid="IUsageMapper.usageDtoColumns"/>
         from ${schema}.df_usage_archive u
         join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
