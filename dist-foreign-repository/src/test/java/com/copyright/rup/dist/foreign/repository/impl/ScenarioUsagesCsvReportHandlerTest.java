@@ -1,23 +1,20 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import com.copyright.rup.dist.foreign.repository.impl.BaseCsvReportHandler.BigDecimalCellProcessor;
-import com.copyright.rup.dist.foreign.repository.impl.BaseCsvReportHandler.FiscalYearCellProcessor;
-import com.copyright.rup.dist.foreign.repository.impl.BaseCsvReportHandler.LocalDateCellProcessor;
-import com.copyright.rup.dist.foreign.repository.impl.BaseCsvReportHandler.ServiceFeePercentCellProcessor;
+import com.copyright.rup.dist.foreign.domain.UsageDto;
 
-import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
-import org.supercsv.cellprocessor.Optional;
-import org.supercsv.cellprocessor.ift.CellProcessor;
 
-import java.io.IOException;
 import java.io.PipedOutputStream;
-import java.util.stream.IntStream;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Verifies {@link ScenarioUsagesCsvReportHandler}.
@@ -30,57 +27,94 @@ import java.util.stream.IntStream;
  */
 public class ScenarioUsagesCsvReportHandlerTest {
 
-    private static final Optional OPTIONAL_PROCESSOR = new Optional();
-    private static final LocalDateCellProcessor LOCAL_DATE_CELL_PROCESSOR = new LocalDateCellProcessor();
-    private static final BigDecimalCellProcessor BIG_DECIMAL_PROCESSOR = new BigDecimalCellProcessor();
-
     private ScenarioUsagesCsvReportHandler scenarioUsagesCsvReportHandler;
 
     @Before
-    public void setUp() throws IOException {
+    public void setUp() {
         scenarioUsagesCsvReportHandler = new ScenarioUsagesCsvReportHandler(new PipedOutputStream());
     }
 
     @Test
-    public void testProcessors() {
-        CellProcessor[] processors = scenarioUsagesCsvReportHandler.getPropertyTable().values()
-            .toArray(new CellProcessor[scenarioUsagesCsvReportHandler.getPropertyTable().size()]);
-        assertTrue(ArrayUtils.isNotEmpty(processors));
-        assertEquals(27, processors.length);
-        CellProcessor[] cellProcessors = {OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR,
-            new FiscalYearCellProcessor(), OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, LOCAL_DATE_CELL_PROCESSOR,
-            OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR,
-            OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR,
-            LOCAL_DATE_CELL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR,
-            BIG_DECIMAL_PROCESSOR, BIG_DECIMAL_PROCESSOR, new ServiceFeePercentCellProcessor(), OPTIONAL_PROCESSOR,
-            OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR, OPTIONAL_PROCESSOR};
-        IntStream.range(0, processors.length)
-            .forEach(index -> assertEquals(cellProcessors[index].getClass(), processors[index].getClass()));
-    }
-
-    @Test
-    public void testHeaders() {
-        String[] headers = scenarioUsagesCsvReportHandler.getPropertyTable().columnKeySet()
-            .toArray(new String[scenarioUsagesCsvReportHandler.getPropertyTable().size()]);
-        assertTrue(ArrayUtils.isNotEmpty(headers));
-        assertEquals(27, headers.length);
-        assertArrayEquals(new String[]{"Detail ID", "Usage Batch Name", "Product Family", "Fiscal Year",
+    public void testGetBeanHeaders() {
+        List<String> beanHeaders = scenarioUsagesCsvReportHandler.getBeanHeaders();
+        assertTrue(CollectionUtils.isNotEmpty(beanHeaders));
+        assertEquals(27, CollectionUtils.size(beanHeaders));
+        assertEquals(Arrays.asList("Detail ID", "Usage Batch Name", "Product Family", "Fiscal Year",
             "RRO Account #", "RRO Name", "Payment Date", "Title", "Article", "Standard Number", "Wr Wrk Inst",
             "RH Account #", "RH Name", "Payee Account #", "Payee Name", "Publisher", "Pub Date", "Number of Copies",
             "Reported value", "Gross Amt in USD", "Service Fee Amount", "Net Amt in USD", "Service Fee %", "Market",
-            "Market Period From", "Market Period To", "Author"}, headers);
+            "Market Period From", "Market Period To", "Author"), beanHeaders);
     }
 
     @Test
-    public void testNameMapping() {
-        String[] nameMapping = scenarioUsagesCsvReportHandler.getPropertyTable().rowKeySet()
-            .toArray(new String[scenarioUsagesCsvReportHandler.getPropertyTable().size()]);
-        assertTrue(ArrayUtils.isNotEmpty(nameMapping));
-        assertEquals(27, nameMapping.length);
-        assertArrayEquals(new String[]{"id", "batchName", "productFamily", "fiscalYear", "rroAccountNumber",
-            "rroName", "paymentDate", "workTitle", "article", "standardNumber", "wrWrkInst", "rhAccountNumber",
-            "rhName", "payeeAccountNumber", "payeeName", "publisher", "publicationDate", "numberOfCopies",
-            "reportedValue", "grossAmount", "serviceFeeAmount", "netAmount", "serviceFee", "market", "marketPeriodFrom",
-            "marketPeriodTo", "author"}, nameMapping);
+    public void testGetBeanProperties() {
+        List<String> beanProperties = scenarioUsagesCsvReportHandler.getBeanProperties(buildUsageDto());
+        assertTrue(CollectionUtils.isNotEmpty(beanProperties));
+        assertEquals(27, CollectionUtils.size(beanProperties));
+        assertEquals(getUsageDtoProperties(buildUsageDto()), beanProperties);
+    }
+
+    private UsageDto buildUsageDto() {
+        UsageDto usageDto = new UsageDto();
+        usageDto.setId("2c7a9d3b-8506-49a9-b0bf-a7735e2cd906");
+        usageDto.setBatchName("testBatch");
+        usageDto.setProductFamily("FAS");
+        usageDto.setFiscalYear(2018);
+        usageDto.setRroAccountNumber(2000017004L);
+        usageDto.setRroName("Access Copyright, The Canadian Copyright Agency");
+        usageDto.setPaymentDate(LocalDate.of(2018, 4, 18));
+        usageDto.setWorkTitle("workTitle");
+        usageDto.setArticle("Appendix: The Principles of Newspeak");
+        usageDto.setStandardNumber("9780");
+        usageDto.setWrWrkInst(123456789L);
+        usageDto.setRhAccountNumber(1000009522L);
+        usageDto.setRhName("RhName");
+        usageDto.setPayeeAccountNumber(1234L);
+        usageDto.setPayeeName("payeeName");
+        usageDto.setPublisher("publisher");
+        usageDto.setPublicationDate(LocalDate.of(2010, 4, 20));
+        usageDto.setNumberOfCopies(5);
+        usageDto.setReportedValue(new BigDecimal("30.86"));
+        usageDto.setGrossAmount(new BigDecimal("10.00"));
+        usageDto.setServiceFeeAmount(new BigDecimal("30.00"));
+        usageDto.setNetAmount(new BigDecimal("14.30"));
+        usageDto.setServiceFee(new BigDecimal("0.0"));
+        usageDto.setMarket("Univ");
+        usageDto.setMarketPeriodFrom(2015);
+        usageDto.setMarketPeriodTo(2015);
+        usageDto.setAuthor("Aarseth, Espen J.");
+        return usageDto;
+    }
+
+    private List<String> getUsageDtoProperties(UsageDto usageDto) {
+        List<String> usageDtoProperties = new ArrayList<>();
+        usageDtoProperties.add(usageDto.getId());
+        usageDtoProperties.add(usageDto.getBatchName());
+        usageDtoProperties.add(usageDto.getProductFamily());
+        usageDtoProperties.add(scenarioUsagesCsvReportHandler.getBeanFiscalYear(usageDto.getFiscalYear()));
+        usageDtoProperties.add(usageDto.getRroAccountNumber().toString());
+        usageDtoProperties.add(usageDto.getRroName());
+        usageDtoProperties.add(scenarioUsagesCsvReportHandler.getBeanLocalDate(usageDto.getPaymentDate()));
+        usageDtoProperties.add(usageDto.getWorkTitle());
+        usageDtoProperties.add(usageDto.getArticle());
+        usageDtoProperties.add(usageDto.getStandardNumber());
+        usageDtoProperties.add(usageDto.getWrWrkInst().toString());
+        usageDtoProperties.add(usageDto.getRhAccountNumber().toString());
+        usageDtoProperties.add(usageDto.getRhName());
+        usageDtoProperties.add(usageDto.getPayeeAccountNumber().toString());
+        usageDtoProperties.add(usageDto.getPayeeName());
+        usageDtoProperties.add(usageDto.getPublisher());
+        usageDtoProperties.add(scenarioUsagesCsvReportHandler.getBeanLocalDate(usageDto.getPublicationDate()));
+        usageDtoProperties.add(usageDto.getNumberOfCopies().toString());
+        usageDtoProperties.add(usageDto.getReportedValue().toString());
+        usageDtoProperties.add(usageDto.getGrossAmount().toString());
+        usageDtoProperties.add(scenarioUsagesCsvReportHandler.getBeanBigDecimal(usageDto.getServiceFeeAmount()));
+        usageDtoProperties.add(scenarioUsagesCsvReportHandler.getBeanBigDecimal(usageDto.getNetAmount()));
+        usageDtoProperties.add(scenarioUsagesCsvReportHandler.getBeanServiceFeePercent(usageDto.getServiceFee()));
+        usageDtoProperties.add(usageDto.getMarket());
+        usageDtoProperties.add(usageDto.getMarketPeriodFrom().toString());
+        usageDtoProperties.add(usageDto.getMarketPeriodTo().toString());
+        usageDtoProperties.add(usageDto.getAuthor());
+        return usageDtoProperties;
     }
 }

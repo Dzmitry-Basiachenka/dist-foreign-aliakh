@@ -1,13 +1,11 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
-import com.google.common.collect.ImmutableTable;
-import com.google.common.collect.Table;
+import com.copyright.rup.dist.foreign.domain.UsageDto;
 
-import org.supercsv.cellprocessor.Optional;
-import org.supercsv.cellprocessor.ift.CellProcessor;
-
-import java.io.IOException;
 import java.io.PipedOutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Writes scenario usages into a {@link PipedOutputStream} connected to the {@link java.io.PipedInputStream}.
@@ -18,55 +16,58 @@ import java.io.PipedOutputStream;
  *
  * @author Uladzislau Shalamitski
  */
-class ScenarioUsagesCsvReportHandler extends BaseCsvReportHandler {
+class ScenarioUsagesCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
 
-    private static final Optional OPTIONAL_PROCESSOR = new Optional();
-    private static final LocalDateCellProcessor LOCAL_DATE_CELL_PROCESSOR = new LocalDateCellProcessor();
-    private static final BigDecimalCellProcessor BIG_DECIMAL_PROCESSOR = new BigDecimalCellProcessor();
-
-    private static final Table<String, String, CellProcessor> PROPERTY_TABLE =
-        ImmutableTable.<String, String, CellProcessor>builder()
-            .put("id", "Detail ID", OPTIONAL_PROCESSOR)
-            .put("batchName", "Usage Batch Name", OPTIONAL_PROCESSOR)
-            .put("productFamily", "Product Family", OPTIONAL_PROCESSOR)
-            .put("fiscalYear", "Fiscal Year", new FiscalYearCellProcessor())
-            .put("rroAccountNumber", "RRO Account #", OPTIONAL_PROCESSOR)
-            .put("rroName", "RRO Name", OPTIONAL_PROCESSOR)
-            .put("paymentDate", "Payment Date", LOCAL_DATE_CELL_PROCESSOR)
-            .put("workTitle", "Title", OPTIONAL_PROCESSOR)
-            .put("article", "Article", OPTIONAL_PROCESSOR)
-            .put("standardNumber", "Standard Number", OPTIONAL_PROCESSOR)
-            .put("wrWrkInst", "Wr Wrk Inst", OPTIONAL_PROCESSOR)
-            .put("rhAccountNumber", "RH Account #", OPTIONAL_PROCESSOR)
-            .put("rhName", "RH Name", OPTIONAL_PROCESSOR)
-            .put("payeeAccountNumber", "Payee Account #", OPTIONAL_PROCESSOR)
-            .put("payeeName", "Payee Name", OPTIONAL_PROCESSOR)
-            .put("publisher", "Publisher", OPTIONAL_PROCESSOR)
-            .put("publicationDate", "Pub Date", LOCAL_DATE_CELL_PROCESSOR)
-            .put("numberOfCopies", "Number of Copies", OPTIONAL_PROCESSOR)
-            .put("reportedValue", "Reported value", OPTIONAL_PROCESSOR)
-            .put("grossAmount", "Gross Amt in USD", OPTIONAL_PROCESSOR)
-            .put("serviceFeeAmount", "Service Fee Amount", BIG_DECIMAL_PROCESSOR)
-            .put("netAmount", "Net Amt in USD", BIG_DECIMAL_PROCESSOR)
-            .put("serviceFee", "Service Fee %", new ServiceFeePercentCellProcessor())
-            .put("market", "Market", OPTIONAL_PROCESSOR)
-            .put("marketPeriodFrom", "Market Period From", OPTIONAL_PROCESSOR)
-            .put("marketPeriodTo", "Market Period To", OPTIONAL_PROCESSOR)
-            .put("author", "Author", OPTIONAL_PROCESSOR)
-            .build();
+    private static final List<String> HEADERS = Arrays.asList("Detail ID", "Usage Batch Name", "Product Family",
+        "Fiscal Year", "RRO Account #", "RRO Name", "Payment Date", "Title", "Article", "Standard Number",
+        "Wr Wrk Inst", "RH Account #", "RH Name", "Payee Account #", "Payee Name", "Publisher", "Pub Date",
+        "Number of Copies", "Reported value", "Gross Amt in USD", "Service Fee Amount", "Net Amt in USD",
+        "Service Fee %", "Market", "Market Period From", "Market Period To", "Author");
 
     /**
      * Constructor.
      *
      * @param pipedOutputStream instance of {@link PipedOutputStream}
-     * @throws IOException if header cannot be written
      */
-    ScenarioUsagesCsvReportHandler(PipedOutputStream pipedOutputStream) throws IOException {
+    ScenarioUsagesCsvReportHandler(PipedOutputStream pipedOutputStream) {
         super(pipedOutputStream);
     }
 
     @Override
-    Table<String, String, CellProcessor> getPropertyTable() {
-        return PROPERTY_TABLE;
+    List<String> getBeanProperties(UsageDto bean) {
+        List<String> beanProperties = new ArrayList<>();
+        beanProperties.add(bean.getId());
+        beanProperties.add(bean.getBatchName());
+        beanProperties.add(bean.getProductFamily());
+        beanProperties.add(getBeanFiscalYear(bean.getFiscalYear()));
+        beanProperties.add(getBeanPropertyAsString(bean.getRroAccountNumber()));
+        beanProperties.add(bean.getRroName());
+        beanProperties.add(getBeanLocalDate(bean.getPaymentDate()));
+        beanProperties.add(bean.getWorkTitle());
+        beanProperties.add(bean.getArticle());
+        beanProperties.add(bean.getStandardNumber());
+        beanProperties.add(getBeanPropertyAsString(bean.getWrWrkInst()));
+        beanProperties.add(getBeanPropertyAsString(bean.getRhAccountNumber()));
+        beanProperties.add(bean.getRhName());
+        beanProperties.add(getBeanPropertyAsString(bean.getPayeeAccountNumber()));
+        beanProperties.add(bean.getPayeeName());
+        beanProperties.add(bean.getPublisher());
+        beanProperties.add(getBeanLocalDate(bean.getPublicationDate()));
+        beanProperties.add(getBeanPropertyAsString(bean.getNumberOfCopies()));
+        beanProperties.add(getBeanPropertyAsString(bean.getReportedValue()));
+        beanProperties.add(getBeanPropertyAsString(bean.getGrossAmount()));
+        beanProperties.add(getBeanBigDecimal(bean.getServiceFeeAmount()));
+        beanProperties.add(getBeanBigDecimal(bean.getNetAmount()));
+        beanProperties.add(getBeanServiceFeePercent(bean.getServiceFee()));
+        beanProperties.add(bean.getMarket());
+        beanProperties.add(getBeanPropertyAsString(bean.getMarketPeriodFrom()));
+        beanProperties.add(getBeanPropertyAsString(bean.getMarketPeriodTo()));
+        beanProperties.add(getBeanPropertyAsString(bean.getAuthor()));
+        return beanProperties;
+    }
+
+    @Override
+    List<String> getBeanHeaders() {
+        return HEADERS;
     }
 }

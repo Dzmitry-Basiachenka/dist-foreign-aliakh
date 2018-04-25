@@ -5,7 +5,6 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 
 import org.apache.ibatis.session.ResultContext;
 
-import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,7 +18,7 @@ import java.util.Set;
  *
  * @author Uladzislau Shalamitski
  */
-public class SendForResearchCsvReportHandler extends UsageCsvReportHandler<UsageDto> {
+public class SendForResearchCsvReportHandler extends UsageCsvReportHandler {
 
     private final Set<String> usagesIds;
 
@@ -27,9 +26,8 @@ public class SendForResearchCsvReportHandler extends UsageCsvReportHandler<Usage
      * Constructor.
      *
      * @param outputStream instance of {@link OutputStream}
-     * @throws IOException if header cannot be written
      */
-    SendForResearchCsvReportHandler(OutputStream outputStream) throws IOException {
+    SendForResearchCsvReportHandler(OutputStream outputStream) {
         super(outputStream);
         usagesIds = new HashSet<>();
     }

@@ -2,7 +2,6 @@ package com.copyright.rup.dist.foreign.repository.impl;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.common.repository.api.Pageable;
@@ -19,7 +18,6 @@ import com.google.common.collect.Maps;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Repository;
 
-import java.io.IOException;
 import java.io.PipedOutputStream;
 import java.util.List;
 import java.util.Map;
@@ -96,8 +94,6 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
             if (Objects.nonNull(scenarioId)) {
                 getTemplate().select("IUsageArchiveMapper.findDtoByScenarioId", scenarioId, handler);
             }
-        } catch (IOException e) {
-            throw new RupRuntimeException(e);
         }
     }
 

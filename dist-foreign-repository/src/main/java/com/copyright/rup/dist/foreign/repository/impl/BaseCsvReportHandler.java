@@ -1,28 +1,24 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import com.copyright.rup.common.date.RupDateUtils;
-import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
 
-import com.google.common.collect.Table;
+import com.univocity.parsers.csv.CsvWriter;
+import com.univocity.parsers.csv.CsvWriterSettings;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.ResultContext;
 import org.apache.ibatis.session.ResultHandler;
-import org.supercsv.cellprocessor.ift.CellProcessor;
-import org.supercsv.io.CsvBeanWriter;
-import org.supercsv.io.ICsvBeanWriter;
-import org.supercsv.prefs.CsvPreference;
-import org.supercsv.util.CsvContext;
 
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -37,104 +33,108 @@ import java.util.Objects;
  */
 public abstract class BaseCsvReportHandler<T extends StoredEntity<String>> implements ResultHandler<T>, AutoCloseable {
 
-    private final ICsvBeanWriter beanWriter;
+    private final CsvWriter csvWriter;
 
     /**
      * Constructor.
      *
      * @param outputStream {@link OutputStream} instance
-     * @throws RupRuntimeException when usage details can't be written to the CSV report
      */
-    BaseCsvReportHandler(OutputStream outputStream) throws RupRuntimeException {
+    BaseCsvReportHandler(OutputStream outputStream) {
         Objects.requireNonNull(outputStream);
-        beanWriter = new CsvBeanWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8),
-            CsvPreference.STANDARD_PREFERENCE);
-        try {
-            beanWriter.writeHeader(getPropertyTable().columnKeySet().toArray(new String[getPropertyTable().size()]));
-        } catch (IOException e) {
-            throw new RupRuntimeException(e);
-        }
+        csvWriter = new CsvWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8),
+            new CsvWriterSettings());
+        csvWriter.writeHeaders(getBeanHeaders());
     }
 
     /**
-     * @return a {@link Table} that contains bean properties, header values and cell processors
+     * Gets bean properties that will be written into report.
+     *
+     * @param bean bean instance
+     * @return a {@link List} that contains bean properties
      */
-    abstract Table<String, String, CellProcessor> getPropertyTable();
+    abstract List<String> getBeanProperties(T bean);
+
+    /**
+     * Gets bean headers that will be written into report.
+     *
+     * @return a {@link List} that contains bean header values
+     */
+    abstract List<String> getBeanHeaders();
 
     @Override
-    public void handleResult(ResultContext<? extends T> context) throws RupRuntimeException {
-        try {
-            beanWriter.write(context.getResultObject(),
-                getPropertyTable().rowKeySet().toArray(new String[getPropertyTable().size()]),
-                getPropertyTable().values().toArray(new CellProcessor[getPropertyTable().size()]));
-        } catch (IOException e) {
-            throw new RupRuntimeException(e);
-        }
+    public void handleResult(ResultContext<? extends T> context) {
+        csvWriter.writeRow(getBeanProperties(context.getResultObject()));
     }
 
     @Override
     public void close() {
-        try {
-            beanWriter.close();
-        } catch (IOException e) {
-            throw new RupRuntimeException(e);
-        }
+        csvWriter.close();
     }
 
     /**
-     * The cell processor to generate fiscal year value for report.
+     * Generate bean fiscal year value.
+     *
+     * @param value fiscal year value
+     * @return fiscal year represented as string
      */
-    static class FiscalYearCellProcessor implements CellProcessor {
-        @Override
-        public Object execute(Object value, CsvContext context) {
-            return null != value ? UsageBatchUtils.getFiscalYear((Integer) value) : null;
-        }
+    String getBeanFiscalYear(Integer value) {
+        return UsageBatchUtils.getFiscalYear(value);
     }
 
     /**
-     * The cell processor to generate date value in {@link RupDateUtils#US_DATE_FORMAT_PATTERN_SHORT} for report
+     * Generate date value in {@link RupDateUtils#US_DATE_FORMAT_PATTERN_SHORT} format
      * for {@link java.time.OffsetDateTime} type fields.
+     *
+     * @param value date value
+     * @return date represented as string
      */
-    static class OffsetDateTimeCellProcessor implements CellProcessor {
-
-        @Override
-        public Object execute(Object value, CsvContext context) {
-            return CommonDateUtils.format((OffsetDateTime) value, RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT);
-        }
+    String getBeanOffsetDateTime(OffsetDateTime value) {
+        return CommonDateUtils.format(value, RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT);
     }
 
     /**
-     * The cell processor to generate date value in {@link RupDateUtils#US_DATE_FORMAT_PATTERN_SHORT} for report
+     * Generate date value in {@link RupDateUtils#US_DATE_FORMAT_PATTERN_SHORT} format
      * for {@link java.time.LocalDate} type fields.
+     *
+     * @param value date value
+     * @return date represented as string
      */
-    static class LocalDateCellProcessor implements CellProcessor {
-
-        @Override
-        public Object execute(Object value, CsvContext context) {
-            return CommonDateUtils.format((LocalDate) value, RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT);
-        }
+    String getBeanLocalDate(LocalDate value) {
+        return CommonDateUtils.format(value, RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT);
     }
 
     /**
-     * The cell processor to generate service fee percent value for report.
+     * Generate service fee percent value.
+     *
+     * @param value service fee percent value
+     * @return service fee percent value represented as string
      */
-    static class ServiceFeePercentCellProcessor implements CellProcessor {
-
-        private static final BigDecimal HUNDRED_PERCENT = new BigDecimal("100");
-
-        @Override
-        public Object execute(Object value, CsvContext context) {
-            return null != value ? String.format("%.1f", HUNDRED_PERCENT.multiply((BigDecimal) value)) : null;
+    String getBeanServiceFeePercent(BigDecimal value) {
+        String result = null;
+        if (Objects.nonNull(value)) {
+            result = String.format("%.1f", new BigDecimal("100").multiply(value));
         }
+        return result;
     }
 
     /**
-     * The cell processor to transform zero big decimal to string for report.
+     * Transform zero big decimal to string.
+     *
+     * @param value zero big decimal value
+     * @return zero big decimal represented as string
      */
-    static class BigDecimalCellProcessor implements CellProcessor {
-        @Override
-        public Object execute(Object value, CsvContext context) {
-            return !(value instanceof BigDecimal && ((BigDecimal) value).signum() == 0) ? value : "0.00";
-        }
+    String getBeanBigDecimal(BigDecimal value) {
+        return value.signum() == 0 ? "0.00" : value.toString();
+    }
+
+    /**
+     * Gets bean property and converts it to string.
+     *
+     * @param value bean property
+     * @return bean property represented as string or empty string - if value is {@code null}
+     */
+    String getBeanPropertyAsString(Object value) {
+        return Objects.nonNull(value) ? value.toString() : StringUtils.EMPTY;
     }
 }

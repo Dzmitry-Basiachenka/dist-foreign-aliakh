@@ -2,7 +2,6 @@ package com.copyright.rup.dist.foreign.repository.impl;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.common.repository.api.Pageable;
@@ -25,7 +24,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.perf4j.aop.Profiled;
 import org.springframework.stereotype.Repository;
 
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
 import java.util.ArrayList;
@@ -108,8 +106,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
             if (Objects.nonNull(scenarioId)) {
                 getTemplate().select("IUsageMapper.findDtoByScenarioId", scenarioId, handler);
             }
-        } catch (IOException e) {
-            throw new RupRuntimeException(e);
         }
     }
 
@@ -119,8 +115,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
             if (!Objects.requireNonNull(filter).isEmpty()) {
                 getTemplate().select("IUsageMapper.findByFilter", ImmutableMap.of(FILTER_KEY, filter), handler);
             }
-        } catch (IOException e) {
-            throw new RupRuntimeException(e);
         }
     }
 
@@ -133,8 +127,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
                 getTemplate().select("IUsageMapper.findByFilter", ImmutableMap.of(FILTER_KEY, filter), handler);
                 usageIds = handler.getUsagesIds();
             }
-        } catch (IOException e) {
-            throw new RupRuntimeException(e);
         }
         return usageIds;
     }
@@ -279,8 +271,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
                 params.put(FILTER_KEY, filter);
                 getTemplate().select("IUsageMapper.findForAudit", params, handler);
             }
-        } catch (IOException e) {
-            throw new RupRuntimeException(e);
         }
     }
 
