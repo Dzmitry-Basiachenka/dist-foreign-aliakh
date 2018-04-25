@@ -20,7 +20,7 @@ import java.util.Set;
  */
 public class CrmResult {
 
-    private final Set<Long> invalidDetailIds = Sets.newHashSet();
+    private final Set<String> invalidUsageIds = Sets.newHashSet();
     private CrmResultStatusEnum crmResultStatus;
 
     /**
@@ -40,18 +40,18 @@ public class CrmResult {
         this.crmResultStatus = crmResultStatus;
     }
 
-    public Set<Long> getInvalidDetailIds() {
-        return invalidDetailIds;
+    public Set<String> getInvalidUsageIds() {
+        return invalidUsageIds;
     }
 
     /**
      * Adds the {@code detailId} into CRM response and associates it with obtained messages.
      *
-     * @param detailId detail id
+     * @param usageId usage id
      */
-    public void addInvalidDetailId(Long detailId) {
-        if (Objects.nonNull(detailId)) {
-            invalidDetailIds.add(detailId);
+    public void addInvalidUsageId(String usageId) {
+        if (Objects.nonNull(usageId)) {
+            invalidUsageIds.add(usageId);
         }
     }
 
@@ -62,14 +62,14 @@ public class CrmResult {
      * {@code false} - otherwise
      */
     public boolean isSuccessful() {
-        return CrmResultStatusEnum.SUCCESS == crmResultStatus && CollectionUtils.isEmpty(invalidDetailIds);
+        return CrmResultStatusEnum.SUCCESS == crmResultStatus && CollectionUtils.isEmpty(invalidUsageIds);
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
             .append("crmResultStatus", crmResultStatus)
-            .append("invalidDetailIds", invalidDetailIds)
+            .append("invalidUsageIds", invalidUsageIds)
             .toString();
     }
 }

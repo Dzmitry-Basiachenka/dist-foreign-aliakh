@@ -77,7 +77,7 @@ public class UsageService implements IUsageService {
     private static final String SEND_TO_CRM_FINISHED_INFO_LOG_MESSAGE = "Send to CRM. Finished. PaidUsagesCount={}, " +
         "ArchivedUsagesCount={}, NotReportedUsagesCount={}, ArchivedScenariosCount={}";
     private static final String SEND_TO_CRM_FINISHED_DEBUG_LOG_MESSAGE = "Send to CRM. Finished. PaidUsagesCount={}, " +
-        "ArchivedUsagesCount={}, ArchivedScenariosCount={}, NotReportedDetailIds={}";
+        "ArchivedUsagesCount={}, ArchivedScenariosCount={}, NotReportedUsageIds={}";
     private static final Long CLA_PAYEE = 2000017000L;
     private static final EnumSet<ScenarioStatusEnum> ARCHIVED_SCENARIO_STATUSES =
         EnumSet.of(ScenarioStatusEnum.SENT_TO_LM, ScenarioStatusEnum.ARCHIVED);
@@ -409,7 +409,7 @@ public class UsageService implements IUsageService {
         LOGGER.info("Send to CRM. Started. PaidUsagesCount={}", LogUtils.size(paidUsagesIds));
         int archivedUsagesCount = 0;
         if (CollectionUtils.isNotEmpty(paidUsagesIds)) {
-            Set<Long> invalidDetailIds = Sets.newHashSet();
+            Set<String> invalidUsageIds = Sets.newHashSet();
             StopWatch stopWatch = new Slf4JStopWatch();
             for (List<String> ids : Iterables.partition(paidUsagesIds, 128)) {
                 List<PaidUsage> paidUsages = usageArchiveRepository.findByIdAndStatus(ids, UsageStatusEnum.PAID);
@@ -423,10 +423,10 @@ public class UsageService implements IUsageService {
                         updateReportedUsages(usagesIds, stopWatch);
                         archivedUsagesCount += usagesIds.size();
                     } else {
-                        Set<Long> invalidIds = result.getInvalidDetailIds();
+                        Set<String> invalidIds = result.getInvalidUsageIds();
                         if (CollectionUtils.isNotEmpty(invalidIds) && paidUsages.size() != invalidIds.size()) {
                             Set<String> usagesIds = paidUsages.stream()
-                                .filter(paidUsage -> !invalidIds.contains(paidUsage.getDetailId()))
+                                .filter(paidUsage -> !invalidIds.contains(paidUsage.getId()))
                                 .map(PaidUsage::getId)
                                 .collect(Collectors.toSet());
                             if (CollectionUtils.isNotEmpty(usagesIds)) {
@@ -434,15 +434,15 @@ public class UsageService implements IUsageService {
                                 archivedUsagesCount += usagesIds.size();
                             }
                         }
-                        invalidDetailIds.addAll(result.getInvalidDetailIds());
+                        invalidUsageIds.addAll(result.getInvalidUsageIds());
                     }
                 }
             }
             int archivedScenariosCount = scenarioService.archiveScenarios(paidUsagesIds);
             LOGGER.info(SEND_TO_CRM_FINISHED_INFO_LOG_MESSAGE, LogUtils.size(paidUsagesIds), archivedUsagesCount,
-                invalidDetailIds.size(), archivedScenariosCount);
+                invalidUsageIds.size(), archivedScenariosCount);
             LOGGER.trace(SEND_TO_CRM_FINISHED_DEBUG_LOG_MESSAGE, LogUtils.size(paidUsagesIds), archivedUsagesCount,
-                archivedScenariosCount, invalidDetailIds);
+                archivedScenariosCount, invalidUsageIds);
         } else {
             LOGGER.info("Send to CRM. Skipped. PaidUsagesCount={}, Reason=There are no usages to report",
                 LogUtils.size(paidUsagesIds));

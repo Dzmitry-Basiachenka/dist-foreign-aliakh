@@ -70,7 +70,7 @@ public class CrmServiceTest {
         CrmResult actualResult =
             crmService.doSendRightsDistributionRequests(Collections.singletonList(buildRequest()));
         assertEquals(CrmResultStatusEnum.SUCCESS, actualResult.getCrmResultStatus());
-        assertTrue(CollectionUtils.isEmpty(actualResult.getInvalidDetailIds()));
+        assertTrue(CollectionUtils.isEmpty(actualResult.getInvalidUsageIds()));
         HttpEntity httpEntity = httpEntityCapture.getValue();
         assertNotNull(httpEntity);
         assertEquals(expectedBody, formatJson(httpEntity.getBody()));
@@ -83,7 +83,7 @@ public class CrmServiceTest {
             crmService.parseResponse(TestUtils.fileToString(CrmServiceTest.class, "crm_response.json"),
                 Collections.emptyMap());
         assertEquals(CrmResultStatusEnum.SUCCESS, actualResult.getCrmResultStatus());
-        assertTrue(CollectionUtils.isEmpty(actualResult.getInvalidDetailIds()));
+        assertTrue(CollectionUtils.isEmpty(actualResult.getInvalidUsageIds()));
     }
 
     @Test
@@ -92,10 +92,10 @@ public class CrmServiceTest {
             crmService.parseResponse(TestUtils.fileToString(CrmServiceTest.class, "crm_response_failed.json"),
                 Collections.emptyMap());
         assertEquals(CrmResultStatusEnum.CRM_ERROR, actualResult.getCrmResultStatus());
-        Set<Long> invalidIds = actualResult.getInvalidDetailIds();
-        assertTrue(CollectionUtils.isNotEmpty(invalidIds));
-        assertEquals(1, invalidIds.size());
-        assertTrue(invalidIds.contains(12345L));
+        Set<String> invalidUsageIds = actualResult.getInvalidUsageIds();
+        assertTrue(CollectionUtils.isNotEmpty(invalidUsageIds));
+        assertEquals(1, invalidUsageIds.size());
+        assertTrue(invalidUsageIds.contains("12345"));
     }
 
     private String formatJson(Object objectToFormat) throws IOException {
@@ -110,6 +110,7 @@ public class CrmServiceTest {
         Rightsholder payee = new Rightsholder();
         payee.setAccountNumber(1000010022L);
         PaidUsage paidUsage = new PaidUsage();
+        paidUsage.setId("1e7d5a65-4cf8-49b6-a804-e15cdbe38d91");
         paidUsage.setRroAccountNumber(7001047151L);
         paidUsage.setCccEventId("53256");
         paidUsage.setRightsholder(rightsholder);
@@ -122,7 +123,6 @@ public class CrmServiceTest {
         paidUsage.setWorkTitle("Adaptations");
         paidUsage.setAuthor("Cartmell, Deborah.");
         paidUsage.setArticle("Routledge");
-        paidUsage.setDetailId(34312312L);
         paidUsage.setGrossAmount(new BigDecimal("1499.99"));
         paidUsage.setPeriodEndDate(LocalDate.of(2017, 6, 16));
         paidUsage.setPublicationDate(LocalDate.of(2006, 12, 12));

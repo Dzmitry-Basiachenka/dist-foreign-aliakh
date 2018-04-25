@@ -73,8 +73,7 @@ public class CrmRightsDistributionRequest {
     private String chapterArticleTitle;
 
     @JsonProperty(value = "omOrderDetailNumber")
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long omOrderDetailNumber;
+    private String omOrderDetailNumber;
 
     @JsonProperty(value = "totalAmount")
     private BigDecimal totalAmount;
@@ -133,7 +132,7 @@ public class CrmRightsDistributionRequest {
         this.publicationName = usage.getWorkTitle();
         this.author = usage.getAuthor();
         this.chapterArticleTitle = usage.getArticle();
-        this.omOrderDetailNumber = usage.getDetailId();
+        this.omOrderDetailNumber = usage.getId();
         this.totalAmount = usage.getGrossAmount();
         this.periodEndDate = usage.getPeriodEndDate();
         this.publicationDate = usage.getPublicationDate();
@@ -240,11 +239,11 @@ public class CrmRightsDistributionRequest {
         this.chapterArticleTitle = chapterArticleTitle;
     }
 
-    public Long getOmOrderDetailNumber() {
+    public String getOmOrderDetailNumber() {
         return omOrderDetailNumber;
     }
 
-    public void setOmOrderDetailNumber(Long omOrderDetailNumber) {
+    public void setOmOrderDetailNumber(String omOrderDetailNumber) {
         this.omOrderDetailNumber = omOrderDetailNumber;
     }
 
