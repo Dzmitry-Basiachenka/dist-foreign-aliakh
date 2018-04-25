@@ -50,7 +50,7 @@ public class PiIntegrationService implements IPiIntegrationService {
 
     @Value("$RUP{dist.foreign.integration.works.cluster}")
     private String cluster;
-    @Value("#{'$RUP{dist.foreign.integration.works.node}'.split(',')}")
+    @Value("$RUP{dist.foreign.integration.works.nodes}")
     private List<String> nodes;
     @Value("$RUP{dist.foreign.integration.works.pi.index}")
     private String piIndex;
