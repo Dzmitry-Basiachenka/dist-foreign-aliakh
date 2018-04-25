@@ -1,0 +1,92 @@
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://java.sun.com/xml/ns/javaee"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         version="3.0">
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+            classpath:/com/copyright/rup/dist/foreign/ui/dist-foreign-ui-test-context.xml
+            classpath:/com/copyright/rup/security/auth/consumer/rup-auth-context.xml
+        </param-value>
+    </context-param>
+
+    <context-param>
+        <description>Vaadin production mode</description>
+        <param-name>productionMode</param-name>
+        <param-value>true</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>moduleInitParameter</param-name>
+        <param-value>MANAGEMENT</param-value>
+    </context-param>
+
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    <listener>
+        <listener-class>com.copyright.rup.common.web.RupAppContextListener</listener-class>
+    </listener>
+    <listener>
+        <listener-class>org.jasig.cas.client.session.SingleSignOutHttpSessionListener</listener-class>
+    </listener>
+    <listener>
+        <listener-class>com.copyright.rup.dist.foreign.ui.main.ContextDestroyListener</listener-class>
+    </listener>
+
+    <session-config>
+        <session-timeout>60</session-timeout>
+        <!-- Disables URL-based sessions (no more 'jsessionid' in the URL using Tomcat) to resolve
+        issue with bootstrap.js alert during first login to application -->
+        <tracking-mode>COOKIE</tracking-mode>
+    </session-config>
+
+    <!-- The Vaadin application servlet -->
+    <servlet>
+        <servlet-name>springVaadinApplicationServlet</servlet-name>
+        <servlet-class>com.vaadin.spring.server.SpringVaadinServlet</servlet-class>
+        <init-param>
+            <param-name>beanName</param-name>
+            <param-value>dist.foreignUi</param-value>
+        </init-param>
+        <init-param>
+            <param-name>closeIdleSessions</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>springVaadinApplicationServlet</servlet-name>
+        <url-pattern>/*</url-pattern>
+    </servlet-mapping>
+
+    <filter>
+        <filter-name>rup</filter-name>
+        <filter-class>com.copyright.rup.common.web.RupAppFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>rup</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>jobRunner</filter-name>
+        <filter-class>com.copyright.rup.dist.foreign.ui.rest.JobRunnerRestFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>jobRunner</filter-name>
+        <url-pattern>/job/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+</web-app>

@@ -71,6 +71,16 @@
     </filter-mapping>
 
     <filter>
+        <filter-name>jobRunner</filter-name>
+        <filter-class>com.copyright.rup.dist.foreign.ui.rest.JobRunnerRestFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>jobRunner</filter-name>
+        <url-pattern>/job/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
         <filter-name>springSecurityFilterChain</filter-name>
         <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
     </filter>
