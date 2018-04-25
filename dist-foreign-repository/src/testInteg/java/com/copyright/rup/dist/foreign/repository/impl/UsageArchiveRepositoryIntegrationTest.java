@@ -8,20 +8,21 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
+import com.copyright.rup.dist.common.test.ReportMatcher;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
-import com.copyright.rup.dist.foreign.repository.impl.util.CsvUtils;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Ignore;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,15 +32,21 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 /**
@@ -81,11 +88,19 @@ public class UsageArchiveRepositoryIntegrationTest {
     private static final Integer NUMBER_OF_COPIES = 155;
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
     private static final String PAID_USAGE_ID = "c0d30ec0-370d-11e8-b566-0800200c9a66";
+    private static final String PATH_TO_ACTUAL_REPORTS = "build/temp";
     private static final String PACKAGE = "/com/copyright/rup/dist/foreign/repository/impl/csv";
-    private static final String PATH_TO_EXPECTED = "src/testInteg/resources" + PACKAGE;
+    private static final String PATH_TO_EXPECTED_REPORTS = "src/testInteg/resources" + PACKAGE;
+    private static final Executor EXECUTOR = Executors.newSingleThreadExecutor();
 
     @Autowired
     private IUsageArchiveRepository usageArchiveRepository;
+
+    @BeforeClass
+    public static void setUpTestDirectory() throws IOException {
+        FileUtils.deleteQuietly(Paths.get(PATH_TO_ACTUAL_REPORTS).toFile());
+        Files.createDirectory(Paths.get(PATH_TO_ACTUAL_REPORTS));
+    }
 
     @Test
     public void testInsert() {
@@ -242,16 +257,11 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
-    @Ignore // TODO {aliakh} will be deleted after refactoring of UsageArchiveRepository
     public void testWriteScenarioUsagesCsvReport() throws Exception {
-        PipedOutputStream outputStream = new PipedOutputStream();
-        PipedInputStream inputStream = new PipedInputStream(outputStream);
-        Executors.newSingleThreadExecutor()
-            .execute(() -> usageArchiveRepository.writeScenarioUsagesCsvReport(SCENARIO_ID, outputStream));
-        List<String> actualCsv = CsvUtils.readLines(inputStream);
-        List<String> expectedCsv = CsvUtils.readLines(PATH_TO_EXPECTED, "archive_scenario_usages_report.csv");
-        assertEquals(4, actualCsv.size());
-        assertEquals(expectedCsv, actualCsv);
+        PipedOutputStream pos = new PipedOutputStream();
+        PipedInputStream pis = new PipedInputStream(pos);
+        EXECUTOR.execute(() -> usageArchiveRepository.writeScenarioUsagesCsvReport(SCENARIO_ID, pos));
+        verifyCsv(pis, "archive_scenario_usages_report.csv");
     }
 
     @Test
@@ -400,5 +410,11 @@ public class UsageArchiveRepositoryIntegrationTest {
         usage.setGrossAmount(GROSS_AMOUNT);
         usage.setNetAmount(new BigDecimal("25.1500000000"));
         return usage;
+    }
+
+    private void verifyCsv(InputStream is, String fileName) throws IOException {
+        FileUtils.copyInputStreamToFile(is, new File(PATH_TO_ACTUAL_REPORTS, fileName));
+        assertTrue(new ReportMatcher(new File(PATH_TO_EXPECTED_REPORTS, fileName))
+            .matches(new File(PATH_TO_ACTUAL_REPORTS, fileName)));
     }
 }
