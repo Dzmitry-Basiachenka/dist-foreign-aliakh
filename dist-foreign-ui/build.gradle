@@ -2,6 +2,7 @@ import fi.jasoft.plugin.GradleVaadinPlugin
 import fi.jasoft.plugin.tasks.CompileThemeTask
 
 apply plugin: 'rup-war-ui'
+apply plugin: 'rup-tomcat'
 
 if (!project.plugins.findPlugin(GradleVaadinPlugin)) {
     project.apply(plugin: GradleVaadinPlugin)
@@ -14,7 +15,6 @@ vaadin {
 }
 
 dependencies {
-    compile project(':dist-foreign-domain')
     compile project(':dist-foreign-service')
 
     compile("com.copyright.rup.vaadin:rup-vaadin-core:${rupVaadinVersion}")
@@ -32,6 +32,10 @@ dependencies {
     testCompile("org.apache.commons:commons-text:${commonsTextVersion}")
 
     testRuntime("cglib:cglib-nodep:${cglibNodepVersion}")
+
+    testIntegRuntime("com.copyright.rup.common:rup-common-config:${rupCommonVersion}")
+    testIntegRuntime("com.copyright.rup.common:rup-common-web:${rupCommonVersion}")
+    testIntegRuntime(group: "com.copyright.rup.common", name: "rup-common-test-integ", version: "${rupCommonVersion}", configuration: "postgres")
 }
 
 task compileVaadinTheme(type: CompileThemeTask, group: "rupVaadin")
@@ -43,6 +47,26 @@ war {
 
 afterEvaluate {
     appBeforeIntegrationTest.doFirst {
-        systemProperty "dbPidLocation", "${projectDir}/build/tmp/embeddedPostgres/postgresUi.pid"
+        gretty {
+            integrationTestTask = 'integrationTest'
+            httpPort = 18321
+            //TODO: find the way how we can add testInteg classes and resources without copy
+            copy {
+                from "${projectDir}/build/resources/testInteg/"
+                into "${projectDir}/build/resources/main/"
+            }
+            copy {
+                from "${projectDir}/build/classes/testInteg/"
+                into "${projectDir}/build/classes/main/"
+            }
+            copy {
+                from "${projectDir}/src/testInteg/webapp/"
+                into "${projectDir}/build/inplaceWebapp/"
+            }
+            systemProperty 'APP_LOG_DIR', "${projectDir}/build/logs/integrationTest"
+        }
     }
+    integrationTest.dependsOn appBeforeIntegrationTest
+    appBeforeIntegrationTest.debug = (System.getProperty("integrationTestDebug") ?: 'false').toBoolean()
+    appBeforeIntegrationTest.dependsOn(":dist-foreign-ui:testIntegClasses")
 }
