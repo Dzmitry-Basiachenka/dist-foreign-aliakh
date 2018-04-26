@@ -49,6 +49,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -200,6 +201,16 @@ public class UsageServiceTest {
         expect(usageRepository.findForReconcile(scenario.getId())).andReturn(usages).once();
         replay(usageRepository);
         assertSame(usages, usageService.getUsagesForReconcile(scenario.getId()));
+        verify(usageRepository);
+    }
+
+    @Test
+    public void testGetInvalidRightsholdersByFilter() {
+        UsageFilter filter = new UsageFilter();
+        List<Long> accountNumbers = Arrays.asList(1000000001L, 1000000002L);
+        expect(usageRepository.findInvalidRightsholdersByFilter(filter)).andReturn(accountNumbers).once();
+        replay(usageRepository);
+        assertSame(accountNumbers, usageService.getInvalidRightsholdersByFilter(filter));
         verify(usageRepository);
     }
 

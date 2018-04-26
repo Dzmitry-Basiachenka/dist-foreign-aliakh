@@ -131,6 +131,14 @@ public interface IUsageRepository {
     List<Usage> findWithAmountsAndRightsholders(UsageFilter filter);
 
     /**
+     * Finds rightsholders account numbers that are not presented in database based on {@link UsageFilter}.
+     *
+     * @param filter instance of {@link UsageFilter}
+     * @return list of rightsholders account numbers
+     */
+    List<Long> findInvalidRightsholdersByFilter(UsageFilter filter);
+
+    /**
      * Updates scenario id, updated user name, status to 'LOCKED', payee account number,
      * net amount, service fee amount and RH participating flag for {@link Usage}s.
      *

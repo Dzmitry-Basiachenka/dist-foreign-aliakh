@@ -26,6 +26,10 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.VerticalLayout;
 
+import org.apache.commons.collections4.CollectionUtils;
+
+import java.util.List;
+
 /**
  * Main widget for usages.
  * <p>
@@ -138,7 +142,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         addColumn(UsageDto::getRhName, "table.column.rh_account_name", "rhName", true, 300);
         addColumn(UsageDto::getPublisher, "table.column.publisher", "publisher", true, 135);
         addColumn(usage ->
-            CommonDateUtils.format(usage.getPublicationDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
+                CommonDateUtils.format(usage.getPublicationDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
             "table.column.publication_date", "publicationDate", true, 90);
         addColumn(UsageDto::getNumberOfCopies, "table.column.number_of_copies", "numberOfCopies", true, 140);
         addColumn(usage -> CurrencyUtils.format(usage.getReportedValue(), null), "table.column.reported_value",
@@ -213,9 +217,17 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         if (0 < controller.getSize()) {
             if (controller.isProductFamilyAndStatusFiltersApplied()) {
                 if (controller.isSigleProductFamilySelected()) {
-                    CreateScenarioWindow window = new CreateScenarioWindow(controller);
-                    window.addListener(ScenarioCreateEvent.class, controller, IUsagesController.ON_SCENARIO_CREATED);
-                    Windows.showModalWindow(window);
+                    List<Long> accountNumbers = controller.getInvalidRightsholders();
+                    if (CollectionUtils.isNotEmpty(accountNumbers)) {
+                        Windows.showNotificationWindow(
+                            ForeignUi.getMessage("message.error.add_to_scenario.invalid_rightsholders", "created",
+                                accountNumbers));
+                    } else {
+                        CreateScenarioWindow window = new CreateScenarioWindow(controller);
+                        window.addListener(ScenarioCreateEvent.class, controller,
+                            IUsagesController.ON_SCENARIO_CREATED);
+                        Windows.showModalWindow(window);
+                    }
                 } else {
                     Windows.showNotificationWindow(ForeignUi.getMessage("message.error.create_scenario"));
                 }

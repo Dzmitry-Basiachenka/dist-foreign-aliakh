@@ -201,6 +201,30 @@ public class UsagesWidgetTest {
     }
 
     @Test
+    public void testAddToScenarioButtonClickListenerInvalidRightsholders() {
+        mockStatic(Windows.class);
+        Grid grid = new Grid();
+        Whitebox.setInternalState(usagesWidget, grid);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
+            .getComponent(0)).getComponent(2);
+        assertTrue(addToScenarioButton.isDisableOnClick());
+        expect(controller.getSize()).andReturn(1).once();
+        expect(controller.isProductFamilyAndStatusFiltersApplied()).andReturn(true).once();
+        expect(controller.isSigleProductFamilySelected()).andReturn(true).once();
+        expect(controller.getInvalidRightsholders()).andReturn(Collections.singletonList(1000000001L)).once();
+        Windows.showNotificationWindow("Scenario cannot be created. The following rightsholder(s) are absent " +
+            "in PRM: <i><b>[1000000001]</b></i>");
+        expectLastCall().once();
+        replay(controller, clickEvent, Windows.class);
+        Collection<?> listeners = addToScenarioButton.getListeners(ClickEvent.class);
+        assertEquals(2, listeners.size());
+        ClickListener clickListener = (ClickListener) listeners.iterator().next();
+        clickListener.buttonClick(clickEvent);
+        verify(controller, clickEvent, Windows.class);
+    }
+
+    @Test
     public void testAddToScenarioButtonClickListenerFasProductFamily() {
         mockStatic(Windows.class);
         Grid grid = new Grid();
@@ -212,6 +236,7 @@ public class UsagesWidgetTest {
         expect(controller.getSize()).andReturn(1).once();
         expect(controller.isProductFamilyAndStatusFiltersApplied()).andReturn(true).once();
         expect(controller.isSigleProductFamilySelected()).andReturn(true).once();
+        expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
         expect(controller.getSelectedProductFamily()).andReturn("FAS").once();
         expect(controller.getScenarioService()).andReturn(null).once();
         Windows.showModalWindow(anyObject(CreateScenarioWindow.class));

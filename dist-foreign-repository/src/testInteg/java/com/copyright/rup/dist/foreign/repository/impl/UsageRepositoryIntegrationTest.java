@@ -324,6 +324,20 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
+    public void testFindInvalidRightsholdersByFilter() {
+        UsageFilter usageFilter =
+            buildUsageFilter(Collections.emptySet(), Collections.singleton(USAGE_BATCH_ID_1),
+                Collections.emptySet(), UsageStatusEnum.ELIGIBLE, null, null);
+        assertTrue(CollectionUtils.isEmpty(usageRepository.findInvalidRightsholdersByFilter(usageFilter)));
+        Usage usage = buildUsage(RupPersistUtils.generateUuid(), USAGE_BATCH_ID_1);
+        usage.getRightsholder().setAccountNumber(1000000003L);
+        usageRepository.insert(usage);
+        List<Long> accountNumbers = usageRepository.findInvalidRightsholdersByFilter(usageFilter);
+        assertEquals(1, accountNumbers.size());
+        assertEquals(1000000003L, accountNumbers.get(0), 0);
+    }
+
+    @Test
     public void testFindRightsholderTotalsHoldersByScenarioIdEmptySearchValue() {
         populateScenario();
         List<RightsholderTotalsHolder> rightsholderTotalsHolders =
@@ -1109,7 +1123,6 @@ public class UsageRepositoryIntegrationTest {
         usage.setWorkTitle("Work Title");
         usage.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER);
         usage.getRightsholder().setName(RH_ACCOUNT_NAME);
-        usage.getPayee().setAccountNumber(2000017004L);
         usage.setStatus(UsageStatusEnum.ELIGIBLE);
         usage.setProductFamily(PRODUCT_FAMILY_FAS);
         usage.setArticle("Article");

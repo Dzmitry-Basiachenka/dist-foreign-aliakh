@@ -74,6 +74,14 @@ public interface IUsageService {
     List<Usage> getUsagesWithAmounts(UsageFilter filter);
 
     /**
+     * Gets rightsholders account numbers that are not presented in database based on {@link UsageFilter}.
+     *
+     * @param filter instance of {@link UsageFilter}
+     * @return list of rightsholders account numbers
+     */
+    List<Long> getInvalidRightsholdersByFilter(UsageFilter filter);
+
+    /**
      * Gets the {@link Usage}s based on {@link Scenario} identifier.
      *
      * @param scenarioId identifier of {@link Scenario}

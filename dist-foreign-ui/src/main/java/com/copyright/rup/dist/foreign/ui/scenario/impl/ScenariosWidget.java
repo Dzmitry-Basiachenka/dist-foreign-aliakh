@@ -202,6 +202,8 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
         metadataPanel = new Panel();
         metadataPanel.setSizeFull();
         VaadinUtils.addComponentStyle(metadataPanel, "scenarios-metadata");
+        descriptionLabel.setStyleName("v-label-white-space-normal");
+        selectionCriteriaLabel.setStyleName("v-label-white-space-normal");
         metadataLayout = new VerticalLayout(ownerLabel, netTotalLabel, grossTotalLabel, reportedTotalLabel,
             descriptionLabel, selectionCriteriaLabel, initScenarioActionLayout());
         metadataLayout.setMargin(new MarginInfo(false, true, false, true));
