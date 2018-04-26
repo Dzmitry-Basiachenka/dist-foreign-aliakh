@@ -69,8 +69,8 @@ public class ReconcileRightsholdersControllerTest {
 
     @Test
     public void testGetSize() {
-        expect(rightsholderDiscrepancyService.getInProgressDiscrepanciesCountByScenarioId(scenario.getId()))
-            .andReturn(5).once();
+        expect(rightsholderDiscrepancyService.getDiscrepanciesCountByScenarioIdAndStatus(scenario.getId(),
+            RightsholderDiscrepancyStatusEnum.IN_PROGRESS)).andReturn(5).once();
         replay(rightsholderDiscrepancyService);
         assertEquals(5, controller.getSize(), 0);
         verify(rightsholderDiscrepancyService);

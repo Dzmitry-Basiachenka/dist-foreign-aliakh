@@ -46,11 +46,11 @@ public class RightsholderDiscrepancyRepository extends BaseRepository implements
     }
 
     @Override
-    public int findInProgressCountByScenarioId(String scenarioId) {
+    public int findCountByScenarioIdAndStatus(String scenarioId, RightsholderDiscrepancyStatusEnum status) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put(STATUS_KEY, RightsholderDiscrepancyStatusEnum.IN_PROGRESS);
-        return selectOne("IRightsholderDiscrepancyMapper.findCountByScenarioId", parameters);
+        parameters.put(STATUS_KEY, Objects.requireNonNull(status));
+        return selectOne("IRightsholderDiscrepancyMapper.findCountByScenarioIdAndStatus", parameters);
     }
 
     @Override
@@ -78,7 +78,7 @@ public class RightsholderDiscrepancyRepository extends BaseRepository implements
     public void deleteByScenarioIdAndStatus(String scenarioId, RightsholderDiscrepancyStatusEnum status) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put(STATUS_KEY, status);
+        parameters.put(STATUS_KEY, Objects.requireNonNull(status));
         delete("IRightsholderDiscrepancyMapper.deleteByScenarioIdAndStatus", parameters);
     }
 

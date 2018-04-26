@@ -10,16 +10,12 @@
         <result property="workTitle" column="work_title"/>
         <result property="productFamily" column="product_family"/>
         <result property="status" column="status_ind"/>
-        <association property="oldRightsholder" javaType="Rightsholder">
-            <result property="id" column="old_rh_id"/>
-            <result property="accountNumber" column="old_rh_account_number"/>
-            <result property="name" column="old_rightsholder_name"/>
-        </association>
-        <association property="newRightsholder" javaType="Rightsholder">
-            <result property="id" column="new_rh_id"/>
-            <result property="accountNumber" column="new_rh_account_number"/>
-            <result property="name" column="new_rightsholder_name"/>
-        </association>
+        <result property="oldRightsholder.id" column="old_rh_id"/>
+        <result property="oldRightsholder.name" column="old_rh_name"/>
+        <result property="oldRightsholder.accountNumber" column="old_rh_account_number"/>
+        <result property="newRightsholder.id" column="new_rh_id"/>
+        <result property="newRightsholder.accountNumber" column="new_rh_account_number"/>
+        <result property="newRightsholder.name" column="new_rh_name"/>
     </resultMap>
 
     <sql id="direction">
@@ -41,16 +37,16 @@
             <when test="sort.property == 'workTitle'">
                 d.work_title <include refid="direction"/>
             </when>
-            <when test="sort.property == 'oldRightsholder.name'">
+            <when test="sort.property == 'oldRightsholder.rhName'">
                 old_rh.name <include refid="direction"/>
             </when>
-            <when test="sort.property == 'oldRightsholder.accountNumber'">
+            <when test="sort.property == 'oldRightsholder.rhAccountNumber'">
                 d.old_rh_account_number <include refid="direction"/>
             </when>
-            <when test="sort.property == 'newRightsholder.name'">
+            <when test="sort.property == 'newRightsholder.rhName'">
                 new_rh.name <include refid="direction"/>
             </when>
-            <when test="sort.property == 'newRightsholder.accountNumber'">
+            <when test="sort.property == 'newRightsholder.rhAccountNumber'">
                 d.new_rh_account_number <include refid="direction"/>
             </when>
         </choose>
@@ -84,13 +80,6 @@
         )
     </insert>
 
-    <select id="findCountByScenarioId" parameterType="map" resultType="int">
-        select count(1)
-        from ${schema}.df_rightsholder_discrepancy
-        where df_scenario_uid = #{scenarioId}
-            and status_ind = #{status}
-    </select>
-
     <select id="findProhibitedAccountNumbers" parameterType="map" resultType="long">
         select distinct old_rh_account_number
         from ${schema}.df_rightsholder_discrepancy
@@ -98,23 +87,30 @@
             and status_ind = #{status}
     </select>
 
+    <select id="findCountByScenarioIdAndStatus" parameterType="map" resultType="int">
+        select count(1)
+        from (
+            select distinct
+                old_rh_account_number,
+                new_rh_account_number,
+                wr_wrk_inst
+            from ${schema}.df_rightsholder_discrepancy
+            where df_scenario_uid = #{scenarioId}
+                and status_ind = #{status}
+        ) discrepancies
+    </select>
+
     <select id="findByScenarioIdAndStatus" parameterType="map" resultMap="rightsholderDiscrepancyResultMap">
-        select
-            d.df_rightsholder_discrepancy_uid,
+        select distinct
             d.old_rh_account_number,
-            old_rh.name old_rightsholder_name,
+            old_rh.name old_rh_name,
             old_rh.df_rightsholder_uid old_rh_id,
             d.new_rh_account_number,
-            new_rh.name new_rightsholder_name,
+            new_rh.name new_rh_name,
             new_rh.df_rightsholder_uid new_rh_id,
             d.wr_wrk_inst,
             d.work_title,
-            d.product_family,
-            d.created_datetime,
-            d.updated_datetime,
-            d.created_by_user,
-            d.updated_by_user,
-            d.record_version
+            d.product_family
         from ${schema}.df_rightsholder_discrepancy d
         left join ${schema}.df_rightsholder new_rh on new_rh.rh_account_number = d.new_rh_account_number
         left join ${schema}.df_rightsholder old_rh on old_rh.rh_account_number = d.old_rh_account_number
@@ -126,7 +122,7 @@
                 <include refid="chooseSortProperty"/>
             </when>
             <otherwise>
-                updated_datetime desc
+                d.old_rh_account_number asc
             </otherwise>
         </choose>
         <if test="null != pageable">

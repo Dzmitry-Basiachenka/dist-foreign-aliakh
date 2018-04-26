@@ -125,11 +125,11 @@ public interface IScenarioService {
     void sendToLm(Scenario scenario);
 
     /**
-     * Finds all discrepancies for specified {@link Scenario} using RMS service and saves in database.
+     * Gets ownership changes for specified {@link Scenario} using RMS service and saves in database.
      *
      * @param scenario {@link Scenario} instance
      */
-    void saveRightsholderDiscrepancies(Scenario scenario);
+    void getOwnershipChanges(Scenario scenario);
 
     /**
      * Updates usages participating flag and amounts for specified {@link Scenario} using PRM service.

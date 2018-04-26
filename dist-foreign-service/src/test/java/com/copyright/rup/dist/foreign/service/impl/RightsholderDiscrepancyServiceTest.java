@@ -55,10 +55,12 @@ public class RightsholderDiscrepancyServiceTest {
     }
 
     @Test
-    public void testGetInProgressDiscrepanciesCountByScenarioId() {
-        expect(rightsholderDiscrepancyRepository.findInProgressCountByScenarioId(SCENARIO_ID)).andReturn(3).once();
+    public void testGetDiscrepanciesCountByScenarioIdAndStatus() {
+        expect(rightsholderDiscrepancyRepository.findCountByScenarioIdAndStatus(SCENARIO_ID,
+            RightsholderDiscrepancyStatusEnum.IN_PROGRESS)).andReturn(3).once();
         replay(rightsholderDiscrepancyRepository);
-        assertEquals(3, rightsholderDiscrepancyService.getInProgressDiscrepanciesCountByScenarioId(SCENARIO_ID), 0);
+        assertEquals(3, rightsholderDiscrepancyService.getDiscrepanciesCountByScenarioIdAndStatus(SCENARIO_ID,
+            RightsholderDiscrepancyStatusEnum.IN_PROGRESS), 0);
         verify(rightsholderDiscrepancyRepository);
     }
 

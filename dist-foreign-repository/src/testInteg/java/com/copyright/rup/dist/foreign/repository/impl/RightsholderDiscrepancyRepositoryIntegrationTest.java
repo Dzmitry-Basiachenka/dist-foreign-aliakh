@@ -60,8 +60,11 @@ public class RightsholderDiscrepancyRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindInProgressCountByScenarioId() {
-        assertEquals(2, rightsholderDiscrepancyRepository.findInProgressCountByScenarioId(SCENARIO_ID));
+    public void testFindCountByScenarioIdAndStatus() {
+        assertEquals(2, rightsholderDiscrepancyRepository.findCountByScenarioIdAndStatus(SCENARIO_ID,
+            RightsholderDiscrepancyStatusEnum.IN_PROGRESS));
+        assertEquals(0, rightsholderDiscrepancyRepository.findCountByScenarioIdAndStatus(SCENARIO_ID,
+            RightsholderDiscrepancyStatusEnum.APPROVED));
     }
 
     @Test

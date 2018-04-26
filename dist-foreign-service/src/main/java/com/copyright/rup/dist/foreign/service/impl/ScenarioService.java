@@ -217,8 +217,9 @@ public class ScenarioService implements IScenarioService {
     }
 
     @Override
-    @Profiled(tag = "service.ScenarioService.saveRightsholderDiscrepancies")
-    public void saveRightsholderDiscrepancies(Scenario scenario) {
+    @Transactional
+    @Profiled(tag = "service.ScenarioService.getOwnershipChanges")
+    public void getOwnershipChanges(Scenario scenario) {
         LOGGER.info("Get ownership changes. Started. {}", ForeignLogUtils.scenario(Objects.requireNonNull(scenario)));
         //TODO {isuvorau} compare performance for selecting new object instead of 'Usage'
         Map<Long, List<Usage>> groupedByWrWrkInstUsages = usageService.getUsagesForReconcile(scenario.getId())
@@ -239,7 +240,8 @@ public class ScenarioService implements IScenarioService {
             }
         });
         LOGGER.info("Get ownership changes. Finished. {}, RhDiscrepanciesCount={}", ForeignLogUtils.scenario(scenario),
-            rightsholderDiscrepancyService.getInProgressDiscrepanciesCountByScenarioId(scenario.getId()));
+            rightsholderDiscrepancyService.getDiscrepanciesCountByScenarioIdAndStatus(scenario.getId(),
+                RightsholderDiscrepancyStatusEnum.IN_PROGRESS));
     }
 
     @Override
@@ -248,13 +250,14 @@ public class ScenarioService implements IScenarioService {
     }
 
     @Override
+    @Transactional
     @Profiled(tag = "service.ScenarioService.approveOwnershipChanges")
     public void approveOwnershipChanges(Scenario scenario) {
         List<RightsholderDiscrepancy> discrepancies =
-            rightsholderDiscrepancyService.getDiscrepanciesByScenarioIdAndStatus(scenario.getId(),
-                RightsholderDiscrepancyStatusEnum.IN_PROGRESS, null, null);
+            rightsholderDiscrepancyService.getDiscrepanciesByScenarioIdAndStatus(
+                Objects.requireNonNull(scenario).getId(), RightsholderDiscrepancyStatusEnum.IN_PROGRESS, null, null);
         LOGGER.info("Approve Ownership Changes. Started. {}, RhDiscrepanciesCount={}",
-            ForeignLogUtils.scenario(Objects.requireNonNull(scenario)), LogUtils.size(discrepancies));
+            ForeignLogUtils.scenario(scenario), LogUtils.size(discrepancies));
         Map<Long, List<Usage>> groupedByWrWrkInstUsages = usageService.getUsagesForReconcile(scenario.getId())
             .stream()
             .collect(Collectors.groupingBy(Usage::getWrWrkInst));

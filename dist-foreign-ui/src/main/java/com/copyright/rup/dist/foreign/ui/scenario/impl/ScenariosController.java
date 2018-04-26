@@ -6,6 +6,7 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
+import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
@@ -116,8 +117,9 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
         Scenario scenario = getWidget().getSelectedScenario();
         scenarioController.setScenario(scenario);
         if (!scenarioController.isScenarioEmpty()) {
-            scenarioService.saveRightsholderDiscrepancies(scenario);
-            if (0 < rightsholderDiscrepancyService.getInProgressDiscrepanciesCountByScenarioId(scenario.getId())) {
+            scenarioService.getOwnershipChanges(scenario);
+            if (0 < rightsholderDiscrepancyService.getDiscrepanciesCountByScenarioIdAndStatus(scenario.getId(),
+                RightsholderDiscrepancyStatusEnum.IN_PROGRESS)) {
                 reconcileRightsholdersController.setScenario(scenario);
                 Windows.showModalWindow(new RightsholderDiscrepanciesWindow(reconcileRightsholdersController, this));
             } else {

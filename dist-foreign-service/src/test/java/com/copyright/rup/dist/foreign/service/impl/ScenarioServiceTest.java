@@ -239,12 +239,12 @@ public class ScenarioServiceTest {
             .andReturn(ImmutableMap.of(2000017010L, buildRightsholder(2000017010L), 1000000001L,
                 buildRightsholder(1000000001L))).once();
         Capture<List<RightsholderDiscrepancy>> discrepanciesCapture = new Capture<>();
-        expect(rightsholderDiscrepancyService.getInProgressDiscrepanciesCountByScenarioId(SCENARIO_ID))
-            .andReturn(2).once();
+        expect(rightsholderDiscrepancyService.getDiscrepanciesCountByScenarioIdAndStatus(SCENARIO_ID,
+            RightsholderDiscrepancyStatusEnum.IN_PROGRESS)).andReturn(2).once();
         rightsholderDiscrepancyService.insertDiscrepancies(capture(discrepanciesCapture), eq(SCENARIO_ID));
         expectLastCall().once();
         replayAll();
-        scenarioService.saveRightsholderDiscrepancies(scenario);
+        scenarioService.getOwnershipChanges(scenario);
         List<RightsholderDiscrepancy> discrepancies = discrepanciesCapture.getValue();
         assertEquals(1, discrepancies.size());
         RightsholderDiscrepancy discrepancy = discrepancies.iterator().next();

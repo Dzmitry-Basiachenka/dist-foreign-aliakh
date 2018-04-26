@@ -58,7 +58,8 @@ public class ReconcileRightsholdersController implements IReconcileRightsholders
 
     @Override
     public int getSize() {
-        return rightsholderDiscrepancyService.getInProgressDiscrepanciesCountByScenarioId(scenario.getId());
+        return rightsholderDiscrepancyService.getDiscrepanciesCountByScenarioIdAndStatus(scenario.getId(),
+            RightsholderDiscrepancyStatusEnum.IN_PROGRESS);
     }
 
     @Override
