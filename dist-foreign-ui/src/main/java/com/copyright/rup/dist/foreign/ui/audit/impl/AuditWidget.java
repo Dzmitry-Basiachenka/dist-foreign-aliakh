@@ -126,7 +126,7 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
         })
             .setCaption(ForeignUi.getMessage("table.column.detail_id"))
             .setSortProperty("detailId")
-            .setWidth(100);
+            .setWidth(260);
         addColumn(UsageDto::getStatus, "table.column.usage_status", "status", 115);
         addColumn(UsageDto::getProductFamily, "table.column.product_family", "productFamily", 125);
         addColumn(UsageDto::getBatchName, "table.column.batch_name", "batchName", 140);
