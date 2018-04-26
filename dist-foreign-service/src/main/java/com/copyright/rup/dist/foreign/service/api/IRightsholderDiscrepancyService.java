@@ -33,7 +33,7 @@ public interface IRightsholderDiscrepancyService {
      * @param status     instance of {@link RightsholderDiscrepancyStatusEnum}
      * @return count of {@link RightsholderDiscrepancy}ies
      */
-    int getDiscrepanciesCountByScenarioIdAndStatus(String scenarioId, RightsholderDiscrepancyStatusEnum status);
+    int getCountByScenarioIdAndStatus(String scenarioId, RightsholderDiscrepancyStatusEnum status);
 
     /**
      * Gets list of old rightsholder account numbers where new account number is empty for specified scenario.
@@ -52,9 +52,9 @@ public interface IRightsholderDiscrepancyService {
      * @param sort       instance of {@link Sort}
      * @return the list of {@link RightsholderDiscrepancy}ies
      */
-    List<RightsholderDiscrepancy> getDiscrepanciesByScenarioIdAndStatus(String scenarioId,
-                                                                        RightsholderDiscrepancyStatusEnum status,
-                                                                        Pageable pageable, Sort sort);
+    List<RightsholderDiscrepancy> getByScenarioIdAndStatus(String scenarioId,
+                                                           RightsholderDiscrepancyStatusEnum status,
+                                                           Pageable pageable, Sort sort);
 
     /**
      * Deletes all {@link RightsholderDiscrepancy}ies by scenario identifier and status.
@@ -62,12 +62,12 @@ public interface IRightsholderDiscrepancyService {
      * @param scenarioId the scenario identifier
      * @param status     instance of {@link RightsholderDiscrepancyStatusEnum}
      */
-    void deleteDiscrepanciesByScenarioIdAndStatus(String scenarioId, RightsholderDiscrepancyStatusEnum status);
+    void deleteByScenarioIdAndStatus(String scenarioId, RightsholderDiscrepancyStatusEnum status);
 
     /**
      * Updates status to {@link RightsholderDiscrepancyStatusEnum#APPROVED} by scenario identifier.
      *
      * @param scenarioId the scenario identifier
      */
-    void approveDiscrepanciesByScenarioId(String scenarioId);
+    void approveByScenarioId(String scenarioId);
 }

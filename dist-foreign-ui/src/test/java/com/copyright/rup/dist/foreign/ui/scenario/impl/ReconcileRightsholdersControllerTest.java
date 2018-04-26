@@ -68,11 +68,11 @@ public class ReconcileRightsholdersControllerTest {
     }
 
     @Test
-    public void testGetSize() {
-        expect(rightsholderDiscrepancyService.getDiscrepanciesCountByScenarioIdAndStatus(scenario.getId(),
+    public void testGetBeansCount() {
+        expect(rightsholderDiscrepancyService.getCountByScenarioIdAndStatus(scenario.getId(),
             RightsholderDiscrepancyStatusEnum.IN_PROGRESS)).andReturn(5).once();
         replay(rightsholderDiscrepancyService);
-        assertEquals(5, controller.getSize(), 0);
+        assertEquals(5, controller.getBeansCount(), 0);
         verify(rightsholderDiscrepancyService);
     }
 
@@ -90,7 +90,7 @@ public class ReconcileRightsholdersControllerTest {
     public void testLoadBeans() {
         Capture<Pageable> pageableCapture = new Capture<>();
         List<RightsholderDiscrepancy> discrepancies = Collections.singletonList(new RightsholderDiscrepancy());
-        expect(rightsholderDiscrepancyService.getDiscrepanciesByScenarioIdAndStatus(same(scenario.getId()),
+        expect(rightsholderDiscrepancyService.getByScenarioIdAndStatus(same(scenario.getId()),
             same(RightsholderDiscrepancyStatusEnum.IN_PROGRESS), capture(pageableCapture), isNull()))
             .andReturn(discrepancies).once();
         replay(rightsholderDiscrepancyService);
@@ -102,12 +102,12 @@ public class ReconcileRightsholdersControllerTest {
     }
 
     @Test
-    public void testDeleteInProgressDiscrepancies() {
-        rightsholderDiscrepancyService.deleteDiscrepanciesByScenarioIdAndStatus(scenario.getId(),
+    public void testCancelReconciliation() {
+        rightsholderDiscrepancyService.deleteByScenarioIdAndStatus(scenario.getId(),
             RightsholderDiscrepancyStatusEnum.IN_PROGRESS);
         expectLastCall().once();
         replay(rightsholderDiscrepancyService);
-        controller.deleteInProgressDiscrepancies();
+        controller.cancelReconciliation();
         verify(rightsholderDiscrepancyService);
     }
 }

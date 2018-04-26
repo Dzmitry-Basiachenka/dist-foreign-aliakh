@@ -51,7 +51,7 @@ class RightsholderDiscrepanciesWindow extends Window {
         setCaption(ForeignUi.getMessage("label.reconcile_rightsholders"));
         this.controller = reconcileRightsholdersController;
         this.scenariosController = scenariosController;
-        this.addCloseListener(event -> controller.deleteInProgressDiscrepancies());
+        this.addCloseListener(event -> controller.cancelReconciliation());
         VaadinUtils.addComponentStyle(this, "rightsholder-discrepancies-window");
     }
 
@@ -93,7 +93,7 @@ class RightsholderDiscrepanciesWindow extends Window {
     private void initGrid() {
         DataProvider<RightsholderDiscrepancy, Void> dataProvider = DataProvider.fromCallbacks(
             query -> controller.loadBeans(query.getOffset(), query.getLimit(), query.getSortOrders()).stream(),
-            query -> controller.getSize()
+            query -> controller.getBeansCount()
         );
         grid = new Grid<>(dataProvider);
         addColumns();

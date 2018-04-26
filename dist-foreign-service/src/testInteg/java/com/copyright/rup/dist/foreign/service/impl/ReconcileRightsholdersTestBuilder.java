@@ -141,7 +141,7 @@ public class ReconcileRightsholdersTestBuilder {
                 expectGetRollups();
             }
             expectGetPreferences();
-            scenarioService.getOwnershipChanges(expectedScenario);
+            scenarioService.reconcileRightsholders(expectedScenario);
             assertDiscrepancies();
             scenarioService.approveOwnershipChanges(expectedScenario);
             assertUsages();
@@ -190,7 +190,7 @@ public class ReconcileRightsholdersTestBuilder {
 
         private void assertDiscrepancies() {
             List<RightsholderDiscrepancy> discrepancies =
-                rightsholderDiscrepancyService.getDiscrepanciesByScenarioIdAndStatus(expectedScenario.getId(),
+                rightsholderDiscrepancyService.getByScenarioIdAndStatus(expectedScenario.getId(),
                     RightsholderDiscrepancyStatusEnum.IN_PROGRESS, null, null);
             expectedDiscrepancies.forEach(expected -> {
                 Long oldAccountNumber = expected.getOldRightsholder().getAccountNumber();

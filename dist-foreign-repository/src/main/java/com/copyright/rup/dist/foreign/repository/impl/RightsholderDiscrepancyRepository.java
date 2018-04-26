@@ -12,7 +12,6 @@ import com.copyright.rup.dist.foreign.repository.api.IRightsholderDiscrepancyRep
 import com.google.common.collect.Maps;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -65,9 +64,8 @@ public class RightsholderDiscrepancyRepository extends BaseRepository implements
     public List<RightsholderDiscrepancy> findByScenarioIdAndStatus(String scenarioId,
                                                                    RightsholderDiscrepancyStatusEnum status,
                                                                    Pageable pageable, Sort sort) {
-        checkArgument(StringUtils.isNotBlank(scenarioId));
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
-        parameters.put(SCENARIO_ID_KEY, scenarioId);
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put(STATUS_KEY, Objects.requireNonNull(status));
         parameters.put("pageable", pageable);
         parameters.put("sort", sort);

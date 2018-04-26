@@ -33,7 +33,7 @@ public class RightsholderDiscrepancyService implements IRightsholderDiscrepancyS
     }
 
     @Override
-    public int getDiscrepanciesCountByScenarioIdAndStatus(String scenarioId, RightsholderDiscrepancyStatusEnum status) {
+    public int getCountByScenarioIdAndStatus(String scenarioId, RightsholderDiscrepancyStatusEnum status) {
         return rightsholderDiscrepancyRepository.findCountByScenarioIdAndStatus(scenarioId, status);
     }
 
@@ -43,19 +43,19 @@ public class RightsholderDiscrepancyService implements IRightsholderDiscrepancyS
     }
 
     @Override
-    public List<RightsholderDiscrepancy> getDiscrepanciesByScenarioIdAndStatus(String scenarioId,
-                                                                               RightsholderDiscrepancyStatusEnum status,
-                                                                               Pageable pageable, Sort sort) {
+    public List<RightsholderDiscrepancy> getByScenarioIdAndStatus(String scenarioId,
+                                                                  RightsholderDiscrepancyStatusEnum status,
+                                                                  Pageable pageable, Sort sort) {
         return rightsholderDiscrepancyRepository.findByScenarioIdAndStatus(scenarioId, status, pageable, sort);
     }
 
     @Override
-    public void deleteDiscrepanciesByScenarioIdAndStatus(String scenarioId, RightsholderDiscrepancyStatusEnum status) {
+    public void deleteByScenarioIdAndStatus(String scenarioId, RightsholderDiscrepancyStatusEnum status) {
         rightsholderDiscrepancyRepository.deleteByScenarioIdAndStatus(scenarioId, status);
     }
 
     @Override
-    public void approveDiscrepanciesByScenarioId(String scenarioId) {
+    public void approveByScenarioId(String scenarioId) {
         rightsholderDiscrepancyRepository.approveByScenarioId(scenarioId);
     }
 }

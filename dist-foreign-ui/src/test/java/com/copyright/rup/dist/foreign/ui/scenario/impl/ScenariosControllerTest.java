@@ -138,9 +138,9 @@ public class ScenariosControllerTest {
             createMock(IRightsholderDiscrepancyService.class);
         Whitebox.setInternalState(scenariosController, rightsholderDiscrepancyService);
         expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
-        scenarioService.getOwnershipChanges(scenario);
+        scenarioService.reconcileRightsholders(scenario);
         expectLastCall().once();
-        expect(rightsholderDiscrepancyService.getDiscrepanciesCountByScenarioIdAndStatus(SCENARIO_ID,
+        expect(rightsholderDiscrepancyService.getCountByScenarioIdAndStatus(SCENARIO_ID,
             RightsholderDiscrepancyStatusEnum.IN_PROGRESS)).andReturn(0).once();
         expect(Windows.showConfirmDialog(eq("There are no rightsholders updates for scenario " +
                 "<i><b>Scenario name</b></i>. Do you want to update service fee?"),
@@ -161,9 +161,9 @@ public class ScenariosControllerTest {
             createMock(IRightsholderDiscrepancyService.class);
         Whitebox.setInternalState(scenariosController, rightsholderDiscrepancyService);
         expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
-        scenarioService.getOwnershipChanges(scenario);
+        scenarioService.reconcileRightsholders(scenario);
         expectLastCall().once();
-        expect(rightsholderDiscrepancyService.getDiscrepanciesCountByScenarioIdAndStatus(SCENARIO_ID,
+        expect(rightsholderDiscrepancyService.getCountByScenarioIdAndStatus(SCENARIO_ID,
             RightsholderDiscrepancyStatusEnum.IN_PROGRESS)).andReturn(5).once();
         Windows.showModalWindow(anyObject(RightsholderDiscrepanciesWindow.class));
         expectLastCall().once();

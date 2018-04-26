@@ -178,7 +178,7 @@ public class ScenarioControllerTest {
         IRightsholderDiscrepancyService rightsholderDiscrepancyService =
             createMock(IRightsholderDiscrepancyService.class);
         Whitebox.setInternalState(controller, rightsholderDiscrepancyService);
-        expect(rightsholderDiscrepancyService.getDiscrepanciesCountByScenarioIdAndStatus(SCENARIO_ID,
+        expect(rightsholderDiscrepancyService.getCountByScenarioIdAndStatus(SCENARIO_ID,
             RightsholderDiscrepancyStatusEnum.APPROVED)).andReturn(1).once();
         Windows.showNotificationWindow("Details can not be excluded after reconciliation");
         expectLastCall().once();
@@ -193,7 +193,7 @@ public class ScenarioControllerTest {
         IRightsholderDiscrepancyService rightsholderDiscrepancyService =
             createMock(IRightsholderDiscrepancyService.class);
         Whitebox.setInternalState(controller, rightsholderDiscrepancyService);
-        expect(rightsholderDiscrepancyService.getDiscrepanciesCountByScenarioIdAndStatus(SCENARIO_ID,
+        expect(rightsholderDiscrepancyService.getCountByScenarioIdAndStatus(SCENARIO_ID,
             RightsholderDiscrepancyStatusEnum.APPROVED)).andReturn(0).once();
         Windows.showModalWindow(anyObject(ExcludeSourceRroWindow.class));
         expectLastCall().once();
