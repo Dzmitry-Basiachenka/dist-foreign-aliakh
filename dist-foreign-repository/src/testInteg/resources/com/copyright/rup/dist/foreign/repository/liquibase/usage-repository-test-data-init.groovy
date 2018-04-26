@@ -95,7 +95,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '3ab5e80b-89c0-4d78-9675-54c7ab284450')
             column(name: 'df_usage_batch_uid', value: '56282dbc-2468-48d4-b926-93d3458a656a')
-            column(name: 'detail_id', value: '6997788888')
             column(name: 'wr_wrk_inst', value: '180382914')
             column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
             column(name: 'rh_account_number', value: '1000009997')
@@ -117,7 +116,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '8a06905f-37ae-4e1f-8550-245277f8165c')
             column(name: 'df_usage_batch_uid', value: '56282dbc-2468-48d4-b926-94d3458a666a')
-            column(name: 'detail_id', value: '6997788885')
             column(name: 'wr_wrk_inst', value: '244614835')
             column(name: 'work_title', value: '15th International Conference on Environmental Degradation of Materials in Nuclear Power Systems Water Reactors')
             column(name: 'rh_account_number', value: '1000002859')
@@ -139,7 +137,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '5c5f8c1c-1418-4cfd-8685-9212f4c421d1')
             column(name: 'df_usage_batch_uid', value: 'a5b64c3a-55d2-462e-b169-362dca6a4dd6')
-            column(name: 'detail_id', value: '6997788884')
             column(name: 'wr_wrk_inst', value: '345870577')
             column(name: 'work_title', value: '10 Years Plant Molecular Biology')
             column(name: 'rh_account_number', value: '1000005413')
@@ -162,7 +159,6 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: 'b1f0b236-3ae9-4a60-9fab-61db84199dss')
             column(name: 'df_usage_batch_uid', value: 'a5b64c3a-55d2-462e-b169-362dca6a4dd6')
             column(name: 'df_scenario_uid', value: 'b1f0b236-3ae9-4a60-9fab-61db84199d6f')
-            column(name: 'detail_id', value: '6997788886')
             column(name: 'wr_wrk_inst', value: '243904752')
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'rh_account_number', value: '1000002859')
@@ -189,7 +185,6 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: 'cf38d390-11bb-4af7-9685-e034c9c32fb6')
             column(name: 'df_usage_batch_uid', value: 'a5b64c3a-55d2-462e-b169-362dca6a4dd6')
             column(name: 'df_scenario_uid', value: 'b1f0b236-3ae9-4a60-9fab-61db84199d6f')
-            column(name: 'detail_id', value: '6213788886')
             column(name: 'wr_wrk_inst', value: '243904752')
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'rh_account_number', value: '1000002859')
@@ -226,7 +221,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '0b0f5100-01bd-11e8-8f1a-0800200c9a66')
             column(name: 'df_usage_batch_uid', value: 'dc945c30-01bc-11e8-8f1a-0800200c9a66')
-            column(name: 'detail_id', value: '3539748198')
             column(name: 'wr_wrk_inst', value: '922859149')
             column(name: 'work_title', value: 'Psychiatric services')
             column(name: 'status_ind', value: 'SENT_FOR_RA')
@@ -271,7 +265,6 @@ databaseChangeLog {
             column(name: 'df_usage_archive_uid', value: 'a71a0544-128e-41c0-b6b0-cfbbea6d2182')
             column(name: 'df_usage_batch_uid', value: 'e0af666b-cbb7-4054-9906-12daa1fbd76e')
             column(name: 'df_scenario_uid', value: '979c981c-6a3a-46f3-bbd7-83d322ce9136')
-            column(name: 'detail_id', value: '5423214587')
             column(name: 'wr_wrk_inst', value: '243904752')
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'rh_account_number', value: '1000002475')
@@ -297,7 +290,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'd9ca07b5-8282-4a81-9b9d-e4480f529d34')
             column(name: 'df_usage_batch_uid', value: 'e0af666b-cbb7-4054-9906-12daa1fbd76e')
-            column(name: 'detail_id', value: '8457965214')
             column(name: 'wr_wrk_inst', value: '103658926')
             column(name: 'work_title', value: 'Nitrates')
             column(name: 'status_ind', value: 'WORK_FOUND')
@@ -341,7 +333,6 @@ databaseChangeLog {
             column(name: 'df_usage_archive_uid', value: '3900eea0-1231-11e8-b566-0800200c9a66')
             column(name: 'df_usage_batch_uid', value: '7802802a-1f96-4d7a-8a27-b0bfd43936b0')
             column(name: 'df_scenario_uid', value: 'bbcfb22f-fe53-490b-8daf-aa90ab87e1c0')
-            column(name: 'detail_id', value: '5423214888')
             column(name: 'product_family', value: 'FAS')
             column(name: 'wr_wrk_inst', value: '243904752')
             column(name: 'work_title', value: '100 ROAD MOVIES')
@@ -383,7 +374,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'e2b3c369-3084-41ad-92b5-62197660d645')
             column(name: 'df_usage_batch_uid', value: 'e855bf85-236c-42e7-9b12-8d68dd747bbe')
-            column(name: 'detail_id', value: '547365434')
             column(name: 'product_family', value: 'FAS')
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
             column(name: 'status_ind', value: 'WORK_NOT_FOUND')
@@ -418,7 +408,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '4dd8cdf8-ca10-422e-bdd5-3220105e6379')
             column(name: 'df_usage_batch_uid', value: 'e855bf85-236c-42e7-9b12-8d68dd747bbe')
-            column(name: 'detail_id', value: '8457965289')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'NTS')
             column(name: 'article', value: 'DIN EN 779:2012')
@@ -448,7 +437,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '593c49c3-eb5b-477b-8556-f7a4725df2b3')
             column(name: 'df_usage_batch_uid', value: 'c10a11c6-dae3-43d7-a632-c682542b1209')
-            column(name: 'detail_id', value: '547365495')
             column(name: 'product_family', value: 'FAS')
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
             column(name: 'status_ind', value: 'NEW')
@@ -470,7 +458,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '7db6455e-5249-44db-801a-307f1c239310')
             column(name: 'df_usage_batch_uid', value: 'c10a11c6-dae3-43d7-a632-c682542b1209')
-            column(name: 'detail_id', value: '95463875')
             column(name: 'product_family', value: 'FAS')
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
             column(name: 'status_ind', value: 'NEW')
@@ -500,7 +487,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '66a7c2c0-3b09-48ad-9aa5-a6d0822226c7')
             column(name: 'df_usage_batch_uid', value: '6aa177f1-2d53-4c98-82bf-da7f78ae70fb')
-            column(name: 'detail_id', value: '547365496')
             column(name: 'product_family', value: 'FAS')
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
             column(name: 'status_ind', value: 'NEW')
@@ -522,7 +508,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '0c099fc0-e6f5-43c0-b2d5-ad971f974c10')
             column(name: 'df_usage_batch_uid', value: '6aa177f1-2d53-4c98-82bf-da7f78ae70fb')
-            column(name: 'detail_id', value: '95463876')
             column(name: 'product_family', value: 'FAS')
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
             column(name: 'status_ind', value: 'NEW')
@@ -542,7 +527,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'dcc794ba-42aa-481d-937b-8f431929a611')
             column(name: 'df_usage_batch_uid', value: '6aa177f1-2d53-4c98-82bf-da7f78ae70fb')
-            column(name: 'detail_id', value: '995463873')
             column(name: 'product_family', value: 'FAS')
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
             column(name: 'status_ind', value: 'NEW')
@@ -561,7 +545,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '47d48889-76b5-4957-aca0-2a7850a09f92')
             column(name: 'df_usage_batch_uid', value: '6aa177f1-2d53-4c98-82bf-da7f78ae70fb')
-            column(name: 'detail_id', value: '995463874')
             column(name: 'product_family', value: 'FAS')
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
             column(name: 'status_ind', value: 'NEW')
@@ -580,7 +563,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'c5ea47b0-b269-4791-9aa7-76308fe835e6')
             column(name: 'df_usage_batch_uid', value: '6aa177f1-2d53-4c98-82bf-da7f78ae70fb')
-            column(name: 'detail_id', value: '995463877')
             column(name: 'product_family', value: 'FAS')
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'status_ind', value: 'NEW')
@@ -599,7 +581,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'b53bb4f3-9eee-4732-8e3d-0c88722081d8')
             column(name: 'df_usage_batch_uid', value: '6aa177f1-2d53-4c98-82bf-da7f78ae70fb')
-            column(name: 'detail_id', value: '995463879')
             column(name: 'product_family', value: 'FAS')
             column(name: 'status_ind', value: 'NEW')
             column(name: 'article', value: 'DIN EN 779:2012')
@@ -635,7 +616,6 @@ databaseChangeLog {
             column(name: 'df_usage_archive_uid', value: '0d85f51d-212b-4181-9972-3154cad74bd0')
             column(name: 'df_usage_batch_uid', value: '48bfe456-fbc1-436e-8762-baca46a0e09c')
             column(name: 'df_scenario_uid', value: 'cac23a50-204c-11e8-b566-0800200c9a66')
-            column(name: 'detail_id', value: '5423213358')
             column(name: 'product_family', value: 'FAS')
             column(name: 'wr_wrk_inst', value: '243904752')
             column(name: 'work_title', value: '100 ROAD MOVIES')
@@ -668,7 +648,6 @@ databaseChangeLog {
             column(name: 'df_usage_archive_uid', value: '1cb766c6-7c49-489a-bd8f-9b8b052f5785')
             column(name: 'df_usage_batch_uid', value: '48bfe456-fbc1-436e-8762-baca46a0e09c')
             column(name: 'df_scenario_uid', value: 'cac23a50-204c-11e8-b566-0800200c9a66')
-            column(name: 'detail_id', value: '5423211926')
             column(name: 'product_family', value: 'FAS')
             column(name: 'wr_wrk_inst', value: '243904752')
             column(name: 'work_title', value: '100 ROAD MOVIES')
@@ -711,7 +690,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '721ca627-09bc-4204-99f4-6acae415fa5d')
             column(name: 'df_usage_batch_uid', value: '76ce3849-1f70-40a0-b42b-fa77efbba73f')
-            column(name: 'detail_id', value: '547365497')
             column(name: 'product_family', value: 'FAS')
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
             column(name: 'status_ind', value: 'WORK_RESEARCH')
@@ -736,7 +714,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '9c07f6dd-382e-4cbb-8cd1-ab9f51413e0a')
             column(name: 'df_usage_batch_uid', value: '76ce3849-1f70-40a0-b42b-fa77efbba73f')
-            column(name: 'detail_id', value: '954638765')
             column(name: 'product_family', value: 'FAS')
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
             column(name: 'status_ind', value: 'WORK_RESEARCH')

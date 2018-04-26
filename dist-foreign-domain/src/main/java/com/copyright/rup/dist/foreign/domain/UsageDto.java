@@ -24,7 +24,6 @@ public class UsageDto extends StoredEntity<String> {
 
     private static final BigDecimal DEFAULT_AMOUNT = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
 
-    private Long detailId;
     private String batchName;
     private Integer fiscalYear;
     private String rroName;
@@ -60,14 +59,6 @@ public class UsageDto extends StoredEntity<String> {
     private String distributionName;
     private OffsetDateTime distributionDate;
     private LocalDate periodEndDate;
-
-    public Long getDetailId() {
-        return detailId;
-    }
-
-    public void setDetailId(Long detailId) {
-        this.detailId = detailId;
-    }
 
     public String getBatchName() {
         return batchName;
@@ -359,7 +350,6 @@ public class UsageDto extends StoredEntity<String> {
         UsageDto that = (UsageDto) obj;
         return new EqualsBuilder()
             .appendSuper(super.equals(obj))
-            .append(this.detailId, that.detailId)
             .append(this.batchName, that.batchName)
             .append(this.fiscalYear, that.fiscalYear)
             .append(this.rroName, that.rroName)
@@ -402,7 +392,6 @@ public class UsageDto extends StoredEntity<String> {
     public int hashCode() {
         return new HashCodeBuilder()
             .appendSuper(super.hashCode())
-            .append(detailId)
             .append(batchName)
             .append(fiscalYear)
             .append(rroName)
@@ -445,7 +434,6 @@ public class UsageDto extends StoredEntity<String> {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
             .appendSuper(super.toString())
-            .append("detailId", detailId)
             .append("batchName", batchName)
             .append("fiscalYear", fiscalYear)
             .append("rroName", rroName)

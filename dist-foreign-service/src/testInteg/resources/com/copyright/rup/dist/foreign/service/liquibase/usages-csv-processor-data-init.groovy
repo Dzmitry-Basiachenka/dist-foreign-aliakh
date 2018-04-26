@@ -17,7 +17,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '3b2bb7f1-eb4a-46a4-9609-1fa3cb36ae20')
             column(name: 'df_usage_batch_uid', value: 'd7f890a5-1762-4213-9fd2-9599b2f34bcc')
-            column(name: 'detail_id', value: '200')
             column(name: 'wr_wrk_inst', value: '123456789')
             column(name: 'product_family', value: 'FAS')
             column(name: 'work_title', value: '1984,Appendix: The Principles of Newspeak')

@@ -28,7 +28,6 @@
             #{id},
             #{batchId},
             #{scenarioId},
-            #{detailId},
             #{wrWrkInst},
             #{workTitle},
             #{rightsholder.accountNumber},

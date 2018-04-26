@@ -21,7 +21,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'd82aaf46-8837-4e59-a158-d485d01f9a16')
             column(name: 'df_usage_batch_uid', value: '01219a91-d033-40db-a9ba-d717513a3b65')
-            column(name: 'detail_id', value: '254690')
             column(name: 'wr_wrk_inst', value: '946768461')
             column(name: 'work_title', value: '1984')
             column(name: 'status_ind', value: 'RH_NOT_FOUND')
@@ -44,7 +43,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '55710948-f203-4547-92b9-3c4526ac32c5')
             column(name: 'df_usage_batch_uid', value: '01219a91-d033-40db-a9ba-d717513a3b65')
-            column(name: 'detail_id', value: '254692')
             column(name: 'wr_wrk_inst', value: '946768461')
             column(name: 'work_title', value: '1984')
             column(name: 'status_ind', value: 'RH_NOT_FOUND')
@@ -67,7 +65,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '427f017c-688b-4c89-9560-c3ea01e55134')
             column(name: 'df_usage_batch_uid', value: '01219a91-d033-40db-a9ba-d717513a3b65')
-            column(name: 'detail_id', value: '254691')
             column(name: 'wr_wrk_inst', value: '946768462')
             column(name: 'work_title', value: '1984')
             column(name: 'status_ind', value: 'RH_NOT_FOUND')
@@ -90,7 +87,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '1c17cae4-4188-4176-b31d-926d5c6f10d3')
             column(name: 'df_usage_batch_uid', value: '01219a91-d033-40db-a9ba-d717513a3b65')
-            column(name: 'detail_id', value: '254693')
             column(name: 'wr_wrk_inst', value: '127778305')
             column(name: 'work_title', value: '1984')
             column(name: 'rh_account_number', value: '1000009522')
@@ -114,7 +110,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '75e17c8c-8782-4071-95d9-0c15ffd0005d')
             column(name: 'df_usage_batch_uid', value: '01219a91-d033-40db-a9ba-d717513a3b65')
-            column(name: 'detail_id', value: '254694')
             column(name: 'wr_wrk_inst', value: '122799407')
             column(name: 'work_title', value: '(En)gendering the war on terror : war stories and camouflaged politics')
             column(name: 'status_ind', value: 'WORK_FOUND')
@@ -137,7 +132,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '7608e81e-0b43-4c21-9407-b14177ee7aa6')
             column(name: 'df_usage_batch_uid', value: '01219a91-d033-40db-a9ba-d717513a3b65')
-            column(name: 'detail_id', value: '254695')
             column(name: 'wr_wrk_inst', value: '123565461')
             column(name: 'work_title', value: 'Annals of internal medicine')
             column(name: 'status_ind', value: 'SENT_FOR_RA')
@@ -160,7 +154,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'd4ab919f-37a7-46b2-bd73-610cced3bb7b')
             column(name: 'df_usage_batch_uid', value: '01219a91-d033-40db-a9ba-d717513a3b65')
-            column(name: 'detail_id', value: '254696')
             column(name: 'status_ind', value: 'NEW')
             column(name: 'product_family', value: 'FAS')
             column(name: 'standard_number', value: '9780000000000')

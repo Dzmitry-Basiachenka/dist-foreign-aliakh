@@ -676,4 +676,21 @@ databaseChangeLog {
             // automatic rollback
         }
     }
+
+    changeSet(id: '2018-04-25-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("B-42928 FDA: Replace user-generated detail ID with system-generated detail ID: " +
+                "drop NOT NULL constraint from detail_id column in df_usage and df_usage_archive tables")
+
+        dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage',
+                columnName: 'detail_id', columnDataType: 'NUMERIC(15,0)')
+        dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_archive',
+                columnName: 'detail_id', columnDataType: 'NUMERIC(15,0)')
+
+        rollback {
+            addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage',
+                    columnName: 'detail_id', columnDataType: 'NUMERIC(15,0)')
+            addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_archive',
+                    columnName: 'detail_id', columnDataType: 'NUMERIC(15,0)')
+        }
+    }
 }

@@ -228,12 +228,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
         // predefined usage ids are used, otherwise during every test run the usage ids will be random
         private void setPredefinedUsageIds(List<Usage> usages) {
             AtomicInteger usageId = new AtomicInteger(0);
-            usages.forEach(usage -> {
-                    usage.setId(predefinedUsageIds.get(usageId.getAndIncrement()));
-                    // TODO {aliakh} will be removed after database clean-up
-                    usage.setDetailId((long) usageId.get());
-                }
-            );
+            usages.forEach(usage -> usage.setId(predefinedUsageIds.get(usageId.getAndIncrement())));
         }
 
         private ByteArrayOutputStream getCsvOutputStream() throws IOException {

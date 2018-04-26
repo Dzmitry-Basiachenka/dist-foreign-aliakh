@@ -136,7 +136,7 @@ public class ScenarioRepositoryIntegrationTest {
         assertEquals(1, scenariosNames.size());
         Scenario scenario = buildScenario(SCENARIO_ID, SCENARIO_NAME);
         scenarioRepository.insert(scenario);
-        usageRepository.insert(buildUsage(85695423L));
+        usageRepository.insert(buildUsage());
         scenariosNames = scenarioRepository.findNamesByUsageBatchId(USAGE_BATCH_ID);
         assertNotNull(scenariosNames);
         assertEquals(2, scenariosNames.size());
@@ -188,16 +188,16 @@ public class ScenarioRepositoryIntegrationTest {
     @Test
     public void testFindSourceRros() {
         scenarioRepository.insert(buildScenario(SCENARIO_ID, SCENARIO_NAME));
-        usageRepository.insert(buildUsage(65874985L));
+        usageRepository.insert(buildUsage());
         UsageBatch batch = buildBatch(2000017000L);
         batchRepository.insert(batch);
-        Usage usage = buildUsage(25685478L);
+        Usage usage = buildUsage();
         usage.setBatchId(batch.getId());
         usageRepository.insert(usage);
         // inserting different batch with the same RRO to verify that it will be returned only once
         batch = buildBatch(2000017000L);
         batchRepository.insert(batch);
-        usage = buildUsage(75423658L);
+        usage = buildUsage();
         usage.setBatchId(batch.getId());
         usageRepository.insert(usage);
         List<Rightsholder> sourceRros = scenarioRepository.findSourceRros(SCENARIO_ID);
@@ -210,14 +210,14 @@ public class ScenarioRepositoryIntegrationTest {
     public void testFindRightsholdersByScenarioIdAndSourceRro() {
         scenarioRepository.insert(buildScenario(SCENARIO_ID, SCENARIO_NAME));
         // build one usage with different pair of rh and payee
-        Usage usage1 = buildUsage(54236984L);
+        Usage usage1 = buildUsage();
         usage1.setRightsholder(buildRightsholder(2000017004L,
             "Access Copyright, The Canadian Copyright Agency"));
         usage1.setPayee(buildRightsholder(2000017010L,
             "JAC, Japan Academic Association for Copyright Clearance, Inc."));
         // build 2 usages with the same rh and payee
-        Usage usage2 = buildUsage(30120014L);
-        Usage usage3 = buildUsage(24125874L);
+        Usage usage2 = buildUsage();
+        Usage usage3 = buildUsage();
         usageRepository.insert(usage1);
         usageRepository.insert(usage2);
         usageRepository.insert(usage3);
@@ -264,12 +264,11 @@ public class ScenarioRepositoryIntegrationTest {
         return batch;
     }
 
-    private Usage buildUsage(Long detailId) {
+    private Usage buildUsage() {
         Usage usage = new Usage();
         usage.setId(RupPersistUtils.generateUuid());
         usage.setBatchId(USAGE_BATCH_ID);
         usage.setScenarioId(SCENARIO_ID);
-        usage.setDetailId(detailId);
         usage.setWrWrkInst(123456783L);
         usage.setWorkTitle("WorkTitle");
         usage.setRightsholder(buildRightsholder(7000813806L,

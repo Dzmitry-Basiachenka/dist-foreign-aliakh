@@ -17,7 +17,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'e1108526-5945-4a30-971e-91e584b4bc88')
             column(name: 'df_usage_batch_uid', value: '9c07f6dd-382e-4cbb-8cd1-ab9f51413e0a')
-            column(name: 'detail_id', value: '12345678')
             column(name: 'wr_wrk_inst', value: '987654321')
             column(name: 'product_family', value: 'FAS')
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
@@ -43,7 +42,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '9f717d69-785a-4f25-ae60-8d90c1f334cc')
             column(name: 'df_usage_batch_uid', value: '9c07f6dd-382e-4cbb-8cd1-ab9f51413e0a')
-            column(name: 'detail_id', value: '23456789')
             column(name: 'wr_wrk_inst', value: '876543210')
             column(name: 'product_family', value: 'FAS')
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
@@ -67,7 +65,6 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '8fc36b5d-a349-485d-9c3d-40806d1b4bca')
             column(name: 'df_usage_batch_uid', value: '9c07f6dd-382e-4cbb-8cd1-ab9f51413e0a')
-            column(name: 'detail_id', value: '67890123')
             column(name: 'wr_wrk_inst', value: '876543210')
             column(name: 'product_family', value: 'FAS')
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
