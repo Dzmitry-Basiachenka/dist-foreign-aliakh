@@ -23,7 +23,6 @@ import org.perf4j.aop.Profiled;
 import org.perf4j.slf4j.Slf4JStopWatch;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,7 +59,6 @@ public class RightsService implements IRightsService {
     @Override
     @Transactional
     @Profiled(tag = "usage.sendForRightsAssignment")
-    @Scheduled(cron = "$RUP{dist.foreign.service.schedule.send_for_ra}")
     public void sendForRightsAssignment() {
         List<Usage> usages = usageRepository.findByStatuses(UsageStatusEnum.RH_NOT_FOUND);
         LOGGER.info("Send for Rights Assignment. Started. UsagesCount={}", LogUtils.size(usages));
@@ -87,7 +85,6 @@ public class RightsService implements IRightsService {
 
     @Override
     @Profiled(tag = "service.UsageService.updateRightsholders")
-    @Scheduled(cron = "$RUP{dist.foreign.service.schedule.get_rights}")
     //TODO {pliakh} adjust implementation to avoid copy-paste for WORK_FOUND and SENT_FOR_RA usages handling
     public void updateRightsholders() {
         List<Usage> usages = usageRepository.findByStatuses(UsageStatusEnum.WORK_FOUND);

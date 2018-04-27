@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
+
+    <bean id="df.service.getRightsQuartzJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <property name="jobClass" value="com.copyright.rup.dist.foreign.service.impl.quartz.GetRightsJob"/>
+        <property name="durability" value="true"/>
+    </bean>
+
+    <bean id="df.service.updateRightsholdersQuartzJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <property name="jobClass" value="com.copyright.rup.dist.foreign.service.impl.quartz.UpdateRightsholdersJob"/>
+        <property name="durability" value="true"/>
+    </bean>
+
+    <bean id="df.service.sendToRightsAssignmentQuartzJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <property name="jobClass" value="com.copyright.rup.dist.foreign.service.impl.quartz.SendToRightsAssignmentJob"/>
+        <property name="durability" value="true"/>
+    </bean>
+
+    <bean id="df.service.sendToCrmQuartzJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <property name="jobClass" value="com.copyright.rup.dist.foreign.service.impl.quartz.SendToCrmJob"/>
+        <property name="durability" value="true"/>
+    </bean>
+
+    <bean id="df.service.worksMatchingQuartzJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <property name="jobClass" value="com.copyright.rup.dist.foreign.service.impl.quartz.WorksMatchingJob"/>
+        <property name="durability" value="true"/>
+    </bean>
+
+    <bean id="df.service.getRightsTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="df.service.getRightsQuartzJob"/>
+        <property name="cronExpression" value="$RUP{dist.foreign.scheduler.get_rights}"/>
+    </bean>
+
+    <bean id="df.service.updateRightsholdersTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="df.service.updateRightsholdersQuartzJob"/>
+        <property name="cronExpression" value="$RUP{dist.foreign.scheduler.rightsholder}"/>
+    </bean>
+
+    <bean id="df.service.sendToRightsAssignmentTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="df.service.sendToRightsAssignmentQuartzJob"/>
+        <property name="cronExpression" value="$RUP{dist.foreign.scheduler.send_for_ra}"/>
+    </bean>
+
+    <bean id="df.service.sendToCrmTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="df.service.sendToCrmQuartzJob"/>
+        <property name="cronExpression" value="$RUP{dist.foreign.scheduler.send_to_crm}"/>
+    </bean>
+
+    <bean id="df.service.worksMatchingTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="df.service.worksMatchingQuartzJob"/>
+        <property name="cronExpression" value="$RUP{dist.foreign.scheduler.works_match}"/>
+    </bean>
+
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="jobDetails">
+            <list>
+                <ref bean="df.service.getRightsQuartzJob"/>
+                <ref bean="df.service.updateRightsholdersQuartzJob"/>
+                <ref bean="df.service.sendToRightsAssignmentQuartzJob"/>
+                <ref bean="df.service.sendToCrmQuartzJob"/>
+                <ref bean="df.service.worksMatchingQuartzJob"/>
+            </list>
+        </property>
+        <property name="triggers">
+            <list>
+                <ref bean="df.service.getRightsTrigger"/>
+                <ref bean="df.service.updateRightsholdersTrigger"/>
+                <ref bean="df.service.sendToRightsAssignmentTrigger"/>
+                <ref bean="df.service.sendToCrmTrigger"/>
+                <ref bean="df.service.worksMatchingTrigger"/>
+            </list>
+        </property>
+        <property name="autoStartup" value="$RUP{dist.foreign.scheduler.auto.startup}"/>
+        <property name="dataSource" ref="dfDataSource"/>
+        <property name="jobFactory">
+            <bean class="com.copyright.rup.dist.foreign.service.impl.util.AutowiringSpringJobBeanFactory"/>
+        </property>
+        <property name="overwriteExistingJobs" value="true"/>
+        <property name="quartzProperties">
+            <value>
+                org.quartz.jobStore.class=org.quartz.impl.jdbcjobstore.JobStoreCMT
+                org.quartz.jobStore.driverDelegateClass=org.quartz.impl.jdbcjobstore.PostgreSQLDelegate
+                org.quartz.jobStore.isClustered=true
+                org.quartz.jobStore.misfireThreshold=60000
+                org.quartz.jobStore.tablePrefix=apps.DF_QRTZ_
+                org.quartz.jobStore.useProperties=false
+                org.quartz.threadPool.class=org.quartz.simpl.SimpleThreadPool
+                org.quartz.threadPool.threadCount=$RUP{dist.foreign.scheduler.thread.count}
+                org.quartz.threadPool.threadPriority=$RUP{dist.foreign.scheduler.thread.priority}
+                org.quartz.jobStore.useProperties=false
+            </value>
+        </property>
+    </bean>
+</beans>

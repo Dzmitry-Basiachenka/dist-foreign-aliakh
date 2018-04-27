@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui;
 
 import static org.junit.Assert.assertEquals;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Uladzislau Shalamitski
  */
+@Ignore
 public class JobRunnerIntegrationTest {
 
     private static final String ENDPOINT_URL = "http://localhost:18321/dist-foreign-ui";

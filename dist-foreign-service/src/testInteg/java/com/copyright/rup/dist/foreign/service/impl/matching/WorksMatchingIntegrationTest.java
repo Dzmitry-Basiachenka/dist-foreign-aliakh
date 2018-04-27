@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageAuditRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
+import com.copyright.rup.dist.foreign.service.impl.quartz.WorksMatchingJob;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,8 +52,8 @@ public class WorksMatchingIntegrationTest {
     private IUsageAuditRepository auditRepository;
 
     @Test
-    public void testFindWorksAndUpdateStatuses() {
-        worksMatchingJob.findWorksAndUpdateStatuses();
+    public void testExecuteInternal() {
+        worksMatchingJob.executeInternal(null);
         verifyUsage("4773573f-acd7-424f-8667-2828d30b5738", 123059057L, UsageStatusEnum.WORK_FOUND, FAS_PRODUCT_FAMILY,
             "Wr Wrk Inst 123059057 was found by standard number 978-0-271-01750-1");
         verifyUsage("c9ad10c6-eaeb-4485-b04b-d23d265f7bb5", 123059057L, UsageStatusEnum.WORK_FOUND, FAS_PRODUCT_FAMILY,

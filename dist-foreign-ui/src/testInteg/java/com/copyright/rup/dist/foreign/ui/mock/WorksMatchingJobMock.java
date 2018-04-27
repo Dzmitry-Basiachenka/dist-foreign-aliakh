@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.mock;
 
-import com.copyright.rup.dist.foreign.service.impl.matching.WorksMatchingJob;
+import com.copyright.rup.dist.foreign.service.impl.quartz.WorksMatchingJob;
+
+import org.quartz.JobExecutionContext;
 
 /**
  * Mocks {@link WorksMatchingJob}.
@@ -14,7 +16,7 @@ import com.copyright.rup.dist.foreign.service.impl.matching.WorksMatchingJob;
 public class WorksMatchingJobMock extends WorksMatchingJob {
 
     @Override
-    public void findWorksAndUpdateStatuses() {
+    public void executeInternal(JobExecutionContext context) {
         // empty method
     }
 }

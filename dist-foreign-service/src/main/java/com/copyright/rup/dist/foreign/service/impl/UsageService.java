@@ -43,7 +43,6 @@ import org.perf4j.slf4j.Slf4JStopWatch;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -397,7 +396,6 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    @Scheduled(cron = "$RUP{dist.foreign.service.schedule.send_to_crm}")
     public void sendToCrm() {
         List<String> paidUsagesIds = usageArchiveRepository.findPaidIds();
         LOGGER.info("Send to CRM. Started. PaidUsagesCount={}", LogUtils.size(paidUsagesIds));
