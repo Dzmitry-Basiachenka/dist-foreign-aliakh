@@ -38,7 +38,7 @@ public interface IReconcileRightsholdersController {
     /**
      * @return number of items.
      */
-    int getSize();
+    int getBeansCount();
 
     /**
      * Loads specified number of beans from the storage with given start index.
@@ -56,7 +56,7 @@ public interface IReconcileRightsholdersController {
     List<Long> getProhibitedAccountNumbers();
 
     /**
-     * Deletes rightsholder discrepancies with IN_PROGRESS status.
+     * Cancels reconciliation of rightsholders.
      */
-    void deleteInProgressDiscrepancies();
+    void cancelReconciliation();
 }

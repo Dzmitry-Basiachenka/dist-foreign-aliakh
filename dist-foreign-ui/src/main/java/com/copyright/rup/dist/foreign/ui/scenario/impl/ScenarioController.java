@@ -105,7 +105,7 @@ public class ScenarioController extends CommonController<IScenarioWidget> implem
 
     @Override
     public void onExcludeDetailsClicked() {
-        if (0 < rightsholderDiscrepancyService.getDiscrepanciesCountByScenarioIdAndStatus(scenario.getId(),
+        if (0 < rightsholderDiscrepancyService.getCountByScenarioIdAndStatus(scenario.getId(),
             RightsholderDiscrepancyStatusEnum.APPROVED)) {
             Windows.showNotificationWindow(ForeignUi.getMessage("message.info.exclude_details.reconciled_scenario"));
         } else {

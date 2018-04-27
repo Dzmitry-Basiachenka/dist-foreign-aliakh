@@ -129,7 +129,7 @@ public interface IScenarioService {
      *
      * @param scenario {@link Scenario} instance
      */
-    void getOwnershipChanges(Scenario scenario);
+    void reconcileRightsholders(Scenario scenario);
 
     /**
      * Updates usages participating flag and amounts for specified {@link Scenario} using PRM service.

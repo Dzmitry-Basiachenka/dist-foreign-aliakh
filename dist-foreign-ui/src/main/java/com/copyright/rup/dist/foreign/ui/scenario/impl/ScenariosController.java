@@ -117,8 +117,8 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
         Scenario scenario = getWidget().getSelectedScenario();
         scenarioController.setScenario(scenario);
         if (!scenarioController.isScenarioEmpty()) {
-            scenarioService.getOwnershipChanges(scenario);
-            if (0 < rightsholderDiscrepancyService.getDiscrepanciesCountByScenarioIdAndStatus(scenario.getId(),
+            scenarioService.reconcileRightsholders(scenario);
+            if (0 < rightsholderDiscrepancyService.getCountByScenarioIdAndStatus(scenario.getId(),
                 RightsholderDiscrepancyStatusEnum.IN_PROGRESS)) {
                 reconcileRightsholdersController.setScenario(scenario);
                 Windows.showModalWindow(new RightsholderDiscrepanciesWindow(reconcileRightsholdersController, this));

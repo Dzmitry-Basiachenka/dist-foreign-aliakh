@@ -55,11 +55,11 @@ public class RightsholderDiscrepancyServiceTest {
     }
 
     @Test
-    public void testGetDiscrepanciesCountByScenarioIdAndStatus() {
+    public void testGetCountByScenarioIdAndStatus() {
         expect(rightsholderDiscrepancyRepository.findCountByScenarioIdAndStatus(SCENARIO_ID,
             RightsholderDiscrepancyStatusEnum.IN_PROGRESS)).andReturn(3).once();
         replay(rightsholderDiscrepancyRepository);
-        assertEquals(3, rightsholderDiscrepancyService.getDiscrepanciesCountByScenarioIdAndStatus(SCENARIO_ID,
+        assertEquals(3, rightsholderDiscrepancyService.getCountByScenarioIdAndStatus(SCENARIO_ID,
             RightsholderDiscrepancyStatusEnum.IN_PROGRESS), 0);
         verify(rightsholderDiscrepancyRepository);
     }
@@ -75,32 +75,32 @@ public class RightsholderDiscrepancyServiceTest {
     }
 
     @Test
-    public void testUpdateDiscrepanciesStatusByScenarioId() {
+    public void testApproveByScenarioId() {
         rightsholderDiscrepancyRepository.approveByScenarioId(SCENARIO_ID);
         expectLastCall().once();
         replay(rightsholderDiscrepancyRepository);
-        rightsholderDiscrepancyService.approveDiscrepanciesByScenarioId(SCENARIO_ID);
+        rightsholderDiscrepancyService.approveByScenarioId(SCENARIO_ID);
         verify(rightsholderDiscrepancyRepository);
     }
 
     @Test
-    public void testGetDiscrepanciesByScenarioId() {
+    public void testGetByScenarioIdAndStatus() {
         List<RightsholderDiscrepancy> discrepancies = Collections.singletonList(new RightsholderDiscrepancy());
         expect(rightsholderDiscrepancyRepository.findByScenarioIdAndStatus(SCENARIO_ID,
             RightsholderDiscrepancyStatusEnum.IN_PROGRESS, null, null)).andReturn(discrepancies).once();
         replay(rightsholderDiscrepancyRepository);
-        assertSame(discrepancies, rightsholderDiscrepancyService.getDiscrepanciesByScenarioIdAndStatus(SCENARIO_ID,
+        assertSame(discrepancies, rightsholderDiscrepancyService.getByScenarioIdAndStatus(SCENARIO_ID,
             RightsholderDiscrepancyStatusEnum.IN_PROGRESS, null, null));
         verify(rightsholderDiscrepancyRepository);
     }
 
     @Test
-    public void testDeleteDiscrepanciesByScenarioIdAndStatus() {
+    public void testDeleteByScenarioIdAndStatus() {
         rightsholderDiscrepancyRepository.deleteByScenarioIdAndStatus(SCENARIO_ID,
             RightsholderDiscrepancyStatusEnum.IN_PROGRESS);
         expectLastCall().once();
         replay(rightsholderDiscrepancyRepository);
-        rightsholderDiscrepancyService.deleteDiscrepanciesByScenarioIdAndStatus(SCENARIO_ID,
+        rightsholderDiscrepancyService.deleteByScenarioIdAndStatus(SCENARIO_ID,
             RightsholderDiscrepancyStatusEnum.IN_PROGRESS);
         verify(rightsholderDiscrepancyRepository);
     }

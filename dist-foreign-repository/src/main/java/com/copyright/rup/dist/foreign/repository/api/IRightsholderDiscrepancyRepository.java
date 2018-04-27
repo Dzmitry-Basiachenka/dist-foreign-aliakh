@@ -19,7 +19,7 @@ import java.util.List;
 public interface IRightsholderDiscrepancyRepository {
 
     /**
-     * Inserts all passed {@link RightsholderDiscrepancy}ies into database and binds them to scenario.
+     * Inserts given {@link RightsholderDiscrepancy}ies into database and binds them to scenario.
      *
      * @param rightsholderDiscrepancies the list of {@link RightsholderDiscrepancy}ies to insert
      * @param scenarioId                the scenario identifier to bind with {@link RightsholderDiscrepancy}ies
@@ -44,7 +44,7 @@ public interface IRightsholderDiscrepancyRepository {
     List<Long> findProhibitedAccountNumbers(String scenarioId);
 
     /**
-     * Finds the list of {@link RightsholderDiscrepancy}ies by passed scenario identifier.
+     * Finds the list of {@link RightsholderDiscrepancy}ies by passed scenario identifier and status.
      *
      * @param scenarioId the scenario identifier
      * @param status     instance of {@link RightsholderDiscrepancyStatusEnum}

@@ -134,7 +134,7 @@ public class ScenarioService implements IScenarioService {
         usageService.deleteFromScenario(scenarioId);
         scenarioAuditService.deleteActions(scenarioId);
         scenarioUsageFilterService.removeByScenarioId(scenarioId);
-        rightsholderDiscrepancyService.deleteDiscrepanciesByScenarioIdAndStatus(scenarioId,
+        rightsholderDiscrepancyService.deleteByScenarioIdAndStatus(scenarioId,
             RightsholderDiscrepancyStatusEnum.APPROVED);
         scenarioRepository.remove(scenarioId);
         LOGGER.info("Delete scenario. Finished. {}, User={}", ForeignLogUtils.scenario(scenario), userName);
@@ -218,14 +218,15 @@ public class ScenarioService implements IScenarioService {
 
     @Override
     @Transactional
-    @Profiled(tag = "service.ScenarioService.getOwnershipChanges")
-    public void getOwnershipChanges(Scenario scenario) {
-        LOGGER.info("Get ownership changes. Started. {}", ForeignLogUtils.scenario(Objects.requireNonNull(scenario)));
+    @Profiled(tag = "service.ScenarioService.reconcileRightsholders")
+    public void reconcileRightsholders(Scenario scenario) {
+        LOGGER.info("Reconcile rightsholders. Started. {}", ForeignLogUtils.scenario(Objects.requireNonNull(scenario)));
         //TODO {isuvorau} compare performance for selecting new object instead of 'Usage'
         Map<Long, List<Usage>> groupedByWrWrkInstUsages = usageService.getUsagesForReconcile(scenario.getId())
             .stream()
             .collect(Collectors.groupingBy(Usage::getWrWrkInst));
         Iterables.partition(groupedByWrWrkInstUsages.entrySet(), 1000).forEach(partition -> {
+            LOGGER.debug("Get ownership changes. Started. WrWrkIstsCount={}", CollectionUtils.size(partition));
             List<RightsholderDiscrepancy> discrepancies = new ArrayList<>();
             Map<Long, Long> wrWrkInstToRightsholderMap =
                 rmsGrantsService.getAccountNumbersByWrWrkInsts(
@@ -238,9 +239,12 @@ public class ScenarioService implements IScenarioService {
             if (CollectionUtils.isNotEmpty(discrepancies)) {
                 rightsholderDiscrepancyService.insertDiscrepancies(discrepancies, scenario.getId());
             }
+            LOGGER.debug("Get ownership changes. Finished. WrWrkIstsCount={}, RhDiscrepanciesCount={}",
+                CollectionUtils.size(partition), CollectionUtils.size(discrepancies));
         });
-        LOGGER.info("Get ownership changes. Finished. {}, RhDiscrepanciesCount={}", ForeignLogUtils.scenario(scenario),
-            rightsholderDiscrepancyService.getDiscrepanciesCountByScenarioIdAndStatus(scenario.getId(),
+        LOGGER.info("Reconcile rightsholders. Finished. {}, RhDiscrepanciesCount={}",
+            ForeignLogUtils.scenario(scenario),
+            rightsholderDiscrepancyService.getCountByScenarioIdAndStatus(scenario.getId(),
                 RightsholderDiscrepancyStatusEnum.IN_PROGRESS));
     }
 
@@ -254,7 +258,7 @@ public class ScenarioService implements IScenarioService {
     @Profiled(tag = "service.ScenarioService.approveOwnershipChanges")
     public void approveOwnershipChanges(Scenario scenario) {
         List<RightsholderDiscrepancy> discrepancies =
-            rightsholderDiscrepancyService.getDiscrepanciesByScenarioIdAndStatus(
+            rightsholderDiscrepancyService.getByScenarioIdAndStatus(
                 Objects.requireNonNull(scenario).getId(), RightsholderDiscrepancyStatusEnum.IN_PROGRESS, null, null);
         LOGGER.info("Approve Ownership Changes. Started. {}, RhDiscrepanciesCount={}",
             ForeignLogUtils.scenario(scenario), LogUtils.size(discrepancies));
@@ -276,7 +280,7 @@ public class ScenarioService implements IScenarioService {
         );
         usageService.updateRhPayeeAndAmounts(
             groupedByWrWrkInstUsages.values().stream().flatMap(Collection::stream).collect(Collectors.toList()));
-        rightsholderDiscrepancyService.approveDiscrepanciesByScenarioId(scenario.getId());
+        rightsholderDiscrepancyService.approveByScenarioId(scenario.getId());
         LOGGER.info("Approve Ownership Changes. Finished. {}, RhDiscrepanciesCount={}",
             ForeignLogUtils.scenario(scenario), LogUtils.size(discrepancies));
     }

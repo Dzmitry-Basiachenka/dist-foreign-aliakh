@@ -57,8 +57,8 @@ public class ReconcileRightsholdersController implements IReconcileRightsholders
     }
 
     @Override
-    public int getSize() {
-        return rightsholderDiscrepancyService.getDiscrepanciesCountByScenarioIdAndStatus(scenario.getId(),
+    public int getBeansCount() {
+        return rightsholderDiscrepancyService.getCountByScenarioIdAndStatus(scenario.getId(),
             RightsholderDiscrepancyStatusEnum.IN_PROGRESS);
     }
 
@@ -69,7 +69,7 @@ public class ReconcileRightsholdersController implements IReconcileRightsholders
             QuerySortOrder sortOrder = sortOrders.iterator().next();
             sort = new Sort(sortOrder.getSorted(), Direction.of(SortDirection.ASCENDING == sortOrder.getDirection()));
         }
-        return rightsholderDiscrepancyService.getDiscrepanciesByScenarioIdAndStatus(scenario.getId(),
+        return rightsholderDiscrepancyService.getByScenarioIdAndStatus(scenario.getId(),
             RightsholderDiscrepancyStatusEnum.IN_PROGRESS, new Pageable(startIndex, count), sort);
     }
 
@@ -79,8 +79,8 @@ public class ReconcileRightsholdersController implements IReconcileRightsholders
     }
 
     @Override
-    public void deleteInProgressDiscrepancies() {
-        rightsholderDiscrepancyService.deleteDiscrepanciesByScenarioIdAndStatus(scenario.getId(),
+    public void cancelReconciliation() {
+        rightsholderDiscrepancyService.deleteByScenarioIdAndStatus(scenario.getId(),
             RightsholderDiscrepancyStatusEnum.IN_PROGRESS);
     }
 }
