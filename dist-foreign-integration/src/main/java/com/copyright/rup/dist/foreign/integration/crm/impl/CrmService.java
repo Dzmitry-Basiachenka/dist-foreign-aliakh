@@ -14,7 +14,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Maps;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
@@ -33,6 +32,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
@@ -99,7 +99,9 @@ public class CrmService implements ICrmService {
             LOGGER.trace("Send rights distribution request. Request={}", crmRequest);
             result = parseResponse(
                 restTemplate.postForObject(crmRightsDistributionRequestsUrl, crmRequest, String.class),
-                buildRightsDistributionRequestMap(batchRequests));
+                batchRequests.stream().collect(Collectors.toMap(
+                    CrmRightsDistributionRequest::getOmOrderDetailNumber,
+                    CrmRightsDistributionRequest::toString)));
         }
         return result;
     }
@@ -134,12 +136,6 @@ public class CrmService implements ICrmService {
             LOGGER.warn("Send usages to CRM. Failed. Reason=Couldn't parse response. Response={}", response);
         }
         return crmResult;
-    }
-
-    private Map<String, String> buildRightsDistributionRequestMap(List<CrmRightsDistributionRequest> requests) {
-        Map<String, String> map = Maps.newHashMapWithExpectedSize(requests.size());
-        requests.forEach(request -> map.put(request.getOmOrderDetailNumber(), request.toString()));
-        return map;
     }
 
     private HttpHeaders buildRequestHeader() {
