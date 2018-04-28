@@ -3,6 +3,8 @@ package com.copyright.rup.dist.foreign.service.impl;
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.integration.rest.prm.IPrmRightsholderService;
+import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.CommonRightsholderService;
 import com.copyright.rup.dist.foreign.repository.api.IRightsholderRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
@@ -60,7 +62,12 @@ public class RightsholderService extends CommonRightsholderService implements IR
     }
 
     @Override
-    public List<Rightsholder> getFromUsages() {
-        return rightsholderRepository.findFromUsages();
+    public List<Rightsholder> getFromUsages(String searchValue, Pageable pageable, Sort sort) {
+        return rightsholderRepository.findFromUsages(searchValue, pageable, sort);
+    }
+
+    @Override
+    public int getCountFromUsages(String searchValue) {
+        return rightsholderRepository.findCountFromUsages(searchValue);
     }
 }

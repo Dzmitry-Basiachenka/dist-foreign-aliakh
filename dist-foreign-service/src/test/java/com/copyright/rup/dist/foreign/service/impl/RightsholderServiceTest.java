@@ -9,6 +9,7 @@ import static org.junit.Assert.assertEquals;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.integration.rest.prm.IPrmRightsholderService;
+import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.IRightsholderRepository;
 
 import org.junit.Before;
@@ -64,9 +65,19 @@ public class RightsholderServiceTest {
 
     @Test
     public void testGetFromUsages() {
-        expect(rightsholderRepository.findFromUsages()).andReturn(Collections.emptyList()).once();
+        Pageable pageable = new Pageable(0, 10);
+        expect(rightsholderRepository.findFromUsages("10001", pageable, null))
+            .andReturn(Collections.emptyList()).once();
         replay(rightsholderRepository);
-        assertEquals(Collections.emptyList(), rightsholderService.getFromUsages());
+        assertEquals(Collections.emptyList(), rightsholderService.getFromUsages("10001", pageable, null));
+        verify(rightsholderRepository);
+    }
+
+    @Test
+    public void testGetCountFromUsages() {
+        expect(rightsholderRepository.findCountFromUsages("Rightsholder")).andReturn(5).once();
+        replay(rightsholderRepository);
+        assertEquals(5, rightsholderService.getCountFromUsages("Rightsholder"));
         verify(rightsholderRepository);
     }
 

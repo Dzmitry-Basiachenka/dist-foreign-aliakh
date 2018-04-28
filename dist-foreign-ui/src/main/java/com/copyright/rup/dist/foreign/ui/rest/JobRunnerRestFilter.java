@@ -62,27 +62,30 @@ public class JobRunnerRestFilter implements Filter {
     @Override
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
         throws IOException, ServletException {
-        HttpServletRequest request = (HttpServletRequest) req;
-        HttpServletResponse response = (HttpServletResponse) resp;
-        switch (StringUtils.lowerCase(request.getServletPath() + StringUtils.defaultString(request.getPathInfo()))) {
-            case "/job/rightsholder":
-                handle(() -> rightsService.updateRightsholders(), response);
-                break;
-            case "/job/ra":
-                handle(() -> rightsService.sendForRightsAssignment(), response);
-                break;
-            case "/job/crm":
-                handle(() -> usageService.sendToCrm(), response);
-                break;
-            case "/job/pi":
-                handle(() -> worksMatchingJob.executeInternal(null), response);
-                break;
-            case "/job/status":
-                handle(null, response);
-                break;
-            default:
-                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                break;
+        if (req instanceof HttpServletRequest && resp instanceof HttpServletResponse) {
+            HttpServletRequest request = (HttpServletRequest) req;
+            HttpServletResponse response = (HttpServletResponse) resp;
+            switch (StringUtils.lowerCase(
+                request.getServletPath() + StringUtils.defaultString(request.getPathInfo()))) {
+                case "/job/rightsholder":
+                    handle(() -> rightsService.updateRightsholders(), response);
+                    break;
+                case "/job/ra":
+                    handle(() -> rightsService.sendForRightsAssignment(), response);
+                    break;
+                case "/job/crm":
+                    handle(() -> usageService.sendToCrm(), response);
+                    break;
+                case "/job/pi":
+                    handle(() -> worksMatchingJob.executeInternal(null), response);
+                    break;
+                case "/job/status":
+                    handle(null, response);
+                    break;
+                default:
+                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                    break;
+            }
         }
     }
 

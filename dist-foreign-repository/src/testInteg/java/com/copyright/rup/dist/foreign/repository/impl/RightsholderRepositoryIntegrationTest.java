@@ -126,12 +126,25 @@ public class RightsholderRepositoryIntegrationTest {
 
     @Test
     public void testFindFromUsages() {
-        List<Rightsholder> rightsholders = rightsholderRepository.findFromUsages();
+        List<Rightsholder> rightsholders = rightsholderRepository.findFromUsages(null, null, null);
         assertEquals(4, rightsholders.size());
         assertTrue(rightsholders.stream()
             .map(Rightsholder::getAccountNumber)
             .collect(Collectors.toList())
             .containsAll(Sets.newHashSet(1000159997L, 1000009997L, 1000002859L, 1000005413L)));
+        rightsholders = rightsholderRepository.findFromUsages("9997", null, null);
+        assertEquals(2, rightsholders.size());
+        assertTrue(rightsholders.stream()
+            .map(Rightsholder::getAccountNumber)
+            .collect(Collectors.toList())
+            .containsAll(Sets.newHashSet(1000159997L, 1000009997L)));
+    }
+
+    @Test
+    public void testFindCountFromUsages() {
+        assertEquals(4, rightsholderRepository.findCountFromUsages(null));
+        assertEquals(2, rightsholderRepository.findCountFromUsages("9997"));
+        assertEquals(1, rightsholderRepository.findCountFromUsages("IEEE"));
     }
 
     private Rightsholder buildRightsholder() {

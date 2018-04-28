@@ -1,6 +1,9 @@
 package com.copyright.rup.dist.foreign.ui.audit.impl;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
@@ -9,6 +12,10 @@ import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterController;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterWidget;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
+import com.vaadin.data.provider.QuerySortOrder;
+import com.vaadin.shared.data.sort.SortDirection;
+
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -37,8 +44,19 @@ public class AuditFilterController extends CommonController<IAuditFilterWidget> 
     private IRightsholderService rightsholderService;
 
     @Override
-    public List<Rightsholder> getRightsholders() {
-        return rightsholderService.getFromUsages();
+    public List<Rightsholder> loadBeans(String searchValue, int startIndex, int count,
+                                        List<QuerySortOrder> sortOrders) {
+        Sort sort = null;
+        if (CollectionUtils.isNotEmpty(sortOrders)) {
+            QuerySortOrder sortOrder = sortOrders.get(0);
+            sort = new Sort(sortOrder.getSorted(), Direction.of(SortDirection.ASCENDING == sortOrder.getDirection()));
+        }
+        return rightsholderService.getFromUsages(searchValue, new Pageable(startIndex, count), sort);
+    }
+
+    @Override
+    public int getBeansCount(String searchValue) {
+        return rightsholderService.getCountFromUsages(searchValue);
     }
 
     @Override
