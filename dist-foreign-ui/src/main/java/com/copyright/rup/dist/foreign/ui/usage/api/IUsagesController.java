@@ -189,6 +189,11 @@ public interface IUsagesController extends IController<IUsagesWidget> {
     String getSelectedProductFamily();
 
     /**
+     * @return rightsholders account numbers that are not presented in database based on applied usage filter.
+     */
+    List<Long> getInvalidRightsholders();
+
+    /**
      * @return {@code true} if product family filter is not empty and selected status filter equals to
      * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE}, {@code false} - otherwise.
      */

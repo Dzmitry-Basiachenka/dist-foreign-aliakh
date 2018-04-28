@@ -210,6 +210,11 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
+    public List<Long> getInvalidRightsholders() {
+        return usageService.getInvalidRightsholdersByFilter(filterController.getWidget().getAppliedFilter());
+    }
+
+    @Override
     public boolean isProductFamilyAndStatusFiltersApplied() {
         UsageFilter filter = filterController.getWidget().getAppliedFilter();
         return UsageStatusEnum.ELIGIBLE == filter.getUsageStatus()

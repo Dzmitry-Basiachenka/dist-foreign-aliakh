@@ -180,7 +180,7 @@ public class ScenarioControllerTest {
         Whitebox.setInternalState(controller, rightsholderDiscrepancyService);
         expect(rightsholderDiscrepancyService.getCountByScenarioIdAndStatus(SCENARIO_ID,
             RightsholderDiscrepancyStatusEnum.APPROVED)).andReturn(1).once();
-        Windows.showNotificationWindow("Details can not be excluded after reconciliation");
+        Windows.showNotificationWindow("Details cannot be excluded after reconciliation");
         expectLastCall().once();
         replay(rightsholderDiscrepancyService, Windows.class);
         controller.onExcludeDetailsClicked();

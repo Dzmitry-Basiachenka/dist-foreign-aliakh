@@ -154,6 +154,11 @@ public class UsageService implements IUsageService {
     }
 
     @Override
+    public List<Long> getInvalidRightsholdersByFilter(UsageFilter filter) {
+        return usageRepository.findInvalidRightsholdersByFilter(filter);
+    }
+
+    @Override
     public void recalculateUsagesForRefresh(UsageFilter filter, Scenario scenario) {
         StopWatch stopWatch = new Slf4JStopWatch();
         Map<Long, Usage> rhToUsageMap = getRightsholdersInformation(scenario.getId());

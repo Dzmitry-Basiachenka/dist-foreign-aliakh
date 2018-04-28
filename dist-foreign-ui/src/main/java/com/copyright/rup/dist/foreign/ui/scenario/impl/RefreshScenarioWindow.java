@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
@@ -23,6 +24,10 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+
+import org.apache.commons.collections4.CollectionUtils;
+
+import java.util.List;
 
 /**
  * Widget displays information about usages that will be added to scenario after refreshing.
@@ -75,9 +80,16 @@ public class RefreshScenarioWindow extends Window {
     private void initButtonsLayout() {
         buttonsLayout = new HorizontalLayout();
         Button continueButton = Buttons.createOkButton();
-        continueButton.addClickListener(e -> {
-            controller.refreshScenario();
-            close();
+        continueButton.addClickListener(event -> {
+            List<Long> accountNumbers = controller.getInvalidRightsholders();
+            if (CollectionUtils.isNotEmpty(accountNumbers)) {
+                Windows.showNotificationWindow(
+                    ForeignUi.getMessage("message.error.add_to_scenario.invalid_rightsholders", "refreshed",
+                        accountNumbers));
+            } else {
+                controller.refreshScenario();
+                close();
+            }
         });
         buttonsLayout.addComponents(continueButton, Buttons.createCancelButton(this));
         buttonsLayout.setSpacing(true);
@@ -110,7 +122,7 @@ public class RefreshScenarioWindow extends Window {
         addColumn(UsageDto::getRhName, "table.column.rh_account_name", "rhName", true, 300);
         addColumn(UsageDto::getPublisher, "table.column.publisher", "publisher", true, 135);
         addColumn(usage ->
-            CommonDateUtils.format(usage.getPublicationDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
+                CommonDateUtils.format(usage.getPublicationDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),
             "table.column.publication_date", "publicationDate", true, 80);
         addColumn(UsageDto::getNumberOfCopies, "table.column.number_of_copies", "numberOfCopies");
         addColumn(usage -> CurrencyUtils.format(usage.getReportedValue(), null), "table.column.reported_value",

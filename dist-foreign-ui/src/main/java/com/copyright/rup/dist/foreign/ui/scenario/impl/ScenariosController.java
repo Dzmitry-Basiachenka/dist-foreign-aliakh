@@ -222,6 +222,12 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
     }
 
     @Override
+    public List<Long> getInvalidRightsholders() {
+        return usageService.getInvalidRightsholdersByFilter(
+            new UsageFilter(scenarioUsageFilterService.getByScenarioId(getWidget().getSelectedScenario().getId())));
+    }
+
+    @Override
     protected IScenariosWidget instantiateWidget() {
         return new ScenariosWidget(scenarioHistoryController);
     }

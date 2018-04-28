@@ -557,6 +557,16 @@
         and u.status_ind = #{status}
     </select>
 
+    <select id="findInvalidRightsholdersByFilter" parameterType="map" resultType="long">
+        select distinct
+            u.rh_account_number
+        from ${schema}.df_usage u
+        join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+        left join ${schema}.df_rightsholder r on u.rh_account_number = r.rh_account_number
+        <include refid="usageFilter"/>
+            and r.df_rightsholder_uid is null
+    </select>
+
     <update id="addToScenario" parameterType="Usage">
         update
             ${schema}.df_usage

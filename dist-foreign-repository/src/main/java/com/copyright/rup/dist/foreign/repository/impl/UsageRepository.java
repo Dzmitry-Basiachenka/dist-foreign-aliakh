@@ -160,6 +160,13 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
+    public List<Long> findInvalidRightsholdersByFilter(UsageFilter filter) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(1);
+        parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
+        return selectList("IUsageMapper.findInvalidRightsholdersByFilter", parameters);
+    }
+
+    @Override
     public void addToScenario(List<Usage> usages) {
         Objects.requireNonNull(usages).forEach(usage -> update("IUsageMapper.addToScenario", usage));
     }

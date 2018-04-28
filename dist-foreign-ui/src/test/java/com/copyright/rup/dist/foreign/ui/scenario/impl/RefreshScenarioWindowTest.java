@@ -1,11 +1,22 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
+import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.verify;
+
+import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
@@ -13,8 +24,13 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +43,8 @@ import java.util.stream.Collectors;
  *
  * @author Ihar Suvorau
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({Windows.class})
 public class RefreshScenarioWindowTest {
 
     @Test
@@ -39,6 +57,45 @@ public class RefreshScenarioWindowTest {
         assertEquals(3, content.getComponentCount());
         verifyGrid(content.getComponent(1));
         verifyButtonsLayout(content.getComponent(2));
+    }
+
+    @Test
+    public void testOnOkButtonClick() {
+        IScenariosController controller = createMock(IScenariosController.class);
+        RefreshScenarioWindow window = new RefreshScenarioWindow(value -> null, value -> 0, controller);
+        VerticalLayout layout = (VerticalLayout) window.getContent();
+        HorizontalLayout buttonsLayout = (HorizontalLayout) layout.getComponent(2);
+        Button okButton = (Button) buttonsLayout.getComponent(0);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
+        controller.refreshScenario();
+        expectLastCall().once();
+        replay(controller, clickEvent);
+        Collection<?> listeners = okButton.getListeners(ClickEvent.class);
+        assertEquals(1, listeners.size());
+        ClickListener clickListener = (ClickListener) listeners.iterator().next();
+        clickListener.buttonClick(clickEvent);
+        verify(controller, clickEvent);
+    }
+
+    @Test
+    public void testOnOkButtonClickInvalidRightsholders() {
+        IScenariosController controller = createMock(IScenariosController.class);
+        RefreshScenarioWindow window = new RefreshScenarioWindow(value -> null, value -> 0, controller);
+        VerticalLayout layout = (VerticalLayout) window.getContent();
+        HorizontalLayout buttonsLayout = (HorizontalLayout) layout.getComponent(2);
+        Button okButton = (Button) buttonsLayout.getComponent(0);
+        mockStatic(Windows.class);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        expect(controller.getInvalidRightsholders()).andReturn(Collections.singletonList(100000000L)).once();
+        Windows.showNotificationWindow("Scenario cannot be refreshed. The following rightsholder(s) are absent in " +
+            "PRM: <i><b>[100000000]</b></i>");
+        replay(controller, clickEvent, Windows.class);
+        Collection<?> listeners = okButton.getListeners(ClickEvent.class);
+        assertEquals(1, listeners.size());
+        ClickListener clickListener = (ClickListener) listeners.iterator().next();
+        clickListener.buttonClick(clickEvent);
+        verify(controller, clickEvent, Windows.class);
     }
 
     private void verifyGrid(Component component) {

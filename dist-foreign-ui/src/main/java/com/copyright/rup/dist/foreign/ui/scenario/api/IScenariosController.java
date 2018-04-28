@@ -32,6 +32,11 @@ public interface IScenariosController extends IController<IScenariosWidget> {
     Scenario getScenarioWithAmountsAndLastAction(Scenario scenario);
 
     /**
+     * @return rightsholders account numbers that are not presented in database based on applied usage filter.
+     */
+    List<Long> getInvalidRightsholders();
+
+    /**
      * Handles click on 'Delete' button.
      */
     void onDeleteButtonClicked();
