@@ -5,7 +5,7 @@ dependencies {
     compile project(':dist-foreign-domain')
 
     compile("com.copyright.rup.dist.common:dist-common-repository:${distCommonVersion}")
-    compile("net.sf.supercsv:super-csv:${superCsvVersion}")
+    compile("com.univocity:univocity-parsers:${univocityCsvParser}")
     compile("org.apache.commons:commons-collections4:${commonsCollectionsVersion}")
     compile("org.mybatis:mybatis-typehandlers-jsr310:${mybatisTypehandlersVersion}")
     compile("org.perf4j:perf4j:${perf4jVersion}")
