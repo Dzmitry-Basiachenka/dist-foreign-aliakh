@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -88,7 +89,10 @@ public class UsageBatchService implements IUsageBatchService {
         int count = usageService.insertUsages(usageBatch, usages);
         stopWatch.lap("usageBatch.load_3_insertUsages");
         executorService.execute(() -> updateRightsholders(
-            usages.stream().map(usage -> usage.getRightsholder().getAccountNumber()).collect(Collectors.toSet())));
+            usages.stream()
+                .map(usage -> usage.getRightsholder().getAccountNumber())
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet())));
         stopWatch.stop("usageBatch.load_4_updateRhs");
         return count;
     }
