@@ -2,7 +2,7 @@ package com.copyright.rup.dist.foreign.ui.rest;
 
 import com.copyright.rup.dist.foreign.service.api.IRightsService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.service.impl.matching.WorksMatchingJob;
+import com.copyright.rup.dist.foreign.service.impl.quartz.WorksMatchingJob;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,7 +75,7 @@ public class JobRunnerRestFilter implements Filter {
                 handle(() -> usageService.sendToCrm(), response);
                 break;
             case "/job/pi":
-                handle(() -> worksMatchingJob.findWorksAndUpdateStatuses(), response);
+                handle(() -> worksMatchingJob.executeInternal(null), response);
                 break;
             case "/job/status":
                 handle(null, response);

@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.service.impl.matching;
+package com.copyright.rup.dist.foreign.service.impl.quartz;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.common.logging.RupLogUtils;
@@ -9,16 +9,18 @@ import com.copyright.rup.dist.foreign.service.api.IWorkMatchingService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.perf4j.StopWatch;
 import org.perf4j.slf4j.Slf4JStopWatch;
+import org.quartz.DisallowConcurrentExecution;
+import org.quartz.JobExecutionContext;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 /**
- * This class is responsible for running scheduled processes for getting works and setting statuses for {@link Usage}s.
+ * Quartz job to get works and setting statuses for {@link Usage}s.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -26,8 +28,9 @@ import java.util.List;
  *
  * @author Aliaksandr Radkevich
  */
+@DisallowConcurrentExecution
 @Component
-public class WorksMatchingJob {
+public class WorksMatchingJob extends QuartzJobBean {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
@@ -41,8 +44,8 @@ public class WorksMatchingJob {
     /**
      * Finds works and updates WrWrkInsts and statuses of {@link Usage}s.
      */
-    @Scheduled(cron = "$RUP{dist.foreign.service.schedule.works_match}")
-    public void findWorksAndUpdateStatuses() {
+    @Override
+    public void executeInternal(JobExecutionContext context) {
         int offset = 0;
         StopWatch stopWatch = new Slf4JStopWatch();
         int standardNumbersCount = usageService.getStandardNumbersCount();

@@ -693,4 +693,455 @@ databaseChangeLog {
                     columnName: 'detail_id', columnDataType: 'NUMERIC(15,0)')
         }
     }
+
+    changeSet(id: '2018-05-03-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("Create tables for quartz job data storage")
+
+        createTable(tableName: 'df_qrtz_job_details', schemaName: dbAppsSchema, tablespace: dbDataTableSpace,
+                remarks: 'Service table for quartz job data storage') {
+            column(name: 'sched_name', type: 'VARCHAR(120)', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'job_name', type: 'VARCHAR(200)', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'job_group', type: 'VARCHAR(200)', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'description', type: 'VARCHAR(250)', remarks: '')
+            column(name: 'job_class_name', type: 'VARCHAR(250)', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'is_durable', type: 'BOOLEAN', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'is_nonconcurrent', type: 'BOOLEAN', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'is_update_data', type: 'BOOLEAN', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'requests_recovery', type: 'BOOLEAN', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'job_data', type: 'BLOB', remarks: '') {
+                constraints(nullable: false)
+            }
+        }
+
+        addPrimaryKey(constraintName: 'pk_df_qrtz_job_details', schemaName: dbAppsSchema, tableName: 'df_qrtz_job_details',
+                tablespace: dbIndexTableSpace, columnNames: 'sched_name, job_name, job_group')
+
+        createTable(tableName: 'df_qrtz_triggers', schemaName: dbAppsSchema, tablespace: dbDataTableSpace,
+                remarks: 'Service table for quartz job data storage') {
+            column(name: 'sched_name', type: 'VARCHAR(120)', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'trigger_name', type: 'VARCHAR(200)', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'trigger_group', type: 'VARCHAR(200)', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'job_name', type: 'VARCHAR(200)', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'job_group', type: 'VARCHAR(200)', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'description', type: 'VARCHAR(250)', remarks: '')
+            column(name: 'next_fire_time', type: 'BIGINT', remarks: '')
+            column(name: 'prev_fire_time', type: 'BIGINT', remarks: '')
+            column(name: 'priority', type: 'INTEGER', remarks: '')
+            column(name: 'trigger_state', type: 'VARCHAR(16)', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'trigger_type', type: 'VARCHAR(8)', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'start_time', type: 'BIGINT', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'end_time', type: 'BIGINT', remarks: '')
+            column(name: 'calendar_name', type: 'VARCHAR(200)', remarks: '')
+            column(name: 'misfire_instr', type: 'SMALLINT', remarks: '')
+            column(name: 'job_data', type: 'BLOB', remarks: '') {
+                constraints(nullable: false)
+            }
+        }
+
+        addPrimaryKey(constraintName: 'pk_df_qrtz_triggers', schemaName: dbAppsSchema, tableName: 'df_qrtz_triggers',
+                tablespace: dbIndexTableSpace, columnNames: 'sched_name,trigger_name,trigger_group')
+        addForeignKeyConstraint(constraintName: 'fk_df_qrtz_triggers_2_df_qrtz_job_details',
+                baseTableSchemaName: dbAppsSchema, baseTableName: 'df_qrtz_triggers',
+                baseColumnNames: 'sched_name,job_name,job_group', referencedTableSchemaName: dbAppsSchema,
+                referencedTableName: 'df_qrtz_job_details', referencedColumnNames: 'sched_name,job_name,job_group')
+
+        createTable(tableName: 'df_qrtz_simple_triggers', schemaName: dbAppsSchema, tablespace: dbDataTableSpace,
+                remarks: 'Service table for quartz job data storage') {
+            column(name: 'sched_name', type: 'VARCHAR(120)', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'trigger_name', type: 'VARCHAR(200)', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'trigger_group', type: 'VARCHAR(200)', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'repeat_count', type: 'BIGINT', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'repeat_interval', type: 'BIGINT', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'times_triggered', type: 'BIGINT', remarks: '') {
+                constraints(nullable: false)
+            }
+        }
+
+        addPrimaryKey(constraintName: 'pk_df_qrtz_simple_triggers', schemaName: dbAppsSchema,
+                tableName: 'df_qrtz_simple_triggers', tablespace: dbIndexTableSpace,
+                columnNames: 'sched_name,trigger_name,trigger_group')
+        addForeignKeyConstraint(constraintName: 'fk_df_qrtz_simple_triggers_2_df_qrtz_triggers',
+                baseTableSchemaName: dbAppsSchema, baseTableName: 'df_qrtz_simple_triggers',
+                baseColumnNames: 'sched_name,trigger_name,trigger_group',
+                referencedTableSchemaName: dbAppsSchema,
+                referencedTableName: 'df_qrtz_triggers', referencedColumnNames: 'sched_name,trigger_name,trigger_group')
+
+        createTable(tableName: 'df_qrtz_cron_triggers', schemaName: dbAppsSchema, tablespace: dbDataTableSpace,
+                remarks: 'Service table for quartz job data storage') {
+            column(name: 'sched_name', type: 'VARCHAR(120)', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'trigger_name', type: 'VARCHAR(200)', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'trigger_group', type: 'VARCHAR(200)', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'cron_expression', type: 'VARCHAR(120)', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'time_zone_id', type: 'VARCHAR(80)', remarks: '') {
+                constraints(nullable: false)
+            }
+        }
+
+        addPrimaryKey(constraintName: 'pk_df_qrtz_cron_triggers', schemaName: dbAppsSchema,
+                tableName: 'df_qrtz_cron_triggers', tablespace: dbIndexTableSpace,
+                columnNames: 'sched_name,trigger_name,trigger_group')
+        addForeignKeyConstraint(constraintName: 'fk_df_qrtz_cron_triggers_2_df_qrtz_triggers',
+                baseTableSchemaName: dbAppsSchema, baseTableName: 'df_qrtz_cron_triggers',
+                baseColumnNames: 'sched_name,trigger_name,trigger_group',
+                referencedTableSchemaName: dbAppsSchema, referencedTableName: 'df_qrtz_triggers',
+                referencedColumnNames: 'sched_name,trigger_name,trigger_group')
+
+        createTable(tableName: 'df_qrtz_simprop_triggers', schemaName: dbAppsSchema, tablespace: dbDataTableSpace,
+                remarks: 'Service table for quartz job data storage') {
+            column(name: 'sched_name', type: 'VARCHAR(120)', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'trigger_name', type: 'VARCHAR(200)', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'trigger_group', type: 'VARCHAR(200)', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'str_prop_1', type: 'VARCHAR(512)', remarks: '')
+            column(name: 'str_prop_2', type: 'VARCHAR(512)', remarks: '')
+            column(name: 'str_prop_3', type: 'VARCHAR(512)', remarks: '')
+            column(name: 'int_prop_1', type: 'INT', remarks: '')
+            column(name: 'int_prop_2', type: 'INT', remarks: '')
+            column(name: 'long_prop_1', type: 'BIGINT', remarks: '')
+            column(name: 'long_prop_2', type: 'BIGINT', remarks: '')
+            column(name: 'dec_prop_1', type: 'NUMERIC(13,4)', remarks: '')
+            column(name: 'dec_prop_2', type: 'NUMERIC(13,4)', remarks: '')
+            column(name: 'bool_prop_1', type: 'BOOLEAN', remarks: '')
+            column(name: 'bool_prop_2', type: 'BOOLEAN', remarks: '')
+        }
+
+        addPrimaryKey(constraintName: 'pk_df_qrtz_simprop_triggers', schemaName: dbAppsSchema,
+                tableName: 'df_qrtz_simprop_triggers', tablespace: dbIndexTableSpace,
+                columnNames: 'sched_name,trigger_name,trigger_group')
+        addForeignKeyConstraint(constraintName: 'fk_df_qrtz_simprop_triggers_2_df_qrtz_triggers',
+                baseTableSchemaName: dbAppsSchema, baseTableName: 'df_qrtz_simprop_triggers',
+                baseColumnNames: 'sched_name,trigger_name,trigger_group',
+                referencedTableSchemaName: dbAppsSchema, referencedTableName: 'df_qrtz_triggers',
+                referencedColumnNames: 'sched_name,trigger_name,trigger_group')
+
+        createTable(tableName: 'df_qrtz_blob_triggers', schemaName: dbAppsSchema, tablespace: dbDataTableSpace,
+                remarks: 'Service table for quartz job data storage') {
+            column(name: 'sched_name', type: 'VARCHAR(120)', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'trigger_name', type: 'VARCHAR(200)', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'trigger_group', type: 'VARCHAR(200)', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'blob_data', type: 'BLOB', remarks: '')
+        }
+
+        addPrimaryKey(constraintName: 'pk_df_qrtz_blob_triggers', schemaName: dbAppsSchema,
+                tableName: 'df_qrtz_blob_triggers', tablespace: dbIndexTableSpace,
+                columnNames: 'sched_name,trigger_name,trigger_group')
+        addForeignKeyConstraint(constraintName: 'fk_df_qrtz_blob_triggers_2_df_qrtz_triggers',
+                baseTableSchemaName: dbAppsSchema, baseTableName: 'df_qrtz_blob_triggers',
+                baseColumnNames: 'sched_name,trigger_name,trigger_group',
+                referencedTableSchemaName: dbAppsSchema, referencedTableName: 'df_qrtz_triggers',
+                referencedColumnNames: 'sched_name,trigger_name,trigger_group')
+
+        createTable(tableName: 'df_qrtz_calendars', schemaName: dbAppsSchema, tablespace: dbDataTableSpace,
+                remarks: 'Service table for quartz job data storage') {
+            column(name: 'sched_name', type: 'VARCHAR(120)', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'calendar_name', type: 'VARCHAR(200)', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'calendar', type: 'BLOB', remarks: '') {
+                constraints(nullable: false)
+            }
+        }
+
+        addPrimaryKey(constraintName: 'pk_df_qrtz_calendars', schemaName: dbAppsSchema, tableName: 'df_qrtz_calendars',
+                tablespace: dbIndexTableSpace, columnNames: 'sched_name,calendar_name')
+
+        createTable(tableName: 'df_qrtz_paused_trigger_grps', schemaName: dbAppsSchema, tablespace: dbDataTableSpace,
+                remarks: 'Service table for quartz job data storage') {
+            column(name: 'sched_name', type: 'VARCHAR(120)', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'trigger_group', type: 'VARCHAR(200)', remarks: '') {
+                constraints(nullable: false)
+            }
+        }
+
+        addPrimaryKey(constraintName: 'pk_df_qrtz_paused_trigger_grps', schemaName: dbAppsSchema,
+                tableName: 'df_qrtz_paused_trigger_grps', tablespace: dbIndexTableSpace,
+                columnNames: 'sched_name,trigger_group')
+
+        createTable(tableName: 'df_qrtz_fired_triggers', schemaName: dbAppsSchema, tablespace: dbDataTableSpace,
+                remarks: 'Service table for quartz job data storage') {
+            column(name: 'sched_name', type: 'VARCHAR(120)', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'entry_id', type: 'VARCHAR(95)', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'trigger_name', type: 'VARCHAR(200)', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'trigger_group', type: 'VARCHAR(200)', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'instance_name', type: 'VARCHAR(200)', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'fired_time', type: 'BIGINT', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'sched_time', type: 'BIGINT', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'priority', type: 'INTEGER', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'state', type: 'VARCHAR(16)', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'job_name', type: 'VARCHAR(200)', remarks: '')
+            column(name: 'job_group', type: 'VARCHAR(200)', remarks: '')
+            column(name: 'is_nonconcurrent ', type: 'BOOLEAN', remarks: '')
+            column(name: 'requests_recovery ', type: 'BOOLEAN', remarks: '')
+        }
+
+        addPrimaryKey(constraintName: 'pk_df_qrtz_fired_triggers', schemaName: dbAppsSchema,
+                tableName: 'df_qrtz_fired_triggers', tablespace: dbIndexTableSpace,
+                columnNames: 'sched_name,entry_id')
+
+        createTable(tableName: 'df_qrtz_scheduler_state', schemaName: dbAppsSchema, tablespace: dbDataTableSpace,
+                remarks: 'Service table for quartz job data storage') {
+            column(name: 'sched_name', type: 'VARCHAR(120)', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'instance_name', type: 'VARCHAR(200)', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'last_checkin_time', type: 'BIGINT', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'checkin_interval', type: 'BIGINT', remarks: '') {
+                constraints(nullable: false)
+            }
+        }
+
+        addPrimaryKey(constraintName: 'pk_df_qrtz_scheduler_state', schemaName: dbAppsSchema,
+                tableName: 'df_qrtz_scheduler_state', tablespace: dbIndexTableSpace,
+                columnNames: 'sched_name,instance_name')
+
+        createTable(tableName: 'df_qrtz_locks', schemaName: dbAppsSchema, tablespace: dbDataTableSpace,
+                remarks: 'Service table for quartz job data storage') {
+            column(name: 'sched_name', type: 'VARCHAR(120)', remarks: '') {
+                constraints(nullable: false)
+            }
+            column(name: 'lock_name', type: 'VARCHAR(40)', remarks: '') {
+                constraints(nullable: false)
+            }
+        }
+
+        addPrimaryKey(constraintName: 'pk_df_qrtz_locks', schemaName: dbAppsSchema, tableName: 'df_qrtz_locks',
+                tablespace: dbIndexTableSpace, columnNames: 'sched_name,lock_name')
+
+        createIndex(schemaName: dbAppsSchema, tablespace: dbIndexTablespace, tableName: 'df_qrtz_job_details',
+                indexName: 'idx_qrtz_j_req_recovery', unique: false) {
+            column(name: 'sched_name')
+            column(name: 'requests_recovery')
+        }
+        createIndex(schemaName: dbAppsSchema, tablespace: dbIndexTablespace, tableName: 'df_qrtz_job_details',
+                indexName: 'idx_qrtz_j_grp', unique: false) {
+            column(name: 'sched_name')
+            column(name: 'job_group')
+        }
+        createIndex(schemaName: dbAppsSchema, tablespace: dbIndexTablespace, tableName: 'df_qrtz_triggers',
+                indexName: 'idx_qrtz_t_j', unique: false) {
+            column(name: 'sched_name')
+            column(name: 'job_name')
+            column(name: 'job_group')
+        }
+        createIndex(schemaName: dbAppsSchema, tablespace: dbIndexTablespace, tableName: 'df_qrtz_triggers',
+                indexName: 'idx_qrtz_t_jg', unique: false) {
+            column(name: 'sched_name')
+            column(name: 'job_group')
+        }
+        createIndex(schemaName: dbAppsSchema, tablespace: dbIndexTablespace, tableName: 'df_qrtz_triggers',
+                indexName: 'idx_qrtz_t_c', unique: false) {
+            column(name: 'sched_name')
+            column(name: 'calendar_name')
+        }
+        createIndex(schemaName: dbAppsSchema, tablespace: dbIndexTablespace, tableName: 'df_qrtz_triggers',
+                indexName: 'idx_qrtz_t_g', unique: false) {
+            column(name: 'sched_name')
+            column(name: 'trigger_group')
+        }
+        createIndex(schemaName: dbAppsSchema, tablespace: dbIndexTablespace, tableName: 'df_qrtz_triggers',
+                indexName: 'idx_qrtz_t_state', unique: false) {
+            column(name: 'sched_name')
+            column(name: 'trigger_state')
+        }
+        createIndex(schemaName: dbAppsSchema, tablespace: dbIndexTablespace, tableName: 'df_qrtz_triggers',
+                indexName: 'idx_qrtz_t_n_state', unique: false) {
+            column(name: 'sched_name')
+            column(name: 'trigger_name')
+            column(name: 'trigger_group')
+            column(name: 'trigger_state')
+        }
+        createIndex(schemaName: dbAppsSchema, tablespace: dbIndexTablespace, tableName: 'df_qrtz_triggers',
+                indexName: 'idx_qrtz_t_n_g_state', unique: false) {
+            column(name: 'sched_name')
+            column(name: 'trigger_group')
+            column(name: 'trigger_state')
+        }
+        createIndex(schemaName: dbAppsSchema, tablespace: dbIndexTablespace, tableName: 'df_qrtz_triggers',
+                indexName: 'idx_qrtz_t_next_fire_time', unique: false) {
+            column(name: 'sched_name')
+            column(name: 'next_fire_time')
+        }
+        createIndex(schemaName: dbAppsSchema, tablespace: dbIndexTablespace, tableName: 'df_qrtz_triggers',
+                indexName: 'idx_qrtz_t_nft', unique: false) {
+            column(name: 'sched_name')
+            column(name: 'trigger_state')
+            column(name: 'next_fire_time')
+        }
+        createIndex(schemaName: dbAppsSchema, tablespace: dbIndexTablespace, tableName: 'df_qrtz_triggers',
+                indexName: 'idx_qrtz_t_nft_misfire', unique: false) {
+            column(name: 'sched_name')
+            column(name: 'misfire_instr')
+            column(name: 'next_fire_time')
+        }
+        createIndex(schemaName: dbAppsSchema, tablespace: dbIndexTablespace, tableName: 'df_qrtz_triggers',
+                indexName: 'idx_qrtz_t_nft_st_misfire', unique: false) {
+            column(name: 'sched_name')
+            column(name: 'misfire_instr')
+            column(name: 'next_fire_time')
+            column(name: 'trigger_state')
+        }
+        createIndex(schemaName: dbAppsSchema, tablespace: dbIndexTablespace, tableName: 'df_qrtz_triggers',
+                indexName: 'idx_qrtz_t_nft_st_misfire_grp', unique: false) {
+            column(name: 'sched_name')
+            column(name: 'misfire_instr')
+            column(name: 'next_fire_time')
+            column(name: 'trigger_state')
+            column(name: 'trigger_group')
+        }
+        createIndex(schemaName: dbAppsSchema, tablespace: dbIndexTablespace, tableName: 'df_qrtz_fired_triggers',
+                indexName: 'idx_qrtz_ft_trig_inst_name', unique: false) {
+            column(name: 'sched_name')
+            column(name: 'instance_name')
+        }
+        createIndex(schemaName: dbAppsSchema, tablespace: dbIndexTablespace, tableName: 'df_qrtz_fired_triggers',
+                indexName: 'idx_qrtz_ft_inst_job_req_rcvry', unique: false) {
+            column(name: 'sched_name')
+            column(name: 'instance_name')
+            column(name: 'requests_recovery')
+        }
+        createIndex(schemaName: dbAppsSchema, tablespace: dbIndexTablespace, tableName: 'df_qrtz_fired_triggers',
+                indexName: 'idx_qrtz_ft_j_g', unique: false) {
+            column(name: 'sched_name')
+            column(name: 'job_name')
+            column(name: 'job_group')
+        }
+        createIndex(schemaName: dbAppsSchema, tablespace: dbIndexTablespace, tableName: 'df_qrtz_fired_triggers',
+                indexName: 'idx_qrtz_ft_jg', unique: false) {
+            column(name: 'sched_name')
+            column(name: 'job_group')
+        }
+        createIndex(schemaName: dbAppsSchema, tablespace: dbIndexTablespace, tableName: 'df_qrtz_fired_triggers',
+                indexName: 'idx_qrtz_ft_t_g', unique: false) {
+            column(name: 'sched_name')
+            column(name: 'trigger_name')
+            column(name: 'trigger_group')
+        }
+        createIndex(schemaName: dbAppsSchema, tablespace: dbIndexTablespace, tableName: 'df_qrtz_fired_triggers',
+                indexName: 'idx_qrtz_ft_tg', unique: false) {
+            column(name: 'sched_name')
+            column(name: 'trigger_group')
+        }
+
+        rollback {
+            sql("drop index ${dbAppsSchema}.idx_qrtz_ft_tg")
+            sql("drop index ${dbAppsSchema}.idx_qrtz_ft_t_g")
+            sql("drop index ${dbAppsSchema}.idx_qrtz_ft_jg")
+            sql("drop index ${dbAppsSchema}.idx_qrtz_ft_j_g")
+            sql("drop index ${dbAppsSchema}.idx_qrtz_ft_inst_job_req_rcvry")
+            sql("drop index ${dbAppsSchema}.idx_qrtz_ft_trig_inst_name")
+            sql("drop index ${dbAppsSchema}.idx_qrtz_t_nft_st_misfire_grp")
+            sql("drop index ${dbAppsSchema}.idx_qrtz_t_nft_st_misfire")
+            sql("drop index ${dbAppsSchema}.idx_qrtz_t_nft_misfire")
+            sql("drop index ${dbAppsSchema}.idx_qrtz_t_nft")
+            sql("drop index ${dbAppsSchema}.idx_qrtz_t_next_fire_time")
+            sql("drop index ${dbAppsSchema}.idx_qrtz_t_n_g_state")
+            sql("drop index ${dbAppsSchema}.idx_qrtz_t_n_state")
+            sql("drop index ${dbAppsSchema}.idx_qrtz_t_state")
+            sql("drop index ${dbAppsSchema}.idx_qrtz_t_g")
+            sql("drop index ${dbAppsSchema}.idx_qrtz_t_c")
+            sql("drop index ${dbAppsSchema}.idx_qrtz_t_jg")
+            sql("drop index ${dbAppsSchema}.idx_qrtz_t_j")
+            sql("drop index ${dbAppsSchema}.idx_qrtz_j_grp")
+            sql("drop index ${dbAppsSchema}.idx_qrtz_j_req_recovery")
+
+            dropTable(tableName: 'df_qrtz_locks', schemaName: dbAppsSchema)
+            dropTable(tableName: 'df_qrtz_scheduler_state', schemaName: dbAppsSchema)
+            dropTable(tableName: 'df_qrtz_fired_triggers', schemaName: dbAppsSchema)
+            dropTable(tableName: 'df_qrtz_paused_trigger_grps', schemaName: dbAppsSchema)
+            dropTable(tableName: 'df_qrtz_calendars', schemaName: dbAppsSchema)
+            dropTable(tableName: 'df_qrtz_blob_triggers', schemaName: dbAppsSchema)
+            dropTable(tableName: 'df_qrtz_simprop_triggers', schemaName: dbAppsSchema)
+            dropTable(tableName: 'df_qrtz_cron_triggers', schemaName: dbAppsSchema)
+            dropTable(tableName: 'df_qrtz_simple_triggers', schemaName: dbAppsSchema)
+            dropTable(tableName: 'df_qrtz_triggers', schemaName: dbAppsSchema)
+            dropTable(tableName: 'df_qrtz_job_details', schemaName: dbAppsSchema)
+        }
+    }
 }

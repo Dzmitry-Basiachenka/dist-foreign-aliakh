@@ -5,7 +5,7 @@ import static org.easymock.EasyMock.expectLastCall;
 
 import com.copyright.rup.dist.foreign.service.api.IRightsService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.service.impl.matching.WorksMatchingJob;
+import com.copyright.rup.dist.foreign.service.impl.quartz.WorksMatchingJob;
 
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.EasyMockSupport;
@@ -94,7 +94,7 @@ public class JobRunnerRestFilterTest extends EasyMockSupport {
     @Test
     public void testPiJob() throws ServletException, IOException, InterruptedException {
         expect(request.getPathInfo()).andReturn("/job/pi").once();
-        worksMatchingJob.findWorksAndUpdateStatuses();
+        worksMatchingJob.executeInternal(null);
         expectLastCall().once();
         response.setStatus(HttpServletResponse.SC_OK);
         expectLastCall().once();
