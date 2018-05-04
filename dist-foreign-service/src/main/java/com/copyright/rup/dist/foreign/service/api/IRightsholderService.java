@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.service.api;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.api.ICommonRightsholderService;
 
 import java.util.List;
@@ -29,7 +31,20 @@ public interface IRightsholderService extends ICommonRightsholderService {
     void updateRightsholder(Rightsholder rightsholder);
 
     /**
-     * @return list of {@link Rightsholder}s from usages.
+     * Gets list of unique {@link Rightsholder}s from all usages base on search value.
+     *
+     * @param searchValue value to search
+     * @param pageable    instance of {@link Pageable}
+     * @param sort        instance of {@link Sort}
+     * @return list of unique {@link Rightsholder}s from all usages
      */
-    List<Rightsholder> getFromUsages();
+    List<Rightsholder> getFromUsages(String searchValue, Pageable pageable, Sort sort);
+
+    /**
+     * Gets count of unique rightsholders from usages based on search value.
+     *
+     * @param searchValue value to search
+     * @return count of rightsholders
+     */
+    int getCountFromUsages(String searchValue);
 }

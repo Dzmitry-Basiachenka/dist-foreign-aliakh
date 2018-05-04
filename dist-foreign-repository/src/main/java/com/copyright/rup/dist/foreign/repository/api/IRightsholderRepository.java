@@ -2,6 +2,8 @@ package com.copyright.rup.dist.foreign.repository.api;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.repository.api.ICommonRightsholderRepository;
+import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.common.repository.api.Sort;
 
 import java.util.List;
 
@@ -31,7 +33,20 @@ public interface IRightsholderRepository extends ICommonRightsholderRepository {
     void deleteByAccountNumber(Long accountNumber);
 
     /**
-     * @return list of distinct {@link Rightsholder}s from all usages.
+     * Finds list of unique {@link Rightsholder}s from all usages base on search value.
+     *
+     * @param searchValue value to search
+     * @param pageable    instance of {@link Pageable}
+     * @param sort        instance of {@link Sort}
+     * @return list of unique {@link Rightsholder}s from all usages
      */
-    List<Rightsholder> findFromUsages();
+    List<Rightsholder> findFromUsages(String searchValue, Pageable pageable, Sort sort);
+
+    /**
+     * Finds count of unique rightsholders from usages based on search value.
+     *
+     * @param searchValue value to search
+     * @return count of rightsholders
+     */
+    int findCountFromUsages(String searchValue);
 }

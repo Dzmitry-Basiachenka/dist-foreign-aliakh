@@ -3,12 +3,17 @@ package com.copyright.rup.dist.foreign.repository.impl;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.impl.CommonRightsholderRepository;
 import com.copyright.rup.dist.foreign.repository.api.IRightsholderRepository;
+
+import com.google.common.collect.Maps;
 
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -40,8 +45,19 @@ public class RightsholderRepository extends CommonRightsholderRepository impleme
     }
 
     @Override
-    public List<Rightsholder> findFromUsages() {
-        return selectList("RightsholderMapper.findFromUsages");
+    public List<Rightsholder> findFromUsages(String searchValue, Pageable pageable, Sort sort) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
+        parameters.put("searchValue", searchValue);
+        parameters.put("pageable", pageable);
+        parameters.put("sort", sort);
+        return selectList("RightsholderMapper.findFromUsages", parameters);
+    }
+
+    @Override
+    public int findCountFromUsages(String searchValue) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(1);
+        parameters.put("searchValue", searchValue);
+        return selectOne("RightsholderMapper.findCountFromUsages", parameters);
     }
 
     @Override

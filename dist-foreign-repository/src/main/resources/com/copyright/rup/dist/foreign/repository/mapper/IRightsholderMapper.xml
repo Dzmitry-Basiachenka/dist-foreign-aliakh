@@ -52,19 +52,50 @@
         where rh_account_number = #{accountNumber}
     </delete>
 
-    <select id="findFromUsages" resultMap="rightsholderResultMap">
+    <select id="findCountFromUsages" parameterType="string" resultType="int">
+        select count(1)
+        from(
+            select distinct u.rh_account_number
+            from ${schema}.df_usage u
+            left join ${schema}.df_rightsholder r on u.rh_account_number = r.rh_account_number
+            where u.rh_account_number is not null
+            <if test="null != searchValue">
+                and <include refid="IUsageMapper.searchWhereClause"/>
+            </if>
+            union
+            select distinct u.rh_account_number
+            from ${schema}.df_usage_archive u
+            left join ${schema}.df_rightsholder r on u.rh_account_number = r.rh_account_number
+            where u.rh_account_number is not null
+            <if test="null != searchValue">
+                and <include refid="IUsageMapper.searchWhereClause"/>
+            </if>
+        ) accountNumbers
+    </select>
+
+    <select id="findFromUsages" parameterType="map" resultMap="rightsholderResultMap">
         select distinct on (u.rh_account_number)
             u.rh_account_number,
             r.name
         from ${schema}.df_usage u
         left join ${schema}.df_rightsholder r on u.rh_account_number = r.rh_account_number
         where u.rh_account_number is not null
+        <if test="null != searchValue">
+            and <include refid="IUsageMapper.searchWhereClause"/>
+        </if>
         union
-        select distinct on (ua.rh_account_number)
-            ua.rh_account_number,
+        select distinct on (u.rh_account_number)
+            u.rh_account_number,
             r.name
-        from ${schema}.df_usage_archive ua
-        left join ${schema}.df_rightsholder r on ua.rh_account_number = r.rh_account_number
-        where ua.rh_account_number is not null
+        from ${schema}.df_usage_archive u
+        left join ${schema}.df_rightsholder r on u.rh_account_number = r.rh_account_number
+        where u.rh_account_number is not null
+        <if test="null != searchValue">
+            and <include refid="IUsageMapper.searchWhereClause"/>
+        </if>
+        <if test="null != pageable">
+            limit #{pageable.limit}
+            offset #{pageable.offset}
+        </if>
     </select>
 </mapper>

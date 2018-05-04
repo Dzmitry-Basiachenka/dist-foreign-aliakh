@@ -4,8 +4,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.foreign.ui.common.LazyRightsholderFilterWidget;
+import com.copyright.rup.dist.foreign.ui.common.LazyRightsholderFilterWindow.IRightsholderFilterSaveListener;
 import com.copyright.rup.dist.foreign.ui.common.ProductFamilyFilterWidget;
-import com.copyright.rup.dist.foreign.ui.common.RightsholderFilterWidget;
 import com.copyright.rup.dist.foreign.ui.common.UsageBatchFilterWidget;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.IFilterSaveListener;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
@@ -58,8 +59,9 @@ public class AuditFilterWidgetTest {
         assertTrue(component instanceof ProductFamilyFilterWidget);
         verifyFilterWidget((ProductFamilyFilterWidget) component, "Product Families");
         component = widget.getComponent(2);
-        assertTrue(component instanceof RightsholderFilterWidget);
-        verifyFilterWidget((RightsholderFilterWidget) component, "Rightsholders");
+        assertTrue(component instanceof LazyRightsholderFilterWidget);
+        assertEquals("Rightsholders", Whitebox.getInternalState(component, Button.class).getCaption());
+        assertNotNull(Whitebox.getInternalState(component, IRightsholderFilterSaveListener.class));
         component = widget.getComponent(3);
         assertTrue(component instanceof UsageBatchFilterWidget);
         verifyFilterWidget((UsageBatchFilterWidget) component, "Batches");

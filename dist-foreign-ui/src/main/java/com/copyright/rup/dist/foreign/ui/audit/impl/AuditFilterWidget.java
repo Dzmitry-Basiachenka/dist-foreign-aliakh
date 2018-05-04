@@ -5,8 +5,8 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterController;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterWidget;
+import com.copyright.rup.dist.foreign.ui.common.LazyRightsholderFilterWidget;
 import com.copyright.rup.dist.foreign.ui.common.ProductFamilyFilterWidget;
-import com.copyright.rup.dist.foreign.ui.common.RightsholderFilterWidget;
 import com.copyright.rup.dist.foreign.ui.common.UsageBatchFilterWidget;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 public class AuditFilterWidget extends VerticalLayout implements IAuditFilterWidget {
 
     private IAuditFilterController controller;
-    private RightsholderFilterWidget rightsholderFilterWidget;
+    private LazyRightsholderFilterWidget rightsholderFilterWidget;
     private UsageBatchFilterWidget usageBatchFilterWidget;
     private StatusFilterWidget statusFilterWidget;
     private TextField cccEventIdField;
@@ -117,12 +117,9 @@ public class AuditFilterWidget extends VerticalLayout implements IAuditFilterWid
     }
 
     private void initRightsholdersFilter() {
-        rightsholderFilterWidget = new RightsholderFilterWidget(
-            ForeignUi.getMessage("label.rightsholders"),
-            ForeignUi.getMessage("prompt.rightsholder"),
-            ForeignUi.getMessage("message.error.rh_not_found"),
-            () -> controller.getRightsholders());
-        rightsholderFilterWidget.addFilterSaveListener((IFilterSaveListener<Rightsholder>) event -> {
+        rightsholderFilterWidget =
+            new LazyRightsholderFilterWidget(ForeignUi.getMessage("label.rightsholders"), controller);
+        rightsholderFilterWidget.addFilterSaveListener(event -> {
             filter.setRhAccountNumbers(event.getSelectedItemsIds()
                 .stream()
                 .map(Rightsholder::getAccountNumber)
