@@ -1143,5 +1143,33 @@ databaseChangeLog {
             dropTable(tableName: 'df_qrtz_triggers', schemaName: dbAppsSchema)
             dropTable(tableName: 'df_qrtz_job_details', schemaName: dbAppsSchema)
         }
+
+        changeSet(id: '2018-05-04-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+            comment("B-42928 FDA: Replace user-generated detail ID with system-generated detail ID: " +
+                    "remove detail_id column from df_usage and df_usage_archive tables")
+
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'detail_id')
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'detail_id')
+
+            rollback {
+                addColumn(schemaName: dbAppsSchema, tableName: 'df_usage') {
+                    column(name: 'detail_id', type: 'NUMERIC(15,0)', remarks: 'The usage identifier in TF')
+                }
+                addUniqueConstraint(constraintName: 'iu_detail_id',
+                        schemaName: dbAppsSchema,
+                        tablespace: dbDataTablespace,
+                        tableName: 'df_usage',
+                        columnNames: 'detail_id')
+
+                addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+                    column(name: 'detail_id', type: 'NUMERIC(15,0)', remarks: 'The usage identifier in TF')
+                }
+                addUniqueConstraint(constraintName: 'iu_archive_detail_id',
+                        schemaName: dbAppsSchema,
+                        tablespace: dbDataTablespace,
+                        tableName: 'df_usage_archive',
+                        columnNames: 'detail_id')
+            }
+        }
     }
 }
