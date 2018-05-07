@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.integration.pi.impl;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.common.logging.RupLogUtils;
+import com.copyright.rup.dist.foreign.domain.Work;
 import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.es.api.RupEsApi;
 import com.copyright.rup.es.api.RupEsApiRuntimeException;
@@ -16,8 +17,6 @@ import com.google.common.collect.Iterables;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.elasticsearch.ElasticsearchException;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -59,7 +58,7 @@ public class PiIntegrationService implements IPiIntegrationService {
     private RupEsApi rupEsApi;
 
     @Override
-    public Map<String, Long> findWrWrkInstsByIdnos(Map<String, String> idnoToTitleMap) {
+    public Map<String, Work> findWorksByIdnos(Map<String, String> idnoToTitleMap) {
         return matchByIdno(idnoToTitleMap);
     }
 
@@ -87,17 +86,17 @@ public class PiIntegrationService implements IPiIntegrationService {
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
-    private Map<String, Long> matchByIdno(Map<String, String> idnoToTitleMap) {
-        Map<String, Long> result = new HashMap<>();
+    private Map<String, Work> matchByIdno(Map<String, String> idnoToTitleMap) {
+        Map<String, Work> idnoToWorkMap = new HashMap<>();
         idnoToTitleMap.forEach((idno, title) -> {
             RupSearchResponse searchMainResponse = doSearch("idno", idno);
             List<RupSearchHit> searchHits = searchMainResponse.getResults().getHits();
             if (CollectionUtils.isNotEmpty(searchHits)) {
                 if (EXPECTED_SEARCH_HITS_COUNT == searchHits.size()) {
-                    Long wrWrkInst = getWrWrkInstFromSearchHit(searchHits, idno, title);
+                    Work work = getWorkFromSearchHit(searchHits, idno, title);
                     LOGGER.trace("Search works. By IDNO. IDNO={}, Title={}, WrWrkInst={}, Hits={}", idno, title,
-                        wrWrkInst, searchHits);
-                    result.put(idno, wrWrkInst);
+                        work.getWrWrkInst(), searchHits);
+                    idnoToWorkMap.put(idno, work);
                 } else {
                     List<RupSearchHit> filteredByTitleHits = searchHits.stream().filter(searchHit -> {
                         List<Object> mainTitles = searchHit.getFields().get("mainTitle");
@@ -105,10 +104,11 @@ public class PiIntegrationService implements IPiIntegrationService {
                             mainTitles.iterator().next().toString());
                     }).collect(Collectors.toList());
                     if (EXPECTED_SEARCH_HITS_COUNT == filteredByTitleHits.size()) {
-                        Long wrWrkInst = getWrWrkInstFromSearchHit(filteredByTitleHits, idno, title);
+                        Work work = getWorkFromSearchHit(searchHits, idno, title);
+                        Long wrWrkInst = Objects.isNull(work) ? (Long) null : work.getWrWrkInst();
                         LOGGER.trace("Search works. By IDNO and Title. IDNO={}, Title={}, WrWrkInst={}, Hits={}",
                             idno, title, wrWrkInst, searchHits);
-                        result.put(idno, wrWrkInst);
+                        idnoToWorkMap.put(idno, new Work(wrWrkInst, title));
                     } else {
                         LOGGER.debug(
                             "Search works. By IDNO and Title. IDNO={}, Title={}, WrWrkInst=MultiResults, Hits={}",
@@ -122,34 +122,32 @@ public class PiIntegrationService implements IPiIntegrationService {
                     idno, title);
             }
         });
-        return result;
+        return idnoToWorkMap;
     }
 
-    private Long getWrWrkInstFromSearchHit(List<RupSearchHit> searchHits, String idno, String title) {
-        Long wrWrkInst;
+    private Work getWorkFromSearchHit(List<RupSearchHit> searchHits, String idno, String title) {
         try {
-            wrWrkInst = mapper.readValue(searchHits.iterator().next().getSource(), Work.class).getWrWrkInst();
+            return mapper.readValue(searchHits.iterator().next().getSource(), Work.class);
         } catch (IOException e) {
             throw new RupRuntimeException(
                 String.format("Search works. Failed. IDNO=%s, Title=%s, Reason=Could not read response", idno, title),
                 e);
         }
-        return wrWrkInst;
     }
 
     private Map<String, Long> matchByTitle(Set<String> titles) {
-        Map<String, Long> result = new HashMap<>();
+        Map<String, Long> titleToWrWrkInstMap = new HashMap<>();
         titles.forEach(title -> {
             RupSearchResponse searchResponse = doSearch("mainTitle", title);
             List<RupSearchHit> searchHits = searchResponse.getResults().getHits();
             if (CollectionUtils.isNotEmpty(searchHits)) {
                 Long wrWrkInst = getWrWrkInstByTitle(title, searchHits);
                 if (Objects.nonNull(wrWrkInst)) {
-                    result.put(title, wrWrkInst);
+                    titleToWrWrkInstMap.put(title, wrWrkInst);
                 }
             }
         });
-        return result;
+        return titleToWrWrkInstMap;
     }
 
     private Long getWrWrkInstByTitle(String title, List<RupSearchHit> hits) {
@@ -196,39 +194,5 @@ public class PiIntegrationService implements IPiIntegrationService {
             .append(":\"")
             .append(value)
             .append('"');
-    }
-
-    private static class Work {
-
-        private Long wrWrkInst;
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null || getClass() != o.getClass()) {
-                return false;
-            }
-            Work that = (Work) o;
-            return new EqualsBuilder()
-                .append(this.wrWrkInst, that.wrWrkInst)
-                .isEquals();
-        }
-
-        @Override
-        public int hashCode() {
-            return new HashCodeBuilder()
-                .append(wrWrkInst)
-                .toHashCode();
-        }
-
-        private Long getWrWrkInst() {
-            return wrWrkInst;
-        }
-
-        public void setWrWrkInst(Long wrWrkInst) {
-            this.wrWrkInst = wrWrkInst;
-        }
     }
 }

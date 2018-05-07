@@ -4,6 +4,7 @@ import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.Work;
 import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
@@ -41,6 +42,7 @@ public class WorkMatchingService implements IWorkMatchingService {
 
     private static final BigDecimal GROSS_AMOUNT_LIMIT = BigDecimal.valueOf(100L);
     private static final long UNIDENTIFIED_WR_WRK_INST = 123050824L;
+    private static final String UNIDENTIFIED_TITLE = "Unidentified";
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired
@@ -121,7 +123,7 @@ public class WorkMatchingService implements IWorkMatchingService {
             .map(Usage::getWorkTitle)
             .collect(Collectors.toSet());
         return CollectionUtils.isNotEmpty(titles)
-            ? computeResult(usages, piIntegrationService.findWrWrkInstsByTitles(titles), Usage::getWorkTitle)
+            ? computeResultByTitles(usages, piIntegrationService.findWrWrkInstsByTitles(titles))
             : Collections.emptyList();
     }
 
@@ -129,24 +131,42 @@ public class WorkMatchingService implements IWorkMatchingService {
         Map<String, String> idnoToTitleMap = new HashMap<>();
         usages.forEach(usage -> idnoToTitleMap.put(usage.getStandardNumber(), usage.getWorkTitle()));
         return MapUtils.isNotEmpty(idnoToTitleMap)
-            ? computeResult(usages, piIntegrationService.findWrWrkInstsByIdnos(idnoToTitleMap),
-            Usage::getStandardNumber)
+            ? computeResultByIdnos(usages, piIntegrationService.findWorksByIdnos(idnoToTitleMap))
             : Collections.emptyList();
     }
 
-    private List<Usage> computeResult(List<Usage> usages, Map<String, Long> wrWrkInstsMap,
-                                      Function<Usage, String> function) {
-        List<Usage> result = new ArrayList<>(wrWrkInstsMap.size());
-        if (MapUtils.isNotEmpty(wrWrkInstsMap)) {
+    private List<Usage> computeResultByTitles(List<Usage> usages, Map<String, Long> titleToWrWrkInstMap) {
+        List<Usage> result = new ArrayList<>(titleToWrWrkInstMap.size());
+        if (MapUtils.isNotEmpty(titleToWrWrkInstMap)) {
             usages.forEach(usage -> {
-                usage.setWrWrkInst(wrWrkInstsMap.get(function.apply(usage)));
-                if (Objects.nonNull(usage.getWrWrkInst())) {
-                    usage.setStatus(UsageStatusEnum.WORK_FOUND);
-                    result.add(usage);
+                usage.setWrWrkInst(titleToWrWrkInstMap.get(usage.getWorkTitle()));
+                addWorkFoundUsageToResult(result, usage);
+            });
+        }
+        return result;
+    }
+
+    private List<Usage> computeResultByIdnos(List<Usage> usages, Map<String, Work> idnoToWorkMap) {
+        List<Usage> result = new ArrayList<>(idnoToWorkMap.size());
+        if (MapUtils.isNotEmpty(idnoToWorkMap)) {
+            usages.forEach(usage -> {
+                Work work = idnoToWorkMap.get(usage.getStandardNumber());
+                if (Objects.nonNull(work)) {
+                    usage.setWrWrkInst(work.getWrWrkInst());
+                    usage.setWorkTitle(work.getMainTitle());
+                    usage.setSystemTitle(work.getMainTitle());
+                    addWorkFoundUsageToResult(result, usage);
                 }
             });
         }
         return result;
+    }
+
+    private void addWorkFoundUsageToResult(List<Usage> result, Usage usage) {
+        if (Objects.nonNull(usage.getWrWrkInst())) {
+            usage.setStatus(UsageStatusEnum.WORK_FOUND);
+            result.add(usage);
+        }
     }
 
     private void updateUsagesStatusAndWriteAudit(List<Usage> usages, UsageGroupEnum usageGroup) {
@@ -161,6 +181,8 @@ public class WorkMatchingService implements IWorkMatchingService {
             usages.forEach(usage -> {
                 if (Objects.isNull(usage.getStandardNumber()) && Objects.isNull(usage.getWorkTitle())) {
                     usage.setWrWrkInst(UNIDENTIFIED_WR_WRK_INST);
+                    usage.setWorkTitle(UNIDENTIFIED_TITLE);
+                    usage.setSystemTitle(UNIDENTIFIED_TITLE);
                     usage.setStatus(UsageStatusEnum.WORK_FOUND);
                     auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
                         "Usage assigned unidentified work due to empty standard number and title");

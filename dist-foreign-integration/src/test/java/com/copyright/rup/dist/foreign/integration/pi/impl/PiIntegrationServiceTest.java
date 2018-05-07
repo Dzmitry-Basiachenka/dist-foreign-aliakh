@@ -8,6 +8,7 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
 import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.foreign.domain.Work;
 import com.copyright.rup.es.api.RupEsApi;
 import com.copyright.rup.es.api.RupSearchResponse;
 import com.copyright.rup.es.api.domain.RupSearchHit;
@@ -78,13 +79,18 @@ public class PiIntegrationServiceTest {
         idnoToTitleMap.put("1140-9126", null);
         idnoToTitleMap.put("978-0-08-027365-5", null);
         idnoToTitleMap.put("1633-1370", null);
-        Map<String, Long> result = piIntegrationService.findWrWrkInstsByIdnos(idnoToTitleMap);
+        Map<String, Work> result = piIntegrationService.findWorksByIdnos(idnoToTitleMap);
         assertEquals(5, result.size());
-        assertEquals(123059057L, result.get("978-0-271-01751-8"), 0);
-        assertEquals(123059058L, result.get("0-271-01750-3"), 0);
-        assertEquals(156427025L, result.get("1140-9126"), 0);
-        assertEquals(112942199L, result.get("978-0-08-027365-5"), 0);
-        assertEquals(113747840L, result.get("1633-1370"), 0);
+        Work work1 = result.get("978-0-271-01751-8");
+        Work work2 = result.get("0-271-01750-3");
+        Work work3 = result.get("1140-9126");
+        Work work4 = result.get("978-0-08-027365-5");
+        Work work5 = result.get("1633-1370");
+        assertEquals(123059057L, work1.getWrWrkInst(), 0);
+        assertEquals(123059058L, work2.getWrWrkInst(), 0);
+        assertEquals(156427025L, work3.getWrWrkInst(), 0);
+        assertEquals(112942199L, work4.getWrWrkInst(), 0);
+        assertEquals(113747840L, work5.getWrWrkInst(), 0);
         verify(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3, searchHit4, searchHit5,
             searchHit6, searchHit7);
     }
@@ -101,7 +107,7 @@ public class PiIntegrationServiceTest {
         titles.add("Forbidden Rites: A Necromancer's Manual of the Fifteenth Century (review)");
         titles.add("Annuaire de la communication en Rhône-Alpes");
         titles.add("Ocular Tissue Culture");
-        titles.add("Lieux du livre en Rhône-Alpes");
+        titles.add("Ocular tissue culture");
         Map<String, Long> result = piIntegrationService.findWrWrkInstsByTitles(titles);
         assertEquals(5, result.size());
         assertEquals(123059057L, result.get("Forbidden rites"), 0);
@@ -109,7 +115,7 @@ public class PiIntegrationServiceTest {
             result.get("Forbidden rites : a necromancer's manual of the fifteenth century"), 0);
         assertEquals(156427025L, result.get("Annuaire de la communication en Rhône-Alpes"), 0);
         assertEquals(112942199L, result.get("Ocular Tissue Culture"), 0);
-        assertEquals(113747840L, result.get("Lieux du livre en Rhône-Alpes"), 0);
+        assertEquals(113747840L, result.get("Ocular tissue culture"), 0);
         verify(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3, searchHit4, searchHit5,
             searchHit6, searchHit7);
     }

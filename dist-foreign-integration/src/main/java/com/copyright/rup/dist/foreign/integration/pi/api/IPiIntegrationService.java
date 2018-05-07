@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.integration.pi.api;
 
+import com.copyright.rup.dist.foreign.domain.Work;
+
 import java.util.Map;
 import java.util.Set;
 
@@ -15,16 +17,16 @@ import java.util.Set;
 public interface IPiIntegrationService {
 
     /**
-     * Finds Wr Wrk Insts for given map of IDNOs and titles.
+     * Finds {@link Work}s for given map of IDNOs and titles.
      * If work for particular IDNO and title is found and they uniquely corresponds to each other, then they will be
      * returned in resulting map.
      * If work for particular IDNO and title is not found or multiple IDNOs correspond to one Wr Wrk Inst -
      * resulting map will not contain mapping for such IDNOs.
      *
      * @param idnoToTitleMap map of IDNOs to title to search works by
-     * @return map with IDNOs as keys and Wr Wrk Insts as values
+     * @return map with IDNOs as keys and {@link Work}s as values
      */
-    Map<String, Long> findWrWrkInstsByIdnos(Map<String, String> idnoToTitleMap);
+    Map<String, Work> findWorksByIdnos(Map<String, String> idnoToTitleMap);
 
     /**
      * Finds Wr Wrk Insts for given set of titles.
