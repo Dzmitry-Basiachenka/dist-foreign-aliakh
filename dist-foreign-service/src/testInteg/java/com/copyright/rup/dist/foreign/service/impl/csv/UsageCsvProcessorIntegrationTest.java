@@ -6,7 +6,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import com.copyright.rup.dist.common.test.ReportMatcher;
+import com.copyright.rup.dist.common.test.ReportTestUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.HeaderValidationException;
@@ -16,7 +16,6 @@ import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.Threshol
 import com.google.common.collect.Lists;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.BeforeClass;
@@ -28,14 +27,11 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.math.BigDecimal;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -56,19 +52,18 @@ import java.util.stream.IntStream;
 @TestPropertySource(properties = {"test.liquibase.changelog=usages-csv-processor-data-init.groovy"})
 public class UsageCsvProcessorIntegrationTest {
 
-    private static final String PATH_TO_ACTUAL = "build/temp";
     private static final String PACKAGE = "/com/copyright/rup/dist/foreign/service/impl/usage";
-    private static final String PATH_TO_EXPECTED = "src/testInteg/resources" + PACKAGE;
+    private static final String PATH_TO_EXPECTED_REPORTS = "src/testInteg/resources" + PACKAGE;
     private static final String TITLE = "1984";
     private static final String PRODUCT_FAMILY = "FAS";
-    private static final String ERRORS_REPORT_CSV = "errors_report.csv";
+
+    private final ReportTestUtils reportTestUtils = new ReportTestUtils(PATH_TO_EXPECTED_REPORTS);
     @Autowired
     private CsvProcessorFactory csvProcessorFactory;
 
     @BeforeClass
     public static void setUpTestDirectory() throws IOException {
-        FileUtils.deleteQuietly(Paths.get(PATH_TO_ACTUAL).toFile());
-        Files.createDirectory(Paths.get(PATH_TO_ACTUAL));
+        ReportTestUtils.setUpTestDirectory();
     }
 
     @Test
@@ -94,15 +89,17 @@ public class UsageCsvProcessorIntegrationTest {
         } catch (ThresholdExceededException ex) {
             assertEquals("The file could not be uploaded. There are more than 2000 errors", ex.getMessage());
             Executors.newSingleThreadExecutor().execute(() -> ex.getProcessingResult().writeToFile(outputStream));
-            FileUtils.copyInputStreamToFile(pipedInputStream, new File(PATH_TO_ACTUAL, "errors_2000_report.csv"));
-            isFilesEquals("usages_with_2000_errors_report.csv", "errors_2000_report.csv");
+            reportTestUtils.assertCsvReport("usages_with_2000_errors_report.csv", pipedInputStream);
         }
     }
 
     @Test
     public void testProcessorForNegativePath() throws Exception {
         DistCsvProcessor.ProcessingResult<Usage> result = processFile("usages_with_errors.csv", true);
-        assertFileWithErrorUsages("usages_with_errors_report.csv", result);
+        PipedOutputStream outputStream = new PipedOutputStream();
+        PipedInputStream pipedInputStream = new PipedInputStream(outputStream);
+        Executors.newSingleThreadExecutor().execute(() -> result.writeToFile(outputStream));
+        reportTestUtils.assertCsvReport("usages_with_errors_report.csv", pipedInputStream);
     }
 
     @Test
@@ -113,8 +110,7 @@ public class UsageCsvProcessorIntegrationTest {
         PipedOutputStream outputStream = new PipedOutputStream();
         PipedInputStream pipedInputStream = new PipedInputStream(outputStream);
         Executors.newSingleThreadExecutor().execute(() -> result.writeToFile(outputStream));
-        FileUtils.copyInputStreamToFile(pipedInputStream, new File(PATH_TO_ACTUAL, "errorsToFile.csv"));
-        isFilesEquals(ERRORS_REPORT_CSV, "errorsToFile.csv");
+        reportTestUtils.assertCsvReport("errors_report.csv", pipedInputStream);
     }
 
     @Test
@@ -171,21 +167,6 @@ public class UsageCsvProcessorIntegrationTest {
                 "Aarseth, Espen J."};
         IntStream.range(0, indexesForReplace.size()).forEach(i -> columns[indexesForReplace.get(i)] = values.get(i));
         return columns;
-    }
-
-    private void assertFileWithErrorUsages(String expectedFileName,
-                                           DistCsvProcessor.ProcessingResult<Usage> actualProcessingResult)
-        throws IOException {
-        PipedOutputStream outputStream = new PipedOutputStream();
-        PipedInputStream pipedInputStream = new PipedInputStream(outputStream);
-        Executors.newSingleThreadExecutor().execute(() -> actualProcessingResult.writeToFile(outputStream));
-        FileUtils.copyInputStreamToFile(pipedInputStream, new File(PATH_TO_ACTUAL, ERRORS_REPORT_CSV));
-        isFilesEquals(expectedFileName, ERRORS_REPORT_CSV);
-    }
-
-    private void isFilesEquals(String expectedFileName, String actualFileName) {
-        assertTrue(new ReportMatcher(new File(PATH_TO_EXPECTED, expectedFileName))
-            .matches(new File(PATH_TO_ACTUAL, actualFileName)));
     }
 
     private DistCsvProcessor.ProcessingResult<Usage> processFile(String file, boolean validateHeaders)

@@ -1,8 +1,5 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
-import static org.junit.Assert.assertTrue;
-
-import com.copyright.rup.dist.common.test.ReportMatcher;
 import com.copyright.rup.dist.common.test.ReportTestUtils;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
@@ -10,8 +7,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 
-import org.apache.commons.io.FileUtils;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +15,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.util.Collections;
@@ -46,29 +40,31 @@ public final class ReportServiceIntegrationTest {
     private static final String PATH_TO_EXPECTED_REPORTS =
         "src/testInteg/resources/com/copyright/rup/dist/foreign/service/impl/report";
 
+    private final ReportTestUtils reportTestUtils = new ReportTestUtils(PATH_TO_EXPECTED_REPORTS);
     @Autowired
     private IReportService reportService;
     @Autowired
     private IScenarioService scenarioService;
 
-    @Before
-    public void setUp() throws IOException {
+    @BeforeClass
+    public static void setUpTestDirectory() throws IOException {
         ReportTestUtils.setUpTestDirectory();
     }
 
     @Test
     public void testExportAuditUsagesCsvReport() throws IOException {
-        assertFiles(out -> reportService.writeAuditCsvReport(buildAuditFilter(), out), "audit_usages_report");
+        assertFiles(out -> reportService.writeAuditCsvReport(buildAuditFilter(), out), "audit_usages_report.csv");
     }
 
     @Test
     public void testExportScenarioUsagesCsvReport() throws IOException {
-        assertFiles(out -> reportService.writeScenarioUsagesCsvReport(getScenario(), out), "scenario_usages_report");
+        assertFiles(out -> reportService.writeScenarioUsagesCsvReport(getScenario(), out),
+            "scenario_usages_report.csv");
     }
 
     @Test
     public void testExportUsagesCsvReport() throws IOException {
-        assertFiles(out -> reportService.writeUsageCsvReport(buildUsageFilter(), out), "usages_report");
+        assertFiles(out -> reportService.writeUsageCsvReport(buildUsageFilter(), out), "usages_report.csv");
     }
 
     private AuditFilter buildAuditFilter() {
@@ -90,19 +86,11 @@ public final class ReportServiceIntegrationTest {
         return uf;
     }
 
-    private void assertFiles(Consumer<? super PipedOutputStream> reportWriter, String expectedReportPrefix)
+    private void assertFiles(Consumer<? super PipedOutputStream> reportWriter, String expectedReportFileName)
         throws IOException {
         PipedOutputStream out = new PipedOutputStream();
         PipedInputStream in = new PipedInputStream(out);
         Executors.newSingleThreadExecutor().execute(() -> reportWriter.accept(out));
-        assertCsvReport(expectedReportPrefix, in);
-    }
-
-    private void assertCsvReport(String expectedReportPrefix, InputStream actualReportStream) throws IOException {
-        String reportFileName = expectedReportPrefix + ".csv";
-        File actualReportFile = new File("build/temp", reportFileName);
-        FileUtils.copyInputStreamToFile(actualReportStream, actualReportFile);
-        File expectedReportFile = new File(PATH_TO_EXPECTED_REPORTS, reportFileName);
-        assertTrue(new ReportMatcher(expectedReportFile).matches(actualReportFile));
+        reportTestUtils.assertCsvReport(expectedReportFileName, in);
     }
 }
