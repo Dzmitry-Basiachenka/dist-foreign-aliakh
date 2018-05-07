@@ -21,7 +21,6 @@ import com.google.common.collect.Maps;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.perf4j.aop.Profiled;
 import org.springframework.stereotype.Repository;
 
 import java.io.OutputStream;
@@ -164,7 +163,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    @Profiled(tag = "repository.UsageRepository.deleteFromScenario")
     public void deleteFromScenario(String scenarioId, String updateUser) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
@@ -174,7 +172,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    @Profiled(tag = "repository.UsageRepository.deleteFromScenario(usagesIds, userName)")
     public void deleteFromScenario(List<String> usagesIds, String userName) {
         checkArgument(CollectionUtils.isNotEmpty(usagesIds));
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
@@ -282,13 +279,11 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    @Profiled(tag = "repository.UsageRepository.findByStatus")
     public List<Usage> findByStatuses(UsageStatusEnum... statuses) {
         return selectList("IUsageMapper.findByStatuses", Objects.requireNonNull(statuses));
     }
 
     @Override
-    @Profiled(tag = "repository.UsageRepository.updateStatus")
     public void updateStatus(Set<String> usageIds, UsageStatusEnum status) {
         checkArgument(CollectionUtils.isNotEmpty(usageIds));
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
@@ -301,7 +296,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    @Profiled(tag = "repository.UsageRepository.updateStatusAndRhAccountNumber")
     public void updateStatusAndRhAccountNumber(Set<String> usageIds, UsageStatusEnum status, Long rhAccountNumber) {
         checkArgument(CollectionUtils.isNotEmpty(usageIds));
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
@@ -373,7 +367,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         return selectList("IUsageMapper.findWithoutStandardNumberAndTitle", UsageStatusEnum.NEW);
     }
 
-    @Profiled(tag = "repository.UsageRepository.update")
     @Override
     public void update(List<Usage> usages) {
         checkArgument(CollectionUtils.isNotEmpty(usages));

@@ -96,6 +96,7 @@ public class UsageService implements IUsageService {
     private ICrmIntegrationService crmIntegrationService;
 
     @Override
+    @Profiled(tag = "usage.getUsages")
     public List<UsageDto> getUsages(UsageFilter filter, Pageable pageable, Sort sort) {
         return !filter.isEmpty()
             ? usageRepository.findByFilter(filter, pageable, sort)
@@ -238,13 +239,13 @@ public class UsageService implements IUsageService {
     }
 
     @Override
+    @Profiled(tag = "usage.deleteFromScenario")
     public void deleteFromScenario(String scenarioId) {
         usageRepository.deleteFromScenario(scenarioId, RupContextUtils.getUserName());
     }
 
     @Override
     @Transactional
-    @Profiled(tag = "service.UsageService.deleteFromScenario")
     public void deleteFromScenario(Scenario scenario, Long rroAccountNumber, List<Long> accountNumbers, String reason) {
         List<String> usagesIds =
             usageRepository.findIdsByScenarioIdRroAccountNumberRhAccountNumbers(scenario.getId(), rroAccountNumber,
@@ -275,6 +276,7 @@ public class UsageService implements IUsageService {
     }
 
     @Override
+    @Profiled(tag = "service.UsageService.getRightsholderTotalsHoldersByScenario")
     public List<RightsholderTotalsHolder> getRightsholderTotalsHoldersByScenario(Scenario scenario,
                                                                                  String searchValue,
                                                                                  Pageable pageable, Sort sort) {
@@ -300,6 +302,7 @@ public class UsageService implements IUsageService {
     }
 
     @Override
+    @Profiled(tag = "usage.getByScenarioAndRhAccountNumber")
     public List<UsageDto> getByScenarioAndRhAccountNumber(Long accountNumber, Scenario scenario,
                                                           String searchValue, Pageable pageable, Sort sort) {
         return ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())
@@ -315,6 +318,7 @@ public class UsageService implements IUsageService {
     }
 
     @Override
+    @Profiled(tag = "usage.getForAudit")
     public List<UsageDto> getForAudit(AuditFilter filter, Pageable pageable, Sort sort) {
         return usageRepository.findForAudit(filter, pageable, sort);
     }
@@ -334,18 +338,18 @@ public class UsageService implements IUsageService {
     public void updatePaidInfo(List<PaidUsage> usages) {
         LOGGER.info("Update paid information. Started. UsagesCount={}", LogUtils.size(usages));
         Set<String> notFoundUsageIds = Sets.newHashSet();
-            for (PaidUsage paidUsage : usages) {
-                String usageId = paidUsage.getId();
-                if (StringUtils.isNotBlank(usageId)) {
-                    paidUsage.setId(usageId);
-                    paidUsage.setStatus(UsageStatusEnum.PAID);
-                    usageArchiveRepository.updatePaidInfo(paidUsage);
-                    usageAuditService.logAction(usageId, UsageActionTypeEnum.PAID,
-                        "Usage has been paid according to information from the LM");
-                } else {
-                    notFoundUsageIds.add(usageId);
-                }
+        usages.forEach(paidUsage -> {
+            String usageId = paidUsage.getId();
+            if (StringUtils.isNotBlank(usageId)) {
+                paidUsage.setId(usageId);
+                paidUsage.setStatus(UsageStatusEnum.PAID);
+                usageArchiveRepository.updatePaidInfo(paidUsage);
+                usageAuditService.logAction(usageId, UsageActionTypeEnum.PAID,
+                    "Usage has been paid according to information from the LM");
+            } else {
+                notFoundUsageIds.add(usageId);
             }
+        });
         if (CollectionUtils.isNotEmpty(notFoundUsageIds)) {
             LOGGER.warn(UPDATE_PAID_INFO_FAILED_LOG_MESSAGE, LogUtils.size(usages),
                 usages.size() - notFoundUsageIds.size(), notFoundUsageIds);

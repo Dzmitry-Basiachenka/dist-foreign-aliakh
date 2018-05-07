@@ -42,6 +42,8 @@ import com.vaadin.shared.data.sort.SortDirection;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.perf4j.StopWatch;
+import org.perf4j.slf4j.Slf4JStopWatch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -130,8 +132,10 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
 
     @Override
     public int loadUsageBatch(UsageBatch usageBatch, Collection<Usage> usages) {
+        StopWatch stopWatch = new Slf4JStopWatch();
         int result = usageBatchService.insertUsageBatch(usageBatch, usages);
         filterController.getWidget().clearFilter();
+        stopWatch.stop("usageBatch.load");
         return result;
     }
 
@@ -143,9 +147,11 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
 
     @Override
     public Scenario createScenario(String scenarioName, String description) {
+        StopWatch stopWatch = new Slf4JStopWatch();
         Scenario scenario = scenarioService.createScenario(scenarioName, description,
             filterController.getWidget().getAppliedFilter());
         filterController.getWidget().clearFilter();
+        stopWatch.stop("scenario.create");
         return scenario;
     }
 

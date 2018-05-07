@@ -14,6 +14,8 @@ import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.perf4j.StopWatch;
+import org.perf4j.slf4j.Slf4JStopWatch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -43,7 +45,9 @@ public class ReconcileRightsholdersController implements IReconcileRightsholders
 
     @Override
     public void approveReconciliation() {
+        StopWatch stopWatch = new Slf4JStopWatch();
         scenarioService.approveOwnershipChanges(scenario);
+        stopWatch.stop("scenario.approveOwnershipChanges");
     }
 
     @Override
