@@ -210,7 +210,7 @@
                 u.product_family <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'detailId'">
-                u.df_usage_uid <include refid="IUsageMapper.direction"/>
+                ${detail_uid} <include refid="IUsageMapper.direction"/>
             </when>
             <when test="sort.property == 'batchName'">
                 ub.name <include refid="IUsageMapper.direction"/>
@@ -392,7 +392,9 @@
         order by
         <choose>
             <when test="null != sort">
-                <include refid="chooseSortProperty"/>
+                <include refid="chooseSortProperty">
+                    <property name="detail_uid" value="u.df_usage_uid"/>
+                </include>
             </when>
             <otherwise>
                 updated_datetime desc
@@ -680,7 +682,9 @@
         order by
         <choose>
             <when test="null != sort">
-                <include refid="chooseSortProperty"/>
+                <include refid="chooseSortProperty">
+                    <property name="detail_uid" value="u.df_usage_uid"/>
+                </include>
             </when>
             <otherwise>
                 df_usage_uid

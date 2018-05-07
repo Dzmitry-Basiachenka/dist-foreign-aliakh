@@ -124,7 +124,9 @@
         order by
         <choose>
             <when test="null != sort">
-                <include refid="IUsageMapper.chooseSortProperty"/>
+                <include refid="IUsageMapper.chooseSortProperty">
+                    <property name="detail_uid" value="u.df_usage_archive_uid"/>
+                </include>
             </when>
             <otherwise>
                 df_usage_archive_uid
