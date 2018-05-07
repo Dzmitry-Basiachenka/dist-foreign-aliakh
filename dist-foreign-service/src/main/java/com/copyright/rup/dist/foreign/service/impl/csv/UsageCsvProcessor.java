@@ -161,6 +161,7 @@ public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
             Usage result = new Usage();
             result.setId(RupPersistUtils.generateUuid());
             result.setWorkTitle(getString(row, Header.TITLE));
+            result.setSystemTitle(result.getWorkTitle());
             result.setArticle(getString(row, Header.ARTICLE));
             result.setStandardNumber(getString(row, Header.STANDARD_NUMBER));
             result.setWrWrkInst(getLong(row, Header.WR_WRK_INST));

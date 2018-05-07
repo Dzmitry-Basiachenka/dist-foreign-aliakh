@@ -80,7 +80,7 @@ public class UsageCsvProcessorIntegrationTest {
         verifyUsage(usages.get(0), 123456789L, 1000009522L, UsageStatusEnum.ELIGIBLE, TITLE);
         verifyUsage(usages.get(1), null, null, UsageStatusEnum.NEW, TITLE);
         verifyUsage(usages.get(2), 123456789L, null, UsageStatusEnum.WORK_FOUND, TITLE);
-        verifyUsage(usages.get(3), 123456789L, 999999999999999999L, UsageStatusEnum.ELIGIBLE, null);
+        verifyUsage(usages.get(3), 123456789L, 999999999999999999L, UsageStatusEnum.ELIGIBLE, TITLE);
         verifyUsageWithEmptyFields(usages.get(4));
     }
 
