@@ -1172,4 +1172,33 @@ databaseChangeLog {
             }
         }
     }
+
+    changeSet(id: '2018-05-07-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("RDSC-587 FDA: Exception is shown during sending usage detail with empty Work Title to Liability Manager")
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'system_title', type: 'VARCHAR(2000)', remarks: 'The work title sent to LM')
+        }
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+            column(name: 'system_title', type: 'VARCHAR(2000)', remarks: 'The work title sent to LM')
+        }
+
+        sql("""update ${dbAppsSchema}.df_usage set system_title = coalesce(work_title,'Unidentified')""")
+        sql("""update ${dbAppsSchema}.df_usage_archive set system_title = coalesce(work_title,'Unidentified')""")
+
+        dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_archive',
+                columnName: 'work_title', columnDataType: 'VARCHAR(2000)')
+        addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_archive',
+                columnName: 'system_title', columnDataType: 'VARCHAR(2000)')
+
+        rollback {
+            dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_archive',
+                    columnName: 'system_title', columnDataType: 'VARCHAR(2000)')
+            addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_archive',
+                    columnName: 'work_title', columnDataType: 'VARCHAR(2000)')
+
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'system_title')
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'system_title')
+        }
+    }
 }

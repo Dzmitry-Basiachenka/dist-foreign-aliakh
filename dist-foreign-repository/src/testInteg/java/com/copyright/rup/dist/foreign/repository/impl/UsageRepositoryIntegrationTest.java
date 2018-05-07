@@ -143,6 +143,7 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(SCENARIO_ID, usage.getScenarioId());
         assertEquals(WR_WRK_INST, usage.getWrWrkInst());
         assertEquals("Work Title", usage.getWorkTitle());
+        assertEquals("System Title", usage.getSystemTitle());
         assertEquals(RH_ACCOUNT_NUMBER, usage.getRightsholder().getAccountNumber());
         assertEquals(RH_ACCOUNT_NAME, usage.getRightsholder().getName());
         assertEquals(UsageStatusEnum.ELIGIBLE, usage.getStatus());
@@ -1121,6 +1122,7 @@ public class UsageRepositoryIntegrationTest {
         usage.setScenarioId(SCENARIO_ID);
         usage.setWrWrkInst(WR_WRK_INST);
         usage.setWorkTitle("Work Title");
+        usage.setSystemTitle("System Title");
         usage.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER);
         usage.getRightsholder().setName(RH_ACCOUNT_NAME);
         usage.setStatus(UsageStatusEnum.ELIGIBLE);

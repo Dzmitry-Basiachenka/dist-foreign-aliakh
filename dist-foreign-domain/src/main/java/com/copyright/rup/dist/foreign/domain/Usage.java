@@ -26,6 +26,7 @@ public class Usage extends StoredEntity<String> {
     private String scenarioId;
     private Long wrWrkInst;
     private String workTitle;
+    private String systemTitle;
     private Rightsholder rightsholder = new Rightsholder();
     private Rightsholder payee = new Rightsholder();
     private String article;
@@ -76,6 +77,14 @@ public class Usage extends StoredEntity<String> {
 
     public void setWorkTitle(String workTitle) {
         this.workTitle = workTitle;
+    }
+
+    public String getSystemTitle() {
+        return systemTitle;
+    }
+
+    public void setSystemTitle(String systemTitle) {
+        this.systemTitle = systemTitle;
     }
 
     public Rightsholder getRightsholder() {
@@ -245,6 +254,7 @@ public class Usage extends StoredEntity<String> {
             .append(this.scenarioId, that.scenarioId)
             .append(this.wrWrkInst, that.wrWrkInst)
             .append(this.workTitle, that.workTitle)
+            .append(this.systemTitle, that.systemTitle)
             .append(this.rightsholder, that.rightsholder)
             .append(this.article, that.article)
             .append(this.standardNumber, that.standardNumber)
@@ -275,6 +285,7 @@ public class Usage extends StoredEntity<String> {
             .append(scenarioId)
             .append(wrWrkInst)
             .append(workTitle)
+            .append(systemTitle)
             .append(rightsholder)
             .append(article)
             .append(standardNumber)
@@ -305,6 +316,7 @@ public class Usage extends StoredEntity<String> {
             .append("scenarioId", scenarioId)
             .append("wrWrkInst", wrWrkInst)
             .append("workTitle", workTitle)
+            .append("systemTitle", systemTitle)
             .append("rightsholder", rightsholder)
             .append("article", article)
             .append("standardNumber", standardNumber)

@@ -27,6 +27,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'wr_wrk_inst', value: '243904752')
             column(name: 'work_title', value: '100 ROAD MOVIES')
+            column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'rh_account_number', value: '1000002859')
             column(name: 'payee_account_number', value: '1000002859')
             column(name: 'status_ind', value: 'LOCKED')
