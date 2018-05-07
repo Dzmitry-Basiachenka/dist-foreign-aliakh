@@ -52,6 +52,7 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -265,7 +266,13 @@ public class UsageService implements IUsageService {
         LOGGER.info("Move details to archive. Started. {}", ForeignLogUtils.scenario(scenario));
         List<Usage> usages = usageRepository.findByScenarioId(scenario.getId());
         stopWatch.lap("usage.moveToArchive_findByScenarioId");
-        usages.forEach(usageArchiveRepository::insert);
+        usages.forEach(usage -> {
+            // TODO {aliakh} remove setting null systemTitle to "Unidentified" when services for RDSC-587 is implemented
+            if (Objects.isNull(usage.getSystemTitle())) {
+                usage.setSystemTitle("Unidentified");
+            }
+            usageArchiveRepository.insert(usage);
+        });
         stopWatch.lap("usage.moveToArchive_insertIntoArchive");
         usageRepository.deleteByScenarioId(scenario.getId());
         LOGGER.info("Move details to archive. Finished. {}, UsagesCount={}", ForeignLogUtils.scenario(scenario),

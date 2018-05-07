@@ -31,6 +31,7 @@ public class UsageDto extends StoredEntity<String> {
     private LocalDate paymentDate;
     private Long wrWrkInst;
     private String workTitle;
+    private String systemTitle;
     private String article;
     private Long rhAccountNumber;
     private String rhName;
@@ -90,6 +91,14 @@ public class UsageDto extends StoredEntity<String> {
 
     public void setWorkTitle(String workTitle) {
         this.workTitle = workTitle;
+    }
+
+    public String getSystemTitle() {
+        return systemTitle;
+    }
+
+    public void setSystemTitle(String systemTitle) {
+        this.systemTitle = systemTitle;
     }
 
     public String getArticle() {
@@ -357,6 +366,7 @@ public class UsageDto extends StoredEntity<String> {
             .append(this.paymentDate, that.paymentDate)
             .append(this.wrWrkInst, that.wrWrkInst)
             .append(this.workTitle, that.workTitle)
+            .append(this.systemTitle, that.systemTitle)
             .append(this.article, that.article)
             .append(this.rhAccountNumber, that.rhAccountNumber)
             .append(this.rhName, that.rhName)
@@ -399,6 +409,7 @@ public class UsageDto extends StoredEntity<String> {
             .append(paymentDate)
             .append(wrWrkInst)
             .append(workTitle)
+            .append(systemTitle)
             .append(article)
             .append(rhAccountNumber)
             .append(rhName)
@@ -441,6 +452,7 @@ public class UsageDto extends StoredEntity<String> {
             .append("paymentDate", paymentDate)
             .append("wrWrkInst", wrWrkInst)
             .append("workTitle", workTitle)
+            .append("systemTitle", systemTitle)
             .append("article", article)
             .append("rhAccountNumber", rhAccountNumber)
             .append("rhName", rhName)

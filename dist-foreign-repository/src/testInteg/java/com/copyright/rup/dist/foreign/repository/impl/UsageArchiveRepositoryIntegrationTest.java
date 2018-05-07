@@ -69,6 +69,7 @@ public class UsageArchiveRepositoryIntegrationTest {
     private static final BigDecimal GROSS_AMOUNT = new BigDecimal("54.4400000000");
     private static final Long WR_WRK_INST = 123456783L;
     private static final String WORK_TITLE = "Work Title";
+    private static final String SYSTEM_TITLE = "System Title";
     private static final String ARTICLE = "Article";
     private static final String STANDARD_NUMBER = "StandardNumber";
     private static final String PUBLISHER = "Publisher";
@@ -112,6 +113,7 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertEquals(RH_ACCOUNT_NUMBER, usageDto.getRhAccountNumber(), 0);
         assertEquals(2000017004L, usageDto.getPayeeAccountNumber(), 0);
         assertEquals(WORK_TITLE, usageDto.getWorkTitle());
+        assertEquals(SYSTEM_TITLE, usageDto.getSystemTitle());
         assertEquals(UsageStatusEnum.LOCKED, usageDto.getStatus());
         assertEquals(ARTICLE, usageDto.getArticle());
         assertEquals(STANDARD_NUMBER, usageDto.getStandardNumber());
@@ -376,6 +378,7 @@ public class UsageArchiveRepositoryIntegrationTest {
         usage.setScenarioId("b1f0b236-3ae9-4a60-9fab-61db84199d6f");
         usage.setWrWrkInst(WR_WRK_INST);
         usage.setWorkTitle(WORK_TITLE);
+        usage.setSystemTitle(SYSTEM_TITLE);
         usage.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER);
         usage.getRightsholder().setName("CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil");
         usage.getPayee().setAccountNumber(2000017004L);

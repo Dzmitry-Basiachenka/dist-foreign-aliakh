@@ -100,6 +100,7 @@ databaseChangeLog {
             column(name: 'df_scenario_uid', value: '3210b236-1239-4a60-9fab-888b84199321')
             column(name: 'wr_wrk_inst', value: '180382915')
             column(name: 'work_title', value: 'High Performance Switching and Routing')
+            column(name: 'system_title', value: 'High Performance Switching and Routing')
             column(name: 'rh_account_number', value: '1000159997')
             column(name: 'payee_account_number', value: '7001555529')
             column(name: 'status_ind', value: 'LOCKED')

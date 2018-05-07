@@ -8,6 +8,7 @@
         <result property="id" column="df_usage_uid"/>
         <result property="wrWrkInst" column="wr_wrk_inst"/>
         <result property="workTitle" column="work_title"/>
+        <result property="systemTitle" column="system_title"/>
         <result property="rhAccountNumber" column="rh_account_number"/>
         <result property="rhName" column="rh_name"/>
         <result property="status" column="status_ind"/>
@@ -74,6 +75,7 @@
         <result property="scenarioId" column="df_scenario_uid"/>
         <result property="wrWrkInst" column="wr_wrk_inst"/>
         <result property="workTitle" column="work_title"/>
+        <result property="systemTitle" column="system_title"/>
         <result property="article" column="article"/>
         <result property="standardNumber" column="standard_number"/>
         <result property="publisher" column="publisher"/>
@@ -94,6 +96,7 @@
         df_scenario_uid,
         wr_wrk_inst,
         work_title,
+        system_title,
         rh_account_number,
         status_ind,
         product_family,
@@ -114,6 +117,7 @@
         u.df_scenario_uid,
         u.wr_wrk_inst,
         u.work_title,
+        u.system_title,
         u.rh_account_number,
         rh.name rh_name,
         u.payee_account_number,
@@ -366,6 +370,7 @@
             #{scenarioId},
             #{wrWrkInst},
             #{workTitle},
+            #{systemTitle},
             #{rightsholder.accountNumber},
             #{status},
             #{productFamily},
@@ -408,6 +413,7 @@
             u.df_scenario_uid,
             u.wr_wrk_inst,
             u.work_title,
+            u.system_title,
             u.rh_account_number,
             rh.name rh_name,
             u.status_ind,
@@ -440,6 +446,7 @@
             u.df_usage_uid,
             u.wr_wrk_inst,
             u.work_title,
+            u.system_title,
             u.rh_account_number,
             rh.name rh_name,
             u.payee_account_number,
@@ -487,6 +494,7 @@
             u.df_scenario_uid,
             u.wr_wrk_inst,
             u.work_title,
+            u.system_title,
             u.rh_account_number,
             r.name rh_name,
             r.df_rightsholder_uid rh_id,
@@ -749,6 +757,7 @@
                     payee.name payee_name,
                     wr_wrk_inst,
                     work_title,
+                    system_title,
                     standard_number,
                     u.gross_amount,
                     service_fee,
@@ -865,6 +874,7 @@
             payee.name payee_name,
             wr_wrk_inst,
             work_title,
+            system_title,
             standard_number,
             u.gross_amount,
             service_fee,
@@ -1008,6 +1018,7 @@
         select distinct
             standard_number,
             work_title,
+            system_title,
             product_family,
             status_ind
         from ${schema}.df_usage
@@ -1021,6 +1032,7 @@
     <select id="findWithTitle" resultMap="usageResultMap" parameterType="map">
         select distinct
             work_title,
+            system_title,
             product_family,
             status_ind
         from ${schema}.df_usage
