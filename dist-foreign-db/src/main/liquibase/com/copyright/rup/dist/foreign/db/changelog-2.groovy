@@ -1110,27 +1110,6 @@ databaseChangeLog {
         }
 
         rollback {
-            sql("drop index ${dbAppsSchema}.idx_qrtz_ft_tg")
-            sql("drop index ${dbAppsSchema}.idx_qrtz_ft_t_g")
-            sql("drop index ${dbAppsSchema}.idx_qrtz_ft_jg")
-            sql("drop index ${dbAppsSchema}.idx_qrtz_ft_j_g")
-            sql("drop index ${dbAppsSchema}.idx_qrtz_ft_inst_job_req_rcvry")
-            sql("drop index ${dbAppsSchema}.idx_qrtz_ft_trig_inst_name")
-            sql("drop index ${dbAppsSchema}.idx_qrtz_t_nft_st_misfire_grp")
-            sql("drop index ${dbAppsSchema}.idx_qrtz_t_nft_st_misfire")
-            sql("drop index ${dbAppsSchema}.idx_qrtz_t_nft_misfire")
-            sql("drop index ${dbAppsSchema}.idx_qrtz_t_nft")
-            sql("drop index ${dbAppsSchema}.idx_qrtz_t_next_fire_time")
-            sql("drop index ${dbAppsSchema}.idx_qrtz_t_n_g_state")
-            sql("drop index ${dbAppsSchema}.idx_qrtz_t_n_state")
-            sql("drop index ${dbAppsSchema}.idx_qrtz_t_state")
-            sql("drop index ${dbAppsSchema}.idx_qrtz_t_g")
-            sql("drop index ${dbAppsSchema}.idx_qrtz_t_c")
-            sql("drop index ${dbAppsSchema}.idx_qrtz_t_jg")
-            sql("drop index ${dbAppsSchema}.idx_qrtz_t_j")
-            sql("drop index ${dbAppsSchema}.idx_qrtz_j_grp")
-            sql("drop index ${dbAppsSchema}.idx_qrtz_j_req_recovery")
-
             dropTable(tableName: 'df_qrtz_locks', schemaName: dbAppsSchema)
             dropTable(tableName: 'df_qrtz_scheduler_state', schemaName: dbAppsSchema)
             dropTable(tableName: 'df_qrtz_fired_triggers', schemaName: dbAppsSchema)
