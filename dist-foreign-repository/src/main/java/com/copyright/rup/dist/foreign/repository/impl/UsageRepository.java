@@ -404,8 +404,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         parameters.put(UPDATE_USER_KEY, StoredEntity.DEFAULT_USER);
         parameters.put(STATUS_KEY, UsageStatusEnum.WORK_FOUND);
         researchedUsages.forEach(researchedUsage -> {
-            parameters.put(USAGE_ID_KEY, researchedUsage.getUsageId());
-            parameters.put("wrWrkInst", researchedUsage.getWrWrkInst());
+            parameters.put("usage", researchedUsage);
             update("IUsageMapper.updateResearchedUsage", parameters);
         });
     }

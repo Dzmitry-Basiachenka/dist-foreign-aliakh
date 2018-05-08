@@ -452,19 +452,23 @@ public class UsageServiceTest {
     public void testLoadResearchedUsages() {
         String usageId1 = "721ca627-09bc-4204-99f4-6acae415fa5d";
         String usageId2 = "9c07f6dd-382e-4cbb-8cd1-ab9f51413e0a";
+        String title1 = "Title1";
+        String title2 = "Title2";
         ResearchedUsage researchedUsage1 = new ResearchedUsage();
         researchedUsage1.setUsageId(usageId1);
+        researchedUsage1.setWorkTitle(title1);
+        researchedUsage1.setSystemTitle(title1);
         researchedUsage1.setWrWrkInst(987654321L);
         ResearchedUsage researchedUsage2 = new ResearchedUsage();
         researchedUsage2.setUsageId(usageId2);
+        researchedUsage2.setWorkTitle(title2);
+        researchedUsage2.setSystemTitle(title2);
         researchedUsage2.setWrWrkInst(876543210L);
         List<ResearchedUsage> researchedUsages = ImmutableList.of(researchedUsage1, researchedUsage2);
         usageRepository.updateResearchedUsages(researchedUsages);
         Usage usage1 = new Usage();
-        usage1.setId(RupPersistUtils.generateUuid());
         usage1.setId(usageId1);
         Usage usage2 = new Usage();
-        usage2.setId(RupPersistUtils.generateUuid());
         usage2.setId(usageId2);
         usageAuditService.logAction(usage1.getId(), UsageActionTypeEnum.WORK_FOUND,
             "Wr Wrk Inst 987654321 was added based on research");

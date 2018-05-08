@@ -140,6 +140,7 @@ public class WorkMatchingService implements IWorkMatchingService {
         if (MapUtils.isNotEmpty(titleToWrWrkInstMap)) {
             usages.forEach(usage -> {
                 usage.setWrWrkInst(titleToWrWrkInstMap.get(usage.getWorkTitle()));
+                usage.setSystemTitle(usage.getWorkTitle());
                 addWorkFoundUsageToResult(result, usage);
             });
         }
@@ -153,7 +154,6 @@ public class WorkMatchingService implements IWorkMatchingService {
                 Work work = idnoToWorkMap.get(usage.getStandardNumber());
                 if (Objects.nonNull(work)) {
                     usage.setWrWrkInst(work.getWrWrkInst());
-                    usage.setWorkTitle(work.getMainTitle());
                     usage.setSystemTitle(work.getMainTitle());
                     addWorkFoundUsageToResult(result, usage);
                 }

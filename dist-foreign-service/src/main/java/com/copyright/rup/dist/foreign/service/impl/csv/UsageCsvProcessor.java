@@ -161,10 +161,12 @@ public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
             Usage result = new Usage();
             result.setId(RupPersistUtils.generateUuid());
             result.setWorkTitle(getString(row, Header.TITLE));
-            result.setSystemTitle(result.getWorkTitle());
             result.setArticle(getString(row, Header.ARTICLE));
             result.setStandardNumber(getString(row, Header.STANDARD_NUMBER));
             result.setWrWrkInst(getLong(row, Header.WR_WRK_INST));
+            if (Objects.nonNull(result.getWrWrkInst())) {
+                result.setSystemTitle(result.getWorkTitle());
+            }
             Rightsholder rightsholder = new Rightsholder();
             rightsholder.setAccountNumber(getLong(row, Header.RH_ACCT_NUMBER));
             result.setRightsholder(rightsholder);

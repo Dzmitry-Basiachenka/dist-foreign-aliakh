@@ -21,7 +21,7 @@ public class PiIntegrationServiceMock extends PiIntegrationService {
 
     @Override
     public Map<String, Work> findWorksByIdnos(Map<String, String> idnoToTitleMap) {
-        return ImmutableMap.of("978-0-271-01750-1", new Work(123059057L, "Main title"));
+        return ImmutableMap.of("978-0-271-01750-1", new Work(123059057L, "Mock title"));
     }
 
     @Override

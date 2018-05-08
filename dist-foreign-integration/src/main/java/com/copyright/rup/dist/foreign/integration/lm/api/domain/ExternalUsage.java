@@ -56,7 +56,7 @@ public class ExternalUsage {
         this.rhAccountNumber = usage.getRightsholder().getAccountNumber();
         this.productFamily = usage.getProductFamily();
         this.usageId = usage.getId();
-        this.workTitle = usage.getWorkTitle();
+        this.workTitle = usage.getSystemTitle();
         this.royaltyAmount = usage.getNetAmount().setScale(2, BigDecimal.ROUND_HALF_UP);
         this.wrWrkInst = usage.getWrWrkInst();
     }
