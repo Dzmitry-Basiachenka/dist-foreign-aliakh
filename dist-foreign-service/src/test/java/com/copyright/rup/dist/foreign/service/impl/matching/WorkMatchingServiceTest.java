@@ -12,6 +12,7 @@ import static org.junit.Assert.assertEquals;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.Work;
 import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
@@ -90,10 +91,13 @@ public class WorkMatchingServiceTest {
         Usage usage1 = buildUsage(standardNumber1, StringUtils.EMPTY);
         Usage usage2 = buildUsage(standardNumber2, StringUtils.EMPTY);
         List<Usage> usages = Lists.newArrayList(usage1, usage2);
-        Map<String, Long> resultMap = ImmutableMap.of(standardNumber1, 112930820L, standardNumber2, 155941698L);
-        expect(piIntegrationService.findWrWrkInstsByIdnos(
+        String mainTitle1 = "Main title 1";
+        String mainTitle2 = "Main title 2";
+        Map<String, Work> idnoToWorkMap = ImmutableMap.of(standardNumber1, new Work(112930820L, mainTitle1),
+            standardNumber2, new Work(155941698L, mainTitle2));
+        expect(piIntegrationService.findWorksByIdnos(
             ImmutableMap.of(standardNumber1, StringUtils.EMPTY, standardNumber2, StringUtils.EMPTY)))
-            .andReturn(resultMap).once();
+            .andReturn(idnoToWorkMap).once();
         usageRepository.updateStatusAndWrWrkInstByStandardNumber(usages);
         expectLastCall().once();
         expect(usageRepository.findByStandardNumberAndStatus(standardNumber1, UsageStatusEnum.WORK_FOUND))
@@ -104,10 +108,15 @@ public class WorkMatchingServiceTest {
         expectLastCall().times(2);
         replay(piIntegrationService, usageRepository, auditService);
         List<Usage> result = workMatchingService.matchByIdno(usages);
-        result.forEach(usage -> {
-            assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
-            assertEquals(resultMap.get(usage.getStandardNumber()), usage.getWrWrkInst());
-        });
+        assertEquals(2, result.size());
+        assertEquals(UsageStatusEnum.WORK_FOUND, usages.get(0).getStatus());
+        Work work1 = idnoToWorkMap.get(usages.get(0).getStandardNumber());
+        assertEquals(work1.getWrWrkInst(), usages.get(0).getWrWrkInst());
+        assertEquals(work1.getMainTitle(), mainTitle1);
+        assertEquals(UsageStatusEnum.WORK_FOUND, usages.get(1).getStatus());
+        Work work2 = idnoToWorkMap.get(usages.get(1).getStandardNumber());
+        assertEquals(work2.getWrWrkInst(), usages.get(1).getWrWrkInst());
+        assertEquals(work2.getMainTitle(), mainTitle2);
         verify(piIntegrationService, usageRepository, auditService);
     }
 

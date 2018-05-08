@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.service.impl.mock;
 
+import com.copyright.rup.dist.foreign.domain.Work;
 import com.copyright.rup.dist.foreign.integration.pi.impl.PiIntegrationService;
 
 import com.google.common.collect.ImmutableMap;
@@ -19,8 +20,8 @@ import java.util.Set;
 public class PiIntegrationServiceMock extends PiIntegrationService {
 
     @Override
-    public Map<String, Long> findWrWrkInstsByIdnos(Map<String, String> idnoToTitleMap) {
-        return ImmutableMap.of("978-0-271-01750-1", 123059057L);
+    public Map<String, Work> findWorksByIdnos(Map<String, String> idnoToTitleMap) {
+        return ImmutableMap.of("978-0-271-01750-1", new Work(123059057L, "Main title"));
     }
 
     @Override
