@@ -76,7 +76,7 @@
         <property name="autoStartup" value="$RUP{dist.foreign.scheduler.auto.startup}"/>
         <property name="dataSource" ref="dfDataSource"/>
         <property name="jobFactory">
-            <bean class="com.copyright.rup.dist.foreign.service.impl.util.AutowiringSpringJobBeanFactory"/>
+            <bean class="com.copyright.rup.dist.common.service.impl.quartz.AutowiringSpringJobBeanFactory"/>
         </property>
         <property name="overwriteExistingJobs" value="true"/>
         <property name="quartzProperties">
