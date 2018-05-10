@@ -13,7 +13,12 @@
              }
         }
 
+        .v-menubar-menuitem {
+            outline: none;
+        }
+
         .v-menubar-menuitem-reports-menu-root {
+            outline: none;
             margin: -3px 0 !important;
             height: 35px !important;
             padding: 0 20px !important;

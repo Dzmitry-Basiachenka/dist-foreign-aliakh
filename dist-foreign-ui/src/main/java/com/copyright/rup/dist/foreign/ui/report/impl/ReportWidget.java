@@ -30,7 +30,8 @@ public class ReportWidget extends MenuBar implements IReportWidget {
         VaadinUtils.addComponentStyle(this, "reports-menu");
         rootItem = addItem(ForeignUi.getMessage("tab.reports"), null);
         rootItem.setStyleName("reports-menu-root");
-        addReportItem("Report1", controller.getReportWindowController());
+        addReportItem(ForeignUi.getMessage("menu.report.undistributed_liabilities"),
+            controller.getUndistributedLiabilitiesReportController());
         return this;
     }
 
@@ -43,7 +44,10 @@ public class ReportWidget extends MenuBar implements IReportWidget {
         rootItem.addItem(reportCaption, new ReportSelectCommand(reportController, reportCaption));
     }
 
-    private static class ReportSelectCommand implements Command {
+    /**
+     * Represents command to show report window based on selected item.
+     */
+    static class ReportSelectCommand implements Command {
 
         private final IController reportController;
         private final String reportCaption;
@@ -61,8 +65,9 @@ public class ReportWidget extends MenuBar implements IReportWidget {
 
         @Override
         public void menuSelected(MenuItem selectedItem) {
-            Windows.showModalWindow(new Window());
+            Window reportWindow = (Window) reportController.initWidget();
+            reportWindow.setCaption(reportCaption);
+            Windows.showModalWindow(reportWindow);
         }
     }
-
 }
