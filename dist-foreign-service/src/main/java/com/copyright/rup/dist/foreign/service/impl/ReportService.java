@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 
+import org.perf4j.aop.Profiled;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,6 @@ import java.util.EnumSet;
  *
  * @author Nikita Levyankov
  */
-//TODO {dbaraukova} implement integration tests for this service.
 @Service
 public class ReportService implements IReportService {
 
@@ -36,11 +36,13 @@ public class ReportService implements IReportService {
     private IUsageArchiveRepository usageArchiveRepository;
 
     @Override
+    @Profiled(tag = "usage.writeUsageCsvReport")
     public void writeUsageCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream) {
         usageRepository.writeUsagesCsvReport(filter, pipedOutputStream);
     }
 
     @Override
+    @Profiled(tag = "scenario.writeScenarioUsagesCsvReport")
     public void writeScenarioUsagesCsvReport(Scenario scenario, PipedOutputStream outputStream) {
         if (ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())) {
             usageArchiveRepository.writeScenarioUsagesCsvReport(scenario.getId(), outputStream);
@@ -50,6 +52,7 @@ public class ReportService implements IReportService {
     }
 
     @Override
+    @Profiled(tag = "audit.writeAuditCsvReport")
     public void writeAuditCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) {
         usageRepository.writeAuditCsvReport(filter, pipedOutputStream);
     }

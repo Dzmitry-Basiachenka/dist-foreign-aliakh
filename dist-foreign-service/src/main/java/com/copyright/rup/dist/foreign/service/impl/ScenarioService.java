@@ -110,18 +110,12 @@ public class ScenarioService implements IScenarioService {
     @Override
     @Transactional
     public Scenario createScenario(String scenarioName, String description, UsageFilter usageFilter) {
-        StopWatch stopWatch = new Slf4JStopWatch();
         List<Usage> usages = usageService.getUsagesWithAmounts(usageFilter);
-        stopWatch.lap("scenario.create_1_getUsagesWithAmounts");
         Scenario scenario = buildScenario(scenarioName, description, usages);
         scenarioRepository.insert(scenario);
-        stopWatch.lap("scenario.create_2_insertScenario");
         usageService.addUsagesToScenario(usages, scenario);
-        stopWatch.lap("scenario.create_3_addUsagesToScenario");
         scenarioUsageFilterService.insert(scenario.getId(), new ScenarioUsageFilter(usageFilter));
-        stopWatch.lap("scenario.create_4_insertScenarioUsageFilter");
         scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY);
-        stopWatch.stop("scenario.create_5_logAddedUsagesAction");
         return scenario;
     }
 
@@ -158,6 +152,7 @@ public class ScenarioService implements IScenarioService {
     }
 
     @Override
+    @Profiled(tag = "scenario.getScenarioWithAmountsAndLastAction")
     public Scenario getScenarioWithAmountsAndLastAction(Scenario scenario) {
         return ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())
             ? scenarioRepository.findArchivedWithAmountsAndLastAction(scenario.getId())
@@ -170,6 +165,7 @@ public class ScenarioService implements IScenarioService {
     }
 
     @Override
+    @Profiled(tag = "scenario.getRightsholdersByScenarioAndSourceRro")
     public List<RightsholderPayeePair> getRightsholdersByScenarioAndSourceRro(String scenarioId,
                                                                               Long rroAccountNumber) {
         return scenarioRepository.findRightsholdersByScenarioIdAndSourceRro(scenarioId, rroAccountNumber);
@@ -196,21 +192,16 @@ public class ScenarioService implements IScenarioService {
     @Override
     @Transactional
     public void sendToLm(Scenario scenario) {
-        StopWatch stopWatch = new Slf4JStopWatch();
         LOGGER.info("Send scenario to LM. Started. {}, User={}", ForeignLogUtils.scenario(scenario),
             RupContextUtils.getUserName());
         List<Usage> usages = usageService.moveToArchive(scenario);
-        stopWatch.lap("scenario.sendToLm_1_moveToArchive");
         if (CollectionUtils.isNotEmpty(usages)) {
             changeScenarioState(scenario, ScenarioStatusEnum.SENT_TO_LM, ScenarioActionTypeEnum.SENT_TO_LM,
                 StringUtils.EMPTY);
-            stopWatch.lap("scenario.sendToLm_2_changeScenarioState");
             lmIntegrationService.sendToLm(usages.stream().map(ExternalUsage::new).collect(Collectors.toList()));
             LOGGER.info("Send scenario to LM. Finished. {}, User={}", ForeignLogUtils.scenario(scenario),
                 RupContextUtils.getUserName());
-            stopWatch.stop("scenario.sendToLm_3_sendUsages");
         } else {
-            stopWatch.stop();
             throw new RupRuntimeException(String.format("Send scenario to LM. Failed. %s. Reason=Scenario is empty",
                 ForeignLogUtils.scenario(scenario)));
         }
@@ -218,7 +209,6 @@ public class ScenarioService implements IScenarioService {
 
     @Override
     @Transactional
-    @Profiled(tag = "service.ScenarioService.reconcileRightsholders")
     public void reconcileRightsholders(Scenario scenario) {
         LOGGER.info("Reconcile rightsholders. Started. {}", ForeignLogUtils.scenario(Objects.requireNonNull(scenario)));
         //TODO {isuvorau} compare performance for selecting new object instead of 'Usage'
@@ -255,7 +245,6 @@ public class ScenarioService implements IScenarioService {
 
     @Override
     @Transactional
-    @Profiled(tag = "service.ScenarioService.approveOwnershipChanges")
     public void approveOwnershipChanges(Scenario scenario) {
         List<RightsholderDiscrepancy> discrepancies =
             rightsholderDiscrepancyService.getByScenarioIdAndStatus(
