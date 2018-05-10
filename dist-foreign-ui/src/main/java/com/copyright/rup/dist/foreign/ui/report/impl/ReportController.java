@@ -2,9 +2,10 @@ package com.copyright.rup.dist.foreign.ui.report.impl;
 
 import com.copyright.rup.dist.foreign.ui.report.api.IReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportWidget;
-import com.copyright.rup.dist.foreign.ui.report.api.IReportWindowController;
+import com.copyright.rup.dist.foreign.ui.report.api.IUndistributedLiabilitiesReportController;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -22,9 +23,12 @@ import org.springframework.stereotype.Component;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ReportController extends CommonController<IReportWidget> implements IReportController {
 
+    @Autowired
+    private IUndistributedLiabilitiesReportController undistributedLiabilitiesReportController;
+
     @Override
-    public IReportWindowController getReportWindowController() {
-        return null;
+    public IUndistributedLiabilitiesReportController getUndistributedLiabilitiesReportController() {
+        return undistributedLiabilitiesReportController;
     }
 
     @Override
