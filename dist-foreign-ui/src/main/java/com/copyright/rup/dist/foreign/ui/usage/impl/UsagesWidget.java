@@ -124,7 +124,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
     }
 
     private void addColumns() {
-        addColumn(UsageDto::getId, "table.column.detail_id", "detailId", false, 260);
+        addColumn(UsageDto::getId, "table.column.detail_id", "detailId", false, 130);
         addColumn(UsageDto::getStatus, "table.column.usage_status", "status", true, 115);
         addColumn(UsageDto::getProductFamily, "table.column.product_family", "productFamily", true, 125);
         addColumn(UsageDto::getBatchName, "table.column.batch_name", "batchName", true, 145);
