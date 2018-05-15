@@ -41,6 +41,21 @@
           "wg_owner_org_number": "1000002137"
         },
         {
+          "wr_wrk_inst": "122861189",
+          "status": "SPECIAL_REQUEST",
+          "type_of_use": "DIGITAL",
+          "market": "CORPORATE",
+          "distribution": "INTERNAL",
+          "region": "WORLDWIDE",
+          "right_begin_date": "10/26/1000",
+          "right_end_date": "12/31/3000",
+          "ownership_begin_date": "01/01/1000",
+          "ownership_end_date": "12/31/3000",
+          "agreement_begin_date": "01/01/1000",
+          "agreement_end_date": "12/31/3000",
+          "wg_owner_org_number": "7000542345"
+        },
+        {
           "wr_wrk_inst": "123647460",
           "status": "DENY",
           "type_of_use": "DIGITAL",
