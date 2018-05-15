@@ -66,7 +66,7 @@ public class ResearchedUsagesCsvProcessor extends DistCsvProcessor<ResearchedUsa
         ARTICLE("Article"),
         STANDARD_NUMBER("Standard Number"),
         WR_WRK_INST("Wr Wrk Inst"),
-        RHA_CCOUNT_NUMBER("RH Account #"),
+        RH_ACCOUNT_NUMBER("RH Account #"),
         RH_NAME("RH Name"),
         PUBLISHER("Publisher"),
         PUBLICATION_DATE("Pub Date"),
@@ -75,7 +75,7 @@ public class ResearchedUsagesCsvProcessor extends DistCsvProcessor<ResearchedUsa
         GROSS_AMOUNT("Amt in USD"),
         BATCH_GROSS_AMOUNT("Gross Amt in USD"),
         MARKET("Market"),
-        MARKETP_ERIOD_FROM("Market Period From"),
+        MARKET_PERIOD_FROM("Market Period From"),
         MARKET_PERIOD_TO("Market Period To"),
         AUTHOR("Author");
 
