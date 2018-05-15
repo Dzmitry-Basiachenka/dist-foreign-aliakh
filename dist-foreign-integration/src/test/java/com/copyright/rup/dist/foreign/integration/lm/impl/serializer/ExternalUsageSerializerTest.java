@@ -88,7 +88,7 @@ public class ExternalUsageSerializerTest {
         rightsholder.setAccountNumber(1000010023L);
         usage.setRightsholder(rightsholder);
         usage.setNetAmount(new BigDecimal("100.00"));
-        usage.setWorkTitle("Work title");
+        usage.setSystemTitle("System title");
         usage.setWrWrkInst(123456789L);
         usage.setProductFamily("FAS");
         return new ExternalUsage(usage);

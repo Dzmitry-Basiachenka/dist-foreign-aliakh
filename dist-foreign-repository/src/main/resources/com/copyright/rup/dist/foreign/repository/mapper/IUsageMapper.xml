@@ -1083,6 +1083,7 @@
             status_ind = #{status},
             wr_wrk_inst = #{wrWrkInst},
             product_family = #{productFamily},
+            system_title = #{systemTitle},
             rh_account_number = #{rightsholder.accountNumber},
             payee_account_number = #{payee.accountNumber},
             net_amount = #{netAmount},
@@ -1099,6 +1100,7 @@
             status_ind = #{usage.status},
             wr_wrk_inst = #{usage.wrWrkInst},
             product_family = #{usage.productFamily},
+            system_title = #{usage.systemTitle},
             <include refid="StoredEntityMapper.update"/>
         where standard_number = #{usage.standardNumber}
             and status_ind = #{status}
@@ -1110,6 +1112,7 @@
             status_ind = #{usage.status},
             wr_wrk_inst = #{usage.wrWrkInst},
             product_family = #{usage.productFamily},
+            system_title = #{usage.systemTitle},
             <include refid="StoredEntityMapper.update"/>
         where standard_number is null
             and work_title = #{usage.workTitle}
@@ -1119,9 +1122,10 @@
     <update id="updateResearchedUsage" parameterType="map">
         update ${schema}.df_usage
         set
-            wr_wrk_inst = #{wrWrkInst},
+            system_title = #{usage.systemTitle},
+            wr_wrk_inst = #{usage.wrWrkInst},
             status_ind = #{status},
             <include refid="StoredEntityMapper.update"/>
-        where df_usage_uid = #{usageId}
+        where df_usage_uid = #{usage.usageId}
     </update>
 </mapper>

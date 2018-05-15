@@ -940,24 +940,38 @@ public class UsageRepositoryIntegrationTest {
     public void testUpdateResearchedUsages() {
         String usageId1 = "721ca627-09bc-4204-99f4-6acae415fa5d";
         String usageId2 = "9c07f6dd-382e-4cbb-8cd1-ab9f51413e0a";
+        String title1 = "Title1";
+        String title2 = "Title2";
         Usage usage1 = usageRepository.findById(usageId1);
         assertEquals(UsageStatusEnum.WORK_RESEARCH, usage1.getStatus());
+        assertEquals(WORK_TITLE, usage1.getWorkTitle());
+        assertNull(usage1.getSystemTitle());
         assertNull(usage1.getWrWrkInst());
         Usage usage2 = usageRepository.findById(usageId2);
         assertEquals(UsageStatusEnum.WORK_RESEARCH, usage2.getStatus());
+        assertEquals(WORK_TITLE, usage2.getWorkTitle());
+        assertNull(usage2.getSystemTitle());
         assertNull(usage2.getWrWrkInst());
         ResearchedUsage researchedUsage1 = new ResearchedUsage();
         researchedUsage1.setUsageId(usageId1);
+        researchedUsage1.setWorkTitle(title1);
+        researchedUsage1.setSystemTitle(title1);
         researchedUsage1.setWrWrkInst(180382916L);
         ResearchedUsage researchedUsage2 = new ResearchedUsage();
         researchedUsage2.setUsageId(usageId2);
+        researchedUsage2.setWorkTitle(title2);
+        researchedUsage2.setSystemTitle(title2);
         researchedUsage2.setWrWrkInst(854030733L);
         usageRepository.updateResearchedUsages(Lists.newArrayList(researchedUsage1, researchedUsage2));
         usage1 = usageRepository.findById(usageId1);
         assertEquals(UsageStatusEnum.WORK_FOUND, usage1.getStatus());
+        assertEquals(WORK_TITLE, usage1.getWorkTitle());
+        assertEquals(title1, usage1.getSystemTitle());
         assertEquals(180382916L, usage1.getWrWrkInst().longValue());
         usage2 = usageRepository.findById(usageId2);
         assertEquals(UsageStatusEnum.WORK_FOUND, usage2.getStatus());
+        assertEquals(WORK_TITLE, usage2.getWorkTitle());
+        assertEquals(title2, usage2.getSystemTitle());
         assertEquals(854030733L, usage2.getWrWrkInst().longValue());
     }
 
