@@ -47,6 +47,8 @@ public class WorksMatchingJob extends QuartzJobBean {
     @Override
     public void executeInternal(JobExecutionContext context) {
         int offset = 0;
+        int processedUsagesCount = 0;
+        int matchedUsagesCount = 0;
         StopWatch stopWatch = new Slf4JStopWatch();
         int standardNumbersCount = usageService.getStandardNumbersCount();
         int titlesCount = usageService.getTitlesCount();
@@ -54,8 +56,10 @@ public class WorksMatchingJob extends QuartzJobBean {
         for (int i = 0; i < standardNumbersCount; i += batchSize) {
             List<Usage> usagesByStandardNumber = usageService.getUsagesWithStandardNumber(batchSize, offset);
             if (CollectionUtils.isNotEmpty(usagesByStandardNumber)) {
+                processedUsagesCount += usagesByStandardNumber.size();
                 try {
-                    matchingService.matchByIdno(usagesByStandardNumber);
+                    List<Usage> foundUsages = matchingService.matchByIdno(usagesByStandardNumber);
+                    matchedUsagesCount += foundUsages.size();
                 } catch (RupRuntimeException e) {
                     offset += batchSize;
                     LOGGER.warn("Search works. Skipped. INDOsCount={}", usagesByStandardNumber.size());
@@ -65,9 +69,11 @@ public class WorksMatchingJob extends QuartzJobBean {
         offset = 0;
         for (int i = 0; i < titlesCount; i += batchSize) {
             List<Usage> usagesByTitle = usageService.getUsagesWithTitle(batchSize, offset);
+            processedUsagesCount += usagesByTitle.size();
             if (CollectionUtils.isNotEmpty(usagesByTitle)) {
                 try {
-                    matchingService.matchByTitle(usagesByTitle);
+                    List<Usage> foundUsages = matchingService.matchByTitle(usagesByTitle);
+                    matchedUsagesCount += foundUsages.size();
                 } catch (RupRuntimeException e) {
                     offset += batchSize;
                     LOGGER.warn("Search works. Skipped. TitlesCount={}", usagesByTitle.size());
@@ -78,7 +84,8 @@ public class WorksMatchingJob extends QuartzJobBean {
         if (CollectionUtils.isNotEmpty(usagesWithoutStandardNumberAndTitle)) {
             matchingService.updateStatusForUsagesWithNoStandardNumberAndTitle(usagesWithoutStandardNumberAndTitle);
         }
-        LOGGER.info("Search works. Finished. IDNOsCount={}, TitlesCount={}", standardNumbersCount, titlesCount);
+        LOGGER.info("Search works. Finished. IDNOsCount={}, TitlesCount={}, Processed={}, Matched={}",
+            standardNumbersCount, titlesCount, processedUsagesCount, matchedUsagesCount);
         stopWatch.stop("usage.matchWorks_findWorksAndUpdateStatuses");
     }
 }
