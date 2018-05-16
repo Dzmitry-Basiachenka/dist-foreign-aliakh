@@ -1,23 +1,30 @@
 package com.copyright.rup.dist.foreign.ui.rest;
 
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.expectLastCall;
-
-import com.copyright.rup.dist.foreign.service.api.IRightsService;
-import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.service.impl.quartz.WorksMatchingJob;
+import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.expectLastCall;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
+import static org.powermock.api.easymock.PowerMock.replayAll;
+import static org.powermock.api.easymock.PowerMock.verifyAll;
 
 import org.apache.commons.lang3.StringUtils;
-import org.easymock.EasyMockSupport;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
+import org.quartz.JobDetail;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobKey;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.impl.JobDetailImpl;
+import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
-import java.io.IOException;
-import java.util.concurrent.Future;
+import java.util.Collections;
 
 import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -30,81 +37,101 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Uladzislau_Shalamitski
  */
-public class JobRunnerRestFilterTest extends EasyMockSupport {
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({JobKey.class})
+public class JobRunnerRestFilterTest {
+
+    private static final String REQUEST = "/job/trigger";
+    private static final String PARAMETER = "name";
 
     private HttpServletRequest request;
     private HttpServletResponse response;
     private FilterChain chain;
-    private IRightsService rightsService;
-    private IUsageService usageService;
-    private WorksMatchingJob worksMatchingJob;
     private JobRunnerRestFilter filter;
+    private SchedulerFactoryBean schedulerFactoryBean;
+    private JobKey jobKey;
 
     @Before
     public void setUp() {
+        mockStatic(JobKey.class);
         request = createMock(HttpServletRequest.class);
         response = createMock(HttpServletResponse.class);
         chain = createMock(FilterChain.class);
-        rightsService = createMock(IRightsService.class);
-        usageService = createMock(IUsageService.class);
-        worksMatchingJob = createMock(WorksMatchingJob.class);
+        jobKey = createMock(JobKey.class);
         filter = new JobRunnerRestFilter();
-        Whitebox.setInternalState(filter, "rightsService", rightsService);
-        Whitebox.setInternalState(filter, "usageService", usageService);
-        Whitebox.setInternalState(filter, "worksMatchingJob", worksMatchingJob);
+        schedulerFactoryBean = createMock(SchedulerFactoryBean.class);
+        Whitebox.setInternalState(filter, schedulerFactoryBean);
         expect(request.getServletPath()).andReturn(StringUtils.EMPTY);
     }
 
     @Test
-    public void testRightsholderJob() throws ServletException, IOException, InterruptedException {
-        expect(request.getPathInfo()).andReturn("/job/rightsholder").once();
-        rightsService.updateRightsholders();
-        expectLastCall().once();
+    public void testRightsholderJob() throws SchedulerException {
+        expect(request.getPathInfo()).andReturn(REQUEST).once();
+        expect(request.getParameter(PARAMETER)).andReturn("rightsholder").once();
+        expectJobTriggers("df.service.updateRightsholdersQuartzJob");
+    }
+
+    @Test
+    public void testGetRightsJob() throws SchedulerException {
+        expect(request.getPathInfo()).andReturn(REQUEST).once();
+        expect(request.getParameter(PARAMETER)).andReturn("getrights").once();
+        expectJobTriggers("df.service.getRightsQuartzJob");
+    }
+
+    @Test
+    public void testSendForRAJob() throws SchedulerException {
+        expect(request.getPathInfo()).andReturn(REQUEST).once();
+        expect(request.getParameter(PARAMETER)).andReturn("sendforra").once();
+        expectJobTriggers("df.service.sendToRightsAssignmentQuartzJob");
+    }
+
+    @Test
+    public void testCrmJob() throws SchedulerException {
+        expect(request.getPathInfo()).andReturn(REQUEST).once();
+        expect(request.getParameter(PARAMETER)).andReturn("crm").once();
+        expectJobTriggers("df.service.sendToCrmQuartzJob");
+    }
+
+    @Test
+    public void testPiJob() throws SchedulerException {
+        expect(request.getPathInfo()).andReturn(REQUEST).once();
+        expect(request.getParameter(PARAMETER)).andReturn("pi").once();
+        expectJobTriggers("df.service.worksMatchingQuartzJob");
+    }
+
+    @Test
+    public void testJobStatus() throws SchedulerException {
+        expect(request.getPathInfo()).andReturn("/job/status").once();
+        expect(request.getParameter(PARAMETER)).andReturn("crm").once();
+        expect(JobKey.jobKey("df.service.sendToCrmQuartzJob")).andReturn(jobKey).once();
+        Scheduler scheduler = createMock(Scheduler.class);
+        expect(schedulerFactoryBean.getScheduler()).andReturn(scheduler).once();
+        expect(scheduler.getJobDetail(jobKey)).andReturn(new JobDetailImpl()).once();
+        expect(scheduler.getCurrentlyExecutingJobs()).andReturn(Collections.emptyList()).once();
         response.setStatus(HttpServletResponse.SC_OK);
         expectLastCall().once();
         replayAll();
         filter.doFilter(request, response, chain);
-        waitAndVerify();
+        verifyAll();
     }
 
     @Test
-    public void testRaJob() throws ServletException, IOException, InterruptedException {
-        expect(request.getPathInfo()).andReturn("/job/ra").once();
-        rightsService.sendForRightsAssignment();
-        expectLastCall().once();
-        response.setStatus(HttpServletResponse.SC_OK);
+    public void testInvalidJobStatus() throws SchedulerException {
+        expect(request.getPathInfo()).andReturn("/job/status").once();
+        expect(request.getParameter(PARAMETER)).andReturn("crm").once();
+        expect(JobKey.jobKey("df.service.sendToCrmQuartzJob")).andReturn(null).once();
+        Scheduler scheduler = createMock(Scheduler.class);
+        expect(schedulerFactoryBean.getScheduler()).andReturn(scheduler).once();
+        expect(scheduler.getJobDetail(null)).andReturn(null).once();
+        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         expectLastCall().once();
         replayAll();
         filter.doFilter(request, response, chain);
-        waitAndVerify();
+        verifyAll();
     }
 
     @Test
-    public void testCrmJob() throws ServletException, IOException, InterruptedException {
-        expect(request.getPathInfo()).andReturn("/job/crm").once();
-        usageService.sendToCrm();
-        expectLastCall().once();
-        response.setStatus(HttpServletResponse.SC_OK);
-        expectLastCall().once();
-        replayAll();
-        filter.doFilter(request, response, chain);
-        waitAndVerify();
-    }
-
-    @Test
-    public void testPiJob() throws ServletException, IOException, InterruptedException {
-        expect(request.getPathInfo()).andReturn("/job/pi").once();
-        worksMatchingJob.executeInternal(null);
-        expectLastCall().once();
-        response.setStatus(HttpServletResponse.SC_OK);
-        expectLastCall().once();
-        replayAll();
-        filter.doFilter(request, response, chain);
-        waitAndVerify();
-    }
-
-    @Test
-    public void testWrongUrl() throws ServletException, IOException, InterruptedException {
+    public void testWrongUrl() {
         expect(request.getPathInfo()).andReturn("/work/crm").once();
         response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         expectLastCall().once();
@@ -114,33 +141,36 @@ public class JobRunnerRestFilterTest extends EasyMockSupport {
     }
 
     @Test
-    public void testCheckStatus() throws ServletException, IOException, InterruptedException {
-        expect(request.getPathInfo()).andReturn("/job/status").once();
+    public void testJobIsAlreadyRunning() throws SchedulerException {
+        expect(request.getPathInfo()).andReturn(REQUEST).once();
+        expect(request.getParameter(PARAMETER)).andReturn("pi").once();
+        expect(JobKey.jobKey("df.service.worksMatchingQuartzJob")).andReturn(jobKey).once();
+        Scheduler scheduler = createMock(Scheduler.class);
+        expect(scheduler.getJobDetail(jobKey)).andReturn(new JobDetailImpl()).once();
+        expect(schedulerFactoryBean.getScheduler()).andReturn(scheduler).once();
+        JobExecutionContext context = createMock(JobExecutionContext.class);
+        expect(scheduler.getCurrentlyExecutingJobs()).andReturn(Collections.singletonList(context)).once();
+        JobDetail jobDetail = createMock(JobDetail.class);
+        expect(context.getJobDetail()).andReturn(jobDetail).once();
+        expect(jobDetail.getKey()).andReturn(jobKey).once();
+        response.setStatus(HttpServletResponse.SC_ACCEPTED);
+        replayAll();
+        filter.doFilter(request, response, chain);
+        verifyAll();
+    }
+
+    private void expectJobTriggers(String jobName) throws SchedulerException {
+        expect(JobKey.jobKey(jobName)).andReturn(jobKey).once();
+        Scheduler scheduler = createMock(Scheduler.class);
+        expect(schedulerFactoryBean.getScheduler()).andReturn(scheduler).once();
+        expect(scheduler.getJobDetail(jobKey)).andReturn(new JobDetailImpl()).once();
+        expect(scheduler.getCurrentlyExecutingJobs()).andReturn(Collections.emptyList()).once();
+        scheduler.triggerJob(jobKey);
+        expectLastCall().once();
         response.setStatus(HttpServletResponse.SC_OK);
         expectLastCall().once();
         replayAll();
         filter.doFilter(request, response, chain);
-        verifyAll();
-    }
-
-    @Test
-    public void testCheckStatusWhenAnotherJobIsRunning() throws ServletException, IOException, InterruptedException {
-        Future future = createMock(Future.class);
-        Whitebox.setInternalState(filter, "future", future);
-        expect(request.getPathInfo()).andReturn("/job/status").once();
-        expect(future.isDone()).andReturn(false).once();
-        response.setStatus(HttpServletResponse.SC_ACCEPTED);
-        expectLastCall().once();
-        replayAll();
-        filter.doFilter(request, response, chain);
-        verifyAll();
-    }
-
-    private void waitAndVerify() throws InterruptedException {
-        Future future = Whitebox.getInternalState(filter, "future");
-        while (!future.isDone()) {
-            Thread.sleep(10);
-        }
         verifyAll();
     }
 }
