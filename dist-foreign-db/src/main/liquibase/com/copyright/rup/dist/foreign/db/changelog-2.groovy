@@ -1381,4 +1381,20 @@ databaseChangeLog {
             dropTable(schemaName: dbAppsSchema, tableName: 'df_rro_estimated_service_fee_percentage')
         }
     }
+
+    changeSet(id: '2018-05-15-00', author: 'Darya Baraukova <dbaraukova@copyright.com>') {
+        comment("RDSC-587 FDA: Exception is shown during sending usage detail with empty Work Title to Liability Manager: " +
+                "populate system_title in df_usage_archive table and add NOT NULL constraint")
+
+        sql("""update ${dbAppsSchema}.df_usage_archive
+               set system_title = coalesce(work_title, 'Unidentified')""")
+
+        addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_archive',
+                columnName: 'system_title', columnDataType: 'VARCHAR(2000)')
+
+        rollback {
+            dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_archive',
+                    columnName: 'system_title', columnDataType: 'VARCHAR(2000)')
+        }
+    }
 }
