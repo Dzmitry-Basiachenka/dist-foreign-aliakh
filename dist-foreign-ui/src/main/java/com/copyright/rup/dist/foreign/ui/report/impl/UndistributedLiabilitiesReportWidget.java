@@ -15,6 +15,9 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
+import java.time.LocalDate;
+import java.util.Objects;
+
 /**
  * Widget for exporting undistributed liabilities report.
  * <p>
@@ -28,6 +31,7 @@ public class UndistributedLiabilitiesReportWidget extends Window implements IUnd
 
     private IUndistributedLiabilitiesReportController controller;
     private LocalDateWidget paymentDateToWidget;
+    private Button exportButton;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -47,14 +51,22 @@ public class UndistributedLiabilitiesReportWidget extends Window implements IUnd
         this.controller = controller;
     }
 
+    @Override
+    public LocalDate getPaymentDate() {
+        return paymentDateToWidget.getValue();
+    }
+
     private void initPaymentDateToFilter() {
         paymentDateToWidget = new LocalDateWidget(ForeignUi.getMessage("label.payment_date_to"));
+        paymentDateToWidget.addValueChangeListener(event ->
+            exportButton.setEnabled(Objects.nonNull(event.getValue())));
         VaadinUtils.addComponentStyle(paymentDateToWidget, "payment-date-filter");
     }
 
     private HorizontalLayout getButtonsLayout() {
         Button closeButton = Buttons.createCloseButton((Window) controller.getWidget());
-        Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
+        exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
+        exportButton.setEnabled(false);
         OnDemandFileDownloader downloader =
             new OnDemandFileDownloader(controller.getUndistributedLiabilitiesReportStreamSource());
         downloader.extend(exportButton);

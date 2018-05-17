@@ -412,7 +412,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public void writeUndistributedLiabilitiesReport(LocalDate paymentDate, OutputStream outputStream) {
+    public void writeUndistributedLiabilitiesCsvReport(LocalDate paymentDate, OutputStream outputStream) {
         try (UndistributedLiabilitiesReportHandler handler =
                  new UndistributedLiabilitiesReportHandler(Objects.requireNonNull(outputStream))) {
             Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);

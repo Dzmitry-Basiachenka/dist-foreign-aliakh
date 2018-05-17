@@ -4,7 +4,9 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
+import java.io.OutputStream;
 import java.io.PipedOutputStream;
+import java.time.LocalDate;
 
 /**
  * Interface that provides ability to generate multiple reports.
@@ -40,4 +42,13 @@ public interface IReportService {
      * @param pipedOutputStream instance of {@link PipedOutputStream}
      */
     void writeScenarioUsagesCsvReport(Scenario scenario, PipedOutputStream pipedOutputStream);
+
+    /**
+     * Writes calculated undistributed amounts into the output stream in csv format.
+     * Is used to generate Undistributed Liabilities Reconciliation Report.
+     *
+     * @param paymentDate  payment date
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeUndistributedLiabilitiesCsvReport(LocalDate paymentDate, OutputStream outputStream);
 }
