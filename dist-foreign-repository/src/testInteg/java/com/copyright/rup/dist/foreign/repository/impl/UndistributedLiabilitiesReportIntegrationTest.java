@@ -18,7 +18,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 /**
- * Integration tests for {@link UsageRepository#writeUndistributedLiabilitiesReport(LocalDate, java.io.OutputStream)}.
+ * Integration tests for
+ * {@link UsageRepository#writeUndistributedLiabilitiesCsvReport(LocalDate, java.io.OutputStream)}.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -49,7 +50,7 @@ public class UndistributedLiabilitiesReportIntegrationTest {
     @Test
     public void testWriteUndistributedLiabilitiesCsvReport() throws Exception {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        usageRepository.writeUndistributedLiabilitiesReport(LocalDate.of(2011, 5, 5), outputStream);
+        usageRepository.writeUndistributedLiabilitiesCsvReport(LocalDate.of(2011, 5, 5), outputStream);
         reportTestUtils.assertCsvReport("undistributed_liabilities_report.csv",
             new ByteArrayInputStream(outputStream.toByteArray()));
     }
@@ -57,7 +58,7 @@ public class UndistributedLiabilitiesReportIntegrationTest {
     @Test
     public void testWriteUndistributedLiabilitiesCsvEmptyReport() throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        usageRepository.writeUndistributedLiabilitiesReport(LocalDate.of(2001, 5, 5), outputStream);
+        usageRepository.writeUndistributedLiabilitiesCsvReport(LocalDate.of(2001, 5, 5), outputStream);
         reportTestUtils.assertCsvReport("undistributed_liabilities_report_empty.csv",
             new ByteArrayInputStream(outputStream.toByteArray()));
     }

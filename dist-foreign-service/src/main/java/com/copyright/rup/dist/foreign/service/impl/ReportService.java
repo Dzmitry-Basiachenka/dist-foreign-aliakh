@@ -12,7 +12,9 @@ import org.perf4j.aop.Profiled;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.OutputStream;
 import java.io.PipedOutputStream;
+import java.time.LocalDate;
 import java.util.EnumSet;
 
 /**
@@ -55,5 +57,11 @@ public class ReportService implements IReportService {
     @Profiled(tag = "audit.writeAuditCsvReport")
     public void writeAuditCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) {
         usageRepository.writeAuditCsvReport(filter, pipedOutputStream);
+    }
+
+    @Override
+    @Profiled(tag = "report.undistributedLiabilitiesCsvReport")
+    public void writeUndistributedLiabilitiesCsvReport(LocalDate paymentDate, OutputStream outputStream) {
+        usageRepository.writeUndistributedLiabilitiesCsvReport(paymentDate, outputStream);
     }
 }

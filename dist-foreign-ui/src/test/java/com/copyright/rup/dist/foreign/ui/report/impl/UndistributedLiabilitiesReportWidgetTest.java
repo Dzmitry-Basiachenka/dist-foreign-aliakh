@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.report.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
@@ -49,6 +50,7 @@ public class UndistributedLiabilitiesReportWidgetTest {
         Component firstButton = buttonsLayout.getComponent(0);
         assertEquals(Button.class, firstButton.getClass());
         assertEquals("Export", firstButton.getCaption());
+        assertFalse(firstButton.isEnabled());
         Component secondButton = buttonsLayout.getComponent(1);
         assertEquals(Button.class, secondButton.getClass());
         assertEquals("Close", secondButton.getCaption());

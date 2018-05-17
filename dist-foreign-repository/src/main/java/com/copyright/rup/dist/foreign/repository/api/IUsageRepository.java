@@ -394,11 +394,11 @@ public interface IUsageRepository {
     void updateResearchedUsages(Collection<ResearchedUsage> researchedUsages);
 
     /**
-     * Writes calculated undistributed amounts into the output stream in CSV format.
+     * Writes calculated undistributed amounts into the output stream in csv format.
      * Is used to generate Undistributed Liabilities Reconciliation Report.
      *
      * @param paymentDate  payment date
      * @param outputStream instance of {@link OutputStream}
      */
-    void writeUndistributedLiabilitiesReport(LocalDate paymentDate, OutputStream outputStream);
+    void writeUndistributedLiabilitiesCsvReport(LocalDate paymentDate, OutputStream outputStream);
 }

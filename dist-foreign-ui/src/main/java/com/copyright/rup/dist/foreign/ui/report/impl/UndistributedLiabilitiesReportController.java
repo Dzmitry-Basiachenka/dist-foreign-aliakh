@@ -1,11 +1,13 @@
 package com.copyright.rup.dist.foreign.ui.report.impl;
 
+import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.report.api.IUndistributedLiabilitiesReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IUndistributedLiabilitiesReportWidget;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -24,11 +26,13 @@ import org.springframework.stereotype.Component;
 public class UndistributedLiabilitiesReportController extends CommonController<IUndistributedLiabilitiesReportWidget>
     implements IUndistributedLiabilitiesReportController {
 
+    @Autowired
+    private IReportService reportService;
+
     @Override
     public IStreamSource getUndistributedLiabilitiesReportStreamSource() {
-        //TODO {ushalamitski} use service logic to generate report here
-        return new ByteArrayStreamSource("undistributed_liabilities_", outputStream -> {
-        });
+        return new ByteArrayStreamSource("undistributed_liabilities_", outputStream ->
+            reportService.writeUndistributedLiabilitiesCsvReport(getWidget().getPaymentDate(), outputStream));
     }
 
     @Override

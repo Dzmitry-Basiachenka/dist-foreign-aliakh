@@ -22,16 +22,16 @@ import java.time.LocalDate;
  */
 public class ByteArrayStreamSource implements IStreamSource {
 
-    private final ISendForResearchReportWriter reportWriter;
+    private final IByteArrayReportWriter reportWriter;
     private final String fileNamePrefix;
 
     /**
      * Constructor.
      *
      * @param fileNamePrefix the leftmost part of the export file name
-     * @param reportWriter   an instance of {@link ISendForResearchReportWriter}
+     * @param reportWriter   an instance of {@link IByteArrayReportWriter}
      */
-    public ByteArrayStreamSource(String fileNamePrefix, ISendForResearchReportWriter reportWriter) {
+    public ByteArrayStreamSource(String fileNamePrefix, IByteArrayReportWriter reportWriter) {
         this.fileNamePrefix = fileNamePrefix;
         this.reportWriter = reportWriter;
     }
@@ -53,7 +53,7 @@ public class ByteArrayStreamSource implements IStreamSource {
      * Implement this interface to write report data to the given stream.
      */
     @FunctionalInterface
-    public interface ISendForResearchReportWriter {
+    public interface IByteArrayReportWriter {
 
         /**
          * Writes report data to the given {@link OutputStream}.
