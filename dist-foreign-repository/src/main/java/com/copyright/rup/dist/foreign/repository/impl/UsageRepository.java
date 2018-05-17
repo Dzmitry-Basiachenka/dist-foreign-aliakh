@@ -6,6 +6,7 @@ import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Repository;
 
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -407,5 +409,19 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
             parameters.put("usage", researchedUsage);
             update("IUsageMapper.updateResearchedUsage", parameters);
         });
+    }
+
+    @Override
+    public void writeUndistributedLiabilitiesReport(LocalDate paymentDate, OutputStream outputStream) {
+        try (UndistributedLiabilitiesReportHandler handler =
+                 new UndistributedLiabilitiesReportHandler(Objects.requireNonNull(outputStream))) {
+            Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
+            parameters.put("paymentDate", Objects.requireNonNull(paymentDate));
+            parameters.put("productFamilyClaFas", FdaConstants.PRODUCT_FAMILY_CLA_FAS);
+            parameters.put("accountNumberClaFas", FdaConstants.ACCOUNT_NUMBER_CLA_FAS);
+            //TODO change status of usages that were sent to LM
+            parameters.put(STATUS_KEY, UsageStatusEnum.LOCKED);
+            getTemplate().select("IUsageMapper.findUndistributedLiabilitiesReportDtos", parameters, handler);
+        }
     }
 }

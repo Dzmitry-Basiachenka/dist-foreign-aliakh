@@ -1397,4 +1397,16 @@ databaseChangeLog {
                     columnName: 'system_title', columnDataType: 'VARCHAR(2000)')
         }
     }
+
+    changeSet(id: '2018-05-15-01', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
+        comment("B-37305 FDA: Undistributed liabilities reconciliation report: fix misprint in column estimated_service_fee")
+
+        renameColumn(schemaName: dbAppsSchema, tableName: 'df_rro_estimated_service_fee_percentage',
+                oldColumnName: 'esimated_service_fee', newColumnName: 'estimated_service_fee')
+
+        rollback {
+            renameColumn(schemaName: dbAppsSchema, tableName: 'df_rro_estimated_service_fee_percentage',
+                    oldColumnName: 'estimated_service_fee', newColumnName: 'esimated_service_fee')
+        }
+    }
 }

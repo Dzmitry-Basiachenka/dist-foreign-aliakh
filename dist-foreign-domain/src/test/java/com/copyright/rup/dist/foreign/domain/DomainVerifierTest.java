@@ -50,7 +50,8 @@ public class DomainVerifierTest {
             {ScenarioAuditItem.class},
             {RightsholderPayeePair.class},
             {RightsholderDiscrepancy.class},
-            {ResearchedUsage.class}
+            {ResearchedUsage.class},
+            {UndistributedLiabilitiesReportDto.class}
         };
         return Arrays.asList(testData);
     }

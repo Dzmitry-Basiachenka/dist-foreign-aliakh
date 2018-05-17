@@ -13,6 +13,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -236,6 +237,7 @@ public interface IUsageRepository {
      */
     List<String> findIdsByScenarioIdRroAccountNumberRhAccountNumbers(String scenarioId, Long rroAccountNumber,
                                                                      List<Long> accountNumbers);
+
     /**
      * Finds {@link Usage} by usage id.
      *
@@ -390,4 +392,13 @@ public interface IUsageRepository {
      * @param researchedUsages collection of {@link ResearchedUsage}s
      */
     void updateResearchedUsages(Collection<ResearchedUsage> researchedUsages);
+
+    /**
+     * Writes calculated undistributed amounts into the output stream in CSV format.
+     * Is used to generate Undistributed Liabilities Reconciliation Report.
+     *
+     * @param paymentDate  payment date
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeUndistributedLiabilitiesReport(LocalDate paymentDate, OutputStream outputStream);
 }
