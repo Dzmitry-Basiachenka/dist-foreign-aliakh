@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
@@ -306,7 +307,8 @@ class UsageBatchUploadWindow extends Window {
                 if (StringUtils.isNotBlank(rro.getName())) {
                     accountNameField.setValue(rro.getName());
                     productFamilyField.setValue(
-                        Long.valueOf(2000017000).equals(rro.getAccountNumber()) ? "CLA_FAS" : "FAS");
+                        FdaConstants.ACCOUNT_NUMBER_CLA_FAS.equals(rro.getAccountNumber())
+                            ? FdaConstants.PRODUCT_FAMILY_CLA_FAS : FdaConstants.PRODUCT_FAMILY_FAS);
                 } else {
                     accountNameField.clear();
                     productFamilyField.clear();

@@ -4,6 +4,25 @@
 
 <mapper namespace="IUsageMapper">
 
+    <resultMap id="undistributedLiabilitiesReportDtoResultMap" type="UndistributedLiabilitiesReportDto">
+        <result property="rroAccountNumber" column="rro_account_number"/>
+        <result property="rroName" column="rro_name"/>
+        <result property="paymentDate" column="payment_date"/>
+        <result property="grossAmount" column="gross_amount"/>
+        <result property="estimatedServiceFeeAmount" column="estimated_service_fee_amount"/>
+        <result property="estimatedNetAmount" column="estimated_net_amount"/>
+        <result property="estimatedServiceFee" column="estimated_service_fee"/>
+        <result property="grossAmountSentToLm" column="gross_amount_sent_to_lm"/>
+        <result property="serviceFeeAmountSentToLm" column="service_fee_amount_sent_to_lm"/>
+        <result property="netAmountSentToLm" column="net_amount_sent_to_lm"/>
+        <result property="serviceFee" column="service_fee"/>
+        <result property="serviceFeeTrueUp" column="service_fee_true_up"/>
+        <result property="serviceFeeTrueUpReturnToCla" column="service_fee_true_up_return_to_cla"/>
+        <result property="grossAmountReturnToCla" column="gross_amount_return_to_cla"/>
+        <result property="serviceFeeAmountReturnToCla" column="service_fee_amount_return_to_cla"/>
+        <result property="netAmountReturnToCla" column="net_amount_return_to_cla"/>
+    </resultMap>
+
     <resultMap id="usageDtoResultMap" type="UsageDto" extends="StoredEntityMapper.storedEntityResult">
         <result property="id" column="df_usage_uid"/>
         <result property="wrWrkInst" column="wr_wrk_inst"/>
@@ -1128,4 +1147,54 @@
             <include refid="StoredEntityMapper.update"/>
         where df_usage_uid = #{usage.usageId}
     </update>
+
+    <select id="findUndistributedLiabilitiesReportDtos" parameterType="map" resultMap="undistributedLiabilitiesReportDtoResultMap">
+        select
+            report.rro_account_number,
+            rh.name rro_name,
+            report.payment_date,
+            coalesce(report.gross_amount, 0) gross_amount,
+            coalesce(report.gross_amount * report.estimated_service_fee, 0) estimated_service_fee_amount,
+            coalesce(report.gross_amount - (report.gross_amount * report.estimated_service_fee), 0) estimated_net_amount,
+            report.estimated_service_fee,
+            coalesce(report.gross_amount_sent_to_lm, 0) gross_amount_sent_to_lm,
+            coalesce(report.service_fee_amount_sent_to_lm, 0) service_fee_amount_sent_to_lm,
+            coalesce(report.net_amount_sent_to_lm, 0) net_amount_sent_to_lm,
+            coalesce(report.service_fee_amount_sent_to_lm / report.gross_amount_sent_to_lm, 0) service_fee,
+            coalesce(report.gross_amount * report.estimated_service_fee - report.service_fee_amount_sent_to_lm, 0) service_fee_true_up,
+            coalesce(report.gross_amount_return_to_cla * report.estimated_service_fee - report.service_fee_amount_return_to_cla, 0) service_fee_true_up_return_to_cla,
+            coalesce(report.gross_amount_return_to_cla, 0) gross_amount_return_to_cla,
+            coalesce(report.service_fee_amount_return_to_cla, 0) service_fee_amount_return_to_cla,
+            coalesce(report.gross_amount_return_to_cla - report.service_fee_amount_return_to_cla, 0) net_amount_return_to_cla
+        from
+            (select
+                nestedReport.rro_account_number,
+                nestedReport.payment_date,
+                sum(nestedReport.gross_amount) gross_amount,
+                coalesce(fee.estimated_service_fee, 0) estimated_service_fee,
+                sum(nestedReport.gross_amount_sent_to_lm) gross_amount_sent_to_lm,
+                sum(nestedReport.service_fee_amount_sent_to_lm) service_fee_amount_sent_to_lm,
+                sum(nestedReport.net_amount_sent_to_lm) net_amount_sent_to_lm,
+                sum(nestedReport.gross_amount_return_to_cla) gross_amount_return_to_cla,
+                sum(nestedReport.service_fee_amount_return_to_cla) service_fee_amount_return_to_cla
+            from
+                (select
+                    ub.rro_account_number,
+                    ub.payment_date,
+                    sum(u.gross_amount) gross_amount,
+                    sum(ua.gross_amount) gross_amount_sent_to_lm,
+                    sum(ua.service_fee_amount) service_fee_amount_sent_to_lm,
+                    sum(ua.net_amount) net_amount_sent_to_lm,
+                    case when (ua.product_family = #{productFamilyClaFas} and ua.payee_account_number = #{accountNumberClaFas}) then sum(ua.gross_amount) else 0 end gross_amount_return_to_cla,
+                    case when (ua.product_family = #{productFamilyClaFas} and ua.payee_account_number = #{accountNumberClaFas}) then sum(ua.service_fee_amount) else 0 end service_fee_amount_return_to_cla
+                from ${schema}.df_usage_batch ub
+                left join ${schema}.df_usage u on u.df_usage_batch_uid = ub.df_usage_batch_uid
+                left join ${schema}.df_usage_archive ua on ua.df_usage_batch_uid = ub.df_usage_batch_uid and ua.status_ind = #{status}
+                where <![CDATA[ub.payment_date <= #{paymentDate}]]>
+                group by ub.payment_date, ub.rro_account_number, ua.product_family, ua.payee_account_number) as nestedReport
+            left join ${schema}.df_rro_estimated_service_fee_percentage fee on fee.rro_account_number = nestedReport.rro_account_number
+            group by nestedReport.payment_date, nestedReport.rro_account_number, fee.estimated_service_fee) as report
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = report.rro_account_number
+        order by rh.name, report.payment_date
+    </select>
 </mapper>
