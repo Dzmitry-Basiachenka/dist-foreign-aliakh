@@ -1409,4 +1409,34 @@ databaseChangeLog {
                     oldColumnName: 'estimated_service_fee', newColumnName: 'esimated_service_fee')
         }
     }
+
+    changeSet(id: '2018-05-21-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-43660 Tech Debt: FDA: implement liquibase script for populating base columns by default values")
+
+        addDefaultValue(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter',
+                columnName: 'created_by_user', defaultValue: 'SYSTEM')
+        addDefaultValue(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter',
+                columnName: 'updated_by_user', defaultValue: 'SYSTEM')
+
+        addDefaultValue(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter_to_rh_account_numbers_map',
+                columnName: 'created_by_user', defaultValue: 'SYSTEM')
+        addDefaultValue(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter_to_rh_account_numbers_map',
+                columnName: 'updated_by_user', defaultValue: 'SYSTEM')
+
+        addDefaultValue(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter_to_usage_batches_ids_map',
+                columnName: 'created_by_user', defaultValue: 'SYSTEM')
+        addDefaultValue(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter_to_usage_batches_ids_map',
+                columnName: 'updated_by_user', defaultValue: 'SYSTEM')
+
+        rollback {
+            sql("alter table ${dbAppsSchema}.df_scenario_usage_filter alter created_by_user drop default")
+            sql("alter table ${dbAppsSchema}.df_scenario_usage_filter alter updated_by_user drop default")
+
+            sql("alter table ${dbAppsSchema}.df_scenario_usage_filter_to_rh_account_numbers_map alter created_by_user drop default")
+            sql("alter table ${dbAppsSchema}.df_scenario_usage_filter_to_rh_account_numbers_map alter updated_by_user drop default")
+
+            sql("alter table ${dbAppsSchema}.df_scenario_usage_filter_to_usage_batches_ids_map alter created_by_user drop default")
+            sql("alter table ${dbAppsSchema}.df_scenario_usage_filter_to_usage_batches_ids_map alter updated_by_user drop default")
+        }
+    }
 }

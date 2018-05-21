@@ -11,7 +11,6 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2018-01-11')
             column(name: 'fiscal_year', value: '2018')
             column(name: 'gross_amount', value: '35000')
-            column(name: 'updated_datetime', value: '2018-02-27 11:41:52.735531+03')
         }
 
         // no standard number, no title, more than $100

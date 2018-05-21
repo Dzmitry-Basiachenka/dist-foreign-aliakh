@@ -11,10 +11,6 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2018-01-24')
             column(name: 'fiscal_year', value: '2018')
             column(name: 'gross_amount', value: '1200.00')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'user@copyright.com')
-            column(name: 'created_datetime', value: '2018-01-24 08:20:19.813522-05')
-            column(name: 'updated_by_user', value: 'user@copyright.com')
             column(name: 'updated_datetime', value: '2018-01-24 08:20:19.813522-05')
         }
 
@@ -33,11 +29,6 @@ databaseChangeLog {
             column(name: 'market_period_to', value: '2015')
             column(name: 'author', value: 'Aarseth, Espen J.')
             column(name: 'gross_amount', value: '100.00')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'user@copyright.com')
-            column(name: 'created_datetime', value: '2018-01-24 08:20:19.813522-05')
-            column(name: 'updated_by_user', value: 'user@copyright.com')
-            column(name: 'updated_datetime', value: '2018-01-24 08:20:19.813522-05')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -55,11 +46,6 @@ databaseChangeLog {
             column(name: 'market_period_to', value: '2015')
             column(name: 'author', value: 'Aarseth, Espen J.')
             column(name: 'gross_amount', value: '200.00')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'user@copyright.com')
-            column(name: 'created_datetime', value: '2018-01-24 08:20:19.813522-05')
-            column(name: 'updated_by_user', value: 'user@copyright.com')
-            column(name: 'updated_datetime', value: '2018-01-24 08:20:19.813522-05')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -77,11 +63,6 @@ databaseChangeLog {
             column(name: 'market_period_to', value: '2015')
             column(name: 'author', value: 'Aarseth, Espen J.')
             column(name: 'gross_amount', value: '300.00')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'user@copyright.com')
-            column(name: 'created_datetime', value: '2018-01-24 08:20:19.813522-05')
-            column(name: 'updated_by_user', value: 'user@copyright.com')
-            column(name: 'updated_datetime', value: '2018-01-24 08:20:19.813522-05')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -100,11 +81,6 @@ databaseChangeLog {
             column(name: 'market_period_to', value: '2015')
             column(name: 'author', value: 'Aarseth, Espen J.')
             column(name: 'gross_amount', value: '150.00')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'user@copyright.com')
-            column(name: 'created_datetime', value: '2018-01-24 08:20:19.813522-05')
-            column(name: 'updated_by_user', value: 'user@copyright.com')
-            column(name: 'updated_datetime', value: '2018-01-24 08:20:19.813522-05')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -122,11 +98,6 @@ databaseChangeLog {
             column(name: 'market_period_to', value: '2015')
             column(name: 'author', value: 'Aarseth, Espen J.')
             column(name: 'gross_amount', value: '250.00')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'user@copyright.com')
-            column(name: 'created_datetime', value: '2018-01-24 08:20:19.813522-05')
-            column(name: 'updated_by_user', value: 'user@copyright.com')
-            column(name: 'updated_datetime', value: '2018-01-24 08:20:19.813522-05')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -144,11 +115,6 @@ databaseChangeLog {
             column(name: 'market_period_to', value: '2015')
             column(name: 'author', value: 'Aarseth, Espen J.')
             column(name: 'gross_amount', value: '150.00')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'user@copyright.com')
-            column(name: 'created_datetime', value: '2018-01-24 08:20:19.813522-05')
-            column(name: 'updated_by_user', value: 'user@copyright.com')
-            column(name: 'updated_datetime', value: '2018-01-24 08:20:19.813522-05')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -162,12 +128,6 @@ databaseChangeLog {
             column(name: 'market_period_from', value: '2015')
             column(name: 'market_period_to', value: '2015')
             column(name: 'gross_amount', value: '50.00')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'user@copyright.com')
-            column(name: 'created_by_user', value: 'user@copyright.com')
-            column(name: 'created_datetime', value: '2018-01-24 08:20:19.813522-05')
-            column(name: 'updated_by_user', value: 'user@copyright.com')
-            column(name: 'updated_datetime', value: '2018-01-24 08:20:19.813522-05')
         }
     }
 }

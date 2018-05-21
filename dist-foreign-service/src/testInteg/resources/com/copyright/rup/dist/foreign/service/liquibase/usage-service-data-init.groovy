@@ -29,7 +29,6 @@ databaseChangeLog {
             column(name: 'name', value: 'Test Scenario for exclude')
             column(name: 'status_ind', value: 'IN_PROGRESS')
             column(name: 'description', value: 'Scenario description')
-            column(name: 'updated_datetime', value: '2017-02-14 11:45:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {

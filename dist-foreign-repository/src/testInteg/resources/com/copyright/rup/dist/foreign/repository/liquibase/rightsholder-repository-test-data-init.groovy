@@ -53,7 +53,6 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
             column(name: 'gross_amount', value: '30000')
-            column(name: 'updated_datetime', value: '2017-02-02 11:41:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -63,7 +62,6 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
             column(name: 'gross_amount', value: '35000')
-            column(name: 'updated_datetime', value: '2017-02-14 11:41:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -73,7 +71,6 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2018-08-16')
             column(name: 'fiscal_year', value: '2019')
             column(name: 'gross_amount', value: '35000')
-            column(name: 'updated_datetime', value: '2017-02-21 11:41:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -83,7 +80,6 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2015-09-10')
             column(name: 'fiscal_year', value: '2016')
             column(name: 'gross_amount', value: '35000')
-            column(name: 'updated_datetime', value: '2017-02-11 11:41:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
@@ -91,7 +87,6 @@ databaseChangeLog {
             column(name: 'name', value: 'Scenario name 3')
             column(name: 'status_ind', value: 'IN_PROGRESS')
             column(name: 'description', value: 'The description of scenario 3')
-            column(name: 'updated_datetime', value: '2017-02-01 11:41:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {

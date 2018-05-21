@@ -11,7 +11,6 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2018-03-05')
             column(name: 'fiscal_year', value: '2018')
             column(name: 'gross_amount', value: '1000')
-            column(name: 'updated_datetime', value: '2018-03-05 12:50:42.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
@@ -25,7 +24,6 @@ databaseChangeLog {
             column(name: 'name', value: 'Scenario name')
             column(name: 'status_ind', value: 'IN_PROGRESS')
             column(name: 'description', value: 'The description of scenario')
-            column(name: 'updated_datetime', value: '2018-03-05 12:50:42.735531+03')
         }
 
         rollback ""

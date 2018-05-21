@@ -49,7 +49,6 @@ databaseChangeLog {
             column(name: 'name', value: 'Scenario name 4')
             column(name: 'status_ind', value: 'IN_PROGRESS')
             column(name: 'description', value: 'The description of scenario 4')
-            column(name: 'updated_datetime', value: '2017-02-10 11:41:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {

@@ -29,7 +29,6 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
             column(name: 'gross_amount', value: '30000')
-            column(name: 'updated_datetime', value: '2017-02-02 11:41:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -39,7 +38,6 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2015-09-10')
             column(name: 'fiscal_year', value: '2016')
             column(name: 'gross_amount', value: '35000')
-            column(name: 'updated_datetime', value: '2017-02-11 11:41:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -49,7 +47,6 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2017-10-30')
             column(name: 'fiscal_year', value: '2018')
             column(name: 'gross_amount', value: '35000')
-            column(name: 'updated_datetime', value: '2017-10-26 14:49:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -59,7 +56,6 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2018-01-01')
             column(name: 'fiscal_year', value: '2018')
             column(name: 'gross_amount', value: '1000')
-            column(name: 'updated_datetime', value: '2017-10-26 14:49:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
@@ -240,7 +236,6 @@ databaseChangeLog {
             column(name: 'action_type_ind', value: 'ADDED_USAGES')
             column(name: 'action_reason', value: 'Usages were added to scenario')
             column(name: 'created_datetime', value: '2017-03-01 11:41:52.735531+03')
-            column(name: 'updated_datetime', value: '2017-03-01 11:41:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_audit') {
@@ -249,7 +244,6 @@ databaseChangeLog {
             column(name: 'action_type_ind', value: 'SUBMITTED')
             column(name: 'action_reason', value: 'Scenario submitted for approval')
             column(name: 'created_datetime', value: '2017-03-10 11:41:58.735531+03')
-            column(name: 'updated_datetime', value: '2017-03-10 11:41:58.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_audit') {
@@ -258,7 +252,6 @@ databaseChangeLog {
             column(name: 'action_type_ind', value: 'APPROVED')
             column(name: 'action_reason', value: 'Scenario approved by manager')
             column(name: 'created_datetime', value: '2017-04-10 11:28:58.735531+03')
-            column(name: 'updated_datetime', value: '2017-04-10 11:28:58.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_audit') {
@@ -267,7 +260,6 @@ databaseChangeLog {
             column(name: 'action_type_ind', value: 'ADDED_USAGES')
             column(name: 'action_reason', value: 'Usages were added to scenario')
             column(name: 'created_datetime', value: '2017-03-01 11:41:52.735531+03')
-            column(name: 'updated_datetime', value: '2017-03-01 11:41:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_audit') {
@@ -276,7 +268,6 @@ databaseChangeLog {
             column(name: 'action_type_ind', value: 'SUBMITTED')
             column(name: 'action_reason', value: 'Scenario submitted for approval')
             column(name: 'created_datetime', value: '2017-03-10 11:41:58.735531+03')
-            column(name: 'updated_datetime', value: '2017-03-10 11:41:58.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_audit') {
@@ -285,7 +276,6 @@ databaseChangeLog {
             column(name: 'action_type_ind', value: 'APPROVED')
             column(name: 'action_reason', value: 'Scenario approved by manager')
             column(name: 'created_datetime', value: '2017-04-10 11:28:58.735531+03')
-            column(name: 'updated_datetime', value: '2017-04-10 11:28:58.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_audit') {
@@ -293,7 +283,6 @@ databaseChangeLog {
             column(name: 'df_scenario_uid', value: '8a6a6b15-6922-4fda-b40c-5097fcbd256e')
             column(name: 'action_type_ind', value: 'SENT_TO_LM')
             column(name: 'created_datetime', value: '2017-06-10 11:28:58.735531+03')
-            column(name: 'updated_datetime', value: '2017-06-10 11:28:58.735531+03')
         }
 
         rollback ""
@@ -307,10 +296,6 @@ databaseChangeLog {
             column(name: 'name', value: 'Scenario with excluded usages')
             column(name: 'status_ind', value: 'IN_PROGRESS')
             column(name: 'description', value: 'The description of scenario 6')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'SYSTEM')
-            column(name: 'created_datetime', value: '2018-03-30 17:47:24')
-            column(name: 'updated_by_user', value: 'SYSTEM')
             column(name: 'updated_datetime', value: '2018-03-30 17:47:24')
         }
 
@@ -319,11 +304,6 @@ databaseChangeLog {
             column(name: 'df_scenario_uid', value: 'b1f0b236-3ae9-4a60-9fab-61db84199d6f')
             column(name: 'product_family', value: 'FAS')
             column(name: 'status_ind', value: 'ELIGIBLE')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'SYSTEM')
-            column(name: 'created_datetime', value: '2018-03-30 17:47:24')
-            column(name: 'updated_by_user', value: 'SYSTEM')
-            column(name: 'updated_datetime', value: '2018-03-30 17:47:24')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
@@ -331,11 +311,6 @@ databaseChangeLog {
             column(name: 'df_scenario_uid', value: '1230b236-1239-4a60-9fab-123b84199123')
             column(name: 'product_family', value: 'FAS')
             column(name: 'status_ind', value: 'ELIGIBLE')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'SYSTEM')
-            column(name: 'created_datetime', value: '2018-03-30 17:47:24')
-            column(name: 'updated_by_user', value: 'SYSTEM')
-            column(name: 'updated_datetime', value: '2018-03-30 17:47:24')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
@@ -343,11 +318,6 @@ databaseChangeLog {
             column(name: 'df_scenario_uid', value: '3210b236-1239-4a60-9fab-888b84199321')
             column(name: 'product_family', value: 'FAS')
             column(name: 'status_ind', value: 'ELIGIBLE')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'SYSTEM')
-            column(name: 'created_datetime', value: '2018-03-30 17:47:24')
-            column(name: 'updated_by_user', value: 'SYSTEM')
-            column(name: 'updated_datetime', value: '2018-03-30 17:47:24')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
@@ -355,11 +325,6 @@ databaseChangeLog {
             column(name: 'df_scenario_uid', value: 'e27551ed-3f69-4e08-9e4f-8ac03f67595f')
             column(name: 'product_family', value: 'FAS')
             column(name: 'status_ind', value: 'ELIGIBLE')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'SYSTEM')
-            column(name: 'created_datetime', value: '2018-03-30 17:47:24')
-            column(name: 'updated_by_user', value: 'SYSTEM')
-            column(name: 'updated_datetime', value: '2018-03-30 17:47:24')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
@@ -367,11 +332,6 @@ databaseChangeLog {
             column(name: 'df_scenario_uid', value: '8a6a6b15-6922-4fda-b40c-5097fcbd256e')
             column(name: 'product_family', value: 'FAS')
             column(name: 'status_ind', value: 'ELIGIBLE')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'SYSTEM')
-            column(name: 'created_datetime', value: '2018-03-30 17:47:24')
-            column(name: 'updated_by_user', value: 'SYSTEM')
-            column(name: 'updated_datetime', value: '2018-03-30 17:47:24')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
@@ -379,41 +339,21 @@ databaseChangeLog {
             column(name: 'df_scenario_uid', value: '095f3df4-c8a7-4dba-9a8f-7dce0b61c40a')
             column(name: 'product_family', value: 'FAS')
             column(name: 'status_ind', value: 'ELIGIBLE')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'SYSTEM')
-            column(name: 'created_datetime', value: '2018-03-30 17:47:24')
-            column(name: 'updated_by_user', value: 'SYSTEM')
-            column(name: 'updated_datetime', value: '2018-03-30 17:47:24')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter_to_usage_batches_ids_map') {
             column(name: 'df_scenario_usage_filter_uid', value: '7459ee74-363b-11e8-b467-0ed5f89f718b')
             column(name: 'df_usage_batch_uid', value: 'a5b64c3a-55d2-462e-b169-362dca6a4dd6')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'SYSTEM')
-            column(name: 'created_datetime', value: '2018-03-30 17:47:24')
-            column(name: 'updated_by_user', value: 'SYSTEM')
-            column(name: 'updated_datetime', value: '2018-03-30 17:47:24')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter_to_usage_batches_ids_map') {
             column(name: 'df_scenario_usage_filter_uid', value: '8f83dfce-363c-11e8-b467-0ed5f89f718b')
             column(name: 'df_usage_batch_uid', value: '3f46981e-e85a-4786-9b60-ab009c4358e7')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'SYSTEM')
-            column(name: 'created_datetime', value: '2018-03-30 17:47:24')
-            column(name: 'updated_by_user', value: 'SYSTEM')
-            column(name: 'updated_datetime', value: '2018-03-30 17:47:24')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter_to_usage_batches_ids_map') {
             column(name: 'df_scenario_usage_filter_uid', value: '3956ce16-4649-46a9-95da-337953436479')
             column(name: 'df_usage_batch_uid', value: '4eff2685-4895-45a1-a886-c41a0f98204b')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'SYSTEM')
-            column(name: 'created_datetime', value: '2018-03-30 17:47:24')
-            column(name: 'updated_by_user', value: 'SYSTEM')
-            column(name: 'updated_datetime', value: '2018-03-30 17:47:24')
         }
 
         //testFindFullPaidIds
@@ -422,10 +362,6 @@ databaseChangeLog {
             column(name: 'name', value: 'Partially Paid Scenario')
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'description', value: 'Not all usages are paid')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'SYSTEM')
-            column(name: 'created_datetime', value: '2017-01-03 17:47:24')
-            column(name: 'updated_by_user', value: 'SYSTEM')
             column(name: 'updated_datetime', value: '2017-01-03 17:47:24')
         }
 
@@ -469,7 +405,6 @@ databaseChangeLog {
             column(name: 'distribution_name', value: 'FDA March 17')
             column(name: 'distribution_date', value: '2016-03-11')
             column(name: 'period_end_date', value: '2016-03-11')
-            column(name: 'created_datetime', value: '2016-03-11')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
@@ -504,10 +439,6 @@ databaseChangeLog {
             column(name: 'name', value: 'Fully Paid Scenario')
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'description', value: 'All usages are paid and reported to CRM')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'SYSTEM')
-            column(name: 'created_datetime', value: '2017-01-02 17:47:24')
-            column(name: 'updated_by_user', value: 'SYSTEM')
             column(name: 'updated_datetime', value: '2017-01-02 17:47:24')
         }
 
@@ -542,7 +473,6 @@ databaseChangeLog {
             column(name: 'distribution_name', value: 'FDA March 17')
             column(name: 'distribution_date', value: '2016-03-11')
             column(name: 'period_end_date', value: '2016-03-11')
-            column(name: 'created_datetime', value: '2016-03-11')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
@@ -550,10 +480,6 @@ databaseChangeLog {
             column(name: 'name', value: 'Archived Scenario')
             column(name: 'status_ind', value: 'ARCHIVED')
             column(name: 'description', value: 'Scenario already archived')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'SYSTEM')
-            column(name: 'created_datetime', value: '2017-01-01 17:47:24')
-            column(name: 'updated_by_user', value: 'SYSTEM')
             column(name: 'updated_datetime', value: '2017-01-01 17:47:24')
         }
 
@@ -588,7 +514,6 @@ databaseChangeLog {
             column(name: 'distribution_name', value: 'FDA March 17')
             column(name: 'distribution_date', value: '2016-03-11')
             column(name: 'period_end_date', value: '2016-03-11')
-            column(name: 'created_datetime', value: '2016-03-11')
         }
 
         rollback ""
