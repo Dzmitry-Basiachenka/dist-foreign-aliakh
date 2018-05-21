@@ -11,7 +11,6 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2021-02-12')
             column(name: 'fiscal_year', value: '2020')
             column(name: 'gross_amount', value: '2000.00')
-            column(name: 'updated_datetime', value: '2017-02-11 11:41:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -29,8 +28,6 @@ databaseChangeLog {
             column(name: 'market_period_from', value: '2013')
             column(name: 'market_period_to', value: '2017')
             column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'created_by_user', value: 'user@copyright.com')
-            column(name: 'updated_by_user', value: 'user@copyright.com')
             column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '10000')
             column(name: 'gross_amount', value: '10000.00')

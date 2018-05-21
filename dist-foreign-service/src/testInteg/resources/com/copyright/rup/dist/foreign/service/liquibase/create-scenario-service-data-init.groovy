@@ -9,7 +9,6 @@ databaseChangeLog {
             column(name: 'name', value: 'Test Scenario for exclude')
             column(name: 'status_ind', value: 'IN_PROGRESS')
             column(name: 'description', value: 'Scenario description')
-            column(name: 'updated_datetime', value: '2017-02-14 11:45:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -19,7 +18,6 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
             column(name: 'gross_amount', value: '35000')
-            column(name: 'updated_datetime', value: '2017-02-14 11:41:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -160,7 +158,6 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
             column(name: 'gross_amount', value: '35000')
-            column(name: 'updated_datetime', value: '2017-02-14 11:41:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {

@@ -8,33 +8,18 @@ databaseChangeLog {
             column(name: 'df_rightsholder_uid', value: '75e057ac-7c24-4ae7-a0f5-aa75ea0895e6')
             column(name: 'rh_account_number', value: '1000009522')
             column(name: 'name', value: 'Zoological Society of Pakistan [T]')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'SYSTEM')
-            column(name: 'created_datetime', value: '2018-01-26 09:00:00.118116-05')
-            column(name: 'updated_by_user', value: 'SYSTEM')
-            column(name: 'updated_datetime', value: '2018-01-26 09:00:00.118116-05')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: 'd311340c-60e8-4df1-bbe1-788ba2ed9a15')
             column(name: 'rh_account_number', value: '1000023401')
             column(name: 'name', value: 'American City Business Journals, Inc.')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'SYSTEM')
-            column(name: 'created_datetime', value: '2018-01-26 09:00:00.118116-05')
-            column(name: 'updated_by_user', value: 'SYSTEM')
-            column(name: 'updated_datetime', value: '2018-01-26 09:00:00.118116-05')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: 'abf348f3-f6d7-4d24-b087-4812b78e140d')
             column(name: 'rh_account_number', value: '1000010077')
             column(name: 'name', value: 'Cambridge University Press - US - Books')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'SYSTEM')
-            column(name: 'created_datetime', value: '2018-01-26 09:00:00.118116-05')
-            column(name: 'updated_by_user', value: 'SYSTEM')
-            column(name: 'updated_datetime', value: '2018-01-26 09:00:00.118116-05')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -44,11 +29,6 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2018-01-26')
             column(name: 'fiscal_year', value: '2018')
             column(name: 'gross_amount', value: '5000.00')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'ahrybanau@copyright.com')
-            column(name: 'created_datetime', value: '2018-01-26 06:22:50.577055-05')
-            column(name: 'updated_by_user', value: 'ahrybanau@copyright.com')
-            column(name: 'updated_datetime', value: '2018-01-26 06:22:50.577055-05')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -70,11 +50,6 @@ databaseChangeLog {
             column(name: 'net_amount', value: '0.0000000000')
             column(name: 'service_fee_amount', value: '0.0000000000')
             column(name: 'gross_amount', value: '124.9783785347')
-            column(name: 'record_version', value: '2')
-            column(name: 'created_by_user', value: 'ahrybanau@copyright.com')
-            column(name: 'created_datetime', value: '2018-01-26 06:22:50.577055-05')
-            column(name: 'updated_by_user', value: 'ahrybanau@copyright.com')
-            column(name: 'updated_datetime', value: '2018-01-26 06:22:50.577055-05')
             column(name: 'is_rh_participating_flag', value: 'FALSE')
         }
 
@@ -97,11 +72,6 @@ databaseChangeLog {
             column(name: 'net_amount', value: '0.0000000000')
             column(name: 'service_fee_amount', value: '0.0000000000')
             column(name: 'gross_amount', value: '390.1883929693')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'ahrybanau@copyright.com')
-            column(name: 'created_datetime', value: '2018-01-26 06:22:50.577055-05')
-            column(name: 'updated_by_user', value: 'ahrybanau@copyright.com')
-            column(name: 'updated_datetime', value: '2018-01-26 06:22:50.577055-05')
             column(name: 'is_rh_participating_flag', value: 'FALSE')
         }
 
@@ -119,11 +89,6 @@ databaseChangeLog {
             column(name: 'net_amount', value: '0.0000000000')
             column(name: 'service_fee_amount', value: '0.0000000000')
             column(name: 'gross_amount', value: '390.1883929693')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'ahrybanau@copyright.com')
-            column(name: 'created_datetime', value: '2018-01-26 06:22:50.577055-05')
-            column(name: 'updated_by_user', value: 'ahrybanau@copyright.com')
-            column(name: 'updated_datetime', value: '2018-01-26 06:22:50.577055-05')
             column(name: 'is_rh_participating_flag', value: 'FALSE')
         }
 
@@ -145,11 +110,6 @@ databaseChangeLog {
             column(name: 'net_amount', value: '0.0000000000')
             column(name: 'service_fee_amount', value: '0.0000000000')
             column(name: 'gross_amount', value: '282.4630168157')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'ahrybanau@copyright.com')
-            column(name: 'created_datetime', value: '2018-01-26 06:22:50.577055-05')
-            column(name: 'updated_by_user', value: 'ahrybanau@copyright.com')
-            column(name: 'updated_datetime', value: '2018-01-26 06:22:50.577055-05')
             column(name: 'is_rh_participating_flag', value: 'FALSE')
         }
 
@@ -171,11 +131,6 @@ databaseChangeLog {
             column(name: 'net_amount', value: '0.0000000000')
             column(name: 'service_fee_amount', value: '0.0000000000')
             column(name: 'gross_amount', value: '118.9783790616')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'ahrybanau@copyright.com')
-            column(name: 'created_datetime', value: '2018-01-26 06:22:50.577055-05')
-            column(name: 'updated_by_user', value: 'ahrybanau@copyright.com')
-            column(name: 'updated_datetime', value: '2018-01-26 06:22:50.577055-05')
             column(name: 'is_rh_participating_flag', value: 'FALSE')
         }
 
@@ -197,11 +152,6 @@ databaseChangeLog {
             column(name: 'net_amount', value: '0.0000000000')
             column(name: 'service_fee_amount', value: '0.0000000000')
             column(name: 'gross_amount', value: '1040.5866734081')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'ahrybanau@copyright.com')
-            column(name: 'created_datetime', value: '2018-01-26 06:22:50.577055-05')
-            column(name: 'updated_by_user', value: 'ahrybanau@copyright.com')
-            column(name: 'updated_datetime', value: '2018-01-26 06:22:50.577055-05')
             column(name: 'is_rh_participating_flag', value: 'FALSE')
         }
 
@@ -223,11 +173,6 @@ databaseChangeLog {
             column(name: 'net_amount', value: '0.0000000000')
             column(name: 'service_fee_amount', value: '0.0000000000')
             column(name: 'gross_amount', value: '1382.4756606371')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'ahrybanau@copyright.com')
-            column(name: 'created_datetime', value: '2018-01-26 06:22:50.577055-05')
-            column(name: 'updated_by_user', value: 'ahrybanau@copyright.com')
-            column(name: 'updated_datetime', value: '2018-01-26 06:22:50.577055-05')
             column(name: 'is_rh_participating_flag', value: 'FALSE')
         }
 
@@ -249,11 +194,6 @@ databaseChangeLog {
             column(name: 'net_amount', value: '0.0000000000')
             column(name: 'service_fee_amount', value: '0.0000000000')
             column(name: 'gross_amount', value: '1395.1194841293')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'ahrybanau@copyright.com')
-            column(name: 'created_datetime', value: '2018-01-26 06:22:50.577055-05')
-            column(name: 'updated_by_user', value: 'ahrybanau@copyright.com')
-            column(name: 'updated_datetime', value: '2018-01-26 06:22:50.577055-05')
             column(name: 'is_rh_participating_flag', value: 'FALSE')
         }
 

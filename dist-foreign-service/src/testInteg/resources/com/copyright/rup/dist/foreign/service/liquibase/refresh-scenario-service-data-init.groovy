@@ -9,7 +9,6 @@ databaseChangeLog {
             column(name: 'name', value: 'Test Scenario')
             column(name: 'status_ind', value: 'IN_PROGRESS')
             column(name: 'description', value: 'Scenario Description')
-            column(name: 'updated_datetime', value: '2017-02-14 11:45:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -19,7 +18,6 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
             column(name: 'gross_amount', value: '35000')
-            column(name: 'updated_datetime', value: '2017-02-14 11:41:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -147,15 +145,11 @@ databaseChangeLog {
             column(name: 'df_scenario_uid', value: 'e6e2fe6c-4c47-4ca1-bf32-591af4c13060')
             column(name: 'product_family', value: 'FAS')
             column(name: 'status_ind', value: 'ELIGIBLE')
-            column(name: 'created_by_user', value: 'SYSTEM')
-            column(name: 'updated_by_user', value: 'SYSTEM')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter_to_usage_batches_ids_map') {
             column(name: 'df_scenario_usage_filter_uid', value: '3964ac3b-4581-41d7-ad12-b93af2420345')
             column(name: 'df_usage_batch_uid', value: '31ddaa1a-e60b-44ce-a968-0ca262870358')
-            column(name: 'created_by_user', value: 'SYSTEM')
-            column(name: 'updated_by_user', value: 'SYSTEM')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
@@ -193,7 +187,6 @@ databaseChangeLog {
             column(name: 'name', value: 'Test Scenario')
             column(name: 'status_ind', value: 'IN_PROGRESS')
             column(name: 'description', value: 'Scenario Description')
-            column(name: 'updated_datetime', value: '2017-02-14 11:45:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -203,7 +196,6 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
             column(name: 'gross_amount', value: '35000')
-            column(name: 'updated_datetime', value: '2017-02-14 11:41:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -331,15 +323,11 @@ databaseChangeLog {
             column(name: 'df_scenario_uid', value: '8fba95e3-c706-47f7-a1c8-fad9af5e31a9')
             column(name: 'product_family', value: 'CLA_FAS')
             column(name: 'status_ind', value: 'ELIGIBLE')
-            column(name: 'created_by_user', value: 'SYSTEM')
-            column(name: 'updated_by_user', value: 'SYSTEM')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter_to_usage_batches_ids_map') {
             column(name: 'df_scenario_usage_filter_uid', value: 'b1b7c100-42f8-49f7-ab9f-a89e92a011c1')
             column(name: 'df_usage_batch_uid', value: 'ce0ca941-1e16-4a3b-a991-b596189b4f22')
-            column(name: 'created_by_user', value: 'SYSTEM')
-            column(name: 'updated_by_user', value: 'SYSTEM')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {

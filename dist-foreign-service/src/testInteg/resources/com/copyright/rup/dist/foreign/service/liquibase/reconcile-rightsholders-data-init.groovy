@@ -8,7 +8,6 @@ databaseChangeLog {
             column(name: 'df_scenario_uid', value: 'be66bae9-fa89-499a-8485-fb9e445bedd9')
             column(name: 'name', value: 'Test Reconcile rightsholders 1')
             column(name: 'status_ind', value: 'IN_PROGRESS')
-            column(name: 'updated_datetime', value: '2017-02-14 11:45:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -18,7 +17,6 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
             column(name: 'gross_amount', value: '1000.00')
-            column(name: 'updated_datetime', value: '2017-02-14 11:41:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -61,7 +59,6 @@ databaseChangeLog {
             column(name: 'df_scenario_uid', value: '04263c90-cb54-44f0-b354-a901586e5801')
             column(name: 'name', value: 'Test Reconcile rightsholders 2')
             column(name: 'status_ind', value: 'IN_PROGRESS')
-            column(name: 'updated_datetime', value: '2017-02-14 11:45:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -71,7 +68,6 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
             column(name: 'gross_amount', value: '15000.00')
-            column(name: 'updated_datetime', value: '2017-02-14 11:41:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {

@@ -11,11 +11,6 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
             column(name: 'gross_amount', value: '40300.00')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'SYSTEM')
-            column(name: 'created_datetime', value: '2017-02-14 11:25:52.735531+03')
-            column(name: 'updated_by_user', value: 'SYSTEM')
-            column(name: 'updated_datetime', value: '2017-02-14 11:25:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -25,11 +20,6 @@ databaseChangeLog {
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
             column(name: 'gross_amount', value: '10250.00')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'SYSTEM')
-            column(name: 'created_datetime', value: '2017-02-14 11:35:52.735531+03')
-            column(name: 'updated_by_user', value: 'SYSTEM')
-            column(name: 'updated_datetime', value: '2017-02-14 11:35:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
@@ -37,11 +27,6 @@ databaseChangeLog {
             column(name: 'name', value: 'Test Scenario')
             column(name: 'status_ind', value: 'IN_PROGRESS')
             column(name: 'description', value: 'Scenario description')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'SYSTEM')
-            column(name: 'created_datetime', value: '2017-02-14 11:45:52.735531+03')
-            column(name: 'updated_by_user', value: 'SYSTEM')
-            column(name: 'updated_datetime', value: '2017-02-14 11:45:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
@@ -49,11 +34,6 @@ databaseChangeLog {
             column(name: 'df_scenario_uid', value: '12ec845f-0e76-4d1c-85cd-bb3fb7ca260e')
             column(name: 'product_family', value: 'FAS')
             column(name: 'status_ind', value: 'ELIGIBLE')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'SYSTEM')
-            column(name: 'created_datetime', value: '2017-02-14 11:45:52.735531+03')
-            column(name: 'updated_by_user', value: 'SYSTEM')
-            column(name: 'updated_datetime', value: '2017-02-14 11:45:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -228,11 +208,6 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: '9f96760c-0de9-4cee-abf2-65521277281b')
             column(name: 'action_type_ind', value: 'LOADED')
             column(name: 'action_reason', value: 'Uploaded in \'Test Batch 1\' Batch')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'SYSTEM')
-            column(name: 'created_datetime', value: '2017-02-14 11:25:52.735531+03')
-            column(name: 'updated_by_user', value: 'SYSTEM')
-            column(name: 'updated_datetime', value: '2017-02-14 11:25:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
@@ -240,11 +215,6 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: 'e4a81fad-7b0e-4c67-8df2-112c8913e45e')
             column(name: 'action_type_ind', value: 'LOADED')
             column(name: 'action_reason', value: 'Uploaded in \'Test Batch 1\' Batch')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'SYSTEM')
-            column(name: 'created_datetime', value: '2017-02-14 11:25:52.735531+03')
-            column(name: 'updated_by_user', value: 'SYSTEM')
-            column(name: 'updated_datetime', value: '2017-02-14 11:25:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
@@ -252,11 +222,6 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: '2641e7fe-2a5a-4cdf-8879-48816d705169')
             column(name: 'action_type_ind', value: 'LOADED')
             column(name: 'action_reason', value: 'Uploaded in \'Test Batch 2\' Batch')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'SYSTEM')
-            column(name: 'created_datetime', value: '2017-02-14 11:35:52.735531+03')
-            column(name: 'updated_by_user', value: 'SYSTEM')
-            column(name: 'updated_datetime', value: '2017-02-14 11:35:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
@@ -264,11 +229,6 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: '405491b1-49a9-4b70-9cdb-d082be6a802d')
             column(name: 'action_type_ind', value: 'LOADED')
             column(name: 'action_reason', value: 'Uploaded in \'Test Batch 2\' Batch')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'SYSTEM')
-            column(name: 'created_datetime', value: '2017-02-14 11:35:52.735531+03')
-            column(name: 'updated_by_user', value: 'SYSTEM')
-            column(name: 'updated_datetime', value: '2017-02-14 11:35:52.735531+03')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
@@ -276,11 +236,6 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: '4ddfcb74-cb72-48f6-9ee4-8b4e05afce75')
             column(name: 'action_type_ind', value: 'LOADED')
             column(name: 'action_reason', value: 'Uploaded in \'Test Batch 2\' Batch')
-            column(name: 'record_version', value: '1')
-            column(name: 'created_by_user', value: 'SYSTEM')
-            column(name: 'created_datetime', value: '2017-02-14 11:35:52.735531+03')
-            column(name: 'updated_by_user', value: 'SYSTEM')
-            column(name: 'updated_datetime', value: '2017-02-14 11:35:52.735531+03')
         }
 
         rollback ""
