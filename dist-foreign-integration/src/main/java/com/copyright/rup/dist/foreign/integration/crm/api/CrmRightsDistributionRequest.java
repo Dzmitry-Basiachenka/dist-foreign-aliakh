@@ -129,7 +129,7 @@ public class CrmRightsDistributionRequest {
             OffsetDateTime.ofInstant(usage.getCreateDate().toInstant(), ZoneId.systemDefault());
         this.serviceFeeAmount = usage.getServiceFeeAmount();
         this.wrWrkInst = usage.getWrWrkInst();
-        this.publicationName = usage.getWorkTitle();
+        this.publicationName = usage.getSystemTitle();
         this.author = usage.getAuthor();
         this.chapterArticleTitle = usage.getArticle();
         this.omOrderDetailNumber = usage.getId();
