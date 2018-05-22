@@ -120,7 +120,7 @@ public class CrmServiceTest {
             Date.from(LocalDate.of(2017, 1, 16).atStartOfDay(ZoneId.systemDefault()).toInstant()));
         paidUsage.setServiceFeeAmount(new BigDecimal("479.99"));
         paidUsage.setWrWrkInst(127778306L);
-        paidUsage.setWorkTitle("Adaptations");
+        paidUsage.setSystemTitle("Adaptations");
         paidUsage.setAuthor("Cartmell, Deborah.");
         paidUsage.setArticle("Routledge");
         paidUsage.setGrossAmount(new BigDecimal("1499.99"));
