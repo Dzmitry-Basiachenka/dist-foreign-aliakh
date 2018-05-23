@@ -121,7 +121,7 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
     }
 
     private HorizontalLayout buildUsageBatchFilter() {
-        usageBatchFilterWidget = new UsageBatchFilterWidget(() -> controller.getUsageBatchesNotIncludedIntoScenario());
+        usageBatchFilterWidget = new UsageBatchFilterWidget(() -> controller.getUsageBatches());
         usageBatchFilterWidget.addFilterSaveListener((IFilterSaveListener<UsageBatch>) saveEvent -> {
             usageFilter.setUsageBatchesIds(
                 saveEvent.getSelectedItemsIds().stream().map(UsageBatch::getId).collect(Collectors.toSet()));

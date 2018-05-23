@@ -37,8 +37,8 @@ public class UsagesFilterController extends CommonController<IUsagesFilterWidget
     private IUsageService usageService;
 
     @Override
-    public List<UsageBatch> getUsageBatchesNotIncludedIntoScenario() {
-        return usageBatchService.getUsageBatchesForFilter();
+    public List<UsageBatch> getUsageBatches() {
+        return usageBatchService.getUsageBatches();
     }
 
     @Override
