@@ -42,11 +42,6 @@ public class UsageBatchRepository extends BaseRepository implements IUsageBatchR
     }
 
     @Override
-    public List<UsageBatch> findForFilter() {
-        return selectList("IUsageBatchMapper.findForFilter", UsageStatusEnum.LOCKED);
-    }
-
-    @Override
     public int findCountByName(String name) {
         checkArgument(StringUtils.isNotBlank(name));
         return selectOne("IUsageBatchMapper.findCountByName", name);

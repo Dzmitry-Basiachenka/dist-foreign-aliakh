@@ -34,11 +34,6 @@ public interface IUsageBatchRepository {
     List<UsageBatch> findAll();
 
     /**
-     * @return list of {@link UsageBatch}es not included into scenario.
-     */
-    List<UsageBatch> findForFilter();
-
-    /**
      * Gets usage batches count with specified name.
      *
      * @param name batch name
