@@ -902,22 +902,6 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindProductFamiliesForFilter() {
-        List<String> productFamilies = usageRepository.findProductFamiliesForFilter();
-        assertEquals(2, CollectionUtils.size(productFamilies));
-        assertEquals(PRODUCT_FAMILY_FAS, productFamilies.get(0));
-        assertEquals(PRODUCT_FAMILY_NTS, productFamilies.get(1));
-    }
-
-    @Test
-    public void testFindProductFamiliesForAuditFilter() {
-        List<String> productFamilies = usageRepository.findProductFamiliesForAuditFilter();
-        assertEquals(2, CollectionUtils.size(productFamilies));
-        assertEquals(PRODUCT_FAMILY_FAS, productFamilies.get(0));
-        assertEquals(PRODUCT_FAMILY_NTS, productFamilies.get(1));
-    }
-
-    @Test
     public void testUpdateStatusAndProductFamily() {
         List<Usage> usages = Lists.newArrayList(
             usageRepository.findById("66a7c2c0-3b09-48ad-9aa5-a6d0822226c7"),

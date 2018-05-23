@@ -67,8 +67,6 @@ import java.util.List;
 @PrepareForTest(RupContextUtils.class)
 public class UsageServiceTest {
 
-    private static final String FAS_PRODUCT_FAMILY = "FAS";
-    private static final String NTS_PRODUCT_FAMILY = "NTS";
     private static final String USAGE_ID_1 = "Usage id 1";
     private static final String USAGE_ID_2 = "Usage id 2";
     private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
@@ -402,32 +400,6 @@ public class UsageServiceTest {
         expect(usageRepository.findForAudit(filter, pageable, sort)).andReturn(Collections.emptyList()).once();
         replay(usageRepository);
         assertEquals(Collections.emptyList(), usageService.getForAudit(filter, pageable, sort));
-        verify(usageRepository);
-    }
-
-    @Test
-    public void testGetProductFamilies() {
-        expect(usageRepository.findProductFamiliesForFilter())
-            .andReturn(Lists.newArrayList(FAS_PRODUCT_FAMILY, NTS_PRODUCT_FAMILY))
-            .once();
-        replay(usageRepository);
-        List<String> productFamilies = usageService.getProductFamilies();
-        assertEquals(2, CollectionUtils.size(productFamilies));
-        assertEquals(FAS_PRODUCT_FAMILY, productFamilies.get(0));
-        assertEquals(NTS_PRODUCT_FAMILY, productFamilies.get(1));
-        verify(usageRepository);
-    }
-
-    @Test
-    public void testGetProductFamiliesForAudit() {
-        expect(usageRepository.findProductFamiliesForAuditFilter())
-            .andReturn(Lists.newArrayList(FAS_PRODUCT_FAMILY, NTS_PRODUCT_FAMILY))
-            .once();
-        replay(usageRepository);
-        List<String> productFamilies = usageService.getProductFamiliesForAudit();
-        assertEquals(2, CollectionUtils.size(productFamilies));
-        assertEquals(FAS_PRODUCT_FAMILY, productFamilies.get(0));
-        assertEquals(NTS_PRODUCT_FAMILY, productFamilies.get(1));
         verify(usageRepository);
     }
 
