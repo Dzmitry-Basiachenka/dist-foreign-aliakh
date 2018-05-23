@@ -67,9 +67,9 @@ public class UsagesFilterControllerTest {
         Whitebox.setInternalState(controller, IUsageBatchService.class, usageBatchService);
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setName("name");
-        expect(usageBatchService.getUsageBatchesForFilter()).andReturn(Lists.newArrayList(usageBatch)).once();
+        expect(usageBatchService.getUsageBatches()).andReturn(Lists.newArrayList(usageBatch)).once();
         replay(usageBatchService);
-        List<UsageBatch> usageBatches = controller.getUsageBatchesNotIncludedIntoScenario();
+        List<UsageBatch> usageBatches = controller.getUsageBatches();
         assertEquals(1, usageBatches.size());
         assertEquals(usageBatch.getName(), usageBatches.iterator().next().getName());
         verify(usageBatchService);

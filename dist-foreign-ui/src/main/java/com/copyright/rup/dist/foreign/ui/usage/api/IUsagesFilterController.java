@@ -24,9 +24,9 @@ public interface IUsagesFilterController extends IFilterController<IUsagesFilter
     List<Integer> getFiscalYears();
 
     /**
-     * @return list of {@link UsageBatch}es not included into scenario.
+     * @return list of all {@link UsageBatch}es.
      */
-    List<UsageBatch> getUsageBatchesNotIncludedIntoScenario();
+    List<UsageBatch> getUsageBatches();
 
     /**
      * @return list of rightsholders.
