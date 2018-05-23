@@ -110,9 +110,4 @@ public class UsageBatchRepositoryIntegrationTest {
         usageBatch.setGrossAmount(GROSS_AMOUNT);
         return usageBatch;
     }
-
-    private void verifyUsageBatch(UsageBatch usageBatch, String id, String name) {
-        assertEquals(id, usageBatch.getId());
-        assertEquals(name, usageBatch.getName());
-    }
 }
