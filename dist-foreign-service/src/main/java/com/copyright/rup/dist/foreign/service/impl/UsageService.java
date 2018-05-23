@@ -82,6 +82,8 @@ public class UsageService implements IUsageService {
     private static final Logger LOGGER = RupLogUtils.getLogger();
     @Value("$RUP{dist.foreign.service_fee.cla_payee}")
     private BigDecimal claPayeeServiceFee;
+    @Value("$RUP{dist.foreign.product_families}")
+    private List<String> supportedProductFamilies;
     @Autowired
     private IUsageRepository usageRepository;
     @Autowired
@@ -325,12 +327,12 @@ public class UsageService implements IUsageService {
 
     @Override
     public List<String> getProductFamilies() {
-        return usageRepository.findProductFamiliesForFilter();
+        return supportedProductFamilies;
     }
 
     @Override
     public List<String> getProductFamiliesForAudit() {
-        return usageRepository.findProductFamiliesForAuditFilter();
+        return supportedProductFamilies;
     }
 
     @Override

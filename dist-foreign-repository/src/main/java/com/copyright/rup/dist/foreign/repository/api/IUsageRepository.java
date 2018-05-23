@@ -299,20 +299,6 @@ public interface IUsageRepository {
     void updateStatusAndRhAccountNumber(Set<String> usageIds, UsageStatusEnum status, Long rhAccountNumber);
 
     /**
-     * Retrieves list of product families of non archived details not included into scenario.
-     *
-     * @return list of product families
-     */
-    List<String> findProductFamiliesForFilter();
-
-    /**
-     * Retrieves list of product families of both archived and non archived details.
-     *
-     * @return list of product families
-     */
-    List<String> findProductFamiliesForAuditFilter();
-
-    /**
      * Finds list of {@link Usage}s that have standard numbers.
      *
      * @param limit  maximum size of list

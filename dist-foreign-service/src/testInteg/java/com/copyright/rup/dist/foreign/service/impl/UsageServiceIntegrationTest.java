@@ -42,6 +42,7 @@ import java.util.List;
 @Transactional
 public class UsageServiceIntegrationTest {
 
+    private static final List<String> SUPPORTED_PRODUCT_FAMILIES = Arrays.asList("CLA_FAS", "FAS", "NTS");
     @Autowired
     private IUsageService usageService;
     @Autowired
@@ -61,6 +62,16 @@ public class UsageServiceIntegrationTest {
         assertTrue(auditRepository.findByUsageId("9f96760c-0de9-4cee-abf2-65521277281b").isEmpty());
         assertTrue(auditRepository.findByUsageId("e4a81fad-7b0e-4c67-8df2-112c8913e45e").isEmpty());
         assertTrue(auditRepository.findByUsageId("4ddfcb74-cb72-48f6-9ee4-8b4e05afce75").isEmpty());
+    }
+
+    @Test
+    public void testGetProductFamilies() {
+        assertEquals(SUPPORTED_PRODUCT_FAMILIES, usageService.getProductFamilies());
+    }
+
+    @Test
+    public void testGetProductFamiliesForAudit() {
+        assertEquals(SUPPORTED_PRODUCT_FAMILIES, usageService.getProductFamiliesForAudit());
     }
 
     private void verifyExcludedUsages(Scenario scenario, boolean excluded, Long... accountNumbers) {
