@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.ui.common.LoadingIndicatorDataProvider;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.impl.ExcludeRightsholdersWindow.ExcludeUsagesEvent;
@@ -128,7 +129,7 @@ public class ScenarioWidget extends Window implements IScenarioWidget, IMediator
     }
 
     private VerticalLayout initContent() {
-        dataProvider = DataProvider.fromCallbacks(
+        dataProvider = LoadingIndicatorDataProvider.fromCallbacks(
             query -> controller.loadBeans(query.getOffset(), query.getLimit(), query.getSortOrders()).stream(),
             query -> controller.getSize());
         rightsholdersGrid = new Grid<>(dataProvider);

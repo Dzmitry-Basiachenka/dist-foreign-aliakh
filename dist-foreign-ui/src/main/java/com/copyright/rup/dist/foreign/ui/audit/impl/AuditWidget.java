@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditController;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterWidget;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditWidget;
+import com.copyright.rup.dist.foreign.ui.common.LoadingIndicatorDataProvider;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -75,7 +76,7 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
     }
 
     private void initContent() {
-        dataProvider = DataProvider.fromCallbacks(
+        dataProvider = LoadingIndicatorDataProvider.fromCallbacks(
             query -> controller.loadBeans(query.getOffset(), query.getLimit(), query.getSortOrders()).stream(),
             query -> {
                 int size = controller.getSize();

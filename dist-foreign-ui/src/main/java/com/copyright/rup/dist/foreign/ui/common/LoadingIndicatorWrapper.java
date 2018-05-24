@@ -13,7 +13,7 @@ import java.util.function.Supplier;
  *
  * @author Aliaksandr Liakh
  */
-public final class LoadingIndicatorWrapper {
+final class LoadingIndicatorWrapper {
 
     private static final String JAVA_SCRIPT_SHOW_LOADING_INDICATOR =
         "var elements = document.querySelectorAll('.v-loading-indicator'); " +
@@ -31,7 +31,7 @@ public final class LoadingIndicatorWrapper {
      * @param <T>      the type of the supplier
      * @return result of the supplier
      */
-    public static <T> T wrap(Supplier<T> supplier) {
+    static <T> T wrap(Supplier<T> supplier) {
         JavaScript.getCurrent().execute(JAVA_SCRIPT_SHOW_LOADING_INDICATOR);
         return supplier.get();
     }

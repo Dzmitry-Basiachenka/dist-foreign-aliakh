@@ -4,7 +4,7 @@ import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
-import com.copyright.rup.dist.foreign.ui.common.LoadingIndicatorWrapper;
+import com.copyright.rup.dist.foreign.ui.common.LoadingIndicatorDataProvider;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesWidget;
@@ -98,10 +98,9 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
     }
 
     private VerticalLayout initUsagesLayout() {
-        dataProvider = DataProvider.fromCallbacks(
-            query -> LoadingIndicatorWrapper.wrap(() ->
-                controller.loadBeans(query.getOffset(), query.getLimit(), query.getSortOrders()).stream()),
-            query -> LoadingIndicatorWrapper.wrap(() -> {
+        dataProvider = LoadingIndicatorDataProvider.fromCallbacks(
+            query -> controller.loadBeans(query.getOffset(), query.getLimit(), query.getSortOrders()).stream(),
+            query -> {
                 int size = controller.getSize();
                 if (0 < size) {
                     usagesGrid.removeStyleName(EMPTY_STYLE_NAME);
@@ -109,7 +108,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
                     usagesGrid.addStyleName(EMPTY_STYLE_NAME);
                 }
                 return size;
-            }));
+            });
         usagesGrid = new Grid<>(dataProvider);
         addColumns();
         VaadinUtils.addComponentStyle(usagesGrid, "usages-grid");

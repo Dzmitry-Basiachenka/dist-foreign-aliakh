@@ -4,6 +4,7 @@ import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
+import com.copyright.rup.dist.foreign.ui.common.LoadingIndicatorDataProvider;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -59,7 +60,7 @@ public class RefreshScenarioWindow extends Window {
         setWidth(800, Unit.PIXELS);
         setHeight(400, Unit.PIXELS);
         VaadinUtils.addComponentStyle(this, "refresh-scenario-window");
-        dataProvider = DataProvider.fromCallbacks(fetchCallback, countCallback);
+        dataProvider = LoadingIndicatorDataProvider.fromCallbacks(fetchCallback, countCallback);
         setContent(initContent());
     }
 
