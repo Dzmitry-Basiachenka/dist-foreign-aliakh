@@ -78,10 +78,10 @@ public class WorksMatchingIntegrationTest {
         verifyUsage("efd7813c-e4d6-41e3-824c-b22035af31d5", null, UsageStatusEnum.WORK_NOT_FOUND, FAS_PRODUCT_FAMILY,
             null, null, "Wr Wrk Inst was not found by standard number 0-325-01548-2");
         verifyUsage("aa8642d5-ac6f-4f38-8c93-5fef55dd37ce", UNIDENTIFIED_WR_WRK_INST, UsageStatusEnum.WORK_FOUND,
-            FAS_PRODUCT_FAMILY, null, UNIDENTIFIED_TITLE,
+            FAS_PRODUCT_FAMILY, UNIDENTIFIED_TITLE, UNIDENTIFIED_TITLE,
             "Usage assigned unidentified work due to empty standard number and title");
         verifyUsage("d906069c-3266-11e8-b467-0ed5f89f718b", UNIDENTIFIED_WR_WRK_INST, UsageStatusEnum.WORK_FOUND,
-            FAS_PRODUCT_FAMILY, null, UNIDENTIFIED_TITLE,
+            FAS_PRODUCT_FAMILY, UNIDENTIFIED_TITLE, UNIDENTIFIED_TITLE,
             "Usage assigned unidentified work due to empty standard number and title");
         verifyUsage("182c7557-e67a-4ac9-8f73-61972f1f5abb", null, UsageStatusEnum.WORK_NOT_FOUND, FAS_PRODUCT_FAMILY,
             null, null, "Wr Wrk Inst was not found by standard number 10.1353/PGN.1999.0081");
