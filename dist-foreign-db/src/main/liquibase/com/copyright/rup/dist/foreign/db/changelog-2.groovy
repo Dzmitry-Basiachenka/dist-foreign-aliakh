@@ -1439,24 +1439,4 @@ databaseChangeLog {
             sql("alter table ${dbAppsSchema}.df_scenario_usage_filter_to_usage_batches_ids_map alter updated_by_user drop default")
         }
     }
-
-    changeSet(id: '2018-05-23-00', author: 'Darya Baraukova <dbaraukova@copyright.com>') {
-        comment("B-43663: FDA: Measure performance of critical areas: " +
-                "add index by df_scenario_uid in df_usage and df_usage_archive tables")
-
-        createIndex(indexName: 'ix_df_usage_df_scenario_uid', schemaName: dbAppsSchema, tableName: 'df_usage',
-                tablespace: dbIndexTablespace) {
-            column(name: 'df_scenario_uid')
-        }
-
-        createIndex(indexName: 'ix_df_usage_archive_df_scenario_uid', schemaName: dbAppsSchema, tableName: 'df_usage_archive',
-                tablespace: dbIndexTablespace) {
-            column(name: 'df_scenario_uid')
-        }
-
-        rollback {
-            sql("drop index ${dbAppsSchema}.ix_df_usage_archive_df_scenario_uid")
-            sql("drop index ${dbAppsSchema}.ix_df_usage_df_scenario_uid")
-        }
-    }
 }
