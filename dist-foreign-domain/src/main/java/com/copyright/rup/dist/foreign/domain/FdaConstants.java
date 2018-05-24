@@ -14,17 +14,17 @@ public final class FdaConstants {
     /**
      * FAS product family.
      */
-    public static final String PRODUCT_FAMILY_FAS = "FAS";
+    public static final String FAS_PRODUCT_FAMILY = "FAS";
 
     /**
-     * Product family for rro with account number {@link FdaConstants#ACCOUNT_NUMBER_CLA_FAS}.
+     * Product family for RRO with account number {@link FdaConstants#CLA_ACCOUNT_NUMBER}.
      */
-    public static final String PRODUCT_FAMILY_CLA_FAS = "CLA_FAS";
+    public static final String CLA_FAS_PRODUCT_FAMILY = "CLA_FAS";
 
     /**
-     * Account number for {@link FdaConstants#PRODUCT_FAMILY_CLA_FAS} rro.
+     * Account number for {@link FdaConstants#CLA_FAS_PRODUCT_FAMILY} RRO.
      */
-    public static final Long ACCOUNT_NUMBER_CLA_FAS = 2000017000L;
+    public static final Long CLA_ACCOUNT_NUMBER = 2000017000L;
 
     private FdaConstants() {
         throw new AssertionError("Constructor shouldn't be called directly");

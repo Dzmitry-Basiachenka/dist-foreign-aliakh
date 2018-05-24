@@ -5,6 +5,7 @@ import com.copyright.rup.dist.common.integration.rest.prm.PrmRollUpService;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.util.LogUtils;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
@@ -76,7 +77,6 @@ public class UsageService implements IUsageService {
         "ArchivedUsagesCount={}, NotReportedUsagesCount={}, ArchivedScenariosCount={}";
     private static final String SEND_TO_CRM_FINISHED_DEBUG_LOG_MESSAGE = "Send to CRM. Finished. PaidUsagesCount={}, " +
         "ArchivedUsagesCount={}, ArchivedScenariosCount={}, NotReportedUsageIds={}";
-    private static final Long CLA_PAYEE = 2000017000L;
     private static final EnumSet<ScenarioStatusEnum> ARCHIVED_SCENARIO_STATUSES =
         EnumSet.of(ScenarioStatusEnum.SENT_TO_LM, ScenarioStatusEnum.ARCHIVED);
     private static final Logger LOGGER = RupLogUtils.getLogger();
@@ -184,7 +184,7 @@ public class UsageService implements IUsageService {
                 : scenarioUsage.isRhParticipating();
             addScenarioInfo(usage, scenario);
             CalculationUtils.recalculateAmounts(usage, rhParticipating,
-                CLA_PAYEE.equals(usage.getPayee().getAccountNumber()) ? claPayeeServiceFee
+                FdaConstants.CLA_ACCOUNT_NUMBER.equals(usage.getPayee().getAccountNumber()) ? claPayeeServiceFee
                     : prmIntegrationService.getRhParticipatingServiceFee(rhParticipating));
         });
         usageRepository.addToScenario(newUsages);
@@ -217,7 +217,7 @@ public class UsageService implements IUsageService {
                 PrmRollUpService.getPayeeAccountNumber(rollUps, usage.getRightsholder(), usage.getProductFamily()));
             addScenarioInfo(usage, scenario);
             //usages that have CLA as Payee should get 10% service fee
-            if (CLA_PAYEE.equals(usage.getPayee().getAccountNumber())) {
+            if (FdaConstants.CLA_ACCOUNT_NUMBER.equals(usage.getPayee().getAccountNumber())) {
                 CalculationUtils.recalculateAmounts(usage, usage.isRhParticipating(), claPayeeServiceFee);
             }
         });

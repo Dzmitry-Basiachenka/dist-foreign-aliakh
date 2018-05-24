@@ -11,7 +11,6 @@ import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
-import com.copyright.rup.dist.common.test.ReportTestUtils;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -27,7 +26,6 @@ import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,9 +35,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collections;
@@ -48,8 +43,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -94,7 +87,7 @@ public class UsageRepositoryIntegrationTest {
     private static final String USAGE_ID_6 = "0b0f5100-01bd-11e8-8f1a-0800200c9a66";
     private static final String USAGE_ID_7 = "cf38d390-11bb-4af7-9685-e034c9c32fb6";
     private static final String USAGE_ID_8 = "b1f0b236-3ae9-4a60-9fab-61db84199dss";
-    private static final String USAGE_ID_9 = "3900eea0-1231-11e8-b566-0800200c9a66";
+    private static final String USAGE_ID_9 = "5c5f8c1c-1418-4cfd-8685-9212f4c421d1";
     private static final String USAGE_ID_10 = "4dd8cdf8-ca10-422e-bdd5-3220105e6379";
     private static final String USAGE_ID_11 = "7db6455e-5249-44db-801a-307f1c239310";
     private static final String USAGE_ID_12 = "593c49c3-eb5b-477b-8556-f7a4725df2b3";
@@ -102,30 +95,19 @@ public class UsageRepositoryIntegrationTest {
     private static final String USAGE_ID_14 = "0c099fc0-e6f5-43c0-b2d5-ad971f974c10";
     private static final String USAGE_ID_15 = "0d85f51d-212b-4181-9972-3154cad74bd0";
     private static final String USAGE_ID_16 = "1cb766c6-7c49-489a-bd8f-9b8b052f5785";
-    private static final String USAGE_ID_17 = "e2b3c369-3084-41ad-92b5-62197660d645";
+    private static final String USAGE_ID_17 = "b53bb4f3-9eee-4732-8e3d-0c88722081d8";
     private static final String USAGE_ID_18 = "721ca627-09bc-4204-99f4-6acae415fa5d";
     private static final String USAGE_ID_19 = "9c07f6dd-382e-4cbb-8cd1-ab9f51413e0a";
     private static final String USAGE_ID_20 = "dcc794ba-42aa-481d-937b-8f431929a611";
     private static final String USAGE_ID_21 = "47d48889-76b5-4957-aca0-2a7850a09f92";
     private static final String USAGE_ID_22 = "c5ea47b0-b269-4791-9aa7-76308fe835e6";
-    private static final String USAGE_ID_23 = "b53bb4f3-9eee-4732-8e3d-0c88722081d8";
-    private static final String USAGE_ID_24 = "5c5f8c1c-1418-4cfd-8685-9212f4c421d1";
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
     private static final String USER_NAME = "user@copyright.com";
     private static final BigDecimal SERVICE_FEE = new BigDecimal("0.32000");
-    private static final Executor EXECUTOR = Executors.newCachedThreadPool();
     private static final String BATCH_ID = "e0af666b-cbb7-4054-9906-12daa1fbd76e";
-    private static final String PATH_TO_EXPECTED_REPORTS =
-        "src/testInteg/resources/com/copyright/rup/dist/foreign/repository/impl/csv";
 
-    private final ReportTestUtils reportTestUtils = new ReportTestUtils(PATH_TO_EXPECTED_REPORTS);
     @Autowired
     private UsageRepository usageRepository;
-
-    @BeforeClass
-    public static void setUpTestDirectory() throws IOException {
-        ReportTestUtils.setUpTestDirectory();
-    }
 
     @Test
     public void testInsert() {
@@ -193,8 +175,8 @@ public class UsageRepositoryIntegrationTest {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             Collections.singleton(PRODUCT_FAMILY_FAS), null, null, null);
         verifyUsageDtos(usageRepository.findByFilter(usageFilter, null, new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)),
-            16, USAGE_ID_6, USAGE_ID_14, USAGE_ID_1, USAGE_ID_21, USAGE_ID_12, USAGE_ID_24, USAGE_ID_13, USAGE_ID_18,
-            USAGE_ID_11, USAGE_ID_2, USAGE_ID_19, USAGE_ID_23, USAGE_ID_22, USAGE_ID_4, USAGE_ID_20, USAGE_ID_17);
+            15, USAGE_ID_6, USAGE_ID_14, USAGE_ID_1, USAGE_ID_21, USAGE_ID_12, USAGE_ID_9, USAGE_ID_13, USAGE_ID_18,
+            USAGE_ID_11, USAGE_ID_2, USAGE_ID_19, USAGE_ID_17, USAGE_ID_22, USAGE_ID_4, USAGE_ID_20);
     }
 
     @Test
@@ -467,50 +449,6 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testWriteUsagesForResearchAndFindIds() throws IOException {
-        PipedOutputStream pos = new PipedOutputStream();
-        PipedInputStream pis = new PipedInputStream(pos);
-        UsageFilter usageFilter = new UsageFilter();
-        usageFilter.setUsageStatus(UsageStatusEnum.WORK_NOT_FOUND);
-        EXECUTOR.execute(() -> usageRepository.writeUsagesForResearchAndFindIds(usageFilter, pos));
-        reportTestUtils.assertCsvReport("usages_for_research.csv", pis);
-    }
-
-    @Test
-    public void testWriteUsagesForResearchAndFindIdsEmptyReport() throws IOException {
-        PipedOutputStream pos = new PipedOutputStream();
-        PipedInputStream pis = new PipedInputStream(pos);
-        EXECUTOR.execute(() -> usageRepository.writeUsagesForResearchAndFindIds(new UsageFilter(), pos));
-        reportTestUtils.assertCsvReport("usages_for_research_empty.csv", pis);
-    }
-
-    @Test
-    public void testWriteUsagesCsvReport() throws Exception {
-        PipedOutputStream pos = new PipedOutputStream();
-        PipedInputStream pis = new PipedInputStream(pos);
-        UsageFilter usageFilter = new UsageFilter();
-        usageFilter.setUsageBatchesIds(Collections.singleton(USAGE_BATCH_ID_1));
-        EXECUTOR.execute(() -> usageRepository.writeUsagesCsvReport(usageFilter, pos));
-        reportTestUtils.assertCsvReport("usages_report.csv", pis);
-    }
-
-    @Test
-    public void testWriteUsagesEmptyCsvReport() throws Exception {
-        PipedOutputStream pos = new PipedOutputStream();
-        PipedInputStream pis = new PipedInputStream(pos);
-        EXECUTOR.execute(() -> usageRepository.writeUsagesCsvReport(new UsageFilter(), pos));
-        reportTestUtils.assertCsvReport("usages_report_empty.csv", pis);
-    }
-
-    @Test
-    public void testWriteScenarioUsagesCsvReport() throws Exception {
-        PipedOutputStream pos = new PipedOutputStream();
-        PipedInputStream pis = new PipedInputStream(pos);
-        EXECUTOR.execute(() -> usageRepository.writeScenarioUsagesCsvReport(SCENARIO_ID, pos));
-        reportTestUtils.assertCsvReport("scenario_usages_report.csv", pis);
-    }
-
-    @Test
     public void testDeleteUsages() {
         UsageFilter filter = new UsageFilter();
         filter.setUsageBatchesIds(Sets.newHashSet(USAGE_BATCH_ID_1));
@@ -639,7 +577,7 @@ public class UsageRepositoryIntegrationTest {
 
     @Test
     public void testAddToScenario() {
-        Usage usage = usageRepository.findById(USAGE_ID_24);
+        Usage usage = usageRepository.findById(USAGE_ID_9);
         verifyUsage(usage, UsageStatusEnum.ELIGIBLE, null, StoredEntity.DEFAULT_USER, null);
         usage.getPayee().setAccountNumber(2000017004L);
         usage.setStatus(UsageStatusEnum.LOCKED);
@@ -651,7 +589,7 @@ public class UsageRepositoryIntegrationTest {
         usage.setNetAmount(netAmount);
         usage.setServiceFee(SERVICE_FEE);
         usageRepository.addToScenario(Collections.singletonList(usage));
-        Usage updatedUsage = usageRepository.findById(USAGE_ID_24);
+        Usage updatedUsage = usageRepository.findById(USAGE_ID_9);
         verifyUsage(updatedUsage, UsageStatusEnum.LOCKED, SCENARIO_ID, USER_NAME, 2000017004L);
         assertEquals(SERVICE_FEE, usage.getServiceFee());
         assertEquals(serviceFeeAmount, usage.getServiceFeeAmount());
@@ -733,11 +671,11 @@ public class UsageRepositoryIntegrationTest {
     public void testFindForAuditByProductFamilies() {
         AuditFilter filter = new AuditFilter();
         filter.setProductFamilies(Collections.singleton(PRODUCT_FAMILY_FAS));
-        assertEquals(22, usageRepository.findCountForAudit(filter));
+        assertEquals(20, usageRepository.findCountForAudit(filter));
         List<UsageDto> usages = usageRepository.findForAudit(filter, new Pageable(0, 25), null);
-        verifyUsageDtos(usages, 22, USAGE_ID_6, USAGE_ID_14, USAGE_ID_15, USAGE_ID_16, USAGE_ID_9, USAGE_ID_1,
-            USAGE_ID_21, USAGE_ID_12, USAGE_ID_24, USAGE_ID_13, USAGE_ID_18, USAGE_ID_11, USAGE_ID_2, USAGE_ID_19,
-            USAGE_ID_5, USAGE_ID_8, USAGE_ID_23, USAGE_ID_22, USAGE_ID_7, USAGE_ID_4, USAGE_ID_20, USAGE_ID_17);
+        verifyUsageDtos(usages, 20, USAGE_ID_6, USAGE_ID_14, USAGE_ID_15, USAGE_ID_16, USAGE_ID_1, USAGE_ID_21,
+            USAGE_ID_12, USAGE_ID_9, USAGE_ID_13, USAGE_ID_18, USAGE_ID_11, USAGE_ID_2, USAGE_ID_19, USAGE_ID_5,
+            USAGE_ID_8, USAGE_ID_17, USAGE_ID_22, USAGE_ID_7, USAGE_ID_4, USAGE_ID_20);
     }
 
     @Test
@@ -766,26 +704,6 @@ public class UsageRepositoryIntegrationTest {
         verifyUsageDtos(usages, 1, USAGE_ID_5);
         usages = usageRepository.findForAudit(filter, new Pageable(1, 1), null);
         verifyUsageDtos(usages, 1, USAGE_ID_4);
-    }
-
-    @Test
-    public void testWriteAuditCsvReport() throws IOException {
-        PipedOutputStream pos = new PipedOutputStream();
-        PipedInputStream pis = new PipedInputStream(pos);
-        AuditFilter filter = new AuditFilter();
-        filter.setBatchesIds(
-            Sets.newHashSet("7802802a-1f96-4d7a-8a27-b0bfd43936b0", "56282dbc-2468-48d4-b926-94d3458a666a"));
-        filter.setRhAccountNumbers(Collections.singleton(1000002859L));
-        EXECUTOR.execute(() -> usageRepository.writeAuditCsvReport(filter, pos));
-        reportTestUtils.assertCsvReport("audit_report.csv", pis);
-    }
-
-    @Test
-    public void testWriteAuditEmptyCsvReport() throws IOException {
-        PipedOutputStream pos = new PipedOutputStream();
-        PipedInputStream pis = new PipedInputStream(pos);
-        EXECUTOR.execute(() -> usageRepository.writeAuditCsvReport(new AuditFilter(), pos));
-        reportTestUtils.assertCsvReport("audit_report_empty.csv", pis);
     }
 
     @Test
@@ -993,7 +911,7 @@ public class UsageRepositoryIntegrationTest {
     public void testFindWithoutStandardNumberAndTitle() {
         List<Usage> usages = usageRepository.findWithoutStandardNumberAndTitle();
         assertEquals(1, usages.size());
-        assertEquals(USAGE_ID_23, usages.get(0).getId());
+        assertEquals(USAGE_ID_17, usages.get(0).getId());
     }
 
     @Test
@@ -1014,7 +932,7 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testUpdatetatusAndWrWrkInstByStandardNumber() {
+    public void testUpdateStatusAndWrWrkInstByStandardNumber() {
         List<Usage> usages = usageRepository.findByStandardNumberAndStatus(STANDARD_NUMBER_2, UsageStatusEnum.NEW);
         assertEquals(1, usages.size());
         assertNull(usages.get(0).getWrWrkInst());
@@ -1030,7 +948,7 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testUpdatetatusAndWrWrkInstByTitle() {
+    public void testUpdateStatusAndWrWrkInstByTitle() {
         List<Usage> usages = usageRepository.findByTitleAndStatus(WORK_TITLE, UsageStatusEnum.NEW);
         assertEquals(2, usages.size());
         usages.forEach(usage -> {
@@ -1164,7 +1082,7 @@ public class UsageRepositoryIntegrationTest {
         usage.setServiceFee(SERVICE_FEE);
         calculateAmounts(usage);
         usages.add(usage);
-        usage = usageRepository.findById(USAGE_ID_24);
+        usage = usageRepository.findById(USAGE_ID_9);
         usage.getPayee().setAccountNumber(1000005413L);
         usage.setScenarioId(SCENARIO_ID);
         usage.setServiceFee(SERVICE_FEE);

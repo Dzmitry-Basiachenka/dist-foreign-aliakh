@@ -44,8 +44,7 @@ public interface IReportService {
     void writeScenarioUsagesCsvReport(Scenario scenario, PipedOutputStream pipedOutputStream);
 
     /**
-     * Writes calculated undistributed amounts into the output stream in csv format.
-     * Is used to generate Undistributed Liabilities Reconciliation Report.
+     * Writes Undistributed Liabilities Reconciliation Report into the output stream in csv format.
      *
      * @param paymentDate  payment date
      * @param outputStream instance of {@link OutputStream}
