@@ -544,6 +544,110 @@ databaseChangeLog {
             column(name: 'period_end_date', value: '2017-03-15 11:41:52.735531+03')
         }
 
+        // Record in reports that includes amounts for batch with two sent to lm usages and two not included into scenario usages
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: 'c38b1946-356b-4934-a765-eb8e824d1f01')
+            column(name: 'name', value: 'Batch with two sent to lm usages and two not included into scenario usages')
+            column(name: 'rro_account_number', value: '7000581909')
+            column(name: 'payment_date', value: '2010-04-21')
+            column(name: 'fiscal_year', value: '2010')
+            column(name: 'gross_amount', value: '400.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '454b5ed8-bff1-4410-b455-235ec5271e6c')
+            column(name: 'df_usage_batch_uid', value: 'c38b1946-356b-4934-a765-eb8e824d1f01')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
+            column(name: 'status_ind', value: 'WORK_RESEARCH')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '2192-3558')
+            column(name: 'publisher', value: 'Network for Science')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'created_by_user', value: 'user@copyright.com')
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '30.86')
+            column(name: 'gross_amount', value: '100')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '910dae16-f495-48aa-932d-0909d8103b00')
+            column(name: 'df_usage_batch_uid', value: 'c38b1946-356b-4934-a765-eb8e824d1f01')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
+            column(name: 'status_ind', value: 'WORK_RESEARCH')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '2192-3558')
+            column(name: 'publisher', value: 'Network for Science')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'created_by_user', value: 'user@copyright.com')
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '30.86')
+            column(name: 'gross_amount', value: '100')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
+            column(name: 'df_scenario_uid', value: '66460664-ccaf-4a11-935e-0d7b9da4e41b')
+            column(name: 'name', value: 'Scenario with two sent to lm usages')
+            column(name: 'status_ind', value: 'SENT_TO_LM')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+            column(name: 'df_usage_archive_uid', value: '0ac629ea-9e8b-45bd-bbd8-857bd7d34424')
+            column(name: 'df_usage_batch_uid', value: 'c38b1946-356b-4934-a765-eb8e824d1f01')
+            column(name: 'df_scenario_uid', value: '66460664-ccaf-4a11-935e-0d7b9da4e41b')
+            column(name: 'wr_wrk_inst', value: '243904752')
+            column(name: 'work_title', value: '100 ROAD MOVIES')
+            column(name: 'system_title', value: '100 ROAD MOVIES')
+            column(name: 'rh_account_number', value: '1000009522')
+            column(name: 'payee_account_number', value: '1000009522')
+            column(name: 'status_ind', value: 'LOCKED')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
+            column(name: 'gross_amount', value: '100.00')
+            column(name: 'net_amount', value: '68.00')
+            column(name: 'service_fee_amount', value: '32.00')
+            column(name: 'service_fee', value: '0.32000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+            column(name: 'df_usage_archive_uid', value: '146ce0f2-f71f-4a53-b0c4-9925ec08da5f')
+            column(name: 'df_usage_batch_uid', value: 'c38b1946-356b-4934-a765-eb8e824d1f01')
+            column(name: 'df_scenario_uid', value: '66460664-ccaf-4a11-935e-0d7b9da4e41b')
+            column(name: 'wr_wrk_inst', value: '243904752')
+            column(name: 'work_title', value: '100 ROAD MOVIES')
+            column(name: 'system_title', value: '100 ROAD MOVIES')
+            column(name: 'rh_account_number', value: '1000009522')
+            column(name: 'payee_account_number', value: '1000009522')
+            column(name: 'status_ind', value: 'LOCKED')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
+            column(name: 'gross_amount', value: '100.00')
+            column(name: 'net_amount', value: '68.00')
+            column(name: 'service_fee_amount', value: '32.00')
+            column(name: 'service_fee', value: '0.32000')
+        }
+
         // Record in report that includes amounts for batch with rro which is not included into table with estimated service fee
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: 'adf97d33-4b76-4c2c-ad6e-91c4715d392f')
@@ -578,7 +682,110 @@ databaseChangeLog {
             column(name: 'updated_by_user', value: 'user@copyright.com')
             column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '30.86')
-            column(name: 'gross_amount', value: '200')
+            column(name: 'gross_amount', value: '100')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
+            column(name: 'df_scenario_uid', value: '6c170115-cd1f-4a73-9a56-6e9316579bc8')
+            column(name: 'name', value: 'In progress scenario')
+            column(name: 'status_ind', value: 'SENT_TO_LM')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+            column(name: 'df_usage_archive_uid', value: 'd1f1def6-4062-47f6-8675-59328fafb157')
+            column(name: 'df_usage_batch_uid', value: 'f6a46748-5c19-4b10-953b-ae61d8e06822')
+            column(name: 'df_scenario_uid', value: '6c170115-cd1f-4a73-9a56-6e9316579bc8')
+            column(name: 'wr_wrk_inst', value: '243904752')
+            column(name: 'work_title', value: '100 ROAD MOVIES')
+            column(name: 'system_title', value: '100 ROAD MOVIES')
+            column(name: 'rh_account_number', value: '1000009522')
+            column(name: 'payee_account_number', value: '1000009522')
+            column(name: 'status_ind', value: 'LOCKED')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
+            column(name: 'gross_amount', value: '100')
+            column(name: 'net_amount', value: '64.00')
+            column(name: 'service_fee_amount', value: '32.00')
+            column(name: 'service_fee', value: '0.32000')
+        }
+
+        // Record for this batch should't be included into report. Batch contains paid and archived usages
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: '24600e42-3c2c-4cf6-b376-d2d477128e04')
+            column(name: 'name', value: 'Batch with paid and archived usages')
+            column(name: 'rro_account_number', value: '5000581900')
+            column(name: 'payment_date', value: '2010-01-03')
+            column(name: 'fiscal_year', value: '2010')
+            column(name: 'gross_amount', value: '200.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
+            column(name: 'df_scenario_uid', value: 'd3436a38-98ff-4061-b245-68ffeb1f216c')
+            column(name: 'name', value: 'Scenario with paid and archived usages')
+            column(name: 'status_ind', value: 'SENT_TO_LM')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+            column(name: 'df_usage_archive_uid', value: 'e8790b32-9d4e-42e6-93f6-eeafc46131fc')
+            column(name: 'df_usage_batch_uid', value: '24600e42-3c2c-4cf6-b376-d2d477128e04')
+            column(name: 'df_scenario_uid', value: 'd3436a38-98ff-4061-b245-68ffeb1f216c')
+            column(name: 'wr_wrk_inst', value: '243904752')
+            column(name: 'work_title', value: '100 ROAD MOVIES')
+            column(name: 'system_title', value: '100 ROAD MOVIES')
+            column(name: 'rh_account_number', value: '1000009522')
+            column(name: 'payee_account_number', value: '1000009522')
+            column(name: 'status_ind', value: 'PAID')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
+            column(name: 'gross_amount', value: '100.00')
+            column(name: 'net_amount', value: '68.00')
+            column(name: 'service_fee_amount', value: '32.00')
+            column(name: 'service_fee', value: '0.32000')
+            column(name: 'ccc_event_id', value: '53256')
+            column(name: 'check_number', value: '578945')
+            column(name: 'check_date', value: '2017-03-15 11:41:52.735531+03')
+            column(name: 'distribution_name', value: 'FDA March 17')
+            column(name: 'distribution_date', value: '2017-03-15 11:41:52.735531+03')
+            column(name: 'period_end_date', value: '2017-03-15 11:41:52.735531+03')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+            column(name: 'df_usage_archive_uid', value: '9fe2be4a-d4fc-4d73-aa55-56da80feeff2')
+            column(name: 'df_usage_batch_uid', value: '24600e42-3c2c-4cf6-b376-d2d477128e04')
+            column(name: 'df_scenario_uid', value: 'd3436a38-98ff-4061-b245-68ffeb1f216c')
+            column(name: 'wr_wrk_inst', value: '243904752')
+            column(name: 'work_title', value: '100 ROAD MOVIES')
+            column(name: 'system_title', value: '100 ROAD MOVIES')
+            column(name: 'rh_account_number', value: '1000009522')
+            column(name: 'payee_account_number', value: '1000009522')
+            column(name: 'status_ind', value: 'ARCHIVED')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '1008902112317622XX')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
+            column(name: 'gross_amount', value: '100.00')
+            column(name: 'net_amount', value: '68.00')
+            column(name: 'service_fee_amount', value: '32.00')
+            column(name: 'service_fee', value: '0.32000')
+            column(name: 'ccc_event_id', value: '53256')
+            column(name: 'check_number', value: '578945')
+            column(name: 'check_date', value: '2017-03-15 11:41:52.735531+03')
+            column(name: 'distribution_name', value: 'FDA March 17')
+            column(name: 'distribution_date', value: '2017-03-15 11:41:52.735531+03')
+            column(name: 'period_end_date', value: '2017-03-15 11:41:52.735531+03')
         }
 
         rollback ""
