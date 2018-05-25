@@ -14,8 +14,8 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
-import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.service.impl.csv.ResearchedUsagesCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.security.SecurityUtils;
@@ -39,7 +39,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -111,7 +110,7 @@ public class ResearchedUsagesUploadWindowTest {
     }
 
     private ProcessingResult<ResearchedUsage> buildCsvProcessingResult() {
-        ProcessingResult<ResearchedUsage> processingResult = new ProcessingResult<>(new ArrayList<>());
+        ProcessingResult<ResearchedUsage> processingResult = new ProcessingResult<>();
         try {
             Whitebox.invokeMethod(processingResult, "addRecord", new ResearchedUsage());
         } catch (Exception e) {
