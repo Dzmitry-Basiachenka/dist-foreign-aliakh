@@ -16,9 +16,9 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
-import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.security.SecurityUtils;
@@ -51,7 +51,6 @@ import org.powermock.reflect.Whitebox;
 import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -185,7 +184,7 @@ public class UsageBatchUploadWindowTest {
     }
 
     private ProcessingResult<Usage> buildCsvProcessingResult() {
-        ProcessingResult<Usage> processingResult = new ProcessingResult<>(new ArrayList<>());
+        ProcessingResult<Usage> processingResult = new ProcessingResult<>();
         try {
             Whitebox.invokeMethod(processingResult, "addRecord", new Usage());
         } catch (Exception e) {

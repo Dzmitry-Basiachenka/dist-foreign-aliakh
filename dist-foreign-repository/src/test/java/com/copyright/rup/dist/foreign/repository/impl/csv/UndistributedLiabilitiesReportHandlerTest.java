@@ -59,14 +59,14 @@ public class UndistributedLiabilitiesReportHandlerTest {
         assertEquals("4050.00", beanProperties.get(5));
         assertEquals("19.0", beanProperties.get(6));
         assertEquals("11000.00", beanProperties.get(7));
-        assertEquals("1100.00", beanProperties.get(8));
+        assertEquals("1200.00", beanProperties.get(8));
         assertEquals("9900.00", beanProperties.get(9));
         assertEquals("10.0", beanProperties.get(10));
         assertEquals("-150", beanProperties.get(11));
         assertEquals("990", beanProperties.get(12));
-        assertEquals("11000.00", beanProperties.get(13));
-        assertEquals("1100.00", beanProperties.get(14));
-        assertEquals("9900.00", beanProperties.get(15));
+        assertEquals("13000.00", beanProperties.get(13));
+        assertEquals("1400.00", beanProperties.get(14));
+        assertEquals("99000.00", beanProperties.get(15));
     }
 
     private UndistributedLiabilitiesReportDto buildUndistributedLiabilitiesReportDto() {
@@ -79,14 +79,14 @@ public class UndistributedLiabilitiesReportHandlerTest {
         info.setEstimatedNetAmount(new BigDecimal("4050.00"));
         info.setEstimatedServiceFee(new BigDecimal("0.19000"));
         info.setGrossAmountSentToLm(new BigDecimal("11000.00"));
-        info.setServiceFeeAmountSentToLm(new BigDecimal("1100.00"));
+        info.setServiceFeeAmountSentToLm(new BigDecimal("1200.00"));
         info.setNetAmountSentToLm(new BigDecimal("9900.00"));
         info.setServiceFee(new BigDecimal("0.10"));
         info.setServiceFeeTrueUp(new BigDecimal("-150"));
         info.setServiceFeeTrueUpReturnToCla(new BigDecimal("990"));
-        info.setGrossAmountReturnToCla(new BigDecimal("11000.00"));
-        info.setServiceFeeAmountReturnToCla(new BigDecimal("1100.00"));
-        info.setNetAmountReturnToCla(new BigDecimal("9900.00"));
+        info.setGrossAmountReturnToCla(new BigDecimal("13000.00"));
+        info.setServiceFeeAmountReturnToCla(new BigDecimal("1400.00"));
+        info.setNetAmountReturnToCla(new BigDecimal("99000.00"));
         return info;
     }
 }
