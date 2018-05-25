@@ -15,6 +15,11 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
+import com.copyright.rup.dist.foreign.repository.impl.csv.AuditCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.ScenarioUsagesCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.SendForResearchCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.UndistributedLiabilitiesReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.UsageCsvReportHandler;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;

@@ -1,15 +1,15 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
+import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ThresholdExceededException;
+import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ValidationException;
+import com.copyright.rup.dist.common.service.impl.csv.validator.AmountValidator;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
-import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.ProcessingResult;
-import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.ThresholdExceededException;
-import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.ValidationException;
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
-import com.copyright.rup.dist.foreign.service.impl.csv.validator.ReportedValueValidator;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -282,7 +282,7 @@ class UsageBatchUploadWindow extends Window {
         grossAmountField.setRequiredIndicatorVisible(true);
         binder.forField(grossAmountField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
-            .withValidator(value -> new ReportedValueValidator().isValid(StringUtils.trimToEmpty(value)),
+            .withValidator(value -> new AmountValidator().isValid(StringUtils.trimToEmpty(value)),
                 "Field value should be positive number and not exceed 10 digits")
             .withConverter(new StringToBigDecimalConverter("Field should be numeric"))
             .bind(UsageBatch::getGrossAmount, UsageBatch::setGrossAmount);

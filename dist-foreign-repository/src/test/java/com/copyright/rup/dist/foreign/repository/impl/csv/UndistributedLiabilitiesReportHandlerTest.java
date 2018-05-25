@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.repository.impl;
+package com.copyright.rup.dist.foreign.repository.impl.csv;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -12,7 +12,6 @@ import org.junit.Test;
 import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -48,12 +47,26 @@ public class UndistributedLiabilitiesReportHandlerTest {
     }
 
     @Test
-    public void testGetBeanProperties() {
-        UndistributedLiabilitiesReportDto reportDto = buildUndistributedLiabilitiesReportDto();
-        List<String> beanProperties = handler.getBeanProperties(reportDto);
+    public void testGetBeanProperties() throws Exception {
+        List<String> beanProperties = handler.getBeanProperties(buildUndistributedLiabilitiesReportDto());
         assertTrue(CollectionUtils.isNotEmpty(beanProperties));
         assertEquals(16, CollectionUtils.size(beanProperties));
-        assertEquals(getBeanProperties(reportDto), beanProperties);
+        assertEquals("2000017004", beanProperties.get(0));
+        assertEquals("Access Copyright, The Canadian Copyright Agency", beanProperties.get(1));
+        assertEquals("04/20/2018", beanProperties.get(2));
+        assertEquals("5000.01124549", beanProperties.get(3));
+        assertEquals("950.00", beanProperties.get(4));
+        assertEquals("4050.00", beanProperties.get(5));
+        assertEquals("19.0", beanProperties.get(6));
+        assertEquals("11000.00", beanProperties.get(7));
+        assertEquals("1100.00", beanProperties.get(8));
+        assertEquals("9900.00", beanProperties.get(9));
+        assertEquals("10.0", beanProperties.get(10));
+        assertEquals("-150", beanProperties.get(11));
+        assertEquals("990", beanProperties.get(12));
+        assertEquals("11000.00", beanProperties.get(13));
+        assertEquals("1100.00", beanProperties.get(14));
+        assertEquals("9900.00", beanProperties.get(15));
     }
 
     private UndistributedLiabilitiesReportDto buildUndistributedLiabilitiesReportDto() {
@@ -68,33 +81,12 @@ public class UndistributedLiabilitiesReportHandlerTest {
         info.setGrossAmountSentToLm(new BigDecimal("11000.00"));
         info.setServiceFeeAmountSentToLm(new BigDecimal("1100.00"));
         info.setNetAmountSentToLm(new BigDecimal("9900.00"));
-        info.setServiceFee(new BigDecimal("10.00"));
+        info.setServiceFee(new BigDecimal("0.10"));
         info.setServiceFeeTrueUp(new BigDecimal("-150"));
         info.setServiceFeeTrueUpReturnToCla(new BigDecimal("990"));
         info.setGrossAmountReturnToCla(new BigDecimal("11000.00"));
         info.setServiceFeeAmountReturnToCla(new BigDecimal("1100.00"));
         info.setNetAmountReturnToCla(new BigDecimal("9900.00"));
         return info;
-    }
-
-    private List<String> getBeanProperties(UndistributedLiabilitiesReportDto bean) {
-        List<String> beanProperties = new ArrayList<>();
-        beanProperties.add(handler.getBeanPropertyAsString(bean.getRroAccountNumber()));
-        beanProperties.add(bean.getRroName());
-        beanProperties.add(handler.getBeanLocalDate(bean.getPaymentDate()));
-        beanProperties.add(handler.getBeanBigDecimal(bean.getGrossAmount()));
-        beanProperties.add(handler.getBeanBigDecimal(bean.getEstimatedServiceFeeAmount()));
-        beanProperties.add(handler.getBeanBigDecimal(bean.getEstimatedNetAmount()));
-        beanProperties.add(handler.getBeanServiceFeePercent(bean.getEstimatedServiceFee()));
-        beanProperties.add(handler.getBeanBigDecimal(bean.getGrossAmountSentToLm()));
-        beanProperties.add(handler.getBeanBigDecimal(bean.getServiceFeeAmountSentToLm()));
-        beanProperties.add(handler.getBeanBigDecimal(bean.getNetAmountSentToLm()));
-        beanProperties.add(handler.getBeanServiceFeePercent(bean.getServiceFee()));
-        beanProperties.add(handler.getBeanBigDecimal(bean.getServiceFeeTrueUp()));
-        beanProperties.add(handler.getBeanBigDecimal(bean.getServiceFeeTrueUpReturnToCla()));
-        beanProperties.add(handler.getBeanBigDecimal(bean.getGrossAmountReturnToCla()));
-        beanProperties.add(handler.getBeanBigDecimal(bean.getServiceFeeAmountReturnToCla()));
-        beanProperties.add(handler.getBeanBigDecimal(bean.getNetAmountReturnToCla()));
-        return beanProperties;
     }
 }

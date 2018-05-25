@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.repository.impl;
+package com.copyright.rup.dist.foreign.repository.impl.csv;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -13,7 +13,6 @@ import org.junit.Test;
 import java.io.PipedOutputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -47,11 +46,34 @@ public class UsageCsvReportHandlerTest {
     }
 
     @Test
-    public void testGetBeanProperties() {
+    public void testGetBeanProperties() throws Exception {
         List<String> beanProperties = usagesCsvReportHandler.getBeanProperties(buildUsageDto());
         assertTrue(CollectionUtils.isNotEmpty(beanProperties));
         assertEquals(24, CollectionUtils.size(beanProperties));
-        assertEquals(getUsageDtoProperties(buildUsageDto()), beanProperties);
+        assertEquals("2c7a9d3b-8506-49a9-b0bf-a7735e2cd906", beanProperties.get(0));
+        assertEquals("NEW", beanProperties.get(1));
+        assertEquals("FAS", beanProperties.get(2));
+        assertEquals("testBatch", beanProperties.get(3));
+        assertEquals("FY2018", beanProperties.get(4));
+        assertEquals("2000017004", beanProperties.get(5));
+        assertEquals("Access Copyright, The Canadian Copyright Agency", beanProperties.get(6));
+        assertEquals("04/18/2018", beanProperties.get(7));
+        assertEquals("workTitle", beanProperties.get(8));
+        assertEquals("Appendix: The Principles of Newspeak", beanProperties.get(9));
+        assertEquals("9780", beanProperties.get(10));
+        assertEquals("123456789", beanProperties.get(11));
+        assertEquals("1000009522", beanProperties.get(12));
+        assertEquals("RhName", beanProperties.get(13));
+        assertEquals("publisher", beanProperties.get(14));
+        assertEquals("04/20/2010", beanProperties.get(15));
+        assertEquals("5", beanProperties.get(16));
+        assertEquals("30.86", beanProperties.get(17));
+        assertEquals("10.00", beanProperties.get(18));
+        assertEquals("30.00", beanProperties.get(19));
+        assertEquals("Univ", beanProperties.get(20));
+        assertEquals("2015", beanProperties.get(21));
+        assertEquals("2015", beanProperties.get(22));
+        assertEquals("Aarseth, Espen J.", beanProperties.get(23));
     }
 
     private UsageDto buildUsageDto() {
@@ -81,34 +103,5 @@ public class UsageCsvReportHandlerTest {
         usageDto.setMarketPeriodTo(2015);
         usageDto.setAuthor("Aarseth, Espen J.");
         return usageDto;
-    }
-
-    private List<String> getUsageDtoProperties(UsageDto usageDto) {
-        List<String> usageDtoProperties = new ArrayList<>();
-        usageDtoProperties.add(usageDto.getId());
-        usageDtoProperties.add(usageDto.getStatus().name());
-        usageDtoProperties.add(usageDto.getProductFamily());
-        usageDtoProperties.add(usageDto.getBatchName());
-        usageDtoProperties.add(usagesCsvReportHandler.getBeanFiscalYear(usageDto.getFiscalYear()));
-        usageDtoProperties.add(usageDto.getRroAccountNumber().toString());
-        usageDtoProperties.add(usageDto.getRroName());
-        usageDtoProperties.add(usagesCsvReportHandler.getBeanLocalDate(usageDto.getPaymentDate()));
-        usageDtoProperties.add(usageDto.getWorkTitle());
-        usageDtoProperties.add(usageDto.getArticle());
-        usageDtoProperties.add(usageDto.getStandardNumber());
-        usageDtoProperties.add(usageDto.getWrWrkInst().toString());
-        usageDtoProperties.add(usageDto.getRhAccountNumber().toString());
-        usageDtoProperties.add(usageDto.getRhName());
-        usageDtoProperties.add(usageDto.getPublisher());
-        usageDtoProperties.add(usagesCsvReportHandler.getBeanLocalDate(usageDto.getPublicationDate()));
-        usageDtoProperties.add(usageDto.getNumberOfCopies().toString());
-        usageDtoProperties.add(usageDto.getReportedValue().toString());
-        usageDtoProperties.add(usageDto.getGrossAmount().toString());
-        usageDtoProperties.add(usageDto.getBatchGrossAmount().toString());
-        usageDtoProperties.add(usageDto.getMarket());
-        usageDtoProperties.add(usageDto.getMarketPeriodFrom().toString());
-        usageDtoProperties.add(usageDto.getMarketPeriodTo().toString());
-        usageDtoProperties.add(usageDto.getAuthor());
-        return usageDtoProperties;
     }
 }

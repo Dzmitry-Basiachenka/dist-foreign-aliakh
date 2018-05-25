@@ -1,6 +1,8 @@
-package com.copyright.rup.dist.foreign.repository.impl;
+package com.copyright.rup.dist.foreign.repository.impl.csv;
 
+import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
 
 import java.io.PipedOutputStream;
 import java.util.ArrayList;
@@ -16,7 +18,7 @@ import java.util.List;
  *
  * @author Uladzislau Shalamitski
  */
-class ScenarioUsagesCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
+public class ScenarioUsagesCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
 
     private static final List<String> HEADERS = Arrays.asList("Detail ID", "Usage Batch Name", "Product Family",
         "Fiscal Year", "RRO Account #", "RRO Name", "Payment Date", "Title", "Article", "Standard Number",
@@ -29,17 +31,17 @@ class ScenarioUsagesCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
      *
      * @param pipedOutputStream instance of {@link PipedOutputStream}
      */
-    ScenarioUsagesCsvReportHandler(PipedOutputStream pipedOutputStream) {
+    public ScenarioUsagesCsvReportHandler(PipedOutputStream pipedOutputStream) {
         super(pipedOutputStream);
     }
 
     @Override
-    List<String> getBeanProperties(UsageDto bean) {
+    protected List<String> getBeanProperties(UsageDto bean) {
         List<String> beanProperties = new ArrayList<>();
         beanProperties.add(bean.getId());
         beanProperties.add(bean.getBatchName());
         beanProperties.add(bean.getProductFamily());
-        beanProperties.add(getBeanFiscalYear(bean.getFiscalYear()));
+        beanProperties.add(UsageBatchUtils.getFiscalYear(bean.getFiscalYear()));
         beanProperties.add(getBeanPropertyAsString(bean.getRroAccountNumber()));
         beanProperties.add(bean.getRroName());
         beanProperties.add(getBeanLocalDate(bean.getPaymentDate()));
@@ -67,7 +69,7 @@ class ScenarioUsagesCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
     }
 
     @Override
-    List<String> getBeanHeaders() {
+    protected List<String> getBeanHeaders() {
         return HEADERS;
     }
 }

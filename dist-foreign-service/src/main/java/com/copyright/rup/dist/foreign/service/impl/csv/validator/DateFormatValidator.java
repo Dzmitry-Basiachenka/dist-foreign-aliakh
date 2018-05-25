@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.csv.validator;
 
+import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
-import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor;
 
 import org.apache.commons.lang3.StringUtils;
 
