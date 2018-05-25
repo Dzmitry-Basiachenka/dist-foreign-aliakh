@@ -79,6 +79,16 @@ public class UsageRepositoryIntegrationTest {
     private static final String PRODUCT_FAMILY_NTS = "NTS";
     private static final String STANDARD_NUMBER_2 = "2192-3558";
     private static final String DETAIL_ID_KEY = "detailId";
+    private static final String WORK_TITLE_KEY = "workTitle";
+    private static final String BATCH_NAME_KEY = "batchName";
+    private static final String PAYMENT_DATE_KEY = "paymentDate";
+    private static final String STANDARD_NUMBER_KEY = "standardNumber";
+    private static final String WR_WRK_INST_KEY = "wrWrkInst";
+    private static final String RH_ACCOUNT_NUMBER_KEY = "rhAccountNumber";
+    private static final String RH_NAME_KEY = "rhName";
+    private static final String GROSS_AMOUNT_KEY = "grossAmount";
+    private static final String SERVICE_FEE_KEY = "serviceFee";
+    private static final String STATUS_KEY = "status";
     private static final String USAGE_ID_1 = "3ab5e80b-89c0-4d78-9675-54c7ab284450";
     private static final String USAGE_ID_2 = "8a06905f-37ae-4e1f-8550-245277f8165c";
     private static final String USAGE_ID_3 = "5c5f8c1c-1418-4cfd-8685-9212f4c421d1";
@@ -101,6 +111,8 @@ public class UsageRepositoryIntegrationTest {
     private static final String USAGE_ID_20 = "dcc794ba-42aa-481d-937b-8f431929a611";
     private static final String USAGE_ID_21 = "47d48889-76b5-4957-aca0-2a7850a09f92";
     private static final String USAGE_ID_22 = "c5ea47b0-b269-4791-9aa7-76308fe835e6";
+    private static final String USAGE_ID_23 = "3b6892a9-49b2-41a2-aa3a-8705ea6640cc";
+    private static final String USAGE_ID_24 = "3c31db4f-4065-4fe1-84c2-b48a0f3bc079";
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
     private static final String USER_NAME = "user@copyright.com";
     private static final BigDecimal SERVICE_FEE = new BigDecimal("0.32000");
@@ -175,8 +187,8 @@ public class UsageRepositoryIntegrationTest {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             Collections.singleton(PRODUCT_FAMILY_FAS), null, null, null);
         verifyUsageDtos(usageRepository.findByFilter(usageFilter, null, new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)),
-            15, USAGE_ID_6, USAGE_ID_14, USAGE_ID_1, USAGE_ID_21, USAGE_ID_12, USAGE_ID_9, USAGE_ID_13, USAGE_ID_18,
-            USAGE_ID_11, USAGE_ID_2, USAGE_ID_19, USAGE_ID_17, USAGE_ID_22, USAGE_ID_4, USAGE_ID_20);
+            16, USAGE_ID_6, USAGE_ID_14, USAGE_ID_1, USAGE_ID_23, USAGE_ID_21, USAGE_ID_12, USAGE_ID_9, USAGE_ID_13,
+            USAGE_ID_18, USAGE_ID_11, USAGE_ID_2, USAGE_ID_19, USAGE_ID_17, USAGE_ID_22, USAGE_ID_4, USAGE_ID_20);
     }
 
     @Test
@@ -191,7 +203,7 @@ public class UsageRepositoryIntegrationTest {
     public void testFindByPaymentDateFilterSortByWorkTitle() {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             Collections.emptySet(), null, PAYMENT_DATE, null);
-        verifyUsageDtos(usageRepository.findByFilter(usageFilter, null, new Sort("workTitle", Sort.Direction.ASC)),
+        verifyUsageDtos(usageRepository.findByFilter(usageFilter, null, new Sort(WORK_TITLE_KEY, Sort.Direction.ASC)),
             3, USAGE_ID_3, USAGE_ID_2, USAGE_ID_1);
     }
 
@@ -201,103 +213,6 @@ public class UsageRepositoryIntegrationTest {
             Collections.emptySet(), null, null, FISCAL_YEAR);
         verifyUsageDtos(usageRepository.findByFilter(usageFilter, null, new Sort("article", Sort.Direction.ASC)), 3,
             USAGE_ID_3, USAGE_ID_1, USAGE_ID_2);
-    }
-
-    @Test
-    public void testFindByFilterSortByStandartNumber() {
-        verifyUsageDtos(usageRepository.findByFilter(buildFilterWithStatuses(UsageStatusEnum.ELIGIBLE), null,
-            new Sort("standardNumber", Sort.Direction.ASC)), 4, USAGE_ID_2, USAGE_ID_3, USAGE_ID_1, USAGE_ID_10);
-    }
-
-    @Test
-    public void testFindByFilterSortByWrWrkInst() {
-        verifyUsageDtos(usageRepository.findByFilter(buildFilterWithStatuses(UsageStatusEnum.ELIGIBLE), null,
-            new Sort("wrWrkInst", Sort.Direction.ASC)), 4, USAGE_ID_1, USAGE_ID_2, USAGE_ID_3, USAGE_ID_10);
-    }
-
-    @Test
-    public void testFindByFilterSortByRhAccountNumber() {
-        verifyUsageDtos(usageRepository.findByFilter(buildFilterWithStatuses(UsageStatusEnum.ELIGIBLE), null,
-            new Sort("rhAccountNumber", Sort.Direction.ASC)), 4, USAGE_ID_2, USAGE_ID_3,
-            USAGE_ID_1, USAGE_ID_10);
-    }
-
-    @Test
-    public void testFindByFilterSortByPublisher() {
-        verifyUsageDtos(usageRepository.findByFilter(buildFilterWithStatuses(UsageStatusEnum.ELIGIBLE), null,
-            new Sort("publisher", Sort.Direction.ASC)), 4, USAGE_ID_1, USAGE_ID_10, USAGE_ID_2, USAGE_ID_3);
-    }
-
-    @Test
-    public void testFindByFilterSortByPublicationDate() {
-        verifyUsageDtos(usageRepository.findByFilter(buildFilterWithStatuses(UsageStatusEnum.ELIGIBLE), null,
-            new Sort("publicationDate", Sort.Direction.ASC)), 4, USAGE_ID_3, USAGE_ID_2, USAGE_ID_1, USAGE_ID_10);
-    }
-
-    @Test
-    public void testFindByFilterSortByNumberOfCopies() {
-        verifyUsageDtos(usageRepository.findByFilter(buildFilterWithStatuses(UsageStatusEnum.ELIGIBLE), null,
-            new Sort("numberOfCopies", Sort.Direction.ASC)), 4, USAGE_ID_2, USAGE_ID_3, USAGE_ID_1, USAGE_ID_10);
-    }
-
-    @Test
-    public void testFindByFilterSortByReportedValue() {
-        verifyUsageDtos(usageRepository.findByFilter(buildFilterWithStatuses(UsageStatusEnum.ELIGIBLE), null,
-            new Sort("reportedValue", Sort.Direction.ASC)), 4, USAGE_ID_10, USAGE_ID_3, USAGE_ID_2, USAGE_ID_1);
-    }
-
-    @Test
-    public void testFindByFilterSortByGrossAmount() {
-        verifyUsageDtos(usageRepository.findByFilter(buildFilterWithStatuses(UsageStatusEnum.ELIGIBLE), null,
-            new Sort("grossAmount", Sort.Direction.ASC)), 4, USAGE_ID_10, USAGE_ID_3, USAGE_ID_1, USAGE_ID_2);
-    }
-
-    @Test
-    public void testFindByFilterSortByMarket() {
-        verifyUsageDtos(usageRepository.findByFilter(buildFilterWithStatuses(UsageStatusEnum.ELIGIBLE), null,
-            new Sort("market", Sort.Direction.ASC)), 4, USAGE_ID_2, USAGE_ID_1, USAGE_ID_10, USAGE_ID_3);
-    }
-
-    @Test
-    public void testFindByFilterSortByMarketPeriodFrom() {
-        verifyUsageDtos(usageRepository.findByFilter(buildFilterWithStatuses(UsageStatusEnum.ELIGIBLE), null,
-            new Sort("marketPeriodFrom", Sort.Direction.ASC)), 4, USAGE_ID_1, USAGE_ID_10, USAGE_ID_2, USAGE_ID_3);
-    }
-
-    @Test
-    public void testFindByFilterSortByMarketPeriodTo() {
-        verifyUsageDtos(usageRepository.findByFilter(buildFilterWithStatuses(UsageStatusEnum.ELIGIBLE), null,
-            new Sort("marketPeriodTo", Sort.Direction.ASC)), 4, USAGE_ID_1, USAGE_ID_10, USAGE_ID_2, USAGE_ID_3);
-    }
-
-    @Test
-    public void testFindByFilterSortByAuthor() {
-        verifyUsageDtos(usageRepository.findByFilter(buildFilterWithStatuses(UsageStatusEnum.ELIGIBLE), null,
-            new Sort("author", Sort.Direction.ASC)), 4, USAGE_ID_1, USAGE_ID_3, USAGE_ID_2, USAGE_ID_10);
-    }
-
-    @Test
-    public void testFindByFilterSortByBatchName() {
-        verifyUsageDtos(usageRepository.findByFilter(buildFilterWithStatuses(UsageStatusEnum.ELIGIBLE), null,
-            new Sort("batchName", Sort.Direction.ASC)), 4, USAGE_ID_2, USAGE_ID_10, USAGE_ID_1, USAGE_ID_3);
-    }
-
-    @Test
-    public void testFindByFilterSortByFiscalYear() {
-        verifyUsageDtos(usageRepository.findByFilter(buildFilterWithStatuses(UsageStatusEnum.ELIGIBLE), null,
-            new Sort("fiscalYear", Sort.Direction.ASC)), 4, USAGE_ID_3, USAGE_ID_1, USAGE_ID_2, USAGE_ID_10);
-    }
-
-    @Test
-    public void testFindByFilterSortByRroAccountNumber() {
-        verifyUsageDtos(usageRepository.findByFilter(buildFilterWithStatuses(UsageStatusEnum.ELIGIBLE), null,
-            new Sort("rroAccountNumber", Sort.Direction.ASC)), 4, USAGE_ID_2, USAGE_ID_3, USAGE_ID_10, USAGE_ID_1);
-    }
-
-    @Test
-    public void testFindByFilterSortByPaymentDate() {
-        verifyUsageDtos(usageRepository.findByFilter(buildFilterWithStatuses(UsageStatusEnum.ELIGIBLE), null,
-            new Sort("paymentDate", Sort.Direction.ASC)), 4, USAGE_ID_3, USAGE_ID_1, USAGE_ID_2, USAGE_ID_10);
     }
 
     @Test
@@ -671,11 +586,11 @@ public class UsageRepositoryIntegrationTest {
     public void testFindForAuditByProductFamilies() {
         AuditFilter filter = new AuditFilter();
         filter.setProductFamilies(Collections.singleton(PRODUCT_FAMILY_FAS));
-        assertEquals(20, usageRepository.findCountForAudit(filter));
+        assertEquals(21, usageRepository.findCountForAudit(filter));
         List<UsageDto> usages = usageRepository.findForAudit(filter, new Pageable(0, 25), null);
-        verifyUsageDtos(usages, 20, USAGE_ID_6, USAGE_ID_14, USAGE_ID_15, USAGE_ID_16, USAGE_ID_1, USAGE_ID_21,
-            USAGE_ID_12, USAGE_ID_9, USAGE_ID_13, USAGE_ID_18, USAGE_ID_11, USAGE_ID_2, USAGE_ID_19, USAGE_ID_5,
-            USAGE_ID_8, USAGE_ID_17, USAGE_ID_22, USAGE_ID_7, USAGE_ID_4, USAGE_ID_20);
+        verifyUsageDtos(usages, 21, USAGE_ID_6, USAGE_ID_14, USAGE_ID_15, USAGE_ID_16, USAGE_ID_1, USAGE_ID_23,
+            USAGE_ID_21, USAGE_ID_12, USAGE_ID_9, USAGE_ID_13, USAGE_ID_18, USAGE_ID_11, USAGE_ID_2, USAGE_ID_19,
+            USAGE_ID_5, USAGE_ID_8, USAGE_ID_17, USAGE_ID_22, USAGE_ID_7, USAGE_ID_4, USAGE_ID_20);
     }
 
     @Test
@@ -707,27 +622,101 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
+    public void testFindByFilterSortingByBatchInfo() {
+        UsageFilter filter = buildUsageFilter(Sets.newHashSet(2000017000L, 7000896777L), Collections.emptySet(),
+            Collections.emptySet(), null, null, null);
+        verifyUsageDtos(findByFilterWithSort(filter, BATCH_NAME_KEY, Direction.ASC), 2, USAGE_ID_23, USAGE_ID_24);
+        verifyUsageDtos(findByFilterWithSort(filter, BATCH_NAME_KEY, Direction.DESC), 2, USAGE_ID_24, USAGE_ID_23);
+        verifyUsageDtos(findByFilterWithSort(filter, "fiscalYear", Direction.ASC), 2, USAGE_ID_23, USAGE_ID_24);
+        verifyUsageDtos(findByFilterWithSort(filter, "fiscalYear", Direction.DESC), 2, USAGE_ID_24, USAGE_ID_23);
+        verifyUsageDtos(findByFilterWithSort(filter, "rroAccountNumber", Direction.ASC), 2, USAGE_ID_23, USAGE_ID_24);
+        verifyUsageDtos(findByFilterWithSort(filter, "rroAccountNumber", Direction.DESC), 2, USAGE_ID_24, USAGE_ID_23);
+        verifyUsageDtos(findByFilterWithSort(filter, "rroName", Direction.ASC), 2, USAGE_ID_24, USAGE_ID_23);
+        verifyUsageDtos(findByFilterWithSort(filter, "rroName", Direction.DESC), 2, USAGE_ID_23, USAGE_ID_24);
+        verifyUsageDtos(findByFilterWithSort(filter, PAYMENT_DATE_KEY, Direction.ASC), 2, USAGE_ID_23, USAGE_ID_24);
+        verifyUsageDtos(findByFilterWithSort(filter, PAYMENT_DATE_KEY, Direction.DESC), 2, USAGE_ID_24, USAGE_ID_23);
+        verifyUsageDtos(findByFilterWithSort(filter, "batchGrossAmount", Direction.ASC), 2, USAGE_ID_23, USAGE_ID_24);
+        verifyUsageDtos(findByFilterWithSort(filter, "batchGrossAmount", Direction.DESC), 2, USAGE_ID_24, USAGE_ID_23);
+    }
+
+    @Test
+    public void testFindByFilterSortingByUsageInfo() {
+        UsageFilter filter = buildUsageFilter(Sets.newHashSet(2000017000L, 7000896777L), Collections.emptySet(),
+            Collections.emptySet(), null, null, null);
+        verifyUsageDtos(findByFilterWithSort(filter, "productFamily", Direction.ASC), 2, USAGE_ID_24, USAGE_ID_23);
+        verifyUsageDtos(findByFilterWithSort(filter, "productFamily", Direction.DESC), 2, USAGE_ID_23, USAGE_ID_24);
+        verifyUsageDtos(findByFilterWithSort(filter, DETAIL_ID_KEY, Direction.ASC), 2, USAGE_ID_23, USAGE_ID_24);
+        verifyUsageDtos(findByFilterWithSort(filter, DETAIL_ID_KEY, Direction.DESC), 2, USAGE_ID_24, USAGE_ID_23);
+        verifyUsageDtos(findByFilterWithSort(filter, STATUS_KEY, Direction.ASC), 2, USAGE_ID_23, USAGE_ID_24);
+        verifyUsageDtos(findByFilterWithSort(filter, STATUS_KEY, Direction.DESC), 2, USAGE_ID_24, USAGE_ID_23);
+        verifyUsageDtos(findByFilterWithSort(filter, RH_ACCOUNT_NUMBER_KEY, Direction.ASC), 2, USAGE_ID_23,
+            USAGE_ID_24);
+        verifyUsageDtos(findByFilterWithSort(filter, RH_ACCOUNT_NUMBER_KEY, Direction.DESC), 2, USAGE_ID_24,
+            USAGE_ID_23);
+        verifyUsageDtos(findByFilterWithSort(filter, RH_NAME_KEY, Direction.ASC), 2, USAGE_ID_23, USAGE_ID_24);
+        verifyUsageDtos(findByFilterWithSort(filter, RH_NAME_KEY, Direction.DESC), 2, USAGE_ID_24, USAGE_ID_23);
+        verifyUsageDtos(findByFilterWithSort(filter, "reportedValue", Direction.ASC), 2, USAGE_ID_23, USAGE_ID_24);
+        verifyUsageDtos(findByFilterWithSort(filter, "reportedValue", Direction.DESC), 2, USAGE_ID_24, USAGE_ID_23);
+        verifyUsageDtos(findByFilterWithSort(filter, GROSS_AMOUNT_KEY, Direction.ASC), 2, USAGE_ID_23, USAGE_ID_24);
+        verifyUsageDtos(findByFilterWithSort(filter, GROSS_AMOUNT_KEY, Direction.DESC), 2, USAGE_ID_24, USAGE_ID_23);
+        verifyUsageDtos(findByFilterWithSort(filter, "serviceFeeAmount", Direction.ASC), 2, USAGE_ID_24, USAGE_ID_23);
+        verifyUsageDtos(findByFilterWithSort(filter, "serviceFeeAmount", Direction.DESC), 2, USAGE_ID_23, USAGE_ID_24);
+        verifyUsageDtos(findByFilterWithSort(filter, "netAmount", Direction.ASC), 2, USAGE_ID_24, USAGE_ID_23);
+        verifyUsageDtos(findByFilterWithSort(filter, "netAmount", Direction.DESC), 2, USAGE_ID_23, USAGE_ID_24);
+        verifyUsageDtos(findByFilterWithSort(filter, SERVICE_FEE_KEY, Direction.ASC), 2, USAGE_ID_23, USAGE_ID_24);
+        verifyUsageDtos(findByFilterWithSort(filter, SERVICE_FEE_KEY, Direction.DESC), 2, USAGE_ID_24, USAGE_ID_23);
+    }
+
+    @Test
+    public void testFindByFilterSortingByWorkInfo() {
+        UsageFilter filter = buildUsageFilter(Sets.newHashSet(2000017000L, 7000896777L), Collections.emptySet(),
+            Collections.emptySet(), null, null, null);
+        verifyUsageDtos(findByFilterWithSort(filter, WORK_TITLE_KEY, Direction.ASC), 2, USAGE_ID_23, USAGE_ID_24);
+        verifyUsageDtos(findByFilterWithSort(filter, WORK_TITLE_KEY, Direction.DESC), 2, USAGE_ID_24, USAGE_ID_23);
+        verifyUsageDtos(findByFilterWithSort(filter, "article", Direction.ASC), 2, USAGE_ID_23, USAGE_ID_24);
+        verifyUsageDtos(findByFilterWithSort(filter, "article", Direction.DESC), 2, USAGE_ID_24, USAGE_ID_23);
+        verifyUsageDtos(findByFilterWithSort(filter, STANDARD_NUMBER_KEY, Direction.ASC), 2, USAGE_ID_23, USAGE_ID_24);
+        verifyUsageDtos(findByFilterWithSort(filter, STANDARD_NUMBER_KEY, Direction.DESC), 2, USAGE_ID_24, USAGE_ID_23);
+        verifyUsageDtos(findByFilterWithSort(filter, WR_WRK_INST_KEY, Direction.ASC), 2, USAGE_ID_23, USAGE_ID_24);
+        verifyUsageDtos(findByFilterWithSort(filter, WR_WRK_INST_KEY, Direction.DESC), 2, USAGE_ID_24, USAGE_ID_23);
+        verifyUsageDtos(findByFilterWithSort(filter, "publisher", Direction.ASC), 2, USAGE_ID_24, USAGE_ID_23);
+        verifyUsageDtos(findByFilterWithSort(filter, "publisher", Direction.DESC), 2, USAGE_ID_23, USAGE_ID_24);
+        verifyUsageDtos(findByFilterWithSort(filter, "publicationDate", Direction.ASC), 2, USAGE_ID_23, USAGE_ID_24);
+        verifyUsageDtos(findByFilterWithSort(filter, "publicationDate", Direction.DESC), 2, USAGE_ID_24, USAGE_ID_23);
+        verifyUsageDtos(findByFilterWithSort(filter, "numberOfCopies", Direction.ASC), 2, USAGE_ID_23, USAGE_ID_24);
+        verifyUsageDtos(findByFilterWithSort(filter, "numberOfCopies", Direction.DESC), 2, USAGE_ID_24, USAGE_ID_23);
+        verifyUsageDtos(findByFilterWithSort(filter, "market", Direction.ASC), 2, USAGE_ID_23, USAGE_ID_24);
+        verifyUsageDtos(findByFilterWithSort(filter, "market", Direction.DESC), 2, USAGE_ID_24, USAGE_ID_23);
+        verifyUsageDtos(findByFilterWithSort(filter, "marketPeriodFrom", Direction.ASC), 2, USAGE_ID_23, USAGE_ID_24);
+        verifyUsageDtos(findByFilterWithSort(filter, "marketPeriodFrom", Direction.DESC), 2, USAGE_ID_24, USAGE_ID_23);
+        verifyUsageDtos(findByFilterWithSort(filter, "marketPeriodTo", Direction.ASC), 2, USAGE_ID_23, USAGE_ID_24);
+        verifyUsageDtos(findByFilterWithSort(filter, "marketPeriodTo", Direction.DESC), 2, USAGE_ID_24, USAGE_ID_23);
+        verifyUsageDtos(findByFilterWithSort(filter, "author", Direction.ASC), 2, USAGE_ID_24, USAGE_ID_23);
+        verifyUsageDtos(findByFilterWithSort(filter, "author", Direction.DESC), 2, USAGE_ID_23, USAGE_ID_24);
+    }
+
+    @Test
     public void testFindForAuditWithSort() {
         AuditFilter filter = new AuditFilter();
         filter.setBatchesIds(Collections.singleton(BATCH_ID));
-        verifyUsageDtos(findForAuditWithSort(filter, "detailId", true), 2, USAGE_ID_5, USAGE_ID_4);
-        verifyUsageDtos(findForAuditWithSort(filter, "detailId", false), 2, USAGE_ID_4, USAGE_ID_5);
-        verifyUsageDtos(findForAuditWithSort(filter, "status", true), 2, USAGE_ID_5, USAGE_ID_4);
-        verifyUsageDtos(findForAuditWithSort(filter, "status", false), 2, USAGE_ID_4, USAGE_ID_5);
-        verifyUsageDtos(findForAuditWithSort(filter, "rhAccountNumber", true), 2, USAGE_ID_5, USAGE_ID_4);
-        verifyUsageDtos(findForAuditWithSort(filter, "rhAccountNumber", false), 2, USAGE_ID_4, USAGE_ID_5);
-        verifyUsageDtos(findForAuditWithSort(filter, "rhName", true), 2, USAGE_ID_5, USAGE_ID_4);
-        verifyUsageDtos(findForAuditWithSort(filter, "rhName", false), 2, USAGE_ID_5, USAGE_ID_4);
-        verifyUsageDtos(findForAuditWithSort(filter, "wrWrkInst", false), 2, USAGE_ID_5, USAGE_ID_4);
-        verifyUsageDtos(findForAuditWithSort(filter, "wrWrkInst", true), 2, USAGE_ID_4, USAGE_ID_5);
-        verifyUsageDtos(findForAuditWithSort(filter, "workTitle", true), 2, USAGE_ID_5, USAGE_ID_4);
-        verifyUsageDtos(findForAuditWithSort(filter, "workTitle", false), 2, USAGE_ID_4, USAGE_ID_5);
-        verifyUsageDtos(findForAuditWithSort(filter, "standardNumber", true), 2, USAGE_ID_5, USAGE_ID_4);
-        verifyUsageDtos(findForAuditWithSort(filter, "standardNumber", false), 2, USAGE_ID_4, USAGE_ID_5);
-        verifyUsageDtos(findForAuditWithSort(filter, "grossAmount", true), 2, USAGE_ID_5, USAGE_ID_4);
-        verifyUsageDtos(findForAuditWithSort(filter, "grossAmount", false), 2, USAGE_ID_4, USAGE_ID_5);
-        verifyUsageDtos(findForAuditWithSort(filter, "serviceFee", true), 2, USAGE_ID_5, USAGE_ID_4);
-        verifyUsageDtos(findForAuditWithSort(filter, "serviceFee", false), 2, USAGE_ID_4, USAGE_ID_5);
+        verifyUsageDtos(findForAuditWithSort(filter, DETAIL_ID_KEY, true), 2, USAGE_ID_5, USAGE_ID_4);
+        verifyUsageDtos(findForAuditWithSort(filter, DETAIL_ID_KEY, false), 2, USAGE_ID_4, USAGE_ID_5);
+        verifyUsageDtos(findForAuditWithSort(filter, STATUS_KEY, true), 2, USAGE_ID_5, USAGE_ID_4);
+        verifyUsageDtos(findForAuditWithSort(filter, STATUS_KEY, false), 2, USAGE_ID_4, USAGE_ID_5);
+        verifyUsageDtos(findForAuditWithSort(filter, RH_ACCOUNT_NUMBER_KEY, true), 2, USAGE_ID_5, USAGE_ID_4);
+        verifyUsageDtos(findForAuditWithSort(filter, RH_ACCOUNT_NUMBER_KEY, false), 2, USAGE_ID_4, USAGE_ID_5);
+        verifyUsageDtos(findForAuditWithSort(filter, RH_NAME_KEY, true), 2, USAGE_ID_5, USAGE_ID_4);
+        verifyUsageDtos(findForAuditWithSort(filter, RH_NAME_KEY, false), 2, USAGE_ID_5, USAGE_ID_4);
+        verifyUsageDtos(findForAuditWithSort(filter, WR_WRK_INST_KEY, false), 2, USAGE_ID_5, USAGE_ID_4);
+        verifyUsageDtos(findForAuditWithSort(filter, WR_WRK_INST_KEY, true), 2, USAGE_ID_4, USAGE_ID_5);
+        verifyUsageDtos(findForAuditWithSort(filter, WORK_TITLE_KEY, true), 2, USAGE_ID_5, USAGE_ID_4);
+        verifyUsageDtos(findForAuditWithSort(filter, WORK_TITLE_KEY, false), 2, USAGE_ID_4, USAGE_ID_5);
+        verifyUsageDtos(findForAuditWithSort(filter, STANDARD_NUMBER_KEY, true), 2, USAGE_ID_5, USAGE_ID_4);
+        verifyUsageDtos(findForAuditWithSort(filter, STANDARD_NUMBER_KEY, false), 2, USAGE_ID_4, USAGE_ID_5);
+        verifyUsageDtos(findForAuditWithSort(filter, GROSS_AMOUNT_KEY, true), 2, USAGE_ID_5, USAGE_ID_4);
+        verifyUsageDtos(findForAuditWithSort(filter, GROSS_AMOUNT_KEY, false), 2, USAGE_ID_4, USAGE_ID_5);
+        verifyUsageDtos(findForAuditWithSort(filter, SERVICE_FEE_KEY, true), 2, USAGE_ID_5, USAGE_ID_4);
+        verifyUsageDtos(findForAuditWithSort(filter, SERVICE_FEE_KEY, false), 2, USAGE_ID_4, USAGE_ID_5);
         verifyUsageDtos(findForAuditWithSort(filter, "scenarioName", true), 2, USAGE_ID_5, USAGE_ID_4);
         verifyUsageDtos(findForAuditWithSort(filter, "scenarioName", false), 2, USAGE_ID_4, USAGE_ID_5);
         verifyFilterForTwoBatches(filter);
@@ -879,7 +868,7 @@ public class UsageRepositoryIntegrationTest {
 
     @Test
     public void testFindStandardNumbersCount() {
-        assertEquals(4, usageRepository.findStandardNumbersCount());
+        assertEquals(5, usageRepository.findStandardNumbersCount());
     }
 
     @Test
@@ -890,11 +879,11 @@ public class UsageRepositoryIntegrationTest {
     @Test
     public void testFindWithStandardNumber() {
         List<Usage> usages = usageRepository.findWithStandardNumber(10, 0);
-        assertEquals(4, usages.size());
+        assertEquals(5, usages.size());
         assertTrue(usages.stream()
             .map(Usage::getStandardNumber)
             .collect(Collectors.toSet())
-            .containsAll(Sets.newHashSet(STANDARD_NUMBER_2, "2192-3566", "2192-3559", "2192-3567")));
+            .containsAll(Sets.newHashSet(STANDARD_NUMBER_2, "2192-3566", "2192-3559", "2192-3567", "2192-3600")));
     }
 
     @Test
@@ -965,15 +954,19 @@ public class UsageRepositoryIntegrationTest {
 
     private void verifyFilterForTwoBatches(AuditFilter filter) {
         filter.setBatchesIds(Sets.newHashSet(BATCH_ID, "74b736f2-81ce-41fa-bd8e-574299232458"));
-        verifyUsageDtos(findForAuditWithSort(filter, "batchName", true), 2, USAGE_ID_5, USAGE_ID_4);
-        verifyUsageDtos(findForAuditWithSort(filter, "batchName", false), 2, USAGE_ID_5, USAGE_ID_4);
-        verifyUsageDtos(findForAuditWithSort(filter, "paymentDate", true), 2, USAGE_ID_5, USAGE_ID_4);
-        verifyUsageDtos(findForAuditWithSort(filter, "paymentDate", false), 2, USAGE_ID_5, USAGE_ID_4);
+        verifyUsageDtos(findForAuditWithSort(filter, BATCH_NAME_KEY, true), 2, USAGE_ID_5, USAGE_ID_4);
+        verifyUsageDtos(findForAuditWithSort(filter, BATCH_NAME_KEY, false), 2, USAGE_ID_5, USAGE_ID_4);
+        verifyUsageDtos(findForAuditWithSort(filter, PAYMENT_DATE_KEY, true), 2, USAGE_ID_5, USAGE_ID_4);
+        verifyUsageDtos(findForAuditWithSort(filter, PAYMENT_DATE_KEY, false), 2, USAGE_ID_5, USAGE_ID_4);
     }
 
     private List<UsageDto> findForAuditWithSort(AuditFilter filter, String property, boolean order) {
         return usageRepository.findForAudit(filter, new Pageable(0, 10),
             new Sort(property, order ? Direction.ASC : Direction.DESC));
+    }
+
+    private List<UsageDto> findByFilterWithSort(UsageFilter filter, String property, Direction direction) {
+        return usageRepository.findByFilter(filter, null, new Sort(property, direction));
     }
 
     private void verifySearch(String searchValue, int expectedSize) {

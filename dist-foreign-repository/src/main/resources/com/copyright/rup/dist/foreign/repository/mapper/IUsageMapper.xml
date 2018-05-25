@@ -496,6 +496,7 @@
     <select id="findDtoByScenarioId" resultMap="usageDtoResultMap">
         <include refid="selectUsageDtos"/>
         where df_scenario_uid = #{scenarioId}
+        order by u.rh_account_number
     </select>
 
     <select id="findCountByFilter" parameterType="map" resultType="int">
@@ -1201,6 +1202,6 @@
             where nestedReportInfo.gross_amount != 0 or nestedReportInfo.gross_amount_sent_to_lm != 0
             group by nestedReportInfo.payment_date, nestedReportInfo.rro_account_number, fee.estimated_service_fee) as reportInfo
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = reportInfo.rro_account_number
-        order by rh.name, reportInfo.payment_date
+        order by reportInfo.rro_account_number, reportInfo.payment_date
     </select>
 </mapper>
