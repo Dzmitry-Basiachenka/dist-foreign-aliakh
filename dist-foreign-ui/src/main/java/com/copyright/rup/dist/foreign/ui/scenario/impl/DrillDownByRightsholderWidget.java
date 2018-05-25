@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl;
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.ui.common.LoadingIndicatorDataProvider;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IDrillDownByRightsholderWidget;
@@ -78,7 +79,7 @@ public class DrillDownByRightsholderWidget extends Window implements IDrillDownB
     }
 
     private void initGrid() {
-        dataProvider = DataProvider.fromCallbacks(
+        dataProvider = LoadingIndicatorDataProvider.fromCallbacks(
             query -> controller.loadBeans(query.getOffset(), query.getLimit(), query.getSortOrders()).stream(),
             query -> controller.getSize());
         grid = new Grid<>(dataProvider);

@@ -110,7 +110,7 @@ public class LazyRightsholderFilterWindow extends Window {
     }
 
     private Panel initItemsPanel() {
-        dataProvider = DataProvider.fromCallbacks(
+        dataProvider = LoadingIndicatorDataProvider.fromCallbacks(
             query -> controller.loadBeans(searchWidget.getSearchValue(), query.getOffset(), query.getLimit(),
                 query.getSortOrders()).stream(),
             query -> controller.getBeansCount(searchWidget.getSearchValue()));

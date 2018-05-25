@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
+import com.copyright.rup.dist.foreign.ui.common.LoadingIndicatorDataProvider;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IReconcileRightsholdersController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
@@ -91,7 +92,7 @@ class RightsholderDiscrepanciesWindow extends Window {
     }
 
     private void initGrid() {
-        DataProvider<RightsholderDiscrepancy, Void> dataProvider = DataProvider.fromCallbacks(
+        DataProvider<RightsholderDiscrepancy, Void> dataProvider = LoadingIndicatorDataProvider.fromCallbacks(
             query -> controller.loadBeans(query.getOffset(), query.getLimit(), query.getSortOrders()).stream(),
             query -> controller.getBeansCount()
         );
