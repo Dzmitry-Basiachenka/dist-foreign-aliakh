@@ -46,6 +46,18 @@ databaseChangeLog {
             column(name: 'name', value: 'JAC, Japan Academic Association for Copyright Clearance, Inc.')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'df_rightsholder_uid', value: 'a92a9eb8-ab95-420d-87a3-0ba663d5344e')
+            column(name: 'rh_account_number', value: '7000896777')
+            column(name: 'name', value: 'CeMPro, Centro Mexicano de Proteccion y Fomento de los Derechos de Autor')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'df_rightsholder_uid', value: '63319ddb-4a9d-4e86-aa88-1f046cd80ddf')
+            column(name: 'rh_account_number', value: '2000017000')
+            column(name: 'name', value: 'CLA, The Copyright Licensing Agency Ltd.')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '56282dbc-2468-48d4-b926-93d3458a656a')
             column(name: 'name', value: 'CADRA_11Dec16')
@@ -634,6 +646,73 @@ databaseChangeLog {
             column(name: 'net_amount', value: '8400.00')
             column(name: 'service_fee_amount', value: '1600.00')
             column(name: 'service_fee', value: '0.16000')
+        }
+
+        //testFindByFilterSortingByBatchInfo
+        //testFindByFilterSortingByUsageInfo
+        //testFindByFilterSortingByWorkInfo
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: '66e0deb8-9cf5-4495-994a-d3a5761572f3')
+            column(name: 'name', value: 'Batch for sorting 1')
+            column(name: 'rro_account_number', value: '2000017000')
+            column(name: 'payment_date', value: '2022-02-12')
+            column(name: 'fiscal_year', value: '2022')
+            column(name: 'gross_amount', value: '1000.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: '9776da8d-098d-4f39-99fd-85405c339e9b')
+            column(name: 'name', value: 'Batch for sorting 2')
+            column(name: 'rro_account_number', value: '7000896777')
+            column(name: 'payment_date', value: '2023-02-12')
+            column(name: 'fiscal_year', value: '2023')
+            column(name: 'gross_amount', value: '2000.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '3b6892a9-49b2-41a2-aa3a-8705ea6640cc')
+            column(name: 'df_usage_batch_uid', value: '66e0deb8-9cf5-4495-994a-d3a5761572f3')
+            column(name: 'rh_account_number', value: '1000002859')
+            column(name: 'payee_account_number', value: '1000002797')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'wr_wrk_inst', value: '243904752')
+            column(name: 'work_title', value: '100 ROAD MOVIES')
+            column(name: 'status_ind', value: 'LOCKED')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '2192-3559')
+            column(name: 'publisher', value: 'Network for Science')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '1000')
+            column(name: 'gross_amount', value: '1000.00')
+            column(name: 'net_amount', value: '8400.00')
+            column(name: 'service_fee_amount', value: '1600.00')
+            column(name: 'service_fee', value: '0.16000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '3c31db4f-4065-4fe1-84c2-b48a0f3bc079')
+            column(name: 'df_usage_batch_uid', value: '9776da8d-098d-4f39-99fd-85405c339e9b')
+            column(name: 'product_family', value: 'CLA_FAS')
+            column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
+            column(name: 'status_ind', value: 'NEW')
+            column(name: 'article', value: 'DIN EN 779:2014')
+            column(name: 'standard_number', value: '2192-3600')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2014-09-10')
+            column(name: 'market', value: 'Univ')
+            column(name: 'market_period_from', value: '2014')
+            column(name: 'market_period_to', value: '2018')
+            column(name: 'author', value: 'Aarseth, Espen J.')
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'number_of_copies', value: '200')
+            column(name: 'reported_value', value: '2000')
+            column(name: 'gross_amount', value: '2000.00')
         }
 
         rollback ""

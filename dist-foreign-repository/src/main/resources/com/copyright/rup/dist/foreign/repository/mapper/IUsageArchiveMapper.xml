@@ -161,6 +161,7 @@
         left join ${schema}.df_rightsholder rro on rro.rh_account_number = ub.rro_account_number
         left join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
         where df_scenario_uid = #{scenarioId}
+        order by u.rh_account_number
     </select>
 
     <delete id="deleteByScenarioId" parameterType="string">
