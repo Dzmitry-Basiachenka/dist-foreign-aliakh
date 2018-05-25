@@ -49,10 +49,11 @@ public class UndistributedLiabilitiesReportHandlerTest {
 
     @Test
     public void testGetBeanProperties() {
-        List<String> beanProperties = handler.getBeanProperties(buildUndistributedLiabilitiesReportDto());
+        UndistributedLiabilitiesReportDto reportDto = buildUndistributedLiabilitiesReportDto();
+        List<String> beanProperties = handler.getBeanProperties(reportDto);
         assertTrue(CollectionUtils.isNotEmpty(beanProperties));
         assertEquals(16, CollectionUtils.size(beanProperties));
-        assertEquals(getBeanProperties(buildUndistributedLiabilitiesReportDto()), beanProperties);
+        assertEquals(getBeanProperties(reportDto), beanProperties);
     }
 
     private UndistributedLiabilitiesReportDto buildUndistributedLiabilitiesReportDto() {

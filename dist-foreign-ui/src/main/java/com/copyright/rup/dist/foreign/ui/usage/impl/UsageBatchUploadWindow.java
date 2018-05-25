@@ -307,8 +307,8 @@ class UsageBatchUploadWindow extends Window {
                 if (StringUtils.isNotBlank(rro.getName())) {
                     accountNameField.setValue(rro.getName());
                     productFamilyField.setValue(
-                        FdaConstants.ACCOUNT_NUMBER_CLA_FAS.equals(rro.getAccountNumber())
-                            ? FdaConstants.PRODUCT_FAMILY_CLA_FAS : FdaConstants.PRODUCT_FAMILY_FAS);
+                        FdaConstants.CLA_ACCOUNT_NUMBER.equals(rro.getAccountNumber())
+                            ? FdaConstants.CLA_FAS_PRODUCT_FAMILY : FdaConstants.FAS_PRODUCT_FAMILY);
                 } else {
                     accountNameField.clear();
                     productFamilyField.clear();

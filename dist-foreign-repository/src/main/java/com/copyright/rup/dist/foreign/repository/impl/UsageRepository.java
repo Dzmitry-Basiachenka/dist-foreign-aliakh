@@ -407,8 +407,8 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
                  new UndistributedLiabilitiesReportHandler(Objects.requireNonNull(outputStream))) {
             Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
             parameters.put("paymentDate", Objects.requireNonNull(paymentDate));
-            parameters.put("productFamilyClaFas", FdaConstants.PRODUCT_FAMILY_CLA_FAS);
-            parameters.put("accountNumberClaFas", FdaConstants.ACCOUNT_NUMBER_CLA_FAS);
+            parameters.put("productFamilyClaFas", FdaConstants.CLA_FAS_PRODUCT_FAMILY);
+            parameters.put("accountNumberClaFas", FdaConstants.CLA_ACCOUNT_NUMBER);
             //TODO change status of usages that were sent to LM
             parameters.put(STATUS_KEY, UsageStatusEnum.LOCKED);
             getTemplate().select("IUsageMapper.findUndistributedLiabilitiesReportDtos", parameters, handler);

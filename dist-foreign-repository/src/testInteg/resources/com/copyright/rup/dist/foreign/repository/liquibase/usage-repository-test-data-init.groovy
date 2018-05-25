@@ -303,89 +303,6 @@ databaseChangeLog {
             column(name: 'updated_by_user', value: 'user@copyright.com')
         }
 
-        //testWriteAuditCsvReport
-        insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
-            column(name: 'df_scenario_uid', value: 'bbcfb22f-fe53-490b-8daf-aa90ab87e1c0')
-            column(name: 'name', value: 'Paid Scenario')
-            column(name: 'status_ind', value: 'SENT_TO_LM')
-            column(name: 'description', value: 'Scenario already sent to LM')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
-            column(name: 'df_usage_batch_uid', value: '7802802a-1f96-4d7a-8a27-b0bfd43936b0')
-            column(name: 'name', value: 'Paid batch')
-            column(name: 'rro_account_number', value: '2000017010')
-            column(name: 'payment_date', value: '2021-02-12')
-            column(name: 'fiscal_year', value: '2020')
-            column(name: 'gross_amount', value: '1000.00')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
-            column(name: 'df_usage_archive_uid', value: '3900eea0-1231-11e8-b566-0800200c9a66')
-            column(name: 'df_usage_batch_uid', value: '7802802a-1f96-4d7a-8a27-b0bfd43936b0')
-            column(name: 'df_scenario_uid', value: 'bbcfb22f-fe53-490b-8daf-aa90ab87e1c0')
-            column(name: 'product_family', value: 'FAS')
-            column(name: 'wr_wrk_inst', value: '243904752')
-            column(name: 'work_title', value: '100 ROAD MOVIES')
-            column(name: 'system_title', value: '100 ROAD MOVIES')
-            column(name: 'rh_account_number', value: '1000002859')
-            column(name: 'payee_account_number', value: '1000002859')
-            column(name: 'status_ind', value: 'PAID')
-            column(name: 'article', value: 'DIN EN 779:2012')
-            column(name: 'standard_number', value: '1008902112317555XX')
-            column(name: 'publisher', value: 'IEEE')
-            column(name: 'publication_date', value: '2013-09-10')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'number_of_copies', value: '100')
-            column(name: 'reported_value', value: '6000')
-            column(name: 'gross_amount', value: '1000.00')
-            column(name: 'net_amount', value: '160.00')
-            column(name: 'service_fee_amount', value: '840.00')
-            column(name: 'service_fee', value: '0.16000')
-            column(name: 'ccc_event_id', value: '53256')
-            column(name: 'check_number', value: '578945')
-            column(name: 'check_date', value: '2017-03-15 11:41:52.735531+03')
-            column(name: 'distribution_name', value: 'FDA March 17')
-            column(name: 'distribution_date', value: '2017-03-15 11:41:52.735531+03')
-            column(name: 'period_end_date', value: '2017-03-15 11:41:52.735531+03')
-        }
-
-        //testWriteIntoCsvAndGetUsagesForResearch
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
-            column(name: 'df_usage_batch_uid', value: 'e855bf85-236c-42e7-9b12-8d68dd747bbe')
-            column(name: 'name', value: 'Batch with NTS')
-            column(name: 'rro_account_number', value: '2000017010')
-            column(name: 'payment_date', value: '2021-02-12')
-            column(name: 'fiscal_year', value: '2020')
-            column(name: 'gross_amount', value: '500.00')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
-            column(name: 'df_usage_uid', value: 'e2b3c369-3084-41ad-92b5-62197660d645')
-            column(name: 'df_usage_batch_uid', value: 'e855bf85-236c-42e7-9b12-8d68dd747bbe')
-            column(name: 'product_family', value: 'FAS')
-            column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
-            column(name: 'status_ind', value: 'WORK_NOT_FOUND')
-            column(name: 'article', value: 'DIN EN 779:2012')
-            column(name: 'standard_number', value: '2192-3558')
-            column(name: 'publisher', value: 'Network for Science')
-            column(name: 'publication_date', value: '2013-09-10')
-            column(name: 'market', value: 'Doc Del')
-            column(name: 'market_period_from', value: '2013')
-            column(name: 'market_period_to', value: '2017')
-            column(name: 'author', value: 'Philippe de Mézières')
-            column(name: 'updated_by_user', value: 'user@copyright.com')
-            column(name: 'number_of_copies', value: '100')
-            column(name: 'reported_value', value: '500.00')
-            column(name: 'gross_amount', value: '500.00')
-            column(name: 'net_amount', value: '420.00')
-            column(name: 'service_fee_amount', value: '80.00')
-            column(name: 'service_fee', value: '0.16000')
-        }
-
         //testFindProductFamilies
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: 'cb597f4e-f636-447f-8710-0436d8994d10')
@@ -398,7 +315,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '4dd8cdf8-ca10-422e-bdd5-3220105e6379')
-            column(name: 'df_usage_batch_uid', value: 'e855bf85-236c-42e7-9b12-8d68dd747bbe')
+            column(name: 'df_usage_batch_uid', value: 'cb597f4e-f636-447f-8710-0436d8994d10')
             column(name: 'status_ind', value: 'ELIGIBLE')
             column(name: 'product_family', value: 'NTS')
             column(name: 'article', value: 'DIN EN 779:2012')
