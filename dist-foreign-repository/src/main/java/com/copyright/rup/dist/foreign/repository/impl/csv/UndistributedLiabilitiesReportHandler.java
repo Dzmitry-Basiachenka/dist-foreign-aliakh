@@ -1,5 +1,6 @@
-package com.copyright.rup.dist.foreign.repository.impl;
+package com.copyright.rup.dist.foreign.repository.impl.csv;
 
+import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
 import com.copyright.rup.dist.foreign.domain.UndistributedLiabilitiesReportDto;
 
 import java.io.OutputStream;
@@ -17,7 +18,7 @@ import java.util.List;
  *
  * @author Uladzislau Shalamitski
  */
-class UndistributedLiabilitiesReportHandler extends BaseCsvReportHandler<UndistributedLiabilitiesReportDto> {
+public class UndistributedLiabilitiesReportHandler extends BaseCsvReportHandler<UndistributedLiabilitiesReportDto> {
 
     private static final List<String> HEADERS = Arrays.asList("Source RRO Account #", "Source RRO Name", "Payment Date",
         "Gross Undistributed Amount in FDA", "Estimated Service Fee Amount", "Net Estimated Payable Amount",
@@ -30,12 +31,12 @@ class UndistributedLiabilitiesReportHandler extends BaseCsvReportHandler<Undistr
      *
      * @param outputStream instance of {@link OutputStream}
      */
-    UndistributedLiabilitiesReportHandler(OutputStream outputStream) {
+    public UndistributedLiabilitiesReportHandler(OutputStream outputStream) {
         super(outputStream);
     }
 
     @Override
-    List<String> getBeanProperties(UndistributedLiabilitiesReportDto bean) {
+    protected List<String> getBeanProperties(UndistributedLiabilitiesReportDto bean) {
         List<String> beanProperties = new ArrayList<>();
         beanProperties.add(getBeanPropertyAsString(bean.getRroAccountNumber()));
         beanProperties.add(bean.getRroName());
@@ -57,7 +58,7 @@ class UndistributedLiabilitiesReportHandler extends BaseCsvReportHandler<Undistr
     }
 
     @Override
-    List<String> getBeanHeaders() {
+    protected List<String> getBeanHeaders() {
         return HEADERS;
     }
 }

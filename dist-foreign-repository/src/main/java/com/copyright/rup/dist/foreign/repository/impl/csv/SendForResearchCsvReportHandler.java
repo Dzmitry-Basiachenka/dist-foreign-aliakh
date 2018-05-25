@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.repository.impl;
+package com.copyright.rup.dist.foreign.repository.impl.csv;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -27,7 +27,7 @@ public class SendForResearchCsvReportHandler extends UsageCsvReportHandler {
      *
      * @param outputStream instance of {@link OutputStream}
      */
-    SendForResearchCsvReportHandler(OutputStream outputStream) {
+    public SendForResearchCsvReportHandler(OutputStream outputStream) {
         super(outputStream);
         usagesIds = new HashSet<>();
     }

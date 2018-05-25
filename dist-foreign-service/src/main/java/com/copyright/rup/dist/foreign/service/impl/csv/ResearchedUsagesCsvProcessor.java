@@ -1,16 +1,15 @@
 package com.copyright.rup.dist.foreign.service.impl.csv;
 
+import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor;
+import com.copyright.rup.dist.common.service.impl.csv.validator.LengthValidator;
+import com.copyright.rup.dist.common.service.impl.csv.validator.PositiveNumberValidator;
+import com.copyright.rup.dist.common.service.impl.csv.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.DuplicateInFileValidator;
-import com.copyright.rup.dist.foreign.service.impl.csv.validator.LengthValidator;
-import com.copyright.rup.dist.foreign.service.impl.csv.validator.PositiveNumberValidator;
-import com.copyright.rup.dist.foreign.service.impl.csv.validator.RequiredValidator;
 
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -34,10 +33,10 @@ public class ResearchedUsagesCsvProcessor extends DistCsvProcessor<ResearchedUsa
     /**
      * @return array of expected columns in CSV file.
      */
-    private static List<String> getColumns() {
+    static String[] getColumns() {
         return Stream.of(Header.values())
             .map(Header::getColumnName)
-            .collect(Collectors.toList());
+            .toArray(String[]::new);
     }
 
     @Override

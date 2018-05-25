@@ -2,8 +2,8 @@ package com.copyright.rup.dist.foreign.service.impl.csv.validator;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor;
 import com.copyright.rup.dist.foreign.domain.Usage;
-import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor;
 
 /**
  * The validator to check that 'Market Period To' greater than or equal to 'Market Period From'.

@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.repository.impl;
+package com.copyright.rup.dist.foreign.repository.impl.csv;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -14,7 +14,6 @@ import java.io.PipedOutputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -48,11 +47,31 @@ public class AuditCsvReportHandlerTest {
     }
 
     @Test
-    public void testGetBeanProperties() {
+    public void testGetBeanProperties() throws Exception {
         List<String> beanProperties = auditCsvReportHandler.getBeanProperties(buildUsageDto());
         assertTrue(CollectionUtils.isNotEmpty(beanProperties));
         assertEquals(21, CollectionUtils.size(beanProperties));
-        assertEquals(getUsageDtoProperties(buildUsageDto()), beanProperties);
+        assertEquals("2c7a9d3b-8506-49a9-b0bf-a7735e2cd906", beanProperties.get(0));
+        assertEquals("NEW", beanProperties.get(1));
+        assertEquals("FAS", beanProperties.get(2));
+        assertEquals("testBatch", beanProperties.get(3));
+        assertEquals("04/20/2018", beanProperties.get(4));
+        assertEquals("1000009522", beanProperties.get(5));
+        assertEquals("RhName", beanProperties.get(6));
+        assertEquals("1234", beanProperties.get(7));
+        assertEquals("payeeName", beanProperties.get(8));
+        assertEquals("123456789", beanProperties.get(9));
+        assertEquals("workTitle", beanProperties.get(10));
+        assertEquals("9780", beanProperties.get(11));
+        assertEquals("10.00", beanProperties.get(12));
+        assertEquals("0.0", beanProperties.get(13));
+        assertEquals("scenarioName", beanProperties.get(14));
+        assertEquals("1234", beanProperties.get(15));
+        assertEquals("04/21/2018", beanProperties.get(16));
+        assertEquals("12345", beanProperties.get(17));
+        assertEquals("distributionName", beanProperties.get(18));
+        assertEquals("04/15/2018", beanProperties.get(19));
+        assertEquals("04/23/2018", beanProperties.get(20));
     }
 
     private UsageDto buildUsageDto() {
@@ -76,35 +95,8 @@ public class AuditCsvReportHandlerTest {
         usageDto.setCheckDate(LocalDate.of(2018, 4, 21).atStartOfDay(ZoneId.systemDefault()).toOffsetDateTime());
         usageDto.setCccEventId("12345");
         usageDto.setDistributionName("distributionName");
-        usageDto.setDistributionDate(
-            LocalDate.of(2018, 4, 15).atStartOfDay(ZoneId.systemDefault()).toOffsetDateTime());
+        usageDto.setDistributionDate(LocalDate.of(2018, 4, 15).atStartOfDay(ZoneId.systemDefault()).toOffsetDateTime());
         usageDto.setPeriodEndDate(LocalDate.of(2018, 4, 23));
         return usageDto;
-    }
-
-    private List<String> getUsageDtoProperties(UsageDto usageDto) {
-        List<String> usageDtoProperties = new ArrayList<>();
-        usageDtoProperties.add(usageDto.getId());
-        usageDtoProperties.add(usageDto.getStatus().name());
-        usageDtoProperties.add(usageDto.getProductFamily());
-        usageDtoProperties.add(usageDto.getBatchName());
-        usageDtoProperties.add(auditCsvReportHandler.getBeanLocalDate(usageDto.getPaymentDate()));
-        usageDtoProperties.add(usageDto.getRhAccountNumber().toString());
-        usageDtoProperties.add(usageDto.getRhName());
-        usageDtoProperties.add(usageDto.getPayeeAccountNumber().toString());
-        usageDtoProperties.add(usageDto.getPayeeName());
-        usageDtoProperties.add(usageDto.getWrWrkInst().toString());
-        usageDtoProperties.add(usageDto.getWorkTitle());
-        usageDtoProperties.add(usageDto.getStandardNumber());
-        usageDtoProperties.add(auditCsvReportHandler.getBeanBigDecimal(usageDto.getGrossAmount()));
-        usageDtoProperties.add(auditCsvReportHandler.getBeanServiceFeePercent(usageDto.getServiceFee()));
-        usageDtoProperties.add(usageDto.getScenarioName());
-        usageDtoProperties.add(usageDto.getCheckNumber());
-        usageDtoProperties.add(auditCsvReportHandler.getBeanOffsetDateTime(usageDto.getCheckDate()));
-        usageDtoProperties.add(usageDto.getCccEventId());
-        usageDtoProperties.add(usageDto.getDistributionName());
-        usageDtoProperties.add(auditCsvReportHandler.getBeanOffsetDateTime(usageDto.getDistributionDate()));
-        usageDtoProperties.add(auditCsvReportHandler.getBeanLocalDate(usageDto.getPeriodEndDate()));
-        return usageDtoProperties;
     }
 }

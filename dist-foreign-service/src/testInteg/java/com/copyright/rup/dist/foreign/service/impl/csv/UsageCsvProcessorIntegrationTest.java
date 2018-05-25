@@ -6,18 +6,15 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.HeaderValidationException;
+import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
+import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ThresholdExceededException;
 import com.copyright.rup.dist.common.test.ReportTestUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.HeaderValidationException;
-import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.ProcessingResult;
-import com.copyright.rup.dist.foreign.service.impl.csv.DistCsvProcessor.ThresholdExceededException;
-
-import com.google.common.collect.Lists;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,7 +32,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.Executors;
-import java.util.stream.IntStream;
 
 /**
  * Verifies {@link UsageCsvProcessor}.
@@ -68,7 +64,7 @@ public class UsageCsvProcessorIntegrationTest {
 
     @Test
     public void testProcessor() throws Exception {
-        DistCsvProcessor.ProcessingResult<Usage> result = processFile("usages.csv", true);
+        ProcessingResult<Usage> result = processFile("usages.csv", true);
         assertNotNull(result);
         List<Usage> usages = result.get();
         assertEquals(5, CollectionUtils.size(usages));
@@ -95,22 +91,11 @@ public class UsageCsvProcessorIntegrationTest {
 
     @Test
     public void testProcessorForNegativePath() throws Exception {
-        DistCsvProcessor.ProcessingResult<Usage> result = processFile("usages_with_errors.csv", true);
+        ProcessingResult<Usage> result = processFile("usages_with_errors.csv", true);
         PipedOutputStream outputStream = new PipedOutputStream();
         PipedInputStream pipedInputStream = new PipedInputStream(outputStream);
         Executors.newSingleThreadExecutor().execute(() -> result.writeToFile(outputStream));
         reportTestUtils.assertCsvReport("usages_with_errors_report.csv", pipedInputStream);
-    }
-
-    @Test
-    public void testWriteErrorsToFile() throws Exception {
-        DistCsvProcessor.ProcessingResult<Usage> result =
-            new DistCsvProcessor.ProcessingResult<>(UsageCsvProcessor.getColumns());
-        logErrors(result);
-        PipedOutputStream outputStream = new PipedOutputStream();
-        PipedInputStream pipedInputStream = new PipedInputStream(outputStream);
-        Executors.newSingleThreadExecutor().execute(() -> result.writeToFile(outputStream));
-        reportTestUtils.assertCsvReport("errors_report.csv", pipedInputStream);
     }
 
     @Test
@@ -146,32 +131,9 @@ public class UsageCsvProcessorIntegrationTest {
         assertTrue(result.isSuccessful());
     }
 
-    private void logErrors(DistCsvProcessor.ProcessingResult<Usage> result) {
-        result.logError(2, buildOriginalLineWithErrors(Lists.newArrayList(0), Lists.newArrayList(StringUtils.EMPTY)),
-            "Detail ID: Field is required and cannot be null or empty");
-        result.logError(5, buildOriginalLineWithErrors(Lists.newArrayList(5), Lists.newArrayList("text")),
-            "RH Account #: Field value should be numeric");
-        String[] lines =
-            buildOriginalLineWithErrors(Lists.newArrayList(0), Lists.newArrayList("text more then 10 symbols"));
-        result.logError(3, lines, "Detail ID: Field value should be numeric");
-        result.logError(3, lines, "Detail ID: Field max length is 10 characters");
-        lines = buildOriginalLineWithErrors(Lists.newArrayList(8, 4), Lists.newArrayList("44.123", "text"));
-        result.logError(7, lines, "Reported Value: Field value must be Numeric with decimals to 2 places");
-        result.logError(7, lines, "Wr Wrk Inst: Field value should be numeric");
-    }
-
-    private String[] buildOriginalLineWithErrors(List<Integer> indexesForReplace, List<String> values) {
-        String[] columns =
-            new String[]{"234", "1984", "Appendix: The Principles of Newspeak", "9.78015E+12", "123456789",
-                "1000009522", "Publisher", "12/22/3000", "65", "30.86", "Univ,Bus,Doc,S", "2015", "2016",
-                "Aarseth, Espen J."};
-        IntStream.range(0, indexesForReplace.size()).forEach(i -> columns[indexesForReplace.get(i)] = values.get(i));
-        return columns;
-    }
-
-    private DistCsvProcessor.ProcessingResult<Usage> processFile(String file, boolean validateHeaders)
+    private ProcessingResult<Usage> processFile(String file, boolean validateHeaders)
         throws IOException {
-        DistCsvProcessor.ProcessingResult<Usage> result;
+        ProcessingResult<Usage> result;
         try (InputStream stream = this.getClass()
             .getResourceAsStream(PACKAGE + "/" + file);
              ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {

@@ -2,14 +2,15 @@ package com.copyright.rup.dist.foreign.service.impl.csv;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor;
+import com.copyright.rup.dist.common.service.impl.csv.validator.AmountValidator;
+import com.copyright.rup.dist.common.service.impl.csv.validator.LengthValidator;
+import com.copyright.rup.dist.common.service.impl.csv.validator.PositiveNumberValidator;
+import com.copyright.rup.dist.common.service.impl.csv.validator.RequiredValidator;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.DateFormatValidator;
-import com.copyright.rup.dist.foreign.service.impl.csv.validator.LengthValidator;
-import com.copyright.rup.dist.foreign.service.impl.csv.validator.PositiveNumberValidator;
-import com.copyright.rup.dist.foreign.service.impl.csv.validator.ReportedValueValidator;
-import com.copyright.rup.dist.foreign.service.impl.csv.validator.RequiredValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.YearValidator;
 
 import org.apache.commons.lang3.StringUtils;
@@ -18,9 +19,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -43,10 +42,13 @@ public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
         super(new UsageConverter(productFamily), true, getColumns());
     }
 
-    static List<String> getColumns() {
+    /**
+     * @return array of expected columns in CSV file.
+     */
+    static String[] getColumns() {
         return Stream.of(Header.values())
             .map(Header::getColumnName)
-            .collect(Collectors.toList());
+            .toArray(String[]::new);
     }
 
     @Override
@@ -63,7 +65,7 @@ public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
         addPlainValidators(Header.PUBLISHER, lengthValidator1000);
         addPlainValidators(Header.PUB_DATE, new DateFormatValidator());
         addPlainValidators(Header.NUMBER_OF_COPIES, positiveNumberValidator, new LengthValidator(9));
-        addPlainValidators(Header.REPORTED_VALUE, requiredValidator, new ReportedValueValidator());
+        addPlainValidators(Header.REPORTED_VALUE, requiredValidator, new AmountValidator());
         addPlainValidators(Header.MARKET, requiredValidator, new LengthValidator(200));
         addPlainValidators(Header.MARKET_PERIOD_FROM, requiredValidator, new YearValidator());
         addPlainValidators(Header.MARKET_PERIOD_TO, requiredValidator, new YearValidator());
