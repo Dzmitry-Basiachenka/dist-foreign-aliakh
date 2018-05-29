@@ -39,7 +39,6 @@ import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -117,7 +116,7 @@ public class ScenarioController extends CommonController<IScenarioWidget> implem
 
     @Override
     public boolean isScenarioEmpty() {
-        return Objects.equals(0, usageService.getRightsholderTotalsHolderCountByScenario(getScenario(), null));
+        return usageService.isScenarioEmpty(getScenario());
     }
 
     @Override

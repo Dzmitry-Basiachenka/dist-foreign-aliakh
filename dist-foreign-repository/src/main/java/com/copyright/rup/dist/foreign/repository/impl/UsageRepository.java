@@ -219,6 +219,11 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
+    public boolean isScenarioEmpty(String scenarioId) {
+        return selectOne("IUsageMapper.isScenarioEmpty", Objects.requireNonNull(scenarioId));
+    }
+
+    @Override
     public int findCountByScenarioIdAndRhAccountNumber(Long accountNumber, String scenarioId, String searchValue) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
         parameters.put("accountNumber", Objects.requireNonNull(accountNumber));

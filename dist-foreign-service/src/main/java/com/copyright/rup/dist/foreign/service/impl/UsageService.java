@@ -296,6 +296,11 @@ public class UsageService implements IUsageService {
     }
 
     @Override
+    public boolean isScenarioEmpty(Scenario scenario) {
+        return usageRepository.isScenarioEmpty(scenario.getId());
+    }
+
+    @Override
     public int getCountByScenarioAndRhAccountNumber(Long accountNumber, Scenario scenario, String searchValue) {
         return ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())
             ? usageArchiveRepository.findCountByScenarioIdAndRhAccountNumber(scenario.getId(), accountNumber,

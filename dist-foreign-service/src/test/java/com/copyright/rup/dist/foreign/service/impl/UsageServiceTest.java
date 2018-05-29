@@ -279,6 +279,14 @@ public class UsageServiceTest {
     }
 
     @Test
+    public void testIsScenarioEmpty() {
+        expect(usageRepository.isScenarioEmpty(SCENARIO_ID)).andReturn(true).once();
+        replay(usageRepository);
+        assertTrue(usageService.isScenarioEmpty(scenario));
+        verify(usageRepository);
+    }
+    
+    @Test
     public void testGetCountByScenarioAndRhAccountNumber() {
         expect(usageRepository.findCountByScenarioIdAndRhAccountNumber(RH_ACCOUNT_NUMBER, SCENARIO_ID,
             StringUtils.EMPTY)).andReturn(5).once();

@@ -364,6 +364,15 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
+    public void testIsScenarioEmpty() {
+        populateScenario();
+        assertFalse(usageRepository.isScenarioEmpty("b1f0b236-3ae9-4a60-9fab-61db84199d6f"));
+        assertTrue(usageRepository.isScenarioEmpty("e27551ed-3f69-4e08-9e4f-8ac03f67595f"));
+        assertTrue(usageRepository.isScenarioEmpty("979c981c-6a3a-46f3-bbd7-83d322ce9136"));
+        assertTrue(usageRepository.isScenarioEmpty("cac23a50-204c-11e8-b566-0800200c9a66"));
+    }
+
+    @Test
     public void testDeleteUsages() {
         UsageFilter filter = new UsageFilter();
         filter.setUsageBatchesIds(Sets.newHashSet(USAGE_BATCH_ID_1));
