@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Scenario;
-import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
 import java.time.LocalDate;
-import java.util.EnumSet;
 
 /**
  * Implements {@link IReportService}.
@@ -28,9 +27,6 @@ import java.util.EnumSet;
  */
 @Service
 public class ReportService implements IReportService {
-
-    private static final EnumSet<ScenarioStatusEnum> ARCHIVED_SCENARIO_STATUSES =
-        EnumSet.of(ScenarioStatusEnum.SENT_TO_LM, ScenarioStatusEnum.ARCHIVED);
 
     @Autowired
     private IUsageRepository usageRepository;
@@ -46,7 +42,7 @@ public class ReportService implements IReportService {
     @Override
     @Profiled(tag = "scenario.writeScenarioUsagesCsvReport")
     public void writeScenarioUsagesCsvReport(Scenario scenario, PipedOutputStream outputStream) {
-        if (ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())) {
+        if (FdaConstants.ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())) {
             usageArchiveRepository.writeScenarioUsagesCsvReport(scenario.getId(), outputStream);
         } else {
             usageRepository.writeScenarioUsagesCsvReport(scenario.getId(), outputStream);

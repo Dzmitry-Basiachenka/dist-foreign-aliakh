@@ -6,6 +6,7 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.integration.rest.prm.PrmRollUpService;
 import com.copyright.rup.dist.common.util.LogUtils;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
@@ -47,7 +48,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -69,8 +69,6 @@ import java.util.stream.Collectors;
 @Service
 public class ScenarioService implements IScenarioService {
 
-    private static final EnumSet<ScenarioStatusEnum> ARCHIVED_SCENARIO_STATUSES =
-        EnumSet.of(ScenarioStatusEnum.SENT_TO_LM, ScenarioStatusEnum.ARCHIVED);
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired
@@ -154,7 +152,7 @@ public class ScenarioService implements IScenarioService {
     @Override
     @Profiled(tag = "scenario.getScenarioWithAmountsAndLastAction")
     public Scenario getScenarioWithAmountsAndLastAction(Scenario scenario) {
-        return ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())
+        return FdaConstants.ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())
             ? scenarioRepository.findArchivedWithAmountsAndLastAction(scenario.getId())
             : scenarioRepository.findWithAmountsAndLastAction(scenario.getId());
     }
