@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.domain;
 
+import java.util.EnumSet;
+
 /**
  * Class that contains constants.
  * <p/>
@@ -25,6 +27,12 @@ public final class FdaConstants {
      * Account number for {@link FdaConstants#CLA_FAS_PRODUCT_FAMILY} RRO.
      */
     public static final Long CLA_ACCOUNT_NUMBER = 2000017000L;
+
+    /**
+     * Archived scenario statuses.
+     */
+    public static final EnumSet<ScenarioStatusEnum> ARCHIVED_SCENARIO_STATUSES =
+        EnumSet.of(ScenarioStatusEnum.SENT_TO_LM, ScenarioStatusEnum.ARCHIVED);
 
     private FdaConstants() {
         throw new AssertionError("Constructor shouldn't be called directly");

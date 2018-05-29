@@ -10,7 +10,6 @@ import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
-import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
@@ -50,7 +49,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -77,8 +75,6 @@ public class UsageService implements IUsageService {
         "ArchivedUsagesCount={}, NotReportedUsagesCount={}, ArchivedScenariosCount={}";
     private static final String SEND_TO_CRM_FINISHED_DEBUG_LOG_MESSAGE = "Send to CRM. Finished. PaidUsagesCount={}, " +
         "ArchivedUsagesCount={}, ArchivedScenariosCount={}, NotReportedUsageIds={}";
-    private static final EnumSet<ScenarioStatusEnum> ARCHIVED_SCENARIO_STATUSES =
-        EnumSet.of(ScenarioStatusEnum.SENT_TO_LM, ScenarioStatusEnum.ARCHIVED);
     private static final Logger LOGGER = RupLogUtils.getLogger();
     @Value("$RUP{dist.foreign.service_fee.cla_payee}")
     private BigDecimal claPayeeServiceFee;
@@ -282,7 +278,7 @@ public class UsageService implements IUsageService {
     public List<RightsholderTotalsHolder> getRightsholderTotalsHoldersByScenario(Scenario scenario,
                                                                                  String searchValue,
                                                                                  Pageable pageable, Sort sort) {
-        return ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())
+        return FdaConstants.ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())
             ? usageArchiveRepository.findRightsholderTotalsHoldersByScenarioId(scenario.getId(), searchValue, pageable,
             sort)
             : usageRepository.findRightsholderTotalsHoldersByScenarioId(scenario.getId(), searchValue, pageable, sort);
@@ -290,14 +286,14 @@ public class UsageService implements IUsageService {
 
     @Override
     public int getRightsholderTotalsHolderCountByScenario(Scenario scenario, String searchValue) {
-        return ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())
+        return FdaConstants.ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())
             ? usageArchiveRepository.findRightsholderTotalsHolderCountByScenarioId(scenario.getId(), searchValue)
             : usageRepository.findRightsholderTotalsHolderCountByScenarioId(scenario.getId(), searchValue);
     }
 
     @Override
     public int getCountByScenarioAndRhAccountNumber(Long accountNumber, Scenario scenario, String searchValue) {
-        return ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())
+        return FdaConstants.ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())
             ? usageArchiveRepository.findCountByScenarioIdAndRhAccountNumber(scenario.getId(), accountNumber,
             searchValue)
             : usageRepository.findCountByScenarioIdAndRhAccountNumber(accountNumber, scenario.getId(), searchValue);
@@ -307,7 +303,7 @@ public class UsageService implements IUsageService {
     @Profiled(tag = "usage.getByScenarioAndRhAccountNumber")
     public List<UsageDto> getByScenarioAndRhAccountNumber(Long accountNumber, Scenario scenario,
                                                           String searchValue, Pageable pageable, Sort sort) {
-        return ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())
+        return FdaConstants.ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())
             ? usageArchiveRepository.findByScenarioIdAndRhAccountNumber(scenario.getId(), accountNumber, searchValue,
             pageable, sort)
             : usageRepository.findByScenarioIdAndRhAccountNumber(accountNumber, scenario.getId(), searchValue, pageable,
