@@ -21,8 +21,8 @@ dependencies {
     compile("com.copyright.rup.vaadin:rup-vaadin-theme:${rupVaadinVersion}")
     compile("com.vaadin:vaadin-spring:${vaadinSpringVersion}")
 
-    runtime("com.copyright.rup.common:rup-common-config:${rupCommonVersion}")
     runtime("com.copyright.rup.common:rup-common-web:${rupCommonVersion}")
+    runtime("com.copyright.rup.dist.common:dist-common-web:${distCommonVersion}")
     runtime("com.copyright.rup.security.auth:rup-auth-consumer:${rupAuthVersion}")
     runtime("com.vaadin:vaadin-push:${vaadinVersion}")
     runtime("org.codehaus.janino:janino:${janinoVersion}")

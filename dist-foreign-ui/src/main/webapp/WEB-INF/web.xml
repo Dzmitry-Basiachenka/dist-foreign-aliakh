@@ -71,6 +71,16 @@
     </filter-mapping>
 
     <filter>
+        <filter-name>healthCheckFilter</filter-name>
+        <filter-class>com.copyright.rup.dist.common.web.filter.HealthCheckFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>healthCheckFilter</filter-name>
+        <url-pattern>/status</url-pattern>
+    </filter-mapping>
+
+    <filter>
         <filter-name>jobRunner</filter-name>
         <filter-class>com.copyright.rup.dist.foreign.ui.rest.JobRunnerRestFilter</filter-class>
     </filter>
