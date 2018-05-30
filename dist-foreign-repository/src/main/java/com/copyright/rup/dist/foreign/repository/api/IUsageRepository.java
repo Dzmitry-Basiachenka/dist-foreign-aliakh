@@ -202,6 +202,14 @@ public interface IUsageRepository {
     int findRightsholderTotalsHolderCountByScenarioId(String scenarioId, String searchValue);
 
     /**
+     * Gets boolean result that shows whether scenario is empty or not.
+     *
+     * @param scenarioId {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier
+     * @return boolean result that shows whether scenario is empty or not.
+     */
+    boolean isScenarioEmpty(String scenarioId);
+
+    /**
      * Gets count of usage details based on {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier and
      * rightsholder account number.
      *

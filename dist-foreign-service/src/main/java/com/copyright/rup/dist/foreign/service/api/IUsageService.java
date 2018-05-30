@@ -192,6 +192,14 @@ public interface IUsageService {
     int getRightsholderTotalsHolderCountByScenario(Scenario scenario, String searchValue);
 
     /**
+     * Gets boolean result that shows whether scenario is empty or not.
+     *
+     * @param scenario instance of {@link Scenario}
+     * @return boolean result that shows whether scenario is empty or not.
+     */
+    boolean isScenarioEmpty(Scenario scenario);
+
+    /**
      * Gets count of usage details based on {@link Scenario} and rightsholder account number.
      *
      * @param accountNumber selected rightsholder account number
