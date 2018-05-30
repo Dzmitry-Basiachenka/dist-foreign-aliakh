@@ -8,7 +8,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 
 /**
  * An implementation of {@link com.vaadin.server.StreamResource.StreamSource}.
@@ -46,7 +46,7 @@ public class ByteArrayStreamSource implements IStreamSource {
     @Override
     public String getFileName() {
         return VaadinUtils.encodeAndBuildFileName(fileNamePrefix +
-            CommonDateUtils.format(LocalDate.now(), "MM_dd_YYYY"), "csv");
+            CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm"), "csv");
     }
 
     /**

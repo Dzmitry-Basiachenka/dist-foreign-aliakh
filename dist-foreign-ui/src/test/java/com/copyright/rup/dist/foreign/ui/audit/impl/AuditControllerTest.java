@@ -35,7 +35,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
@@ -155,7 +155,7 @@ public class AuditControllerTest {
         IStreamSource streamSource = controller.getExportUsagesStreamSource();
         assertTrue(streamSource instanceof ExportStreamSource);
         assertNotNull(streamSource.getStream());
-        assertEquals("export_usage_audit_" + CommonDateUtils.format(LocalDate.now(), "MM_dd_YYYY") + ".csv",
+        assertEquals("export_usage_audit_" + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm") + ".csv",
             streamSource.getFileName());
     }
 

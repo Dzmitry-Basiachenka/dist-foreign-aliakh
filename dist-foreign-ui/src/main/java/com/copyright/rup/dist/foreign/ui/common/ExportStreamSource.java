@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -54,7 +54,7 @@ public class ExportStreamSource implements IStreamSource {
     @Override
     public String getFileName() {
         return VaadinUtils.encodeAndBuildFileName(fileNamePrefix +
-            CommonDateUtils.format(LocalDate.now(), "MM_dd_YYYY"), "csv");
+            CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm"), "csv");
     }
 
     /**

@@ -17,7 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -54,7 +54,7 @@ public class ExportStreamSourceTest {
 
     @Test
     public void testGetFileName() {
-        assertEquals("file_name_" + CommonDateUtils.format(LocalDate.now(), "MM_dd_YYYY") + ".csv",
+        assertEquals("file_name_" + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm") + ".csv",
             streamSource.getFileName());
     }
 }

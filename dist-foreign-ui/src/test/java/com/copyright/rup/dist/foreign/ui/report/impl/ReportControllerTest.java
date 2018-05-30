@@ -19,7 +19,7 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.io.OutputStream;
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 
 /**
  * Verifies {@link ReportController}.
@@ -61,7 +61,7 @@ public class ReportControllerTest {
 
     @Test
     public void testSendForResearchUsagesStreamSourceFileName() {
-        assertEquals("batch_summary_" + CommonDateUtils.format(LocalDate.now(), "MM_dd_YYYY") + ".csv",
+        assertEquals("batch_summary_" + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm") + ".csv",
             reportController.getBatchSummaryReportStreamSource().getFileName());
     }
 

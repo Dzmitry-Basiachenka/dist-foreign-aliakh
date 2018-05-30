@@ -51,7 +51,7 @@ import org.powermock.reflect.Whitebox;
 
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -172,7 +172,7 @@ public class UsagesControllerTest {
 
     @Test
     public void testSendForResearchUsagesStreamSourceFileName() {
-        assertEquals("send_for_research_" + CommonDateUtils.format(LocalDate.now(), "MM_dd_YYYY") + ".csv",
+        assertEquals("send_for_research_" + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm") + ".csv",
             controller.getSendForResearchUsagesStreamSource().getFileName());
     }
 
@@ -214,7 +214,7 @@ public class UsagesControllerTest {
 
     @Test
     public void testGetExportFileName() {
-        assertEquals("export_usage_" + CommonDateUtils.format(LocalDate.now(), "MM_dd_YYYY") + ".csv",
+        assertEquals("export_usage_" + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm") + ".csv",
             controller.getExportUsagesStreamSource().getFileName());
     }
 

@@ -18,6 +18,7 @@ import org.powermock.reflect.Whitebox;
 
 import java.io.OutputStream;
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 
 /**
  * Verifies {@link UndistributedLiabilitiesReportController}.
@@ -49,7 +50,8 @@ public class UndistributedLiabilitiesReportControllerTest {
 
     @Test
     public void testSendForResearchUsagesStreamSourceFileName() {
-        assertEquals("undistributed_liabilities_" + CommonDateUtils.format(LocalDate.now(), "MM_dd_YYYY") + ".csv",
+        assertEquals(
+            "undistributed_liabilities_" + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm") + ".csv",
             controller.getUndistributedLiabilitiesReportStreamSource().getFileName());
     }
 
