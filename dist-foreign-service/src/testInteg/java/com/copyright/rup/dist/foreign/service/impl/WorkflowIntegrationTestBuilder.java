@@ -294,7 +294,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
         }
 
         private void expectReceivePaidUsages() throws InterruptedException {
-            producerTemplate.setDefaultEndpointUri("direct:topic:sf.processor.detail.paid");
+            producerTemplate.setDefaultEndpointUri("direct:queue:Consumer.df.VirtualTopic.sf.processor.detail.paid");
             CountDownLatch latch = new CountDownLatch(1);
             paidUsageConsumer.setLatch(latch);
             String body = TestUtils.fileToString(this.getClass(), expectedPaidUsagesJsonFile);
