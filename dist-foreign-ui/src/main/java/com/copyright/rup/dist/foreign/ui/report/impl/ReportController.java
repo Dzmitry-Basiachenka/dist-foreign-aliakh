@@ -1,8 +1,11 @@
 package com.copyright.rup.dist.foreign.ui.report.impl;
 
+import com.copyright.rup.dist.foreign.service.api.IReportService;
+import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportWidget;
 import com.copyright.rup.dist.foreign.ui.report.api.IUndistributedLiabilitiesReportController;
+import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,8 @@ public class ReportController extends CommonController<IReportWidget> implements
 
     @Autowired
     private IUndistributedLiabilitiesReportController undistributedLiabilitiesReportController;
+    @Autowired
+    private IReportService reportService;
 
     @Override
     public IUndistributedLiabilitiesReportController getUndistributedLiabilitiesReportController() {
@@ -34,5 +39,11 @@ public class ReportController extends CommonController<IReportWidget> implements
     @Override
     protected IReportWidget instantiateWidget() {
         return new ReportWidget();
+    }
+
+    @Override
+    public IStreamSource getBatchSummaryReportStreamSource() {
+        return new ByteArrayStreamSource("batch_summary_",
+            outputStream -> reportService.writeBatchSummaryCsvReport(outputStream));
     }
 }

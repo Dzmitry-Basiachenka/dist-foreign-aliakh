@@ -60,4 +60,10 @@ public class ReportService implements IReportService {
     public void writeUndistributedLiabilitiesCsvReport(LocalDate paymentDate, OutputStream outputStream) {
         usageRepository.writeUndistributedLiabilitiesCsvReport(paymentDate, outputStream);
     }
+
+    @Override
+    @Profiled(tag = "report.batchSummaryCsvReport")
+    public void writeBatchSummaryCsvReport(OutputStream outputStream) {
+        usageRepository.writeBatchSummaryCsvReport(outputStream);
+    }
 }

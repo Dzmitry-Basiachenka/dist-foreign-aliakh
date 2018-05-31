@@ -394,4 +394,11 @@ public interface IUsageRepository {
      * @param outputStream instance of {@link OutputStream}
      */
     void writeUndistributedLiabilitiesCsvReport(LocalDate paymentDate, OutputStream outputStream);
+
+    /**
+     * Writes Batch Summary Report into the output stream in csv format.
+     *
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeBatchSummaryCsvReport(OutputStream outputStream);
 }

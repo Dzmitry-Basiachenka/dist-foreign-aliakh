@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.report.api;
 
+import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.widget.api.IController;
 
 /**
@@ -17,4 +18,9 @@ public interface IReportController extends IController<IReportWidget> {
      * @return undistributed liabilities report controller.
      */
     IUndistributedLiabilitiesReportController getUndistributedLiabilitiesReportController();
+
+    /**
+     * @return instance of {@link IStreamSource} for batch summary report.
+     */
+    IStreamSource getBatchSummaryReportStreamSource();
 }

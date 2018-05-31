@@ -134,6 +134,16 @@ public class ReportServiceTest {
         verify(usageRepository);
     }
 
+    @Test
+    public void testBatchSummaryCsvReport() {
+        ByteArrayOutputStream outputStream = createMock(ByteArrayOutputStream.class);
+        usageRepository.writeBatchSummaryCsvReport(outputStream);
+        expectLastCall().once();
+        replay(usageRepository);
+        reportService.writeBatchSummaryCsvReport(outputStream);
+        verify(usageRepository);
+    }
+
     private Scenario buildScenario(ScenarioStatusEnum status) {
         Scenario scenario = new Scenario();
         scenario.setId(RupPersistUtils.generateUuid());
