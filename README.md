@@ -1,3 +1,11 @@
+2.1.42
+-
+* B-43661 Tech Debt: FDA: update dependencies to use rup-plugin 5.+
+* B-43661 Tech Debt: FDA: update jackson-module-jaxb-annotations version to rup-camel-jackson version to avoid CVE-2016-7051
+* B-44096 FDA: Address performance issues related to export and scenario functionality: Add implementation of checking scenario emptiness for scenarios in states SENT_TO_LM, ARCHIVED
+* Revving up build version
+* Update release notes for version 2.1.41
+
 2.1.41
 -
 * B-37305 FDA: undistributed liabilities reconciliation report: make changes based on comments in CR-DIST-FOREIGN-61
