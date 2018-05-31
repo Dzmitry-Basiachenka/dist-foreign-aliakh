@@ -58,7 +58,7 @@ public class ReceivePaidUsagesFromLmTest {
     }
 
     private void expectReceivePaidUsages() throws InterruptedException {
-        template.setDefaultEndpointUri("direct:topic:sf.processor.detail.paid");
+        template.setDefaultEndpointUri("direct:queue:Consumer.df.VirtualTopic.sf.processor.detail.paid");
         CountDownLatch latch = new CountDownLatch(1);
         paidUsageConsumer.setLatch(latch);
         template.sendBodyAndHeader(TestUtils.fileToString(this.getClass(), "lm/paid_usages_fas.json"), "source", "FDA");
