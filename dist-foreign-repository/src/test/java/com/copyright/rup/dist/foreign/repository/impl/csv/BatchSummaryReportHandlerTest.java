@@ -3,7 +3,7 @@ package com.copyright.rup.dist.foreign.repository.impl.csv;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import com.copyright.rup.dist.foreign.domain.BatchSummaryReportDto;
+import com.copyright.rup.dist.foreign.domain.report.BatchSummaryReportDto;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;

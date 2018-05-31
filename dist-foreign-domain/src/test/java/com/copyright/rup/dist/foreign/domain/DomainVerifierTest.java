@@ -3,6 +3,9 @@ package com.copyright.rup.dist.foreign.domain;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.domain.report.BatchSummaryReportDto;
+import com.copyright.rup.dist.foreign.domain.report.ResearchStatusReportDto;
+import com.copyright.rup.dist.foreign.domain.report.UndistributedLiabilitiesReportDto;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -52,7 +55,8 @@ public class DomainVerifierTest {
             {RightsholderDiscrepancy.class},
             {ResearchedUsage.class},
             {UndistributedLiabilitiesReportDto.class},
-            {BatchSummaryReportDto.class}
+            {BatchSummaryReportDto.class},
+            {ResearchStatusReportDto.class}
         };
         return Arrays.asList(testData);
     }

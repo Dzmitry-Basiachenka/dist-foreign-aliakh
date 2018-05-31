@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.impl.csv;
 
 import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
-import com.copyright.rup.dist.foreign.domain.BatchSummaryReportDto;
+import com.copyright.rup.dist.foreign.domain.report.BatchSummaryReportDto;
 
 import java.io.OutputStream;
 import java.util.ArrayList;

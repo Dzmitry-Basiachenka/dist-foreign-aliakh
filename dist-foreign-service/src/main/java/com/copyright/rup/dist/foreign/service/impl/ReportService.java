@@ -66,4 +66,10 @@ public class ReportService implements IReportService {
     public void writeBatchSummaryCsvReport(OutputStream outputStream) {
         usageRepository.writeBatchSummaryCsvReport(outputStream);
     }
+
+    @Override
+    @Profiled(tag = "report.researchStatusReport")
+    public void writeResearchStatusCsvReport(OutputStream outputStream) {
+        usageRepository.writeResearchStatusCsvReport(outputStream);
+    }
 }
