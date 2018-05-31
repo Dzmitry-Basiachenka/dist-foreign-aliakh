@@ -424,4 +424,9 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
             getTemplate().select("IUsageMapper.findUndistributedLiabilitiesReportDtos", parameters, handler);
         }
     }
+
+    @Override
+    public void writeBatchSummaryCsvReport(OutputStream outputStream) {
+        //TODO: use handler here to generate report
+    }
 }

@@ -51,7 +51,8 @@ public class DomainVerifierTest {
             {RightsholderPayeePair.class},
             {RightsholderDiscrepancy.class},
             {ResearchedUsage.class},
-            {UndistributedLiabilitiesReportDto.class}
+            {UndistributedLiabilitiesReportDto.class},
+            {BatchSummaryReportDto.class}
         };
         return Arrays.asList(testData);
     }
