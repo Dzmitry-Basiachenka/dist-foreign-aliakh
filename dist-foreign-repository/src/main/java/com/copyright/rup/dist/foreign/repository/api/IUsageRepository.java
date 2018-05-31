@@ -401,4 +401,11 @@ public interface IUsageRepository {
      * @param outputStream instance of {@link OutputStream}
      */
     void writeBatchSummaryCsvReport(OutputStream outputStream);
+
+    /**
+     * Writes Research Status Report into the output stream in csv format.
+     *
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeResearchStatusCsvReport(OutputStream outputStream);
 }

@@ -3,7 +3,7 @@ package com.copyright.rup.dist.foreign.repository.impl.csv;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import com.copyright.rup.dist.foreign.domain.UndistributedLiabilitiesReportDto;
+import com.copyright.rup.dist.foreign.domain.report.UndistributedLiabilitiesReportDto;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
@@ -47,7 +47,7 @@ public class UndistributedLiabilitiesReportHandlerTest {
     }
 
     @Test
-    public void testGetBeanProperties() throws Exception {
+    public void testGetBeanProperties() {
         List<String> beanProperties = handler.getBeanProperties(buildUndistributedLiabilitiesReportDto());
         assertTrue(CollectionUtils.isNotEmpty(beanProperties));
         assertEquals(16, CollectionUtils.size(beanProperties));

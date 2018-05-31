@@ -31,7 +31,8 @@
         <typeAlias alias="ScenarioUsageFilter" type="com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter"/>
         <typeAlias alias="UsageStatusEnum" type="com.copyright.rup.dist.foreign.domain.UsageStatusEnum"/>
         <typeAlias alias="RightsholderDiscrepancy" type="com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy"/>
-        <typeAlias alias="UndistributedLiabilitiesReportDto" type="com.copyright.rup.dist.foreign.domain.UndistributedLiabilitiesReportDto"/>
+        <typeAlias alias="UndistributedLiabilitiesReportDto" type="com.copyright.rup.dist.foreign.domain.report.UndistributedLiabilitiesReportDto"/>
+        <typeAlias alias="ResearchStatusReportDto" type="com.copyright.rup.dist.foreign.domain.report.ResearchStatusReportDto"/>
     </typeAliases>
 
     <typeHandlers>

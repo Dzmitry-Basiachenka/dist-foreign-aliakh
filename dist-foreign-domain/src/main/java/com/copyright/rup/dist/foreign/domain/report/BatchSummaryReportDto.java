@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.domain;
+package com.copyright.rup.dist.foreign.domain.report;
 
 import com.copyright.rup.dist.common.domain.StoredEntity;
 

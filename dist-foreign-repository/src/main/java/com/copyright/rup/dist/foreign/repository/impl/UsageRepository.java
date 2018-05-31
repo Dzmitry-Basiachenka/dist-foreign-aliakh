@@ -16,6 +16,7 @@ import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.repository.impl.csv.AuditCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.ResearchStatusReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.ScenarioUsagesCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.SendForResearchCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.UndistributedLiabilitiesReportHandler;
@@ -428,5 +429,13 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     @Override
     public void writeBatchSummaryCsvReport(OutputStream outputStream) {
         //TODO: use handler here to generate report
+    }
+
+    @Override
+    public void writeResearchStatusCsvReport(OutputStream outputStream) {
+        try (ResearchStatusReportHandler handler = new ResearchStatusReportHandler(
+            Objects.requireNonNull(outputStream))) {
+            getTemplate().select("IUsageMapper.findResearchStatusReportDtos", handler);
+        }
     }
 }

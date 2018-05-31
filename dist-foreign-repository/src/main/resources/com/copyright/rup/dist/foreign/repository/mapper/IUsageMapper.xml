@@ -23,6 +23,21 @@
         <result property="netAmountReturnToCla" column="net_amount_return_to_cla"/>
     </resultMap>
 
+    <resultMap id="researchStatusReportDtoResultMap" type="ResearchStatusReportDto">
+        <result property="batchName" column="batch_name"/>
+        <result property="rroAccountNumber" column="rro_account_number"/>
+        <result property="rroName" column="rro_name"/>
+        <result property="paymentDate" column="payment_date"/>
+        <result property="workNotFoundDetailsCount" column="work_not_found_details_count"/>
+        <result property="workNotFoundGrossAmount" column="work_not_found_gross_amount"/>
+        <result property="workResearchDetailsCount" column="work_research_details_count"/>
+        <result property="workResearchGrossAmount" column="work_research_gross_amount"/>
+        <result property="sendForRaDetailsCount" column="send_for_ra_details_count"/>
+        <result property="sendForRaGrossAmount" column="send_for_ra_gross_amount"/>
+        <result property="rhNotFoundDetailsCount" column="rh_not_found_details_count"/>
+        <result property="rhNotFoundGrossAmount" column="rh_not_found_gross_amount"/>
+    </resultMap>
+
     <resultMap id="usageDtoResultMap" type="UsageDto" extends="StoredEntityMapper.storedEntityResult">
         <result property="id" column="df_usage_uid"/>
         <result property="wrWrkInst" column="wr_wrk_inst"/>
@@ -1211,5 +1226,22 @@
             group by nestedReportInfo.payment_date, nestedReportInfo.rro_account_number, fee.estimated_service_fee) as reportInfo
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = reportInfo.rro_account_number
         order by reportInfo.rro_account_number, reportInfo.payment_date
+    </select>
+
+    <select id="findResearchStatusReportDtos" resultMap="researchStatusReportDtoResultMap">
+        select
+            batch_name,
+            rro_account_number,
+            rro_name,
+            payment_date,
+            work_not_found_details_count,
+            work_not_found_gross_amount,
+            work_research_details_count,
+            work_research_gross_amount,
+            send_for_ra_details_count,
+            send_for_ra_gross_amount,
+            rh_not_found_details_count,
+            rh_not_found_gross_amount
+        from ${schema}.v_research_status_report
     </select>
 </mapper>

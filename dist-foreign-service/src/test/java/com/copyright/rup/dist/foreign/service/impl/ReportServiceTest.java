@@ -141,6 +141,15 @@ public class ReportServiceTest {
         expectLastCall().once();
         replay(usageRepository);
         reportService.writeBatchSummaryCsvReport(outputStream);
+    }
+
+    @Test
+    public void testWriteResearchStatusCsvReport() {
+        PipedOutputStream outputStream = createMock(PipedOutputStream.class);
+        usageRepository.writeResearchStatusCsvReport(outputStream);
+        expectLastCall().once();
+        replay(usageRepository);
+        reportService.writeResearchStatusCsvReport(outputStream);
         verify(usageRepository);
     }
 
