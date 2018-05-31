@@ -115,6 +115,12 @@ public class CsvReportsIntegrationTest {
             outputStream), "undistributed_liabilities_report_empty.csv");
     }
 
+    @Test
+    public void testWriteResearchStatusCsvReport() throws IOException {
+        assertFiles(outputStream -> usageRepository.writeResearchStatusCsvReport(outputStream),
+            "research_status_report.csv");
+    }
+
     private void assertFiles(Consumer<ByteArrayOutputStream> reportWriter, String fileName) throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         reportWriter.accept(outputStream);

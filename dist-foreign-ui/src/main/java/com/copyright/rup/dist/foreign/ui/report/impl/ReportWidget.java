@@ -49,6 +49,8 @@ public class ReportWidget extends MenuBar implements IReportWidget {
                 controller.getUndistributedLiabilitiesReportController()));
         rootItem.addItem(ForeignUi.getMessage("menu.report.batch_summary"),
             menuItem -> generateReport(controller.getBatchSummaryReportStreamSource()));
+        rootItem.addItem(ForeignUi.getMessage("menu.report.research_status"),
+            menuItem -> generateReport(controller.getResearchStatusReportStreamSource()));
         return this;
     }
 

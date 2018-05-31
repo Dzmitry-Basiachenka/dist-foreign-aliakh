@@ -23,4 +23,9 @@ public interface IReportController extends IController<IReportWidget> {
      * @return instance of {@link IStreamSource} for batch summary report.
      */
     IStreamSource getBatchSummaryReportStreamSource();
+
+    /**
+     * @return instance of {@link IStreamSource} for research status report.
+     */
+    IStreamSource getResearchStatusReportStreamSource();
 }
