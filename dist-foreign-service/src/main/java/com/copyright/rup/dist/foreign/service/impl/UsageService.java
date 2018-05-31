@@ -293,7 +293,8 @@ public class UsageService implements IUsageService {
 
     @Override
     public boolean isScenarioEmpty(Scenario scenario) {
-        return usageRepository.isScenarioEmpty(scenario.getId());
+        return !FdaConstants.ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())
+            && usageRepository.isScenarioEmpty(scenario.getId());
     }
 
     @Override

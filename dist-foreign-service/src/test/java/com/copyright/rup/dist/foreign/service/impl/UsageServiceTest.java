@@ -4,6 +4,7 @@ import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -283,6 +284,10 @@ public class UsageServiceTest {
         expect(usageRepository.isScenarioEmpty(SCENARIO_ID)).andReturn(true).once();
         replay(usageRepository);
         assertTrue(usageService.isScenarioEmpty(scenario));
+        scenario.setStatus(ScenarioStatusEnum.SENT_TO_LM);
+        assertFalse(usageService.isScenarioEmpty(scenario));
+        scenario.setStatus(ScenarioStatusEnum.ARCHIVED);
+        assertFalse(usageService.isScenarioEmpty(scenario));
         verify(usageRepository);
     }
     
