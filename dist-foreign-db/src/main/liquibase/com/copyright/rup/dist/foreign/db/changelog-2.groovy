@@ -1459,4 +1459,51 @@ databaseChangeLog {
             sql("drop index ${dbAppsSchema}.ix_df_usage_df_scenario_uid")
         }
     }
+
+    changeSet(id: '2018-05-31-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-43639 FDA: Research Status Report: implement view to store data for Research Status Report")
+
+        createView(viewName:'v_research_status_report', schemaName: dbAppsSchema) {
+            """select
+                    nestedReport.batch_name, 
+                    nestedReport.rro_account_number,
+                    nestedReport.rro_name,
+                    nestedReport.payment_date, 
+                    nestedReport.gross_amount,
+                    sum(work_not_found_count) work_not_found_details_count,
+                    sum(nestedReport.work_not_found) work_not_found_gross_amount,
+                    sum(researched_count) work_research_details_count,
+                    sum(nestedReport.researched) work_research_gross_amount,
+                    sum(sent_for_ra_count) send_for_ra_details_count,
+                    sum(nestedReport.sent_for_ra) send_for_ra_gross_amount,
+                    sum(rh_not_found_count) rh_not_found_details_count,
+                    sum(nestedReport.rh_not_found) rh_not_found_gross_amount
+                    from(
+                        select
+                            b.name batch_name, 
+                            b.rro_account_number,
+                            rh.name rro_name,
+                            b.payment_date, 
+                            b.gross_amount,     
+                            case when (u.status_ind = 'WORK_NOT_FOUND') then count(1) else 0 end work_not_found_count,
+                            case when (u.status_ind = 'WORK_NOT_FOUND') then sum(u.gross_amount) else 0 end work_not_found,
+                            case when (u.status_ind = 'WORK_RESEARCH') then count(1) else 0 end researched_count,
+                            case when (u.status_ind = 'WORK_RESEARCH') then sum(u.gross_amount) else 0 end researched,
+                            case when (u.status_ind = 'SENT_FOR_RA') then count(1) else 0 end sent_for_ra_count,
+                            case when (u.status_ind = 'SENT_FOR_RA') then sum(u.gross_amount) else 0 end sent_for_ra,
+                            case when (u.status_ind = 'RH_NOT_FOUND') then count(1) else 0 end rh_not_found_count,
+                            case when (u.status_ind = 'RH_NOT_FOUND') then sum(u.gross_amount) else 0 end rh_not_found     
+                        from apps.df_usage u
+                        left join apps.df_usage_batch b on u.df_usage_batch_uid = b.df_usage_batch_uid 
+                        left join apps.df_rightsholder rh on b.rro_account_number = rh.rh_account_number  
+                        where status_ind in ('WORK_NOT_FOUND', 'WORK_RESEARCH', 'SENT_FOR_RA','RH_NOT_FOUND')
+                        group by b.name, rro_account_number, rh.name, payment_date, b.gross_amount, u.status_ind) nestedReport
+                group by nestedReport.batch_name, nestedReport.rro_account_number, nestedReport.rro_name, nestedReport.payment_date, nestedReport.gross_amount
+                order by nestedReport.payment_date desc, nestedReport.batch_name"""
+        }
+
+        rollback {
+            //automatic rollback
+        }
+    }
 }

@@ -46,4 +46,10 @@ public class ReportController extends CommonController<IReportWidget> implements
         return new ByteArrayStreamSource("batch_summary_",
             outputStream -> reportService.writeBatchSummaryCsvReport(outputStream));
     }
+
+    @Override
+    public IStreamSource getResearchStatusReportStreamSource() {
+        return new ByteArrayStreamSource("research_status_report_",
+            outputStream -> reportService.writeResearchStatusCsvReport(outputStream));
+    }
 }

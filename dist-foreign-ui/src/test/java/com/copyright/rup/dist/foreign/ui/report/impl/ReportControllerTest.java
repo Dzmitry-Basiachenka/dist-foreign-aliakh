@@ -74,4 +74,14 @@ public class ReportControllerTest {
         assertNotNull(reportController.getBatchSummaryReportStreamSource().getStream());
         verify(reportService);
     }
+
+    @Test
+    public void testResearchStatusReportStreamSource() {
+        reportService.writeResearchStatusCsvReport(anyObject(OutputStream.class));
+        expectLastCall().once();
+        replay(reportService);
+        reportController.initWidget();
+        assertNotNull(reportController.getResearchStatusReportStreamSource().getStream());
+        verify(reportService);
+    }
 }
