@@ -1066,7 +1066,6 @@
             standard_number,
             work_title,
             system_title,
-            product_family,
             status_ind
         from ${schema}.df_usage
         where standard_number is not null
@@ -1080,7 +1079,6 @@
         select distinct
             work_title,
             system_title,
-            product_family,
             status_ind
         from ${schema}.df_usage
         where standard_number is null
@@ -1143,7 +1141,6 @@
         set
             status_ind = #{usage.status},
             wr_wrk_inst = #{usage.wrWrkInst},
-            product_family = #{usage.productFamily},
             system_title = #{usage.systemTitle},
             <include refid="StoredEntityMapper.update"/>
         where standard_number = #{usage.standardNumber}
@@ -1155,12 +1152,20 @@
         set
             status_ind = #{usage.status},
             wr_wrk_inst = #{usage.wrWrkInst},
-            product_family = #{usage.productFamily},
             system_title = #{usage.systemTitle},
             <include refid="StoredEntityMapper.update"/>
         where standard_number is null
             and work_title = #{usage.workTitle}
             and status_ind = #{status}
+    </update>
+
+    <update id="updateToNtsEligible" parameterType="map">
+        update ${schema}.df_usage
+        set
+            status_ind = #{status},
+            product_family = #{productFamily},
+            <include refid="StoredEntityMapper.update"/>
+        where df_usage_uid = #{usageId}
     </update>
 
     <update id="updateResearchedUsage" parameterType="map">

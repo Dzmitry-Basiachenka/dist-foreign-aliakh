@@ -363,6 +363,13 @@ public interface IUsageRepository {
     void updateStatusAndWrWrkInstByTitle(List<Usage> usages);
 
     /**
+     * Update status to {@link UsageStatusEnum#ELIGIBLE} and product family to NTS for each usage.
+     *
+     * @param usages list of {@link Usage}s
+     */
+    void updateToNtsEligible(List<Usage> usages);
+
+    /**
      * Finds list of {@link Usage}s by standard number and status.
      *
      * @param standardNumber standard number to find

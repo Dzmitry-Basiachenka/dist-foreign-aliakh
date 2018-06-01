@@ -937,7 +937,6 @@ public class UsageRepositoryIntegrationTest {
         Usage usage = usages.get(0);
         usage.setStandardNumber(STANDARD_NUMBER_2);
         usage.setWrWrkInst(WR_WRK_INST);
-        usage.setProductFamily(PRODUCT_FAMILY_FAS);
         usage.setStatus(UsageStatusEnum.WORK_FOUND);
         usageRepository.updateStatusAndWrWrkInstByStandardNumber(usages);
         usages = usageRepository.findByStandardNumberAndStatus(STANDARD_NUMBER_2, UsageStatusEnum.WORK_FOUND);
@@ -952,13 +951,27 @@ public class UsageRepositoryIntegrationTest {
         usages.forEach(usage -> {
             usage.setWorkTitle(WORK_TITLE);
             usage.setWrWrkInst(WR_WRK_INST);
-            usage.setProductFamily(PRODUCT_FAMILY_FAS);
             usage.setStatus(UsageStatusEnum.WORK_FOUND);
         });
         usageRepository.updateStatusAndWrWrkInstByTitle(usages);
         usages = usageRepository.findByTitleAndStatus(WORK_TITLE, UsageStatusEnum.WORK_FOUND);
         assertEquals(2, usages.size());
         usages.forEach(usage -> assertEquals(WR_WRK_INST, usage.getWrWrkInst()));
+    }
+
+    @Test
+    public void testUpdateToNts() {
+        List<Usage> usages = usageRepository.findWithoutStandardNumberAndTitle();
+        assertEquals(1, usages.size());
+        Usage usage = usages.get(0);
+        assertEquals(PRODUCT_FAMILY_FAS, usage.getProductFamily());
+        assertEquals(UsageStatusEnum.NEW, usage.getStatus());
+        usage.setProductFamily(PRODUCT_FAMILY_NTS);
+        usage.setStatus(UsageStatusEnum.ELIGIBLE);
+        usageRepository.updateToNtsEligible(usages);
+        Usage actualUsage = usageRepository.findById(usage.getId());
+        assertEquals(PRODUCT_FAMILY_NTS, actualUsage.getProductFamily());
+        assertEquals(UsageStatusEnum.ELIGIBLE, actualUsage.getStatus());
     }
 
     private void verifyFilterForTwoBatches(AuditFilter filter) {
