@@ -38,6 +38,25 @@
         <result property="rhNotFoundGrossAmount" column="rh_not_found_gross_amount"/>
     </resultMap>
 
+    <resultMap id="batchSummaryReportDtoResultMap" type="BatchSummaryReportDto">
+        <result property="batchName" column="batch_name"/>
+        <result property="rroAccountNumber" column="rro_account_number"/>
+        <result property="rroName" column="rro_name"/>
+        <result property="paymentDate" column="payment_date"/>
+        <result property="grossAmount" column="gross_amount"/>
+        <result property="nonEligibleDetailsCount" column="non_eligible_details_count"/>
+        <result property="nonEligibleDetailsGrossAmount" column="non_eligible_details_gross_amount"/>
+        <result property="ntsDetailsCount" column="nts_details_count"/>
+        <result property="ntsDetailsGrossAmount" column="nts_details_gross_amount"/>
+        <result property="fasAndClaFasEligibleDetailsCount" column="fas_and_cla_fas_eligible_details_count"/>
+        <result property="fasAndClaFasEligibleDetailsGrossAmount" column="fas_and_cla_fas_eligible_details_gross_amount"/>
+        <result property="scenariosDetailsCount" column="scenarios_details_count"/>
+        <result property="scenariosDetailsGrossAmount" column="scenarios_details_gross_amount"/>
+        <result property="scenariosDetailsNetAmount" column="scenarios_details_net_amount"/>
+        <result property="returnToClaDetailsCount" column="return_to_cla_details_count"/>
+        <result property="returnToClaDetailsGrossAmount" column="return_to_cla_details_gross_amount"/>
+    </resultMap>
+
     <resultMap id="usageDtoResultMap" type="UsageDto" extends="StoredEntityMapper.storedEntityResult">
         <result property="id" column="df_usage_uid"/>
         <result property="wrWrkInst" column="wr_wrk_inst"/>
@@ -1243,5 +1262,26 @@
             rh_not_found_details_count,
             rh_not_found_gross_amount
         from ${schema}.v_research_status_report
+    </select>
+
+    <select id="findBatchSummaryReportDtos" resultMap="batchSummaryReportDtoResultMap">
+        select
+            batch_name,
+            rro_account_number,
+            rro_name,
+            payment_date,
+            gross_amount,
+            non_eligible_details_count,
+            non_eligible_details_gross_amount,
+            nts_details_count,
+            nts_details_gross_amount,
+            fas_and_cla_fas_eligible_details_count,
+            fas_and_cla_fas_eligible_details_gross_amount,
+            scenarios_details_count,
+            scenarios_details_gross_amount,
+            scenarios_details_net_amount,
+            return_to_cla_details_count,
+            return_to_cla_details_gross_amount
+        from ${schema}.v_batch_summary_report
     </select>
 </mapper>
