@@ -43,7 +43,7 @@ public class ReportController extends CommonController<IReportWidget> implements
 
     @Override
     public IStreamSource getBatchSummaryReportStreamSource() {
-        return new ByteArrayStreamSource("batch_summary_",
+        return new ByteArrayStreamSource("batch_summary_report_",
             outputStream -> reportService.writeBatchSummaryCsvReport(outputStream));
     }
 

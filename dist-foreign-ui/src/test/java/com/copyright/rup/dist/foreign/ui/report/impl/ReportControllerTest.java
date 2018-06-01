@@ -60,9 +60,9 @@ public class ReportControllerTest {
     }
 
     @Test
-    public void testSendForResearchUsagesStreamSourceFileName() {
-        assertEquals("batch_summary_" + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm") + ".csv",
-            reportController.getBatchSummaryReportStreamSource().getFileName());
+    public void testBatchSummaryStreamSourceFileName() {
+        assertEquals("batch_summary_report_" + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm") +
+            ".csv", reportController.getBatchSummaryReportStreamSource().getFileName());
     }
 
     @Test

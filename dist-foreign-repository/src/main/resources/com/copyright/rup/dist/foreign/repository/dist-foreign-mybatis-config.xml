@@ -33,6 +33,7 @@
         <typeAlias alias="RightsholderDiscrepancy" type="com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy"/>
         <typeAlias alias="UndistributedLiabilitiesReportDto" type="com.copyright.rup.dist.foreign.domain.report.UndistributedLiabilitiesReportDto"/>
         <typeAlias alias="ResearchStatusReportDto" type="com.copyright.rup.dist.foreign.domain.report.ResearchStatusReportDto"/>
+        <typeAlias alias="BatchSummaryReportDto" type="com.copyright.rup.dist.foreign.domain.report.BatchSummaryReportDto"/>
     </typeAliases>
 
     <typeHandlers>

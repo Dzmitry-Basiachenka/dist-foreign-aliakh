@@ -1493,13 +1493,82 @@ databaseChangeLog {
                             case when (u.status_ind = 'SENT_FOR_RA') then sum(u.gross_amount) else 0 end sent_for_ra,
                             case when (u.status_ind = 'RH_NOT_FOUND') then count(1) else 0 end rh_not_found_count,
                             case when (u.status_ind = 'RH_NOT_FOUND') then sum(u.gross_amount) else 0 end rh_not_found     
-                        from apps.df_usage u
-                        left join apps.df_usage_batch b on u.df_usage_batch_uid = b.df_usage_batch_uid 
-                        left join apps.df_rightsholder rh on b.rro_account_number = rh.rh_account_number  
+                        from ${dbAppsSchema}.df_usage u
+                        left join ${dbAppsSchema}.df_usage_batch b on u.df_usage_batch_uid = b.df_usage_batch_uid 
+                        left join ${dbAppsSchema}.df_rightsholder rh on b.rro_account_number = rh.rh_account_number  
                         where status_ind in ('WORK_NOT_FOUND', 'WORK_RESEARCH', 'SENT_FOR_RA','RH_NOT_FOUND')
                         group by b.name, rro_account_number, rh.name, payment_date, b.gross_amount, u.status_ind) nestedReport
                 group by nestedReport.batch_name, nestedReport.rro_account_number, nestedReport.rro_name, nestedReport.payment_date, nestedReport.gross_amount
                 order by nestedReport.payment_date desc, nestedReport.batch_name"""
+        }
+
+        rollback {
+            //automatic rollback
+        }
+    }
+
+    changeSet(id: '2018-06-01-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
+        comment("B-30192 FDA: Batch Summary Report (DVPR Replacement): implement view to generate report")
+
+        createView(viewName: 'v_batch_summary_report', schemaName: dbAppsSchema) {
+            """select
+                    rro.name rro_name,
+                    rro.rh_account_number rro_account_number,
+                    report.batch_name,
+                    report.payment_date,
+                    report.gross_amount,
+                    report.non_eligible_details_count,
+                    report.non_eligible_details_gross_amount,
+                    report.nts_details_count,
+                    report.nts_details_gross_amount,
+                    report.fas_and_cla_fas_eligible_details_count,
+                    report.fas_and_cla_fas_eligible_details_gross_amount,
+                    report.scenarios_details_count,
+                    report.scenarios_details_gross_amount,
+                    report.scenarios_details_net_amount,
+                    report.return_to_cla_details_count,
+                    report.return_to_cla_details_gross_amount
+                from 
+                    (select
+                        nested_report.rro_account_number,
+                        nested_report.batch_name as batch_name,
+                        nested_report.payment_date,
+                        nested_report.gross_amount,
+                        sum(nested_report.non_eligible_details_count) non_eligible_details_count,
+                        sum(nested_report.non_eligible_details_gross_amount) non_eligible_details_gross_amount,
+                        sum(nested_report.nts_details_count) nts_details_count,
+                        sum(nested_report.nts_details_gross_amount) nts_details_gross_amount,
+                        sum(nested_report.fas_and_cla_fas_eligible_details_count) fas_and_cla_fas_eligible_details_count,
+                        sum(nested_report.fas_and_cla_fas_eligible_details_gross_amount) fas_and_cla_fas_eligible_details_gross_amount,
+                        sum(nested_report.scenarios_details_count) scenarios_details_count,
+                        sum(nested_report.scenarios_details_gross_amount) scenarios_details_gross_amount,
+                        sum(nested_report.scenarios_details_net_amount) scenarios_details_net_amount,
+                        sum(nested_report.return_to_cla_details_count) return_to_cla_details_count,
+                        sum(nested_report.return_to_cla_details_gross_amount) return_to_cla_details_gross_amount
+                    from
+                        (select 
+                            b.rro_account_number,
+                            b.name as batch_name,
+                            b.payment_date,
+                            b.gross_amount,
+                            case when (u.status_ind != 'ELIGIBLE' and u.status_ind != 'LOCKED') then count(1) else 0 end as non_eligible_details_count,
+                            case when (u.status_ind != 'ELIGIBLE' and u.status_ind != 'LOCKED') then sum(u.gross_amount) else 0 end as non_eligible_details_gross_amount,
+                            case when (u.product_family = 'NTS') then count(1) else 0 end as  nts_details_count,
+                            case when (u.product_family = 'NTS') then sum(u.gross_amount) else 0 end as nts_details_gross_amount,
+                            case when (u.status_ind = 'ELIGIBLE' and (u.product_family = 'FAS' or u.product_family = 'CLA_FAS')) then count(1) else 0 end as  fas_and_cla_fas_eligible_details_count,
+                            case when (u.status_ind = 'ELIGIBLE' and (u.product_family = 'FAS' or u.product_family = 'CLA_FAS')) then sum(u.gross_amount) else 0 end as  fas_and_cla_fas_eligible_details_gross_amount,
+                            case when (u.status_ind = 'LOCKED') then count(1) else 0 end as scenarios_details_count,
+                            case when (u.status_ind = 'LOCKED') then sum(u.gross_amount) else 0 end as scenarios_details_gross_amount,
+                            case when (u.status_ind = 'LOCKED') then sum(u.net_amount) else 0 end as scenarios_details_net_amount,
+                            case when (u.product_family = 'CLA_FAS' and u.payee_account_number = 2000017000) then count(1) else 0 end return_to_cla_details_count,
+                            case when (u.product_family = 'CLA_FAS' and u.payee_account_number = 2000017000) then sum(u.gross_amount) else 0 end return_to_cla_details_gross_amount
+                        from ${dbAppsSchema}.df_usage u
+                        join ${dbAppsSchema}.df_usage_batch b on b.df_usage_batch_uid = u.df_usage_batch_uid
+                        group by b.rro_account_number, b.name, b.payment_date, b.gross_amount, u.status_ind, u.product_family, u.payee_account_number) as nested_report
+                    group by nested_report.rro_account_number, nested_report.batch_name, nested_report.payment_date, nested_report.gross_amount) as report
+                left join ${dbAppsSchema}.df_rightsholder rro on rro.rh_account_number = report.rro_account_number
+                where non_eligible_details_count != 0 or fas_and_cla_fas_eligible_details_count != 0 or scenarios_details_count != 0
+                order by report.payment_date desc, report.batch_name"""
         }
 
         rollback {

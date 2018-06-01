@@ -1,0 +1,20 @@
+Usage Batch Name,RRO Account Number,RRO Name,Payment Date,Gross Fund Pool in USD,# non-Eligible Details,Gross USD non-Eligible Details,# Details NTS,Gross USD NTS,# FAS/CLA_FAS Eligible Details,Gross FAS/CLA_FAS Eligible USD,# Details in-progress Scenarios,Gross USD in-progress Scenarios,Royalty Payable USD,# Details Return to CLA,Gross USD Return to CLA
+Batch with NTS,2000017010,"JAC, Japan Academic Association for Copyright Clearance, Inc.",02/12/2021,500.00,1,500.0000000000,0,0.00,0,0.00,0,0.00,0.00,0,0.00
+AT_batch-summary-report-12_BATCH,2000017000,"CLA, The Copyright Licensing Agency Ltd.",05/08/2018,600.00,2,200.0000000000,2,100.0000000000,2,100.0000000000,4,200.0000000000,174.0000000000,2,100.0000000000
+AT_batch-summary-report-9_BATCH,7000581909,"CLASS, The Copyright Licensing and Administration Society of Singapore Ltd",05/08/2018,550.00,2,200.0000000000,2,50.0000000000,2,100.0000000000,2,100.0000000000,84.0000000000,0,0.00
+AT_batch-summary-report-1_BATCH,7000581909,"CLASS, The Copyright Licensing and Administration Society of Singapore Ltd",01/04/2018,100.00,0,0.00,0,0.00,0,0.00,2,100.0000000000,84.0000000000,0,0.00
+AT_batch-summary-report-2_BATCH,7000581909,"CLASS, The Copyright Licensing and Administration Society of Singapore Ltd",01/04/2018,250.00,2,100.0000000000,2,50.0000000000,2,100.0000000000,0,0.00,0.00,0,0.00
+AT_batch-summary-report-3_BATCH,7000581909,"CLASS, The Copyright Licensing and Administration Society of Singapore Ltd",01/04/2018,550.00,2,200.0000000000,0,0.00,2,50.0000000000,2,300.0000000000,204.0000000000,0,0.00
+AT_batch-summary-report-4_BATCH,7000581909,"CLASS, The Copyright Licensing and Administration Society of Singapore Ltd",01/04/2018,450.00,2,100.0000000000,2,50.0000000000,2,100.0000000000,0,0.00,0.00,0,0.00
+AT_batch-summary-report-5_BATCH,7000581909,"CLASS, The Copyright Licensing and Administration Society of Singapore Ltd",01/04/2018,450.00,2,200.0000000000,2,50.0000000000,2,100.0000000000,2,100.0000000000,84.0000000000,0,0.00
+AT_batch-summary-report-6_BATCH,7000581909,"CLASS, The Copyright Licensing and Administration Society of Singapore Ltd",01/04/2018,450.00,2,200.0000000000,2,50.0000000000,2,100.0000000000,2,100.0000000000,84.0000000000,0,0.00
+AT_batch-summary-report-7_BATCH,2000017000,"CLA, The Copyright Licensing Agency Ltd.",01/04/2018,650.00,2,200.0000000000,2,50.0000000000,2,100.0000000000,2,300.0000000000,204.0000000000,0,0.00
+AT_batch-summary-report-8_BATCH,2000017011,"DALRO, Dramatic, Artistic & Literary Rights Organisation",01/04/2018,550.00,2,200.0000000000,2,50.0000000000,2,100.0000000000,2,100.0000000000,84.0000000000,0,0.00
+Test Batch 1,2000017000,"CLA, The Copyright Licensing Agency Ltd.",01/11/2017,40300.00,0,0.00,0,0.00,2,40300.0000000000,0,0.00,0.00,0,0.00
+Test Batch 2,2000017001,CFC/ Center Fran dexploitation du droit de Copie,01/11/2017,10250.00,0,0.00,0,0.00,0,0.00,3,10249.9900000000,6969.9900000000,0,0.00
+Batch with two sent to lm usages and two not included into scenario usages,7000581909,"CLASS, The Copyright Licensing and Administration Society of Singapore Ltd",04/21/2010,400.00,2,200.0000000000,0,0.00,0,0.00,0,0.00,0.00,0,0.00
+Batch with rro which is not included into table with estimated service fee,5000581900,The Copyright Company,01/03/2010,200.00,1,100.0000000000,0,0.00,0,0.00,0,0.00,0.00,0,0.00
+Batch with usages in different statuses,7000581909,"CLASS, The Copyright Licensing and Administration Society of Singapore Ltd",01/03/2010,800.00,4,800.0000000000,0,0.00,0,0.00,0,0.00,0.00,0,0.00
+Undistributed Liabilities Reconciliation Report Batch 6,7000581909,"CLASS, The Copyright Licensing and Administration Society of Singapore Ltd",01/02/2010,60.00,0,0.00,1,20.0000000000,2,40.0000000000,0,0.00,0.00,0,0.00
+Undistributed Liabilities Reconciliation Report Batch 4,2000017000,"CLA, The Copyright Licensing Agency Ltd.",01/01/2010,500.00,0,0.00,0,0.00,2,499.9999999976,0,0.00,0.00,0,0.00
+Undistributed Liabilities Reconciliation Report Batch 5,2000017000,"CLA, The Copyright Licensing Agency Ltd.",01/01/2010,1000.00,0,0.00,0,0.00,2,1000.0000000014,0,0.00,0.00,0,0.00
