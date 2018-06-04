@@ -216,7 +216,7 @@
             <if test="filter.usageBatchesIds.size() > 0">
                 and
                 <foreach collection="filter.usageBatchesIds" item="usageBatchId" open="(" separator=" or " close=")">
-                    ub.df_usage_batch_uid = #{usageBatchId}
+                    u.df_usage_batch_uid = #{usageBatchId}
                 </foreach>
             </if>
             <if test="filter.rhAccountNumbers.size() > 0">

@@ -1575,4 +1575,24 @@ databaseChangeLog {
             //automatic rollback
         }
     }
+
+    changeSet(id: '2018-06-04-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("B-44096 FDA: Address performance issues related to export and scenario functionality: " +
+                "improve performance of usages filtering by batch")
+
+        createIndex(indexName: 'ix_df_usage_df_usage_batch_uid', schemaName: dbAppsSchema, tableName: 'df_usage',
+                tablespace: dbIndexTablespace) {
+            column(name: 'df_usage_batch_uid')
+        }
+
+        createIndex(indexName: 'ix_df_usage_archive_df_usage_batch_uid', schemaName: dbAppsSchema, tableName: 'df_usage_archive',
+                tablespace: dbIndexTablespace) {
+            column(name: 'df_usage_batch_uid')
+        }
+
+        rollback {
+            sql("drop index ${dbAppsSchema}.ix_df_usage_archive_df_usage_batch_uid")
+            sql("drop index ${dbAppsSchema}.ix_df_usage_df_usage_batch_uid")
+        }
+    }
 }
