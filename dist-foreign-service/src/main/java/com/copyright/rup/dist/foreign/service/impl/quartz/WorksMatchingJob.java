@@ -62,7 +62,8 @@ public class WorksMatchingJob extends QuartzJobBean {
                     matchedUsagesCount += foundUsages.size();
                 } catch (RupRuntimeException e) {
                     offset += batchSize;
-                    LOGGER.warn("Search works. Skipped. INDOsCount={}", usagesByStandardNumber.size());
+                    LOGGER.warn("Search works. Skipped. INDOsCount={}. Reason={}", usagesByStandardNumber.size(),
+                        e.getMessage());
                 }
             }
         }
@@ -76,7 +77,8 @@ public class WorksMatchingJob extends QuartzJobBean {
                     matchedUsagesCount += foundUsages.size();
                 } catch (RupRuntimeException e) {
                     offset += batchSize;
-                    LOGGER.warn("Search works. Skipped. TitlesCount={}", usagesByTitle.size());
+                    LOGGER.warn("Search works. Skipped. TitlesCount={}. Reason={}", usagesByTitle.size(),
+                        e.getMessage());
                 }
             }
         }

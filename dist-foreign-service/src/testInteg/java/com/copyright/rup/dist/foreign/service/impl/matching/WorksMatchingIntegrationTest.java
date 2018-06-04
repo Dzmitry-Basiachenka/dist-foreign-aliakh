@@ -89,6 +89,8 @@ public class WorksMatchingIntegrationTest {
             TITLE_2, null, "Wr Wrk Inst was not found by standard number 10.1353/PGN.1999.0081");
         verifyUsage("792252e1-9182-4e1a-a6dc-2b27b0e92c18", null, UsageStatusEnum.WORK_NOT_FOUND, FAS_PRODUCT_FAMILY,
             TITLE_3, null, "Wr Wrk Inst was not found by standard number 978-0-08-027365-5");
+        verifyUsage("d6e01eb0-45d8-441a-81e6-9c5cf5a44b0d", null, UsageStatusEnum.WORK_NOT_FOUND, "CLA_FAS", TITLE_5,
+            null, "Wr Wrk Inst was not found by standard number 978-0-08-027365-5");
         verifyUsage("032aaf56-61d1-4656-abe1-de2889f1214e", null, UsageStatusEnum.WORK_NOT_FOUND, FAS_PRODUCT_FAMILY,
             TITLE_4, null, "Wr Wrk Inst was not found by standard number ETOCRN066582498");
         verifyUsage("58d7b428-d1fc-45b0-b190-ddef5e997f7d", null, UsageStatusEnum.WORK_NOT_FOUND, FAS_PRODUCT_FAMILY,

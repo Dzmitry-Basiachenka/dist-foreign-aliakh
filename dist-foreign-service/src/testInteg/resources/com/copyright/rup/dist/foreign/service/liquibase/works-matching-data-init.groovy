@@ -504,6 +504,34 @@ databaseChangeLog {
             column(name: 'gross_amount', value: '50.00')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: '83f9fc59-ed39-421d-b6d1-82d62a51659d')
+            column(name: 'name', value: 'CLA batch')
+            column(name: 'rro_account_number', value: '2000017000')
+            column(name: 'payment_date', value: '2018-01-11')
+            column(name: 'fiscal_year', value: '2018')
+            column(name: 'gross_amount', value: '5000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'd6e01eb0-45d8-441a-81e6-9c5cf5a44b0d')
+            column(name: 'df_usage_batch_uid', value: '83f9fc59-ed39-421d-b6d1-82d62a51659d')
+            column(name: 'work_title', value: 'Kieckhefer, Richard, Forbidden Rites')
+            column(name: 'standard_number', value: '978-0-08-027365-5')
+            column(name: 'status_ind', value: 'NEW')
+            column(name: 'product_family', value: 'CLA_FAS')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'number_of_copies', value: '10')
+            column(name: 'reported_value', value: '5000.00')
+            column(name: 'gross_amount', value: '5000.00')
+        }
+
         rollback ""
     }
 }

@@ -402,6 +402,19 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
+    public void updateToNtsEligible(List<Usage> usages) {
+        Objects.requireNonNull(usages);
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
+        parameters.put(STATUS_KEY, UsageStatusEnum.ELIGIBLE);
+        parameters.put(UPDATE_USER_KEY, StoredEntity.DEFAULT_USER);
+        parameters.put("productFamily", "NTS");
+        usages.forEach(usage -> {
+            parameters.put(USAGE_ID_KEY, usage.getId());
+            update("IUsageMapper.updateToNtsEligible", parameters);
+        });
+    }
+
+    @Override
     public void updateResearchedUsages(Collection<ResearchedUsage> researchedUsages) {
         Objects.requireNonNull(researchedUsages);
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);

@@ -75,8 +75,8 @@ public class WorkMatchingService implements IWorkMatchingService {
             .forEach(standardNumber -> {
                 List<Usage> usagesByStandardNumber =
                     usageRepository.findByStandardNumberAndStatus(standardNumber, UsageStatusEnum.NEW);
-                updateUsagesStatusAndWriteAudit(usagesByStandardNumber, UsageGroupEnum.STANDARD_NUMBER);
-                usageRepository.updateStatusAndWrWrkInstByStandardNumber(usagesByStandardNumber);
+                updateUsagesStatusAndWriteAudit(usagesByStandardNumber, UsageGroupEnum.STANDARD_NUMBER,
+                    (usagesToUpdate) -> usageRepository.updateStatusAndWrWrkInstByStandardNumber(usagesToUpdate));
             });
         LOGGER.info("Search works by IDNOs. Finished. IDNOsCount={}, WorksFound={}", usages.size(), result.size());
         return result;
@@ -103,8 +103,8 @@ public class WorkMatchingService implements IWorkMatchingService {
             .collect(Collectors.toSet())
             .forEach(title -> {
                 List<Usage> usagesByTitle = usageRepository.findByTitleAndStatus(title, UsageStatusEnum.NEW);
-                updateUsagesStatusAndWriteAudit(usagesByTitle, UsageGroupEnum.TITLE);
-                usageRepository.updateStatusAndWrWrkInstByTitle(usagesByTitle);
+                updateUsagesStatusAndWriteAudit(usagesByTitle, UsageGroupEnum.TITLE,
+                    (usagesToUpdate) -> usageRepository.updateStatusAndWrWrkInstByTitle(usagesToUpdate));
             });
         LOGGER.info("Search works by Titles. Finished. TitlesCount={}, WorksFound={}", usages.size(), result.size());
         return result;
@@ -114,7 +114,8 @@ public class WorkMatchingService implements IWorkMatchingService {
     @Transactional
     public void updateStatusForUsagesWithNoStandardNumberAndTitle(List<Usage> usages) {
         usages.forEach(
-            usage -> updateUsagesStatusAndWriteAudit(Collections.singletonList(usage), UsageGroupEnum.SINGLE_USAGE));
+            usage -> updateUsagesStatusAndWriteAudit(Collections.singletonList(usage), UsageGroupEnum.SINGLE_USAGE,
+                (usagesToUpdate) -> usageRepository.updateStatusAndWrWrkInstByTitle(usagesToUpdate)));
         usageRepository.update(usages);
     }
 
@@ -169,7 +170,8 @@ public class WorkMatchingService implements IWorkMatchingService {
         }
     }
 
-    private void updateUsagesStatusAndWriteAudit(List<Usage> usages, UsageGroupEnum usageGroup) {
+    private void updateUsagesStatusAndWriteAudit(List<Usage> usages, UsageGroupEnum usageGroup,
+                                                 IUpdateFunction function) {
         if (GROSS_AMOUNT_LIMIT.compareTo(sumUsagesGrossAmount(usages)) > 0) {
             usages.forEach(usage -> {
                 usage.setStatus(UsageStatusEnum.ELIGIBLE);
@@ -177,6 +179,7 @@ public class WorkMatchingService implements IWorkMatchingService {
                 auditService.logAction(usage.getId(), UsageActionTypeEnum.ELIGIBLE_FOR_NTS,
                     usageGroup.getNtsEligibleReason());
             });
+            usageRepository.updateToNtsEligible(usages);
         } else {
             usages.forEach(usage -> {
                 if (Objects.isNull(usage.getStandardNumber()) && Objects.isNull(usage.getWorkTitle())) {
@@ -192,6 +195,7 @@ public class WorkMatchingService implements IWorkMatchingService {
                         usageGroup.getWorkNotFoundReasonFunction().apply(usage));
                 }
             });
+            function.update(usages);
         }
     }
 
@@ -259,5 +263,10 @@ public class WorkMatchingService implements IWorkMatchingService {
          * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#WORK_NOT_FOUND} for {@link Usage}.
          */
         abstract Function<Usage, String> getWorkNotFoundReasonFunction();
+    }
+
+    @FunctionalInterface
+    private interface IUpdateFunction {
+        void update(List<Usage> usages);
     }
 }
