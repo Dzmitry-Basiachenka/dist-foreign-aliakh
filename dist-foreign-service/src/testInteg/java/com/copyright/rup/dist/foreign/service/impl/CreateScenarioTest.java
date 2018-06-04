@@ -91,8 +91,8 @@ public class CreateScenarioTest {
         testBuilder
             .withFilter(buildUsageFilter("ce0ca941-1e16-4a3b-a991-b596189b4f22", "CLA_FAS"))
             .expectPreferences("prm/not_found_response.json")
-            .expectRollups("prm/cla_rollups_response.json", "b0e6b1f6-89e9-4767-b143-db0f49f32769",
-                "624dcf73-a30f-4381-b6aa-c86d17198bd5", "60080587-a225-439c-81af-f016cb33aeac",
+            .expectRollups("prm/cla_rollups_response.json", "624dcf73-a30f-4381-b6aa-c86d17198bd5",
+                "b0e6b1f6-89e9-4767-b143-db0f49f32769", "60080587-a225-439c-81af-f016cb33aeac",
                 "37338ed1-7083-45e2-a96b-5872a7de3a98", "f366285a-ce46-48b0-96ee-cd35d62fb243")
             .expectUsages(Lists.newArrayList(
                 buildUsageForCreatedScenario(2000133267L, 2000017000L, "897.204", "8074.836"),
