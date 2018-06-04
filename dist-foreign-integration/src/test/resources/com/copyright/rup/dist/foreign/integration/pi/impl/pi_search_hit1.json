@@ -1,52 +1,30 @@
 {
   "catalogRank": 99,
-  "mainTitle": "Forbidden rites",
-  "fullTitle": "Forbidden rites : a necromancer's manual of the fifteenth century",
-  "mainIdno": "978-0-271-01750-1",
-  "mainIdnoType": "VALISBN13",
-  "mainLang": "English",
-  "mainPubCountry": "United States of America",
-  "mainPublisher": "PENNSYLVANIA STATE UNIVERSITY PRESS",
+  "mainTitle": "Annuaire de la communication en Rhône-Alpes",
+  "fullTitle": "Annuaire de la communication en Rhône-Alpes",
+  "mainIdno": "1140-9126",
+  "mainIdnoType": "VALISSN",
+  "mainLang": "French",
+  "mainPubCountry": "France",
+  "mainPublisher": "Intermédia",
   "pubCountry": [
-    "United States of America"
-  ],
-  "author": [
-    "KIECKHEFER, RICHARD"
+    "France"
   ],
   "publisher": [
-    "PENNSYLVANIA STATE UNIVERSITY PRESS"
+    "Intermédia"
   ],
   "language": [
-    "English"
+    "French"
   ],
   "title": [
-    "FORBIDDEN RITES : A NECROMANCER'S MANUAL OF THE FIFTEENTH CENTURY",
-    "Forbidden rites : a necromancer's manual of the fifteenth century",
-    "Forbidden rites",
-    "a necromancer's manual of the fifteenth century",
-    "MAGIC IN HISTORY"
+    "Annuaire de la communication en Rhône-Alpes"
   ],
   "idno": [
-    "978-0-271-01750-1",
-    "0-271-01750-3",
-    "97026745"
+    "1140-9126"
   ],
-  "isbn10": "0-271-01750-3",
-  "isbn13": "978-0-271-01750-1",
+  "issn": "1140-9126",
   "wrWrkInst": "123059057",
-  "subject": [
-    "REL100000",
-    "OCC028000",
-    "MAGIC_HISTORY",
-    "DEMONOLOGY",
-    "DEMONOLOGY",
-    "MAGIC_HISTORY",
-    "HRQX2",
-    "HRQX9",
-    "VXWM"
-  ],
-  "pubType": "Book",
-  "dataSource": "eeb701e5-7b36-46a5-9df4-704ab6ea1bb1",
-  "startDate": "19980101",
-  "routingId": 9
+  "pubType": "Journal",
+  "dataSource": "ace60dcb-8f12-4959-8033-236c2e9b3145",
+  "routingId": 3
 }

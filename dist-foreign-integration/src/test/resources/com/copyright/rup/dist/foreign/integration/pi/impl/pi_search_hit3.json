@@ -1,37 +1,52 @@
 {
   "catalogRank": 99,
-  "mainTitle": "Kieckhefer, Richard, Forbidden Rites: A Necromancer's Manual of the Fifteenth Century",
-  "fullTitle": "Kieckhefer, Richard, Forbidden Rites: A Necromancer's Manual of the Fifteenth Century",
-  "mainIdno": "ETOCRN066582498",
-  "mainIdnoType": "BLID",
+  "mainTitle": "Forbidden rites",
+  "fullTitle": "Forbidden rites : a necromancer's manual of the fifteenth century",
+  "mainIdno": "978-0-08-027365-5",
+  "mainIdnoType": "VALISBN13",
   "mainLang": "English",
-  "mainPublisher": "University of Sydney",
+  "mainPubCountry": "United States of America",
+  "mainPublisher": "PENNSYLVANIA STATE UNIVERSITY PRESS",
+  "pubCountry": [
+    "United States of America"
+  ],
   "author": [
-    "Jack, S. M."
+    "KIECKHEFER, RICHARD"
   ],
   "publisher": [
-    "University of Sydney"
+    "PENNSYLVANIA STATE UNIVERSITY PRESS"
   ],
   "language": [
     "English"
   ],
   "title": [
-    "Kieckhefer, Richard, Forbidden Rites: A Necromancer's Manual of the Fifteenth Century"
+    "FORBIDDEN RITES : A NECROMANCER'S MANUAL OF THE FIFTEENTH CENTURY",
+    "Forbidden rites : a necromancer's manual of the fifteenth century",
+    "Forbidden rites",
+    "a necromancer's manual of the fifteenth century",
+    "MAGIC IN HISTORY"
   ],
   "idno": [
-    "etocrn-06658-2498"
+    "978-0-271-01750-1",
+    "0-271-01750-3",
+    "97026745"
   ],
-  "blid": "ETOCRN066582498",
-  "wrWrkInst": "421802499",
-  "pubType": "Article",
-  "dataSource": "eb7f588e-6ab0-4da3-b3db-f801ced9bb7a",
-  "startDate": "19990101",
-  "volume": "16",
-  "issue": "2",
-  "startPage": "264",
-  "endPage": "266",
-  "hostIdno": [
-    "03136221"
+  "isbn10": "0-271-01750-3",
+  "isbn13": "978-0-08-027365-5",
+  "wrWrkInst": "156427025",
+  "subject": [
+    "REL100000",
+    "OCC028000",
+    "MAGIC_HISTORY",
+    "DEMONOLOGY",
+    "DEMONOLOGY",
+    "MAGIC_HISTORY",
+    "HRQX2",
+    "HRQX9",
+    "VXWM"
   ],
-  "routingId": 4
+  "pubType": "Book",
+  "dataSource": "eeb701e5-7b36-46a5-9df4-704ab6ea1bb1",
+  "startDate": "19980101",
+  "routingId": 9
 }
