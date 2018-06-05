@@ -25,7 +25,6 @@
     <property name="logLevelMatching" value="${DIST_FOREIGN_MATCHING_LOG_LEVEL:-${logLevel}}"/>
     <property name="logLevelCrmReporting" value="${DIST_FOREIGN_CRM_REPORTING_LOG_LEVEL:-${logLevel}}"/>
     <property name="logLevelService" value="${DIST_FOREIGN_SERVICE_LOG_LEVEL:-${logLevel}}"/>
-    <property name="logLevelIntegrationCommon" value="${DIST_COMMON_INTEGRATION_LOG_LEVEL:-${logLevel}}"/>
 
     <logger name="com.copyright.rup.dist" level="${logLevel}" additivity="false">
         <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
