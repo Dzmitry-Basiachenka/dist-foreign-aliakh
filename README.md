@@ -1,3 +1,19 @@
+2.1.43
+-
+* B-30192 FDA: Batch Summary Report (DVPR Replacement): Implement view to retrieve data for report
+* B-30192 FDA: Batch Summary Report (DVPR Replacement): make changes on UI and add service logic and handler to generate report
+* B-43639 FDA: Research Status Report: implement handler and repository logic to generate report
+* B-43639 FDA: Research Status Report: implement view to store report data, implement ui part and integration test to cover report generation
+* B-43660 Tech Debt: FDA: clean-up release notes and remove revving up build version and release notes related commits
+* B-43661 Tech Debt: FDA: Refine JobRunnerRestFilter Rest API to send job status in response body
+* B-43661 Tech Debt: FDA: Refine export functionality to adjust file name of exported file
+* B-43661 Tech Debt: FDA: add expectations of rest template error handler modifying to RmsRightAssignmentServiceTest test
+* B-43661 Tech Debt: FDA: replace topic with virtual topic
+* B-43661 Tech Debt: FDA: update dist-common version to 14.+
+* B-43661 Tech Debt: FDA: update rup-postgres plugins common scripts version to 2.1.0
+* B-44096 FDA: Address performance issues related to export and scenario functionality: improve performance of usages filtering by batch
+* RDSC-595 FDA: PI job: Product family is set incorrectly for details with the same Standard Number but with different product family
+
 2.1.42
 -
 * B-43661 Tech Debt: FDA: update dependencies to use rup-plugin 5.+
