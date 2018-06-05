@@ -1,7 +1,9 @@
 package com.copyright.rup.dist.foreign.integration.rms.impl;
 
+import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
@@ -21,6 +23,7 @@ import org.powermock.reflect.Whitebox;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -52,6 +55,8 @@ public class RmsRightsAssignmentServiceTest {
 
     @Test
     public void testSendForRightsAssignment() throws IOException {
+        restTemplate.setErrorHandler(anyObject(DefaultResponseErrorHandler.class));
+        expectLastCall().once();
         expect(restTemplate.postForObject(RIGHTS_ASSIGNMENT_URL, createHttpRightsAssigmentRequest(), String.class))
             .andReturn(TestUtils.fileToString(RmsRightsAssignmentServiceTest.class,
                 "rms_rights_assignment_response.json")).once();
@@ -64,6 +69,8 @@ public class RmsRightsAssignmentServiceTest {
 
     @Test
     public void testSendForRightsAssignmentWorksCountMismatch() throws IOException {
+        restTemplate.setErrorHandler(anyObject(DefaultResponseErrorHandler.class));
+        expectLastCall().once();
         expect(restTemplate.postForObject(RIGHTS_ASSIGNMENT_URL, createHttpRightsAssigmentRequest(), String.class))
             .andReturn(TestUtils.fileToString(RmsRightsAssignmentServiceTest.class,
                 "rms_rights_assignment_response_works_count_mismatch.json")).once();
@@ -77,6 +84,8 @@ public class RmsRightsAssignmentServiceTest {
 
     @Test
     public void testSendForRightsAssignmentNoJobId() throws IOException {
+        restTemplate.setErrorHandler(anyObject(DefaultResponseErrorHandler.class));
+        expectLastCall().once();
         expect(restTemplate.postForObject(RIGHTS_ASSIGNMENT_URL, createHttpRightsAssigmentRequest(), String.class))
             .andReturn(TestUtils.fileToString(RmsRightsAssignmentServiceTest.class,
                 "rms_rights_assignment_response_no_job_id.json")).once();
