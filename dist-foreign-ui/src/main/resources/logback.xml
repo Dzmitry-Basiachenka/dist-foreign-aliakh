@@ -31,11 +31,6 @@
         <appender-ref ref="STDOUT"/>
     </logger>
 
-    <logger name="com.copyright.rup.dist.common.integration" level="${logLevelIntegrationCommon}" additivity="false">
-        <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
-        <appender-ref ref="STDOUT"/>
-    </logger>
-
     <logger name="com.copyright.rup.dist.foreign.service.impl" level="${logLevelService}" additivity="false">
         <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
         <appender-ref ref="STDOUT"/>
