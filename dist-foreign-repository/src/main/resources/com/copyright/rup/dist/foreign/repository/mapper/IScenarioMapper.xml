@@ -181,12 +181,9 @@
             and df_scenario_uid in
                 (select ua.df_scenario_uid
                  from ${schema}.df_usage_archive ua
-                 where ua.status_ind = #{usageStatus} and ua.df_usage_archive_uid in
-                     <foreach collection="usageIds" item="usageId" separator="," open="(" close=")">
-                         #{usageId}
-                     </foreach>
+                 where ua.status_ind = #{usageStatus}
                  group by ua.df_scenario_uid
-                 having count(df_usage_archive_uid) =
+                 having count(ua.df_usage_archive_uid) =
                      (select count(u.df_usage_archive_uid)
                       from ${schema}.df_usage_archive u
                       where u.df_scenario_uid = ua.df_scenario_uid))

@@ -149,8 +149,7 @@ public interface IScenarioService {
      * Updates scenario status to {@link com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum#ARCHIVED} if
      * all usages are in {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ARCHIVED} status.
      *
-     * @param paidUsageIds list of paid usages ids
      * @return count of archieved scenarios
      */
-    int archiveScenarios(List<String> paidUsageIds);
+    int archiveScenarios();
 }
