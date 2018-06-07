@@ -82,7 +82,7 @@
 
     <filter>
         <filter-name>jobRunner</filter-name>
-        <filter-class>com.copyright.rup.dist.foreign.ui.rest.JobRunnerRestFilter</filter-class>
+        <filter-class>com.copyright.rup.dist.common.web.filter.JobRunnerRestFilter</filter-class>
     </filter>
 
     <filter-mapping>
