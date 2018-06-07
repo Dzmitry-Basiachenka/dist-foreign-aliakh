@@ -68,7 +68,7 @@ public class ReportService implements IReportService {
     }
 
     @Override
-    @Profiled(tag = "report.researchStatusReport")
+    @Profiled(tag = "report.researchStatusCsvReport")
     public void writeResearchStatusCsvReport(OutputStream outputStream) {
         usageRepository.writeResearchStatusCsvReport(outputStream);
     }
