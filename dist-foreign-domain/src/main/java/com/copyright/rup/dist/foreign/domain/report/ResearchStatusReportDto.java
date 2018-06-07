@@ -27,12 +27,12 @@ public class ResearchStatusReportDto extends StoredEntity<String> {
     private Long rroAccountNumber;
     private LocalDate paymentDate;
     private int workNotFoundDetailsCount;
-    private BigDecimal workNotFoundGrossAmount = DEFAULT_AMOUNT;
     private int workResearchDetailsCount;
-    private BigDecimal workResearchGrossAmount = DEFAULT_AMOUNT;
     private int sendForRaDetailsCount;
-    private BigDecimal sendForRaGrossAmount = DEFAULT_AMOUNT;
     private int rhNotFoundDetailsCount;
+    private BigDecimal workNotFoundGrossAmount = DEFAULT_AMOUNT;
+    private BigDecimal workResearchGrossAmount = DEFAULT_AMOUNT;
+    private BigDecimal sendForRaGrossAmount = DEFAULT_AMOUNT;
     private BigDecimal rhNotFoundGrossAmount = DEFAULT_AMOUNT;
 
     public String getBatchName() {

@@ -26,17 +26,17 @@ public class BatchSummaryReportDto extends StoredEntity<String> {
     private String rroName;
     private Long rroAccountNumber;
     private LocalDate paymentDate;
-    private BigDecimal grossAmount = DEFAULT_AMOUNT;
     private int nonEligibleDetailsCount;
-    private BigDecimal nonEligibleDetailsGrossAmount = DEFAULT_AMOUNT;
     private int ntsDetailsCount;
-    private BigDecimal ntsDetailsGrossAmount = DEFAULT_AMOUNT;
     private int fasAndClaFasEligibleDetailsCount;
-    private BigDecimal fasAndClaFasEligibleDetailsGrossAmount = DEFAULT_AMOUNT;
     private int scenariosDetailsCount;
+    private int returnToClaDetailsCount;
+    private BigDecimal grossAmount = DEFAULT_AMOUNT;
+    private BigDecimal nonEligibleDetailsGrossAmount = DEFAULT_AMOUNT;
+    private BigDecimal ntsDetailsGrossAmount = DEFAULT_AMOUNT;
+    private BigDecimal fasAndClaFasEligibleDetailsGrossAmount = DEFAULT_AMOUNT;
     private BigDecimal scenariosDetailsGrossAmount = DEFAULT_AMOUNT;
     private BigDecimal scenariosDetailsNetAmount = DEFAULT_AMOUNT;
-    private int returnToClaDetailsCount;
     private BigDecimal returnToClaDetailsGrossAmount = DEFAULT_AMOUNT;
 
     public String getBatchName() {

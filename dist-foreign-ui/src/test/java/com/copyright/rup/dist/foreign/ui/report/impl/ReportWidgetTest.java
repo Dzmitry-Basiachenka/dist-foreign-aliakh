@@ -60,16 +60,16 @@ public class ReportWidgetTest {
 
     @Before
     public void setUp() {
-        reportWidget = new ReportWidget();
-        reportController = createMock(IReportController.class);
-        reportWidget.setController(reportController);
         mockStatic(Page.class);
         mockStatic(Windows.class);
         mockStatic(VaadinSession.class);
         mockStatic(ResourceReference.class);
+        reportController = createMock(IReportController.class);
         vaadinSession = createMock(VaadinSession.class);
         resourceReference = createMock(ResourceReference.class);
         page = createMock(Page.class);
+        reportWidget = new ReportWidget();
+        reportWidget.setController(reportController);
     }
 
     @Test
@@ -120,10 +120,11 @@ public class ReportWidgetTest {
         expect(controller.initWidget()).andReturn(widget).once();
         Windows.showModalWindow(widget);
         expectLastCall().once();
-        widget.setCaption("Batch Summary Report");
+        widget.setCaption("Undistributes Liabilities Reconciliation Report");
         expectLastCall().once();
         replay(controller, widget, Windows.class);
-        Whitebox.invokeMethod(reportWidget, "openReportWindow", "Batch Summary Report", controller);
+        Whitebox.invokeMethod(reportWidget, "openReportWindow", "Undistributes Liabilities Reconciliation Report",
+            controller);
         verify(controller, widget, Windows.class);
     }
 
@@ -131,16 +132,16 @@ public class ReportWidgetTest {
     public void testReportStreamSource() {
         IStreamSource streamSource = createMock(IStreamSource.class);
         InputStream inputStream = createMock(InputStream.class);
-        expect(streamSource.getFileName()).andReturn("batch_summary_05_30_2018.csv");
-        expect(streamSource.getStream()).andReturn(inputStream);
+        expect(streamSource.getFileName()).andReturn("batch_summary_05_30_2018_12_30.csv").once();
+        expect(streamSource.getStream()).andReturn(inputStream).once();
         replay(streamSource, inputStream);
         ReportStreamSource reportStreamSource = new ReportStreamSource(streamSource);
         DownloadStream stream = reportStreamSource.getStream();
         assertEquals(0, stream.getCacheTime());
-        assertEquals("batch_summary_05_30_2018.csv", stream.getFileName());
+        assertEquals("batch_summary_05_30_2018_12_30.csv", stream.getFileName());
         assertEquals(MediaType.OCTET_STREAM.withCharset(StandardCharsets.UTF_8).toString(), stream.getContentType());
         assertEquals("private,no-cache,no-store", stream.getParameter(HttpHeaders.CACHE_CONTROL));
-        assertEquals("attachment; filename=\"batch_summary_05_30_2018.csv\"",
+        assertEquals("attachment; filename=\"batch_summary_05_30_2018_12_30.csv\"",
             stream.getParameter(HttpHeaders.CONTENT_DISPOSITION));
         verify(streamSource, inputStream);
     }

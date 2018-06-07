@@ -1092,7 +1092,6 @@ databaseChangeLog {
         }
 
         // Batch summary report
-
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '4502b24f-3146-4682-a654-7f1f6647cb7f')
             column(name: 'rh_account_number', value: '2000017011')
