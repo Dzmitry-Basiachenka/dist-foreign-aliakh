@@ -438,7 +438,7 @@ public class UsageService implements IUsageService {
                     }
                 }
             }
-            int archivedScenariosCount = scenarioService.archiveScenarios(paidUsagesIds);
+            int archivedScenariosCount = scenarioService.archiveScenarios();
             LOGGER.info(SEND_TO_CRM_FINISHED_INFO_LOG_MESSAGE, LogUtils.size(paidUsagesIds), archivedUsagesCount,
                 invalidUsageIds.size(), archivedScenariosCount);
             LOGGER.trace(SEND_TO_CRM_FINISHED_DEBUG_LOG_MESSAGE, LogUtils.size(paidUsagesIds), archivedUsagesCount,

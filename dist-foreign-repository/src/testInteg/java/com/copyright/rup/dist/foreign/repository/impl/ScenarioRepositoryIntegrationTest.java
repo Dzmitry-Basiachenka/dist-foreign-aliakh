@@ -33,7 +33,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -241,11 +240,7 @@ public class ScenarioRepositoryIntegrationTest {
 
     @Test
     public void testFindIdsForArchiving() {
-        List<String> scenariosIds =
-            scenarioRepository.findIdsForArchiving(Collections.singletonList("4a8cd820-605d-439e-8619-7f7dcaaf31e0"));
-        assertTrue(CollectionUtils.isEmpty(scenariosIds));
-        scenariosIds =
-            scenarioRepository.findIdsForArchiving(Collections.singletonList("2f235210-36af-4c7e-a5a3-25fc2e0668a2"));
+        List<String> scenariosIds = scenarioRepository.findIdsForArchiving();
         assertTrue(CollectionUtils.isNotEmpty(scenariosIds));
         assertEquals(1, scenariosIds.size());
         assertEquals("a9ee7491-d166-47cd-b36f-fe80ee7450f1", scenariosIds.get(0));

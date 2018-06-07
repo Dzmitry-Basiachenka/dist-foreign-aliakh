@@ -12,13 +12,11 @@ import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
 
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -114,15 +112,10 @@ public class ScenarioRepository extends BaseRepository implements IScenarioRepos
     }
 
     @Override
-    public List<String> findIdsForArchiving(List<String> paidUsagesIds) {
+    public List<String> findIdsForArchiving() {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
         params.put("usageStatus", UsageStatusEnum.ARCHIVED);
         params.put("scenarioStatus", ScenarioStatusEnum.SENT_TO_LM);
-        List<String> result = new ArrayList<>(paidUsagesIds.size());
-        Iterables.partition(paidUsagesIds, 32000).forEach(partition -> {
-            params.put("usageIds", partition);
-            result.addAll(selectList("IScenarioMapper.findIdsForArchiving", params));
-        });
-        return result;
+        return selectList("IScenarioMapper.findIdsForArchiving", params);
     }
 }

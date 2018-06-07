@@ -274,8 +274,8 @@ public class ScenarioService implements IScenarioService {
 
     @Override
     @Transactional
-    public int archiveScenarios(List<String> paidUsageIds) {
-        List<String> paidScenariosIds = scenarioRepository.findIdsForArchiving(paidUsageIds);
+    public int archiveScenarios() {
+        List<String> paidScenariosIds = scenarioRepository.findIdsForArchiving();
         LOGGER.info("Archive scenarios. Started. PaidScenariosCount={}", LogUtils.size(paidScenariosIds));
         int archivedCount = paidScenariosIds.size();
         if (CollectionUtils.isNotEmpty(paidScenariosIds)) {

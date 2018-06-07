@@ -114,11 +114,10 @@ public interface IScenarioRepository {
     List<RightsholderPayeePair> findRightsholdersByScenarioIdAndSourceRro(String scenarioId, Long rroAccountNumber);
 
     /**
-     * Finds scenarios ids in {@link ScenarioStatusEnum#SENT_TO_LM} containing only usages with provided ids
-     * in {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ARCHIVED} status.
+     * Finds scenarios ids in {@link ScenarioStatusEnum#SENT_TO_LM}
+     * containing only usages in {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ARCHIVED} status.
      *
-     * @param paidUsagesIds list of paid usages ids
      * @return list of found scenarios ids
      */
-    List<String> findIdsForArchiving(List<String> paidUsagesIds);
+    List<String> findIdsForArchiving();
 }
