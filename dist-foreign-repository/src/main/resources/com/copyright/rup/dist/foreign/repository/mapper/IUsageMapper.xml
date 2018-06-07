@@ -1053,7 +1053,6 @@
         select count(1)
         from (
             select distinct
-                standard_number,
                 work_title
             from ${schema}.df_usage
             where standard_number is null
