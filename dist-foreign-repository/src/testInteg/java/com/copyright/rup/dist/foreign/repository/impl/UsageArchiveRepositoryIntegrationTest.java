@@ -108,7 +108,7 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertEquals(2000017004L, usageDto.getPayeeAccountNumber(), 0);
         assertEquals(WORK_TITLE, usageDto.getWorkTitle());
         assertEquals(SYSTEM_TITLE, usageDto.getSystemTitle());
-        assertEquals(UsageStatusEnum.LOCKED, usageDto.getStatus());
+        assertEquals(UsageStatusEnum.SENT_TO_LM, usageDto.getStatus());
         assertEquals(ARTICLE, usageDto.getArticle());
         assertEquals(STANDARD_NUMBER, usageDto.getStandardNumber());
         assertEquals(PUBLISHER, usageDto.getPublisher());
@@ -262,7 +262,7 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertTrue(CollectionUtils.isNotEmpty(usages));
         assertEquals(1, usages.size());
         UsageDto usage = usages.get(0);
-        verifyPaidUsage(usage, UsageStatusEnum.LOCKED, 1000002859L, null, null, null, null, null, null);
+        verifyPaidUsage(usage, UsageStatusEnum.SENT_TO_LM, 1000002859L, null, null, null, null, null, null);
         PaidUsage paidUsage = new PaidUsage();
         Rightsholder payee = new Rightsholder();
         payee.setAccountNumber(1000005413L);
@@ -376,7 +376,7 @@ public class UsageArchiveRepositoryIntegrationTest {
         usage.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER);
         usage.getRightsholder().setName("CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil");
         usage.getPayee().setAccountNumber(2000017004L);
-        usage.setStatus(UsageStatusEnum.LOCKED);
+        usage.setStatus(UsageStatusEnum.SENT_TO_LM);
         usage.setProductFamily("FAS");
         usage.setArticle(ARTICLE);
         usage.setStandardNumber(STANDARD_NUMBER);

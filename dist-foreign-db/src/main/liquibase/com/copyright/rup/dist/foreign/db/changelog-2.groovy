@@ -1678,4 +1678,20 @@ databaseChangeLog {
             }
         }
     }
+
+    changeSet(id: '2018-06-07-00', author: 'Pavel Liakh <pliakh@copyright.com>') {
+        comment('B-43661 Tech Debt: FDA: update status from LOCKED to SENT_TO_LM for usages in df_usage_archive table')
+
+        update(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+            column(name: 'status_ind', value: 'SENT_TO_LM')
+            where "status_ind = 'LOCKED'"
+        }
+
+        rollback {
+            update(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+                column(name: 'status_ind', value: 'LOCKED')
+                where "status_ind = 'SENT_TO_LM'"
+            }
+        }
+    }
 }

@@ -98,7 +98,7 @@ databaseChangeLog {
             column(name: 'system_title', value: 'High Performance Switching and Routing')
             column(name: 'rh_account_number', value: '1000159997')
             column(name: 'payee_account_number', value: '7001555529')
-            column(name: 'status_ind', value: 'LOCKED')
+            column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'product_family', value: 'FAS')
             column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water')
             column(name: 'standard_number', value: '1008902992377654XX')
