@@ -349,11 +349,11 @@ public interface IUsageRepository {
     void update(List<Usage> usages);
 
     /**
-     * Updates status and Wr Wrk Inst for given list of {@link Usage}s based on standard numbers.
+     * Updates status and Wr Wrk Inst for given list of {@link Usage}s based on standard numbers and titles.
      *
      * @param usages list of {@link Usage}s
      */
-    void updateStatusAndWrWrkInstByStandardNumber(List<Usage> usages);
+    void updateStatusAndWrWrkInstByStandardNumberAndTitle(List<Usage> usages);
 
     /**
      * Updates status and Wr Wrk Inst for given list of {@link Usage}s based on work titles.
@@ -368,6 +368,16 @@ public interface IUsageRepository {
      * @param usages list of {@link Usage}s
      */
     void updateToNtsEligible(List<Usage> usages);
+
+    /**
+     * Finds list of {@link Usage}s by standard number, title and status.
+     *
+     * @param standardNumber standard number to find
+     * @param title          title to find
+     * @param status         instance of {@link UsageStatusEnum}
+     * @return list of {@link Usage}s
+     */
+    List<Usage> findByStandardNumberTitleAndStatus(String standardNumber, String title, UsageStatusEnum status);
 
     /**
      * Finds list of {@link Usage}s by standard number and status.

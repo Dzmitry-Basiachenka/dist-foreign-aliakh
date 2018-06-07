@@ -23,7 +23,6 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -71,23 +70,15 @@ public class PiIntegrationServiceTest {
     }
 
     @Test
-    public void testFindWorksByIdno() {
+    public void testFindWorkByIdnoAndTitle() {
         expectGetSearchResponseByIdno();
         replay(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3, searchHit4, searchHit5,
             searchHit6, searchHit7);
-        Map<String, String> idnoToTitleMap = new LinkedHashMap<>();
-        idnoToTitleMap.put("1140-9126", null);
-        idnoToTitleMap.put("0-271-01750-3", null);
-        idnoToTitleMap.put("978-0-08-027365-5", null);
-        idnoToTitleMap.put("10.1353/PGN.1999.0081", null);
-        idnoToTitleMap.put("978-0-271-01751-8", OCULAR_TITLE);
-        Map<String, Work> result = piIntegrationService.findWorksByIdnos(idnoToTitleMap);
-        assertEquals(5, result.size());
-        Work work1 = result.get("1140-9126");
-        Work work2 = result.get("0-271-01750-3");
-        Work work3 = result.get("978-0-08-027365-5");
-        Work work4 = result.get("10.1353/PGN.1999.0081");
-        Work work5 = result.get("978-0-271-01751-8");
+        Work work1 = piIntegrationService.findWorkByIdnoAndTitle("1140-9126", null);
+        Work work2 = piIntegrationService.findWorkByIdnoAndTitle("0-271-01750-3", null);
+        Work work3 = piIntegrationService.findWorkByIdnoAndTitle("978-0-08-027365-5", null);
+        Work work4 = piIntegrationService.findWorkByIdnoAndTitle("10.1353/PGN.1999.0081", null);
+        Work work5 = piIntegrationService.findWorkByIdnoAndTitle("978-0-271-01751-8", OCULAR_TITLE);
         assertEquals(123059057L, work1.getWrWrkInst(), 0);
         assertEquals(123059058L, work2.getWrWrkInst(), 0);
         assertEquals(156427025L, work3.getWrWrkInst(), 0);

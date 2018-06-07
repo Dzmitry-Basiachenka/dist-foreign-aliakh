@@ -43,7 +43,6 @@ public class WorksMatchingIntegrationTest {
         "Detail was made eligible for NTS because gross amount is less than $100";
     private static final String NTS_PRODUCT_FAMILY = "NTS";
     private static final String FAS_PRODUCT_FAMILY = "FAS";
-    private static final String MOCK_TITLE = "Mock title";
     private static final long UNIDENTIFIED_WR_WRK_INST = 123050824L;
     private static final String UNIDENTIFIED_TITLE = "Unidentified";
     private static final String TITLE_1 = "Forbidden rites";
@@ -66,13 +65,15 @@ public class WorksMatchingIntegrationTest {
     public void testExecuteInternal() {
         worksMatchingJob.executeInternal(null);
         verifyUsage("4773573f-acd7-424f-8667-2828d30b5738", 123059057L, UsageStatusEnum.WORK_FOUND, FAS_PRODUCT_FAMILY,
-            null, MOCK_TITLE, "Wr Wrk Inst 123059057 was found by standard number 978-0-271-01750-1");
+            null, "BIOCHEMISTRY (MOSCOW)", "Wr Wrk Inst 123059057 was found by standard number 978-0-271-01750-1");
         verifyUsage("c9ad10c6-eaeb-4485-b04b-d23d265f7bb5", 123059057L, UsageStatusEnum.WORK_FOUND, FAS_PRODUCT_FAMILY,
             TITLE_1, TITLE_1, "Wr Wrk Inst 123059057 was found by title \"Forbidden rites\"");
         verifyUsage("363ac3fe-20db-4db7-a967-57963c98aa05", 123059057L, UsageStatusEnum.WORK_FOUND, FAS_PRODUCT_FAMILY,
             TITLE_1, TITLE_1, "Wr Wrk Inst 123059057 was found by title \"Forbidden rites\"");
-        verifyUsage("c25a3be4-138c-47b2-b7b6-41029b063679", 123059057L, UsageStatusEnum.WORK_FOUND, FAS_PRODUCT_FAMILY,
-            TITLE_2, MOCK_TITLE, "Wr Wrk Inst 123059057 was found by standard number 978-0-271-01750-1");
+        verifyUsage("c25a3be4-138c-47b2-b7b6-41029b063679", 292891647L, UsageStatusEnum.WORK_FOUND, FAS_PRODUCT_FAMILY,
+            TITLE_2, TITLE_2, "Wr Wrk Inst 292891647 was found by standard number 1906011");
+        verifyUsage("f8e98697-8b4a-4e2d-ab82-5a141fa42792", null, UsageStatusEnum.WORK_NOT_FOUND, FAS_PRODUCT_FAMILY,
+            TITLE_3, null, "Wr Wrk Inst was not found by standard number 1906011");
         verifyUsage("0ff04fa7-245c-4663-835b-48a7e0e7d9f9", null, UsageStatusEnum.WORK_NOT_FOUND, FAS_PRODUCT_FAMILY,
             null, null, "Wr Wrk Inst was not found by standard number 0-325-01548-2");
         verifyUsage("efd7813c-e4d6-41e3-824c-b22035af31d5", null, UsageStatusEnum.WORK_NOT_FOUND, FAS_PRODUCT_FAMILY,

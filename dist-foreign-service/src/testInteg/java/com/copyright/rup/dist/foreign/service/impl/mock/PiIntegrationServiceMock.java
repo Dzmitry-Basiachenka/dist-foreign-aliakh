@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.integration.pi.impl.PiIntegrationService;
 import com.google.common.collect.ImmutableMap;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -20,8 +21,13 @@ import java.util.Set;
 public class PiIntegrationServiceMock extends PiIntegrationService {
 
     @Override
-    public Map<String, Work> findWorksByIdnos(Map<String, String> idnoToTitleMap) {
-        return ImmutableMap.of("978-0-271-01750-1", new Work(123059057L, "Mock title"));
+    public Work findWorkByIdnoAndTitle(String idno, String title) {
+        if (Objects.equals("978-0-271-01750-1", idno)) {
+            return new Work(123059057L, "BIOCHEMISTRY (MOSCOW)");
+        } else if (Objects.equals("1906011", idno) && Objects.equals("Solar Cells", title)) {
+            return new Work(292891647L, "Solar Cells");
+        }
+        return null;
     }
 
     @Override

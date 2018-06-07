@@ -1097,6 +1097,21 @@
             and standard_number = #{standardNumber}
     </select>
 
+    <select id="findByStandardNumberTitleAndStatus" resultMap="usageResultMap" parameterType="map">
+        select
+            df_usage_uid,
+            <include refid="usageColumns"/>
+        from ${schema}.df_usage
+        where status_ind = #{status}
+            and standard_number = #{standardNumber}
+            <if test="null == workTitle">
+                and work_title is null
+            </if>
+            <if test="null != workTitle">
+                and work_title = #{workTitle}
+            </if>
+    </select>
+
     <select id="findByTitleAndStatus" resultMap="usageResultMap" parameterType="map">
         select
             df_usage_uid,
@@ -1135,7 +1150,7 @@
         where df_usage_uid = #{id}
     </update>
 
-    <update id="updateStatusAndWrWrkInstByStandardNumber" parameterType="map">
+    <update id="updateStatusAndWrWrkInstByStandardNumberAndTitle" parameterType="map">
         update ${schema}.df_usage
         set
             status_ind = #{usage.status},
@@ -1144,6 +1159,12 @@
             <include refid="StoredEntityMapper.update"/>
         where standard_number = #{usage.standardNumber}
             and status_ind = #{status}
+            <if test="null == usage.workTitle">
+                and work_title is null
+            </if>
+            <if test="null != usage.workTitle">
+                and work_title = #{usage.workTitle}
+            </if>
     </update>
 
     <update id="updateStatusAndWrWrkInstByTitle" parameterType="map">

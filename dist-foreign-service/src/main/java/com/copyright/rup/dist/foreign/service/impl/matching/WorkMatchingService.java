@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -58,25 +57,21 @@ public class WorkMatchingService implements IWorkMatchingService {
         LOGGER.info("Search works by IDNOs. Started. IDNOsCount={}", usages.size());
         List<Usage> result = doMatchByIdno(usages);
         if (CollectionUtils.isNotEmpty(result)) {
-            usageRepository.updateStatusAndWrWrkInstByStandardNumber(result);
-            result.stream()
-                .map(Usage::getStandardNumber)
-                .collect(Collectors.toSet())
-                .forEach(standardNumber -> usageRepository.findByStandardNumberAndStatus(standardNumber,
-                    UsageStatusEnum.WORK_FOUND)
-                    .forEach(usage -> auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
-                        String.format("Wr Wrk Inst %s was found by standard number %s", usage.getWrWrkInst(),
-                            usage.getStandardNumber()))));
+            usageRepository.updateStatusAndWrWrkInstByStandardNumberAndTitle(result);
+            result.forEach(usage -> usageRepository.findByStandardNumberTitleAndStatus(usage.getStandardNumber(),
+                usage.getWorkTitle(), UsageStatusEnum.WORK_FOUND)
+                .forEach(updatedUsage -> auditService.logAction(updatedUsage.getId(), UsageActionTypeEnum.WORK_FOUND,
+                    String.format("Wr Wrk Inst %s was found by standard number %s", updatedUsage.getWrWrkInst(),
+                        updatedUsage.getStandardNumber()))));
         }
         usages.stream()
             .filter(usage -> Objects.equals(UsageStatusEnum.NEW, usage.getStatus()))
-            .map(Usage::getStandardNumber)
-            .collect(Collectors.toSet())
-            .forEach(standardNumber -> {
+            .forEach(usage -> {
                 List<Usage> usagesByStandardNumber =
-                    usageRepository.findByStandardNumberAndStatus(standardNumber, UsageStatusEnum.NEW);
+                    usageRepository.findByStandardNumberAndStatus(usage.getStandardNumber(), UsageStatusEnum.NEW);
                 updateUsagesStatusAndWriteAudit(usagesByStandardNumber, UsageGroupEnum.STANDARD_NUMBER,
-                    (usagesToUpdate) -> usageRepository.updateStatusAndWrWrkInstByStandardNumber(usagesToUpdate));
+                    (usagesToUpdate) -> usageRepository.updateStatusAndWrWrkInstByStandardNumberAndTitle(
+                        usagesToUpdate));
             });
         LOGGER.info("Search works by IDNOs. Finished. IDNOsCount={}, WorksFound={}", usages.size(), result.size());
         return result;
@@ -129,11 +124,16 @@ public class WorkMatchingService implements IWorkMatchingService {
     }
 
     private List<Usage> doMatchByIdno(List<Usage> usages) {
-        Map<String, String> idnoToTitleMap = new HashMap<>();
-        usages.forEach(usage -> idnoToTitleMap.put(usage.getStandardNumber(), usage.getWorkTitle()));
-        return MapUtils.isNotEmpty(idnoToTitleMap)
-            ? computeResultByIdnos(usages, piIntegrationService.findWorksByIdnos(idnoToTitleMap))
-            : Collections.emptyList();
+        List<Usage> result = new ArrayList<>();
+        usages.forEach(usage -> {
+            Work work = piIntegrationService.findWorkByIdnoAndTitle(usage.getStandardNumber(), usage.getWorkTitle());
+            if (Objects.nonNull(work)) {
+                usage.setWrWrkInst(work.getWrWrkInst());
+                usage.setSystemTitle(work.getMainTitle());
+                addWorkFoundUsageToResult(result, usage);
+            }
+        });
+        return result;
     }
 
     private List<Usage> computeResultByTitles(List<Usage> usages, Map<String, Long> titleToWrWrkInstMap) {
@@ -143,21 +143,6 @@ public class WorkMatchingService implements IWorkMatchingService {
                 usage.setWrWrkInst(titleToWrWrkInstMap.get(usage.getWorkTitle()));
                 usage.setSystemTitle(usage.getWorkTitle());
                 addWorkFoundUsageToResult(result, usage);
-            });
-        }
-        return result;
-    }
-
-    private List<Usage> computeResultByIdnos(List<Usage> usages, Map<String, Work> idnoToWorkMap) {
-        List<Usage> result = new ArrayList<>(idnoToWorkMap.size());
-        if (MapUtils.isNotEmpty(idnoToWorkMap)) {
-            usages.forEach(usage -> {
-                Work work = idnoToWorkMap.get(usage.getStandardNumber());
-                if (Objects.nonNull(work)) {
-                    usage.setWrWrkInst(work.getWrWrkInst());
-                    usage.setSystemTitle(work.getMainTitle());
-                    addWorkFoundUsageToResult(result, usage);
-                }
             });
         }
         return result;

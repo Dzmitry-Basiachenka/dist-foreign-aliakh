@@ -58,8 +58,20 @@ public class PiIntegrationService implements IPiIntegrationService {
     private RupEsApi rupEsApi;
 
     @Override
-    public Map<String, Work> findWorksByIdnos(Map<String, String> idnoToTitleMap) {
-        return matchByIdno(idnoToTitleMap);
+    public Work findWorkByIdnoAndTitle(String idno, String title) {
+        Work result = matchByStandardNumber(idno, "issn");
+        if (Objects.nonNull(result)) {
+            return result;
+        }
+        result = matchByStandardNumber(idno, "isbn10");
+        if (Objects.nonNull(result)) {
+            return result;
+        }
+        result = matchByStandardNumber(idno, "isbn13");
+        if (Objects.nonNull(result)) {
+            return result;
+        }
+        return matchByIdnoAndTitle(idno, title);
     }
 
     @Override
@@ -86,63 +98,59 @@ public class PiIntegrationService implements IPiIntegrationService {
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
-    private Map<String, Work> matchByIdno(Map<String, String> idnoToTitleMap) {
-        Map<String, Work> idnoToWorkMap = new HashMap<>();
-        idnoToTitleMap.forEach((idno, title) -> {
-            if (!matchAndPutByStandardNumber(idnoToWorkMap, idno, title, "issn")
-                && !matchAndPutByStandardNumber(idnoToWorkMap, idno, title, "isbn10")
-                && !matchAndPutByStandardNumber(idnoToWorkMap, idno, title, "isbn13")) {
-                List<RupSearchHit> searchHits = doSearch("idno", idno).getResults().getHits();
-                if (CollectionUtils.isNotEmpty(searchHits)) {
-                    if (EXPECTED_SEARCH_HITS_COUNT == searchHits.size()) {
-                        parseAndPutWorkFromSearchHit(searchHits, idno, title, "IDNO", idnoToWorkMap);
-                    } else {
-                        List<RupSearchHit> filteredByTitleHits = searchHits.stream().filter(searchHit -> {
-                            List<Object> mainTitles = searchHit.getFields().get("mainTitle");
-                            return CollectionUtils.isNotEmpty(mainTitles) && StringUtils.equalsIgnoreCase(title,
-                                mainTitles.iterator().next().toString());
-                        }).collect(Collectors.toList());
-                        if (EXPECTED_SEARCH_HITS_COUNT == filteredByTitleHits.size()) {
-                            parseAndPutWorkFromSearchHit(filteredByTitleHits, idno, title, "IDNO and Title",
-                                idnoToWorkMap);
-                        } else {
-                            LOGGER.debug("Search works. By IDNO and Title. IDNO={}, Title={}, " +
-                                "WrWrkInst=MultiResults, Hits={}", idno, title, filteredByTitleHits.stream()
-                                .map(RupSearchHit::getSource)
-                                .collect(Collectors.joining(";")));
-                        }
+    private Work matchByIdnoAndTitle(String idno, String title) {
+        List<RupSearchHit> searchHits = doSearch("idno", idno).getResults().getHits();
+        if (CollectionUtils.isNotEmpty(searchHits)) {
+            if (EXPECTED_SEARCH_HITS_COUNT == searchHits.size()) {
+                return parseWorkFromSearchHit(searchHits, idno, "IDNO");
+            } else {
+                List<RupSearchHit> filteredByTitleHits = searchHits.stream().filter(searchHit -> {
+                    List<Object> mainTitles = searchHit.getFields().get("mainTitle");
+                    return CollectionUtils.isNotEmpty(mainTitles) && StringUtils.equalsIgnoreCase(title,
+                        mainTitles.iterator().next().toString());
+                }).collect(Collectors.toList());
+                if (EXPECTED_SEARCH_HITS_COUNT == filteredByTitleHits.size()) {
+                    try {
+                        String source = filteredByTitleHits.get(0).getSource();
+                        Work result = mapper.readValue(source, Work.class);
+                        LOGGER.trace("Search works. By IDNO and Title. IDNO={}, Title={}, WrWrkInst={}, Hit={}", idno,
+                            title, result.getWrWrkInst(), source);
+                        return result;
+                    } catch (IOException e) {
+                        throw new RupRuntimeException(
+                            String.format("Search works. Failed. IDNO=%s, Title=%s, Reason=Could not read response",
+                                idno, title), e);
                     }
                 } else {
-                    LOGGER.debug("Search works. By IDNO. IDNO={}, Title={}, WrWrkInst=Not Found, Hits=Empty", idno,
-                        title);
+                    LOGGER.debug("Search works. By IDNO and Title. IDNO={}, Title={}, WrWrkInst=MultiResults, Hits={}",
+                        idno, title,
+                        filteredByTitleHits.stream().map(RupSearchHit::getSource).collect(Collectors.joining(";")));
                 }
             }
-        });
-        return idnoToWorkMap;
+        } else {
+            LOGGER.debug("Search works. By IDNO. IDNO={}, WrWrkInst=Not Found, Hits=Empty", idno);
+        }
+        return null;
     }
 
-    private boolean matchAndPutByStandardNumber(Map<String, Work> idnoToWorkMap, String idno, String title,
-                                                String parameter) {
+    private Work matchByStandardNumber(String idno, String parameter) {
         List<RupSearchHit> searchHits = doSearch(parameter, idno).getResults().getHits();
         if (EXPECTED_SEARCH_HITS_COUNT == searchHits.size()) {
-            parseAndPutWorkFromSearchHit(searchHits, idno, title, parameter, idnoToWorkMap);
-            return true;
+            return parseWorkFromSearchHit(searchHits, idno, parameter);
         }
-        return false;
+        return null;
     }
 
-    private void parseAndPutWorkFromSearchHit(List<RupSearchHit> searchHits, String idno, String title,
-                                              String parameter, Map<String, Work> idnoToWorkMap) {
+    private Work parseWorkFromSearchHit(List<RupSearchHit> searchHits, String idno, String parameter) {
         try {
             String source = searchHits.get(0).getSource();
-            Work work = mapper.readValue(source, Work.class);
-            idnoToWorkMap.put(idno, work);
-            LOGGER.trace("Search works. By {}. IDNO={}, Title={}, WrWrkInst={}, Hit={}", parameter, idno, title,
-                work.getWrWrkInst(), source);
+            Work result = mapper.readValue(source, Work.class);
+            LOGGER.trace("Search works. By {}. IDNO={}, WrWrkInst={}, Hit={}", parameter, idno, result.getWrWrkInst(),
+                source);
+            return result;
         } catch (IOException e) {
             throw new RupRuntimeException(
-                String.format("Search works. Failed. IDNO=%s, Title=%s, Reason=Could not read response", idno, title),
-                e);
+                String.format("Search works. Failed. IDNO=%s, Reason=Could not read response", idno), e);
         }
     }
 
