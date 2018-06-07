@@ -1,3 +1,12 @@
+2.1.44
+-
+* B-30192 FDA: Batch Summary Report (DVPR Replacement): make changes based on comments in CR-DIST-FOREIGN-62
+* B-43661 Tech Debt: FDA: Add date-time info to exported scenario usages file name
+* B-43661 Tech Debt: FDA: remove unused com.copyright.rup.dist.common.integration logger from logback configuration
+* B-43661 Tech Debt: FDA: remove unused logLevelIntegrationCommon log level variable from logback configuration
+* B-43863 FDA: Modify matching to target IDNO Type: adjust service logic to match by IDNO Types in case of multiple matching results
+* RDSC-597 FDA: Scenario status doesn't changed to ARCHIVED if details were sent to CRM in different time
+
 2.1.43
 -
 * B-30192 FDA: Batch Summary Report (DVPR Replacement): Implement view to retrieve data for report
