@@ -20,6 +20,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
@@ -48,6 +49,7 @@ import org.powermock.reflect.Whitebox;
 
 import java.io.PipedOutputStream;
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -169,7 +171,8 @@ public class ScenarioControllerTest {
 
     @Test
     public void testGetScenarioUsagesExportFileName() {
-        assertEquals("Scenario_name.csv", controller.getExportScenarioUsagesStreamSource().getFileName());
+        assertEquals("Scenario_name_" + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm") + ".csv",
+            controller.getExportScenarioUsagesStreamSource().getFileName());
     }
 
     @Test

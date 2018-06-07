@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
-import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
@@ -13,6 +12,7 @@ import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderDiscrepancyService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.ui.common.ExportStreamSource;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IDrillDownByRightsholderController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioController;
@@ -20,7 +20,6 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioWidget;
 import com.copyright.rup.dist.foreign.ui.scenario.impl.ExcludeRightsholdersWindow.ExcludeUsagesEvent;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
-import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import com.vaadin.data.provider.QuerySortOrder;
@@ -34,13 +33,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * Controller class for {@link ScenarioWidget}.
@@ -96,7 +89,8 @@ public class ScenarioController extends CommonController<IScenarioWidget> implem
 
     @Override
     public IStreamSource getExportScenarioUsagesStreamSource() {
-        return new ExportScenarioUsagesStreamSource(reportService, getScenario());
+        return new ExportStreamSource(scenario.getName() + "_",
+            pipedStream -> reportService.writeScenarioUsagesCsvReport(scenario, pipedStream));
     }
 
     @Override
@@ -153,35 +147,5 @@ public class ScenarioController extends CommonController<IScenarioWidget> implem
     @Override
     public void fireWidgetEvent(ExcludeUsagesEvent event) {
         getWidget().fireWidgetEvent(event);
-    }
-
-    private static class ExportScenarioUsagesStreamSource implements IStreamSource {
-
-        private final ExecutorService executorService = Executors.newSingleThreadExecutor();
-        private final IReportService reportService;
-        private final Scenario scenario;
-
-        ExportScenarioUsagesStreamSource(IReportService reportService, Scenario scenario) {
-            this.reportService = reportService;
-            this.scenario = scenario;
-        }
-
-        @Override
-        public InputStream getStream() {
-            try {
-                PipedOutputStream pipedOutputStream = new PipedOutputStream();
-                PipedInputStream pipedInputStream = new PipedInputStream(pipedOutputStream);
-                executorService.execute(
-                    () -> reportService.writeScenarioUsagesCsvReport(scenario, pipedOutputStream));
-                return pipedInputStream;
-            } catch (IOException e) {
-                throw new RupRuntimeException(e);
-            }
-        }
-
-        @Override
-        public String getFileName() {
-            return VaadinUtils.encodeAndBuildFileName(scenario.getName(), "csv");
-        }
     }
 }
