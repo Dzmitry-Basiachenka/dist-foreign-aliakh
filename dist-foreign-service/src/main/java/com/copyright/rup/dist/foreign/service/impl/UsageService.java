@@ -264,7 +264,10 @@ public class UsageService implements IUsageService {
         LOGGER.info("Move details to archive. Started. {}", ForeignLogUtils.scenario(scenario));
         List<Usage> usages = usageRepository.findByScenarioId(scenario.getId());
         stopWatch.lap("usage.moveToArchive_findByScenarioId");
-        usages.forEach(usageArchiveRepository::insert);
+        usages.forEach(usage -> {
+            usage.setStatus(UsageStatusEnum.SENT_TO_LM);
+            usageArchiveRepository.insert(usage);
+        });
         stopWatch.lap("usage.moveToArchive_insertIntoArchive");
         usageRepository.deleteByScenarioId(scenario.getId());
         LOGGER.info("Move details to archive. Finished. {}, UsagesCount={}", ForeignLogUtils.scenario(scenario),

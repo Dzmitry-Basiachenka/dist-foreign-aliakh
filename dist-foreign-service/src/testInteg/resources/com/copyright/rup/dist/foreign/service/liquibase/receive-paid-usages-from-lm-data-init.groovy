@@ -30,7 +30,7 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'rh_account_number', value: '1000002859')
             column(name: 'payee_account_number', value: '1000002859')
-            column(name: 'status_ind', value: 'LOCKED')
+            column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '1008902112317555XX')
             column(name: 'publisher', value: 'IEEE')

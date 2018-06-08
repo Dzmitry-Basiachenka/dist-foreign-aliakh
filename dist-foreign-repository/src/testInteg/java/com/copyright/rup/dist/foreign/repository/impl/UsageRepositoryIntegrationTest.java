@@ -535,7 +535,7 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(1, usageRepository.findCountByUsageIdAndStatus("3ab5e80b-89c0-4d78-9675-54c7ab284450",
             UsageStatusEnum.ELIGIBLE));
         assertEquals(1, usageRepository.findCountByUsageIdAndStatus("a71a0544-128e-41c0-b6b0-cfbbea6d2182",
-            UsageStatusEnum.LOCKED));
+            UsageStatusEnum.SENT_TO_LM));
     }
 
     @Test

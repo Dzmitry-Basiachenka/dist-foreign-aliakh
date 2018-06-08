@@ -273,7 +273,7 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'rh_account_number', value: '1000002475')
             column(name: 'payee_account_number', value: '1000002475')
-            column(name: 'status_ind', value: 'LOCKED')
+            column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'product_family', value: 'FAS')
             column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '1008902112317622XX')

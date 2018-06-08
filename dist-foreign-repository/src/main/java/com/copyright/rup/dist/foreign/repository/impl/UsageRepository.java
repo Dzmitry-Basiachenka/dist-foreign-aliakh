@@ -434,8 +434,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
             parameters.put("paymentDate", Objects.requireNonNull(paymentDate));
             parameters.put("productFamilyClaFas", FdaConstants.CLA_FAS_PRODUCT_FAMILY);
             parameters.put("accountNumberClaFas", FdaConstants.CLA_ACCOUNT_NUMBER);
-            //TODO change status of usages that were sent to LM
-            parameters.put(STATUS_KEY, UsageStatusEnum.LOCKED);
+            parameters.put(STATUS_KEY, UsageStatusEnum.SENT_TO_LM);
             getTemplate().select("IUsageMapper.findUndistributedLiabilitiesReportDtos", parameters, handler);
         }
     }

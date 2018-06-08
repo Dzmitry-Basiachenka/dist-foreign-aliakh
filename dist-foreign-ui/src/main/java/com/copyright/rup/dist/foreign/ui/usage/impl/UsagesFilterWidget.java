@@ -153,6 +153,7 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
         statuses.remove(UsageStatusEnum.LOCKED);
         statuses.remove(UsageStatusEnum.PAID);
         statuses.remove(UsageStatusEnum.ARCHIVED);
+        statuses.remove(UsageStatusEnum.SENT_TO_LM);
         statusComboBox = new ComboBox<>(ForeignUi.getMessage("label.status"), statuses);
         VaadinUtils.setMaxComponentsWidth(statusComboBox);
         statusComboBox.addValueChangeListener(event -> {
