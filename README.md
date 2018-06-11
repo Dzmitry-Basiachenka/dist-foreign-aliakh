@@ -1,3 +1,9 @@
+2.1.45
+-
+* B-43661 Tech Debt: FDA: Apply JobRunnerRestFilter from dist-common
+* B-43661 Tech Debt: FDA: change status from LOCKED to SENT TO LM for usages that were sent to LM
+* B-43863 FDA: Modify matching to target IDNO Type: implement logic to match works by IDNO and mainTitle only for usages with the same workTitle in case of multiply titles for single IDNO
+
 2.1.44
 -
 * B-30192 FDA: Batch Summary Report (DVPR Replacement): make changes based on comments in CR-DIST-FOREIGN-62
