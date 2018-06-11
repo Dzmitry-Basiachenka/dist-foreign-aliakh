@@ -913,8 +913,17 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
+    public void testFindByStandardNumberTitleAndStatus() {
+        List<Usage> usages =
+            usageRepository.findByStandardNumberTitleAndStatus(STANDARD_NUMBER_2, WORK_TITLE, UsageStatusEnum.NEW);
+        assertEquals(1, usages.size());
+        assertEquals(USAGE_ID_12, usages.get(0).getId());
+    }
+
+    @Test
     public void testFindByStandardNumberAndStatus() {
-        List<Usage> usages = usageRepository.findByStandardNumberAndStatus(STANDARD_NUMBER_2, UsageStatusEnum.NEW);
+        List<Usage> usages =
+            usageRepository.findByStandardNumberAndStatus(STANDARD_NUMBER_2, UsageStatusEnum.NEW);
         assertEquals(1, usages.size());
         assertEquals(USAGE_ID_12, usages.get(0).getId());
     }
@@ -930,16 +939,18 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testUpdateStatusAndWrWrkInstByStandardNumber() {
-        List<Usage> usages = usageRepository.findByStandardNumberAndStatus(STANDARD_NUMBER_2, UsageStatusEnum.NEW);
+    public void testUpdateStatusAndWrWrkInstByStandardNumberAndTitle() {
+        List<Usage> usages =
+            usageRepository.findByStandardNumberTitleAndStatus(STANDARD_NUMBER_2, WORK_TITLE, UsageStatusEnum.NEW);
         assertEquals(1, usages.size());
         assertNull(usages.get(0).getWrWrkInst());
         Usage usage = usages.get(0);
         usage.setStandardNumber(STANDARD_NUMBER_2);
         usage.setWrWrkInst(WR_WRK_INST);
         usage.setStatus(UsageStatusEnum.WORK_FOUND);
-        usageRepository.updateStatusAndWrWrkInstByStandardNumber(usages);
-        usages = usageRepository.findByStandardNumberAndStatus(STANDARD_NUMBER_2, UsageStatusEnum.WORK_FOUND);
+        usageRepository.updateStatusAndWrWrkInstByStandardNumberAndTitle(usages);
+        usages = usageRepository.findByStandardNumberTitleAndStatus(STANDARD_NUMBER_2, WORK_TITLE,
+            UsageStatusEnum.WORK_FOUND);
         assertEquals(1, usages.size());
         assertEquals(WR_WRK_INST, usages.get(0).getWrWrkInst());
     }

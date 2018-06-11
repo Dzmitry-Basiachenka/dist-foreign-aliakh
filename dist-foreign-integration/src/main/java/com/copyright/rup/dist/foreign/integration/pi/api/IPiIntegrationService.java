@@ -17,16 +17,15 @@ import java.util.Set;
 public interface IPiIntegrationService {
 
     /**
-     * Finds {@link Work}s for given map of IDNOs and titles.
-     * If work for particular IDNO and title is found and they uniquely corresponds to each other, then they will be
-     * returned in resulting map.
-     * If work for particular IDNO and title is not found or multiple IDNOs correspond to one Wr Wrk Inst -
-     * resulting map will not contain mapping for such IDNOs.
+     * Finds {@link Work} for given IDNO and title.
+     * Returns work for particular IDNO and title is found and they uniquely corresponds to each other.
+     * Returns null if there are multiple search hits or empty result for particular IDNO and title is found.
      *
-     * @param idnoToTitleMap map of IDNOs to title to search works by
-     * @return map with IDNOs as keys and {@link Work}s as values
+     * @param idno  indo to match
+     * @param title title to match
+     * @return instance of {@link Work}
      */
-    Map<String, Work> findWorksByIdnos(Map<String, String> idnoToTitleMap);
+    Work findWorkByIdnoAndTitle(String idno, String title);
 
     /**
      * Finds Wr Wrk Insts for given set of titles.
