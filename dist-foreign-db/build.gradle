@@ -9,6 +9,6 @@ rupPostgres {
     schemaSpy {
         schema = 'apps'
         host = 'localhost'
-        database = 'rd'
+        database = 'rup'
     }
 }
