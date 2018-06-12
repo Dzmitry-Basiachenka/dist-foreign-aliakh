@@ -60,7 +60,7 @@ public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
         addPlainValidators(Header.TITLE, lengthValidator2000);
         addPlainValidators(Header.ARTICLE, lengthValidator1000);
         addPlainValidators(Header.STANDARD_NUMBER, lengthValidator1000);
-        addPlainValidators(Header.WR_WRK_INST, positiveNumberValidator, new LengthValidator(15));
+        addPlainValidators(Header.WR_WRK_INST, positiveNumberValidator, new LengthValidator(9));
         addPlainValidators(Header.RH_ACCT_NUMBER, positiveNumberValidator, new LengthValidator(18));
         addPlainValidators(Header.PUBLISHER, lengthValidator1000);
         addPlainValidators(Header.PUB_DATE, new DateFormatValidator());
