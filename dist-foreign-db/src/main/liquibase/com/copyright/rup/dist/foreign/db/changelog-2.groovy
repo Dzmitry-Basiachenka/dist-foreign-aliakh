@@ -1694,4 +1694,23 @@ databaseChangeLog {
             }
         }
     }
+
+    changeSet(id: '2018-06-12-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment('B-43661 Tech Debt: FDA: set status NEW and update related columns to usages with wr_wrk_inst more than 9 symbols')
+
+        update(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'status_ind', value: 'NEW')
+            column(name: 'wr_wrk_inst', value: null)
+            column(name: 'rh_account_number', value: null)
+            column(name: 'df_scenario_uid', value: null)
+            column(name: 'payee_account_number', value: null)
+            column(name: 'net_amount', value: '0.0000000000')
+            column(name: 'service_fee', value: null)
+            column(name: 'service_fee_amount', value: '0.0000000000')
+            column(name: 'is_rh_participating_flag', value: 'false')
+            where "wr_wrk_inst > 999999999"
+        }
+
+        rollback ""
+    }
 }
