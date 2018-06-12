@@ -18,7 +18,6 @@ public interface IPiIntegrationService {
 
     /**
      * Finds {@link Work} for given IDNO and title.
-     * Returns work for particular IDNO and title is found and they uniquely corresponds to each other.
      * Returns null if there are multiple search hits or empty result for particular IDNO and title is found.
      *
      * @param idno  indo to match

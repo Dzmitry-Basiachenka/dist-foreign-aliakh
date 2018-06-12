@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.matching;
 
 import com.copyright.rup.common.logging.RupLogUtils;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -160,7 +161,7 @@ public class WorkMatchingService implements IWorkMatchingService {
         if (GROSS_AMOUNT_LIMIT.compareTo(sumUsagesGrossAmount(usages)) > 0) {
             usages.forEach(usage -> {
                 usage.setStatus(UsageStatusEnum.ELIGIBLE);
-                usage.setProductFamily("NTS");
+                usage.setProductFamily(FdaConstants.NTS_PRODUCT_FAMILY);
                 auditService.logAction(usage.getId(), UsageActionTypeEnum.ELIGIBLE_FOR_NTS,
                     usageGroup.getNtsEligibleReason());
             });

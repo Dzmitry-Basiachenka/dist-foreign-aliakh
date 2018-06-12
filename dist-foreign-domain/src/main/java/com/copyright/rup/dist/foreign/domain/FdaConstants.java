@@ -24,6 +24,11 @@ public final class FdaConstants {
     public static final String CLA_FAS_PRODUCT_FAMILY = "CLA_FAS";
 
     /**
+     * NTS product family.
+     */
+    public static final String NTS_PRODUCT_FAMILY = "NTS";
+
+    /**
      * Account number for {@link FdaConstants#CLA_FAS_PRODUCT_FAMILY} RRO.
      */
     public static final Long CLA_ACCOUNT_NUMBER = 2000017000L;

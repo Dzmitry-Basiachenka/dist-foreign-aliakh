@@ -6,6 +6,7 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -230,7 +231,7 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     @Override
     public boolean isSigleProductFamilySelected() {
         Set<String> productFamilies = getSelectedProductFamilies();
-        return 1 == CollectionUtils.size(productFamilies) && !productFamilies.contains("NTS");
+        return 1 == CollectionUtils.size(productFamilies) && !productFamilies.contains(FdaConstants.NTS_PRODUCT_FAMILY);
     }
 
     @Override

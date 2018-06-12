@@ -11,6 +11,7 @@ import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -76,7 +77,6 @@ public class UsageRepositoryIntegrationTest {
     private static final Long WR_WRK_INST = 123456783L;
     private static final String WORK_TITLE = "Wissenschaft & Forschung Japan";
     private static final String PRODUCT_FAMILY_FAS = "FAS";
-    private static final String PRODUCT_FAMILY_NTS = "NTS";
     private static final String STANDARD_NUMBER_2 = "2192-3558";
     private static final String DETAIL_ID_KEY = "detailId";
     private static final String WORK_TITLE_KEY = "workTitle";
@@ -826,13 +826,13 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(2, usages.size());
         usages.forEach(usage -> {
             usage.setStatus(UsageStatusEnum.ELIGIBLE);
-            usage.setProductFamily(PRODUCT_FAMILY_NTS);
+            usage.setProductFamily(FdaConstants.NTS_PRODUCT_FAMILY);
         });
         usageRepository.update(usages);
         usages.forEach(usage -> {
             Usage updatedUsage = usageRepository.findById(usage.getId());
             assertEquals(UsageStatusEnum.ELIGIBLE, updatedUsage.getStatus());
-            assertEquals(PRODUCT_FAMILY_NTS, updatedUsage.getProductFamily());
+            assertEquals(FdaConstants.NTS_PRODUCT_FAMILY, updatedUsage.getProductFamily());
         });
     }
 
@@ -977,11 +977,11 @@ public class UsageRepositoryIntegrationTest {
         Usage usage = usages.get(0);
         assertEquals(PRODUCT_FAMILY_FAS, usage.getProductFamily());
         assertEquals(UsageStatusEnum.NEW, usage.getStatus());
-        usage.setProductFamily(PRODUCT_FAMILY_NTS);
+        usage.setProductFamily(FdaConstants.NTS_PRODUCT_FAMILY);
         usage.setStatus(UsageStatusEnum.ELIGIBLE);
         usageRepository.updateToNtsEligible(usages);
         Usage actualUsage = usageRepository.findById(usage.getId());
-        assertEquals(PRODUCT_FAMILY_NTS, actualUsage.getProductFamily());
+        assertEquals(FdaConstants.NTS_PRODUCT_FAMILY, actualUsage.getProductFamily());
         assertEquals(UsageStatusEnum.ELIGIBLE, actualUsage.getStatus());
     }
 
