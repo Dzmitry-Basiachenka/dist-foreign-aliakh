@@ -97,6 +97,19 @@ public class RightsholderDiscrepancyRepositoryIntegrationTest {
     }
 
     @Test
+    public void testDeleteByStatus() {
+        List<RightsholderDiscrepancy> discrepancies =
+            rightsholderDiscrepancyRepository.findByScenarioIdAndStatus(SCENARIO_ID,
+                RightsholderDiscrepancyStatusEnum.IN_PROGRESS, null, null);
+        assertNotNull(discrepancies);
+        assertEquals(2, discrepancies.size());
+        rightsholderDiscrepancyRepository.deleteByStatus(RightsholderDiscrepancyStatusEnum.IN_PROGRESS);
+        discrepancies = rightsholderDiscrepancyRepository.findByScenarioIdAndStatus(SCENARIO_ID,
+            RightsholderDiscrepancyStatusEnum.IN_PROGRESS, null, null);
+        assertEquals(0, discrepancies.size());
+    }
+
+    @Test
     public void testApproveByScenarioId() {
         assertTrue(CollectionUtils.isEmpty(rightsholderDiscrepancyRepository.findByScenarioIdAndStatus(SCENARIO_ID,
             RightsholderDiscrepancyStatusEnum.APPROVED, null, null)));

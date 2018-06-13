@@ -209,7 +209,7 @@ public class ScenarioService implements IScenarioService {
     @Transactional
     public void reconcileRightsholders(Scenario scenario) {
         LOGGER.info("Reconcile rightsholders. Started. {}", ForeignLogUtils.scenario(Objects.requireNonNull(scenario)));
-        //TODO {isuvorau} compare performance for selecting new object instead of 'Usage'
+        rightsholderDiscrepancyService.deleteByStatus(RightsholderDiscrepancyStatusEnum.IN_PROGRESS);
         Map<Long, List<Usage>> groupedByWrWrkInstUsages = usageService.getUsagesForReconcile(scenario.getId())
             .stream()
             .collect(Collectors.groupingBy(Usage::getWrWrkInst));

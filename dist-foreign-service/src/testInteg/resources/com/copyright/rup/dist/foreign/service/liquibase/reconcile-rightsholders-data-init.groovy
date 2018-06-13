@@ -226,6 +226,16 @@ databaseChangeLog {
             column(name: 'service_fee', value: '0.16000')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder_discrepancy') {
+            column(name: 'df_rightsholder_discrepancy_uid', value: 'e4877bab-090b-49c0-adaa-6720217ea37d')
+            column(name: 'df_scenario_uid', value: '04263c90-cb54-44f0-b354-a901586e5801')
+            column(name: 'wr_wrk_inst', value: '180382914')
+            column(name: 'old_rh_account_number', value: '1000009997')
+            column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'status_ind', value: 'IN_PROGRESS')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '1281cdca-a838-4047-802c-850d46fd51b6')
             column(name: 'rh_account_number', value: '7000515031')

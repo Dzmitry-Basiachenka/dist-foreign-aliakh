@@ -104,4 +104,13 @@ public class RightsholderDiscrepancyServiceTest {
             RightsholderDiscrepancyStatusEnum.IN_PROGRESS);
         verify(rightsholderDiscrepancyRepository);
     }
+
+    @Test
+    public void testDeleteByStatus() {
+        rightsholderDiscrepancyRepository.deleteByStatus(RightsholderDiscrepancyStatusEnum.IN_PROGRESS);
+        expectLastCall().once();
+        replay(rightsholderDiscrepancyRepository);
+        rightsholderDiscrepancyService.deleteByStatus(RightsholderDiscrepancyStatusEnum.IN_PROGRESS);
+        verify(rightsholderDiscrepancyRepository);
+    }
 }
