@@ -135,10 +135,9 @@ public class PiIntegrationService implements IPiIntegrationService {
 
     private Work matchByStandardNumber(String idno, String parameter) {
         List<RupSearchHit> searchHits = doSearch(parameter, idno).getResults().getHits();
-        if (EXPECTED_SEARCH_HITS_COUNT == searchHits.size()) {
-            return parseWorkFromSearchHit(searchHits, idno, parameter);
-        }
-        return null;
+        return EXPECTED_SEARCH_HITS_COUNT == searchHits.size()
+            ? parseWorkFromSearchHit(searchHits, idno, parameter)
+            : null;
     }
 
     private Work parseWorkFromSearchHit(List<RupSearchHit> searchHits, String idno, String parameter) {
@@ -150,7 +149,8 @@ public class PiIntegrationService implements IPiIntegrationService {
             return result;
         } catch (IOException e) {
             throw new RupRuntimeException(
-                String.format("Search works. Failed. IDNO=%s, Reason=Could not read response", idno), e);
+                String.format("Search works. By %s. Failed. IDNO=%s, Reason=Could not read response", parameter, idno),
+                e);
         }
     }
 
@@ -175,7 +175,7 @@ public class PiIntegrationService implements IPiIntegrationService {
             LOGGER.trace("Search works. By MainTitle. Title={}, WrWrkInst={}, Hit={}", title, wrWrkInst, source);
         } catch (IOException e) {
             throw new RupRuntimeException(
-                String.format("Search works. Failed. Title=%s, Reason=Could not read response", title), e);
+                String.format("Search works. By Title. Failed. Title=%s, Reason=Could not read response", title), e);
         }
     }
 
@@ -186,7 +186,7 @@ public class PiIntegrationService implements IPiIntegrationService {
         request.setQueryBuilder(builder);
         request.setTypes("work");
         request.setSearchType(RupSearchRequest.RupSearchType.DFS_QUERY_AND_FETCH);
-        request.setFields("idno", "mainTitle");
+        request.setFields("mainTitle");
         request.setFetchSource(true);
         try {
             return getRupEsApi().search(request);

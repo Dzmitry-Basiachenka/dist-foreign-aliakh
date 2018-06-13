@@ -416,7 +416,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
         parameters.put(STATUS_KEY, UsageStatusEnum.ELIGIBLE);
         parameters.put(UPDATE_USER_KEY, StoredEntity.DEFAULT_USER);
-        parameters.put("productFamily", "NTS");
+        parameters.put("productFamily", FdaConstants.NTS_PRODUCT_FAMILY);
         usages.forEach(usage -> {
             parameters.put(USAGE_ID_KEY, usage.getId());
             update("IUsageMapper.updateToNtsEligible", parameters);
