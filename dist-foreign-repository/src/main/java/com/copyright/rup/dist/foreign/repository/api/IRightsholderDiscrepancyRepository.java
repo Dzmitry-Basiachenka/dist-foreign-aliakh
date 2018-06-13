@@ -64,6 +64,13 @@ public interface IRightsholderDiscrepancyRepository {
     void deleteByScenarioIdAndStatus(String scenarioId, RightsholderDiscrepancyStatusEnum status);
 
     /**
+     * Deletes all {@link RightsholderDiscrepancy}ies by status.
+     *
+     * @param status instance of {@link RightsholderDiscrepancyStatusEnum}
+     */
+    void deleteByStatus(RightsholderDiscrepancyStatusEnum status);
+
+    /**
      * Updates status to {@link RightsholderDiscrepancyStatusEnum#APPROVED} by scenario identifier.
      *
      * @param scenarioId the scenario identifier

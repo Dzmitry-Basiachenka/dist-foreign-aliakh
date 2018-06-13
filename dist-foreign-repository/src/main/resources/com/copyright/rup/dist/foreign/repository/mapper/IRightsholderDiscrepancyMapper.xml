@@ -137,6 +137,11 @@
             and status_ind = #{status}
     </delete>
 
+    <delete id="deleteByStatus">
+        delete from ${schema}.df_rightsholder_discrepancy
+        where status_ind = #{status}
+    </delete>
+
     <update id="approveByScenarioId" parameterType="map">
         update ${schema}.df_rightsholder_discrepancy
         set status_ind = #{status}

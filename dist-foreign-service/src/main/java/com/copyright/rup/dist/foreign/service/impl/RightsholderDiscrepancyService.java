@@ -55,6 +55,11 @@ public class RightsholderDiscrepancyService implements IRightsholderDiscrepancyS
     }
 
     @Override
+    public void deleteByStatus(RightsholderDiscrepancyStatusEnum status) {
+        rightsholderDiscrepancyRepository.deleteByStatus(status);
+    }
+
+    @Override
     public void approveByScenarioId(String scenarioId) {
         rightsholderDiscrepancyRepository.approveByScenarioId(scenarioId);
     }
