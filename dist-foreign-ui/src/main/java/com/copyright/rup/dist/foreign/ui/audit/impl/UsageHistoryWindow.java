@@ -50,9 +50,9 @@ class UsageHistoryWindow extends Window {
         grid.setSelectionMode(SelectionMode.NONE);
         grid.setItems(usageAuditItems);
         grid.setSizeFull();
-        VaadinUtils.addComponentStyle(grid, "usage-batches-grid");
+        VaadinUtils.addComponentStyle(grid, "usage-history-grid");
         grid.setSizeFull();
-        grid.addColumn(UsageAuditItem::getActionType)
+        grid.addColumn(item -> item.getActionType().name())
             .setCaption(ForeignUi.getMessage("label.action_type"))
             .setSortProperty("actionType");
         grid.addColumn(UsageAuditItem::getCreateUser)
