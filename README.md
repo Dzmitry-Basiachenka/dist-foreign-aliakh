@@ -1,3 +1,11 @@
+2.1.46
+-
+* B-43661 Tech Debt: FDA: make changes based on comments in CR-DIST-FOREIGN-65
+* B-43661 Tech Debt: FDA: use RupContextUtils and PerformanceAspect from dist-common, clean-up redundant profiled annotations
+* B-43863 FDA: Modify matching to target IDNO Type: make changes based on comments in CR-DIST-FOREIGN-64
+* RDSC-596 FDA: Right assignment job fails for usages with WrWrkInst length > 9 symbols
+* RDSC-600 FDA: RHs discrepancies are not cleared from the table if reconciliation process is interrupted
+
 2.1.45
 -
 * B-43661 Tech Debt: FDA: Apply JobRunnerRestFilter from dist-common
