@@ -5,6 +5,7 @@ import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.integration.rest.prm.PrmRollUpService;
+import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
@@ -28,7 +29,6 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
@@ -36,9 +36,6 @@ import com.google.common.collect.Table;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.perf4j.StopWatch;
-import org.perf4j.aop.Profiled;
-import org.perf4j.slf4j.Slf4JStopWatch;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -135,22 +132,15 @@ public class ScenarioService implements IScenarioService {
     @Override
     @Transactional
     public void refreshScenario(Scenario scenario) {
-        StopWatch stopWatch = new Slf4JStopWatch();
         ScenarioUsageFilter usageFilter = scenarioUsageFilterService.getByScenarioId(scenario.getId());
-        stopWatch.lap("scenario.refresh_1_getByScenarioId");
         if (null != usageFilter) {
             usageService.recalculateUsagesForRefresh(new UsageFilter(usageFilter), scenario);
-            stopWatch.lap("scenario.refresh_2_recalculateUsagesForRefresh");
             scenarioRepository.refresh(scenario);
-            stopWatch.lap("scenario.refresh_3_updateScenario");
             scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY);
-            stopWatch.lap("scenario.refresh_4_logAction");
         }
-        stopWatch.stop();
     }
 
     @Override
-    @Profiled(tag = "scenario.getScenarioWithAmountsAndLastAction")
     public Scenario getScenarioWithAmountsAndLastAction(Scenario scenario) {
         return FdaConstants.ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())
             ? scenarioRepository.findArchivedWithAmountsAndLastAction(scenario.getId())
@@ -163,7 +153,6 @@ public class ScenarioService implements IScenarioService {
     }
 
     @Override
-    @Profiled(tag = "scenario.getRightsholdersByScenarioAndSourceRro")
     public List<RightsholderPayeePair> getRightsholdersByScenarioAndSourceRro(String scenarioId,
                                                                               Long rroAccountNumber) {
         return scenarioRepository.findRightsholdersByScenarioIdAndSourceRro(scenarioId, rroAccountNumber);

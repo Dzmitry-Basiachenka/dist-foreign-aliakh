@@ -1,11 +1,11 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioAuditRepository;
 import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
-import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

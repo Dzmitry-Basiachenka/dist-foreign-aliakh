@@ -38,8 +38,6 @@ import com.vaadin.ui.Window;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.perf4j.StopWatch;
-import org.perf4j.slf4j.Slf4JStopWatch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -116,7 +114,6 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
 
     @Override
     public void onReconcileRightsholdersButtonClicked() {
-        StopWatch stopWatch = new Slf4JStopWatch();
         Scenario scenario = getWidget().getSelectedScenario();
         scenarioController.setScenario(scenario);
         if (!scenarioController.isScenarioEmpty()) {
@@ -136,7 +133,6 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
             Windows.showNotificationWindow(
                 ForeignUi.getMessage("message.warning.action_for_empty_scenario", "recalculated"));
         }
-        stopWatch.stop("scenario.reconciliation");
     }
 
     @Override
@@ -271,9 +267,7 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
      */
     void sendToLM(Scenario scenario) {
         try {
-            StopWatch stopWatch = new Slf4JStopWatch();
             scenarioService.sendToLm(scenario);
-            stopWatch.stop("scenario.sendToLm");
         } catch (RuntimeException e) {
             Windows.showNotificationWindow(e.getMessage());
         }

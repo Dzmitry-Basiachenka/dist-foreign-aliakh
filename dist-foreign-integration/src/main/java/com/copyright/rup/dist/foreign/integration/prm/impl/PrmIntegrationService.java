@@ -12,7 +12,6 @@ import com.google.common.collect.Table;
 
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ObjectUtils;
-import org.perf4j.aop.Profiled;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -56,7 +55,6 @@ public class PrmIntegrationService implements IPrmIntegrationService {
     private BigDecimal rhParticipatingServiceFee;
 
     @Override
-    @Profiled(tag = "integration.PrmIntegrationService.getRightsholders")
     public List<Rightsholder> getRightsholders(Set<Long> accountNumbers) {
         return prmRightsholderService.getRightsholders(accountNumbers);
     }
@@ -72,7 +70,6 @@ public class PrmIntegrationService implements IPrmIntegrationService {
     }
 
     @Override
-    @Profiled(tag = "integration.PrmIntegrationService.getRollUps")
     public Table<String, String, Long> getRollUps(Collection<String> rightsholdersIds) {
         return prmRollUpAsync
             ? prmRollUpAsyncService.getRollUps(rightsholdersIds)
@@ -80,7 +77,6 @@ public class PrmIntegrationService implements IPrmIntegrationService {
     }
 
     @Override
-    @Profiled(tag = "integration.PrmIntegrationService.isRightsholderParticipating")
     public boolean isRightsholderParticipating(Long accountNumber, String productFamily) {
         boolean rhParticipatingFlag = false;
         Map<String, RightsholderPreferences> preferencesMap =

@@ -26,8 +26,6 @@ import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.perf4j.StopWatch;
-import org.perf4j.slf4j.Slf4JStopWatch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -120,9 +118,7 @@ public class ScenarioController extends CommonController<IScenarioWidget> implem
 
     @Override
     public void deleteFromScenario(Long rroAccountNumber, List<Long> accountNumbers, String reason) {
-        StopWatch stopWatch = new Slf4JStopWatch();
         usageService.deleteFromScenario(getScenario(), rroAccountNumber, accountNumbers, reason);
-        stopWatch.stop("scenario.deleteFromScenario");
     }
 
     @Override

@@ -33,8 +33,6 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 import org.apache.commons.lang3.StringUtils;
-import org.perf4j.StopWatch;
-import org.perf4j.slf4j.Slf4JStopWatch;
 
 import java.math.BigDecimal;
 
@@ -85,14 +83,11 @@ class UsageBatchUploadWindow extends Window {
      */
     void onUploadClicked() {
         if (isValid()) {
-            StopWatch stopWatch = new Slf4JStopWatch();
             try {
                 UsageCsvProcessor processor = usagesController.getCsvProcessor(productFamilyField.getValue());
                 ProcessingResult<Usage> processingResult = processor.process(uploadField.getStreamToUploadedFile());
-                stopWatch.lap("usageBatch.load_fileProcessed");
                 if (processingResult.isSuccessful()) {
                     int usagesCount = usagesController.loadUsageBatch(buildUsageBatch(), processingResult.get());
-                    stopWatch.lap("usageBatch.load_stored");
                     close();
                     Windows.showNotificationWindow(ForeignUi.getMessage("message.upload_completed", usagesCount));
                 } else {
@@ -108,8 +103,6 @@ class UsageBatchUploadWindow extends Window {
                         e.getMessage() + "<br>Press Download button to see detailed list of errors"));
             } catch (ValidationException e) {
                 Windows.showNotificationWindow(ForeignUi.getMessage("window.error"), e.getHtmlMessage());
-            } finally {
-                stopWatch.stop();
             }
         } else {
             Windows.showValidationErrorWindow(

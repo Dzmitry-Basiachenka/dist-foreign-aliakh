@@ -4,6 +4,7 @@ import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.integration.rest.prm.PrmRollUpService;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
@@ -28,7 +29,6 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.service.impl.util.RupContextUtils;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -37,9 +37,6 @@ import com.google.common.collect.Table;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.perf4j.StopWatch;
-import org.perf4j.aop.Profiled;
-import org.perf4j.slf4j.Slf4JStopWatch;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -94,7 +91,6 @@ public class UsageService implements IUsageService {
     private ICrmIntegrationService crmIntegrationService;
 
     @Override
-    @Profiled(tag = "usage.getUsages")
     public List<UsageDto> getUsages(UsageFilter filter, Pageable pageable, Sort sort) {
         return !filter.isEmpty()
             ? usageRepository.findByFilter(filter, pageable, sort)
@@ -108,25 +104,21 @@ public class UsageService implements IUsageService {
 
     @Override
     public int insertUsages(UsageBatch usageBatch, Collection<Usage> usages) {
-        StopWatch stopWatch = new Slf4JStopWatch();
         String userName = RupContextUtils.getUserName();
         int size = usages.size();
         LOGGER.info("Insert usages. Started. UsageBatchName={}, UsagesCount={}, UserName={}", usageBatch.getName(),
             size, userName);
         calculateUsagesGrossAmount(usageBatch, usages);
-        stopWatch.lap("usageBatch.load_3_1_calculateGrossAmount");
         usages.forEach(usage -> {
             usage.setBatchId(usageBatch.getId());
             usage.setCreateUser(userName);
             usage.setUpdateUser(userName);
             usageRepository.insert(usage);
         });
-        stopWatch.lap("usageBatch.load_3_2.storedUsages");
         // Adding data to audit table in separate loop increases performance up to 3 times
         // while using batch with 200000 usages
         String reason = "Uploaded in '" + usageBatch.getName() + "' Batch";
         usages.forEach(usage -> usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.LOADED, reason));
-        stopWatch.stop("usageBatch.load_3_3_logLoadedAction");
         LOGGER.info("Insert usages. Finished. UsageBatchName={}, UsagesCount={}, UserName={}", usageBatch.getName(),
             size, userName);
         return size;
@@ -158,17 +150,13 @@ public class UsageService implements IUsageService {
 
     @Override
     public void recalculateUsagesForRefresh(UsageFilter filter, Scenario scenario) {
-        StopWatch stopWatch = new Slf4JStopWatch();
         Map<Long, Usage> rhToUsageMap = getRightsholdersInformation(scenario.getId());
-        stopWatch.lap("scenario.refresh_2_1_getRightsholdersInformation");
         List<Usage> newUsages = usageRepository.findWithAmountsAndRightsholders(filter);
-        stopWatch.lap("scenario.refresh_2_2_findWithAmountsAndRightsholders");
         Set<String> rightsholdersIds = newUsages.stream().map(usage -> usage.getRightsholder().getId())
             .collect(Collectors.toSet());
         rightsholdersIds.removeAll(
             rhToUsageMap.values().stream().map(usage -> usage.getRightsholder().getId()).collect(Collectors.toSet()));
         Table<String, String, Long> rollUps = prmIntegrationService.getRollUps(rightsholdersIds);
-        stopWatch.lap("scenario.refresh_2_3_getRollUps");
         newUsages.forEach(usage -> {
             final long rhAccountNumber = usage.getRightsholder().getAccountNumber();
             Usage scenarioUsage = rhToUsageMap.get(rhAccountNumber);
@@ -184,7 +172,6 @@ public class UsageService implements IUsageService {
                     : prmIntegrationService.getRhParticipatingServiceFee(rhParticipating));
         });
         usageRepository.addToScenario(newUsages);
-        stopWatch.stop("scenario.refresh_2_4_addToScenario");
     }
 
     @Override
@@ -204,10 +191,8 @@ public class UsageService implements IUsageService {
 
     @Override
     public void addUsagesToScenario(List<Usage> usages, Scenario scenario) {
-        StopWatch stopWatch = new Slf4JStopWatch();
         Table<String, String, Long> rollUps = prmIntegrationService.getRollUps(
             usages.stream().map(usage -> usage.getRightsholder().getId()).collect(Collectors.toSet()));
-        stopWatch.lap("scenario.create_3_1_getRollups");
         usages.forEach(usage -> {
             usage.getPayee().setAccountNumber(
                 PrmRollUpService.getPayeeAccountNumber(rollUps, usage.getRightsholder(), usage.getProductFamily()));
@@ -217,9 +202,7 @@ public class UsageService implements IUsageService {
                 CalculationUtils.recalculateAmounts(usage, usage.isRhParticipating(), claPayeeServiceFee);
             }
         });
-        stopWatch.lap("scenario.create_3_2_setPayeeAndStatus");
         usageRepository.addToScenario(usages);
-        stopWatch.stop("scenario.create_3_3_addScenarioIdToUsages");
     }
 
     @Override
@@ -237,7 +220,6 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    @Profiled(tag = "usage.deleteFromScenario")
     public void deleteFromScenario(String scenarioId) {
         usageRepository.deleteFromScenario(scenarioId, RupContextUtils.getUserName());
     }
@@ -260,24 +242,19 @@ public class UsageService implements IUsageService {
 
     @Override
     public List<Usage> moveToArchive(Scenario scenario) {
-        StopWatch stopWatch = new Slf4JStopWatch();
         LOGGER.info("Move details to archive. Started. {}", ForeignLogUtils.scenario(scenario));
         List<Usage> usages = usageRepository.findByScenarioId(scenario.getId());
-        stopWatch.lap("usage.moveToArchive_findByScenarioId");
         usages.forEach(usage -> {
             usage.setStatus(UsageStatusEnum.SENT_TO_LM);
             usageArchiveRepository.insert(usage);
         });
-        stopWatch.lap("usage.moveToArchive_insertIntoArchive");
         usageRepository.deleteByScenarioId(scenario.getId());
         LOGGER.info("Move details to archive. Finished. {}, UsagesCount={}", ForeignLogUtils.scenario(scenario),
             usages.size());
-        stopWatch.stop("usage.moveToArchive_deleteByScenarioId");
         return usages;
     }
 
     @Override
-    @Profiled(tag = "service.UsageService.getRightsholderTotalsHoldersByScenario")
     public List<RightsholderTotalsHolder> getRightsholderTotalsHoldersByScenario(Scenario scenario,
                                                                                  String searchValue,
                                                                                  Pageable pageable, Sort sort) {
@@ -309,7 +286,6 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    @Profiled(tag = "usage.getByScenarioAndRhAccountNumber")
     public List<UsageDto> getByScenarioAndRhAccountNumber(Long accountNumber, Scenario scenario,
                                                           String searchValue, Pageable pageable, Sort sort) {
         return FdaConstants.ARCHIVED_SCENARIO_STATUSES.contains(scenario.getStatus())
@@ -325,7 +301,6 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    @Profiled(tag = "usage.getForAudit")
     public List<UsageDto> getForAudit(AuditFilter filter, Pageable pageable, Sort sort) {
         return usageRepository.findForAudit(filter, pageable, sort);
     }
@@ -394,15 +369,12 @@ public class UsageService implements IUsageService {
     @Transactional
     public void loadResearchedUsages(Collection<ResearchedUsage> researchedUsages) {
         LOGGER.info("Load researched usages. Started. ResearchedUsagesCount={}", LogUtils.size(researchedUsages));
-        StopWatch stopWatch = new Slf4JStopWatch();
         usageRepository.updateResearchedUsages(researchedUsages);
-        stopWatch.lap("usage.loadResearchedUsages_1_updateResearchedUsage");
         researchedUsages.forEach(
             researchedUsage -> usageAuditService.logAction(researchedUsage.getUsageId(),
                 UsageActionTypeEnum.WORK_FOUND,
                 String.format("Wr Wrk Inst %s was added based on research", researchedUsage.getWrWrkInst()))
         );
-        stopWatch.stop("usage.loadResearchedUsages_2_logAction");
         LOGGER.info("Load researched usages. Finished. ResearchedUsagesCount={}", LogUtils.size(researchedUsages));
     }
 
@@ -413,17 +385,15 @@ public class UsageService implements IUsageService {
         int archivedUsagesCount = 0;
         if (CollectionUtils.isNotEmpty(paidUsagesIds)) {
             Set<String> invalidUsageIds = Sets.newHashSet();
-            StopWatch stopWatch = new Slf4JStopWatch();
             for (List<String> ids : Iterables.partition(paidUsagesIds, 128)) {
                 List<PaidUsage> paidUsages = usageArchiveRepository.findByIdAndStatus(ids, UsageStatusEnum.PAID);
                 if (CollectionUtils.isNotEmpty(paidUsages)) {
                     CrmResult result =
                         crmIntegrationService.sendRightsDistributionRequests(
                             buildCrmRightsDistributionRequest(paidUsages));
-                    stopWatch.lap("usage.sendToCrm_1_sendRightsDistributionRequests");
                     if (result.isSuccessful()) {
                         Set<String> usagesIds = paidUsages.stream().map(PaidUsage::getId).collect(Collectors.toSet());
-                        updateReportedUsages(usagesIds, stopWatch);
+                        updateReportedUsages(usagesIds);
                         archivedUsagesCount += usagesIds.size();
                     } else {
                         Set<String> invalidIds = result.getInvalidUsageIds();
@@ -433,7 +403,7 @@ public class UsageService implements IUsageService {
                                 .map(PaidUsage::getId)
                                 .collect(Collectors.toSet());
                             if (CollectionUtils.isNotEmpty(usagesIds)) {
-                                updateReportedUsages(usagesIds, stopWatch);
+                                updateReportedUsages(usagesIds);
                                 archivedUsagesCount += usagesIds.size();
                             }
                         }
@@ -458,11 +428,9 @@ public class UsageService implements IUsageService {
         return requests;
     }
 
-    private void updateReportedUsages(Set<String> usagesIds, StopWatch stopWatch) {
+    private void updateReportedUsages(Set<String> usagesIds) {
         usageArchiveRepository.updateStatus(usagesIds, UsageStatusEnum.ARCHIVED);
-        stopWatch.lap("usage.sendToCrm_2_updateStatus");
         usageAuditService.logAction(usagesIds, UsageActionTypeEnum.ARCHIVED, "Usage was sent to CRM");
-        stopWatch.stop("usage.sendToCrm_3_logAction");
     }
 
     private void calculateUsagesGrossAmount(UsageBatch usageBatch, Collection<Usage> usages) {

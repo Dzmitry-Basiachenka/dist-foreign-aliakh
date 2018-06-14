@@ -13,9 +13,9 @@
             http://camel.apache.org/schema/spring
             http://camel.apache.org/schema/spring/camel-spring-2.18.3.xsd">
 
+    <import resource="classpath:/com/copyright/rup/dist/common/service/dist-common-performance-aspect-context.xml"/>
     <import resource="classpath:/com/copyright/rup/dist/foreign/repository/dist-foreign-repository-context.xml"/>
     <import resource="classpath:/com/copyright/rup/dist/foreign/integration/dist-foreign-integration-context.xml"/>
-    <import resource="classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-performance-aspect-context.xml"/>
     <import resource="classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-scheduler-context.xml"/>
 
     <!--Transaction manager configuration-->
