@@ -9,7 +9,6 @@ import com.copyright.rup.dist.foreign.service.api.IRmsGrantsService;
 
 import com.google.common.collect.Maps;
 
-import org.perf4j.aop.Profiled;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,7 +39,6 @@ public class RmsGrantsService implements IRmsGrantsService {
     private IRmsIntegrationService rmsIntegrationService;
 
     @Override
-    @Profiled(tag = "service.RmsGrantsService.getAccountNumbersByWrWrkInsts")
     public Map<Long, Long> getAccountNumbersByWrWrkInsts(List<Long> wrWrkInsts) {
         Set<RmsGrant> allRmsGrants = rmsIntegrationService.getAllRmsGrants(wrWrkInsts);
         LOGGER.info("Get account numbers from RMS. Started. WrWrkInstsCount={}, RmsGrantsCount={}", wrWrkInsts.size(),

@@ -7,8 +7,6 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.IWorkMatchingService;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.perf4j.StopWatch;
-import org.perf4j.slf4j.Slf4JStopWatch;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.JobExecutionContext;
 import org.slf4j.Logger;
@@ -49,7 +47,6 @@ public class WorksMatchingJob extends QuartzJobBean {
         int offset = 0;
         int processedUsagesCount = 0;
         int matchedUsagesCount = 0;
-        StopWatch stopWatch = new Slf4JStopWatch();
         int standardNumbersCount = usageService.getStandardNumbersCount();
         int titlesCount = usageService.getTitlesCount();
         LOGGER.info("Search works. Started. IDNOsCount={}, TitlesCount={}", standardNumbersCount, titlesCount);
@@ -88,6 +85,5 @@ public class WorksMatchingJob extends QuartzJobBean {
         }
         LOGGER.info("Search works. Finished. IDNOsCount={}, TitlesCount={}, Processed={}, Matched={}",
             standardNumbersCount, titlesCount, processedUsagesCount, matchedUsagesCount);
-        stopWatch.stop("usage.matchWorks_findWorksAndUpdateStatuses");
     }
 }

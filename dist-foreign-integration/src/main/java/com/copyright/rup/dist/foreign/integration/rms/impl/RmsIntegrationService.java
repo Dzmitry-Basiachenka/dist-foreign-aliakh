@@ -6,7 +6,6 @@ import com.copyright.rup.dist.foreign.integration.rms.api.IRmsIntegrationService
 import com.copyright.rup.dist.foreign.integration.rms.api.IRmsRightsAssignmentService;
 import com.copyright.rup.dist.foreign.integration.rms.api.RightsAssignmentResult;
 
-import org.perf4j.aop.Profiled;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -35,7 +34,6 @@ public class RmsIntegrationService implements IRmsIntegrationService {
     private IRmsRightsAssignmentService rmsRightsAssignmentService;
 
     @Override
-    @Profiled(tag = "integration.RmsIntegrationService.getAllRmsGrants")
     public Set<RmsGrant> getAllRmsGrants(List<Long> wrWrkInsts) {
         return rmsService.getAllRmsGrants(wrWrkInsts, LocalDate.now());
     }

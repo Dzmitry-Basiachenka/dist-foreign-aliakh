@@ -22,8 +22,6 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 import org.apache.commons.lang3.StringUtils;
-import org.perf4j.StopWatch;
-import org.perf4j.slf4j.Slf4JStopWatch;
 
 import java.util.Collections;
 
@@ -62,16 +60,13 @@ class ResearchedUsagesUploadWindow extends Window {
      */
     void onUploadClicked() {
         if (isValid()) {
-            StopWatch stopWatch = new Slf4JStopWatch();
             try {
                 ResearchedUsagesCsvProcessor processor = usagesController.getResearchedUsagesCsvProcessor();
                 ProcessingResult<ResearchedUsage> processingResult =
                     processor.process(uploadField.getStreamToUploadedFile());
-                stopWatch.lap("researchedUsages.load_fileProcessed");
                 if (processingResult.isSuccessful()) {
                     int count = processingResult.get().size();
                     usagesController.loadResearchedUsages(processingResult.get());
-                    stopWatch.lap("researchedUsages.load_stored");
                     close();
                     Windows.showNotificationWindow(ForeignUi.getMessage("message.upload_completed", count));
                 } else {
@@ -87,8 +82,6 @@ class ResearchedUsagesUploadWindow extends Window {
                         e.getMessage() + ForeignUi.getMessage("message.error.upload.threshold.exceeded")));
             } catch (ValidationException e) {
                 Windows.showNotificationWindow(ForeignUi.getMessage("window.error"), e.getHtmlMessage());
-            } finally {
-                stopWatch.stop();
             }
         } else {
             Windows.showValidationErrorWindow(Collections.singleton(uploadField));

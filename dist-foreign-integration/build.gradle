@@ -9,7 +9,6 @@ dependencies {
     //dependency to avoid vulnerability CVE-2016-7051 (severity: MEDIUM) associated with 'com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.8.3'
     compile("com.fasterxml.jackson.module:jackson-module-jaxb-annotations:${rupCamel.standardDependencies.jackson.version}")
     compile("org.apache.commons:commons-collections4:${commonsCollectionsVersion}")
-    compile("org.perf4j:perf4j:${perf4jVersion}")
     compile("org.springframework:spring-web:${rupJava.standardDependencies.spring.version}")
     compile("org.apache.httpcomponents:httpasyncclient:${httpAsyncClientVersion}")
 

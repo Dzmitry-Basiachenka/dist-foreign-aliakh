@@ -18,9 +18,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.perf4j.StopWatch;
-import org.perf4j.aop.Profiled;
-import org.perf4j.slf4j.Slf4JStopWatch;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,7 +55,6 @@ public class RightsService implements IRightsService {
 
     @Override
     @Transactional
-    @Profiled(tag = "usage.sendForRightsAssignment")
     public void sendForRightsAssignment() {
         List<Usage> usages = usageRepository.findByStatuses(UsageStatusEnum.RH_NOT_FOUND);
         LOGGER.info("Send for Rights Assignment. Started. UsagesCount={}", LogUtils.size(usages));
@@ -84,7 +80,6 @@ public class RightsService implements IRightsService {
     }
 
     @Override
-    @Profiled(tag = "service.UsageService.updateRightsholders")
     //TODO {pliakh} adjust implementation to avoid copy-paste for WORK_FOUND and SENT_FOR_RA usages handling
     public void updateRightsholders() {
         List<Usage> usages = usageRepository.findByStatuses(UsageStatusEnum.WORK_FOUND);
@@ -110,7 +105,6 @@ public class RightsService implements IRightsService {
     }
 
     private long updateWorkFoundUsagesRightsholders(List<Usage> usages) {
-        StopWatch stopWatch = new Slf4JStopWatch("service.UsageService.updateRightsholders(WORK_FOUND)");
         Map<Long, Set<String>> wrWrkInstToUsageIds = usages.stream().collect(
             Collectors.groupingBy(Usage::getWrWrkInst, HashMap::new, Collectors
                 .mapping(Usage::getId, Collectors.toSet())));
@@ -136,12 +130,10 @@ public class RightsService implements IRightsService {
                     String.format("Rightsholder account for %s was not found in RMS", wrWrkInst));
             }
         });
-        stopWatch.stop();
         return eligibleUsagesCount.longValue();
     }
 
     private long updateSentForRaUsagesRightsholders(List<Usage> usages) {
-        StopWatch stopWatch = new Slf4JStopWatch("service.UsageService.updateRightsholders(SENT_FOR_RA)");
         Map<Long, Set<String>> wrWrkInstToUsageIds = usages.stream().collect(
             Collectors.groupingBy(Usage::getWrWrkInst, HashMap::new, Collectors
                 .mapping(Usage::getId, Collectors.toSet())));
@@ -157,7 +149,6 @@ public class RightsService implements IRightsService {
                 String.format("Rightsholder account %s was found in RMS", rhAccountNumber));
         });
         rightsholderService.updateRightsholders(Sets.newHashSet(wrWrkInstToAccountNumber.values()));
-        stopWatch.stop();
         return eligibleUsagesCount.longValue();
     }
 }

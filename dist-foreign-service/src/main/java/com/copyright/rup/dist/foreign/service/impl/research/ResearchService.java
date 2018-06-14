@@ -8,8 +8,6 @@ import com.copyright.rup.dist.foreign.service.api.IResearchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.perf4j.StopWatch;
-import org.perf4j.slf4j.Slf4JStopWatch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,15 +35,11 @@ public class ResearchService implements IResearchService {
     @Override
     @Transactional
     public void sendForResearch(UsageFilter filter, OutputStream outputStream) {
-        StopWatch stopWatch = new Slf4JStopWatch();
         Set<String> usageIds = usageRepository.writeUsagesForResearchAndFindIds(filter, outputStream);
-        stopWatch.lap("usage.sendForResearch.writeUsagesForResearchAndFindIds");
         if (CollectionUtils.isNotEmpty(usageIds)) {
             usageRepository.updateStatus(usageIds, UsageStatusEnum.WORK_RESEARCH);
         }
-        stopWatch.lap("usage.sendForResearch.updateStatus");
         usageIds.forEach(usageId -> usageAuditService.logAction(usageId, UsageActionTypeEnum.WORK_RESEARCH,
             "Usage detail was sent for research"));
-        stopWatch.stop("usage.sendForResearch.logAction");
     }
 }
