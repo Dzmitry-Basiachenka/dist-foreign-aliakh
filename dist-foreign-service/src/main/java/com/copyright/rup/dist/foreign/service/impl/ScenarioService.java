@@ -5,6 +5,8 @@ import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.integration.rest.prm.PrmRollUpService;
+import com.copyright.rup.dist.common.service.api.discrepancy.ICommonDiscrepanciesService;
+import com.copyright.rup.dist.common.service.api.discrepancy.ICommonDiscrepanciesService.IDiscrepancyBuilder;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
@@ -23,14 +25,11 @@ import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsage;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderDiscrepancyService;
-import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
-import com.copyright.rup.dist.foreign.service.api.IRmsGrantsService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
 
@@ -43,11 +42,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -77,9 +75,7 @@ public class ScenarioService implements IScenarioService {
     @Autowired
     private ILmIntegrationService lmIntegrationService;
     @Autowired
-    private IRmsGrantsService rmsGrantsService;
-    @Autowired
-    private IRightsholderService rightsholderService;
+    private ICommonDiscrepanciesService<Usage, RightsholderDiscrepancy> commonDiscrepanciesService;
     @Autowired
     private IPrmIntegrationService prmIntegrationService;
     @Autowired
@@ -199,26 +195,12 @@ public class ScenarioService implements IScenarioService {
     public void reconcileRightsholders(Scenario scenario) {
         LOGGER.info("Reconcile rightsholders. Started. {}", ForeignLogUtils.scenario(Objects.requireNonNull(scenario)));
         rightsholderDiscrepancyService.deleteByStatus(RightsholderDiscrepancyStatusEnum.IN_PROGRESS);
-        Map<Long, List<Usage>> groupedByWrWrkInstUsages = usageService.getUsagesForReconcile(scenario.getId())
-            .stream()
-            .collect(Collectors.groupingBy(Usage::getWrWrkInst));
-        Iterables.partition(groupedByWrWrkInstUsages.entrySet(), 1000).forEach(partition -> {
-            LOGGER.debug("Get ownership changes. Started. WrWrkIstsCount={}", CollectionUtils.size(partition));
-            List<RightsholderDiscrepancy> discrepancies = new ArrayList<>();
-            Map<Long, Long> wrWrkInstToRightsholderMap =
-                rmsGrantsService.getAccountNumbersByWrWrkInsts(
-                    partition.stream().map(Entry::getKey).collect(Collectors.toList()));
-            Map<Long, Rightsholder> rightsholdersMap =
-                rightsholderService.updateAndGetRightsholders(Sets.newHashSet(wrWrkInstToRightsholderMap.values()));
-            partition.forEach(entry -> discrepancies.addAll(
-                getDiscrepanciesForNewRightsholder(entry.getValue(), wrWrkInstToRightsholderMap.get(entry.getKey()),
-                    rightsholdersMap)));
-            if (CollectionUtils.isNotEmpty(discrepancies)) {
-                rightsholderDiscrepancyService.insertDiscrepancies(discrepancies, scenario.getId());
-            }
-            LOGGER.debug("Get ownership changes. Finished. WrWrkIstsCount={}, RhDiscrepanciesCount={}",
-                CollectionUtils.size(partition), CollectionUtils.size(discrepancies));
-        });
+        List<RightsholderDiscrepancy> discrepancies = commonDiscrepanciesService.getDiscrepancies(
+            usageService.getUsagesForReconcile(scenario.getId()), Usage::getWrWrkInst,
+            new DiscrepancyBuilder(RupContextUtils.getUserName()));
+        if (CollectionUtils.isNotEmpty(discrepancies)) {
+            rightsholderDiscrepancyService.insertDiscrepancies(discrepancies, scenario.getId());
+        }
         LOGGER.info("Reconcile rightsholders. Finished. {}, RhDiscrepanciesCount={}",
             ForeignLogUtils.scenario(scenario),
             rightsholderDiscrepancyService.getCountByScenarioIdAndStatus(scenario.getId(),
@@ -279,38 +261,48 @@ public class ScenarioService implements IScenarioService {
         return archivedCount;
     }
 
-    private Set<RightsholderDiscrepancy> getDiscrepanciesForNewRightsholder(List<Usage> usages, Long newAccountNumber,
-                                                                            Map<Long, Rightsholder> rightsholdersMap) {
-        Set<RightsholderDiscrepancy> rightsholderDiscrepancies = Sets.newHashSet();
-        usages.forEach(usage -> {
-            if (!Objects.equals(usage.getRightsholder().getAccountNumber(), newAccountNumber)) {
-                rightsholderDiscrepancies.add(buildRightsholderDiscrepancy(usage, newAccountNumber, rightsholdersMap));
-            }
-        });
-        return rightsholderDiscrepancies;
-    }
+    private static class DiscrepancyBuilder implements IDiscrepancyBuilder<Usage, RightsholderDiscrepancy> {
 
-    private RightsholderDiscrepancy buildRightsholderDiscrepancy(Usage usage, Long newAccountNumber,
-                                                                 Map<Long, Rightsholder> rightsholdersMap) {
-        RightsholderDiscrepancy rightsholderDiscrepancy = new RightsholderDiscrepancy();
-        rightsholderDiscrepancy.setId(RupPersistUtils.generateUuid());
-        rightsholderDiscrepancy.setOldRightsholder(usage.getRightsholder());
-        rightsholderDiscrepancy.setNewRightsholder(
-            rightsholdersMap.computeIfAbsent(newAccountNumber, this::buildRightsholder));
-        rightsholderDiscrepancy.setWrWrkInst(usage.getWrWrkInst());
-        rightsholderDiscrepancy.setWorkTitle(usage.getWorkTitle());
-        rightsholderDiscrepancy.setProductFamily(usage.getProductFamily());
-        rightsholderDiscrepancy.setStatus(RightsholderDiscrepancyStatusEnum.IN_PROGRESS);
-        String userName = RupContextUtils.getUserName();
-        rightsholderDiscrepancy.setCreateUser(userName);
-        rightsholderDiscrepancy.setUpdateUser(userName);
-        return rightsholderDiscrepancy;
-    }
+        private final String userName;
 
-    private Rightsholder buildRightsholder(Long accountNumber) {
-        Rightsholder rightsholder = new Rightsholder();
-        rightsholder.setAccountNumber(accountNumber);
-        return rightsholder;
+        DiscrepancyBuilder(String userName) {
+            this.userName = userName;
+        }
+
+        @Override
+        public Set<RightsholderDiscrepancy> build(List<Usage> usages, Long newAccountNumber,
+                                                  Map<Long, Rightsholder> accountNumberToRightsholder) {
+            Set<RightsholderDiscrepancy> rightsholderDiscrepancies = new HashSet<>();
+            usages.forEach(usage -> {
+                if (!Objects.equals(usage.getRightsholder().getAccountNumber(), newAccountNumber)) {
+                    rightsholderDiscrepancies.add(
+                        buildDiscrepancy(usage, newAccountNumber, accountNumberToRightsholder));
+                }
+            });
+            return rightsholderDiscrepancies;
+        }
+
+        private RightsholderDiscrepancy buildDiscrepancy(Usage usage, Long newAccountNumber,
+                                                         Map<Long, Rightsholder> accountNumberToRightsholder) {
+            RightsholderDiscrepancy discrepancy = new RightsholderDiscrepancy();
+            discrepancy.setId(RupPersistUtils.generateUuid());
+            discrepancy.setOldRightsholder(usage.getRightsholder());
+            discrepancy.setNewRightsholder(
+                accountNumberToRightsholder.computeIfAbsent(newAccountNumber, this::buildRightsholder));
+            discrepancy.setWrWrkInst(usage.getWrWrkInst());
+            discrepancy.setWorkTitle(usage.getWorkTitle());
+            discrepancy.setProductFamily(usage.getProductFamily());
+            discrepancy.setStatus(RightsholderDiscrepancyStatusEnum.IN_PROGRESS);
+            discrepancy.setCreateUser(userName);
+            discrepancy.setUpdateUser(userName);
+            return discrepancy;
+        }
+
+        private Rightsholder buildRightsholder(Long accountNumber) {
+            Rightsholder rightsholder = new Rightsholder();
+            rightsholder.setAccountNumber(accountNumber);
+            return rightsholder;
+        }
     }
 
     private Scenario buildScenario(String scenarioName, String description, List<Usage> usages) {

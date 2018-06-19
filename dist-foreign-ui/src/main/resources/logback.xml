@@ -41,6 +41,12 @@
         <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
         <appender-ref ref="STDOUT"/>
     </logger>
+
+    <logger name="com.copyright.rup.dist.common.service.impl.discrepancy" level="${logLevelRights}" additivity="false">
+        <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
     <logger name="com.copyright.rup.dist.foreign.integration.rms.impl" level="${logLevelRights}" additivity="false">
         <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
         <appender-ref ref="STDOUT"/>

@@ -18,6 +18,20 @@
     <import resource="classpath:/com/copyright/rup/dist/foreign/integration/dist-foreign-integration-context.xml"/>
     <import resource="classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-scheduler-context.xml"/>
 
+    <bean id="dist.common.integration.rmsIntegrationService" class="com.copyright.rup.dist.common.service.impl.discrepancy.RmsIntegrationService">
+        <constructor-arg ref="dist.common.integration.rmsService"/>
+    </bean>
+
+    <bean id="dist.common.integration.rmsGrantsProcessorService" class="com.copyright.rup.dist.common.service.impl.discrepancy.RmsGrantsProcessorService">
+        <constructor-arg ref="dist.common.integration.rmsIntegrationService"/>
+    </bean>
+
+    <bean id="dist.common.integration.commonDiscrepanciesService" class="com.copyright.rup.dist.common.service.impl.discrepancy.CommonDiscrepanciesService">
+        <constructor-arg ref="dist.common.integration.rmsGrantsProcessorService"/>
+        <constructor-arg ref="rightsholderService"/>
+        <constructor-arg value="$RUP{dist.foreign.discrepancy.partition_size}"/>
+    </bean>
+
     <!--Transaction manager configuration-->
     <tx:annotation-driven transaction-manager="txManager"/>
 
