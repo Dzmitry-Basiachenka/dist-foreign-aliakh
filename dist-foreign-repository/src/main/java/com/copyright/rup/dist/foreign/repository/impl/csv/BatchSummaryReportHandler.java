@@ -41,18 +41,18 @@ public class BatchSummaryReportHandler extends BaseCsvReportHandler<BatchSummary
         beanProperties.add(getBeanPropertyAsString(bean.getRroAccountNumber()));
         beanProperties.add(bean.getRroName());
         beanProperties.add(getBeanLocalDate(bean.getPaymentDate()));
-        beanProperties.add(getBeanBigDecimal(bean.getGrossAmount()));
+        beanProperties.add(roundAndGetBeanBigDecimal(bean.getGrossAmount()));
         beanProperties.add(getBeanPropertyAsString(bean.getNonEligibleDetailsCount()));
-        beanProperties.add(getBeanBigDecimal(bean.getNonEligibleDetailsGrossAmount()));
+        beanProperties.add(roundAndGetBeanBigDecimal(bean.getNonEligibleDetailsGrossAmount()));
         beanProperties.add(getBeanPropertyAsString(bean.getNtsDetailsCount()));
-        beanProperties.add(getBeanBigDecimal(bean.getNtsDetailsGrossAmount()));
+        beanProperties.add(roundAndGetBeanBigDecimal(bean.getNtsDetailsGrossAmount()));
         beanProperties.add(getBeanPropertyAsString(bean.getFasAndClaFasEligibleDetailsCount()));
-        beanProperties.add(getBeanBigDecimal(bean.getFasAndClaFasEligibleDetailsGrossAmount()));
+        beanProperties.add(roundAndGetBeanBigDecimal(bean.getFasAndClaFasEligibleDetailsGrossAmount()));
         beanProperties.add(getBeanPropertyAsString(bean.getScenariosDetailsCount()));
-        beanProperties.add(getBeanBigDecimal(bean.getScenariosDetailsGrossAmount()));
-        beanProperties.add(getBeanBigDecimal(bean.getScenariosDetailsNetAmount()));
+        beanProperties.add(roundAndGetBeanBigDecimal(bean.getScenariosDetailsGrossAmount()));
+        beanProperties.add(roundAndGetBeanBigDecimal(bean.getScenariosDetailsNetAmount()));
         beanProperties.add(getBeanPropertyAsString(bean.getReturnToClaDetailsCount()));
-        beanProperties.add(getBeanBigDecimal(bean.getReturnToClaDetailsGrossAmount()));
+        beanProperties.add(roundAndGetBeanBigDecimal(bean.getReturnToClaDetailsGrossAmount()));
         return beanProperties;
     }
 
