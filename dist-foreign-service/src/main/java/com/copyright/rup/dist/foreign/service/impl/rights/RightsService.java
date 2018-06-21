@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.service.impl.rights;
 
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.domain.BaseEntity;
+import com.copyright.rup.dist.common.service.api.discrepancy.IRmsGrantsProcessorService;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
@@ -11,7 +12,6 @@ import com.copyright.rup.dist.foreign.integration.rms.api.RightsAssignmentResult
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsService;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
-import com.copyright.rup.dist.foreign.service.api.IRmsGrantsService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 
 import com.google.common.collect.Lists;
@@ -49,7 +49,7 @@ public class RightsService implements IRightsService {
     @Autowired
     private IUsageAuditService auditService;
     @Autowired
-    private IRmsGrantsService rmsGrantsService;
+    private IRmsGrantsProcessorService rmsGrantsProcessorService;
     @Autowired
     private IRightsholderService rightsholderService;
 
@@ -110,7 +110,7 @@ public class RightsService implements IRightsService {
                 .mapping(Usage::getId, Collectors.toSet())));
 
         Map<Long, Long> wrWrkInstToAccountNumber =
-            rmsGrantsService.getAccountNumbersByWrWrkInsts(Lists.newArrayList(wrWrkInstToUsageIds.keySet()));
+            rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Lists.newArrayList(wrWrkInstToUsageIds.keySet()));
 
         AtomicLong eligibleUsagesCount = new AtomicLong();
         wrWrkInstToAccountNumber.forEach((wrWrkInst, rhAccountNumber) -> {
@@ -138,7 +138,7 @@ public class RightsService implements IRightsService {
             Collectors.groupingBy(Usage::getWrWrkInst, HashMap::new, Collectors
                 .mapping(Usage::getId, Collectors.toSet())));
         Map<Long, Long> wrWrkInstToAccountNumber =
-            rmsGrantsService.getAccountNumbersByWrWrkInsts(Lists.newArrayList(wrWrkInstToUsageIds.keySet()));
+            rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Lists.newArrayList(wrWrkInstToUsageIds.keySet()));
         AtomicLong eligibleUsagesCount = new AtomicLong();
         wrWrkInstToAccountNumber.forEach((wrWrkInst, rhAccountNumber) -> {
             Set<String> usageIds = wrWrkInstToUsageIds.get(wrWrkInst);
