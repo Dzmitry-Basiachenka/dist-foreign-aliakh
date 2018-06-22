@@ -70,6 +70,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     private static final String USAGE_ID_KEY = "usageId";
     private static final String STATUS_KEY = "status";
     private static final String RH_ACCOUNT_NUMBER_KEY = "rhAccountNumber";
+    private static final int REPORT_BATCH_SIZE = 100000;
 
     @Override
     public void insert(Usage usage) {
@@ -110,18 +111,28 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     @Override
     public void writeScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
         Objects.requireNonNull(pipedOutputStream);
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put("scenarioId", Objects.requireNonNull(scenarioId));
         try (ScenarioUsagesCsvReportHandler handler = new ScenarioUsagesCsvReportHandler(pipedOutputStream)) {
-            if (Objects.nonNull(scenarioId)) {
-                getTemplate().select("IUsageMapper.findDtoByScenarioId", scenarioId, handler);
+            int size = selectOne("IUsageMapper.findCountByScenarioId", parameters);
+            for (int offset = 0; offset < size; offset += REPORT_BATCH_SIZE) {
+                parameters.put(PAGEABLE_KEY, new Pageable(offset, REPORT_BATCH_SIZE));
+                getTemplate().select("IUsageMapper.findDtoByScenarioId", parameters, handler);
             }
         }
     }
 
     @Override
     public void writeUsagesCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
         try (UsageCsvReportHandler handler = new UsageCsvReportHandler(Objects.requireNonNull(pipedOutputStream))) {
-            if (!Objects.requireNonNull(filter).isEmpty()) {
-                getTemplate().select("IUsageMapper.findByFilter", ImmutableMap.of(FILTER_KEY, filter), handler);
+            if (!filter.isEmpty()) {
+                int size = findCountByFilter(filter);
+                for (int offset = 0; offset < size; offset += REPORT_BATCH_SIZE) {
+                    parameters.put(PAGEABLE_KEY, new Pageable(offset, REPORT_BATCH_SIZE));
+                    getTemplate().select("IUsageMapper.findByFilter", parameters, handler);
+                }
             }
         }
     }
@@ -283,11 +294,15 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
 
     @Override
     public void writeAuditCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put(FILTER_KEY, filter);
         try (AuditCsvReportHandler handler = new AuditCsvReportHandler(Objects.requireNonNull(pipedOutputStream))) {
             if (!Objects.requireNonNull(filter).isEmpty()) {
-                Map<String, Object> params = Maps.newHashMapWithExpectedSize(1);
-                params.put(FILTER_KEY, filter);
-                getTemplate().select("IUsageMapper.findForAudit", params, handler);
+                int size = findCountForAudit(filter);
+                for (int offset = 0; offset < size; offset += REPORT_BATCH_SIZE) {
+                    parameters.put(PAGEABLE_KEY, new Pageable(offset, REPORT_BATCH_SIZE));
+                    getTemplate().select("IUsageMapper.findForAudit", parameters, handler);
+                }
             }
         }
     }
