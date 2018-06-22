@@ -42,13 +42,13 @@ public class ResearchStatusReportHandler extends BaseCsvReportHandler<ResearchSt
         beanProperties.add(bean.getRroName());
         beanProperties.add(getBeanLocalDate(bean.getPaymentDate()));
         beanProperties.add(getBeanPropertyAsString(bean.getWorkNotFoundDetailsCount()));
-        beanProperties.add(getBeanBigDecimal(bean.getWorkNotFoundGrossAmount()));
+        beanProperties.add(roundAndGetBeanBigDecimal(bean.getWorkNotFoundGrossAmount()));
         beanProperties.add(getBeanPropertyAsString(bean.getWorkResearchDetailsCount()));
-        beanProperties.add(getBeanBigDecimal(bean.getWorkResearchGrossAmount()));
+        beanProperties.add(roundAndGetBeanBigDecimal(bean.getWorkResearchGrossAmount()));
         beanProperties.add(getBeanPropertyAsString(bean.getSendForRaDetailsCount()));
-        beanProperties.add(getBeanBigDecimal(bean.getSendForRaGrossAmount()));
+        beanProperties.add(roundAndGetBeanBigDecimal(bean.getSendForRaGrossAmount()));
         beanProperties.add(getBeanPropertyAsString(bean.getRhNotFoundDetailsCount()));
-        beanProperties.add(getBeanBigDecimal(bean.getRhNotFoundGrossAmount()));
+        beanProperties.add(roundAndGetBeanBigDecimal(bean.getRhNotFoundGrossAmount()));
         return beanProperties;
     }
 
