@@ -1,3 +1,11 @@
+2.1.47
+-
+* B-43661 Tech Debt: FDA: fix style name and sorting for Type column in Usage History window
+* B-43662 Tech Debt: FDA: add rounding to two decimal places for all reports
+* B-43662 Tech Debt: FDA: adjust data ordering for Batch Summary and Research Status reports
+* B-44370 LM: Performance improvements of critical areas: Unify discrepancy creation functionality in FDA and LM
+* B-44370 LM: Performance improvements of critical areas: Update Spring configuration after removing class RmsIntegrationService
+
 2.1.46
 -
 * B-43661 Tech Debt: FDA: make changes based on comments in CR-DIST-FOREIGN-65
