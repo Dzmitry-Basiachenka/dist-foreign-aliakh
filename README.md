@@ -1,3 +1,7 @@
+2.1.48
+-
+* B-43662 Tech Debt: FDA: add pagination to export usages on Usages and Audit tabs and View Scenario window to resolve out of memory exception
+
 2.1.47
 -
 * B-43661 Tech Debt: FDA: fix style name and sorting for Type column in Usage History window
