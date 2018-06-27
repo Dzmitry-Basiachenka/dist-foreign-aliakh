@@ -461,6 +461,12 @@
         <include refid="ifPageable"/>
     </select>
 
+    <select id="findCountByScenarioId" parameterType="map" resultType="int">
+        select count(1)
+        from ${schema}.df_usage u
+        where df_scenario_uid = #{scenarioId}
+    </select>
+
     <select id="findByScenarioId" resultMap="usageResultMap" parameterType="string">
         select
             u.df_usage_uid,
@@ -531,6 +537,7 @@
         <include refid="selectUsageDtos"/>
         where df_scenario_uid = #{scenarioId}
         order by u.rh_account_number
+        <include refid="ifPageable"/>
     </select>
 
     <select id="findCountByFilter" parameterType="map" resultType="int">
