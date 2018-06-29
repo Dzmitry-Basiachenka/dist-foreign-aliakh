@@ -106,11 +106,11 @@ public class RightsholderDiscrepancyServiceTest {
     }
 
     @Test
-    public void testDeleteByStatus() {
-        rightsholderDiscrepancyRepository.deleteByStatus(RightsholderDiscrepancyStatusEnum.IN_PROGRESS);
+    public void testDeleteByScenarioId() {
+        rightsholderDiscrepancyRepository.deleteByScenarioId(SCENARIO_ID);
         expectLastCall().once();
         replay(rightsholderDiscrepancyRepository);
-        rightsholderDiscrepancyService.deleteByStatus(RightsholderDiscrepancyStatusEnum.IN_PROGRESS);
+        rightsholderDiscrepancyService.deleteByScenarioId(SCENARIO_ID);
         verify(rightsholderDiscrepancyRepository);
     }
 }

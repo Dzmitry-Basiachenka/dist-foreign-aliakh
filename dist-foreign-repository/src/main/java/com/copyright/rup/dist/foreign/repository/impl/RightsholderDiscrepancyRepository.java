@@ -81,8 +81,8 @@ public class RightsholderDiscrepancyRepository extends BaseRepository implements
     }
 
     @Override
-    public void deleteByStatus(RightsholderDiscrepancyStatusEnum status) {
-        delete("IRightsholderDiscrepancyMapper.deleteByStatus", Objects.requireNonNull(status));
+    public void deleteByScenarioId(String scenarioId) {
+        delete("IRightsholderDiscrepancyMapper.deleteByScenarioId", Objects.requireNonNull(scenarioId));
     }
 
     @Override
