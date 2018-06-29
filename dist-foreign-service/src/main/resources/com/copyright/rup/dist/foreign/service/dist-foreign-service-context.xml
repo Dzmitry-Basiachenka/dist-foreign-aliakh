@@ -14,19 +14,10 @@
             http://camel.apache.org/schema/spring/camel-spring-2.18.3.xsd">
 
     <import resource="classpath:/com/copyright/rup/dist/common/service/dist-common-performance-aspect-context.xml"/>
+    <import resource="classpath:/com/copyright/rup/dist/common/service/dist-common-discrepancy-service-context.xml"/>
     <import resource="classpath:/com/copyright/rup/dist/foreign/repository/dist-foreign-repository-context.xml"/>
     <import resource="classpath:/com/copyright/rup/dist/foreign/integration/dist-foreign-integration-context.xml"/>
     <import resource="classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-scheduler-context.xml"/>
-
-    <bean id="dist.common.integration.rmsGrantsProcessorService" class="com.copyright.rup.dist.common.service.impl.discrepancy.RmsGrantsProcessorService">
-        <constructor-arg ref="dist.common.integration.rmsService"/>
-    </bean>
-
-    <bean id="dist.common.integration.commonDiscrepanciesService" class="com.copyright.rup.dist.common.service.impl.discrepancy.CommonDiscrepanciesService">
-        <constructor-arg ref="dist.common.integration.rmsGrantsProcessorService"/>
-        <constructor-arg ref="rightsholderService"/>
-        <constructor-arg value="$RUP{dist.foreign.discrepancy.partition_size}"/>
-    </bean>
 
     <!--Transaction manager configuration-->
     <tx:annotation-driven transaction-manager="txManager"/>

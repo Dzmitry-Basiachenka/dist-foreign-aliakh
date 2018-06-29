@@ -297,12 +297,6 @@ public class ScenarioService implements IScenarioService {
             discrepancy.setUpdateUser(userName);
             return discrepancy;
         }
-
-        private Rightsholder buildRightsholder(Long accountNumber) {
-            Rightsholder rightsholder = new Rightsholder();
-            rightsholder.setAccountNumber(accountNumber);
-            return rightsholder;
-        }
     }
 
     private Scenario buildScenario(String scenarioName, String description, List<Usage> usages) {
