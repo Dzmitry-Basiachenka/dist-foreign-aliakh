@@ -84,6 +84,7 @@
         select distinct old_rh_account_number
         from ${schema}.df_rightsholder_discrepancy
         where new_rh_account_number is null
+            and df_scenario_uid = #{scenarioId}
             and status_ind = #{status}
     </select>
 
@@ -137,9 +138,9 @@
             and status_ind = #{status}
     </delete>
 
-    <delete id="deleteByStatus">
+    <delete id="deleteByScenarioId">
         delete from ${schema}.df_rightsholder_discrepancy
-        where status_ind = #{status}
+        where df_scenario_uid = #{scenarioId}
     </delete>
 
     <update id="approveByScenarioId" parameterType="map">

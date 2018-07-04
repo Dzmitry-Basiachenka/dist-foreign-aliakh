@@ -119,8 +119,7 @@ public class ScenarioService implements IScenarioService {
         usageService.deleteFromScenario(scenarioId);
         scenarioAuditService.deleteActions(scenarioId);
         scenarioUsageFilterService.removeByScenarioId(scenarioId);
-        rightsholderDiscrepancyService.deleteByScenarioIdAndStatus(scenarioId,
-            RightsholderDiscrepancyStatusEnum.APPROVED);
+        rightsholderDiscrepancyService.deleteByScenarioId(scenarioId);
         scenarioRepository.remove(scenarioId);
         LOGGER.info("Delete scenario. Finished. {}, User={}", ForeignLogUtils.scenario(scenario), userName);
     }
@@ -194,7 +193,8 @@ public class ScenarioService implements IScenarioService {
     @Transactional
     public void reconcileRightsholders(Scenario scenario) {
         LOGGER.info("Reconcile rightsholders. Started. {}", ForeignLogUtils.scenario(Objects.requireNonNull(scenario)));
-        rightsholderDiscrepancyService.deleteByStatus(RightsholderDiscrepancyStatusEnum.IN_PROGRESS);
+        rightsholderDiscrepancyService.deleteByScenarioIdAndStatus(scenario.getId(),
+            RightsholderDiscrepancyStatusEnum.IN_PROGRESS);
         List<RightsholderDiscrepancy> discrepancies = commonDiscrepanciesService.getDiscrepancies(
             usageService.getUsagesForReconcile(scenario.getId()), Usage::getWrWrkInst,
             new DiscrepancyBuilder(RupContextUtils.getUserName()));
@@ -261,6 +261,42 @@ public class ScenarioService implements IScenarioService {
         return archivedCount;
     }
 
+    private Scenario buildScenario(String scenarioName, String description, List<Usage> usages) {
+        Scenario scenario = new Scenario();
+        scenario.setId(RupPersistUtils.generateUuid());
+        scenario.setName(scenarioName);
+        scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
+        scenario.setDescription(description);
+        scenario.setNetTotal(usages.stream()
+            .map(Usage::getNetAmount)
+            .reduce(BigDecimal.ZERO.setScale(10, RoundingMode.HALF_UP), BigDecimal::add));
+        scenario.setServiceFeeTotal(usages.stream()
+            .map(Usage::getServiceFeeAmount)
+            .reduce(BigDecimal.ZERO.setScale(10, RoundingMode.HALF_UP), BigDecimal::add));
+        scenario.setGrossTotal(usages.stream()
+            .map(Usage::getGrossAmount)
+            .reduce(BigDecimal.ZERO.setScale(10, RoundingMode.HALF_UP), BigDecimal::add));
+        scenario.setReportedTotal(usages.stream()
+            .map(Usage::getReportedValue)
+            .reduce(BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP), BigDecimal::add));
+        String userName = RupContextUtils.getUserName();
+        scenario.setCreateUser(userName);
+        scenario.setUpdateUser(userName);
+        return scenario;
+    }
+
+    private void changeScenarioState(Scenario scenario, ScenarioStatusEnum status, ScenarioActionTypeEnum action,
+                                     String reason) {
+        Objects.requireNonNull(scenario);
+        String userName = RupContextUtils.getUserName();
+        scenario.setStatus(status);
+        scenario.setUpdateUser(userName);
+        LOGGER.info("Change scenario status. {}, User={}, Reason={}", ForeignLogUtils.scenario(scenario), userName,
+            reason);
+        scenarioRepository.updateStatus(scenario);
+        scenarioAuditService.logAction(scenario.getId(), action, reason);
+    }
+
     private static class DiscrepancyBuilder implements IDiscrepancyBuilder<Usage, RightsholderDiscrepancy> {
 
         private final String userName;
@@ -297,41 +333,5 @@ public class ScenarioService implements IScenarioService {
             discrepancy.setUpdateUser(userName);
             return discrepancy;
         }
-    }
-
-    private Scenario buildScenario(String scenarioName, String description, List<Usage> usages) {
-        Scenario scenario = new Scenario();
-        scenario.setId(RupPersistUtils.generateUuid());
-        scenario.setName(scenarioName);
-        scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
-        scenario.setDescription(description);
-        scenario.setNetTotal(usages.stream()
-            .map(Usage::getNetAmount)
-            .reduce(BigDecimal.ZERO.setScale(10, RoundingMode.HALF_UP), BigDecimal::add));
-        scenario.setServiceFeeTotal(usages.stream()
-            .map(Usage::getServiceFeeAmount)
-            .reduce(BigDecimal.ZERO.setScale(10, RoundingMode.HALF_UP), BigDecimal::add));
-        scenario.setGrossTotal(usages.stream()
-            .map(Usage::getGrossAmount)
-            .reduce(BigDecimal.ZERO.setScale(10, RoundingMode.HALF_UP), BigDecimal::add));
-        scenario.setReportedTotal(usages.stream()
-            .map(Usage::getReportedValue)
-            .reduce(BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP), BigDecimal::add));
-        String userName = RupContextUtils.getUserName();
-        scenario.setCreateUser(userName);
-        scenario.setUpdateUser(userName);
-        return scenario;
-    }
-
-    private void changeScenarioState(Scenario scenario, ScenarioStatusEnum status, ScenarioActionTypeEnum action,
-                                     String reason) {
-        Objects.requireNonNull(scenario);
-        String userName = RupContextUtils.getUserName();
-        scenario.setStatus(status);
-        scenario.setUpdateUser(userName);
-        LOGGER.info("Change scenario status. {}, User={}, Reason={}", ForeignLogUtils.scenario(scenario), userName,
-            reason);
-        scenarioRepository.updateStatus(scenario);
-        scenarioAuditService.logAction(scenario.getId(), action, reason);
     }
 }
