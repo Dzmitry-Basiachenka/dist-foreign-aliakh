@@ -123,8 +123,7 @@ public class PiIntegrationService implements IPiIntegrationService {
                     }
                 } else {
                     LOGGER.debug("Search works. By IDNO and Title. IDNO={}, Title={}, WrWrkInst=MultiResults, Hits={}",
-                        idno, title,
-                        filteredByTitleHits.stream().map(RupSearchHit::getSource).collect(Collectors.joining(";")));
+                        idno, title, searchHits.stream().map(RupSearchHit::getSource).collect(Collectors.joining(";")));
                 }
             }
         } else {
