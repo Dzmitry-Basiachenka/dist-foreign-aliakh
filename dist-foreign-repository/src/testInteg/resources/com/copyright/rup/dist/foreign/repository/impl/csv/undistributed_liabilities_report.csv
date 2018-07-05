@@ -1,8 +1,6 @@
-Source RRO Account #,Source RRO Name,Payment Date,Gross Undistributed Amount in FDA,Estimated Service Fee Amount,Net Estimated Payable Amount,Estimated Service Fee %,Total FAS Gross Amount Sent to LM,Total Actual Service Fee Amount in LM,Net Amount Sent to LM,Actual Service Fee %,Service Fee True-Up,Return to CLA Service Fee True-up,Gross Amount Return to CLA,Total CLA Service Fee Amount,Net Total Amount Return to CLA
-2000017000,"CLA, The Copyright Licensing Agency Ltd.",01/01/2010,1500.00,285.00,1215.00,19.0,880.00,198.00,682.00,22.5,87.00,34.20,380.00,38.00,342.00
-5000581900,The Copyright Company,01/03/2010,100.00,0.00,100.00,0.0,100.00,32.00,64.00,32.0,-32.00,0.00,0.00,0.00,0.00
-7000581909,"CLASS, The Copyright Licensing and Administration Society of Singapore Ltd",01/01/2010,0.00,0.00,0.00,19.5,100.00,32.00,68.00,32.0,-32.00,0.00,0.00,0.00,0.00
-7000581909,"CLASS, The Copyright Licensing and Administration Society of Singapore Ltd",01/02/2010,60.00,11.70,48.30,19.5,0.00,0.00,0.00,0.0,11.70,0.00,0.00,0.00,0.00
-7000581909,"CLASS, The Copyright Licensing and Administration Society of Singapore Ltd",01/03/2010,800.00,156.00,644.00,19.5,0.00,0.00,0.00,0.0,156.00,0.00,0.00,0.00,0.00
-7000581909,"CLASS, The Copyright Licensing and Administration Society of Singapore Ltd",01/04/2010,0.00,0.00,0.00,19.5,50.00,16.00,34.00,32.0,-16.00,0.00,0.00,0.00,0.00
-7000581909,"CLASS, The Copyright Licensing and Administration Society of Singapore Ltd",04/21/2010,200.00,39.00,161.00,19.5,200.00,64.00,136.00,32.0,-25.00,0.00,0.00,0.00,0.00
+Source RRO Account #,Source RRO Name,Payment Date,Gross Undistributed Amount in FDA,Estimated Service Fee Amount,Net Estimated Payable Amount,Estimated Service Fee %
+2000017000,"CLA, The Copyright Licensing Agency Ltd.",01/01/2010,1500.00,285.00,1215.00,19.0
+5000581900,The Copyright Company,01/03/2010,100.00,0.00,100.00,0.0
+7000581909,"CLASS, The Copyright Licensing and Administration Society of Singapore Ltd",01/02/2010,60.00,11.70,48.30,19.5
+7000581909,"CLASS, The Copyright Licensing and Administration Society of Singapore Ltd",01/03/2010,800.00,156.00,644.00,19.5
+7000581909,"CLASS, The Copyright Licensing and Administration Society of Singapore Ltd",04/21/2010,200.00,39.00,161.00,19.5
