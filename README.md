@@ -1,3 +1,12 @@
+2.1.49
+-
+* B-43662 Tech Debt: FDA: adjust PI integration service log in case of multiply results
+* B-43662 Tech Debt: FDA: update dist-common version to 15, apply HealthCheckSetupContextListener, remove HealthCheckFilter
+* B-44370 LM: Performance improvements of critical areas: Increase version of disc-common dependency
+* B-44370 LM: Performance improvements of critical areas: Make changes based on comments in CR-DIST-FOREIGN-66
+* B-44723 FDA: Update Undistributed Liabilities Report: adjust sql query for data selecting data and report handler for report generation
+* RDSC-600 FDA: RHs discrepancies are not cleared from the table if reconciliation process is interrupted
+
 2.1.48
 -
 * B-43662 Tech Debt: FDA: add pagination to export usages on Usages and Audit tabs and View Scenario window to resolve out of memory exception
