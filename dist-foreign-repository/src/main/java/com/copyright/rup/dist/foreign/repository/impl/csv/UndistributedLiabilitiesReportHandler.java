@@ -20,11 +20,9 @@ import java.util.List;
  */
 public class UndistributedLiabilitiesReportHandler extends BaseCsvReportHandler<UndistributedLiabilitiesReportDto> {
 
-    private static final List<String> HEADERS = Arrays.asList("Source RRO Account #", "Source RRO Name", "Payment Date",
-        "Gross Undistributed Amount in FDA", "Estimated Service Fee Amount", "Net Estimated Payable Amount",
-        "Estimated Service Fee %", "Total FAS Gross Amount Sent to LM", "Total Actual Service Fee Amount in LM",
-        "Net Amount Sent to LM", "Actual Service Fee %", "Service Fee True-Up", "Return to CLA Service Fee True-up",
-        "Gross Amount Return to CLA", "Total CLA Service Fee Amount", "Net Total Amount Return to CLA");
+    private static final List<String> HEADERS =
+        Arrays.asList("Source RRO Account #", "Source RRO Name", "Payment Date", "Gross Undistributed Amount in FDA",
+            "Estimated Service Fee Amount", "Net Estimated Payable Amount", "Estimated Service Fee %");
 
     /**
      * Constructor.
@@ -45,15 +43,6 @@ public class UndistributedLiabilitiesReportHandler extends BaseCsvReportHandler<
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getEstimatedServiceFeeAmount()));
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getEstimatedNetAmount()));
         beanProperties.add(getBeanServiceFeePercent(bean.getEstimatedServiceFee()));
-        beanProperties.add(roundAndGetBeanBigDecimal(bean.getGrossAmountSentToLm()));
-        beanProperties.add(roundAndGetBeanBigDecimal(bean.getServiceFeeAmountSentToLm()));
-        beanProperties.add(roundAndGetBeanBigDecimal(bean.getNetAmountSentToLm()));
-        beanProperties.add(getBeanServiceFeePercent(bean.getServiceFee()));
-        beanProperties.add(roundAndGetBeanBigDecimal(bean.getServiceFeeTrueUp()));
-        beanProperties.add(roundAndGetBeanBigDecimal(bean.getServiceFeeTrueUpReturnToCla()));
-        beanProperties.add(roundAndGetBeanBigDecimal(bean.getGrossAmountReturnToCla()));
-        beanProperties.add(roundAndGetBeanBigDecimal(bean.getServiceFeeAmountReturnToCla()));
-        beanProperties.add(roundAndGetBeanBigDecimal(bean.getNetAmountReturnToCla()));
         return beanProperties;
     }
 
