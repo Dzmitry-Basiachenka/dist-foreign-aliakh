@@ -78,10 +78,11 @@ public class ReportWidgetTest {
         assertEquals("reports-menu", reportWidget.getStyleName());
         assertEquals(1, CollectionUtils.size(reportWidget.getItems()));
         List<MenuItem> menuItems = reportWidget.getItems().get(0).getChildren();
-        assertEquals(3, CollectionUtils.size(menuItems));
-        assertEquals("Undistributed Liabilities Reconciliation Report", menuItems.get(0).getText());
-        assertEquals("Batch Summary Report", menuItems.get(1).getText());
-        assertEquals("Research Status Report", menuItems.get(2).getText());
+        assertEquals(4, CollectionUtils.size(menuItems));
+        assertEquals("Batch Summary Report", menuItems.get(0).getText());
+        assertEquals("Research Status Report", menuItems.get(1).getText());
+        assertEquals("Service Fee True-up Report", menuItems.get(2).getText());
+        assertEquals("Undistributed Liabilities Reconciliation Report", menuItems.get(3).getText());
     }
 
     @Test
@@ -92,7 +93,7 @@ public class ReportWidgetTest {
         Windows.showModalWindow(anyObject());
         expectLastCall().once();
         replayAll();
-        selectMenuItem(0);
+        selectMenuItem(3);
         verifyAll();
     }
 
@@ -100,13 +101,25 @@ public class ReportWidgetTest {
     public void testBatchSummaryReportSelected() {
         expectReportGenerated(reportController.getBatchSummaryReportStreamSource());
         replayAll();
-        selectMenuItem(1);
+        selectMenuItem(0);
         verifyAll();
     }
 
     @Test
     public void testResearchStatusReportSelected() {
         expectReportGenerated(reportController.getResearchStatusReportStreamSource());
+        replayAll();
+        selectMenuItem(1);
+        verifyAll();
+    }
+
+    @Test
+    public void testServiceFeeTrueUpReportSelected() {
+        expect(reportController.getServiceFeeTrueUpReportController())
+            .andReturn(new ServiceFeeTrueUpReportController()).once();
+        expect(ResourceReference.create(anyObject(), anyObject(), anyObject())).andReturn(resourceReference).once();
+        Windows.showModalWindow(anyObject());
+        expectLastCall().once();
         replayAll();
         selectMenuItem(2);
         verifyAll();

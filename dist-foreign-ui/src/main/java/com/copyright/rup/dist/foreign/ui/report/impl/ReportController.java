@@ -4,6 +4,7 @@ import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportWidget;
+import com.copyright.rup.dist.foreign.ui.report.api.IServiceFeeTrueUpReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IUndistributedLiabilitiesReportController;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.widget.api.CommonController;
@@ -29,11 +30,18 @@ public class ReportController extends CommonController<IReportWidget> implements
     @Autowired
     private IUndistributedLiabilitiesReportController undistributedLiabilitiesReportController;
     @Autowired
+    private IServiceFeeTrueUpReportController serviceFeeTrueUpReportController;
+    @Autowired
     private IReportService reportService;
 
     @Override
     public IUndistributedLiabilitiesReportController getUndistributedLiabilitiesReportController() {
         return undistributedLiabilitiesReportController;
+    }
+
+    @Override
+    public IServiceFeeTrueUpReportController getServiceFeeTrueUpReportController() {
+        return serviceFeeTrueUpReportController;
     }
 
     @Override

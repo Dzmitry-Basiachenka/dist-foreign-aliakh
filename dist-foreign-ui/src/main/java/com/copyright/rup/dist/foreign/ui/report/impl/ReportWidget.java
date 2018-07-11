@@ -44,13 +44,16 @@ public class ReportWidget extends MenuBar implements IReportWidget {
         MenuItem rootItem = addItem(ForeignUi.getMessage("tab.reports"), null);
         rootItem.setStyleName("reports-menu-root");
         String undistributedLiabilitiesReportCaption = ForeignUi.getMessage("menu.report.undistributed_liabilities");
-        rootItem.addItem(undistributedLiabilitiesReportCaption, menuItem ->
-            openReportWindow(undistributedLiabilitiesReportCaption,
-                controller.getUndistributedLiabilitiesReportController()));
+        String serviceFeeTrueUpReportCaption = ForeignUi.getMessage("menu.report.service_fee_true_up");
         rootItem.addItem(ForeignUi.getMessage("menu.report.batch_summary"),
             menuItem -> generateReport(controller.getBatchSummaryReportStreamSource()));
         rootItem.addItem(ForeignUi.getMessage("menu.report.research_status"),
             menuItem -> generateReport(controller.getResearchStatusReportStreamSource()));
+        rootItem.addItem(serviceFeeTrueUpReportCaption, menuItem ->
+            openReportWindow(serviceFeeTrueUpReportCaption, controller.getServiceFeeTrueUpReportController()));
+        rootItem.addItem(undistributedLiabilitiesReportCaption, menuItem ->
+            openReportWindow(undistributedLiabilitiesReportCaption,
+                controller.getUndistributedLiabilitiesReportController()));
         return this;
     }
 

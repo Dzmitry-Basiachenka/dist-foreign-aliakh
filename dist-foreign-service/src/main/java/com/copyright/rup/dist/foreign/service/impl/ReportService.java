@@ -65,4 +65,10 @@ public class ReportService implements IReportService {
     public void writeResearchStatusCsvReport(OutputStream outputStream) {
         usageRepository.writeResearchStatusCsvReport(outputStream);
     }
+
+    @Override
+    public void writeServiceFeeTrueUpCsvReport(LocalDate fromDate, LocalDate toDate, LocalDate paymentDateTo,
+                                               OutputStream outputStream) {
+        //TODO use repository to generate report here
+    }
 }
