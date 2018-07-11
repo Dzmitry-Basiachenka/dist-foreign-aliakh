@@ -1,3 +1,9 @@
+2.1.50
+-
+* B-42074 FDA: Upgrade FDA RUP ES API Integration with new Elastic Search version: update rupEsApi to 9+ version and configure cluster, node and index for PI integration
+* B-43662 Tech Debt: FDA: remove redundant v-label-white-space-normal CSS definition
+* B-44722 FDA: Service Fee True-up Report: add ui to generate report, change order of items in reports menu
+
 2.1.49
 -
 * B-43662 Tech Debt: FDA: adjust PI integration service log in case of multiply results
