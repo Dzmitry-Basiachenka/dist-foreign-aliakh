@@ -20,6 +20,11 @@ public interface IReportController extends IController<IReportWidget> {
     IUndistributedLiabilitiesReportController getUndistributedLiabilitiesReportController();
 
     /**
+     * @return service fee true-up report controller.
+     */
+    IServiceFeeTrueUpReportController getServiceFeeTrueUpReportController();
+
+    /**
      * @return instance of {@link IStreamSource} for batch summary report.
      */
     IStreamSource getBatchSummaryReportStreamSource();
