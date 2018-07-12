@@ -58,6 +58,19 @@ public class ReportServiceTest {
     }
 
     @Test
+    public void testServiceFeeTrueUpCsvReport() {
+        LocalDate fromDate = LocalDate.now();
+        LocalDate toDate = LocalDate.now();
+        LocalDate paymentDateTo = LocalDate.now();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        usageRepository.writeServiceFeeTrueUpCsvReport(fromDate, toDate, paymentDateTo, outputStream);
+        expectLastCall().once();
+        replay(usageRepository);
+        reportService.writeServiceFeeTrueUpCsvReport(fromDate, toDate, paymentDateTo, outputStream);
+        verify(usageRepository);
+    }
+
+    @Test
     public void testWriteUsageCsvReport() {
         UsageFilter filter = createMock(UsageFilter.class);
         PipedOutputStream outputStream = createMock(PipedOutputStream.class);

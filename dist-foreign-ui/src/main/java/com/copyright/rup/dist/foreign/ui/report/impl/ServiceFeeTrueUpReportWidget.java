@@ -72,9 +72,11 @@ public class ServiceFeeTrueUpReportWidget extends Window implements IServiceFeeT
 
     private void initDatesFilters() {
         toDateWidget = new LocalDateWidget(ForeignUi.getMessage("label.to_date"));
+        toDateWidget.setValue(LocalDate.now());
         fromDateWidget = new LocalDateWidget(ForeignUi.getMessage("label.from_date"));
-        paymentDateToWidget = new LocalDateWidget(ForeignUi.getMessage("label.payment_date_to"));
         fromDateWidget.addValueChangeListener(event -> exportButton.setEnabled(Objects.nonNull(event.getValue())));
+        paymentDateToWidget = new LocalDateWidget(ForeignUi.getMessage("label.payment_date_to"));
+        paymentDateToWidget.setValue(LocalDate.now());
         VaadinUtils.addComponentStyle(toDateWidget, "to-date-filter");
         VaadinUtils.addComponentStyle(fromDateWidget, "from-date-filter");
         VaadinUtils.addComponentStyle(paymentDateToWidget, "payment-date-to-filter");

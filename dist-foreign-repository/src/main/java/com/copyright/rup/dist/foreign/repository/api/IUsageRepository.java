@@ -413,6 +413,17 @@ public interface IUsageRepository {
     void writeUndistributedLiabilitiesCsvReport(LocalDate paymentDate, OutputStream outputStream);
 
     /**
+     * Writes Service Fee True-up Report into the output stream in csv format.
+     *
+     * @param fromDate      from date
+     * @param toDate        to date
+     * @param paymentDateTo payment date to
+     * @param outputStream  instance of {@link OutputStream}
+     */
+    void writeServiceFeeTrueUpCsvReport(LocalDate fromDate, LocalDate toDate, LocalDate paymentDateTo,
+                                        OutputStream outputStream);
+
+    /**
      * Writes Batch Summary Report into the output stream in csv format.
      *
      * @param outputStream instance of {@link OutputStream}
