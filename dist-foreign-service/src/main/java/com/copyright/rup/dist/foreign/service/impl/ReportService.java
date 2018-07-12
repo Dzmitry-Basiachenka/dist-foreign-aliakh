@@ -69,6 +69,6 @@ public class ReportService implements IReportService {
     @Override
     public void writeServiceFeeTrueUpCsvReport(LocalDate fromDate, LocalDate toDate, LocalDate paymentDateTo,
                                                OutputStream outputStream) {
-        //TODO use repository to generate report here
+        usageRepository.writeServiceFeeTrueUpCsvReport(fromDate, toDate, paymentDateTo, outputStream);
     }
 }

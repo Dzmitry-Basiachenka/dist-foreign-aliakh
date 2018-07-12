@@ -20,6 +20,7 @@ import com.copyright.rup.dist.foreign.repository.impl.csv.BatchSummaryReportHand
 import com.copyright.rup.dist.foreign.repository.impl.csv.ResearchStatusReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.ScenarioUsagesCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.SendForResearchCsvReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.ServiceFeeTrueUpReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.UndistributedLiabilitiesReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.UsageCsvReportHandler;
 
@@ -460,6 +461,22 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
             parameters.put("accountNumberClaFas", FdaConstants.CLA_ACCOUNT_NUMBER);
             parameters.put(STATUS_KEY, UsageStatusEnum.SENT_TO_LM);
             getTemplate().select("IUsageMapper.findUndistributedLiabilitiesReportDtos", parameters, handler);
+        }
+    }
+
+    @Override
+    public void writeServiceFeeTrueUpCsvReport(LocalDate fromDate, LocalDate toDate, LocalDate paymentDateTo,
+                                               OutputStream outputStream) {
+        try (ServiceFeeTrueUpReportHandler handler =
+                 new ServiceFeeTrueUpReportHandler(Objects.requireNonNull(outputStream))) {
+            Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(6);
+            parameters.put("paymentDateTo", Objects.requireNonNull(paymentDateTo));
+            parameters.put("fromDate", Objects.requireNonNull(fromDate));
+            parameters.put("toDate", Objects.requireNonNull(toDate));
+            parameters.put("productFamilyClaFas", FdaConstants.CLA_FAS_PRODUCT_FAMILY);
+            parameters.put("accountNumberClaFas", FdaConstants.CLA_ACCOUNT_NUMBER);
+            parameters.put(STATUS_KEY, UsageStatusEnum.SENT_TO_LM);
+            getTemplate().select("IUsageMapper.findServiceFeeTrueUpReportDtos", parameters, handler);
         }
     }
 
