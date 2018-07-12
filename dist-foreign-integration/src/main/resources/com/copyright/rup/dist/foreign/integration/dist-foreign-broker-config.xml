@@ -9,21 +9,19 @@
         <property name="brokerURL" value="$RUP{dist.foreign.integration.broker.url}"/>
     </bean>
 
-    <bean id="df.integration.pooledConnectionFactory"
-          class="org.apache.activemq.pool.PooledConnectionFactory" destroy-method="stop">
+    <bean id="df.integration.pooledConnectionFactory" class="org.apache.activemq.pool.PooledConnectionFactory"
+          init-method="start" destroy-method="stop">
         <property name="maxConnections" value="10"/>
         <property name="connectionFactory" ref="df.integration.jmsConnectionFactory"/>
         <property name="idleTimeout" value="0"/>
     </bean>
 
-    <bean id="df.integration.jmsConfig"
-          class="org.apache.camel.component.jms.JmsConfiguration">
+    <bean id="df.integration.jmsConfig" class="org.apache.camel.component.jms.JmsConfiguration">
         <property name="connectionFactory" ref="df.integration.pooledConnectionFactory"/>
         <property name="concurrentConsumers" value="1"/>
     </bean>
 
-    <bean id="df.integration.activemqComponent" class="org.apache.activemq.camel.component.ActiveMQComponent"
-          destroy-method="doStop">
+    <bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent" destroy-method="doStop">
         <property name="configuration" ref="df.integration.jmsConfig"/>
     </bean>
 </beans>
