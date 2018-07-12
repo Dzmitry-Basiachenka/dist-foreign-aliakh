@@ -1,3 +1,8 @@
+2.1.51
+-
+* B-44722 FDA: Service Fee True-up Report: add repository and query to generate report
+* B-45018 Tech Debt: FDA: Fix ActiveMQ configuration issue related to preconfigured PooledConnectionFactory not being used
+
 2.1.50
 -
 * B-42074 FDA: Upgrade FDA RUP ES API Integration with new Elastic Search version: update rupEsApi to 9+ version and configure cluster, node and index for PI integration
