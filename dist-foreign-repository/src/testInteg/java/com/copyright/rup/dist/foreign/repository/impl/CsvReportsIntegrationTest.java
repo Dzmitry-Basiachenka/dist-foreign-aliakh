@@ -132,6 +132,18 @@ public class CsvReportsIntegrationTest {
             usageRepository.writeBatchSummaryCsvReport(outputStream), "batch_summary_report.csv");
     }
 
+    @Test
+    public void testWriteServiceFeeTrueUpCsvReport() throws IOException {
+        assertFiles(outputStream -> usageRepository.writeServiceFeeTrueUpCsvReport(LocalDate.of(2012, 1, 1),
+            LocalDate.of(2013, 1, 1), LocalDate.of(2014, 5, 5), outputStream), "service_fee_true_up_report.csv");
+    }
+
+    @Test
+    public void testWriteServiceFeeTrueUpCsvEmptyReport() throws IOException {
+        assertFiles(outputStream -> usageRepository.writeServiceFeeTrueUpCsvReport(LocalDate.of(2013, 1, 1),
+            LocalDate.of(2012, 1, 1), LocalDate.of(2014, 5, 5), outputStream), "service_fee_true_up_empty_report.csv");
+    }
+
     private void assertFiles(Consumer<ByteArrayOutputStream> reportWriter, String fileName) throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         reportWriter.accept(outputStream);
