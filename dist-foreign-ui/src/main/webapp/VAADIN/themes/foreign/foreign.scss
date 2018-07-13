@@ -198,4 +198,23 @@
         padding: 0px;
         white-space: normal;
    }
+
+    /**==== Styles for service fee true-up report widget ====*/
+    #report-service-fee-true-up-window #from-date-filter .v-horizontallayout .v-expand,
+    #report-service-fee-true-up-window #to-date-filter .v-horizontallayout .v-expand,
+    #report-service-fee-true-up-window #payment-date-to-filter .v-horizontallayout .v-expand {
+        padding-left: 0px !important;
+    }
+
+    #report-service-fee-true-up-window #from-date-filter .v-horizontallayout .v-expand .v-slot:first-child,
+    #report-service-fee-true-up-window #to-date-filter .v-horizontallayout .v-expand .v-slot:first-child,
+    #report-service-fee-true-up-window #payment-date-to-filter .v-horizontallayout .v-expand .v-slot:first-child {
+        margin-left: 0px !important;
+    }
+
+    #report-service-fee-true-up-window #from-date-filter .v-horizontallayout .v-expand .v-slot:last-child,
+    #report-service-fee-true-up-window #to-date-filter .v-horizontallayout .v-expand .v-slot:last-child,
+    #report-service-fee-true-up-window #payment-date-to-filter .v-horizontallayout .v-expand .v-slot:last-child {
+        display:none !important;
+    }
 }

@@ -8,7 +8,6 @@ import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
-import com.google.common.base.MoreObjects;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -62,12 +61,12 @@ public class ServiceFeeTrueUpReportWidget extends Window implements IServiceFeeT
 
     @Override
     public LocalDate getToDate() {
-        return MoreObjects.firstNonNull(toDateWidget.getValue(), LocalDate.now());
+        return toDateWidget.getValue();
     }
 
     @Override
     public LocalDate getPaymentDateTo() {
-        return MoreObjects.firstNonNull(paymentDateToWidget.getValue(), LocalDate.now());
+        return paymentDateToWidget.getValue();
     }
 
     private void initDatesFilters() {
