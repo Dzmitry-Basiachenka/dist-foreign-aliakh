@@ -6,7 +6,6 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
@@ -94,16 +93,6 @@ public class ServiceFeeTrueUpReportWidgetTest {
     }
 
     @Test
-    public void testGetToDateNull() {
-        LocalDateWidget toDateWidget = createMock(LocalDateWidget.class);
-        Whitebox.setInternalState(widget, "toDateWidget", toDateWidget);
-        expect(toDateWidget.getValue()).andReturn(null).once();
-        replay(toDateWidget);
-        assertNotNull(widget.getToDate());
-        verify(toDateWidget);
-    }
-
-    @Test
     public void testGetPaymentDateTo() {
         LocalDateWidget paymentDateToWidget = createMock(LocalDateWidget.class);
         Whitebox.setInternalState(widget, "paymentDateToWidget", paymentDateToWidget);
@@ -111,16 +100,6 @@ public class ServiceFeeTrueUpReportWidgetTest {
         expect(paymentDateToWidget.getValue()).andReturn(fromDate).once();
         replay(paymentDateToWidget);
         assertEquals(fromDate, widget.getPaymentDateTo());
-        verify(paymentDateToWidget);
-    }
-
-    @Test
-    public void testGetPaymentDateToNull() {
-        LocalDateWidget paymentDateToWidget = createMock(LocalDateWidget.class);
-        Whitebox.setInternalState(widget, "paymentDateToWidget", paymentDateToWidget);
-        expect(paymentDateToWidget.getValue()).andReturn(null).once();
-        replay(paymentDateToWidget);
-        assertNotNull(widget.getPaymentDateTo());
         verify(paymentDateToWidget);
     }
 }
