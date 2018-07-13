@@ -1,3 +1,8 @@
+2.1.52
+-
+* B-44722 FDA: Service Fee True-up Report: add integration test
+* B-44722 FDA: Service Fee True-up Report: remove clear buttons from date widgets
+
 2.1.51
 -
 * B-44722 FDA: Service Fee True-up Report: add repository and query to generate report
