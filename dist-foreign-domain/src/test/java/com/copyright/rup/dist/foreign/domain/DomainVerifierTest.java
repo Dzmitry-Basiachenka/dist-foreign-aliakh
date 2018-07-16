@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.domain.report.BatchSummaryReportDto;
 import com.copyright.rup.dist.foreign.domain.report.ResearchStatusReportDto;
+import com.copyright.rup.dist.foreign.domain.report.ServiceFeeTrueUpReportDto;
 import com.copyright.rup.dist.foreign.domain.report.UndistributedLiabilitiesReportDto;
 
 import org.junit.Test;
@@ -56,7 +57,8 @@ public class DomainVerifierTest {
             {ResearchedUsage.class},
             {UndistributedLiabilitiesReportDto.class},
             {BatchSummaryReportDto.class},
-            {ResearchStatusReportDto.class}
+            {ResearchStatusReportDto.class},
+            {ServiceFeeTrueUpReportDto.class}
         };
         return Arrays.asList(testData);
     }
