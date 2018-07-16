@@ -9,6 +9,7 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
+import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -455,12 +456,8 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     public void writeUndistributedLiabilitiesCsvReport(LocalDate paymentDate, OutputStream outputStream) {
         try (UndistributedLiabilitiesReportHandler handler =
                  new UndistributedLiabilitiesReportHandler(Objects.requireNonNull(outputStream))) {
-            Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
-            parameters.put("paymentDate", Objects.requireNonNull(paymentDate));
-            parameters.put("productFamilyClaFas", FdaConstants.CLA_FAS_PRODUCT_FAMILY);
-            parameters.put("accountNumberClaFas", FdaConstants.CLA_ACCOUNT_NUMBER);
-            parameters.put(STATUS_KEY, UsageStatusEnum.SENT_TO_LM);
-            getTemplate().select("IUsageMapper.findUndistributedLiabilitiesReportDtos", parameters, handler);
+            getTemplate().select("IUsageMapper.findUndistributedLiabilitiesReportDtos",
+                Objects.requireNonNull(paymentDate), handler);
         }
     }
 
@@ -469,12 +466,13 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
                                                OutputStream outputStream) {
         try (ServiceFeeTrueUpReportHandler handler =
                  new ServiceFeeTrueUpReportHandler(Objects.requireNonNull(outputStream))) {
-            Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(6);
+            Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(7);
             parameters.put("paymentDateTo", Objects.requireNonNull(paymentDateTo));
             parameters.put("fromDate", Objects.requireNonNull(fromDate));
             parameters.put("toDate", Objects.requireNonNull(toDate));
             parameters.put("productFamilyClaFas", FdaConstants.CLA_FAS_PRODUCT_FAMILY);
             parameters.put("accountNumberClaFas", FdaConstants.CLA_ACCOUNT_NUMBER);
+            parameters.put("action", ScenarioActionTypeEnum.SENT_TO_LM);
             parameters.put(STATUS_KEY, UsageStatusEnum.SENT_TO_LM);
             getTemplate().select("IUsageMapper.findServiceFeeTrueUpReportDtos", parameters, handler);
         }
