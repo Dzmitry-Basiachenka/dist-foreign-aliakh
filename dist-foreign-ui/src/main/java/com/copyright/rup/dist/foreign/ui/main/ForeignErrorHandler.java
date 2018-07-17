@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.main;
 
 import com.copyright.rup.dist.common.integration.IntegrationConnectionException;
+import com.copyright.rup.dist.common.integration.rest.prm.PrmConfigurationException;
 import com.copyright.rup.vaadin.ui.CommonErrorHandler;
 import com.copyright.rup.vaadin.ui.component.downloader.FileDownloadException;
 import com.copyright.rup.vaadin.ui.component.window.NotificationWindow;
@@ -41,6 +42,8 @@ public class ForeignErrorHandler extends CommonErrorHandler {
             return window;
         } else if (fileDownloadExceptionPresent(event)) {
             return new NotificationWindow(ForeignUi.getMessage("message.report.generate_error"));
+        } else if (prmConfigurationExceptionPresent(event)) {
+            return new NotificationWindow(ForeignUi.getMessage("message.error.incorrect_prm_configuration"));
         }
         return super.initErrorWindow(event);
     }
@@ -51,5 +54,9 @@ public class ForeignErrorHandler extends CommonErrorHandler {
 
     private boolean integrationConnectionExceptionPresent(ErrorEvent event) {
         return -1 != ExceptionUtils.indexOfType(event.getThrowable(), IntegrationConnectionException.class);
+    }
+
+    private boolean prmConfigurationExceptionPresent(ErrorEvent event) {
+        return -1 != ExceptionUtils.indexOfType(event.getThrowable(), PrmConfigurationException.class);
     }
 }
