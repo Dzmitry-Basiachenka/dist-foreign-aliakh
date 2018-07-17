@@ -1,3 +1,7 @@
+2.1.54
+-
+* RDSC-604 FDA: Exception while creating scenario in case incorrect PRM configurations
+
 2.1.53
 -
 * B-44722 FDA: Service Fee True-up Report: fix query, clean up code for undistributed liabilities reconciliation report
