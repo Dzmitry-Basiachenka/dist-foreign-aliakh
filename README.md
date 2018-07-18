@@ -1,3 +1,7 @@
+2.1.55
+-
+* B-45018 Tech Debt: FDA: Use 16.+ version of dist-common
+
 2.1.54
 -
 * RDSC-604 FDA: Exception while creating scenario in case incorrect PRM configurations
