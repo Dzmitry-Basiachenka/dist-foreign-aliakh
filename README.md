@@ -1,3 +1,7 @@
+2.1.56
+-
+* RDSC-611 FDA: Service Fee True-up Report miss data if sending date to LM and 'To Date' are equal
+
 2.1.55
 -
 * B-45018 Tech Debt: FDA: Use 16.+ version of dist-common
