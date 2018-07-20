@@ -1319,7 +1319,7 @@
                 from ${schema}.df_usage_batch batch
                 join ${schema}.df_usage_archive ua on ua.df_usage_batch_uid = batch.df_usage_batch_uid and ua.status_ind = #{status}
                 join ${schema}.df_scenario_audit sa on sa.df_scenario_uid = ua.df_scenario_uid
-                    and sa.created_datetime between #{fromDate} and #{toDate}
+                    and sa.created_datetime::date between #{fromDate} and #{toDate}
                     and sa.action_type_ind = #{action}
                 where <![CDATA[batch.payment_date <= #{paymentDateTo}]]>
                 group by batch.payment_date, batch.rro_account_number, ua.product_family, ua.payee_account_number) as nestedReport2
