@@ -4011,8 +4011,8 @@ databaseChangeLog {
             column(name: "df_scenario_audit_uid", value: "a87797e1-613a-4a52-8367-f1a33283f074")
             column(name: "df_scenario_uid", value: "79841191-4101-4bee-beca-01cab4f62e23")
             column(name: "action_type_ind", value: "ADDED_USAGES")
-            column(name: "created_datetime", value: "2012-03-15 11:41:52.735531+03")
-            column(name: "updated_datetime", value: "2012-03-15 11:41:52.735531+03")
+            column(name: "created_datetime", value: "2012-01-01 11:41:52.735531+03")
+            column(name: "updated_datetime", value: "2012-01-01 11:41:52.735531+03")
         }
 
         insert(schemaName: dbAppsSchema, tableName: "df_scenario_audit") {

@@ -135,7 +135,7 @@ public class CsvReportsIntegrationTest {
     @Test
     public void testWriteServiceFeeTrueUpCsvReport() throws IOException {
         assertFiles(outputStream -> usageRepository.writeServiceFeeTrueUpCsvReport(LocalDate.of(2012, 1, 1),
-            LocalDate.of(2013, 1, 1), LocalDate.of(2014, 5, 5), outputStream), "service_fee_true_up_report.csv");
+            LocalDate.of(2012, 3, 15), LocalDate.of(2014, 5, 5), outputStream), "service_fee_true_up_report.csv");
     }
 
     @Test

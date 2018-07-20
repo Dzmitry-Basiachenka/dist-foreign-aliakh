@@ -85,10 +85,10 @@ public class ServiceFeeTrueUpReportWidgetTest {
     public void testGetToDate() {
         LocalDateWidget toDateWidget = createMock(LocalDateWidget.class);
         Whitebox.setInternalState(widget, "toDateWidget", toDateWidget);
-        LocalDate fromDate = LocalDate.now();
-        expect(toDateWidget.getValue()).andReturn(fromDate).once();
+        LocalDate toDate = LocalDate.now();
+        expect(toDateWidget.getValue()).andReturn(toDate).once();
         replay(toDateWidget);
-        assertEquals(fromDate, widget.getToDate());
+        assertEquals(toDate, widget.getToDate());
         verify(toDateWidget);
     }
 
@@ -96,10 +96,10 @@ public class ServiceFeeTrueUpReportWidgetTest {
     public void testGetPaymentDateTo() {
         LocalDateWidget paymentDateToWidget = createMock(LocalDateWidget.class);
         Whitebox.setInternalState(widget, "paymentDateToWidget", paymentDateToWidget);
-        LocalDate fromDate = LocalDate.now();
-        expect(paymentDateToWidget.getValue()).andReturn(fromDate).once();
+        LocalDate paymentDateTo = LocalDate.now();
+        expect(paymentDateToWidget.getValue()).andReturn(paymentDateTo).once();
         replay(paymentDateToWidget);
-        assertEquals(fromDate, widget.getPaymentDateTo());
+        assertEquals(paymentDateTo, widget.getPaymentDateTo());
         verify(paymentDateToWidget);
     }
 }
