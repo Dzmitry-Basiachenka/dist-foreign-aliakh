@@ -2,7 +2,6 @@ package com.copyright.rup.dist.foreign.service.impl.usage.paid;
 
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.integration.util.JsonUtils;
-import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -15,10 +14,7 @@ import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Implementation of {@link JsonDeserializer} for list of {@link PaidUsage}s.
@@ -57,27 +53,11 @@ public class PaidUsageDeserializer extends JsonDeserializer<List<PaidUsage>> {
         usage.getPayee().setAccountNumber(JsonUtils.getLongValueFromString(jsonNode.get("rollup_account_number")));
         usage.setId(JsonUtils.getStringValue(jsonNode.get("detail_id")));
         usage.setCheckNumber(JsonUtils.getStringValue(jsonNode.get("check_number")));
-        usage.setCheckDate(getOffsetDateTimeFromLong(jsonNode.get("check_date")));
+        usage.setCheckDate(JsonUtils.getOffsetDateTime(jsonNode.get("check_date")));
         usage.setCccEventId(JsonUtils.getStringValue(jsonNode.get("ccc_event_id")));
         usage.setDistributionName(JsonUtils.getStringValue(jsonNode.get("distribution_name")));
-        usage.setDistributionDate(getOffsetDateTimeFromLong(jsonNode.get("distribution_date")));
-        usage.setPeriodEndDate(getLocalDateFromLong(jsonNode.get("period_end_date")));
+        usage.setDistributionDate(JsonUtils.getOffsetDateTime(jsonNode.get("distribution_date")));
+        usage.setPeriodEndDate(JsonUtils.getLocalDateValue(jsonNode.get("period_end_date")));
         return usage;
-    }
-
-    private OffsetDateTime getOffsetDateTimeFromLong(JsonNode node) {
-        OffsetDateTime result = null;
-        if (Objects.nonNull(node)) {
-            result = CommonDateUtils.getOffsetDateTimeFromLong(node.asLong());
-        }
-        return result;
-    }
-
-    private LocalDate getLocalDateFromLong(JsonNode node) {
-        LocalDate result = null;
-        if (Objects.nonNull(node)) {
-            result = CommonDateUtils.getLocalDateFromLong(node.asLong());
-        }
-        return result;
     }
 }
