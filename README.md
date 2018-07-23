@@ -1,3 +1,8 @@
+2.1.57
+-
+* B-45018 Tech Debt: LM: Add configurable loggers for non-CCC JMS related logic for debug needs
+* B-45018 Tech Debt: adjust consuming of paid information to consume check_date, distribution_date and period_end_date either in ISO or in long format
+
 2.1.56
 -
 * RDSC-611 FDA: Service Fee True-up Report miss data if sending date to LM and 'To Date' are equal
