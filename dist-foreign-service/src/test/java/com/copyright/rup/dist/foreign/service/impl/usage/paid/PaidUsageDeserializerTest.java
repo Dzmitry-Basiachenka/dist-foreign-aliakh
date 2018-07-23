@@ -35,10 +35,18 @@ public class PaidUsageDeserializerTest {
     private final PaidUsageUnmarshaller unmarshaller = new PaidUsageUnmarshaller();
 
     @Test
-    @SuppressWarnings("unchecked")
     public void testDeserialize() {
-        try (InputStream inputStream = PaidUsageDeserializerTest.class.getResourceAsStream(
-            "paid_usages_message.json")) {
+        assertDeserialize("paid_usages_message.json");
+    }
+
+    @Test
+    public void testDeserializeWithIsoDates() {
+        assertDeserialize("paid_usages_message_iso_dates.json");
+    }
+
+    @SuppressWarnings("unchecked")
+    private void assertDeserialize(String filename) {
+        try (InputStream inputStream = PaidUsageDeserializerTest.class.getResourceAsStream(filename)) {
             String jsonString = CharStreams.toString(new InputStreamReader(inputStream, Charsets.UTF_8));
             Object paidUsageMessage =
                 unmarshaller.unmarshal(null, new ByteArrayInputStream(jsonString.getBytes(Charsets.UTF_8)));
