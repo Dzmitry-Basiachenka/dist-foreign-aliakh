@@ -25,6 +25,7 @@
     <property name="logLevelMatching" value="${DIST_FOREIGN_MATCHING_LOG_LEVEL:-${logLevel}}"/>
     <property name="logLevelCrmReporting" value="${DIST_FOREIGN_CRM_REPORTING_LOG_LEVEL:-${logLevel}}"/>
     <property name="logLevelService" value="${DIST_FOREIGN_SERVICE_LOG_LEVEL:-${logLevel}}"/>
+    <property name="logLevelJms" value="${DIST_FOREIGN_JMS_LOG_LEVEL:-${logLevel}}"/>
 
     <logger name="com.copyright.rup.dist" level="${logLevel}" additivity="false">
         <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
@@ -70,6 +71,20 @@
     </logger>
 
     <logger name="com.copyright.rup.dist.foreign.service.impl.matching" level="${logLevelMatching}" additivity="false">
+        <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <!--Loggers for non-CCC JMS related logic-->
+    <logger name="org.apache.activemq" level="${logLevelJms}" additivity="false">
+        <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
+        <appender-ref ref="STDOUT"/>
+    </logger>
+    <logger name="org.apache.camel" level="${logLevelJms}" additivity="false">
+        <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
+        <appender-ref ref="STDOUT"/>
+    </logger>
+    <logger name="org.springframework.jms" level="${logLevelJms}" additivity="false">
         <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
         <appender-ref ref="STDOUT"/>
     </logger>
