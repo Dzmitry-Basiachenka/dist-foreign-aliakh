@@ -20,6 +20,7 @@
     </appender>
 
     <property name="logLevel" value="${DIST_FOREIGN_LOG_LEVEL:-info}}"/>
+    <property name="logLevelPrm" value="${DIST_FOREIGN_PRM_LOG_LEVEL:-${logLevel}}"/>
     <property name="logLevelRights" value="${DIST_FOREIGN_RIGHTS_LOG_LEVEL:-${logLevel}}"/>
     <property name="logLevelResearch" value="${DIST_FOREIGN_RESEARCH_LOG_LEVEL:-${logLevel}}"/>
     <property name="logLevelMatching" value="${DIST_FOREIGN_MATCHING_LOG_LEVEL:-${logLevel}}"/>
@@ -33,6 +34,12 @@
     </logger>
 
     <logger name="com.copyright.rup.dist.foreign.service.impl" level="${logLevelService}" additivity="false">
+        <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <!--Loggers for PRM related logic-->
+    <logger name="com.copyright.rup.dist.common.integration.rest.prm" level="${logLevelPrm}" additivity="false">
         <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
         <appender-ref ref="STDOUT"/>
     </logger>
