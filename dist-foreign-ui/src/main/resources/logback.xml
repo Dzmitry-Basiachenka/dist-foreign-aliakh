@@ -89,7 +89,7 @@
         <appender-ref ref="STDOUT"/>
     </logger>
 
-    <root level="INFO">
+    <root level="${GEN_LOG_LEVEL:-warn}">
         <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
         <appender-ref ref="STDOUT"/>
     </root>
