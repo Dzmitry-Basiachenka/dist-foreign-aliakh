@@ -1,3 +1,9 @@
+2.1.58
+-
+* B-45018 Tech Debt: FDA: add configuration for root log level
+* B-45018 Tech Debt: FDA: add log level configuration for PRM integration
+* B-45018 Tech Debt: FDA: apply new index for PI integration
+
 2.1.57
 -
 * B-45018 Tech Debt: LM: Add configurable loggers for non-CCC JMS related logic for debug needs
