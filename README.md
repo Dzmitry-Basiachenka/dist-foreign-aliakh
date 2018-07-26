@@ -1,5 +1,5 @@
 2.1.59
--
+- B-45018 Tech Debt: FDA: update dist-common version
 
 2.1.58
 -
