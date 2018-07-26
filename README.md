@@ -1,3 +1,6 @@
+2.1.59
+-
+
 2.1.58
 -
 * B-45018 Tech Debt: FDA: add configuration for root log level
