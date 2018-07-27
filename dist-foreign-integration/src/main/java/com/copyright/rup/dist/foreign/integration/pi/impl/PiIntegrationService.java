@@ -160,6 +160,11 @@ public class PiIntegrationService implements IPiIntegrationService {
             List<RupSearchHit> searchHits = searchResponse.getResults().getHits();
             if (CollectionUtils.isNotEmpty(searchHits) && EXPECTED_SEARCH_HITS_COUNT == searchHits.size()) {
                 parseAndPutWrWrkInstByTitle(searchHits, title, titleToWrWrkInstMap);
+            } else if (CollectionUtils.isEmpty(searchHits)) {
+                LOGGER.debug("Search works. By MainTitle. Title={}, WWrWrkInst=Not Found, Hits=Empty", title);
+            } else {
+                LOGGER.debug("Search works. By MainTitle. Title={}, WrWrkInst=MultiResults, Hits={}",
+                    title, searchHits.stream().map(RupSearchHit::getSource).collect(Collectors.joining(";")));
             }
         });
         return titleToWrWrkInstMap;
@@ -174,7 +179,8 @@ public class PiIntegrationService implements IPiIntegrationService {
             LOGGER.trace("Search works. By MainTitle. Title={}, WrWrkInst={}, Hit={}", title, wrWrkInst, source);
         } catch (IOException e) {
             throw new RupRuntimeException(
-                String.format("Search works. By Title. Failed. Title=%s, Reason=Could not read response", title), e);
+                String.format("Search works. By MainTitle. Failed. Title=%s, Reason=Could not read response", title),
+                e);
         }
     }
 
