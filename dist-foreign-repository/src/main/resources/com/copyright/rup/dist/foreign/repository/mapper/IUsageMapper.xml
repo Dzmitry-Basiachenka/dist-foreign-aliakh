@@ -305,6 +305,9 @@
             <when test="sort.property == 'wrWrkInst'">
                 u.wr_wrk_inst <include refid="IUsageMapper.direction"/>
             </when>
+            <when test="sort.property == 'systemTitle'">
+                u.system_title <include refid="IUsageMapper.direction"/>
+            </when>
             <when test="sort.property == 'rhAccountNumber'">
                 u.rh_account_number <include refid="IUsageMapper.direction"/>
             </when>
@@ -899,6 +902,9 @@
                     <when test="sort.property == 'wrWrkInst'">
                         wr_wrk_inst
                     </when>
+                    <when test="sort.property == 'systemTitle'">
+                        system_title
+                    </when>
                     <when test="sort.property == 'workTitle'">
                         work_title
                     </when>
@@ -1019,6 +1025,7 @@
             and (
                 ${detail_uid} like '%' || #{filter.searchValue} || '%' or
                 cast(wr_wrk_inst as text) like '%' || #{filter.searchValue} || '%' or
+                upper(system_title) like '%' || upper(#{filter.searchValue}) || '%' or
                 upper(work_title) like '%' || upper(#{filter.searchValue}) || '%')
         </if>
     </sql>
