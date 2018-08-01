@@ -22,8 +22,8 @@ public class ScenarioUsagesCsvReportHandler extends BaseCsvReportHandler<UsageDt
 
     private static final List<String> HEADERS = Arrays.asList("Detail ID", "Usage Batch Name", "Product Family",
         "Fiscal Year", "RRO Account #", "RRO Name", "Payment Date", "Title", "Article", "Standard Number",
-        "Wr Wrk Inst", "RH Account #", "RH Name", "Payee Account #", "Payee Name", "Publisher", "Pub Date",
-        "Number of Copies", "Reported value", "Gross Amt in USD", "Service Fee Amount", "Net Amt in USD",
+        "Wr Wrk Inst", "System Title", "RH Account #", "RH Name", "Payee Account #", "Payee Name", "Publisher",
+        "Pub Date", "Number of Copies", "Reported value", "Gross Amt in USD", "Service Fee Amount", "Net Amt in USD",
         "Service Fee %", "Market", "Market Period From", "Market Period To", "Author");
 
     /**
@@ -49,6 +49,7 @@ public class ScenarioUsagesCsvReportHandler extends BaseCsvReportHandler<UsageDt
         beanProperties.add(bean.getArticle());
         beanProperties.add(bean.getStandardNumber());
         beanProperties.add(getBeanPropertyAsString(bean.getWrWrkInst()));
+        beanProperties.add(bean.getSystemTitle());
         beanProperties.add(getBeanPropertyAsString(bean.getRhAccountNumber()));
         beanProperties.add(bean.getRhName());
         beanProperties.add(getBeanPropertyAsString(bean.getPayeeAccountNumber()));
