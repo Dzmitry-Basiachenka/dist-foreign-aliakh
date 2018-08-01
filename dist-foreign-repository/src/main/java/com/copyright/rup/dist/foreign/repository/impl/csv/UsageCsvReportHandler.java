@@ -22,9 +22,9 @@ public class UsageCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
 
     private static final List<String> HEADERS = Arrays.asList("Detail ID", "Detail Status", "Product Family",
         "Usage Batch Name", "Fiscal Year", "RRO Account #", "RRO Name", "Payment Date", "Title", "Article",
-        "Standard Number", "Wr Wrk Inst", "RH Account #", "RH Name", "Publisher", "Pub Date", "Number of Copies",
-        "Reported value", "Amt in USD", "Gross Amt in USD", "Market", "Market Period From", "Market Period To",
-        "Author");
+        "Standard Number", "Wr Wrk Inst", "System Title", "RH Account #", "RH Name", "Publisher", "Pub Date",
+        "Number of Copies", "Reported value", "Amt in USD", "Gross Amt in USD", "Market", "Market Period From",
+        "Market Period To", "Author");
 
     /**
      * Constructor.
@@ -50,6 +50,7 @@ public class UsageCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
         beanProperties.add(bean.getArticle());
         beanProperties.add(bean.getStandardNumber());
         beanProperties.add(getBeanPropertyAsString(bean.getWrWrkInst()));
+        beanProperties.add(bean.getSystemTitle());
         beanProperties.add(getBeanPropertyAsString(bean.getRhAccountNumber()));
         beanProperties.add(bean.getRhName());
         beanProperties.add(bean.getPublisher());
