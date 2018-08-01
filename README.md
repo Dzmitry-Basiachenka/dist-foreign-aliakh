@@ -1,3 +1,11 @@
+3.1.0
+-
+* B-44118 FDA: Add System title to the reports and the UI: add System Title to Usages and Audit tab, add System Title to Drill Down by RH on scenario view, adjust search on audit tab to search by system title
+* B-44118 FDA: Add System title to the reports and the UI: add System Title to export from Usages tab, to Send for research export, to export from Audit tab and to export from Drill Down by RH on scenario view
+* B-45018 Tech Debt: FDA: add logs for multiply matching by MainTitle during PI works matching job
+* B-45516 Tech Debt: FDA: Add logback-test.xml without jmxConfigurator
+* B-45516 Tech Debt: FDA: Adjust logback configuration: include logback-webapp.xml from rup-common in logback config to have jmxConfigurator, add logger com.copyright.* classes, refine JMS log level setup
+
 2.1.59
 - B-45018 Tech Debt: FDA: update dist-common version
 
