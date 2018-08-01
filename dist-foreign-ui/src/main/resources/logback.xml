@@ -1,5 +1,8 @@
 <configuration>
 
+    <!-- STANDARD-VERBATIM: Include the standard configuration. -->
+    <include resource="com/copyright/rup/common/logging/logback-webapp.xml"/>
+
     <include resource="com/copyright/rup/dist/foreign/ui/logback-dist-foreign-ui.xml"/>
     <include resource="com/copyright/rup/dist/foreign/ui/logback-dist-foreign-ui-performance.xml"/>
 
@@ -19,14 +22,26 @@
         </encoder>
     </appender>
 
-    <property name="logLevel" value="${DIST_FOREIGN_LOG_LEVEL:-info}}"/>
+    <!-- STANDARD-PATTERN: Set the context name for webapps. When multiple webapps
+        are deployed to a container, this gives each a distinct JMX MBeans. -->
+    <contextName>dist-foreign-ui</contextName>
+
+    <property name="logLevelGen" value="${GEN_LOG_LEVEL:-warn}"/>
+    <property name="logLevelJms" value="${JMS_LOG_LEVEL:-${logLevelGen}}"/>
+
+    <property name="logLevelCcc" value="${CCC_LOG_LEVEL:-info}}"/>
+    <property name="logLevel" value="${DIST_FOREIGN_LOG_LEVEL:-${logLevelCcc}}}"/>
     <property name="logLevelPrm" value="${DIST_FOREIGN_PRM_LOG_LEVEL:-${logLevel}}"/>
     <property name="logLevelRights" value="${DIST_FOREIGN_RIGHTS_LOG_LEVEL:-${logLevel}}"/>
     <property name="logLevelResearch" value="${DIST_FOREIGN_RESEARCH_LOG_LEVEL:-${logLevel}}"/>
     <property name="logLevelMatching" value="${DIST_FOREIGN_MATCHING_LOG_LEVEL:-${logLevel}}"/>
     <property name="logLevelCrmReporting" value="${DIST_FOREIGN_CRM_REPORTING_LOG_LEVEL:-${logLevel}}"/>
     <property name="logLevelService" value="${DIST_FOREIGN_SERVICE_LOG_LEVEL:-${logLevel}}"/>
-    <property name="logLevelJms" value="${DIST_FOREIGN_JMS_LOG_LEVEL:-${logLevel}}"/>
+
+    <logger name="com.copyright" level="${logLevelCcc}" additivity="false">
+        <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
+        <appender-ref ref="STDOUT"/>
+    </logger>
 
     <logger name="com.copyright.rup.dist" level="${logLevel}" additivity="false">
         <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
@@ -96,7 +111,7 @@
         <appender-ref ref="STDOUT"/>
     </logger>
 
-    <root level="${GEN_LOG_LEVEL:-warn}">
+    <root level="${logLevelGen}">
         <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
         <appender-ref ref="STDOUT"/>
     </root>
