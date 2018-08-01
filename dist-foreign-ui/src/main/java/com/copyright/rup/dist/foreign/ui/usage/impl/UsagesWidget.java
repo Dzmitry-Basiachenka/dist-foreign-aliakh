@@ -139,6 +139,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         addColumn(UsageDto::getArticle, "table.column.article", "article", true, 135);
         addColumn(UsageDto::getStandardNumber, "table.column.standard_number", "standardNumber", true, 140);
         addColumn(UsageDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", true, 110);
+        addColumn(UsageDto::getSystemTitle, "table.column.system_title", "systemTitle", true, 300);
         addColumn(UsageDto::getRhAccountNumber, "table.column.rh_account_number", "rhAccountNumber", true, 115);
         addColumn(UsageDto::getRhName, "table.column.rh_account_name", "rhName", true, 300);
         addColumn(UsageDto::getPublisher, "table.column.publisher", "publisher", true, 135);

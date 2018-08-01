@@ -138,6 +138,7 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
         addColumn(UsageDto::getPayeeAccountNumber, "table.column.payee_account_number", "payeeAccountNumber", 115);
         addColumn(UsageDto::getPayeeName, "table.column.payee_name", "payeeName", 300);
         addColumn(UsageDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", 110);
+        addColumn(UsageDto::getSystemTitle, "table.column.system_title", "systemTitle", 300);
         addColumn(UsageDto::getWorkTitle, "table.column.work_title", "workTitle", 300);
         addColumn(UsageDto::getStandardNumber, "table.column.standard_number", "standardNumber", 140);
         auditGrid.addColumn(usage -> CurrencyUtils.format(usage.getGrossAmount(), null))

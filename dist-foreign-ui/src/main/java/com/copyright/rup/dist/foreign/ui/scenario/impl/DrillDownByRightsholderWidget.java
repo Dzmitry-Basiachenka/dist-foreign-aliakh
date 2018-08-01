@@ -104,6 +104,7 @@ public class DrillDownByRightsholderWidget extends Window implements IDrillDownB
         addColumn(UsageDto::getArticle, "table.column.article", "article");
         addColumn(UsageDto::getStandardNumber, "table.column.standard_number", "standardNumber", true, 140);
         addColumn(UsageDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", true, 110);
+        addColumn(UsageDto::getSystemTitle, "table.column.system_title", "systemTitle", true, 300);
         addColumn(UsageDto::getPublisher, "table.column.publisher", "publisher", true, 135);
         addColumn(usageDto ->
             CommonDateUtils.format(usageDto.getPublicationDate(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT),

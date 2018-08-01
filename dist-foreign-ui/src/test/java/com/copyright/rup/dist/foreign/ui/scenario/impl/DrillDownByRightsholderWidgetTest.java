@@ -85,8 +85,9 @@ public class DrillDownByRightsholderWidgetTest {
         });
         assertArrayEquals(new String[]{"Detail ID", "Usage Batch Name", "Product Family", "Fiscal Year",
                 "RRO Account #", "RRO Name", "Payment Date", "Title", "Article", "Standard Number", "Wr Wrk Inst",
-                "Publisher", "Pub Date", "Number of Copies", "Reported value", "Gross Amt in USD", "Service Fee Amount",
-                "Net Amt in USD", "Service Fee %", "Market", "Market Period From", "Market Period To", "Author"},
+                "System Title", "Publisher", "Pub Date", "Number of Copies", "Reported value", "Gross Amt in USD",
+                "Service Fee Amount", "Net Amt in USD", "Service Fee %", "Market", "Market Period From",
+                "Market Period To", "Author"},
             grid.getColumns().stream().map(Column::getCaption).toArray());
     }
 

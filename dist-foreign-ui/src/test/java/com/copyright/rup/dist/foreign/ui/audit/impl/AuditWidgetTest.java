@@ -97,7 +97,7 @@ public class AuditWidgetTest {
         assertTrue(component instanceof SearchWidget);
         SearchWidget searchWidget = (SearchWidget) component;
         verifySize(searchWidget, Unit.PERCENTAGE, 75, Unit.PIXELS, -1);
-        assertEquals("Enter Detail ID or Wr Wrk Inst or Work Title",
+        assertEquals("Enter Detail ID or Wr Wrk Inst or System Title or Work Title",
             Whitebox.getInternalState(searchWidget, TextField.class).getPlaceholder());
     }
 
@@ -114,9 +114,9 @@ public class AuditWidgetTest {
         verifySize(grid, Unit.PERCENTAGE, 100, Unit.PERCENTAGE, 100);
         List<Column> columns = grid.getColumns();
         assertEquals(Arrays.asList("Detail ID", "Detail Status", "Product Family", "Usage Batch Name",
-            "Payment Date", "RH Account #", "RH Name", "Payee Account #", "Payee Name", "Wr Wrk Inst", "Title",
-            "Standard Number", "Amt in USD", "Service Fee %", "Scenario Name", "Check #", "Check Date", "Event ID",
-            "Dist. Name", "Dist. Date", "Period Ending"),
+            "Payment Date", "RH Account #", "RH Name", "Payee Account #", "Payee Name", "Wr Wrk Inst", "System Title",
+            "Title", "Standard Number", "Amt in USD", "Service Fee %", "Scenario Name", "Check #", "Check Date",
+            "Event ID", "Dist. Name", "Dist. Date", "Period Ending"),
             columns.stream().map(Column::getCaption).collect(Collectors.toList()));
     }
 

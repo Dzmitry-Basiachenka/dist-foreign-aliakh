@@ -617,6 +617,10 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(1, usageRepository.findCountForAudit(filter));
         usages = usageRepository.findForAudit(filter, new Pageable(0, 10), null);
         verifyUsageDtos(usages, 1, USAGE_ID_4);
+        filter.setSearchValue("Hydronitrous");
+        assertEquals(1, usageRepository.findCountForAudit(filter));
+        usages = usageRepository.findForAudit(filter, new Pageable(0, 10), null);
+        verifyUsageDtos(usages, 1, USAGE_ID_4);
     }
 
     @Test
@@ -688,6 +692,8 @@ public class UsageRepositoryIntegrationTest {
         verifyUsageDtos(findByFilterWithSort(filter, STANDARD_NUMBER_KEY, Direction.DESC), 2, USAGE_ID_24, USAGE_ID_23);
         verifyUsageDtos(findByFilterWithSort(filter, WR_WRK_INST_KEY, Direction.ASC), 2, USAGE_ID_23, USAGE_ID_24);
         verifyUsageDtos(findByFilterWithSort(filter, WR_WRK_INST_KEY, Direction.DESC), 2, USAGE_ID_24, USAGE_ID_23);
+        verifyUsageDtos(findByFilterWithSort(filter, "systemTitle", Direction.ASC), 2, USAGE_ID_23, USAGE_ID_24);
+        verifyUsageDtos(findByFilterWithSort(filter, "systemTitle", Direction.DESC), 2, USAGE_ID_24, USAGE_ID_23);
         verifyUsageDtos(findByFilterWithSort(filter, "publisher", Direction.ASC), 2, USAGE_ID_24, USAGE_ID_23);
         verifyUsageDtos(findByFilterWithSort(filter, "publisher", Direction.DESC), 2, USAGE_ID_23, USAGE_ID_24);
         verifyUsageDtos(findByFilterWithSort(filter, "publicationDate", Direction.ASC), 2, USAGE_ID_23, USAGE_ID_24);
