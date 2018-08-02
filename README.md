@@ -1,3 +1,9 @@
+3.1.1
+-
+* B-44118 FDA: Add System title to the reports and the UI: add System Title to Refresh Scenario window on Scenarios tab
+* B-44118 FDA: Add System title to the reports and the UI: adjust upload of researched details to consume System Title column, make Title column optional, make System Title column required
+* B-45018 Tech Debt: FDA: set NewYork timezone as default for PaidUsageDeserializerTest
+
 3.1.0
 -
 * B-44118 FDA: Add System title to the reports and the UI: add System Title to Usages and Audit tab, add System Title to Drill Down by RH on scenario view, adjust search on audit tab to search by system title
