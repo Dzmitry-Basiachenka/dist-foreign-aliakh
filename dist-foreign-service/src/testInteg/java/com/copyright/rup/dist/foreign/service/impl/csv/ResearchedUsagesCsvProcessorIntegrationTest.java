@@ -109,6 +109,7 @@ public class ResearchedUsagesCsvProcessorIntegrationTest {
                     "<li>Article</li>" +
                     "<li>Standard Number</li>" +
                     "<li>Wr Wrk Inst</li>" +
+                    "<li>System Title</li>" +
                     "<li>RH Account #</li>" +
                     "<li>RH Name</li>" +
                     "<li>Publisher</li>" +
@@ -141,5 +142,6 @@ public class ResearchedUsagesCsvProcessorIntegrationTest {
         assertNotNull(researchedUsage);
         assertEquals(usageId, researchedUsage.getUsageId());
         assertEquals(wrWrkInst, researchedUsage.getWrWrkInst().longValue());
+        assertEquals("test system title", researchedUsage.getSystemTitle());
     }
 }
