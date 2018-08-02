@@ -10,6 +10,7 @@ import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
@@ -20,6 +21,7 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Verifies {@link PaidUsageDeserializer}.
@@ -33,6 +35,11 @@ import java.util.List;
 public class PaidUsageDeserializerTest {
 
     private final PaidUsageUnmarshaller unmarshaller = new PaidUsageUnmarshaller();
+
+    @Before
+    public void setUp() {
+        TimeZone.setDefault(TimeZone.getTimeZone("America/New_York"));
+    }
 
     @Test
     public void testDeserialize() {
