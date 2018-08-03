@@ -441,12 +441,10 @@ public class UsageServiceTest {
         String title2 = "Title2";
         ResearchedUsage researchedUsage1 = new ResearchedUsage();
         researchedUsage1.setUsageId(usageId1);
-        researchedUsage1.setWorkTitle(title1);
         researchedUsage1.setSystemTitle(title1);
         researchedUsage1.setWrWrkInst(987654321L);
         ResearchedUsage researchedUsage2 = new ResearchedUsage();
         researchedUsage2.setUsageId(usageId2);
-        researchedUsage2.setWorkTitle(title2);
         researchedUsage2.setSystemTitle(title2);
         researchedUsage2.setWrWrkInst(876543210L);
         List<ResearchedUsage> researchedUsages = ImmutableList.of(researchedUsage1, researchedUsage2);

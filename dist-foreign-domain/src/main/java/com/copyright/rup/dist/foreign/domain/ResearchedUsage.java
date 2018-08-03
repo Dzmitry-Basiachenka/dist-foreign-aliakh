@@ -17,7 +17,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 public class ResearchedUsage {
 
     private String usageId;
-    private String workTitle;
     private String systemTitle;
     private Long wrWrkInst;
 
@@ -27,14 +26,6 @@ public class ResearchedUsage {
 
     public void setUsageId(String usageId) {
         this.usageId = usageId;
-    }
-
-    public String getWorkTitle() {
-        return workTitle;
-    }
-
-    public void setWorkTitle(String workTitle) {
-        this.workTitle = workTitle;
     }
 
     public String getSystemTitle() {
@@ -64,7 +55,6 @@ public class ResearchedUsage {
         ResearchedUsage that = (ResearchedUsage) obj;
         return new EqualsBuilder()
             .append(this.usageId, that.usageId)
-            .append(this.workTitle, that.workTitle)
             .append(this.systemTitle, that.systemTitle)
             .append(this.wrWrkInst, that.wrWrkInst)
             .isEquals();
@@ -74,7 +64,6 @@ public class ResearchedUsage {
     public int hashCode() {
         return new HashCodeBuilder()
             .append(usageId)
-            .append(workTitle)
             .append(systemTitle)
             .append(wrWrkInst)
             .toHashCode();
@@ -84,7 +73,6 @@ public class ResearchedUsage {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
             .append("usageId", usageId)
-            .append("workTitle", workTitle)
             .append("systemTitle", systemTitle)
             .append("wrWrkInst", wrWrkInst)
             .toString();
