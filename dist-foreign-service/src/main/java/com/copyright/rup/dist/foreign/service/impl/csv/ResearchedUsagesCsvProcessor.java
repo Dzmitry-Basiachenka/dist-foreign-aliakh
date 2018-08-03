@@ -124,7 +124,6 @@ public class ResearchedUsagesCsvProcessor extends DistCsvProcessor<ResearchedUsa
         public ResearchedUsage convert(String... row) {
             ResearchedUsage researchedUsage = new ResearchedUsage();
             researchedUsage.setUsageId(getString(row, Header.DETAIL_ID));
-            researchedUsage.setWorkTitle(getString(row, Header.WORK_TITLE));
             researchedUsage.setSystemTitle(getString(row, Header.SYSTEM_TITLE));
             researchedUsage.setWrWrkInst(getLong(row, Header.WR_WRK_INST));
             return researchedUsage;

@@ -860,12 +860,10 @@ public class UsageRepositoryIntegrationTest {
         assertNull(usage2.getWrWrkInst());
         ResearchedUsage researchedUsage1 = new ResearchedUsage();
         researchedUsage1.setUsageId(usageId1);
-        researchedUsage1.setWorkTitle(title1);
         researchedUsage1.setSystemTitle(title1);
         researchedUsage1.setWrWrkInst(180382916L);
         ResearchedUsage researchedUsage2 = new ResearchedUsage();
         researchedUsage2.setUsageId(usageId2);
-        researchedUsage2.setWorkTitle(title2);
         researchedUsage2.setSystemTitle(title2);
         researchedUsage2.setWrWrkInst(854030733L);
         usageRepository.updateResearchedUsages(Lists.newArrayList(researchedUsage1, researchedUsage2));
