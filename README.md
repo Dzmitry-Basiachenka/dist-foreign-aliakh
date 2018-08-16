@@ -1,3 +1,8 @@
+3.1.2
+-
+* B-44118 FDA: Add System title to the reports and the UI: make changes based on comments in CR-DIST-FOREIGN-68
+* RDSC-616 FDA: Exception is shown during uploading Researched Details with System Title more than 2000 symbols
+
 3.1.1
 -
 * B-44118 FDA: Add System title to the reports and the UI: add System Title to Refresh Scenario window on Scenarios tab
