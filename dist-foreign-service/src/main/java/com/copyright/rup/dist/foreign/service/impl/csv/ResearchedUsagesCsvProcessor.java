@@ -45,7 +45,7 @@ public class ResearchedUsagesCsvProcessor extends DistCsvProcessor<ResearchedUsa
         PositiveNumberValidator positiveNumberValidator = new PositiveNumberValidator();
         addPlainValidators(Header.DETAIL_ID, requiredValidator, new LengthValidator(36),
             new DuplicateInFileValidator());
-        addPlainValidators(Header.SYSTEM_TITLE, requiredValidator);
+        addPlainValidators(Header.SYSTEM_TITLE, requiredValidator, new LengthValidator(2000));
         addPlainValidators(Header.WR_WRK_INST, requiredValidator, positiveNumberValidator, new LengthValidator(9));
     }
 
