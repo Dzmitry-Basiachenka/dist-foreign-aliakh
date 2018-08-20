@@ -64,10 +64,6 @@ public class AuditCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
         return beanProperties;
     }
 
-    private String getBeanOffsetDateTime(OffsetDateTime value) {
-        return CommonDateUtils.format(value, RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT);
-    }
-
     @Override
     protected List<String> getBeanHeaders() {
         return HEADERS;
