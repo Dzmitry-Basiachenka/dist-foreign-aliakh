@@ -74,7 +74,7 @@ public class ReportService implements IReportService {
     }
 
     @Override
-    public void writeSummaryMarkerReport(List<String> batchIds, OutputStream outputStream) {
-        // TODO {isuvorau} call repository method after implementation
+    public void writeSummaryMarkerCsvReport(List<String> batchIds, OutputStream outputStream) {
+        usageRepository.writeSummaryMarketCsvReport(batchIds, outputStream);
     }
 }

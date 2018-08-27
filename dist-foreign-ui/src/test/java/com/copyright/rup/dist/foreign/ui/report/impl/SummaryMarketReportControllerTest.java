@@ -62,7 +62,7 @@ public class SummaryMarketReportControllerTest {
 
     @Test
     public void testGetSummaryMarketReportStreamSource() {
-        reportService.writeSummaryMarkerReport(anyObject(), anyObject(OutputStream.class));
+        reportService.writeSummaryMarkerCsvReport(anyObject(), anyObject(OutputStream.class));
         expectLastCall().once();
         expect(usageBatchService.getUsageBatches()).andReturn(Collections.emptyList()).once();
         replay(reportService, usageBatchService);

@@ -21,6 +21,7 @@ import org.powermock.reflect.Whitebox;
 import java.io.ByteArrayOutputStream;
 import java.io.PipedOutputStream;
 import java.time.LocalDate;
+import java.util.Collections;
 
 /**
  * Verifies {@link ReportService}.
@@ -163,6 +164,16 @@ public class ReportServiceTest {
         expectLastCall().once();
         replay(usageRepository);
         reportService.writeResearchStatusCsvReport(outputStream);
+        verify(usageRepository);
+    }
+
+    @Test
+    public void testWriteSummaryMarketCsvReport() {
+        PipedOutputStream outputStream = createMock(PipedOutputStream.class);
+        usageRepository.writeSummaryMarketCsvReport(Collections.emptyList(), outputStream);
+        expectLastCall().once();
+        replay(usageRepository);
+        reportService.writeSummaryMarkerCsvReport(Collections.emptyList(), outputStream);
         verify(usageRepository);
     }
 

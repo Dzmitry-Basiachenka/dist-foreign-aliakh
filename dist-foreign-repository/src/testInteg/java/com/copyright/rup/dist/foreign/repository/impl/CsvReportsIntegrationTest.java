@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
@@ -124,6 +125,14 @@ public class CsvReportsIntegrationTest {
     public void testWriteResearchStatusCsvReport() throws IOException {
         assertFiles(outputStream -> usageRepository.writeResearchStatusCsvReport(outputStream),
             "research_status_report.csv");
+    }
+
+    @Test
+    public void testWriteSummaryMarketCsvReport() throws IOException {
+        assertFiles(outputStream -> usageRepository.writeSummaryMarketCsvReport(
+            Arrays.asList("d016d9c2-5460-41bf-837c-8598cf00b651", "d016d9c2-5460-41bf-837c-8598cf00b652",
+                "f1a40b56-54f1-4a46-90fa-77946c2f7805", "d016d9c2-5460-41bf-837c-8598cf00b658"), outputStream),
+            "summary_of_market_report.csv");
     }
 
     @Test

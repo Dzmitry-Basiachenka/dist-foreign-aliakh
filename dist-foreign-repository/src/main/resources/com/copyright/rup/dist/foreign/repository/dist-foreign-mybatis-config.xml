@@ -35,6 +35,7 @@
         <typeAlias alias="ResearchStatusReportDto" type="com.copyright.rup.dist.foreign.domain.report.ResearchStatusReportDto"/>
         <typeAlias alias="BatchSummaryReportDto" type="com.copyright.rup.dist.foreign.domain.report.BatchSummaryReportDto"/>
         <typeAlias alias="ServiceFeeTrueUpReportDto" type="com.copyright.rup.dist.foreign.domain.report.ServiceFeeTrueUpReportDto"/>
+        <typeAlias alias="SummaryMarketReportDto" type="com.copyright.rup.dist.foreign.domain.report.SummaryMarketReportDto"/>
     </typeAliases>
 
     <typeHandlers>

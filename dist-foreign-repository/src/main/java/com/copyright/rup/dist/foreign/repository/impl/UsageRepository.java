@@ -22,6 +22,7 @@ import com.copyright.rup.dist.foreign.repository.impl.csv.ResearchStatusReportHa
 import com.copyright.rup.dist.foreign.repository.impl.csv.ScenarioUsagesCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.SendForResearchCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.ServiceFeeTrueUpReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.SummaryMarketReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.UndistributedLiabilitiesReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.UsageCsvReportHandler;
 
@@ -475,6 +476,14 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
             parameters.put("action", ScenarioActionTypeEnum.SENT_TO_LM);
             parameters.put(STATUS_KEY, UsageStatusEnum.SENT_TO_LM);
             getTemplate().select("IUsageMapper.findServiceFeeTrueUpReportDtos", parameters, handler);
+        }
+    }
+
+    @Override
+    public void writeSummaryMarketCsvReport(List<String> batchIds, OutputStream outputStream) {
+        try (SummaryMarketReportHandler handler = new SummaryMarketReportHandler(
+            Objects.requireNonNull(outputStream))) {
+            getTemplate().select("IUsageMapper.findSummaryMarketReportDtos", Objects.requireNonNull(batchIds), handler);
         }
     }
 
