@@ -78,11 +78,12 @@ public class ReportWidgetTest {
         assertEquals("reports-menu", reportWidget.getStyleName());
         assertEquals(1, CollectionUtils.size(reportWidget.getItems()));
         List<MenuItem> menuItems = reportWidget.getItems().get(0).getChildren();
-        assertEquals(4, CollectionUtils.size(menuItems));
+        assertEquals(5, CollectionUtils.size(menuItems));
         assertEquals("Batch Summary Report", menuItems.get(0).getText());
-        assertEquals("Research Status Report", menuItems.get(1).getText());
-        assertEquals("Service Fee True-up Report", menuItems.get(2).getText());
-        assertEquals("Undistributed Liabilities Reconciliation Report", menuItems.get(3).getText());
+        assertEquals("Summary of Market Report", menuItems.get(1).getText());
+        assertEquals("Research Status Report", menuItems.get(2).getText());
+        assertEquals("Service Fee True-up Report", menuItems.get(3).getText());
+        assertEquals("Undistributed Liabilities Reconciliation Report", menuItems.get(4).getText());
     }
 
     @Test
@@ -93,7 +94,7 @@ public class ReportWidgetTest {
         Windows.showModalWindow(anyObject());
         expectLastCall().once();
         replayAll();
-        selectMenuItem(3);
+        selectMenuItem(4);
         verifyAll();
     }
 
@@ -106,10 +107,22 @@ public class ReportWidgetTest {
     }
 
     @Test
+    public void testSummaryMarketReportSelected() {
+        expect(reportController.getSummaryMarketReportController())
+            .andReturn(new SummaryMarketReportController()).once();
+        expect(ResourceReference.create(anyObject(), anyObject(), anyObject())).andReturn(resourceReference).once();
+        Windows.showModalWindow(anyObject());
+        expectLastCall().once();
+        replayAll();
+        selectMenuItem(1);
+        verifyAll();
+    }
+
+    @Test
     public void testResearchStatusReportSelected() {
         expectReportGenerated(reportController.getResearchStatusReportStreamSource());
         replayAll();
-        selectMenuItem(1);
+        selectMenuItem(2);
         verifyAll();
     }
 
@@ -121,7 +134,7 @@ public class ReportWidgetTest {
         Windows.showModalWindow(anyObject());
         expectLastCall().once();
         replayAll();
-        selectMenuItem(2);
+        selectMenuItem(3);
         verifyAll();
     }
 
