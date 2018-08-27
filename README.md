@@ -1,3 +1,9 @@
+3.1.3
+-
+* B-19334 FDA: Summary of Market Report: implement widget and controller to generate report
+* B-45516 Tech Debt: FDA: remove unused imports from AuditCsvReportHandler
+* B-45516 Tech Debt: remove getBeanOffsetDateTime method from AuditCsvReportHandler
+
 3.1.2
 -
 * B-44118 FDA: Add System title to the reports and the UI: make changes based on comments in CR-DIST-FOREIGN-68
