@@ -25,6 +25,11 @@ public interface IReportController extends IController<IReportWidget> {
     IServiceFeeTrueUpReportController getServiceFeeTrueUpReportController();
 
     /**
+     * @return summary market report controller.
+     */
+    ISummaryMarketReportController getSummaryMarketReportController();
+
+    /**
      * @return instance of {@link IStreamSource} for batch summary report.
      */
     IStreamSource getBatchSummaryReportStreamSource();

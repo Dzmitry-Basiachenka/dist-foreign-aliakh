@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * Interface that provides ability to generate multiple reports.
@@ -75,4 +76,12 @@ public interface IReportService {
      */
     void writeServiceFeeTrueUpCsvReport(LocalDate fromDate, LocalDate toDate, LocalDate paymentDateTo,
                                         OutputStream outputStream);
+
+    /**
+     * Writes Summary of Market Report into the output stream in csv format based on batch ids.
+     *
+     * @param batchIds     list of batch ids
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeSummaryMarkerReport(List<String> batchIds, OutputStream outputStream);
 }

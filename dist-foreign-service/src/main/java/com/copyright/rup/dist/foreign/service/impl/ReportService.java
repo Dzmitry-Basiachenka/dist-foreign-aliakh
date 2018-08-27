@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * Implements {@link IReportService}.
@@ -70,5 +71,10 @@ public class ReportService implements IReportService {
     public void writeServiceFeeTrueUpCsvReport(LocalDate fromDate, LocalDate toDate, LocalDate paymentDateTo,
                                                OutputStream outputStream) {
         usageRepository.writeServiceFeeTrueUpCsvReport(fromDate, toDate, paymentDateTo, outputStream);
+    }
+
+    @Override
+    public void writeSummaryMarkerReport(List<String> batchIds, OutputStream outputStream) {
+        // TODO {isuvorau} call repository method after implementation
     }
 }

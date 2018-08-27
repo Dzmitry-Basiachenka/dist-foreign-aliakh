@@ -38,6 +38,7 @@ public class UndistributedLiabilitiesReportWidget extends Window implements IUnd
     public IUndistributedLiabilitiesReportWidget init() {
         initPaymentDateToFilter();
         VerticalLayout content = new VerticalLayout(paymentDateToWidget, getButtonsLayout());
+        content.setSpacing(false);
         VaadinUtils.setMaxComponentsWidth(content);
         setContent(content);
         setWidth(350, Unit.PIXELS);
