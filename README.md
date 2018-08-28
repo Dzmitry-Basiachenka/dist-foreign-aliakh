@@ -1,3 +1,8 @@
+3.1.4
+-
+* B-19334 FDA: Summary of Market Report: adjust summary market widget to display list of batches instead of batches filter
+* B-19334 FDA: Summary of Market Report: implement repository layer to generate summary market report
+
 3.1.3
 -
 * B-19334 FDA: Summary of Market Report: implement widget and controller to generate report
