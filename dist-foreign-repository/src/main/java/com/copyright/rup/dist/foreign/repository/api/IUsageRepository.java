@@ -424,6 +424,14 @@ public interface IUsageRepository {
                                         OutputStream outputStream);
 
     /**
+     * Writes Summary of Market Report into the output stream in csv format based on batch ids.
+     *
+     * @param batchIds     list of batch ids
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeSummaryMarketCsvReport(List<String> batchIds, OutputStream outputStream);
+
+    /**
      * Writes Batch Summary Report into the output stream in csv format.
      *
      * @param outputStream instance of {@link OutputStream}

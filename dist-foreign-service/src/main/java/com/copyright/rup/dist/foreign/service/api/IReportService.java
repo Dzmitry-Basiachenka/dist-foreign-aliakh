@@ -83,5 +83,5 @@ public interface IReportService {
      * @param batchIds     list of batch ids
      * @param outputStream instance of {@link OutputStream}
      */
-    void writeSummaryMarkerReport(List<String> batchIds, OutputStream outputStream);
+    void writeSummaryMarkerCsvReport(List<String> batchIds, OutputStream outputStream);
 }
