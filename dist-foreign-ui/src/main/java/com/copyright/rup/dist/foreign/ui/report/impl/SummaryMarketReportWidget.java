@@ -2,23 +2,27 @@ package com.copyright.rup.dist.foreign.ui.report.impl;
 
 
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
-import com.copyright.rup.dist.foreign.ui.common.UsageBatchFilterWidget;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.report.api.ISummaryMarketReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.ISummaryMarketReportWidget;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
-import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.IFilterSaveListener;
+import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.util.VaadinUtils;
+import com.copyright.rup.vaadin.widget.SearchWidget;
 
+import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.CheckBoxGroup;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,21 +39,26 @@ import java.util.stream.Collectors;
 public class SummaryMarketReportWidget extends Window implements ISummaryMarketReportWidget {
 
     private ISummaryMarketReportController controller;
-    private UsageBatchFilterWidget filterWidget;
     private List<String> batchIds;
+    private CheckBoxGroup<UsageBatch> checkBoxGroup;
+    private ListDataProvider<UsageBatch> listDataProvider;
     private Button exportButton;
+    private SearchWidget searchWidget;
 
     @Override
     @SuppressWarnings("unchecked")
     public ISummaryMarketReportWidget init() {
-        initFilterWidget();
-        VerticalLayout content = new VerticalLayout(filterWidget, getButtonsLayout());
-        content.setSpacing(false);
-        VaadinUtils.setMaxComponentsWidth(content);
-        setContent(content);
         setWidth(350, Unit.PIXELS);
+        setHeight(400, Unit.PIXELS);
         setResizable(false);
         VaadinUtils.addComponentStyle(this, "summary-market-report-window");
+        Panel panel = buildPanel();
+        HorizontalLayout buttonsLayout = buildButtonsLayout();
+        VerticalLayout content = new VerticalLayout(createSearchWidget(), panel, buttonsLayout);
+        content.setExpandRatio(panel, 1f);
+        content.setSizeFull();
+        content.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
+        setContent(content);
         return this;
     }
 
@@ -63,25 +72,46 @@ public class SummaryMarketReportWidget extends Window implements ISummaryMarketR
         return batchIds;
     }
 
-    private void initFilterWidget() {
-        filterWidget = new UsageBatchFilterWidget(() -> controller.getUsageBatches());
-        filterWidget.addFilterSaveListener((IFilterSaveListener<UsageBatch>) saveEvent -> {
-            batchIds = saveEvent.getSelectedItemsIds().stream().map(UsageBatch::getId).collect(Collectors.toList());
+    private Panel buildPanel() {
+        listDataProvider = new ListDataProvider<>(controller.getUsageBatches());
+        checkBoxGroup = new CheckBoxGroup<>(null, listDataProvider);
+        checkBoxGroup.setItemCaptionGenerator(UsageBatch::getName);
+        checkBoxGroup.setHtmlContentAllowed(true);
+        checkBoxGroup.addValueChangeListener(event -> {
+            batchIds = event.getValue().stream().map(UsageBatch::getId).collect(Collectors.toList());
             exportButton.setEnabled(CollectionUtils.isNotEmpty(batchIds));
         });
+        Panel panel = new Panel(checkBoxGroup);
+        panel.setStyleName(Cornerstone.FORMLAYOUT_LIGHT);
+        panel.setSizeFull();
+        return panel;
     }
 
-    private HorizontalLayout getButtonsLayout() {
+    private SearchWidget createSearchWidget() {
+        searchWidget = new SearchWidget(this::performSearch);
+        searchWidget.setPrompt(ForeignUi.getMessage("prompt.batch"));
+        return searchWidget;
+    }
+
+    private void performSearch() {
+        listDataProvider.clearFilters();
+        String searchValue = searchWidget.getSearchValue();
+        if (StringUtils.isNotBlank(searchValue)) {
+            listDataProvider.addFilter(value -> StringUtils.contains(StringUtils.lowerCase(value.getName()),
+                StringUtils.lowerCase(searchValue)));
+        }
+    }
+
+    private HorizontalLayout buildButtonsLayout() {
         Button closeButton = Buttons.createCloseButton((Window) controller.getWidget());
+        Button clearButton = Buttons.createButton("Clear");
+        clearButton.addClickListener(event -> checkBoxGroup.clear());
         exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
         exportButton.setEnabled(false);
         OnDemandFileDownloader downloader = new OnDemandFileDownloader(controller.getSummaryMarketReportStreamSource());
         downloader.extend(exportButton);
-        HorizontalLayout layout = new HorizontalLayout(exportButton, closeButton);
-        layout.setComponentAlignment(closeButton, Alignment.MIDDLE_RIGHT);
-        layout.setComponentAlignment(exportButton, Alignment.MIDDLE_LEFT);
-        layout.setMargin(new MarginInfo(true, false, false, false));
-        layout.setSizeFull();
+        HorizontalLayout layout = new HorizontalLayout(exportButton, clearButton, closeButton);
+        layout.setMargin(new MarginInfo(false, false, false, false));
         return layout;
     }
 }

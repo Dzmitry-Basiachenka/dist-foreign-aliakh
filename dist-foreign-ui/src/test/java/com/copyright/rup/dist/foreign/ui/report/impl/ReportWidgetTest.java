@@ -13,6 +13,7 @@ import static org.powermock.api.easymock.PowerMock.verifyAll;
 
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportController;
+import com.copyright.rup.dist.foreign.ui.report.api.ISummaryMarketReportController;
 import com.copyright.rup.dist.foreign.ui.report.impl.ReportWidget.ReportStreamSource;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -108,9 +109,9 @@ public class ReportWidgetTest {
 
     @Test
     public void testSummaryMarketReportSelected() {
-        expect(reportController.getSummaryMarketReportController())
-            .andReturn(new SummaryMarketReportController()).once();
-        expect(ResourceReference.create(anyObject(), anyObject(), anyObject())).andReturn(resourceReference).once();
+        ISummaryMarketReportController summaryMarketReportController = createMock(ISummaryMarketReportController.class);
+        expect(reportController.getSummaryMarketReportController()).andReturn(summaryMarketReportController).once();
+        expect(summaryMarketReportController.initWidget()).andReturn(new SummaryMarketReportWidget()).once();
         Windows.showModalWindow(anyObject());
         expectLastCall().once();
         replayAll();
