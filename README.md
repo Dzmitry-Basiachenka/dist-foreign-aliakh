@@ -1,3 +1,7 @@
+3.1.5
+-
+* B-19334 FDA: Summary of Market Report: make changes based on comments in CR-DIST-FOREIGN-69
+
 3.1.4
 -
 * B-19334 FDA: Summary of Market Report: adjust summary market widget to display list of batches instead of batches filter
