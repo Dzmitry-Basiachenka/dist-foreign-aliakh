@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.api;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
@@ -78,10 +79,10 @@ public interface IReportService {
                                         OutputStream outputStream);
 
     /**
-     * Writes Summary of Market Report into the output stream in csv format based on batch ids.
+     * Writes Summary of Market Report into the output stream in csv format based on batches.
      *
-     * @param batchIds     list of batch ids
+     * @param batches      list of batches
      * @param outputStream instance of {@link OutputStream}
      */
-    void writeSummaryMarkerCsvReport(List<String> batchIds, OutputStream outputStream);
+    void writeSummaryMarkerCsvReport(List<UsageBatch> batches, OutputStream outputStream);
 }
