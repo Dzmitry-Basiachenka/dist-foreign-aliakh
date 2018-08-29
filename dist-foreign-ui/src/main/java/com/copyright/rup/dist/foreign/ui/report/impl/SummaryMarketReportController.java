@@ -43,7 +43,7 @@ public class SummaryMarketReportController extends CommonController<ISummaryMark
     @Override
     public IStreamSource getSummaryMarketReportStreamSource() {
         return new ByteArrayStreamSource("summary_of_market_report_", outputStream ->
-            reportService.writeSummaryMarkerCsvReport(getWidget().getBatchIds(), outputStream));
+            reportService.writeSummaryMarkerCsvReport(getWidget().getBatches(), outputStream));
     }
 
     @Override

@@ -24,8 +24,8 @@ import com.vaadin.ui.Window;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Widget for exporting summary of market report.
@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
 public class SummaryMarketReportWidget extends Window implements ISummaryMarketReportWidget {
 
     private ISummaryMarketReportController controller;
-    private List<String> batchIds;
+    private List<UsageBatch> batches;
     private CheckBoxGroup<UsageBatch> checkBoxGroup;
     private ListDataProvider<UsageBatch> listDataProvider;
     private Button exportButton;
@@ -68,8 +68,8 @@ public class SummaryMarketReportWidget extends Window implements ISummaryMarketR
     }
 
     @Override
-    public List<String> getBatchIds() {
-        return batchIds;
+    public List<UsageBatch> getBatches() {
+        return batches;
     }
 
     private Panel buildPanel() {
@@ -78,8 +78,8 @@ public class SummaryMarketReportWidget extends Window implements ISummaryMarketR
         checkBoxGroup.setItemCaptionGenerator(UsageBatch::getName);
         checkBoxGroup.setHtmlContentAllowed(true);
         checkBoxGroup.addValueChangeListener(event -> {
-            batchIds = event.getValue().stream().map(UsageBatch::getId).collect(Collectors.toList());
-            exportButton.setEnabled(CollectionUtils.isNotEmpty(batchIds));
+            batches = new ArrayList<>(event.getValue());
+            exportButton.setEnabled(CollectionUtils.isNotEmpty(batches));
         });
         Panel panel = new Panel(checkBoxGroup);
         panel.setStyleName(Cornerstone.FORMLAYOUT_LIGHT);

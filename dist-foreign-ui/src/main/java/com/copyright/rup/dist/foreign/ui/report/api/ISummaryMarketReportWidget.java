@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.report.api;
 
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
 public interface ISummaryMarketReportWidget extends IWidget<ISummaryMarketReportController> {
 
     /**
-     * @return selected batch ids.
+     * @return selected batches.
      */
-    List<String> getBatchIds();
+    List<UsageBatch> getBatches();
 }

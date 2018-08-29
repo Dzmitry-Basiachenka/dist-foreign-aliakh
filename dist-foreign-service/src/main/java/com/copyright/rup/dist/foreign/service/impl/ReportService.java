@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.service.impl;
 
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
@@ -15,6 +16,7 @@ import java.io.OutputStream;
 import java.io.PipedOutputStream;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Implements {@link IReportService}.
@@ -74,7 +76,8 @@ public class ReportService implements IReportService {
     }
 
     @Override
-    public void writeSummaryMarkerCsvReport(List<String> batchIds, OutputStream outputStream) {
-        usageRepository.writeSummaryMarketCsvReport(batchIds, outputStream);
+    public void writeSummaryMarkerCsvReport(List<UsageBatch> batches, OutputStream outputStream) {
+        usageRepository.writeSummaryMarketCsvReport(
+            batches.stream().map(UsageBatch::getId).collect(Collectors.toList()), outputStream);
     }
 }
