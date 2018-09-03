@@ -1,3 +1,7 @@
+3.1.6
+-
+* B-45517 Tech Debt: FDA: update dist-common version to 17.0.+ and rup-vaadin version to 7.2.+
+
 3.1.5
 -
 * B-19334 FDA: Summary of Market Report: make changes based on comments in CR-DIST-FOREIGN-69
