@@ -30,6 +30,7 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
 
@@ -37,6 +38,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,6 +68,8 @@ public class ScenarioService implements IScenarioService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
+    @Value("$RUP{dist.common.discrepancy.partition_size}")
+    private int discrepancyPartitionSize;
     @Autowired
     private IScenarioRepository scenarioRepository;
     @Autowired
@@ -195,12 +199,18 @@ public class ScenarioService implements IScenarioService {
         LOGGER.info("Reconcile rightsholders. Started. {}", ForeignLogUtils.scenario(Objects.requireNonNull(scenario)));
         rightsholderDiscrepancyService.deleteByScenarioIdAndStatus(scenario.getId(),
             RightsholderDiscrepancyStatusEnum.IN_PROGRESS);
-        List<RightsholderDiscrepancy> discrepancies = commonDiscrepanciesService.getDiscrepancies(
-            usageService.getUsagesForReconcile(scenario.getId()), Usage::getWrWrkInst,
-            new DiscrepancyBuilder(RupContextUtils.getUserName()));
-        if (CollectionUtils.isNotEmpty(discrepancies)) {
-            rightsholderDiscrepancyService.insertDiscrepancies(discrepancies, scenario.getId());
-        }
+        Map<Long, List<Usage>> groupedByWrWrkInstUsages = usageService.getUsagesForReconcile(scenario.getId())
+            .stream()
+            .collect(Collectors.groupingBy(Usage::getWrWrkInst));
+        Iterables.partition(groupedByWrWrkInstUsages.entrySet(), discrepancyPartitionSize).forEach(entries -> {
+            List<RightsholderDiscrepancy> discrepancies =
+                commonDiscrepanciesService.getDiscrepancies(
+                    entries.stream().flatMap(entry -> entry.getValue().stream()).collect(Collectors.toList()),
+                    Usage::getWrWrkInst, new DiscrepancyBuilder(RupContextUtils.getUserName()));
+            if (CollectionUtils.isNotEmpty(discrepancies)) {
+                rightsholderDiscrepancyService.insertDiscrepancies(discrepancies, scenario.getId());
+            }
+        });
         LOGGER.info("Reconcile rightsholders. Finished. {}, RhDiscrepanciesCount={}",
             ForeignLogUtils.scenario(scenario),
             rightsholderDiscrepancyService.getCountByScenarioIdAndStatus(scenario.getId(),
