@@ -1,3 +1,7 @@
+3.1.7
+-
+* B-45517 Tech Debt: FDA: refine reconciliation process to store discrepancies by batches
+
 3.1.6
 -
 * B-45517 Tech Debt: FDA: update dist-common version to 17.0.+ and rup-vaadin version to 7.2.+
