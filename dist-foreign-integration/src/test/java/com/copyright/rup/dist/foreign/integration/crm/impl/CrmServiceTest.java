@@ -31,6 +31,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.Collections;
 import java.util.Date;
@@ -124,7 +125,7 @@ public class CrmServiceTest {
         paidUsage.setAuthor("Cartmell, Deborah.");
         paidUsage.setArticle("Routledge");
         paidUsage.setGrossAmount(new BigDecimal("1499.99"));
-        paidUsage.setPeriodEndDate(LocalDate.of(2017, 6, 16));
+        paidUsage.setPeriodEndDate(OffsetDateTime.parse("2017-06-16T00:00:00-04:00"));
         paidUsage.setPublicationDate(LocalDate.of(2006, 12, 12));
         paidUsage.setNumberOfCopies(10006);
         paidUsage.setMarket("Univ,Bus,Doc,S");
