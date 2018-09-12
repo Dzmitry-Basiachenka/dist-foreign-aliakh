@@ -9,7 +9,8 @@
       "ccc_event_id": "53255",
       "check_number": "578940",
       "check_date": 1523318400000,
-      "period_end_date": 1523491200000
+      "period_end_date": 1523491200000,
+      "lm_detail_id": "2ca0fc10-b68a-11e8-b568-0800200c9a66"
     },
     {
       "rh_account_number": "2000073957",
@@ -20,7 +21,8 @@
       "ccc_event_id": "53256",
       "check_number": "578941",
       "check_date": 1523318400000,
-      "period_end_date": 1523491200000
+      "period_end_date": 1523491200000,
+      "lm_detail_id": "863989e0-b68a-11e8-b568-0800200c9a66"
     },
     {
       "rh_account_number": "7001508482",
@@ -31,7 +33,8 @@
       "ccc_event_id": "53257",
       "check_number": "578942",
       "check_date": 1523318400000,
-      "period_end_date": 1523491200000
+      "period_end_date": 1523491200000,
+      "lm_detail_id": "91fbf1f0-b68a-11e8-b568-0800200c9a66"
     },
     {
       "rh_account_number": "1000024950",
@@ -42,7 +45,8 @@
       "ccc_event_id": "53258",
       "check_number": "578943",
       "check_date": 1523318400000,
-      "period_end_date": 1523491200000
+      "period_end_date": 1523491200000,
+      "lm_detail_id": "e3ab5f0-b68a-11e8-b568-0800200c9a666"
     },
     {
       "rh_account_number": "2000139286",
@@ -53,7 +57,8 @@
       "ccc_event_id": "53259",
       "check_number": "578944",
       "check_date": 1523318400000,
-      "period_end_date": 1523491200000
+      "period_end_date": 1523491200000,
+      "lm_detail_id": "a9107410-b68a-11e8-b568-0800200c9a66"
     }
   ]
 }
