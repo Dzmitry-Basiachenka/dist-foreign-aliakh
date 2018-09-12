@@ -5,7 +5,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import java.time.LocalDate;
 import java.time.OffsetDateTime;
 
 /**
@@ -25,7 +24,7 @@ public class PaidUsage extends Usage {
     private String cccEventId;
     private String distributionName;
     private OffsetDateTime distributionDate;
-    private LocalDate periodEndDate;
+    private OffsetDateTime periodEndDate;
 
     public Long getRroAccountNumber() {
         return rroAccountNumber;
@@ -58,6 +57,7 @@ public class PaidUsage extends Usage {
     public void setCccEventId(String cccEventId) {
         this.cccEventId = cccEventId;
     }
+
     public String getDistributionName() {
         return distributionName;
     }
@@ -74,11 +74,11 @@ public class PaidUsage extends Usage {
         this.distributionDate = distributionDate;
     }
 
-    public LocalDate getPeriodEndDate() {
+    public OffsetDateTime getPeriodEndDate() {
         return periodEndDate;
     }
 
-    public void setPeriodEndDate(LocalDate periodEndDate) {
+    public void setPeriodEndDate(OffsetDateTime periodEndDate) {
         this.periodEndDate = periodEndDate;
     }
 

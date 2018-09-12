@@ -80,7 +80,7 @@ public class CrmRightsDistributionRequest {
 
     @JsonProperty(value = "periodEndDate")
     @JsonFormat(pattern = RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT)
-    private LocalDate periodEndDate;
+    private OffsetDateTime periodEndDate;
 
     @JsonProperty(value = "publicationDate")
     @JsonFormat(pattern = RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT)
@@ -255,11 +255,11 @@ public class CrmRightsDistributionRequest {
         this.totalAmount = totalAmount;
     }
 
-    public LocalDate getPeriodEndDate() {
+    public OffsetDateTime getPeriodEndDate() {
         return periodEndDate;
     }
 
-    public void setPeriodEndDate(LocalDate periodEndDate) {
+    public void setPeriodEndDate(OffsetDateTime periodEndDate) {
         this.periodEndDate = periodEndDate;
     }
 

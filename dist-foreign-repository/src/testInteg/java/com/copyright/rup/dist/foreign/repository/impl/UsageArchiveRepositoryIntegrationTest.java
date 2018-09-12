@@ -9,6 +9,7 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.test.ReportTestUtils;
+import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -273,7 +274,7 @@ public class UsageArchiveRepositoryIntegrationTest {
         paidUsage.setCccEventId("53256");
         paidUsage.setDistributionName("FDA March 17");
         paidUsage.setDistributionDate(PAID_DATE);
-        paidUsage.setPeriodEndDate(PUBLICATION_DATE);
+        paidUsage.setPeriodEndDate(CommonDateUtils.getOffsetDateTime(PUBLICATION_DATE));
         paidUsage.setStatus(UsageStatusEnum.PAID);
         usageArchiveRepository.updatePaidInfo(paidUsage);
         usages =
