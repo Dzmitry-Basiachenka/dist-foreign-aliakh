@@ -71,6 +71,7 @@ public class PaidUsageDeserializerTest {
                 usage.getDistributionDate().toInstant());
             assertEquals(OffsetDateTime.parse("2017-01-16T00:00:00-05:00").toInstant(),
                 usage.getPeriodEndDate().toInstant());
+            assertEquals("2ca0fc10-b68a-11e8-b568-0800200c9a66", usage.getLmDetailId());
         } catch (IOException e) {
             fail();
         }

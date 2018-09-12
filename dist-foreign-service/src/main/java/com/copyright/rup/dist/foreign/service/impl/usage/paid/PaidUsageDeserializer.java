@@ -58,6 +58,7 @@ public class PaidUsageDeserializer extends JsonDeserializer<List<PaidUsage>> {
         usage.setDistributionName(JsonUtils.getStringValue(jsonNode.get("distribution_name")));
         usage.setDistributionDate(JsonUtils.getOffsetDateTime(jsonNode.get("distribution_date")));
         usage.setPeriodEndDate(JsonUtils.getOffsetDateTime(jsonNode.get("period_end_date")));
+        usage.setLmDetailId(JsonUtils.getStringValue(jsonNode.get("lm_detail_id")));
         return usage;
     }
 }
