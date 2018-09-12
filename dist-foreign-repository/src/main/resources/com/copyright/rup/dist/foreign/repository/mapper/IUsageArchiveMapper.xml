@@ -12,6 +12,7 @@
         <result property="distributionName" column="distribution_name"/>
         <result property="distributionDate" column="distribution_date"/>
         <result property="periodEndDate" column="period_end_date"/>
+        <result property="lmDetailId" column="lm_detail_id"/>
     </resultMap>
 
     <insert id="insert" parameterType="Usage">
@@ -164,11 +165,6 @@
         order by u.rh_account_number
     </select>
 
-    <delete id="deleteByScenarioId" parameterType="string">
-        delete from ${schema}.df_usage_archive
-        where df_scenario_uid = #{scenarioId}
-    </delete>
-
     <update id="updatePaidInfo" parameterType="PaidUsage">
         update ${schema}.df_usage_archive
         set
@@ -180,6 +176,7 @@
             distribution_name = #{distributionName},
             distribution_date = #{distributionDate},
             period_end_date = #{periodEndDate},
+            lm_detail_id = #{lmDetailId},
             <include refid="StoredEntityMapper.update"/>
         where df_usage_archive_uid = #{id}
     </update>
@@ -215,6 +212,7 @@
             u.distribution_name,
             u.distribution_date,
             u.period_end_date,
+            u.lm_detail_id,
             u.created_datetime,
             ub.rro_account_number
         from ${schema}.df_usage_archive u

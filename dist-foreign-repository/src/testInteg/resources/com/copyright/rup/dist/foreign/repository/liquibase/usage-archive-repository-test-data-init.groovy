@@ -298,6 +298,7 @@ databaseChangeLog {
             column(name: 'ccc_event_id', value: '53256')
             column(name: 'distribution_name', value: 'FDA March 17')
             column(name: 'distribution_date', value: '2016-11-03')
+            column(name: 'lm_detail_id', value: 'be8999b0-b65e-11e8-b568-0800200c9a66')
         }
 
         rollback ""

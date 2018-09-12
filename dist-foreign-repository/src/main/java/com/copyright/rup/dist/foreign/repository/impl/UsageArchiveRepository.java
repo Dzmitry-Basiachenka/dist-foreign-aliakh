@@ -99,11 +99,6 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
     }
 
     @Override
-    public void deleteByScenarioId(String scenarioId) {
-        delete("IUsageArchiveMapper.deleteByScenarioId", Objects.requireNonNull(scenarioId));
-    }
-
-    @Override
     public void updatePaidInfo(PaidUsage usage) {
         update("IUsageArchiveMapper.updatePaidInfo", Objects.requireNonNull(usage));
     }
