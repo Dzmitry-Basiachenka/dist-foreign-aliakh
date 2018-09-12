@@ -54,7 +54,7 @@ public class WorkflowIntegrationTest {
         testBuilder
             .withUsagesCsvFile("usage/usages_for_workflow.csv",
                 USAGE_ID_1, USAGE_ID_2, USAGE_ID_3, USAGE_ID_4, USAGE_ID_5)
-            .withProductFamily("CLA_FAS")
+            .withProductFamily("FAS2")
             .withUsageBatch(buildUsageBatch())
             .withUsageFilter(buildUsageFilter())
             .expectInsertedUsagesCount(5)
@@ -65,7 +65,8 @@ public class WorkflowIntegrationTest {
             .expectLmDetails("details/cla_details_to_lm.json")
             .expectPaidUsagesFromLm("lm/paid_usages_cla.json")
             .expectPaidDetailsIds(USAGE_ID_1, USAGE_ID_2, USAGE_ID_3, USAGE_ID_4, USAGE_ID_5)
-            .expectCrmReporting("crm/cla_rights_distribution_request.json", "crm/cla_rights_distribution_response.json")
+            .expectCrmReporting("crm/cla_rights_distribution_request.json",
+                "crm/cla_rights_distribution_response.json")
             .expectArchivedDetailsIds(USAGE_ID_1, USAGE_ID_2, USAGE_ID_3, USAGE_ID_4, USAGE_ID_5)
             .expectUsageAudit(USAGE_ID_1, expectedUsageAudit)
             .expectUsageAudit(USAGE_ID_2, expectedUsageAudit)
@@ -78,7 +79,7 @@ public class WorkflowIntegrationTest {
 
     private UsageFilter buildUsageFilter() {
         UsageFilter filter = new UsageFilter();
-        filter.setProductFamilies(Collections.singleton("CLA_FAS"));
+        filter.setProductFamilies(Collections.singleton("FAS2"));
         filter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         return filter;
     }

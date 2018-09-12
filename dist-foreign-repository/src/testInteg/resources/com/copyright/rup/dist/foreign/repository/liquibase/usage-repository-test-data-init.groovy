@@ -700,7 +700,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '3c31db4f-4065-4fe1-84c2-b48a0f3bc079')
             column(name: 'df_usage_batch_uid', value: '9776da8d-098d-4f39-99fd-85405c339e9b')
-            column(name: 'product_family', value: 'CLA_FAS')
+            column(name: 'product_family', value: 'FAS2')
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
             column(name: 'system_title', value: 'Wissenschaft & Forschung Japan')
             column(name: 'status_ind', value: 'NEW')

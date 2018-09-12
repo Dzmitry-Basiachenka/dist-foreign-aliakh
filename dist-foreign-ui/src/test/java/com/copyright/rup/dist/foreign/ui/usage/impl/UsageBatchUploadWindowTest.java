@@ -300,7 +300,7 @@ public class UsageBatchUploadWindowTest {
         numberField.setValue("2000017000");
         verifyButton.click();
         assertEquals("CLA, The Copyright Licensing Agency Ltd.", nameField.getValue());
-        assertEquals("CLA_FAS", productFamilyField.getValue());
+        assertEquals("FAS2", productFamilyField.getValue());
         numberField.setValue("20000170");
         verifyButton.click();
         assertEquals(StringUtils.EMPTY, nameField.getValue());

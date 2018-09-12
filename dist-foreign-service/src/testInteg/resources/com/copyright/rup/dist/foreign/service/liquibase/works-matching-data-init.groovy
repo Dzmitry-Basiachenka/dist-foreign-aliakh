@@ -538,7 +538,7 @@ databaseChangeLog {
             column(name: 'work_title', value: 'Kieckhefer, Richard, Forbidden Rites')
             column(name: 'standard_number', value: '978-0-08-027365-5')
             column(name: 'status_ind', value: 'NEW')
-            column(name: 'product_family', value: 'CLA_FAS')
+            column(name: 'product_family', value: 'FAS2')
             column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
