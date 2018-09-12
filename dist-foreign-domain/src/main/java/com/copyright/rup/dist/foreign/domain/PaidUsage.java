@@ -25,6 +25,7 @@ public class PaidUsage extends Usage {
     private String distributionName;
     private OffsetDateTime distributionDate;
     private OffsetDateTime periodEndDate;
+    private String lmDetailId;
 
     public Long getRroAccountNumber() {
         return rroAccountNumber;
@@ -82,6 +83,14 @@ public class PaidUsage extends Usage {
         this.periodEndDate = periodEndDate;
     }
 
+    public String getLmDetailId() {
+        return lmDetailId;
+    }
+
+    public void setLmDetailId(String lmDetailId) {
+        this.lmDetailId = lmDetailId;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -100,6 +109,7 @@ public class PaidUsage extends Usage {
             .append(this.distributionName, that.distributionName)
             .append(this.distributionDate, that.distributionDate)
             .append(this.periodEndDate, that.periodEndDate)
+            .append(this.lmDetailId, that.lmDetailId)
             .isEquals();
     }
 
@@ -114,6 +124,7 @@ public class PaidUsage extends Usage {
             .append(distributionName)
             .append(distributionDate)
             .append(periodEndDate)
+            .append(lmDetailId)
             .toHashCode();
     }
 
@@ -128,6 +139,7 @@ public class PaidUsage extends Usage {
             .append("distributionName", distributionName)
             .append("distributionDate", distributionDate)
             .append("periodEndDate", periodEndDate)
+            .append("lmDetailId", lmDetailId)
             .toString();
     }
 }

@@ -87,13 +87,6 @@ public interface IUsageArchiveRepository {
     void writeScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
 
     /**
-     * Removes usages from archive by {@link com.copyright.rup.dist.foreign.domain.Scenario} identifier.
-     *
-     * @param scenarioId id of scenario for remove usages
-     */
-    void deleteByScenarioId(String scenarioId);
-
-    /**
      * Updates paid information for {@link PaidUsage} by id.
      *
      * @param usage {@link PaidUsage} instance

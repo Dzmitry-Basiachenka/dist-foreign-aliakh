@@ -17,6 +17,8 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 
+import com.google.common.collect.ImmutableList;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.BeforeClass;
@@ -80,6 +82,7 @@ public class UsageArchiveRepositoryIntegrationTest {
     private static final Integer NUMBER_OF_COPIES = 155;
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
     private static final String PAID_USAGE_ID = "c0d30ec0-370d-11e8-b566-0800200c9a66";
+    private static final String LM_DETAIL_ID = "be8999b0-b65e-11e8-b568-0800200c9a66";
     private static final String PATH_TO_EXPECTED_REPORTS =
         "src/testInteg/resources/com/copyright/rup/dist/foreign/repository/impl/csv";
     private static final Executor EXECUTOR = Executors.newSingleThreadExecutor();
@@ -257,18 +260,15 @@ public class UsageArchiveRepositoryIntegrationTest {
 
     @Test
     public void testUpdatePaidInfo() {
-        List<UsageDto> usages =
-            usageArchiveRepository.findByScenarioIdAndRhAccountNumber("98caae9b-2f20-4c6d-b2af-3190a1115c48",
-                1000002859L, null, null, null);
-        assertTrue(CollectionUtils.isNotEmpty(usages));
-        assertEquals(1, usages.size());
-        UsageDto usage = usages.get(0);
-        verifyPaidUsage(usage, UsageStatusEnum.SENT_TO_LM, 1000002859L, null, null, null, null, null, null);
+        String scenarioId = "98caae9b-2f20-4c6d-b2af-3190a1115c48";
+        Long scenarioPayee = 1000002859L;
         PaidUsage paidUsage = new PaidUsage();
-        Rightsholder payee = new Rightsholder();
-        payee.setAccountNumber(1000005413L);
-        paidUsage.setPayee(payee);
         paidUsage.setId("7241b7e0-6ab8-4483-896d-fd485c574293");
+        Rightsholder payee = new Rightsholder();
+        payee.setAccountNumber(scenarioPayee);
+        paidUsage.setPayee(payee);
+        assertPaidUsage(paidUsage, scenarioId, scenarioPayee, UsageStatusEnum.SENT_TO_LM);
+        payee.setAccountNumber(1000005413L);
         paidUsage.setCheckNumber("578945");
         paidUsage.setCheckDate(PAID_DATE);
         paidUsage.setCccEventId("53256");
@@ -276,15 +276,9 @@ public class UsageArchiveRepositoryIntegrationTest {
         paidUsage.setDistributionDate(PAID_DATE);
         paidUsage.setPeriodEndDate(CommonDateUtils.getOffsetDateTime(PUBLICATION_DATE));
         paidUsage.setStatus(UsageStatusEnum.PAID);
+        paidUsage.setLmDetailId(LM_DETAIL_ID);
         usageArchiveRepository.updatePaidInfo(paidUsage);
-        usages =
-            usageArchiveRepository.findByScenarioIdAndRhAccountNumber("98caae9b-2f20-4c6d-b2af-3190a1115c48",
-                1000002859L, null, null, null);
-        assertTrue(CollectionUtils.isNotEmpty(usages));
-        assertEquals(1, usages.size());
-        usage = usages.get(0);
-        verifyPaidUsage(usage, UsageStatusEnum.PAID, 1000005413L, "578945", PAID_DATE, "53256", "FDA March 17",
-            PAID_DATE, PUBLICATION_DATE);
+        assertPaidUsage(paidUsage, scenarioId, scenarioPayee, UsageStatusEnum.PAID);
     }
 
     @Test
@@ -315,6 +309,7 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertEquals("53256", paidUsage.getCccEventId());
         assertEquals("FDA March 17", paidUsage.getDistributionName());
         assertEquals(PAID_DATE, paidUsage.getDistributionDate());
+        assertEquals(LM_DETAIL_ID, paidUsage.getLmDetailId());
         assertTrue(CollectionUtils.isEmpty(
             usageArchiveRepository.findByIdAndStatus(Collections.singletonList(PAID_USAGE_ID),
                 UsageStatusEnum.ARCHIVED)));
@@ -328,19 +323,27 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertEquals(PAID_USAGE_ID, usagesIds.get(0));
     }
 
-    private void verifyPaidUsage(UsageDto actualUsageDto, UsageStatusEnum status, Long payeeAccountNumber,
-                                 String checkNumber, OffsetDateTime checkDate, String cccEventId,
-                                 String distributionName, OffsetDateTime distributionDate,
-                                 LocalDate periodEndDate) {
-        assertEquals("7241b7e0-6ab8-4483-896d-fd485c574293", actualUsageDto.getId());
-        assertEquals(status, actualUsageDto.getStatus());
-        assertEquals(payeeAccountNumber, actualUsageDto.getPayeeAccountNumber(), 0);
-        assertEquals(checkNumber, actualUsageDto.getCheckNumber());
-        assertEquals(checkDate, actualUsageDto.getCheckDate());
-        assertEquals(cccEventId, actualUsageDto.getCccEventId());
-        assertEquals(distributionName, actualUsageDto.getDistributionName());
-        assertEquals(distributionDate, actualUsageDto.getDistributionDate());
-        assertEquals(periodEndDate, actualUsageDto.getPeriodEndDate());
+    private void assertPaidUsage(PaidUsage expectedPaidUsage, String scenarioId, Long scenarioPayee,
+                                 UsageStatusEnum status) {
+        List<PaidUsage> paidUsages =
+            usageArchiveRepository.findByIdAndStatus(ImmutableList.of(expectedPaidUsage.getId()), status);
+        assertEquals(1, CollectionUtils.size(paidUsages));
+        PaidUsage actualPaidUsage = paidUsages.get(0);
+        assertEquals(expectedPaidUsage.getId(), actualPaidUsage.getId());
+        assertEquals(expectedPaidUsage.getCheckNumber(), actualPaidUsage.getCheckNumber());
+        assertEquals(expectedPaidUsage.getCheckDate(), actualPaidUsage.getCheckDate());
+        assertEquals(expectedPaidUsage.getCccEventId(), actualPaidUsage.getCccEventId());
+        assertEquals(expectedPaidUsage.getDistributionName(), actualPaidUsage.getDistributionName());
+        assertEquals(expectedPaidUsage.getDistributionDate(), actualPaidUsage.getDistributionDate());
+        assertEquals(expectedPaidUsage.getPeriodEndDate(), actualPaidUsage.getPeriodEndDate());
+        assertEquals(expectedPaidUsage.getLmDetailId(), actualPaidUsage.getLmDetailId());
+        List<UsageDto> usageDtos =
+            usageArchiveRepository.findByScenarioIdAndRhAccountNumber(scenarioId, scenarioPayee, null, null, null);
+        assertTrue(CollectionUtils.isNotEmpty(usageDtos));
+        assertEquals(1, usageDtos.size());
+        UsageDto usageDto = usageDtos.get(0);
+        assertEquals(expectedPaidUsage.getPayee().getAccountNumber(), usageDto.getPayeeAccountNumber());
+        assertEquals(status, usageDto.getStatus());
     }
 
     private void verifySearch(String searchValue, int expectedSize) {
