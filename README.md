@@ -1,3 +1,7 @@
+3.1.8
+-
+* B-45044 FDA: Process Post-Distribution Details: move liquibase script to new changelog
+
 3.1.7
 -
 * B-45517 Tech Debt: FDA: refine reconciliation process to store discrepancies by batches
