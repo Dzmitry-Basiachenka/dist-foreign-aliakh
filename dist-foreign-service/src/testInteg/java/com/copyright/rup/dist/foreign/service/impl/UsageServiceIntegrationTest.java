@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
@@ -38,7 +37,6 @@ import java.util.List;
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
 @TestPropertySource(properties = {"test.liquibase.changelog=usage-service-data-init.groovy"})
-@TransactionConfiguration
 @Transactional
 public class UsageServiceIntegrationTest {
 

@@ -46,7 +46,7 @@ import java.util.stream.IntStream;
  * @author Ihar Suvorau
  */
 @Component
-public class ReconcileRightsholdersTestBuilder {
+class ReconcileRightsholdersTestBuilder {
 
     private Scenario expectedScenario;
     private String rmsResponse;
@@ -72,6 +72,7 @@ public class ReconcileRightsholdersTestBuilder {
     private boolean prmRollUpAsync;
     @Value("$RUP{dist.foreign.integration.rest.prm.rightsholder.async}")
     private boolean prmRightsholderAsync;
+    private int expectedPreferencesCallsTimes;
 
     Runner build() {
         return new Runner();
@@ -104,8 +105,9 @@ public class ReconcileRightsholdersTestBuilder {
         return this;
     }
 
-    ReconcileRightsholdersTestBuilder expectPreferences(String preferencesJson) {
+    ReconcileRightsholdersTestBuilder expectPreferences(String preferencesJson, int times) {
         this.expectedPreferencesJson = preferencesJson;
+        this.expectedPreferencesCallsTimes = times;
         return this;
     }
 
@@ -140,7 +142,7 @@ public class ReconcileRightsholdersTestBuilder {
             if (Objects.nonNull(expectedRollupsJson)) {
                 expectGetRollups();
             }
-            expectGetPreferences();
+            expectGetPreferences(expectedPreferencesJson);
             scenarioService.reconcileRightsholders(expectedScenario);
             assertDiscrepancies();
             scenarioService.approveOwnershipChanges(expectedScenario);
@@ -180,12 +182,14 @@ public class ReconcileRightsholdersTestBuilder {
                         MediaType.APPLICATION_JSON));
         }
 
-        private void expectGetPreferences() {
-            mockServer.expect(MockRestRequestMatchers
-                .requestTo("http://localhost:8080/party-rest/orgPreference/all?fmt=json"))
-                .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
-                .andRespond(MockRestResponseCreators.withSuccess(
-                    TestUtils.fileToString(this.getClass(), expectedPreferencesJson), MediaType.APPLICATION_JSON));
+        private void expectGetPreferences(String fileName) {
+            IntStream.range(0, expectedPreferencesCallsTimes).forEach(i ->
+                mockServer.expect(MockRestRequestMatchers
+                    .requestTo("http://localhost:8080/party-rest/orgPreference/all?fmt=json"))
+                    .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
+                    .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), fileName),
+                        MediaType.APPLICATION_JSON))
+            );
         }
 
         private void assertDiscrepancies() {

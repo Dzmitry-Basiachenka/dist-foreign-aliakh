@@ -67,6 +67,7 @@ class RefreshScenarioTestBuilder {
     private AsyncRestTemplate asyncRestTemplate;
     @Value("$RUP{dist.foreign.integration.rest.prm.rollups.async}")
     private boolean prmRollUpAsync;
+    private int expectedPreferencesCallsTimes;
 
     RefreshScenarioTestBuilder expectRollups(String rollupsJson, String... rollups) {
         this.expectedRollupsJson = rollupsJson;
@@ -74,8 +75,9 @@ class RefreshScenarioTestBuilder {
         return this;
     }
 
-    RefreshScenarioTestBuilder expectPreferences(String preferencesJson) {
+    RefreshScenarioTestBuilder expectPreferences(String preferencesJson, int times) {
         this.expectedPreferencesJson = preferencesJson;
+        this.expectedPreferencesCallsTimes = times;
         return this;
     }
 
@@ -165,11 +167,13 @@ class RefreshScenarioTestBuilder {
         }
 
         private void expectGetPreferences(String fileName) {
-            mockServer.expect(MockRestRequestMatchers
-                .requestTo("http://localhost:8080/party-rest/orgPreference/all?fmt=json"))
-                .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
-                .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), fileName),
-                    MediaType.APPLICATION_JSON));
+            IntStream.range(0, expectedPreferencesCallsTimes).forEach(i ->
+                mockServer.expect(MockRestRequestMatchers
+                    .requestTo("http://localhost:8080/party-rest/orgPreference/all?fmt=json"))
+                    .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
+                    .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), fileName),
+                        MediaType.APPLICATION_JSON))
+            );
         }
 
         private void expectGetRollups(String fileName, String rightsholdersIds) {
