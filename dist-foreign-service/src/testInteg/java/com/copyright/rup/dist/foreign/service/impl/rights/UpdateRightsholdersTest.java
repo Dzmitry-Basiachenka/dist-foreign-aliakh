@@ -21,8 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -45,7 +43,6 @@ import org.springframework.web.client.RestTemplate;
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
 @TestPropertySource(properties = {"test.liquibase.changelog=update-rightsholders-data-init.groovy"})
-@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 public class UpdateRightsholdersTest {
 
     @Autowired

@@ -9,8 +9,6 @@ import com.google.common.collect.Lists;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -30,7 +28,6 @@ import java.math.BigDecimal;
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
 @TestPropertySource(properties = {"test.liquibase.changelog=refresh-scenario-service-data-init.groovy"})
-@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 public class RefreshScenarioTest {
 
     @Autowired
@@ -40,7 +37,7 @@ public class RefreshScenarioTest {
     public void testRefreshFasScenario() {
         testBuilder
             .withScenario("e6e2fe6c-4c47-4ca1-bf32-591af4c13060")
-            .expectPreferences("prm/preferences_response.json")
+            .expectPreferences("prm/preferences_response.json", 1)
             .expectRollups("prm/fas_rollups_response.json", "019acfde-91be-43aa-8871-6305642bcb2c")
             .expectUsages(Lists.newArrayList(
                 buildUsage("0e49fd89-f094-4023-b729-afe240272ebe", 1000024497L, 1000024497L, "435.008", "2283.792"),
@@ -58,7 +55,7 @@ public class RefreshScenarioTest {
     public void testRefreshClaScenario() {
         testBuilder
             .withScenario("8fba95e3-c706-47f7-a1c8-fad9af5e31a9")
-            .expectPreferences("prm/not_found_response.json")
+            .expectPreferences("prm/not_found_response.json", 2)
             .expectRollups("prm/cla_rollups_response.json", "624dcf73-a30f-4381-b6aa-c86d17198bd5",
                 "37338ed1-7083-45e2-a96b-5872a7de3a98")
             .expectUsages(Lists.newArrayList(

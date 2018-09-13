@@ -12,11 +12,10 @@ import com.google.common.collect.Sets;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -35,21 +34,17 @@ import java.util.Collections;
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
 @TestPropertySource(properties = {"test.liquibase.changelog=create-scenario-service-data-init.groovy"})
-@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
+@Transactional
 public class CreateScenarioTest {
 
     @Autowired
     private CreateScenarioTestBuilder testBuilder;
 
-    // Test Case IDs: a5c08113-a8f3-434d-9fa9-1e6026e5e2b4, 5bb2c3eb-036e-452d-982f-62761ca6b1ae,
-    // 7c7ea548-6845-478a-b39f-62a62feeddae, ab35246e-983d-455c-8bf1-2fd39fbdd527, 3d745a35-9256-4aae-8275-c4500d70bde8,
-    // c3719d14-c4a2-4809-911a-915e3e1a7e91, ae37e5a6-88dd-48ae-bd5a-4a12134236ac, ee8ebb66-3584-4aaa-9c44-93e384428efb,
-    // 15a4527f-f28e-4ab9-aed7-f5caf3ce5569, 9f2663b9-6006-46cf-a741-cb774ce69754
     @Test
     public void testCreateFasScenario() {
         testBuilder
             .withFilter(buildUsageFilter("31ddaa1a-e60b-44ce-a968-0ca262870358", "FAS"))
-            .expectPreferences("prm/preferences_response.json")
+            .expectPreferences("prm/preferences_response.json", 5)
             .expectRollups("prm/fas_rollups_response.json", "a5989f7c-fc6f-4e8c-88d4-2fe7bcce8d1f",
                 "00d4ae90-5fe7-47bf-ace1-781c8d76d4da", "038bf4aa-b6cc-430a-9b32-655954d95278",
                 "756299b5-02ce-4f76-b0bc-ee2571cf906e", "019acfde-91be-43aa-8871-6305642bcb2c")
@@ -65,12 +60,11 @@ public class CreateScenarioTest {
             .run();
     }
 
-    // Test Case ID: e9a0e8f2-2ef1-4608-8221-1beb116a0748
     @Test
     public void testCreateFasScenarioNoRollupsNoPreferences() {
         testBuilder
             .withFilter(buildUsageFilter("31ddaa1a-e60b-44ce-a968-0ca262870358", "FAS"))
-            .expectPreferences("prm/not_found_response.json")
+            .expectPreferences("prm/not_found_response.json", 5)
             .expectRollups("prm/not_found_response.json", "a5989f7c-fc6f-4e8c-88d4-2fe7bcce8d1f",
                 "00d4ae90-5fe7-47bf-ace1-781c8d76d4da", "038bf4aa-b6cc-430a-9b32-655954d95278",
                 "756299b5-02ce-4f76-b0bc-ee2571cf906e", "019acfde-91be-43aa-8871-6305642bcb2c")
@@ -90,7 +84,7 @@ public class CreateScenarioTest {
     public void testCreateClaScenario() {
         testBuilder
             .withFilter(buildUsageFilter("ce0ca941-1e16-4a3b-a991-b596189b4f22", "FAS2"))
-            .expectPreferences("prm/not_found_response.json")
+            .expectPreferences("prm/not_found_response.json", 5)
             .expectRollups("prm/cla_rollups_response.json", "624dcf73-a30f-4381-b6aa-c86d17198bd5",
                 "b0e6b1f6-89e9-4767-b143-db0f49f32769", "60080587-a225-439c-81af-f016cb33aeac",
                 "37338ed1-7083-45e2-a96b-5872a7de3a98", "f366285a-ce46-48b0-96ee-cd35d62fb243")

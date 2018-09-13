@@ -10,8 +10,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -34,7 +32,6 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml")
 @TestPropertySource(properties = {"test.liquibase.changelog=workflow-data-init.groovy"})
-@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 public class WorkflowIntegrationTest {
 
     private static final LocalDate PAYMENT_DATE = LocalDate.now();
@@ -58,7 +55,7 @@ public class WorkflowIntegrationTest {
             .withUsageBatch(buildUsageBatch())
             .withUsageFilter(buildUsageFilter())
             .expectInsertedUsagesCount(5)
-            .expectPreferences("prm/not_found_response.json")
+            .expectPreferences("prm/not_found_response.json", 5)
             .expectRollups("prm/cla_rollups_response.json", "b0e6b1f6-89e9-4767-b143-db0f49f32769",
                 "624dcf73-a30f-4381-b6aa-c86d17198bd5", "60080587-a225-439c-81af-f016cb33aeac",
                 "37338ed1-7083-45e2-a96b-5872a7de3a98", "f366285a-ce46-48b0-96ee-cd35d62fb243")

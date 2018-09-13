@@ -36,6 +36,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.IntStream;
 
 /**
  * Builder for {@link CreateScenarioTest}.
@@ -73,6 +74,7 @@ class CreateScenarioTestBuilder {
     private List<Usage> expectedUsages;
     private String scenarioId;
     private Scenario expectedScenario;
+    private int expectedPreferencesCallsTimes;
 
     CreateScenarioTestBuilder expectRollups(String rollupsJson, String... rollups) {
         this.expectedRollupsJson = rollupsJson;
@@ -80,8 +82,9 @@ class CreateScenarioTestBuilder {
         return this;
     }
 
-    CreateScenarioTestBuilder expectPreferences(String preferencesJson) {
+    CreateScenarioTestBuilder expectPreferences(String preferencesJson, int times) {
         this.expectedPreferencesJson = preferencesJson;
+        this.expectedPreferencesCallsTimes = times;
         return this;
     }
 
@@ -182,11 +185,13 @@ class CreateScenarioTestBuilder {
         }
 
         private void expectGetPreferences(String fileName) {
-            mockServer.expect(MockRestRequestMatchers
-                .requestTo("http://localhost:8080/party-rest/orgPreference/all?fmt=json"))
-                .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
-                .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), fileName),
-                    MediaType.APPLICATION_JSON));
+            IntStream.range(0, expectedPreferencesCallsTimes).forEach(i ->
+                mockServer.expect(MockRestRequestMatchers
+                    .requestTo("http://localhost:8080/party-rest/orgPreference/all?fmt=json"))
+                    .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
+                    .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), fileName),
+                        MediaType.APPLICATION_JSON))
+            );
         }
 
         private void expectGetRollups(String fileName, String rightsholdersIds) {

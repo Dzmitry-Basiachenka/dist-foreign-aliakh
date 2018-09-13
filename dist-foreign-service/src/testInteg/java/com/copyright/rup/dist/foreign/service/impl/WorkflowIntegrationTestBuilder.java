@@ -61,6 +61,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Builder for {@link WorkflowIntegrationTest}.
@@ -74,6 +75,7 @@ import java.util.stream.Collectors;
 @Component
 public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
 
+    private final Map<String, List<Pair<UsageActionTypeEnum, String>>> expectedUsagesAudit = Maps.newHashMap();
     @Autowired
     private CsvProcessorFactory csvProcessorFactory;
     @Autowired
@@ -101,14 +103,13 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
     private IScenarioAuditService scenarioAuditService;
     @Autowired
     private IUsageAuditService usageAuditService;
-
     private String usagesCsvFile;
     private List<String> predefinedUsageIds;
     private String productFamily;
     private UsageBatch usageBatch;
     private UsageFilter usageFilter;
     private int expectedInsertedUsagesCount;
-    private String expectedPreferencesJsonFile;
+    private String expectedPreferencesJson;
     private String expectedRollupsJsonFile;
     private List<String> expectedRightsholdersIds;
     private String expectedLmDetailsJsonFile;
@@ -117,7 +118,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
     private String expectedCrmRequestJsonFile;
     private String expectedCrmResponseJsonFile;
     private List<String> expectedArchivedUsageIds;
-    private final Map<String, List<Pair<UsageActionTypeEnum, String>>> expectedUsagesAudit = Maps.newHashMap();
+    private int expectedPreferencesCallsTimes;
 
     public WorkflowIntegrationTestBuilder withUsagesCsvFile(String csvFile, String... usageIds) {
         this.usagesCsvFile = csvFile;
@@ -145,10 +146,12 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
-    public WorkflowIntegrationTestBuilder expectPreferences(String jsonFile) {
-        this.expectedPreferencesJsonFile = jsonFile;
+    public WorkflowIntegrationTestBuilder expectPreferences(String preferencesJson, int times) {
+        this.expectedPreferencesJson = preferencesJson;
+        this.expectedPreferencesCallsTimes = times;
         return this;
     }
+
 
     public WorkflowIntegrationTestBuilder expectRollups(String jsonFile, String... rightsholdersIds) {
         this.expectedRollupsJsonFile = jsonFile;
@@ -240,7 +243,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
 
         private void addToScenario() {
             createRestServer();
-            expectGetPreferences();
+            expectGetPreferences(expectedPreferencesJson);
             expectGetRollups();
             scenario = scenarioService.createScenario("Test Scenario", "Test Scenario Description", usageFilter);
             mockServer.verify();
@@ -254,12 +257,14 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
             asyncMockServer = MockRestServiceServer.createServer(asyncRestTemplate);
         }
 
-        private void expectGetPreferences() {
-            String responseBody = TestUtils.fileToString(this.getClass(), expectedPreferencesJsonFile);
-            mockServer.expect(
-                MockRestRequestMatchers.requestTo("http://localhost:8080/party-rest/orgPreference/all?fmt=json"))
-                .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
-                .andRespond(MockRestResponseCreators.withSuccess(responseBody, MediaType.APPLICATION_JSON));
+        private void expectGetPreferences(String fileName) {
+            IntStream.range(0, expectedPreferencesCallsTimes).forEach(i ->
+                mockServer.expect(MockRestRequestMatchers
+                    .requestTo("http://localhost:8080/party-rest/orgPreference/all?fmt=json"))
+                    .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
+                    .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), fileName),
+                        MediaType.APPLICATION_JSON))
+            );
         }
 
         private void expectGetRollups() {
@@ -311,7 +316,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
             return usageArchiveRepository.findByIdAndStatus(usageIds, status).size();
         }
 
-        private void sendUsagesToCrm() throws IOException {
+        private void sendUsagesToCrm() {
             createRestServer();
             expectSendToCrm();
             usageService.sendToCrm();
@@ -319,7 +324,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
             assertArchivedUsages();
         }
 
-        private void expectSendToCrm() throws IOException {
+        private void expectSendToCrm() {
             String requestBody = TestUtils.fileToString(this.getClass(), expectedCrmRequestJsonFile);
             String responseBody = TestUtils.fileToString(this.getClass(), expectedCrmResponseJsonFile);
             List<String> excludedFields = Collections.singletonList("licenseCreateDate");
