@@ -89,7 +89,7 @@ public class CreateScenarioTest {
     @Test
     public void testCreateClaScenario() {
         testBuilder
-            .withFilter(buildUsageFilter("ce0ca941-1e16-4a3b-a991-b596189b4f22", "CLA_FAS"))
+            .withFilter(buildUsageFilter("ce0ca941-1e16-4a3b-a991-b596189b4f22", "FAS2"))
             .expectPreferences("prm/not_found_response.json")
             .expectRollups("prm/cla_rollups_response.json", "624dcf73-a30f-4381-b6aa-c86d17198bd5",
                 "b0e6b1f6-89e9-4767-b143-db0f49f32769", "60080587-a225-439c-81af-f016cb33aeac",

@@ -42,7 +42,7 @@ import java.util.List;
 @Transactional
 public class UsageServiceIntegrationTest {
 
-    private static final List<String> SUPPORTED_PRODUCT_FAMILIES = Arrays.asList("CLA_FAS", "FAS", "NTS");
+    private static final List<String> SUPPORTED_PRODUCT_FAMILIES = Arrays.asList("FAS", "FAS2", "NTS");
     @Autowired
     private IUsageService usageService;
     @Autowired

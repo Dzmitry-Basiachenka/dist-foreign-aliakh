@@ -21,7 +21,7 @@ public final class FdaConstants {
     /**
      * Product family for RRO with account number {@link FdaConstants#CLA_ACCOUNT_NUMBER}.
      */
-    public static final String CLA_FAS_PRODUCT_FAMILY = "CLA_FAS";
+    public static final String CLA_FAS_PRODUCT_FAMILY = "FAS2";
 
     /**
      * NTS product family.
