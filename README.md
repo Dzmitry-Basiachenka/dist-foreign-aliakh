@@ -1,3 +1,12 @@
+3.1.9
+-
+* B-45044 FDA: Process Post-Distribution Details: adjust update paid info logic to create post-distribution paid-information, remove batch_uid and scenario_uid not-null constrains in usage archive table
+* B-45896 FDA: Change Product Name: implement liquibase script to update product family for historical data
+* B-45896 FDA: Change Product Name: rearrange changesets based on database structure to update tables with lowest data first
+* B-45896 FDA: Change Product Name: rename CLA_FAS product family to FAS2 on UI and reports
+* B-45902 FDA: FAS Display product to RC for FAS: add serviceNameReporting field to CRM rights request
+* B-45902 FDA: FAS Display product to RC for FAS: update dist-common version to 19.0+, update RMS url to PDEV address
+
 3.1.8
 -
 * B-45044 FDA: Process Post-Distribution Details: move liquibase script to new changelog
