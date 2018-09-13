@@ -36,7 +36,7 @@ public class CrmRightsDistributionRequest {
     private String cccEventId;
 
     @JsonProperty(value = "product")
-    private String productFamily = "FAS";
+    private String productFamily;
 
     @JsonProperty(value = "rorAccountNumber")
     @JsonSerialize(using = ToStringSerializer.class)
@@ -108,6 +108,9 @@ public class CrmRightsDistributionRequest {
     @JsonSerialize(using = ToStringSerializer.class)
     private Long arAccountNumber;
 
+    @JsonProperty(value = "serviceNameReporting")
+    private String serviceNameReporting  = "FAS";
+
     @JsonProperty(value = "createUser")
     private String createUser = "FDA Distribution";
 
@@ -122,6 +125,7 @@ public class CrmRightsDistributionRequest {
     public CrmRightsDistributionRequest(PaidUsage usage) {
         Objects.requireNonNull(usage);
         this.cccEventId = usage.getCccEventId();
+        this.productFamily = usage.getProductFamily();
         this.rorAccountNumber = usage.getRightsholder().getAccountNumber();
         this.payeeAccountNumber = usage.getPayee().getAccountNumber();
         this.royaltyAmount = usage.getNetAmount();
@@ -327,6 +331,14 @@ public class CrmRightsDistributionRequest {
         this.arAccountNumber = arAccountNumber;
     }
 
+    public String getServiceNameReporting() {
+        return serviceNameReporting;
+    }
+
+    public void setServiceNameReporting(String serviceNameReporting) {
+        this.serviceNameReporting = serviceNameReporting;
+    }
+
     public String getCreateUser() {
         return createUser;
     }
@@ -376,6 +388,7 @@ public class CrmRightsDistributionRequest {
             .append(this.marketPeriodFrom, that.marketPeriodFrom)
             .append(this.marketPeriodTo, that.marketPeriodTo)
             .append(this.arAccountNumber, that.arAccountNumber)
+            .append(this.serviceNameReporting, that.serviceNameReporting)
             .append(this.createUser, that.createUser)
             .append(this.status, that.status)
             .isEquals();
@@ -407,6 +420,7 @@ public class CrmRightsDistributionRequest {
             .append(marketPeriodFrom)
             .append(marketPeriodTo)
             .append(arAccountNumber)
+            .append(serviceNameReporting)
             .append(createUser)
             .append(status)
             .toHashCode();
@@ -438,6 +452,7 @@ public class CrmRightsDistributionRequest {
             .append("marketPeriodFrom", marketPeriodFrom)
             .append("marketPeriodTo", marketPeriodTo)
             .append("arAccountNumber", arAccountNumber)
+            .append("serviceNameReporting", serviceNameReporting)
             .append("createUser", createUser)
             .append("status", status)
             .toString();

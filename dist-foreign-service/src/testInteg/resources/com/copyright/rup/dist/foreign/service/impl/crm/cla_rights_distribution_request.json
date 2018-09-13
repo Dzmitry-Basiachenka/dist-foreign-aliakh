@@ -3,7 +3,7 @@
     "rightsDistribution": [
       {
         "cccEventId": "53255",
-        "product": "FAS",
+        "product": "FAS2",
         "rorAccountNumber": "2000133267",
         "payeeAccountNumber": "2000017000",
         "royaltyAmount": 35.8200000000,
@@ -22,13 +22,14 @@
         "market": "Univ",
         "marketPeriodFrom": 2015,
         "marketPeriodTo": 2015,
+        "serviceNameReporting": "FAS",
         "arAccountNumber": "2000017000",
         "createUser": "FDA Distribution",
         "status": "D - Distributed"
       },
       {
         "cccEventId": "53256",
-        "product": "FAS",
+        "product": "FAS2",
         "rorAccountNumber": "2000073957",
         "payeeAccountNumber": "2000073957",
         "royaltyAmount": 27.0640000000,
@@ -48,12 +49,13 @@
         "marketPeriodFrom": 2015,
         "marketPeriodTo": 2015,
         "arAccountNumber": "2000017000",
+        "serviceNameReporting": "FAS",
         "createUser": "FDA Distribution",
         "status": "D - Distributed"
       },
       {
         "cccEventId": "53257",
-        "product": "FAS",
+        "product": "FAS2",
         "rorAccountNumber": "7001508482",
         "payeeAccountNumber": "7001508482",
         "royaltyAmount": 27.0640000000,
@@ -73,12 +75,13 @@
         "marketPeriodFrom": 2015,
         "marketPeriodTo": 2015,
         "arAccountNumber": "2000017000",
+        "serviceNameReporting": "FAS",
         "createUser": "FDA Distribution",
         "status": "D - Distributed"
       },
       {
         "cccEventId": "53258",
-        "product": "FAS",
+        "product": "FAS2",
         "rorAccountNumber": "1000024950",
         "payeeAccountNumber": "1000024950",
         "royaltyAmount": 27.0640000000,
@@ -99,12 +102,13 @@
         "marketPeriodFrom": 2015,
         "marketPeriodTo": 2015,
         "arAccountNumber": "2000017000",
+        "serviceNameReporting": "FAS",
         "createUser": "FDA Distribution",
         "status": "D - Distributed"
       },
       {
         "cccEventId": "53259",
-        "product": "FAS",
+        "product": "FAS2",
         "rorAccountNumber": "2000139286",
         "payeeAccountNumber": "2000017000",
         "royaltyAmount": 35.8200000000,
@@ -125,6 +129,7 @@
         "marketPeriodFrom": 2015,
         "marketPeriodTo": 2015,
         "arAccountNumber": "2000017000",
+        "serviceNameReporting": "FAS",
         "createUser": "FDA Distribution",
         "status": "D - Distributed"
       }

@@ -112,6 +112,7 @@ public class CrmServiceTest {
         payee.setAccountNumber(1000010022L);
         PaidUsage paidUsage = new PaidUsage();
         paidUsage.setId("1e7d5a65-4cf8-49b6-a804-e15cdbe38d91");
+        paidUsage.setProductFamily("FAS");
         paidUsage.setRroAccountNumber(7001047151L);
         paidUsage.setCccEventId("53256");
         paidUsage.setRightsholder(rightsholder);

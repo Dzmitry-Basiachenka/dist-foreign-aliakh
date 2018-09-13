@@ -192,6 +192,7 @@
         select
             u.df_usage_archive_uid df_usage_uid,
             u.rh_account_number,
+            u.product_family,
             u.payee_account_number,
             u.wr_wrk_inst,
             u.work_title,
