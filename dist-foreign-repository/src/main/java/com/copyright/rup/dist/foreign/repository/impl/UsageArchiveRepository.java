@@ -14,6 +14,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.impl.csv.ScenarioUsagesCsvReportHandler;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -126,5 +127,15 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
     @Override
     public List<String> findPaidIds() {
         return selectList("IUsageArchiveMapper.findPaidIds", UsageStatusEnum.PAID);
+    }
+
+    @Override
+    public void insertPaid(PaidUsage paidUsage) {
+        insert("IUsageArchiveMapper.insertPaid", Objects.requireNonNull(paidUsage));
+    }
+
+    @Override
+    public List<Usage> findUsageInformationById(List<String> usageIds) {
+        return selectList("IUsageArchiveMapper.findUsageInformationById", ImmutableMap.of("usageIds", usageIds));
     }
 }

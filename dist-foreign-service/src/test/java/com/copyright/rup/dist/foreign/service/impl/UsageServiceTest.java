@@ -27,6 +27,7 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
@@ -65,7 +66,7 @@ import java.util.List;
  * @author Mikalai Bezmen
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(RupContextUtils.class)
+@PrepareForTest({RupContextUtils.class, RupPersistUtils.class})
 public class UsageServiceTest {
 
     private static final String USAGE_ID_1 = "Usage id 1";
@@ -420,9 +421,12 @@ public class UsageServiceTest {
     public void testUpdatePaidInfo() {
         PaidUsage paidUsage = new PaidUsage();
         paidUsage.setId(USAGE_ID_1);
+        paidUsage.setStatus(UsageStatusEnum.SENT_TO_LM);
         paidUsage.setCheckNumber("578945");
         paidUsage.setCccEventId("53256");
         paidUsage.setDistributionName("FDA March 17");
+        expect(usageArchiveRepository.findUsageInformationById(ImmutableList.of(USAGE_ID_1)))
+            .andReturn(ImmutableList.of(paidUsage)).once();
         usageArchiveRepository.updatePaidInfo(paidUsage);
         expectLastCall().once();
         usageAuditService.logAction(USAGE_ID_1, UsageActionTypeEnum.PAID,
@@ -431,6 +435,52 @@ public class UsageServiceTest {
         replay(usageArchiveRepository, usageAuditService);
         usageService.updatePaidInfo(Collections.singletonList(paidUsage));
         verify(usageArchiveRepository, usageAuditService);
+    }
+
+    @Test
+    public void testUpdatePostDistributionPaidInfo() {
+        PaidUsage paidUsage = new PaidUsage();
+        paidUsage.setId(USAGE_ID_1);
+        paidUsage.setCheckNumber("578945");
+        paidUsage.setCccEventId("53256");
+        paidUsage.setDistributionName("FDA March 17");
+        Usage archivedPaidUsage = new Usage();
+        archivedPaidUsage.setId(USAGE_ID_1);
+        archivedPaidUsage.setScenarioId("scenario id");
+        archivedPaidUsage.setBatchId("batch id");
+        archivedPaidUsage.setStatus(UsageStatusEnum.ARCHIVED);
+        archivedPaidUsage.setArticle("test article");
+        expect(usageArchiveRepository.findUsageInformationById(ImmutableList.of(USAGE_ID_1)))
+            .andReturn(ImmutableList.of(archivedPaidUsage)).once();
+        String newUsageId = "4a8f5fe0-b735-11e8-b568-0800200c9a66";
+        mockStatic(RupPersistUtils.class);
+        expect(RupPersistUtils.generateUuid()).andReturn(newUsageId).once();
+        PaidUsage expectedPostDistributionUsage = new PaidUsage();
+        expectedPostDistributionUsage.setId(newUsageId);
+        expectedPostDistributionUsage.setCheckNumber(paidUsage.getCheckNumber());
+        expectedPostDistributionUsage.setCccEventId(paidUsage.getCccEventId());
+        expectedPostDistributionUsage.setDistributionName(paidUsage.getDistributionName());
+        expectedPostDistributionUsage.setArticle(archivedPaidUsage.getArticle());
+        expectedPostDistributionUsage.setStatus(UsageStatusEnum.PAID);
+        usageArchiveRepository.insertPaid(expectedPostDistributionUsage);
+        expectLastCall().once();
+        usageAuditService.logAction(newUsageId, UsageActionTypeEnum.PAID,
+            "Usage has been created based on Post-Distribution process");
+        expectLastCall().once();
+        replay(usageArchiveRepository, usageAuditService, RupPersistUtils.class);
+        usageService.updatePaidInfo(Collections.singletonList(paidUsage));
+        verify(usageArchiveRepository, usageAuditService, RupPersistUtils.class);
+    }
+
+    @Test
+    public void testUpdatePaidInfoNotFoundUsage() {
+        PaidUsage paidUsage = new PaidUsage();
+        paidUsage.setId(USAGE_ID_1);
+        expect(usageArchiveRepository.findUsageInformationById(ImmutableList.of(USAGE_ID_1)))
+            .andReturn(Lists.newArrayList()).once();
+        replay(usageArchiveRepository);
+        usageService.updatePaidInfo(Collections.singletonList(paidUsage));
+        verify(usageArchiveRepository);
     }
 
     @Test

@@ -205,4 +205,23 @@ databaseChangeLog {
             }
         }
     }
+
+    changeSet(id: '2018-09-13-01', author: 'Pavel Liakh <pliakh@copyright.com>') {
+        comment("B-45044 FDA: Process Post-Distribution Details: " +
+                "drop not-null constraint from the columns df_usage_archive.df_usage_batch_uid and " +
+                "df_usage_archive.df_scenario_uid")
+
+        dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'df_scenario_uid',
+                columnDataType: 'VARCHAR(255)')
+
+        dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'df_usage_batch_uid',
+                columnDataType: 'VARCHAR(255)')
+
+        rollback {
+            addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'df_scenario_uid',
+                    columnDataType: 'VARCHAR(255)')
+            addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_archive',
+                    columnName: 'df_usage_batch_uid', columnDataType: 'VARCHAR(255)')
+        }
+    }
 }

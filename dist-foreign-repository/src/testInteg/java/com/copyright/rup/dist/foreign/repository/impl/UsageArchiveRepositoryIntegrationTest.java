@@ -267,7 +267,7 @@ public class UsageArchiveRepositoryIntegrationTest {
         Rightsholder payee = new Rightsholder();
         payee.setAccountNumber(scenarioPayee);
         paidUsage.setPayee(payee);
-        assertPaidUsage(paidUsage, scenarioId, scenarioPayee, UsageStatusEnum.SENT_TO_LM);
+        assertUsagePaidInformation(paidUsage, scenarioId, scenarioPayee, UsageStatusEnum.SENT_TO_LM);
         payee.setAccountNumber(1000005413L);
         paidUsage.setCheckNumber("578945");
         paidUsage.setCheckDate(PAID_DATE);
@@ -278,7 +278,7 @@ public class UsageArchiveRepositoryIntegrationTest {
         paidUsage.setStatus(UsageStatusEnum.PAID);
         paidUsage.setLmDetailId(LM_DETAIL_ID);
         usageArchiveRepository.updatePaidInfo(paidUsage);
-        assertPaidUsage(paidUsage, scenarioId, scenarioPayee, UsageStatusEnum.PAID);
+        assertUsagePaidInformation(paidUsage, scenarioId, scenarioPayee, UsageStatusEnum.PAID);
     }
 
     @Test
@@ -323,12 +323,54 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertEquals(PAID_USAGE_ID, usagesIds.get(0));
     }
 
-    private void assertPaidUsage(PaidUsage expectedPaidUsage, String scenarioId, Long scenarioPayee,
-                                 UsageStatusEnum status) {
+    @Test
+    public void testInsertPaid() {
+        PaidUsage paidUsage = buildPaidUsage();
+        usageArchiveRepository.insertPaid(paidUsage);
+        assertUsagePaidInformation(paidUsage);
+    }
+
+    @Test
+    // TODO {pliakh} add assertions for rest of the usage fields
+    public void testFindUsageInformationById() {
+        List<Usage> usages = usageArchiveRepository.findUsageInformationById(ImmutableList.of(PAID_USAGE_ID));
+        assertTrue(CollectionUtils.isNotEmpty(usages));
+        assertEquals(1, CollectionUtils.size(usages));
+        Usage usage = usages.get(0);
+        assertEquals(PAID_USAGE_ID, usage.getId());
+        assertEquals(UsageStatusEnum.PAID, usage.getStatus());
+    }
+
+    private void assertUsagePaidInformation(PaidUsage expectedPaidUsage) {
+        List<Usage> usages =
+            usageArchiveRepository.findUsageInformationById(ImmutableList.of(expectedPaidUsage.getId()));
+        assertTrue(CollectionUtils.isNotEmpty(usages));
+        assertEquals(1, CollectionUtils.size(usages));
+        assertUsage(expectedPaidUsage, usages.get(0));
+        List<PaidUsage> paidUsages =
+            usageArchiveRepository.findByIdAndStatus(ImmutableList.of(expectedPaidUsage.getId()), UsageStatusEnum.PAID);
+        assertTrue(CollectionUtils.isNotEmpty(paidUsages));
+        assertEquals(1, CollectionUtils.size(paidUsages));
+        assertUsagePaidInformation(expectedPaidUsage, paidUsages.get(0));
+    }
+
+    private void assertUsagePaidInformation(PaidUsage expectedPaidUsage, String scenarioId, Long scenarioPayee,
+                                            UsageStatusEnum status) {
         List<PaidUsage> paidUsages =
             usageArchiveRepository.findByIdAndStatus(ImmutableList.of(expectedPaidUsage.getId()), status);
         assertEquals(1, CollectionUtils.size(paidUsages));
         PaidUsage actualPaidUsage = paidUsages.get(0);
+        assertUsagePaidInformation(expectedPaidUsage, actualPaidUsage);
+        List<UsageDto> usageDtos =
+            usageArchiveRepository.findByScenarioIdAndRhAccountNumber(scenarioId, scenarioPayee, null, null, null);
+        assertTrue(CollectionUtils.isNotEmpty(usageDtos));
+        assertEquals(1, usageDtos.size());
+        UsageDto usageDto = usageDtos.get(0);
+        assertEquals(expectedPaidUsage.getPayee().getAccountNumber(), usageDto.getPayeeAccountNumber());
+        assertEquals(status, usageDto.getStatus());
+    }
+
+    private void assertUsagePaidInformation(PaidUsage expectedPaidUsage, PaidUsage actualPaidUsage) {
         assertEquals(expectedPaidUsage.getId(), actualPaidUsage.getId());
         assertEquals(expectedPaidUsage.getCheckNumber(), actualPaidUsage.getCheckNumber());
         assertEquals(expectedPaidUsage.getCheckDate(), actualPaidUsage.getCheckDate());
@@ -337,13 +379,6 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertEquals(expectedPaidUsage.getDistributionDate(), actualPaidUsage.getDistributionDate());
         assertEquals(expectedPaidUsage.getPeriodEndDate(), actualPaidUsage.getPeriodEndDate());
         assertEquals(expectedPaidUsage.getLmDetailId(), actualPaidUsage.getLmDetailId());
-        List<UsageDto> usageDtos =
-            usageArchiveRepository.findByScenarioIdAndRhAccountNumber(scenarioId, scenarioPayee, null, null, null);
-        assertTrue(CollectionUtils.isNotEmpty(usageDtos));
-        assertEquals(1, usageDtos.size());
-        UsageDto usageDto = usageDtos.get(0);
-        assertEquals(expectedPaidUsage.getPayee().getAccountNumber(), usageDto.getPayeeAccountNumber());
-        assertEquals(status, usageDto.getStatus());
     }
 
     private void verifySearch(String searchValue, int expectedSize) {
@@ -369,8 +404,53 @@ public class UsageArchiveRepositoryIntegrationTest {
         return rightsholderTotalsHolder;
     }
 
-    private Usage buildUsage(String usageId, String usageBatchId) {
+    private PaidUsage buildPaidUsage() {
+        PaidUsage paidUsage = new PaidUsage();
+        setUsageFields(paidUsage, RupPersistUtils.generateUuid(), null);
+        paidUsage.setLmDetailId(LM_DETAIL_ID);
+        paidUsage.setCheckNumber("578945");
+        paidUsage.setCheckDate(PAID_DATE);
+        paidUsage.setCccEventId("53256");
+        paidUsage.setDistributionName("FDA March 17");
+        paidUsage.setDistributionDate(PAID_DATE);
+        paidUsage.setPeriodEndDate(CommonDateUtils.getOffsetDateTime(PUBLICATION_DATE));
+        paidUsage.setStatus(UsageStatusEnum.PAID);
+        paidUsage.setLmDetailId(LM_DETAIL_ID);
+        return paidUsage;
+    }
+
+    private Usage buildUsage(String usageid, String usageBatchId) {
         Usage usage = new Usage();
+        setUsageFields(usage, usageid, usageBatchId);
+        return usage;
+    }
+
+    private void assertUsage(Usage expectedUsage, Usage actualUsage) {
+        assertEquals(expectedUsage.getBatchId(), actualUsage.getBatchId());
+        assertEquals(expectedUsage.getScenarioId(), actualUsage.getScenarioId());
+        assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
+        assertEquals(expectedUsage.getWorkTitle(), actualUsage.getWorkTitle());
+        assertEquals(expectedUsage.getSystemTitle(), actualUsage.getSystemTitle());
+        assertEquals(expectedUsage.getRightsholder().getAccountNumber(),
+            actualUsage.getRightsholder().getAccountNumber());
+        assertEquals(expectedUsage.getPayee().getAccountNumber(), actualUsage.getPayee().getAccountNumber());
+        assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
+        assertEquals(expectedUsage.getProductFamily(), actualUsage.getProductFamily());
+        assertEquals(expectedUsage.getArticle(), actualUsage.getArticle());
+        assertEquals(expectedUsage.getStandardNumber(), actualUsage.getStandardNumber());
+        assertEquals(expectedUsage.getPublisher(), actualUsage.getPublisher());
+        assertEquals(expectedUsage.getPublicationDate(), actualUsage.getPublicationDate());
+        assertEquals(expectedUsage.getMarket(), actualUsage.getMarket());
+        assertEquals(expectedUsage.getMarketPeriodFrom(), actualUsage.getMarketPeriodFrom());
+        assertEquals(expectedUsage.getMarketPeriodTo(), actualUsage.getMarketPeriodTo());
+        assertEquals(expectedUsage.getAuthor(), actualUsage.getAuthor());
+        assertEquals(expectedUsage.getNumberOfCopies(), actualUsage.getNumberOfCopies());
+        assertEquals(expectedUsage.getReportedValue(), actualUsage.getReportedValue());
+        assertEquals(expectedUsage.getGrossAmount(), actualUsage.getGrossAmount());
+        assertEquals(expectedUsage.getNetAmount(), actualUsage.getNetAmount());
+    }
+
+    private void setUsageFields(Usage usage, String usageId, String usageBatchId) {
         usage.setId(usageId);
         usage.setBatchId(usageBatchId);
         usage.setScenarioId("b1f0b236-3ae9-4a60-9fab-61db84199d6f");
@@ -394,6 +474,5 @@ public class UsageArchiveRepositoryIntegrationTest {
         usage.setReportedValue(REPORTED_VALUE);
         usage.setGrossAmount(GROSS_AMOUNT);
         usage.setNetAmount(new BigDecimal("25.1500000000"));
-        return usage;
     }
 }
