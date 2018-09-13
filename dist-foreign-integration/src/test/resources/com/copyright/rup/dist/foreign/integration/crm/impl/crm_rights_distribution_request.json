@@ -25,6 +25,7 @@
         "marketPeriodFrom": 2016,
         "marketPeriodTo": 2016,
         "arAccountNumber": "7001047151",
+        "serviceNameReporting": "FAS",
         "createUser": "FDA Distribution",
         "status": "D - Distributed"
       }
