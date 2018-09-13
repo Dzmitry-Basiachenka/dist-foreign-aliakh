@@ -116,4 +116,19 @@ public interface IUsageArchiveRepository {
      * @return list of found usages ids
      */
     List<String> findPaidIds();
+
+    /**
+     * Insert usage with paid information.
+     *
+     * @param paidUsage {@link PaidUsage} instance
+     */
+    void insertPaid(PaidUsage paidUsage);
+
+    /**
+     * Finds usage information by provided ids.
+     *
+     * @param   usageIds list of usage ids
+     * @return  list of found usages
+     */
+    List<Usage> findUsageInformationById(List<String> usageIds);
 }

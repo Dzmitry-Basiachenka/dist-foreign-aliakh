@@ -4,6 +4,10 @@
 
 <mapper namespace="IUsageArchiveMapper">
 
+    <resultMap id="archivedUsageResultMap" type="Usage" extends="IUsageMapper.usageResultMap">
+        <result property="id" column="df_usage_archive_uid"/>
+    </resultMap>
+
     <resultMap id="paidUsageResultMap" type="PaidUsage" extends="IUsageMapper.usageResultMap">
         <result property="rroAccountNumber" column="rro_account_number"/>
         <result property="checkNumber" column="check_number"/>
@@ -15,16 +19,20 @@
         <result property="lmDetailId" column="lm_detail_id"/>
     </resultMap>
 
+    <sql id="payeeColumns">
+        service_fee,
+        service_fee_amount,
+        net_amount,
+        payee_account_number,
+        is_rh_participating_flag
+    </sql>
+
     <insert id="insert" parameterType="Usage">
         insert into ${schema}.df_usage_archive(
             df_usage_archive_uid,
             <include refid="IUsageMapper.usageColumns"/>,
-            service_fee,
-            service_fee_amount,
-            net_amount,
-            payee_account_number,
-            is_rh_participating_flag,
-        <include refid="StoredEntityMapper.additionalColumns"/>)
+            <include refid="payeeColumns"/>,
+            <include refid="StoredEntityMapper.additionalColumns"/>)
         values(
             #{id},
             #{batchId},
@@ -216,7 +224,7 @@
             u.created_datetime,
             ub.rro_account_number
         from ${schema}.df_usage_archive u
-        join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+        left join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
         where u.status_ind = #{status}
             and u.df_usage_archive_uid in
             <foreach collection="usageIds" item="usageId" separator="," open="(" close=")">
@@ -229,4 +237,66 @@
         from ${schema}.df_usage_archive
         where status_ind = #{status}
     </select>
+
+    <select id="findUsageInformationById" resultMap="archivedUsageResultMap" parameterType="map">
+        select
+            df_usage_archive_uid,
+            <include refid="IUsageMapper.usageColumns"/>,
+            <include refid="payeeColumns"/>
+        from ${schema}.df_usage_archive u
+        where u.df_usage_archive_uid in
+            <foreach collection="usageIds" item="usageId" separator="," open="(" close=")">
+                #{usageId}
+            </foreach>
+    </select>
+
+    <insert id="insertPaid" parameterType="PaidUsage">
+        insert into ${schema}.df_usage_archive(
+            df_usage_archive_uid,
+            <include refid="IUsageMapper.usageColumns"/>,
+            <include refid="payeeColumns"/>,
+            check_number,
+            check_date,
+            ccc_event_id,
+            distribution_name,
+            distribution_date,
+            period_end_date,
+            lm_detail_id,
+            <include refid="StoredEntityMapper.additionalColumns"/>)
+        values(
+            #{id},
+            #{batchId},
+            #{scenarioId},
+            #{wrWrkInst},
+            #{workTitle},
+            #{systemTitle},
+            #{rightsholder.accountNumber},
+            #{status},
+            #{productFamily},
+            #{article},
+            #{standardNumber},
+            #{publisher},
+            #{publicationDate},
+            #{market},
+            #{marketPeriodFrom},
+            #{marketPeriodTo},
+            #{author},
+            #{numberOfCopies},
+            #{reportedValue},
+            #{grossAmount},
+            #{serviceFee},
+            #{serviceFeeAmount},
+            #{netAmount},
+            #{payee.accountNumber},
+            #{rhParticipating},
+            #{checkNumber},
+            #{checkDate},
+            #{cccEventId},
+            #{distributionName},
+            #{distributionDate},
+            #{periodEndDate},
+            #{lmDetailId},
+            <include refid="StoredEntityMapper.insert"/>
+        )
+    </insert>
 </mapper>
