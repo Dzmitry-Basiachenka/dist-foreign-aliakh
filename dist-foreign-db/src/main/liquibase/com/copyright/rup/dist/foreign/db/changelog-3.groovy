@@ -141,4 +141,68 @@ databaseChangeLog {
             }
         }
     }
+
+    changeSet(id: '2018-09-13-01', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-45896 FDA: Change Product Name - FAS2 (replace CLA_FAS): update CLA_FAS product family to FAS2 in df_usage table")
+
+        update(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'product_family', value: 'FAS2')
+            where "product_family = 'CLA_FAS'"
+        }
+
+        rollback {
+            update(schemaName: dbAppsSchema, tableName: 'df_usage') {
+                column(name: 'product_family', value: 'CLA_FAS')
+                where "product_family = 'FAS2'"
+            }
+        }
+    }
+
+    changeSet(id: '2018-09-13-02', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-45896 FDA: Change Product Name - FAS2 (replace CLA_FAS): update CLA_FAS product family to FAS2 in df_usage_archive table")
+
+        update(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+            column(name: 'product_family', value: 'FAS2')
+            where "product_family = 'CLA_FAS'"
+        }
+
+        rollback {
+            update(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+                column(name: 'product_family', value: 'CLA_FAS')
+                where "product_family = 'FAS2'"
+            }
+        }
+    }
+
+    changeSet(id: '2018-09-13-03', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-45896 FDA: Change Product Name - FAS2 (replace CLA_FAS): update CLA_FAS product family to FAS2 in df_rightsholder_discrepancy table")
+
+        update(schemaName: dbAppsSchema, tableName: 'df_rightsholder_discrepancy') {
+            column(name: 'product_family', value: 'FAS2')
+            where "product_family = 'CLA_FAS'"
+        }
+
+        rollback {
+            update(schemaName: dbAppsSchema, tableName: 'df_rightsholder_discrepancy') {
+                column(name: 'product_family', value: 'CLA_FAS')
+                where "product_family = 'FAS2'"
+            }
+        }
+    }
+
+    changeSet(id: '2018-09-13-04', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-45896 FDA: Change Product Name - FAS2 (replace CLA_FAS): update CLA_FAS product family to FAS2 in df_scenario_usage_filter table")
+
+        update(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
+            column(name: 'product_family', value: 'FAS2')
+            where "product_family = 'CLA_FAS'"
+        }
+
+        rollback {
+            update(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
+                column(name: 'product_family', value: 'CLA_FAS')
+                where "product_family = 'FAS2'"
+            }
+        }
+    }
 }
