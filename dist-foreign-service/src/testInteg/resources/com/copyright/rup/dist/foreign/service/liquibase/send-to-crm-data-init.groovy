@@ -162,8 +162,47 @@ databaseChangeLog {
             column(name: 'check_date', value: '2016-11-03')
             column(name: 'distribution_name', value: 'FDA March 17')
             column(name: 'distribution_date', value: '2016-03-11')
+            column(name: 'ccc_event_id', value: '140918')
             column(name: 'period_end_date', value: '2016-03-11')
             column(name: 'created_datetime', value: '2016-03-11')
+        }
+    }
+
+    changeSet(id: '2018-09-14-00', author: 'Pavel Liakh <pliakh@copyright.com>') {
+        comment('Inserting test data for Send To CRM integration test:' +
+                'insert post distribution usage')
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+            column(name: 'df_usage_archive_uid', value: 'f6b7dcd0-b7f7-11e8-b568-0800200c9a66')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'wr_wrk_inst', value: '243904752')
+            column(name: 'work_title', value: '100 ROAD MOVIES')
+            column(name: 'system_title', value: '100 ROAD MOVIES')
+            column(name: 'rh_account_number', value: '1000002859')
+            column(name: 'payee_account_number', value: '1000002859')
+            column(name: 'status_ind', value: 'PAID')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '1008902112317555XX')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2016-11-03')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2016')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '3000')
+            column(name: 'gross_amount', value: '500.00')
+            column(name: 'net_amount', value: '80.00')
+            column(name: 'service_fee_amount', value: '420.00')
+            column(name: 'service_fee', value: '0.16000')
+            column(name: 'check_number', value: '763497')
+            column(name: 'check_date', value: '2018-11-03')
+            column(name: 'distribution_name', value: 'FDA March 18')
+            column(name: 'distribution_date', value: '2018-03-11')
+            column(name: 'ccc_event_id', value: '156665')
+            column(name: 'period_end_date', value: '2018-03-11')
+            column(name: 'created_datetime', value: '2018-03-11')
+            column(name: 'lm_detail_id', value: '85ebddc0-b7f8-11e8-b568-0800200c9a66')
         }
     }
 }

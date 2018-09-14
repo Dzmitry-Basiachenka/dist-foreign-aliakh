@@ -41,7 +41,6 @@ import java.util.concurrent.TimeUnit;
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
 @TestPropertySource(properties = {"test.liquibase.changelog=receive-paid-usages-from-lm-data-init.groovy"})
-// TODO {pliakh} add test case for message with three details for archived, sent to lm and not existing usages
 @Transactional
 public class ReceivePaidUsagesFromLmTest {
 
@@ -58,7 +57,7 @@ public class ReceivePaidUsagesFromLmTest {
         int paidUsagesCount = usageArchiveRepository.findPaidIds().size();
         expectReceivePaidUsages("lm/paid_usages_fas.json");
         assertEquals(1 + paidUsagesCount, usageArchiveRepository.findPaidIds().size());
-        assertPaidInformationNotEmpty("6a833980-17e3-11e8-b566-0800200c9a66");
+        assertPaidUsageByLmDetailId("43b7cb10-b72d-11e8-b568-0800200c9a66");
     }
 
     @Test
@@ -70,6 +69,21 @@ public class ReceivePaidUsagesFromLmTest {
         List<String> paidUsageIds = usageArchiveRepository.findPaidIds();
         assertFalse(paidUsageIds.contains(predistributionPaidUsageId));
         assertPaidUsageByLmDetailId("0415faf0-b731-11e8-b568-0800200c9a66");
+    }
+
+    @Test
+    /**
+     * Test case to verify consuming logic when received paid information for SENT_TO_LM, ARCHIVED and not existing
+     * usages in one message.
+     */
+    public void testReceivePaidInformationFromLm() throws InterruptedException {
+        String predistributionPaidUsageId = "fa78b240-b72f-11e8-b568-0800200c9a66";
+        int paidUsagesCount = usageArchiveRepository.findPaidIds().size();
+        expectReceivePaidUsages("lm/paid_usages.json");
+        assertEquals(2 + paidUsagesCount, usageArchiveRepository.findPaidIds().size());
+        assertPaidUsageByLmDetailId("0415faf0-b731-11e8-b568-0800200c9a66");
+        assertPaidUsageByLmDetailId("43b7cb10-b72d-11e8-b568-0800200c9a66");
+        assertFalse(usageArchiveRepository.findPaidIds().contains(predistributionPaidUsageId));
     }
 
     private void assertPaidUsageByLmDetailId(String lmDetailId) {
