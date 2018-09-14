@@ -807,7 +807,7 @@
     <sql id="selectArchivedCountForAuditSql">
         (select count(1) usage_count
         from ${schema}.df_usage_archive u
-        join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
+        left join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
         left join ${schema}.df_scenario s on s.df_scenario_uid = u.df_scenario_uid
         <include refid="archivedAuditFilterWhereClause"/>)
     </sql>
@@ -985,7 +985,7 @@
             u.distribution_date,
             u.period_end_date
         from ${schema}.df_usage_archive u
-        join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
+        left join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         left join ${schema}.df_rightsholder payee on payee.rh_account_number = u.payee_account_number
         left join ${schema}.df_scenario s on s.df_scenario_uid = u.df_scenario_uid
