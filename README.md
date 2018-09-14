@@ -1,3 +1,10 @@
+3.1.10
+-
+* B-45044 FDA: Process Post-Distribution Details: adjust audit logic to show post-distribution usages
+* B-45044 FDA: Process Post-Distribution Details: adjust integration tests for receiving paid information from LM, for reporting to CRM and for reading usage information from DB
+* B-45518 Tech Debt: FDA: remove DirtiesContext annotation for service integration tests to speedup test execution
+* B-45518 Tech Debt: FDA: set maxParrallelForks for test tasks
+
 3.1.9
 -
 * B-45044 FDA: Process Post-Distribution Details: adjust update paid info logic to create post-distribution paid-information, remove batch_uid and scenario_uid not-null constrains in usage archive table
