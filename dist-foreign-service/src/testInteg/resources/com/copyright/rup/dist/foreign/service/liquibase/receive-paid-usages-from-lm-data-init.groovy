@@ -69,6 +69,7 @@ databaseChangeLog {
             column(name: 'gross_amount', value: '2000.00')
         }
 
+        // usage that shouldn't be affected during receiving paid information from LM
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
             column(name: 'df_usage_archive_uid', value: 'fa78b240-b72f-11e8-b568-0800200c9a66')
             column(name: 'df_usage_batch_uid', value: 'f1e8c570-b72f-11e8-b568-0800200c9a66')

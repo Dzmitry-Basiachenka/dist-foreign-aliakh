@@ -331,14 +331,14 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
-    // TODO {pliakh} add assertions for rest of the usage fields
     public void testFindUsageInformationById() {
-        List<Usage> usages = usageArchiveRepository.findUsageInformationById(ImmutableList.of(PAID_USAGE_ID));
-        assertTrue(CollectionUtils.isNotEmpty(usages));
-        assertEquals(1, CollectionUtils.size(usages));
-        Usage usage = usages.get(0);
-        assertEquals(PAID_USAGE_ID, usage.getId());
-        assertEquals(UsageStatusEnum.PAID, usage.getStatus());
+        Usage expectedUsage = buildUsage(RupPersistUtils.generateUuid(), "56282dbc-2468-48d4-b926-93d3458a656a");
+        usageArchiveRepository.insert(expectedUsage);
+        List<Usage> actualUsages =
+            usageArchiveRepository.findUsageInformationById(ImmutableList.of(expectedUsage.getId()));
+        assertTrue(CollectionUtils.isNotEmpty(actualUsages));
+        assertEquals(1, CollectionUtils.size(actualUsages));
+        assertUsage(expectedUsage, actualUsages.get(0));
     }
 
     private void assertUsagePaidInformation(PaidUsage expectedPaidUsage) {
