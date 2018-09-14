@@ -113,6 +113,7 @@ public class UsageRepositoryIntegrationTest {
     private static final String USAGE_ID_22 = "c5ea47b0-b269-4791-9aa7-76308fe835e6";
     private static final String USAGE_ID_23 = "3b6892a9-49b2-41a2-aa3a-8705ea6640cc";
     private static final String USAGE_ID_24 = "3c31db4f-4065-4fe1-84c2-b48a0f3bc079";
+    private static final String POST_DISTRIBUTION_USAGE_ID_25 = "a417fb00-b7ec-11e8-b568-0800200c9a66";
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
     private static final String USER_NAME = "user@copyright.com";
     private static final BigDecimal SERVICE_FEE = new BigDecimal("0.32000");
@@ -595,11 +596,12 @@ public class UsageRepositoryIntegrationTest {
     public void testFindForAuditByProductFamilies() {
         AuditFilter filter = new AuditFilter();
         filter.setProductFamilies(Collections.singleton(PRODUCT_FAMILY_FAS));
-        assertEquals(21, usageRepository.findCountForAudit(filter));
+        assertEquals(22, usageRepository.findCountForAudit(filter));
         List<UsageDto> usages = usageRepository.findForAudit(filter, new Pageable(0, 25), null);
-        verifyUsageDtos(usages, 21, USAGE_ID_6, USAGE_ID_14, USAGE_ID_15, USAGE_ID_16, USAGE_ID_1, USAGE_ID_23,
+        verifyUsageDtos(usages, 22, USAGE_ID_6, USAGE_ID_14, USAGE_ID_15, USAGE_ID_16, USAGE_ID_1, USAGE_ID_23,
             USAGE_ID_21, USAGE_ID_12, USAGE_ID_9, USAGE_ID_13, USAGE_ID_18, USAGE_ID_11, USAGE_ID_2, USAGE_ID_19,
-            USAGE_ID_5, USAGE_ID_8, USAGE_ID_17, USAGE_ID_22, USAGE_ID_7, USAGE_ID_4, USAGE_ID_20);
+            POST_DISTRIBUTION_USAGE_ID_25, USAGE_ID_5, USAGE_ID_8, USAGE_ID_17, USAGE_ID_22, USAGE_ID_7, USAGE_ID_4,
+            USAGE_ID_20);
     }
 
     @Test
@@ -621,6 +623,10 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(1, usageRepository.findCountForAudit(filter));
         usages = usageRepository.findForAudit(filter, new Pageable(0, 10), null);
         verifyUsageDtos(usages, 1, USAGE_ID_4);
+        filter.setSearchValue(POST_DISTRIBUTION_USAGE_ID_25);
+        assertEquals(1, usageRepository.findCountForAudit(filter));
+        usages = usageRepository.findForAudit(filter, new Pageable(0, 100), null);
+        verifyUsageDtos(usages, 1, POST_DISTRIBUTION_USAGE_ID_25);
     }
 
     @Test
