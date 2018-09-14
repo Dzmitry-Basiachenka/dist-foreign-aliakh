@@ -7,6 +7,7 @@ import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.Processin
 import com.copyright.rup.dist.common.test.JsonEndpointMatcher;
 import com.copyright.rup.dist.common.test.JsonMatcher;
 import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
@@ -27,12 +28,14 @@ import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.mock.PaidUsageConsumerMock;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.component.mock.MockEndpoint;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.Builder;
@@ -75,7 +78,8 @@ import java.util.stream.IntStream;
 @Component
 public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
 
-    private final Map<String, List<Pair<UsageActionTypeEnum, String>>> expectedUsagesAudit = Maps.newHashMap();
+    private final Map<String, List<Pair<UsageActionTypeEnum, String>>> expectedUsageLmDetailIdToAuditMap
+        = Maps.newHashMap();
     @Autowired
     private CsvProcessorFactory csvProcessorFactory;
     @Autowired
@@ -114,10 +118,9 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
     private List<String> expectedRightsholdersIds;
     private String expectedLmDetailsJsonFile;
     private String expectedPaidUsagesJsonFile;
-    private List<String> expectedPaidUsageIds;
+    private List<String> expectedPaidUsageLmDetailids;
     private String expectedCrmRequestJsonFile;
     private String expectedCrmResponseJsonFile;
-    private List<String> expectedArchivedUsageIds;
     private int expectedPreferencesCallsTimes;
 
     public WorkflowIntegrationTestBuilder withUsagesCsvFile(String csvFile, String... usageIds) {
@@ -169,8 +172,8 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
-    public WorkflowIntegrationTestBuilder expectPaidDetailsIds(String... usageIds) {
-        this.expectedPaidUsageIds = Arrays.asList(usageIds);
+    public WorkflowIntegrationTestBuilder expectPaidUsageLmDetailIds(String... usageLmDetailIds) {
+        this.expectedPaidUsageLmDetailids = Arrays.asList(usageLmDetailIds);
         return this;
     }
 
@@ -180,14 +183,9 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
-    public WorkflowIntegrationTestBuilder expectArchivedDetailsIds(String... usageIds) {
-        this.expectedArchivedUsageIds = Arrays.asList(usageIds);
-        return this;
-    }
-
-    public WorkflowIntegrationTestBuilder expectUsageAudit(String usageId,
+    public WorkflowIntegrationTestBuilder expectUsageAudit(String usageLmDetailId,
                                                            List<Pair<UsageActionTypeEnum, String>> usageAudit) {
-        this.expectedUsagesAudit.put(usageId, usageAudit);
+        this.expectedUsageLmDetailIdToAuditMap.put(usageLmDetailId, usageAudit);
         return this;
     }
 
@@ -203,6 +201,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
 
         private MockRestServiceServer mockServer;
         private MockRestServiceServer asyncMockServer;
+        private List<PaidUsage> archiveUsages;
 
         private Scenario scenario;
 
@@ -295,7 +294,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
 
         private void receivePaidUsagesFromLm() throws InterruptedException {
             expectReceivePaidUsages();
-            assertPaidUsages();
+            assertPaidUsagesCountByLmDetailIds();
         }
 
         private void expectReceivePaidUsages() throws InterruptedException {
@@ -307,27 +306,18 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
             assertTrue(latch.await(10, TimeUnit.SECONDS));
         }
 
-        private void assertPaidUsages() {
-            assertEquals(expectedPaidUsageIds.size(),
-                findPaidUsagesCountByUsageIdsAndStatus(expectedPaidUsageIds, UsageStatusEnum.PAID));
-        }
-
-        private int findPaidUsagesCountByUsageIdsAndStatus(List<String> usageIds, UsageStatusEnum status) {
-            return usageArchiveRepository.findByIdAndStatus(usageIds, status).size();
-        }
-
         private void sendUsagesToCrm() {
             createRestServer();
             expectSendToCrm();
             usageService.sendToCrm();
             mockServer.verify();
-            assertArchivedUsages();
+            assertArchivedUsagesCount();
         }
 
         private void expectSendToCrm() {
             String requestBody = TestUtils.fileToString(this.getClass(), expectedCrmRequestJsonFile);
             String responseBody = TestUtils.fileToString(this.getClass(), expectedCrmResponseJsonFile);
-            List<String> excludedFields = Collections.singletonList("licenseCreateDate");
+            List<String> excludedFields = ImmutableList.of("licenseCreateDate", "omOrderDetailNumber");
             mockServer.expect(MockRestRequestMatchers.requestTo(
                 "http://localhost:9061/legacy-integration-rest/insertCCCRightsDistribution"))
                 .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
@@ -335,9 +325,25 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
                 .andRespond(MockRestResponseCreators.withSuccess(responseBody, MediaType.APPLICATION_JSON));
         }
 
-        private void assertArchivedUsages() {
-            assertEquals(expectedArchivedUsageIds.size(),
-                findPaidUsagesCountByUsageIdsAndStatus(expectedArchivedUsageIds, UsageStatusEnum.ARCHIVED));
+        private void assertPaidUsagesCountByLmDetailIds() {
+            List<String> paidIds = usageArchiveRepository.findPaidIds();
+            List<PaidUsage> actualUsages = usageArchiveRepository.findByIdAndStatus(paidIds, UsageStatusEnum.PAID);
+            assertTrue(CollectionUtils.isNotEmpty(actualUsages));
+            assertEquals(CollectionUtils.size(expectedPaidUsageLmDetailids), CollectionUtils.size(actualUsages));
+            List<String> actualLmDetailIds =
+                actualUsages.stream().map(PaidUsage::getLmDetailId).distinct().collect(Collectors.toList());
+            assertEquals(CollectionUtils.size(expectedPaidUsageLmDetailids), CollectionUtils.size(actualLmDetailIds));
+            assertTrue(expectedPaidUsageLmDetailids.containsAll(actualLmDetailIds));
+            archiveUsages = actualUsages;
+        }
+
+        private void assertArchivedUsagesCount() {
+            List<String> expectedArchivedUsageIds =
+                archiveUsages.stream().map(PaidUsage::getId).collect(Collectors.toList());
+            List<PaidUsage> actualArchivedUsages =
+                usageArchiveRepository.findByIdAndStatus(expectedArchivedUsageIds, UsageStatusEnum.ARCHIVED);
+            assertTrue(CollectionUtils.isNotEmpty(actualArchivedUsages));
+            assertEquals(CollectionUtils.size(expectedArchivedUsageIds), CollectionUtils.size(actualArchivedUsages));
         }
 
         private void verifyScenarioAudit() {
@@ -361,14 +367,18 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
         }
 
         private void verifyUsagesAudit() {
-            assertEquals(expectedUsagesAudit, buildUsageAuditMapForAssertion());
+            assertEquals(expectedUsageLmDetailIdToAuditMap, buildUsageAuditMapForAssertion());
         }
 
         private Map<String, List<Pair<UsageActionTypeEnum, String>>> buildUsageAuditMapForAssertion() {
-            return expectedUsagesAudit.keySet().stream()
+            return expectedUsageLmDetailIdToAuditMap.keySet().stream()
                 .collect(Collectors.toMap(
-                    usageId -> usageId,
-                    this::getUsageAuditActionTypeAndMessagePairs
+                    usageLmDetailIdId -> usageLmDetailIdId,
+                    usageLmDetailIdId ->
+                        getUsageAuditActionTypeAndMessagePairs(
+                            archiveUsages.stream()
+                                .filter(usage -> usageLmDetailIdId.equals(usage.getLmDetailId())).findFirst().get()
+                                .getId())
                 ));
         }
 
