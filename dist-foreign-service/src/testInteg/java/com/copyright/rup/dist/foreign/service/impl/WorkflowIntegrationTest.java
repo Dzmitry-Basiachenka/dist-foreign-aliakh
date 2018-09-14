@@ -41,6 +41,13 @@ public class WorkflowIntegrationTest {
     private static final String USAGE_ID_3 = "5f0f7397-6cb6-4538-b3dc-9364ed302e95";
     private static final String USAGE_ID_4 = "ae72ce15-d501-4c0f-b224-3ffca884e0f3";
     private static final String USAGE_ID_5 = "f85a6579-9461-4fa1-948f-734f0a3b3963";
+    private static final String USAGE_LM_DETAIL_ID_1 = "2ca0fc10-b68a-11e8-b568-0800200c9a66";
+    private static final String USAGE_LM_DETAIL_ID_2 = "863989e0-b68a-11e8-b568-0800200c9a66";
+    private static final String USAGE_LM_DETAIL_ID_3 = "91fbf1f0-b68a-11e8-b568-0800200c9a66";
+    private static final String USAGE_LM_DETAIL_ID_4 = "e3ab5f0-b68a-11e8-b568-0800200c9a666";
+    private static final String USAGE_LM_DETAIL_ID_5 = "a9107410-b68a-11e8-b568-0800200c9a66";
+    private static final String USAGE_LM_DETAIL_ID_6 = "0cfdb8c0-b802-11e8-b568-0800200c9a66";
+
 
     @Autowired
     private WorkflowIntegrationTestBuilder testBuilder;
@@ -61,15 +68,18 @@ public class WorkflowIntegrationTest {
                 "37338ed1-7083-45e2-a96b-5872a7de3a98", "f366285a-ce46-48b0-96ee-cd35d62fb243")
             .expectLmDetails("details/cla_details_to_lm.json")
             .expectPaidUsagesFromLm("lm/paid_usages_cla.json")
-            .expectPaidDetailsIds(USAGE_ID_1, USAGE_ID_2, USAGE_ID_3, USAGE_ID_4, USAGE_ID_5)
+            .expectPaidUsageLmDetailIds(USAGE_LM_DETAIL_ID_1, USAGE_LM_DETAIL_ID_2, USAGE_LM_DETAIL_ID_3,
+                USAGE_LM_DETAIL_ID_4, USAGE_LM_DETAIL_ID_5, USAGE_LM_DETAIL_ID_6)
             .expectCrmReporting("crm/cla_rights_distribution_request.json",
                 "crm/cla_rights_distribution_response.json")
-            .expectArchivedDetailsIds(USAGE_ID_1, USAGE_ID_2, USAGE_ID_3, USAGE_ID_4, USAGE_ID_5)
-            .expectUsageAudit(USAGE_ID_1, expectedUsageAudit)
-            .expectUsageAudit(USAGE_ID_2, expectedUsageAudit)
-            .expectUsageAudit(USAGE_ID_3, expectedUsageAudit)
-            .expectUsageAudit(USAGE_ID_4, expectedUsageAudit)
-            .expectUsageAudit(USAGE_ID_5, expectedUsageAudit)
+            .expectUsageAudit(USAGE_LM_DETAIL_ID_1, expectedUsageAudit)
+            .expectUsageAudit(USAGE_LM_DETAIL_ID_2, expectedUsageAudit)
+            .expectUsageAudit(USAGE_LM_DETAIL_ID_3, expectedUsageAudit)
+            .expectUsageAudit(USAGE_LM_DETAIL_ID_4, expectedUsageAudit)
+            .expectUsageAudit(USAGE_LM_DETAIL_ID_5, expectedUsageAudit)
+            .expectUsageAudit(USAGE_LM_DETAIL_ID_6, Arrays.asList(
+                Pair.of(UsageActionTypeEnum.PAID, "Usage has been created based on Post-Distribution process"),
+                Pair.of(UsageActionTypeEnum.ARCHIVED, "Usage was sent to CRM")))
             .build()
             .run();
     }

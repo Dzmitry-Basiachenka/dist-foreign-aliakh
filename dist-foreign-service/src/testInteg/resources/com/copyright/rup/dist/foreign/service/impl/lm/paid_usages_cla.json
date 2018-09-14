@@ -59,6 +59,18 @@
       "check_date": 1523318400000,
       "period_end_date": 1523491200000,
       "lm_detail_id": "a9107410-b68a-11e8-b568-0800200c9a66"
+    },
+    {
+      "rh_account_number": "2000139286",
+      "rollup_account_number": "2000017000",
+      "detail_id": "bde1e665-b10f-4015-936f-71fb42410e3b",
+      "distribution_name": "FDA April 18",
+      "distribution_date": 1523145600000,
+      "ccc_event_id": "53259",
+      "check_number": "578944",
+      "check_date": 1523318400000,
+      "period_end_date": 1523491200000,
+      "lm_detail_id": "0cfdb8c0-b802-11e8-b568-0800200c9a66"
     }
   ]
 }
