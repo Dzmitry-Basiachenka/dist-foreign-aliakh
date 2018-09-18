@@ -52,7 +52,7 @@ public class ResearchedUsagesCsvProcessorIntegrationTest {
 
     @BeforeClass
     public static void setUpTestDirectory() throws IOException {
-        ReportTestUtils.setUpTestDirectory();
+        ReportTestUtils.setUpTestDirectory(ResearchedUsagesCsvProcessorIntegrationTest.class);
     }
 
     @Test

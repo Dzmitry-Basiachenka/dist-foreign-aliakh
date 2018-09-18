@@ -93,7 +93,7 @@ public class UsageArchiveRepositoryIntegrationTest {
 
     @BeforeClass
     public static void setUpTestDirectory() throws IOException {
-        ReportTestUtils.setUpTestDirectory();
+        ReportTestUtils.setUpTestDirectory(UsageArchiveRepositoryIntegrationTest.class);
     }
 
     @Test
