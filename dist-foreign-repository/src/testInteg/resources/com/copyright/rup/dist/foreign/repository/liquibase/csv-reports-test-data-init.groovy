@@ -4320,6 +4320,57 @@ databaseChangeLog {
             column(name: "df_usage_batch_uid", value: "29e140ab-2a71-40a3-a55a-a68dcdb95a9b")
         }
 
+    }
+
+    changeSet(id: '2018-09-18-00', author: 'Pavel Liakh <pliakh@copyright.com>') {
+        comment('Inserts data for csv reports integration test: ' +
+                'insert post-distribution usage without batch')
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+            column(name: 'df_usage_archive_uid', value: '75693c90-d6f5-401a-8c26-134adc9745c5')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'wr_wrk_inst', value: '243904752')
+            column(name: 'work_title', value: '100 ROAD MOVIES')
+            column(name: 'system_title', value: '100 ROAD MOVIES')
+            column(name: 'rh_account_number', value: '1000002859')
+            column(name: 'payee_account_number', value: '1000002859')
+            column(name: 'status_ind', value: 'ARCHIVED')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '1008902112317555XX')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2016-11-03')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '3000')
+            column(name: 'gross_amount', value: '500.00')
+            column(name: 'net_amount', value: '80.00')
+            column(name: 'service_fee_amount', value: '420.00')
+            column(name: 'service_fee', value: '0.16000')
+            column(name: 'check_number', value: '578945')
+            column(name: 'check_date', value: '2016-11-03')
+            column(name: 'ccc_event_id', value: '53256')
+            column(name: 'distribution_name', value: 'FDA March 17')
+            column(name: 'distribution_date', value: '2016-11-03')
+            column(name: 'lm_detail_id', value: '97a86977-016f-4b9d-b861-79fcd8ff1164')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
+            column(name: 'df_usage_audit_uid', value: '2ba71de9-1180-44d7-afb7-924c46d77943')
+            column(name: 'df_usage_uid', value: 'af0cbd9a-0b34-49db-8466-35aa82dbe904')
+            column(name: 'action_type_ind', value: 'PAID')
+            column(name: 'action_reason', value: 'Usage has been created based on Post-Distribution process')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
+            column(name: 'df_usage_audit_uid', value: '40e44752-bb20-11e8-b568-08002003f8ce825-6514-4307-a118-3ec89187bef3')
+            column(name: 'df_usage_uid', value: 'd62a9eb5-c5f2-4241-9477-01369ef686dd')
+            column(name: 'action_type_ind', value: 'ARCHIVED')
+            column(name: 'action_reason', value: 'Usage was sent to CRM')
+        }
+
         rollback ""
     }
 }

@@ -173,7 +173,7 @@ databaseChangeLog {
                 'insert post distribution usage')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
-            column(name: 'df_usage_archive_uid', value: 'f6b7dcd0-b7f7-11e8-b568-0800200c9a66')
+            column(name: 'df_usage_archive_uid', value: '48189e92-b9d2-46be-94a4-c2adf83f21ce')
             column(name: 'product_family', value: 'FAS')
             column(name: 'wr_wrk_inst', value: '243904752')
             column(name: 'work_title', value: '100 ROAD MOVIES')
@@ -202,7 +202,7 @@ databaseChangeLog {
             column(name: 'ccc_event_id', value: '156665')
             column(name: 'period_end_date', value: '2018-03-11')
             column(name: 'created_datetime', value: '2018-03-11')
-            column(name: 'lm_detail_id', value: '85ebddc0-b7f8-11e8-b568-0800200c9a66')
+            column(name: 'lm_detail_id', value: '48189e92-b9d2-46be-94a4-c2adf83f21ce')
         }
     }
 }

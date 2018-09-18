@@ -81,8 +81,8 @@ public class UsageArchiveRepositoryIntegrationTest {
         LocalDate.of(2016, 11, 3).atStartOfDay(ZoneId.systemDefault()).toOffsetDateTime();
     private static final Integer NUMBER_OF_COPIES = 155;
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
-    private static final String PAID_USAGE_ID = "c0d30ec0-370d-11e8-b566-0800200c9a66";
-    private static final String LM_DETAIL_ID = "be8999b0-b65e-11e8-b568-0800200c9a66";
+    private static final String PAID_USAGE_ID = "3f8ce825-6514-4307-a118-3ec89187bef3";
+    private static final String LM_DETAIL_ID = "5963a9c2-b639-468c-a4c1-02101a4597c6";
     private static final String PATH_TO_EXPECTED_REPORTS =
         "src/testInteg/resources/com/copyright/rup/dist/foreign/repository/impl/csv";
     private static final Executor EXECUTOR = Executors.newSingleThreadExecutor();
@@ -209,38 +209,38 @@ public class UsageArchiveRepositoryIntegrationTest {
 
     @Test
     public void testFindByScenarioIdAndRhAccountNumberSearchByRorName() {
-        verifySearch("JAC, Japan Academic Association for Copyright Clearance, Inc.", 1);
-        verifySearch("Copyright Clearance, Inc.", 1);
-        verifySearch("CoPyRight", 1);
-        verifySearch("JAC, Japan Acade mic", 0);
+        assertSearch("JAC, Japan Academic Association for Copyright Clearance, Inc.", 1);
+        assertSearch("Copyright Clearance, Inc.", 1);
+        assertSearch("CoPyRight", 1);
+        assertSearch("JAC, Japan Acade mic", 0);
     }
 
     @Test
     public void testFindByScenarioIdAndRhAccountNumberSearchByRorAccountNumber() {
-        verifySearch("2000017010", 1);
-        verifySearch("0001701", 1);
-        verifySearch("200001 7010", 0);
+        assertSearch("2000017010", 1);
+        assertSearch("0001701", 1);
+        assertSearch("200001 7010", 0);
     }
 
     @Test
     public void testFindByScenarioIdAndRhAccountNumberSearchDetailId() {
-        verifySearch("2f660585-35a1-48a5-a506-904c725cda11", 1);
-        verifySearch("48a5", 1);
-        verifySearch("49", 0);
+        assertSearch("2f660585-35a1-48a5-a506-904c725cda11", 1);
+        assertSearch("48a5", 1);
+        assertSearch("49", 0);
     }
 
     @Test
     public void testFindByScenarioIdAndRhAccountNumberSearchByWrWrkInst() {
-        verifySearch("243904752", 1);
-        verifySearch("24390", 1);
-        verifySearch("24461 4835", 0);
+        assertSearch("243904752", 1);
+        assertSearch("24390", 1);
+        assertSearch("24461 4835", 0);
     }
 
     @Test
     public void testFindByScenarioIdAndRhAccountNumberSearchByStandardNumber() {
-        verifySearch("1008902112377654XX", 1);
-        verifySearch("1008902112377654xx", 1);
-        verifySearch("100890 2002377655XX", 0);
+        assertSearch("1008902112377654XX", 1);
+        assertSearch("1008902112377654xx", 1);
+        assertSearch("100890 2002377655XX", 0);
     }
 
     @Test
@@ -288,7 +288,7 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertTrue(CollectionUtils.isNotEmpty(paidUsages));
         assertEquals(1, paidUsages.size());
         PaidUsage paidUsage = paidUsages.get(0);
-        assertEquals("c0d30ec0-370d-11e8-b566-0800200c9a66", paidUsage.getId());
+        assertEquals("3f8ce825-6514-4307-a118-3ec89187bef3", paidUsage.getId());
         assertEquals(Long.valueOf("7000813806"), paidUsage.getRroAccountNumber());
         assertEquals(Long.valueOf("1000002859"), paidUsage.getRightsholder().getAccountNumber());
         assertEquals(Long.valueOf("1000002859"), paidUsage.getPayee().getAccountNumber());
@@ -381,7 +381,7 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertEquals(expectedPaidUsage.getLmDetailId(), actualPaidUsage.getLmDetailId());
     }
 
-    private void verifySearch(String searchValue, int expectedSize) {
+    private void assertSearch(String searchValue, int expectedSize) {
         assertEquals(expectedSize, usageArchiveRepository.findByScenarioIdAndRhAccountNumber(SCENARIO_ID, 1000002859L,
             searchValue, null, null).size());
         assertEquals(expectedSize,

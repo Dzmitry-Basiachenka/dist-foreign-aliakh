@@ -5,14 +5,14 @@ databaseChangeLog {
         comment('Inserting test data to receive paid usages from LM')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
-            column(name: 'df_scenario_uid', value: '5b9ab240-17e3-11e8-b566-0800200c9a66')
+            column(name: 'df_scenario_uid', value: '4924da00-ee87-41b3-9aed-caa5c5ba94f1')
             column(name: 'name', value: 'Paid Scenario')
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'description', value: 'Scenario already sent to LM')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
-            column(name: 'df_usage_batch_uid', value: '64a6ace0-17e3-11e8-b566-0800200c9a66')
+            column(name: 'df_usage_batch_uid', value: 'c392b841-33a6-4268-861a-2c4334a7fabc')
             column(name: 'name', value: 'Paid batch')
             column(name: 'rro_account_number', value: '2000017010')
             column(name: 'payment_date', value: '2021-02-12')
@@ -21,9 +21,9 @@ databaseChangeLog {
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
-            column(name: 'df_usage_archive_uid', value: '6a833980-17e3-11e8-b566-0800200c9a66')
-            column(name: 'df_usage_batch_uid', value: '64a6ace0-17e3-11e8-b566-0800200c9a66')
-            column(name: 'df_scenario_uid', value: '5b9ab240-17e3-11e8-b566-0800200c9a66')
+            column(name: 'df_usage_archive_uid', value: 'e783caf7-586d-434c-baaa-2ddf09afee77')
+            column(name: 'df_usage_batch_uid', value: 'c392b841-33a6-4268-861a-2c4334a7fabc')
+            column(name: 'df_scenario_uid', value: '4924da00-ee87-41b3-9aed-caa5c5ba94f1')
             column(name: 'product_family', value: 'FAS')
             column(name: 'wr_wrk_inst', value: '243904752')
             column(name: 'work_title', value: '100 ROAD MOVIES')
@@ -54,14 +54,14 @@ databaseChangeLog {
         comment('Inserting test data to receive post-distribution paid usages from LM')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
-            column(name: 'df_scenario_uid', value: '87b47790-b72e-11e8-b568-0800200c9a66')
+            column(name: 'df_scenario_uid', value: '19de64a0-f4d6-4ddf-9d00-882325e39c58')
             column(name: 'name', value: 'Paid Scenario')
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'description', value: 'Scenario already sent to LM')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
-            column(name: 'df_usage_batch_uid', value: 'f1e8c570-b72f-11e8-b568-0800200c9a66')
+            column(name: 'df_usage_batch_uid', value: '244ecf91-bc53-4cf3-a3c4-170019125b46')
             column(name: 'name', value: 'Post Distribution Paid batch')
             column(name: 'rro_account_number', value: '2000017010')
             column(name: 'payment_date', value: '2021-02-12')
@@ -71,9 +71,9 @@ databaseChangeLog {
 
         // usage that shouldn't be affected during receiving paid information from LM
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
-            column(name: 'df_usage_archive_uid', value: 'fa78b240-b72f-11e8-b568-0800200c9a66')
-            column(name: 'df_usage_batch_uid', value: 'f1e8c570-b72f-11e8-b568-0800200c9a66')
-            column(name: 'df_scenario_uid', value: '87b47790-b72e-11e8-b568-0800200c9a66')
+            column(name: 'df_usage_archive_uid', value: 'ef058a3f-b60e-429b-b6e3-14d386eb86ba')
+            column(name: 'df_usage_batch_uid', value: '244ecf91-bc53-4cf3-a3c4-170019125b46')
+            column(name: 'df_scenario_uid', value: '19de64a0-f4d6-4ddf-9d00-882325e39c58')
             column(name: 'product_family', value: 'FAS')
             column(name: 'wr_wrk_inst', value: '243904752')
             column(name: 'work_title', value: '100 ROAD MOVIES')

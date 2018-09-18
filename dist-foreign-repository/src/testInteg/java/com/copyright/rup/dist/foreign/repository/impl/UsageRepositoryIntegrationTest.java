@@ -94,7 +94,7 @@ public class UsageRepositoryIntegrationTest {
     private static final String USAGE_ID_3 = "5c5f8c1c-1418-4cfd-8685-9212f4c421d1";
     private static final String USAGE_ID_4 = "d9ca07b5-8282-4a81-9b9d-e4480f529d34";
     private static final String USAGE_ID_5 = "a71a0544-128e-41c0-b6b0-cfbbea6d2182";
-    private static final String USAGE_ID_6 = "0b0f5100-01bd-11e8-8f1a-0800200c9a66";
+    private static final String USAGE_ID_6 = "62e0ddd7-a37f-4810-8ada-abab805cb48d";
     private static final String USAGE_ID_7 = "cf38d390-11bb-4af7-9685-e034c9c32fb6";
     private static final String USAGE_ID_8 = "b1f0b236-3ae9-4a60-9fab-61db84199dss";
     private static final String USAGE_ID_9 = "5c5f8c1c-1418-4cfd-8685-9212f4c421d1";
@@ -113,7 +113,7 @@ public class UsageRepositoryIntegrationTest {
     private static final String USAGE_ID_22 = "c5ea47b0-b269-4791-9aa7-76308fe835e6";
     private static final String USAGE_ID_23 = "3b6892a9-49b2-41a2-aa3a-8705ea6640cc";
     private static final String USAGE_ID_24 = "3c31db4f-4065-4fe1-84c2-b48a0f3bc079";
-    private static final String POST_DISTRIBUTION_USAGE_ID_25 = "a417fb00-b7ec-11e8-b568-0800200c9a66";
+    private static final String POST_DISTRIBUTION_USAGE_ID = "cce295c6-23cf-47b4-b00c-2e0e50cce169";
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
     private static final String USER_NAME = "user@copyright.com";
     private static final BigDecimal SERVICE_FEE = new BigDecimal("0.32000");
@@ -188,7 +188,7 @@ public class UsageRepositoryIntegrationTest {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             Collections.singleton(PRODUCT_FAMILY_FAS), null, null, null);
         verifyUsageDtos(usageRepository.findByFilter(usageFilter, null, new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)),
-            16, USAGE_ID_6, USAGE_ID_14, USAGE_ID_1, USAGE_ID_23, USAGE_ID_21, USAGE_ID_12, USAGE_ID_9, USAGE_ID_13,
+            16, USAGE_ID_14, USAGE_ID_1, USAGE_ID_23, USAGE_ID_21, USAGE_ID_12, USAGE_ID_9, USAGE_ID_6, USAGE_ID_13,
             USAGE_ID_18, USAGE_ID_11, USAGE_ID_2, USAGE_ID_19, USAGE_ID_17, USAGE_ID_22, USAGE_ID_4, USAGE_ID_20);
     }
 
@@ -370,7 +370,7 @@ public class UsageRepositoryIntegrationTest {
         assertFalse(usageRepository.isScenarioEmpty("b1f0b236-3ae9-4a60-9fab-61db84199d6f"));
         assertTrue(usageRepository.isScenarioEmpty("e27551ed-3f69-4e08-9e4f-8ac03f67595f"));
         assertTrue(usageRepository.isScenarioEmpty("979c981c-6a3a-46f3-bbd7-83d322ce9136"));
-        assertTrue(usageRepository.isScenarioEmpty("cac23a50-204c-11e8-b566-0800200c9a66"));
+        assertTrue(usageRepository.isScenarioEmpty("091c08cf-8a93-4a64-87b5-4bdd44f97e79"));
     }
 
     @Test
@@ -598,10 +598,10 @@ public class UsageRepositoryIntegrationTest {
         filter.setProductFamilies(Collections.singleton(PRODUCT_FAMILY_FAS));
         assertEquals(22, usageRepository.findCountForAudit(filter));
         List<UsageDto> usages = usageRepository.findForAudit(filter, new Pageable(0, 25), null);
-        verifyUsageDtos(usages, 22, USAGE_ID_6, USAGE_ID_14, USAGE_ID_15, USAGE_ID_16, USAGE_ID_1, USAGE_ID_23,
-            USAGE_ID_21, USAGE_ID_12, USAGE_ID_9, USAGE_ID_13, USAGE_ID_18, USAGE_ID_11, USAGE_ID_2, USAGE_ID_19,
-            POST_DISTRIBUTION_USAGE_ID_25, USAGE_ID_5, USAGE_ID_8, USAGE_ID_17, USAGE_ID_22, USAGE_ID_7, USAGE_ID_4,
-            USAGE_ID_20);
+        verifyUsageDtos(usages, 22, USAGE_ID_14, USAGE_ID_15, USAGE_ID_16, USAGE_ID_1, USAGE_ID_23,
+            USAGE_ID_21, USAGE_ID_12, USAGE_ID_9, USAGE_ID_6, USAGE_ID_13, USAGE_ID_18, USAGE_ID_11, USAGE_ID_2,
+            USAGE_ID_19, USAGE_ID_5, USAGE_ID_8, USAGE_ID_17, USAGE_ID_22, POST_DISTRIBUTION_USAGE_ID, USAGE_ID_7,
+            USAGE_ID_4, USAGE_ID_20);
     }
 
     @Test
@@ -623,10 +623,10 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(1, usageRepository.findCountForAudit(filter));
         usages = usageRepository.findForAudit(filter, new Pageable(0, 10), null);
         verifyUsageDtos(usages, 1, USAGE_ID_4);
-        filter.setSearchValue(POST_DISTRIBUTION_USAGE_ID_25);
+        filter.setSearchValue(POST_DISTRIBUTION_USAGE_ID);
         assertEquals(1, usageRepository.findCountForAudit(filter));
         usages = usageRepository.findForAudit(filter, new Pageable(0, 100), null);
-        verifyUsageDtos(usages, 1, POST_DISTRIBUTION_USAGE_ID_25);
+        verifyUsageDtos(usages, 1, POST_DISTRIBUTION_USAGE_ID);
     }
 
     @Test

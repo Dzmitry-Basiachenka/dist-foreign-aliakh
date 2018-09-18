@@ -57,18 +57,18 @@ public class ReceivePaidUsagesFromLmTest {
         int paidUsagesCount = usageArchiveRepository.findPaidIds().size();
         expectReceivePaidUsages("lm/paid_usages_fas.json");
         assertEquals(1 + paidUsagesCount, usageArchiveRepository.findPaidIds().size());
-        assertPaidUsageByLmDetailId("43b7cb10-b72d-11e8-b568-0800200c9a66");
+        assertPaidUsageByLmDetailId("a1bd3d85-f130-45ad-be9b-dd4344668b16");
     }
 
     @Test
     public void testReceivePostDistributionUsageFromLm() throws InterruptedException {
         int paidUsagesCount = usageArchiveRepository.findPaidIds().size();
-        String predistributionPaidUsageId = "fa78b240-b72f-11e8-b568-0800200c9a66";
+        String predistributionPaidUsageId = "ef058a3f-b60e-429b-b6e3-14d386eb86ba";
         expectReceivePaidUsages("lm/post_distribution_paid_usages_fas.json");
         assertEquals(1 + paidUsagesCount, usageArchiveRepository.findPaidIds().size());
         List<String> paidUsageIds = usageArchiveRepository.findPaidIds();
         assertFalse(paidUsageIds.contains(predistributionPaidUsageId));
-        assertPaidUsageByLmDetailId("0415faf0-b731-11e8-b568-0800200c9a66");
+        assertPaidUsageByLmDetailId("c3a24455-a92b-4572-b6b5-628a66572104");
     }
 
     @Test
@@ -77,12 +77,12 @@ public class ReceivePaidUsagesFromLmTest {
      * usages in one message.
      */
     public void testReceivePaidInformationFromLm() throws InterruptedException {
-        String predistributionPaidUsageId = "fa78b240-b72f-11e8-b568-0800200c9a66";
+        String predistributionPaidUsageId = "ef058a3f-b60e-429b-b6e3-14d386eb86ba";
         int paidUsagesCount = usageArchiveRepository.findPaidIds().size();
         expectReceivePaidUsages("lm/paid_usages.json");
         assertEquals(2 + paidUsagesCount, usageArchiveRepository.findPaidIds().size());
-        assertPaidUsageByLmDetailId("0415faf0-b731-11e8-b568-0800200c9a66");
-        assertPaidUsageByLmDetailId("43b7cb10-b72d-11e8-b568-0800200c9a66");
+        assertPaidUsageByLmDetailId("c3a24455-a92b-4572-b6b5-628a66572104");
+        assertPaidUsageByLmDetailId("a1bd3d85-f130-45ad-be9b-dd4344668b16");
         assertFalse(usageArchiveRepository.findPaidIds().contains(predistributionPaidUsageId));
     }
 
