@@ -41,13 +41,12 @@ public class WorkflowIntegrationTest {
     private static final String USAGE_ID_3 = "5f0f7397-6cb6-4538-b3dc-9364ed302e95";
     private static final String USAGE_ID_4 = "ae72ce15-d501-4c0f-b224-3ffca884e0f3";
     private static final String USAGE_ID_5 = "f85a6579-9461-4fa1-948f-734f0a3b3963";
-    private static final String USAGE_LM_DETAIL_ID_1 = "2ca0fc10-b68a-11e8-b568-0800200c9a66";
-    private static final String USAGE_LM_DETAIL_ID_2 = "863989e0-b68a-11e8-b568-0800200c9a66";
-    private static final String USAGE_LM_DETAIL_ID_3 = "91fbf1f0-b68a-11e8-b568-0800200c9a66";
-    private static final String USAGE_LM_DETAIL_ID_4 = "e3ab5f0-b68a-11e8-b568-0800200c9a666";
-    private static final String USAGE_LM_DETAIL_ID_5 = "a9107410-b68a-11e8-b568-0800200c9a66";
-    private static final String USAGE_LM_DETAIL_ID_6 = "0cfdb8c0-b802-11e8-b568-0800200c9a66";
-
+    private static final String USAGE_LM_DETAIL_ID_1 = "d40b2162-d062-4161-8d64-7e869d45da4a";
+    private static final String USAGE_LM_DETAIL_ID_2 = "75d22d2c-d9f0-4486-b17e-6e03ccda6bf9";
+    private static final String USAGE_LM_DETAIL_ID_3 = "f9233aec-fa18-4973-a97c-5b550474c2fd";
+    private static final String USAGE_LM_DETAIL_ID_4 = "b771be06-0206-4e03-9e9a-740c5714bdae";
+    private static final String USAGE_LM_DETAIL_ID_5 = "1cb528e4-9712-4a2a-b456-9eb4316799d4";
+    private static final String USAGE_LM_DETAIL_ID_6 = "c6a8a6d4-952c-43e2-9f9d-f12212c95fd8";
 
     @Autowired
     private WorkflowIntegrationTestBuilder testBuilder;

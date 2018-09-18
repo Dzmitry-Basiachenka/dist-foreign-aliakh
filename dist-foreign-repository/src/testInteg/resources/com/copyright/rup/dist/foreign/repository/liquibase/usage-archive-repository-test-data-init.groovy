@@ -223,7 +223,7 @@ databaseChangeLog {
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
-            column(name: 'df_usage_archive_uid', value: 'ce9a7770-1ae6-11e8-b566-0800200c9a66')
+            column(name: 'df_usage_archive_uid', value: '32db57d1-9140-4912-af27-656c6956752d')
             column(name: 'df_usage_batch_uid', value: 'b58a3ec8-4294-47ae-a12a-83cfe748909b')
             column(name: 'df_scenario_uid', value: '98caae9b-2f20-4c6d-b2af-3190a1115c48')
             column(name: 'product_family', value: 'FAS')
@@ -252,14 +252,14 @@ databaseChangeLog {
         //testFindByIdsAndStatus
         //testFindPaidIds
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
-            column(name: 'df_scenario_uid', value: 'a72989e0-370d-11e8-b566-0800200c9a66')
+            column(name: 'df_scenario_uid', value: '40c4d9ad-2c2f-4041-8bbf-630dc69dfaac')
             column(name: 'name', value: 'Paid Scenario 1')
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'description', value: 'Scenario already sent to LM')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
-            column(name: 'df_usage_batch_uid', value: 'b7551870-370d-11e8-b566-0800200c9a66')
+            column(name: 'df_usage_batch_uid', value: 'f132d857-d66a-4b9f-acdc-b1a64c8db718')
             column(name: 'name', value: 'Paid batch')
             column(name: 'rro_account_number', value: '7000813806')
             column(name: 'payment_date', value: '2021-02-12')
@@ -268,9 +268,9 @@ databaseChangeLog {
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
-            column(name: 'df_usage_archive_uid', value: 'c0d30ec0-370d-11e8-b566-0800200c9a66')
-            column(name: 'df_usage_batch_uid', value: 'b7551870-370d-11e8-b566-0800200c9a66')
-            column(name: 'df_scenario_uid', value: 'a72989e0-370d-11e8-b566-0800200c9a66')
+            column(name: 'df_usage_archive_uid', value: '3f8ce825-6514-4307-a118-3ec89187bef3')
+            column(name: 'df_usage_batch_uid', value: 'f132d857-d66a-4b9f-acdc-b1a64c8db718')
+            column(name: 'df_scenario_uid', value: '40c4d9ad-2c2f-4041-8bbf-630dc69dfaac')
             column(name: 'product_family', value: 'FAS')
             column(name: 'wr_wrk_inst', value: '243904752')
             column(name: 'work_title', value: '100 ROAD MOVIES')
@@ -297,7 +297,7 @@ databaseChangeLog {
             column(name: 'ccc_event_id', value: '53256')
             column(name: 'distribution_name', value: 'FDA March 17')
             column(name: 'distribution_date', value: '2016-11-03')
-            column(name: 'lm_detail_id', value: 'be8999b0-b65e-11e8-b568-0800200c9a66')
+            column(name: 'lm_detail_id', value: '5963a9c2-b639-468c-a4c1-02101a4597c6')
         }
 
         rollback ""

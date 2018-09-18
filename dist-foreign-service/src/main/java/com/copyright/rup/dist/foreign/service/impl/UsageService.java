@@ -336,7 +336,7 @@ public class UsageService implements IUsageService {
                     usageArchiveRepository.insertPaid(postDistributionUsage);
                     usageAuditService.logAction(postDistributionUsage.getId(), UsageActionTypeEnum.PAID,
                         "Usage has been created based on Post-Distribution process");
-                    postDistributionUsagesCount.getAndAdd(1);
+                    postDistributionUsagesCount.getAndIncrement();
                 } else {
                     paidUsage.setStatus(UsageStatusEnum.PAID);
                     usageArchiveRepository.updatePaidInfo(paidUsage);

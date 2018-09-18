@@ -452,7 +452,7 @@ public class UsageServiceTest {
         archivedPaidUsage.setArticle("test article");
         expect(usageArchiveRepository.findUsageInformationById(ImmutableList.of(USAGE_ID_1)))
             .andReturn(ImmutableList.of(archivedPaidUsage)).once();
-        String newUsageId = "4a8f5fe0-b735-11e8-b568-0800200c9a66";
+        String newUsageId = "93c24edf-bc4d-406e-bd54-9a7379a6e532";
         mockStatic(RupPersistUtils.class);
         expect(RupPersistUtils.generateUuid()).andReturn(newUsageId).once();
         PaidUsage expectedPostDistributionUsage = new PaidUsage();

@@ -216,7 +216,7 @@ databaseChangeLog {
 
         // testFindByStatuses
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
-            column(name: 'df_usage_batch_uid', value: 'dc945c30-01bc-11e8-8f1a-0800200c9a66')
+            column(name: 'df_usage_batch_uid', value: '8b56c3d6-52c0-4f25-8d78-923afcfd31e6')
             column(name: 'name', value: 'JAACC_12Dec20')
             column(name: 'rro_account_number', value: '2000017010')
             column(name: 'payment_date', value: '2020-12-12')
@@ -225,8 +225,8 @@ databaseChangeLog {
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
-            column(name: 'df_usage_uid', value: '0b0f5100-01bd-11e8-8f1a-0800200c9a66')
-            column(name: 'df_usage_batch_uid', value: 'dc945c30-01bc-11e8-8f1a-0800200c9a66')
+            column(name: 'df_usage_uid', value: '62e0ddd7-a37f-4810-8ada-abab805cb48d')
+            column(name: 'df_usage_batch_uid', value: '8b56c3d6-52c0-4f25-8d78-923afcfd31e6')
             column(name: 'wr_wrk_inst', value: '922859149')
             column(name: 'work_title', value: 'Psychiatric services')
             column(name: 'status_ind', value: 'SENT_FOR_RA')
@@ -513,7 +513,7 @@ databaseChangeLog {
 
         //testFindForAuditWithSort
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
-            column(name: 'df_scenario_uid', value: 'cac23a50-204c-11e8-b566-0800200c9a66')
+            column(name: 'df_scenario_uid', value: '091c08cf-8a93-4a64-87b5-4bdd44f97e79')
             column(name: 'name', value: 'Paid Scenario for Audit')
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'description', value: 'Scenario already sent to LM')
@@ -531,7 +531,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
             column(name: 'df_usage_archive_uid', value: '0d85f51d-212b-4181-9972-3154cad74bd0')
             column(name: 'df_usage_batch_uid', value: '48bfe456-fbc1-436e-8762-baca46a0e09c')
-            column(name: 'df_scenario_uid', value: 'cac23a50-204c-11e8-b566-0800200c9a66')
+            column(name: 'df_scenario_uid', value: '091c08cf-8a93-4a64-87b5-4bdd44f97e79')
             column(name: 'product_family', value: 'FAS')
             column(name: 'wr_wrk_inst', value: '243904752')
             column(name: 'work_title', value: '100 ROAD MOVIES')
@@ -564,7 +564,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
             column(name: 'df_usage_archive_uid', value: '1cb766c6-7c49-489a-bd8f-9b8b052f5785')
             column(name: 'df_usage_batch_uid', value: '48bfe456-fbc1-436e-8762-baca46a0e09c')
-            column(name: 'df_scenario_uid', value: 'cac23a50-204c-11e8-b566-0800200c9a66')
+            column(name: 'df_scenario_uid', value: '091c08cf-8a93-4a64-87b5-4bdd44f97e79')
             column(name: 'product_family', value: 'FAS')
             column(name: 'wr_wrk_inst', value: '243904752')
             column(name: 'work_title', value: '100 ROAD MOVIES')
@@ -726,7 +726,7 @@ databaseChangeLog {
                 'insert post-distribution usage for find for audit and find count for audit')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
-            column(name: 'df_usage_archive_uid', value: 'a417fb00-b7ec-11e8-b568-0800200c9a66')
+            column(name: 'df_usage_archive_uid', value: 'cce295c6-23cf-47b4-b00c-2e0e50cce169')
             column(name: 'product_family', value: 'FAS')
             column(name: 'wr_wrk_inst', value: '243904752')
             column(name: 'work_title', value: '100 ROAD MOVIES')
@@ -753,7 +753,7 @@ databaseChangeLog {
             column(name: 'ccc_event_id', value: '53256')
             column(name: 'distribution_name', value: 'FDA March 17')
             column(name: 'distribution_date', value: '2016-11-03')
-            column(name: 'lm_detail_id', value: 'bfe5e680-b7ec-11e8-b568-0800200c9a66')
+            column(name: 'lm_detail_id', value: 'ced40f77-704a-4b77-ae46-2698ef408df4')
         }
     }
 }

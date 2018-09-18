@@ -48,7 +48,7 @@ databaseChangeLog {
                 'insert usage for creating post-distribution usage')
         
         insert(schemaName: dbAppsSchema, tableName: "df_usage_batch") {
-            column(name: "df_usage_batch_uid", value: "252d6450-b801-11e8-b568-0800200c9a66")
+            column(name: "df_usage_batch_uid", value: "03ba3d02-c86a-40f8-8b14-270ca46a1f3a")
             column(name: "name", value: "AT_service-fee-true-up-report-12_BATCH")
             column(name: "rro_account_number", value: "5000581901")
             column(name: "payment_date", value: "2013-01-03")
@@ -57,15 +57,15 @@ databaseChangeLog {
         }
 
         insert(schemaName: dbAppsSchema, tableName: "df_scenario") {
-            column(name: "df_scenario_uid", value: "186488c0-b801-11e8-b568-0800200c9a66")
+            column(name: "df_scenario_uid", value: "99f7d565-2df3-45e9-93ff-5dce63c75263")
             column(name: "name", value: "AT_service-fee-true-up-report-7_SCENARIO")
             column(name: "status_ind", value: "SENT_TO_LM")
         }
 
         insert(schemaName: dbAppsSchema, tableName: "df_usage_archive") {
             column(name: "df_usage_archive_uid", value: "bde1e665-b10f-4015-936f-71fb42410e3b")
-            column(name: "df_usage_batch_uid", value: "252d6450-b801-11e8-b568-0800200c9a66")
-            column(name: "df_scenario_uid", value: "186488c0-b801-11e8-b568-0800200c9a66")
+            column(name: "df_usage_batch_uid", value: "03ba3d02-c86a-40f8-8b14-270ca46a1f3a")
+            column(name: "df_scenario_uid", value: "99f7d565-2df3-45e9-93ff-5dce63c75263")
             column(name: "wr_wrk_inst", value: "243904752")
             column(name: "work_title", value: "100 ROAD MOVIES")
             column(name: "system_title", value: "100 ROAD MOVIES")
@@ -89,7 +89,7 @@ databaseChangeLog {
             column(name: "distribution_name", value: "FDA March 11")
             column(name: "distribution_date", value: "2011-03-15 11:41:52.735531+03")
             column(name: "period_end_date", value: "2011-03-15 11:41:52.735531+03")
-            column(name: "lm_detail_id", value: "7c4ded40-b801-11e8-b568-0800200c9a66")
+            column(name: "lm_detail_id", value: "803dea5c-03d9-4404-8b3a-7f6b5ba9acce")
         }
     }
 }

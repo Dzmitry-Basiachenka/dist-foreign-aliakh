@@ -57,13 +57,21 @@ public class CsvReportsIntegrationTest {
     }
 
     @Test
-    public void testWriteAuditCsvReportCsvReport() throws Exception {
+    public void testWriteAuditCsvReport() throws Exception {
         AuditFilter auditFilter = new AuditFilter();
         auditFilter.setBatchesIds(Sets.newHashSet("e855bf85-236c-42e7-9b12-8d68dd747bbe",
             "034873b3-97fa-475a-9a2a-191e8ec988b3", "02a09322-5f0f-4cae-888c-73127050dc98",
             "d016d9c2-5460-41bf-837c-8598cf00b654", "acae006c-a4fe-45f0-a0cc-098e12db00c5"));
         assertFilesWithExecutor(outputStream -> usageRepository.writeAuditCsvReport(auditFilter, outputStream),
             "audit_usages_report.csv");
+    }
+
+    @Test
+    public void testWriteAuditCsvReportForPostDistribution() throws Exception {
+        AuditFilter auditFilter = new AuditFilter();
+        auditFilter.setSearchValue("75693c90-d6f5-401a-8c26-134adc9745c5");
+        assertFilesWithExecutor(outputStream -> usageRepository.writeAuditCsvReport(auditFilter, outputStream),
+            "audit_usages_report_post_distribution.csv");
     }
 
     @Test
