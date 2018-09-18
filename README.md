@@ -1,3 +1,9 @@
+3.1.11
+-
+* B-45044 FDA: Process Post-Distribution Details: adjust integration workflow test with post-distribution usage
+* B-45044 FDA: Process Post-Distribution Details: make changes based on comments in CR-DIST-FOREIGN-71, add test case to CsvReportsIntegrationTest for post-distribution usage
+* B-45518 Tech Debt: FDA: update dist-common version to 20.0.0
+
 3.1.10
 -
 * B-45044 FDA: Process Post-Distribution Details: adjust audit logic to show post-distribution usages
