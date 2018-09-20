@@ -19,6 +19,7 @@ import com.copyright.rup.dist.foreign.integration.crm.api.CrmResultStatusEnum;
 import com.copyright.rup.dist.foreign.integration.crm.api.CrmRightsDistributionRequest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ImmutableSet;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.easymock.Capture;
@@ -88,15 +89,26 @@ public class CrmServiceTest {
     }
 
     @Test
-    public void testParseInvalidResponse() throws IOException {
+    public void testParseInvalidResponseWith() throws IOException {
+        assertParseResponseWithInvalidUsages("crm_response_failed.json",
+            ImmutableSet.of("2e9747c7-f3e8-4c3c-94cf-4f9ba3d10109"));
+    }
+
+    @Test
+    public void testParseInvalidResponseWithTwoInvalidUsages() throws IOException {
+        assertParseResponseWithInvalidUsages("crm_response_failed_two_usages.json",
+            ImmutableSet.of("ca9763ab-1ce7-486e-8938-272f6c3392a7", "bbdc5eb3-7396-47b8-bc18-5ec6ad0c4ef1"));
+    }
+
+    private void assertParseResponseWithInvalidUsages(String fileName, Set<String> expectedUsagesIds)
+        throws IOException {
         CrmResult actualResult =
-            crmService.parseResponse(TestUtils.fileToString(CrmServiceTest.class, "crm_response_failed.json"),
-                Collections.emptyMap());
+            crmService.parseResponse(TestUtils.fileToString(CrmServiceTest.class, fileName), Collections.emptyMap());
         assertEquals(CrmResultStatusEnum.CRM_ERROR, actualResult.getCrmResultStatus());
-        Set<String> invalidUsageIds = actualResult.getInvalidUsageIds();
-        assertTrue(CollectionUtils.isNotEmpty(invalidUsageIds));
-        assertEquals(1, invalidUsageIds.size());
-        assertTrue(invalidUsageIds.contains("12345"));
+        Set<String> actualInvalidUsageIds = actualResult.getInvalidUsageIds();
+        assertTrue(CollectionUtils.isNotEmpty(actualInvalidUsageIds));
+        assertEquals(CollectionUtils.size(expectedUsagesIds), CollectionUtils.size(actualInvalidUsageIds));
+        assertEquals(expectedUsagesIds, actualInvalidUsageIds);
     }
 
     private String formatJson(Object objectToFormat) throws IOException {

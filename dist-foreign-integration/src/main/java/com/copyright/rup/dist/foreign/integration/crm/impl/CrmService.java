@@ -29,6 +29,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -120,16 +121,24 @@ public class CrmService implements ICrmService {
         JsonNode jsonNode = JsonUtils.readJsonTree(objectMapper, response);
         JsonNode list = jsonNode.get("list");
         CrmResult crmResult = new CrmResult(CrmResultStatusEnum.SUCCESS);
-        if (null != list) {
-            List<JsonNode> errorNodes = list.findValues("error");
-            if (CollectionUtils.isNotEmpty(errorNodes)) {
+        if (Objects.nonNull(list)) {
+            JsonNode errorNode = list.findValue("error");
+            if (Objects.nonNull(errorNode)) {
                 crmResult.setCrmResultStatus(CrmResultStatusEnum.CRM_ERROR);
-                for (JsonNode errorNode : errorNodes) {
-                    JsonNode key = errorNode.findValue("key");
-                    List<JsonNode> errorMessages = errorNode.findValues("string");
-                    crmResult.addInvalidUsageId(key.asText());
-                    LOGGER.warn("Send usages to CRM. Failed. DetailId={}, Request={}, ErrorMessage={}", key,
-                        requestMap.get(key.asText()), errorMessages);
+                List<JsonNode> errorMessageNodes = new ArrayList<>();
+                if (errorNode.isArray()) {
+                    errorNode.forEach(errorMessageNodes::add);
+                } else {
+                    errorMessageNodes.add(errorNode);
+                }
+                if (CollectionUtils.isNotEmpty(errorMessageNodes)) {
+                    for (JsonNode errorMessageNode : errorMessageNodes) {
+                        JsonNode key = errorMessageNode.findValue("key");
+                        List<JsonNode> errorMessages = errorMessageNode.findValues("string");
+                        crmResult.addInvalidUsageId(key.asText());
+                        LOGGER.warn("Send usages to CRM. Failed. DetailId={}, Request={}, ErrorMessage={}", key,
+                            requestMap.get(key.asText()), errorMessages);
+                    }
                 }
             }
         } else {
