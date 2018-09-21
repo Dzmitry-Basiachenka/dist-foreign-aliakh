@@ -80,6 +80,7 @@ public class SendToCrmIntegrationTest {
         usageService.sendToCrm();
         verifyUsages("0d1829eb-de35-4f93-bb36-2a7435263051", UsageStatusEnum.ARCHIVED);
         verifyUsages("9e356e22-57b3-49b3-af99-155093a9dc0a", UsageStatusEnum.PAID);
+        verifyUsages("53496a2f-fb52-4b5b-9f60-9034cceb69b9", UsageStatusEnum.PAID);
         verifyUsages("feefdfd2-71fe-4c0a-a701-9dacffa9bccb", UsageStatusEnum.SENT_TO_LM);
         verifyUsages("48189e92-b9d2-46be-94a4-c2adf83f21ce", UsageStatusEnum.ARCHIVED);
         verifyScenarios();
