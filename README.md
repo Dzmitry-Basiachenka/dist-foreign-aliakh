@@ -1,3 +1,8 @@
+3.1.12
+-
+* B-45518 Tech Debt: FDA: fix empty grid background image on audit tab
+* RDSC-620 FDA: After CRM job runs, paid FAS2 details change status to ARCHIVED but absent in CRM
+
 3.1.11
 -
 * B-45044 FDA: Process Post-Distribution Details: adjust integration workflow test with post-distribution usage
