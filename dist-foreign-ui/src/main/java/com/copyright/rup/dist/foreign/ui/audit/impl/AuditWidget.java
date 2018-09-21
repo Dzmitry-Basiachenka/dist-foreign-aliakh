@@ -43,7 +43,7 @@ import java.util.Objects;
  */
 public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
 
-    private static final String EMPTY_STYLE_NAME = "empty-audit-table";
+    private static final String EMPTY_STYLE_NAME = "empty-audit-grid";
 
     private IAuditController controller;
     private SearchWidget searchWidget;
@@ -73,6 +73,10 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
     @Override
     public String getSearchValue() {
         return StringUtils.defaultIfBlank(searchWidget.getSearchValue(), null);
+    }
+
+    Grid<UsageDto> getAuditGrid() {
+        return auditGrid;
     }
 
     private void initContent() {

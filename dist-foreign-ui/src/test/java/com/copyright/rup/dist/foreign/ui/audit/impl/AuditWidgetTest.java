@@ -1,19 +1,28 @@
 package com.copyright.rup.dist.foreign.ui.audit.impl;
 
-import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.capture;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.reset;
-import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
+import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.reset;
+import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditController;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterController;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterWidget;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
+import com.google.common.collect.Lists;
+import com.vaadin.data.provider.CallbackDataProvider;
+import com.vaadin.data.provider.Query;
+import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
@@ -21,16 +30,23 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Verifies {@link AuditWidget}.
@@ -41,30 +57,30 @@ import java.util.stream.Collectors;
  *
  * @author Aliaksandr Radkevich
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(JavaScript.class)
 public class AuditWidgetTest {
 
     private AuditWidget widget;
     private IAuditController controller;
+    private IAuditFilterWidget filterWidget;
+    private IAuditFilterController filterController;
+    private IStreamSource streamSource;
 
     @Before
     public void setUp() {
         controller = createMock(IAuditController.class);
         widget = new AuditWidget();
         widget.setController(controller);
+        filterController = createMock(IAuditFilterController.class);
+        filterWidget = new AuditFilterWidget();
+        filterWidget.setController(filterController);
+        streamSource = createMock(IStreamSource.class);
     }
 
     @Test
     public void testInit() {
-        IAuditFilterController filterController = createMock(IAuditFilterController.class);
-        IAuditFilterWidget filterWidget = new AuditFilterWidget();
-        IStreamSource streamSource = createMock(IStreamSource.class);
-        expect(controller.getAuditFilterController()).andReturn(filterController).once();
-        expect(filterController.initWidget()).andReturn(filterWidget).once();
-        expect(controller.getExportUsagesStreamSource()).andReturn(streamSource).once();
-        replay(controller, filterController, streamSource);
-        widget.init();
-        verify(controller, filterController, streamSource);
-        reset(controller, filterController, streamSource);
+        initWidget();
         assertEquals(200, widget.getSplitPosition(), 0);
         assertTrue(widget.isLocked());
         assertEquals("audit-widget", widget.getStyleName());
@@ -73,6 +89,42 @@ public class AuditWidgetTest {
         component = widget.getSecondComponent();
         assertTrue(component instanceof VerticalLayout);
         verifyGridLayout((VerticalLayout) component);
+    }
+
+    @Test
+    public void testRefresh() {
+        initWidget();
+        mockStatic(JavaScript.class);
+        expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).times(2);
+        List<UsageDto> liabilities = Lists.newArrayList(new UsageDto());
+        Capture<List<QuerySortOrder>> orderCapture = new Capture<>();
+        expect(controller.getSize()).andReturn(1).once();
+        expect(controller.loadBeans(eq(0), eq(1), capture(orderCapture))).andReturn(liabilities).once();
+        replay(controller, JavaScript.class);
+        widget.refresh();
+        Grid<?> grid = widget.getAuditGrid();
+        CallbackDataProvider<?, ?> dataProvider = (CallbackDataProvider) grid.getDataProvider();
+        assertEquals(1, dataProvider.size(new Query<>()));
+        Stream<?> stream = dataProvider.fetch(new Query<>(0, 1, Collections.emptyList(), null, null));
+        assertEquals(liabilities, stream.collect(Collectors.toList()));
+        assertFalse(grid.getStyleName().contains("empty-audit-grid"));
+        assertEquals(0, orderCapture.getValue().size());
+        verify(controller, JavaScript.class);
+    }
+
+    @Test
+    public void testRefreshEmptyGrid() {
+        initWidget();
+        mockStatic(JavaScript.class);
+        expect(JavaScript.getCurrent()).andReturn(createMock(JavaScript.class)).once();
+        expect(controller.getSize()).andReturn(0).once();
+        replay(controller, JavaScript.class);
+        widget.refresh();
+        Grid<?> grid = widget.getAuditGrid();
+        CallbackDataProvider<?, ?> dataProvider = (CallbackDataProvider) grid.getDataProvider();
+        assertEquals(0, dataProvider.size(new Query<>()));
+        assertTrue(grid.getStyleName().contains("empty-audit-grid"));
+        verify(controller, JavaScript.class);
     }
 
     private void verifyGridLayout(VerticalLayout layout) {
@@ -125,5 +177,15 @@ public class AuditWidgetTest {
         assertEquals(height, component.getHeight(), 0);
         assertEquals(heightUnit, component.getHeightUnits());
         assertEquals(widthUnit, component.getWidthUnits());
+    }
+
+    private void initWidget() {
+        expect(controller.getAuditFilterController()).andReturn(filterController).once();
+        expect(filterController.initWidget()).andReturn(filterWidget).once();
+        expect(controller.getExportUsagesStreamSource()).andReturn(streamSource).once();
+        replay(controller, filterController, streamSource);
+        widget.init();
+        verify(controller, filterController, streamSource);
+        reset(controller, filterController, streamSource);
     }
 }
