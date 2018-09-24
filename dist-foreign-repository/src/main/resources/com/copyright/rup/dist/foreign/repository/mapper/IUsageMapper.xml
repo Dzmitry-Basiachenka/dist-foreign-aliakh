@@ -407,15 +407,15 @@
     </sql>
 
     <sql id="searchWhereClause">
-        upper(r.name) like '%' || upper(#{searchValue}) || '%' or
+        r.name ilike '%' || #{searchValue} || '%' or
         cast(u.rh_account_number as text) like '%' || #{searchValue} || '%'
     </sql>
 
     <sql id="drillDownSearchWhereClause">
         ${detail_uid} like '%' || #{searchValue} || '%' or
-        upper(u.standard_number) like '%' || upper(#{searchValue}) || '%' or
+        u.standard_number ilike '%' || #{searchValue} || '%' or
         cast(u.wr_wrk_inst as text) like '%' || #{searchValue} || '%' or
-        upper(rro.name) like '%' || upper(#{searchValue}) || '%' or
+        rro.name ilike '%' || #{searchValue} || '%' or
         cast(ub.rro_account_number as text) like '%' || #{searchValue} || '%'
     </sql>
 
@@ -998,10 +998,10 @@
                 <property name="detail_uid" value="u.df_usage_archive_uid"/>
             </include>
             <if test="null != filter.cccEventId">
-                and upper(ccc_event_id) like '%' || upper(#{filter.cccEventId}) || '%'
+                and ccc_event_id ilike '%' || #{filter.cccEventId} || '%'
             </if>
             <if test="null != filter.distributionName">
-                and upper(distribution_name) like '%' || upper(#{filter.distributionName}) || '%'
+                and distribution_name ilike '%' || #{filter.distributionName} || '%'
             </if>
         </where>
     </sql>
@@ -1035,8 +1035,8 @@
             and (
                 ${detail_uid} like '%' || #{filter.searchValue} || '%' or
                 cast(wr_wrk_inst as text) like '%' || #{filter.searchValue} || '%' or
-                upper(system_title) like '%' || upper(#{filter.searchValue}) || '%' or
-                upper(work_title) like '%' || upper(#{filter.searchValue}) || '%')
+                system_title ilike '%' || #{filter.searchValue} || '%' or
+                work_title ilike '%' || #{filter.searchValue} || '%')
         </if>
     </sql>
 
