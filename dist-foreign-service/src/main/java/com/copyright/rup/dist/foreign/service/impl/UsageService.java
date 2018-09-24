@@ -447,7 +447,6 @@ public class UsageService implements IUsageService {
         postDistributionUsage.setStatus(UsageStatusEnum.PAID);
         postDistributionUsage.setWrWrkInst(originalUsage.getWrWrkInst());
         postDistributionUsage.setWorkTitle(originalUsage.getWorkTitle());
-        postDistributionUsage.setRightsholder(originalUsage.getRightsholder());
         postDistributionUsage.setArticle(originalUsage.getArticle());
         postDistributionUsage.setStandardNumber(originalUsage.getStandardNumber());
         postDistributionUsage.setPublisher(originalUsage.getPublisher());
@@ -465,6 +464,7 @@ public class UsageService implements IUsageService {
         postDistributionUsage.setRhParticipating(originalUsage.isRhParticipating());
         postDistributionUsage.setProductFamily(originalUsage.getProductFamily());
         postDistributionUsage.setSystemTitle(originalUsage.getSystemTitle());
+        postDistributionUsage.setRightsholder(paidUsage.getRightsholder());
         postDistributionUsage.setPayee(paidUsage.getPayee());
         postDistributionUsage.setDistributionName(paidUsage.getDistributionName());
         postDistributionUsage.setDistributionDate(paidUsage.getDistributionDate());

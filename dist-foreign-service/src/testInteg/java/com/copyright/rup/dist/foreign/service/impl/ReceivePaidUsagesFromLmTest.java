@@ -24,6 +24,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -57,7 +58,7 @@ public class ReceivePaidUsagesFromLmTest {
         int paidUsagesCount = usageArchiveRepository.findPaidIds().size();
         expectReceivePaidUsages("lm/paid_usages_fas.json");
         assertEquals(1 + paidUsagesCount, usageArchiveRepository.findPaidIds().size());
-        assertPaidUsageByLmDetailId("a1bd3d85-f130-45ad-be9b-dd4344668b16");
+        assertPaidUsage(buildPaidUsage("a1bd3d85-f130-45ad-be9b-dd4344668b16"));
     }
 
     @Test
@@ -68,7 +69,7 @@ public class ReceivePaidUsagesFromLmTest {
         assertEquals(1 + paidUsagesCount, usageArchiveRepository.findPaidIds().size());
         List<String> paidUsageIds = usageArchiveRepository.findPaidIds();
         assertFalse(paidUsageIds.contains(predistributionPaidUsageId));
-        assertPaidUsageByLmDetailId("c3a24455-a92b-4572-b6b5-628a66572104");
+        assertPaidUsage(buildPaidUsage("c3a24455-a92b-4572-b6b5-628a66572104"));
     }
 
     @Test
@@ -81,35 +82,51 @@ public class ReceivePaidUsagesFromLmTest {
         int paidUsagesCount = usageArchiveRepository.findPaidIds().size();
         expectReceivePaidUsages("lm/paid_usages.json");
         assertEquals(2 + paidUsagesCount, usageArchiveRepository.findPaidIds().size());
-        assertPaidUsageByLmDetailId("c3a24455-a92b-4572-b6b5-628a66572104");
-        assertPaidUsageByLmDetailId("a1bd3d85-f130-45ad-be9b-dd4344668b16");
+        assertPaidUsage(buildPaidUsage("a1bd3d85-f130-45ad-be9b-dd4344668b16"));
+        assertPaidUsage(buildPaidUsage("c3a24455-a92b-4572-b6b5-628a66572104"));
         assertFalse(usageArchiveRepository.findPaidIds().contains(predistributionPaidUsageId));
     }
 
-    private void assertPaidUsageByLmDetailId(String lmDetailId) {
+    private void assertPaidUsage(PaidUsage expectedPaidUsage) {
         List<PaidUsage> paidUsages =
             usageArchiveRepository.findByIdAndStatus(usageArchiveRepository.findPaidIds(), UsageStatusEnum.PAID);
         PaidUsage actualPaidUsage =
             paidUsages.stream()
-                .filter(paidUsage -> lmDetailId.equals(paidUsage.getLmDetailId()))
+                .filter(paidUsage -> expectedPaidUsage.getLmDetailId().equals(paidUsage.getLmDetailId()))
                 .findFirst()
                 .orElse(null);
         assertNotNull(actualPaidUsage);
-        assertPaidInformationNotEmpty(actualPaidUsage.getId());
+        assertPaidInformation(expectedPaidUsage, actualPaidUsage.getId());
     }
 
-    private void assertPaidInformationNotEmpty(String expectedPaidUsageId) {
+    private void assertPaidInformation(PaidUsage expectedPaidUsage, String actualPaidUsageId) {
         List<PaidUsage> paidUsages =
-            usageArchiveRepository.findByIdAndStatus(ImmutableList.of(expectedPaidUsageId), UsageStatusEnum.PAID);
-        PaidUsage paidUsage = paidUsages.get(0);
-        assertNotNull(paidUsage.getLmDetailId());
-        assertNotNull(paidUsage.getPayee());
-        assertNotNull(paidUsage.getCheckDate());
-        assertNotNull(paidUsage.getCheckNumber());
-        assertNotNull(paidUsage.getPeriodEndDate());
-        assertNotNull(paidUsage.getDistributionName());
-        assertNotNull(paidUsage.getDistributionDate());
-        assertNotNull(paidUsage.getCccEventId());
+            usageArchiveRepository.findByIdAndStatus(ImmutableList.of(actualPaidUsageId), UsageStatusEnum.PAID);
+        PaidUsage actualPaidUsage = paidUsages.get(0);
+        assertEquals(expectedPaidUsage.getLmDetailId(), actualPaidUsage.getLmDetailId());
+        assertEquals(expectedPaidUsage.getRightsholder().getAccountNumber(),
+            actualPaidUsage.getRightsholder().getAccountNumber());
+        assertEquals(expectedPaidUsage.getPayee().getAccountNumber(), actualPaidUsage.getPayee().getAccountNumber());
+        assertEquals(expectedPaidUsage.getDistributionName(), actualPaidUsage.getDistributionName());
+        assertEquals(expectedPaidUsage.getDistributionDate(), actualPaidUsage.getDistributionDate());
+        assertEquals(expectedPaidUsage.getCccEventId(), actualPaidUsage.getCccEventId());
+        assertEquals(expectedPaidUsage.getCheckNumber(), actualPaidUsage.getCheckNumber());
+        assertEquals(expectedPaidUsage.getCheckDate(), actualPaidUsage.getCheckDate());
+        assertEquals(expectedPaidUsage.getPeriodEndDate(), actualPaidUsage.getPeriodEndDate());
+    }
+
+    private PaidUsage buildPaidUsage(String lmDetailId) {
+        PaidUsage paidUsage = new PaidUsage();
+        paidUsage.getRightsholder().setAccountNumber(1000002859L);
+        paidUsage.getPayee().setAccountNumber(1000010022L);
+        paidUsage.setDistributionName("FDA March 17");
+        paidUsage.setDistributionDate(OffsetDateTime.parse("2017-01-14T00:00-05:00"));
+        paidUsage.setCccEventId("53256");
+        paidUsage.setCheckDate(OffsetDateTime.parse("2017-01-15T00:00-05:00"));
+        paidUsage.setCheckNumber("578945");
+        paidUsage.setPeriodEndDate(OffsetDateTime.parse("2017-01-16T00:00-05:00"));
+        paidUsage.setLmDetailId(lmDetailId);
+        return paidUsage;
     }
 
     private void expectReceivePaidUsages(String messageFilepath) throws InterruptedException {

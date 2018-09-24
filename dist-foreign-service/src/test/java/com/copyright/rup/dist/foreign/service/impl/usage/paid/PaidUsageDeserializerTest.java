@@ -61,7 +61,8 @@ public class PaidUsageDeserializerTest {
             assertEquals(1, usages.size());
             PaidUsage usage = usages.get(0);
             assertEquals("6039cab2-8d7d-409f-8843-3930daf6a48d", usage.getId());
-            assertEquals(1000002859, usage.getPayee().getAccountNumber(), 0);
+            assertEquals(1000010022L, usage.getRightsholder().getAccountNumber(), 0);
+            assertEquals(1000002859L, usage.getPayee().getAccountNumber(), 0);
             assertEquals("578945", usage.getCheckNumber());
             assertEquals(OffsetDateTime.parse("2017-01-15T00:00:00-05:00").toInstant(),
                 usage.getCheckDate().toInstant());
