@@ -29,7 +29,7 @@ databaseChangeLog {
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'rh_account_number', value: '1000002859')
-            column(name: 'payee_account_number', value: '1000002859')
+            column(name: 'payee_account_number', value: '7001832491')
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '1008902112317555XX')
@@ -69,7 +69,6 @@ databaseChangeLog {
             column(name: 'gross_amount', value: '2000.00')
         }
 
-        // usage that shouldn't be affected during receiving paid information from LM
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
             column(name: 'df_usage_archive_uid', value: 'ef058a3f-b60e-429b-b6e3-14d386eb86ba')
             column(name: 'df_usage_batch_uid', value: '244ecf91-bc53-4cf3-a3c4-170019125b46')
@@ -78,8 +77,8 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: '243904752')
             column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'system_title', value: '100 ROAD MOVIES')
-            column(name: 'rh_account_number', value: '1000002859')
-            column(name: 'payee_account_number', value: '1000002859')
+            column(name: 'rh_account_number', value: '1000000001')
+            column(name: 'payee_account_number', value: '1000000001')
             column(name: 'status_ind', value: 'ARCHIVED')
             column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '1008902112317555XX')

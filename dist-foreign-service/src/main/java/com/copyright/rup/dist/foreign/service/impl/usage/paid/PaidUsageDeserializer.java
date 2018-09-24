@@ -50,6 +50,7 @@ public class PaidUsageDeserializer extends JsonDeserializer<List<PaidUsage>> {
 
     private PaidUsage deserializeLiability(JsonNode jsonNode) {
         PaidUsage usage = new PaidUsage();
+        usage.getRightsholder().setAccountNumber(JsonUtils.getLongValueFromString(jsonNode.get("rh_account_number")));
         usage.getPayee().setAccountNumber(JsonUtils.getLongValueFromString(jsonNode.get("rollup_account_number")));
         usage.setId(JsonUtils.getStringValue(jsonNode.get("detail_id")));
         usage.setCheckNumber(JsonUtils.getStringValue(jsonNode.get("check_number")));
