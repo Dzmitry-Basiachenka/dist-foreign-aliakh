@@ -54,7 +54,7 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
                                                                                     Pageable pageable, Sort sort) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put(SEARCH_VALUE_KEY, searchValue);
+        parameters.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
         parameters.put(PAGEABLE_KEY, pageable);
         parameters.put(SORT_KEY, sort);
         return selectList("IUsageArchiveMapper.findRightsholderTotalsHoldersByScenarioId", parameters);
@@ -64,7 +64,7 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
     public int findRightsholderTotalsHolderCountByScenarioId(String scenarioId, String searchValue) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put(SEARCH_VALUE_KEY, searchValue);
+        parameters.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
         return selectOne("IUsageArchiveMapper.findRightsholderTotalsHolderCountByScenarioId", parameters);
     }
 
@@ -74,7 +74,7 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(5);
         parameters.put("accountNumber", Objects.requireNonNull(accountNumber));
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put(SEARCH_VALUE_KEY, searchValue);
+        parameters.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
         parameters.put(PAGEABLE_KEY, pageable);
         parameters.put(SORT_KEY, sort);
         return selectList("IUsageArchiveMapper.findByScenarioIdAndRhAccountNumber", parameters);
@@ -85,7 +85,7 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
         parameters.put("accountNumber", Objects.requireNonNull(accountNumber));
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put(SEARCH_VALUE_KEY, searchValue);
+        parameters.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
         return selectOne("IUsageArchiveMapper.findCountByScenarioIdAndRhAccountNumber", parameters);
     }
 

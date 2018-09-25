@@ -220,7 +220,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
                                                                                     Pageable pageable, Sort sort) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put(SEARCH_VALUE_KEY, searchValue);
+        parameters.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
         parameters.put(PAGEABLE_KEY, pageable);
         parameters.put(SORT_KEY, sort);
         return selectList("IUsageMapper.findRightsholderTotalsHoldersByScenarioId", parameters);
@@ -230,7 +230,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     public int findRightsholderTotalsHolderCountByScenarioId(String scenarioId, String searchValue) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put(SEARCH_VALUE_KEY, searchValue);
+        parameters.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
         return selectOne("IUsageMapper.findRightsholderTotalsHolderCountByScenarioId", parameters);
     }
 
@@ -244,7 +244,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
         parameters.put("accountNumber", Objects.requireNonNull(accountNumber));
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put(SEARCH_VALUE_KEY, searchValue);
+        parameters.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
         return selectOne("IUsageMapper.findCountByScenarioIdAndRhAccountNumber", parameters);
     }
 
@@ -254,7 +254,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(5);
         parameters.put("accountNumber", Objects.requireNonNull(accountNumber));
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put(SEARCH_VALUE_KEY, searchValue);
+        parameters.put(SEARCH_VALUE_KEY, escapeSqlLikePattern(searchValue));
         parameters.put(PAGEABLE_KEY, pageable);
         parameters.put(SORT_KEY, sort);
         return selectList("IUsageMapper.findByScenarioIdAndRhAccountNumber", parameters);
@@ -282,14 +282,14 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     @Override
     public int findCountForAudit(AuditFilter filter) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(1);
-        params.put(FILTER_KEY, Objects.requireNonNull(filter));
+        params.put(FILTER_KEY, escapeSqlLikePattern(Objects.requireNonNull(filter)));
         return selectOne("IUsageMapper.findCountForAudit", params);
     }
 
     @Override
     public List<UsageDto> findForAudit(AuditFilter filter, Pageable pageable, Sort sort) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
-        params.put(FILTER_KEY, Objects.requireNonNull(filter));
+        params.put(FILTER_KEY, escapeSqlLikePattern(Objects.requireNonNull(filter)));
         params.put("pageable", pageable);
         params.put("sort", sort);
         return selectList("IUsageMapper.findForAudit", params);
@@ -298,10 +298,10 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     @Override
     public void writeAuditCsvReport(AuditFilter filter, PipedOutputStream pipedOutputStream) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-        parameters.put(FILTER_KEY, filter);
         try (AuditCsvReportHandler handler = new AuditCsvReportHandler(Objects.requireNonNull(pipedOutputStream))) {
             if (!Objects.requireNonNull(filter).isEmpty()) {
                 int size = findCountForAudit(filter);
+                parameters.put(FILTER_KEY, escapeSqlLikePattern(filter));
                 for (int offset = 0; offset < size; offset += REPORT_BATCH_SIZE) {
                     parameters.put(PAGEABLE_KEY, new Pageable(offset, REPORT_BATCH_SIZE));
                     getTemplate().select("IUsageMapper.findForAudit", parameters, handler);
@@ -500,5 +500,13 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
             Objects.requireNonNull(outputStream))) {
             getTemplate().select("IUsageMapper.findResearchStatusReportDtos", handler);
         }
+    }
+
+    private AuditFilter escapeSqlLikePattern(AuditFilter auditFilter) {
+        AuditFilter filterCopy = new AuditFilter(auditFilter);
+        filterCopy.setCccEventId(escapeSqlLikePattern(filterCopy.getCccEventId()));
+        filterCopy.setDistributionName(escapeSqlLikePattern(filterCopy.getDistributionName()));
+        filterCopy.setSearchValue(escapeSqlLikePattern(filterCopy.getSearchValue()));
+        return filterCopy;
     }
 }

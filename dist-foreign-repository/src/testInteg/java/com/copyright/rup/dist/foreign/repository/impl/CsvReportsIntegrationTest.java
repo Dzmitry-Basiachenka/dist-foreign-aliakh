@@ -45,6 +45,9 @@ import java.util.function.Consumer;
 @Transactional
 public class CsvReportsIntegrationTest {
 
+    private static final String SEARCH_WITH_SQL_1 = "%";
+    private static final String SEARCH_WITH_SQL_2 = "_";
+
     @Autowired
     private IUsageRepository usageRepository;
 
@@ -76,8 +79,26 @@ public class CsvReportsIntegrationTest {
 
     @Test
     public void testWriteAuditCsvReportEmptyCsvReport() throws Exception {
-        assertFilesWithExecutor(outputStream -> usageRepository.writeAuditCsvReport(new AuditFilter(), outputStream),
-            "audit_usages_report_empty.csv");
+        assertEmptyAuditReport(new AuditFilter());
+    }
+
+    @Test
+    public void testWriteAuditCsvReportSearchBySqlLikePattern() throws Exception {
+        AuditFilter filter = new AuditFilter();
+        filter.setSearchValue(SEARCH_WITH_SQL_1);
+        assertEmptyAuditReport(filter);
+        filter.setSearchValue(SEARCH_WITH_SQL_2);
+        assertEmptyAuditReport(filter);
+        filter = new AuditFilter();
+        filter.setCccEventId(SEARCH_WITH_SQL_1);
+        assertEmptyAuditReport(filter);
+        filter.setCccEventId(SEARCH_WITH_SQL_2);
+        assertEmptyAuditReport(filter);
+        filter = new AuditFilter();
+        filter.setDistributionName(SEARCH_WITH_SQL_1);
+        assertEmptyAuditReport(filter);
+        filter.setDistributionName(SEARCH_WITH_SQL_2);
+        assertEmptyAuditReport(filter);
     }
 
     @Test
@@ -172,5 +193,10 @@ public class CsvReportsIntegrationTest {
         PipedOutputStream outputStream = new PipedOutputStream();
         Executors.newSingleThreadExecutor().execute(() -> reportWriter.accept(outputStream));
         reportTestUtils.assertCsvReport(fileName, new PipedInputStream(outputStream));
+    }
+
+    private void assertEmptyAuditReport(AuditFilter filter) throws IOException {
+        assertFilesWithExecutor(outputStream -> usageRepository.writeAuditCsvReport(filter, outputStream),
+            "audit_usages_report_empty.csv");
     }
 }
