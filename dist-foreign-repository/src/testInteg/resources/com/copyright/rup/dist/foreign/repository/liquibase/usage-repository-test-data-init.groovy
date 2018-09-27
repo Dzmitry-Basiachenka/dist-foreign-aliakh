@@ -556,7 +556,7 @@ databaseChangeLog {
             column(name: 'ccc_event_id', value: '53256')
             column(name: 'check_number', value: '578945')
             column(name: 'check_date', value: '2017-03-15 11:41:52.735531+03')
-            column(name: 'distribution_name', value: 'FDA March 17')
+            column(name: 'distribution_name', value: 'FDA_March_17')
             column(name: 'distribution_date', value: '2017-03-15 11:41:52.735531+03')
             column(name: 'period_end_date', value: '2017-03-15 11:41:52.735531+03')
         }
@@ -751,7 +751,7 @@ databaseChangeLog {
             column(name: 'check_number', value: '578945')
             column(name: 'check_date', value: '2016-11-03')
             column(name: 'ccc_event_id', value: '53256')
-            column(name: 'distribution_name', value: 'FDA March 17')
+            column(name: 'distribution_name', value: 'FDA_March_17')
             column(name: 'distribution_date', value: '2016-11-03')
             column(name: 'lm_detail_id', value: 'ced40f77-704a-4b77-ae46-2698ef408df4')
         }

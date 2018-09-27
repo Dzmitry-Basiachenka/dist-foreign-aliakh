@@ -161,6 +161,10 @@ public class UsageArchiveRepositoryIntegrationTest {
             rightsholderTotalsHolders.get(0));
         assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_3, 1000005413L, 2125.24, 680.0768, 1445.1632),
             rightsholderTotalsHolders.get(1));
+        assertEquals(0,
+            usageArchiveRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, "%", null, null).size());
+        assertEquals(0,
+            usageArchiveRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, "_", null, null).size());
     }
 
     @Test
@@ -209,38 +213,44 @@ public class UsageArchiveRepositoryIntegrationTest {
 
     @Test
     public void testFindByScenarioIdAndRhAccountNumberSearchByRorName() {
-        assertSearch("JAC, Japan Academic Association for Copyright Clearance, Inc.", 1);
-        assertSearch("Copyright Clearance, Inc.", 1);
-        assertSearch("CoPyRight", 1);
-        assertSearch("JAC, Japan Acade mic", 0);
+        assertFindByScenarioIdAndRhSearch("JAC, Japan Academic Association for Copyright Clearance, Inc.", 1);
+        assertFindByScenarioIdAndRhSearch("Copyright Clearance, Inc.", 1);
+        assertFindByScenarioIdAndRhSearch("CoPyRight", 1);
+        assertFindByScenarioIdAndRhSearch("JAC, Japan Acade mic", 0);
     }
 
     @Test
     public void testFindByScenarioIdAndRhAccountNumberSearchByRorAccountNumber() {
-        assertSearch("2000017010", 1);
-        assertSearch("0001701", 1);
-        assertSearch("200001 7010", 0);
+        assertFindByScenarioIdAndRhSearch("2000017010", 1);
+        assertFindByScenarioIdAndRhSearch("0001701", 1);
+        assertFindByScenarioIdAndRhSearch("200001 7010", 0);
     }
 
     @Test
     public void testFindByScenarioIdAndRhAccountNumberSearchDetailId() {
-        assertSearch("2f660585-35a1-48a5-a506-904c725cda11", 1);
-        assertSearch("48a5", 1);
-        assertSearch("49", 0);
+        assertFindByScenarioIdAndRhSearch("2f660585-35a1-48a5-a506-904c725cda11", 1);
+        assertFindByScenarioIdAndRhSearch("48a5", 1);
+        assertFindByScenarioIdAndRhSearch("49", 0);
     }
 
     @Test
     public void testFindByScenarioIdAndRhAccountNumberSearchByWrWrkInst() {
-        assertSearch("243904752", 1);
-        assertSearch("24390", 1);
-        assertSearch("24461 4835", 0);
+        assertFindByScenarioIdAndRhSearch("243904752", 1);
+        assertFindByScenarioIdAndRhSearch("24390", 1);
+        assertFindByScenarioIdAndRhSearch("24461 4835", 0);
     }
 
     @Test
     public void testFindByScenarioIdAndRhAccountNumberSearchByStandardNumber() {
-        assertSearch("1008902112377654XX", 1);
-        assertSearch("1008902112377654xx", 1);
-        assertSearch("100890 2002377655XX", 0);
+        assertFindByScenarioIdAndRhSearch("1008902112377654XX", 1);
+        assertFindByScenarioIdAndRhSearch("1008902112377654xx", 1);
+        assertFindByScenarioIdAndRhSearch("100890 2002377655XX", 0);
+    }
+
+    @Test
+    public void testFindByScenarioIdAndRhAccountNumberSearchBySqlLikePattern() {
+        assertFindByScenarioIdAndRhSearch("%", 0);
+        assertFindByScenarioIdAndRhSearch("_", 0);
     }
 
     @Test
@@ -248,6 +258,8 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertEquals(3,
             usageArchiveRepository.findRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, StringUtils.EMPTY));
         assertEquals(1, usageArchiveRepository.findRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, "IEEE"));
+        assertEquals(0, usageArchiveRepository.findRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, "%"));
+        assertEquals(0, usageArchiveRepository.findRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, "_"));
     }
 
     @Test
@@ -381,7 +393,7 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertEquals(expectedPaidUsage.getLmDetailId(), actualPaidUsage.getLmDetailId());
     }
 
-    private void assertSearch(String searchValue, int expectedSize) {
+    private void assertFindByScenarioIdAndRhSearch(String searchValue, int expectedSize) {
         assertEquals(expectedSize, usageArchiveRepository.findByScenarioIdAndRhAccountNumber(SCENARIO_ID, 1000002859L,
             searchValue, null, null).size());
         assertEquals(expectedSize,

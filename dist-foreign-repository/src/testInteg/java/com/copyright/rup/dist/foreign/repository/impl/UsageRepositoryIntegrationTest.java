@@ -118,6 +118,8 @@ public class UsageRepositoryIntegrationTest {
     private static final String USER_NAME = "user@copyright.com";
     private static final BigDecimal SERVICE_FEE = new BigDecimal("0.32000");
     private static final String BATCH_ID = "e0af666b-cbb7-4054-9906-12daa1fbd76e";
+    private static final String PERCENT = "%";
+    private static final String UNDERSCORE = "_";
 
     @Autowired
     private UsageRepository usageRepository;
@@ -264,6 +266,10 @@ public class UsageRepositoryIntegrationTest {
             rightsholderTotalsHolders.get(0));
         assertEquals(buildRightsholderTotalsHolder(RH_ACCOUNT_NAME_3, 1000005413L, 2125.24, 680.0768, 1445.1632),
             rightsholderTotalsHolders.get(1));
+        assertEquals(0,
+            usageRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, PERCENT, null, null).size());
+        assertEquals(0,
+            usageRepository.findRightsholderTotalsHoldersByScenarioId(SCENARIO_ID, UNDERSCORE, null, null).size());
     }
 
     @Test
@@ -318,43 +324,50 @@ public class UsageRepositoryIntegrationTest {
     @Test
     public void testFindByScenarioIdAndRhAccountNumberSearchByRorName() {
         populateScenario();
-        verifySearch("Access Copyright, The Canadian Copyright Agency", 1);
-        verifySearch("Academic", 2);
-        verifySearch("aCaDemiC", 2);
-        verifySearch("Aca demic", 0);
+        verifyFindByScenarioIdAndRhSearch("Access Copyright, The Canadian Copyright Agency", 1);
+        verifyFindByScenarioIdAndRhSearch("Academic", 2);
+        verifyFindByScenarioIdAndRhSearch("aCaDemiC", 2);
+        verifyFindByScenarioIdAndRhSearch("Aca demic", 0);
     }
 
     @Test
     public void testFindByScenarioIdAndRhAccountNumberSearchByRorAccountNumber() {
         populateScenario();
-        verifySearch("2000017010", 2);
-        verifySearch("0001700", 1);
-        verifySearch("70014 40663", 0);
+        verifyFindByScenarioIdAndRhSearch("2000017010", 2);
+        verifyFindByScenarioIdAndRhSearch("0001700", 1);
+        verifyFindByScenarioIdAndRhSearch("70014 40663", 0);
     }
 
     @Test
     public void testFindByScenarioIdAndRhAccountNumberSearchDetailId() {
         populateScenario();
-        verifySearch("b1f0b236-3ae9-4a60-9fab-61db84199dss", 1);
-        verifySearch("4a60", 1);
-        verifySearch("4a", 2);
+        verifyFindByScenarioIdAndRhSearch("b1f0b236-3ae9-4a60-9fab-61db84199dss", 1);
+        verifyFindByScenarioIdAndRhSearch("4a60", 1);
+        verifyFindByScenarioIdAndRhSearch("4a", 2);
     }
 
     @Test
     public void testFindByScenarioIdAndRhAccountNumberSearchByWrWrkInst() {
         populateScenario();
-        verifySearch("243904752", 2);
-        verifySearch("244614", 1);
-        verifySearch("24461 4835", 0);
+        verifyFindByScenarioIdAndRhSearch("243904752", 2);
+        verifyFindByScenarioIdAndRhSearch("244614", 1);
+        verifyFindByScenarioIdAndRhSearch("24461 4835", 0);
     }
 
     @Test
     public void testFindByScenarioIdAndRhAccountNumberSearchByStandardNumber() {
         populateScenario();
-        verifySearch("1008902002377655XX", 1);
-        verifySearch("1008902002377655xx", 1);
-        verifySearch("10089", 3);
-        verifySearch("100890 2002377655XX", 0);
+        verifyFindByScenarioIdAndRhSearch("1008902002377655XX", 1);
+        verifyFindByScenarioIdAndRhSearch("1008902002377655xx", 1);
+        verifyFindByScenarioIdAndRhSearch("10089", 3);
+        verifyFindByScenarioIdAndRhSearch("100890 2002377655XX", 0);
+    }
+
+    @Test
+    public void testFindByScenarioIdAndRhAccountNumberSearchBySqlLikePattern() {
+        populateScenario();
+        verifyFindByScenarioIdAndRhSearch(PERCENT, 0);
+        verifyFindByScenarioIdAndRhSearch(UNDERSCORE, 0);
     }
 
     @Test
@@ -362,6 +375,8 @@ public class UsageRepositoryIntegrationTest {
         populateScenario();
         assertEquals(3, usageRepository.findRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, StringUtils.EMPTY));
         assertEquals(1, usageRepository.findRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, "IEEE"));
+        assertEquals(0, usageRepository.findRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, PERCENT));
+        assertEquals(0, usageRepository.findRightsholderTotalsHolderCountByScenarioId(SCENARIO_ID, UNDERSCORE));
     }
 
     @Test
@@ -605,28 +620,30 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindForAuditBySearch() {
-        AuditFilter filter = new AuditFilter();
-        filter.setSearchValue("a71a0544-128e-41c0-b6b0-cfbbea6d2182");
-        assertEquals(1, usageRepository.findCountForAudit(filter));
-        List<UsageDto> usages = usageRepository.findForAudit(filter, new Pageable(0, 10), null);
-        verifyUsageDtos(usages, 1, USAGE_ID_5);
-        filter.setSearchValue("Nitrates");
-        assertEquals(1, usageRepository.findCountForAudit(filter));
-        usages = usageRepository.findForAudit(filter, new Pageable(0, 10), null);
-        verifyUsageDtos(usages, 1, USAGE_ID_4);
-        filter.setSearchValue("d9ca07b5-8282-4a81-9b9d-e4480f529d34");
-        assertEquals(1, usageRepository.findCountForAudit(filter));
-        usages = usageRepository.findForAudit(filter, new Pageable(0, 10), null);
-        verifyUsageDtos(usages, 1, USAGE_ID_4);
-        filter.setSearchValue("Hydronitrous");
-        assertEquals(1, usageRepository.findCountForAudit(filter));
-        usages = usageRepository.findForAudit(filter, new Pageable(0, 10), null);
-        verifyUsageDtos(usages, 1, USAGE_ID_4);
-        filter.setSearchValue(POST_DISTRIBUTION_USAGE_ID);
-        assertEquals(1, usageRepository.findCountForAudit(filter));
-        usages = usageRepository.findForAudit(filter, new Pageable(0, 100), null);
-        verifyUsageDtos(usages, 1, POST_DISTRIBUTION_USAGE_ID);
+    public void testFindForAuditWithSearch() {
+        assertFindForAuditSearch(USAGE_ID_5, 1, USAGE_ID_5);
+        assertFindForAuditSearch("Nitrates", 1, USAGE_ID_4);
+        assertFindForAuditSearch(USAGE_ID_4, 1, USAGE_ID_4);
+        assertFindForAuditSearch("Hydronitrous", 1, USAGE_ID_4);
+        assertFindForAuditSearch(POST_DISTRIBUTION_USAGE_ID, 1, POST_DISTRIBUTION_USAGE_ID);
+        assertFindForAuditSearch(PERCENT, 0);
+        assertFindForAuditSearch(UNDERSCORE, 0);
+    }
+
+    @Test
+    public void testFindForAuditSearchByCccEventId() {
+        assertFindForAuditSearchByCccEventId("53256", 2, USAGE_ID_15, POST_DISTRIBUTION_USAGE_ID);
+        assertFindForAuditSearchByCccEventId("53257", 1, USAGE_ID_16);
+        assertFindForAuditSearchByCccEventId(PERCENT, 0);
+        assertFindForAuditSearchByCccEventId(UNDERSCORE, 0);
+    }
+
+    @Test
+    public void testFindForAuditSearchByDistributionName() {
+        assertFindForAuditSearchByDistributionName("FDA July 17", 1, USAGE_ID_16);
+        assertFindForAuditSearchByDistributionName("FDA_March_17", 2, USAGE_ID_15, POST_DISTRIBUTION_USAGE_ID);
+        assertFindForAuditSearchByDistributionName(PERCENT, 0);
+        assertFindForAuditSearchByDistributionName(UNDERSCORE, 2, USAGE_ID_15, POST_DISTRIBUTION_USAGE_ID);
     }
 
     @Test
@@ -1012,7 +1029,7 @@ public class UsageRepositoryIntegrationTest {
         return usageRepository.findByFilter(filter, null, new Sort(property, direction));
     }
 
-    private void verifySearch(String searchValue, int expectedSize) {
+    private void verifyFindByScenarioIdAndRhSearch(String searchValue, int expectedSize) {
         assertEquals(expectedSize, usageRepository.findByScenarioIdAndRhAccountNumber(1000002859L, SCENARIO_ID,
             searchValue, null, null).size());
         assertEquals(expectedSize, usageRepository.findCountByScenarioIdAndRhAccountNumber(1000002859L,
@@ -1146,5 +1163,27 @@ public class UsageRepositoryIntegrationTest {
             assertEquals(usageIds[i], usages.get(i).getId());
             assertEquals(UsageStatusEnum.ELIGIBLE, usages.get(i).getStatus());
         });
+    }
+
+    private void assertFindForAuditSearch(String searchValue, int expectedSize, String... usageIds) {
+        AuditFilter filter = new AuditFilter();
+        filter.setSearchValue(searchValue);
+        assertEquals(expectedSize, usageRepository.findCountForAudit(filter));
+        verifyUsageDtos(usageRepository.findForAudit(filter, null, null), expectedSize, usageIds);
+    }
+
+    private void assertFindForAuditSearchByCccEventId(String cccEventId, int expectedSize, String... usageIds) {
+        AuditFilter filter = new AuditFilter();
+        filter.setCccEventId(cccEventId);
+        assertEquals(expectedSize, usageRepository.findCountForAudit(filter));
+        verifyUsageDtos(usageRepository.findForAudit(filter, null, null), expectedSize, usageIds);
+    }
+
+    private void assertFindForAuditSearchByDistributionName(String distributionName, int expectedSize,
+                                                            String... usageIds) {
+        AuditFilter filter = new AuditFilter();
+        filter.setDistributionName(distributionName);
+        assertEquals(expectedSize, usageRepository.findCountForAudit(filter));
+        verifyUsageDtos(usageRepository.findForAudit(filter, null, null), expectedSize, usageIds);
     }
 }
