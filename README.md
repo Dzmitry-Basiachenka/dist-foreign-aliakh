@@ -1,3 +1,7 @@
+3.1.14
+-
+* B-45518 Tech Debt: FDA: Adjust search by special symbols, update dist-common version to 20.2.+
+
 3.1.13
 -
 
