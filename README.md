@@ -1,3 +1,7 @@
+3.1.15
+-
+* B-45519 Tech Debt: FDA: set up default time zone for tests to avoid comparison failures for dates
+
 3.1.14
 -
 * B-45518 Tech Debt: FDA: Adjust search by special symbols, update dist-common version to 20.2.+
