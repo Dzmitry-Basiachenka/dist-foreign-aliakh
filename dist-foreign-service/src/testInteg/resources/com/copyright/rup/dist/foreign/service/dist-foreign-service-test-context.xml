@@ -43,19 +43,6 @@
         <property name="createCommonTablesOnStartup" value="false"/>
     </bean>
 
-    <bean id="defaultZoneInfo" class="sun.util.calendar.ZoneInfo" factory-method="getTimeZone">
-        <constructor-arg type="java.lang.String" value="America/New_York"/>
-    </bean>
-
-    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-        <property name="staticMethod" value="java.util.TimeZone.setDefault"/>
-        <property name="arguments">
-            <list>
-                <ref bean="defaultZoneInfo"/>
-            </list>
-        </property>
-    </bean>
-
     <bean id="df.service.paidUsageConsumer"
           class="com.copyright.rup.dist.foreign.service.impl.mock.PaidUsageConsumerMock"/>
 

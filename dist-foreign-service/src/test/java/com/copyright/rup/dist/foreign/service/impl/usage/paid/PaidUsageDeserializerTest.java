@@ -10,7 +10,7 @@ import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
@@ -34,8 +34,8 @@ public class PaidUsageDeserializerTest {
 
     private final PaidUsageUnmarshaller unmarshaller = new PaidUsageUnmarshaller();
 
-    @Before
-    public void setUp() {
+    @BeforeClass
+    public static void beforeClass() {
         TimeZone.setDefault(TimeZone.getTimeZone("America/New_York"));
     }
 
