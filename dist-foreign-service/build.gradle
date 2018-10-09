@@ -16,3 +16,7 @@ dependencies {
     testIntegRuntime project(path: ':dist-foreign-repository', configuration: 'testIntegRuntime')
     testIntegRuntime("com.copyright.rup.common:rup-common-config:${rupCommonVersion}")
 }
+
+integrationTest {
+    systemProperty "user.timezone", "America/New_York"
+}
