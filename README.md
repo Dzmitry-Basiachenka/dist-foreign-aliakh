@@ -1,3 +1,7 @@
+3.1.16
+-
+* B-45519 Tech Debt: FDA: adjust handling of errors during parsing incorrect message in CRM integration
+
 3.1.15
 -
 * B-45519 Tech Debt: FDA: set up default time zone for tests to avoid comparison failures for dates
