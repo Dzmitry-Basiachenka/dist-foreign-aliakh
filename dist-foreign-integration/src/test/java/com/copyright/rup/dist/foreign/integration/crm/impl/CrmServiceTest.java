@@ -10,8 +10,10 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.integration.IntegrationConnectionException;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.integration.crm.api.CrmResult;
@@ -27,6 +29,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -62,17 +66,36 @@ public class CrmServiceTest {
     }
 
     @Test
-    public void testDoSendCrmRightsDistributionRequests() throws IOException {
+    public void testSendCrmRightsDistributionRequests() throws IOException {
         String expectedBody = formatJson(TestUtils.fileToString(CrmServiceTest.class,
             "crm_rights_distribution_request.json"));
         Capture<HttpEntity> httpEntityCapture = new Capture<>();
         expect(restTemplate.postForObject(anyObject(String.class), capture(httpEntityCapture), eq(String.class)))
             .andReturn(TestUtils.fileToString(CrmServiceTest.class, "crm_response.json")).once();
         replay(restTemplate);
-        CrmResult actualResult =
-            crmService.doSendRightsDistributionRequests(Collections.singletonList(buildRequest()));
+        CrmResult actualResult = crmService.sendRightsDistributionRequests(Collections.singletonList(buildRequest()));
         assertEquals(CrmResultStatusEnum.SUCCESS, actualResult.getCrmResultStatus());
         assertTrue(CollectionUtils.isEmpty(actualResult.getInvalidUsageIds()));
+        HttpEntity httpEntity = httpEntityCapture.getValue();
+        assertNotNull(httpEntity);
+        assertEquals(expectedBody, formatJson(httpEntity.getBody()));
+        verify(restTemplate);
+    }
+
+    @Test
+    public void testSendRightsDistributionRequestsIntegrationConnectionException() throws IOException {
+        String expectedBody =
+            formatJson(TestUtils.fileToString(CrmServiceTest.class, "crm_rights_distribution_request.json"));
+        Capture<HttpEntity> httpEntityCapture = new Capture<>();
+        expect(restTemplate.postForObject(anyObject(String.class), capture(httpEntityCapture), eq(String.class)))
+            .andThrow(new HttpClientErrorException(HttpStatus.BAD_GATEWAY)).once();
+        replay(restTemplate);
+        try {
+            crmService.sendRightsDistributionRequests(Collections.singletonList(buildRequest()));
+            fail();
+        } catch (IntegrationConnectionException e) {
+            assertEquals("Could not connect to the CRM system", e.getMessage());
+        }
         HttpEntity httpEntity = httpEntityCapture.getValue();
         assertNotNull(httpEntity);
         assertEquals(expectedBody, formatJson(httpEntity.getBody()));
@@ -98,6 +121,22 @@ public class CrmServiceTest {
     public void testParseInvalidResponseWithTwoInvalidUsages() throws IOException {
         assertParseResponseWithInvalidUsages("crm_response_failed_two_usages.json",
             ImmutableSet.of("ca9763ab-1ce7-486e-8938-272f6c3392a7", "bbdc5eb3-7396-47b8-bc18-5ec6ad0c4ef1"));
+    }
+
+    @Test
+    public void testParseResponseWithNoListElement() {
+        try {
+            crmService.parseResponse("{\"elements\":{}}", Collections.emptyMap());
+            fail();
+        } catch (IOException e) {
+            assertEquals("Send usages to CRM. Failed. Reason=Couldn't parse response. " +
+                "Response={\"elements\":{}}, JsonNode={\"elements\":{}}", e.getMessage());
+        }
+    }
+
+    @Test(expected = IOException.class)
+    public void testParseResponseInvalidJson() throws IOException {
+        crmService.parseResponse("{abc123", Collections.emptyMap());
     }
 
     private void assertParseResponseWithInvalidUsages(String fileName, Set<String> expectedUsagesIds)

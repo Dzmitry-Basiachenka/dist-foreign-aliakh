@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.integration.crm.impl;
 
+import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.integration.IntegrationConnectionException;
 import com.copyright.rup.dist.common.integration.util.JsonUtils;
@@ -66,9 +67,8 @@ public class CrmService implements ICrmService {
         } catch (HttpClientErrorException | ResourceAccessException e) {
             throw new IntegrationConnectionException("Could not connect to the CRM system", e);
         } catch (IOException e) {
-            LOGGER.error("Problem with processing (parsing, generating) JSON content", e);
+            throw new RupRuntimeException("Problem with processing (parsing, generating) JSON content", e);
         }
-        return null;
     }
 
     /**
@@ -142,7 +142,9 @@ public class CrmService implements ICrmService {
                 }
             }
         } else {
-            LOGGER.warn("Send usages to CRM. Failed. Reason=Couldn't parse response. Response={}", response);
+            throw new IOException(
+                String.format("Send usages to CRM. Failed. Reason=Couldn't parse response. Response=%s, JsonNode=%s",
+                    response, jsonNode));
         }
         return crmResult;
     }
