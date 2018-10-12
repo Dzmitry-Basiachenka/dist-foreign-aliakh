@@ -51,5 +51,6 @@ subprojects {
 
     tasks.withType(Test) {
         maxParallelForks = Runtime.runtime.availableProcessors()
+        systemProperty "user.timezone", "America/New_York"
     }
 }
