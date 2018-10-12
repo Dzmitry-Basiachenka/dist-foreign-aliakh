@@ -8,9 +8,13 @@ import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.HeaderVal
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ThresholdExceededException;
 import com.copyright.rup.dist.common.test.ReportTestUtils;
+import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 
-import org.apache.commons.collections4.CollectionUtils;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
 import org.apache.commons.io.IOUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -27,6 +31,7 @@ import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.util.List;
 import java.util.concurrent.Executors;
+import java.util.stream.IntStream;
 
 /**
  * Verifies {@link ResearchedUsagesCsvProcessor}.
@@ -43,10 +48,11 @@ import java.util.concurrent.Executors;
 @TestPropertySource(properties = {"test.liquibase.changelog=researched-usages-csv-processor-data-init.groovy"})
 public class ResearchedUsagesCsvProcessorIntegrationTest {
 
-    private static final String PACKAGE = "/com/copyright/rup/dist/foreign/service/impl/usage/researched";
-    private static final String PATH_TO_EXPECTED_REPORTS = "src/testInteg/resources" + PACKAGE;
+    private static final String BASE_PATH = "/com/copyright/rup/dist/foreign/service/impl/usage/researched/";
+    private static final String PATH_TO_CSV = "src/testInteg/resources" + BASE_PATH;
 
-    private final ReportTestUtils reportTestUtils = new ReportTestUtils(PATH_TO_EXPECTED_REPORTS);
+    private final ReportTestUtils reportTestUtils = new ReportTestUtils(PATH_TO_CSV);
+
     @Autowired
     private CsvProcessorFactory csvProcessorFactory;
 
@@ -59,10 +65,14 @@ public class ResearchedUsagesCsvProcessorIntegrationTest {
     public void testProcessor() throws Exception {
         ProcessingResult<ResearchedUsage> result = processFile("researched_usages.csv");
         assertNotNull(result);
-        List<ResearchedUsage> researchedUsages = result.get();
-        assertEquals(2, CollectionUtils.size(researchedUsages));
-        verifyResearchedUsage(researchedUsages.get(0), "e1108526-5945-4a30-971e-91e584b4bc88", 987654321);
-        verifyResearchedUsage(researchedUsages.get(1), "9f717d69-785a-4f25-ae60-8d90c1f334cc", 876543210);
+        List<ResearchedUsage> actualUsages = result.get();
+        List<ResearchedUsage> expectedUsages = loadExpectedUsages("researched_usages.json");
+        int expectedSize = 2;
+        assertEquals(expectedSize, actualUsages.size());
+        assertEquals(expectedSize, expectedUsages.size());
+        IntStream.range(0, expectedSize).forEach(i ->
+            assertUsage(expectedUsages.get(i), actualUsages.get(i))
+        );
     }
 
     @Test
@@ -129,7 +139,7 @@ public class ResearchedUsagesCsvProcessorIntegrationTest {
 
     private ProcessingResult<ResearchedUsage> processFile(String fileName) throws IOException {
         ProcessingResult<ResearchedUsage> result;
-        try (InputStream is = this.getClass().getResourceAsStream(PACKAGE + "/" + fileName);
+        try (InputStream is = this.getClass().getResourceAsStream(BASE_PATH + "/" + fileName);
              ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
             IOUtils.copy(is, baos);
             ResearchedUsagesCsvProcessor processor = csvProcessorFactory.getResearchedUsagesCsvProcessor();
@@ -138,10 +148,17 @@ public class ResearchedUsagesCsvProcessorIntegrationTest {
         return result;
     }
 
-    private void verifyResearchedUsage(ResearchedUsage researchedUsage, String usageId, long wrWrkInst) {
-        assertNotNull(researchedUsage);
-        assertEquals(usageId, researchedUsage.getUsageId());
-        assertEquals(wrWrkInst, researchedUsage.getWrWrkInst().longValue());
-        assertEquals("test system title", researchedUsage.getSystemTitle());
+    private void assertUsage(ResearchedUsage expectedUsage, ResearchedUsage actualUsage) {
+        assertEquals(expectedUsage.getUsageId(), actualUsage.getUsageId());
+        assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
+        assertEquals(expectedUsage.getSystemTitle(), actualUsage.getSystemTitle());
+    }
+
+    private List<ResearchedUsage> loadExpectedUsages(String fileName) throws IOException {
+        String content = TestUtils.fileToString(this.getClass(), BASE_PATH + fileName);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        return mapper.readValue(content, new TypeReference<List<ResearchedUsage>>() {
+        });
     }
 }

@@ -1,0 +1,143 @@
+[
+  {
+    "id": "8a5316e7-29bf-469e-8363-038a56abdea5",
+    "createDate": 1539353929742,
+    "updateDate": 1539353929742,
+    "createUser": "SYSTEM",
+    "updateUser": "SYSTEM",
+    "wrWrkInst": 123456789,
+    "workTitle": "1984",
+    "systemTitle": "1984",
+    "rightsholder": {
+      "accountNumber": 1000009522
+    },
+    "article": "Appendix: The Principles of Newspeak",
+    "standardNumber": "9780150000000",
+    "publisher": "Publisher",
+    "publicationDate": [
+      3000,
+      12,
+      22
+    ],
+    "market": "Univ,Bus,Doc,S",
+    "marketPeriodFrom": 2015,
+    "marketPeriodTo": 2016,
+    "author": "Aarseth, Espen J.",
+    "numberOfCopies": 65,
+    "reportedValue": 30.86,
+    "status": "ELIGIBLE",
+    "productFamily": "FAS"
+  },
+  {
+    "id": "fdb72fd7-b766-4bd1-a63a-f898cd903317",
+    "createDate": 1539353929743,
+    "updateDate": 1539353929743,
+    "createUser": "SYSTEM",
+    "updateUser": "SYSTEM",
+    "wrWrkInst": null,
+    "workTitle": "1984",
+    "systemTitle": null,
+    "rightsholder": {
+      "accountNumber": null
+    },
+    "article": "Appendix: The Principles of Newspeak",
+    "standardNumber": "9780150000000",
+    "publisher": "Publisher",
+    "publicationDate": [
+      3000,
+      12,
+      22
+    ],
+    "market": "Univ,Bus,Doc,S",
+    "marketPeriodFrom": 2015,
+    "marketPeriodTo": 2016,
+    "author": "Aarseth, Espen J.",
+    "numberOfCopies": 65,
+    "reportedValue": 30.86,
+    "status": "NEW",
+    "productFamily": "FAS"
+  },
+  {
+    "id": "ad6c2b0d-6303-4dd6-9c93-104d97013289",
+    "createDate": 1539353929743,
+    "updateDate": 1539353929743,
+    "createUser": "SYSTEM",
+    "updateUser": "SYSTEM",
+    "wrWrkInst": 123456789,
+    "workTitle": "1984",
+    "systemTitle": "1984",
+    "rightsholder": {
+      "accountNumber": null
+    },
+    "article": "Appendix: The Principles of Newspeak",
+    "standardNumber": "9780150000000",
+    "publisher": "Publisher",
+    "publicationDate": [
+      3000,
+      12,
+      22
+    ],
+    "market": "Univ,Bus,Doc,S",
+    "marketPeriodFrom": 2015,
+    "marketPeriodTo": 2016,
+    "author": "Aarseth, Espen J.",
+    "numberOfCopies": 65,
+    "reportedValue": 30.86,
+    "status": "WORK_FOUND",
+    "productFamily": "FAS"
+  },
+  {
+    "id": "487d484c-c0c5-4394-971f-1616247d3b47",
+    "createDate": 1539353929743,
+    "updateDate": 1539353929743,
+    "createUser": "SYSTEM",
+    "updateUser": "SYSTEM",
+    "wrWrkInst": 123456789,
+    "workTitle": "1984",
+    "systemTitle": "1984",
+    "rightsholder": {
+      "accountNumber": 999999999999999999
+    },
+    "article": "Appendix: The Principles of Newspeak",
+    "standardNumber": "9780150000000",
+    "publisher": "Publisher",
+    "publicationDate": [
+      3000,
+      12,
+      22
+    ],
+    "market": "Univ,Bus,Doc,S",
+    "marketPeriodFrom": 2015,
+    "marketPeriodTo": 2016,
+    "author": "Aarseth, Espen J.",
+    "numberOfCopies": 65,
+    "reportedValue": 30.86,
+    "status": "ELIGIBLE",
+    "productFamily": "FAS"
+  },
+  {
+    "id": "eea0bde1-3886-4af4-a499-1dfabc9df65c",
+    "createDate": 1539353929744,
+    "updateDate": 1539353929744,
+    "createUser": "SYSTEM",
+    "updateUser": "SYSTEM",
+    "wrWrkInst": null,
+    "workTitle": "1984",
+    "systemTitle": null,
+    "rightsholder": {
+      "accountNumber": null
+    },
+    "article": null,
+    "standardNumber": "9780150000000",
+    "publisher": null,
+    "publicationDate": null,
+    "market": "Univ,Bus,Doc,S",
+    "marketPeriodFrom": 2015,
+    "marketPeriodTo": 2015,
+    "author": null,
+    "numberOfCopies": null,
+    "reportedValue": 60.80,
+    "status": "NEW",
+    "productFamily": "FAS"
+  }
+]
