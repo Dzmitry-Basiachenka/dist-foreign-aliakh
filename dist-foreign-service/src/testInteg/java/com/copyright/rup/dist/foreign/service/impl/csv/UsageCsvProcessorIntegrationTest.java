@@ -1,19 +1,25 @@
 package com.copyright.rup.dist.foreign.service.impl.csv;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.HeaderValidationException;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ThresholdExceededException;
 import com.copyright.rup.dist.common.test.ReportTestUtils;
+import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
-import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
-import org.apache.commons.collections4.CollectionUtils;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
 import org.apache.commons.io.IOUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -29,9 +35,9 @@ import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.Executors;
+import java.util.stream.IntStream;
 
 /**
  * Verifies {@link UsageCsvProcessor}.
@@ -48,12 +54,12 @@ import java.util.concurrent.Executors;
 @TestPropertySource(properties = {"test.liquibase.changelog=usages-csv-processor-data-init.groovy"})
 public class UsageCsvProcessorIntegrationTest {
 
-    private static final String PACKAGE = "/com/copyright/rup/dist/foreign/service/impl/usage";
-    private static final String PATH_TO_EXPECTED_REPORTS = "src/testInteg/resources" + PACKAGE;
-    private static final String TITLE = "1984";
+    private static final String BASE_PATH = "/com/copyright/rup/dist/foreign/service/impl/usage/";
+    private static final String PATH_TO_CSV = "src/testInteg/resources" + BASE_PATH;
     private static final String PRODUCT_FAMILY = "FAS";
 
-    private final ReportTestUtils reportTestUtils = new ReportTestUtils(PATH_TO_EXPECTED_REPORTS);
+    private final ReportTestUtils reportTestUtils = new ReportTestUtils(PATH_TO_CSV);
+
     @Autowired
     private CsvProcessorFactory csvProcessorFactory;
 
@@ -66,13 +72,14 @@ public class UsageCsvProcessorIntegrationTest {
     public void testProcessor() throws Exception {
         ProcessingResult<Usage> result = processFile("usages.csv", true);
         assertNotNull(result);
-        List<Usage> usages = result.get();
-        assertEquals(5, CollectionUtils.size(usages));
-        verifyUsage(usages.get(0), 123456789L, 1000009522L, UsageStatusEnum.ELIGIBLE, TITLE);
-        verifyUsage(usages.get(1), null, null, UsageStatusEnum.NEW, TITLE);
-        verifyUsage(usages.get(2), 123456789L, null, UsageStatusEnum.WORK_FOUND, TITLE);
-        verifyUsage(usages.get(3), 123456789L, 999999999999999999L, UsageStatusEnum.ELIGIBLE, TITLE);
-        verifyUsageWithEmptyFields(usages.get(4));
+        List<Usage> actualUsages = result.get();
+        List<Usage> expectedUsages = loadExpectedUsages("usages.json");
+        int expectedSize = 5;
+        assertEquals(expectedSize, actualUsages.size());
+        assertEquals(expectedSize, expectedUsages.size());
+        IntStream.range(0, expectedSize).forEach(i ->
+            assertUsage(expectedUsages.get(i), actualUsages.get(i))
+        );
     }
 
     @Test
@@ -135,7 +142,7 @@ public class UsageCsvProcessorIntegrationTest {
         throws IOException {
         ProcessingResult<Usage> result;
         try (InputStream stream = this.getClass()
-            .getResourceAsStream(PACKAGE + "/" + file);
+            .getResourceAsStream(BASE_PATH + "/" + file);
              ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             IOUtils.copy(stream, outputStream);
             UsageCsvProcessor processor = csvProcessorFactory.getUsageCsvProcessor(PRODUCT_FAMILY);
@@ -145,45 +152,71 @@ public class UsageCsvProcessorIntegrationTest {
         return result;
     }
 
-    private void verifyUsage(Usage usage, Long wrWrkInst, Long rhAccountNumber, UsageStatusEnum status, String title) {
-        assertNotNull(usage);
-        assertNotNull(usage.getId());
-        assertEquals(title, usage.getWorkTitle());
-        assertEquals("Appendix: The Principles of Newspeak", usage.getArticle());
-        assertEquals("9780150000000", usage.getStandardNumber());
-        assertEquals(wrWrkInst, usage.getWrWrkInst());
-        assertEquals(rhAccountNumber, usage.getRightsholder().getAccountNumber());
-        assertEquals("Publisher", usage.getPublisher());
-        assertEquals(LocalDate.of(3000, 12, 22), usage.getPublicationDate());
-        assertEquals(Integer.valueOf(65), usage.getNumberOfCopies());
-        assertEquals(new BigDecimal("30.86"), usage.getReportedValue());
-        assertEquals("Univ,Bus,Doc,S", usage.getMarket());
-        assertEquals(Integer.valueOf(2015), usage.getMarketPeriodFrom());
-        assertEquals(Integer.valueOf(2016), usage.getMarketPeriodTo());
-        assertEquals(status, usage.getStatus());
-        assertEquals("Aarseth, Espen J.", usage.getAuthor());
-        assertEquals(PRODUCT_FAMILY, usage.getProductFamily());
-        assertEquals(BigDecimal.ZERO, usage.getGrossAmount());
+    private void assertUsage(Usage expectedUsage, Usage actualUsage) {
+        assertNotNull(expectedUsage.getId());
+        assertNotNull(actualUsage.getId());
+        assertStoredEntity(expectedUsage);
+        assertStoredEntity(actualUsage);
+        assertUsageParsedFields(expectedUsage, actualUsage);
+        assertUsageNonParsedFields(expectedUsage);
+        assertUsageNonParsedFields(actualUsage);
+        Rightsholder payee = actualUsage.getPayee();
+        assertNull(payee.getId());
+        assertStoredEntity(payee);
+        assertNull(payee.getName());
+        assertNull(payee.getAccountNumber());
     }
 
-    private void verifyUsageWithEmptyFields(Usage usage) {
-        assertNotNull(usage);
-        assertNotNull(usage.getId());
-        assertEquals(TITLE, usage.getWorkTitle());
-        assertNull(usage.getArticle());
-        assertEquals("9780150000000", usage.getStandardNumber());
-        assertNull(usage.getWrWrkInst());
-        assertNull(usage.getRightsholder().getAccountNumber());
-        assertNull(usage.getPublisher());
-        assertNull(usage.getPublicationDate());
-        assertNull(usage.getNumberOfCopies());
-        assertEquals(new BigDecimal("60.80"), usage.getReportedValue());
-        assertEquals("Univ,Bus,Doc,S", usage.getMarket());
-        assertEquals(Integer.valueOf(2015), usage.getMarketPeriodFrom());
-        assertEquals(Integer.valueOf(2015), usage.getMarketPeriodTo());
-        assertEquals(UsageStatusEnum.NEW, usage.getStatus());
-        assertNull(usage.getAuthor());
-        assertEquals(PRODUCT_FAMILY, usage.getProductFamily());
+    private void assertStoredEntity(StoredEntity entity) {
+        assertNotNull(entity.getCreateDate());
+        assertNotNull(entity.getUpdateDate());
+        assertEquals("SYSTEM", entity.getCreateUser());
+    }
+
+    private void assertUsageParsedFields(Usage expectedUsage, Usage actualUsage) {
+        assertEquals(expectedUsage.getWorkTitle(), actualUsage.getWorkTitle());
+        assertEquals(expectedUsage.getSystemTitle(), actualUsage.getSystemTitle());
+        assertEquals(expectedUsage.getArticle(), actualUsage.getArticle());
+        assertEquals(expectedUsage.getStandardNumber(), actualUsage.getStandardNumber());
+        assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
+        assertRightsholder(expectedUsage.getRightsholder(), actualUsage.getRightsholder());
+        assertEquals(expectedUsage.getPublisher(), actualUsage.getPublisher());
+        assertEquals(expectedUsage.getPublicationDate(), actualUsage.getPublicationDate());
+        assertEquals(expectedUsage.getNumberOfCopies(), actualUsage.getNumberOfCopies());
+        assertEquals(expectedUsage.getReportedValue(), actualUsage.getReportedValue());
+        assertEquals(expectedUsage.getMarket(), actualUsage.getMarket());
+        assertEquals(expectedUsage.getMarketPeriodFrom(), actualUsage.getMarketPeriodFrom());
+        assertEquals(expectedUsage.getMarketPeriodTo(), actualUsage.getMarketPeriodTo());
+        assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
+        assertEquals(expectedUsage.getAuthor(), actualUsage.getAuthor());
+        assertEquals(expectedUsage.getProductFamily(), actualUsage.getProductFamily());
+    }
+
+    private void assertRightsholder(Rightsholder expectedRightsholder, Rightsholder actualRightsholder) {
+        assertNull(expectedRightsholder.getId());
+        assertNull(actualRightsholder.getId());
+        assertStoredEntity(expectedRightsholder);
+        assertStoredEntity(actualRightsholder);
+        assertNull(expectedRightsholder.getName());
+        assertNull(actualRightsholder.getName());
+        assertEquals(expectedRightsholder.getAccountNumber(), expectedRightsholder.getAccountNumber());
+    }
+
+    private void assertUsageNonParsedFields(Usage usage) {
+        assertNull(usage.getBatchId());
+        assertNull(usage.getScenarioId());
+        assertEquals(BigDecimal.ZERO, usage.getNetAmount());
+        assertNull(usage.getServiceFee());
+        assertEquals(BigDecimal.ZERO, usage.getServiceFeeAmount());
         assertEquals(BigDecimal.ZERO, usage.getGrossAmount());
+        assertFalse(usage.isRhParticipating());
+    }
+
+    private List<Usage> loadExpectedUsages(String fileName) throws IOException {
+        String content = TestUtils.fileToString(this.getClass(), BASE_PATH + fileName);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        return mapper.readValue(content, new TypeReference<List<Usage>>() {
+        });
     }
 }
