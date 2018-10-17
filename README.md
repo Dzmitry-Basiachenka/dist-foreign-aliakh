@@ -1,3 +1,9 @@
+3.1.17
+-
+* B-45519 FDA: update legacy integration service URL for integration with CRM
+* B-45519 Tech Debt: FDA: Adjust integration tests for parsing CSV files
+* B-45519 Tech Debt: FDA: make changes based on comments in CR-DIST-FOREIGN-73
+
 3.1.16
 -
 * B-45519 Tech Debt: FDA: adjust handling of errors during parsing incorrect message in CRM integration
