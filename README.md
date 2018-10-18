@@ -1,3 +1,7 @@
+3.1.18
+-
+* CDP-578 Upgrade PostgreSQL driver to 42.2.1 (dist-foreign)
+
 3.1.17
 -
 * B-45519 FDA: update legacy integration service URL for integration with CRM
