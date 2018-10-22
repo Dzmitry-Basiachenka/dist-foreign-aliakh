@@ -1,5 +1,6 @@
 3.1.19
 -
+* RDSC-623 FDA: Reconciliation: Discrepancies are displayed only for one record when there are works with the same Wr Wrk Inst, but different Work Title
 
 3.1.18
 -
