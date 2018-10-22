@@ -1,3 +1,6 @@
+3.1.19
+-
+
 3.1.18
 -
 * CDP-578 Upgrade PostgreSQL driver to 42.2.1 (dist-foreign)
