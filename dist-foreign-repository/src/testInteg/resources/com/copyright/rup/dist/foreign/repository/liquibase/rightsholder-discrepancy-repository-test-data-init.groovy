@@ -146,6 +146,16 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'IN_PROGRESS')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder_discrepancy') {
+            column(name: 'df_rightsholder_discrepancy_uid', value: '4c20732d-729a-4a8e-beee-3d5a282c6c54')
+            column(name: 'df_scenario_uid', value: 'b1f0b236-3ae9-4a60-9fab-61db84199d6f')
+            column(name: 'wr_wrk_inst', value: '180382914')
+            column(name: 'old_rh_account_number', value: '1000009997')
+            column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'status_ind', value: 'IN_PROGRESS')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: 'ff8b9ac9-5fca-4d57-b74e-26da209c1040')
             column(name: 'rh_account_number', value: '1000009997')
