@@ -94,7 +94,8 @@
             select distinct
                 old_rh_account_number,
                 new_rh_account_number,
-                wr_wrk_inst
+                wr_wrk_inst,
+                work_title
             from ${schema}.df_rightsholder_discrepancy
             where df_scenario_uid = #{scenarioId}
                 and status_ind = #{status}
