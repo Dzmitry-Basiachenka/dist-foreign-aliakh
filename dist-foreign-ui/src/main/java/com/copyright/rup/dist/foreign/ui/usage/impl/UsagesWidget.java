@@ -218,7 +218,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
     private void onAddToScenarioClicked() {
         if (0 < controller.getSize()) {
             if (controller.isProductFamilyAndStatusFiltersApplied()) {
-                if (controller.isSigleProductFamilySelected()) {
+                if (controller.isSingleProductFamilySelected()) {
                     List<Long> accountNumbers = controller.getInvalidRightsholders();
                     if (CollectionUtils.isNotEmpty(accountNumbers)) {
                         Windows.showNotificationWindow(
