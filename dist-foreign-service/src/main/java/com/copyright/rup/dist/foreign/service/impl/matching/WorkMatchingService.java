@@ -160,7 +160,7 @@ public class WorkMatchingService implements IWorkMatchingService {
                                                  IUpdateFunction function) {
         if (GROSS_AMOUNT_LIMIT.compareTo(sumUsagesGrossAmount(usages)) > 0) {
             usages.forEach(usage -> {
-                usage.setStatus(UsageStatusEnum.ELIGIBLE);
+                usage.setStatus(UsageStatusEnum.NTS_WITHDRAWN);
                 usage.setProductFamily(FdaConstants.NTS_PRODUCT_FAMILY);
                 auditService.logAction(usage.getId(), UsageActionTypeEnum.ELIGIBLE_FOR_NTS,
                     usageGroup.getNtsEligibleReason());
@@ -240,7 +240,7 @@ public class WorkMatchingService implements IWorkMatchingService {
 
         /**
          * @return reason for making {@link Usage}
-         * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE} for NTS.
+         * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#NTS_WITHDRAWN}.
          */
         abstract String getNtsEligibleReason();
 

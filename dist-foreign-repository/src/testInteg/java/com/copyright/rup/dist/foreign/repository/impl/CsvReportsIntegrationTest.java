@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.google.common.collect.Sets;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -165,6 +166,7 @@ public class CsvReportsIntegrationTest {
     }
 
     @Test
+    @Ignore // ignored while busines requirements are not specified
     public void testWriteBatchSummaryCsvReport() throws IOException {
         assertFiles(outputStream ->
             usageRepository.writeBatchSummaryCsvReport(outputStream), "batch_summary_report.csv");

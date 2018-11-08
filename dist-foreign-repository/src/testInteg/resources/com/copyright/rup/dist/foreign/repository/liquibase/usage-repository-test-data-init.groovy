@@ -329,7 +329,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: '4dd8cdf8-ca10-422e-bdd5-3220105e6379')
             column(name: 'df_usage_batch_uid', value: 'cb597f4e-f636-447f-8710-0436d8994d10')
-            column(name: 'status_ind', value: 'ELIGIBLE')
+            column(name: 'status_ind', value: 'NTS_WITHDRAWN')
             column(name: 'product_family', value: 'NTS')
             column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '5475802112214578XX')
