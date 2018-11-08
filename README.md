@@ -1,3 +1,12 @@
+3.1.20
+-
+* B-45289 FDA: Report FAS split payments to RC: update service logic for sending usages to LM to send service fee and collected amounts
+* B-46887 FDA: Make unmatched FAS details available for NTS additional fund pool: Adjust batch summary report to exclude NTS_WITHDRAWN from non-eligible details
+* B-46887 FDA: Make unmatched FAS details available for NTS additional fund pool: add NTS_WITHDRAWN status to the system and UI filters
+* B-46887 FDA: Make unmatched FAS details available for NTS additional fund pool: add liquibase script for set NTS_WITHDRAWN status for historical NTS usages
+* B-46887 FDA: Make unmatched FAS details available for NTS additional fund pool: adjust scenario creation logic on Usages tab to do not check if selected product family is NTS
+* B-46887 FDA: Make unmatched FAS details available for NTS additional fund pool: adjust works matching service logic to set NTS_WITHDRAWN status for NTS usages
+
 3.1.19
 -
 * RDSC-623 FDA: Reconciliation: Discrepancies are displayed only for one record when there are works with the same Wr Wrk Inst, but different Work Title
