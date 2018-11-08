@@ -102,26 +102,26 @@ public class WorksMatchingIntegrationTest {
             TITLE_1, null, "Wr Wrk Inst was not found by standard number 0-325-01548-2");
         verifyUsage("68fb88b0-ed9b-4c36-93bc-2bf0b51c7223", null, UsageStatusEnum.WORK_NOT_FOUND, FAS_PRODUCT_FAMILY,
             TITLE_6, null, "Wr Wrk Inst was not found by title \"Fall guys in the florentine flood\"");
-        verifyUsage("c9ecd9ce-043e-4982-85c1-8e3aa97eaed6", null, UsageStatusEnum.ELIGIBLE, NTS_PRODUCT_FAMILY, TITLE_2,
-            null, NTS_BY_STANDARD_NUMBER_MESSAGE);
-        verifyUsage("2186a1ed-62d1-4034-a6a6-ea9e61835b60", null, UsageStatusEnum.ELIGIBLE, NTS_PRODUCT_FAMILY, null,
-            null, NTS_BY_STANDARD_NUMBER_MESSAGE);
-        verifyUsage("8850b2f3-9fef-47da-a8f9-11143a892741", null, UsageStatusEnum.ELIGIBLE, NTS_PRODUCT_FAMILY, null,
-            null, NTS_BY_STANDARD_NUMBER_MESSAGE);
-        verifyUsage("223985fd-8033-42e6-afaf-4da73be804cf", null, UsageStatusEnum.ELIGIBLE, NTS_PRODUCT_FAMILY, TITLE_2,
-            null, NTS_BY_WORK_TITLE_MESSAGE);
-        verifyUsage("4abbb5ea-516f-4b60-bfc4-e8a2d274bb34", null, UsageStatusEnum.ELIGIBLE, NTS_PRODUCT_FAMILY, TITLE_2,
-            null, NTS_BY_WORK_TITLE_MESSAGE);
-        verifyUsage("dc9b3bb8-4135-472a-a7c3-50d800b88829", null, UsageStatusEnum.ELIGIBLE, NTS_PRODUCT_FAMILY, TITLE_7,
-            null, NTS_BY_WORK_TITLE_MESSAGE);
-        verifyUsage("4336ca5e-44fe-46a9-996a-55bdd5967191", null, UsageStatusEnum.ELIGIBLE, NTS_PRODUCT_FAMILY, TITLE_7,
-            null, NTS_BY_WORK_TITLE_MESSAGE);
-        verifyUsage("77a10e10-8154-49c1-88b8-7f5f0ad86c08", null, UsageStatusEnum.ELIGIBLE, NTS_PRODUCT_FAMILY, null,
-            null, NTS_BY_SELF_MESSAGE);
-        verifyUsage("3d85b292-3600-48e8-ba39-37d193afdfa6", null, UsageStatusEnum.ELIGIBLE, NTS_PRODUCT_FAMILY, null,
-            null, NTS_BY_SELF_MESSAGE);
-        verifyUsage("8d4006a3-cbae-48ab-a1e2-e0d5bd204f4d", null, UsageStatusEnum.ELIGIBLE, NTS_PRODUCT_FAMILY, TITLE_3,
-            null, NTS_BY_WORK_TITLE_MESSAGE);
+        verifyUsage("c9ecd9ce-043e-4982-85c1-8e3aa97eaed6", null, UsageStatusEnum.NTS_WITHDRAWN, NTS_PRODUCT_FAMILY,
+            TITLE_2, null, NTS_BY_STANDARD_NUMBER_MESSAGE);
+        verifyUsage("2186a1ed-62d1-4034-a6a6-ea9e61835b60", null, UsageStatusEnum.NTS_WITHDRAWN, NTS_PRODUCT_FAMILY,
+            null, null, NTS_BY_STANDARD_NUMBER_MESSAGE);
+        verifyUsage("8850b2f3-9fef-47da-a8f9-11143a892741", null, UsageStatusEnum.NTS_WITHDRAWN, NTS_PRODUCT_FAMILY,
+            null, null, NTS_BY_STANDARD_NUMBER_MESSAGE);
+        verifyUsage("223985fd-8033-42e6-afaf-4da73be804cf", null, UsageStatusEnum.NTS_WITHDRAWN, NTS_PRODUCT_FAMILY,
+            TITLE_2, null, NTS_BY_WORK_TITLE_MESSAGE);
+        verifyUsage("4abbb5ea-516f-4b60-bfc4-e8a2d274bb34", null, UsageStatusEnum.NTS_WITHDRAWN, NTS_PRODUCT_FAMILY,
+            TITLE_2, null, NTS_BY_WORK_TITLE_MESSAGE);
+        verifyUsage("dc9b3bb8-4135-472a-a7c3-50d800b88829", null, UsageStatusEnum.NTS_WITHDRAWN, NTS_PRODUCT_FAMILY,
+            TITLE_7, null, NTS_BY_WORK_TITLE_MESSAGE);
+        verifyUsage("4336ca5e-44fe-46a9-996a-55bdd5967191", null, UsageStatusEnum.NTS_WITHDRAWN, NTS_PRODUCT_FAMILY,
+            TITLE_7, null, NTS_BY_WORK_TITLE_MESSAGE);
+        verifyUsage("77a10e10-8154-49c1-88b8-7f5f0ad86c08", null, UsageStatusEnum.NTS_WITHDRAWN, NTS_PRODUCT_FAMILY,
+            null, null, NTS_BY_SELF_MESSAGE);
+        verifyUsage("3d85b292-3600-48e8-ba39-37d193afdfa6", null, UsageStatusEnum.NTS_WITHDRAWN, NTS_PRODUCT_FAMILY,
+            null, null, NTS_BY_SELF_MESSAGE);
+        verifyUsage("8d4006a3-cbae-48ab-a1e2-e0d5bd204f4d", null, UsageStatusEnum.NTS_WITHDRAWN, NTS_PRODUCT_FAMILY,
+            TITLE_3, null, NTS_BY_WORK_TITLE_MESSAGE);
     }
 
     private void verifyUsage(String usageId, Long wrWrkInst, UsageStatusEnum status, String productFamily,

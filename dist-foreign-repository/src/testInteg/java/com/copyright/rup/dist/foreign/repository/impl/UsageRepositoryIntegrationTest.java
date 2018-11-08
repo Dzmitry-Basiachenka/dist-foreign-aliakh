@@ -98,7 +98,6 @@ public class UsageRepositoryIntegrationTest {
     private static final String USAGE_ID_7 = "cf38d390-11bb-4af7-9685-e034c9c32fb6";
     private static final String USAGE_ID_8 = "b1f0b236-3ae9-4a60-9fab-61db84199dss";
     private static final String USAGE_ID_9 = "5c5f8c1c-1418-4cfd-8685-9212f4c421d1";
-    private static final String USAGE_ID_10 = "4dd8cdf8-ca10-422e-bdd5-3220105e6379";
     private static final String USAGE_ID_11 = "7db6455e-5249-44db-801a-307f1c239310";
     private static final String USAGE_ID_12 = "593c49c3-eb5b-477b-8556-f7a4725df2b3";
     private static final String USAGE_ID_13 = "66a7c2c0-3b09-48ad-9aa5-a6d0822226c7";
@@ -198,8 +197,8 @@ public class UsageRepositoryIntegrationTest {
     public void testFindByStatusFilter() {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             Collections.emptySet(), UsageStatusEnum.ELIGIBLE, null, null);
-        verifyUsageDtos(usageRepository.findByFilter(usageFilter, null, new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 4,
-            USAGE_ID_1, USAGE_ID_10, USAGE_ID_3, USAGE_ID_2);
+        verifyUsageDtos(usageRepository.findByFilter(usageFilter, null, new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 3,
+            USAGE_ID_1, USAGE_ID_3, USAGE_ID_2);
     }
 
     @Test
@@ -495,8 +494,8 @@ public class UsageRepositoryIntegrationTest {
     public void testFindWithAmountsAndRightsholdersByStatusFilter() {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             Collections.emptySet(), UsageStatusEnum.ELIGIBLE, null, null);
-        verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 4, USAGE_ID_1, USAGE_ID_2,
-            USAGE_ID_3, USAGE_ID_10);
+        verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 3, USAGE_ID_1, USAGE_ID_2,
+            USAGE_ID_3);
     }
 
     @Test
@@ -546,12 +545,9 @@ public class UsageRepositoryIntegrationTest {
 
     @Test
     public void testFindCountByDetailIdAndStatus() {
-        assertEquals(0, usageRepository.findCountByUsageIdAndStatus("d9ca07b5-8282-4a81-9b9d-e4480f529d34",
-            UsageStatusEnum.NEW));
-        assertEquals(1, usageRepository.findCountByUsageIdAndStatus("3ab5e80b-89c0-4d78-9675-54c7ab284450",
-            UsageStatusEnum.ELIGIBLE));
-        assertEquals(1, usageRepository.findCountByUsageIdAndStatus("a71a0544-128e-41c0-b6b0-cfbbea6d2182",
-            UsageStatusEnum.SENT_TO_LM));
+        assertEquals(0, usageRepository.findCountByUsageIdAndStatus(USAGE_ID_4, UsageStatusEnum.NEW));
+        assertEquals(1, usageRepository.findCountByUsageIdAndStatus(USAGE_ID_1, UsageStatusEnum.ELIGIBLE));
+        assertEquals(1, usageRepository.findCountByUsageIdAndStatus(USAGE_ID_5, UsageStatusEnum.SENT_TO_LM));
     }
 
     @Test
@@ -604,7 +600,7 @@ public class UsageRepositoryIntegrationTest {
         filter.setRhAccountNumbers(Collections.singleton(1000002475L));
         assertEquals(1, usageRepository.findCountForAudit(filter));
         List<UsageDto> usages = usageRepository.findForAudit(filter, new Pageable(0, 10), null);
-        verifyUsageDtos(usages, 1, USAGE_ID_4);
+        verifyUsageDtos(usages, 1, USAGE_ID_5);
     }
 
     @Test
@@ -998,18 +994,18 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testUpdateToNts() {
+    public void testUpdateToNtsEligible() {
         List<Usage> usages = usageRepository.findWithoutStandardNumberAndTitle();
         assertEquals(1, usages.size());
         Usage usage = usages.get(0);
         assertEquals(PRODUCT_FAMILY_FAS, usage.getProductFamily());
         assertEquals(UsageStatusEnum.NEW, usage.getStatus());
         usage.setProductFamily(FdaConstants.NTS_PRODUCT_FAMILY);
-        usage.setStatus(UsageStatusEnum.ELIGIBLE);
+        usage.setStatus(UsageStatusEnum.NTS_WITHDRAWN);
         usageRepository.updateToNtsEligible(usages);
         Usage actualUsage = usageRepository.findById(usage.getId());
         assertEquals(FdaConstants.NTS_PRODUCT_FAMILY, actualUsage.getProductFamily());
-        assertEquals(UsageStatusEnum.ELIGIBLE, actualUsage.getStatus());
+        assertEquals(UsageStatusEnum.NTS_WITHDRAWN, actualUsage.getStatus());
     }
 
     private void verifyFilterForTwoBatches(AuditFilter filter) {
@@ -1153,7 +1149,7 @@ public class UsageRepositoryIntegrationTest {
     private void verifyUsageDtos(List<UsageDto> usageDtos, int count, String... usageIds) {
         assertNotNull(usageDtos);
         assertEquals(count, usageDtos.size());
-        IntStream.range(0, count - 1).forEach(i -> assertEquals(usageIds[i], usageDtos.get(i).getId()));
+        IntStream.range(0, count).forEach(i -> assertEquals(usageIds[i], usageDtos.get(i).getId()));
     }
 
     private void verifyUsages(List<Usage> usages, int count, String... usageIds) {

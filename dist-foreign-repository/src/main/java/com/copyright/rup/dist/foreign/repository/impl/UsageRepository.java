@@ -432,7 +432,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     public void updateToNtsEligible(List<Usage> usages) {
         Objects.requireNonNull(usages);
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
-        parameters.put(STATUS_KEY, UsageStatusEnum.ELIGIBLE);
+        parameters.put(STATUS_KEY, UsageStatusEnum.NTS_WITHDRAWN);
         parameters.put(UPDATE_USER_KEY, StoredEntity.DEFAULT_USER);
         parameters.put("productFamily", FdaConstants.NTS_PRODUCT_FAMILY);
         usages.forEach(usage -> {

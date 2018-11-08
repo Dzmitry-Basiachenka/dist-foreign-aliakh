@@ -363,7 +363,7 @@ public interface IUsageRepository {
     void updateStatusAndWrWrkInstByTitle(List<Usage> usages);
 
     /**
-     * Updates status to {@link UsageStatusEnum#ELIGIBLE} and product family to NTS for each usage.
+     * Updates status to {@link UsageStatusEnum#NTS_WITHDRAWN} and product family to NTS for each usage.
      *
      * @param usages list of {@link Usage}s
      */
