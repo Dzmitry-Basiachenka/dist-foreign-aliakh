@@ -27,24 +27,30 @@ import java.math.BigDecimal;
 @JsonInclude(Include.NON_NULL)
 public class ExternalUsage {
 
-    @JsonProperty(value = "rh_account_number")
+    @JsonProperty("rh_account_number")
     @JsonSerialize(using = ToStringSerializer.class)
     private Long rhAccountNumber;
 
-    @JsonProperty(value = "product_family")
+    @JsonProperty("product_family")
     private String productFamily;
 
-    @JsonProperty(value = "detail_id")
+    @JsonProperty("detail_id")
     private String usageId;
 
-    @JsonProperty(value = "royalty_amount")
-    private BigDecimal royaltyAmount = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
+    @JsonProperty("royalty_amount")
+    private BigDecimal royaltyAmount;
 
-    @JsonProperty(value = "wr_wrk_inst")
+    @JsonProperty("service_fee_amount")
+    private BigDecimal serviceFeeAmount;
+
+    @JsonProperty("collected_amount")
+    private BigDecimal collectedAmount;
+
+    @JsonProperty("wr_wrk_inst")
     @JsonSerialize(using = ToStringSerializer.class)
     private Long wrWrkInst;
 
-    @JsonProperty(value = "work_title")
+    @JsonProperty("work_title")
     private String workTitle;
 
     /**
@@ -58,6 +64,8 @@ public class ExternalUsage {
         this.usageId = usage.getId();
         this.workTitle = usage.getSystemTitle();
         this.royaltyAmount = usage.getNetAmount().setScale(2, BigDecimal.ROUND_HALF_UP);
+        this.serviceFeeAmount = usage.getServiceFeeAmount().setScale(2, BigDecimal.ROUND_HALF_UP);
+        this.collectedAmount = usage.getGrossAmount().setScale(2, BigDecimal.ROUND_HALF_UP);
         this.wrWrkInst = usage.getWrWrkInst();
     }
 
@@ -93,6 +101,22 @@ public class ExternalUsage {
         this.royaltyAmount = royaltyAmount;
     }
 
+    public BigDecimal getServiceFeeAmount() {
+        return serviceFeeAmount;
+    }
+
+    public void setServiceFeeAmount(BigDecimal serviceFeeAmount) {
+        this.serviceFeeAmount = serviceFeeAmount;
+    }
+
+    public BigDecimal getCollectedAmount() {
+        return collectedAmount;
+    }
+
+    public void setCollectedAmount(BigDecimal collectedAmount) {
+        this.collectedAmount = collectedAmount;
+    }
+
     public Long getWrWrkInst() {
         return wrWrkInst;
     }
@@ -123,6 +147,8 @@ public class ExternalUsage {
             .append(productFamily, that.productFamily)
             .append(usageId, that.usageId)
             .append(royaltyAmount, that.royaltyAmount)
+            .append(serviceFeeAmount, that.serviceFeeAmount)
+            .append(collectedAmount, that.collectedAmount)
             .append(wrWrkInst, that.wrWrkInst)
             .append(workTitle, that.workTitle)
             .isEquals();
@@ -135,6 +161,8 @@ public class ExternalUsage {
             .append(productFamily)
             .append(usageId)
             .append(royaltyAmount)
+            .append(serviceFeeAmount)
+            .append(collectedAmount)
             .append(wrWrkInst)
             .append(workTitle)
             .toHashCode();
@@ -147,6 +175,8 @@ public class ExternalUsage {
             .append("productFamily", productFamily)
             .append("usageId", usageId)
             .append("royaltyAmount", royaltyAmount)
+            .append("serviceFeeAmount", serviceFeeAmount)
+            .append("collectedAmount", collectedAmount)
             .append("wrWrkInst", wrWrkInst)
             .append("workTitle", workTitle)
             .toString();

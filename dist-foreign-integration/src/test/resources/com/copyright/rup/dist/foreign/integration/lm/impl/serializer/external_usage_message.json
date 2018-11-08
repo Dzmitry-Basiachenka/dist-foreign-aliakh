@@ -4,6 +4,8 @@
     "product_family" : "FAS",
     "detail_id" : "5bd86764-d57b-443f-9891-adb57adb22fb",
     "royalty_amount" : 100.00,
+    "service_fee_amount" : 20.00,
+    "collected_amount" : 120.00,
     "wr_wrk_inst" : "123456789",
     "work_title" : "System title"
   }, {
@@ -11,6 +13,8 @@
     "product_family" : "FAS",
     "detail_id" : "59e217bf-8704-43a7-8272-9ca486ba21e3",
     "royalty_amount" : 100.00,
+    "service_fee_amount" : 20.00,
+    "collected_amount" : 120.00,
     "wr_wrk_inst" : "123456789",
     "work_title" : "System title"
   } ]
