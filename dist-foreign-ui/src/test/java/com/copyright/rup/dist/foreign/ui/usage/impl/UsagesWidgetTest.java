@@ -189,7 +189,7 @@ public class UsagesWidgetTest {
         assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.getSize()).andReturn(1).once();
         expect(controller.isProductFamilyAndStatusFiltersApplied()).andReturn(true).once();
-        expect(controller.isSigleProductFamilySelected()).andReturn(false).once();
+        expect(controller.isSingleProductFamilySelected()).andReturn(false).once();
         Windows.showNotificationWindow("Scenario cannot be created. Select only one product family at a time");
         expectLastCall().once();
         replay(controller, clickEvent, Windows.class);
@@ -211,7 +211,7 @@ public class UsagesWidgetTest {
         assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.getSize()).andReturn(1).once();
         expect(controller.isProductFamilyAndStatusFiltersApplied()).andReturn(true).once();
-        expect(controller.isSigleProductFamilySelected()).andReturn(true).once();
+        expect(controller.isSingleProductFamilySelected()).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.singletonList(1000000001L)).once();
         Windows.showNotificationWindow("Scenario cannot be created. The following rightsholder(s) are absent " +
             "in PRM: <i><b>[1000000001]</b></i>");
@@ -235,7 +235,7 @@ public class UsagesWidgetTest {
         assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.getSize()).andReturn(1).once();
         expect(controller.isProductFamilyAndStatusFiltersApplied()).andReturn(true).once();
-        expect(controller.isSigleProductFamilySelected()).andReturn(true).once();
+        expect(controller.isSingleProductFamilySelected()).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
         expect(controller.getSelectedProductFamily()).andReturn("FAS").once();
         expect(controller.getScenarioService()).andReturn(null).once();

@@ -34,6 +34,7 @@ import java.time.LocalDate;
  *
  * @author Mikalai Bezmen
  */
+// TODO add testOnConfirmButtonClicked
 public class CreateScenarioWindowTest {
 
     private static final String DATE =

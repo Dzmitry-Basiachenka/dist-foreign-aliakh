@@ -200,11 +200,9 @@ public interface IUsagesController extends IController<IUsagesWidget> {
     boolean isProductFamilyAndStatusFiltersApplied();
 
     /**
-     * @return {@code true} if product family filter contains single product family (except for NTS),
-     * {@code false} - otherwise.
+     * @return {@code true} if product family filter contains single product family, {@code false} - otherwise.
      */
-    //TODO {dbaraukova} remove check that product family is not NTS after implementing create NTS scenario logic
-    boolean isSigleProductFamilySelected();
+    boolean isSingleProductFamilySelected();
 
     /**
      * @return {@code true} if {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#WORK_NOT_FOUND}
