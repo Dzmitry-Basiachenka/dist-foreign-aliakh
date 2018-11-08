@@ -224,4 +224,21 @@ databaseChangeLog {
                     columnName: 'df_usage_batch_uid', columnDataType: 'VARCHAR(255)')
         }
     }
+
+    changeSet(id: '2018-11-06-00', author: 'Pavel Liakh <pliakh@copyright.com>') {
+        comment("B-46887 FDA: Make unmatched FAS details available for NTS additional fund pool: " +
+                "set NTS_WITHDRAWN status for historical NTS details")
+
+        update(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'status_ind', value: 'NTS_WITHDRAWN')
+            where "status_ind = 'ELIGIBLE' and product_family = 'NTS'"
+        }
+
+        rollback {
+            update(schemaName: dbAppsSchema, tableName: 'df_usage') {
+                column(name: 'status_ind', value: 'ELIGIBLE')
+                where "status_ind = 'NTS_WITHDRAWN' and product_family = 'NTS'"
+            }
+        }
+    }
 }
