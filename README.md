@@ -1,3 +1,7 @@
+3.1.21
+-
+* RDSC-633 Upgrade to RUP Common 6
+
 3.1.20
 -
 * B-45289 FDA: Report FAS split payments to RC: update service logic for sending usages to LM to send service fee and collected amounts
