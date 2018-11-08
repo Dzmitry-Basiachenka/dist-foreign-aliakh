@@ -53,6 +53,11 @@ public enum UsageStatusEnum {
     ELIGIBLE,
 
     /**
+     * Status for eligible for NTS usages.
+     */
+    NTS_WITHDRAWN,
+
+    /**
      * Status for usages which were added to scenario.
      */
     LOCKED,
