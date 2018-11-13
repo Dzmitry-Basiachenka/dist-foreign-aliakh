@@ -80,6 +80,38 @@ public class WorkMatchingService implements IWorkMatchingService {
 
     @Override
     @Transactional
+    public void matchByIdno(Usage usage) {
+        doMatchByIdno(usage);
+        if (UsageStatusEnum.WORK_FOUND == usage.getStatus()) {
+            usageRepository.updateStatusAndWrWrkInstByStandardNumberAndTitle(Collections.singletonList(usage));
+            auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
+                String.format("Wr Wrk Inst %s was found by standard number %s", usage.getWrWrkInst(),
+                    usage.getStandardNumber()));
+        } else {
+            List<Usage> usagesByStandardNumber =
+                usageRepository.findByStandardNumberAndStatus(usage.getStandardNumber(), UsageStatusEnum.NEW);
+            updateUsagesStatusAndWriteAudit(usagesByStandardNumber, UsageGroupEnum.STANDARD_NUMBER,
+                (usagesToUpdate) -> usageRepository.updateStatusAndWrWrkInstByStandardNumberAndTitle(usagesToUpdate));
+        }
+    }
+
+    @Override
+    @Transactional
+    public void matchByTitle(Usage usage) {
+        doMatchByTitle(usage);
+        if (UsageStatusEnum.WORK_FOUND == usage.getStatus()) {
+            usageRepository.updateStatusAndWrWrkInstByTitle(Collections.singletonList(usage));
+            auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
+                String.format("Wr Wrk Inst %s was found by title \"%s\"", usage.getWrWrkInst(), usage.getWorkTitle()));
+        } else {
+            List<Usage> usagesByTitle = usageRepository.findByTitleAndStatus(usage.getWorkTitle(), UsageStatusEnum.NEW);
+            updateUsagesStatusAndWriteAudit(usagesByTitle, UsageGroupEnum.TITLE,
+                (usagesToUpdate) -> usageRepository.updateStatusAndWrWrkInstByTitle(usagesToUpdate));
+        }
+    }
+
+    @Override
+    @Transactional
     public List<Usage> matchByTitle(List<Usage> usages) {
         LOGGER.info("Search works by Titles. Started. TitlesCount={}", usages.size());
         List<Usage> result = doMatchByTitle(usages);
@@ -115,6 +147,13 @@ public class WorkMatchingService implements IWorkMatchingService {
         usageRepository.update(usages);
     }
 
+    @Override
+    @Transactional
+    public void updateStatusForUsageWithoutStandardNumberAndTitle(Usage usage) {
+        updateUsagesStatusAndWriteAudit(Collections.singletonList(usage), UsageGroupEnum.SINGLE_USAGE,
+            (usagesToUpdate) -> usageRepository.update(usagesToUpdate));
+    }
+
     private List<Usage> doMatchByTitle(List<Usage> usages) {
         Set<String> titles = usages.stream()
             .map(Usage::getWorkTitle)
@@ -122,6 +161,15 @@ public class WorkMatchingService implements IWorkMatchingService {
         return CollectionUtils.isNotEmpty(titles)
             ? computeResultByTitles(usages, piIntegrationService.findWrWrkInstsByTitles(titles))
             : Collections.emptyList();
+    }
+
+    private void doMatchByTitle(Usage usage) {
+        Long wrWrkInst = piIntegrationService.findWrWrkInstByTitle(usage.getWorkTitle());
+        if (Objects.nonNull(wrWrkInst)) {
+            usage.setWrWrkInst(wrWrkInst);
+            usage.setSystemTitle(usage.getWorkTitle());
+            usage.setStatus(UsageStatusEnum.WORK_FOUND);
+        }
     }
 
     private List<Usage> doMatchByIdno(List<Usage> usages) {
@@ -135,6 +183,15 @@ public class WorkMatchingService implements IWorkMatchingService {
             }
         });
         return result;
+    }
+
+    private void doMatchByIdno(Usage usage) {
+        Work work = piIntegrationService.findWorkByIdnoAndTitle(usage.getStandardNumber(), usage.getWorkTitle());
+        if (Objects.nonNull(work) && Objects.nonNull(work.getWrWrkInst())) {
+            usage.setWrWrkInst(work.getWrWrkInst());
+            usage.setSystemTitle(work.getMainTitle());
+            usage.setStatus(UsageStatusEnum.WORK_FOUND);
+        }
     }
 
     private List<Usage> computeResultByTitles(List<Usage> usages, Map<String, Long> titleToWrWrkInstMap) {

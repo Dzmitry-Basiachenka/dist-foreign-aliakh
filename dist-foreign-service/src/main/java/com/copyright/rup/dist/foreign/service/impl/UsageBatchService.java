@@ -2,9 +2,11 @@ package com.copyright.rup.dist.foreign.service.impl;
 
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.integration.camel.IProducer;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
@@ -12,6 +14,7 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,6 +52,9 @@ public class UsageBatchService implements IUsageBatchService {
     private IUsageService usageService;
     @Autowired
     private IRightsholderService rightsholderService;
+    @Autowired
+    @Qualifier("df.service.workMatchingProducer")
+    private IProducer<Usage> workMatchingProducer;
 
     @Override
     public List<Integer> getFiscalYears() {
@@ -66,7 +72,7 @@ public class UsageBatchService implements IUsageBatchService {
     }
 
     @Override
-    @Transactional
+    // TODO {isuvorau} add transactional and find better approach to send messages on queue
     public int insertUsageBatch(UsageBatch usageBatch, Collection<Usage> usages) {
         String userName = RupContextUtils.getUserName();
         usageBatch.setId(RupPersistUtils.generateUuid());
@@ -82,6 +88,9 @@ public class UsageBatchService implements IUsageBatchService {
                 .map(usage -> usage.getRightsholder().getAccountNumber())
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet())));
+        usages.stream()
+            .filter(usage -> UsageStatusEnum.NEW == usage.getStatus())
+            .forEach(workMatchingProducer::send);
         return count;
     }
 

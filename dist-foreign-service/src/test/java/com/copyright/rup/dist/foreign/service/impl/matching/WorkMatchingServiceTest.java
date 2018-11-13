@@ -57,7 +57,7 @@ public class WorkMatchingServiceTest {
     }
 
     @Test
-    public void testMatchByTitle() {
+    public void testMatchByTitles() {
         String title1 = "The theological roots of Pentecostalism";
         String title2 = "Theological roots of Pentecostalism";
         Usage usage1 = buildUsage(null, title1);
@@ -80,6 +80,22 @@ public class WorkMatchingServiceTest {
             assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
             assertEquals(resultMap.get(usage.getWorkTitle()), usage.getWrWrkInst());
         });
+        verify(piIntegrationService, usageRepository, auditService);
+    }
+
+    @Test
+    public void testMatchByTitle() {
+        String title = "The theological roots of Pentecostalism";
+        Usage usage = buildUsage(null, title);
+        expect(piIntegrationService.findWrWrkInstByTitle(title)).andReturn(112930820L).once();
+        usageRepository.updateStatusAndWrWrkInstByTitle(Collections.singletonList(usage));
+        expectLastCall().once();
+        auditService.logAction(anyString(), eq(UsageActionTypeEnum.WORK_FOUND), anyString());
+        expectLastCall().once();
+        replay(piIntegrationService, usageRepository, auditService);
+        workMatchingService.matchByTitle(usage);
+        assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
+        assertEquals(112930820L, usage.getWrWrkInst(), 0);
         verify(piIntegrationService, usageRepository, auditService);
     }
 

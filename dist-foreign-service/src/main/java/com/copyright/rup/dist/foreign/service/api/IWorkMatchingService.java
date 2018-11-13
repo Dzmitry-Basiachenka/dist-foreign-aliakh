@@ -24,6 +24,13 @@ public interface IWorkMatchingService {
     List<Usage> matchByIdno(List<Usage> usages);
 
     /**
+     * Finds Wr Wrk Inst for given usage and matches result by standard number.
+     *
+     * @param usage {@link Usage} to be matched
+     */
+    void matchByIdno(Usage usage);
+
+    /**
      * Finds Wr Wrk Insts for given usages and matches result by work title.
      *
      * @param usages list of {@link Usage}s to be matched
@@ -32,9 +39,23 @@ public interface IWorkMatchingService {
     List<Usage> matchByTitle(List<Usage> usages);
 
     /**
+     * Finds Wr Wrk Inst for given usage and matches result by work title.
+     *
+     * @param usage {@link Usage} to be matched
+     */
+    void matchByTitle(Usage usage);
+
+    /**
      * Updates {@link Usage}s status and Wr Wrk Inst.
      *
      * @param usages list of {@link Usage}s with not blank standard number and title
      */
     void updateStatusForUsagesWithNoStandardNumberAndTitle(List<Usage> usages);
+
+    /**
+     * Updates {@link Usage} status and Wr Wrk Inst.
+     *
+     * @param usage {@link Usage} to update
+     */
+    void updateStatusForUsageWithoutStandardNumberAndTitle(Usage usage);
 }

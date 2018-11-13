@@ -26,13 +26,25 @@
         <property name="dataSource" ref="dfDataSource"/>
     </bean>
 
+    <bean id="df.service.workMatchingProducer"
+          class="com.copyright.rup.dist.foreign.service.impl.matching.WorkMatchingProducer">
+        <property name="endPoint" value="direct:df.service.matchingUsage"/>
+    </bean>
+
     <context:component-scan base-package="com.copyright.rup.dist.foreign.service"/>
 
     <camelContext id="df.service.camelContext" xmlns="http://camel.apache.org/schema/spring">
         <contextScan/>
-        <template id="df.service.consumerTemplate"/>
+        <template id="df.service.producerTemplate"/>
 
         <endpoint id="df.service.lm.detail.paid.endpoint" uri="$RUP{dist.foreign.service.lm.detail.paid.endpoint}"/>
+
+        <endpoint id="df.service.matching.usage.endpoint" uri="direct:df.service.matchingUsage"/>
+        <endpoint id="df.service.matching.endpoint" uri="$RUP{dist.foreign.service.matching.endpoint}"/>
+
+        <redeliveryPolicyProfile id="defaultRedeliveryPolicy"
+                                 maximumRedeliveries="10"
+                                 redeliveryDelay="6000"/> <!-- 1 min -->
 
         <route>
             <from ref="df.service.lm.detail.paid.endpoint"/>
@@ -47,6 +59,22 @@
                     <bean ref="df.service.paidUsageConsumer"/>
                 </when>
             </choice>
+        </route>
+
+        <route>
+            <from ref="df.service.matching.usage.endpoint"/>
+            <marshal>
+                <custom ref="df.service.matchingMarshaller"/>
+            </marshal>
+            <to ref="df.service.matching.endpoint"/>
+        </route>
+
+        <route>
+            <from ref="df.service.matching.endpoint"/>
+            <unmarshal>
+                <custom ref="df.service.matchingUnmarshaller"/>
+            </unmarshal>
+            <bean ref="df.service.workMatchingConsumer"/>
         </route>
     </camelContext>
 </beans>

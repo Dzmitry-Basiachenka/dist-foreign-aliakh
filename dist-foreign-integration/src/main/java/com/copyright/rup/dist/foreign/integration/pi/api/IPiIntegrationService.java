@@ -37,4 +37,15 @@ public interface IPiIntegrationService {
      * @return map with titles as keys and Wr Wrk Insts as values
      */
     Map<String, Long> findWrWrkInstsByTitles(Set<String> titles);
+
+    /**
+     * Finds Wr Wrk Inst for given title.
+     * If work for particular title is found and they uniquely corresponds to each other, work will be returned.
+     * If work for particular title is not found or multiple standard numbers correspond to one Wr Wrk Inst -
+     * return {@code null}.
+     *
+     * @param title title to search work by
+     * @return wr wrk inst value
+     */
+    Long findWrWrkInstByTitle(String title);
 }

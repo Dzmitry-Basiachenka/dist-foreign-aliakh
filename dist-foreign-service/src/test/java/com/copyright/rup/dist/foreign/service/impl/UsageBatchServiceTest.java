@@ -10,16 +10,20 @@ import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.replayAll;
 import static org.powermock.api.easymock.PowerMock.verify;
+import static org.powermock.api.easymock.PowerMock.verifyAll;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.impl.matching.WorkMatchingProducer;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -63,6 +67,7 @@ public class UsageBatchServiceTest {
     private IRightsholderService rightsholderService;
     private UsageBatchService usageBatchService;
     private ExecutorService executorService;
+    private WorkMatchingProducer workMatchingProducer;
 
     @Before
     public void setUp() {
@@ -70,11 +75,13 @@ public class UsageBatchServiceTest {
         usageService = createMock(IUsageService.class);
         rightsholderService = createMock(IRightsholderService.class);
         executorService = createMock(ExecutorService.class);
+        workMatchingProducer = createMock(WorkMatchingProducer.class);
         usageBatchService = new UsageBatchService();
         Whitebox.setInternalState(usageBatchService, "usageBatchRepository", usageBatchRepository);
         Whitebox.setInternalState(usageBatchService, "usageService", usageService);
         Whitebox.setInternalState(usageBatchService, "rightsholderService", rightsholderService);
         Whitebox.setInternalState(usageBatchService, "executorService", executorService);
+        Whitebox.setInternalState(usageBatchService, "workMatchingProducer", workMatchingProducer);
     }
 
     @Test
@@ -114,7 +121,7 @@ public class UsageBatchServiceTest {
     }
 
     @Test
-    public void testInsertUsageBatch() throws Exception {
+    public void testInsertUsageBatch() {
         mockStatic(RupContextUtils.class);
         Capture<UsageBatch> captureUsageBatch = new Capture<>();
         Capture<Runnable> runnableCapture = new Capture<>();
@@ -125,6 +132,7 @@ public class UsageBatchServiceTest {
         usage1.setRightsholder(buildRightsholder(1000001534L));
         Usage usage2 = new Usage();
         usage2.setRightsholder(buildRightsholder(1000009522L));
+        usage2.setStatus(UsageStatusEnum.NEW);
         List<Usage> usages = Lists.newArrayList(usage1, usage2);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         usageBatchRepository.insert(capture(captureUsageBatch));
@@ -136,14 +144,16 @@ public class UsageBatchServiceTest {
         executorService.execute(capture(runnableCapture));
         expectLastCall().once();
         expect(usageService.insertUsages(usageBatch, usages)).andReturn(2).once();
-        replay(usageBatchRepository, usageService, rightsholderService, RupContextUtils.class, executorService);
+        workMatchingProducer.send(usage2);
+        expectLastCall().once();
+        replayAll();
         assertEquals(2, usageBatchService.insertUsageBatch(usageBatch, usages));
         UsageBatch insertedUsageBatch = captureUsageBatch.getValue();
         assertNotNull(insertedUsageBatch);
         assertEquals(USER_NAME, insertedUsageBatch.getUpdateUser());
         assertEquals(USER_NAME, insertedUsageBatch.getCreateUser());
         assertNotNull(runnableCapture.getValue());
-        verify(usageBatchRepository, usageService, rightsholderService, RupContextUtils.class, executorService);
+        verifyAll();
     }
 
     @Test
