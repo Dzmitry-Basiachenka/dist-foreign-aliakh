@@ -42,8 +42,8 @@ databaseChangeLog {
             column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '6000')
             column(name: 'gross_amount', value: '1000.00')
-            column(name: 'net_amount', value: '160.00')
-            column(name: 'service_fee_amount', value: '840.00')
+            column(name: 'net_amount', value: '840.00')
+            column(name: 'service_fee_amount', value: '160.00')
             column(name: 'service_fee', value: '0.16000')
         }
 
@@ -91,7 +91,7 @@ databaseChangeLog {
             column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '6000')
             column(name: 'gross_amount', value: '2000.00')
-            column(name: 'net_amount', value: '160.00')
+            column(name: 'net_amount', value: '1680.00')
             column(name: 'service_fee_amount', value: '320.00')
             column(name: 'service_fee', value: '0.16000')
         }

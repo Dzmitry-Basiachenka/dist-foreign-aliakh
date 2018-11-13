@@ -10,7 +10,10 @@
       "check_number": "578945",
       "check_date": 1484456400000,
       "period_end_date": 1484542800000,
-      "lm_detail_id": "c3a24455-a92b-4572-b6b5-628a66572104"
+      "lm_detail_id": "c3a24455-a92b-4572-b6b5-628a66572104",
+      "royalty_amount": 1680.00,
+      "service_fee_amount": 320.00,
+      "collected_amount": 2000.00
     }
   ]
 }

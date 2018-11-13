@@ -279,6 +279,9 @@ public class UsageArchiveRepositoryIntegrationTest {
         Rightsholder payee = new Rightsholder();
         payee.setAccountNumber(scenarioPayee);
         paidUsage.setPayee(payee);
+        paidUsage.setNetAmount(new BigDecimal("80.0000000000"));
+        paidUsage.setServiceFeeAmount(new BigDecimal("12.8000000000"));
+        paidUsage.setGrossAmount(new BigDecimal("92.8000000000"));
         assertUsagePaidInformation(paidUsage, scenarioId, scenarioPayee, UsageStatusEnum.SENT_TO_LM);
         payee.setAccountNumber(1000005413L);
         paidUsage.setCheckNumber("578945");
@@ -289,6 +292,9 @@ public class UsageArchiveRepositoryIntegrationTest {
         paidUsage.setPeriodEndDate(CommonDateUtils.getOffsetDateTime(PUBLICATION_DATE));
         paidUsage.setStatus(UsageStatusEnum.PAID);
         paidUsage.setLmDetailId(LM_DETAIL_ID);
+        paidUsage.setNetAmount(new BigDecimal("40.0000000000"));
+        paidUsage.setServiceFeeAmount(new BigDecimal("6.4000000000"));
+        paidUsage.setGrossAmount(new BigDecimal("46.4000000000"));
         usageArchiveRepository.updatePaidInfo(paidUsage);
         assertUsagePaidInformation(paidUsage, scenarioId, scenarioPayee, UsageStatusEnum.PAID);
     }
@@ -391,6 +397,9 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertEquals(expectedPaidUsage.getDistributionDate(), actualPaidUsage.getDistributionDate());
         assertEquals(expectedPaidUsage.getPeriodEndDate(), actualPaidUsage.getPeriodEndDate());
         assertEquals(expectedPaidUsage.getLmDetailId(), actualPaidUsage.getLmDetailId());
+        assertEquals(expectedPaidUsage.getNetAmount(), actualPaidUsage.getNetAmount());
+        assertEquals(expectedPaidUsage.getServiceFeeAmount(), actualPaidUsage.getServiceFeeAmount());
+        assertEquals(expectedPaidUsage.getGrossAmount(), actualPaidUsage.getGrossAmount());
     }
 
     private void assertFindByScenarioIdAndRhSearch(String searchValue, int expectedSize) {
@@ -428,6 +437,10 @@ public class UsageArchiveRepositoryIntegrationTest {
         paidUsage.setPeriodEndDate(CommonDateUtils.getOffsetDateTime(PUBLICATION_DATE));
         paidUsage.setStatus(UsageStatusEnum.PAID);
         paidUsage.setLmDetailId(LM_DETAIL_ID);
+        paidUsage.setNetAmount(new BigDecimal("50.0000000000"));
+        paidUsage.setServiceFeeAmount(new BigDecimal("16.0000000000"));
+        paidUsage.setGrossAmount(new BigDecimal("66.0000000000"));
+        paidUsage.setServiceFee(new BigDecimal("0.32000"));
         return paidUsage;
     }
 

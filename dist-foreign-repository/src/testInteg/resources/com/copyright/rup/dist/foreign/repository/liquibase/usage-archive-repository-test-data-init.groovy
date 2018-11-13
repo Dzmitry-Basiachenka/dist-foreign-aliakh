@@ -177,7 +177,6 @@ databaseChangeLog {
             column(name: 'service_fee', value: '0.32000')
         }
 
-        //testFindIdByDetailId
         //testUpdatePaidInfo
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
             column(name: 'df_scenario_uid', value: '98caae9b-2f20-4c6d-b2af-3190a1115c48')
@@ -192,7 +191,7 @@ databaseChangeLog {
             column(name: 'rro_account_number', value: '2000017010')
             column(name: 'payment_date', value: '2021-02-12')
             column(name: 'fiscal_year', value: '2020')
-            column(name: 'gross_amount', value: '1000.00')
+            column(name: 'gross_amount', value: '185.60')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
@@ -216,9 +215,9 @@ databaseChangeLog {
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '3000')
-            column(name: 'gross_amount', value: '500.00')
+            column(name: 'gross_amount', value: '92.80')
             column(name: 'net_amount', value: '80.00')
-            column(name: 'service_fee_amount', value: '420.00')
+            column(name: 'service_fee_amount', value: '12.80')
             column(name: 'service_fee', value: '0.16000')
         }
 
@@ -243,9 +242,9 @@ databaseChangeLog {
             column(name: 'author', value: 'Philippe de Mézières')
             column(name: 'number_of_copies', value: '100')
             column(name: 'reported_value', value: '3000')
-            column(name: 'gross_amount', value: '500.00')
+            column(name: 'gross_amount', value: '92.80')
             column(name: 'net_amount', value: '80.00')
-            column(name: 'service_fee_amount', value: '420.00')
+            column(name: 'service_fee_amount', value: '12.80')
             column(name: 'service_fee', value: '0.16000')
         }
 

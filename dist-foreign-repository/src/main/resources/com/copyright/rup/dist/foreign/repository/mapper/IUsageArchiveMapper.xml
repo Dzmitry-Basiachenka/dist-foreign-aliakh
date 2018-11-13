@@ -185,6 +185,9 @@
             distribution_date = #{distributionDate},
             period_end_date = #{periodEndDate},
             lm_detail_id = #{lmDetailId},
+            net_amount = #{netAmount},
+            service_fee_amount = #{serviceFeeAmount},
+            gross_amount = #{grossAmount},
             <include refid="StoredEntityMapper.update"/>
         where df_usage_archive_uid = #{id}
     </update>
