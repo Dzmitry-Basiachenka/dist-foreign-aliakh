@@ -10,7 +10,10 @@
       "check_number": "578940",
       "check_date": 1523318400000,
       "period_end_date": 1523491200000,
-      "lm_detail_id": "d40b2162-d062-4161-8d64-7e869d45da4a"
+      "lm_detail_id": "d40b2162-d062-4161-8d64-7e869d45da4a",
+      "royalty_amount": 35.82,
+      "service_fee_amount": 3.98,
+      "collected_amount": 39.80
     },
     {
       "rh_account_number": "2000073957",
@@ -22,7 +25,10 @@
       "check_number": "578941",
       "check_date": 1523318400000,
       "period_end_date": 1523491200000,
-      "lm_detail_id": "75d22d2c-d9f0-4486-b17e-6e03ccda6bf9"
+      "lm_detail_id": "75d22d2c-d9f0-4486-b17e-6e03ccda6bf9",
+      "royalty_amount": 27.06,
+      "service_fee_amount": 12.74,
+      "collected_amount": 39.80
     },
     {
       "rh_account_number": "7001508482",
@@ -34,7 +40,10 @@
       "check_number": "578942",
       "check_date": 1523318400000,
       "period_end_date": 1523491200000,
-      "lm_detail_id": "f9233aec-fa18-4973-a97c-5b550474c2fd"
+      "lm_detail_id": "f9233aec-fa18-4973-a97c-5b550474c2fd",
+      "royalty_amount": 27.06,
+      "service_fee_amount": 12.74,
+      "collected_amount": 39.80
     },
     {
       "rh_account_number": "1000024950",
@@ -46,7 +55,10 @@
       "check_number": "578943",
       "check_date": 1523318400000,
       "period_end_date": 1523491200000,
-      "lm_detail_id": "b771be06-0206-4e03-9e9a-740c5714bdae"
+      "lm_detail_id": "b771be06-0206-4e03-9e9a-740c5714bdae",
+      "royalty_amount": 27.06,
+      "service_fee_amount": 12.74,
+      "collected_amount": 39.80
     },
     {
       "rh_account_number": "2000139286",
@@ -58,7 +70,10 @@
       "check_number": "578944",
       "check_date": 1523318400000,
       "period_end_date": 1523491200000,
-      "lm_detail_id": "1cb528e4-9712-4a2a-b456-9eb4316799d4"
+      "lm_detail_id": "1cb528e4-9712-4a2a-b456-9eb4316799d4",
+      "royalty_amount": 35.82,
+      "service_fee_amount": 3.98,
+      "collected_amount": 39.80
     },
     {
       "rh_account_number": "2000139286",
@@ -70,7 +85,10 @@
       "check_number": "578944",
       "check_date": 1523318400000,
       "period_end_date": 1523491200000,
-      "lm_detail_id": "c6a8a6d4-952c-43e2-9f9d-f12212c95fd8"
+      "lm_detail_id": "c6a8a6d4-952c-43e2-9f9d-f12212c95fd8",
+      "royalty_amount": 68.00,
+      "service_fee_amount": 32.00,
+      "collected_amount": 100.00
     }
   ]
 }
