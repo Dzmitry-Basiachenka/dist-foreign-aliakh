@@ -26,6 +26,8 @@ public class PaidUsage extends Usage {
     private OffsetDateTime distributionDate;
     private OffsetDateTime periodEndDate;
     private String lmDetailId;
+    private Boolean splitParentFlag;
+    private Boolean postDistributionFlag;
 
     public Long getRroAccountNumber() {
         return rroAccountNumber;
@@ -91,6 +93,22 @@ public class PaidUsage extends Usage {
         this.lmDetailId = lmDetailId;
     }
 
+    public Boolean getSplitParentFlag() {
+        return splitParentFlag;
+    }
+
+    public void setSplitParentFlag(Boolean splitParentFlag) {
+        this.splitParentFlag = splitParentFlag;
+    }
+
+    public Boolean getPostDistributionFlag() {
+        return postDistributionFlag;
+    }
+
+    public void setPostDistributionFlag(Boolean postDistributionFlag) {
+        this.postDistributionFlag = postDistributionFlag;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -110,6 +128,8 @@ public class PaidUsage extends Usage {
             .append(this.distributionDate, that.distributionDate)
             .append(this.periodEndDate, that.periodEndDate)
             .append(this.lmDetailId, that.lmDetailId)
+            .append(this.splitParentFlag, that.splitParentFlag)
+            .append(this.postDistributionFlag, that.postDistributionFlag)
             .isEquals();
     }
 
@@ -125,6 +145,8 @@ public class PaidUsage extends Usage {
             .append(distributionDate)
             .append(periodEndDate)
             .append(lmDetailId)
+            .append(splitParentFlag)
+            .append(postDistributionFlag)
             .toHashCode();
     }
 
@@ -140,6 +162,8 @@ public class PaidUsage extends Usage {
             .append("distributionDate", distributionDate)
             .append("periodEndDate", periodEndDate)
             .append("lmDetailId", lmDetailId)
+            .append("splitParentFlag", splitParentFlag)
+            .append("postDistributionFlag", postDistributionFlag)
             .toString();
     }
 }

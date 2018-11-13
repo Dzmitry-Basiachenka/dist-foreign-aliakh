@@ -1,14 +1,13 @@
 package com.copyright.rup.dist.foreign.service.impl.usage.paid;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
-
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
 
@@ -16,6 +15,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -66,6 +66,11 @@ public class PaidUsageDeserializerTest {
             assertEquals(OffsetDateTime.parse("2017-01-16T00:00:00-05:00").toInstant(),
                 usage.getPeriodEndDate().toInstant());
             assertEquals("47ab477a-7007-4d78-ba39-6137474a47e3", usage.getLmDetailId());
+            assertEquals(new BigDecimal("100.0"), usage.getNetAmount());
+            assertEquals(new BigDecimal("16.0"), usage.getServiceFeeAmount());
+            assertEquals(new BigDecimal("116.0"), usage.getGrossAmount());
+            assertTrue(usage.getSplitParentFlag());
+            assertFalse(usage.getPostDistributionFlag());
         } catch (IOException e) {
             fail();
         }

@@ -60,6 +60,11 @@ public class PaidUsageDeserializer extends JsonDeserializer<List<PaidUsage>> {
         usage.setDistributionDate(JsonUtils.getOffsetDateTime(jsonNode.get("distribution_date")));
         usage.setPeriodEndDate(JsonUtils.getOffsetDateTime(jsonNode.get("period_end_date")));
         usage.setLmDetailId(JsonUtils.getStringValue(jsonNode.get("lm_detail_id")));
+        usage.setNetAmount(JsonUtils.getBigDecimalValue(jsonNode.get("royalty_amount")));
+        usage.setServiceFeeAmount(JsonUtils.getBigDecimalValue(jsonNode.get("service_fee_amount")));
+        usage.setGrossAmount(JsonUtils.getBigDecimalValue(jsonNode.get("collected_amount")));
+        usage.setSplitParentFlag(JsonUtils.getBooleanValue(jsonNode.get("split_parent_flag")));
+        usage.setPostDistributionFlag(JsonUtils.getBooleanValue(jsonNode.get("post_distribution_flag")));
         return usage;
     }
 }
