@@ -1,3 +1,10 @@
+3.1.22
+-
+* B-45289 FDA: Report FAS split payments to RC: adjust service logic for consuming paid data with splits information from LM
+* B-45289 FDA: Report FAS split payments to RC: adjust updating paid usages functionality
+* B-46887 FDA: Make unmatched FAS details available for NTS additional fund pool: fix comments in CR-DIST-FOREIGN-75
+* B-47643 Tech Debt: FDA: update dist-common to 21.4.+
+
 3.1.21
 -
 * RDSC-633 Upgrade to RUP Common 6
