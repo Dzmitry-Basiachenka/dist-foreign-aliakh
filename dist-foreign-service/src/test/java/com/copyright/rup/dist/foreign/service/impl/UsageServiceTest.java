@@ -444,6 +444,7 @@ public class UsageServiceTest {
         paidUsage.setCheckNumber("578945");
         paidUsage.setCccEventId("53256");
         paidUsage.setDistributionName("FDA March 17");
+        paidUsage.setPostDistribution(true);
         Usage archivedPaidUsage = new Usage();
         archivedPaidUsage.setId(USAGE_ID_1);
         archivedPaidUsage.setScenarioId("scenario id");

@@ -330,7 +330,7 @@ public class UsageService implements IUsageService {
         paidUsages.forEach(paidUsage -> {
             String paidUsageId = paidUsage.getId();
             if (Objects.nonNull(usageIdToUsageMap.get(paidUsageId))) {
-                if (isPostDistributionUsage(paidUsage, usageIdToUsageMap)) {
+                if (paidUsage.isPostDistribution() && Objects.isNull(paidUsage.getSplitParentFlag())) {
                     PaidUsage postDistributionUsage =
                         buildPostDistributionUsage(usageIdToUsageMap.get(paidUsageId), paidUsage);
                     usageArchiveRepository.insertPaid(postDistributionUsage);
@@ -437,10 +437,6 @@ public class UsageService implements IUsageService {
         }
     }
 
-    private boolean isPostDistributionUsage(PaidUsage paidUsage, Map<String, Usage> usageIdToUsageMap) {
-        return UsageStatusEnum.SENT_TO_LM != usageIdToUsageMap.get(paidUsage.getId()).getStatus();
-    }
-
     private PaidUsage buildPostDistributionUsage(Usage originalUsage, PaidUsage paidUsage) {
         PaidUsage postDistributionUsage = new PaidUsage();
         postDistributionUsage.setId(RupPersistUtils.generateUuid());
@@ -457,10 +453,10 @@ public class UsageService implements IUsageService {
         postDistributionUsage.setAuthor(originalUsage.getAuthor());
         postDistributionUsage.setNumberOfCopies(originalUsage.getNumberOfCopies());
         postDistributionUsage.setReportedValue(originalUsage.getReportedValue());
-        postDistributionUsage.setNetAmount(originalUsage.getNetAmount());
+        postDistributionUsage.setNetAmount(paidUsage.getNetAmount());
         postDistributionUsage.setServiceFee(originalUsage.getServiceFee());
-        postDistributionUsage.setServiceFeeAmount(originalUsage.getServiceFeeAmount());
-        postDistributionUsage.setGrossAmount(originalUsage.getGrossAmount());
+        postDistributionUsage.setServiceFeeAmount(paidUsage.getServiceFeeAmount());
+        postDistributionUsage.setGrossAmount(paidUsage.getGrossAmount());
         postDistributionUsage.setRhParticipating(originalUsage.isRhParticipating());
         postDistributionUsage.setProductFamily(originalUsage.getProductFamily());
         postDistributionUsage.setSystemTitle(originalUsage.getSystemTitle());

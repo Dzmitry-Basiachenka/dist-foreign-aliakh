@@ -94,7 +94,7 @@
       "royalty_amount": 68.00,
       "service_fee_amount": 32.00,
       "collected_amount": 100.00,
-      "post_distribution_flag": false
+      "post_distribution_flag": true
     }
   ]
 }
