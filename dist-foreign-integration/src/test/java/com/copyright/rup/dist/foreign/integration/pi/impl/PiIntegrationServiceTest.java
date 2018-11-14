@@ -36,6 +36,7 @@ import java.util.Set;
  *
  * @author Aliaksandr Radkevich
  */
+// TODO {isuvorau} update test after removing redundant logic from service
 public class PiIntegrationServiceTest {
 
     private static final String OCULAR_TITLE = "Ocular Tissue Culture";
