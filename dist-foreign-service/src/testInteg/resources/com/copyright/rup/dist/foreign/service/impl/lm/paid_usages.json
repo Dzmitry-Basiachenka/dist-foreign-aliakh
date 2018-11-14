@@ -13,7 +13,8 @@
       "lm_detail_id": "a1bd3d85-f130-45ad-be9b-dd4344668b16",
       "royalty_amount": 840.00,
       "service_fee_amount": 160.00,
-      "collected_amount": 1000.00
+      "collected_amount": 1000.00,
+      "post_distribution_flag": false
     },
     {
       "rh_account_number": "1000002859",
@@ -28,7 +29,8 @@
       "lm_detail_id": "c3a24455-a92b-4572-b6b5-628a66572104",
       "royalty_amount": 1680.00,
       "service_fee_amount": 320.00,
-      "collected_amount": 2000.00
+      "collected_amount": 2000.00,
+      "post_distribution_flag": false
     },
     {
       "rh_account_number": "1000002859",
@@ -43,7 +45,8 @@
       "lm_detail_id": "b65c936c-c3d7-4fa4-95cf-15615b3a7999",
       "royalty_amount": 1680.00,
       "service_fee_amount": 320.00,
-      "collected_amount": 2000.00
+      "collected_amount": 2000.00,
+      "post_distribution_flag": false
     }
   ]
 }

@@ -13,7 +13,8 @@
       "lm_detail_id": "c3a24455-a92b-4572-b6b5-628a66572104",
       "royalty_amount": 1680.00,
       "service_fee_amount": 320.00,
-      "collected_amount": 2000.00
+      "collected_amount": 2000.00,
+      "post_distribution_flag": true
     }
   ]
 }
