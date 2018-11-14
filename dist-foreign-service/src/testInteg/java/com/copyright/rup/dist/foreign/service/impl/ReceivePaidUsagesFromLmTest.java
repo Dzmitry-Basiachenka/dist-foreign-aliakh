@@ -58,7 +58,7 @@ public class ReceivePaidUsagesFromLmTest {
         int paidUsagesCount = usageArchiveRepository.findPaidIds().size();
         expectReceivePaidUsages("lm/paid_usages_fas.json");
         assertEquals(1 + paidUsagesCount, usageArchiveRepository.findPaidIds().size());
-        assertPaidUsage(buildPaidUsage("a1bd3d85-f130-45ad-be9b-dd4344668b16"));
+        assertPaidUsage(buildPaidUsage("a1bd3d85-f130-45ad-be9b-dd4344668b16", 1000009372L));
     }
 
     @Test
@@ -69,7 +69,7 @@ public class ReceivePaidUsagesFromLmTest {
         assertEquals(1 + paidUsagesCount, usageArchiveRepository.findPaidIds().size());
         List<String> paidUsageIds = usageArchiveRepository.findPaidIds();
         assertFalse(paidUsageIds.contains(predistributionPaidUsageId));
-        assertPaidUsage(buildPaidUsage("c3a24455-a92b-4572-b6b5-628a66572104"));
+        assertPaidUsage(buildPaidUsage("c3a24455-a92b-4572-b6b5-628a66572104", 1000002859L));
     }
 
     @Test
@@ -82,8 +82,8 @@ public class ReceivePaidUsagesFromLmTest {
         int paidUsagesCount = usageArchiveRepository.findPaidIds().size();
         expectReceivePaidUsages("lm/paid_usages.json");
         assertEquals(2 + paidUsagesCount, usageArchiveRepository.findPaidIds().size());
-        assertPaidUsage(buildPaidUsage("a1bd3d85-f130-45ad-be9b-dd4344668b16"));
-        assertPaidUsage(buildPaidUsage("c3a24455-a92b-4572-b6b5-628a66572104"));
+        assertPaidUsage(buildPaidUsage("a1bd3d85-f130-45ad-be9b-dd4344668b16", 1000002859L));
+        assertPaidUsage(buildPaidUsage("c3a24455-a92b-4572-b6b5-628a66572104", 1000002859L));
         assertFalse(usageArchiveRepository.findPaidIds().contains(predistributionPaidUsageId));
     }
 
@@ -115,9 +115,9 @@ public class ReceivePaidUsagesFromLmTest {
         assertEquals(expectedPaidUsage.getPeriodEndDate(), actualPaidUsage.getPeriodEndDate());
     }
 
-    private PaidUsage buildPaidUsage(String lmDetailId) {
+    private PaidUsage buildPaidUsage(String lmDetailId, Long rhAccountNumber) {
         PaidUsage paidUsage = new PaidUsage();
-        paidUsage.getRightsholder().setAccountNumber(1000002859L);
+        paidUsage.getRightsholder().setAccountNumber(rhAccountNumber);
         paidUsage.getPayee().setAccountNumber(1000010022L);
         paidUsage.setDistributionName("FDA March 17");
         paidUsage.setDistributionDate(OffsetDateTime.parse("2017-01-14T00:00-05:00"));

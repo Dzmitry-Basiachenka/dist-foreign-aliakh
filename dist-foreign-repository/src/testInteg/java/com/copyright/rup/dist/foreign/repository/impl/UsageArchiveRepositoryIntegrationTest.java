@@ -273,17 +273,21 @@ public class UsageArchiveRepositoryIntegrationTest {
     @Test
     public void testUpdatePaidInfo() {
         String scenarioId = "98caae9b-2f20-4c6d-b2af-3190a1115c48";
-        Long scenarioPayee = 1000002859L;
+        Long oldAccountNumber = 1000002859L;
         PaidUsage paidUsage = new PaidUsage();
         paidUsage.setId("7241b7e0-6ab8-4483-896d-fd485c574293");
         Rightsholder payee = new Rightsholder();
-        payee.setAccountNumber(scenarioPayee);
+        payee.setAccountNumber(oldAccountNumber);
         paidUsage.setPayee(payee);
+        Rightsholder rightsholder = new Rightsholder();
+        rightsholder.setAccountNumber(oldAccountNumber);
+        paidUsage.setRightsholder(rightsholder);
         paidUsage.setNetAmount(new BigDecimal("80.0000000000"));
         paidUsage.setServiceFeeAmount(new BigDecimal("12.8000000000"));
         paidUsage.setGrossAmount(new BigDecimal("92.8000000000"));
-        assertUsagePaidInformation(paidUsage, scenarioId, scenarioPayee, UsageStatusEnum.SENT_TO_LM);
+        assertUsagePaidInformation(paidUsage, scenarioId, oldAccountNumber, UsageStatusEnum.SENT_TO_LM);
         payee.setAccountNumber(1000005413L);
+        rightsholder.setAccountNumber(1000009255L);
         paidUsage.setCheckNumber("578945");
         paidUsage.setCheckDate(PAID_DATE);
         paidUsage.setCccEventId("53256");
@@ -296,7 +300,7 @@ public class UsageArchiveRepositoryIntegrationTest {
         paidUsage.setServiceFeeAmount(new BigDecimal("6.4000000000"));
         paidUsage.setGrossAmount(new BigDecimal("46.4000000000"));
         usageArchiveRepository.updatePaidInfo(paidUsage);
-        assertUsagePaidInformation(paidUsage, scenarioId, scenarioPayee, UsageStatusEnum.PAID);
+        assertUsagePaidInformation(paidUsage, scenarioId, 1000009255L, UsageStatusEnum.PAID);
     }
 
     @Test
@@ -385,6 +389,7 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertEquals(1, usageDtos.size());
         UsageDto usageDto = usageDtos.get(0);
         assertEquals(expectedPaidUsage.getPayee().getAccountNumber(), usageDto.getPayeeAccountNumber());
+        assertEquals(expectedPaidUsage.getRightsholder().getAccountNumber(), usageDto.getRhAccountNumber());
         assertEquals(status, usageDto.getStatus());
     }
 

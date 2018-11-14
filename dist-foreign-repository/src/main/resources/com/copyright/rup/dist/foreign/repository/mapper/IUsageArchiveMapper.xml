@@ -176,6 +176,7 @@
     <update id="updatePaidInfo" parameterType="PaidUsage">
         update ${schema}.df_usage_archive
         set
+            rh_account_number = #{rightsholder.accountNumber},
             payee_account_number = #{payee.accountNumber},
             check_number = #{checkNumber},
             check_date = #{checkDate},
