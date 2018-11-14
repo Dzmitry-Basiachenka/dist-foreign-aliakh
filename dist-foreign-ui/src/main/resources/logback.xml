@@ -1,119 +1,38 @@
 <configuration>
 
-    <!-- STANDARD-VERBATIM: Include the standard configuration. -->
-    <include resource="com/copyright/rup/common/logging/logback-webapp.xml"/>
-
-    <include resource="com/copyright/rup/dist/foreign/ui/logback-dist-foreign-ui.xml"/>
-    <include resource="com/copyright/rup/dist/foreign/ui/logback-dist-foreign-ui-performance.xml"/>
-
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
-            <evaluator>
-                <expression>return level <![CDATA[ >= ]]> WARN ||
-                    (logger.startsWith("com.copyright.rup.dist.foreign.ui") <![CDATA[ && ]]> level <![CDATA[ >= ]]> INFO
-                    );
-                </expression>
-            </evaluator>
-            <OnMismatch>DENY</OnMismatch>
-            <OnMatch>ACCEPT</OnMatch>
-        </filter>
-        <encoder>
-            <pattern>%date [%-10.-10thread] [%-5level] %logger{56} ->%method:%line - %msg%n</pattern>
-        </encoder>
-    </appender>
+    <include resource="com/copyright/rup/dist/common/web/logback-dist.xml"/>
 
     <!-- STANDARD-PATTERN: Set the context name for webapps. When multiple webapps
         are deployed to a container, this gives each a distinct JMX MBeans. -->
     <contextName>dist-foreign-ui</contextName>
 
-    <property name="logLevelGen" value="${GEN_LOG_LEVEL:-warn}"/>
-    <property name="logLevelJms" value="${JMS_LOG_LEVEL:-${logLevelGen}}"/>
+    <property name="logLevelPrm" value="${DIST_FOREIGN_PRM_LOG_LEVEL:-${logLevelDist}}"/>
+    <property name="logLevelRights" value="${DIST_FOREIGN_RIGHTS_LOG_LEVEL:-${logLevelDist}}"/>
+    <property name="logLevelResearch" value="${DIST_FOREIGN_RESEARCH_LOG_LEVEL:-${logLevelDist}}"/>
+    <property name="logLevelMatching" value="${DIST_FOREIGN_MATCHING_LOG_LEVEL:-${logLevelDist}}"/>
+    <property name="logLevelCrmReporting" value="${DIST_FOREIGN_CRM_REPORTING_LOG_LEVEL:-${logLevelDist}}"/>
+    <property name="logLevelService" value="${DIST_FOREIGN_SERVICE_LOG_LEVEL:-${logLevelDist}}"/>
 
-    <property name="logLevelCcc" value="${CCC_LOG_LEVEL:-info}}"/>
-    <property name="logLevel" value="${DIST_FOREIGN_LOG_LEVEL:-${logLevelCcc}}}"/>
-    <property name="logLevelPrm" value="${DIST_FOREIGN_PRM_LOG_LEVEL:-${logLevel}}"/>
-    <property name="logLevelRights" value="${DIST_FOREIGN_RIGHTS_LOG_LEVEL:-${logLevel}}"/>
-    <property name="logLevelResearch" value="${DIST_FOREIGN_RESEARCH_LOG_LEVEL:-${logLevel}}"/>
-    <property name="logLevelMatching" value="${DIST_FOREIGN_MATCHING_LOG_LEVEL:-${logLevel}}"/>
-    <property name="logLevelCrmReporting" value="${DIST_FOREIGN_CRM_REPORTING_LOG_LEVEL:-${logLevel}}"/>
-    <property name="logLevelService" value="${DIST_FOREIGN_SERVICE_LOG_LEVEL:-${logLevel}}"/>
-
-    <logger name="com.copyright" level="${logLevelCcc}" additivity="false">
-        <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
-        <appender-ref ref="STDOUT"/>
-    </logger>
-
-    <logger name="com.copyright.rup.dist" level="${logLevel}" additivity="false">
-        <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
-        <appender-ref ref="STDOUT"/>
-    </logger>
-
-    <logger name="com.copyright.rup.dist.foreign.service.impl" level="${logLevelService}" additivity="false">
-        <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
-        <appender-ref ref="STDOUT"/>
-    </logger>
+    <logger name="com.copyright.rup.dist.foreign.service.impl" level="${logLevelService}"/>
 
     <!--Loggers for PRM related logic-->
-    <logger name="com.copyright.rup.dist.common.integration.rest.prm" level="${logLevelPrm}" additivity="false">
-        <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
-        <appender-ref ref="STDOUT"/>
-    </logger>
+    <logger name="com.copyright.rup.dist.common.integration.rest.prm" level="${logLevelPrm}"/>
 
     <!--Loggers for Rights related logic-->
-    <logger name="com.copyright.rup.dist.common.integration.rest.rms" level="${logLevelRights}" additivity="false">
-        <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
-        <appender-ref ref="STDOUT"/>
-    </logger>
-
-    <logger name="com.copyright.rup.dist.common.service.impl.discrepancy" level="${logLevelRights}" additivity="false">
-        <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
-        <appender-ref ref="STDOUT"/>
-    </logger>
-
-    <logger name="com.copyright.rup.dist.foreign.integration.rms.impl" level="${logLevelRights}" additivity="false">
-        <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
-        <appender-ref ref="STDOUT"/>
-    </logger>
-
-    <logger name="com.copyright.rup.dist.foreign.service.impl.rights" level="${logLevelRights}" additivity="false">
-        <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
-        <appender-ref ref="STDOUT"/>
-    </logger>
+    <logger name="com.copyright.rup.dist.common.integration.rest.rms" level="${logLevelRights}"/>
+    <logger name="com.copyright.rup.dist.common.service.impl.discrepancy" level="${logLevelRights}"/>
+    <logger name="com.copyright.rup.dist.foreign.integration.rms.impl" level="${logLevelRights}"/>
+    <logger name="com.copyright.rup.dist.foreign.service.impl.rights" level="${logLevelRights}"/>
 
     <!--Loggers for CRM reporting related logic-->
-    <logger name="com.copyright.rup.dist.foreign.integration.crm.impl" level="${logLevelCrmReporting}" additivity="false">
-        <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
-        <appender-ref ref="STDOUT"/>
-    </logger>
+    <logger name="com.copyright.rup.dist.foreign.integration.crm.impl" level="${logLevelCrmReporting}"/>
 
     <!--Loggers for Matching logic-->
-    <logger name="com.copyright.rup.dist.foreign.integration.pi.impl" level="${logLevelMatching}" additivity="false">
-        <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
-        <appender-ref ref="STDOUT"/>
-    </logger>
-
-    <logger name="com.copyright.rup.dist.foreign.service.impl.matching" level="${logLevelMatching}" additivity="false">
-        <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
-        <appender-ref ref="STDOUT"/>
-    </logger>
-
-    <!--Loggers for non-CCC JMS related logic-->
-    <logger name="org.apache.activemq" level="${logLevelJms}" additivity="false">
-        <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
-        <appender-ref ref="STDOUT"/>
-    </logger>
-    <logger name="org.apache.camel" level="${logLevelJms}" additivity="false">
-        <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
-        <appender-ref ref="STDOUT"/>
-    </logger>
-    <logger name="org.springframework.jms" level="${logLevelJms}" additivity="false">
-        <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
-        <appender-ref ref="STDOUT"/>
-    </logger>
+    <logger name="com.copyright.rup.dist.foreign.integration.pi.impl" level="${logLevelMatching}"/>
+    <logger name="com.copyright.rup.dist.foreign.service.impl.matching" level="${logLevelMatching}"/>
 
     <root level="${logLevelGen}">
-        <appender-ref ref="FILE_DIST_FOREIGN_UI"/>
-        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="RUP-CONSOLE"/>
     </root>
 
 </configuration>
