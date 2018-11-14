@@ -1,3 +1,10 @@
+3.1.23
+-
+* B-45289 FDA: Report FAS split payments to RC: adjust service logic for receiving post-distribution usages from LM
+* B-45289 FDA: Report FAS split payments to RC: update rightsholder for paid usages
+* B-47643 Tech Debt: FDA: update logback configuration to use common logging approach
+* B-47837 FDA: Neartime processing for Works match and Get RHs: implement producer and consumer for PI matching
+
 3.1.22
 -
 * B-45289 FDA: Report FAS split payments to RC: adjust service logic for consuming paid data with splits information from LM
