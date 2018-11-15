@@ -45,6 +45,8 @@ public class MatchingDeserializer extends JsonDeserializer<Usage> {
         usage.setId(JsonUtils.getStringValue(jsonNode.get("id")));
         usage.setStandardNumber(JsonUtils.getStringValue(jsonNode.get("standard_number")));
         usage.setWorkTitle(JsonUtils.getStringValue(jsonNode.get("work_title")));
+        usage.setSystemTitle(JsonUtils.getStringValue(jsonNode.get("system_title")));
+        usage.setWrWrkInst(JsonUtils.getLongValue(jsonNode.get("wr_wrk_inst")));
         usage.setBatchId(JsonUtils.getStringValue(jsonNode.get("batch_id")));
         usage.setProductFamily(JsonUtils.getStringValue(jsonNode.get("product_family")));
         usage.setStatus(UsageStatusEnum.valueOf(JsonUtils.getStringValue(jsonNode.get("status"))));

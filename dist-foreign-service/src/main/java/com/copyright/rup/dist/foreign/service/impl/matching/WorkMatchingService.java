@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.matching;
 
 import com.copyright.rup.common.logging.RupLogUtils;
+import com.copyright.rup.dist.common.integration.camel.IProducer;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
@@ -15,6 +16,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,6 +53,9 @@ public class WorkMatchingService implements IWorkMatchingService {
     private IUsageRepository usageRepository;
     @Autowired
     private IUsageAuditService auditService;
+    @Autowired
+    @Qualifier("df.service.rightsMatchingProducer")
+    private IProducer<Usage> producer;
 
     @Override
     @Transactional
@@ -87,6 +92,7 @@ public class WorkMatchingService implements IWorkMatchingService {
             auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
                 String.format("Wr Wrk Inst %s was found by standard number %s", usage.getWrWrkInst(),
                     usage.getStandardNumber()));
+            producer.send(usage);
         } else {
             List<Usage> usagesByStandardNumber =
                 usageRepository.findByStandardNumberAndStatus(usage.getStandardNumber(), UsageStatusEnum.NEW);
@@ -103,6 +109,7 @@ public class WorkMatchingService implements IWorkMatchingService {
             usageRepository.updateStatusAndWrWrkInstByTitle(Collections.singletonList(usage));
             auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
                 String.format("Wr Wrk Inst %s was found by title \"%s\"", usage.getWrWrkInst(), usage.getWorkTitle()));
+            producer.send(usage);
         } else {
             List<Usage> usagesByTitle = usageRepository.findByTitleAndStatus(usage.getWorkTitle(), UsageStatusEnum.NEW);
             updateUsagesStatusAndWriteAudit(usagesByTitle, UsageGroupEnum.TITLE,
@@ -232,6 +239,7 @@ public class WorkMatchingService implements IWorkMatchingService {
                     usage.setStatus(UsageStatusEnum.WORK_FOUND);
                     auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
                         "Usage assigned unidentified work due to empty standard number and title");
+                    producer.send(usage);
                 } else {
                     usage.setStatus(UsageStatusEnum.WORK_NOT_FOUND);
                     auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_NOT_FOUND,

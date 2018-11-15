@@ -31,6 +31,11 @@
         <property name="endPoint" value="direct:df.service.matchingUsage"/>
     </bean>
 
+    <bean id="df.service.rightsMatchingProducer"
+          class="com.copyright.rup.dist.foreign.service.impl.matching.RightsMatchingProducer">
+        <property name="endPoint" value="direct:df.service.matchingRights"/>
+    </bean>
+
     <context:component-scan base-package="com.copyright.rup.dist.foreign.service"/>
 
     <camelContext id="df.service.camelContext" xmlns="http://camel.apache.org/schema/spring">
@@ -39,8 +44,11 @@
 
         <endpoint id="df.service.lm.detail.paid.endpoint" uri="$RUP{dist.foreign.service.lm.detail.paid.endpoint}"/>
 
-        <endpoint id="df.service.matching.usage.endpoint" uri="direct:df.service.matchingUsage"/>
-        <endpoint id="df.service.matching.endpoint" uri="$RUP{dist.foreign.service.matching.endpoint}"/>
+        <endpoint id="df.service.internal.works.endpoint" uri="direct:df.service.matchingUsage"/>
+        <endpoint id="df.service.matching.works.endpoint" uri="$RUP{dist.foreign.service.matching.works.endpoint}"/>
+
+        <endpoint id="df.service.internal.rights.endpoint" uri="direct:df.service.matchingRights"/>
+        <endpoint id="df.service.matching.rights.endpoint" uri="$RUP{dist.foreign.service.matching.rights.endpoint}"/>
 
         <redeliveryPolicyProfile id="defaultRedeliveryPolicy"
                                  maximumRedeliveries="10"
@@ -62,19 +70,35 @@
         </route>
 
         <route>
-            <from ref="df.service.matching.usage.endpoint"/>
+            <from ref="df.service.internal.works.endpoint"/>
             <marshal>
                 <custom ref="df.service.matchingMarshaller"/>
             </marshal>
-            <to ref="df.service.matching.endpoint"/>
+            <to ref="df.service.matching.works.endpoint"/>
         </route>
 
         <route>
-            <from ref="df.service.matching.endpoint"/>
+            <from ref="df.service.matching.works.endpoint"/>
             <unmarshal>
                 <custom ref="df.service.matchingUnmarshaller"/>
             </unmarshal>
             <bean ref="df.service.workMatchingConsumer"/>
+        </route>
+
+        <route>
+            <from ref="df.service.internal.rights.endpoint"/>
+            <marshal>
+                <custom ref="df.service.matchingMarshaller"/>
+            </marshal>
+            <to ref="df.service.matching.rights.endpoint"/>
+        </route>
+
+        <route>
+            <from ref="df.service.matching.rights.endpoint"/>
+            <unmarshal>
+                <custom ref="df.service.matchingUnmarshaller"/>
+            </unmarshal>
+            <bean ref="df.service.rightsMatchingConsumer"/>
         </route>
     </camelContext>
 </beans>

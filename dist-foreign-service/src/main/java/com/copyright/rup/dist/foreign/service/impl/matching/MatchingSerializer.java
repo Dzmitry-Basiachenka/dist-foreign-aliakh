@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.type.CollectionLikeType;
 import com.fasterxml.jackson.databind.type.SimpleType;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
@@ -35,11 +36,13 @@ public class MatchingSerializer extends StdSerializer<Usage> {
         if (Objects.nonNull(usage)) {
             writeNotNullField(jsonGenerator, "id", usage.getId());
             writeNotNullField(jsonGenerator, "standard_number", usage.getStandardNumber());
+            writeNotNullField(jsonGenerator, "wr_wrk_inst", usage.getWrWrkInst());
             writeNotNullField(jsonGenerator, "work_title", usage.getWorkTitle());
+            writeNotNullField(jsonGenerator, "system_title", usage.getSystemTitle());
             writeNotNullField(jsonGenerator, "batch_id", usage.getBatchId());
             writeNotNullField(jsonGenerator, "product_family", usage.getProductFamily());
             writeNotNullField(jsonGenerator, "status", usage.getStatus().name());
-            jsonGenerator.writeNumberField("gross_amount", usage.getGrossAmount());
+            writeNotNullField(jsonGenerator, "gross_amount", usage.getGrossAmount());
         }
         jsonGenerator.writeEndObject();
     }
@@ -48,6 +51,20 @@ public class MatchingSerializer extends StdSerializer<Usage> {
         throws IOException {
         if (Objects.nonNull(fieldValue)) {
             jsonGenerator.writeStringField(fieldName, fieldValue);
+        }
+    }
+
+    private void writeNotNullField(JsonGenerator jsonGenerator, String fieldName, BigDecimal fieldValue)
+        throws IOException {
+        if (Objects.nonNull(fieldValue)) {
+            jsonGenerator.writeNumberField(fieldName, fieldValue);
+        }
+    }
+
+    private void writeNotNullField(JsonGenerator jsonGenerator, String fieldName, Long fieldValue)
+        throws IOException {
+        if (Objects.nonNull(fieldValue)) {
+            jsonGenerator.writeNumberField(fieldName, fieldValue);
         }
     }
 }

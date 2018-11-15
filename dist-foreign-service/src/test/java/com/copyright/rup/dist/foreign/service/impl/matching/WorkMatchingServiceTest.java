@@ -9,6 +9,7 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
+import com.copyright.rup.dist.common.integration.camel.IProducer;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -44,6 +45,7 @@ public class WorkMatchingServiceTest {
     private WorkMatchingService workMatchingService;
     private IUsageRepository usageRepository;
     private IUsageAuditService auditService;
+    private IProducer<Usage> producer;
 
     @Before
     public void setUp() {
@@ -51,9 +53,11 @@ public class WorkMatchingServiceTest {
         piIntegrationService = createMock(IPiIntegrationService.class);
         usageRepository = createMock(IUsageRepository.class);
         auditService = createMock(IUsageAuditService.class);
+        producer = createMock(IProducer.class);
         Whitebox.setInternalState(workMatchingService, piIntegrationService);
         Whitebox.setInternalState(workMatchingService, usageRepository);
         Whitebox.setInternalState(workMatchingService, auditService);
+        Whitebox.setInternalState(workMatchingService, producer);
     }
 
     @Test
@@ -92,11 +96,13 @@ public class WorkMatchingServiceTest {
         expectLastCall().once();
         auditService.logAction(anyString(), eq(UsageActionTypeEnum.WORK_FOUND), anyString());
         expectLastCall().once();
-        replay(piIntegrationService, usageRepository, auditService);
+        producer.send(usage);
+        expectLastCall().once();
+        replay(piIntegrationService, usageRepository, auditService, producer);
         workMatchingService.matchByTitle(usage);
         assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
         assertEquals(112930820L, usage.getWrWrkInst(), 0);
-        verify(piIntegrationService, usageRepository, auditService);
+        verify(piIntegrationService, usageRepository, auditService, producer);
     }
 
     @Test
