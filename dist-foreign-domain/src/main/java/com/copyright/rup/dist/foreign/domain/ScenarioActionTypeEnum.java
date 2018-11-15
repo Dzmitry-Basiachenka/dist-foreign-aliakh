@@ -32,6 +32,10 @@ public enum ScenarioActionTypeEnum {
      */
     SENT_TO_LM,
     /**
+     * Action type for {@link Scenario} that was updated based on Split process.
+     */
+    UPDATED_AFTER_SPLIT,
+    /**
      * Action type for archive {@link Scenario}.
      */
     ARCHIVED
