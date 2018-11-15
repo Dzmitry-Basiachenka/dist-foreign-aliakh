@@ -48,7 +48,7 @@ public class UsageCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
         beanProperties.add(getBeanLocalDate(bean.getPaymentDate()));
         beanProperties.add(bean.getWorkTitle());
         beanProperties.add(bean.getArticle());
-        beanProperties.add(bean.getStandardNumber());
+        beanProperties.add(formatStringStartedWithZero(bean.getStandardNumber()));
         beanProperties.add(getBeanPropertyAsString(bean.getWrWrkInst()));
         beanProperties.add(bean.getSystemTitle());
         beanProperties.add(getBeanPropertyAsString(bean.getRhAccountNumber()));
