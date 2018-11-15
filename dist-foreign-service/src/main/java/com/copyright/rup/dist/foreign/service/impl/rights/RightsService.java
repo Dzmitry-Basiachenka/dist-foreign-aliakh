@@ -23,9 +23,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
@@ -101,6 +103,25 @@ public class RightsService implements IRightsService {
                 UsageStatusEnum.SENT_FOR_RA, LogUtils.size(usages), eligibleUsagesCount);
         } else {
             LOGGER.info("Get usage rightsholders. Skipped. Reason=There are no SENT_FOR_RA usages.");
+        }
+    }
+
+    @Override
+    public void updateRightsholder(Usage usage) {
+        Long wrWrkInst = usage.getWrWrkInst();
+        Set<String> usageId = Collections.singleton(usage.getId());
+        Long rhAccountNumber =
+            rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(wrWrkInst))
+                .get(wrWrkInst);
+        if (Objects.nonNull(rhAccountNumber)) {
+            usageRepository.updateStatusAndRhAccountNumber(usageId, UsageStatusEnum.ELIGIBLE, rhAccountNumber);
+            auditService.logAction(usageId, UsageActionTypeEnum.RH_FOUND,
+                String.format("Rightsholder account %s was found in RMS", rhAccountNumber));
+            rightsholderService.updateRightsholders(Collections.singleton(rhAccountNumber));
+        } else {
+            usageRepository.updateStatus(usageId, UsageStatusEnum.RH_NOT_FOUND);
+            auditService.logAction(usageId, UsageActionTypeEnum.RH_NOT_FOUND,
+                String.format("Rightsholder account for %s was not found in RMS", wrWrkInst));
         }
     }
 

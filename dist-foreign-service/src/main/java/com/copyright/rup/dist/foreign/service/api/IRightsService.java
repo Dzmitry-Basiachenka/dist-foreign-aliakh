@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.service.api;
 
+import com.copyright.rup.dist.foreign.domain.Usage;
+
 /**
  * Interface represents API for working with RA functionality.
  * <p>
@@ -18,6 +20,15 @@ public interface IRightsService {
      * to get Grants.
      */
     void updateRightsholders();
+
+    /**
+     * Sends Wr Wrk Inst to RMS to get Grants and updates usage status based on response.
+     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE} if rhAccountNumber was found in RMS,
+     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#RH_NOT_FOUND} otherwise.
+     *
+     * @param usage {@link Usage} to update
+     */
+    void updateRightsholder(Usage usage);
 
     /**
      * Finds list of {@link com.copyright.rup.dist.foreign.domain.Usage}s with
