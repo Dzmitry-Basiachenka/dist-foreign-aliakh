@@ -12,6 +12,7 @@ import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
@@ -27,6 +28,7 @@ import com.copyright.rup.dist.foreign.integration.crm.api.ICrmIntegrationService
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
+import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
@@ -68,8 +70,6 @@ import java.util.stream.Collectors;
 public class UsageService implements IUsageService {
     private static final String CALCULATION_FINISHED_LOG_MESSAGE = "Calculated usages gross amount. " +
         "UsageBatchName={}, FundPoolAmount={}, TotalAmount={}, ConversionRate={}";
-    private static final String UPDATE_PAID_INFO_FAILED_LOG_MESSAGE = "Update paid information. Not found usages. " +
-        "UsagesCount={}, UpdatedCount={}, NotFoundUsageIds={}";
     private static final String SEND_TO_CRM_FINISHED_INFO_LOG_MESSAGE = "Send to CRM. Finished. PaidUsagesCount={}, " +
         "ArchivedUsagesCount={}, NotReportedUsagesCount={}, ArchivedScenariosCount={}";
     private static final String SEND_TO_CRM_FINISHED_DEBUG_LOG_MESSAGE = "Send to CRM. Finished. PaidUsagesCount={}, " +
@@ -91,6 +91,8 @@ public class UsageService implements IUsageService {
     private IPrmIntegrationService prmIntegrationService;
     @Autowired
     private ICrmIntegrationService crmIntegrationService;
+    @Autowired
+    private IScenarioAuditService scenarioAuditService;
 
     @Override
     public List<UsageDto> getUsages(UsageFilter filter, Pageable pageable, Sort sort) {
@@ -321,7 +323,7 @@ public class UsageService implements IUsageService {
     @Transactional
     public void updatePaidInfo(List<PaidUsage> paidUsages) {
         LOGGER.info("Update paid information. Started. UsagesCount={}", LogUtils.size(paidUsages));
-        AtomicInteger postDistributionUsagesCount = new AtomicInteger();
+        AtomicInteger newUsagesCount = new AtomicInteger();
         Set<String> notFoundUsageIds = Sets.newHashSet();
         Map<String, Usage> usageIdToUsageMap = usageArchiveRepository.findUsageInformationById(
             paidUsages.stream().map(PaidUsage::getId).collect(Collectors.toList()))
@@ -330,29 +332,36 @@ public class UsageService implements IUsageService {
         paidUsages.forEach(paidUsage -> {
             String paidUsageId = paidUsage.getId();
             if (Objects.nonNull(usageIdToUsageMap.get(paidUsageId))) {
-                if (paidUsage.isPostDistribution() && Objects.isNull(paidUsage.getSplitParentFlag())) {
-                    PaidUsage postDistributionUsage =
-                        buildPostDistributionUsage(usageIdToUsageMap.get(paidUsageId), paidUsage);
-                    usageArchiveRepository.insertPaid(postDistributionUsage);
-                    usageAuditService.logAction(postDistributionUsage.getId(), UsageActionTypeEnum.PAID,
-                        "Usage has been created based on Post-Distribution process");
-                    postDistributionUsagesCount.getAndIncrement();
+                if (paidUsage.isPostDistribution()) {
+                    String actionReason = Objects.nonNull(paidUsage.getSplitParentFlag())
+                        ? "Usage has been created based on Post-Distribution and Split processes"
+                        : "Usage has been created based on Post-Distribution process";
+                    insertPaidUsage(buildPaidUsage(usageIdToUsageMap.get(paidUsageId), paidUsage), actionReason);
+                    newUsagesCount.getAndIncrement();
+                } else if (Objects.isNull(paidUsage.getSplitParentFlag())) {
+                    updatePaidUsage(paidUsage, "Usage has been paid according to information from the LM");
+                } else if (paidUsage.getSplitParentFlag()) {
+                    updatePaidUsage(paidUsage, "Usage has been adjusted based on Split process");
+                    scenarioAuditService.logAction(usageIdToUsageMap.get(paidUsageId).getScenarioId(),
+                        ScenarioActionTypeEnum.UPDATED_AFTER_SPLIT,
+                        "Scenario has been updated after Split process");
                 } else {
-                    paidUsage.setStatus(UsageStatusEnum.PAID);
-                    usageArchiveRepository.updatePaidInfo(paidUsage);
-                    usageAuditService.logAction(paidUsage.getId(), UsageActionTypeEnum.PAID,
-                        "Usage has been paid according to information from the LM");
+                    insertPaidUsage(buildPaidUsage(usageIdToUsageMap.get(paidUsageId), paidUsage),
+                        "Usage has been created based on Split process");
+                    newUsagesCount.getAndIncrement();
                 }
             } else {
                 notFoundUsageIds.add(paidUsage.getId());
             }
         });
         if (CollectionUtils.isNotEmpty(notFoundUsageIds)) {
-            LOGGER.warn(UPDATE_PAID_INFO_FAILED_LOG_MESSAGE, LogUtils.size(paidUsages),
-                paidUsages.size() - notFoundUsageIds.size(), notFoundUsageIds);
+            LOGGER.warn("Update paid information. Not found usages. UsagesCount={}, CreatedCount={}, " +
+                    "UpdatedCount={}, NotFoundUsageIds={}", LogUtils.size(paidUsages), newUsagesCount,
+                paidUsages.size() - newUsagesCount.get() - notFoundUsageIds.size(), notFoundUsageIds);
         }
-        LOGGER.info("Update paid information. Finished. UsagesCount={}, PostDistributionUsageCount={}, UpdatedCount={}",
-            LogUtils.size(paidUsages), postDistributionUsagesCount, paidUsages.size() - notFoundUsageIds.size());
+        LOGGER.info("Update paid information. Finished. UsagesCount={}, CreatedCount={}, UpdatedCount={}",
+            LogUtils.size(paidUsages), newUsagesCount,
+            paidUsages.size() - newUsagesCount.get() - notFoundUsageIds.size());
     }
 
     @Override
@@ -437,42 +446,53 @@ public class UsageService implements IUsageService {
         }
     }
 
-    private PaidUsage buildPostDistributionUsage(Usage originalUsage, PaidUsage paidUsage) {
-        PaidUsage postDistributionUsage = new PaidUsage();
-        postDistributionUsage.setId(RupPersistUtils.generateUuid());
-        postDistributionUsage.setStatus(UsageStatusEnum.PAID);
-        postDistributionUsage.setWrWrkInst(originalUsage.getWrWrkInst());
-        postDistributionUsage.setWorkTitle(originalUsage.getWorkTitle());
-        postDistributionUsage.setArticle(originalUsage.getArticle());
-        postDistributionUsage.setStandardNumber(originalUsage.getStandardNumber());
-        postDistributionUsage.setPublisher(originalUsage.getPublisher());
-        postDistributionUsage.setPublicationDate(originalUsage.getPublicationDate());
-        postDistributionUsage.setMarket(originalUsage.getMarket());
-        postDistributionUsage.setMarketPeriodFrom(originalUsage.getMarketPeriodFrom());
-        postDistributionUsage.setMarketPeriodTo(originalUsage.getMarketPeriodTo());
-        postDistributionUsage.setAuthor(originalUsage.getAuthor());
-        postDistributionUsage.setNumberOfCopies(originalUsage.getNumberOfCopies());
-        postDistributionUsage.setReportedValue(originalUsage.getReportedValue());
-        postDistributionUsage.setNetAmount(paidUsage.getNetAmount());
-        postDistributionUsage.setServiceFee(originalUsage.getServiceFee());
-        postDistributionUsage.setServiceFeeAmount(paidUsage.getServiceFeeAmount());
-        postDistributionUsage.setGrossAmount(paidUsage.getGrossAmount());
-        postDistributionUsage.setRhParticipating(originalUsage.isRhParticipating());
-        postDistributionUsage.setProductFamily(originalUsage.getProductFamily());
-        postDistributionUsage.setSystemTitle(originalUsage.getSystemTitle());
-        postDistributionUsage.setRightsholder(paidUsage.getRightsholder());
-        postDistributionUsage.setPayee(paidUsage.getPayee());
-        postDistributionUsage.setDistributionName(paidUsage.getDistributionName());
-        postDistributionUsage.setDistributionDate(paidUsage.getDistributionDate());
-        postDistributionUsage.setCccEventId(paidUsage.getCccEventId());
-        postDistributionUsage.setCheckNumber(paidUsage.getCheckNumber());
-        postDistributionUsage.setCheckDate(paidUsage.getCheckDate());
-        postDistributionUsage.setLmDetailId(paidUsage.getLmDetailId());
-        postDistributionUsage.setPeriodEndDate(paidUsage.getPeriodEndDate());
-        return postDistributionUsage;
+    private void updatePaidUsage(PaidUsage paidUsage, String actionReason) {
+        paidUsage.setStatus(UsageStatusEnum.PAID);
+        usageArchiveRepository.updatePaidInfo(paidUsage);
+        usageAuditService.logAction(paidUsage.getId(), UsageActionTypeEnum.PAID, actionReason);
     }
 
-   private List<CrmRightsDistributionRequest> buildCrmRightsDistributionRequest(List<PaidUsage> paidUsages) {
+    private void insertPaidUsage(PaidUsage paidUsage, String actionReason) {
+        usageArchiveRepository.insertPaid(paidUsage);
+        usageAuditService.logAction(paidUsage.getId(), UsageActionTypeEnum.PAID, actionReason);
+    }
+
+    private PaidUsage buildPaidUsage(Usage originalUsage, PaidUsage paidUsage) {
+        PaidUsage resultUsage = new PaidUsage();
+        resultUsage.setId(RupPersistUtils.generateUuid());
+        resultUsage.setStatus(UsageStatusEnum.PAID);
+        resultUsage.setWrWrkInst(originalUsage.getWrWrkInst());
+        resultUsage.setWorkTitle(originalUsage.getWorkTitle());
+        resultUsage.setArticle(originalUsage.getArticle());
+        resultUsage.setStandardNumber(originalUsage.getStandardNumber());
+        resultUsage.setPublisher(originalUsage.getPublisher());
+        resultUsage.setPublicationDate(originalUsage.getPublicationDate());
+        resultUsage.setMarket(originalUsage.getMarket());
+        resultUsage.setMarketPeriodFrom(originalUsage.getMarketPeriodFrom());
+        resultUsage.setMarketPeriodTo(originalUsage.getMarketPeriodTo());
+        resultUsage.setAuthor(originalUsage.getAuthor());
+        resultUsage.setNumberOfCopies(originalUsage.getNumberOfCopies());
+        resultUsage.setReportedValue(originalUsage.getReportedValue());
+        resultUsage.setRhParticipating(originalUsage.isRhParticipating());
+        resultUsage.setProductFamily(originalUsage.getProductFamily());
+        resultUsage.setSystemTitle(originalUsage.getSystemTitle());
+        resultUsage.setServiceFee(originalUsage.getServiceFee());
+        resultUsage.setNetAmount(paidUsage.getNetAmount());
+        resultUsage.setServiceFeeAmount(paidUsage.getServiceFeeAmount());
+        resultUsage.setGrossAmount(paidUsage.getGrossAmount());
+        resultUsage.setRightsholder(paidUsage.getRightsholder());
+        resultUsage.setPayee(paidUsage.getPayee());
+        resultUsage.setDistributionName(paidUsage.getDistributionName());
+        resultUsage.setDistributionDate(paidUsage.getDistributionDate());
+        resultUsage.setCccEventId(paidUsage.getCccEventId());
+        resultUsage.setCheckNumber(paidUsage.getCheckNumber());
+        resultUsage.setCheckDate(paidUsage.getCheckDate());
+        resultUsage.setLmDetailId(paidUsage.getLmDetailId());
+        resultUsage.setPeriodEndDate(paidUsage.getPeriodEndDate());
+        return resultUsage;
+    }
+
+    private List<CrmRightsDistributionRequest> buildCrmRightsDistributionRequest(List<PaidUsage> paidUsages) {
         List<CrmRightsDistributionRequest> requests = Lists.newArrayListWithExpectedSize(paidUsages.size());
         paidUsages.forEach(paidUsage -> requests.add(new CrmRightsDistributionRequest(paidUsage)));
         return requests;

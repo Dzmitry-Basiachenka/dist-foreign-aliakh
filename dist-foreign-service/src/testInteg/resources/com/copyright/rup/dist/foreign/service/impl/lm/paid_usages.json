@@ -30,7 +30,8 @@
       "royalty_amount": 1680.00,
       "service_fee_amount": 320.00,
       "collected_amount": 2000.00,
-      "post_distribution_flag": false
+      "post_distribution_flag": false,
+      "split_parent_flag": false
     },
     {
       "rh_account_number": "1000002859",

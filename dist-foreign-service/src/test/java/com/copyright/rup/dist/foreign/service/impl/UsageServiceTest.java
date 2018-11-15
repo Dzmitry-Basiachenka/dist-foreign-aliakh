@@ -22,6 +22,7 @@ import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
@@ -33,6 +34,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
+import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 
 import com.google.common.collect.HashBasedTable;
@@ -79,6 +81,7 @@ public class UsageServiceTest {
     private IUsageRepository usageRepository;
     private IUsageArchiveRepository usageArchiveRepository;
     private IUsageAuditService usageAuditService;
+    private IScenarioAuditService scenarioAuditService;
     private UsageService usageService;
     private IPrmIntegrationService prmIntegrationService;
 
@@ -91,11 +94,13 @@ public class UsageServiceTest {
         usageAuditService = createMock(IUsageAuditService.class);
         prmIntegrationService = createMock(IPrmIntegrationService.class);
         usageArchiveRepository = createMock(IUsageArchiveRepository.class);
+        scenarioAuditService = createMock(IScenarioAuditService.class);
         usageService = new UsageService();
         Whitebox.setInternalState(usageService, "usageRepository", usageRepository);
         Whitebox.setInternalState(usageService, "usageAuditService", usageAuditService);
         Whitebox.setInternalState(usageService, "prmIntegrationService", prmIntegrationService);
         Whitebox.setInternalState(usageService, "usageArchiveRepository", usageArchiveRepository);
+        Whitebox.setInternalState(usageService, "scenarioAuditService", scenarioAuditService);
     }
 
     @Test
@@ -419,57 +424,126 @@ public class UsageServiceTest {
 
     @Test
     public void testUpdatePaidInfo() {
-        PaidUsage paidUsage = new PaidUsage();
-        paidUsage.setId(USAGE_ID_1);
-        paidUsage.setStatus(UsageStatusEnum.SENT_TO_LM);
-        paidUsage.setCheckNumber("578945");
-        paidUsage.setCccEventId("53256");
-        paidUsage.setDistributionName("FDA March 17");
+        PaidUsage usage = buildPaidUsage(UsageStatusEnum.SENT_TO_LM, false, null);
+        PaidUsage usageInPaidStatus = buildPaidUsage(UsageStatusEnum.PAID, false, null);
         expect(usageArchiveRepository.findUsageInformationById(ImmutableList.of(USAGE_ID_1)))
-            .andReturn(ImmutableList.of(paidUsage)).once();
-        usageArchiveRepository.updatePaidInfo(paidUsage);
+            .andReturn(ImmutableList.of(usage))
+            .once();
+        usageArchiveRepository.updatePaidInfo(usageInPaidStatus);
         expectLastCall().once();
         usageAuditService.logAction(USAGE_ID_1, UsageActionTypeEnum.PAID,
             "Usage has been paid according to information from the LM");
         expectLastCall().once();
         replay(usageArchiveRepository, usageAuditService);
-        usageService.updatePaidInfo(Collections.singletonList(paidUsage));
+        usageService.updatePaidInfo(Collections.singletonList(usage));
         verify(usageArchiveRepository, usageAuditService);
     }
 
     @Test
-    public void testUpdatePostDistributionPaidInfo() {
-        PaidUsage paidUsage = new PaidUsage();
-        paidUsage.setId(USAGE_ID_1);
-        paidUsage.setCheckNumber("578945");
-        paidUsage.setCccEventId("53256");
-        paidUsage.setDistributionName("FDA March 17");
-        paidUsage.setPostDistribution(true);
-        Usage archivedPaidUsage = new Usage();
-        archivedPaidUsage.setId(USAGE_ID_1);
-        archivedPaidUsage.setScenarioId("scenario id");
-        archivedPaidUsage.setBatchId("batch id");
-        archivedPaidUsage.setStatus(UsageStatusEnum.ARCHIVED);
-        archivedPaidUsage.setArticle("test article");
+    public void testUpdatePaidInfoSplitOriginalDetail() {
+        PaidUsage usage = buildPaidUsage(UsageStatusEnum.SENT_TO_LM, false, true);
+        PaidUsage usageInPaidStatus = buildPaidUsage(UsageStatusEnum.PAID, false, true);
         expect(usageArchiveRepository.findUsageInformationById(ImmutableList.of(USAGE_ID_1)))
-            .andReturn(ImmutableList.of(archivedPaidUsage)).once();
-        String newUsageId = "93c24edf-bc4d-406e-bd54-9a7379a6e532";
+            .andReturn(ImmutableList.of(usage))
+            .once();
+        usageArchiveRepository.updatePaidInfo(usageInPaidStatus);
+        expectLastCall().once();
+        usageAuditService.logAction(USAGE_ID_1, UsageActionTypeEnum.PAID,
+            "Usage has been adjusted based on Split process");
+        expectLastCall().once();
+        scenarioAuditService.logAction("e4a81dff-719b-4f73-bb0d-fcfc23ea2395",
+            ScenarioActionTypeEnum.UPDATED_AFTER_SPLIT, "Scenario has been updated after Split process");
+        expectLastCall().once();
+        replay(usageArchiveRepository, usageAuditService, scenarioAuditService);
+        usageService.updatePaidInfo(Collections.singletonList(usage));
+        verify(usageArchiveRepository, usageAuditService, scenarioAuditService);
+    }
+
+    @Test
+    public void testUpdatePaidInfoSplitNewDetail() {
         mockStatic(RupPersistUtils.class);
-        expect(RupPersistUtils.generateUuid()).andReturn(newUsageId).once();
-        PaidUsage expectedPostDistributionUsage = new PaidUsage();
-        expectedPostDistributionUsage.setId(newUsageId);
-        expectedPostDistributionUsage.setCheckNumber(paidUsage.getCheckNumber());
-        expectedPostDistributionUsage.setCccEventId(paidUsage.getCccEventId());
-        expectedPostDistributionUsage.setDistributionName(paidUsage.getDistributionName());
-        expectedPostDistributionUsage.setArticle(archivedPaidUsage.getArticle());
-        expectedPostDistributionUsage.setStatus(UsageStatusEnum.PAID);
-        usageArchiveRepository.insertPaid(expectedPostDistributionUsage);
+        PaidUsage usageFromLm = buildPaidUsage(null, false, false);
+        Usage storedUsage = buildUsage(USAGE_ID_1);
+        expect(usageArchiveRepository.findUsageInformationById(ImmutableList.of(USAGE_ID_1)))
+            .andReturn(ImmutableList.of(storedUsage))
+            .once();
+        String newUsageId = "93c24edf-bc4d-406e-bd54-9a7379a6e532";
+        expect(RupPersistUtils.generateUuid())
+            .andReturn(newUsageId)
+            .once();
+        usageArchiveRepository.insertPaid(buildPaidUsageToInsert(usageFromLm, storedUsage, newUsageId));
+        expectLastCall().once();
+        usageAuditService.logAction(newUsageId, UsageActionTypeEnum.PAID,
+            "Usage has been created based on Split process");
+        expectLastCall().once();
+        replay(usageArchiveRepository, usageAuditService, RupPersistUtils.class);
+        usageService.updatePaidInfo(Collections.singletonList(usageFromLm));
+        verify(usageArchiveRepository, usageAuditService, RupPersistUtils.class);
+    }
+
+    @Test
+    public void testUpdatePostDistributionPaidInfo() {
+        mockStatic(RupPersistUtils.class);
+        PaidUsage usageFromLm = buildPaidUsage(null, true, null);
+        Usage storedUsage = buildUsage(USAGE_ID_1);
+        expect(usageArchiveRepository.findUsageInformationById(ImmutableList.of(USAGE_ID_1)))
+            .andReturn(ImmutableList.of(storedUsage))
+            .once();
+        String newUsageId = "2a1aa09c-0de7-49f7-a41e-f2a05c7bb43f";
+        expect(RupPersistUtils.generateUuid())
+            .andReturn(newUsageId)
+            .once();
+        usageArchiveRepository.insertPaid(buildPaidUsageToInsert(usageFromLm, storedUsage, newUsageId));
         expectLastCall().once();
         usageAuditService.logAction(newUsageId, UsageActionTypeEnum.PAID,
             "Usage has been created based on Post-Distribution process");
         expectLastCall().once();
         replay(usageArchiveRepository, usageAuditService, RupPersistUtils.class);
-        usageService.updatePaidInfo(Collections.singletonList(paidUsage));
+        usageService.updatePaidInfo(Collections.singletonList(usageFromLm));
+        verify(usageArchiveRepository, usageAuditService, RupPersistUtils.class);
+    }
+
+    @Test
+    public void testUpdatePostDistributionPaidInfoSplitOriginalUsage() {
+        mockStatic(RupPersistUtils.class);
+        PaidUsage usageFromLm = buildPaidUsage(null, true, true);
+        Usage storedUsage = buildUsage(USAGE_ID_1);
+        expect(usageArchiveRepository.findUsageInformationById(ImmutableList.of(USAGE_ID_1)))
+            .andReturn(ImmutableList.of(storedUsage))
+            .once();
+        String newUsageId = "93c24edf-bc4d-406e-bd54-9a7379a6e532";
+        expect(RupPersistUtils.generateUuid())
+            .andReturn(newUsageId)
+            .once();
+        usageArchiveRepository.insertPaid(buildPaidUsageToInsert(usageFromLm, storedUsage, newUsageId));
+        expectLastCall().once();
+        usageAuditService.logAction(newUsageId, UsageActionTypeEnum.PAID,
+            "Usage has been created based on Post-Distribution and Split processes");
+        expectLastCall().once();
+        replay(usageArchiveRepository, usageAuditService, RupPersistUtils.class);
+        usageService.updatePaidInfo(Collections.singletonList(usageFromLm));
+        verify(usageArchiveRepository, usageAuditService, RupPersistUtils.class);
+    }
+
+    @Test
+    public void testUpdatePostDistributionPaidInfoSplitNewUsage() {
+        mockStatic(RupPersistUtils.class);
+        PaidUsage usageFromLm = buildPaidUsage(null, true, false);
+        Usage storedUsage = buildUsage(USAGE_ID_1);
+        expect(usageArchiveRepository.findUsageInformationById(ImmutableList.of(USAGE_ID_1)))
+            .andReturn(ImmutableList.of(storedUsage))
+            .once();
+        String newUsageId = "ef671fd5-6610-450e-9326-255a48230e3b";
+        expect(RupPersistUtils.generateUuid())
+            .andReturn(newUsageId)
+            .once();
+        usageArchiveRepository.insertPaid(buildPaidUsageToInsert(usageFromLm, storedUsage, newUsageId));
+        expectLastCall().once();
+        usageAuditService.logAction(newUsageId, UsageActionTypeEnum.PAID,
+            "Usage has been created based on Post-Distribution and Split processes");
+        expectLastCall().once();
+        replay(usageArchiveRepository, usageAuditService, RupPersistUtils.class);
+        usageService.updatePaidInfo(Collections.singletonList(usageFromLm));
         verify(usageArchiveRepository, usageAuditService, RupPersistUtils.class);
     }
 
@@ -589,5 +663,43 @@ public class UsageServiceTest {
         usage.getPayee().setId(RupPersistUtils.generateUuid());
         usage.getPayee().setAccountNumber(RH_ACCOUNT_NUMBER);
         return usage;
+    }
+
+    private PaidUsage buildPaidUsage(UsageStatusEnum status, boolean postDistributionFlag, Boolean splitParentFlag) {
+        PaidUsage paidUsage = new PaidUsage();
+        paidUsage.setId(USAGE_ID_1);
+        paidUsage.setStatus(status);
+        paidUsage.setCheckNumber("578945");
+        paidUsage.setCccEventId("53256");
+        paidUsage.setDistributionName("FDA March 17");
+        paidUsage.setGrossAmount(new BigDecimal("50.00"));
+        paidUsage.setNetAmount(new BigDecimal("40.00"));
+        paidUsage.setServiceFeeAmount(new BigDecimal("10.00"));
+        paidUsage.setServiceFee(new BigDecimal("0.32"));
+        paidUsage.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER);
+        paidUsage.setProductFamily("FAS");
+        paidUsage.setWrWrkInst(123160519L);
+        paidUsage.setPostDistribution(postDistributionFlag);
+        paidUsage.setSplitParentFlag(splitParentFlag);
+        paidUsage.setScenarioId("e4a81dff-719b-4f73-bb0d-fcfc23ea2395");
+        return paidUsage;
+    }
+
+    private PaidUsage buildPaidUsageToInsert(PaidUsage usageFromLm, Usage storedUsage, String usegeId) {
+        PaidUsage paidUsage = new PaidUsage();
+        paidUsage.setId(usegeId);
+        paidUsage.setCheckNumber(usageFromLm.getCheckNumber());
+        paidUsage.setCccEventId(usageFromLm.getCccEventId());
+        paidUsage.setDistributionName(usageFromLm.getDistributionName());
+        paidUsage.setArticle(storedUsage.getArticle());
+        paidUsage.setStatus(UsageStatusEnum.PAID);
+        paidUsage.getRightsholder().setAccountNumber(usageFromLm.getRightsholder().getAccountNumber());
+        paidUsage.setWrWrkInst(storedUsage.getWrWrkInst());
+        paidUsage.setProductFamily(storedUsage.getProductFamily());
+        paidUsage.setNetAmount(usageFromLm.getNetAmount());
+        paidUsage.setServiceFee(usageFromLm.getServiceFee());
+        paidUsage.setGrossAmount(usageFromLm.getGrossAmount());
+        paidUsage.setServiceFeeAmount(usageFromLm.getServiceFeeAmount());
+        return paidUsage;
     }
 }
