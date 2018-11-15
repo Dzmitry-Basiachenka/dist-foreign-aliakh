@@ -1,3 +1,10 @@
+3.1.24
+-
+* B-45289 FDA: Report FAS split payments to RC: update service logic for consuming paid split usages from LM
+* B-47836 FDA: Preserve leading zeros in Standard numbers: adjust Usages/Send for Research export, Scenario Usages export and Audit export reports to handle Standard numbers that starts with 0
+* B-47837 FDA: Neartime processing for Works match and Get RHs: implement producer and consumer for getting Rights
+* CDP-576 Upgrade PostgreSQL driver to 42.2.1: update version for party-db module
+
 3.1.23
 -
 * B-45289 FDA: Report FAS split payments to RC: adjust service logic for receiving post-distribution usages from LM
