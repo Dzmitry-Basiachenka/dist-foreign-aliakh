@@ -1,3 +1,7 @@
+3.1.25
+-
+* B-47837 FDA: Neartime processing for Works match and Get RHs: rename classes related to getting Rights, add independent serializer and deserializer for getting Rights
+
 3.1.24
 -
 * B-45289 FDA: Report FAS split payments to RC: update service logic for consuming paid split usages from LM
