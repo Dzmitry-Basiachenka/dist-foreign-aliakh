@@ -53,8 +53,8 @@ public class UsageBatchService implements IUsageBatchService {
     @Autowired
     private IRightsholderService rightsholderService;
     @Autowired
-    @Qualifier("df.service.workMatchingProducer")
-    private IProducer<Usage> workMatchingProducer;
+    @Qualifier("df.service.matchingProducer")
+    private IProducer<Usage> matchingProducer;
 
     @Override
     public List<Integer> getFiscalYears() {
@@ -90,7 +90,7 @@ public class UsageBatchService implements IUsageBatchService {
                 .collect(Collectors.toSet())));
         usages.stream()
             .filter(usage -> UsageStatusEnum.NEW == usage.getStatus())
-            .forEach(workMatchingProducer::send);
+            .forEach(matchingProducer::send);
         return count;
     }
 

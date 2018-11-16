@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.service.impl.matching;
+package com.copyright.rup.dist.foreign.service.impl.rights;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -20,7 +20,7 @@ import java.io.InputStreamReader;
 import java.math.BigDecimal;
 
 /**
- * Verifies {@link MatchingSerializer}.
+ * Verifies {@link RightsDeserializer}.
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
@@ -28,18 +28,18 @@ import java.math.BigDecimal;
  *
  * @author Ihar Suvorau
  */
-public class MatchingDeserializerTest {
+public class RightsDeserializerTest {
 
-    private MatchingUnmarshaller unmarshaller;
+    private RightsUnmarshaller unmarshaller;
 
     @Before
     public void setUp() {
-        unmarshaller = new MatchingUnmarshaller();
+        unmarshaller = new RightsUnmarshaller();
     }
 
     @Test
     public void testDeserialize() {
-        try (InputStream inputStream = MatchingDeserializerTest.class.getResourceAsStream("matching_message.json")) {
+        try (InputStream inputStream = RightsDeserializerTest.class.getResourceAsStream("rights_message.json")) {
             String jsonString = CharStreams.toString(new InputStreamReader(inputStream, Charsets.UTF_8));
             Object message =
                 unmarshaller.unmarshal(null, new ByteArrayInputStream(jsonString.getBytes(Charsets.UTF_8)));
@@ -53,11 +53,13 @@ public class MatchingDeserializerTest {
     private Usage buildUsage() {
         Usage usage = new Usage();
         usage.setId("ac00c194-5363-463a-a718-ff02643aebf3");
+        usage.setWrWrkInst(100010768L);
         usage.setBatchId("5da597e4-f418-4b70-b43a-7990e82e6367");
         usage.setGrossAmount(new BigDecimal("50.00"));
         usage.setStandardNumber("12345XX-190048");
         usage.setWorkTitle("True directions : living your sacred instructions");
-        usage.setStatus(UsageStatusEnum.NEW);
+        usage.setSystemTitle("True directions : living your sacred instructions");
+        usage.setStatus(UsageStatusEnum.WORK_FOUND);
         return usage;
     }
 }

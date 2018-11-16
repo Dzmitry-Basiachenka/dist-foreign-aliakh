@@ -43,8 +43,8 @@
         <property name="createCommonTablesOnStartup" value="false"/>
     </bean>
 
-    <bean id="df.service.rightsMatchingProducer"
-          class="com.copyright.rup.dist.foreign.service.impl.mock.RightsMatchingProducerMock"/>
+    <bean id="df.service.rightsProducer"
+          class="com.copyright.rup.dist.foreign.service.impl.mock.RightsProducerMock"/>
 
     <bean id="df.service.paidUsageConsumer"
           class="com.copyright.rup.dist.foreign.service.impl.mock.PaidUsageConsumerMock"/>

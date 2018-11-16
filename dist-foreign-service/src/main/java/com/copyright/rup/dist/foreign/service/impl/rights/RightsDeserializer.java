@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.service.impl.matching;
+package com.copyright.rup.dist.foreign.service.impl.rights;
 
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.integration.util.JsonUtils;
@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.math.RoundingMode;
 
 /**
- * Implementation of {@link JsonDeserializer} to get {@link Usage} for matching.
+ * Implementation of {@link JsonDeserializer} to get {@link Usage} for getting Rights.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -25,7 +25,7 @@ import java.math.RoundingMode;
  *
  * @author Ihar Suvorau
  */
-public class MatchingDeserializer extends JsonDeserializer<Usage> {
+public class RightsDeserializer extends JsonDeserializer<Usage> {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
@@ -45,10 +45,12 @@ public class MatchingDeserializer extends JsonDeserializer<Usage> {
         usage.setId(JsonUtils.getStringValue(jsonNode.get("id")));
         usage.setStandardNumber(JsonUtils.getStringValue(jsonNode.get("standard_number")));
         usage.setWorkTitle(JsonUtils.getStringValue(jsonNode.get("work_title")));
+        usage.setSystemTitle(JsonUtils.getStringValue(jsonNode.get("system_title")));
+        usage.setWrWrkInst(JsonUtils.getLongValue(jsonNode.get("wr_wrk_inst")));
         usage.setBatchId(JsonUtils.getStringValue(jsonNode.get("batch_id")));
-        usage.setStatus(UsageStatusEnum.valueOf(JsonUtils.getStringValue(jsonNode.get("status"))));
         usage.setGrossAmount(
             JsonUtils.getBigDecimalValue(jsonNode.get("gross_amount")).setScale(2, RoundingMode.HALF_UP));
+        usage.setStatus(UsageStatusEnum.valueOf(JsonUtils.getStringValue(jsonNode.get("status"))));
         return usage;
     }
 }

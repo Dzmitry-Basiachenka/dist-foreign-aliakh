@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Verifies {@link WorkMatchingProducer}.
+ * Verifies {@link MatchingProducer}.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -20,17 +20,17 @@ import org.junit.Test;
  *
  * @author Ihar Suvorau
  */
-public class WorkMatchingProducerTest {
+public class MatchingProducerTest {
 
     private static final String END_POINT = "test";
 
     private ProducerTemplate template;
-    private WorkMatchingProducer producer;
+    private MatchingProducer producer;
 
     @Before
     public void setUp() {
         template = createMock(ProducerTemplate.class);
-        producer = new WorkMatchingProducer();
+        producer = new MatchingProducer();
         producer.setProducerTemplate(template);
         producer.setEndPoint(END_POINT);
     }

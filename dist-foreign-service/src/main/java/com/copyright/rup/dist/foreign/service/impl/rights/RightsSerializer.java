@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.service.impl.matching;
+package com.copyright.rup.dist.foreign.service.impl.rights;
 
 import com.copyright.rup.dist.foreign.domain.Usage;
 
@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
- * Implementation for {@link StdSerializer} to build json message for matching.
+ * Implementation for {@link StdSerializer} to build json message for getting rights.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -21,13 +21,13 @@ import java.util.Objects;
  *
  * @author Ihar Suvorau
  */
-public class MatchingSerializer extends StdSerializer<Usage> {
+public class RightsSerializer extends StdSerializer<Usage> {
 
     /**
      * Constructor.
      */
-    public MatchingSerializer() {
-        super(CollectionLikeType.construct(Usage.class, SimpleType.construct(MatchingSerializer.class)));
+    public RightsSerializer() {
+        super(CollectionLikeType.construct(Usage.class, SimpleType.construct(RightsSerializer.class)));
     }
 
     @Override
@@ -36,10 +36,12 @@ public class MatchingSerializer extends StdSerializer<Usage> {
         if (Objects.nonNull(usage)) {
             writeNotNullField(jsonGenerator, "id", usage.getId());
             writeNotNullField(jsonGenerator, "standard_number", usage.getStandardNumber());
+            writeNotNullField(jsonGenerator, "wr_wrk_inst", usage.getWrWrkInst());
             writeNotNullField(jsonGenerator, "work_title", usage.getWorkTitle());
+            writeNotNullField(jsonGenerator, "system_title", usage.getSystemTitle());
             writeNotNullField(jsonGenerator, "batch_id", usage.getBatchId());
-            writeNotNullField(jsonGenerator, "status", usage.getStatus().name());
             writeNotNullField(jsonGenerator, "gross_amount", usage.getGrossAmount());
+            writeNotNullField(jsonGenerator, "status", usage.getStatus().name());
         }
         jsonGenerator.writeEndObject();
     }
@@ -52,6 +54,13 @@ public class MatchingSerializer extends StdSerializer<Usage> {
     }
 
     private void writeNotNullField(JsonGenerator jsonGenerator, String fieldName, BigDecimal fieldValue)
+        throws IOException {
+        if (Objects.nonNull(fieldValue)) {
+            jsonGenerator.writeNumberField(fieldName, fieldValue);
+        }
+    }
+
+    private void writeNotNullField(JsonGenerator jsonGenerator, String fieldName, Long fieldValue)
         throws IOException {
         if (Objects.nonNull(fieldValue)) {
             jsonGenerator.writeNumberField(fieldName, fieldValue);

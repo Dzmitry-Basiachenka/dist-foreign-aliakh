@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.service.impl.matching;
+package com.copyright.rup.dist.foreign.service.impl.rights;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
- * Implementation of {@link IProducer} to send usages for rights matching.
+ * Implementation of {@link IProducer} to send usages for getting Rights.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -21,7 +21,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
  *
  * @author Ihar Suvorau
  */
-public class RightsMatchingProducer implements IProducer<Usage> {
+public class RightsProducer implements IProducer<Usage> {
 
     @Autowired
     @Qualifier("df.service.producerTemplate")
