@@ -843,25 +843,6 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testUpdateStatusAndProductFamily() {
-        List<Usage> usages = Lists.newArrayList(
-            usageRepository.findById("66a7c2c0-3b09-48ad-9aa5-a6d0822226c7"),
-            usageRepository.findById("66a7c2c0-3b09-48ad-9aa5-a6d0822226c7")
-        );
-        assertEquals(2, usages.size());
-        usages.forEach(usage -> {
-            usage.setStatus(UsageStatusEnum.ELIGIBLE);
-            usage.setProductFamily(FdaConstants.NTS_PRODUCT_FAMILY);
-        });
-        usageRepository.update(usages);
-        usages.forEach(usage -> {
-            Usage updatedUsage = usageRepository.findById(usage.getId());
-            assertEquals(UsageStatusEnum.ELIGIBLE, updatedUsage.getStatus());
-            assertEquals(FdaConstants.NTS_PRODUCT_FAMILY, updatedUsage.getProductFamily());
-        });
-    }
-
-    @Test
     public void testUpdateResearchedUsages() {
         String usageId1 = "721ca627-09bc-4204-99f4-6acae415fa5d";
         String usageId2 = "9c07f6dd-382e-4cbb-8cd1-ab9f51413e0a";

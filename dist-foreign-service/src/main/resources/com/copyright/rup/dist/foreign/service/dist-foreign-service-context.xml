@@ -26,14 +26,14 @@
         <property name="dataSource" ref="dfDataSource"/>
     </bean>
 
-    <bean id="df.service.workMatchingProducer"
-          class="com.copyright.rup.dist.foreign.service.impl.matching.WorkMatchingProducer">
-        <property name="endPoint" value="direct:df.service.matchingUsage"/>
+    <bean id="df.service.matchingProducer"
+          class="com.copyright.rup.dist.foreign.service.impl.matching.MatchingProducer">
+        <property name="endPoint" value="direct:df.service.matching"/>
     </bean>
 
-    <bean id="df.service.rightsMatchingProducer"
-          class="com.copyright.rup.dist.foreign.service.impl.matching.RightsMatchingProducer">
-        <property name="endPoint" value="direct:df.service.matchingRights"/>
+    <bean id="df.service.rightsProducer"
+          class="com.copyright.rup.dist.foreign.service.impl.rights.RightsProducer">
+        <property name="endPoint" value="direct:df.service.rights"/>
     </bean>
 
     <context:component-scan base-package="com.copyright.rup.dist.foreign.service"/>
@@ -44,11 +44,11 @@
 
         <endpoint id="df.service.lm.detail.paid.endpoint" uri="$RUP{dist.foreign.service.lm.detail.paid.endpoint}"/>
 
-        <endpoint id="df.service.internal.works.endpoint" uri="direct:df.service.matchingUsage"/>
-        <endpoint id="df.service.matching.works.endpoint" uri="$RUP{dist.foreign.service.matching.works.endpoint}"/>
+        <endpoint id="df.service.internal.matching.endpoint" uri="direct:df.service.matching"/>
+        <endpoint id="df.service.matching.endpoint" uri="$RUP{dist.foreign.service.matching.endpoint}"/>
 
-        <endpoint id="df.service.internal.rights.endpoint" uri="direct:df.service.matchingRights"/>
-        <endpoint id="df.service.matching.rights.endpoint" uri="$RUP{dist.foreign.service.matching.rights.endpoint}"/>
+        <endpoint id="df.service.internal.rights.endpoint" uri="direct:df.service.rights"/>
+        <endpoint id="df.service.rights.endpoint" uri="$RUP{dist.foreign.service.rights.endpoint}"/>
 
         <redeliveryPolicyProfile id="defaultRedeliveryPolicy"
                                  maximumRedeliveries="10"
@@ -70,35 +70,35 @@
         </route>
 
         <route>
-            <from ref="df.service.internal.works.endpoint"/>
+            <from ref="df.service.internal.matching.endpoint"/>
             <marshal>
                 <custom ref="df.service.matchingMarshaller"/>
             </marshal>
-            <to ref="df.service.matching.works.endpoint"/>
+            <to ref="df.service.matching.endpoint"/>
         </route>
 
         <route>
-            <from ref="df.service.matching.works.endpoint"/>
+            <from ref="df.service.matching.endpoint"/>
             <unmarshal>
                 <custom ref="df.service.matchingUnmarshaller"/>
             </unmarshal>
-            <bean ref="df.service.workMatchingConsumer"/>
+            <bean ref="df.service.matchingConsumer"/>
         </route>
 
         <route>
             <from ref="df.service.internal.rights.endpoint"/>
             <marshal>
-                <custom ref="df.service.matchingMarshaller"/>
+                <custom ref="df.service.rightsMarshaller"/>
             </marshal>
-            <to ref="df.service.matching.rights.endpoint"/>
+            <to ref="df.service.rights.endpoint"/>
         </route>
 
         <route>
-            <from ref="df.service.matching.rights.endpoint"/>
+            <from ref="df.service.rights.endpoint"/>
             <unmarshal>
-                <custom ref="df.service.matchingUnmarshaller"/>
+                <custom ref="df.service.rightsUnmarshaller"/>
             </unmarshal>
-            <bean ref="df.service.rightsMatchingConsumer"/>
+            <bean ref="df.service.rightsConsumer"/>
         </route>
     </camelContext>
 </beans>

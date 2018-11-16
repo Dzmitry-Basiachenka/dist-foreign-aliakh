@@ -17,9 +17,9 @@ import org.springframework.stereotype.Component;
  *
  * @author Ihar Suvorau
  */
-@Component("df.service.workMatchingConsumer")
+@Component("df.service.matchingConsumer")
 // TODO {isuvorau} cover by integration test
-public class WorkMatchingConsumer implements IConsumer<Usage> {
+public class MatchingConsumer implements IConsumer<Usage> {
 
     @Autowired
     private IWorkMatchingService workMatchingService;

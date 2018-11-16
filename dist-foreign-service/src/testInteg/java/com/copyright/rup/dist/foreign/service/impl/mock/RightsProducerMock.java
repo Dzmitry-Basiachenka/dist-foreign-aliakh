@@ -1,10 +1,10 @@
 package com.copyright.rup.dist.foreign.service.impl.mock;
 
 import com.copyright.rup.dist.foreign.domain.Usage;
-import com.copyright.rup.dist.foreign.service.impl.matching.RightsMatchingProducer;
+import com.copyright.rup.dist.foreign.service.impl.rights.RightsProducer;
 
 /**
- * Stub for rights matching producer.
+ * Stub for rights producer.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -12,7 +12,7 @@ import com.copyright.rup.dist.foreign.service.impl.matching.RightsMatchingProduc
  *
  * @author Ihar Suvorau
  */
-public class RightsMatchingProducerMock extends RightsMatchingProducer {
+public class RightsProducerMock extends RightsProducer {
 
     @Override
     public void send(Usage usage) {

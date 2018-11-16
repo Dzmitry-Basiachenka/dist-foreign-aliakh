@@ -1170,7 +1170,6 @@
         set
             status_ind = #{status},
             wr_wrk_inst = #{wrWrkInst},
-            product_family = #{productFamily},
             work_title = #{workTitle},
             system_title = #{systemTitle},
             rh_account_number = #{rightsholder.accountNumber},

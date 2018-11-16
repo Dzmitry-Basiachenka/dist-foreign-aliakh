@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.service.impl.matching;
+package com.copyright.rup.dist.foreign.service.impl.rights;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -23,7 +23,7 @@ import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Verifies {@link MatchingSerializer}.
+ * Verifies {@link RightsSerializer}.
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
@@ -31,13 +31,13 @@ import java.nio.charset.StandardCharsets;
  *
  * @author Ihar Suvorau
  */
-public class MatchingSerializerTest {
+public class RightsSerializerTest {
 
-    private MatchingSerializer matchingSerializer;
+    private RightsSerializer rightsSerializer;
 
     @Before
     public void setUp() {
-        matchingSerializer = new MatchingSerializer();
+        rightsSerializer = new RightsSerializer();
     }
 
     @Test
@@ -45,17 +45,17 @@ public class MatchingSerializerTest {
         StringWriter stringWriter = new StringWriter();
         JsonGenerator jsonGenerator = new JsonFactory().createGenerator(stringWriter);
         jsonGenerator.setPrettyPrinter(new DefaultPrettyPrinter());
-        matchingSerializer.serialize(buildUsage(), jsonGenerator, new DefaultSerializerProvider.Impl());
+        rightsSerializer.serialize(buildUsage(), jsonGenerator, new DefaultSerializerProvider.Impl());
         jsonGenerator.close();
         assertNotNull(stringWriter);
-        assertEquals(getFileAsString("matching_message.json"), stringWriter.toString());
+        assertEquals(getFileAsString("rights_message.json"), stringWriter.toString());
     }
 
     @Test
     public void testSerializeEmptyMessage() throws Exception {
         StringWriter stringWriter = new StringWriter();
         JsonGenerator jsonGenerator = new JsonFactory().createGenerator(stringWriter);
-        matchingSerializer.serialize(null, jsonGenerator, new DefaultSerializerProvider.Impl());
+        rightsSerializer.serialize(null, jsonGenerator, new DefaultSerializerProvider.Impl());
         jsonGenerator.close();
         assertNotNull(stringWriter);
         assertEquals("{}", stringWriter.toString());
@@ -64,7 +64,7 @@ public class MatchingSerializerTest {
     private String getFileAsString(String resourceName) {
         String result = null;
         try {
-            result = Resources.toString(MatchingSerializerTest.class.getResource(resourceName),
+            result = Resources.toString(RightsSerializerTest.class.getResource(resourceName),
                 StandardCharsets.UTF_8);
         } catch (IOException e) {
             fail();
@@ -76,10 +76,12 @@ public class MatchingSerializerTest {
         Usage usage = new Usage();
         usage.setId("ac00c194-5363-463a-a718-ff02643aebf3");
         usage.setBatchId("5da597e4-f418-4b70-b43a-7990e82e6367");
+        usage.setWrWrkInst(100010768L);
         usage.setGrossAmount(new BigDecimal("50.00"));
         usage.setStandardNumber("12345XX-190048");
         usage.setWorkTitle("True directions : living your sacred instructions");
-        usage.setStatus(UsageStatusEnum.NEW);
+        usage.setSystemTitle("True directions : living your sacred instructions");
+        usage.setStatus(UsageStatusEnum.WORK_FOUND);
         return usage;
     }
 }

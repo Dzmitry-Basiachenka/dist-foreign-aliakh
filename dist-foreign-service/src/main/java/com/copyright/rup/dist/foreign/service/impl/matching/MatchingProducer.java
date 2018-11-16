@@ -22,7 +22,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
  * @author Ihar Suvorau
  */
 // TODO {isuvorau} cover by integration test
-public class WorkMatchingProducer implements IProducer<Usage> {
+public class MatchingProducer implements IProducer<Usage> {
 
     @Autowired
     @Qualifier("df.service.producerTemplate")

@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.service.impl.matching;
+package com.copyright.rup.dist.foreign.service.impl.rights;
 
 import com.copyright.rup.dist.common.integration.camel.IConsumer;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.Objects;
 
 /**
- * Consumer to handle usages for Rights matching.
+ * Consumer to handle usages for getting Rights.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -18,8 +18,8 @@ import java.util.Objects;
  *
  * @author Ihar Suvorau
  */
-@Component("df.service.rightsMatchingConsumer")
-public class RightsMatchingConsumer implements IConsumer<Usage> {
+@Component("df.service.rightsConsumer")
+public class RightsConsumer implements IConsumer<Usage> {
 
     @Autowired
     private IRightsService rightsService;

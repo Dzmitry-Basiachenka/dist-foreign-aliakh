@@ -54,7 +54,7 @@ public class WorkMatchingService implements IWorkMatchingService {
     @Autowired
     private IUsageAuditService auditService;
     @Autowired
-    @Qualifier("df.service.rightsMatchingProducer")
+    @Qualifier("df.service.rightsProducer")
     private IProducer<Usage> producer;
 
     @Override
