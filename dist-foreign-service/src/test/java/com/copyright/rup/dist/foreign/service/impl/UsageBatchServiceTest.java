@@ -23,7 +23,6 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.service.impl.matching.MatchingProducer;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -67,7 +66,6 @@ public class UsageBatchServiceTest {
     private IRightsholderService rightsholderService;
     private UsageBatchService usageBatchService;
     private ExecutorService executorService;
-    private MatchingProducer matchingProducer;
 
     @Before
     public void setUp() {
@@ -75,13 +73,11 @@ public class UsageBatchServiceTest {
         usageService = createMock(IUsageService.class);
         rightsholderService = createMock(IRightsholderService.class);
         executorService = createMock(ExecutorService.class);
-        matchingProducer = createMock(MatchingProducer.class);
         usageBatchService = new UsageBatchService();
         Whitebox.setInternalState(usageBatchService, "usageBatchRepository", usageBatchRepository);
         Whitebox.setInternalState(usageBatchService, "usageService", usageService);
         Whitebox.setInternalState(usageBatchService, "rightsholderService", rightsholderService);
         Whitebox.setInternalState(usageBatchService, "executorService", executorService);
-        Whitebox.setInternalState(usageBatchService, "matchingProducer", matchingProducer);
     }
 
     @Test
@@ -142,10 +138,8 @@ public class UsageBatchServiceTest {
         rightsholderService.updateRightsholder(rro);
         expectLastCall().once();
         executorService.execute(capture(runnableCapture));
-        expectLastCall().once();
+        expectLastCall().times(2);
         expect(usageService.insertUsages(usageBatch, usages)).andReturn(2).once();
-        matchingProducer.send(usage2);
-        expectLastCall().once();
         replayAll();
         assertEquals(2, usageBatchService.insertUsageBatch(usageBatch, usages));
         UsageBatch insertedUsageBatch = captureUsageBatch.getValue();
