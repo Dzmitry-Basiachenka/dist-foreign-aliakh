@@ -72,7 +72,7 @@ public class UsageBatchService implements IUsageBatchService {
     }
 
     @Override
-    // TODO {isuvorau} add transactional and find better approach to send messages on queue
+    @Transactional
     public int insertUsageBatch(UsageBatch usageBatch, Collection<Usage> usages) {
         String userName = RupContextUtils.getUserName();
         usageBatch.setId(RupPersistUtils.generateUuid());
@@ -83,14 +83,14 @@ public class UsageBatchService implements IUsageBatchService {
         LOGGER.info("Insert usage batch. Finished. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
         rightsholderService.updateRightsholder(usageBatch.getRro());
         int count = usageService.insertUsages(usageBatch, usages);
-        executorService.execute(() -> updateRightsholders(
-            usages.stream()
-                .map(usage -> usage.getRightsholder().getAccountNumber())
-                .filter(Objects::nonNull)
-                .collect(Collectors.toSet())));
-        usages.stream()
-            .filter(usage -> UsageStatusEnum.NEW == usage.getStatus())
-            .forEach(matchingProducer::send);
+        Set<Long> accountNumbersToUpdate = usages.stream()
+            .map(usage -> usage.getRightsholder().getAccountNumber())
+            .filter(Objects::nonNull)
+            .collect(Collectors.toSet());
+        executorService.execute(() -> updateRightsholders(accountNumbersToUpdate));
+        List<Usage> usagesInNewStatus =
+            usages.stream().filter(usage -> UsageStatusEnum.NEW == usage.getStatus()).collect(Collectors.toList());
+        executorService.execute(() -> usagesInNewStatus.forEach(matchingProducer::send));
         return count;
     }
 
@@ -105,12 +105,14 @@ public class UsageBatchService implements IUsageBatchService {
     }
 
     /**
-     * Gets instance of {@link ExecutorService}.
+     * Gets instance of {@link ExecutorService} with 2 threads.
+     * First is for update rightsholders task.
+     * Second is for sending usages on queue for PI matching.
      *
      * @return instance of {@link ExecutorService}
      */
     protected ExecutorService getExecutorService() {
-        return Executors.newSingleThreadExecutor();
+        return Executors.newFixedThreadPool(2);
     }
 
     /**
