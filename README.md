@@ -1,3 +1,7 @@
+3.1.26
+-
+* B-47837 FDA: Neartime processing for Works match and Get RHs: apply concurrent consumers for Matching and Rights queues
+
 3.1.25
 -
 * B-47837 FDA: Neartime processing for Works match and Get RHs: rename classes related to getting Rights, add independent serializer and deserializer for getting Rights
