@@ -4,7 +4,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import com.copyright.rup.dist.foreign.integration.lm.impl.producer.ExternalUsageProducer;
-import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 
 import org.junit.Test;
@@ -38,7 +37,8 @@ public class ApplicationContextTest {
             assertNotNull(context.getBean(ExternalUsageProducer.class));
             assertNotNull(context.getBean("dist.common.integration.rest.prmRollUpService"));
             assertNotNull(context.getBean("dist.common.integration.rest.prmRollUpAsyncService"));
-            assertNotNull(context.getBean(IPiIntegrationService.class));
+            assertNotNull(context.getBean("df.integration.piIntegrationService"));
+            assertNotNull(context.getBean("df.integration.piIntegrationProxyService"));
         } catch (Exception e) {
             fail("Context is not valid: " + e.getMessage());
         }

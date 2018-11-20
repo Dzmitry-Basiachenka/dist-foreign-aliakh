@@ -36,6 +36,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -138,7 +139,7 @@ public class UsageBatchServiceTest {
         rightsholderService.updateRightsholder(rro);
         expectLastCall().once();
         executorService.execute(capture(runnableCapture));
-        expectLastCall().times(2);
+        expectLastCall().once();
         expect(usageService.insertUsages(usageBatch, usages)).andReturn(2).once();
         replayAll();
         assertEquals(2, usageBatchService.insertUsageBatch(usageBatch, usages));
@@ -163,6 +164,21 @@ public class UsageBatchServiceTest {
         replay(usageService, usageBatchRepository, RupContextUtils.class);
         usageBatchService.deleteUsageBatch(usageBatch);
         verify(usageService, usageBatchRepository, RupContextUtils.class);
+    }
+
+    @Test
+    public void testSendForMatching() {
+        Usage usage1 = new Usage();
+        Usage usage2 = new Usage();
+        usage2.setStatus(UsageStatusEnum.NEW);
+        List<Usage> usages = Arrays.asList(usage1, usage2);
+        Capture<Runnable> runnableCapture = new Capture<>();
+        executorService.execute(capture(runnableCapture));
+        expectLastCall().once();
+        replay(executorService);
+        usageBatchService.sendForMatching(usages);
+        assertNotNull(runnableCapture.getValue());
+        verify(executorService);
     }
 
     @Test
