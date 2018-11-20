@@ -263,39 +263,6 @@ public interface IUsageService {
     void updatePaidInfo(List<PaidUsage> usages);
 
     /**
-     * @return count of {@link Usage}s with standard number and {@link UsageStatusEnum#NEW} status.
-     */
-    int getStandardNumbersCount();
-
-    /**
-     * @return count of {@link Usage}s without standard number, with title and {@link UsageStatusEnum#NEW} status.
-     */
-    int getTitlesCount();
-
-    /**
-     * Gets list of {@link Usage}s that have standard numbers.
-     *
-     * @param limit  maximum size of list
-     * @param offset number of excluded records
-     * @return list of {@link Usage}s
-     */
-    List<Usage> getUsagesWithStandardNumber(int limit, int offset);
-
-    /**
-     * Gets list of {@link Usage}s that have no standard numbers but have titles.
-     *
-     * @param limit  maximum size of list
-     * @param offset number of excluded records
-     * @return list of {@link Usage}s
-     */
-    List<Usage> getUsagesWithTitle(int limit, int offset);
-
-    /**
-     * @return list of {@link Usage}s without standard number and title with with {@link UsageStatusEnum#NEW} status.
-     */
-    List<Usage> getUsagesWithoutStandardNumberAndTitle();
-
-    /**
      * Updates researched usage details.
      *
      * @param researchedUsages collection of {@link ResearchedUsage}s
@@ -310,4 +277,14 @@ public interface IUsageService {
      * if all usages from scenario were sent to CRM.
      */
     void sendToCrm();
+
+    /**
+     * Gets list of {@link Usage}s by specified {@link UsageStatusEnum}.
+     *
+     * @param status {@link UsageStatusEnum} instance
+     * @param limit  maximum size of list
+     * @param offset number of excluded records
+     * @return the list of found {@link Usage}s
+     */
+    List<Usage> getUsagesByStatus(UsageStatusEnum status, int limit, int offset);
 }

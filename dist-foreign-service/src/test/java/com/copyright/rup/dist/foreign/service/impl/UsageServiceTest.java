@@ -36,12 +36,10 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
-
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
@@ -590,45 +588,11 @@ public class UsageServiceTest {
     }
 
     @Test
-    public void testGetStandardNumbersCount() {
-        expect(usageRepository.findStandardNumbersCount()).andReturn(10).once();
-        replay(usageRepository);
-        assertEquals(10, usageService.getStandardNumbersCount());
-        verify(usageRepository);
-    }
-
-    @Test
-    public void testGetTitlesCount() {
-        expect(usageRepository.findTitlesCount()).andReturn(10).once();
-        replay(usageRepository);
-        assertEquals(10, usageService.getTitlesCount());
-        verify(usageRepository);
-    }
-
-    @Test
-    public void testGetUsagesWithStandardNumber() {
+    public void testGetUsagesByStatus() {
         List<Usage> usages = Collections.singletonList(buildUsage(USAGE_ID_1));
-        expect(usageRepository.findWithStandardNumber(10, 0)).andReturn(usages).once();
+        expect(usageRepository.findByStatus(UsageStatusEnum.NEW, 10, 0)).andReturn(usages).once();
         replay(usageRepository);
-        assertEquals(usages, usageService.getUsagesWithStandardNumber(10, 0));
-        verify(usageRepository);
-    }
-
-    @Test
-    public void testGetUsagesWithTitle() {
-        List<Usage> usages = Collections.singletonList(buildUsage(USAGE_ID_1));
-        expect(usageRepository.findWithTitle(10, 0)).andReturn(usages).once();
-        replay(usageRepository);
-        assertEquals(usages, usageService.getUsagesWithTitle(10, 0));
-        verify(usageRepository);
-    }
-
-    @Test
-    public void testGetUsagesWithoutStandardNumberAndTitle() {
-        List<Usage> usages = Collections.singletonList(buildUsage(USAGE_ID_1));
-        expect(usageRepository.findWithoutStandardNumberAndTitle()).andReturn(usages).once();
-        replay(usageRepository);
-        assertEquals(usages, usageService.getUsagesWithoutStandardNumberAndTitle());
+        assertEquals(usages, usageService.getUsagesByStatus(UsageStatusEnum.NEW, 10, 0));
         verify(usageRepository);
     }
 

@@ -366,31 +366,6 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public int getStandardNumbersCount() {
-        return usageRepository.findStandardNumbersCount();
-    }
-
-    @Override
-    public int getTitlesCount() {
-        return usageRepository.findTitlesCount();
-    }
-
-    @Override
-    public List<Usage> getUsagesWithStandardNumber(int limit, int offset) {
-        return usageRepository.findWithStandardNumber(limit, offset);
-    }
-
-    @Override
-    public List<Usage> getUsagesWithTitle(int limit, int offset) {
-        return usageRepository.findWithTitle(limit, offset);
-    }
-
-    @Override
-    public List<Usage> getUsagesWithoutStandardNumberAndTitle() {
-        return usageRepository.findWithoutStandardNumberAndTitle();
-    }
-
-    @Override
     @Transactional
     public void loadResearchedUsages(Collection<ResearchedUsage> researchedUsages) {
         LOGGER.info("Load researched usages. Started. ResearchedUsagesCount={}", LogUtils.size(researchedUsages));
@@ -445,6 +420,11 @@ public class UsageService implements IUsageService {
             LOGGER.info("Send to CRM. Skipped. PaidUsagesCount={}, Reason=There are no usages to report",
                 LogUtils.size(paidUsagesIds));
         }
+    }
+
+    @Override
+    public List<Usage> getUsagesByStatus(UsageStatusEnum status, int limit, int offset) {
+        return usageRepository.findByStatus(status, limit, offset);
     }
 
     private void updatePaidUsage(PaidUsage paidUsage, String actionReason) {

@@ -2,8 +2,6 @@ package com.copyright.rup.dist.foreign.service.api;
 
 import com.copyright.rup.dist.foreign.domain.Usage;
 
-import java.util.List;
-
 /**
  * Interface for service to match usages with works.
  * <p>
@@ -16,14 +14,6 @@ import java.util.List;
 public interface IWorkMatchingService {
 
     /**
-     * Finds Wr Wrk Insts for given usages and matches result by standard number.
-     *
-     * @param usages list of {@link Usage}s to be matched
-     * @return list of matched {@link Usage}s
-     */
-    List<Usage> matchByIdno(List<Usage> usages);
-
-    /**
      * Finds Wr Wrk Inst for given usage and matches result by standard number.
      *
      * @param usage {@link Usage} to be matched
@@ -31,26 +21,11 @@ public interface IWorkMatchingService {
     void matchByIdno(Usage usage);
 
     /**
-     * Finds Wr Wrk Insts for given usages and matches result by work title.
-     *
-     * @param usages list of {@link Usage}s to be matched
-     * @return list of matched {@link Usage}s
-     */
-    List<Usage> matchByTitle(List<Usage> usages);
-
-    /**
      * Finds Wr Wrk Inst for given usage and matches result by work title.
      *
      * @param usage {@link Usage} to be matched
      */
     void matchByTitle(Usage usage);
-
-    /**
-     * Updates {@link Usage}s status and Wr Wrk Inst.
-     *
-     * @param usages list of {@link Usage}s with not blank standard number and title
-     */
-    void updateStatusForUsagesWithNoStandardNumberAndTitle(List<Usage> usages);
 
     /**
      * Updates {@link Usage} status and Wr Wrk Inst.

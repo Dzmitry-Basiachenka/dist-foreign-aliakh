@@ -1073,52 +1073,13 @@
             </foreach>
     </update>
 
-    <select id="findStandardNumbersCount" resultType="int">
-        select count(1)
-        from (
-            select distinct
-                standard_number,
-                work_title
-            from ${schema}.df_usage
-            where standard_number is not null
-                and status_ind = #{status}) standardNumbers
-    </select>
-
-    <select id="findTitlesCount" resultType="int">
-        select count(1)
-        from (
-            select distinct
-                work_title
-            from ${schema}.df_usage
-            where standard_number is null
-                and work_title is not null
-                and status_ind = #{status}) titles
-    </select>
-
-    <select id="findWithStandardNumber" resultMap="usageResultMap" parameterType="map">
-        select distinct
-            standard_number,
-            work_title,
-            system_title,
-            status_ind
+    <select id="findByStatus" resultMap="usageResultMap">
+        select
+            df_usage_uid,
+            <include refid="usageColumns"/>
         from ${schema}.df_usage
-        where standard_number is not null
-            and status_ind = #{status}
-        order by standard_number
-        limit #{limit}
-        offset #{offset}
-    </select>
-
-    <select id="findWithTitle" resultMap="usageResultMap" parameterType="map">
-        select distinct
-            work_title,
-            system_title,
-            status_ind
-        from ${schema}.df_usage
-        where standard_number is null
-            and work_title is not null
-            and status_ind = #{status}
-        order by work_title
+        where status_ind = #{status}
+        order by df_usage_uid
         limit #{limit}
         offset #{offset}
     </select>
@@ -1154,16 +1115,6 @@
         from ${schema}.df_usage
         where work_title = #{workTitle}
             and standard_number is null
-            and status_ind = #{status}
-    </select>
-
-    <select id="findWithoutStandardNumberAndTitle" resultMap="usageResultMap">
-        select
-            df_usage_uid,
-            <include refid="usageColumns"/>
-        from ${schema}.df_usage
-        where standard_number is null
-            and work_title is null
             and status_ind = #{status}
     </select>
 

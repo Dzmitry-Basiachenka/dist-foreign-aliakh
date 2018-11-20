@@ -307,38 +307,14 @@ public interface IUsageRepository {
     void updateStatusAndRhAccountNumber(Set<String> usageIds, UsageStatusEnum status, Long rhAccountNumber);
 
     /**
-     * Finds list of {@link Usage}s that have standard numbers.
+     * Finds list of {@link Usage}s by specified {@link UsageStatusEnum}.
      *
+     * @param status {@link UsageStatusEnum} instance
      * @param limit  maximum size of list
      * @param offset number of excluded records
-     * @return list of {@link Usage}s
+     * @return the list of found {@link Usage}s
      */
-    List<Usage> findWithStandardNumber(int limit, int offset);
-
-    /**
-     * Finds list of {@link Usage}s that have no standard numbers but have titles.
-     *
-     * @param limit  maximum size of list
-     * @param offset number of excluded records
-     * @return list of {@link Usage}s
-     */
-    List<Usage> findWithTitle(int limit, int offset);
-
-    /**
-     * @return list of {@link Usage}s without standard number and title with {@link UsageStatusEnum#NEW} status.
-     */
-    List<Usage> findWithoutStandardNumberAndTitle();
-
-    /**
-     * @return count of unique standard numbers among {@link Usage}s with {@link UsageStatusEnum#NEW} status.
-     */
-    int findStandardNumbersCount();
-
-    /**
-     * @return count of unique titles among {@link Usage}s without standard number and with
-     * {@link UsageStatusEnum#NEW} status.
-     */
-    int findTitlesCount();
+    List<Usage> findByStatus(UsageStatusEnum status, int limit, int offset);
 
     /**
      * Updates given list of {@link Usage}s. Update affects not all fields. For exact list of affected fields please
