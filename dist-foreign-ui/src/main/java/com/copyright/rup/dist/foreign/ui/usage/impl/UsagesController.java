@@ -132,6 +132,7 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     public int loadUsageBatch(UsageBatch usageBatch, Collection<Usage> usages) {
         int result = usageBatchService.insertUsageBatch(usageBatch, usages);
         usageBatchService.sendForMatching(usages);
+        usageBatchService.sendForGettingRights(usages);
         filterController.getWidget().clearFilter();
         return result;
     }

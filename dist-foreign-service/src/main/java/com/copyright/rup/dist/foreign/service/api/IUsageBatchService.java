@@ -44,6 +44,13 @@ public interface IUsageBatchService {
     void sendForMatching(Collection<Usage> usages);
 
     /**
+     * Sends list of usages on queue for getting Rights process.
+     *
+     * @param usages collection of {@link Usage} to be sent
+     */
+    void sendForGettingRights(Collection<Usage> usages);
+
+    /**
      * Inserts usage batch, it's usages and RRO.
      *
      * @param usageBatch {@link UsageBatch} instance
