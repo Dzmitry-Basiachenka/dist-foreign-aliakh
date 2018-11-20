@@ -139,7 +139,7 @@ public class UsageService implements IUsageService {
         List<Usage> usages = usageRepository.findWithAmountsAndRightsholders(filter);
         usages.forEach(usage -> {
             boolean rhParticipatingFlag =
-                prmIntegrationService.isRightsholderParticipating(usage.getRightsholder().getAccountNumber(),
+                prmIntegrationService.isRightsholderParticipating(usage.getRightsholder().getId(),
                     usage.getProductFamily());
             CalculationUtils.recalculateAmounts(usage, rhParticipatingFlag,
                 prmIntegrationService.getRhParticipatingServiceFee(rhParticipatingFlag));
@@ -162,13 +162,14 @@ public class UsageService implements IUsageService {
             rhToUsageMap.values().stream().map(usage -> usage.getRightsholder().getId()).collect(Collectors.toSet()));
         Table<String, String, Long> rollUps = prmIntegrationService.getRollUps(rightsholdersIds);
         newUsages.forEach(usage -> {
+            final String rightsholderId = usage.getRightsholder().getId();
             final long rhAccountNumber = usage.getRightsholder().getAccountNumber();
             Usage scenarioUsage = rhToUsageMap.get(rhAccountNumber);
             usage.getPayee().setAccountNumber(null == scenarioUsage
                 ? PrmRollUpService.getPayeeAccountNumber(rollUps, usage.getRightsholder(), usage.getProductFamily())
                 : scenarioUsage.getPayee().getAccountNumber());
             boolean rhParticipating = null == scenarioUsage
-                ? prmIntegrationService.isRightsholderParticipating(rhAccountNumber, usage.getProductFamily())
+                ? prmIntegrationService.isRightsholderParticipating(rightsholderId, usage.getProductFamily())
                 : scenarioUsage.isRhParticipating();
             addScenarioInfo(usage, scenario);
             CalculationUtils.recalculateAmounts(usage, rhParticipating,
@@ -214,7 +215,7 @@ public class UsageService implements IUsageService {
         String userName = RupContextUtils.getUserName();
         usages.forEach(usage -> {
             boolean rhParticipatingFlag =
-                prmIntegrationService.isRightsholderParticipating(usage.getRightsholder().getAccountNumber(),
+                prmIntegrationService.isRightsholderParticipating(usage.getRightsholder().getId(),
                     usage.getProductFamily());
             CalculationUtils.recalculateAmounts(usage, rhParticipatingFlag,
                 prmIntegrationService.getRhParticipatingServiceFee(rhParticipatingFlag));

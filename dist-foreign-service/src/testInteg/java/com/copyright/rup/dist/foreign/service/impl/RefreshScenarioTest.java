@@ -30,6 +30,9 @@ import java.math.BigDecimal;
 @TestPropertySource(properties = {"test.liquibase.changelog=refresh-scenario-service-data-init.groovy"})
 public class RefreshScenarioTest {
 
+    private static final String RIGHTHOLDER_ID_1 = "019acfde-91be-43aa-8871-6305642bcb2c";
+    private static final String RIGHTHOLDER_ID_2 = "37338ed1-7083-45e2-a96b-5872a7de3a98";
+    private static final String RIGHTHOLDER_ID_3 = "624dcf73-a30f-4381-b6aa-c86d17198bd5";
     @Autowired
     private RefreshScenarioTestBuilder testBuilder;
 
@@ -37,8 +40,10 @@ public class RefreshScenarioTest {
     public void testRefreshFasScenario() {
         testBuilder
             .withScenario("e6e2fe6c-4c47-4ca1-bf32-591af4c13060")
-            .expectPreferences("prm/preferences_response.json", 1)
-            .expectRollups("prm/fas_rollups_response.json", "019acfde-91be-43aa-8871-6305642bcb2c")
+            .expectPreferences("prm/preferences_response.json",
+                RIGHTHOLDER_ID_1)
+            .expectRollups("prm/fas_rollups_response.json",
+                RIGHTHOLDER_ID_1)
             .expectUsages(Lists.newArrayList(
                 buildUsage("0e49fd89-f094-4023-b729-afe240272ebe", 1000024497L, 1000024497L, "435.008", "2283.792"),
                 buildUsage("b1f0b236-3ae9-4a60-9fab-61db84199dss", 7000429266L, 1000009997L, "2871.0528", "6100.9872"),
@@ -55,9 +60,12 @@ public class RefreshScenarioTest {
     public void testRefreshClaScenario() {
         testBuilder
             .withScenario("8fba95e3-c706-47f7-a1c8-fad9af5e31a9")
-            .expectPreferences("prm/not_found_response.json", 2)
-            .expectRollups("prm/cla_rollups_response.json", "624dcf73-a30f-4381-b6aa-c86d17198bd5",
-                "37338ed1-7083-45e2-a96b-5872a7de3a98")
+            .expectPreferences("prm/not_found_response.json",
+                RIGHTHOLDER_ID_2,
+                RIGHTHOLDER_ID_3)
+            .expectRollups("prm/cla_rollups_response.json",
+                RIGHTHOLDER_ID_3,
+                RIGHTHOLDER_ID_2)
             .expectUsages(Lists.newArrayList(
                 buildUsage("007aff49-831c-46ab-9528-2e043f7564e9", 2000073957L, 2000073957L, "1450.0256", "3081.3044"),
                 buildUsage("3c3a3329-d64c-45a9-962c-f247e4bbf3b6", 2000139286L, 2000017000L, "509.322", "4583.898"),

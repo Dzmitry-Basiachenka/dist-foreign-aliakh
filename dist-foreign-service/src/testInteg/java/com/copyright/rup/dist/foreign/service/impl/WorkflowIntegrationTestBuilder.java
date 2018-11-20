@@ -64,7 +64,6 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * Builder for {@link WorkflowIntegrationTest}.
@@ -114,6 +113,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
     private UsageFilter usageFilter;
     private int expectedInsertedUsagesCount;
     private String expectedPreferencesJson;
+    private List<String> expectedPreferencesRightholderIds;
     private String expectedRollupsJsonFile;
     private List<String> expectedRightsholdersIds;
     private String expectedLmDetailsJsonFile;
@@ -121,7 +121,6 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
     private List<String> expectedPaidUsageLmDetailids;
     private String expectedCrmRequestJsonFile;
     private String expectedCrmResponseJsonFile;
-    private int expectedPreferencesCallsTimes;
 
     public WorkflowIntegrationTestBuilder withUsagesCsvFile(String csvFile, String... usageIds) {
         this.usagesCsvFile = csvFile;
@@ -149,12 +148,11 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
-    public WorkflowIntegrationTestBuilder expectPreferences(String preferencesJson, int times) {
+    public WorkflowIntegrationTestBuilder expectPreferences(String preferencesJson, String... rightholderIds) {
         this.expectedPreferencesJson = preferencesJson;
-        this.expectedPreferencesCallsTimes = times;
+        this.expectedPreferencesRightholderIds = Arrays.asList(rightholderIds);
         return this;
     }
-
 
     public WorkflowIntegrationTestBuilder expectRollups(String jsonFile, String... rightsholdersIds) {
         this.expectedRollupsJsonFile = jsonFile;
@@ -242,7 +240,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
 
         private void addToScenario() {
             createRestServer();
-            expectGetPreferences(expectedPreferencesJson);
+            expectGetPreferences(expectedPreferencesJson, expectedPreferencesRightholderIds);
             expectGetRollups();
             scenario = scenarioService.createScenario("Test Scenario", "Test Scenario Description", usageFilter);
             mockServer.verify();
@@ -256,14 +254,16 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
             asyncMockServer = MockRestServiceServer.createServer(asyncRestTemplate);
         }
 
-        private void expectGetPreferences(String fileName) {
-            IntStream.range(0, expectedPreferencesCallsTimes).forEach(i ->
+        private void expectGetPreferences(String fileName, List<String> rightholderIds) {
+            rightholderIds.forEach(rightholderId -> {
                 mockServer.expect(MockRestRequestMatchers
-                    .requestTo("http://localhost:8080/party-rest/orgPreference/all?fmt=json"))
+                    .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelpref?orgIds%5B%5D="
+                        + rightholderId
+                        + "&prefCodes%5B%5D=ISDISTRIBUTABLE,TAXBENEFICIALOWNER,MINIMUMPAYMENT,IS-RH-FDA-PARTICIPATING"))
                     .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
                     .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), fileName),
-                        MediaType.APPLICATION_JSON))
-            );
+                        MediaType.APPLICATION_JSON));
+            });
         }
 
         private void expectGetRollups() {

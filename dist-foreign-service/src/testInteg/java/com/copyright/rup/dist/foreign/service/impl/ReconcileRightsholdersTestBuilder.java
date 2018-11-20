@@ -52,6 +52,7 @@ class ReconcileRightsholdersTestBuilder {
     private String rmsResponse;
     private String rmsRequest;
     private String expectedPreferencesJson;
+    private List<String> expectedPreferencesRightholderIds;
     private String expectedRollupsJson;
     private String expectedRollupsIds;
     private String expectedPrmResponse;
@@ -72,7 +73,6 @@ class ReconcileRightsholdersTestBuilder {
     private boolean prmRollUpAsync;
     @Value("$RUP{dist.foreign.integration.rest.prm.rightsholder.async}")
     private boolean prmRightsholderAsync;
-    private int expectedPreferencesCallsTimes;
 
     Runner build() {
         return new Runner();
@@ -105,9 +105,9 @@ class ReconcileRightsholdersTestBuilder {
         return this;
     }
 
-    ReconcileRightsholdersTestBuilder expectPreferences(String preferencesJson, int times) {
+    ReconcileRightsholdersTestBuilder expectPreferences(String preferencesJson, String... rightholderIds) {
         this.expectedPreferencesJson = preferencesJson;
-        this.expectedPreferencesCallsTimes = times;
+        this.expectedPreferencesRightholderIds = Arrays.asList(rightholderIds);
         return this;
     }
 
@@ -142,7 +142,7 @@ class ReconcileRightsholdersTestBuilder {
             if (Objects.nonNull(expectedRollupsJson)) {
                 expectGetRollups();
             }
-            expectGetPreferences(expectedPreferencesJson);
+            expectGetPreferences(expectedPreferencesJson, expectedPreferencesRightholderIds);
             scenarioService.reconcileRightsholders(expectedScenario);
             assertDiscrepancies();
             scenarioService.approveOwnershipChanges(expectedScenario);
@@ -182,14 +182,16 @@ class ReconcileRightsholdersTestBuilder {
                         MediaType.APPLICATION_JSON));
         }
 
-        private void expectGetPreferences(String fileName) {
-            IntStream.range(0, expectedPreferencesCallsTimes).forEach(i ->
+        private void expectGetPreferences(String fileName, List<String> rightholderIds) {
+            rightholderIds.forEach(rightholderId -> {
                 mockServer.expect(MockRestRequestMatchers
-                    .requestTo("http://localhost:8080/party-rest/orgPreference/all?fmt=json"))
+                    .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelpref?orgIds%5B%5D="
+                        + rightholderId
+                        + "&prefCodes%5B%5D=ISDISTRIBUTABLE,TAXBENEFICIALOWNER,MINIMUMPAYMENT,IS-RH-FDA-PARTICIPATING"))
                     .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
                     .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), fileName),
-                        MediaType.APPLICATION_JSON))
-            );
+                        MediaType.APPLICATION_JSON));
+            });
         }
 
         private void assertDiscrepancies() {

@@ -225,7 +225,7 @@ public class UsageServiceTest {
         Usage usage = buildUsage(USAGE_ID_1);
         expect(usageRepository.findWithAmountsAndRightsholders(usageFilter))
             .andReturn(Lists.newArrayList(usage)).once();
-        expect(prmIntegrationService.isRightsholderParticipating(usage.getRightsholder().getAccountNumber(),
+        expect(prmIntegrationService.isRightsholderParticipating(usage.getRightsholder().getId(),
             usage.getProductFamily()))
             .andReturn(true).once();
         expect(prmIntegrationService.getRhParticipatingServiceFee(true))

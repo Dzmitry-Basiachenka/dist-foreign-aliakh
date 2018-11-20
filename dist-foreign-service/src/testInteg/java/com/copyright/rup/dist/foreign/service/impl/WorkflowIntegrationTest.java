@@ -47,6 +47,11 @@ public class WorkflowIntegrationTest {
     private static final String USAGE_LM_DETAIL_ID_4 = "b771be06-0206-4e03-9e9a-740c5714bdae";
     private static final String USAGE_LM_DETAIL_ID_5 = "1cb528e4-9712-4a2a-b456-9eb4316799d4";
     private static final String USAGE_LM_DETAIL_ID_6 = "c6a8a6d4-952c-43e2-9f9d-f12212c95fd8";
+    private static final String RIGHTHOLDER_ID_1 = "60080587-a225-439c-81af-f016cb33aeac";
+    private static final String RIGHTHOLDER_ID_2 = "b0e6b1f6-89e9-4767-b143-db0f49f32769";
+    private static final String RIGHTHOLDER_ID_3 = "f366285a-ce46-48b0-96ee-cd35d62fb243";
+    private static final String RIGHTHOLDER_ID_4 = "624dcf73-a30f-4381-b6aa-c86d17198bd5";
+    private static final String RIGHTHOLDER_ID_5 = "37338ed1-7083-45e2-a96b-5872a7de3a98";
 
     @Autowired
     private WorkflowIntegrationTestBuilder testBuilder;
@@ -61,10 +66,18 @@ public class WorkflowIntegrationTest {
             .withUsageBatch(buildUsageBatch())
             .withUsageFilter(buildUsageFilter())
             .expectInsertedUsagesCount(5)
-            .expectPreferences("prm/not_found_response.json", 5)
-            .expectRollups("prm/cla_rollups_response.json", "b0e6b1f6-89e9-4767-b143-db0f49f32769",
-                "624dcf73-a30f-4381-b6aa-c86d17198bd5", "60080587-a225-439c-81af-f016cb33aeac",
-                "37338ed1-7083-45e2-a96b-5872a7de3a98", "f366285a-ce46-48b0-96ee-cd35d62fb243")
+            .expectPreferences("prm/not_found_response.json",
+                RIGHTHOLDER_ID_1,
+                RIGHTHOLDER_ID_2,
+                RIGHTHOLDER_ID_3,
+                RIGHTHOLDER_ID_4,
+                RIGHTHOLDER_ID_5)
+            .expectRollups("prm/cla_rollups_response.json",
+                RIGHTHOLDER_ID_2,
+                RIGHTHOLDER_ID_4,
+                RIGHTHOLDER_ID_1,
+                RIGHTHOLDER_ID_5,
+                RIGHTHOLDER_ID_3)
             .expectLmDetails("details/cla_details_to_lm.json")
             .expectPaidUsagesFromLm("lm/paid_usages_cla.json")
             .expectPaidUsageLmDetailIds(USAGE_LM_DETAIL_ID_1, USAGE_LM_DETAIL_ID_2, USAGE_LM_DETAIL_ID_3,

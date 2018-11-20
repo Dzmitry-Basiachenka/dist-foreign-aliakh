@@ -52,7 +52,8 @@ public class ReconcileRightsholdersTest {
             .forScenario(buildScenario("be66bae9-fa89-499a-8485-fb9e445bedd9", "Test Reconcile rightsholders 1"))
             .expectRmsCall("reconcileRightsholders/rms_no_discrepancies_request.json",
                 "reconcileRightsholders/rms_no_discrepancies_response.json")
-            .expectPreferences("reconcileRightsholders/preferences_no_discrepancies_response.json", 1)
+            .expectPreferences("reconcileRightsholders/preferences_no_discrepancies_response.json",
+                "05dc9217-26d4-46ca-aa6e-18572591f3c8")
             .expectUsages(
                 buildUsage("fcdaea01-2439-4c51-b3e2-23649cf710c7", 1000003821L, 1000003821L, 471137470L, "1000.00",
                     "840.00", "160.00", SERVICE_FEE_16))
@@ -69,7 +70,10 @@ public class ReconcileRightsholdersTest {
             .expectPrmCall("reconcileRightsholders/prm_with_discrepancies_response.json")
             .expectRollups("reconcileRightsholders/rollups_with_discrepancies_response.json",
                 "f0ba198d-14fd-49c9-a2c3-ffc65b2f14af", "cd1d10f8-c625-4634-afee-9b983071e725")
-            .expectPreferences("reconcileRightsholders/preferences_with_discrepancies_response.json", 6)
+            .expectPreferences("reconcileRightsholders/preferences_with_discrepancies_response.json",
+                "f0ba198d-14fd-49c9-a2c3-ffc65b2f14af",
+                "e395cf0e-312f-425c-a37d-4a7ab824b8f6",
+                "cd1d10f8-c625-4634-afee-9b983071e725")
             .expectDiscrepancies(Sets.newHashSet(
                 buildDiscrepancy(7000515031L, 2000152614L, 127778305L),
                 buildDiscrepancy(2000152614L, 1000002137L, 122861189L),
