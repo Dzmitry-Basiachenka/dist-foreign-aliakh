@@ -37,6 +37,13 @@ public interface IUsageBatchService {
     boolean usageBatchExists(String name);
 
     /**
+     * Sends list of usages on queue for PI matching process.
+     *
+     * @param usages collection of {@link Usage} to be sent
+     */
+    void sendForMatching(Collection<Usage> usages);
+
+    /**
      * Inserts usage batch, it's usages and RRO.
      *
      * @param usageBatch {@link UsageBatch} instance

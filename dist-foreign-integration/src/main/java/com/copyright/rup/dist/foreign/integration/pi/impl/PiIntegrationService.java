@@ -41,7 +41,7 @@ import javax.annotation.PostConstruct;
  *
  * @author Aliaksandr Radkevich
  */
-@Service
+@Service("df.integration.piIntegrationService")
 public class PiIntegrationService implements IPiIntegrationService {
 
     private static final int EXPECTED_SEARCH_HITS_COUNT = 1;

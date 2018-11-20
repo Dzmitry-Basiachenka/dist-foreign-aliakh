@@ -48,6 +48,7 @@ public class WorkMatchingService implements IWorkMatchingService {
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired
+    @Qualifier("df.integration.piIntegrationProxyService")
     private IPiIntegrationService piIntegrationService;
     @Autowired
     private IUsageRepository usageRepository;

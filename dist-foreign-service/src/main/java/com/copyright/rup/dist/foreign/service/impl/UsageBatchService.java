@@ -88,10 +88,14 @@ public class UsageBatchService implements IUsageBatchService {
             .filter(Objects::nonNull)
             .collect(Collectors.toSet());
         executorService.execute(() -> updateRightsholders(accountNumbersToUpdate));
+        return count;
+    }
+
+    @Override
+    public void sendForMatching(Collection<Usage> usages) {
         List<Usage> usagesInNewStatus =
             usages.stream().filter(usage -> UsageStatusEnum.NEW == usage.getStatus()).collect(Collectors.toList());
         executorService.execute(() -> usagesInNewStatus.forEach(matchingProducer::send));
-        return count;
     }
 
     @Override
