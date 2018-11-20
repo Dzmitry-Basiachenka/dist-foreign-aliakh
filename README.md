@@ -1,3 +1,7 @@
+3.1.27
+-
+* B-47837 FDA: Neartime processing for Works match and Get RHs: add caching functionality for PI matching
+
 3.1.26
 -
 * B-47837 FDA: Neartime processing for Works match and Get RHs: apply concurrent consumers for Matching and Rights queues
