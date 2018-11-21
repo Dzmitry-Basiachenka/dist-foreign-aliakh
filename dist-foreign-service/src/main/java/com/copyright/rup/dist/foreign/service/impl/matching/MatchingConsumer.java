@@ -1,11 +1,14 @@
 package com.copyright.rup.dist.foreign.service.impl.matching;
 
 import com.copyright.rup.dist.common.integration.camel.IConsumer;
+import com.copyright.rup.dist.common.integration.camel.IProducer;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IWorkMatchingService;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 /**
@@ -23,6 +26,9 @@ public class MatchingConsumer implements IConsumer<Usage> {
 
     @Autowired
     private IWorkMatchingService workMatchingService;
+    @Autowired
+    @Qualifier("df.service.rightsProducer")
+    private IProducer<Usage> producer;
 
     @Override
     public void consume(Usage usage) {
@@ -32,6 +38,9 @@ public class MatchingConsumer implements IConsumer<Usage> {
             workMatchingService.matchByTitle(usage);
         } else {
             workMatchingService.updateStatusForUsageWithoutStandardNumberAndTitle(usage);
+        }
+        if (UsageStatusEnum.WORK_FOUND == usage.getStatus()) {
+            producer.send(usage);
         }
     }
 }
