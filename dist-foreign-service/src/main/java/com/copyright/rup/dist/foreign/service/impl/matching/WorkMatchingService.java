@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IWorkMatchingService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
@@ -49,15 +49,14 @@ public class WorkMatchingService implements IWorkMatchingService {
     public void matchByIdno(Usage usage) {
         doMatchByIdno(usage);
         if (UsageStatusEnum.WORK_FOUND == usage.getStatus()) {
-            usageRepository.updateStatusAndWrWrkInstByStandardNumberAndTitle(Collections.singletonList(usage));
+            usageRepository.update(Collections.singletonList(usage));
             auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
                 String.format("Wr Wrk Inst %s was found by standard number %s", usage.getWrWrkInst(),
                     usage.getStandardNumber()));
         } else {
-            List<Usage> usagesByStandardNumber =
-                usageRepository.findByStandardNumberAndStatus(usage.getStandardNumber(), UsageStatusEnum.NEW);
-            updateUsagesStatusAndWriteAudit(usagesByStandardNumber, UsageGroupEnum.STANDARD_NUMBER,
-                (usagesToUpdate) -> usageRepository.updateStatusAndWrWrkInstByStandardNumberAndTitle(usagesToUpdate));
+            updateUsagesStatusAndWriteAudit(usage, UsageGroupEnum.STANDARD_NUMBER,
+                usageRepository.getTotalAmountByStandardNumberAndBatchId(usage.getStandardNumber(),
+                    usage.getBatchId()));
         }
     }
 
@@ -66,21 +65,19 @@ public class WorkMatchingService implements IWorkMatchingService {
     public void matchByTitle(Usage usage) {
         doMatchByTitle(usage);
         if (UsageStatusEnum.WORK_FOUND == usage.getStatus()) {
-            usageRepository.updateStatusAndWrWrkInstByTitle(Collections.singletonList(usage));
+            usageRepository.update(Collections.singletonList(usage));
             auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
                 String.format("Wr Wrk Inst %s was found by title \"%s\"", usage.getWrWrkInst(), usage.getWorkTitle()));
         } else {
-            List<Usage> usagesByTitle = usageRepository.findByTitleAndStatus(usage.getWorkTitle(), UsageStatusEnum.NEW);
-            updateUsagesStatusAndWriteAudit(usagesByTitle, UsageGroupEnum.TITLE,
-                (usagesToUpdate) -> usageRepository.updateStatusAndWrWrkInstByTitle(usagesToUpdate));
+            updateUsagesStatusAndWriteAudit(usage, UsageGroupEnum.TITLE,
+                usageRepository.getTotalAmountByTitleAndBatchId(usage.getWorkTitle(), usage.getBatchId()));
         }
     }
 
     @Override
     @Transactional
     public void updateStatusForUsageWithoutStandardNumberAndTitle(Usage usage) {
-        updateUsagesStatusAndWriteAudit(Collections.singletonList(usage), UsageGroupEnum.SINGLE_USAGE,
-            (usagesToUpdate) -> usageRepository.update(usagesToUpdate));
+        updateUsagesStatusAndWriteAudit(usage, UsageGroupEnum.SINGLE_USAGE, usage.getGrossAmount());
     }
 
     private void doMatchByTitle(Usage usage) {
@@ -101,39 +98,27 @@ public class WorkMatchingService implements IWorkMatchingService {
         }
     }
 
-    private void updateUsagesStatusAndWriteAudit(List<Usage> usages, UsageGroupEnum usageGroup,
-                                                 IUpdateFunction function) {
-        if (GROSS_AMOUNT_LIMIT.compareTo(sumUsagesGrossAmount(usages)) > 0) {
-            usages.forEach(usage -> {
-                usage.setStatus(UsageStatusEnum.NTS_WITHDRAWN);
-                usage.setProductFamily(FdaConstants.NTS_PRODUCT_FAMILY);
-                auditService.logAction(usage.getId(), UsageActionTypeEnum.ELIGIBLE_FOR_NTS,
-                    usageGroup.getNtsEligibleReason());
-            });
-            usageRepository.updateToNtsEligible(usages);
+    private void updateUsagesStatusAndWriteAudit(Usage usage, UsageGroupEnum usageGroup, BigDecimal totalGrossAmount) {
+        if (GROSS_AMOUNT_LIMIT.compareTo(totalGrossAmount) > 0) {
+            usage.setStatus(UsageStatusEnum.NTS_WITHDRAWN);
+            usage.setProductFamily(FdaConstants.NTS_PRODUCT_FAMILY);
+            auditService.logAction(usage.getId(), UsageActionTypeEnum.ELIGIBLE_FOR_NTS,
+                usageGroup.getNtsEligibleReason());
         } else {
-            usages.forEach(usage -> {
-                if (Objects.isNull(usage.getStandardNumber()) && Objects.isNull(usage.getWorkTitle())) {
-                    usage.setWrWrkInst(UNIDENTIFIED_WR_WRK_INST);
-                    usage.setWorkTitle(UNIDENTIFIED_TITLE);
-                    usage.setSystemTitle(UNIDENTIFIED_TITLE);
-                    usage.setStatus(UsageStatusEnum.WORK_FOUND);
-                    auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
-                        "Usage assigned unidentified work due to empty standard number and title");
-                } else {
-                    usage.setStatus(UsageStatusEnum.WORK_NOT_FOUND);
-                    auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_NOT_FOUND,
-                        usageGroup.getWorkNotFoundReasonFunction().apply(usage));
-                }
-            });
-            function.update(usages);
+            if (Objects.isNull(usage.getStandardNumber()) && Objects.isNull(usage.getWorkTitle())) {
+                usage.setWrWrkInst(UNIDENTIFIED_WR_WRK_INST);
+                usage.setWorkTitle(UNIDENTIFIED_TITLE);
+                usage.setSystemTitle(UNIDENTIFIED_TITLE);
+                usage.setStatus(UsageStatusEnum.WORK_FOUND);
+                auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
+                    "Usage assigned unidentified work due to empty standard number and title");
+            } else {
+                usage.setStatus(UsageStatusEnum.WORK_NOT_FOUND);
+                auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_NOT_FOUND,
+                    usageGroup.getWorkNotFoundReasonFunction().apply(usage));
+            }
         }
-    }
-
-    private BigDecimal sumUsagesGrossAmount(List<Usage> usages) {
-        return usages.stream()
-            .map(Usage::getGrossAmount)
-            .reduce(BigDecimal.ZERO, BigDecimal::add);
+        usageRepository.update(Collections.singletonList(usage));
     }
 
     private enum UsageGroupEnum {
@@ -194,10 +179,5 @@ public class WorkMatchingService implements IWorkMatchingService {
          * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#WORK_NOT_FOUND} for {@link Usage}.
          */
         abstract Function<Usage, String> getWorkNotFoundReasonFunction();
-    }
-
-    @FunctionalInterface
-    private interface IUpdateFunction {
-        void update(List<Usage> usages);
     }
 }

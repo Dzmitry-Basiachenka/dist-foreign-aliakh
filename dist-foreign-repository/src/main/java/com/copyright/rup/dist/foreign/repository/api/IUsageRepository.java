@@ -13,6 +13,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
@@ -114,6 +115,24 @@ public interface IUsageRepository {
      * @param batchId {@link com.copyright.rup.dist.foreign.domain.UsageBatch} id
      */
     void deleteUsages(String batchId);
+
+    /**
+     * Calculates total gross amount by standard number and batch identifier for PI matching.
+     *
+     * @param standardNumber standard number for calculation
+     * @param batchId        batch identifier
+     * @return total gross amount
+     */
+    BigDecimal getTotalAmountByStandardNumberAndBatchId(String standardNumber, String batchId);
+
+    /**
+     * Calculates total gross amount by title and batch identifier for PI matching.
+     *
+     * @param title   title for calculation
+     * @param batchId batch identifier
+     * @return total gross amount
+     */
+    BigDecimal getTotalAmountByTitleAndBatchId(String title, String batchId);
 
     /**
      * Deletes all {@link Usage}s for specified scenario.
@@ -323,55 +342,6 @@ public interface IUsageRepository {
      * @param usages list of {@link Usage}s
      */
     void update(List<Usage> usages);
-
-    /**
-     * Updates status and Wr Wrk Inst for given list of {@link Usage}s based on standard numbers and titles.
-     *
-     * @param usages list of {@link Usage}s
-     */
-    void updateStatusAndWrWrkInstByStandardNumberAndTitle(List<Usage> usages);
-
-    /**
-     * Updates status and Wr Wrk Inst for given list of {@link Usage}s based on work titles.
-     *
-     * @param usages list of {@link Usage}s
-     */
-    void updateStatusAndWrWrkInstByTitle(List<Usage> usages);
-
-    /**
-     * Updates status to {@link UsageStatusEnum#NTS_WITHDRAWN} and product family to NTS for each usage.
-     *
-     * @param usages list of {@link Usage}s
-     */
-    void updateToNtsEligible(List<Usage> usages);
-
-    /**
-     * Finds list of {@link Usage}s by standard number, title and status.
-     *
-     * @param standardNumber standard number to find
-     * @param title          title to find
-     * @param status         instance of {@link UsageStatusEnum}
-     * @return list of {@link Usage}s
-     */
-    List<Usage> findByStandardNumberTitleAndStatus(String standardNumber, String title, UsageStatusEnum status);
-
-    /**
-     * Finds list of {@link Usage}s by standard number and status.
-     *
-     * @param standardNumber standard number to find
-     * @param status         instance of {@link UsageStatusEnum}
-     * @return list of {@link Usage}s
-     */
-    List<Usage> findByStandardNumberAndStatus(String standardNumber, UsageStatusEnum status);
-
-    /**
-     * Finds list of {@link Usage}s by work title and status.
-     *
-     * @param title  work title to find
-     * @param status instance of {@link UsageStatusEnum}
-     * @return list of {@link Usage}s
-     */
-    List<Usage> findByTitleAndStatus(String title, UsageStatusEnum status);
 
     /**
      * Updates researched usage details.

@@ -3,11 +3,7 @@ package com.copyright.rup.dist.foreign.service.impl.mock;
 import com.copyright.rup.dist.foreign.domain.Work;
 import com.copyright.rup.dist.foreign.integration.pi.impl.PiIntegrationService;
 
-import com.google.common.collect.ImmutableMap;
-
-import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * Mock for {@link PiIntegrationService}.
@@ -31,7 +27,7 @@ public class PiIntegrationServiceMock extends PiIntegrationService {
     }
 
     @Override
-    public Map<String, Long> findWrWrkInstsByTitles(Set<String> titles) {
-        return ImmutableMap.of("Forbidden rites", 123059057L);
+    public Long findWrWrkInstByTitle(String title) {
+        return 123059057L;
     }
 }

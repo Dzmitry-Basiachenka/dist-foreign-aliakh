@@ -333,6 +333,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'NTS')
             column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '5475802112214578XX')
+            column(name: 'work_title', value: '100 ROAD MOVIES')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')

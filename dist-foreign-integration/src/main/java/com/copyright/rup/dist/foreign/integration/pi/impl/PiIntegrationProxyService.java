@@ -9,9 +9,7 @@ import com.google.common.cache.CacheBuilder;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -26,7 +24,6 @@ import java.util.concurrent.TimeUnit;
 public class PiIntegrationProxyService implements IPiIntegrationService {
 
     private final IPiIntegrationService piIntegrationService;
-
     private final Cache<Pair<String, String>, Work> worksCache;
 
     /**
@@ -50,11 +47,6 @@ public class PiIntegrationProxyService implements IPiIntegrationService {
             }
         }
         return result;
-    }
-
-    @Override
-    public Map<String, Long> findWrWrkInstsByTitles(Set<String> titles) {
-        return piIntegrationService.findWrWrkInstsByTitles(titles);
     }
 
     @Override

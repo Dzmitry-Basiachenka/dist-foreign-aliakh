@@ -11,7 +11,6 @@ import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
-import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -20,9 +19,11 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.common.util.CalculationUtils;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
@@ -75,7 +76,6 @@ public class UsageRepositoryIntegrationTest {
     private static final Long WR_WRK_INST = 123456783L;
     private static final String WORK_TITLE = "Wissenschaft & Forschung Japan";
     private static final String PRODUCT_FAMILY_FAS = "FAS";
-    private static final String STANDARD_NUMBER_2 = "2192-3558";
     private static final String DETAIL_ID_KEY = "detailId";
     private static final String WORK_TITLE_KEY = "workTitle";
     private static final String BATCH_NAME_KEY = "batchName";
@@ -575,6 +575,25 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
+    public void testGetTotalAmountByStandardNumberAndBatchId() {
+        assertEquals(new BigDecimal("10000.00"), usageRepository.getTotalAmountByStandardNumberAndBatchId("2192-3558",
+            "c10a11c6-dae3-43d7-a632-c682542b1209"));
+        assertEquals(new BigDecimal("16.40"),
+            usageRepository.getTotalAmountByStandardNumberAndBatchId("5475802112214578XX",
+                "cb597f4e-f636-447f-8710-0436d8994d10"));
+    }
+
+    @Test
+    public void testGetTotalAmountByTitleAndBatchId() {
+        assertEquals(new BigDecimal("20000.00"),
+            usageRepository.getTotalAmountByTitleAndBatchId("Wissenschaft & Forschung Japan",
+                "c10a11c6-dae3-43d7-a632-c682542b1209"));
+        assertEquals(new BigDecimal("16.40"),
+            usageRepository.getTotalAmountByTitleAndBatchId("100 ROAD MOVIES",
+                "cb597f4e-f636-447f-8710-0436d8994d10"));
+    }
+
+    @Test
     public void testFindForAuditByStatus() {
         AuditFilter filter = new AuditFilter();
         filter.setStatuses(EnumSet.of(UsageStatusEnum.WORK_FOUND));
@@ -885,71 +904,6 @@ public class UsageRepositoryIntegrationTest {
             .map(Usage::getId)
             .collect(Collectors.toSet())
             .containsAll(Sets.newHashSet(USAGE_ID_14, USAGE_ID_24, USAGE_ID_21, USAGE_ID_12, USAGE_ID_13)));
-    }
-
-    @Test
-    public void testFindByStandardNumberAndStatus() {
-        List<Usage> usages =
-            usageRepository.findByStandardNumberAndStatus(STANDARD_NUMBER_2, UsageStatusEnum.NEW);
-        assertEquals(1, usages.size());
-        assertEquals(USAGE_ID_12, usages.get(0).getId());
-    }
-
-    @Test
-    public void testFindByTitleAndStatus() {
-        List<Usage> usages = usageRepository.findByTitleAndStatus(WORK_TITLE, UsageStatusEnum.NEW);
-        assertEquals(2, usages.size());
-        assertTrue(usages.stream()
-            .map(Usage::getId)
-            .collect(Collectors.toSet())
-            .containsAll(Sets.newHashSet(USAGE_ID_20, USAGE_ID_21)));
-    }
-
-    @Test
-    public void testUpdateStatusAndWrWrkInstByStandardNumberAndTitle() {
-        List<Usage> usages =
-            usageRepository.findByStandardNumberTitleAndStatus(STANDARD_NUMBER_2, WORK_TITLE, UsageStatusEnum.NEW);
-        assertEquals(1, usages.size());
-        assertNull(usages.get(0).getWrWrkInst());
-        Usage usage = usages.get(0);
-        usage.setStandardNumber(STANDARD_NUMBER_2);
-        usage.setWrWrkInst(WR_WRK_INST);
-        usage.setStatus(UsageStatusEnum.WORK_FOUND);
-        usageRepository.updateStatusAndWrWrkInstByStandardNumberAndTitle(usages);
-        usages = usageRepository.findByStandardNumberTitleAndStatus(STANDARD_NUMBER_2, WORK_TITLE,
-            UsageStatusEnum.WORK_FOUND);
-        assertEquals(1, usages.size());
-        assertEquals(WR_WRK_INST, usages.get(0).getWrWrkInst());
-    }
-
-    @Test
-    public void testUpdateStatusAndWrWrkInstByTitle() {
-        List<Usage> usages = usageRepository.findByTitleAndStatus(WORK_TITLE, UsageStatusEnum.NEW);
-        assertEquals(2, usages.size());
-        usages.forEach(usage -> {
-            usage.setWorkTitle(WORK_TITLE);
-            usage.setWrWrkInst(WR_WRK_INST);
-            usage.setStatus(UsageStatusEnum.WORK_FOUND);
-        });
-        usageRepository.updateStatusAndWrWrkInstByTitle(usages);
-        usages = usageRepository.findByTitleAndStatus(WORK_TITLE, UsageStatusEnum.WORK_FOUND);
-        assertEquals(2, usages.size());
-        usages.forEach(usage -> assertEquals(WR_WRK_INST, usage.getWrWrkInst()));
-    }
-
-    @Test
-    public void testUpdateToNtsEligible() {
-        Usage usage = usageRepository.findById(USAGE_ID_20);
-        assertNotNull(usage);
-        assertEquals(USAGE_ID_20, usage.getId());
-        assertEquals(PRODUCT_FAMILY_FAS, usage.getProductFamily());
-        assertEquals(UsageStatusEnum.NEW, usage.getStatus());
-        usage.setProductFamily(FdaConstants.NTS_PRODUCT_FAMILY);
-        usage.setStatus(UsageStatusEnum.NTS_WITHDRAWN);
-        usageRepository.updateToNtsEligible(Collections.singletonList(usage));
-        Usage actualUsage = usageRepository.findById(usage.getId());
-        assertEquals(FdaConstants.NTS_PRODUCT_FAMILY, actualUsage.getProductFamily());
-        assertEquals(UsageStatusEnum.NTS_WITHDRAWN, actualUsage.getStatus());
     }
 
     private void verifyFilterForTwoBatches(AuditFilter filter) {

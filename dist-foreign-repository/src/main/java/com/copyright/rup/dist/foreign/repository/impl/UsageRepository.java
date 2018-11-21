@@ -29,6 +29,7 @@ import com.copyright.rup.dist.foreign.repository.impl.csv.UsageCsvReportHandler;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -36,6 +37,8 @@ import org.springframework.stereotype.Repository;
 
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -151,6 +154,30 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
             }
         }
         return usageIds;
+    }
+
+    @Override
+    public BigDecimal getTotalAmountByStandardNumberAndBatchId(String standardNumber, String batchId) {
+        Set<UsageStatusEnum> statuses =
+            Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.NTS_WITHDRAWN, UsageStatusEnum.WORK_NOT_FOUND);
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
+        parameters.put("statuses", Objects.requireNonNull(statuses));
+        parameters.put("standardNumber", standardNumber);
+        parameters.put("batchId", batchId);
+        BigDecimal totalAmount = selectOne("IUsageMapper.getTotalAmountByStandardNumberAndBatchId", parameters);
+        return totalAmount.setScale(2, RoundingMode.HALF_UP);
+    }
+
+    @Override
+    public BigDecimal getTotalAmountByTitleAndBatchId(String title, String batchId) {
+        Set<UsageStatusEnum> statuses =
+            Sets.newHashSet(UsageStatusEnum.NEW, UsageStatusEnum.NTS_WITHDRAWN, UsageStatusEnum.WORK_NOT_FOUND);
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
+        parameters.put("statuses", Objects.requireNonNull(statuses));
+        parameters.put("title", title);
+        parameters.put("batchId", batchId);
+        BigDecimal totalAmount = selectOne("IUsageMapper.getTotalAmountByTitleAndBatchId", parameters);
+        return totalAmount.setScale(2, RoundingMode.HALF_UP);
     }
 
     @Override
@@ -350,71 +377,9 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public List<Usage> findByStandardNumberTitleAndStatus(String standardNumber, String title, UsageStatusEnum status) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
-        parameters.put(STATUS_KEY, Objects.requireNonNull(status));
-        parameters.put("standardNumber", Objects.requireNonNull(standardNumber));
-        parameters.put("workTitle", title);
-        return selectList("IUsageMapper.findByStandardNumberTitleAndStatus", parameters);
-    }
-
-    @Override
-    public List<Usage> findByStandardNumberAndStatus(String standardNumber, UsageStatusEnum status) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-        parameters.put(STATUS_KEY, Objects.requireNonNull(status));
-        parameters.put("standardNumber", Objects.requireNonNull(standardNumber));
-        return selectList("IUsageMapper.findByStandardNumberAndStatus", parameters);
-    }
-
-    @Override
-    public List<Usage> findByTitleAndStatus(String title, UsageStatusEnum status) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-        parameters.put(STATUS_KEY, Objects.requireNonNull(status));
-        parameters.put("workTitle", Objects.requireNonNull(title));
-        return selectList("IUsageMapper.findByTitleAndStatus", parameters);
-    }
-
-    @Override
     public void update(List<Usage> usages) {
         checkArgument(CollectionUtils.isNotEmpty(usages));
         usages.forEach(usage -> update("IUsageMapper.update", usage));
-    }
-
-    @Override
-    public void updateStatusAndWrWrkInstByStandardNumberAndTitle(List<Usage> usages) {
-        checkArgument(CollectionUtils.isNotEmpty(usages));
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
-        parameters.put(STATUS_KEY, UsageStatusEnum.NEW);
-        parameters.put(UPDATE_USER_KEY, StoredEntity.DEFAULT_USER);
-        usages.forEach(usage -> {
-            parameters.put("usage", usage);
-            update("IUsageMapper.updateStatusAndWrWrkInstByStandardNumberAndTitle", parameters);
-        });
-    }
-
-    @Override
-    public void updateStatusAndWrWrkInstByTitle(List<Usage> usages) {
-        checkArgument(CollectionUtils.isNotEmpty(usages));
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
-        parameters.put(STATUS_KEY, UsageStatusEnum.NEW);
-        parameters.put(UPDATE_USER_KEY, StoredEntity.DEFAULT_USER);
-        usages.forEach(usage -> {
-            parameters.put("usage", usage);
-            update("IUsageMapper.updateStatusAndWrWrkInstByTitle", parameters);
-        });
-    }
-
-    @Override
-    public void updateToNtsEligible(List<Usage> usages) {
-        Objects.requireNonNull(usages);
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
-        parameters.put(STATUS_KEY, UsageStatusEnum.NTS_WITHDRAWN);
-        parameters.put(UPDATE_USER_KEY, StoredEntity.DEFAULT_USER);
-        parameters.put("productFamily", FdaConstants.NTS_PRODUCT_FAMILY);
-        usages.forEach(usage -> {
-            parameters.put(USAGE_ID_KEY, usage.getId());
-            update("IUsageMapper.updateToNtsEligible", parameters);
-        });
     }
 
     @Override
