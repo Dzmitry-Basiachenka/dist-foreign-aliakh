@@ -55,6 +55,9 @@ public class UsageBatchService implements IUsageBatchService {
     @Autowired
     @Qualifier("df.service.matchingProducer")
     private IProducer<Usage> matchingProducer;
+    @Autowired
+    @Qualifier("df.service.rightsProducer")
+    private IProducer<Usage> rightsProducer;
 
     @Override
     public List<Integer> getFiscalYears() {
@@ -96,6 +99,15 @@ public class UsageBatchService implements IUsageBatchService {
         List<Usage> usagesInNewStatus =
             usages.stream().filter(usage -> UsageStatusEnum.NEW == usage.getStatus()).collect(Collectors.toList());
         executorService.execute(() -> usagesInNewStatus.forEach(matchingProducer::send));
+    }
+
+    @Override
+    public void sendForGettingRights(Collection<Usage> usages) {
+        List<Usage> workFoundUsages =
+            usages.stream()
+                .filter(usage -> UsageStatusEnum.WORK_FOUND == usage.getStatus())
+                .collect(Collectors.toList());
+        executorService.execute(() -> workFoundUsages.forEach(rightsProducer::send));
     }
 
     @Override

@@ -182,6 +182,21 @@ public class UsageBatchServiceTest {
     }
 
     @Test
+    public void testSendForGettingRights() {
+        Usage usage1 = new Usage();
+        Usage usage2 = new Usage();
+        usage2.setStatus(UsageStatusEnum.WORK_FOUND);
+        List<Usage> usages = Arrays.asList(usage1, usage2);
+        Capture<Runnable> runnableCapture = new Capture<>();
+        executorService.execute(capture(runnableCapture));
+        expectLastCall().once();
+        replay(executorService);
+        usageBatchService.sendForGettingRights(usages);
+        assertNotNull(runnableCapture.getValue());
+        verify(executorService);
+    }
+
+    @Test
     public void testUpdateRightsholders() {
         rightsholderService.updateRightsholders(Collections.singleton(1000001534L));
         expectLastCall().once();
