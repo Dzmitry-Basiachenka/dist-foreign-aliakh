@@ -1,3 +1,8 @@
+3.1.28
+-
+* B-47643 Tech Debt: FDA: implement service for getting RHs preferences from PRM by RH ids and preference codes
+* RDSC-636 FDA: batch processing could produce RH_NOT_FOUND usages without wr_wrk_inst
+
 3.1.27
 -
 * B-47837 FDA: Neartime processing for Works match and Get RHs: add caching functionality for PI matching
