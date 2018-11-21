@@ -2,9 +2,9 @@ package com.copyright.rup.dist.foreign.integration.prm.impl;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.domain.RightsholderPreferences;
-import com.copyright.rup.dist.common.integration.rest.prm.IPrmRhPreferenceService;
 import com.copyright.rup.dist.common.integration.rest.prm.IPrmRightsholderService;
 import com.copyright.rup.dist.common.integration.rest.prm.IPrmRollUpService;
+import com.copyright.rup.dist.common.integration.rest.prm.preference.IPrmPreferenceService;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 
 import com.google.common.collect.Sets;
@@ -47,8 +47,8 @@ public class PrmIntegrationService implements IPrmIntegrationService {
     @Value("$RUP{dist.foreign.integration.rest.prm.rollups.async}")
     private boolean prmRollUpAsync;
     @Autowired
-    @Qualifier("dist.common.integration.rest.prmRhPreferenceService")
-    private IPrmRhPreferenceService prmRhPreferenceService;
+    @Qualifier("dist.common.integration.rest.prmPreferenceService")
+    private IPrmPreferenceService prmPreferenceService;
     @Value("$RUP{dist.foreign.service_fee.non_participating}")
     private BigDecimal rhNonParticipatingServiceFee;
     @Value("$RUP{dist.foreign.service_fee.participating}")
@@ -77,10 +77,10 @@ public class PrmIntegrationService implements IPrmIntegrationService {
     }
 
     @Override
-    public boolean isRightsholderParticipating(Long accountNumber, String productFamily) {
+    public boolean isRightsholderParticipating(String rightsholderId, String productFamily) {
         boolean rhParticipatingFlag = false;
         Map<String, RightsholderPreferences> preferencesMap =
-            prmRhPreferenceService.getRightsholderPreferences(accountNumber);
+            prmPreferenceService.getProductFamiliesToPreferencesMap(rightsholderId);
         if (MapUtils.isNotEmpty(preferencesMap)) {
             RightsholderPreferences preferences = ObjectUtils.defaultIfNull(preferencesMap.get(productFamily),
                 preferencesMap.get(RightsholderPreferences.ALL_PRODUCTS_KEY));

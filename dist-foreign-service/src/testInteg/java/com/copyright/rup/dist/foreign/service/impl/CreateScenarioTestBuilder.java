@@ -34,9 +34,9 @@ import org.springframework.test.web.client.response.MockRestResponseCreators;
 import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.IntStream;
 
 /**
  * Builder for {@link CreateScenarioTest}.
@@ -70,11 +70,11 @@ class CreateScenarioTestBuilder {
     private String expectedRollupsIds;
     private String expectedRollupsJson;
     private String expectedPreferencesJson;
+    private List<String> expectedPreferencesRightholderIds;
     private UsageFilter usageFilter;
     private List<Usage> expectedUsages;
     private String scenarioId;
     private Scenario expectedScenario;
-    private int expectedPreferencesCallsTimes;
 
     CreateScenarioTestBuilder expectRollups(String rollupsJson, String... rollups) {
         this.expectedRollupsJson = rollupsJson;
@@ -82,9 +82,9 @@ class CreateScenarioTestBuilder {
         return this;
     }
 
-    CreateScenarioTestBuilder expectPreferences(String preferencesJson, int times) {
+    CreateScenarioTestBuilder expectPreferences(String preferencesJson, String... rightholderIds) {
         this.expectedPreferencesJson = preferencesJson;
-        this.expectedPreferencesCallsTimes = times;
+        this.expectedPreferencesRightholderIds = Arrays.asList(rightholderIds);
         return this;
     }
 
@@ -114,7 +114,7 @@ class CreateScenarioTestBuilder {
 
         void run() {
             createRestServer();
-            expectGetPreferences(expectedPreferencesJson);
+            expectGetPreferences(expectedPreferencesJson, expectedPreferencesRightholderIds);
             expectGetRollups(expectedRollupsJson, expectedRollupsIds);
             scenarioId = scenarioService.createScenario("Test Scenario", "Scenario Description", usageFilter).getId();
             mockServer.verify();
@@ -184,14 +184,16 @@ class CreateScenarioTestBuilder {
             asyncMockServer = MockRestServiceServer.createServer(asyncRestTemplate);
         }
 
-        private void expectGetPreferences(String fileName) {
-            IntStream.range(0, expectedPreferencesCallsTimes).forEach(i ->
+        private void expectGetPreferences(String fileName, List<String> rightholderIds) {
+            rightholderIds.forEach(rightholderId -> {
                 mockServer.expect(MockRestRequestMatchers
-                    .requestTo("http://localhost:8080/party-rest/orgPreference/all?fmt=json"))
+                    .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelpref?orgIds%5B%5D="
+                        + rightholderId
+                        + "&prefCodes%5B%5D=ISDISTRIBUTABLE,TAXBENEFICIALOWNER,MINIMUMPAYMENT,IS-RH-FDA-PARTICIPATING"))
                     .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
                     .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), fileName),
-                        MediaType.APPLICATION_JSON))
-            );
+                        MediaType.APPLICATION_JSON));
+            });
         }
 
         private void expectGetRollups(String fileName, String rightsholdersIds) {
