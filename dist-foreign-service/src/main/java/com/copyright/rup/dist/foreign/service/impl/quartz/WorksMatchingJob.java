@@ -1,16 +1,18 @@
 package com.copyright.rup.dist.foreign.service.impl.quartz;
 
-import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.common.logging.RupLogUtils;
+import com.copyright.rup.dist.common.integration.camel.IProducer;
+import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.service.api.IWorkMatchingService;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.JobExecutionContext;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
@@ -35,7 +37,8 @@ public class WorksMatchingJob extends QuartzJobBean {
     @Autowired
     private IUsageService usageService;
     @Autowired
-    private IWorkMatchingService matchingService;
+    @Qualifier("df.service.matchingProducer")
+    private IProducer<Usage> matchingProducer;
     @Value("$RUP{dist.foreign.integration.works.pi.batch_size}")
     private int batchSize;
 
@@ -46,44 +49,24 @@ public class WorksMatchingJob extends QuartzJobBean {
     public void executeInternal(JobExecutionContext context) {
         int offset = 0;
         int processedUsagesCount = 0;
-        int matchedUsagesCount = 0;
-        int standardNumbersCount = usageService.getStandardNumbersCount();
-        int titlesCount = usageService.getTitlesCount();
-        LOGGER.info("Search works. Started. IDNOsCount={}, TitlesCount={}", standardNumbersCount, titlesCount);
-        for (int i = 0; i < standardNumbersCount; i += batchSize) {
-            List<Usage> usagesByStandardNumber = usageService.getUsagesWithStandardNumber(batchSize, offset);
-            if (CollectionUtils.isNotEmpty(usagesByStandardNumber)) {
-                processedUsagesCount += usagesByStandardNumber.size();
+        UsageFilter usageFilter = new UsageFilter();
+        usageFilter.setUsageStatus(UsageStatusEnum.NEW);
+        int newUsagesCount = usageService.getUsagesCount(usageFilter);
+        LOGGER.info("Send usages for works matching. Started. NewUsagesCount={}", newUsagesCount);
+        for (int i = 0; i < newUsagesCount; i += batchSize) {
+            List<Usage> newUsages = usageService.getUsagesByStatus(UsageStatusEnum.NEW, batchSize, offset);
+            if (CollectionUtils.isNotEmpty(newUsages)) {
+                processedUsagesCount += newUsages.size();
                 try {
-                    List<Usage> foundUsages = matchingService.matchByIdno(usagesByStandardNumber);
-                    matchedUsagesCount += foundUsages.size();
-                } catch (RupRuntimeException e) {
+                    newUsages.forEach(matchingProducer::send);
+                } catch (RuntimeException e) {
                     offset += batchSize;
-                    LOGGER.warn(String.format("Search works. Skipped. INDOsCount=%s. Reason=%s",
-                        usagesByStandardNumber.size(), e.getMessage()), e);
+                    LOGGER.warn(String.format("Send usages for works matching. Skipped. NewUsagesCount=%s. Reason=%s",
+                        LogUtils.size(newUsages), e.getMessage()), e);
                 }
             }
         }
-        offset = 0;
-        for (int i = 0; i < titlesCount; i += batchSize) {
-            List<Usage> usagesByTitle = usageService.getUsagesWithTitle(batchSize, offset);
-            processedUsagesCount += usagesByTitle.size();
-            if (CollectionUtils.isNotEmpty(usagesByTitle)) {
-                try {
-                    List<Usage> foundUsages = matchingService.matchByTitle(usagesByTitle);
-                    matchedUsagesCount += foundUsages.size();
-                } catch (RupRuntimeException e) {
-                    offset += batchSize;
-                    LOGGER.warn(String.format("Search works. Skipped. TitlesCount=%s. Reason=%s", usagesByTitle.size(),
-                        e.getMessage()), e);
-                }
-            }
-        }
-        List<Usage> usagesWithoutStandardNumberAndTitle = usageService.getUsagesWithoutStandardNumberAndTitle();
-        if (CollectionUtils.isNotEmpty(usagesWithoutStandardNumberAndTitle)) {
-            matchingService.updateStatusForUsagesWithNoStandardNumberAndTitle(usagesWithoutStandardNumberAndTitle);
-        }
-        LOGGER.info("Search works. Finished. IDNOsCount={}, TitlesCount={}, Processed={}, Matched={}",
-            standardNumbersCount, titlesCount, processedUsagesCount, matchedUsagesCount);
+        LOGGER.info("Send usages for works matching. Finished. NewUsagesCount={}, ProcessedUsagesCount={}",
+            newUsagesCount, processedUsagesCount);
     }
 }

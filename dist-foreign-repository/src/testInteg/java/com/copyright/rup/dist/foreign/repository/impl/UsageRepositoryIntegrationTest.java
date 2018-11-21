@@ -20,11 +20,9 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.common.util.CalculationUtils;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
-
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
@@ -880,48 +878,13 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindStandardNumbersCount() {
-        assertEquals(5, usageRepository.findStandardNumbersCount());
-    }
-
-    @Test
-    public void testFindTitlesCount() {
-        assertEquals(2, usageRepository.findTitlesCount());
-    }
-
-    @Test
-    public void testFindWithStandardNumber() {
-        List<Usage> usages = usageRepository.findWithStandardNumber(10, 0);
+    public void testFindByStatus() {
+        List<Usage> usages = usageRepository.findByStatus(UsageStatusEnum.NEW, 5, 0);
         assertEquals(5, usages.size());
         assertTrue(usages.stream()
-            .map(Usage::getStandardNumber)
+            .map(Usage::getId)
             .collect(Collectors.toSet())
-            .containsAll(Sets.newHashSet(STANDARD_NUMBER_2, "2192-3566", "2192-3559", "2192-3567", "2192-3600")));
-    }
-
-    @Test
-    public void testFindWithTitle() {
-        List<Usage> usages = usageRepository.findWithTitle(10, 0);
-        assertEquals(2, usages.size());
-        assertTrue(usages.stream()
-            .map(Usage::getWorkTitle)
-            .collect(Collectors.toSet())
-            .containsAll(Sets.newHashSet(WORK_TITLE, "100 ROAD MOVIES")));
-    }
-
-    @Test
-    public void testFindWithoutStandardNumberAndTitle() {
-        List<Usage> usages = usageRepository.findWithoutStandardNumberAndTitle();
-        assertEquals(1, usages.size());
-        assertEquals(USAGE_ID_17, usages.get(0).getId());
-    }
-
-    @Test
-    public void testFindByStandardNumberTitleAndStatus() {
-        List<Usage> usages =
-            usageRepository.findByStandardNumberTitleAndStatus(STANDARD_NUMBER_2, WORK_TITLE, UsageStatusEnum.NEW);
-        assertEquals(1, usages.size());
-        assertEquals(USAGE_ID_12, usages.get(0).getId());
+            .containsAll(Sets.newHashSet(USAGE_ID_14, USAGE_ID_24, USAGE_ID_21, USAGE_ID_12, USAGE_ID_13)));
     }
 
     @Test
@@ -976,14 +939,14 @@ public class UsageRepositoryIntegrationTest {
 
     @Test
     public void testUpdateToNtsEligible() {
-        List<Usage> usages = usageRepository.findWithoutStandardNumberAndTitle();
-        assertEquals(1, usages.size());
-        Usage usage = usages.get(0);
+        Usage usage = usageRepository.findById(USAGE_ID_20);
+        assertNotNull(usage);
+        assertEquals(USAGE_ID_20, usage.getId());
         assertEquals(PRODUCT_FAMILY_FAS, usage.getProductFamily());
         assertEquals(UsageStatusEnum.NEW, usage.getStatus());
         usage.setProductFamily(FdaConstants.NTS_PRODUCT_FAMILY);
         usage.setStatus(UsageStatusEnum.NTS_WITHDRAWN);
-        usageRepository.updateToNtsEligible(usages);
+        usageRepository.updateToNtsEligible(Collections.singletonList(usage));
         Usage actualUsage = usageRepository.findById(usage.getId());
         assertEquals(FdaConstants.NTS_PRODUCT_FAMILY, actualUsage.getProductFamily());
         assertEquals(UsageStatusEnum.NTS_WITHDRAWN, actualUsage.getStatus());

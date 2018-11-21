@@ -341,31 +341,12 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public int findStandardNumbersCount() {
-        return selectOne("IUsageMapper.findStandardNumbersCount", UsageStatusEnum.NEW);
-    }
-
-    @Override
-    public int findTitlesCount() {
-        return selectOne("IUsageMapper.findTitlesCount", UsageStatusEnum.NEW);
-    }
-
-    @Override
-    public List<Usage> findWithStandardNumber(int limit, int offset) {
+    public List<Usage> findByStatus(UsageStatusEnum status, int limit, int offset) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
-        parameters.put(STATUS_KEY, UsageStatusEnum.NEW);
+        parameters.put(STATUS_KEY, Objects.requireNonNull(status));
         parameters.put("limit", limit);
         parameters.put("offset", offset);
-        return selectList("IUsageMapper.findWithStandardNumber", parameters);
-    }
-
-    @Override
-    public List<Usage> findWithTitle(int limit, int offset) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
-        parameters.put(STATUS_KEY, UsageStatusEnum.NEW);
-        parameters.put("limit", limit);
-        parameters.put("offset", offset);
-        return selectList("IUsageMapper.findWithTitle", parameters);
+        return selectList("IUsageMapper.findByStatus", parameters);
     }
 
     @Override
@@ -391,11 +372,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         parameters.put(STATUS_KEY, Objects.requireNonNull(status));
         parameters.put("workTitle", Objects.requireNonNull(title));
         return selectList("IUsageMapper.findByTitleAndStatus", parameters);
-    }
-
-    @Override
-    public List<Usage> findWithoutStandardNumberAndTitle() {
-        return selectList("IUsageMapper.findWithoutStandardNumberAndTitle", UsageStatusEnum.NEW);
     }
 
     @Override
