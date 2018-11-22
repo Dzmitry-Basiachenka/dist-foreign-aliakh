@@ -1,3 +1,9 @@
+3.1.30
+-
+* B-47837 FDA: Near-time processing for Works match and Get RHs: adjust service logic of Get Rights Job to send usages for getting rights information via queue
+* B-47837 FDA: Neartime processing for Works match and Get RHs: apply logic for processing details independently during PI matching in order to apply concurrent processing
+* RDSC-637 FDA: Unable to update service fee for scenario without rightholders updates
+
 3.1.29
 -
 * B-47837 FDA: Neartime processing for Works match and Get RHs: adjust service logic for Works Matching Job to send usages for matching via df.matching queue
