@@ -259,5 +259,11 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000000322')
             column(name: 'name', value: 'American College of Physicians - Journals')
         }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'df_rightsholder_uid', value: '00d4ae90-5fe7-47bf-ace1-781c8d76d4da')
+            column(name: 'rh_account_number', value: '1000001820')
+            column(name: 'name', value: 'Delhi Medical Assn')
+        }
     }
 }
