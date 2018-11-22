@@ -12,9 +12,11 @@ import static org.junit.Assert.assertEquals;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.Work;
 import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -49,11 +51,29 @@ public class WorkMatchingServiceTest {
     }
 
     @Test
+    public void testMatchByIdno() {
+        String standardNumber = "000043122-1";
+        String title = "The theological roots of Pentecostalism";
+        Usage usage = buildUsage(standardNumber, title);
+        expect(piIntegrationService.findWorkByIdnoAndTitle(standardNumber, title))
+            .andReturn(new Work(112930820L, title)).once();
+        usageRepository.update(Collections.singletonList(usage));
+        expectLastCall().once();
+        auditService.logAction(anyString(), eq(UsageActionTypeEnum.WORK_FOUND), anyString());
+        expectLastCall().once();
+        replay(piIntegrationService, usageRepository, auditService);
+        workMatchingService.matchByIdno(usage);
+        assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
+        assertEquals(112930820L, usage.getWrWrkInst(), 0);
+        verify(piIntegrationService, usageRepository, auditService);
+    }
+
+    @Test
     public void testMatchByTitle() {
         String title = "The theological roots of Pentecostalism";
         Usage usage = buildUsage(null, title);
         expect(piIntegrationService.findWrWrkInstByTitle(title)).andReturn(112930820L).once();
-        usageRepository.updateStatusAndWrWrkInstByTitle(Collections.singletonList(usage));
+        usageRepository.update(Collections.singletonList(usage));
         expectLastCall().once();
         auditService.logAction(anyString(), eq(UsageActionTypeEnum.WORK_FOUND), anyString());
         expectLastCall().once();

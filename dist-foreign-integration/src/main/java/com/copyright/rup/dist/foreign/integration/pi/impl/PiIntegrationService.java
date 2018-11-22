@@ -23,11 +23,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
@@ -73,11 +70,6 @@ public class PiIntegrationService implements IPiIntegrationService {
             return result;
         }
         return matchByIdnoAndTitle(idno, title);
-    }
-
-    @Override
-    public Map<String, Long> findWrWrkInstsByTitles(Set<String> titles) {
-        return matchByTitle(titles);
     }
 
     @Override
@@ -174,37 +166,6 @@ public class PiIntegrationService implements IPiIntegrationService {
         } catch (IOException e) {
             throw new RupRuntimeException(
                 String.format("Search works. By %s. Failed. IDNO=%s, Reason=Could not read response", parameter, idno),
-                e);
-        }
-    }
-
-    private Map<String, Long> matchByTitle(Set<String> titles) {
-        Map<String, Long> titleToWrWrkInstMap = new HashMap<>();
-        titles.forEach(title -> {
-            RupSearchResponse searchResponse = doSearch(MAIN_TITLE, title);
-            List<RupSearchHit> searchHits = searchResponse.getResults().getHits();
-            if (CollectionUtils.isNotEmpty(searchHits) && EXPECTED_SEARCH_HITS_COUNT == searchHits.size()) {
-                parseAndPutWrWrkInstByTitle(searchHits, title, titleToWrWrkInstMap);
-            } else if (CollectionUtils.isEmpty(searchHits)) {
-                LOGGER.debug("Search works. By MainTitle. Title={}, WWrWrkInst=Not Found, Hits=Empty", title);
-            } else {
-                LOGGER.debug("Search works. By MainTitle. Title={}, WrWrkInst=MultiResults, Hits={}",
-                    title, searchHits.stream().map(RupSearchHit::getSource).collect(Collectors.joining(";")));
-            }
-        });
-        return titleToWrWrkInstMap;
-    }
-
-    private void parseAndPutWrWrkInstByTitle(List<RupSearchHit> searchHits, String title,
-                                             Map<String, Long> titleToWrWrkInstMap) {
-        try {
-            String source = searchHits.get(0).getSource();
-            Long wrWrkInst = mapper.readValue(source, Work.class).getWrWrkInst();
-            titleToWrWrkInstMap.put(title, wrWrkInst);
-            LOGGER.trace("Search works. By MainTitle. Title={}, WrWrkInst={}, Hit={}", title, wrWrkInst, source);
-        } catch (IOException e) {
-            throw new RupRuntimeException(
-                String.format("Search works. By MainTitle. Failed. Title=%s, Reason=Could not read response", title),
                 e);
         }
     }
