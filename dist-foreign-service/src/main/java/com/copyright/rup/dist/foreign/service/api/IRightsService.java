@@ -17,9 +17,9 @@ public interface IRightsService {
      * Finds list of {@link com.copyright.rup.dist.foreign.domain.Usage}s with
      * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#WORK_FOUND} and
      * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#SENT_FOR_RA} statuses and sends Wr Wrk Insts to RMS
-     * to get Grants.
+     * to get Grants and update RHs information.
      */
-    void updateRightsholders();
+    void updateRights();
 
     /**
      * Sends Wr Wrk Inst to RMS to get Grants and updates usage status based on response.

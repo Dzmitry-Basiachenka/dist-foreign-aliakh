@@ -26,7 +26,7 @@ public class GetRightsQuartzJobTest {
         IRightsService rightsService = createMock(IRightsService.class);
         GetRightsJob job = new GetRightsJob();
         Whitebox.setInternalState(job, rightsService);
-        rightsService.updateRightsholders();
+        rightsService.updateRights();
         expectLastCall().once();
         replay(rightsService);
         job.executeInternal(null);
