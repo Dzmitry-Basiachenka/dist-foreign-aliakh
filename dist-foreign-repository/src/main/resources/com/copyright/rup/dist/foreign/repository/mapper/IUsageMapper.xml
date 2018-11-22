@@ -498,6 +498,7 @@
             u.work_title,
             u.system_title,
             u.rh_account_number,
+            rh.df_rightsholder_uid rh_id,
             rh.name rh_name,
             u.status_ind,
             u.product_family,
@@ -516,6 +517,7 @@
             u.service_fee_amount,
             u.net_amount,
             u.payee_account_number,
+            p.df_rightsholder_uid payee_id,
             p.name payee_name,
             u.is_rh_participating_flag
         from ${schema}.df_usage u

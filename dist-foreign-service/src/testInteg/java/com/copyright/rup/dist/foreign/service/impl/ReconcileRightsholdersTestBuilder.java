@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import com.copyright.rup.dist.common.test.JsonMatcher;
 import com.copyright.rup.dist.common.test.TestUtils;
@@ -217,6 +218,8 @@ class ReconcileRightsholdersTestBuilder {
         }
 
         private void assertUsage(Usage expected, Usage actual) {
+            assertNotNull(actual.getRightsholder().getId());
+            assertNotNull(actual.getPayee().getId());
             assertEquals(expected.getRightsholder().getAccountNumber(), actual.getRightsholder().getAccountNumber());
             assertEquals(expected.getPayee().getAccountNumber(), actual.getPayee().getAccountNumber());
             assertEquals(expected.getWrWrkInst(), actual.getWrWrkInst());
