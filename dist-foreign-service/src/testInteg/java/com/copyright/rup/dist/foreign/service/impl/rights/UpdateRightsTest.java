@@ -42,8 +42,8 @@ import org.springframework.web.client.RestTemplate;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
-@TestPropertySource(properties = {"test.liquibase.changelog=update-rightsholders-data-init.groovy"})
-public class UpdateRightsholdersTest {
+@TestPropertySource(properties = {"test.liquibase.changelog=update-rights-data-init.groovy"})
+public class UpdateRightsTest {
 
     @Autowired
     private IUsageRepository usageRepository;
@@ -62,13 +62,12 @@ public class UpdateRightsholdersTest {
     private MockRestServiceServer asyncMockServer;
 
     @Test
-    public void testUpdateRights() {
+    public void testUpdateRightsSentForRaUsages() {
         mockServer = MockRestServiceServer.createServer(restTemplate);
         asyncMockServer = MockRestServiceServer.createServer(asyncRestTemplate);
-        expectRmsCall("rms_grants_work_found_usages_request.json", "rms_grants_work_found_usages_response.json");
         expectRmsCall("rms_grants_sent_for_ra_usages_request.json", "rms_grants_sent_for_ra_usages_response.json");
         expectPrmCall();
-        rightsService.updateRightsholders();
+        rightsService.updateRights();
         assertUsages();
         assertAudit();
         mockServer.verify();
@@ -80,11 +79,9 @@ public class UpdateRightsholdersTest {
         assertUsage("2de40e13-d353-44ce-b6bb-a11383ba9fb9", UsageStatusEnum.NEW, null);
         assertUsage("e6378e17-b0c9-420f-aa5c-a653156339d2", UsageStatusEnum.SENT_FOR_RA, null);
         assertUsage("11853c83-780a-4533-ad01-dde87c8b8592", UsageStatusEnum.ELIGIBLE, 1000000322L);
-        assertUsage("b77e72d6-ef71-4f4b-a00b-5800e43e5bee", UsageStatusEnum.ELIGIBLE, 1000010077L);
         assertUsage("37c4d727-caeb-4a7f-b11a-34e313b0bfcc", UsageStatusEnum.ELIGIBLE, 1000009522L);
         assertUsage("ff321d96-04bd-11e8-ba89-0ed5f89f718b", UsageStatusEnum.LOCKED, 1000009522L);
         assertUsage("19ca7776-48c8-472e-acfe-d49b6e8780ce", UsageStatusEnum.RH_NOT_FOUND, null);
-        assertUsage("8aded52d-9507-4883-ab4c-fd2e029298af", UsageStatusEnum.RH_NOT_FOUND, null);
     }
 
     private void assertUsage(String usageId, UsageStatusEnum expectedStatus, Long expectedRhAccounNumber) {
@@ -94,9 +91,7 @@ public class UpdateRightsholdersTest {
     }
 
     private void assertAudit() {
-        assertAudit("b77e72d6-ef71-4f4b-a00b-5800e43e5bee", "Rightsholder account 1000010077 was found in RMS");
         assertAudit("11853c83-780a-4533-ad01-dde87c8b8592", "Rightsholder account 1000000322 was found in RMS");
-        assertAudit("8aded52d-9507-4883-ab4c-fd2e029298af", "Rightsholder account for 854030731 was not found in RMS");
     }
 
     private void assertAudit(String usageId, String reason) {

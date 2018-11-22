@@ -26,6 +26,6 @@ public class GetRightsJob extends QuartzJobBean {
 
     @Override
     public void executeInternal(JobExecutionContext context) {
-        rightsService.updateRightsholders();
+        rightsService.updateRights();
     }
 }
