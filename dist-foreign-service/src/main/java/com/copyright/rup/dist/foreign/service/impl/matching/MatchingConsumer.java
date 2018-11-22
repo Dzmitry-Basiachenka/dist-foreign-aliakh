@@ -21,7 +21,6 @@ import org.springframework.stereotype.Component;
  * @author Ihar Suvorau
  */
 @Component("df.service.matchingConsumer")
-// TODO {isuvorau} cover by integration test
 public class MatchingConsumer implements IConsumer<Usage> {
 
     @Autowired
