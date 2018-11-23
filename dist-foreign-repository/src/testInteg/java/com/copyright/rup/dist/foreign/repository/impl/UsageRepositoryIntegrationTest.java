@@ -581,6 +581,8 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(new BigDecimal("16.40"),
             usageRepository.getTotalAmountByStandardNumberAndBatchId("5475802112214578XX",
                 "cb597f4e-f636-447f-8710-0436d8994d10"));
+        assertEquals(new BigDecimal("0.00"),
+            usageRepository.getTotalAmountByStandardNumberAndBatchId("100 ROAD 5475802112214578XX", "invalid id"));
     }
 
     @Test
@@ -591,6 +593,8 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(new BigDecimal("16.40"),
             usageRepository.getTotalAmountByTitleAndBatchId("100 ROAD MOVIES",
                 "cb597f4e-f636-447f-8710-0436d8994d10"));
+        assertEquals(new BigDecimal("0.00"),
+            usageRepository.getTotalAmountByTitleAndBatchId("100 ROAD MOVIES", "invalid id"));
     }
 
     @Test
