@@ -1,0 +1,15 @@
+{
+  "response": {
+    "status": {
+      "code": "SUCCESS",
+      "message": "OK"
+    },
+    "content": {
+      "@class": "com.copyright.rup.rms.rights.domain.WorksResponse",
+      "requestedWorkCount": "1",
+      "processedWorkCount": "1",
+      "foundWorkCount": "0",
+      "rights": []
+    }
+  }
+}

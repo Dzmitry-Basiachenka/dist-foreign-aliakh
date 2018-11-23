@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.service.impl.rights;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.test.JsonMatcher;
 import com.copyright.rup.dist.common.test.TestUtils;
@@ -14,7 +13,6 @@ import com.copyright.rup.dist.foreign.service.impl.RightsholderService;
 
 import com.google.common.collect.Lists;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +25,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.test.web.client.match.MockRestRequestMatchers;
 import org.springframework.test.web.client.response.MockRestResponseCreators;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
 
@@ -43,6 +42,7 @@ import org.springframework.web.client.RestTemplate;
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
 @TestPropertySource(properties = {"test.liquibase.changelog=update-rights-data-init.groovy"})
+@Transactional
 public class UpdateRightsTest {
 
     @Autowired
@@ -65,33 +65,55 @@ public class UpdateRightsTest {
     public void testUpdateRightsSentForRaUsages() {
         mockServer = MockRestServiceServer.createServer(restTemplate);
         asyncMockServer = MockRestServiceServer.createServer(asyncRestTemplate);
-        expectRmsCall("rms_grants_sent_for_ra_usages_request.json", "rms_grants_sent_for_ra_usages_response.json");
+        expectRmsCall("rms_grants_854030732_request.json", "rms_grants_empty_response.json");
+        expectRmsCall("rms_grants_122824345_request.json", "rms_grants_122824345_response.json");
         expectPrmCall();
         rightsService.updateRights();
-        assertUsages();
-        assertAudit();
-        mockServer.verify();
-        asyncMockServer.verify();
-    }
-
-    private void assertUsages() {
-        assertTrue(CollectionUtils.isEmpty(usageRepository.findByStatuses(UsageStatusEnum.WORK_FOUND)));
         assertUsage("2de40e13-d353-44ce-b6bb-a11383ba9fb9", UsageStatusEnum.NEW, null);
         assertUsage("e6378e17-b0c9-420f-aa5c-a653156339d2", UsageStatusEnum.SENT_FOR_RA, null);
         assertUsage("11853c83-780a-4533-ad01-dde87c8b8592", UsageStatusEnum.ELIGIBLE, 1000000322L);
         assertUsage("37c4d727-caeb-4a7f-b11a-34e313b0bfcc", UsageStatusEnum.ELIGIBLE, 1000009522L);
         assertUsage("ff321d96-04bd-11e8-ba89-0ed5f89f718b", UsageStatusEnum.LOCKED, 1000009522L);
         assertUsage("19ca7776-48c8-472e-acfe-d49b6e8780ce", UsageStatusEnum.RH_NOT_FOUND, null);
+        assertAudit("11853c83-780a-4533-ad01-dde87c8b8592", "Rightsholder account 1000000322 was found in RMS");
+        mockServer.verify();
+        asyncMockServer.verify();
+    }
+
+    @Test
+    public void testUpdateRightsholder() {
+        mockServer = MockRestServiceServer.createServer(restTemplate);
+        asyncMockServer = MockRestServiceServer.createServer(asyncRestTemplate);
+        expectRmsCall("rms_grants_254030731_request.json", "rms_grants_254030731_response.json");
+        expectRmsCall("rms_grants_658824345_request.json", "rms_grants_658824345_response.json");
+        expectRmsCall("rms_grants_488824345_request.json", "rms_grants_empty_response.json");
+        rightsService.updateRightsholder(buildUsage("b77e72d6-ef71-4f4b-a00b-5800e43e5bee", 254030731L));
+        rightsService.updateRightsholder(buildUsage("8aded52d-9507-4883-ab4c-fd2e029298af", 254030731L));
+        rightsService.updateRightsholder(buildUsage("74ded52a-4454-1225-ab4c-fA2e029298af", 658824345L));
+        rightsService.updateRightsholder(buildUsage("3a6b6f25-9f68-4da7-be4f-dd65574f5168", 488824345L));
+        assertUsage("b77e72d6-ef71-4f4b-a00b-5800e43e5bee", UsageStatusEnum.ELIGIBLE, 1000010077L);
+        assertUsage("8aded52d-9507-4883-ab4c-fd2e029298af", UsageStatusEnum.ELIGIBLE, 1000010077L);
+        assertUsage("74ded52a-4454-1225-ab4c-fA2e029298af", UsageStatusEnum.ELIGIBLE, 1000023401L);
+        assertUsage("3a6b6f25-9f68-4da7-be4f-dd65574f5168", UsageStatusEnum.RH_NOT_FOUND, null);
+        assertAudit("b77e72d6-ef71-4f4b-a00b-5800e43e5bee", "Rightsholder account 1000010077 was found in RMS");
+        assertAudit("8aded52d-9507-4883-ab4c-fd2e029298af", "Rightsholder account 1000010077 was found in RMS");
+        assertAudit("74ded52a-4454-1225-ab4c-fA2e029298af", "Rightsholder account 1000023401 was found in RMS");
+        assertAudit("3a6b6f25-9f68-4da7-be4f-dd65574f5168", "Rightsholder account for 488824345 was not found in RMS");
+        mockServer.verify();
+        asyncMockServer.verify();
+    }
+
+    private Usage buildUsage(String usageId, Long wrWrkInst) {
+        Usage usage = new Usage();
+        usage.setId(usageId);
+        usage.setWrWrkInst(wrWrkInst);
+        return usage;
     }
 
     private void assertUsage(String usageId, UsageStatusEnum expectedStatus, Long expectedRhAccounNumber) {
         Usage usage = usageRepository.findById(usageId);
         assertEquals(expectedStatus, usage.getStatus());
         assertEquals(expectedRhAccounNumber, usage.getRightsholder().getAccountNumber());
-    }
-
-    private void assertAudit() {
-        assertAudit("11853c83-780a-4533-ad01-dde87c8b8592", "Rightsholder account 1000000322 was found in RMS");
     }
 
     private void assertAudit(String usageId, String reason) {

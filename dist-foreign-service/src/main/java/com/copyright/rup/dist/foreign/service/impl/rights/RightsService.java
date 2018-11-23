@@ -52,6 +52,7 @@ public class RightsService implements IRightsService {
     @Autowired
     private IUsageAuditService auditService;
     @Autowired
+    @Qualifier("df.service.rmsGrantsProcessorService")
     private IRmsGrantsProcessorService rmsGrantsProcessorService;
     @Autowired
     private IRightsholderService rightsholderService;
@@ -113,9 +114,9 @@ public class RightsService implements IRightsService {
     public void updateRightsholder(Usage usage) {
         Long wrWrkInst = usage.getWrWrkInst();
         Set<String> usageId = Collections.singleton(usage.getId());
-        Long rhAccountNumber =
-            rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(wrWrkInst))
-                .get(wrWrkInst);
+        Map<Long, Long> wrWrkInstToRhAccountNumberMap =
+            rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(wrWrkInst));
+        Long rhAccountNumber = wrWrkInstToRhAccountNumberMap.get(wrWrkInst);
         if (Objects.nonNull(rhAccountNumber)) {
             usageRepository.updateStatusAndRhAccountNumber(usageId, UsageStatusEnum.ELIGIBLE, rhAccountNumber);
             auditService.logAction(usageId, UsageActionTypeEnum.RH_FOUND,
