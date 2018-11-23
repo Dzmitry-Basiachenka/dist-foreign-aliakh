@@ -55,6 +55,7 @@ public class PiIntegrationServiceTest {
         piIntegrationService.init();
         rupEsApi = piIntegrationService.getRupEsApi();
         piIntegrationProxyService = new PiIntegrationProxyService(piIntegrationService, 1);
+        piIntegrationProxyService.createCache();
         searchHit1 = createMock(RupSearchHit.class);
         searchHit2 = createMock(RupSearchHit.class);
         searchHit3 = createMock(RupSearchHit.class);
