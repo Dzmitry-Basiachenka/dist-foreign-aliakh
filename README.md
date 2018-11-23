@@ -1,3 +1,9 @@
+3.1.31
+-
+* B-47837 FDA: Near time processing for Works match and Get RHs: Add caching for getting rightsholders by wrWrkInsts
+* B-47837 FDA: Neartime processing for Works match and Get RHs: fix issue with calculating total amount if batch was removed during processing
+* B-47837 FDA: Neartime processing for Works match and Get RHs: refine caching functionality for PI matching on order to use common service
+
 3.1.30
 -
 * B-47837 FDA: Near-time processing for Works match and Get RHs: adjust service logic of Get Rights Job to send usages for getting rights information via queue
