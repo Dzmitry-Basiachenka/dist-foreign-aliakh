@@ -32,6 +32,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
@@ -164,7 +165,9 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         parameters.put("statuses", Objects.requireNonNull(statuses));
         parameters.put("standardNumber", standardNumber);
         parameters.put("batchId", batchId);
-        BigDecimal totalAmount = selectOne("IUsageMapper.getTotalAmountByStandardNumberAndBatchId", parameters);
+        BigDecimal totalAmount =
+            ObjectUtils.defaultIfNull(selectOne("IUsageMapper.getTotalAmountByStandardNumberAndBatchId", parameters),
+                BigDecimal.ZERO);
         return totalAmount.setScale(2, RoundingMode.HALF_UP);
     }
 
@@ -176,7 +179,9 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         parameters.put("statuses", Objects.requireNonNull(statuses));
         parameters.put("title", title);
         parameters.put("batchId", batchId);
-        BigDecimal totalAmount = selectOne("IUsageMapper.getTotalAmountByTitleAndBatchId", parameters);
+        BigDecimal totalAmount =
+            ObjectUtils.defaultIfNull(selectOne("IUsageMapper.getTotalAmountByTitleAndBatchId", parameters),
+                BigDecimal.ZERO);
         return totalAmount.setScale(2, RoundingMode.HALF_UP);
     }
 
