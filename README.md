@@ -1,3 +1,8 @@
+3.1.32
+-
+* B-47837 FDA: Neartime processing for Works match and Get RHs: apply redelivery policy only for RupRuntimeException during PI matching and GetRights processing
+* RDSC-639 FDA: System doesn't populate 'NTS' product family for usages with 'NTS_WITHDRAWN' status
+
 3.1.31
 -
 * B-47837 FDA: Near time processing for Works match and Get RHs: Add caching for getting rightsholders by wrWrkInsts
