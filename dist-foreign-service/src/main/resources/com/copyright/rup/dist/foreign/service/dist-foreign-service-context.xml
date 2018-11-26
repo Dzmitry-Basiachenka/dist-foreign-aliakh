@@ -48,8 +48,6 @@
 
     <context:component-scan base-package="com.copyright.rup.dist.foreign.service"/>
 
-    <errorHandler id="commonErrorHandler" xmlns="http://camel.apache.org/schema/spring" redeliveryPolicyRef="defaultRedeliveryPolicy"/>
-
     <bean id="defaultRedeliveryPolicy" class="org.apache.camel.processor.RedeliveryPolicy"
           p:maximumRedeliveries="$RUP{dist.foreign.service.redelivery.count}"
           p:redeliveryDelay="$RUP{dist.foreign.service.redelivery.delay}"
@@ -61,7 +59,7 @@
           p:logRetryStackTrace="true"
           p:logRetryAttempted="true"/>
 
-    <camelContext id="df.service.camelContext" xmlns="http://camel.apache.org/schema/spring" errorHandlerRef="commonErrorHandler">
+    <camelContext id="df.service.camelContext" xmlns="http://camel.apache.org/schema/spring">
         <contextScan/>
         <template id="df.service.producerTemplate"/>
 
@@ -94,6 +92,10 @@
                 <custom ref="df.service.matchingMarshaller"/>
             </marshal>
             <to ref="df.service.matching.endpoint"/>
+
+            <onException redeliveryPolicyRef="defaultRedeliveryPolicy" useOriginalMessage="true">
+                <exception>com.copyright.rup.common.exception.RupRuntimeException</exception>
+            </onException>
         </route>
 
         <route>
@@ -102,6 +104,10 @@
                 <custom ref="df.service.matchingUnmarshaller"/>
             </unmarshal>
             <bean ref="df.service.matchingConsumer"/>
+
+            <onException redeliveryPolicyRef="defaultRedeliveryPolicy" useOriginalMessage="true">
+                <exception>com.copyright.rup.common.exception.RupRuntimeException</exception>
+            </onException>
         </route>
 
         <route>
@@ -110,6 +116,10 @@
                 <custom ref="df.service.rightsMarshaller"/>
             </marshal>
             <to ref="df.service.rights.endpoint"/>
+
+            <onException redeliveryPolicyRef="defaultRedeliveryPolicy" useOriginalMessage="true">
+                <exception>com.copyright.rup.common.exception.RupRuntimeException</exception>
+            </onException>
         </route>
 
         <route>
@@ -118,6 +128,10 @@
                 <custom ref="df.service.rightsUnmarshaller"/>
             </unmarshal>
             <bean ref="df.service.rightsConsumer"/>
+
+            <onException redeliveryPolicyRef="defaultRedeliveryPolicy" useOriginalMessage="true">
+                <exception>com.copyright.rup.common.exception.RupRuntimeException</exception>
+            </onException>
         </route>
     </camelContext>
 </beans>
