@@ -9,6 +9,7 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
+import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -21,6 +22,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 
 /**
@@ -65,6 +67,31 @@ public class WorkMatchingServiceTest {
         workMatchingService.matchByIdno(usage);
         assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
         assertEquals(112930820L, usage.getWrWrkInst(), 0);
+        verify(piIntegrationService, usageRepository, auditService);
+    }
+
+    @Test
+    public void testMatchByIdnoForNts() {
+        String standardNumber = "000043122-1";
+        String title = "The theological roots of Pentecostalism";
+        String batchId = RupPersistUtils.generateUuid();
+        Usage usage = buildUsage(standardNumber, title);
+        usage.setId(RupPersistUtils.generateUuid());
+        usage.setBatchId(batchId);
+        expect(piIntegrationService.findWorkByIdnoAndTitle(standardNumber, title))
+            .andReturn(new Work()).once();
+        expect(usageRepository.getTotalAmountByStandardNumberAndBatchId(standardNumber, batchId))
+            .andReturn(new BigDecimal("99.00"));
+        usageRepository.updateToNtsWithdrawn(usage);
+        expectLastCall().once();
+        auditService.logAction(usage.getId(), UsageActionTypeEnum.ELIGIBLE_FOR_NTS,
+            "Detail was made eligible for NTS because sum of gross amounts, grouped by standard number, " +
+                "is less than $100");
+        expectLastCall().once();
+        replay(piIntegrationService, usageRepository, auditService);
+        workMatchingService.matchByIdno(usage);
+        assertEquals(UsageStatusEnum.NTS_WITHDRAWN, usage.getStatus());
+        assertEquals("NTS", usage.getProductFamily());
         verify(piIntegrationService, usageRepository, auditService);
     }
 

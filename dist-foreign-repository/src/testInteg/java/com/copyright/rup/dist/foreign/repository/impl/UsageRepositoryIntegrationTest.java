@@ -11,6 +11,7 @@ import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -861,6 +862,21 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(new BigDecimal("2630.0000000000"), usage.getServiceFeeAmount());
         assertEquals(new BigDecimal("0.16000"), usage.getServiceFee());
         usage.getRightsholder().setAccountNumber(1000000001L);
+    }
+
+    @Test
+    public void testUpdateToNtsWithdrawn() {
+        Usage usage = usageRepository.findById(USAGE_ID_20);
+        assertNotNull(usage);
+        assertEquals(USAGE_ID_20, usage.getId());
+        assertEquals(PRODUCT_FAMILY_FAS, usage.getProductFamily());
+        assertEquals(UsageStatusEnum.NEW, usage.getStatus());
+        usage.setProductFamily(FdaConstants.NTS_PRODUCT_FAMILY);
+        usage.setStatus(UsageStatusEnum.NTS_WITHDRAWN);
+        usageRepository.updateToNtsWithdrawn(usage);
+        Usage actualUsage = usageRepository.findById(usage.getId());
+        assertEquals(FdaConstants.NTS_PRODUCT_FAMILY, actualUsage.getProductFamily());
+        assertEquals(UsageStatusEnum.NTS_WITHDRAWN, actualUsage.getStatus());
     }
 
     @Test

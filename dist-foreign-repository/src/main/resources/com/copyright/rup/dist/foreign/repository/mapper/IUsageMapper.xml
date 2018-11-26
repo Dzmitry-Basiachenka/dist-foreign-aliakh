@@ -1135,6 +1135,15 @@
         where df_usage_uid = #{usage.usageId}
     </update>
 
+    <update id="updateToNtsWithdrawn" parameterType="map">
+        update ${schema}.df_usage
+        set
+            status_ind = #{status},
+            product_family = #{productFamily},
+            <include refid="StoredEntityMapper.update"/>
+        where df_usage_uid = #{usageId}
+    </update>
+
     <select id="findUndistributedLiabilitiesReportDtos" parameterType="map" resultMap="undistributedLiabilitiesReportDtoResultMap">
         select
             reportInfo.rro_account_number,

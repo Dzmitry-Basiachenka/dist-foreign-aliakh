@@ -344,6 +344,13 @@ public interface IUsageRepository {
     void update(List<Usage> usages);
 
     /**
+     * Updates status to {@link UsageStatusEnum#NTS_WITHDRAWN} and product family to NTS for usage.
+     *
+     * @param usage instance of {@link Usage}
+     */
+    void updateToNtsWithdrawn(Usage usage);
+
+    /**
      * Updates researched usage details.
      *
      * @param researchedUsages collection of {@link ResearchedUsage}s

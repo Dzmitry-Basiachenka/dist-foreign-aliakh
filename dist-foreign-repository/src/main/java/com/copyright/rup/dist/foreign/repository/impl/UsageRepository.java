@@ -388,6 +388,16 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
+    public void updateToNtsWithdrawn(Usage usage) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
+        parameters.put(STATUS_KEY, UsageStatusEnum.NTS_WITHDRAWN);
+        parameters.put(UPDATE_USER_KEY, StoredEntity.DEFAULT_USER);
+        parameters.put("productFamily", FdaConstants.NTS_PRODUCT_FAMILY);
+        parameters.put(USAGE_ID_KEY, Objects.requireNonNull(usage).getId());
+        update("IUsageMapper.updateToNtsWithdrawn", parameters);
+    }
+
+    @Override
     public void updateResearchedUsages(Collection<ResearchedUsage> researchedUsages) {
         Objects.requireNonNull(researchedUsages);
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
