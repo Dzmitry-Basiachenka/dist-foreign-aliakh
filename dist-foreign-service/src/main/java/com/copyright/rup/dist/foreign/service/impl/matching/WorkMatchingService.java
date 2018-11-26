@@ -104,6 +104,7 @@ public class WorkMatchingService implements IWorkMatchingService {
             usage.setProductFamily(FdaConstants.NTS_PRODUCT_FAMILY);
             auditService.logAction(usage.getId(), UsageActionTypeEnum.ELIGIBLE_FOR_NTS,
                 usageGroup.getNtsEligibleReason());
+            usageRepository.updateToNtsWithdrawn(usage);
         } else {
             if (Objects.isNull(usage.getStandardNumber()) && Objects.isNull(usage.getWorkTitle())) {
                 usage.setWrWrkInst(UNIDENTIFIED_WR_WRK_INST);
@@ -117,8 +118,8 @@ public class WorkMatchingService implements IWorkMatchingService {
                 auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_NOT_FOUND,
                     usageGroup.getWorkNotFoundReasonFunction().apply(usage));
             }
+            usageRepository.update(Collections.singletonList(usage));
         }
-        usageRepository.update(Collections.singletonList(usage));
     }
 
     private enum UsageGroupEnum {
