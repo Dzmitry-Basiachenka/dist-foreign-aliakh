@@ -39,7 +39,7 @@
 
     <bean id="df.service.rmsProxyService" class="com.copyright.rup.dist.foreign.service.impl.rights.RmsProxyService">
         <constructor-arg ref="dist.common.integration.rmsService"/>
-        <constructor-arg value="$RUP{dist.foreign.service.rightsholders.ttl.minutes}"/>
+        <constructor-arg value="$RUP{dist.foreign.service.rights.ttl.minutes}"/>
     </bean>
 
     <bean id="df.service.rmsGrantsProcessorService" class="com.copyright.rup.dist.common.service.impl.discrepancy.RmsGrantsProcessorService">

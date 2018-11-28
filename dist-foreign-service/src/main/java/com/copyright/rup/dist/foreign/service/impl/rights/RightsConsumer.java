@@ -27,7 +27,7 @@ public class RightsConsumer implements IConsumer<Usage> {
     @Override
     public void consume(Usage usage) {
         if (Objects.nonNull(usage)) {
-            rightsService.updateRightsholder(usage);
+            rightsService.updateRight(usage);
         }
     }
 }

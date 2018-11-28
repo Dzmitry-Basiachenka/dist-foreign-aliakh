@@ -35,7 +35,7 @@ public class RightsDeserializer extends JsonDeserializer<Usage> {
         try {
             usage = deserializeUsage(parser.readValueAsTree());
         } catch (JsonParseException e) {
-            LOGGER.warn("Deserialize LM message. Failed", e);
+            LOGGER.warn("Deserialize Rights message. Failed", e);
         }
         return usage;
     }

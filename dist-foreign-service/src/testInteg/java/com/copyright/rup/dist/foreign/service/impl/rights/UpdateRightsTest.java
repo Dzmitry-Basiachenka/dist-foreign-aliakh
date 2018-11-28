@@ -30,7 +30,7 @@ import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * Verifies correctness of updating usages rightsholders.
+ * Verifies correctness of updating usages rights.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -81,16 +81,16 @@ public class UpdateRightsTest {
     }
 
     @Test
-    public void testUpdateRightsholder() {
+    public void testUpdateRight() {
         mockServer = MockRestServiceServer.createServer(restTemplate);
         asyncMockServer = MockRestServiceServer.createServer(asyncRestTemplate);
         expectRmsCall("rms_grants_254030731_request.json", "rms_grants_254030731_response.json");
         expectRmsCall("rms_grants_658824345_request.json", "rms_grants_658824345_response.json");
         expectRmsCall("rms_grants_488824345_request.json", "rms_grants_empty_response.json");
-        rightsService.updateRightsholder(buildUsage("b77e72d6-ef71-4f4b-a00b-5800e43e5bee", 254030731L));
-        rightsService.updateRightsholder(buildUsage("8aded52d-9507-4883-ab4c-fd2e029298af", 254030731L));
-        rightsService.updateRightsholder(buildUsage("74ded52a-4454-1225-ab4c-fA2e029298af", 658824345L));
-        rightsService.updateRightsholder(buildUsage("3a6b6f25-9f68-4da7-be4f-dd65574f5168", 488824345L));
+        rightsService.updateRight(buildUsage("b77e72d6-ef71-4f4b-a00b-5800e43e5bee", 254030731L));
+        rightsService.updateRight(buildUsage("8aded52d-9507-4883-ab4c-fd2e029298af", 254030731L));
+        rightsService.updateRight(buildUsage("74ded52a-4454-1225-ab4c-fA2e029298af", 658824345L));
+        rightsService.updateRight(buildUsage("3a6b6f25-9f68-4da7-be4f-dd65574f5168", 488824345L));
         assertUsage("b77e72d6-ef71-4f4b-a00b-5800e43e5bee", UsageStatusEnum.ELIGIBLE, 1000010077L);
         assertUsage("8aded52d-9507-4883-ab4c-fd2e029298af", UsageStatusEnum.ELIGIBLE, 1000010077L);
         assertUsage("74ded52a-4454-1225-ab4c-fA2e029298af", UsageStatusEnum.ELIGIBLE, 1000023401L);

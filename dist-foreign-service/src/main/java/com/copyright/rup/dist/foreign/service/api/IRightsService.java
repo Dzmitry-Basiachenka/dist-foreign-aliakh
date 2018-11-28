@@ -28,7 +28,7 @@ public interface IRightsService {
      *
      * @param usage {@link Usage} to update
      */
-    void updateRightsholder(Usage usage);
+    void updateRight(Usage usage);
 
     /**
      * Finds list of {@link com.copyright.rup.dist.foreign.domain.Usage}s with

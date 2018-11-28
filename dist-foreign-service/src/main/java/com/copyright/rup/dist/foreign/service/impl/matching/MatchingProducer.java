@@ -53,7 +53,9 @@ public class MatchingProducer implements IProducer<Usage> {
         try {
             producerTemplate.sendBody(endPoint, message);
         } catch (CamelExecutionException e) {
-            throw new RupRuntimeException("Exception appeared while sending usages for matching", e);
+            throw new RupRuntimeException(
+                String.format("Exception appeared while sending usages for matching. Endpoint=%s. Message=%s", endPoint,
+                    message), e);
         }
     }
 }
