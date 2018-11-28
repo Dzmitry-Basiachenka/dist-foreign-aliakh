@@ -1,3 +1,9 @@
+3.1.33
+-
+* B-45289 FDA: Report FAS split payments to RC: Make changes based on comments in CR-DIST-FOREIGN-76
+* B-47837 FDA: Neartime processing for Works match and Get RHs: make changes based on comments in CR-DIST-FOREIGN-78
+* RDSC-640 FDA: Usages are grouped by the same title after PI matching, ignoring standard number presence for 1 of them
+
 3.1.32
 -
 * B-47837 FDA: Neartime processing for Works match and Get RHs: apply redelivery policy only for RupRuntimeException during PI matching and GetRights processing
