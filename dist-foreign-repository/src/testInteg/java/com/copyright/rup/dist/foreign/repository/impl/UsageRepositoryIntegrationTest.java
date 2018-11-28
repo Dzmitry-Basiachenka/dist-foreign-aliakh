@@ -588,10 +588,10 @@ public class UsageRepositoryIntegrationTest {
 
     @Test
     public void testGetTotalAmountByTitleAndBatchId() {
-        assertEquals(new BigDecimal("20000.00"),
+        assertEquals(new BigDecimal("2000.00"),
             usageRepository.getTotalAmountByTitleAndBatchId("Wissenschaft & Forschung Japan",
-                "c10a11c6-dae3-43d7-a632-c682542b1209"));
-        assertEquals(new BigDecimal("16.40"),
+                "9776da8d-098d-4f39-99fd-85405c339e9b"));
+        assertEquals(new BigDecimal("0.00"),
             usageRepository.getTotalAmountByTitleAndBatchId("100 ROAD MOVIES",
                 "cb597f4e-f636-447f-8710-0436d8994d10"));
         assertEquals(new BigDecimal("0.00"),
