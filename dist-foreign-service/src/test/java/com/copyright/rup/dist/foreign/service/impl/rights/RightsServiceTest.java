@@ -141,7 +141,7 @@ public class RightsServiceTest {
     }
 
     @Test
-    public void testUpdateRightsholder() {
+    public void testUpdateRight() {
         String usageId = RupPersistUtils.generateUuid();
         Set<String> usageIdsSet = Collections.singleton(usageId);
         expect(rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(123160519L)))
@@ -155,12 +155,12 @@ public class RightsServiceTest {
         rightsholderService.updateRightsholders(Collections.singleton(1000009522L));
         expectLastCall().once();
         replay(rmsGrantsProcessorService, rightsholderService, usageRepository, usageAuditService);
-        rightsAssignmentService.updateRightsholder(buildUsage(usageId, UsageStatusEnum.WORK_FOUND));
+        rightsAssignmentService.updateRight(buildUsage(usageId, UsageStatusEnum.WORK_FOUND));
         verify(rmsGrantsProcessorService, rightsholderService, usageRepository, usageAuditService);
     }
 
     @Test
-    public void testUpdateRightsholderNotFound() {
+    public void testUpdateRightNotFound() {
         String usageId = RupPersistUtils.generateUuid();
         Set<String> usageIdsSet = Collections.singleton(usageId);
         expect(rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(123160519L)))
@@ -172,7 +172,7 @@ public class RightsServiceTest {
             "Rightsholder account for 123160519 was not found in RMS");
         expectLastCall().once();
         replay(rmsGrantsProcessorService, rightsholderService, usageRepository, usageAuditService);
-        rightsAssignmentService.updateRightsholder(buildUsage(usageId, UsageStatusEnum.WORK_FOUND));
+        rightsAssignmentService.updateRight(buildUsage(usageId, UsageStatusEnum.WORK_FOUND));
         verify(rmsGrantsProcessorService, rightsholderService, usageRepository, usageAuditService);
     }
 

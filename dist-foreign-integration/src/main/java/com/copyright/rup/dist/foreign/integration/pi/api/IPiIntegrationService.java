@@ -25,12 +25,12 @@ public interface IPiIntegrationService {
 
     /**
      * Finds Wr Wrk Inst for given title.
-     * If work for particular title is found and they uniquely corresponds to each other, work will be returned.
+     * If work for particular title is found and they uniquely corresponds to each other, Wr Wrk Inst will be returned.
      * If work for particular title is not found or multiple standard numbers correspond to one Wr Wrk Inst -
-     * return {@code null}.
+     * returns {@code null}.
      *
      * @param title title to search work by
-     * @return wr wrk inst value
+     * @return Wr Wrk Inst value
      */
     Long findWrWrkInstByTitle(String title);
 }

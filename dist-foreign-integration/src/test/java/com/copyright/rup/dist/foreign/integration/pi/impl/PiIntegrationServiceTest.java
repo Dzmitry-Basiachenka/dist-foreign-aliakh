@@ -37,7 +37,8 @@ import java.util.Collections;
 public class PiIntegrationServiceTest {
 
     private static final String OCULAR_TITLE = "Ocular Tissue Culture";
-    private PiIntegrationProxyService piIntegrationProxyService;
+    private static final String FORBIDDEN_RIGHTS = "Forbidden rites";
+    private PiIntegrationService piIntegrationService;
     private RupEsApi rupEsApi;
     private RupSearchHit searchHit1;
     private RupSearchHit searchHit2;
@@ -51,11 +52,9 @@ public class PiIntegrationServiceTest {
 
     @Before
     public void setUp() {
-        PiIntegrationService piIntegrationService = new PiIntegrationServiceMock();
+        piIntegrationService = new PiIntegrationServiceMock();
         piIntegrationService.init();
         rupEsApi = piIntegrationService.getRupEsApi();
-        piIntegrationProxyService = new PiIntegrationProxyService(piIntegrationService, 1);
-        piIntegrationProxyService.createCache();
         searchHit1 = createMock(RupSearchHit.class);
         searchHit2 = createMock(RupSearchHit.class);
         searchHit3 = createMock(RupSearchHit.class);
@@ -72,24 +71,16 @@ public class PiIntegrationServiceTest {
         expectGetSearchResponseByIdno();
         replay(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3, searchHit4, searchHit5,
             searchHit6);
-        Work work1 = piIntegrationProxyService.findWorkByIdnoAndTitle("1140-9126", null);
-        Work work2 = piIntegrationProxyService.findWorkByIdnoAndTitle("0-271-01750-3", null);
-        Work work3 = piIntegrationProxyService.findWorkByIdnoAndTitle("978-0-08-027365-5", null);
-        Work work4 = piIntegrationProxyService.findWorkByIdnoAndTitle("10.1353/PGN.1999.0081", null);
-        Work work5 = piIntegrationProxyService.findWorkByIdnoAndTitle("978-0-271-01751-8", OCULAR_TITLE);
-        Work work6 = piIntegrationProxyService.findWorkByIdnoAndTitle("978-0-08-027365-5", null);
-        Work work7 = piIntegrationProxyService.findWorkByIdnoAndTitle("1140-9126", null);
-        Work work8 = piIntegrationProxyService.findWorkByIdnoAndTitle("1140-9126", null);
-        Work work9 = piIntegrationProxyService.findWorkByIdnoAndTitle("978-0-271-01751-8", OCULAR_TITLE);
-        assertEquals(123059057L, work1.getWrWrkInst(), 0);
-        assertEquals(123059058L, work2.getWrWrkInst(), 0);
-        assertEquals(156427025L, work3.getWrWrkInst(), 0);
-        assertEquals(112942199L, work4.getWrWrkInst(), 0);
-        assertEquals(123067577L, work5.getWrWrkInst(), 0);
-        assertEquals(156427025L, work6.getWrWrkInst(), 0);
-        assertEquals(123059057L, work7.getWrWrkInst(), 0);
-        assertEquals(123059057L, work8.getWrWrkInst(), 0);
-        assertEquals(123067577L, work9.getWrWrkInst(), 0);
+        assertEquals(new Work(123059057L, "Annuaire de la communication en Rhône-Alpes"),
+            piIntegrationService.findWorkByIdnoAndTitle("1140-9126", null));
+        assertEquals(new Work(123059058L, FORBIDDEN_RIGHTS),
+            piIntegrationService.findWorkByIdnoAndTitle("0-271-01750-3", null));
+        assertEquals(new Work(156427025L, FORBIDDEN_RIGHTS),
+            piIntegrationService.findWorkByIdnoAndTitle("978-0-08-027365-5", null));
+        assertEquals(new Work(112942199L, "Forbidden Rites: A Necromancer's Manual of the Fifteenth Century (review)"),
+            piIntegrationService.findWorkByIdnoAndTitle("10.1353/PGN.1999.0081", null));
+        assertEquals(new Work(123067577L, OCULAR_TITLE),
+            piIntegrationService.findWorkByIdnoAndTitle("978-0-271-01751-8", OCULAR_TITLE));
         verify(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3, searchHit4, searchHit5,
             searchHit6);
     }
@@ -99,25 +90,16 @@ public class PiIntegrationServiceTest {
         expectGetSearchResponseByTitle();
         replay(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3, searchHit4, searchHit5,
             searchHit6);
-        Long result1 = piIntegrationProxyService.findWrWrkInstByTitle("Forbidden rites");
-        Long result2 = piIntegrationProxyService.findWrWrkInstByTitle(
-            "Forbidden rites : a necromancer's manual of the fifteenth century");
-        Long result3 = piIntegrationProxyService.findWrWrkInstByTitle(
-            "Kieckhefer, Richard, Forbidden Rites: A Necromancer's Manual of the Fifteenth Century");
-        Long result4 = piIntegrationProxyService.findWrWrkInstByTitle(
-            "Forbidden Rites: A Necromancer's Manual of the Fifteenth Century (review)");
-        Long result5 = piIntegrationProxyService.findWrWrkInstByTitle("Annuaire de la communication en Rhône-Alpes");
-        Long result6 = piIntegrationProxyService.findWrWrkInstByTitle(OCULAR_TITLE);
-        Long result7 = piIntegrationProxyService.findWrWrkInstByTitle("Forbidden rites");
-        Long result8 = piIntegrationProxyService.findWrWrkInstByTitle(OCULAR_TITLE);
-        assertEquals(123059057L, result1, 0);
-        assertEquals(123059058L, result2, 0);
-        assertNull(result3);
-        assertNull(result4);
-        assertEquals(156427025L, result5, 0);
-        assertEquals(123067577L, result6, 0);
-        assertEquals(123059057L, result7, 0);
-        assertEquals(123067577L, result8, 0);
+        assertEquals(123059057L, piIntegrationService.findWrWrkInstByTitle(FORBIDDEN_RIGHTS), 0);
+        assertEquals(123059058L, piIntegrationService.findWrWrkInstByTitle(
+            "Forbidden rites : a necromancer's manual of the fifteenth century"), 0);
+        assertNull(piIntegrationService.findWrWrkInstByTitle(
+            "Kieckhefer, Richard, Forbidden Rites: A Necromancer's Manual of the Fifteenth Century"));
+        assertNull(piIntegrationService.findWrWrkInstByTitle(
+            "Forbidden Rites: A Necromancer's Manual of the Fifteenth Century (review)"));
+        assertEquals(156427025L,
+            piIntegrationService.findWrWrkInstByTitle("Annuaire de la communication en Rhône-Alpes"), 0);
+        assertEquals(123067577L, piIntegrationService.findWrWrkInstByTitle(OCULAR_TITLE), 0);
         verify(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3, searchHit4, searchHit5,
             searchHit6);
     }
@@ -186,7 +168,7 @@ public class PiIntegrationServiceTest {
         expect(searchResults.getHits()).andReturn(Arrays.asList(searchHit1, searchHit2)).once();
         expect(searchResults.getHits()).andReturn(Arrays.asList(searchHit5, searchHit6)).once();
         expect(searchHit5.getFields()).andReturn(
-            ImmutableMap.of("mainTitle", Collections.singletonList("Forbidden rites"))).once();
+            ImmutableMap.of("mainTitle", Collections.singletonList(FORBIDDEN_RIGHTS))).once();
         expect(searchHit6.getFields()).andReturn(
             ImmutableMap.of("mainTitle", Collections.singletonList(OCULAR_TITLE))).once();
         expectSearchHitSource(searchHit6, "pi_search_hit6.json");

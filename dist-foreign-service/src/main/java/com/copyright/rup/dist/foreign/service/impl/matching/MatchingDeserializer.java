@@ -35,7 +35,7 @@ public class MatchingDeserializer extends JsonDeserializer<Usage> {
         try {
             usage = deserializeUsage(parser.readValueAsTree());
         } catch (JsonParseException e) {
-            LOGGER.warn("Deserialize LM message. Failed", e);
+            LOGGER.warn("Deserialize PI matching message. Failed", e);
         }
         return usage;
     }

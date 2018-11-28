@@ -96,7 +96,7 @@ public class RightsService implements IRightsService {
             LOGGER.info("Update Rights. Finished. UsagesStatus={}, UsagesCount={}", UsageStatusEnum.WORK_FOUND,
                 LogUtils.size(usages));
         } else {
-            LOGGER.info("Update. Skipped. Reason=There are no WORK_FOUND usages");
+            LOGGER.info("Update Rights. Skipped. Reason=There are no WORK_FOUND usages");
         }
         usages = usageRepository.findByStatuses(UsageStatusEnum.SENT_FOR_RA);
         if (CollectionUtils.isNotEmpty(usages)) {
@@ -111,7 +111,7 @@ public class RightsService implements IRightsService {
     }
 
     @Override
-    public void updateRightsholder(Usage usage) {
+    public void updateRight(Usage usage) {
         Long wrWrkInst = usage.getWrWrkInst();
         Set<String> usageId = Collections.singleton(usage.getId());
         Map<Long, Long> wrWrkInstToRhAccountNumberMap =
