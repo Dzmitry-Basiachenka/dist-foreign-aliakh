@@ -645,7 +645,7 @@ public class UsageServiceTest {
         paidUsage.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER);
         paidUsage.setProductFamily("FAS");
         paidUsage.setWrWrkInst(123160519L);
-        paidUsage.setPostDistribution(postDistributionFlag);
+        paidUsage.setPostDistributionFlag(postDistributionFlag);
         paidUsage.setSplitParentFlag(splitParentFlag);
         paidUsage.setScenarioId("e4a81dff-719b-4f73-bb0d-fcfc23ea2395");
         return paidUsage;

@@ -333,7 +333,7 @@ public class UsageService implements IUsageService {
         paidUsages.forEach(paidUsage -> {
             String paidUsageId = paidUsage.getId();
             if (Objects.nonNull(usageIdToUsageMap.get(paidUsageId))) {
-                if (paidUsage.isPostDistribution()) {
+                if (paidUsage.isPostDistributionFlag()) {
                     String actionReason = Objects.nonNull(paidUsage.getSplitParentFlag())
                         ? "Usage has been created based on Post-Distribution and Split processes"
                         : "Usage has been created based on Post-Distribution process";

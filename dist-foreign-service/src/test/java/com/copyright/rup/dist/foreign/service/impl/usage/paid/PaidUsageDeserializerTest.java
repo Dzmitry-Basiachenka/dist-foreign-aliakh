@@ -70,7 +70,7 @@ public class PaidUsageDeserializerTest {
             assertEquals(new BigDecimal("16.0"), usage.getServiceFeeAmount());
             assertEquals(new BigDecimal("116.0"), usage.getGrossAmount());
             assertTrue(usage.getSplitParentFlag());
-            assertFalse(usage.isPostDistribution());
+            assertFalse(usage.isPostDistributionFlag());
         } catch (IOException e) {
             fail();
         }
