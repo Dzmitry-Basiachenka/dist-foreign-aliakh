@@ -1,3 +1,8 @@
+3.1.34
+-
+* B-43660 Tech Debt: FDA: set correct version of the dist-common dependency
+* B-47644 Tech Debt FDA: use new cached PRM preferences service to read preferences only by selected preference code
+
 3.1.33
 -
 * B-45289 FDA: Report FAS split payments to RC: Make changes based on comments in CR-DIST-FOREIGN-76
