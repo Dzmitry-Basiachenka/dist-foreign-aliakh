@@ -2,15 +2,14 @@ package com.copyright.rup.dist.foreign.integration.prm.impl;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.domain.RightsholderPreferences;
+import com.copyright.rup.dist.common.integration.rest.prm.IPrmPreferenceService;
 import com.copyright.rup.dist.common.integration.rest.prm.IPrmRightsholderService;
 import com.copyright.rup.dist.common.integration.rest.prm.IPrmRollUpService;
-import com.copyright.rup.dist.common.integration.rest.prm.preference.IPrmPreferenceService;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 
 import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
 
-import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -47,7 +45,7 @@ public class PrmIntegrationService implements IPrmIntegrationService {
     @Value("$RUP{dist.foreign.integration.rest.prm.rollups.async}")
     private boolean prmRollUpAsync;
     @Autowired
-    @Qualifier("dist.common.integration.rest.prmPreferenceService")
+    @Qualifier("dist.common.integration.rest.prmPreferenceCacheService")
     private IPrmPreferenceService prmPreferenceService;
     @Value("$RUP{dist.foreign.service_fee.non_participating}")
     private BigDecimal rhNonParticipatingServiceFee;
@@ -78,21 +76,26 @@ public class PrmIntegrationService implements IPrmIntegrationService {
 
     @Override
     public boolean isRightsholderParticipating(String rightsholderId, String productFamily) {
-        boolean rhParticipatingFlag = false;
-        Map<String, RightsholderPreferences> preferencesMap =
-            prmPreferenceService.getProductFamiliesToPreferencesMap(rightsholderId);
-        if (MapUtils.isNotEmpty(preferencesMap)) {
-            RightsholderPreferences preferences = ObjectUtils.defaultIfNull(preferencesMap.get(productFamily),
-                preferencesMap.get(RightsholderPreferences.ALL_PRODUCTS_KEY));
-            if (null != preferences && null != preferences.isRhParticipating()) {
-                rhParticipatingFlag = preferences.isRhParticipating();
-            }
-        }
-        return rhParticipatingFlag;
+        return getBooleanPreference(
+            prmPreferenceService.getPreferencesTable(rightsholderId),
+            productFamily,
+            RightsholderPreferences.IS_RH_FDA_PARTICIPATING_CODE);
     }
 
     @Override
     public BigDecimal getRhParticipatingServiceFee(boolean rhParticipatingFlag) {
         return rhParticipatingFlag ? rhParticipatingServiceFee : rhNonParticipatingServiceFee;
+    }
+
+    private boolean getBooleanPreference(Table<String, String, Object> preferencesTable,
+                                         String productFamily, String preferenceCode) {
+        Boolean preferenceValue = (Boolean) ObjectUtils.defaultIfNull(
+            preferencesTable.get(productFamily, preferenceCode),
+            preferencesTable.get(RightsholderPreferences.ALL_PRODUCTS_KEY, preferenceCode));
+        if (null != preferenceValue) {
+            return preferenceValue;
+        } else {
+            return false;
+        }
     }
 }

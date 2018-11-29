@@ -2,7 +2,7 @@ package com.copyright.rup.dist.foreign.service.impl;
 
 import com.copyright.rup.common.caching.api.ICacheService;
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.common.integration.rest.prm.preference.IPrmPreferenceService;
+import com.copyright.rup.dist.common.integration.rest.prm.IPrmPreferenceService;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -56,7 +56,7 @@ public class CreateScenarioTest {
     private CreateScenarioTestBuilder testBuilder;
 
     @Autowired
-    @Qualifier("dist.common.integration.rest.prmPreferenceService")
+    @Qualifier("dist.common.integration.rest.prmPreferenceCacheService")
     private IPrmPreferenceService prmPreferenceService;
 
     @Before
