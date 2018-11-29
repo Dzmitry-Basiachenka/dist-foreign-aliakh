@@ -12,14 +12,14 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.domain.RightsholderPreferences;
+import com.copyright.rup.dist.common.integration.rest.prm.IPrmPreferenceService;
 import com.copyright.rup.dist.common.integration.rest.prm.IPrmRightsholderService;
 import com.copyright.rup.dist.common.integration.rest.prm.IPrmRollUpService;
-import com.copyright.rup.dist.common.integration.rest.prm.preference.IPrmPreferenceService;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.google.common.collect.Table;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +27,6 @@ import org.powermock.reflect.Whitebox;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -132,46 +131,55 @@ public class PrmIntegrationServiceTest {
     }
 
     @Test
-    public void testIsRightsholderParticipating() {
-        RightsholderPreferences preferences = new RightsholderPreferences();
-        preferences.setRhParticipating(true);
-        Map<String, RightsholderPreferences> preferencesMap = Maps.newHashMap();
-        preferencesMap.put(FAS_PRODUCT_FAMILY, preferences);
-        expect(prmPreferenceService.getProductFamiliesToPreferencesMap(RIGHTSHOLDER_ID))
-            .andReturn(preferencesMap).once();
+    public void testIsRightsholderParticipatingByProductFamilyTrue() {
+        Table<String, String, Object> preferencesTable = HashBasedTable.create();
+        preferencesTable.put(FAS_PRODUCT_FAMILY, RightsholderPreferences.IS_RH_FDA_PARTICIPATING_CODE, true);
+        expect(prmPreferenceService.getPreferencesTable(RIGHTSHOLDER_ID))
+            .andReturn(preferencesTable).once();
         replay(prmPreferenceService);
         assertTrue(prmIntegrationService.isRightsholderParticipating(RIGHTSHOLDER_ID, FAS_PRODUCT_FAMILY));
         verify(prmPreferenceService);
     }
 
     @Test
-    public void testIsRightsholderParticipatingAllProductsConfiguration() {
-        RightsholderPreferences preferences = new RightsholderPreferences();
-        preferences.setRhParticipating(true);
-        Map<String, RightsholderPreferences> preferencesMap = Maps.newHashMap();
-        preferencesMap.put("*", preferences);
-        expect(prmPreferenceService.getProductFamiliesToPreferencesMap(RIGHTSHOLDER_ID))
-            .andReturn(preferencesMap).once();
-        replay(prmPreferenceService);
-        assertTrue(prmIntegrationService.isRightsholderParticipating(RIGHTSHOLDER_ID, FAS_PRODUCT_FAMILY));
-        verify(prmPreferenceService);
-    }
-
-    @Test
-    public void testIsRightsholderParticipatingNoPreferences() {
-        expect(prmPreferenceService.getProductFamiliesToPreferencesMap(RIGHTSHOLDER_ID)).andReturn(null).once();
+    public void testIsRightsholderParticipatingByProductFamilyFalse() {
+        Table<String, String, Object> preferencesTable = HashBasedTable.create();
+        preferencesTable.put(FAS_PRODUCT_FAMILY, RightsholderPreferences.IS_RH_FDA_PARTICIPATING_CODE, false);
+        expect(prmPreferenceService.getPreferencesTable(RIGHTSHOLDER_ID))
+            .andReturn(preferencesTable).once();
         replay(prmPreferenceService);
         assertFalse(prmIntegrationService.isRightsholderParticipating(RIGHTSHOLDER_ID, FAS_PRODUCT_FAMILY));
         verify(prmPreferenceService);
     }
 
     @Test
-    public void testIsRightsholderParticipatingNullRhParticipatingPreference() {
-        RightsholderPreferences preferences = new RightsholderPreferences();
-        Map<String, RightsholderPreferences> preferencesMap = Maps.newHashMap();
-        preferencesMap.put(FAS_PRODUCT_FAMILY, preferences);
-        expect(prmPreferenceService.getProductFamiliesToPreferencesMap(RIGHTSHOLDER_ID))
-            .andReturn(preferencesMap).once();
+    public void testIsRightsholderParticipatingByAllProductsTrue() {
+        Table<String, String, Object> preferencesTable = HashBasedTable.create();
+        preferencesTable.put("*", RightsholderPreferences.IS_RH_FDA_PARTICIPATING_CODE, true);
+        expect(prmPreferenceService.getPreferencesTable(RIGHTSHOLDER_ID))
+            .andReturn(preferencesTable).once();
+        replay(prmPreferenceService);
+        assertTrue(prmIntegrationService.isRightsholderParticipating(RIGHTSHOLDER_ID, FAS_PRODUCT_FAMILY));
+        verify(prmPreferenceService);
+    }
+
+    @Test
+    public void testIsRightsholderParticipatingByAllProductsFalse() {
+        Table<String, String, Object> preferencesTable = HashBasedTable.create();
+        preferencesTable.put("*", RightsholderPreferences.IS_RH_FDA_PARTICIPATING_CODE, false);
+        expect(prmPreferenceService.getPreferencesTable(RIGHTSHOLDER_ID))
+            .andReturn(preferencesTable).once();
+        replay(prmPreferenceService);
+        assertFalse(prmIntegrationService.isRightsholderParticipating(RIGHTSHOLDER_ID, FAS_PRODUCT_FAMILY));
+        verify(prmPreferenceService);
+    }
+
+    @Test
+    public void testIsRightsholderParticipatingDefaultFalse() {
+        Table<String, String, Object> preferencesTable = HashBasedTable.create();
+        preferencesTable.put(FAS_PRODUCT_FAMILY, RightsholderPreferences.IS_RH_FDA_PARTICIPATING_CODE, false);
+        expect(prmPreferenceService.getPreferencesTable(RIGHTSHOLDER_ID))
+            .andReturn(preferencesTable).once();
         replay(prmPreferenceService);
         assertFalse(prmIntegrationService.isRightsholderParticipating(RIGHTSHOLDER_ID, FAS_PRODUCT_FAMILY));
         verify(prmPreferenceService);
