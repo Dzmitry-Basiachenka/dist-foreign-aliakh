@@ -181,6 +181,8 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
     private HorizontalLayout initButtonsLayout() {
         loadUsageBatchButton = Buttons.createButton(ForeignUi.getMessage("button.load_usage_batch"));
         loadUsageBatchButton.addClickListener(event -> Windows.showModalWindow(new UsageBatchUploadWindow(controller)));
+        Button loadFundPoolButton = Buttons.createButton(ForeignUi.getMessage("button.load_fund_pool"));
+        loadFundPoolButton.addClickListener(event -> Windows.showModalWindow(new FundPoolLoadWindow(controller)));
         loadResearchedUsagesButton = Buttons.createButton(ForeignUi.getMessage("button.load_researched_usages"));
         loadResearchedUsagesButton.addClickListener(event ->
             Windows.showModalWindow(new ResearchedUsagesUploadWindow(controller)));
@@ -206,10 +208,10 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         });
         deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete_usage_batch"));
         deleteButton.addClickListener(event -> Windows.showModalWindow(new DeleteUsageBatchWindow(controller)));
-        VaadinUtils.setButtonsAutoDisabled(loadUsageBatchButton, loadResearchedUsagesButton, addToScenarioButton,
-            deleteButton);
-        HorizontalLayout layout = new HorizontalLayout(loadUsageBatchButton, loadResearchedUsagesButton,
-            addToScenarioButton, exportButton, deleteButton, sendForResearchButton);
+        VaadinUtils.setButtonsAutoDisabled(loadUsageBatchButton, loadFundPoolButton, loadResearchedUsagesButton,
+            addToScenarioButton, deleteButton);
+        HorizontalLayout layout = new HorizontalLayout(loadUsageBatchButton, loadFundPoolButton,
+            loadResearchedUsagesButton, addToScenarioButton, exportButton, deleteButton, sendForResearchButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "usages-buttons");
         return layout;
