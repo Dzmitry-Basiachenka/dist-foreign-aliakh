@@ -96,6 +96,11 @@ public interface IUsagesController extends IController<IUsagesWidget> {
     List<UsageBatch> getUsageBatches();
 
     /**
+     * @return list of available markets.
+     */
+    List<String> getMarkets();
+
+    /**
      * Deletes {@link UsageBatch} and all it's details.
      *
      * @param usageBatch {@link UsageBatch} to delete
