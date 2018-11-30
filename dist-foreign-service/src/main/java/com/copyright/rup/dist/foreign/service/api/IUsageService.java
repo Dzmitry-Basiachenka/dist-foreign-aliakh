@@ -255,6 +255,11 @@ public interface IUsageService {
     List<String> getProductFamiliesForAudit();
 
     /**
+     * @return list of supported markets.
+     */
+    List<String> getMarkets();
+
+    /**
      * Updates paid infromation for {@link PaidUsage}s
      * and status to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#PAID}.
      *
