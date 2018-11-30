@@ -244,6 +244,15 @@ public class UsagesControllerTest {
     }
 
     @Test
+    public void testGetMarkets() {
+        List<String> markets = Collections.singletonList("Bus");
+        expect(usageService.getMarkets()).andReturn(markets).once();
+        replay(usageService);
+        assertEquals(markets, controller.getMarkets());
+        verify(usageService);
+    }
+
+    @Test
     public void testUsageBatchExists() {
         expect(usageBatchService.usageBatchExists("Usage Batch Name")).andReturn(false).once();
         replay(usageBatchService);

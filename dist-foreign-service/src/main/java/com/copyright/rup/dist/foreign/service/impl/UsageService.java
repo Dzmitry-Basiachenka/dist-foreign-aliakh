@@ -46,6 +46,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -318,6 +319,12 @@ public class UsageService implements IUsageService {
     @Override
     public List<String> getProductFamiliesForAudit() {
         return supportedProductFamilies;
+    }
+
+    @Override
+    //TODO {isuvorau} replace by using property value
+    public List<String> getMarkets() {
+        return Arrays.asList("Bus", "Doc Del", "Edu", "Gov", "Lib", "Sch", "Univ");
     }
 
     @Override

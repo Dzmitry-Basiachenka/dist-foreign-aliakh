@@ -72,6 +72,11 @@ public class UsageServiceIntegrationTest {
         assertEquals(SUPPORTED_PRODUCT_FAMILIES, usageService.getProductFamiliesForAudit());
     }
 
+    @Test
+    public void testGetMarkets() {
+        assertEquals(Arrays.asList("Bus", "Doc Del", "Edu", "Gov", "Lib", "Sch", "Univ"), usageService.getMarkets());
+    }
+
     private void verifyExcludedUsages(Scenario scenario, boolean excluded, Long... accountNumbers) {
         Pageable pageable = new Pageable(0, 10);
         Arrays.stream(accountNumbers)
