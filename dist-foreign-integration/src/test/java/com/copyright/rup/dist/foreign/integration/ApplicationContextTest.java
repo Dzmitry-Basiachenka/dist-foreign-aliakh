@@ -1,9 +1,11 @@
 package com.copyright.rup.dist.foreign.integration;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import com.copyright.rup.dist.foreign.integration.lm.impl.producer.ExternalUsageProducer;
+import com.copyright.rup.dist.foreign.integration.oracle.impl.OracleIntegrationProxyService;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 
 import org.junit.Test;
@@ -32,15 +34,25 @@ public class ApplicationContextTest {
             assertNotNull(context);
             assertNotNull(context.getBean(RestTemplate.class));
             assertNotNull(context.getBean(IPrmIntegrationService.class));
-            assertNotNull(context.getBean("dist.common.integration.rest.prmRightsholderService"));
-            assertNotNull(context.getBean("dist.common.integration.rest.prmRightsholderAsyncService"));
-            assertNotNull(context.getBean(ExternalUsageProducer.class));
-            assertNotNull(context.getBean("dist.common.integration.rest.prmRollUpService"));
-            assertNotNull(context.getBean("dist.common.integration.rest.prmRollUpAsyncService"));
-            assertNotNull(context.getBean("df.integration.piIntegrationService"));
+            assertNotNull(context.getBean("df.integration.oracleIntegrationProxyService"));
+            assertNotNull(context.getBean("df.integration.oracleIntegrationService"));
             assertNotNull(context.getBean("df.integration.piIntegrationProxyService"));
+            assertNotNull(context.getBean("df.integration.piIntegrationService"));
+            assertNotNull(context.getBean("dist.common.integration.rest.prmRightsholderAsyncService"));
+            assertNotNull(context.getBean("dist.common.integration.rest.prmRightsholderService"));
+            assertNotNull(context.getBean("dist.common.integration.rest.prmRollUpAsyncService"));
+            assertNotNull(context.getBean("dist.common.integration.rest.prmRollUpService"));
+            assertNotNull(context.getBean(ExternalUsageProducer.class));
         } catch (Exception e) {
             fail("Context is not valid: " + e.getMessage());
         }
+    }
+
+    @Test
+    public void testBeanInitialization() {
+        ApplicationContext context = new ClassPathXmlApplicationContext(CONFIG_LOCATION);
+        OracleIntegrationProxyService oracleIntegrationProxyService =
+            context.getBean("df.integration.oracleIntegrationProxyService", OracleIntegrationProxyService.class);
+        assertEquals(600L, oracleIntegrationProxyService.getExpirationTime(), 0);
     }
 }
