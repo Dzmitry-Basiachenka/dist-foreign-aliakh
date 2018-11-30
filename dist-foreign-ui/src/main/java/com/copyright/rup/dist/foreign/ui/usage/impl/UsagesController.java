@@ -51,6 +51,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -165,6 +166,12 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     @Override
     public List<UsageBatch> getUsageBatches() {
         return usageBatchService.getUsageBatches();
+    }
+
+    @Override
+    public List<String> getMarkets() {
+        // TODO {isuvorau} return available markets
+        return Arrays.asList("Bus", "Doc");
     }
 
     @Override
