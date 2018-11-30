@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.FilterSaveEvent;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
@@ -78,10 +79,12 @@ class FundPoolLoadWindow extends Window {
      */
     void onUploadClicked() {
         // TODO {isuvorau} insert batch after implementation
-        Windows.showValidationErrorWindow(
-            Arrays.asList(usageBatchNameField, accountNumberField, accountNameField, paymentDateWidget,
-                fundPollPeriodToField, fundPollPeriodFromField, stmAmountField, nonStmAmountField,
-                stmMinAmountField, nonStmMinAmountField));
+        if (!isValid()) {
+            Windows.showValidationErrorWindow(
+                Arrays.asList(usageBatchNameField, accountNumberField, accountNameField, paymentDateWidget,
+                    fundPollPeriodToField, fundPollPeriodFromField, stmAmountField, nonStmAmountField,
+                    stmMinAmountField, nonStmMinAmountField));
+        }
     }
 
     /**
@@ -97,8 +100,7 @@ class FundPoolLoadWindow extends Window {
         HorizontalLayout buttonsLayout = initButtonsLayout();
         VerticalLayout rootLayout = new VerticalLayout();
         rootLayout.addComponents(initUsageBatchNameField(), initRightsholderLayout(), initDateLayout(),
-            initMarketFilterWidget(), initAmountsLayout(), initMinAmountsLayout(),
-            buttonsLayout);
+            initMarketFilterWidget(), initAmountsLayout(), initMinAmountsLayout(), buttonsLayout);
         rootLayout.setMargin(new MarginInfo(true, true, false, true));
         VaadinUtils.setMaxComponentsWidth(rootLayout);
         rootLayout.setComponentAlignment(buttonsLayout, Alignment.BOTTOM_RIGHT);
@@ -108,7 +110,9 @@ class FundPoolLoadWindow extends Window {
 
     private MarketFilterWidget initMarketFilterWidget() {
         //TODO {isuvorau} add listener to save selected items
-        return new MarketFilterWidget(usagesController::getMarkets);
+        MarketFilterWidget marketFilterWidget = new MarketFilterWidget(usagesController::getMarkets);
+        marketFilterWidget.addFilterSaveListener(FilterSaveEvent::getSelectedItemsIds);
+        return marketFilterWidget;
     }
 
     private HorizontalLayout initButtonsLayout() {
@@ -165,6 +169,7 @@ class FundPoolLoadWindow extends Window {
         fundPollPeriodFromField = new TextField(ForeignUi.getMessage("label.fund.pool.period.from"));
         fundPollPeriodFromField.setRequiredIndicatorVisible(true);
         fundPollPeriodFromField.setSizeFull();
+        fundPollPeriodFromField.addValueChangeListener(event -> stringBinder.validate());
         stringBinder.forField(fundPollPeriodFromField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .withValidator(getNumericValidator(), "Field value should contain numeric values only")
@@ -177,6 +182,7 @@ class FundPoolLoadWindow extends Window {
         fundPollPeriodToField = new TextField(ForeignUi.getMessage("label.fund.pool.period.to"));
         fundPollPeriodToField.setRequiredIndicatorVisible(true);
         fundPollPeriodToField.setSizeFull();
+        fundPollPeriodToField.addValueChangeListener(event -> stringBinder.validate());
         stringBinder.forField(fundPollPeriodToField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .withValidator(getNumericValidator(), "Field value should contain numeric values only")
