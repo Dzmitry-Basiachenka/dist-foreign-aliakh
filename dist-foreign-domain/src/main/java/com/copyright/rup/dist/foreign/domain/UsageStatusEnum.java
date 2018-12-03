@@ -38,6 +38,11 @@ public enum UsageStatusEnum {
     RH_NOT_FOUND,
 
     /**
+     * Status for usages with rhAccountNumber found in RMS.
+     */
+    RH_FOUND,
+
+    /**
      * Status for usages that were sent to LM.
      */
     SENT_TO_LM,
