@@ -186,6 +186,7 @@ class FundPoolLoadWindow extends Window {
         fundPoolPeriodFromField.setRequiredIndicatorVisible(true);
         fundPoolPeriodFromField.setSizeFull();
         fundPoolPeriodFromField.addValueChangeListener(event -> stringBinder.validate());
+        VaadinUtils.addComponentStyle(fundPoolPeriodFromField, "fund-pool-period-from-field");
         stringBinder.forField(fundPoolPeriodFromField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .withValidator(getNumericValidator(), "Field value should contain numeric values only")
@@ -198,6 +199,7 @@ class FundPoolLoadWindow extends Window {
         fundPoolPeriodToField = new TextField(ForeignUi.getMessage("label.fund.pool.period.to"));
         fundPoolPeriodToField.setRequiredIndicatorVisible(true);
         fundPoolPeriodToField.setSizeFull();
+        VaadinUtils.addComponentStyle(fundPoolPeriodToField, "fund-pool-period-to-field");
         stringBinder.forField(fundPoolPeriodToField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .withValidator(getNumericValidator(), "Field value should contain numeric values only")
@@ -215,7 +217,9 @@ class FundPoolLoadWindow extends Window {
 
     private HorizontalLayout initAmountsLayout() {
         stmAmountField = initAmountField(ForeignUi.getMessage("label.stm.amount"));
+        VaadinUtils.addComponentStyle(stmAmountField, "stm-amount-field");
         nonStmAmountField = initAmountField(ForeignUi.getMessage("label.non.stm.amount"));
+        VaadinUtils.addComponentStyle(nonStmAmountField, "non-stm-amount-field");
         HorizontalLayout amountLayout = new HorizontalLayout(stmAmountField, nonStmAmountField);
         amountLayout.setSizeFull();
         return amountLayout;
@@ -224,8 +228,10 @@ class FundPoolLoadWindow extends Window {
     private HorizontalLayout initMinAmountsLayout() {
         stmMinAmountField = initAmountField(ForeignUi.getMessage("label.stm.minimum.amount"));
         stmMinAmountField.setValue("50");
+        VaadinUtils.addComponentStyle(stmMinAmountField, "stm-minimum-amount-field");
         nonStmMinAmountField = initAmountField(ForeignUi.getMessage("label.non.stm.minimum.amount"));
         nonStmMinAmountField.setValue("7");
+        VaadinUtils.addComponentStyle(nonStmMinAmountField, "non-stm-minimum-amount-field");
         HorizontalLayout minAmountLayout = new HorizontalLayout(stmMinAmountField, nonStmMinAmountField);
         minAmountLayout.setSizeFull();
         return minAmountLayout;
