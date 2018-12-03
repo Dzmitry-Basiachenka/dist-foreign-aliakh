@@ -36,13 +36,11 @@
         <typeAlias alias="BatchSummaryReportDto" type="com.copyright.rup.dist.foreign.domain.report.BatchSummaryReportDto"/>
         <typeAlias alias="ServiceFeeTrueUpReportDto" type="com.copyright.rup.dist.foreign.domain.report.ServiceFeeTrueUpReportDto"/>
         <typeAlias alias="SummaryMarketReportDto" type="com.copyright.rup.dist.foreign.domain.report.SummaryMarketReportDto"/>
-        <typeAlias alias="FundPoolTypeHandler" type="com.copyright.rup.dist.foreign.repository.impl.converter.FundPoolTypeHandler"/>
     </typeAliases>
 
     <typeHandlers>
         <typeHandler handler="org.apache.ibatis.type.LocalDateTypeHandler"/>
         <typeHandler handler="org.apache.ibatis.type.OffsetDateTimeTypeHandler"/>
-        <typeHandler handler="FundPoolTypeHandler" javaType="com.copyright.rup.dist.foreign.domain.FundPool"/>
     </typeHandlers>
 
     <mappers>
