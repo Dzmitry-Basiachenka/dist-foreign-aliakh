@@ -192,6 +192,11 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
+    public void deleteById(String usageId) {
+        delete("IUsageMapper.deleteById", Objects.requireNonNull(usageId));
+    }
+
+    @Override
     public void deleteByScenarioId(String scenarioId) {
         checkArgument(StringUtils.isNotBlank(scenarioId));
         delete("IUsageMapper.deleteByScenarioId", scenarioId);

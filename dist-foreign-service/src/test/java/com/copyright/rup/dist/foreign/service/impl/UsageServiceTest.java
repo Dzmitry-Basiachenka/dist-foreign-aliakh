@@ -183,6 +183,16 @@ public class UsageServiceTest {
     }
 
     @Test
+    public void testDeleteById() {
+        String usageId = RupPersistUtils.generateUuid();
+        usageRepository.deleteById(usageId);
+        expectLastCall();
+        replay(usageRepository);
+        usageService.deleteById(usageId);
+        verify(usageRepository);
+    }
+
+    @Test
     public void testGetUsagesByScenario() {
         List<Usage> usages = Collections.singletonList(new Usage());
         expect(usageRepository.findByScenarioId(scenario.getId())).andReturn(usages).once();

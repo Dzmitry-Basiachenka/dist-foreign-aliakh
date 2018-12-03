@@ -623,6 +623,11 @@
         where df_usage_batch_uid = #{batchId}
     </delete>
 
+    <delete id="deleteById" parameterType="string">
+        delete from ${schema}.df_usage
+        where df_usage_uid = #{usageId}
+    </delete>
+
     <delete id="deleteByScenarioId" parameterType="string">
         delete from ${schema}.df_usage
         where df_scenario_uid = #{scenarioId}

@@ -136,6 +136,11 @@ public class UsageService implements IUsageService {
     }
 
     @Override
+    public void deleteById(String usageId) {
+        usageRepository.deleteById(usageId);
+    }
+
+    @Override
     public List<Usage> getUsagesWithAmounts(UsageFilter filter) {
         List<Usage> usages = usageRepository.findWithAmountsAndRightsholders(filter);
         usages.forEach(usage -> {

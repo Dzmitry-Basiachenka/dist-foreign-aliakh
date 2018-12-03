@@ -117,6 +117,13 @@ public interface IUsageRepository {
     void deleteUsages(String batchId);
 
     /**
+     * Deletes {@link Usage} with given id.
+     *
+     * @param usageId usage identifier
+     */
+    void deleteById(String usageId);
+
+    /**
      * Calculates total gross amount by standard number and batch identifier for PI matching.
      *
      * @param standardNumber standard number for calculation
