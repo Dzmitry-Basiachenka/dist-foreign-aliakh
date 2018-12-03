@@ -1,5 +1,15 @@
 4.1.0
 -
+B-23202 FDA: Create a NTS batch of FAS usage details as specified by RRO Receipt: implement window for loading fund pool
+B-23202 FDA: Create a NTS batch of FAS usage details as specified by RRO Receipt: implement service method to get eligible markets
+B-23202 FDA: Create a NTS batch of FAS usage details as specified by RRO Receipt: implement load fund pool button
+B-23202 FDA: Create a NTS batch of FAS usage details as specified by RRO Receipt: implement validation for markets widget and periods on load fund pool window
+B-23202 FDA: Create a NTS batch of FAS usage details as specified by RRO Receipt: Update batch domain object to store new fields
+B-23202 FDA: Create a NTS batch of FAS usage details as specified by RRO Receipt: implement repository layer for selecting archive details for NTS batch creation
+B-23202 FDA: Create a NTS batch of FAS usage details as specified by RRO Receipt: add ids for components on Load Fund Pool window
+B-46036 FDA: Exclude non-US RHs from the NTS proxy: implement OracleService for getting Rhs country code
+B-46036 FDA: Exclude non US RHs from the NTS proxy: introduce RH_FOUND status
+B-46036 FDA: Exclude non US RHs from the NTS proxy: implement method to delete usage by its identifier
 
 3.1.34
 -
