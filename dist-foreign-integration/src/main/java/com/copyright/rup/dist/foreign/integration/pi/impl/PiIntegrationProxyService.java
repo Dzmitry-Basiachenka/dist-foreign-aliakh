@@ -44,6 +44,7 @@ public class PiIntegrationProxyService extends AbstractCacheService<Pair<String,
     public Long findWrWrkInstByTitle(String title) {
         Work work = getFromCache(Pair.of(null, title));
         Long result = null;
+        // TODO {pliakh} remove not-null check
         if (Objects.nonNull(work)) {
             result = work.getWrWrkInst();
         }
