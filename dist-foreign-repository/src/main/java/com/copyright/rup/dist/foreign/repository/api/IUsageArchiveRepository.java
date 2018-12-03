@@ -111,6 +111,16 @@ public interface IUsageArchiveRepository {
     List<PaidUsage> findByIdAndStatus(List<String> usageIds, UsageStatusEnum status);
 
     /**
+     * Finds list of archived {@link Usage}s based on markets and period for NTS batch creation.
+     *
+     * @param marketPeriodFrom market period from
+     * @param marketPeriodTo   market period to
+     * @param markets          list of selected markets
+     * @return list of eligible for NTS {@link Usage}s
+     */
+    List<Usage> findForNtsBatch(Integer marketPeriodFrom, Integer marketPeriodTo, List<String> markets);
+
+    /**
      * Finds usages ids with {@link UsageStatusEnum#PAID} status.
      *
      * @return list of found usages ids
@@ -127,8 +137,8 @@ public interface IUsageArchiveRepository {
     /**
      * Finds usage information by provided ids.
      *
-     * @param   usageIds list of usage ids
-     * @return  list of found usages
+     * @param usageIds list of usage ids
+     * @return list of found usages
      */
     List<Usage> findUsageInformationById(List<String> usageIds);
 }

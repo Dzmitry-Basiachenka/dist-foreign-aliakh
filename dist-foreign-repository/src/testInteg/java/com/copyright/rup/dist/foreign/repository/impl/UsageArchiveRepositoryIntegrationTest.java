@@ -38,10 +38,12 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 /**
  * Integration test for {@link UsageArchiveRepository}.
@@ -335,6 +337,15 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertTrue(CollectionUtils.isEmpty(
             usageArchiveRepository.findByIdAndStatus(Collections.singletonList(PAID_USAGE_ID),
                 UsageStatusEnum.ARCHIVED)));
+    }
+
+    @Test
+    public void testFindForNtsBatch() {
+        List<Usage> usages = usageArchiveRepository.findForNtsBatch(2015, 2016, Arrays.asList("Bus", "Doc Del"));
+        assertEquals(2, usages.size());
+        List<String> uids = usages.stream().map(Usage::getId).collect(Collectors.toList());
+        assertTrue(uids.contains("bc0fe9bc-9b24-4324-b624-eed0d9773e19"));
+        assertTrue(uids.contains("5b8c2754-2f63-425a-a95f-dbd744e815fc"));
     }
 
     @Test

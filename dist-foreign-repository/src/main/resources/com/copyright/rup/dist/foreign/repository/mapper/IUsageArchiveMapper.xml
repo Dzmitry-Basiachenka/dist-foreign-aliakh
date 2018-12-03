@@ -173,6 +173,33 @@
         order by u.rh_account_number
     </select>
 
+    <select id="findForNtsBatch" parameterType="map" resultMap="archivedUsageResultMap">
+        select
+            df_usage_archive_uid,
+            wr_wrk_inst,
+            work_title,
+            system_title,
+            article,
+            standard_number,
+            publisher,
+            publication_date,
+            market,
+            market_period_from,
+            market_period_to,
+            author,
+            number_of_copies,
+            reported_value,
+            gross_amount
+        from ${schema}.df_usage_archive
+        where
+            <foreach collection="markets" item="market" separator="or" open="(" close=")">
+                market ilike '%' || #{market} || '%'
+            </foreach>
+            and <![CDATA[market_period_from <= #{marketPeriodTo}]]>
+            and <![CDATA[market_period_to >= #{marketPeriodFrom}]]>
+            and status_ind = #{status}
+    </select>
+
     <update id="updatePaidInfo" parameterType="PaidUsage">
         update ${schema}.df_usage_archive
         set
