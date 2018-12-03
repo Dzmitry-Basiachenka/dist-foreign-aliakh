@@ -59,7 +59,7 @@ import java.util.stream.Collectors;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Windows.class, SecurityUtils.class, FundPoolLoadWindow.class})
-public class FunPoolLoadWindowTest {
+public class FundPoolLoadWindowTest {
 
     private static final String ACCOUNT_NUMBER = "1000001863";
     private static final String USAGE_BATCH_NAME = "BatchName";
@@ -116,13 +116,15 @@ public class FunPoolLoadWindowTest {
         assertFalse(window.isValid());
         Whitebox.getInternalState(window, LocalDateWidget.class).setValue(LocalDate.now());
         assertFalse(window.isValid());
-        setTextFieldValue("fundPollPeriodToField", "2000");
-        setTextFieldValue("fundPollPeriodFromField", "2000");
+        setTextFieldValue("fundPoolPeriodToField", "2000");
+        setTextFieldValue("fundPoolPeriodFromField", "2000");
         assertFalse(window.isValid());
         setTextFieldValue("stmAmountField", "100.00");
         setTextFieldValue("nonStmAmountField", "100.00");
         setTextFieldValue("stmMinAmountField", "10.00");
         setTextFieldValue("nonStmMinAmountField", "10.00");
+        assertFalse(window.isValid());
+        setTextFieldValue("marketValidationField", "2");
         assertTrue(window.isValid());
         verify(usagesController);
     }
@@ -143,8 +145,8 @@ public class FunPoolLoadWindowTest {
         replay(usagesController);
         window = new FundPoolLoadWindow(usagesController);
         Binder binder = Whitebox.getInternalState(window, "stringBinder");
-        TextField periodFrom = Whitebox.getInternalState(window, "fundPollPeriodFromField");
-        TextField periodTo = Whitebox.getInternalState(window, "fundPollPeriodToField");
+        TextField periodFrom = Whitebox.getInternalState(window, "fundPoolPeriodFromField");
+        TextField periodTo = Whitebox.getInternalState(window, "fundPoolPeriodToField");
         verifyFieldValidationMessage(periodFrom, "1000", binder, INVALID_PERIOD_ERROR_MESSAGE, false);
         verifyFieldValidationMessage(periodTo, "1000", binder, INVALID_PERIOD_ERROR_MESSAGE, false);
         verifyFieldValidationMessage(periodFrom, "2100", binder, INVALID_PERIOD_ERROR_MESSAGE, false);
@@ -208,8 +210,9 @@ public class FunPoolLoadWindowTest {
             Whitebox.getInternalState(window, "accountNumberField"),
             Whitebox.getInternalState(window, "accountNameField"),
             Whitebox.getInternalState(window, "paymentDateWidget"),
-            Whitebox.getInternalState(window, "fundPollPeriodToField"),
-            Whitebox.getInternalState(window, "fundPollPeriodFromField"),
+            Whitebox.getInternalState(window, "fundPoolPeriodToField"),
+            Whitebox.getInternalState(window, "fundPoolPeriodFromField"),
+            Whitebox.getInternalState(window, "marketValidationField"),
             Whitebox.getInternalState(window, "stmAmountField"),
             Whitebox.getInternalState(window, "nonStmAmountField"),
             Whitebox.getInternalState(window, "stmMinAmountField"),

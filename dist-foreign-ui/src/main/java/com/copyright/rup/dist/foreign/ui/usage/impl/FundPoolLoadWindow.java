@@ -6,7 +6,6 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.ui.Buttons;
-import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.FilterSaveEvent;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
@@ -27,7 +26,6 @@ import com.vaadin.ui.Window;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
-import java.util.Objects;
 
 /**
  * Window for loading fund pool.
@@ -40,6 +38,7 @@ import java.util.Objects;
  */
 class FundPoolLoadWindow extends Window {
 
+    private static final String EMPTY_MARKET_STYLE = "empty-selected-markets";
     private static final String EMPTY_FIELD_MESSAGE = "field.error.empty";
     private static final int MIN_YEAR = 1950;
     private static final int MAX_YEAR = 2099;
@@ -55,8 +54,9 @@ class FundPoolLoadWindow extends Window {
     private TextField stmMinAmountField;
     private TextField nonStmMinAmountField;
     private TextField usageBatchNameField;
-    private TextField fundPollPeriodToField;
-    private TextField fundPollPeriodFromField;
+    private TextField fundPoolPeriodToField;
+    private TextField fundPoolPeriodFromField;
+    private TextField marketValidationField;
     private Rightsholder rro;
 
     /**
@@ -82,8 +82,8 @@ class FundPoolLoadWindow extends Window {
         if (!isValid()) {
             Windows.showValidationErrorWindow(
                 Arrays.asList(usageBatchNameField, accountNumberField, accountNameField, paymentDateWidget,
-                    fundPollPeriodToField, fundPollPeriodFromField, stmAmountField, nonStmAmountField,
-                    stmMinAmountField, nonStmMinAmountField));
+                    fundPoolPeriodToField, fundPoolPeriodFromField, marketValidationField, stmAmountField,
+                    nonStmAmountField, stmMinAmountField, nonStmMinAmountField));
         }
     }
 
@@ -110,8 +110,24 @@ class FundPoolLoadWindow extends Window {
 
     private MarketFilterWidget initMarketFilterWidget() {
         //TODO {isuvorau} add listener to save selected items
+        marketValidationField = new TextField(ForeignUi.getMessage("label.markets"));
+        stringBinder.forField(marketValidationField)
+            .withValidator(value -> Integer.parseInt(value) > 0, "Please select at least one market")
+            .bind(source -> source, (bean, fieldValue) -> bean = fieldValue)
+            .validate();
         MarketFilterWidget marketFilterWidget = new MarketFilterWidget(usagesController::getMarkets);
-        marketFilterWidget.addFilterSaveListener(FilterSaveEvent::getSelectedItemsIds);
+        VaadinUtils.addComponentStyle(marketFilterWidget, "market-filter-widget");
+        marketFilterWidget.addStyleName(EMPTY_MARKET_STYLE);
+        marketFilterWidget.addFilterSaveListener(event -> {
+            int size = event.getSelectedItemsIds().size();
+            marketValidationField.setValue(String.valueOf(size));
+            stringBinder.validate();
+            if (0 < size) {
+                marketFilterWidget.removeStyleName(EMPTY_MARKET_STYLE);
+            } else {
+                marketFilterWidget.addStyleName(EMPTY_MARKET_STYLE);
+            }
+        });
         return marketFilterWidget;
     }
 
@@ -157,41 +173,43 @@ class FundPoolLoadWindow extends Window {
         initPeriodToField();
         LocalDateWidget paymentDate = initPaymentDateWidget();
         HorizontalLayout horizontalLayout =
-            new HorizontalLayout(paymentDate, fundPollPeriodFromField, fundPollPeriodToField);
+            new HorizontalLayout(paymentDate, fundPoolPeriodFromField, fundPoolPeriodToField);
         horizontalLayout.setSizeFull();
         horizontalLayout.setExpandRatio(paymentDate, 0.3f);
-        horizontalLayout.setExpandRatio(fundPollPeriodFromField, 0.35f);
-        horizontalLayout.setExpandRatio(fundPollPeriodToField, 0.35f);
+        horizontalLayout.setExpandRatio(fundPoolPeriodFromField, 0.35f);
+        horizontalLayout.setExpandRatio(fundPoolPeriodToField, 0.35f);
         return horizontalLayout;
     }
 
     private void initPeriodFromField() {
-        fundPollPeriodFromField = new TextField(ForeignUi.getMessage("label.fund.pool.period.from"));
-        fundPollPeriodFromField.setRequiredIndicatorVisible(true);
-        fundPollPeriodFromField.setSizeFull();
-        fundPollPeriodFromField.addValueChangeListener(event -> stringBinder.validate());
-        stringBinder.forField(fundPollPeriodFromField)
+        fundPoolPeriodFromField = new TextField(ForeignUi.getMessage("label.fund.pool.period.from"));
+        fundPoolPeriodFromField.setRequiredIndicatorVisible(true);
+        fundPoolPeriodFromField.setSizeFull();
+        fundPoolPeriodFromField.addValueChangeListener(event -> stringBinder.validate());
+        stringBinder.forField(fundPoolPeriodFromField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .withValidator(getNumericValidator(), "Field value should contain numeric values only")
             .withValidator(getYearValidator(), "Field value should be in range from 1950 to 2099")
-            .bind(s -> s, (s, v) -> s = v)
+            .bind(source -> source, (bean, fieldValue) -> bean = fieldValue)
             .validate();
     }
 
     private void initPeriodToField() {
-        fundPollPeriodToField = new TextField(ForeignUi.getMessage("label.fund.pool.period.to"));
-        fundPollPeriodToField.setRequiredIndicatorVisible(true);
-        fundPollPeriodToField.setSizeFull();
-        fundPollPeriodToField.addValueChangeListener(event -> stringBinder.validate());
-        stringBinder.forField(fundPollPeriodToField)
+        fundPoolPeriodToField = new TextField(ForeignUi.getMessage("label.fund.pool.period.to"));
+        fundPoolPeriodToField.setRequiredIndicatorVisible(true);
+        fundPoolPeriodToField.setSizeFull();
+        stringBinder.forField(fundPoolPeriodToField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
             .withValidator(getNumericValidator(), "Field value should contain numeric values only")
             .withValidator(getYearValidator(), "Field value should be in range from 1950 to 2099")
-            .withValidator(value -> Objects.isNull(fundPollPeriodFromField.getValue())
-                    || fundPollPeriodToField.getValue().compareTo(fundPollPeriodFromField.getValue()) >= 0,
-                "Field value should be greater or equal to Fund pool period from"
-            )
-            .bind(s -> s, (s, v) -> s = v)
+            .withValidator(value -> {
+                String periodFrom = fundPoolPeriodFromField.getValue();
+                return StringUtils.isEmpty(periodFrom)
+                    || !getNumericValidator().test(periodFrom)
+                    || !getYearValidator().test(periodFrom)
+                    || 0 <= fundPoolPeriodToField.getValue().compareTo(periodFrom);
+            }, "Field value should be greater or equal to Fund pool period from")
+            .bind(source -> source, (bean, fieldValue) -> bean = fieldValue)
             .validate();
     }
 

@@ -217,4 +217,9 @@
     #report-service-fee-true-up-window #payment-date-to-filter .v-horizontallayout .v-expand .v-slot:last-child {
         display:none !important;
     }
+
+    /**==== Styles for markets filter widget ====*/
+    .empty-selected-markets .v-label {
+        color: red;
+    }
 }
