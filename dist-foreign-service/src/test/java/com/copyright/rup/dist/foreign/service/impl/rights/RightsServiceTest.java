@@ -20,7 +20,6 @@ import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
@@ -29,8 +28,8 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -49,6 +48,7 @@ public class RightsServiceTest {
     private static final String USAGE_ID_1 = "Usage id 1";
     private static final Long RH_ACCOUNT_NUMBER = 1000001534L;
     private static final String RH_ID = RupPersistUtils.generateUuid();
+    private static final String FAS_PRODUCT_FAMILY = "FAS";
     private IRightsService rightsAssignmentService;
     private IUsageRepository usageRepository;
     private IUsageAuditService usageAuditService;
@@ -79,7 +79,8 @@ public class RightsServiceTest {
         RightsAssignmentResult result = new RightsAssignmentResult(RightsAssignmentResultStatusEnum.SUCCESS);
         result.setJobId("b5015e54-c38a-4fc8-b889-c644640085a4");
         expect(usageRepository.findByStatuses(UsageStatusEnum.RH_NOT_FOUND))
-            .andReturn(Lists.newArrayList(buildUsage(USAGE_ID_1, UsageStatusEnum.RH_NOT_FOUND))).once();
+            .andReturn(Arrays.asList(buildUsage(USAGE_ID_1, FAS_PRODUCT_FAMILY, UsageStatusEnum.RH_NOT_FOUND)))
+            .once();
         expect(rmsIntegrationService.sendForRightsAssignment(Sets.newHashSet(123160519L)))
             .andReturn(result).once();
         Set<String> usageIds = new HashSet<>();
@@ -96,7 +97,8 @@ public class RightsServiceTest {
     @Test
     public void testSendForRightsAssignmentRaError() {
         expect(usageRepository.findByStatuses(UsageStatusEnum.RH_NOT_FOUND))
-            .andReturn(Lists.newArrayList(buildUsage(USAGE_ID_1, UsageStatusEnum.RH_NOT_FOUND))).once();
+            .andReturn(Arrays.asList(buildUsage(USAGE_ID_1, FAS_PRODUCT_FAMILY, UsageStatusEnum.RH_NOT_FOUND)))
+            .once();
         expect(rmsIntegrationService.sendForRightsAssignment(Sets.newHashSet(123160519L)))
             .andReturn(new RightsAssignmentResult(RightsAssignmentResultStatusEnum.RA_ERROR)).once();
         replay(usageRepository, usageAuditService, rmsIntegrationService);
@@ -115,8 +117,10 @@ public class RightsServiceTest {
 
     @Test
     public void testUpdateRights() {
-        Usage workFoundUsage = buildUsage(RupPersistUtils.generateUuid(), UsageStatusEnum.WORK_FOUND);
-        Usage sentForRaUsage = buildUsage(RupPersistUtils.generateUuid(), UsageStatusEnum.SENT_FOR_RA);
+        Usage workFoundUsage =
+            buildUsage(RupPersistUtils.generateUuid(), FAS_PRODUCT_FAMILY, UsageStatusEnum.WORK_FOUND);
+        Usage sentForRaUsage =
+            buildUsage(RupPersistUtils.generateUuid(), FAS_PRODUCT_FAMILY, UsageStatusEnum.SENT_FOR_RA);
         Map<Long, Long> wrWrkInstToRhAccountNumberMap = Maps.newHashMap();
         wrWrkInstToRhAccountNumberMap.put(123160519L, RH_ACCOUNT_NUMBER);
         expect(usageRepository.findByStatuses(UsageStatusEnum.WORK_FOUND))
@@ -142,11 +146,11 @@ public class RightsServiceTest {
 
     @Test
     public void testUpdateRight() {
-        String usageId = RupPersistUtils.generateUuid();
-        Set<String> usageIdsSet = Collections.singleton(usageId);
         expect(rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(123160519L)))
             .andReturn(ImmutableMap.of(123160519L, 1000009522L))
             .once();
+        String usageId = RupPersistUtils.generateUuid();
+        Set<String> usageIdsSet = Collections.singleton(usageId);
         usageRepository.updateStatusAndRhAccountNumber(usageIdsSet, UsageStatusEnum.ELIGIBLE, 1000009522L);
         expectLastCall().once();
         usageAuditService.logAction(usageIdsSet, UsageActionTypeEnum.RH_FOUND,
@@ -155,16 +159,35 @@ public class RightsServiceTest {
         rightsholderService.updateRightsholders(Collections.singleton(1000009522L));
         expectLastCall().once();
         replay(rmsGrantsProcessorService, rightsholderService, usageRepository, usageAuditService);
-        rightsAssignmentService.updateRight(buildUsage(usageId, UsageStatusEnum.WORK_FOUND));
+        rightsAssignmentService.updateRight(buildUsage(usageId, FAS_PRODUCT_FAMILY, UsageStatusEnum.WORK_FOUND));
         verify(rmsGrantsProcessorService, rightsholderService, usageRepository, usageAuditService);
     }
 
     @Test
-    public void testUpdateRightNotFound() {
+    public void testUpdateRightWithNtsUsage() {
+        expect(rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(123160519L)))
+            .andReturn(ImmutableMap.of(123160519L, 1000009522L))
+            .once();
+        String usageId = RupPersistUtils.generateUuid();
+        Set<String> usageIdsSet = Collections.singleton(usageId);
+        usageRepository.updateStatusAndRhAccountNumber(usageIdsSet, UsageStatusEnum.RH_FOUND, 1000009522L);
+        expectLastCall().once();
+        usageAuditService.logAction(usageIdsSet, UsageActionTypeEnum.RH_FOUND,
+            "Rightsholder account 1000009522 was found in RMS");
+        expectLastCall().once();
+        rightsholderService.updateRightsholders(Collections.singleton(1000009522L));
+        expectLastCall().once();
+        replay(rmsGrantsProcessorService, rightsholderService, usageRepository, usageAuditService);
+        rightsAssignmentService.updateRight(buildUsage(usageId, "NTS", UsageStatusEnum.WORK_FOUND));
+        verify(rmsGrantsProcessorService, rightsholderService, usageRepository, usageAuditService);
+    }
+
+    @Test
+    public void testUpdateRightWithNotFound() {
         String usageId = RupPersistUtils.generateUuid();
         Set<String> usageIdsSet = Collections.singleton(usageId);
         expect(rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(123160519L)))
-            .andReturn(new HashMap<>())
+            .andReturn(Collections.EMPTY_MAP)
             .once();
         usageRepository.updateStatus(usageIdsSet, UsageStatusEnum.RH_NOT_FOUND);
         expectLastCall().once();
@@ -172,11 +195,24 @@ public class RightsServiceTest {
             "Rightsholder account for 123160519 was not found in RMS");
         expectLastCall().once();
         replay(rmsGrantsProcessorService, rightsholderService, usageRepository, usageAuditService);
-        rightsAssignmentService.updateRight(buildUsage(usageId, UsageStatusEnum.WORK_FOUND));
+        rightsAssignmentService.updateRight(buildUsage(usageId, FAS_PRODUCT_FAMILY, UsageStatusEnum.WORK_FOUND));
         verify(rmsGrantsProcessorService, rightsholderService, usageRepository, usageAuditService);
     }
 
-    private Usage buildUsage(String usageId, UsageStatusEnum status) {
+    @Test
+    public void testUpdateRightWithNtsAndNotFound() {
+        String usageId = RupPersistUtils.generateUuid();
+        expect(rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(123160519L)))
+            .andReturn(Collections.EMPTY_MAP)
+            .once();
+        usageRepository.deleteById(usageId);
+        expectLastCall().once();
+        replay(rmsGrantsProcessorService, rightsholderService, usageRepository);
+        rightsAssignmentService.updateRight(buildUsage(usageId, "NTS", UsageStatusEnum.WORK_FOUND));
+        verify(rmsGrantsProcessorService, rightsholderService, usageRepository);
+    }
+
+    private Usage buildUsage(String usageId, String productFamily, UsageStatusEnum status) {
         Usage usage = new Usage();
         usage.setId(usageId);
         usage.setWrWrkInst(123160519L);
@@ -186,7 +222,7 @@ public class RightsServiceTest {
         usage.setNetAmount(new BigDecimal("68.0000000000"));
         usage.setServiceFeeAmount(new BigDecimal("32.0000000000"));
         usage.setServiceFee(new BigDecimal("0.32"));
-        usage.setProductFamily("FAS");
+        usage.setProductFamily(productFamily);
         usage.setStatus(status);
         return usage;
     }
