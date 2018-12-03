@@ -397,6 +397,15 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
+    public void testDeleteById() {
+        assertNotNull(usageRepository.findById("3cf274c5-8eac-4d4a-96be-5921ae026840"));
+        assertNotNull(usageRepository.findById("f5eb98ce-ab59-44c8-9a50-1afea2b5ae15"));
+        usageRepository.deleteById("3cf274c5-8eac-4d4a-96be-5921ae026840");
+        assertNull(usageRepository.findById("3cf274c5-8eac-4d4a-96be-5921ae026840"));
+        assertNotNull(usageRepository.findById("f5eb98ce-ab59-44c8-9a50-1afea2b5ae15"));
+    }
+
+    @Test
     public void testFindByScenarioId() {
         List<Usage> usages = usageRepository.findByScenarioId(SCENARIO_ID);
         assertEquals(2, usages.size());

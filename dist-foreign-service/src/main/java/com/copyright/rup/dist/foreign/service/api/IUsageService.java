@@ -65,6 +65,13 @@ public interface IUsageService {
     void deleteUsageBatchDetails(UsageBatch usageBatch);
 
     /**
+     * Deletes {@link Usage} with given id.
+     *
+     * @param usageId usage identifier
+     */
+    void deleteById(String usageId);
+
+    /**
      * Gets the {@link Usage}s based on {@link UsageFilter}.
      *
      * @param filter instance of {@link UsageFilter}
