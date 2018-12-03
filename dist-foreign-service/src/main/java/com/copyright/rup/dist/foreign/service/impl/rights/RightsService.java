@@ -5,6 +5,7 @@ import com.copyright.rup.dist.common.domain.BaseEntity;
 import com.copyright.rup.dist.common.integration.camel.IProducer;
 import com.copyright.rup.dist.common.service.api.discrepancy.IRmsGrantsProcessorService;
 import com.copyright.rup.dist.common.util.LogUtils;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -117,11 +118,16 @@ public class RightsService implements IRightsService {
         Map<Long, Long> wrWrkInstToRhAccountNumberMap =
             rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(wrWrkInst));
         Long rhAccountNumber = wrWrkInstToRhAccountNumberMap.get(wrWrkInst);
+        boolean isNtsUsage = FdaConstants.NTS_PRODUCT_FAMILY.equals(usage.getProductFamily());
         if (Objects.nonNull(rhAccountNumber)) {
-            usageRepository.updateStatusAndRhAccountNumber(usageId, UsageStatusEnum.ELIGIBLE, rhAccountNumber);
+            usageRepository.updateStatusAndRhAccountNumber(usageId,
+                isNtsUsage ? UsageStatusEnum.RH_FOUND : UsageStatusEnum.ELIGIBLE, rhAccountNumber);
             auditService.logAction(usageId, UsageActionTypeEnum.RH_FOUND,
                 String.format("Rightsholder account %s was found in RMS", rhAccountNumber));
             rightsholderService.updateRightsholders(Collections.singleton(rhAccountNumber));
+        } else if (isNtsUsage) {
+            auditService.deleteActions(usage.getId());
+            usageRepository.deleteById(usage.getId());
         } else {
             usageRepository.updateStatus(usageId, UsageStatusEnum.RH_NOT_FOUND);
             auditService.logAction(usageId, UsageActionTypeEnum.RH_NOT_FOUND,
