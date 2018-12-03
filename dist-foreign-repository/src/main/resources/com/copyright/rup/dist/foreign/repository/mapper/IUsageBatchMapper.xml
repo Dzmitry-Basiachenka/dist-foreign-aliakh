@@ -56,6 +56,7 @@
     <select id="findFiscalYears" resultType="int">
         select distinct fiscal_year
         from ${schema}.df_usage_batch
+        where fiscal_year is not null
         order by fiscal_year
     </select>
 

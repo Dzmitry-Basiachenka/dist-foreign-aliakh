@@ -1,10 +1,13 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
+import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
+import static org.powermock.api.easymock.PowerMock.createPartialMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
@@ -13,6 +16,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -35,6 +39,7 @@ import com.vaadin.ui.VerticalLayout;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -61,8 +66,18 @@ import java.util.stream.Collectors;
 @PrepareForTest({Windows.class, SecurityUtils.class, FundPoolLoadWindow.class})
 public class FundPoolLoadWindowTest {
 
+    private static final String PERIOD_FROM = "2000";
+    private static final String PERIOD_TO = "2000";
+    private static final String AMOUNT = "100.00";
+    private static final String MIN_AMOUNT = "10.00";
     private static final String ACCOUNT_NUMBER = "1000001863";
     private static final String USAGE_BATCH_NAME = "BatchName";
+    private static final String PERIOD_FROM_FIELD = "fundPoolPeriodFromField";
+    private static final String PERIOD_TO_FIELD = "fundPoolPeriodToField";
+    private static final String STM_FIELD = "stmAmountField";
+    private static final String NON_STM_FIELD = "nonStmAmountField";
+    private static final String STM_MIN_FIELD = "stmMinAmountField";
+    private static final String NON_STM_MIN_FIELD = "nonStmMinAmountField";
     private static final String INVALID_GROSS_AMOUNT_ERROR_MESSAGE =
         "Field value should be positive number and not exceed 10 digits";
     private static final String INVALID_PERIOD_ERROR_MESSAGE = "Field value should be in range from 1950 to 2099";
@@ -116,13 +131,13 @@ public class FundPoolLoadWindowTest {
         assertFalse(window.isValid());
         Whitebox.getInternalState(window, LocalDateWidget.class).setValue(LocalDate.now());
         assertFalse(window.isValid());
-        setTextFieldValue("fundPoolPeriodToField", "2000");
-        setTextFieldValue("fundPoolPeriodFromField", "2000");
+        setTextFieldValue(PERIOD_TO_FIELD, PERIOD_TO);
+        setTextFieldValue(PERIOD_FROM_FIELD, PERIOD_FROM);
         assertFalse(window.isValid());
-        setTextFieldValue("stmAmountField", "100.00");
-        setTextFieldValue("nonStmAmountField", "100.00");
-        setTextFieldValue("stmMinAmountField", "10.00");
-        setTextFieldValue("nonStmMinAmountField", "10.00");
+        setTextFieldValue(STM_FIELD, AMOUNT);
+        setTextFieldValue(NON_STM_FIELD, AMOUNT);
+        setTextFieldValue(STM_MIN_FIELD, MIN_AMOUNT);
+        setTextFieldValue(NON_STM_MIN_FIELD, MIN_AMOUNT);
         assertFalse(window.isValid());
         setTextFieldValue("marketValidationField", "2");
         assertTrue(window.isValid());
@@ -133,10 +148,10 @@ public class FundPoolLoadWindowTest {
     public void testAmountFieldValidation() {
         replay(usagesController);
         window = new FundPoolLoadWindow(usagesController);
-        verifyAmountFieldValidation("stmAmountField");
-        verifyAmountFieldValidation("nonStmAmountField");
-        verifyAmountFieldValidation("stmMinAmountField");
-        verifyAmountFieldValidation("nonStmMinAmountField");
+        verifyAmountFieldValidation(STM_FIELD);
+        verifyAmountFieldValidation(NON_STM_FIELD);
+        verifyAmountFieldValidation(STM_MIN_FIELD);
+        verifyAmountFieldValidation(NON_STM_MIN_FIELD);
         verify(usagesController);
     }
 
@@ -145,8 +160,8 @@ public class FundPoolLoadWindowTest {
         replay(usagesController);
         window = new FundPoolLoadWindow(usagesController);
         Binder binder = Whitebox.getInternalState(window, "stringBinder");
-        TextField periodFrom = Whitebox.getInternalState(window, "fundPoolPeriodFromField");
-        TextField periodTo = Whitebox.getInternalState(window, "fundPoolPeriodToField");
+        TextField periodFrom = Whitebox.getInternalState(window, PERIOD_FROM_FIELD);
+        TextField periodTo = Whitebox.getInternalState(window, PERIOD_TO_FIELD);
         verifyFieldValidationMessage(periodFrom, "1000", binder, INVALID_PERIOD_ERROR_MESSAGE, false);
         verifyFieldValidationMessage(periodTo, "1000", binder, INVALID_PERIOD_ERROR_MESSAGE, false);
         verifyFieldValidationMessage(periodFrom, "2100", binder, INVALID_PERIOD_ERROR_MESSAGE, false);
@@ -161,6 +176,59 @@ public class FundPoolLoadWindowTest {
         verifyFieldValidationMessage(periodTo, "2005", binder,
             "Field value should be greater or equal to Fund pool period from", true);
         verify(usagesController);
+    }
+
+    @Test
+    public void testOnUploadClickedValidFields() {
+        mockStatic(Windows.class);
+        Capture<UsageBatch> usageBatchCapture = new Capture<>();
+        window = createPartialMock(FundPoolLoadWindow.class, "isValid");
+        Whitebox.setInternalState(window, "usagesController", usagesController);
+        initUploadComponents();
+        expect(window.isValid()).andReturn(true).once();
+        expect(usagesController.getUsagesCountForNtsBatch(capture(usageBatchCapture))).andReturn(3).once();
+        usagesController.loadNtsBatch(capture(usageBatchCapture));
+        expectLastCall().once();
+        Windows.showNotificationWindow("Upload completed: 3 record(s) were stored successfully");
+        expectLastCall().once();
+        replay(window, usagesController, Windows.class);
+        window.onUploadClicked();
+        UsageBatch usageBatch = usageBatchCapture.getValue();
+        assertNotNull(usageBatch);
+        verify(window, usagesController, Windows.class);
+    }
+
+    @Test
+    public void testOnUploadClickedValidFieldsNoRecords() {
+        mockStatic(Windows.class);
+        Capture<UsageBatch> usageBatchCapture = new Capture<>();
+        window = createPartialMock(FundPoolLoadWindow.class, "isValid");
+        Whitebox.setInternalState(window, "usagesController", usagesController);
+        initUploadComponents();
+        expect(window.isValid()).andReturn(true).once();
+        expect(usagesController.getUsagesCountForNtsBatch(capture(usageBatchCapture))).andReturn(0).once();
+        Windows.showNotificationWindow("There are no usages matching selected Markets and Fund Pool Period");
+        expectLastCall().once();
+        replay(window, usagesController, Windows.class);
+        window.onUploadClicked();
+        UsageBatch usageBatch = usageBatchCapture.getValue();
+        assertNotNull(usageBatch);
+        verify(window, usagesController, Windows.class);
+    }
+
+    private void initUploadComponents() {
+        LocalDateWidget paymentDateWidget = new LocalDateWidget("Payment Date");
+        paymentDateWidget.setValue(LocalDate.now());
+        Whitebox.setInternalState(window, "paymentDateWidget", paymentDateWidget);
+        setTextField("usageBatchNameField", USAGE_BATCH_NAME);
+        setTextField("accountNumberField", ACCOUNT_NUMBER);
+        setTextField(PERIOD_TO_FIELD, PERIOD_TO);
+        setTextField(PERIOD_FROM_FIELD, PERIOD_FROM);
+        setTextField(STM_FIELD, AMOUNT);
+        setTextField(NON_STM_FIELD, AMOUNT);
+        setTextField(STM_MIN_FIELD, MIN_AMOUNT);
+        setTextField(NON_STM_MIN_FIELD, MIN_AMOUNT);
+        setTextField("marketValidationField", "2");
     }
 
     private void verifyAmountFieldValidation(String fieldName) {
@@ -210,13 +278,13 @@ public class FundPoolLoadWindowTest {
             Whitebox.getInternalState(window, "accountNumberField"),
             Whitebox.getInternalState(window, "accountNameField"),
             Whitebox.getInternalState(window, "paymentDateWidget"),
-            Whitebox.getInternalState(window, "fundPoolPeriodToField"),
-            Whitebox.getInternalState(window, "fundPoolPeriodFromField"),
+            Whitebox.getInternalState(window, PERIOD_TO_FIELD),
+            Whitebox.getInternalState(window, PERIOD_FROM_FIELD),
             Whitebox.getInternalState(window, "marketValidationField"),
-            Whitebox.getInternalState(window, "stmAmountField"),
-            Whitebox.getInternalState(window, "nonStmAmountField"),
-            Whitebox.getInternalState(window, "stmMinAmountField"),
-            Whitebox.getInternalState(window, "nonStmMinAmountField"));
+            Whitebox.getInternalState(window, STM_FIELD),
+            Whitebox.getInternalState(window, NON_STM_FIELD),
+            Whitebox.getInternalState(window, STM_MIN_FIELD),
+            Whitebox.getInternalState(window, NON_STM_MIN_FIELD));
         Windows.showValidationErrorWindow(fields);
         expectLastCall().once();
         replay(Windows.class);
@@ -344,6 +412,10 @@ public class FundPoolLoadWindowTest {
         assertTrue(component instanceof TextField);
         assertEquals(caption, component.getCaption());
         return (TextField) component;
+    }
+
+    private void setTextField(String field, String value) {
+        Whitebox.setInternalState(window, field, new TextField(field, value));
     }
 
     private void setTextFieldValue(String field, String value) {

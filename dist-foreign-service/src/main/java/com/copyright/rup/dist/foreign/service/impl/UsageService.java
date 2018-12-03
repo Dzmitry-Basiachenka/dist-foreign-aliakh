@@ -8,6 +8,7 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
+import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
@@ -46,7 +47,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -80,6 +80,8 @@ public class UsageService implements IUsageService {
     private BigDecimal claPayeeServiceFee;
     @Value("$RUP{dist.foreign.product_families}")
     private List<String> supportedProductFamilies;
+    @Value("$RUP{dist.foreign.markets}")
+    private List<String> supportedMarkets;
     @Autowired
     private IUsageRepository usageRepository;
     @Autowired
@@ -130,6 +132,28 @@ public class UsageService implements IUsageService {
     }
 
     @Override
+    @Transactional
+    public void insertNtsUsages(UsageBatch usageBatch, List<Usage> usages) {
+        String userName = RupContextUtils.getUserName();
+        LOGGER.info("Insert NTS usages. Started. UsageBatchName={}, UsagesCount={}, UserName={}", usageBatch.getName(),
+            LogUtils.size(usages), userName);
+        usages.forEach(usage -> {
+            usage.setId(RupPersistUtils.generateUuid());
+            usage.setProductFamily(FdaConstants.NTS_PRODUCT_FAMILY);
+            usage.setStatus(UsageStatusEnum.WORK_FOUND);
+            usage.setBatchId(usageBatch.getId());
+            usage.setCreateUser(userName);
+            usage.setUpdateUser(userName);
+            usageRepository.insert(usage);
+        });
+        String reason = buildNtsUsageReason(usageBatch);
+        usageAuditService.logAction(usages.stream().map(Usage::getId).collect(Collectors.toSet()),
+            UsageActionTypeEnum.CREATED, reason);
+        LOGGER.info("Insert NTS usages. Finished. UsageBatchName={}, UsagesCount={}, UserName={}", usageBatch.getName(),
+            LogUtils.size(usages), userName);
+    }
+
+    @Override
     public void deleteUsageBatchDetails(UsageBatch usageBatch) {
         usageAuditService.deleteActions(usageBatch.getId());
         usageRepository.deleteUsages(usageBatch.getId());
@@ -151,6 +175,20 @@ public class UsageService implements IUsageService {
                 prmIntegrationService.getRhParticipatingServiceFee(rhParticipatingFlag));
         });
         return usages;
+    }
+
+    @Override
+    public int getUsagesCountForNtsBatch(UsageBatch usageBatch) {
+        FundPool fundPool = usageBatch.getFundPool();
+        return usageArchiveRepository.findCountForNtsBatch(fundPool.getFundPoolPeriodFrom(),
+            fundPool.getFundPoolPeriodTo(), fundPool.getMarkets());
+    }
+
+    @Override
+    public List<Usage> getUsagesForNtsBatch(UsageBatch usageBatch) {
+        FundPool fundPool = usageBatch.getFundPool();
+        return usageArchiveRepository.findForNtsBatch(fundPool.getFundPoolPeriodFrom(),
+            fundPool.getFundPoolPeriodTo(), fundPool.getMarkets());
     }
 
     @Override
@@ -327,9 +365,8 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    //TODO {isuvorau} replace by using property value
     public List<String> getMarkets() {
-        return Arrays.asList("Bus", "Doc Del", "Edu", "Gov", "Lib", "Sch", "Univ");
+        return supportedMarkets;
     }
 
     @Override
@@ -510,5 +547,15 @@ public class UsageService implements IUsageService {
         usage.setScenarioId(scenario.getId());
         usage.setStatus(UsageStatusEnum.LOCKED);
         usage.setUpdateUser(scenario.getCreateUser());
+    }
+
+    private String buildNtsUsageReason(UsageBatch usageBatch) {
+        FundPool fundPool = usageBatch.getFundPool();
+        StringBuilder reasonBuilder = new StringBuilder(64);
+        reasonBuilder.append("Usage was created based on Market(s): ");
+        fundPool.getMarkets().forEach(market -> reasonBuilder.append(String.format("'%s', ", market)));
+        reasonBuilder.append(
+            String.format("Fund Pool Period: %s-%s", fundPool.getFundPoolPeriodFrom(), fundPool.getFundPoolPeriodTo()));
+        return reasonBuilder.toString();
     }
 }

@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.service.impl.csv.validator.AmountValidator;
+import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
@@ -25,7 +26,9 @@ import com.vaadin.ui.Window;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Set;
 
 /**
  * Window for loading fund pool.
@@ -46,6 +49,7 @@ class FundPoolLoadWindow extends Window {
     private final IUsagesController usagesController;
     private final Binder<UsageBatch> binder = new Binder<>();
     private final Binder<String> stringBinder = new Binder<>();
+    private Set<String> selectedMarkets;
     private TextField accountNumberField;
     private TextField accountNameField;
     private LocalDateWidget paymentDateWidget;
@@ -78,8 +82,17 @@ class FundPoolLoadWindow extends Window {
      * Initiates file uploading.
      */
     void onUploadClicked() {
-        // TODO {isuvorau} insert batch after implementation
-        if (!isValid()) {
+        if (isValid()) {
+            UsageBatch usageBatch = buildUsageBatch();
+            int usagesCount = usagesController.getUsagesCountForNtsBatch(usageBatch);
+            if (0 < usagesCount) {
+                usagesController.loadNtsBatch(usageBatch);
+                close();
+                Windows.showNotificationWindow(ForeignUi.getMessage("message.upload_completed", usagesCount));
+            } else {
+                Windows.showNotificationWindow(ForeignUi.getMessage("message.load_fund_pool.no_usages"));
+            }
+        } else {
             Windows.showValidationErrorWindow(
                 Arrays.asList(usageBatchNameField, accountNumberField, accountNameField, paymentDateWidget,
                     fundPoolPeriodToField, fundPoolPeriodFromField, marketValidationField, stmAmountField,
@@ -96,6 +109,23 @@ class FundPoolLoadWindow extends Window {
         return binder.isValid() && stringBinder.isValid();
     }
 
+    private UsageBatch buildUsageBatch() {
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatch.setName(StringUtils.trim(usageBatchNameField.getValue()));
+        usageBatch.setRro(rro);
+        usageBatch.setPaymentDate(paymentDateWidget.getValue());
+        FundPool fundPool = new FundPool();
+        fundPool.setMarkets(selectedMarkets);
+        fundPool.setFundPoolPeriodFrom(Integer.parseInt(fundPoolPeriodFromField.getValue()));
+        fundPool.setFundPoolPeriodTo(Integer.parseInt(fundPoolPeriodToField.getValue()));
+        fundPool.setStmAmount(new BigDecimal(stmAmountField.getValue()));
+        fundPool.setNonStmAmount(new BigDecimal(nonStmAmountField.getValue()));
+        fundPool.setStmMinimumAmount(new BigDecimal(stmMinAmountField.getValue()));
+        fundPool.setNonStmMinimumAmount(new BigDecimal(nonStmMinAmountField.getValue()));
+        usageBatch.setFundPool(fundPool);
+        return usageBatch;
+    }
+
     private ComponentContainer initRootLayout() {
         HorizontalLayout buttonsLayout = initButtonsLayout();
         VerticalLayout rootLayout = new VerticalLayout();
@@ -109,7 +139,6 @@ class FundPoolLoadWindow extends Window {
     }
 
     private MarketFilterWidget initMarketFilterWidget() {
-        //TODO {isuvorau} add listener to save selected items
         marketValidationField = new TextField(ForeignUi.getMessage("label.markets"));
         stringBinder.forField(marketValidationField)
             .withValidator(value -> Integer.parseInt(value) > 0, "Please select at least one market")
@@ -127,6 +156,7 @@ class FundPoolLoadWindow extends Window {
             } else {
                 marketFilterWidget.addStyleName(EMPTY_MARKET_STYLE);
             }
+            selectedMarkets = (Set<String>) event.getSelectedItemsIds();
         });
         return marketFilterWidget;
     }

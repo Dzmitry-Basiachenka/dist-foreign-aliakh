@@ -42,6 +42,7 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
     private static final String SORT_KEY = "sort";
     private static final String SEARCH_VALUE_KEY = "searchValue";
     private static final String SCENARIO_ID_KEY = "scenarioId";
+    private static final String STATUS_KEY = "status";
 
     @Override
     public void insert(Usage usage) {
@@ -108,7 +109,7 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
     public void updateStatus(Set<String> usageIds, UsageStatusEnum status) {
         checkArgument(CollectionUtils.isNotEmpty(usageIds));
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
-        parameters.put("status", Objects.requireNonNull(status));
+        parameters.put(STATUS_KEY, Objects.requireNonNull(status));
         parameters.put("updateUser", StoredEntity.DEFAULT_USER);
         usageIds.forEach(usageId -> {
             parameters.put("usageId", usageId);
@@ -119,18 +120,28 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
     @Override
     public List<PaidUsage> findByIdAndStatus(List<String> usageIds, UsageStatusEnum status) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-        parameters.put("status", status);
+        parameters.put(STATUS_KEY, status);
         parameters.put("usageIds", Objects.requireNonNull(usageIds));
         return selectList("IUsageArchiveMapper.findByIdAndStatus", parameters);
     }
 
     @Override
-    public List<Usage> findForNtsBatch(Integer marketPeriodFrom, Integer marketPeriodTo, List<String> markets) {
+    public int findCountForNtsBatch(Integer marketPeriodFrom, Integer marketPeriodTo, Set<String> markets) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
         params.put("marketPeriodFrom", Objects.requireNonNull(marketPeriodFrom));
         params.put("marketPeriodTo", Objects.requireNonNull(marketPeriodTo));
         params.put("markets", Objects.requireNonNull(markets));
-        params.put("status", UsageStatusEnum.ARCHIVED);
+        params.put(STATUS_KEY, UsageStatusEnum.ARCHIVED);
+        return selectOne("IUsageArchiveMapper.findCountForNtsBatch", params);
+    }
+
+    @Override
+    public List<Usage> findForNtsBatch(Integer marketPeriodFrom, Integer marketPeriodTo, Set<String> markets) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
+        params.put("marketPeriodFrom", Objects.requireNonNull(marketPeriodFrom));
+        params.put("marketPeriodTo", Objects.requireNonNull(marketPeriodTo));
+        params.put("markets", Objects.requireNonNull(markets));
+        params.put(STATUS_KEY, UsageStatusEnum.ARCHIVED);
         return selectList("IUsageArchiveMapper.findForNtsBatch", params);
     }
 

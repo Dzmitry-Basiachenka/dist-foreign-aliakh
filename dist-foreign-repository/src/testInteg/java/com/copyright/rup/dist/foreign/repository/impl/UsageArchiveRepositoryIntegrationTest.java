@@ -18,6 +18,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Sets;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -38,7 +39,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -340,8 +340,13 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
+    public void testFindCountForNtsBatch() {
+        assertEquals(2, usageArchiveRepository.findCountForNtsBatch(2015, 2016, Sets.newHashSet("Bus", "Doc Del")));
+    }
+
+    @Test
     public void testFindForNtsBatch() {
-        List<Usage> usages = usageArchiveRepository.findForNtsBatch(2015, 2016, Arrays.asList("Bus", "Doc Del"));
+        List<Usage> usages = usageArchiveRepository.findForNtsBatch(2015, 2016, Sets.newHashSet("Bus", "Doc Del"));
         assertEquals(2, usages.size());
         List<String> uids = usages.stream().map(Usage::getId).collect(Collectors.toList());
         assertTrue(uids.contains("bc0fe9bc-9b24-4324-b624-eed0d9773e19"));

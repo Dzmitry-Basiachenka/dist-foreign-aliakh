@@ -126,6 +126,21 @@ public interface IUsagesController extends IController<IUsagesWidget> {
     int loadUsageBatch(UsageBatch usageBatch, Collection<Usage> usages);
 
     /**
+     * Gets count of archived usages based on batch information.
+     *
+     * @param usageBatch {@link UsageBatch} instance
+     * @return usages count
+     */
+    int getUsagesCountForNtsBatch(UsageBatch usageBatch);
+
+    /**
+     * Inserts NTS batch and assigns eligible for NTS usages to it based on fund pool information.
+     *
+     * @param usageBatch {@link UsageBatch} to insert
+     */
+    void loadNtsBatch(UsageBatch usageBatch);
+
+    /**
      * Updates researched usage details.
      *
      * @param researchedUsages collection of {@link ResearchedUsage}s

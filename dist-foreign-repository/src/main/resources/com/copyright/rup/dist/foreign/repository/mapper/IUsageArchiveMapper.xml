@@ -188,9 +188,18 @@
             market_period_to,
             author,
             number_of_copies,
-            reported_value,
-            gross_amount
+            reported_value
         from ${schema}.df_usage_archive
+        <include refid="ntsBatchWhereClause"/>
+    </select>
+
+    <select id="findCountForNtsBatch" parameterType="map" resultType="int">
+        select count(1)
+        from ${schema}.df_usage_archive
+        <include refid="ntsBatchWhereClause"/>
+    </select>
+
+    <sql id="ntsBatchWhereClause">
         where
             <foreach collection="markets" item="market" separator="or" open="(" close=")">
                 market ilike '%' || #{market} || '%'
@@ -198,7 +207,7 @@
             and <![CDATA[market_period_from <= #{marketPeriodTo}]]>
             and <![CDATA[market_period_to >= #{marketPeriodFrom}]]>
             and status_ind = #{status}
-    </select>
+    </sql>
 
     <update id="updatePaidInfo" parameterType="PaidUsage">
         update ${schema}.df_usage_archive

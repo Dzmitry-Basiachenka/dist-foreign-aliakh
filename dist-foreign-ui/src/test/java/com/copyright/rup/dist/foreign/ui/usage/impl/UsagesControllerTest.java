@@ -278,6 +278,28 @@ public class UsagesControllerTest {
     }
 
     @Test
+    public void testLoadNtsBatch() {
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatchService.insertNtsBatch(usageBatch);
+        expectLastCall().once();
+        expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
+        filterWidgetMock.clearFilter();
+        expectLastCall().once();
+        replay(usageBatchService, filterController, filterWidgetMock);
+        controller.loadNtsBatch(usageBatch);
+        verify(usageBatchService, filterController, filterWidgetMock);
+    }
+
+    @Test
+    public void testGetUsagesCountForNtsBatch() {
+        UsageBatch usageBatch = new UsageBatch();
+        expect(usageService.getUsagesCountForNtsBatch(usageBatch)).andReturn(5).once();
+        replay(usageService);
+        assertEquals(5, controller.getUsagesCountForNtsBatch(usageBatch));
+        verify(usageService);
+    }
+
+    @Test
     public void testLoadResearchedUsages() {
         List<ResearchedUsage> researchedUsages = Lists.newArrayList(new ResearchedUsage());
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();

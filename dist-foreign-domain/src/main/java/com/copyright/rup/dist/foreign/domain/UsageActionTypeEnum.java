@@ -17,6 +17,11 @@ public enum UsageActionTypeEnum {
     LOADED,
 
     /**
+     * Action type for NTS usages created based on {@link UsageStatusEnum#ARCHIVED} usages.
+     */
+    CREATED,
+
+    /**
      * Action type for successfully found work.
      */
     WORK_FOUND,
