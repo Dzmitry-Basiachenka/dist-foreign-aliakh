@@ -37,6 +37,11 @@
         <property name="endPoint" value="direct:df.service.rights"/>
     </bean>
 
+    <bean id="df.service.rhTaxProducer"
+          class="com.copyright.rup.dist.foreign.service.impl.tax.RhTaxProducer">
+        <property name="endPoint" value="direct:df.service.tax"/>
+    </bean>
+
     <bean id="df.service.rmsProxyService" class="com.copyright.rup.dist.foreign.service.impl.rights.RmsProxyService">
         <constructor-arg ref="dist.common.integration.rmsService"/>
         <constructor-arg value="$RUP{dist.foreign.service.rights.ttl.minutes}"/>
@@ -70,6 +75,9 @@
 
         <endpoint id="df.service.internal.rights.endpoint" uri="direct:df.service.rights"/>
         <endpoint id="df.service.rights.endpoint" uri="$RUP{dist.foreign.service.rights.endpoint}"/>
+
+        <endpoint id="df.service.internal.tax.endpoint" uri="direct:df.service.tax"/>
+        <endpoint id="df.service.tax.endpoint" uri="$RUP{dist.foreign.service.tax.endpoint}"/>
 
         <route>
             <from ref="df.service.lm.detail.paid.endpoint"/>
@@ -128,6 +136,30 @@
                 <custom ref="df.service.rightsUnmarshaller"/>
             </unmarshal>
             <bean ref="df.service.rightsConsumer"/>
+
+            <onException redeliveryPolicyRef="defaultRedeliveryPolicy" useOriginalMessage="true">
+                <exception>com.copyright.rup.common.exception.RupRuntimeException</exception>
+            </onException>
+        </route>
+
+        <route>
+            <from ref="df.service.internal.tax.endpoint"/>
+            <marshal>
+                <custom ref="df.service.rhTaxMarshaller"/>
+            </marshal>
+            <to ref="df.service.tax.endpoint"/>
+
+            <onException redeliveryPolicyRef="defaultRedeliveryPolicy" useOriginalMessage="true">
+                <exception>com.copyright.rup.common.exception.RupRuntimeException</exception>
+            </onException>
+        </route>
+
+        <route>
+            <from ref="df.service.tax.endpoint"/>
+            <unmarshal>
+                <custom ref="df.service.rhTaxUnmarshaller"/>
+            </unmarshal>
+            <bean ref="df.service.rhTaxConsumer"/>
 
             <onException redeliveryPolicyRef="defaultRedeliveryPolicy" useOriginalMessage="true">
                 <exception>com.copyright.rup.common.exception.RupRuntimeException</exception>
