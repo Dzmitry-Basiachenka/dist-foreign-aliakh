@@ -1,3 +1,11 @@
+4.1.1
+-
+* B-23202 FDA: Create a NTS batch of FAS usage details as specified by RRO Receipt: Refactor fields of fund pool domain object
+* B-23202 FDA: Create a NTS batch of FAS usage details as specified by RRO Receipt: Update batch domain object to store new fields
+* B-23202 FDA: Create a NTS batch of FAS usage details as specified by RRO Receipt: Update batch repository to store new fields in database
+* B-23202 FDA: Create a NTS batch of FAS usage details as specified by RRO Receipt: add liquibase changelog file for FDA of version 4
+* B-46036 FDA: Exclude non US RHs from the NTS proxy: implement consumer and producer for tax queue
+
 4.1.0
 -
 * B-23202 FDA: Create a NTS batch of FAS usage details as specified by RRO Receipt: implement window for loading fund pool
