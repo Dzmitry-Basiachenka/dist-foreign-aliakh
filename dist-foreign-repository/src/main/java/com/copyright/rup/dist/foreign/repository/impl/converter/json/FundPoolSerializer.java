@@ -36,8 +36,8 @@ public class FundPoolSerializer extends StdSerializer<FundPool> {
     }
 
     private void writePeriods(JsonGenerator jg, FundPool fundPool) throws IOException {
-        jg.writeNumberField("market_period_from", fundPool.getMarketPeriodFrom());
-        jg.writeNumberField("market_period_to", fundPool.getMarketPeriodTo());
+        jg.writeNumberField("fund_pool_period_from", fundPool.getFundPoolPeriodFrom());
+        jg.writeNumberField("fund_pool_period_to", fundPool.getFundPoolPeriodTo());
     }
 
     private void writeAmounts(JsonGenerator jg, FundPool fundPool) throws IOException {

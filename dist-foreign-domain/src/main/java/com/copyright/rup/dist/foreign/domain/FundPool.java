@@ -6,8 +6,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Represents fund pool.
@@ -21,28 +21,28 @@ import java.util.List;
 // TODO {aliakh} to add as field to UsageBatch
 public class FundPool {
 
-    private Integer marketPeriodFrom;
-    private Integer marketPeriodTo;
+    private Integer fundPoolPeriodFrom;
+    private Integer fundPoolPeriodTo;
     private BigDecimal stmAmount;
     private BigDecimal nonStmAmount;
     private BigDecimal stmMinimumAmount;
     private BigDecimal nonStmMinimumAmount;
-    private List<String> markets = new ArrayList<>();
+    private Set<String> markets = new HashSet<>();
 
-    public Integer getMarketPeriodFrom() {
-        return marketPeriodFrom;
+    public Integer getFundPoolPeriodFrom() {
+        return fundPoolPeriodFrom;
     }
 
-    public void setMarketPeriodFrom(Integer marketPeriodFrom) {
-        this.marketPeriodFrom = marketPeriodFrom;
+    public void setFundPoolPeriodFrom(Integer fundPoolPeriodFrom) {
+        this.fundPoolPeriodFrom = fundPoolPeriodFrom;
     }
 
-    public Integer getMarketPeriodTo() {
-        return marketPeriodTo;
+    public Integer getFundPoolPeriodTo() {
+        return fundPoolPeriodTo;
     }
 
-    public void setMarketPeriodTo(Integer marketPeriodTo) {
-        this.marketPeriodTo = marketPeriodTo;
+    public void setFundPoolPeriodTo(Integer fundPoolPeriodTo) {
+        this.fundPoolPeriodTo = fundPoolPeriodTo;
     }
 
     public BigDecimal getStmAmount() {
@@ -77,11 +77,11 @@ public class FundPool {
         this.nonStmMinimumAmount = nonStmMinimumAmount;
     }
 
-    public List<String> getMarkets() {
+    public Set<String> getMarkets() {
         return markets;
     }
 
-    public void setMarkets(List<String> markets) {
+    public void setMarkets(Set<String> markets) {
         this.markets = markets;
     }
 
@@ -95,8 +95,8 @@ public class FundPool {
         }
         FundPool that = (FundPool) obj;
         return new EqualsBuilder()
-            .append(marketPeriodFrom, that.marketPeriodFrom)
-            .append(marketPeriodTo, that.marketPeriodTo)
+            .append(fundPoolPeriodFrom, that.fundPoolPeriodFrom)
+            .append(fundPoolPeriodTo, that.fundPoolPeriodTo)
             .append(stmAmount, that.stmAmount)
             .append(nonStmAmount, that.nonStmAmount)
             .append(stmMinimumAmount, that.stmMinimumAmount)
@@ -108,8 +108,8 @@ public class FundPool {
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
-            .append(marketPeriodFrom)
-            .append(marketPeriodTo)
+            .append(fundPoolPeriodFrom)
+            .append(fundPoolPeriodTo)
             .append(stmAmount)
             .append(nonStmAmount)
             .append(stmMinimumAmount)
@@ -121,8 +121,8 @@ public class FundPool {
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-            .append("periodFrom", marketPeriodFrom)
-            .append("periodTo", marketPeriodTo)
+            .append("periodFrom", fundPoolPeriodFrom)
+            .append("periodTo", fundPoolPeriodTo)
             .append("stmAmount", stmAmount)
             .append("nonStmAmount", nonStmAmount)
             .append("stmMinimumAmount", stmMinimumAmount)

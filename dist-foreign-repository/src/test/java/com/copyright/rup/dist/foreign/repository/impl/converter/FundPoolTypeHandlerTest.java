@@ -10,6 +10,8 @@ import static org.junit.Assert.assertNull;
 
 import com.copyright.rup.dist.foreign.domain.FundPool;
 
+import com.google.common.collect.ImmutableSet;
+
 import org.junit.Test;
 import org.postgresql.util.PGobject;
 
@@ -18,7 +20,6 @@ import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
 
 /**
  * Verifies {@link FundPoolTypeHandler}.
@@ -97,13 +98,13 @@ public class FundPoolTypeHandlerTest {
 
     private FundPool buildFundPool() {
         FundPool fundPool = new FundPool();
-        fundPool.setMarketPeriodFrom(2017);
-        fundPool.setMarketPeriodTo(2018);
+        fundPool.setFundPoolPeriodFrom(2017);
+        fundPool.setFundPoolPeriodTo(2018);
         fundPool.setStmAmount(new BigDecimal(100));
         fundPool.setNonStmAmount(new BigDecimal(200));
         fundPool.setStmMinimumAmount(new BigDecimal(300));
         fundPool.setNonStmMinimumAmount(new BigDecimal(400));
-        fundPool.setMarkets(Arrays.asList("Edu", "Gov"));
+        fundPool.setMarkets(ImmutableSet.of("Edu", "Gov"));
         return fundPool;
     }
 }

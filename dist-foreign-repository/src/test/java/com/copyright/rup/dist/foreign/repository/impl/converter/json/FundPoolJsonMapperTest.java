@@ -7,12 +7,12 @@ import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.google.common.collect.ImmutableSet;
 
 import org.junit.Test;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Arrays;
 
 /**
  * Verifies {@link FundPoolJsonMapper}.
@@ -31,25 +31,25 @@ public class FundPoolJsonMapperTest {
     public void testDeserialize() throws IOException {
         String json = TestUtils.fileToString(this.getClass(), "fund_pool.json");
         FundPool fundPool = jsonMapper.deserialize(json);
-        assertEquals(2017, fundPool.getMarketPeriodFrom().intValue());
-        assertEquals(2018, fundPool.getMarketPeriodTo().intValue());
+        assertEquals(2017, fundPool.getFundPoolPeriodFrom().intValue());
+        assertEquals(2018, fundPool.getFundPoolPeriodTo().intValue());
         assertEquals(new BigDecimal("100"), fundPool.getStmAmount());
         assertEquals(new BigDecimal("200."), fundPool.getNonStmAmount());
         assertEquals(new BigDecimal("300.3"), fundPool.getStmMinimumAmount());
         assertEquals(new BigDecimal("400.44"), fundPool.getNonStmMinimumAmount());
-        assertEquals(Arrays.asList("Edu", "Gov"), fundPool.getMarkets());
+        assertEquals(ImmutableSet.of("Edu", "Gov"), fundPool.getMarkets());
     }
 
     @Test
     public void testSerialize() throws IOException {
         FundPool fundPool = new FundPool();
-        fundPool.setMarketPeriodFrom(2017);
-        fundPool.setMarketPeriodTo(2018);
+        fundPool.setFundPoolPeriodFrom(2017);
+        fundPool.setFundPoolPeriodTo(2018);
         fundPool.setStmAmount(new BigDecimal("100"));
         fundPool.setNonStmAmount(new BigDecimal("200."));
         fundPool.setStmMinimumAmount(new BigDecimal("300.3"));
         fundPool.setNonStmMinimumAmount(new BigDecimal("400.44"));
-        fundPool.setMarkets(Arrays.asList("Edu", "Gov"));
+        fundPool.setMarkets(ImmutableSet.of("Edu", "Gov"));
         String actualJson = jsonMapper.serialize(fundPool);
         assertEquals(fundPool, jsonMapper.deserialize(actualJson));
     }
