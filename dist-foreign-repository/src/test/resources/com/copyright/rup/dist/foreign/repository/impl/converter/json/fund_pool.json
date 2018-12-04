@@ -1,0 +1,12 @@
+{
+  "market_period_from": 2017,
+  "market_period_to": 2018,
+  "stm_amount": 100,
+  "non_stm_amount": 200,
+  "stm_minimum_amount": 300.3,
+  "non_stm_minimum_amount": 400.44,
+  "markets": [
+    "Edu",
+    "Gov"
+  ]
+}

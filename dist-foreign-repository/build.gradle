@@ -1,10 +1,13 @@
 apply plugin: 'rup-jdbc'
 apply plugin: 'rup-mybatis'
+apply plugin: 'rup-camel'
 
 dependencies {
     compile project(':dist-foreign-domain')
 
     compile("com.copyright.rup.dist.common:dist-common-repository:${distCommonVersion}")
+    //dependency to avoid vulnerability CVE-2016-7051 (severity: MEDIUM) associated with 'com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.8.3'
+    compile("com.fasterxml.jackson.module:jackson-module-jaxb-annotations:${rupCamel.standardDependencies.jackson.version}")
     compile("org.apache.commons:commons-collections4:${commonsCollectionsVersion}")
     compile("org.mybatis:mybatis-typehandlers-jsr310:${mybatisTypehandlersVersion}")
 
