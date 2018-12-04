@@ -12,6 +12,7 @@
         <result property="paymentDate" column="payment_date"/>
         <result property="fiscalYear" column="fiscal_year"/>
         <result property="grossAmount" column="gross_amount"/>
+        <result property="fundPool" column="fund_pool" typeHandler="FundPoolTypeHandler"/>
     </resultMap>
 
     <sql id="usageBatchColumns">
@@ -22,6 +23,7 @@
         ub.payment_date,
         ub.fiscal_year,
         ub.gross_amount,
+        ub.fund_pool,
         ub.created_datetime,
         ub.updated_datetime,
         ub.created_by_user,
@@ -37,6 +39,7 @@
             payment_date,
             fiscal_year,
             gross_amount,
+            fund_pool,
             <include refid="StoredEntityMapper.additionalColumns"/>
         ) values (
             #{id},
@@ -45,6 +48,7 @@
             #{paymentDate},
             #{fiscalYear},
             #{grossAmount},
+            #{fundPool, typeHandler=FundPoolTypeHandler},
             <include refid="StoredEntityMapper.insert"/>
         )
     </insert>

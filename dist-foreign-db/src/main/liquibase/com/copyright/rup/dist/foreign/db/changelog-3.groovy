@@ -371,4 +371,22 @@ databaseChangeLog {
             }
         }
     }
+
+    changeSet(id: '2018-12-04-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("B-23202 FDA: Create a NTS batch of FAS usage details as specified by RRO Receipt: Update batch repository to store new fields in database")
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'fund_pool', type: 'JSONB', remarks: 'The fund pool')
+        }
+
+        dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_batch',
+            columnName: 'fiscal_year', columnDataType: 'NUMERIC(4,0)')
+
+        rollback {
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_batch', columnName: 'fund_pool')
+
+            addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_batch',
+                columnName: 'fiscal_year', columnDataType: 'NUMERIC(4,0)')
+        }
+    }
 }
