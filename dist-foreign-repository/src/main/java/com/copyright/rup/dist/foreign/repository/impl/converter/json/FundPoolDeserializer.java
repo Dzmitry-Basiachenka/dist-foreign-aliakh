@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Implementation of {@link StdDeserializer} for {@link FundPool}.
@@ -48,11 +48,11 @@ public class FundPoolDeserializer extends StdDeserializer<FundPool> {
 
     private void readPeriods(JsonParser jp, FundPool fundPool) throws IOException {
         switch (jp.getCurrentName()) {
-            case "market_period_from":
-                fundPool.setMarketPeriodFrom(jp.getIntValue());
+            case "fund_pool_period_from":
+                fundPool.setFundPoolPeriodFrom(jp.getIntValue());
                 break;
-            case "market_period_to":
-                fundPool.setMarketPeriodTo(jp.getIntValue());
+            case "fund_pool_period_to":
+                fundPool.setFundPoolPeriodTo(jp.getIntValue());
                 break;
             default:
                 break;
@@ -81,7 +81,7 @@ public class FundPoolDeserializer extends StdDeserializer<FundPool> {
     private void readMarkets(JsonParser jp, FundPool fundPool) throws IOException {
         if ("markets".equals(jp.getCurrentName())) {
             while (jp.nextToken() != JsonToken.END_ARRAY) {
-                List<String> markets = fundPool.getMarkets();
+                Set<String> markets = fundPool.getMarkets();
                 markets.add(jp.getValueAsString());
             }
         }
