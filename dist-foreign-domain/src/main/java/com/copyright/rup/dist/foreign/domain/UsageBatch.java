@@ -27,6 +27,7 @@ public class UsageBatch extends StoredEntity<String> {
     private LocalDate paymentDate;
     private Integer fiscalYear;
     private BigDecimal grossAmount = BigDecimal.ZERO;
+    private FundPool fundPool;
 
     /**
      * @return name.
@@ -109,6 +110,14 @@ public class UsageBatch extends StoredEntity<String> {
         }
     }
 
+    public FundPool getFundPool() {
+        return fundPool;
+    }
+
+    public void setFundPool(FundPool fundPool) {
+        this.fundPool = fundPool;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -125,6 +134,7 @@ public class UsageBatch extends StoredEntity<String> {
             .append(this.paymentDate, that.paymentDate)
             .append(this.fiscalYear, that.fiscalYear)
             .append(this.grossAmount, that.grossAmount)
+            .append(this.fundPool, that.fundPool)
             .isEquals();
     }
 
@@ -137,6 +147,7 @@ public class UsageBatch extends StoredEntity<String> {
             .append(paymentDate)
             .append(fiscalYear)
             .append(grossAmount)
+            .append(fundPool)
             .toHashCode();
     }
 
@@ -149,6 +160,7 @@ public class UsageBatch extends StoredEntity<String> {
             .append("paymentDate", paymentDate)
             .append("fiscalYear", fiscalYear)
             .append("grossAmount", grossAmount)
+            .append("fundPool", fundPool)
             .toString();
     }
 }

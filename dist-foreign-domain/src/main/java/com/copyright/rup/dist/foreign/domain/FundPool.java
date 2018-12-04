@@ -18,7 +18,6 @@ import java.util.Set;
  *
  * @author Aliaksandr Liakh
  */
-// TODO {aliakh} to add as field to UsageBatch
 public class FundPool {
 
     private Integer fundPoolPeriodFrom;
