@@ -39,6 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
@@ -165,6 +166,24 @@ public class UsageRepositoryIntegrationTest {
                 Collections.singleton(PRODUCT_FAMILY_FAS), UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, FISCAL_YEAR);
         verifyUsageDtos(usageRepository.findByFilter(usageFilter, null, new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 1,
             USAGE_ID_1);
+    }
+
+    @Test
+    public void testFindUsagesByFilter() {
+        UsageFilter usageFilter = new UsageFilter();
+        usageFilter.setProductFamilies(ImmutableSet.of("NTS"));
+        usageFilter.setUsageStatus(UsageStatusEnum.RH_FOUND);
+        usageFilter.setUsageBatchesIds(ImmutableSet.of("928e2693-2646-4a04-85f1-4ca9cd78551a"));
+        List<Usage> actualUsages = usageRepository.findUsagesByFilter(usageFilter);
+        assertTrue(CollectionUtils.isNotEmpty(actualUsages));
+        assertEquals(2, CollectionUtils.size(actualUsages));
+        actualUsages.sort(Comparator.comparing(Usage::getId));
+        Usage actualUsage1 = actualUsages.get(0);
+        assertEquals("3290f7ae-23f7-4286-baf6-a74a9d4ef2d4", actualUsage1.getId());
+        assertEquals(1000009523L, actualUsage1.getRightsholder().getAccountNumber(), 0);
+        Usage actualUsage2 = actualUsages.get(1);
+        assertEquals("97f76fe1-9254-4d2e-9f4e-fa6904140371", actualUsage2.getId());
+        assertEquals(1000009524L, actualUsage2.getRightsholder().getAccountNumber(), 0);
     }
 
     @Test

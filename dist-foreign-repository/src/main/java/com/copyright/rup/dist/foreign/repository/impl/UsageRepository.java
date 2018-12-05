@@ -94,6 +94,13 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
+    public List<Usage> findUsagesByFilter(UsageFilter filter) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(1);
+        parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
+        return selectList("IUsageMapper.findUsagesByFilter", parameters);
+    }
+
+    @Override
     public List<Usage> findByScenarioId(String scenarioId) {
         return selectList("IUsageMapper.findByScenarioId", Objects.requireNonNull(scenarioId));
     }

@@ -143,6 +143,7 @@
     </resultMap>
 
     <resultMap id="usageResultMap" type="Usage" extends="usageAmountResultMap">
+        <result property="id" column="df_usage_uid"/>
         <result property="batchId" column="df_usage_batch_uid"/>
         <result property="scenarioId" column="df_scenario_uid"/>
         <result property="wrWrkInst" column="wr_wrk_inst"/>
@@ -481,6 +482,14 @@
             </otherwise>
         </choose>
         <include refid="ifPageable"/>
+    </select>
+
+    <select id="findUsagesByFilter" resultMap="usageResultMap" parameterType="map">
+        select
+        u.df_usage_uid,
+        <include refid="usageColumns"/>
+        from ${schema}.df_usage u
+        <include refid="usageFilter"/>
     </select>
 
     <select id="findCountByScenarioId" parameterType="map" resultType="int">
