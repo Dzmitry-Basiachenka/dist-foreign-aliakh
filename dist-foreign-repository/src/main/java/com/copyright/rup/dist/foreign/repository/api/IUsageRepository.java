@@ -51,6 +51,14 @@ public interface IUsageRepository {
     List<UsageDto> findByFilter(UsageFilter filter, Pageable pageable, Sort sort);
 
     /**
+     * Gets list of {@link Usage}s by usage filter.
+     *
+     * @param filter filter
+     * @return list of usages
+     */
+    List<Usage> findUsagesByFilter(UsageFilter filter);
+
+    /**
      * Finds usages count based on applied filter.
      *
      * @param filter instance of {@link UsageFilter}

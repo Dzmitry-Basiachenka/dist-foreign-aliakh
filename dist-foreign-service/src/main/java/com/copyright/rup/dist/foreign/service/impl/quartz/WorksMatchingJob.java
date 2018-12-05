@@ -46,6 +46,8 @@ public class WorksMatchingJob extends QuartzJobBean {
      * Finds works and updates WrWrkInsts and statuses of {@link Usage}s.
      */
     @Override
+    // TODO {pliakh} remove redundant RE catching
+    // TODO {pliakh} check that job will work correctly in case of NEW usages will be processed in parallel
     public void executeInternal(JobExecutionContext context) {
         int offset = 0;
         int processedUsagesCount = 0;

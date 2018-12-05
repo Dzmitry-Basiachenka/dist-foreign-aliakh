@@ -774,6 +774,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'NTS')
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
             column(name: 'status_ind', value: 'RH_FOUND')
+            column(name: 'rh_account_number', value: '1000009523')
             column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '2192-3559')
             column(name: 'publisher', value: 'Network for Science')
@@ -797,6 +798,69 @@ databaseChangeLog {
             column(name: 'product_family', value: 'NTS')
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
             column(name: 'status_ind', value: 'RH_FOUND')
+            column(name: 'rh_account_number', value: '1000009524')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '2192-3559')
+            column(name: 'publisher', value: 'Network for Science')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '100')
+            column(name: 'gross_amount', value: '500.00')
+            column(name: 'net_amount', value: '420.00')
+            column(name: 'service_fee_amount', value: '80.00')
+            column(name: 'service_fee', value: '0.16000')
+        }
+    }
+
+    // testFindUsagesByFilter
+    changeSet(id: '2018-12-03-00', author: 'Pavel Liakh <pliakh@copyright.com>') {
+        comment('Inserting test data for testFindUsagesByFilter()')
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: '928e2693-2646-4a04-85f1-4ca9cd78551a')
+            column(name: 'name', value: 'Usage Batch')
+            column(name: 'rro_account_number', value: '2000017011')
+            column(name: 'payment_date', value: '2021-02-12')
+            column(name: 'fiscal_year', value: '2020')
+            column(name: 'gross_amount', value: '100.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '3290f7ae-23f7-4286-baf6-a74a9d4ef2d4')
+            column(name: 'df_usage_batch_uid', value: '928e2693-2646-4a04-85f1-4ca9cd78551a')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
+            column(name: 'status_ind', value: 'RH_FOUND')
+            column(name: 'rh_account_number', value: '1000009523')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '2192-3559')
+            column(name: 'publisher', value: 'Network for Science')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'updated_by_user', value: 'user@copyright.com')
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '100')
+            column(name: 'gross_amount', value: '500.00')
+            column(name: 'net_amount', value: '420.00')
+            column(name: 'service_fee_amount', value: '80.00')
+            column(name: 'service_fee', value: '0.16000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '97f76fe1-9254-4d2e-9f4e-fa6904140371')
+            column(name: 'df_usage_batch_uid', value: '928e2693-2646-4a04-85f1-4ca9cd78551a')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
+            column(name: 'status_ind', value: 'RH_FOUND')
+            column(name: 'rh_account_number', value: '1000009524')
             column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '2192-3559')
             column(name: 'publisher', value: 'Network for Science')
