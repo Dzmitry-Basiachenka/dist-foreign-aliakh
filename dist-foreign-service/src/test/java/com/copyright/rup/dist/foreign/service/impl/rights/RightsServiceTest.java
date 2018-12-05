@@ -19,6 +19,7 @@ import com.copyright.rup.dist.foreign.service.api.IRightsService;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 
+import com.copyright.rup.dist.foreign.service.impl.tax.RhTaxProducer;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -56,6 +57,7 @@ public class RightsServiceTest {
     private IRmsGrantsProcessorService rmsGrantsProcessorService;
     private IRightsholderService rightsholderService;
     private RightsProducer rightsProducer;
+    private RhTaxProducer rhTaxProducer;
 
     @Before
     public void setUp() {
@@ -65,13 +67,15 @@ public class RightsServiceTest {
         rmsGrantsProcessorService = createMock(IRmsGrantsProcessorService.class);
         rightsholderService = createMock(IRightsholderService.class);
         rightsProducer = createMock(RightsProducer.class);
+        rhTaxProducer = createMock(RhTaxProducer.class);
         rightsAssignmentService = new RightsService();
-        Whitebox.setInternalState(rightsAssignmentService, usageRepository);
-        Whitebox.setInternalState(rightsAssignmentService, usageAuditService);
-        Whitebox.setInternalState(rightsAssignmentService, rmsIntegrationService);
-        Whitebox.setInternalState(rightsAssignmentService, rmsGrantsProcessorService);
-        Whitebox.setInternalState(rightsAssignmentService, rightsholderService);
-        Whitebox.setInternalState(rightsAssignmentService, rightsProducer);
+        Whitebox.setInternalState(rightsAssignmentService, "usageRepository", usageRepository);
+        Whitebox.setInternalState(rightsAssignmentService, "auditService", usageAuditService);
+        Whitebox.setInternalState(rightsAssignmentService, "rmsIntegrationService", rmsIntegrationService);
+        Whitebox.setInternalState(rightsAssignmentService, "rmsGrantsProcessorService", rmsGrantsProcessorService);
+        Whitebox.setInternalState(rightsAssignmentService, "rightsholderService", rightsholderService);
+        Whitebox.setInternalState(rightsAssignmentService, "rightsProducer", rightsProducer);
+        Whitebox.setInternalState(rightsAssignmentService, "rhTaxProducer", rhTaxProducer);
     }
 
     @Test
@@ -165,10 +169,11 @@ public class RightsServiceTest {
 
     @Test
     public void testUpdateRightWithNtsUsage() {
+        String usageId = RupPersistUtils.generateUuid();
+        Usage usage = buildUsage(usageId, "NTS", UsageStatusEnum.WORK_FOUND);
         expect(rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(123160519L)))
             .andReturn(ImmutableMap.of(123160519L, 1000009522L))
             .once();
-        String usageId = RupPersistUtils.generateUuid();
         Set<String> usageIdsSet = Collections.singleton(usageId);
         usageRepository.updateStatusAndRhAccountNumber(usageIdsSet, UsageStatusEnum.RH_FOUND, 1000009522L);
         expectLastCall().once();
@@ -177,9 +182,10 @@ public class RightsServiceTest {
         expectLastCall().once();
         rightsholderService.updateRightsholders(Collections.singleton(1000009522L));
         expectLastCall().once();
-        replay(rmsGrantsProcessorService, rightsholderService, usageRepository, usageAuditService);
-        rightsAssignmentService.updateRight(buildUsage(usageId, "NTS", UsageStatusEnum.WORK_FOUND));
-        verify(rmsGrantsProcessorService, rightsholderService, usageRepository, usageAuditService);
+        rhTaxProducer.send(usage);
+        replay(rmsGrantsProcessorService, rightsholderService, usageRepository, usageAuditService, rhTaxProducer);
+        rightsAssignmentService.updateRight(usage);
+        verify(rmsGrantsProcessorService, rightsholderService, usageRepository, usageAuditService, rhTaxProducer);
     }
 
     @Test

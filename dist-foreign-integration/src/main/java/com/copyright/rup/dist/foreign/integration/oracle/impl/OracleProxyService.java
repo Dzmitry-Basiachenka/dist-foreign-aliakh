@@ -1,14 +1,12 @@
 package com.copyright.rup.dist.foreign.integration.oracle.impl;
 
 import com.copyright.rup.common.caching.impl.AbstractCacheService;
-import com.copyright.rup.common.logging.RupLogUtils;
-import com.copyright.rup.dist.foreign.integration.oracle.api.IOracleIntegrationService;
+import com.copyright.rup.dist.foreign.integration.oracle.api.IOracleService;
 
 import com.google.common.collect.ImmutableList;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +19,7 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Implementation of {@link IOracleIntegrationService} with caching.
+ * Implementation of {@link IOracleService} with caching.
  * See {@link AbstractCacheService}.
  * <p>
  * Copyright (C) 2018 copyright.com
@@ -30,15 +28,12 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Aliaksandr Liakh
  */
-@Service("df.integration.oracleIntegrationProxyService")
-public class OracleIntegrationProxyService extends AbstractCacheService<Long, String> implements
-    IOracleIntegrationService {
-
-    private static final Logger LOGGER = RupLogUtils.getLogger();
+@Service("df.integration.oracleProxyService")
+public class OracleProxyService extends AbstractCacheService<Long, String> implements IOracleService {
 
     @Autowired
-    @Qualifier("df.integration.oracleIntegrationService")
-    private IOracleIntegrationService oracleService;
+    @Qualifier("df.integration.oracleService")
+    private IOracleService oracleService;
 
     @Override
     @Value("$RUP{dist.foreign.integration.rest.oracle.ttl.minutes}")
@@ -49,7 +44,6 @@ public class OracleIntegrationProxyService extends AbstractCacheService<Long, St
     @Override
     public Map<Long, String> getAccountNumbersToCountryCodesMap(List<Long> accountNumbers) {
         Objects.requireNonNull(accountNumbers);
-        LOGGER.debug("Get RHs country codes. Started. AccountNumbersCount={}", accountNumbers.size());
         Map<Long, String> result = new HashMap<>(accountNumbers.size());
         accountNumbers
             .forEach(accountNumber -> {
@@ -58,8 +52,6 @@ public class OracleIntegrationProxyService extends AbstractCacheService<Long, St
                     result.put(accountNumber, countryCode);
                 }
             });
-        LOGGER.debug("Get RHs country codes. Finished. AccountNumbersCount={}, AccountNumbersToCountryCodesMapCount={}",
-            accountNumbers.size(), result.size());
         return result;
     }
 
@@ -69,7 +61,7 @@ public class OracleIntegrationProxyService extends AbstractCacheService<Long, St
         return ObjectUtils.defaultIfNull(result.get(accountNumber), StringUtils.EMPTY);
     }
 
-    void setOracleService(IOracleIntegrationService oracleService) {
+    void setOracleService(IOracleService oracleService) {
         this.oracleService = oracleService;
     }
 }

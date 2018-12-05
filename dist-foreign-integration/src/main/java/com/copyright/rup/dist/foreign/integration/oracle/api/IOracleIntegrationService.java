@@ -1,8 +1,5 @@
 package com.copyright.rup.dist.foreign.integration.oracle.api;
 
-import java.util.List;
-import java.util.Map;
-
 /**
  * Interface for working with Oracle AP REST.
  * <p>
@@ -10,16 +7,15 @@ import java.util.Map;
  * <p/>
  * Date: 11/27/2018
  *
- * @author Aliaksandr Liakh
+ * @author Uladzislau Shalamitski
  */
 public interface IOracleIntegrationService {
 
     /**
-     * Gets map from rightsholders account numbers to country codes.
+     * Returns {@code true} if country code is US, otherwise {@code false}.
      *
-     * @param accountNumbers list of rightsholders account numbers
-     * @return map from rightsholders account numbers to country codes.
-     * Map doesn't contains key for account number if country code wasn't found.
+     * @param accountNumber rh account number
+     * @return {@code true} if country code is US
      */
-    Map<Long, String> getAccountNumbersToCountryCodesMap(List<Long> accountNumbers);
+    boolean isUsCountryCode(Long accountNumber);
 }

@@ -12,6 +12,7 @@
     <property name="logLevelMatching" value="${DIST_FOREIGN_MATCHING_LOG_LEVEL:-${logLevelDist}}"/>
     <property name="logLevelCrmReporting" value="${DIST_FOREIGN_CRM_REPORTING_LOG_LEVEL:-${logLevelDist}}"/>
     <property name="logLevelService" value="${DIST_FOREIGN_SERVICE_LOG_LEVEL:-${logLevelDist}}"/>
+    <property name="logLevelRhTax" value="${DIST_FOREIGN_RIGHTSHOLDER_TAX_LOG_LEVEL:-${logLevelDist}}"/>
 
     <logger name="com.copyright.rup.dist.foreign.service.impl" level="${logLevelService}"/>
 
@@ -30,6 +31,9 @@
     <!--Loggers for Matching logic-->
     <logger name="com.copyright.rup.dist.foreign.integration.pi.impl" level="${logLevelMatching}"/>
     <logger name="com.copyright.rup.dist.foreign.service.impl.matching" level="${logLevelMatching}"/>
+
+    <!--Loggers for Taxes logic-->
+    <logger name="com.copyright.rup.dist.foreign.service.tax" level="${logLevelRhTax}"/>
 
     <root level="${logLevelGen}">
         <appender-ref ref="RUP-CONSOLE"/>
