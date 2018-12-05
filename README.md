@@ -1,3 +1,9 @@
+4.1.2
+-
+* B-23202 FDA: Create a NTS batch of FAS usage details as specified by RRO Receipt: implement service logic for loading fund pool and inserting associated usages
+* B-46036 FDA: Exclude non US RHs from the NTS proxy: implement service logic to verify RH tax country for NTS usages
+* B-46036 FDA: Exclude non-US RHs from the NTS proxy: Implemnt job to send RH_FOUND usages to eligibility queue
+
 4.1.1
 -
 * B-23202 FDA: Create a NTS batch of FAS usage details as specified by RRO Receipt: Refactor fields of fund pool domain object
