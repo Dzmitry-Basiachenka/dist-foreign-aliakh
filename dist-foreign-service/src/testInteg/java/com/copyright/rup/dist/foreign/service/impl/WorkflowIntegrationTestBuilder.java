@@ -29,6 +29,7 @@ import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.mock.PaidUsageConsumerMock;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.apache.camel.EndpointInject;
@@ -121,6 +122,8 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
     private List<String> expectedPaidUsageLmDetailids;
     private String expectedCrmRequestJsonFile;
     private String expectedCrmResponseJsonFile;
+    private String expectedRmsRequest;
+    private String expectedRmsResponse;
 
     public WorkflowIntegrationTestBuilder withUsagesCsvFile(String csvFile, String... usageIds) {
         this.usagesCsvFile = csvFile;
@@ -187,6 +190,12 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
+    public WorkflowIntegrationTestBuilder expectRmsRights(String rmsRequest, String rmsResponse) {
+        this.expectedRmsRequest = rmsRequest;
+        this.expectedRmsResponse = rmsResponse;
+        return this;
+    }
+
     @Override
     public Runner build() {
         return new Runner();
@@ -204,8 +213,13 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
         private Scenario scenario;
 
         public void run() throws IOException, InterruptedException {
+            createRestServer();
+            expectGetRmsRights();
+            expectGetPreferences(expectedPreferencesJson, expectedPreferencesRightholderIds);
+            expectGetRollups();
             loadUsageBatch();
             addToScenario();
+            verifyRestServer();
             scenarioService.submit(scenario, "Submitting scenario for testing purposes");
             scenarioService.approve(scenario, "Approving scenario for testing purposes");
             sendScenarioToLm();
@@ -223,6 +237,8 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
             setPredefinedUsageIds(usages);
             int usagesInsertedCount = usageBatchService.insertUsageBatch(usageBatch, usages);
             assertEquals(expectedInsertedUsagesCount, usagesInsertedCount);
+            usageBatchService.sendForMatching(usages);
+            usageBatchService.sendForGettingRights(usages);
         }
 
         // predefined usage ids are used, otherwise during every test run the usage ids will be random
@@ -239,12 +255,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
         }
 
         private void addToScenario() {
-            createRestServer();
-            expectGetPreferences(expectedPreferencesJson, expectedPreferencesRightholderIds);
-            expectGetRollups();
             scenario = scenarioService.createScenario("Test Scenario", "Test Scenario Description", usageFilter);
-            mockServer.verify();
-            asyncMockServer.verify();
             List<Usage> usages = usageService.getUsagesByScenarioId(scenario.getId());
             assertEquals(expectedInsertedUsagesCount, usages.size());
         }
@@ -252,6 +263,23 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
         private void createRestServer() {
             mockServer = MockRestServiceServer.createServer(restTemplate);
             asyncMockServer = MockRestServiceServer.createServer(asyncRestTemplate);
+        }
+
+        private void verifyRestServer() {
+            mockServer.verify();
+            asyncMockServer.verify();
+        }
+
+        private void expectGetRmsRights() {
+            mockServer.expect(MockRestRequestMatchers
+                .requestTo("http://localhost:9051/rms-rights-rest/all-rights/"))
+                .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
+                .andExpect(MockRestRequestMatchers.content()
+                    .string(new JsonMatcher(TestUtils.fileToString(this.getClass(), expectedRmsRequest),
+                        Lists.newArrayList("period_end_date"))))
+                .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(),
+                    expectedRmsResponse),
+                    MediaType.APPLICATION_JSON));
         }
 
         private void expectGetPreferences(String fileName, List<String> rightholderIds) {
