@@ -60,6 +60,7 @@ public class RightsDeserializerTest {
         usage.setWorkTitle("True directions : living your sacred instructions");
         usage.setSystemTitle("True directions : living your sacred instructions");
         usage.setStatus(UsageStatusEnum.WORK_FOUND);
+        usage.setProductFamily("NTS");
         return usage;
     }
 }

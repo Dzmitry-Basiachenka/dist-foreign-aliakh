@@ -51,6 +51,7 @@ public class RightsDeserializer extends JsonDeserializer<Usage> {
         usage.setGrossAmount(
             JsonUtils.getBigDecimalValue(jsonNode.get("gross_amount")).setScale(2, RoundingMode.HALF_UP));
         usage.setStatus(UsageStatusEnum.valueOf(JsonUtils.getStringValue(jsonNode.get("status"))));
+        usage.setProductFamily(JsonUtils.getStringValue(jsonNode.get("product_family")));
         return usage;
     }
 }

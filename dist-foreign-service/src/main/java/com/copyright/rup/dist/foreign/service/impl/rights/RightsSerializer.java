@@ -42,6 +42,7 @@ public class RightsSerializer extends StdSerializer<Usage> {
             writeNotNullField(jsonGenerator, "batch_id", usage.getBatchId());
             writeNotNullField(jsonGenerator, "gross_amount", usage.getGrossAmount());
             writeNotNullField(jsonGenerator, "status", usage.getStatus().name());
+            writeNotNullField(jsonGenerator, "product_family", usage.getProductFamily());
         }
         jsonGenerator.writeEndObject();
     }

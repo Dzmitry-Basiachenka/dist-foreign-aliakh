@@ -134,6 +134,7 @@ public class RightsService implements IRightsService {
         } else if (isNtsUsage) {
             auditService.deleteActions(usage.getId());
             usageRepository.deleteById(usage.getId());
+            LOGGER.trace("Removed NTS usage without rights. UsageId={}", usage.getId());
         } else {
             usageRepository.updateStatus(usageId, UsageStatusEnum.RH_NOT_FOUND);
             auditService.logAction(usageId, UsageActionTypeEnum.RH_NOT_FOUND,
