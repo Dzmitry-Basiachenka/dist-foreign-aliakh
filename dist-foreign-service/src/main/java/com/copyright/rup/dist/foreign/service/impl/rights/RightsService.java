@@ -60,6 +60,9 @@ public class RightsService implements IRightsService {
     @Autowired
     @Qualifier("df.service.rightsProducer")
     private IProducer<Usage> rightsProducer;
+    @Autowired
+    @Qualifier("df.service.rhTaxProducer")
+    private IProducer<Usage> rhTaxProducer;
 
     @Override
     @Transactional
@@ -124,6 +127,9 @@ public class RightsService implements IRightsService {
                 isNtsUsage ? UsageStatusEnum.RH_FOUND : UsageStatusEnum.ELIGIBLE, rhAccountNumber);
             auditService.logAction(usageId, UsageActionTypeEnum.RH_FOUND,
                 String.format("Rightsholder account %s was found in RMS", rhAccountNumber));
+            if (isNtsUsage) {
+                rhTaxProducer.send(usage);
+            }
             rightsholderService.updateRightsholders(Collections.singleton(rhAccountNumber));
         } else if (isNtsUsage) {
             auditService.deleteActions(usage.getId());

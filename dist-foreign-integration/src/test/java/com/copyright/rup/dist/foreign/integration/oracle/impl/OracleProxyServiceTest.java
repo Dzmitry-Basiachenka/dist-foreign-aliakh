@@ -9,8 +9,7 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import com.copyright.rup.dist.foreign.integration.oracle.api.IOracleIntegrationService;
-
+import com.copyright.rup.dist.foreign.integration.oracle.api.IOracleService;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
@@ -22,7 +21,7 @@ import java.util.Collections;
 import java.util.Map;
 
 /**
- * Verifies {@link OracleIntegrationProxyService}.
+ * Verifies {@link OracleProxyService}.
  * <p>
  * Copyright (C) 2018 copyright.com
  * </p>
@@ -30,18 +29,18 @@ import java.util.Map;
  *
  * @author Aliaksandr Liakh
  */
-public class OracleIntegrationProxyServiceTest {
+public class OracleProxyServiceTest {
 
     private static final long ACCOUNT_NUMBER = 1000015778L;
     private static final String COUNTRY_CODE = "US";
 
-    private IOracleIntegrationService oracleServiceMock;
-    private OracleIntegrationProxyService oracleIntegrationProxyService;
+    private IOracleService oracleServiceMock;
+    private OracleProxyService oracleIntegrationProxyService;
 
     @Before
     public void setUp() {
-        oracleServiceMock = createMock(IOracleIntegrationService.class);
-        oracleIntegrationProxyService = new OracleIntegrationProxyService();
+        oracleServiceMock = createMock(IOracleService.class);
+        oracleIntegrationProxyService = new OracleProxyService();
         oracleIntegrationProxyService.setOracleService(oracleServiceMock);
         oracleIntegrationProxyService.setExpirationTime(100L);
         oracleIntegrationProxyService.createCache();
