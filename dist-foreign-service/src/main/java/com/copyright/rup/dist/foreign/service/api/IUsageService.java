@@ -66,6 +66,14 @@ public interface IUsageService {
     int insertUsages(UsageBatch usageBatch, Collection<Usage> usages);
 
     /**
+     * Inserts NTS usages.
+     *
+     * @param usageBatch usage batch
+     * @param usages     list of usages to insert
+     */
+    void insertNtsUsages(UsageBatch usageBatch, List<Usage> usages);
+
+    /**
      * Deletes all {@link Usage}s associated with the given {@link UsageBatch}.
      *
      * @param usageBatch {@link UsageBatch} to delete usages from
@@ -87,6 +95,22 @@ public interface IUsageService {
      * rightsholder
      */
     List<Usage> getUsagesWithAmounts(UsageFilter filter);
+
+    /**
+     * Gets count of archived {@link Usage}s based on fund pool information.
+     *
+     * @param usageBatch instance of {@link UsageBatch}
+     * @return usages count
+     */
+    int getUsagesCountForNtsBatch(UsageBatch usageBatch);
+
+    /**
+     * Gets list of archived {@link Usage}s based on on fund pool information.
+     *
+     * @param usageBatch instance of {@link UsageBatch}
+     * @return list of eligible for NTS {@link Usage}s
+     */
+    List<Usage> getUsagesForNtsBatch(UsageBatch usageBatch);
 
     /**
      * Gets rightsholders account numbers that are not presented in database based on {@link UsageFilter}.

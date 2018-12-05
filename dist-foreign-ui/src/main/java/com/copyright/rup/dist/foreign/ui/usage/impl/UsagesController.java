@@ -138,6 +138,17 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
+    public int getUsagesCountForNtsBatch(UsageBatch usageBatch) {
+        return usageService.getUsagesCountForNtsBatch(usageBatch);
+    }
+
+    @Override
+    public void loadNtsBatch(UsageBatch usageBatch) {
+        usageBatchService.insertNtsBatch(usageBatch);
+        filterController.getWidget().clearFilter();
+    }
+
+    @Override
     public void loadResearchedUsages(Collection<ResearchedUsage> researchedUsages) {
         usageService.loadResearchedUsages(researchedUsages);
         filterController.getWidget().clearFilter();

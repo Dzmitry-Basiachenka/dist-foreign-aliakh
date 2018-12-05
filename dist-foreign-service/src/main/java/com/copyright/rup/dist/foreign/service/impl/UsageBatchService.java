@@ -95,6 +95,19 @@ public class UsageBatchService implements IUsageBatchService {
     }
 
     @Override
+    @Transactional
+    public void insertNtsBatch(UsageBatch usageBatch) {
+        String userName = RupContextUtils.getUserName();
+        usageBatch.setId(RupPersistUtils.generateUuid());
+        usageBatch.setCreateUser(userName);
+        usageBatch.setUpdateUser(userName);
+        LOGGER.info("Insert NTS batch. Started. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
+        usageBatchRepository.insert(usageBatch);
+        usageService.insertNtsUsages(usageBatch, usageService.getUsagesForNtsBatch(usageBatch));
+        LOGGER.info("Insert NTS batch. Finished. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
+    }
+
+    @Override
     public void sendForMatching(Collection<Usage> usages) {
         List<Usage> usagesInNewStatus =
             usages.stream().filter(usage -> UsageStatusEnum.NEW == usage.getStatus()).collect(Collectors.toList());

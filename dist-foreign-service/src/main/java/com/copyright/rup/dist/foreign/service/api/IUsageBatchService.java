@@ -60,6 +60,13 @@ public interface IUsageBatchService {
     int insertUsageBatch(UsageBatch usageBatch, Collection<Usage> usages);
 
     /**
+     * Inserts NTS batch and assigns eligible for NTS usages to it based on fund pool information.
+     *
+     * @param usageBatch {@link UsageBatch} to insert
+     */
+    void insertNtsBatch(UsageBatch usageBatch);
+
+    /**
      * Deletes given {@link UsageBatch} and all it's usage details.
      *
      * @param usageBatch {@link UsageBatch}
