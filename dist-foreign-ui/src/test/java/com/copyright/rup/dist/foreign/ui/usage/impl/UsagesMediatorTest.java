@@ -32,6 +32,7 @@ public class UsagesMediatorTest {
 
     private Button deleteButton;
     private Button loadUsageBatchButton;
+    private Button loadFundPoolButton;
     private Button loadResearchedUsagesButton;
     private Button addToScenarioButton;
     private Button sendForResearchButton;
@@ -41,11 +42,13 @@ public class UsagesMediatorTest {
     public void setUp() {
         deleteButton = new Button();
         loadUsageBatchButton = new Button();
+        loadFundPoolButton = new Button();
         loadResearchedUsagesButton = new Button();
         addToScenarioButton = new Button();
         sendForResearchButton = new Button();
         mediator = new UsagesMediator();
         mediator.setLoadUsageBatchButton(loadUsageBatchButton);
+        mediator.setLoadFundPoolButton(loadFundPoolButton);
         mediator.setLoadResearchedUsagesButton(loadResearchedUsagesButton);
         mediator.setDeleteUsageButton(deleteButton);
         mediator.setAddToScenarioButton(addToScenarioButton);
@@ -59,6 +62,7 @@ public class UsagesMediatorTest {
         mediator.applyPermissions();
         assertFalse(deleteButton.isVisible());
         assertFalse(loadUsageBatchButton.isVisible());
+        assertFalse(loadFundPoolButton.isVisible());
         assertFalse(loadResearchedUsagesButton.isVisible());
         assertFalse(addToScenarioButton.isVisible());
         assertFalse(sendForResearchButton.isVisible());
@@ -71,6 +75,7 @@ public class UsagesMediatorTest {
         mediator.applyPermissions();
         assertFalse(deleteButton.isVisible());
         assertFalse(loadUsageBatchButton.isVisible());
+        assertFalse(loadFundPoolButton.isVisible());
         assertFalse(loadResearchedUsagesButton.isVisible());
         assertFalse(addToScenarioButton.isVisible());
         assertFalse(sendForResearchButton.isVisible());
@@ -83,6 +88,7 @@ public class UsagesMediatorTest {
         mediator.applyPermissions();
         assertTrue(deleteButton.isVisible());
         assertTrue(loadUsageBatchButton.isVisible());
+        assertTrue(loadFundPoolButton.isVisible());
         assertTrue(loadResearchedUsagesButton.isVisible());
         assertTrue(addToScenarioButton.isVisible());
         assertTrue(sendForResearchButton.isVisible());
@@ -106,6 +112,7 @@ public class UsagesMediatorTest {
         expect(SecurityUtils.hasPermission("FDA_ACCESS_APPLICATION")).andReturn(true).anyTimes();
         expect(SecurityUtils.hasPermission("FDA_DELETE_USAGE")).andReturn(true).anyTimes();
         expect(SecurityUtils.hasPermission("FDA_LOAD_USAGE")).andReturn(true).anyTimes();
+        expect(SecurityUtils.hasPermission("FDA_LOAD_FUND_POOL")).andReturn(true).anyTimes();
         expect(SecurityUtils.hasPermission("FDA_LOAD_RESEARCHED_USAGE")).andReturn(true).anyTimes();
         expect(SecurityUtils.hasPermission("FDA_CREATE_EDIT_SCENARIO")).andReturn(true).anyTimes();
         expect(SecurityUtils.hasPermission("FDA_SEND_FOR_WORK_RESEARCH")).andReturn(true).anyTimes();

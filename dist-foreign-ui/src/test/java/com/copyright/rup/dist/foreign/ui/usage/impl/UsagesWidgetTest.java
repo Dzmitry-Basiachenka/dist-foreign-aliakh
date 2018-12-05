@@ -301,6 +301,8 @@ public class UsagesWidgetTest {
         expectNew(UsagesMediator.class).andReturn(mediator).once();
         mediator.setDeleteUsageButton(anyObject(Button.class));
         expectLastCall().once();
+        mediator.setLoadFundPoolButton(anyObject(Button.class));
+        expectLastCall().once();
         mediator.setLoadUsageBatchButton(anyObject(Button.class));
         expectLastCall().once();
         mediator.setLoadResearchedUsagesButton(anyObject(Button.class));

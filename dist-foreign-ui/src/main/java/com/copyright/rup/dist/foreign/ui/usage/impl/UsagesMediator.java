@@ -17,10 +17,21 @@ import com.vaadin.ui.Button;
 class UsagesMediator implements IMediator {
 
     private Button loadUsageBatchButton;
+    private Button loadFundPoolButton;
     private Button loadResearchedUsagesButton;
     private Button deleteUsageButton;
     private Button addToScenarioButton;
     private Button sendForResearchButton;
+
+    @Override
+    public void applyPermissions() {
+        loadUsageBatchButton.setVisible(ForeignSecurityUtils.hasLoadUsagePermission());
+        loadFundPoolButton.setVisible(ForeignSecurityUtils.hasLoadFundPoolPermission());
+        loadResearchedUsagesButton.setVisible(ForeignSecurityUtils.hasLoadResearchedUsagePermission());
+        deleteUsageButton.setVisible(ForeignSecurityUtils.hasDeleteUsagePermission());
+        addToScenarioButton.setVisible(ForeignSecurityUtils.hasCreateEditScenarioPermission());
+        sendForResearchButton.setVisible(ForeignSecurityUtils.hasSendForWorkResearchPermission());
+    }
 
     /**
      * Sets load usage batch button.
@@ -29,6 +40,15 @@ class UsagesMediator implements IMediator {
      */
     void setLoadUsageBatchButton(Button loadUsageBatchButton) {
         this.loadUsageBatchButton = loadUsageBatchButton;
+    }
+
+    /**
+     * Sets load fund pool button.
+     *
+     * @param loadFundPoolButton load fund pool button
+     */
+    void setLoadFundPoolButton(Button loadFundPoolButton) {
+        this.loadFundPoolButton = loadFundPoolButton;
     }
 
     /**
@@ -65,14 +85,5 @@ class UsagesMediator implements IMediator {
      */
     void setSendForResearchButton(Button sendForResearchButton) {
         this.sendForResearchButton = sendForResearchButton;
-    }
-
-    @Override
-    public void applyPermissions() {
-        loadUsageBatchButton.setVisible(ForeignSecurityUtils.hasLoadUsagePermission());
-        loadResearchedUsagesButton.setVisible(ForeignSecurityUtils.hasLoadResearchedUsagePermission());
-        deleteUsageButton.setVisible(ForeignSecurityUtils.hasDeleteUsagePermission());
-        addToScenarioButton.setVisible(ForeignSecurityUtils.hasCreateEditScenarioPermission());
-        sendForResearchButton.setVisible(ForeignSecurityUtils.hasSendForWorkResearchPermission());
     }
 }
