@@ -96,15 +96,17 @@ public class UsageBatchService implements IUsageBatchService {
 
     @Override
     @Transactional
-    public void insertNtsBatch(UsageBatch usageBatch) {
+    public List<Usage> insertNtsBatch(UsageBatch usageBatch) {
         String userName = RupContextUtils.getUserName();
         usageBatch.setId(RupPersistUtils.generateUuid());
         usageBatch.setCreateUser(userName);
         usageBatch.setUpdateUser(userName);
         LOGGER.info("Insert NTS batch. Started. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
         usageBatchRepository.insert(usageBatch);
-        usageService.insertNtsUsages(usageBatch, usageService.getUsagesForNtsBatch(usageBatch));
+        List<Usage> ntsBatchUsages = usageService.getUsagesForNtsBatch(usageBatch);
+        usageService.insertNtsUsages(usageBatch, ntsBatchUsages);
         LOGGER.info("Insert NTS batch. Finished. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
+        return ntsBatchUsages;
     }
 
     @Override

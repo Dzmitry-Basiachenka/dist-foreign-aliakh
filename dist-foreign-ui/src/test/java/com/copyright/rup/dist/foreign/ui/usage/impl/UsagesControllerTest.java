@@ -54,6 +54,7 @@ import org.powermock.reflect.Whitebox;
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
 import java.time.OffsetDateTime;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -280,7 +281,9 @@ public class UsagesControllerTest {
     @Test
     public void testLoadNtsBatch() {
         UsageBatch usageBatch = new UsageBatch();
-        usageBatchService.insertNtsBatch(usageBatch);
+        List<Usage> insertedNtsUsages = Arrays.asList(new Usage(), new Usage());
+        expect(usageBatchService.insertNtsBatch(usageBatch)).andReturn(insertedNtsUsages).once();
+        usageBatchService.sendForGettingRights(insertedNtsUsages);
         expectLastCall().once();
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         filterWidgetMock.clearFilter();

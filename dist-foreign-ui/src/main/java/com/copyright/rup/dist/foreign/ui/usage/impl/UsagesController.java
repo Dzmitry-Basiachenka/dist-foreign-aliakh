@@ -144,7 +144,8 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
 
     @Override
     public void loadNtsBatch(UsageBatch usageBatch) {
-        usageBatchService.insertNtsBatch(usageBatch);
+        List<Usage> insertedNtsUsages = usageBatchService.insertNtsBatch(usageBatch);
+        usageBatchService.sendForGettingRights(insertedNtsUsages);
         filterController.getWidget().clearFilter();
     }
 
