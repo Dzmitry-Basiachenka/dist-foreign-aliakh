@@ -42,7 +42,7 @@ public class PrmIntegrationService implements IPrmIntegrationService {
     @Autowired
     @Qualifier("dist.common.integration.rest.prmRollUpService")
     private IPrmRollUpService prmRollUpService;
-    @Value("$RUP{dist.foreign.integration.rest.prm.rollups.async}")
+    @Value("$RUP{dist.foreign.rest.prm.rollups.async}")
     private boolean prmRollUpAsync;
     @Autowired
     @Qualifier("dist.common.integration.rest.prmPreferenceCacheService")

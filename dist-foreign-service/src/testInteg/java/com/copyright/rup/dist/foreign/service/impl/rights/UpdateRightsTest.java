@@ -55,7 +55,7 @@ public class UpdateRightsTest {
     private RestTemplate restTemplate;
     @Autowired
     private AsyncRestTemplate asyncRestTemplate;
-    @Value("$RUP{dist.foreign.integration.rest.prm.rightsholder.async}")
+    @Value("$RUP{dist.foreign.rest.prm.rightsholder.async}")
     private boolean prmRightsholderAsync;
 
     private MockRestServiceServer mockServer;

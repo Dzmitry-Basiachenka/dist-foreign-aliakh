@@ -6,7 +6,7 @@
             http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
 
     <bean id="df.integration.jmsConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
-        <property name="brokerURL" value="$RUP{dist.foreign.integration.broker.url}"/>
+        <property name="brokerURL" value="$RUP{dist.foreign.broker.url}"/>
     </bean>
 
     <bean id="df.integration.pooledConnectionFactory" class="org.apache.activemq.pool.PooledConnectionFactory"

@@ -45,7 +45,7 @@ class RmsRightsAssignmentService implements IRmsRightsAssignmentService {
     @Autowired
     private RestTemplate restTemplate;
 
-    @Value("$RUP{dist.foreign.integration.rest.rms.url}")
+    @Value("$RUP{dist.foreign.rest.rms.url}")
     private String baseUrl;
     private String rightsAssignmentUrl;
     private ObjectMapper objectMapper;

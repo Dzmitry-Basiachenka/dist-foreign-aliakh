@@ -45,11 +45,11 @@ public class PiIntegrationService implements IPiIntegrationService {
     private static final String MAIN_TITLE = "mainTitle";
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
-    @Value("$RUP{dist.foreign.integration.works.cluster}")
+    @Value("$RUP{dist.foreign.pi.cluster}")
     private String cluster;
-    @Value("$RUP{dist.foreign.integration.works.nodes}")
+    @Value("$RUP{dist.foreign.pi.nodes}")
     private List<String> nodes;
-    @Value("$RUP{dist.foreign.integration.works.pi.index}")
+    @Value("$RUP{dist.foreign.pi.index}")
     private String piIndex;
 
     private ObjectMapper mapper;

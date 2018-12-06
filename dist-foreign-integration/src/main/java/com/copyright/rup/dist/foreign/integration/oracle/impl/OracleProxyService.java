@@ -36,7 +36,7 @@ public class OracleProxyService extends AbstractCacheService<Long, String> imple
     private IOracleService oracleService;
 
     @Override
-    @Value("$RUP{dist.foreign.integration.rest.oracle.ttl.minutes}")
+    @Value("$RUP{dist.foreign.rest.oracle.ttl.minutes}")
     public void setExpirationTime(Long expirationTime) {
         super.setExpirationTime(TimeUnit.MINUTES.toSeconds(expirationTime));
     }
