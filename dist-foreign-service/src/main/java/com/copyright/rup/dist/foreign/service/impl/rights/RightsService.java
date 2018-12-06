@@ -128,6 +128,7 @@ public class RightsService implements IRightsService {
             auditService.logAction(usageId, UsageActionTypeEnum.RH_FOUND,
                 String.format("Rightsholder account %s was found in RMS", rhAccountNumber));
             if (isNtsUsage) {
+                usage.getRightsholder().setAccountNumber(rhAccountNumber);
                 rhTaxProducer.send(usage);
             }
             rightsholderService.updateRightsholders(Collections.singleton(rhAccountNumber));
