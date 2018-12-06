@@ -1,5 +1,8 @@
 package com.copyright.rup.dist.foreign.service.impl.rights;
 
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNull;
+
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
@@ -171,6 +174,7 @@ public class RightsServiceTest {
     public void testUpdateRightWithNtsUsage() {
         String usageId = RupPersistUtils.generateUuid();
         Usage usage = buildUsage(usageId, "NTS", UsageStatusEnum.WORK_FOUND);
+        usage.getRightsholder().setAccountNumber(null);
         expect(rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(123160519L)))
             .andReturn(ImmutableMap.of(123160519L, 1000009522L))
             .once();
@@ -183,8 +187,11 @@ public class RightsServiceTest {
         rightsholderService.updateRightsholders(Collections.singleton(1000009522L));
         expectLastCall().once();
         rhTaxProducer.send(usage);
+        expectLastCall().once();
         replay(rmsGrantsProcessorService, rightsholderService, usageRepository, usageAuditService, rhTaxProducer);
+        assertNull(usage.getRightsholder().getAccountNumber());
         rightsAssignmentService.updateRight(usage);
+        assertEquals(1000009522L, usage.getRightsholder().getAccountNumber(), 0);
         verify(rmsGrantsProcessorService, rightsholderService, usageRepository, usageAuditService, rhTaxProducer);
     }
 
