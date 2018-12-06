@@ -6,11 +6,15 @@ import static org.junit.Assert.assertNull;
 import com.copyright.rup.dist.common.test.JsonMatcher;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
+import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IRhTaxService;
 
+import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Verifies {@link IRhTaxService}.
@@ -48,6 +53,8 @@ public class RhTaxServiceIntegrationTest {
     @Autowired
     private IUsageRepository usageRepository;
     @Autowired
+    private IUsageAuditService usageAuditService;
+    @Autowired
     private RestTemplate restTemplate;
 
     @Test
@@ -56,6 +63,8 @@ public class RhTaxServiceIntegrationTest {
         prepareOracleCall(mockServer, "rh_tax_country_us_request.json", "rh_tax_country_us_response.json");
         rhTaxService.applyRhTaxCountry(buildUsage("eae81bc0-a756-43a2-b236-05a0184384f4", 2000133267L));
         assertUsage("eae81bc0-a756-43a2-b236-05a0184384f4", UsageStatusEnum.ELIGIBLE);
+        assertAudit("eae81bc0-a756-43a2-b236-05a0184384f4", UsageActionTypeEnum.ELIGIBLE,
+            "Usage has become eligible based on US rightsholder tax country");
         mockServer.verify();
     }
 
@@ -71,6 +80,14 @@ public class RhTaxServiceIntegrationTest {
     private void assertUsage(String usageId, UsageStatusEnum expectedStatus) {
         Usage usage = usageRepository.findById(usageId);
         assertEquals(expectedStatus, usage.getStatus());
+    }
+
+    private void assertAudit(String usageId, UsageActionTypeEnum actionTypeEnum, String reason) {
+        List<UsageAuditItem> auditItemList = usageAuditService.getUsageAudit(usageId);
+        assertEquals(1, CollectionUtils.size(auditItemList));
+        UsageAuditItem auditItem = auditItemList.get(0);
+        assertEquals(actionTypeEnum, auditItem.getActionType());
+        assertEquals(reason, auditItem.getActionReason());
     }
 
     private String formatJson(Object objectToFormat) throws IOException {

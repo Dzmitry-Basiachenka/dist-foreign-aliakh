@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.service.impl.tax;
 
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.integration.oracle.api.IOracleIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
@@ -44,6 +45,8 @@ public class RhTaxService implements IRhTaxService {
         LOGGER.debug("Applying RH tax country. Started. UsageId={}, RhAccountNumber={}", usageId, accountNumber);
         if (oracleIntegrationService.isUsCountryCode(accountNumber)) {
             usageRepository.updateStatus(Collections.singleton(usageId), UsageStatusEnum.ELIGIBLE);
+            usageAuditService.logAction(usageId, UsageActionTypeEnum.ELIGIBLE,
+                "Usage has become eligible based on US rightsholder tax country");
         } else {
             usageAuditService.deleteActions(usageId);
             usageRepository.deleteById(usageId);
