@@ -47,6 +47,11 @@ public enum UsageActionTypeEnum {
     RH_NOT_FOUND,
 
     /**
+     * Action type for eligible usages.
+     */
+    ELIGIBLE,
+
+    /**
      * Action type for sending {@link Usage} to RMS for Rights Assignment.
      */
     SENT_FOR_RA,

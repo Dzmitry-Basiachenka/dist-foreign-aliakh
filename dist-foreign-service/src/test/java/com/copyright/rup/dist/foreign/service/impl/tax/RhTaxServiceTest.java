@@ -8,6 +8,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.integration.oracle.api.IOracleIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
@@ -64,6 +65,9 @@ public class RhTaxServiceTest {
         Usage usage = buildUsage(RupPersistUtils.generateUuid());
         expect(oracleIntegrationService.isUsCountryCode(1000001534L)).andReturn(true).once();
         usageRepository.updateStatus(Collections.singleton(usage.getId()), UsageStatusEnum.ELIGIBLE);
+        expectLastCall().once();
+        usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.ELIGIBLE,
+            "Usage has become eligible based on US rightsholder tax country");
         expectLastCall().once();
         replay(usageRepository, usageAuditService, oracleIntegrationService);
         rhTaxService.applyRhTaxCountry(usage);
