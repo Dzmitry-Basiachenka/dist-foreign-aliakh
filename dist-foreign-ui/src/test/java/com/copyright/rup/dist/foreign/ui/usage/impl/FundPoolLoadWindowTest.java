@@ -16,6 +16,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.security.SecurityUtils;
@@ -47,6 +48,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Iterator;
@@ -71,6 +73,7 @@ public class FundPoolLoadWindowTest {
     private static final String AMOUNT = "100.00";
     private static final String MIN_AMOUNT = "10.00";
     private static final String ACCOUNT_NUMBER = "1000001863";
+    private static final String RRO_NAME = "RRO name";
     private static final String USAGE_BATCH_NAME = "BatchName";
     private static final String PERIOD_FROM_FIELD = "fundPoolPeriodFromField";
     private static final String PERIOD_TO_FIELD = "fundPoolPeriodToField";
@@ -194,6 +197,17 @@ public class FundPoolLoadWindowTest {
         replay(window, usagesController, Windows.class);
         window.onUploadClicked();
         UsageBatch usageBatch = usageBatchCapture.getValue();
+        assertEquals(USAGE_BATCH_NAME, usageBatch.getName());
+        assertEquals(Long.valueOf(ACCOUNT_NUMBER), usageBatch.getRro().getAccountNumber());
+        assertEquals(RRO_NAME, usageBatch.getRro().getName());
+        assertEquals(Integer.valueOf(2019), usageBatch.getFiscalYear());
+        FundPool fundPool = usageBatch.getFundPool();
+        assertEquals(Integer.valueOf(PERIOD_FROM), fundPool.getFundPoolPeriodFrom());
+        assertEquals(Integer.valueOf(PERIOD_TO), fundPool.getFundPoolPeriodTo());
+        assertEquals(new BigDecimal(AMOUNT), fundPool.getStmAmount());
+        assertEquals(new BigDecimal(AMOUNT), fundPool.getNonStmAmount());
+        assertEquals(new BigDecimal(MIN_AMOUNT), fundPool.getStmMinimumAmount());
+        assertEquals(new BigDecimal(MIN_AMOUNT), fundPool.getNonStmMinimumAmount());
         assertNotNull(usageBatch);
         verify(window, usagesController, Windows.class);
     }
@@ -217,9 +231,14 @@ public class FundPoolLoadWindowTest {
     }
 
     private void initUploadComponents() {
+        Rightsholder rro = new Rightsholder();
+        rro.setAccountNumber(Long.valueOf(ACCOUNT_NUMBER));
+        rro.setName(RRO_NAME);
+        rro.setId(RupPersistUtils.generateUuid());
         LocalDateWidget paymentDateWidget = new LocalDateWidget("Payment Date");
         paymentDateWidget.setValue(LocalDate.now());
         Whitebox.setInternalState(window, "paymentDateWidget", paymentDateWidget);
+        Whitebox.setInternalState(window, "rro", rro);
         setTextField("usageBatchNameField", USAGE_BATCH_NAME);
         setTextField("accountNumberField", ACCOUNT_NUMBER);
         setTextField(PERIOD_TO_FIELD, PERIOD_TO);

@@ -81,14 +81,19 @@ public class NtsBatchUploadIntegrationTest {
 
     private void verifyUsage(UsageDto usage, Integer periodFrom, Integer periodTo, String market) {
         assertNull(usage.getRhAccountNumber());
+        assertNull(usage.getArticle());
+        assertNull(usage.getPublisher());
+        assertNull(usage.getPublicationDate());
+        assertNull(usage.getNumberOfCopies());
         assertNotNull(usage.getWrWrkInst());
         assertNotNull(usage.getWorkTitle());
         assertNotNull(usage.getSystemTitle());
         assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
         assertEquals("NTS", usage.getProductFamily());
         assertEquals(5431L, usage.getRroAccountNumber(), 0);
-        assertEquals(new BigDecimal("50.00"), usage.getReportedValue());
-        assertEquals(new BigDecimal("0.0000000000"), usage.getGrossAmount());
+        assertEquals(new BigDecimal("0.00"), usage.getReportedValue());
+        assertEquals(new BigDecimal("50.0000000000"), usage.getGrossAmount());
+        assertEquals(new BigDecimal("0.00"), usage.getBatchGrossAmount());
         assertEquals(market, usage.getMarket());
         assertEquals(periodFrom, usage.getMarketPeriodFrom());
         assertEquals(periodTo, usage.getMarketPeriodTo());

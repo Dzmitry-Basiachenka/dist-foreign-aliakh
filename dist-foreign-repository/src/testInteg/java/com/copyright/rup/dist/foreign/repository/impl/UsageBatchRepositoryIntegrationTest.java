@@ -92,6 +92,7 @@ public class UsageBatchRepositoryIntegrationTest {
         assertNotNull(usageBatch);
         assertEquals(RRO_ACCOUNT_NUMBER, usageBatch.getRro().getAccountNumber());
         assertEquals(PAYMENT_DATE, usageBatch.getPaymentDate());
+        assertEquals(FISCAL_YEAR_2017, usageBatch.getFiscalYear());
         FundPool fundPool = usageBatch.getFundPool();
         assertEquals(2017, fundPool.getFundPoolPeriodFrom().intValue());
         assertEquals(2018, fundPool.getFundPoolPeriodTo().intValue());
@@ -138,6 +139,7 @@ public class UsageBatchRepositoryIntegrationTest {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setId(RupPersistUtils.generateUuid());
         usageBatch.setName(batchName);
+        usageBatch.setFiscalYear(FISCAL_YEAR_2017);
         Rightsholder rightsholder = new Rightsholder();
         rightsholder.setAccountNumber(RRO_ACCOUNT_NUMBER);
         usageBatch.setRro(rightsholder);
