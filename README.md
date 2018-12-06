@@ -1,3 +1,11 @@
+4.1.3
+-
+* B-23202 FDA: Create a NTS batch of FAS usage details as specified by RRO Receipt: calculate and save fiscal year, remove redundant fields from usages during creating NTS batch
+* B-23202 FDA: Create a NTS batch of FAS usage details as specified by RRO Receipt: implement liquibase script with permission to load fund pool
+* B-46032 FDA: Update RHs in targeted FAS usage details: Adjust NTS batch creation logic to send created usages for getting rights
+* B-46036 FDA: Exclude non US RHs from the NTS proxy: add audit for US tax country NTS usages
+* B-46036 FDA: Exclude non-US RHs from the NTS proxy: fix NPE on rh tax processing adjusting update rights method for nts usages to set RH account number to usage before sending usage for Rh Tax processing
+
 4.1.2
 -
 * B-23202 FDA: Create a NTS batch of FAS usage details as specified by RRO Receipt: implement service logic for loading fund pool and inserting associated usages
