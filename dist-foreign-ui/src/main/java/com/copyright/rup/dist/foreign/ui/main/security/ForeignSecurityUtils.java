@@ -35,6 +35,13 @@ public final class ForeignSecurityUtils {
     }
 
     /**
+     * @return {@code true} if user has permission to load fund pool.
+     */
+    public static boolean hasLoadFundPoolPermission() {
+        return SecurityUtils.hasPermission("FDA_LOAD_FUND_POOL");
+    }
+
+    /**
      * @return {@code true} if user has permission to load researched usages.
      */
     public static boolean hasLoadResearchedUsagePermission() {

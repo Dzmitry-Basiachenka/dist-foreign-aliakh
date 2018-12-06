@@ -48,6 +48,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
     private DataProvider<UsageDto, Void> dataProvider;
     private Grid<UsageDto> usagesGrid;
     private Button loadUsageBatchButton;
+    private Button loadFundPoolButton;
     private Button loadResearchedUsagesButton;
     private Button deleteButton;
     private Button sendForResearchButton;
@@ -78,6 +79,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
     public UsagesMediator initMediator() {
         UsagesMediator mediator = new UsagesMediator();
         mediator.setLoadUsageBatchButton(loadUsageBatchButton);
+        mediator.setLoadFundPoolButton(loadFundPoolButton);
         mediator.setLoadResearchedUsagesButton(loadResearchedUsagesButton);
         mediator.setDeleteUsageButton(deleteButton);
         mediator.setAddToScenarioButton(addToScenarioButton);
@@ -181,7 +183,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
     private HorizontalLayout initButtonsLayout() {
         loadUsageBatchButton = Buttons.createButton(ForeignUi.getMessage("button.load_usage_batch"));
         loadUsageBatchButton.addClickListener(event -> Windows.showModalWindow(new UsageBatchUploadWindow(controller)));
-        Button loadFundPoolButton = Buttons.createButton(ForeignUi.getMessage("button.load_fund_pool"));
+        loadFundPoolButton = Buttons.createButton(ForeignUi.getMessage("button.load_fund_pool"));
         loadFundPoolButton.addClickListener(event -> Windows.showModalWindow(new FundPoolLoadWindow(controller)));
         loadResearchedUsagesButton = Buttons.createButton(ForeignUi.getMessage("button.load_researched_usages"));
         loadResearchedUsagesButton.addClickListener(event ->
