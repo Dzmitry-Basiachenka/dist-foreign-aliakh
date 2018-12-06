@@ -179,16 +179,11 @@
             wr_wrk_inst,
             work_title,
             system_title,
-            article,
             standard_number,
-            publisher,
-            publication_date,
             market,
             market_period_from,
             market_period_to,
-            author,
-            number_of_copies,
-            reported_value
+            gross_amount
         from ${schema}.df_usage_archive
         <include refid="ntsBatchWhereClause"/>
     </select>

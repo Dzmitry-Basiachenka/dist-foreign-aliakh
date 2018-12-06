@@ -4,6 +4,7 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.service.impl.csv.validator.AmountValidator;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -114,6 +115,7 @@ class FundPoolLoadWindow extends Window {
         usageBatch.setName(StringUtils.trim(usageBatchNameField.getValue()));
         usageBatch.setRro(rro);
         usageBatch.setPaymentDate(paymentDateWidget.getValue());
+        usageBatch.setFiscalYear(UsageBatchUtils.calculateFiscalYear(paymentDateWidget.getValue()));
         FundPool fundPool = new FundPool();
         fundPool.setMarkets(selectedMarkets);
         fundPool.setFundPoolPeriodFrom(Integer.parseInt(fundPoolPeriodFromField.getValue()));
