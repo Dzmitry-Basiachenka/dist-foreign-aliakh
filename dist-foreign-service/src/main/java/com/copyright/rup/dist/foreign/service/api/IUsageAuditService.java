@@ -2,7 +2,9 @@ package com.copyright.rup.dist.foreign.service.api;
 
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
+import com.copyright.rup.dist.foreign.domain.report.UsageBatchStatistic;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -57,4 +59,14 @@ public interface IUsageAuditService {
      * @return list of {@link UsageAuditItem}
      */
     List<UsageAuditItem> getUsageAudit(String usageId);
+
+    /**
+     * Gets {@link UsageBatchStatistic} for specified batch name and date.
+     * Calculates percentage for each usage statuses.
+     *
+     * @param batchName batch name
+     * @param date      date
+     * @return instance of {@link UsageBatchStatistic}
+     */
+    UsageBatchStatistic getBatchStatistic(String batchName, LocalDate date);
 }

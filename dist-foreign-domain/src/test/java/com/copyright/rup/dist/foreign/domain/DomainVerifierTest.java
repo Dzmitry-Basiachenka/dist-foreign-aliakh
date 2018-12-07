@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.report.BatchSummaryReportDto;
 import com.copyright.rup.dist.foreign.domain.report.ResearchStatusReportDto;
 import com.copyright.rup.dist.foreign.domain.report.ServiceFeeTrueUpReportDto;
 import com.copyright.rup.dist.foreign.domain.report.UndistributedLiabilitiesReportDto;
+import com.copyright.rup.dist.foreign.domain.report.UsageBatchStatistic;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -58,7 +59,8 @@ public class DomainVerifierTest {
             {UndistributedLiabilitiesReportDto.class},
             {BatchSummaryReportDto.class},
             {ResearchStatusReportDto.class},
-            {ServiceFeeTrueUpReportDto.class}
+            {ServiceFeeTrueUpReportDto.class},
+            {UsageBatchStatistic.class}
         };
         return Arrays.asList(testData);
     }

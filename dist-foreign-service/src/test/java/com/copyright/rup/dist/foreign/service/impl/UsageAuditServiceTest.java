@@ -12,6 +12,7 @@ import static org.junit.Assert.assertSame;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
+import com.copyright.rup.dist.foreign.domain.report.UsageBatchStatistic;
 import com.copyright.rup.dist.foreign.repository.impl.UsageAuditRepository;
 
 import com.google.common.collect.ImmutableSet;
@@ -21,6 +22,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
@@ -105,10 +108,52 @@ public class UsageAuditServiceTest {
         verify(usageAuditRepository);
     }
 
+    @Test
+    public void testGetBatchStatistic() {
+        String batchName = "Batch Name";
+        LocalDate date = LocalDate.now();
+        UsageBatchStatistic statistic = buildStatistic();
+        BigDecimal percent10 = new BigDecimal("10.0");
+        expect(usageAuditRepository.findBatchStatistic(batchName, date)).andReturn(statistic).once();
+        replay(usageAuditRepository);
+        usageAuditService.getBatchStatistic(batchName, date);
+        assertEquals(batchName, statistic.getBatchName());
+        assertEquals(date, statistic.getDate());
+        assertEquals(new BigDecimal("20.0"), statistic.getMatchedPercent());
+        assertEquals(percent10, statistic.getWorksNotFoundPercent());
+        assertEquals(percent10, statistic.getNtsWithDrawnPercent());
+        assertEquals(percent10, statistic.getRhNotFoundPercent());
+        assertEquals(percent10, statistic.getEligiblePercent());
+        assertEquals(percent10, statistic.getSendForRaPercent());
+        assertEquals(new BigDecimal("50.0"), statistic.getPaidPercent());
+        verify(usageAuditRepository);
+    }
+
     private void verifyCapturedAuditItem(Capture<UsageAuditItem> usageAuditItemCapture, String expectedUsageItemId) {
         UsageAuditItem usageAuditItem = usageAuditItemCapture.getValue();
         assertEquals(REASON, usageAuditItem.getActionReason());
         assertEquals(expectedUsageItemId, usageAuditItem.getUsageId());
         assertEquals(UsageActionTypeEnum.LOADED, usageAuditItem.getActionType());
+    }
+
+    private UsageBatchStatistic buildStatistic() {
+        UsageBatchStatistic statistic = new UsageBatchStatistic();
+        statistic.setLoadedCount(10);
+        statistic.setLoadedAmount(new BigDecimal("1000.00"));
+        statistic.setMatchedCount(2);
+        statistic.setMatchedAmount(new BigDecimal("300.00"));
+        statistic.setWorksNotFoundCount(1);
+        statistic.setWorksNotFoundAmount(new BigDecimal("50.00"));
+        statistic.setNtsWithDrawnCount(1);
+        statistic.setNtsWithDrawnAmount(new BigDecimal("150.00"));
+        statistic.setRhNotFoundCount(1);
+        statistic.setRhNotFoundAmount(new BigDecimal("130.00"));
+        statistic.setSendForRaCount(1);
+        statistic.setSendForRaAmount(new BigDecimal("130.00"));
+        statistic.setEligibleCount(1);
+        statistic.setEligibleAmount(new BigDecimal("170.00"));
+        statistic.setPaidCount(5);
+        statistic.setPaidAmount(new BigDecimal("500.00"));
+        return statistic;
     }
 }
