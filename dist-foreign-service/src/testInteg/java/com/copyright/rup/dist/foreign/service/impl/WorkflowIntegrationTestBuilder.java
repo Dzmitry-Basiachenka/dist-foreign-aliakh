@@ -59,6 +59,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
@@ -80,6 +81,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
 
     private final Map<String, List<Pair<UsageActionTypeEnum, String>>> expectedUsageLmDetailIdToAuditMap
         = Maps.newHashMap();
+    private final Map<String, String> expectedRmsRequestsToResponses = new LinkedHashMap<>();
     @Autowired
     private CsvProcessorFactory csvProcessorFactory;
     @Autowired
@@ -122,8 +124,6 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
     private List<String> expectedPaidUsageLmDetailids;
     private String expectedCrmRequestJsonFile;
     private String expectedCrmResponseJsonFile;
-    private String expectedRmsRequest;
-    private String expectedRmsResponse;
 
     public WorkflowIntegrationTestBuilder withUsagesCsvFile(String csvFile, String... usageIds) {
         this.usagesCsvFile = csvFile;
@@ -191,9 +191,13 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
     }
 
     public WorkflowIntegrationTestBuilder expectRmsRights(String rmsRequest, String rmsResponse) {
-        this.expectedRmsRequest = rmsRequest;
-        this.expectedRmsResponse = rmsResponse;
+        this.expectedRmsRequestsToResponses.put(rmsRequest, rmsResponse);
         return this;
+    }
+
+    void reset() {
+        this.expectedUsageLmDetailIdToAuditMap.clear();
+        this.expectedRmsRequestsToResponses.clear();
     }
 
     @Override
@@ -271,7 +275,8 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
         }
 
         private void expectGetRmsRights() {
-            mockServer.expect(MockRestRequestMatchers
+            expectedRmsRequestsToResponses.forEach((expectedRmsRequest, expectedRmsResponse)
+                -> mockServer.expect(MockRestRequestMatchers
                 .requestTo("http://localhost:9051/rms-rights-rest/all-rights/"))
                 .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
                 .andExpect(MockRestRequestMatchers.content()
@@ -279,7 +284,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
                         Lists.newArrayList("period_end_date"))))
                 .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(),
                     expectedRmsResponse),
-                    MediaType.APPLICATION_JSON));
+                    MediaType.APPLICATION_JSON)));
         }
 
         private void expectGetPreferences(String fileName, List<String> rightholderIds) {

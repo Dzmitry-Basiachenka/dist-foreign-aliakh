@@ -58,6 +58,7 @@ public class WorkflowIntegrationTest {
     private static final String RIGHTHOLDER_ID_3 = "f366285a-ce46-48b0-96ee-cd35d62fb243";
     private static final String RIGHTHOLDER_ID_4 = "624dcf73-a30f-4381-b6aa-c86d17198bd5";
     private static final String RIGHTHOLDER_ID_5 = "37338ed1-7083-45e2-a96b-5872a7de3a98";
+    private static final String AUDIT_USAGE_WAS_SENT_TO_CRM = "Usage was sent to CRM";
 
     @Autowired
     private WorkflowIntegrationTestBuilder testBuilder;
@@ -67,6 +68,7 @@ public class WorkflowIntegrationTest {
 
     @Before
     public void setUp() throws Exception {
+        testBuilder.reset();
         brokerService = new BrokerService();
         brokerService.setPersistent(false);
         brokerService.setUseJmx(false);
@@ -97,12 +99,14 @@ public class WorkflowIntegrationTest {
             .expectInsertedUsagesCount(5)
             .expectRmsRights("rights/rms_grants_100012905_request.json",
                 "rights/rms_grants_100012905_response.json")
+            .expectRmsRights("rights/rms_grants_100011821_request.json",
+                "rights/rms_grants_100011821_response.json")
             .expectPreferences("prm/not_found_response.json",
                 RIGHTHOLDER_ID_1,
                 RIGHTHOLDER_ID_2,
                 RIGHTHOLDER_ID_3,
-                RIGHTHOLDER_ID_4,
-                RIGHTHOLDER_ID_5)
+                RIGHTHOLDER_ID_5,
+                RIGHTHOLDER_ID_4)
             .expectRollups("prm/cla_rollups_response.json",
                 RIGHTHOLDER_ID_2,
                 RIGHTHOLDER_ID_4,
@@ -118,17 +122,21 @@ public class WorkflowIntegrationTest {
             .expectUsageAudit(USAGE_LM_DETAIL_ID_1, expectedUsageAudit)
             .expectUsageAudit(USAGE_LM_DETAIL_ID_2, expectedUsageAudit)
             .expectUsageAudit(USAGE_LM_DETAIL_ID_3, expectedUsageAudit)
-            .expectUsageAudit(USAGE_LM_DETAIL_ID_4, expectedUsageAudit)
+            .expectUsageAudit(USAGE_LM_DETAIL_ID_4, Arrays.asList(
+                Pair.of(UsageActionTypeEnum.LOADED, "Uploaded in 'Test_Batch' Batch"),
+                Pair.of(UsageActionTypeEnum.RH_FOUND, "Rightsholder account 1000024950 was found in RMS"),
+                Pair.of(UsageActionTypeEnum.PAID, "Usage has been paid according to information from the LM"),
+                Pair.of(UsageActionTypeEnum.ARCHIVED, AUDIT_USAGE_WAS_SENT_TO_CRM)))
             .expectUsageAudit(USAGE_LM_DETAIL_ID_5, Arrays.asList(
                 Pair.of(UsageActionTypeEnum.LOADED , "Uploaded in 'Test_Batch' Batch"),
                 Pair.of(UsageActionTypeEnum.WORK_FOUND , "Wr Wrk Inst 100012905 was found by standard number " +
                     "12345XX-12978"),
                 Pair.of(UsageActionTypeEnum.RH_FOUND , "Rightsholder account 2000139286 was found in RMS"),
                 Pair.of(UsageActionTypeEnum.PAID , "Usage has been paid according to information from the LM"),
-                Pair.of(UsageActionTypeEnum.ARCHIVED , "Usage was sent to CRM")))
+                Pair.of(UsageActionTypeEnum.ARCHIVED , AUDIT_USAGE_WAS_SENT_TO_CRM)))
             .expectUsageAudit(USAGE_LM_DETAIL_ID_6, Arrays.asList(
                 Pair.of(UsageActionTypeEnum.PAID, "Usage has been created based on Post-Distribution process"),
-                Pair.of(UsageActionTypeEnum.ARCHIVED, "Usage was sent to CRM")))
+                Pair.of(UsageActionTypeEnum.ARCHIVED, AUDIT_USAGE_WAS_SENT_TO_CRM)))
             .build()
             .run();
     }
@@ -162,6 +170,6 @@ public class WorkflowIntegrationTest {
         return Arrays.asList(
             Pair.of(UsageActionTypeEnum.LOADED, "Uploaded in 'Test_Batch' Batch"),
             Pair.of(UsageActionTypeEnum.PAID, "Usage has been paid according to information from the LM"),
-            Pair.of(UsageActionTypeEnum.ARCHIVED, "Usage was sent to CRM"));
+            Pair.of(UsageActionTypeEnum.ARCHIVED, AUDIT_USAGE_WAS_SENT_TO_CRM));
     }
 }
