@@ -44,7 +44,7 @@
 
     <bean id="df.service.rmsProxyService" class="com.copyright.rup.dist.foreign.service.impl.rights.RmsProxyService">
         <constructor-arg ref="dist.common.integration.rmsService"/>
-        <constructor-arg value="$RUP{dist.foreign.service.rights.ttl.minutes}"/>
+        <constructor-arg value="$RUP{dist.foreign.rest.rms.ttl.minutes}"/>
     </bean>
 
     <bean id="df.service.rmsGrantsProcessorService" class="com.copyright.rup.dist.common.service.impl.discrepancy.RmsGrantsProcessorService">
@@ -54,8 +54,8 @@
     <context:component-scan base-package="com.copyright.rup.dist.foreign.service"/>
 
     <bean id="defaultRedeliveryPolicy" class="org.apache.camel.processor.RedeliveryPolicy"
-          p:maximumRedeliveries="$RUP{dist.foreign.service.redelivery.count}"
-          p:redeliveryDelay="$RUP{dist.foreign.service.redelivery.delay}"
+          p:maximumRedeliveries="$RUP{dist.foreign.broker.redelivery.count}"
+          p:redeliveryDelay="$RUP{dist.foreign.broker.redelivery.delay}"
           p:retryAttemptedLogLevel="INFO"
           p:retriesExhaustedLogLevel="INFO"
           p:asyncDelayedRedelivery="true"
@@ -68,16 +68,16 @@
         <contextScan/>
         <template id="df.service.producerTemplate"/>
 
-        <endpoint id="df.service.lm.detail.paid.endpoint" uri="$RUP{dist.foreign.service.lm.detail.paid.endpoint}"/>
+        <endpoint id="df.service.lm.detail.paid.endpoint" uri="$RUP{dist.foreign.endpoint.lm.detail.paid}"/>
 
         <endpoint id="df.service.internal.matching.endpoint" uri="direct:df.service.matching"/>
-        <endpoint id="df.service.matching.endpoint" uri="$RUP{dist.foreign.service.matching.endpoint}"/>
+        <endpoint id="df.service.matching.endpoint" uri="$RUP{dist.foreign.endpoint.matching}"/>
 
         <endpoint id="df.service.internal.rights.endpoint" uri="direct:df.service.rights"/>
-        <endpoint id="df.service.rights.endpoint" uri="$RUP{dist.foreign.service.rights.endpoint}"/>
+        <endpoint id="df.service.rights.endpoint" uri="$RUP{dist.foreign.endpoint.rights}"/>
 
         <endpoint id="df.service.internal.tax.endpoint" uri="direct:df.service.tax"/>
-        <endpoint id="df.service.tax.endpoint" uri="$RUP{dist.foreign.service.tax.endpoint}"/>
+        <endpoint id="df.service.rh.tax.endpoint" uri="$RUP{dist.foreign.endpoint.rh_tax}"/>
 
         <route>
             <from ref="df.service.lm.detail.paid.endpoint"/>
@@ -147,7 +147,7 @@
             <marshal>
                 <custom ref="df.service.rhTaxMarshaller"/>
             </marshal>
-            <to ref="df.service.tax.endpoint"/>
+            <to ref="df.service.rh.tax.endpoint"/>
 
             <onException redeliveryPolicyRef="defaultRedeliveryPolicy" useOriginalMessage="true">
                 <exception>com.copyright.rup.common.exception.RupRuntimeException</exception>
@@ -155,7 +155,7 @@
         </route>
 
         <route>
-            <from ref="df.service.tax.endpoint"/>
+            <from ref="df.service.rh.tax.endpoint"/>
             <unmarshal>
                 <custom ref="df.service.rhTaxUnmarshaller"/>
             </unmarshal>

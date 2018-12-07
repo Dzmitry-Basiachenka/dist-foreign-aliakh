@@ -57,7 +57,7 @@ public class CrmService implements ICrmService {
     @Autowired
     private RestTemplate restTemplate;
 
-    @Value("$RUP{dist.foreign.integration.rest.crm.url}")
+    @Value("$RUP{dist.foreign.rest.crm.url}")
     private String baseUrl;
 
     @Override

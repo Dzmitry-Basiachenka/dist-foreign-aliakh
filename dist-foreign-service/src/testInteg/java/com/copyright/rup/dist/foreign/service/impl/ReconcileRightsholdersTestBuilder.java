@@ -70,9 +70,9 @@ class ReconcileRightsholdersTestBuilder {
     private RestTemplate restTemplate;
     @Autowired
     private AsyncRestTemplate asyncRestTemplate;
-    @Value("$RUP{dist.foreign.integration.rest.prm.rollups.async}")
+    @Value("$RUP{dist.foreign.rest.prm.rollups.async}")
     private boolean prmRollUpAsync;
-    @Value("$RUP{dist.foreign.integration.rest.prm.rightsholder.async}")
+    @Value("$RUP{dist.foreign.rest.prm.rightsholder.async}")
     private boolean prmRightsholderAsync;
 
     Runner build() {

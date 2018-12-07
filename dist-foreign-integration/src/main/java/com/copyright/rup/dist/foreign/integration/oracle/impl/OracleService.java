@@ -49,7 +49,7 @@ public class OracleService implements IOracleService {
     @Autowired
     private RestTemplate restTemplate;
 
-    @Value("$RUP{dist.foreign.integration.rest.oracle.url}")
+    @Value("$RUP{dist.foreign.rest.oracle.url}")
     private String baseUrl;
 
     private String rhTaxInformationUrl;

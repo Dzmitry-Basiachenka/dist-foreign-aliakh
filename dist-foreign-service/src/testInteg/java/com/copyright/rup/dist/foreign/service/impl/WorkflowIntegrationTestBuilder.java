@@ -94,7 +94,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
     private RestTemplate restTemplate;
     @Autowired
     private AsyncRestTemplate asyncRestTemplate;
-    @Value("$RUP{dist.foreign.integration.rest.prm.rollups.async}")
+    @Value("$RUP{dist.foreign.rest.prm.rollups.async}")
     private boolean prmRollUpAsync;
     @EndpointInject(context = "df.integration.camelContext", uri = "mock:sf.processor.detail")
     private MockEndpoint mockLmEndPoint;

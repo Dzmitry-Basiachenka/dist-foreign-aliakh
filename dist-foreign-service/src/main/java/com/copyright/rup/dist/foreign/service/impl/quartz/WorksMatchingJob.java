@@ -39,7 +39,7 @@ public class WorksMatchingJob extends QuartzJobBean {
     @Autowired
     @Qualifier("df.service.matchingProducer")
     private IProducer<Usage> matchingProducer;
-    @Value("$RUP{dist.foreign.integration.works.pi.batch_size}")
+    @Value("$RUP{dist.foreign.pi.batch_size}")
     private int batchSize;
 
     /**

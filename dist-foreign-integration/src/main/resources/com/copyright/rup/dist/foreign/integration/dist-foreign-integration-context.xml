@@ -27,9 +27,9 @@
     <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean"/>
 
     <bean id="asyncRequestFactory" class="org.springframework.http.client.HttpComponentsAsyncClientHttpRequestFactory">
-        <property name="connectionRequestTimeout" value="$RUP{dist.foreign.integration.async.rest.factory.connection.request.timeout}"/>
-        <property name="connectTimeout" value="$RUP{dist.foreign.integration.async.rest.factory.connect.timeout}"/>
-        <property name="readTimeout" value="$RUP{dist.foreign.integration.async.rest.factory.read.timeout}"/>
+        <property name="connectionRequestTimeout" value="$RUP{dist.foreign.rest.async.factory.connection.request.timeout}"/>
+        <property name="connectTimeout" value="$RUP{dist.foreign.rest.async.factory.connect.timeout}"/>
+        <property name="readTimeout" value="$RUP{dist.foreign.rest.async.factory.read.timeout}"/>
     </bean>
 
     <bean id="asyncRestTemplate" class="org.springframework.web.client.AsyncRestTemplate">
@@ -47,14 +47,14 @@
         <constructor-arg value="$RUP{dist.common.integration.rest.prm.url}"/>
         <constructor-arg ref="restTemplate"/>
         <constructor-arg ref="asyncRestTemplate"/>
-        <constructor-arg value="$RUP{dist.foreign.integration.rest.prm.rightsholder.async.rate_limiter_permits}"/>
-        <constructor-arg value="$RUP{dist.foreign.integration.rest.prm.rightsholder.async}"/>
+        <constructor-arg value="$RUP{dist.foreign.rest.prm.rightsholder.async.rate_limiter_permits}"/>
+        <constructor-arg value="$RUP{dist.foreign.rest.prm.rightsholder.async}"/>
     </bean>
 
     <bean id="dist.common.integration.rmsService" class="com.copyright.rup.dist.common.integration.rest.rms.RmsService">
         <constructor-arg ref="restTemplate"/>
-        <constructor-arg value="$RUP{dist.foreign.integration.rest.rms.url}"/>
-        <constructor-arg value="$RUP{dist.foreign.integration.rest.rms.request_partition_size}"/>
+        <constructor-arg value="$RUP{dist.foreign.rest.rms.url}"/>
+        <constructor-arg value="$RUP{dist.foreign.rest.rms.request_partition_size}"/>
         <constructor-arg value="true"/>
     </bean>
 
@@ -66,7 +66,7 @@
     <bean id="df.integration.piIntegrationProxyService"
           class="com.copyright.rup.dist.foreign.integration.pi.impl.PiIntegrationProxyService">
         <constructor-arg ref="df.integration.piIntegrationService"/>
-        <constructor-arg value="$RUP{dist.foreign.integration.works.ttl.minutes}"/>
+        <constructor-arg value="$RUP{dist.foreign.pi.ttl.minutes}"/>
     </bean>
 
     <util:list id="prmPreferenceProcessors"
@@ -83,7 +83,7 @@
         <template id="df.integration.producerTemplate"/>
 
         <endpoint id="df.integration.internal.usage.endpoint" uri="direct:df.integration.externalUsage"/>
-        <endpoint id="df.integration.lm.detail.endpoint" uri="$RUP{dist.foreign.integration.lm.detail.endpoint}"/>
+        <endpoint id="df.integration.lm.detail.endpoint" uri="$RUP{dist.foreign.endpoint.lm.detail}"/>
 
         <redeliveryPolicyProfile id="defaultRedeliveryPolicy"
                                  maximumRedeliveries="10"

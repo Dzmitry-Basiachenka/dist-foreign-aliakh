@@ -62,7 +62,7 @@ class CreateScenarioTestBuilder {
     private RestTemplate restTemplate;
     @Autowired
     private AsyncRestTemplate asyncRestTemplate;
-    @Value("$RUP{dist.foreign.integration.rest.prm.rollups.async}")
+    @Value("$RUP{dist.foreign.rest.prm.rollups.async}")
     private boolean prmRollUpAsync;
 
     private MockRestServiceServer mockServer;
