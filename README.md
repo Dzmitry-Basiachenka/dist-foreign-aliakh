@@ -1,3 +1,10 @@
+4.1.4
+-
+* B-47644 Tech Debt: FDA: add embedded ActiveMQ to WorkflowIntegrationTest to provide ability to interact with the queues df.matching, df.rights
+* B-47644 Tech Debt: FDA: align rup-env properties with common approach for naming
+* B-47644 Tech Debt: FDA: remove redundant class RightsholderPreferences
+* B-47644 Tech Debt: FDA: update WorkflowIntegrationTest to cover transfer of usages from status WORK_FOUND to ELIGIBLE in the method UsageBatchService.sendForGettingRights
+
 4.1.3
 -
 * B-23202 FDA: Create a NTS batch of FAS usage details as specified by RRO Receipt: calculate and save fiscal year, remove redundant fields from usages during creating NTS batch
