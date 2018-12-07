@@ -73,7 +73,7 @@
                value-type="com.copyright.rup.dist.common.integration.rest.prm.PrmPreferenceProcessor">
         <bean class="com.copyright.rup.dist.common.integration.rest.prm.PrmPreferenceProcessorBoolean">
             <constructor-arg name="preferenceCode">
-                <util:constant static-field="com.copyright.rup.dist.common.domain.RightsholderPreferences.IS_RH_FDA_PARTICIPATING_CODE"/>
+                <util:constant static-field="com.copyright.rup.dist.foreign.domain.FdaConstants.IS_RH_FDA_PARTICIPATING_PREFERENCE_CODE"/>
             </constructor-arg>
         </bean>
     </util:list>

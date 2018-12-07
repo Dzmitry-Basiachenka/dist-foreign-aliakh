@@ -1,10 +1,10 @@
 package com.copyright.rup.dist.foreign.integration.prm.impl;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.common.domain.RightsholderPreferences;
 import com.copyright.rup.dist.common.integration.rest.prm.IPrmPreferenceService;
 import com.copyright.rup.dist.common.integration.rest.prm.IPrmRightsholderService;
 import com.copyright.rup.dist.common.integration.rest.prm.IPrmRollUpService;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 
 import com.google.common.collect.Sets;
@@ -79,7 +79,7 @@ public class PrmIntegrationService implements IPrmIntegrationService {
         return getBooleanPreference(
             prmPreferenceService.getPreferencesTable(rightsholderId),
             productFamily,
-            RightsholderPreferences.IS_RH_FDA_PARTICIPATING_CODE);
+            FdaConstants.IS_RH_FDA_PARTICIPATING_PREFERENCE_CODE);
     }
 
     @Override
@@ -91,7 +91,7 @@ public class PrmIntegrationService implements IPrmIntegrationService {
                                          String productFamily, String preferenceCode) {
         Boolean preferenceValue = (Boolean) ObjectUtils.defaultIfNull(
             preferencesTable.get(productFamily, preferenceCode),
-            preferencesTable.get(RightsholderPreferences.ALL_PRODUCTS_KEY, preferenceCode));
+            preferencesTable.get(FdaConstants.ALL_PRODUCTS_KEY, preferenceCode));
         if (null != preferenceValue) {
             return preferenceValue;
         } else {

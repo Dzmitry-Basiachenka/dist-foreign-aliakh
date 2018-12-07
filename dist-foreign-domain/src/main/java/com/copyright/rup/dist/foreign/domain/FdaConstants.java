@@ -34,6 +34,16 @@ public final class FdaConstants {
     public static final Long CLA_ACCOUNT_NUMBER = 2000017000L;
 
     /**
+     * Rightsholder preference code for the rightsholder FDA participation flag from PRM.
+     */
+    public static final String IS_RH_FDA_PARTICIPATING_PREFERENCE_CODE = "IS-RH-FDA-PARTICIPATING";
+
+    /**
+     * Key for all products for reading rightsholder preferences from PRM.
+     */
+    public static final String ALL_PRODUCTS_KEY = "*";
+
+    /**
      * Archived scenario statuses.
      */
     public static final EnumSet<ScenarioStatusEnum> ARCHIVED_SCENARIO_STATUSES =
