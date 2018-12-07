@@ -1,0 +1,121 @@
+{
+  "response": {
+    "status": {
+      "code": "SUCCESS",
+      "message": "OK"
+    },
+    "content": {
+      "@class": "com.copyright.rup.rms.rights.domain.WorksResponse",
+      "requestedWorkCount": "1",
+      "processedWorkCount": "1",
+      "foundWorkCount": "7",
+      "rights": [
+        {
+          "wr_wrk_inst": "100012905",
+          "status": "GRANT",
+          "type_of_use": "NGT_PHOTOCOPY",
+          "market": "CORPORATE",
+          "distribution": "EXTERNAL",
+          "region": "WORLDWIDE",
+          "right_begin_date": "12/20/1995",
+          "right_end_date": "12/31/3000",
+          "ownership_begin_date": "01/01/1000",
+          "ownership_end_date": "12/31/1992",
+          "agreement_begin_date": "12/20/1995",
+          "agreement_end_date": "12/31/3000",
+          "wg_owner_org_number": "2000139286"
+        },
+        {
+          "wr_wrk_inst": "100012905",
+          "status": "GRANT",
+          "type_of_use": "DIGITAL",
+          "market": "ACADEMIC",
+          "distribution": "INTERNAL",
+          "region": "WORLDWIDE",
+          "right_begin_date": "08/12/2011",
+          "right_end_date": "12/31/3000",
+          "ownership_begin_date": "01/01/1000",
+          "ownership_end_date": "12/31/3000",
+          "agreement_begin_date": "08/12/2011",
+          "agreement_end_date": "12/31/3000",
+          "wg_owner_org_number": "2000139286"
+        },
+        {
+          "wr_wrk_inst": "100012905",
+          "status": "GRANT",
+          "type_of_use": "DIGITAL",
+          "market": "CORPORATE",
+          "distribution": "INTERNAL",
+          "region": "WORLDWIDE",
+          "right_begin_date": "12/07/2001",
+          "right_end_date": "12/31/3000",
+          "ownership_begin_date": "01/01/1000",
+          "ownership_end_date": "12/31/3000",
+          "agreement_begin_date": "12/07/2001",
+          "agreement_end_date": "12/31/3000",
+          "wg_owner_org_number": "2000139286"
+        },
+        {
+          "wr_wrk_inst": "100012905",
+          "status": "GRANT",
+          "type_of_use": "PRINT",
+          "market": "CORPORATE",
+          "distribution": "INTERNAL",
+          "region": "WORLDWIDE",
+          "right_begin_date": "12/20/1995",
+          "right_end_date": "12/31/3000",
+          "ownership_begin_date": "01/01/1000",
+          "ownership_end_date": "12/31/3000",
+          "agreement_begin_date": "12/20/1995",
+          "agreement_end_date": "12/31/3000",
+          "wg_owner_org_number": "2000139286"
+        },
+        {
+          "wr_wrk_inst": "100012905",
+          "status": "GRANT",
+          "type_of_use": "PRINT",
+          "market": "ACADEMIC",
+          "distribution": "INTERNAL",
+          "region": "WORLDWIDE",
+          "right_begin_date": "08/12/2011",
+          "right_end_date": "12/31/3000",
+          "ownership_begin_date": "01/01/1000",
+          "ownership_end_date": "12/31/3000",
+          "agreement_begin_date": "08/12/2011",
+          "agreement_end_date": "12/31/3000",
+          "wg_owner_org_number": "2000139286"
+        },
+        {
+          "wr_wrk_inst": "100012905",
+          "status": "GRANT",
+          "type_of_use": "NGT_PHOTOCOPY",
+          "market": "CORPORATE",
+          "distribution": "EXTERNAL",
+          "region": "WORLDWIDE",
+          "right_begin_date": "12/20/1995",
+          "right_end_date": "12/31/3000",
+          "ownership_begin_date": "01/01/1993",
+          "ownership_end_date": "12/31/3000",
+          "agreement_begin_date": "12/20/1995",
+          "agreement_end_date": "12/31/3000",
+          "wg_owner_org_number": "2000139286"
+        },
+        {
+          "wr_wrk_inst": "100012905",
+          "status": "GRANT",
+          "type_of_use": "REACTIVELY_SHARE",
+          "market": "CORPORATE",
+          "distribution": "INTERNAL",
+          "region": "WORLDWIDE",
+          "right_begin_date": "12/07/2001",
+          "right_end_date": "12/31/3000",
+          "ownership_begin_date": "01/01/1000",
+          "ownership_end_date": "12/31/3000",
+          "agreement_begin_date": "12/07/2001",
+          "agreement_end_date": "12/31/3000",
+          "wg_owner_org_number": "2000139286"
+        }
+      ]
+    }
+  }
+}

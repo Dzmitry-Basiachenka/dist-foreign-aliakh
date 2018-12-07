@@ -6,7 +6,11 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
+import org.apache.activemq.ActiveMQConnectionFactory;
+import org.apache.activemq.broker.BrokerService;
 import org.apache.commons.lang3.tuple.Pair;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +23,8 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import javax.jms.Connection;
 
 /**
  * Verifies application workflow.
@@ -56,6 +62,29 @@ public class WorkflowIntegrationTest {
     @Autowired
     private WorkflowIntegrationTestBuilder testBuilder;
 
+    private BrokerService brokerService;
+    private Connection connection;
+
+    @Before
+    public void setUp() throws Exception {
+        brokerService = new BrokerService();
+        brokerService.setPersistent(false);
+        brokerService.setUseJmx(false);
+        brokerService.start();
+        connection = new ActiveMQConnectionFactory("vm://localhost").createConnection();
+        connection.start();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        if (null != connection) {
+            connection.close();
+        }
+        if (null != brokerService) {
+            brokerService.stop();
+        }
+    }
+
     @Test
     public void testClaWorkflow() throws Exception {
         List<Pair<UsageActionTypeEnum, String>> expectedUsageAudit = buildExpectedUsageAudit();
@@ -66,6 +95,8 @@ public class WorkflowIntegrationTest {
             .withUsageBatch(buildUsageBatch())
             .withUsageFilter(buildUsageFilter())
             .expectInsertedUsagesCount(5)
+            .expectRmsRights("rights/rms_grants_100012905_request.json",
+                "rights/rms_grants_100012905_response.json")
             .expectPreferences("prm/not_found_response.json",
                 RIGHTHOLDER_ID_1,
                 RIGHTHOLDER_ID_2,
@@ -88,7 +119,13 @@ public class WorkflowIntegrationTest {
             .expectUsageAudit(USAGE_LM_DETAIL_ID_2, expectedUsageAudit)
             .expectUsageAudit(USAGE_LM_DETAIL_ID_3, expectedUsageAudit)
             .expectUsageAudit(USAGE_LM_DETAIL_ID_4, expectedUsageAudit)
-            .expectUsageAudit(USAGE_LM_DETAIL_ID_5, expectedUsageAudit)
+            .expectUsageAudit(USAGE_LM_DETAIL_ID_5, Arrays.asList(
+                Pair.of(UsageActionTypeEnum.LOADED , "Uploaded in 'Test_Batch' Batch"),
+                Pair.of(UsageActionTypeEnum.WORK_FOUND , "Wr Wrk Inst 100012905 was found by standard number " +
+                    "12345XX-12978"),
+                Pair.of(UsageActionTypeEnum.RH_FOUND , "Rightsholder account 2000139286 was found in RMS"),
+                Pair.of(UsageActionTypeEnum.PAID , "Usage has been paid according to information from the LM"),
+                Pair.of(UsageActionTypeEnum.ARCHIVED , "Usage was sent to CRM")))
             .expectUsageAudit(USAGE_LM_DETAIL_ID_6, Arrays.asList(
                 Pair.of(UsageActionTypeEnum.PAID, "Usage has been created based on Post-Distribution process"),
                 Pair.of(UsageActionTypeEnum.ARCHIVED, "Usage was sent to CRM")))

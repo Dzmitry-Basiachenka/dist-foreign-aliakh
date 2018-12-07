@@ -49,6 +49,7 @@ public class MatchingDeserializer extends JsonDeserializer<Usage> {
         usage.setStatus(UsageStatusEnum.valueOf(JsonUtils.getStringValue(jsonNode.get("status"))));
         usage.setGrossAmount(
             JsonUtils.getBigDecimalValue(jsonNode.get("gross_amount")).setScale(2, RoundingMode.HALF_UP));
+        usage.setProductFamily(JsonUtils.getStringValue(jsonNode.get("product_family")));
         return usage;
     }
 }

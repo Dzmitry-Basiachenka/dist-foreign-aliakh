@@ -40,6 +40,7 @@ public class MatchingSerializer extends StdSerializer<Usage> {
             writeNotNullField(jsonGenerator, "batch_id", usage.getBatchId());
             writeNotNullField(jsonGenerator, "status", usage.getStatus().name());
             writeNotNullField(jsonGenerator, "gross_amount", usage.getGrossAmount());
+            writeNotNullField(jsonGenerator, "product_family", usage.getProductFamily());
         }
         jsonGenerator.writeEndObject();
     }
