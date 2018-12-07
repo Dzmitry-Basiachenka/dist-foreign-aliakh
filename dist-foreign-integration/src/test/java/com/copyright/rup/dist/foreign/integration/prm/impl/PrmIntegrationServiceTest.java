@@ -11,10 +11,10 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.common.domain.RightsholderPreferences;
 import com.copyright.rup.dist.common.integration.rest.prm.IPrmPreferenceService;
 import com.copyright.rup.dist.common.integration.rest.prm.IPrmRightsholderService;
 import com.copyright.rup.dist.common.integration.rest.prm.IPrmRollUpService;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Lists;
@@ -133,7 +133,7 @@ public class PrmIntegrationServiceTest {
     @Test
     public void testIsRightsholderParticipatingByProductFamilyTrue() {
         Table<String, String, Object> preferencesTable = HashBasedTable.create();
-        preferencesTable.put(FAS_PRODUCT_FAMILY, RightsholderPreferences.IS_RH_FDA_PARTICIPATING_CODE, true);
+        preferencesTable.put(FAS_PRODUCT_FAMILY, FdaConstants.IS_RH_FDA_PARTICIPATING_PREFERENCE_CODE, true);
         expect(prmPreferenceService.getPreferencesTable(RIGHTSHOLDER_ID))
             .andReturn(preferencesTable).once();
         replay(prmPreferenceService);
@@ -144,7 +144,7 @@ public class PrmIntegrationServiceTest {
     @Test
     public void testIsRightsholderParticipatingByProductFamilyFalse() {
         Table<String, String, Object> preferencesTable = HashBasedTable.create();
-        preferencesTable.put(FAS_PRODUCT_FAMILY, RightsholderPreferences.IS_RH_FDA_PARTICIPATING_CODE, false);
+        preferencesTable.put(FAS_PRODUCT_FAMILY, FdaConstants.IS_RH_FDA_PARTICIPATING_PREFERENCE_CODE, false);
         expect(prmPreferenceService.getPreferencesTable(RIGHTSHOLDER_ID))
             .andReturn(preferencesTable).once();
         replay(prmPreferenceService);
@@ -155,7 +155,7 @@ public class PrmIntegrationServiceTest {
     @Test
     public void testIsRightsholderParticipatingByAllProductsTrue() {
         Table<String, String, Object> preferencesTable = HashBasedTable.create();
-        preferencesTable.put("*", RightsholderPreferences.IS_RH_FDA_PARTICIPATING_CODE, true);
+        preferencesTable.put("*", FdaConstants.IS_RH_FDA_PARTICIPATING_PREFERENCE_CODE, true);
         expect(prmPreferenceService.getPreferencesTable(RIGHTSHOLDER_ID))
             .andReturn(preferencesTable).once();
         replay(prmPreferenceService);
@@ -166,7 +166,7 @@ public class PrmIntegrationServiceTest {
     @Test
     public void testIsRightsholderParticipatingByAllProductsFalse() {
         Table<String, String, Object> preferencesTable = HashBasedTable.create();
-        preferencesTable.put("*", RightsholderPreferences.IS_RH_FDA_PARTICIPATING_CODE, false);
+        preferencesTable.put("*", FdaConstants.IS_RH_FDA_PARTICIPATING_PREFERENCE_CODE, false);
         expect(prmPreferenceService.getPreferencesTable(RIGHTSHOLDER_ID))
             .andReturn(preferencesTable).once();
         replay(prmPreferenceService);
@@ -177,7 +177,7 @@ public class PrmIntegrationServiceTest {
     @Test
     public void testIsRightsholderParticipatingDefaultFalse() {
         Table<String, String, Object> preferencesTable = HashBasedTable.create();
-        preferencesTable.put(FAS_PRODUCT_FAMILY, RightsholderPreferences.IS_RH_FDA_PARTICIPATING_CODE, false);
+        preferencesTable.put(FAS_PRODUCT_FAMILY, FdaConstants.IS_RH_FDA_PARTICIPATING_PREFERENCE_CODE, false);
         expect(prmPreferenceService.getPreferencesTable(RIGHTSHOLDER_ID))
             .andReturn(preferencesTable).once();
         replay(prmPreferenceService);

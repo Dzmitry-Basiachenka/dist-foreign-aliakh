@@ -50,7 +50,7 @@ public interface IPrmIntegrationService {
 
     /**
      * Checks whether {@link com.copyright.rup.dist.common.domain.Rightsholder rightsholder} is participating or not.
-     * Gets participating flag from {@link com.copyright.rup.dist.common.domain.RightsholderPreferences preferences}
+     * Gets participating flag from {@link com.copyright.rup.dist.foreign.domain.FdaConstants preferences}
      * by specified rightsholder id and product family.
      * </br>
      * If preferences for specified product family were not found System finds preferences for the same rightsholder
