@@ -42,13 +42,13 @@
         <property name="endPoint" value="direct:df.service.tax"/>
     </bean>
 
-    <bean id="df.service.rmsProxyService" class="com.copyright.rup.dist.foreign.service.impl.rights.RmsProxyService">
+    <bean id="df.service.rmsCacheService" class="com.copyright.rup.dist.foreign.service.impl.rights.RmsCacheService">
         <constructor-arg ref="dist.common.integration.rmsService"/>
         <constructor-arg value="$RUP{dist.foreign.rest.rms.ttl.minutes}"/>
     </bean>
 
     <bean id="df.service.rmsGrantsProcessorService" class="com.copyright.rup.dist.common.service.impl.discrepancy.RmsGrantsProcessorService">
-        <constructor-arg ref="df.service.rmsProxyService"/>
+        <constructor-arg ref="df.service.rmsCacheService"/>
     </bean>
 
     <context:component-scan base-package="com.copyright.rup.dist.foreign.service"/>

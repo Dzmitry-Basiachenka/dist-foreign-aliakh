@@ -22,7 +22,7 @@ import java.util.Map;
 public class OracleIntegrationService implements IOracleIntegrationService {
 
     @Autowired
-    @Qualifier("df.integration.oracleProxyService")
+    @Qualifier("df.integration.oracleCacheService")
     private IOracleService oracleService;
 
     @Override

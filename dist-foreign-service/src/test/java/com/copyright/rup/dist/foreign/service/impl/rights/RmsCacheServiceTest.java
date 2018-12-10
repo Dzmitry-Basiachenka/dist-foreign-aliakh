@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Verifies {@link RmsProxyService}.
+ * Verifies {@link RmsCacheService}.
  * <p/>
  * Copyright (C) 2018 copyright.com
  * <p/>
@@ -33,7 +33,7 @@ import java.util.Set;
  *
  * @author Uladzislau Shalamitski
  */
-public class RmsProxyServiceTest {
+public class RmsCacheServiceTest {
 
     private static final Long RH_ACCOUNT_NUMBER_1 = 1000009522L;
     private static final Long RH_ACCOUNT_NUMBER_2 = 2000009522L;
@@ -41,14 +41,14 @@ public class RmsProxyServiceTest {
     private static final Long WR_WRK_INST_2 = 559815489L;
 
     private IRmsService rmsService;
-    private RmsProxyService rmsProxyService;
+    private RmsCacheService rmsCacheService;
 
     @Before
     public void setUp() {
         rmsService = createMock(IRmsService.class);
-        rmsProxyService = new RmsProxyService(rmsService, 10);
-        Whitebox.setInternalState(rmsProxyService, rmsService);
-        rmsProxyService.createCache();
+        rmsCacheService = new RmsCacheService(rmsService, 10);
+        Whitebox.setInternalState(rmsCacheService, rmsService);
+        rmsCacheService.createCache();
     }
 
     @Test
@@ -62,10 +62,10 @@ public class RmsProxyServiceTest {
             .andReturn(Sets.newHashSet(buildRmsGrant(WR_WRK_INST_2, RH_ACCOUNT_NUMBER_2)))
             .once();
         replay(rmsService);
-        Set<RmsGrant> grants = rmsProxyService.getAllRmsGrants(wrWrkInst1, LocalDate.now());
+        Set<RmsGrant> grants = rmsCacheService.getAllRmsGrants(wrWrkInst1, LocalDate.now());
         assertEquals(1, CollectionUtils.size(grants));
         assertTrue(grants.contains(buildRmsGrant(WR_WRK_INST_1, RH_ACCOUNT_NUMBER_1)));
-        grants = rmsProxyService.getAllRmsGrants(wrWrkInst2, LocalDate.now());
+        grants = rmsCacheService.getAllRmsGrants(wrWrkInst2, LocalDate.now());
         assertEquals(1, CollectionUtils.size(grants));
         assertTrue(grants.contains(buildRmsGrant(WR_WRK_INST_2, RH_ACCOUNT_NUMBER_2)));
         verify(rmsService);
@@ -78,10 +78,10 @@ public class RmsProxyServiceTest {
             .andReturn(Sets.newHashSet(buildRmsGrant(WR_WRK_INST_1, RH_ACCOUNT_NUMBER_1)))
             .once();
         replay(rmsService);
-        Set<RmsGrant> grants = rmsProxyService.getAllRmsGrants(wrWrkInst, LocalDate.now());
+        Set<RmsGrant> grants = rmsCacheService.getAllRmsGrants(wrWrkInst, LocalDate.now());
         assertEquals(1, CollectionUtils.size(grants));
         assertTrue(grants.contains(buildRmsGrant(WR_WRK_INST_1, RH_ACCOUNT_NUMBER_1)));
-        grants = rmsProxyService.getAllRmsGrants(wrWrkInst, LocalDate.now());
+        grants = rmsCacheService.getAllRmsGrants(wrWrkInst, LocalDate.now());
         assertEquals(1, CollectionUtils.size(grants));
         assertTrue(grants.contains(buildRmsGrant(WR_WRK_INST_1, RH_ACCOUNT_NUMBER_1)));
         verify(rmsService);
@@ -94,7 +94,7 @@ public class RmsProxyServiceTest {
             .andReturn(new HashSet<>())
             .once();
         replay(rmsService);
-        Set<RmsGrant> grants = rmsProxyService.getAllRmsGrants(wrWrkInsts, LocalDate.now());
+        Set<RmsGrant> grants = rmsCacheService.getAllRmsGrants(wrWrkInsts, LocalDate.now());
         assertTrue(CollectionUtils.isEmpty(grants));
         verify(rmsService);
     }

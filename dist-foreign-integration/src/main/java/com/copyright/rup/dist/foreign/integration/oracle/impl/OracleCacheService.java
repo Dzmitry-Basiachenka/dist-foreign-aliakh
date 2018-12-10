@@ -28,8 +28,8 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Aliaksandr Liakh
  */
-@Service("df.integration.oracleProxyService")
-public class OracleProxyService extends AbstractCacheService<Long, String> implements IOracleService {
+@Service("df.integration.oracleCacheService")
+public class OracleCacheService extends AbstractCacheService<Long, String> implements IOracleService {
 
     @Autowired
     @Qualifier("df.integration.oracleService")

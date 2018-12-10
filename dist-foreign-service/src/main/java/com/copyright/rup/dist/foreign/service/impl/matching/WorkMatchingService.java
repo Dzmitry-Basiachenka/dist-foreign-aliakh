@@ -37,7 +37,7 @@ public class WorkMatchingService implements IWorkMatchingService {
     private static final String UNIDENTIFIED_TITLE = "Unidentified";
 
     @Autowired
-    @Qualifier("df.integration.piIntegrationProxyService")
+    @Qualifier("df.integration.piIntegrationCacheService")
     private IPiIntegrationService piIntegrationService;
     @Autowired
     private IUsageRepository usageRepository;

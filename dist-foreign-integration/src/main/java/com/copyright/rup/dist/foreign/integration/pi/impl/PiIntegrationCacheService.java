@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Ihar Suvorau
  */
-public class PiIntegrationProxyService extends AbstractCacheService<Pair<String, String>, Work>
+public class PiIntegrationCacheService extends AbstractCacheService<Pair<String, String>, Work>
     implements IPiIntegrationService {
 
     private final IPiIntegrationService piIntegrationService;
@@ -30,7 +30,7 @@ public class PiIntegrationProxyService extends AbstractCacheService<Pair<String,
      * @param piIntegrationService instance of {@link IPiIntegrationService}
      * @param timeToLive           cache expiration time, minutes
      */
-    public PiIntegrationProxyService(IPiIntegrationService piIntegrationService, int timeToLive) {
+    public PiIntegrationCacheService(IPiIntegrationService piIntegrationService, int timeToLive) {
         this.piIntegrationService = piIntegrationService;
         super.setExpirationTime(TimeUnit.MINUTES.toSeconds(timeToLive));
     }
