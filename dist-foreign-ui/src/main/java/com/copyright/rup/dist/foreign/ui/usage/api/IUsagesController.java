@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.impl.csv.ResearchedUsagesCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
@@ -179,6 +180,15 @@ public interface IUsagesController extends IController<IUsagesWidget> {
     IStreamSource getSendForResearchUsagesStreamSource();
 
     /**
+     * Vefiries whether all filtered {@link Usage}s in specifies status or not.
+     *
+     * @param status {@link UsageStatusEnum} instance
+     * @return {@code true} - if all filtered {@link Usage}s have specified {@link UsageStatusEnum},
+     * {@link false} - otherwise
+     */
+    boolean isValidUsagesState(UsageStatusEnum status);
+
+    /**
      * Return instance of {@link IStreamSource} for errors result.
      *
      * @param fileName         name of processed file
@@ -223,12 +233,6 @@ public interface IUsagesController extends IController<IUsagesWidget> {
      * @return {@code true} if product family filter contains single product family, {@code false} - otherwise.
      */
     boolean isSingleProductFamilySelected();
-
-    /**
-     * @return {@code true} if {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#WORK_NOT_FOUND}
-     * status applied, otherwise {@code false}.
-     */
-    boolean isWorkNotFoundStatusApplied();
 
     /**
      * Resets filter.

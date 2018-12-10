@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl;
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
@@ -199,9 +200,9 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         // Click listener and second isWorkNotFoundStatusApplied() call were added due to problem with
         // modal window appearance in chrome browser
         sendForResearchButton.addClickListener(event -> {
-            if (!controller.isWorkNotFoundStatusApplied()) {
+            if (!controller.isValidUsagesState(UsageStatusEnum.WORK_NOT_FOUND)) {
                 Windows.showNotificationWindow(
-                    ForeignUi.getMessage("message.error.invalid_filter_to_send_for_research"));
+                    ForeignUi.getMessage("message.error.invalid_usages_status.send_for_research"));
             } else {
                 NotificationWindow window = new NotificationWindow(ForeignUi.getMessage("message.send_for_research"));
                 window.addCloseListener(closeEvent -> controller.clearFilter());
@@ -261,7 +262,8 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
 
         @Override
         public boolean handleConnectorRequest(VaadinRequest request, VaadinResponse response, String path) {
-            return controller.isWorkNotFoundStatusApplied() && super.handleConnectorRequest(request, response, path);
+            return controller.isValidUsagesState(UsageStatusEnum.WORK_NOT_FOUND)
+                && super.handleConnectorRequest(request, response, path);
         }
     }
 }

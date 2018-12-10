@@ -204,6 +204,11 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
+    public boolean isValidUsagesState(UsageStatusEnum status) {
+        return usageService.isValidUsagesState(filterController.getWidget().getAppliedFilter(), status);
+    }
+
+    @Override
     public IStreamSource getErrorResultStreamSource(String fileName, ProcessingResult processingResult) {
         return new ErrorResultStreamSource(fileName, processingResult);
     }
@@ -245,10 +250,6 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
         return 1 == CollectionUtils.size(getSelectedProductFamilies());
     }
 
-    @Override
-    public boolean isWorkNotFoundStatusApplied() {
-        return UsageStatusEnum.WORK_NOT_FOUND == filterController.getWidget().getAppliedFilter().getUsageStatus();
-    }
 
     @Override
     public void clearFilter() {

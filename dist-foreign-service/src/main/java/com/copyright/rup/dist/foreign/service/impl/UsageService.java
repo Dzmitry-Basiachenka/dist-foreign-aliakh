@@ -481,6 +481,11 @@ public class UsageService implements IUsageService {
         return usageRepository.findByStatus(status, limit, offset);
     }
 
+    @Override
+    public boolean isValidUsagesState(UsageFilter filter, UsageStatusEnum status) {
+        return 0 == usageRepository.findCountByFilterAndNotInStatus(filter, status);
+    }
+
     private void updatePaidUsage(PaidUsage paidUsage, String actionReason) {
         paidUsage.setStatus(UsageStatusEnum.PAID);
         usageArchiveRepository.updatePaidInfo(paidUsage);
