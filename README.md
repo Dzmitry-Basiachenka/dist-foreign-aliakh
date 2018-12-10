@@ -1,3 +1,9 @@
+4.1.5
+-
+* B-47644 Tech Debt: FDA: remove constraint for applying status filter from Sent for Research functionality
+* B-47644 Tech Debt: FDA: rename caching services name suffix from Proxy to Cache
+* RDSC-645 FDA: Newly uploaded Fiscal Year is not present in 'Fiscal Year To' filter on Usage Tab
+
 4.1.4
 -
 * B-47644 Tech Debt: FDA: add embedded ActiveMQ to WorkflowIntegrationTest to provide ability to interact with the queues df.matching, df.rights
