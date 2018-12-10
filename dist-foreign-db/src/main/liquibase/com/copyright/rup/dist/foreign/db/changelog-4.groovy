@@ -20,4 +20,17 @@ databaseChangeLog {
                 columnName: 'fiscal_year', columnDataType: 'NUMERIC(4,0)')
         }
     }
+
+    changeSet(id: '2018-12-10-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-23202 FDA: Create a NTS batch of FAS usage details as specified by RRO Receipt: " +
+                "add not-null constraint to fiscal_year column in df_usage_batch table")
+
+        addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_batch',
+                columnName: 'fiscal_year', columnDataType: 'NUMERIC(4,0)')
+
+        rollback {
+            dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_batch',
+                    columnName: 'fiscal_year', columnDataType: 'NUMERIC(4,0)')
+        }
+    }
 }

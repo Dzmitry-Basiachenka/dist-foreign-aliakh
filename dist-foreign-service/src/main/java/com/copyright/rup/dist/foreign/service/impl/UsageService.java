@@ -566,7 +566,7 @@ public class UsageService implements IUsageService {
         FundPool fundPool = usageBatch.getFundPool();
         StringBuilder reasonBuilder = new StringBuilder(64);
         reasonBuilder.append("Usage was created based on Market(s): ");
-        fundPool.getMarkets().forEach(market -> reasonBuilder.append(String.format("'%s', ", market)));
+        fundPool.getMarkets().forEach(market -> reasonBuilder.append("'").append(market).append("', "));
         reasonBuilder.append(
             String.format("Fund Pool Period: %s-%s", fundPool.getFundPoolPeriodFrom(), fundPool.getFundPoolPeriodTo()));
         return reasonBuilder.toString();

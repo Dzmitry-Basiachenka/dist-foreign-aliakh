@@ -239,7 +239,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
             assertTrue(result.isSuccessful());
             List<Usage> usages = result.get();
             setPredefinedUsageIds(usages);
-            int usagesInsertedCount = usageBatchService.insertUsageBatch(usageBatch, usages);
+            int usagesInsertedCount = usageBatchService.insertFasBatch(usageBatch, usages);
             assertEquals(expectedInsertedUsagesCount, usagesInsertedCount);
             usageBatchService.sendForMatching(usages);
             usageBatchService.sendForGettingRights(usages);
