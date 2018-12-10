@@ -367,22 +367,14 @@ public class UsagesControllerTest {
     }
 
     @Test
-    public void testIsWorkNotFoundStatusApplied() {
+    public void testIsValidUsagesState() {
         usageFilter.setUsageStatus(UsageStatusEnum.WORK_NOT_FOUND);
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
-        replay(filterController, filterWidgetMock);
-        assertTrue(controller.isWorkNotFoundStatusApplied());
-        verify(filterController, filterWidgetMock);
-    }
-
-    @Test
-    public void testIsWorkNotFoundStatusAppliedWorkFound() {
-        usageFilter.setUsageStatus(UsageStatusEnum.WORK_FOUND);
-        prepareGetAppliedFilterExpectations(usageFilter);
-        replay(filterController, filterWidgetMock);
-        assertFalse(controller.isWorkNotFoundStatusApplied());
-        verify(filterController, filterWidgetMock);
+        expect(usageService.isValidUsagesState(usageFilter, UsageStatusEnum.WORK_NOT_FOUND)).andReturn(true).once();
+        replay(filterController, filterWidgetMock, usageService);
+        assertTrue(controller.isValidUsagesState(UsageStatusEnum.WORK_NOT_FOUND));
+        verify(filterController, filterWidgetMock, usageService);
     }
 
     @Test

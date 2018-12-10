@@ -608,6 +608,16 @@ public class UsageServiceTest {
         verify(usageRepository);
     }
 
+    @Test
+    public void testGetUsagesCountInNotApplicableStatus() {
+        UsageFilter usageFilter = new UsageFilter();
+        expect(usageRepository.findCountByFilterAndNotInStatus(usageFilter, UsageStatusEnum.WORK_NOT_FOUND))
+            .andReturn(1).once();
+        replay(usageRepository);
+        usageService.isValidUsagesState(usageFilter, UsageStatusEnum.WORK_NOT_FOUND);
+        verify(usageRepository);
+    }
+
     private void assertResult(List<?> result, int size) {
         assertNotNull(result);
         assertEquals(size, result.size());

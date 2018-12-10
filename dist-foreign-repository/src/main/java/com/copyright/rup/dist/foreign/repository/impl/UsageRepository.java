@@ -470,6 +470,14 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         }
     }
 
+    @Override
+    public int findCountByFilterAndNotInStatus(UsageFilter filter, UsageStatusEnum status) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
+        params.put(FILTER_KEY, Objects.requireNonNull(filter));
+        params.put(STATUS_KEY, status);
+        return selectOne("IUsageMapper.findCountByFilterAndNotInStatus", params);
+    }
+
     private AuditFilter escapeSqlLikePattern(AuditFilter auditFilter) {
         AuditFilter filterCopy = new AuditFilter(auditFilter);
         filterCopy.setCccEventId(escapeSqlLikePattern(filterCopy.getCccEventId()));

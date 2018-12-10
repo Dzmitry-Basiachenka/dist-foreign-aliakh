@@ -954,6 +954,15 @@ public class UsageRepositoryIntegrationTest {
             .containsAll(Sets.newHashSet(USAGE_ID_14, USAGE_ID_24, USAGE_ID_21, USAGE_ID_12, USAGE_ID_13)));
     }
 
+    @Test
+    public void testFindCountByFilterAndNotInStatus() {
+        UsageFilter usageFilter = new UsageFilter();
+        usageFilter.setUsageBatchesIds(Collections.singleton("ee575916-f6d0-4c3c-b589-32663e0f4793"));
+        assertEquals(1, usageRepository.findCountByFilterAndNotInStatus(usageFilter, UsageStatusEnum.WORK_NOT_FOUND));
+        usageFilter.setUsageStatus(UsageStatusEnum.WORK_NOT_FOUND);
+        assertEquals(0, usageRepository.findCountByFilterAndNotInStatus(usageFilter, UsageStatusEnum.WORK_NOT_FOUND));
+    }
+
     private void verifyFilterForTwoBatches(AuditFilter filter) {
         filter.setBatchesIds(Sets.newHashSet(BATCH_ID, "74b736f2-81ce-41fa-bd8e-574299232458"));
         verifyUsageDtos(findForAuditWithSort(filter, BATCH_NAME_KEY, true), 2, USAGE_ID_5, USAGE_ID_4);

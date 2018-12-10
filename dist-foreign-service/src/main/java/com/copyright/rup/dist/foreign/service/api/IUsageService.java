@@ -331,4 +331,14 @@ public interface IUsageService {
      * @return the list of found {@link Usage}s
      */
     List<Usage> getUsagesByStatus(UsageStatusEnum status, int limit, int offset);
+
+    /**
+     * Verifies whether {@link Usage}s found by defined {@link UsageFilter} have specified status or not.
+     *
+     * @param filter           {@link UsageFilter} instance
+     * @param status {@link UsageStatusEnum} instance
+     * @return {@code true} - if all filtered {@link Usage}s have specified {@link UsageStatusEnum},
+     *         {@link false} - otherwise
+     */
+    boolean isValidUsagesState(UsageFilter filter, UsageStatusEnum status);
 }

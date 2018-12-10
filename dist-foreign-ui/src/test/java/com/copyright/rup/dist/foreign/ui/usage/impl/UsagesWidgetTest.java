@@ -14,6 +14,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
@@ -261,6 +262,25 @@ public class UsagesWidgetTest {
         replay(controller, clickEvent, Windows.class);
         Collection<?> listeners = addToScenarioButton.getListeners(ClickEvent.class);
         assertEquals(2, listeners.size());
+        ClickListener clickListener = (ClickListener) listeners.iterator().next();
+        clickListener.buttonClick(clickEvent);
+        verify(controller, clickEvent, Windows.class);
+    }
+
+    @Test
+    public void testSendForResearchInvalidUsagesState() {
+        mockStatic(Windows.class);
+        Grid grid = new Grid();
+        Whitebox.setInternalState(usagesWidget, grid);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        Button sendForResearchButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
+            .getComponent(0)).getComponent(6);
+        expect(controller.isValidUsagesState(UsageStatusEnum.WORK_NOT_FOUND)).andReturn(false).once();
+        Windows.showNotificationWindow("Only usages in WORK_NOT_FOUND status can be sent for research");
+        expectLastCall().once();
+        replay(controller, clickEvent, Windows.class);
+        Collection<?> listeners = sendForResearchButton.getListeners(ClickEvent.class);
+        assertEquals(1, listeners.size());
         ClickListener clickListener = (ClickListener) listeners.iterator().next();
         clickListener.buttonClick(clickEvent);
         verify(controller, clickEvent, Windows.class);
