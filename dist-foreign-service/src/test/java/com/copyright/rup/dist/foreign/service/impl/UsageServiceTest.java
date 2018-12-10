@@ -173,9 +173,9 @@ public class UsageServiceTest {
     public void testDeleteUsageBatchDetails() {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setId(RupPersistUtils.generateUuid());
-        usageRepository.deleteUsages(usageBatch.getId());
+        usageRepository.deleteByBatchId(usageBatch.getId());
         expectLastCall().once();
-        usageAuditService.deleteActions(usageBatch.getId());
+        usageAuditService.deleteActionsByBatchId(usageBatch.getId());
         expectLastCall().once();
         replay(usageRepository);
         usageService.deleteUsageBatchDetails(usageBatch);
@@ -185,6 +185,8 @@ public class UsageServiceTest {
     @Test
     public void testDeleteById() {
         String usageId = RupPersistUtils.generateUuid();
+        usageAuditService.deleteActionsByUsageId(usageId);
+        expectLastCall().once();
         usageRepository.deleteById(usageId);
         expectLastCall();
         replay(usageRepository);

@@ -406,12 +406,12 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testDeleteUsages() {
+    public void testDeleteByBatchId() {
         UsageFilter filter = new UsageFilter();
         filter.setUsageBatchesIds(Sets.newHashSet(USAGE_BATCH_ID_1));
         Sort sort = new Sort(DETAIL_ID_KEY, Direction.ASC);
         assertEquals(1, usageRepository.findByFilter(filter, null, sort).size());
-        usageRepository.deleteUsages(USAGE_BATCH_ID_1);
+        usageRepository.deleteByBatchId(USAGE_BATCH_ID_1);
         assertEquals(0, usageRepository.findByFilter(filter, null, sort).size());
     }
 

@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IRhTaxService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 
+import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,6 +37,8 @@ public class RhTaxService implements IRhTaxService {
     private IUsageRepository usageRepository;
     @Autowired
     private IUsageAuditService usageAuditService;
+    @Autowired
+    private IUsageService usageService;
 
     @Override
     @Transactional
@@ -48,8 +51,7 @@ public class RhTaxService implements IRhTaxService {
             usageAuditService.logAction(usageId, UsageActionTypeEnum.ELIGIBLE,
                 "Usage has become eligible based on US rightsholder tax country");
         } else {
-            usageAuditService.deleteActions(usageId);
-            usageRepository.deleteById(usageId);
+            usageService.deleteById(usageId);
         }
         LOGGER.debug("Applying RH tax country. Finished. UsageId={}, RhAccountNumber={}", usageId, accountNumber);
     }

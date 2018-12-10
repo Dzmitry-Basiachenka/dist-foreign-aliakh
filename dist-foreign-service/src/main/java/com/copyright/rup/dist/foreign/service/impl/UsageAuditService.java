@@ -40,8 +40,13 @@ public class UsageAuditService implements IUsageAuditService {
     }
 
     @Override
-    public void deleteActions(String batchId) {
+    public void deleteActionsByBatchId(String batchId) {
         usageAuditRepository.deleteByBatchId(batchId);
+    }
+
+    @Override
+    public void deleteActionsByUsageId(String usageId) {
+        usageAuditRepository.deleteByUsageId(usageId);
     }
 
     @Override

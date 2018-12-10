@@ -22,6 +22,7 @@ import com.copyright.rup.dist.foreign.service.api.IRightsService;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 
+import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.tax.RhTaxProducer;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
@@ -61,6 +62,7 @@ public class RightsServiceTest {
     private IRightsholderService rightsholderService;
     private RightsProducer rightsProducer;
     private RhTaxProducer rhTaxProducer;
+    private IUsageService usageService;
 
     @Before
     public void setUp() {
@@ -71,6 +73,7 @@ public class RightsServiceTest {
         rightsholderService = createMock(IRightsholderService.class);
         rightsProducer = createMock(RightsProducer.class);
         rhTaxProducer = createMock(RhTaxProducer.class);
+        usageService = createMock(IUsageService.class);
         rightsAssignmentService = new RightsService();
         Whitebox.setInternalState(rightsAssignmentService, "usageRepository", usageRepository);
         Whitebox.setInternalState(rightsAssignmentService, "auditService", usageAuditService);
@@ -79,6 +82,7 @@ public class RightsServiceTest {
         Whitebox.setInternalState(rightsAssignmentService, "rightsholderService", rightsholderService);
         Whitebox.setInternalState(rightsAssignmentService, "rightsProducer", rightsProducer);
         Whitebox.setInternalState(rightsAssignmentService, "rhTaxProducer", rhTaxProducer);
+        Whitebox.setInternalState(rightsAssignmentService, "usageService", usageService);
     }
 
     @Test
@@ -218,11 +222,11 @@ public class RightsServiceTest {
         expect(rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(123160519L)))
             .andReturn(Collections.EMPTY_MAP)
             .once();
-        usageRepository.deleteById(usageId);
+        usageService.deleteById(usageId);
         expectLastCall().once();
-        replay(rmsGrantsProcessorService, rightsholderService, usageRepository);
+        replay(rmsGrantsProcessorService, usageService);
         rightsAssignmentService.updateRight(buildUsage(usageId, "NTS", UsageStatusEnum.WORK_FOUND));
-        verify(rmsGrantsProcessorService, rightsholderService, usageRepository);
+        verify(rmsGrantsProcessorService, usageService);
     }
 
     private Usage buildUsage(String usageId, String productFamily, UsageStatusEnum status) {

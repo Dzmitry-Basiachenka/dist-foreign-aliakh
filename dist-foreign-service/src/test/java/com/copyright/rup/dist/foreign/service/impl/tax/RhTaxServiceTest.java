@@ -14,6 +14,7 @@ import com.copyright.rup.dist.foreign.integration.oracle.api.IOracleIntegrationS
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 
+import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -35,6 +36,7 @@ public class RhTaxServiceTest {
     private IUsageAuditService usageAuditService;
     private RhTaxService rhTaxService;
     private IOracleIntegrationService oracleIntegrationService;
+    private IUsageService usageService;
 
     @Before
     public void setUp() {
@@ -42,6 +44,8 @@ public class RhTaxServiceTest {
         oracleIntegrationService = createMock(IOracleIntegrationService.class);
         usageRepository = createMock(IUsageRepository.class);
         usageAuditService = createMock(IUsageAuditService.class);
+        usageService = createMock(IUsageService.class);
+        Whitebox.setInternalState(rhTaxService, "usageService", usageService);
         Whitebox.setInternalState(rhTaxService, "usageRepository", usageRepository);
         Whitebox.setInternalState(rhTaxService, "usageAuditService", usageAuditService);
         Whitebox.setInternalState(rhTaxService, "oracleIntegrationService", oracleIntegrationService);
@@ -51,9 +55,7 @@ public class RhTaxServiceTest {
     public void testApplyRhTaxCountryFr() {
         Usage usage = buildUsage(RupPersistUtils.generateUuid());
         expect(oracleIntegrationService.isUsCountryCode(1000001534L)).andReturn(false).once();
-        usageRepository.deleteById(usage.getId());
-        expectLastCall().once();
-        usageAuditService.deleteActions(usage.getId());
+        usageService.deleteById(usage.getId());
         expectLastCall().once();
         replay(usageRepository, usageAuditService, oracleIntegrationService);
         rhTaxService.applyRhTaxCountry(usage);
