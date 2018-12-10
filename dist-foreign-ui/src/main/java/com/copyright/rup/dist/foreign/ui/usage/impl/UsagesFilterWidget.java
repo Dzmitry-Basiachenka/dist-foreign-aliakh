@@ -69,6 +69,7 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
     public void clearFilter() {
         paymentDateWidget.clear();
         fiscalYearComboBox.clear();
+        fiscalYearComboBox.setItems(getController().getFiscalYears());
         statusComboBox.clear();
         usageFilter = new UsageFilter();
         rightsholderFilterWidget.reset();
