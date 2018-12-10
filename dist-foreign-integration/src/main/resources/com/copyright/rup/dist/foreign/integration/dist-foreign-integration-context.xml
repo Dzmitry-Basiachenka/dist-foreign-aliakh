@@ -63,8 +63,8 @@
         <property name="endPoint" value="direct:df.integration.externalUsage"/>
     </bean>
 
-    <bean id="df.integration.piIntegrationProxyService"
-          class="com.copyright.rup.dist.foreign.integration.pi.impl.PiIntegrationProxyService">
+    <bean id="df.integration.piIntegrationCacheService"
+          class="com.copyright.rup.dist.foreign.integration.pi.impl.PiIntegrationCacheService">
         <constructor-arg ref="df.integration.piIntegrationService"/>
         <constructor-arg value="$RUP{dist.foreign.pi.ttl.minutes}"/>
     </bean>

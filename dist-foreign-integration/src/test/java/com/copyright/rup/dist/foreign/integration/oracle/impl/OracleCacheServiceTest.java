@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.Map;
 
 /**
- * Verifies {@link OracleProxyService}.
+ * Verifies {@link OracleCacheService}.
  * <p>
  * Copyright (C) 2018 copyright.com
  * </p>
@@ -29,21 +29,21 @@ import java.util.Map;
  *
  * @author Aliaksandr Liakh
  */
-public class OracleProxyServiceTest {
+public class OracleCacheServiceTest {
 
     private static final long ACCOUNT_NUMBER = 1000015778L;
     private static final String COUNTRY_CODE = "US";
 
     private IOracleService oracleServiceMock;
-    private OracleProxyService oracleIntegrationProxyService;
+    private OracleCacheService oracleIntegrationCacheService;
 
     @Before
     public void setUp() {
         oracleServiceMock = createMock(IOracleService.class);
-        oracleIntegrationProxyService = new OracleProxyService();
-        oracleIntegrationProxyService.setOracleService(oracleServiceMock);
-        oracleIntegrationProxyService.setExpirationTime(100L);
-        oracleIntegrationProxyService.createCache();
+        oracleIntegrationCacheService = new OracleCacheService();
+        oracleIntegrationCacheService.setOracleService(oracleServiceMock);
+        oracleIntegrationCacheService.setExpirationTime(100L);
+        oracleIntegrationCacheService.createCache();
     }
 
     @Test
@@ -52,12 +52,12 @@ public class OracleProxyServiceTest {
             ImmutableMap.of(ACCOUNT_NUMBER, COUNTRY_CODE)).once();
         replay(oracleServiceMock);
         Map<Long, String> actualResult =
-            oracleIntegrationProxyService.getAccountNumbersToCountryCodesMap(Collections.singletonList(ACCOUNT_NUMBER));
+            oracleIntegrationCacheService.getAccountNumbersToCountryCodesMap(Collections.singletonList(ACCOUNT_NUMBER));
         assertTrue(MapUtils.isNotEmpty(actualResult));
         assertEquals(1, actualResult.size());
         assertEquals(COUNTRY_CODE, actualResult.get(ACCOUNT_NUMBER));
         assertEquals(COUNTRY_CODE,
-            oracleIntegrationProxyService.getAccountNumbersToCountryCodesMap(Collections.singletonList(ACCOUNT_NUMBER))
+            oracleIntegrationCacheService.getAccountNumbersToCountryCodesMap(Collections.singletonList(ACCOUNT_NUMBER))
                 .get(ACCOUNT_NUMBER));
         verify(oracleServiceMock);
     }
@@ -68,7 +68,7 @@ public class OracleProxyServiceTest {
             .andReturn(Collections.EMPTY_MAP).once();
         replay(oracleServiceMock);
         Map<Long, String> actualResult =
-            oracleIntegrationProxyService.getAccountNumbersToCountryCodesMap(Collections.singletonList(ACCOUNT_NUMBER));
+            oracleIntegrationCacheService.getAccountNumbersToCountryCodesMap(Collections.singletonList(ACCOUNT_NUMBER));
         assertNotNull(actualResult);
         assertTrue(MapUtils.isEmpty(actualResult));
         verify(oracleServiceMock);

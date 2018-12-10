@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Uladzislau Shalamitski
  */
-public class RmsProxyService extends AbstractCacheService<Long, Set<RmsGrant>> implements IRmsService {
+public class RmsCacheService extends AbstractCacheService<Long, Set<RmsGrant>> implements IRmsService {
 
     private final IRmsService rmsService;
 
@@ -30,7 +30,7 @@ public class RmsProxyService extends AbstractCacheService<Long, Set<RmsGrant>> i
      * @param rmsService instance of {@link IRmsService}
      * @param timeToLive time to keep cached rollups in minutes
      */
-    RmsProxyService(IRmsService rmsService, int timeToLive) {
+    RmsCacheService(IRmsService rmsService, int timeToLive) {
         this.rmsService = rmsService;
         super.setExpirationTime(TimeUnit.MINUTES.toSeconds(timeToLive));
     }

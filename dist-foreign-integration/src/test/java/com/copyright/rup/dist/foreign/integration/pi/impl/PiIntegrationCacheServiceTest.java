@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Verifies {@link PiIntegrationProxyService}.
+ * Verifies {@link PiIntegrationCacheService}.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -20,21 +20,21 @@ import org.junit.Test;
  *
  * @author Ihar Suvorau
  */
-public class PiIntegrationProxyServiceTest {
+public class PiIntegrationCacheServiceTest {
 
     private static final String OCULAR_TITLE = "Ocular Tissue Culture";
     private static final String FORBIDDEN_RITES = "Forbidden rites";
     private static final String NECROMANCER = "A Necromancer's Manual of the Fifteenth Century";
     private static final String IDNO_1 = "0-271-01750-3";
     private static final String IDNO_2 = "978-0-271-01751-8";
-    private PiIntegrationProxyService piIntegrationProxyService;
+    private PiIntegrationCacheService piIntegrationCacheService;
     private PiIntegrationService piIntegrationService;
 
     @Before
     public void setUp() {
         piIntegrationService = createMock(PiIntegrationService.class);
-        piIntegrationProxyService = new PiIntegrationProxyService(piIntegrationService, 1);
-        piIntegrationProxyService.createCache();
+        piIntegrationCacheService = new PiIntegrationCacheService(piIntegrationService, 1);
+        piIntegrationCacheService.createCache();
     }
 
     @Test
@@ -46,11 +46,11 @@ public class PiIntegrationProxyServiceTest {
         expect(piIntegrationService.findWorkByIdnoAndTitle(IDNO_1, FORBIDDEN_RITES)).andReturn(work2).once();
         expect(piIntegrationService.findWorkByIdnoAndTitle(IDNO_2, OCULAR_TITLE)).andReturn(work3).once();
         replay(piIntegrationService);
-        assertEquals(work1, piIntegrationProxyService.findWorkByIdnoAndTitle("1140-9126", null));
-        assertEquals(work2, piIntegrationProxyService.findWorkByIdnoAndTitle(IDNO_1, FORBIDDEN_RITES));
-        assertEquals(work3, piIntegrationProxyService.findWorkByIdnoAndTitle(IDNO_2, OCULAR_TITLE));
-        assertEquals(work2, piIntegrationProxyService.findWorkByIdnoAndTitle(IDNO_1, FORBIDDEN_RITES));
-        assertEquals(work3, piIntegrationProxyService.findWorkByIdnoAndTitle(IDNO_2, OCULAR_TITLE));
+        assertEquals(work1, piIntegrationCacheService.findWorkByIdnoAndTitle("1140-9126", null));
+        assertEquals(work2, piIntegrationCacheService.findWorkByIdnoAndTitle(IDNO_1, FORBIDDEN_RITES));
+        assertEquals(work3, piIntegrationCacheService.findWorkByIdnoAndTitle(IDNO_2, OCULAR_TITLE));
+        assertEquals(work2, piIntegrationCacheService.findWorkByIdnoAndTitle(IDNO_1, FORBIDDEN_RITES));
+        assertEquals(work3, piIntegrationCacheService.findWorkByIdnoAndTitle(IDNO_2, OCULAR_TITLE));
         verify(piIntegrationService);
     }
 
@@ -60,11 +60,11 @@ public class PiIntegrationProxyServiceTest {
         expect(piIntegrationService.findWrWrkInstByTitle(FORBIDDEN_RITES)).andReturn(2222L).once();
         expect(piIntegrationService.findWrWrkInstByTitle(OCULAR_TITLE)).andReturn(3333L).once();
         replay(piIntegrationService);
-        assertEquals(1111L, piIntegrationProxyService.findWrWrkInstByTitle(NECROMANCER), 0);
-        assertEquals(2222L, piIntegrationProxyService.findWrWrkInstByTitle(FORBIDDEN_RITES), 0);
-        assertEquals(3333L, piIntegrationProxyService.findWrWrkInstByTitle(OCULAR_TITLE), 0);
-        assertEquals(2222L, piIntegrationProxyService.findWrWrkInstByTitle(FORBIDDEN_RITES), 0);
-        assertEquals(3333L, piIntegrationProxyService.findWrWrkInstByTitle(OCULAR_TITLE), 0);
+        assertEquals(1111L, piIntegrationCacheService.findWrWrkInstByTitle(NECROMANCER), 0);
+        assertEquals(2222L, piIntegrationCacheService.findWrWrkInstByTitle(FORBIDDEN_RITES), 0);
+        assertEquals(3333L, piIntegrationCacheService.findWrWrkInstByTitle(OCULAR_TITLE), 0);
+        assertEquals(2222L, piIntegrationCacheService.findWrWrkInstByTitle(FORBIDDEN_RITES), 0);
+        assertEquals(3333L, piIntegrationCacheService.findWrWrkInstByTitle(OCULAR_TITLE), 0);
         verify(piIntegrationService);
     }
 }
