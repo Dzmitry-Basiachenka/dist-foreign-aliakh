@@ -1319,13 +1319,14 @@
         order by nestedReport.payment_date, rh.rh_account_number
     </select>
 
-    <select id="findCountByFilterAndNotInStatus" parameterType="map" resultType="int">
-        select count(1)
-        from ${schema}.df_usage u
-        join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
-        left join ${schema}.df_rightsholder rro on rro.rh_account_number = ub.rro_account_number
-        <include refid="usageFilter"/>
-            and u.df_scenario_uid is null
-            and u.status_ind != #{status}
+    <select id="isValidUsagesState" parameterType="map" resultType="boolean">
+        select not exists (
+            select 1
+            from ${schema}.df_usage u
+            join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+            left join ${schema}.df_rightsholder rro on rro.rh_account_number = ub.rro_account_number
+            <include refid="usageFilter"/>
+                and u.df_scenario_uid is null
+                and u.status_ind != #{status})
     </select>
 </mapper>

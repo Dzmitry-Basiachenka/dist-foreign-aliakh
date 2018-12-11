@@ -183,9 +183,8 @@ public class UsagesWidgetTest {
             .getComponent(0)).getComponent(3);
         assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.getSize()).andReturn(1).once();
-        expect(controller.isProductFamilyAndStatusFiltersApplied()).andReturn(false).once();
-        Windows.showNotificationWindow(
-            "Please apply Product Family filter and ELIGIBLE status filter to create scenario");
+        expect(controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)).andReturn(false).once();
+        Windows.showNotificationWindow("Only usages in ELIGIBLE status can be added to scenario");
         expectLastCall().once();
         replay(controller, clickEvent, Windows.class);
         Collection<?> listeners = addToScenarioButton.getListeners(ClickEvent.class);
@@ -206,9 +205,9 @@ public class UsagesWidgetTest {
             .getComponent(0)).getComponent(3);
         assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.getSize()).andReturn(1).once();
-        expect(controller.isProductFamilyAndStatusFiltersApplied()).andReturn(true).once();
+        expect(controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.isSingleProductFamilySelected()).andReturn(false).once();
-        Windows.showNotificationWindow("Scenario cannot be created. Select only one product family at a time");
+        Windows.showNotificationWindow("Scenario cannot be created. Select one product family at a time");
         expectLastCall().once();
         replay(controller, clickEvent, Windows.class);
         Collection<?> listeners = addToScenarioButton.getListeners(ClickEvent.class);
@@ -228,7 +227,7 @@ public class UsagesWidgetTest {
             .getComponent(0)).getComponent(3);
         assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.getSize()).andReturn(1).once();
-        expect(controller.isProductFamilyAndStatusFiltersApplied()).andReturn(true).once();
+        expect(controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.isSingleProductFamilySelected()).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.singletonList(1000000001L)).once();
         Windows.showNotificationWindow("Scenario cannot be created. The following rightsholder(s) are absent " +
@@ -252,7 +251,7 @@ public class UsagesWidgetTest {
             .getComponent(0)).getComponent(3);
         assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.getSize()).andReturn(1).once();
-        expect(controller.isProductFamilyAndStatusFiltersApplied()).andReturn(true).once();
+        expect(controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.isSingleProductFamilySelected()).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
         expect(controller.getSelectedProductFamily()).andReturn("FAS").once();

@@ -42,7 +42,6 @@ import com.copyright.rup.vaadin.widget.api.IWidget;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.vaadin.ui.HorizontalLayout;
 
 import org.apache.commons.lang3.StringUtils;
@@ -75,7 +74,6 @@ public class UsagesControllerTest {
     private static final String RRO_ACCOUNT_NAME = "Account Name";
     private static final String USAGE_BATCH_ID = RupPersistUtils.generateUuid();
     private static final Long RRO_ACCOUNT_NUMBER = 12345678L;
-    private static final String FAS_PRODUCT_FAMILY = "FAS";
     private UsagesController controller;
     private UsageService usageService;
     private IUsagesFilterController filterController;
@@ -349,24 +347,6 @@ public class UsagesControllerTest {
     }
 
     @Test
-    public void testIsProductFamilyAndStatusFiltersAppliedStatusNull() {
-        prepareGetAppliedFilterExpectations(usageFilter);
-        replay(filterController, filterWidgetMock);
-        assertFalse(controller.isProductFamilyAndStatusFiltersApplied());
-        verify(filterController, filterWidgetMock);
-    }
-
-    @Test
-    public void testIsProductFamilyAndStatusFilterApplied() {
-        usageFilter.setUsageStatus(UsageStatusEnum.NEW);
-        testIsProductFamilyAndStatusFilterApplied(false, usageFilter);
-        usageFilter = new UsageFilter();
-        usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
-        usageFilter.setProductFamilies(Sets.newHashSet(FAS_PRODUCT_FAMILY, "NTS"));
-        testIsProductFamilyAndStatusFilterApplied(true, usageFilter);
-    }
-
-    @Test
     public void testIsValidUsagesState() {
         usageFilter.setUsageStatus(UsageStatusEnum.WORK_NOT_FOUND);
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
@@ -394,14 +374,6 @@ public class UsagesControllerTest {
         replay(usageWidgetMock, eventMock);
         controller.onScenarioCreated(eventMock);
         verify(usageWidgetMock, eventMock);
-    }
-
-    private void testIsProductFamilyAndStatusFilterApplied(boolean expectedResult, UsageFilter actualAppliedFilter) {
-        prepareGetAppliedFilterExpectations(actualAppliedFilter);
-        replay(filterController, filterWidgetMock);
-        assertEquals(expectedResult, controller.isProductFamilyAndStatusFiltersApplied());
-        verify(filterController, filterWidgetMock);
-        reset(filterController, filterWidgetMock);
     }
 
     private void testIsSingleProductFamilySelected(boolean expectedResult, Set<String> actualProductFamilies) {

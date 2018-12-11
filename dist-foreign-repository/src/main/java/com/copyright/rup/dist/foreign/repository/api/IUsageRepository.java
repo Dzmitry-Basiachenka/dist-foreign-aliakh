@@ -414,11 +414,12 @@ public interface IUsageRepository {
     void writeResearchStatusCsvReport(OutputStream outputStream);
 
     /**
-     * Find {@link Usage}s count by specified {@link UsageFilter} and not in defined status.
+     * Verifies whether {@link Usage}s found by defined {@link UsageFilter} have specified status or not.
      *
      * @param filter {@link UsageFilter} instance
      * @param status {@link UsageStatusEnum} instance
-     * @return count of found {@link Usage}s
+     * @return {@code true} - if there are no {@link Usage}s found by defined {@link UsageFilter}
+     *         with status different from specified , {@link false} - otherwise
      */
-    int findCountByFilterAndNotInStatus(UsageFilter filter, UsageStatusEnum status);
+    boolean isValidUsagesState(UsageFilter filter, UsageStatusEnum status);
 }

@@ -955,12 +955,12 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindCountByFilterAndNotInStatus() {
+    public void testIsValidUsagesState() {
         UsageFilter usageFilter = new UsageFilter();
         usageFilter.setUsageBatchesIds(Collections.singleton("ee575916-f6d0-4c3c-b589-32663e0f4793"));
-        assertEquals(1, usageRepository.findCountByFilterAndNotInStatus(usageFilter, UsageStatusEnum.WORK_NOT_FOUND));
+        assertFalse(usageRepository.isValidUsagesState(usageFilter, UsageStatusEnum.WORK_NOT_FOUND));
         usageFilter.setUsageStatus(UsageStatusEnum.WORK_NOT_FOUND);
-        assertEquals(0, usageRepository.findCountByFilterAndNotInStatus(usageFilter, UsageStatusEnum.WORK_NOT_FOUND));
+        assertTrue(usageRepository.isValidUsagesState(usageFilter, UsageStatusEnum.WORK_NOT_FOUND));
     }
 
     private void verifyFilterForTwoBatches(AuditFilter filter) {

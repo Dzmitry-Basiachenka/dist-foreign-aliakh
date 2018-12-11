@@ -12,7 +12,6 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
@@ -236,13 +235,6 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     @Override
     public List<Long> getInvalidRightsholders() {
         return usageService.getInvalidRightsholdersByFilter(filterController.getWidget().getAppliedFilter());
-    }
-
-    @Override
-    public boolean isProductFamilyAndStatusFiltersApplied() {
-        UsageFilter filter = filterController.getWidget().getAppliedFilter();
-        return UsageStatusEnum.ELIGIBLE == filter.getUsageStatus()
-            && CollectionUtils.isNotEmpty(filter.getProductFamilies());
     }
 
     @Override

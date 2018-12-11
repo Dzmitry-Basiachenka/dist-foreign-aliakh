@@ -224,12 +224,6 @@ public interface IUsagesController extends IController<IUsagesWidget> {
     List<Long> getInvalidRightsholders();
 
     /**
-     * @return {@code true} if product family filter is not empty and selected status filter equals to
-     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE}, {@code false} - otherwise.
-     */
-    boolean isProductFamilyAndStatusFiltersApplied();
-
-    /**
      * @return {@code true} if product family filter contains single product family, {@code false} - otherwise.
      */
     boolean isSingleProductFamilySelected();

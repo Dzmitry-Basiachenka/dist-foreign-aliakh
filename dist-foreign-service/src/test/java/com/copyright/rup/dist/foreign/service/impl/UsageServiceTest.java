@@ -611,10 +611,9 @@ public class UsageServiceTest {
     }
 
     @Test
-    public void testGetUsagesCountInNotApplicableStatus() {
+    public void testIsValidUsagesState() {
         UsageFilter usageFilter = new UsageFilter();
-        expect(usageRepository.findCountByFilterAndNotInStatus(usageFilter, UsageStatusEnum.WORK_NOT_FOUND))
-            .andReturn(1).once();
+        expect(usageRepository.isValidUsagesState(usageFilter, UsageStatusEnum.WORK_NOT_FOUND)).andReturn(true).once();
         replay(usageRepository);
         usageService.isValidUsagesState(usageFilter, UsageStatusEnum.WORK_NOT_FOUND);
         verify(usageRepository);
