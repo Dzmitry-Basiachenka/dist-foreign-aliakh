@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
+
+    <!-- Common processors -->
+    <bean id="eligibilityProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.EligibilityProcessor"/>
+    <bean id="deleteUsageProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.DeleteUsageProcessor"/>
+
+    <!-- NTS processors -->
+    <bean id="ntsRightsProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.RightsProcessor">
+        <property name="successProcessor" ref="rhTaxProcessor"/>
+        <property name="failureProcessor" ref="deleteUsageProcessor"/>
+    </bean>
+
+    <bean id="rhTaxProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.RhTaxProcessor">
+        <property name="successProcessor" ref="eligibilityProcessor"/>
+        <property name="failureProcessor" ref="deleteUsageProcessor"/>
+    </bean>
+</beans>
