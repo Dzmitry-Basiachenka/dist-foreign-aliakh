@@ -31,6 +31,13 @@ public interface IUsageArchiveRepository {
     void insert(Usage usage);
 
     /**
+     * Deletes archived {@link Usage}s by given batch identifier.
+     *
+     * @param batchId batch identifier
+     */
+    void deleteByBatchId(String batchId);
+
+    /**
      * Gets list of {@link RightsholderTotalsHolder}s based on {@link com.copyright.rup.dist.foreign.domain.Scenario}
      * identifier.
      *

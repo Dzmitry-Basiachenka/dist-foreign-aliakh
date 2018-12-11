@@ -81,6 +81,13 @@ public interface IUsageService {
     void deleteUsageBatchDetails(UsageBatch usageBatch);
 
     /**
+     * Deletes all {@link Usage}s and it's audit by provided batch id.
+     *
+     * @param batchId batch identifier
+     */
+    void deleteArchivedByBatchId(String batchId);
+
+    /**
      * Deletes {@link Usage} with given id.
      *
      * @param usageId usage identifier

@@ -50,6 +50,11 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
     }
 
     @Override
+    public void deleteByBatchId(String batchId) {
+        delete("IUsageArchiveMapper.deleteByBatchId", Objects.requireNonNull(batchId));
+    }
+
+    @Override
     public List<RightsholderTotalsHolder> findRightsholderTotalsHoldersByScenarioId(String scenarioId,
                                                                                     String searchValue,
                                                                                     Pageable pageable, Sort sort) {

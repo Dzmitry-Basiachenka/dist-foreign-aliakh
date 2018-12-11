@@ -129,6 +129,16 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertEquals("FAS", usageDto.getProductFamily());
     }
 
+    @Test
+    public void testDeleteByBatchId() {
+        assertTrue(CollectionUtils.isNotEmpty(
+            usageArchiveRepository.findByIdAndStatus(Collections.singletonList("5f90f7d7-566f-402a-975b-d54466862704"),
+                UsageStatusEnum.ARCHIVED)));
+        usageArchiveRepository.deleteByBatchId("f043c988-3344-4c0f-bce9-120af0027d09");
+        assertTrue(CollectionUtils.isEmpty(
+            usageArchiveRepository.findByIdAndStatus(Collections.singletonList("5f90f7d7-566f-402a-975b-d54466862704"),
+                UsageStatusEnum.ARCHIVED)));
+    }
 
     @Test
     public void testFindRightsholderTotalsHoldersByScenarioIdEmptySearchValue() {
