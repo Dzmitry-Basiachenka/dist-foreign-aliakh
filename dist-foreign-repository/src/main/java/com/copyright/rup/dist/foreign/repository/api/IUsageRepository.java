@@ -122,7 +122,7 @@ public interface IUsageRepository {
      *
      * @param batchId {@link com.copyright.rup.dist.foreign.domain.UsageBatch} id
      */
-    void deleteUsages(String batchId);
+    void deleteByBatchId(String batchId);
 
     /**
      * Deletes {@link Usage} with given id.

@@ -627,12 +627,12 @@
         where u.df_usage_uid = #{usageId}
     </select>
 
-    <delete id="deleteUsages" parameterType="string">
+    <delete id="deleteByBatchId" parameterType="string">
         delete from ${schema}.df_usage
         where df_usage_batch_uid = #{batchId}
     </delete>
 
-    <delete id="deleteById" parameterType="string">
+    <delete id="deleteByUsageId" parameterType="string">
         delete from ${schema}.df_usage
         where df_usage_uid = #{usageId}
     </delete>

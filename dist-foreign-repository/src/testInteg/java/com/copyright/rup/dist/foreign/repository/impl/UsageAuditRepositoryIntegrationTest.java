@@ -44,36 +44,41 @@ public class UsageAuditRepositoryIntegrationTest {
 
     @Test
     public void testInsertAndFind() {
-        UsageAuditItem loadAction = buildUsageAuditItem(USAGE_UID, UsageActionTypeEnum.LOADED);
-        usageAuditRepository.insert(loadAction);
-        usageAuditRepository.insert(buildUsageAuditItem("8a06905f-37ae-4e1f-8550-245277f8165c",
-            UsageActionTypeEnum.LOADED));
         List<UsageAuditItem> usageAuditItems = usageAuditRepository.findByUsageId(USAGE_UID);
-        assertTrue(CollectionUtils.isNotEmpty(usageAuditItems));
         assertEquals(1, CollectionUtils.size(usageAuditItems));
-        assertEquals(loadAction, usageAuditItems.get(0));
-        UsageAuditItem excludeAction = buildUsageAuditItem(USAGE_UID, UsageActionTypeEnum.EXCLUDED_FROM_SCENARIO);
-        usageAuditRepository.insert(excludeAction);
+        usageAuditRepository.insert(buildUsageAuditItem());
         usageAuditItems = usageAuditRepository.findByUsageId(USAGE_UID);
         assertEquals(2, CollectionUtils.size(usageAuditItems));
-        assertEquals(excludeAction.getActionType(), usageAuditItems.get(0).getActionType());
-        assertEquals(loadAction.getActionType(), usageAuditItems.get(1).getActionType());
+        UsageAuditItem auditItem = usageAuditItems.get(0);
+        assertEquals(UsageActionTypeEnum.WORK_NOT_FOUND, auditItem.getActionType());
+        assertEquals(USAGE_UID, auditItem.getUsageId());
+        assertEquals("Usage has no standard number and title", auditItem.getActionReason());
+        auditItem = usageAuditItems.get(1);
+        assertEquals(UsageActionTypeEnum.LOADED, auditItem.getActionType());
+        assertEquals("Uploaded in 'Test Batch 1' Batch", auditItem.getActionReason());
+        assertEquals(USAGE_UID, auditItem.getUsageId());
     }
 
     @Test
     public void testDeleteByBatchId() {
-        usageAuditRepository.insert(buildUsageAuditItem(USAGE_UID, UsageActionTypeEnum.LOADED));
         assertEquals(1, CollectionUtils.size(usageAuditRepository.findByUsageId(USAGE_UID)));
         usageAuditRepository.deleteByBatchId("56282dbc-2468-48d4-b926-93d3458a656a");
         assertTrue(CollectionUtils.isEmpty(usageAuditRepository.findByUsageId(USAGE_UID)));
     }
 
-    private UsageAuditItem buildUsageAuditItem(String usageId, UsageActionTypeEnum actionType) {
+    @Test
+    public void testDeleteByUsageId() {
+        assertEquals(1, CollectionUtils.size(usageAuditRepository.findByUsageId(USAGE_UID)));
+        usageAuditRepository.deleteByUsageId(USAGE_UID);
+        assertTrue(CollectionUtils.isEmpty(usageAuditRepository.findByUsageId(USAGE_UID)));
+    }
+
+    private UsageAuditItem buildUsageAuditItem() {
         UsageAuditItem usageAuditItem = new UsageAuditItem();
         usageAuditItem.setId(RupPersistUtils.generateUuid());
-        usageAuditItem.setUsageId(usageId);
-        usageAuditItem.setActionType(actionType);
-        usageAuditItem.setActionReason("Uploaded in ‘CADRA_11Dec16’ Batch");
+        usageAuditItem.setUsageId(USAGE_UID);
+        usageAuditItem.setActionType(UsageActionTypeEnum.WORK_NOT_FOUND);
+        usageAuditItem.setActionReason("Usage has no standard number and title");
         return usageAuditItem;
     }
 }

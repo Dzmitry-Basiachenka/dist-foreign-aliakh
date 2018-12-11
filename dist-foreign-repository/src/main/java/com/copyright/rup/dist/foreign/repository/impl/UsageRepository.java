@@ -193,14 +193,13 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public void deleteUsages(String batchId) {
-        checkArgument(StringUtils.isNotBlank(batchId));
-        delete("IUsageMapper.deleteUsages", batchId);
+    public void deleteByBatchId(String batchId) {
+        delete("IUsageMapper.deleteByBatchId", Objects.requireNonNull(batchId));
     }
 
     @Override
     public void deleteById(String usageId) {
-        delete("IUsageMapper.deleteById", Objects.requireNonNull(usageId));
+        delete("IUsageMapper.deleteByUsageId", Objects.requireNonNull(usageId));
     }
 
     @Override

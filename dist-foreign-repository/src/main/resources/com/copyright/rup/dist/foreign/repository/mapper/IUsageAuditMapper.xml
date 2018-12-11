@@ -39,6 +39,11 @@
             where df_usage_batch_uid = #{batchId})
     </delete>
 
+    <delete id="deleteByUsageId" parameterType="string">
+        delete from ${schema}.df_usage_audit
+        where df_usage_uid = #{usageId}
+    </delete>
+
     <select id="findByUsageId" parameterType="string" resultMap="usageAuditItemResultMap">
         select
             <include refid="usageAuditItemColumns"/>

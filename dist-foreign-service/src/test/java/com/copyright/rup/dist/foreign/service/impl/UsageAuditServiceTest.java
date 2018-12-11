@@ -78,11 +78,20 @@ public class UsageAuditServiceTest {
     }
 
     @Test
-    public void testDeleteActions() {
+    public void testDeleteActionsByBatchId() {
         usageAuditRepository.deleteByBatchId(BATCH_UID);
         expectLastCall().once();
         replay(usageAuditRepository);
-        usageAuditService.deleteActions(BATCH_UID);
+        usageAuditService.deleteActionsByBatchId(BATCH_UID);
+        verify(usageAuditRepository);
+    }
+
+    @Test
+    public void testDeleteActionsByUsageId() {
+        usageAuditRepository.deleteByUsageId(USAGE_UID);
+        expectLastCall().once();
+        replay(usageAuditRepository);
+        usageAuditService.deleteActionsByUsageId(USAGE_UID);
         verify(usageAuditRepository);
     }
 

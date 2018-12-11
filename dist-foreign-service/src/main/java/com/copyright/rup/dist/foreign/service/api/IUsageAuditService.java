@@ -37,11 +37,18 @@ public interface IUsageAuditService {
     void logAction(Set<String> usageIds, UsageActionTypeEnum actionType, String actionReason);
 
     /**
+     * Deletes usage actions by batch identifier.
+     *
+     * @param batchId batch identifier
+     */
+    void deleteActionsByBatchId(String batchId);
+
+    /**
      * Deletes usage actions by usage identifier.
      *
      * @param usageId usage identifier
      */
-    void deleteActions(String usageId);
+    void deleteActionsByUsageId(String usageId);
 
     /**
      * Gets all actions for usage with given id.
