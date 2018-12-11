@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Verifies correctness of loading NTS batch.
+ * Verifies correctness of inserting NTS batch.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -48,9 +48,9 @@ import java.util.Objects;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
-@TestPropertySource(properties = {"test.liquibase.changelog=upload-nts-batch-data-init.groovy"})
+@TestPropertySource(properties = {"test.liquibase.changelog=insert-nts-batch-data-init.groovy"})
 @Transactional
-public class NtsBatchUploadIntegrationTest {
+public class InsertNtsBatchIntegrationTest {
 
     @Autowired
     private IUsageBatchService usageBatchService;
@@ -62,7 +62,7 @@ public class NtsBatchUploadIntegrationTest {
     private IUsageAuditService usageAuditService;
 
     @Test
-    public void testUploadNtsBatch() {
+    public void testInsertNtsBatch() {
         UsageBatch usageBatch = buildNtsBatch();
         usageBatchService.insertNtsBatch(usageBatch);
         assertNotNull(usageBatchRepository.findAll()
@@ -122,6 +122,7 @@ public class NtsBatchUploadIntegrationTest {
         fundPool.setStmMinimumAmount(new BigDecimal("50.00"));
         fundPool.setNonStmMinimumAmount(new BigDecimal("7.00"));
         UsageBatch usageBatch = new UsageBatch();
+        usageBatch.setFiscalYear(2014);
         usageBatch.setId(RupPersistUtils.generateUuid());
         usageBatch.setName("Test NTS batch");
         usageBatch.setPaymentDate(LocalDate.now());

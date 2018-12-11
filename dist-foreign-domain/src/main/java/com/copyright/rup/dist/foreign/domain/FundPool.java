@@ -120,8 +120,8 @@ public class FundPool {
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-            .append("periodFrom", fundPoolPeriodFrom)
-            .append("periodTo", fundPoolPeriodTo)
+            .append("fundPoolPeriodFrom", fundPoolPeriodFrom)
+            .append("fundPoolPeriodTo", fundPoolPeriodTo)
             .append("stmAmount", stmAmount)
             .append("nonStmAmount", nonStmAmount)
             .append("stmMinimumAmount", stmMinimumAmount)

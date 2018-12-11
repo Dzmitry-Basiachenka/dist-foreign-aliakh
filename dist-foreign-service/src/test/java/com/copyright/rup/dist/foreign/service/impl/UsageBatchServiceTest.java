@@ -118,7 +118,7 @@ public class UsageBatchServiceTest {
     }
 
     @Test
-    public void testInsertUsageBatch() {
+    public void testInsertFasBatch() {
         mockStatic(RupContextUtils.class);
         Capture<UsageBatch> captureUsageBatch = new Capture<>();
         Capture<Runnable> runnableCapture = new Capture<>();
@@ -142,7 +142,7 @@ public class UsageBatchServiceTest {
         expectLastCall().once();
         expect(usageService.insertUsages(usageBatch, usages)).andReturn(2).once();
         replayAll();
-        assertEquals(2, usageBatchService.insertUsageBatch(usageBatch, usages));
+        assertEquals(2, usageBatchService.insertFasBatch(usageBatch, usages));
         UsageBatch insertedUsageBatch = captureUsageBatch.getValue();
         assertNotNull(insertedUsageBatch);
         assertEquals(USER_NAME, insertedUsageBatch.getUpdateUser());
