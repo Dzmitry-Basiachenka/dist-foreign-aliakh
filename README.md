@@ -1,3 +1,11 @@
+4.1.6
+-
+* B-23202 FDA: Create a NTS batch of FAS usage details as specified by RRO Receipt: make changes based on comments in CR-DIST-FOREIGN-79
+* B-47644 Tech Debt: FDA: Implement foundation for NTS usages processing
+* B-47644 Tech Debt: FDA: adjust API for AT adding method to remove archived usages and it's audit by batch id
+* B-47644 Tech Debt: FDA: remove constraint for applying Statuses filter from Create Scenario functionality
+* RDSC-644 FDA: Audit is not deleted from Database for NTS usage, that was deleted due to non-US RH and RH was not found in RMS
+
 4.1.5
 -
 * B-47644 Tech Debt: FDA: remove constraint for applying status filter from Sent for Research functionality
