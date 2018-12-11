@@ -114,6 +114,18 @@ public class UsageServiceTest {
     }
 
     @Test
+    public void testDeleteArchivedByBatchId() {
+        String batchId = "batch id";
+        usageAuditService.deleteActionsByBatchId(batchId);
+        expectLastCall().once();
+        usageArchiveRepository.deleteByBatchId(batchId);
+        expectLastCall().once();
+        replay(usageAuditService, usageArchiveRepository);
+        usageService.deleteArchivedByBatchId(batchId);
+        verify(usageAuditService, usageArchiveRepository);
+    }
+
+    @Test
     public void testGetUsageCountEmptyFilter() {
         assertEquals(0, usageService.getUsagesCount(new UsageFilter()));
     }

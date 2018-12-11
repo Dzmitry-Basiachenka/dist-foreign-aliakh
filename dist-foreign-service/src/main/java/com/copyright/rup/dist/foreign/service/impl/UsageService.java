@@ -167,6 +167,13 @@ public class UsageService implements IUsageService {
 
     @Override
     @Transactional
+    public void deleteArchivedByBatchId(String batchId) {
+        usageAuditService.deleteActionsByBatchId(batchId);
+        usageArchiveRepository.deleteByBatchId(batchId);
+    }
+
+    @Override
+    @Transactional
     public void deleteById(String usageId) {
         usageAuditService.deleteActionsByUsageId(usageId);
         usageRepository.deleteById(usageId);

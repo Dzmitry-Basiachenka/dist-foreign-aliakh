@@ -63,6 +63,11 @@
         )
     </insert>
 
+    <delete id="deleteByBatchId" parameterType="string" >
+        delete from ${schema}.df_usage_archive
+        where df_usage_batch_uid = #{batchId}
+    </delete>
+
     <select id="findRightsholderTotalsHolderCountByScenarioId" parameterType="map" resultType="int">
         select count(1)
         from (
