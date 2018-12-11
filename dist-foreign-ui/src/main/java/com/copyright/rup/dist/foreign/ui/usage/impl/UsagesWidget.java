@@ -202,7 +202,8 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         sendForResearchButton.addClickListener(event -> {
             if (!controller.isValidUsagesState(UsageStatusEnum.WORK_NOT_FOUND)) {
                 Windows.showNotificationWindow(
-                    ForeignUi.getMessage("message.error.invalid_usages_status.send_for_research"));
+                    ForeignUi.getMessage("message.error.invalid_usages_status", UsageStatusEnum.WORK_NOT_FOUND,
+                        "sent for research"));
             } else {
                 NotificationWindow window = new NotificationWindow(ForeignUi.getMessage("message.send_for_research"));
                 window.addCloseListener(closeEvent -> controller.clearFilter());
@@ -222,7 +223,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
 
     private void onAddToScenarioClicked() {
         if (0 < controller.getSize()) {
-            if (controller.isProductFamilyAndStatusFiltersApplied()) {
+            if (controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)) {
                 if (controller.isSingleProductFamilySelected()) {
                     List<Long> accountNumbers = controller.getInvalidRightsholders();
                     if (CollectionUtils.isNotEmpty(accountNumbers)) {
@@ -239,7 +240,9 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
                     Windows.showNotificationWindow(ForeignUi.getMessage("message.error.create_scenario"));
                 }
             } else {
-                Windows.showNotificationWindow(ForeignUi.getMessage("message.error.invalid_filter"));
+                Windows.showNotificationWindow(
+                    ForeignUi.getMessage("message.error.invalid_usages_status", UsageStatusEnum.ELIGIBLE,
+                        "added to scenario"));
             }
         } else {
             Windows.showNotificationWindow(ForeignUi.getMessage("message.error.empty_usages"));

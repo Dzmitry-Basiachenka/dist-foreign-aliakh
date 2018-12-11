@@ -486,7 +486,7 @@ public class UsageService implements IUsageService {
 
     @Override
     public boolean isValidUsagesState(UsageFilter filter, UsageStatusEnum status) {
-        return 0 == usageRepository.findCountByFilterAndNotInStatus(filter, status);
+        return usageRepository.isValidUsagesState(filter, status);
     }
 
     private void updatePaidUsage(PaidUsage paidUsage, String actionReason) {
