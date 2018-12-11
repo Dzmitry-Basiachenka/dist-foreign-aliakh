@@ -52,6 +52,42 @@ databaseChangeLog {
             column(name: 'updated_by_user', value: 'SYSTEM')
         }
 
+        // testDeleteForArchivedByBatchId
+        insert(schemaName: dbAppsSchema, tableName: "df_usage_archive") {
+            column(name: "df_usage_archive_uid", value: "422d33c0-4594-451e-a1ca-412c023299aa")
+            column(name: 'df_usage_batch_uid', value: '56282dbc-2468-48d4-b926-93d3458a656a')
+            column(name: "wr_wrk_inst", value: "243904752")
+            column(name: "work_title", value: "100 ROAD MOVIES")
+            column(name: "system_title", value: "100 ROAD MOVIES")
+            column(name: "rh_account_number", value: "1000009522")
+            column(name: "payee_account_number", value: "1000009522")
+            column(name: "status_ind", value: "PAID")
+            column(name: "product_family", value: "FAS")
+            column(name: "article", value: "DIN EN 779:2013")
+            column(name: "standard_number", value: "1008902112317622XX")
+            column(name: "market", value: "Doc Del")
+            column(name: "market_period_from", value: "2013")
+            column(name: "market_period_to", value: "2017")
+            column(name: "reported_value", value: "30.86")
+            column(name: "gross_amount", value: "50.00")
+            column(name: "net_amount", value: "34.00")
+            column(name: "service_fee_amount", value: "16.00")
+            column(name: "service_fee", value: "0.32000")
+            column(name: "ccc_event_id", value: "53256")
+            column(name: "check_number", value: "578945")
+            column(name: "check_date", value: "2011-03-15 11:41:52.735531+03")
+            column(name: "distribution_name", value: "FDA March 11")
+            column(name: "distribution_date", value: "2011-03-15 11:41:52.735531+03")
+            column(name: "period_end_date", value: "2011-03-15 11:41:52.735531+03")
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
+            column(name: 'df_usage_audit_uid', value: 'ef9d1e0e-4000-488a-a870-84b6c1c38ff6')
+            column(name: 'df_usage_uid', value: '422d33c0-4594-451e-a1ca-412c023299aa')
+            column(name: 'action_type_ind', value: 'PAID')
+            column(name: 'action_reason', value: 'Usage has been created based on Split process')
+        }
+
         //testFindBatchStatistic
         insert(schemaName: "apps", tableName: "df_usage_batch") {
             column(name: "df_usage_batch_uid", value: "275c0dd4-ffff-41ea-b68b-d35539ad3b6e")
@@ -408,7 +444,7 @@ databaseChangeLog {
             column(name: "action_type_ind", value: "PAID")
             column(name: "action_reason", value: "Usage has been paid according to information from the LM'")
         }
-        
+
         insert(schemaName: "apps", tableName: "df_usage_audit") {
             column(name: "df_usage_audit_uid", value: "1ce67a8a-c39c-4b08-b8cd-8a3eca32b4ca")
             column(name: "df_usage_uid", value: "0427f1de-2894-4a1d-b154-b1bf0e91192c")

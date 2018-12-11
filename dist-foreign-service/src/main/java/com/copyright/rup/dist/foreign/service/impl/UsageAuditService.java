@@ -50,6 +50,11 @@ public class UsageAuditService implements IUsageAuditService {
     }
 
     @Override
+    public void deleteActionsForArchivedByBatchId(String batchId) {
+        usageAuditRepository.deleteForArchivedByBatchId(batchId);
+    }
+
+    @Override
     public void deleteActionsByUsageId(String usageId) {
         usageAuditRepository.deleteByUsageId(usageId);
     }

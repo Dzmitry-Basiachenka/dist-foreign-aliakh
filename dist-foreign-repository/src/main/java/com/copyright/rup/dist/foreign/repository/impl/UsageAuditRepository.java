@@ -37,6 +37,11 @@ public class UsageAuditRepository extends BaseRepository implements IUsageAuditR
     }
 
     @Override
+    public void deleteForArchivedByBatchId(String batchId) {
+        delete("IUsageAuditMapper.deleteForArchivedByBatchId", Objects.requireNonNull(batchId));
+    }
+
+    @Override
     public void deleteByUsageId(String usageId) {
         delete("IUsageAuditMapper.deleteByUsageId", Objects.requireNonNull(usageId));
     }
