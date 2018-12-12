@@ -11,6 +11,27 @@
         <result property="actionReason" column="action_reason"/>
     </resultMap>
 
+    <resultMap id="usageBatchStatisticMap" type="UsageBatchStatistic">
+        <result property="loadedCount" column="loaded_count"/>
+        <result property="loadedAmount" column="loaded_sum"/>
+        <result property="matchedCount" column="matched_count"/>
+        <result property="matchedAmount" column="matched_sum"/>
+        <result property="ntsWithDrawnCount" column="nts_withdrawn_count"/>
+        <result property="ntsWithDrawnAmount" column="nts_withdrawn_sum"/>
+        <result property="worksNotFoundCount" column="work_not_found_count"/>
+        <result property="worksNotFoundAmount" column="work_not_found_sum"/>
+        <result property="rhNotFoundCount" column="rh_not_found_count"/>
+        <result property="rhNotFoundAmount" column="rh_not_found_sum"/>
+        <result property="eligibleCount" column="rh_found_count"/>
+        <result property="eligibleAmount" column="rh_found_sum"/>
+        <result property="sendForRaCount" column="send_for_ra_count"/>
+        <result property="sendForRaAmount" column="send_for_ra_sum"/>
+        <result property="sendToLmCount" column="sent_to_lm_count"/>
+        <result property="sendToLmAmount" column="sent_to_lm_sum"/>
+        <result property="paidCount" column="paid_count"/>
+        <result property="paidAmount" column="paid_sum"/>
+    </resultMap>
+
     <sql id="usageAuditItemColumns">
         df_usage_audit_uid,
         df_usage_uid,
@@ -51,4 +72,87 @@
         where df_usage_uid = #{usageId}
         order by created_datetime desc
     </select>
+    
+    <select id="findBatchStatistic" parameterType="map" resultMap="usageBatchStatisticMap">
+        select
+            sum(nested.loaded_count) loaded_count,
+            round(sum(nested.loaded_sum), 2) loaded_sum,
+            sum(nested.work_found_count) matched_count,
+            round(sum(nested.work_found_sum), 2) matched_sum,
+            sum(nested.nts_withdrawn_count) nts_withdrawn_count,
+            round(sum(nested.nts_withdrawn_sum), 2) nts_withdrawn_sum,
+            sum(nested.work_not_found_count) work_not_found_count,
+            round(sum(nested.work_not_found_sum), 2) work_not_found_sum,
+            sum(nested.rh_not_found_count) rh_not_found_count,
+            round(sum(nested.rh_not_found_sum), 2) rh_not_found_sum,
+            sum(nested.rh_found_count) rh_found_count,
+            round(sum(nested.rh_found_sum), 2) rh_found_sum,
+            sum(nested.send_for_ra_count) send_for_ra_count,
+            round(sum(nested.send_for_ra_sum), 2) send_for_ra_sum,
+            sum(nested.sent_to_lm_count) sent_to_lm_count,
+            round(sum(nested.sent_to_lm_sum), 2) sent_to_lm_sum,
+            sum(nested.paid_count) paid_count,
+            round(sum(nested.paid_sum), 2) paid_sum
+        from (
+            select
+                case when (sum(nested.loaded_count) != 0) then nested.amount else 0 end loaded_sum,
+                sum(nested.loaded_count) loaded_count,
+                case when (sum(nested.nts_withdrawn_count) != 0) then nested.amount else 0 end nts_withdrawn_sum,
+                sum(nested.nts_withdrawn_count) nts_withdrawn_count,
+                case when (sum(nested.work_found_count) != 0) then nested.amount else 0 end work_found_sum,
+                sum(nested.work_found_count) work_found_count,
+                case when (sum(nested.work_not_found_count) != 0) then nested.amount else 0 end work_not_found_sum,
+                sum(nested.work_not_found_count) work_not_found_count,
+                case when (sum(nested.rh_found_count) != 0) then nested.amount else 0 end rh_found_sum,
+                sum(nested.rh_found_count) rh_found_count,
+                case when (sum(nested.rh_not_found_count) != 0) then nested.amount else 0 end rh_not_found_sum,
+                sum(nested.rh_not_found_count) rh_not_found_count,
+                case when (sum(nested.send_for_ra_count) != 0) then nested.amount else 0 end send_for_ra_sum,
+                sum(nested.send_for_ra_count) send_for_ra_count,
+                case when (sum(nested.sent_to_lm_count) != 0) then nested.amount else 0 end sent_to_lm_sum,
+                sum(nested.sent_to_lm_count) sent_to_lm_count,
+                case when (sum(nested.paid_count) != 0) then nested.amount else 0 end paid_sum,
+                sum(nested.paid_count) paid_count
+            from(
+                select
+                    <include refid="batchStatisticColumns"/>
+                from ${schema}.df_usage_audit audit
+                left join ${schema}.df_usage u on audit.df_usage_uid = u.df_usage_uid
+                left join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
+                <include refid="batchStatisticWhere"/>
+                union all
+                select
+                    <include refid="batchStatisticColumns"/>
+                from ${schema}.df_usage_audit audit
+                left join ${schema}.df_usage_archive u on audit.df_usage_uid = u.df_usage_archive_uid
+                left join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
+                <include refid="batchStatisticWhere"/>
+            ) nested
+            group by nested.amount
+        ) nested
+    </select>
+
+    <sql id="batchStatisticColumns">
+        sum(u.gross_amount) amount,
+        case when (audit.action_type_ind = 'LOADED') then count(1) else 0 end loaded_count,
+        case when (audit.action_type_ind = 'ELIGIBLE_FOR_NTS' <include refid="actionTypeDateClause"/>) then count(1) else 0 end nts_withdrawn_count,
+        case when (audit.action_type_ind = 'WORK_FOUND' <include refid="actionTypeDateClause"/>) then count(1) else 0 end work_found_count,
+        case when (audit.action_type_ind = 'WORK_NOT_FOUND' <include refid="actionTypeDateClause"/>) then count(1) else 0 end work_not_found_count,
+        case when (audit.action_type_ind = 'RH_FOUND' <include refid="actionTypeDateClause"/>) then count(1) else 0 end rh_found_count,
+        case when (audit.action_type_ind = 'RH_NOT_FOUND' <include refid="actionTypeDateClause"/>) then count(1) else 0 end rh_not_found_count,
+        case when (audit.action_type_ind = 'SENT_FOR_RA' <include refid="actionTypeDateClause"/>) then count(1) else 0 end send_for_ra_count,
+        case when (audit.action_type_ind = 'SENT_TO_LM' <include refid="actionTypeDateClause"/>) then count(1) else 0 end sent_to_lm_count,
+        case when (audit.action_type_ind = 'PAID' <include refid="actionTypeDateClause"/>) then count(1) else 0 end paid_count
+    </sql>
+
+    <sql id="batchStatisticWhere">
+        where ub.name = #{batchName}
+        group by audit.action_type_ind, audit.created_datetime
+    </sql>
+
+    <sql id="actionTypeDateClause">
+        <if test="null != date">
+            and <![CDATA[cast(audit.created_datetime as date) = cast(#{date} as date)]]>
+        </if>
+    </sql>
 </mapper>
