@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.service.impl;
 
 import com.copyright.rup.common.caching.api.ICacheService;
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.integration.rest.prm.IPrmPreferenceService;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -14,6 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -21,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Collections;
-import java.util.List;
 
 /**
  * Verifies correctness of creating a scenario.
@@ -55,11 +56,12 @@ public class CreateScenarioTest {
     private CreateScenarioTestBuilder testBuilder;
 
     @Autowired
-    private List<ICacheService<?, ?>> cacheServices;
+    @Qualifier("dist.common.integration.rest.prmPreferenceCacheService")
+    private IPrmPreferenceService prmPreferenceService;
 
     @Before
     public void setUp() {
-        cacheServices.forEach(ICacheService::invalidateCache);
+        ((ICacheService<?, ?>) prmPreferenceService).invalidateCache();
     }
 
     @Test

@@ -1,13 +1,11 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
-import com.copyright.rup.common.caching.api.ICacheService;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 
 import com.google.common.collect.Lists;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +14,6 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * Verifies correctness of refreshing a scenario.
@@ -38,14 +35,6 @@ public class RefreshScenarioTest {
     private static final String RIGHTHOLDER_ID_3 = "624dcf73-a30f-4381-b6aa-c86d17198bd5";
     @Autowired
     private RefreshScenarioTestBuilder testBuilder;
-
-    @Autowired
-    private List<ICacheService<?, ?>> cacheServices;
-
-    @Before
-    public void setUp() {
-        cacheServices.forEach(ICacheService::invalidateCache);
-    }
 
     @Test
     public void testRefreshFasScenario() {
