@@ -46,6 +46,13 @@ public interface IUsageAuditService {
     void deleteActionsByBatchId(String batchId);
 
     /**
+     * Deletes archived usages actions by batch identifier.
+     *
+     * @param batchId batch identifier
+     */
+    void deleteActionsForArchivedByBatchId(String batchId);
+
+    /**
      * Deletes usage actions by usage identifier.
      *
      * @param usageId usage identifier

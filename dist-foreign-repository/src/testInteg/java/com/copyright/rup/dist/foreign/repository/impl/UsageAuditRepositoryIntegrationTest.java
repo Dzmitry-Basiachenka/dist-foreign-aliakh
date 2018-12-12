@@ -70,6 +70,14 @@ public class UsageAuditRepositoryIntegrationTest {
     }
 
     @Test
+    public void testDeleteForArchivedByBatchId() {
+        assertEquals(1,
+            CollectionUtils.size(usageAuditRepository.findByUsageId("422d33c0-4594-451e-a1ca-412c023299aa")));
+        usageAuditRepository.deleteForArchivedByBatchId("56282dbc-2468-48d4-b926-93d3458a656a");
+        assertTrue(CollectionUtils.isEmpty(usageAuditRepository.findByUsageId("422d33c0-4594-451e-a1ca-412c023299aa")));
+    }
+
+    @Test
     public void testDeleteByUsageId() {
         assertEquals(1, CollectionUtils.size(usageAuditRepository.findByUsageId(USAGE_UID)));
         usageAuditRepository.deleteByUsageId(USAGE_UID);

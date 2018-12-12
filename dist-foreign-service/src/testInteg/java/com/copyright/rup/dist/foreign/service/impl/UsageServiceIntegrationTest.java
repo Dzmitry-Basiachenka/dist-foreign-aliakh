@@ -7,11 +7,14 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageAuditRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 
 import com.google.common.collect.Lists;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,6 +25,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -45,6 +49,10 @@ public class UsageServiceIntegrationTest {
     private IUsageService usageService;
     @Autowired
     private IUsageAuditRepository auditRepository;
+    @Autowired
+    private IUsageArchiveRepository usageArchiveRepository;
+    @Autowired
+    private IUsageAuditRepository usageAuditRepository;
 
     @Test
     public void testDeleteFromScenario() {
@@ -60,6 +68,19 @@ public class UsageServiceIntegrationTest {
         assertTrue(auditRepository.findByUsageId("9f96760c-0de9-4cee-abf2-65521277281b").isEmpty());
         assertTrue(auditRepository.findByUsageId("e4a81fad-7b0e-4c67-8df2-112c8913e45e").isEmpty());
         assertTrue(auditRepository.findByUsageId("4ddfcb74-cb72-48f6-9ee4-8b4e05afce75").isEmpty());
+    }
+
+    @Test
+    public void testDeleteArchivedByBatchId() {
+        String usageId = "8b09419a-89d1-47ca-8c5a-5ee206e0b0e0";
+        String batchId = "0dc1cff9-fc33-47ef-866c-c97de0203f9c";
+        assertEquals(3, CollectionUtils.size(usageAuditRepository.findByUsageId(usageId)));
+        assertEquals(1, CollectionUtils.size(
+            usageArchiveRepository.findByIdAndStatus(Collections.singletonList(usageId), UsageStatusEnum.ARCHIVED)));
+        usageService.deleteArchivedByBatchId(batchId);
+        assertTrue(CollectionUtils.isEmpty(usageAuditRepository.findByUsageId(usageId)));
+        assertTrue(CollectionUtils.isEmpty(
+            usageArchiveRepository.findByIdAndStatus(Collections.singletonList(usageId),UsageStatusEnum.ARCHIVED)));
     }
 
     @Test

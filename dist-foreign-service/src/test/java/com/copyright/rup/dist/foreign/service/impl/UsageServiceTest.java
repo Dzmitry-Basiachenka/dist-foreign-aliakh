@@ -116,7 +116,7 @@ public class UsageServiceTest {
     @Test
     public void testDeleteArchivedByBatchId() {
         String batchId = "batch id";
-        usageAuditService.deleteActionsByBatchId(batchId);
+        usageAuditService.deleteActionsForArchivedByBatchId(batchId);
         expectLastCall().once();
         usageArchiveRepository.deleteByBatchId(batchId);
         expectLastCall().once();
