@@ -32,6 +32,11 @@ public enum UsageActionTypeEnum {
     WORK_NOT_FOUND,
 
     /**
+     * Action type for case when there are multiple works were found.
+     */
+    MULTIPLE_RESULTS,
+
+    /**
      * Action type for sending {@link Usage} for research.
      */
     WORK_RESEARCH,

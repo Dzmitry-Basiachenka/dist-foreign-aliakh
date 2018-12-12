@@ -41,14 +41,8 @@ public class PiIntegrationCacheService extends AbstractCacheService<Pair<String,
     }
 
     @Override
-    public Long findWrWrkInstByTitle(String title) {
-        Work work = getFromCache(Pair.of(null, title));
-        Long result = null;
-        // TODO {pliakh} remove not-null check
-        if (Objects.nonNull(work)) {
-            result = work.getWrWrkInst();
-        }
-        return result;
+    public Work findWorkByTitle(String title) {
+        return getFromCache(Pair.of(null, title));
     }
 
     @Override
@@ -60,7 +54,7 @@ public class PiIntegrationCacheService extends AbstractCacheService<Pair<String,
             result = ObjectUtils.defaultIfNull(piIntegrationService.findWorkByIdnoAndTitle(standardNumber, title),
                 new Work());
         } else {
-            result = new Work(piIntegrationService.findWrWrkInstByTitle(title), title);
+            result = piIntegrationService.findWorkByTitle(title);
         }
         return result;
     }

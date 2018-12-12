@@ -30,6 +30,9 @@ public class UsageBatchStatistic {
     private int worksNotFoundCount;
     private BigDecimal worksNotFoundAmount = DEFAULT_AMOUNT;
     private BigDecimal worksNotFoundPercent = DEFAULT_AMOUNT;
+    private int multipleMatchingCount;
+    private BigDecimal multipleMatchingAmount = DEFAULT_AMOUNT;
+    private BigDecimal multipleMatchingPercent = DEFAULT_AMOUNT;
     private int ntsWithDrawnCount;
     private BigDecimal ntsWithDrawnAmount = DEFAULT_AMOUNT;
     private BigDecimal ntsWithDrawnPercent = DEFAULT_AMOUNT;
@@ -42,9 +45,6 @@ public class UsageBatchStatistic {
     private int sendForRaCount;
     private BigDecimal sendForRaAmount = DEFAULT_AMOUNT;
     private BigDecimal sendForRaPercent = DEFAULT_AMOUNT;
-    private int sendToLmCount;
-    private BigDecimal sendToLmAmount = DEFAULT_AMOUNT;
-    private BigDecimal sendToLmPercent = DEFAULT_AMOUNT;
     private int paidCount;
     private BigDecimal paidAmount = DEFAULT_AMOUNT;
     private BigDecimal paidPercent = DEFAULT_AMOUNT;
@@ -127,6 +127,30 @@ public class UsageBatchStatistic {
 
     public void setWorksNotFoundPercent(BigDecimal worksNotFoundPercent) {
         this.worksNotFoundPercent = worksNotFoundPercent;
+    }
+
+    public int getMultipleMatchingCount() {
+        return multipleMatchingCount;
+    }
+
+    public void setMultipleMatchingCount(int multipleMatchingCount) {
+        this.multipleMatchingCount = multipleMatchingCount;
+    }
+
+    public BigDecimal getMultipleMatchingAmount() {
+        return multipleMatchingAmount;
+    }
+
+    public void setMultipleMatchingAmount(BigDecimal multipleMatchingAmount) {
+        this.multipleMatchingAmount = multipleMatchingAmount;
+    }
+
+    public BigDecimal getMultipleMatchingPercent() {
+        return multipleMatchingPercent;
+    }
+
+    public void setMultipleMatchingPercent(BigDecimal multipleMatchingPercent) {
+        this.multipleMatchingPercent = multipleMatchingPercent;
     }
 
     public int getNtsWithDrawnCount() {
@@ -225,30 +249,6 @@ public class UsageBatchStatistic {
         this.sendForRaPercent = sendForRaPercent;
     }
 
-    public int getSendToLmCount() {
-        return sendToLmCount;
-    }
-
-    public void setSendToLmCount(int sendToLmCount) {
-        this.sendToLmCount = sendToLmCount;
-    }
-
-    public BigDecimal getSendToLmAmount() {
-        return sendToLmAmount;
-    }
-
-    public void setSendToLmAmount(BigDecimal sendToLmAmount) {
-        this.sendToLmAmount = sendToLmAmount;
-    }
-
-    public BigDecimal getSendToLmPercent() {
-        return sendToLmPercent;
-    }
-
-    public void setSendToLmPercent(BigDecimal sendToLmPercent) {
-        this.sendToLmPercent = sendToLmPercent;
-    }
-
     public int getPaidCount() {
         return paidCount;
     }
@@ -296,6 +296,9 @@ public class UsageBatchStatistic {
             .append(worksNotFoundCount, that.worksNotFoundCount)
             .append(worksNotFoundAmount, that.worksNotFoundAmount)
             .append(worksNotFoundPercent, that.worksNotFoundPercent)
+            .append(multipleMatchingCount, that.multipleMatchingCount)
+            .append(multipleMatchingAmount, that.multipleMatchingAmount)
+            .append(multipleMatchingPercent, that.multipleMatchingPercent)
             .append(eligibleCount, that.eligibleCount)
             .append(eligibleAmount, that.eligibleAmount)
             .append(eligiblePercent, that.eligiblePercent)
@@ -305,9 +308,6 @@ public class UsageBatchStatistic {
             .append(sendForRaCount, that.sendForRaCount)
             .append(sendForRaAmount, that.sendForRaAmount)
             .append(sendForRaPercent, that.sendForRaPercent)
-            .append(sendToLmCount, that.sendToLmCount)
-            .append(sendToLmAmount, that.sendToLmAmount)
-            .append(sendToLmPercent, that.sendToLmPercent)
             .append(paidCount, that.paidCount)
             .append(paidAmount, that.paidAmount)
             .append(paidPercent, that.paidPercent)
@@ -330,6 +330,9 @@ public class UsageBatchStatistic {
             .append(worksNotFoundCount)
             .append(worksNotFoundAmount)
             .append(worksNotFoundPercent)
+            .append(multipleMatchingCount)
+            .append(multipleMatchingAmount)
+            .append(multipleMatchingPercent)
             .append(eligibleCount)
             .append(eligibleAmount)
             .append(eligiblePercent)
@@ -339,9 +342,6 @@ public class UsageBatchStatistic {
             .append(sendForRaCount)
             .append(sendForRaAmount)
             .append(sendForRaPercent)
-            .append(sendToLmCount)
-            .append(sendToLmAmount)
-            .append(sendToLmPercent)
             .append(paidCount)
             .append(paidAmount)
             .append(paidPercent)
@@ -364,6 +364,9 @@ public class UsageBatchStatistic {
             .append("worksNotFoundCount", worksNotFoundCount)
             .append("worksNotFoundAmount", worksNotFoundAmount)
             .append("worksNotFoundPercent", worksNotFoundPercent)
+            .append("multipleMatchingCount", multipleMatchingCount)
+            .append("multipleMatchingAmount", multipleMatchingAmount)
+            .append("multipleMatchingPercent", multipleMatchingPercent)
             .append("eligibleCount", eligibleCount)
             .append("eligibleAmount", eligibleAmount)
             .append("eligiblePercent", eligiblePercent)
@@ -373,9 +376,6 @@ public class UsageBatchStatistic {
             .append("sendForRaCount", sendForRaCount)
             .append("sendForRaAmount", sendForRaAmount)
             .append("sendForRaPercent", sendForRaPercent)
-            .append("sendToLmCount", sendToLmCount)
-            .append("sendToLmAmount", sendToLmAmount)
-            .append("sendToLmPercent", sendToLmPercent)
             .append("paidCount", paidCount)
             .append("paidAmount", paidAmount)
             .append("paidPercent", paidPercent)

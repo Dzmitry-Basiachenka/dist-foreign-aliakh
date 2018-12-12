@@ -47,14 +47,14 @@ public class WorkMatchingService implements IWorkMatchingService {
     @Override
     @Transactional
     public void matchByIdno(Usage usage) {
-        doMatchByIdno(usage);
+        Work work = doMatchByIdno(usage);
         if (UsageStatusEnum.WORK_FOUND == usage.getStatus()) {
             usageRepository.update(Collections.singletonList(usage));
             auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
                 String.format("Wr Wrk Inst %s was found by standard number %s", usage.getWrWrkInst(),
                     usage.getStandardNumber()));
         } else {
-            updateUsagesStatusAndWriteAudit(usage, UsageGroupEnum.STANDARD_NUMBER,
+            updateUsagesStatusAndWriteAudit(usage, work, UsageGroupEnum.STANDARD_NUMBER,
                 usageRepository.getTotalAmountByStandardNumberAndBatchId(usage.getStandardNumber(),
                     usage.getBatchId()));
         }
@@ -63,13 +63,13 @@ public class WorkMatchingService implements IWorkMatchingService {
     @Override
     @Transactional
     public void matchByTitle(Usage usage) {
-        doMatchByTitle(usage);
+        Work work = doMatchByTitle(usage);
         if (UsageStatusEnum.WORK_FOUND == usage.getStatus()) {
             usageRepository.update(Collections.singletonList(usage));
             auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
                 String.format("Wr Wrk Inst %s was found by title \"%s\"", usage.getWrWrkInst(), usage.getWorkTitle()));
         } else {
-            updateUsagesStatusAndWriteAudit(usage, UsageGroupEnum.TITLE,
+            updateUsagesStatusAndWriteAudit(usage, work, UsageGroupEnum.TITLE,
                 usageRepository.getTotalAmountByTitleAndBatchId(usage.getWorkTitle(), usage.getBatchId()));
         }
     }
@@ -77,28 +77,31 @@ public class WorkMatchingService implements IWorkMatchingService {
     @Override
     @Transactional
     public void updateStatusForUsageWithoutStandardNumberAndTitle(Usage usage) {
-        updateUsagesStatusAndWriteAudit(usage, UsageGroupEnum.SINGLE_USAGE, usage.getGrossAmount());
+        updateUsagesStatusAndWriteAudit(usage, new Work(), UsageGroupEnum.SINGLE_USAGE, usage.getGrossAmount());
     }
 
-    private void doMatchByTitle(Usage usage) {
-        Long wrWrkInst = piIntegrationService.findWrWrkInstByTitle(usage.getWorkTitle());
-        if (Objects.nonNull(wrWrkInst)) {
-            usage.setWrWrkInst(wrWrkInst);
+    private Work doMatchByTitle(Usage usage) {
+        Work work = piIntegrationService.findWorkByTitle(usage.getWorkTitle());
+        if (Objects.nonNull(work.getWrWrkInst())) {
+            usage.setWrWrkInst(work.getWrWrkInst());
             usage.setSystemTitle(usage.getWorkTitle());
             usage.setStatus(UsageStatusEnum.WORK_FOUND);
         }
+        return work;
     }
 
-    private void doMatchByIdno(Usage usage) {
+    private Work doMatchByIdno(Usage usage) {
         Work work = piIntegrationService.findWorkByIdnoAndTitle(usage.getStandardNumber(), usage.getWorkTitle());
-        if (Objects.nonNull(work) && Objects.nonNull(work.getWrWrkInst())) {
+        if (Objects.nonNull(work.getWrWrkInst())) {
             usage.setWrWrkInst(work.getWrWrkInst());
             usage.setSystemTitle(work.getMainTitle());
             usage.setStatus(UsageStatusEnum.WORK_FOUND);
         }
+        return work;
     }
 
-    private void updateUsagesStatusAndWriteAudit(Usage usage, UsageGroupEnum usageGroup, BigDecimal totalGrossAmount) {
+    private void updateUsagesStatusAndWriteAudit(Usage usage, Work work, UsageGroupEnum usageGroup,
+                                                 BigDecimal totalGrossAmount) {
         if (GROSS_AMOUNT_LIMIT.compareTo(totalGrossAmount) > 0) {
             usage.setStatus(UsageStatusEnum.NTS_WITHDRAWN);
             usage.setProductFamily(FdaConstants.NTS_PRODUCT_FAMILY);
@@ -115,8 +118,13 @@ public class WorkMatchingService implements IWorkMatchingService {
                     "Usage assigned unidentified work due to empty standard number and title");
             } else {
                 usage.setStatus(UsageStatusEnum.WORK_NOT_FOUND);
-                auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_NOT_FOUND,
-                    usageGroup.getWorkNotFoundReasonFunction().apply(usage));
+                if (work.isMultipleMatches()) {
+                    auditService.logAction(usage.getId(), UsageActionTypeEnum.MULTIPLE_RESULTS,
+                        usageGroup.getMultipleMatchesReasonFunction().apply(usage));
+                } else {
+                    auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_NOT_FOUND,
+                        usageGroup.getWorkNotFoundReasonFunction().apply(usage));
+                }
             }
             usageRepository.update(Collections.singletonList(usage));
         }
@@ -138,6 +146,11 @@ public class WorkMatchingService implements IWorkMatchingService {
             Function<Usage, String> getWorkNotFoundReasonFunction() {
                 return usage -> "Wr Wrk Inst was not found by standard number " + usage.getStandardNumber();
             }
+
+            @Override
+            Function<Usage, String> getMultipleMatchesReasonFunction() {
+                return usage -> "Multiple results were found by standard number " + usage.getStandardNumber();
+            }
         },
         /**
          * Enum constant to separate groups of {@link Usage}s with work title.
@@ -153,6 +166,11 @@ public class WorkMatchingService implements IWorkMatchingService {
             Function<Usage, String> getWorkNotFoundReasonFunction() {
                 return usage -> "Wr Wrk Inst was not found by title \"" + usage.getWorkTitle() + "\"";
             }
+
+            @Override
+            Function<Usage, String> getMultipleMatchesReasonFunction() {
+                return usage -> "Multiple results were found by title \"" + usage.getWorkTitle() + "\"";
+            }
         },
         /**
          * Enum constant to separate groups of {@link Usage}s that don't have standard number and work title.
@@ -167,6 +185,11 @@ public class WorkMatchingService implements IWorkMatchingService {
             Function<Usage, String> getWorkNotFoundReasonFunction() {
                 return usage -> "Usage has no standard number and title";
             }
+
+            @Override
+            Function<Usage, String> getMultipleMatchesReasonFunction() {
+                return usage -> "Usage has no standard number and title";
+            }
         };
 
         /**
@@ -176,9 +199,15 @@ public class WorkMatchingService implements IWorkMatchingService {
         abstract String getNtsEligibleReason();
 
         /**
-         * @return {@link Function} for building reason for setting status
-         * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#WORK_NOT_FOUND} for {@link Usage}.
+         * @return {@link Function} for building reason for setting status {@link UsageStatusEnum#WORK_NOT_FOUND}
+         * with {@link UsageActionTypeEnum#WORK_NOT_FOUND} action type for {@link Usage}.
          */
         abstract Function<Usage, String> getWorkNotFoundReasonFunction();
+
+        /**
+         * @return {@link Function} for building reason for setting status {@link UsageStatusEnum#WORK_NOT_FOUND}
+         * with {@link UsageActionTypeEnum#MULTIPLE_RESULTS} action type for {@link Usage}
+         */
+        abstract Function<Usage, String> getMultipleMatchesReasonFunction();
     }
 }

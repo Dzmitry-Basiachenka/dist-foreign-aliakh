@@ -20,14 +20,14 @@
         <result property="ntsWithDrawnAmount" column="nts_withdrawn_sum"/>
         <result property="worksNotFoundCount" column="work_not_found_count"/>
         <result property="worksNotFoundAmount" column="work_not_found_sum"/>
+        <result property="multipleMatchingCount" column="multiple_matching_count"/>
+        <result property="multipleMatchingAmount" column="multiple_matching_sum"/>
         <result property="rhNotFoundCount" column="rh_not_found_count"/>
         <result property="rhNotFoundAmount" column="rh_not_found_sum"/>
         <result property="eligibleCount" column="rh_found_count"/>
         <result property="eligibleAmount" column="rh_found_sum"/>
         <result property="sendForRaCount" column="send_for_ra_count"/>
         <result property="sendForRaAmount" column="send_for_ra_sum"/>
-        <result property="sendToLmCount" column="sent_to_lm_count"/>
-        <result property="sendToLmAmount" column="sent_to_lm_sum"/>
         <result property="paidCount" column="paid_count"/>
         <result property="paidAmount" column="paid_sum"/>
     </resultMap>
@@ -91,14 +91,14 @@
             round(sum(nested.nts_withdrawn_sum), 2) nts_withdrawn_sum,
             sum(nested.work_not_found_count) work_not_found_count,
             round(sum(nested.work_not_found_sum), 2) work_not_found_sum,
+            sum(nested.multiple_matching_count) multiple_matching_count,
+            round(sum(nested.multiple_matching_sum), 2) multiple_matching_sum,
             sum(nested.rh_not_found_count) rh_not_found_count,
             round(sum(nested.rh_not_found_sum), 2) rh_not_found_sum,
             sum(nested.rh_found_count) rh_found_count,
             round(sum(nested.rh_found_sum), 2) rh_found_sum,
             sum(nested.send_for_ra_count) send_for_ra_count,
             round(sum(nested.send_for_ra_sum), 2) send_for_ra_sum,
-            sum(nested.sent_to_lm_count) sent_to_lm_count,
-            round(sum(nested.sent_to_lm_sum), 2) sent_to_lm_sum,
             sum(nested.paid_count) paid_count,
             round(sum(nested.paid_sum), 2) paid_sum
         from (
@@ -111,14 +111,14 @@
                 sum(nested.work_found_count) work_found_count,
                 case when (sum(nested.work_not_found_count) != 0) then nested.amount else 0 end work_not_found_sum,
                 sum(nested.work_not_found_count) work_not_found_count,
+                case when (sum(nested.multiple_matching_count) != 0) then nested.amount else 0 end multiple_matching_sum,
+                sum(nested.multiple_matching_count) multiple_matching_count,
                 case when (sum(nested.rh_found_count) != 0) then nested.amount else 0 end rh_found_sum,
                 sum(nested.rh_found_count) rh_found_count,
                 case when (sum(nested.rh_not_found_count) != 0) then nested.amount else 0 end rh_not_found_sum,
                 sum(nested.rh_not_found_count) rh_not_found_count,
                 case when (sum(nested.send_for_ra_count) != 0) then nested.amount else 0 end send_for_ra_sum,
                 sum(nested.send_for_ra_count) send_for_ra_count,
-                case when (sum(nested.sent_to_lm_count) != 0) then nested.amount else 0 end sent_to_lm_sum,
-                sum(nested.sent_to_lm_count) sent_to_lm_count,
                 case when (sum(nested.paid_count) != 0) then nested.amount else 0 end paid_sum,
                 sum(nested.paid_count) paid_count
             from(
@@ -146,16 +146,16 @@
         case when (audit.action_type_ind = 'ELIGIBLE_FOR_NTS' <include refid="actionTypeDateClause"/>) then count(1) else 0 end nts_withdrawn_count,
         case when (audit.action_type_ind = 'WORK_FOUND' <include refid="actionTypeDateClause"/>) then count(1) else 0 end work_found_count,
         case when (audit.action_type_ind = 'WORK_NOT_FOUND' <include refid="actionTypeDateClause"/>) then count(1) else 0 end work_not_found_count,
+        case when (audit.action_type_ind = 'MULTIPLE_RESULTS' <include refid="actionTypeDateClause"/>) then count(1) else 0 end multiple_matching_count,
         case when (audit.action_type_ind = 'RH_FOUND' <include refid="actionTypeDateClause"/>) then count(1) else 0 end rh_found_count,
         case when (audit.action_type_ind = 'RH_NOT_FOUND' <include refid="actionTypeDateClause"/>) then count(1) else 0 end rh_not_found_count,
         case when (audit.action_type_ind = 'SENT_FOR_RA' <include refid="actionTypeDateClause"/>) then count(1) else 0 end send_for_ra_count,
-        case when (audit.action_type_ind = 'SENT_TO_LM' <include refid="actionTypeDateClause"/>) then count(1) else 0 end sent_to_lm_count,
         case when (audit.action_type_ind = 'PAID' <include refid="actionTypeDateClause"/>) then count(1) else 0 end paid_count
     </sql>
 
     <sql id="batchStatisticWhere">
         where ub.name = #{batchName}
-        group by audit.action_type_ind, audit.created_datetime
+        group by audit.action_type_ind, cast(audit.created_datetime as date)
     </sql>
 
     <sql id="actionTypeDateClause">
