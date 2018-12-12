@@ -39,6 +39,7 @@ public class ReconcileRightsholdersTest {
 
     private static final String SERVICE_FEE_16 = "0.16";
     private static final String SERVICE_FEE_32 = "0.32";
+    private static final String SERVICE_FEE_10 = "0.10";
 
     @Autowired
     private ReconcileRightsholdersTestBuilder testBuilder;
@@ -90,10 +91,10 @@ public class ReconcileRightsholdersTest {
                     "4200.00", "800.00", SERVICE_FEE_16),
                 buildUsage("cf2b4a25-d786-4fee-9c7f-5bec12b017c1", 1000000322L, 1000000322L, 123642505L, "2500.00",
                     "1700.00", "800.00", SERVICE_FEE_32),
-                buildUsage("d2da6044-7ff7-4b5d-984a-69978b9e0678", 1000002137L, 1000001820L, 122799407L, "1800.00",
-                    "1224.00", "576.00", SERVICE_FEE_32),
-                buildUsage("daf2483b-a7b4-415b-81d2-adb328423661", 1000002137L, 1000001820L, 122861189L, "1000.00",
-                    "680.00", "320.00", SERVICE_FEE_32),
+                buildUsage("d2da6044-7ff7-4b5d-984a-69978b9e0678", 1000002137L, 2000017000L, 122799407L, "1800.00",
+                        "1620.00", "180.00", SERVICE_FEE_10),
+                buildUsage("daf2483b-a7b4-415b-81d2-adb328423661", 1000002137L, 2000017000L, 122861189L, "1000.00",
+                        "900.00", "100.00", SERVICE_FEE_10),
                 buildUsage("f1d2c084-973b-4c88-9b45-d4060d87b4ba", 2000152614L, 2000152614L, 123636551L, "4500.00",
                     "3780.00", "720.00", SERVICE_FEE_16),
                 buildUsage("f9f5d608-c6e7-49dd-b658-174522b0549e", 2000152614L, 2000152614L, 123647460L, "200.00",

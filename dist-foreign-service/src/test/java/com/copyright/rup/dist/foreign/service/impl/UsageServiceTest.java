@@ -249,14 +249,9 @@ public class UsageServiceTest {
         Usage usage = buildUsage(USAGE_ID_1);
         expect(usageRepository.findWithAmountsAndRightsholders(usageFilter))
             .andReturn(Lists.newArrayList(usage)).once();
-        expect(prmIntegrationService.isRightsholderParticipating(usage.getRightsholder().getId(),
-            usage.getProductFamily()))
-            .andReturn(true).once();
-        expect(prmIntegrationService.getRhParticipatingServiceFee(true))
-            .andReturn(new BigDecimal("0.16000")).once();
-        replay(usageRepository, prmIntegrationService);
+        replay(usageRepository);
         assertTrue(CollectionUtils.isNotEmpty(usageService.getUsagesWithAmounts(usageFilter)));
-        verify(usageRepository, prmIntegrationService);
+        verify(usageRepository);
     }
 
     @Test
@@ -269,6 +264,12 @@ public class UsageServiceTest {
         expectLastCall().once();
         expect(prmIntegrationService.getRollUps(capture(rightsholdersIdsCapture)))
             .andReturn(HashBasedTable.create()).once();
+        expect(prmIntegrationService.isRightsholderParticipating(usage1.getRightsholder().getId(),
+            usage1.getProductFamily())).andReturn(true).once();
+        expect(prmIntegrationService.isRightsholderParticipating(usage2.getRightsholder().getId(),
+            usage2.getProductFamily())).andReturn(true).once();
+        expect(prmIntegrationService.getRhParticipatingServiceFee(true))
+            .andReturn(new BigDecimal("0.16000")).times(2);
         replay(usageRepository, prmIntegrationService);
         usageService.addUsagesToScenario(Lists.newArrayList(usage1, usage2), scenario);
         verify(usageRepository, prmIntegrationService);

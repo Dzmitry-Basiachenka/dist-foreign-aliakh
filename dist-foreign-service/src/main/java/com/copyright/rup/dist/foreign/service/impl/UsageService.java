@@ -181,15 +181,7 @@ public class UsageService implements IUsageService {
 
     @Override
     public List<Usage> getUsagesWithAmounts(UsageFilter filter) {
-        List<Usage> usages = usageRepository.findWithAmountsAndRightsholders(filter);
-        usages.forEach(usage -> {
-            boolean rhParticipatingFlag =
-                prmIntegrationService.isRightsholderParticipating(usage.getRightsholder().getId(),
-                    usage.getProductFamily());
-            CalculationUtils.recalculateAmounts(usage, rhParticipatingFlag,
-                prmIntegrationService.getRhParticipatingServiceFee(rhParticipatingFlag));
-        });
-        return usages;
+        return usageRepository.findWithAmountsAndRightsholders(filter);
     }
 
     @Override
@@ -221,19 +213,16 @@ public class UsageService implements IUsageService {
             rhToUsageMap.values().stream().map(usage -> usage.getRightsholder().getId()).collect(Collectors.toSet()));
         Table<String, String, Long> rollUps = prmIntegrationService.getRollUps(rightsholdersIds);
         newUsages.forEach(usage -> {
-            final String rightsholderId = usage.getRightsholder().getId();
             final long rhAccountNumber = usage.getRightsholder().getAccountNumber();
             Usage scenarioUsage = rhToUsageMap.get(rhAccountNumber);
             usage.getPayee().setAccountNumber(null == scenarioUsage
                 ? PrmRollUpService.getPayeeAccountNumber(rollUps, usage.getRightsholder(), usage.getProductFamily())
                 : scenarioUsage.getPayee().getAccountNumber());
-            boolean rhParticipating = null == scenarioUsage
-                ? prmIntegrationService.isRightsholderParticipating(rightsholderId, usage.getProductFamily())
-                : scenarioUsage.isRhParticipating();
             addScenarioInfo(usage, scenario);
-            CalculationUtils.recalculateAmounts(usage, rhParticipating,
-                FdaConstants.CLA_ACCOUNT_NUMBER.equals(usage.getPayee().getAccountNumber()) ? claPayeeServiceFee
-                    : prmIntegrationService.getRhParticipatingServiceFee(rhParticipating));
+            calculateAmounts(usage, null == scenarioUsage
+                ? prmIntegrationService.isRightsholderParticipating(usage.getRightsholder().getId(),
+                    usage.getProductFamily())
+                : scenarioUsage.isRhParticipating());
         });
         usageRepository.addToScenario(newUsages);
     }
@@ -261,10 +250,9 @@ public class UsageService implements IUsageService {
             usage.getPayee().setAccountNumber(
                 PrmRollUpService.getPayeeAccountNumber(rollUps, usage.getRightsholder(), usage.getProductFamily()));
             addScenarioInfo(usage, scenario);
-            //usages that have CLA as Payee should get 10% service fee
-            if (FdaConstants.CLA_ACCOUNT_NUMBER.equals(usage.getPayee().getAccountNumber())) {
-                CalculationUtils.recalculateAmounts(usage, usage.isRhParticipating(), claPayeeServiceFee);
-            }
+            calculateAmounts(usage,
+                prmIntegrationService.isRightsholderParticipating(usage.getRightsholder().getId(),
+                    usage.getProductFamily()));
         });
         usageRepository.addToScenario(usages);
     }
@@ -273,11 +261,9 @@ public class UsageService implements IUsageService {
     public void updateRhPayeeAndAmounts(List<Usage> usages) {
         String userName = RupContextUtils.getUserName();
         usages.forEach(usage -> {
-            boolean rhParticipatingFlag =
+            calculateAmounts(usage,
                 prmIntegrationService.isRightsholderParticipating(usage.getRightsholder().getId(),
-                    usage.getProductFamily());
-            CalculationUtils.recalculateAmounts(usage, rhParticipatingFlag,
-                prmIntegrationService.getRhParticipatingServiceFee(rhParticipatingFlag));
+                    usage.getProductFamily()));
             usage.setUpdateUser(userName);
         });
         usageRepository.update(usages);
@@ -505,6 +491,13 @@ public class UsageService implements IUsageService {
     private void insertPaidUsage(PaidUsage paidUsage, String actionReason) {
         usageArchiveRepository.insertPaid(paidUsage);
         usageAuditService.logAction(paidUsage.getId(), UsageActionTypeEnum.PAID, actionReason);
+    }
+
+    private void calculateAmounts(Usage usage, boolean rhParticipatingFlag) {
+        //usages that have CLA as Payee should get 10% service fee
+         CalculationUtils.recalculateAmounts(usage, rhParticipatingFlag,
+            FdaConstants.CLA_ACCOUNT_NUMBER.equals(usage.getPayee().getAccountNumber()) ? claPayeeServiceFee
+                : prmIntegrationService.getRhParticipatingServiceFee(rhParticipatingFlag));
     }
 
     private PaidUsage buildPaidUsage(Usage originalUsage, PaidUsage paidUsage) {
