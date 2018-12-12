@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
-import com.copyright.rup.common.caching.api.ICacheService;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
@@ -64,16 +63,12 @@ public class WorkflowIntegrationTest {
     @Autowired
     private WorkflowIntegrationTestBuilder testBuilder;
 
-    @Autowired
-    private List<ICacheService<?, ?>> cacheServices;
-
     private BrokerService brokerService;
     private Connection connection;
 
     @Before
     public void setUp() throws Exception {
         testBuilder.reset();
-        cacheServices.forEach(ICacheService::invalidateCache);
         brokerService = new BrokerService();
         brokerService.setPersistent(false);
         brokerService.setUseJmx(false);
