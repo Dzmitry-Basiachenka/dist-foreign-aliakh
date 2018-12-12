@@ -54,6 +54,10 @@
 * B-46036 FDA: Exclude non US RHs from the NTS proxy: introduce RH_FOUND status
 * B-46036 FDA: Exclude non US RHs from the NTS proxy: implement method to delete usage by its identifier
 
+3.1.35
+-
+* RDSC-646 FDA: For usages that have CLA as Payee service fee changes to 16% after applying rollups during reconciliation process
+
 3.1.34
 -
 * B-43660 Tech Debt: FDA: set correct version of the dist-common dependency
