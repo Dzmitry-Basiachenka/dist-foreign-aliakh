@@ -265,5 +265,11 @@ databaseChangeLog {
             column(name: 'rh_account_number', value: '1000001820')
             column(name: 'name', value: 'Delhi Medical Assn')
         }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'df_rightsholder_uid', value: '3259b121-8b0e-4b9e-8d7a-88707cf418a4')
+            column(name: 'rh_account_number', value: '2000017000')
+            column(name: 'name', value: 'CEDRO, Centro Espanol de Derechos Reprograficos')
+        }
     }
 }
