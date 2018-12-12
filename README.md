@@ -1,3 +1,7 @@
+4.1.7
+-
+* Revert B-47644 Tech Debt: FDA: refactor integration tests after refactoring PrmRollUpCacheService to be inherited from AbstractCacheService
+
 4.1.6
 -
 * B-23202 FDA: Create a NTS batch of FAS usage details as specified by RRO Receipt: make changes based on comments in CR-DIST-FOREIGN-79
