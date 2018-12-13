@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
+import com.copyright.rup.common.caching.api.ICacheService;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.domain.Scenario;
@@ -18,6 +19,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Integration test to verify reconcile rightsholders functionality.
@@ -42,9 +44,13 @@ public class ReconcileRightsholdersTest {
     @Autowired
     private ReconcileRightsholdersTestBuilder testBuilder;
 
+    @Autowired
+    private List<ICacheService<?, ?>> cacheServices;
+
     @Before
     public void setUp() {
         testBuilder.reset();
+        cacheServices.forEach(ICacheService::invalidateCache);
     }
 
     @Test

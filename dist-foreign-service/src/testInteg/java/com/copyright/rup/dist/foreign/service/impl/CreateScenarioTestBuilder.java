@@ -22,7 +22,6 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
@@ -67,8 +66,8 @@ class CreateScenarioTestBuilder {
 
     private MockRestServiceServer mockServer;
     private MockRestServiceServer asyncMockServer;
-    private String expectedRollupsIds;
     private String expectedRollupsJson;
+    private List<String> expectedRollupsRightholderIds;
     private String expectedPreferencesJson;
     private List<String> expectedPreferencesRightholderIds;
     private UsageFilter usageFilter;
@@ -76,9 +75,9 @@ class CreateScenarioTestBuilder {
     private String scenarioId;
     private Scenario expectedScenario;
 
-    CreateScenarioTestBuilder expectRollups(String rollupsJson, String... rollups) {
+    CreateScenarioTestBuilder expectRollups(String rollupsJson, String... rollupsRightsholdersIds) {
         this.expectedRollupsJson = rollupsJson;
-        this.expectedRollupsIds = StringUtils.join(rollups, ',');
+        this.expectedRollupsRightholderIds = Arrays.asList(rollupsRightsholdersIds);
         return this;
     }
 
@@ -114,8 +113,8 @@ class CreateScenarioTestBuilder {
 
         void run() {
             createRestServer();
+            expectGetRollups(expectedRollupsJson, expectedRollupsRightholderIds);
             expectGetPreferences(expectedPreferencesJson, expectedPreferencesRightholderIds);
-            expectGetRollups(expectedRollupsJson, expectedRollupsIds);
             scenarioId = scenarioService.createScenario("Test Scenario", "Scenario Description", usageFilter).getId();
             mockServer.verify();
             asyncMockServer.verify();
@@ -196,13 +195,15 @@ class CreateScenarioTestBuilder {
             });
         }
 
-        private void expectGetRollups(String fileName, String rightsholdersIds) {
-            (prmRollUpAsync ? asyncMockServer : mockServer).expect(MockRestRequestMatchers
-                .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelprefrollup?orgIds%5B%5D=" +
-                    rightsholdersIds + "&relationshipCode=PARENT&prefCodes%5B%5D=payee"))
-                .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
-                .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), fileName),
-                    MediaType.APPLICATION_JSON));
+        private void expectGetRollups(String fileName, List<String> rightsholdersIds) {
+            rightsholdersIds.forEach(rightsholdersId -> {
+                (prmRollUpAsync ? asyncMockServer : mockServer).expect(MockRestRequestMatchers
+                    .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelprefrollup?orgIds%5B%5D=" +
+                        rightsholdersId + "&relationshipCode=PARENT&prefCodes%5B%5D=payee"))
+                    .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
+                    .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), fileName),
+                        MediaType.APPLICATION_JSON));
+            });
         }
     }
 }
