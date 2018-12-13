@@ -1,17 +1,18 @@
-package com.copyright.rup.dist.foreign.service.impl.tax;
+package com.copyright.rup.dist.foreign.service.impl.common;
 
 import com.copyright.rup.dist.common.integration.camel.CommonMarshaller;
 import com.copyright.rup.dist.foreign.domain.Usage;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import org.apache.camel.Exchange;
-import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
 
 /**
- * Json marshaller for handling messages to check RH tax country.
+ * Common json marshaller for handling messages for usages.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -19,8 +20,7 @@ import java.io.InputStream;
  *
  * @author Uladzislau Shalamitski
  */
-@Component("df.service.rhTaxMarshaller")
-public class RhTaxMarshaller extends CommonMarshaller {
+public class CommonUsageMarshaller extends CommonMarshaller {
 
     /**
      * Usages marshaller {@link TypeReference}.
@@ -28,10 +28,16 @@ public class RhTaxMarshaller extends CommonMarshaller {
     static final TypeReference<Usage> TYPE_REFERENCE = new TypeReference<Usage>() {
     };
 
+    private StdSerializer<Usage> serializer;
+
+    public void setSerializer(StdSerializer<Usage> serializer) {
+        this.serializer = serializer;
+    }
+
     @Override
     protected ObjectMapper getObjectMapper() {
         SimpleModule simpleModule = new SimpleModule();
-        simpleModule.addSerializer(new RhTaxSerializer());
+        simpleModule.addSerializer(serializer);
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(simpleModule);
         return objectMapper;

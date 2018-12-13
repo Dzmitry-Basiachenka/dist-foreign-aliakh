@@ -114,7 +114,7 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
             sort = new Sort(sortOrder.getSorted(), Direction.of(SortDirection.ASCENDING == sortOrder.getDirection()));
         }
         return usageService
-            .getUsages(filterController.getWidget().getAppliedFilter(), new Pageable(startIndex, count), sort);
+            .getUsageDtos(filterController.getWidget().getAppliedFilter(), new Pageable(startIndex, count), sort);
     }
 
     @Override

@@ -52,11 +52,6 @@ public enum UsageActionTypeEnum {
     RH_NOT_FOUND,
 
     /**
-     * Action type for eligible usages.
-     */
-    ELIGIBLE,
-
-    /**
      * Action type for sending {@link Usage} to RMS for Rights Assignment.
      */
     SENT_FOR_RA,
@@ -66,6 +61,11 @@ public enum UsageActionTypeEnum {
      * and product family to "NTS".
      */
     ELIGIBLE_FOR_NTS,
+
+    /**
+     * Action type for eligible usages.
+     */
+    ELIGIBLE,
 
     /**
      * Action type for adding {@link Usage} to {@link Scenario}.

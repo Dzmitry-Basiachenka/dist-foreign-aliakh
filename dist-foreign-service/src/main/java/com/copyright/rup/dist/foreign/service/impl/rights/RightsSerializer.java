@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.fasterxml.jackson.databind.type.CollectionLikeType;
 import com.fasterxml.jackson.databind.type.SimpleType;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -21,6 +22,7 @@ import java.util.Objects;
  *
  * @author Ihar Suvorau
  */
+@Component("df.service.rightsSerializer")
 public class RightsSerializer extends StdSerializer<Usage> {
 
     /**

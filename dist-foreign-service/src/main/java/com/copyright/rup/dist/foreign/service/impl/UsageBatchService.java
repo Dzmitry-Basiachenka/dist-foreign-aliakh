@@ -4,6 +4,7 @@ import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.integration.camel.IProducer;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
+import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -83,13 +84,14 @@ public class UsageBatchService implements IUsageBatchService {
         usageBatch.setUpdateUser(userName);
         LOGGER.info("Insert usage batch. Started. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
         usageBatchRepository.insert(usageBatch);
-        LOGGER.info("Insert usage batch. Finished. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
         rightsholderService.updateRightsholder(usageBatch.getRro());
         int count = usageService.insertUsages(usageBatch, usages);
         Set<Long> accountNumbersToUpdate = usages.stream()
             .map(usage -> usage.getRightsholder().getAccountNumber())
             .filter(Objects::nonNull)
             .collect(Collectors.toSet());
+        LOGGER.info("Insert usage batch. Finished. UsageBatchName={}, UserName={}, UsagesCount={}",
+            usageBatch.getName(), userName, count);
         executorService.execute(() -> updateRightsholders(accountNumbersToUpdate));
         return count;
     }
@@ -105,7 +107,8 @@ public class UsageBatchService implements IUsageBatchService {
         usageBatchRepository.insert(usageBatch);
         List<Usage> ntsBatchUsages = usageService.getUsagesForNtsBatch(usageBatch);
         usageService.insertNtsUsages(usageBatch, ntsBatchUsages);
-        LOGGER.info("Insert NTS batch. Finished. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
+        LOGGER.info("Insert NTS batch. Finished. UsageBatchName={}, UserName={}, UsagesCount={}",
+            usageBatch.getName(), userName, LogUtils.size(ntsBatchUsages));
         return ntsBatchUsages;
     }
 

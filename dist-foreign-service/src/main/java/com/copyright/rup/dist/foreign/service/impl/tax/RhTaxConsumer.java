@@ -26,7 +26,7 @@ public class RhTaxConsumer implements IConsumer<Usage> {
     @Override
     public void consume(Usage usage) {
         if (Objects.nonNull(usage)) {
-            rhTaxService.applyRhTaxCountry(usage);
+            rhTaxService.processRhTaxCountry(usage);
         }
     }
 }

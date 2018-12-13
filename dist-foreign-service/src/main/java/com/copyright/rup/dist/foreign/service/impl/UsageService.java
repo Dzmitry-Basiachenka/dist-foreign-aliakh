@@ -98,15 +98,15 @@ public class UsageService implements IUsageService {
     private IScenarioAuditService scenarioAuditService;
 
     @Override
-    public List<UsageDto> getUsages(UsageFilter filter, Pageable pageable, Sort sort) {
+    public List<UsageDto> getUsageDtos(UsageFilter filter, Pageable pageable, Sort sort) {
         return !filter.isEmpty()
-            ? usageRepository.findByFilter(filter, pageable, sort)
+            ? usageRepository.findDtosByFilter(filter, pageable, sort)
             : Collections.emptyList();
     }
 
     @Override
-    public List<Usage> getUsagesByFilter(UsageFilter filter) {
-        return usageRepository.findUsagesByFilter(filter);
+    public List<Usage> getUsages(UsageFilter filter) {
+        return usageRepository.findByFilter(filter);
     }
 
     @Override

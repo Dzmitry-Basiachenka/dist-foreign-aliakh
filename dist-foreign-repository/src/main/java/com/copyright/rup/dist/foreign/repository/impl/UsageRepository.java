@@ -85,19 +85,19 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public List<UsageDto> findByFilter(UsageFilter filter, Pageable pageable, Sort sort) {
+    public List<UsageDto> findDtosByFilter(UsageFilter filter, Pageable pageable, Sort sort) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
         parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
         parameters.put(PAGEABLE_KEY, pageable);
         parameters.put(SORT_KEY, sort);
-        return selectList("IUsageMapper.findByFilter", parameters);
+        return selectList("IUsageMapper.findDtosByFilter", parameters);
     }
 
     @Override
-    public List<Usage> findUsagesByFilter(UsageFilter filter) {
+    public List<Usage> findByFilter(UsageFilter filter) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(1);
         parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
-        return selectList("IUsageMapper.findUsagesByFilter", parameters);
+        return selectList("IUsageMapper.findByFilter", parameters);
     }
 
     @Override
@@ -145,7 +145,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
                 int size = findCountByFilter(filter);
                 for (int offset = 0; offset < size; offset += REPORT_BATCH_SIZE) {
                     parameters.put(PAGEABLE_KEY, new Pageable(offset, REPORT_BATCH_SIZE));
-                    getTemplate().select("IUsageMapper.findByFilter", parameters, handler);
+                    getTemplate().select("IUsageMapper.findDtosByFilter", parameters, handler);
                 }
             }
         }
@@ -157,7 +157,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         try (SendForResearchCsvReportHandler handler =
                  new SendForResearchCsvReportHandler(Objects.requireNonNull(outputStream))) {
             if (!Objects.requireNonNull(filter).isEmpty()) {
-                getTemplate().select("IUsageMapper.findByFilter", ImmutableMap.of(FILTER_KEY, filter), handler);
+                getTemplate().select("IUsageMapper.findDtosByFilter", ImmutableMap.of(FILTER_KEY, filter), handler);
                 usageIds = handler.getUsagesIds();
             }
         }

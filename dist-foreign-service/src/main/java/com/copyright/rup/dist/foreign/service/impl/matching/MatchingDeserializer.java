@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import org.slf4j.Logger;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.math.RoundingMode;
@@ -25,6 +26,7 @@ import java.math.RoundingMode;
  *
  * @author Ihar Suvorau
  */
+@Component("df.service.matchingDeserializer")
 public class MatchingDeserializer extends JsonDeserializer<Usage> {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();

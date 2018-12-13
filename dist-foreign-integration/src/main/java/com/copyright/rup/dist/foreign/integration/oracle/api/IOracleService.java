@@ -21,6 +21,5 @@ public interface IOracleService {
      * @return map from rightsholders account numbers to country codes.
      * Map doesn't contains key for account number if country code wasn't found.
      */
-    //TODO {ushalamitski} change method signature to process single account number
     Map<Long, String> getAccountNumbersToCountryCodesMap(List<Long> accountNumbers);
 }

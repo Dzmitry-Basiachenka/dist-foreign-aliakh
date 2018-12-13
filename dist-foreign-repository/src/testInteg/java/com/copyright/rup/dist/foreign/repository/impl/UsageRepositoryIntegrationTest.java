@@ -160,21 +160,21 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindByFilter() {
+    public void testFindDtosByFilter() {
         UsageFilter usageFilter =
             buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.singleton(USAGE_BATCH_ID_1),
                 Collections.singleton(PRODUCT_FAMILY_FAS), UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, FISCAL_YEAR);
-        verifyUsageDtos(usageRepository.findByFilter(usageFilter, null, new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 1,
-            USAGE_ID_1);
+        verifyUsageDtos(usageRepository.findDtosByFilter(usageFilter, null,
+            new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 1, USAGE_ID_1);
     }
 
     @Test
-    public void testFindUsagesByFilter() {
+    public void testFindByFilter() {
         UsageFilter usageFilter = new UsageFilter();
         usageFilter.setProductFamilies(ImmutableSet.of("NTS"));
         usageFilter.setUsageStatus(UsageStatusEnum.RH_FOUND);
         usageFilter.setUsageBatchesIds(ImmutableSet.of("928e2693-2646-4a04-85f1-4ca9cd78551a"));
-        List<Usage> actualUsages = usageRepository.findUsagesByFilter(usageFilter);
+        List<Usage> actualUsages = usageRepository.findByFilter(usageFilter);
         assertTrue(CollectionUtils.isNotEmpty(actualUsages));
         assertEquals(2, CollectionUtils.size(actualUsages));
         actualUsages.sort(Comparator.comparing(Usage::getId));
@@ -187,51 +187,52 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindByUsageBatchFilter() {
+    public void testFindDtosByUsageBatchFilter() {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.singleton(USAGE_BATCH_ID_1),
             Collections.emptySet(), null, null, null);
-        verifyUsageDtos(usageRepository.findByFilter(usageFilter, null, new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 1,
-            USAGE_ID_1);
+        verifyUsageDtos(usageRepository.findDtosByFilter(usageFilter, null,
+            new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 1, USAGE_ID_1);
     }
 
     @Test
-    public void testFindByRhAccountNumberFilter() {
+    public void testFindDtosByRhAccountNumberFilter() {
         UsageFilter usageFilter = buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.emptySet(),
             Collections.emptySet(), null, null, null);
-        verifyUsageDtos(usageRepository.findByFilter(usageFilter, null, new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 1,
-            USAGE_ID_1);
+        verifyUsageDtos(usageRepository.findDtosByFilter(usageFilter, null,
+            new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 1, USAGE_ID_1);
     }
 
     @Test
-    public void testFindByProductFamiliesFilter() {
+    public void testFindDtosByProductFamiliesFilter() {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             Collections.singleton(PRODUCT_FAMILY_FAS), null, null, null);
-        verifyUsageDtos(usageRepository.findByFilter(usageFilter, null, new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)),
-            16, USAGE_ID_14, USAGE_ID_1, USAGE_ID_23, USAGE_ID_21, USAGE_ID_12, USAGE_ID_9, USAGE_ID_6, USAGE_ID_13,
-            USAGE_ID_18, USAGE_ID_11, USAGE_ID_2, USAGE_ID_19, USAGE_ID_17, USAGE_ID_22, USAGE_ID_4, USAGE_ID_20);
+        verifyUsageDtos(usageRepository.findDtosByFilter(usageFilter, null,
+            new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 16, USAGE_ID_14, USAGE_ID_1, USAGE_ID_23, USAGE_ID_21,
+            USAGE_ID_12, USAGE_ID_9, USAGE_ID_6, USAGE_ID_13, USAGE_ID_18, USAGE_ID_11, USAGE_ID_2, USAGE_ID_19,
+            USAGE_ID_17, USAGE_ID_22, USAGE_ID_4, USAGE_ID_20);
     }
 
     @Test
-    public void testFindByStatusFilter() {
+    public void testFindDtosByStatusFilter() {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             Collections.emptySet(), UsageStatusEnum.ELIGIBLE, null, null);
-        verifyUsageDtos(usageRepository.findByFilter(usageFilter, null, new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 3,
-            USAGE_ID_1, USAGE_ID_3, USAGE_ID_2);
+        verifyUsageDtos(usageRepository.findDtosByFilter(usageFilter, null, new Sort(DETAIL_ID_KEY,
+            Sort.Direction.ASC)), 3, USAGE_ID_1, USAGE_ID_3, USAGE_ID_2);
     }
 
     @Test
-    public void testFindByPaymentDateFilterSortByWorkTitle() {
+    public void testFindDtosByPaymentDateFilterSortByWorkTitle() {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             Collections.emptySet(), null, PAYMENT_DATE, null);
-        verifyUsageDtos(usageRepository.findByFilter(usageFilter, null, new Sort(WORK_TITLE_KEY, Sort.Direction.ASC)),
-            3, USAGE_ID_3, USAGE_ID_2, USAGE_ID_1);
+        verifyUsageDtos(usageRepository.findDtosByFilter(usageFilter, null, new Sort(WORK_TITLE_KEY,
+            Sort.Direction.ASC)), 3, USAGE_ID_3, USAGE_ID_2, USAGE_ID_1);
     }
 
     @Test
-    public void testFindByFiscalYearFilterSortByArticle() {
+    public void testFindDtosByFiscalYearFilterSortByArticle() {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             Collections.emptySet(), null, null, FISCAL_YEAR);
-        verifyUsageDtos(usageRepository.findByFilter(usageFilter, null, new Sort("article", Sort.Direction.ASC)), 3,
+        verifyUsageDtos(usageRepository.findDtosByFilter(usageFilter, null, new Sort("article", Sort.Direction.ASC)), 3,
             USAGE_ID_3, USAGE_ID_1, USAGE_ID_2);
     }
 
@@ -410,9 +411,9 @@ public class UsageRepositoryIntegrationTest {
         UsageFilter filter = new UsageFilter();
         filter.setUsageBatchesIds(Sets.newHashSet(USAGE_BATCH_ID_1));
         Sort sort = new Sort(DETAIL_ID_KEY, Direction.ASC);
-        assertEquals(1, usageRepository.findByFilter(filter, null, sort).size());
+        assertEquals(1, usageRepository.findDtosByFilter(filter, null, sort).size());
         usageRepository.deleteByBatchId(USAGE_BATCH_ID_1);
-        assertEquals(0, usageRepository.findByFilter(filter, null, sort).size());
+        assertEquals(0, usageRepository.findDtosByFilter(filter, null, sort).size());
     }
 
     @Test
@@ -977,7 +978,7 @@ public class UsageRepositoryIntegrationTest {
     }
 
     private List<UsageDto> findByFilterWithSort(UsageFilter filter, String property, Direction direction) {
-        return usageRepository.findByFilter(filter, null, new Sort(property, direction));
+        return usageRepository.findDtosByFilter(filter, null, new Sort(property, direction));
     }
 
     private void verifyFindByScenarioIdAndRhSearch(String searchValue, int expectedSize) {

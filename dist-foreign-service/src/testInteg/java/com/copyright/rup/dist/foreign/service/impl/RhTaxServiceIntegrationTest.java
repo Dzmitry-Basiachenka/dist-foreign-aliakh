@@ -58,10 +58,10 @@ public class RhTaxServiceIntegrationTest {
     private RestTemplate restTemplate;
 
     @Test
-    public void testApplyTaxCountryUs() throws IOException {
+    public void testProcessTaxCountryUs() throws IOException {
         MockRestServiceServer mockServer = MockRestServiceServer.createServer(restTemplate);
         prepareOracleCall(mockServer, "rh_tax_country_us_request.json", "rh_tax_country_us_response.json");
-        rhTaxService.applyRhTaxCountry(buildUsage("eae81bc0-a756-43a2-b236-05a0184384f4", 2000133267L));
+        rhTaxService.processRhTaxCountry(buildUsage("eae81bc0-a756-43a2-b236-05a0184384f4", 2000133267L));
         assertUsage("eae81bc0-a756-43a2-b236-05a0184384f4", UsageStatusEnum.ELIGIBLE);
         assertAudit("eae81bc0-a756-43a2-b236-05a0184384f4", UsageActionTypeEnum.ELIGIBLE,
             "Usage has become eligible based on US rightsholder tax country");
@@ -69,10 +69,10 @@ public class RhTaxServiceIntegrationTest {
     }
 
     @Test
-    public void testApplyTaxCountryFr() throws IOException {
+    public void testProcessTaxCountryFr() throws IOException {
         MockRestServiceServer mockServer = MockRestServiceServer.createServer(restTemplate);
         prepareOracleCall(mockServer, "rh_tax_country_fr_request.json", "rh_tax_country_fr_response.json");
-        rhTaxService.applyRhTaxCountry(buildUsage("4ae8c9cb-3cd0-4497-ac8b-f19f85b259cb", 2000133261L));
+        rhTaxService.processRhTaxCountry(buildUsage("4ae8c9cb-3cd0-4497-ac8b-f19f85b259cb", 2000133261L));
         assertNull(usageRepository.findById("4ae8c9cb-3cd0-4497-ac8b-f19f85b259cb"));
         mockServer.verify();
     }

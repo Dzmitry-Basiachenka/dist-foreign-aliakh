@@ -131,23 +131,23 @@ public class UsageServiceTest {
     }
 
     @Test
-    public void testGetUsages() {
+    public void testGetUsageDtos() {
         List<UsageDto> usagesWithBatch = Lists.newArrayList(new UsageDto());
         Pageable pageable = new Pageable(0, 1);
         Sort sort = new Sort("detailId", Sort.Direction.ASC);
         UsageFilter filter = new UsageFilter();
         filter.setFiscalYear(2017);
-        expect(usageRepository.findByFilter(filter, pageable, sort)).andReturn(usagesWithBatch).once();
+        expect(usageRepository.findDtosByFilter(filter, pageable, sort)).andReturn(usagesWithBatch).once();
         replay(usageRepository);
-        List<UsageDto> result = usageService.getUsages(filter, pageable, sort);
+        List<UsageDto> result = usageService.getUsageDtos(filter, pageable, sort);
         assertNotNull(result);
         assertEquals(1, result.size());
         verify(usageRepository);
     }
 
     @Test
-    public void testGetUsagesEmptyFilter() {
-        List<UsageDto> result = usageService.getUsages(new UsageFilter(), null, null);
+    public void testGetUsagesDtosEmptyFilter() {
+        List<UsageDto> result = usageService.getUsageDtos(new UsageFilter(), null, null);
         assertNotNull(result);
         assertTrue(result.isEmpty());
     }

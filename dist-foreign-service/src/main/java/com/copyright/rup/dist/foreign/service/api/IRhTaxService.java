@@ -19,5 +19,5 @@ public interface IRhTaxService {
      *
      * @param usage NTS {@link Usage} to check RH tax country
      */
-    void applyRhTaxCountry(Usage usage);
+    void processRhTaxCountry(Usage usage);
 }

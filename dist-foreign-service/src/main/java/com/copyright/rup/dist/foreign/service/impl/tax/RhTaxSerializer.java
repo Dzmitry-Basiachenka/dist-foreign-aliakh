@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.fasterxml.jackson.databind.type.CollectionLikeType;
 import com.fasterxml.jackson.databind.type.SimpleType;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -20,6 +21,7 @@ import java.util.Objects;
  *
  * @author Uladzislau Shalamitski
  */
+@Component("df.service.rhTaxSerializer")
 public class RhTaxSerializer extends StdSerializer<Usage> {
 
     /**

@@ -48,8 +48,8 @@ public class OracleCacheServiceTest {
 
     @Test
     public void testGetAccountNumbersToCountryCodesMap() {
-        expect(oracleServiceMock.getAccountNumbersToCountryCodesMap(ImmutableList.of(ACCOUNT_NUMBER))).andReturn(
-            ImmutableMap.of(ACCOUNT_NUMBER, COUNTRY_CODE)).once();
+        expect(oracleServiceMock.getAccountNumbersToCountryCodesMap(ImmutableList.of(ACCOUNT_NUMBER)))
+            .andReturn(ImmutableMap.of(ACCOUNT_NUMBER, COUNTRY_CODE)).once();
         replay(oracleServiceMock);
         Map<Long, String> actualResult =
             oracleIntegrationCacheService.getAccountNumbersToCountryCodesMap(Collections.singletonList(ACCOUNT_NUMBER));
