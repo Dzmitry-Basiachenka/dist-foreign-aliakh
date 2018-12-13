@@ -38,7 +38,6 @@ import org.apache.camel.ProducerTemplate;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.Builder;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,8 +116,8 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
     private int expectedInsertedUsagesCount;
     private String expectedPreferencesJson;
     private List<String> expectedPreferencesRightholderIds;
-    private String expectedRollupsJsonFile;
-    private List<String> expectedRightsholdersIds;
+    private String expectedRollupsJson;
+    private List<String> expectedRollupsRightsholdersIds;
     private String expectedLmDetailsJsonFile;
     private String expectedPaidUsagesJsonFile;
     private List<String> expectedPaidUsageLmDetailids;
@@ -157,9 +156,9 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
-    public WorkflowIntegrationTestBuilder expectRollups(String jsonFile, String... rightsholdersIds) {
-        this.expectedRollupsJsonFile = jsonFile;
-        this.expectedRightsholdersIds = Arrays.asList(rightsholdersIds);
+    public WorkflowIntegrationTestBuilder expectRollups(String rollupsJson, String... rollupsRightsholdersIds) {
+        this.expectedRollupsJson = rollupsJson;
+        this.expectedRollupsRightsholdersIds = Arrays.asList(rollupsRightsholdersIds);
         return this;
     }
 
@@ -219,8 +218,8 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
         public void run() throws IOException, InterruptedException {
             createRestServer();
             expectGetRmsRights();
+            expectGetRollups(expectedRollupsJson, expectedRollupsRightsholdersIds);
             expectGetPreferences(expectedPreferencesJson, expectedPreferencesRightholderIds);
-            expectGetRollups();
             loadUsageBatch();
             addToScenario();
             verifyRestServer();
@@ -299,17 +298,15 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
             });
         }
 
-        private void expectGetRollups() {
-            String responseBody = TestUtils.fileToString(this.getClass(), expectedRollupsJsonFile);
-            (prmRollUpAsync ? asyncMockServer : mockServer).expect(
-                MockRestRequestMatchers.requestTo(buildRollupRequestString()))
-                .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
-                .andRespond(MockRestResponseCreators.withSuccess(responseBody, MediaType.APPLICATION_JSON));
-        }
-
-        private String buildRollupRequestString() {
-            return "http://localhost:8080/party-rest/orgPreference/orgrelprefrollup?orgIds%5B%5D=" +
-                StringUtils.join(expectedRightsholdersIds, ",") + "&relationshipCode=PARENT&prefCodes%5B%5D=payee";
+        private void expectGetRollups(String fileName, List<String> rightsholdersIds) {
+            rightsholdersIds.forEach(rightsholdersId -> {
+                (prmRollUpAsync ? asyncMockServer : mockServer).expect(MockRestRequestMatchers
+                    .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelprefrollup?orgIds%5B%5D=" +
+                        rightsholdersId + "&relationshipCode=PARENT&prefCodes%5B%5D=payee"))
+                    .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
+                    .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), fileName),
+                        MediaType.APPLICATION_JSON));
+            });
         }
 
         private void sendScenarioToLm() throws InterruptedException {
