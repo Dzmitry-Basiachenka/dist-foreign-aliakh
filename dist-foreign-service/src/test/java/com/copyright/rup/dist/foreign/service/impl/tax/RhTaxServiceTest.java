@@ -52,18 +52,18 @@ public class RhTaxServiceTest {
     }
 
     @Test
-    public void testApplyRhTaxCountryFr() {
+    public void testProcessRhTaxCountryFr() {
         Usage usage = buildUsage(RupPersistUtils.generateUuid());
         expect(oracleIntegrationService.isUsCountryCode(1000001534L)).andReturn(false).once();
         usageService.deleteById(usage.getId());
         expectLastCall().once();
         replay(usageRepository, usageAuditService, oracleIntegrationService);
-        rhTaxService.applyRhTaxCountry(usage);
+        rhTaxService.processRhTaxCountry(usage);
         verify(usageRepository, usageAuditService, oracleIntegrationService);
     }
 
     @Test
-    public void testApplyRhTaxCountryUs() {
+    public void testProcessRhTaxCountryUs() {
         Usage usage = buildUsage(RupPersistUtils.generateUuid());
         expect(oracleIntegrationService.isUsCountryCode(1000001534L)).andReturn(true).once();
         usageRepository.updateStatus(Collections.singleton(usage.getId()), UsageStatusEnum.ELIGIBLE);
@@ -72,7 +72,7 @@ public class RhTaxServiceTest {
             "Usage has become eligible based on US rightsholder tax country");
         expectLastCall().once();
         replay(usageRepository, usageAuditService, oracleIntegrationService);
-        rhTaxService.applyRhTaxCountry(usage);
+        rhTaxService.processRhTaxCountry(usage);
         verify(usageRepository, usageAuditService, oracleIntegrationService);
     }
 

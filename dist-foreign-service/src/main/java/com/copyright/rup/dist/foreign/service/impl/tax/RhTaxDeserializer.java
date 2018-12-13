@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.slf4j.Logger;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
@@ -22,6 +23,7 @@ import java.io.IOException;
  *
  * @author Uladzislau Shalamitski
  */
+@Component("df.service.rhTaxDeserializer")
 public class RhTaxDeserializer extends JsonDeserializer<Usage> {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
@@ -32,7 +34,7 @@ public class RhTaxDeserializer extends JsonDeserializer<Usage> {
         try {
             usage = deserializeUsage(parser.readValueAsTree());
         } catch (JsonParseException e) {
-            LOGGER.warn("Deserialize Tax message. Failed", e);
+            LOGGER.warn("Deserialize RH tax message. Failed", e);
         }
         return usage;
     }

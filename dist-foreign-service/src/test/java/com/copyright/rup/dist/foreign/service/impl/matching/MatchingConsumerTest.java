@@ -19,7 +19,7 @@ import org.powermock.reflect.Whitebox;
 import java.util.Objects;
 
 /**
- * Verifies {@link MatchingConsumerTest}.
+ * Verifies {@link MatchingConsumer}.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>

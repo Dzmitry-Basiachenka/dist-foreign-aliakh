@@ -301,7 +301,7 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
             QuerySortOrder sortOrder = sortOrders.get(0);
             sort = new Sort(sortOrder.getSorted(), Direction.of(SortDirection.ASCENDING == sortOrder.getDirection()));
         }
-        return usageService.getUsages(usageFilter, new Pageable(startIndex, count), sort);
+        return usageService.getUsageDtos(usageFilter, new Pageable(startIndex, count), sort);
     }
 
     private int getSize(UsageFilter filter) {

@@ -1,17 +1,18 @@
-package com.copyright.rup.dist.foreign.service.impl.tax;
+package com.copyright.rup.dist.foreign.service.impl.common;
 
 import com.copyright.rup.dist.common.integration.camel.CommonMarshaller;
 import com.copyright.rup.dist.foreign.domain.Usage;
+
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.apache.camel.Exchange;
-import org.springframework.stereotype.Component;
 
 import java.io.OutputStream;
 
 /**
- * Json unmarshaller for handling messages to check RH tax country.
+ * Common json unmarshaller for handling messages for usages.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -19,12 +20,16 @@ import java.io.OutputStream;
  *
  * @author Uladzislau Shalamitski
  */
-@Component("df.service.rhTaxUnmarshaller")
-public class RhTaxUnmarshaller extends CommonMarshaller {
+public class CommonUsageUnmarshaller extends CommonMarshaller {
 
-    private static final TypeReference<Usage> TYPE_REFERENCE =
-        new TypeReference<Usage>() {
-        };
+    private static final TypeReference<Usage> TYPE_REFERENCE = new TypeReference<Usage>() {
+    };
+
+    private JsonDeserializer<Usage> deserializer;
+
+    public void setDeserializer(JsonDeserializer<Usage> deserializer) {
+        this.deserializer = deserializer;
+    }
 
     @Override
     public void marshal(Exchange exchange, Object graph, OutputStream stream) throws UnsupportedOperationException {
@@ -34,7 +39,7 @@ public class RhTaxUnmarshaller extends CommonMarshaller {
     @Override
     protected ObjectMapper getObjectMapper() {
         SimpleModule simpleModule = new SimpleModule();
-        simpleModule.addDeserializer(Usage.class, new RhTaxDeserializer());
+        simpleModule.addDeserializer(Usage.class, deserializer);
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(simpleModule);
         return objectMapper;

@@ -50,7 +50,7 @@ public class RhTaxJob extends QuartzJobBean {
         UsageFilter ntsRhFoundUsagesFilter = new UsageFilter();
         ntsRhFoundUsagesFilter.setUsageStatus(UsageStatusEnum.RH_FOUND);
         ntsRhFoundUsagesFilter.setProductFamilies(ImmutableSet.of(FdaConstants.NTS_PRODUCT_FAMILY));
-        List<Usage> ntsRhFoundUsages = usageService.getUsagesByFilter(ntsRhFoundUsagesFilter);
+        List<Usage> ntsRhFoundUsages = usageService.getUsages(ntsRhFoundUsagesFilter);
         LOGGER.info("Send RH_FOUND usages to Rh Tax queue. Started. NtsRhFoundUsagesCount={}",
             LogUtils.size(ntsRhFoundUsages));
         ntsRhFoundUsages.forEach(rhTaxProducer::send);
@@ -62,8 +62,7 @@ public class RhTaxJob extends QuartzJobBean {
         this.usageService = usageService;
     }
 
-    void setRhTaxProducer(
-        IProducer<Usage> rhTaxProducer) {
+    void setRhTaxProducer(IProducer<Usage> rhTaxProducer) {
         this.rhTaxProducer = rhTaxProducer;
     }
 }

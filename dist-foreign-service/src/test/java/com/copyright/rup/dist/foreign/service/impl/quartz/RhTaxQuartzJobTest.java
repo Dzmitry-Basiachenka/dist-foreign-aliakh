@@ -41,7 +41,7 @@ public class RhTaxQuartzJobTest {
         rhTaxJob.setUsageService(usageServiceMock);
         Capture<UsageFilter> usageFilterCapture = new Capture<>();
         List<Usage> ntsRhFoundUsages = Arrays.asList(buildUsage(), buildUsage());
-        expect(usageServiceMock.getUsagesByFilter(capture(usageFilterCapture))).andReturn(ntsRhFoundUsages).once();
+        expect(usageServiceMock.getUsages(capture(usageFilterCapture))).andReturn(ntsRhFoundUsages).once();
         Capture<Usage> usageCapture1 = new Capture<>();
         rhTaxProducerMock.send(capture(usageCapture1));
         expectLastCall().once();

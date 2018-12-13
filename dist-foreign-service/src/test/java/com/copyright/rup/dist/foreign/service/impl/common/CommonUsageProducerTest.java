@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.service.impl.matching;
+package com.copyright.rup.dist.foreign.service.impl.common;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expectLastCall;
@@ -10,29 +10,30 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import org.apache.camel.ProducerTemplate;
 import org.junit.Before;
 import org.junit.Test;
+import org.powermock.reflect.Whitebox;
 
 /**
- * Verifies {@link MatchingProducer}.
+ * Verifies {@link CommonUsageProducerTest}.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
  * Date: 01/11/18
  *
- * @author Ihar Suvorau
+ * @author Uladzislau Shalamitski
  */
-public class MatchingProducerTest {
+public class CommonUsageProducerTest {
 
     private static final String END_POINT = "test";
 
     private ProducerTemplate template;
-    private MatchingProducer producer;
+    private CommonUsageProducer producer;
 
     @Before
     public void setUp() {
         template = createMock(ProducerTemplate.class);
-        producer = new MatchingProducer();
-        producer.setProducerTemplate(template);
+        producer = new CommonUsageProducer();
         producer.setEndPoint(END_POINT);
+        Whitebox.setInternalState(producer, template);
     }
 
     @Test

@@ -38,7 +38,7 @@ public interface IUsageService {
      * @param sort     instance of {@link Sort}
      * @return the list of {@link UsageDto}
      */
-    List<UsageDto> getUsages(UsageFilter filter, Pageable pageable, Sort sort);
+    List<UsageDto> getUsageDtos(UsageFilter filter, Pageable pageable, Sort sort);
 
     /**
      * Gets list of {@link Usage}s by usage filter.
@@ -46,7 +46,7 @@ public interface IUsageService {
      * @param filter filter
      * @return list of usages
      */
-    List<Usage> getUsagesByFilter(UsageFilter filter);
+    List<Usage> getUsages(UsageFilter filter);
 
     /**
      * Gets usages count based on applied filter.

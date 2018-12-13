@@ -72,7 +72,7 @@ public class InsertNtsBatchIntegrationTest {
         UsageFilter usageFilter = new UsageFilter();
         usageFilter.setUsageBatchesIds(Collections.singleton(usageBatch.getId()));
         List<UsageDto> usages =
-            usageRepository.findByFilter(usageFilter, null, new Sort("market", Sort.Direction.ASC));
+            usageRepository.findDtosByFilter(usageFilter, null, new Sort("market", Sort.Direction.ASC));
         assertEquals(3, usages.size());
         verifyUsage(usages.get(0), 2011, 2013, "Bus,Edu");
         verifyUsage(usages.get(1), 2013, 2017, "Sch");

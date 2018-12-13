@@ -36,7 +36,7 @@ public class RhTaxConsumerTest {
     @Test
     public void testConsume() {
         Usage usage = new Usage();
-        rhTaxService.applyRhTaxCountry(usage);
+        rhTaxService.processRhTaxCountry(usage);
         expectLastCall().once();
         replay(rhTaxService);
         rhTaxConsumer.consume(usage);

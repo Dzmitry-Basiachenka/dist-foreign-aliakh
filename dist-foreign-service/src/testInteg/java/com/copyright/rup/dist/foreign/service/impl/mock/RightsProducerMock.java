@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.mock;
 
 import com.copyright.rup.dist.foreign.domain.Usage;
-import com.copyright.rup.dist.foreign.service.impl.rights.RightsProducer;
+import com.copyright.rup.dist.foreign.service.impl.common.CommonUsageProducer;
 
 /**
  * Stub for rights producer.
@@ -12,7 +12,7 @@ import com.copyright.rup.dist.foreign.service.impl.rights.RightsProducer;
  *
  * @author Ihar Suvorau
  */
-public class RightsProducerMock extends RightsProducer {
+public class RightsProducerMock extends CommonUsageProducer {
 
     @Override
     public void send(Usage usage) {

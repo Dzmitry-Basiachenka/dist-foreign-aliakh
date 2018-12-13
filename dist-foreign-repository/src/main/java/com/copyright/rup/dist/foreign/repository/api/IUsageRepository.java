@@ -41,22 +41,22 @@ public interface IUsageRepository {
     void insert(Usage usage);
 
     /**
-     * Finds the usage based on applied filter.
+     * Finds list of {@link UsageDto}s by usage filter.
      *
      * @param filter   instance of {@link UsageFilter}
      * @param pageable instance of {@link Pageable}
      * @param sort     instance of {@link Sort}
      * @return the list of {@link UsageDto}
      */
-    List<UsageDto> findByFilter(UsageFilter filter, Pageable pageable, Sort sort);
+    List<UsageDto> findDtosByFilter(UsageFilter filter, Pageable pageable, Sort sort);
 
     /**
-     * Gets list of {@link Usage}s by usage filter.
+     * Finds list of {@link Usage}s by usage filter.
      *
      * @param filter filter
      * @return list of usages
      */
-    List<Usage> findUsagesByFilter(UsageFilter filter);
+    List<Usage> findByFilter(UsageFilter filter);
 
     /**
      * Finds usages count based on applied filter.

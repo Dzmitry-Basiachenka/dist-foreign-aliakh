@@ -123,7 +123,7 @@ public class UsagesControllerTest {
         usageFilter.setFiscalYear(2017);
         prepareGetAppliedFilterExpectations(usageFilter);
         Capture<Pageable> pageableCapture = new Capture<>();
-        expect(usageService.getUsages(eq(usageFilter), capture(pageableCapture), isNull()))
+        expect(usageService.getUsageDtos(eq(usageFilter), capture(pageableCapture), isNull()))
             .andReturn(Collections.emptyList()).once();
         replay(filterWidgetMock, usageService, filterController);
         List<UsageDto> result = controller.loadBeans(10, 150, null);

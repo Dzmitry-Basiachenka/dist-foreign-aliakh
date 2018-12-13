@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+            http://camel.apache.org/schema/spring
+            http://camel.apache.org/schema/spring/camel-spring-2.18.3.xsd">
+
+    <bean id="df.service.usageMarshaller" class="com.copyright.rup.dist.foreign.service.impl.common.CommonUsageMarshaller" />
+
+    <bean id="df.service.usageUnmarshaller" class="com.copyright.rup.dist.foreign.service.impl.common.CommonUsageUnmarshaller" />
+   
+    <bean id="df.service.matchingMarshaller" parent="df.service.usageMarshaller">
+        <property name="serializer" ref="df.service.matchingSerializer" />
+    </bean>
+
+    <bean id="df.service.matchingUnmarshaller" parent="df.service.usageUnmarshaller">
+        <property name="deserializer" ref="df.service.matchingDeserializer" />
+    </bean>
+
+    <bean id="df.service.rightsMarshaller" parent="df.service.usageMarshaller">
+        <property name="serializer" ref="df.service.rightsSerializer" />
+    </bean>
+
+    <bean id="df.service.rightsUnmarshaller" parent="df.service.usageUnmarshaller">
+        <property name="deserializer" ref="df.service.rightsDeserializer" />
+    </bean>
+
+    <bean id="df.service.rhTaxMarshaller" parent="df.service.usageMarshaller">
+        <property name="serializer" ref="df.service.rhTaxSerializer" />
+    </bean>
+
+    <bean id="df.service.rhTaxUnmarshaller" parent="df.service.usageUnmarshaller">
+        <property name="deserializer" ref="df.service.rhTaxDeserializer" />
+    </bean>
+
+    <bean id="df.service.usageProducer" class="com.copyright.rup.dist.foreign.service.impl.common.CommonUsageProducer" />
+
+    <bean id="df.service.rightsProducer" parent="df.service.usageProducer">
+        <property name="endPoint" value="direct:df.service.rights"/>
+    </bean>
+
+    <bean id="df.service.rhTaxProducer" parent="df.service.usageProducer">
+        <property name="endPoint" value="direct:df.service.tax"/>
+    </bean>
+
+    <bean id="df.service.matchingProducer" parent="df.service.usageProducer">
+        <property name="endPoint" value="direct:df.service.matching"/>
+    </bean>
+
+    <bean id="defaultRedeliveryPolicy" class="org.apache.camel.processor.RedeliveryPolicy"
+          p:maximumRedeliveries="$RUP{dist.foreign.broker.redelivery.count}"
+          p:redeliveryDelay="$RUP{dist.foreign.broker.redelivery.delay}"
+          p:retryAttemptedLogLevel="INFO"
+          p:retriesExhaustedLogLevel="INFO"
+          p:asyncDelayedRedelivery="true"
+          p:logExhausted="true"
+          p:logStackTrace="true"
+          p:logRetryStackTrace="true"
+          p:logRetryAttempted="true"/>
+
+    <camelContext id="df.service.camelContext" xmlns="http://camel.apache.org/schema/spring">
+        <contextScan/>
+        <template id="df.service.producerTemplate"/>
+
+        <endpoint id="df.service.lm.detail.paid.endpoint" uri="$RUP{dist.foreign.endpoint.lm.detail.paid}"/>
+
+        <endpoint id="df.service.internal.matching.endpoint" uri="direct:df.service.matching"/>
+        <endpoint id="df.service.matching.endpoint" uri="$RUP{dist.foreign.endpoint.matching}"/>
+
+        <endpoint id="df.service.internal.rights.endpoint" uri="direct:df.service.rights"/>
+        <endpoint id="df.service.rights.endpoint" uri="$RUP{dist.foreign.endpoint.rights}"/>
+
+        <endpoint id="df.service.internal.tax.endpoint" uri="direct:df.service.tax"/>
+        <endpoint id="df.service.rh.tax.endpoint" uri="$RUP{dist.foreign.endpoint.rh_tax}"/>
+
+        <route>
+            <from ref="df.service.lm.detail.paid.endpoint"/>
+            <choice>
+                <when>
+                    <simple>'FDA' == ${headers.source}</simple>
+                    <log message="Consume paid usages from LM. Source=${headers.source}, Body: ${body}"
+                         loggingLevel="DEBUG" logName="com.copyright.rup.dist"/>
+                    <unmarshal>
+                        <custom ref="df.service.paidUsageUnmarshaller"/>
+                    </unmarshal>
+                    <bean ref="df.service.paidUsageConsumer"/>
+                </when>
+            </choice>
+        </route>
+
+        <route>
+            <from ref="df.service.internal.matching.endpoint"/>
+            <marshal>
+                <custom ref="df.service.matchingMarshaller"/>
+            </marshal>
+            <to ref="df.service.matching.endpoint"/>
+
+            <onException redeliveryPolicyRef="defaultRedeliveryPolicy" useOriginalMessage="true">
+                <exception>com.copyright.rup.common.exception.RupRuntimeException</exception>
+            </onException>
+        </route>
+
+        <route>
+            <from ref="df.service.matching.endpoint"/>
+            <unmarshal>
+                <custom ref="df.service.matchingUnmarshaller"/>
+            </unmarshal>
+            <bean ref="df.service.matchingConsumer"/>
+
+            <onException redeliveryPolicyRef="defaultRedeliveryPolicy" useOriginalMessage="true">
+                <exception>com.copyright.rup.common.exception.RupRuntimeException</exception>
+            </onException>
+        </route>
+
+        <route>
+            <from ref="df.service.internal.rights.endpoint"/>
+            <marshal>
+                <custom ref="df.service.rightsMarshaller"/>
+            </marshal>
+            <to ref="df.service.rights.endpoint"/>
+
+            <onException redeliveryPolicyRef="defaultRedeliveryPolicy" useOriginalMessage="true">
+                <exception>com.copyright.rup.common.exception.RupRuntimeException</exception>
+            </onException>
+        </route>
+
+        <route>
+            <from ref="df.service.rights.endpoint"/>
+            <unmarshal>
+                <custom ref="df.service.rightsUnmarshaller"/>
+            </unmarshal>
+            <bean ref="df.service.rightsConsumer"/>
+
+            <onException redeliveryPolicyRef="defaultRedeliveryPolicy" useOriginalMessage="true">
+                <exception>com.copyright.rup.common.exception.RupRuntimeException</exception>
+            </onException>
+        </route>
+
+        <route>
+            <from ref="df.service.internal.tax.endpoint"/>
+            <marshal>
+                <custom ref="df.service.rhTaxMarshaller"/>
+            </marshal>
+            <to ref="df.service.rh.tax.endpoint"/>
+
+            <onException redeliveryPolicyRef="defaultRedeliveryPolicy" useOriginalMessage="true">
+                <exception>com.copyright.rup.common.exception.RupRuntimeException</exception>
+            </onException>
+        </route>
+
+        <route>
+            <from ref="df.service.rh.tax.endpoint"/>
+            <unmarshal>
+                <custom ref="df.service.rhTaxUnmarshaller"/>
+            </unmarshal>
+            <bean ref="df.service.rhTaxConsumer"/>
+
+            <onException redeliveryPolicyRef="defaultRedeliveryPolicy" useOriginalMessage="true">
+                <exception>com.copyright.rup.common.exception.RupRuntimeException</exception>
+            </onException>
+        </route>
+    </camelContext>
+</beans>

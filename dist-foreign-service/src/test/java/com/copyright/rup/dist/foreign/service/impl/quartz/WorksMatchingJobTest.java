@@ -11,7 +11,7 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.service.impl.matching.MatchingProducer;
+import com.copyright.rup.dist.foreign.service.impl.common.CommonUsageProducer;
 import org.apache.camel.CamelExecutionException;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,14 +33,14 @@ import java.util.Collections;
 public class WorksMatchingJobTest {
 
     private IUsageService usageService;
-    private MatchingProducer matchingProducer;
+    private CommonUsageProducer matchingProducer;
     private UsageFilter usageFilter;
     private WorksMatchingJob job;
 
     @Before
     public void setUp() {
         usageService = createMock(IUsageService.class);
-        matchingProducer = createMock(MatchingProducer.class);
+        matchingProducer = createMock(CommonUsageProducer.class);
         job = new WorksMatchingJob();
         Whitebox.setInternalState(job, usageService);
         Whitebox.setInternalState(job, matchingProducer);

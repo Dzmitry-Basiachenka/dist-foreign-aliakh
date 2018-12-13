@@ -42,17 +42,23 @@ public class RhTaxService implements IRhTaxService {
 
     @Override
     @Transactional
-    public void applyRhTaxCountry(Usage usage) {
+    public void processRhTaxCountry(Usage usage) {
         String usageId = usage.getId();
         Long accountNumber = usage.getRightsholder().getAccountNumber();
-        LOGGER.debug("Applying RH tax country. Started. UsageId={}, RhAccountNumber={}", usageId, accountNumber);
-        if (oracleIntegrationService.isUsCountryCode(accountNumber)) {
+        LOGGER.debug("Processing RH tax country. Started. UsageId={}, RhAccountNumber={}", usageId, accountNumber);
+        boolean isUsTaxCountry = oracleIntegrationService.isUsCountryCode(accountNumber);
+        if (isUsTaxCountry) {
             usageRepository.updateStatus(Collections.singleton(usageId), UsageStatusEnum.ELIGIBLE);
             usageAuditService.logAction(usageId, UsageActionTypeEnum.ELIGIBLE,
                 "Usage has become eligible based on US rightsholder tax country");
         } else {
             usageService.deleteById(usageId);
         }
-        LOGGER.debug("Applying RH tax country. Finished. UsageId={}, RhAccountNumber={}", usageId, accountNumber);
+        LOGGER.debug("Processing RH tax country. Finished. {}. UsageId={}, RhAccountNumber={}",
+            buildResultMessage(isUsTaxCountry), usageId, accountNumber);
+    }
+
+    private String buildResultMessage(boolean isUsTaxCountry) {
+        return isUsTaxCountry ? "Usage has been updated" : "Usage has been removed";
     }
 }

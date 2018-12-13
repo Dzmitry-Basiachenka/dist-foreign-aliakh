@@ -23,7 +23,7 @@ import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.service.impl.tax.RhTaxProducer;
+import com.copyright.rup.dist.foreign.service.impl.common.CommonUsageProducer;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -54,14 +54,13 @@ public class RightsServiceTest {
     private static final Long RH_ACCOUNT_NUMBER = 1000001534L;
     private static final String RH_ID = RupPersistUtils.generateUuid();
     private static final String FAS_PRODUCT_FAMILY = "FAS";
-    private IRightsService rightsAssignmentService;
+    private IRightsService rightsService;
     private IUsageRepository usageRepository;
     private IUsageAuditService usageAuditService;
     private IRmsIntegrationService rmsIntegrationService;
     private IRmsGrantsProcessorService rmsGrantsProcessorService;
     private IRightsholderService rightsholderService;
-    private RightsProducer rightsProducer;
-    private RhTaxProducer rhTaxProducer;
+    private CommonUsageProducer rightsProducer;
     private IUsageService usageService;
 
     @Before
@@ -71,18 +70,16 @@ public class RightsServiceTest {
         rmsIntegrationService = createMock(IRmsIntegrationService.class);
         rmsGrantsProcessorService = createMock(IRmsGrantsProcessorService.class);
         rightsholderService = createMock(IRightsholderService.class);
-        rightsProducer = createMock(RightsProducer.class);
-        rhTaxProducer = createMock(RhTaxProducer.class);
+        rightsProducer = createMock(CommonUsageProducer.class);
         usageService = createMock(IUsageService.class);
-        rightsAssignmentService = new RightsService();
-        Whitebox.setInternalState(rightsAssignmentService, "usageRepository", usageRepository);
-        Whitebox.setInternalState(rightsAssignmentService, "auditService", usageAuditService);
-        Whitebox.setInternalState(rightsAssignmentService, "rmsIntegrationService", rmsIntegrationService);
-        Whitebox.setInternalState(rightsAssignmentService, "rmsGrantsProcessorService", rmsGrantsProcessorService);
-        Whitebox.setInternalState(rightsAssignmentService, "rightsholderService", rightsholderService);
-        Whitebox.setInternalState(rightsAssignmentService, "rightsProducer", rightsProducer);
-        Whitebox.setInternalState(rightsAssignmentService, "rhTaxProducer", rhTaxProducer);
-        Whitebox.setInternalState(rightsAssignmentService, "usageService", usageService);
+        rightsService = new RightsService();
+        Whitebox.setInternalState(rightsService, "usageRepository", usageRepository);
+        Whitebox.setInternalState(rightsService, "auditService", usageAuditService);
+        Whitebox.setInternalState(rightsService, "rmsIntegrationService", rmsIntegrationService);
+        Whitebox.setInternalState(rightsService, "rmsGrantsProcessorService", rmsGrantsProcessorService);
+        Whitebox.setInternalState(rightsService, "rightsholderService", rightsholderService);
+        Whitebox.setInternalState(rightsService, "rightsProducer", rightsProducer);
+        Whitebox.setInternalState(rightsService, "usageService", usageService);
     }
 
     @Test
@@ -101,7 +98,7 @@ public class RightsServiceTest {
         usageAuditService.logAction(usageIds, UsageActionTypeEnum.SENT_FOR_RA,
             "Sent for RA: job id 'b5015e54-c38a-4fc8-b889-c644640085a4'");
         replay(usageRepository, usageAuditService, rmsIntegrationService);
-        rightsAssignmentService.sendForRightsAssignment();
+        rightsService.sendForRightsAssignment();
         verify(usageRepository, usageAuditService, rmsIntegrationService);
     }
 
@@ -113,7 +110,7 @@ public class RightsServiceTest {
         expect(rmsIntegrationService.sendForRightsAssignment(Sets.newHashSet(123160519L)))
             .andReturn(new RightsAssignmentResult(RightsAssignmentResultStatusEnum.RA_ERROR)).once();
         replay(usageRepository, usageAuditService, rmsIntegrationService);
-        rightsAssignmentService.sendForRightsAssignment();
+        rightsService.sendForRightsAssignment();
         verify(usageRepository, usageAuditService, rmsIntegrationService);
     }
 
@@ -122,7 +119,7 @@ public class RightsServiceTest {
         expect(usageRepository.findByStatuses(UsageStatusEnum.RH_NOT_FOUND))
             .andReturn(Collections.emptyList()).once();
         replay(usageRepository, usageAuditService, rmsIntegrationService);
-        rightsAssignmentService.sendForRightsAssignment();
+        rightsService.sendForRightsAssignment();
         verify(usageRepository, usageAuditService, rmsIntegrationService);
     }
 
@@ -151,7 +148,7 @@ public class RightsServiceTest {
         rightsholderService.updateRightsholders(Collections.singleton(RH_ACCOUNT_NUMBER));
         expectLastCall().once();
         replay(usageRepository, rmsGrantsProcessorService, usageAuditService, rightsholderService, rightsProducer);
-        rightsAssignmentService.updateRights();
+        rightsService.updateRights();
         verify(usageRepository, rmsGrantsProcessorService, usageAuditService, rightsholderService, rightsProducer);
     }
 
@@ -170,7 +167,7 @@ public class RightsServiceTest {
         rightsholderService.updateRightsholders(Collections.singleton(1000009522L));
         expectLastCall().once();
         replay(rmsGrantsProcessorService, rightsholderService, usageRepository, usageAuditService);
-        rightsAssignmentService.updateRight(buildUsage(usageId, FAS_PRODUCT_FAMILY, UsageStatusEnum.WORK_FOUND));
+        rightsService.updateRight(buildUsage(usageId, FAS_PRODUCT_FAMILY, UsageStatusEnum.WORK_FOUND));
         verify(rmsGrantsProcessorService, rightsholderService, usageRepository, usageAuditService);
     }
 
@@ -190,13 +187,11 @@ public class RightsServiceTest {
         expectLastCall().once();
         rightsholderService.updateRightsholders(Collections.singleton(1000009522L));
         expectLastCall().once();
-        rhTaxProducer.send(usage);
-        expectLastCall().once();
-        replay(rmsGrantsProcessorService, rightsholderService, usageRepository, usageAuditService, rhTaxProducer);
+        replay(rmsGrantsProcessorService, rightsholderService, usageRepository, usageAuditService);
         assertNull(usage.getRightsholder().getAccountNumber());
-        rightsAssignmentService.updateRight(usage);
+        rightsService.updateRight(usage);
         assertEquals(1000009522L, usage.getRightsholder().getAccountNumber(), 0);
-        verify(rmsGrantsProcessorService, rightsholderService, usageRepository, usageAuditService, rhTaxProducer);
+        verify(rmsGrantsProcessorService, rightsholderService, usageRepository, usageAuditService);
     }
 
     @Test
@@ -212,7 +207,7 @@ public class RightsServiceTest {
             "Rightsholder account for 123160519 was not found in RMS");
         expectLastCall().once();
         replay(rmsGrantsProcessorService, rightsholderService, usageRepository, usageAuditService);
-        rightsAssignmentService.updateRight(buildUsage(usageId, FAS_PRODUCT_FAMILY, UsageStatusEnum.WORK_FOUND));
+        rightsService.updateRight(buildUsage(usageId, FAS_PRODUCT_FAMILY, UsageStatusEnum.WORK_FOUND));
         verify(rmsGrantsProcessorService, rightsholderService, usageRepository, usageAuditService);
     }
 
@@ -225,7 +220,7 @@ public class RightsServiceTest {
         usageService.deleteById(usageId);
         expectLastCall().once();
         replay(rmsGrantsProcessorService, usageService);
-        rightsAssignmentService.updateRight(buildUsage(usageId, "NTS", UsageStatusEnum.WORK_FOUND));
+        rightsService.updateRight(buildUsage(usageId, "NTS", UsageStatusEnum.WORK_FOUND));
         verify(rmsGrantsProcessorService, usageService);
     }
 

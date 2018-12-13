@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.service.impl.matching;
+package com.copyright.rup.dist.foreign.service.impl.common;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
@@ -13,30 +13,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
- * Implementation of {@link IProducer} to send usages for work matching.
+ * Common implementation of {@link IProducer} to send usages to queue.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
  * Date: 11/12/2018
  *
- * @author Ihar Suvorau
+ * @author Uladzislau Shalamitski
  */
-public class MatchingProducer implements IProducer<Usage> {
+public class CommonUsageProducer implements IProducer<Usage> {
 
     @Autowired
     @Qualifier("df.service.producerTemplate")
     private ProducerTemplate producerTemplate;
 
     private String endPoint;
-
-    /**
-     * Sets producer template.
-     *
-     * @param producerTemplate an instance of {@link ProducerTemplate}
-     */
-    public void setProducerTemplate(ProducerTemplate producerTemplate) {
-        this.producerTemplate = producerTemplate;
-    }
 
     /**
      * Sets end point.
@@ -49,13 +40,13 @@ public class MatchingProducer implements IProducer<Usage> {
     }
 
     @Override
-    public void send(Usage message) throws RupRuntimeException {
+    public void send(Usage usage) throws RupRuntimeException {
         try {
-            producerTemplate.sendBody(endPoint, message);
+            producerTemplate.sendBody(endPoint, usage);
         } catch (CamelExecutionException e) {
             throw new RupRuntimeException(
-                String.format("Exception appeared while sending usages for matching. Endpoint=%s. Message=%s", endPoint,
-                    message), e);
+                String.format("Exception appeared while sending usages to queue. Endpoint=%s. Usage=%s", endPoint,
+                    usage), e);
         }
     }
 }
