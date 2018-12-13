@@ -6,6 +6,8 @@ import com.copyright.rup.dist.foreign.domain.report.UsageBatchStatistic;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.google.common.net.HttpHeaders;
 import com.google.common.net.MediaType;
 
@@ -18,6 +20,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 import javax.servlet.ServletConfig;
@@ -41,6 +44,7 @@ public class StatisticServlet extends HttpServlet {
 
     @Autowired
     private IUsageAuditService usageAuditService;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public void init(final ServletConfig config) throws ServletException {
@@ -48,6 +52,7 @@ public class StatisticServlet extends HttpServlet {
         WebApplicationContext springContext =
             WebApplicationContextUtils.getRequiredWebApplicationContext(config.getServletContext());
         final AutowireCapableBeanFactory beanFactory = springContext.getAutowireCapableBeanFactory();
+        registerJavaTimeModule();
         beanFactory.autowireBean(this);
     }
 
@@ -61,7 +66,7 @@ public class StatisticServlet extends HttpServlet {
                 UsageBatchStatistic statistic = usageAuditService.getBatchStatistic(name, localDate);
                 if (Objects.nonNull(statistic)) {
                     writeResponse(response,
-                        new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(statistic));
+                        objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(statistic));
                 } else {
                     response.setStatus(HttpServletResponse.SC_NOT_FOUND);
                     writeResponse(response, String.format("Batch with name '%s' was no found", name));
@@ -73,6 +78,16 @@ public class StatisticServlet extends HttpServlet {
         } catch (IOException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    /**
+     * Creates and registers {@link JavaTimeModule} with date serialization pattern for {@link ObjectMapper}.
+     */
+    void registerJavaTimeModule() {
+        JavaTimeModule timeModule = new JavaTimeModule();
+        timeModule.addSerializer(LocalDate.class,
+            new LocalDateSerializer(DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT)));
+        objectMapper.registerModule(timeModule);
     }
 
     private void writeResponse(HttpServletResponse response, String str) throws IOException {

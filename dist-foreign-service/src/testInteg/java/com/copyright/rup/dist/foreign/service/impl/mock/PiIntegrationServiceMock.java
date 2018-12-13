@@ -32,7 +32,7 @@ public class PiIntegrationServiceMock extends PiIntegrationService {
     }
 
     @Override
-    public Long findWrWrkInstByTitle(String title) {
-        return 123059057L;
+    public Work findWorkByTitle(String title) {
+        return new Work(123059057L, title);
     }
 }

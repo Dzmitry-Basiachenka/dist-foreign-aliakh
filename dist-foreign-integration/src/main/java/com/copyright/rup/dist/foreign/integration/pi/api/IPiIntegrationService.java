@@ -32,5 +32,5 @@ public interface IPiIntegrationService {
      * @param title title to search work by
      * @return Wr Wrk Inst value
      */
-    Long findWrWrkInstByTitle(String title);
+    Work findWorkByTitle(String title);
 }

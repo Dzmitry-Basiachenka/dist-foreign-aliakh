@@ -99,7 +99,7 @@ public class WorkMatchingServiceTest {
     public void testMatchByTitle() {
         String title = "The theological roots of Pentecostalism";
         Usage usage = buildUsage(null, title);
-        expect(piIntegrationService.findWrWrkInstByTitle(title)).andReturn(112930820L).once();
+        expect(piIntegrationService.findWorkByTitle(title)).andReturn(new Work(112930820L, null)).once();
         usageRepository.update(Collections.singletonList(usage));
         expectLastCall().once();
         auditService.logAction(anyString(), eq(UsageActionTypeEnum.WORK_FOUND), anyString());

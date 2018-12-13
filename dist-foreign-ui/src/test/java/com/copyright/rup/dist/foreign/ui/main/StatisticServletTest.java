@@ -55,6 +55,7 @@ public class StatisticServletTest {
     @Before
     public void setUp() {
         servlet = new StatisticServlet();
+        servlet.registerJavaTimeModule();
         usageAuditService = createMock(IUsageAuditService.class);
         Whitebox.setInternalState(servlet, usageAuditService);
         request = createMock(HttpServletRequest.class);
@@ -97,6 +98,7 @@ public class StatisticServletTest {
     private UsageBatchStatistic buildStatistic() {
         UsageBatchStatistic statistic = new UsageBatchStatistic();
         statistic.setBatchName(BATCH_NAME);
+        statistic.setDate(LocalDate.of(2018, 12, 10));
         statistic.setLoadedCount(2);
         statistic.setLoadedAmount(new BigDecimal("10.00"));
         statistic.setPaidCount(2);

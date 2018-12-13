@@ -1,6 +1,6 @@
 {
   "batchName" : "batch name",
-  "date" : null,
+  "date" : "12/10/2018",
   "loadedCount" : 2,
   "loadedAmount" : 10.00,
   "matchedCount" : 0,
@@ -9,6 +9,9 @@
   "worksNotFoundCount" : 0,
   "worksNotFoundAmount" : 0.00,
   "worksNotFoundPercent" : 0.00,
+  "multipleMatchingCount" : 0,
+  "multipleMatchingAmount" : 0.00,
+  "multipleMatchingPercent" : 0.00,
   "ntsWithDrawnCount" : 0,
   "ntsWithDrawnAmount" : 0.00,
   "ntsWithDrawnPercent" : 0.00,
@@ -21,9 +24,6 @@
   "sendForRaCount" : 0,
   "sendForRaAmount" : 0.00,
   "sendForRaPercent" : 0.00,
-  "sendToLmCount" : 0,
-  "sendToLmAmount" : 0.00,
-  "sendToLmPercent" : 0.00,
   "paidCount" : 2,
   "paidAmount" : 10.00,
   "paidPercent" : 100.00

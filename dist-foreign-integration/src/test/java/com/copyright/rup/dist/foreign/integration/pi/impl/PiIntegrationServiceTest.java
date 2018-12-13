@@ -90,16 +90,16 @@ public class PiIntegrationServiceTest {
         expectGetSearchResponseByTitle();
         replay(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3, searchHit4, searchHit5,
             searchHit6);
-        assertEquals(123059057L, piIntegrationService.findWrWrkInstByTitle(FORBIDDEN_RIGHTS), 0);
-        assertEquals(123059058L, piIntegrationService.findWrWrkInstByTitle(
-            "Forbidden rites : a necromancer's manual of the fifteenth century"), 0);
-        assertNull(piIntegrationService.findWrWrkInstByTitle(
-            "Kieckhefer, Richard, Forbidden Rites: A Necromancer's Manual of the Fifteenth Century"));
-        assertNull(piIntegrationService.findWrWrkInstByTitle(
-            "Forbidden Rites: A Necromancer's Manual of the Fifteenth Century (review)"));
+        assertEquals(123059057L, piIntegrationService.findWorkByTitle(FORBIDDEN_RIGHTS).getWrWrkInst(), 0);
+        assertEquals(123059058L, piIntegrationService.findWorkByTitle(
+            "Forbidden rites : a necromancer's manual of the fifteenth century").getWrWrkInst(), 0);
+        assertNull(piIntegrationService.findWorkByTitle(
+            "Kieckhefer, Richard, Forbidden Rites: A Necromancer's Manual of the Fifteenth Century").getWrWrkInst());
+        assertNull(piIntegrationService.findWorkByTitle(
+            "Forbidden Rites: A Necromancer's Manual of the Fifteenth Century (review)").getWrWrkInst());
         assertEquals(156427025L,
-            piIntegrationService.findWrWrkInstByTitle("Annuaire de la communication en Rhône-Alpes"), 0);
-        assertEquals(123067577L, piIntegrationService.findWrWrkInstByTitle(OCULAR_TITLE), 0);
+            piIntegrationService.findWorkByTitle("Annuaire de la communication en Rhône-Alpes").getWrWrkInst(), 0);
+        assertEquals(123067577L, piIntegrationService.findWorkByTitle(OCULAR_TITLE).getWrWrkInst(), 0);
         verify(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3, searchHit4, searchHit5,
             searchHit6);
     }

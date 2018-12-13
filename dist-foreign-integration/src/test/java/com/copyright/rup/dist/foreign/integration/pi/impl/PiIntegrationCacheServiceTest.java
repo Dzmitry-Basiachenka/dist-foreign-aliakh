@@ -56,15 +56,18 @@ public class PiIntegrationCacheServiceTest {
 
     @Test
     public void testFindWrWrkInstsByTitle() {
-        expect(piIntegrationService.findWrWrkInstByTitle(NECROMANCER)).andReturn(1111L).once();
-        expect(piIntegrationService.findWrWrkInstByTitle(FORBIDDEN_RITES)).andReturn(2222L).once();
-        expect(piIntegrationService.findWrWrkInstByTitle(OCULAR_TITLE)).andReturn(3333L).once();
+        Work work1 = new Work(1111L, null);
+        Work work2 = new Work(2222L, null);
+        Work work3 = new Work(3333L, null);
+        expect(piIntegrationService.findWorkByTitle(NECROMANCER)).andReturn(work1).once();
+        expect(piIntegrationService.findWorkByTitle(FORBIDDEN_RITES)).andReturn(work2).once();
+        expect(piIntegrationService.findWorkByTitle(OCULAR_TITLE)).andReturn(work3).once();
         replay(piIntegrationService);
-        assertEquals(1111L, piIntegrationCacheService.findWrWrkInstByTitle(NECROMANCER), 0);
-        assertEquals(2222L, piIntegrationCacheService.findWrWrkInstByTitle(FORBIDDEN_RITES), 0);
-        assertEquals(3333L, piIntegrationCacheService.findWrWrkInstByTitle(OCULAR_TITLE), 0);
-        assertEquals(2222L, piIntegrationCacheService.findWrWrkInstByTitle(FORBIDDEN_RITES), 0);
-        assertEquals(3333L, piIntegrationCacheService.findWrWrkInstByTitle(OCULAR_TITLE), 0);
+        assertEquals(work1, piIntegrationCacheService.findWorkByTitle(NECROMANCER));
+        assertEquals(work2, piIntegrationCacheService.findWorkByTitle(FORBIDDEN_RITES));
+        assertEquals(work3, piIntegrationCacheService.findWorkByTitle(OCULAR_TITLE));
+        assertEquals(work2, piIntegrationCacheService.findWorkByTitle(FORBIDDEN_RITES));
+        assertEquals(work3, piIntegrationCacheService.findWorkByTitle(OCULAR_TITLE));
         verify(piIntegrationService);
     }
 }

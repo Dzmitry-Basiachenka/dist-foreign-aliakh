@@ -18,6 +18,7 @@ public class Work {
 
     private Long wrWrkInst;
     private String mainTitle;
+    private boolean multipleMatches;
 
     /**
      * Constructor.
@@ -52,6 +53,14 @@ public class Work {
         this.mainTitle = mainTitle;
     }
 
+    public boolean isMultipleMatches() {
+        return multipleMatches;
+    }
+
+    public void setMultipleMatches(boolean multipleMatches) {
+        this.multipleMatches = multipleMatches;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -64,6 +73,7 @@ public class Work {
         return new EqualsBuilder()
             .append(this.wrWrkInst, that.wrWrkInst)
             .append(this.mainTitle, that.mainTitle)
+            .append(this.multipleMatches, that.multipleMatches)
             .isEquals();
     }
 
@@ -72,6 +82,7 @@ public class Work {
         return new HashCodeBuilder()
             .append(wrWrkInst)
             .append(mainTitle)
+            .append(multipleMatches)
             .toHashCode();
     }
 
@@ -80,6 +91,7 @@ public class Work {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
             .append("wrWrkInst", wrWrkInst)
             .append("mainTitle", mainTitle)
+            .append("multipleMatches", multipleMatches)
             .toString();
     }
 }
