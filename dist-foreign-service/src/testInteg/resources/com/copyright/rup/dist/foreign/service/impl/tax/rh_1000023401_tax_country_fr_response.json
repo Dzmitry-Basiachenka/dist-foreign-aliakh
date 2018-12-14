@@ -9,8 +9,8 @@
       [
         {
           "@class": "com.copyright.rup.adapters.oracle.ap.domain.RhTaxInfo",
-          "payeeAccountNumber": "2000133261",
-          "tboAccountNumber": "2000133261",
+          "payeeAccountNumber": "1000023401",
+          "tboAccountNumber": "1000023401",
           "tboAccountName": "101 Communications, Ltd.",
           "taxOnFile": "0",
           "notificationsSent": 1,
