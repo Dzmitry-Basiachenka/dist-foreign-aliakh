@@ -1,3 +1,11 @@
+4.1.8
+-
+* B-46032 FDA: Exclude non US RHs from the NTS proxy: implement workflow test for NTS product family
+* B-46036 FDA: Exclude non US RH from the NTS proxy: make changes based on comments in CR-DIST-FOREIGN-81
+* B-47644 Tech Debt: FDA: adjust PI integration service to get information about multiple matching, add multiple matching to statistic servlet
+* B-47644 Tech Debt: FDA: refactor integration tests after refactoring PrmRollUpCacheService to be inherited from AbstractCacheService
+* B-47644 Tech Debt: FDA: remove job rest filter configuration from web.xml
+
 4.1.7
 -
 * Revert B-47644 Tech Debt: FDA: refactor integration tests after refactoring PrmRollUpCacheService to be inherited from AbstractCacheService
