@@ -1,0 +1,32 @@
+{
+  "response": {
+    "status": {
+      "code": "SUCCESS",
+      "message": "OK"
+    },
+    "content": [
+      "java.util.ArrayList",
+      [
+        {
+          "@class": "com.copyright.rup.party.domain.organization.Organization",
+          "version": 3,
+          "createDate": "2013-03-23T02:25:07-0400",
+          "updateDate": "2015-12-10T09:57:30-0500",
+          "createUser": "pmOrganizationLoad",
+          "updateUser": "Bulk update: Jira CQUE-64",
+          "id": "85f864f2-30a5-4215-ac4f-f1f541901218",
+          "name": "American College of Physicians - Journals",
+          "extOrgKey": "1000023401",
+          "extOrgSource": "EBUSINESS",
+          "defaultCurrencyID": "USD",
+          "defaultOrgAccountID": "6f9aa2c1-91c3-44a0-86e0-ad7c54ac689a",
+          "defaultLanguageID": "en",
+          "notForProfit": "false",
+          "organizationTypeID": "RH",
+          "articleSearchAllowed": true,
+          "organizationSubType": "COMPANY"
+        }
+      ]
+    ]
+  }
+}

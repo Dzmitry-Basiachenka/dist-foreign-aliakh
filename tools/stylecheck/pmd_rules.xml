@@ -122,6 +122,8 @@
         <!--False positive in messages from constants-->
         <exclude name="InvalidSlf4jMessageFormat"/>
         <exclude name="MissingSerialVersionUID"/>
+        <!--Required in reset methods of test builders-->
+        <exclude name="NullAssignment"/>
     </rule>
     <rule ref="category/java/errorprone.xml/AssignmentInOperand">
         <properties>
