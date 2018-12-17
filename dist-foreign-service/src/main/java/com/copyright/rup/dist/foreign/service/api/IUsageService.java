@@ -333,11 +333,9 @@ public interface IUsageService {
      * Gets list of {@link Usage}s by specified {@link UsageStatusEnum}.
      *
      * @param status {@link UsageStatusEnum} instance
-     * @param limit  maximum size of list
-     * @param offset number of excluded records
      * @return the list of found {@link Usage}s
      */
-    List<Usage> getUsagesByStatus(UsageStatusEnum status, int limit, int offset);
+    List<Usage> getUsagesByStatus(UsageStatusEnum status);
 
     /**
      * Verifies whether {@link Usage}s found by defined {@link UsageFilter} have specified status or not.

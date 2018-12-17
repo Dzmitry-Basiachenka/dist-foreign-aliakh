@@ -9,17 +9,15 @@ import static org.easymock.EasyMock.verify;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.common.CommonUsageProducer;
-import org.apache.camel.CamelExecutionException;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Collections;
 
 /**
  * Verifies {@link WorksMatchingJob}.
@@ -34,7 +32,6 @@ public class WorksMatchingJobTest {
 
     private IUsageService usageService;
     private CommonUsageProducer matchingProducer;
-    private UsageFilter usageFilter;
     private WorksMatchingJob job;
 
     @Before
@@ -44,61 +41,16 @@ public class WorksMatchingJobTest {
         job = new WorksMatchingJob();
         Whitebox.setInternalState(job, usageService);
         Whitebox.setInternalState(job, matchingProducer);
-        Whitebox.setInternalState(job, "batchSize", 2);
-        usageFilter = new UsageFilter();
-        usageFilter.setUsageStatus(UsageStatusEnum.NEW);
     }
 
     @Test
     public void testExecuteInternal() {
-        Usage usage = buildUsage();
-        expect(usageService.getUsagesCount(usageFilter)).andReturn(1).once();
-        expect(usageService.getUsagesByStatus(UsageStatusEnum.NEW, 2, 0))
-            .andReturn(Collections.singletonList(usage)).once();
-        matchingProducer.send(usage);
-        expectLastCall().once();
-        replay(usageService, matchingProducer);
-        job.executeInternal(null);
-        verify(usageService, matchingProducer);
-    }
-
-    @Test
-    public void testExecuteInternalProcessingByBatches() {
         Usage usage1 = buildUsage();
         Usage usage2 = buildUsage();
-        Usage usage3 = buildUsage();
-        expect(usageService.getUsagesCount(usageFilter)).andReturn(3).once();
-        expect(usageService.getUsagesByStatus(UsageStatusEnum.NEW, 2, 0))
-            .andReturn(Arrays.asList(usage1, usage2)).once();
-        expect(usageService.getUsagesByStatus(UsageStatusEnum.NEW, 2, 0))
-            .andReturn(Collections.singletonList(usage3)).once();
+        expect(usageService.getUsagesByStatus(UsageStatusEnum.NEW)).andReturn(Arrays.asList(usage1, usage2)).once();
         matchingProducer.send(usage1);
         expectLastCall().once();
         matchingProducer.send(usage2);
-        expectLastCall().once();
-        matchingProducer.send(usage3);
-        expectLastCall().once();
-        replay(usageService, matchingProducer);
-        job.executeInternal(null);
-        verify(usageService, matchingProducer);
-    }
-
-    @Test
-    public void testExecuteInternalSendingFailure() {
-        Usage usage1 = buildUsage();
-        Usage usage2 = buildUsage();
-        Usage usage3 = buildUsage();
-        expect(usageService.getUsagesCount(usageFilter)).andReturn(3).once();
-        expect(usageService.getUsagesByStatus(UsageStatusEnum.NEW, 2, 0))
-            .andReturn(Arrays.asList(usage1, usage2)).once();
-        matchingProducer.send(usage1);
-        expectLastCall().once();
-        matchingProducer.send(usage2);
-        expectLastCall().andThrow(
-            new CamelExecutionException("Exception occurred during execution on the exchange", null)).once();
-        expect(usageService.getUsagesByStatus(UsageStatusEnum.NEW, 2, 2))
-            .andReturn(Collections.singletonList(usage3)).once();
-        matchingProducer.send(usage3);
         expectLastCall().once();
         replay(usageService, matchingProducer);
         job.executeInternal(null);

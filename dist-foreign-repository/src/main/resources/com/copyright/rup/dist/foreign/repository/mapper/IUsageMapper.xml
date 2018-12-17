@@ -1111,17 +1111,6 @@
             </foreach>
     </update>
 
-    <select id="findByStatus" resultMap="usageResultMap">
-        select
-            df_usage_uid,
-            <include refid="usageColumns"/>
-        from ${schema}.df_usage
-        where status_ind = #{status}
-        order by df_usage_uid
-        limit #{limit}
-        offset #{offset}
-    </select>
-
     <update id="update" parameterType="Usage">
         update ${schema}.df_usage
         set

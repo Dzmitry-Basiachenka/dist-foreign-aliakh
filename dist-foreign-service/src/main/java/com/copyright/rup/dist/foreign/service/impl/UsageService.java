@@ -473,8 +473,8 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public List<Usage> getUsagesByStatus(UsageStatusEnum status, int limit, int offset) {
-        return usageRepository.findByStatus(status, limit, offset);
+    public List<Usage> getUsagesByStatus(UsageStatusEnum status) {
+        return usageRepository.findByStatuses(status);
     }
 
     @Override
