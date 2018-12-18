@@ -1,3 +1,7 @@
+4.1.9
+-
+* RDSC-648 FDA: PI job sends the same message several times while processing usages
+
 4.1.8
 -
 * B-46032 FDA: Exclude non US RHs from the NTS proxy: implement workflow test for NTS product family
