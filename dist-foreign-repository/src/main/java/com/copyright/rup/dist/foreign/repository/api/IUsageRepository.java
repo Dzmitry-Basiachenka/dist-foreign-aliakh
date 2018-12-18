@@ -341,16 +341,6 @@ public interface IUsageRepository {
     void updateStatusAndRhAccountNumber(Set<String> usageIds, UsageStatusEnum status, Long rhAccountNumber);
 
     /**
-     * Finds list of {@link Usage}s by specified {@link UsageStatusEnum}.
-     *
-     * @param status {@link UsageStatusEnum} instance
-     * @param limit  maximum size of list
-     * @param offset number of excluded records
-     * @return the list of found {@link Usage}s
-     */
-    List<Usage> findByStatus(UsageStatusEnum status, int limit, int offset);
-
-    /**
      * Updates given list of {@link Usage}s. Update affects not all fields. For exact list of affected fields please
      * see implementation.
      *

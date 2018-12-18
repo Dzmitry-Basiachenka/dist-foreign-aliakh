@@ -45,7 +45,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -943,16 +942,6 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(WORK_TITLE, usage2.getWorkTitle());
         assertEquals(title2, usage2.getSystemTitle());
         assertEquals(854030733L, usage2.getWrWrkInst().longValue());
-    }
-
-    @Test
-    public void testFindByStatus() {
-        List<Usage> usages = usageRepository.findByStatus(UsageStatusEnum.NEW, 5, 0);
-        assertEquals(5, usages.size());
-        assertTrue(usages.stream()
-            .map(Usage::getId)
-            .collect(Collectors.toSet())
-            .containsAll(Sets.newHashSet(USAGE_ID_14, USAGE_ID_24, USAGE_ID_21, USAGE_ID_12, USAGE_ID_13)));
     }
 
     @Test

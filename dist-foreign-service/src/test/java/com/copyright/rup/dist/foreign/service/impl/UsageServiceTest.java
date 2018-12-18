@@ -617,9 +617,9 @@ public class UsageServiceTest {
     @Test
     public void testGetUsagesByStatus() {
         List<Usage> usages = Collections.singletonList(buildUsage(USAGE_ID_1));
-        expect(usageRepository.findByStatus(UsageStatusEnum.NEW, 10, 0)).andReturn(usages).once();
+        expect(usageRepository.findByStatuses(UsageStatusEnum.NEW)).andReturn(usages).once();
         replay(usageRepository);
-        assertEquals(usages, usageService.getUsagesByStatus(UsageStatusEnum.NEW, 10, 0));
+        assertEquals(usages, usageService.getUsagesByStatus(UsageStatusEnum.NEW));
         verify(usageRepository);
     }
 

@@ -384,15 +384,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public List<Usage> findByStatus(UsageStatusEnum status, int limit, int offset) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
-        parameters.put(STATUS_KEY, Objects.requireNonNull(status));
-        parameters.put("limit", limit);
-        parameters.put("offset", offset);
-        return selectList("IUsageMapper.findByStatus", parameters);
-    }
-
-    @Override
     public void update(List<Usage> usages) {
         checkArgument(CollectionUtils.isNotEmpty(usages));
         usages.forEach(usage -> update("IUsageMapper.update", usage));
