@@ -1,3 +1,10 @@
+4.1.10
+-
+* B-47645 Tech Debt: FDA: Change version of embedded PostgreSQL for integration tests
+* B-47645 Tech Debt: FDA: Implement Liquibase script to add primary keys constraint to the column df_rightsholder_uid instead of the column rh_account_number
+* B-48319 FDA/LM: Apply optimization for getting grants from RMS: add Liquibase changeset to create grant_priority table and populate it, write IT for GrantPriorityRepository
+* B-48321 FDA: Apply common workflow approach for processing FAS usages: implement Eligibility processor
+
 4.1.9
 -
 * RDSC-648 FDA: PI job sends the same message several times while processing usages
