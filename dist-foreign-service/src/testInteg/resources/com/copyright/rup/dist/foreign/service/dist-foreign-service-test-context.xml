@@ -37,7 +37,7 @@
 
     <bean id="dfDataSource"
           class="com.copyright.rup.common.test.integ.db.embedded.EmbeddedPostgresDatabaseFactory">
-        <property name="version" value="9.4.4-1"/>
+        <property name="version" value="10.3-1"/>
         <property name="resourcesFromPaths"
                   value="#{'${test.liquibase.changelog:}'.equals('') ? defaultChangelog : extendedChangelog}"/>
         <property name="createCommonTablesOnStartup" value="false"/>
