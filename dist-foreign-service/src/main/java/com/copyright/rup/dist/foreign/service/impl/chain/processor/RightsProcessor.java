@@ -4,8 +4,6 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.service.api.IJobProcessor;
 import com.copyright.rup.dist.foreign.service.api.JobProcessorTypeEnum;
 
-import java.util.List;
-
 /**
  * Implementation of {@link AbstractUsageChainProcessor} for getting rights.
  * <p>
@@ -26,7 +24,7 @@ public class RightsProcessor extends AbstractUsageChainProcessor implements IJob
     }
 
     @Override
-    public void process(List<Usage> items) {
+    public void process(Usage usage) {
         /*
             1. Send items to queue via rightsProducer
          */

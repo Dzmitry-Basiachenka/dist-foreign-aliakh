@@ -123,17 +123,15 @@ public class RightsService implements IRightsService {
         Map<Long, Long> wrWrkInstToRhAccountNumberMap =
             rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(wrWrkInst));
         Long rhAccountNumber = wrWrkInstToRhAccountNumberMap.get(wrWrkInst);
-        boolean isNtsUsage = FdaConstants.NTS_PRODUCT_FAMILY.equals(usage.getProductFamily());
         if (Objects.nonNull(rhAccountNumber)) {
-            usageRepository.updateStatusAndRhAccountNumber(usageId,
-                isNtsUsage ? UsageStatusEnum.RH_FOUND : UsageStatusEnum.ELIGIBLE, rhAccountNumber);
+            usageRepository.updateStatusAndRhAccountNumber(usageId, UsageStatusEnum.RH_FOUND, rhAccountNumber);
             auditService.logAction(usageId, UsageActionTypeEnum.RH_FOUND,
                 String.format("Rightsholder account %s was found in RMS", rhAccountNumber));
-            if (isNtsUsage) {
-                usage.getRightsholder().setAccountNumber(rhAccountNumber);
-            }
             rightsholderService.updateRightsholders(Collections.singleton(rhAccountNumber));
-        } else if (isNtsUsage) {
+            usage.getRightsholder().setAccountNumber(rhAccountNumber);
+            usage.setStatus(UsageStatusEnum.RH_FOUND);
+        } else if (FdaConstants.NTS_PRODUCT_FAMILY.equals(usage.getProductFamily())) {
+            //TODO: remove product family specific logic once NTS chain will be implemented
             usageService.deleteById(usage.getId());
             LOGGER.trace("Removed NTS usage without rights. UsageId={}", usage.getId());
         } else {

@@ -7,6 +7,7 @@ import static org.easymock.EasyMock.verify;
 
 import com.copyright.rup.dist.common.integration.camel.IProducer;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IRightsService;
 
 import org.junit.Before;
@@ -86,6 +87,7 @@ public class RightsConsumerTest {
         public void updateRight(Usage usage) {
             if (NTS_PRODUCT_FAMILY.equals(usage.getProductFamily()) && NTS_USAGE_ID_WITH_RH.equals(usage.getId())) {
                 usage.getRightsholder().setAccountNumber(1000009522L);
+                usage.setStatus(UsageStatusEnum.RH_FOUND);
             }
         }
     }

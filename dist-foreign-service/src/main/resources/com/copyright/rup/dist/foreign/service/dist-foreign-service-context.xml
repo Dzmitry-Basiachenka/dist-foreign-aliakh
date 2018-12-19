@@ -18,6 +18,7 @@
     <import resource="classpath:/com/copyright/rup/dist/foreign/integration/dist-foreign-integration-context.xml"/>
     <import resource="classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-scheduler-context.xml"/>
     <import resource="classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-camel-context.xml"/>
+    <import resource="classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-chain-processors-context.xml"/>
 
     <!--Transaction manager configuration-->
     <tx:annotation-driven transaction-manager="txManager"/>
