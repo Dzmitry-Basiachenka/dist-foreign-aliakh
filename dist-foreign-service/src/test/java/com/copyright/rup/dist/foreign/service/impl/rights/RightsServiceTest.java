@@ -159,7 +159,7 @@ public class RightsServiceTest {
             .once();
         String usageId = RupPersistUtils.generateUuid();
         Set<String> usageIdsSet = Collections.singleton(usageId);
-        usageRepository.updateStatusAndRhAccountNumber(usageIdsSet, UsageStatusEnum.ELIGIBLE, 1000009522L);
+        usageRepository.updateStatusAndRhAccountNumber(usageIdsSet, UsageStatusEnum.RH_FOUND, 1000009522L);
         expectLastCall().once();
         usageAuditService.logAction(usageIdsSet, UsageActionTypeEnum.RH_FOUND,
             "Rightsholder account 1000009522 was found in RMS");

@@ -1,7 +1,5 @@
 package com.copyright.rup.dist.foreign.service.api;
 
-import java.util.List;
-
 /**
  * Interface for chain processor.
  * <p>
@@ -15,11 +13,11 @@ import java.util.List;
 public interface IChainProcessor<T> {
 
     /**
-     * Processes specific items.
+     * Processes specific item.
      *
-     * @param items to process
+     * @param item to process
      */
-    void process(List<T> items);
+    void process(T item);
 
     /**
      * @return success processor.

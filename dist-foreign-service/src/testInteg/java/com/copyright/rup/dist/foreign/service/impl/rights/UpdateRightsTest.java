@@ -91,9 +91,9 @@ public class UpdateRightsTest {
         rightsService.updateRight(buildUsage("8aded52d-9507-4883-ab4c-fd2e029298af", 254030731L));
         rightsService.updateRight(buildUsage("74ded52a-4454-1225-ab4c-fA2e029298af", 658824345L));
         rightsService.updateRight(buildUsage("3a6b6f25-9f68-4da7-be4f-dd65574f5168", 488824345L));
-        assertUsage("b77e72d6-ef71-4f4b-a00b-5800e43e5bee", UsageStatusEnum.ELIGIBLE, 1000010077L);
-        assertUsage("8aded52d-9507-4883-ab4c-fd2e029298af", UsageStatusEnum.ELIGIBLE, 1000010077L);
-        assertUsage("74ded52a-4454-1225-ab4c-fA2e029298af", UsageStatusEnum.ELIGIBLE, 1000023401L);
+        assertUsage("b77e72d6-ef71-4f4b-a00b-5800e43e5bee", UsageStatusEnum.RH_FOUND, 1000010077L);
+        assertUsage("8aded52d-9507-4883-ab4c-fd2e029298af", UsageStatusEnum.RH_FOUND, 1000010077L);
+        assertUsage("74ded52a-4454-1225-ab4c-fA2e029298af", UsageStatusEnum.RH_FOUND, 1000023401L);
         assertUsage("3a6b6f25-9f68-4da7-be4f-dd65574f5168", UsageStatusEnum.RH_NOT_FOUND, null);
         assertAudit("b77e72d6-ef71-4f4b-a00b-5800e43e5bee", "Rightsholder account 1000010077 was found in RMS");
         assertAudit("8aded52d-9507-4883-ab4c-fd2e029298af", "Rightsholder account 1000010077 was found in RMS");

@@ -130,6 +130,7 @@ public class WorkflowIntegrationTest {
             .expectUsageAudit(USAGE_LM_DETAIL_ID_4, Arrays.asList(
                 Pair.of(UsageActionTypeEnum.LOADED, "Uploaded in 'Test_Batch' Batch"),
                 Pair.of(UsageActionTypeEnum.RH_FOUND, "Rightsholder account 1000024950 was found in RMS"),
+                Pair.of(UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible"),
                 Pair.of(UsageActionTypeEnum.PAID, "Usage has been paid according to information from the LM"),
                 Pair.of(UsageActionTypeEnum.ARCHIVED, AUDIT_USAGE_WAS_SENT_TO_CRM)))
             .expectUsageAudit(USAGE_LM_DETAIL_ID_5, Arrays.asList(
@@ -137,6 +138,7 @@ public class WorkflowIntegrationTest {
                 Pair.of(UsageActionTypeEnum.WORK_FOUND , "Wr Wrk Inst 100012905 was found by standard number " +
                     "12345XX-12978"),
                 Pair.of(UsageActionTypeEnum.RH_FOUND , "Rightsholder account 2000139286 was found in RMS"),
+                Pair.of(UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible"),
                 Pair.of(UsageActionTypeEnum.PAID , "Usage has been paid according to information from the LM"),
                 Pair.of(UsageActionTypeEnum.ARCHIVED , AUDIT_USAGE_WAS_SENT_TO_CRM)))
             .expectUsageAudit(USAGE_LM_DETAIL_ID_6, Arrays.asList(
