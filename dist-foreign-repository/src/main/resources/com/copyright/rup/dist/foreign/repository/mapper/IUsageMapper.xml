@@ -477,7 +477,7 @@
                 </include>
             </when>
             <otherwise>
-                updated_datetime desc
+                updated_datetime desc, df_usage_uid
             </otherwise>
         </choose>
         <include refid="ifPageable"/>
@@ -553,6 +553,7 @@
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         left join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
         where df_scenario_uid = #{scenarioId}
+        order by df_usage_uid
     </select>
 
     <select id="findRightsholdersInformation" resultMap="usageResultMap" parameterType="string">
