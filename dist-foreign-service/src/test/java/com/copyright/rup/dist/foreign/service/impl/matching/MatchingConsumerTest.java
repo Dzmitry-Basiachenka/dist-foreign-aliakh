@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.service.impl.matching;
 
+import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
@@ -8,10 +10,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
-import com.copyright.rup.dist.common.integration.camel.IProducer;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
+import com.copyright.rup.dist.foreign.service.api.IChainProcessor;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -32,67 +34,73 @@ public class MatchingConsumerTest {
     private static final String VALID_TITLE = "VALID TITLE";
     private static final String VALID_STANDARD_NUMBER = "VALID SN";
     private final MatchingConsumer consumer = new MatchingConsumer();
-    private IProducer<Usage> rightsProducer;
+    private IChainProcessor<Usage> matchingProcessor;
 
     @Before
     public void setUp() {
-        rightsProducer = createMock(IProducer.class);
+        matchingProcessor = createMock(IChainProcessor.class);
         Whitebox.setInternalState(consumer, new WorkMatchingServiceMock());
-        Whitebox.setInternalState(consumer, rightsProducer);
+        Whitebox.setInternalState(consumer, matchingProcessor);
     }
 
     @Test
     public void testConsumeUsageWithoutTitleAndStandardNumber() {
         Usage usage = buildUsage();
-        replay(rightsProducer);
+        matchingProcessor.processResult(eq(usage), anyObject());
+        expectLastCall().once();
+        replay(matchingProcessor);
         consumer.consume(usage);
         assertEquals(UsageStatusEnum.WORK_NOT_FOUND, usage.getStatus());
         assertNull(usage.getWrWrkInst());
-        verify(rightsProducer);
+        verify(matchingProcessor);
     }
 
     @Test
     public void testConsumeUsageWithValidTitle() {
         Usage usage = buildUsageWithTitle(VALID_TITLE);
-        rightsProducer.send(usage);
+        matchingProcessor.processResult(eq(usage), anyObject());
         expectLastCall().once();
-        replay(rightsProducer);
+        replay(matchingProcessor);
         consumer.consume(usage);
         assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
         assertEquals(1112L, usage.getWrWrkInst(), 0);
-        verify(rightsProducer);
+        verify(matchingProcessor);
     }
 
     @Test
     public void testConsumeUsageWithInvalidTitle() {
         Usage usage = buildUsageWithTitle("INVALID TITLE");
-        replay(rightsProducer);
+        matchingProcessor.processResult(eq(usage), anyObject());
+        expectLastCall().once();
+        replay(matchingProcessor);
         consumer.consume(usage);
         assertEquals(UsageStatusEnum.WORK_NOT_FOUND, usage.getStatus());
         assertNull(usage.getWrWrkInst());
-        verify(rightsProducer);
+        verify(matchingProcessor);
     }
 
     @Test
     public void testConsumeUsageWithValidStandardNumber() {
         Usage usage = buildUsageWithStandardNumber(VALID_STANDARD_NUMBER);
-        rightsProducer.send(usage);
+        matchingProcessor.processResult(eq(usage), anyObject());
         expectLastCall().once();
-        replay(rightsProducer);
+        replay(matchingProcessor);
         consumer.consume(usage);
         assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
         assertEquals(1112L, usage.getWrWrkInst(), 0);
-        verify(rightsProducer);
+        verify(matchingProcessor);
     }
 
     @Test
     public void testConsumeUsageWithInvalidStandardNumber() {
         Usage usage = buildUsageWithStandardNumber("INVALID SN");
-        replay(rightsProducer);
+        matchingProcessor.processResult(eq(usage), anyObject());
+        expectLastCall().once();
+        replay(matchingProcessor);
         consumer.consume(usage);
         assertEquals(UsageStatusEnum.WORK_NOT_FOUND, usage.getStatus());
         assertNull(usage.getWrWrkInst());
-        verify(rightsProducer);
+        verify(matchingProcessor);
     }
 
     private Usage buildUsage() {

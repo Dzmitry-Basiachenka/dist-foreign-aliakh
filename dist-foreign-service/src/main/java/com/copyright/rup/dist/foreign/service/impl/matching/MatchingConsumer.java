@@ -1,9 +1,9 @@
 package com.copyright.rup.dist.foreign.service.impl.matching;
 
 import com.copyright.rup.dist.common.integration.camel.IConsumer;
-import com.copyright.rup.dist.common.integration.camel.IProducer;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.service.api.IChainProcessor;
 import com.copyright.rup.dist.foreign.service.api.IWorkMatchingService;
 
 import org.apache.commons.lang3.StringUtils;
@@ -26,8 +26,8 @@ public class MatchingConsumer implements IConsumer<Usage> {
     @Autowired
     private IWorkMatchingService workMatchingService;
     @Autowired
-    @Qualifier("df.service.rightsProducer")
-    private IProducer<Usage> producer;
+    @Qualifier("df.service.fasMatchingProcessor")
+    private IChainProcessor<Usage> matchingProcessor;
 
     @Override
     public void consume(Usage usage) {
@@ -38,8 +38,6 @@ public class MatchingConsumer implements IConsumer<Usage> {
         } else {
             workMatchingService.updateStatusForUsageWithoutStandardNumberAndTitle(usage);
         }
-        if (UsageStatusEnum.WORK_FOUND == usage.getStatus()) {
-            producer.send(usage);
-        }
+        matchingProcessor.processResult(usage, usageItem -> UsageStatusEnum.WORK_FOUND == usageItem.getStatus());
     }
 }
