@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.service.impl.rights;
 
+import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
@@ -8,6 +10,7 @@ import static org.easymock.EasyMock.verify;
 import com.copyright.rup.dist.common.integration.camel.IProducer;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.service.api.IChainProcessor;
 import com.copyright.rup.dist.foreign.service.api.IRightsService;
 
 import org.junit.Before;
@@ -30,12 +33,16 @@ public class RightsConsumerTest {
 
     private final RightsConsumer consumer = new RightsConsumer();
     private IProducer<Usage> rhTaxProducer;
+    private IChainProcessor<Usage> rightsProcessor;
 
     @Before
+    @SuppressWarnings("unchecked")
     public void setUp() {
         rhTaxProducer = createMock(IProducer.class);
+        rightsProcessor = createMock(IChainProcessor.class);
         Whitebox.setInternalState(consumer, new RightsServiceMock());
         Whitebox.setInternalState(consumer, rhTaxProducer);
+        Whitebox.setInternalState(consumer, rightsProcessor);
     }
 
     @Test
@@ -59,9 +66,10 @@ public class RightsConsumerTest {
     @Test
     public void testConsumeFasUsage() {
         Usage usage = buildUsage("1861c32e-eb9c-42c6-ae4f-2a4d65f207bc", "FAS");
-        replay(rhTaxProducer);
+        rightsProcessor.processResult(eq(usage), anyObject());
+        replay(rightsProcessor);
         consumer.consume(usage);
-        verify(rhTaxProducer);
+        verify(rightsProcessor);
     }
 
     private Usage buildUsage(String usageId, String productFamily) {

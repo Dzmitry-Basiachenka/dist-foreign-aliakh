@@ -1,8 +1,13 @@
 package com.copyright.rup.dist.foreign.service.impl.chain.processor;
 
+import com.copyright.rup.dist.common.integration.camel.IProducer;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.service.api.IJobProcessor;
+import com.copyright.rup.dist.foreign.service.api.IRightsService;
 import com.copyright.rup.dist.foreign.service.api.JobProcessorTypeEnum;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
  * Implementation of {@link AbstractUsageChainProcessor} for getting rights.
@@ -15,19 +20,20 @@ import com.copyright.rup.dist.foreign.service.api.JobProcessorTypeEnum;
  */
 public class RightsProcessor extends AbstractUsageChainProcessor implements IJobProcessor {
 
+    @Autowired
+    @Qualifier("df.service.rightsProducer")
+    private IProducer<Usage> producer;
+    @Autowired
+    private IRightsService rightsService;
+
     @Override
     public void process() {
-        /*
-            1. Find usages by WORK_FOUND status
-            2. Send it to queue via rightsProducer
-         */
+        rightsService.updateRights();
     }
 
     @Override
     public void process(Usage usage) {
-        /*
-            1. Send items to queue via rightsProducer
-         */
+        producer.send(usage);
     }
 
     @Override
