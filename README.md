@@ -1,3 +1,8 @@
+4.1.11
+-
+* B-48321 FDA: Apply common workflow approach for processing FAS usages: implement rights processor and adjust rights consumer
+* RDSC-647 FDA: One of usages with the same Wr_wrk_inst remains in 'WORK_FOUND' status after batch upload, if rightsholder for it is absent in database
+
 4.1.10
 -
 * B-47645 Tech Debt: FDA: Change version of embedded PostgreSQL for integration tests
