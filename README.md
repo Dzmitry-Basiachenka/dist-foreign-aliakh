@@ -1,3 +1,8 @@
+4.1.12
+-
+* B-48319 FDA: Apply optimization for getting grants from RMS: apply common method for building discrepancies based on priorities from dist common
+* B-48321 FDA: Apply common workflow approach for processing FAS usages: implement matching processor and adjust matching consumer
+
 4.1.11
 -
 * B-48321 FDA: Apply common workflow approach for processing FAS usages: implement rights processor and adjust rights consumer
