@@ -1,5 +1,8 @@
 package com.copyright.rup.dist.foreign.service.api;
 
+import java.util.Objects;
+import java.util.function.Predicate;
+
 /**
  * Interface for chain processor.
  * <p>
@@ -42,4 +45,20 @@ public interface IChainProcessor<T> {
      * @param failureProcessor failure processor
      */
     void setFailureProcessor(IChainProcessor<T> failureProcessor);
+
+    /**
+     * Passes processed item to the next processor.
+     *
+     * @param processedItem    item to pass to the next processor
+     * @param successPredicate predicate to decide whether item was processed successfully or not
+     */
+    default void processResult(T processedItem, Predicate<T> successPredicate) {
+        if (successPredicate.test(processedItem)) {
+            if (Objects.nonNull(getSuccessProcessor())) {
+                getSuccessProcessor().process(processedItem);
+            }
+        } else if (Objects.nonNull(getFailureProcessor())) {
+            getFailureProcessor().process(processedItem);
+        }
+    }
 }

@@ -28,26 +28,25 @@ import java.util.Objects;
 public class RightsConsumer implements IConsumer<Usage> {
 
     @Autowired
-    private IChainProcessor<Usage> fasEligibilityProcessor;
-    @Autowired
     private IRightsService rightsService;
     @Autowired
     @Qualifier("df.service.rhTaxProducer")
     private IProducer<Usage> rhTaxproducer;
+    @Autowired
+    @Qualifier("df.service.fasRightsProcessor")
+    private IChainProcessor<Usage> rightsProcessor;
 
     @Override
     public void consume(Usage usage) {
         if (Objects.nonNull(usage)) {
             rightsService.updateRight(usage);
-        }
-        //TODO: remove product family specific logic once NTS chain will be implemented
-        if (FdaConstants.NTS_PRODUCT_FAMILY.equals(usage.getProductFamily()) &&
-            UsageStatusEnum.RH_FOUND == usage.getStatus()) {
-            rhTaxproducer.send(usage);
-        } else if (DistributionConstant.FOREIGN_PRODUCT_FAMILIES.contains(usage.getProductFamily()) &&
-            UsageStatusEnum.RH_FOUND == usage.getStatus()) {
-            //TODO: replace direct call of eligibility processor once rights processor will be implemented
-            fasEligibilityProcessor.process(usage);
+            //TODO: remove product family specific logic once NTS chain will be implemented
+            if (FdaConstants.NTS_PRODUCT_FAMILY.equals(usage.getProductFamily()) &&
+                UsageStatusEnum.RH_FOUND == usage.getStatus()) {
+                rhTaxproducer.send(usage);
+            } else if (DistributionConstant.FOREIGN_PRODUCT_FAMILIES.contains(usage.getProductFamily())) {
+                rightsProcessor.processResult(usage, usage1 -> UsageStatusEnum.RH_FOUND == usage1.getStatus());
+            }
         }
     }
 }
