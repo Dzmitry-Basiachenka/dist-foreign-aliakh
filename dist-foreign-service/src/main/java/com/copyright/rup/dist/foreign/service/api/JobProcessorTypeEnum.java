@@ -12,12 +12,12 @@ package com.copyright.rup.dist.foreign.service.api;
 public enum JobProcessorTypeEnum {
 
     /**
+     * Matching processor.
+     */
+    MATCHING,
+
+    /**
      * Rights processor.
      */
     RIGHTS,
-
-    /**
-     * RH tax processor.
-     */
-    RH_TAX,
 }

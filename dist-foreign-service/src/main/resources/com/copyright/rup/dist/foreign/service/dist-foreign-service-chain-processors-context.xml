@@ -10,4 +10,8 @@
     <bean id="df.service.fasRightsProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.RightsProcessor">
         <property name="successProcessor" ref="df.service.fasEligibilityProcessor"/>
     </bean>
+
+    <bean id="df.service.fasMatchingProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.MatchingProcessor">
+        <property name="successProcessor" ref="df.service.fasRightsProcessor"/>
+    </bean>
 </beans>

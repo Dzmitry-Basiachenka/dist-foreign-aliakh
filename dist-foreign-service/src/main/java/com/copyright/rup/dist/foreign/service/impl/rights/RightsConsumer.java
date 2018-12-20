@@ -45,7 +45,7 @@ public class RightsConsumer implements IConsumer<Usage> {
                 UsageStatusEnum.RH_FOUND == usage.getStatus()) {
                 rhTaxproducer.send(usage);
             } else if (DistributionConstant.FOREIGN_PRODUCT_FAMILIES.contains(usage.getProductFamily())) {
-                rightsProcessor.processResult(usage, usage1 -> UsageStatusEnum.RH_FOUND == usage1.getStatus());
+                rightsProcessor.processResult(usage, usageItem -> UsageStatusEnum.RH_FOUND == usageItem.getStatus());
             }
         }
     }
