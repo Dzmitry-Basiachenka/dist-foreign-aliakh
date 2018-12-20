@@ -199,14 +199,15 @@ public class ScenarioService implements IScenarioService {
         LOGGER.info("Reconcile rightsholders. Started. {}", ForeignLogUtils.scenario(Objects.requireNonNull(scenario)));
         rightsholderDiscrepancyService.deleteByScenarioIdAndStatus(scenario.getId(),
             RightsholderDiscrepancyStatusEnum.IN_PROGRESS);
-        Map<Long, List<Usage>> groupedByWrWrkInstUsages = usageService.getUsagesForReconcile(scenario.getId())
-            .stream()
-            .collect(Collectors.groupingBy(Usage::getWrWrkInst));
+        List<Usage> usagesForReconcile = usageService.getUsagesForReconcile(scenario.getId());
+        Map<Long, List<Usage>> groupedByWrWrkInstUsages =
+            usagesForReconcile.stream().collect(Collectors.groupingBy(Usage::getWrWrkInst));
+        String productFamily = usagesForReconcile.iterator().next().getProductFamily();
         Iterables.partition(groupedByWrWrkInstUsages.entrySet(), discrepancyPartitionSize).forEach(entries -> {
             List<RightsholderDiscrepancy> discrepancies =
                 commonDiscrepanciesService.getDiscrepancies(
                     entries.stream().flatMap(entry -> entry.getValue().stream()).collect(Collectors.toList()),
-                    Usage::getWrWrkInst, new DiscrepancyBuilder(RupContextUtils.getUserName()));
+                    Usage::getWrWrkInst, productFamily, new DiscrepancyBuilder(RupContextUtils.getUserName()));
             if (CollectionUtils.isNotEmpty(discrepancies)) {
                 rightsholderDiscrepancyService.insertDiscrepancies(discrepancies, scenario.getId());
             }
