@@ -15,10 +15,11 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsService;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
-
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,7 +122,8 @@ public class RightsService implements IRightsService {
         Long wrWrkInst = usage.getWrWrkInst();
         Set<String> usageId = Collections.singleton(usage.getId());
         Map<Long, Long> wrWrkInstToRhAccountNumberMap =
-            rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(wrWrkInst));
+            rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(wrWrkInst),
+                usage.getProductFamily());
         Long rhAccountNumber = wrWrkInstToRhAccountNumberMap.get(wrWrkInst);
         if (Objects.nonNull(rhAccountNumber)) {
             usageRepository.updateStatusAndRhAccountNumber(usageId, UsageStatusEnum.RH_FOUND, rhAccountNumber);
@@ -145,8 +147,10 @@ public class RightsService implements IRightsService {
         Map<Long, Set<String>> wrWrkInstToUsageIds = usages.stream().collect(
             Collectors.groupingBy(Usage::getWrWrkInst, HashMap::new, Collectors
                 .mapping(Usage::getId, Collectors.toSet())));
+        String productFamily = usages.iterator().next().getProductFamily();
         Map<Long, Long> wrWrkInstToAccountNumber =
-            rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Lists.newArrayList(wrWrkInstToUsageIds.keySet()));
+            rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Lists.newArrayList(wrWrkInstToUsageIds.keySet()),
+                productFamily);
         AtomicLong eligibleUsagesCount = new AtomicLong();
         wrWrkInstToAccountNumber.forEach((wrWrkInst, rhAccountNumber) -> {
             Set<String> usageIds = wrWrkInstToUsageIds.get(wrWrkInst);

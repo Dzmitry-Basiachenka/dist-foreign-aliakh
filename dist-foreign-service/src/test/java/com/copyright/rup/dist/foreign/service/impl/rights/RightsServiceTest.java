@@ -21,9 +21,9 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsService;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
-
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.common.CommonUsageProducer;
+
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -54,6 +54,7 @@ public class RightsServiceTest {
     private static final Long RH_ACCOUNT_NUMBER = 1000001534L;
     private static final String RH_ID = RupPersistUtils.generateUuid();
     private static final String FAS_PRODUCT_FAMILY = "FAS";
+    private static final String NTS_PRODUCT_FAMILY = "NTS";
     private IRightsService rightsService;
     private IUsageRepository usageRepository;
     private IUsageAuditService usageAuditService;
@@ -137,8 +138,8 @@ public class RightsServiceTest {
         expectLastCall().once();
         expect(usageRepository.findByStatuses(UsageStatusEnum.SENT_FOR_RA))
             .andReturn(Collections.singletonList(sentForRaUsage)).once();
-        expect(rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(123160519L)))
-            .andReturn(wrWrkInstToRhAccountNumberMap).once();
+        expect(rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(123160519L),
+            FAS_PRODUCT_FAMILY)).andReturn(wrWrkInstToRhAccountNumberMap).once();
         usageRepository.updateStatusAndRhAccountNumber(Collections.singleton(sentForRaUsage.getId()),
             UsageStatusEnum.ELIGIBLE, RH_ACCOUNT_NUMBER);
         expectLastCall().once();
@@ -154,9 +155,8 @@ public class RightsServiceTest {
 
     @Test
     public void testUpdateRight() {
-        expect(rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(123160519L)))
-            .andReturn(ImmutableMap.of(123160519L, 1000009522L))
-            .once();
+        expect(rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(123160519L),
+            FAS_PRODUCT_FAMILY)).andReturn(ImmutableMap.of(123160519L, 1000009522L)).once();
         String usageId = RupPersistUtils.generateUuid();
         Set<String> usageIdsSet = Collections.singleton(usageId);
         usageRepository.updateStatusAndRhAccountNumber(usageIdsSet, UsageStatusEnum.RH_FOUND, 1000009522L);
@@ -174,11 +174,10 @@ public class RightsServiceTest {
     @Test
     public void testUpdateRightWithNtsUsage() {
         String usageId = RupPersistUtils.generateUuid();
-        Usage usage = buildUsage(usageId, "NTS", UsageStatusEnum.WORK_FOUND);
+        Usage usage = buildUsage(usageId, NTS_PRODUCT_FAMILY, UsageStatusEnum.WORK_FOUND);
         usage.getRightsholder().setAccountNumber(null);
-        expect(rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(123160519L)))
-            .andReturn(ImmutableMap.of(123160519L, 1000009522L))
-            .once();
+        expect(rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(123160519L),
+            NTS_PRODUCT_FAMILY)).andReturn(ImmutableMap.of(123160519L, 1000009522L)).once();
         Set<String> usageIdsSet = Collections.singleton(usageId);
         usageRepository.updateStatusAndRhAccountNumber(usageIdsSet, UsageStatusEnum.RH_FOUND, 1000009522L);
         expectLastCall().once();
@@ -198,9 +197,8 @@ public class RightsServiceTest {
     public void testUpdateRightWithNotFound() {
         String usageId = RupPersistUtils.generateUuid();
         Set<String> usageIdsSet = Collections.singleton(usageId);
-        expect(rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(123160519L)))
-            .andReturn(Collections.EMPTY_MAP)
-            .once();
+        expect(rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(123160519L),
+            FAS_PRODUCT_FAMILY)).andReturn(Collections.EMPTY_MAP).once();
         usageRepository.updateStatus(usageIdsSet, UsageStatusEnum.RH_NOT_FOUND);
         expectLastCall().once();
         usageAuditService.logAction(usageIdsSet, UsageActionTypeEnum.RH_NOT_FOUND,
@@ -214,13 +212,12 @@ public class RightsServiceTest {
     @Test
     public void testUpdateRightWithNtsAndNotFound() {
         String usageId = RupPersistUtils.generateUuid();
-        expect(rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(123160519L)))
-            .andReturn(Collections.EMPTY_MAP)
-            .once();
+        expect(rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(123160519L),
+            NTS_PRODUCT_FAMILY)).andReturn(Collections.EMPTY_MAP).once();
         usageService.deleteById(usageId);
         expectLastCall().once();
         replay(rmsGrantsProcessorService, usageService);
-        rightsService.updateRight(buildUsage(usageId, "NTS", UsageStatusEnum.WORK_FOUND));
+        rightsService.updateRight(buildUsage(usageId, NTS_PRODUCT_FAMILY, UsageStatusEnum.WORK_FOUND));
         verify(rmsGrantsProcessorService, usageService);
     }
 

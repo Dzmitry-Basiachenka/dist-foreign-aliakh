@@ -107,6 +107,7 @@ public class UpdateRightsTest {
         Usage usage = new Usage();
         usage.setId(usageId);
         usage.setWrWrkInst(wrWrkInst);
+        usage.setProductFamily("FAS");
         return usage;
     }
 
