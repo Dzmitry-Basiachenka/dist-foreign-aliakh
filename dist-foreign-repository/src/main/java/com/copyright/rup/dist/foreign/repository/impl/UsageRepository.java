@@ -106,6 +106,14 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
+    public List<Usage> findByIds(List<String> usageIds) {
+        List<Usage> result = new ArrayList<>();
+        Iterables.partition(Objects.requireNonNull(usageIds), 32000)
+            .forEach(partition -> result.addAll(selectList("IUsageMapper.findByIds", partition)));
+        return result;
+    }
+
+    @Override
     public List<Usage> findForReconcile(String scenarioId) {
         return selectList("IUsageMapper.findForReconcile", Objects.requireNonNull(scenarioId));
     }
@@ -315,11 +323,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
             result.addAll(selectList("IUsageMapper.findIdsByScenarioIdRroAccountNumberRhAccountNumbers", parameters));
         });
         return result;
-    }
-
-    @Override
-    public Usage findById(String usageId) {
-        return selectOne("IUsageMapper.findById", Objects.requireNonNull(usageId));
     }
 
     @Override
