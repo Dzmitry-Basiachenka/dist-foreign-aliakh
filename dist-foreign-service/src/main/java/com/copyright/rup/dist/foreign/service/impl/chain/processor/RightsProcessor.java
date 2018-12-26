@@ -2,9 +2,9 @@ package com.copyright.rup.dist.foreign.service.impl.chain.processor;
 
 import com.copyright.rup.dist.common.integration.camel.IProducer;
 import com.copyright.rup.dist.foreign.domain.Usage;
-import com.copyright.rup.dist.foreign.service.api.IJobProcessor;
+import com.copyright.rup.dist.foreign.service.api.ChainProcessorTypeEnum;
 import com.copyright.rup.dist.foreign.service.api.IRightsService;
-import com.copyright.rup.dist.foreign.service.api.JobProcessorTypeEnum;
+import com.copyright.rup.dist.foreign.service.api.IUsageJobProcessor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
  *
  * @author Uladzislau Shalamitski
  */
-public class RightsProcessor extends AbstractUsageChainProcessor implements IJobProcessor {
+public class RightsProcessor extends AbstractUsageChainProcessor implements IUsageJobProcessor {
 
     @Autowired
     @Qualifier("df.service.rightsProducer")
@@ -27,8 +27,8 @@ public class RightsProcessor extends AbstractUsageChainProcessor implements IJob
     private IRightsService rightsService;
 
     @Override
-    public void process() {
-        rightsService.updateRights();
+    public void process(String productFamily) {
+        rightsService.updateRights(productFamily);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class RightsProcessor extends AbstractUsageChainProcessor implements IJob
     }
 
     @Override
-    public JobProcessorTypeEnum getJobProcessorType() {
-        return JobProcessorTypeEnum.RIGHTS;
+    public ChainProcessorTypeEnum getChainProcessorType() {
+        return ChainProcessorTypeEnum.RIGHTS;
     }
 }

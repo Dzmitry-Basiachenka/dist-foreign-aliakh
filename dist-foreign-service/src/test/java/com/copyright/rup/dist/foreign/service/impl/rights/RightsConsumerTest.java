@@ -87,7 +87,7 @@ public class RightsConsumerTest {
         }
 
         @Override
-        public void updateRights() {
+        public void updateRights(String productFamily) {
             throw new UnsupportedOperationException();
         }
 

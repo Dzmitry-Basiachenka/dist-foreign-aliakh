@@ -71,6 +71,7 @@ import java.util.List;
 @PrepareForTest({RupContextUtils.class, RupPersistUtils.class})
 public class UsageServiceTest {
 
+    private static final String FAS_PRODUCT_FAMILY = "FAS";
     private static final String USAGE_ID_1 = "Usage id 1";
     private static final String USAGE_ID_2 = "Usage id 2";
     private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
@@ -615,11 +616,14 @@ public class UsageServiceTest {
     }
 
     @Test
-    public void testGetUsagesByStatus() {
+    public void testGetUsagesByStatusAndProductFamily() {
         List<Usage> usages = Collections.singletonList(buildUsage(USAGE_ID_1));
-        expect(usageRepository.findByStatuses(UsageStatusEnum.NEW)).andReturn(usages).once();
+        UsageFilter usageFilter = new UsageFilter();
+        usageFilter.setUsageStatus(UsageStatusEnum.NEW);
+        usageFilter.setProductFamilies(Collections.singleton(FAS_PRODUCT_FAMILY));
+        expect(usageRepository.findByFilter(usageFilter)).andReturn(usages).once();
         replay(usageRepository);
-        assertEquals(usages, usageService.getUsagesByStatus(UsageStatusEnum.NEW));
+        assertEquals(usages, usageService.getUsagesByStatusAndProductFamily(UsageStatusEnum.NEW, FAS_PRODUCT_FAMILY));
         verify(usageRepository);
     }
 
@@ -654,7 +658,7 @@ public class UsageServiceTest {
         usage.setNetAmount(new BigDecimal("68.0000000000"));
         usage.setServiceFeeAmount(new BigDecimal("32.0000000000"));
         usage.setServiceFee(new BigDecimal("0.32"));
-        usage.setProductFamily("FAS");
+        usage.setProductFamily(FAS_PRODUCT_FAMILY);
         return usage;
     }
 
@@ -677,7 +681,7 @@ public class UsageServiceTest {
         paidUsage.setServiceFeeAmount(new BigDecimal("10.00"));
         paidUsage.setServiceFee(new BigDecimal("0.32"));
         paidUsage.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER);
-        paidUsage.setProductFamily("FAS");
+        paidUsage.setProductFamily(FAS_PRODUCT_FAMILY);
         paidUsage.setWrWrkInst(123160519L);
         paidUsage.setPostDistributionFlag(postDistributionFlag);
         paidUsage.setSplitParentFlag(splitParentFlag);

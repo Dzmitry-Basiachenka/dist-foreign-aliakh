@@ -5,9 +5,9 @@ import com.copyright.rup.dist.common.integration.camel.IProducer;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.service.api.IJobProcessor;
+import com.copyright.rup.dist.foreign.service.api.ChainProcessorTypeEnum;
+import com.copyright.rup.dist.foreign.service.api.IUsageJobProcessor;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.service.api.JobProcessorTypeEnum;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ import java.util.List;
  *
  * @author Uladzislau Shalamitski
  */
-public class MatchingProcessor extends AbstractUsageChainProcessor implements IJobProcessor {
+public class MatchingProcessor extends AbstractUsageChainProcessor implements IUsageJobProcessor {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
@@ -35,11 +35,13 @@ public class MatchingProcessor extends AbstractUsageChainProcessor implements IJ
     private IUsageService usageService;
 
     @Override
-    public void process() {
-        List<Usage> usages = usageService.getUsagesByStatus(UsageStatusEnum.NEW);
-        LOGGER.info("Send usages for works matching. Started. UsagesCount={}", LogUtils.size(usages));
+    public void process(String productFamily) {
+        List<Usage> usages = usageService.getUsagesByStatusAndProductFamily(UsageStatusEnum.NEW, productFamily);
+        LOGGER.info("Send usages for works matching. Started. ProductFamily={}, UsagesCount={}", productFamily,
+            LogUtils.size(usages));
         usages.forEach(this::process);
-        LOGGER.info("Send usages for works matching. Finished. UsagesCount={}", LogUtils.size(usages));
+        LOGGER.info("Send usages for works matching. Finished. ProductFamily={}, UsagesCount={}", productFamily,
+            LogUtils.size(usages));
     }
 
     @Override
@@ -48,7 +50,7 @@ public class MatchingProcessor extends AbstractUsageChainProcessor implements IJ
     }
 
     @Override
-    public JobProcessorTypeEnum getJobProcessorType() {
-        return JobProcessorTypeEnum.MATCHING;
+    public ChainProcessorTypeEnum getChainProcessorType() {
+        return ChainProcessorTypeEnum.MATCHING;
     }
 }

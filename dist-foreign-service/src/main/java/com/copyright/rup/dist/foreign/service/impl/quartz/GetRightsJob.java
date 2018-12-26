@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.service.impl.quartz;
 
-import com.copyright.rup.dist.foreign.service.api.IRightsService;
+import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.service.api.ChainProcessorTypeEnum;
+import com.copyright.rup.dist.foreign.service.api.IChainExecutor;
 
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.JobExecutionContext;
@@ -22,10 +24,10 @@ import org.springframework.stereotype.Component;
 public class GetRightsJob extends QuartzJobBean {
 
     @Autowired
-    private IRightsService rightsService;
+    private IChainExecutor<Usage> executor;
 
     @Override
     public void executeInternal(JobExecutionContext context) {
-        rightsService.updateRights();
+        executor.execute(ChainProcessorTypeEnum.RIGHTS);
     }
 }

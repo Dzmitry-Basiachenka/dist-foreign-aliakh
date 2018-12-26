@@ -92,26 +92,26 @@ public class RightsService implements IRightsService {
     }
 
     @Override
-    public void updateRights() {
-        List<Usage> usages = usageRepository.findByStatuses(UsageStatusEnum.WORK_FOUND);
+    public void updateRights(String productFamily) {
+        List<Usage> usages = usageService.getUsagesByStatusAndProductFamily(UsageStatusEnum.WORK_FOUND, productFamily);
         if (CollectionUtils.isNotEmpty(usages)) {
-            LOGGER.info("Update Rights. Started. UsagesStatus={}, UsagesCount={}", UsageStatusEnum.WORK_FOUND,
-                LogUtils.size(usages));
+            LOGGER.info("Update Rights. Started. ProductFamily={}, UsagesStatus={}, UsagesCount={}", productFamily,
+                UsageStatusEnum.WORK_FOUND, LogUtils.size(usages));
             usages.forEach(rightsProducer::send);
-            LOGGER.info("Update Rights. Finished. UsagesStatus={}, UsagesCount={}", UsageStatusEnum.WORK_FOUND,
-                LogUtils.size(usages));
+            LOGGER.info("Update Rights. Finished. ProductFamily={}, UsagesStatus={}, UsagesCount={}", productFamily,
+                UsageStatusEnum.WORK_FOUND, LogUtils.size(usages));
         } else {
-            LOGGER.info("Update Rights. Skipped. Reason=There are no WORK_FOUND usages");
+            LOGGER.info("Update Rights. Skipped. Reason=There are no WORK_FOUND {} usages", productFamily);
         }
-        usages = usageRepository.findByStatuses(UsageStatusEnum.SENT_FOR_RA);
+        usages = usageService.getUsagesByStatusAndProductFamily(UsageStatusEnum.SENT_FOR_RA, productFamily);
         if (CollectionUtils.isNotEmpty(usages)) {
-            LOGGER.info("Update Rights. Started. UsagesStatus={}, UsagesCount={}", UsageStatusEnum.SENT_FOR_RA,
-                LogUtils.size(usages));
+            LOGGER.info("Update Rights. Started. ProductFamily={}, UsagesStatus={}, UsagesCount={}", productFamily,
+                UsageStatusEnum.SENT_FOR_RA, LogUtils.size(usages));
             updateSentForRaUsagesRightsholders(usages);
-            LOGGER.info("Update Rights. Finished. UsagesStatus={}, UsagesCount={}", UsageStatusEnum.SENT_FOR_RA,
-                LogUtils.size(usages));
+            LOGGER.info("Update Rights. Finished. ProductFamily={}, UsagesStatus={}, UsagesCount={}", productFamily,
+                UsageStatusEnum.SENT_FOR_RA, LogUtils.size(usages));
         } else {
-            LOGGER.info("Send for getting Rights. Skipped. Reason=There are no SENT_FOR_RA usages.");
+            LOGGER.info("Send for getting Rights. Skipped. Reason=There are no SENT_FOR_RA {} usages.", productFamily);
         }
     }
 

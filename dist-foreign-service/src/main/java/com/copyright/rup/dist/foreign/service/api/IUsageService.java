@@ -330,12 +330,13 @@ public interface IUsageService {
     void sendToCrm();
 
     /**
-     * Gets list of {@link Usage}s by specified {@link UsageStatusEnum}.
+     * Gets list of {@link Usage}s by specified {@link UsageStatusEnum} and product family.
      *
      * @param status {@link UsageStatusEnum} instance
+     * @param productFamily product family
      * @return the list of found {@link Usage}s
      */
-    List<Usage> getUsagesByStatus(UsageStatusEnum status);
+    List<Usage> getUsagesByStatusAndProductFamily(UsageStatusEnum status, String productFamily);
 
     /**
      * Verifies whether {@link Usage}s found by defined {@link UsageFilter} have specified status or not.

@@ -9,7 +9,7 @@ package com.copyright.rup.dist.foreign.service.api;
  *
  * @author Uladzislau Shalamitski
  */
-public enum JobProcessorTypeEnum {
+public enum ChainProcessorTypeEnum {
 
     /**
      * Matching processor.
@@ -20,4 +20,9 @@ public enum JobProcessorTypeEnum {
      * Rights processor.
      */
     RIGHTS,
+
+    /**
+     * Eligibility processor.
+     */
+    ELIGIBILITY
 }

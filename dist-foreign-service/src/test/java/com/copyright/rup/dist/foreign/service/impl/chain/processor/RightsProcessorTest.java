@@ -41,10 +41,10 @@ public class RightsProcessorTest {
 
     @Test
     public void testProcess() {
-        rightsService.updateRights();
+        rightsService.updateRights("FAS");
         expectLastCall().once();
         replay(rightsService);
-        processor.process();
+        processor.process("FAS");
         verify(rightsService);
     }
 

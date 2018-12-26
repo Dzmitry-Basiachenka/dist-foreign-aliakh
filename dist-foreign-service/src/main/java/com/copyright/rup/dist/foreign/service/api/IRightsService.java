@@ -14,12 +14,14 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 public interface IRightsService {
 
     /**
-     * Finds list of {@link com.copyright.rup.dist.foreign.domain.Usage}s with
+     * Finds list of {@link com.copyright.rup.dist.foreign.domain.Usage}s with specified product family and
      * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#WORK_FOUND} and
      * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#SENT_FOR_RA} statuses and sends Wr Wrk Insts to RMS
      * to get Grants and update RHs information.
+     *
+     * @param productFamily product family
      */
-    void updateRights();
+    void updateRights(String productFamily);
 
     /**
      * Sends Wr Wrk Inst to RMS to get Grants and updates usage status based on response.

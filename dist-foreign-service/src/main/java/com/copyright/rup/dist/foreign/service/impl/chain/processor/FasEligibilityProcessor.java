@@ -4,6 +4,7 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
+import com.copyright.rup.dist.foreign.service.api.ChainProcessorTypeEnum;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,5 +33,10 @@ public class FasEligibilityProcessor extends AbstractUsageChainProcessor {
     public void process(Usage usage) {
         usageRepository.updateStatus(Collections.singleton(usage.getId()), UsageStatusEnum.ELIGIBLE);
         usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible");
+    }
+
+    @Override
+    public ChainProcessorTypeEnum getChainProcessorType() {
+        return ChainProcessorTypeEnum.ELIGIBILITY;
     }
 }

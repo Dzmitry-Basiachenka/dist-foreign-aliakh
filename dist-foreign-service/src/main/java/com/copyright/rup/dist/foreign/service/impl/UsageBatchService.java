@@ -2,20 +2,20 @@ package com.copyright.rup.dist.foreign.service.impl;
 
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.common.persist.RupPersistUtils;
-import com.copyright.rup.dist.common.integration.camel.IProducer;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
+import com.copyright.rup.dist.foreign.service.api.ChainProcessorTypeEnum;
+import com.copyright.rup.dist.foreign.service.api.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,11 +54,7 @@ public class UsageBatchService implements IUsageBatchService {
     @Autowired
     private IRightsholderService rightsholderService;
     @Autowired
-    @Qualifier("df.service.matchingProducer")
-    private IProducer<Usage> matchingProducer;
-    @Autowired
-    @Qualifier("df.service.rightsProducer")
-    private IProducer<Usage> rightsProducer;
+    private IChainExecutor<Usage> chainExecutor;
 
     @Override
     public List<Integer> getFiscalYears() {
@@ -116,7 +112,7 @@ public class UsageBatchService implements IUsageBatchService {
     public void sendForMatching(Collection<Usage> usages) {
         List<Usage> usagesInNewStatus =
             usages.stream().filter(usage -> UsageStatusEnum.NEW == usage.getStatus()).collect(Collectors.toList());
-        executorService.execute(() -> usagesInNewStatus.forEach(matchingProducer::send));
+        chainExecutor.execute(usagesInNewStatus, ChainProcessorTypeEnum.MATCHING);
     }
 
     @Override
@@ -125,7 +121,7 @@ public class UsageBatchService implements IUsageBatchService {
             usages.stream()
                 .filter(usage -> UsageStatusEnum.WORK_FOUND == usage.getStatus())
                 .collect(Collectors.toList());
-        executorService.execute(() -> workFoundUsages.forEach(rightsProducer::send));
+        chainExecutor.execute(workFoundUsages, ChainProcessorTypeEnum.RIGHTS);
     }
 
     @Override

@@ -47,6 +47,11 @@ public interface IChainProcessor<T> {
     void setFailureProcessor(IChainProcessor<T> failureProcessor);
 
     /**
+     * @return instance of {@link ChainProcessorTypeEnum}.
+     */
+    ChainProcessorTypeEnum getChainProcessorType();
+
+    /**
      * Passes processed item to the next processor.
      *
      * @param processedItem    item to pass to the next processor

@@ -5,7 +5,9 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 
-import com.copyright.rup.dist.foreign.service.api.IRightsService;
+import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.service.api.ChainProcessorTypeEnum;
+import com.copyright.rup.dist.foreign.service.api.IChainExecutor;
 
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -22,14 +24,15 @@ import org.powermock.reflect.Whitebox;
 public class GetRightsQuartzJobTest {
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testExecuteInternal() {
-        IRightsService rightsService = createMock(IRightsService.class);
+        IChainExecutor<Usage> executor = createMock(IChainExecutor.class);
         GetRightsJob job = new GetRightsJob();
-        Whitebox.setInternalState(job, rightsService);
-        rightsService.updateRights();
+        Whitebox.setInternalState(job, executor);
+        executor.execute(ChainProcessorTypeEnum.RIGHTS);
         expectLastCall().once();
-        replay(rightsService);
+        replay(executor);
         job.executeInternal(null);
-        verify(rightsService);
+        verify(executor);
     }
 }

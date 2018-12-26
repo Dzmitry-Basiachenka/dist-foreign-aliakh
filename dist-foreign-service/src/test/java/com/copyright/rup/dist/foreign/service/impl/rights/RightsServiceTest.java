@@ -131,11 +131,11 @@ public class RightsServiceTest {
             buildUsage(RupPersistUtils.generateUuid(), FAS_PRODUCT_FAMILY, UsageStatusEnum.SENT_FOR_RA);
         Map<Long, Long> wrWrkInstToRhAccountNumberMap = Maps.newHashMap();
         wrWrkInstToRhAccountNumberMap.put(123160519L, RH_ACCOUNT_NUMBER);
-        expect(usageRepository.findByStatuses(UsageStatusEnum.WORK_FOUND))
+        expect(usageService.getUsagesByStatusAndProductFamily(UsageStatusEnum.WORK_FOUND, FAS_PRODUCT_FAMILY))
             .andReturn(Collections.singletonList(workFoundUsage)).once();
         rightsProducer.send(workFoundUsage);
         expectLastCall().once();
-        expect(usageRepository.findByStatuses(UsageStatusEnum.SENT_FOR_RA))
+        expect(usageService.getUsagesByStatusAndProductFamily(UsageStatusEnum.SENT_FOR_RA, FAS_PRODUCT_FAMILY))
             .andReturn(Collections.singletonList(sentForRaUsage)).once();
         expect(rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(123160519L)))
             .andReturn(wrWrkInstToRhAccountNumberMap).once();
@@ -147,9 +147,11 @@ public class RightsServiceTest {
         expectLastCall().once();
         rightsholderService.updateRightsholders(Collections.singleton(RH_ACCOUNT_NUMBER));
         expectLastCall().once();
-        replay(usageRepository, rmsGrantsProcessorService, usageAuditService, rightsholderService, rightsProducer);
-        rightsService.updateRights();
-        verify(usageRepository, rmsGrantsProcessorService, usageAuditService, rightsholderService, rightsProducer);
+        replay(usageRepository, usageService, rmsGrantsProcessorService, usageAuditService, rightsholderService,
+            rightsProducer);
+        rightsService.updateRights(FAS_PRODUCT_FAMILY);
+        verify(usageRepository, usageService, rmsGrantsProcessorService, usageAuditService, rightsholderService,
+            rightsProducer);
     }
 
     @Test
