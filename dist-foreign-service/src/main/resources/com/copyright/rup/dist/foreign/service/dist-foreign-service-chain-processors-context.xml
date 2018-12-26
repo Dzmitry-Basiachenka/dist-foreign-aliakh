@@ -14,4 +14,8 @@
     <bean id="df.service.fasMatchingProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.MatchingProcessor">
         <property name="successProcessor" ref="df.service.fasRightsProcessor"/>
     </bean>
+
+    <!-- NTS processors -->
+    <!-- TODO: remove product family specific logic from RightsProcessor once NTS processors will be implemented -->
+    <bean id="df.service.ntsRightsProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.RightsProcessor"/>
 </beans>

@@ -21,6 +21,8 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
+import com.copyright.rup.dist.foreign.service.api.ChainProcessorTypeEnum;
+import com.copyright.rup.dist.foreign.service.api.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 
@@ -67,18 +69,22 @@ public class UsageBatchServiceTest {
     private IRightsholderService rightsholderService;
     private UsageBatchService usageBatchService;
     private ExecutorService executorService;
+    private IChainExecutor<Usage> chainExecutor;
 
     @Before
+    @SuppressWarnings("unchecked")
     public void setUp() {
         usageBatchRepository = createMock(IUsageBatchRepository.class);
         usageService = createMock(IUsageService.class);
         rightsholderService = createMock(IRightsholderService.class);
         executorService = createMock(ExecutorService.class);
+        chainExecutor = createMock(IChainExecutor.class);
         usageBatchService = new UsageBatchService();
         Whitebox.setInternalState(usageBatchService, "usageBatchRepository", usageBatchRepository);
         Whitebox.setInternalState(usageBatchService, "usageService", usageService);
         Whitebox.setInternalState(usageBatchService, "rightsholderService", rightsholderService);
         Whitebox.setInternalState(usageBatchService, "executorService", executorService);
+        Whitebox.setInternalState(usageBatchService, "chainExecutor", chainExecutor);
     }
 
     @Test
@@ -171,14 +177,11 @@ public class UsageBatchServiceTest {
         Usage usage1 = new Usage();
         Usage usage2 = new Usage();
         usage2.setStatus(UsageStatusEnum.NEW);
-        List<Usage> usages = Arrays.asList(usage1, usage2);
-        Capture<Runnable> runnableCapture = new Capture<>();
-        executorService.execute(capture(runnableCapture));
+        chainExecutor.execute(Collections.singletonList(usage2), ChainProcessorTypeEnum.MATCHING);
         expectLastCall().once();
-        replay(executorService);
-        usageBatchService.sendForMatching(usages);
-        assertNotNull(runnableCapture.getValue());
-        verify(executorService);
+        replay(chainExecutor);
+        usageBatchService.sendForMatching(Arrays.asList(usage1, usage2));
+        verify(chainExecutor);
     }
 
     @Test
@@ -186,14 +189,11 @@ public class UsageBatchServiceTest {
         Usage usage1 = new Usage();
         Usage usage2 = new Usage();
         usage2.setStatus(UsageStatusEnum.WORK_FOUND);
-        List<Usage> usages = Arrays.asList(usage1, usage2);
-        Capture<Runnable> runnableCapture = new Capture<>();
-        executorService.execute(capture(runnableCapture));
+        chainExecutor.execute(Collections.singletonList(usage2), ChainProcessorTypeEnum.RIGHTS);
         expectLastCall().once();
-        replay(executorService);
-        usageBatchService.sendForGettingRights(usages);
-        assertNotNull(runnableCapture.getValue());
-        verify(executorService);
+        replay(chainExecutor);
+        usageBatchService.sendForGettingRights(Arrays.asList(usage1, usage2));
+        verify(chainExecutor);
     }
 
     @Test

@@ -473,8 +473,11 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public List<Usage> getUsagesByStatus(UsageStatusEnum status) {
-        return usageRepository.findByStatuses(status);
+    public List<Usage> getUsagesByStatusAndProductFamily(UsageStatusEnum status, String productFamily) {
+        UsageFilter usageFilter = new UsageFilter();
+        usageFilter.setUsageStatus(status);
+        usageFilter.setProductFamilies(Collections.singleton(productFamily));
+        return usageRepository.findByFilter(usageFilter);
     }
 
     @Override

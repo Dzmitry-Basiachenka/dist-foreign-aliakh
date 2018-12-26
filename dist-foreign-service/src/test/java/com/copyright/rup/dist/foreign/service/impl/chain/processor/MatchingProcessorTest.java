@@ -54,7 +54,7 @@ public class MatchingProcessorTest {
     public void testProcess() {
         Usage firstUsage = buildUsage(UsageStatusEnum.NEW);
         Usage secondUsage = buildUsage(UsageStatusEnum.NEW);
-        expect(usageService.getUsagesByStatus(UsageStatusEnum.NEW))
+        expect(usageService.getUsagesByStatusAndProductFamily(UsageStatusEnum.NEW, "FAS"))
             .andReturn(Arrays.asList(firstUsage, secondUsage))
             .once();
         matchingProducer.send(firstUsage);
@@ -62,7 +62,7 @@ public class MatchingProcessorTest {
         matchingProducer.send(secondUsage);
         expectLastCall().once();
         replay(usageService, matchingProducer);
-        processor.process();
+        processor.process("FAS");
         verify(usageService, matchingProducer);
     }
 
