@@ -75,6 +75,14 @@ public interface IUsageRepository {
     List<Usage> findByScenarioId(String scenarioId);
 
     /**
+     * Finds list of {@link Usage}s by their ids.
+     *
+     * @param usageIds list of {@link Usage}s identifiers
+     * @return list of {@link Usage}s
+     */
+    List<Usage> findByIds(List<String> usageIds);
+
+    /**
      * Finds {@link Usage}s for reconcile based on scenario identifier.
      *
      * @param scenarioId scenario identifier
@@ -279,14 +287,6 @@ public interface IUsageRepository {
      */
     List<String> findIdsByScenarioIdRroAccountNumberRhAccountNumbers(String scenarioId, Long rroAccountNumber,
                                                                      List<Long> accountNumbers);
-
-    /**
-     * Finds {@link Usage} by usage id.
-     *
-     * @param usageId usage id
-     * @return found {@link Usage} instance
-     */
-    Usage findById(String usageId);
 
     /**
      * Finds count of {@link UsageDto}s by specified {@link AuditFilter}.

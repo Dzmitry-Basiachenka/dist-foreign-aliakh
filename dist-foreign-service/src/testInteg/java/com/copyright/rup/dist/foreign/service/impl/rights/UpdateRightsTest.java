@@ -29,6 +29,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Collections;
+
 /**
  * Verifies correctness of updating usages rights.
  * <p>
@@ -111,7 +113,7 @@ public class UpdateRightsTest {
     }
 
     private void assertUsage(String usageId, UsageStatusEnum expectedStatus, Long expectedRhAccounNumber) {
-        Usage usage = usageRepository.findById(usageId);
+        Usage usage = usageRepository.findByIds(Collections.singletonList(usageId)).get(0);
         assertEquals(expectedStatus, usage.getStatus());
         assertEquals(expectedRhAccounNumber, usage.getRightsholder().getAccountNumber());
     }

@@ -585,7 +585,7 @@
         and u.df_scenario_uid is null
     </select>
 
-    <select id="findById" resultMap="usageResultMap" parameterType="string">
+    <select id="findByIds" resultMap="usageResultMap">
         select
             u.df_usage_uid,
             u.df_usage_batch_uid,
@@ -624,7 +624,11 @@
         from ${schema}.df_usage u
         left join ${schema}.df_rightsholder r on r.rh_account_number = u.rh_account_number
         left join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
-        where u.df_usage_uid = #{usageId}
+        where u.df_usage_uid in
+        <foreach collection="list" item="usageId" open="(" separator="," close=")">
+            #{usageId}
+        </foreach>
+        order by u.df_usage_uid
     </select>
 
     <delete id="deleteByBatchId" parameterType="string">

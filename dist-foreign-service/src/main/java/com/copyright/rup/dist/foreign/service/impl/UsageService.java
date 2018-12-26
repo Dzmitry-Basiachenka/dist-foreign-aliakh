@@ -29,6 +29,8 @@ import com.copyright.rup.dist.foreign.integration.crm.api.ICrmIntegrationService
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
+import com.copyright.rup.dist.foreign.service.api.ChainProcessorTypeEnum;
+import com.copyright.rup.dist.foreign.service.api.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
@@ -96,6 +98,8 @@ public class UsageService implements IUsageService {
     private ICrmIntegrationService crmIntegrationService;
     @Autowired
     private IScenarioAuditService scenarioAuditService;
+    @Autowired
+    private IChainExecutor<Usage> chainExecutor;
 
     @Override
     public List<UsageDto> getUsageDtos(UsageFilter filter, Pageable pageable, Sort sort) {
@@ -425,6 +429,10 @@ public class UsageService implements IUsageService {
                 UsageActionTypeEnum.WORK_FOUND,
                 String.format("Wr Wrk Inst %s was added based on research", researchedUsage.getWrWrkInst()))
         );
+        List<String> usageIds = researchedUsages.stream()
+            .map(ResearchedUsage::getUsageId)
+            .collect(Collectors.toList());
+        chainExecutor.execute(usageRepository.findByIds(usageIds), ChainProcessorTypeEnum.RIGHTS);
         LOGGER.info("Load researched usages. Finished. ResearchedUsagesCount={}", LogUtils.size(researchedUsages));
     }
 
