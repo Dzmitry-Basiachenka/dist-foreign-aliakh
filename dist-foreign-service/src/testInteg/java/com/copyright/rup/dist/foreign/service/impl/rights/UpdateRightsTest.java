@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import com.copyright.rup.dist.common.test.JsonMatcher;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsService;
@@ -12,6 +13,8 @@ import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.impl.RightsholderService;
 
 import com.google.common.collect.Lists;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ArrayUtils;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,6 +33,8 @@ import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.IntStream;
 
 /**
  * Verifies correctness of updating usages rights.
@@ -77,7 +82,8 @@ public class UpdateRightsTest {
         assertUsage("37c4d727-caeb-4a7f-b11a-34e313b0bfcc", UsageStatusEnum.ELIGIBLE, 1000009522L);
         assertUsage("ff321d96-04bd-11e8-ba89-0ed5f89f718b", UsageStatusEnum.LOCKED, 1000009522L);
         assertUsage("19ca7776-48c8-472e-acfe-d49b6e8780ce", UsageStatusEnum.RH_NOT_FOUND, null);
-        assertAudit("11853c83-780a-4533-ad01-dde87c8b8592", "Rightsholder account 1000000322 was found in RMS");
+        assertAudit("11853c83-780a-4533-ad01-dde87c8b8592", "Usage has become eligible",
+            "Rightsholder account 1000000322 was found in RMS");
         mockServer.verify();
         asyncMockServer.verify();
     }
@@ -119,8 +125,11 @@ public class UpdateRightsTest {
         assertEquals(expectedRhAccounNumber, usage.getRightsholder().getAccountNumber());
     }
 
-    private void assertAudit(String usageId, String reason) {
-        assertEquals(reason, usageAuditService.getUsageAudit(usageId).get(0).getActionReason());
+    private void assertAudit(String usageId, String... reasons) {
+        List<UsageAuditItem> auditItems = usageAuditService.getUsageAudit(usageId);
+        assertEquals(CollectionUtils.size(auditItems), ArrayUtils.getLength(reasons));
+        IntStream.range(0, reasons.length)
+            .forEach(index -> assertEquals(reasons[index], auditItems.get(index).getActionReason()));
     }
 
     private void expectRmsCall(String rmsRequestFileName, String rmsResponseFileName) {

@@ -18,6 +18,8 @@ import com.copyright.rup.dist.foreign.integration.rms.api.IRmsIntegrationService
 import com.copyright.rup.dist.foreign.integration.rms.api.RightsAssignmentResult;
 import com.copyright.rup.dist.foreign.integration.rms.api.RightsAssignmentResult.RightsAssignmentResultStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
+import com.copyright.rup.dist.foreign.service.api.ChainProcessorTypeEnum;
+import com.copyright.rup.dist.foreign.service.api.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.IRightsService;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
@@ -63,8 +65,10 @@ public class RightsServiceTest {
     private IRightsholderService rightsholderService;
     private CommonUsageProducer rightsProducer;
     private IUsageService usageService;
+    private IChainExecutor<Usage> chainExecutor;
 
     @Before
+    @SuppressWarnings("unchecked")
     public void setUp() {
         usageRepository = createMock(IUsageRepository.class);
         usageAuditService = createMock(IUsageAuditService.class);
@@ -73,6 +77,7 @@ public class RightsServiceTest {
         rightsholderService = createMock(IRightsholderService.class);
         rightsProducer = createMock(CommonUsageProducer.class);
         usageService = createMock(IUsageService.class);
+        chainExecutor = createMock(IChainExecutor.class);
         rightsService = new RightsService();
         Whitebox.setInternalState(rightsService, "usageRepository", usageRepository);
         Whitebox.setInternalState(rightsService, "auditService", usageAuditService);
@@ -81,6 +86,7 @@ public class RightsServiceTest {
         Whitebox.setInternalState(rightsService, "rightsholderService", rightsholderService);
         Whitebox.setInternalState(rightsService, "rightsProducer", rightsProducer);
         Whitebox.setInternalState(rightsService, "usageService", usageService);
+        Whitebox.setInternalState(rightsService, "chainExecutor", chainExecutor);
     }
 
     @Test
@@ -141,18 +147,20 @@ public class RightsServiceTest {
         expect(rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(123160519L),
             FAS_PRODUCT_FAMILY)).andReturn(wrWrkInstToRhAccountNumberMap).once();
         usageRepository.updateStatusAndRhAccountNumber(Collections.singleton(sentForRaUsage.getId()),
-            UsageStatusEnum.ELIGIBLE, RH_ACCOUNT_NUMBER);
+            UsageStatusEnum.RH_FOUND, RH_ACCOUNT_NUMBER);
         expectLastCall().once();
         usageAuditService.logAction(Collections.singleton(sentForRaUsage.getId()), UsageActionTypeEnum.RH_FOUND,
             String.format("Rightsholder account %s was found in RMS", RH_ACCOUNT_NUMBER));
         expectLastCall().once();
         rightsholderService.updateRightsholders(Collections.singleton(RH_ACCOUNT_NUMBER));
         expectLastCall().once();
+        chainExecutor.execute(Collections.singletonList(sentForRaUsage), ChainProcessorTypeEnum.ELIGIBILITY);
+        expectLastCall().once();
         replay(usageRepository, usageService, rmsGrantsProcessorService, usageAuditService, rightsholderService,
-            rightsProducer);
+            rightsProducer, chainExecutor);
         rightsService.updateRights(FAS_PRODUCT_FAMILY);
         verify(usageRepository, usageService, rmsGrantsProcessorService, usageAuditService, rightsholderService,
-            rightsProducer);
+            rightsProducer, chainExecutor);
     }
 
     @Test
