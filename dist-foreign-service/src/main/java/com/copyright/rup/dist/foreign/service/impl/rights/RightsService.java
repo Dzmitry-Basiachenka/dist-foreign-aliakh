@@ -12,6 +12,8 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.integration.rms.api.IRmsIntegrationService;
 import com.copyright.rup.dist.foreign.integration.rms.api.RightsAssignmentResult;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
+import com.copyright.rup.dist.foreign.service.api.ChainProcessorTypeEnum;
+import com.copyright.rup.dist.foreign.service.api.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.IRightsService;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
@@ -28,7 +30,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -65,6 +66,8 @@ public class RightsService implements IRightsService {
     @Autowired
     @Qualifier("df.service.rightsProducer")
     private IProducer<Usage> rightsProducer;
+    @Autowired
+    private IChainExecutor<Usage> chainExecutor;
 
     @Override
     @Transactional
@@ -93,6 +96,7 @@ public class RightsService implements IRightsService {
     }
 
     @Override
+    @Transactional
     public void updateRights(String productFamily) {
         List<Usage> usages = usageService.getUsagesByStatusAndProductFamily(UsageStatusEnum.WORK_FOUND, productFamily);
         if (CollectionUtils.isNotEmpty(usages)) {
@@ -144,20 +148,21 @@ public class RightsService implements IRightsService {
     }
 
     private long updateSentForRaUsagesRightsholders(List<Usage> usages) {
-        Map<Long, Set<String>> wrWrkInstToUsageIds = usages.stream().collect(
-            Collectors.groupingBy(Usage::getWrWrkInst, HashMap::new, Collectors
-                .mapping(Usage::getId, Collectors.toSet())));
+        Map<Long, List<Usage>> wrWrkInstToUsagesMap = usages.stream()
+            .collect(Collectors.groupingBy(Usage::getWrWrkInst));
         String productFamily = usages.iterator().next().getProductFamily();
         Map<Long, Long> wrWrkInstToAccountNumber =
-            rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Lists.newArrayList(wrWrkInstToUsageIds.keySet()),
+            rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Lists.newArrayList(wrWrkInstToUsagesMap.keySet()),
                 productFamily);
         AtomicLong eligibleUsagesCount = new AtomicLong();
         wrWrkInstToAccountNumber.forEach((wrWrkInst, rhAccountNumber) -> {
-            Set<String> usageIds = wrWrkInstToUsageIds.get(wrWrkInst);
-            usageRepository.updateStatusAndRhAccountNumber(usageIds, UsageStatusEnum.ELIGIBLE, rhAccountNumber);
+            List<Usage> usagesToUpdate = wrWrkInstToUsagesMap.get(wrWrkInst);
+            Set<String> usageIds = usagesToUpdate.stream().map(Usage::getId).collect(Collectors.toSet());
+            usageRepository.updateStatusAndRhAccountNumber(usageIds, UsageStatusEnum.RH_FOUND, rhAccountNumber);
             eligibleUsagesCount.addAndGet(usageIds.size());
             auditService.logAction(usageIds, UsageActionTypeEnum.RH_FOUND,
                 String.format("Rightsholder account %s was found in RMS", rhAccountNumber));
+            chainExecutor.execute(usagesToUpdate, ChainProcessorTypeEnum.ELIGIBILITY);
         });
         rightsholderService.updateRightsholders(Sets.newHashSet(wrWrkInstToAccountNumber.values()));
         return eligibleUsagesCount.longValue();

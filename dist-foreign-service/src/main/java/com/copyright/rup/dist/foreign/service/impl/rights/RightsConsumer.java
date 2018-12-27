@@ -13,6 +13,7 @@ import com.google.common.collect.ImmutableSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
@@ -41,6 +42,7 @@ public class RightsConsumer implements IConsumer<Usage> {
     private IChainProcessor<Usage> rightsProcessor;
 
     @Override
+    @Transactional
     public void consume(Usage usage) {
         if (Objects.nonNull(usage)) {
             rightsService.updateRight(usage);

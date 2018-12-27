@@ -13,7 +13,6 @@ import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
-import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
@@ -414,7 +413,6 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
 
         private List<Pair<UsageActionTypeEnum, String>> getUsageAuditActionTypeAndMessagePairs(String usageId) {
             return usageAuditService.getUsageAudit(usageId).stream()
-                .sorted(Comparator.comparing(UsageAuditItem::getCreateDate))
                 .map(usageAuditItem -> Pair.of(usageAuditItem.getActionType(), usageAuditItem.getActionReason()))
                 .collect(Collectors.toList());
         }
