@@ -1,3 +1,10 @@
+4.1.13
+-
+* B-48318 FDA: Plug new service for Roll-up: create separate URLs for PRM REST services
+* B-48319 FDA: Apply optimization for getting grants from RMS: apply common rms processor for RightsService, replace usages of distribution constants by local implementation
+* B-48321 FDA: Apply common workflow approach for processing FAS usages: adjust load researched usages functionality
+* B-48321 FDA: Apply common workflow approach for processing FAS usages: implement executor to run processors and adjust matching and rights jobs
+
 4.1.12
 -
 * B-48319 FDA: Apply optimization for getting grants from RMS: apply common method for building discrepancies based on priorities from dist common
