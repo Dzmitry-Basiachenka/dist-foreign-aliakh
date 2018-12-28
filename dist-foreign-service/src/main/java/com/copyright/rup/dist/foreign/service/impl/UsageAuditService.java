@@ -13,7 +13,10 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -92,6 +95,9 @@ public class UsageAuditService implements IUsageAuditService {
         String userName = RupContextUtils.getUserName();
         usageAuditItem.setCreateUser(userName);
         usageAuditItem.setUpdateUser(userName);
+        Date currentDate = Date.from(Instant.now().atZone(ZoneId.systemDefault()).toInstant());
+        usageAuditItem.setCreateDate(currentDate);
+        usageAuditItem.setUpdateDate(currentDate);
         return usageAuditItem;
     }
 

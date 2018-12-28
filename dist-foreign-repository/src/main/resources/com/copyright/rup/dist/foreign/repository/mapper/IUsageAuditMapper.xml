@@ -48,7 +48,11 @@
             #{usageId},
             #{actionType},
             #{actionReason},
-            <include refid="StoredEntityMapper.insert"/>
+            #{createDate},
+            #{updateDate},
+            #{createUser},
+            #{updateUser},
+            1
         )
     </insert>
 
