@@ -68,7 +68,7 @@ public class ScenarioService implements IScenarioService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
-    @Value("$RUP{dist.common.discrepancy.partition_size}")
+    @Value("$RUP{dist.foreign.discrepancy.partition_size}")
     private int discrepancyPartitionSize;
     @Autowired
     private IScenarioRepository scenarioRepository;

@@ -54,7 +54,6 @@
     <bean id="dist.common.integration.rmsService" class="com.copyright.rup.dist.common.integration.rest.rms.RmsService">
         <constructor-arg ref="restTemplate"/>
         <constructor-arg value="$RUP{dist.foreign.rest.rms.url}"/>
-        <constructor-arg value="$RUP{dist.foreign.rest.rms.request_partition_size}"/>
         <constructor-arg value="true"/>
     </bean>
 
