@@ -203,11 +203,12 @@ public class ScenarioService implements IScenarioService {
         Map<Long, List<Usage>> groupedByWrWrkInstUsages =
             usagesForReconcile.stream().collect(Collectors.groupingBy(Usage::getWrWrkInst));
         String productFamily = usagesForReconcile.iterator().next().getProductFamily();
+        String userName = RupContextUtils.getUserName();
         Iterables.partition(groupedByWrWrkInstUsages.entrySet(), discrepancyPartitionSize).forEach(entries -> {
             List<RightsholderDiscrepancy> discrepancies =
                 commonDiscrepanciesService.getDiscrepancies(
                     entries.stream().flatMap(entry -> entry.getValue().stream()).collect(Collectors.toList()),
-                    Usage::getWrWrkInst, productFamily, new DiscrepancyBuilder(RupContextUtils.getUserName()));
+                    Usage::getWrWrkInst, productFamily, new DiscrepancyBuilder(userName));
             if (CollectionUtils.isNotEmpty(discrepancies)) {
                 rightsholderDiscrepancyService.insertDiscrepancies(discrepancies, scenario.getId());
             }
