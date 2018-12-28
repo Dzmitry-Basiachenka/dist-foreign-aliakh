@@ -67,7 +67,7 @@ public class GrantPriorityRepositoryIntegrationTest {
             buildGrantPriority("ACADEMIC", INTERNAL_DISTRIBUTION, "PRINT", 3),
             buildGrantPriority("ACADEMIC", INTERNAL_DISTRIBUTION, "DIGITAL", 4)
         );
-        IntStream.of(0, 4)
+        IntStream.range(0, expectedGrantPriorities.size())
             .forEach(i -> assertGrantPriority(expectedGrantPriorities.get(i), actualGrantPriorities.get(i)));
     }
 
