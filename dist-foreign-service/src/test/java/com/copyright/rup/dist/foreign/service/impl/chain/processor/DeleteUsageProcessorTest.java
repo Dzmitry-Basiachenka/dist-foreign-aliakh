@@ -12,7 +12,7 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import org.junit.Test;
 
 /**
- * Verifies {@link RightsProcessor}.
+ * Verifies {@link DeleteUsageProcessor}.
  * <p>
  * Copyright (C) 2019 copyright.com
  * <p>
