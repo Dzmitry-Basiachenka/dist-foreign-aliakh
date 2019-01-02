@@ -22,6 +22,11 @@ public enum ChainProcessorTypeEnum {
     RIGHTS,
 
     /**
+     * Deleting processor.
+     */
+    DELETE,
+
+    /**
      * Eligibility processor.
      */
     ELIGIBILITY
