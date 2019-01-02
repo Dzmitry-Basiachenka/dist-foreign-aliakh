@@ -27,6 +27,11 @@ public enum ChainProcessorTypeEnum {
     DELETE,
 
     /**
+     * RH Tax processor.
+     */
+    RH_TAX,
+
+    /**
      * Eligibility processor.
      */
     ELIGIBILITY
