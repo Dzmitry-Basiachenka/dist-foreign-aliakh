@@ -1,3 +1,11 @@
+4.1.14
+-
+* B-47645 Tech Debt: FDA: apply discrepancies partitioning changes from Common
+* B-47645 Tech Debt: FDA: make changes based on comments in CR-DIST-FOREIGN-83
+* B-48319 FDA: Apply optimization for getting grants from RMS: make changes based on comments in CR-DIST-FOREIGN-84
+* B-48321 FDA: Apply common workflow approach for processing FAS usages: adjust send for RA functionality
+* B-48321 FDA: Apply common workflow approach for processing FAS usages: fix ordering of audit items with the same date of creation and implement load researched usages integration test
+
 4.1.13
 -
 * B-48318 FDA: Plug new service for Roll-up: create separate URLs for PRM REST services
