@@ -32,7 +32,7 @@
         <constructor-arg value="$RUP{dist.foreign.rest.rms.ttl.minutes}"/>
     </bean>
 
-    <bean id="df.service.rmsGrantsProcessorService" class="com.copyright.rup.dist.common.service.impl.discrepancy.RmsGrantsProcessorService">
+    <bean id="df.service.rmsGrantProcessorService" class="com.copyright.rup.dist.common.service.impl.discrepancy.RmsGrantProcessorService">
         <constructor-arg ref="df.service.rmsCacheService"/>
     </bean>
 

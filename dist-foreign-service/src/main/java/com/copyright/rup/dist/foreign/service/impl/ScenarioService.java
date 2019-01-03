@@ -5,8 +5,8 @@ import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.integration.rest.prm.PrmRollUpService;
-import com.copyright.rup.dist.common.service.api.discrepancy.ICommonDiscrepanciesService;
-import com.copyright.rup.dist.common.service.api.discrepancy.ICommonDiscrepanciesService.IDiscrepancyBuilder;
+import com.copyright.rup.dist.common.service.api.discrepancy.ICommonDiscrepancyService;
+import com.copyright.rup.dist.common.service.api.discrepancy.ICommonDiscrepancyService.IDiscrepancyBuilder;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
@@ -79,7 +79,7 @@ public class ScenarioService implements IScenarioService {
     @Autowired
     private ILmIntegrationService lmIntegrationService;
     @Autowired
-    private ICommonDiscrepanciesService<Usage, RightsholderDiscrepancy> commonDiscrepanciesService;
+    private ICommonDiscrepancyService<Usage, RightsholderDiscrepancy> commonDiscrepancyService;
     @Autowired
     private IPrmIntegrationService prmIntegrationService;
     @Autowired
@@ -206,7 +206,7 @@ public class ScenarioService implements IScenarioService {
         String userName = RupContextUtils.getUserName();
         Iterables.partition(groupedByWrWrkInstUsages.entrySet(), discrepancyPartitionSize).forEach(entries -> {
             List<RightsholderDiscrepancy> discrepancies =
-                commonDiscrepanciesService.getDiscrepancies(
+                commonDiscrepancyService.getDiscrepancies(
                     entries.stream().flatMap(entry -> entry.getValue().stream()).collect(Collectors.toList()),
                     Usage::getWrWrkInst, productFamily, new DiscrepancyBuilder(userName));
             if (CollectionUtils.isNotEmpty(discrepancies)) {

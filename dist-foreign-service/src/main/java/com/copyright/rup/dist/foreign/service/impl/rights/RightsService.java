@@ -3,7 +3,7 @@ package com.copyright.rup.dist.foreign.service.impl.rights;
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.domain.BaseEntity;
 import com.copyright.rup.dist.common.integration.camel.IProducer;
-import com.copyright.rup.dist.common.service.api.discrepancy.IRmsGrantsProcessorService;
+import com.copyright.rup.dist.common.service.api.discrepancy.IRmsGrantProcessorService;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -59,8 +59,8 @@ public class RightsService implements IRightsService {
     @Autowired
     private IUsageAuditService auditService;
     @Autowired
-    @Qualifier("df.service.rmsGrantsProcessorService")
-    private IRmsGrantsProcessorService rmsGrantsProcessorService;
+    @Qualifier("df.service.rmsGrantProcessorService")
+    private IRmsGrantProcessorService rmsGrantProcessorService;
     @Autowired
     private IRightsholderService rightsholderService;
     @Autowired
@@ -126,7 +126,7 @@ public class RightsService implements IRightsService {
         Long wrWrkInst = usage.getWrWrkInst();
         Set<String> usageId = Collections.singleton(usage.getId());
         Map<Long, Long> wrWrkInstToRhAccountNumberMap =
-            rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(wrWrkInst),
+            rmsGrantProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(wrWrkInst),
                 usage.getProductFamily());
         Long rhAccountNumber = wrWrkInstToRhAccountNumberMap.get(wrWrkInst);
         if (Objects.nonNull(rhAccountNumber)) {
@@ -152,7 +152,7 @@ public class RightsService implements IRightsService {
             .collect(Collectors.groupingBy(Usage::getWrWrkInst));
         String productFamily = usages.iterator().next().getProductFamily();
         Map<Long, Long> wrWrkInstToAccountNumber =
-            rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Lists.newArrayList(wrWrkInstToUsagesMap.keySet()),
+            rmsGrantProcessorService.getAccountNumbersByWrWrkInsts(Lists.newArrayList(wrWrkInstToUsagesMap.keySet()),
                 productFamily);
         AtomicLong eligibleUsagesCount = new AtomicLong();
         wrWrkInstToAccountNumber.forEach((wrWrkInst, rhAccountNumber) -> {
