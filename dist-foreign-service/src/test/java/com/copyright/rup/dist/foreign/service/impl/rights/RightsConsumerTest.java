@@ -1,21 +1,25 @@
 package com.copyright.rup.dist.foreign.service.impl.rights;
 
-import static org.easymock.EasyMock.anyObject;
+import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.reset;
 import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
 
-import com.copyright.rup.dist.common.integration.camel.IProducer;
+import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IChainProcessor;
-import com.copyright.rup.dist.foreign.service.api.IRightsService;
 
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
-import org.powermock.reflect.Whitebox;
+
+import java.util.Objects;
+import java.util.function.Predicate;
 
 /**
  * Verifies {@link RightsConsumer}.
@@ -28,74 +32,87 @@ import org.powermock.reflect.Whitebox;
  */
 public class RightsConsumerTest {
 
-    private static final String NTS_PRODUCT_FAMILY = "NTS";
-    private static final String NTS_USAGE_ID_WITH_RH = "1b44ab08-aea4-4bce-8d1c-f183f0ec595";
-
-    private final RightsConsumer consumer = new RightsConsumer();
-    private IProducer<Usage> rhTaxProducer;
-    private IChainProcessor<Usage> rightsProcessor;
+    private RightsConsumer rightsConsumer;
+    private IChainProcessor<Usage> ntsRightsProcessorMock;
+    private IChainProcessor<Usage> fasRightsProcessorMock;
 
     @Before
     @SuppressWarnings("unchecked")
     public void setUp() {
-        rhTaxProducer = createMock(IProducer.class);
-        rightsProcessor = createMock(IChainProcessor.class);
-        Whitebox.setInternalState(consumer, new RightsServiceMock());
-        Whitebox.setInternalState(consumer, rhTaxProducer);
-        Whitebox.setInternalState(consumer, rightsProcessor);
+        rightsConsumer = new RightsConsumer();
+        ntsRightsProcessorMock = createMock(IChainProcessor.class);
+        fasRightsProcessorMock = createMock(IChainProcessor.class);
+        rightsConsumer.setNtsRightsProcessor(ntsRightsProcessorMock);
+        rightsConsumer.setFasRightsProcessor(fasRightsProcessorMock);
     }
 
     @Test
-    public void testConsumeNtsUsageWithoutRightsholder() {
-        Usage usage = buildUsage("05a338d3-eac0-483e-bbf0-a6dfd60ad678", NTS_PRODUCT_FAMILY);
-        replay(rhTaxProducer);
-        consumer.consume(usage);
-        verify(rhTaxProducer);
+    public void testConsumeNtsUsage() {
+        testConsume("NTS", 10000L, ntsRightsProcessorMock, true);
     }
 
     @Test
-    public void testConsumeNtsUsageWithRightsholder() {
-        Usage usage = buildUsage(NTS_USAGE_ID_WITH_RH, NTS_PRODUCT_FAMILY);
-        rhTaxProducer.send(usage);
-        expectLastCall().once();
-        replay(rhTaxProducer);
-        consumer.consume(usage);
-        verify(rhTaxProducer);
+    public void testConsumeNtsUsageWithoutRights() {
+        testConsume("NTS", null, ntsRightsProcessorMock, false);
     }
 
     @Test
     public void testConsumeFasUsage() {
-        Usage usage = buildUsage("1861c32e-eb9c-42c6-ae4f-2a4d65f207bc", "FAS");
-        rightsProcessor.processResult(eq(usage), anyObject());
-        replay(rightsProcessor);
-        consumer.consume(usage);
-        verify(rightsProcessor);
+        testConsume("FAS", 10000L, fasRightsProcessorMock, true);
     }
 
-    private Usage buildUsage(String usageId, String productFamily) {
+    @Test
+    public void testConsumeFasUsageWithoutRights() {
+        testConsume("FAS", null, fasRightsProcessorMock, false);
+    }
+
+    @Test
+    public void testConsumeClaUsage() {
+        testConsume("FAS2", 10000L, fasRightsProcessorMock, true);
+    }
+
+    @Test
+    public void testConsumeClaUsageWithoutRights() {
+        testConsume("FAS2", null, fasRightsProcessorMock, false);
+    }
+
+    private void testConsume(String productFamily, Long foundRhAccountNumber, IChainProcessor<Usage> expectedProcessor,
+                            boolean expectedPredicateResult) {
+        rightsConsumer.setRightsService(new RightsServiceMock(foundRhAccountNumber));
+        Usage usage = buildUsage(productFamily);
+        Capture<Predicate<Usage>> predicateCapture = new Capture<>();
+        expectedProcessor.processResult(eq(usage), capture(predicateCapture));
+        expectLastCall().once();
+        replay(expectedProcessor);
+        rightsConsumer.consume(usage);
+        verify(expectedProcessor);
+        reset(expectedProcessor);
+        assertEquals(expectedPredicateResult, predicateCapture.getValue().test(usage));
+    }
+
+    private Usage buildUsage(String productFamily) {
         Usage usage = new Usage();
-        usage.setId(usageId);
+        usage.setId(RupPersistUtils.generateUuid());
         usage.setProductFamily(productFamily);
+        usage.setStatus(UsageStatusEnum.WORK_FOUND);
         return usage;
     }
 
-    private static class RightsServiceMock implements IRightsService {
+    private static class RightsServiceMock extends RightsService {
 
-        @Override
-        public void sendForRightsAssignment() {
-            throw new UnsupportedOperationException();
-        }
+        private final Long rhAccountNumber;
 
-        @Override
-        public void updateRights(String productFamily) {
-            throw new UnsupportedOperationException();
+        RightsServiceMock(Long rhAccountNumber) {
+            this.rhAccountNumber = rhAccountNumber;
         }
 
         @Override
         public void updateRight(Usage usage) {
-            if (NTS_PRODUCT_FAMILY.equals(usage.getProductFamily()) && NTS_USAGE_ID_WITH_RH.equals(usage.getId())) {
-                usage.getRightsholder().setAccountNumber(1000009522L);
+            if (Objects.nonNull(rhAccountNumber)) {
+                usage.getRightsholder().setAccountNumber(rhAccountNumber);
                 usage.setStatus(UsageStatusEnum.RH_FOUND);
+            } else {
+                usage.setStatus(UsageStatusEnum.RH_NOT_FOUND);
             }
         }
     }
