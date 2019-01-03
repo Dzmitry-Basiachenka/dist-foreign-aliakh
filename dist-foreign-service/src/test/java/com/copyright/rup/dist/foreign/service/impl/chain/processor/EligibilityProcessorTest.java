@@ -18,7 +18,7 @@ import org.powermock.reflect.Whitebox;
 import java.util.Collections;
 
 /**
- * Verifies {@link FasEligibilityProcessor}.
+ * Verifies {@link EligibilityProcessor}.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -26,19 +26,19 @@ import java.util.Collections;
  *
  * @author Uladzislau Shalamitski
  */
-public class FasEligibilityProcessorTest {
+public class EligibilityProcessorTest {
 
-    private FasEligibilityProcessor processor;
+    private EligibilityProcessor eligibilityProcessor;
     private IUsageRepository usageRepository;
     private IUsageAuditService usageAuditService;
 
     @Before
     public void setUp() {
-        processor = new FasEligibilityProcessor();
+        eligibilityProcessor = new EligibilityProcessor("Usage has become eligible");
         usageRepository = createMock(IUsageRepository.class);
         usageAuditService = createMock(IUsageAuditService.class);
-        Whitebox.setInternalState(processor, usageRepository);
-        Whitebox.setInternalState(processor, usageAuditService);
+        Whitebox.setInternalState(eligibilityProcessor, usageRepository);
+        Whitebox.setInternalState(eligibilityProcessor, usageAuditService);
     }
 
     @Test
@@ -50,7 +50,7 @@ public class FasEligibilityProcessorTest {
             .logAction(usage.getId(), UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible");
         expectLastCall().once();
         replay(usageRepository, usageAuditService);
-        processor.process(usage);
+        eligibilityProcessor.process(usage);
         verify(usageRepository, usageAuditService);
     }
 
