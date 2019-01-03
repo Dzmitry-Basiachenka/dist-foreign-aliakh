@@ -10,7 +10,7 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
-import com.copyright.rup.dist.common.service.api.discrepancy.IRmsGrantsProcessorService;
+import com.copyright.rup.dist.common.service.api.discrepancy.IRmsGrantProcessorService;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -61,7 +61,7 @@ public class RightsServiceTest {
     private IUsageRepository usageRepository;
     private IUsageAuditService usageAuditService;
     private IRmsIntegrationService rmsIntegrationService;
-    private IRmsGrantsProcessorService rmsGrantsProcessorService;
+    private IRmsGrantProcessorService rmsGrantProcessorService;
     private IRightsholderService rightsholderService;
     private CommonUsageProducer rightsProducer;
     private IUsageService usageService;
@@ -73,7 +73,7 @@ public class RightsServiceTest {
         usageRepository = createMock(IUsageRepository.class);
         usageAuditService = createMock(IUsageAuditService.class);
         rmsIntegrationService = createMock(IRmsIntegrationService.class);
-        rmsGrantsProcessorService = createMock(IRmsGrantsProcessorService.class);
+        rmsGrantProcessorService = createMock(IRmsGrantProcessorService.class);
         rightsholderService = createMock(IRightsholderService.class);
         rightsProducer = createMock(CommonUsageProducer.class);
         usageService = createMock(IUsageService.class);
@@ -82,7 +82,7 @@ public class RightsServiceTest {
         Whitebox.setInternalState(rightsService, "usageRepository", usageRepository);
         Whitebox.setInternalState(rightsService, "auditService", usageAuditService);
         Whitebox.setInternalState(rightsService, "rmsIntegrationService", rmsIntegrationService);
-        Whitebox.setInternalState(rightsService, "rmsGrantsProcessorService", rmsGrantsProcessorService);
+        Whitebox.setInternalState(rightsService, "rmsGrantProcessorService", rmsGrantProcessorService);
         Whitebox.setInternalState(rightsService, "rightsholderService", rightsholderService);
         Whitebox.setInternalState(rightsService, "rightsProducer", rightsProducer);
         Whitebox.setInternalState(rightsService, "usageService", usageService);
@@ -144,7 +144,7 @@ public class RightsServiceTest {
         expectLastCall().once();
         expect(usageService.getUsagesByStatusAndProductFamily(UsageStatusEnum.SENT_FOR_RA, FAS_PRODUCT_FAMILY))
             .andReturn(Collections.singletonList(sentForRaUsage)).once();
-        expect(rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(123160519L),
+        expect(rmsGrantProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(123160519L),
             FAS_PRODUCT_FAMILY)).andReturn(wrWrkInstToRhAccountNumberMap).once();
         usageRepository.updateStatusAndRhAccountNumber(Collections.singleton(sentForRaUsage.getId()),
             UsageStatusEnum.RH_FOUND, RH_ACCOUNT_NUMBER);
@@ -156,16 +156,16 @@ public class RightsServiceTest {
         expectLastCall().once();
         chainExecutor.execute(Collections.singletonList(sentForRaUsage), ChainProcessorTypeEnum.ELIGIBILITY);
         expectLastCall().once();
-        replay(usageRepository, usageService, rmsGrantsProcessorService, usageAuditService, rightsholderService,
+        replay(usageRepository, usageService, rmsGrantProcessorService, usageAuditService, rightsholderService,
             rightsProducer, chainExecutor);
         rightsService.updateRights(FAS_PRODUCT_FAMILY);
-        verify(usageRepository, usageService, rmsGrantsProcessorService, usageAuditService, rightsholderService,
+        verify(usageRepository, usageService, rmsGrantProcessorService, usageAuditService, rightsholderService,
             rightsProducer, chainExecutor);
     }
 
     @Test
     public void testUpdateRight() {
-        expect(rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(123160519L),
+        expect(rmsGrantProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(123160519L),
             FAS_PRODUCT_FAMILY)).andReturn(ImmutableMap.of(123160519L, 1000009522L)).once();
         String usageId = RupPersistUtils.generateUuid();
         Set<String> usageIdsSet = Collections.singleton(usageId);
@@ -176,9 +176,9 @@ public class RightsServiceTest {
         expectLastCall().once();
         rightsholderService.updateRightsholders(Collections.singleton(1000009522L));
         expectLastCall().once();
-        replay(rmsGrantsProcessorService, rightsholderService, usageRepository, usageAuditService);
+        replay(rmsGrantProcessorService, rightsholderService, usageRepository, usageAuditService);
         rightsService.updateRight(buildUsage(usageId, FAS_PRODUCT_FAMILY, UsageStatusEnum.WORK_FOUND));
-        verify(rmsGrantsProcessorService, rightsholderService, usageRepository, usageAuditService);
+        verify(rmsGrantProcessorService, rightsholderService, usageRepository, usageAuditService);
     }
 
     @Test
@@ -186,7 +186,7 @@ public class RightsServiceTest {
         String usageId = RupPersistUtils.generateUuid();
         Usage usage = buildUsage(usageId, NTS_PRODUCT_FAMILY, UsageStatusEnum.WORK_FOUND);
         usage.getRightsholder().setAccountNumber(null);
-        expect(rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(123160519L),
+        expect(rmsGrantProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(123160519L),
             NTS_PRODUCT_FAMILY)).andReturn(ImmutableMap.of(123160519L, 1000009522L)).once();
         Set<String> usageIdsSet = Collections.singleton(usageId);
         usageRepository.updateStatusAndRhAccountNumber(usageIdsSet, UsageStatusEnum.RH_FOUND, 1000009522L);
@@ -196,39 +196,39 @@ public class RightsServiceTest {
         expectLastCall().once();
         rightsholderService.updateRightsholders(Collections.singleton(1000009522L));
         expectLastCall().once();
-        replay(rmsGrantsProcessorService, rightsholderService, usageRepository, usageAuditService);
+        replay(rmsGrantProcessorService, rightsholderService, usageRepository, usageAuditService);
         assertNull(usage.getRightsholder().getAccountNumber());
         rightsService.updateRight(usage);
         assertEquals(1000009522L, usage.getRightsholder().getAccountNumber(), 0);
-        verify(rmsGrantsProcessorService, rightsholderService, usageRepository, usageAuditService);
+        verify(rmsGrantProcessorService, rightsholderService, usageRepository, usageAuditService);
     }
 
     @Test
     public void testUpdateRightWithNotFound() {
         String usageId = RupPersistUtils.generateUuid();
         Set<String> usageIdsSet = Collections.singleton(usageId);
-        expect(rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(123160519L),
+        expect(rmsGrantProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(123160519L),
             FAS_PRODUCT_FAMILY)).andReturn(Collections.EMPTY_MAP).once();
         usageRepository.updateStatus(usageIdsSet, UsageStatusEnum.RH_NOT_FOUND);
         expectLastCall().once();
         usageAuditService.logAction(usageIdsSet, UsageActionTypeEnum.RH_NOT_FOUND,
             "Rightsholder account for 123160519 was not found in RMS");
         expectLastCall().once();
-        replay(rmsGrantsProcessorService, rightsholderService, usageRepository, usageAuditService);
+        replay(rmsGrantProcessorService, rightsholderService, usageRepository, usageAuditService);
         rightsService.updateRight(buildUsage(usageId, FAS_PRODUCT_FAMILY, UsageStatusEnum.WORK_FOUND));
-        verify(rmsGrantsProcessorService, rightsholderService, usageRepository, usageAuditService);
+        verify(rmsGrantProcessorService, rightsholderService, usageRepository, usageAuditService);
     }
 
     @Test
     public void testUpdateRightWithNtsAndNotFound() {
         String usageId = RupPersistUtils.generateUuid();
-        expect(rmsGrantsProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(123160519L),
+        expect(rmsGrantProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(123160519L),
             NTS_PRODUCT_FAMILY)).andReturn(Collections.EMPTY_MAP).once();
         usageService.deleteById(usageId);
         expectLastCall().once();
-        replay(rmsGrantsProcessorService, usageService);
+        replay(rmsGrantProcessorService, usageService);
         rightsService.updateRight(buildUsage(usageId, NTS_PRODUCT_FAMILY, UsageStatusEnum.WORK_FOUND));
-        verify(rmsGrantsProcessorService, usageService);
+        verify(rmsGrantProcessorService, usageService);
     }
 
     private Usage buildUsage(String usageId, String productFamily, UsageStatusEnum status) {
