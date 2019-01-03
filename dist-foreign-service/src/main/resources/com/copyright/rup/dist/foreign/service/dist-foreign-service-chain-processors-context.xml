@@ -16,10 +16,12 @@
     </bean>
 
     <!-- NTS processors -->
-    <bean id="df.service.deleteUsageProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.DeleteUsageProcessor" />
+    <bean id="df.service.deleteUsageProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.DeleteUsageProcessor"/>
 
-    <bean id="df.service.rhTaxProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.RhTaxProcessor" />
+    <bean id="df.service.rhTaxProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.RhTaxProcessor"/>
 
-    <!-- TODO: remove product family specific logic from RightsProcessor once NTS processors will be implemented -->
-    <bean id="df.service.ntsRightsProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.RightsProcessor"/>
+    <bean id="df.service.ntsRightsProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.RightsProcessor">
+        <property name="successProcessor" ref="df.service.rhTaxProcessor"/>
+        <property name="failureProcessor" ref="df.service.deleteUsageProcessor"/>
+    </bean>
 </beans>
