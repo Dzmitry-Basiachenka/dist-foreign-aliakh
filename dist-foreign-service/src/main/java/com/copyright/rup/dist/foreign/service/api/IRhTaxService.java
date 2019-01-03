@@ -15,9 +15,9 @@ public interface IRhTaxService {
 
     /**
      * Verifies whether RH tax country for NTS {@link Usage} is US or not.
-     * Removes this {@link Usage} in case of non-US country.
      *
      * @param usage NTS {@link Usage} to check RH tax country
+     * @return {@code true} if usage RH is US, {@code false} otherwise
      */
-    void processRhTaxCountry(Usage usage);
+    boolean isUsCountryCodeUsage(Usage usage);
 }

@@ -1,25 +1,19 @@
 package com.copyright.rup.dist.foreign.service.impl.tax;
 
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertTrue;
+
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
-import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
-import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
-import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.integration.oracle.api.IOracleIntegrationService;
-import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
-import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 
-import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import org.junit.Before;
 import org.junit.Test;
-import org.powermock.reflect.Whitebox;
-
-import java.util.Collections;
 
 /**
  * Verifies {@link RhTaxService}.
@@ -32,53 +26,43 @@ import java.util.Collections;
  */
 public class RhTaxServiceTest {
 
-    private IUsageRepository usageRepository;
-    private IUsageAuditService usageAuditService;
     private RhTaxService rhTaxService;
-    private IOracleIntegrationService oracleIntegrationService;
-    private IUsageService usageService;
+    private IOracleIntegrationService oracleIntegrationServiceMock;
 
     @Before
     public void setUp() {
         rhTaxService = new RhTaxService();
-        oracleIntegrationService = createMock(IOracleIntegrationService.class);
-        usageRepository = createMock(IUsageRepository.class);
-        usageAuditService = createMock(IUsageAuditService.class);
-        usageService = createMock(IUsageService.class);
-        Whitebox.setInternalState(rhTaxService, "usageService", usageService);
-        Whitebox.setInternalState(rhTaxService, "usageRepository", usageRepository);
-        Whitebox.setInternalState(rhTaxService, "usageAuditService", usageAuditService);
-        Whitebox.setInternalState(rhTaxService, "oracleIntegrationService", oracleIntegrationService);
+        oracleIntegrationServiceMock = createMock(IOracleIntegrationService.class);
+        rhTaxService.setOracleIntegrationService(oracleIntegrationServiceMock);
     }
 
     @Test
-    public void testProcessRhTaxCountryFr() {
-        Usage usage = buildUsage(RupPersistUtils.generateUuid());
-        expect(oracleIntegrationService.isUsCountryCode(1000001534L)).andReturn(false).once();
-        usageService.deleteById(usage.getId());
-        expectLastCall().once();
-        replay(usageRepository, usageAuditService, oracleIntegrationService);
-        rhTaxService.processRhTaxCountry(usage);
-        verify(usageRepository, usageAuditService, oracleIntegrationService);
+    public void testIsUsCountryCodeUsage() {
+        Usage usage = buildUsage();
+        expect(oracleIntegrationServiceMock.isUsCountryCode(1000001534L)).andReturn(true).once();
+        replay(oracleIntegrationServiceMock);
+        assertTrue(rhTaxService.isUsCountryCodeUsage(usage));
+        verify(oracleIntegrationServiceMock);
     }
 
     @Test
-    public void testProcessRhTaxCountryUs() {
-        Usage usage = buildUsage(RupPersistUtils.generateUuid());
-        expect(oracleIntegrationService.isUsCountryCode(1000001534L)).andReturn(true).once();
-        usageRepository.updateStatus(Collections.singleton(usage.getId()), UsageStatusEnum.ELIGIBLE);
-        expectLastCall().once();
-        usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.ELIGIBLE,
-            "Usage has become eligible based on US rightsholder tax country");
-        expectLastCall().once();
-        replay(usageRepository, usageAuditService, oracleIntegrationService);
-        rhTaxService.processRhTaxCountry(usage);
-        verify(usageRepository, usageAuditService, oracleIntegrationService);
+    public void testIsUsCountryCodeUsageWithFrCode() {
+        Usage usage = buildUsage();
+        expect(oracleIntegrationServiceMock.isUsCountryCode(1000001534L)).andReturn(false).once();
+        replay(oracleIntegrationServiceMock);
+        assertFalse(rhTaxService.isUsCountryCodeUsage(usage));
+        verify(oracleIntegrationServiceMock);
     }
 
-    private Usage buildUsage(String usageId) {
+    @Test(expected = NullPointerException.class)
+    public void testIsUsCountryCodeUsageWithNull() {
         Usage usage = new Usage();
-        usage.setId(usageId);
+        rhTaxService.isUsCountryCodeUsage(usage);
+    }
+
+    private Usage buildUsage() {
+        Usage usage = new Usage();
+        usage.setId(RupPersistUtils.generateUuid());
         usage.getRightsholder().setAccountNumber(1000001534L);
         return usage;
     }
