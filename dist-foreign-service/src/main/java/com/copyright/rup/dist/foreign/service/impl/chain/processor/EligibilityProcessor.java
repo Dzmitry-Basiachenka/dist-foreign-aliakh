@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collections;
 
 /**
- * Implementation of {@link AbstractUsageChainProcessor} to make FAS/FAS2 {@link Usage} eligible.
+ * Implementation of {@link AbstractUsageChainProcessor} to make {@link Usage} eligible.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -21,18 +21,29 @@ import java.util.Collections;
  *
  * @author Uladzislau Shalamitski
  */
-public class FasEligibilityProcessor extends AbstractUsageChainProcessor {
+public class EligibilityProcessor extends AbstractUsageChainProcessor {
 
     @Autowired
     private IUsageRepository usageRepository;
     @Autowired
     private IUsageAuditService usageAuditService;
 
+    private final String auditReason;
+
+    /**
+     * Constructor.
+     *
+     * @param auditReason audit reason for making usage eligible
+     */
+    public EligibilityProcessor(String auditReason) {
+        this.auditReason = auditReason;
+    }
+
     @Override
     @Transactional
     public void process(Usage usage) {
         usageRepository.updateStatus(Collections.singleton(usage.getId()), UsageStatusEnum.ELIGIBLE);
-        usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible");
+        usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.ELIGIBLE, auditReason);
     }
 
     @Override
