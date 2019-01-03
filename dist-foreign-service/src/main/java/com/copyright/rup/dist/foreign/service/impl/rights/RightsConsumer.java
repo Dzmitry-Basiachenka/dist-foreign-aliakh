@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.service.impl.rights;
 
 import com.copyright.rup.dist.common.integration.camel.IConsumer;
-import com.copyright.rup.dist.common.integration.camel.IProducer;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
+import java.util.function.Predicate;
 
 /**
  * Consumer to handle usages for getting Rights.
@@ -35,24 +35,35 @@ public class RightsConsumer implements IConsumer<Usage> {
     @Autowired
     private IRightsService rightsService;
     @Autowired
-    @Qualifier("df.service.rhTaxProducer")
-    private IProducer<Usage> rhTaxproducer;
+    @Qualifier("df.service.ntsRightsProcessor")
+    private IChainProcessor<Usage> ntsRightsProcessor;
     @Autowired
     @Qualifier("df.service.fasRightsProcessor")
-    private IChainProcessor<Usage> rightsProcessor;
+    private IChainProcessor<Usage> fasRightsProcessor;
 
     @Override
     @Transactional
     public void consume(Usage usage) {
         if (Objects.nonNull(usage)) {
             rightsService.updateRight(usage);
-            //TODO: remove product family specific logic once NTS chain will be implemented
-            if (FdaConstants.NTS_PRODUCT_FAMILY.equals(usage.getProductFamily()) &&
-                UsageStatusEnum.RH_FOUND == usage.getStatus()) {
-                rhTaxproducer.send(usage);
+            Predicate<Usage> successPredicate = updatedUsage -> UsageStatusEnum.RH_FOUND == updatedUsage.getStatus();
+            if (FdaConstants.NTS_PRODUCT_FAMILY.equals(usage.getProductFamily())) {
+                ntsRightsProcessor.processResult(usage, successPredicate);
             } else if (FAS_PRODUCT_FAMILIES.contains(usage.getProductFamily())) {
-                rightsProcessor.processResult(usage, usageItem -> UsageStatusEnum.RH_FOUND == usageItem.getStatus());
+                fasRightsProcessor.processResult(usage, successPredicate);
             }
         }
+    }
+
+    void setRightsService(IRightsService rightsService) {
+        this.rightsService = rightsService;
+    }
+
+    void setNtsRightsProcessor(IChainProcessor<Usage> ntsRightsProcessor) {
+        this.ntsRightsProcessor = ntsRightsProcessor;
+    }
+
+    void setFasRightsProcessor(IChainProcessor<Usage> fasRightsProcessor) {
+        this.fasRightsProcessor = fasRightsProcessor;
     }
 }

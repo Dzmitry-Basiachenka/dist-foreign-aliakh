@@ -24,9 +24,11 @@ public interface IRightsService {
     void updateRights(String productFamily);
 
     /**
-     * Sends Wr Wrk Inst to RMS to get Grants and updates usage status based on response.
-     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE} if rhAccountNumber was found in RMS,
-     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#RH_NOT_FOUND} otherwise.
+     * Sends Wr Wrk Inst to RMS to get Grants and updates usage status and usage RH and writes audit based on response.
+     * Sets usage status to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#RH_FOUND} and writes
+     * {@link com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum#RH_FOUND} audit if RH was found in RMS,
+     * and sets usage status to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#RH_NOT_FOUND} and writes
+     * {@link com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum#RH_NOT_FOUND} audit otherwise.
      *
      * @param usage {@link Usage} to update
      */

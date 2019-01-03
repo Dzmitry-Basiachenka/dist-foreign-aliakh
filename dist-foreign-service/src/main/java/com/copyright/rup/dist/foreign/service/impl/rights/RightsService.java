@@ -5,7 +5,6 @@ import com.copyright.rup.dist.common.domain.BaseEntity;
 import com.copyright.rup.dist.common.integration.camel.IProducer;
 import com.copyright.rup.dist.common.service.api.discrepancy.IRmsGrantProcessorService;
 import com.copyright.rup.dist.common.util.LogUtils;
-import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -136,10 +135,6 @@ public class RightsService implements IRightsService {
             rightsholderService.updateRightsholders(Collections.singleton(rhAccountNumber));
             usage.getRightsholder().setAccountNumber(rhAccountNumber);
             usage.setStatus(UsageStatusEnum.RH_FOUND);
-        } else if (FdaConstants.NTS_PRODUCT_FAMILY.equals(usage.getProductFamily())) {
-            //TODO: remove product family specific logic once NTS chain will be implemented
-            usageService.deleteById(usage.getId());
-            LOGGER.trace("Removed NTS usage without rights. UsageId={}", usage.getId());
         } else {
             usageRepository.updateStatus(usageId, UsageStatusEnum.RH_NOT_FOUND);
             auditService.logAction(usageId, UsageActionTypeEnum.RH_NOT_FOUND,

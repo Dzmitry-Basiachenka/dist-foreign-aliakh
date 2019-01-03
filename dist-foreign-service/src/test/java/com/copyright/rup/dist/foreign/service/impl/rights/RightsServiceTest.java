@@ -219,18 +219,6 @@ public class RightsServiceTest {
         verify(rmsGrantProcessorService, rightsholderService, usageRepository, usageAuditService);
     }
 
-    @Test
-    public void testUpdateRightWithNtsAndNotFound() {
-        String usageId = RupPersistUtils.generateUuid();
-        expect(rmsGrantProcessorService.getAccountNumbersByWrWrkInsts(Collections.singletonList(123160519L),
-            NTS_PRODUCT_FAMILY)).andReturn(Collections.EMPTY_MAP).once();
-        usageService.deleteById(usageId);
-        expectLastCall().once();
-        replay(rmsGrantProcessorService, usageService);
-        rightsService.updateRight(buildUsage(usageId, NTS_PRODUCT_FAMILY, UsageStatusEnum.WORK_FOUND));
-        verify(rmsGrantProcessorService, usageService);
-    }
-
     private Usage buildUsage(String usageId, String productFamily, UsageStatusEnum status) {
         Usage usage = new Usage();
         usage.setId(usageId);
