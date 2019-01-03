@@ -109,11 +109,6 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public List<Usage> getUsages(UsageFilter filter) {
-        return usageRepository.findByFilter(filter);
-    }
-
-    @Override
     public int getUsagesCount(UsageFilter filter) {
         return !filter.isEmpty() ? usageRepository.findCountByFilter(filter) : 0;
     }
