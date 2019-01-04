@@ -1,11 +1,9 @@
 package com.copyright.rup.dist.foreign.integration;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import com.copyright.rup.dist.foreign.integration.lm.impl.producer.ExternalUsageProducer;
-import com.copyright.rup.dist.foreign.integration.oracle.impl.OracleCacheService;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 
 import org.junit.Test;
@@ -46,13 +44,5 @@ public class ApplicationContextTest {
         } catch (Exception e) {
             fail("Context is not valid: " + e.getMessage());
         }
-    }
-
-    @Test
-    public void testBeanInitialization() {
-        ApplicationContext context = new ClassPathXmlApplicationContext(CONFIG_LOCATION);
-        OracleCacheService oracleIntegrationCacheService =
-            context.getBean("df.integration.oracleCacheService", OracleCacheService.class);
-        assertEquals(600L, oracleIntegrationCacheService.getExpirationTime(), 0);
     }
 }

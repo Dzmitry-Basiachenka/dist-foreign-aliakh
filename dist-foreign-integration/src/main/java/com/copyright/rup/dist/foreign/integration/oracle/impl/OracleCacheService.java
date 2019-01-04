@@ -9,8 +9,6 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
@@ -28,17 +26,19 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Aliaksandr Liakh
  */
-@Service("df.integration.oracleCacheService")
 public class OracleCacheService extends AbstractCacheService<Long, String> implements IOracleService {
 
     @Autowired
     @Qualifier("df.integration.oracleService")
     private IOracleService oracleService;
 
-    @Override
-    @Value("$RUP{dist.foreign.rest.oracle.ttl.minutes}")
-    public void setExpirationTime(Long expirationTime) {
-        super.setExpirationTime(TimeUnit.MINUTES.toSeconds(expirationTime));
+    /**
+     * Constructor.
+     *
+     * @param timeToLive cache expiration time, minutes
+     */
+    public OracleCacheService(int timeToLive) {
+        super.setExpirationTime(TimeUnit.MINUTES.toSeconds(timeToLive));
     }
 
     @Override
