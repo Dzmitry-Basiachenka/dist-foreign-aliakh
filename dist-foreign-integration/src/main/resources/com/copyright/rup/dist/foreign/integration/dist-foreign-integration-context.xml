@@ -77,6 +77,10 @@
         </bean>
     </util:list>
 
+    <bean id="df.integration.oracleCacheService" class="com.copyright.rup.dist.foreign.integration.oracle.impl.OracleCacheService">
+        <constructor-arg value="$RUP{dist.foreign.rest.oracle.ttl.minutes}"/>
+    </bean>
+
     <camelContext id="df.integration.camelContext" xmlns="http://camel.apache.org/schema/spring">
         <contextScan/>
         <template id="df.integration.producerTemplate"/>

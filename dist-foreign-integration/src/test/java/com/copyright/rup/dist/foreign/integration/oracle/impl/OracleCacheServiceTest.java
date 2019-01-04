@@ -10,6 +10,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import com.copyright.rup.dist.foreign.integration.oracle.api.IOracleService;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
@@ -35,15 +36,19 @@ public class OracleCacheServiceTest {
     private static final String COUNTRY_CODE = "US";
 
     private IOracleService oracleServiceMock;
-    private OracleCacheService oracleIntegrationCacheService;
+    private OracleCacheService oracleCacheService;
 
     @Before
     public void setUp() {
         oracleServiceMock = createMock(IOracleService.class);
-        oracleIntegrationCacheService = new OracleCacheService();
-        oracleIntegrationCacheService.setOracleService(oracleServiceMock);
-        oracleIntegrationCacheService.setExpirationTime(100L);
-        oracleIntegrationCacheService.createCache();
+        oracleCacheService = new OracleCacheService(100);
+        oracleCacheService.setOracleService(oracleServiceMock);
+        oracleCacheService.createCache();
+    }
+
+    @Test
+    public void testConstructor() {
+        assertEquals(oracleCacheService.getExpirationTime(), 6000L, 0);
     }
 
     @Test
@@ -52,12 +57,12 @@ public class OracleCacheServiceTest {
             .andReturn(ImmutableMap.of(ACCOUNT_NUMBER, COUNTRY_CODE)).once();
         replay(oracleServiceMock);
         Map<Long, String> actualResult =
-            oracleIntegrationCacheService.getAccountNumbersToCountryCodesMap(Collections.singletonList(ACCOUNT_NUMBER));
+            oracleCacheService.getAccountNumbersToCountryCodesMap(Collections.singletonList(ACCOUNT_NUMBER));
         assertTrue(MapUtils.isNotEmpty(actualResult));
         assertEquals(1, actualResult.size());
         assertEquals(COUNTRY_CODE, actualResult.get(ACCOUNT_NUMBER));
         assertEquals(COUNTRY_CODE,
-            oracleIntegrationCacheService.getAccountNumbersToCountryCodesMap(Collections.singletonList(ACCOUNT_NUMBER))
+            oracleCacheService.getAccountNumbersToCountryCodesMap(Collections.singletonList(ACCOUNT_NUMBER))
                 .get(ACCOUNT_NUMBER));
         verify(oracleServiceMock);
     }
@@ -68,7 +73,7 @@ public class OracleCacheServiceTest {
             .andReturn(Collections.EMPTY_MAP).once();
         replay(oracleServiceMock);
         Map<Long, String> actualResult =
-            oracleIntegrationCacheService.getAccountNumbersToCountryCodesMap(Collections.singletonList(ACCOUNT_NUMBER));
+            oracleCacheService.getAccountNumbersToCountryCodesMap(Collections.singletonList(ACCOUNT_NUMBER));
         assertNotNull(actualResult);
         assertTrue(MapUtils.isEmpty(actualResult));
         verify(oracleServiceMock);
