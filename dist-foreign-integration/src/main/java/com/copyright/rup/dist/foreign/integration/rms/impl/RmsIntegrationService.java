@@ -1,10 +1,10 @@
 package com.copyright.rup.dist.foreign.integration.rms.impl;
 
 import com.copyright.rup.dist.common.domain.RmsGrant;
+import com.copyright.rup.dist.common.integration.rest.rms.IRmsRightsAssignmentService;
 import com.copyright.rup.dist.common.integration.rest.rms.IRmsService;
+import com.copyright.rup.dist.common.integration.rest.rms.RightsAssignmentResult;
 import com.copyright.rup.dist.foreign.integration.rms.api.IRmsIntegrationService;
-import com.copyright.rup.dist.foreign.integration.rms.api.IRmsRightsAssignmentService;
-import com.copyright.rup.dist.foreign.integration.rms.api.RightsAssignmentResult;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

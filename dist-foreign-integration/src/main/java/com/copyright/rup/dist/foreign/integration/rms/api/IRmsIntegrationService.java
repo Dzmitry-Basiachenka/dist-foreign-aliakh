@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.integration.rms.api;
 
 import com.copyright.rup.dist.common.domain.RmsGrant;
+import com.copyright.rup.dist.common.integration.rest.rms.RightsAssignmentResult;
 
 import java.util.List;
 import java.util.Set;
