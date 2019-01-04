@@ -10,10 +10,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.common.integration.rest.rms.IRmsRightsAssignmentService;
 import com.copyright.rup.dist.common.integration.rest.rms.IRmsService;
-import com.copyright.rup.dist.foreign.integration.rms.api.IRmsRightsAssignmentService;
-import com.copyright.rup.dist.foreign.integration.rms.api.RightsAssignmentResult;
-import com.copyright.rup.dist.foreign.integration.rms.api.RightsAssignmentResult.RightsAssignmentResultStatusEnum;
+import com.copyright.rup.dist.common.integration.rest.rms.RightsAssignmentResult;
+import com.copyright.rup.dist.common.integration.rest.rms.RightsAssignmentResult.RightsAssignmentResultStatusEnum;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;

@@ -5,8 +5,6 @@ import com.copyright.rup.dist.foreign.integration.crm.api.CrmRightsDistributionR
 import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsage;
 import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsageMessage;
 import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsageWrapper;
-import com.copyright.rup.dist.foreign.integration.rms.api.RightsAssignmentRequest;
-import com.copyright.rup.dist.foreign.integration.rms.api.RightsAssignmentResult;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,9 +43,7 @@ public class DomainVerifierTest {
             {CrmRightsDistributionRequest.class},
             {ExternalUsage.class},
             {ExternalUsageMessage.class},
-            {ExternalUsageWrapper.class},
-            {RightsAssignmentRequest.class},
-            {RightsAssignmentResult.class}
+            {ExternalUsageWrapper.class}
         };
         return Arrays.asList(testData);
     }
