@@ -39,6 +39,11 @@ public final class FdaConstants {
     public static final String IS_RH_FDA_PARTICIPATING_PREFERENCE_CODE = "IS-RH-FDA-PARTICIPATING";
 
     /**
+     * Rightsholder preference code for the ineligible rightsholder flag in PRM.
+     */
+    public static final String IS_RH_DIST_INELIGIBLE_CODE = "ISRHDISTINELIGIBLE";
+
+    /**
      * Key for all products for reading rightsholder preferences from PRM.
      */
     public static final String ALL_PRODUCTS_KEY = "*";

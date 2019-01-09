@@ -80,6 +80,11 @@
                 <util:constant static-field="com.copyright.rup.dist.foreign.domain.FdaConstants.IS_RH_FDA_PARTICIPATING_PREFERENCE_CODE"/>
             </constructor-arg>
         </bean>
+        <bean class="com.copyright.rup.dist.common.integration.rest.prm.PrmPreferenceProcessorBoolean">
+            <constructor-arg name="preferenceCode">
+                <util:constant static-field="com.copyright.rup.dist.foreign.domain.FdaConstants.IS_RH_DIST_INELIGIBLE_CODE"/>
+            </constructor-arg>
+        </bean>
     </util:list>
 
     <bean id="df.integration.oracleCacheService" class="com.copyright.rup.dist.foreign.integration.oracle.impl.OracleCacheService">
