@@ -1,3 +1,18 @@
+4.1.15
+-
+* B-46034 FDA: Exclude Ceased/Lost/NTS Refused RHs from the NTS proxy: adjust PrmIntegrationService to get ISRHDISTINELIGIBLE preference
+* B-47645 Tech Debt: FDA: add DeleteUsageProcessor
+* B-47645 Tech Debt: FDA: add RhTaxProcessor
+* B-47645 Tech Debt: FDA: adjust RhTaxJob to use common workflow executor
+* B-47645 Tech Debt: FDA: adjust ntsRightsProcessor config
+* B-47645 Tech Debt: FDA: adjust rhTaxProcessor config
+* B-47645 Tech Debt: FDA: move time to leave property setup to constructor in OracleCacheService
+* B-47645 Tech Debt: FDA: replace RmsRightsAssignmentService type with type from dist-common
+* B-47645 Tech Debt: FDA: use ntsRightsProcessor in RightsConsumer, remove NTS specific logic from RightsService updateRight
+* B-47645 Tech Debt: FDA: use rhTaxProcessor in rhTaxConsumer, remove usage update logic from RhTaxService
+* B-48319 FDA: Apply optimization for getting grants from RMS: rename CommonDiscrepanciesService to CommonDiscrepancyService and RmsGrantsService to RmsGrantService
+* B-48525 FDA: Update Logic for getting FAS Rightsholders: Implement Liquibase script to add new records into the table df_grant_priority
+
 4.1.14
 -
 * B-47645 Tech Debt: FDA: apply discrepancies partitioning changes from Common
