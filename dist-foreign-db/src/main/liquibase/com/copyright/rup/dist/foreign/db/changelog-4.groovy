@@ -241,4 +241,75 @@ databaseChangeLog {
             dropTable(schemaName: dbAppsSchema, tableName: 'df_grant_priority')
         }
     }
+
+    changeSet(id: '2019-01-09-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("B-48525 FDA: Update Logic for getting FAS Rightsholders: " +
+                "Implement Liquibase script to add new records into the table df_grant_priority")
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: '40f97da2-79f6-4917-b683-1cfa0fccd669')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'market', value: 'ACADEMIC')
+            column(name: 'distribution', value: 'EXTERNAL')
+            column(name: 'type_of_use', value: 'NGT_PRINT_COURSE_MATERIALS')
+            column(name: 'priority', value: '5')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: '2ad646de-d6c0-4eae-9a85-9c65f5c7e46b')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'market', value: 'ACADEMIC')
+            column(name: 'distribution', value: 'EXTERNAL')
+            column(name: 'type_of_use', value: 'NGT_ELECTRONIC_COURSE_MATERIALS')
+            column(name: 'priority', value: '6')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: '5549a633-57a9-49b6-a54d-9cbb1e0d13c9')
+            column(name: 'product_family', value: 'FAS2')
+            column(name: 'market', value: 'ACADEMIC')
+            column(name: 'distribution', value: 'EXTERNAL')
+            column(name: 'type_of_use', value: 'NGT_PRINT_COURSE_MATERIALS')
+            column(name: 'priority', value: '5')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: 'b1b7c100-42f8-49f7-ab9f-a89e92a011c1')
+            column(name: 'product_family', value: 'FAS2')
+            column(name: 'market', value: 'ACADEMIC')
+            column(name: 'distribution', value: 'EXTERNAL')
+            column(name: 'type_of_use', value: 'NGT_ELECTRONIC_COURSE_MATERIALS')
+            column(name: 'priority', value: '6')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: '76ce3849-1f70-40a0-b42b-fa77efbba73f')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'market', value: 'ACADEMIC')
+            column(name: 'distribution', value: 'EXTERNAL')
+            column(name: 'type_of_use', value: 'NGT_PRINT_COURSE_MATERIALS')
+            column(name: 'priority', value: '5')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: '9c07f6dd-382e-4cbb-8cd1-ab9f51413e0a')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'market', value: 'ACADEMIC')
+            column(name: 'distribution', value: 'EXTERNAL')
+            column(name: 'type_of_use', value: 'NGT_ELECTRONIC_COURSE_MATERIALS')
+            column(name: 'priority', value: '6')
+        }
+
+        rollback {
+            delete(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                where "df_grant_priority_uid in (" +
+                        "'40f97da2-79f6-4917-b683-1cfa0fccd669'," +
+                        "'2ad646de-d6c0-4eae-9a85-9c65f5c7e46b'," +
+                        "'5549a633-57a9-49b6-a54d-9cbb1e0d13c9'," +
+                        "'b1b7c100-42f8-49f7-ab9f-a89e92a011c1'," +
+                        "'76ce3849-1f70-40a0-b42b-fa77efbba73f'," +
+                        "'9c07f6dd-382e-4cbb-8cd1-ab9f51413e0a')"
+            }
+        }
+    }
 }
