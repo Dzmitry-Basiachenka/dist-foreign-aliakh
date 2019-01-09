@@ -32,6 +32,7 @@ import java.util.stream.IntStream;
 public class GrantPriorityRepositoryIntegrationTest {
 
     private static final String INTERNAL_DISTRIBUTION = "INTERNAL";
+    private static final String ACADEMIC_MARKET = "ACADEMIC";
 
     @Autowired
     private IGrantPriorityRepository grantPriorityRepository;
@@ -59,13 +60,15 @@ public class GrantPriorityRepositoryIntegrationTest {
     private void assertFindByProductFamily() {
         List<GrantPriority> actualGrantPriorities = grantPriorityRepository.findByProductFamily(productFamily);
         assertNotNull(actualGrantPriorities);
-        assertEquals(5, CollectionUtils.size(actualGrantPriorities));
+        assertEquals(7, CollectionUtils.size(actualGrantPriorities));
         List<GrantPriority> expectedGrantPriorities = Arrays.asList(
             buildGrantPriority("CORPORATE", "EXTERNAL", "NGT_PHOTOCOPY", 0),
             buildGrantPriority("CORPORATE", INTERNAL_DISTRIBUTION, "PRINT", 1),
             buildGrantPriority("CORPORATE", INTERNAL_DISTRIBUTION, "DIGITAL", 2),
-            buildGrantPriority("ACADEMIC", INTERNAL_DISTRIBUTION, "PRINT", 3),
-            buildGrantPriority("ACADEMIC", INTERNAL_DISTRIBUTION, "DIGITAL", 4)
+            buildGrantPriority(ACADEMIC_MARKET, INTERNAL_DISTRIBUTION, "PRINT", 3),
+            buildGrantPriority(ACADEMIC_MARKET, INTERNAL_DISTRIBUTION, "DIGITAL", 4),
+            buildGrantPriority(ACADEMIC_MARKET, "EXTERNAL", "NGT_PRINT_COURSE_MATERIALS", 5),
+            buildGrantPriority(ACADEMIC_MARKET, "EXTERNAL", "NGT_ELECTRONIC_COURSE_MATERIALS", 6)
         );
         IntStream.range(0, expectedGrantPriorities.size())
             .forEach(i -> assertGrantPriority(expectedGrantPriorities.get(i), actualGrantPriorities.get(i)));
