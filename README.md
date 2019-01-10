@@ -1,3 +1,8 @@
+4.1.16
+-
+* B-46034 FDA: Exclude Ceased/Lost/NTS Refused RHs from the NTS proxy: add US_TAX_COUNTRY status and action type, change audit message for eligible NTS usages
+* B-46034 FDA: Exclude Ceased/Lost/NTS Refused RHs from the NTS proxy: implement RH eligibility serializer and deserializer
+
 4.1.15
 -
 * B-46034 FDA: Exclude Ceased/Lost/NTS Refused RHs from the NTS proxy: adjust PrmIntegrationService to get ISRHDISTINELIGIBLE preference
