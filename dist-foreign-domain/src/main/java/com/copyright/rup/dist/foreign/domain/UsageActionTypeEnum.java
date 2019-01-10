@@ -63,6 +63,11 @@ public enum UsageActionTypeEnum {
     ELIGIBLE_FOR_NTS,
 
     /**
+     * Action type for NTS usages with US tax rightsholder.
+     */
+    US_TAX_COUNTRY,
+
+    /**
      * Action type for eligible usages.
      */
     ELIGIBLE,

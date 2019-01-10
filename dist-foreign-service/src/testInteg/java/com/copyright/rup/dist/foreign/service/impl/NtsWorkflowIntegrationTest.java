@@ -63,7 +63,9 @@ public class NtsWorkflowIntegrationTest {
             .expectedUsage(buildUsage())
             .expectUsageAudit(Arrays.asList(
                 buildUsageAuditItem(UsageActionTypeEnum.ELIGIBLE,
-                    "Usage has become eligible based on US rightsholder tax country"),
+                    "Usage has become eligible"),
+                buildUsageAuditItem(UsageActionTypeEnum.US_TAX_COUNTRY,
+                    "Rightsholder tax country is US"),
                 buildUsageAuditItem(UsageActionTypeEnum.RH_FOUND,
                     "Rightsholder account 1000023401 was found in RMS"),
                 buildUsageAuditItem(UsageActionTypeEnum.CREATED,

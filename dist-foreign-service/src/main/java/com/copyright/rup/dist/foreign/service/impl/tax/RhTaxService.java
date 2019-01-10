@@ -2,13 +2,18 @@ package com.copyright.rup.dist.foreign.service.impl.tax;
 
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.integration.oracle.api.IOracleIntegrationService;
+import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IRhTaxService;
+import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.Objects;
 
 /**
@@ -27,18 +32,35 @@ public class RhTaxService implements IRhTaxService {
 
     @Autowired
     private IOracleIntegrationService oracleIntegrationService;
+    @Autowired
+    private IUsageRepository usageRepository;
+    @Autowired
+    private IUsageAuditService usageAuditService;
 
     @Override
-    public boolean isUsCountryCodeUsage(Usage usage) {
+    public void processTaxCountryCode(Usage usage) {
         String usageId = usage.getId();
         Long accountNumber = Objects.requireNonNull(usage.getRightsholder().getAccountNumber());
+        LOGGER.debug("Processing RH tax country. Started. UsageId={}, RhAccountNumber={}", usageId, accountNumber);
         boolean isUsTaxCountry = oracleIntegrationService.isUsCountryCode(accountNumber);
-        LOGGER.debug("Processing RH tax country. UsageId={}, RhAccountNumber={}, IsUsTaxCountry={}", usageId,
+        if (isUsTaxCountry) {
+            usage.setStatus(UsageStatusEnum.US_TAX_COUNTRY);
+            usageRepository.updateStatus(Collections.singleton(usageId), UsageStatusEnum.US_TAX_COUNTRY);
+            usageAuditService.logAction(usageId, UsageActionTypeEnum.US_TAX_COUNTRY, "Rightsholder tax country is US");
+        }
+        LOGGER.debug("Processing RH tax country. Finished. UsageId={}, RhAccountNumber={}, IsUsTaxCountry={}", usageId,
             accountNumber, isUsTaxCountry);
-        return isUsTaxCountry;
     }
 
     void setOracleIntegrationService(IOracleIntegrationService oracleIntegrationService) {
         this.oracleIntegrationService = oracleIntegrationService;
+    }
+
+    void setUsageRepository(IUsageRepository usageRepository) {
+        this.usageRepository = usageRepository;
+    }
+
+    void setUsageAuditService(IUsageAuditService usageAuditService) {
+        this.usageAuditService = usageAuditService;
     }
 }

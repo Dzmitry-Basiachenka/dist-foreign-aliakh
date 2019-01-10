@@ -14,10 +14,10 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 public interface IRhTaxService {
 
     /**
-     * Verifies whether RH tax country for NTS {@link Usage} is US or not.
+     * Verifies whether RH tax country for NTS {@link Usage} is US or not. In positive case updates status to
+     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#US_TAX_COUNTRY} and adds log message.
      *
      * @param usage NTS {@link Usage} to check RH tax country
-     * @return {@code true} if usage RH is US, {@code false} otherwise
      */
-    boolean isUsCountryCodeUsage(Usage usage);
+    void processTaxCountryCode(Usage usage);
 }
