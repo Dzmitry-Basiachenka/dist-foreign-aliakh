@@ -34,7 +34,7 @@ public class EligibilityProcessorTest {
 
     @Before
     public void setUp() {
-        eligibilityProcessor = new EligibilityProcessor("Usage has become eligible");
+        eligibilityProcessor = new EligibilityProcessor();
         usageRepository = createMock(IUsageRepository.class);
         usageAuditService = createMock(IUsageAuditService.class);
         Whitebox.setInternalState(eligibilityProcessor, usageRepository);

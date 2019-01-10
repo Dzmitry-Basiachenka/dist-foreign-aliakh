@@ -28,22 +28,11 @@ public class EligibilityProcessor extends AbstractUsageChainProcessor {
     @Autowired
     private IUsageAuditService usageAuditService;
 
-    private final String auditReason;
-
-    /**
-     * Constructor.
-     *
-     * @param auditReason audit reason for making usage eligible
-     */
-    public EligibilityProcessor(String auditReason) {
-        this.auditReason = auditReason;
-    }
-
     @Override
     @Transactional
     public void process(Usage usage) {
         usageRepository.updateStatus(Collections.singleton(usage.getId()), UsageStatusEnum.ELIGIBLE);
-        usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.ELIGIBLE, auditReason);
+        usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible");
     }
 
     @Override

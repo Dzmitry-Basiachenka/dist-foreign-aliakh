@@ -2,12 +2,14 @@ package com.copyright.rup.dist.foreign.service.impl.tax;
 
 import com.copyright.rup.dist.common.integration.camel.IConsumer;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IChainProcessor;
 import com.copyright.rup.dist.foreign.service.api.IRhTaxService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
@@ -31,10 +33,11 @@ public class RhTaxConsumer implements IConsumer<Usage> {
     private IChainProcessor<Usage> rhTaxProcessor;
 
     @Override
+    @Transactional
     public void consume(Usage usage) {
         if (Objects.nonNull(usage)) {
-            boolean isUsCountryCode = rhTaxService.isUsCountryCodeUsage(usage);
-            rhTaxProcessor.processResult(usage, (obj) -> isUsCountryCode);
+            rhTaxService.processTaxCountryCode(usage);
+            rhTaxProcessor.processResult(usage, (obj) -> UsageStatusEnum.US_TAX_COUNTRY == usage.getStatus());
         }
     }
 
