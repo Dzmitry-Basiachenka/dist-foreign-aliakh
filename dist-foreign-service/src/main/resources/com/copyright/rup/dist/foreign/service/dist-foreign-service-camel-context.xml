@@ -36,6 +36,14 @@
         <property name="deserializer" ref="df.service.rhTaxDeserializer" />
     </bean>
 
+    <bean id="df.service.rhEligibilityMarshaller" parent="df.service.usageMarshaller">
+        <property name="serializer" ref="df.service.rhEligibilitySerializer" />
+    </bean>
+
+    <bean id="df.service.rhEligibilityUnmarshaller" parent="df.service.usageUnmarshaller">
+        <property name="deserializer" ref="df.service.rhEligibilityDeserializer" />
+    </bean>
+
     <bean id="df.service.usageProducer" class="com.copyright.rup.dist.foreign.service.impl.common.CommonUsageProducer" />
 
     <bean id="df.service.rightsProducer" parent="df.service.usageProducer">
