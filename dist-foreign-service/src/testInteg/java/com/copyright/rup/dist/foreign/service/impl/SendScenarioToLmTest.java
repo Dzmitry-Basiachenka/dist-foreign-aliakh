@@ -1,12 +1,13 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
-import com.copyright.rup.dist.common.test.JsonEndpointMatcher;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
+import com.copyright.rup.dist.foreign.service.impl.mock.SqsClientMock;
 
-import org.apache.camel.EndpointInject;
-import org.apache.camel.component.mock.MockEndpoint;
+import com.google.common.collect.ImmutableMap;
+
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,21 +32,25 @@ import java.util.Collections;
 @TestPropertySource(properties = {"test.liquibase.changelog=send-scenario-to-lm-data-init.groovy"})
 public class SendScenarioToLmTest {
 
-    @EndpointInject(context = "df.integration.camelContext", uri = "mock:sf.processor.detail")
-    private MockEndpoint mockLmEndPoint;
-
     @Autowired
     private IScenarioService scenarioService;
 
+    @Autowired
+    private SqsClientMock sqsClientMock;
+
+    @Before
+    public void setUp() {
+        sqsClientMock.reset();
+    }
+
     @Test
-    public void testSendToLm() throws Exception {
-        String expectedJson = TestUtils.fileToString(this.getClass(), "details/details_to_lm.json");
-        mockLmEndPoint.expectedMessageCount(1);
-        mockLmEndPoint.expectedHeaderReceived("source", "FDA");
-        mockLmEndPoint.expects(new JsonEndpointMatcher(mockLmEndPoint, Collections.singletonList(expectedJson)));
+    public void testSendToLm() {
         Scenario scenario = new Scenario();
         scenario.setId("4c014547-06f3-4840-94ff-6249730d537d");
+        sqsClientMock.prepareSendMessageExpectations("fda-test-sf-detail.fifo",
+            TestUtils.fileToString(this.getClass(), "details/details_to_lm.json"), Collections.EMPTY_LIST,
+            ImmutableMap.of("source", "FDA"));
         scenarioService.sendToLm(scenario);
-        mockLmEndPoint.assertIsSatisfied();
+        sqsClientMock.assertSendMessage();
     }
 }

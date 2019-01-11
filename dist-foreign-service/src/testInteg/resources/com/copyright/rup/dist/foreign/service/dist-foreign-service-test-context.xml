@@ -43,6 +43,7 @@
         <property name="createCommonTablesOnStartup" value="false"/>
     </bean>
 
+    <!-- Mocks -->
     <bean id="df.service.paidUsageConsumer"
           class="com.copyright.rup.dist.foreign.service.impl.mock.PaidUsageConsumerMock"/>
 
@@ -50,4 +51,8 @@
           class="com.copyright.rup.dist.foreign.service.impl.mock.PiIntegrationServiceMock"/>
 
     <bean id="usageBatchService" class="com.copyright.rup.dist.foreign.service.impl.mock.UsageBatchServiceMock"/>
+
+    <bean id="df.integration.sqs.client.configuration" class="com.copyright.rup.aws.RupClientConfiguration"/>
+    <bean id="df.integration.sqs.endpoint.configuration" class="com.copyright.rup.aws.RupClientConfiguration"/>
+    <bean id="df.integration.sqs.client" class="com.copyright.rup.dist.foreign.service.impl.mock.SqsClientMock"/>
 </beans>
