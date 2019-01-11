@@ -1,3 +1,8 @@
+4.1.17
+-
+* B-46034 FDA: Exclude Ceased/Lost/NTS Refused RHs from the NTS proxy: add US_TAX_COUNTRY status and action type, change audit message for eligible NTS usages
+* B-46034 FDA: Exclude Ceased/Lost/NTS Refused RHs from the NTS proxy: remove US_TAX_COUNTRY status from filters
+
 4.1.16
 -
 * B-46034 FDA: Exclude Ceased/Lost/NTS Refused RHs from the NTS proxy: add US_TAX_COUNTRY status and action type, change audit message for eligible NTS usages
