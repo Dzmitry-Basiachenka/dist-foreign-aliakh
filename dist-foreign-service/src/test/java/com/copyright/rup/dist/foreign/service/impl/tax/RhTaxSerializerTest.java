@@ -59,6 +59,7 @@ public class RhTaxSerializerTest {
         Usage usage = new Usage();
         usage.setId("ac00c194-5363-463a-a718-ff02643aebf3");
         usage.getRightsholder().setAccountNumber(1000009522L);
+        usage.getRightsholder().setId("1e5ad7fa-15c1-4216-9f44-a6e8559d9f90");
         return usage;
     }
 }

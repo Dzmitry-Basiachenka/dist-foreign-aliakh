@@ -40,6 +40,7 @@ import java.util.List;
 public class NtsWorkflowIntegrationTest {
 
     private static final LocalDate DATE = LocalDate.of(2017, 2, 1);
+    private static final String BUS_MARKET = "Bus";
 
     @Autowired
     private List<ICacheService<?, ?>> cacheServices;
@@ -55,11 +56,12 @@ public class NtsWorkflowIntegrationTest {
     @Test
     public void testNtsBatchWorkflow() {
         testBuilder
-            .withUsageBatch(buildUsageBatch(buildFundPool("Bus")))
+            .withUsageBatch(buildUsageBatch(buildFundPool(BUS_MARKET)))
             .expectRmsRights("rights/rms_grants_658824345_request.json", "rights/rms_grants_658824345_response.json")
             .expectPrmCall(1000023401L, "prm/rightsholder_1000023401_response.json")
             .expectOracleCall("tax/rh_1000023401_tax_country_request.json",
                 "tax/rh_1000023401_tax_country_us_response.json")
+            .expectPreferences("eligibility/pref_eligible_rh_response.json", "85f864f2-30a5-4215-ac4f-f1f541901218")
             .expectedUsage(buildUsage())
             .expectUsageAudit(Arrays.asList(
                 buildUsageAuditItem(UsageActionTypeEnum.ELIGIBLE,
@@ -76,9 +78,22 @@ public class NtsWorkflowIntegrationTest {
     }
 
     @Test
+    public void testNtsBatchWorkflowIneligibleRightsholder() {
+        testBuilder
+            .withUsageBatch(buildUsageBatch(buildFundPool(BUS_MARKET)))
+            .expectRmsRights("rights/rms_grants_658824345_request.json", "rights/rms_grants_658824345_response.json")
+            .expectPrmCall(1000023401L, "prm/rightsholder_1000023401_response.json")
+            .expectOracleCall("tax/rh_1000023401_tax_country_request.json",
+                "tax/rh_1000023401_tax_country_us_response.json")
+            .expectPreferences("eligibility/pref_ineligible_rh_response.json", "85f864f2-30a5-4215-ac4f-f1f541901218")
+            .build()
+            .run();
+    }
+
+    @Test
     public void testNtsBatchWorkflowNonUsRhTaxCountry() {
         testBuilder
-            .withUsageBatch(buildUsageBatch(buildFundPool("Bus")))
+            .withUsageBatch(buildUsageBatch(buildFundPool(BUS_MARKET)))
             .expectRmsRights("rights/rms_grants_658824345_request.json", "rights/rms_grants_658824345_response.json")
             .expectPrmCall(1000023401L, "prm/rightsholder_1000023401_response.json")
             .expectOracleCall("tax/rh_1000023401_tax_country_request.json",
@@ -140,7 +155,7 @@ public class NtsWorkflowIntegrationTest {
         usage.setStatus(UsageStatusEnum.ELIGIBLE);
         usage.setProductFamily("NTS");
         usage.setStandardNumber("1008902112317555XX");
-        usage.setMarket("Bus");
+        usage.setMarket(BUS_MARKET);
         usage.setMarketPeriodFrom(2013);
         usage.setMarketPeriodTo(2017);
         usage.setGrossAmount(new BigDecimal("500.0000000000"));

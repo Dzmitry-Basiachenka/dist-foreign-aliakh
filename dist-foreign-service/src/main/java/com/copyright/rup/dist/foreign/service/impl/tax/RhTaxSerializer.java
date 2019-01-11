@@ -36,6 +36,7 @@ public class RhTaxSerializer extends StdSerializer<Usage> {
         jsonGenerator.writeStartObject();
         if (Objects.nonNull(usage)) {
             writeNotNullField(jsonGenerator, "id", usage.getId());
+            writeNotNullField(jsonGenerator, "rh_uid", usage.getRightsholder().getId());
             writeNotNullField(jsonGenerator, "rh_account_number", usage.getRightsholder().getAccountNumber());
         }
         jsonGenerator.writeEndObject();

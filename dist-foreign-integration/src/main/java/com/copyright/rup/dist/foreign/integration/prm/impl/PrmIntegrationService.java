@@ -83,8 +83,8 @@ public class PrmIntegrationService implements IPrmIntegrationService {
     }
 
     @Override
-    public boolean isRightsholderIneligibleForNtsDistribution(String rightsholderId) {
-        return getBooleanPreference(prmPreferenceService.getPreferencesTable(rightsholderId),
+    public boolean isRightsholderEligibleForNtsDistribution(String rightsholderId) {
+        return !getBooleanPreference(prmPreferenceService.getPreferencesTable(rightsholderId),
             FdaConstants.NTS_PRODUCT_FAMILY, FdaConstants.IS_RH_DIST_INELIGIBLE_CODE);
     }
 

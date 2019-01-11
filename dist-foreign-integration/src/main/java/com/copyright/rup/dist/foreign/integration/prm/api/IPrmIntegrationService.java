@@ -72,9 +72,9 @@ public interface IPrmIntegrationService {
      * and <b>{@code '*'}</b> ('*' is passed as a product family).
      *
      * @param rightsholderId rightsholder id
-     * @return the found rightsholder ineligibility flag or {@code false} if there is neither no preferences for RH
+     * @return {@code true} if RH is eligible for NTS distribution, otherwise {@code false}
      */
-    boolean isRightsholderIneligibleForNtsDistribution(String rightsholderId);
+    boolean isRightsholderEligibleForNtsDistribution(String rightsholderId);
 
     /**
      * Gets service fee configuration value based on RH participating flag.

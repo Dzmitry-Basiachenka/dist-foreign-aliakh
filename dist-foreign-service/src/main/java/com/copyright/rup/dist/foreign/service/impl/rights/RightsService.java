@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.service.impl.rights;
 
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.domain.BaseEntity;
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.integration.camel.IProducer;
 import com.copyright.rup.dist.common.integration.rest.rms.RightsAssignmentResult;
 import com.copyright.rup.dist.common.service.api.discrepancy.IRmsGrantProcessorService;
@@ -132,8 +133,11 @@ public class RightsService implements IRightsService {
             usageRepository.updateStatusAndRhAccountNumber(usageId, UsageStatusEnum.RH_FOUND, rhAccountNumber);
             auditService.logAction(usageId, UsageActionTypeEnum.RH_FOUND,
                 String.format("Rightsholder account %s was found in RMS", rhAccountNumber));
-            rightsholderService.updateRightsholders(Collections.singleton(rhAccountNumber));
-            usage.getRightsholder().setAccountNumber(rhAccountNumber);
+            List<Rightsholder> rightsholders =
+                rightsholderService.updateRightsholders(Collections.singleton(rhAccountNumber));
+            if (CollectionUtils.isNotEmpty(rightsholders)) {
+                usage.setRightsholder(rightsholders.get(0));
+            }
             usage.setStatus(UsageStatusEnum.RH_FOUND);
         } else {
             usageRepository.updateStatus(usageId, UsageStatusEnum.RH_NOT_FOUND);

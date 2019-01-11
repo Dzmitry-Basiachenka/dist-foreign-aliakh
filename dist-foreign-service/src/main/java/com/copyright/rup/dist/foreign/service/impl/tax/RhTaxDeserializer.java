@@ -42,6 +42,7 @@ public class RhTaxDeserializer extends JsonDeserializer<Usage> {
     private Usage deserializeUsage(JsonNode jsonNode) {
         Usage usage = new Usage();
         usage.setId(JsonUtils.getStringValue(jsonNode.get("id")));
+        usage.getRightsholder().setId(JsonUtils.getStringValue(jsonNode.get("rh_uid")));
         usage.getRightsholder().setAccountNumber(JsonUtils.getLongValue(jsonNode.get("rh_account_number")));
         return usage;
     }

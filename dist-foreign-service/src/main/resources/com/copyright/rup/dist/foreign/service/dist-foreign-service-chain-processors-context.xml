@@ -19,8 +19,13 @@
     <!-- NTS processors -->
     <bean id="df.service.deleteUsageProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.DeleteUsageProcessor"/>
 
-    <bean id="df.service.rhTaxProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.RhTaxProcessor">
+    <bean id="df.service.rhEligibilityProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.RhEligibilityProcessor">
         <property name="successProcessor" ref="df.service.eligibilityProcessor"/>
+        <property name="failureProcessor" ref="df.service.deleteUsageProcessor"/>
+    </bean>
+
+    <bean id="df.service.rhTaxProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.RhTaxProcessor">
+        <property name="successProcessor" ref="df.service.rhEligibilityProcessor"/>
         <property name="failureProcessor" ref="df.service.deleteUsageProcessor"/>
     </bean>
 

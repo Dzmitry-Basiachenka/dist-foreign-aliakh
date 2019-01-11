@@ -32,6 +32,11 @@ public enum ChainProcessorTypeEnum {
     RH_TAX,
 
     /**
+     * RH Eligibility processor.
+     */
+    RH_ELIGIBILITY,
+
+    /**
      * Eligibility processor.
      */
     ELIGIBILITY

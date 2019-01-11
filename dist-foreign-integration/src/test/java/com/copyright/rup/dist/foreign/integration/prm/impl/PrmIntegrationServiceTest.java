@@ -131,50 +131,50 @@ public class PrmIntegrationServiceTest {
     }
 
     @Test
-    public void testIsRightsholderIneligibleForNtsDistributionTrue() {
+    public void testIsRightsholderEligibleForNtsDistributionTrue() {
         Table<String, String, Object> preferencesTable = HashBasedTable.create();
         preferencesTable.put("NTS", FdaConstants.IS_RH_DIST_INELIGIBLE_CODE, true);
         expect(prmPreferenceService.getPreferencesTable(RIGHTSHOLDER_ID))
             .andReturn(preferencesTable)
             .once();
         replay(prmPreferenceService);
-        assertTrue(prmIntegrationService.isRightsholderIneligibleForNtsDistribution(RIGHTSHOLDER_ID));
+        assertFalse(prmIntegrationService.isRightsholderEligibleForNtsDistribution(RIGHTSHOLDER_ID));
         verify(prmPreferenceService);
     }
 
     @Test
-    public void testIsRightsholderIneligibleForNtsDistributionFalse() {
+    public void testIsRightsholderEligibleForNtsDistributionFalse() {
         Table<String, String, Object> preferencesTable = HashBasedTable.create();
         preferencesTable.put("NTS", FdaConstants.IS_RH_DIST_INELIGIBLE_CODE, false);
         expect(prmPreferenceService.getPreferencesTable(RIGHTSHOLDER_ID))
             .andReturn(preferencesTable)
             .once();
         replay(prmPreferenceService);
-        assertFalse(prmIntegrationService.isRightsholderIneligibleForNtsDistribution(RIGHTSHOLDER_ID));
+        assertTrue(prmIntegrationService.isRightsholderEligibleForNtsDistribution(RIGHTSHOLDER_ID));
         verify(prmPreferenceService);
     }
 
     @Test
-    public void testIsRightsholderIneligibleForNtsDistributionAllProductsTrue() {
+    public void testIsRightsholderEligibleForNtsDistributionAllProductsTrue() {
         Table<String, String, Object> preferencesTable = HashBasedTable.create();
         preferencesTable.put("*", FdaConstants.IS_RH_DIST_INELIGIBLE_CODE, true);
         expect(prmPreferenceService.getPreferencesTable(RIGHTSHOLDER_ID))
             .andReturn(preferencesTable)
             .once();
         replay(prmPreferenceService);
-        assertTrue(prmIntegrationService.isRightsholderIneligibleForNtsDistribution(RIGHTSHOLDER_ID));
+        assertFalse(prmIntegrationService.isRightsholderEligibleForNtsDistribution(RIGHTSHOLDER_ID));
         verify(prmPreferenceService);
     }
 
     @Test
-    public void testIsRightsholderIneligibleForNtsDistributionAllProductsFalse() {
+    public void testIsRightsholderEligibleForNtsDistributionAllProductsFalse() {
         Table<String, String, Object> preferencesTable = HashBasedTable.create();
         preferencesTable.put("*", FdaConstants.IS_RH_DIST_INELIGIBLE_CODE, false);
         expect(prmPreferenceService.getPreferencesTable(RIGHTSHOLDER_ID))
             .andReturn(preferencesTable)
             .once();
         replay(prmPreferenceService);
-        assertFalse(prmIntegrationService.isRightsholderIneligibleForNtsDistribution(RIGHTSHOLDER_ID));
+        assertTrue(prmIntegrationService.isRightsholderEligibleForNtsDistribution(RIGHTSHOLDER_ID));
         verify(prmPreferenceService);
     }
 
