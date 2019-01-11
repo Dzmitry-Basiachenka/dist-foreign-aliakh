@@ -206,7 +206,7 @@ public class UsagesFilterWidgetTest {
         verifyStatusComboboxComponent(verticalLayout.getComponent(5), Lists.newArrayList(UsageStatusEnum.NEW,
             UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.WORK_RESEARCH, UsageStatusEnum.WORK_FOUND,
             UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.RH_FOUND, UsageStatusEnum.SENT_FOR_RA,
-            UsageStatusEnum.US_TAX_COUNTRY, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.NTS_WITHDRAWN));
+            UsageStatusEnum.ELIGIBLE, UsageStatusEnum.NTS_WITHDRAWN));
         verifyFiscalYearComboboxComponent(verticalLayout.getComponent(6), Collections.singletonList(FISCAL_YEAR));
     }
 
@@ -240,7 +240,7 @@ public class UsagesFilterWidgetTest {
         ListDataProvider<UsageStatusEnum> listDataProvider =
             (ListDataProvider<UsageStatusEnum>) comboBox.getDataProvider();
         Collection<?> itemIds = listDataProvider.getItems();
-        assertEquals(10, itemIds.size());
+        assertEquals(9, itemIds.size());
         assertEquals(values, itemIds);
     }
 

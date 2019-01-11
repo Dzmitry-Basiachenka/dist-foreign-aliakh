@@ -23,6 +23,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -44,7 +45,9 @@ public class StatusFilterWidgetTest {
 
     @Test
     public void testLoadBeans() {
-        assertEquals(Lists.newArrayList(UsageStatusEnum.values()), widget.loadBeans());
+        List<UsageStatusEnum> statuses = Lists.newArrayList(UsageStatusEnum.values());
+        statuses.remove(UsageStatusEnum.US_TAX_COUNTRY);
+        assertEquals(statuses, widget.loadBeans());
     }
 
     @Test
