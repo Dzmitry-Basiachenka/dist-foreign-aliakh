@@ -42,7 +42,7 @@ public class RhEligibilityDeserializer extends JsonDeserializer<Usage> {
     private Usage deserializeUsage(JsonNode jsonNode) {
         Usage usage = new Usage();
         usage.setId(JsonUtils.getStringValue(jsonNode.get("id")));
-        usage.getRightsholder().setId(JsonUtils.getStringValue(jsonNode.get("rh_id")));
+        usage.getRightsholder().setId(JsonUtils.getStringValue(jsonNode.get("rh_uid")));
         return usage;
     }
 }

@@ -68,6 +68,8 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
     private String expectedOracleRequest;
     private String expectedOracleResponse;
     private String expectedPrmResponse;
+    private String expectedPreferencesResponce;
+    private String expectedPreferencesRightholderId;
     private Long expectedPrmAccountNumber;
     private List<UsageAuditItem> expectedUsageAuditItems;
     private UsageBatch usageBatch;
@@ -92,6 +94,12 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
     NtsWorkflowIntegrationTestBuilder expectOracleCall(String request, String response) {
         this.expectedOracleRequest = request;
         this.expectedOracleResponse = response;
+        return this;
+    }
+
+    NtsWorkflowIntegrationTestBuilder expectPreferences(String preferencesJson, String rightholderId) {
+        this.expectedPreferencesResponce = preferencesJson;
+        this.expectedPreferencesRightholderId = rightholderId;
         return this;
     }
 
@@ -120,6 +128,8 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
         expectedOracleRequest = null;
         expectedOracleResponse = null;
         expectedUsageAuditItems = null;
+        expectedPreferencesResponce = null;
+        expectedPreferencesRightholderId = null;
     }
 
     /**
@@ -138,6 +148,9 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
             }
             if (Objects.nonNull(expectedOracleRequest)) {
                 expectOracleCall();
+            }
+            if (Objects.nonNull(expectedPreferencesResponce)) {
+                expectGetPreferences();
             }
             loadNtsBatch();
             assertBatch();
@@ -241,6 +254,16 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
                     .string(new JsonMatcher(TestUtils.fileToString(this.getClass(), expectedOracleRequest))))
                 .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(),
                     expectedOracleResponse), MediaType.APPLICATION_JSON));
+        }
+
+        private void expectGetPreferences() {
+            mockServer.expect(MockRestRequestMatchers
+                .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelpref?orgIds%5B%5D="
+                    + expectedPreferencesRightholderId
+                    + "&prefCodes%5B%5D=IS-RH-FDA-PARTICIPATING,ISRHDISTINELIGIBLE"))
+                .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
+                .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(),
+                    expectedPreferencesResponce), MediaType.APPLICATION_JSON));
         }
     }
 }

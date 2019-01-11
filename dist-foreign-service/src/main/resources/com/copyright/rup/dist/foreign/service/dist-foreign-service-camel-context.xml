@@ -54,6 +54,10 @@
         <property name="endPoint" value="direct:df.service.tax"/>
     </bean>
 
+    <bean id="df.service.rhEligibilityProducer" parent="df.service.usageProducer">
+        <property name="endPoint" value="direct:df.service.eligibility"/>
+    </bean>
+
     <bean id="df.service.matchingProducer" parent="df.service.usageProducer">
         <property name="endPoint" value="direct:df.service.matching"/>
     </bean>
@@ -84,7 +88,10 @@
         <endpoint id="df.service.internal.tax.endpoint" uri="direct:df.service.tax"/>
         <endpoint id="df.service.rh.tax.endpoint" uri="$RUP{dist.foreign.endpoint.rh_tax}"/>
 
-        <route>
+        <endpoint id="df.service.internal.eligibility.endpoint" uri="direct:df.service.eligibility"/>
+        <endpoint id="df.service.rh.eligibility.endpoint" uri="$RUP{dist.foreign.endpoint.rh_eligibility}"/>
+
+        <route id="df.service.paidUsageRoute">
             <from ref="df.service.lm.detail.paid.endpoint"/>
             <choice>
                 <when>
@@ -99,7 +106,7 @@
             </choice>
         </route>
 
-        <route>
+        <route id="df.service.matchingInternalRoute">
             <from ref="df.service.internal.matching.endpoint"/>
             <marshal>
                 <custom ref="df.service.matchingMarshaller"/>
@@ -111,7 +118,7 @@
             </onException>
         </route>
 
-        <route>
+        <route id="df.service.matchingRoute">
             <from ref="df.service.matching.endpoint"/>
             <unmarshal>
                 <custom ref="df.service.matchingUnmarshaller"/>
@@ -123,7 +130,7 @@
             </onException>
         </route>
 
-        <route>
+        <route id="df.service.rightsInternalRoute">
             <from ref="df.service.internal.rights.endpoint"/>
             <marshal>
                 <custom ref="df.service.rightsMarshaller"/>
@@ -135,7 +142,7 @@
             </onException>
         </route>
 
-        <route>
+        <route id="df.service.rightsRoute">
             <from ref="df.service.rights.endpoint"/>
             <unmarshal>
                 <custom ref="df.service.rightsUnmarshaller"/>
@@ -147,7 +154,7 @@
             </onException>
         </route>
 
-        <route>
+        <route id="df.service.taxInternalRoute">
             <from ref="df.service.internal.tax.endpoint"/>
             <marshal>
                 <custom ref="df.service.rhTaxMarshaller"/>
@@ -159,12 +166,36 @@
             </onException>
         </route>
 
-        <route>
+        <route id="df.service.taxRoute">
             <from ref="df.service.rh.tax.endpoint"/>
             <unmarshal>
                 <custom ref="df.service.rhTaxUnmarshaller"/>
             </unmarshal>
             <bean ref="df.service.rhTaxConsumer"/>
+
+            <onException redeliveryPolicyRef="defaultRedeliveryPolicy" useOriginalMessage="true">
+                <exception>com.copyright.rup.common.exception.RupRuntimeException</exception>
+            </onException>
+        </route>
+
+        <route id="df.service.eligibilityInternalRoute">
+            <from ref="df.service.internal.eligibility.endpoint"/>
+            <marshal>
+                <custom ref="df.service.rhEligibilityMarshaller"/>
+            </marshal>
+            <to ref="df.service.rh.eligibility.endpoint"/>
+
+            <onException redeliveryPolicyRef="defaultRedeliveryPolicy" useOriginalMessage="true">
+                <exception>com.copyright.rup.common.exception.RupRuntimeException</exception>
+            </onException>
+        </route>
+
+        <route id="df.service.eligibilityRoute">
+            <from ref="df.service.rh.eligibility.endpoint"/>
+            <unmarshal>
+                <custom ref="df.service.rhEligibilityUnmarshaller"/>
+            </unmarshal>
+            <bean ref="df.service.rhEligibilityConsumer"/>
 
             <onException redeliveryPolicyRef="defaultRedeliveryPolicy" useOriginalMessage="true">
                 <exception>com.copyright.rup.common.exception.RupRuntimeException</exception>

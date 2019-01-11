@@ -198,8 +198,9 @@ public class UsageBatchServiceTest {
 
     @Test
     public void testUpdateRightsholders() {
-        rightsholderService.updateRightsholders(Collections.singleton(1000001534L));
-        expectLastCall().once();
+        expect(rightsholderService.updateRightsholders(Collections.singleton(1000001534L)))
+            .andReturn(Collections.singletonList(buildRightsholder(1000001534L)))
+            .once();
         replay(rightsholderService);
         usageBatchService.updateRightsholders(Sets.newHashSet(1000001534L));
         verify(rightsholderService);

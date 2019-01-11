@@ -35,7 +35,7 @@ public class RhEligibilitySerializer extends StdSerializer<Usage> {
         jsonGenerator.writeStartObject();
         if (Objects.nonNull(usage)) {
             writeNotNullField(jsonGenerator, "id", usage.getId());
-            writeNotNullField(jsonGenerator, "rh_id", usage.getRightsholder().getId());
+            writeNotNullField(jsonGenerator, "rh_uid", usage.getRightsholder().getId());
         }
         jsonGenerator.writeEndObject();
     }

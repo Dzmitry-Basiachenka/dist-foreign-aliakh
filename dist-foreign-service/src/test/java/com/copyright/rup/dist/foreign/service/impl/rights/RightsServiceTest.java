@@ -10,6 +10,7 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.integration.rest.rms.RightsAssignmentResult;
 import com.copyright.rup.dist.common.integration.rest.rms.RightsAssignmentResult.RightsAssignmentResultStatusEnum;
 import com.copyright.rup.dist.common.service.api.discrepancy.IRmsGrantProcessorService;
@@ -152,8 +153,9 @@ public class RightsServiceTest {
         usageAuditService.logAction(Collections.singleton(sentForRaUsage.getId()), UsageActionTypeEnum.RH_FOUND,
             String.format("Rightsholder account %s was found in RMS", RH_ACCOUNT_NUMBER));
         expectLastCall().once();
-        rightsholderService.updateRightsholders(Collections.singleton(RH_ACCOUNT_NUMBER));
-        expectLastCall().once();
+        expect(rightsholderService.updateRightsholders(Collections.singleton(RH_ACCOUNT_NUMBER)))
+            .andReturn(Collections.singletonList(buildRightsholder(RH_ACCOUNT_NUMBER)))
+            .once();
         chainExecutor.execute(Collections.singletonList(sentForRaUsage), ChainProcessorTypeEnum.ELIGIBILITY);
         expectLastCall().once();
         replay(usageRepository, usageService, rmsGrantProcessorService, usageAuditService, rightsholderService,
@@ -174,8 +176,9 @@ public class RightsServiceTest {
         usageAuditService.logAction(usageIdsSet, UsageActionTypeEnum.RH_FOUND,
             "Rightsholder account 1000009522 was found in RMS");
         expectLastCall().once();
-        rightsholderService.updateRightsholders(Collections.singleton(1000009522L));
-        expectLastCall().once();
+        expect(rightsholderService.updateRightsholders(Collections.singleton(1000009522L)))
+            .andReturn(Collections.singletonList(buildRightsholder(1000009522L)))
+            .once();
         replay(rmsGrantProcessorService, rightsholderService, usageRepository, usageAuditService);
         rightsService.updateRight(buildUsage(usageId, FAS_PRODUCT_FAMILY, UsageStatusEnum.WORK_FOUND));
         verify(rmsGrantProcessorService, rightsholderService, usageRepository, usageAuditService);
@@ -194,8 +197,9 @@ public class RightsServiceTest {
         usageAuditService.logAction(usageIdsSet, UsageActionTypeEnum.RH_FOUND,
             "Rightsholder account 1000009522 was found in RMS");
         expectLastCall().once();
-        rightsholderService.updateRightsholders(Collections.singleton(1000009522L));
-        expectLastCall().once();
+        expect(rightsholderService.updateRightsholders(Collections.singleton(1000009522L)))
+            .andReturn(Collections.singletonList(buildRightsholder(1000009522L)))
+            .once();
         replay(rmsGrantProcessorService, rightsholderService, usageRepository, usageAuditService);
         assertNull(usage.getRightsholder().getAccountNumber());
         rightsService.updateRight(usage);
@@ -232,5 +236,11 @@ public class RightsServiceTest {
         usage.setProductFamily(productFamily);
         usage.setStatus(status);
         return usage;
+    }
+
+    private Rightsholder buildRightsholder(Long accountNumber){
+        Rightsholder rightsholder = new Rightsholder();
+        rightsholder.setAccountNumber(accountNumber);
+        return rightsholder;
     }
 }

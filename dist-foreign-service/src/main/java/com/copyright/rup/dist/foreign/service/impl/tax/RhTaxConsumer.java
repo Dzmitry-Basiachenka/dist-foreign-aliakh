@@ -37,7 +37,7 @@ public class RhTaxConsumer implements IConsumer<Usage> {
     public void consume(Usage usage) {
         if (Objects.nonNull(usage)) {
             rhTaxService.processTaxCountryCode(usage);
-            rhTaxProcessor.processResult(usage, (obj) -> UsageStatusEnum.US_TAX_COUNTRY == usage.getStatus());
+            rhTaxProcessor.processResult(usage, (obj) -> UsageStatusEnum.US_TAX_COUNTRY == obj.getStatus());
         }
     }
 
