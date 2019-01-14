@@ -483,12 +483,36 @@
         <include refid="ifPageable"/>
     </select>
 
-    <select id="findByFilter" resultMap="usageResultMap" parameterType="map">
+    <select id="findByStatusAndProductFamily" resultMap="usageResultMap" parameterType="map">
         select
-        u.df_usage_uid,
-        <include refid="usageColumns"/>
+            u.df_usage_uid,
+            u.df_usage_batch_uid,
+            u.df_scenario_uid,
+            u.wr_wrk_inst,
+            u.work_title,
+            u.system_title,
+            u.rh_account_number,
+            rh.df_rightsholder_uid as rh_id,
+            rh.name as rh_name,
+            u.status_ind,
+            u.product_family,
+            u.article,
+            u.standard_number,
+            u.publisher,
+            u.publication_date,
+            u.market,
+            u.market_period_from,
+            u.market_period_to,
+            u.author,
+            u.number_of_copies,
+            u.reported_value,
+            u.gross_amount
         from ${schema}.df_usage u
-        <include refid="usageFilter"/>
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        where
+            u.status_ind = #{status} and
+            u.product_family = #{productFamily}
+        order by u.df_usage_uid
     </select>
 
     <select id="findCountByScenarioId" parameterType="map" resultType="int">

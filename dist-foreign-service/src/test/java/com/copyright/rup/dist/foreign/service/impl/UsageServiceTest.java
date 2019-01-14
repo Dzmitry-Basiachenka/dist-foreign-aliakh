@@ -612,10 +612,9 @@ public class UsageServiceTest {
     @Test
     public void testGetUsagesByStatusAndProductFamily() {
         List<Usage> usages = Collections.singletonList(buildUsage(USAGE_ID_1));
-        UsageFilter usageFilter = new UsageFilter();
-        usageFilter.setUsageStatus(UsageStatusEnum.NEW);
-        usageFilter.setProductFamilies(Collections.singleton(FAS_PRODUCT_FAMILY));
-        expect(usageRepository.findByFilter(usageFilter)).andReturn(usages).once();
+        expect(usageRepository.findByStatusAndProductFamily(UsageStatusEnum.NEW, FAS_PRODUCT_FAMILY))
+            .andReturn(usages)
+            .once();
         replay(usageRepository);
         assertEquals(usages, usageService.getUsagesByStatusAndProductFamily(UsageStatusEnum.NEW, FAS_PRODUCT_FAMILY));
         verify(usageRepository);

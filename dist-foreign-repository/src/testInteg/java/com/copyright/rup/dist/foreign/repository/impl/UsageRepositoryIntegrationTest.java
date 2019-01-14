@@ -7,6 +7,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
@@ -170,21 +171,22 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindByFilter() {
-        UsageFilter usageFilter = new UsageFilter();
-        usageFilter.setProductFamilies(ImmutableSet.of("NTS"));
-        usageFilter.setUsageStatus(UsageStatusEnum.RH_FOUND);
-        usageFilter.setUsageBatchesIds(ImmutableSet.of("928e2693-2646-4a04-85f1-4ca9cd78551a"));
-        List<Usage> actualUsages = usageRepository.findByFilter(usageFilter);
-        assertTrue(CollectionUtils.isNotEmpty(actualUsages));
+    public void testFindByStatusAnsProductFamily() {
+        List<Usage> actualUsages = usageRepository.findByStatusAndProductFamily(UsageStatusEnum.US_TAX_COUNTRY, "NTS");
         assertEquals(2, CollectionUtils.size(actualUsages));
         actualUsages.sort(Comparator.comparing(Usage::getId));
-        Usage actualUsage1 = actualUsages.get(0);
-        assertEquals("3290f7ae-23f7-4286-baf6-a74a9d4ef2d4", actualUsage1.getId());
-        assertEquals(1000009523L, actualUsage1.getRightsholder().getAccountNumber(), 0);
-        Usage actualUsage2 = actualUsages.get(1);
-        assertEquals("97f76fe1-9254-4d2e-9f4e-fa6904140371", actualUsage2.getId());
-        assertEquals(1000009524L, actualUsage2.getRightsholder().getAccountNumber(), 0);
+        verifyUsage(buildUsage("463e2239-1a36-41cc-9a51-ee2a80eae0c7", "d368a40b-d3ab-45b1-80a3-07be2cd5224c", null,
+            243904752L, "Wissenschaft & Forschung Japan", null, UsageStatusEnum.US_TAX_COUNTRY, "NTS",
+            "DIN EN 779:2012", "2192-3559", "Network for Science", LocalDate.of(2013, 9, 10), "Doc Del", 2013, 2015,
+            "Philippe de Mézières", 100, new BigDecimal("200.00"), new BigDecimal("1000.0000000000"),
+            BigDecimal.ZERO, buildRightsholder("bc4076cc-7554-4575-a03e-d4f4b3b76ca9",
+                "John Wiley & Sons - Books", 1000009523L)), actualUsages.get(0));
+        verifyUsage(buildUsage("bd407b50-6101-4304-8316-6404fe32a800", "d368a40b-d3ab-45b1-80a3-07be2cd5224c", null,
+            823904752L, "Medical Journal", null, UsageStatusEnum.US_TAX_COUNTRY, "NTS",
+            "DIN EN 779:2012", "2192-2555", "Network for Medicine", LocalDate.of(2013, 9, 10), "Doc Del", 2013, 2017,
+            "Arturo de Mézières", 100, new BigDecimal("100.00"), new BigDecimal("500.0000000000"),
+            BigDecimal.ZERO, buildRightsholder("1b2f23a7-921a-4116-9268-86627fd2fc0b",
+                "IEEE - Inst of Electrical and Electronics Engrs", 1000009524L)), actualUsages.get(1));
     }
 
     @Test
@@ -1040,30 +1042,70 @@ public class UsageRepositoryIntegrationTest {
     }
 
     private Usage buildUsage(String usageId, String usageBatchId) {
+        return buildUsage(usageId, usageBatchId, SCENARIO_ID, WR_WRK_INST, "Work Title", "System Title",
+            UsageStatusEnum.ELIGIBLE, PRODUCT_FAMILY_FAS, "Article", "StandardNumber", "Publisher",
+            LocalDate.of(2016, 11, 3), "Market", 2015, 2017, "Author", 155, new BigDecimal("11.25"),
+            new BigDecimal("54.4400000000"), new BigDecimal("25.1500000000"),
+            buildRightsholder("ee07d016-07b2-4285-8c53-d95d1a21f3d5", RH_ACCOUNT_NAME, RH_ACCOUNT_NUMBER));
+    }
+
+    private Usage buildUsage(String usageId, String batchId, String scenarioId, Long wrWrkInst, String workTitle,
+                             String systemTitle, UsageStatusEnum status, String productFamily, String article,
+                             String standardNumber, String publisher, LocalDate publicatioDate, String market,
+                             Integer marketPeriodFrom, Integer marketPeriodTo, String author, Integer numberOfCopies,
+                             BigDecimal reportedValue, BigDecimal grossAmount, BigDecimal netAmount, Rightsholder rh) {
         Usage usage = new Usage();
         usage.setId(usageId);
-        usage.setBatchId(usageBatchId);
-        usage.setScenarioId(SCENARIO_ID);
-        usage.setWrWrkInst(WR_WRK_INST);
-        usage.setWorkTitle("Work Title");
-        usage.setSystemTitle("System Title");
-        usage.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER);
-        usage.getRightsholder().setName(RH_ACCOUNT_NAME);
-        usage.setStatus(UsageStatusEnum.ELIGIBLE);
-        usage.setProductFamily(PRODUCT_FAMILY_FAS);
-        usage.setArticle("Article");
-        usage.setStandardNumber("StandardNumber");
-        usage.setPublisher("Publisher");
-        usage.setPublicationDate(LocalDate.of(2016, 11, 3));
-        usage.setMarket("Market");
-        usage.setMarketPeriodFrom(2015);
-        usage.setMarketPeriodTo(2017);
-        usage.setAuthor("Author");
-        usage.setNumberOfCopies(155);
-        usage.setReportedValue(new BigDecimal("11.25"));
-        usage.setGrossAmount(new BigDecimal("54.4400000000"));
-        usage.setNetAmount(new BigDecimal("25.1500000000"));
+        usage.setBatchId(batchId);
+        usage.setScenarioId(scenarioId);
+        usage.setWrWrkInst(wrWrkInst);
+        usage.setWorkTitle(workTitle);
+        usage.setSystemTitle(systemTitle);
+        usage.setStatus(status);
+        usage.setProductFamily(productFamily);
+        usage.setArticle(article);
+        usage.setStandardNumber(standardNumber);
+        usage.setPublisher(publisher);
+        usage.setPublicationDate(publicatioDate);
+        usage.setMarket(market);
+        usage.setMarketPeriodFrom(marketPeriodFrom);
+        usage.setMarketPeriodTo(marketPeriodTo);
+        usage.setAuthor(author);
+        usage.setNumberOfCopies(numberOfCopies);
+        usage.setReportedValue(reportedValue);
+        usage.setGrossAmount(grossAmount);
+        usage.setNetAmount(netAmount);
+        usage.setRightsholder(rh);
         return usage;
+    }
+
+    private void verifyUsage(Usage expectedUsage, Usage actualUsage) {
+        assertEquals(expectedUsage.getId(), actualUsage.getId());
+        assertEquals(expectedUsage.getBatchId(), actualUsage.getBatchId());
+        assertEquals(expectedUsage.getScenarioId(), actualUsage.getScenarioId());
+        assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
+        assertEquals(expectedUsage.getWorkTitle(), actualUsage.getWorkTitle());
+        assertEquals(expectedUsage.getProductFamily(), actualUsage.getProductFamily());
+        assertEquals(expectedUsage.getStandardNumber(), actualUsage.getStandardNumber());
+        assertEquals(expectedUsage.getPublisher(), actualUsage.getPublisher());
+        assertEquals(expectedUsage.getMarket(), actualUsage.getMarket());
+        assertEquals(expectedUsage.getMarketPeriodTo(), actualUsage.getMarketPeriodTo());
+        assertEquals(expectedUsage.getMarketPeriodFrom(), actualUsage.getMarketPeriodFrom());
+        assertEquals(expectedUsage.getGrossAmount(), actualUsage.getGrossAmount());
+        assertEquals(expectedUsage.getReportedValue(), actualUsage.getReportedValue());
+        assertEquals(expectedUsage.getNetAmount(), actualUsage.getNetAmount());
+        assertEquals(expectedUsage.getRightsholder().getName(), actualUsage.getRightsholder().getName());
+        assertEquals(expectedUsage.getRightsholder().getId(), actualUsage.getRightsholder().getId());
+        assertEquals(expectedUsage.getRightsholder().getAccountNumber(),
+            actualUsage.getRightsholder().getAccountNumber());
+    }
+
+    private Rightsholder buildRightsholder(String id, String rhName, Long rhAccountNumber) {
+        Rightsholder rightsholder = new Rightsholder();
+        rightsholder.setId(id);
+        rightsholder.setAccountNumber(rhAccountNumber);
+        rightsholder.setName(rhName);
+        return rightsholder;
     }
 
     private RightsholderTotalsHolder buildRightsholderTotalsHolder(String rhName, Long rhAccountNumber,
