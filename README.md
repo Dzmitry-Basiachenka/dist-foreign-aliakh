@@ -1,3 +1,9 @@
+4.1.18
+-
+* B-46034 FDA: Exclude Ceased/Lost/NTS Refused RHs from the NTS proxy: Implement Job for handling ISRHDISTINELIGIBLE flag for NTS usages
+* B-47587 FDA: Utilize SQS/SNS for internal distribution apps communication: adjust sending of usages to LM to use SQS/SNS
+* B-47646 Tech Debt: FDA: resolve security vulnerabilities related to org.apache.tomcat.embed
+
 4.1.17
 -
 * B-46034 FDA: Exclude Ceased/Lost/NTS Refused RHs from the NTS proxy: add US_TAX_COUNTRY status and action type, change audit message for eligible NTS usages
