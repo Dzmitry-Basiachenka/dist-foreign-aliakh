@@ -14,6 +14,11 @@
         <property name="durability" value="true"/>
     </bean>
 
+    <bean id="df.service.rhEligibilityQuartzJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <property name="jobClass" value="com.copyright.rup.dist.foreign.service.impl.quartz.RhEligibilityJob"/>
+        <property name="durability" value="true"/>
+    </bean>
+
     <bean id="df.service.updateRightsholdersQuartzJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
         <property name="jobClass" value="com.copyright.rup.dist.foreign.service.impl.quartz.UpdateRightsholdersJob"/>
         <property name="durability" value="true"/>
@@ -42,6 +47,11 @@
     <bean id="df.service.rhTaxTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="df.service.rhTaxQuartzJob"/>
         <property name="cronExpression" value="$RUP{dist.foreign.scheduler.rh_tax}"/>
+    </bean>
+
+    <bean id="df.service.rhEligibilityTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="df.service.rhEligibilityQuartzJob"/>
+        <property name="cronExpression" value="$RUP{dist.foreign.scheduler.rh_eligibility}"/>
     </bean>
 
     <bean id="df.service.updateRightsholdersTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
@@ -73,6 +83,7 @@
                 <ref bean="df.service.sendToRightsAssignmentQuartzJob"/>
                 <ref bean="df.service.sendToCrmQuartzJob"/>
                 <ref bean="df.service.worksMatchingQuartzJob"/>
+                <ref bean="df.service.rhEligibilityQuartzJob"/>
             </list>
         </property>
         <property name="triggers">
@@ -83,6 +94,7 @@
                 <ref bean="df.service.sendToRightsAssignmentTrigger"/>
                 <ref bean="df.service.sendToCrmTrigger"/>
                 <ref bean="df.service.worksMatchingTrigger"/>
+                <ref bean="df.service.rhEligibilityTrigger"/>
             </list>
         </property>
         <property name="autoStartup" value="$RUP{dist.foreign.scheduler.auto.startup}"/>

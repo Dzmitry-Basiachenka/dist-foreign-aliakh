@@ -51,12 +51,13 @@ public interface IUsageRepository {
     List<UsageDto> findDtosByFilter(UsageFilter filter, Pageable pageable, Sort sort);
 
     /**
-     * Finds list of {@link Usage}s by usage filter.
+     * Finds list of {@link Usage}s by specified {@link UsageStatusEnum} and product family.
      *
-     * @param filter filter
-     * @return list of usages
+     * @param status        {@link UsageStatusEnum} instance
+     * @param productFamily product family
+     * @return the list of found {@link Usage}s
      */
-    List<Usage> findByFilter(UsageFilter filter);
+    List<Usage> findByStatusAndProductFamily(UsageStatusEnum status, String productFamily);
 
     /**
      * Finds usages count based on applied filter.

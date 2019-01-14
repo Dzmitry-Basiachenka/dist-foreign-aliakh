@@ -9,6 +9,7 @@ import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
@@ -175,7 +176,7 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
         private void assertUsages() {
             UsageFilter usageFilter = new UsageFilter();
             usageFilter.setUsageBatchesIds(Collections.singleton(usageBatch.getId()));
-            List<Usage> usages = usageRepository.findByFilter(usageFilter);
+            List<UsageDto> usages = usageRepository.findDtosByFilter(usageFilter, null, null);
             if (Objects.isNull(processedUsage)) {
                 assertTrue(CollectionUtils.isEmpty(usages));
             } else {
@@ -185,26 +186,25 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
             }
         }
 
-        private void assertUsage(Usage usage) {
-            assertEquals(processedUsage.getStatus(), usage.getStatus());
-            assertEquals(processedUsage.getWrWrkInst(), usage.getWrWrkInst());
-            assertEquals(processedUsage.getWorkTitle(), usage.getWorkTitle());
-            assertEquals(processedUsage.getProductFamily(), usage.getProductFamily());
-            assertEquals(processedUsage.getArticle(), usage.getArticle());
-            assertEquals(processedUsage.getStandardNumber(), usage.getStandardNumber());
-            assertEquals(processedUsage.getPublisher(), usage.getPublisher());
-            assertEquals(processedUsage.getPublicationDate(), usage.getPublicationDate());
-            assertEquals(processedUsage.getMarket(), usage.getMarket());
-            assertEquals(processedUsage.getMarketPeriodFrom(), usage.getMarketPeriodFrom());
-            assertEquals(processedUsage.getMarketPeriodTo(), usage.getMarketPeriodTo());
-            assertEquals(processedUsage.getAuthor(), usage.getAuthor());
-            assertEquals(processedUsage.getGrossAmount(), usage.getGrossAmount());
-            assertEquals(processedUsage.getRightsholder().getAccountNumber(),
-                usage.getRightsholder().getAccountNumber());
+        private void assertUsage(UsageDto usageDto) {
+            assertEquals(processedUsage.getStatus(), usageDto.getStatus());
+            assertEquals(processedUsage.getWrWrkInst(), usageDto.getWrWrkInst());
+            assertEquals(processedUsage.getWorkTitle(), usageDto.getWorkTitle());
+            assertEquals(processedUsage.getProductFamily(), usageDto.getProductFamily());
+            assertEquals(processedUsage.getArticle(), usageDto.getArticle());
+            assertEquals(processedUsage.getStandardNumber(), usageDto.getStandardNumber());
+            assertEquals(processedUsage.getPublisher(), usageDto.getPublisher());
+            assertEquals(processedUsage.getPublicationDate(), usageDto.getPublicationDate());
+            assertEquals(processedUsage.getMarket(), usageDto.getMarket());
+            assertEquals(processedUsage.getMarketPeriodFrom(), usageDto.getMarketPeriodFrom());
+            assertEquals(processedUsage.getMarketPeriodTo(), usageDto.getMarketPeriodTo());
+            assertEquals(processedUsage.getAuthor(), usageDto.getAuthor());
+            assertEquals(processedUsage.getGrossAmount(), usageDto.getGrossAmount());
+            assertEquals(processedUsage.getRightsholder().getAccountNumber(), usageDto.getRhAccountNumber());
         }
 
-        private void assertAudit(Usage usage) {
-            List<UsageAuditItem> auditItems = usageAuditService.getUsageAudit(usage.getId());
+        private void assertAudit(UsageDto usageDto) {
+            List<UsageAuditItem> auditItems = usageAuditService.getUsageAudit(usageDto.getId());
             assertEquals(CollectionUtils.size(expectedUsageAuditItems), CollectionUtils.size(auditItems));
             IntStream.range(0, expectedUsageAuditItems.size()).forEach(index -> {
                 assertUsageAuditItem(expectedUsageAuditItems.get(index), auditItems.get(index));
