@@ -16,6 +16,7 @@
     <import resource="classpath:/com/copyright/rup/dist/common/integration/rest/prm/prm-rollup-context.xml"/>
     <import resource="classpath:/com/copyright/rup/dist/common/integration/rest/prm/prm-rh-preference-context.xml"/>
     <import resource="classpath:/com/copyright/rup/dist/foreign/integration/dist-foreign-broker-config.xml"/>
+    <import resource="classpath:/com/copyright/rup/dist/foreign/integration/dist-foreign-sqs-config.xml"/>
 
     <bean id="applicationName" class="java.lang.String">
         <constructor-arg value="dist.foreign"/>
@@ -96,7 +97,8 @@
         <template id="df.integration.producerTemplate"/>
 
         <endpoint id="df.integration.internal.usage.endpoint" uri="direct:df.integration.externalUsage"/>
-        <endpoint id="df.integration.lm.detail.endpoint" uri="$RUP{dist.foreign.endpoint.lm.detail}"/>
+        <endpoint id="df.integration.lm.detail.endpoint"
+                  uri="aws-sqs://$RUP{dist.foreign.aws.service.environment.prefix}-$RUP{dist.foreign.endpoint.lm.detail}.fifo?amazonSQSClient=#df.integration.sqs.client&amp;messageAttributeNames=All&amp;messageGroupIdStrategy=useConstant"/>
 
         <redeliveryPolicyProfile id="defaultRedeliveryPolicy"
                                  maximumRedeliveries="10"

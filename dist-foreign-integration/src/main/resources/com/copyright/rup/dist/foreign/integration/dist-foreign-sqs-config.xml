@@ -1,0 +1,26 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+
+    <bean id="df.integration.sqs.client.configuration" class="com.copyright.rup.aws.RupClientConfiguration">
+        <property name="connectionTimeout" value="$RUP{dist.foreign.aws.rup.client.connection.timeout.millis}"/>
+        <property name="socketTimeout" value="$RUP{dist.foreign.aws.rup.client.socket.timeout.millis}"/>
+        <property name="maxErrorRetry" value="$RUP{dist.foreign.aws.rup.client.max.error.retry}"/>
+        <property name="maxConnections" value="$RUP{dist.foreign.aws.rup.client.max.connections}"/>
+    </bean>
+
+    <bean id="df.integration.sqs.endpoint.configuration" class="com.amazonaws.client.builder.AwsClientBuilder$EndpointConfiguration">
+        <constructor-arg name="serviceEndpoint" value="$RUP{dist.foreign.aws.sqs.service.endpoint}"/>
+        <constructor-arg name="signingRegion" value="$RUP{dist.foreign.aws.sqs.signing.region}"/>
+    </bean>
+
+    <bean id="df.integration.sqs.client" class="com.copyright.rup.aws.services.sqs.RupAmazonSqsFactoryBean">
+        <property name="rupClientConfiguration" ref="df.integration.sqs.client.configuration"/>
+        <property name="endpointConfiguration" ref="df.integration.sqs.endpoint.configuration"/>
+    </bean>
+
+    <bean id="df.integration.sqs.component" class="org.apache.camel.component.aws.sqs.SqsComponent">
+        <property name="camelContext" ref="df.integration.camelContext"/>
+    </bean>
+</beans>

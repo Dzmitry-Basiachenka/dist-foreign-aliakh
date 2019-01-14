@@ -6,6 +6,10 @@
             http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
 
     <import resource="classpath:/com/copyright/rup/common/config/rup-properties-config.xml"/>
-    <import resource="classpath:/com/copyright/rup/dist/foreign/integration/dist-foreign-integration-context.xml" />
+    <import resource="classpath:/com/copyright/rup/dist/foreign/integration/dist-foreign-integration-context.xml"/>
 
+    <!-- Mocks -->
+    <bean id="df.integration.sqs.client.configuration" class="com.copyright.rup.aws.RupClientConfiguration"/>
+    <bean id="df.integration.sqs.endpoint.configuration" class="com.copyright.rup.aws.RupClientConfiguration"/>
+    <bean id="df.integration.sqs.client" class="com.copyright.rup.dist.foreign.integration.SqsClientMock"/>
 </beans>

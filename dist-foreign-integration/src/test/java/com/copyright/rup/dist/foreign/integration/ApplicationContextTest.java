@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.integration;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
 
 import com.copyright.rup.dist.foreign.integration.lm.impl.producer.ExternalUsageProducer;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
@@ -45,7 +44,7 @@ public class ApplicationContextTest {
             assertNotNull(context.getBean("dist.common.integration.rmsRightsAssignmentService"));
             assertNotNull(context.getBean(ExternalUsageProducer.class));
         } catch (Exception e) {
-            fail("Context is not valid: " + e.getMessage());
+            throw new AssertionError("Context is not valid: ", e);
         }
     }
 }

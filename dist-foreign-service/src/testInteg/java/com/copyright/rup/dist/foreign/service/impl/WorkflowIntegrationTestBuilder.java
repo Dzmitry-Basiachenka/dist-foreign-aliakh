@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
-import com.copyright.rup.dist.common.test.JsonEndpointMatcher;
 import com.copyright.rup.dist.common.test.JsonMatcher;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
@@ -26,15 +25,15 @@ import com.copyright.rup.dist.foreign.service.impl.WorkflowIntegrationTestBuilde
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.mock.PaidUsageConsumerMock;
+import com.copyright.rup.dist.foreign.service.impl.mock.SqsClientMock;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import org.apache.camel.EndpointInject;
 import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
-import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.builder.Builder;
@@ -94,8 +93,6 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
     private AsyncRestTemplate asyncRestTemplate;
     @Value("$RUP{dist.foreign.rest.prm.rollups.async}")
     private boolean prmRollUpAsync;
-    @EndpointInject(context = "df.integration.camelContext", uri = "mock:sf.processor.detail")
-    private MockEndpoint mockLmEndPoint;
     @Produce
     private ProducerTemplate producerTemplate;
     @Autowired
@@ -107,6 +104,9 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
     private IScenarioAuditService scenarioAuditService;
     @Autowired
     private IUsageAuditService usageAuditService;
+    @Autowired
+    private SqsClientMock sqsClientMock;
+
     private String usagesCsvFile;
     private List<String> predefinedUsageIds;
     private String productFamily;
@@ -196,6 +196,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
     void reset() {
         this.expectedUsageLmDetailIdToAuditMap.clear();
         this.expectedRmsRequestsToResponses.clear();
+        this.sqsClientMock.reset();
     }
 
     @Override
@@ -308,17 +309,12 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
             });
         }
 
-        private void sendScenarioToLm() throws InterruptedException {
-            expectSendToLm();
+        void sendScenarioToLm() {
+            sqsClientMock.prepareSendMessageExpectations("fda-test-sf-detail.fifo",
+                TestUtils.fileToString(this.getClass(), expectedLmDetailsJsonFile), Collections.EMPTY_LIST,
+                ImmutableMap.of("source", "FDA"));
             scenarioService.sendToLm(scenario);
-            mockLmEndPoint.assertIsSatisfied();
-        }
-
-        private void expectSendToLm() {
-            String expectedJson = TestUtils.fileToString(this.getClass(), expectedLmDetailsJsonFile);
-            mockLmEndPoint.expectedMessageCount(1);
-            mockLmEndPoint.expectedHeaderReceived("source", "FDA");
-            mockLmEndPoint.expects(new JsonEndpointMatcher(mockLmEndPoint, Collections.singletonList(expectedJson)));
+            sqsClientMock.assertSendMessage();
         }
 
         private void receivePaidUsagesFromLm() throws InterruptedException {
