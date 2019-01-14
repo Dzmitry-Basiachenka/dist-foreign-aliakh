@@ -7,6 +7,10 @@ if (!project.plugins.findPlugin(GradleVaadinPlugin)) {
     project.apply(plugin: GradleVaadinPlugin)
 }
 
+rupTomcat {
+    tomcatVersion = "${embeddedTomcatVersion}"
+}
+
 vaadin {
     version = "${vaadinVersion}"
     manageDependencies = false
