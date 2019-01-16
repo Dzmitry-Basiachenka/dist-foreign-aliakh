@@ -2,10 +2,10 @@ package com.copyright.rup.dist.foreign.service.impl.chain.executor;
 
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Usage;
-import com.copyright.rup.dist.foreign.service.api.ChainProcessorTypeEnum;
-import com.copyright.rup.dist.foreign.service.api.IChainExecutor;
-import com.copyright.rup.dist.foreign.service.api.IChainProcessor;
-import com.copyright.rup.dist.foreign.service.api.IUsageJobProcessor;
+import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
+import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
+import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
+import com.copyright.rup.dist.foreign.service.api.processor.IUsageJobProcessor;
 
 import com.google.common.collect.ImmutableMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +64,9 @@ public class UsageChainExecutor implements IChainExecutor<Usage> {
             IChainProcessor<Usage> processor = productFamilyToProcessorMap.get(productFamily);
             if (Objects.nonNull(processor)) {
                 execute(usages, processor, type);
+            } else {
+                throw new UnsupportedOperationException(
+                    String.format("Product family %s is not supported", productFamily));
             }
         });
     }
@@ -71,7 +74,7 @@ public class UsageChainExecutor implements IChainExecutor<Usage> {
     private void execute(String productFamily, IChainProcessor<Usage> processor, ChainProcessorTypeEnum type) {
         if (Objects.nonNull(processor)) {
             if (processor instanceof IUsageJobProcessor && type == processor.getChainProcessorType()) {
-                ((IUsageJobProcessor) processor).process(productFamily);
+                ((IUsageJobProcessor) processor).jobProcess(productFamily);
             } else {
                 execute(productFamily, processor.getSuccessProcessor(), type);
                 execute(productFamily, processor.getFailureProcessor(), type);

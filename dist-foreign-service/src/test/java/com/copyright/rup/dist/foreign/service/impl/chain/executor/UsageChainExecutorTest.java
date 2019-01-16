@@ -7,9 +7,9 @@ import static org.easymock.EasyMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
-import com.copyright.rup.dist.foreign.service.api.ChainProcessorTypeEnum;
-import com.copyright.rup.dist.foreign.service.api.IChainProcessor;
-import com.copyright.rup.dist.foreign.service.api.IUsageJobProcessor;
+import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
+import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
+import com.copyright.rup.dist.foreign.service.api.processor.IUsageJobProcessor;
 import com.copyright.rup.dist.foreign.service.impl.chain.processor.AbstractUsageChainProcessor;
 
 import org.junit.Before;
@@ -86,6 +86,13 @@ public class UsageChainExecutorTest {
         verify(fasProcessor, ntsProcessor, fasEligibilityProcessor);
     }
 
+    private Usage buildUsage() {
+        Usage usage = new Usage();
+        usage.setId(RupPersistUtils.generateUuid());
+        usage.setProductFamily("FAS");
+        return usage;
+    }
+
     private static class MockProcessor extends AbstractUsageChainProcessor implements IUsageJobProcessor {
 
         @Override
@@ -94,7 +101,7 @@ public class UsageChainExecutorTest {
         }
 
         @Override
-        public void process(String productFamily) {
+        public void jobProcess(String productFamily) {
             // Empty method
         }
 
@@ -102,12 +109,5 @@ public class UsageChainExecutorTest {
         public ChainProcessorTypeEnum getChainProcessorType() {
             return ChainProcessorTypeEnum.ELIGIBILITY;
         }
-    }
-
-    private Usage buildUsage() {
-        Usage usage = new Usage();
-        usage.setId(RupPersistUtils.generateUuid());
-        usage.setProductFamily("FAS");
-        return usage;
     }
 }

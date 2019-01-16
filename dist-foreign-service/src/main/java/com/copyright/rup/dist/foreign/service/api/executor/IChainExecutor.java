@@ -1,4 +1,6 @@
-package com.copyright.rup.dist.foreign.service.api;
+package com.copyright.rup.dist.foreign.service.api.executor;
+
+import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
 import java.util.List;
 

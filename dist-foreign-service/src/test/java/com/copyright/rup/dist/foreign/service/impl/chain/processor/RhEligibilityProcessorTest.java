@@ -45,6 +45,7 @@ public class RhEligibilityProcessorTest {
         usageServiceMock = createMock(IUsageService.class);
         rhEligibilityProcessor.setRhEligibilityProducer(rhEligibilityProducerMock);
         rhEligibilityProcessor.setUsageService(usageServiceMock);
+        rhEligibilityProcessor.setUsageStatus(UsageStatusEnum.US_TAX_COUNTRY);
     }
 
     @Test
@@ -70,7 +71,7 @@ public class RhEligibilityProcessorTest {
         rhEligibilityProducerMock.send(capture(usageCapture2));
         expectLastCall().once();
         replay(usageServiceMock, rhEligibilityProducerMock);
-        rhEligibilityProcessor.process("NTS");
+        rhEligibilityProcessor.jobProcess("NTS");
         verify(usageServiceMock, rhEligibilityProducerMock);
         assertEquals(usageCapture1.getValue(), rhFoundUsages.get(0));
         assertEquals(usageCapture2.getValue(), rhFoundUsages.get(1));

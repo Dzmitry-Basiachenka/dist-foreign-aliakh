@@ -3,21 +3,21 @@ package com.copyright.rup.dist.foreign.service.impl.rights;
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.domain.BaseEntity;
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.common.integration.camel.IProducer;
 import com.copyright.rup.dist.common.integration.rest.rms.RightsAssignmentResult;
 import com.copyright.rup.dist.common.service.api.discrepancy.IRmsGrantProcessorService;
 import com.copyright.rup.dist.common.util.LogUtils;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.integration.rms.api.IRmsIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
-import com.copyright.rup.dist.foreign.service.api.ChainProcessorTypeEnum;
-import com.copyright.rup.dist.foreign.service.api.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.IRightsService;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
+import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -29,6 +29,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -64,9 +65,6 @@ public class RightsService implements IRightsService {
     @Autowired
     private IRightsholderService rightsholderService;
     @Autowired
-    @Qualifier("df.service.rightsProducer")
-    private IProducer<Usage> rightsProducer;
-    @Autowired
     private IChainExecutor<Usage> chainExecutor;
 
     @Override
@@ -97,27 +95,22 @@ public class RightsService implements IRightsService {
 
     @Override
     @Transactional
-    public void updateRights(String productFamily) {
-        List<Usage> usages = usageService.getUsagesByStatusAndProductFamily(UsageStatusEnum.WORK_FOUND, productFamily);
-        if (CollectionUtils.isNotEmpty(usages)) {
-            LOGGER.info("Update Rights. Started. ProductFamily={}, UsagesStatus={}, UsagesCount={}", productFamily,
-                UsageStatusEnum.WORK_FOUND, LogUtils.size(usages));
-            usages.forEach(rightsProducer::send);
-            LOGGER.info("Update Rights. Finished. ProductFamily={}, UsagesStatus={}, UsagesCount={}", productFamily,
-                UsageStatusEnum.WORK_FOUND, LogUtils.size(usages));
-        } else {
-            LOGGER.info("Update Rights. Skipped. Reason=There are no WORK_FOUND {} usages", productFamily);
-        }
-        usages = usageService.getUsagesByStatusAndProductFamily(UsageStatusEnum.SENT_FOR_RA, productFamily);
-        if (CollectionUtils.isNotEmpty(usages)) {
-            LOGGER.info("Update Rights. Started. ProductFamily={}, UsagesStatus={}, UsagesCount={}", productFamily,
-                UsageStatusEnum.SENT_FOR_RA, LogUtils.size(usages));
-            updateSentForRaUsagesRightsholders(usages);
-            LOGGER.info("Update Rights. Finished. ProductFamily={}, UsagesStatus={}, UsagesCount={}", productFamily,
-                UsageStatusEnum.SENT_FOR_RA, LogUtils.size(usages));
-        } else {
-            LOGGER.info("Send for getting Rights. Skipped. Reason=There are no SENT_FOR_RA {} usages.", productFamily);
-        }
+    public void updateRightsSentForRaUsages() {
+        Arrays.asList(FdaConstants.FAS_PRODUCT_FAMILY, FdaConstants.CLA_FAS_PRODUCT_FAMILY).forEach(productFamily -> {
+            List<Usage> usages =
+                usageService.getUsagesByStatusAndProductFamily(UsageStatusEnum.SENT_FOR_RA, productFamily);
+            if (CollectionUtils.isNotEmpty(usages)) {
+                LogUtils.ILogWrapper usagesCount = LogUtils.size(usages);
+                LOGGER.info("Update rights for SEND_FOR_RA usages. Started. ProductFamily={},, UsagesCount={}",
+                    productFamily, usagesCount);
+                updateSentForRaUsagesRightsholders(usages);
+                LOGGER.info("Update rights for SEND_FOR_RA usages. Finished. ProductFamily={}, UsagesCount={}",
+                    productFamily, usagesCount);
+            } else {
+                LOGGER.info("Update rights for SEND_FOR_RA usages. Skipped. Reason=There are no SENT_FOR_RA {} usages.",
+                    productFamily);
+            }
+        });
     }
 
     @Override

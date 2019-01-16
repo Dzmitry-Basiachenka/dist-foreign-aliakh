@@ -3,8 +3,8 @@ package com.copyright.rup.dist.foreign.service.impl.tax;
 import com.copyright.rup.dist.common.integration.camel.IConsumer;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.service.api.IChainProcessor;
 import com.copyright.rup.dist.foreign.service.api.IRhTaxService;
+import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -29,7 +29,7 @@ public class RhTaxConsumer implements IConsumer<Usage> {
     private IRhTaxService rhTaxService;
 
     @Autowired
-    @Qualifier("df.service.rhTaxProcessor")
+    @Qualifier("df.service.ntsRhTaxProcessor")
     private IChainProcessor<Usage> rhTaxProcessor;
 
     @Override
@@ -37,7 +37,7 @@ public class RhTaxConsumer implements IConsumer<Usage> {
     public void consume(Usage usage) {
         if (Objects.nonNull(usage)) {
             rhTaxService.processTaxCountryCode(usage);
-            rhTaxProcessor.processResult(usage, (obj) -> UsageStatusEnum.US_TAX_COUNTRY == obj.getStatus());
+            rhTaxProcessor.executeNextProcessor(usage, (obj) -> UsageStatusEnum.US_TAX_COUNTRY == obj.getStatus());
         }
     }
 

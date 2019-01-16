@@ -11,7 +11,7 @@ import static org.easymock.EasyMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.service.api.IChainProcessor;
+import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 
 import org.easymock.Capture;
 import org.junit.Before;
@@ -50,7 +50,7 @@ public class RhTaxConsumerTest {
         Usage usage = new Usage();
         usage.setId(USAGE_ID_1);
         Capture<Predicate<Usage>> successPredicate = new Capture<>();
-        rhTaxProcessor.processResult(eq(usage), capture(successPredicate));
+        rhTaxProcessor.executeNextProcessor(eq(usage), capture(successPredicate));
         expectLastCall().once();
         replay(rhTaxProcessor);
         rhTaxConsumer.consume(usage);
@@ -63,7 +63,7 @@ public class RhTaxConsumerTest {
         Usage usage = new Usage();
         usage.setId(USAGE_ID_2);
         Capture<Predicate<Usage>> successPredicateCapture = new Capture<>();
-        rhTaxProcessor.processResult(eq(usage), capture(successPredicateCapture));
+        rhTaxProcessor.executeNextProcessor(eq(usage), capture(successPredicateCapture));
         expectLastCall().once();
         replay(rhTaxProcessor);
         rhTaxConsumer.consume(usage);

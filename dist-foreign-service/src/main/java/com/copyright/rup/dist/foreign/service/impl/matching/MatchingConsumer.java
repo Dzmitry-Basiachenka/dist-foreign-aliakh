@@ -3,8 +3,8 @@ package com.copyright.rup.dist.foreign.service.impl.matching;
 import com.copyright.rup.dist.common.integration.camel.IConsumer;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.service.api.IChainProcessor;
 import com.copyright.rup.dist.foreign.service.api.IWorkMatchingService;
+import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +38,6 @@ public class MatchingConsumer implements IConsumer<Usage> {
         } else {
             workMatchingService.updateStatusForUsageWithoutStandardNumberAndTitle(usage);
         }
-        matchingProcessor.processResult(usage, usageItem -> UsageStatusEnum.WORK_FOUND == usageItem.getStatus());
+        matchingProcessor.executeNextProcessor(usage, usageItem -> UsageStatusEnum.WORK_FOUND == usageItem.getStatus());
     }
 }

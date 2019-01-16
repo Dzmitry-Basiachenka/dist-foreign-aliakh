@@ -1,8 +1,8 @@
 package com.copyright.rup.dist.foreign.service.impl.chain.processor;
 
 import com.copyright.rup.dist.foreign.domain.Usage;
-import com.copyright.rup.dist.foreign.service.api.ChainProcessorTypeEnum;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
 import org.springframework.beans.factory.annotation.Autowired;
 

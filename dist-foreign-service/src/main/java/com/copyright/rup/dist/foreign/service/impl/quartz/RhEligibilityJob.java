@@ -1,8 +1,8 @@
 package com.copyright.rup.dist.foreign.service.impl.quartz;
 
 import com.copyright.rup.dist.foreign.domain.Usage;
-import com.copyright.rup.dist.foreign.service.api.ChainProcessorTypeEnum;
-import com.copyright.rup.dist.foreign.service.api.IChainExecutor;
+import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
+import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.JobExecutionContext;

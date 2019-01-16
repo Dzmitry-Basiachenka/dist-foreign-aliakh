@@ -12,7 +12,7 @@ import static org.easymock.EasyMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
-import com.copyright.rup.dist.foreign.service.api.IChainProcessor;
+import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -54,7 +54,7 @@ public class RhEligibilityConsumerTest {
         expect(prmIntegrationService.isRightsholderEligibleForNtsDistribution(RH_ID))
             .andReturn(true)
             .once();
-        rhEligibilityProcessor.processResult(eq(usage), capture(successPredicate));
+        rhEligibilityProcessor.executeNextProcessor(eq(usage), capture(successPredicate));
         expectLastCall().once();
         replay(rhEligibilityProcessor, prmIntegrationService);
         rhEligibilityConsumer.consume(usage);
@@ -70,7 +70,7 @@ public class RhEligibilityConsumerTest {
         expect(prmIntegrationService.isRightsholderEligibleForNtsDistribution(RH_ID))
             .andReturn(false)
             .once();
-        rhEligibilityProcessor.processResult(eq(usage), capture(successPredicate));
+        rhEligibilityProcessor.executeNextProcessor(eq(usage), capture(successPredicate));
         expectLastCall().once();
         replay(rhEligibilityProcessor, prmIntegrationService);
         rhEligibilityConsumer.consume(usage);

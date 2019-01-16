@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.service.api;
+package com.copyright.rup.dist.foreign.service.api.processor;
 
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -57,7 +57,7 @@ public interface IChainProcessor<T> {
      * @param processedItem    item to pass to the next processor
      * @param successPredicate predicate to decide whether item was processed successfully or not
      */
-    default void processResult(T processedItem, Predicate<T> successPredicate) {
+    default void executeNextProcessor(T processedItem, Predicate<T> successPredicate) {
         if (successPredicate.test(processedItem)) {
             if (Objects.nonNull(getSuccessProcessor())) {
                 getSuccessProcessor().process(processedItem);

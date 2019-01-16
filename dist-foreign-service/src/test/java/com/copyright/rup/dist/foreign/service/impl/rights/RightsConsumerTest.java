@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.service.api.IChainProcessor;
+import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 
 import org.easymock.Capture;
 import org.junit.Before;
@@ -81,7 +81,7 @@ public class RightsConsumerTest {
         rightsConsumer.setRightsService(new RightsServiceMock(foundRhAccountNumber));
         Usage usage = buildUsage(productFamily);
         Capture<Predicate<Usage>> predicateCapture = new Capture<>();
-        expectedProcessor.processResult(eq(usage), capture(predicateCapture));
+        expectedProcessor.executeNextProcessor(eq(usage), capture(predicateCapture));
         expectLastCall().once();
         replay(expectedProcessor);
         rightsConsumer.consume(usage);

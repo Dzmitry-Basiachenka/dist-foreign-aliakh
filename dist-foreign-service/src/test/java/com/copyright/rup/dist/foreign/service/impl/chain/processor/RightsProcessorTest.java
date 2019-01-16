@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.chain.processor;
 
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
@@ -8,11 +9,14 @@ import static org.easymock.EasyMock.verify;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.integration.camel.IProducer;
 import com.copyright.rup.dist.foreign.domain.Usage;
-import com.copyright.rup.dist.foreign.service.api.IRightsService;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
+import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 import org.junit.Before;
 import org.junit.Test;
-import org.powermock.reflect.Whitebox;
+
+import java.util.Arrays;
 
 /**
  * Verifies {@link RightsProcessor}.
@@ -27,30 +31,44 @@ public class RightsProcessorTest {
 
     private RightsProcessor processor;
     private IProducer<Usage> rightsProducer;
-    private IRightsService rightsService;
+    private IUsageService usageService;
+    private IChainProcessor<Usage> successProcessor;
+    private IChainProcessor<Usage> failureProcessor;
 
     @Before
     @SuppressWarnings("unchecked")
     public void setUp() {
         processor = new RightsProcessor();
         rightsProducer = createMock(IProducer.class);
-        rightsService = createMock(IRightsService.class);
-        Whitebox.setInternalState(processor, rightsProducer);
-        Whitebox.setInternalState(processor, rightsService);
+        usageService = createMock(IUsageService.class);
+        successProcessor = createMock(IChainProcessor.class);
+        failureProcessor = createMock(IChainProcessor.class);
+        processor.setUsageService(usageService);
+        processor.setProducer(rightsProducer);
+        processor.setSuccessProcessor(successProcessor);
+        processor.setFailureProcessor(failureProcessor);
+        processor.setUsageStatus(UsageStatusEnum.WORK_FOUND);
     }
 
     @Test
     public void testProcess() {
-        rightsService.updateRights("FAS");
+        Usage usage1 = buildUsage(UsageStatusEnum.WORK_FOUND);
+        Usage usage2 = buildUsage(UsageStatusEnum.WORK_FOUND);
+        expect(usageService.getUsagesByStatusAndProductFamily(UsageStatusEnum.WORK_FOUND, "FAS"))
+            .andReturn(Arrays.asList(usage1, usage2))
+            .once();
+        rightsProducer.send(usage1);
         expectLastCall().once();
-        replay(rightsService);
-        processor.process("FAS");
-        verify(rightsService);
+        rightsProducer.send(usage2);
+        expectLastCall().once();
+        replay(usageService, rightsProducer);
+        processor.jobProcess("FAS");
+        verify(usageService, rightsProducer);
     }
 
     @Test
     public void testProcessUsage() {
-        Usage usage = buildUsage();
+        Usage usage = buildUsage(UsageStatusEnum.NEW);
         rightsProducer.send(usage);
         expectLastCall().once();
         replay(rightsProducer);
@@ -58,9 +76,30 @@ public class RightsProcessorTest {
         verify(rightsProducer);
     }
 
-    private Usage buildUsage() {
+    @Test
+    public void testProcessResultSuccess() {
+        Usage usage = buildUsage(UsageStatusEnum.WORK_FOUND);
+        successProcessor.process(usage);
+        expectLastCall().once();
+        replay(successProcessor, failureProcessor);
+        processor.executeNextProcessor(usage, usage1 -> UsageStatusEnum.WORK_FOUND == usage1.getStatus());
+        verify(successProcessor, failureProcessor);
+    }
+
+    @Test
+    public void testProcessResultFailure() {
+        Usage usage = buildUsage(UsageStatusEnum.WORK_NOT_FOUND);
+        failureProcessor.process(usage);
+        expectLastCall().once();
+        replay(successProcessor, failureProcessor);
+        processor.executeNextProcessor(usage, usage1 -> UsageStatusEnum.WORK_FOUND == usage1.getStatus());
+        verify(successProcessor, failureProcessor);
+    }
+
+    private Usage buildUsage(UsageStatusEnum status) {
         Usage usage = new Usage();
         usage.setId(RupPersistUtils.generateUuid());
+        usage.setStatus(status);
         return usage;
     }
 }

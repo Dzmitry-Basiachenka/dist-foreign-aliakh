@@ -324,7 +324,7 @@ public interface IUsageService {
     /**
      * Gets list of {@link Usage}s by specified {@link UsageStatusEnum} and product family.
      *
-     * @param status {@link UsageStatusEnum} instance
+     * @param status        {@link UsageStatusEnum} instance
      * @param productFamily product family
      * @return the list of found {@link Usage}s
      */
@@ -333,10 +333,10 @@ public interface IUsageService {
     /**
      * Verifies whether {@link Usage}s found by defined {@link UsageFilter} have specified status or not.
      *
-     * @param filter           {@link UsageFilter} instance
+     * @param filter {@link UsageFilter} instance
      * @param status {@link UsageStatusEnum} instance
      * @return {@code true} - if all filtered {@link Usage}s have specified {@link UsageStatusEnum},
-     *         {@link false} - otherwise
+     * {@link false} - otherwise
      */
     boolean isValidUsagesState(UsageFilter filter, UsageStatusEnum status);
 }

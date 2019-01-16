@@ -5,32 +5,37 @@
             http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
 
     <!-- Common processors -->
-    <bean id="df.service.eligibilityProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.EligibilityProcessor"/>
+    <bean id="df.service.commonEligibilityProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.EligibilityProcessor"/>
 
     <!-- FAS/FAS2 processors -->
     <bean id="df.service.fasRightsProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.RightsProcessor">
-        <property name="successProcessor" ref="df.service.eligibilityProcessor"/>
+        <property name="usageStatus" value="WORK_FOUND"/>
+        <property name="successProcessor" ref="df.service.commonEligibilityProcessor"/>
     </bean>
 
     <bean id="df.service.fasMatchingProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.MatchingProcessor">
+        <property name="usageStatus" value="NEW"/>
         <property name="successProcessor" ref="df.service.fasRightsProcessor"/>
     </bean>
 
     <!-- NTS processors -->
-    <bean id="df.service.deleteUsageProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.DeleteUsageProcessor"/>
+    <bean id="df.service.ntsDeleteUsageProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.DeleteUsageProcessor"/>
 
-    <bean id="df.service.rhEligibilityProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.RhEligibilityProcessor">
-        <property name="successProcessor" ref="df.service.eligibilityProcessor"/>
-        <property name="failureProcessor" ref="df.service.deleteUsageProcessor"/>
+    <bean id="df.service.ntsRhEligibilityProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.RhEligibilityProcessor">
+        <property name="usageStatus" value="US_TAX_COUNTRY"/>
+        <property name="successProcessor" ref="df.service.commonEligibilityProcessor"/>
+        <property name="failureProcessor" ref="df.service.ntsDeleteUsageProcessor"/>
     </bean>
 
-    <bean id="df.service.rhTaxProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.RhTaxProcessor">
-        <property name="successProcessor" ref="df.service.rhEligibilityProcessor"/>
-        <property name="failureProcessor" ref="df.service.deleteUsageProcessor"/>
+    <bean id="df.service.ntsRhTaxProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.RhTaxProcessor">
+        <property name="usageStatus" value="RH_FOUND"/>
+        <property name="successProcessor" ref="df.service.ntsRhEligibilityProcessor"/>
+        <property name="failureProcessor" ref="df.service.ntsDeleteUsageProcessor"/>
     </bean>
 
     <bean id="df.service.ntsRightsProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.RightsProcessor">
-        <property name="successProcessor" ref="df.service.rhTaxProcessor"/>
-        <property name="failureProcessor" ref="df.service.deleteUsageProcessor"/>
+        <property name="usageStatus" value="WORK_FOUND"/>
+        <property name="successProcessor" ref="df.service.ntsRhTaxProcessor"/>
+        <property name="failureProcessor" ref="df.service.ntsDeleteUsageProcessor"/>
     </bean>
 </beans>

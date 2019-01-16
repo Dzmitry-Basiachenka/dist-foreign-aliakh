@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.chain.processor;
 
 import com.copyright.rup.dist.foreign.domain.Usage;
-import com.copyright.rup.dist.foreign.service.api.IChainProcessor;
+import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 
 /**
  * Abstract implementation of {@link IChainProcessor}.
