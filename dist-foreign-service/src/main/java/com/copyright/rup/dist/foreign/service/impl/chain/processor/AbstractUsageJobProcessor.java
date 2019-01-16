@@ -47,7 +47,7 @@ public abstract class AbstractUsageJobProcessor extends AbstractUsageChainProces
         }
     }
 
-    void setUsageStatus(UsageStatusEnum usageStatus) {
+    public void setUsageStatus(UsageStatusEnum usageStatus) {
         this.usageStatus = usageStatus;
     }
 
