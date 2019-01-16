@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.service.api;
+package com.copyright.rup.dist.foreign.service.api.processor;
 
 /**
  * Enum that enumerates available job processors.

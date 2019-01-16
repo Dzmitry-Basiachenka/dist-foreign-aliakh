@@ -1,8 +1,6 @@
 package com.copyright.rup.dist.foreign.service.impl.quartz;
 
-import com.copyright.rup.dist.foreign.domain.Usage;
-import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
-import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
+import com.copyright.rup.dist.foreign.service.api.IRightsService;
 
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.JobExecutionContext;
@@ -11,23 +9,27 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 
 /**
- * Quartz job to get grants from RMS.
+ * Quartz job to update rights for SENT_FOR_RA usages.
  * <p/>
- * Copyright (C) 2018 copyright.com
+ * Copyright (C) 2019 copyright.com
  * <p/>
- * Date: 04/24/2018
+ * Date: 01/15/2019
  *
- * @author Aliaksandr Liakh
+ * @author Uladzislau Shalamitski
  */
 @DisallowConcurrentExecution
 @Component
-public class GetRightsJob extends QuartzJobBean {
+public class GetRightsSentForRaJob extends QuartzJobBean {
 
     @Autowired
-    private IChainExecutor<Usage> executor;
+    private IRightsService rightsService;
 
     @Override
     public void executeInternal(JobExecutionContext context) {
-        executor.execute(ChainProcessorTypeEnum.RIGHTS);
+        rightsService.updateRightsSentForRaUsages();
+    }
+
+    void setRightsService(IRightsService rightsService) {
+        this.rightsService = rightsService;
     }
 }

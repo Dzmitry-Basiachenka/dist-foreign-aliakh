@@ -129,7 +129,9 @@ public class UsageRepositoryIntegrationTest {
     public void testInsert() {
         String usageId = RupPersistUtils.generateUuid();
         usageRepository.insert(buildUsage(usageId, USAGE_BATCH_ID_1));
-        Usage usage = usageRepository.findByIds(Collections.singletonList(usageId)).get(0);
+        List<Usage> usages = usageRepository.findByIds(Collections.singletonList(usageId));
+        assertEquals(1, CollectionUtils.size(usages));
+        Usage usage = usages.get(0);
         assertNotNull(usage);
         assertEquals(usageId, usage.getId());
         assertEquals(SCENARIO_ID, usage.getScenarioId());
@@ -558,7 +560,9 @@ public class UsageRepositoryIntegrationTest {
 
     @Test
     public void testAddToScenario() {
-        Usage usage = usageRepository.findByIds(Collections.singletonList(USAGE_ID_9)).get(0);
+        List<Usage> usages = usageRepository.findByIds(Collections.singletonList(USAGE_ID_9));
+        assertEquals(1, CollectionUtils.size(usages));
+        Usage usage = usages.get(0);
         verifyUsage(usage, UsageStatusEnum.ELIGIBLE, null, StoredEntity.DEFAULT_USER, null);
         usage.getPayee().setAccountNumber(2000017004L);
         usage.setStatus(UsageStatusEnum.LOCKED);
@@ -570,8 +574,9 @@ public class UsageRepositoryIntegrationTest {
         usage.setNetAmount(netAmount);
         usage.setServiceFee(SERVICE_FEE);
         usageRepository.addToScenario(Collections.singletonList(usage));
-        Usage updatedUsage = usageRepository.findByIds(Collections.singletonList(USAGE_ID_9)).get(0);
-        verifyUsage(updatedUsage, UsageStatusEnum.LOCKED, SCENARIO_ID, USER_NAME, 2000017004L);
+        usages = usageRepository.findByIds(Collections.singletonList(USAGE_ID_9));
+        assertEquals(1, CollectionUtils.size(usages));
+        verifyUsage(usages.get(0), UsageStatusEnum.LOCKED, SCENARIO_ID, USER_NAME, 2000017004L);
         assertEquals(SERVICE_FEE, usage.getServiceFee());
         assertEquals(serviceFeeAmount, usage.getServiceFeeAmount());
         assertEquals(netAmount, usage.getNetAmount());
@@ -579,8 +584,9 @@ public class UsageRepositoryIntegrationTest {
 
     @Test
     public void testDeleteFromScenario() {
-        verifyUsage(usageRepository.findByIds(Collections.singletonList(USAGE_ID_8)).get(0), UsageStatusEnum.LOCKED,
-            SCENARIO_ID, StoredEntity.DEFAULT_USER, 1000002859L);
+        List<Usage> usages = usageRepository.findByIds(Collections.singletonList(USAGE_ID_8));
+        assertEquals(1, CollectionUtils.size(usages));
+        verifyUsage(usages.get(0), UsageStatusEnum.LOCKED, SCENARIO_ID, StoredEntity.DEFAULT_USER, 1000002859L);
         usageRepository.deleteFromScenario(SCENARIO_ID, USER_NAME);
         verifyUsageExcludedFromScenario(usageRepository.findByIds(Collections.singletonList(USAGE_ID_8)).get(0));
     }
@@ -857,6 +863,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     public void testUpdateStatusWithUsageIds() {
         List<Usage> usages = usageRepository.findByIds(Arrays.asList(USAGE_ID_4, USAGE_ID_6));
+        assertEquals(2, CollectionUtils.size(usages));
         Usage usage1 = usages.get(0);
         assertEquals(UsageStatusEnum.SENT_FOR_RA, usage1.getStatus());
         assertEquals(USER_NAME, usage1.getUpdateUser());
@@ -865,6 +872,7 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(USER_NAME, usage2.getUpdateUser());
         usageRepository.updateStatus(ImmutableSet.of(usage1.getId(), usage2.getId()), UsageStatusEnum.RH_NOT_FOUND);
         usages = usageRepository.findByIds(Arrays.asList(USAGE_ID_4, USAGE_ID_6));
+        assertEquals(2, CollectionUtils.size(usages));
         usage1 = usages.get(0);
         assertEquals(UsageStatusEnum.RH_NOT_FOUND, usage1.getStatus());
         assertEquals(StoredEntity.DEFAULT_USER, usage1.getUpdateUser());
@@ -876,6 +884,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     public void testUpdateStatusAndRhAccountNumber() {
         List<Usage> usages = usageRepository.findByIds(Arrays.asList(USAGE_ID_4, USAGE_ID_6));
+        assertEquals(2, CollectionUtils.size(usages));
         Usage usage1 = usages.get(0);
         assertEquals(UsageStatusEnum.SENT_FOR_RA, usage1.getStatus());
         assertNull(usage1.getRightsholder().getAccountNumber());
@@ -885,6 +894,7 @@ public class UsageRepositoryIntegrationTest {
         usageRepository.updateStatusAndRhAccountNumber(ImmutableSet.of(usage1.getId(), usage2.getId()),
             UsageStatusEnum.ELIGIBLE, RH_ACCOUNT_NUMBER);
         usages = usageRepository.findByIds(Arrays.asList(USAGE_ID_4, USAGE_ID_6));
+        assertEquals(2, CollectionUtils.size(usages));
         usage1 = usages.get(0);
         assertEquals(UsageStatusEnum.ELIGIBLE, usage1.getStatus());
         assertEquals(RH_ACCOUNT_NUMBER, usage1.getRightsholder().getAccountNumber());
@@ -895,7 +905,9 @@ public class UsageRepositoryIntegrationTest {
 
     @Test
     public void testUpdateRhPayeeAndAmounts() {
-        Usage usage = usageRepository.findByIds(Collections.singletonList(USAGE_ID_8)).get(0);
+        List<Usage> usages = usageRepository.findByIds(Collections.singletonList(USAGE_ID_8));
+        assertEquals(1, CollectionUtils.size(usages));
+        Usage usage = usages.get(0);
         assertEquals(1000002859L, usage.getRightsholder().getAccountNumber(), 0);
         assertEquals(new BigDecimal("16437.4000000000"), usage.getGrossAmount());
         assertEquals(new BigDecimal("11177.4000000000"), usage.getNetAmount());
@@ -906,7 +918,9 @@ public class UsageRepositoryIntegrationTest {
         usage.setNetAmount(new BigDecimal("13807.4000000000"));
         usage.setServiceFeeAmount(new BigDecimal("2630.0000000000"));
         usageRepository.update(Collections.singletonList(usage));
-        usage = usageRepository.findByIds(Collections.singletonList(USAGE_ID_8)).get(0);
+        usages = usageRepository.findByIds(Collections.singletonList(USAGE_ID_8));
+        assertEquals(1, CollectionUtils.size(usages));
+        usage = usages.get(0);
         assertEquals(1000000001L, usage.getRightsholder().getAccountNumber(), 0);
         assertEquals(new BigDecimal("13807.4000000000"), usage.getNetAmount());
         assertEquals(new BigDecimal("2630.0000000000"), usage.getServiceFeeAmount());
@@ -916,7 +930,9 @@ public class UsageRepositoryIntegrationTest {
 
     @Test
     public void testUpdateToNtsWithdrawn() {
-        Usage usage = usageRepository.findByIds(Collections.singletonList(USAGE_ID_20)).get(0);
+        List<Usage> usages = usageRepository.findByIds(Collections.singletonList(USAGE_ID_20));
+        assertEquals(1, CollectionUtils.size(usages));
+        Usage usage = usages.get(0);
         assertNotNull(usage);
         assertEquals(USAGE_ID_20, usage.getId());
         assertEquals(PRODUCT_FAMILY_FAS, usage.getProductFamily());
@@ -924,7 +940,9 @@ public class UsageRepositoryIntegrationTest {
         usage.setProductFamily(FdaConstants.NTS_PRODUCT_FAMILY);
         usage.setStatus(UsageStatusEnum.NTS_WITHDRAWN);
         usageRepository.updateToNtsWithdrawn(usage);
-        Usage actualUsage = usageRepository.findByIds(Collections.singletonList(usage.getId())).get(0);
+        usages = usageRepository.findByIds(Collections.singletonList(usage.getId()));
+        assertEquals(1, CollectionUtils.size(usages));
+        Usage actualUsage = usages.get(0);
         assertEquals(FdaConstants.NTS_PRODUCT_FAMILY, actualUsage.getProductFamily());
         assertEquals(UsageStatusEnum.NTS_WITHDRAWN, actualUsage.getStatus());
     }
@@ -935,12 +953,16 @@ public class UsageRepositoryIntegrationTest {
         String usageId2 = "9c07f6dd-382e-4cbb-8cd1-ab9f51413e0a";
         String title1 = "Title1";
         String title2 = "Title2";
-        Usage usage1 = usageRepository.findByIds(Collections.singletonList(usageId1)).get(0);
+        List<Usage> usages = usageRepository.findByIds(Collections.singletonList(usageId1));
+        assertEquals(1, CollectionUtils.size(usages));
+        Usage usage1 = usages.get(0);
         assertEquals(UsageStatusEnum.WORK_RESEARCH, usage1.getStatus());
         assertEquals(WORK_TITLE, usage1.getWorkTitle());
         assertNull(usage1.getSystemTitle());
         assertNull(usage1.getWrWrkInst());
-        Usage usage2 = usageRepository.findByIds(Collections.singletonList(usageId2)).get(0);
+        usages = usageRepository.findByIds(Collections.singletonList(usageId2));
+        assertEquals(1, CollectionUtils.size(usages));
+        Usage usage2 = usages.get(0);
         assertEquals(UsageStatusEnum.WORK_RESEARCH, usage2.getStatus());
         assertEquals(WORK_TITLE, usage2.getWorkTitle());
         assertNull(usage2.getSystemTitle());
@@ -954,12 +976,16 @@ public class UsageRepositoryIntegrationTest {
         researchedUsage2.setSystemTitle(title2);
         researchedUsage2.setWrWrkInst(854030733L);
         usageRepository.updateResearchedUsages(Lists.newArrayList(researchedUsage1, researchedUsage2));
-        usage1 = usageRepository.findByIds(Collections.singletonList(usageId1)).get(0);
+        usages = usageRepository.findByIds(Collections.singletonList(usageId1));
+        assertEquals(1, CollectionUtils.size(usages));
+        usage1 = usages.get(0);
         assertEquals(UsageStatusEnum.WORK_FOUND, usage1.getStatus());
         assertEquals(WORK_TITLE, usage1.getWorkTitle());
         assertEquals(title1, usage1.getSystemTitle());
         assertEquals(180382916L, usage1.getWrWrkInst().longValue());
-        usage2 = usageRepository.findByIds(Collections.singletonList(usageId2)).get(0);
+        usages = usageRepository.findByIds(Collections.singletonList(usageId2));
+        assertEquals(1, CollectionUtils.size(usages));
+        usage2 = usages.get(0);
         assertEquals(UsageStatusEnum.WORK_FOUND, usage2.getStatus());
         assertEquals(WORK_TITLE, usage2.getWorkTitle());
         assertEquals(title2, usage2.getSystemTitle());

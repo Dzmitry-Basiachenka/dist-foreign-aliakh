@@ -45,6 +45,7 @@ public class RhTaxProcessorTest {
         usageServiceMock = createMock(IUsageService.class);
         rhTaxProcessor.setRhTaxProducer(rhTaxProducerMock);
         rhTaxProcessor.setUsageService(usageServiceMock);
+        rhTaxProcessor.setUsageStatus(UsageStatusEnum.RH_FOUND);
     }
 
     @Test
@@ -69,7 +70,7 @@ public class RhTaxProcessorTest {
         rhTaxProducerMock.send(capture(usageCapture2));
         expectLastCall().once();
         replay(usageServiceMock, rhTaxProducerMock);
-        rhTaxProcessor.process("NTS");
+        rhTaxProcessor.jobProcess("NTS");
         verify(usageServiceMock, rhTaxProducerMock);
         assertEquals(usageCapture1.getValue(), rhFoundUsages.get(0));
         assertEquals(usageCapture2.getValue(), rhFoundUsages.get(1));

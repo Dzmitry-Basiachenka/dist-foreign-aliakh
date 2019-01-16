@@ -3,7 +3,7 @@ package com.copyright.rup.dist.foreign.service.impl.eligibility;
 import com.copyright.rup.dist.common.integration.camel.IConsumer;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
-import com.copyright.rup.dist.foreign.service.api.IChainProcessor;
+import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -28,7 +28,7 @@ public class RhEligibilityConsumer implements IConsumer<Usage> {
     private IPrmIntegrationService prmIntegrationService;
 
     @Autowired
-    @Qualifier("df.service.rhEligibilityProcessor")
+    @Qualifier("df.service.ntsRhEligibilityProcessor")
     private IChainProcessor<Usage> rhEligibilityProcessor;
 
     @Override
@@ -37,7 +37,7 @@ public class RhEligibilityConsumer implements IConsumer<Usage> {
         if (Objects.nonNull(usage)) {
             boolean isEligible =
                 prmIntegrationService.isRightsholderEligibleForNtsDistribution(usage.getRightsholder().getId());
-            rhEligibilityProcessor.processResult(usage, (obj) -> isEligible);
+            rhEligibilityProcessor.executeNextProcessor(usage, (obj) -> isEligible);
         }
     }
 

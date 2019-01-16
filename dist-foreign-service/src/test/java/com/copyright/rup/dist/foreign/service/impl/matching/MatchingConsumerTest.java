@@ -13,7 +13,7 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
-import com.copyright.rup.dist.foreign.service.api.IChainProcessor;
+import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -46,7 +46,7 @@ public class MatchingConsumerTest {
     @Test
     public void testConsumeUsageWithoutTitleAndStandardNumber() {
         Usage usage = buildUsage();
-        matchingProcessor.processResult(eq(usage), anyObject());
+        matchingProcessor.executeNextProcessor(eq(usage), anyObject());
         expectLastCall().once();
         replay(matchingProcessor);
         consumer.consume(usage);
@@ -58,7 +58,7 @@ public class MatchingConsumerTest {
     @Test
     public void testConsumeUsageWithValidTitle() {
         Usage usage = buildUsageWithTitle(VALID_TITLE);
-        matchingProcessor.processResult(eq(usage), anyObject());
+        matchingProcessor.executeNextProcessor(eq(usage), anyObject());
         expectLastCall().once();
         replay(matchingProcessor);
         consumer.consume(usage);
@@ -70,7 +70,7 @@ public class MatchingConsumerTest {
     @Test
     public void testConsumeUsageWithInvalidTitle() {
         Usage usage = buildUsageWithTitle("INVALID TITLE");
-        matchingProcessor.processResult(eq(usage), anyObject());
+        matchingProcessor.executeNextProcessor(eq(usage), anyObject());
         expectLastCall().once();
         replay(matchingProcessor);
         consumer.consume(usage);
@@ -82,7 +82,7 @@ public class MatchingConsumerTest {
     @Test
     public void testConsumeUsageWithValidStandardNumber() {
         Usage usage = buildUsageWithStandardNumber(VALID_STANDARD_NUMBER);
-        matchingProcessor.processResult(eq(usage), anyObject());
+        matchingProcessor.executeNextProcessor(eq(usage), anyObject());
         expectLastCall().once();
         replay(matchingProcessor);
         consumer.consume(usage);
@@ -94,7 +94,7 @@ public class MatchingConsumerTest {
     @Test
     public void testConsumeUsageWithInvalidStandardNumber() {
         Usage usage = buildUsageWithStandardNumber("INVALID SN");
-        matchingProcessor.processResult(eq(usage), anyObject());
+        matchingProcessor.executeNextProcessor(eq(usage), anyObject());
         expectLastCall().once();
         replay(matchingProcessor);
         consumer.consume(usage);

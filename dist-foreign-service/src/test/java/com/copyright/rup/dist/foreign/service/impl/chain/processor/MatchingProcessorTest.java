@@ -10,12 +10,11 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.integration.camel.IProducer;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.service.api.IChainProcessor;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
 
@@ -44,25 +43,26 @@ public class MatchingProcessorTest {
         successProcessor = createMock(IChainProcessor.class);
         failureProcessor = createMock(IChainProcessor.class);
         usageService = createMock(IUsageService.class);
-        Whitebox.setInternalState(processor, "matchingProducer", matchingProducer);
-        Whitebox.setInternalState(processor, "usageService", usageService);
-        Whitebox.setInternalState(processor, "successProcessor", successProcessor);
-        Whitebox.setInternalState(processor, "failureProcessor", failureProcessor);
+        processor.setUsageService(usageService);
+        processor.setMatchingProducer(matchingProducer);
+        processor.setSuccessProcessor(successProcessor);
+        processor.setFailureProcessor(failureProcessor);
+        processor.setUsageStatus(UsageStatusEnum.NEW);
     }
 
     @Test
     public void testProcess() {
-        Usage firstUsage = buildUsage(UsageStatusEnum.NEW);
-        Usage secondUsage = buildUsage(UsageStatusEnum.NEW);
+        Usage usage1 = buildUsage(UsageStatusEnum.NEW);
+        Usage usage2 = buildUsage(UsageStatusEnum.NEW);
         expect(usageService.getUsagesByStatusAndProductFamily(UsageStatusEnum.NEW, "FAS"))
-            .andReturn(Arrays.asList(firstUsage, secondUsage))
+            .andReturn(Arrays.asList(usage1, usage2))
             .once();
-        matchingProducer.send(firstUsage);
+        matchingProducer.send(usage1);
         expectLastCall().once();
-        matchingProducer.send(secondUsage);
+        matchingProducer.send(usage2);
         expectLastCall().once();
         replay(usageService, matchingProducer);
-        processor.process("FAS");
+        processor.jobProcess("FAS");
         verify(usageService, matchingProducer);
     }
 
@@ -82,7 +82,7 @@ public class MatchingProcessorTest {
         successProcessor.process(usage);
         expectLastCall().once();
         replay(successProcessor, failureProcessor);
-        processor.processResult(usage, usage1 -> UsageStatusEnum.WORK_FOUND == usage1.getStatus());
+        processor.executeNextProcessor(usage, usage1 -> UsageStatusEnum.WORK_FOUND == usage1.getStatus());
         verify(successProcessor, failureProcessor);
     }
 
@@ -92,7 +92,7 @@ public class MatchingProcessorTest {
         failureProcessor.process(usage);
         expectLastCall().once();
         replay(successProcessor, failureProcessor);
-        processor.processResult(usage, usage1 -> UsageStatusEnum.WORK_FOUND == usage1.getStatus());
+        processor.executeNextProcessor(usage, usage1 -> UsageStatusEnum.WORK_FOUND == usage1.getStatus());
         verify(successProcessor, failureProcessor);
     }
 

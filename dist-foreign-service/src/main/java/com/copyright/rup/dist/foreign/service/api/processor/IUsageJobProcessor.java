@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.service.api;
+package com.copyright.rup.dist.foreign.service.api.processor;
 
 /**
  * Interface for usage processors that will be run by job.
@@ -16,5 +16,5 @@ public interface IUsageJobProcessor {
      *
      * @param productFamily product family
      */
-    void process(String productFamily);
+    void jobProcess(String productFamily);
 }
