@@ -1,3 +1,9 @@
+4.1.19
+-
+* B-47646 Tech Debt: FDA: change visibility modifier of setter in AbstractUsageJobProcessor
+* B-47646 Tech Debt: FDA: make changes based on comments in CR-DIST-FOREIGN-85
+* B-47646 Tech Debt: FDA: resolve Security Vulnerability in camel-spring
+
 4.1.18
 -
 * B-46034 FDA: Exclude Ceased/Lost/NTS Refused RHs from the NTS proxy: Implement Job for handling ISRHDISTINELIGIBLE flag for NTS usages
