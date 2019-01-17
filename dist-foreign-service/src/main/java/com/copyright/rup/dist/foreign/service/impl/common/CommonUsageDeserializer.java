@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.service.impl.matching;
+package com.copyright.rup.dist.foreign.service.impl.common;
 
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.integration.util.JsonUtils;
@@ -15,10 +15,12 @@ import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Objects;
 
 /**
- * Implementation of {@link JsonDeserializer} to get {@link Usage} for matching.
+ * Implementation of {@link JsonDeserializer} to get {@link Usage}.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -26,8 +28,8 @@ import java.math.RoundingMode;
  *
  * @author Ihar Suvorau
  */
-@Component("df.service.matchingDeserializer")
-public class MatchingDeserializer extends JsonDeserializer<Usage> {
+@Component("df.service.commonUsageDeserializer")
+public class CommonUsageDeserializer extends JsonDeserializer<Usage> {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
@@ -37,7 +39,7 @@ public class MatchingDeserializer extends JsonDeserializer<Usage> {
         try {
             usage = deserializeUsage(parser.readValueAsTree());
         } catch (JsonParseException e) {
-            LOGGER.warn("Deserialize PI matching message. Failed", e);
+            LOGGER.warn("Deserialize Usage message. Failed", e);
         }
         return usage;
     }
@@ -45,12 +47,16 @@ public class MatchingDeserializer extends JsonDeserializer<Usage> {
     private Usage deserializeUsage(JsonNode jsonNode) {
         Usage usage = new Usage();
         usage.setId(JsonUtils.getStringValue(jsonNode.get("id")));
+        usage.getRightsholder().setId(JsonUtils.getStringValue(jsonNode.get("rh_uid")));
+        usage.getRightsholder().setAccountNumber(JsonUtils.getLongValue(jsonNode.get("rh_account_number")));
         usage.setStandardNumber(JsonUtils.getStringValue(jsonNode.get("standard_number")));
         usage.setWorkTitle(JsonUtils.getStringValue(jsonNode.get("work_title")));
+        usage.setSystemTitle(JsonUtils.getStringValue(jsonNode.get("system_title")));
+        usage.setWrWrkInst(JsonUtils.getLongValue(jsonNode.get("wr_wrk_inst")));
         usage.setBatchId(JsonUtils.getStringValue(jsonNode.get("batch_id")));
-        usage.setStatus(UsageStatusEnum.valueOf(JsonUtils.getStringValue(jsonNode.get("status"))));
         usage.setGrossAmount(
             JsonUtils.getBigDecimalValue(jsonNode.get("gross_amount")).setScale(2, RoundingMode.HALF_UP));
+        usage.setStatus(UsageStatusEnum.valueOf(JsonUtils.getStringValue(jsonNode.get("status"))));
         usage.setProductFamily(JsonUtils.getStringValue(jsonNode.get("product_family")));
         return usage;
     }
