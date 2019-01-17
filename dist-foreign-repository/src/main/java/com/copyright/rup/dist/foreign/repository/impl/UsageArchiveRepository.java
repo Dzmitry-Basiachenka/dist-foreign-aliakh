@@ -15,6 +15,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.impl.csv.ScenarioUsagesCsvReportHandler;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -38,6 +39,7 @@ import java.util.Set;
 @Repository
 public class UsageArchiveRepository extends BaseRepository implements IUsageArchiveRepository {
 
+    private static final int BATCH_SIZE = 32000;
     private static final String PAGEABLE_KEY = "pageable";
     private static final String SORT_KEY = "sort";
     private static final String SEARCH_VALUE_KEY = "searchValue";
@@ -52,6 +54,12 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
     @Override
     public void deleteByBatchId(String batchId) {
         delete("IUsageArchiveMapper.deleteByBatchId", Objects.requireNonNull(batchId));
+    }
+
+    @Override
+    public void deleteByIds(List<String> usageIds) {
+        Iterables.partition(Objects.requireNonNull(usageIds), BATCH_SIZE)
+            .forEach(partition -> delete("IUsageArchiveMapper.deleteByIds", partition));
     }
 
     @Override

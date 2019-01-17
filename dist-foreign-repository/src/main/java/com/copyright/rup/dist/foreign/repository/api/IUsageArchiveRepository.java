@@ -38,6 +38,13 @@ public interface IUsageArchiveRepository {
     void deleteByBatchId(String batchId);
 
     /**
+     * Deletes archived {@link Usage}s by their identifiers.
+     *
+     * @param usageIds list of usage identifiers
+     */
+    void deleteByIds(List<String> usageIds);
+
+    /**
      * Gets list of {@link RightsholderTotalsHolder}s based on {@link com.copyright.rup.dist.foreign.domain.Scenario}
      * identifier.
      *
