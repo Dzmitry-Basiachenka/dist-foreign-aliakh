@@ -68,6 +68,14 @@
         where df_usage_batch_uid = #{batchId}
     </delete>
 
+    <delete id="deleteByIds" parameterType="list">
+        delete from ${schema}.df_usage_archive
+        where df_usage_archive_uid in
+        <foreach collection="list" item="usageId" open="(" close=")" separator=",">
+            #{usageId}
+        </foreach>
+    </delete>
+
     <select id="findRightsholderTotalsHolderCountByScenarioId" parameterType="map" resultType="int">
         select count(1)
         from (

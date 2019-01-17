@@ -39,6 +39,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -138,6 +139,17 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertTrue(CollectionUtils.isEmpty(
             usageArchiveRepository.findByIdAndStatus(Collections.singletonList("5f90f7d7-566f-402a-975b-d54466862704"),
                 UsageStatusEnum.ARCHIVED)));
+    }
+
+    @Test
+    public void testDeleteByIds() {
+        List<String> usageIds =
+            Arrays.asList("5f90f7d7-566f-402a-975b-d54466862704", "a9fac1e1-5a34-416b-9ecb-f2615b24d1c1");
+        assertTrue(
+            CollectionUtils.isNotEmpty(usageArchiveRepository.findByIdAndStatus(usageIds, UsageStatusEnum.ARCHIVED)));
+        usageArchiveRepository.deleteByIds(usageIds);
+        assertTrue(
+            CollectionUtils.isEmpty(usageArchiveRepository.findByIdAndStatus(usageIds, UsageStatusEnum.ARCHIVED)));
     }
 
     @Test
