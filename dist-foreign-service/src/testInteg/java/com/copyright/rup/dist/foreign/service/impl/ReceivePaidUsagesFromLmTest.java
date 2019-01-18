@@ -10,21 +10,23 @@ import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.service.impl.mock.PaidUsageConsumerMock;
+import com.copyright.rup.dist.foreign.service.impl.mock.SqsClientMock;
 
-import org.apache.camel.Produce;
-import org.apache.camel.ProducerTemplate;
 import org.apache.commons.collections.CollectionUtils;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -42,7 +44,7 @@ import java.util.concurrent.TimeUnit;
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
 @TestPropertySource(properties = {"test.liquibase.changelog=receive-paid-usages-from-lm-data-init.groovy"})
-@Transactional
+@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 public class ReceivePaidUsagesFromLmTest {
 
     private static final BigDecimal AMOUNT_2000 = new BigDecimal("2000.0000000000");
@@ -55,13 +57,18 @@ public class ReceivePaidUsagesFromLmTest {
     private static final BigDecimal AMOUNT_160 = new BigDecimal("160.0000000000");
     private static final BigDecimal AMOUNT_80 = new BigDecimal("80.0000000000");
 
-    @Produce
-    private ProducerTemplate template;
     @Autowired
     @Qualifier("df.service.paidUsageConsumer")
     private PaidUsageConsumerMock paidUsageConsumer;
     @Autowired
     private IUsageArchiveRepository usageArchiveRepository;
+    @Autowired
+    private SqsClientMock sqsClientMock;
+
+    @Before
+    public void reset() {
+        sqsClientMock.reset();
+    }
 
     @Test
     public void testReceivePaidUsagesFromLm() throws InterruptedException {
@@ -109,11 +116,11 @@ public class ReceivePaidUsagesFromLmTest {
             buildPaidUsage("fbb61f5e-35df-4081-b975-3d88e2a0af78", 1000009522L, AMOUNT_840, AMOUNT_160, AMOUNT_1000));
     }
 
-    @Test
     /**
      * Test case to verify consuming logic when received paid information for SENT_TO_LM, ARCHIVED and not existing
      * usages in one message.
      */
+    @Test
     public void testReceivePaidInformationFromLm() throws InterruptedException {
         assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaidIds()));
         expectReceivePaidUsages("lm/paid_usages.json");
@@ -173,10 +180,10 @@ public class ReceivePaidUsagesFromLmTest {
     }
 
     private void expectReceivePaidUsages(String messageFilepath) throws InterruptedException {
-        template.setDefaultEndpointUri("direct:queue:Consumer.df.VirtualTopic.sf.processor.detail.paid");
         CountDownLatch latch = new CountDownLatch(1);
         paidUsageConsumer.setLatch(latch);
-        template.sendBodyAndHeader(TestUtils.fileToString(this.getClass(), messageFilepath), "source", "FDA");
+        sqsClientMock.prepareReceivedMessage(TestUtils.fileToString(this.getClass(), messageFilepath),
+            Collections.EMPTY_MAP, "df-consumer-sf-detail-paid");
         assertTrue(latch.await(10, TimeUnit.SECONDS));
     }
 }

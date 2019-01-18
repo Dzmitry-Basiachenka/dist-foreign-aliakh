@@ -32,8 +32,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import org.apache.camel.Produce;
-import org.apache.camel.ProducerTemplate;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.builder.Builder;
@@ -93,8 +91,6 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
     private AsyncRestTemplate asyncRestTemplate;
     @Value("$RUP{dist.foreign.rest.prm.rollups.async}")
     private boolean prmRollUpAsync;
-    @Produce
-    private ProducerTemplate producerTemplate;
     @Autowired
     @Qualifier("df.service.paidUsageConsumer")
     private PaidUsageConsumerMock paidUsageConsumer;
@@ -310,7 +306,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
         }
 
         void sendScenarioToLm() {
-            sqsClientMock.prepareSendMessageExpectations("fda-test-sf-detail.fifo",
+            sqsClientMock.prepareSendMessageExpectations("sf-detail.fifo",
                 TestUtils.fileToString(this.getClass(), expectedLmDetailsJsonFile), Collections.EMPTY_LIST,
                 ImmutableMap.of("source", "FDA"));
             scenarioService.sendToLm(scenario);
@@ -323,11 +319,10 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
         }
 
         private void expectReceivePaidUsages() throws InterruptedException {
-            producerTemplate.setDefaultEndpointUri("direct:queue:Consumer.df.VirtualTopic.sf.processor.detail.paid");
             CountDownLatch latch = new CountDownLatch(1);
             paidUsageConsumer.setLatch(latch);
             String body = TestUtils.fileToString(this.getClass(), expectedPaidUsagesJsonFile);
-            producerTemplate.sendBodyAndHeader(body, "source", "FDA");
+            sqsClientMock.prepareReceivedMessage(body, Collections.EMPTY_MAP, "df-consumer-sf-detail-paid");
             assertTrue(latch.await(10, TimeUnit.SECONDS));
         }
 

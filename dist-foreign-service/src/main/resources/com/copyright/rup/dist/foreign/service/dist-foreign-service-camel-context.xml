@@ -8,10 +8,12 @@
             http://camel.apache.org/schema/spring
             http://camel.apache.org/schema/spring/camel-spring-2.18.3.xsd">
 
-    <bean id="df.service.usageMarshaller" class="com.copyright.rup.dist.foreign.service.impl.common.CommonUsageMarshaller" />
+    <bean id="df.service.usageMarshaller"
+          class="com.copyright.rup.dist.foreign.service.impl.common.CommonUsageMarshaller"/>
 
-    <bean id="df.service.usageUnmarshaller" class="com.copyright.rup.dist.foreign.service.impl.common.CommonUsageUnmarshaller" />
-   
+    <bean id="df.service.usageUnmarshaller"
+          class="com.copyright.rup.dist.foreign.service.impl.common.CommonUsageUnmarshaller"/>
+
     <bean id="df.service.matchingMarshaller" parent="df.service.usageMarshaller">
         <property name="serializer" ref="df.service.commonUsageSerializer" />
     </bean>
@@ -62,6 +64,12 @@
         <property name="endPoint" value="direct:df.service.matching"/>
     </bean>
 
+    <bean id="df.service.paidUsageSubscriber"
+          class="com.copyright.rup.dist.foreign.service.impl.usage.paid.PaidUsageSubscriber">
+        <constructor-arg ref="df.service.lm.detail.paid.endpoint.topic"/>
+        <constructor-arg ref="df.service.lm.detail.paid.endpoint"/>
+    </bean>
+
     <bean id="defaultRedeliveryPolicy" class="org.apache.camel.processor.RedeliveryPolicy"
           p:maximumRedeliveries="$RUP{dist.foreign.broker.redelivery.count}"
           p:redeliveryDelay="$RUP{dist.foreign.broker.redelivery.delay}"
@@ -77,7 +85,11 @@
         <contextScan/>
         <template id="df.service.producerTemplate"/>
 
-        <endpoint id="df.service.lm.detail.paid.endpoint" uri="$RUP{dist.foreign.endpoint.lm.detail.paid}"/>
+        <endpoint id="df.service.lm.detail.paid.endpoint.topic"
+                  uri="aws-sns://$RUP{dist.foreign.aws.service.environment.prefix}-$RUP{dist.foreign.endpoint.lm.detail.paid.topic}?amazonSNSClient=#df.integration.sns.client"/>
+
+        <endpoint id="df.service.lm.detail.paid.endpoint"
+                  uri="aws-sqs://$RUP{dist.foreign.aws.service.environment.prefix}-$RUP{dist.foreign.endpoint.lm.detail.paid}?amazonSQSClient=#df.integration.sqs.client&amp;messageAttributeNames=All"/>
 
         <endpoint id="df.service.internal.matching.endpoint" uri="direct:df.service.matching"/>
         <endpoint id="df.service.matching.endpoint" uri="$RUP{dist.foreign.endpoint.matching}"/>
@@ -93,17 +105,23 @@
 
         <route id="df.service.paidUsageRoute">
             <from ref="df.service.lm.detail.paid.endpoint"/>
-            <choice>
-                <when>
-                    <simple>'FDA' == ${headers.source}</simple>
-                    <log message="Consume paid usages from LM. Source=${headers.source}, Body: ${body}"
-                         loggingLevel="DEBUG" logName="com.copyright.rup.dist"/>
-                    <unmarshal>
-                        <custom ref="df.service.paidUsageUnmarshaller"/>
-                    </unmarshal>
-                    <bean ref="df.service.paidUsageConsumer"/>
-                </when>
-            </choice>
+            <!-- TODO {pliakh} replace converted with default Jackson unmarshaller -->
+            <bean ref="df.service.snsNotificationMessageConverter"/>
+            <log message="Consume paid usages from LM. Source=${headers.source}, Body: ${body}"
+                 loggingLevel="DEBUG" logName="com.copyright.rup.dist"/>
+            <unmarshal>
+                <custom ref="df.service.paidUsageUnmarshaller"/>
+            </unmarshal>
+            <bean ref="df.service.paidUsageConsumer"/>
+
+            <onException useOriginalMessage="true">
+                <exception>java.lang.Exception</exception>
+                <handled>
+                    <constant>true</constant>
+                </handled>
+                <log message="Exception during message processing. ExceptionMessage=${exception.message}, ExceptionStacktrace=${exception.stacktrace}, Body=${body}"
+                     loggingLevel="WARN" logName="com.copyright.rup.dist"/>
+            </onException>
         </route>
 
         <route id="df.service.matchingInternalRoute">

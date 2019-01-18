@@ -3,7 +3,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
 
-    <bean id="df.integration.sqs.client.configuration" class="com.copyright.rup.aws.RupClientConfiguration">
+    <bean id="df.integration.aws.client.configuration" class="com.copyright.rup.aws.RupClientConfiguration">
         <property name="connectionTimeout" value="$RUP{dist.foreign.aws.rup.client.connection.timeout.millis}"/>
         <property name="socketTimeout" value="$RUP{dist.foreign.aws.rup.client.socket.timeout.millis}"/>
         <property name="maxErrorRetry" value="$RUP{dist.foreign.aws.rup.client.max.error.retry}"/>
@@ -16,7 +16,7 @@
     </bean>
 
     <bean id="df.integration.sqs.client" class="com.copyright.rup.aws.services.sqs.RupAmazonSqsFactoryBean">
-        <property name="rupClientConfiguration" ref="df.integration.sqs.client.configuration"/>
+        <property name="rupClientConfiguration" ref="df.integration.aws.client.configuration"/>
         <property name="endpointConfiguration" ref="df.integration.sqs.endpoint.configuration"/>
     </bean>
 
