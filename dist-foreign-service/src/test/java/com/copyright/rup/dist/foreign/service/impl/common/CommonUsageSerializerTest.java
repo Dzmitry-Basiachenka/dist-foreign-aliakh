@@ -1,9 +1,10 @@
-package com.copyright.rup.dist.foreign.service.impl.rights;
+package com.copyright.rup.dist.foreign.service.impl.common;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
 
+import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
@@ -11,33 +12,29 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ser.DefaultSerializerProvider;
-import com.google.common.io.Resources;
-
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.io.StringWriter;
 import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
 
 /**
- * Verifies {@link RightsSerializer}.
+ * Verifies {@link CommonUsageSerializer}.
  * <p>
- * Copyright (C) 2017 copyright.com
+ * Copyright (C) 2019 copyright.com
  * <p>
- * Date: 06/09/17
+ * Date: 01/17/19
  *
- * @author Ihar Suvorau
+ * @author Uladzislau Shalamitski
  */
-public class RightsSerializerTest {
+public class CommonUsageSerializerTest {
 
-    private RightsSerializer rightsSerializer;
+    private CommonUsageSerializer serializer;
 
     @Before
     public void setUp() {
-        rightsSerializer = new RightsSerializer();
+        serializer = new CommonUsageSerializer();
     }
 
     @Test
@@ -45,31 +42,21 @@ public class RightsSerializerTest {
         StringWriter stringWriter = new StringWriter();
         JsonGenerator jsonGenerator = new JsonFactory().createGenerator(stringWriter);
         jsonGenerator.setPrettyPrinter(new DefaultPrettyPrinter());
-        rightsSerializer.serialize(buildUsage(), jsonGenerator, new DefaultSerializerProvider.Impl());
+        serializer.serialize(buildUsage(), jsonGenerator, new DefaultSerializerProvider.Impl());
         jsonGenerator.close();
         assertNotNull(stringWriter);
-        assertEquals(getFileAsString("rights_message.json"), stringWriter.toString());
+        assertEquals(StringUtils.strip(TestUtils.fileToString(this.getClass(), "usage_message.json")),
+            stringWriter.toString());
     }
 
     @Test
     public void testSerializeEmptyMessage() throws Exception {
         StringWriter stringWriter = new StringWriter();
         JsonGenerator jsonGenerator = new JsonFactory().createGenerator(stringWriter);
-        rightsSerializer.serialize(null, jsonGenerator, new DefaultSerializerProvider.Impl());
+        serializer.serialize(null, jsonGenerator, new DefaultSerializerProvider.Impl());
         jsonGenerator.close();
         assertNotNull(stringWriter);
         assertEquals("{}", stringWriter.toString());
-    }
-
-    private String getFileAsString(String resourceName) {
-        String result = null;
-        try {
-            result = Resources.toString(RightsSerializerTest.class.getResource(resourceName),
-                StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            fail();
-        }
-        return StringUtils.strip(result);
     }
 
     private Usage buildUsage() {
@@ -83,6 +70,14 @@ public class RightsSerializerTest {
         usage.setSystemTitle("True directions : living your sacred instructions");
         usage.setStatus(UsageStatusEnum.WORK_FOUND);
         usage.setProductFamily("NTS");
+        usage.setRightsholder(buildRightsholder());
         return usage;
+    }
+
+    private Rightsholder buildRightsholder() {
+        Rightsholder rightsholder = new Rightsholder();
+        rightsholder.setId("4c4d1354-bff2-4f70-987b-f996bade22ba");
+        rightsholder.setAccountNumber(2000017005L);
+        return rightsholder;
     }
 }
