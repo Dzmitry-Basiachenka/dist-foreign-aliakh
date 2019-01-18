@@ -53,7 +53,7 @@ public class SqsClientMock extends AmazonSQSClient {
         "  \"Type\" : \"Notification\"," +
         "  \"MessageId\" : \"%s\"," +
         "  \"TopicArn\" : \"arn:aws:sns:us-east-1:10101010101:lm-pdev-sf-detail-paid\"," +
-        "  \"Message\" : %s," +
+        "  \"Message\" : \"%s\"," +
         "  \"Timestamp\" : \"%s\"," +
         "  \"SignatureVersion\" : \"1\"," +
         "  \"Signature\" : \"signature\"," +
@@ -168,8 +168,8 @@ public class SqsClientMock extends AmazonSQSClient {
 
 
     private String buildSnsNotificationMessage(String body) {
-        return String.format(SNS_NOTIFICATION_MESSAGE_FORMAT, RupPersistUtils.generateUuid(), body,
-            OffsetDateTime.now().toString());
+        return String.format(SNS_NOTIFICATION_MESSAGE_FORMAT, RupPersistUtils.generateUuid(),
+            body.replace("\n", "").replace("\"", "\\\""), OffsetDateTime.now().toString());
     }
 
     private static class SqsMessage {
