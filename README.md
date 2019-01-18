@@ -1,3 +1,11 @@
+4.1.20
+-
+* B-46034 FDA: Exclude Ceased/Lost/NTS Refused RHs from the NTS proxy: make changes based on comments in CR-DIST-FOREIGN-86
+* B-46034 FDA: Exclude Ceased/Lost/NTS Refused RHs from the NTS proxy: make changes based on comments in CR-DIST-FOREIGN-86
+* B-47587 FDA: Utilize SQS/SNS for internal distribution apps communication: introduce subscriber for SQS SNS communication, adjust camel config to consume paid information from SQS queue
+* B-47646 Tech Debt: FDA: Implement repository method to delete archived usages
+* Revert "B-46034 FDA: Exclude Ceased/Lost/NTS Refused RHs from the NTS proxy: make changes based on comments in CR-DIST-FOREIGN-86"
+
 4.1.19
 -
 * B-47646 Tech Debt: FDA: change visibility modifier of setter in AbstractUsageJobProcessor
