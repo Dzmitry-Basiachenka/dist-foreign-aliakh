@@ -47,7 +47,7 @@ public class SendScenarioToLmTest {
     public void testSendToLm() {
         Scenario scenario = new Scenario();
         scenario.setId("4c014547-06f3-4840-94ff-6249730d537d");
-        sqsClientMock.prepareSendMessageExpectations("fda-test-sf-detail.fifo",
+        sqsClientMock.prepareSendMessageExpectations("sf-detail.fifo",
             TestUtils.fileToString(this.getClass(), "details/details_to_lm.json"), Collections.EMPTY_LIST,
             ImmutableMap.of("source", "FDA"));
         scenarioService.sendToLm(scenario);

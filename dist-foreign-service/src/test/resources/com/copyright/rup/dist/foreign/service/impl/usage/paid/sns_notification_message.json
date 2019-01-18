@@ -1,0 +1,21 @@
+{
+  "Type": "Notification",
+  "MessageId": "968b10f4-9e47-57ae-aa79-444db7c7213a",
+  "TopicArn": "arn:aws:sns:by-1:101001011:fda-test-sf-detail-paid",
+  "Message": "{\"details\":[{\"rh_account_number\":\"1000009256\"}]}",
+  "Timestamp": "2019-01-16T12:44:48.404Z",
+  "SignatureVersion": "1",
+  "Signature": "signature",
+  "SigningCertURL": "signature url",
+  "UnsubscribeURL": "unsubscribe url",
+  "MessageAttributes": {
+    "breadcrumbId": {
+      "Type": "String",
+      "Value": "ID-machinename-1547641307954-1-18"
+    },
+    "source": {
+      "Type": "String",
+      "Value": "FDA"
+    }
+  }
+}

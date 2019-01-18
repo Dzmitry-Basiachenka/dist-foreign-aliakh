@@ -39,7 +39,7 @@ public class PaidUsageDeserializer extends JsonDeserializer<List<PaidUsage>> {
             JsonNode detailsNode = tree.get("details");
             if (detailsNode.isArray()) {
                 for (JsonNode detailNode : detailsNode) {
-                    usages.add(deserializeLiability(detailNode));
+                    usages.add(deserializePaidUsage(detailNode));
                 }
             }
         } catch (JsonParseException e) {
@@ -48,7 +48,7 @@ public class PaidUsageDeserializer extends JsonDeserializer<List<PaidUsage>> {
         return usages;
     }
 
-    private PaidUsage deserializeLiability(JsonNode jsonNode) {
+    private PaidUsage deserializePaidUsage(JsonNode jsonNode) {
         PaidUsage usage = new PaidUsage();
         usage.getRightsholder().setAccountNumber(JsonUtils.getLongValueFromString(jsonNode.get("rh_account_number")));
         usage.getPayee().setAccountNumber(JsonUtils.getLongValueFromString(jsonNode.get("rollup_account_number")));

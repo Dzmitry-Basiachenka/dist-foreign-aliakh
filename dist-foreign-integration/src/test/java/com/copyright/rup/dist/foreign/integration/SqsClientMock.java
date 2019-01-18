@@ -17,6 +17,7 @@ public class SqsClientMock extends AmazonSQSClient {
 
     @Override
     public ListQueuesResult listQueues(ListQueuesRequest request) {
-        return new ListQueuesResult().withQueueUrls("aws.sqs.com/fda-test-sf-detail.fifo");
+        return new ListQueuesResult().withQueueUrls("aws.sqs.com/fda-test-sf-detail.fifo",
+            "aws.sqs.com/fda-test-df-consumer-sf-detail-paid");
     }
 }
