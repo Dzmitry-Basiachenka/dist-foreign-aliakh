@@ -1,0 +1,32 @@
+[
+  {
+    "id": "463e2239-1a36-41cc-9a51-ee2a80eae0c1",
+    "batchId": "56282dbc-2468-48d4-b926-93d3458a656a",
+    "scenarioId": "b1f0b236-3ae9-4a60-9fab-61db84199d6f",
+    "wrWrkInst": 123456783,
+    "workTitle": "Wissenschaft & Forschung Japan",
+    "systemTitle": "Wissenschaft & Forschung Japan",
+    "status": "ELIGIBLE",
+    "productFamily": "FAS",
+    "article": "DIN EN 779:2012",
+    "standardNumber": "2192-3559",
+    "publisher": "Network for Science",
+    "publicationDate": [
+      2016,
+      11,
+      3
+    ],
+    "market": "Doc Del",
+    "marketPeriodFrom": 2015,
+    "marketPeriodTo": 2017,
+    "author": "Philippe de Mézières",
+    "numberOfCopies": 155,
+    "reportedValue": 11.25,
+    "grossAmount": 54.4400000000,
+    "rightsholder": {
+      "id": "05c4714b-291d-4e38-ba4a-35307434acfb",
+      "name": "CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil",
+      "accountNumber": 7000813806
+    }
+  }
+]

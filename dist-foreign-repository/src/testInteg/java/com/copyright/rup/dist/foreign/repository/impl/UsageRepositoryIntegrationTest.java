@@ -6,12 +6,11 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import com.copyright.rup.common.persist.RupPersistUtils;
-import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
+import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
@@ -22,6 +21,9 @@ import com.copyright.rup.dist.foreign.domain.common.util.CalculationUtils;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -37,11 +39,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
@@ -72,12 +75,9 @@ public class UsageRepositoryIntegrationTest {
     private static final Long RH_ACCOUNT_NUMBER = 7000813806L;
     private static final LocalDate PAYMENT_DATE = LocalDate.of(2018, 12, 11);
     private static final Integer FISCAL_YEAR = 2019;
-    private static final String RH_ACCOUNT_NAME =
-        "CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil";
     private static final String RH_ACCOUNT_NAME_1 = "IEEE - Inst of Electrical and Electronics Engrs";
     private static final String RH_ACCOUNT_NAME_2 = "John Wiley & Sons - Books";
     private static final String RH_ACCOUNT_NAME_3 = "Kluwer Academic Publishers - Dordrecht";
-    private static final Long WR_WRK_INST = 123456783L;
     private static final String WORK_TITLE = "Wissenschaft & Forschung Japan";
     private static final String PRODUCT_FAMILY_FAS = "FAS";
     private static final String DETAIL_ID_KEY = "detailId";
@@ -126,34 +126,13 @@ public class UsageRepositoryIntegrationTest {
     private UsageRepository usageRepository;
 
     @Test
-    public void testInsert() {
-        String usageId = RupPersistUtils.generateUuid();
-        usageRepository.insert(buildUsage(usageId, USAGE_BATCH_ID_1));
-        List<Usage> usages = usageRepository.findByIds(Collections.singletonList(usageId));
+    public void testInsert() throws IOException {
+        Usage expectedUsage = buildUsage();
+        expectedUsage.setNetAmount(expectedUsage.getNetAmount().setScale(10, RoundingMode.HALF_UP));
+        usageRepository.insert(expectedUsage);
+        List<Usage> usages = usageRepository.findByIds(Collections.singletonList(expectedUsage.getId()));
         assertEquals(1, CollectionUtils.size(usages));
-        Usage usage = usages.get(0);
-        assertNotNull(usage);
-        assertEquals(usageId, usage.getId());
-        assertEquals(SCENARIO_ID, usage.getScenarioId());
-        assertEquals(WR_WRK_INST, usage.getWrWrkInst());
-        assertEquals("Work Title", usage.getWorkTitle());
-        assertEquals("System Title", usage.getSystemTitle());
-        assertEquals(RH_ACCOUNT_NUMBER, usage.getRightsholder().getAccountNumber());
-        assertEquals(RH_ACCOUNT_NAME, usage.getRightsholder().getName());
-        assertEquals(UsageStatusEnum.ELIGIBLE, usage.getStatus());
-        assertEquals(PRODUCT_FAMILY_FAS, usage.getProductFamily());
-        assertEquals("Article", usage.getArticle());
-        assertEquals("StandardNumber", usage.getStandardNumber());
-        assertEquals("Publisher", usage.getPublisher());
-        assertEquals(LocalDate.of(2016, 11, 3), usage.getPublicationDate());
-        assertEquals("Market", usage.getMarket());
-        assertEquals(2015, usage.getMarketPeriodFrom(), 0);
-        assertEquals(2017, usage.getMarketPeriodTo(), 0);
-        assertEquals("Author", usage.getAuthor());
-        assertEquals(155, usage.getNumberOfCopies(), 0);
-        assertEquals(new BigDecimal("11.25"), usage.getReportedValue());
-        assertEquals(new BigDecimal("54.4400000000"), usage.getGrossAmount());
-        assertFalse(usage.isRhParticipating());
+        verifyUsage(expectedUsage, usages.get(0));
     }
 
     @Test
@@ -173,22 +152,9 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindByStatusAnsProductFamily() {
+    public void testFindByStatusAnsProductFamily() throws IOException {
         List<Usage> actualUsages = usageRepository.findByStatusAndProductFamily(UsageStatusEnum.US_TAX_COUNTRY, "NTS");
-        assertEquals(2, CollectionUtils.size(actualUsages));
-        actualUsages.sort(Comparator.comparing(Usage::getId));
-        verifyUsage(buildUsage("463e2239-1a36-41cc-9a51-ee2a80eae0c7", "d368a40b-d3ab-45b1-80a3-07be2cd5224c", null,
-            243904752L, "Wissenschaft & Forschung Japan", null, UsageStatusEnum.US_TAX_COUNTRY, "NTS",
-            "DIN EN 779:2012", "2192-3559", "Network for Science", LocalDate.of(2013, 9, 10), "Doc Del", 2013, 2015,
-            "Philippe de Mézières", 100, new BigDecimal("200.00"), new BigDecimal("1000.0000000000"),
-            BigDecimal.ZERO, buildRightsholder("bc4076cc-7554-4575-a03e-d4f4b3b76ca9",
-                "John Wiley & Sons - Books", 1000009523L)), actualUsages.get(0));
-        verifyUsage(buildUsage("bd407b50-6101-4304-8316-6404fe32a800", "d368a40b-d3ab-45b1-80a3-07be2cd5224c", null,
-            823904752L, "Medical Journal", null, UsageStatusEnum.US_TAX_COUNTRY, "NTS",
-            "DIN EN 779:2012", "2192-2555", "Network for Medicine", LocalDate.of(2013, 9, 10), "Doc Del", 2013, 2017,
-            "Arturo de Mézières", 100, new BigDecimal("100.00"), new BigDecimal("500.0000000000"),
-            BigDecimal.ZERO, buildRightsholder("1b2f23a7-921a-4116-9268-86627fd2fc0b",
-                "IEEE - Inst of Electrical and Electronics Engrs", 1000009524L)), actualUsages.get(1));
+        verifyUsages(loadExpectedUsages("json/usages_find_by_status.json"), actualUsages);
     }
 
     @Test
@@ -242,12 +208,12 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindInvalidRightsholdersByFilter() {
+    public void testFindInvalidRightsholdersByFilter() throws IOException {
         UsageFilter usageFilter =
             buildUsageFilter(Collections.emptySet(), Collections.singleton(USAGE_BATCH_ID_1),
                 Collections.emptySet(), UsageStatusEnum.ELIGIBLE, null, null);
         assertTrue(CollectionUtils.isEmpty(usageRepository.findInvalidRightsholdersByFilter(usageFilter)));
-        Usage usage = buildUsage(RupPersistUtils.generateUuid(), USAGE_BATCH_ID_1);
+        Usage usage = buildUsage();
         usage.getRightsholder().setAccountNumber(1000000003L);
         usageRepository.insert(usage);
         List<Long> accountNumbers = usageRepository.findInvalidRightsholdersByFilter(usageFilter);
@@ -326,9 +292,9 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindCountByScenarioIdAndRhAccountNumberNullSearchValue() {
+    public void testFindCountByScenarioIdAndRhAccountNumberNullSearchValue() throws IOException {
         populateScenario();
-        Usage usage = buildUsage(RupPersistUtils.generateUuid(), USAGE_BATCH_ID_1);
+        Usage usage = buildUsage();
         usageRepository.insert(usage);
         usageRepository.addToScenario(Collections.singletonList(usage));
         assertEquals(1, usageRepository.findCountByScenarioIdAndRhAccountNumber(1000009997L, SCENARIO_ID, null));
@@ -599,25 +565,24 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testDeleteFromScenarioByAccountNumbers() {
+    public void testDeleteFromScenarioByAccountNumbers() throws IOException {
         List<Usage> usages = usageRepository.findByIds(Arrays.asList(USAGE_ID_8, USAGE_ID_7));
         assertEquals(2, CollectionUtils.size(usages));
         usages.forEach(usage -> assertEquals(SCENARIO_ID, usage.getScenarioId()));
-        String usageId = RupPersistUtils.generateUuid();
-        Usage usage = buildUsage(usageId, USAGE_BATCH_ID_1);
+        Usage usage = buildUsage();
         usageRepository.insert(usage);
         usageRepository.addToScenario(Collections.singletonList(usage));
         usageRepository.deleteFromScenario(Lists.newArrayList(USAGE_ID_8, USAGE_ID_7), USER_NAME);
         usages = usageRepository.findByIds(Arrays.asList(USAGE_ID_8, USAGE_ID_7));
         assertEquals(2, CollectionUtils.size(usages));
         usages.forEach(this::verifyUsageExcludedFromScenario);
-        usages = usageRepository.findByIds(Collections.singletonList(usageId));
+        usages = usageRepository.findByIds(Collections.singletonList(usage.getId()));
         assertEquals(SCENARIO_ID, usages.get(0).getScenarioId());
     }
 
     @Test
-    public void testFindByScenarioIdAndRhAccountNumbers() {
-        Usage usage = buildUsage(RupPersistUtils.generateUuid(), USAGE_BATCH_ID_1);
+    public void testFindByScenarioIdAndRhAccountNumbers() throws IOException {
+        Usage usage = buildUsage();
         usageRepository.insert(usage);
         usage.setScenarioId(SCENARIO_ID);
         usageRepository.addToScenario(Collections.singletonList(usage));
@@ -1067,42 +1032,24 @@ public class UsageRepositoryIntegrationTest {
         return usageFilter;
     }
 
-    private Usage buildUsage(String usageId, String usageBatchId) {
-        return buildUsage(usageId, usageBatchId, SCENARIO_ID, WR_WRK_INST, "Work Title", "System Title",
-            UsageStatusEnum.ELIGIBLE, PRODUCT_FAMILY_FAS, "Article", "StandardNumber", "Publisher",
-            LocalDate.of(2016, 11, 3), "Market", 2015, 2017, "Author", 155, new BigDecimal("11.25"),
-            new BigDecimal("54.4400000000"), new BigDecimal("25.1500000000"),
-            buildRightsholder("ee07d016-07b2-4285-8c53-d95d1a21f3d5", RH_ACCOUNT_NAME, RH_ACCOUNT_NUMBER));
+    private Usage buildUsage() throws IOException {
+        List<Usage> usages = loadExpectedUsages("json/usage.json");
+        assertEquals(1, CollectionUtils.size(usages));
+        return usages.get(0);
     }
 
-    private Usage buildUsage(String usageId, String batchId, String scenarioId, Long wrWrkInst, String workTitle,
-                             String systemTitle, UsageStatusEnum status, String productFamily, String article,
-                             String standardNumber, String publisher, LocalDate publicatioDate, String market,
-                             Integer marketPeriodFrom, Integer marketPeriodTo, String author, Integer numberOfCopies,
-                             BigDecimal reportedValue, BigDecimal grossAmount, BigDecimal netAmount, Rightsholder rh) {
-        Usage usage = new Usage();
-        usage.setId(usageId);
-        usage.setBatchId(batchId);
-        usage.setScenarioId(scenarioId);
-        usage.setWrWrkInst(wrWrkInst);
-        usage.setWorkTitle(workTitle);
-        usage.setSystemTitle(systemTitle);
-        usage.setStatus(status);
-        usage.setProductFamily(productFamily);
-        usage.setArticle(article);
-        usage.setStandardNumber(standardNumber);
-        usage.setPublisher(publisher);
-        usage.setPublicationDate(publicatioDate);
-        usage.setMarket(market);
-        usage.setMarketPeriodFrom(marketPeriodFrom);
-        usage.setMarketPeriodTo(marketPeriodTo);
-        usage.setAuthor(author);
-        usage.setNumberOfCopies(numberOfCopies);
-        usage.setReportedValue(reportedValue);
-        usage.setGrossAmount(grossAmount);
-        usage.setNetAmount(netAmount);
-        usage.setRightsholder(rh);
-        return usage;
+    private List<Usage> loadExpectedUsages(String fileName) throws IOException {
+        String content = TestUtils.fileToString(this.getClass(), fileName);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        return mapper.readValue(content, new TypeReference<List<Usage>>() {
+        });
+    }
+
+    private void verifyUsages(List<Usage> expectedUsages, List<Usage> actualUsages) {
+        assertEquals(CollectionUtils.size(expectedUsages), CollectionUtils.size(actualUsages));
+        IntStream.range(0, expectedUsages.size())
+            .forEach(index -> verifyUsage(expectedUsages.get(index), actualUsages.get(index)));
     }
 
     private void verifyUsage(Usage expectedUsage, Usage actualUsage) {
@@ -1124,14 +1071,6 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(expectedUsage.getRightsholder().getId(), actualUsage.getRightsholder().getId());
         assertEquals(expectedUsage.getRightsholder().getAccountNumber(),
             actualUsage.getRightsholder().getAccountNumber());
-    }
-
-    private Rightsholder buildRightsholder(String id, String rhName, Long rhAccountNumber) {
-        Rightsholder rightsholder = new Rightsholder();
-        rightsholder.setId(id);
-        rightsholder.setAccountNumber(rhAccountNumber);
-        rightsholder.setName(rhName);
-        return rightsholder;
     }
 
     private RightsholderTotalsHolder buildRightsholderTotalsHolder(String rhName, Long rhAccountNumber,

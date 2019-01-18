@@ -68,7 +68,7 @@ public interface IPrmIntegrationService {
      * Gets participating flag {@link com.copyright.rup.dist.foreign.domain.FdaConstants#IS_RH_DIST_INELIGIBLE_CODE}
      * by specified rightsholder id and {@link com.copyright.rup.dist.foreign.domain.FdaConstants#NTS_PRODUCT_FAMILY}.
      * </br>
-     * If preferences for product family were not found System finds preferences for the same rightsholder id
+     * If preferences for NTS product family were not found System finds preferences for the same rightsholder id
      * and <b>{@code '*'}</b> ('*' is passed as a product family).
      *
      * @param rightsholderId rightsholder id
