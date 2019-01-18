@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.service.impl.common;
+package com.copyright.rup.dist.foreign.service.impl.rights;
 
 import com.copyright.rup.dist.foreign.domain.Usage;
 
@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
- * Implementation for {@link StdSerializer} to build json message from {@link Usage}.
+ * Implementation for {@link StdSerializer} to build json message for getting rights.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -22,14 +22,14 @@ import java.util.Objects;
  *
  * @author Ihar Suvorau
  */
-@Component("df.service.commonUsageSerializer")
-public class CommonUsageSerializer extends StdSerializer<Usage> {
+@Component("df.service.rightsSerializer")
+public class RightsSerializer extends StdSerializer<Usage> {
 
     /**
      * Constructor.
      */
-    public CommonUsageSerializer() {
-        super(CollectionLikeType.construct(Usage.class, SimpleType.construct(CommonUsageSerializer.class)));
+    public RightsSerializer() {
+        super(CollectionLikeType.construct(Usage.class, SimpleType.construct(RightsSerializer.class)));
     }
 
     @Override
@@ -37,8 +37,6 @@ public class CommonUsageSerializer extends StdSerializer<Usage> {
         jsonGenerator.writeStartObject();
         if (Objects.nonNull(usage)) {
             writeNotNullField(jsonGenerator, "id", usage.getId());
-            writeNotNullField(jsonGenerator, "rh_uid", usage.getRightsholder().getId());
-            writeNotNullField(jsonGenerator, "rh_account_number", usage.getRightsholder().getAccountNumber());
             writeNotNullField(jsonGenerator, "standard_number", usage.getStandardNumber());
             writeNotNullField(jsonGenerator, "wr_wrk_inst", usage.getWrWrkInst());
             writeNotNullField(jsonGenerator, "work_title", usage.getWorkTitle());

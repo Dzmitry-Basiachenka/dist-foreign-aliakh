@@ -128,7 +128,9 @@ public class RightsService implements IRightsService {
                 String.format("Rightsholder account %s was found in RMS", rhAccountNumber));
             List<Rightsholder> rightsholders =
                 rightsholderService.updateRightsholders(Collections.singleton(rhAccountNumber));
-            usage.setRightsholder(rightsholders.get(0));
+            if (CollectionUtils.isNotEmpty(rightsholders)) {
+                usage.setRightsholder(rightsholders.get(0));
+            }
             usage.setStatus(UsageStatusEnum.RH_FOUND);
         } else {
             usageRepository.updateStatus(usageId, UsageStatusEnum.RH_NOT_FOUND);
