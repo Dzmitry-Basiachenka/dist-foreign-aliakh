@@ -13,35 +13,35 @@
     <bean id="df.service.usageUnmarshaller" class="com.copyright.rup.dist.foreign.service.impl.common.CommonUsageUnmarshaller" />
    
     <bean id="df.service.matchingMarshaller" parent="df.service.usageMarshaller">
-        <property name="serializer" ref="df.service.matchingSerializer" />
+        <property name="serializer" ref="df.service.commonUsageSerializer" />
     </bean>
 
     <bean id="df.service.matchingUnmarshaller" parent="df.service.usageUnmarshaller">
-        <property name="deserializer" ref="df.service.matchingDeserializer" />
+        <property name="deserializer" ref="df.service.commonUsageDeserializer" />
     </bean>
 
     <bean id="df.service.rightsMarshaller" parent="df.service.usageMarshaller">
-        <property name="serializer" ref="df.service.rightsSerializer" />
+        <property name="serializer" ref="df.service.commonUsageSerializer" />
     </bean>
 
     <bean id="df.service.rightsUnmarshaller" parent="df.service.usageUnmarshaller">
-        <property name="deserializer" ref="df.service.rightsDeserializer" />
+        <property name="deserializer" ref="df.service.commonUsageDeserializer" />
     </bean>
 
     <bean id="df.service.rhTaxMarshaller" parent="df.service.usageMarshaller">
-        <property name="serializer" ref="df.service.rhTaxSerializer" />
+        <property name="serializer" ref="df.service.commonUsageSerializer" />
     </bean>
 
     <bean id="df.service.rhTaxUnmarshaller" parent="df.service.usageUnmarshaller">
-        <property name="deserializer" ref="df.service.rhTaxDeserializer" />
+        <property name="deserializer" ref="df.service.commonUsageDeserializer" />
     </bean>
 
     <bean id="df.service.rhEligibilityMarshaller" parent="df.service.usageMarshaller">
-        <property name="serializer" ref="df.service.rhEligibilitySerializer" />
+        <property name="serializer" ref="df.service.commonUsageSerializer" />
     </bean>
 
     <bean id="df.service.rhEligibilityUnmarshaller" parent="df.service.usageUnmarshaller">
-        <property name="deserializer" ref="df.service.rhEligibilityDeserializer" />
+        <property name="deserializer" ref="df.service.commonUsageDeserializer" />
     </bean>
 
     <bean id="df.service.usageProducer" class="com.copyright.rup.dist.foreign.service.impl.common.CommonUsageProducer" />
