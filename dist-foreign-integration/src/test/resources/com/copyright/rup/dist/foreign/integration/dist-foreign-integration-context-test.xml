@@ -9,9 +9,9 @@
     <import resource="classpath:/com/copyright/rup/dist/foreign/integration/dist-foreign-integration-context.xml"/>
 
     <!-- Mocks -->
-    <bean id="df.integration.aws.client.configuration" class="com.copyright.rup.aws.RupClientConfiguration"/>
-    <bean id="df.integration.sqs.endpoint.configuration" class="com.copyright.rup.aws.RupClientConfiguration"/>
-    <bean id="df.integration.sqs.client" class="com.copyright.rup.dist.foreign.integration.SqsClientMock"/>
-    <bean id="df.integration.sns.endpoint.configuration" class="com.copyright.rup.aws.RupClientConfiguration"/>
-    <bean id="df.integration.sns.client" class="com.copyright.rup.dist.foreign.integration.SnsClientMock"/>
+    <bean id="dist.common.integration.aws.client.configuration" class="com.copyright.rup.aws.RupClientConfiguration"/>
+    <bean id="dist.common.integration.sqs.endpoint.configuration" class="com.copyright.rup.aws.RupClientConfiguration"/>
+    <bean id="dist.common.integration.sqs.client" class="com.copyright.rup.dist.foreign.integration.SqsClientMock"/>
+    <bean id="dist.common.integration.sns.endpoint.configuration" class="com.copyright.rup.aws.RupClientConfiguration"/>
+    <bean id="dist.common.integration.sns.client" class="com.copyright.rup.dist.foreign.integration.SnsClientMock"/>
 </beans>
