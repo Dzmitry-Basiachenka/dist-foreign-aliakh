@@ -49,7 +49,7 @@ public class SnsNotificationMessageConverterTest {
         snsNotificationMessageConverter.convert(exchange);
         Message actualOut = exchange.getOut();
         assertSame(in, actualOut);
-        assertEquals("\"{\\\"details\\\":[{\\\"rh_account_number\\\":\\\"1000009256\\\"}]}\"",
+        assertEquals("{\"details\":[{\"rh_account_number\":\"1000009256\"}]}",
             actualOut.getBody());
         Map<String, Object> actualHeaders = actualOut.getHeaders();
         assertNotNull(actualHeaders.get("source"));
