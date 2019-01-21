@@ -1,3 +1,7 @@
+4.1.21
+-
+* CDP-643 FDA: Paid information from LM is not consumed by FDA
+
 4.1.20
 -
 * B-46034 FDA: Exclude Ceased/Lost/NTS Refused RHs from the NTS proxy: make changes based on comments in CR-DIST-FOREIGN-86
