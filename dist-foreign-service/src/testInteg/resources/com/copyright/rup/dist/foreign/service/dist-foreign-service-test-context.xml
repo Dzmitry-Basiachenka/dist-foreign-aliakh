@@ -52,10 +52,10 @@
 
     <bean id="usageBatchService" class="com.copyright.rup.dist.foreign.service.impl.mock.UsageBatchServiceMock"/>
 
-    <bean id="df.integration.aws.client.configuration" class="com.copyright.rup.aws.RupClientConfiguration"/>
-    <bean id="df.integration.sqs.endpoint.configuration" class="com.copyright.rup.aws.RupClientConfiguration"/>
-    <bean id="df.integration.sqs.client" class="com.copyright.rup.dist.foreign.service.impl.mock.SqsClientMock"/>
-    <bean id="df.integration.sns.endpoint.configuration" class="com.copyright.rup.aws.RupClientConfiguration"/>
-    <bean id="df.integration.sns.client" class="com.copyright.rup.dist.foreign.service.impl.mock.SnsClientMock"/>
+    <bean id="dist.common.integration.aws.client.configuration" class="com.copyright.rup.aws.RupClientConfiguration"/>
+    <bean id="dist.common.integration.sqs.endpoint.configuration" class="com.copyright.rup.aws.RupClientConfiguration"/>
+    <bean id="dist.common.integration.sqs.client" class="com.copyright.rup.dist.foreign.service.impl.mock.SqsClientMock"/>
+    <bean id="dist.common.integration.sns.endpoint.configuration" class="com.copyright.rup.aws.RupClientConfiguration"/>
+    <bean id="dist.common.integration.sns.client" class="com.copyright.rup.dist.foreign.service.impl.mock.SnsClientMock"/>
     <bean id="df.service.paidUsageSubscriber" class="com.copyright.rup.aws.RupClientConfiguration"/>
 </beans>
