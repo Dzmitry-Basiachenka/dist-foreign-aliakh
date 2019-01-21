@@ -1,3 +1,7 @@
+4.1.22
+-
+* B-48535 FDA: Utilize SQS/SNS for internal distribution apps communication: apply common sqs and sns config
+
 4.1.21
 -
 * CDP-643 FDA: Paid information from LM is not consumed by FDA
