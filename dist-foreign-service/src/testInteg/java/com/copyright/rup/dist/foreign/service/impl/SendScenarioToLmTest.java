@@ -1,9 +1,9 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
 import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.common.test.mock.aws.SqsClientMock;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
-import com.copyright.rup.dist.foreign.service.impl.mock.SqsClientMock;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -47,10 +47,10 @@ public class SendScenarioToLmTest {
     public void testSendToLm() {
         Scenario scenario = new Scenario();
         scenario.setId("4c014547-06f3-4840-94ff-6249730d537d");
-        sqsClientMock.prepareSendMessageExpectations("sf-detail.fifo",
-            TestUtils.fileToString(this.getClass(), "details/details_to_lm.json"), Collections.EMPTY_LIST,
-            ImmutableMap.of("source", "FDA"));
+        sqsClientMock.expectSendMessages("fda-test-sf-detail.fifo",
+            Collections.singletonList(TestUtils.fileToString(this.getClass(), "details/details_to_lm.json")),
+            Collections.EMPTY_LIST, ImmutableMap.of("source", "FDA"));
         scenarioService.sendToLm(scenario);
-        sqsClientMock.assertSendMessage();
+        sqsClientMock.assertSendMessages();
     }
 }
