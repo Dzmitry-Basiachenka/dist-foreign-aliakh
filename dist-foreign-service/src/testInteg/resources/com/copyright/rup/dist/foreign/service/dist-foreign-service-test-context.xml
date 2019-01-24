@@ -56,5 +56,5 @@
     <bean id="dist.common.integration.sqs.client"
           class="com.copyright.rup.dist.foreign.service.impl.mock.DfSqsClientMock"/>
     <import resource="classpath:/com/copyright/rup/dist/common/test/mock/aws/dist-common-sns-test-context.xml"/>
-    <bean id="df.service.paidUsageSubscriber" class="com.copyright.rup.dist.common.test.mock.EmptyType"/>
+    <bean id="df.service.paidUsageSubscriber" class="java.lang.Object"/>
 </beans>
