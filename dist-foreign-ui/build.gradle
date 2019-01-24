@@ -45,7 +45,23 @@ war {
     exclude '**/*.scss'
 }
 
+def localAwsPrefix = "lm-pdev-local"
+
 afterEvaluate {
+
+    tomcatRun.doFirst {
+        if ("LOCAL".equals(System.getProperty("rup.environment"))) {
+            systemProperty("dist.foreign.aws.service.environment.prefix", localAwsPrefix)
+            println "Change dist.foreign.aws.service.environment.prefix to ${localAwsPrefix}"
+        }
+    }
+    tomcatRunDebug.doFirst {
+        if ("LOCAL".equals(System.getProperty("rup.environment"))) {
+            systemProperty "dist.foreign.aws.service.environment.prefix", localAwsPrefix
+            println "Change dist.foreign.aws.service.environment.prefix to ${localAwsPrefix}"
+        }
+    }
+
     appBeforeIntegrationTest.doFirst {
         systemProperty "dbPidLocation", "${projectDir}/build/tmp/embeddedPostgres/postgresUi.pid"
     }
