@@ -19,7 +19,7 @@ public final class FdaConstants {
     public static final String FAS_PRODUCT_FAMILY = "FAS";
 
     /**
-     * Product family for RRO with account number {@link FdaConstants#CLA_ACCOUNT_NUMBER}.
+     * Product family for RRO with CLA account number.
      */
     public static final String CLA_FAS_PRODUCT_FAMILY = "FAS2";
 
@@ -27,11 +27,6 @@ public final class FdaConstants {
      * NTS product family.
      */
     public static final String NTS_PRODUCT_FAMILY = "NTS";
-
-    /**
-     * Account number for {@link FdaConstants#CLA_FAS_PRODUCT_FAMILY} RRO.
-     */
-    public static final Long CLA_ACCOUNT_NUMBER = 2000017000L;
 
     /**
      * Rightsholder preference code for the rightsholder FDA participation flag from PRM.

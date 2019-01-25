@@ -298,6 +298,11 @@ public interface IUsageService {
     List<String> getMarkets();
 
     /**
+     * @return CLA account number.
+     */
+    Long getClaAccountNumber();
+
+    /**
      * Updates paid infromation for {@link PaidUsage}s
      * and status to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#PAID}.
      *

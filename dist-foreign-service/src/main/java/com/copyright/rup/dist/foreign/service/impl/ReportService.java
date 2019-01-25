@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
+import com.copyright.rup.dist.foreign.service.api.IUsageService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,8 @@ public class ReportService implements IReportService {
     private IUsageRepository usageRepository;
     @Autowired
     private IUsageArchiveRepository usageArchiveRepository;
+    @Autowired
+    private IUsageService usageService;
 
     @Override
     public void writeUsageCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream) {
@@ -72,7 +75,8 @@ public class ReportService implements IReportService {
     @Override
     public void writeServiceFeeTrueUpCsvReport(LocalDate fromDate, LocalDate toDate, LocalDate paymentDateTo,
                                                OutputStream outputStream) {
-        usageRepository.writeServiceFeeTrueUpCsvReport(fromDate, toDate, paymentDateTo, outputStream);
+        usageRepository.writeServiceFeeTrueUpCsvReport(fromDate, toDate, paymentDateTo, outputStream,
+            usageService.getClaAccountNumber());
     }
 
     @Override

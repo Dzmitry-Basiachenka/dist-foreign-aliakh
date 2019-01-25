@@ -252,6 +252,15 @@ public class UsagesControllerTest {
     }
 
     @Test
+    public void testGetClaAccountNumber() {
+        Long claAccountNumber = 2000017000L;
+        expect(usageService.getClaAccountNumber()).andReturn(claAccountNumber).once();
+        replay(usageService);
+        assertEquals(claAccountNumber, controller.getClaAccountNumber());
+        verify(usageService);
+    }
+
+    @Test
     public void testUsageBatchExists() {
         expect(usageBatchService.usageBatchExists("Usage Batch Name")).andReturn(false).once();
         replay(usageBatchService);

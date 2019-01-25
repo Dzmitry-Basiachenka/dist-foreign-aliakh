@@ -7,7 +7,6 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import org.junit.Before;
@@ -20,6 +19,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -78,9 +79,9 @@ public class CreateScenarioTest {
                 RIGHTHOLDER_ID_1,
                 RIGHTHOLDER_ID_5,
                 RIGHTHOLDER_ID_2)
-            .expectUsages(Lists.newArrayList(
+            .expectUsages(Arrays.asList(
                 buildUsageForCreatedScenario(7000429266L, 1000009997L, "2871.0528", "6100.9872"),
-                buildUsageForCreatedScenario(1000002859L, 1000002859L, "1450.0256", "3081.3044"),
+                buildUsageForCreatedScenario(1000002859L, 2000017000L, "1450.0256", "3081.3044"),
                 buildUsageForCreatedScenario(1000001820L, 1000001820L, "2175.0384", "11418.9516"),
                 buildUsageForCreatedScenario(1000024497L, 1000024497L, "435.008", "2283.792"),
                 buildUsageForCreatedScenario(1000002562L, 1000009997L, "1629.8304", "3463.3896"),
@@ -106,7 +107,7 @@ public class CreateScenarioTest {
                 RIGHTHOLDER_ID_1,
                 RIGHTHOLDER_ID_5,
                 RIGHTHOLDER_ID_2)
-            .expectUsages(Lists.newArrayList(
+            .expectUsages(Arrays.asList(
                 buildUsageForCreatedScenario(7000429266L, 7000429266L, "2871.0528", "6100.9872"),
                 buildUsageForCreatedScenario(1000002859L, 1000002859L, "1450.0256", "3081.3044"),
                 buildUsageForCreatedScenario(1000001820L, 1000001820L, "4350.0768", "9243.9132"),
@@ -134,7 +135,7 @@ public class CreateScenarioTest {
                 RIGHTHOLDER_ID_10,
                 RIGHTHOLDER_ID_6,
                 RIGHTHOLDER_ID_8)
-            .expectUsages(Lists.newArrayList(
+            .expectUsages(Arrays.asList(
                 buildUsageForCreatedScenario(2000133267L, 2000017000L, "897.204", "8074.836"),
                 buildUsageForCreatedScenario(2000073957L, 2000073957L, "1450.0256", "3081.3044"),
                 buildUsageForCreatedScenario(7001508482L, 7001508482L, "4350.0768", "9243.9132"),
@@ -148,10 +149,10 @@ public class CreateScenarioTest {
     private Scenario buildScenario(String netTotal, String grossAmount, String serviceFeeTotal, String reportedTotal) {
         Scenario scenario = new Scenario();
         scenario.setName("Test Scenario");
-        scenario.setNetTotal(new BigDecimal(netTotal).setScale(10));
-        scenario.setGrossTotal(new BigDecimal(grossAmount).setScale(10));
-        scenario.setServiceFeeTotal(new BigDecimal(serviceFeeTotal).setScale(10));
-        scenario.setReportedTotal(new BigDecimal(reportedTotal).setScale(2));
+        scenario.setNetTotal(new BigDecimal(netTotal).setScale(10, RoundingMode.HALF_UP));
+        scenario.setGrossTotal(new BigDecimal(grossAmount).setScale(10, RoundingMode.HALF_UP));
+        scenario.setServiceFeeTotal(new BigDecimal(serviceFeeTotal).setScale(10, RoundingMode.HALF_UP));
+        scenario.setReportedTotal(new BigDecimal(reportedTotal).setScale(2, RoundingMode.HALF_UP));
         scenario.setDescription("Scenario Description");
         return scenario;
     }
@@ -167,8 +168,8 @@ public class CreateScenarioTest {
         usage.setScenarioId(scenarioId);
         usage.setRightsholder(buildRightsholder(rhAccountNumber));
         usage.setPayee(buildRightsholder(payeeAccountNumber));
-        usage.setServiceFeeAmount(new BigDecimal(serviceFeeAmount).setScale(10));
-        usage.setNetAmount(new BigDecimal(netAmount).setScale(10));
+        usage.setServiceFeeAmount(new BigDecimal(serviceFeeAmount).setScale(10, RoundingMode.HALF_UP));
+        usage.setNetAmount(new BigDecimal(netAmount).setScale(10, RoundingMode.HALF_UP));
         return usage;
     }
 

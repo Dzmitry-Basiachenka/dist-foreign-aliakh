@@ -80,7 +80,7 @@ public class UsageServiceIntegrationTest {
         usageService.deleteArchivedByBatchId(batchId);
         assertTrue(CollectionUtils.isEmpty(usageAuditRepository.findByUsageId(usageId)));
         assertTrue(CollectionUtils.isEmpty(
-            usageArchiveRepository.findByIdAndStatus(Collections.singletonList(usageId),UsageStatusEnum.ARCHIVED)));
+            usageArchiveRepository.findByIdAndStatus(Collections.singletonList(usageId), UsageStatusEnum.ARCHIVED)));
     }
 
     @Test
@@ -96,6 +96,11 @@ public class UsageServiceIntegrationTest {
     @Test
     public void testGetMarkets() {
         assertEquals(Arrays.asList("Bus", "Doc Del", "Edu", "Gov", "Lib", "Sch", "Univ"), usageService.getMarkets());
+    }
+
+    @Test
+    public void testClaAccountNumber() {
+        assertEquals(2000017000L, usageService.getClaAccountNumber(), 0);
     }
 
     private void verifyExcludedUsages(Scenario scenario, boolean excluded, Long... accountNumbers) {
