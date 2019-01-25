@@ -108,6 +108,7 @@ public class UsageServiceTest {
         Whitebox.setInternalState(usageService, "prmIntegrationService", prmIntegrationService);
         Whitebox.setInternalState(usageService, "usageArchiveRepository", usageArchiveRepository);
         Whitebox.setInternalState(usageService, "scenarioAuditService", scenarioAuditService);
+        Whitebox.setInternalState(usageService, "claAccountNumber", 2000017000L);
     }
 
     @Test

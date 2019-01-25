@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
@@ -13,6 +14,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
+import com.copyright.rup.dist.foreign.service.api.IUsageService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -63,12 +65,15 @@ public class ReportServiceTest {
         LocalDate fromDate = LocalDate.now();
         LocalDate toDate = LocalDate.now();
         LocalDate paymentDateTo = LocalDate.now();
+        IUsageService usageService = createMock(IUsageService.class);
+        Whitebox.setInternalState(reportService, usageService);
+        expect(usageService.getClaAccountNumber()).andReturn(2000017000L).once();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        usageRepository.writeServiceFeeTrueUpCsvReport(fromDate, toDate, paymentDateTo, outputStream);
+        usageRepository.writeServiceFeeTrueUpCsvReport(fromDate, toDate, paymentDateTo, outputStream, 2000017000L);
         expectLastCall().once();
-        replay(usageRepository);
+        replay(usageRepository, usageService);
         reportService.writeServiceFeeTrueUpCsvReport(fromDate, toDate, paymentDateTo, outputStream);
-        verify(usageRepository);
+        verify(usageRepository, usageService);
     }
 
     @Test

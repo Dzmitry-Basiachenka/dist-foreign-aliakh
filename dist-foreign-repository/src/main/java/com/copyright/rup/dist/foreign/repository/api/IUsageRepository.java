@@ -374,13 +374,14 @@ public interface IUsageRepository {
     /**
      * Writes Service Fee True-up Report into the output stream in csv format.
      *
-     * @param fromDate      from date
-     * @param toDate        to date
-     * @param paymentDateTo payment date to
-     * @param outputStream  instance of {@link OutputStream}
+     * @param fromDate         from date
+     * @param toDate           to date
+     * @param paymentDateTo    payment date to
+     * @param outputStream     instance of {@link OutputStream}
+     * @param claAccountNumber CLA account number
      */
     void writeServiceFeeTrueUpCsvReport(LocalDate fromDate, LocalDate toDate, LocalDate paymentDateTo,
-                                        OutputStream outputStream);
+                                        OutputStream outputStream, Long claAccountNumber);
 
     /**
      * Writes Summary of Market Report into the output stream in csv format based on batch ids.
@@ -410,7 +411,7 @@ public interface IUsageRepository {
      * @param filter {@link UsageFilter} instance
      * @param status {@link UsageStatusEnum} instance
      * @return {@code true} - if there are no {@link Usage}s found by defined {@link UsageFilter}
-     *         with status different from specified , {@link false} - otherwise
+     * with status different from specified , {@link false} - otherwise
      */
     boolean isValidUsagesState(UsageFilter filter, UsageStatusEnum status);
 }

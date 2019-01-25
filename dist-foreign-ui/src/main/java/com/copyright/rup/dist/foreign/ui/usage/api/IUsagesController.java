@@ -102,6 +102,11 @@ public interface IUsagesController extends IController<IUsagesWidget> {
     List<String> getMarkets();
 
     /**
+     * @return CLA account number.
+     */
+    Long getClaAccountNumber();
+
+    /**
      * Deletes {@link UsageBatch} and all it's details.
      *
      * @param usageBatch {@link UsageBatch} to delete

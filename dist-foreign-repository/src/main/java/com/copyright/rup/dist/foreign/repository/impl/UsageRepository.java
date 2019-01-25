@@ -426,7 +426,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
 
     @Override
     public void writeServiceFeeTrueUpCsvReport(LocalDate fromDate, LocalDate toDate, LocalDate paymentDateTo,
-                                               OutputStream outputStream) {
+                                               OutputStream outputStream, Long claAccountNumber) {
         try (ServiceFeeTrueUpReportHandler handler =
                  new ServiceFeeTrueUpReportHandler(Objects.requireNonNull(outputStream))) {
             Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(7);
@@ -434,7 +434,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
             parameters.put("fromDate", Objects.requireNonNull(fromDate));
             parameters.put("toDate", Objects.requireNonNull(toDate));
             parameters.put("productFamilyClaFas", FdaConstants.CLA_FAS_PRODUCT_FAMILY);
-            parameters.put("accountNumberClaFas", FdaConstants.CLA_ACCOUNT_NUMBER);
+            parameters.put("accountNumberClaFas", claAccountNumber);
             parameters.put("action", ScenarioActionTypeEnum.SENT_TO_LM);
             parameters.put(STATUS_KEY, UsageStatusEnum.SENT_TO_LM);
             getTemplate().select("IUsageMapper.findServiceFeeTrueUpReportDtos", parameters, handler);

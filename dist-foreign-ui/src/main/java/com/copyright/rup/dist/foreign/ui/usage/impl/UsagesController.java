@@ -184,6 +184,11 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
+    public Long getClaAccountNumber() {
+        return usageService.getClaAccountNumber();
+    }
+
+    @Override
     public void deleteUsageBatch(UsageBatch usageBatch) {
         usageBatchService.deleteUsageBatch(usageBatch);
         filterController.getWidget().clearFilter();

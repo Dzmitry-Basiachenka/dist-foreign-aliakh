@@ -84,6 +84,8 @@ public class UsageService implements IUsageService {
     private List<String> supportedProductFamilies;
     @Value("$RUP{dist.foreign.markets}")
     private List<String> supportedMarkets;
+    @Value("$RUP{dist.foreign.cla_account_number}")
+    private Long claAccountNumber;
     @Autowired
     private IUsageRepository usageRepository;
     @Autowired
@@ -220,7 +222,7 @@ public class UsageService implements IUsageService {
             addScenarioInfo(usage, scenario);
             calculateAmounts(usage, null == scenarioUsage
                 ? prmIntegrationService.isRightsholderParticipating(usage.getRightsholder().getId(),
-                    usage.getProductFamily())
+                usage.getProductFamily())
                 : scenarioUsage.isRhParticipating());
         });
         usageRepository.addToScenario(newUsages);
@@ -370,6 +372,11 @@ public class UsageService implements IUsageService {
     }
 
     @Override
+    public Long getClaAccountNumber() {
+        return claAccountNumber;
+    }
+
+    @Override
     @Transactional
     public void updatePaidInfo(List<PaidUsage> paidUsages) {
         LOGGER.info("Update paid information. Started. UsagesCount={}", LogUtils.size(paidUsages));
@@ -498,8 +505,10 @@ public class UsageService implements IUsageService {
 
     private void calculateAmounts(Usage usage, boolean rhParticipatingFlag) {
         //usages that have CLA as Payee should get 10% service fee
-         CalculationUtils.recalculateAmounts(usage, rhParticipatingFlag,
-            FdaConstants.CLA_ACCOUNT_NUMBER.equals(usage.getPayee().getAccountNumber()) ? claPayeeServiceFee
+        CalculationUtils.recalculateAmounts(usage, rhParticipatingFlag,
+            claAccountNumber.equals(usage.getPayee().getAccountNumber())
+                && FdaConstants.CLA_FAS_PRODUCT_FAMILY.equals(usage.getProductFamily())
+                ? claPayeeServiceFee
                 : prmIntegrationService.getRhParticipatingServiceFee(rhParticipatingFlag));
     }
 
