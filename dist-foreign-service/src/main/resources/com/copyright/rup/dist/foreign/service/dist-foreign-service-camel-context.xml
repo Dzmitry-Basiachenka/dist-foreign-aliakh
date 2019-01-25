@@ -89,7 +89,7 @@
                   uri="aws-sns://$RUP{dist.foreign.aws.service.environment.prefix}-$RUP{dist.foreign.endpoint.lm.detail.paid.topic}?amazonSNSClient=#dist.common.integration.sns.client"/>
 
         <endpoint id="df.service.lm.detail.paid.endpoint"
-                  uri="aws-sqs://$RUP{dist.foreign.aws.service.environment.prefix}-$RUP{dist.foreign.endpoint.lm.detail.paid}?amazonSQSClient=#dist.common.integration.sqs.client&amp;messageAttributeNames=All"/>
+                  uri="aws-sqs://$RUP{dist.foreign.aws.service.environment.prefix}-$RUP{dist.foreign.endpoint.lm.detail.paid.queue}?amazonSQSClient=#dist.common.integration.sqs.client&amp;messageAttributeNames=All"/>
 
         <endpoint id="df.service.internal.matching.endpoint" uri="direct:df.service.matching"/>
         <endpoint id="df.service.matching.endpoint" uri="$RUP{dist.foreign.endpoint.matching}"/>
