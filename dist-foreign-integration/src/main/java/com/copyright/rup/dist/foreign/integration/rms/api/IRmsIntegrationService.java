@@ -1,9 +1,7 @@
 package com.copyright.rup.dist.foreign.integration.rms.api;
 
-import com.copyright.rup.dist.common.domain.RmsGrant;
 import com.copyright.rup.dist.common.integration.rest.rms.RightsAssignmentResult;
 
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -16,14 +14,6 @@ import java.util.Set;
  * @author Aliaksandr Liakh
  */
 public interface IRmsIntegrationService {
-
-    /**
-     * Gets set of all {@link RmsGrant}s from RMS.
-     *
-     * @param wrWrkInsts list of wr wrk insts
-     * @return set of {@link RmsGrant}s
-     */
-    Set<RmsGrant> getAllRmsGrants(List<Long> wrWrkInsts);
 
     /**
      * Sends set of Wr Wrk Insts to RMS for rights assignment.

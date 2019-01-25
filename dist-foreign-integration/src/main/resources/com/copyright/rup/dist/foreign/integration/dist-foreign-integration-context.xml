@@ -53,15 +53,15 @@
         <constructor-arg value="$RUP{dist.foreign.rest.prm.rightsholder.async}"/>
     </bean>
 
-    <bean id="dist.common.integration.rmsService" class="com.copyright.rup.dist.common.integration.rest.rms.RmsService">
+    <bean id="dist.common.integration.rmsAllRightsService" class="com.copyright.rup.dist.common.integration.rest.rms.RmsAllRightsService">
         <constructor-arg ref="restTemplate"/>
-        <constructor-arg value="$RUP{dist.foreign.rest.rms.url}"/>
+        <constructor-arg value="$RUP{dist.foreign.rest.rms.all_rights.url}"/>
         <constructor-arg value="true"/>
     </bean>
 
     <bean id="dist.common.integration.rmsRightsAssignmentService" class="com.copyright.rup.dist.common.integration.rest.rms.RmsRightsAssignmentService">
         <constructor-arg ref="restTemplate"/>
-        <constructor-arg value="$RUP{dist.foreign.rest.rms.url}"/>
+        <constructor-arg value="$RUP{dist.foreign.rest.rms.rights_assignment.url}"/>
     </bean>
 
     <bean id="df.integration.externalUsageProducer"
