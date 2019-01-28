@@ -1,3 +1,12 @@
+4.1.23
+-
+* B-48535 FDA: Utilize SQS/SNS for internal distribution apps communication: reuse common sqs and sns mocks
+* B-48535 FDA: Utilize SQS/SNS for internal distribution apps communication: adjust tomcatRun to override AWS prefix property on local environment
+* B-48535 FDA: Utilize SQS SNS for internal distribution apps communication: make changes based on comments in CR-DIST-FOREIGN-87
+* CDP-646 FDA: Scenario is incorrectly showing 10% service fee for FAS details paid to CLA and CLA members
+* B-47646 Tech Debt: FDA: rename properties names from dist.common.integration.rest to dist.common.rest
+* B-47646 Tech Debt: FDA: create separate URLs for RMS services
+
 4.1.22
 -
 * B-48535 FDA: Utilize SQS/SNS for internal distribution apps communication: apply common sqs and sns config
