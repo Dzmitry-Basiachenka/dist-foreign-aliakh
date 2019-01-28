@@ -66,7 +66,7 @@ public class RightsAssignmentServiceIntegrationTest {
     @Test
     public void testSendForRightsAssignment() {
         MockRestServiceServer mockServer = MockRestServiceServer.createServer(restTemplate);
-        mockServer.expect(MockRestRequestMatchers.requestTo("http://localhost:9051/rms-rights-rest/jobs/wrwrkinst"))
+        mockServer.expect(MockRestRequestMatchers.requestTo("http://localhost:9051/rms-rights-rest/jobs/wrwrkinst/"))
             .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
             .andExpect(MockRestRequestMatchers.content()
                 .string(new JsonMatcher(
