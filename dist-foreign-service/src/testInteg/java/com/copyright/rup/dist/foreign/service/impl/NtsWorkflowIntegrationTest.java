@@ -14,10 +14,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -36,7 +37,7 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml")
 @TestPropertySource(properties = {"test.liquibase.changelog=nts-workflow-data-init.groovy"})
-@Transactional
+@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 public class NtsWorkflowIntegrationTest {
 
     private static final LocalDate DATE = LocalDate.of(2017, 2, 1);
@@ -54,7 +55,7 @@ public class NtsWorkflowIntegrationTest {
     }
 
     @Test
-    public void testNtsBatchWorkflow() {
+    public void testNtsBatchWorkflow() throws InterruptedException {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildFundPool(BUS_MARKET)))
             .expectRmsRights("rights/rms_grants_658824345_request.json", "rights/rms_grants_658824345_response.json")
@@ -62,6 +63,7 @@ public class NtsWorkflowIntegrationTest {
             .expectOracleCall("tax/rh_1000023401_tax_country_request.json",
                 "tax/rh_1000023401_tax_country_us_response.json")
             .expectPreferences("eligibility/pref_eligible_rh_response.json", "85f864f2-30a5-4215-ac4f-f1f541901218")
+            .expectInternalTaxUsage("internal/tax/usage_test_nts_batch_workflow.json")
             .expectedUsage(buildUsage())
             .expectUsageAudit(Arrays.asList(
                 buildUsageAuditItem(UsageActionTypeEnum.ELIGIBLE,
@@ -78,7 +80,7 @@ public class NtsWorkflowIntegrationTest {
     }
 
     @Test
-    public void testNtsBatchWorkflowIneligibleRightsholder() {
+    public void testNtsBatchWorkflowIneligibleRightsholder() throws InterruptedException {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildFundPool(BUS_MARKET)))
             .expectRmsRights("rights/rms_grants_658824345_request.json", "rights/rms_grants_658824345_response.json")
@@ -86,24 +88,26 @@ public class NtsWorkflowIntegrationTest {
             .expectOracleCall("tax/rh_1000023401_tax_country_request.json",
                 "tax/rh_1000023401_tax_country_us_response.json")
             .expectPreferences("eligibility/pref_ineligible_rh_response.json", "85f864f2-30a5-4215-ac4f-f1f541901218")
+            .expectInternalTaxUsage("internal/tax/usage_test_nts_batch_workflow.json")
             .build()
             .run();
     }
 
     @Test
-    public void testNtsBatchWorkflowNonUsRhTaxCountry() {
+    public void testNtsBatchWorkflowNonUsRhTaxCountry() throws InterruptedException {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildFundPool(BUS_MARKET)))
             .expectRmsRights("rights/rms_grants_658824345_request.json", "rights/rms_grants_658824345_response.json")
             .expectPrmCall(1000023401L, "prm/rightsholder_1000023401_response.json")
             .expectOracleCall("tax/rh_1000023401_tax_country_request.json",
                 "tax/rh_1000023401_tax_country_fr_response.json")
+            .expectInternalTaxUsage("internal/tax/usage_test_nts_batch_workflow.json")
             .build()
             .run();
     }
 
     @Test
-    public void testNtsBatchWorkflowRhNotFound() {
+    public void testNtsBatchWorkflowRhNotFound() throws InterruptedException {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildFundPool("Utiv")))
             .expectRmsRights("rights/rms_grants_854030732_request.json", "rights/rms_grants_empty_response.json")

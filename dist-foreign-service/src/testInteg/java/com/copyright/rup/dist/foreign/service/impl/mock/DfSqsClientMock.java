@@ -3,6 +3,8 @@ package com.copyright.rup.dist.foreign.service.impl.mock;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.test.mock.aws.SqsClientMock;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.time.OffsetDateTime;
 import java.util.Map;
 
@@ -36,8 +38,10 @@ public class DfSqsClientMock extends SqsClientMock {
     @Override
     public void prepareReceivedMessage(String queueName, String body, Map<String, String> headers) {
         super.prepareReceivedMessage(queueName,
-            String.format(SNS_NOTIFICATION_MESSAGE_FORMAT, RupPersistUtils.generateUuid(),
-                body.replace("\n", "").replace("\"", "\\\""), OffsetDateTime.now().toString()),
+            "fda-test-df-consumer-sf-detail-paid".equals(queueName)
+                ? String.format(SNS_NOTIFICATION_MESSAGE_FORMAT, RupPersistUtils.generateUuid(),
+                body.replace("\n", StringUtils.EMPTY).replace("\"", "\\\""), OffsetDateTime.now().toString())
+                : body,
             headers);
     }
 }
