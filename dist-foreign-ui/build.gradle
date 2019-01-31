@@ -52,6 +52,7 @@ afterEvaluate {
         tomcatRunTask.doFirst {
             if (!PluginUtils.onBuildServer()) {
                 systemProperty("dist.foreign.aws.service.environment.prefix", "lm-pdev-local")
+                systemProperty("dist.foreign.aws.service.environment.internal.prefix", "fda-pdev-local")
             }
         }
     }

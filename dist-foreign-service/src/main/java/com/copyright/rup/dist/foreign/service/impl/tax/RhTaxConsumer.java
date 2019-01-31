@@ -1,11 +1,13 @@
 package com.copyright.rup.dist.foreign.service.impl.tax;
 
+import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.integration.camel.IConsumer;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IRhTaxService;
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -25,6 +27,8 @@ import java.util.Objects;
 @Component("df.service.rhTaxConsumer")
 public class RhTaxConsumer implements IConsumer<Usage> {
 
+    private static final Logger LOGGER = RupLogUtils.getLogger();
+
     @Autowired
     private IRhTaxService rhTaxService;
 
@@ -35,6 +39,7 @@ public class RhTaxConsumer implements IConsumer<Usage> {
     @Override
     @Transactional
     public void consume(Usage usage) {
+        LOGGER.trace("Consume usage for RH tax processing. Usage={}", usage);
         if (Objects.nonNull(usage)) {
             rhTaxService.processTaxCountryCode(usage);
             rhTaxProcessor.executeNextProcessor(usage, (obj) -> UsageStatusEnum.US_TAX_COUNTRY == obj.getStatus());
