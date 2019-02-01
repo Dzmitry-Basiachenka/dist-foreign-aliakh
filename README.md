@@ -1,3 +1,6 @@
+4.1.24
+-
+
 4.1.23
 -
 * B-48535 FDA: Utilize SQS/SNS for internal distribution apps communication: reuse common sqs and sns mocks
