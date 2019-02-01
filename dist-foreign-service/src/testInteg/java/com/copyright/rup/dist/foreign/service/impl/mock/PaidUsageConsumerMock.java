@@ -31,4 +31,8 @@ public class PaidUsageConsumerMock extends PaidUsageConsumer {
     public void setLatch(CountDownLatch latch) {
         this.latch = latch;
     }
+
+    public CountDownLatch getLatch() {
+        return latch;
+    }
 }

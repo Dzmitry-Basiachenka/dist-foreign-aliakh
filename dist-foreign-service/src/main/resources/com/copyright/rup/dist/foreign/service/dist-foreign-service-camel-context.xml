@@ -98,8 +98,7 @@
         <endpoint id="df.service.rights.endpoint" uri="$RUP{dist.foreign.endpoint.rights}"/>
 
         <endpoint id="df.service.internal.tax.endpoint" uri="direct:df.service.tax"/>
-        <endpoint id="df.service.rh.tax.endpoint"
-                  uri="aws-sqs://$RUP{dist.foreign.aws.service.environment.internal.prefix}-$RUP{dist.foreign.endpoint.rh_tax}?amazonSQSClient=#dist.common.integration.sqs.client&amp;messageAttributeNames=All&amp;messageGroupIdStrategy=useConstant"/>
+        <endpoint id="df.service.rh.tax.endpoint" uri="$RUP{dist.foreign.endpoint.rh_tax}"/>
 
         <endpoint id="df.service.internal.eligibility.endpoint" uri="direct:df.service.eligibility"/>
         <endpoint id="df.service.rh.eligibility.endpoint" uri="$RUP{dist.foreign.endpoint.rh_eligibility}"/>

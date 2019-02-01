@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.test.JsonMatcher;
 import com.copyright.rup.dist.common.test.TestUtils;
-import com.copyright.rup.dist.common.test.mock.aws.SqsClientMock;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
@@ -17,15 +16,11 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.impl.NtsWorkflowIntegrationTestBuilder.Runner;
-import com.copyright.rup.dist.foreign.service.impl.mock.RhTaxConsumerMock;
 
-import com.amazonaws.services.sqs.model.SendMessageRequest;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.builder.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -39,8 +34,6 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
 /**
@@ -67,11 +60,6 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
     private RestTemplate restTemplate;
     @Autowired
     private AsyncRestTemplate asyncRestTemplate;
-    @Autowired
-    private SqsClientMock sqsClientMock;
-    @Autowired
-    @Qualifier("df.service.rhTaxConsumer")
-    private RhTaxConsumerMock rhTaxConsumer;
 
     @Value("$RUP{dist.foreign.rest.prm.rightsholder.async}")
     private boolean prmRightsholderAsync;
@@ -87,7 +75,6 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
     private List<UsageAuditItem> expectedUsageAuditItems;
     private UsageBatch usageBatch;
     private Usage processedUsage;
-    private String expectedInternalTaxUsage;
 
     NtsWorkflowIntegrationTestBuilder withUsageBatch(UsageBatch batch) {
         this.usageBatch = batch;
@@ -128,11 +115,6 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
-    NtsWorkflowIntegrationTestBuilder expectInternalTaxUsage(String usage) {
-        this.expectedInternalTaxUsage = usage;
-        return this;
-    }
-
     @Override
     public Runner build() {
         return new Runner();
@@ -149,8 +131,6 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
         expectedUsageAuditItems = null;
         expectedPreferencesResponce = null;
         expectedPreferencesRightholderId = null;
-        expectedInternalTaxUsage = null;
-        sqsClientMock.reset();
     }
 
     /**
@@ -173,37 +153,10 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
             if (Objects.nonNull(expectedPreferencesResponce)) {
                 expectGetPreferences();
             }
-            if (Objects.nonNull(expectedInternalTaxUsage)) {
-                expectRhTaxProducer();
-            }
             loadNtsBatch();
-            if (Objects.nonNull(expectedInternalTaxUsage)) {
-                assertRhTaxConsumer(assertRhTaxProducer());
-            }
             assertBatch();
             assertUsages();
             verifyRestServer();
-        }
-
-        private void expectRhTaxProducer() {
-            sqsClientMock.expectSendMessages("fda-internal-test-df-tax.fifo",
-                Collections.singletonList(TestUtils.fileToString(this.getClass(), expectedInternalTaxUsage)),
-                ImmutableList.of("id", "batch_id"), Collections.emptyMap());
-        }
-
-        private String assertRhTaxProducer() {
-            sqsClientMock.assertSendMessages();
-            List<SendMessageRequest> requests = sqsClientMock.getActualSendMessages();
-            assertEquals(1, requests.size());
-            return requests.get(0).getMessageBody();
-        }
-
-        private void assertRhTaxConsumer(String message) throws InterruptedException {
-            CountDownLatch latch = new CountDownLatch(1);
-            rhTaxConsumer.setLatch(latch);
-            sqsClientMock.prepareReceivedMessage("fda-internal-test-df-tax.fifo", message, Collections.emptyMap());
-            assertTrue(latch.await(10, TimeUnit.SECONDS));
-            sqsClientMock.assertReceivedMessageDeleted();
         }
 
         private void loadNtsBatch() {

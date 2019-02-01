@@ -63,7 +63,6 @@ public class NtsWorkflowIntegrationTest {
             .expectOracleCall("tax/rh_1000023401_tax_country_request.json",
                 "tax/rh_1000023401_tax_country_us_response.json")
             .expectPreferences("eligibility/pref_eligible_rh_response.json", "85f864f2-30a5-4215-ac4f-f1f541901218")
-            .expectInternalTaxUsage("internal/tax/usage_test_nts_batch_workflow.json")
             .expectedUsage(buildUsage())
             .expectUsageAudit(Arrays.asList(
                 buildUsageAuditItem(UsageActionTypeEnum.ELIGIBLE,
@@ -88,7 +87,6 @@ public class NtsWorkflowIntegrationTest {
             .expectOracleCall("tax/rh_1000023401_tax_country_request.json",
                 "tax/rh_1000023401_tax_country_us_response.json")
             .expectPreferences("eligibility/pref_ineligible_rh_response.json", "85f864f2-30a5-4215-ac4f-f1f541901218")
-            .expectInternalTaxUsage("internal/tax/usage_test_nts_batch_workflow.json")
             .build()
             .run();
     }
@@ -101,7 +99,6 @@ public class NtsWorkflowIntegrationTest {
             .expectPrmCall(1000023401L, "prm/rightsholder_1000023401_response.json")
             .expectOracleCall("tax/rh_1000023401_tax_country_request.json",
                 "tax/rh_1000023401_tax_country_fr_response.json")
-            .expectInternalTaxUsage("internal/tax/usage_test_nts_batch_workflow.json")
             .build()
             .run();
     }

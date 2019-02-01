@@ -47,9 +47,6 @@
     <bean id="df.service.paidUsageConsumer"
           class="com.copyright.rup.dist.foreign.service.impl.mock.PaidUsageConsumerMock"/>
 
-    <bean id="df.service.rhTaxConsumer"
-          class="com.copyright.rup.dist.foreign.service.impl.mock.RhTaxConsumerMock"/>
-
     <bean id="df.integration.piIntegrationCacheService"
           class="com.copyright.rup.dist.foreign.service.impl.mock.PiIntegrationServiceMock"/>
 
@@ -57,7 +54,7 @@
 
     <import resource="classpath:/com/copyright/rup/dist/common/test/mock/aws/dist-common-sqs-test-context.xml"/>
     <bean id="dist.common.integration.sqs.client"
-          class="com.copyright.rup.dist.foreign.service.impl.mock.DfSqsClientMock"/>
+          class="com.copyright.rup.dist.foreign.service.impl.mock.SqsClientMock"/>
     <import resource="classpath:/com/copyright/rup/dist/common/test/mock/aws/dist-common-sns-test-context.xml"/>
     <bean id="df.service.paidUsageSubscriber" class="java.lang.Object"/>
 </beans>

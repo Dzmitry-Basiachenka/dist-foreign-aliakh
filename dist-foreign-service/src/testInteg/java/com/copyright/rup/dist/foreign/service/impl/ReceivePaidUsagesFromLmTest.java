@@ -6,11 +6,12 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.test.TestUtils;
-import com.copyright.rup.dist.common.test.mock.aws.SqsClientMock;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.service.impl.mock.PaidUsageConsumerMock;
+import com.copyright.rup.dist.foreign.service.impl.mock.SnsMock;
+import com.copyright.rup.dist.foreign.service.impl.mock.SqsClientMock;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
@@ -180,11 +181,10 @@ public class ReceivePaidUsagesFromLmTest {
     }
 
     private void expectReceivePaidUsages(String messageFilepath) throws InterruptedException {
-        CountDownLatch latch = new CountDownLatch(1);
-        paidUsageConsumer.setLatch(latch);
-        sqsClientMock.prepareReceivedMessage("fda-test-df-consumer-sf-detail-paid",
-            TestUtils.fileToString(this.getClass(), messageFilepath), Collections.EMPTY_MAP);
-        assertTrue(latch.await(10, TimeUnit.SECONDS));
-        sqsClientMock.assertReceivedMessageDeleted();
+        paidUsageConsumer.setLatch(new CountDownLatch(1));
+        sqsClientMock.sendMessage("fda-test-df-consumer-sf-detail-paid",
+            SnsMock.wrapBody(TestUtils.fileToString(this.getClass(), messageFilepath)), Collections.EMPTY_MAP);
+        assertTrue(paidUsageConsumer.getLatch().await(2, TimeUnit.SECONDS));
+        assertEquals(0, sqsClientMock.getCurrentMessages("fda-test-df-consumer-sf-detail-paid").size());
     }
 }
