@@ -1,3 +1,7 @@
+4.1.25
+-
+* B-48910 FDA: Migrate to SQS for internal queues: Migrate Camel route for the endpoint activemq:df.rights to SQS
+
 4.1.24
 -
 * B-48910 FDA: Migrate to SQS for internal queues: Migrate Camel route for the endpoint activemq:df.tax to SQS
