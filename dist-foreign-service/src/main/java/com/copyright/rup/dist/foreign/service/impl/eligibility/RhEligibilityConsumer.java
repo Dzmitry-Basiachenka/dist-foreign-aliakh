@@ -1,10 +1,12 @@
 package com.copyright.rup.dist.foreign.service.impl.eligibility;
 
+import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.integration.camel.IConsumer;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -24,6 +26,8 @@ import java.util.Objects;
 @Component("df.service.rhEligibilityConsumer")
 public class RhEligibilityConsumer implements IConsumer<Usage> {
 
+    private static final Logger LOGGER = RupLogUtils.getLogger();
+
     @Autowired
     private IPrmIntegrationService prmIntegrationService;
 
@@ -34,6 +38,7 @@ public class RhEligibilityConsumer implements IConsumer<Usage> {
     @Override
     @Transactional
     public void consume(Usage usage) {
+        LOGGER.trace("Consume usage for RH eligibility processing. Usage={}", usage);
         if (Objects.nonNull(usage)) {
             boolean isEligible =
                 prmIntegrationService.isRightsholderEligibleForNtsDistribution(usage.getRightsholder().getId());
