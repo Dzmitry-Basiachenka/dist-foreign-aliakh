@@ -1,12 +1,10 @@
 package com.copyright.rup.dist.foreign.service.impl.mock;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
-import com.copyright.rup.dist.common.test.mock.aws.SqsClientMock;
 
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.OffsetDateTime;
-import java.util.Map;
 
 /**
  * Mock class for {@link com.amazonaws.services.sns.AmazonSNSClient} to avoid requests to AWS services.
@@ -16,7 +14,7 @@ import java.util.Map;
  *
  * @author Pavel Liakh
  */
-public class DfSqsClientMock extends SqsClientMock {
+public final class SnsMock {
 
     // https://docs.aws.amazon.com/sns/latest/dg/sns-message-and-json-formats.html
     private static final String SNS_NOTIFICATION_MESSAGE_FORMAT = "{" +
@@ -35,13 +33,12 @@ public class DfSqsClientMock extends SqsClientMock {
         "  }" +
         "}";
 
-    @Override
-    public void prepareReceivedMessage(String queueName, String body, Map<String, String> headers) {
-        super.prepareReceivedMessage(queueName,
-            "fda-test-df-consumer-sf-detail-paid".equals(queueName)
-                ? String.format(SNS_NOTIFICATION_MESSAGE_FORMAT, RupPersistUtils.generateUuid(),
-                body.replace("\n", StringUtils.EMPTY).replace("\"", "\\\""), OffsetDateTime.now().toString())
-                : body,
-            headers);
+    private SnsMock() {
+        throw new AssertionError("Constructor shouldn't be called directly");
+    }
+
+    public static String wrapBody(String body) {
+        return String.format(SNS_NOTIFICATION_MESSAGE_FORMAT, RupPersistUtils.generateUuid(),
+            body.replace("\n", StringUtils.EMPTY).replace("\"", "\\\""), OffsetDateTime.now().toString());
     }
 }

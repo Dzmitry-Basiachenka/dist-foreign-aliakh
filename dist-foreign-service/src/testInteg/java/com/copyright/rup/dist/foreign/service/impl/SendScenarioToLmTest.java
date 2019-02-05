@@ -1,10 +1,13 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
+import static org.junit.Assert.assertEquals;
+
 import com.copyright.rup.dist.common.test.TestUtils;
-import com.copyright.rup.dist.common.test.mock.aws.SqsClientMock;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
+import com.copyright.rup.dist.foreign.service.impl.mock.SqsClientMock;
 
+import com.amazonaws.services.sqs.model.SendMessageRequest;
 import com.google.common.collect.ImmutableMap;
 
 import org.junit.Before;
@@ -16,6 +19,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies Send To LM functionality.
@@ -47,10 +51,12 @@ public class SendScenarioToLmTest {
     public void testSendToLm() {
         Scenario scenario = new Scenario();
         scenario.setId("4c014547-06f3-4840-94ff-6249730d537d");
-        sqsClientMock.expectSendMessages("fda-test-sf-detail.fifo",
+        scenarioService.sendToLm(scenario);
+        List<SendMessageRequest> sendMessageRequests = sqsClientMock.getSendMessageRequests();
+        assertEquals(1, sendMessageRequests.size());
+        sqsClientMock.assertSendMessageRequest(sendMessageRequests.get(0),
+            "fda-test-sf-detail.fifo",
             Collections.singletonList(TestUtils.fileToString(this.getClass(), "details/details_to_lm.json")),
             Collections.EMPTY_LIST, ImmutableMap.of("source", "FDA"));
-        scenarioService.sendToLm(scenario);
-        sqsClientMock.assertSendMessages();
     }
 }
