@@ -7,10 +7,7 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
-import org.apache.activemq.ActiveMQConnectionFactory;
-import org.apache.activemq.broker.BrokerService;
 import org.apache.commons.lang3.tuple.Pair;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,8 +21,6 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import javax.jms.Connection;
 
 /**
  * Verifies application workflow.
@@ -67,29 +62,10 @@ public class WorkflowIntegrationTest {
     @Autowired
     private List<ICacheService<?, ?>> cacheServices;
 
-    private BrokerService brokerService;
-    private Connection connection;
-
     @Before
     public void setUp() throws Exception {
         testBuilder.reset();
         cacheServices.forEach(ICacheService::invalidateCache);
-        brokerService = new BrokerService();
-        brokerService.setPersistent(false);
-        brokerService.setUseJmx(false);
-        brokerService.start();
-        connection = new ActiveMQConnectionFactory("vm://localhost").createConnection();
-        connection.start();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        if (null != connection) {
-            connection.close();
-        }
-        if (null != brokerService) {
-            brokerService.stop();
-        }
     }
 
     @Test
