@@ -1,3 +1,7 @@
+4.1.27
+-
+* B-48910 FDA: Migrate to SQS for internal queues: Remove all ActiveMQ dependencies from the project
+
 4.1.26
 -
 * B-48910 FDA: Migrate to SQS for internal queues: Migrate Camel route for the endpoint activemq:df.eligibility to SQS
