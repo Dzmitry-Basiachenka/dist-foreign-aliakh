@@ -1,0 +1,3 @@
+== Currently supported RESTs
+
+Please refer additional information section of the each method to get more information about method usage.
