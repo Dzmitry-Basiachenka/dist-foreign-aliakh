@@ -6,7 +6,7 @@ info:
 host: 'dist-foreign.aws-p-dev.copyright.com'
 schemes:
   - http
-basePath: /dist-modeling-feeder
+basePath: /dist-foreign-ui
 produces:
   - application/json
 consumes:
