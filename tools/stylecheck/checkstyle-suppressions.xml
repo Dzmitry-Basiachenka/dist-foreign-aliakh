@@ -27,9 +27,6 @@
     <suppress checks="MethodLength"             files="src[/\\]testUi[/\\]java[/\\].*"/>
     <suppress checks="FileLength"               files="src[/\\]testUi[/\\]java[/\\].*"/>
 
-    <!--Swagger files-->
-    <suppress checks="[a-zA-Z0-9]*" files="[\\/]gen[\\/]"/>
-
     <!-- suppress checks for file length longer than 500 lines-->
     <suppress checks="FileLength"
               files="src[/\\]main[/\\]java[/\\]com[/\\]copyright[/\\]rup[/\\]dist[/\\]foreign[/\\]domain[/\\]UsageDto.java"/>

@@ -84,7 +84,7 @@
         <property name="cronExpression" value="$RUP{dist.foreign.scheduler.works_match}"/>
     </bean>
 
-    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+    <bean id="schedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
         <property name="jobDetails">
             <list>
                 <ref bean="df.service.getRightsQuartzJob"/>
@@ -129,5 +129,9 @@
                 org.quartz.jobStore.useProperties=false
             </value>
         </property>
+    </bean>
+
+    <bean name="schedulerService" class="com.copyright.rup.dist.common.service.impl.scheduler.SchedulerService">
+        <constructor-arg index="0" ref="schedulerFactoryBean"/>
     </bean>
 </beans>
