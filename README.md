@@ -1,3 +1,11 @@
+4.1.28
+-
+* B-47964 FDA: Tag details with category supplied by RRO when loading batches/receipts: FDA: and comment column to db tables
+* B-49040 Tech Debt: FDA: Add Swagger Codegen to implement REST services
+* B-49040 Tech Debt: FDA: Set correct value of basePath for Swagger Codegen configuration
+* B-49040 Tech Debt: FDA: Update project configuration to support REST services implemented by Swagger Codegen
+* B-49461 Tech Debt: FDA: reduce Camel redelivery policy delay, apply redelivery for all consuming routes
+
 4.1.27
 -
 * B-48910 FDA: Migrate to SQS for internal queues: Remove all ActiveMQ dependencies from the project
