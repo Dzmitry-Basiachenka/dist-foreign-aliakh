@@ -312,4 +312,21 @@ databaseChangeLog {
             }
         }
     }
+
+    changeSet(id: '2019-02-13-00', author: 'Uladzislau Shalamistski <ushalamitski@copyright.com>') {
+        comment("B-47964 FDA: Tag details with category supplied by RRO when loading batches/receipts: and comment column to db tables")
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'comment', type: 'VARCHAR(100)', remarks: 'Comment')
+        }
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+            column(name: 'comment', type: 'VARCHAR(100)', remarks: 'Comment')
+        }
+
+        rollback {
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'comment')
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'comment')
+        }
+    }
 }
