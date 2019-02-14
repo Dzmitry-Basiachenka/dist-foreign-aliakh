@@ -25,8 +25,6 @@ dependencies {
     compile("com.copyright.rup.vaadin:rup-vaadin-core:${rupVaadinVersion}")
     compile("com.copyright.rup.vaadin:rup-vaadin-theme:${rupVaadinVersion}")
     compile("com.vaadin:vaadin-spring:${vaadinSpringVersion}")
-    compile("io.swagger:swagger-annotations:${swaggerVersion}")
-    compile("org.hibernate:hibernate-validator:${hibernateValidatorVersion}")
 
     runtime("com.copyright.rup.common:rup-common-web:${rupCommonVersion}")
     runtime("com.copyright.rup.dist.common:dist-common-web:${distCommonVersion}")
@@ -39,9 +37,6 @@ dependencies {
     testCompile("org.apache.commons:commons-text:${commonsTextVersion}")
 
     testRuntime("cglib:cglib-nodep:${cglibNodepVersion}")
-
-    testIntegRuntime("com.jayway.jsonpath:json-path:${jsonPathVersion}")
-    testIntegRuntime("org.skyscreamer:jsonassert:${jsonassertVersion}")
 }
 
 task compileVaadinTheme(type: CompileThemeTask, group: "rupVaadin")
