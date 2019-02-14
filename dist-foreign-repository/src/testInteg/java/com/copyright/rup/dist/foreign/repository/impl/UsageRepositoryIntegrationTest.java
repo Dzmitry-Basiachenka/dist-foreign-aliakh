@@ -90,6 +90,7 @@ public class UsageRepositoryIntegrationTest {
     private static final String RH_NAME_KEY = "rhName";
     private static final String GROSS_AMOUNT_KEY = "grossAmount";
     private static final String SERVICE_FEE_KEY = "serviceFee";
+    private static final String COMMENT_KEY = "comment";
     private static final String STATUS_KEY = "status";
     private static final String USAGE_ID_1 = "3ab5e80b-89c0-4d78-9675-54c7ab284450";
     private static final String USAGE_ID_2 = "8a06905f-37ae-4e1f-8550-245277f8165c";
@@ -708,6 +709,8 @@ public class UsageRepositoryIntegrationTest {
         verifyUsageDtos(findByFilterWithSort(filter, PAYMENT_DATE_KEY, Direction.DESC), 2, USAGE_ID_24, USAGE_ID_23);
         verifyUsageDtos(findByFilterWithSort(filter, "batchGrossAmount", Direction.ASC), 2, USAGE_ID_23, USAGE_ID_24);
         verifyUsageDtos(findByFilterWithSort(filter, "batchGrossAmount", Direction.DESC), 2, USAGE_ID_24, USAGE_ID_23);
+        verifyUsageDtos(findByFilterWithSort(filter, COMMENT_KEY, Direction.ASC), 2, USAGE_ID_23, USAGE_ID_24);
+        verifyUsageDtos(findByFilterWithSort(filter, COMMENT_KEY, Direction.DESC), 2, USAGE_ID_24, USAGE_ID_23);
     }
 
     @Test
@@ -736,6 +739,8 @@ public class UsageRepositoryIntegrationTest {
         verifyUsageDtos(findByFilterWithSort(filter, "netAmount", Direction.DESC), 2, USAGE_ID_23, USAGE_ID_24);
         verifyUsageDtos(findByFilterWithSort(filter, SERVICE_FEE_KEY, Direction.ASC), 2, USAGE_ID_23, USAGE_ID_24);
         verifyUsageDtos(findByFilterWithSort(filter, SERVICE_FEE_KEY, Direction.DESC), 2, USAGE_ID_24, USAGE_ID_23);
+        verifyUsageDtos(findByFilterWithSort(filter, COMMENT_KEY, Direction.ASC), 2, USAGE_ID_23, USAGE_ID_24);
+        verifyUsageDtos(findByFilterWithSort(filter, COMMENT_KEY, Direction.DESC), 2, USAGE_ID_24, USAGE_ID_23);
     }
 
     @Test
@@ -766,6 +771,8 @@ public class UsageRepositoryIntegrationTest {
         verifyUsageDtos(findByFilterWithSort(filter, "marketPeriodTo", Direction.DESC), 2, USAGE_ID_24, USAGE_ID_23);
         verifyUsageDtos(findByFilterWithSort(filter, "author", Direction.ASC), 2, USAGE_ID_24, USAGE_ID_23);
         verifyUsageDtos(findByFilterWithSort(filter, "author", Direction.DESC), 2, USAGE_ID_23, USAGE_ID_24);
+        verifyUsageDtos(findByFilterWithSort(filter, COMMENT_KEY, Direction.ASC), 2, USAGE_ID_23, USAGE_ID_24);
+        verifyUsageDtos(findByFilterWithSort(filter, COMMENT_KEY, Direction.DESC), 2, USAGE_ID_24, USAGE_ID_23);
     }
 
     @Test
@@ -792,6 +799,8 @@ public class UsageRepositoryIntegrationTest {
         verifyUsageDtos(findForAuditWithSort(filter, SERVICE_FEE_KEY, false), 2, USAGE_ID_4, USAGE_ID_5);
         verifyUsageDtos(findForAuditWithSort(filter, "scenarioName", true), 2, USAGE_ID_5, USAGE_ID_4);
         verifyUsageDtos(findForAuditWithSort(filter, "scenarioName", false), 2, USAGE_ID_4, USAGE_ID_5);
+        verifyUsageDtos(findForAuditWithSort(filter, COMMENT_KEY, true), 2, USAGE_ID_5, USAGE_ID_4);
+        verifyUsageDtos(findForAuditWithSort(filter, COMMENT_KEY, false), 2, USAGE_ID_4, USAGE_ID_5);
         verifyFilterForTwoBatches(filter);
         filter.setBatchesIds(Sets.newHashSet("48bfe456-fbc1-436e-8762-baca46a0e09c"));
         verifyUsageDtos(findForAuditWithSort(filter, "payeeAccountNumber", true), 2, USAGE_ID_16, USAGE_ID_15);
@@ -1071,6 +1080,7 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(expectedUsage.getRightsholder().getId(), actualUsage.getRightsholder().getId());
         assertEquals(expectedUsage.getRightsholder().getAccountNumber(),
             actualUsage.getRightsholder().getAccountNumber());
+        assertEquals(expectedUsage.getComment(), actualUsage.getComment());
     }
 
     private RightsholderTotalsHolder buildRightsholderTotalsHolder(String rhName, Long rhAccountNumber,

@@ -183,7 +183,8 @@
         author,
         number_of_copies,
         reported_value,
-        gross_amount
+        gross_amount,
+        comment
     </sql>
 
     <sql id="usageDtoColumns">
@@ -368,6 +369,9 @@
             <when test="sort.property == 'status'">
                 u.status_ind <include refid="IUsageMapper.direction"/>
             </when>
+            <when test="sort.property == 'comment'">
+                u.comment <include refid="IUsageMapper.direction"/>
+            </when>
         </choose>
     </sql>
 
@@ -462,6 +466,7 @@
             #{numberOfCopies},
             #{reportedValue},
             #{grossAmount},
+            #{comment},
             #{payee.accountNumber},
             <include refid="StoredEntityMapper.insert"/>
         )
@@ -635,6 +640,7 @@
             u.market_period_from,
             u.market_period_to,
             u.author,
+            u.comment,
             u.number_of_copies,
             u.reported_value,
             u.gross_amount,
@@ -1019,6 +1025,9 @@
                     </when>
                     <when test="sort.property == 'periodEndDate'">
                         period_end_date
+                    </when>
+                    <when test="sort.property == 'comment'">
+                        comment
                     </when>
                 </choose>
                 <include refid="IUsageMapper.direction"/>

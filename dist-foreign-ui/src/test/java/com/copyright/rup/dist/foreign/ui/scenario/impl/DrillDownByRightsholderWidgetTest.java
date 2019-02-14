@@ -87,7 +87,7 @@ public class DrillDownByRightsholderWidgetTest {
                 "RRO Account #", "RRO Name", "Payment Date", "Title", "Article", "Standard Number", "Wr Wrk Inst",
                 "System Title", "Publisher", "Pub Date", "Number of Copies", "Reported value", "Gross Amt in USD",
                 "Service Fee Amount", "Net Amt in USD", "Service Fee %", "Market", "Market Period From",
-                "Market Period To", "Author"},
+                "Market Period To", "Author", "Comment"},
             grid.getColumns().stream().map(Column::getCaption).toArray());
     }
 
