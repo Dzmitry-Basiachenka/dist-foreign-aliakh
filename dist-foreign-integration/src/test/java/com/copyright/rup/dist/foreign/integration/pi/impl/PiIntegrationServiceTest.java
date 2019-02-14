@@ -104,6 +104,12 @@ public class PiIntegrationServiceTest {
             searchHit6);
     }
 
+    @Test
+    public void testBuildQueryString() {
+        assertEquals("idno\\:\\\"0.1353\\/PGN.1999.0081",
+            piIntegrationService.buildQueryString("idno", "   \"0.1353/PGN.1999.0081   "));
+    }
+
     private void expectGetSearchResponseByTitle() {
         expect(searchResponse.getResults()).andReturn(searchResults).times(6);
         expect(searchResults.getHits()).andReturn(Collections.singletonList(searchHit1)).once();

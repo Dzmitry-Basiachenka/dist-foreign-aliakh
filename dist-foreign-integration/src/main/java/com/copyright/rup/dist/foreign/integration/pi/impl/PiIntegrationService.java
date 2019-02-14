@@ -17,6 +17,7 @@ import com.google.common.collect.Iterables;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.lucene.queryparser.classic.QueryParser;
 import org.elasticsearch.ElasticsearchException;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -118,6 +119,10 @@ public class PiIntegrationService implements IPiIntegrationService {
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
+    String buildQueryString(String field, String value) {
+        return QueryParser.escape(String.format("%s:%s", field, value.trim()));
+    }
+
     private Work matchByIdnoAndTitle(String idno, String title) {
         List<RupSearchHit> searchHits = doSearch("idno", idno).getResults().getHits();
         Work result = new Work();
@@ -189,22 +194,5 @@ public class PiIntegrationService implements IPiIntegrationService {
         } catch (RupEsApiRuntimeException | ElasticsearchException e) {
             throw new RupRuntimeException("Unable to connect to RupEsApi", e);
         }
-    }
-
-    private String buildQueryString(String field, String value) {
-        StringBuilder builder = new StringBuilder();
-        append(builder, field, value);
-        return builder.toString();
-    }
-
-    private void append(StringBuilder builder, String field, String value) {
-        appendValue(builder, field, value);
-    }
-
-    private void appendValue(StringBuilder builder, String field, String value) {
-        builder.append(field)
-            .append(":\"")
-            .append(value)
-            .append('"');
     }
 }
