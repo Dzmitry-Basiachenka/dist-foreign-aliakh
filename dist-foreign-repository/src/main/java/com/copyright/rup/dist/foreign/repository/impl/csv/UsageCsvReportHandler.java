@@ -24,7 +24,7 @@ public class UsageCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
         "Usage Batch Name", "Fiscal Year", "RRO Account #", "RRO Name", "Payment Date", "Title", "Article",
         "Standard Number", "Wr Wrk Inst", "System Title", "RH Account #", "RH Name", "Publisher", "Pub Date",
         "Number of Copies", "Reported value", "Amt in USD", "Gross Amt in USD", "Market", "Market Period From",
-        "Market Period To", "Author");
+        "Market Period To", "Author", "Comment");
 
     /**
      * Constructor.
@@ -63,6 +63,7 @@ public class UsageCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
         beanProperties.add(getBeanPropertyAsString(bean.getMarketPeriodFrom()));
         beanProperties.add(getBeanPropertyAsString(bean.getMarketPeriodTo()));
         beanProperties.add(bean.getAuthor());
+        beanProperties.add(bean.getComment());
         return beanProperties;
     }
 

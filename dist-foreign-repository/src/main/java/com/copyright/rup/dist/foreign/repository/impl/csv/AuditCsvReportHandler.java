@@ -22,7 +22,7 @@ public class AuditCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
     private static final List<String> HEADERS = Arrays.asList("Detail ID", "Detail Status", "Product Family",
         "Usage Batch Name", "Payment Date", "RH Account #", "RH Name", "Payee Account #", "Payee Name",
         "Wr Wrk Inst", "System Title", "Title", "Standard Number", "Amt in USD", "Service Fee %", "Scenario Name",
-        "Check #", "Check Date", "Event ID", "Dist. Name", "Dist. Date", "Period Ending");
+        "Check #", "Check Date", "Event ID", "Dist. Name", "Dist. Date", "Period Ending", "Comment");
 
     /**
      * Constructor.
@@ -58,6 +58,7 @@ public class AuditCsvReportHandler extends BaseCsvReportHandler<UsageDto> {
         beanProperties.add(bean.getDistributionName());
         beanProperties.add(getBeanOffsetDateTime(bean.getDistributionDate()));
         beanProperties.add(getBeanLocalDate(bean.getPeriodEndDate()));
+        beanProperties.add(bean.getComment());
         return beanProperties;
     }
 

@@ -40,6 +40,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: '420.00')
             column(name: 'service_fee_amount', value: '80.00')
             column(name: 'service_fee', value: '0.16000')
+            column(name: 'comment', value: 'DIN EN 779:2012')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -156,6 +157,7 @@ databaseChangeLog {
             column(name: 'service_fee_amount', value: '2082.98')
             column(name: 'net_amount', value: '4426.33')
             column(name: 'service_fee', value: '0.32')
+            column(name: 'comment', value: '471137967')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -184,6 +186,7 @@ databaseChangeLog {
             column(name: 'service_fee_amount', value: '416.60')
             column(name: 'net_amount', value: '885.26')
             column(name: 'service_fee', value: '0.32')
+            column(name: 'comment', value: '122235139')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -212,6 +215,7 @@ databaseChangeLog {
             column(name: 'service_fee_amount', value: '780.42')
             column(name: 'net_amount', value: '1658.40')
             column(name: 'service_fee', value: '0.32')
+            column(name: 'comment', value: '471137469')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
@@ -4354,6 +4358,7 @@ databaseChangeLog {
             column(name: 'distribution_name', value: 'FDA March 17')
             column(name: 'distribution_date', value: '2016-11-03')
             column(name: 'lm_detail_id', value: '97a86977-016f-4b9d-b861-79fcd8ff1164')
+            column(name: 'comment', value: '243904752')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {

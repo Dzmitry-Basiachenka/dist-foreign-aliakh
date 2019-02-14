@@ -121,6 +121,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: '23800.00')
             column(name: 'service_fee_amount', value: '11200.00')
             column(name: 'service_fee', value: '0.32000')
+            column(name: 'comment', value: '180382914')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {

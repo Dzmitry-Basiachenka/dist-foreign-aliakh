@@ -24,7 +24,7 @@ public class ScenarioUsagesCsvReportHandler extends BaseCsvReportHandler<UsageDt
         "Fiscal Year", "RRO Account #", "RRO Name", "Payment Date", "Title", "Article", "Standard Number",
         "Wr Wrk Inst", "System Title", "RH Account #", "RH Name", "Payee Account #", "Payee Name", "Publisher",
         "Pub Date", "Number of Copies", "Reported value", "Gross Amt in USD", "Service Fee Amount", "Net Amt in USD",
-        "Service Fee %", "Market", "Market Period From", "Market Period To", "Author");
+        "Service Fee %", "Market", "Market Period From", "Market Period To", "Author", "Comment");
 
     /**
      * Constructor.
@@ -66,6 +66,7 @@ public class ScenarioUsagesCsvReportHandler extends BaseCsvReportHandler<UsageDt
         beanProperties.add(getBeanPropertyAsString(bean.getMarketPeriodFrom()));
         beanProperties.add(getBeanPropertyAsString(bean.getMarketPeriodTo()));
         beanProperties.add(getBeanPropertyAsString(bean.getAuthor()));
+        beanProperties.add(bean.getComment());
         return beanProperties;
     }
 

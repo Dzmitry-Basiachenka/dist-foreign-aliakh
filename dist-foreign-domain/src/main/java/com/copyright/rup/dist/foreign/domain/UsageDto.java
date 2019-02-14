@@ -60,6 +60,7 @@ public class UsageDto extends StoredEntity<String> {
     private String distributionName;
     private OffsetDateTime distributionDate;
     private LocalDate periodEndDate;
+    private String comment;
 
     public String getBatchName() {
         return batchName;
@@ -324,6 +325,7 @@ public class UsageDto extends StoredEntity<String> {
     public void setCccEventId(String cccEventId) {
         this.cccEventId = cccEventId;
     }
+
     public String getDistributionName() {
         return distributionName;
     }
@@ -346,6 +348,14 @@ public class UsageDto extends StoredEntity<String> {
 
     public void setPeriodEndDate(LocalDate periodEndDate) {
         this.periodEndDate = periodEndDate;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     @Override
@@ -395,6 +405,7 @@ public class UsageDto extends StoredEntity<String> {
             .append(this.distributionName, that.distributionName)
             .append(this.distributionDate, that.distributionDate)
             .append(this.periodEndDate, that.periodEndDate)
+            .append(this.comment, that.comment)
             .isEquals();
     }
 
@@ -438,6 +449,7 @@ public class UsageDto extends StoredEntity<String> {
             .append(distributionName)
             .append(distributionDate)
             .append(periodEndDate)
+            .append(comment)
             .toHashCode();
     }
 
@@ -481,6 +493,7 @@ public class UsageDto extends StoredEntity<String> {
             .append("distributionName", distributionName)
             .append("distributionDate", distributionDate)
             .append("periodEndDate", periodEndDate)
+            .append("comment", comment)
             .toString();
     }
 }
