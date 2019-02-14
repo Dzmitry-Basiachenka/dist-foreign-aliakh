@@ -115,6 +115,7 @@
         <result property="distributionName" column="distribution_name"/>
         <result property="distributionDate" column="distribution_date"/>
         <result property="periodEndDate" column="period_end_date"/>
+        <result property="comment" column="comment"/>
     </resultMap>
 
     <resultMap id="usageAmountResultMap" type="Usage" extends="StoredEntityMapper.storedEntityResult">
@@ -216,7 +217,8 @@
         rro.name rro_name,
         ub.payment_date,
         ub.fiscal_year,
-        u.updated_datetime
+        u.updated_datetime,
+        u.comment
     </sql>
 
     <sql id="selectUsageDtos">
@@ -932,7 +934,8 @@
                     null ccc_event_id,
                     null distribution_name,
                     null distribution_date,
-                    null period_end_date
+                    null period_end_date,
+                    u.comment
                 from ${schema}.df_usage u
                 join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
                 left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
@@ -1052,7 +1055,8 @@
             u.ccc_event_id,
             u.distribution_name,
             u.distribution_date,
-            u.period_end_date
+            u.period_end_date,
+            u.comment
         from ${schema}.df_usage_archive u
         left join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
