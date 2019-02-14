@@ -119,6 +119,13 @@ public class PiIntegrationService implements IPiIntegrationService {
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
+    /**
+     * Builds query string based on field to search and value.
+     *
+     * @param field field to search
+     * @param value value
+     * @return query string
+     */
     String buildQueryString(String field, String value) {
         return QueryParser.escape(String.format("%s:%s", field, value.trim()));
     }
