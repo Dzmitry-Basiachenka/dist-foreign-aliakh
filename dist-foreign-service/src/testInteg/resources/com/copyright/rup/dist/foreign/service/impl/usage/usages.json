@@ -26,7 +26,8 @@
     "numberOfCopies": 65,
     "reportedValue": 30.86,
     "status": "ELIGIBLE",
-    "productFamily": "FAS"
+    "productFamily": "FAS",
+    "comment": "usage1 from usages.csv"
   },
   {
     "id": "fdb72fd7-b766-4bd1-a63a-f898cd903317",
@@ -55,7 +56,8 @@
     "numberOfCopies": 65,
     "reportedValue": 30.86,
     "status": "NEW",
-    "productFamily": "FAS"
+    "productFamily": "FAS",
+    "comment": "usage2 from usages.csv"
   },
   {
     "id": "ad6c2b0d-6303-4dd6-9c93-104d97013289",
@@ -84,7 +86,8 @@
     "numberOfCopies": 65,
     "reportedValue": 30.86,
     "status": "WORK_FOUND",
-    "productFamily": "FAS"
+    "productFamily": "FAS",
+    "comment": "usage3 from usages.csv"
   },
   {
     "id": "487d484c-c0c5-4394-971f-1616247d3b47",
@@ -113,7 +116,8 @@
     "numberOfCopies": 65,
     "reportedValue": 30.86,
     "status": "ELIGIBLE",
-    "productFamily": "FAS"
+    "productFamily": "FAS",
+    "comment": "usage4 from usages.csv"
   },
   {
     "id": "eea0bde1-3886-4af4-a499-1dfabc9df65c",
@@ -138,6 +142,7 @@
     "numberOfCopies": null,
     "reportedValue": 60.80,
     "status": "NEW",
-    "productFamily": "FAS"
+    "productFamily": "FAS",
+    "comment": "usage5 from usages.csv"
   }
 ]

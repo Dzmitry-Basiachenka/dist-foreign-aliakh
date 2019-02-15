@@ -70,6 +70,7 @@ public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
         addPlainValidators(Header.MARKET_PERIOD_FROM, requiredValidator, new YearValidator());
         addPlainValidators(Header.MARKET_PERIOD_TO, requiredValidator, new YearValidator());
         addPlainValidators(Header.AUTHOR, lengthValidator2000);
+        addPlainValidators(Header.COMMENT, new LengthValidator(100));
     }
 
     /**
@@ -88,7 +89,8 @@ public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
         MARKET("Market"),
         MARKET_PERIOD_FROM("Market Period From"),
         MARKET_PERIOD_TO("Market Period To"),
-        AUTHOR("Author");
+        AUTHOR("Author"),
+        COMMENT("Comment");
 
         private String columnName;
 
@@ -183,6 +185,7 @@ public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
             result.setStatus(isEligible(result) ? UsageStatusEnum.ELIGIBLE
                 : isWorkFound(result) ? UsageStatusEnum.WORK_FOUND : UsageStatusEnum.NEW);
             result.setProductFamily(productFamily);
+            result.setComment(getString(row, Header.COMMENT));
             return result;
         }
 
