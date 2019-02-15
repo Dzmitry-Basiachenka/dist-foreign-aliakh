@@ -127,6 +127,7 @@ public class UsageCsvProcessorIntegrationTest {
                     "<li>Market Period From</li>" +
                     "<li>Market Period To</li>" +
                     "<li>Author</li>" +
+                    "<li>Comment</li>" +
                     "</ul>",
                 e.getHtmlMessage());
         }
@@ -190,6 +191,7 @@ public class UsageCsvProcessorIntegrationTest {
         assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
         assertEquals(expectedUsage.getAuthor(), actualUsage.getAuthor());
         assertEquals(expectedUsage.getProductFamily(), actualUsage.getProductFamily());
+        assertEquals(expectedUsage.getComment(), actualUsage.getComment());
     }
 
     private void assertRightsholder(Rightsholder expectedRightsholder, Rightsholder actualRightsholder) {
