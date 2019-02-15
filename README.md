@@ -1,3 +1,12 @@
+4.1.29
+-
+*  B-49648 FDA: Escape reserved characters when loading a usage batch: add javadoc for buildQueryString method
+* B-47964 FDA: Tag details with category supplied by RRO when loading batches/receipts: FDA: add Comment column to UI tables
+* B-47964 FDA: Tag details with category supplied by RRO when loading batches/receipts: FDA: add Comment column to exports
+* B-47964 FDA: Tag details with category supplied by RRO when loading batches/receipts: upload usages with Comment column
+* B-49461 Tech Debt: FDA: Implement REST service to process scheduled jobs
+* B-49648 FDA: Escape reserved characters when loading a usage batch: apply logic for escaping special characters during PI matching
+
 4.1.28
 -
 * B-47964 FDA: Tag details with category supplied by RRO when loading batches/receipts: FDA: and comment column to db tables
