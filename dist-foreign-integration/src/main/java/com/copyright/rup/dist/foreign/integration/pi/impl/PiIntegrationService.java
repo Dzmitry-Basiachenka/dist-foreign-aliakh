@@ -127,7 +127,7 @@ public class PiIntegrationService implements IPiIntegrationService {
      * @return query string
      */
     String buildQueryString(String field, String value) {
-        return QueryParser.escape(String.format("%s:%s", field, value.trim()));
+        return String.format("%s:\"%s\"", field, QueryParser.escape(value.trim()));
     }
 
     private Work matchByIdnoAndTitle(String idno, String title) {
