@@ -106,7 +106,7 @@ public class PiIntegrationServiceTest {
 
     @Test
     public void testBuildQueryString() {
-        assertEquals("idno\\:\\\"0.1353\\/PGN.1999.0081",
+        assertEquals("idno:\"\\\"0.1353\\/PGN.1999.0081\"",
             piIntegrationService.buildQueryString("idno", "   \"0.1353/PGN.1999.0081   "));
     }
 
