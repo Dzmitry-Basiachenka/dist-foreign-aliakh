@@ -160,6 +160,7 @@ public class ReceivePaidUsagesFromLmTest {
         assertEquals(expectedPaidUsage.getNetAmount(), actualPaidUsage.getNetAmount());
         assertEquals(expectedPaidUsage.getGrossAmount(), actualPaidUsage.getGrossAmount());
         assertEquals(expectedPaidUsage.getServiceFeeAmount(), actualPaidUsage.getServiceFeeAmount());
+        assertEquals(expectedPaidUsage.getComment(), actualPaidUsage.getComment());
     }
 
     private PaidUsage buildPaidUsage(String lmDetailId, Long rhAccountNumber, BigDecimal netAmount,
@@ -177,6 +178,7 @@ public class ReceivePaidUsagesFromLmTest {
         paidUsage.setNetAmount(netAmount);
         paidUsage.setServiceFeeAmount(serviceFeeAmount);
         paidUsage.setGrossAmount(collectedAmount);
+        paidUsage.setComment("usage from usages.csv");
         return paidUsage;
     }
 
