@@ -45,6 +45,7 @@ databaseChangeLog {
             column(name: 'service_fee_amount', value: '29.00')
             column(name: 'net_amount', value: '61.63')
             column(name: 'service_fee', value: '0.32000')
+            column(name: 'comment', value: 'usage from usages.csv')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -72,6 +73,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: '2871.0528')
             column(name: 'service_fee_amount', value: '6100.9872')
             column(name: 'service_fee', value: '0.32000')
+            column(name: 'comment', value: 'usage from usages.csv')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -99,6 +101,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: '1450.0256')
             column(name: 'service_fee_amount', value: '3081.3044')
             column(name: 'service_fee', value: '0.32000')
+            column(name: 'comment', value: 'usage from usages.csv')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -126,6 +129,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: '4350.0768')
             column(name: 'service_fee_amount', value: '9243.9132')
             column(name: 'service_fee', value: '0.32000')
+            column(name: 'comment', value: 'usage from usages.csv')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {

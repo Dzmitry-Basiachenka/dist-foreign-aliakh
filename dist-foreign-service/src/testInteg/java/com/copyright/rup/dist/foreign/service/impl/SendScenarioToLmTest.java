@@ -1,25 +1,34 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.impl.mock.SqsClientMock;
 
 import com.amazonaws.services.sqs.model.SendMessageRequest;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.ImmutableMap;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.IntStream;
 
 /**
  * Verifies Send To LM functionality.
@@ -38,9 +47,12 @@ public class SendScenarioToLmTest {
 
     @Autowired
     private IScenarioService scenarioService;
-
+    @Autowired
+    private SqlSessionTemplate sqlSessionTemplate;
     @Autowired
     private SqsClientMock sqsClientMock;
+
+    private static final String SCENARIO_ID = "4c014547-06f3-4840-94ff-6249730d537d";
 
     @Before
     public void setUp() {
@@ -48,9 +60,10 @@ public class SendScenarioToLmTest {
     }
 
     @Test
-    public void testSendToLm() {
+    public void testSendToLm() throws IOException {
+        assertTrue(CollectionUtils.isEmpty(findUsageDtos()));
         Scenario scenario = new Scenario();
-        scenario.setId("4c014547-06f3-4840-94ff-6249730d537d");
+        scenario.setId(SCENARIO_ID);
         scenarioService.sendToLm(scenario);
         List<SendMessageRequest> sendMessageRequests = sqsClientMock.getSendMessageRequests();
         assertEquals(1, sendMessageRequests.size());
@@ -58,5 +71,50 @@ public class SendScenarioToLmTest {
             "fda-test-sf-detail.fifo",
             Collections.singletonList(TestUtils.fileToString(this.getClass(), "details/details_to_lm.json")),
             Collections.EMPTY_LIST, ImmutableMap.of("source", "FDA"));
+        List<UsageDto> usageDtos = findUsageDtos();
+        List<UsageDto> expectedUsageDtos = loadExpectedUsageDtos("usage/archived_usage_dtos.json");
+        assertEquals(CollectionUtils.size(expectedUsageDtos), CollectionUtils.size(usageDtos));
+        IntStream.range(0, usageDtos.size())
+            .forEach(index -> assertUsageDto(expectedUsageDtos.get(index), usageDtos.get(index)));
+    }
+
+    private List<UsageDto> findUsageDtos() {
+        return sqlSessionTemplate.selectList("IUsageArchiveMapper.findDtoByScenarioId", SCENARIO_ID);
+    }
+
+    private void assertUsageDto(UsageDto expected, UsageDto actual) {
+        assertEquals(expected.getId(), actual.getId());
+        assertEquals(expected.getBatchName(), actual.getBatchName());
+        assertEquals(expected.getFiscalYear(), actual.getFiscalYear());
+        assertEquals(expected.getRroName(), actual.getRroName());
+        assertEquals(expected.getRroAccountNumber(), actual.getRroAccountNumber());
+        assertEquals(expected.getPayeeName(), actual.getPayeeName());
+        assertEquals(expected.getWrWrkInst(), actual.getWrWrkInst());
+        assertEquals(expected.getSystemTitle(), actual.getSystemTitle());
+        assertEquals(expected.getWorkTitle(), actual.getWorkTitle());
+        assertEquals(expected.getArticle(), actual.getArticle());
+        assertEquals(expected.getRhAccountNumber(), actual.getRhAccountNumber());
+        assertEquals(expected.getRhName(), actual.getRhName());
+        assertEquals(expected.getStandardNumber(), actual.getStandardNumber());
+        assertEquals(expected.getPublisher(), actual.getPublisher());
+        assertEquals(expected.getNumberOfCopies(), actual.getNumberOfCopies());
+        assertEquals(expected.getMarket(), actual.getMarket());
+        assertEquals(expected.getArticle(), actual.getArticle());
+        assertEquals(expected.getPayeeAccountNumber(), actual.getPayeeAccountNumber());
+        assertEquals(expected.getPayeeName(), actual.getPayeeName());
+        assertEquals(expected.getGrossAmount(), actual.getGrossAmount());
+        assertEquals(expected.getReportedValue(), actual.getReportedValue());
+        assertEquals(expected.getNetAmount(), actual.getNetAmount());
+        assertEquals(expected.getStatus(), actual.getStatus());
+        assertEquals(expected.getServiceFee(), actual.getServiceFee());
+        assertEquals(expected.getComment(), actual.getComment());
+    }
+
+    private List<UsageDto> loadExpectedUsageDtos(String fileName) throws IOException {
+        String content = TestUtils.fileToString(this.getClass(), fileName);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        return mapper.readValue(content, new TypeReference<List<UsageDto>>() {
+        });
     }
 }
