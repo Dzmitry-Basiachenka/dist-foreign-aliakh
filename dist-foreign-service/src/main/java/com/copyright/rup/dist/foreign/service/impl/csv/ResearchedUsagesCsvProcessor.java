@@ -78,7 +78,8 @@ public class ResearchedUsagesCsvProcessor extends DistCsvProcessor<ResearchedUsa
         MARKET("Market"),
         MARKET_PERIOD_FROM("Market Period From"),
         MARKET_PERIOD_TO("Market Period To"),
-        AUTHOR("Author");
+        AUTHOR("Author"),
+        COMMENT("Comment");
 
         private String columnName;
 
