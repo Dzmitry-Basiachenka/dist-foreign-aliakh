@@ -26,7 +26,7 @@
         <property name="dataSource" ref="dfDataSource"/>
     </bean>
 
-    <bean id="df.service.rmsCacheService" class="com.copyright.rup.dist.foreign.service.impl.rights.RmsAllRightsCacheService">
+    <bean id="df.service.rmsCacheService" class="com.copyright.rup.dist.foreign.integration.rms.impl.RmsAllRightsCacheService">
         <constructor-arg ref="dist.common.integration.rmsAllRightsService"/>
         <constructor-arg value="$RUP{dist.foreign.rest.rms.ttl.minutes}"/>
     </bean>
