@@ -162,6 +162,7 @@
         <result property="payee.accountNumber" column="payee_account_number"/>
         <result property="payee.name" column="payee_name"/>
         <result property="rhParticipating" column="is_rh_participating_flag"/>
+        <result property="comment" column="comment"/>
     </resultMap>
 
     <sql id="usageColumns">
@@ -558,7 +559,8 @@
             u.payee_account_number,
             p.df_rightsholder_uid payee_id,
             p.name payee_name,
-            u.is_rh_participating_flag
+            u.is_rh_participating_flag,
+            u.comment
         from ${schema}.df_usage u
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         left join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
