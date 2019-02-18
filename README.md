@@ -1,9 +1,13 @@
 4.1.30
 -
+* B-46540 FDA: Migrate usage from SC: add changeset to remove not-null constraints in df_usage_archive table from payee_account_number and is_rh_participating_flag columns
+* B-47964 FDA: Tag details with category supplied by RRO when loading batches/receipts: adjust logic of movement usages to archive
+* CDP-657 FDA: Usage with title or standard number which are present in PI gets WORK_NOT_FOUND status after PI matching
+* B-47964 FDA: Tag details with category supplied by RRO when loading batches/receipts: adjust upload researched usages functionality
 
 4.1.29
 -
-*  B-49648 FDA: Escape reserved characters when loading a usage batch: add javadoc for buildQueryString method
+* B-49648 FDA: Escape reserved characters when loading a usage batch: add javadoc for buildQueryString method
 * B-47964 FDA: Tag details with category supplied by RRO when loading batches/receipts: FDA: add Comment column to UI tables
 * B-47964 FDA: Tag details with category supplied by RRO when loading batches/receipts: FDA: add Comment column to exports
 * B-47964 FDA: Tag details with category supplied by RRO when loading batches/receipts: upload usages with Comment column
