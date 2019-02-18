@@ -132,6 +132,7 @@ public class ResearchedUsagesCsvProcessorIntegrationTest {
                     "<li>Market Period From</li>" +
                     "<li>Market Period To</li>" +
                     "<li>Author</li>" +
+                    "<li>Comment</li>" +
                     "</ul>",
                 e.getHtmlMessage());
         }
