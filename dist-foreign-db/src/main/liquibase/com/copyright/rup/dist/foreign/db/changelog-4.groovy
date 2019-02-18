@@ -329,4 +329,18 @@ databaseChangeLog {
             dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'comment')
         }
     }
+
+    changeSet(id: '2019-02-18-00', author: 'Pavel Liakh <pliakh@copyright.com>') {
+        comment("B-46540 FDA: Migrate usage from SC: " +
+                "remove not-null constraints in table df_usage_archive " +
+                "from columns payee_account_number and is_rh_participating_flag")
+
+        dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_archive',
+                columnName: 'payee_account_number', columnDataType: 'NUMERIC(22,0)')
+
+        dropNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_archive',
+                columnName: 'is_rh_participating_flag', columnDataType: 'BOOLEAN')
+
+        rollback ""
+    }
 }
