@@ -134,7 +134,7 @@ public class UpdateRightsTest {
 
     private void expectRmsCall(String rmsRequestFileName, String rmsResponseFileName) {
         mockServer
-            .expect(MockRestRequestMatchers.requestTo("http://localhost:9051/rms-rights-rest/all-rights/"))
+            .expect(MockRestRequestMatchers.requestTo("http://localhost:9051/rms-rights-rest/rights/"))
             .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
             .andExpect(MockRestRequestMatchers.content()
                 .string(new JsonMatcher(TestUtils.fileToString(this.getClass(), rmsRequestFileName),

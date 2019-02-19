@@ -274,7 +274,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
         private void expectGetRmsRights() {
             expectedRmsRequestsToResponses.forEach((expectedRmsRequest, expectedRmsResponse)
                 -> mockServer.expect(MockRestRequestMatchers
-                .requestTo("http://localhost:9051/rms-rights-rest/all-rights/"))
+                .requestTo("http://localhost:9051/rms-rights-rest/rights/"))
                 .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
                 .andExpect(MockRestRequestMatchers.content()
                     .string(new JsonMatcher(TestUtils.fileToString(this.getClass(), expectedRmsRequest),

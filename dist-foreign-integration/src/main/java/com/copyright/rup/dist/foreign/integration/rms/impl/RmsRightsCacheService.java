@@ -2,7 +2,7 @@ package com.copyright.rup.dist.foreign.integration.rms.impl;
 
 import com.copyright.rup.common.caching.impl.AbstractCacheService;
 import com.copyright.rup.dist.common.domain.RmsGrant;
-import com.copyright.rup.dist.common.integration.rest.rms.IRmsAllRightsService;
+import com.copyright.rup.dist.common.integration.rest.rms.IRmsRightsService;
 
 import java.time.LocalDate;
 import java.util.Collections;
@@ -12,7 +12,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Implementation of {@link IRmsAllRightsService}. Uses cache to avoid redundant calls to RMS.
+ * Implementation of {@link IRmsRightsService}. Uses cache to avoid redundant calls to RMS.
  * <p/>
  * Copyright (C) 2018 copyright.com
  * <p/>
@@ -20,24 +20,25 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Uladzislau Shalamitski
  */
-public class RmsAllRightsCacheService extends AbstractCacheService<Long, Set<RmsGrant>>
-    implements IRmsAllRightsService {
+public class RmsRightsCacheService extends AbstractCacheService<Long, Set<RmsGrant>>
+    implements IRmsRightsService {
 
-    private final IRmsAllRightsService rmsAllRightsService;
+    private final IRmsRightsService rmsRightsService;
 
     /**
      * Constructor.
      *
-     * @param rmsAllRightsService instance of {@link IRmsAllRightsService}
+     * @param rmsRightsService instance of {@link IRmsRightsService}
      * @param timeToLive       time to keep cached grants in minutes
      */
-    RmsAllRightsCacheService(IRmsAllRightsService rmsAllRightsService, int timeToLive) {
-        this.rmsAllRightsService = rmsAllRightsService;
+    RmsRightsCacheService(IRmsRightsService rmsRightsService, int timeToLive) {
+        this.rmsRightsService = rmsRightsService;
         super.setExpirationTime(TimeUnit.MINUTES.toSeconds(timeToLive));
     }
 
     @Override
-    public Set<RmsGrant> getGrants(List<Long> wrWrkInsts, LocalDate periodEndDate) {
+    public Set<RmsGrant> getGrants(List<Long> wrWrkInsts, LocalDate periodEndDate, List<String> typeOfUses,
+                                   String... licenseTypes) {
         Set<RmsGrant> result = new HashSet<>();
         wrWrkInsts.forEach(wrWrkInst -> result.addAll(getFromCache(wrWrkInst)));
         return result;
@@ -45,6 +46,7 @@ public class RmsAllRightsCacheService extends AbstractCacheService<Long, Set<Rms
 
     @Override
     protected Set<RmsGrant> loadData(Long wrWrkInsts) {
-        return rmsAllRightsService.getGrants(Collections.singletonList(wrWrkInsts), LocalDate.now());
+        return rmsRightsService.getGrants(Collections.singletonList(wrWrkInsts), LocalDate.now(),
+            Collections.emptyList());
     }
 }

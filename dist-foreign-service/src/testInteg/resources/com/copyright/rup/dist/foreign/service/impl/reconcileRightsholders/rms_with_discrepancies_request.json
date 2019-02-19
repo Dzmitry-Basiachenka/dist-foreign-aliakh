@@ -1,26 +1,32 @@
 {
   "works": [
     {
+      "status": ["GRANT", "DENY"],
       "wr_wrk_inst": 127778305,
       "period_end_date": "02/01/2018"
     },
     {
+      "status": ["GRANT", "DENY"],
       "wr_wrk_inst": 122861189,
       "period_end_date": "02/01/2018"
     },
     {
+      "status": ["GRANT", "DENY"],
       "wr_wrk_inst": 123647460,
       "period_end_date": "02/01/2018"
     },
     {
+      "status": ["GRANT", "DENY"],
       "wr_wrk_inst": 122799407,
       "period_end_date": "02/01/2018"
     },
     {
+      "status": ["GRANT", "DENY"],
       "wr_wrk_inst": 123636551,
       "period_end_date": "02/01/2018"
     },
     {
+      "status": ["GRANT", "DENY"],
       "wr_wrk_inst": 123642505,
       "period_end_date": "02/01/2018"
     }

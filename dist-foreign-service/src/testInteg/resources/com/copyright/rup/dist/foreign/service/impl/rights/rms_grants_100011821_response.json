@@ -5,7 +5,7 @@
       "message": "OK"
     },
     "content": {
-      "@class": "com.copyright.rup.rms.rights.domain.WorksResponse",
+      "@class": "com.copyright.rup.rms.rights.domain.GrantWorksResponse",
       "requestedWorkCount": "1",
       "processedWorkCount": "1",
       "foundWorkCount": "7",
@@ -19,11 +19,15 @@
           "region": "WORLDWIDE",
           "right_begin_date": "12/20/1995",
           "right_end_date": "12/31/3000",
-          "ownership_begin_date": "01/01/1000",
-          "ownership_end_date": "12/31/1992",
+          "publication_begin_date": "01/01/1000",
+          "publication_end_date": "12/31/1992",
           "agreement_begin_date": "12/20/1995",
           "agreement_end_date": "12/31/3000",
-          "wg_owner_org_number": "1000024950"
+          "wg_owner_org_number": "1000024950",
+          "right_id": "ccb91a36-71b1-489c-b0f5-55263169783a",
+          "license_type": "NGT_PHOTOCOPY",
+          "product_family": "TRS",
+          "rh_account_number": "1000024950"
         },
         {
           "wr_wrk_inst": "100011821",
@@ -34,11 +38,15 @@
           "region": "WORLDWIDE",
           "right_begin_date": "08/12/2011",
           "right_end_date": "12/31/3000",
-          "ownership_begin_date": "01/01/1000",
-          "ownership_end_date": "12/31/3000",
+          "publication_begin_date": "01/01/1000",
+          "publication_end_date": "12/31/3000",
           "agreement_begin_date": "08/12/2011",
           "agreement_end_date": "12/31/3000",
-          "wg_owner_org_number": "1000024950"
+          "wg_owner_org_number": "1000024950",
+          "right_id": "ccb91a36-71b1-489c-b0f5-55263169783a",
+          "license_type": "ACLDIGITAL",
+          "product_family": "ACLDIGITAL",
+          "rh_account_number": "1000024950"
         },
         {
           "wr_wrk_inst": "100011821",
@@ -49,11 +57,15 @@
           "region": "WORLDWIDE",
           "right_begin_date": "12/07/2001",
           "right_end_date": "12/31/3000",
-          "ownership_begin_date": "01/01/1000",
-          "ownership_end_date": "12/31/3000",
+          "publication_begin_date": "01/01/1000",
+          "publication_end_date": "12/31/3000",
           "agreement_begin_date": "12/07/2001",
           "agreement_end_date": "12/31/3000",
-          "wg_owner_org_number": "1000024950"
+          "wg_owner_org_number": "1000024950",
+          "right_id": "ccb91a36-71b1-489c-b0f5-55263169783a",
+          "license_type": "ACLDIGITAL",
+          "product_family": "ACLDIGITAL",
+          "rh_account_number": "1000024950"
         },
         {
           "wr_wrk_inst": "100011821",
@@ -64,11 +76,15 @@
           "region": "WORLDWIDE",
           "right_begin_date": "12/20/1995",
           "right_end_date": "12/31/3000",
-          "ownership_begin_date": "01/01/1000",
-          "ownership_end_date": "12/31/3000",
+          "publication_begin_date": "01/01/1000",
+          "publication_end_date": "12/31/3000",
           "agreement_begin_date": "12/20/1995",
           "agreement_end_date": "12/31/3000",
-          "wg_owner_org_number": "1000024950"
+          "wg_owner_org_number": "1000024950",
+          "right_id": "ccb91a36-71b1-489c-b0f5-55263169783a",
+          "license_type": "ACLPRINT",
+          "product_family": "ACLPRINT",
+          "rh_account_number": "1000024950"
         },
         {
           "wr_wrk_inst": "100011821",
@@ -79,11 +95,15 @@
           "region": "WORLDWIDE",
           "right_begin_date": "08/12/2011",
           "right_end_date": "12/31/3000",
-          "ownership_begin_date": "01/01/1000",
-          "ownership_end_date": "12/31/3000",
+          "publication_begin_date": "01/01/1000",
+          "publication_end_date": "12/31/3000",
           "agreement_begin_date": "08/12/2011",
           "agreement_end_date": "12/31/3000",
-          "wg_owner_org_number": "1000024950"
+          "wg_owner_org_number": "1000024950",
+          "right_id": "ccb91a36-71b1-489c-b0f5-55263169783a",
+          "license_type": "ACLPRINT",
+          "product_family": "ACLPRINT",
+          "rh_account_number": "1000024950"
         },
         {
           "wr_wrk_inst": "100011821",
@@ -94,11 +114,15 @@
           "region": "WORLDWIDE",
           "right_begin_date": "12/20/1995",
           "right_end_date": "12/31/3000",
-          "ownership_begin_date": "01/01/1993",
-          "ownership_end_date": "12/31/3000",
+          "publication_begin_date": "01/01/1993",
+          "publication_end_date": "12/31/3000",
           "agreement_begin_date": "12/20/1995",
           "agreement_end_date": "12/31/3000",
-          "wg_owner_org_number": "1000024950"
+          "wg_owner_org_number": "1000024950",
+          "right_id": "ccb91a36-71b1-489c-b0f5-55263169783a",
+          "license_type": "NGT_PHOTOCOPY",
+          "product_family": "TRS",
+          "rh_account_number": "1000024950"
         },
         {
           "wr_wrk_inst": "100011821",
@@ -109,11 +133,15 @@
           "region": "WORLDWIDE",
           "right_begin_date": "12/07/2001",
           "right_end_date": "12/31/3000",
-          "ownership_begin_date": "01/01/1000",
-          "ownership_end_date": "12/31/3000",
+          "publication_begin_date": "01/01/1000",
+          "publication_end_date": "12/31/3000",
           "agreement_begin_date": "12/07/2001",
           "agreement_end_date": "12/31/3000",
-          "wg_owner_org_number": "1000024950"
+          "wg_owner_org_number": "1000024950",
+          "right_id": "ccb91a36-71b1-489c-b0f5-55263169783a",
+          "license_type": "REACTIVELY_SHARE",
+          "product_family": "REACTIVELY_SHARE",
+          "rh_account_number": "1000024950"
         }
       ]
     }

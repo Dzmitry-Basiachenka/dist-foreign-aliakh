@@ -52,9 +52,9 @@
         <constructor-arg value="$RUP{dist.foreign.rest.prm.rightsholder.async}"/>
     </bean>
 
-    <bean id="dist.common.integration.rmsAllRightsService" class="com.copyright.rup.dist.common.integration.rest.rms.RmsAllRightsService">
+    <bean id="dist.common.integration.rmsRightsService" class="com.copyright.rup.dist.common.integration.rest.rms.RmsRightsService">
         <constructor-arg ref="restTemplate"/>
-        <constructor-arg value="$RUP{dist.foreign.rest.rms.all_rights.url}"/>
+        <constructor-arg value="$RUP{dist.foreign.rest.rms.rights.url}"/>
         <constructor-arg value="true"/>
     </bean>
 
