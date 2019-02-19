@@ -197,7 +197,8 @@
             market,
             market_period_from,
             market_period_to,
-            gross_amount
+            gross_amount,
+            comment
         from ${schema}.df_usage_archive
         <include refid="ntsBatchWhereClause"/>
     </select>
