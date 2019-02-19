@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.service.impl.rights;
+package com.copyright.rup.dist.foreign.integration.rms.impl;
 
 import com.copyright.rup.common.caching.impl.AbstractCacheService;
 import com.copyright.rup.dist.common.domain.RmsGrant;

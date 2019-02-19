@@ -1,4 +1,4 @@
-package com.copyright.rup.dist.foreign.service.impl.rights;
+package com.copyright.rup.dist.foreign.integration.rms.impl;
 
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.createMock;
