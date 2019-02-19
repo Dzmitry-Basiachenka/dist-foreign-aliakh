@@ -128,7 +128,7 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertEquals(REPORTED_VALUE, usageDto.getReportedValue());
         assertEquals(GROSS_AMOUNT, usageDto.getGrossAmount());
         assertEquals("FAS", usageDto.getProductFamily());
-        assertEquals("b1f0b236", usageDto.getComment());
+        assertEquals("usage from usages.csv", usageDto.getComment());
     }
 
     @Test
@@ -517,6 +517,7 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertEquals(expectedUsage.getReportedValue(), actualUsage.getReportedValue());
         assertEquals(expectedUsage.getGrossAmount(), actualUsage.getGrossAmount());
         assertEquals(expectedUsage.getNetAmount(), actualUsage.getNetAmount());
+        assertEquals(expectedUsage.getComment(), actualUsage.getComment());
     }
 
     private void setUsageFields(Usage usage, String usageId, String usageBatchId) {
@@ -543,6 +544,6 @@ public class UsageArchiveRepositoryIntegrationTest {
         usage.setReportedValue(REPORTED_VALUE);
         usage.setGrossAmount(GROSS_AMOUNT);
         usage.setNetAmount(new BigDecimal("25.1500000000"));
-        usage.setComment("b1f0b236");
+        usage.setComment("usage from usages.csv");
     }
 }

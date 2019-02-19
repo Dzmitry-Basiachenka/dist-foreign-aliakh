@@ -289,7 +289,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: '800.40')
             column(name: 'service_fee_amount', value: '5260.00')
             column(name: 'service_fee', value: '0.16000')
-            column(name: 'comment', value: '123904752')
+            column(name: 'comment', value: 'usage from usages_10.csv')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -315,7 +315,7 @@ databaseChangeLog {
             column(name: 'service_fee_amount', value: '5260.00')
             column(name: 'service_fee', value: '0.32000')
             column(name: 'updated_by_user', value: 'user@copyright.com')
-            column(name: 'comment', value: '243904752')
+            column(name: 'comment', value: 'usage from usages_20.csv')
         }
 
         //testFindProductFamilies
@@ -562,7 +562,7 @@ databaseChangeLog {
             column(name: 'distribution_name', value: 'FDA_March_17')
             column(name: 'distribution_date', value: '2017-03-15 11:41:52.735531+03')
             column(name: 'period_end_date', value: '2017-03-15 11:41:52.735531+03')
-            column(name: 'comment', value: '123904752')
+            column(name: 'comment', value: 'usage from usages_10.csv')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
@@ -596,7 +596,7 @@ databaseChangeLog {
             column(name: 'distribution_name', value: 'FDA July 17')
             column(name: 'distribution_date', value: '2017-03-16 11:41:52.735531+03')
             column(name: 'period_end_date', value: '2017-03-16 11:41:52.735531+03')
-            column(name: 'comment', value: '243904752')
+            column(name: 'comment', value: 'usage from usages_20.csv')
         }
 
         //testUpdateResearchedUsage
@@ -700,7 +700,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: '8400.00')
             column(name: 'service_fee_amount', value: '1600.00')
             column(name: 'service_fee', value: '0.16000')
-            column(name: 'comment', value: '153904752')
+            column(name: 'comment', value: 'usage from usages_15.csv')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -720,7 +720,7 @@ databaseChangeLog {
             column(name: 'number_of_copies', value: '200')
             column(name: 'reported_value', value: '2000')
             column(name: 'gross_amount', value: '2000.00')
-            column(name: 'comment', value: '353904752')
+            column(name: 'comment', value: 'usage from usages_25.csv')
         }
 
         rollback ""

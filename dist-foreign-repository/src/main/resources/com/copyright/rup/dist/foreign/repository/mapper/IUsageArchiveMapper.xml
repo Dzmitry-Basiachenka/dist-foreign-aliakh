@@ -272,7 +272,8 @@
             u.period_end_date,
             u.lm_detail_id,
             u.created_datetime,
-            ub.rro_account_number
+            ub.rro_account_number,
+            u.comment
         from ${schema}.df_usage_archive u
         left join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
         where u.status_ind = #{status}

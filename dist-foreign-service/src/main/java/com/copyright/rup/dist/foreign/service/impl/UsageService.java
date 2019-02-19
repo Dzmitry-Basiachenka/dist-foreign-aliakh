@@ -532,6 +532,7 @@ public class UsageService implements IUsageService {
         resultUsage.setProductFamily(originalUsage.getProductFamily());
         resultUsage.setSystemTitle(originalUsage.getSystemTitle());
         resultUsage.setServiceFee(originalUsage.getServiceFee());
+        resultUsage.setComment(originalUsage.getComment());
         resultUsage.setNetAmount(paidUsage.getNetAmount());
         resultUsage.setServiceFeeAmount(paidUsage.getServiceFeeAmount());
         resultUsage.setGrossAmount(paidUsage.getGrossAmount());

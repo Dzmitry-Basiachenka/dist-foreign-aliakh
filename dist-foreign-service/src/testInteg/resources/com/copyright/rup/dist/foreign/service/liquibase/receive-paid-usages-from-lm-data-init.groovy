@@ -45,6 +45,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: '840.00')
             column(name: 'service_fee_amount', value: '160.00')
             column(name: 'service_fee', value: '0.16000')
+            column(name: 'comment', value: 'usage from usages.csv')
         }
 
         rollback ""
@@ -94,6 +95,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: '1680.00')
             column(name: 'service_fee_amount', value: '320.00')
             column(name: 'service_fee', value: '0.16000')
+            column(name: 'comment', value: 'usage from usages.csv')
         }
 
         rollback ""
