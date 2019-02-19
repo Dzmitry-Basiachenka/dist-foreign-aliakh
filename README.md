@@ -1,3 +1,9 @@
+4.1.31
+-
+* B-47964 FDA: Tag details with category supplied by RRO when loading batches/receipts: adjust NTS usage batch creation logic
+* B-47964 FDA: Tag details with category supplied by RRO when loading batches/receipts: adjust receive paid usage functionality
+* B-49461 Tech Debt: FDA: move RmsAllRightsCacheService into integration module
+
 4.1.30
 -
 * B-46540 FDA: Migrate usage from SC: add changeset to remove not-null constraints in df_usage_archive table from payee_account_number and is_rh_participating_flag columns
