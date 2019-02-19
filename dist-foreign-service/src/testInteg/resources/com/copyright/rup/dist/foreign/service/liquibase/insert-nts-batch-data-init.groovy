@@ -44,6 +44,7 @@ databaseChangeLog {
             column(name: "gross_amount", value: "50.00")
             column(name: "df_scenario_uid", value: "46d10d6e-c8da-4f88-a233-226433a55dbf")
             column(name: "payee_account_number", value: "1000005413")
+            column(name: "comment", value: "loaded from usages.csv")
         }
 
         insert(schemaName: "apps", tableName: "df_usage_archive") {
@@ -71,6 +72,7 @@ databaseChangeLog {
             column(name: "gross_amount", value: "50.00")
             column(name: "df_scenario_uid", value: "46d10d6e-c8da-4f88-a233-226433a55dbf")
             column(name: "payee_account_number", value: "1000005413")
+            column(name: "comment", value: "loaded from usages.csv")
         }
 
         insert(schemaName: "apps", tableName: "df_usage_archive") {
@@ -98,6 +100,7 @@ databaseChangeLog {
             column(name: "gross_amount", value: "50.00")
             column(name: "df_scenario_uid", value: "46d10d6e-c8da-4f88-a233-226433a55dbf")
             column(name: "payee_account_number", value: "1000005413")
+            column(name: "comment", value: "loaded from usages.csv")
         }
 
         insert(schemaName: "apps", tableName: "df_usage_archive") {
@@ -125,6 +128,7 @@ databaseChangeLog {
             column(name: "gross_amount", value: "50.00")
             column(name: "df_scenario_uid", value: "46d10d6e-c8da-4f88-a233-226433a55dbf")
             column(name: "payee_account_number", value: "1000005413")
+            column(name: "comment", value: "loaded from usages.csv")
         }
 
         insert(schemaName: "apps", tableName: "df_usage_archive") {
@@ -152,6 +156,7 @@ databaseChangeLog {
             column(name: "gross_amount", value: "50.00")
             column(name: "df_scenario_uid", value: "46d10d6e-c8da-4f88-a233-226433a55dbf")
             column(name: "payee_account_number", value: "1000005413")
+            column(name: "comment", value: "loaded from usages.csv")
         }
 
         insert(schemaName: "apps", tableName: "df_usage_archive") {
@@ -179,6 +184,7 @@ databaseChangeLog {
             column(name: "gross_amount", value: "50.00")
             column(name: "df_scenario_uid", value: "46d10d6e-c8da-4f88-a233-226433a55dbf")
             column(name: "payee_account_number", value: "1000005413")
+            column(name: "comment", value: "loaded from usages.csv")
         }
 
         insert(schemaName: "apps", tableName: "df_usage_archive") {
@@ -206,6 +212,7 @@ databaseChangeLog {
             column(name: "gross_amount", value: "50.00")
             column(name: "df_scenario_uid", value: "46d10d6e-c8da-4f88-a233-226433a55dbf")
             column(name: "payee_account_number", value: "1000005413")
+            column(name: "comment", value: "loaded from usages.csv")
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {

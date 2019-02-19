@@ -97,6 +97,7 @@ public class InsertNtsBatchIntegrationTest {
         assertEquals(market, usage.getMarket());
         assertEquals(periodFrom, usage.getMarketPeriodFrom());
         assertEquals(periodTo, usage.getMarketPeriodTo());
+        assertEquals("loaded from usages.csv", usage.getComment());
         verifyAudit(usage.getId());
     }
 
