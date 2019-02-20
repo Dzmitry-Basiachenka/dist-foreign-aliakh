@@ -1,3 +1,7 @@
+4.1.32
+-
+* CDP-660 FDA: Exception occurs during running manual jobs
+
 4.1.31
 -
 * B-47964 FDA: Tag details with category supplied by RRO when loading batches/receipts: adjust NTS usage batch creation logic
