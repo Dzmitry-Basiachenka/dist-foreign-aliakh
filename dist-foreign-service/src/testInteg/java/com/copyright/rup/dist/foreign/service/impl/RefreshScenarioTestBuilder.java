@@ -158,6 +158,7 @@ class RefreshScenarioTestBuilder {
                 assertEquals("SYSTEM", actualUsage.getUpdateUser());
                 assertEquals(expectedUsage.getServiceFeeAmount(), actualUsage.getServiceFeeAmount());
                 assertEquals(expectedUsage.getNetAmount(), actualUsage.getNetAmount());
+                assertEquals(expectedUsage.getComment(), actualUsage.getComment());
             });
         }
 

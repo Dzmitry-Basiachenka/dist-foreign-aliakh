@@ -137,6 +137,7 @@ public class RefreshScenarioWindow extends Window {
         addColumn(UsageDto::getMarketPeriodFrom, "table.column.market_period_from", "marketPeriodFrom");
         addColumn(UsageDto::getMarketPeriodTo, "table.column.market_period_to", "marketPeriodTo");
         addColumn(UsageDto::getAuthor, "table.column.author", "author", true, 300);
+        addColumn(UsageDto::getComment, "table.column.comment", "comment", true, 200);
     }
 
     private void addColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, String sort) {

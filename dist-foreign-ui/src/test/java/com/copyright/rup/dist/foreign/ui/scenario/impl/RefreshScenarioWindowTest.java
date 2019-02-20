@@ -106,7 +106,7 @@ public class RefreshScenarioWindowTest {
             "Fiscal Year", "RRO Account #", "RRO Name", "Payment Date", "Title", "Article", "Standard Number",
             "Wr Wrk Inst", "System Title", "RH Account #", "RH Name", "Publisher", "Pub Date", "Number of Copies",
             "Reported value", "Amt in USD", "Gross Amt in USD", "Market", "Market Period From", "Market Period To",
-            "Author"),
+            "Author", "Comment"),
             columns.stream().map(Column::getCaption).collect(Collectors.toList()));
         verifySize(grid);
     }
