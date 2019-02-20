@@ -128,7 +128,7 @@ public class DrillDownByRightsholderWidget extends Window implements IDrillDownB
         addColumn(UsageDto::getMarketPeriodFrom, "table.column.market_period_from", "marketPeriodFrom", true, 150);
         addColumn(UsageDto::getMarketPeriodTo, "table.column.market_period_to", "marketPeriodTo", true, 145);
         addColumn(UsageDto::getAuthor, "table.column.author", "author", true, 90);
-        addColumn(UsageDto::getComment, "table.column.comment", "comment", true, 115);
+        addColumn(UsageDto::getComment, "table.column.comment", "comment", true, 200);
     }
 
     private void addColumn(ValueProvider<UsageDto, ?> provider, String captionProperty, String sort) {

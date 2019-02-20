@@ -107,6 +107,7 @@ public class RefreshScenarioTest {
         usage.setPayee(buildRightsholder(payeeAccountNumber));
         usage.setServiceFeeAmount(new BigDecimal(serviceFeeAmount).setScale(10, BigDecimal.ROUND_HALF_UP));
         usage.setNetAmount(new BigDecimal(netAmount).setScale(10, BigDecimal.ROUND_HALF_UP));
+        usage.setComment("usage from usages.csv");
         return usage;
     }
 
