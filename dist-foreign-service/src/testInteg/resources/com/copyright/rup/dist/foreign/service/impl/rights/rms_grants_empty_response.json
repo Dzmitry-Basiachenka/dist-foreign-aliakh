@@ -5,7 +5,7 @@
       "message": "OK"
     },
     "content": {
-      "@class": "com.copyright.rup.rms.rights.domain.WorksResponse",
+      "@class": "com.copyright.rup.rms.rights.domain.GrantWorksResponse",
       "requestedWorkCount": "1",
       "processedWorkCount": "1",
       "foundWorkCount": "0",
