@@ -6,6 +6,7 @@
         <param-name>contextConfigLocation</param-name>
         <param-value>
             classpath:/com/copyright/rup/dist/foreign/ui/dist-foreign-ui-context.xml
+            classpath:/com/copyright/rup/dist/foreign/ui/dist-foreign-rest-auth-context.xml
             classpath:/com/copyright/rup/security/auth/consumer/rup-auth-context.xml
         </param-value>
     </context-param>
