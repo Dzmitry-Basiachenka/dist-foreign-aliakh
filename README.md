@@ -1,7 +1,8 @@
 4.1.33
 -
-* B-49461 Tech Debt: FDA: Add Swagger Codegen to implement REST services
-* B-49461 Tech Debt: FDA: Add Swagger Codegen to implement REST services
+* B-49461 Tech Debt: FDA: Change REST services URL prefix to /api/
+* B-49461 Tech Debt: FDA: Use Swagger Codegen to change implementation of REST services from servlet to Spring MVC
+* B-49461 Tech Debt: FDA: Add Swagger Codegen dependencies to the project
 * B-49461 Tech Debt: FDA: apply read and connect timeout for spring RestTemplate
 
 4.1.32
