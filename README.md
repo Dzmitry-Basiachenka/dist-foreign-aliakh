@@ -1,6 +1,7 @@
 4.1.32
 -
 * CDP-660 FDA: Exception occurs during running manual jobs
+* B-49461 Tech Debt: FDA: update dist-common version to 35.0.+
 
 4.1.31
 -
