@@ -1,0 +1,62 @@
+package {{package}};
+
+{{#imports}}import {{import}};
+{{/imports}}
+{{#jdk8}}
+    import com.fasterxml.jackson.databind.ObjectMapper;
+{{/jdk8}}
+import io.swagger.annotations.*;
+{{#jdk8}}
+    import org.slf4j.Logger;
+    import org.slf4j.LoggerFactory;
+    import org.springframework.http.HttpStatus;
+{{/jdk8}}
+import org.springframework.http.ResponseEntity;
+{{#useBeanValidation}}
+    import org.springframework.validation.annotation.Validated;
+{{/useBeanValidation}}
+import org.springframework.web.multipart.MultipartFile;
+
+{{#useBeanValidation}}
+    import javax.validation.Valid;
+    import javax.validation.constraints.*;
+{{/useBeanValidation}}
+
+{{#jdk8}}
+    import java.io.IOException;
+{{/jdk8}}
+
+{{#jdk8}}
+    import javax.servlet.http.HttpServletRequest;
+{{/jdk8}}
+import java.util.List;
+{{#jdk8}}
+    import java.util.Optional;
+{{/jdk8}}
+{{^jdk8}}
+    {{#useOptional}}
+        import java.util.Optional;
+    {{/useOptional}}
+{{/jdk8}}
+{{#async}}
+    import java.util.concurrent.{{^jdk8}}Callable{{/jdk8}}{{#jdk8}}CompletableFuture{{/jdk8}};
+{{/async}}
+
+{{#operations}}
+/**
+* A delegate to be called by the {@link {{classname}}Controller}}.
+* Implement this interface with a {@link org.springframework.stereotype.Service} annotated class.
+*/
+@Validated
+public interface {{classname}}Delegate {
+
+{{#operation}}
+    /**
+    * @see {{classname}}#{{operationId}}
+    */
+    {{#responseWrapper}}{{.}}<{{/responseWrapper}}ResponseEntity<{{>returnTypes}}>{{#responseWrapper}}>{{/responseWrapper}} {{operationId}}({{#allParams}}{{>beanValidationQueryParams}}{{>beanValidationPathParams}}{{^isFile}}{{^isUuid}}{{>optionalDataType}}{{/isUuid}}{{#isUuid}}String{{/isUuid}}{{/isFile}}{{#isFile}}MultipartFile{{/isFile}} {{paramName}}{{#hasMore}},
+    {{/hasMore}}{{/allParams}});
+
+{{/operation}}
+}
+{{/operations}}
