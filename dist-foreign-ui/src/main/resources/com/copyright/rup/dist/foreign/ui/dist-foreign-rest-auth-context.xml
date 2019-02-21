@@ -8,6 +8,6 @@
            http://www.springframework.org/schema/security/spring-security-3.2.xsd"
        default-autowire-candidates="false">
 
-    <sec:http pattern="/jobs/**" security="none"/>
+    <sec:http pattern="/api/**" security="none"/>
 
 </beans>
