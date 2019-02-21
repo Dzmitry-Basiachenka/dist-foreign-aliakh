@@ -1,0 +1,98 @@
+swagger: '2.0'
+info:
+  title: FDA REST Services
+  description: Set of services implemented for FDA.
+  version: 1.0.0
+host: 'dist-foreign.aws-p-dev.copyright.com'
+schemes:
+  - http
+basePath: /dist-foreign-ui
+produces:
+  - application/json
+paths:
+  /jobs/{jobName:.+}:
+    get:
+      operationId: getJobStatus
+      summary: Gets status of the job
+      tags:
+        - jobs
+      parameters:
+        - $ref: '#/parameters/job_name'
+        - name: jobName
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: The job is waiting
+          schema:
+            $ref: '#/definitions/JobStatus'
+        202:
+          description: The job is running
+          schema:
+            $ref: '#/definitions/JobStatus'
+        404:
+          description: Job not found. Error code [NOT_FOUND]
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: Unexpected error. Error code [INTERNAL_SERVER_ERROR]
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      operationId: triggerJob
+      summary: Triggers the job
+      tags:
+        - jobs
+      parameters:
+        - $ref: '#/parameters/job_name'
+        - name: jobName
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: The job is triggred
+          schema:
+            $ref: '#/definitions/JobStatus'
+        202:
+          description: The job is already running
+          schema:
+            $ref: '#/definitions/JobStatus'
+        404:
+          description: Job not found. Error code [NOT_FOUND]
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: Unexpected error. Error code [INTERNAL_SERVER_ERROR]
+          schema:
+            $ref: '#/definitions/Error'
+
+definitions:
+  Error:
+    description: Error
+    type: object
+    properties:
+      error:
+        type: string
+        example: ERROR_CODE
+      message:
+        type: string
+        example: Field value is not valid. Field=name, Value=null, Reason=may not be null
+      stackTrace:
+        type: string
+        example: java.lang.NullPointerException\n\tat java.lang.Thread.run(Thread.java:748)
+
+  JobStatus:
+    description: JobStatus
+    type: object
+    properties:
+      status:
+        type: string
+
+parameters:
+  job_name:
+    name: jobName
+    in: path
+    required: true
+    type: string

@@ -1,0 +1,1 @@
+{{#isPathParam}} @PathVariable("{{baseName}}") {{#isUuid}}String{{/isUuid}}{{^isUuid}}{{{dataType}}}{{/isUuid}} {{paramName}}{{/isPathParam}}
