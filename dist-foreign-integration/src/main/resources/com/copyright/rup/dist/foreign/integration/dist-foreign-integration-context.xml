@@ -24,7 +24,15 @@
 
     <context:component-scan base-package="com.copyright.rup.dist.foreign.integration"/>
 
-    <bean id="restTemplate" class="org.springframework.web.client.RestTemplate"/>
+    <bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
+        <constructor-arg ref="simpleHttpRequestFactory"/>
+    </bean>
+
+    <bean id="simpleHttpRequestFactory" class="org.springframework.http.client.SimpleClientHttpRequestFactory">
+        <property name="connectTimeout" value="$RUP{dist.foreign.rest.factory.connect.timeout}"/>
+        <property name="readTimeout" value="$RUP{dist.foreign.rest.factory.read.timeout}"/>
+    </bean>
+
     <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean"/>
 
     <bean id="asyncRequestFactory" class="org.springframework.http.client.HttpComponentsAsyncClientHttpRequestFactory">
