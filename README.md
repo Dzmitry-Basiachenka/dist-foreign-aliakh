@@ -1,3 +1,9 @@
+4.1.33
+-
+* B-49461 Tech Debt: FDA: Add Swagger Codegen to implement REST services
+* B-49461 Tech Debt: FDA: Add Swagger Codegen to implement REST services
+* B-49461 Tech Debt: FDA: apply read and connect timeout for spring RestTemplate
+
 4.1.32
 -
 * CDP-660 FDA: Exception occurs during running manual jobs
