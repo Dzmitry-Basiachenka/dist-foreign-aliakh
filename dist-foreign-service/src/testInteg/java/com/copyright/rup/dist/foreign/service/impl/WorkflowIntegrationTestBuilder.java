@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.common.test.JsonMatcher;
 import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.common.test.mock.aws.SqsClientMock;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
@@ -26,9 +27,7 @@ import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.mock.PaidUsageConsumerMock;
 import com.copyright.rup.dist.foreign.service.impl.mock.SnsMock;
-import com.copyright.rup.dist.foreign.service.impl.mock.SqsClientMock;
 
-import com.amazonaws.services.sqs.model.SendMessageRequest;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -309,10 +308,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
 
         void sendScenarioToLm() {
             scenarioService.sendToLm(scenario);
-            List<SendMessageRequest> sendMessageRequests = sqsClientMock.getSendMessageRequests();
-            assertEquals(1, sendMessageRequests.size());
-            sqsClientMock.assertSendMessageRequest(sendMessageRequests.get(0),
-                "fda-test-sf-detail.fifo",
+            sqsClientMock.assertSendMessages("fda-test-sf-detail.fifo",
                 Collections.singletonList(TestUtils.fileToString(this.getClass(), expectedLmDetailsJsonFile)),
                 Collections.EMPTY_LIST, ImmutableMap.of("source", "FDA"));
         }
@@ -328,7 +324,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
                 SnsMock.wrapBody(TestUtils.fileToString(this.getClass(), expectedPaidUsagesJsonFile)),
                 Collections.EMPTY_MAP);
             assertTrue(paidUsageConsumer.getLatch().await(2, TimeUnit.SECONDS));
-            assertEquals(0, sqsClientMock.getCurrentMessages("fda-test-df-consumer-sf-detail-paid").size());
+            sqsClientMock.assertQueueMessagesReceived("fda-test-df-consumer-sf-detail-paid");
         }
 
         private void sendUsagesToCrm() {

@@ -53,8 +53,7 @@
     <bean id="usageBatchService" class="com.copyright.rup.dist.foreign.service.impl.mock.UsageBatchServiceMock"/>
 
     <import resource="classpath:/com/copyright/rup/dist/common/test/mock/aws/dist-common-sqs-test-context.xml"/>
-    <bean id="dist.common.integration.sqs.client"
-          class="com.copyright.rup.dist.foreign.service.impl.mock.SqsClientMock"/>
+    <bean id="dist.common.integration.sqs.client" class="com.copyright.rup.dist.common.test.mock.aws.SqsClientMock"/>
     <import resource="classpath:/com/copyright/rup/dist/common/test/mock/aws/dist-common-sns-test-context.xml"/>
     <bean id="df.service.paidUsageSubscriber" class="java.lang.Object"/>
 </beans>

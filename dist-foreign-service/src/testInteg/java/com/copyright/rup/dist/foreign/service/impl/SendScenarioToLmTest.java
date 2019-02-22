@@ -4,12 +4,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.common.test.mock.aws.SqsClientMock;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
-import com.copyright.rup.dist.foreign.service.impl.mock.SqsClientMock;
 
-import com.amazonaws.services.sqs.model.SendMessageRequest;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -65,10 +64,7 @@ public class SendScenarioToLmTest {
         Scenario scenario = new Scenario();
         scenario.setId(SCENARIO_ID);
         scenarioService.sendToLm(scenario);
-        List<SendMessageRequest> sendMessageRequests = sqsClientMock.getSendMessageRequests();
-        assertEquals(1, sendMessageRequests.size());
-        sqsClientMock.assertSendMessageRequest(sendMessageRequests.get(0),
-            "fda-test-sf-detail.fifo",
+        sqsClientMock.assertSendMessages("fda-test-sf-detail.fifo",
             Collections.singletonList(TestUtils.fileToString(this.getClass(), "details/details_to_lm.json")),
             Collections.EMPTY_LIST, ImmutableMap.of("source", "FDA"));
         List<UsageDto> usageDtos = findUsageDtos();
