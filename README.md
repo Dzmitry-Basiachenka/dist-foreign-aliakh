@@ -9,6 +9,8 @@
 -
 * CDP-660 FDA: Exception occurs during running manual jobs
 * B-49461 Tech Debt: FDA: update dist-common version to 35.0.+
+* B-48636 FDA: Consume RMS Rights Service that provides mapping between Product and Product Family: apply new common grants service for RMS integration
+* B-47964 FDA: Tag details with category supplied by RRO when loading batches/receipts: add Comment column to refresh scenario window and increase width of Comment column in all widgets 
 
 4.1.31
 -
