@@ -13,6 +13,7 @@
     <property name="logLevelCrmReporting" value="${DIST_FOREIGN_CRM_REPORTING_LOG_LEVEL:-${logLevelDist}}"/>
     <property name="logLevelService" value="${DIST_FOREIGN_SERVICE_LOG_LEVEL:-${logLevelDist}}"/>
     <property name="logLevelRhTax" value="${DIST_FOREIGN_RIGHTSHOLDER_TAX_LOG_LEVEL:-${logLevelDist}}"/>
+    <property name="logLevelSpringSecurity" value="${DIST_FOREIGN_SPRING_SECURITY_LOG_LEVEL:-${logLevelDist}}"/>
 
     <logger name="com.copyright.rup.dist.foreign.service.impl" level="${logLevelService}"/>
 
@@ -34,6 +35,8 @@
 
     <!--Loggers for Taxes logic-->
     <logger name="com.copyright.rup.dist.foreign.service.tax" level="${logLevelRhTax}"/>
+
+    <logger name="org.springframework.security" level="${logLevelSpringSecurity}"/>
 
     <root level="${logLevelGen}">
         <appender-ref ref="RUP-CONSOLE"/>
