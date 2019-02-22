@@ -1,3 +1,8 @@
+4.1.34
+-
+* B-49461 Tech Debt: FDA: Add ability to change logging level for Spring Security
+* B-49461 Tech Debt: FDA: use SqsClientMock from Common, update dist-common dependency version to 36.0.+
+
 4.1.33
 -
 * B-49461 Tech Debt: FDA: Change REST services URL prefix to /api/
