@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.rest;
 
 import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -58,7 +59,10 @@ public class SwaggerConfiguration {
     }
 
     private Predicate<String> paths() {
-        return PathSelectors.regex("/jobs.*");
+        return Predicates.or(
+            PathSelectors.regex("/jobs.*"),
+            PathSelectors.regex("/statistic.*")
+        );
     }
 
     private ApiInfo apiInfo() {

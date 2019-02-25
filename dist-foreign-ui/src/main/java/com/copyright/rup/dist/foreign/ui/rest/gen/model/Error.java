@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import javax.validation.Valid;
@@ -18,6 +19,7 @@ import javax.validation.constraints.*;
  * Error
  */
 @ApiModel(description = "Error")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 
 public class Error   {
     @JsonProperty("error")
