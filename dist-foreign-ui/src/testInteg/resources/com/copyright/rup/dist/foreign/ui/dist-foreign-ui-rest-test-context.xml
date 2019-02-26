@@ -9,4 +9,8 @@
     <bean id="dm.service.schedulerServiceMock" class="org.easymock.EasyMock" factory-method="createMock" primary="true">
         <constructor-arg type="java.lang.Class" value="com.copyright.rup.dist.common.service.api.scheduler.ISchedulerService"/>
     </bean>
+
+    <bean id="dm.service.usageAuditServiceMock" class="org.easymock.EasyMock" factory-method="createMock" primary="true">
+        <constructor-arg type="java.lang.Class" value="com.copyright.rup.dist.foreign.service.api.IUsageAuditService"/>
+    </bean>
 </beans>

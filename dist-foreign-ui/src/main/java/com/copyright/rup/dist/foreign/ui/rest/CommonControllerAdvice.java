@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.rest;
 
 import com.copyright.rup.common.logging.RupLogUtils;
+import com.copyright.rup.dist.foreign.service.api.NotFoundException;
 import com.copyright.rup.dist.foreign.ui.rest.gen.model.Error;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -37,6 +38,17 @@ public class CommonControllerAdvice {
      */
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<Error> handleNoSuchElementException(NoSuchElementException exception) {
+        return handleException(exception, "NOT_FOUND", HttpStatus.NOT_FOUND);
+    }
+
+    /**
+     * Handles {@link NotFoundException} exception.
+     *
+     * @param exception instance of {@link NotFoundException}
+     * @return instance of {@link ResponseEntity}
+     */
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<Error> handleNoSuchElementException(NotFoundException exception) {
         return handleException(exception, "NOT_FOUND", HttpStatus.NOT_FOUND);
     }
 
