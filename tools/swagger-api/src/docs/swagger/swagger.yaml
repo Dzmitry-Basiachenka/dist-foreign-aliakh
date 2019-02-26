@@ -84,8 +84,8 @@ paths:
           in: query
           required: false
           type: string
-          pattern: '^\d{2}/\d{2}/\d{4}$'
-          description: Batch action date in the format MM/dd/yyyy
+          pattern: '^\d{4}-\d{2}-\d{2}$'
+          description: Batch action date in the format yyyy-MM-dd
       responses:
         200:
           description: Batch statistic
