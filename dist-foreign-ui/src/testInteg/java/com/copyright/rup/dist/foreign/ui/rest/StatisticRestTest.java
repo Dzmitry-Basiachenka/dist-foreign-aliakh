@@ -45,13 +45,12 @@ import java.time.format.DateTimeFormatter;
 @WebAppConfiguration
 public class StatisticRestTest {
 
-    private static final DateTimeFormatter FORMATTER =
-        DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT);
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(RupDateUtils.DATE_FORMAT_PATTERN);
     private static final String STATISTIC_PATH = "/statistic";
     private static final String NAME = "name";
     private static final String DATE = "date";
     private static final String TEST_BATCH_NAME = "testBatchName";
-    private static final String TEST_DATE = "02/25/2019";
+    private static final String TEST_DATE = "2019-02-25";
     private static final String JSON_PATH_ERROR = "$.error";
     private static final String JSON_PATH_MESSAGE = "$.message";
 

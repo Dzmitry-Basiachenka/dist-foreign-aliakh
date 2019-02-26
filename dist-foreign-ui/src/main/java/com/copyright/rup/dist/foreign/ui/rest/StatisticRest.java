@@ -30,15 +30,14 @@ import javax.validation.constraints.Pattern;
 @Component
 public class StatisticRest implements StatisticApiDelegate {
 
-    private static final DateTimeFormatter FORMATTER =
-        DateTimeFormatter.ofPattern(RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT);
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(RupDateUtils.DATE_FORMAT_PATTERN);
 
     @Autowired
     private IUsageAuditService usageAuditService;
 
     @Override
     public ResponseEntity<BatchStatistic> getBatchStatistic(
-        @NotNull String name, @Pattern(regexp = "^\\d{2}/\\d{2}/\\d{4}$") String date) {
+        @NotNull String name, @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$") String date) {
         UsageBatchStatistic ubs = usageAuditService.getBatchStatistic(name,
             (null != date) ? LocalDate.parse(date, FORMATTER) : null);
         if (null == ubs) {
