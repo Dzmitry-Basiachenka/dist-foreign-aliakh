@@ -1,3 +1,8 @@
+4.1.35
+-
+* B-49461 Tech Debt: FDA: Change date format in batch statistic REST service to yyyy-MM-dd
+* B-49461 Tech Debt: FDA: implement REST service by Swagger Codegen to get batch statistic
+
 4.1.34
 -
 * B-49461 Tech Debt: FDA: Add ability to change logging level for Spring Security
