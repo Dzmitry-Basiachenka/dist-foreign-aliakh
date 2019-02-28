@@ -74,15 +74,15 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
     private Long expectedPrmAccountNumber;
     private List<UsageAuditItem> expectedUsageAuditItems;
     private UsageBatch usageBatch;
-    private Usage processedUsage;
+    private Usage expectedUsage;
 
     NtsWorkflowIntegrationTestBuilder withUsageBatch(UsageBatch batch) {
         this.usageBatch = batch;
         return this;
     }
 
-    NtsWorkflowIntegrationTestBuilder expectedUsage(Usage usage) {
-        this.processedUsage = usage;
+    NtsWorkflowIntegrationTestBuilder expectUsage(Usage usage) {
+        this.expectedUsage = usage;
         return this;
     }
 
@@ -122,7 +122,7 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
     void reset() {
         usageBatch = null;
-        processedUsage = null;
+        expectedUsage = null;
         expectedPrmResponse = null;
         expectedRmsRequest = null;
         expectedRmsResponse = null;
@@ -176,31 +176,32 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
         private void assertUsages() {
             UsageFilter usageFilter = new UsageFilter();
             usageFilter.setUsageBatchesIds(Collections.singleton(usageBatch.getId()));
-            List<UsageDto> usages = usageRepository.findDtosByFilter(usageFilter, null, null);
-            if (Objects.isNull(processedUsage)) {
-                assertTrue(CollectionUtils.isEmpty(usages));
+            List<UsageDto> actualUsages = usageRepository.findDtosByFilter(usageFilter, null, null);
+            if (Objects.isNull(expectedUsage)) {
+                assertTrue(CollectionUtils.isEmpty(actualUsages));
             } else {
-                assertEquals(1, CollectionUtils.size(usages));
-                assertUsage(usages.get(0));
-                assertAudit(usages.get(0));
+                assertEquals(1, CollectionUtils.size(actualUsages));
+                assertUsage(actualUsages.get(0));
+                assertAudit(actualUsages.get(0));
             }
         }
 
-        private void assertUsage(UsageDto usageDto) {
-            assertEquals(processedUsage.getStatus(), usageDto.getStatus());
-            assertEquals(processedUsage.getWrWrkInst(), usageDto.getWrWrkInst());
-            assertEquals(processedUsage.getWorkTitle(), usageDto.getWorkTitle());
-            assertEquals(processedUsage.getProductFamily(), usageDto.getProductFamily());
-            assertEquals(processedUsage.getArticle(), usageDto.getArticle());
-            assertEquals(processedUsage.getStandardNumber(), usageDto.getStandardNumber());
-            assertEquals(processedUsage.getPublisher(), usageDto.getPublisher());
-            assertEquals(processedUsage.getPublicationDate(), usageDto.getPublicationDate());
-            assertEquals(processedUsage.getMarket(), usageDto.getMarket());
-            assertEquals(processedUsage.getMarketPeriodFrom(), usageDto.getMarketPeriodFrom());
-            assertEquals(processedUsage.getMarketPeriodTo(), usageDto.getMarketPeriodTo());
-            assertEquals(processedUsage.getAuthor(), usageDto.getAuthor());
-            assertEquals(processedUsage.getGrossAmount(), usageDto.getGrossAmount());
-            assertEquals(processedUsage.getRightsholder().getAccountNumber(), usageDto.getRhAccountNumber());
+        private void assertUsage(UsageDto actualUsage) {
+            assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
+            assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
+            assertEquals(expectedUsage.getWorkTitle(), actualUsage.getWorkTitle());
+            assertEquals(expectedUsage.getProductFamily(), actualUsage.getProductFamily());
+            assertEquals(expectedUsage.getArticle(), actualUsage.getArticle());
+            assertEquals(expectedUsage.getStandardNumber(), actualUsage.getStandardNumber());
+            assertEquals(expectedUsage.getPublisher(), actualUsage.getPublisher());
+            assertEquals(expectedUsage.getPublicationDate(), actualUsage.getPublicationDate());
+            assertEquals(expectedUsage.getMarket(), actualUsage.getMarket());
+            assertEquals(expectedUsage.getMarketPeriodFrom(), actualUsage.getMarketPeriodFrom());
+            assertEquals(expectedUsage.getMarketPeriodTo(), actualUsage.getMarketPeriodTo());
+            assertEquals(expectedUsage.getAuthor(), actualUsage.getAuthor());
+            assertEquals(expectedUsage.getGrossAmount(), actualUsage.getGrossAmount());
+            assertEquals(expectedUsage.getReportedValue(), actualUsage.getReportedValue());
+            assertEquals(expectedUsage.getRightsholder().getAccountNumber(), actualUsage.getRhAccountNumber());
         }
 
         private void assertAudit(UsageDto usageDto) {

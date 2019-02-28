@@ -62,7 +62,7 @@ public class NtsWorkflowIntegrationTest {
             .expectOracleCall("tax/rh_1000023401_tax_country_request.json",
                 "tax/rh_1000023401_tax_country_us_response.json")
             .expectPreferences("eligibility/pref_eligible_rh_response.json", "85f864f2-30a5-4215-ac4f-f1f541901218")
-            .expectedUsage(buildUsage())
+            .expectUsage(buildUsage())
             .expectUsageAudit(Arrays.asList(
                 buildUsageAuditItem(UsageActionTypeEnum.ELIGIBLE,
                     "Usage has become eligible"),
@@ -158,7 +158,8 @@ public class NtsWorkflowIntegrationTest {
         usage.setMarket(BUS_MARKET);
         usage.setMarketPeriodFrom(2013);
         usage.setMarketPeriodTo(2017);
-        usage.setGrossAmount(new BigDecimal("500.0000000000"));
+        usage.setGrossAmount(new BigDecimal("1176.9160000000"));
+        usage.setReportedValue(new BigDecimal("1176.92"));
         return usage;
     }
 }

@@ -1,0 +1,70 @@
+[
+  {
+    "id": "5b8c2754-2f63-425a-a95f-dbd744e815fc",
+    "version": 1,
+    "createDate": 1551345258286,
+    "updateDate": 1551345258286,
+    "createUser": "SYSTEM",
+    "updateUser": "SYSTEM",
+    "wrWrkInst": 243904752,
+    "workTitle": "100 ROAD MOVIES",
+    "systemTitle": "100 ROAD MOVIES",
+    "rightsholder": {
+      "version": 1,
+      "createDate": 1551345258286,
+      "updateDate": 1551345258286,
+      "createUser": "SYSTEM",
+      "updateUser": "SYSTEM"
+    },
+    "payee": {
+      "version": 1,
+      "createDate": 1551345258286,
+      "updateDate": 1551345258286,
+      "createUser": "SYSTEM",
+      "updateUser": "SYSTEM"
+    },
+    "standardNumber": "1008902112317555XX",
+    "market": "Bus",
+    "marketPeriodFrom": 2016,
+    "marketPeriodTo": 2017,
+    "reportedValue": 500.0000000000,
+    "netAmount": 0,
+    "serviceFeeAmount": 0,
+    "grossAmount": 500.0000000000,
+    "rhParticipating": false
+  },
+  {
+    "id": "bc0fe9bc-9b24-4324-b624-eed0d9773e19",
+    "version": 1,
+    "createDate": 1551345258286,
+    "updateDate": 1551345258286,
+    "createUser": "SYSTEM",
+    "updateUser": "SYSTEM",
+    "wrWrkInst": 243904752,
+    "workTitle": "100 ROAD MOVIES",
+    "systemTitle": "100 ROAD MOVIES",
+    "rightsholder": {
+      "version": 1,
+      "createDate": 1551345258286,
+      "updateDate": 1551345258286,
+      "createUser": "SYSTEM",
+      "updateUser": "SYSTEM"
+    },
+    "payee": {
+      "version": 1,
+      "createDate": 1551345258286,
+      "updateDate": 1551345258286,
+      "createUser": "SYSTEM",
+      "updateUser": "SYSTEM"
+    },
+    "standardNumber": "1008902112317555XX",
+    "market": "Doc Del",
+    "marketPeriodFrom": 2013,
+    "marketPeriodTo": 2017,
+    "reportedValue": 1176.9160000000,
+    "netAmount": 0,
+    "serviceFeeAmount": 0,
+    "grossAmount": 1176.9160000000,
+    "rhParticipating": false
+  }
+]
