@@ -1,3 +1,9 @@
+4.1.36
+-
+* B-49461 Tech Debt: FDA: adjust NTS batch creation logic to populate new usages reported value from archived usage gross amount
+* B-48636 FDA: Consume RMS Rights Service that provides mapping between Product and Product Family: add grant_product_family column into df_grant_priority table and drop market and distribution columns
+* B-48636 FDA: Consume RMS Rights Service that provides mapping between Product and Product Family: update dist-common version to 38.0.+
+
 4.1.35
 -
 * B-49461 Tech Debt: FDA: Change date format in batch statistic REST service to yyyy-MM-dd
