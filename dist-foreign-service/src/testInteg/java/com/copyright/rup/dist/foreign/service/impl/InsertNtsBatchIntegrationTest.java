@@ -91,7 +91,7 @@ public class InsertNtsBatchIntegrationTest {
         assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
         assertEquals("NTS", usage.getProductFamily());
         assertEquals(5431L, usage.getRroAccountNumber(), 0);
-        assertEquals(new BigDecimal("0.00"), usage.getReportedValue());
+        assertEquals(new BigDecimal("50.00"), usage.getReportedValue());
         assertEquals(new BigDecimal("50.0000000000"), usage.getGrossAmount());
         assertEquals(new BigDecimal("0.00"), usage.getBatchGrossAmount());
         assertEquals(market, usage.getMarket());
