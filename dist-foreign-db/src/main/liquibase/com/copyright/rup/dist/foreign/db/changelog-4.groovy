@@ -343,4 +343,75 @@ databaseChangeLog {
 
         rollback ""
     }
+
+    changeSet(id: '2019-02-28-00', author: 'Darya Baraukova <dbaraukova@copyright.com>') {
+        comment('B-48636 FDA: Consume RMS Rights Service that provides mapping between Product and Product Family: ' +
+                'add grant_product_family column into df_grant_priority table and drop market and distribution columns')
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'grant_product_family', type: 'VARCHAR(128)', remarks: 'Grant Product Family')
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'grant_product_family', value: 'TRS')
+            where "market = 'CORPORATE' and distribution = 'EXTERNAL' and type_of_use = 'NGT_PHOTOCOPY'"
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'grant_product_family', value: 'ACLPRINT')
+            where "market = 'CORPORATE' and distribution = 'INTERNAL' and type_of_use = 'PRINT'"
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'grant_product_family', value: 'ACLDIGITAL')
+            where "market = 'CORPORATE' and distribution = 'INTERNAL' and type_of_use = 'DIGITAL'"
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'grant_product_family', value: 'AACL')
+            where "market = 'ACADEMIC' and distribution = 'INTERNAL' and type_of_use in ('PRINT', 'DIGITAL')"
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'grant_product_family', value: 'RLS')
+            where "market = 'ACADEMIC' and distribution = 'EXTERNAL' " +
+                    "and type_of_use in ('NGT_PRINT_COURSE_MATERIALS', 'NGT_ELECTRONIC_COURSE_MATERIALS')"
+        }
+
+        dropColumn(schemaName: dbAppsSchema, tableName: 'df_grant_priority', columnName: 'market')
+        dropColumn(schemaName: dbAppsSchema, tableName: 'df_grant_priority', columnName: 'distribution')
+
+        rollback {
+            addColumn(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'market', type: 'VARCHAR(128)', remarks: 'Market')
+                column(name: 'distribution', type: 'VARCHAR(128)', remarks: 'Distribution type')
+            }
+
+            update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'market', value: 'CORPORATE')
+                column(name: 'distribution', value: 'EXTERNAL')
+                where "grant_product_family = 'TRS'"
+            }
+
+            update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'market', value: 'CORPORATE')
+                column(name: 'distribution', value: 'INTERNAL')
+                where "grant_product_family in ('ACLPRINT', 'ACLDIGITAL')"
+            }
+
+            update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'market', value: 'ACADEMIC')
+                column(name: 'distribution', value: 'INTERNAL')
+                where "grant_product_family = 'AACL'"
+            }
+
+            update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'market', value: 'ACADEMIC')
+                column(name: 'distribution', value: 'EXTERNAL')
+                where "grant_product_family = 'RLS'"
+            }
+
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_grant_priority', columnName: 'grant_product_family')
+        }
+    }
 }

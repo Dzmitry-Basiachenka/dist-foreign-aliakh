@@ -31,9 +31,6 @@ import java.util.stream.IntStream;
     value = {"classpath:/com/copyright/rup/dist/foreign/repository/dist-foreign-repository-test-context.xml"})
 public class GrantPriorityRepositoryIntegrationTest {
 
-    private static final String INTERNAL_DISTRIBUTION = "INTERNAL";
-    private static final String ACADEMIC_MARKET = "ACADEMIC";
-
     @Autowired
     private IGrantPriorityRepository grantPriorityRepository;
 
@@ -62,35 +59,32 @@ public class GrantPriorityRepositoryIntegrationTest {
         assertNotNull(actualGrantPriorities);
         assertEquals(7, CollectionUtils.size(actualGrantPriorities));
         List<GrantPriority> expectedGrantPriorities = Arrays.asList(
-            buildGrantPriority("CORPORATE", "EXTERNAL", "NGT_PHOTOCOPY", 0),
-            buildGrantPriority("CORPORATE", INTERNAL_DISTRIBUTION, "PRINT", 1),
-            buildGrantPriority("CORPORATE", INTERNAL_DISTRIBUTION, "DIGITAL", 2),
-            buildGrantPriority(ACADEMIC_MARKET, INTERNAL_DISTRIBUTION, "PRINT", 3),
-            buildGrantPriority(ACADEMIC_MARKET, INTERNAL_DISTRIBUTION, "DIGITAL", 4),
-            buildGrantPriority(ACADEMIC_MARKET, "EXTERNAL", "NGT_PRINT_COURSE_MATERIALS", 5),
-            buildGrantPriority(ACADEMIC_MARKET, "EXTERNAL", "NGT_ELECTRONIC_COURSE_MATERIALS", 6)
+            buildGrantPriority("NGT_PHOTOCOPY", 0, "TRS"),
+            buildGrantPriority("PRINT", 1, "ACLPRINT"),
+            buildGrantPriority("DIGITAL", 2, "ACLDIGITAL"),
+            buildGrantPriority("PRINT", 3, "AACL"),
+            buildGrantPriority("DIGITAL", 4, "AACL"),
+            buildGrantPriority("NGT_PRINT_COURSE_MATERIALS", 5, "RLS"),
+            buildGrantPriority("NGT_ELECTRONIC_COURSE_MATERIALS", 6, "RLS")
         );
         IntStream.range(0, expectedGrantPriorities.size())
             .forEach(i -> assertGrantPriority(expectedGrantPriorities.get(i), actualGrantPriorities.get(i)));
     }
 
-    private GrantPriority buildGrantPriority(String market, String distribution, String typeOfUse,
-                                             Integer priority) {
+    private GrantPriority buildGrantPriority(String typeOfUse, Integer priority, String grantProductFamily) {
         GrantPriority grantPriority = new GrantPriority();
         grantPriority.setProductFamily(productFamily);
-        grantPriority.setMarket(market);
-        grantPriority.setDistribution(distribution);
         grantPriority.setTypeOfUse(typeOfUse);
         grantPriority.setPriority(priority);
+        grantPriority.setGrantProductFamily(grantProductFamily);
         return grantPriority;
     }
 
     private void assertGrantPriority(GrantPriority expected, GrantPriority actual) {
         assertNotNull(actual.getId());
         assertEquals(expected.getProductFamily(), actual.getProductFamily());
-        assertEquals(expected.getMarket(), actual.getMarket());
-        assertEquals(expected.getDistribution(), actual.getDistribution());
         assertEquals(expected.getTypeOfUse(), actual.getTypeOfUse());
         assertEquals(expected.getPriority(), actual.getPriority());
+        assertEquals(expected.getGrantProductFamily(), actual.getGrantProductFamily());
     }
 }

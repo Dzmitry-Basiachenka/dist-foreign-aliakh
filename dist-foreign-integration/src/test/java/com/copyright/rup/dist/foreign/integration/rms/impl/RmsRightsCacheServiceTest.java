@@ -106,8 +106,6 @@ public class RmsRightsCacheServiceTest {
         rmsGrant.setWrWrkInst(wrWrkInst);
         rmsGrant.setStatus("GRANT");
         rmsGrant.setTypeOfUse("NGT_PHOTOCOPY");
-        rmsGrant.setMarket("CORPORATE");
-        rmsGrant.setDistribution("EXTERNAL");
         rmsGrant.setWorkGroupOwnerOrgNumber(new BigDecimal(rhAccountNumber));
         return rmsGrant;
     }
