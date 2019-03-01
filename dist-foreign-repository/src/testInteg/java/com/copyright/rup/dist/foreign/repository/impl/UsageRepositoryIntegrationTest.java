@@ -11,7 +11,6 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.test.TestUtils;
-import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -903,25 +902,6 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testUpdateToNtsWithdrawn() {
-        List<Usage> usages = usageRepository.findByIds(Collections.singletonList(USAGE_ID_20));
-        assertEquals(1, CollectionUtils.size(usages));
-        Usage usage = usages.get(0);
-        assertNotNull(usage);
-        assertEquals(USAGE_ID_20, usage.getId());
-        assertEquals(PRODUCT_FAMILY_FAS, usage.getProductFamily());
-        assertEquals(UsageStatusEnum.NEW, usage.getStatus());
-        usage.setProductFamily(FdaConstants.NTS_PRODUCT_FAMILY);
-        usage.setStatus(UsageStatusEnum.NTS_WITHDRAWN);
-        usageRepository.updateToNtsWithdrawn(usage);
-        usages = usageRepository.findByIds(Collections.singletonList(usage.getId()));
-        assertEquals(1, CollectionUtils.size(usages));
-        Usage actualUsage = usages.get(0);
-        assertEquals(FdaConstants.NTS_PRODUCT_FAMILY, actualUsage.getProductFamily());
-        assertEquals(UsageStatusEnum.NTS_WITHDRAWN, actualUsage.getStatus());
-    }
-
-    @Test
     public void testUpdateResearchedUsages() {
         String usageId1 = "721ca627-09bc-4204-99f4-6acae415fa5d";
         String usageId2 = "9c07f6dd-382e-4cbb-8cd1-ab9f51413e0a";
@@ -973,6 +953,28 @@ public class UsageRepositoryIntegrationTest {
         assertFalse(usageRepository.isValidUsagesState(usageFilter, UsageStatusEnum.WORK_NOT_FOUND));
         usageFilter.setUsageStatus(UsageStatusEnum.WORK_NOT_FOUND);
         assertTrue(usageRepository.isValidUsagesState(usageFilter, UsageStatusEnum.WORK_NOT_FOUND));
+    }
+
+    @Test
+    public void testUpdateProcessedUsage() {
+        List<Usage> usages = usageRepository.findByIds(Collections.singletonList(USAGE_ID_24));
+        assertEquals(1, CollectionUtils.size(usages));
+        Usage usage = usages.get(0);
+        usage.setStatus(UsageStatusEnum.RH_FOUND);
+        usage.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER);
+        usage.setProductFamily(PRODUCT_FAMILY_FAS);
+        usage.setWrWrkInst(5697789789L);
+        usage.setWorkTitle("Wissenschaft & Forschung Italy");
+        usage.setSystemTitle("Wissenschaft & Forschung France");
+        assertNotNull(usageRepository.updateProcessedUsage(usage));
+        List<Usage> updatedUsages = usageRepository.findByIds(Collections.singletonList(USAGE_ID_24));
+        assertEquals(1, CollectionUtils.size(updatedUsages));
+        Usage updatedUsage = updatedUsages.get(0);
+        assertEquals(RH_ACCOUNT_NUMBER, updatedUsage.getRightsholder().getAccountNumber());
+        assertEquals(UsageStatusEnum.RH_FOUND, updatedUsage.getStatus());
+        assertEquals(PRODUCT_FAMILY_FAS, updatedUsage.getProductFamily());
+        assertEquals("Wissenschaft & Forschung Italy", updatedUsage.getWorkTitle());
+        assertEquals("Wissenschaft & Forschung France", updatedUsage.getSystemTitle());
     }
 
     private void verifyFilterForTwoBatches(AuditFilter filter) {

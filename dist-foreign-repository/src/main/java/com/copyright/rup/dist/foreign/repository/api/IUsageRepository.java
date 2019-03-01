@@ -350,11 +350,12 @@ public interface IUsageRepository {
     void update(List<Usage> usages);
 
     /**
-     * Updates status to {@link UsageStatusEnum#NTS_WITHDRAWN} and product family to NTS for usage.
+     * Updates given {@link Usage} in case of its version is the same as in database .
      *
-     * @param usage instance of {@link Usage}
+     * @param usage {@link Usage} to update
+     * @return id of updated record, otherwise {@code null}
      */
-    void updateToNtsWithdrawn(Usage usage);
+    String updateProcessedUsage(Usage usage);
 
     /**
      * Updates researched usage details.

@@ -514,7 +514,8 @@
             u.author,
             u.number_of_copies,
             u.reported_value,
-            u.gross_amount
+            u.gross_amount,
+            u.record_version
         from ${schema}.df_usage u
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         where
@@ -1182,14 +1183,20 @@
         where df_usage_uid = #{usage.usageId}
     </update>
 
-    <update id="updateToNtsWithdrawn" parameterType="map">
+    <select id="updateProcessedUsage" parameterType="map" resultType="string">
         update ${schema}.df_usage
         set
+            rh_account_number = #{rightsholder.accountNumber},
+            wr_wrk_inst = #{wrWrkInst},
+            system_title = #{systemTitle},
+            work_title = #{workTitle},
             status_ind = #{status},
             product_family = #{productFamily},
             <include refid="StoredEntityMapper.update"/>
-        where df_usage_uid = #{usageId}
-    </update>
+        where df_usage_uid = #{id}
+            and record_version = #{version}
+        returning df_usage_uid
+    </select>
 
     <select id="findUndistributedLiabilitiesReportDtos" parameterType="map" resultMap="undistributedLiabilitiesReportDtoResultMap">
         select

@@ -123,15 +123,16 @@ public class RightsService implements IRightsService {
                 usage.getProductFamily());
         Long rhAccountNumber = wrWrkInstToRhAccountNumberMap.get(wrWrkInst);
         if (Objects.nonNull(rhAccountNumber)) {
-            usageRepository.updateStatusAndRhAccountNumber(usageId, UsageStatusEnum.RH_FOUND, rhAccountNumber);
-            auditService.logAction(usageId, UsageActionTypeEnum.RH_FOUND,
-                String.format("Rightsholder account %s was found in RMS", rhAccountNumber));
             List<Rightsholder> rightsholders =
                 rightsholderService.updateRightsholders(Collections.singleton(rhAccountNumber));
             usage.setRightsholder(rightsholders.get(0));
             usage.setStatus(UsageStatusEnum.RH_FOUND);
+            usageService.updateProcessedUsage(usage);
+            auditService.logAction(usageId, UsageActionTypeEnum.RH_FOUND,
+                String.format("Rightsholder account %s was found in RMS", rhAccountNumber));
         } else {
-            usageRepository.updateStatus(usageId, UsageStatusEnum.RH_NOT_FOUND);
+            usage.setStatus(UsageStatusEnum.RH_NOT_FOUND);
+            usageService.updateProcessedUsage(usage);
             auditService.logAction(usageId, UsageActionTypeEnum.RH_NOT_FOUND,
                 String.format("Rightsholder account for %s was not found in RMS", wrWrkInst));
         }

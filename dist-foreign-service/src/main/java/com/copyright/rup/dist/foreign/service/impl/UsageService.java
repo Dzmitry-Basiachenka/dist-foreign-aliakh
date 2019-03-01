@@ -77,6 +77,8 @@ public class UsageService implements IUsageService {
         "ArchivedUsagesCount={}, NotReportedUsagesCount={}, ArchivedScenariosCount={}";
     private static final String SEND_TO_CRM_FINISHED_DEBUG_LOG_MESSAGE = "Send to CRM. Finished. PaidUsagesCount={}, " +
         "ArchivedUsagesCount={}, ArchivedScenariosCount={}, NotReportedUsageIds={}";
+    private static final String UPDATE_PAID_NOT_FOUND_WARN_LOG_MESSAGE = "Update paid information. Not found usages. " +
+        "UsagesCount={}, CreatedCount={}, UpdatedCount={}, NotFoundUsageIds={}";
     private static final Logger LOGGER = RupLogUtils.getLogger();
     @Value("$RUP{dist.foreign.service_fee.cla_payee}")
     private BigDecimal claPayeeServiceFee;
@@ -411,14 +413,14 @@ public class UsageService implements IUsageService {
                 notFoundUsageIds.add(paidUsage.getId());
             }
         });
+        int updatedUsagesCount =
+            CollectionUtils.size(paidUsages) - newUsagesCount.get() - CollectionUtils.size(notFoundUsageIds);
         if (CollectionUtils.isNotEmpty(notFoundUsageIds)) {
-            LOGGER.warn("Update paid information. Not found usages. UsagesCount={}, CreatedCount={}, " +
-                    "UpdatedCount={}, NotFoundUsageIds={}", LogUtils.size(paidUsages), newUsagesCount,
-                paidUsages.size() - newUsagesCount.get() - notFoundUsageIds.size(), notFoundUsageIds);
+            LOGGER.warn(UPDATE_PAID_NOT_FOUND_WARN_LOG_MESSAGE, LogUtils.size(paidUsages), newUsagesCount,
+                updatedUsagesCount, notFoundUsageIds);
         }
         LOGGER.info("Update paid information. Finished. UsagesCount={}, CreatedCount={}, UpdatedCount={}",
-            LogUtils.size(paidUsages), newUsagesCount,
-            paidUsages.size() - newUsagesCount.get() - notFoundUsageIds.size());
+            LogUtils.size(paidUsages), newUsagesCount, updatedUsagesCount);
     }
 
     @Override
@@ -490,6 +492,15 @@ public class UsageService implements IUsageService {
     @Override
     public boolean isValidUsagesState(UsageFilter filter, UsageStatusEnum status) {
         return usageRepository.isValidUsagesState(filter, status);
+    }
+
+    @Override
+    public void updateProcessedUsage(Usage usage) {
+        if (Objects.isNull(usageRepository.updateProcessedUsage(usage))) {
+            // throws an exception and stops usage processing when such usage has been already consumed and processed
+            throw new InconsistentUsageStateException();
+        }
+        usage.setVersion(usage.getVersion() + 1);
     }
 
     private void updatePaidUsage(PaidUsage paidUsage, String actionReason) {

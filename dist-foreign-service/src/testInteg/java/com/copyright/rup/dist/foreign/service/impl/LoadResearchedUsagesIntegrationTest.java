@@ -72,7 +72,7 @@ public class LoadResearchedUsagesIntegrationTest {
         asyncMockServer = MockRestServiceServer.createServer(asyncRestTemplate);
         expectRmsCall("rights/rms_grants_854030732_request.json", "rights/rms_grants_empty_response.json");
         expectRmsCall("rights/rms_grants_658824345_request.json", "rights/rms_grants_658824345_response.json");
-        expectPrmCall(1000023401L, "prm/rightsholder_1000000322_response.json");
+        expectPrmCall(1000023401L, "prm/rightsholder_1000023401_response.json");
         usageService.loadResearchedUsages(Arrays.asList(
             buildResearchedUsage("c219108e-f319-4636-b837-b71bccb29b76", 658824345L, "Medical Journal"),
             buildResearchedUsage("54580cd4-33b5-4079-bfc7-5c35bf9c5c9e", 854030732L, "Technical Journal")));

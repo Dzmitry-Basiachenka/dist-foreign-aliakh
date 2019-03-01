@@ -48,7 +48,9 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -88,6 +90,9 @@ public class UsageServiceTest {
     private UsageService usageService;
     private IPrmIntegrationService prmIntegrationService;
     private IChainExecutor<Usage> chainExecutor;
+
+    @Rule
+    private final ExpectedException exception = ExpectedException.none();
 
     @Before
     @SuppressWarnings("unchecked")
@@ -627,6 +632,27 @@ public class UsageServiceTest {
         expect(usageRepository.isValidUsagesState(usageFilter, UsageStatusEnum.WORK_NOT_FOUND)).andReturn(true).once();
         replay(usageRepository);
         usageService.isValidUsagesState(usageFilter, UsageStatusEnum.WORK_NOT_FOUND);
+        verify(usageRepository);
+    }
+
+    @Test
+    public void testUpdateProcessedUsage() {
+        String usageId = RupPersistUtils.generateUuid();
+        Usage usage = buildUsage(usageId);
+        expect(usageRepository.updateProcessedUsage(usage)).andReturn(usageId).once();
+        replay(usageRepository);
+        usageService.updateProcessedUsage(usage);
+        verify(usageRepository);
+    }
+
+    @Test
+    public void testUpdateProcessedUsageWrongVersion() {
+        Usage usage = buildUsage(RupPersistUtils.generateUuid());
+        exception.expect(InconsistentUsageStateException.class);
+        exception.expectMessage("Usage is in inconsistent state");
+        expect(usageRepository.updateProcessedUsage(usage)).andReturn(null).once();
+        replay(usageRepository);
+        usageService.updateProcessedUsage(usage);
         verify(usageRepository);
     }
 
