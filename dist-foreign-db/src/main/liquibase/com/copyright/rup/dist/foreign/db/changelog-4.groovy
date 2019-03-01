@@ -323,11 +323,6 @@ databaseChangeLog {
         addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
             column(name: 'comment', type: 'VARCHAR(100)', remarks: 'Comment')
         }
-
-        rollback {
-            dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage', columnName: 'comment')
-            dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive', columnName: 'comment')
-        }
     }
 
     changeSet(id: '2019-02-18-00', author: 'Pavel Liakh <pliakh@copyright.com>') {
