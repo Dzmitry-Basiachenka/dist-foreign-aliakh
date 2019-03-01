@@ -41,6 +41,7 @@ import java.util.List;
 public class UsageAuditRepositoryIntegrationTest {
 
     private static final String USAGE_UID = "3ab5e80b-89c0-4d78-9675-54c7ab284450";
+    private static final String AMOUNT_ZERO = "0.00";
 
     @Autowired
     private IUsageAuditRepository usageAuditRepository;
@@ -85,8 +86,8 @@ public class UsageAuditRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindBatchStatistic() {
-        UsageBatchStatistic statistic = usageAuditRepository.findBatchStatistic("Statistic batch", null);
+    public void testFindFasBatchStatistic() {
+        UsageBatchStatistic statistic = usageAuditRepository.findBatchStatistic("FAS batch statistic", null);
         assertNotNull(statistic);
         assertEquals(10, statistic.getLoadedCount());
         assertEquals(new BigDecimal("995.00"), statistic.getLoadedAmount());
@@ -104,6 +105,28 @@ public class UsageAuditRepositoryIntegrationTest {
         assertEquals(new BigDecimal("80.00"), statistic.getSendForRaAmount());
         assertEquals(5, statistic.getPaidCount());
         assertEquals(new BigDecimal("500.00"), statistic.getPaidAmount());
+    }
+
+    @Test
+    public void testFindNtsBatchStatistic() {
+        UsageBatchStatistic statistic = usageAuditRepository.findBatchStatistic("NTS batch statistic", null);
+        assertNotNull(statistic);
+        assertEquals(10, statistic.getLoadedCount());
+        assertEquals(new BigDecimal("995.00"), statistic.getLoadedAmount());
+        assertEquals(0, statistic.getMatchedCount());
+        assertEquals(new BigDecimal(AMOUNT_ZERO), statistic.getMatchedAmount());
+        assertEquals(0, statistic.getWorksNotFoundCount());
+        assertEquals(new BigDecimal(AMOUNT_ZERO), statistic.getWorksNotFoundAmount());
+        assertEquals(0, statistic.getNtsWithDrawnCount());
+        assertEquals(new BigDecimal(AMOUNT_ZERO), statistic.getNtsWithDrawnAmount());
+        assertEquals(0, statistic.getRhNotFoundCount());
+        assertEquals(new BigDecimal(AMOUNT_ZERO), statistic.getRhNotFoundAmount());
+        assertEquals(5, statistic.getEligibleCount());
+        assertEquals(new BigDecimal("500.00"), statistic.getEligibleAmount());
+        assertEquals(0, statistic.getSendForRaCount());
+        assertEquals(new BigDecimal(AMOUNT_ZERO), statistic.getSendForRaAmount());
+        assertEquals(0, statistic.getPaidCount());
+        assertEquals(new BigDecimal(AMOUNT_ZERO), statistic.getPaidAmount());
     }
 
     private UsageAuditItem buildUsageAuditItem() {
