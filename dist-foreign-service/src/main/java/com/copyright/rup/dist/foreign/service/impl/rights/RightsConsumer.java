@@ -48,7 +48,7 @@ public class RightsConsumer implements IConsumer<Usage> {
     @Override
     @Transactional
     public void consume(Usage usage) {
-        LOGGER.trace("Consume usage for rights processing. Usage={}", usage);
+        LOGGER.trace("Consume usage for rights processing. Started. Usage={}", usage);
         if (Objects.nonNull(usage)) {
             rightsService.updateRight(usage);
             Predicate<Usage> successPredicate = updatedUsage -> UsageStatusEnum.RH_FOUND == updatedUsage.getStatus();
@@ -58,6 +58,7 @@ public class RightsConsumer implements IConsumer<Usage> {
                 fasRightsProcessor.executeNextProcessor(usage, successPredicate);
             }
         }
+        LOGGER.trace("Consume usage for rights processing. Finished. Usage={}", usage);
     }
 
     void setRightsService(IRightsService rightsService) {
