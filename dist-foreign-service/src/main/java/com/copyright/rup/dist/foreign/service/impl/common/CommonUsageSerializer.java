@@ -47,6 +47,7 @@ public class CommonUsageSerializer extends StdSerializer<Usage> {
             writeNotNullField(jsonGenerator, "gross_amount", usage.getGrossAmount());
             writeNotNullField(jsonGenerator, "status", usage.getStatus().name());
             writeNotNullField(jsonGenerator, "product_family", usage.getProductFamily());
+            jsonGenerator.writeNumberField("record_version", usage.getVersion());
         }
         jsonGenerator.writeEndObject();
     }

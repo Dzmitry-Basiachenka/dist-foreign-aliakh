@@ -5,15 +5,14 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.integration.oracle.api.IOracleIntegrationService;
-import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IRhTaxService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 
+import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.Objects;
 
 /**
@@ -33,7 +32,7 @@ public class RhTaxService implements IRhTaxService {
     @Autowired
     private IOracleIntegrationService oracleIntegrationService;
     @Autowired
-    private IUsageRepository usageRepository;
+    private IUsageService usageService;
     @Autowired
     private IUsageAuditService usageAuditService;
 
@@ -45,7 +44,7 @@ public class RhTaxService implements IRhTaxService {
         boolean isUsTaxCountry = oracleIntegrationService.isUsCountryCode(accountNumber);
         if (isUsTaxCountry) {
             usage.setStatus(UsageStatusEnum.US_TAX_COUNTRY);
-            usageRepository.updateStatus(Collections.singleton(usageId), UsageStatusEnum.US_TAX_COUNTRY);
+            usageService.updateProcessedUsage(usage);
             usageAuditService.logAction(usageId, UsageActionTypeEnum.US_TAX_COUNTRY, "Rightsholder tax country is US");
         }
         LOGGER.debug("Processing RH tax country. Finished. UsageId={}, RhAccountNumber={}, IsUsTaxCountry={}", usageId,
@@ -56,8 +55,8 @@ public class RhTaxService implements IRhTaxService {
         this.oracleIntegrationService = oracleIntegrationService;
     }
 
-    void setUsageRepository(IUsageRepository usageRepository) {
-        this.usageRepository = usageRepository;
+    void setUsageService(IUsageService usageService) {
+        this.usageService = usageService;
     }
 
     void setUsageAuditService(IUsageAuditService usageAuditService) {

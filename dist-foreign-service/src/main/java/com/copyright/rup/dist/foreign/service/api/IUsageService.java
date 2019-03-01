@@ -344,4 +344,13 @@ public interface IUsageService {
      * {@link false} - otherwise
      */
     boolean isValidUsagesState(UsageFilter filter, UsageStatusEnum status);
+
+    /**
+     * Updates {@link Usage} and verifies that version of {@link Usage} is the same as in database.
+     * Throws an {@link com.copyright.rup.dist.foreign.service.impl.InconsistentUsageStateException} in case of
+     * there are {@link Usage} version discrepancies.
+     *
+     * @param usage {@link Usage} to update
+     */
+    void updateProcessedUsage(Usage usage);
 }

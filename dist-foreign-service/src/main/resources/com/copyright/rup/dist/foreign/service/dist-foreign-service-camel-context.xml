@@ -148,6 +148,13 @@
             </onException>
 
             <onException useOriginalMessage="true">
+                <exception>com.copyright.rup.dist.foreign.service.impl.InconsistentUsageStateException</exception>
+                <handled>
+                    <constant>true</constant>
+                </handled>
+            </onException>
+
+            <onException useOriginalMessage="true">
                 <exception>java.lang.Exception</exception>
                 <handled>
                     <constant>true</constant>
@@ -178,6 +185,13 @@
 
             <onException redeliveryPolicyRef="defaultRedeliveryPolicy" useOriginalMessage="true">
                 <exception>com.copyright.rup.common.exception.RupRuntimeException</exception>
+            </onException>
+
+            <onException useOriginalMessage="true">
+                <exception>com.copyright.rup.dist.foreign.service.impl.InconsistentUsageStateException</exception>
+                <handled>
+                    <constant>true</constant>
+                </handled>
             </onException>
 
             <onException useOriginalMessage="true">
@@ -214,6 +228,13 @@
             </onException>
 
             <onException useOriginalMessage="true">
+                <exception>com.copyright.rup.dist.foreign.service.impl.InconsistentUsageStateException</exception>
+                <handled>
+                    <constant>true</constant>
+                </handled>
+            </onException>
+
+            <onException useOriginalMessage="true">
                 <exception>java.lang.Exception</exception>
                 <handled>
                     <constant>true</constant>
@@ -244,6 +265,13 @@
 
             <onException redeliveryPolicyRef="defaultRedeliveryPolicy" useOriginalMessage="true">
                 <exception>com.copyright.rup.common.exception.RupRuntimeException</exception>
+            </onException>
+
+            <onException useOriginalMessage="true">
+                <exception>com.copyright.rup.dist.foreign.service.impl.InconsistentUsageStateException</exception>
+                <handled>
+                    <constant>true</constant>
+                </handled>
             </onException>
 
             <onException useOriginalMessage="true">

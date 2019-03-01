@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.domain.Work;
 import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
+import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.IWorkMatchingService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.Objects;
 import java.util.function.Function;
 
@@ -42,6 +42,8 @@ public class WorkMatchingService implements IWorkMatchingService {
     @Autowired
     private IUsageRepository usageRepository;
     @Autowired
+    private IUsageService usageService;
+    @Autowired
     private IUsageAuditService auditService;
 
     @Override
@@ -49,7 +51,7 @@ public class WorkMatchingService implements IWorkMatchingService {
     public void matchByIdno(Usage usage) {
         Work work = doMatchByIdno(usage);
         if (UsageStatusEnum.WORK_FOUND == usage.getStatus()) {
-            usageRepository.update(Collections.singletonList(usage));
+            usageService.updateProcessedUsage(usage);
             auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
                 String.format("Wr Wrk Inst %s was found by standard number %s", usage.getWrWrkInst(),
                     usage.getStandardNumber()));
@@ -65,7 +67,7 @@ public class WorkMatchingService implements IWorkMatchingService {
     public void matchByTitle(Usage usage) {
         Work work = doMatchByTitle(usage);
         if (UsageStatusEnum.WORK_FOUND == usage.getStatus()) {
-            usageRepository.update(Collections.singletonList(usage));
+            usageService.updateProcessedUsage(usage);
             auditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND,
                 String.format("Wr Wrk Inst %s was found by title \"%s\"", usage.getWrWrkInst(), usage.getWorkTitle()));
         } else {
@@ -105,9 +107,9 @@ public class WorkMatchingService implements IWorkMatchingService {
         if (GROSS_AMOUNT_LIMIT.compareTo(totalGrossAmount) > 0) {
             usage.setStatus(UsageStatusEnum.NTS_WITHDRAWN);
             usage.setProductFamily(FdaConstants.NTS_PRODUCT_FAMILY);
+            usageService.updateProcessedUsage(usage);
             auditService.logAction(usage.getId(), UsageActionTypeEnum.ELIGIBLE_FOR_NTS,
                 usageGroup.getNtsEligibleReason());
-            usageRepository.updateToNtsWithdrawn(usage);
         } else {
             if (Objects.isNull(usage.getStandardNumber()) && Objects.isNull(usage.getWorkTitle())) {
                 usage.setWrWrkInst(UNIDENTIFIED_WR_WRK_INST);
@@ -126,7 +128,7 @@ public class WorkMatchingService implements IWorkMatchingService {
                         usageGroup.getWorkNotFoundReasonFunction().apply(usage));
                 }
             }
-            usageRepository.update(Collections.singletonList(usage));
+            usageService.updateProcessedUsage(usage);
         }
     }
 

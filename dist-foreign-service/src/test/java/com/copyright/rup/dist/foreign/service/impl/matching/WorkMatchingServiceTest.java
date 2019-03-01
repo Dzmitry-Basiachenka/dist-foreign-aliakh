@@ -18,12 +18,12 @@ import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 
+import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 
 /**
  * Verifies {@link WorkMatchingService}.
@@ -40,16 +40,19 @@ public class WorkMatchingServiceTest {
     private WorkMatchingService workMatchingService;
     private IUsageRepository usageRepository;
     private IUsageAuditService auditService;
+    private IUsageService usageService;
 
     @Before
     public void setUp() {
         workMatchingService = new WorkMatchingService();
         piIntegrationService = createMock(IPiIntegrationService.class);
         usageRepository = createMock(IUsageRepository.class);
+        usageService = createMock(IUsageService.class);
         auditService = createMock(IUsageAuditService.class);
         Whitebox.setInternalState(workMatchingService, piIntegrationService);
         Whitebox.setInternalState(workMatchingService, usageRepository);
         Whitebox.setInternalState(workMatchingService, auditService);
+        Whitebox.setInternalState(workMatchingService, usageService);
     }
 
     @Test
@@ -59,15 +62,15 @@ public class WorkMatchingServiceTest {
         Usage usage = buildUsage(standardNumber, title);
         expect(piIntegrationService.findWorkByIdnoAndTitle(standardNumber, title))
             .andReturn(new Work(112930820L, title)).once();
-        usageRepository.update(Collections.singletonList(usage));
+        usageService.updateProcessedUsage(usage);
         expectLastCall().once();
         auditService.logAction(anyString(), eq(UsageActionTypeEnum.WORK_FOUND), anyString());
         expectLastCall().once();
-        replay(piIntegrationService, usageRepository, auditService);
+        replay(piIntegrationService, usageRepository, auditService, usageService);
         workMatchingService.matchByIdno(usage);
         assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
         assertEquals(112930820L, usage.getWrWrkInst(), 0);
-        verify(piIntegrationService, usageRepository, auditService);
+        verify(piIntegrationService, usageRepository, auditService, usageService);
     }
 
     @Test
@@ -82,7 +85,7 @@ public class WorkMatchingServiceTest {
             .andReturn(new Work()).once();
         expect(usageRepository.getTotalAmountByStandardNumberAndBatchId(standardNumber, batchId))
             .andReturn(new BigDecimal("99.00"));
-        usageRepository.updateToNtsWithdrawn(usage);
+        usageService.updateProcessedUsage(usage);
         expectLastCall().once();
         auditService.logAction(usage.getId(), UsageActionTypeEnum.ELIGIBLE_FOR_NTS,
             "Detail was made eligible for NTS because sum of gross amounts, grouped by standard number, " +
@@ -100,7 +103,7 @@ public class WorkMatchingServiceTest {
         String title = "The theological roots of Pentecostalism";
         Usage usage = buildUsage(null, title);
         expect(piIntegrationService.findWorkByTitle(title)).andReturn(new Work(112930820L, null)).once();
-        usageRepository.update(Collections.singletonList(usage));
+        usageService.updateProcessedUsage(usage);
         expectLastCall().once();
         auditService.logAction(anyString(), eq(UsageActionTypeEnum.WORK_FOUND), anyString());
         expectLastCall().once();

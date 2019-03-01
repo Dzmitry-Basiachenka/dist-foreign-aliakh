@@ -56,6 +56,7 @@ public class CommonUsageDeserializer extends JsonDeserializer<Usage> {
             JsonUtils.getBigDecimalValue(jsonNode.get("gross_amount")).setScale(2, RoundingMode.HALF_UP));
         usage.setStatus(UsageStatusEnum.valueOf(JsonUtils.getStringValue(jsonNode.get("status"))));
         usage.setProductFamily(JsonUtils.getStringValue(jsonNode.get("product_family")));
+        usage.setVersion(JsonUtils.getIntegerValue(jsonNode.get("record_version")));
         return usage;
     }
 }
