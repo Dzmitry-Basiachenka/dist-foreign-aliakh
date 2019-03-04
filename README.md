@@ -1,3 +1,7 @@
+4.1.37
+-
+* B-49461 Tech Debt: FDA: hardcode rupCamel.jackson version to 2.9.8 to avoid vulnerability issues
+
 4.1.36
 -
 * B-49461 Tech Debt: FDA: adjust NTS batch creation logic to populate new usages reported value from archived usage gross amount
