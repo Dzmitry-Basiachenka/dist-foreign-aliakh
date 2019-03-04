@@ -1,22 +1,28 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
+import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.integration.rest.prm.IPrmRightsholderService;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.foreign.repository.api.IRightsholderRepository;
 
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
+import org.powermock.reflect.Whitebox;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ExecutorService;
 
 /**
  * Verifies {@link RightsholderService}.
@@ -79,6 +85,20 @@ public class RightsholderServiceTest {
         replay(rightsholderRepository);
         assertEquals(5, rightsholderService.getCountFromUsages("Rightsholder"));
         verify(rightsholderRepository);
+    }
+
+    @Test
+    public void testUpdateRighstholdersAsync() {
+        ExecutorService executorService = createMock(ExecutorService.class);
+        Whitebox.setInternalState(rightsholderService, "executorService", executorService);
+        Capture<Runnable> runnableCapture = new Capture<>();
+        Set<Long> accountNumbers = Collections.singleton(541236485L);
+        executorService.execute(capture(runnableCapture));
+        expectLastCall().once();
+        replay(executorService);
+        rightsholderService.updateRighstholdersAsync(accountNumbers);
+        assertNotNull(runnableCapture.getValue());
+        verify(executorService);
     }
 
     private Rightsholder buildRightsholder(Long accountNumber) {

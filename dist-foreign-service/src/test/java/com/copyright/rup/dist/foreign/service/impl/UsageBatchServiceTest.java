@@ -42,7 +42,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
 
 /**
  * Verifies {@link UsageBatchService}.
@@ -68,7 +67,6 @@ public class UsageBatchServiceTest {
     private IUsageService usageService;
     private IRightsholderService rightsholderService;
     private UsageBatchService usageBatchService;
-    private ExecutorService executorService;
     private IChainExecutor<Usage> chainExecutor;
 
     @Before
@@ -77,13 +75,11 @@ public class UsageBatchServiceTest {
         usageBatchRepository = createMock(IUsageBatchRepository.class);
         usageService = createMock(IUsageService.class);
         rightsholderService = createMock(IRightsholderService.class);
-        executorService = createMock(ExecutorService.class);
         chainExecutor = createMock(IChainExecutor.class);
         usageBatchService = new UsageBatchService();
         Whitebox.setInternalState(usageBatchService, "usageBatchRepository", usageBatchRepository);
         Whitebox.setInternalState(usageBatchService, "usageService", usageService);
         Whitebox.setInternalState(usageBatchService, "rightsholderService", rightsholderService);
-        Whitebox.setInternalState(usageBatchService, "executorService", executorService);
         Whitebox.setInternalState(usageBatchService, "chainExecutor", chainExecutor);
     }
 
@@ -127,7 +123,6 @@ public class UsageBatchServiceTest {
     public void testInsertFasBatch() {
         mockStatic(RupContextUtils.class);
         Capture<UsageBatch> captureUsageBatch = new Capture<>();
-        Capture<Runnable> runnableCapture = new Capture<>();
         UsageBatch usageBatch = new UsageBatch();
         Rightsholder rro = buildRro();
         usageBatch.setRro(rro);
@@ -144,7 +139,7 @@ public class UsageBatchServiceTest {
         rightsholderMap.put(RRO_ACCOUNT_NUMBER, rro);
         rightsholderService.updateRightsholder(rro);
         expectLastCall().once();
-        executorService.execute(capture(runnableCapture));
+        rightsholderService.updateRighstholdersAsync(Sets.newHashSet(1000001534L, 1000009522L));
         expectLastCall().once();
         expect(usageService.insertUsages(usageBatch, usages)).andReturn(2).once();
         replayAll();
@@ -153,7 +148,6 @@ public class UsageBatchServiceTest {
         assertNotNull(insertedUsageBatch);
         assertEquals(USER_NAME, insertedUsageBatch.getUpdateUser());
         assertEquals(USER_NAME, insertedUsageBatch.getCreateUser());
-        assertNotNull(runnableCapture.getValue());
         verifyAll();
     }
 
@@ -194,16 +188,6 @@ public class UsageBatchServiceTest {
         replay(chainExecutor);
         usageBatchService.sendForGettingRights(Arrays.asList(usage1, usage2));
         verify(chainExecutor);
-    }
-
-    @Test
-    public void testUpdateRightsholders() {
-        expect(rightsholderService.updateRightsholders(Collections.singleton(1000001534L)))
-            .andReturn(Collections.singletonList(buildRightsholder(1000001534L)))
-            .once();
-        replay(rightsholderService);
-        usageBatchService.updateRightsholders(Sets.newHashSet(1000001534L));
-        verify(rightsholderService);
     }
 
     private Rightsholder buildRro() {

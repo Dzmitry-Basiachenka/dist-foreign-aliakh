@@ -23,12 +23,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 
 /**
  * Implementation of {@link IUsageBatchService}.
@@ -44,8 +39,6 @@ import javax.annotation.PreDestroy;
 public class UsageBatchService implements IUsageBatchService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
-
-    private ExecutorService executorService;
 
     @Autowired
     private IUsageBatchRepository usageBatchRepository;
@@ -88,7 +81,7 @@ public class UsageBatchService implements IUsageBatchService {
             .collect(Collectors.toSet());
         LOGGER.info("Insert usage batch. Finished. UsageBatchName={}, UserName={}, UsagesCount={}",
             usageBatch.getName(), userName, count);
-        executorService.execute(() -> updateRightsholders(accountNumbersToUpdate));
+        rightsholderService.updateRighstholdersAsync(accountNumbersToUpdate);
         return count;
     }
 
@@ -132,43 +125,5 @@ public class UsageBatchService implements IUsageBatchService {
         usageService.deleteUsageBatchDetails(usageBatch);
         usageBatchRepository.deleteUsageBatch(usageBatch.getId());
         LOGGER.info("Delete usage batch. Finished. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
-    }
-
-    /**
-     * Gets instance of {@link ExecutorService} with 2 threads.
-     * First is for update rightsholders task.
-     * Second is for sending usages on queue for PI matching.
-     *
-     * @return instance of {@link ExecutorService}
-     */
-    protected ExecutorService getExecutorService() {
-        return Executors.newFixedThreadPool(2);
-    }
-
-    /**
-     * Post construct method.
-     */
-    @PostConstruct
-    void postConstruct() {
-        executorService = getExecutorService();
-    }
-
-    /**
-     * Pre destroy method.
-     */
-    @PreDestroy
-    void preDestroy() {
-        executorService.shutdown();
-    }
-
-    /**
-     * Updates rightsholders based on provided list of {@link Usage}s.
-     *
-     * @param rightsholdersIds list of rightsholdersIds
-     */
-    void updateRightsholders(Set<Long> rightsholdersIds) {
-        synchronized (this) {
-            rightsholderService.updateRightsholders(rightsholdersIds);
-        }
     }
 }

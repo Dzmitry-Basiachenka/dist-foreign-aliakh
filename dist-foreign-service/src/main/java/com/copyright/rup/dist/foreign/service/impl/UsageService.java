@@ -29,6 +29,7 @@ import com.copyright.rup.dist.foreign.integration.crm.api.ICrmIntegrationService
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
+import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
@@ -104,6 +105,8 @@ public class UsageService implements IUsageService {
     private IScenarioAuditService scenarioAuditService;
     @Autowired
     private IChainExecutor<Usage> chainExecutor;
+    @Autowired
+    private IRightsholderService rightsholderService;
 
     @Override
     public List<UsageDto> getUsageDtos(UsageFilter filter, Pageable pageable, Sort sort) {
@@ -228,6 +231,7 @@ public class UsageService implements IUsageService {
                 : scenarioUsage.isRhParticipating());
         });
         usageRepository.addToScenario(newUsages);
+        updateRighstholdersInSeparateThread(newUsages);
     }
 
     @Override
@@ -258,6 +262,7 @@ public class UsageService implements IUsageService {
                     usage.getProductFamily()));
         });
         usageRepository.addToScenario(usages);
+        updateRighstholdersInSeparateThread(usages);
     }
 
     @Override
@@ -503,6 +508,13 @@ public class UsageService implements IUsageService {
         usage.setVersion(usage.getVersion() + 1);
     }
 
+    private void updateRighstholdersInSeparateThread(List<Usage> usages) {
+        rightsholderService.updateRighstholdersAsync(
+            usages.stream()
+                .map(usage -> usage.getRightsholder().getAccountNumber())
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet()));
+    }
     private void updatePaidUsage(PaidUsage paidUsage, String actionReason) {
         paidUsage.setStatus(UsageStatusEnum.PAID);
         usageArchiveRepository.updatePaidInfo(paidUsage);

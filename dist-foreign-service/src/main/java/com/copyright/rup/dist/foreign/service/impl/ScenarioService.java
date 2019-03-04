@@ -25,6 +25,7 @@ import com.copyright.rup.dist.foreign.integration.lm.api.domain.ExternalUsage;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderDiscrepancyService;
+import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
@@ -86,6 +87,8 @@ public class ScenarioService implements IScenarioService {
     private IScenarioUsageFilterService scenarioUsageFilterService;
     @Autowired
     private IRightsholderDiscrepancyService rightsholderDiscrepancyService;
+    @Autowired
+    private IRightsholderService rightsholderService;
 
     @Override
     public List<Scenario> getScenarios() {
@@ -211,6 +214,11 @@ public class ScenarioService implements IScenarioService {
                     Usage::getWrWrkInst, productFamily, new DiscrepancyBuilder(userName));
             if (CollectionUtils.isNotEmpty(discrepancies)) {
                 rightsholderDiscrepancyService.insertDiscrepancies(discrepancies, scenario.getId());
+                rightsholderService.updateRighstholdersAsync(
+                    discrepancies.stream()
+                        .map(discrepancy -> discrepancy.getNewRightsholder().getAccountNumber())
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toSet()));
             }
         });
         LOGGER.info("Reconcile rightsholders. Finished. {}, RhDiscrepanciesCount={}",
