@@ -1,6 +1,10 @@
 4.1.37
 -
 * B-49461 Tech Debt: FDA: hardcode rupCamel.jackson version to 2.9.8 to avoid vulnerability issues
+* CDP-670 FDA: Duplicate audit for usages after creation fund pool with more than 110K usages
+* B-47964 FDA: Tag details with category supplied by RRO when loading batches/receipts: make changes based on comments in CR-DIST-FOREIGN-89
+* B-47646 FDA: Migrate to SQS for internal queues: make changes based on comments in CR-DIST-FOREIGN-88
+* CDP-673 FDA: Usage batch statistic is not running for batches with NTS product family
 
 4.1.36
 -
