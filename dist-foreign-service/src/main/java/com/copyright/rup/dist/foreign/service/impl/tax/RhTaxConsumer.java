@@ -39,11 +39,12 @@ public class RhTaxConsumer implements IConsumer<Usage> {
     @Override
     @Transactional
     public void consume(Usage usage) {
-        LOGGER.trace("Consume usage for RH tax processing. Usage={}", usage);
+        LOGGER.trace("Consume usage for RH tax processing. Started. Usage={}", usage);
         if (Objects.nonNull(usage)) {
             rhTaxService.processTaxCountryCode(usage);
             rhTaxProcessor.executeNextProcessor(usage, (obj) -> UsageStatusEnum.US_TAX_COUNTRY == obj.getStatus());
         }
+        LOGGER.trace("Consume usage for RH tax processing. Finished. Usage={}", usage);
     }
 
     void setRhTaxService(IRhTaxService rhTaxService) {

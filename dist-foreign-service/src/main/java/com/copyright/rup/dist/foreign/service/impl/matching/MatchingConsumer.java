@@ -35,7 +35,7 @@ public class MatchingConsumer implements IConsumer<Usage> {
 
     @Override
     public void consume(Usage usage) {
-        LOGGER.trace("Consume usage for matching processing. Usage={}", usage);
+        LOGGER.trace("Consume usage for matching processing. Started. Usage={}", usage);
         if (StringUtils.isNoneEmpty(usage.getStandardNumber())) {
             workMatchingService.matchByIdno(usage);
         } else if (StringUtils.isNoneEmpty(usage.getWorkTitle())) {
@@ -44,5 +44,6 @@ public class MatchingConsumer implements IConsumer<Usage> {
             workMatchingService.updateStatusForUsageWithoutStandardNumberAndTitle(usage);
         }
         matchingProcessor.executeNextProcessor(usage, usageItem -> UsageStatusEnum.WORK_FOUND == usageItem.getStatus());
+        LOGGER.trace("Consume usage for matching processing. Finished. Usage={}", usage);
     }
 }
