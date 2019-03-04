@@ -11,13 +11,13 @@
             http://www.springframework.org/schema/tx
             http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
 
-    <import resource="classpath:/com/copyright/rup/dist/common/service/dist-common-performance-aspect-context.xml"/>
     <import resource="classpath:/com/copyright/rup/dist/common/service/dist-common-discrepancy-service-context.xml"/>
     <import resource="classpath:/com/copyright/rup/dist/foreign/repository/dist-foreign-repository-context.xml"/>
     <import resource="classpath:/com/copyright/rup/dist/foreign/integration/dist-foreign-integration-context.xml"/>
     <import resource="classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-scheduler-context.xml"/>
     <import resource="classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-camel-context.xml"/>
     <import resource="classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-chain-processors-context.xml"/>
+    <import resource="classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-performance-aspect-context.xml"/>
 
     <!--Transaction manager configuration-->
     <tx:annotation-driven transaction-manager="txManager"/>

@@ -7,13 +7,14 @@
     <contextName>dist-foreign-ui</contextName>
 
     <property name="logLevelPrm" value="${DIST_FOREIGN_PRM_LOG_LEVEL:-${logLevelDist}}"/>
-    <property name="logLevelRights" value="${DIST_FOREIGN_RIGHTS_LOG_LEVEL:-${logLevelDist}}"/>
-    <property name="logLevelResearch" value="${DIST_FOREIGN_RESEARCH_LOG_LEVEL:-${logLevelDist}}"/>
-    <property name="logLevelMatching" value="${DIST_FOREIGN_MATCHING_LOG_LEVEL:-${logLevelDist}}"/>
     <property name="logLevelCrmReporting" value="${DIST_FOREIGN_CRM_REPORTING_LOG_LEVEL:-${logLevelDist}}"/>
-    <property name="logLevelService" value="${DIST_FOREIGN_SERVICE_LOG_LEVEL:-${logLevelDist}}"/>
+    <property name="logLevelMatching" value="${DIST_FOREIGN_MATCHING_LOG_LEVEL:-${logLevelDist}}"/>
+    <property name="logLevelResearch" value="${DIST_FOREIGN_RESEARCH_LOG_LEVEL:-${logLevelDist}}"/>
     <property name="logLevelRhTax" value="${DIST_FOREIGN_RIGHTSHOLDER_TAX_LOG_LEVEL:-${logLevelDist}}"/>
+    <property name="logLevelRights" value="${DIST_FOREIGN_RIGHTS_LOG_LEVEL:-${logLevelDist}}"/>
+    <property name="logLevelService" value="${DIST_FOREIGN_SERVICE_LOG_LEVEL:-${logLevelDist}}"/>
     <property name="logLevelSpringSecurity" value="${DIST_FOREIGN_SPRING_SECURITY_LOG_LEVEL:-${logLevelDist}}"/>
+    <property name="logLevelUsageProcessing" value="${DIST_FOREIGN_USAGE_PROCESSING_LOG_LEVEL:-${logLevelDist}}"/>
 
     <logger name="com.copyright.rup.dist.foreign.service.impl" level="${logLevelService}"/>
 
@@ -24,17 +25,24 @@
     <logger name="com.copyright.rup.dist.common.integration.rest.rms" level="${logLevelRights}"/>
     <logger name="com.copyright.rup.dist.common.service.impl.discrepancy" level="${logLevelRights}"/>
     <logger name="com.copyright.rup.dist.foreign.integration.rms.impl" level="${logLevelRights}"/>
-    <logger name="com.copyright.rup.dist.foreign.service.impl.rights" level="${logLevelRights}"/>
+    <logger name="com.copyright.rup.dist.foreign.service.impl.rights.RightsService" level="${logLevelRights}"/>
 
     <!--Loggers for CRM reporting related logic-->
     <logger name="com.copyright.rup.dist.foreign.integration.crm.impl" level="${logLevelCrmReporting}"/>
 
     <!--Loggers for Matching logic-->
     <logger name="com.copyright.rup.dist.foreign.integration.pi.impl" level="${logLevelMatching}"/>
-    <logger name="com.copyright.rup.dist.foreign.service.impl.matching" level="${logLevelMatching}"/>
+    <logger name="com.copyright.rup.dist.foreign.service.impl.matching.WorkMatchingService" level="${logLevelMatching}"/>
 
     <!--Loggers for Taxes logic-->
-    <logger name="com.copyright.rup.dist.foreign.service.tax" level="${logLevelRhTax}"/>
+    <logger name="com.copyright.rup.dist.foreign.service.impl.tax.RhTaxService" level="${logLevelRhTax}"/>
+
+    <!--Loggers for usage processing-->
+    <logger name="com.copyright.rup.dist.foreign.service.impl.chain.processor" level="${logLevelUsageProcessing}" />
+    <logger name="com.copyright.rup.dist.foreign.service.impl.eligibility.RhEligibilityConsumer" level="${logLevelUsageProcessing}"/>
+    <logger name="com.copyright.rup.dist.foreign.service.impl.matching.MatchingConsumer" level="${logLevelUsageProcessing}"/>
+    <logger name="com.copyright.rup.dist.foreign.service.impl.rights.RightsConsumer" level="${logLevelUsageProcessing}"/>
+    <logger name="com.copyright.rup.dist.foreign.service.impl.tax.RhTaxConsumer" level="${logLevelUsageProcessing}"/>
 
     <logger name="org.springframework.security" level="${logLevelSpringSecurity}"/>
 
