@@ -6,6 +6,7 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
@@ -415,4 +416,14 @@ public interface IUsageRepository {
      * with status different from specified , {@link false} - otherwise
      */
     boolean isValidUsagesState(UsageFilter filter, UsageStatusEnum status);
+
+    /**
+     * Inserts usages from archived usages during for NTS batch creation and writes audit for this action.
+     *
+     * @param usageBatch        instance of {@link UsageBatch}
+     * @param auditActionReason action reason for audit
+     * @param userName          user name
+     * @return list of inserted usage uids
+     */
+    List<String> insertNtsUsagesWithAudit(UsageBatch usageBatch, String auditActionReason, String userName);
 }

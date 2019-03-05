@@ -61,9 +61,9 @@ public interface IUsageService {
      * Inserts NTS usages.
      *
      * @param usageBatch usage batch
-     * @param usages     list of usages to insert
+     * @return list of NTS usages' ids
      */
-    void insertNtsUsages(UsageBatch usageBatch, List<Usage> usages);
+    List<String> insertNtsUsages(UsageBatch usageBatch);
 
     /**
      * Deletes all {@link Usage}s associated with the given {@link UsageBatch}.

@@ -144,24 +144,14 @@ public class UsageService implements IUsageService {
 
     @Override
     @Transactional
-    public void insertNtsUsages(UsageBatch usageBatch, List<Usage> usages) {
+    public List<String> insertNtsUsages(UsageBatch usageBatch) {
         String userName = RupContextUtils.getUserName();
-        LOGGER.info("Insert NTS usages. Started. UsageBatchName={}, UsagesCount={}, UserName={}", usageBatch.getName(),
-            LogUtils.size(usages), userName);
-        usages.forEach(usage -> {
-            usage.setId(RupPersistUtils.generateUuid());
-            usage.setProductFamily(FdaConstants.NTS_PRODUCT_FAMILY);
-            usage.setStatus(UsageStatusEnum.WORK_FOUND);
-            usage.setBatchId(usageBatch.getId());
-            usage.setCreateUser(userName);
-            usage.setUpdateUser(userName);
-            usageRepository.insert(usage);
-        });
-        String reason = buildNtsUsageReason(usageBatch);
-        usageAuditService.logAction(usages.stream().map(Usage::getId).collect(Collectors.toSet()),
-            UsageActionTypeEnum.CREATED, reason);
-        LOGGER.info("Insert NTS usages. Finished. UsageBatchName={}, UsagesCount={}, UserName={}", usageBatch.getName(),
-            LogUtils.size(usages), userName);
+        LOGGER.info("Insert NTS usages. Started. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
+        List<String> usageIds = usageRepository.insertNtsUsagesWithAudit(usageBatch,
+            buildNtsUsageReason(usageBatch), userName);
+        LOGGER.info("Insert NTS usages. Finished. UsageBatchName={}, UserName={}, UsageIdsCount={}",
+            usageBatch.getName(), userName, LogUtils.size(usageIds));
+        return usageIds;
     }
 
     @Override
