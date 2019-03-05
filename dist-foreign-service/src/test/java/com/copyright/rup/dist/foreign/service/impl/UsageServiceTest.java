@@ -34,6 +34,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
+import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
@@ -87,6 +88,7 @@ public class UsageServiceTest {
     private IUsageArchiveRepository usageArchiveRepository;
     private IUsageAuditService usageAuditService;
     private IScenarioAuditService scenarioAuditService;
+    private IRightsholderService rightsholderService;
     private UsageService usageService;
     private IPrmIntegrationService prmIntegrationService;
     private IChainExecutor<Usage> chainExecutor;
@@ -105,6 +107,7 @@ public class UsageServiceTest {
         prmIntegrationService = createMock(IPrmIntegrationService.class);
         usageArchiveRepository = createMock(IUsageArchiveRepository.class);
         scenarioAuditService = createMock(IScenarioAuditService.class);
+        rightsholderService = createMock(IRightsholderService.class);
         chainExecutor = createMock(IChainExecutor.class);
         usageService = new UsageService();
         Whitebox.setInternalState(usageService, "chainExecutor", chainExecutor);
@@ -113,6 +116,7 @@ public class UsageServiceTest {
         Whitebox.setInternalState(usageService, "prmIntegrationService", prmIntegrationService);
         Whitebox.setInternalState(usageService, "usageArchiveRepository", usageArchiveRepository);
         Whitebox.setInternalState(usageService, "scenarioAuditService", scenarioAuditService);
+        Whitebox.setInternalState(usageService, "rightsholderService", rightsholderService);
         Whitebox.setInternalState(usageService, "claAccountNumber", 2000017000L);
     }
 
@@ -271,9 +275,11 @@ public class UsageServiceTest {
             usage2.getProductFamily())).andReturn(true).once();
         expect(prmIntegrationService.getRhParticipatingServiceFee(true))
             .andReturn(new BigDecimal("0.16000")).times(2);
-        replay(usageRepository, prmIntegrationService);
+        rightsholderService.updateRighstholdersAsync(Collections.singleton(RH_ACCOUNT_NUMBER));
+        expectLastCall().once();
+        replay(usageRepository, prmIntegrationService, rightsholderService);
         usageService.addUsagesToScenario(Lists.newArrayList(usage1, usage2), scenario);
-        verify(usageRepository, prmIntegrationService);
+        verify(usageRepository, prmIntegrationService, rightsholderService);
     }
 
     @Test
@@ -423,9 +429,11 @@ public class UsageServiceTest {
         expect(prmIntegrationService.getRhParticipatingServiceFee(false)).andReturn(new BigDecimal("0.32")).once();
         usageRepository.addToScenario(Collections.singletonList(usage1));
         expectLastCall().once();
-        replay(usageRepository, prmIntegrationService);
+        rightsholderService.updateRighstholdersAsync(Collections.singleton(RH_ACCOUNT_NUMBER));
+        expectLastCall().once();
+        replay(usageRepository, prmIntegrationService, rightsholderService);
         usageService.recalculateUsagesForRefresh(filter, scenario);
-        verify(usageRepository, prmIntegrationService);
+        verify(usageRepository, prmIntegrationService, rightsholderService);
     }
 
     @Test

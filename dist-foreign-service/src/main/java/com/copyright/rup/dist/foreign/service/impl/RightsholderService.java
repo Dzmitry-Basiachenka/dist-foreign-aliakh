@@ -16,6 +16,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 /**
  * Implementation of {@link IRightsholderService}.
@@ -32,6 +37,8 @@ public class RightsholderService extends CommonRightsholderService implements IR
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     private final IRightsholderRepository rightsholderRepository;
+
+    private ExecutorService executorService;
 
     /**
      * Constructor.
@@ -69,5 +76,30 @@ public class RightsholderService extends CommonRightsholderService implements IR
     @Override
     public int getCountFromUsages(String searchValue) {
         return rightsholderRepository.findCountFromUsages(searchValue);
+    }
+
+    @Override
+    public void updateRighstholdersAsync(Set<Long> accountNumbers) {
+        executorService.execute(() -> {
+            synchronized (this) {
+                updateRightsholders(accountNumbers);
+            }
+        });
+    }
+
+    /**
+     * Post construct method.
+     */
+    @PostConstruct
+    void postConstruct() {
+        executorService = Executors.newSingleThreadExecutor();
+    }
+
+    /**
+     * Pre destroy method.
+     */
+    @PreDestroy
+    void preDestroy() {
+        executorService.shutdown();
     }
 }

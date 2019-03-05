@@ -6,6 +6,7 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.api.ICommonRightsholderService;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Represents interface of service for rightsholder business logic.
@@ -47,4 +48,12 @@ public interface IRightsholderService extends ICommonRightsholderService {
      * @return count of rightsholders
      */
     int getCountFromUsages(String searchValue);
+
+    /**
+     * Updates RHs information for account numbers absent in database based on PRM information.
+     * Updates information in background thread.
+     *
+     * @param accountNumbers set of RH account numbers
+     */
+    void updateRighstholdersAsync(Set<Long> accountNumbers);
 }
