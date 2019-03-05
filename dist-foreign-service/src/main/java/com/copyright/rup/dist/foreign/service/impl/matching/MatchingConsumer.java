@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 /**
  * Consumer to handle usages for PI matching.
  * <p>
@@ -25,6 +27,12 @@ import org.springframework.stereotype.Component;
 @Component("df.service.matchingConsumer")
 public class MatchingConsumer implements IConsumer<Usage> {
 
+    private static final String MATCHING_BY_IDNO_FINISHED_LOG = "Consume usage for matching processing. Finished. " +
+        "UsageId={}, StandardNumber={}, WorkTitle={}, MatchBy=IDNO, WrWrkInst={}, UsageStatus={}";
+    private static final String MATCHING_BY_TITLE_FINISHED_LOG = "Consume usage for matching processing. Finished. " +
+        "UsageId={}, WorkTitle={}, MatchBy=Title, WrWrkInst={}, UsageStatus={}";
+    private static final String NOT_MATCHED_FINISHED_LOG = "Consume usage for matching processing. Finished. " +
+        "UsageId={}, UsageStatus={}, ProductFamily={}, WorkTitle={}, WrWrkInst={}";
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired
@@ -35,15 +43,24 @@ public class MatchingConsumer implements IConsumer<Usage> {
 
     @Override
     public void consume(Usage usage) {
-        LOGGER.trace("Consume usage for matching processing. Started. Usage={}", usage);
-        if (StringUtils.isNoneEmpty(usage.getStandardNumber())) {
-            workMatchingService.matchByIdno(usage);
-        } else if (StringUtils.isNoneEmpty(usage.getWorkTitle())) {
-            workMatchingService.matchByTitle(usage);
-        } else {
-            workMatchingService.updateStatusForUsageWithoutStandardNumberAndTitle(usage);
+        if (Objects.nonNull(usage)) {
+            LOGGER.trace("Consume usage for matching processing. Started. UsageId={}, StandardNumber={}, WorkTitle={}",
+                usage.getId(), usage.getStandardNumber(), usage.getWorkTitle());
+            if (StringUtils.isNoneEmpty(usage.getStandardNumber())) {
+                workMatchingService.matchByIdno(usage);
+                LOGGER.trace(MATCHING_BY_IDNO_FINISHED_LOG, usage.getId(), usage.getStandardNumber(),
+                    usage.getWorkTitle(), usage.getWrWrkInst(), usage.getStatus());
+            } else if (StringUtils.isNoneEmpty(usage.getWorkTitle())) {
+                workMatchingService.matchByTitle(usage);
+                LOGGER.trace(MATCHING_BY_TITLE_FINISHED_LOG, usage.getId(), usage.getWorkTitle(), usage.getWrWrkInst(),
+                    usage.getStatus());
+            } else {
+                workMatchingService.updateStatusForUsageWithoutStandardNumberAndTitle(usage);
+                LOGGER.trace(NOT_MATCHED_FINISHED_LOG, usage.getId(), usage.getStatus(), usage.getProductFamily(),
+                    usage.getWorkTitle(), usage.getWrWrkInst());
+            }
+            matchingProcessor.executeNextProcessor(usage,
+                usageItem -> UsageStatusEnum.WORK_FOUND == usageItem.getStatus());
         }
-        matchingProcessor.executeNextProcessor(usage, usageItem -> UsageStatusEnum.WORK_FOUND == usageItem.getStatus());
-        LOGGER.trace("Consume usage for matching processing. Finished. Usage={}", usage);
     }
 }

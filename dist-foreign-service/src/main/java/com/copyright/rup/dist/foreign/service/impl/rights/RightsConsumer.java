@@ -31,10 +31,11 @@ import java.util.function.Predicate;
 @Component("df.service.rightsConsumer")
 public class RightsConsumer implements IConsumer<Usage> {
 
-    private static final Logger LOGGER = RupLogUtils.getLogger();
-
+    private static final String RIGHTS_PROCESSING_FINISHED_LOG = "Consume usage for rights processing. Finished. " +
+        "UsageId={}, ProductFamily={}, WrWrkInst={}, UsageStatus={}, RhAcc#={}";
     private static final ImmutableSet<String> FAS_PRODUCT_FAMILIES =
         ImmutableSet.of(FdaConstants.FAS_PRODUCT_FAMILY, FdaConstants.CLA_FAS_PRODUCT_FAMILY);
+    private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired
     private IRightsService rightsService;
@@ -48,8 +49,9 @@ public class RightsConsumer implements IConsumer<Usage> {
     @Override
     @Transactional
     public void consume(Usage usage) {
-        LOGGER.trace("Consume usage for rights processing. Started. Usage={}", usage);
         if (Objects.nonNull(usage)) {
+            LOGGER.trace("Consume usage for rights processing. Started. UsageId={}, ProductFamily={}, WrWrkInst={}",
+                usage.getId(), usage.getProductFamily(), usage.getWrWrkInst());
             rightsService.updateRight(usage);
             Predicate<Usage> successPredicate = updatedUsage -> UsageStatusEnum.RH_FOUND == updatedUsage.getStatus();
             if (FdaConstants.NTS_PRODUCT_FAMILY.equals(usage.getProductFamily())) {
@@ -57,8 +59,9 @@ public class RightsConsumer implements IConsumer<Usage> {
             } else if (FAS_PRODUCT_FAMILIES.contains(usage.getProductFamily())) {
                 fasRightsProcessor.executeNextProcessor(usage, successPredicate);
             }
+            LOGGER.trace(RIGHTS_PROCESSING_FINISHED_LOG, usage.getId(), usage.getProductFamily(), usage.getWrWrkInst(),
+                usage.getStatus(), usage.getRightsholder().getAccountNumber());
         }
-        LOGGER.trace("Consume usage for rights processing. Finished. Usage={}", usage);
     }
 
     void setRightsService(IRightsService rightsService) {

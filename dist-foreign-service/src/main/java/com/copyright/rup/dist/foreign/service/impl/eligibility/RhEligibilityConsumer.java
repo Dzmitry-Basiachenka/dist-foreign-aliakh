@@ -38,13 +38,14 @@ public class RhEligibilityConsumer implements IConsumer<Usage> {
     @Override
     @Transactional
     public void consume(Usage usage) {
-        LOGGER.trace("Consume usage for RH eligibility processing. Started. Usage={}", usage);
         if (Objects.nonNull(usage)) {
+            LOGGER.trace("Consume usage for RH eligibility processing. Started. UsageId={}", usage.getId());
             boolean isEligible =
                 prmIntegrationService.isRightsholderEligibleForNtsDistribution(usage.getRightsholder().getId());
             rhEligibilityProcessor.executeNextProcessor(usage, (obj) -> isEligible);
+            LOGGER.trace("Consume usage for RH eligibility processing. Finished. UsageId={}, IsEligibile={}",
+                usage.getId(), isEligible);
         }
-        LOGGER.trace("Consume usage for RH eligibility processing. Finished. Usage={}", usage);
     }
 
     void setPrmIntegrationService(IPrmIntegrationService prmIntegrationService) {
