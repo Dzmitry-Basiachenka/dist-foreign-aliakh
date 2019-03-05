@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
@@ -473,5 +474,21 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         filterCopy.setDistributionName(escapeSqlLikePattern(filterCopy.getDistributionName()));
         filterCopy.setSearchValue(escapeSqlLikePattern(filterCopy.getSearchValue()));
         return filterCopy;
+    }
+
+    @Override
+    public List<String> insertNtsUsagesWithAudit(UsageBatch usageBatch, String auditActionReason, String userName) {
+        Objects.requireNonNull(usageBatch);
+        Objects.requireNonNull(usageBatch.getFundPool());
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(8);
+        params.put("batchId", Objects.requireNonNull(usageBatch.getId()));
+        params.put("marketPeriodFrom", Objects.requireNonNull(usageBatch.getFundPool().getFundPoolPeriodFrom()));
+        params.put("marketPeriodTo", Objects.requireNonNull(usageBatch.getFundPool().getFundPoolPeriodTo()));
+        params.put("markets", Objects.requireNonNull(usageBatch.getFundPool().getMarkets()));
+        params.put(STATUS_KEY, UsageStatusEnum.ARCHIVED);
+        params.put("auditActionReason", Objects.requireNonNull(auditActionReason));
+        params.put("createUser", Objects.requireNonNull(userName));
+        params.put("updateUser", Objects.requireNonNull(userName));
+        return selectList("IUsageMapper.insertNtsUsagesWithAudit", params);
     }
 }

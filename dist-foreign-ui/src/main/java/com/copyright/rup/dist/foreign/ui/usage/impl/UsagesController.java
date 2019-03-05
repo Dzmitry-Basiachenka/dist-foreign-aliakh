@@ -13,6 +13,7 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
+import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
@@ -34,6 +35,7 @@ import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.collect.Iterables;
 import com.google.common.io.Files;
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.shared.data.sort.SortDirection;
@@ -72,10 +74,14 @@ import java.util.concurrent.Executors;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class UsagesController extends CommonController<IUsagesWidget> implements IUsagesController {
 
+    private static final int NTS_USAGES_BATCH_SIZE = 1000;
+
     @Autowired
     private IUsageBatchService usageBatchService;
     @Autowired
     private IUsageService usageService;
+    @Autowired
+    private IUsageRepository usageRepository;
     @Autowired
     private IResearchService researchService;
     @Autowired
@@ -143,8 +149,12 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
 
     @Override
     public void loadNtsBatch(UsageBatch usageBatch) {
-        List<Usage> insertedNtsUsages = usageBatchService.insertNtsBatch(usageBatch);
-        usageBatchService.sendForGettingRights(insertedNtsUsages);
+        List<String> ntsUsageIds = usageBatchService.insertNtsBatch(usageBatch);
+        Iterables.partition(ntsUsageIds, NTS_USAGES_BATCH_SIZE)
+            .forEach(partition -> {
+                List<Usage> ntsUsage = usageRepository.findByIds(partition);
+                usageBatchService.sendForGettingRights(ntsUsage);
+            });
         filterController.getWidget().clearFilter();
     }
 
