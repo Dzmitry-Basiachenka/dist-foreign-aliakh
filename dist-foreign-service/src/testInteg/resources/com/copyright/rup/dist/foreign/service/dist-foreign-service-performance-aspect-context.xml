@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
+
+    <bean id="performanceAspect" class="com.copyright.rup.dist.foreign.service.impl.util.ForeignPerformanceAspect">
+        <constructor-arg name="performanceThresholdMillis" value="$RUP{dist.common.performance.threshold.millis}"/>
+        <constructor-arg name="loggingEnabled" value="$RUP{dist.common.performance.logging.enabled}"/>
+    </bean>
+
+</beans>
