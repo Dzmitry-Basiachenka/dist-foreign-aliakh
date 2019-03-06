@@ -8,14 +8,17 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
+import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
+import com.google.common.collect.Iterables;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +26,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 /**
  * Implementation of {@link IUsageBatchService}.
@@ -45,9 +53,16 @@ public class UsageBatchService implements IUsageBatchService {
     @Autowired
     private IUsageService usageService;
     @Autowired
+    private IUsageRepository usageRepository;
+    @Autowired
     private IRightsholderService rightsholderService;
     @Autowired
     private IChainExecutor<Usage> chainExecutor;
+
+    @Value("$RUP{dist.foreign.usages.batch_size}")
+    private int usagesBatchSize;
+
+    private ExecutorService executorService;
 
     @Override
     public List<Integer> getFiscalYears() {
@@ -102,18 +117,28 @@ public class UsageBatchService implements IUsageBatchService {
 
     @Override
     public void sendForMatching(Collection<Usage> usages) {
-        List<Usage> usagesInNewStatus =
-            usages.stream().filter(usage -> UsageStatusEnum.NEW == usage.getStatus()).collect(Collectors.toList());
-        chainExecutor.execute(usagesInNewStatus, ChainProcessorTypeEnum.MATCHING);
+        executorService.execute(() -> {
+            List<Usage> usagesInNewStatus =
+                usages.stream().filter(usage -> UsageStatusEnum.NEW == usage.getStatus()).collect(Collectors.toList());
+            chainExecutor.execute(usagesInNewStatus, ChainProcessorTypeEnum.MATCHING);
+        });
     }
 
     @Override
     public void sendForGettingRights(Collection<Usage> usages) {
-        List<Usage> workFoundUsages =
-            usages.stream()
-                .filter(usage -> UsageStatusEnum.WORK_FOUND == usage.getStatus())
-                .collect(Collectors.toList());
-        chainExecutor.execute(workFoundUsages, ChainProcessorTypeEnum.RIGHTS);
+        executorService.execute(() -> {
+            List<Usage> workFoundUsages =
+                usages.stream()
+                    .filter(usage -> UsageStatusEnum.WORK_FOUND == usage.getStatus())
+                    .collect(Collectors.toList());
+            chainExecutor.execute(workFoundUsages, ChainProcessorTypeEnum.RIGHTS);
+        });
+    }
+
+    @Override
+    public void getAndSendForGettingRights(List<String> usageIds) {
+        Iterables.partition(usageIds, usagesBatchSize)
+            .forEach(partition -> sendForGettingRights(usageRepository.findByIds(partition)));
     }
 
     @Override
@@ -124,5 +149,31 @@ public class UsageBatchService implements IUsageBatchService {
         usageService.deleteUsageBatchDetails(usageBatch);
         usageBatchRepository.deleteUsageBatch(usageBatch.getId());
         LOGGER.info("Delete usage batch. Finished. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
+    }
+
+    /**
+     * Gets instance of {@link ExecutorService} with 2 threads.
+     * Used for sending usages to queues to process them.
+     *
+     * @return instance of {@link ExecutorService}
+     */
+    protected ExecutorService getExecutorService() {
+        return Executors.newFixedThreadPool(2);
+    }
+
+    /**
+     * Post construct method.
+     */
+    @PostConstruct
+    void postConstruct() {
+        executorService = getExecutorService();
+    }
+
+    /**
+     * Pre destroy method.
+     */
+    @PreDestroy
+    void preDestroy() {
+        executorService.shutdown();
     }
 }
