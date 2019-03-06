@@ -7,7 +7,9 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.report.UsageBatchStatistic;
+import com.copyright.rup.dist.foreign.domain.report.UsageStatistic;
 import com.copyright.rup.dist.foreign.repository.api.IUsageAuditRepository;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -41,6 +43,7 @@ import java.util.List;
 public class UsageAuditRepositoryIntegrationTest {
 
     private static final String USAGE_UID = "3ab5e80b-89c0-4d78-9675-54c7ab284450";
+    private static final String USAGE_UID_2 = "3fb43e60-3352-4db4-9080-c30b8a6f6600";
     private static final String AMOUNT_ZERO = "0.00";
 
     @Autowired
@@ -127,6 +130,16 @@ public class UsageAuditRepositoryIntegrationTest {
         assertEquals(new BigDecimal(AMOUNT_ZERO), statistic.getSendForRaAmount());
         assertEquals(0, statistic.getPaidCount());
         assertEquals(new BigDecimal(AMOUNT_ZERO), statistic.getPaidAmount());
+    }
+
+    @Test
+    public void testGetUsageStatistic() {
+        UsageStatistic statistic = usageAuditRepository.getUsageStatistic(USAGE_UID_2);
+        assertEquals(USAGE_UID_2, statistic.getUsageId());
+        assertEquals(UsageStatusEnum.LOCKED, statistic.getStatus());
+        assertEquals(0, statistic.getMatching());
+        assertEquals(1121, statistic.getRights());
+        assertEquals(1075, statistic.getEligibility());
     }
 
     private UsageAuditItem buildUsageAuditItem() {

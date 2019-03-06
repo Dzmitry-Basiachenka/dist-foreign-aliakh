@@ -32,6 +32,14 @@
         <result property="paidAmount" column="paid_sum"/>
     </resultMap>
 
+    <resultMap id="usageStatisticResultMap" type="UsageStatistic">
+        <result property="usageId" column="df_usage_uid"/>
+        <result property="status" column="status"/>
+        <result property="matching" column="matching_ms"/>
+        <result property="rights" column="rights_ms"/>
+        <result property="eligibility" column="eligibility_ms"/>
+    </resultMap>
+
     <sql id="usageAuditItemColumns">
         df_usage_audit_uid,
         df_usage_uid,
@@ -167,4 +175,44 @@
             and <![CDATA[cast(audit.created_datetime as date) = cast(#{date} as date)]]>
         </if>
     </sql>
+
+    <select id="getUsageStatistic" parameterType="string" resultMap="usageStatisticResultMap">
+        select
+            external.df_usage_uid,
+            case when (u.status_ind is not null) then u.status_ind else ua.status_ind end status,
+            extract(milliseconds from (greatest (min(work_not_found_delta), min(multiple_result_delta), min(work_found_delta)))) matching_ms,
+            extract(milliseconds from (greatest (min(rh_not_found_delta), min(rh_found_delta)))) rights_ms,
+            extract(milliseconds from (min(eligible_delta))) eligibility_ms
+        from (
+            select
+                df_usage_uid,
+                case when (internal.action_type_ind = 'WORK_NOT_FOUND') then min(delta) else null end work_not_found_delta,
+                case when (internal.action_type_ind = 'MULTIPLE_RESULTS') then min(delta) else null end multiple_result_delta,
+                case when (internal.action_type_ind = 'WORK_FOUND') then min(delta) else null end work_found_delta,
+                case when (internal.action_type_ind = 'RH_NOT_FOUND') then min(delta) else null end rh_not_found_delta,
+                case when (internal.action_type_ind = 'RH_FOUND') then min(delta) else null end rh_found_delta,
+                case when (internal.action_type_ind = 'ELIGIBLE') then min(delta) else null end eligible_delta
+            from (
+                select
+                    a1.df_usage_uid,
+                    a1.action_type_ind,
+                    a1.created_datetime - max(a2.created_datetime) delta
+                from ${schema}.df_usage_audit a1
+                left join ${schema}.df_usage_audit a2
+                    on a1.df_usage_uid = a2.df_usage_uid
+                    and <![CDATA[a2.created_datetime < a1.created_datetime]]>
+                where a1.df_usage_uid = #{usageId}
+                    and a1.action_type_ind in ('WORK_NOT_FOUND', 'MULTIPLE_RESULTS', 'WORK_FOUND', 'RH_NOT_FOUND', 'RH_FOUND', 'ELIGIBLE')
+                group by
+                    a1.df_usage_uid,
+                    a1.action_type_ind,
+                    a1.created_datetime
+            ) internal
+            group by df_usage_uid, internal.action_type_ind
+        ) external
+        left join ${schema}.df_usage u on u.df_usage_uid = external.df_usage_uid
+        left join ${schema}.df_usage_archive ua on ua.df_usage_archive_uid = external.df_usage_uid
+        group by external.df_usage_uid, status
+    </select>
+
 </mapper>

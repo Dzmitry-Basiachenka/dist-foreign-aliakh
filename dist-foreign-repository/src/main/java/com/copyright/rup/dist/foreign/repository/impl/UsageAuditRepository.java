@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.report.UsageBatchStatistic;
+import com.copyright.rup.dist.foreign.domain.report.UsageStatistic;
 import com.copyright.rup.dist.foreign.repository.api.IUsageAuditRepository;
 
 import com.google.common.collect.Maps;
@@ -57,5 +58,10 @@ public class UsageAuditRepository extends BaseRepository implements IUsageAuditR
         parameters.put("batchName", Objects.requireNonNull(batchName));
         parameters.put("date", date);
         return selectOne("IUsageAuditMapper.findBatchStatistic", parameters);
+    }
+
+    @Override
+    public UsageStatistic getUsageStatistic(String usageId) {
+        return selectOne("IUsageAuditMapper.getUsageStatistic", Objects.requireNonNull(usageId));
     }
 }

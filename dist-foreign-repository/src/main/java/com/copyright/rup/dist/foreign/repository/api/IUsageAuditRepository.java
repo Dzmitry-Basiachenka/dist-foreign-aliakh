@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.repository.api;
 
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.report.UsageBatchStatistic;
+import com.copyright.rup.dist.foreign.domain.report.UsageStatistic;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -60,4 +61,12 @@ public interface IUsageAuditRepository {
      * @return instance of {@link UsageBatchStatistic}
      */
     UsageBatchStatistic findBatchStatistic(String batchName, LocalDate date);
+
+    /**
+     * Gets usage statistic.
+     *
+     * @param usageId usage id
+     * @return instance of {@link UsageStatistic}
+     */
+    UsageStatistic getUsageStatistic(String usageId);
 }
