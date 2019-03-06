@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.chain.processor;
 
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
@@ -10,13 +11,14 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.integration.camel.IProducer;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Verifies {@link RightsProcessor}.
@@ -44,6 +46,7 @@ public class RightsProcessorTest {
         successProcessor = createMock(IChainProcessor.class);
         failureProcessor = createMock(IChainProcessor.class);
         processor.setUsageService(usageService);
+        processor.setUsagesBatchSize(1000);
         processor.setProducer(rightsProducer);
         processor.setSuccessProcessor(successProcessor);
         processor.setFailureProcessor(failureProcessor);
@@ -54,7 +57,11 @@ public class RightsProcessorTest {
     public void testProcess() {
         Usage usage1 = buildUsage(UsageStatusEnum.WORK_FOUND);
         Usage usage2 = buildUsage(UsageStatusEnum.WORK_FOUND);
-        expect(usageService.getUsagesByStatusAndProductFamily(UsageStatusEnum.WORK_FOUND, "FAS"))
+        List<String> usageIds = Arrays.asList(usage1.getId(), usage2.getId());
+        expect(usageService.getUsageIdsByStatusAndProductFamily(eq(UsageStatusEnum.WORK_FOUND), eq("FAS")))
+            .andReturn(usageIds)
+            .once();
+        expect(usageService.getUsagesByIds(eq(usageIds)))
             .andReturn(Arrays.asList(usage1, usage2))
             .once();
         rightsProducer.send(usage1);

@@ -21,6 +21,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Verifies {@link RhTaxProcessor}.
@@ -45,6 +46,7 @@ public class RhTaxProcessorTest {
         usageServiceMock = createMock(IUsageService.class);
         rhTaxProcessor.setRhTaxProducer(rhTaxProducerMock);
         rhTaxProcessor.setUsageService(usageServiceMock);
+        rhTaxProcessor.setUsagesBatchSize(1000);
         rhTaxProcessor.setUsageStatus(UsageStatusEnum.RH_FOUND);
     }
 
@@ -61,7 +63,10 @@ public class RhTaxProcessorTest {
     @Test
     public void testProcessByProductFamily() {
         List<Usage> rhFoundUsages = Arrays.asList(buildUsage(), buildUsage());
-        expect(usageServiceMock.getUsagesByStatusAndProductFamily(eq(UsageStatusEnum.RH_FOUND), eq("NTS")))
+        List<String> rhFoundUsageIds = rhFoundUsages.stream().map(Usage::getId).collect(Collectors.toList());
+        expect(usageServiceMock.getUsageIdsByStatusAndProductFamily(eq(UsageStatusEnum.RH_FOUND), eq("NTS")))
+            .andReturn(rhFoundUsageIds).once();
+        expect(usageServiceMock.getUsagesByIds(eq(rhFoundUsageIds)))
             .andReturn(rhFoundUsages).once();
         Capture<Usage> usageCapture1 = new Capture<>();
         rhTaxProducerMock.send(capture(usageCapture1));
