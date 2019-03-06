@@ -51,6 +51,13 @@ public interface IUsageBatchService {
     void sendForGettingRights(Collection<Usage> usages);
 
     /**
+     * Finds usages by their ids and sends them to queue for getting Rights process.
+     *
+     * @param usageIds collection of {@link Usage} ids
+     */
+    void getAndSendForGettingRights(List<String> usageIds);
+
+    /**
      * Inserts usage batch, it's usages and RRO.
      *
      * @param usageBatch {@link UsageBatch} instance

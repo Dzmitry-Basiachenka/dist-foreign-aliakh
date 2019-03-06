@@ -21,10 +21,10 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
+import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
-import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -42,6 +42,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
 
 /**
  * Verifies {@link UsageBatchService}.
@@ -68,6 +69,8 @@ public class UsageBatchServiceTest {
     private IRightsholderService rightsholderService;
     private UsageBatchService usageBatchService;
     private IChainExecutor<Usage> chainExecutor;
+    private ExecutorService executorService;
+    private IUsageRepository usageRepository;
 
     @Before
     @SuppressWarnings("unchecked")
@@ -76,11 +79,16 @@ public class UsageBatchServiceTest {
         usageService = createMock(IUsageService.class);
         rightsholderService = createMock(IRightsholderService.class);
         chainExecutor = createMock(IChainExecutor.class);
+        executorService = createMock(ExecutorService.class);
+        usageRepository = createMock(IUsageRepository.class);
         usageBatchService = new UsageBatchService();
         Whitebox.setInternalState(usageBatchService, "usageBatchRepository", usageBatchRepository);
         Whitebox.setInternalState(usageBatchService, "usageService", usageService);
         Whitebox.setInternalState(usageBatchService, "rightsholderService", rightsholderService);
         Whitebox.setInternalState(usageBatchService, "chainExecutor", chainExecutor);
+        Whitebox.setInternalState(usageBatchService, "executorService", executorService);
+        Whitebox.setInternalState(usageBatchService, "usageRepository", usageRepository);
+        Whitebox.setInternalState(usageBatchService, "usagesBatchSize", 100);
     }
 
     @Test
@@ -168,26 +176,37 @@ public class UsageBatchServiceTest {
 
     @Test
     public void testSendForMatching() {
-        Usage usage1 = new Usage();
-        Usage usage2 = new Usage();
-        usage2.setStatus(UsageStatusEnum.NEW);
-        chainExecutor.execute(Collections.singletonList(usage2), ChainProcessorTypeEnum.MATCHING);
+        Capture<Runnable> captureRunnable = new Capture<>();
+        executorService.execute(capture(captureRunnable));
         expectLastCall().once();
-        replay(chainExecutor);
-        usageBatchService.sendForMatching(Arrays.asList(usage1, usage2));
-        verify(chainExecutor);
+        replay(chainExecutor, executorService);
+        usageBatchService.sendForMatching(Arrays.asList(new Usage(), new Usage()));
+        assertNotNull(captureRunnable);
+        verify(chainExecutor, executorService);
     }
 
     @Test
     public void testSendForGettingRights() {
-        Usage usage1 = new Usage();
-        Usage usage2 = new Usage();
-        usage2.setStatus(UsageStatusEnum.WORK_FOUND);
-        chainExecutor.execute(Collections.singletonList(usage2), ChainProcessorTypeEnum.RIGHTS);
+        Capture<Runnable> captureRunnable = new Capture<>();
+        executorService.execute(capture(captureRunnable));
         expectLastCall().once();
-        replay(chainExecutor);
-        usageBatchService.sendForGettingRights(Arrays.asList(usage1, usage2));
-        verify(chainExecutor);
+        replay(chainExecutor, executorService);
+        usageBatchService.sendForGettingRights(Arrays.asList(new Usage(), new Usage()));
+        assertNotNull(captureRunnable);
+        verify(chainExecutor, executorService);
+    }
+
+    @Test
+    public void testGetAndSendForGettingRights() {
+        List<String> usageIds = Arrays.asList(RupPersistUtils.generateUuid(), RupPersistUtils.generateUuid());
+        expect(usageRepository.findByIds(usageIds)).andReturn(Arrays.asList(new Usage(), new Usage())).once();
+        Capture<Runnable> captureRunnable = new Capture<>();
+        executorService.execute(capture(captureRunnable));
+        expectLastCall().once();
+        replay(chainExecutor, executorService, usageRepository);
+        usageBatchService.getAndSendForGettingRights(usageIds);
+        assertNotNull(captureRunnable);
+        verify(chainExecutor, executorService, usageRepository);
     }
 
     private Rightsholder buildRro() {

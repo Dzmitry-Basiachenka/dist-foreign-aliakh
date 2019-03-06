@@ -28,7 +28,6 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
-import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
@@ -77,7 +76,6 @@ public class UsagesControllerTest {
     private static final Long RRO_ACCOUNT_NUMBER = 12345678L;
     private UsagesController controller;
     private UsageService usageService;
-    private IUsageRepository usageRepository;
     private IUsagesFilterController filterController;
     private IUsagesFilterWidget filterWidgetMock;
     private IUsagesWidget usagesWidget;
@@ -91,7 +89,6 @@ public class UsagesControllerTest {
     public void setUp() {
         controller = new UsagesController();
         usageService = createMock(UsageService.class);
-        usageRepository = createMock(IUsageRepository.class);
         usageBatchService = createMock(IUsageBatchService.class);
         filterController = createMock(IUsagesFilterController.class);
         usagesWidget = createMock(IUsagesWidget.class);
@@ -101,7 +98,6 @@ public class UsagesControllerTest {
         filterWidgetMock = createMock(IUsagesFilterWidget.class);
         Whitebox.setInternalState(controller, usageBatchService);
         Whitebox.setInternalState(controller, usageService);
-        Whitebox.setInternalState(controller, usageRepository);
         Whitebox.setInternalState(controller, usageBatchService);
         Whitebox.setInternalState(controller, IWidget.class, usagesWidget);
         Whitebox.setInternalState(controller, filterController);
@@ -296,18 +292,16 @@ public class UsagesControllerTest {
         usage1.setId(RupPersistUtils.generateUuid());
         Usage usage2 = new Usage();
         usage2.setId(RupPersistUtils.generateUuid());
-        List<Usage> usages = Arrays.asList(usage1, usage2);
         List<String> ntsUsageIds = Arrays.asList(usage1.getId(), usage2.getId());
         expect(usageBatchService.insertNtsBatch(usageBatch)).andReturn(ntsUsageIds).once();
-        expect(usageRepository.findByIds(ntsUsageIds)).andReturn(usages).once();
-        usageBatchService.sendForGettingRights(usages);
+        usageBatchService.getAndSendForGettingRights(ntsUsageIds);
         expectLastCall().once();
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         filterWidgetMock.clearFilter();
         expectLastCall().once();
-        replay(usageBatchService, filterController, filterWidgetMock, usageRepository);
+        replay(usageBatchService, filterController, filterWidgetMock);
         controller.loadNtsBatch(usageBatch);
-        verify(usageBatchService, filterController, filterWidgetMock, usageRepository);
+        verify(usageBatchService, filterController, filterWidgetMock);
     }
 
     @Test
