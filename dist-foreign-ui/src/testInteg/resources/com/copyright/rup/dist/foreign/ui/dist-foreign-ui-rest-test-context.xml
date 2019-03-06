@@ -13,4 +13,16 @@
     <bean id="dm.service.usageAuditServiceMock" class="org.easymock.EasyMock" factory-method="createMock" primary="true">
         <constructor-arg type="java.lang.Class" value="com.copyright.rup.dist.foreign.service.api.IUsageAuditService"/>
     </bean>
+
+    <bean id="dm.repository.usageAuditRepositoryMock" class="org.easymock.EasyMock" factory-method="createMock" primary="true">
+        <constructor-arg type="java.lang.Class" value="com.copyright.rup.dist.foreign.repository.api.IUsageAuditRepository"/>
+    </bean>
+
+    <bean id="dm.repository.usageRepositoryMock" class="org.easymock.EasyMock" factory-method="createMock" primary="true">
+        <constructor-arg type="java.lang.Class" value="com.copyright.rup.dist.foreign.repository.api.IUsageRepository"/>
+    </bean>
+
+    <bean id="dm.repository.usageArchiveRepositoryMock" class="org.easymock.EasyMock" factory-method="createMock" primary="true">
+        <constructor-arg type="java.lang.Class" value="com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository"/>
+    </bean>
 </beans>

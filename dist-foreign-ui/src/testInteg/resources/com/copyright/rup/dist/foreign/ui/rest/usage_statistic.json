@@ -1,0 +1,7 @@
+{
+  "usageId": "testUsageId",
+  "status": "LOCKED",
+  "matchingMs": 1,
+  "rightsMs": 2,
+  "eligibilityMs": 3
+}

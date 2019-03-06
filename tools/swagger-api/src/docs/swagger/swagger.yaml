@@ -6,7 +6,7 @@ info:
 host: 'dist-foreign.aws-p-dev.copyright.com'
 schemes:
   - http
-basePath: /dist-foreign-ui
+basePath: /dist-foreign-ui/api
 produces:
   - application/json
 paths:
@@ -100,6 +100,32 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
+  /statistic/usage/{usageId}:
+    get:
+      operationId: getUsageStatistic
+      summary: Gets usage statistic
+      tags:
+        - statistic, usage
+      parameters:
+        - name: usageId
+          in: path
+          required: true
+          type: string
+          description: Usage id
+      responses:
+        200:
+          description: Usage statistic
+          schema:
+            $ref: '#/definitions/UsageStat'
+        404:
+          description: Usage not found by id. Error code [NOT_FOUND]
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: Unexpected error. Error code [INTERNAL_SERVER_ERROR]
+          schema:
+            $ref: '#/definitions/Error'
+
 definitions:
   Error:
     description: Error
@@ -182,6 +208,21 @@ definitions:
         type: number
       paidPercent:
         type: number
+
+  UsageStat:
+    description: Usage statistic
+    type: object
+    properties:
+      usageId:
+        type: string
+      status:
+        type: string
+      matchingMs:
+        type: integer
+      rightsMs:
+        type: integer
+      eligibilityMs:
+        type: integer
 
 parameters:
   job_name:
