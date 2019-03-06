@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.chain.processor;
 
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
@@ -17,6 +18,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Verifies {@link MatchingProcessor}.
@@ -44,6 +46,7 @@ public class MatchingProcessorTest {
         failureProcessor = createMock(IChainProcessor.class);
         usageService = createMock(IUsageService.class);
         processor.setUsageService(usageService);
+        processor.setUsagesBatchSize(1000);
         processor.setMatchingProducer(matchingProducer);
         processor.setSuccessProcessor(successProcessor);
         processor.setFailureProcessor(failureProcessor);
@@ -54,7 +57,11 @@ public class MatchingProcessorTest {
     public void testProcess() {
         Usage usage1 = buildUsage(UsageStatusEnum.NEW);
         Usage usage2 = buildUsage(UsageStatusEnum.NEW);
-        expect(usageService.getUsagesByStatusAndProductFamily(UsageStatusEnum.NEW, "FAS"))
+        List<String> usageIds = Arrays.asList(usage1.getId(), usage2.getId());
+        expect(usageService.getUsageIdsByStatusAndProductFamily(eq(UsageStatusEnum.NEW), eq("FAS")))
+            .andReturn(usageIds)
+            .once();
+        expect(usageService.getUsagesByIds(eq(usageIds)))
             .andReturn(Arrays.asList(usage1, usage2))
             .once();
         matchingProducer.send(usage1);

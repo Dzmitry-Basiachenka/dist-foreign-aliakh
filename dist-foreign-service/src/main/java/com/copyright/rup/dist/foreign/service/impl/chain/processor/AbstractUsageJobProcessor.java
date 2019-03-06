@@ -2,14 +2,16 @@ package com.copyright.rup.dist.foreign.service.impl.chain.processor;
 
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.util.LogUtils;
-import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.processor.IUsageJobProcessor;
 
+import com.google.common.collect.Iterables;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
 
@@ -28,17 +30,20 @@ public abstract class AbstractUsageJobProcessor extends AbstractUsageChainProces
 
     @Autowired
     private IUsageService usageService;
+    @Value("$RUP{dist.foreign.usages.batch_size}")
+    private Integer usagesBatchSize;
 
     private UsageStatusEnum usageStatus;
 
     @Override
     public void jobProcess(String productFamily) {
-        List<Usage> usages = usageService.getUsagesByStatusAndProductFamily(usageStatus, productFamily);
-        if (CollectionUtils.isNotEmpty(usages)) {
-            LogUtils.ILogWrapper usagesCount = LogUtils.size(usages);
+        List<String> usageIds = usageService.getUsageIdsByStatusAndProductFamily(usageStatus, productFamily);
+        if (CollectionUtils.isNotEmpty(usageIds)) {
+            LogUtils.ILogWrapper usagesCount = LogUtils.size(usageIds);
             LOGGER.info("Send {} usages for processing. Started. ProductFamily={}, UsagesCount={}", usageStatus,
                 productFamily, usagesCount);
-            usages.forEach(this::process);
+            Iterables.partition(usageIds, usagesBatchSize)
+                .forEach(partition -> usageService.getUsagesByIds(partition).forEach(this::process));
             LOGGER.info("Send {} usages for processing. Finished. ProductFamily={}, UsagesCount={}", usageStatus,
                 productFamily, usagesCount);
         } else {
@@ -53,5 +58,9 @@ public abstract class AbstractUsageJobProcessor extends AbstractUsageChainProces
 
     void setUsageService(IUsageService usageService) {
         this.usageService = usageService;
+    }
+
+    void setUsagesBatchSize(Integer usagesBatchSize) {
+        this.usagesBatchSize = usagesBatchSize;
     }
 }

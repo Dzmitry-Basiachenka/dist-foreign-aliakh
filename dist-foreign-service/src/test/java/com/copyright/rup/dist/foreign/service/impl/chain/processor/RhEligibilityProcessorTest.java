@@ -21,6 +21,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Verifies {@link RhEligibilityProcessor}.
@@ -45,6 +46,7 @@ public class RhEligibilityProcessorTest {
         usageServiceMock = createMock(IUsageService.class);
         rhEligibilityProcessor.setRhEligibilityProducer(rhEligibilityProducerMock);
         rhEligibilityProcessor.setUsageService(usageServiceMock);
+        rhEligibilityProcessor.setUsagesBatchSize(1000);
         rhEligibilityProcessor.setUsageStatus(UsageStatusEnum.US_TAX_COUNTRY);
     }
 
@@ -61,7 +63,11 @@ public class RhEligibilityProcessorTest {
     @Test
     public void testProcessByProductFamily() {
         List<Usage> rhFoundUsages = Arrays.asList(buildUsage(), buildUsage());
-        expect(usageServiceMock.getUsagesByStatusAndProductFamily(eq(UsageStatusEnum.US_TAX_COUNTRY), eq("NTS")))
+        List<String> rhFoundUsageIds = rhFoundUsages.stream().map(Usage::getId).collect(Collectors.toList());
+        expect(usageServiceMock.getUsageIdsByStatusAndProductFamily(eq(UsageStatusEnum.US_TAX_COUNTRY), eq("NTS")))
+            .andReturn(rhFoundUsageIds)
+            .once();
+        expect(usageServiceMock.getUsagesByIds(eq(rhFoundUsageIds)))
             .andReturn(rhFoundUsages)
             .once();
         Capture<Usage> usageCapture1 = new Capture<>();

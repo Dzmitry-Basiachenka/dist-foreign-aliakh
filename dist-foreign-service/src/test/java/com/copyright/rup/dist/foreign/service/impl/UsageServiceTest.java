@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.service.impl;
 
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -621,6 +622,23 @@ public class UsageServiceTest {
         replay(usageRepository, usageAuditService, chainExecutor);
         usageService.loadResearchedUsages(researchedUsages);
         verify(usageRepository, usageAuditService, chainExecutor);
+    }
+
+    @Test
+    public void testGetUsagesByIds() {
+        List<String> usageIds = Collections.singletonList(USAGE_ID_1);
+        List<Usage> usages = Collections.singletonList(buildUsage(USAGE_ID_1));
+        expect(usageRepository.findByIds(eq(usageIds))).andReturn(usages).once();
+        replay(usageRepository);
+        assertEquals(usages, usageService.getUsagesByIds(usageIds));
+        verify(usageRepository);
+    }
+
+    @Test
+    public void testGetUsagesByIdsEmptyIds() {
+        replay(usageRepository);
+        assertEquals(Collections.emptyList(), usageService.getUsagesByIds(Collections.emptyList()));
+        verify(usageRepository);
     }
 
     @Test
