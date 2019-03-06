@@ -58,6 +58,11 @@ public enum UsageStatusEnum {
     US_TAX_COUNTRY,
 
     /**
+     * Status for usages with unclassified work.
+     */
+    UNCLASSIFIED,
+
+    /**
      * Status for eligible usages.
      */
     ELIGIBLE,

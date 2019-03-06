@@ -37,6 +37,11 @@ public enum ChainProcessorTypeEnum {
     RH_ELIGIBILITY,
 
     /**
+     * Classification processor.
+     */
+    CLASSIFICATION,
+
+    /**
      * Eligibility processor.
      */
     ELIGIBILITY
