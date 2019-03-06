@@ -1,3 +1,6 @@
+4.1.38
+-
+
 4.1.37
 -
 * B-49461 Tech Debt: FDA: hardcode rupCamel.jackson version to 2.9.8 to avoid vulnerability issues
