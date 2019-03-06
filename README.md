@@ -1,5 +1,9 @@
 4.1.38
 -
+* B-49461 Tech Debt: FDA: populate RHs information while getting roll ups
+* B-49461 Tech Debt: FDA: adjust logging of usages during processing — Pavel_Liakh / githubweb
+* B-49461 Tech Debt: FDA: fix integration tests failure due to imposibility of autoproxying of target test builder classes by overriding performance aspect context for tests — Pavel_Liakh / githubweb
+* CDP-678 FDA: Load Fund Pool batch: ‘Out of memory’ error occurs while loading Fund Pool batch with usages count more than 200K
 
 4.1.37
 -
