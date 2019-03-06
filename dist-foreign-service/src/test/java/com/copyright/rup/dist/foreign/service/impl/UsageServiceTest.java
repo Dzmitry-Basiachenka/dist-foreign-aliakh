@@ -624,6 +624,18 @@ public class UsageServiceTest {
     }
 
     @Test
+    public void testGetUsageIdsByStatusAndProductFamily() {
+        List<String> usageIds = Collections.singletonList(USAGE_ID_1);
+        expect(usageRepository.findIdsByStatusAndProductFamily(UsageStatusEnum.NEW, FAS_PRODUCT_FAMILY))
+            .andReturn(usageIds)
+            .once();
+        replay(usageRepository);
+        assertEquals(usageIds,
+            usageService.getUsageIdsByStatusAndProductFamily(UsageStatusEnum.NEW, FAS_PRODUCT_FAMILY));
+        verify(usageRepository);
+    }
+
+    @Test
     public void testGetUsagesByStatusAndProductFamily() {
         List<Usage> usages = Collections.singletonList(buildUsage(USAGE_ID_1));
         expect(usageRepository.findByStatusAndProductFamily(UsageStatusEnum.NEW, FAS_PRODUCT_FAMILY))

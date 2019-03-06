@@ -152,6 +152,14 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
+    public void testFindIdsByStatusAnsProductFamily() {
+        List<String> actualUsageIds =
+            usageRepository.findIdsByStatusAndProductFamily(UsageStatusEnum.US_TAX_COUNTRY, "NTS");
+        assertEquals(Arrays.asList("463e2239-1a36-41cc-9a51-ee2a80eae0c7", "bd407b50-6101-4304-8316-6404fe32a800"),
+            actualUsageIds);
+    }
+
+    @Test
     public void testFindByStatusAnsProductFamily() throws IOException {
         List<Usage> actualUsages = usageRepository.findByStatusAndProductFamily(UsageStatusEnum.US_TAX_COUNTRY, "NTS");
         verifyUsages(loadExpectedUsages("json/usages_find_by_status.json"), actualUsages);
