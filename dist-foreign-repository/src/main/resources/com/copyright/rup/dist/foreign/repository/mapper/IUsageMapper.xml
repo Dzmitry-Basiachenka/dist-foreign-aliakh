@@ -491,6 +491,15 @@
         <include refid="ifPageable"/>
     </select>
 
+    <select id="findIdsByStatusAndProductFamily" resultType="string" parameterType="map">
+        select df_usage_uid
+        from ${schema}.df_usage
+        where
+            status_ind = #{status} and
+            product_family = #{productFamily}
+        order by df_usage_uid
+    </select>
+
     <select id="findByStatusAndProductFamily" resultMap="usageResultMap" parameterType="map">
         select
             u.df_usage_uid,

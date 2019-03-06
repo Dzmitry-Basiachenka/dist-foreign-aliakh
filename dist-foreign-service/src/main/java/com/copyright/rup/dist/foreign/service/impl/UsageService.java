@@ -480,6 +480,11 @@ public class UsageService implements IUsageService {
     }
 
     @Override
+    public List<String> getUsageIdsByStatusAndProductFamily(UsageStatusEnum status, String productFamily) {
+        return usageRepository.findIdsByStatusAndProductFamily(status, productFamily);
+    }
+
+    @Override
     public List<Usage> getUsagesByStatusAndProductFamily(UsageStatusEnum status, String productFamily) {
         return usageRepository.findByStatusAndProductFamily(status, productFamily);
     }
@@ -505,6 +510,7 @@ public class UsageService implements IUsageService {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet()));
     }
+
     private void updatePaidUsage(PaidUsage paidUsage, String actionReason) {
         paidUsage.setStatus(UsageStatusEnum.PAID);
         usageArchiveRepository.updatePaidInfo(paidUsage);

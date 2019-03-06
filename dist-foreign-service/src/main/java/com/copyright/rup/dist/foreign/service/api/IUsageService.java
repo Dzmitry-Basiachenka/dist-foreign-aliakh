@@ -327,6 +327,15 @@ public interface IUsageService {
     void sendToCrm();
 
     /**
+     * Gets list of {@link Usage} ids by specified {@link UsageStatusEnum} and product family.
+     *
+     * @param status        {@link UsageStatusEnum} instance
+     * @param productFamily product family
+     * @return the list of found {@link Usage} ids
+     */
+    List<String> getUsageIdsByStatusAndProductFamily(UsageStatusEnum status, String productFamily);
+
+    /**
      * Gets list of {@link Usage}s by specified {@link UsageStatusEnum} and product family.
      *
      * @param status        {@link UsageStatusEnum} instance
