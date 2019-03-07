@@ -524,7 +524,7 @@ public class UsageService implements IUsageService {
     private void updateRighstholdersInSeparateThread(List<Usage> usages) {
         rightsholderService.updateRighstholdersAsync(
             usages.stream()
-                .map(usage -> usage.getRightsholder().getAccountNumber())
+                .map(usage -> usage.getPayee().getAccountNumber())
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet()));
     }

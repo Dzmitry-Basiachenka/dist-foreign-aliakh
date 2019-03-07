@@ -46,6 +46,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 
+import com.google.common.collect.Table;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
@@ -83,6 +84,7 @@ public class UsageServiceTest {
     private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
     private static final String USER_NAME = "User name";
     private static final Long RH_ACCOUNT_NUMBER = 1000001534L;
+    private static final Long PAYEE_ACCOUNT_NUMBER = 12387456L;
     private static final String RH_ID = RupPersistUtils.generateUuid();
     private Scenario scenario;
     private IUsageRepository usageRepository;
@@ -266,17 +268,19 @@ public class UsageServiceTest {
         Usage usage2 = buildUsage(USAGE_ID_2);
         Capture<List<String>> rightsholdersIdsCapture = new Capture<>();
         List<Usage> usages = Lists.newArrayList(usage1, usage2);
+        Table<String, String, Long> rollUps = HashBasedTable.create();
+        rollUps.put(RH_ID, FAS_PRODUCT_FAMILY, PAYEE_ACCOUNT_NUMBER);
         usageRepository.addToScenario(usages);
         expectLastCall().once();
         expect(prmIntegrationService.getRollUps(capture(rightsholdersIdsCapture)))
-            .andReturn(HashBasedTable.create()).once();
+            .andReturn(rollUps).once();
         expect(prmIntegrationService.isRightsholderParticipating(usage1.getRightsholder().getId(),
             usage1.getProductFamily())).andReturn(true).once();
         expect(prmIntegrationService.isRightsholderParticipating(usage2.getRightsholder().getId(),
             usage2.getProductFamily())).andReturn(true).once();
         expect(prmIntegrationService.getRhParticipatingServiceFee(true))
             .andReturn(new BigDecimal("0.16000")).times(2);
-        rightsholderService.updateRighstholdersAsync(Collections.singleton(RH_ACCOUNT_NUMBER));
+        rightsholderService.updateRighstholdersAsync(Collections.singleton(PAYEE_ACCOUNT_NUMBER));
         expectLastCall().once();
         replay(usageRepository, prmIntegrationService, rightsholderService);
         usageService.addUsagesToScenario(Lists.newArrayList(usage1, usage2), scenario);
@@ -422,15 +426,17 @@ public class UsageServiceTest {
         UsageFilter filter = new UsageFilter();
         Usage usage1 = buildUsage(RupPersistUtils.generateUuid());
         Usage usage2 = buildUsageWithPayee(RupPersistUtils.generateUuid());
+        Table<String, String, Long> rollUps = HashBasedTable.create();
+        rollUps.put(RH_ID, FAS_PRODUCT_FAMILY, PAYEE_ACCOUNT_NUMBER);
         expect(usageRepository.findRightsholdersInformation(SCENARIO_ID)).andReturn(
             ImmutableMap.of(usage2.getRightsholder().getAccountNumber(), usage2)).once();
         expect(usageRepository.findWithAmountsAndRightsholders(filter)).andReturn(Collections.singletonList(usage1))
             .once();
-        expect(prmIntegrationService.getRollUps(Collections.EMPTY_SET)).andReturn(HashBasedTable.create()).once();
+        expect(prmIntegrationService.getRollUps(Collections.EMPTY_SET)).andReturn(rollUps).once();
         expect(prmIntegrationService.getRhParticipatingServiceFee(false)).andReturn(new BigDecimal("0.32")).once();
         usageRepository.addToScenario(Collections.singletonList(usage1));
         expectLastCall().once();
-        rightsholderService.updateRighstholdersAsync(Collections.singleton(RH_ACCOUNT_NUMBER));
+        rightsholderService.updateRighstholdersAsync(Collections.singleton(PAYEE_ACCOUNT_NUMBER));
         expectLastCall().once();
         replay(usageRepository, prmIntegrationService, rightsholderService);
         usageService.recalculateUsagesForRefresh(filter, scenario);
@@ -747,7 +753,7 @@ public class UsageServiceTest {
     private Usage buildUsageWithPayee(String usageId) {
         Usage usage = buildUsage(usageId);
         usage.getPayee().setId(RupPersistUtils.generateUuid());
-        usage.getPayee().setAccountNumber(RH_ACCOUNT_NUMBER);
+        usage.getPayee().setAccountNumber(PAYEE_ACCOUNT_NUMBER);
         return usage;
     }
 
