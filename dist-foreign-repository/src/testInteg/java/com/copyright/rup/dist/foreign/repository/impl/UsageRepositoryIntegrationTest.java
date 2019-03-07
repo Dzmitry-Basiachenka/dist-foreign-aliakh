@@ -121,6 +121,7 @@ public class UsageRepositoryIntegrationTest {
     private static final String BATCH_ID = "e0af666b-cbb7-4054-9906-12daa1fbd76e";
     private static final String PERCENT = "%";
     private static final String UNDERSCORE = "_";
+    private static final String NTS_PRODUCT_FAMILY = "NTS";
 
     @Autowired
     private UsageRepository usageRepository;
@@ -154,15 +155,33 @@ public class UsageRepositoryIntegrationTest {
     @Test
     public void testFindIdsByStatusAnsProductFamily() {
         List<String> actualUsageIds =
-            usageRepository.findIdsByStatusAndProductFamily(UsageStatusEnum.US_TAX_COUNTRY, "NTS");
+            usageRepository.findIdsByStatusAndProductFamily(UsageStatusEnum.US_TAX_COUNTRY, NTS_PRODUCT_FAMILY);
         assertEquals(Arrays.asList("463e2239-1a36-41cc-9a51-ee2a80eae0c7", "bd407b50-6101-4304-8316-6404fe32a800"),
             actualUsageIds);
     }
 
     @Test
     public void testFindByStatusAnsProductFamily() throws IOException {
-        List<Usage> actualUsages = usageRepository.findByStatusAndProductFamily(UsageStatusEnum.US_TAX_COUNTRY, "NTS");
+        List<Usage> actualUsages =
+            usageRepository.findByStatusAndProductFamily(UsageStatusEnum.US_TAX_COUNTRY, NTS_PRODUCT_FAMILY);
         verifyUsages(loadExpectedUsages("json/usages_find_by_status.json"), actualUsages);
+    }
+
+    @Test
+    public void testFindByStatusAnsProductFamilyWithPageable() throws IOException {
+        List<Usage> expectedUsages = loadExpectedUsages("json/usages_find_by_status.json");
+        verifyUsages(expectedUsages,
+            usageRepository.findByStatusAndProductFamily(UsageStatusEnum.US_TAX_COUNTRY, NTS_PRODUCT_FAMILY,
+                new Pageable(0, 2)));
+        verifyUsages(Collections.singletonList(expectedUsages.get(1)),
+            usageRepository.findByStatusAndProductFamily(UsageStatusEnum.US_TAX_COUNTRY, NTS_PRODUCT_FAMILY,
+                new Pageable(1, 1)));
+    }
+
+    @Test
+    public void testFindCountByStatusAnsProductFamily() {
+        assertEquals(2, usageRepository.findCountByStatusAndProductFamily(UsageStatusEnum.US_TAX_COUNTRY,
+            NTS_PRODUCT_FAMILY));
     }
 
     @Test

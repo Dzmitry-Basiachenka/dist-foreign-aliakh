@@ -78,6 +78,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     private static final String USAGE_ID_KEY = "usageId";
     private static final String STATUS_KEY = "status";
     private static final String RH_ACCOUNT_NUMBER_KEY = "rhAccountNumber";
+    private static final String PRODUCT_FAMILY_KEY = "productFamily";
     private static final int REPORT_BATCH_SIZE = 100000;
 
     @Override
@@ -98,7 +99,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     public List<String> findIdsByStatusAndProductFamily(UsageStatusEnum status, String productFamily) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(STATUS_KEY, Objects.requireNonNull(status));
-        parameters.put("productFamily", Objects.requireNonNull(productFamily));
+        parameters.put(PRODUCT_FAMILY_KEY, Objects.requireNonNull(productFamily));
         return selectList("IUsageMapper.findIdsByStatusAndProductFamily", parameters);
     }
 
@@ -106,8 +107,25 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     public List<Usage> findByStatusAndProductFamily(UsageStatusEnum status, String productFamily) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(STATUS_KEY, Objects.requireNonNull(status));
-        parameters.put("productFamily", Objects.requireNonNull(productFamily));
+        parameters.put(PRODUCT_FAMILY_KEY, Objects.requireNonNull(productFamily));
         return selectList("IUsageMapper.findByStatusAndProductFamily", parameters);
+    }
+
+    @Override
+    public List<Usage> findByStatusAndProductFamily(UsageStatusEnum status, String productFamily, Pageable pageable) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
+        parameters.put(STATUS_KEY, Objects.requireNonNull(status));
+        parameters.put(PRODUCT_FAMILY_KEY, Objects.requireNonNull(productFamily));
+        parameters.put(PAGEABLE_KEY, pageable);
+        return selectList("IUsageMapper.findByStatusAndProductFamily", parameters);
+    }
+
+    @Override
+    public int findCountByStatusAndProductFamily(UsageStatusEnum status, String productFamily) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put(STATUS_KEY, Objects.requireNonNull(status));
+        parameters.put(PRODUCT_FAMILY_KEY, Objects.requireNonNull(productFamily));
+        return selectOne("IUsageMapper.findCountByStatusAndProductFamily", parameters);
     }
 
     @Override

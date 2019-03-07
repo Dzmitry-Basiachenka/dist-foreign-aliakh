@@ -353,6 +353,25 @@ public interface IUsageService {
     List<Usage> getUsagesByStatusAndProductFamily(UsageStatusEnum status, String productFamily);
 
     /**
+     * Gets list of {@link Usage}s by specified {@link UsageStatusEnum} and product family.
+     *
+     * @param status        {@link UsageStatusEnum} instance
+     * @param productFamily product family
+     * @param pageable      {@link Pageable} instance
+     * @return the list of found {@link Usage}s
+     */
+    List<Usage> getUsagesByStatusAndProductFamily(UsageStatusEnum status, String productFamily, Pageable pageable);
+
+    /**
+     * Gets count {@link Usage}s by specified {@link UsageStatusEnum} and product family.
+     *
+     * @param status        {@link UsageStatusEnum} instance
+     * @param productFamily product family
+     * @return the number of {@link Usage}s
+     */
+    int getUsageCountByStatusAndProductFamily(UsageStatusEnum status, String productFamily);
+
+    /**
      * Verifies whether {@link Usage}s found by defined {@link UsageFilter} have specified status or not.
      *
      * @param filter {@link UsageFilter} instance

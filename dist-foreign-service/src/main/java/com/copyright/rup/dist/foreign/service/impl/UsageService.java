@@ -497,6 +497,17 @@ public class UsageService implements IUsageService {
     }
 
     @Override
+    public List<Usage> getUsagesByStatusAndProductFamily(UsageStatusEnum status, String productFamily,
+                                                         Pageable pageable) {
+        return usageRepository.findByStatusAndProductFamily(status, productFamily, pageable);
+    }
+
+    @Override
+    public int getUsageCountByStatusAndProductFamily(UsageStatusEnum status, String productFamily) {
+        return usageRepository.findCountByStatusAndProductFamily(status, productFamily);
+    }
+
+    @Override
     public boolean isValidUsagesState(UsageFilter filter, UsageStatusEnum status) {
         return usageRepository.isValidUsagesState(filter, status);
     }
