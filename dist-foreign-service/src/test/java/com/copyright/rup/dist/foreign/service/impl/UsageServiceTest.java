@@ -665,6 +665,30 @@ public class UsageServiceTest {
     }
 
     @Test
+    public void testGetUsagesByStatusAndProductFamilyWithPageable() {
+        Pageable pageable = new Pageable(0, 1);
+        List<Usage> usages = Collections.singletonList(buildUsage(USAGE_ID_1));
+        expect(
+            usageRepository.findByStatusAndProductFamily(eq(UsageStatusEnum.NEW), eq(FAS_PRODUCT_FAMILY), eq(pageable)))
+            .andReturn(usages)
+            .once();
+        replay(usageRepository);
+        assertEquals(usages,
+            usageService.getUsagesByStatusAndProductFamily(UsageStatusEnum.NEW, FAS_PRODUCT_FAMILY, pageable));
+        verify(usageRepository);
+    }
+
+    @Test
+    public void testGetUsageCountByStatusAndProductFamily() {
+        expect(usageRepository.findCountByStatusAndProductFamily(UsageStatusEnum.NEW, FAS_PRODUCT_FAMILY))
+            .andReturn(10)
+            .once();
+        replay(usageRepository);
+        assertEquals(10, usageService.getUsageCountByStatusAndProductFamily(UsageStatusEnum.NEW, FAS_PRODUCT_FAMILY));
+        verify(usageRepository);
+    }
+
+    @Test
     public void testIsValidUsagesState() {
         UsageFilter usageFilter = new UsageFilter();
         expect(usageRepository.isValidUsagesState(usageFilter, UsageStatusEnum.WORK_NOT_FOUND)).andReturn(true).once();
