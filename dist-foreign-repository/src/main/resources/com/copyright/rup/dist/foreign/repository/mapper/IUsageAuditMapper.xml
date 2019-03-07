@@ -35,9 +35,9 @@
     <resultMap id="usageStatisticResultMap" type="UsageStatistic">
         <result property="usageId" column="df_usage_uid"/>
         <result property="status" column="status"/>
-        <result property="matching" column="matching_ms"/>
-        <result property="rights" column="rights_ms"/>
-        <result property="eligibility" column="eligibility_ms"/>
+        <result property="matchingMs" column="matching_ms"/>
+        <result property="rightsMs" column="rights_ms"/>
+        <result property="eligibilityMs" column="eligibility_ms"/>
     </resultMap>
 
     <sql id="usageAuditItemColumns">

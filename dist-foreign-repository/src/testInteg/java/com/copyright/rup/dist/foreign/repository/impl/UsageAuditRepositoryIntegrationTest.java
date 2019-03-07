@@ -137,9 +137,9 @@ public class UsageAuditRepositoryIntegrationTest {
         UsageStatistic statistic = usageAuditRepository.getUsageStatistic(USAGE_UID_2);
         assertEquals(USAGE_UID_2, statistic.getUsageId());
         assertEquals(UsageStatusEnum.LOCKED, statistic.getStatus());
-        assertEquals(0, statistic.getMatching());
-        assertEquals(1121, statistic.getRights());
-        assertEquals(1075, statistic.getEligibility());
+        assertEquals(0, statistic.getMatchingMs());
+        assertEquals(1121, statistic.getRightsMs());
+        assertEquals(1075, statistic.getEligibilityMs());
     }
 
     private UsageAuditItem buildUsageAuditItem() {

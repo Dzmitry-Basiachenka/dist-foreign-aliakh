@@ -19,9 +19,9 @@ public class UsageStatistic {
 
     private String usageId;
     private UsageStatusEnum status;
-    private int matching;
-    private int rights;
-    private int eligibility;
+    private int matchingMs;
+    private int rightsMs;
+    private int eligibilityMs;
 
     public String getUsageId() {
         return usageId;
@@ -39,28 +39,28 @@ public class UsageStatistic {
         this.status = status;
     }
 
-    public int getMatching() {
-        return matching;
+    public int getMatchingMs() {
+        return matchingMs;
     }
 
-    public void setMatching(int matching) {
-        this.matching = matching;
+    public void setMatchingMs(int matchingMs) {
+        this.matchingMs = matchingMs;
     }
 
-    public int getRights() {
-        return rights;
+    public int getRightsMs() {
+        return rightsMs;
     }
 
-    public void setRights(int rights) {
-        this.rights = rights;
+    public void setRightsMs(int rightsMs) {
+        this.rightsMs = rightsMs;
     }
 
-    public int getEligibility() {
-        return eligibility;
+    public int getEligibilityMs() {
+        return eligibilityMs;
     }
 
-    public void setEligibility(int eligibility) {
-        this.eligibility = eligibility;
+    public void setEligibilityMs(int eligibilityMs) {
+        this.eligibilityMs = eligibilityMs;
     }
 
     @Override
@@ -76,9 +76,9 @@ public class UsageStatistic {
             .appendSuper(super.equals(o))
             .append(usageId, that.usageId)
             .append(status, that.status)
-            .append(matching, that.matching)
-            .append(rights, that.rights)
-            .append(eligibility, that.eligibility)
+            .append(matchingMs, that.matchingMs)
+            .append(rightsMs, that.rightsMs)
+            .append(eligibilityMs, that.eligibilityMs)
             .isEquals();
     }
 
@@ -88,9 +88,9 @@ public class UsageStatistic {
             .appendSuper(super.hashCode())
             .append(usageId)
             .append(status)
-            .append(matching)
-            .append(rights)
-            .append(eligibility)
+            .append(matchingMs)
+            .append(rightsMs)
+            .append(eligibilityMs)
             .toHashCode();
     }
 
@@ -100,9 +100,9 @@ public class UsageStatistic {
             .appendSuper(super.toString())
             .append("usageId", usageId)
             .append("status", status)
-            .append("matching", matching)
-            .append("rights", rights)
-            .append("eligibility", eligibility)
+            .append("matchingMs", matchingMs)
+            .append("rightsMs", rightsMs)
+            .append("eligibilityMs", eligibilityMs)
             .toString();
     }
 }
