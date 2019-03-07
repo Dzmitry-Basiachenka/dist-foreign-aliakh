@@ -60,7 +60,9 @@ public class DomainVerifierTest {
             {BatchSummaryReportDto.class},
             {ResearchStatusReportDto.class},
             {ServiceFeeTrueUpReportDto.class},
-            {UsageBatchStatistic.class}
+            {UsageBatchStatistic.class},
+            {Work.class},
+            {WorkClassification.class}
         };
         return Arrays.asList(testData);
     }

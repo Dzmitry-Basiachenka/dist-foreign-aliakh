@@ -218,6 +218,8 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete_usage_batch"));
         deleteButton.addClickListener(event -> Windows.showModalWindow(new DeleteUsageBatchWindow(controller)));
         assignClassificationButton = Buttons.createButton(ForeignUi.getMessage("button.assign_classification"));
+        assignClassificationButton.addClickListener(
+            event -> new NtsUsageBatchSelectorWidget(controller).showFilterWindow());
         VaadinUtils.setButtonsAutoDisabled(loadUsageBatchButton, loadFundPoolButton, assignClassificationButton,
             loadResearchedUsagesButton, addToScenarioButton, deleteButton);
         HorizontalLayout layout =
