@@ -70,25 +70,6 @@ public interface IUsageRepository {
     List<Usage> findByStatusAndProductFamily(UsageStatusEnum status, String productFamily);
 
     /**
-     * Finds list of {@link Usage}s by specified {@link UsageStatusEnum} and product family.
-     *
-     * @param status        {@link UsageStatusEnum} instance
-     * @param productFamily product family
-     * @param pageable      {@link Pageable} instance
-     * @return the list of found {@link Usage}s
-     */
-    List<Usage> findByStatusAndProductFamily(UsageStatusEnum status, String productFamily, Pageable pageable);
-
-    /**
-     * Finds count {@link Usage}s by specified {@link UsageStatusEnum} and product family.
-     *
-     * @param status        {@link UsageStatusEnum} instance
-     * @param productFamily product family
-     * @return number of {@link Usage}s
-     */
-    int findCountByStatusAndProductFamily(UsageStatusEnum status, String productFamily);
-
-    /**
      * Finds usages count based on applied filter.
      *
      * @param filter instance of {@link UsageFilter}

@@ -531,14 +531,6 @@
             u.status_ind = #{status} and
             u.product_family = #{productFamily}
         order by u.df_usage_uid
-        <include refid="ifPageable"/>
-    </select>
-
-    <select id="findCountByStatusAndProductFamily" parameterType="map" resultType="int">
-        select count(1)
-        from ${schema}.df_usage
-        where status_ind = #{status}
-            and product_family = #{productFamily}
     </select>
 
     <select id="findCountByScenarioId" parameterType="map" resultType="int">
