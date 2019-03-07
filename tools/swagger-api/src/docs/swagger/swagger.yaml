@@ -190,6 +190,12 @@ definitions:
         type: number
       rhNotFoundPercent:
         type: number
+      rhFoundCount:
+        type: integer
+      rhFoundAmount:
+        type: number
+      rhFoundPercent:
+        type: number
       eligibleCount:
         type: integer
       eligibleAmount:

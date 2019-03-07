@@ -78,8 +78,9 @@ public class UsageAuditService implements IUsageAuditService {
             statistic.setNtsWithDrawnPercent(buildPercent(statistic.getNtsWithDrawnCount() / loadedCount));
             statistic.setWorksNotFoundPercent(buildPercent(statistic.getWorksNotFoundCount() / loadedCount));
             statistic.setMultipleMatchingPercent(buildPercent(statistic.getMultipleMatchingCount() / loadedCount));
-            statistic.setEligiblePercent(buildPercent(statistic.getEligibleCount() / loadedCount));
             statistic.setRhNotFoundPercent(buildPercent(statistic.getRhNotFoundCount() / loadedCount));
+            statistic.setRhFoundPercent(buildPercent(statistic.getRhFoundCount() / loadedCount));
+            statistic.setEligiblePercent(buildPercent(statistic.getEligibleCount() / loadedCount));
             statistic.setSendForRaPercent(buildPercent(statistic.getSendForRaCount() / loadedCount));
             statistic.setPaidPercent(buildPercent(statistic.getPaidCount() / loadedCount));
         }

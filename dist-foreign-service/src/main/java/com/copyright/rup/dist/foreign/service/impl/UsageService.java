@@ -135,8 +135,18 @@ public class UsageService implements IUsageService {
         });
         // Adding data to audit table in separate loop increases performance up to 3 times
         // while using batch with 200000 usages
-        String reason = "Uploaded in '" + usageBatch.getName() + "' Batch";
-        usages.forEach(usage -> usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.LOADED, reason));
+        String loadedReason = "Uploaded in '" + usageBatch.getName() + "' Batch";
+        String eligibleReason = "Usage was uploaded with Wr Wrk Inst and RH account number";
+        String workFoundReason = "Usage was uploaded with Wr Wrk Inst";
+        usages.forEach(usage -> {
+            usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.LOADED, loadedReason);
+            if (UsageStatusEnum.ELIGIBLE == usage.getStatus()) {
+                usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.ELIGIBLE, eligibleReason);
+            }
+            if (UsageStatusEnum.WORK_FOUND == usage.getStatus()) {
+                usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.WORK_FOUND, workFoundReason);
+            }
+        });
         LOGGER.info("Insert usages. Finished. UsageBatchName={}, UsagesCount={}, UserName={}", usageBatch.getName(),
             size, userName);
         return size;

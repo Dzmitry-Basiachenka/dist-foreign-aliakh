@@ -67,6 +67,9 @@ public class StatisticRest implements StatisticApiDelegate {
         bs.setRhNotFoundCount(ubs.getRhNotFoundCount());
         bs.setRhNotFoundAmount(ubs.getRhNotFoundAmount());
         bs.setRhNotFoundPercent(ubs.getRhNotFoundPercent());
+        bs.setRhFoundCount(ubs.getRhFoundCount());
+        bs.setRhFoundAmount(ubs.getRhFoundAmount());
+        bs.setRhFoundPercent(ubs.getRhFoundPercent());
         bs.setEligibleCount(ubs.getEligibleCount());
         bs.setEligibleAmount(ubs.getEligibleAmount());
         bs.setEligiblePercent(ubs.getEligiblePercent());
