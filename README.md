@@ -1,3 +1,12 @@
+4.1.39
+-
+* B-49462 Tech Debt: FDA: Add repository and service methods to get usage ids by status and product family
+* B-49462 Tech Debt: FDA: Add repository and service methods to retrieve usages by status and product family using paging
+* B-49462 Tech Debt: FDA: Retrieve usages by partitions in AbstractJobProcessor
+* B-49462 Tech Debt: FDA: implement database backend for REST service to get usage timings statistic
+* B-49462 Tech Debt: FDA: send uploaded FAS and newly created NTS usages to queues in backgroud thread
+* CDP-686 FDA: RHs information is not populated while getting roll ups
+
 4.1.38
 -
 * B-49461 Tech Debt: FDA: populate RHs information while getting roll ups
