@@ -1379,54 +1379,41 @@
     </select>
 
     <select id="insertNtsUsagesWithAudit" parameterType="map" resultType="string">
-        with result as (
-            insert into ${schema}.df_usage (
-                df_usage_uid,
-                df_usage_batch_uid,
-                wr_wrk_inst,
-                work_title,
-                system_title,
-                status_ind,
-                product_family,
-                standard_number,
-                market,
-                market_period_from,
-                market_period_to,
-                reported_value,
-                gross_amount,
-                comment,
-                <include refid="StoredEntityMapper.additionalColumns"/>
-            )
-            select
-                uuid_generate_v4(),
-                #{batchId},
-                wr_wrk_inst,
-                work_title,
-                system_title,
-                'WORK_FOUND',
-                'NTS',
-                standard_number,
-                market,
-                market_period_from,
-                market_period_to,
-                gross_amount,
-                gross_amount,
-                comment,
-                <include refid="StoredEntityMapper.insert"/>
-            from ${schema}.df_usage_archive
-            <include refid="IUsageArchiveMapper.ntsBatchWhereClause"/>
-            returning df_usage_uid
-        )
-        insert into ${schema}.df_usage_audit (
-            <include refid="IUsageAuditMapper.usageAuditItemColumns"/>
+        insert into ${schema}.df_usage (
+            df_usage_uid,
+            df_usage_batch_uid,
+            wr_wrk_inst,
+            work_title,
+            system_title,
+            status_ind,
+            product_family,
+            standard_number,
+            market,
+            market_period_from,
+            market_period_to,
+            reported_value,
+            gross_amount,
+            comment,
+            <include refid="StoredEntityMapper.additionalColumns"/>
         )
         select
             uuid_generate_v4(),
-            df_usage_uid,
-            'CREATED',
-            #{auditActionReason},
+            #{batchId},
+            wr_wrk_inst,
+            work_title,
+            system_title,
+            'WORK_FOUND',
+            'NTS',
+            standard_number,
+            market,
+            market_period_from,
+            market_period_to,
+            gross_amount,
+            gross_amount,
+            comment,
             <include refid="StoredEntityMapper.insert"/>
-        from result
+        from ${schema}.df_usage_archive
+        <include refid="IUsageArchiveMapper.ntsBatchWhereClause"/>
         returning df_usage_uid
     </select>
 </mapper>
