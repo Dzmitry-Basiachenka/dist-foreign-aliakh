@@ -7,13 +7,11 @@ import static org.junit.Assert.assertTrue;
 import com.copyright.rup.dist.common.test.JsonMatcher;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
-import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
-import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.impl.NtsWorkflowIntegrationTestBuilder.Runner;
 
@@ -34,7 +32,6 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.IntStream;
 
 /**
  * Builder for {@link NtsWorkflowIntegrationTest}.
@@ -53,8 +50,6 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
     @Autowired
     private IUsageBatchRepository usageBatchRepository;
     @Autowired
-    private IUsageAuditService usageAuditService;
-    @Autowired
     private IUsageRepository usageRepository;
     @Autowired
     private RestTemplate restTemplate;
@@ -72,7 +67,6 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
     private String expectedPreferencesResponce;
     private String expectedPreferencesRightholderId;
     private Long expectedPrmAccountNumber;
-    private List<UsageAuditItem> expectedUsageAuditItems;
     private UsageBatch usageBatch;
     private Usage expectedUsage;
 
@@ -110,11 +104,6 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
-    NtsWorkflowIntegrationTestBuilder expectUsageAudit(List<UsageAuditItem> usageAudit) {
-        this.expectedUsageAuditItems = usageAudit;
-        return this;
-    }
-
     @Override
     public Runner build() {
         return new Runner();
@@ -128,7 +117,6 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
         expectedRmsResponse = null;
         expectedOracleRequest = null;
         expectedOracleResponse = null;
-        expectedUsageAuditItems = null;
         expectedPreferencesResponce = null;
         expectedPreferencesRightholderId = null;
     }
@@ -182,7 +170,6 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
             } else {
                 assertEquals(1, CollectionUtils.size(actualUsages));
                 assertUsage(actualUsages.get(0));
-                assertAudit(actualUsages.get(0));
             }
         }
 
@@ -202,19 +189,6 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
             assertEquals(expectedUsage.getGrossAmount(), actualUsage.getGrossAmount());
             assertEquals(expectedUsage.getReportedValue(), actualUsage.getReportedValue());
             assertEquals(expectedUsage.getRightsholder().getAccountNumber(), actualUsage.getRhAccountNumber());
-        }
-
-        private void assertAudit(UsageDto usageDto) {
-            List<UsageAuditItem> auditItems = usageAuditService.getUsageAudit(usageDto.getId());
-            assertEquals(CollectionUtils.size(expectedUsageAuditItems), CollectionUtils.size(auditItems));
-            IntStream.range(0, expectedUsageAuditItems.size()).forEach(index -> {
-                assertUsageAuditItem(expectedUsageAuditItems.get(index), auditItems.get(index));
-            });
-        }
-
-        private void assertUsageAuditItem(UsageAuditItem expectedItem, UsageAuditItem actualItem) {
-            assertEquals(expectedItem.getActionType(), actualItem.getActionType());
-            assertEquals(expectedItem.getActionReason(), actualItem.getActionReason());
         }
 
         private void createRestServer() {

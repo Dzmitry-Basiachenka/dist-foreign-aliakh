@@ -4,8 +4,6 @@ import com.copyright.rup.common.caching.api.ICacheService;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.Usage;
-import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
-import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
@@ -21,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -63,16 +60,6 @@ public class NtsWorkflowIntegrationTest {
                 "tax/rh_1000023401_tax_country_us_response.json")
             .expectPreferences("eligibility/pref_eligible_rh_response.json", "85f864f2-30a5-4215-ac4f-f1f541901218")
             .expectUsage(buildUsage())
-            .expectUsageAudit(Arrays.asList(
-                buildUsageAuditItem(UsageActionTypeEnum.ELIGIBLE,
-                    "Usage has become eligible"),
-                buildUsageAuditItem(UsageActionTypeEnum.US_TAX_COUNTRY,
-                    "Rightsholder tax country is US"),
-                buildUsageAuditItem(UsageActionTypeEnum.RH_FOUND,
-                    "Rightsholder account 1000023401 was found in RMS"),
-                buildUsageAuditItem(UsageActionTypeEnum.CREATED,
-                    "Usage was created based on Market(s): 'Bus', Fund Pool Period: 2013-2016")
-            ))
             .build()
             .run();
     }
@@ -109,13 +96,6 @@ public class NtsWorkflowIntegrationTest {
             .expectRmsRights("rights/rms_grants_854030732_request.json", "rights/rms_grants_empty_response.json")
             .build()
             .run();
-    }
-
-    private UsageAuditItem buildUsageAuditItem(UsageActionTypeEnum status, String reason) {
-        UsageAuditItem item = new UsageAuditItem();
-        item.setActionReason(reason);
-        item.setActionType(status);
-        return item;
     }
 
     private UsageBatch buildUsageBatch(FundPool fundPool) {
