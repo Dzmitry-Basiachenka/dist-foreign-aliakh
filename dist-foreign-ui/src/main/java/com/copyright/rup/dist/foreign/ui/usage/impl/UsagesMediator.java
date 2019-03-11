@@ -27,6 +27,7 @@ class UsagesMediator implements IUsagesMediator {
     private Button deleteUsageButton;
     private Button addToScenarioButton;
     private Button sendForResearchButton;
+    private Button assignClassificationButton;
     private final Map<String, Set<UsageWorkflowStepEnum>> usageWorkflowSteps;
 
     /**
@@ -47,6 +48,7 @@ class UsagesMediator implements IUsagesMediator {
         deleteUsageButton.setVisible(ForeignSecurityUtils.hasDeleteUsagePermission());
         addToScenarioButton.setVisible(ForeignSecurityUtils.hasCreateEditScenarioPermission());
         sendForResearchButton.setVisible(ForeignSecurityUtils.hasSendForWorkResearchPermission());
+        assignClassificationButton.setVisible(ForeignSecurityUtils.hasAssignClassificationPermission());
     }
 
     @Override
@@ -61,6 +63,8 @@ class UsagesMediator implements IUsagesMediator {
                 && usageSteps.contains(UsageWorkflowStepEnum.LOAD_RESEARCHED));
             sendForResearchButton.setVisible(ForeignSecurityUtils.hasSendForWorkResearchPermission()
                 && usageSteps.contains(UsageWorkflowStepEnum.RESEARCH));
+            assignClassificationButton.setVisible(ForeignSecurityUtils.hasAssignClassificationPermission()
+                && usageSteps.contains(UsageWorkflowStepEnum.CLASSIFICATION));
             deleteUsageButton.setVisible(ForeignSecurityUtils.hasDeleteUsagePermission());
             addToScenarioButton.setVisible(ForeignSecurityUtils.hasCreateEditScenarioPermission());
         } else {
@@ -73,57 +77,31 @@ class UsagesMediator implements IUsagesMediator {
         }
     }
 
-    /**
-     * Sets load usage batch button.
-     *
-     * @param loadUsageBatchButton load usage batch button
-     */
     void setLoadUsageBatchButton(Button loadUsageBatchButton) {
         this.loadUsageBatchButton = loadUsageBatchButton;
     }
 
-    /**
-     * Sets load fund pool button.
-     *
-     * @param loadFundPoolButton load fund pool button
-     */
     void setLoadFundPoolButton(Button loadFundPoolButton) {
         this.loadFundPoolButton = loadFundPoolButton;
     }
 
-    /**
-     * Sets load researched details button.
-     *
-     * @param loadResearchedUsagesButton load researched details button
-     */
     void setLoadResearchedUsagesButton(Button loadResearchedUsagesButton) {
         this.loadResearchedUsagesButton = loadResearchedUsagesButton;
     }
 
-    /**
-     * Sets delete usage button.
-     *
-     * @param deleteUsageButton delete usage button
-     */
     void setDeleteUsageButton(Button deleteUsageButton) {
         this.deleteUsageButton = deleteUsageButton;
     }
 
-    /**
-     * Sets add to scenario button.
-     *
-     * @param addToScenarioButton add to scenario button
-     */
     void setAddToScenarioButton(Button addToScenarioButton) {
         this.addToScenarioButton = addToScenarioButton;
     }
 
-    /**
-     * Sets send for research button.
-     *
-     * @param sendForResearchButton send for research button
-     */
     void setSendForResearchButton(Button sendForResearchButton) {
         this.sendForResearchButton = sendForResearchButton;
+    }
+
+    void setAssignClassificationButton(Button assignClassificationButton) {
+        this.assignClassificationButton = assignClassificationButton;
     }
 }

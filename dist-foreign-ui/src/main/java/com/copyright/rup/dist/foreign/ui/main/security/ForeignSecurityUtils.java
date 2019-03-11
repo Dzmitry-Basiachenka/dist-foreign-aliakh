@@ -70,6 +70,13 @@ public final class ForeignSecurityUtils {
     }
 
     /**
+     * @return {@code true} if user has permission to assigning works classifications.
+     */
+    public static boolean hasAssignClassificationPermission() {
+        return SecurityUtils.hasPermission("FDA_ASSIGN_CLASSIFICATION");
+    }
+
+    /**
      * @return {@code true} if user has permission to delete scenarios.
      */
     public static boolean hasDeleteScenarioPermission() {
