@@ -1,3 +1,11 @@
+4.1.40
+-
+* B-49462 Tech Debt: FDA: implement Swagger Codegen REST service to get usage statistic
+* B-49462 Tech Debt: FDA: update batch statistic REST to get statistic for usages that are ELIGIBLE or WORK_FOUND during loading of FAS batch
+* B-49462 Tech Debt: FDA: update dist-common to 38.1.+ version
+* CDP-685 FDA: Load Fund Pool: 'Server Connection Lost' appears during creation NTS batch
+* Revert "B-49462 Tech Debt: FDA: Add repository and service methods to retrieve usages by status and product family using paging"
+
 4.1.39
 -
 * B-49462 Tech Debt: FDA: Add repository and service methods to get usage ids by status and product family
