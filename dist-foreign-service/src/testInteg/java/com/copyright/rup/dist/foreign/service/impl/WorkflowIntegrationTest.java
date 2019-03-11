@@ -55,6 +55,7 @@ public class WorkflowIntegrationTest {
     private static final String RIGHTHOLDER_ID_4 = "624dcf73-a30f-4381-b6aa-c86d17198bd5";
     private static final String RIGHTHOLDER_ID_5 = "37338ed1-7083-45e2-a96b-5872a7de3a98";
     private static final String AUDIT_USAGE_WAS_SENT_TO_CRM = "Usage was sent to CRM";
+    private static final String AUDIT_UPLOADED_IN_BATCH = "Uploaded in 'Test_Batch' Batch";
 
     @Autowired
     private WorkflowIntegrationTestBuilder testBuilder;
@@ -108,7 +109,8 @@ public class WorkflowIntegrationTest {
                 Pair.of(UsageActionTypeEnum.PAID, "Usage has been paid according to information from the LM"),
                 Pair.of(UsageActionTypeEnum.ELIGIBLE, "Usage has become eligible"),
                 Pair.of(UsageActionTypeEnum.RH_FOUND, "Rightsholder account 1000024950 was found in RMS"),
-                Pair.of(UsageActionTypeEnum.LOADED, "Uploaded in 'Test_Batch' Batch")))
+                Pair.of(UsageActionTypeEnum.WORK_FOUND, "Usage was uploaded with Wr Wrk Inst"),
+                Pair.of(UsageActionTypeEnum.LOADED, AUDIT_UPLOADED_IN_BATCH)))
             .expectUsageAudit(USAGE_LM_DETAIL_ID_5, Arrays.asList(
                 Pair.of(UsageActionTypeEnum.ARCHIVED , AUDIT_USAGE_WAS_SENT_TO_CRM),
                 Pair.of(UsageActionTypeEnum.PAID , "Usage has been paid according to information from the LM"),
@@ -116,7 +118,7 @@ public class WorkflowIntegrationTest {
                 Pair.of(UsageActionTypeEnum.RH_FOUND , "Rightsholder account 2000139286 was found in RMS"),
                 Pair.of(UsageActionTypeEnum.WORK_FOUND , "Wr Wrk Inst 100012905 was found by standard number " +
                     "12345XX-12978"),
-                Pair.of(UsageActionTypeEnum.LOADED , "Uploaded in 'Test_Batch' Batch")))
+                Pair.of(UsageActionTypeEnum.LOADED , AUDIT_UPLOADED_IN_BATCH)))
             .expectUsageAudit(USAGE_LM_DETAIL_ID_6, Arrays.asList(
                 Pair.of(UsageActionTypeEnum.ARCHIVED, AUDIT_USAGE_WAS_SENT_TO_CRM),
                 Pair.of(UsageActionTypeEnum.PAID, "Usage has been created based on Post-Distribution process")))
@@ -153,6 +155,7 @@ public class WorkflowIntegrationTest {
         return Arrays.asList(
             Pair.of(UsageActionTypeEnum.ARCHIVED, AUDIT_USAGE_WAS_SENT_TO_CRM),
             Pair.of(UsageActionTypeEnum.PAID, "Usage has been paid according to information from the LM"),
-            Pair.of(UsageActionTypeEnum.LOADED, "Uploaded in 'Test_Batch' Batch"));
+            Pair.of(UsageActionTypeEnum.ELIGIBLE, "Usage was uploaded with Wr Wrk Inst and RH account number"),
+            Pair.of(UsageActionTypeEnum.LOADED, AUDIT_UPLOADED_IN_BATCH));
     }
 }

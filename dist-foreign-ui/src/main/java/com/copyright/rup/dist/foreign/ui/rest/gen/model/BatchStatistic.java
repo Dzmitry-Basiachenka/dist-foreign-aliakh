@@ -175,6 +175,30 @@ public class BatchStatistic   {
 
     private BigDecimal rhNotFoundPercent = null;
 
+    @JsonProperty("rhFoundCount")
+    
+
+
+
+
+    private Integer rhFoundCount = null;
+
+    @JsonProperty("rhFoundAmount")
+    
+@Valid
+
+
+
+    private BigDecimal rhFoundAmount = null;
+
+    @JsonProperty("rhFoundPercent")
+    
+@Valid
+
+
+
+    private BigDecimal rhFoundPercent = null;
+
     @JsonProperty("eligibleCount")
     
 
@@ -665,6 +689,72 @@ public class BatchStatistic   {
         }
     }
 
+    public BatchStatistic rhFoundCount(Integer rhFoundCount) {
+        this.rhFoundCount = rhFoundCount;
+        return this;
+    }
+
+     /**
+     * Get rhFoundCount
+     * @return rhFoundCount
+    **/
+    @ApiModelProperty(value = "")
+    public Integer getRhFoundCount() {
+        return rhFoundCount;
+    }
+
+    public void setRhFoundCount(Integer rhFoundCount) {
+        if(rhFoundCount == null) {
+            this.rhFoundCount = null;
+        } else {
+            this.rhFoundCount = rhFoundCount;
+        }
+    }
+
+    public BatchStatistic rhFoundAmount(BigDecimal rhFoundAmount) {
+        this.rhFoundAmount = rhFoundAmount;
+        return this;
+    }
+
+     /**
+     * Get rhFoundAmount
+     * @return rhFoundAmount
+    **/
+    @ApiModelProperty(value = "")
+    public BigDecimal getRhFoundAmount() {
+        return rhFoundAmount;
+    }
+
+    public void setRhFoundAmount(BigDecimal rhFoundAmount) {
+        if(rhFoundAmount == null) {
+            this.rhFoundAmount = null;
+        } else {
+            this.rhFoundAmount = rhFoundAmount;
+        }
+    }
+
+    public BatchStatistic rhFoundPercent(BigDecimal rhFoundPercent) {
+        this.rhFoundPercent = rhFoundPercent;
+        return this;
+    }
+
+     /**
+     * Get rhFoundPercent
+     * @return rhFoundPercent
+    **/
+    @ApiModelProperty(value = "")
+    public BigDecimal getRhFoundPercent() {
+        return rhFoundPercent;
+    }
+
+    public void setRhFoundPercent(BigDecimal rhFoundPercent) {
+        if(rhFoundPercent == null) {
+            this.rhFoundPercent = null;
+        } else {
+            this.rhFoundPercent = rhFoundPercent;
+        }
+    }
+
     public BatchStatistic eligibleCount(Integer eligibleCount) {
         this.eligibleCount = eligibleCount;
         return this;
@@ -892,6 +982,9 @@ public class BatchStatistic   {
                 Objects.equals(this.rhNotFoundCount, batchStatistic.rhNotFoundCount) &&
                 Objects.equals(this.rhNotFoundAmount, batchStatistic.rhNotFoundAmount) &&
                 Objects.equals(this.rhNotFoundPercent, batchStatistic.rhNotFoundPercent) &&
+                Objects.equals(this.rhFoundCount, batchStatistic.rhFoundCount) &&
+                Objects.equals(this.rhFoundAmount, batchStatistic.rhFoundAmount) &&
+                Objects.equals(this.rhFoundPercent, batchStatistic.rhFoundPercent) &&
                 Objects.equals(this.eligibleCount, batchStatistic.eligibleCount) &&
                 Objects.equals(this.eligibleAmount, batchStatistic.eligibleAmount) &&
                 Objects.equals(this.eligiblePercent, batchStatistic.eligiblePercent) &&
@@ -905,7 +998,7 @@ public class BatchStatistic   {
 
     @Override
     public int hashCode() {
-        return Objects.hash(batchName, date, loadedCount, loadedAmount, matchedCount, matchedAmount, matchedPercent, worksNotFoundCount, worksNotFoundAmount, worksNotFoundPercent, multipleMatchingCount, multipleMatchingAmount, multipleMatchingPercent, ntsWithDrawnCount, ntsWithDrawnAmount, ntsWithDrawnPercent, rhNotFoundCount, rhNotFoundAmount, rhNotFoundPercent, eligibleCount, eligibleAmount, eligiblePercent, sendForRaCount, sendForRaAmount, sendForRaPercent, paidCount, paidAmount, paidPercent);
+        return Objects.hash(batchName, date, loadedCount, loadedAmount, matchedCount, matchedAmount, matchedPercent, worksNotFoundCount, worksNotFoundAmount, worksNotFoundPercent, multipleMatchingCount, multipleMatchingAmount, multipleMatchingPercent, ntsWithDrawnCount, ntsWithDrawnAmount, ntsWithDrawnPercent, rhNotFoundCount, rhNotFoundAmount, rhNotFoundPercent, rhFoundCount, rhFoundAmount, rhFoundPercent, eligibleCount, eligibleAmount, eligiblePercent, sendForRaCount, sendForRaAmount, sendForRaPercent, paidCount, paidAmount, paidPercent);
     }
 
     @Override
@@ -932,6 +1025,9 @@ public class BatchStatistic   {
         sb.append("        rhNotFoundCount: ").append(toIndentedString(rhNotFoundCount)).append("\n");
         sb.append("        rhNotFoundAmount: ").append(toIndentedString(rhNotFoundAmount)).append("\n");
         sb.append("        rhNotFoundPercent: ").append(toIndentedString(rhNotFoundPercent)).append("\n");
+        sb.append("        rhFoundCount: ").append(toIndentedString(rhFoundCount)).append("\n");
+        sb.append("        rhFoundAmount: ").append(toIndentedString(rhFoundAmount)).append("\n");
+        sb.append("        rhFoundPercent: ").append(toIndentedString(rhFoundPercent)).append("\n");
         sb.append("        eligibleCount: ").append(toIndentedString(eligibleCount)).append("\n");
         sb.append("        eligibleAmount: ").append(toIndentedString(eligibleAmount)).append("\n");
         sb.append("        eligiblePercent: ").append(toIndentedString(eligiblePercent)).append("\n");

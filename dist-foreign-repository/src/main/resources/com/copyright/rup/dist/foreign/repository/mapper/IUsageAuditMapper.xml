@@ -24,8 +24,10 @@
         <result property="multipleMatchingAmount" column="multiple_matching_sum"/>
         <result property="rhNotFoundCount" column="rh_not_found_count"/>
         <result property="rhNotFoundAmount" column="rh_not_found_sum"/>
-        <result property="eligibleCount" column="rh_found_count"/>
-        <result property="eligibleAmount" column="rh_found_sum"/>
+        <result property="rhFoundCount" column="rh_found_count"/>
+        <result property="rhFoundAmount" column="rh_found_sum"/>
+        <result property="eligibleCount" column="eligible_count"/>
+        <result property="eligibleAmount" column="eligible_sum"/>
         <result property="sendForRaCount" column="send_for_ra_count"/>
         <result property="sendForRaAmount" column="send_for_ra_sum"/>
         <result property="paidCount" column="paid_count"/>
@@ -109,6 +111,8 @@
             round(sum(nested.rh_not_found_sum), 2) rh_not_found_sum,
             sum(nested.rh_found_count) rh_found_count,
             round(sum(nested.rh_found_sum), 2) rh_found_sum,
+            sum(nested.eligible_count) eligible_count,
+            round(sum(nested.eligible_sum), 2) eligible_sum,
             sum(nested.send_for_ra_count) send_for_ra_count,
             round(sum(nested.send_for_ra_sum), 2) send_for_ra_sum,
             sum(nested.paid_count) paid_count,
@@ -129,6 +133,8 @@
                 sum(nested.rh_found_count) rh_found_count,
                 case when (sum(nested.rh_not_found_count) != 0) then nested.amount else 0 end rh_not_found_sum,
                 sum(nested.rh_not_found_count) rh_not_found_count,
+                case when (sum(nested.eligible_count) != 0) then nested.amount else 0 end eligible_sum,
+                sum(nested.eligible_count) eligible_count,
                 case when (sum(nested.send_for_ra_count) != 0) then nested.amount else 0 end send_for_ra_sum,
                 sum(nested.send_for_ra_count) send_for_ra_count,
                 case when (sum(nested.paid_count) != 0) then nested.amount else 0 end paid_sum,
@@ -161,6 +167,7 @@
         case when (audit.action_type_ind = 'MULTIPLE_RESULTS' <include refid="actionTypeDateClause"/>) then count(1) else 0 end multiple_matching_count,
         case when (audit.action_type_ind = 'RH_FOUND' <include refid="actionTypeDateClause"/>) then count(1) else 0 end rh_found_count,
         case when (audit.action_type_ind = 'RH_NOT_FOUND' <include refid="actionTypeDateClause"/>) then count(1) else 0 end rh_not_found_count,
+        case when (audit.action_type_ind = 'ELIGIBLE' <include refid="actionTypeDateClause"/>) then count(1) else 0 end eligible_count,
         case when (audit.action_type_ind = 'SENT_FOR_RA' <include refid="actionTypeDateClause"/>) then count(1) else 0 end send_for_ra_count,
         case when (audit.action_type_ind = 'PAID' <include refid="actionTypeDateClause"/>) then count(1) else 0 end paid_count
     </sql>

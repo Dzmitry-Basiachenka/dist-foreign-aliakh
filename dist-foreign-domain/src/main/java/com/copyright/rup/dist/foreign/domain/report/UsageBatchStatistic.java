@@ -39,6 +39,9 @@ public class UsageBatchStatistic {
     private int rhNotFoundCount;
     private BigDecimal rhNotFoundAmount = DEFAULT_AMOUNT;
     private BigDecimal rhNotFoundPercent = DEFAULT_AMOUNT;
+    private int rhFoundCount;
+    private BigDecimal rhFoundAmount = DEFAULT_AMOUNT;
+    private BigDecimal rhFoundPercent = DEFAULT_AMOUNT;
     private int eligibleCount;
     private BigDecimal eligibleAmount = DEFAULT_AMOUNT;
     private BigDecimal eligiblePercent = DEFAULT_AMOUNT;
@@ -201,6 +204,30 @@ public class UsageBatchStatistic {
         this.rhNotFoundPercent = rhNotFoundPercent;
     }
 
+    public int getRhFoundCount() {
+        return rhFoundCount;
+    }
+
+    public void setRhFoundCount(int rhFoundCount) {
+        this.rhFoundCount = rhFoundCount;
+    }
+
+    public BigDecimal getRhFoundAmount() {
+        return rhFoundAmount;
+    }
+
+    public void setRhFoundAmount(BigDecimal rhFoundAmount) {
+        this.rhFoundAmount = rhFoundAmount;
+    }
+
+    public BigDecimal getRhFoundPercent() {
+        return rhFoundPercent;
+    }
+
+    public void setRhFoundPercent(BigDecimal rhFoundPercent) {
+        this.rhFoundPercent = rhFoundPercent;
+    }
+
     public int getEligibleCount() {
         return eligibleCount;
     }
@@ -299,12 +326,15 @@ public class UsageBatchStatistic {
             .append(multipleMatchingCount, that.multipleMatchingCount)
             .append(multipleMatchingAmount, that.multipleMatchingAmount)
             .append(multipleMatchingPercent, that.multipleMatchingPercent)
-            .append(eligibleCount, that.eligibleCount)
-            .append(eligibleAmount, that.eligibleAmount)
-            .append(eligiblePercent, that.eligiblePercent)
             .append(rhNotFoundCount, that.rhNotFoundCount)
             .append(rhNotFoundAmount, that.rhNotFoundAmount)
             .append(rhNotFoundPercent, that.rhNotFoundPercent)
+            .append(rhFoundCount, that.rhFoundCount)
+            .append(rhFoundAmount, that.rhFoundAmount)
+            .append(rhFoundPercent, that.rhFoundPercent)
+            .append(eligibleCount, that.eligibleCount)
+            .append(eligibleAmount, that.eligibleAmount)
+            .append(eligiblePercent, that.eligiblePercent)
             .append(sendForRaCount, that.sendForRaCount)
             .append(sendForRaAmount, that.sendForRaAmount)
             .append(sendForRaPercent, that.sendForRaPercent)
@@ -333,12 +363,15 @@ public class UsageBatchStatistic {
             .append(multipleMatchingCount)
             .append(multipleMatchingAmount)
             .append(multipleMatchingPercent)
-            .append(eligibleCount)
-            .append(eligibleAmount)
-            .append(eligiblePercent)
             .append(rhNotFoundCount)
             .append(rhNotFoundAmount)
             .append(rhNotFoundPercent)
+            .append(rhFoundCount)
+            .append(rhFoundAmount)
+            .append(rhFoundPercent)
+            .append(eligibleCount)
+            .append(eligibleAmount)
+            .append(eligiblePercent)
             .append(sendForRaCount)
             .append(sendForRaAmount)
             .append(sendForRaPercent)
@@ -367,12 +400,15 @@ public class UsageBatchStatistic {
             .append("multipleMatchingCount", multipleMatchingCount)
             .append("multipleMatchingAmount", multipleMatchingAmount)
             .append("multipleMatchingPercent", multipleMatchingPercent)
-            .append("eligibleCount", eligibleCount)
-            .append("eligibleAmount", eligibleAmount)
-            .append("eligiblePercent", eligiblePercent)
             .append("rhNotFoundCount", rhNotFoundCount)
             .append("rhNotFoundAmount", rhNotFoundAmount)
             .append("rhNotFoundPercent", rhNotFoundPercent)
+            .append("rhFoundCount", rhFoundCount)
+            .append("rhFoundAmount", rhFoundAmount)
+            .append("rhFoundPercent", rhFoundPercent)
+            .append("eligibleCount", eligibleCount)
+            .append("eligibleAmount", eligibleAmount)
+            .append("eligiblePercent", eligiblePercent)
             .append("sendForRaCount", sendForRaCount)
             .append("sendForRaAmount", sendForRaAmount)
             .append("sendForRaPercent", sendForRaPercent)

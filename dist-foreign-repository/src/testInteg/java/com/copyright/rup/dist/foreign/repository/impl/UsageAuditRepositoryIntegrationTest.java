@@ -102,8 +102,10 @@ public class UsageAuditRepositoryIntegrationTest {
         assertEquals(new BigDecimal("150.00"), statistic.getNtsWithDrawnAmount());
         assertEquals(1, statistic.getRhNotFoundCount());
         assertEquals(new BigDecimal("80.00"), statistic.getRhNotFoundAmount());
-        assertEquals(1, statistic.getEligibleCount());
-        assertEquals(new BigDecimal("110.00"), statistic.getEligibleAmount());
+        assertEquals(1, statistic.getRhFoundCount());
+        assertEquals(new BigDecimal("110.00"), statistic.getRhFoundAmount());
+        assertEquals(0, statistic.getEligibleCount());
+        assertEquals(new BigDecimal(AMOUNT_ZERO), statistic.getEligibleAmount());
         assertEquals(1, statistic.getSendForRaCount());
         assertEquals(new BigDecimal("80.00"), statistic.getSendForRaAmount());
         assertEquals(5, statistic.getPaidCount());
@@ -124,8 +126,10 @@ public class UsageAuditRepositoryIntegrationTest {
         assertEquals(new BigDecimal(AMOUNT_ZERO), statistic.getNtsWithDrawnAmount());
         assertEquals(0, statistic.getRhNotFoundCount());
         assertEquals(new BigDecimal(AMOUNT_ZERO), statistic.getRhNotFoundAmount());
-        assertEquals(5, statistic.getEligibleCount());
-        assertEquals(new BigDecimal("500.00"), statistic.getEligibleAmount());
+        assertEquals(5, statistic.getRhFoundCount());
+        assertEquals(new BigDecimal("500.00"), statistic.getRhFoundAmount());
+        assertEquals(4, statistic.getEligibleCount());
+        assertEquals(new BigDecimal("400.00"), statistic.getEligibleAmount());
         assertEquals(0, statistic.getSendForRaCount());
         assertEquals(new BigDecimal(AMOUNT_ZERO), statistic.getSendForRaAmount());
         assertEquals(0, statistic.getPaidCount());
