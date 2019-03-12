@@ -14,7 +14,6 @@ import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
-import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
@@ -28,6 +27,7 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.UsageWorkflowStepEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
@@ -42,7 +42,7 @@ import com.copyright.rup.dist.foreign.ui.usage.impl.CreateScenarioWindow.Scenari
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
-import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.vaadin.ui.HorizontalLayout;
 
@@ -61,6 +61,7 @@ import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 
@@ -383,13 +384,6 @@ public class UsagesControllerTest {
     }
 
     @Test
-    public void testIsSingleProductFamilySelected() {
-        testIsSingleProductFamilySelected(true, ImmutableSet.of("NTS"));
-        testIsSingleProductFamilySelected(false, Collections.EMPTY_SET);
-        testIsSingleProductFamilySelected(false, ImmutableSet.of("FAS", "FAS2"));
-    }
-
-    @Test
     public void testOnScenarioCreated() {
         IUsagesWidget usageWidgetMock = createMock(IUsagesWidget.class);
         ScenarioCreateEvent eventMock = createMock(ScenarioCreateEvent.class);
@@ -401,14 +395,14 @@ public class UsagesControllerTest {
         verify(usageWidgetMock, eventMock);
     }
 
-    private void testIsSingleProductFamilySelected(boolean expectedResult, Set<String> actualProductFamilies) {
-        usageFilter = new UsageFilter();
-        usageFilter.setProductFamilies(actualProductFamilies);
-        prepareGetAppliedFilterExpectations(usageFilter);
-        replay(filterController, filterWidgetMock);
-        assertEquals(expectedResult, controller.isSingleProductFamilySelected());
-        verify(filterController, filterWidgetMock);
-        reset(filterController, filterWidgetMock);
+    @Test
+    public void testGetUsageWorkflowStepsMap() {
+        Map<String, Set<UsageWorkflowStepEnum>> workflowSteps =
+            ImmutableMap.of("NTS", Collections.singleton(UsageWorkflowStepEnum.CLASSIFICATION));
+        expect(usageService.getUsageWorkflowStepsMap()).andReturn(workflowSteps).once();
+        replay(usageService);
+        assertEquals(workflowSteps, controller.getUsageWorkflowStepsMap());
+        verify(usageService);
     }
 
     private void prepareGetAppliedFilterExpectations(UsageFilter expectedUsageFilter) {

@@ -119,12 +119,11 @@ public class UsageFilter {
     }
 
     /**
-     * @return {@code true} if filter does not contain any criteria, otherwise {@code false}.
+     * @return {@code true} if filter does not contain any criteria except Product Family, otherwise {@code false}.
      */
     public boolean isEmpty() {
         return CollectionUtils.isEmpty(rhAccountNumbers)
             && CollectionUtils.isEmpty(usageBatchesIds)
-            && CollectionUtils.isEmpty(productFamilies)
             && null == paymentDate
             && null == fiscalYear
             && null == usageStatus;

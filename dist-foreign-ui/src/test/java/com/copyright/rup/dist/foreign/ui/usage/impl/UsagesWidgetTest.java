@@ -139,7 +139,7 @@ public class UsagesWidgetTest {
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button loadResearchedUsagesButton =
             (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
-                .getComponent(0)).getComponent(1);
+                .getComponent(0)).getComponent(3);
         assertTrue(loadResearchedUsagesButton.isDisableOnClick());
         Windows.showModalWindow(anyObject(ResearchedUsagesUploadWindow.class));
         expectLastCall().once();
@@ -159,7 +159,7 @@ public class UsagesWidgetTest {
         Whitebox.setInternalState(usagesWidget, grid);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
-            .getComponent(0)).getComponent(3);
+            .getComponent(0)).getComponent(4);
         assertTrue(addToScenarioButton.isDisableOnClick());
         Windows.showNotificationWindow("Scenario cannot be created. There are no usages to include into scenario");
         expectLastCall().once();
@@ -180,34 +180,11 @@ public class UsagesWidgetTest {
         Whitebox.setInternalState(usagesWidget, grid);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
-            .getComponent(0)).getComponent(3);
+            .getComponent(0)).getComponent(4);
         assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.getSize()).andReturn(1).once();
         expect(controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)).andReturn(false).once();
         Windows.showNotificationWindow("Only usages in ELIGIBLE status can be added to scenario");
-        expectLastCall().once();
-        replay(controller, clickEvent, Windows.class);
-        Collection<?> listeners = addToScenarioButton.getListeners(ClickEvent.class);
-        assertEquals(2, listeners.size());
-        ClickListener clickListener = (ClickListener) listeners.iterator().next();
-        clickListener.buttonClick(clickEvent);
-        verify(controller, clickEvent, Windows.class);
-    }
-
-    @Test
-    @SuppressWarnings("unchecked")
-    public void testAddToScenarioButtonClickListener() {
-        mockStatic(Windows.class);
-        Grid grid = new Grid();
-        Whitebox.setInternalState(usagesWidget, grid);
-        ClickEvent clickEvent = createMock(ClickEvent.class);
-        Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
-            .getComponent(0)).getComponent(3);
-        assertTrue(addToScenarioButton.isDisableOnClick());
-        expect(controller.getSize()).andReturn(1).once();
-        expect(controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
-        expect(controller.isSingleProductFamilySelected()).andReturn(false).once();
-        Windows.showNotificationWindow("Scenario cannot be created. Select one product family at a time");
         expectLastCall().once();
         replay(controller, clickEvent, Windows.class);
         Collection<?> listeners = addToScenarioButton.getListeners(ClickEvent.class);
@@ -224,11 +201,10 @@ public class UsagesWidgetTest {
         Whitebox.setInternalState(usagesWidget, grid);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
-            .getComponent(0)).getComponent(3);
+            .getComponent(0)).getComponent(4);
         assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.getSize()).andReturn(1).once();
         expect(controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
-        expect(controller.isSingleProductFamilySelected()).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.singletonList(1000000001L)).once();
         Windows.showNotificationWindow("Scenario cannot be created. The following rightsholder(s) are absent " +
             "in PRM: <i><b>[1000000001]</b></i>");
@@ -248,11 +224,10 @@ public class UsagesWidgetTest {
         Whitebox.setInternalState(usagesWidget, grid);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
-            .getComponent(0)).getComponent(3);
+            .getComponent(0)).getComponent(4);
         assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.getSize()).andReturn(1).once();
         expect(controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
-        expect(controller.isSingleProductFamilySelected()).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
         expect(controller.getSelectedProductFamily()).andReturn("FAS").once();
         expect(controller.getScenarioService()).andReturn(null).once();
@@ -273,7 +248,7 @@ public class UsagesWidgetTest {
         Whitebox.setInternalState(usagesWidget, grid);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button sendForResearchButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
-            .getComponent(0)).getComponent(6);
+            .getComponent(0)).getComponent(2);
         expect(controller.isValidUsagesState(UsageStatusEnum.WORK_NOT_FOUND)).andReturn(false).once();
         Windows.showNotificationWindow("Only usages in WORK_NOT_FOUND status can be sent for research");
         expectLastCall().once();
@@ -290,7 +265,7 @@ public class UsagesWidgetTest {
         mockStatic(Windows.class);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button deleteButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
-            .getComponent(0)).getComponent(5);
+            .getComponent(0)).getComponent(6);
         assertTrue(deleteButton.isDisableOnClick());
         expect(controller.getUsageBatches()).andReturn(Collections.emptyList()).once();
         Windows.showModalWindow(anyObject(DeleteUsageBatchWindow.class));
@@ -306,18 +281,24 @@ public class UsagesWidgetTest {
     @Test
     public void testRefresh() {
         DataProvider dataProvider = createMock(DataProvider.class);
+        UsagesMediator mediator = createMock(UsagesMediator.class);
         Whitebox.setInternalState(usagesWidget, dataProvider);
+        Whitebox.setInternalState(usagesWidget, mediator);
+        expect(controller.getSelectedProductFamily()).andReturn("NTS").once();
+        mediator.onProductFamilyChanged("NTS");
+        expectLastCall().once();
         dataProvider.refreshAll();
         expectLastCall().once();
-        replay(dataProvider);
+        replay(dataProvider, controller, mediator);
         usagesWidget.refresh();
-        verify(dataProvider);
+        verify(dataProvider, controller, mediator);
     }
 
     @Test
     public void testInitMediator() throws Exception {
         UsagesMediator mediator = createMock(UsagesMediator.class);
-        expectNew(UsagesMediator.class).andReturn(mediator).once();
+        expect(controller.getUsageWorkflowStepsMap()).andReturn(Collections.emptyMap());
+        expectNew(UsagesMediator.class, Collections.emptyMap()).andReturn(mediator).once();
         mediator.setDeleteUsageButton(anyObject(Button.class));
         expectLastCall().once();
         mediator.setLoadFundPoolButton(anyObject(Button.class));
@@ -330,9 +311,9 @@ public class UsagesWidgetTest {
         expectLastCall().once();
         mediator.setSendForResearchButton(anyObject(Button.class));
         expectLastCall().once();
-        replay(UsagesMediator.class, mediator);
+        replay(UsagesMediator.class, mediator, controller);
         assertNotNull(usagesWidget.initMediator());
-        verify(UsagesMediator.class, mediator);
+        verify(UsagesMediator.class, mediator, controller);
     }
 
     private void verifyButtonsLayout(HorizontalLayout layout) {
@@ -341,16 +322,16 @@ public class UsagesWidgetTest {
         assertEquals(7, layout.getComponentCount());
         assertEquals("Load Usage Batch", layout.getComponent(0).getCaption());
         assertEquals("Load Fund Pool", layout.getComponent(1).getCaption());
-        assertEquals("Load Researched Details", layout.getComponent(2).getCaption());
-        assertEquals("Add To Scenario", layout.getComponent(3).getCaption());
-        Component component = layout.getComponent(4);
+        assertEquals("Send for Research", layout.getComponent(2).getCaption());
+        assertEquals("Load Researched Details", layout.getComponent(3).getCaption());
+        assertEquals("Add To Scenario", layout.getComponent(4).getCaption());
+        Component component = layout.getComponent(5);
         assertEquals("Export", component.getCaption());
         Collection<Extension> extensions = component.getExtensions();
         assertTrue(CollectionUtils.isNotEmpty(extensions));
         assertEquals(1, extensions.size());
         assertTrue(extensions.iterator().next() instanceof OnDemandFileDownloader);
-        assertEquals("Delete Usage Batch", layout.getComponent(5).getCaption());
-        assertEquals("Send for Research", layout.getComponent(6).getCaption());
+        assertEquals("Delete Usage Batch", layout.getComponent(6).getCaption());
     }
 
     private void verifyGrid(Grid grid) {

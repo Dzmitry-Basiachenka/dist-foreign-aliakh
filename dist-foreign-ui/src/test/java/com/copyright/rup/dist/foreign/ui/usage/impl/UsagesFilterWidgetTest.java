@@ -73,6 +73,7 @@ public class UsagesFilterWidgetTest {
         widget = new UsagesFilterWidget();
         widget.setController(usagesFilterController);
         expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
+        expect(usagesFilterController.getProductFamilies()).andReturn(Collections.singletonList("FAS")).once();
     }
 
     @Test
@@ -151,8 +152,8 @@ public class UsagesFilterWidgetTest {
         widget.clearFilter();
         assertTrue(widget.getFilter().getRhAccountNumbers().isEmpty());
         assertTrue(widget.getAppliedFilter().getRhAccountNumbers().isEmpty());
-        assertTrue(widget.getFilter().getProductFamilies().isEmpty());
-        assertTrue(widget.getAppliedFilter().getProductFamilies().isEmpty());
+        assertFalse(widget.getFilter().getProductFamilies().isEmpty());
+        assertFalse(widget.getAppliedFilter().getProductFamilies().isEmpty());
         assertFalse(applyButton.isEnabled());
         LocalDateWidget localDateWidget =
             Whitebox.getInternalState(widget, "paymentDateWidget", UsagesFilterWidget.class);
@@ -198,8 +199,8 @@ public class UsagesFilterWidgetTest {
         assertTrue(layout instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) layout;
         assertEquals(7, verticalLayout.getComponentCount());
-        verifyFiltersLabel(verticalLayout.getComponent(0));
-        verifyItemsFilterLayout(verticalLayout.getComponent(1), "Product Families");
+        verifyProductFamilyComboboxComponent(verticalLayout.getComponent(0), Collections.singletonList("FAS"));
+        verifyFiltersLabel(verticalLayout.getComponent(1));
         verifyItemsFilterLayout(verticalLayout.getComponent(2), "Batches");
         verifyItemsFilterLayout(verticalLayout.getComponent(3), "RROs");
         verifyDateWidget(verticalLayout.getComponent(4));
@@ -251,6 +252,14 @@ public class UsagesFilterWidgetTest {
         assertEquals(100, comboBox.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, comboBox.getWidthUnits());
         assertEquals(values, ((ListDataProvider<Integer>) comboBox.getDataProvider()).getItems());
+    }
+
+    private void verifyProductFamilyComboboxComponent(Component component, List<String> values) {
+        assertTrue(component instanceof ComboBox);
+        ComboBox comboBox = (ComboBox) component;
+        assertEquals("Product Family", comboBox.getCaption());
+        assertEquals(Unit.PERCENTAGE, comboBox.getWidthUnits());
+        assertEquals(values, ((ListDataProvider<String>) comboBox.getDataProvider()).getItems());
     }
 
     private void verifyDateWidget(Component component) {
