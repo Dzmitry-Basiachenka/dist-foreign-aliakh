@@ -82,6 +82,7 @@ public class UsagesControllerTest {
     private static final String USAGE_BATCH_ID = RupPersistUtils.generateUuid();
     private static final Long RRO_ACCOUNT_NUMBER = 12345678L;
     private static final String USER_NAME = "Test User Name";
+    private static final String BATCH_NAME = "Test Batch Name";
     private UsagesController controller;
     private UsageService usageService;
     private IUsagesFilterController filterController;
@@ -297,6 +298,7 @@ public class UsagesControllerTest {
     public void testLoadNtsBatch() {
         mockStatic(RupContextUtils.class);
         UsageBatch usageBatch = new UsageBatch();
+        usageBatch.setName(BATCH_NAME);
         Usage usage1 = new Usage();
         usage1.setId(RupPersistUtils.generateUuid());
         Usage usage2 = new Usage();
@@ -304,7 +306,7 @@ public class UsagesControllerTest {
         List<String> ntsUsageIds = Arrays.asList(usage1.getId(), usage2.getId());
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         expect(usageBatchService.insertNtsBatch(usageBatch, USER_NAME)).andReturn(ntsUsageIds).once();
-        usageBatchService.getAndSendForGettingRights(ntsUsageIds);
+        usageBatchService.getAndSendForGettingRights(ntsUsageIds, BATCH_NAME, USER_NAME);
         expectLastCall().once();
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         filterWidgetMock.clearFilter();

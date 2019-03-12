@@ -212,7 +212,7 @@ public class UsageBatchServiceTest {
         chainExecutor.execute(usages, ChainProcessorTypeEnum.RIGHTS);
         expectLastCall().once();
         replay(chainExecutor, executorService, usageRepository);
-        usageBatchService.getAndSendForGettingRights(usageIds);
+        usageBatchService.getAndSendForGettingRights(usageIds, BATCH_NAME, USER_NAME);
         assertNotNull(captureRunnable);
         Runnable runnable = captureRunnable.getValue();
         runnable.run();

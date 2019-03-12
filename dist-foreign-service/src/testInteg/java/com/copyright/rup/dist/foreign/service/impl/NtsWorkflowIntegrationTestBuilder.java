@@ -149,8 +149,9 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
         }
 
         private void loadNtsBatch() {
-            List<String> ntsUsageIds = usageBatchService.insertNtsBatch(usageBatch, RupContextUtils.getUserName());
-            usageBatchService.getAndSendForGettingRights(ntsUsageIds);
+            String userName = RupContextUtils.getUserName();
+            List<String> ntsUsageIds = usageBatchService.insertNtsBatch(usageBatch, userName);
+            usageBatchService.getAndSendForGettingRights(ntsUsageIds, usageBatch.getName(), userName);
         }
 
         private void assertBatch() {
