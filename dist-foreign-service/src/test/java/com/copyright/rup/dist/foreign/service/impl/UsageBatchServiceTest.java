@@ -25,6 +25,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
+import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -199,13 +200,22 @@ public class UsageBatchServiceTest {
     @Test
     public void testGetAndSendForGettingRights() {
         List<String> usageIds = Arrays.asList(RupPersistUtils.generateUuid(), RupPersistUtils.generateUuid());
-        expect(usageRepository.findByIds(usageIds)).andReturn(Arrays.asList(new Usage(), new Usage())).once();
+        Usage usage1 = new Usage();
+        usage1.setStatus(UsageStatusEnum.WORK_FOUND);
+        Usage usage2 = new Usage();
+        usage2.setStatus(UsageStatusEnum.WORK_FOUND);
+        List<Usage> usages = Arrays.asList(usage1, usage2);
+        expect(usageRepository.findByIds(usageIds)).andReturn(usages).once();
         Capture<Runnable> captureRunnable = new Capture<>();
         executorService.execute(capture(captureRunnable));
+        expectLastCall().once();
+        chainExecutor.execute(usages, ChainProcessorTypeEnum.RIGHTS);
         expectLastCall().once();
         replay(chainExecutor, executorService, usageRepository);
         usageBatchService.getAndSendForGettingRights(usageIds);
         assertNotNull(captureRunnable);
+        Runnable runnable = captureRunnable.getValue();
+        runnable.run();
         verify(chainExecutor, executorService, usageRepository);
     }
 

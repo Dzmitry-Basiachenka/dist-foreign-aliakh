@@ -1,11 +1,14 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
+import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
+import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
+import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -41,6 +44,7 @@ import com.vaadin.shared.data.sort.SortDirection;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -71,6 +75,8 @@ import java.util.concurrent.Executors;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class UsagesController extends CommonController<IUsagesWidget> implements IUsagesController {
+
+    private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired
     private IUsageBatchService usageBatchService;
@@ -143,7 +149,11 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
 
     @Override
     public void loadNtsBatch(UsageBatch usageBatch) {
-        List<String> ntsUsageIds = usageBatchService.insertNtsBatch(usageBatch);
+        String userName = RupContextUtils.getUserName();
+        LOGGER.info("Insert NTS batch. Started. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
+        List<String> ntsUsageIds = usageBatchService.insertNtsBatch(usageBatch, userName);
+        LOGGER.info("Insert NTS batch. Finished. UsageBatchName={}, UserName={}, UsagesCount={}",
+            usageBatch.getName(), userName, LogUtils.size(ntsUsageIds));
         usageBatchService.getAndSendForGettingRights(ntsUsageIds);
         filterController.getWidget().clearFilter();
     }
