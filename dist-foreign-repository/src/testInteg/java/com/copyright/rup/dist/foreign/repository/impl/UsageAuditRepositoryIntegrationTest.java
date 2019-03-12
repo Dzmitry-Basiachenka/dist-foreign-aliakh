@@ -8,7 +8,7 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.domain.report.UsageBatchStatistic;
+import com.copyright.rup.dist.foreign.domain.report.BatchStatistic;
 import com.copyright.rup.dist.foreign.domain.report.UsageStatistic;
 import com.copyright.rup.dist.foreign.repository.api.IUsageAuditRepository;
 
@@ -23,6 +23,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -89,9 +90,57 @@ public class UsageAuditRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindFasBatchStatistic() {
-        UsageBatchStatistic statistic = usageAuditRepository.findBatchStatistic("FAS batch statistic", null);
+    public void testFindFasBatchStatisticByBatchName() {
+        List<BatchStatistic> statistics = usageAuditRepository.findBatchesStatistic("FAS batch statistic", null,
+            null, null);
+        assertNotNull(statistics);
+        assertEquals(1, statistics.size());
+        BatchStatistic statistic = statistics.get(0);
+        assertFasBatch(statistic);
+    }
+
+    @Test
+    public void testFindNtsBatchStatisticByBatchName() {
+        List<BatchStatistic> statistics = usageAuditRepository.findBatchesStatistic("NTS batch statistic", null,
+            null, null);
+        assertNotNull(statistics);
+        assertEquals(1, statistics.size());
+        BatchStatistic statistic = statistics.get(0);
+        assertNtsBatch(statistic);
+    }
+
+    @Test
+    public void testFindBatchesStatisticByDateFromDateTo() {
+        List<BatchStatistic> statistics = usageAuditRepository.findBatchesStatistic(null, null,
+            LocalDate.of(1950, 1, 1), LocalDate.of(2050, 1, 1));
+        assertNotNull(statistics);
+        assertEquals(5, statistics.size());
+        assertFasBatch(statistics.get(1));
+        assertNtsBatch(statistics.get(2));
+    }
+
+    @Test
+    public void testFindUsageStatistic() {
+        UsageStatistic statistic = usageAuditRepository.getUsageStatistic(USAGE_UID_2);
+        assertEquals(USAGE_UID_2, statistic.getUsageId());
+        assertEquals(UsageStatusEnum.LOCKED, statistic.getStatus());
+        assertEquals(0, statistic.getMatchingMs());
+        assertEquals(1121, statistic.getRightsMs());
+        assertEquals(1075, statistic.getEligibilityMs());
+    }
+
+    private UsageAuditItem buildUsageAuditItem() {
+        UsageAuditItem usageAuditItem = new UsageAuditItem();
+        usageAuditItem.setId(RupPersistUtils.generateUuid());
+        usageAuditItem.setUsageId(USAGE_UID);
+        usageAuditItem.setActionType(UsageActionTypeEnum.WORK_NOT_FOUND);
+        usageAuditItem.setActionReason("Usage has no standard number and title");
+        return usageAuditItem;
+    }
+
+    private void assertFasBatch(BatchStatistic statistic) {
         assertNotNull(statistic);
+        assertEquals("FAS batch statistic", statistic.getBatchName());
         assertEquals(10, statistic.getTotalCount());
         assertEquals(10, statistic.getLoadedCount());
         assertEquals(new BigDecimal("995.00"), statistic.getLoadedAmount());
@@ -115,10 +164,9 @@ public class UsageAuditRepositoryIntegrationTest {
         assertEquals(new BigDecimal("500.00"), statistic.getPaidAmount());
     }
 
-    @Test
-    public void testFindNtsBatchStatistic() {
-        UsageBatchStatistic statistic = usageAuditRepository.findBatchStatistic("NTS batch statistic", null);
+    private void assertNtsBatch(BatchStatistic statistic) {
         assertNotNull(statistic);
+        assertEquals("NTS batch statistic", statistic.getBatchName());
         assertEquals(10, statistic.getTotalCount());
         assertEquals(0, statistic.getLoadedCount());
         assertEquals(new BigDecimal(AMOUNT_ZERO), statistic.getLoadedAmount());
@@ -140,24 +188,5 @@ public class UsageAuditRepositoryIntegrationTest {
         assertEquals(new BigDecimal(AMOUNT_ZERO), statistic.getSendForRaAmount());
         assertEquals(0, statistic.getPaidCount());
         assertEquals(new BigDecimal(AMOUNT_ZERO), statistic.getPaidAmount());
-    }
-
-    @Test
-    public void testGetUsageStatistic() {
-        UsageStatistic statistic = usageAuditRepository.getUsageStatistic(USAGE_UID_2);
-        assertEquals(USAGE_UID_2, statistic.getUsageId());
-        assertEquals(UsageStatusEnum.LOCKED, statistic.getStatus());
-        assertEquals(0, statistic.getMatchingMs());
-        assertEquals(1121, statistic.getRightsMs());
-        assertEquals(1075, statistic.getEligibilityMs());
-    }
-
-    private UsageAuditItem buildUsageAuditItem() {
-        UsageAuditItem usageAuditItem = new UsageAuditItem();
-        usageAuditItem.setId(RupPersistUtils.generateUuid());
-        usageAuditItem.setUsageId(USAGE_UID);
-        usageAuditItem.setActionType(UsageActionTypeEnum.WORK_NOT_FOUND);
-        usageAuditItem.setActionReason("Usage has no standard number and title");
-        return usageAuditItem;
     }
 }

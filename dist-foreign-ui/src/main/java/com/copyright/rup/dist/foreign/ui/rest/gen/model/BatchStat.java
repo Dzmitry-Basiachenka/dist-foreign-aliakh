@@ -22,7 +22,7 @@ import javax.validation.constraints.*;
 @ApiModel(description = "Batch statistic")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 
-public class BatchStatistic   {
+public class BatchStat   {
     @JsonProperty("batchName")
     
 
@@ -30,14 +30,6 @@ public class BatchStatistic   {
 
 
     private String batchName = null;
-
-    @JsonProperty("date")
-    
-
-
-
-
-    private String date = null;
 
     @JsonProperty("totalCount")
     
@@ -311,7 +303,7 @@ public class BatchStatistic   {
 
     private BigDecimal paidPercent = null;
 
-    public BatchStatistic batchName(String batchName) {
+    public BatchStat batchName(String batchName) {
         this.batchName = batchName;
         return this;
     }
@@ -333,29 +325,7 @@ public class BatchStatistic   {
         }
     }
 
-    public BatchStatistic date(String date) {
-        this.date = date;
-        return this;
-    }
-
-     /**
-     * Get date
-     * @return date
-    **/
-    @ApiModelProperty(value = "")
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        if(date == null) {
-            this.date = null;
-        } else {
-            this.date = date;
-        }
-    }
-
-    public BatchStatistic totalCount(Integer totalCount) {
+    public BatchStat totalCount(Integer totalCount) {
         this.totalCount = totalCount;
         return this;
     }
@@ -377,7 +347,7 @@ public class BatchStatistic   {
         }
     }
 
-    public BatchStatistic loadedCount(Integer loadedCount) {
+    public BatchStat loadedCount(Integer loadedCount) {
         this.loadedCount = loadedCount;
         return this;
     }
@@ -399,7 +369,7 @@ public class BatchStatistic   {
         }
     }
 
-    public BatchStatistic loadedAmount(BigDecimal loadedAmount) {
+    public BatchStat loadedAmount(BigDecimal loadedAmount) {
         this.loadedAmount = loadedAmount;
         return this;
     }
@@ -421,7 +391,7 @@ public class BatchStatistic   {
         }
     }
 
-    public BatchStatistic loadedPercent(BigDecimal loadedPercent) {
+    public BatchStat loadedPercent(BigDecimal loadedPercent) {
         this.loadedPercent = loadedPercent;
         return this;
     }
@@ -443,7 +413,7 @@ public class BatchStatistic   {
         }
     }
 
-    public BatchStatistic createdCount(Integer createdCount) {
+    public BatchStat createdCount(Integer createdCount) {
         this.createdCount = createdCount;
         return this;
     }
@@ -465,7 +435,7 @@ public class BatchStatistic   {
         }
     }
 
-    public BatchStatistic createdAmount(BigDecimal createdAmount) {
+    public BatchStat createdAmount(BigDecimal createdAmount) {
         this.createdAmount = createdAmount;
         return this;
     }
@@ -487,7 +457,7 @@ public class BatchStatistic   {
         }
     }
 
-    public BatchStatistic createdPercent(BigDecimal createdPercent) {
+    public BatchStat createdPercent(BigDecimal createdPercent) {
         this.createdPercent = createdPercent;
         return this;
     }
@@ -509,7 +479,7 @@ public class BatchStatistic   {
         }
     }
 
-    public BatchStatistic matchedCount(Integer matchedCount) {
+    public BatchStat matchedCount(Integer matchedCount) {
         this.matchedCount = matchedCount;
         return this;
     }
@@ -531,7 +501,7 @@ public class BatchStatistic   {
         }
     }
 
-    public BatchStatistic matchedAmount(BigDecimal matchedAmount) {
+    public BatchStat matchedAmount(BigDecimal matchedAmount) {
         this.matchedAmount = matchedAmount;
         return this;
     }
@@ -553,7 +523,7 @@ public class BatchStatistic   {
         }
     }
 
-    public BatchStatistic matchedPercent(BigDecimal matchedPercent) {
+    public BatchStat matchedPercent(BigDecimal matchedPercent) {
         this.matchedPercent = matchedPercent;
         return this;
     }
@@ -575,7 +545,7 @@ public class BatchStatistic   {
         }
     }
 
-    public BatchStatistic worksNotFoundCount(Integer worksNotFoundCount) {
+    public BatchStat worksNotFoundCount(Integer worksNotFoundCount) {
         this.worksNotFoundCount = worksNotFoundCount;
         return this;
     }
@@ -597,7 +567,7 @@ public class BatchStatistic   {
         }
     }
 
-    public BatchStatistic worksNotFoundAmount(BigDecimal worksNotFoundAmount) {
+    public BatchStat worksNotFoundAmount(BigDecimal worksNotFoundAmount) {
         this.worksNotFoundAmount = worksNotFoundAmount;
         return this;
     }
@@ -619,7 +589,7 @@ public class BatchStatistic   {
         }
     }
 
-    public BatchStatistic worksNotFoundPercent(BigDecimal worksNotFoundPercent) {
+    public BatchStat worksNotFoundPercent(BigDecimal worksNotFoundPercent) {
         this.worksNotFoundPercent = worksNotFoundPercent;
         return this;
     }
@@ -641,7 +611,7 @@ public class BatchStatistic   {
         }
     }
 
-    public BatchStatistic multipleMatchingCount(Integer multipleMatchingCount) {
+    public BatchStat multipleMatchingCount(Integer multipleMatchingCount) {
         this.multipleMatchingCount = multipleMatchingCount;
         return this;
     }
@@ -663,7 +633,7 @@ public class BatchStatistic   {
         }
     }
 
-    public BatchStatistic multipleMatchingAmount(BigDecimal multipleMatchingAmount) {
+    public BatchStat multipleMatchingAmount(BigDecimal multipleMatchingAmount) {
         this.multipleMatchingAmount = multipleMatchingAmount;
         return this;
     }
@@ -685,7 +655,7 @@ public class BatchStatistic   {
         }
     }
 
-    public BatchStatistic multipleMatchingPercent(BigDecimal multipleMatchingPercent) {
+    public BatchStat multipleMatchingPercent(BigDecimal multipleMatchingPercent) {
         this.multipleMatchingPercent = multipleMatchingPercent;
         return this;
     }
@@ -707,7 +677,7 @@ public class BatchStatistic   {
         }
     }
 
-    public BatchStatistic ntsWithDrawnCount(Integer ntsWithDrawnCount) {
+    public BatchStat ntsWithDrawnCount(Integer ntsWithDrawnCount) {
         this.ntsWithDrawnCount = ntsWithDrawnCount;
         return this;
     }
@@ -729,7 +699,7 @@ public class BatchStatistic   {
         }
     }
 
-    public BatchStatistic ntsWithDrawnAmount(BigDecimal ntsWithDrawnAmount) {
+    public BatchStat ntsWithDrawnAmount(BigDecimal ntsWithDrawnAmount) {
         this.ntsWithDrawnAmount = ntsWithDrawnAmount;
         return this;
     }
@@ -751,7 +721,7 @@ public class BatchStatistic   {
         }
     }
 
-    public BatchStatistic ntsWithDrawnPercent(BigDecimal ntsWithDrawnPercent) {
+    public BatchStat ntsWithDrawnPercent(BigDecimal ntsWithDrawnPercent) {
         this.ntsWithDrawnPercent = ntsWithDrawnPercent;
         return this;
     }
@@ -773,7 +743,7 @@ public class BatchStatistic   {
         }
     }
 
-    public BatchStatistic rhNotFoundCount(Integer rhNotFoundCount) {
+    public BatchStat rhNotFoundCount(Integer rhNotFoundCount) {
         this.rhNotFoundCount = rhNotFoundCount;
         return this;
     }
@@ -795,7 +765,7 @@ public class BatchStatistic   {
         }
     }
 
-    public BatchStatistic rhNotFoundAmount(BigDecimal rhNotFoundAmount) {
+    public BatchStat rhNotFoundAmount(BigDecimal rhNotFoundAmount) {
         this.rhNotFoundAmount = rhNotFoundAmount;
         return this;
     }
@@ -817,7 +787,7 @@ public class BatchStatistic   {
         }
     }
 
-    public BatchStatistic rhNotFoundPercent(BigDecimal rhNotFoundPercent) {
+    public BatchStat rhNotFoundPercent(BigDecimal rhNotFoundPercent) {
         this.rhNotFoundPercent = rhNotFoundPercent;
         return this;
     }
@@ -839,7 +809,7 @@ public class BatchStatistic   {
         }
     }
 
-    public BatchStatistic rhFoundCount(Integer rhFoundCount) {
+    public BatchStat rhFoundCount(Integer rhFoundCount) {
         this.rhFoundCount = rhFoundCount;
         return this;
     }
@@ -861,7 +831,7 @@ public class BatchStatistic   {
         }
     }
 
-    public BatchStatistic rhFoundAmount(BigDecimal rhFoundAmount) {
+    public BatchStat rhFoundAmount(BigDecimal rhFoundAmount) {
         this.rhFoundAmount = rhFoundAmount;
         return this;
     }
@@ -883,7 +853,7 @@ public class BatchStatistic   {
         }
     }
 
-    public BatchStatistic rhFoundPercent(BigDecimal rhFoundPercent) {
+    public BatchStat rhFoundPercent(BigDecimal rhFoundPercent) {
         this.rhFoundPercent = rhFoundPercent;
         return this;
     }
@@ -905,7 +875,7 @@ public class BatchStatistic   {
         }
     }
 
-    public BatchStatistic eligibleCount(Integer eligibleCount) {
+    public BatchStat eligibleCount(Integer eligibleCount) {
         this.eligibleCount = eligibleCount;
         return this;
     }
@@ -927,7 +897,7 @@ public class BatchStatistic   {
         }
     }
 
-    public BatchStatistic eligibleAmount(BigDecimal eligibleAmount) {
+    public BatchStat eligibleAmount(BigDecimal eligibleAmount) {
         this.eligibleAmount = eligibleAmount;
         return this;
     }
@@ -949,7 +919,7 @@ public class BatchStatistic   {
         }
     }
 
-    public BatchStatistic eligiblePercent(BigDecimal eligiblePercent) {
+    public BatchStat eligiblePercent(BigDecimal eligiblePercent) {
         this.eligiblePercent = eligiblePercent;
         return this;
     }
@@ -971,7 +941,7 @@ public class BatchStatistic   {
         }
     }
 
-    public BatchStatistic sendForRaCount(Integer sendForRaCount) {
+    public BatchStat sendForRaCount(Integer sendForRaCount) {
         this.sendForRaCount = sendForRaCount;
         return this;
     }
@@ -993,7 +963,7 @@ public class BatchStatistic   {
         }
     }
 
-    public BatchStatistic sendForRaAmount(BigDecimal sendForRaAmount) {
+    public BatchStat sendForRaAmount(BigDecimal sendForRaAmount) {
         this.sendForRaAmount = sendForRaAmount;
         return this;
     }
@@ -1015,7 +985,7 @@ public class BatchStatistic   {
         }
     }
 
-    public BatchStatistic sendForRaPercent(BigDecimal sendForRaPercent) {
+    public BatchStat sendForRaPercent(BigDecimal sendForRaPercent) {
         this.sendForRaPercent = sendForRaPercent;
         return this;
     }
@@ -1037,7 +1007,7 @@ public class BatchStatistic   {
         }
     }
 
-    public BatchStatistic paidCount(Integer paidCount) {
+    public BatchStat paidCount(Integer paidCount) {
         this.paidCount = paidCount;
         return this;
     }
@@ -1059,7 +1029,7 @@ public class BatchStatistic   {
         }
     }
 
-    public BatchStatistic paidAmount(BigDecimal paidAmount) {
+    public BatchStat paidAmount(BigDecimal paidAmount) {
         this.paidAmount = paidAmount;
         return this;
     }
@@ -1081,7 +1051,7 @@ public class BatchStatistic   {
         }
     }
 
-    public BatchStatistic paidPercent(BigDecimal paidPercent) {
+    public BatchStat paidPercent(BigDecimal paidPercent) {
         this.paidPercent = paidPercent;
         return this;
     }
@@ -1112,57 +1082,55 @@ public class BatchStatistic   {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        BatchStatistic batchStatistic = (BatchStatistic) o;
-        return Objects.equals(this.batchName, batchStatistic.batchName) &&
-                Objects.equals(this.date, batchStatistic.date) &&
-                Objects.equals(this.totalCount, batchStatistic.totalCount) &&
-                Objects.equals(this.loadedCount, batchStatistic.loadedCount) &&
-                Objects.equals(this.loadedAmount, batchStatistic.loadedAmount) &&
-                Objects.equals(this.loadedPercent, batchStatistic.loadedPercent) &&
-                Objects.equals(this.createdCount, batchStatistic.createdCount) &&
-                Objects.equals(this.createdAmount, batchStatistic.createdAmount) &&
-                Objects.equals(this.createdPercent, batchStatistic.createdPercent) &&
-                Objects.equals(this.matchedCount, batchStatistic.matchedCount) &&
-                Objects.equals(this.matchedAmount, batchStatistic.matchedAmount) &&
-                Objects.equals(this.matchedPercent, batchStatistic.matchedPercent) &&
-                Objects.equals(this.worksNotFoundCount, batchStatistic.worksNotFoundCount) &&
-                Objects.equals(this.worksNotFoundAmount, batchStatistic.worksNotFoundAmount) &&
-                Objects.equals(this.worksNotFoundPercent, batchStatistic.worksNotFoundPercent) &&
-                Objects.equals(this.multipleMatchingCount, batchStatistic.multipleMatchingCount) &&
-                Objects.equals(this.multipleMatchingAmount, batchStatistic.multipleMatchingAmount) &&
-                Objects.equals(this.multipleMatchingPercent, batchStatistic.multipleMatchingPercent) &&
-                Objects.equals(this.ntsWithDrawnCount, batchStatistic.ntsWithDrawnCount) &&
-                Objects.equals(this.ntsWithDrawnAmount, batchStatistic.ntsWithDrawnAmount) &&
-                Objects.equals(this.ntsWithDrawnPercent, batchStatistic.ntsWithDrawnPercent) &&
-                Objects.equals(this.rhNotFoundCount, batchStatistic.rhNotFoundCount) &&
-                Objects.equals(this.rhNotFoundAmount, batchStatistic.rhNotFoundAmount) &&
-                Objects.equals(this.rhNotFoundPercent, batchStatistic.rhNotFoundPercent) &&
-                Objects.equals(this.rhFoundCount, batchStatistic.rhFoundCount) &&
-                Objects.equals(this.rhFoundAmount, batchStatistic.rhFoundAmount) &&
-                Objects.equals(this.rhFoundPercent, batchStatistic.rhFoundPercent) &&
-                Objects.equals(this.eligibleCount, batchStatistic.eligibleCount) &&
-                Objects.equals(this.eligibleAmount, batchStatistic.eligibleAmount) &&
-                Objects.equals(this.eligiblePercent, batchStatistic.eligiblePercent) &&
-                Objects.equals(this.sendForRaCount, batchStatistic.sendForRaCount) &&
-                Objects.equals(this.sendForRaAmount, batchStatistic.sendForRaAmount) &&
-                Objects.equals(this.sendForRaPercent, batchStatistic.sendForRaPercent) &&
-                Objects.equals(this.paidCount, batchStatistic.paidCount) &&
-                Objects.equals(this.paidAmount, batchStatistic.paidAmount) &&
-                Objects.equals(this.paidPercent, batchStatistic.paidPercent);
+        BatchStat batchStat = (BatchStat) o;
+        return Objects.equals(this.batchName, batchStat.batchName) &&
+                Objects.equals(this.totalCount, batchStat.totalCount) &&
+                Objects.equals(this.loadedCount, batchStat.loadedCount) &&
+                Objects.equals(this.loadedAmount, batchStat.loadedAmount) &&
+                Objects.equals(this.loadedPercent, batchStat.loadedPercent) &&
+                Objects.equals(this.createdCount, batchStat.createdCount) &&
+                Objects.equals(this.createdAmount, batchStat.createdAmount) &&
+                Objects.equals(this.createdPercent, batchStat.createdPercent) &&
+                Objects.equals(this.matchedCount, batchStat.matchedCount) &&
+                Objects.equals(this.matchedAmount, batchStat.matchedAmount) &&
+                Objects.equals(this.matchedPercent, batchStat.matchedPercent) &&
+                Objects.equals(this.worksNotFoundCount, batchStat.worksNotFoundCount) &&
+                Objects.equals(this.worksNotFoundAmount, batchStat.worksNotFoundAmount) &&
+                Objects.equals(this.worksNotFoundPercent, batchStat.worksNotFoundPercent) &&
+                Objects.equals(this.multipleMatchingCount, batchStat.multipleMatchingCount) &&
+                Objects.equals(this.multipleMatchingAmount, batchStat.multipleMatchingAmount) &&
+                Objects.equals(this.multipleMatchingPercent, batchStat.multipleMatchingPercent) &&
+                Objects.equals(this.ntsWithDrawnCount, batchStat.ntsWithDrawnCount) &&
+                Objects.equals(this.ntsWithDrawnAmount, batchStat.ntsWithDrawnAmount) &&
+                Objects.equals(this.ntsWithDrawnPercent, batchStat.ntsWithDrawnPercent) &&
+                Objects.equals(this.rhNotFoundCount, batchStat.rhNotFoundCount) &&
+                Objects.equals(this.rhNotFoundAmount, batchStat.rhNotFoundAmount) &&
+                Objects.equals(this.rhNotFoundPercent, batchStat.rhNotFoundPercent) &&
+                Objects.equals(this.rhFoundCount, batchStat.rhFoundCount) &&
+                Objects.equals(this.rhFoundAmount, batchStat.rhFoundAmount) &&
+                Objects.equals(this.rhFoundPercent, batchStat.rhFoundPercent) &&
+                Objects.equals(this.eligibleCount, batchStat.eligibleCount) &&
+                Objects.equals(this.eligibleAmount, batchStat.eligibleAmount) &&
+                Objects.equals(this.eligiblePercent, batchStat.eligiblePercent) &&
+                Objects.equals(this.sendForRaCount, batchStat.sendForRaCount) &&
+                Objects.equals(this.sendForRaAmount, batchStat.sendForRaAmount) &&
+                Objects.equals(this.sendForRaPercent, batchStat.sendForRaPercent) &&
+                Objects.equals(this.paidCount, batchStat.paidCount) &&
+                Objects.equals(this.paidAmount, batchStat.paidAmount) &&
+                Objects.equals(this.paidPercent, batchStat.paidPercent);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(batchName, date, totalCount, loadedCount, loadedAmount, loadedPercent, createdCount, createdAmount, createdPercent, matchedCount, matchedAmount, matchedPercent, worksNotFoundCount, worksNotFoundAmount, worksNotFoundPercent, multipleMatchingCount, multipleMatchingAmount, multipleMatchingPercent, ntsWithDrawnCount, ntsWithDrawnAmount, ntsWithDrawnPercent, rhNotFoundCount, rhNotFoundAmount, rhNotFoundPercent, rhFoundCount, rhFoundAmount, rhFoundPercent, eligibleCount, eligibleAmount, eligiblePercent, sendForRaCount, sendForRaAmount, sendForRaPercent, paidCount, paidAmount, paidPercent);
+        return Objects.hash(batchName, totalCount, loadedCount, loadedAmount, loadedPercent, createdCount, createdAmount, createdPercent, matchedCount, matchedAmount, matchedPercent, worksNotFoundCount, worksNotFoundAmount, worksNotFoundPercent, multipleMatchingCount, multipleMatchingAmount, multipleMatchingPercent, ntsWithDrawnCount, ntsWithDrawnAmount, ntsWithDrawnPercent, rhNotFoundCount, rhNotFoundAmount, rhNotFoundPercent, rhFoundCount, rhFoundAmount, rhFoundPercent, eligibleCount, eligibleAmount, eligiblePercent, sendForRaCount, sendForRaAmount, sendForRaPercent, paidCount, paidAmount, paidPercent);
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("class BatchStatistic {\n");
+        sb.append("class BatchStat {\n");
         
         sb.append("        batchName: ").append(toIndentedString(batchName)).append("\n");
-        sb.append("        date: ").append(toIndentedString(date)).append("\n");
         sb.append("        totalCount: ").append(toIndentedString(totalCount)).append("\n");
         sb.append("        loadedCount: ").append(toIndentedString(loadedCount)).append("\n");
         sb.append("        loadedAmount: ").append(toIndentedString(loadedAmount)).append("\n");

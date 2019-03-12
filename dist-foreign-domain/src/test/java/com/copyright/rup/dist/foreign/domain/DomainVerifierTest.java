@@ -3,11 +3,11 @@ package com.copyright.rup.dist.foreign.domain;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.domain.report.BatchStatistic;
 import com.copyright.rup.dist.foreign.domain.report.BatchSummaryReportDto;
 import com.copyright.rup.dist.foreign.domain.report.ResearchStatusReportDto;
 import com.copyright.rup.dist.foreign.domain.report.ServiceFeeTrueUpReportDto;
 import com.copyright.rup.dist.foreign.domain.report.UndistributedLiabilitiesReportDto;
-import com.copyright.rup.dist.foreign.domain.report.UsageBatchStatistic;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -60,7 +60,7 @@ public class DomainVerifierTest {
             {BatchSummaryReportDto.class},
             {ResearchStatusReportDto.class},
             {ServiceFeeTrueUpReportDto.class},
-            {UsageBatchStatistic.class},
+            {BatchStatistic.class},
             {Work.class},
             {WorkClassification.class}
         };

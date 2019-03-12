@@ -4,17 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class StatisticApiController implements StatisticApi {
+public class StatisticBatchApiController implements StatisticBatchApi {
 
-    private final StatisticApiDelegate delegate;
+    private final StatisticBatchApiDelegate delegate;
 
     @Autowired
-    public StatisticApiController(StatisticApiDelegate delegate) {
+    public StatisticBatchApiController(StatisticBatchApiDelegate delegate) {
         this.delegate = delegate;
     }
 
     @Override
-    public StatisticApiDelegate getDelegate() {
+    public StatisticBatchApiDelegate getDelegate() {
         return delegate;
     }
 }
