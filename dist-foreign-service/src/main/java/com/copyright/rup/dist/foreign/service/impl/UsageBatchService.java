@@ -28,6 +28,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
@@ -131,20 +132,22 @@ public class UsageBatchService implements IUsageBatchService {
     }
 
     @Override
-    public void getAndSendForGettingRights(List<String> usageIds) {
+    public void getAndSendForGettingRights(List<String> usageIds, String batchName, String userName) {
+        AtomicInteger usageIdsCount = new AtomicInteger(0);
         executorService.execute(() ->
             Iterables.partition(usageIds, usagesBatchSize)
                 .forEach(partition -> {
-                    LOGGER.info("Sending usages for getting rights. Started. PartitionSize={}",
-                        LogUtils.size(partition));
+                    usageIdsCount.addAndGet(partition.size());
+                    LOGGER.info("Sending usages for getting rights. Started. UsageBatchName={}, UserName={}, " +
+                        "UsageIdsCount={}", batchName, userName, usageIdsCount);
                     List<Usage> workFoundUsages = usageRepository.findByIds(partition)
                         .stream()
                         .filter(usage -> UsageStatusEnum.WORK_FOUND == usage.getStatus())
                         .collect(Collectors.toList());
                     LOGGER.info("Sending usages for getting rights. UsagesCount={}", LogUtils.size(workFoundUsages));
                     chainExecutor.execute(workFoundUsages, ChainProcessorTypeEnum.RIGHTS);
-                    LOGGER.info("Sending usages for getting rights. Finished. PartitionSize={}",
-                        LogUtils.size(partition));
+                    LOGGER.info("Sending usages for getting rights. Finished.  UsageBatchName={}, UserName={}, " +
+                        "UsageIdsCount={}", batchName, userName, usageIdsCount);
                 }));
     }
 

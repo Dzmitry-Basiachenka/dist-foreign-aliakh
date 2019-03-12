@@ -154,7 +154,7 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
         List<String> ntsUsageIds = usageBatchService.insertNtsBatch(usageBatch, userName);
         LOGGER.info("Insert NTS batch. Finished. UsageBatchName={}, UserName={}, UsagesCount={}",
             usageBatch.getName(), userName, LogUtils.size(ntsUsageIds));
-        usageBatchService.getAndSendForGettingRights(ntsUsageIds);
+        usageBatchService.getAndSendForGettingRights(ntsUsageIds, usageBatch.getName(), userName);
         filterController.getWidget().clearFilter();
     }
 
