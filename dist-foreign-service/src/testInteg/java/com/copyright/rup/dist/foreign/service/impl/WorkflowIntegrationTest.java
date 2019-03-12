@@ -56,6 +56,7 @@ public class WorkflowIntegrationTest {
     private static final String RIGHTHOLDER_ID_5 = "37338ed1-7083-45e2-a96b-5872a7de3a98";
     private static final String AUDIT_USAGE_WAS_SENT_TO_CRM = "Usage was sent to CRM";
     private static final String AUDIT_UPLOADED_IN_BATCH = "Uploaded in 'Test_Batch' Batch";
+    private static final String FAS2_PRODUCT_FAMILY = "FAS2";
 
     @Autowired
     private WorkflowIntegrationTestBuilder testBuilder;
@@ -75,7 +76,7 @@ public class WorkflowIntegrationTest {
         testBuilder
             .withUsagesCsvFile("usage/usages_for_workflow.csv",
                 USAGE_ID_1, USAGE_ID_2, USAGE_ID_3, USAGE_ID_4, USAGE_ID_5)
-            .withProductFamily("FAS2")
+            .withProductFamily(FAS2_PRODUCT_FAMILY)
             .withUsageBatch(buildUsageBatch())
             .withUsageFilter(buildUsageFilter())
             .expectInsertedUsagesCount(5)
@@ -128,7 +129,7 @@ public class WorkflowIntegrationTest {
 
     private UsageFilter buildUsageFilter() {
         UsageFilter filter = new UsageFilter();
-        filter.setProductFamilies(Collections.singleton("FAS2"));
+        filter.setProductFamilies(Collections.singleton(FAS2_PRODUCT_FAMILY));
         filter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
         return filter;
     }
@@ -137,6 +138,7 @@ public class WorkflowIntegrationTest {
         UsageBatch batch = new UsageBatch();
         batch.setName("Test_Batch");
         batch.setRro(buildRro());
+        batch.setProductFamily(FAS2_PRODUCT_FAMILY);
         batch.setPaymentDate(PAYMENT_DATE);
         batch.setFiscalYear(2018);
         batch.setGrossAmount(BigDecimal.valueOf(199));

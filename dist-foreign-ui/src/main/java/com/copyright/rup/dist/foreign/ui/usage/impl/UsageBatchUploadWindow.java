@@ -123,6 +123,7 @@ class UsageBatchUploadWindow extends Window {
     private UsageBatch buildUsageBatch() {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setName(StringUtils.trim(usageBatchNameField.getValue()));
+        usageBatch.setProductFamily(StringUtils.trim(productFamilyField.getValue()));
         usageBatch.setRro(rro);
         usageBatch.setPaymentDate(paymentDateWidget.getValue());
         usageBatch.setFiscalYear(UsageBatchUtils.calculateFiscalYear(paymentDateWidget.getValue()));

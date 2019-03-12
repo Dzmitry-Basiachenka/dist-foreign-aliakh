@@ -51,6 +51,7 @@ databaseChangeLog {
             column(name: "df_usage_batch_uid", value: "03ba3d02-c86a-40f8-8b14-270ca46a1f3a")
             column(name: "name", value: "AT_service-fee-true-up-report-12_BATCH")
             column(name: "rro_account_number", value: "5000581901")
+            column(name: 'product_family', value: 'FAS')
             column(name: "payment_date", value: "2013-01-03")
             column(name: "fiscal_year", value: "2013")
             column(name: "gross_amount", value: "200.00")

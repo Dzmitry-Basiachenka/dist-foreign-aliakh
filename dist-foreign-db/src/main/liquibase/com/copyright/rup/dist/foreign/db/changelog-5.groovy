@@ -40,4 +40,35 @@ databaseChangeLog {
             // automatic rollback
         }
     }
+
+    changeSet(id: '2019-03-11-00', author: 'Darya Baraukova <dbaraukova@copyright.com>') {
+        comment('B-49017 FDA: Address the number of buttons on the Usage tab: ' +
+                'add product_family column into df_usage_batch table and populate historical data')
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'product_family', type: 'VARCHAR(128)', remarks: 'Product Family')
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'product_family', value: 'NTS')
+            where "fund_pool is not null"
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'product_family', value: 'FAS2')
+            where "fund_pool is null and rro_account_number = 2000017000"
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'product_family', value: 'FAS')
+            where "fund_pool is null and rro_account_number != 2000017000 and product_family is null"
+        }
+
+        addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_batch',
+                columnName: 'product_family', columnDataType: 'VARCHAR(128)')
+    
+        rollback {
+            dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_batch', columnName: 'product_family')
+        }
+    }
 }

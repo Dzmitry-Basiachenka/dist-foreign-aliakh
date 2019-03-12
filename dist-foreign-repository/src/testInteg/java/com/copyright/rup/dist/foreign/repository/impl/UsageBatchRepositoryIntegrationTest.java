@@ -78,6 +78,7 @@ public class UsageBatchRepositoryIntegrationTest {
         usageBatchRepository.insert(buildUsageBatch(USAGE_BATCH_NAME_1));
         UsageBatch usageBatch = usageBatchRepository.findByName(USAGE_BATCH_NAME_1);
         assertNotNull(usageBatch);
+        assertEquals("FAS", usageBatch.getProductFamily());
         assertEquals(RRO_ACCOUNT_NUMBER, usageBatch.getRro().getAccountNumber());
         assertEquals(PAYMENT_DATE, usageBatch.getPaymentDate());
         assertEquals(FISCAL_YEAR_2017, usageBatch.getFiscalYear());
@@ -90,6 +91,7 @@ public class UsageBatchRepositoryIntegrationTest {
         usageBatchRepository.insert(buildUsageBatchWithFundPool(USAGE_BATCH_NAME_2));
         UsageBatch usageBatch = usageBatchRepository.findByName(USAGE_BATCH_NAME_2);
         assertNotNull(usageBatch);
+        assertEquals("NTS", usageBatch.getProductFamily());
         assertEquals(RRO_ACCOUNT_NUMBER, usageBatch.getRro().getAccountNumber());
         assertEquals(PAYMENT_DATE, usageBatch.getPaymentDate());
         assertEquals(FISCAL_YEAR_2017, usageBatch.getFiscalYear());
@@ -125,6 +127,7 @@ public class UsageBatchRepositoryIntegrationTest {
     private UsageBatch buildUsageBatch(String batchName) {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setId(RupPersistUtils.generateUuid());
+        usageBatch.setProductFamily("FAS");
         usageBatch.setName(batchName);
         Rightsholder rightsholder = new Rightsholder();
         rightsholder.setAccountNumber(RRO_ACCOUNT_NUMBER);
@@ -138,6 +141,7 @@ public class UsageBatchRepositoryIntegrationTest {
     private UsageBatch buildUsageBatchWithFundPool(String batchName) {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setId(RupPersistUtils.generateUuid());
+        usageBatch.setProductFamily("NTS");
         usageBatch.setName(batchName);
         usageBatch.setFiscalYear(FISCAL_YEAR_2017);
         Rightsholder rightsholder = new Rightsholder();

@@ -24,83 +24,58 @@ public class UsageBatch extends StoredEntity<String> {
 
     private String name;
     private Rightsholder rro;
+    private String productFamily;
     private LocalDate paymentDate;
     private Integer fiscalYear;
     private BigDecimal grossAmount = BigDecimal.ZERO;
     private FundPool fundPool;
 
-    /**
-     * @return name.
-     */
     public String getName() {
         return name;
     }
 
-    /**
-     * Sets name.
-     *
-     * @param name name
-     */
     public void setName(String name) {
         this.name = name;
     }
 
-    /**
-     * @return rro.
-     */
     public Rightsholder getRro() {
         return rro;
     }
 
-    /**
-     * Sets rro.
-     *
-     * @param rro rro
-     */
     public void setRro(Rightsholder rro) {
         this.rro = rro;
     }
 
-    /**
-     * @return payment date.
-     */
+    public String getProductFamily() {
+        return productFamily;
+    }
+
+    public void setProductFamily(String productFamily) {
+        this.productFamily = productFamily;
+    }
+
     public LocalDate getPaymentDate() {
         return paymentDate;
     }
 
-    /**
-     * Sets payment date.
-     *
-     * @param paymentDate payment date
-     */
     public void setPaymentDate(LocalDate paymentDate) {
         this.paymentDate = paymentDate;
     }
 
-    /**
-     * @return fiscal year.
-     */
     public Integer getFiscalYear() {
         return fiscalYear;
     }
 
-    /**
-     * Sets fiscal year.
-     *
-     * @param fiscalYear fiscal year
-     */
     public void setFiscalYear(Integer fiscalYear) {
         this.fiscalYear = fiscalYear;
     }
-    /**
-     * @return gross amount.
-     */
+
     public BigDecimal getGrossAmount() {
         return grossAmount;
     }
 
     /**
-     * Sets gross amount.
+     * Sets not null gross amount value.
      *
      * @param grossAmount gross amount
      */
@@ -131,6 +106,7 @@ public class UsageBatch extends StoredEntity<String> {
             .appendSuper(super.equals(obj))
             .append(this.name, that.name)
             .append(this.rro, that.rro)
+            .append(this.productFamily, that.productFamily)
             .append(this.paymentDate, that.paymentDate)
             .append(this.fiscalYear, that.fiscalYear)
             .append(this.grossAmount, that.grossAmount)
@@ -144,6 +120,7 @@ public class UsageBatch extends StoredEntity<String> {
             .appendSuper(super.hashCode())
             .append(name)
             .append(rro)
+            .append(productFamily)
             .append(paymentDate)
             .append(fiscalYear)
             .append(grossAmount)
@@ -157,6 +134,7 @@ public class UsageBatch extends StoredEntity<String> {
             .appendSuper(super.toString())
             .append("name", name)
             .append("rro", rro)
+            .append("productFamily", productFamily)
             .append("paymentDate", paymentDate)
             .append("fiscalYear", fiscalYear)
             .append("grossAmount", grossAmount)
