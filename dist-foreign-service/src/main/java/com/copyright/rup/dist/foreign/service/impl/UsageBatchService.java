@@ -102,17 +102,12 @@ public class UsageBatchService implements IUsageBatchService {
 
     @Override
     @Transactional
-    public List<String> insertNtsBatch(UsageBatch usageBatch) {
-        String userName = RupContextUtils.getUserName();
+    public List<String> insertNtsBatch(UsageBatch usageBatch, String userName) {
         usageBatch.setId(RupPersistUtils.generateUuid());
         usageBatch.setCreateUser(userName);
         usageBatch.setUpdateUser(userName);
-        LOGGER.info("Insert NTS batch. Started. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
         usageBatchRepository.insert(usageBatch);
-        List<String> ntsUsageIds = usageService.insertNtsUsages(usageBatch);
-        LOGGER.info("Insert NTS batch. Finished. UsageBatchName={}, UserName={}, UsagesCount={}",
-            usageBatch.getName(), userName, LogUtils.size(ntsUsageIds));
-        return ntsUsageIds;
+        return usageService.insertNtsUsages(usageBatch);
     }
 
     @Override
@@ -137,8 +132,20 @@ public class UsageBatchService implements IUsageBatchService {
 
     @Override
     public void getAndSendForGettingRights(List<String> usageIds) {
-        Iterables.partition(usageIds, usagesBatchSize)
-            .forEach(partition -> sendForGettingRights(usageRepository.findByIds(partition)));
+        executorService.execute(() ->
+            Iterables.partition(usageIds, usagesBatchSize)
+                .forEach(partition -> {
+                    LOGGER.info("Sending usages for getting rights. Started. PartitionSize={}",
+                        LogUtils.size(partition));
+                    List<Usage> workFoundUsages = usageRepository.findByIds(partition)
+                        .stream()
+                        .filter(usage -> UsageStatusEnum.WORK_FOUND == usage.getStatus())
+                        .collect(Collectors.toList());
+                    LOGGER.info("Sending usages for getting rights. UsagesCount={}", LogUtils.size(workFoundUsages));
+                    chainExecutor.execute(workFoundUsages, ChainProcessorTypeEnum.RIGHTS);
+                    LOGGER.info("Sending usages for getting rights. Finished. PartitionSize={}",
+                        LogUtils.size(partition));
+                }));
     }
 
     @Override

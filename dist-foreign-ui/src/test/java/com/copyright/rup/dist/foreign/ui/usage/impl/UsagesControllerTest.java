@@ -12,6 +12,7 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
@@ -20,6 +21,7 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
+import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -48,6 +50,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.io.OutputStream;
@@ -69,11 +74,14 @@ import java.util.concurrent.ExecutorService;
  * @author Aliaksandr Radkevich
  */
 // TODO add testCreateScenario
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(RupContextUtils.class)
 public class UsagesControllerTest {
 
     private static final String RRO_ACCOUNT_NAME = "Account Name";
     private static final String USAGE_BATCH_ID = RupPersistUtils.generateUuid();
     private static final Long RRO_ACCOUNT_NUMBER = 12345678L;
+    private static final String USER_NAME = "Test User Name";
     private UsagesController controller;
     private UsageService usageService;
     private IUsagesFilterController filterController;
@@ -287,21 +295,23 @@ public class UsagesControllerTest {
 
     @Test
     public void testLoadNtsBatch() {
+        mockStatic(RupContextUtils.class);
         UsageBatch usageBatch = new UsageBatch();
         Usage usage1 = new Usage();
         usage1.setId(RupPersistUtils.generateUuid());
         Usage usage2 = new Usage();
         usage2.setId(RupPersistUtils.generateUuid());
         List<String> ntsUsageIds = Arrays.asList(usage1.getId(), usage2.getId());
-        expect(usageBatchService.insertNtsBatch(usageBatch)).andReturn(ntsUsageIds).once();
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        expect(usageBatchService.insertNtsBatch(usageBatch, USER_NAME)).andReturn(ntsUsageIds).once();
         usageBatchService.getAndSendForGettingRights(ntsUsageIds);
         expectLastCall().once();
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         filterWidgetMock.clearFilter();
         expectLastCall().once();
-        replay(usageBatchService, filterController, filterWidgetMock);
+        replay(usageBatchService, filterController, filterWidgetMock, RupContextUtils.class);
         controller.loadNtsBatch(usageBatch);
-        verify(usageBatchService, filterController, filterWidgetMock);
+        verify(usageBatchService, filterController, filterWidgetMock, RupContextUtils.class);
     }
 
     @Test
