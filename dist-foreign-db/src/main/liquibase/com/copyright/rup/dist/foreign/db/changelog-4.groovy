@@ -409,4 +409,26 @@ databaseChangeLog {
             dropColumn(schemaName: dbAppsSchema, tableName: 'df_grant_priority', columnName: 'grant_product_family')
         }
     }
+
+    changeSet(id: '2019-03-13-00', author: 'Darya Baraukova <dbaraukova@copyright.com>') {
+        comment('B-49462 Tech Debt: FDA: update grant_product_family value in df_grant_priority table ' +
+                'for NGT_ELECTRONIC_COURSE_MATERIALS and NGT_PRINT_COURSE_MATERIALS type of uses')
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'grant_product_family', value: 'ECC')
+            where "type_of_use = 'NGT_ELECTRONIC_COURSE_MATERIALS'"
+        }
+
+        update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'grant_product_family', value: 'APS')
+            where "type_of_use = 'NGT_PRINT_COURSE_MATERIALS'"
+        }
+
+        rollback {
+            update(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'grant_product_family', value: 'RLS')
+                where "type_of_use in ('NGT_ELECTRONIC_COURSE_MATERIALS', 'NGT_PRINT_COURSE_MATERIALS')"
+            }
+        }
+    }
 }
