@@ -103,6 +103,13 @@
         <endpoint id="df.service.internal.eligibility.endpoint" uri="direct:df.service.eligibility"/>
         <endpoint id="df.service.rh.eligibility.endpoint" uri="$RUP{dist.foreign.endpoint.rh_eligibility}"/>
 
+        <onException useOriginalMessage="true">
+            <exception>com.copyright.rup.dist.foreign.service.impl.InconsistentUsageStateException</exception>
+            <handled>
+                <constant>true</constant>
+            </handled>
+        </onException>
+
         <route id="df.service.paidUsageRoute">
             <from ref="df.service.lm.detail.paid.endpoint"/>
             <!-- TODO {pliakh} replace converted with default Jackson unmarshaller -->
@@ -148,13 +155,6 @@
             </onException>
 
             <onException useOriginalMessage="true">
-                <exception>com.copyright.rup.dist.foreign.service.impl.InconsistentUsageStateException</exception>
-                <handled>
-                    <constant>true</constant>
-                </handled>
-            </onException>
-
-            <onException useOriginalMessage="true">
                 <exception>java.lang.Exception</exception>
                 <handled>
                     <constant>true</constant>
@@ -181,17 +181,23 @@
             <unmarshal>
                 <custom ref="df.service.rightsUnmarshaller"/>
             </unmarshal>
-            <bean ref="df.service.rightsConsumer"/>
+
+            <choice>
+                <when>
+                    <simple>
+                        ${body.getProductFamily()} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.FAS_PRODUCT_FAMILY} ||
+                        ${body.getProductFamily()} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.CLA_FAS_PRODUCT_FAMILY}
+                    </simple>
+                    <bean ref="df.service.fasRightsConsumer"/>
+                </when>
+                <when>
+                    <simple>${body.getProductFamily()} == ${type:com.copyright.rup.dist.foreign.domain.FdaConstants.NTS_PRODUCT_FAMILY}</simple>
+                    <bean ref="df.service.ntsRightsConsumer"/>
+                </when>
+            </choice>
 
             <onException redeliveryPolicyRef="defaultRedeliveryPolicy" useOriginalMessage="true">
                 <exception>com.copyright.rup.common.exception.RupRuntimeException</exception>
-            </onException>
-
-            <onException useOriginalMessage="true">
-                <exception>com.copyright.rup.dist.foreign.service.impl.InconsistentUsageStateException</exception>
-                <handled>
-                    <constant>true</constant>
-                </handled>
             </onException>
 
             <onException useOriginalMessage="true">
@@ -228,13 +234,6 @@
             </onException>
 
             <onException useOriginalMessage="true">
-                <exception>com.copyright.rup.dist.foreign.service.impl.InconsistentUsageStateException</exception>
-                <handled>
-                    <constant>true</constant>
-                </handled>
-            </onException>
-
-            <onException useOriginalMessage="true">
                 <exception>java.lang.Exception</exception>
                 <handled>
                     <constant>true</constant>
@@ -265,13 +264,6 @@
 
             <onException redeliveryPolicyRef="defaultRedeliveryPolicy" useOriginalMessage="true">
                 <exception>com.copyright.rup.common.exception.RupRuntimeException</exception>
-            </onException>
-
-            <onException useOriginalMessage="true">
-                <exception>com.copyright.rup.dist.foreign.service.impl.InconsistentUsageStateException</exception>
-                <handled>
-                    <constant>true</constant>
-                </handled>
             </onException>
 
             <onException useOriginalMessage="true">

@@ -21,15 +21,17 @@ public interface IRightsService {
     void updateRightsSentForRaUsages();
 
     /**
-     * Sends Wr Wrk Inst to RMS to get Grants and updates usage status and usage RH and writes audit based on response.
-     * Sets usage status to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#RH_FOUND} and writes
+     * Sends Wr Wrk Inst to RMS to get Grants and updates usage status and usage RH based on response. Sets usage status
+     * to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#RH_FOUND} if RH was found in RMS, and
+     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#RH_NOT_FOUND} otherwise.
+     * In case of logAction parameter is {@code true} it writes
      * {@link com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum#RH_FOUND} audit if RH was found in RMS,
-     * and sets usage status to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#RH_NOT_FOUND} and writes
-     * {@link com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum#RH_NOT_FOUND} audit otherwise.
+     * and {@link com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum#RH_NOT_FOUND} audit if RH wasn't found.
      *
-     * @param usage {@link Usage} to update
+     * @param usage     {@link Usage} to update
+     * @param logAction defines whether usage audit should be added or not
      */
-    void updateRight(Usage usage);
+    void updateRight(Usage usage, boolean logAction);
 
     /**
      * Finds list of {@link com.copyright.rup.dist.foreign.domain.Usage}s with

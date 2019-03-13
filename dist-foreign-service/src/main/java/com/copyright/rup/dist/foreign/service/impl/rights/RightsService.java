@@ -115,7 +115,7 @@ public class RightsService implements IRightsService {
 
     @Override
     @Transactional
-    public void updateRight(Usage usage) {
+    public void updateRight(Usage usage, boolean logAction) {
         Long wrWrkInst = usage.getWrWrkInst();
         Set<String> usageId = Collections.singleton(usage.getId());
         Map<Long, Long> wrWrkInstToRhAccountNumberMap =
@@ -128,13 +128,19 @@ public class RightsService implements IRightsService {
             usage.setRightsholder(rightsholders.get(0));
             usage.setStatus(UsageStatusEnum.RH_FOUND);
             usageService.updateProcessedUsage(usage);
-            auditService.logAction(usageId, UsageActionTypeEnum.RH_FOUND,
-                String.format("Rightsholder account %s was found in RMS", rhAccountNumber));
+            logAction(usageId, UsageActionTypeEnum.RH_FOUND,
+                String.format("Rightsholder account %s was found in RMS", rhAccountNumber), logAction);
         } else {
             usage.setStatus(UsageStatusEnum.RH_NOT_FOUND);
             usageService.updateProcessedUsage(usage);
-            auditService.logAction(usageId, UsageActionTypeEnum.RH_NOT_FOUND,
-                String.format("Rightsholder account for %s was not found in RMS", wrWrkInst));
+            logAction(usageId, UsageActionTypeEnum.RH_NOT_FOUND,
+                String.format("Rightsholder account for %s was not found in RMS", wrWrkInst), logAction);
+        }
+    }
+
+    private void logAction(Set<String> usageId, UsageActionTypeEnum type, String message, boolean logAction) {
+        if (logAction) {
+            auditService.logAction(usageId, type, message);
         }
     }
 

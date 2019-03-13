@@ -8,11 +8,14 @@ import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.test.JsonMatcher;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
+import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
+import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.impl.NtsWorkflowIntegrationTestBuilder.Runner;
 
@@ -46,6 +49,8 @@ import java.util.Objects;
 @Component
 public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
+    @Autowired
+    private IUsageAuditService usageAuditService;
     @Autowired
     private IUsageBatchService usageBatchService;
     @Autowired
@@ -171,7 +176,9 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
                 assertTrue(CollectionUtils.isEmpty(actualUsages));
             } else {
                 assertEquals(1, CollectionUtils.size(actualUsages));
-                assertUsage(actualUsages.get(0));
+                UsageDto actualUsage = actualUsages.get(0);
+                assertUsage(actualUsage);
+                assertAudit(actualUsage.getId());
             }
         }
 
@@ -191,6 +198,14 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
             assertEquals(expectedUsage.getGrossAmount(), actualUsage.getGrossAmount());
             assertEquals(expectedUsage.getReportedValue(), actualUsage.getReportedValue());
             assertEquals(expectedUsage.getRightsholder().getAccountNumber(), actualUsage.getRhAccountNumber());
+        }
+
+        private void assertAudit(String usageId) {
+            List<UsageAuditItem> auditItems = usageAuditService.getUsageAudit(usageId);
+            assertEquals(1, CollectionUtils.size(auditItems));
+            UsageAuditItem auditItem = auditItems.get(0);
+            assertEquals(UsageActionTypeEnum.ELIGIBLE, auditItem.getActionType());
+            assertEquals("Usage has become eligible", auditItem.getActionReason());
         }
 
         private void createRestServer() {

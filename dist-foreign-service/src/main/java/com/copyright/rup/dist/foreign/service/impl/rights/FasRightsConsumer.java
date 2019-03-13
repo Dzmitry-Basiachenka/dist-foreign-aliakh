@@ -2,13 +2,10 @@ package com.copyright.rup.dist.foreign.service.impl.rights;
 
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.integration.camel.IConsumer;
-import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IRightsService;
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
-
-import com.google.common.collect.ImmutableSet;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +14,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
-import java.util.function.Predicate;
 
 /**
- * Consumer to handle usages for getting Rights.
+ * Consumer to handle FAS/FAS2 usages for getting Rights.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -28,20 +24,15 @@ import java.util.function.Predicate;
  *
  * @author Ihar Suvorau
  */
-@Component("df.service.rightsConsumer")
-public class RightsConsumer implements IConsumer<Usage> {
+@Component("df.service.fasRightsConsumer")
+public class FasRightsConsumer implements IConsumer<Usage> {
 
     private static final String RIGHTS_PROCESSING_FINISHED_LOG = "Consume usage for rights processing. Finished. " +
         "UsageId={}, ProductFamily={}, WrWrkInst={}, UsageStatus={}, RhAcc#={}";
-    private static final ImmutableSet<String> FAS_PRODUCT_FAMILIES =
-        ImmutableSet.of(FdaConstants.FAS_PRODUCT_FAMILY, FdaConstants.CLA_FAS_PRODUCT_FAMILY);
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired
     private IRightsService rightsService;
-    @Autowired
-    @Qualifier("df.service.ntsRightsProcessor")
-    private IChainProcessor<Usage> ntsRightsProcessor;
     @Autowired
     @Qualifier("df.service.fasRightsProcessor")
     private IChainProcessor<Usage> fasRightsProcessor;
@@ -52,13 +43,8 @@ public class RightsConsumer implements IConsumer<Usage> {
         if (Objects.nonNull(usage)) {
             LOGGER.trace("Consume usage for rights processing. Started. UsageId={}, ProductFamily={}, WrWrkInst={}",
                 usage.getId(), usage.getProductFamily(), usage.getWrWrkInst());
-            rightsService.updateRight(usage);
-            Predicate<Usage> successPredicate = updatedUsage -> UsageStatusEnum.RH_FOUND == updatedUsage.getStatus();
-            if (FdaConstants.NTS_PRODUCT_FAMILY.equals(usage.getProductFamily())) {
-                ntsRightsProcessor.executeNextProcessor(usage, successPredicate);
-            } else if (FAS_PRODUCT_FAMILIES.contains(usage.getProductFamily())) {
-                fasRightsProcessor.executeNextProcessor(usage, successPredicate);
-            }
+            rightsService.updateRight(usage, true);
+            fasRightsProcessor.executeNextProcessor(usage, item -> UsageStatusEnum.RH_FOUND == item.getStatus());
             LOGGER.trace(RIGHTS_PROCESSING_FINISHED_LOG, usage.getId(), usage.getProductFamily(), usage.getWrWrkInst(),
                 usage.getStatus(), usage.getRightsholder().getAccountNumber());
         }
@@ -66,10 +52,6 @@ public class RightsConsumer implements IConsumer<Usage> {
 
     void setRightsService(IRightsService rightsService) {
         this.rightsService = rightsService;
-    }
-
-    void setNtsRightsProcessor(IChainProcessor<Usage> ntsRightsProcessor) {
-        this.ntsRightsProcessor = ntsRightsProcessor;
     }
 
     void setFasRightsProcessor(IChainProcessor<Usage> fasRightsProcessor) {
