@@ -32,6 +32,7 @@ import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesWidget;
+import com.copyright.rup.dist.foreign.ui.usage.api.IWorkClassificationController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.CreateScenarioWindow.ScenarioCreateEvent;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -95,6 +96,8 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     private CsvProcessorFactory csvProcessorFactory;
     @Autowired
     private IReportService reportService;
+    @Autowired
+    private IWorkClassificationController workClassificationController;
 
     @Override
     public IUsagesFilterWidget initUsagesFilterWidget() {
@@ -216,6 +219,11 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     public IStreamSource getSendForResearchUsagesStreamSource() {
         return new ByteArrayStreamSource("send_for_research_", pipedStream ->
             researchService.sendForResearch(filterController.getWidget().getAppliedFilter(), pipedStream));
+    }
+
+    @Override
+    public IWorkClassificationController getWorkClassificationController() {
+        return workClassificationController;
     }
 
     @Override

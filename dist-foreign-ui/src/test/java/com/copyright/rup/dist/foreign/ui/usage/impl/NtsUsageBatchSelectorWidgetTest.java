@@ -78,12 +78,15 @@ public class NtsUsageBatchSelectorWidgetTest {
     @Test
     public void testOnSave() {
         mockStatic(Windows.class);
-        FilterSaveEvent filterSaveEvent = createMock(FilterSaveEvent.class);
+        FilterSaveEvent<UsageBatch> filterSaveEvent = createMock(FilterSaveEvent.class);
+        expect(filterSaveEvent.getSelectedItemsIds()).andReturn(Collections.singleton(buildUsageBatch())).once();
+        expect(usagesController.getWorkClassificationController())
+            .andReturn(createMock(WorkClassificationController.class)).once();
         Windows.showModalWindow(anyObject(WorkClassificationWindow.class));
         expectLastCall().once();
-        replay(filterSaveEvent, Windows.class);
+        replay(usagesController, filterSaveEvent, Windows.class);
         ntsUsageBatchSelectorWidget.onSave(filterSaveEvent);
-        verify(filterSaveEvent, Windows.class);
+        verify(usagesController, filterSaveEvent, Windows.class);
     }
 
     @Test
@@ -91,7 +94,7 @@ public class NtsUsageBatchSelectorWidgetTest {
         mockStatic(Windows.class);
         Capture<ValueProvider<UsageBatch, List<String>>> providerCapture = new Capture<>();
         FilterWindow filterWindow = createMock(FilterWindow.class);
-        Windows.showFilterWindow(eq("Batches filter"), same(ntsUsageBatchSelectorWidget), capture(providerCapture));
+        Windows.showFilterWindow(eq("Batches Selector"), same(ntsUsageBatchSelectorWidget), capture(providerCapture));
         expectLastCall().andReturn(filterWindow).once();
         replay(Windows.class);
         ntsUsageBatchSelectorWidget.showFilterWindow();

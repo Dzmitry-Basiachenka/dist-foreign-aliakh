@@ -1,9 +1,14 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.foreign.ui.usage.api.IWorkClassificationController;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.vaadin.server.Sizeable.Unit;
@@ -15,10 +20,13 @@ import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -32,9 +40,19 @@ import java.util.stream.Collectors;
  */
 public class WorkClassificationWindowTest {
 
+    private final Set<String> batchesIds = Collections.singleton(RupPersistUtils.generateUuid());
+    private WorkClassificationWindow window;
+
+    @Before
+    public void setUp() {
+        IWorkClassificationController workClassificationController = createMock(IWorkClassificationController.class);
+        replay(workClassificationController);
+        window = new WorkClassificationWindow(batchesIds, workClassificationController);
+        verify(workClassificationController);
+    }
+
     @Test
     public void testComponentStructure() {
-        WorkClassificationWindow window = new WorkClassificationWindow();
         assertEquals("Works Classification", window.getCaption());
         verifySize(window, 1000, Unit.PIXELS, 530, Unit.PIXELS);
         VerticalLayout content = (VerticalLayout) window.getContent();

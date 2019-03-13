@@ -1,9 +1,13 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.WorkClassification;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.usage.api.IWorkClassificationController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
+import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.vaadin.data.ValueProvider;
@@ -17,7 +21,8 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
-import java.util.ArrayList;
+import java.util.Set;
+import java.util.function.Consumer;
 
 /**
  * Works classification window.
@@ -31,12 +36,20 @@ import java.util.ArrayList;
 public class WorkClassificationWindow extends Window {
 
     private Grid<WorkClassification> grid;
+    private SearchWidget searchWidget;
+    private DataProvider<WorkClassification, Void> dataProvider;
+    private final IWorkClassificationController controller;
+    private final Set<String> selectedBatchesIds;
 
     /**
      * Constructor.
+     *
+     * @param batchesIds set of batches ids
+     * @param controller instance of {@link IWorkClassificationController}
      */
-    public WorkClassificationWindow() {
-        //TODO {isuvorau} IUsageController should be added
+    public WorkClassificationWindow(Set<String> batchesIds, IWorkClassificationController controller) {
+        this.controller = controller;
+        selectedBatchesIds = batchesIds;
         setWidth(1000, Unit.PIXELS);
         setHeight(530, Unit.PIXELS);
         setContent(initContent());
@@ -46,8 +59,8 @@ public class WorkClassificationWindow extends Window {
     private Component initContent() {
         initGrid();
         HorizontalLayout buttons = initButtons();
-        SearchWidget searchWidget = new SearchWidget(this::close);
-        searchWidget.setPrompt("Enter Wr Wrk Inst or Work Title");
+        searchWidget = new SearchWidget(() -> dataProvider.refreshAll());
+        searchWidget.setPrompt(ForeignUi.getMessage("prompt.works_classification"));
         searchWidget.setWidth(60, Unit.PERCENTAGE);
         VerticalLayout content = new VerticalLayout(searchWidget, grid, buttons);
         content.setMargin(true);
@@ -63,26 +76,38 @@ public class WorkClassificationWindow extends Window {
         HorizontalLayout buttonsLayout = new HorizontalLayout();
         Button clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
         clearButton.addClickListener(event -> grid.deselectAll());
-        buttonsLayout.addComponents(
-            Buttons.createButton(ForeignUi.getMessage("button.mark_as_stm")),
-            Buttons.createButton(ForeignUi.getMessage("button.mark_as_non_stm")),
-            Buttons.createButton(ForeignUi.getMessage("button.mark_as_belletristic")),
-            Buttons.createButton(ForeignUi.getMessage("button.remove_classification")),
-            clearButton, Buttons.createCloseButton(this));
+        Button markAsStmButton = Buttons.createButton(ForeignUi.getMessage("button.mark_as_stm"));
+        addClickListener(markAsStmButton, "message.confirm.classification.update_usage",
+            (classifications) -> controller.updateClassifications(classifications, FdaConstants.STM_CLASSIFICATION));
+        Button markAsNonStmButton = Buttons.createButton(ForeignUi.getMessage("button.mark_as_non_stm"));
+        addClickListener(markAsNonStmButton, "message.confirm.classification.update_usage",
+            (classifications) -> controller.updateClassifications(classifications,
+                FdaConstants.NON_STM_CLASSIFICATION));
+        Button markAsBelletristicButton = Buttons.createButton(ForeignUi.getMessage("button.mark_as_belletristic"));
+        addClickListener(markAsBelletristicButton, "message.confirm.classification.delete_usage",
+            (classifications) -> controller.updateClassifications(classifications,
+                FdaConstants.BELLETRISTIC_CLASSIFICATION));
+        Button removeClassificationButton = Buttons.createButton(ForeignUi.getMessage("button.remove_classification"));
+        addClickListener(removeClassificationButton, "message.confirm.remove_classification",
+            controller::deleteClassification);
+        buttonsLayout.addComponents(markAsStmButton, markAsNonStmButton, markAsBelletristicButton,
+            removeClassificationButton, clearButton, Buttons.createCloseButton(this));
         buttonsLayout.setSpacing(true);
         return buttonsLayout;
     }
 
     private void initGrid() {
-        //TODO {isuvorau} get data using controller
-        DataProvider<WorkClassification, Void> dataProvider = LoadingIndicatorDataProvider.fromCallbacks(
-            query -> new ArrayList<WorkClassification>().stream(),
-            query -> 0);
+        dataProvider = LoadingIndicatorDataProvider.fromCallbacks(
+            query -> controller.getClassifications(selectedBatchesIds, searchWidget.getSearchValue(),
+                query.getOffset(), query.getLimit(), query.getSortOrders()).stream(),
+            query -> controller.getClassificationCount(selectedBatchesIds,
+                searchWidget.getSearchValue()));
         grid = new Grid<>(dataProvider);
         addColumns();
         grid.setSizeFull();
         grid.setSelectionMode(SelectionMode.MULTI);
         grid.getColumns().forEach(column -> column.setSortable(true));
+        VaadinUtils.addComponentStyle(grid, "works-classification-grid");
     }
 
     private void addColumns() {
@@ -103,5 +128,21 @@ public class WorkClassificationWindow extends Window {
             .setCaption(ForeignUi.getMessage(captionProperty))
             .setSortProperty(sort)
             .setWidth(width);
+    }
+
+    private void addClickListener(Button button, String message, Consumer<Set<WorkClassification>> consumer) {
+        button.addClickListener(event -> {
+            Set<WorkClassification> selectedItems = grid.getSelectedItems();
+            if (!selectedItems.isEmpty()) {
+                Windows.showConfirmDialog(ForeignUi.getMessage(message, controller.getCountToUpdate(selectedItems)),
+                    () -> {
+                        consumer.accept(selectedItems);
+                        dataProvider.refreshAll();
+                        grid.setDataProvider(dataProvider);
+                    });
+            } else {
+                Windows.showNotificationWindow(ForeignUi.getMessage("message.classification.empty"));
+            }
+        });
     }
 }
