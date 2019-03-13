@@ -13,6 +13,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageAuditRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hamcrest.core.StringStartsWith;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,6 +50,7 @@ public class StatisticUsageRestTest {
     private static final String TEST_USAGE_ID = "testUsageId";
     private static final String JSON_PATH_ERROR = "$.error";
     private static final String JSON_PATH_MESSAGE = "$.message";
+    private static final String JSON_PATH_STACKTRACE = "$.stackTrace";
 
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -104,7 +106,9 @@ public class StatisticUsageRestTest {
             .andExpect(MockMvcResultMatchers.jsonPath(JSON_PATH_ERROR)
                 .value("NOT_FOUND"))
             .andExpect(MockMvcResultMatchers.jsonPath(JSON_PATH_MESSAGE)
-                .value("Usage not found. UsageId=testUsageId"));
+                .value("Usage not found. UsageId=testUsageId"))
+            .andExpect(MockMvcResultMatchers.jsonPath(JSON_PATH_STACKTRACE)
+                .doesNotExist());
         verify(usageAuditRepository);
     }
 
@@ -119,7 +123,9 @@ public class StatisticUsageRestTest {
             .andExpect(MockMvcResultMatchers.jsonPath(JSON_PATH_ERROR)
                 .value("INTERNAL_SERVER_ERROR"))
             .andExpect(MockMvcResultMatchers.jsonPath(JSON_PATH_MESSAGE)
-                .value("Test exception"));
+                .value("Test exception"))
+            .andExpect(MockMvcResultMatchers.jsonPath(JSON_PATH_STACKTRACE)
+                .value(StringStartsWith.startsWith("java.lang.RuntimeException: Test exception")));
         verify(usageAuditRepository);
     }
 

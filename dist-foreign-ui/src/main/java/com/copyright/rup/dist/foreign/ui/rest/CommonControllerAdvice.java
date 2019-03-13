@@ -38,7 +38,7 @@ public class CommonControllerAdvice {
      */
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<Error> handleNoSuchElementException(NoSuchElementException exception) {
-        return handleException(exception, "NOT_FOUND", HttpStatus.NOT_FOUND);
+        return handleExpectedException(exception, "NOT_FOUND", HttpStatus.NOT_FOUND);
     }
 
     /**
@@ -49,7 +49,7 @@ public class CommonControllerAdvice {
      */
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<Error> handleNoSuchElementException(NotFoundException exception) {
-        return handleException(exception, "NOT_FOUND", HttpStatus.NOT_FOUND);
+        return handleExpectedException(exception, "NOT_FOUND", HttpStatus.NOT_FOUND);
     }
 
     /**
@@ -60,16 +60,25 @@ public class CommonControllerAdvice {
      */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Error> handleException(Exception exception) {
-        return handleException(exception, "INTERNAL_SERVER_ERROR", HttpStatus.INTERNAL_SERVER_ERROR);
+        return handleUnexpectedException(exception, "INTERNAL_SERVER_ERROR", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    private ResponseEntity<Error> handleException(Exception exception, String errorText, HttpStatus status) {
+    private ResponseEntity<Error> handleExpectedException(Exception exception, String errorText, HttpStatus status) {
+        return new ResponseEntity<>(buildError(exception, errorText), status);
+    }
+
+    private ResponseEntity<Error> handleUnexpectedException(Exception exception, String errorText, HttpStatus status) {
+        Error error = buildError(exception, errorText);
+        error.setStackTrace(ExceptionUtils.getStackTrace(exception));
+        return new ResponseEntity<>(error, status);
+    }
+
+    private Error buildError(Exception exception, String errorText) {
         Error error = new Error();
         error.setError(errorText);
         String message = exception.getMessage();
         error.setMessage(message);
-        error.setStackTrace(ExceptionUtils.getStackTrace(exception));
         LOGGER.warn(message, exception);
-        return new ResponseEntity<>(error, status);
+        return error;
     }
 }
