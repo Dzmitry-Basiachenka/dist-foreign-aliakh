@@ -64,8 +64,8 @@ public class GrantPriorityRepositoryIntegrationTest {
             buildGrantPriority("DIGITAL", 2, "ACLDIGITAL"),
             buildGrantPriority("PRINT", 3, "AACL"),
             buildGrantPriority("DIGITAL", 4, "AACL"),
-            buildGrantPriority("NGT_PRINT_COURSE_MATERIALS", 5, "RLS"),
-            buildGrantPriority("NGT_ELECTRONIC_COURSE_MATERIALS", 6, "RLS")
+            buildGrantPriority("NGT_PRINT_COURSE_MATERIALS", 5, "APS"),
+            buildGrantPriority("NGT_ELECTRONIC_COURSE_MATERIALS", 6, "ECC")
         );
         IntStream.range(0, expectedGrantPriorities.size())
             .forEach(i -> assertGrantPriority(expectedGrantPriorities.get(i), actualGrantPriorities.get(i)));
