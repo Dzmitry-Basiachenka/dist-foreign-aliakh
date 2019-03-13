@@ -1,3 +1,6 @@
+4.1.42
+-
+
 4.1.41
 -
 * CDP-685 FDA: Load Fund Pool: 'Server Connection Lost' appears during creation NTS batch: use single thread to send usages for getting rights after loading NTS batch
