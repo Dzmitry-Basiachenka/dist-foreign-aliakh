@@ -22,6 +22,12 @@ databaseChangeLog {
             column(name: 'name', value: 'Cambridge University Press - US - Books')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'df_rightsholder_uid', value: 'a088a427-0739-4fc7-b621-9a77eb83244a')
+            column(name: 'rh_account_number', value: '1000010088')
+            column(name: 'name', value: 'Zoological Society of Poland')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '38f41b1f-989d-42c2-9ea2-94b3565bea0f')
             column(name: 'name', value: 'Test_RMS_get_rights')
@@ -237,6 +243,32 @@ databaseChangeLog {
             column(name: 'service_fee_amount', value: '0.0000000000')
             column(name: 'gross_amount', value: '1395.1194841293')
             column(name: 'is_rh_participating_flag', value: 'FALSE')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: 'ade32bd9-4c0f-4835-b980-6372b89c9caf')
+            column(name: 'name', value: 'NTS getRights')
+            column(name: 'rro_account_number', value: '1000023401')
+            column(name: 'payment_date', value: '2018-01-26')
+            column(name: 'fiscal_year', value: '2018')
+            column(name: 'gross_amount', value: '84.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'ede81bc0-a756-43a2-b236-05a0184384f4')
+            column(name: 'df_usage_batch_uid', value: 'ade32bd9-4c0f-4835-b980-6372b89c9caf')
+            column(name: 'wr_wrk_inst', value: '786768461')
+            column(name: 'work_title', value: '100 ROAD MOVIES')
+            column(name: 'system_title', value: '100 ROAD MOVIES')
+            column(name: 'status_ind', value: 'WORK_FOUND')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '112317622XX')
+            column(name: 'market', value: 'Univ,Bus,Doc,S')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '16.00')
+            column(name: 'gross_amount', value: '84.00')
         }
 
         rollback ""

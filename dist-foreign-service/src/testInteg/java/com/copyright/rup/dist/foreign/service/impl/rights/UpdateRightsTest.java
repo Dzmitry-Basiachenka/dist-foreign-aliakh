@@ -52,6 +52,8 @@ import java.util.stream.IntStream;
 @Transactional
 public class UpdateRightsTest {
 
+    private static final String FAS = "FAS";
+
     @Autowired
     private IUsageRepository usageRepository;
     @Autowired
@@ -95,10 +97,13 @@ public class UpdateRightsTest {
         expectRmsCall("rms_grants_254030731_request.json", "rms_grants_254030731_response.json");
         expectRmsCall("rms_grants_658824345_request.json", "rms_grants_658824345_response.json");
         expectRmsCall("rms_grants_488824345_request.json", "rms_grants_empty_response.json");
-        rightsService.updateRight(buildUsage("b77e72d6-ef71-4f4b-a00b-5800e43e5bee", 254030731L));
-        rightsService.updateRight(buildUsage("8aded52d-9507-4883-ab4c-fd2e029298af", 254030731L));
-        rightsService.updateRight(buildUsage("74ded52a-4454-1225-ab4c-fA2e029298af", 658824345L));
-        rightsService.updateRight(buildUsage("3a6b6f25-9f68-4da7-be4f-dd65574f5168", 488824345L));
+        expectRmsCall("rms_grants_786768461_request.json", "rms_grants_786768461_response.json");
+        rightsService.updateRight(buildUsage("b77e72d6-ef71-4f4b-a00b-5800e43e5bee", FAS, 254030731L), true);
+        rightsService.updateRight(buildUsage("8aded52d-9507-4883-ab4c-fd2e029298af", FAS, 254030731L), true);
+        rightsService.updateRight(buildUsage("74ded52a-4454-1225-ab4c-fA2e029298af", FAS, 658824345L), true);
+        rightsService.updateRight(buildUsage("3a6b6f25-9f68-4da7-be4f-dd65574f5168", FAS, 488824345L), true);
+        rightsService.updateRight(buildUsage("ede81bc0-a756-43a2-b236-05a0184384f4", "NTS", 786768461L), false);
+        assertUsage("ede81bc0-a756-43a2-b236-05a0184384f4", UsageStatusEnum.RH_FOUND, 1000010088L);
         assertUsage("b77e72d6-ef71-4f4b-a00b-5800e43e5bee", UsageStatusEnum.RH_FOUND, 1000010077L);
         assertUsage("8aded52d-9507-4883-ab4c-fd2e029298af", UsageStatusEnum.RH_FOUND, 1000010077L);
         assertUsage("74ded52a-4454-1225-ab4c-fA2e029298af", UsageStatusEnum.RH_FOUND, 1000023401L);
@@ -107,15 +112,16 @@ public class UpdateRightsTest {
         assertAudit("8aded52d-9507-4883-ab4c-fd2e029298af", "Rightsholder account 1000010077 was found in RMS");
         assertAudit("74ded52a-4454-1225-ab4c-fA2e029298af", "Rightsholder account 1000023401 was found in RMS");
         assertAudit("3a6b6f25-9f68-4da7-be4f-dd65574f5168", "Rightsholder account for 488824345 was not found in RMS");
+        assertAudit("ede81bc0-a756-43a2-b236-05a0184384f4");
         mockServer.verify();
         asyncMockServer.verify();
     }
 
-    private Usage buildUsage(String usageId, Long wrWrkInst) {
+    private Usage buildUsage(String usageId, String productFamily, Long wrWrkInst) {
         Usage usage = new Usage();
         usage.setId(usageId);
         usage.setWrWrkInst(wrWrkInst);
-        usage.setProductFamily("FAS");
+        usage.setProductFamily(productFamily);
         return usage;
     }
 

@@ -2,11 +2,9 @@ package com.copyright.rup.dist.foreign.service.impl.tax;
 
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
-import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.integration.oracle.api.IOracleIntegrationService;
 import com.copyright.rup.dist.foreign.service.api.IRhTaxService;
-import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import org.slf4j.Logger;
@@ -33,8 +31,6 @@ public class RhTaxService implements IRhTaxService {
     private IOracleIntegrationService oracleIntegrationService;
     @Autowired
     private IUsageService usageService;
-    @Autowired
-    private IUsageAuditService usageAuditService;
 
     @Override
     public void processTaxCountryCode(Usage usage) {
@@ -45,7 +41,6 @@ public class RhTaxService implements IRhTaxService {
         if (isUsTaxCountry) {
             usage.setStatus(UsageStatusEnum.US_TAX_COUNTRY);
             usageService.updateProcessedUsage(usage);
-            usageAuditService.logAction(usageId, UsageActionTypeEnum.US_TAX_COUNTRY, "Rightsholder tax country is US");
         }
         LOGGER.debug("Processing RH tax country. Finished. UsageId={}, RhAccountNumber={}, IsUsTaxCountry={}", usageId,
             accountNumber, isUsTaxCountry);
@@ -57,9 +52,5 @@ public class RhTaxService implements IRhTaxService {
 
     void setUsageService(IUsageService usageService) {
         this.usageService = usageService;
-    }
-
-    void setUsageAuditService(IUsageAuditService usageAuditService) {
-        this.usageAuditService = usageAuditService;
     }
 }

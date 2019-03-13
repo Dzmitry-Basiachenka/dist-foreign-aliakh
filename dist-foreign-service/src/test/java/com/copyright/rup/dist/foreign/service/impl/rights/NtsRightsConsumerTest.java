@@ -13,7 +13,6 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
-
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,78 +21,54 @@ import java.util.Objects;
 import java.util.function.Predicate;
 
 /**
- * Verifies {@link RightsConsumer}.
+ * Verifies {@link NtsRightsConsumer}.
  * <p>
- * Copyright (C) 2018 copyright.com
+ * Copyright (C) 2019 copyright.com
  * <p>
- * Date: 11/21/2018
+ * Date: 3/12/2019
  *
  * @author Uladzislau Shalamitski
  */
-public class RightsConsumerTest {
+public class NtsRightsConsumerTest {
 
-    private RightsConsumer rightsConsumer;
+    private NtsRightsConsumer ntsRightsConsumer;
     private IChainProcessor<Usage> ntsRightsProcessorMock;
-    private IChainProcessor<Usage> fasRightsProcessorMock;
 
     @Before
     @SuppressWarnings("unchecked")
     public void setUp() {
-        rightsConsumer = new RightsConsumer();
+        ntsRightsConsumer = new NtsRightsConsumer();
         ntsRightsProcessorMock = createMock(IChainProcessor.class);
-        fasRightsProcessorMock = createMock(IChainProcessor.class);
-        rightsConsumer.setNtsRightsProcessor(ntsRightsProcessorMock);
-        rightsConsumer.setFasRightsProcessor(fasRightsProcessorMock);
+        ntsRightsConsumer.setNtsRightsProcessor(ntsRightsProcessorMock);
     }
 
     @Test
-    public void testConsumeNtsUsage() {
-        testConsume("NTS", 10000L, ntsRightsProcessorMock, true);
+    public void testConsume() {
+        testConsume(1000009522L, true);
     }
 
     @Test
-    public void testConsumeNtsUsageWithoutRights() {
-        testConsume("NTS", null, ntsRightsProcessorMock, false);
+    public void testConsumeUsageWithoutRights() {
+        testConsume(null, false);
     }
 
-    @Test
-    public void testConsumeFasUsage() {
-        testConsume("FAS", 10000L, fasRightsProcessorMock, true);
-    }
-
-    @Test
-    public void testConsumeFasUsageWithoutRights() {
-        testConsume("FAS", null, fasRightsProcessorMock, false);
-    }
-
-    @Test
-    public void testConsumeClaUsage() {
-        testConsume("FAS2", 10000L, fasRightsProcessorMock, true);
-    }
-
-    @Test
-    public void testConsumeClaUsageWithoutRights() {
-        testConsume("FAS2", null, fasRightsProcessorMock, false);
-    }
-
-    private void testConsume(String productFamily, Long foundRhAccountNumber, IChainProcessor<Usage> expectedProcessor,
-                            boolean expectedPredicateResult) {
-        rightsConsumer.setRightsService(new RightsServiceMock(foundRhAccountNumber));
-        Usage usage = buildUsage(productFamily);
+    private void testConsume(Long foundRhAccountNumber, boolean expectedPredicateResult) {
+        ntsRightsConsumer.setRightsService(new RightsServiceMock(foundRhAccountNumber));
+        Usage usage = buildUsage();
         Capture<Predicate<Usage>> predicateCapture = new Capture<>();
-        expectedProcessor.executeNextProcessor(eq(usage), capture(predicateCapture));
+        ntsRightsProcessorMock.executeNextProcessor(eq(usage), capture(predicateCapture));
         expectLastCall().once();
-        replay(expectedProcessor);
-        rightsConsumer.consume(usage);
-        verify(expectedProcessor);
-        reset(expectedProcessor);
+        replay(ntsRightsProcessorMock);
+        ntsRightsConsumer.consume(usage);
+        verify(ntsRightsProcessorMock);
+        reset(ntsRightsProcessorMock);
         assertEquals(expectedPredicateResult, predicateCapture.getValue().test(usage));
     }
 
-    private Usage buildUsage(String productFamily) {
+    private Usage buildUsage() {
         Usage usage = new Usage();
         usage.setId(RupPersistUtils.generateUuid());
-        usage.setProductFamily(productFamily);
+        usage.setProductFamily("NTS");
         usage.setStatus(UsageStatusEnum.WORK_FOUND);
         return usage;
     }
@@ -107,7 +82,7 @@ public class RightsConsumerTest {
         }
 
         @Override
-        public void updateRight(Usage usage) {
+        public void updateRight(Usage usage, boolean logAction) {
             if (Objects.nonNull(rhAccountNumber)) {
                 usage.getRightsholder().setAccountNumber(rhAccountNumber);
                 usage.setStatus(UsageStatusEnum.RH_FOUND);
