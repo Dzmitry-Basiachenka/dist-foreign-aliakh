@@ -427,12 +427,12 @@ public interface IUsageRepository {
     boolean isValidUsagesState(UsageFilter filter, UsageStatusEnum status);
 
     /**
-     * Inserts usages from archived usages during for NTS batch creation and writes audit for this action.
+     * Inserts usages from archived usages during for NTS batch creation.
      *
      * @param usageBatch        instance of {@link UsageBatch}
      * @param auditActionReason action reason for audit
      * @param userName          user name
      * @return list of inserted usage uids
      */
-    List<String> insertNtsUsagesWithAudit(UsageBatch usageBatch, String auditActionReason, String userName);
+    List<String> insertNtsUsages(UsageBatch usageBatch, String auditActionReason, String userName);
 }
