@@ -485,7 +485,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public List<String> insertNtsUsagesWithAudit(UsageBatch usageBatch, String auditActionReason, String userName) {
+    public List<String> insertNtsUsages(UsageBatch usageBatch, String auditActionReason, String userName) {
         Objects.requireNonNull(usageBatch);
         Objects.requireNonNull(usageBatch.getFundPool());
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(8);
@@ -497,6 +497,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         params.put("auditActionReason", Objects.requireNonNull(auditActionReason));
         params.put("createUser", Objects.requireNonNull(userName));
         params.put("updateUser", Objects.requireNonNull(userName));
-        return selectList("IUsageMapper.insertNtsUsagesWithAudit", params);
+        return selectList("IUsageMapper.insertNtsUsages", params);
     }
 }

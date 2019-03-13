@@ -1378,7 +1378,7 @@
                 and u.status_ind != #{status})
     </select>
 
-    <select id="insertNtsUsagesWithAudit" parameterType="map" resultType="string">
+    <select id="insertNtsUsages" parameterType="map" resultType="string">
         insert into ${schema}.df_usage (
             df_usage_uid,
             df_usage_batch_uid,

@@ -157,7 +157,7 @@ public class UsageService implements IUsageService {
     public List<String> insertNtsUsages(UsageBatch usageBatch) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Insert NTS usages. Started. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
-        List<String> usageIds = usageRepository.insertNtsUsagesWithAudit(usageBatch,
+        List<String> usageIds = usageRepository.insertNtsUsages(usageBatch,
             buildNtsUsageReason(usageBatch), userName);
         LOGGER.info("Insert NTS usages. Finished. UsageBatchName={}, UserName={}, UsageIdsCount={}",
             usageBatch.getName(), userName, LogUtils.size(usageIds));
