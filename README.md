@@ -1,5 +1,9 @@
 4.1.42
 -
+* B-49462 Tech Debt: FDA: improve logging during sending usages for getting rights after loading NTS batch
+* B-49462 Tech Debt: FDA: update dist-common to 38.2.+ version
+* B-49462 Tech Debt: FDA: update grant_product_family value in df_grant_priority table for NGT_ELECTRONIC_COURSE_MATERIALS and NGT_PRINT_COURSE_MATERIALS type of uses
+* B-49462 Tech Debt: FDA: remove adding audit from NTS usage processing and split common RightsConsumer into NtsRightsConsumer and FasRightsConsumer
 
 4.1.41
 -
