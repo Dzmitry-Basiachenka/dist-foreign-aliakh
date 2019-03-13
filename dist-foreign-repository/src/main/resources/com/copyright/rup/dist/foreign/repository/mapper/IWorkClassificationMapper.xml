@@ -23,6 +23,7 @@
             update ${schema}.df_work_classification
             set classification = #{classification},
                 <include refid="StoredEntityMapper.update"/>
+            where wr_wrk_inst = #{wrWrkInst}
         )
         insert into ${schema}.df_work_classification (
             df_work_classification_uid,
@@ -63,28 +64,28 @@
             <when test="null != sort">
                 <choose>
                     <when test="sort.property == 'article'">
-                        internal.article <include refid="IUsageMapper.direction"/>
+                        article <include refid="IUsageMapper.direction"/>
                     </when>
                     <when test="sort.property == 'standardNumber'">
-                        internal.standard_number <include refid="IUsageMapper.direction"/>
+                        standard_number <include refid="IUsageMapper.direction"/>
                     </when>
                     <when test="sort.property == 'wrWrkInst'">
                         wr_wrk_inst <include refid="IUsageMapper.direction"/>
                     </when>
                     <when test="sort.property == 'systemTitle'">
-                        internal.system_title <include refid="IUsageMapper.direction"/>
+                        system_title <include refid="IUsageMapper.direction"/>
                     </when>
                     <when test="sort.property == 'rhAccountNumber'">
-                        internal.rh_account_number <include refid="IUsageMapper.direction"/>
+                        rh_account_number <include refid="IUsageMapper.direction"/>
                     </when>
                     <when test="sort.property == 'rhName'">
-                        internal.rh_name <include refid="IUsageMapper.direction"/>
+                        rh_name <include refid="IUsageMapper.direction"/>
                     </when>
                     <when test="sort.property == 'publisher'">
-                        internal.publisher <include refid="IUsageMapper.direction"/>
+                        publisher <include refid="IUsageMapper.direction"/>
                     </when>
                     <when test="sort.property == 'author'">
-                        internal.author <include refid="IUsageMapper.direction"/>
+                        author <include refid="IUsageMapper.direction"/>
                     </when>
                     <when test="sort.property == 'classification'">
                         classification <include refid="IUsageMapper.direction"/>
@@ -92,7 +93,7 @@
                 </choose>
             </when>
             <otherwise>
-                wr_wrk_inst
+                wc.updated_datetime
             </otherwise>
         </choose>
     </sql>

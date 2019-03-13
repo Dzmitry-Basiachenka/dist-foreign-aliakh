@@ -463,6 +463,12 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
+    public void testFindCountForClassificationUpdate() {
+        assertEquals(2, usageRepository.findCountForClassificationUpdate(Sets.newHashSet(987632764L, 12318778798L)));
+        assertEquals(0, usageRepository.findCountForClassificationUpdate(Collections.singleton(1L)));
+    }
+
+    @Test
     public void testFindWithAmountsAndRightsholders() {
         UsageFilter usageFilter =
             buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.singleton(USAGE_BATCH_ID_1),

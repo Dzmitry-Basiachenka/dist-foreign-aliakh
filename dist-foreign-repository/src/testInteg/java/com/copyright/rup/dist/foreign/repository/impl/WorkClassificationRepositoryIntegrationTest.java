@@ -5,6 +5,8 @@ import static junit.framework.TestCase.assertNull;
 import static org.junit.Assert.assertEquals;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.WorkClassification;
 
 import org.junit.Test;
@@ -63,23 +65,29 @@ public class WorkClassificationRepositoryIntegrationTest {
     public void testInsertOrUpdateWithExistingClassification() {
         WorkClassification classification = buildClassification(BELLETRISTIC, WR_WRK_INST_1);
         assertEquals(NON_STM, workClassificationRepository.findClassificationByWrWrkInst(WR_WRK_INST_1));
+        assertEquals(NON_STM, workClassificationRepository.findClassificationByWrWrkInst(180382914L));
         workClassificationRepository.insertOrUpdate(classification);
         assertEquals(BELLETRISTIC, workClassificationRepository.findClassificationByWrWrkInst(WR_WRK_INST_1));
+        assertEquals(NON_STM, workClassificationRepository.findClassificationByWrWrkInst(180382914L));
     }
 
     @Test
     public void testInsertOrUpdateWithNewClassification() {
         WorkClassification classification = buildClassification(STM, WR_WRK_INST_2);
         assertNull(workClassificationRepository.findClassificationByWrWrkInst(WR_WRK_INST_2));
+        assertEquals(NON_STM, workClassificationRepository.findClassificationByWrWrkInst(180382914L));
         workClassificationRepository.insertOrUpdate(classification);
         assertEquals(STM, workClassificationRepository.findClassificationByWrWrkInst(WR_WRK_INST_2));
+        assertEquals(NON_STM, workClassificationRepository.findClassificationByWrWrkInst(180382914L));
     }
 
     @Test
     public void testDeleteByWrWkrInst() {
         assertEquals(NON_STM, workClassificationRepository.findClassificationByWrWrkInst(WR_WRK_INST_1));
+        assertEquals(NON_STM, workClassificationRepository.findClassificationByWrWrkInst(180382914L));
         workClassificationRepository.deleteByWrWrkInst(WR_WRK_INST_1);
         assertNull(workClassificationRepository.findClassificationByWrWrkInst(WR_WRK_INST_1));
+        assertEquals(NON_STM, workClassificationRepository.findClassificationByWrWrkInst(180382914L));
     }
 
     @Test
@@ -104,7 +112,8 @@ public class WorkClassificationRepositoryIntegrationTest {
 
     @Test
     public void testFindBySearch() {
-        List<WorkClassification> classifications = workClassificationRepository.findBySearch(null, null, null);
+        List<WorkClassification> classifications =
+            workClassificationRepository.findBySearch(null, null, new Sort("wrWrkInst", Direction.ASC));
         assertEquals(5, classifications.size());
         assertClassification(classifications.get(0), WR_WRK_INST_1, NON_STM, null);
         assertClassification(classifications.get(1), 122410079L, STM, null);

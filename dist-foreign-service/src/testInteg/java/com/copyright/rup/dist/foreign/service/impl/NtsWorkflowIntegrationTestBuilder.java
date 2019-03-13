@@ -73,7 +73,7 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
     private String expectedOracleResponse;
     private String expectedPrmResponse;
     private String expectedPreferencesResponse;
-    private String expectedPreferencesRightholderId;
+    private String expectedPreferencesRightsholderId;
     private Long expectedPrmAccountNumber;
     private UsageBatch usageBatch;
     private Usage expectedUsage;
@@ -100,9 +100,9 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
-    NtsWorkflowIntegrationTestBuilder expectPreferences(String preferencesJson, String rightholderId) {
+    NtsWorkflowIntegrationTestBuilder expectPreferences(String preferencesJson, String rightsholderId) {
         this.expectedPreferencesResponse = preferencesJson;
-        this.expectedPreferencesRightholderId = rightholderId;
+        this.expectedPreferencesRightsholderId = rightsholderId;
         return this;
     }
 
@@ -126,7 +126,7 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
         expectedOracleRequest = null;
         expectedOracleResponse = null;
         expectedPreferencesResponse = null;
-        expectedPreferencesRightholderId = null;
+        expectedPreferencesRightsholderId = null;
     }
 
     /**
@@ -254,7 +254,7 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
         private void expectGetPreferences() {
             mockServer.expect(MockRestRequestMatchers
                 .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelpref?orgIds%5B%5D="
-                    + expectedPreferencesRightholderId
+                    + expectedPreferencesRightsholderId
                     + "&prefCodes%5B%5D=IS-RH-FDA-PARTICIPATING,ISRHDISTINELIGIBLE"))
                 .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
                 .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(),
