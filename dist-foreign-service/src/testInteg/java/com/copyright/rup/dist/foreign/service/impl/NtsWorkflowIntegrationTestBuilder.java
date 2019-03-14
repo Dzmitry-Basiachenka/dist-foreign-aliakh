@@ -20,6 +20,7 @@ import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.impl.NtsWorkflowIntegrationTestBuilder.Runner;
 
 import com.google.common.collect.Lists;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.builder.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -135,7 +136,7 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
         private MockRestServiceServer mockServer;
         private MockRestServiceServer asyncMockServer;
 
-        public void run() throws InterruptedException {
+        public void run() {
             createRestServer();
             expectGetRmsRights();
             if (Objects.nonNull(expectedPrmResponse)) {
@@ -154,9 +155,8 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
         }
 
         private void loadNtsBatch() {
-            String userName = RupContextUtils.getUserName();
-            List<String> ntsUsageIds = usageBatchService.insertNtsBatch(usageBatch, userName);
-            usageBatchService.getAndSendForGettingRights(ntsUsageIds, usageBatch.getName(), userName);
+            List<String> ntsUsageIds = usageBatchService.insertNtsBatch(usageBatch, RupContextUtils.getUserName());
+            usageBatchService.getAndSendForGettingRights(ntsUsageIds, usageBatch.getName());
         }
 
         private void assertBatch() {

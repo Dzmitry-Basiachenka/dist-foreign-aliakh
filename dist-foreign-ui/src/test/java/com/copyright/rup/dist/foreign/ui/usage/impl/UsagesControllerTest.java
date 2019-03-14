@@ -287,7 +287,7 @@ public class UsagesControllerTest {
         expect(usageBatchService.insertFasBatch(usageBatch, usages)).andReturn(1).once();
         usageBatchService.sendForMatching(usages);
         expectLastCall().once();
-        usageBatchService.sendForGettingRights(usages);
+        usageBatchService.sendForGettingRights(usages, usageBatch.getName());
         expectLastCall().once();
         replay(usageBatchService, filterController, filterWidgetMock);
         assertEquals(1, controller.loadUsageBatch(usageBatch, usages));
@@ -306,7 +306,7 @@ public class UsagesControllerTest {
         List<String> ntsUsageIds = Arrays.asList(usage1.getId(), usage2.getId());
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         expect(usageBatchService.insertNtsBatch(usageBatch, USER_NAME)).andReturn(ntsUsageIds).once();
-        usageBatchService.getAndSendForGettingRights(ntsUsageIds, BATCH_NAME, USER_NAME);
+        usageBatchService.getAndSendForGettingRights(ntsUsageIds, BATCH_NAME);
         expectLastCall().once();
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         filterWidgetMock.clearFilter();

@@ -238,7 +238,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
             int usagesInsertedCount = usageBatchService.insertFasBatch(usageBatch, usages);
             assertEquals(expectedInsertedUsagesCount, usagesInsertedCount);
             usageBatchService.sendForMatching(usages);
-            usageBatchService.sendForGettingRights(usages);
+            usageBatchService.sendForGettingRights(usages, usageBatch.getName());
         }
 
         // predefined usage ids are used, otherwise during every test run the usage ids will be random

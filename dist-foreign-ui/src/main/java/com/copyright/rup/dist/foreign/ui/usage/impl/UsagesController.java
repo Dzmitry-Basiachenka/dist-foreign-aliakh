@@ -137,7 +137,7 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     public int loadUsageBatch(UsageBatch usageBatch, Collection<Usage> usages) {
         int result = usageBatchService.insertFasBatch(usageBatch, usages);
         usageBatchService.sendForMatching(usages);
-        usageBatchService.sendForGettingRights(usages);
+        usageBatchService.sendForGettingRights(usages, usageBatch.getName());
         filterController.getWidget().clearFilter();
         return result;
     }
@@ -154,7 +154,7 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
         List<String> ntsUsageIds = usageBatchService.insertNtsBatch(usageBatch, userName);
         LOGGER.info("Insert NTS batch. Finished. UsageBatchName={}, UserName={}, UsagesCount={}",
             usageBatch.getName(), userName, LogUtils.size(ntsUsageIds));
-        usageBatchService.getAndSendForGettingRights(ntsUsageIds, usageBatch.getName(), userName);
+        usageBatchService.getAndSendForGettingRights(ntsUsageIds, usageBatch.getName());
         filterController.getWidget().clearFilter();
     }
 

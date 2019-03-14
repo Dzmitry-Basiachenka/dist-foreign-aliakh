@@ -35,7 +35,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 /**
@@ -144,24 +143,21 @@ public class RightsService implements IRightsService {
         }
     }
 
-    private long updateSentForRaUsagesRightsholders(List<Usage> usages) {
+    private void updateSentForRaUsagesRightsholders(List<Usage> usages) {
         Map<Long, List<Usage>> wrWrkInstToUsagesMap = usages.stream()
             .collect(Collectors.groupingBy(Usage::getWrWrkInst));
         String productFamily = usages.iterator().next().getProductFamily();
         Map<Long, Long> wrWrkInstToAccountNumber =
             rmsGrantProcessorService.getAccountNumbersByWrWrkInsts(Lists.newArrayList(wrWrkInstToUsagesMap.keySet()),
                 productFamily);
-        AtomicLong eligibleUsagesCount = new AtomicLong();
         wrWrkInstToAccountNumber.forEach((wrWrkInst, rhAccountNumber) -> {
             List<Usage> usagesToUpdate = wrWrkInstToUsagesMap.get(wrWrkInst);
             Set<String> usageIds = usagesToUpdate.stream().map(Usage::getId).collect(Collectors.toSet());
             usageRepository.updateStatusAndRhAccountNumber(usageIds, UsageStatusEnum.RH_FOUND, rhAccountNumber);
-            eligibleUsagesCount.addAndGet(usageIds.size());
             auditService.logAction(usageIds, UsageActionTypeEnum.RH_FOUND,
                 String.format("Rightsholder account %s was found in RMS", rhAccountNumber));
             chainExecutor.execute(usagesToUpdate, ChainProcessorTypeEnum.ELIGIBILITY);
         });
         rightsholderService.updateRightsholders(Sets.newHashSet(wrWrkInstToAccountNumber.values()));
-        return eligibleUsagesCount.longValue();
     }
 }
