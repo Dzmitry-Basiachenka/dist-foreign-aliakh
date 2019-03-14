@@ -1,3 +1,13 @@
+4.1.43
+-
+*  B-49462 Tech Debt: FDA: remove environment prefix from internal SQS endoints
+* B-49462 Tech Debt: FDA: Rename service and repository methods after skipping audit writing during loading Fund Pool batch
+* B-49462 Tech Debt: FDA: adjust loggers during processing NTS usage batch
+* B-49462 Tech Debt: FDA: profile distinct usage processors, remove ForeignPerformanceAspect
+* B-49462 Tech Debt: FDA: remove usage audit deletion while removing non ELIGIBLE NTS usage
+* B-49462 Tech Debt: FDA: update dist-common to 38.3.+ version
+* CDP-691 FDA: Usage statistic: Exception occurs during running usage statistic with invalid usageId
+
 4.1.42
 -
 * B-49462 Tech Debt: FDA: improve logging during sending usages for getting rights after loading NTS batch
