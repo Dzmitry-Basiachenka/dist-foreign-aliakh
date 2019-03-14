@@ -179,9 +179,7 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    @Transactional
     public void deleteById(String usageId) {
-        usageAuditService.deleteActionsByUsageId(usageId);
         usageRepository.deleteById(usageId);
     }
 
