@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
+import org.perf4j.aop.Profiled;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -25,6 +26,7 @@ public class DeleteUsageProcessor extends AbstractUsageChainProcessor {
     private IUsageService usageService;
 
     @Override
+    @Profiled(tag = "DeleteUsageProcessor.process")
     public void process(Usage usage) {
         LOGGER.trace("Usage Delete processor. Started. UsageId={}", usage.getId());
         usageService.deleteById(usage.getId());

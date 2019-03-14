@@ -5,6 +5,7 @@ import com.copyright.rup.dist.common.integration.camel.IProducer;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
+import org.perf4j.aop.Profiled;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -27,6 +28,7 @@ public class RightsProcessor extends AbstractUsageJobProcessor {
     private IProducer<Usage> producer;
 
     @Override
+    @Profiled(tag = "RightsProcessor.process")
     public void process(Usage usage) {
         LOGGER.trace("Usage Rights processor. Started. UsageId={}", usage.getId());
         producer.send(usage);

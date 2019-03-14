@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
+import org.perf4j.aop.Profiled;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +35,7 @@ public class EligibilityProcessor extends AbstractUsageChainProcessor {
 
     @Override
     @Transactional
+    @Profiled(tag = "EligibilityProcessor.process")
     public void process(Usage usage) {
         LOGGER.trace("Usage Eligibility processor. Started. UsageId={}", usage.getId());
         usageRepository.updateStatus(Collections.singleton(usage.getId()), UsageStatusEnum.ELIGIBLE);

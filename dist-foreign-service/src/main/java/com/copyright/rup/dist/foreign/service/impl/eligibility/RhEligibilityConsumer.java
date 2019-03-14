@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 
+import org.perf4j.aop.Profiled;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -37,6 +38,7 @@ public class RhEligibilityConsumer implements IConsumer<Usage> {
 
     @Override
     @Transactional
+    @Profiled(tag = "RhEligibilityConsumer.consume")
     public void consume(Usage usage) {
         if (Objects.nonNull(usage)) {
             LOGGER.trace("Consume usage for RH eligibility processing. Started. UsageId={}", usage.getId());
