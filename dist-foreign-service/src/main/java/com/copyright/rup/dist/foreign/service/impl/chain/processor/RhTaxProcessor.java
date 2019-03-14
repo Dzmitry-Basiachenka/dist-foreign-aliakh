@@ -5,6 +5,7 @@ import com.copyright.rup.dist.common.integration.camel.IProducer;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
+import org.perf4j.aop.Profiled;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -27,6 +28,7 @@ public class RhTaxProcessor extends AbstractUsageJobProcessor {
     private IProducer<Usage> rhTaxProducer;
 
     @Override
+    @Profiled(tag = "RhTaxProcessor.process")
     public void process(Usage usage) {
         LOGGER.trace("Usage RhTax processor. Started. UsageId={}", usage.getId());
         rhTaxProducer.send(usage);

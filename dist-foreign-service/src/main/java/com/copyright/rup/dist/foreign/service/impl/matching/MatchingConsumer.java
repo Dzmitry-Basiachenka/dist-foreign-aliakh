@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.service.api.IWorkMatchingService;
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 
 import org.apache.commons.lang3.StringUtils;
+import org.perf4j.aop.Profiled;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -42,6 +43,7 @@ public class MatchingConsumer implements IConsumer<Usage> {
     private IChainProcessor<Usage> matchingProcessor;
 
     @Override
+    @Profiled(tag = "MatchingConsumer.consume")
     public void consume(Usage usage) {
         if (Objects.nonNull(usage)) {
             LOGGER.trace("Consume usage for matching processing. Started. UsageId={}, StandardNumber={}, WorkTitle={}",

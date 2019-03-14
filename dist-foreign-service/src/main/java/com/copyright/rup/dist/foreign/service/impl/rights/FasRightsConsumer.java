@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IRightsService;
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 
+import org.perf4j.aop.Profiled;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -39,6 +40,7 @@ public class FasRightsConsumer implements IConsumer<Usage> {
 
     @Override
     @Transactional
+    @Profiled(tag = "FasRightsConsumer.consume")
     public void consume(Usage usage) {
         if (Objects.nonNull(usage)) {
             LOGGER.trace("Consume usage for rights processing. Started. UsageId={}, ProductFamily={}, WrWrkInst={}",

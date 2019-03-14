@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.perf4j.aop.Profiled;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -31,6 +32,7 @@ public class PaidUsageConsumer implements IConsumer<List<PaidUsage>> {
     private IUsageService usageService;
 
     @Override
+    @Profiled(tag = "PaidUsageConsumer.consume")
     public void consume(List<PaidUsage> usages) {
         LOGGER.info("Consume paid information from LM. Started. UsagesCount={}", LogUtils.size(usages));
         if (CollectionUtils.isNotEmpty(usages)) {
