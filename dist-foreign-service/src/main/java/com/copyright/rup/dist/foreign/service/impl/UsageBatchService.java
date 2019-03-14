@@ -16,6 +16,7 @@ import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
 import com.google.common.collect.Iterables;
+
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -121,33 +122,36 @@ public class UsageBatchService implements IUsageBatchService {
     }
 
     @Override
-    public void sendForGettingRights(Collection<Usage> usages) {
+    public void sendForGettingRights(Collection<Usage> usages, String batchName) {
         executorService.execute(() -> {
+            LOGGER.info("Sending usages for getting rights. Started. UsageBatchName={}, UsagesCount={}", batchName,
+                LogUtils.size(usages));
             List<Usage> workFoundUsages =
                 usages.stream()
                     .filter(usage -> UsageStatusEnum.WORK_FOUND == usage.getStatus())
                     .collect(Collectors.toList());
             chainExecutor.execute(workFoundUsages, ChainProcessorTypeEnum.RIGHTS);
+            LOGGER.info("Sending usages for getting rights. Finished. UsageBatchName={}, UsagesCount={}, " +
+                "WorkFoundUsagesCount={}", batchName, LogUtils.size(usages), LogUtils.size(workFoundUsages));
         });
     }
 
     @Override
-    public void getAndSendForGettingRights(List<String> usageIds, String batchName, String userName) {
+    public void getAndSendForGettingRights(List<String> usageIds, String batchName) {
         AtomicInteger usageIdsCount = new AtomicInteger(0);
         executorService.execute(() ->
             Iterables.partition(usageIds, usagesBatchSize)
                 .forEach(partition -> {
                     usageIdsCount.addAndGet(partition.size());
-                    LOGGER.info("Sending usages for getting rights. Started. UsageBatchName={}, UserName={}, " +
-                        "UsageIdsCount={}", batchName, userName, usageIdsCount);
+                    LOGGER.info("Sending usages for getting rights. Started. UsageBatchName={}, UsageIdsCount={} " +
+                        "BatchSize={}", batchName, usageIdsCount, usagesBatchSize);
                     List<Usage> workFoundUsages = usageRepository.findByIds(partition)
                         .stream()
                         .filter(usage -> UsageStatusEnum.WORK_FOUND == usage.getStatus())
                         .collect(Collectors.toList());
-                    LOGGER.info("Sending usages for getting rights. UsagesCount={}", LogUtils.size(workFoundUsages));
                     chainExecutor.execute(workFoundUsages, ChainProcessorTypeEnum.RIGHTS);
-                    LOGGER.info("Sending usages for getting rights. Finished.  UsageBatchName={}, UserName={}, " +
-                        "UsageIdsCount={}", batchName, userName, usageIdsCount);
+                    LOGGER.info("Sending usages for getting rights. Finished.  UsageBatchName={}, UsageIdsCount={}, " +
+                        "BatchSize={}", batchName, usageIdsCount, usagesBatchSize);
                 }));
     }
 
@@ -168,7 +172,7 @@ public class UsageBatchService implements IUsageBatchService {
      * @return instance of {@link ExecutorService}
      */
     protected ExecutorService getExecutorService() {
-        return Executors.newFixedThreadPool(2);
+        return Executors.newFixedThreadPool(3);
     }
 
     /**

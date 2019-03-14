@@ -46,18 +46,18 @@ public interface IUsageBatchService {
     /**
      * Sends list of usages on queue for getting Rights process.
      *
-     * @param usages collection of {@link Usage} to be sent
+     * @param usages    collection of {@link Usage} to be sent
+     * @param batchName batch name
      */
-    void sendForGettingRights(Collection<Usage> usages);
+    void sendForGettingRights(Collection<Usage> usages, String batchName);
 
     /**
      * Finds usages by their ids and sends them to queue for getting Rights process.
      *
      * @param usageIds  collection of {@link Usage} ids
      * @param batchName batch name
-     * @param userName  user name
      */
-    void getAndSendForGettingRights(List<String> usageIds, String batchName, String userName);
+    void getAndSendForGettingRights(List<String> usageIds, String batchName);
 
     /**
      * Inserts usage batch, it's usages and RRO.
