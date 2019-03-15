@@ -513,7 +513,7 @@ public class UsageService implements IUsageService {
     public void updateProcessedUsage(Usage usage) {
         if (Objects.isNull(usageRepository.updateProcessedUsage(usage))) {
             // throws an exception and stops usage processing when such usage has been already consumed and processed
-            throw new InconsistentUsageStateException();
+            throw new InconsistentUsageStateException(usage);
         }
         usage.setVersion(usage.getVersion() + 1);
     }
