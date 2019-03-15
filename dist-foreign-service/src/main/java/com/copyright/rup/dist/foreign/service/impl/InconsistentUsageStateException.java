@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
+import com.copyright.rup.dist.foreign.domain.Usage;
 
 /**
  * Represents exceptional case when usage is in inconsistent state.
@@ -15,8 +16,11 @@ public class InconsistentUsageStateException extends RupRuntimeException {
 
     /**
      * Constructor.
+     *
+     * @param usage usage in inconsistent state
      */
-    public InconsistentUsageStateException() {
-        super("Usage is in inconsistent state");
+    public InconsistentUsageStateException(Usage usage) {
+        super(String.format("Usage is in inconsistent state. UsageId=%s, Status=%s, RecordVersion=%s", usage.getId(),
+            usage.getStatus(), usage.getVersion()));
     }
 }

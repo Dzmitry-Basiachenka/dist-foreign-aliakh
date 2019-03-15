@@ -45,8 +45,8 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-
 import com.google.common.collect.Table;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
@@ -689,9 +689,12 @@ public class UsageServiceTest {
 
     @Test
     public void testUpdateProcessedUsageWrongVersion() {
-        Usage usage = buildUsage(RupPersistUtils.generateUuid());
+        Usage usage = buildUsage("ca62ea7e-4185-4c56-b12b-c53fbad1d6b8");
+        usage.setStatus(UsageStatusEnum.US_TAX_COUNTRY);
+        usage.setVersion(2);
         exception.expect(InconsistentUsageStateException.class);
-        exception.expectMessage("Usage is in inconsistent state");
+        exception.expectMessage("Usage is in inconsistent state. UsageId=ca62ea7e-4185-4c56-b12b-c53fbad1d6b8," +
+            " Status=US_TAX_COUNTRY, RecordVersion=2");
         expect(usageRepository.updateProcessedUsage(usage)).andReturn(null).once();
         replay(usageRepository);
         usageService.updateProcessedUsage(usage);

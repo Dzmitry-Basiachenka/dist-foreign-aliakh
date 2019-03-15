@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
@@ -38,7 +37,6 @@ public class RhTaxConsumer implements IConsumer<Usage> {
     private IChainProcessor<Usage> rhTaxProcessor;
 
     @Override
-    @Transactional
     @Profiled(tag = "RhTaxConsumer.consume")
     public void consume(Usage usage) {
         if (Objects.nonNull(usage)) {
