@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.rest;
 
 import com.copyright.rup.common.logging.RupLogUtils;
+import com.copyright.rup.dist.foreign.service.api.BadRequestException;
 import com.copyright.rup.dist.foreign.service.api.NotFoundException;
 import com.copyright.rup.dist.foreign.ui.rest.gen.model.Error;
 
@@ -29,6 +30,17 @@ import java.util.NoSuchElementException;
 public class CommonControllerAdvice {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
+
+    /**
+     * Handles {@link BadRequestException} exception.
+     *
+     * @param exception instance of {@link BadRequestException}
+     * @return instance of {@link ResponseEntity}
+     */
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<Error> handleBadRequestException(BadRequestException exception) {
+        return handleExpectedException(exception, "BAD_REQUEST", HttpStatus.BAD_REQUEST);
+    }
 
     /**
      * Handles {@link NoSuchElementException} exception.
@@ -70,15 +82,14 @@ public class CommonControllerAdvice {
     private ResponseEntity<Error> handleUnexpectedException(Exception exception, String errorText, HttpStatus status) {
         Error error = buildError(exception, errorText);
         error.setStackTrace(ExceptionUtils.getStackTrace(exception));
+        LOGGER.warn(exception.getMessage(), exception);
         return new ResponseEntity<>(error, status);
     }
 
     private Error buildError(Exception exception, String errorText) {
         Error error = new Error();
         error.setError(errorText);
-        String message = exception.getMessage();
-        error.setMessage(message);
-        LOGGER.warn(message, exception);
+        error.setMessage(exception.getMessage());
         return error;
     }
 }

@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.rest;
 
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.foreign.domain.report.UsageBatchStatistic;
+import com.copyright.rup.dist.foreign.service.api.BadRequestException;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.NotFoundException;
 import com.copyright.rup.dist.foreign.ui.rest.gen.api.StatisticApiDelegate;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -38,12 +40,19 @@ public class StatisticRest implements StatisticApiDelegate {
     @Override
     public ResponseEntity<BatchStatistic> getBatchStatistic(
         @NotNull String name, @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$") String date) {
-        UsageBatchStatistic ubs = usageAuditService.getBatchStatistic(name,
-            (null != date) ? LocalDate.parse(date, FORMATTER) : null);
+        UsageBatchStatistic ubs = usageAuditService.getBatchStatistic(name, parseDate(date));
         if (null == ubs) {
             throw new NotFoundException("Batch not found. BatchName=" + name);
         }
         return new ResponseEntity<>(buildBatchStatistic(ubs), HttpStatus.OK);
+    }
+
+    private LocalDate parseDate(String date) {
+        try {
+            return (null != date) ? LocalDate.parse(date, FORMATTER) : null;
+        } catch (DateTimeParseException e) {
+            throw new BadRequestException(e);
+        }
     }
 
     private BatchStatistic buildBatchStatistic(UsageBatchStatistic ubs) {

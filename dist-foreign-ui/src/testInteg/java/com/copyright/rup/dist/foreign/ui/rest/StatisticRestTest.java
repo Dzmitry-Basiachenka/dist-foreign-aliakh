@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.domain.report.UsageBatchStatistic;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hamcrest.core.StringStartsWith;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -53,6 +54,7 @@ public class StatisticRestTest {
     private static final String TEST_DATE = "2019-02-25";
     private static final String JSON_PATH_ERROR = "$.error";
     private static final String JSON_PATH_MESSAGE = "$.message";
+    private static final String JSON_PATH_STACKTRACE = "$.stackTrace";
 
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -115,6 +117,23 @@ public class StatisticRestTest {
     }
 
     @Test
+    public void testGetBatchStatisticWrongDate() throws Exception {
+        replay(usageAuditServiceMock);
+        mockMvc.perform(MockMvcRequestBuilders.get(STATISTIC_PATH)
+            .param(NAME, TEST_BATCH_NAME)
+            .param(DATE, "wrongDate")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(MockMvcResultMatchers.status().isBadRequest())
+            .andExpect(MockMvcResultMatchers.jsonPath(JSON_PATH_ERROR)
+                .value("BAD_REQUEST"))
+            .andExpect(MockMvcResultMatchers.jsonPath(JSON_PATH_MESSAGE)
+                .value("java.time.format.DateTimeParseException: Text 'wrongDate' could not be parsed at index 0"))
+            .andExpect(MockMvcResultMatchers.jsonPath(JSON_PATH_STACKTRACE)
+                .doesNotExist());
+        verify(usageAuditServiceMock);
+    }
+
+    @Test
     public void testGetBatchStatisticWrongBatchName() throws Exception {
         expect(usageAuditServiceMock.getBatchStatistic(TEST_BATCH_NAME, LocalDate.parse(TEST_DATE, FORMATTER)))
             .andReturn(null).once();
@@ -127,12 +146,14 @@ public class StatisticRestTest {
             .andExpect(MockMvcResultMatchers.jsonPath(JSON_PATH_ERROR)
                 .value("NOT_FOUND"))
             .andExpect(MockMvcResultMatchers.jsonPath(JSON_PATH_MESSAGE)
-                .value("Batch not found. BatchName=testBatchName"));
+                .value("Batch not found. BatchName=testBatchName"))
+            .andExpect(MockMvcResultMatchers.jsonPath(JSON_PATH_STACKTRACE)
+                .doesNotExist());
         verify(usageAuditServiceMock);
     }
 
     @Test
-    public void testTriggerJobInternalServerError() throws Exception {
+    public void testGetBatchStatisticInternalServerError() throws Exception {
         expect(usageAuditServiceMock.getBatchStatistic(TEST_BATCH_NAME, LocalDate.parse(TEST_DATE, FORMATTER)))
             .andThrow(new RuntimeException("Test exception")).once();
         replay(usageAuditServiceMock);
@@ -144,7 +165,9 @@ public class StatisticRestTest {
             .andExpect(MockMvcResultMatchers.jsonPath(JSON_PATH_ERROR)
                 .value("INTERNAL_SERVER_ERROR"))
             .andExpect(MockMvcResultMatchers.jsonPath(JSON_PATH_MESSAGE)
-                .value("Test exception"));
+                .value("Test exception"))
+            .andExpect(MockMvcResultMatchers.jsonPath(JSON_PATH_STACKTRACE)
+                .value(StringStartsWith.startsWith("java.lang.RuntimeException: Test exception")));
         verify(usageAuditServiceMock);
     }
 
