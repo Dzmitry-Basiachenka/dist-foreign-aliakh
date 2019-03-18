@@ -156,9 +156,19 @@ definitions:
         type: string
       date:
         type: string
+      totalCount:
+        type: integer
       loadedCount:
         type: integer
       loadedAmount:
+        type: number
+      loadedPercent:
+        type: number
+      createdCount:
+        type: integer
+      createdAmount:
+        type: number
+      createdPercent:
         type: number
       matchedCount:
         type: integer

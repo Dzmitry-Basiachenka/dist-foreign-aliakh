@@ -175,11 +175,18 @@ public class StatisticRestTest {
         UsageBatchStatistic ubs = new UsageBatchStatistic();
         ubs.setBatchName(TEST_BATCH_NAME);
         ubs.setDate(date);
+        ubs.setTotalCount(2);
         ubs.setLoadedCount(2);
-        ubs.setLoadedAmount(new BigDecimal("10.00"));
-        ubs.setPaidCount(2);
-        ubs.setPaidAmount(new BigDecimal("10.00"));
-        ubs.setPaidPercent(new BigDecimal("100.00"));
+        ubs.setLoadedAmount(new BigDecimal("1000.00"));
+        ubs.setMatchedCount(1);
+        ubs.setMatchedAmount(new BigDecimal("500.00"));
+        ubs.setMatchedPercent(new BigDecimal("50.00"));
+        ubs.setRhFoundCount(1);
+        ubs.setRhFoundAmount(new BigDecimal("500.00"));
+        ubs.setRhFoundPercent(new BigDecimal("50.00"));
+        ubs.setEligibleCount(2);
+        ubs.setEligibleAmount(new BigDecimal("1000.00"));
+        ubs.setEligiblePercent(new BigDecimal("100.00"));
         return ubs;
     }
 

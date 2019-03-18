@@ -138,6 +138,7 @@ public class UsageAuditServiceTest {
 
     private UsageBatchStatistic buildStatistic() {
         UsageBatchStatistic statistic = new UsageBatchStatistic();
+        statistic.setTotalCount(10);
         statistic.setLoadedCount(10);
         statistic.setLoadedAmount(new BigDecimal("1000.00"));
         statistic.setMatchedCount(2);
