@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -39,6 +40,18 @@ public class CommonControllerAdvice {
      */
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<Error> handleBadRequestException(BadRequestException exception) {
+        return handleExpectedException(exception, "BAD_REQUEST", HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * Handles {@link MissingServletRequestParameterException} exception.
+     *
+     * @param exception instance of {@link MissingServletRequestParameterException}
+     * @return instance of {@link MissingServletRequestParameterException}
+     */
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<Error> handleMissingServletRequestParameterException(
+        MissingServletRequestParameterException exception) {
         return handleExpectedException(exception, "BAD_REQUEST", HttpStatus.BAD_REQUEST);
     }
 
