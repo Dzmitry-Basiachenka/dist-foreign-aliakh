@@ -1,3 +1,9 @@
+4.1.44
+-
+* B-49462 Tech Debt: FDA: adjust grant product family value for NGT_ELECTRONIC_COURSE_MATERIALS and NGT_PRINT_COURSE_MATERIALS type of uses
+* CDP-688: FDA: Sometimes by creation of NTS batch some usages remain in state RH_FOUND
+* CDP-692 FDA: Usage batch statistic: Exception occurs during running usage batch statistic with invalid date format
+
 4.1.43
 -
 *  B-49462 Tech Debt: FDA: remove environment prefix from internal SQS endoints
