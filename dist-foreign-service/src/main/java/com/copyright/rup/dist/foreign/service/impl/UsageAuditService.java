@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
+import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
@@ -73,16 +74,21 @@ public class UsageAuditService implements IUsageAuditService {
         if (Objects.nonNull(statistic)) {
             statistic.setBatchName(batchName);
             statistic.setDate(date);
-            double loadedCount = statistic.getLoadedCount();
-            statistic.setMatchedPercent(buildPercent(statistic.getMatchedCount() / loadedCount));
-            statistic.setNtsWithDrawnPercent(buildPercent(statistic.getNtsWithDrawnCount() / loadedCount));
-            statistic.setWorksNotFoundPercent(buildPercent(statistic.getWorksNotFoundCount() / loadedCount));
-            statistic.setMultipleMatchingPercent(buildPercent(statistic.getMultipleMatchingCount() / loadedCount));
-            statistic.setRhNotFoundPercent(buildPercent(statistic.getRhNotFoundCount() / loadedCount));
-            statistic.setRhFoundPercent(buildPercent(statistic.getRhFoundCount() / loadedCount));
-            statistic.setEligiblePercent(buildPercent(statistic.getEligibleCount() / loadedCount));
-            statistic.setSendForRaPercent(buildPercent(statistic.getSendForRaCount() / loadedCount));
-            statistic.setPaidPercent(buildPercent(statistic.getPaidCount() / loadedCount));
+            if (0 == statistic.getTotalCount()) {
+                throw new RupRuntimeException("Total usages count is 0 for the batch " + batchName);
+            }
+            double totalCount = statistic.getTotalCount();
+            statistic.setLoadedPercent(buildPercent(statistic.getLoadedCount() / totalCount));
+            statistic.setCreatedPercent(buildPercent(statistic.getCreatedCount() / totalCount));
+            statistic.setMatchedPercent(buildPercent(statistic.getMatchedCount() / totalCount));
+            statistic.setNtsWithDrawnPercent(buildPercent(statistic.getNtsWithDrawnCount() / totalCount));
+            statistic.setWorksNotFoundPercent(buildPercent(statistic.getWorksNotFoundCount() / totalCount));
+            statistic.setMultipleMatchingPercent(buildPercent(statistic.getMultipleMatchingCount() / totalCount));
+            statistic.setRhNotFoundPercent(buildPercent(statistic.getRhNotFoundCount() / totalCount));
+            statistic.setRhFoundPercent(buildPercent(statistic.getRhFoundCount() / totalCount));
+            statistic.setEligiblePercent(buildPercent(statistic.getEligibleCount() / totalCount));
+            statistic.setSendForRaPercent(buildPercent(statistic.getSendForRaCount() / totalCount));
+            statistic.setPaidPercent(buildPercent(statistic.getPaidCount() / totalCount));
         }
         return statistic;
     }

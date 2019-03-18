@@ -92,8 +92,11 @@ public class UsageAuditRepositoryIntegrationTest {
     public void testFindFasBatchStatistic() {
         UsageBatchStatistic statistic = usageAuditRepository.findBatchStatistic("FAS batch statistic", null);
         assertNotNull(statistic);
+        assertEquals(10, statistic.getTotalCount());
         assertEquals(10, statistic.getLoadedCount());
         assertEquals(new BigDecimal("995.00"), statistic.getLoadedAmount());
+        assertEquals(0, statistic.getCreatedCount());
+        assertEquals(new BigDecimal(AMOUNT_ZERO), statistic.getCreatedAmount());
         assertEquals(2, statistic.getMatchedCount());
         assertEquals(new BigDecimal("190.00"), statistic.getMatchedAmount());
         assertEquals(1, statistic.getWorksNotFoundCount());
@@ -116,8 +119,11 @@ public class UsageAuditRepositoryIntegrationTest {
     public void testFindNtsBatchStatistic() {
         UsageBatchStatistic statistic = usageAuditRepository.findBatchStatistic("NTS batch statistic", null);
         assertNotNull(statistic);
-        assertEquals(10, statistic.getLoadedCount());
-        assertEquals(new BigDecimal("995.00"), statistic.getLoadedAmount());
+        assertEquals(10, statistic.getTotalCount());
+        assertEquals(0, statistic.getLoadedCount());
+        assertEquals(new BigDecimal(AMOUNT_ZERO), statistic.getLoadedAmount());
+        assertEquals(10, statistic.getCreatedCount());
+        assertEquals(new BigDecimal("995.00"), statistic.getCreatedAmount());
         assertEquals(0, statistic.getMatchedCount());
         assertEquals(new BigDecimal(AMOUNT_ZERO), statistic.getMatchedAmount());
         assertEquals(0, statistic.getWorksNotFoundCount());

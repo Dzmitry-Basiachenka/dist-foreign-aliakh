@@ -59,8 +59,13 @@ public class StatisticRest implements StatisticApiDelegate {
         BatchStatistic bs = new BatchStatistic();
         bs.setBatchName(ubs.getBatchName());
         bs.setDate((null != ubs.getDate()) ? FORMATTER.format(ubs.getDate()) : null);
+        bs.setTotalCount(ubs.getTotalCount());
         bs.setLoadedCount(ubs.getLoadedCount());
         bs.setLoadedAmount(ubs.getLoadedAmount());
+        bs.setLoadedPercent(ubs.getLoadedPercent());
+        bs.setCreatedCount(ubs.getCreatedCount());
+        bs.setCreatedAmount(ubs.getCreatedAmount());
+        bs.setCreatedPercent(ubs.getCreatedPercent());
         bs.setMatchedCount(ubs.getMatchedCount());
         bs.setMatchedAmount(ubs.getMatchedAmount());
         bs.setMatchedPercent(ubs.getMatchedPercent());

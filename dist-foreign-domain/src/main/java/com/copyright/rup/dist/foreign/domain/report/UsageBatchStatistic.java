@@ -22,8 +22,13 @@ public class UsageBatchStatistic {
 
     private String batchName;
     private LocalDate date;
+    private int totalCount;
     private int loadedCount;
     private BigDecimal loadedAmount = DEFAULT_AMOUNT;
+    private BigDecimal loadedPercent = DEFAULT_AMOUNT;
+    private int createdCount;
+    private BigDecimal createdAmount = DEFAULT_AMOUNT;
+    private BigDecimal createdPercent = DEFAULT_AMOUNT;
     private int matchedCount;
     private BigDecimal matchedAmount = DEFAULT_AMOUNT;
     private BigDecimal matchedPercent = DEFAULT_AMOUNT;
@@ -68,6 +73,14 @@ public class UsageBatchStatistic {
         this.date = date;
     }
 
+    public int getTotalCount() {
+        return totalCount;
+    }
+
+    public void setTotalCount(int totalCount) {
+        this.totalCount = totalCount;
+    }
+
     public int getLoadedCount() {
         return loadedCount;
     }
@@ -82,6 +95,38 @@ public class UsageBatchStatistic {
 
     public void setLoadedAmount(BigDecimal loadedAmount) {
         this.loadedAmount = loadedAmount;
+    }
+
+    public BigDecimal getLoadedPercent() {
+        return loadedPercent;
+    }
+
+    public void setLoadedPercent(BigDecimal loadedPercent) {
+        this.loadedPercent = loadedPercent;
+    }
+
+    public int getCreatedCount() {
+        return createdCount;
+    }
+
+    public void setCreatedCount(int createdCount) {
+        this.createdCount = createdCount;
+    }
+
+    public BigDecimal getCreatedAmount() {
+        return createdAmount;
+    }
+
+    public void setCreatedAmount(BigDecimal createdAmount) {
+        this.createdAmount = createdAmount;
+    }
+
+    public BigDecimal getCreatedPercent() {
+        return createdPercent;
+    }
+
+    public void setCreatedPercent(BigDecimal createdPercent) {
+        this.createdPercent = createdPercent;
     }
 
     public int getMatchedCount() {
@@ -312,8 +357,13 @@ public class UsageBatchStatistic {
         return new EqualsBuilder()
             .append(batchName, that.batchName)
             .append(date, that.date)
+            .append(totalCount, that.totalCount)
             .append(loadedCount, that.loadedCount)
             .append(loadedAmount, that.loadedAmount)
+            .append(loadedPercent, that.loadedPercent)
+            .append(createdCount, that.createdCount)
+            .append(createdAmount, that.createdAmount)
+            .append(createdPercent, that.createdPercent)
             .append(matchedCount, that.matchedCount)
             .append(matchedAmount, that.matchedAmount)
             .append(matchedPercent, that.matchedPercent)
@@ -349,8 +399,13 @@ public class UsageBatchStatistic {
         return new HashCodeBuilder()
             .append(batchName)
             .append(date)
+            .append(totalCount)
             .append(loadedCount)
             .append(loadedAmount)
+            .append(loadedPercent)
+            .append(createdCount)
+            .append(createdAmount)
+            .append(createdPercent)
             .append(matchedCount)
             .append(matchedAmount)
             .append(matchedPercent)
@@ -386,8 +441,13 @@ public class UsageBatchStatistic {
         return new ToStringBuilder(this)
             .append("batchName", batchName)
             .append("date", date)
+            .append("totalCount", totalCount)
             .append("loadedCount", loadedCount)
             .append("loadedAmount", loadedAmount)
+            .append("loadedPercent", loadedPercent)
+            .append("createdCount", createdCount)
+            .append("createdAmount", createdAmount)
+            .append("createdPercent", createdPercent)
             .append("matchedCount", matchedCount)
             .append("matchedAmount", matchedAmount)
             .append("matchedPercent", matchedPercent)
