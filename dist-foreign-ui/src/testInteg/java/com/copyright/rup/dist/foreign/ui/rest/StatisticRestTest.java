@@ -95,11 +95,13 @@ public class StatisticRestTest {
         mockMvc.perform(MockMvcRequestBuilders.get(STATISTIC_PATH)
             .param(DATE, TEST_DATE)
             .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.status().isInternalServerError())
+            .andExpect(MockMvcResultMatchers.status().isBadRequest())
             .andExpect(MockMvcResultMatchers.jsonPath(JSON_PATH_ERROR)
-                .value("INTERNAL_SERVER_ERROR"))
+                .value("BAD_REQUEST"))
             .andExpect(MockMvcResultMatchers.jsonPath(JSON_PATH_MESSAGE)
-                .value("Required String parameter 'name' is not present"));
+                .value("Required String parameter 'name' is not present"))
+            .andExpect(MockMvcResultMatchers.jsonPath(JSON_PATH_STACKTRACE)
+                .doesNotExist());
         verify(usageAuditServiceMock);
     }
 
