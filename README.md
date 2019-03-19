@@ -1,3 +1,8 @@
+4.1.45
+-
+* CDP-695 FDA: Usage batch statistic: Exception occurs during running usage batch statistic, if batch is processing
+* CDP-696 FDA: Usage batch statistic: Exception occurs during running usage batch statistic without 'name' field
+
 4.1.44
 -
 * B-49462 Tech Debt: FDA: adjust grant product family value for NGT_ELECTRONIC_COURSE_MATERIALS and NGT_PRINT_COURSE_MATERIALS type of uses
