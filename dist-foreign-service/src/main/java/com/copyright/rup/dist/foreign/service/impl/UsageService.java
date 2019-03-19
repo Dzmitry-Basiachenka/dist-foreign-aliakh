@@ -157,8 +157,7 @@ public class UsageService implements IUsageService {
     public List<String> insertNtsUsages(UsageBatch usageBatch) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Insert NTS usages. Started. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
-        List<String> usageIds = usageRepository.insertNtsUsages(usageBatch,
-            buildNtsUsageReason(usageBatch), userName);
+        List<String> usageIds = usageRepository.insertNtsUsages(usageBatch, userName);
         LOGGER.info("Insert NTS usages. Finished. UsageBatchName={}, UserName={}, UsageIdsCount={}",
             usageBatch.getName(), userName, LogUtils.size(usageIds));
         return usageIds;
@@ -607,15 +606,5 @@ public class UsageService implements IUsageService {
         usage.setScenarioId(scenario.getId());
         usage.setStatus(UsageStatusEnum.LOCKED);
         usage.setUpdateUser(scenario.getCreateUser());
-    }
-
-    private String buildNtsUsageReason(UsageBatch usageBatch) {
-        FundPool fundPool = usageBatch.getFundPool();
-        StringBuilder reasonBuilder = new StringBuilder(64);
-        reasonBuilder.append("Usage was created based on Market(s): ");
-        fundPool.getMarkets().forEach(market -> reasonBuilder.append("'").append(market).append("', "));
-        reasonBuilder.append(
-            String.format("Fund Pool Period: %s-%s", fundPool.getFundPoolPeriodFrom(), fundPool.getFundPoolPeriodTo()));
-        return reasonBuilder.toString();
     }
 }
