@@ -455,6 +455,14 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
+    public void testFindUsageIdsForClassificationUpdate() {
+        List<String> actualUsageIds = usageRepository.findUsageIdsForClassificationUpdate();
+        assertNotNull(actualUsageIds);
+        assertEquals(1, actualUsageIds.size());
+        assertEquals("c6cb5b07-45c0-4188-9da3-920046eec4cf", actualUsageIds.get(0));
+    }
+
+    @Test
     public void testFindWithAmountsAndRightsholders() {
         UsageFilter usageFilter =
             buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.singleton(USAGE_BATCH_ID_1),

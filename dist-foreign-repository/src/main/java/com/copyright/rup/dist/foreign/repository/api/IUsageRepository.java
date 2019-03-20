@@ -94,6 +94,13 @@ public interface IUsageRepository {
     List<Usage> findByIds(List<String> usageIds);
 
     /**
+     * Finds identifiers of usages in status {@link UsageStatusEnum#UNCLASSIFIED} with classification available.
+     *
+     * @return list of {@link Usage}s
+     */
+    List<String> findUsageIdsForClassificationUpdate();
+
+    /**
      * Finds {@link Usage}s for reconcile based on scenario identifier.
      *
      * @param scenarioId scenario identifier

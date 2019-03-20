@@ -371,4 +371,10 @@ public interface IUsageService {
      * @return map of usage workflow steps where key - Product Family, values - set of {@link UsageWorkflowStepEnum}
      */
     Map<String, Set<UsageWorkflowStepEnum>> getUsageWorkflowStepsMap();
+
+    /**
+     * Runs classification process for usages in {@link UsageStatusEnum#UNCLASSIFIED} status with works
+     * for which classification is available.
+     */
+    void updateUnclassifiedUsages();
 }
