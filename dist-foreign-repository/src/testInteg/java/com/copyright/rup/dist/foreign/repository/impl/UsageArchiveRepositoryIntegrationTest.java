@@ -9,7 +9,6 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.test.ReportTestUtils;
-import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
@@ -18,9 +17,6 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 
@@ -45,7 +41,6 @@ import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -372,15 +367,6 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindForNtsBatch() throws IOException {
-        List<Usage> actualUsages =
-            usageArchiveRepository.findForNtsBatch(2015, 2016, Sets.newHashSet("Bus", "Doc Del"));
-        assertEquals(2, actualUsages.size());
-        actualUsages.sort(Comparator.comparing(Usage::getId));
-        assertEquals(loadExpectedUsages("json/test_find_for_nts_batch.json"), actualUsages);
-    }
-
-    @Test
     public void testFindPaidIds() {
         List<String> usagesIds = usageArchiveRepository.findPaidIds();
         assertTrue(CollectionUtils.isNotEmpty(usagesIds));
@@ -549,13 +535,5 @@ public class UsageArchiveRepositoryIntegrationTest {
         usage.setGrossAmount(GROSS_AMOUNT);
         usage.setNetAmount(new BigDecimal("25.1500000000"));
         usage.setComment("usage from usages.csv");
-    }
-
-    private List<Usage> loadExpectedUsages(String fileName) throws IOException {
-        String content = TestUtils.fileToString(this.getClass(), fileName);
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        return mapper.readValue(content, new TypeReference<List<Usage>>() {
-        });
     }
 }

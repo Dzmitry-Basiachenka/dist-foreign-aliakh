@@ -106,14 +106,6 @@ public interface IUsageService {
     int getUsagesCountForNtsBatch(UsageBatch usageBatch);
 
     /**
-     * Gets list of archived {@link Usage}s based on on fund pool information.
-     *
-     * @param usageBatch instance of {@link UsageBatch}
-     * @return list of eligible for NTS {@link Usage}s
-     */
-    List<Usage> getUsagesForNtsBatch(UsageBatch usageBatch);
-
-    /**
      * Gets rightsholders account numbers that are not presented in database based on {@link UsageFilter}.
      *
      * @param filter instance of {@link UsageFilter}

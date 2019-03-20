@@ -187,23 +187,6 @@
         order by u.rh_account_number
     </select>
 
-    <select id="findForNtsBatch" parameterType="map" resultMap="archivedUsageResultMap">
-        select
-            df_usage_archive_uid,
-            wr_wrk_inst,
-            work_title,
-            system_title,
-            standard_number,
-            market,
-            market_period_from,
-            market_period_to,
-            gross_amount,
-            gross_amount as reported_value,
-            comment
-        from ${schema}.df_usage_archive
-        <include refid="ntsBatchWhereClause"/>
-    </select>
-
     <select id="findCountForNtsBatch" parameterType="map" resultType="int">
         select count(1)
         from ${schema}.df_usage_archive
