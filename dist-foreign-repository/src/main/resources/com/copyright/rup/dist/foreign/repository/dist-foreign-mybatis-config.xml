@@ -62,5 +62,6 @@
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IScenarioAuditMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IScenarioUsageFilterMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IRightsholderDiscrepancyMapper.xml"/>
+        <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IWorkClassificationMapper.xml"/>
     </mappers>
 </configuration>
