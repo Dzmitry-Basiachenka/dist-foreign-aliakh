@@ -10,12 +10,14 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.UsageWorkflowStepEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Represents interface of service for usage business logic.
@@ -370,4 +372,11 @@ public interface IUsageService {
      * @param usage {@link Usage} to update
      */
     void updateProcessedUsage(Usage usage);
+
+    /**
+     * Gets set of additional workflow steps to make Usage Eligible for adding to scenario based on Product Family.
+     *
+     * @return map of usage workflow steps where key - Product Family, values - set of {@link UsageWorkflowStepEnum}
+     */
+    Map<String, Set<UsageWorkflowStepEnum>> getUsageWorkflowStepsMap();
 }

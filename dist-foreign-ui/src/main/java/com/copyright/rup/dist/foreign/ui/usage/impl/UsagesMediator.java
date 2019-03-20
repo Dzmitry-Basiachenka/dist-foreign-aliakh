@@ -1,9 +1,14 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
+import com.copyright.rup.dist.foreign.domain.UsageWorkflowStepEnum;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
-import com.copyright.rup.vaadin.widget.api.IMediator;
+import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesMediator;
 
 import com.vaadin.ui.Button;
+import org.apache.commons.collections4.CollectionUtils;
+
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Mediator for the usages widget.
@@ -14,7 +19,7 @@ import com.vaadin.ui.Button;
  *
  * @author Ihar Suvorau
  */
-class UsagesMediator implements IMediator {
+class UsagesMediator implements IUsagesMediator {
 
     private Button loadUsageBatchButton;
     private Button loadFundPoolButton;
@@ -22,6 +27,17 @@ class UsagesMediator implements IMediator {
     private Button deleteUsageButton;
     private Button addToScenarioButton;
     private Button sendForResearchButton;
+    private final Map<String, Set<UsageWorkflowStepEnum>> usageWorkflowSteps;
+
+    /**
+     * Constructor.
+     *
+     * @param usageWorkflowSteps map of usage workflow steps where key - Product Family,
+     *                           value - set of {@link UsageWorkflowStepEnum}
+     */
+    public UsagesMediator(Map<String, Set<UsageWorkflowStepEnum>> usageWorkflowSteps) {
+        this.usageWorkflowSteps = usageWorkflowSteps;
+    }
 
     @Override
     public void applyPermissions() {
@@ -31,6 +47,30 @@ class UsagesMediator implements IMediator {
         deleteUsageButton.setVisible(ForeignSecurityUtils.hasDeleteUsagePermission());
         addToScenarioButton.setVisible(ForeignSecurityUtils.hasCreateEditScenarioPermission());
         sendForResearchButton.setVisible(ForeignSecurityUtils.hasSendForWorkResearchPermission());
+    }
+
+    @Override
+    public void onProductFamilyChanged(String productFamily) {
+        Set<UsageWorkflowStepEnum> usageSteps = usageWorkflowSteps.get(productFamily);
+        if (CollectionUtils.isNotEmpty(usageSteps)) {
+            loadUsageBatchButton.setVisible(ForeignSecurityUtils.hasLoadUsagePermission()
+                && usageSteps.contains(UsageWorkflowStepEnum.LOAD_BATCH));
+            loadFundPoolButton.setVisible(ForeignSecurityUtils.hasLoadFundPoolPermission()
+                && usageSteps.contains(UsageWorkflowStepEnum.LOAD_FUNDPOOL));
+            loadResearchedUsagesButton.setVisible(ForeignSecurityUtils.hasLoadResearchedUsagePermission()
+                && usageSteps.contains(UsageWorkflowStepEnum.LOAD_RESEARCHED));
+            sendForResearchButton.setVisible(ForeignSecurityUtils.hasSendForWorkResearchPermission()
+                && usageSteps.contains(UsageWorkflowStepEnum.RESEARCH));
+            deleteUsageButton.setVisible(ForeignSecurityUtils.hasDeleteUsagePermission());
+            addToScenarioButton.setVisible(ForeignSecurityUtils.hasCreateEditScenarioPermission());
+        } else {
+            loadUsageBatchButton.setVisible(false);
+            loadFundPoolButton.setVisible(false);
+            loadResearchedUsagesButton.setVisible(false);
+            deleteUsageButton.setVisible(false);
+            addToScenarioButton.setVisible(false);
+            sendForResearchButton.setVisible(false);
+        }
     }
 
     /**

@@ -48,6 +48,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
     private IUsagesController controller;
     private DataProvider<UsageDto, Void> dataProvider;
     private Grid<UsageDto> usagesGrid;
+    private UsagesMediator mediator;
     private Button loadUsageBatchButton;
     private Button loadFundPoolButton;
     private Button loadResearchedUsagesButton;
@@ -57,6 +58,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
 
     @Override
     public void refresh() {
+        mediator.onProductFamilyChanged(getController().getSelectedProductFamily());
         dataProvider.refreshAll();
     }
 
@@ -78,7 +80,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
 
     @Override
     public UsagesMediator initMediator() {
-        UsagesMediator mediator = new UsagesMediator();
+        mediator = new UsagesMediator(getController().getUsageWorkflowStepsMap());
         mediator.setLoadUsageBatchButton(loadUsageBatchButton);
         mediator.setLoadFundPoolButton(loadFundPoolButton);
         mediator.setLoadResearchedUsagesButton(loadResearchedUsagesButton);
@@ -215,8 +217,8 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         deleteButton.addClickListener(event -> Windows.showModalWindow(new DeleteUsageBatchWindow(controller)));
         VaadinUtils.setButtonsAutoDisabled(loadUsageBatchButton, loadFundPoolButton, loadResearchedUsagesButton,
             addToScenarioButton, deleteButton);
-        HorizontalLayout layout = new HorizontalLayout(loadUsageBatchButton, loadFundPoolButton,
-            loadResearchedUsagesButton, addToScenarioButton, exportButton, deleteButton, sendForResearchButton);
+        HorizontalLayout layout = new HorizontalLayout(loadUsageBatchButton, loadFundPoolButton, sendForResearchButton,
+            loadResearchedUsagesButton, addToScenarioButton, exportButton, deleteButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "usages-buttons");
         return layout;
@@ -225,20 +227,16 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
     private void onAddToScenarioClicked() {
         if (0 < controller.getSize()) {
             if (controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)) {
-                if (controller.isSingleProductFamilySelected()) {
-                    List<Long> accountNumbers = controller.getInvalidRightsholders();
-                    if (CollectionUtils.isNotEmpty(accountNumbers)) {
-                        Windows.showNotificationWindow(
-                            ForeignUi.getMessage("message.error.add_to_scenario.invalid_rightsholders", "created",
-                                accountNumbers));
-                    } else {
-                        CreateScenarioWindow window = new CreateScenarioWindow(controller);
-                        window.addListener(ScenarioCreateEvent.class, controller,
-                            IUsagesController.ON_SCENARIO_CREATED);
-                        Windows.showModalWindow(window);
-                    }
+                List<Long> accountNumbers = controller.getInvalidRightsholders();
+                if (CollectionUtils.isNotEmpty(accountNumbers)) {
+                    Windows.showNotificationWindow(
+                        ForeignUi.getMessage("message.error.add_to_scenario.invalid_rightsholders", "created",
+                            accountNumbers));
                 } else {
-                    Windows.showNotificationWindow(ForeignUi.getMessage("message.error.create_scenario"));
+                    CreateScenarioWindow window = new CreateScenarioWindow(controller);
+                    window.addListener(ScenarioCreateEvent.class, controller,
+                        IUsagesController.ON_SCENARIO_CREATED);
+                    Windows.showModalWindow(window);
                 }
             } else {
                 Windows.showNotificationWindow(

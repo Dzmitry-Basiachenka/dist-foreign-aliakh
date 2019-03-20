@@ -19,6 +19,7 @@ import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.UsageWorkflowStepEnum;
 import com.copyright.rup.dist.foreign.domain.common.util.CalculationUtils;
 import com.copyright.rup.dist.foreign.domain.common.util.ForeignLogUtils;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
@@ -89,6 +90,8 @@ public class UsageService implements IUsageService {
     private List<String> supportedMarkets;
     @Value("$RUP{dist.foreign.cla_account_number}")
     private Long claAccountNumber;
+    @Value("#{$RUP{dist.foreign.usages.workflow_steps}}")
+    private Map<String, Set<UsageWorkflowStepEnum>> usageWorkflowStepsMap;
     @Autowired
     private IUsageRepository usageRepository;
     @Autowired
@@ -515,6 +518,11 @@ public class UsageService implements IUsageService {
             throw new InconsistentUsageStateException(usage);
         }
         usage.setVersion(usage.getVersion() + 1);
+    }
+
+    @Override
+    public Map<String, Set<UsageWorkflowStepEnum>> getUsageWorkflowStepsMap() {
+        return usageWorkflowStepsMap;
     }
 
     private void updateRighstholdersInSeparateThread(List<Usage> usages) {

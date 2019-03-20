@@ -4,7 +4,6 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
-import com.copyright.rup.dist.foreign.ui.common.ProductFamilyFilterWidget;
 import com.copyright.rup.dist.foreign.ui.common.RightsholderFilterWidget;
 import com.copyright.rup.dist.foreign.ui.common.UsageBatchFilterWidget;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
@@ -24,6 +23,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,7 +45,7 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
     private IUsagesFilterController controller;
     private RightsholderFilterWidget rightsholderFilterWidget;
     private UsageBatchFilterWidget usageBatchFilterWidget;
-    private ProductFamilyFilterWidget productFamilyFilterWidget;
+    private ComboBox<String> productFamilyCombobox;
     private UsageFilter usageFilter = new UsageFilter();
     private UsageFilter appliedUsageFilter = new UsageFilter();
 
@@ -74,7 +74,7 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
         usageFilter = new UsageFilter();
         rightsholderFilterWidget.reset();
         usageBatchFilterWidget.reset();
-        productFamilyFilterWidget.reset();
+        usageFilter.setProductFamilies(Collections.singleton(getSelectedProductFamily()));
         applyFilter();
     }
 
@@ -100,25 +100,32 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
         this.controller = controller;
     }
 
+    @Override
+    public String getSelectedProductFamily() {
+        return productFamilyCombobox.getValue();
+    }
+
     private VerticalLayout initFiltersLayout() {
         initPaymentDateFilter();
         initFiscalYearFilter();
         initStatusFilter();
-        VerticalLayout verticalLayout = new VerticalLayout(buildFiltersHeaderLabel(), buildProductFamiliesFilter(),
+        VerticalLayout verticalLayout = new VerticalLayout(buildProductFamilyCombobox(), buildFiltersHeaderLabel(),
             buildUsageBatchFilter(), buildRroAccountNumberFilter(), paymentDateWidget, statusComboBox,
             fiscalYearComboBox);
         verticalLayout.setMargin(false);
         return verticalLayout;
     }
 
-    private HorizontalLayout buildProductFamiliesFilter() {
-        productFamilyFilterWidget = new ProductFamilyFilterWidget(() -> controller.getProductFamilies());
-        productFamilyFilterWidget.addFilterSaveListener(saveEvent -> {
-            usageFilter.setProductFamilies(saveEvent.getSelectedItemsIds());
-            filterChanged();
-        });
-        VaadinUtils.addComponentStyle(productFamilyFilterWidget, "product-families-filter");
-        return productFamilyFilterWidget;
+    private ComboBox buildProductFamilyCombobox() {
+        productFamilyCombobox =
+            new ComboBox<>(ForeignUi.getMessage("label.product_family"), controller.getProductFamilies());
+        productFamilyCombobox.setSelectedItem("FAS");
+        productFamilyCombobox.setEmptySelectionAllowed(false);
+        productFamilyCombobox.setTextInputAllowed(false);
+        productFamilyCombobox.addValueChangeListener(event -> clearFilter());
+        VaadinUtils.setMaxComponentsWidth(productFamilyCombobox);
+        VaadinUtils.addComponentStyle(productFamilyCombobox, "product-family-combo-box");
+        return productFamilyCombobox;
     }
 
     private HorizontalLayout buildUsageBatchFilter() {

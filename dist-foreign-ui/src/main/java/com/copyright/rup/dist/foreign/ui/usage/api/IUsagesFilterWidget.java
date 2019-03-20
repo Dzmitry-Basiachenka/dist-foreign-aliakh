@@ -23,4 +23,9 @@ public interface IUsagesFilterWidget extends IFilterWidget<IUsagesFilterControll
      * @return applied {@link UsageFilter}.
      */
     UsageFilter getAppliedFilter();
+
+    /**
+     * @return selected Product Family.
+     */
+    String getSelectedProductFamily();
 }

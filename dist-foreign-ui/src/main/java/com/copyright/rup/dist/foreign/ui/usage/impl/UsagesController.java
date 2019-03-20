@@ -15,6 +15,7 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.UsageWorkflowStepEnum;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
@@ -43,7 +44,6 @@ import com.vaadin.shared.data.sort.SortDirection;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -57,6 +57,7 @@ import java.io.PipedOutputStream;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -244,7 +245,7 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
 
     @Override
     public String getSelectedProductFamily() {
-        return isSingleProductFamilySelected() ? getSelectedProductFamilies().iterator().next() : StringUtils.EMPTY;
+        return filterController.getWidget().getSelectedProductFamily();
     }
 
     @Override
@@ -253,23 +254,18 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
-    public boolean isSingleProductFamilySelected() {
-        return 1 == CollectionUtils.size(getSelectedProductFamilies());
-    }
-
-
-    @Override
     public void clearFilter() {
         filterController.getWidget().clearFilter();
     }
 
     @Override
-    protected IUsagesWidget instantiateWidget() {
-        return new UsagesWidget();
+    public Map<String, Set<UsageWorkflowStepEnum>> getUsageWorkflowStepsMap() {
+        return usageService.getUsageWorkflowStepsMap();
     }
 
-    private Set<String> getSelectedProductFamilies() {
-        return filterController.getWidget().getAppliedFilter().getProductFamilies();
+    @Override
+    protected IUsagesWidget instantiateWidget() {
+        return new UsagesWidget();
     }
 
     private static class ErrorResultStreamSource implements IStreamSource {

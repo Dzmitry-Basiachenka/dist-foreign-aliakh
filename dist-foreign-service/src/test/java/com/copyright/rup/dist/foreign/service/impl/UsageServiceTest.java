@@ -30,6 +30,7 @@ import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.UsageWorkflowStepEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
@@ -63,6 +64,8 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Verifies {@link UsageService}.
@@ -699,6 +702,14 @@ public class UsageServiceTest {
         replay(usageRepository);
         usageService.updateProcessedUsage(usage);
         verify(usageRepository);
+    }
+
+    @Test
+    public void testGetUsageWorkflowStepsMap() {
+        Map<String, Set<UsageWorkflowStepEnum>> workflowSteps =
+            ImmutableMap.of("NTS", Collections.singleton(UsageWorkflowStepEnum.CLASSIFICATION));
+        Whitebox.setInternalState(usageService, "usageWorkflowStepsMap", workflowSteps);
+        assertEquals(workflowSteps, usageService.getUsageWorkflowStepsMap());
     }
 
     private void assertResult(List<?> result, int size) {

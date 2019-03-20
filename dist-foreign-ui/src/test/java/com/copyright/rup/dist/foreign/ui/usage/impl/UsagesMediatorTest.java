@@ -6,9 +6,13 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.foreign.domain.UsageWorkflowStepEnum;
 import com.copyright.rup.vaadin.security.SecurityUtils;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Sets;
 import com.vaadin.ui.Button;
 
 import org.junit.Before;
@@ -30,6 +34,8 @@ import org.powermock.modules.junit4.PowerMockRunner;
 @PrepareForTest(SecurityUtils.class)
 public class UsagesMediatorTest {
 
+    private static final String FAS_PRODUCT_FAMILY = "FAS";
+    private static final String NTS_PRODUCT_FAMILY = "NTS";
     private Button deleteButton;
     private Button loadUsageBatchButton;
     private Button loadFundPoolButton;
@@ -46,7 +52,9 @@ public class UsagesMediatorTest {
         loadResearchedUsagesButton = new Button();
         addToScenarioButton = new Button();
         sendForResearchButton = new Button();
-        mediator = new UsagesMediator();
+        mediator = new UsagesMediator(ImmutableMap.of(FAS_PRODUCT_FAMILY, Sets.newHashSet(
+            UsageWorkflowStepEnum.LOAD_BATCH, UsageWorkflowStepEnum.RESEARCH, UsageWorkflowStepEnum.LOAD_RESEARCHED),
+            NTS_PRODUCT_FAMILY, Sets.newHashSet(UsageWorkflowStepEnum.LOAD_FUNDPOOL)));
         mediator.setLoadUsageBatchButton(loadUsageBatchButton);
         mediator.setLoadFundPoolButton(loadFundPoolButton);
         mediator.setLoadResearchedUsagesButton(loadResearchedUsagesButton);
@@ -66,6 +74,7 @@ public class UsagesMediatorTest {
         assertFalse(loadResearchedUsagesButton.isVisible());
         assertFalse(addToScenarioButton.isVisible());
         assertFalse(sendForResearchButton.isVisible());
+        verify(SecurityUtils.class);
     }
 
     @Test
@@ -79,6 +88,7 @@ public class UsagesMediatorTest {
         assertFalse(loadResearchedUsagesButton.isVisible());
         assertFalse(addToScenarioButton.isVisible());
         assertFalse(sendForResearchButton.isVisible());
+        verify(SecurityUtils.class);
     }
 
     @Test
@@ -92,6 +102,91 @@ public class UsagesMediatorTest {
         assertTrue(loadResearchedUsagesButton.isVisible());
         assertTrue(addToScenarioButton.isVisible());
         assertTrue(sendForResearchButton.isVisible());
+        verify(SecurityUtils.class);
+    }
+
+    @Test
+    public void testOnProductFamilyChangedFasViewOnly() {
+        mockViewOnlyPermissions();
+        replay(SecurityUtils.class);
+        mediator.onProductFamilyChanged(FAS_PRODUCT_FAMILY);
+        assertFalse(deleteButton.isVisible());
+        assertFalse(loadUsageBatchButton.isVisible());
+        assertFalse(loadFundPoolButton.isVisible());
+        assertFalse(loadResearchedUsagesButton.isVisible());
+        assertFalse(addToScenarioButton.isVisible());
+        assertFalse(sendForResearchButton.isVisible());
+        verify(SecurityUtils.class);
+    }
+
+    @Test
+    public void testOnProductFamilyChangedFasSpecialist() {
+        mockSpecialistPermissions();
+        replay(SecurityUtils.class);
+        mediator.onProductFamilyChanged(FAS_PRODUCT_FAMILY);
+        assertTrue(deleteButton.isVisible());
+        assertTrue(loadUsageBatchButton.isVisible());
+        assertFalse(loadFundPoolButton.isVisible());
+        assertTrue(loadResearchedUsagesButton.isVisible());
+        assertTrue(addToScenarioButton.isVisible());
+        assertTrue(sendForResearchButton.isVisible());
+        verify(SecurityUtils.class);
+    }
+
+    @Test
+    public void testOnProductFamilyChangedFasManager() {
+        mockManagerPermissions();
+        replay(SecurityUtils.class);
+        mediator.onProductFamilyChanged(FAS_PRODUCT_FAMILY);
+        assertFalse(deleteButton.isVisible());
+        assertFalse(loadUsageBatchButton.isVisible());
+        assertFalse(loadFundPoolButton.isVisible());
+        assertFalse(loadResearchedUsagesButton.isVisible());
+        assertFalse(addToScenarioButton.isVisible());
+        assertFalse(sendForResearchButton.isVisible());
+        verify(SecurityUtils.class);
+    }
+
+    @Test
+    public void testOnProductFamilyChangedNtsViewOnly() {
+        mockViewOnlyPermissions();
+        replay(SecurityUtils.class);
+        mediator.onProductFamilyChanged(NTS_PRODUCT_FAMILY);
+        assertFalse(deleteButton.isVisible());
+        assertFalse(loadUsageBatchButton.isVisible());
+        assertFalse(loadFundPoolButton.isVisible());
+        assertFalse(loadResearchedUsagesButton.isVisible());
+        assertFalse(addToScenarioButton.isVisible());
+        assertFalse(sendForResearchButton.isVisible());
+        verify(SecurityUtils.class);
+    }
+
+    @Test
+    public void testOnProductFamilyChangedNtsSpecialist() {
+        mockSpecialistPermissions();
+        replay(SecurityUtils.class);
+        mediator.onProductFamilyChanged(NTS_PRODUCT_FAMILY);
+        assertTrue(deleteButton.isVisible());
+        assertFalse(loadUsageBatchButton.isVisible());
+        assertTrue(loadFundPoolButton.isVisible());
+        assertFalse(loadResearchedUsagesButton.isVisible());
+        assertTrue(addToScenarioButton.isVisible());
+        assertFalse(sendForResearchButton.isVisible());
+        verify(SecurityUtils.class);
+    }
+
+    @Test
+    public void testOnProductFamilyChangedNtsManager() {
+        mockManagerPermissions();
+        replay(SecurityUtils.class);
+        mediator.onProductFamilyChanged(NTS_PRODUCT_FAMILY);
+        assertFalse(deleteButton.isVisible());
+        assertFalse(loadUsageBatchButton.isVisible());
+        assertFalse(loadFundPoolButton.isVisible());
+        assertFalse(loadResearchedUsagesButton.isVisible());
+        assertFalse(addToScenarioButton.isVisible());
+        assertFalse(sendForResearchButton.isVisible());
+        verify(SecurityUtils.class);
     }
 
     private void mockViewOnlyPermissions() {
