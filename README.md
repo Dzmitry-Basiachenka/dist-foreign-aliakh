@@ -1,3 +1,18 @@
+5.1.0
+-
+* B-46039 FDA: Exclude Belletristic titles from NTS Batch: adjust NTS batch usages processing strategy to process usage work classification after processing usage Rh Ilegibility
+* B-46039 FDA: Exclude Belletristic titles from NTS Batch: adjust query for selecting usages for fund pool to exclude belletristic
+* B-46039 FDA: Exclude Belletristic titles from NTS Batch: implement Classification usage processor, add UNCLASSIFIED usage status
+* B-46039 FDA: Exclude Belletristic titles from NTS Batch: implement repository and service methods for getting wrWrkInst classification
+* B-46039 FDA: Exclude Belletristic titles from NTS Batch: implement service method for usages classification updates
+* B-46040 FDA: Assign title classification to titles in NTS distribution: implement NTS batch selector and works classification windows
+* B-46040 FDA: Assign title classification to titles in NTS distribution: implement liquibase changeset with permission, add assign classification button on UI
+* B-46040 FDA: Assign title classification to titles in NTS distribution: implement liquibase to create df_work_classification table
+* B-49017 FDA: Address the number of buttons on the Usage tab: add Product Family dropdown to Usage tab and display action buttons related to selected Product Family
+* B-49017 FDA: Address the number of buttons on the Usage tab: add product_family column into df_usage_batch table and populate historical data
+* B-49462 Tech Debt: FDA: remove unused nts batch creation audit reason from UsageService#insertNtsUsages method
+* B-49462 Tech Debt: FDA: remove unused service method getUsagesForNtsBatch
+
 4.1.45
 -
 * CDP-695 FDA: Usage batch statistic: Exception occurs during running usage batch statistic, if batch is processing
