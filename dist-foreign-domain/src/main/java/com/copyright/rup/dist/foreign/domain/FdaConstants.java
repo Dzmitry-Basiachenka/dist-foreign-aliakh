@@ -44,6 +44,11 @@ public final class FdaConstants {
     public static final String ALL_PRODUCTS_KEY = "*";
 
     /**
+     * Belletristic work classification.
+     */
+    public static final String BELLETRISTIC_CLASSIFICATION = "BELLETRISTIC";
+
+    /**
      * Archived scenario statuses.
      */
     public static final EnumSet<ScenarioStatusEnum> ARCHIVED_SCENARIO_STATUSES =
