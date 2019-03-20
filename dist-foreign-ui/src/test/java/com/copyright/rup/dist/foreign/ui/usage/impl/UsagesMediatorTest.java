@@ -42,6 +42,7 @@ public class UsagesMediatorTest {
     private Button loadResearchedUsagesButton;
     private Button addToScenarioButton;
     private Button sendForResearchButton;
+    private Button assignClassificationButton;
     private UsagesMediator mediator;
 
     @Before
@@ -52,15 +53,18 @@ public class UsagesMediatorTest {
         loadResearchedUsagesButton = new Button();
         addToScenarioButton = new Button();
         sendForResearchButton = new Button();
+        assignClassificationButton = new Button();
         mediator = new UsagesMediator(ImmutableMap.of(FAS_PRODUCT_FAMILY, Sets.newHashSet(
             UsageWorkflowStepEnum.LOAD_BATCH, UsageWorkflowStepEnum.RESEARCH, UsageWorkflowStepEnum.LOAD_RESEARCHED),
-            NTS_PRODUCT_FAMILY, Sets.newHashSet(UsageWorkflowStepEnum.LOAD_FUNDPOOL)));
+            NTS_PRODUCT_FAMILY,
+            Sets.newHashSet(UsageWorkflowStepEnum.LOAD_FUNDPOOL, UsageWorkflowStepEnum.CLASSIFICATION)));
         mediator.setLoadUsageBatchButton(loadUsageBatchButton);
         mediator.setLoadFundPoolButton(loadFundPoolButton);
         mediator.setLoadResearchedUsagesButton(loadResearchedUsagesButton);
         mediator.setDeleteUsageButton(deleteButton);
         mediator.setAddToScenarioButton(addToScenarioButton);
         mediator.setSendForResearchButton(sendForResearchButton);
+        mediator.setAssignClassificationButton(assignClassificationButton);
     }
 
     @Test
@@ -74,6 +78,7 @@ public class UsagesMediatorTest {
         assertFalse(loadResearchedUsagesButton.isVisible());
         assertFalse(addToScenarioButton.isVisible());
         assertFalse(sendForResearchButton.isVisible());
+        assertFalse(assignClassificationButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -88,6 +93,7 @@ public class UsagesMediatorTest {
         assertFalse(loadResearchedUsagesButton.isVisible());
         assertFalse(addToScenarioButton.isVisible());
         assertFalse(sendForResearchButton.isVisible());
+        assertFalse(assignClassificationButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -102,6 +108,7 @@ public class UsagesMediatorTest {
         assertTrue(loadResearchedUsagesButton.isVisible());
         assertTrue(addToScenarioButton.isVisible());
         assertTrue(sendForResearchButton.isVisible());
+        assertTrue(assignClassificationButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -130,6 +137,7 @@ public class UsagesMediatorTest {
         assertTrue(loadResearchedUsagesButton.isVisible());
         assertTrue(addToScenarioButton.isVisible());
         assertTrue(sendForResearchButton.isVisible());
+        assertFalse(assignClassificationButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -172,6 +180,7 @@ public class UsagesMediatorTest {
         assertFalse(loadResearchedUsagesButton.isVisible());
         assertTrue(addToScenarioButton.isVisible());
         assertFalse(sendForResearchButton.isVisible());
+        assertTrue(assignClassificationButton.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -211,5 +220,6 @@ public class UsagesMediatorTest {
         expect(SecurityUtils.hasPermission("FDA_LOAD_RESEARCHED_USAGE")).andReturn(true).anyTimes();
         expect(SecurityUtils.hasPermission("FDA_CREATE_EDIT_SCENARIO")).andReturn(true).anyTimes();
         expect(SecurityUtils.hasPermission("FDA_SEND_FOR_WORK_RESEARCH")).andReturn(true).anyTimes();
+        expect(SecurityUtils.hasPermission("FDA_ASSIGN_CLASSIFICATION")).andReturn(true).anyTimes();
     }
 }

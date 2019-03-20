@@ -55,6 +55,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
     private Button deleteButton;
     private Button sendForResearchButton;
     private Button addToScenarioButton;
+    private Button assignClassificationButton;
 
     @Override
     public void refresh() {
@@ -87,6 +88,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         mediator.setDeleteUsageButton(deleteButton);
         mediator.setAddToScenarioButton(addToScenarioButton);
         mediator.setSendForResearchButton(sendForResearchButton);
+        mediator.setAssignClassificationButton(assignClassificationButton);
         return mediator;
     }
 
@@ -215,10 +217,12 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         });
         deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete_usage_batch"));
         deleteButton.addClickListener(event -> Windows.showModalWindow(new DeleteUsageBatchWindow(controller)));
-        VaadinUtils.setButtonsAutoDisabled(loadUsageBatchButton, loadFundPoolButton, loadResearchedUsagesButton,
-            addToScenarioButton, deleteButton);
-        HorizontalLayout layout = new HorizontalLayout(loadUsageBatchButton, loadFundPoolButton, sendForResearchButton,
-            loadResearchedUsagesButton, addToScenarioButton, exportButton, deleteButton);
+        assignClassificationButton = Buttons.createButton(ForeignUi.getMessage("button.assign_classification"));
+        VaadinUtils.setButtonsAutoDisabled(loadUsageBatchButton, loadFundPoolButton, assignClassificationButton,
+            loadResearchedUsagesButton, addToScenarioButton, deleteButton);
+        HorizontalLayout layout =
+            new HorizontalLayout(loadUsageBatchButton, loadFundPoolButton, assignClassificationButton,
+                sendForResearchButton, loadResearchedUsagesButton, addToScenarioButton, exportButton, deleteButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "usages-buttons");
         return layout;
