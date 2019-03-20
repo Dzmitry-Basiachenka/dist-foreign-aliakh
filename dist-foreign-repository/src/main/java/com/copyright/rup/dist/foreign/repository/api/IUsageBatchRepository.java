@@ -24,14 +24,25 @@ public interface IUsageBatchRepository {
     void insert(UsageBatch usageBatch);
 
     /**
-     * @return list of all fiscal years presented in DB.
+     * Gets list of fiscal years from Usage Batches presented in DB and associated with specified Product Family.
+     *
+     * @param productFamily Product Family
+     * @return list of fiscal years
      */
-    List<Integer> findFiscalYears();
+    List<Integer> findFiscalYearsByProductFamily(String productFamily);
 
     /**
      * @return list of all {@link UsageBatch} presented in DB.
      */
     List<UsageBatch> findAll();
+
+    /**
+     * Finds list of {@link UsageBatch}es by specified Product Family.
+     *
+     * @param productFamily Product Family
+     * @return list of found {@link UsageBatch}es
+     */
+    List<UsageBatch> findByProductFamily(String productFamily);
 
     /**
      * Gets usage batches count with specified name.

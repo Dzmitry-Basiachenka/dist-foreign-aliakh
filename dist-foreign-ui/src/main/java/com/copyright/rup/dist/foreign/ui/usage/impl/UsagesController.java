@@ -185,8 +185,8 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
-    public List<UsageBatch> getUsageBatches() {
-        return usageBatchService.getUsageBatches();
+    public List<UsageBatch> getUsageBatches(String productFamily) {
+        return usageBatchService.getUsageBatches(productFamily);
     }
 
     @Override

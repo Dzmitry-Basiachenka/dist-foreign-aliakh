@@ -38,7 +38,7 @@ public class NtsUsageBatchSelectorWidget implements IFilterWindowController<Usag
 
     @Override
     public Collection<UsageBatch> loadBeans() {
-        return usagesController.getUsageBatches();
+        return usagesController.getUsageBatches(usagesController.getSelectedProductFamily());
     }
 
     @Override

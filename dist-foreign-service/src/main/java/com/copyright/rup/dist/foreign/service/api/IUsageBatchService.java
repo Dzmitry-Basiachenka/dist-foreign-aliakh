@@ -19,14 +19,25 @@ import java.util.List;
 public interface IUsageBatchService {
 
     /**
-     * @return list of fiscal years presented in DB.
+     * Gets list of fiscal years from Usage Batches presented in DB and associated with specified Product Family.
+     *
+     * @param productFamily Product Family
+     * @return list of fiscal years
      */
-    List<Integer> getFiscalYears();
+    List<Integer> getFiscalYears(String productFamily);
 
     /**
      * @return list of {@link UsageBatch}.
      */
     List<UsageBatch> getUsageBatches();
+
+    /**
+     * Gets list of {@link UsageBatch}s related to specified Product Family.
+     *
+     * @param productFamily Product Family
+     * @return list of found {@link UsageBatch}es
+     */
+    List<UsageBatch> getUsageBatches(String productFamily);
 
     /**
      * Checks whether Usage Batch with provided name exists in database or not.

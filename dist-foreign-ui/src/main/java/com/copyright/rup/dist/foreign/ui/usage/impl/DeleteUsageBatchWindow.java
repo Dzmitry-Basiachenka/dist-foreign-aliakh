@@ -63,7 +63,7 @@ class DeleteUsageBatchWindow extends Window {
 
     private void initUsageBatchesGrid() {
         grid = new Grid<>();
-        grid.setItems(controller.getUsageBatches());
+        grid.setItems(controller.getUsageBatches(controller.getSelectedProductFamily()));
         grid.setSelectionMode(SelectionMode.NONE);
         grid.setSizeFull();
         grid.addColumn(UsageBatch::getName)
@@ -108,7 +108,7 @@ class DeleteUsageBatchWindow extends Window {
 
     private void performDelete(UsageBatch usageBatch) {
         controller.deleteUsageBatch(usageBatch);
-        grid.setItems(controller.getUsageBatches());
+        grid.setItems(controller.getUsageBatches(controller.getSelectedProductFamily()));
     }
 
     /**

@@ -60,6 +60,7 @@ import java.util.stream.Collectors;
 @PrepareForTest({UsagesWidget.class, Windows.class})
 public class UsagesWidgetTest {
 
+    private static final String FAS_PRODUCT_FAMILY = "FAS";
     private UsagesWidget usagesWidget;
     private IUsagesController controller;
 
@@ -229,7 +230,7 @@ public class UsagesWidgetTest {
         expect(controller.getSize()).andReturn(1).once();
         expect(controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
-        expect(controller.getSelectedProductFamily()).andReturn("FAS").once();
+        expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
         expect(controller.getScenarioService()).andReturn(null).once();
         Windows.showModalWindow(anyObject(CreateScenarioWindow.class));
         expectLastCall().once();
@@ -267,7 +268,8 @@ public class UsagesWidgetTest {
         Button deleteButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
             .getComponent(0)).getComponent(7);
         assertTrue(deleteButton.isDisableOnClick());
-        expect(controller.getUsageBatches()).andReturn(Collections.emptyList()).once();
+        expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
+        expect(controller.getUsageBatches(FAS_PRODUCT_FAMILY)).andReturn(Collections.emptyList()).once();
         Windows.showModalWindow(anyObject(DeleteUsageBatchWindow.class));
         expectLastCall().once();
         replay(clickEvent, Windows.class, controller);

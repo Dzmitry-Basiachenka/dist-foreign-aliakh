@@ -49,6 +49,7 @@ public class UsageBatchRepositoryIntegrationTest {
     private static final Long RRO_ACCOUNT_NUMBER = 123456789L;
     private static final BigDecimal GROSS_AMOUNT = new BigDecimal("23.53");
     private static final LocalDate PAYMENT_DATE = LocalDate.of(2017, 2, 23);
+    private static final String FAS_PRODUCT_FAMILY = "FAS";
 
     @Autowired
     private UsageBatchRepository usageBatchRepository;
@@ -57,7 +58,7 @@ public class UsageBatchRepositoryIntegrationTest {
 
     @Test
     public void testFindFiscalYears() {
-        List<Integer> fiscalYears = usageBatchRepository.findFiscalYears();
+        List<Integer> fiscalYears = usageBatchRepository.findFiscalYearsByProductFamily(FAS_PRODUCT_FAMILY);
         assertNotNull(fiscalYears);
         assertEquals(4, fiscalYears.size());
         assertEquals(2016, fiscalYears.get(0), 0);
@@ -78,7 +79,7 @@ public class UsageBatchRepositoryIntegrationTest {
         usageBatchRepository.insert(buildUsageBatch(USAGE_BATCH_NAME_1));
         UsageBatch usageBatch = usageBatchRepository.findByName(USAGE_BATCH_NAME_1);
         assertNotNull(usageBatch);
-        assertEquals("FAS", usageBatch.getProductFamily());
+        assertEquals(FAS_PRODUCT_FAMILY, usageBatch.getProductFamily());
         assertEquals(RRO_ACCOUNT_NUMBER, usageBatch.getRro().getAccountNumber());
         assertEquals(PAYMENT_DATE, usageBatch.getPaymentDate());
         assertEquals(FISCAL_YEAR_2017, usageBatch.getFiscalYear());
@@ -124,10 +125,20 @@ public class UsageBatchRepositoryIntegrationTest {
         assertEquals("a5b64c3a-55d2-462e-b169-362dca6a4dd6", usageBatches.get(3).getId());
     }
 
+    @Test
+    public void testFindByProductFamily() {
+        List<UsageBatch> usageBatches = usageBatchRepository.findByProductFamily(FAS_PRODUCT_FAMILY);
+        assertEquals(4, usageBatches.size());
+        assertEquals("3f46981e-e85a-4786-9b60-ab009c4358e7", usageBatches.get(0).getId());
+        assertEquals("56282dbc-2468-48d4-b926-94d3458a666a", usageBatches.get(1).getId());
+        assertEquals("56282dbc-2468-48d4-b926-93d3458a656a", usageBatches.get(2).getId());
+        assertEquals("a5b64c3a-55d2-462e-b169-362dca6a4dd6", usageBatches.get(3).getId());
+    }
+
     private UsageBatch buildUsageBatch(String batchName) {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setId(RupPersistUtils.generateUuid());
-        usageBatch.setProductFamily("FAS");
+        usageBatch.setProductFamily(FAS_PRODUCT_FAMILY);
         usageBatch.setName(batchName);
         Rightsholder rightsholder = new Rightsholder();
         rightsholder.setAccountNumber(RRO_ACCOUNT_NUMBER);

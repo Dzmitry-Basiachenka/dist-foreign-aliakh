@@ -66,6 +66,7 @@ import java.util.stream.Collectors;
 public class DeleteUsageBatchWindowTest {
 
     private static final String USAGE_BATCH_ID = RupPersistUtils.generateUuid();
+    private static final String FAS_PRODUCT_FAMILY = "FAS";
     private UsageBatch usageBatch;
     private DeleteUsageBatchWindow deleteWindow;
     private IUsagesController controller;
@@ -76,8 +77,10 @@ public class DeleteUsageBatchWindowTest {
         usageBatch = new UsageBatch();
         usageBatch.setId(USAGE_BATCH_ID);
         usageBatch.setName("Batch Name");
+        usageBatch.setProductFamily(FAS_PRODUCT_FAMILY);
         usageBatch.setPaymentDate(LocalDate.now());
-        expect(controller.getUsageBatches()).andReturn(Lists.newArrayList(usageBatch)).once();
+        expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
+        expect(controller.getUsageBatches(FAS_PRODUCT_FAMILY)).andReturn(Lists.newArrayList(usageBatch)).once();
         replay(controller);
         deleteWindow = new DeleteUsageBatchWindow(controller);
         verify(controller);

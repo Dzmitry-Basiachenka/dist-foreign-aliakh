@@ -21,9 +21,12 @@ import java.util.List;
 public interface IRightsholderRepository extends ICommonRightsholderRepository {
 
     /**
-     * @return list of RROs from all batches stored in DB.
+     * Finds list of RROs stored in DB associated with specified Product Family.
+     *
+     * @param productFamily Product Family
+     * @return list of found RROs
      */
-    List<Rightsholder> findRros();
+    List<Rightsholder> findRros(String productFamily);
 
     /**
      * Deletes {@link Rightsholder} from database table by account number.

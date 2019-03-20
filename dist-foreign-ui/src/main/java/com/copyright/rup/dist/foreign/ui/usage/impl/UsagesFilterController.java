@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
@@ -15,6 +16,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Controller for filtering usages.
@@ -37,13 +39,13 @@ public class UsagesFilterController extends CommonController<IUsagesFilterWidget
     private IUsageService usageService;
 
     @Override
-    public List<UsageBatch> getUsageBatches() {
-        return usageBatchService.getUsageBatches();
+    public List<UsageBatch> getUsageBatches(String productFamily) {
+        return usageBatchService.getUsageBatches(productFamily);
     }
 
     @Override
-    public List<Rightsholder> getRros() {
-        return rightsholderService.getRros();
+    public List<Rightsholder> getRros(String productFamily) {
+        return rightsholderService.getRros(productFamily);
     }
 
     @Override
@@ -52,8 +54,13 @@ public class UsagesFilterController extends CommonController<IUsagesFilterWidget
     }
 
     @Override
-    public List<Integer> getFiscalYears() {
-        return usageBatchService.getFiscalYears();
+    public List<Integer> getFiscalYears(String productFamily) {
+        return usageBatchService.getFiscalYears(productFamily);
+    }
+
+    @Override
+    public Set<UsageStatusEnum> getStatuses(String productFamily) {
+        return usageService.getAvailableStatuses(productFamily);
     }
 
     @Override

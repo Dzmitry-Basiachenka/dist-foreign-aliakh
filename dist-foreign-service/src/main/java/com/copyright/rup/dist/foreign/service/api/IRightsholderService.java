@@ -20,9 +20,12 @@ import java.util.Set;
 public interface IRightsholderService extends ICommonRightsholderService {
 
     /**
-     * @return list of all RROs presented in DB.
+     * Get list of RROs presented in DB associated with specified Product Family.
+     *
+     * @param productFamily Product Family
+     * @return list of found RROs
      */
-    List<Rightsholder> getRros();
+    List<Rightsholder> getRros(String productFamily);
 
     /**
      * Inserts specified rightsholder into database if it does not exist.
