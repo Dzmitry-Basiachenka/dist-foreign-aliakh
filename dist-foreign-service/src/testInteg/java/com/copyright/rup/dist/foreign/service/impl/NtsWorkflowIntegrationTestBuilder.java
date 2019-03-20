@@ -12,6 +12,7 @@ import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
@@ -71,7 +72,7 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
     private String expectedOracleRequest;
     private String expectedOracleResponse;
     private String expectedPrmResponse;
-    private String expectedPreferencesResponce;
+    private String expectedPreferencesResponse;
     private String expectedPreferencesRightholderId;
     private Long expectedPrmAccountNumber;
     private UsageBatch usageBatch;
@@ -100,7 +101,7 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
     }
 
     NtsWorkflowIntegrationTestBuilder expectPreferences(String preferencesJson, String rightholderId) {
-        this.expectedPreferencesResponce = preferencesJson;
+        this.expectedPreferencesResponse = preferencesJson;
         this.expectedPreferencesRightholderId = rightholderId;
         return this;
     }
@@ -124,7 +125,7 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
         expectedRmsResponse = null;
         expectedOracleRequest = null;
         expectedOracleResponse = null;
-        expectedPreferencesResponce = null;
+        expectedPreferencesResponse = null;
         expectedPreferencesRightholderId = null;
     }
 
@@ -145,7 +146,7 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
             if (Objects.nonNull(expectedOracleRequest)) {
                 expectOracleCall();
             }
-            if (Objects.nonNull(expectedPreferencesResponce)) {
+            if (Objects.nonNull(expectedPreferencesResponse)) {
                 expectGetPreferences();
             }
             loadNtsBatch();
@@ -178,7 +179,9 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
                 assertEquals(1, CollectionUtils.size(actualUsages));
                 UsageDto actualUsage = actualUsages.get(0);
                 assertUsage(actualUsage);
-                assertAudit(actualUsage.getId());
+                if (UsageStatusEnum.ELIGIBLE == expectedUsage.getStatus()) {
+                    assertAudit(actualUsage.getId());
+                }
             }
         }
 
@@ -255,7 +258,7 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
                     + "&prefCodes%5B%5D=IS-RH-FDA-PARTICIPATING,ISRHDISTINELIGIBLE"))
                 .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
                 .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(),
-                    expectedPreferencesResponce), MediaType.APPLICATION_JSON));
+                    expectedPreferencesResponse), MediaType.APPLICATION_JSON));
         }
     }
 }

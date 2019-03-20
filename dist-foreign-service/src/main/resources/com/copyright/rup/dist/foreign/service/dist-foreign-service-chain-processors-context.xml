@@ -21,9 +21,14 @@
     <!-- NTS processors -->
     <bean id="df.service.ntsDeleteUsageProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.DeleteUsageProcessor"/>
 
+    <bean id="df.service.ntsClassificationProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.ClassificationProcessor">
+        <property name="successProcessor" ref="df.service.ntsDeleteUsageProcessor"/>
+        <property name="failureProcessor" ref="df.service.commonEligibilityProcessor"/>
+    </bean>
+
     <bean id="df.service.ntsRhEligibilityProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.RhEligibilityProcessor">
         <property name="usageStatus" value="US_TAX_COUNTRY"/>
-        <property name="successProcessor" ref="df.service.commonEligibilityProcessor"/>
+        <property name="successProcessor" ref="df.service.ntsClassificationProcessor"/>
         <property name="failureProcessor" ref="df.service.ntsDeleteUsageProcessor"/>
     </bean>
 
