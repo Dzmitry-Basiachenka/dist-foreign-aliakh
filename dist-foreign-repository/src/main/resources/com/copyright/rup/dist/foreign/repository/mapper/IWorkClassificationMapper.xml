@@ -4,9 +4,208 @@
 
 <mapper namespace="IWorkClassificationMapper">
 
+    <resultMap id="workClassificationResultMap" type="WorkClassification">
+        <result property="id" column="df_work_classification_uid"/>
+        <result property="wrWrkInst" column="wr_wrk_inst"/>
+        <result property="systemTitle" column="system_title"/>
+        <result property="article" column="article"/>
+        <result property="author" column="author"/>
+        <result property="publisher" column="publisher"/>
+        <result property="classification" column="classification"/>
+        <result property="standardNumber" column="standard_number"/>
+        <result property="rhAccountNumber" column="rh_account_number"/>
+        <result property="rhName" column="rh_name"/>
+        <result property="updateDate" column="updated_datetime"/>
+    </resultMap>
+
+    <insert id="insertOrUpdate" parameterType="WorkClassification">
+        with result as (
+            update ${schema}.df_work_classification
+            set classification = #{classification},
+                <include refid="StoredEntityMapper.update"/>
+        )
+        insert into ${schema}.df_work_classification (
+            df_work_classification_uid,
+            wr_wrk_inst,
+            classification,
+            <include refid="StoredEntityMapper.additionalColumns"/>)
+        values(
+            #{id},
+            #{wrWrkInst},
+            #{classification},
+            <include refid="StoredEntityMapper.insert"/>)
+        on conflict (wr_wrk_inst)
+        do nothing
+    </insert>
+
+    <delete id="deleteByWrWrkInst" parameterType="long">
+        delete from ${schema}.df_work_classification
+        where wr_wrk_inst = #{wrWrkInst}
+    </delete>
+
     <select id="findClassificationByWrWrkInst" resultType="string" parameterType="long">
         select classification
         from ${schema}.df_work_classification
         where wr_wrk_inst = #{wrWrkInst}
+    </select>
+
+    <sql id="searchClause">
+        (cast(u.wr_wrk_inst as text) ilike '%' || #{searchValue} || '%' or
+        u.standard_number ilike '%' || #{searchValue} || '%' or
+        u.system_title ilike '%' || #{searchValue} || '%' or
+        cast(u.rh_account_number as text) like '%' || #{searchValue} || '%' or
+        rh.name ilike '%' || #{searchValue} || '%')
+    </sql>
+
+    <sql id="classificationOrderByClause">
+        order by
+        <choose>
+            <when test="null != sort">
+                <choose>
+                    <when test="sort.property == 'article'">
+                        internal.article <include refid="IUsageMapper.direction"/>
+                    </when>
+                    <when test="sort.property == 'standardNumber'">
+                        internal.standard_number <include refid="IUsageMapper.direction"/>
+                    </when>
+                    <when test="sort.property == 'wrWrkInst'">
+                        wr_wrk_inst <include refid="IUsageMapper.direction"/>
+                    </when>
+                    <when test="sort.property == 'systemTitle'">
+                        internal.system_title <include refid="IUsageMapper.direction"/>
+                    </when>
+                    <when test="sort.property == 'rhAccountNumber'">
+                        internal.rh_account_number <include refid="IUsageMapper.direction"/>
+                    </when>
+                    <when test="sort.property == 'rhName'">
+                        internal.rh_name <include refid="IUsageMapper.direction"/>
+                    </when>
+                    <when test="sort.property == 'publisher'">
+                        internal.publisher <include refid="IUsageMapper.direction"/>
+                    </when>
+                    <when test="sort.property == 'author'">
+                        internal.author <include refid="IUsageMapper.direction"/>
+                    </when>
+                    <when test="sort.property == 'classification'">
+                        classification <include refid="IUsageMapper.direction"/>
+                    </when>
+                </choose>
+            </when>
+            <otherwise>
+                wr_wrk_inst
+            </otherwise>
+        </choose>
+    </sql>
+
+    <select id="findByBatchIds" resultMap="workClassificationResultMap" parameterType="map">
+        select
+            wc.df_work_classification_uid,
+            wc.classification,
+            internal.wr_wrk_inst wr_wrk_inst,
+            system_title,
+            article,
+            author,
+            publisher,
+            standard_number,
+            rh_account_number,
+            rh_name
+        from (
+            select distinct on (u.wr_wrk_inst)
+                u.wr_wrk_inst,
+                u.system_title,
+                u.article,
+                u.author,
+                u.publisher,
+                u.standard_number,
+                u.rh_account_number,
+                u.updated_datetime,
+                rh.name rh_name
+            from ${schema}.df_usage u
+            left join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
+            left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+            where
+                u.df_usage_batch_uid in
+                <foreach collection="batchesIds" item="batchId" separator="," open="(" close=")">
+                    #{batchId}
+                </foreach>
+                <if test="null != searchValue">
+                    and <include refid="searchClause"/>
+                </if>
+            order by u.wr_wrk_inst, u.updated_datetime desc
+            ) internal
+        left join ${schema}.df_work_classification wc on wc.wr_wrk_inst = internal.wr_wrk_inst
+        <include refid="classificationOrderByClause"/>
+        <include refid="IUsageMapper.ifPageable"/>
+    </select>
+
+    <select id="findBySearch" resultMap="workClassificationResultMap">
+        select
+            wc.df_work_classification_uid,
+            wc.classification,
+            wc.wr_wrk_inst wr_wrk_inst,
+            system_title,
+            article,
+            author,
+            publisher,
+            standard_number,
+            rh.rh_account_number,
+            rh.name rh_name
+        from ${schema}.df_work_classification wc
+        left join lateral (
+            select
+                u.wr_wrk_inst,
+                u.system_title,
+                u.article,
+                u.author,
+                u.publisher,
+                u.standard_number,
+                u.rh_account_number
+            from ${schema}.df_usage_archive u
+            where u.wr_wrk_inst = wc.wr_wrk_inst
+            limit 1
+        ) u on true
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        <if test="null != searchValue">
+            where <include refid="searchClause"/>
+        </if>
+        <include refid="classificationOrderByClause"/>
+        <include refid="IUsageMapper.ifPageable"/>
+    </select>
+
+    <select id="findCountByBatchIds" parameterType="map" resultType="int">
+        select count(distinct wr_wrk_inst)
+        from ${schema}.df_usage u
+        left join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        where
+            u.df_usage_batch_uid in
+            <foreach collection="batchesIds" item="batchId" separator="," open="(" close=")">
+                #{batchId}
+            </foreach>
+        <if test="null != searchValue">
+            and <include refid="searchClause"/>
+        </if>
+    </select>
+
+    <select id="findCountBySearch" parameterType="map" resultType="int">
+        select count(1)
+        from ${schema}.df_work_classification wc
+        left join lateral (
+            select
+                u.wr_wrk_inst,
+                u.system_title,
+                u.article,
+                u.author,
+                u.publisher,
+                u.standard_number,
+                u.rh_account_number
+            from ${schema}.df_usage_archive u
+            where u.wr_wrk_inst = wc.wr_wrk_inst
+            limit 1
+        ) u on true
+        left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        <if test="null != searchValue">
+            where <include refid="searchClause"/>
+        </if>
     </select>
 </mapper>
