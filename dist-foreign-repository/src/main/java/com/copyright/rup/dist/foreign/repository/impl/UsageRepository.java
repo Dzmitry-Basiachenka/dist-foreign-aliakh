@@ -496,6 +496,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         params.put(STATUS_KEY, UsageStatusEnum.ARCHIVED);
         params.put("createUser", Objects.requireNonNull(userName));
         params.put("updateUser", Objects.requireNonNull(userName));
+        params.put("excludeClassification", FdaConstants.BELLETRISTIC_CLASSIFICATION);
         return selectList("IUsageMapper.insertNtsUsages", params);
     }
 }

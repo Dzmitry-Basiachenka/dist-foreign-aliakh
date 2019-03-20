@@ -189,11 +189,13 @@
 
     <select id="findCountForNtsBatch" parameterType="map" resultType="int">
         select count(1)
-        from ${schema}.df_usage_archive
-        <include refid="ntsBatchWhereClause"/>
+        <include refid="ntsBatchCondition"/>
     </select>
 
-    <sql id="ntsBatchWhereClause">
+    <sql id="ntsBatchCondition">
+        from
+            ${schema}.df_usage_archive ua
+            left join ${schema}.df_work_classification wc on ua.wr_wrk_inst = wc.wr_wrk_inst
         where
             <foreach collection="markets" item="market" separator="or" open="(" close=")">
                 market ilike '%' || #{market} || '%'
@@ -201,6 +203,7 @@
             and <![CDATA[market_period_from <= #{marketPeriodTo}]]>
             and <![CDATA[market_period_to >= #{marketPeriodFrom}]]>
             and status_ind = #{status}
+            and coalesce(wc.classification, '') != #{excludeClassification}
     </sql>
 
     <update id="updatePaidInfo" parameterType="PaidUsage">

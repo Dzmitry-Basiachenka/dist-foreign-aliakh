@@ -1399,7 +1399,7 @@
         select
             uuid_generate_v4(),
             #{batchId},
-            wr_wrk_inst,
+            ua.wr_wrk_inst as wr_wrk_inst,
             work_title,
             system_title,
             'WORK_FOUND',
@@ -1412,8 +1412,7 @@
             gross_amount,
             comment,
             <include refid="StoredEntityMapper.insert"/>
-        from ${schema}.df_usage_archive
-        <include refid="IUsageArchiveMapper.ntsBatchWhereClause"/>
+        <include refid="IUsageArchiveMapper.ntsBatchCondition"/>
         returning df_usage_uid
     </select>
 </mapper>
