@@ -124,6 +124,11 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
+    public List<String> findUsageIdsForClassificationUpdate() {
+        return selectList("IUsageMapper.findUsageIdsForClassificationUpdate", UsageStatusEnum.UNCLASSIFIED);
+    }
+
+    @Override
     public List<Usage> findForReconcile(String scenarioId) {
         return selectList("IUsageMapper.findForReconcile", Objects.requireNonNull(scenarioId));
     }
