@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
 import com.google.common.collect.ImmutableSet;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,6 +39,10 @@ public class NtsWorkflowIntegrationTest {
 
     private static final LocalDate DATE = LocalDate.of(2017, 2, 1);
     private static final String BUS_MARKET = "Bus";
+    private static final String ORACLE_RH_TAX_1000023401_REQUEST = "tax/rh_1000023401_tax_country_request.json";
+    private static final String ORACLE_RH_TAX_1000023401_US_RESPONSE = "tax/rh_1000023401_tax_country_us_response.json";
+    private static final String PRM_RH_1000023401_RESPONSE = "prm/rightsholder_1000023401_response.json";
+    private static final String RH_ID = "85f864f2-30a5-4215-ac4f-f1f541901218";
 
     @Autowired
     private List<ICacheService<?, ?>> cacheServices;
@@ -51,34 +56,45 @@ public class NtsWorkflowIntegrationTest {
     }
 
     @Test
-    public void testNtsBatchWorkflow() throws InterruptedException {
+    public void testNtsBatchWorkflow() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildFundPool(BUS_MARKET)))
             .expectRmsRights("rights/rms_grants_658824345_request.json", "rights/rms_grants_658824345_response.json")
-            .expectPrmCall(1000023401L, "prm/rightsholder_1000023401_response.json")
-            .expectOracleCall("tax/rh_1000023401_tax_country_request.json",
-                "tax/rh_1000023401_tax_country_us_response.json")
-            .expectPreferences("eligibility/pref_eligible_rh_response.json", "85f864f2-30a5-4215-ac4f-f1f541901218")
-            .expectUsage(buildUsage())
+            .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
+            .expectOracleCall(ORACLE_RH_TAX_1000023401_REQUEST, ORACLE_RH_TAX_1000023401_US_RESPONSE)
+            .expectPreferences("eligibility/pref_eligible_rh_response.json", RH_ID)
+            .expectUsage(buildUsage(BUS_MARKET, UsageStatusEnum.ELIGIBLE, 658824345L))
             .build()
             .run();
     }
 
     @Test
-    public void testNtsBatchWorkflowIneligibleRightsholder() throws InterruptedException {
+    public void testNtsBatchWorkflowWithUnclassified() {
         testBuilder
-            .withUsageBatch(buildUsageBatch(buildFundPool(BUS_MARKET)))
-            .expectRmsRights("rights/rms_grants_658824345_request.json", "rights/rms_grants_658824345_response.json")
-            .expectPrmCall(1000023401L, "prm/rightsholder_1000023401_response.json")
-            .expectOracleCall("tax/rh_1000023401_tax_country_request.json",
-                "tax/rh_1000023401_tax_country_us_response.json")
-            .expectPreferences("eligibility/pref_ineligible_rh_response.json", "85f864f2-30a5-4215-ac4f-f1f541901218")
+            .withUsageBatch(buildUsageBatch(buildFundPool("Gov")))
+            .expectRmsRights("rights/rms_grants_576324545_request.json", "rights/rms_grants_576324545_response.json")
+            .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
+            .expectOracleCall(ORACLE_RH_TAX_1000023401_REQUEST, ORACLE_RH_TAX_1000023401_US_RESPONSE)
+            .expectPreferences("eligibility/pref_eligible_rh_response.json", RH_ID)
+            .expectUsage(buildUsage("Gov", UsageStatusEnum.UNCLASSIFIED, 576324545L))
             .build()
             .run();
     }
 
     @Test
-    public void testNtsBatchWorkflowNonUsRhTaxCountry() throws InterruptedException {
+    public void testNtsBatchWorkflowWithIneligibleRh() {
+        testBuilder
+            .withUsageBatch(buildUsageBatch(buildFundPool(BUS_MARKET)))
+            .expectRmsRights("rights/rms_grants_658824345_request.json", "rights/rms_grants_658824345_response.json")
+            .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
+            .expectOracleCall(ORACLE_RH_TAX_1000023401_REQUEST, ORACLE_RH_TAX_1000023401_US_RESPONSE)
+            .expectPreferences("eligibility/pref_ineligible_rh_response.json", RH_ID)
+            .build()
+            .run();
+    }
+
+    @Test
+    public void testNtsBatchWorkflowWithNonUsRhTaxCountry() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildFundPool(BUS_MARKET)))
             .expectRmsRights("rights/rms_grants_658824345_request.json", "rights/rms_grants_658824345_response.json")
@@ -90,7 +106,7 @@ public class NtsWorkflowIntegrationTest {
     }
 
     @Test
-    public void testNtsBatchWorkflowRhNotFound() throws InterruptedException {
+    public void testNtsBatchWorkflowWithRhNotFound() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildFundPool("Utiv")))
             .expectRmsRights("rights/rms_grants_854030732_request.json", "rights/rms_grants_empty_response.json")
@@ -128,15 +144,15 @@ public class NtsWorkflowIntegrationTest {
         return fundPool;
     }
 
-    private Usage buildUsage() {
+    private Usage buildUsage(String market, UsageStatusEnum status, Long wrWrkInst) {
         Usage usage = new Usage();
-        usage.setWrWrkInst(658824345L);
+        usage.setWrWrkInst(wrWrkInst);
         usage.setWorkTitle("100 ROAD MOVIES");
         usage.setRightsholder(buildRightsholder(1000023401L, "American College of Physicians - Journals"));
-        usage.setStatus(UsageStatusEnum.ELIGIBLE);
+        usage.setStatus(status);
         usage.setProductFamily("NTS");
         usage.setStandardNumber("1008902112317555XX");
-        usage.setMarket(BUS_MARKET);
+        usage.setMarket(market);
         usage.setMarketPeriodFrom(2013);
         usage.setMarketPeriodTo(2017);
         usage.setGrossAmount(new BigDecimal("1176.9160000000"));
