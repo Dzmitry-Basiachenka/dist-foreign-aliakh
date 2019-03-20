@@ -149,16 +149,6 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
     }
 
     @Override
-    public List<Usage> findForNtsBatch(Integer marketPeriodFrom, Integer marketPeriodTo, Set<String> markets) {
-        Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
-        params.put("marketPeriodFrom", Objects.requireNonNull(marketPeriodFrom));
-        params.put("marketPeriodTo", Objects.requireNonNull(marketPeriodTo));
-        params.put("markets", Objects.requireNonNull(markets));
-        params.put(STATUS_KEY, UsageStatusEnum.ARCHIVED);
-        return selectList("IUsageArchiveMapper.findForNtsBatch", params);
-    }
-
-    @Override
     public List<String> findPaidIds() {
         return selectList("IUsageArchiveMapper.findPaidIds", UsageStatusEnum.PAID);
     }

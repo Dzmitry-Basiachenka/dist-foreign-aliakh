@@ -198,13 +198,6 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public List<Usage> getUsagesForNtsBatch(UsageBatch usageBatch) {
-        FundPool fundPool = usageBatch.getFundPool();
-        return usageArchiveRepository.findForNtsBatch(fundPool.getFundPoolPeriodFrom(),
-            fundPool.getFundPoolPeriodTo(), fundPool.getMarkets());
-    }
-
-    @Override
     public List<Long> getInvalidRightsholdersByFilter(UsageFilter filter) {
         return usageRepository.findInvalidRightsholdersByFilter(filter);
     }
