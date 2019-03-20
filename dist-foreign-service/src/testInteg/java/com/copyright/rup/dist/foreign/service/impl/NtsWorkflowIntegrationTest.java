@@ -104,6 +104,7 @@ public class NtsWorkflowIntegrationTest {
         usageBatch.setFiscalYear(2017);
         usageBatch.setPaymentDate(DATE);
         usageBatch.setRro(buildRightsholder(2000017001L, "CFC, Centre Francais d'exploitation du droit de Copie"));
+        usageBatch.setProductFamily("NTS");
         usageBatch.setFundPool(fundPool);
         return usageBatch;
     }

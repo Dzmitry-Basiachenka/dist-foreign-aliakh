@@ -15,6 +15,7 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: '31ddaa1a-e60b-44ce-a968-0ca262870358')
             column(name: 'name', value: 'CADRA_27Oct17')
             column(name: 'rro_account_number', value: '1000002562')
+            column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2017-01-11')
             column(name: 'fiscal_year', value: '2017')
             column(name: 'gross_amount', value: '30000')

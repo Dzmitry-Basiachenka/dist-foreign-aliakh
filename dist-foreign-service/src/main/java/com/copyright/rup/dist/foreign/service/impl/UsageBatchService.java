@@ -4,6 +4,7 @@ import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.util.LogUtils;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -106,6 +107,7 @@ public class UsageBatchService implements IUsageBatchService {
     @Transactional
     public List<String> insertNtsBatch(UsageBatch usageBatch, String userName) {
         usageBatch.setId(RupPersistUtils.generateUuid());
+        usageBatch.setProductFamily(FdaConstants.NTS_PRODUCT_FAMILY);
         usageBatch.setCreateUser(userName);
         usageBatch.setUpdateUser(userName);
         usageBatchRepository.insert(usageBatch);

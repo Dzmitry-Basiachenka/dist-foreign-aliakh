@@ -114,6 +114,7 @@ class FundPoolLoadWindow extends Window {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setName(StringUtils.trim(usageBatchNameField.getValue()));
         usageBatch.setRro(rro);
+        usageBatch.setProductFamily("NTS");
         usageBatch.setPaymentDate(paymentDateWidget.getValue());
         usageBatch.setFiscalYear(UsageBatchUtils.calculateFiscalYear(paymentDateWidget.getValue()));
         FundPool fundPool = new FundPool();

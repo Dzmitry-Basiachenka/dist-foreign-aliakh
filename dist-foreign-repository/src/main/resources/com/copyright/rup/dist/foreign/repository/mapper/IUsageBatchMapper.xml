@@ -9,6 +9,7 @@
         <result property="name" column="name"/>
         <result property="rro.accountNumber" column="rro_account_number"/>
         <result property="rro.name" column="rro_name"/>
+        <result property="productFamily" column="product_family"/>
         <result property="paymentDate" column="payment_date"/>
         <result property="fiscalYear" column="fiscal_year"/>
         <result property="grossAmount" column="gross_amount"/>
@@ -20,6 +21,7 @@
         ub.name,
         ub.rro_account_number,
         r.name rro_name,
+        ub.product_family,
         ub.payment_date,
         ub.fiscal_year,
         ub.gross_amount,
@@ -36,6 +38,7 @@
             df_usage_batch_uid,
             name,
             rro_account_number,
+            product_family,
             payment_date,
             fiscal_year,
             gross_amount,
@@ -45,6 +48,7 @@
             #{id},
             #{name},
             #{rro.accountNumber},
+            #{productFamily},
             #{paymentDate},
             #{fiscalYear},
             #{grossAmount},

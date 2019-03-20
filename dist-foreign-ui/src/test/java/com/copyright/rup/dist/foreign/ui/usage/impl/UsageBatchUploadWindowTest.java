@@ -72,6 +72,7 @@ public class UsageBatchUploadWindowTest {
     private static final String USAGE_BATCH_NAME = "BatchName";
     private static final String RRO_NAME = "RRO name";
     private static final String ACCOUNT_NAME = "Account Name";
+    private static final String FAS_PRODUCT_FAMILY = "FAS";
     private static final String INVALID_GROSS_AMOUNT_ERROR_MESSAGE =
         "Field value should be positive number and not exceed 10 digits";
     private static final String GROSS_AMOUNT_FIELD = "grossAmountField";
@@ -170,10 +171,10 @@ public class UsageBatchUploadWindowTest {
         Whitebox.setInternalState(window, "fiscalYearField", new TextField("FY2017"));
         Whitebox.setInternalState(window, GROSS_AMOUNT_FIELD, new TextField("Gross Amount", "100.00"));
         Whitebox.setInternalState(window, "accountNameField", new TextField(RRO_NAME));
-        Whitebox.setInternalState(window, "productFamilyField", new TextField("Product Family", "FAS"));
+        Whitebox.setInternalState(window, "productFamilyField", new TextField("Product Family", FAS_PRODUCT_FAMILY));
         Whitebox.setInternalState(window, "rro", rro);
         expect(window.isValid()).andReturn(true).once();
-        expect(usagesController.getCsvProcessor("FAS")).andReturn(processor).once();
+        expect(usagesController.getCsvProcessor(FAS_PRODUCT_FAMILY)).andReturn(processor).once();
         expect(processor.process(anyObject())).andReturn(processingResult).once();
         expect(usagesController.loadUsageBatch(buildUsageBatch(rro), processingResult.get())).andReturn(1).once();
         expect(uploadField.getStreamToUploadedFile()).andReturn(createMock(ByteArrayOutputStream.class)).once();
@@ -297,7 +298,7 @@ public class UsageBatchUploadWindowTest {
         numberField.setValue(ACCOUNT_NUMBER);
         verifyButton.click();
         assertEquals("CANADIAN CERAMIC SOCIETY", nameField.getValue());
-        assertEquals("FAS", productFamilyField.getValue());
+        assertEquals(FAS_PRODUCT_FAMILY, productFamilyField.getValue());
         numberField.setValue("2000017000");
         verifyButton.click();
         assertEquals("CLA, The Copyright Licensing Agency Ltd.", nameField.getValue());
@@ -355,6 +356,7 @@ public class UsageBatchUploadWindowTest {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setName(USAGE_BATCH_NAME);
         usageBatch.setRro(rro);
+        usageBatch.setProductFamily("FAS");
         usageBatch.setPaymentDate(PAYMENT_DATE);
         usageBatch.setFiscalYear(2017);
         usageBatch.setGrossAmount(new BigDecimal("100.00"));

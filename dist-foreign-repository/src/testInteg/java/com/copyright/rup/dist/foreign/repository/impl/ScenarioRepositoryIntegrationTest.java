@@ -249,6 +249,7 @@ public class ScenarioRepositoryIntegrationTest {
     private UsageBatch buildBatch(Long rroAccountNumber) {
         UsageBatch batch = new UsageBatch();
         batch.setId(RupPersistUtils.generateUuid());
+        batch.setProductFamily("FAS");
         batch.setGrossAmount(new BigDecimal("100.00"));
         batch.setPaymentDate(LocalDate.of(2017, 1, 1));
         batch.setFiscalYear(2017);

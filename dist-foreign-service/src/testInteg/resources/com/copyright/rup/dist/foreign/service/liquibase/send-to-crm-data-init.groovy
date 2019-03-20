@@ -27,6 +27,7 @@ databaseChangeLog {
             column(name: 'df_usage_batch_uid', value: '10defe40-ef47-47c9-96b4-be9226f3d591')
             column(name: 'name', value: 'Paid batch')
             column(name: 'rro_account_number', value: '1000005413')
+            column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2021-02-12')
             column(name: 'fiscal_year', value: '2020')
             column(name: 'gross_amount', value: '1000.00')
