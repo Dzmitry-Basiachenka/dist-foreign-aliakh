@@ -683,6 +683,16 @@
         where u.status_ind = #{status}
     </select>
 
+    <select id="findCountForClassificationUpdate" resultType="int">
+        select count(1)
+        from ${schema}.df_usage
+        where status_ind = #{status}
+            and wr_wrk_inst in
+            <foreach collection="wrWrkInsts" item="wrWrkInst" open="(" separator="," close=")">
+                #{wrWrkInst}
+            </foreach>
+    </select>
+
     <delete id="deleteByBatchId" parameterType="string">
         delete from ${schema}.df_usage
         where df_usage_batch_uid = #{batchId}

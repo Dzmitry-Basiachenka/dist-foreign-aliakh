@@ -49,6 +49,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Implementation of Usage repository.
@@ -126,6 +127,20 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     @Override
     public List<String> findUsageIdsForClassificationUpdate() {
         return selectList("IUsageMapper.findUsageIdsForClassificationUpdate", UsageStatusEnum.UNCLASSIFIED);
+    }
+
+    @Override
+    public int findCountForClassificationUpdate(Set<Long> wrWrkInsts) {
+        AtomicInteger count = new AtomicInteger(0);
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put(STATUS_KEY, Objects.requireNonNull(UsageStatusEnum.UNCLASSIFIED));
+        Iterables.partition(Objects.requireNonNull(wrWrkInsts), 32000)
+            .forEach(
+                partition -> {
+                    parameters.put("wrWrkInsts", Objects.requireNonNull(wrWrkInsts));
+                    count.addAndGet(selectOne("IUsageMapper.findCountForClassificationUpdate", parameters));
+                });
+        return count.get();
     }
 
     @Override

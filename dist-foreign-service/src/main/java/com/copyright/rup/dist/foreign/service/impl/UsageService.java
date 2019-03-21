@@ -539,6 +539,11 @@ public class UsageService implements IUsageService {
     }
 
     @Override
+    public int getUnclassifiedUsagesCount(Set<Long> wrWrkInsts) {
+        return usageRepository.findCountForClassificationUpdate(wrWrkInsts);
+    }
+
+    @Override
     public Set<UsageStatusEnum> getAvailableStatuses(String productFamily) {
         Set<UsageStatusEnum> statuses = productFamilyToStatusesMap.get(productFamily);
         return CollectionUtils.isNotEmpty(statuses) ? statuses : Collections.emptySet();
