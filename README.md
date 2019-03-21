@@ -1,3 +1,9 @@
+5.1.1
+-
+* B-46040 FDA: Assign title classification to titles in NTS distribution: implement repository logic for selecting and updating works classification
+* B-46040 FDA: Assign title classification to titles in NTS distribution: implement service logic for assign classification functionality
+* B-49017 FDA: Address the number of buttons on the Usage tab: adjust Filters on Usage tab and Delete Usage Batch modal window to display data considering selected Product Family
+
 5.1.0
 -
 * B-46039 FDA: Exclude Belletristic titles from NTS Batch: adjust NTS batch usages processing strategy to process usage work classification after processing usage Rh Ilegibility
