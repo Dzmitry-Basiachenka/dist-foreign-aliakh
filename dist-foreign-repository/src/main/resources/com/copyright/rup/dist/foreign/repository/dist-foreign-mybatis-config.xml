@@ -41,6 +41,7 @@
         <typeAlias alias="UsageBatchStatistic" type="com.copyright.rup.dist.foreign.domain.report.UsageBatchStatistic"/>
         <typeAlias alias="FundPoolTypeHandler" type="com.copyright.rup.dist.foreign.repository.impl.converter.FundPoolTypeHandler"/>
         <typeAlias alias="UsageStatistic" type="com.copyright.rup.dist.foreign.domain.report.UsageStatistic"/>
+        <typeAlias alias="WorkClassification" type="com.copyright.rup.dist.foreign.domain.WorkClassification"/>
     </typeAliases>
 
     <typeHandlers>
