@@ -377,4 +377,12 @@ public interface IUsageService {
      * for which classification is available.
      */
     void updateUnclassifiedUsages();
+
+    /**
+     * Gets set of {@link UsageStatusEnum} availale for specified Product Family.
+     *
+     * @param productFamily Product Family
+     * @return set of {@link UsageStatusEnum}
+     */
+    Set<UsageStatusEnum> getAvailableStatuses(String productFamily);
 }

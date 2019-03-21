@@ -95,9 +95,12 @@ public interface IUsagesController extends IController<IUsagesWidget> {
     List<UsageDto> loadBeans(int startIndex, int count, List<QuerySortOrder> sortOrders);
 
     /**
-     * @return list of {@link UsageBatch}es available for deleting.
+     * Gets list of {@link UsageBatch}es associated with selected Product Family.
+     *
+     * @param productFamily Product Family
+     * @return list of found {@link UsageBatch}es
      */
-    List<UsageBatch> getUsageBatches();
+    List<UsageBatch> getUsageBatches(String productFamily);
 
     /**
      * @return list of available markets.

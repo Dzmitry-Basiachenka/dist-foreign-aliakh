@@ -57,9 +57,10 @@
         )
     </insert>
 
-    <select id="findFiscalYears" resultType="int">
+    <select id="findFiscalYearsByProductFamily" resultType="int" parameterType="string">
         select distinct fiscal_year
         from ${schema}.df_usage_batch
+        where product_family = #{productFamily}
         order by fiscal_year
     </select>
 
@@ -68,6 +69,15 @@
             <include refid="usageBatchColumns"/>
         from ${schema}.df_usage_batch ub
         left join ${schema}.df_rightsholder r on r.rh_account_number = ub.rro_account_number
+        order by ub.updated_datetime desc
+    </select>
+
+    <select id="findByProductFamily" resultMap="usageBatchResultMap" parameterType="string">
+        select
+            <include refid="usageBatchColumns"/>
+        from ${schema}.df_usage_batch ub
+        left join ${schema}.df_rightsholder r on r.rh_account_number = ub.rro_account_number
+        where ub.product_family = #{productFamily}
         order by ub.updated_datetime desc
     </select>
 

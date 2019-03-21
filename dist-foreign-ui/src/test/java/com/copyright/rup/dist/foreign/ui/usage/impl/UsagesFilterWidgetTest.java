@@ -63,6 +63,10 @@ public class UsagesFilterWidgetTest {
 
     private static final Integer FISCAL_YEAR = 2017;
     private static final Long ACCOUNT_NUMBER = 12345678L;
+    private static final String FAS_PRODUCT_FAMILY = "FAS";
+    private static final Set<UsageStatusEnum> STATUSES = Sets.newHashSet(UsageStatusEnum.NEW,
+        UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.WORK_RESEARCH, UsageStatusEnum.WORK_FOUND,
+        UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.RH_FOUND, UsageStatusEnum.SENT_FOR_RA, UsageStatusEnum.ELIGIBLE);
 
     private IUsagesFilterController usagesFilterController;
     private UsagesFilterWidget widget;
@@ -72,8 +76,11 @@ public class UsagesFilterWidgetTest {
         usagesFilterController = createMock(IUsagesFilterController.class);
         widget = new UsagesFilterWidget();
         widget.setController(usagesFilterController);
-        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
-        expect(usagesFilterController.getProductFamilies()).andReturn(Collections.singletonList("FAS")).once();
+        expect(usagesFilterController.getFiscalYears(FAS_PRODUCT_FAMILY))
+            .andReturn(Collections.singletonList(FISCAL_YEAR)).once();
+        expect(usagesFilterController.getProductFamilies())
+            .andReturn(Collections.singletonList(FAS_PRODUCT_FAMILY)).once();
+        expect(usagesFilterController.getStatuses(FAS_PRODUCT_FAMILY)).andReturn(STATUSES).once();
     }
 
     @Test
@@ -89,7 +96,9 @@ public class UsagesFilterWidgetTest {
 
     @Test
     public void testApplyFilter() {
-        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
+        expect(usagesFilterController.getFiscalYears(FAS_PRODUCT_FAMILY))
+            .andReturn(Collections.singletonList(FISCAL_YEAR)).once();
+        expect(usagesFilterController.getStatuses(FAS_PRODUCT_FAMILY)).andReturn(STATUSES).once();
         replay(usagesFilterController);
         widget.init();
         widget.clearFilter();
@@ -133,7 +142,9 @@ public class UsagesFilterWidgetTest {
 
     @Test
     public void testClearFilter() {
-        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
+        expect(usagesFilterController.getFiscalYears(FAS_PRODUCT_FAMILY))
+            .andReturn(Collections.singletonList(FISCAL_YEAR)).once();
+        expect(usagesFilterController.getStatuses(FAS_PRODUCT_FAMILY)).andReturn(STATUSES).once();
         replay(usagesFilterController);
         widget.init();
         Button applyButton = getApplyButton();
@@ -179,7 +190,9 @@ public class UsagesFilterWidgetTest {
     @Test
     public void verifyButtonClickListener() {
         ClickEvent clickEvent = createMock(ClickEvent.class);
-        expect(usagesFilterController.getFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
+        expect(usagesFilterController.getFiscalYears(FAS_PRODUCT_FAMILY))
+            .andReturn(Collections.singletonList(FISCAL_YEAR)).once();
+        expect(usagesFilterController.getStatuses(FAS_PRODUCT_FAMILY)).andReturn(STATUSES).once();
         replay(clickEvent, usagesFilterController);
         widget.init();
         Set<Long> accountNumbers = Sets.newHashSet(ACCOUNT_NUMBER);
@@ -204,10 +217,7 @@ public class UsagesFilterWidgetTest {
         verifyItemsFilterLayout(verticalLayout.getComponent(2), "Batches");
         verifyItemsFilterLayout(verticalLayout.getComponent(3), "RROs");
         verifyDateWidget(verticalLayout.getComponent(4));
-        verifyStatusComboboxComponent(verticalLayout.getComponent(5), Lists.newArrayList(UsageStatusEnum.NEW,
-            UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.WORK_RESEARCH, UsageStatusEnum.WORK_FOUND,
-            UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.RH_FOUND, UsageStatusEnum.SENT_FOR_RA,
-            UsageStatusEnum.UNCLASSIFIED, UsageStatusEnum.ELIGIBLE, UsageStatusEnum.NTS_WITHDRAWN));
+        verifyStatusComboboxComponent(verticalLayout.getComponent(5), STATUSES);
         verifyFiscalYearComboboxComponent(verticalLayout.getComponent(6), Collections.singletonList(FISCAL_YEAR));
     }
 
@@ -232,7 +242,7 @@ public class UsagesFilterWidgetTest {
         assertFalse(iterator.hasNext());
     }
 
-    private void verifyStatusComboboxComponent(Component component, List<UsageStatusEnum> values) {
+    private void verifyStatusComboboxComponent(Component component, Set<UsageStatusEnum> values) {
         assertTrue(component instanceof ComboBox);
         ComboBox comboBox = (ComboBox) component;
         assertEquals("Status", comboBox.getCaption());
@@ -241,8 +251,8 @@ public class UsagesFilterWidgetTest {
         ListDataProvider<UsageStatusEnum> listDataProvider =
             (ListDataProvider<UsageStatusEnum>) comboBox.getDataProvider();
         Collection<?> itemIds = listDataProvider.getItems();
-        assertEquals(10, itemIds.size());
-        assertEquals(values, itemIds);
+        assertEquals(8, itemIds.size());
+        assertEquals(Lists.newArrayList(values), itemIds);
     }
 
     private void verifyFiscalYearComboboxComponent(Component component, List<Integer> values) {

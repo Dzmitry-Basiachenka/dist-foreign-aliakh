@@ -58,7 +58,8 @@ public class NtsUsageBatchSelectorWidgetTest {
     @Test
     public void testLoadBeans() {
         List<UsageBatch> batches = Collections.singletonList(buildUsageBatch());
-        expect(usagesController.getUsageBatches()).andReturn(batches).once();
+        expect(usagesController.getSelectedProductFamily()).andReturn("FAS").once();
+        expect(usagesController.getUsageBatches("FAS")).andReturn(batches).once();
         replay(usagesController);
         assertEquals(batches, ntsUsageBatchSelectorWidget.loadBeans());
         verify(usagesController);

@@ -68,13 +68,18 @@ public class UsageBatchService implements IUsageBatchService {
     private ExecutorService executorService;
 
     @Override
-    public List<Integer> getFiscalYears() {
-        return usageBatchRepository.findFiscalYears();
+    public List<Integer> getFiscalYears(String productFamily) {
+        return usageBatchRepository.findFiscalYearsByProductFamily(productFamily);
     }
 
     @Override
     public List<UsageBatch> getUsageBatches() {
         return usageBatchRepository.findAll();
+    }
+
+    @Override
+    public List<UsageBatch> getUsageBatches(String productFamily) {
+        return usageBatchRepository.findByProductFamily(productFamily);
     }
 
     @Override

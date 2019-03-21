@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Implementation of {@link IUsageBatchRepository} for MyBatis.
@@ -31,13 +32,18 @@ public class UsageBatchRepository extends BaseRepository implements IUsageBatchR
     }
 
     @Override
-    public List<Integer> findFiscalYears() {
-        return selectList("IUsageBatchMapper.findFiscalYears");
+    public List<Integer> findFiscalYearsByProductFamily(String productFamily) {
+        return selectList("IUsageBatchMapper.findFiscalYearsByProductFamily", Objects.requireNonNull(productFamily));
     }
 
     @Override
     public List<UsageBatch> findAll() {
         return selectList("IUsageBatchMapper.findAll");
+    }
+
+    @Override
+    public List<UsageBatch> findByProductFamily(String productFamily) {
+        return selectList("IUsageBatchMapper.findByProductFamily", Objects.requireNonNull(productFamily));
     }
 
     @Override

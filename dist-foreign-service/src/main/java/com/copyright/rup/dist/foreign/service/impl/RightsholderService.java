@@ -55,8 +55,8 @@ public class RightsholderService extends CommonRightsholderService implements IR
     }
 
     @Override
-    public List<Rightsholder> getRros() {
-        return rightsholderRepository.findRros();
+    public List<Rightsholder> getRros(String productFamily) {
+        return rightsholderRepository.findRros(productFamily);
     }
 
     @Override

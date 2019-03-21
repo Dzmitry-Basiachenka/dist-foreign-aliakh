@@ -94,6 +94,8 @@ public class UsageService implements IUsageService {
     private Long claAccountNumber;
     @Value("#{$RUP{dist.foreign.usages.workflow_steps}}")
     private Map<String, Set<UsageWorkflowStepEnum>> usageWorkflowStepsMap;
+    @Value("#{$RUP{dist.foreign.usage_filter.statuses}}")
+    private Map<String, Set<UsageStatusEnum>> productFamilyToStatusesMap;
     @Autowired
     private IUsageRepository usageRepository;
     @Autowired
@@ -534,6 +536,12 @@ public class UsageService implements IUsageService {
             .forEach(partition -> usageRepository.findByIds(partition).forEach(classificationProcessor::process));
         LOGGER.debug("Update unclassified usages. Finished. UsagesForClassificationUpdateCount={}",
             CollectionUtils.size(usageIdsForClassificationUpdate));
+    }
+
+    @Override
+    public Set<UsageStatusEnum> getAvailableStatuses(String productFamily) {
+        Set<UsageStatusEnum> statuses = productFamilyToStatusesMap.get(productFamily);
+        return CollectionUtils.isNotEmpty(statuses) ? statuses : Collections.emptySet();
     }
 
     void setClassificationProcessor(IChainProcessor<Usage> classificationProcessor) {

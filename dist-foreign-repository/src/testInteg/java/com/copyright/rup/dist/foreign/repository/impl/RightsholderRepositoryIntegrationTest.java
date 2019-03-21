@@ -91,7 +91,7 @@ public class RightsholderRepositoryIntegrationTest {
 
     @Test
     public void testFindRros() {
-        List<Rightsholder> rros = rightsholderRepository.findRros();
+        List<Rightsholder> rros = rightsholderRepository.findRros("FAS");
         assertNotNull(rros);
         assertTrue(CollectionUtils.isNotEmpty(rros));
         assertEquals(4, rros.size());

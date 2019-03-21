@@ -737,6 +737,23 @@ public class UsageServiceTest {
         verify(usageRepository, classificationProcessorMock);
     }
 
+    @Test
+    public void testGetAvailableStatuses() {
+        Map<String, Set<UsageStatusEnum>> statuses =
+            ImmutableMap.of(FAS_PRODUCT_FAMILY, Collections.singleton(UsageStatusEnum.ELIGIBLE));
+        Whitebox.setInternalState(usageService, "productFamilyToStatusesMap", statuses);
+        assertEquals(Collections.singleton(UsageStatusEnum.ELIGIBLE),
+            usageService.getAvailableStatuses(FAS_PRODUCT_FAMILY));
+    }
+
+    @Test
+    public void testGetAvailableStatusesNullStatusResult() {
+        Map<String, Set<UsageStatusEnum>> statuses =
+            ImmutableMap.of(FAS_PRODUCT_FAMILY, Collections.singleton(UsageStatusEnum.ELIGIBLE));
+        Whitebox.setInternalState(usageService, "productFamilyToStatusesMap", statuses);
+        assertTrue(CollectionUtils.isEmpty(usageService.getAvailableStatuses("NTS")));
+    }
+
     private void assertResult(List<?> result, int size) {
         assertNotNull(result);
         assertEquals(size, result.size());

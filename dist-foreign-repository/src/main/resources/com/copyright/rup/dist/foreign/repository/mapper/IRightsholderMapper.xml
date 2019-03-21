@@ -10,13 +10,14 @@
         <result property="name" column="name"/>
     </resultMap>
 
-    <select id="findRros" resultMap="rroResultMap">
+    <select id="findRros" resultMap="rroResultMap" parameterType="string">
         select distinct
             ub.rro_account_number,
             r.name,
             r.df_rightsholder_uid
         from ${schema}.df_usage_batch ub
         left join ${schema}.df_rightsholder r on r.rh_account_number = ub.rro_account_number
+        where ub.product_family = #{productFamily}
         order by r.name
     </select>
 

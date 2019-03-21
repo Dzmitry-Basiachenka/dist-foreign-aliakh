@@ -67,14 +67,16 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
 
     @Override
     public void clearFilter() {
+        String selectedProductFamily = getSelectedProductFamily();
         paymentDateWidget.clear();
         fiscalYearComboBox.clear();
-        fiscalYearComboBox.setItems(getController().getFiscalYears());
+        fiscalYearComboBox.setItems(getController().getFiscalYears(selectedProductFamily));
         statusComboBox.clear();
+        statusComboBox.setItems(getController().getStatuses(selectedProductFamily));
         usageFilter = new UsageFilter();
         rightsholderFilterWidget.reset();
         usageBatchFilterWidget.reset();
-        usageFilter.setProductFamilies(Collections.singleton(getSelectedProductFamily()));
+        usageFilter.setProductFamilies(Collections.singleton(selectedProductFamily));
         applyFilter();
     }
 
@@ -106,17 +108,18 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
     }
 
     private VerticalLayout initFiltersLayout() {
+        initProductFamilyCombobox();
         initPaymentDateFilter();
         initFiscalYearFilter();
         initStatusFilter();
-        VerticalLayout verticalLayout = new VerticalLayout(buildProductFamilyCombobox(), buildFiltersHeaderLabel(),
+        VerticalLayout verticalLayout = new VerticalLayout(productFamilyCombobox, buildFiltersHeaderLabel(),
             buildUsageBatchFilter(), buildRroAccountNumberFilter(), paymentDateWidget, statusComboBox,
             fiscalYearComboBox);
         verticalLayout.setMargin(false);
         return verticalLayout;
     }
 
-    private ComboBox buildProductFamilyCombobox() {
+    private ComboBox initProductFamilyCombobox() {
         productFamilyCombobox =
             new ComboBox<>(ForeignUi.getMessage("label.product_family"), controller.getProductFamilies());
         productFamilyCombobox.setSelectedItem("FAS");
@@ -129,7 +132,8 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
     }
 
     private HorizontalLayout buildUsageBatchFilter() {
-        usageBatchFilterWidget = new UsageBatchFilterWidget(() -> controller.getUsageBatches());
+        usageBatchFilterWidget = new UsageBatchFilterWidget(
+            () -> controller.getUsageBatches(getSelectedProductFamily()));
         usageBatchFilterWidget.addFilterSaveListener((IFilterSaveListener<UsageBatch>) saveEvent -> {
             usageFilter.setUsageBatchesIds(
                 saveEvent.getSelectedItemsIds().stream().map(UsageBatch::getId).collect(Collectors.toSet()));
@@ -144,7 +148,7 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
             ForeignUi.getMessage("label.rros"),
             ForeignUi.getMessage("prompt.rro"),
             ForeignUi.getMessage("message.error.rro_not_found"),
-            () -> controller.getRros());
+            () -> controller.getRros(getSelectedProductFamily()));
         rightsholderFilterWidget.addFilterSaveListener((IFilterSaveListener<Rightsholder>) saveEvent -> {
             usageFilter.setRhAccountNumbers(saveEvent.getSelectedItemsIds()
                 .stream()
@@ -157,12 +161,7 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
     }
 
     private void initStatusFilter() {
-        List<UsageStatusEnum> statuses = Lists.newArrayList(UsageStatusEnum.values());
-        statuses.remove(UsageStatusEnum.LOCKED);
-        statuses.remove(UsageStatusEnum.PAID);
-        statuses.remove(UsageStatusEnum.ARCHIVED);
-        statuses.remove(UsageStatusEnum.SENT_TO_LM);
-        statuses.remove(UsageStatusEnum.US_TAX_COUNTRY);
+        List<UsageStatusEnum> statuses = Lists.newArrayList(controller.getStatuses(getSelectedProductFamily()));
         statusComboBox = new ComboBox<>(ForeignUi.getMessage("label.status"), statuses);
         VaadinUtils.setMaxComponentsWidth(statusComboBox);
         statusComboBox.addValueChangeListener(event -> {
@@ -174,7 +173,8 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
 
     private void initFiscalYearFilter() {
         fiscalYearComboBox =
-            new ComboBox<>(ForeignUi.getMessage("label.fiscal_year_to"), getController().getFiscalYears());
+            new ComboBox<>(ForeignUi.getMessage("label.fiscal_year_to"),
+                getController().getFiscalYears(getSelectedProductFamily()));
         VaadinUtils.setMaxComponentsWidth(fiscalYearComboBox);
         fiscalYearComboBox.addValueChangeListener(event -> {
             usageFilter.setFiscalYear(fiscalYearComboBox.getValue());

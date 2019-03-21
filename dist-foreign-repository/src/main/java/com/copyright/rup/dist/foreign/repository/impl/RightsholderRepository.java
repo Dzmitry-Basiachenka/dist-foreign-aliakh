@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -30,8 +31,8 @@ import java.util.Set;
 public class RightsholderRepository extends CommonRightsholderRepository implements IRightsholderRepository {
 
     @Override
-    public List<Rightsholder> findRros() {
-        return selectList("RightsholderMapper.findRros");
+    public List<Rightsholder> findRros(String productFamily) {
+        return selectList("RightsholderMapper.findRros", Objects.requireNonNull(productFamily));
     }
 
     @Override

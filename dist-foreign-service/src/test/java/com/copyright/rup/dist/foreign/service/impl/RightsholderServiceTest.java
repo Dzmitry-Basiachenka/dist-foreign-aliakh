@@ -51,9 +51,9 @@ public class RightsholderServiceTest {
     @Test
     public void testGetRros() {
         List<Rightsholder> rros = Collections.singletonList(new Rightsholder());
-        expect(rightsholderRepository.findRros()).andReturn(rros).once();
+        expect(rightsholderRepository.findRros("FAS")).andReturn(rros).once();
         replay(rightsholderRepository);
-        assertEquals(rros, rightsholderService.getRros());
+        assertEquals(rros, rightsholderService.getRros("FAS"));
         verify(rightsholderRepository);
     }
 

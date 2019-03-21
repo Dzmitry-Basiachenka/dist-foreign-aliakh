@@ -64,6 +64,7 @@ public class UsageBatchServiceTest {
     private static final String USER_NAME = "User Name";
     private static final Long RRO_ACCOUNT_NUMBER = 123456789L;
     private static final String RRO_NAME = "RRO Name";
+    private static final String FAS_PRODUCT_FAMILY = "FAS";
 
     private IUsageBatchRepository usageBatchRepository;
     private IUsageService usageService;
@@ -94,9 +95,10 @@ public class UsageBatchServiceTest {
 
     @Test
     public void testGetFiscalYears() {
-        expect(usageBatchRepository.findFiscalYears()).andReturn(Collections.singletonList(FISCAL_YEAR)).once();
+        expect(usageBatchRepository.findFiscalYearsByProductFamily(FAS_PRODUCT_FAMILY))
+            .andReturn(Collections.singletonList(FISCAL_YEAR)).once();
         replay(usageBatchRepository);
-        List<Integer> result = usageBatchService.getFiscalYears();
+        List<Integer> result = usageBatchService.getFiscalYears(FAS_PRODUCT_FAMILY);
         assertNotNull(result);
         assertEquals(1, result.size());
         assertTrue(result.contains(FISCAL_YEAR));
@@ -109,6 +111,14 @@ public class UsageBatchServiceTest {
         expect(usageBatchRepository.findAll()).andReturn(usageBatches).once();
         replay(usageBatchRepository);
         assertEquals(usageBatches, usageBatchService.getUsageBatches());
+        verify(usageBatchRepository);
+    }
+
+    @Test
+    public void testGetUsageBatchesByProductFamily() {
+        expect(usageBatchRepository.findByProductFamily(FAS_PRODUCT_FAMILY)).andReturn(Collections.emptyList()).once();
+        replay(usageBatchRepository);
+        usageBatchService.getUsageBatches(FAS_PRODUCT_FAMILY);
         verify(usageBatchRepository);
     }
 

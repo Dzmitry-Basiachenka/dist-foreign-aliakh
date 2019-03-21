@@ -246,9 +246,9 @@ public class UsagesControllerTest {
 
     @Test
     public void testGetUsageBatches() {
-        expect(usageBatchService.getUsageBatches()).andReturn(Collections.emptyList()).once();
+        expect(usageBatchService.getUsageBatches("FAS")).andReturn(Collections.emptyList()).once();
         replay(usageBatchService);
-        controller.getUsageBatches();
+        controller.getUsageBatches("FAS");
         verify(usageBatchService);
     }
 
