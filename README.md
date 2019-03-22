@@ -1,3 +1,9 @@
+5.1.2
+-
+* B-46040 FDA: Assign title classification to titles in NTS distribution: create index by wr_wrk_inst in df_usage_archive table
+* B-46040 FDA: Assign title classification to titles in NTS distribution: implement works classification controller, apply service logic to UI
+* B-49462 Tech Debt: FDA: add parameters dateFrom, dateTo to the batch statistic REST
+
 5.1.1
 -
 * B-46040 FDA: Assign title classification to titles in NTS distribution: implement repository logic for selecting and updating works classification
