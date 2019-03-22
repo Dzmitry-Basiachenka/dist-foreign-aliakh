@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.rest.gen.api;
 
-import com.copyright.rup.dist.foreign.ui.rest.gen.model.BatchStatistic;
+import com.copyright.rup.dist.foreign.ui.rest.gen.model.BatchStats;
 import com.copyright.rup.dist.foreign.ui.rest.gen.model.Error;
     import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
@@ -21,23 +21,31 @@ import java.util.List;
     import java.util.Optional;
 
 /**
-* A delegate to be called by the {@link StatisticApiController}}.
+* A delegate to be called by the {@link StatisticBatchApiController}}.
 * Implement this interface with a {@link org.springframework.stereotype.Service} annotated class.
 */
 @Validated
-public interface StatisticApiDelegate {
+public interface StatisticBatchApiDelegate {
 
     /**
-    * @see StatisticApi#getBatchStatistic
+    * @see StatisticBatchApi#getBatchesStatistic
     */
-    ResponseEntity<BatchStatistic
-> getBatchStatistic(@NotNull 
+    ResponseEntity<BatchStats
+> getBatchesStatistic(
 
 
 String name,
     @Pattern(regexp="^\\d{4}-\\d{2}-\\d{2}$") 
 
 
-String date);
+String date,
+    @Pattern(regexp="^\\d{4}-\\d{2}-\\d{2}$") 
+
+
+String dateFrom,
+    @Pattern(regexp="^\\d{4}-\\d{2}-\\d{2}$") 
+
+
+String dateTo);
 
 }

@@ -38,7 +38,7 @@
         <typeAlias alias="BatchSummaryReportDto" type="com.copyright.rup.dist.foreign.domain.report.BatchSummaryReportDto"/>
         <typeAlias alias="ServiceFeeTrueUpReportDto" type="com.copyright.rup.dist.foreign.domain.report.ServiceFeeTrueUpReportDto"/>
         <typeAlias alias="SummaryMarketReportDto" type="com.copyright.rup.dist.foreign.domain.report.SummaryMarketReportDto"/>
-        <typeAlias alias="UsageBatchStatistic" type="com.copyright.rup.dist.foreign.domain.report.UsageBatchStatistic"/>
+        <typeAlias alias="BatchStatistic" type="com.copyright.rup.dist.foreign.domain.report.BatchStatistic"/>
         <typeAlias alias="FundPoolTypeHandler" type="com.copyright.rup.dist.foreign.repository.impl.converter.FundPoolTypeHandler"/>
         <typeAlias alias="UsageStatistic" type="com.copyright.rup.dist.foreign.domain.report.UsageStatistic"/>
         <typeAlias alias="WorkClassification" type="com.copyright.rup.dist.foreign.domain.WorkClassification"/>

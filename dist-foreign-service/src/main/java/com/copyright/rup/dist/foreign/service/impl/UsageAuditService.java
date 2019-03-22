@@ -1,11 +1,12 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
-import com.copyright.rup.common.exception.RupRuntimeException;
+import static com.google.common.base.Preconditions.checkArgument;
+
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
-import com.copyright.rup.dist.foreign.domain.report.UsageBatchStatistic;
+import com.copyright.rup.dist.foreign.domain.report.BatchStatistic;
 import com.copyright.rup.dist.foreign.repository.api.IUsageAuditRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 
@@ -69,28 +70,43 @@ public class UsageAuditService implements IUsageAuditService {
     }
 
     @Override
-    public UsageBatchStatistic getBatchStatistic(String batchName, LocalDate date) {
-        UsageBatchStatistic statistic = usageAuditRepository.findBatchStatistic(batchName, date);
-        if (Objects.nonNull(statistic)) {
-            statistic.setBatchName(batchName);
-            statistic.setDate(date);
-            if (0 == statistic.getTotalCount()) {
-                throw new RupRuntimeException("Total usages count is 0 for the batch " + batchName);
-            }
-            double totalCount = statistic.getTotalCount();
-            statistic.setLoadedPercent(buildPercent(statistic.getLoadedCount() / totalCount));
-            statistic.setCreatedPercent(buildPercent(statistic.getCreatedCount() / totalCount));
-            statistic.setMatchedPercent(buildPercent(statistic.getMatchedCount() / totalCount));
-            statistic.setNtsWithDrawnPercent(buildPercent(statistic.getNtsWithDrawnCount() / totalCount));
-            statistic.setWorksNotFoundPercent(buildPercent(statistic.getWorksNotFoundCount() / totalCount));
-            statistic.setMultipleMatchingPercent(buildPercent(statistic.getMultipleMatchingCount() / totalCount));
-            statistic.setRhNotFoundPercent(buildPercent(statistic.getRhNotFoundCount() / totalCount));
-            statistic.setRhFoundPercent(buildPercent(statistic.getRhFoundCount() / totalCount));
-            statistic.setEligiblePercent(buildPercent(statistic.getEligibleCount() / totalCount));
-            statistic.setSendForRaPercent(buildPercent(statistic.getSendForRaCount() / totalCount));
-            statistic.setPaidPercent(buildPercent(statistic.getPaidCount() / totalCount));
+    public List<BatchStatistic> getBatchesStatistic(String batchName, LocalDate date,
+                                                    LocalDate dateFrom, LocalDate dateTo) {
+        if (null != batchName) {
+            checkArgument(null == dateFrom,
+                "If the parameter 'batchName' is set, the parameter 'dateFrom' must not be set");
+            checkArgument(null == dateTo,
+                "If the parameter 'batchName' is set, the parameter 'dateTo' must not be set");
+        } else {
+            checkArgument(null == date,
+                "If the parameter 'batchName' is not set, the parameter 'date' must not be set either");
+            checkArgument(null != dateFrom,
+                "If the parameter 'batchName' is not set, the parameter 'dateFrom' must be set");
+            checkArgument(null != dateTo,
+                "If the parameter 'batchName' is not set, the parameter 'dateTo' must be set");
+            checkArgument(dateFrom.compareTo(dateTo) <= 0,
+                "The parameter 'dateFrom' must be before or equal the parameter 'dateTo'");
         }
-        return statistic;
+        List<BatchStatistic> statistics = usageAuditRepository.findBatchesStatistic(batchName, date, dateFrom, dateTo);
+        if (Objects.nonNull(statistics)) {
+            for (BatchStatistic statistic : statistics) {
+                if (0 != statistic.getTotalCount()) {
+                    double count = statistic.getTotalCount();
+                    statistic.setLoadedPercent(buildPercent(statistic.getLoadedCount() / count));
+                    statistic.setCreatedPercent(buildPercent(statistic.getCreatedCount() / count));
+                    statistic.setMatchedPercent(buildPercent(statistic.getMatchedCount() / count));
+                    statistic.setNtsWithDrawnPercent(buildPercent(statistic.getNtsWithDrawnCount() / count));
+                    statistic.setWorksNotFoundPercent(buildPercent(statistic.getWorksNotFoundCount() / count));
+                    statistic.setMultipleMatchingPercent(buildPercent(statistic.getMultipleMatchingCount() / count));
+                    statistic.setRhNotFoundPercent(buildPercent(statistic.getRhNotFoundCount() / count));
+                    statistic.setRhFoundPercent(buildPercent(statistic.getRhFoundCount() / count));
+                    statistic.setEligiblePercent(buildPercent(statistic.getEligibleCount() / count));
+                    statistic.setSendForRaPercent(buildPercent(statistic.getSendForRaCount() / count));
+                    statistic.setPaidPercent(buildPercent(statistic.getPaidCount() / count));
+                }
+            }
+        }
+        return statistics;
     }
 
     private UsageAuditItem buildUsageAuditItem(String usageId, UsageActionTypeEnum actionType, String actionReason) {

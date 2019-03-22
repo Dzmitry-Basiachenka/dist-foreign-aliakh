@@ -5,7 +5,7 @@
 */
 package com.copyright.rup.dist.foreign.ui.rest.gen.api;
 
-import com.copyright.rup.dist.foreign.ui.rest.gen.model.BatchStatistic;
+import com.copyright.rup.dist.foreign.ui.rest.gen.model.BatchStats;
 import com.copyright.rup.dist.foreign.ui.rest.gen.model.Error;
 import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
@@ -23,21 +23,21 @@ import org.springframework.web.multipart.MultipartFile;
     import javax.validation.constraints.*;
 import java.util.List;
 
-@Api(value = "Statistic", description = "the Statistic API")
-    public interface StatisticApi {
+@Api(value = "StatisticBatch", description = "the StatisticBatch API")
+    public interface StatisticBatchApi {
 
-            StatisticApiDelegate getDelegate();
+            StatisticBatchApiDelegate getDelegate();
 
-            @ApiOperation(value = "Gets status of batch by action date", nickname = "getBatchStatistic", notes = "", response = BatchStatistic.class, tags={ "statistic", })
+            @ApiOperation(value = "Gets batches statistic", nickname = "getBatchesStatistic", notes = "", response = BatchStats.class, tags={ "statistic, batch", })
             @ApiResponses(value = { 
-                @ApiResponse(code = 200, message = "Batch statistic", response = BatchStatistic.class),
+                @ApiResponse(code = 200, message = "Batches statistic", response = BatchStats.class),
                 @ApiResponse(code = 404, message = "Batch not found by name. Error code [NOT_FOUND]", response = Error.class),
                 @ApiResponse(code = 500, message = "Unexpected error. Error code [INTERNAL_SERVER_ERROR]", response = Error.class) })
-            @RequestMapping(value = "/statistic",
+            @RequestMapping(value = "/statistic/batch",
                 produces = { "application/json" }, 
             method = RequestMethod.GET)
-        default ResponseEntity<BatchStatistic
-> getBatchStatistic( @RequestParam(value = "name", required = true) String name
+        default ResponseEntity<BatchStats
+> getBatchesStatistic( @RequestParam(value = "name", required = false) String name
 
 
 
@@ -47,8 +47,18 @@ import java.util.List;
 
 
 
+, @RequestParam(value = "dateFrom", required = false) String dateFrom
+
+
+
+
+, @RequestParam(value = "dateTo", required = false) String dateTo
+
+
+
+
 ) {
-                return getDelegate().getBatchStatistic(name, date);
+                return getDelegate().getBatchesStatistic(name, date, dateFrom, dateTo);
             }
 
         }

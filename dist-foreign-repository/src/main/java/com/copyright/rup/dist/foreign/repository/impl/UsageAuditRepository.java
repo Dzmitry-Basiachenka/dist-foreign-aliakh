@@ -2,7 +2,7 @@ package com.copyright.rup.dist.foreign.repository.impl;
 
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
-import com.copyright.rup.dist.foreign.domain.report.UsageBatchStatistic;
+import com.copyright.rup.dist.foreign.domain.report.BatchStatistic;
 import com.copyright.rup.dist.foreign.domain.report.UsageStatistic;
 import com.copyright.rup.dist.foreign.repository.api.IUsageAuditRepository;
 
@@ -53,11 +53,14 @@ public class UsageAuditRepository extends BaseRepository implements IUsageAuditR
     }
 
     @Override
-    public UsageBatchStatistic findBatchStatistic(String batchName, LocalDate date) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-        parameters.put("batchName", Objects.requireNonNull(batchName));
+    public List<BatchStatistic> findBatchesStatistic(String batchName, LocalDate date,
+                                                     LocalDate dateFrom, LocalDate dateTo) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
+        parameters.put("batchName", batchName);
         parameters.put("date", date);
-        return selectOne("IUsageAuditMapper.findBatchStatistic", parameters);
+        parameters.put("dateFrom", dateFrom);
+        parameters.put("dateTo", dateTo);
+        return selectList("IUsageAuditMapper.findBatchesStatistic", parameters);
     }
 
     @Override

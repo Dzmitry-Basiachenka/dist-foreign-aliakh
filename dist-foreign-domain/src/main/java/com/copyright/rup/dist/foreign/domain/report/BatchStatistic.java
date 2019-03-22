@@ -5,7 +5,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 /**
  * Represents domain object for usage batch statistic.
@@ -16,12 +15,11 @@ import java.time.LocalDate;
  *
  * @author Ihar Suvorau
  */
-public class UsageBatchStatistic {
+public class BatchStatistic {
 
     private static final BigDecimal DEFAULT_AMOUNT = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
 
     private String batchName;
-    private LocalDate date;
     private int totalCount;
     private int loadedCount;
     private BigDecimal loadedAmount = DEFAULT_AMOUNT;
@@ -63,14 +61,6 @@ public class UsageBatchStatistic {
 
     public void setBatchName(String batchName) {
         this.batchName = batchName;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
     }
 
     public int getTotalCount() {
@@ -353,10 +343,9 @@ public class UsageBatchStatistic {
         if (null == obj || getClass() != obj.getClass()) {
             return false;
         }
-        UsageBatchStatistic that = (UsageBatchStatistic) obj;
+        BatchStatistic that = (BatchStatistic) obj;
         return new EqualsBuilder()
             .append(batchName, that.batchName)
-            .append(date, that.date)
             .append(totalCount, that.totalCount)
             .append(loadedCount, that.loadedCount)
             .append(loadedAmount, that.loadedAmount)
@@ -398,7 +387,6 @@ public class UsageBatchStatistic {
     public int hashCode() {
         return new HashCodeBuilder()
             .append(batchName)
-            .append(date)
             .append(totalCount)
             .append(loadedCount)
             .append(loadedAmount)
@@ -440,7 +428,6 @@ public class UsageBatchStatistic {
     public String toString() {
         return new ToStringBuilder(this)
             .append("batchName", batchName)
-            .append("date", date)
             .append("totalCount", totalCount)
             .append("loadedCount", loadedCount)
             .append("loadedAmount", loadedAmount)

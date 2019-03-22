@@ -11,7 +11,8 @@
         <result property="actionReason" column="action_reason"/>
     </resultMap>
 
-    <resultMap id="usageBatchStatisticMap" type="UsageBatchStatistic">
+    <resultMap id="batchStatisticResultMap" type="BatchStatistic">
+        <result property="batchName" column="batch_name"/>
         <result property="totalCount" column="total_count"/>
         <result property="loadedCount" column="loaded_count"/>
         <result property="loadedAmount" column="loaded_sum"/>
@@ -98,8 +99,9 @@
         order by created_datetime desc
     </select>
     
-    <select id="findBatchStatistic" parameterType="map" resultMap="usageBatchStatisticMap">
+    <select id="findBatchesStatistic" parameterType="map" resultMap="batchStatisticResultMap">
         select
+            nested.batch_name,
             max(total_count1) + max(total_count2) total_count,
             sum(nested.loaded_count) loaded_count,
             round(sum(nested.loaded_sum), 2) loaded_sum,
@@ -125,6 +127,7 @@
             round(sum(nested.paid_sum), 2) paid_sum
         from (
             select
+                nested.batch_name,
                 min(total_count1) total_count1,
                 min(total_count2) total_count2,
                 case when (sum(nested.loaded_count) != 0) then nested.amount else 0 end loaded_sum,
@@ -168,11 +171,14 @@
                 left join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
                 <include refid="batchStatisticWhere"/>
             ) nested
-            group by nested.amount
+            group by nested.batch_name, nested.amount
         ) nested
+        group by nested.batch_name
+        order by nested.batch_name
     </select>
 
     <sql id="batchStatisticColumns">
+        ub.name as batch_name,
         sum(u.gross_amount) amount,
         case when (audit.action_type_ind = 'LOADED' <include refid="actionTypeDateClause"/>) then count(1) else 0 end loaded_count,
         case when (audit.action_type_ind = 'CREATED' <include refid="actionTypeDateClause"/>) then count(1) else 0 end created_count,
@@ -188,13 +194,21 @@
     </sql>
 
     <sql id="batchStatisticWhere">
-        where ub.name = #{batchName}
-        group by audit.action_type_ind, cast(audit.created_datetime as date)
+        <if test="null != batchName">
+            where ub.name = #{batchName}
+        </if>
+        group by ub.name, audit.action_type_ind, cast(audit.created_datetime as date)
     </sql>
 
     <sql id="actionTypeDateClause">
         <if test="null != date">
             and <![CDATA[cast(audit.created_datetime as date) = cast(#{date} as date)]]>
+        </if>
+        <if test="null != dateFrom">
+            and <![CDATA[cast(audit.created_datetime as date) >= cast(#{dateFrom} as date)]]>
+        </if>
+        <if test="null != dateTo">
+            and <![CDATA[cast(audit.created_datetime as date) <= cast(#{dateTo} as date)]]>
         </if>
     </sql>
 

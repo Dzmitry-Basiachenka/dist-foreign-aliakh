@@ -56,6 +56,17 @@ public class CommonControllerAdvice {
     }
 
     /**
+     * Handles {@link IllegalArgumentException} exception.
+     *
+     * @param exception instance of {@link IllegalArgumentException}
+     * @return instance of {@link ResponseEntity}
+     */
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Error> handleIllegalArgumentException(IllegalArgumentException exception) {
+        return handleExpectedException(exception, "BAD_REQUEST", HttpStatus.BAD_REQUEST);
+    }
+
+    /**
      * Handles {@link NoSuchElementException} exception.
      *
      * @param exception instance of {@link NoSuchElementException}

@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
-import com.copyright.rup.dist.foreign.domain.report.UsageBatchStatistic;
+import com.copyright.rup.dist.foreign.domain.report.BatchStatistic;
 import com.copyright.rup.dist.foreign.domain.report.UsageStatistic;
 
 import java.time.LocalDate;
@@ -54,13 +54,15 @@ public interface IUsageAuditRepository {
     List<UsageAuditItem> findByUsageId(String usageId);
 
     /**
-     * Find {@link UsageBatchStatistic} based on batch name and date.
+     * Finds batches statistic.
      *
      * @param batchName batch name
-     * @param date      date when actions were performed
-     * @return instance of {@link UsageBatchStatistic}
+     * @param date      action date
+     * @param dateFrom  action start date
+     * @param dateTo    action end date
+     * @return list of {@link BatchStatistic}
      */
-    UsageBatchStatistic findBatchStatistic(String batchName, LocalDate date);
+    List<BatchStatistic> findBatchesStatistic(String batchName, LocalDate date, LocalDate dateFrom, LocalDate dateTo);
 
     /**
      * Gets usage statistic.
