@@ -191,6 +191,11 @@ public interface IUsagesController extends IController<IUsagesWidget> {
     IStreamSource getSendForResearchUsagesStreamSource();
 
     /**
+     * @return instance of {@link IWorkClassificationController}.
+     */
+    IWorkClassificationController getWorkClassificationController();
+
+    /**
      * Vefiries whether all filtered {@link Usage}s in specifies status or not.
      *
      * @param status {@link UsageStatusEnum} instance

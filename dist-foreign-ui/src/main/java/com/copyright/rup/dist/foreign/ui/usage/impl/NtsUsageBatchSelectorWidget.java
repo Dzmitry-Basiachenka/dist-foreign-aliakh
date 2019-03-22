@@ -13,6 +13,7 @@ import com.vaadin.data.ValueProvider;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Usage batch selector window for NTS specific logic.
@@ -53,14 +54,19 @@ public class NtsUsageBatchSelectorWidget implements IFilterWindowController<Usag
 
     @Override
     public void onSave(FilterSaveEvent<UsageBatch> event) {
-        Windows.showModalWindow(new WorkClassificationWindow());
+        Windows.showModalWindow(new WorkClassificationWindow(
+            event.getSelectedItemsIds().stream().map(UsageBatch::getId).collect(Collectors.toSet()),
+            usagesController.getWorkClassificationController()));
     }
 
     /**
      * @return shows on UI and returns {@link FilterWindow}.
      */
     public FilterWindow<UsageBatch> showFilterWindow() {
-        return Windows.showFilterWindow(ForeignUi.getMessage("window.batches_filter"), this,
-            (ValueProvider<UsageBatch, List<String>>) bean -> Collections.singletonList(bean.getName()));
+        FilterWindow<UsageBatch> filterWindow =
+            Windows.showFilterWindow(ForeignUi.getMessage("window.batches_selector"), this,
+                (ValueProvider<UsageBatch, List<String>>) bean -> Collections.singletonList(bean.getName()));
+        filterWindow.setSearchPromptString(ForeignUi.getMessage("prompt.batch"));
+        return filterWindow;
     }
 }

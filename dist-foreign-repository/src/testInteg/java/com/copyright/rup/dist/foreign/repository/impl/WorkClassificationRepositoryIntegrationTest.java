@@ -9,6 +9,7 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.WorkClassification;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,7 +94,7 @@ public class WorkClassificationRepositoryIntegrationTest {
     @Test
     public void testFindByBatchIds() {
         List<WorkClassification> classifications = workClassificationRepository.findByBatchIds(
-            Collections.singleton(BATCH_UID), null, null, null);
+            Collections.singleton(BATCH_UID), StringUtils.EMPTY, null, new Sort("wrWrkInst", Direction.ASC));
         assertEquals(3, classifications.size());
         assertClassification(classifications.get(0), 180382914L, NON_STM, TITLE_1);
         assertClassification(classifications.get(1), 243904752L, STM, TITLE_2);
@@ -103,7 +104,7 @@ public class WorkClassificationRepositoryIntegrationTest {
     @Test
     public void testFindCountByBatchIds() {
         assertEquals(3,
-            workClassificationRepository.findCountByBatchIds(Collections.singleton(BATCH_UID), null));
+            workClassificationRepository.findCountByBatchIds(Collections.singleton(BATCH_UID), StringUtils.EMPTY));
         assertEquals(1,
             workClassificationRepository.findCountByBatchIds(Collections.singleton(BATCH_UID), "243904752"));
         assertEquals(2, workClassificationRepository.findCountByBatchIds(Collections.singleton(BATCH_UID),
@@ -113,7 +114,7 @@ public class WorkClassificationRepositoryIntegrationTest {
     @Test
     public void testFindBySearch() {
         List<WorkClassification> classifications =
-            workClassificationRepository.findBySearch(null, null, new Sort("wrWrkInst", Direction.ASC));
+            workClassificationRepository.findBySearch(StringUtils.EMPTY, null, new Sort("wrWrkInst", Direction.ASC));
         assertEquals(5, classifications.size());
         assertClassification(classifications.get(0), WR_WRK_INST_1, NON_STM, null);
         assertClassification(classifications.get(1), 122410079L, STM, null);
@@ -125,7 +126,7 @@ public class WorkClassificationRepositoryIntegrationTest {
 
     @Test
     public void testFindCountBySearch() {
-        assertEquals(5, workClassificationRepository.findCountBySearch(null));
+        assertEquals(5, workClassificationRepository.findCountBySearch(StringUtils.EMPTY));
         assertEquals(1, workClassificationRepository.findCountBySearch("243904752"));
         assertEquals(3, workClassificationRepository.findCountBySearch("John Wiley & Sons - Books"));
     }

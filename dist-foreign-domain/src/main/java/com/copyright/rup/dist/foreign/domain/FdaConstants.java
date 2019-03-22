@@ -49,6 +49,16 @@ public final class FdaConstants {
     public static final String BELLETRISTIC_CLASSIFICATION = "BELLETRISTIC";
 
     /**
+     * STM work classification.
+     */
+    public static final String STM_CLASSIFICATION = "STM";
+
+    /**
+     * NON-STM work classification.
+     */
+    public static final String NON_STM_CLASSIFICATION = "NON-STM";
+
+    /**
      * Archived scenario statuses.
      */
     public static final EnumSet<ScenarioStatusEnum> ARCHIVED_SCENARIO_STATUSES =

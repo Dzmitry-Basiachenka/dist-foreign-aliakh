@@ -51,10 +51,10 @@
     </select>
 
     <sql id="searchClause">
-        (cast(u.wr_wrk_inst as text) ilike '%' || #{searchValue} || '%' or
-        u.standard_number ilike '%' || #{searchValue} || '%' or
-        u.system_title ilike '%' || #{searchValue} || '%' or
-        cast(u.rh_account_number as text) like '%' || #{searchValue} || '%' or
+        (cast(${wr_wrk_inst} as text) ilike '%' || #{searchValue} || '%' or
+        standard_number ilike '%' || #{searchValue} || '%' or
+        system_title ilike '%' || #{searchValue} || '%' or
+        cast(rh.rh_account_number as text) like '%' || #{searchValue} || '%' or
         rh.name ilike '%' || #{searchValue} || '%')
     </sql>
 
@@ -93,7 +93,7 @@
                 </choose>
             </when>
             <otherwise>
-                wc.updated_datetime
+                wc.updated_datetime desc
             </otherwise>
         </choose>
     </sql>
@@ -130,7 +130,10 @@
                     #{batchId}
                 </foreach>
                 <if test="null != searchValue">
-                    and <include refid="searchClause"/>
+                    and
+                        <include refid="searchClause">
+                            <property name="wr_wrk_inst" value="u.wr_wrk_inst"/>
+                        </include>
                 </if>
             order by u.wr_wrk_inst, u.updated_datetime desc
             ) internal
@@ -167,7 +170,10 @@
         ) u on true
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         <if test="null != searchValue">
-            where <include refid="searchClause"/>
+            where
+                <include refid="searchClause">
+                    <property name="wr_wrk_inst" value="wc.wr_wrk_inst"/>
+                </include>
         </if>
         <include refid="classificationOrderByClause"/>
         <include refid="IUsageMapper.ifPageable"/>
@@ -184,7 +190,10 @@
                 #{batchId}
             </foreach>
         <if test="null != searchValue">
-            and <include refid="searchClause"/>
+            and
+                <include refid="searchClause">
+                    <property name="wr_wrk_inst" value="u.wr_wrk_inst"/>
+                </include>
         </if>
     </select>
 
@@ -206,7 +215,10 @@
         ) u on true
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
         <if test="null != searchValue">
-            where <include refid="searchClause"/>
+            where
+                <include refid="searchClause">
+                    <property name="wr_wrk_inst" value="wc.wr_wrk_inst"/>
+                </include>
         </if>
     </select>
 </mapper>
