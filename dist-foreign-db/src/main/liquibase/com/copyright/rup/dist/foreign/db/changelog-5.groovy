@@ -71,4 +71,18 @@ databaseChangeLog {
             dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_batch', columnName: 'product_family')
         }
     }
+
+    changeSet(id: '2019-03-22-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("B-46040 FDA: Assign title classification to titles in NTS distribution: " +
+                "add index by wr_wrk_inst in df_usage_archive table")
+
+        createIndex(indexName: 'ix_df_usage_archive_wr_wrk_inst', schemaName: dbAppsSchema, tableName: 'df_usage_archive',
+                tablespace: dbIndexTablespace) {
+            column(name: 'wr_wrk_inst')
+        }
+
+        rollback {
+            sql("drop index ${dbAppsSchema}.ix_df_usage_archive_wr_wrk_inst")
+        }
+    }
 }
