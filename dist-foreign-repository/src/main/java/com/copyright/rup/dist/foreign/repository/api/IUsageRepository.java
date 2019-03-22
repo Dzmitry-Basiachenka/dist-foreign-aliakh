@@ -98,7 +98,7 @@ public interface IUsageRepository {
      *
      * @return list of {@link Usage}s
      */
-    List<String> findUsageIdsForClassificationUpdate();
+    List<String> findUnclassifiedUsageIds();
 
     /**
      * Finds count of usages to be updated based on set of Wr Wrk Insts.

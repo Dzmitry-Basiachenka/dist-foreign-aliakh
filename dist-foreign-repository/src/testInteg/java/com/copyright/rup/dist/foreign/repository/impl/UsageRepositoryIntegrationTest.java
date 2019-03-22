@@ -11,9 +11,11 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.common.util.CalculationUtils;
@@ -44,6 +46,7 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
@@ -77,7 +80,8 @@ public class UsageRepositoryIntegrationTest {
     private static final String RH_ACCOUNT_NAME_1 = "IEEE - Inst of Electrical and Electronics Engrs";
     private static final String RH_ACCOUNT_NAME_2 = "John Wiley & Sons - Books";
     private static final String RH_ACCOUNT_NAME_3 = "Kluwer Academic Publishers - Dordrecht";
-    private static final String WORK_TITLE = "Wissenschaft & Forschung Japan";
+    private static final String WORK_TITLE_1 = "Wissenschaft & Forschung Japan";
+    private static final String WORK_TITLE_2 = "100 ROAD MOVIES";
     private static final String PRODUCT_FAMILY_FAS = "FAS";
     private static final String DETAIL_ID_KEY = "detailId";
     private static final String WORK_TITLE_KEY = "workTitle";
@@ -423,7 +427,7 @@ public class UsageRepositoryIntegrationTest {
             assertEquals(243904752L, usage.getWrWrkInst(), 0);
             assertEquals(1000002859L, usage.getRightsholder().getAccountNumber(), 0);
             assertEquals("John Wiley & Sons - Books", usage.getRightsholder().getName());
-            assertEquals("100 ROAD MOVIES", usage.getWorkTitle());
+            assertEquals(WORK_TITLE_2, usage.getWorkTitle());
             assertEquals(PRODUCT_FAMILY_FAS, usage.getProductFamily());
             assertNotNull(usage.getGrossAmount());
         });
@@ -455,8 +459,8 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindUsageIdsForClassificationUpdate() {
-        List<String> actualUsageIds = usageRepository.findUsageIdsForClassificationUpdate();
+    public void testFindUnclassifiedUsageIds() {
+        List<String> actualUsageIds = usageRepository.findUnclassifiedUsageIds();
         assertNotNull(actualUsageIds);
         assertEquals(1, actualUsageIds.size());
         assertEquals("c6cb5b07-45c0-4188-9da3-920046eec4cf", actualUsageIds.get(0));
@@ -631,10 +635,10 @@ public class UsageRepositoryIntegrationTest {
             usageRepository.getTotalAmountByTitleAndBatchId("Wissenschaft & Forschung Japan",
                 "9776da8d-098d-4f39-99fd-85405c339e9b"));
         assertEquals(new BigDecimal("0.00"),
-            usageRepository.getTotalAmountByTitleAndBatchId("100 ROAD MOVIES",
+            usageRepository.getTotalAmountByTitleAndBatchId(WORK_TITLE_2,
                 "cb597f4e-f636-447f-8710-0436d8994d10"));
         assertEquals(new BigDecimal("0.00"),
-            usageRepository.getTotalAmountByTitleAndBatchId("100 ROAD MOVIES", "invalid id"));
+            usageRepository.getTotalAmountByTitleAndBatchId(WORK_TITLE_2, "invalid id"));
     }
 
     @Test
@@ -668,12 +672,14 @@ public class UsageRepositoryIntegrationTest {
     public void testFindForAuditByProductFamilies() {
         AuditFilter filter = new AuditFilter();
         filter.setProductFamilies(Collections.singleton(PRODUCT_FAMILY_FAS));
-        assertEquals(22, usageRepository.findCountForAudit(filter));
+        assertEquals(27, usageRepository.findCountForAudit(filter));
         List<UsageDto> usages = usageRepository.findForAudit(filter, new Pageable(0, 25), null);
-        verifyUsageDtos(usages, 22, USAGE_ID_14, USAGE_ID_15, USAGE_ID_16, USAGE_ID_1, USAGE_ID_23,
+        verifyUsageDtos(usages, 25, USAGE_ID_14, USAGE_ID_15, USAGE_ID_16, USAGE_ID_1, USAGE_ID_23,
             USAGE_ID_21, USAGE_ID_12, USAGE_ID_9, USAGE_ID_6, USAGE_ID_13, USAGE_ID_18, USAGE_ID_11, USAGE_ID_2,
             USAGE_ID_19, USAGE_ID_5, USAGE_ID_8, USAGE_ID_17, USAGE_ID_22, POST_DISTRIBUTION_USAGE_ID, USAGE_ID_7,
-            USAGE_ID_4, USAGE_ID_20);
+            "b6fc6063-a0ea-4e4d-832d-b1cbc896963d", "a9fac1e1-5a34-416b-9ecb-f2615b24d1c1",
+            "33113b79-791a-4aa9-b192-12b292c32823", "5b8c2754-2f63-425a-a95f-dbd744e815fc",
+            "bc0fe9bc-9b24-4324-b624-eed0d9773e19");
     }
 
     @Test
@@ -933,14 +939,14 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(1, CollectionUtils.size(usages));
         Usage usage1 = usages.get(0);
         assertEquals(UsageStatusEnum.WORK_RESEARCH, usage1.getStatus());
-        assertEquals(WORK_TITLE, usage1.getWorkTitle());
+        assertEquals(WORK_TITLE_1, usage1.getWorkTitle());
         assertNull(usage1.getSystemTitle());
         assertNull(usage1.getWrWrkInst());
         usages = usageRepository.findByIds(Collections.singletonList(usageId2));
         assertEquals(1, CollectionUtils.size(usages));
         Usage usage2 = usages.get(0);
         assertEquals(UsageStatusEnum.WORK_RESEARCH, usage2.getStatus());
-        assertEquals(WORK_TITLE, usage2.getWorkTitle());
+        assertEquals(WORK_TITLE_1, usage2.getWorkTitle());
         assertNull(usage2.getSystemTitle());
         assertNull(usage2.getWrWrkInst());
         ResearchedUsage researchedUsage1 = new ResearchedUsage();
@@ -956,14 +962,14 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(1, CollectionUtils.size(usages));
         usage1 = usages.get(0);
         assertEquals(UsageStatusEnum.WORK_FOUND, usage1.getStatus());
-        assertEquals(WORK_TITLE, usage1.getWorkTitle());
+        assertEquals(WORK_TITLE_1, usage1.getWorkTitle());
         assertEquals(title1, usage1.getSystemTitle());
         assertEquals(180382916L, usage1.getWrWrkInst().longValue());
         usages = usageRepository.findByIds(Collections.singletonList(usageId2));
         assertEquals(1, CollectionUtils.size(usages));
         usage2 = usages.get(0);
         assertEquals(UsageStatusEnum.WORK_FOUND, usage2.getStatus());
-        assertEquals(WORK_TITLE, usage2.getWorkTitle());
+        assertEquals(WORK_TITLE_1, usage2.getWorkTitle());
         assertEquals(title2, usage2.getSystemTitle());
         assertEquals(854030733L, usage2.getWrWrkInst().longValue());
     }
@@ -999,6 +1005,26 @@ public class UsageRepositoryIntegrationTest {
         assertEquals("Wissenschaft & Forschung France", updatedUsage.getSystemTitle());
     }
 
+    @Test
+    public void testInsertNtsUsages() {
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatch.setId("b9d0ea49-9e38-4bb0-a7e0-0ca299e3dcfa");
+        FundPool fundPool = new FundPool();
+        fundPool.setMarkets(Sets.newHashSet("Bus", "Doc Del"));
+        fundPool.setFundPoolPeriodFrom(2015);
+        fundPool.setFundPoolPeriodTo(2016);
+        usageBatch.setFundPool(fundPool);
+        List<String> insertedUsageIds = usageRepository.insertNtsUsages(usageBatch, USER_NAME);
+        assertNotNull(insertedUsageIds);
+        assertEquals(2, insertedUsageIds.size());
+        List<Usage> insertedUsages = usageRepository.findByIds(insertedUsageIds);
+        insertedUsages.sort(Comparator.comparing(Usage::getMarket));
+        verifyInsertedFundPoolUsage("Bus", 2016, new BigDecimal("500.00"), new BigDecimal("500.0000000000"),
+            insertedUsages.get(0));
+        verifyInsertedFundPoolUsage("Doc Del", 2013, new BigDecimal("1176.92"), new BigDecimal("1176.9160000000"),
+            insertedUsages.get(1));
+    }
+
     private void verifyFilterForTwoBatches(AuditFilter filter) {
         filter.setBatchesIds(Sets.newHashSet(BATCH_ID, "74b736f2-81ce-41fa-bd8e-574299232458"));
         verifyUsageDtos(findForAuditWithSort(filter, BATCH_NAME_KEY, true), 2, USAGE_ID_5, USAGE_ID_4);
@@ -1031,6 +1057,24 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(defaultUser, usage.getUpdateUser());
         assertEquals(payeeAccountNumber, usage.getPayee().getAccountNumber());
         assertEquals(PRODUCT_FAMILY_FAS, usage.getProductFamily());
+    }
+
+    private void verifyInsertedFundPoolUsage(String market, Integer marketPeriodFrom, BigDecimal grossAmount,
+                                             BigDecimal reportedValues, Usage actualUsage) {
+        assertEquals(actualUsage.getBatchId(), "b9d0ea49-9e38-4bb0-a7e0-0ca299e3dcfa");
+        assertEquals(243904752L, actualUsage.getWrWrkInst(), 0);
+        assertEquals(WORK_TITLE_2, actualUsage.getWorkTitle());
+        assertEquals(WORK_TITLE_2, actualUsage.getSystemTitle());
+        assertEquals(UsageStatusEnum.WORK_FOUND, actualUsage.getStatus());
+        assertEquals("NTS", actualUsage.getProductFamily());
+        assertEquals("1008902112317555XX", actualUsage.getStandardNumber());
+        assertEquals(market, actualUsage.getMarket());
+        assertEquals(marketPeriodFrom, actualUsage.getMarketPeriodFrom());
+        assertEquals(Integer.valueOf(2017), actualUsage.getMarketPeriodTo());
+        assertEquals(grossAmount, actualUsage.getReportedValue());
+        assertEquals(reportedValues, actualUsage.getGrossAmount());
+        assertEquals("for nts batch", actualUsage.getComment());
+        assertEquals(USER_NAME, actualUsage.getCreateUser());
     }
 
     private void verifyUsageExcludedFromScenario(Usage usage) {
@@ -1156,6 +1200,8 @@ public class UsageRepositoryIntegrationTest {
     private void verifyUsageDtos(List<UsageDto> usageDtos, int count, String... usageIds) {
         assertNotNull(usageDtos);
         assertEquals(count, usageDtos.size());
+        usageDtos.sort(Comparator.comparing(UsageDto::getId));
+        Arrays.sort(usageIds);
         IntStream.range(0, count).forEach(i -> assertEquals(usageIds[i], usageDtos.get(i).getId()));
     }
 

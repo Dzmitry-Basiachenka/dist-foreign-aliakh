@@ -4,6 +4,8 @@ import com.copyright.rup.common.caching.api.ICacheService;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
+import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 
@@ -57,6 +59,9 @@ public class NtsWorkflowIntegrationTest {
 
     @Test
     public void testNtsBatchWorkflow() {
+        UsageAuditItem expectedAudit = new UsageAuditItem();
+        expectedAudit.setActionType(UsageActionTypeEnum.ELIGIBLE);
+        expectedAudit.setActionReason("Usage has become eligible");
         testBuilder
             .withUsageBatch(buildUsageBatch(buildFundPool(BUS_MARKET)))
             .expectRmsRights("rights/rms_grants_658824345_request.json", "rights/rms_grants_658824345_response.json")
@@ -64,6 +69,7 @@ public class NtsWorkflowIntegrationTest {
             .expectOracleCall(ORACLE_RH_TAX_1000023401_REQUEST, ORACLE_RH_TAX_1000023401_US_RESPONSE)
             .expectPreferences("eligibility/pref_eligible_rh_response.json", RH_ID)
             .expectUsage(buildUsage(BUS_MARKET, UsageStatusEnum.ELIGIBLE, 658824345L))
+            .expectAudit(expectedAudit)
             .build()
             .run();
     }

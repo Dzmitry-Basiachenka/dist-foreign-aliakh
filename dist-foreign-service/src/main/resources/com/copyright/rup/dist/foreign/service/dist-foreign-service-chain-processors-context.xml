@@ -21,14 +21,9 @@
     <!-- NTS processors -->
     <bean id="df.service.ntsDeleteUsageProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.DeleteUsageProcessor"/>
 
-    <bean id="df.service.ntsClassificationProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.ClassificationProcessor">
-        <property name="successProcessor" ref="df.service.ntsDeleteUsageProcessor"/>
-        <property name="failureProcessor" ref="df.service.commonEligibilityProcessor"/>
-    </bean>
-
-    <bean id="df.service.ntsRhEligibilityProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.RhEligibilityProcessor">
-        <property name="usageStatus" value="US_TAX_COUNTRY"/>
-        <property name="successProcessor" ref="df.service.ntsClassificationProcessor"/>
+    <bean id="df.service.ntsRightsProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.RightsProcessor">
+        <property name="usageStatus" value="WORK_FOUND"/>
+        <property name="successProcessor" ref="df.service.ntsRhTaxProcessor"/>
         <property name="failureProcessor" ref="df.service.ntsDeleteUsageProcessor"/>
     </bean>
 
@@ -38,9 +33,21 @@
         <property name="failureProcessor" ref="df.service.ntsDeleteUsageProcessor"/>
     </bean>
 
-    <bean id="df.service.ntsRightsProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.RightsProcessor">
-        <property name="usageStatus" value="WORK_FOUND"/>
-        <property name="successProcessor" ref="df.service.ntsRhTaxProcessor"/>
+    <bean id="df.service.ntsRhEligibilityProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.RhEligibilityProcessor">
+        <property name="usageStatus" value="US_TAX_COUNTRY"/>
+        <property name="successProcessor" ref="df.service.ntsClassificationProcessor"/>
         <property name="failureProcessor" ref="df.service.ntsDeleteUsageProcessor"/>
     </bean>
+
+    <bean id="df.service.ntsClassificationProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.ClassificationProcessor">
+        <property name="successProcessor" ref="df.service.ntsNonBelletristicProcessor"/>
+        <property name="failureProcessor" ref="df.service.ntsUnclassifiedStatusProcessor"/>
+    </bean>
+
+    <bean id="df.service.ntsNonBelletristicProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.NonBelletristicProcessor">
+        <property name="successProcessor" ref="df.service.commonEligibilityProcessor"/>
+        <property name="failureProcessor" ref="df.service.ntsDeleteUsageProcessor"/>
+    </bean>
+
+    <bean id="df.service.ntsUnclassifiedStatusProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.UnclassifiedStatusProcessor" />
 </beans>

@@ -675,11 +675,10 @@
         order by u.df_usage_uid
     </select>
 
-    <select id="findUsageIdsForClassificationUpdate" parameterType="UsageStatusEnum" resultType="string">
+    <select id="findUnclassifiedUsageIds" parameterType="UsageStatusEnum" resultType="string">
         select u.df_usage_uid
-        from
-            ${schema}.df_usage u
-            inner join ${schema}.df_work_classification wc on u.wr_wrk_inst = wc.wr_wrk_inst
+        from ${schema}.df_usage u
+        join ${schema}.df_work_classification wc on u.wr_wrk_inst = wc.wr_wrk_inst
         where u.status_ind = #{status}
     </select>
 
@@ -1417,7 +1416,7 @@
         select
             uuid_generate_v4(),
             #{batchId},
-            ua.wr_wrk_inst as wr_wrk_inst,
+            ua.wr_wrk_inst,
             work_title,
             system_title,
             'WORK_FOUND',
@@ -1430,7 +1429,9 @@
             gross_amount,
             comment,
             <include refid="StoredEntityMapper.insert"/>
-        <include refid="IUsageArchiveMapper.ntsBatchCondition"/>
+        from ${schema}.df_usage_archive ua
+        left join ${schema}.df_work_classification wc on ua.wr_wrk_inst = wc.wr_wrk_inst
+        <include refid="IUsageArchiveMapper.ntsBatchWhereClause"/>
         returning df_usage_uid
     </select>
 </mapper>

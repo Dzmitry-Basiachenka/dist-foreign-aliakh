@@ -189,13 +189,12 @@
 
     <select id="findCountForNtsBatch" parameterType="map" resultType="int">
         select count(1)
-        <include refid="ntsBatchCondition"/>
+        from ${schema}.df_usage_archive ua
+        left join ${schema}.df_work_classification wc on ua.wr_wrk_inst = wc.wr_wrk_inst
+        <include refid="ntsBatchWhereClause"/>
     </select>
 
-    <sql id="ntsBatchCondition">
-        from
-            ${schema}.df_usage_archive ua
-            left join ${schema}.df_work_classification wc on ua.wr_wrk_inst = wc.wr_wrk_inst
+    <sql id="ntsBatchWhereClause">
         where
             <foreach collection="markets" item="market" separator="or" open="(" close=")">
                 market ilike '%' || #{market} || '%'

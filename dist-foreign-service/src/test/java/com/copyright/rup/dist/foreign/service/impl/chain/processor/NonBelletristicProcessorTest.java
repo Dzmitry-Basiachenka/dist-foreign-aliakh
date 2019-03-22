@@ -15,54 +15,54 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Verifies {@link ClassificationProcessor}.
+ * Verifies {@link NonBelletristicProcessor}.
  * <p>
  * Copyright (C) 2019 copyright.com
  * <p>
- * Date: 03/06/2019
+ * Date: 03/22/2019
  *
  * @author Pavel Liakh
  */
-public class ClassificationProcessorTest {
+public class NonBelletristicProcessorTest {
 
     private static final Long WR_WRK_INST = 11233251L;
 
-    private ClassificationProcessor classificationProcessor;
+    private NonBelletristicProcessor nonBelletristicProcessor;
     private IWorkClassificationService workClassificationServiceMock;
-    private IChainProcessor<Usage> nonBelletristicProcessorMock;
-    private IChainProcessor<Usage> unclassifiedStatusProcessorMock;
+    private IChainProcessor<Usage> eligibilityProcessorMock;
+    private IChainProcessor<Usage> deleteProcessorMock;
 
     @Before
     public void setUp() {
-        classificationProcessor = new ClassificationProcessor();
+        nonBelletristicProcessor = new NonBelletristicProcessor();
         workClassificationServiceMock = createMock(IWorkClassificationService.class);
-        nonBelletristicProcessorMock = createMock(IChainProcessor.class);
-        unclassifiedStatusProcessorMock = createMock(IChainProcessor.class);
-        classificationProcessor.setWorkClassificationService(workClassificationServiceMock);
-        classificationProcessor.setSuccessProcessor(nonBelletristicProcessorMock);
-        classificationProcessor.setFailureProcessor(unclassifiedStatusProcessorMock);
+        eligibilityProcessorMock = createMock(IChainProcessor.class);
+        deleteProcessorMock = createMock(IChainProcessor.class);
+        nonBelletristicProcessor.setWorkClassificationService(workClassificationServiceMock);
+        nonBelletristicProcessor.setSuccessProcessor(deleteProcessorMock);
+        nonBelletristicProcessor.setFailureProcessor(eligibilityProcessorMock);
     }
 
     @Test
     public void testProcessWithStm() {
         Usage usage = buildUsage();
         expect(workClassificationServiceMock.getClassification(WR_WRK_INST)).andReturn("STM").once();
-        nonBelletristicProcessorMock.process(usage);
+        deleteProcessorMock.process(usage);
         expectLastCall().once();
-        replay(workClassificationServiceMock, nonBelletristicProcessorMock);
-        classificationProcessor.process(usage);
-        verify(workClassificationServiceMock, nonBelletristicProcessorMock);
+        replay(workClassificationServiceMock, deleteProcessorMock);
+        nonBelletristicProcessor.process(usage);
+        verify(workClassificationServiceMock, deleteProcessorMock);
     }
 
     @Test
-    public void testProcessWithAbsentClassification() {
+    public void testProcessWithBelletristic() {
         Usage usage = buildUsage();
-        expect(workClassificationServiceMock.getClassification(WR_WRK_INST)).andReturn(null).once();
-        unclassifiedStatusProcessorMock.process(usage);
+        expect(workClassificationServiceMock.getClassification(WR_WRK_INST)).andReturn("BELLETRISTIC").once();
+        eligibilityProcessorMock.process(usage);
         expectLastCall().once();
-        replay(workClassificationServiceMock, unclassifiedStatusProcessorMock);
-        classificationProcessor.process(usage);
-        verify(workClassificationServiceMock, unclassifiedStatusProcessorMock);
+        replay(workClassificationServiceMock, eligibilityProcessorMock);
+        nonBelletristicProcessor.process(usage);
+        verify(workClassificationServiceMock, eligibilityProcessorMock);
     }
 
     private Usage buildUsage() {

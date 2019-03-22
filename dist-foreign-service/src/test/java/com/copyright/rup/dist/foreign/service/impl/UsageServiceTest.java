@@ -41,7 +41,6 @@ import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
-import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.ImmutableList;
@@ -711,30 +710,6 @@ public class UsageServiceTest {
             ImmutableMap.of("NTS", Collections.singleton(UsageWorkflowStepEnum.CLASSIFICATION));
         Whitebox.setInternalState(usageService, "usageWorkflowStepsMap", workflowSteps);
         assertEquals(workflowSteps, usageService.getUsageWorkflowStepsMap());
-    }
-
-    @Test
-    public void testUpdateUnclassifiedUsages() {
-        IChainProcessor<Usage> classificationProcessorMock = createMock(IChainProcessor.class);
-        usageService.setClassificationProcessor(classificationProcessorMock);
-        usageService.setUsagesBatchSize(1);
-        Usage usage1 = new Usage();
-        usage1.setId(RupPersistUtils.generateUuid());
-        Usage usage2 = new Usage();
-        usage1.setId(RupPersistUtils.generateUuid());
-        expect(usageRepository.findUsageIdsForClassificationUpdate())
-            .andReturn(Arrays.asList(usage1.getId(), usage2.getId())).once();
-        expect(usageRepository.findByIds(Collections.singletonList(usage1.getId())))
-            .andReturn(Collections.singletonList(usage1)).once();
-        classificationProcessorMock.process(usage1);
-        expectLastCall().once();
-        expect(usageRepository.findByIds(Collections.singletonList(usage2.getId())))
-            .andReturn(Collections.singletonList(usage2)).once();
-        classificationProcessorMock.process(usage2);
-        expectLastCall().once();
-        replay(usageRepository, classificationProcessorMock);
-        usageService.updateUnclassifiedUsages();
-        verify(usageRepository, classificationProcessorMock);
     }
 
     @Test
