@@ -19,10 +19,11 @@ import java.util.Set;
 public interface IWorkClassificationService {
 
     /**
-     * Inserts or updates work classification.
+     * Inserts or updates work classification and updates
+     * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#UNCLASSIFIED} usages.
      *
      * @param workClassifications set of {@link WorkClassification} instance
-     * @param newClassification      new classification
+     * @param newClassification   new classification
      */
     void insertOrUpdateClassifications(Set<WorkClassification> workClassifications, String newClassification);
 
@@ -40,7 +41,6 @@ public interface IWorkClassificationService {
      * @return wrWrkInst classification if work has classification, {@code null} otherwise
      */
     String getClassification(Long wrWrkInst);
-
 
     /**
      * Gets list of {@link WorkClassification}s by usage batches ids and search value.

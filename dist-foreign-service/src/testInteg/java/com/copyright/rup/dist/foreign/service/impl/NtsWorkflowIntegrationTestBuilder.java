@@ -8,11 +8,9 @@ import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.test.JsonMatcher;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
-import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
-import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
@@ -77,6 +75,7 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
     private Long expectedPrmAccountNumber;
     private UsageBatch usageBatch;
     private Usage expectedUsage;
+    private UsageAuditItem expectedAudit;
 
     NtsWorkflowIntegrationTestBuilder withUsageBatch(UsageBatch batch) {
         this.usageBatch = batch;
@@ -85,6 +84,11 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
     NtsWorkflowIntegrationTestBuilder expectUsage(Usage usage) {
         this.expectedUsage = usage;
+        return this;
+    }
+
+    NtsWorkflowIntegrationTestBuilder expectAudit(UsageAuditItem audit) {
+        this.expectedAudit = audit;
         return this;
     }
 
@@ -177,11 +181,10 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
                 assertTrue(CollectionUtils.isEmpty(actualUsages));
             } else {
                 assertEquals(1, CollectionUtils.size(actualUsages));
-                UsageDto actualUsage = actualUsages.get(0);
-                assertUsage(actualUsage);
-                if (UsageStatusEnum.ELIGIBLE == expectedUsage.getStatus()) {
-                    assertAudit(actualUsage.getId());
-                }
+                assertUsage(actualUsages.get(0));
+            }
+            if (Objects.nonNull(expectedAudit)) {
+                assertAudit(actualUsages.get(0).getId());
             }
         }
 
@@ -207,8 +210,8 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
             List<UsageAuditItem> auditItems = usageAuditService.getUsageAudit(usageId);
             assertEquals(1, CollectionUtils.size(auditItems));
             UsageAuditItem auditItem = auditItems.get(0);
-            assertEquals(UsageActionTypeEnum.ELIGIBLE, auditItem.getActionType());
-            assertEquals("Usage has become eligible", auditItem.getActionReason());
+            assertEquals(expectedAudit.getActionType(), auditItem.getActionType());
+            assertEquals(expectedAudit.getActionReason(), auditItem.getActionReason());
         }
 
         private void createRestServer() {

@@ -125,8 +125,8 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public List<String> findUsageIdsForClassificationUpdate() {
-        return selectList("IUsageMapper.findUsageIdsForClassificationUpdate", UsageStatusEnum.UNCLASSIFIED);
+    public List<String> findUnclassifiedUsageIds() {
+        return selectList("IUsageMapper.findUnclassifiedUsageIds", UsageStatusEnum.UNCLASSIFIED);
     }
 
     @Override
@@ -496,14 +496,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         return selectOne("IUsageMapper.isValidUsagesState", params);
     }
 
-    private AuditFilter escapeSqlLikePattern(AuditFilter auditFilter) {
-        AuditFilter filterCopy = new AuditFilter(auditFilter);
-        filterCopy.setCccEventId(escapeSqlLikePattern(filterCopy.getCccEventId()));
-        filterCopy.setDistributionName(escapeSqlLikePattern(filterCopy.getDistributionName()));
-        filterCopy.setSearchValue(escapeSqlLikePattern(filterCopy.getSearchValue()));
-        return filterCopy;
-    }
-
     @Override
     public List<String> insertNtsUsages(UsageBatch usageBatch, String userName) {
         Objects.requireNonNull(usageBatch);
@@ -518,5 +510,13 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         params.put("updateUser", Objects.requireNonNull(userName));
         params.put("excludeClassification", FdaConstants.BELLETRISTIC_CLASSIFICATION);
         return selectList("IUsageMapper.insertNtsUsages", params);
+    }
+
+    private AuditFilter escapeSqlLikePattern(AuditFilter auditFilter) {
+        AuditFilter filterCopy = new AuditFilter(auditFilter);
+        filterCopy.setCccEventId(escapeSqlLikePattern(filterCopy.getCccEventId()));
+        filterCopy.setDistributionName(escapeSqlLikePattern(filterCopy.getDistributionName()));
+        filterCopy.setSearchValue(escapeSqlLikePattern(filterCopy.getSearchValue()));
+        return filterCopy;
     }
 }

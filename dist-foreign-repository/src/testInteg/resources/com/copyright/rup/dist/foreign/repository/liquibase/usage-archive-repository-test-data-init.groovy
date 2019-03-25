@@ -479,6 +479,12 @@ databaseChangeLog {
             column(name: 'lm_detail_id', value: '4c56f661-5bef-4c82-8526-fd987b5455f8')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_work_classification') {
+            column(name: 'df_work_classification_uid', value: '1d182000-4c91-11e9-b475-0800200c9a66')
+            column(name: 'wr_wrk_inst', value: '243904752')
+            column(name: 'classification', value: 'NON-STM')
+        }
+
         // excluded by market
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
             column(name: 'df_usage_archive_uid', value: 'a9fac1e1-5a34-416b-9ecb-f2615b24d1c1')

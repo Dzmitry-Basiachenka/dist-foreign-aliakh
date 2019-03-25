@@ -5,14 +5,20 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.util.LogUtils;
+import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.WorkClassification;
+import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.IWorkClassificationRepository;
-import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.IWorkClassificationService;
+import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
+
+import com.google.common.collect.Iterables;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,7 +42,12 @@ public class WorkClassificationService implements IWorkClassificationService {
     @Autowired
     private IWorkClassificationRepository workClassificationRepository;
     @Autowired
-    private IUsageService usageService;
+    private IUsageRepository usageRepository;
+    @Autowired
+    @Qualifier("df.service.ntsNonBelletristicProcessor")
+    private IChainProcessor<Usage> nonBelletristicProcessor;
+    @Value("$RUP{dist.foreign.usages.batch_size}")
+    private int usagesBatchSize;
 
     @Override
     @Transactional
@@ -50,7 +61,7 @@ public class WorkClassificationService implements IWorkClassificationService {
             workClassification.setClassification(newClassification);
             workClassificationRepository.insertOrUpdate(workClassification);
         });
-        usageService.updateUnclassifiedUsages();
+        updateUnclassifiedUsages();
         LOGGER.info("Update classification. Finished. WorksCount={}, Classification={}", LogUtils.size(classifications),
             newClassification);
     }
@@ -82,5 +93,31 @@ public class WorkClassificationService implements IWorkClassificationService {
         return CollectionUtils.isNotEmpty(batchesIds)
             ? workClassificationRepository.findCountByBatchIds(batchesIds, searchValue)
             : workClassificationRepository.findCountBySearch(searchValue);
+    }
+
+    void setWorkClassificationRepository(IWorkClassificationRepository workClassificationRepository) {
+        this.workClassificationRepository = workClassificationRepository;
+    }
+
+    void setUsageRepository(IUsageRepository usageRepository) {
+        this.usageRepository = usageRepository;
+    }
+
+    void setNonBelletristicProcessor(IChainProcessor<Usage> nonBelletristicProcessor) {
+        this.nonBelletristicProcessor = nonBelletristicProcessor;
+    }
+
+    void setUsagesBatchSize(int usagesBatchSize) {
+        this.usagesBatchSize = usagesBatchSize;
+    }
+
+    private void updateUnclassifiedUsages() {
+        List<String> unclassifiedUsageIds = usageRepository.findUnclassifiedUsageIds();
+        LOGGER.debug("Update unclassified usages. Started. UnclassifiedUsagesCount={}",
+            LogUtils.size(unclassifiedUsageIds));
+        Iterables.partition(unclassifiedUsageIds, usagesBatchSize)
+            .forEach(partition -> usageRepository.findByIds(partition).forEach(nonBelletristicProcessor::process));
+        LOGGER.debug("Update unclassified usages. Finished. UnclassifiedUsagesCount={}",
+            LogUtils.size(unclassifiedUsageIds));
     }
 }

@@ -36,7 +36,7 @@ public interface IWorkClassificationRepository {
      * Finds Wr Wrk Inst classification.
      *
      * @param wrWrkInst Wr Wrk Inst
-     * @return wrWrkInst classification if work has classification, {@code null} otherwise
+     * @return Wr Wrk Inst classification if work has classification, {@code null} otherwise
      */
     String findClassificationByWrWrkInst(Long wrWrkInst);
 

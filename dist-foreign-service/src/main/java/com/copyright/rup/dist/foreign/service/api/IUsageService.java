@@ -373,12 +373,6 @@ public interface IUsageService {
     Map<String, Set<UsageWorkflowStepEnum>> getUsageWorkflowStepsMap();
 
     /**
-     * Runs classification process for usages in {@link UsageStatusEnum#UNCLASSIFIED} status with works
-     * for which classification is available.
-     */
-    void updateUnclassifiedUsages();
-
-    /**
      * Gets count of unclassified usages to be updated based on set of Wr Wrk Insts.
      *
      * @param wrWrkInsts set of Wr Wrk Insts

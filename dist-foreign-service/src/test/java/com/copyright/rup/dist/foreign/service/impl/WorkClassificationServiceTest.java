@@ -11,17 +11,19 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.WorkClassification;
+import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.IWorkClassificationRepository;
-import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 
 import com.google.common.collect.Sets;
 
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
-import org.powermock.reflect.Whitebox;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -45,15 +47,18 @@ public class WorkClassificationServiceTest {
     private static final Long WR_WRK_INST_2 = 222222222L;
     private WorkClassificationService workClassificationService;
     private IWorkClassificationRepository workClassificationRepository;
-    private IUsageService usageService;
+    private IUsageRepository usageRepository;
+    private IChainProcessor<Usage> nonBelletristicProcessorMock;
 
     @Before
     public void setUp() {
         workClassificationService = new WorkClassificationService();
         workClassificationRepository = createMock(IWorkClassificationRepository.class);
-        usageService = createMock(IUsageService.class);
-        Whitebox.setInternalState(workClassificationService, usageService);
-        Whitebox.setInternalState(workClassificationService, workClassificationRepository);
+        usageRepository = createMock(IUsageRepository.class);
+        nonBelletristicProcessorMock = createMock(IChainProcessor.class);
+        workClassificationService.setWorkClassificationRepository(workClassificationRepository);
+        workClassificationService.setUsageRepository(usageRepository);
+        workClassificationService.setNonBelletristicProcessor(nonBelletristicProcessorMock);
     }
 
     @Test
@@ -72,9 +77,22 @@ public class WorkClassificationServiceTest {
         expectLastCall().once();
         workClassificationRepository.insertOrUpdate(capture(classificationCapture2));
         expectLastCall().once();
-        usageService.updateUnclassifiedUsages();
+        workClassificationService.setUsagesBatchSize(1);
+        Usage usage1 = new Usage();
+        usage1.setId(RupPersistUtils.generateUuid());
+        Usage usage2 = new Usage();
+        usage1.setId(RupPersistUtils.generateUuid());
+        expect(usageRepository.findUnclassifiedUsageIds())
+            .andReturn(Arrays.asList(usage1.getId(), usage2.getId())).once();
+        expect(usageRepository.findByIds(Collections.singletonList(usage1.getId())))
+            .andReturn(Collections.singletonList(usage1)).once();
+        nonBelletristicProcessorMock.process(usage1);
         expectLastCall().once();
-        replay(workClassificationRepository, usageService);
+        expect(usageRepository.findByIds(Collections.singletonList(usage2.getId())))
+            .andReturn(Collections.singletonList(usage2)).once();
+        nonBelletristicProcessorMock.process(usage2);
+        expectLastCall().once();
+        replay(workClassificationRepository, usageRepository, nonBelletristicProcessorMock);
         workClassificationService.insertOrUpdateClassifications(
             Sets.newHashSet(buildClassification(WR_WRK_INST_1), buildClassification(WR_WRK_INST_2)), STM);
         WorkClassification classification1 = classificationCapture1.getValue();
@@ -83,7 +101,7 @@ public class WorkClassificationServiceTest {
         WorkClassification classification2 = classificationCapture2.getValue();
         assertNotNull(classification2.getWrWrkInst());
         assertEquals(STM, classification2.getClassification());
-        verify(workClassificationRepository, usageService);
+        verify(workClassificationRepository, usageRepository, nonBelletristicProcessorMock);
     }
 
     @Test

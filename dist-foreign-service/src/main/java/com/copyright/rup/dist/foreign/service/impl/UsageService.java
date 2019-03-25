@@ -37,7 +37,6 @@ import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
-import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -47,7 +46,6 @@ import com.google.common.collect.Table;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -114,11 +112,6 @@ public class UsageService implements IUsageService {
     private IChainExecutor<Usage> chainExecutor;
     @Autowired
     private IRightsholderService rightsholderService;
-    @Autowired
-    @Qualifier("df.service.ntsClassificationProcessor")
-    private IChainProcessor<Usage> classificationProcessor;
-    @Value("$RUP{dist.foreign.usages.batch_size}")
-    private int usagesBatchSize;
 
     @Override
     public List<UsageDto> getUsageDtos(UsageFilter filter, Pageable pageable, Sort sort) {
@@ -528,17 +521,6 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public void updateUnclassifiedUsages() {
-        List<String> usageIdsForClassificationUpdate = usageRepository.findUsageIdsForClassificationUpdate();
-        LOGGER.debug("Update unclassified usages. Started. UsagesForClassificationUpdateCount={}",
-            CollectionUtils.size(usageIdsForClassificationUpdate));
-        Iterables.partition(usageIdsForClassificationUpdate, usagesBatchSize)
-            .forEach(partition -> usageRepository.findByIds(partition).forEach(classificationProcessor::process));
-        LOGGER.debug("Update unclassified usages. Finished. UsagesForClassificationUpdateCount={}",
-            CollectionUtils.size(usageIdsForClassificationUpdate));
-    }
-
-    @Override
     public int getUnclassifiedUsagesCount(Set<Long> wrWrkInsts) {
         return usageRepository.findCountForClassificationUpdate(wrWrkInsts);
     }
@@ -547,14 +529,6 @@ public class UsageService implements IUsageService {
     public Set<UsageStatusEnum> getAvailableStatuses(String productFamily) {
         Set<UsageStatusEnum> statuses = productFamilyToStatusesMap.get(productFamily);
         return CollectionUtils.isNotEmpty(statuses) ? statuses : Collections.emptySet();
-    }
-
-    void setClassificationProcessor(IChainProcessor<Usage> classificationProcessor) {
-        this.classificationProcessor = classificationProcessor;
-    }
-
-    void setUsagesBatchSize(int usagesBatchSize) {
-        this.usagesBatchSize = usagesBatchSize;
     }
 
     private void updateRighstholdersInSeparateThread(List<Usage> usages) {
