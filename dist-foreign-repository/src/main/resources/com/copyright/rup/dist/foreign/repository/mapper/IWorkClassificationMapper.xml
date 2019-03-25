@@ -63,9 +63,6 @@
         <choose>
             <when test="null != sort">
                 <choose>
-                    <when test="sort.property == 'article'">
-                        article <include refid="IUsageMapper.direction"/>
-                    </when>
                     <when test="sort.property == 'standardNumber'">
                         standard_number <include refid="IUsageMapper.direction"/>
                     </when>
@@ -80,12 +77,6 @@
                     </when>
                     <when test="sort.property == 'rhName'">
                         rh_name <include refid="IUsageMapper.direction"/>
-                    </when>
-                    <when test="sort.property == 'publisher'">
-                        publisher <include refid="IUsageMapper.direction"/>
-                    </when>
-                    <when test="sort.property == 'author'">
-                        author <include refid="IUsageMapper.direction"/>
                     </when>
                     <when test="sort.property == 'classification'">
                         classification <include refid="IUsageMapper.direction"/>
@@ -104,9 +95,6 @@
             wc.classification,
             internal.wr_wrk_inst wr_wrk_inst,
             system_title,
-            article,
-            author,
-            publisher,
             standard_number,
             rh_account_number,
             rh_name
@@ -114,9 +102,6 @@
             select distinct on (u.wr_wrk_inst)
                 u.wr_wrk_inst,
                 u.system_title,
-                u.article,
-                u.author,
-                u.publisher,
                 u.standard_number,
                 u.rh_account_number,
                 u.updated_datetime,
@@ -148,9 +133,6 @@
             wc.classification,
             wc.wr_wrk_inst wr_wrk_inst,
             system_title,
-            article,
-            author,
-            publisher,
             standard_number,
             rh.rh_account_number,
             rh.name rh_name
@@ -159,9 +141,6 @@
             select
                 u.wr_wrk_inst,
                 u.system_title,
-                u.article,
-                u.author,
-                u.publisher,
                 u.standard_number,
                 u.rh_account_number
             from ${schema}.df_usage_archive u
@@ -204,9 +183,6 @@
             select
                 u.wr_wrk_inst,
                 u.system_title,
-                u.article,
-                u.author,
-                u.publisher,
                 u.standard_number,
                 u.rh_account_number
             from ${schema}.df_usage_archive u

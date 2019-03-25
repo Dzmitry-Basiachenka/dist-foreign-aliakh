@@ -43,10 +43,10 @@ public interface IWorkClassificationController {
     /**
      * Inserts new and updates existing works classifications.
      *
-     * @param classifications set of {@link WorkClassification}s to be updated
-     * @param classification  new classification
+     * @param classifications   set of {@link WorkClassification}s to be updated
+     * @param newClassification new classification
      */
-    void updateClassifications(Set<WorkClassification> classifications, String classification);
+    void updateClassifications(Set<WorkClassification> classifications, String newClassification);
 
     /**
      * Deletes all classifications by its Wr Wrk Insts.

@@ -106,7 +106,7 @@ public interface IUsageRepository {
      * @param wrWrkInsts set of Wr Wrk Insts
      * @return count of usages
      */
-    int findCountForClassificationUpdate(Set<Long> wrWrkInsts);
+    int findUnclassifiedCountByWrWrkInts(Set<Long> wrWrkInsts);
 
     /**
      * Finds {@link Usage}s for reconcile based on scenario identifier.

@@ -119,7 +119,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2019-03-18-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
-        comment('Inserting test data for testFindByBatches and testFindCountByBatches')
+        comment('Inserting test data for testFindBySearch and testFindCountBySearch')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_work_classification') {
             column(name: 'df_work_classification_uid', value: '06b21198-daaf-40e1-a501-5b97deeecc0d')
@@ -179,7 +179,7 @@ databaseChangeLog {
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '41e08f32-9d23-44fc-92cd-51ff34d5b5fe')
-            column(name: 'name', value: 'FAS batch')
+            column(name: 'name', value: 'NTS batch')
             column(name: 'rro_account_number', value: '2000017010')
             column(name: 'payment_date', value: '2015-09-10')
             column(name: 'fiscal_year', value: '2016')

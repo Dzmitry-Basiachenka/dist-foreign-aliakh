@@ -83,18 +83,14 @@ public class WorkClassificationWindowTest {
         assertNull(grid.getCaption());
         verifySize(grid, 100, Unit.PERCENTAGE, 100, Unit.PERCENTAGE);
         List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Wr Wrk Inst", "System Title", "Article", "Author", "Publisher", "Classification",
-            "Standard Number", "RH Account #", "RH Name"),
-            columns.stream().map(Column::getCaption).collect(Collectors.toList()));
+        assertEquals(Arrays.asList("Wr Wrk Inst", "System Title", "Classification", "Standard Number", "RH Account #",
+            "RH Name"), columns.stream().map(Column::getCaption).collect(Collectors.toList()));
         assertEquals(100, columns.get(0).getWidth(), 0);
-        assertEquals(200, columns.get(1).getWidth(), 0);
-        assertEquals(140, columns.get(2).getWidth(), 0);
-        assertEquals(100, columns.get(3).getWidth(), 0);
-        assertEquals(140, columns.get(4).getWidth(), 0);
-        assertEquals(110, columns.get(5).getWidth(), 0);
-        assertEquals(140, columns.get(6).getWidth(), 0);
-        assertEquals(100, columns.get(7).getWidth(), 0);
-        assertEquals(200, columns.get(8).getWidth(), 0);
+        assertEquals(285, columns.get(1).getWidth(), 0);
+        assertEquals(110, columns.get(2).getWidth(), 0);
+        assertEquals(140, columns.get(3).getWidth(), 0);
+        assertEquals(100, columns.get(4).getWidth(), 0);
+        assertEquals(200, columns.get(5).getWidth(), 0);
     }
 
     private void verifyButtonsLayout(HorizontalLayout buttonsLayout) {
@@ -104,7 +100,7 @@ public class WorkClassificationWindowTest {
         assertEquals("Mark as STM", buttonsLayout.getComponent(0).getCaption());
         assertEquals("Mark as Non-STM", buttonsLayout.getComponent(1).getCaption());
         assertEquals("Mark as Belletristic", buttonsLayout.getComponent(2).getCaption());
-        assertEquals("Remove Classification", buttonsLayout.getComponent(3).getCaption());
+        assertEquals("Delete Classification", buttonsLayout.getComponent(3).getCaption());
         assertEquals("Clear", buttonsLayout.getComponent(4).getCaption());
         assertEquals("Close", buttonsLayout.getComponent(5).getCaption());
     }
