@@ -1,3 +1,7 @@
+configurations {
+    compile.exclude group: 'org.apache.activemq'
+}
+
 dependencies {
     compile project(':dist-foreign-domain')
     compile project(':dist-foreign-repository')
@@ -10,7 +14,9 @@ dependencies {
     runtime("commons-jexl:commons-jexl:${jexlVersion}")
     runtime("org.aspectj:aspectjweaver:${aspectjVersion}")
 
-    testCompile("com.copyright.rup.dist.common:dist-common-test:${distCommonVersion}")
+    testCompile("com.copyright.rup.dist.common:dist-common-test:${distCommonVersion}") {
+        exclude group: "org.apache.activemq"
+    }
 
     testIntegCompile("commons-io:commons-io:${commonsIoVersion}")
     testIntegRuntime project(path: ':dist-foreign-repository', configuration: 'testIntegRuntime')
