@@ -522,7 +522,7 @@ public class UsageService implements IUsageService {
 
     @Override
     public int getUnclassifiedUsagesCount(Set<Long> wrWrkInsts) {
-        return usageRepository.findCountForClassificationUpdate(wrWrkInsts);
+        return usageRepository.findUnclassifiedCountByWrWrkInts(wrWrkInsts);
     }
 
     @Override

@@ -66,10 +66,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class UsageRepository extends BaseRepository implements IUsageRepository {
 
     /**
-     * Details ids batch size for finding duplicates. This size was obtained as (32000 / 2 = 16000)
-     * where {@code 32000} it's a max value for count of variables in statement and {@code 2} means that statement uses
-     * 'in' clause with the same parameters two times.
+     * It's a max value for count of variables in statement.
      */
+    private static final int MAX_VARIABLES_COUNT = 32000;
     private static final String FILTER_KEY = "filter";
     private static final String PAGEABLE_KEY = "pageable";
     private static final String SORT_KEY = "sort";
@@ -119,7 +118,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     @Override
     public List<Usage> findByIds(List<String> usageIds) {
         List<Usage> result = new ArrayList<>();
-        Iterables.partition(Objects.requireNonNull(usageIds), 32000)
+        Iterables.partition(Objects.requireNonNull(usageIds), MAX_VARIABLES_COUNT)
             .forEach(partition -> result.addAll(selectList("IUsageMapper.findByIds", partition)));
         return result;
     }
@@ -130,15 +129,15 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public int findCountForClassificationUpdate(Set<Long> wrWrkInsts) {
+    public int findUnclassifiedCountByWrWrkInts(Set<Long> wrWrkInsts) {
         AtomicInteger count = new AtomicInteger(0);
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(STATUS_KEY, Objects.requireNonNull(UsageStatusEnum.UNCLASSIFIED));
-        Iterables.partition(Objects.requireNonNull(wrWrkInsts), 32000)
+        Iterables.partition(Objects.requireNonNull(wrWrkInsts), MAX_VARIABLES_COUNT)
             .forEach(
                 partition -> {
                     parameters.put("wrWrkInsts", Objects.requireNonNull(wrWrkInsts));
-                    count.addAndGet(selectOne("IUsageMapper.findCountForClassificationUpdate", parameters));
+                    count.addAndGet(selectOne("IUsageMapper.findUnclassifiedCountByWrWrkInts", parameters));
                 });
         return count.get();
     }
@@ -348,7 +347,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put("rroAccountNumber", Objects.requireNonNull(rroAccountNumber));
         List<String> result = new ArrayList<>(accountNumbers.size());
-        Iterables.partition(accountNumbers, 32000).forEach(partition -> {
+        Iterables.partition(accountNumbers, MAX_VARIABLES_COUNT).forEach(partition -> {
             parameters.put("accountNumbers", Objects.requireNonNull(partition));
             result.addAll(selectList("IUsageMapper.findIdsByScenarioIdRroAccountNumberRhAccountNumbers", parameters));
         });
@@ -410,7 +409,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         parameters.put(STATUS_KEY, Objects.requireNonNull(status));
         parameters.put(RH_ACCOUNT_NUMBER_KEY, Objects.requireNonNull(rhAccountNumber));
         parameters.put(UPDATE_USER_KEY, StoredEntity.DEFAULT_USER);
-        Iterables.partition(usageIds, 32000).forEach(partition -> {
+        Iterables.partition(usageIds, MAX_VARIABLES_COUNT).forEach(partition -> {
             parameters.put("usageIds", partition);
             update("IUsageMapper.updateStatusAndRhAccountNumber", parameters);
         });

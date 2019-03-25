@@ -20,9 +20,6 @@ public class WorkClassification extends StoredEntity<String> {
 
     private Long wrWrkInst;
     private String systemTitle;
-    private String article;
-    private String author;
-    private String publisher;
     private String classification;
     private String standardNumber;
     private Long rhAccountNumber;
@@ -42,30 +39,6 @@ public class WorkClassification extends StoredEntity<String> {
 
     public void setSystemTitle(String systemTitle) {
         this.systemTitle = systemTitle;
-    }
-
-    public String getArticle() {
-        return article;
-    }
-
-    public void setArticle(String article) {
-        this.article = article;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public String getPublisher() {
-        return publisher;
-    }
-
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
     }
 
     public String getClassification() {
@@ -114,9 +87,6 @@ public class WorkClassification extends StoredEntity<String> {
             .appendSuper(super.equals(obj))
             .append(this.wrWrkInst, that.wrWrkInst)
             .append(this.systemTitle, that.systemTitle)
-            .append(this.article, that.article)
-            .append(this.author, that.author)
-            .append(this.publisher, that.publisher)
             .append(this.classification, that.classification)
             .append(this.standardNumber, that.standardNumber)
             .append(this.rhAccountNumber, that.rhAccountNumber)
@@ -130,9 +100,6 @@ public class WorkClassification extends StoredEntity<String> {
             .appendSuper(super.hashCode())
             .append(wrWrkInst)
             .append(systemTitle)
-            .append(article)
-            .append(author)
-            .append(publisher)
             .append(classification)
             .append(standardNumber)
             .append(rhAccountNumber)
@@ -146,9 +113,6 @@ public class WorkClassification extends StoredEntity<String> {
             .appendSuper(super.toString())
             .append("wrWrkInst", wrWrkInst)
             .append("systemTitle", systemTitle)
-            .append("article", article)
-            .append("author", author)
-            .append("publisher", publisher)
             .append("classification", classification)
             .append("standardNumber", standardNumber)
             .append("rhAccountNumber", rhAccountNumber)

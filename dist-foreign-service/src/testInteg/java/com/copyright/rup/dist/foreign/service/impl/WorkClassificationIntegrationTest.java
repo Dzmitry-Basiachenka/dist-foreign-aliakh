@@ -15,11 +15,10 @@ import com.google.common.collect.Sets;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -38,7 +37,7 @@ import java.util.Set;
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml"})
 @TestPropertySource(properties = {"test.liquibase.changelog=work-classification-data-init.groovy"})
-@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
+@Transactional
 public class WorkClassificationIntegrationTest {
 
     private static final Set<String> BATCHES_IDS = Collections.singleton("e17ebc80-e74e-436d-ba6e-acf3d355b7ff");

@@ -57,8 +57,8 @@ public class WorkClassificationController implements IWorkClassificationControll
     }
 
     @Override
-    public void updateClassifications(Set<WorkClassification> classifications, String classification) {
-        workClassificationService.insertOrUpdateClassifications(classifications, classification);
+    public void updateClassifications(Set<WorkClassification> classifications, String newClassification) {
+        workClassificationService.insertOrUpdateClassifications(classifications, newClassification);
     }
 
     @Override

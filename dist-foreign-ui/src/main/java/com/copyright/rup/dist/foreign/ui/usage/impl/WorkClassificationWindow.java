@@ -20,6 +20,8 @@ import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+import com.vaadin.ui.components.grid.MultiSelectionModel.SelectAllCheckBoxVisibility;
+import com.vaadin.ui.components.grid.MultiSelectionModelImpl;
 
 import java.util.Set;
 import java.util.function.Consumer;
@@ -77,21 +79,19 @@ public class WorkClassificationWindow extends Window {
         Button clearButton = Buttons.createButton(ForeignUi.getMessage("button.clear"));
         clearButton.addClickListener(event -> grid.deselectAll());
         Button markAsStmButton = Buttons.createButton(ForeignUi.getMessage("button.mark_as_stm"));
-        addClickListener(markAsStmButton, "message.confirm.classification.update_usage",
-            (classifications) -> controller.updateClassifications(classifications, FdaConstants.STM_CLASSIFICATION));
+        addClickListener(markAsStmButton, "message.confirm.classification.update_usage", (classifications) ->
+            controller.updateClassifications(classifications, FdaConstants.STM_CLASSIFICATION));
         Button markAsNonStmButton = Buttons.createButton(ForeignUi.getMessage("button.mark_as_non_stm"));
-        addClickListener(markAsNonStmButton, "message.confirm.classification.update_usage",
-            (classifications) -> controller.updateClassifications(classifications,
-                FdaConstants.NON_STM_CLASSIFICATION));
+        addClickListener(markAsNonStmButton, "message.confirm.classification.update_usage", (classifications) ->
+            controller.updateClassifications(classifications, FdaConstants.NON_STM_CLASSIFICATION));
         Button markAsBelletristicButton = Buttons.createButton(ForeignUi.getMessage("button.mark_as_belletristic"));
-        addClickListener(markAsBelletristicButton, "message.confirm.classification.delete_usage",
-            (classifications) -> controller.updateClassifications(classifications,
-                FdaConstants.BELLETRISTIC_CLASSIFICATION));
-        Button removeClassificationButton = Buttons.createButton(ForeignUi.getMessage("button.remove_classification"));
-        addClickListener(removeClassificationButton, "message.confirm.remove_classification",
+        addClickListener(markAsBelletristicButton, "message.confirm.classification.delete_usage", (classifications) ->
+            controller.updateClassifications(classifications, FdaConstants.BELLETRISTIC_CLASSIFICATION));
+        Button deleteClassificationButton = Buttons.createButton(ForeignUi.getMessage("button.delete_classification"));
+        addClickListener(deleteClassificationButton, "message.confirm.delete_classification",
             controller::deleteClassification);
         buttonsLayout.addComponents(markAsStmButton, markAsNonStmButton, markAsBelletristicButton,
-            removeClassificationButton, clearButton, Buttons.createCloseButton(this));
+            deleteClassificationButton, clearButton, Buttons.createCloseButton(this));
         buttonsLayout.setSpacing(true);
         return buttonsLayout;
     }
@@ -105,17 +105,15 @@ public class WorkClassificationWindow extends Window {
         grid = new Grid<>(dataProvider);
         addColumns();
         grid.setSizeFull();
-        grid.setSelectionMode(SelectionMode.MULTI);
+        MultiSelectionModelImpl model = (MultiSelectionModelImpl) grid.setSelectionMode(SelectionMode.MULTI);
+        model.setSelectAllCheckBoxVisibility(SelectAllCheckBoxVisibility.VISIBLE);
         grid.getColumns().forEach(column -> column.setSortable(true));
         VaadinUtils.addComponentStyle(grid, "works-classification-grid");
     }
 
     private void addColumns() {
         addColumn(WorkClassification::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", 100);
-        addColumn(WorkClassification::getSystemTitle, "table.column.system_title", "systemTitle", 200);
-        addColumn(WorkClassification::getArticle, "table.column.article", "article", 140);
-        addColumn(WorkClassification::getAuthor, "table.column.author", "author", 100);
-        addColumn(WorkClassification::getPublisher, "table.column.publisher", "publisher", 140);
+        addColumn(WorkClassification::getSystemTitle, "table.column.system_title", "systemTitle", 285);
         addColumn(WorkClassification::getClassification, "table.column.classification", "classification", 110);
         addColumn(WorkClassification::getStandardNumber, "table.column.standard_number", "standardNumber", 140);
         addColumn(WorkClassification::getRhAccountNumber, "table.column.rh_account_number", "rhAccountNumber", 100);
