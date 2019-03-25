@@ -27,7 +27,6 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.domain.UsageWorkflowStepEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
@@ -42,7 +41,6 @@ import com.copyright.rup.dist.foreign.ui.usage.impl.CreateScenarioWindow.Scenari
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.widget.api.IWidget;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.vaadin.ui.HorizontalLayout;
 
@@ -61,8 +59,6 @@ import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -393,16 +389,6 @@ public class UsagesControllerTest {
         replay(usageWidgetMock, eventMock);
         controller.onScenarioCreated(eventMock);
         verify(usageWidgetMock, eventMock);
-    }
-
-    @Test
-    public void testGetUsageWorkflowStepsMap() {
-        Map<String, Set<UsageWorkflowStepEnum>> workflowSteps =
-            ImmutableMap.of("NTS", Collections.singleton(UsageWorkflowStepEnum.CLASSIFICATION));
-        expect(usageService.getUsageWorkflowStepsMap()).andReturn(workflowSteps).once();
-        replay(usageService);
-        assertEquals(workflowSteps, controller.getUsageWorkflowStepsMap());
-        verify(usageService);
     }
 
     private void prepareGetAppliedFilterExpectations(UsageFilter expectedUsageFilter) {

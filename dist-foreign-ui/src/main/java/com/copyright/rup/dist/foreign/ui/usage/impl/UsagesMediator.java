@@ -1,14 +1,10 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
-import com.copyright.rup.dist.foreign.domain.UsageWorkflowStepEnum;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesMediator;
 
 import com.vaadin.ui.Button;
-import org.apache.commons.collections4.CollectionUtils;
-
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Mediator for the usages widget.
@@ -28,17 +24,6 @@ class UsagesMediator implements IUsagesMediator {
     private Button addToScenarioButton;
     private Button sendForResearchButton;
     private Button assignClassificationButton;
-    private final Map<String, Set<UsageWorkflowStepEnum>> usageWorkflowSteps;
-
-    /**
-     * Constructor.
-     *
-     * @param usageWorkflowSteps map of usage workflow steps where key - Product Family,
-     *                           value - set of {@link UsageWorkflowStepEnum}
-     */
-    public UsagesMediator(Map<String, Set<UsageWorkflowStepEnum>> usageWorkflowSteps) {
-        this.usageWorkflowSteps = usageWorkflowSteps;
-    }
 
     @Override
     public void applyPermissions() {
@@ -53,28 +38,18 @@ class UsagesMediator implements IUsagesMediator {
 
     @Override
     public void onProductFamilyChanged(String productFamily) {
-        Set<UsageWorkflowStepEnum> usageSteps = usageWorkflowSteps.get(productFamily);
-        if (CollectionUtils.isNotEmpty(usageSteps)) {
-            loadUsageBatchButton.setVisible(ForeignSecurityUtils.hasLoadUsagePermission()
-                && usageSteps.contains(UsageWorkflowStepEnum.LOAD_BATCH));
-            loadFundPoolButton.setVisible(ForeignSecurityUtils.hasLoadFundPoolPermission()
-                && usageSteps.contains(UsageWorkflowStepEnum.LOAD_FUNDPOOL));
-            loadResearchedUsagesButton.setVisible(ForeignSecurityUtils.hasLoadResearchedUsagePermission()
-                && usageSteps.contains(UsageWorkflowStepEnum.LOAD_RESEARCHED));
-            sendForResearchButton.setVisible(ForeignSecurityUtils.hasSendForWorkResearchPermission()
-                && usageSteps.contains(UsageWorkflowStepEnum.RESEARCH));
-            assignClassificationButton.setVisible(ForeignSecurityUtils.hasAssignClassificationPermission()
-                && usageSteps.contains(UsageWorkflowStepEnum.CLASSIFICATION));
-            deleteUsageButton.setVisible(ForeignSecurityUtils.hasDeleteUsagePermission());
-            addToScenarioButton.setVisible(ForeignSecurityUtils.hasCreateEditScenarioPermission());
-        } else {
-            loadUsageBatchButton.setVisible(false);
-            loadFundPoolButton.setVisible(false);
-            loadResearchedUsagesButton.setVisible(false);
-            deleteUsageButton.setVisible(false);
-            addToScenarioButton.setVisible(false);
-            sendForResearchButton.setVisible(false);
-        }
+        boolean isFasFas2ProductFamily = FdaConstants.FAS_FAS2_PRODUCT_FAMILY_SET.contains(productFamily);
+        boolean isNtsProductFamily = FdaConstants.NTS_PRODUCT_FAMILY.equals(productFamily);
+        loadUsageBatchButton.setVisible(ForeignSecurityUtils.hasLoadUsagePermission() && isFasFas2ProductFamily);
+        loadFundPoolButton.setVisible(ForeignSecurityUtils.hasLoadFundPoolPermission() && isNtsProductFamily);
+        loadResearchedUsagesButton.setVisible(ForeignSecurityUtils.hasLoadResearchedUsagePermission()
+            && isFasFas2ProductFamily);
+        sendForResearchButton.setVisible(ForeignSecurityUtils.hasSendForWorkResearchPermission()
+            && isFasFas2ProductFamily);
+        assignClassificationButton.setVisible(ForeignSecurityUtils.hasAssignClassificationPermission()
+            && isNtsProductFamily);
+        deleteUsageButton.setVisible(ForeignSecurityUtils.hasDeleteUsagePermission());
+        addToScenarioButton.setVisible(ForeignSecurityUtils.hasCreateEditScenarioPermission());
     }
 
     void setLoadUsageBatchButton(Button loadUsageBatchButton) {

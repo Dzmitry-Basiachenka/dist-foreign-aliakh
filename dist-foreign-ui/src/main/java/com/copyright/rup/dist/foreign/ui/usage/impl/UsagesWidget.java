@@ -81,7 +81,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
 
     @Override
     public UsagesMediator initMediator() {
-        mediator = new UsagesMediator(getController().getUsageWorkflowStepsMap());
+        mediator = new UsagesMediator();
         mediator.setLoadUsageBatchButton(loadUsageBatchButton);
         mediator.setLoadFundPoolButton(loadFundPoolButton);
         mediator.setLoadResearchedUsagesButton(loadResearchedUsagesButton);

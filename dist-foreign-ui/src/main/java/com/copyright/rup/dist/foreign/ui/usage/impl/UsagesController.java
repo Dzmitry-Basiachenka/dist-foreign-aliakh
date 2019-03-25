@@ -15,7 +15,6 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.domain.UsageWorkflowStepEnum;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
@@ -58,8 +57,6 @@ import java.io.PipedOutputStream;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -264,11 +261,6 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     @Override
     public void clearFilter() {
         filterController.getWidget().clearFilter();
-    }
-
-    @Override
-    public Map<String, Set<UsageWorkflowStepEnum>> getUsageWorkflowStepsMap() {
-        return usageService.getUsageWorkflowStepsMap();
     }
 
     @Override

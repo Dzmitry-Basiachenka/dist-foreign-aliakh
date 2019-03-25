@@ -8,11 +8,8 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
-import com.copyright.rup.dist.foreign.domain.UsageWorkflowStepEnum;
 import com.copyright.rup.vaadin.security.SecurityUtils;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Sets;
 import com.vaadin.ui.Button;
 
 import org.junit.Before;
@@ -54,10 +51,7 @@ public class UsagesMediatorTest {
         addToScenarioButton = new Button();
         sendForResearchButton = new Button();
         assignClassificationButton = new Button();
-        mediator = new UsagesMediator(ImmutableMap.of(FAS_PRODUCT_FAMILY, Sets.newHashSet(
-            UsageWorkflowStepEnum.LOAD_BATCH, UsageWorkflowStepEnum.RESEARCH, UsageWorkflowStepEnum.LOAD_RESEARCHED),
-            NTS_PRODUCT_FAMILY,
-            Sets.newHashSet(UsageWorkflowStepEnum.LOAD_FUNDPOOL, UsageWorkflowStepEnum.CLASSIFICATION)));
+        mediator = new UsagesMediator();
         mediator.setLoadUsageBatchButton(loadUsageBatchButton);
         mediator.setLoadFundPoolButton(loadFundPoolButton);
         mediator.setLoadResearchedUsagesButton(loadResearchedUsagesButton);

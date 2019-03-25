@@ -1,6 +1,9 @@
 package com.copyright.rup.dist.foreign.domain;
 
+import com.google.common.collect.ImmutableSet;
+
 import java.util.EnumSet;
+import java.util.Set;
 
 /**
  * Class that contains constants.
@@ -57,6 +60,12 @@ public final class FdaConstants {
      * NON-STM work classification.
      */
     public static final String NON_STM_CLASSIFICATION = "NON-STM";
+
+    /**
+     * Set of FAS and FAS2 product families.
+     */
+    public static final Set<String> FAS_FAS2_PRODUCT_FAMILY_SET =
+        ImmutableSet.of(FAS_PRODUCT_FAMILY, CLA_FAS_PRODUCT_FAMILY);
 
     /**
      * Archived scenario statuses.
