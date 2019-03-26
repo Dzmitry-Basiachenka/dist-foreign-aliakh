@@ -10,7 +10,6 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.domain.UsageWorkflowStepEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
@@ -366,25 +365,10 @@ public interface IUsageService {
     void updateProcessedUsage(Usage usage);
 
     /**
-     * Gets set of additional workflow steps to make Usage Eligible for adding to scenario based on Product Family.
-     *
-     * @return map of usage workflow steps where key - Product Family, values - set of {@link UsageWorkflowStepEnum}
-     */
-    Map<String, Set<UsageWorkflowStepEnum>> getUsageWorkflowStepsMap();
-
-    /**
      * Gets count of unclassified usages to be updated based on set of Wr Wrk Insts.
      *
      * @param wrWrkInsts set of Wr Wrk Insts
      * @return usages count
      */
     int getUnclassifiedUsagesCount(Set<Long> wrWrkInsts);
-
-    /**
-     * Gets set of {@link UsageStatusEnum} availale for specified Product Family.
-     *
-     * @param productFamily Product Family
-     * @return set of {@link UsageStatusEnum}
-     */
-    Set<UsageStatusEnum> getAvailableStatuses(String productFamily);
 }

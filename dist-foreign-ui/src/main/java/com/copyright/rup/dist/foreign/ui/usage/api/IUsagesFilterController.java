@@ -2,11 +2,9 @@ package com.copyright.rup.dist.foreign.ui.usage.api;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
-import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.vaadin.widget.api.IFilterController;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * Interface for controller for usage filtering.
@@ -43,14 +41,6 @@ public interface IUsagesFilterController extends IFilterController<IUsagesFilter
      * @return list of RROs
      */
     List<Rightsholder> getRros(String productFamily);
-
-    /**
-     * Gets set of {@link UsageStatusEnum} available for selected Product Family.
-     *
-     * @param productFamily Product Family
-     * @return set of {@link UsageStatusEnum}es
-     */
-    Set<UsageStatusEnum> getStatuses(String productFamily);
 
     /**
      * @return list of product families.

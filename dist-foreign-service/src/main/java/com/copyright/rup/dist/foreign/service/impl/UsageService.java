@@ -19,7 +19,6 @@ import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.domain.UsageWorkflowStepEnum;
 import com.copyright.rup.dist.foreign.domain.common.util.CalculationUtils;
 import com.copyright.rup.dist.foreign.domain.common.util.ForeignLogUtils;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
@@ -90,10 +89,6 @@ public class UsageService implements IUsageService {
     private List<String> supportedMarkets;
     @Value("$RUP{dist.foreign.cla_account_number}")
     private Long claAccountNumber;
-    @Value("#{$RUP{dist.foreign.usages.workflow_steps}}")
-    private Map<String, Set<UsageWorkflowStepEnum>> usageWorkflowStepsMap;
-    @Value("#{$RUP{dist.foreign.usage_filter.statuses}}")
-    private Map<String, Set<UsageStatusEnum>> productFamilyToStatusesMap;
     @Autowired
     private IUsageRepository usageRepository;
     @Autowired
@@ -516,19 +511,8 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public Map<String, Set<UsageWorkflowStepEnum>> getUsageWorkflowStepsMap() {
-        return usageWorkflowStepsMap;
-    }
-
-    @Override
     public int getUnclassifiedUsagesCount(Set<Long> wrWrkInsts) {
         return usageRepository.findUnclassifiedCountByWrWrkInts(wrWrkInsts);
-    }
-
-    @Override
-    public Set<UsageStatusEnum> getAvailableStatuses(String productFamily) {
-        Set<UsageStatusEnum> statuses = productFamilyToStatusesMap.get(productFamily);
-        return CollectionUtils.isNotEmpty(statuses) ? statuses : Collections.emptySet();
     }
 
     private void updateRighstholdersInSeparateThread(List<Usage> usages) {

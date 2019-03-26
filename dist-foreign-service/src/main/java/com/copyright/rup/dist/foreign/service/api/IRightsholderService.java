@@ -20,7 +20,7 @@ import java.util.Set;
 public interface IRightsholderService extends ICommonRightsholderService {
 
     /**
-     * Get list of RROs presented in DB associated with specified Product Family.
+     * Gets list of RROs presented in DB associated with specified Product Family.
      *
      * @param productFamily Product Family
      * @return list of found RROs

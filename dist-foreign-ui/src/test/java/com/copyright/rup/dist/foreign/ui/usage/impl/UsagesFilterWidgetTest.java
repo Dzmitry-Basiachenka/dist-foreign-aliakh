@@ -80,7 +80,6 @@ public class UsagesFilterWidgetTest {
             .andReturn(Collections.singletonList(FISCAL_YEAR)).once();
         expect(usagesFilterController.getProductFamilies())
             .andReturn(Collections.singletonList(FAS_PRODUCT_FAMILY)).once();
-        expect(usagesFilterController.getStatuses(FAS_PRODUCT_FAMILY)).andReturn(STATUSES).once();
     }
 
     @Test
@@ -98,7 +97,6 @@ public class UsagesFilterWidgetTest {
     public void testApplyFilter() {
         expect(usagesFilterController.getFiscalYears(FAS_PRODUCT_FAMILY))
             .andReturn(Collections.singletonList(FISCAL_YEAR)).once();
-        expect(usagesFilterController.getStatuses(FAS_PRODUCT_FAMILY)).andReturn(STATUSES).once();
         replay(usagesFilterController);
         widget.init();
         widget.clearFilter();
@@ -144,7 +142,6 @@ public class UsagesFilterWidgetTest {
     public void testClearFilter() {
         expect(usagesFilterController.getFiscalYears(FAS_PRODUCT_FAMILY))
             .andReturn(Collections.singletonList(FISCAL_YEAR)).once();
-        expect(usagesFilterController.getStatuses(FAS_PRODUCT_FAMILY)).andReturn(STATUSES).once();
         replay(usagesFilterController);
         widget.init();
         Button applyButton = getApplyButton();
@@ -192,7 +189,6 @@ public class UsagesFilterWidgetTest {
         ClickEvent clickEvent = createMock(ClickEvent.class);
         expect(usagesFilterController.getFiscalYears(FAS_PRODUCT_FAMILY))
             .andReturn(Collections.singletonList(FISCAL_YEAR)).once();
-        expect(usagesFilterController.getStatuses(FAS_PRODUCT_FAMILY)).andReturn(STATUSES).once();
         replay(clickEvent, usagesFilterController);
         widget.init();
         Set<Long> accountNumbers = Sets.newHashSet(ACCOUNT_NUMBER);

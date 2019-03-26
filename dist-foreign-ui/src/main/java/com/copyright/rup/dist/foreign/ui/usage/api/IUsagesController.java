@@ -8,7 +8,6 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.domain.UsageWorkflowStepEnum;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.impl.csv.ResearchedUsagesCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
@@ -22,8 +21,6 @@ import com.vaadin.util.ReflectTools;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Interface for controller for {@link IUsagesWidget}.
@@ -243,11 +240,4 @@ public interface IUsagesController extends IController<IUsagesWidget> {
      * Resets filter.
      */
     void clearFilter();
-
-    /**
-     * Gets set of additional workflow steps to make Usage Eligible for adding to scenario based on Product Family.
-     *
-     * @return map of usage workflow steps where key - Product Family, values - set of {@link UsageWorkflowStepEnum}
-     */
-    Map<String, Set<UsageWorkflowStepEnum>> getUsageWorkflowStepsMap();
 }

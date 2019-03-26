@@ -299,8 +299,7 @@ public class UsagesWidgetTest {
     @Test
     public void testInitMediator() throws Exception {
         UsagesMediator mediator = createMock(UsagesMediator.class);
-        expect(controller.getUsageWorkflowStepsMap()).andReturn(Collections.emptyMap());
-        expectNew(UsagesMediator.class, Collections.emptyMap()).andReturn(mediator).once();
+        expectNew(UsagesMediator.class).andReturn(mediator).once();
         mediator.setDeleteUsageButton(anyObject(Button.class));
         expectLastCall().once();
         mediator.setLoadFundPoolButton(anyObject(Button.class));

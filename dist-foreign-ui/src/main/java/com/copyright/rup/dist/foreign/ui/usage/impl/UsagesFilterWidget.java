@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
@@ -17,6 +18,7 @@ import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.HorizontalLayout;
@@ -25,6 +27,7 @@ import com.vaadin.ui.VerticalLayout;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -48,6 +51,11 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
     private ComboBox<String> productFamilyCombobox;
     private UsageFilter usageFilter = new UsageFilter();
     private UsageFilter appliedUsageFilter = new UsageFilter();
+    private static final Set<UsageStatusEnum> FAS_FAS2_STATUSES = Sets.newHashSet(UsageStatusEnum.NEW,
+        UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.WORK_RESEARCH, UsageStatusEnum.WORK_FOUND,
+        UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.RH_FOUND, UsageStatusEnum.SENT_FOR_RA, UsageStatusEnum.ELIGIBLE);
+    private static final Set<UsageStatusEnum> NTS_STATUSES = Sets.newHashSet(UsageStatusEnum.NTS_WITHDRAWN,
+        UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND, UsageStatusEnum.UNCLASSIFIED, UsageStatusEnum.ELIGIBLE);
 
     @Override
     @SuppressWarnings("unchecked")
@@ -72,7 +80,7 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
         fiscalYearComboBox.clear();
         fiscalYearComboBox.setItems(getController().getFiscalYears(selectedProductFamily));
         statusComboBox.clear();
-        statusComboBox.setItems(getController().getStatuses(selectedProductFamily));
+        statusComboBox.setItems(getAvailableStatuses());
         usageFilter = new UsageFilter();
         rightsholderFilterWidget.reset();
         usageBatchFilterWidget.reset();
@@ -161,7 +169,7 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
     }
 
     private void initStatusFilter() {
-        List<UsageStatusEnum> statuses = Lists.newArrayList(controller.getStatuses(getSelectedProductFamily()));
+        List<UsageStatusEnum> statuses = Lists.newArrayList(getAvailableStatuses());
         statusComboBox = new ComboBox<>(ForeignUi.getMessage("label.status"), statuses);
         VaadinUtils.setMaxComponentsWidth(statusComboBox);
         statusComboBox.addValueChangeListener(event -> {
@@ -208,6 +216,12 @@ class UsagesFilterWidget extends VerticalLayout implements IUsagesFilterWidget {
         VaadinUtils.setMaxComponentsWidth(horizontalLayout, applyButton, clearButton);
         VaadinUtils.addComponentStyle(horizontalLayout, "filter-buttons");
         return horizontalLayout;
+    }
+
+    private Set<UsageStatusEnum> getAvailableStatuses() {
+        return FdaConstants.FAS_FAS2_PRODUCT_FAMILY_SET.contains(getSelectedProductFamily())
+            ? FAS_FAS2_STATUSES
+            : NTS_STATUSES;
     }
 
     private void filterChanged() {
