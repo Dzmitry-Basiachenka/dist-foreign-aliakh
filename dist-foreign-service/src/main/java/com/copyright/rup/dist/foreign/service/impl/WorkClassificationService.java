@@ -52,7 +52,7 @@ public class WorkClassificationService implements IWorkClassificationService {
     @Override
     @Transactional
     public void insertOrUpdateClassifications(Set<WorkClassification> classifications, String newClassification) {
-        LOGGER.info("Update classification. Started. WorksCount={}, Classification={}", LogUtils.size(classifications),
+        LOGGER.debug("Update classification. Started. WorksCount={}, Classification={}", LogUtils.size(classifications),
             newClassification);
         classifications.forEach(workClassification -> {
             if (null == workClassification.getId()) {
@@ -62,17 +62,17 @@ public class WorkClassificationService implements IWorkClassificationService {
             workClassificationRepository.insertOrUpdate(workClassification);
         });
         updateUnclassifiedUsages();
-        LOGGER.info("Update classification. Finished. WorksCount={}, Classification={}", LogUtils.size(classifications),
-            newClassification);
+        LOGGER.debug("Update classification. Finished. WorksCount={}, Classification={}",
+            LogUtils.size(classifications), newClassification);
     }
 
     @Override
     @Transactional
     public void deleteClassifications(Set<WorkClassification> classifications) {
-        LOGGER.info("Delete classification. Started. WorksCount={}", LogUtils.size(classifications));
+        LOGGER.debug("Delete classification. Started. WorksCount={}", LogUtils.size(classifications));
         classifications.forEach(workClassification ->
             workClassificationRepository.deleteByWrWrkInst(workClassification.getWrWrkInst()));
-        LOGGER.info("Delete classification. Finished. WorksCount={}", LogUtils.size(classifications));
+        LOGGER.debug("Delete classification. Finished. WorksCount={}", LogUtils.size(classifications));
     }
 
     @Override
