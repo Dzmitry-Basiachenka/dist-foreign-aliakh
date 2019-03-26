@@ -1,5 +1,9 @@
 5.1.3
 -
+* B-49462 Tech Debt: FDA: remove ActiveMQ dependencies from the application
+* B-46039 FDA: Exclude Belletristic titles from NTS Batch: FDA: make changes based on comments in CR-DIST-FOREIGN-92
+* B-46040 FDA: Assign title classification to titles in NTS distribution: make changes based on comments in CR-DIST-FOREIGN-94
+* B-49017 FDA: Address the number of buttons on the Usage tab: make changes based on comments in CR-DIST-FOREIGN-93
 
 5.1.2
 -
