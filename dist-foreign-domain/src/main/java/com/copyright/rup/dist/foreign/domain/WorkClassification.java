@@ -22,6 +22,7 @@ public class WorkClassification extends StoredEntity<String> {
     private String systemTitle;
     private String classification;
     private String standardNumber;
+    private String standardNumberType;
     private Long rhAccountNumber;
     private String rhName;
 
@@ -57,6 +58,14 @@ public class WorkClassification extends StoredEntity<String> {
         this.standardNumber = standardNumber;
     }
 
+    public String getStandardNumberType() {
+        return standardNumberType;
+    }
+
+    public void setStandardNumberType(String standardNumberType) {
+        this.standardNumberType = standardNumberType;
+    }
+
     public Long getRhAccountNumber() {
         return rhAccountNumber;
     }
@@ -89,6 +98,7 @@ public class WorkClassification extends StoredEntity<String> {
             .append(this.systemTitle, that.systemTitle)
             .append(this.classification, that.classification)
             .append(this.standardNumber, that.standardNumber)
+            .append(this.standardNumberType, that.standardNumberType)
             .append(this.rhAccountNumber, that.rhAccountNumber)
             .append(this.rhName, that.rhName)
             .isEquals();
@@ -102,6 +112,7 @@ public class WorkClassification extends StoredEntity<String> {
             .append(systemTitle)
             .append(classification)
             .append(standardNumber)
+            .append(standardNumberType)
             .append(rhAccountNumber)
             .append(rhName)
             .toHashCode();
@@ -115,6 +126,7 @@ public class WorkClassification extends StoredEntity<String> {
             .append("systemTitle", systemTitle)
             .append("classification", classification)
             .append("standardNumber", standardNumber)
+            .append("standardNumberType", standardNumberType)
             .append("rhAccountNumber", rhAccountNumber)
             .append("rhName", rhName)
             .toString();

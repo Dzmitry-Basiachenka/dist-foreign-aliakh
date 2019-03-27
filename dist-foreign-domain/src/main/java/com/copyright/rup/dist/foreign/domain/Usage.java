@@ -31,6 +31,7 @@ public class Usage extends StoredEntity<String> {
     private Rightsholder payee = new Rightsholder();
     private String article;
     private String standardNumber;
+    private String standardNumberType;
     private String publisher;
     private LocalDate publicationDate;
     private String market;
@@ -110,6 +111,14 @@ public class Usage extends StoredEntity<String> {
 
     public void setStandardNumber(String standardNumber) {
         this.standardNumber = standardNumber;
+    }
+
+    public String getStandardNumberType() {
+        return standardNumberType;
+    }
+
+    public void setStandardNumberType(String standardNumberType) {
+        this.standardNumberType = standardNumberType;
     }
 
     public String getPublisher() {
@@ -267,6 +276,7 @@ public class Usage extends StoredEntity<String> {
             .append(this.rightsholder, that.rightsholder)
             .append(this.article, that.article)
             .append(this.standardNumber, that.standardNumber)
+            .append(this.standardNumberType, that.standardNumberType)
             .append(this.publisher, that.publisher)
             .append(this.publicationDate, that.publicationDate)
             .append(this.market, that.market)
@@ -299,6 +309,7 @@ public class Usage extends StoredEntity<String> {
             .append(rightsholder)
             .append(article)
             .append(standardNumber)
+            .append(standardNumberType)
             .append(publisher)
             .append(publicationDate)
             .append(market)
@@ -331,6 +342,7 @@ public class Usage extends StoredEntity<String> {
             .append("rightsholder", rightsholder)
             .append("article", article)
             .append("standardNumber", standardNumber)
+            .append("standardNumberType", standardNumberType)
             .append("publisher", publisher)
             .append("publicationDate", publicationDate)
             .append("market", market)

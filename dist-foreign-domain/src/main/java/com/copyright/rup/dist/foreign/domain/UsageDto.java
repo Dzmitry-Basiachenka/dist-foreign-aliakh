@@ -36,6 +36,7 @@ public class UsageDto extends StoredEntity<String> {
     private Long rhAccountNumber;
     private String rhName;
     private String standardNumber;
+    private String standardNumberType;
     private String publisher;
     private LocalDate publicationDate;
     private Integer numberOfCopies;
@@ -116,6 +117,14 @@ public class UsageDto extends StoredEntity<String> {
 
     public void setStandardNumber(String standardNumber) {
         this.standardNumber = standardNumber;
+    }
+
+    public String getStandardNumberType() {
+        return standardNumberType;
+    }
+
+    public void setStandardNumberType(String standardNumberType) {
+        this.standardNumberType = standardNumberType;
     }
 
     public String getPublisher() {
@@ -381,6 +390,7 @@ public class UsageDto extends StoredEntity<String> {
             .append(this.rhAccountNumber, that.rhAccountNumber)
             .append(this.rhName, that.rhName)
             .append(this.standardNumber, that.standardNumber)
+            .append(this.standardNumberType, that.standardNumberType)
             .append(this.publisher, that.publisher)
             .append(this.publicationDate, that.publicationDate)
             .append(this.numberOfCopies, that.numberOfCopies)
@@ -425,6 +435,7 @@ public class UsageDto extends StoredEntity<String> {
             .append(rhAccountNumber)
             .append(rhName)
             .append(standardNumber)
+            .append(standardNumberType)
             .append(publisher)
             .append(publicationDate)
             .append(numberOfCopies)
@@ -469,6 +480,7 @@ public class UsageDto extends StoredEntity<String> {
             .append("rhAccountNumber", rhAccountNumber)
             .append("rhName", rhName)
             .append("standardNumber", standardNumber)
+            .append("standardNumberType", standardNumberType)
             .append("publisher", publisher)
             .append("publicationDate", publicationDate)
             .append("numberOfCopies", numberOfCopies)
