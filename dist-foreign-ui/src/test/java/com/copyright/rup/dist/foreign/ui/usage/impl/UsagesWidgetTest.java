@@ -14,6 +14,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
@@ -352,8 +353,21 @@ public class UsagesWidgetTest {
         assertEquals("Additional Funds", item.getText());
         List<MenuItem> childItems = item.getChildren();
         assertEquals(2, childItems.size());
-        assertEquals("Create", childItems.get(0).getText());
+        MenuItem menuItemCreate = childItems.get(0);
+        assertEquals("Create", menuItemCreate.getText());
         assertEquals("Delete", childItems.get(1).getText());
+        verifyMenuItemCreate(menuItemCreate);
+    }
+
+    private void verifyMenuItemCreate(MenuItem menuItemCreate) {
+        mockStatic(Windows.class);
+        Windows.showModalWindow(anyObject(WithdrawnBatchFilterWindow.class));
+        expectLastCall().once();
+        expect(controller.getWithdrawnUsageBatches()).andReturn(Collections.singletonList(new UsageBatch())).once();
+        replay(controller, Windows.class);
+        menuItemCreate.getCommand().menuSelected(menuItemCreate);
+        verify(controller, Windows.class);
+        reset(controller, Windows.class);
     }
 
     private void verifyGrid(Grid grid) {
