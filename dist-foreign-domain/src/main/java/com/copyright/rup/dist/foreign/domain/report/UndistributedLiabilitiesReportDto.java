@@ -29,6 +29,7 @@ public class UndistributedLiabilitiesReportDto extends StoredEntity<String> {
     private BigDecimal estimatedServiceFeeAmount = DEFAULT_AMOUNT;
     private BigDecimal estimatedNetAmount = DEFAULT_AMOUNT;
     private BigDecimal estimatedServiceFee = DEFAULT_AMOUNT;
+    private BigDecimal withdrawnGrossAmount = DEFAULT_AMOUNT;
 
     public String getRroName() {
         return rroName;
@@ -86,6 +87,14 @@ public class UndistributedLiabilitiesReportDto extends StoredEntity<String> {
         this.estimatedServiceFee = estimatedServiceFee;
     }
 
+    public BigDecimal getWithdrawnGrossAmount() {
+        return withdrawnGrossAmount;
+    }
+
+    public void setWithdrawnGrossAmount(BigDecimal withdrawnGrossAmount) {
+        this.withdrawnGrossAmount = withdrawnGrossAmount;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -104,6 +113,7 @@ public class UndistributedLiabilitiesReportDto extends StoredEntity<String> {
             .append(estimatedServiceFeeAmount, that.estimatedServiceFeeAmount)
             .append(estimatedNetAmount, that.estimatedNetAmount)
             .append(estimatedServiceFee, that.estimatedServiceFee)
+            .append(withdrawnGrossAmount, that.withdrawnGrossAmount)
             .isEquals();
     }
 
@@ -118,6 +128,7 @@ public class UndistributedLiabilitiesReportDto extends StoredEntity<String> {
             .append(estimatedServiceFeeAmount)
             .append(estimatedNetAmount)
             .append(estimatedServiceFee)
+            .append(withdrawnGrossAmount)
             .toHashCode();
     }
 
@@ -132,6 +143,7 @@ public class UndistributedLiabilitiesReportDto extends StoredEntity<String> {
             .append("estimatedServiceFeeAmount", estimatedServiceFeeAmount)
             .append("estimatedNetAmount", estimatedNetAmount)
             .append("estimatedServiceFee", estimatedServiceFee)
+            .append("withdrawnGrossAmount", withdrawnGrossAmount)
             .toString();
     }
 }
