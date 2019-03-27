@@ -8,6 +8,7 @@ import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.google.common.collect.Lists;
 import com.vaadin.data.ValueProvider;
+import com.vaadin.ui.Button.ClickListener;
 
 import java.util.List;
 
@@ -20,18 +21,31 @@ import java.util.List;
  *
  * @author Aliaksandr Liakh
  */
-public class WithdrawnBatchFilterWindow extends FilterWindow<UsageBatch> {
+class WithdrawnBatchFilterWindow extends FilterWindow<UsageBatch> {
 
     /**
      * Constructor.
      *
      * @param controller instance of {@link IFilterWindowController}
      */
-    public WithdrawnBatchFilterWindow(IFilterWindowController<UsageBatch> controller) {
+    WithdrawnBatchFilterWindow(IFilterWindowController<UsageBatch> controller) {
         super(ForeignUi.getMessage("window.batches_filter"), controller,
             "Continue", null,
             (ValueProvider<UsageBatch, List<String>>) batch -> Lists.newArrayList(batch.getName()));
         this.setSearchPromptString(ForeignUi.getMessage("prompt.batch"));
         VaadinUtils.addComponentStyle(this, "batches-filter-window");
+    }
+
+    /**
+     * Updates {@link ClickListener} for the Save button.
+     *
+     * @param action instance of {@link Runnable}
+     */
+    void updateSaveButtonClickListener(Runnable action) {
+        getSaveButtonRegistration().remove();
+        getSaveButton().addClickListener((ClickListener) event -> {
+            fireFilterSaveEvent();
+            action.run();
+        });
     }
 }
