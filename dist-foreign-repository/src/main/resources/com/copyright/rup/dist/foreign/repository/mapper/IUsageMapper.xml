@@ -12,6 +12,7 @@
         <result property="estimatedServiceFeeAmount" column="estimated_service_fee_amount"/>
         <result property="estimatedNetAmount" column="estimated_net_amount"/>
         <result property="estimatedServiceFee" column="estimated_service_fee"/>
+        <result property="withdrawnGrossAmount" column="withdrawn_gross_amount"/>
     </resultMap>
 
     <resultMap id="serviceFeeTrueUpReportDtoResultMap" type="ServiceFeeTrueUpReportDto">
@@ -1240,16 +1241,28 @@
             reportInfo.usages_gross_amount,
             reportInfo.usages_gross_amount * reportInfo.estimated_service_fee estimated_service_fee_amount,
             reportInfo.usages_gross_amount - (reportInfo.usages_gross_amount * reportInfo.estimated_service_fee) estimated_net_amount,
-            reportInfo.estimated_service_fee
+            reportInfo.estimated_service_fee,
+            reportInfo.withdrawn_gross_amount
         from
             (select
                 batch.rro_account_number,
                 batch.payment_date,
                 coalesce(sum(u.gross_amount), 0) usages_gross_amount,
-                coalesce(fee.estimated_service_fee, 0.00000) estimated_service_fee
+                coalesce(fee.estimated_service_fee, 0.00000) estimated_service_fee,
+                coalesce(sum(u.withdrawn_gross_amount), 0) withdrawn_gross_amount
             from ${schema}.df_usage_batch batch
             left join ${schema}.df_rro_estimated_service_fee_percentage fee on fee.rro_account_number = batch.rro_account_number
-            left join ${schema}.df_usage u on u.df_usage_batch_uid = batch.df_usage_batch_uid
+            left join (
+                select
+                    df_usage_batch_uid,
+                    gross_amount,
+                    case when status_ind in
+                    <foreach collection="withdrawnStatuses" item="withdrawnStatus" separator="," open="(" close=")">
+                        #{withdrawnStatus}
+                    </foreach>
+                    then gross_amount else 0 end withdrawn_gross_amount
+                from ${schema}.df_usage
+            ) u on u.df_usage_batch_uid = batch.df_usage_batch_uid
             where <![CDATA[batch.payment_date <= #{paymentDate}]]>
             group by payment_date, batch.rro_account_number, fee.estimated_service_fee) as reportInfo
         left join ${schema}.df_rightsholder rh on rh.rh_account_number = reportInfo.rro_account_number
