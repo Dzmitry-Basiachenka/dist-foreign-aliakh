@@ -70,6 +70,13 @@ public final class ForeignSecurityUtils {
     }
 
     /**
+     * @return {@code true} if user has permission to create and delete additional funds.
+     */
+    public static boolean hasCreateDeleteFundPermission() {
+        return SecurityUtils.hasPermission("FDA_CREATE_DELETE_FUND");
+    }
+
+    /**
      * @return {@code true} if user has permission to assigning works classifications.
      */
     public static boolean hasAssignClassificationPermission() {

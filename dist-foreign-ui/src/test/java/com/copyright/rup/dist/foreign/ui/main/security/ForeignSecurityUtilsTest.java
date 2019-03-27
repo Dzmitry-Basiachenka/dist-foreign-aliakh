@@ -51,7 +51,7 @@ public final class ForeignSecurityUtilsTest {
         Object[] distributionManagerRole = {Sets.newHashSet(FDA_ACCESS_APPLICATION)};
         Object[] distributionSpecialistRole = {Sets.newHashSet(
             FDA_ACCESS_APPLICATION, "FDA_DELETE_USAGE", "FDA_LOAD_USAGE", "FDA_LOAD_FUND_POOL",
-            "FDA_LOAD_RESEARCHED_USAGE", "FDA_ASSIGN_CLASSIFICATION", "FDA_DELETE_SCENARIO",
+            "FDA_LOAD_RESEARCHED_USAGE", "FDA_CREATE_DELETE_FUND", "FDA_ASSIGN_CLASSIFICATION", "FDA_DELETE_SCENARIO",
             "FDA_EXCLUDE_FROM_SCENARIO", "FDA_SEND_FOR_WORK_RESEARCH")};
         Object[] roleWithoutPermissions = {Collections.emptySet()};
         return Arrays.asList(
@@ -85,6 +85,8 @@ public final class ForeignSecurityUtilsTest {
             ForeignSecurityUtils.hasLoadFundPoolPermission());
         assertEquals(permissions.contains("FDA_LOAD_RESEARCHED_USAGE"),
             ForeignSecurityUtils.hasLoadResearchedUsagePermission());
+        assertEquals(permissions.contains("FDA_CREATE_DELETE_FUND"),
+            ForeignSecurityUtils.hasCreateDeleteFundPermission());
         assertEquals(permissions.contains("FDA_ASSIGN_CLASSIFICATION"),
             ForeignSecurityUtils.hasLoadResearchedUsagePermission());
         assertEquals(permissions.contains("FDA_CREATE_EDIT_SCENARIO"),
