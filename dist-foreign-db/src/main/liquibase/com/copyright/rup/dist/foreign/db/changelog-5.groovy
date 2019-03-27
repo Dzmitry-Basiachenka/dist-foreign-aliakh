@@ -129,4 +129,21 @@ databaseChangeLog {
             // automatic rollback
         }
     }
+
+    changeSet(id: '2019-03-27-01', author: 'Stanislau Rudak <srudak@copyright.com>') {
+        comment('B-50004 FDA: Add Standard Number Type to the usage for classification: ' +
+                'Add standard_number_type column to df_usage and df_usage_archive tables')
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'standard_number_type', type: 'VARCHAR(50)', remarks: 'Standard Number Type')
+        }
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+            column(name: 'standard_number_type', type: 'VARCHAR(50)', remarks: 'Standard Number Type')
+        }
+
+        rollback {
+            // automatic rollback
+        }
+    }
 }
