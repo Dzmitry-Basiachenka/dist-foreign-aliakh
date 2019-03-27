@@ -977,7 +977,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2019-03-20-00', author: 'Pavel Liakh <pliakh@copyright.com>') {
-        comment('Inserting test data for testFindUsageIdsForClassificationUpdate')
+        comment('Inserting test data for testFindUsageIdsForClassificationUpdate and testGetCutoffAmountByBatchIdAndClassification')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '73027b25-f269-4bec-a8ea-b126431eedbe')

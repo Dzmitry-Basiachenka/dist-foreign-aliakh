@@ -78,6 +78,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     private static final String USAGE_ID_KEY = "usageId";
     private static final String STATUS_KEY = "status";
     private static final String RH_ACCOUNT_NUMBER_KEY = "rhAccountNumber";
+    private static final String BATCH_ID_KEY = "batchId";
     private static final int REPORT_BATCH_SIZE = 100000;
 
     @Override
@@ -208,7 +209,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
         parameters.put("statuses", Objects.requireNonNull(statuses));
         parameters.put("standardNumber", standardNumber);
-        parameters.put("batchId", batchId);
+        parameters.put(BATCH_ID_KEY, batchId);
         BigDecimal totalAmount =
             ObjectUtils.defaultIfNull(selectOne("IUsageMapper.getTotalAmountByStandardNumberAndBatchId", parameters),
                 BigDecimal.ZERO);
@@ -222,7 +223,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
         parameters.put("statuses", Objects.requireNonNull(statuses));
         parameters.put("title", title);
-        parameters.put("batchId", batchId);
+        parameters.put(BATCH_ID_KEY, batchId);
         BigDecimal totalAmount =
             ObjectUtils.defaultIfNull(selectOne("IUsageMapper.getTotalAmountByTitleAndBatchId", parameters),
                 BigDecimal.ZERO);
@@ -500,7 +501,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         Objects.requireNonNull(usageBatch);
         Objects.requireNonNull(usageBatch.getFundPool());
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(8);
-        params.put("batchId", Objects.requireNonNull(usageBatch.getId()));
+        params.put(BATCH_ID_KEY, Objects.requireNonNull(usageBatch.getId()));
         params.put("marketPeriodFrom", Objects.requireNonNull(usageBatch.getFundPool().getFundPoolPeriodFrom()));
         params.put("marketPeriodTo", Objects.requireNonNull(usageBatch.getFundPool().getFundPoolPeriodTo()));
         params.put("markets", Objects.requireNonNull(usageBatch.getFundPool().getMarkets()));
@@ -509,6 +510,19 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         params.put("updateUser", Objects.requireNonNull(userName));
         params.put("excludeClassification", FdaConstants.BELLETRISTIC_CLASSIFICATION);
         return selectList("IUsageMapper.insertNtsUsages", params);
+    }
+
+    @Override
+    public BigDecimal getCutoffAmountByBatchIdAndClassification(UsageBatch usageBatch, String classification) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
+        params.put("usageBatch", Objects.requireNonNull(usageBatch));
+        params.put("classification", Objects.requireNonNull(classification));
+        boolean stmClassification = FdaConstants.STM_CLASSIFICATION.equals(classification);
+        params.put("fundPoolMinAmount", Objects.requireNonNull(stmClassification
+            ? usageBatch.getFundPool().getStmMinimumAmount() : usageBatch.getFundPool().getNonStmMinimumAmount()));
+        params.put("fundPoolAmount", Objects.requireNonNull(stmClassification
+            ? usageBatch.getFundPool().getStmAmount() : usageBatch.getFundPool().getNonStmAmount()));
+        return selectOne("IUsageMapper.getCutoffAmountByBatchIdAndClassification", params);
     }
 
     private AuditFilter escapeSqlLikePattern(AuditFilter auditFilter) {
