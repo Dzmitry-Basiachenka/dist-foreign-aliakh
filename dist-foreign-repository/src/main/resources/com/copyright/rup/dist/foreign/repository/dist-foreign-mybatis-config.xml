@@ -42,6 +42,7 @@
         <typeAlias alias="FundPoolTypeHandler" type="com.copyright.rup.dist.foreign.repository.impl.converter.FundPoolTypeHandler"/>
         <typeAlias alias="UsageStatistic" type="com.copyright.rup.dist.foreign.domain.report.UsageStatistic"/>
         <typeAlias alias="WorkClassification" type="com.copyright.rup.dist.foreign.domain.WorkClassification"/>
+        <typeAlias alias="WithdrawnFundPool" type="com.copyright.rup.dist.foreign.domain.WithdrawnFundPool"/>
     </typeAliases>
 
     <typeHandlers>
@@ -64,5 +65,6 @@
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IScenarioUsageFilterMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IRightsholderDiscrepancyMapper.xml"/>
         <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IWorkClassificationMapper.xml"/>
+        <mapper resource="com/copyright/rup/dist/foreign/repository/mapper/IWithdrawnFundPoolMapper.xml"/>
     </mappers>
 </configuration>
