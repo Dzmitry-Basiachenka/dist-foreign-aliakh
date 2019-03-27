@@ -85,4 +85,48 @@ databaseChangeLog {
             sql("drop index ${dbAppsSchema}.ix_df_usage_archive_wr_wrk_inst")
         }
     }
+
+    changeSet(id: '2019-03-27-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("B-48760 FDA: Create NTS Pre-service fee additional fund pool from NTS withdrawn details: " +
+                "Implement Liqubase script to create table df_fund_pool")
+
+        createTable(tableName: 'df_fund_pool', schemaName: dbAppsSchema, tablespace: dbDataTablespace,
+                remarks: 'The table to store NTS withdrawn fund pool') {
+
+            column(name: 'df_fund_pool_uid', type: 'VARCHAR(255)', remarks: 'The identifier of fund pool') {
+                constraints(nullable: false)
+            }
+            column(name: 'name', type: 'VARCHAR(255)', remarks: 'The name of fund pool') {
+                constraints(nullable: false)
+                constraints(unique: true)
+            }
+            column(name: 'comment', type: 'VARCHAR(2000)', remarks: 'The comment of fund pool') {
+                constraints(nullable: true)
+            }
+            column(name: 'record_version', type: 'INTEGER', defaultValue: '1', remarks: 'The latest version of this record, used for optimistic locking') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM', remarks: 'The user name who created this record') {
+                constraints(nullable: false)
+            }
+            column(name: 'created_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()', remarks: 'The date and time this record was created') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_by_user', type: 'VARCHAR(320)', defaultValue: 'SYSTEM',
+                    remarks: 'The user name who updated this record; when a record is first created, this will be the same as the created_by_user') {
+                constraints(nullable: false)
+            }
+            column(name: 'updated_datetime', type: 'TIMESTAMPTZ', defaultValueDate: 'now()',
+                    remarks: 'The date and time this record was created; when a record is first created, this will be the same as the created_datetime') {
+                constraints(nullable: false)
+            }
+        }
+
+        addPrimaryKey(schemaName: dbAppsSchema, tableName: 'df_fund_pool', tablespace: dbIndexTablespace,
+                columnNames: 'df_fund_pool_uid', constraintName: 'df_fund_pool_pk')
+
+        rollback {
+            // automatic rollback
+        }
+    }
 }
