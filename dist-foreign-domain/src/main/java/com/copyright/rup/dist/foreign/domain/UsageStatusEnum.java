@@ -73,6 +73,11 @@ public enum UsageStatusEnum {
     NTS_WITHDRAWN,
 
     /**
+     * Status for withdrawn usages to be distributed.
+     */
+    TO_BE_DISTRIBUTED,
+
+    /**
      * Status for usages which were added to scenario.
      */
     LOCKED,

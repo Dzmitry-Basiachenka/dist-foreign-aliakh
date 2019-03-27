@@ -323,7 +323,12 @@ databaseChangeLog {
             column(name: 'updated_datetime', value: '2017-02-14 11:35:52.735531+03')
         }
 
-        // Data for Undistributed Liabilities Reconciliation Report
+        rollback ""
+    }
+
+    changeSet(id: '2019-03-27-00', author: 'Pavel Liakh <pliakh@copyright.com>') {
+        comment('Inserting test data for testWriteUndistributedLiabilitiesCsvReport')
+
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '53089c29-7df1-4d41-93d3-4ad222408818')
             column(name: 'rh_account_number', value: '7000581909')
@@ -588,7 +593,7 @@ databaseChangeLog {
             column(name: 'system_title', value: '100 ROAD MOVIES')
             column(name: 'rh_account_number', value: '1000009522')
             column(name: 'payee_account_number', value: '1000009522')
-            column(name: 'status_ind', value: 'ELIGIBLE')
+            column(name: 'status_ind', value: 'RH_FOUND')
             column(name: 'product_family', value: 'FAS2')
             column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '1008902112317622XX')
@@ -616,6 +621,36 @@ databaseChangeLog {
             column(name: 'market_period_to', value: '2017')
             column(name: 'reported_value', value: '30.86')
             column(name: 'gross_amount', value: '500.0000000007')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '3b7aed62-eb9f-4244-9248-2f9ba329e3be')
+            column(name: 'df_usage_batch_uid', value: 'e116e5e0-9080-4abf-9e67-86959f2cae52')
+            column(name: 'payee_account_number', value: '1000009522')
+            column(name: 'status_ind', value: 'NTS_WITHDRAWN')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '1008902112317622Xxxx')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
+            column(name: 'gross_amount', value: '155.0000000007')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'b92f4f46-38c1-4f6c-9f69-2c1dcd73d579')
+            column(name: 'df_usage_batch_uid', value: 'e116e5e0-9080-4abf-9e67-86959f2cae52')
+            column(name: 'payee_account_number', value: '1000009522')
+            column(name: 'status_ind', value: 'TO_BE_DISTRIBUTED')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '1008902112317622Xxxx')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '30.86')
+            column(name: 'gross_amount', value: '155.0000000007')
         }
 
         // Record in report that includes amounts for batch with fas and nts usages in eligible status
@@ -1113,6 +1148,12 @@ databaseChangeLog {
             column(name: 'distribution_date', value: '2017-03-15 11:41:52.735531+03')
             column(name: 'period_end_date', value: '2017-03-15 11:41:52.735531+03')
         }
+
+        rollback ""
+    }
+
+    changeSet(id: '2019-03-27-01', author: 'Pavel Liakh <pliakh@copyright.com>') {
+        comment('Inserting test data for testWriteBatchSummaryCsvReport')
 
         // Batch summary report
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
@@ -2960,7 +3001,12 @@ databaseChangeLog {
             column(name: 'service_fee', value: '0.10000')
         }
 
-        // Service Fee True-up Report
+        rollback ""
+    }
+
+    changeSet(id: '2019-03-27-02', author: 'Pavel Liakh <pliakh@copyright.com>') {
+        comment('Inserting test data for testWriteServiceFeeTrueUpCsvReport')
+
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '4cc22676-bb0b-4f06-be23-e245d474b01d')
             column(name: 'rh_account_number', value: '5000581901')
@@ -4362,6 +4408,7 @@ databaseChangeLog {
             column(name: "df_usage_batch_uid", value: "29e140ab-2a71-40a3-a55a-a68dcdb95a9b")
         }
 
+        rollback ""
     }
 
     changeSet(id: '2018-09-18-00', author: 'Pavel Liakh <pliakh@copyright.com>') {

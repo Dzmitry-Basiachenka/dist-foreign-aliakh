@@ -43,6 +43,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -441,10 +442,13 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
 
     @Override
     public void writeUndistributedLiabilitiesCsvReport(LocalDate paymentDate, OutputStream outputStream) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put("paymentDate", Objects.requireNonNull(paymentDate));
+        parameters.put("withdrawnStatuses",
+            Arrays.asList(UsageStatusEnum.NTS_WITHDRAWN, UsageStatusEnum.TO_BE_DISTRIBUTED));
         try (UndistributedLiabilitiesReportHandler handler =
                  new UndistributedLiabilitiesReportHandler(Objects.requireNonNull(outputStream))) {
-            getTemplate().select("IUsageMapper.findUndistributedLiabilitiesReportDtos",
-                Objects.requireNonNull(paymentDate), handler);
+            getTemplate().select("IUsageMapper.findUndistributedLiabilitiesReportDtos", parameters, handler);
         }
     }
 
