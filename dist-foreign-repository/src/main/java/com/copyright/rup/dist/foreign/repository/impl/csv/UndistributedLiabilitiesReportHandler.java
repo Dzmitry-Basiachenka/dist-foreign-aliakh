@@ -22,7 +22,8 @@ public class UndistributedLiabilitiesReportHandler extends BaseCsvReportHandler<
 
     private static final List<String> HEADERS =
         Arrays.asList("Source RRO Account #", "Source RRO Name", "Payment Date", "Gross Undistributed Amount in FDA",
-            "Estimated Service Fee Amount", "Net Estimated Payable Amount", "Estimated Service Fee %");
+            "Estimated Service Fee Amount", "Net Estimated Payable Amount", "Estimated Service Fee %",
+            "Gross Undistributed Withdrawn Amt in FDA");
 
     /**
      * Constructor.
@@ -43,6 +44,7 @@ public class UndistributedLiabilitiesReportHandler extends BaseCsvReportHandler<
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getEstimatedServiceFeeAmount()));
         beanProperties.add(roundAndGetBeanBigDecimal(bean.getEstimatedNetAmount()));
         beanProperties.add(getBeanServiceFeePercent(bean.getEstimatedServiceFee()));
+        beanProperties.add(roundAndGetBeanBigDecimal(bean.getWithdrawnGrossAmount()));
         return beanProperties;
     }
 
