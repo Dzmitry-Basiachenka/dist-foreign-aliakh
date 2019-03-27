@@ -116,6 +116,8 @@ public class WorkClassificationWindow extends Window {
         addColumn(WorkClassification::getSystemTitle, "table.column.system_title", "systemTitle", 285);
         addColumn(WorkClassification::getClassification, "table.column.classification", "classification", 110);
         addColumn(WorkClassification::getStandardNumber, "table.column.standard_number", "standardNumber", 140);
+        addColumn(
+            WorkClassification::getStandardNumberType, "table.column.standard_number_type", "standardNumberType", 155);
         addColumn(WorkClassification::getRhAccountNumber, "table.column.rh_account_number", "rhAccountNumber", 100);
         addColumn(WorkClassification::getRhName, "table.column.rh_account_name", "rhName", 200);
     }

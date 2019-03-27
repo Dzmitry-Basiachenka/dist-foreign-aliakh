@@ -167,8 +167,8 @@ public class AuditWidgetTest {
         List<Column> columns = grid.getColumns();
         assertEquals(Arrays.asList("Detail ID", "Detail Status", "Product Family", "Usage Batch Name",
             "Payment Date", "RH Account #", "RH Name", "Payee Account #", "Payee Name", "Wr Wrk Inst", "System Title",
-            "Title", "Standard Number", "Amt in USD", "Service Fee %", "Scenario Name", "Check #", "Check Date",
-            "Event ID", "Dist. Name", "Dist. Date", "Period Ending", "Comment"),
+            "Title", "Standard Number", "Standard Number Type", "Amt in USD", "Service Fee %", "Scenario Name",
+            "Check #", "Check Date", "Event ID", "Dist. Name", "Dist. Date", "Period Ending", "Comment"),
             columns.stream().map(Column::getCaption).collect(Collectors.toList()));
     }
 

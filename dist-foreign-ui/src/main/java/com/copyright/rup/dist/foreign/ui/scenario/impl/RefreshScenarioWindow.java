@@ -118,6 +118,8 @@ public class RefreshScenarioWindow extends Window {
         addColumn(UsageDto::getWorkTitle, "table.column.work_title", "workTitle", true, 300);
         addColumn(UsageDto::getArticle, "table.column.article", "article", true, 135);
         addColumn(UsageDto::getStandardNumber, "table.column.standard_number", "standardNumber", true, 125);
+        addColumn(
+            UsageDto::getStandardNumberType, "table.column.standard_number_type", "standardNumberType", true, 155);
         addColumn(UsageDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst");
         addColumn(UsageDto::getSystemTitle, "table.column.system_title", "systemTitle", true, 300);
         addColumn(UsageDto::getRhAccountNumber, "table.column.rh_account_number", "rhAccountNumber");

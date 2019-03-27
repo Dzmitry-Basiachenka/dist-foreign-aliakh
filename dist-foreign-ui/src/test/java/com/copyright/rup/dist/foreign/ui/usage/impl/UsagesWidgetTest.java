@@ -342,9 +342,9 @@ public class UsagesWidgetTest {
         List<Column> columns = grid.getColumns();
         assertEquals(Arrays.asList("Detail ID", "Detail Status", "Product Family", "Usage Batch Name",
             "Fiscal Year", "RRO Account #", "RRO Name", "Payment Date", "Title", "Article", "Standard Number",
-            "Wr Wrk Inst", "System Title", "RH Account #", "RH Name", "Publisher", "Pub Date", "Number of Copies",
-            "Reported value", "Amt in USD", "Gross Amt in USD", "Market", "Market Period From", "Market Period To",
-            "Author", "Comment"),
+            "Standard Number Type", "Wr Wrk Inst", "System Title", "RH Account #", "RH Name", "Publisher", "Pub Date",
+            "Number of Copies", "Reported value", "Amt in USD", "Gross Amt in USD", "Market", "Market Period From",
+            "Market Period To", "Author", "Comment"),
             columns.stream().map(Column::getCaption).collect(Collectors.toList()));
         verifySize(grid);
     }

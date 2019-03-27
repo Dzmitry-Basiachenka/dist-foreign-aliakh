@@ -316,6 +316,9 @@
             <when test="sort.property == 'standardNumber'">
                 u.standard_number <include refid="IUsageMapper.direction"/>
             </when>
+            <when test="sort.property == 'standardNumberType'">
+                u.standard_number_type <include refid="IUsageMapper.direction"/>
+            </when>
             <when test="sort.property == 'wrWrkInst'">
                 u.wr_wrk_inst <include refid="IUsageMapper.direction"/>
             </when>
@@ -960,6 +963,7 @@
                     work_title,
                     system_title,
                     standard_number,
+                    standard_number_type,
                     u.gross_amount,
                     service_fee,
                     u.updated_datetime,
@@ -1028,6 +1032,9 @@
                     <when test="sort.property == 'standardNumber'">
                         standard_number
                     </when>
+                    <when test="sort.property == 'standardNumberType'">
+                        standard_number_type
+                    </when>
                     <when test="sort.property == 'grossAmount'">
                         gross_amount
                     </when>
@@ -1084,6 +1091,7 @@
             work_title,
             system_title,
             standard_number,
+            standard_number_type,
             u.gross_amount,
             service_fee,
             u.updated_datetime,
