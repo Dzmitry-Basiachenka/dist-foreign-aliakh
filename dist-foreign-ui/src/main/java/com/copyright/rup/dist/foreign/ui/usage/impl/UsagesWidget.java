@@ -245,7 +245,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         menuItem.addItem(ForeignUi.getMessage("menu.item.create"), null,
             (item) -> {/*TODO {aliakh} create fund pool*/});
         menuItem.addItem(ForeignUi.getMessage("menu.item.delete"), null,
-            (item) -> {/*TODO {isuvorau} delete fund pool*/});
+            (item) -> Windows.showModalWindow(new DeleteAdditionalFundsWindow()));
         VaadinUtils.addComponentStyle(withdrawnFundMenuBar, "withdrawn-fund-menu-bar");
     }
 
