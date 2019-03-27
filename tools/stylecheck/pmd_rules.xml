@@ -107,7 +107,7 @@
     <rule ref="category/java/design.xml/TooManyFields">
         <properties>
             <property name="maxfields">
-                <value>37</value>
+                <value>38</value>
             </property>
         </properties>
     </rule>
