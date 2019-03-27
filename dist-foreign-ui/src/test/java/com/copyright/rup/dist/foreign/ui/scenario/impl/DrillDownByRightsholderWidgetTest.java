@@ -84,10 +84,10 @@ public class DrillDownByRightsholderWidgetTest {
             assertTrue(column.isResizable());
         });
         assertArrayEquals(new String[]{"Detail ID", "Usage Batch Name", "Product Family", "Fiscal Year",
-                "RRO Account #", "RRO Name", "Payment Date", "Title", "Article", "Standard Number", "Wr Wrk Inst",
-                "System Title", "Publisher", "Pub Date", "Number of Copies", "Reported value", "Gross Amt in USD",
-                "Service Fee Amount", "Net Amt in USD", "Service Fee %", "Market", "Market Period From",
-                "Market Period To", "Author", "Comment"},
+                "RRO Account #", "RRO Name", "Payment Date", "Title", "Article", "Standard Number",
+                "Standard Number Type", "Wr Wrk Inst", "System Title", "Publisher", "Pub Date", "Number of Copies",
+                "Reported value", "Gross Amt in USD", "Service Fee Amount", "Net Amt in USD", "Service Fee %", "Market",
+                "Market Period From", "Market Period To", "Author", "Comment"},
             grid.getColumns().stream().map(Column::getCaption).toArray());
     }
 

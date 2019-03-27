@@ -66,6 +66,9 @@
                     <when test="sort.property == 'standardNumber'">
                         standard_number <include refid="IUsageMapper.direction"/>
                     </when>
+                    <when test="sort.property == 'standardNumberType'">
+                        standard_number_type <include refid="IUsageMapper.direction"/>
+                    </when>
                     <when test="sort.property == 'wrWrkInst'">
                         wr_wrk_inst <include refid="IUsageMapper.direction"/>
                     </when>
@@ -103,6 +106,7 @@
                 u.wr_wrk_inst,
                 u.system_title,
                 u.standard_number,
+                u.standard_number_type,
                 u.rh_account_number,
                 u.updated_datetime,
                 rh.name rh_name
@@ -142,6 +146,7 @@
                 u.wr_wrk_inst,
                 u.system_title,
                 u.standard_number,
+                u.standard_number_type,
                 u.rh_account_number
             from ${schema}.df_usage_archive u
             where u.wr_wrk_inst = wc.wr_wrk_inst

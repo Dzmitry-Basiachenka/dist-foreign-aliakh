@@ -103,6 +103,8 @@ public class DrillDownByRightsholderWidget extends Window implements IDrillDownB
         addColumn(UsageDto::getWorkTitle, "table.column.work_title", "workTitle");
         addColumn(UsageDto::getArticle, "table.column.article", "article");
         addColumn(UsageDto::getStandardNumber, "table.column.standard_number", "standardNumber", true, 140);
+        addColumn(
+            UsageDto::getStandardNumberType, "table.column.standard_number_type", "standardNumberType", true, 155);
         addColumn(UsageDto::getWrWrkInst, "table.column.wr_wrk_inst", "wrWrkInst", true, 110);
         addColumn(UsageDto::getSystemTitle, "table.column.system_title", "systemTitle", true, 300);
         addColumn(UsageDto::getPublisher, "table.column.publisher", "publisher", true, 135);
