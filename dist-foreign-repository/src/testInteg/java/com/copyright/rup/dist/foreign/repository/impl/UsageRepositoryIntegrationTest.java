@@ -121,10 +121,11 @@ public class UsageRepositoryIntegrationTest {
     private static final String POST_DISTRIBUTION_USAGE_ID = "cce295c6-23cf-47b4-b00c-2e0e50cce169";
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
     private static final String USER_NAME = "user@copyright.com";
-    private static final BigDecimal SERVICE_FEE = new BigDecimal("0.32000");
     private static final String BATCH_ID = "e0af666b-cbb7-4054-9906-12daa1fbd76e";
     private static final String PERCENT = "%";
     private static final String UNDERSCORE = "_";
+    private static final BigDecimal SERVICE_FEE = new BigDecimal("0.32000");
+    private static final BigDecimal ZERO_AMOUNT = new BigDecimal("0.00");
 
     @Autowired
     private UsageRepository usageRepository;
@@ -625,7 +626,7 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(new BigDecimal("16.40"),
             usageRepository.getTotalAmountByStandardNumberAndBatchId("5475802112214578XX",
                 "cb597f4e-f636-447f-8710-0436d8994d10"));
-        assertEquals(new BigDecimal("0.00"),
+        assertEquals(ZERO_AMOUNT,
             usageRepository.getTotalAmountByStandardNumberAndBatchId("100 ROAD 5475802112214578XX", "invalid id"));
     }
 
@@ -634,11 +635,9 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(new BigDecimal("2000.00"),
             usageRepository.getTotalAmountByTitleAndBatchId("Wissenschaft & Forschung Japan",
                 "9776da8d-098d-4f39-99fd-85405c339e9b"));
-        assertEquals(new BigDecimal("0.00"),
-            usageRepository.getTotalAmountByTitleAndBatchId(WORK_TITLE_2,
-                "cb597f4e-f636-447f-8710-0436d8994d10"));
-        assertEquals(new BigDecimal("0.00"),
-            usageRepository.getTotalAmountByTitleAndBatchId(WORK_TITLE_2, "invalid id"));
+        assertEquals(ZERO_AMOUNT, usageRepository.getTotalAmountByTitleAndBatchId(WORK_TITLE_2,
+            "cb597f4e-f636-447f-8710-0436d8994d10"));
+        assertEquals(ZERO_AMOUNT, usageRepository.getTotalAmountByTitleAndBatchId(WORK_TITLE_2, "invalid id"));
     }
 
     @Test
@@ -1023,6 +1022,24 @@ public class UsageRepositoryIntegrationTest {
             insertedUsages.get(0));
         verifyInsertedFundPoolUsage("Doc Del", 2013, new BigDecimal("1176.92"), new BigDecimal("1176.9160000000"),
             insertedUsages.get(1));
+    }
+
+    @Test
+    public void testGetCutoffAmountByBatchIdAndClassification() {
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatch.setId("73027b25-f269-4bec-a8ea-b126431eedbe");
+        FundPool fundPool = new FundPool();
+        fundPool.setMarkets(Sets.newHashSet("Bus", "Doc Del"));
+        fundPool.setFundPoolPeriodFrom(2013);
+        fundPool.setFundPoolPeriodTo(2017);
+        fundPool.setStmAmount(new BigDecimal("100.00"));
+        fundPool.setStmMinimumAmount(new BigDecimal("50.00"));
+        fundPool.setNonStmAmount(new BigDecimal("100.00"));
+        fundPool.setNonStmMinimumAmount(new BigDecimal("7.00"));
+        usageBatch.setFundPool(fundPool);
+        assertEquals(new BigDecimal("2450.00"),
+            usageRepository.getCutoffAmountByBatchIdAndClassification(usageBatch, "NON-STM"));
+        assertEquals(ZERO_AMOUNT, usageRepository.getCutoffAmountByBatchIdAndClassification(usageBatch, "STM"));
     }
 
     private void verifyFilterForTwoBatches(AuditFilter filter) {

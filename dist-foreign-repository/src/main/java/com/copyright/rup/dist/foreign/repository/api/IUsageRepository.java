@@ -449,4 +449,13 @@ public interface IUsageRepository {
      * @return list of inserted usage uids
      */
     List<String> insertNtsUsages(UsageBatch usageBatch, String userName);
+
+    /**
+     * Gets Cutoff amount based on usages related to specified batch and classification.
+     *
+     * @param usageBatch batch
+     * @param classification classification name
+     * @return calculated Cutoff amount
+     */
+    BigDecimal getCutoffAmountByBatchIdAndClassification(UsageBatch usageBatch, String classification);
 }

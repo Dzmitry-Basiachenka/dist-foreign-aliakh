@@ -1434,4 +1434,23 @@
         <include refid="IUsageArchiveMapper.ntsBatchWhereClause"/>
         returning df_usage_uid
     </select>
+
+    <select id="getCutoffAmountByBatchIdAndClassification" parameterType="map" resultType="BigDecimal">
+        with grand_total_divisor_subquery as(
+            select
+                round(sum(u.gross_amount *
+                    ((#{usageBatch.fundPool.fundPoolPeriodTo} - #{usageBatch.fundPool.fundPoolPeriodFrom} +1)
+                        /(u.market_period_to - u.market_period_from +1))), 2) grand_total_divisor
+            from ${schema}.df_usage u
+            join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
+            join ${schema}.df_work_classification wc on u.wr_wrk_inst = wc.wr_wrk_inst
+            where u.df_usage_batch_uid = #{usageBatch.id}
+                and wc.classification = #{classification}
+        )
+        select
+            case when grand_total_divisor is not null
+            then round(#{fundPoolMinAmount} * grand_total_divisor / #{fundPoolAmount}, 2)
+            else 0.00 end cutoff_amount
+        from grand_total_divisor_subquery
+    </select>
 </mapper>
