@@ -62,7 +62,8 @@ public class DomainVerifierTest {
             {ServiceFeeTrueUpReportDto.class},
             {BatchStatistic.class},
             {Work.class},
-            {WorkClassification.class}
+            {WorkClassification.class},
+            {WithdrawnFundPool.class},
         };
         return Arrays.asList(testData);
     }
