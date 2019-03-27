@@ -1,3 +1,17 @@
+5.1.4
+-
+* B-46039 FDA: Exclude Belletristic titles from NTS Batch: FDA: change WorkClassificationService debug level from info to debug
+* B-46739 FDA: Remove NTS titles that do not meet the minimum from the fund pool batch: implement repository method for calculating STM/Non-STM Cutoff Amounts
+* B-48760 FDA: Create NTS Pre-service fee additional fund pool from NTS withdrawn details: Implement domain object
+* B-48760 FDA: Create NTS Pre-service fee additional fund pool from NTS withdrawn details: Implement repository
+* B-48760 FDA: Create NTS Pre-service fee additional fund pool from NTS withdrawn details: implement Liqubase script to create table df_fund_pool
+* B-48760 FDA: Create NTS Pre-service fee additional fund pool from NTS withdrawn details: increase size of column status_ind of tables df_usage and df_usage_archive to 32 characters
+* B-50004 FDA: Add Standard Number Type to the usage for classification: Add standard number type field to Usage, UsageDto and WorkClassification entities
+* B-50004 FDA: Add Standard Number Type to the usage for classification: Add standard_number_type column to df_usage and df_usage_archive tables
+* B-50004 FDA: Add Standard Number Type to the usage for classification: add Standard Number Type column to UI grids and adjust queries to sort by this column
+* B-50061 FDA: Update Undistributed Liabilities reconciliation report to display NTS withdrawn amounts separately: adjust Undistributed Report service logic to include Gross Undistributed Withdrawn Amt in FDA column with 0 value
+* B-50061 FDA: Update Undistributed Liabilities reconciliation report to display NTS withdrawn amounts separately: adjust Undistributed report database query to calculate nts withdrawn gross amount
+
 5.1.3
 -
 * B-49462 Tech Debt: FDA: remove ActiveMQ dependencies from the application
