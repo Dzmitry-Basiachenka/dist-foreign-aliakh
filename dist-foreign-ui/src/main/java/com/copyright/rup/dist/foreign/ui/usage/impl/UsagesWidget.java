@@ -26,6 +26,8 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
+import com.vaadin.ui.MenuBar;
+import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.VerticalLayout;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -56,6 +58,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
     private Button sendForResearchButton;
     private Button addToScenarioButton;
     private Button assignClassificationButton;
+    private MenuBar withdrawnFundMenuBar;
 
     @Override
     public void refresh() {
@@ -89,6 +92,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         mediator.setAddToScenarioButton(addToScenarioButton);
         mediator.setSendForResearchButton(sendForResearchButton);
         mediator.setAssignClassificationButton(assignClassificationButton);
+        mediator.setWithdrawnFundMenuBar(withdrawnFundMenuBar);
         return mediator;
     }
 
@@ -222,14 +226,27 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         assignClassificationButton = Buttons.createButton(ForeignUi.getMessage("button.assign_classification"));
         assignClassificationButton.addClickListener(
             event -> new NtsUsageBatchSelectorWidget(controller).showFilterWindow());
+        initMenuBar();
         VaadinUtils.setButtonsAutoDisabled(loadUsageBatchButton, loadFundPoolButton, assignClassificationButton,
             loadResearchedUsagesButton, addToScenarioButton, deleteButton);
         HorizontalLayout layout =
-            new HorizontalLayout(loadUsageBatchButton, loadFundPoolButton, assignClassificationButton,
-                sendForResearchButton, loadResearchedUsagesButton, addToScenarioButton, exportButton, deleteButton);
+            new HorizontalLayout(loadUsageBatchButton, loadFundPoolButton, withdrawnFundMenuBar,
+                assignClassificationButton, sendForResearchButton, loadResearchedUsagesButton, addToScenarioButton,
+                exportButton, deleteButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "usages-buttons");
         return layout;
+    }
+
+    private void initMenuBar() {
+        withdrawnFundMenuBar = new MenuBar();
+        MenuItem menuItem =
+            withdrawnFundMenuBar.addItem(ForeignUi.getMessage("menu.caption.additional_funds"), null, null);
+        menuItem.addItem(ForeignUi.getMessage("menu.item.create"), null,
+            (item) -> {/*TODO {aliakh} create fund pool*/});
+        menuItem.addItem(ForeignUi.getMessage("menu.item.delete"), null,
+            (item) -> {/*TODO {isuvorau} delete fund pool*/});
+        VaadinUtils.addComponentStyle(withdrawnFundMenuBar, "withdrawn-fund-menu-bar");
     }
 
     private void onAddToScenarioClicked() {

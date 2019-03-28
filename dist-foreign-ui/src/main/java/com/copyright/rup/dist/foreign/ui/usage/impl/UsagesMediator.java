@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesMediator;
 
 import com.vaadin.ui.Button;
+import com.vaadin.ui.MenuBar;
 
 /**
  * Mediator for the usages widget.
@@ -24,6 +25,7 @@ class UsagesMediator implements IUsagesMediator {
     private Button addToScenarioButton;
     private Button sendForResearchButton;
     private Button assignClassificationButton;
+    private MenuBar withdrawnFundMenuBar;
 
     @Override
     public void applyPermissions() {
@@ -34,6 +36,7 @@ class UsagesMediator implements IUsagesMediator {
         addToScenarioButton.setVisible(ForeignSecurityUtils.hasCreateEditScenarioPermission());
         sendForResearchButton.setVisible(ForeignSecurityUtils.hasSendForWorkResearchPermission());
         assignClassificationButton.setVisible(ForeignSecurityUtils.hasAssignClassificationPermission());
+        withdrawnFundMenuBar.setVisible(ForeignSecurityUtils.hasCreateDeleteFundPermission());
     }
 
     @Override
@@ -48,6 +51,7 @@ class UsagesMediator implements IUsagesMediator {
             && isFasFas2ProductFamily);
         assignClassificationButton.setVisible(ForeignSecurityUtils.hasAssignClassificationPermission()
             && isNtsProductFamily);
+        withdrawnFundMenuBar.setVisible(ForeignSecurityUtils.hasCreateDeleteFundPermission() && isNtsProductFamily);
         deleteUsageButton.setVisible(ForeignSecurityUtils.hasDeleteUsagePermission());
         addToScenarioButton.setVisible(ForeignSecurityUtils.hasCreateEditScenarioPermission());
     }
@@ -78,5 +82,9 @@ class UsagesMediator implements IUsagesMediator {
 
     void setAssignClassificationButton(Button assignClassificationButton) {
         this.assignClassificationButton = assignClassificationButton;
+    }
+
+    void setWithdrawnFundMenuBar(MenuBar withdrawnFundMenuBar) {
+        this.withdrawnFundMenuBar = withdrawnFundMenuBar;
     }
 }

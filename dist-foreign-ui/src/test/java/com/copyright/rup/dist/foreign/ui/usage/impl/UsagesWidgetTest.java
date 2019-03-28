@@ -31,6 +31,8 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.MenuBar;
+import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.VerticalLayout;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -140,7 +142,7 @@ public class UsagesWidgetTest {
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button loadResearchedUsagesButton =
             (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
-                .getComponent(0)).getComponent(4);
+                .getComponent(0)).getComponent(5);
         assertTrue(loadResearchedUsagesButton.isDisableOnClick());
         Windows.showModalWindow(anyObject(ResearchedUsagesUploadWindow.class));
         expectLastCall().once();
@@ -160,7 +162,7 @@ public class UsagesWidgetTest {
         Whitebox.setInternalState(usagesWidget, grid);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
-            .getComponent(0)).getComponent(5);
+            .getComponent(0)).getComponent(6);
         assertTrue(addToScenarioButton.isDisableOnClick());
         Windows.showNotificationWindow("Scenario cannot be created. There are no usages to include into scenario");
         expectLastCall().once();
@@ -181,7 +183,7 @@ public class UsagesWidgetTest {
         Whitebox.setInternalState(usagesWidget, grid);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
-            .getComponent(0)).getComponent(5);
+            .getComponent(0)).getComponent(6);
         assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.getSize()).andReturn(1).once();
         expect(controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)).andReturn(false).once();
@@ -202,7 +204,7 @@ public class UsagesWidgetTest {
         Whitebox.setInternalState(usagesWidget, grid);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
-            .getComponent(0)).getComponent(5);
+            .getComponent(0)).getComponent(6);
         assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.getSize()).andReturn(1).once();
         expect(controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
@@ -225,7 +227,7 @@ public class UsagesWidgetTest {
         Whitebox.setInternalState(usagesWidget, grid);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
-            .getComponent(0)).getComponent(5);
+            .getComponent(0)).getComponent(6);
         assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.getSize()).andReturn(1).once();
         expect(controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
@@ -249,7 +251,7 @@ public class UsagesWidgetTest {
         Whitebox.setInternalState(usagesWidget, grid);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button sendForResearchButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
-            .getComponent(0)).getComponent(3);
+            .getComponent(0)).getComponent(4);
         expect(controller.isValidUsagesState(UsageStatusEnum.WORK_NOT_FOUND)).andReturn(false).once();
         Windows.showNotificationWindow("Only usages in WORK_NOT_FOUND status can be sent for research");
         expectLastCall().once();
@@ -266,7 +268,7 @@ public class UsagesWidgetTest {
         mockStatic(Windows.class);
         ClickEvent clickEvent = createMock(ClickEvent.class);
         Button deleteButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
-            .getComponent(0)).getComponent(7);
+            .getComponent(0)).getComponent(8);
         assertTrue(deleteButton.isDisableOnClick());
         expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
         expect(controller.getUsageBatches(FAS_PRODUCT_FAMILY)).andReturn(Collections.emptyList()).once();
@@ -314,6 +316,8 @@ public class UsagesWidgetTest {
         expectLastCall().once();
         mediator.setAssignClassificationButton(anyObject(Button.class));
         expectLastCall().once();
+        mediator.setWithdrawnFundMenuBar(anyObject(MenuBar.class));
+        expectLastCall().once();
         replay(UsagesMediator.class, mediator, controller);
         assertNotNull(usagesWidget.initMediator());
         verify(UsagesMediator.class, mediator, controller);
@@ -322,20 +326,34 @@ public class UsagesWidgetTest {
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(true), layout.getMargin());
-        assertEquals(8, layout.getComponentCount());
+        assertEquals(9, layout.getComponentCount());
         assertEquals("Load Usage Batch", layout.getComponent(0).getCaption());
         assertEquals("Load Fund Pool", layout.getComponent(1).getCaption());
-        assertEquals("Assign Classification", layout.getComponent(2).getCaption());
-        assertEquals("Send for Research", layout.getComponent(3).getCaption());
-        assertEquals("Load Researched Details", layout.getComponent(4).getCaption());
-        assertEquals("Add To Scenario", layout.getComponent(5).getCaption());
-        Component component = layout.getComponent(6);
+        verifyMenuBar(layout.getComponent(2));
+        assertEquals("Assign Classification", layout.getComponent(3).getCaption());
+        assertEquals("Send for Research", layout.getComponent(4).getCaption());
+        assertEquals("Load Researched Details", layout.getComponent(5).getCaption());
+        assertEquals("Add To Scenario", layout.getComponent(6).getCaption());
+        Component component = layout.getComponent(7);
         assertEquals("Export", component.getCaption());
         Collection<Extension> extensions = component.getExtensions();
         assertTrue(CollectionUtils.isNotEmpty(extensions));
         assertEquals(1, extensions.size());
         assertTrue(extensions.iterator().next() instanceof OnDemandFileDownloader);
-        assertEquals("Delete Usage Batch", layout.getComponent(7).getCaption());
+        assertEquals("Delete Usage Batch", layout.getComponent(8).getCaption());
+    }
+
+    private void verifyMenuBar(Component component) {
+        assertTrue(component instanceof MenuBar);
+        MenuBar menuBar = (MenuBar) component;
+        List<MenuItem> parentItems = menuBar.getItems();
+        assertEquals(1, parentItems.size());
+        MenuItem item = parentItems.get(0);
+        assertEquals("Additional Funds", item.getText());
+        List<MenuItem> childItems = item.getChildren();
+        assertEquals(2, childItems.size());
+        assertEquals("Create", childItems.get(0).getText());
+        assertEquals("Delete", childItems.get(1).getText());
     }
 
     private void verifyGrid(Grid grid) {

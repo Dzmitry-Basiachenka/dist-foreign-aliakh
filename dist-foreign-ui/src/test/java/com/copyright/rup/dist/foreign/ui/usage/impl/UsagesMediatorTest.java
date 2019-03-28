@@ -11,6 +11,7 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.vaadin.security.SecurityUtils;
 
 import com.vaadin.ui.Button;
+import com.vaadin.ui.MenuBar;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -40,6 +41,7 @@ public class UsagesMediatorTest {
     private Button addToScenarioButton;
     private Button sendForResearchButton;
     private Button assignClassificationButton;
+    private MenuBar withdrawnFundMenuBar;
     private UsagesMediator mediator;
 
     @Before
@@ -51,6 +53,7 @@ public class UsagesMediatorTest {
         addToScenarioButton = new Button();
         sendForResearchButton = new Button();
         assignClassificationButton = new Button();
+        withdrawnFundMenuBar = new MenuBar();
         mediator = new UsagesMediator();
         mediator.setLoadUsageBatchButton(loadUsageBatchButton);
         mediator.setLoadFundPoolButton(loadFundPoolButton);
@@ -59,6 +62,7 @@ public class UsagesMediatorTest {
         mediator.setAddToScenarioButton(addToScenarioButton);
         mediator.setSendForResearchButton(sendForResearchButton);
         mediator.setAssignClassificationButton(assignClassificationButton);
+        mediator.setWithdrawnFundMenuBar(withdrawnFundMenuBar);
     }
 
     @Test
@@ -73,6 +77,7 @@ public class UsagesMediatorTest {
         assertFalse(addToScenarioButton.isVisible());
         assertFalse(sendForResearchButton.isVisible());
         assertFalse(assignClassificationButton.isVisible());
+        assertFalse(withdrawnFundMenuBar.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -88,6 +93,7 @@ public class UsagesMediatorTest {
         assertFalse(addToScenarioButton.isVisible());
         assertFalse(sendForResearchButton.isVisible());
         assertFalse(assignClassificationButton.isVisible());
+        assertFalse(withdrawnFundMenuBar.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -103,6 +109,7 @@ public class UsagesMediatorTest {
         assertTrue(addToScenarioButton.isVisible());
         assertTrue(sendForResearchButton.isVisible());
         assertTrue(assignClassificationButton.isVisible());
+        assertTrue(withdrawnFundMenuBar.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -117,6 +124,7 @@ public class UsagesMediatorTest {
         assertFalse(loadResearchedUsagesButton.isVisible());
         assertFalse(addToScenarioButton.isVisible());
         assertFalse(sendForResearchButton.isVisible());
+        assertFalse(withdrawnFundMenuBar.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -132,6 +140,7 @@ public class UsagesMediatorTest {
         assertTrue(addToScenarioButton.isVisible());
         assertTrue(sendForResearchButton.isVisible());
         assertFalse(assignClassificationButton.isVisible());
+        assertFalse(withdrawnFundMenuBar.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -146,6 +155,7 @@ public class UsagesMediatorTest {
         assertFalse(loadResearchedUsagesButton.isVisible());
         assertFalse(addToScenarioButton.isVisible());
         assertFalse(sendForResearchButton.isVisible());
+        assertFalse(withdrawnFundMenuBar.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -160,6 +170,7 @@ public class UsagesMediatorTest {
         assertFalse(loadResearchedUsagesButton.isVisible());
         assertFalse(addToScenarioButton.isVisible());
         assertFalse(sendForResearchButton.isVisible());
+        assertFalse(withdrawnFundMenuBar.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -175,6 +186,7 @@ public class UsagesMediatorTest {
         assertTrue(addToScenarioButton.isVisible());
         assertFalse(sendForResearchButton.isVisible());
         assertTrue(assignClassificationButton.isVisible());
+        assertTrue(withdrawnFundMenuBar.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -189,6 +201,7 @@ public class UsagesMediatorTest {
         assertFalse(loadResearchedUsagesButton.isVisible());
         assertFalse(addToScenarioButton.isVisible());
         assertFalse(sendForResearchButton.isVisible());
+        assertFalse(withdrawnFundMenuBar.isVisible());
         verify(SecurityUtils.class);
     }
 
@@ -215,5 +228,6 @@ public class UsagesMediatorTest {
         expect(SecurityUtils.hasPermission("FDA_CREATE_EDIT_SCENARIO")).andReturn(true).anyTimes();
         expect(SecurityUtils.hasPermission("FDA_SEND_FOR_WORK_RESEARCH")).andReturn(true).anyTimes();
         expect(SecurityUtils.hasPermission("FDA_ASSIGN_CLASSIFICATION")).andReturn(true).anyTimes();
+        expect(SecurityUtils.hasPermission("FDA_CREATE_DELETE_FUND")).andReturn(true).anyTimes();
     }
 }
