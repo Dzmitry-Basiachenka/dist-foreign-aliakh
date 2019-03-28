@@ -7,6 +7,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.math.BigDecimal;
+
 /**
  * Represents NTS withdrawn fund pool.
  * <p/>
@@ -20,6 +22,7 @@ public class WithdrawnFundPool extends StoredEntity<String> {
 
     private String name;
     private String comment;
+    private BigDecimal amount;
 
     public String getName() {
         return name;
@@ -37,6 +40,14 @@ public class WithdrawnFundPool extends StoredEntity<String> {
         this.comment = comment;
     }
 
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -49,6 +60,7 @@ public class WithdrawnFundPool extends StoredEntity<String> {
         return new EqualsBuilder()
             .appendSuper(super.equals(obj))
             .append(name, that.name)
+            .append(amount, that.amount)
             .append(comment, that.comment)
             .isEquals();
     }
@@ -58,6 +70,7 @@ public class WithdrawnFundPool extends StoredEntity<String> {
         return new HashCodeBuilder()
             .appendSuper(super.hashCode())
             .append(name)
+            .append(amount)
             .append(comment)
             .toHashCode();
     }
@@ -67,6 +80,7 @@ public class WithdrawnFundPool extends StoredEntity<String> {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
             .appendSuper(super.toString())
             .append("name", name)
+            .append("amount", amount)
             .append("comment", comment)
             .toString();
     }
