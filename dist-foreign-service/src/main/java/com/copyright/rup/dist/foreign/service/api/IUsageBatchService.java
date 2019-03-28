@@ -40,6 +40,13 @@ public interface IUsageBatchService {
     List<UsageBatch> getUsageBatches(String productFamily);
 
     /**
+     * Finds list of {@link UsageBatch}es suitable for including in NTS additional funds.
+     *
+     * @return list of found {@link UsageBatch}es
+     */
+    List<UsageBatch> getWithdrawnUsageBatches();
+
+    /**
      * Checks whether Usage Batch with provided name exists in database or not.
      *
      * @param name usage batch name

@@ -83,6 +83,11 @@ public class UsageBatchService implements IUsageBatchService {
     }
 
     @Override
+    public List<UsageBatch> getWithdrawnUsageBatches() {
+        return usageBatchRepository.findWithdrawnUsageBatches();
+    }
+
+    @Override
     public boolean usageBatchExists(String name) {
         return 0 < usageBatchRepository.findCountByName(name);
     }
