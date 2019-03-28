@@ -123,6 +123,14 @@ public class UsageBatchServiceTest {
     }
 
     @Test
+    public void testGetWithdrawnUsageBatches() {
+        expect(usageBatchRepository.findWithdrawnUsageBatches()).andReturn(Collections.emptyList()).once();
+        replay(usageBatchRepository);
+        usageBatchService.getWithdrawnUsageBatches();
+        verify(usageBatchRepository);
+    }
+
+    @Test
     public void testUsageBatchExists() {
         expect(usageBatchRepository.findCountByName(BATCH_NAME)).andReturn(1).once();
         replay(usageBatchRepository);

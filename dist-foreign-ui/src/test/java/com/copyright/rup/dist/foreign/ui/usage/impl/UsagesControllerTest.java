@@ -249,6 +249,14 @@ public class UsagesControllerTest {
     }
 
     @Test
+    public void testGetWithdrawnUsageBatches() {
+        expect(usageBatchService.getWithdrawnUsageBatches()).andReturn(Collections.emptyList()).once();
+        replay(usageBatchService);
+        controller.getWithdrawnUsageBatches();
+        verify(usageBatchService);
+    }
+
+    @Test
     public void testGetMarkets() {
         List<String> markets = Collections.singletonList("Bus");
         expect(usageService.getMarkets()).andReturn(markets).once();

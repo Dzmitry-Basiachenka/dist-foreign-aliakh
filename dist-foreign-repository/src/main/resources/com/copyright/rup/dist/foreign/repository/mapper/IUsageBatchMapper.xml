@@ -81,6 +81,26 @@
         order by ub.updated_datetime desc
     </select>
 
+    <select id="findWithdrawnUsageBatches" resultMap="usageBatchResultMap" parameterType="map">
+        select
+            ub.df_usage_batch_uid,
+            ub.name,
+            ub.gross_amount
+        from ${schema}.df_usage_batch ub
+        where ub.product_family in
+        <foreach collection="productFamilies" item="productFamily" separator="," open="(" close=")">
+            #{productFamily}
+        </foreach>
+        and exists (
+            select 1
+            from ${schema}.df_usage u
+            where u.df_usage_batch_uid = ub.df_usage_batch_uid
+            and u.status_ind = #{status}
+            and u.df_fund_pool_uid is null
+        )
+        order by ub.updated_datetime desc
+    </select>
+
     <select id="findCountByName" parameterType="string" resultType="int">
         select count(name)
         from ${schema}.df_usage_batch

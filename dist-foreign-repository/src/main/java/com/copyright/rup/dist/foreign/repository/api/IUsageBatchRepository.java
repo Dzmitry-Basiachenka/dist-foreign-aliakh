@@ -45,6 +45,13 @@ public interface IUsageBatchRepository {
     List<UsageBatch> findByProductFamily(String productFamily);
 
     /**
+     * Finds list of FAS/FAS2 {@link UsageBatch}es with usages in NTS_WITHDRAWN status.
+     *
+     * @return list of found {@link UsageBatch}es
+     */
+    List<UsageBatch> findWithdrawnUsageBatches();
+
+    /**
      * Gets usage batches count with specified name.
      *
      * @param name batch name

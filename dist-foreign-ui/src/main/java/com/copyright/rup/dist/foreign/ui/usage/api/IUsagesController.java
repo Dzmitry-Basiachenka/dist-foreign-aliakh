@@ -100,6 +100,13 @@ public interface IUsagesController extends IController<IUsagesWidget> {
     List<UsageBatch> getUsageBatches(String productFamily);
 
     /**
+     * Finds list of {@link UsageBatch}es suitable for including in NTS additional funds.
+     *
+     * @return list of found {@link UsageBatch}es
+     */
+    List<UsageBatch> getWithdrawnUsageBatches();
+
+    /**
      * @return list of available markets.
      */
     List<String> getMarkets();

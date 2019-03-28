@@ -190,6 +190,11 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
+    public List<UsageBatch> getWithdrawnUsageBatches() {
+        return usageBatchService.getWithdrawnUsageBatches();
+    }
+
+    @Override
     public List<String> getMarkets() {
         return usageService.getMarkets();
     }
