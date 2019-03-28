@@ -279,4 +279,37 @@ databaseChangeLog {
             }
         }
     }
+
+    changeSet(id: '2019-03-28-00', author: 'Ihar Suvorau<isuvorau@copyright.com>') {
+        comment('B-48760 FDA: Create NTS Pre-service fee additional fund pool from NTS withdrawn details:' +
+                'add df_fund_pool_uid column with foreign key to df_usage, df_usage_archive tables')
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_fund_pool_uid', type: 'VARCHAR(255)', remarks: 'The identifier of fund pool')
+        }
+
+        addForeignKeyConstraint(constraintName: 'fk_df_usage_2_df_fund_pool',
+                baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_usage',
+                baseColumnNames: 'df_fund_pool_uid',
+                referencedTableName: 'df_fund_pool',
+                referencedColumnNames: 'df_fund_pool_uid')
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+            column(name: 'df_fund_pool_uid', type: 'VARCHAR(255)', remarks: 'The identifier of fund pool')
+        }
+
+        addForeignKeyConstraint(constraintName: 'fk_df_usage_archive_2_df_fund_pool',
+                baseTableSchemaName: dbAppsSchema,
+                referencedTableSchemaName: dbAppsSchema,
+                baseTableName: 'df_usage_archive',
+                baseColumnNames: 'df_fund_pool_uid',
+                referencedTableName: 'df_fund_pool',
+                referencedColumnNames: 'df_fund_pool_uid')
+
+        rollback {
+            // automatic rollback
+        }
+    }
 }
