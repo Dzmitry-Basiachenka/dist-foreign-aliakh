@@ -83,6 +83,8 @@ public class UsageRepositoryIntegrationTest {
     private static final String WORK_TITLE_1 = "Wissenschaft & Forschung Japan";
     private static final String WORK_TITLE_2 = "100 ROAD MOVIES";
     private static final String PRODUCT_FAMILY_FAS = "FAS";
+    private static final String BUS_MARKET = "Bus";
+    private static final String DOC_DEL_MARKET = "Doc Del";
     private static final String DETAIL_ID_KEY = "detailId";
     private static final String WORK_TITLE_KEY = "workTitle";
     private static final String BATCH_NAME_KEY = "batchName";
@@ -126,6 +128,7 @@ public class UsageRepositoryIntegrationTest {
     private static final String UNDERSCORE = "_";
     private static final BigDecimal SERVICE_FEE = new BigDecimal("0.32000");
     private static final BigDecimal ZERO_AMOUNT = new BigDecimal("0.00");
+    private static final BigDecimal HUNDRED_AMOUNT = new BigDecimal("100.00");
 
     @Autowired
     private UsageRepository usageRepository;
@@ -643,10 +646,10 @@ public class UsageRepositoryIntegrationTest {
     @Test
     public void testFindForAuditByStatus() {
         AuditFilter filter = new AuditFilter();
-        filter.setStatuses(EnumSet.of(UsageStatusEnum.WORK_FOUND));
+        filter.setStatuses(EnumSet.of(UsageStatusEnum.SENT_TO_LM));
         assertEquals(1, usageRepository.findCountForAudit(filter));
         List<UsageDto> usages = usageRepository.findForAudit(filter, new Pageable(0, 10), null);
-        verifyUsageDtos(usages, 1, USAGE_ID_4);
+        verifyUsageDtos(usages, 1, USAGE_ID_5);
     }
 
     @Test
@@ -853,14 +856,11 @@ public class UsageRepositoryIntegrationTest {
     @Test
     public void testFindByStatuses() {
         List<Usage> usages =
-            usageRepository.findByStatuses(UsageStatusEnum.WORK_FOUND, UsageStatusEnum.SENT_FOR_RA);
-        assertEquals(2, CollectionUtils.size(usages));
+            usageRepository.findByStatuses(UsageStatusEnum.SENT_TO_LM, UsageStatusEnum.SENT_FOR_RA);
+        assertEquals(1, CollectionUtils.size(usages));
         Usage usageSentForRa = usages.get(0);
         assertEquals(USAGE_ID_6, usageSentForRa.getId());
         assertEquals(UsageStatusEnum.SENT_FOR_RA, usageSentForRa.getStatus());
-        Usage usageWorkFound = usages.get(1);
-        assertEquals(USAGE_ID_4, usageWorkFound.getId());
-        assertEquals(UsageStatusEnum.WORK_FOUND, usageWorkFound.getStatus());
     }
 
     @Test
@@ -1012,7 +1012,7 @@ public class UsageRepositoryIntegrationTest {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setId("b9d0ea49-9e38-4bb0-a7e0-0ca299e3dcfa");
         FundPool fundPool = new FundPool();
-        fundPool.setMarkets(Sets.newHashSet("Bus", "Doc Del"));
+        fundPool.setMarkets(Sets.newHashSet(BUS_MARKET, DOC_DEL_MARKET));
         fundPool.setFundPoolPeriodFrom(2015);
         fundPool.setFundPoolPeriodTo(2016);
         usageBatch.setFundPool(fundPool);
@@ -1021,9 +1021,9 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(2, insertedUsageIds.size());
         List<Usage> insertedUsages = usageRepository.findByIds(insertedUsageIds);
         insertedUsages.sort(Comparator.comparing(Usage::getMarket));
-        verifyInsertedFundPoolUsage("Bus", 2016, new BigDecimal("500.00"), new BigDecimal("500.0000000000"),
+        verifyInsertedFundPoolUsage(BUS_MARKET, 2016, new BigDecimal("500.00"), new BigDecimal("500.0000000000"),
             insertedUsages.get(0));
-        verifyInsertedFundPoolUsage("Doc Del", 2013, new BigDecimal("1176.92"), new BigDecimal("1176.9160000000"),
+        verifyInsertedFundPoolUsage(DOC_DEL_MARKET, 2013, new BigDecimal("1176.92"), new BigDecimal("1176.9160000000"),
             insertedUsages.get(1));
     }
 
@@ -1032,17 +1032,35 @@ public class UsageRepositoryIntegrationTest {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setId("73027b25-f269-4bec-a8ea-b126431eedbe");
         FundPool fundPool = new FundPool();
-        fundPool.setMarkets(Sets.newHashSet("Bus", "Doc Del"));
+        fundPool.setMarkets(Sets.newHashSet(BUS_MARKET, DOC_DEL_MARKET));
         fundPool.setFundPoolPeriodFrom(2013);
         fundPool.setFundPoolPeriodTo(2017);
-        fundPool.setStmAmount(new BigDecimal("100.00"));
+        fundPool.setStmAmount(HUNDRED_AMOUNT);
         fundPool.setStmMinimumAmount(new BigDecimal("50.00"));
-        fundPool.setNonStmAmount(new BigDecimal("100.00"));
+        fundPool.setNonStmAmount(HUNDRED_AMOUNT);
         fundPool.setNonStmMinimumAmount(new BigDecimal("7.00"));
         usageBatch.setFundPool(fundPool);
         assertEquals(new BigDecimal("2450.00"),
             usageRepository.getCutoffAmountByBatchIdAndClassification(usageBatch, "NON-STM"));
         assertEquals(ZERO_AMOUNT, usageRepository.getCutoffAmountByBatchIdAndClassification(usageBatch, "STM"));
+    }
+
+    @Test
+    public void testDeleteUnderMinimumCutoffAmountUsagesByBatchId() {
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatch.setId("74901845-ac06-44ab-9b79-9dc9622e74de");
+        FundPool fundPool = new FundPool();
+        fundPool.setMarkets(Sets.newHashSet(BUS_MARKET, DOC_DEL_MARKET));
+        fundPool.setFundPoolPeriodFrom(2013);
+        fundPool.setFundPoolPeriodTo(2017);
+        fundPool.setStmAmount(HUNDRED_AMOUNT);
+        fundPool.setStmMinimumAmount(new BigDecimal("50.00"));
+        fundPool.setNonStmAmount(HUNDRED_AMOUNT);
+        fundPool.setNonStmMinimumAmount(new BigDecimal("7.00"));
+        usageBatch.setFundPool(fundPool);
+        assertEquals(Collections.singletonList("f9ddb072-a411-443b-89ca-1bb5a63425a4"),
+            usageRepository.deleteUnderMinimumCutoffAmountUsagesByBatchId(usageBatch, new BigDecimal("50.00"),
+                new BigDecimal("2.10")));
     }
 
     private void verifyFilterForTwoBatches(AuditFilter filter) {
