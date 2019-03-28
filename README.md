@@ -1,5 +1,15 @@
 5.1.5
 -
+* B-48760 FDA: Create NTS PreService fee additional fund pool from NTS withdrawn details: implement additional funds menu bar and apply permissions for it
+* B-50004 FDA: Add Standard Number Type to the usage for classification: add standard number type column to exported usages files
+* B-50004 FDA: Add Standard Number Type to the usage for classification: Adjust usage serialization/deserialization with processing standard number type field
+* B-48995 FDA: Delete NTS withdrawn fund pool: implement delete NTS fund window
+* CDP-706 FDA: Exception occurs during creation FAS scenario
+* B-48760 FDA: Create NTS PreService fee additional fund pool from NTS withdrawn details: add df_fund_pool_uid column to df_usage and df_usage archive tables
+* B-46739 FDA: Remove NTS titles that do not meet the minimum from the fund pool batch: implement repository method for deleting usages that are under minimum cutoff amount
+* B-48760 FDA: Create NTS Pre-service fee additional fund pool from NTS withdrawn details: Implement backend to load usage batches by FAS/FAS2 product families, previously not included in NTS withdrawn fund pools
+* B-48760 FDA: Create NTS Pre-service fee additional fund pool from NTS withdrawn details: Implement the Batches Filter dialog
+* B-50004 FDA: Add Standard Number Type to the usage for classification: Adjust WorkClassificationRepository to process standard number type field
 
 5.1.4
 -
