@@ -1262,4 +1262,121 @@ databaseChangeLog {
 
         rollback ""
     }
+
+    changeSet(id: '2019-03-27-00', author: 'Darya Baraukova <dbaraukova@copyright.com>') {
+        comment('Inserting test data for testDeleteUnderMinimumCutoffAmountByBatchId')
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_work_classification') {
+            column(name: 'df_work_classification_uid', value: '5f0b074c-9de3-4972-bc87-44d95506fa6c')
+            column(name: 'wr_wrk_inst', value: '122827635')
+            column(name: 'classification', value: 'STM')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_work_classification') {
+            column(name: 'df_work_classification_uid', value: 'e439f866-891e-4cf4-9237-8dfdfcf02104')
+            column(name: 'wr_wrk_inst', value: '135632553')
+            column(name: 'classification', value: 'NON-STM')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: '74901845-ac06-44ab-9b79-9dc9622e74de')
+            column(name: 'name', value: 'NTS Batch with Under Minimum usages')
+            column(name: 'rro_account_number', value: '1000000001')
+            column(name: 'payment_date', value: '2019-01-11')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'fiscal_year', value: '2020')
+            column(name: 'fund_pool', value: '{"markets": ["Univ"], "stm_amount": 100, "non_stm_amount": 100, "stm_minimum_amount": 50, ' +
+                    '"fund_pool_period_to": 2017, "fund_pool_period_from": 2013, "non_stm_minimum_amount": 7}')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '0f86df24-39a0-4420-8e9b-327713ddd2b9')
+            column(name: 'df_usage_batch_uid', value: '74901845-ac06-44ab-9b79-9dc9622e74de')
+            column(name: 'wr_wrk_inst', value: '122827635')
+            column(name: 'work_title', value: 'Cell Biology')
+            column(name: 'system_title', value: 'Cell Biology')
+            column(name: 'rh_account_number', value: '1000009997')
+            column(name: 'status_ind', value: 'WORK_FOUND')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '1003324112314587XX')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Univ')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
+            column(name: 'number_of_copies', value: '2502232')
+            column(name: 'reported_value', value: '2000')
+            column(name: 'gross_amount', value: '50.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'a86308b1-7f89-474b-9390-fc926c5b218b')
+            column(name: 'df_usage_batch_uid', value: '74901845-ac06-44ab-9b79-9dc9622e74de')
+            column(name: 'wr_wrk_inst', value: '122827635')
+            column(name: 'work_title', value: 'Cell Biology')
+            column(name: 'system_title', value: 'Cell Biology')
+            column(name: 'rh_account_number', value: '1000009997')
+            column(name: 'status_ind', value: 'WORK_FOUND')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '1003324112314587XX')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2019-09-10')
+            column(name: 'market', value: 'Univ')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
+            column(name: 'number_of_copies', value: '2502232')
+            column(name: 'reported_value', value: '1000')
+            column(name: 'gross_amount', value: '50.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'af1f25e5-75ca-463f-8c9f-1f1e4b92f699')
+            column(name: 'df_usage_batch_uid', value: '74901845-ac06-44ab-9b79-9dc9622e74de')
+            column(name: 'wr_wrk_inst', value: '135632553')
+            column(name: 'work_title', value: 'Business')
+            column(name: 'system_title', value: 'Business')
+            column(name: 'rh_account_number', value: '1000002859')
+            column(name: 'status_ind', value: 'WORK_FOUND')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '1003324112314587XX')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2019-09-10')
+            column(name: 'market', value: 'Univ')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
+            column(name: 'number_of_copies', value: '2502232')
+            column(name: 'reported_value', value: '3000')
+            column(name: 'gross_amount', value: '30.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'f9ddb072-a411-443b-89ca-1bb5a63425a4')
+            column(name: 'df_usage_batch_uid', value: '74901845-ac06-44ab-9b79-9dc9622e74de')
+            column(name: 'wr_wrk_inst', value: '146547417')
+            column(name: 'work_title', value: 'Test de aptitudes profesionales')
+            column(name: 'system_title', value: 'Test de aptitudes profesionales')
+            column(name: 'rh_account_number', value: '1000002859')
+            column(name: 'status_ind', value: 'WORK_FOUND')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '1003324112314587XX')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2019-09-10')
+            column(name: 'market', value: 'Univ')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
+            column(name: 'number_of_copies', value: '2502232')
+            column(name: 'reported_value', value: '2000')
+            column(name: 'gross_amount', value: '2.00')
+        }
+
+        rollback ""
+    }
 }

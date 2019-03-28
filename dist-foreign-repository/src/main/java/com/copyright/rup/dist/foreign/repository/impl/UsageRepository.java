@@ -529,6 +529,16 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         return selectOne("IUsageMapper.getCutoffAmountByBatchIdAndClassification", params);
     }
 
+    @Override
+    public List<String> deleteUnderMinimumCutoffAmountUsagesByBatchId(UsageBatch usageBatch, BigDecimal stmCutoffAmount,
+                                                                      BigDecimal nonStmCutoffAmount) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(3);
+        params.put("usageBatch", Objects.requireNonNull(usageBatch));
+        params.put("stmCutoffAmount", Objects.requireNonNull(stmCutoffAmount));
+        params.put("nonStmCutoffAmount", Objects.requireNonNull(nonStmCutoffAmount));
+        return selectList("IUsageMapper.deleteUnderMinimumCutoffAmountUsagesByBatchId", params);
+    }
+
     private AuditFilter escapeSqlLikePattern(AuditFilter auditFilter) {
         AuditFilter filterCopy = new AuditFilter(auditFilter);
         filterCopy.setCccEventId(escapeSqlLikePattern(filterCopy.getCccEventId()));
