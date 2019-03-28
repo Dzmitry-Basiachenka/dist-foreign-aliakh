@@ -40,6 +40,7 @@ public class CommonUsageSerializer extends StdSerializer<Usage> {
             writeNotNullField(jsonGenerator, "rh_uid", usage.getRightsholder().getId());
             writeNotNullField(jsonGenerator, "rh_account_number", usage.getRightsholder().getAccountNumber());
             writeNotNullField(jsonGenerator, "standard_number", usage.getStandardNumber());
+            writeNotNullField(jsonGenerator, "standard_number_type", usage.getStandardNumberType());
             writeNotNullField(jsonGenerator, "wr_wrk_inst", usage.getWrWrkInst());
             writeNotNullField(jsonGenerator, "work_title", usage.getWorkTitle());
             writeNotNullField(jsonGenerator, "system_title", usage.getSystemTitle());
