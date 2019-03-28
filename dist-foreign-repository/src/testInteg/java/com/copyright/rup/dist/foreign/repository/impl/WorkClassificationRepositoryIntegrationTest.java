@@ -7,7 +7,12 @@ import static org.junit.Assert.assertEquals;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
+import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.WorkClassification;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
@@ -19,8 +24,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.IntStream;
 
 /**
  * Verifies {@link WorkClassificationRepository}.
@@ -45,9 +52,6 @@ public class WorkClassificationRepositoryIntegrationTest {
     private static final String BELLETRISTIC = "BELLETRISTIC";
     private static final Long WR_WRK_INST_1 = 111111111L;
     private static final Long WR_WRK_INST_2 = 222222222L;
-    private static final String TITLE_1 = "2001 IEEE Workshop on High Performance Switching";
-    private static final String TITLE_2 = "Corporate identity manuals";
-    private static final String TITLE_3 = "future of children";
 
     @Autowired
     private WorkClassificationRepository workClassificationRepository;
@@ -92,13 +96,15 @@ public class WorkClassificationRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindByBatchIds() {
-        List<WorkClassification> classifications = workClassificationRepository.findByBatchIds(
-            Collections.singleton(BATCH_UID), StringUtils.EMPTY, null, new Sort("wrWrkInst", Direction.ASC));
-        assertEquals(3, classifications.size());
-        assertClassification(classifications.get(0), 180382914L, NON_STM, TITLE_1);
-        assertClassification(classifications.get(1), 243904752L, STM, TITLE_2);
-        assertClassification(classifications.get(2), 244614835L, null, TITLE_3);
+    public void testFindByBatchIds() throws IOException {
+        List<WorkClassification> expectedClassifications =
+            loadExpectedClassifications("json/work_classifications_find_by_batch_ids.json");
+        List<WorkClassification> actualClassifications =
+            workClassificationRepository.findByBatchIds(Collections.singleton(BATCH_UID), StringUtils.EMPTY, null,
+                new Sort("wrWrkInst", Direction.ASC));
+        assertEquals(expectedClassifications.size(), actualClassifications.size());
+        IntStream.range(0, actualClassifications.size())
+            .forEach(i -> assertClassification(expectedClassifications.get(i), actualClassifications.get(i)));
     }
 
     @Test
@@ -112,16 +118,14 @@ public class WorkClassificationRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindBySearch() {
-        List<WorkClassification> classifications =
+    public void testFindBySearch() throws IOException {
+        List<WorkClassification> expectedClassifications =
+            loadExpectedClassifications("json/work_classifications_find_by_search.json");
+        List<WorkClassification> actualClassifications =
             workClassificationRepository.findBySearch(StringUtils.EMPTY, null, new Sort("wrWrkInst", Direction.ASC));
-        assertEquals(5, classifications.size());
-        assertClassification(classifications.get(0), WR_WRK_INST_1, NON_STM, null);
-        assertClassification(classifications.get(1), 122410079L, STM, null);
-        assertClassification(classifications.get(2), 123345258L, NON_STM,
-            "15th International Conference on Environmental Degradation");
-        assertClassification(classifications.get(3), 180382914L, NON_STM, TITLE_1);
-        assertClassification(classifications.get(4), 243904752L, STM, TITLE_2);
+        assertEquals(expectedClassifications.size(), actualClassifications.size());
+        IntStream.range(0, actualClassifications.size())
+            .forEach(i -> assertClassification(expectedClassifications.get(i), actualClassifications.get(i)));
     }
 
     @Test
@@ -131,11 +135,25 @@ public class WorkClassificationRepositoryIntegrationTest {
         assertEquals(3, workClassificationRepository.findCountBySearch("John Wiley & Sons - Books"));
     }
 
-    private void assertClassification(WorkClassification workClassification, Long wrWrkInst, String classification,
-                                      String title) {
-        assertEquals(wrWrkInst, workClassification.getWrWrkInst());
-        assertEquals(classification, workClassification.getClassification());
-        assertEquals(title, workClassification.getSystemTitle());
+    private List<WorkClassification> loadExpectedClassifications(String fileName)
+        throws IOException {
+        String content = TestUtils.fileToString(this.getClass(), fileName);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        return mapper.readValue(content, new TypeReference<List<WorkClassification>>() {
+        });
+    }
+
+    private void assertClassification(WorkClassification expectedClassification,
+        WorkClassification actualClassification) {
+        assertEquals(expectedClassification.getId(), actualClassification.getId());
+        assertEquals(expectedClassification.getWrWrkInst(), actualClassification.getWrWrkInst());
+        assertEquals(expectedClassification.getClassification(), actualClassification.getClassification());
+        assertEquals(expectedClassification.getSystemTitle(), actualClassification.getSystemTitle());
+        assertEquals(expectedClassification.getRhAccountNumber(), actualClassification.getRhAccountNumber());
+        assertEquals(expectedClassification.getRhName(), actualClassification.getRhName());
+        assertEquals(expectedClassification.getStandardNumber(), actualClassification.getStandardNumber());
+        assertEquals(expectedClassification.getStandardNumberType(), actualClassification.getStandardNumberType());
     }
 
     private WorkClassification buildClassification(String classification, Long wrWkrInst) {

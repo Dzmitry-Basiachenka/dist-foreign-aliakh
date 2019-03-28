@@ -8,11 +8,9 @@
         <result property="id" column="df_work_classification_uid"/>
         <result property="wrWrkInst" column="wr_wrk_inst"/>
         <result property="systemTitle" column="system_title"/>
-        <result property="article" column="article"/>
-        <result property="author" column="author"/>
-        <result property="publisher" column="publisher"/>
         <result property="classification" column="classification"/>
         <result property="standardNumber" column="standard_number"/>
+        <result property="standardNumberType" column="standard_number_type"/>
         <result property="rhAccountNumber" column="rh_account_number"/>
         <result property="rhName" column="rh_name"/>
         <result property="updateDate" column="updated_datetime"/>
@@ -99,6 +97,7 @@
             internal.wr_wrk_inst wr_wrk_inst,
             system_title,
             standard_number,
+            standard_number_type,
             rh_account_number,
             rh_name
         from (
@@ -138,6 +137,7 @@
             wc.wr_wrk_inst wr_wrk_inst,
             system_title,
             standard_number,
+            standard_number_type,
             rh.rh_account_number,
             rh.name rh_name
         from ${schema}.df_work_classification wc
