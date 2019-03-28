@@ -713,6 +713,7 @@ databaseChangeLog {
             column(name: 'service_fee_amount', value: '1600.00')
             column(name: 'service_fee', value: '0.16000')
             column(name: 'comment', value: 'usage from usages_15.csv')
+            column(name: 'standard_number_type', value: 'VALISSN')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {

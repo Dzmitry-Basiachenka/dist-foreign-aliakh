@@ -125,6 +125,7 @@ databaseChangeLog {
             column(name: 'service_fee_amount', value: '11200.00')
             column(name: 'service_fee', value: '0.32000')
             column(name: 'comment', value: '180382914')
+            column(name: 'standard_number_type', value: 'VALISSN')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
@@ -152,6 +153,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: '1445.1632')
             column(name: 'service_fee_amount', value: '680.0768')
             column(name: 'service_fee', value: '0.32000')
+            column(name: 'standard_number_type', value: 'VALISBN10');
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
@@ -179,6 +181,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: '46154.80')
             column(name: 'service_fee_amount', value: '21720.00')
             column(name: 'service_fee', value: '0.32000')
+            column(name: 'standard_number_type', value: 'VALISBN10')
         }
 
         //testUpdatePaidInfo

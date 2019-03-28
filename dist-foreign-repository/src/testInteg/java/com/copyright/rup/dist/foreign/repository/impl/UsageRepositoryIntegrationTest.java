@@ -780,6 +780,9 @@ public class UsageRepositoryIntegrationTest {
         verifyUsageDtos(findByFilterWithSort(filter, "article", Direction.DESC), 2, USAGE_ID_24, USAGE_ID_23);
         verifyUsageDtos(findByFilterWithSort(filter, STANDARD_NUMBER_KEY, Direction.ASC), 2, USAGE_ID_23, USAGE_ID_24);
         verifyUsageDtos(findByFilterWithSort(filter, STANDARD_NUMBER_KEY, Direction.DESC), 2, USAGE_ID_24, USAGE_ID_23);
+        verifyUsageDtos(findByFilterWithSort(filter, "standardNumberType", Direction.ASC), 2, USAGE_ID_23, USAGE_ID_24);
+        verifyUsageDtos(
+            findByFilterWithSort(filter, "standardNumberType", Direction.DESC), 2, USAGE_ID_24, USAGE_ID_23);
         verifyUsageDtos(findByFilterWithSort(filter, WR_WRK_INST_KEY, Direction.ASC), 2, USAGE_ID_23, USAGE_ID_24);
         verifyUsageDtos(findByFilterWithSort(filter, WR_WRK_INST_KEY, Direction.DESC), 2, USAGE_ID_24, USAGE_ID_23);
         verifyUsageDtos(findByFilterWithSort(filter, "systemTitle", Direction.ASC), 2, USAGE_ID_23, USAGE_ID_24);

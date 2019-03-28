@@ -109,6 +109,7 @@ databaseChangeLog {
             column(name: 'number_of_copies', value: '250232')
             column(name: 'reported_value', value: '9900.00')
             column(name: 'gross_amount', value: '26776.51')
+            column(name: 'standard_number_type', value: 'VALISSN')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -132,6 +133,7 @@ databaseChangeLog {
             column(name: 'number_of_copies', value: '25')
             column(name: 'reported_value', value: '5000.00')
             column(name: 'gross_amount', value: '13523.49')
+            column(name: 'standard_number_type', value: 'VALISSN')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -161,6 +163,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: '4426.33')
             column(name: 'service_fee', value: '0.32')
             column(name: 'comment', value: '471137967')
+            column(name: 'standard_number_type', value: 'VALISSN')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -190,6 +193,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: '885.26')
             column(name: 'service_fee', value: '0.32')
             column(name: 'comment', value: '122235139')
+            column(name: 'standard_number_type', value: 'VALISBN10')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -219,6 +223,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: '1658.40')
             column(name: 'service_fee', value: '0.32')
             column(name: 'comment', value: '471137469')
+            column(name: 'standard_number_type', value: 'VALISBN13')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
@@ -368,6 +373,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: '34.0000000007')
             column(name: 'service_fee_amount', value: '16.0000000003')
             column(name: 'service_fee', value: '0.32000')
+            column(name: 'standard_number_type', value: 'VALISSN')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
@@ -391,6 +397,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: '34.0000000007')
             column(name: 'service_fee_amount', value: '16.0000000003')
             column(name: 'service_fee', value: '0.32000')
+            column(name: 'standard_number_type', value: 'VALISSN')
         }
 
         /* Record in report that includes amounts for following batch:
@@ -435,6 +442,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: '169.9999999992')
             column(name: 'service_fee_amount', value: '79.9999999996')
             column(name: 'service_fee', value: '0.32000')
+            column(name: 'standard_number_type', value: 'VALISSN')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
@@ -458,6 +466,7 @@ databaseChangeLog {
             column(name: 'net_amount', value: '169.9999999992')
             column(name: 'service_fee_amount', value: '79.9999999996')
             column(name: 'service_fee', value: '0.32000')
+            column(name: 'standard_number_type', value: 'VALISSN')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
@@ -4398,6 +4407,7 @@ databaseChangeLog {
             column(name: 'distribution_date', value: '2016-11-03')
             column(name: 'lm_detail_id', value: '97a86977-016f-4b9d-b861-79fcd8ff1164')
             column(name: 'comment', value: '243904752')
+            column(name: 'standard_number_type', value: 'VALISSN')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_audit') {
