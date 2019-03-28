@@ -48,6 +48,7 @@ public class CommonUsageDeserializer extends JsonDeserializer<Usage> {
         usage.getRightsholder().setId(JsonUtils.getStringValue(jsonNode.get("rh_uid")));
         usage.getRightsholder().setAccountNumber(JsonUtils.getLongValue(jsonNode.get("rh_account_number")));
         usage.setStandardNumber(JsonUtils.getStringValue(jsonNode.get("standard_number")));
+        usage.setStandardNumberType(JsonUtils.getStringValue(jsonNode.get("standard_number_type")));
         usage.setWorkTitle(JsonUtils.getStringValue(jsonNode.get("work_title")));
         usage.setSystemTitle(JsonUtils.getStringValue(jsonNode.get("system_title")));
         usage.setWrWrkInst(JsonUtils.getLongValue(jsonNode.get("wr_wrk_inst")));

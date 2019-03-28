@@ -66,6 +66,7 @@ public class CommonUsageSerializerTest {
         usage.setWrWrkInst(100010768L);
         usage.setGrossAmount(new BigDecimal("50.00"));
         usage.setStandardNumber("12345XX-190048");
+        usage.setStandardNumberType("STDID");
         usage.setWorkTitle("True directions : living your sacred instructions");
         usage.setSystemTitle("True directions : living your sacred instructions");
         usage.setStatus(UsageStatusEnum.WORK_FOUND);
