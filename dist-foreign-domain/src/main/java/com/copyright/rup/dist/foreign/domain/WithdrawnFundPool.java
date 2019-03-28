@@ -22,7 +22,7 @@ public class WithdrawnFundPool extends StoredEntity<String> {
 
     private String name;
     private String comment;
-    private BigDecimal amount;
+    private BigDecimal amount = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
 
     public String getName() {
         return name;

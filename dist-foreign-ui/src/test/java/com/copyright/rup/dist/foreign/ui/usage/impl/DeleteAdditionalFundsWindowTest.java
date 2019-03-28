@@ -1,10 +1,16 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.reset;
+import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.DeleteAdditionalFundsWindow.SearchController;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
@@ -24,6 +30,7 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,7 +49,12 @@ public class DeleteAdditionalFundsWindowTest {
 
     @Before
     public void setUp() {
-        deleteWindow = new DeleteAdditionalFundsWindow();
+        IUsagesController controller = createMock(IUsagesController.class);
+        expect(controller.getAdditionalFunds()).andReturn(Collections.emptyList()).once();
+        replay(controller);
+        deleteWindow = new DeleteAdditionalFundsWindow(controller);
+        verify(controller);
+        reset(controller);
     }
 
     @Test

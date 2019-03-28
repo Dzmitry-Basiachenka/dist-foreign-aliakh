@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.dist.foreign.domain.WithdrawnFundPool;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -18,8 +19,6 @@ import com.vaadin.ui.Window;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Collections;
-
 /**
  * Modal window that provides functionality for deleting {@link WithdrawnFundPool}s.
  * <p/>
@@ -32,12 +31,16 @@ import java.util.Collections;
 class DeleteAdditionalFundsWindow extends Window {
 
     private final SearchWidget searchWidget;
+    private final IUsagesController controller;
     private Grid<WithdrawnFundPool> grid;
 
     /**
      * Constructor.
+     *
+     * @param controller instance of {@link IUsagesController}
      */
-    DeleteAdditionalFundsWindow() {
+    DeleteAdditionalFundsWindow(IUsagesController controller) {
+        this.controller = controller;
         setCaption(ForeignUi.getMessage("window.delete_fund_pool"));
         setWidth(700, Unit.PIXELS);
         setHeight(450, Unit.PIXELS);
@@ -54,8 +57,7 @@ class DeleteAdditionalFundsWindow extends Window {
 
     private void initUsageBatchesGrid() {
         grid = new Grid<>();
-        //TODO {isuvorau} populate grid by fund pools
-        grid.setItems(Collections.emptyList());
+        grid.setItems(controller.getAdditionalFunds());
         grid.setSelectionMode(SelectionMode.NONE);
         grid.setSizeFull();
         grid.addColumn(WithdrawnFundPool::getName)

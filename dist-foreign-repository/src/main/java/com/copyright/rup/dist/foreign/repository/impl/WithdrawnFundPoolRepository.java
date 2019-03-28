@@ -10,6 +10,8 @@ import com.copyright.rup.dist.foreign.repository.api.IWithdrawnFundPoolRepositor
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Implementation of {@link IWithdrawnFundPoolRepository}.
  * <p/>
@@ -37,5 +39,10 @@ public class WithdrawnFundPoolRepository extends BaseRepository implements IWith
     public int delete(String fundPoolId) {
         checkArgument(StringUtils.isNotBlank(fundPoolId));
         return delete("IWithdrawnFundPoolMapper.delete", fundPoolId);
+    }
+
+    @Override
+    public List<WithdrawnFundPool> findAll() {
+        return selectList("IWithdrawnFundPoolMapper.findAll");
     }
 }

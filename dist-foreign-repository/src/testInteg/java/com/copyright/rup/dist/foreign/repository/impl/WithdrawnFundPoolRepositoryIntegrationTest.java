@@ -15,6 +15,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * Verifies {@link WithdrawnFundPoolRepository}.
  * <p/>
@@ -67,9 +69,23 @@ public class WithdrawnFundPoolRepositoryIntegrationTest {
     }
 
     @Test
+    public void testFindAll() {
+        List<WithdrawnFundPool> fundPools = withdrawnFundPoolRepository.findAll();
+        assertEquals(2, fundPools.size());
+        assertFundPool(fundPools.get(0), ID_1, "FAS Q1 2019", "some comment");
+        assertFundPool(fundPools.get(1), "49060c9b-9cc2-4b93-b701-fffc82eb28b0", "Test fund", "test comment");
+    }
+
+    @Test
     public void testDelete() {
         assertNotNull(withdrawnFundPoolRepository.findById(ID_1));
         withdrawnFundPoolRepository.delete(ID_1);
         assertNull(withdrawnFundPoolRepository.findById(ID_1));
+    }
+
+    private void assertFundPool(WithdrawnFundPool fundPool, String id, String name, String comment) {
+        assertEquals(fundPool.getId(), id);
+        assertEquals(fundPool.getName(), name);
+        assertEquals(fundPool.getComment(), comment);
     }
 }

@@ -27,11 +27,13 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.WithdrawnFundPool;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
+import com.copyright.rup.dist.foreign.service.api.IWithdrawnFundPoolService;
 import com.copyright.rup.dist.foreign.service.impl.UsageService;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
@@ -89,6 +91,7 @@ public class UsagesControllerTest {
     private IPrmIntegrationService prmIntegrationService;
     private IScenarioService scenarioService;
     private IResearchService researchService;
+    private IWithdrawnFundPoolService withdrawnFundPoolService;
     private UsageFilter usageFilter;
 
     @Before
@@ -102,6 +105,7 @@ public class UsagesControllerTest {
         prmIntegrationService = createMock(IPrmIntegrationService.class);
         researchService = createMock(IResearchService.class);
         filterWidgetMock = createMock(IUsagesFilterWidget.class);
+        withdrawnFundPoolService = createMock(IWithdrawnFundPoolService.class);
         Whitebox.setInternalState(controller, usageBatchService);
         Whitebox.setInternalState(controller, usageService);
         Whitebox.setInternalState(controller, usageBatchService);
@@ -110,6 +114,7 @@ public class UsagesControllerTest {
         Whitebox.setInternalState(controller, prmIntegrationService);
         Whitebox.setInternalState(controller, scenarioService);
         Whitebox.setInternalState(controller, researchService);
+        Whitebox.setInternalState(controller, withdrawnFundPoolService);
         usageFilter = new UsageFilter();
     }
 
@@ -311,6 +316,15 @@ public class UsagesControllerTest {
         replay(usageBatchService, filterController, filterWidgetMock, RupContextUtils.class);
         controller.loadNtsBatch(usageBatch);
         verify(usageBatchService, filterController, filterWidgetMock, RupContextUtils.class);
+    }
+
+    @Test
+    public void testGetAdditionalFunds() {
+        List<WithdrawnFundPool> additionalFunds = Collections.singletonList(new WithdrawnFundPool());
+        expect(withdrawnFundPoolService.getAdditionalFunds()).andReturn(additionalFunds).once();
+        replay(withdrawnFundPoolService);
+        assertEquals(additionalFunds, controller.getAdditionalFunds());
+        verify(withdrawnFundPoolService);
     }
 
     @Test
