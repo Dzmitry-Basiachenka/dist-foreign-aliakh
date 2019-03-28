@@ -19,7 +19,6 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
@@ -147,7 +146,7 @@ public class UsagesFilterWidgetTest {
         Button applyButton = getApplyButton();
         assertTrue(widget.getFilter().getRhAccountNumbers().isEmpty());
         assertTrue(widget.getAppliedFilter().getRhAccountNumbers().isEmpty());
-        assertTrue(widget.getFilter().getProductFamilies().isEmpty());
+        assertFalse(widget.getFilter().getProductFamilies().isEmpty());
         assertTrue(widget.getAppliedFilter().getProductFamilies().isEmpty());
         widget.getFilter().setRhAccountNumbers(Sets.newHashSet(ACCOUNT_NUMBER));
         widget.getFilter().setProductFamilies(Sets.newHashSet("FAS", "NTS"));
@@ -238,7 +237,7 @@ public class UsagesFilterWidgetTest {
         assertFalse(iterator.hasNext());
     }
 
-    private void verifyStatusComboboxComponent(Component component, Set<UsageStatusEnum> values) {
+    private void verifyStatusComboboxComponent(Component component, Set<UsageStatusEnum> expectedStatuses) {
         assertTrue(component instanceof ComboBox);
         ComboBox comboBox = (ComboBox) component;
         assertEquals("Status", comboBox.getCaption());
@@ -246,9 +245,9 @@ public class UsagesFilterWidgetTest {
         assertEquals(Unit.PERCENTAGE, comboBox.getWidthUnits());
         ListDataProvider<UsageStatusEnum> listDataProvider =
             (ListDataProvider<UsageStatusEnum>) comboBox.getDataProvider();
-        Collection<?> itemIds = listDataProvider.getItems();
-        assertEquals(8, itemIds.size());
-        assertEquals(Lists.newArrayList(values), itemIds);
+        Collection<?> actualStatuses = listDataProvider.getItems();
+        assertEquals(8, actualStatuses.size());
+        assertEquals(expectedStatuses, actualStatuses);
     }
 
     private void verifyFiscalYearComboboxComponent(Component component, List<Integer> values) {
