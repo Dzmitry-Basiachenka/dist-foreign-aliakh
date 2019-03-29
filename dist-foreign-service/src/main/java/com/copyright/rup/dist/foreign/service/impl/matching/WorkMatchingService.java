@@ -88,6 +88,7 @@ public class WorkMatchingService implements IWorkMatchingService {
             usage.setWrWrkInst(work.getWrWrkInst());
             usage.setSystemTitle(usage.getWorkTitle());
             usage.setStatus(UsageStatusEnum.WORK_FOUND);
+            usage.setStandardNumberType(work.getMainIdnoType());
         }
         return work;
     }
@@ -98,6 +99,7 @@ public class WorkMatchingService implements IWorkMatchingService {
             usage.setWrWrkInst(work.getWrWrkInst());
             usage.setSystemTitle(work.getMainTitle());
             usage.setStatus(UsageStatusEnum.WORK_FOUND);
+            usage.setStandardNumberType(work.getMainIdnoType());
         }
         return work;
     }

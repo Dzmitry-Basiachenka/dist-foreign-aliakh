@@ -1235,6 +1235,7 @@
             work_title = #{workTitle},
             status_ind = #{status},
             product_family = #{productFamily},
+            standard_number_type = #{standardNumberType},
             <include refid="StoredEntityMapper.update"/>
         where df_usage_uid = #{id}
             and record_version = #{version}

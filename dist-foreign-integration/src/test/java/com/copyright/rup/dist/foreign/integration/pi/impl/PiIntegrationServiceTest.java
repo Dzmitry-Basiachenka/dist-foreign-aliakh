@@ -6,7 +6,6 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.Work;
@@ -38,6 +37,8 @@ public class PiIntegrationServiceTest {
 
     private static final String OCULAR_TITLE = "Ocular Tissue Culture";
     private static final String FORBIDDEN_RIGHTS = "Forbidden rites";
+    private static final String VALISBN13 = "VALISBN13";
+
     private PiIntegrationService piIntegrationService;
     private RupEsApi rupEsApi;
     private RupSearchHit searchHit1;
@@ -71,35 +72,38 @@ public class PiIntegrationServiceTest {
         expectGetSearchResponseByIdno();
         replay(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3, searchHit4, searchHit5,
             searchHit6);
-        assertEquals(new Work(123059057L, "Annuaire de la communication en Rhône-Alpes"),
+        assertEquals(new Work(123059057L, "Annuaire de la communication en Rhône-Alpes", "VALISSN"),
             piIntegrationService.findWorkByIdnoAndTitle("1140-9126", null));
-        assertEquals(new Work(123059058L, FORBIDDEN_RIGHTS),
+        assertEquals(new Work(123059058L, FORBIDDEN_RIGHTS, "VALISBN10"),
             piIntegrationService.findWorkByIdnoAndTitle("0-271-01750-3", null));
-        assertEquals(new Work(156427025L, FORBIDDEN_RIGHTS),
+        assertEquals(new Work(156427025L, FORBIDDEN_RIGHTS, VALISBN13),
             piIntegrationService.findWorkByIdnoAndTitle("978-0-08-027365-5", null));
-        assertEquals(new Work(112942199L, "Forbidden Rites: A Necromancer's Manual of the Fifteenth Century (review)"),
+        assertEquals(
+            new Work(112942199L, "Forbidden Rites: A Necromancer's Manual of the Fifteenth Century (review)", "DOI"),
             piIntegrationService.findWorkByIdnoAndTitle("10.1353/PGN.1999.0081", null));
-        assertEquals(new Work(123067577L, OCULAR_TITLE),
+        assertEquals(new Work(123067577L, OCULAR_TITLE, VALISBN13),
             piIntegrationService.findWorkByIdnoAndTitle("978-0-271-01751-8", OCULAR_TITLE));
         verify(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3, searchHit4, searchHit5,
             searchHit6);
     }
 
     @Test
-    public void testFindWrWrkInstsByTitle() {
+    public void testFindWorkByTitle() {
         expectGetSearchResponseByTitle();
         replay(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3, searchHit4, searchHit5,
             searchHit6);
-        assertEquals(123059057L, piIntegrationService.findWorkByTitle(FORBIDDEN_RIGHTS).getWrWrkInst(), 0);
-        assertEquals(123059058L, piIntegrationService.findWorkByTitle(
-            "Forbidden rites : a necromancer's manual of the fifteenth century").getWrWrkInst(), 0);
-        assertNull(piIntegrationService.findWorkByTitle(
-            "Kieckhefer, Richard, Forbidden Rites: A Necromancer's Manual of the Fifteenth Century").getWrWrkInst());
-        assertNull(piIntegrationService.findWorkByTitle(
-            "Forbidden Rites: A Necromancer's Manual of the Fifteenth Century (review)").getWrWrkInst());
-        assertEquals(156427025L,
-            piIntegrationService.findWorkByTitle("Annuaire de la communication en Rhône-Alpes").getWrWrkInst(), 0);
-        assertEquals(123067577L, piIntegrationService.findWorkByTitle(OCULAR_TITLE).getWrWrkInst(), 0);
+        assertEquals(new Work(123059057L, "Annuaire de la communication en Rhône-Alpes", "VALISSN"),
+            piIntegrationService.findWorkByTitle(FORBIDDEN_RIGHTS));
+        assertEquals(new Work(123059058L, FORBIDDEN_RIGHTS, "VALISBN10"),
+            piIntegrationService.findWorkByTitle("Forbidden rites : a necromancer's manual of the fifteenth century"));
+        assertEquals(new Work(), piIntegrationService.findWorkByTitle(
+            "Kieckhefer, Richard, Forbidden Rites: A Necromancer's Manual of the Fifteenth Century"));
+        assertEquals(new Work(), piIntegrationService.findWorkByTitle(
+            "Forbidden Rites: A Necromancer's Manual of the Fifteenth Century (review)"));
+        assertEquals(new Work(156427025L, FORBIDDEN_RIGHTS, VALISBN13),
+            piIntegrationService.findWorkByTitle("Annuaire de la communication en Rhône-Alpes"));
+        assertEquals(new Work(123067577L, OCULAR_TITLE, VALISBN13),
+            piIntegrationService.findWorkByTitle(OCULAR_TITLE));
         verify(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3, searchHit4, searchHit5,
             searchHit6);
     }

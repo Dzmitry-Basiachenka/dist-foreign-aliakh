@@ -22,17 +22,17 @@ public class PiIntegrationServiceMock extends PiIntegrationService {
     @Override
     public Work findWorkByIdnoAndTitle(String idno, String title) {
         if (Objects.equals("978-0-271-01750-1", idno)) {
-            return new Work(123059057L, "BIOCHEMISTRY (MOSCOW)");
+            return new Work(123059057L, "BIOCHEMISTRY (MOSCOW)", "VALISSN");
         } else if (Objects.equals("1906011", idno) && Objects.equals("Solar Cells", title)) {
-            return new Work(292891647L, "Solar Cells");
+            return new Work(292891647L, "Solar Cells", "VALISSN");
         } else if (Objects.equals("12345XX-12978", idno) && Objects.equals(TITLE, title)) {
-            return new Work(100012905L, TITLE);
+            return new Work(100012905L, TITLE, "VALISBN13");
         }
         return null;
     }
 
     @Override
     public Work findWorkByTitle(String title) {
-        return new Work(123059057L, title);
+        return new Work(123059057L, title, "VALISBN10");
     }
 }
