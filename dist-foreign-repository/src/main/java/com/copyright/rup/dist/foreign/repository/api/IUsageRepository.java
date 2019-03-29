@@ -166,6 +166,15 @@ public interface IUsageRepository {
     void deleteById(String usageId);
 
     /**
+     * Deletes {@link Usage}s from additional fund.
+     * Reverts status of {@link Usage}s to {@link UsageStatusEnum#NTS_WITHDRAWN}.
+     *
+     * @param fundPoolId identifier of fund pool
+     * @param userName   user name
+     */
+    void deleteFromAdditionalFund(String fundPoolId, String userName);
+
+    /**
      * Calculates total gross amount by standard number and batch identifier for PI matching.
      *
      * @param standardNumber standard number for calculation
@@ -444,8 +453,8 @@ public interface IUsageRepository {
     /**
      * Inserts usages from archived usages during for NTS batch creation.
      *
-     * @param usageBatch        instance of {@link UsageBatch}
-     * @param userName          user name
+     * @param usageBatch instance of {@link UsageBatch}
+     * @param userName   user name
      * @return list of inserted usage uids
      */
     List<String> insertNtsUsages(UsageBatch usageBatch, String userName);

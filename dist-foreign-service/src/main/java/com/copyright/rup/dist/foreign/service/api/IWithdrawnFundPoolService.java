@@ -21,4 +21,11 @@ public interface IWithdrawnFundPoolService {
      * @return list of {@link WithdrawnFundPool}s
      */
     List<WithdrawnFundPool> getAdditionalFunds();
+
+    /**
+     * Deletes additional fund pool.
+     *
+     * @param fundPool {@link WithdrawnFundPool} to delete
+     */
+    void deleteAdditionalFund(WithdrawnFundPool fundPool);
 }

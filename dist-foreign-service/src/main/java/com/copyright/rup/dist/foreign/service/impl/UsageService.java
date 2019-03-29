@@ -171,6 +171,11 @@ public class UsageService implements IUsageService {
     }
 
     @Override
+    public void deleteFromAdditionalFund(String fundPoolId) {
+        usageRepository.deleteFromAdditionalFund(fundPoolId, RupContextUtils.getUserName());
+    }
+
+    @Override
     @Transactional
     public void deleteArchivedByBatchId(String batchId) {
         usageAuditService.deleteActionsForArchivedByBatchId(batchId);

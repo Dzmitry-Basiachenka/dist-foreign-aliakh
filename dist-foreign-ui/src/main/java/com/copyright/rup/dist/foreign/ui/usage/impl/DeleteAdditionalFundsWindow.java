@@ -4,6 +4,7 @@ import com.copyright.rup.dist.foreign.domain.WithdrawnFundPool;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
@@ -75,12 +76,23 @@ class DeleteAdditionalFundsWindow extends Window {
         grid.addComponentColumn(fundPool -> {
             Button deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete"));
             deleteButton.setId(fundPool.getId());
-            //TODO {isuvorau} apply click listener to perform deleting
+            deleteButton.addClickListener(event -> deleteFund(fundPool));
             return deleteButton;
         }).setId("delete")
             .setWidth(90)
             .setSortable(false);
         VaadinUtils.addComponentStyle(grid, "delete-fund-pool-grid");
+    }
+
+    private void deleteFund(WithdrawnFundPool fundPool) {
+        Windows.showConfirmDialog(
+            ForeignUi.getMessage("message.confirm.delete_action", fundPool.getName(), "additional fund"),
+            () -> performDelete(fundPool));
+    }
+
+    private void performDelete(WithdrawnFundPool fundPool) {
+        controller.deleteAdditionalFund(fundPool);
+        grid.setItems(controller.getAdditionalFunds());
     }
 
     /**

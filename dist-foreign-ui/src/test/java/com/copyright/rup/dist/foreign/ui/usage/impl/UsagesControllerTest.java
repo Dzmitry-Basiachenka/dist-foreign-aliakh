@@ -336,6 +336,16 @@ public class UsagesControllerTest {
     }
 
     @Test
+    public void testDeleteAdditionalFund() {
+        WithdrawnFundPool fundPool = new WithdrawnFundPool();
+        withdrawnFundPoolService.deleteAdditionalFund(fundPool);
+        expectLastCall().once();
+        replay(withdrawnFundPoolService);
+        controller.deleteAdditionalFund(fundPool);
+        verify(withdrawnFundPoolService);
+    }
+
+    @Test
     public void testGetUsagesCountForNtsBatch() {
         UsageBatch usageBatch = new UsageBatch();
         expect(usageService.getUsagesCountForNtsBatch(usageBatch)).andReturn(5).once();

@@ -169,6 +169,11 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
+    public void deleteAdditionalFund(WithdrawnFundPool fundPool) {
+        withdrawnFundPoolService.deleteAdditionalFund(fundPool);
+    }
+
+    @Override
     public void loadResearchedUsages(Collection<ResearchedUsage> researchedUsages) {
         usageService.loadResearchedUsages(researchedUsages);
         filterController.getWidget().clearFilter();
