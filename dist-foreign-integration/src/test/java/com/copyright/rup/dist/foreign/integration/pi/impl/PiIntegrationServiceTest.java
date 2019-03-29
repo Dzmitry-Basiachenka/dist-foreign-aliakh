@@ -35,6 +35,7 @@ import java.util.Collections;
  */
 public class PiIntegrationServiceTest {
 
+    private static final String ANNUAIRE_TITLE = "Annuaire de la communication en Rhône-Alpes";
     private static final String OCULAR_TITLE = "Ocular Tissue Culture";
     private static final String FORBIDDEN_RIGHTS = "Forbidden rites";
     private static final String VALISBN13 = "VALISBN13";
@@ -72,7 +73,7 @@ public class PiIntegrationServiceTest {
         expectGetSearchResponseByIdno();
         replay(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3, searchHit4, searchHit5,
             searchHit6);
-        assertEquals(new Work(123059057L, "Annuaire de la communication en Rhône-Alpes", "VALISSN"),
+        assertEquals(new Work(123059057L, ANNUAIRE_TITLE, "VALISSN"),
             piIntegrationService.findWorkByIdnoAndTitle("1140-9126", null));
         assertEquals(new Work(123059058L, FORBIDDEN_RIGHTS, "VALISBN10"),
             piIntegrationService.findWorkByIdnoAndTitle("0-271-01750-3", null));
@@ -83,6 +84,7 @@ public class PiIntegrationServiceTest {
             piIntegrationService.findWorkByIdnoAndTitle("10.1353/PGN.1999.0081", null));
         assertEquals(new Work(123067577L, OCULAR_TITLE, VALISBN13),
             piIntegrationService.findWorkByIdnoAndTitle("978-0-271-01751-8", OCULAR_TITLE));
+        assertEquals(new Work(), piIntegrationService.findWorkByIdnoAndTitle("978-0-271-01751-8", "Medical Journal"));
         verify(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3, searchHit4, searchHit5,
             searchHit6);
     }
@@ -92,7 +94,7 @@ public class PiIntegrationServiceTest {
         expectGetSearchResponseByTitle();
         replay(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3, searchHit4, searchHit5,
             searchHit6);
-        assertEquals(new Work(123059057L, "Annuaire de la communication en Rhône-Alpes", "VALISSN"),
+        assertEquals(new Work(123059057L, ANNUAIRE_TITLE, "VALISSN"),
             piIntegrationService.findWorkByTitle(FORBIDDEN_RIGHTS));
         assertEquals(new Work(123059058L, FORBIDDEN_RIGHTS, "VALISBN10"),
             piIntegrationService.findWorkByTitle("Forbidden rites : a necromancer's manual of the fifteenth century"));
@@ -101,7 +103,7 @@ public class PiIntegrationServiceTest {
         assertEquals(new Work(), piIntegrationService.findWorkByTitle(
             "Forbidden Rites: A Necromancer's Manual of the Fifteenth Century (review)"));
         assertEquals(new Work(156427025L, FORBIDDEN_RIGHTS, VALISBN13),
-            piIntegrationService.findWorkByTitle("Annuaire de la communication en Rhône-Alpes"));
+            piIntegrationService.findWorkByTitle(ANNUAIRE_TITLE));
         assertEquals(new Work(123067577L, OCULAR_TITLE, VALISBN13),
             piIntegrationService.findWorkByTitle(OCULAR_TITLE));
         verify(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3, searchHit4, searchHit5,
@@ -109,9 +111,35 @@ public class PiIntegrationServiceTest {
     }
 
     @Test
+    public void testFindWorkByWrWrkInst() {
+        expectGetSearchResponseByWrWrkInst();
+        replay(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3);
+        assertEquals(new Work(123059057L, ANNUAIRE_TITLE, "VALISSN"),
+            piIntegrationService.findWorkByWrWrkInst(123059057L));
+        assertEquals(new Work(123059058L, FORBIDDEN_RIGHTS, "VALISBN10"),
+            piIntegrationService.findWorkByWrWrkInst(123059058L));
+        assertEquals(new Work(156427025L, FORBIDDEN_RIGHTS, VALISBN13),
+            piIntegrationService.findWorkByWrWrkInst(156427025L));
+        assertEquals(new Work(), piIntegrationService.findWorkByWrWrkInst(1000009552L));
+        verify(rupEsApi, searchResponse, searchResults, searchHit1, searchHit2, searchHit3);
+    }
+
+    @Test
     public void testBuildQueryString() {
         assertEquals("idno:\"\\\"0.1353\\/PGN.1999.0081\"",
             piIntegrationService.buildQueryString("idno", "   \"0.1353/PGN.1999.0081   "));
+    }
+
+    private void expectGetSearchResponseByWrWrkInst() {
+        expect(searchResponse.getResults()).andReturn(searchResults).times(4);
+        expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).times(4);
+        expect(searchResults.getHits()).andReturn(Collections.singletonList(searchHit1)).once();
+        expect(searchResults.getHits()).andReturn(Collections.singletonList(searchHit2)).once();
+        expect(searchResults.getHits()).andReturn(Collections.singletonList(searchHit3)).once();
+        expect(searchResults.getHits()).andReturn(Collections.emptyList()).once();
+        expectSearchHitSource(searchHit1, "pi_search_hit1.json");
+        expectSearchHitSource(searchHit2, "pi_search_hit2.json");
+        expectSearchHitSource(searchHit3, "pi_search_hit3.json");
     }
 
     private void expectGetSearchResponseByTitle() {
@@ -135,6 +163,7 @@ public class PiIntegrationServiceTest {
         expectGetResponseWithIsbn13();
         expectGetResponseWithIdno();
         expectGetResponseWithIdnoAndTitle();
+        getEmptySearchResponseByIdnoAndTitle();
     }
 
     private void expectGetResponseWithIssn() {
@@ -182,6 +211,12 @@ public class PiIntegrationServiceTest {
         expect(searchHit6.getFields()).andReturn(
             ImmutableMap.of("mainTitle", Collections.singletonList(OCULAR_TITLE))).once();
         expectSearchHitSource(searchHit6, "pi_search_hit6.json");
+        expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).times(4);
+    }
+
+    private void getEmptySearchResponseByIdnoAndTitle() {
+        expect(searchResponse.getResults()).andReturn(searchResults).times(4);
+        expect(searchResults.getHits()).andReturn(Collections.emptyList()).times(4);
         expect(rupEsApi.search(capture(requestCapture))).andReturn(searchResponse).times(4);
     }
 

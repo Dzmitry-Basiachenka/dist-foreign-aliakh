@@ -55,7 +55,7 @@ public class PiIntegrationCacheServiceTest {
     }
 
     @Test
-    public void testFindWrWrkInstsByTitle() {
+    public void testFindWorkByTitle() {
         Work work1 = new Work(1111L, null, "VALISSN");
         Work work2 = new Work(2222L, null, "VALISBN10");
         Work work3 = new Work(3333L, null, "VALISBN13");
@@ -68,6 +68,24 @@ public class PiIntegrationCacheServiceTest {
         assertEquals(work3, piIntegrationCacheService.findWorkByTitle(OCULAR_TITLE));
         assertEquals(work2, piIntegrationCacheService.findWorkByTitle(FORBIDDEN_RITES));
         assertEquals(work3, piIntegrationCacheService.findWorkByTitle(OCULAR_TITLE));
+        verify(piIntegrationService);
+    }
+
+    @Test
+    public void findWorkByWrWrkInst() {
+        Work work1 = new Work(1111L, null, "VALISSN");
+        Work work2 = new Work(2222L, null, "VALISBN10");
+        Work work3 = new Work(3333L, null, "VALISBN13");
+        expect(piIntegrationService.findWorkByWrWrkInst(1000009553L)).andReturn(work1).once();
+        expect(piIntegrationService.findWorkByWrWrkInst(1000009554L)).andReturn(work2).once();
+        expect(piIntegrationService.findWorkByWrWrkInst(1000009555L)).andReturn(work3).once();
+        replay(piIntegrationService);
+        assertEquals(work1, piIntegrationCacheService.findWorkByWrWrkInst(1000009553L));
+        assertEquals(work2, piIntegrationCacheService.findWorkByWrWrkInst(1000009554L));
+        assertEquals(work3, piIntegrationCacheService.findWorkByWrWrkInst(1000009555L));
+        assertEquals(work1, piIntegrationCacheService.findWorkByWrWrkInst(1000009553L));
+        assertEquals(work2, piIntegrationCacheService.findWorkByWrWrkInst(1000009554L));
+        assertEquals(work3, piIntegrationCacheService.findWorkByWrWrkInst(1000009555L));
         verify(piIntegrationService);
     }
 }
