@@ -39,9 +39,9 @@ public class PiIntegrationCacheServiceTest {
 
     @Test
     public void testFindWorkByIdnoAndTitle() {
-        Work work1 = new Work(1111L, NECROMANCER);
-        Work work2 = new Work(2222L, FORBIDDEN_RITES);
-        Work work3 = new Work(3333L, OCULAR_TITLE);
+        Work work1 = new Work(1111L, NECROMANCER, "VALISSN");
+        Work work2 = new Work(2222L, FORBIDDEN_RITES, "VALISBN10");
+        Work work3 = new Work(3333L, OCULAR_TITLE, "VALISBN13");
         expect(piIntegrationService.findWorkByIdnoAndTitle("1140-9126", null)).andReturn(work1).once();
         expect(piIntegrationService.findWorkByIdnoAndTitle(IDNO_1, FORBIDDEN_RITES)).andReturn(work2).once();
         expect(piIntegrationService.findWorkByIdnoAndTitle(IDNO_2, OCULAR_TITLE)).andReturn(work3).once();
@@ -56,9 +56,9 @@ public class PiIntegrationCacheServiceTest {
 
     @Test
     public void testFindWrWrkInstsByTitle() {
-        Work work1 = new Work(1111L, null);
-        Work work2 = new Work(2222L, null);
-        Work work3 = new Work(3333L, null);
+        Work work1 = new Work(1111L, null, "VALISSN");
+        Work work2 = new Work(2222L, null, "VALISBN10");
+        Work work3 = new Work(3333L, null, "VALISBN13");
         expect(piIntegrationService.findWorkByTitle(NECROMANCER)).andReturn(work1).once();
         expect(piIntegrationService.findWorkByTitle(FORBIDDEN_RITES)).andReturn(work2).once();
         expect(piIntegrationService.findWorkByTitle(OCULAR_TITLE)).andReturn(work3).once();

@@ -18,6 +18,7 @@ public class Work {
 
     private Long wrWrkInst;
     private String mainTitle;
+    private String mainIdnoType;
     private boolean multipleMatches;
 
     /**
@@ -31,10 +32,12 @@ public class Work {
      *
      * @param wrWrkInst wr wrk inst
      * @param mainTitle main title
+     * @param mainIdnoType main idno type
      */
-    public Work(Long wrWrkInst, String mainTitle) {
+    public Work(Long wrWrkInst, String mainTitle, String mainIdnoType) {
         this.wrWrkInst = wrWrkInst;
         this.mainTitle = mainTitle;
+        this.mainIdnoType = mainIdnoType;
     }
 
     public Long getWrWrkInst() {
@@ -61,6 +64,14 @@ public class Work {
         this.multipleMatches = multipleMatches;
     }
 
+    public String getMainIdnoType() {
+        return mainIdnoType;
+    }
+
+    public void setMainIdnoType(String mainIdnoType) {
+        this.mainIdnoType = mainIdnoType;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -74,6 +85,7 @@ public class Work {
             .append(this.wrWrkInst, that.wrWrkInst)
             .append(this.mainTitle, that.mainTitle)
             .append(this.multipleMatches, that.multipleMatches)
+            .append(this.mainIdnoType, that.mainIdnoType)
             .isEquals();
     }
 
@@ -83,6 +95,7 @@ public class Work {
             .append(wrWrkInst)
             .append(mainTitle)
             .append(multipleMatches)
+            .append(mainIdnoType)
             .toHashCode();
     }
 
@@ -92,6 +105,7 @@ public class Work {
             .append("wrWrkInst", wrWrkInst)
             .append("mainTitle", mainTitle)
             .append("multipleMatches", multipleMatches)
+            .append("mainIdnoType", mainIdnoType)
             .toString();
     }
 }
