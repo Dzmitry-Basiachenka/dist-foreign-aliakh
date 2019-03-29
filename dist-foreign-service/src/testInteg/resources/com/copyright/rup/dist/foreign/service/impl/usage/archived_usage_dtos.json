@@ -66,6 +66,7 @@
     "rhAccountNumber":1000002859,
     "rhName":"John Wiley & Sons - Books",
     "standardNumber":"1003324112314587XX",
+    "standardNumberType":"VALISBN13",
     "publisher":"IEEE",
     "publicationDate":[
       2013,

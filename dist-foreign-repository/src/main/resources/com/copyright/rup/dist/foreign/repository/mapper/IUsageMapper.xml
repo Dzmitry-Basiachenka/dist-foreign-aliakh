@@ -153,6 +153,7 @@
         <result property="systemTitle" column="system_title"/>
         <result property="article" column="article"/>
         <result property="standardNumber" column="standard_number"/>
+        <result property="standardNumberType" column="standard_number_type"/>
         <result property="publisher" column="publisher"/>
         <result property="publicationDate" column="publication_date"/>
         <result property="market" column="market"/>
@@ -178,6 +179,7 @@
         product_family,
         article,
         standard_number,
+        standard_number_type,
         publisher,
         publication_date,
         market,
@@ -464,6 +466,7 @@
             #{productFamily},
             #{article},
             #{standardNumber},
+            #{standardNumberType},
             #{publisher},
             #{publicationDate},
             #{market},
@@ -521,6 +524,7 @@
             u.product_family,
             u.article,
             u.standard_number,
+            u.standard_number_type,
             u.publisher,
             u.publication_date,
             u.market,
@@ -560,6 +564,7 @@
             u.product_family,
             u.article,
             u.standard_number,
+            u.standard_number_type,
             u.publisher,
             u.publication_date,
             u.market,
@@ -652,6 +657,7 @@
             u.product_family,
             u.article,
             u.standard_number,
+            u.standard_number_type,
             u.publisher,
             u.publication_date,
             u.market,
@@ -1428,6 +1434,7 @@
             status_ind,
             product_family,
             standard_number,
+            standard_number_type,
             market,
             market_period_from,
             market_period_to,
@@ -1445,6 +1452,7 @@
             'WORK_FOUND',
             'NTS',
             standard_number,
+            standard_number_type,
             market,
             market_period_from,
             market_period_to,

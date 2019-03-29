@@ -10,6 +10,7 @@
     "productFamily": "FAS",
     "article": "DIN EN 779:2012",
     "standardNumber": "2192-3559",
+    "standardNumberType": "STDID",
     "publisher": "Network for Science",
     "publicationDate": [
       2016,

@@ -72,6 +72,7 @@ public class UsageArchiveRepositoryIntegrationTest {
     private static final String SYSTEM_TITLE = "System Title";
     private static final String ARTICLE = "Article";
     private static final String STANDARD_NUMBER = "StandardNumber";
+    private static final String STANDARD_NUMBER_TYPE = "VALISBN13";
     private static final String PUBLISHER = "Publisher";
     private static final String MARKET = "Market";
     private static final Integer MARKED_PERIOD_FROM = 2015;
@@ -117,6 +118,7 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertEquals(UsageStatusEnum.SENT_TO_LM, usageDto.getStatus());
         assertEquals(ARTICLE, usageDto.getArticle());
         assertEquals(STANDARD_NUMBER, usageDto.getStandardNumber());
+        assertEquals(STANDARD_NUMBER_TYPE, usageDto.getStandardNumberType());
         assertEquals(PUBLISHER, usageDto.getPublisher());
         assertEquals(PUBLICATION_DATE, usageDto.getPublicationDate());
         assertEquals(MARKET, usageDto.getMarket());
@@ -497,6 +499,7 @@ public class UsageArchiveRepositoryIntegrationTest {
         assertEquals(expectedUsage.getProductFamily(), actualUsage.getProductFamily());
         assertEquals(expectedUsage.getArticle(), actualUsage.getArticle());
         assertEquals(expectedUsage.getStandardNumber(), actualUsage.getStandardNumber());
+        assertEquals(expectedUsage.getStandardNumberType(), actualUsage.getStandardNumberType());
         assertEquals(expectedUsage.getPublisher(), actualUsage.getPublisher());
         assertEquals(expectedUsage.getPublicationDate(), actualUsage.getPublicationDate());
         assertEquals(expectedUsage.getMarket(), actualUsage.getMarket());
@@ -524,6 +527,7 @@ public class UsageArchiveRepositoryIntegrationTest {
         usage.setProductFamily("FAS");
         usage.setArticle(ARTICLE);
         usage.setStandardNumber(STANDARD_NUMBER);
+        usage.setStandardNumberType(STANDARD_NUMBER_TYPE);
         usage.setPublisher(PUBLISHER);
         usage.setPublicationDate(PUBLICATION_DATE);
         usage.setMarket(MARKET);

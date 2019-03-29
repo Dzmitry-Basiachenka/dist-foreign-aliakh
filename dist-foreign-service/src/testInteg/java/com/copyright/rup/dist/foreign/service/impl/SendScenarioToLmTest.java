@@ -92,6 +92,7 @@ public class SendScenarioToLmTest {
         assertEquals(expected.getRhAccountNumber(), actual.getRhAccountNumber());
         assertEquals(expected.getRhName(), actual.getRhName());
         assertEquals(expected.getStandardNumber(), actual.getStandardNumber());
+        assertEquals(expected.getStandardNumberType(), actual.getStandardNumberType());
         assertEquals(expected.getPublisher(), actual.getPublisher());
         assertEquals(expected.getNumberOfCopies(), actual.getNumberOfCopies());
         assertEquals(expected.getMarket(), actual.getMarket());

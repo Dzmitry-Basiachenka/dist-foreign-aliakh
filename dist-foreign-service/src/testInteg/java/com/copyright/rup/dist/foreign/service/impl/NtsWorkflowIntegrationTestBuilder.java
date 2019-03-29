@@ -195,6 +195,7 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
             assertEquals(expectedUsage.getProductFamily(), actualUsage.getProductFamily());
             assertEquals(expectedUsage.getArticle(), actualUsage.getArticle());
             assertEquals(expectedUsage.getStandardNumber(), actualUsage.getStandardNumber());
+            assertEquals(expectedUsage.getStandardNumberType(), actualUsage.getStandardNumberType());
             assertEquals(expectedUsage.getPublisher(), actualUsage.getPublisher());
             assertEquals(expectedUsage.getPublicationDate(), actualUsage.getPublicationDate());
             assertEquals(expectedUsage.getMarket(), actualUsage.getMarket());

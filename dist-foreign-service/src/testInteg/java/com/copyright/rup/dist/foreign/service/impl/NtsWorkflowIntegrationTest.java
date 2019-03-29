@@ -158,6 +158,7 @@ public class NtsWorkflowIntegrationTest {
         usage.setStatus(status);
         usage.setProductFamily("NTS");
         usage.setStandardNumber("1008902112317555XX");
+        usage.setStandardNumberType("VALISBN13");
         usage.setMarket(market);
         usage.setMarketPeriodFrom(2013);
         usage.setMarketPeriodTo(2017);
