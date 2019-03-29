@@ -7,8 +7,10 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.test.ReportTestUtils;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
@@ -21,7 +23,10 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collections;
 
@@ -35,6 +40,14 @@ import java.util.Collections;
  * @author Uladzislau Shalamitski
  */
 public class ReportServiceTest {
+
+    private static final String PATH_TO_EXPECTED_REPORTS =
+        "src/test/resources/com/copyright/rup/dist/foreign/service/impl/csv";
+    private static final String USAGE_BATCH_ID = "2358deb3-caa3-4c4e-85cd-c353fcc8e6b9";
+    private static final String USAGE_BATCH_NAME = "Copibec 25May18";
+    private static final BigDecimal USAGE_BATCH_GROSS_AMOUNT = BigDecimal.ONE;
+
+    private final ReportTestUtils reportTestUtils = new ReportTestUtils(PATH_TO_EXPECTED_REPORTS);
 
     private IReportService reportService;
     private IUsageArchiveRepository usageArchiveRepository;
@@ -182,10 +195,27 @@ public class ReportServiceTest {
         verify(usageRepository);
     }
 
+    @Test
+    public void testWriteWithdrawnBatchesCsvReport() throws IOException {
+        PipedOutputStream pos = new PipedOutputStream();
+        PipedInputStream pis = new PipedInputStream(pos);
+        new ReportService().writeWithdrawnBatchesCsvReport(
+            Collections.singletonList(buildUsageBatch()), USAGE_BATCH_GROSS_AMOUNT, pos);
+        reportTestUtils.assertCsvReport("batches_nts_withdrawn.csv", pis);
+    }
+
     private Scenario buildScenario(ScenarioStatusEnum status) {
         Scenario scenario = new Scenario();
         scenario.setId(RupPersistUtils.generateUuid());
         scenario.setStatus(status);
         return scenario;
+    }
+
+    private UsageBatch buildUsageBatch() {
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatch.setId(USAGE_BATCH_ID);
+        usageBatch.setName(USAGE_BATCH_NAME);
+        usageBatch.setGrossAmount(USAGE_BATCH_GROSS_AMOUNT);
+        return usageBatch;
     }
 }

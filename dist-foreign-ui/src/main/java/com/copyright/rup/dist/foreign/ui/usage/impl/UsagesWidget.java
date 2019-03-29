@@ -254,10 +254,11 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
 
     private Window initWithdrawnBatchFilterWindow() {
         WithdrawnBatchFilterWidget widget = new WithdrawnBatchFilterWidget(
-            () -> this.controller.getWithdrawnUsageBatches());
+            () -> controller.getWithdrawnUsageBatches());
         WithdrawnBatchFilterWindow window = new WithdrawnBatchFilterWindow(widget);
         window.updateSaveButtonClickListener(
-            () -> Windows.showModalWindow(new WithdrawnFilteredBatchesWindow(widget.getSelectedUsageBatches())));
+            () -> Windows.showModalWindow(new WithdrawnFilteredBatchesWindow(controller,
+                widget.getSelectedUsageBatches())));
         window.addListener(FilterSaveEvent.class,
             (IFilterSaveListener) widget::onSave,
             IFilterSaveListener.SAVE_HANDLER);

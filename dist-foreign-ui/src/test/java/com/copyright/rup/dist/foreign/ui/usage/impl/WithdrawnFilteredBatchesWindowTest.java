@@ -1,10 +1,16 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
+import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Button;
@@ -17,6 +23,7 @@ import com.vaadin.ui.VerticalLayout;
 
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -35,11 +42,17 @@ public class WithdrawnFilteredBatchesWindowTest {
 
     private static final String USAGE_BATCH_ID = "2358deb3-caa3-4c4e-85cd-c353fcc8e6b9";
     private static final String USAGE_BATCH_NAME = "Copibec 25May18";
+    private static final BigDecimal USAGE_BATCH_GROSS_AMOUNT = BigDecimal.ONE;
 
     @Test
     public void testConstructor() {
-        WithdrawnFilteredBatchesWindow window = new WithdrawnFilteredBatchesWindow(
-            Collections.singleton(buildUsageBatch()));
+        IUsagesController controller = createMock(IUsagesController.class);
+        List<UsageBatch> batches = Collections.singletonList(buildUsageBatch());
+        expect(controller.getWithdrawnBatchesStreamSource(batches, USAGE_BATCH_GROSS_AMOUNT))
+            .andReturn(createMock(IStreamSource.class)).once();
+        replay(controller);
+        WithdrawnFilteredBatchesWindow window = new WithdrawnFilteredBatchesWindow(controller, batches);
+        verify(controller);
         assertEquals("Filtered batches", window.getCaption());
         verifySize(window, Unit.PIXELS, 450, Unit.PIXELS, 400);
         assertEquals("batches-filter-window", window.getStyleName());
@@ -71,10 +84,10 @@ public class WithdrawnFilteredBatchesWindowTest {
         HorizontalLayout layout = (HorizontalLayout) component;
         assertEquals(3, layout.getComponentCount());
         Button exportButton = verifyButton(layout.getComponent(0), "Export");
-        Button saveButton = verifyButton(layout.getComponent(1), "Save");
+        Button continueButton = verifyButton(layout.getComponent(1), "Continue");
         Button closeButton = verifyButton(layout.getComponent(2), "Close");
         assertEquals(0, exportButton.getListeners(ClickEvent.class).size());
-        assertEquals(0, saveButton.getListeners(ClickEvent.class).size());
+        assertEquals(0, continueButton.getListeners(ClickEvent.class).size());
         assertEquals(1, closeButton.getListeners(ClickEvent.class).size());
     }
 
@@ -95,6 +108,7 @@ public class WithdrawnFilteredBatchesWindowTest {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setId(USAGE_BATCH_ID);
         usageBatch.setName(USAGE_BATCH_NAME);
+        usageBatch.setGrossAmount(USAGE_BATCH_GROSS_AMOUNT);
         return usageBatch;
     }
 }

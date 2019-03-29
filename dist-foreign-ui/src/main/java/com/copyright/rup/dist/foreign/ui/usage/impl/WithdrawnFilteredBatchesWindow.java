@@ -2,7 +2,9 @@ package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.ui.Buttons;
+import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
@@ -17,10 +19,7 @@ import com.vaadin.ui.components.grid.FooterCell;
 import com.vaadin.ui.components.grid.FooterRow;
 
 import java.math.BigDecimal;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Window for filtered batches to create NTS withdrawn fund pool.
@@ -33,23 +32,26 @@ import java.util.stream.Collectors;
  */
 class WithdrawnFilteredBatchesWindow extends Window {
 
-    private Grid<UsageBatch> grid;
+    private final IUsagesController controller;
 
     /**
      * Constructor.
      *
-     * @param batches set of {@link UsageBatch}'es
+     * @param controller instance of {@link IUsagesController}
+     * @param batches    list of {@link UsageBatch}'es
      */
-    WithdrawnFilteredBatchesWindow(Set<UsageBatch> batches) {
+    WithdrawnFilteredBatchesWindow(IUsagesController controller, List<UsageBatch> batches) {
+        this.controller = controller;
+        BigDecimal grossAmount = batches
+            .stream()
+            .map(UsageBatch::getGrossAmount)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
         setCaption(ForeignUi.getMessage("window.filtered_batches"));
         setWidth(450, Unit.PIXELS);
         setHeight(400, Unit.PIXELS);
-        initUsageBatchesGrid(batches
-            .stream()
-            .sorted(Comparator.comparing(UsageBatch::getUpdateDate).reversed())
-            .collect(Collectors.toList()));
+        Grid<UsageBatch> grid = initUsageBatchesGrid(batches, grossAmount);
         VerticalLayout content = new VerticalLayout();
-        HorizontalLayout buttonsLayout = createButtonsLayout();
+        HorizontalLayout buttonsLayout = createButtonsLayout(batches, grossAmount);
         content.addComponents(grid, buttonsLayout);
         content.setExpandRatio(grid, 1f);
         content.setSizeFull();
@@ -58,8 +60,8 @@ class WithdrawnFilteredBatchesWindow extends Window {
         VaadinUtils.addComponentStyle(this, "batches-filter-window");
     }
 
-    private void initUsageBatchesGrid(List<UsageBatch> batches) {
-        grid = new Grid<>();
+    private Grid<UsageBatch> initUsageBatchesGrid(List<UsageBatch> batches, BigDecimal grossAmount) {
+        Grid<UsageBatch> grid = new Grid<>();
         grid.setItems(batches);
         grid.setSelectionMode(SelectionMode.NONE);
         grid.setSizeFull();
@@ -79,16 +81,16 @@ class WithdrawnFilteredBatchesWindow extends Window {
         FooterCell totalCell = row.getCell("name");
         totalCell.setText(ForeignUi.getMessage("table.column.total"));
         FooterCell amountCell = row.getCell("grossAmount");
-        BigDecimal amount = batches
-            .stream()
-            .map(UsageBatch::getGrossAmount)
-            .reduce(BigDecimal.ZERO, BigDecimal::add);
-        amountCell.setText(CurrencyUtils.format(amount, null));
+        amountCell.setText(CurrencyUtils.format(grossAmount, null));
+        return grid;
     }
 
-    private HorizontalLayout createButtonsLayout() {
+    private HorizontalLayout createButtonsLayout(List<UsageBatch> batches, BigDecimal grossAmount) {
         Button exportButton = Buttons.createButton("Export");
-        Button saveButton = Buttons.createButton("Save");
-        return new HorizontalLayout(exportButton, saveButton, Buttons.createCloseButton(this));
+        OnDemandFileDownloader fileDownloader = new OnDemandFileDownloader(
+            controller.getWithdrawnBatchesStreamSource(batches, grossAmount));
+        fileDownloader.extend(exportButton);
+        Button continueButton = Buttons.createButton("Continue");
+        return new HorizontalLayout(exportButton, continueButton, Buttons.createCloseButton(this));
     }
 }

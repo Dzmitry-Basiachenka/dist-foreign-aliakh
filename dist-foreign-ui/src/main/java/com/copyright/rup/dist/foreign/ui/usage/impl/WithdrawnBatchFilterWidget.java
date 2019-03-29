@@ -4,10 +4,10 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.FilterSaveEvent;
 import com.copyright.rup.vaadin.ui.component.filter.IFilterWindowController;
 
-import com.google.common.collect.Sets;
-
 import org.apache.commons.collections4.CollectionUtils;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -24,7 +24,7 @@ import java.util.function.Supplier;
 public class WithdrawnBatchFilterWidget implements IFilterWindowController<UsageBatch> {
 
     private final Supplier<List<UsageBatch>> supplier;
-    private final Set<UsageBatch> selectedUsageBatches = Sets.newHashSet();
+    private final List<UsageBatch> selectedUsageBatches = new ArrayList<>();
 
     /**
      * Constructor.
@@ -56,10 +56,11 @@ public class WithdrawnBatchFilterWidget implements IFilterWindowController<Usage
         selectedUsageBatches.clear();
         if (CollectionUtils.isNotEmpty(itemsIds)) {
             selectedUsageBatches.addAll(itemsIds);
+            selectedUsageBatches.sort(Comparator.comparing(UsageBatch::getName));
         }
     }
 
-    public Set<UsageBatch> getSelectedUsageBatches() {
+    public List<UsageBatch> getSelectedUsageBatches() {
         return selectedUsageBatches;
     }
 }
