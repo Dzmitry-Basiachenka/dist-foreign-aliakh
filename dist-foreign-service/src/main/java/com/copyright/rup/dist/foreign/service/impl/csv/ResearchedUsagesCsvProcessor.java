@@ -65,6 +65,7 @@ public class ResearchedUsagesCsvProcessor extends DistCsvProcessor<ResearchedUsa
         WORK_TITLE("Title"),
         ARTICLE("Article"),
         STANDARD_NUMBER("Standard Number"),
+        STANDARD_NUMBER_TYPE("Standard Number Type"),
         WR_WRK_INST("Wr Wrk Inst"),
         SYSTEM_TITLE("System Title"),
         RH_ACCOUNT_NUMBER("RH Account #"),
