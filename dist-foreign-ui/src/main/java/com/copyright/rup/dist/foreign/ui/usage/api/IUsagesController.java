@@ -8,6 +8,7 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.WithdrawnFundPool;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.impl.csv.ResearchedUsagesCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
@@ -155,6 +156,13 @@ public interface IUsagesController extends IController<IUsagesWidget> {
      * @param usageBatch {@link UsageBatch} to insert
      */
     void loadNtsBatch(UsageBatch usageBatch);
+
+    /**
+     * Gets all additional funds.
+     *
+     * @return list of {@link WithdrawnFundPool}s
+     */
+    List<WithdrawnFundPool> getAdditionalFunds();
 
     /**
      * Updates researched usage details.

@@ -2,6 +2,8 @@ package com.copyright.rup.dist.foreign.repository.api;
 
 import com.copyright.rup.dist.foreign.domain.WithdrawnFundPool;
 
+import java.util.List;
+
 /**
  * Interface for {@link WithdrawnFundPool} repository.
  * <p/>
@@ -35,4 +37,11 @@ public interface IWithdrawnFundPoolRepository {
      * @return number of deleted records
      */
     int delete(String fundPoolId);
+
+    /**
+     * Finds all {@link WithdrawnFundPool}s.
+     *
+     * @return list of {@link WithdrawnFundPool}s
+     */
+    List<WithdrawnFundPool> findAll();
 }

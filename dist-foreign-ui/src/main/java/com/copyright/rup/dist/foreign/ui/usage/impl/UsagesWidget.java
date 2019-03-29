@@ -246,7 +246,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
             item -> Windows.showModalWindow(new WithdrawnBatchFilterWindow(
                 new WithdrawnBatchFilterWidget(() -> controller.getWithdrawnUsageBatches()))));
         menuItem.addItem(ForeignUi.getMessage("menu.item.delete"), null,
-            (item) -> Windows.showModalWindow(new DeleteAdditionalFundsWindow()));
+            (item) -> Windows.showModalWindow(new DeleteAdditionalFundsWindow(controller)));
         VaadinUtils.addComponentStyle(withdrawnFundMenuBar, "withdrawn-fund-menu-bar");
     }
 

@@ -15,12 +15,14 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.WithdrawnFundPool;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.api.IWithdrawnFundPoolService;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.service.impl.csv.ResearchedUsagesCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
@@ -95,6 +97,8 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     private IReportService reportService;
     @Autowired
     private IWorkClassificationController workClassificationController;
+    @Autowired
+    private IWithdrawnFundPoolService withdrawnFundPoolService;
 
     @Override
     public IUsagesFilterWidget initUsagesFilterWidget() {
@@ -157,6 +161,11 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
             usageBatch.getName(), userName, LogUtils.size(ntsUsageIds));
         usageBatchService.getAndSendForGettingRights(ntsUsageIds, usageBatch.getName());
         filterController.getWidget().clearFilter();
+    }
+
+    @Override
+    public List<WithdrawnFundPool> getAdditionalFunds() {
+        return withdrawnFundPoolService.getAdditionalFunds();
     }
 
     @Override

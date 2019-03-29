@@ -8,6 +8,7 @@
         <result property="id" column="df_fund_pool_uid"/>
         <result property="name" column="name"/>
         <result property="comment" column="comment"/>
+        <result property="createUser" column="create_user"/>
     </resultMap>
 
     <insert id="insert" parameterType="WithdrawnFundPool">
@@ -33,9 +34,18 @@
         where df_fund_pool_uid = #{fundPoolId}
     </select>
 
+    <select id="findAll" resultMap="withdrawnFundPoolResultMap">
+        select
+            df_fund_pool_uid,
+            name,
+            comment,
+            created_by_user
+        from ${schema}.df_fund_pool
+        order by updated_datetime desc
+    </select>
+
     <delete id="delete" parameterType="string">
         delete from ${schema}.df_fund_pool
         where df_fund_pool_uid = #{fundPoolId}
     </delete>
-
 </mapper>

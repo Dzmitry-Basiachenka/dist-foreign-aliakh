@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Implementation of {@link IWorkClassificationRepository}.
+ * Implementation of {@link IWorkClassificationService}.
  * <p>
  * Copyright (C) 2019 copyright.com
  * <p>
