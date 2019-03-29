@@ -90,6 +90,7 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '1003324112314587XX')
+            column(name: 'standard_number_type', value: 'VALISBN13')
             column(name: 'publisher', value: 'IEEE')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')

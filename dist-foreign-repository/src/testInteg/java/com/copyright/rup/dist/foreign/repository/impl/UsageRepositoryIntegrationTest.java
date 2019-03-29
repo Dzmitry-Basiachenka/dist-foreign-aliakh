@@ -1106,6 +1106,7 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(UsageStatusEnum.WORK_FOUND, actualUsage.getStatus());
         assertEquals("NTS", actualUsage.getProductFamily());
         assertEquals("1008902112317555XX", actualUsage.getStandardNumber());
+        assertEquals("VALISBN13", actualUsage.getStandardNumberType());
         assertEquals(market, actualUsage.getMarket());
         assertEquals(marketPeriodFrom, actualUsage.getMarketPeriodFrom());
         assertEquals(Integer.valueOf(2017), actualUsage.getMarketPeriodTo());
@@ -1175,6 +1176,7 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(expectedUsage.getWorkTitle(), actualUsage.getWorkTitle());
         assertEquals(expectedUsage.getProductFamily(), actualUsage.getProductFamily());
         assertEquals(expectedUsage.getStandardNumber(), actualUsage.getStandardNumber());
+        assertEquals(expectedUsage.getStandardNumberType(), actualUsage.getStandardNumberType());
         assertEquals(expectedUsage.getPublisher(), actualUsage.getPublisher());
         assertEquals(expectedUsage.getMarket(), actualUsage.getMarket());
         assertEquals(expectedUsage.getMarketPeriodTo(), actualUsage.getMarketPeriodTo());
