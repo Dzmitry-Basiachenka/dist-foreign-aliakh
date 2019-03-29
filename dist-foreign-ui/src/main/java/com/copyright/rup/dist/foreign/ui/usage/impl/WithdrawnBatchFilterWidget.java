@@ -24,7 +24,7 @@ import java.util.function.Supplier;
 public class WithdrawnBatchFilterWidget implements IFilterWindowController<UsageBatch> {
 
     private final Supplier<List<UsageBatch>> supplier;
-    private final Set<UsageBatch> selectedItemsIds = Sets.newHashSet();
+    private final Set<UsageBatch> selectedUsageBatches = Sets.newHashSet();
 
     /**
      * Constructor.
@@ -53,9 +53,13 @@ public class WithdrawnBatchFilterWidget implements IFilterWindowController<Usage
     @Override
     public void onSave(FilterSaveEvent<UsageBatch> event) {
         Set<UsageBatch> itemsIds = event.getSelectedItemsIds();
-        selectedItemsIds.clear();
+        selectedUsageBatches.clear();
         if (CollectionUtils.isNotEmpty(itemsIds)) {
-            selectedItemsIds.addAll(itemsIds);
+            selectedUsageBatches.addAll(itemsIds);
         }
+    }
+
+    public Set<UsageBatch> getSelectedUsageBatches() {
+        return selectedUsageBatches;
     }
 }

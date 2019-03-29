@@ -85,7 +85,8 @@
         select
             ub.df_usage_batch_uid,
             ub.name,
-            ub.gross_amount
+            ub.gross_amount,
+            ub.updated_datetime
         from ${schema}.df_usage_batch ub
         where ub.product_family in
         <foreach collection="productFamilies" item="productFamily" separator="," open="(" close=")">

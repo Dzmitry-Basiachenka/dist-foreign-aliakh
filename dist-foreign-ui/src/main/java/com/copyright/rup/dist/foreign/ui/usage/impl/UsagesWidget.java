@@ -12,6 +12,8 @@ import com.copyright.rup.dist.foreign.ui.usage.impl.CreateScenarioWindow.Scenari
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
+import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.FilterSaveEvent;
+import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.IFilterSaveListener;
 import com.copyright.rup.vaadin.ui.component.window.NotificationWindow;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
@@ -29,6 +31,7 @@ import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
 
 import org.apache.commons.collections4.CollectionUtils;
 
@@ -243,11 +246,22 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         MenuItem menuItem =
             withdrawnFundMenuBar.addItem(ForeignUi.getMessage("menu.caption.additional_funds"), null, null);
         menuItem.addItem(ForeignUi.getMessage("menu.item.create"), null,
-            item -> Windows.showModalWindow(new WithdrawnBatchFilterWindow(
-                new WithdrawnBatchFilterWidget(() -> controller.getWithdrawnUsageBatches()))));
+            item -> Windows.showModalWindow(initWithdrawnBatchFilterWindow()));
         menuItem.addItem(ForeignUi.getMessage("menu.item.delete"), null,
             (item) -> Windows.showModalWindow(new DeleteAdditionalFundsWindow(controller)));
         VaadinUtils.addComponentStyle(withdrawnFundMenuBar, "withdrawn-fund-menu-bar");
+    }
+
+    private Window initWithdrawnBatchFilterWindow() {
+        WithdrawnBatchFilterWidget widget = new WithdrawnBatchFilterWidget(
+            () -> this.controller.getWithdrawnUsageBatches());
+        WithdrawnBatchFilterWindow window = new WithdrawnBatchFilterWindow(widget);
+        window.updateSaveButtonClickListener(
+            () -> Windows.showModalWindow(new WithdrawnFilteredBatchesWindow(widget.getSelectedUsageBatches())));
+        window.addListener(FilterSaveEvent.class,
+            (IFilterSaveListener) widget::onSave,
+            IFilterSaveListener.SAVE_HANDLER);
+        return window;
     }
 
     private void onAddToScenarioClicked() {
