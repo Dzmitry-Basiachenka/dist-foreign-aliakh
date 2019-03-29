@@ -1,3 +1,13 @@
+5.1.6
+-
+* B-48760 FDA: Create NTS Pre-service fee additional fund pool from NTS withdrawn details: Implement the Filtered Batches dialog
+* B-48995 FDA: Delete NTS withdrawn fund pool: implement backend logic to select all additional funds to display on UI
+* B-49463 Tech Debt: FDA: fix javadoc warnings
+* B-50004 FDA: Add Standard Number Type to the usage for classification: Adjust UsageRepository and UsageArchiveRepository with processing standard number type
+* B-50004 FDA: Add Standard Number Type to the usage for classification: Adjust researched usage CSV validation to accept standard number type column
+* B-50004 FDA: Add Standard Number Type to the usage for classification: adjust logic of matching functionality
+* CDP-703 FDA: Usage batch statistic: System displays statistic for all batches when certain dates are indicated
+
 5.1.5
 -
 * B-48760 FDA: Create NTS PreService fee additional fund pool from NTS withdrawn details: implement additional funds menu bar and apply permissions for it
