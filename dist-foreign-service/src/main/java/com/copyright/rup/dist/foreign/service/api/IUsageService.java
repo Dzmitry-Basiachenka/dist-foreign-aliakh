@@ -351,7 +351,7 @@ public interface IUsageService {
      * @param filter {@link UsageFilter} instance
      * @param status {@link UsageStatusEnum} instance
      * @return {@code true} - if all filtered {@link Usage}s have specified {@link UsageStatusEnum},
-     * {@link false} - otherwise
+     * {@code false} - otherwise
      */
     boolean isValidUsagesState(UsageFilter filter, UsageStatusEnum status);
 

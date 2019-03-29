@@ -2,6 +2,8 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
+import com.copyright.rup.dist.foreign.ui.scenario.api.ExcludeUsagesEvent;
+import com.copyright.rup.dist.foreign.ui.scenario.api.IExcludeUsagesListener;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenarioController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
@@ -14,18 +16,15 @@ import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
-import com.vaadin.util.ReflectTools;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -154,39 +153,5 @@ public class ExcludeRightsholdersWindow extends Window implements ISearchControl
 
     private Boolean caseInsensitiveContains(String where, String what) {
         return StringUtils.contains(StringUtils.lowerCase(where), StringUtils.lowerCase(what));
-    }
-
-    /**
-     * Listener for exclude usages from scenario.
-     */
-    public interface IExcludeUsagesListener {
-
-        /**
-         * {@link #onExcludeDetails(ExcludeUsagesEvent)}.
-         */
-        Method EXCLUDE_DETAILS_HANDLER = ReflectTools.findMethod(IExcludeUsagesListener.class, "onExcludeDetails",
-            ExcludeUsagesEvent.class);
-
-        /**
-         * Handles excluding details from scenario.
-         *
-         * @param excludeUsagesEvent an instance of {@link ExcludeUsagesEvent}
-         */
-        void onExcludeDetails(ExcludeUsagesEvent excludeUsagesEvent);
-    }
-
-    /**
-     * Event appears when {@link ExcludeRightsholdersWindow} closes.
-     */
-    public static class ExcludeUsagesEvent extends Event {
-
-        /**
-         * Constructs a new event with the specified source component.
-         *
-         * @param source the source component of the event
-         */
-        ExcludeUsagesEvent(Component source) {
-            super(source);
-        }
     }
 }

@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.ui.scenario.api;
 
-import com.copyright.rup.dist.foreign.ui.scenario.impl.ExcludeRightsholdersWindow.IExcludeUsagesListener;
 import com.copyright.rup.dist.foreign.ui.scenario.impl.ScenarioController;
 import com.copyright.rup.vaadin.widget.api.IRefreshable;
 import com.copyright.rup.vaadin.widget.api.IWidget;
@@ -17,9 +16,9 @@ import com.copyright.rup.vaadin.widget.api.IWidget;
 public interface IScenarioWidget extends IWidget<ScenarioController>, IRefreshable {
 
     /**
-     * Fires {@link Event}.
+     * Fires {@link com.vaadin.ui.Component.Event}.
      *
-     * @param event an {@link Event} to be fired
+     * @param event an {@link com.vaadin.ui.Component.Event} to be fired
      * @see com.vaadin.server.AbstractClientConnector#fireEvent(java.util.EventObject)
      */
     void fireWidgetEvent(Event event);

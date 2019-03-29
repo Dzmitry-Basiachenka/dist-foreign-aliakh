@@ -437,7 +437,7 @@ public interface IUsageRepository {
      * @param filter {@link UsageFilter} instance
      * @param status {@link UsageStatusEnum} instance
      * @return {@code true} - if there are no {@link Usage}s found by defined {@link UsageFilter}
-     * with status different from specified , {@link false} - otherwise
+     * with status different from specified , {@code false} - otherwise
      */
     boolean isValidUsagesState(UsageFilter filter, UsageStatusEnum status);
 
