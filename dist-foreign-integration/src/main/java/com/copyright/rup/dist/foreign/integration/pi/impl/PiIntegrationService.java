@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Iterables;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.elasticsearch.ElasticsearchException;
@@ -57,16 +58,21 @@ public class PiIntegrationService implements IPiIntegrationService {
     private RupEsApi rupEsApi;
 
     @Override
+    public Work findWorkByWrWrkInst(Long wrWrkInst) {
+        return ObjectUtils.defaultIfNull(findWork("wrWrkInst", wrWrkInst), new Work());
+    }
+
+    @Override
     public Work findWorkByIdnoAndTitle(String idno, String title) {
-        Work result = matchByStandardNumber(idno, "issn");
+        Work result = findWork("issn", idno);
         if (Objects.nonNull(result)) {
             return result;
         }
-        result = matchByStandardNumber(idno, "isbn10");
+        result = findWork("isbn10", idno);
         if (Objects.nonNull(result)) {
             return result;
         }
-        result = matchByStandardNumber(idno, "isbn13");
+        result = findWork("isbn13", idno);
         if (Objects.nonNull(result)) {
             return result;
         }
@@ -126,8 +132,10 @@ public class PiIntegrationService implements IPiIntegrationService {
      * @param value value
      * @return query string
      */
-    String buildQueryString(String field, String value) {
-        return String.format("%s:\"%s\"", field, QueryParser.escape(value.trim()));
+    String buildQueryString(String field, Object value) {
+        return String.format("%s:\"%s\"", field, value instanceof String
+            ? QueryParser.escape(((String) value).trim())
+            : value);
     }
 
     private Work matchByIdnoAndTitle(String idno, String title) {
@@ -166,28 +174,27 @@ public class PiIntegrationService implements IPiIntegrationService {
         return result;
     }
 
-    private Work matchByStandardNumber(String idno, String parameter) {
-        List<RupSearchHit> searchHits = doSearch(parameter, idno).getResults().getHits();
+    private Work findWork(String parameter, Object value) {
+        List<RupSearchHit> searchHits = doSearch(parameter, value).getResults().getHits();
         return EXPECTED_SEARCH_HITS_COUNT == searchHits.size()
-            ? parseWorkFromSearchHit(searchHits, idno, parameter)
+            ? parseWorkFromSearchHit(searchHits, value, parameter)
             : null;
     }
 
-    private Work parseWorkFromSearchHit(List<RupSearchHit> searchHits, String idno, String parameter) {
+    private Work parseWorkFromSearchHit(List<RupSearchHit> searchHits, Object value, String parameter) {
         try {
             String source = searchHits.get(0).getSource();
             Work result = mapper.readValue(source, Work.class);
-            LOGGER.trace("Search works. By {}. IDNO={}, WrWrkInst={}, Hit={}", parameter, idno, result.getWrWrkInst(),
-                source);
+            LOGGER.trace("Search works. By {}. ParameterValue={}, Hit={}", parameter, value, source);
             return result;
         } catch (IOException e) {
             throw new RupRuntimeException(
-                String.format("Search works. By %s. Failed. IDNO=%s, Reason=Could not read response", parameter, idno),
-                e);
+                String.format("Search works. By %s. Failed. ParameterValue=%s, Reason=Could not read response",
+                    parameter, value), e);
         }
     }
 
-    private RupSearchResponse doSearch(String field, String value) {
+    private RupSearchResponse doSearch(String field, Object value) {
         String queryString = buildQueryString(field, value);
         RupSearchRequest request = RupSearchRequest.of(piIndex);
         RupQueryStringQueryBuilder builder = RupQueryStringQueryBuilder.of(queryString);

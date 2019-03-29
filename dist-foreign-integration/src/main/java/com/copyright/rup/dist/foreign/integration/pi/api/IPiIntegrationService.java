@@ -15,7 +15,6 @@ public interface IPiIntegrationService {
 
     /**
      * Finds {@link Work} for given IDNO and title.
-     * Returns null if there are multiple search hits or empty result for particular IDNO and title is found.
      *
      * @param idno  indo to match
      * @param title title to match
@@ -24,13 +23,19 @@ public interface IPiIntegrationService {
     Work findWorkByIdnoAndTitle(String idno, String title);
 
     /**
-     * Finds Wr Wrk Inst for given title.
-     * If work for particular title is found and they uniquely corresponds to each other, Wr Wrk Inst will be returned.
-     * If work for particular title is not found or multiple standard numbers correspond to one Wr Wrk Inst -
-     * returns {@code null}.
+     * Finds {@link Work} for given title.
+     * If work for particular title is found and they uniquely corresponds to each other, {@link Work} will be returned.
      *
      * @param title title to search work by
-     * @return Wr Wrk Inst value
+     * @return instance of {@link Work}
      */
     Work findWorkByTitle(String title);
+
+    /**
+     * Finds {@link Work} by Wr Wrk Inst.
+     *
+     * @param wrWrkInst Wr Wrk Inst to search work by
+     * @return instance of {@link Work}
+     */
+    Work findWorkByWrWrkInst(Long wrWrkInst);
 }
