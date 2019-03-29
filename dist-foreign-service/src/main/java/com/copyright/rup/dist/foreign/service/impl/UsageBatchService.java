@@ -49,6 +49,10 @@ import javax.annotation.PreDestroy;
 @Service
 public class UsageBatchService implements IUsageBatchService {
 
+    private static final String GETTING_RIGHTS_STARTED_LOG = "Sending usages for getting rights. Started. " +
+        "UsageBatchName={}, UsagesCount={}, BatchSize={}";
+    private static final String GETTING_RIGHTS_FINISHED_LOG = "Sending usages for getting rights. Finished. " +
+        "UsageBatchName={}, UsagesCount={}, WorkFoundUsagesCount={}";
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired
@@ -143,8 +147,7 @@ public class UsageBatchService implements IUsageBatchService {
                     .filter(usage -> UsageStatusEnum.WORK_FOUND == usage.getStatus())
                     .collect(Collectors.toList());
             chainExecutor.execute(workFoundUsages, ChainProcessorTypeEnum.RIGHTS);
-            LOGGER.info("Sending usages for getting rights. Finished. UsageBatchName={}, UsagesCount={}, " +
-                "WorkFoundUsagesCount={}", batchName, LogUtils.size(usages), LogUtils.size(workFoundUsages));
+            LOGGER.info(GETTING_RIGHTS_FINISHED_LOG, batchName, LogUtils.size(usages), LogUtils.size(workFoundUsages));
         });
     }
 
@@ -155,15 +158,13 @@ public class UsageBatchService implements IUsageBatchService {
             Iterables.partition(usageIds, usagesBatchSize)
                 .forEach(partition -> {
                     usageIdsCount.addAndGet(partition.size());
-                    LOGGER.info("Sending usages for getting rights. Started. UsageBatchName={}, UsageIdsCount={} " +
-                        "BatchSize={}", batchName, usageIdsCount, usagesBatchSize);
+                    LOGGER.info(GETTING_RIGHTS_STARTED_LOG, batchName, usageIdsCount, usagesBatchSize);
                     List<Usage> workFoundUsages = usageRepository.findByIds(partition)
                         .stream()
                         .filter(usage -> UsageStatusEnum.WORK_FOUND == usage.getStatus())
                         .collect(Collectors.toList());
                     chainExecutor.execute(workFoundUsages, ChainProcessorTypeEnum.RIGHTS);
-                    LOGGER.info("Sending usages for getting rights. Finished.  UsageBatchName={}, UsageIdsCount={}, " +
-                        "BatchSize={}", batchName, usageIdsCount, usagesBatchSize);
+                    LOGGER.info(GETTING_RIGHTS_FINISHED_LOG, batchName, usageIdsCount, usagesBatchSize);
                 }));
     }
 

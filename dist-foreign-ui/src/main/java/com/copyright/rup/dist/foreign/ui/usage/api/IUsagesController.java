@@ -12,7 +12,6 @@ import com.copyright.rup.dist.foreign.domain.WithdrawnFundPool;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.impl.csv.ResearchedUsagesCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
-import com.copyright.rup.dist.foreign.ui.usage.impl.CreateScenarioWindow.ScenarioCreateEvent;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.widget.api.IController;
 
@@ -212,7 +211,7 @@ public interface IUsagesController extends IController<IUsagesWidget> {
      *
      * @param status {@link UsageStatusEnum} instance
      * @return {@code true} - if all filtered {@link Usage}s have specified {@link UsageStatusEnum},
-     * {@link false} - otherwise
+     * {@code false} - otherwise
      */
     boolean isValidUsagesState(UsageStatusEnum status);
 

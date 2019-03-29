@@ -5,6 +5,7 @@ import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
+import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
@@ -14,7 +15,6 @@ import com.vaadin.data.Binder;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
@@ -111,32 +111,6 @@ public class CreateScenarioWindow extends Window {
             close();
         } else {
             Windows.showValidationErrorWindow(Lists.newArrayList(scenarioNameField, descriptionArea));
-        }
-    }
-
-    /**
-     * Event that is thrown when new {@link Scenario} is created.
-     */
-    public static class ScenarioCreateEvent extends Event {
-
-        private final Scenario scenario;
-
-        /**
-         * Constructor.
-         *
-         * @param source   event source
-         * @param scenario created {@link Scenario}
-         */
-        ScenarioCreateEvent(Component source, Scenario scenario) {
-            super(source);
-            this.scenario = scenario;
-        }
-
-        /**
-         * @return {@link Scenario}.
-         */
-        public Scenario getScenarioId() {
-            return scenario;
         }
     }
 }
