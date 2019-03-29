@@ -52,6 +52,7 @@ databaseChangeLog {
             column(name: 'action_reason', value: 'Uploaded in \'Test Batch 1\' Batch')
             column(name: 'created_by_user', value: 'SYSTEM')
             column(name: 'updated_by_user', value: 'SYSTEM')
+            column(name: "created_datetime", value: "2012-03-15 11:41:52.735531+03")
         }
 
         // testDeleteForArchivedByBatchId
@@ -88,6 +89,7 @@ databaseChangeLog {
             column(name: 'df_usage_uid', value: '422d33c0-4594-451e-a1ca-412c023299aa')
             column(name: 'action_type_ind', value: 'PAID')
             column(name: 'action_reason', value: 'Usage has been created based on Split process')
+            column(name: "created_datetime", value: "2012-03-15 11:41:52.735531+03")
         }
 
         //testFindFasBatchStatistic
