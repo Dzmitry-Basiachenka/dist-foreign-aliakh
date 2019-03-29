@@ -5,12 +5,17 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.report.BatchStatistic;
 import com.copyright.rup.dist.foreign.domain.report.UsageStatistic;
 import com.copyright.rup.dist.foreign.repository.api.IUsageAuditRepository;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
@@ -22,6 +27,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -110,13 +116,13 @@ public class UsageAuditRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindBatchesStatisticByDateFromDateTo() {
-        List<BatchStatistic> statistics = usageAuditRepository.findBatchesStatistic(null, null,
-            LocalDate.of(1950, 1, 1), LocalDate.of(2050, 1, 1));
-        assertNotNull(statistics);
-        assertEquals(5, statistics.size());
-        assertFasBatch(statistics.get(1));
-        assertNtsBatch(statistics.get(2));
+    public void testFindBatchesStatisticByDateFromDateTo() throws IOException {
+        List<BatchStatistic> actualStatistics = usageAuditRepository.findBatchesStatistic(null, null,
+            LocalDate.of(2013, 1, 1), LocalDate.of(2050, 1, 1));
+        assertNotNull(actualStatistics);
+        assertEquals(4, actualStatistics.size());
+        assertEquals(loadExpectedBatchStatisticsList("json/batch_statistics_by_datefrom_dateto.json"),
+            actualStatistics);
     }
 
     @Test
@@ -136,6 +142,14 @@ public class UsageAuditRepositoryIntegrationTest {
         usageAuditItem.setActionType(UsageActionTypeEnum.WORK_NOT_FOUND);
         usageAuditItem.setActionReason("Usage has no standard number and title");
         return usageAuditItem;
+    }
+
+    private List<BatchStatistic> loadExpectedBatchStatisticsList(String fileName) throws IOException {
+        String content = TestUtils.fileToString(this.getClass(), fileName);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        return mapper.readValue(content, new TypeReference<List<BatchStatistic>>() {
+        });
     }
 
     private void assertFasBatch(BatchStatistic statistic) {
