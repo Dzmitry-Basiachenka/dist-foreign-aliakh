@@ -185,7 +185,7 @@ public class UsageBatchService implements IUsageBatchService {
      * @return instance of {@link ExecutorService}
      */
     protected ExecutorService getExecutorService() {
-        return Executors.newFixedThreadPool(3);
+        return Executors.newCachedThreadPool();
     }
 
     /**
