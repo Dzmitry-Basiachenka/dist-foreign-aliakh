@@ -123,7 +123,9 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
     void reset() {
         usageBatch = null;
+        expectedAudit = null;
         expectedUsage = null;
+        expectedPrmAccountNumber = null;
         expectedPrmResponse = null;
         expectedRmsRequest = null;
         expectedRmsResponse = null;

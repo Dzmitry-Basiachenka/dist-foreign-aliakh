@@ -44,6 +44,8 @@ public class NtsWorkflowIntegrationTest {
     private static final String ORACLE_RH_TAX_1000023401_REQUEST = "tax/rh_1000023401_tax_country_request.json";
     private static final String ORACLE_RH_TAX_1000023401_US_RESPONSE = "tax/rh_1000023401_tax_country_us_response.json";
     private static final String PRM_RH_1000023401_RESPONSE = "prm/rightsholder_1000023401_response.json";
+    private static final String RMS_GRANTS_65882434_REQUEST = "rights/rms_grants_658824345_request.json";
+    private static final String RMS_GRANTS_65882434_RESPONSE = "rights/rms_grants_658824345_response.json";
     private static final String RH_ID = "85f864f2-30a5-4215-ac4f-f1f541901218";
 
     @Autowired
@@ -59,17 +61,14 @@ public class NtsWorkflowIntegrationTest {
 
     @Test
     public void testNtsBatchWorkflow() {
-        UsageAuditItem expectedAudit = new UsageAuditItem();
-        expectedAudit.setActionType(UsageActionTypeEnum.ELIGIBLE);
-        expectedAudit.setActionReason("Usage has become eligible");
         testBuilder
             .withUsageBatch(buildUsageBatch(buildFundPool(BUS_MARKET)))
-            .expectRmsRights("rights/rms_grants_658824345_request.json", "rights/rms_grants_658824345_response.json")
+            .expectRmsRights(RMS_GRANTS_65882434_REQUEST, "rights/rms_grants_658824345_response.json")
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
             .expectOracleCall(ORACLE_RH_TAX_1000023401_REQUEST, ORACLE_RH_TAX_1000023401_US_RESPONSE)
             .expectPreferences("eligibility/pref_eligible_rh_response.json", RH_ID)
             .expectUsage(buildUsage(BUS_MARKET, UsageStatusEnum.ELIGIBLE, 658824345L))
-            .expectAudit(expectedAudit)
+            .expectAudit(getEligibleUsageAuditItem())
             .build()
             .run();
     }
@@ -91,7 +90,7 @@ public class NtsWorkflowIntegrationTest {
     public void testNtsBatchWorkflowWithIneligibleRh() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildFundPool(BUS_MARKET)))
-            .expectRmsRights("rights/rms_grants_658824345_request.json", "rights/rms_grants_658824345_response.json")
+            .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
             .expectOracleCall(ORACLE_RH_TAX_1000023401_REQUEST, ORACLE_RH_TAX_1000023401_US_RESPONSE)
             .expectPreferences("eligibility/pref_ineligible_rh_response.json", RH_ID)
@@ -103,7 +102,7 @@ public class NtsWorkflowIntegrationTest {
     public void testNtsBatchWorkflowWithNonUsRhTaxCountry() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildFundPool(BUS_MARKET)))
-            .expectRmsRights("rights/rms_grants_658824345_request.json", "rights/rms_grants_658824345_response.json")
+            .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
             .expectPrmCall(1000023401L, "prm/rightsholder_1000023401_response.json")
             .expectOracleCall("tax/rh_1000023401_tax_country_request.json",
                 "tax/rh_1000023401_tax_country_fr_response.json")
@@ -116,6 +115,20 @@ public class NtsWorkflowIntegrationTest {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildFundPool("Utiv")))
             .expectRmsRights("rights/rms_grants_854030732_request.json", "rights/rms_grants_empty_response.json")
+            .build()
+            .run();
+    }
+
+    @Test
+    public void testNtsBatchWorkflowWithUsageUnderMinimun() {
+        testBuilder
+            .withUsageBatch(buildUsageBatch(buildFundPool("Lib")))
+            .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
+            .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
+            .expectOracleCall(ORACLE_RH_TAX_1000023401_REQUEST, ORACLE_RH_TAX_1000023401_US_RESPONSE)
+            .expectPreferences("eligibility/pref_eligible_rh_response.json", RH_ID)
+            .expectUsage(buildUsage("Lib", UsageStatusEnum.ELIGIBLE, 658824345L))
+            .expectAudit(getEligibleUsageAuditItem())
             .build()
             .run();
     }
@@ -143,9 +156,9 @@ public class NtsWorkflowIntegrationTest {
         fundPool.setFundPoolPeriodFrom(2013);
         fundPool.setFundPoolPeriodTo(2016);
         fundPool.setStmAmount(new BigDecimal("100"));
-        fundPool.setNonStmAmount(new BigDecimal("200."));
+        fundPool.setNonStmAmount(new BigDecimal("400.44"));
         fundPool.setStmMinimumAmount(new BigDecimal("300.3"));
-        fundPool.setNonStmMinimumAmount(new BigDecimal("400.44"));
+        fundPool.setNonStmMinimumAmount(new BigDecimal("200."));
         fundPool.setMarkets(ImmutableSet.of(market));
         return fundPool;
     }
@@ -165,5 +178,12 @@ public class NtsWorkflowIntegrationTest {
         usage.setGrossAmount(new BigDecimal("1176.9160000000"));
         usage.setReportedValue(new BigDecimal("1176.92"));
         return usage;
+    }
+
+    private UsageAuditItem getEligibleUsageAuditItem() {
+        UsageAuditItem auditItem = new UsageAuditItem();
+        auditItem.setActionType(UsageActionTypeEnum.ELIGIBLE);
+        auditItem.setActionReason("Usage has become eligible");
+        return auditItem;
     }
 }
