@@ -10,6 +10,7 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.WithdrawnFundPool;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
+import com.copyright.rup.dist.foreign.service.api.IWithdrawnFundPoolService;
 import com.copyright.rup.dist.foreign.service.impl.csv.ResearchedUsagesCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
@@ -272,11 +273,18 @@ public interface IUsagesController extends IController<IUsagesWidget> {
     void clearFilter();
 
     /**
-     * Return instance of {@link IStreamSource} for for NTS Withdrawn Batches Report.
+     * Gets instance of {@link IStreamSource} for for NTS Withdrawn Batches Report.
      *
      * @param batches     list of batches
      * @param grossAmount total gross amount
      * @return instance of {@link IStreamSource}
      */
     IStreamSource getWithdrawnBatchesStreamSource(List<UsageBatch> batches, BigDecimal grossAmount);
+
+    /**
+     * Gets instance of {@link IWithdrawnFundPoolService}.
+     *
+     * @return instance of {@link IWithdrawnFundPoolService}.
+     */
+    IWithdrawnFundPoolService getWithdrawnFundPoolService();
 }

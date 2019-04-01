@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
+import static junit.framework.TestCase.assertTrue;
+
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
@@ -32,6 +34,8 @@ public class WithdrawnFundPoolServiceTest {
 
     private static final String FUND_UID = RupPersistUtils.generateUuid();
     private static final String BATCH_UID = RupPersistUtils.generateUuid();
+    private static final String FUND_POOL_NAME = "FAS Q3 2019";
+
     private WithdrawnFundPoolService withdrawnFundPoolService;
     private IUsageService usageService;
     private IWithdrawnFundPoolRepository withdrawnFundPoolRepository;
@@ -43,6 +47,16 @@ public class WithdrawnFundPoolServiceTest {
         usageService = createMock(IUsageService.class);
         withdrawnFundPoolService.setUsageService(usageService);
         withdrawnFundPoolService.setWithdrawnFundPoolRepository(withdrawnFundPoolRepository);
+    }
+
+    @Test
+    public void testInsert() {
+        WithdrawnFundPool fund = buildWithdrawnFundPool();
+        withdrawnFundPoolRepository.insert(fund);
+        expectLastCall().once();
+        replay(withdrawnFundPoolRepository);
+        withdrawnFundPoolService.insert(fund);
+        verify(withdrawnFundPoolRepository);
     }
 
     @Test
@@ -70,6 +84,14 @@ public class WithdrawnFundPoolServiceTest {
         expect(withdrawnFundPoolRepository.findNamesByUsageBatchId(BATCH_UID)).andReturn(names).once();
         replay(withdrawnFundPoolRepository);
         assertEquals(names, withdrawnFundPoolService.getAdditionalFundNamesByUsageBatchId(BATCH_UID));
+        verify(withdrawnFundPoolRepository);
+    }
+
+    @Test
+    public void testFundPoolNameExists() {
+        expect(withdrawnFundPoolRepository.findCountByName(FUND_POOL_NAME)).andReturn(1).once();
+        replay(withdrawnFundPoolRepository);
+        assertTrue(withdrawnFundPoolService.fundPoolNameExists(FUND_POOL_NAME));
         verify(withdrawnFundPoolRepository);
     }
 

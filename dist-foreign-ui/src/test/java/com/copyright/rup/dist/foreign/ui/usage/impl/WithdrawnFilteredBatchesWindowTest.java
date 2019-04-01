@@ -51,7 +51,8 @@ public class WithdrawnFilteredBatchesWindowTest {
         expect(controller.getWithdrawnBatchesStreamSource(batches, USAGE_BATCH_GROSS_AMOUNT))
             .andReturn(createMock(IStreamSource.class)).once();
         replay(controller);
-        WithdrawnFilteredBatchesWindow window = new WithdrawnFilteredBatchesWindow(controller, batches);
+        WithdrawnFilteredBatchesWindow window = new WithdrawnFilteredBatchesWindow(controller, batches,
+            createMock(WithdrawnBatchFilterWindow.class));
         verify(controller);
         assertEquals("Filtered batches", window.getCaption());
         verifySize(window, Unit.PIXELS, 450, Unit.PIXELS, 400);
@@ -85,10 +86,10 @@ public class WithdrawnFilteredBatchesWindowTest {
         assertEquals(3, layout.getComponentCount());
         Button exportButton = verifyButton(layout.getComponent(0), "Export");
         Button continueButton = verifyButton(layout.getComponent(1), "Continue");
-        Button closeButton = verifyButton(layout.getComponent(2), "Close");
+        Button cancelButton = verifyButton(layout.getComponent(2), "Cancel");
         assertEquals(0, exportButton.getListeners(ClickEvent.class).size());
-        assertEquals(0, continueButton.getListeners(ClickEvent.class).size());
-        assertEquals(1, closeButton.getListeners(ClickEvent.class).size());
+        assertEquals(1, continueButton.getListeners(ClickEvent.class).size());
+        assertEquals(1, cancelButton.getListeners(ClickEvent.class).size());
     }
 
     private Button verifyButton(Component component, String caption) {

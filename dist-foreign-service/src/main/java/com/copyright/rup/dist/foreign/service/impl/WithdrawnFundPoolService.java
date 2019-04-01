@@ -34,6 +34,11 @@ public class WithdrawnFundPoolService implements IWithdrawnFundPoolService {
     private IUsageService usageService;
 
     @Override
+    public void insert(WithdrawnFundPool fundPool) {
+        withdrawnFundPoolRepository.insert(fundPool);
+    }
+
+    @Override
     public List<WithdrawnFundPool> getAdditionalFunds() {
         return withdrawnFundPoolRepository.findAll();
     }
@@ -51,6 +56,11 @@ public class WithdrawnFundPoolService implements IWithdrawnFundPoolService {
     @Override
     public List<String> getAdditionalFundNamesByUsageBatchId(String batchId) {
         return withdrawnFundPoolRepository.findNamesByUsageBatchId(batchId);
+    }
+
+    @Override
+    public boolean fundPoolNameExists(String fundPoolName) {
+        return 0 < withdrawnFundPoolRepository.findCountByName(fundPoolName);
     }
 
     void setWithdrawnFundPoolRepository(IWithdrawnFundPoolRepository withdrawnFundPoolRepository) {

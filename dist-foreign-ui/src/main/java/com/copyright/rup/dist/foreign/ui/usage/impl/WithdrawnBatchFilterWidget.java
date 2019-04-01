@@ -56,7 +56,7 @@ public class WithdrawnBatchFilterWidget implements IFilterWindowController<Usage
         selectedUsageBatches.clear();
         if (CollectionUtils.isNotEmpty(itemsIds)) {
             selectedUsageBatches.addAll(itemsIds);
-            selectedUsageBatches.sort(Comparator.comparing(UsageBatch::getName));
+            selectedUsageBatches.sort(Comparator.comparing(UsageBatch::getUpdateDate).reversed());
         }
     }
 

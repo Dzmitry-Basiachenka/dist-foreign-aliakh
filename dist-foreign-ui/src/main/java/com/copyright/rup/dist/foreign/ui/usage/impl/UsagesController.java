@@ -295,6 +295,11 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
+    public IWithdrawnFundPoolService getWithdrawnFundPoolService() {
+        return withdrawnFundPoolService;
+    }
+
+    @Override
     protected IUsagesWidget instantiateWidget() {
         return new UsagesWidget();
     }
