@@ -77,6 +77,14 @@ public class WithdrawnFundPoolRepositoryIntegrationTest {
     }
 
     @Test
+    public void testFindNamesByUsageBatchId() {
+        List<String> names =
+            withdrawnFundPoolRepository.findNamesByUsageBatchId("a163cca7-8eeb-449c-8a3c-29ff3ec82e58");
+        assertEquals(1, names.size());
+        assertEquals("Test fund", names.get(0));
+    }
+
+    @Test
     public void testDelete() {
         assertNotNull(withdrawnFundPoolRepository.findById(ID_1));
         withdrawnFundPoolRepository.delete(ID_1);

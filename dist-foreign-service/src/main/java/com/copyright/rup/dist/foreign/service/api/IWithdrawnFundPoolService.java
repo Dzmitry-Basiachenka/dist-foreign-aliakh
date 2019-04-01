@@ -28,4 +28,12 @@ public interface IWithdrawnFundPoolService {
      * @param fundPool {@link WithdrawnFundPool} to delete
      */
     void deleteAdditionalFund(WithdrawnFundPool fundPool);
+
+    /**
+     * Gets additional fund names associated with batch identifier.
+     *
+     * @param batchId batch identifier
+     * @return list of names
+     */
+    List<String> getAdditionalFundNamesByUsageBatchId(String batchId);
 }

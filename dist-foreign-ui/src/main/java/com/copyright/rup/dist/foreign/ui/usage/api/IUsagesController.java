@@ -171,6 +171,14 @@ public interface IUsagesController extends IController<IUsagesWidget> {
     void deleteAdditionalFund(WithdrawnFundPool fundPool);
 
     /**
+     * Gets additional fund names associated with batch identifier.
+     *
+     * @param batchId batch identifier
+     * @return list of names
+     */
+    List<String> getAdditionalFundNamesByUsageBatchId(String batchId);
+
+    /**
      * Updates researched usage details.
      *
      * @param researchedUsages collection of {@link ResearchedUsage}s

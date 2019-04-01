@@ -48,4 +48,14 @@
         delete from ${schema}.df_fund_pool
         where df_fund_pool_uid = #{fundPoolId}
     </delete>
+
+    <select id="findNamesByUsageBatchId" resultType="string" parameterType="string">
+        select distinct name
+        from ${schema}.df_fund_pool
+        where df_fund_pool_uid in (
+            select distinct df_fund_pool_uid
+            from ${schema}.df_usage
+            where df_usage_batch_uid = #{df_usage_batch_id}
+        )
+    </select>
 </mapper>

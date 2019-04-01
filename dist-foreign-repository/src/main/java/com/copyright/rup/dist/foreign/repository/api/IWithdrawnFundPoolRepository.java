@@ -44,4 +44,12 @@ public interface IWithdrawnFundPoolRepository {
      * @return list of {@link WithdrawnFundPool}s
      */
     List<WithdrawnFundPool> findAll();
+
+    /**
+     * Find fund pool names associated with batch identifier.
+     *
+     * @param batchId batch identifier
+     * @return list of NTS withdrawn fund pool names
+     */
+    List<String> findNamesByUsageBatchId(String batchId);
 }
