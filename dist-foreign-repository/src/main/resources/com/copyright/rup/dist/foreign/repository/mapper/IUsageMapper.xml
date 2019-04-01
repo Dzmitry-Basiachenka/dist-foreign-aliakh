@@ -148,6 +148,7 @@
     <resultMap id="usageResultMap" type="Usage" extends="usageAmountResultMap">
         <result property="batchId" column="df_usage_batch_uid"/>
         <result property="scenarioId" column="df_scenario_uid"/>
+        <result property="fundPoolId" column="df_fund_pool_uid"/>
         <result property="wrWrkInst" column="wr_wrk_inst"/>
         <result property="workTitle" column="work_title"/>
         <result property="systemTitle" column="system_title"/>
@@ -514,6 +515,7 @@
             u.df_usage_uid,
             u.df_usage_batch_uid,
             u.df_scenario_uid,
+            u.df_fund_pool_uid,
             u.wr_wrk_inst,
             u.work_title,
             u.system_title,
@@ -553,6 +555,7 @@
         select
             u.df_usage_uid,
             u.df_usage_batch_uid,
+            u.df_fund_pool_uid,
             u.df_scenario_uid,
             u.wr_wrk_inst,
             u.work_title,
@@ -644,6 +647,7 @@
             u.df_usage_uid,
             u.df_usage_batch_uid,
             u.df_scenario_uid,
+            u.df_fund_pool_uid,
             u.wr_wrk_inst,
             u.work_title,
             u.system_title,
@@ -718,6 +722,16 @@
         delete from ${schema}.df_usage
         where df_scenario_uid = #{scenarioId}
     </delete>
+
+    <update id="deleteFromAdditionalFund" parameterType="map">
+        update
+            ${schema}.df_usage
+        set
+            status_ind = #{status},
+            df_fund_pool_uid = null,
+            <include refid="StoredEntityMapper.update"/>
+        where df_fund_pool_uid = #{fundPoolId}
+    </update>
 
     <select id="findWithAmountsAndRightsholders" parameterType="map" resultMap="usageAmountResultMap">
         select
@@ -1171,6 +1185,7 @@
     <select id="findByStatuses" resultMap="usageResultMap">
         select
             df_usage_uid,
+            df_fund_pool_uid,
             <include refid="usageColumns"/>
         from ${schema}.df_usage
         where

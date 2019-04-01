@@ -242,6 +242,15 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
+    public void deleteFromAdditionalFund(String fundPoolId, String updateUser) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
+        parameters.put("fundPoolId", Objects.requireNonNull(fundPoolId));
+        parameters.put(UPDATE_USER_KEY, Objects.requireNonNull(updateUser));
+        parameters.put(STATUS_KEY, UsageStatusEnum.NTS_WITHDRAWN);
+        update("IUsageMapper.deleteFromAdditionalFund", parameters);
+    }
+
+    @Override
     public void deleteByScenarioId(String scenarioId) {
         checkArgument(StringUtils.isNotBlank(scenarioId));
         delete("IUsageMapper.deleteByScenarioId", scenarioId);

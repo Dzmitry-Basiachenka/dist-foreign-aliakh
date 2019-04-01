@@ -416,6 +416,22 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
+    public void testDeleteFromAdditionalFund() {
+        String fundPoolId = "3fef25b0-c0d1-4819-887f-4c6acc01390e";
+        List<Usage> usages =
+            usageRepository.findByIds(Collections.singletonList("ba95f0b3-dc94-4925-96f2-93d05db9c469"));
+        assertEquals(1, CollectionUtils.size(usages));
+        Usage usage = usages.get(0);
+        assertEquals(UsageStatusEnum.TO_BE_DISTRIBUTED, usage.getStatus());
+        assertEquals(fundPoolId, usage.getFundPoolId());
+        usageRepository.deleteFromAdditionalFund(fundPoolId, USER_NAME);
+        usage =
+            usageRepository.findByIds(Collections.singletonList("ba95f0b3-dc94-4925-96f2-93d05db9c469")).get(0);
+        assertEquals(UsageStatusEnum.NTS_WITHDRAWN, usage.getStatus());
+        assertNull(usage.getFundPoolId());
+    }
+
+    @Test
     public void testFindByScenarioId() {
         List<Usage> usages = usageRepository.findByScenarioId(SCENARIO_ID);
         assertEquals(2, usages.size());

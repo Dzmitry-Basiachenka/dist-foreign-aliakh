@@ -164,6 +164,13 @@ public interface IUsagesController extends IController<IUsagesWidget> {
     List<WithdrawnFundPool> getAdditionalFunds();
 
     /**
+     * Deletes additional fund pool.
+     *
+     * @param fundPool {@link WithdrawnFundPool} to delete
+     */
+    void deleteAdditionalFund(WithdrawnFundPool fundPool);
+
+    /**
      * Updates researched usage details.
      *
      * @param researchedUsages collection of {@link ResearchedUsage}s

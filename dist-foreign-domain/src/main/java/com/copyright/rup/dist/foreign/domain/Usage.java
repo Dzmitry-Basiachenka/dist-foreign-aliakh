@@ -24,6 +24,7 @@ public class Usage extends StoredEntity<String> {
 
     private String batchId;
     private String scenarioId;
+    private String fundPoolId;
     private Long wrWrkInst;
     private String workTitle;
     private String systemTitle;
@@ -63,6 +64,14 @@ public class Usage extends StoredEntity<String> {
 
     public void setScenarioId(String scenarioId) {
         this.scenarioId = scenarioId;
+    }
+
+    public String getFundPoolId() {
+        return fundPoolId;
+    }
+
+    public void setFundPoolId(String fundPoolId) {
+        this.fundPoolId = fundPoolId;
     }
 
     public Long getWrWrkInst() {
@@ -270,6 +279,7 @@ public class Usage extends StoredEntity<String> {
             .appendSuper(super.equals(obj))
             .append(this.batchId, that.batchId)
             .append(this.scenarioId, that.scenarioId)
+            .append(this.fundPoolId, that.fundPoolId)
             .append(this.wrWrkInst, that.wrWrkInst)
             .append(this.workTitle, that.workTitle)
             .append(this.systemTitle, that.systemTitle)
@@ -303,6 +313,7 @@ public class Usage extends StoredEntity<String> {
             .appendSuper(super.hashCode())
             .append(batchId)
             .append(scenarioId)
+            .append(fundPoolId)
             .append(wrWrkInst)
             .append(workTitle)
             .append(systemTitle)
@@ -336,6 +347,7 @@ public class Usage extends StoredEntity<String> {
             .appendSuper(super.toString())
             .append("batchId", batchId)
             .append("scenarioId", scenarioId)
+            .append("fundPoolId", fundPoolId)
             .append("wrWrkInst", wrWrkInst)
             .append("workTitle", workTitle)
             .append("systemTitle", systemTitle)
