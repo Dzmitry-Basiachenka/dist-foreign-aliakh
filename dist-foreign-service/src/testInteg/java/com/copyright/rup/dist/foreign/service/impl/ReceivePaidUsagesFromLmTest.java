@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -12,6 +11,11 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.service.impl.mock.PaidUsageConsumerMock;
 import com.copyright.rup.dist.foreign.service.impl.mock.SnsMock;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Before;
@@ -25,12 +29,14 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.math.BigDecimal;
-import java.time.OffsetDateTime;
+import java.io.IOException;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Verifies consuming paid information from LM and storing paid data to database.
@@ -48,16 +54,6 @@ import java.util.concurrent.TimeUnit;
 @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 public class ReceivePaidUsagesFromLmTest {
 
-    private static final BigDecimal AMOUNT_2000 = new BigDecimal("2000.0000000000");
-    private static final BigDecimal AMOUNT_1000 = new BigDecimal("1000.0000000000");
-    private static final BigDecimal AMOUNT_1680 = new BigDecimal("1680.0000000000");
-    private static final BigDecimal AMOUNT_840 = new BigDecimal("840.0000000000");
-    private static final BigDecimal AMOUNT_500 = new BigDecimal("500.0000000000");
-    private static final BigDecimal AMOUNT_420 = new BigDecimal("420.0000000000");
-    private static final BigDecimal AMOUNT_320 = new BigDecimal("320.0000000000");
-    private static final BigDecimal AMOUNT_160 = new BigDecimal("160.0000000000");
-    private static final BigDecimal AMOUNT_80 = new BigDecimal("80.0000000000");
-
     @Autowired
     @Qualifier("df.service.paidUsageConsumer")
     private PaidUsageConsumerMock paidUsageConsumer;
@@ -72,49 +68,31 @@ public class ReceivePaidUsagesFromLmTest {
     }
 
     @Test
-    public void testReceivePaidUsagesFromLm() throws InterruptedException {
+    public void testReceivePaidUsagesFromLm() throws InterruptedException, IOException {
         assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaidIds()));
         expectReceivePaidUsages("lm/paid_usages_fas.json");
-        List<String> paidUsageIds = usageArchiveRepository.findPaidIds();
-        assertEquals(1, CollectionUtils.size(paidUsageIds));
-        assertPaidUsage(
-            buildPaidUsage("a1bd3d85-f130-45ad-be9b-dd4344668b16", 1000009372L, AMOUNT_840, AMOUNT_160, AMOUNT_1000));
+        assertPaidUsages("usage/paid_usages_fas.json");
     }
 
     @Test
-    public void testReceivePaidSplitUsagesFromLm() throws InterruptedException {
+    public void testReceivePaidSplitUsagesFromLm() throws InterruptedException, IOException {
         assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaidIds()));
         expectReceivePaidUsages("lm/paid_split_usages_fas.json");
-        List<String> paidUsageIds = usageArchiveRepository.findPaidIds();
-        assertEquals(2, CollectionUtils.size(paidUsageIds));
-        assertPaidUsage(
-            buildPaidUsage("a1bd3d85-f130-45ad-be9b-dd4344668b16", 1000009372L, AMOUNT_420, AMOUNT_80, AMOUNT_500));
-        assertPaidUsage(
-            buildPaidUsage("fbf146ca-3cab-4868-b31b-16e9daa4a7d0", 1000009522L, AMOUNT_420, AMOUNT_80, AMOUNT_500));
+        assertPaidUsages("usage/paid_split_usages_fas.json");
     }
 
     @Test
-    public void testReceivePostDistributionUsageFromLm() throws InterruptedException {
+    public void testReceivePostDistributionUsageFromLm() throws InterruptedException, IOException {
         assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaidIds()));
         expectReceivePaidUsages("lm/post_distribution_paid_usages_fas.json");
-        List<String> paidUsageIds = usageArchiveRepository.findPaidIds();
-        assertEquals(1, CollectionUtils.size(paidUsageIds));
-        assertFalse(paidUsageIds.contains("ef058a3f-b60e-429b-b6e3-14d386eb86ba"));
-        assertPaidUsage(
-            buildPaidUsage("c3a24455-a92b-4572-b6b5-628a66572104", 1000002859L, AMOUNT_1680, AMOUNT_320, AMOUNT_2000));
+        assertPaidUsages("usage/post_distribution_paid_usages_fas.json");
     }
 
     @Test
-    public void testReceivePostDistributionSplitUsageFromLm() throws InterruptedException {
+    public void testReceivePostDistributionSplitUsageFromLm() throws InterruptedException, IOException {
         assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaidIds()));
         expectReceivePaidUsages("lm/post_distribution_split_paid_usages_fas.json");
-        List<String> paidUsageIds = usageArchiveRepository.findPaidIds();
-        assertEquals(2, CollectionUtils.size(paidUsageIds));
-        assertFalse(paidUsageIds.contains("ef058a3f-b60e-429b-b6e3-14d386eb86ba"));
-        assertPaidUsage(
-            buildPaidUsage("c3a24455-a92b-4572-b6b5-628a66572104", 1000002859L, AMOUNT_840, AMOUNT_160, AMOUNT_1000));
-        assertPaidUsage(
-            buildPaidUsage("fbb61f5e-35df-4081-b975-3d88e2a0af78", 1000009522L, AMOUNT_840, AMOUNT_160, AMOUNT_1000));
+        assertPaidUsages("usage/post_distribution_split_paid_usages_fas.json");
     }
 
     /**
@@ -122,31 +100,55 @@ public class ReceivePaidUsagesFromLmTest {
      * usages in one message.
      */
     @Test
-    public void testReceivePaidInformationFromLm() throws InterruptedException {
+    public void testReceivePaidInformationFromLm() throws InterruptedException, IOException {
         assertTrue(CollectionUtils.isEmpty(usageArchiveRepository.findPaidIds()));
         expectReceivePaidUsages("lm/paid_usages.json");
-        List<String> paidUsageIds = usageArchiveRepository.findPaidIds();
-        assertEquals(2, CollectionUtils.size(paidUsageIds));
-        assertPaidUsage(
-            buildPaidUsage("a1bd3d85-f130-45ad-be9b-dd4344668b16", 1000002859L, AMOUNT_840, AMOUNT_160, AMOUNT_1000));
-        assertPaidUsage(
-            buildPaidUsage("c3a24455-a92b-4572-b6b5-628a66572104", 1000002859L, AMOUNT_1680, AMOUNT_320, AMOUNT_2000));
-        assertFalse(paidUsageIds.contains("ef058a3f-b60e-429b-b6e3-14d386eb86ba"));
+        assertPaidUsages("usage/paid_usages.json");
     }
 
-    private void assertPaidUsage(PaidUsage expectedPaidUsage) {
-        List<PaidUsage> paidUsages =
-            usageArchiveRepository.findByIdAndStatus(usageArchiveRepository.findPaidIds(), UsageStatusEnum.PAID);
-        PaidUsage actualPaidUsage =
-            paidUsages.stream()
-                .filter(paidUsage -> expectedPaidUsage.getLmDetailId().equals(paidUsage.getLmDetailId()))
-                .findFirst()
-                .orElse(null);
-        assertNotNull(actualPaidUsage);
-        assertPaidInformation(expectedPaidUsage, actualPaidUsage);
+    private void assertPaidUsages(String expectedPaidUsageJsonFile) throws IOException {
+        List<PaidUsage> expectedPaidUsages = loadExpectedPaidUsages(expectedPaidUsageJsonFile).stream()
+            .sorted(Comparator.comparing(PaidUsage::getLmDetailId))
+            .collect(Collectors.toList());
+        List<PaidUsage> actualPaidUsages =
+            usageArchiveRepository.findByIdAndStatus(usageArchiveRepository.findPaidIds(), UsageStatusEnum.PAID)
+                .stream()
+                .sorted(Comparator.comparing(PaidUsage::getLmDetailId))
+                .collect(Collectors.toList());
+        assertEquals(expectedPaidUsages.size(), actualPaidUsages.size());
+        IntStream.range(0, expectedPaidUsages.size())
+            .forEach(i -> assertPaidUsage(expectedPaidUsages.get(i), actualPaidUsages.get(i)));
     }
 
-    private void assertPaidInformation(PaidUsage expectedPaidUsage, PaidUsage actualPaidUsage) {
+    private List<PaidUsage> loadExpectedPaidUsages(String fileName) throws IOException {
+        String content = TestUtils.fileToString(this.getClass(), fileName);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+        return mapper.readValue(content, new TypeReference<List<PaidUsage>>() {
+        });
+    }
+
+    private void assertPaidUsage(PaidUsage expectedPaidUsage, PaidUsage actualPaidUsage) {
+        assertNotNull(actualPaidUsage.getId());
+        assertEquals(expectedPaidUsage.getStatus(), actualPaidUsage.getStatus());
+        assertEquals(expectedPaidUsage.getWrWrkInst(), actualPaidUsage.getWrWrkInst());
+        assertEquals(expectedPaidUsage.getWorkTitle(), actualPaidUsage.getWorkTitle());
+        assertEquals(expectedPaidUsage.getArticle(), actualPaidUsage.getArticle());
+        assertEquals(expectedPaidUsage.getStandardNumber(), actualPaidUsage.getStandardNumber());
+        assertEquals(expectedPaidUsage.getStandardNumberType(), actualPaidUsage.getStandardNumberType());
+        assertEquals(expectedPaidUsage.getPublisher(), actualPaidUsage.getPublisher());
+        assertEquals(expectedPaidUsage.getPublicationDate(), actualPaidUsage.getPublicationDate());
+        assertEquals(expectedPaidUsage.getMarket(), actualPaidUsage.getMarket());
+        assertEquals(expectedPaidUsage.getMarketPeriodFrom(), actualPaidUsage.getMarketPeriodFrom());
+        assertEquals(expectedPaidUsage.getMarketPeriodTo(), actualPaidUsage.getMarketPeriodTo());
+        assertEquals(expectedPaidUsage.getAuthor(), actualPaidUsage.getAuthor());
+        assertEquals(expectedPaidUsage.getNumberOfCopies(), actualPaidUsage.getNumberOfCopies());
+        assertEquals(expectedPaidUsage.getReportedValue(), actualPaidUsage.getReportedValue());
+        assertEquals(expectedPaidUsage.isRhParticipating(), actualPaidUsage.isRhParticipating());
+        assertEquals(expectedPaidUsage.getProductFamily(), actualPaidUsage.getProductFamily());
+        assertEquals(expectedPaidUsage.getSystemTitle(), actualPaidUsage.getSystemTitle());
+        assertEquals(expectedPaidUsage.getServiceFee(), actualPaidUsage.getServiceFee());
         assertEquals(expectedPaidUsage.getLmDetailId(), actualPaidUsage.getLmDetailId());
         assertEquals(expectedPaidUsage.getRightsholder().getAccountNumber(),
             actualPaidUsage.getRightsholder().getAccountNumber());
@@ -161,25 +163,6 @@ public class ReceivePaidUsagesFromLmTest {
         assertEquals(expectedPaidUsage.getGrossAmount(), actualPaidUsage.getGrossAmount());
         assertEquals(expectedPaidUsage.getServiceFeeAmount(), actualPaidUsage.getServiceFeeAmount());
         assertEquals(expectedPaidUsage.getComment(), actualPaidUsage.getComment());
-    }
-
-    private PaidUsage buildPaidUsage(String lmDetailId, Long rhAccountNumber, BigDecimal netAmount,
-                                     BigDecimal serviceFeeAmount, BigDecimal collectedAmount) {
-        PaidUsage paidUsage = new PaidUsage();
-        paidUsage.getRightsholder().setAccountNumber(rhAccountNumber);
-        paidUsage.getPayee().setAccountNumber(1000010022L);
-        paidUsage.setDistributionName("FDA March 17");
-        paidUsage.setDistributionDate(OffsetDateTime.parse("2017-01-14T00:00-05:00"));
-        paidUsage.setCccEventId("53256");
-        paidUsage.setCheckDate(OffsetDateTime.parse("2017-01-15T00:00-05:00"));
-        paidUsage.setCheckNumber("578945");
-        paidUsage.setPeriodEndDate(OffsetDateTime.parse("2017-01-16T00:00-05:00"));
-        paidUsage.setLmDetailId(lmDetailId);
-        paidUsage.setNetAmount(netAmount);
-        paidUsage.setServiceFeeAmount(serviceFeeAmount);
-        paidUsage.setGrossAmount(collectedAmount);
-        paidUsage.setComment("usage from usages.csv");
-        return paidUsage;
     }
 
     private void expectReceivePaidUsages(String messageFilepath) throws InterruptedException {

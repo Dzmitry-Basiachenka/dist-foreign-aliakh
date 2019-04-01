@@ -1,0 +1,44 @@
+[
+  {
+    "id": "c3a24455-a92b-4572-b6b5-628a66572104",
+    "productFamily": "FAS",
+    "status": "PAID",
+    "wrWrkInst": "243904752",
+    "workTitle": "100 ROAD MOVIES",
+    "systemTitle": "100 ROAD MOVIES",
+    "article": "DIN EN 779:2012",
+    "standardNumber": "1008902112317555XX",
+    "standardNumberType": null,
+    "publisher": "IEEE",
+    "publicationDate": "2013-09-10",
+    "market": "Doc Del",
+    "marketPeriodFrom": 2013,
+    "marketPeriodTo": 2017,
+    "author": "Philippe de Mézières",
+    "numberOfCopies": 100,
+    "reportedValue": "6000.00",
+    "rhParticipating": null,
+    "serviceFee": "0.16000",
+    "serviceFeeAmount": "320.0000000000",
+    "netAmount": "1680.0000000000",
+    "grossAmount": "2000.0000000000",
+    "rightsholder": {
+      "id": null,
+      "accountNumber": "1000002859",
+      "name": null
+    },
+    "payee": {
+      "id": null,
+      "accountNumber": "1000010022",
+      "name": null
+    },
+    "distributionName": "FDA March 17",
+    "distributionDate": "2017-01-14T00:00-05:00",
+    "cccEventId": "53256",
+    "checkNumber": "578945",
+    "checkDate": "2017-01-15T00:00-05:00",
+    "lmDetailId": "c3a24455-a92b-4572-b6b5-628a66572104",
+    "periodEndDate": "2017-01-16T00:00-05:00",
+    "comment": "usage from usages.csv"
+  }
+]

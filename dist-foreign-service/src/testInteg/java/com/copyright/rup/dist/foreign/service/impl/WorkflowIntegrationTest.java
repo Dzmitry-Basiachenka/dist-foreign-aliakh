@@ -102,6 +102,7 @@ public class WorkflowIntegrationTest {
                 USAGE_LM_DETAIL_ID_4, USAGE_LM_DETAIL_ID_5, USAGE_LM_DETAIL_ID_6)
             .expectCrmReporting("crm/cla_rights_distribution_request.json",
                 "crm/cla_rights_distribution_response.json")
+            .expectUsages("usage/expected_usages_for_workflow.json")
             .expectUsageAudit(USAGE_LM_DETAIL_ID_1, expectedUsageAudit)
             .expectUsageAudit(USAGE_LM_DETAIL_ID_2, expectedUsageAudit)
             .expectUsageAudit(USAGE_LM_DETAIL_ID_3, expectedUsageAudit)

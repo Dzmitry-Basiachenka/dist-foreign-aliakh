@@ -571,6 +571,7 @@ public class UsageService implements IUsageService {
         resultUsage.setWorkTitle(originalUsage.getWorkTitle());
         resultUsage.setArticle(originalUsage.getArticle());
         resultUsage.setStandardNumber(originalUsage.getStandardNumber());
+        resultUsage.setStandardNumberType(originalUsage.getStandardNumberType());
         resultUsage.setPublisher(originalUsage.getPublisher());
         resultUsage.setPublicationDate(originalUsage.getPublicationDate());
         resultUsage.setMarket(originalUsage.getMarket());
