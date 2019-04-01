@@ -1,3 +1,13 @@
+5.1.7
+-
+* B-46739 FDA: Remove NTS titles that do not meet the minimum from the fund pool batch: implement service logic for excluding details under minimum cutoff amount
+* B-48760 FDA: Create NTS Pre-service fee additional fund pool from NTS withdrawn details: Implement CSV export from the Filtered Batches dialog
+* B-48995 FDA: Delete NTS withdrawn fund pool: implement backend logic to delete additional funds
+* B-49463 Tech Debt: FDA: adjust thread executor on batch loading to start processing of usages instead of keep processing task waiting in queue
+* B-49463 Tech Debt: FDA: ignore redundand org.apache.catalina.util.SessionIdGeneratorBase and org.jasig.cas.client.session.SingleSignOutHandler warn messages
+* B-50004 FDA: Add Standard Number Type to the usage for classification: Preserve standard number type during creating split paid usage, adjust workflow tests with usage verification
+* B-50004 FDA: Add Standard Number Type to the usage for classification: retrieve Work by Wr Wrk Inst from PI
+
 5.1.6
 -
 * B-48760 FDA: Create NTS Pre-service fee additional fund pool from NTS withdrawn details: Implement the Filtered Batches dialog
