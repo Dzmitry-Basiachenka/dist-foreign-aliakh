@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
@@ -14,7 +15,9 @@ import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
@@ -28,6 +31,10 @@ import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.mock.PaidUsageConsumerMock;
 import com.copyright.rup.dist.foreign.service.impl.mock.SnsMock;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -62,6 +69,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Builder for {@link WorkflowIntegrationTest}.
@@ -119,6 +127,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
     private List<String> expectedPaidUsageLmDetailids;
     private String expectedCrmRequestJsonFile;
     private String expectedCrmResponseJsonFile;
+    private String expectedUsagesJsonFile;
 
     public WorkflowIntegrationTestBuilder withUsagesCsvFile(String csvFile, String... usageIds) {
         this.usagesCsvFile = csvFile;
@@ -190,6 +199,11 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
+    public WorkflowIntegrationTestBuilder expectUsages(String usagesJsonFile) {
+        this.expectedUsagesJsonFile = usagesJsonFile;
+        return this;
+    }
+
     void reset() {
         this.expectedUsageLmDetailIdToAuditMap.clear();
         this.expectedRmsRequestsToResponses.clear();
@@ -225,6 +239,7 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
             sendScenarioToLm();
             receivePaidUsagesFromLm();
             sendUsagesToCrm();
+            verifyUsages();
             verifyScenarioAudit();
             verifyUsagesAudit();
         }
@@ -365,6 +380,69 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
                 usageArchiveRepository.findByIdAndStatus(expectedArchivedUsageIds, UsageStatusEnum.ARCHIVED);
             assertTrue(CollectionUtils.isNotEmpty(actualArchivedUsages));
             assertEquals(CollectionUtils.size(expectedArchivedUsageIds), CollectionUtils.size(actualArchivedUsages));
+        }
+
+        private void verifyUsages() throws IOException {
+            List<String> usageIds = usageService.getForAudit(new AuditFilter(), null, null).stream()
+                .map(UsageDto::getId)
+                .collect(Collectors.toList());
+            List<PaidUsage> expectedPaidUsages = loadExpectedUsages(expectedUsagesJsonFile).stream()
+                .sorted(Comparator.comparing(PaidUsage::getLmDetailId))
+                .collect(Collectors.toList());
+            List<PaidUsage> actualPaidUsages =
+                usageArchiveRepository.findByIdAndStatus(usageIds, UsageStatusEnum.ARCHIVED)
+                    .stream()
+                    .sorted(Comparator.comparing(PaidUsage::getLmDetailId))
+                    .collect(Collectors.toList());
+            assertEquals(expectedPaidUsages.size(), actualPaidUsages.size());
+            IntStream.range(0, expectedPaidUsages.size())
+                .forEach(i -> assertPaidUsage(expectedPaidUsages.get(i), actualPaidUsages.get(i)));
+        }
+
+        private List<PaidUsage> loadExpectedUsages(String fileName) throws IOException {
+            String content = TestUtils.fileToString(this.getClass(), fileName);
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
+            mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+            return mapper.readValue(content, new TypeReference<List<PaidUsage>>() {
+            });
+        }
+
+        private void assertPaidUsage(PaidUsage expectedPaidUsage, PaidUsage actualPaidUsage) {
+            assertNotNull(actualPaidUsage.getId());
+            assertEquals(expectedPaidUsage.getStatus(), actualPaidUsage.getStatus());
+            assertEquals(expectedPaidUsage.getWrWrkInst(), actualPaidUsage.getWrWrkInst());
+            assertEquals(expectedPaidUsage.getWorkTitle(), actualPaidUsage.getWorkTitle());
+            assertEquals(expectedPaidUsage.getArticle(), actualPaidUsage.getArticle());
+            assertEquals(expectedPaidUsage.getStandardNumber(), actualPaidUsage.getStandardNumber());
+            assertEquals(expectedPaidUsage.getStandardNumberType(), actualPaidUsage.getStandardNumberType());
+            assertEquals(expectedPaidUsage.getPublisher(), actualPaidUsage.getPublisher());
+            assertEquals(expectedPaidUsage.getPublicationDate(), actualPaidUsage.getPublicationDate());
+            assertEquals(expectedPaidUsage.getMarket(), actualPaidUsage.getMarket());
+            assertEquals(expectedPaidUsage.getMarketPeriodFrom(), actualPaidUsage.getMarketPeriodFrom());
+            assertEquals(expectedPaidUsage.getMarketPeriodTo(), actualPaidUsage.getMarketPeriodTo());
+            assertEquals(expectedPaidUsage.getAuthor(), actualPaidUsage.getAuthor());
+            assertEquals(expectedPaidUsage.getNumberOfCopies(), actualPaidUsage.getNumberOfCopies());
+            assertEquals(expectedPaidUsage.getReportedValue(), actualPaidUsage.getReportedValue());
+            assertEquals(expectedPaidUsage.isRhParticipating(), actualPaidUsage.isRhParticipating());
+            assertEquals(expectedPaidUsage.getProductFamily(), actualPaidUsage.getProductFamily());
+            assertEquals(expectedPaidUsage.getSystemTitle(), actualPaidUsage.getSystemTitle());
+            assertEquals(expectedPaidUsage.getServiceFee(), actualPaidUsage.getServiceFee());
+            assertEquals(expectedPaidUsage.getLmDetailId(), actualPaidUsage.getLmDetailId());
+            assertEquals(expectedPaidUsage.getRightsholder().getAccountNumber(),
+                actualPaidUsage.getRightsholder().getAccountNumber());
+            assertEquals(expectedPaidUsage.getPayee().getAccountNumber(),
+                actualPaidUsage.getPayee().getAccountNumber());
+            assertEquals(expectedPaidUsage.getDistributionName(), actualPaidUsage.getDistributionName());
+            assertEquals(expectedPaidUsage.getDistributionDate(), actualPaidUsage.getDistributionDate());
+            assertEquals(expectedPaidUsage.getCccEventId(), actualPaidUsage.getCccEventId());
+            assertEquals(expectedPaidUsage.getCheckNumber(), actualPaidUsage.getCheckNumber());
+            assertEquals(expectedPaidUsage.getCheckDate(), actualPaidUsage.getCheckDate());
+            assertEquals(expectedPaidUsage.getPeriodEndDate(), actualPaidUsage.getPeriodEndDate());
+            assertEquals(expectedPaidUsage.getNetAmount(), actualPaidUsage.getNetAmount());
+            assertEquals(expectedPaidUsage.getGrossAmount(), actualPaidUsage.getGrossAmount());
+            assertEquals(expectedPaidUsage.getServiceFeeAmount(), actualPaidUsage.getServiceFeeAmount());
+            assertEquals(expectedPaidUsage.getComment(), actualPaidUsage.getComment());
         }
 
         private void verifyScenarioAudit() {
