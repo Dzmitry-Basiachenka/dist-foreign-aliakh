@@ -9,12 +9,15 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+import com.copyright.rup.dist.foreign.service.impl.csv.WithdrawnBatchesCsvReportHandler;
 
+import org.apache.ibatis.executor.result.DefaultResultContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -83,5 +86,23 @@ public class ReportService implements IReportService {
     public void writeSummaryMarkerCsvReport(List<UsageBatch> batches, OutputStream outputStream) {
         usageRepository.writeSummaryMarketCsvReport(
             batches.stream().map(UsageBatch::getId).collect(Collectors.toList()), outputStream);
+    }
+
+    @Override
+    public void writeWithdrawnBatchesCsvReport(List<UsageBatch> batches, BigDecimal grossAmount,
+                                               OutputStream outputStream) {
+        try (WithdrawnBatchesCsvReportHandler handler = new WithdrawnBatchesCsvReportHandler(outputStream)) {
+            batches.forEach(usageBatch -> {
+                DefaultResultContext<UsageBatch> context = new DefaultResultContext<>();
+                context.nextResultObject(usageBatch);
+                handler.handleResult(context);
+            });
+            UsageBatch usageBatch = new UsageBatch();
+            usageBatch.setName("Total");
+            usageBatch.setGrossAmount(grossAmount);
+            DefaultResultContext<UsageBatch> context = new DefaultResultContext<>();
+            context.nextResultObject(usageBatch);
+            handler.handleResult(context);
+        }
     }
 }

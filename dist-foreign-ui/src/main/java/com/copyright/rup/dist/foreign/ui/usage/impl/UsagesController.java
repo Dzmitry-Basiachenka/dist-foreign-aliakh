@@ -56,6 +56,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -280,6 +281,12 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     @Override
     public void clearFilter() {
         filterController.getWidget().clearFilter();
+    }
+
+    @Override
+    public IStreamSource getWithdrawnBatchesStreamSource(List<UsageBatch> batches, BigDecimal grossAmount) {
+        return new ExportStreamSource("batches_nts_withdrawn_",
+            pipedOutputStream -> reportService.writeWithdrawnBatchesCsvReport(batches, grossAmount, pipedOutputStream));
     }
 
     @Override

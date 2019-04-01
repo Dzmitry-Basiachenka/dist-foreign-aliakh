@@ -19,6 +19,7 @@ import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.util.ReflectTools;
 
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 
@@ -261,4 +262,13 @@ public interface IUsagesController extends IController<IUsagesWidget> {
      * Resets filter.
      */
     void clearFilter();
+
+    /**
+     * Return instance of {@link IStreamSource} for for NTS Withdrawn Batches Report.
+     *
+     * @param batches     list of batches
+     * @param grossAmount total gross amount
+     * @return instance of {@link IStreamSource}
+     */
+    IStreamSource getWithdrawnBatchesStreamSource(List<UsageBatch> batches, BigDecimal grossAmount);
 }

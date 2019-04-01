@@ -57,6 +57,7 @@ import org.powermock.reflect.Whitebox;
 
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.Collections;
@@ -421,6 +422,24 @@ public class UsagesControllerTest {
         replay(usageWidgetMock, eventMock);
         controller.onScenarioCreated(eventMock);
         verify(usageWidgetMock, eventMock);
+    }
+
+    @Test
+    public void testGetWithdrawnBatchesStreamSource() {
+        IStreamSource streamSource = controller.getWithdrawnBatchesStreamSource(
+            Collections.singletonList(new UsageBatch()), BigDecimal.ONE);
+        ExecutorService executorService = createMock(ExecutorService.class);
+        Whitebox.setInternalState(streamSource, executorService);
+        Capture<Runnable> captureRunnable = new Capture<>();
+        executorService.execute(capture(captureRunnable));
+        expectLastCall().once();
+        replay(usageService,  executorService);
+        assertNotNull(streamSource.getStream());
+        Runnable runnable = captureRunnable.getValue();
+        assertNotNull(runnable);
+        assertSame(streamSource, Whitebox.getInternalState(runnable, "arg$1"));
+        assertTrue(Whitebox.getInternalState(runnable, "arg$2") instanceof PipedOutputStream);
+        verify(usageService,  executorService);
     }
 
     private void prepareGetAppliedFilterExpectations(UsageFilter expectedUsageFilter) {

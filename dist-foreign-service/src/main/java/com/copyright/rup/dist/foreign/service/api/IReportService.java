@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import java.io.OutputStream;
 import java.io.PipedOutputStream;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -85,4 +86,13 @@ public interface IReportService {
      * @param outputStream instance of {@link OutputStream}
      */
     void writeSummaryMarkerCsvReport(List<UsageBatch> batches, OutputStream outputStream);
+
+    /**
+     * Writes NTS Withdrawn Batches Report into the output stream in csv format.
+     *
+     * @param batches      list of batches
+     * @param grossAmount  total gross amount
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeWithdrawnBatchesCsvReport(List<UsageBatch> batches, BigDecimal grossAmount, OutputStream outputStream);
 }
