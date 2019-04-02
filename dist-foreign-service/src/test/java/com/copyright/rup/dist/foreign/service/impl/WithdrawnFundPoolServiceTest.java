@@ -15,6 +15,7 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,6 +31,7 @@ import java.util.List;
 public class WithdrawnFundPoolServiceTest {
 
     private static final String FUND_UID = RupPersistUtils.generateUuid();
+    private static final String BATCH_UID = RupPersistUtils.generateUuid();
     private WithdrawnFundPoolService withdrawnFundPoolService;
     private IUsageService usageService;
     private IWithdrawnFundPoolRepository withdrawnFundPoolRepository;
@@ -60,6 +62,15 @@ public class WithdrawnFundPoolServiceTest {
         replay(withdrawnFundPoolRepository, usageService);
         withdrawnFundPoolService.deleteAdditionalFund(buildWithdrawnFundPool());
         verify(withdrawnFundPoolRepository, usageService);
+    }
+
+    @Test
+    public void testGetAdditionalFundNamesByUsageBatchId() {
+        List<String> names = Arrays.asList("Test 1", "Test 2");
+        expect(withdrawnFundPoolRepository.findNamesByUsageBatchId(BATCH_UID)).andReturn(names).once();
+        replay(withdrawnFundPoolRepository);
+        assertEquals(names, withdrawnFundPoolService.getAdditionalFundNamesByUsageBatchId(BATCH_UID));
+        verify(withdrawnFundPoolRepository);
     }
 
     private WithdrawnFundPool buildWithdrawnFundPool() {

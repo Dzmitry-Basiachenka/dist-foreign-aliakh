@@ -23,7 +23,6 @@ import com.copyright.rup.vaadin.ui.component.window.ConfirmDialogWindow.IListene
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
-import com.google.common.collect.Lists;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
@@ -47,6 +46,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -80,7 +80,7 @@ public class DeleteUsageBatchWindowTest {
         usageBatch.setProductFamily(FAS_PRODUCT_FAMILY);
         usageBatch.setPaymentDate(LocalDate.now());
         expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
-        expect(controller.getUsageBatches(FAS_PRODUCT_FAMILY)).andReturn(Lists.newArrayList(usageBatch)).once();
+        expect(controller.getUsageBatches(FAS_PRODUCT_FAMILY)).andReturn(Collections.singletonList(usageBatch)).once();
         replay(controller);
         deleteWindow = new DeleteUsageBatchWindow(controller);
         verify(controller);
@@ -108,6 +108,27 @@ public class DeleteUsageBatchWindowTest {
     }
 
     @Test
+    public void testDeleteClickListenerAssociatedFunds() {
+        mockStatic(Windows.class);
+        Window confirmWindowCapture = createMock(Window.class);
+        VerticalLayout content = (VerticalLayout) deleteWindow.getContent();
+        Grid grid = (Grid) content.getComponent(1);
+        Button button = (Button) grid.getColumn("delete").getValueProvider().apply(usageBatch);
+        assertEquals("Delete", button.getCaption());
+        Collection<?> listeners = button.getListeners(ClickEvent.class);
+        assertEquals(1, listeners.size());
+        ClickListener listener = (ClickListener) listeners.iterator().next();
+        expect(controller.getAdditionalFundNamesByUsageBatchId(USAGE_BATCH_ID))
+            .andReturn(Arrays.asList("Fund 1", "Fund 2")).once();
+        Windows.showNotificationWindow("Usage batch cannot be deleted because it is associated with the following " +
+            "additional funds:<ul><li>Fund 1</li><li>Fund 2</li></ul>");
+        expectLastCall().once();
+        replay(controller, confirmWindowCapture, Windows.class);
+        listener.buttonClick(null);
+        verify(controller, confirmWindowCapture, Windows.class);
+    }
+
+    @Test
     public void testDeleteClickListenerEmptyAssociatedScenarios() {
         mockStatic(Windows.class);
         Capture<IListener> listenerCapture = new Capture<>();
@@ -119,6 +140,8 @@ public class DeleteUsageBatchWindowTest {
         Collection<?> listeners = button.getListeners(ClickEvent.class);
         assertEquals(1, listeners.size());
         ClickListener listener = (ClickListener) listeners.iterator().next();
+        expect(controller.getAdditionalFundNamesByUsageBatchId(USAGE_BATCH_ID))
+            .andReturn(Collections.emptyList()).once();
         expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
             .andReturn(Collections.emptyList()).once();
         expect(Windows.showConfirmDialog(eq("Are you sure you want to delete <i><b>'Batch Name'</b></i> usage batch?"),
@@ -127,7 +150,6 @@ public class DeleteUsageBatchWindowTest {
         listener.buttonClick(null);
         verify(controller, confirmWindowCapture, Windows.class);
     }
-
 
     @Test
     public void testDeleteClickListenerWithAssociatedScenarios() {
@@ -140,8 +162,10 @@ public class DeleteUsageBatchWindowTest {
         Collection<?> listeners = button.getListeners(ClickEvent.class);
         assertEquals(1, listeners.size());
         ClickListener listener = (ClickListener) listeners.iterator().next();
+        expect(controller.getAdditionalFundNamesByUsageBatchId(USAGE_BATCH_ID))
+            .andReturn(Collections.emptyList()).once();
         expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
-            .andReturn(Lists.newArrayList("Scenario 1", "Scenario 2")).once();
+            .andReturn(Arrays.asList("Scenario 1", "Scenario 2")).once();
         Windows.showNotificationWindow("Usage batch cannot be deleted because it is associated with the following " +
             "scenarios:<ul><li>Scenario 1</li><li>Scenario 2</li></ul>");
         expectLastCall().once();
@@ -174,7 +198,7 @@ public class DeleteUsageBatchWindowTest {
         assertNull(grid.getCaption());
         verifySize(grid, 100, Unit.PERCENTAGE, 100, Unit.PERCENTAGE);
         List<Column> columns = grid.getColumns();
-        assertEquals(Lists.newArrayList("Usage Batch Name", "Payment Date", "Fiscal Year", StringUtils.EMPTY),
+        assertEquals(Arrays.asList("Usage Batch Name", "Payment Date", "Fiscal Year", StringUtils.EMPTY),
             columns.stream().map(Column::getCaption).collect(Collectors.toList()));
         assertEquals(115, columns.get(1).getWidth(), 0);
         assertEquals(110, columns.get(2).getWidth(), 0);

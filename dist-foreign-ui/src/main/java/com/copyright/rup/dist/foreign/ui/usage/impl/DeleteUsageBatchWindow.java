@@ -90,19 +90,18 @@ class DeleteUsageBatchWindow extends Window {
     }
 
     private void deleteUsageBatch(UsageBatch usageBatch) {
-        List<String> scenariosNames = controller.getScenariosNamesAssociatedWithUsageBatch(usageBatch.getId());
-        if (CollectionUtils.isEmpty(scenariosNames)) {
-            Windows.showConfirmDialog(
-                ForeignUi.getMessage("message.confirm.delete_action", usageBatch.getName(), "usage batch"),
-                () -> performDelete(usageBatch));
+        List<String> additionalFundsNames = controller.getAdditionalFundNamesByUsageBatchId(usageBatch.getId());
+        if (CollectionUtils.isNotEmpty(additionalFundsNames)) {
+            Windows.showNotificationWindow(buildNotificationMessage("additional funds", additionalFundsNames));
         } else {
-            StringBuilder scenariosHtml = new StringBuilder("<ul>");
-            for (String scenarioName : scenariosNames) {
-                scenariosHtml.append("<li>").append(scenarioName).append("</li>");
+            List<String> scenariosNames = controller.getScenariosNamesAssociatedWithUsageBatch(usageBatch.getId());
+            if (CollectionUtils.isEmpty(scenariosNames)) {
+                Windows.showConfirmDialog(
+                    ForeignUi.getMessage("message.confirm.delete_action", usageBatch.getName(), "usage batch"),
+                    () -> performDelete(usageBatch));
+            } else {
+                Windows.showNotificationWindow(buildNotificationMessage("scenarios", scenariosNames));
             }
-            scenariosHtml.append("</ul>");
-            Windows.showNotificationWindow(
-                ForeignUi.getMessage("message.error.delete_usage_batch", scenariosHtml));
         }
     }
 
@@ -130,5 +129,12 @@ class DeleteUsageBatchWindow extends Window {
         private Boolean caseInsensitiveContains(String where, String what) {
             return StringUtils.contains(StringUtils.lowerCase(where), StringUtils.lowerCase(what));
         }
+    }
+
+    private String buildNotificationMessage(String associatedField, List<String> associatedNames) {
+        StringBuilder htmlNamesList = new StringBuilder("<ul>");
+        associatedNames.forEach(name -> htmlNamesList.append("<li>").append(name).append("</li>"));
+        htmlNamesList.append("</ul>");
+        return ForeignUi.getMessage("message.error.delete_usage_batch", associatedField, htmlNamesList);
     }
 }

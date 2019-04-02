@@ -347,6 +347,16 @@ public class UsagesControllerTest {
     }
 
     @Test
+    public void testGetAdditionalFundNamesByUsageBatchId() {
+        String batchId = RupPersistUtils.generateUuid();
+        List<String> names = Arrays.asList("Test 1", "Test 2");
+        expect(withdrawnFundPoolService.getAdditionalFundNamesByUsageBatchId(batchId)).andReturn(names).once();
+        replay(withdrawnFundPoolService);
+        assertEquals(names, controller.getAdditionalFundNamesByUsageBatchId(batchId));
+        verify(withdrawnFundPoolService);
+    }
+
+    @Test
     public void testGetUsagesCountForNtsBatch() {
         UsageBatch usageBatch = new UsageBatch();
         expect(usageService.getUsagesCountForNtsBatch(usageBatch)).andReturn(5).once();

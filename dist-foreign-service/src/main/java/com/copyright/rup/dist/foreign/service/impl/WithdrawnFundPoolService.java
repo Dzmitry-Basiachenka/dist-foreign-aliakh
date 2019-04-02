@@ -48,6 +48,11 @@ public class WithdrawnFundPoolService implements IWithdrawnFundPoolService {
         LOGGER.info("Delete additional fund. Finished. FundPoolName={}, UserName={}", fundPool.getName(), userName);
     }
 
+    @Override
+    public List<String> getAdditionalFundNamesByUsageBatchId(String batchId) {
+        return withdrawnFundPoolRepository.findNamesByUsageBatchId(batchId);
+    }
+
     void setWithdrawnFundPoolRepository(IWithdrawnFundPoolRepository withdrawnFundPoolRepository) {
         this.withdrawnFundPoolRepository = withdrawnFundPoolRepository;
     }

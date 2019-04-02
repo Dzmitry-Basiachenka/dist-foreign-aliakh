@@ -42,6 +42,12 @@ public class WithdrawnFundPoolRepository extends BaseRepository implements IWith
     }
 
     @Override
+    public List<String> findNamesByUsageBatchId(String batchId) {
+        checkArgument(StringUtils.isNotBlank(batchId));
+        return selectList("IWithdrawnFundPoolMapper.findNamesByUsageBatchId", batchId);
+    }
+
+    @Override
     public List<WithdrawnFundPool> findAll() {
         return selectList("IWithdrawnFundPoolMapper.findAll");
     }
