@@ -60,6 +60,7 @@ public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
         addPlainValidators(Header.TITLE, lengthValidator2000);
         addPlainValidators(Header.ARTICLE, lengthValidator1000);
         addPlainValidators(Header.STANDARD_NUMBER, lengthValidator1000);
+        addPlainValidators(Header.STANDARD_NUMBER_TYPE, new LengthValidator(50));
         addPlainValidators(Header.WR_WRK_INST, positiveNumberValidator, new LengthValidator(9));
         addPlainValidators(Header.RH_ACCT_NUMBER, positiveNumberValidator, new LengthValidator(18));
         addPlainValidators(Header.PUBLISHER, lengthValidator1000);
@@ -80,6 +81,7 @@ public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
         TITLE("Title"),
         ARTICLE("Article"),
         STANDARD_NUMBER("Standard Number"),
+        STANDARD_NUMBER_TYPE("Standard Number Type"),
         WR_WRK_INST("Wr Wrk Inst"),
         RH_ACCT_NUMBER("RH Account #"),
         PUBLISHER("Publisher"),
@@ -167,6 +169,7 @@ public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
             result.setWorkTitle(getString(row, Header.TITLE));
             result.setArticle(getString(row, Header.ARTICLE));
             result.setStandardNumber(getString(row, Header.STANDARD_NUMBER));
+            result.setStandardNumberType(StringUtils.upperCase(getString(row, Header.STANDARD_NUMBER_TYPE)));
             result.setWrWrkInst(getLong(row, Header.WR_WRK_INST));
             if (Objects.nonNull(result.getWrWrkInst())) {
                 result.setSystemTitle(result.getWorkTitle());

@@ -76,6 +76,7 @@ databaseChangeLog {
             column(name: "product_family", value: "FAS")
             column(name: "article", value: "DIN EN 779:2013")
             column(name: "standard_number", value: "1008902112317622XX")
+            column(name: "standard_number_type", value: "VALISBN10")
             column(name: "market", value: "Doc Del")
             column(name: "market_period_from", value: "2013")
             column(name: "market_period_to", value: "2017")

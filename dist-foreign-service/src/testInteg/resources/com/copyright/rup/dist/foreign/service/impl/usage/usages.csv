@@ -1,6 +1,6 @@
-Title,Article,standard number,WR WRK INST,RH Account #,Publisher,Pub Date,Number of Copies,Reported Value,Market,Market Period From,Market Period To,Author,Comment
-1984,Appendix: The Principles of Newspeak,9780150000000,123456789,1000009522,"Publisher",12/22/3000,65,30.86,"Univ,Bus,Doc,S",2015,2016,"Aarseth, Espen J.","usage1 from usages.csv"
-1984,Appendix: The Principles of Newspeak,9780150000000,,,"Publisher",12/22/3000,65,30.862,"Univ,Bus,Doc,S",2015,2016,"Aarseth, Espen J.","usage2 from usages.csv"
-1984,Appendix: The Principles of Newspeak,9780150000000,123456789,,"Publisher",12/22/3000,65,30.86333,"Univ,Bus,Doc,S",2015,2016,"Aarseth, Espen J.","usage3 from usages.csv"
-1984,Appendix: The Principles of Newspeak,9780150000000,123456789,999999999999999999,"Publisher",12/22/3000,65,30.86,"Univ,Bus,Doc,S",2015,2016,"Aarseth, Espen J.","usage4 from usages.csv"
-"1984",Na,9780150000000,Na,null,"null","N/A",null,60.8,"Univ,Bus,Doc,S",2015,2015,,"usage5 from usages.csv"
+Title,Article,Standard Number,Standard Number Type,WR WRK INST,RH Account #,Publisher,Pub Date,Number of Copies,Reported Value,Market,Market Period From,Market Period To,Author,Comment
+1984,Appendix: The Principles of Newspeak,9780150000000,valisbn10,123456789,1000009522,"Publisher",12/22/3000,65,30.86,"Univ,Bus,Doc,S",2015,2016,"Aarseth, Espen J.","usage1 from usages.csv"
+1984,Appendix: The Principles of Newspeak,9780150000000,VALISBN10,,,"Publisher",12/22/3000,65,30.862,"Univ,Bus,Doc,S",2015,2016,"Aarseth, Espen J.","usage2 from usages.csv"
+1984,Appendix: The Principles of Newspeak,9780150000000,,123456789,,"Publisher",12/22/3000,65,30.86333,"Univ,Bus,Doc,S",2015,2016,"Aarseth, Espen J.","usage3 from usages.csv"
+1984,Appendix: The Principles of Newspeak,9780150000000,VALISBN13,123456789,999999999999999999,"Publisher",12/22/3000,65,30.86,"Univ,Bus,Doc,S",2015,2016,"Aarseth, Espen J.","usage4 from usages.csv"
+"1984",Na,9780150000000,null,Na,null,"null","N/A",null,60.8,"Univ,Bus,Doc,S",2015,2015,,"usage5 from usages.csv"
