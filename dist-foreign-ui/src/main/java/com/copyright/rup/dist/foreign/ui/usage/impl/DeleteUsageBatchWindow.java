@@ -133,7 +133,9 @@ class DeleteUsageBatchWindow extends Window {
 
     private String buildNotificationMessage(String associatedField, List<String> associatedNames) {
         StringBuilder htmlNamesList = new StringBuilder("<ul>");
-        associatedNames.forEach(name -> htmlNamesList.append("<li>").append(name).append("</li>"));
+        for (String name : associatedNames) {
+            htmlNamesList.append("<li>").append(name).append("</li>");
+        }
         htmlNamesList.append("</ul>");
         return ForeignUi.getMessage("message.error.delete_usage_batch", associatedField, htmlNamesList);
     }

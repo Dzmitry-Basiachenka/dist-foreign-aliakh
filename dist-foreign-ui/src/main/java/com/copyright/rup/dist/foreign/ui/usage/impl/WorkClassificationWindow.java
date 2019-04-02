@@ -134,7 +134,10 @@ public class WorkClassificationWindow extends Window {
         button.addClickListener(event -> {
             Set<WorkClassification> selectedItems = grid.getSelectedItems();
             if (!selectedItems.isEmpty()) {
-                Windows.showConfirmDialog(ForeignUi.getMessage(message, controller.getCountToUpdate(selectedItems)),
+                int usageCount = controller.getCountToUpdate(selectedItems);
+                Windows.showConfirmDialog(0 < usageCount
+                        ? ForeignUi.getMessage(message, usageCount)
+                        : ForeignUi.getMessage("message.confirm.action"),
                     () -> {
                         consumer.accept(selectedItems);
                         dataProvider.refreshAll();
