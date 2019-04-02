@@ -1,3 +1,11 @@
+5.1.8
+-
+* B-48760 FDA: Create NTS Pre-service fee additional fund pool from NTS withdrawn details: Implement the Create Fund Pool dialog
+* B-48995 FDA: Delete NTS withdrawn fund pool: prevent deleting batch that associated with additional funds
+* B-49463 Tech Debt: FDA: adjust confirmation message during applying classification without unclassified usages
+* B-50004 FDA: Add Standard Number Type to the usage for classification: Ensure standard number type from PI is in uppercase
+* B-50004 FDA: Add Standard Number Type to the usage for classification: implement validator to verify Wr Wrk Inst
+
 5.1.7
 -
 * B-46739 FDA: Remove NTS titles that do not meet the minimum from the fund pool batch: implement service logic for excluding details under minimum cutoff amount
