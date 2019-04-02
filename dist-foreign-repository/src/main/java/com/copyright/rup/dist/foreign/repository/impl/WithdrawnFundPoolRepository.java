@@ -51,4 +51,10 @@ public class WithdrawnFundPoolRepository extends BaseRepository implements IWith
     public List<WithdrawnFundPool> findAll() {
         return selectList("IWithdrawnFundPoolMapper.findAll");
     }
+
+    @Override
+    public int findCountByName(String fundPoolName) {
+        checkArgument(StringUtils.isNotBlank(fundPoolName));
+        return selectOne("IWithdrawnFundPoolMapper.findCountByName", fundPoolName);
+    }
 }

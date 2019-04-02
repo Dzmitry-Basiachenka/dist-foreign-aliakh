@@ -58,4 +58,10 @@
             where df_usage_batch_uid = #{df_usage_batch_id}
         )
     </select>
+
+    <select id="findCountByName" parameterType="string" resultType="int">
+        select count(name)
+        from ${schema}.df_fund_pool
+        where upper(name) = upper(#{name})
+    </select>
 </mapper>

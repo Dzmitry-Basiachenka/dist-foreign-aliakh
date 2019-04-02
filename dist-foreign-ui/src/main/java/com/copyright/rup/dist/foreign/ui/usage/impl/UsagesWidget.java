@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
@@ -257,8 +258,15 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
             () -> controller.getWithdrawnUsageBatches());
         WithdrawnBatchFilterWindow window = new WithdrawnBatchFilterWindow(widget);
         window.updateSaveButtonClickListener(
-            () -> Windows.showModalWindow(new WithdrawnFilteredBatchesWindow(controller,
-                widget.getSelectedUsageBatches())));
+            () -> {
+                List<UsageBatch> selectedUsageBatches = widget.getSelectedUsageBatches();
+                if (!selectedUsageBatches.isEmpty()) {
+                    Windows.showModalWindow(
+                        new WithdrawnFilteredBatchesWindow(controller, selectedUsageBatches, window));
+                } else {
+                    Windows.showNotificationWindow(ForeignUi.getMessage("message.usage.batches.empty"));
+                }
+            });
         window.addListener(FilterSaveEvent.class,
             (IFilterSaveListener) widget::onSave,
             IFilterSaveListener.SAVE_HANDLER);

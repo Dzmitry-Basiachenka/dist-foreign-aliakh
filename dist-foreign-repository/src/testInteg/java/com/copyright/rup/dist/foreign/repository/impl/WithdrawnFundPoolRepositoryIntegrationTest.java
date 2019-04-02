@@ -91,6 +91,12 @@ public class WithdrawnFundPoolRepositoryIntegrationTest {
         assertNull(withdrawnFundPoolRepository.findById(ID_1));
     }
 
+    @Test
+    public void testFindCountByName() {
+        assertEquals(1, withdrawnFundPoolRepository.findCountByName(NAME_1));
+        assertEquals(0, withdrawnFundPoolRepository.findCountByName("missing fund pool name"));
+    }
+
     private void assertFundPool(WithdrawnFundPool fundPool, String id, String name, String comment) {
         assertEquals(fundPool.getId(), id);
         assertEquals(fundPool.getName(), name);

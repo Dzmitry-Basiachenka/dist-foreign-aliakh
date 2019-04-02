@@ -14,6 +14,7 @@
         <result property="fiscalYear" column="fiscal_year"/>
         <result property="grossAmount" column="gross_amount"/>
         <result property="fundPool" column="fund_pool" typeHandler="FundPoolTypeHandler"/>
+        <result property="updateDate" column="updated_datetime"/>
     </resultMap>
 
     <sql id="usageBatchColumns">
@@ -95,7 +96,8 @@
                 select sum(u.gross_amount)
                 from ${schema}.df_usage u
                 <include refid="withdrawnUsagesWhereClause"/>
-            ) gross_amount
+            ) gross_amount,
+            ub.updated_datetime
         from ${schema}.df_usage_batch ub
         where ub.product_family in
         <foreach collection="productFamilies" item="productFamily" separator="," open="(" close=")">
@@ -106,7 +108,7 @@
             from ${schema}.df_usage u
             <include refid="withdrawnUsagesWhereClause"/>
         )
-        order by ub.name
+        order by ub.updated_datetime desc
     </select>
 
     <select id="findCountByName" parameterType="string" resultType="int">

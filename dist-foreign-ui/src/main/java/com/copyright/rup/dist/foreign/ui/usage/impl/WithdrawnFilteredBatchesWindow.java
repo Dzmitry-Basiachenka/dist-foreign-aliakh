@@ -5,11 +5,13 @@ import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
+import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
@@ -33,15 +35,19 @@ import java.util.List;
 class WithdrawnFilteredBatchesWindow extends Window {
 
     private final IUsagesController controller;
+    private final WithdrawnBatchFilterWindow batchFilterWindow;
 
     /**
      * Constructor.
      *
-     * @param controller instance of {@link IUsagesController}
-     * @param batches    list of {@link UsageBatch}'es
+     * @param controller        instance of {@link IUsagesController}
+     * @param batches           list of {@link UsageBatch}'es
+     * @param batchFilterWindow instance of {@link WithdrawnBatchFilterWindow}
      */
-    WithdrawnFilteredBatchesWindow(IUsagesController controller, List<UsageBatch> batches) {
+    WithdrawnFilteredBatchesWindow(IUsagesController controller, List<UsageBatch> batches,
+                                   WithdrawnBatchFilterWindow batchFilterWindow) {
         this.controller = controller;
+        this.batchFilterWindow = batchFilterWindow;
         BigDecimal grossAmount = batches
             .stream()
             .map(UsageBatch::getGrossAmount)
@@ -91,6 +97,13 @@ class WithdrawnFilteredBatchesWindow extends Window {
             controller.getWithdrawnBatchesStreamSource(batches, grossAmount));
         fileDownloader.extend(exportButton);
         Button continueButton = Buttons.createButton("Continue");
-        return new HorizontalLayout(exportButton, continueButton, Buttons.createCloseButton(this));
+        continueButton.addClickListener((ClickListener) event ->
+            Windows.showModalWindow(new CreateWithdrawnFundPoolWindow(controller, batchFilterWindow, this)));
+        Button cancelButton = Buttons.createButton("Cancel");
+        cancelButton.addClickListener(event -> {
+            this.close();
+            batchFilterWindow.close();
+        });
+        return new HorizontalLayout(exportButton, continueButton, cancelButton);
     }
 }

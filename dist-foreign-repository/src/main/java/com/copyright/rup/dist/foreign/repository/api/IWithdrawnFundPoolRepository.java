@@ -52,4 +52,12 @@ public interface IWithdrawnFundPoolRepository {
      * @return list of NTS withdrawn fund pool names
      */
     List<String> findNamesByUsageBatchId(String batchId);
+
+    /**
+     * Finds {@link WithdrawnFundPool}s count by the name.
+     *
+     * @param fundPoolName {@link WithdrawnFundPool} name
+     * @return count of found {@link WithdrawnFundPool}s
+     */
+    int findCountByName(String fundPoolName);
 }

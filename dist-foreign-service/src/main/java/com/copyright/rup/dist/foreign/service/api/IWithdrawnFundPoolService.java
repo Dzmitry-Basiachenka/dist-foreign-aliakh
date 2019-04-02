@@ -16,6 +16,13 @@ import java.util.List;
 public interface IWithdrawnFundPoolService {
 
     /**
+     * Inserts NTS withdrawn fund pool.
+     *
+     * @param fundPool instance of {@link WithdrawnFundPool}
+     */
+    void insert(WithdrawnFundPool fundPool);
+
+    /**
      * Gets all additional funds.
      *
      * @return list of {@link WithdrawnFundPool}s
@@ -36,4 +43,12 @@ public interface IWithdrawnFundPoolService {
      * @return list of names
      */
     List<String> getAdditionalFundNamesByUsageBatchId(String batchId);
+
+    /**
+     * Checks whether {@link WithdrawnFundPool} with the name already exists.
+     *
+     * @param fundPoolName name of {@link WithdrawnFundPool} to check
+     * @return {@code true} if {@link WithdrawnFundPool} with the name already exists, {@code false} otherwise
+     */
+    boolean fundPoolNameExists(String fundPoolName);
 }
