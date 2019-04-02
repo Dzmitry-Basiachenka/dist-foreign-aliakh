@@ -74,7 +74,7 @@ public class WithdrawnFilteredBatchesWindowTest {
         assertNull(grid.getCaption());
         verifySize(grid, Unit.PERCENTAGE, 100, Unit.PERCENTAGE, 100);
         List<Column> columns = grid.getColumns();
-        assertEquals(Arrays.asList("Usage Batch Name", "NTS Withdrawn Amount"),
+        assertEquals(Arrays.asList("Usage Batch Name", "Gross NTS Withdrawn Amount"),
             columns.stream().map(Column::getCaption).collect(Collectors.toList()));
         assertEquals(-1.0, columns.get(0).getWidth(), 0);
         assertEquals(200, columns.get(1).getWidth(), 0);

@@ -548,6 +548,18 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         return selectList("IUsageMapper.deleteUnderMinimumCutoffAmountUsagesByBatchId", params);
     }
 
+    @Override
+    public void addWithdrawnUsagesToFundPool(String fundPoolId, List<String> batchIds, String userName) {
+        checkArgument(StringUtils.isNotBlank(fundPoolId));
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(5);
+        params.put("fundPoolId", fundPoolId);
+        params.put("statusFrom", UsageStatusEnum.NTS_WITHDRAWN);
+        params.put("statusTo", UsageStatusEnum.TO_BE_DISTRIBUTED);
+        params.put("batchIds", Objects.requireNonNull(batchIds));
+        params.put("updateUser", Objects.requireNonNull(userName));
+        update("IUsageMapper.addWithdrawnUsagesToFundPool", params);
+    }
+
     private AuditFilter escapeSqlLikePattern(AuditFilter auditFilter) {
         AuditFilter filterCopy = new AuditFilter(auditFilter);
         filterCopy.setCccEventId(escapeSqlLikePattern(filterCopy.getCccEventId()));

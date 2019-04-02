@@ -19,6 +19,9 @@ import com.vaadin.ui.VerticalLayout;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
+import java.math.BigDecimal;
+import java.util.Collections;
+
 /**
  * Verifies {@link CreateWithdrawnFundPoolWindow}.
  * <p/>
@@ -34,8 +37,9 @@ public class CreateWithdrawnFundPoolWindowTest {
     public void testConstructor() {
         IUsagesController controller = createMock(IUsagesController.class);
         CreateWithdrawnFundPoolWindow window = new CreateWithdrawnFundPoolWindow(controller,
+            Collections.emptyList(), BigDecimal.ONE,
             createMock(WithdrawnBatchFilterWindow.class), createMock(WithdrawnFilteredBatchesWindow.class));
-        assertEquals("Create Fund Pool", window.getCaption());
+        assertEquals("Create NTS Pre-Service Fee Funds", window.getCaption());
         verifySize(window, Unit.PIXELS, 320, Unit.PIXELS, -1);
         VerticalLayout content = (VerticalLayout) window.getContent();
         assertNotNull(content);

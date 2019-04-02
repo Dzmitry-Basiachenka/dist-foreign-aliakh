@@ -478,4 +478,14 @@ public interface IUsageRepository {
      */
     List<String> deleteUnderMinimumCutoffAmountUsagesByBatchId(UsageBatch usageBatch, BigDecimal stmCutoffAmount,
                                                                BigDecimal nonStmCutoffAmount);
+
+    /**
+     * Updates usages with status NTS_WITHDRAWN from given batches to status TO_BE_DISTRIBUTED
+     * and adds the usages to the NTS withdrawn fund pool.
+     *
+     * @param fundPoolId id of NTS withdrawn fund pool
+     * @param batchIds   list of ids of usage batches
+     * @param userName   user name
+     */
+    void addWithdrawnUsagesToFundPool(String fundPoolId, List<String> batchIds, String userName);
 }

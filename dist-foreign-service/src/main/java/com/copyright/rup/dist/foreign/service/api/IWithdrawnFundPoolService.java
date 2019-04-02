@@ -16,11 +16,12 @@ import java.util.List;
 public interface IWithdrawnFundPoolService {
 
     /**
-     * Inserts NTS withdrawn fund pool.
+     * Creates NTS withdrawn fund pool.
      *
      * @param fundPool instance of {@link WithdrawnFundPool}
+     * @param batchIds list of ids of usage batches
      */
-    void insert(WithdrawnFundPool fundPool);
+    void create(WithdrawnFundPool fundPool, List<String> batchIds);
 
     /**
      * Gets all additional funds.

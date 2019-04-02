@@ -1524,4 +1524,17 @@
                 or (sub.classification is null and sub.work_total_weight &lt; least (#{stmCutoffAmount}, #{nonStmCutoffAmount})))
         returning u.df_usage_uid
     </select>
+
+    <update id="addWithdrawnUsagesToFundPool" parameterType="map">
+        update ${schema}.df_usage
+        set
+            status_ind = #{statusTo},
+            df_fund_pool_uid = #{fundPoolId},
+            <include refid="StoredEntityMapper.update"/>
+        where df_usage_batch_uid in
+            <foreach collection="batchIds" item="batchId" separator="," open="(" close=")">
+                #{batchId}
+            </foreach>
+            and status_ind = #{statusFrom}
+    </update>
 </mapper>
