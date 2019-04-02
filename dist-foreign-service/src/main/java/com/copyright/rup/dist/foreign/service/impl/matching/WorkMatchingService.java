@@ -11,6 +11,7 @@ import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.IWorkMatchingService;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -88,7 +89,7 @@ public class WorkMatchingService implements IWorkMatchingService {
             usage.setWrWrkInst(work.getWrWrkInst());
             usage.setSystemTitle(usage.getWorkTitle());
             usage.setStatus(UsageStatusEnum.WORK_FOUND);
-            usage.setStandardNumberType(work.getMainIdnoType());
+            usage.setStandardNumberType(StringUtils.upperCase(work.getMainIdnoType()));
         }
         return work;
     }
@@ -99,7 +100,7 @@ public class WorkMatchingService implements IWorkMatchingService {
             usage.setWrWrkInst(work.getWrWrkInst());
             usage.setSystemTitle(work.getMainTitle());
             usage.setStatus(UsageStatusEnum.WORK_FOUND);
-            usage.setStandardNumberType(work.getMainIdnoType());
+            usage.setStandardNumberType(StringUtils.upperCase(work.getMainIdnoType()));
         }
         return work;
     }

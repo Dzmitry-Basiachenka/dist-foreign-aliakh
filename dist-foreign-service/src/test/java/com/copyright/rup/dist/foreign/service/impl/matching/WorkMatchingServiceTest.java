@@ -61,7 +61,7 @@ public class WorkMatchingServiceTest {
         String title = "The theological roots of Pentecostalism";
         Usage usage = buildUsage(standardNumber, title);
         expect(piIntegrationService.findWorkByIdnoAndTitle(standardNumber, title))
-            .andReturn(new Work(112930820L, title, "VALISBN10")).once();
+            .andReturn(new Work(112930820L, title, "valisbn10")).once();
         usageService.updateProcessedUsage(usage);
         expectLastCall().once();
         auditService.logAction(anyString(), eq(UsageActionTypeEnum.WORK_FOUND), anyString());
@@ -103,7 +103,7 @@ public class WorkMatchingServiceTest {
     public void testMatchByTitle() {
         String title = "The theological roots of Pentecostalism";
         Usage usage = buildUsage(null, title);
-        expect(piIntegrationService.findWorkByTitle(title)).andReturn(new Work(112930820L, null, "VALISSN")).once();
+        expect(piIntegrationService.findWorkByTitle(title)).andReturn(new Work(112930820L, null, "valissn")).once();
         usageService.updateProcessedUsage(usage);
         expectLastCall().once();
         auditService.logAction(anyString(), eq(UsageActionTypeEnum.WORK_FOUND), anyString());
