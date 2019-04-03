@@ -649,7 +649,6 @@ databaseChangeLog {
             column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
             column(name: 'status_ind', value: 'WORK_RESEARCH')
             column(name: 'article', value: 'DIN EN 779:2012')
-            column(name: 'standard_number', value: '2192-3566')
             column(name: 'publisher', value: 'Network for Science')
             column(name: 'publication_date', value: '2013-09-10')
             column(name: 'market', value: 'Doc Del')

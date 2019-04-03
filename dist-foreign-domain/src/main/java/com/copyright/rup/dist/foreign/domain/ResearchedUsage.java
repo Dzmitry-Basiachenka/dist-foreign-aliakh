@@ -17,6 +17,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 public class ResearchedUsage {
 
     private String usageId;
+    private String standardNumber;
+    private String standardNumberType;
     private String systemTitle;
     private Long wrWrkInst;
 
@@ -26,6 +28,22 @@ public class ResearchedUsage {
 
     public void setUsageId(String usageId) {
         this.usageId = usageId;
+    }
+
+    public String getStandardNumber() {
+        return standardNumber;
+    }
+
+    public void setStandardNumber(String standardNumber) {
+        this.standardNumber = standardNumber;
+    }
+
+    public String getStandardNumberType() {
+        return standardNumberType;
+    }
+
+    public void setStandardNumberType(String standardNumberType) {
+        this.standardNumberType = standardNumberType;
     }
 
     public String getSystemTitle() {
@@ -55,6 +73,8 @@ public class ResearchedUsage {
         ResearchedUsage that = (ResearchedUsage) obj;
         return new EqualsBuilder()
             .append(this.usageId, that.usageId)
+            .append(this.standardNumber, that.standardNumber)
+            .append(this.standardNumberType, that.standardNumberType)
             .append(this.systemTitle, that.systemTitle)
             .append(this.wrWrkInst, that.wrWrkInst)
             .isEquals();
@@ -64,6 +84,8 @@ public class ResearchedUsage {
     public int hashCode() {
         return new HashCodeBuilder()
             .append(usageId)
+            .append(standardNumber)
+            .append(standardNumberType)
             .append(systemTitle)
             .append(wrWrkInst)
             .toHashCode();
@@ -73,6 +95,8 @@ public class ResearchedUsage {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
             .append("usageId", usageId)
+            .append("standardNumber", standardNumber)
+            .append("standardNumberType", standardNumberType)
             .append("systemTitle", systemTitle)
             .append("wrWrkInst", wrWrkInst)
             .toString();

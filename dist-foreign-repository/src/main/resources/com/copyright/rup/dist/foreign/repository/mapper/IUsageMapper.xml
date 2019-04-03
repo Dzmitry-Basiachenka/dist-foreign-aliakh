@@ -1234,6 +1234,8 @@
     <update id="updateResearchedUsage" parameterType="map">
         update ${schema}.df_usage
         set
+            standard_number = #{usage.standardNumber},
+            standard_number_type = #{usage.standardNumberType},
             system_title = #{usage.systemTitle},
             wr_wrk_inst = #{usage.wrWrkInst},
             status_ind = #{status},
