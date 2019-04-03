@@ -131,15 +131,15 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public int findUnclassifiedCountByWrWrkInts(Set<Long> wrWrkInsts) {
+    public int findCountByStatusAndWrWrkInsts(UsageStatusEnum status, Set<Long> wrWrkInsts) {
         AtomicInteger count = new AtomicInteger(0);
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-        parameters.put(STATUS_KEY, Objects.requireNonNull(UsageStatusEnum.UNCLASSIFIED));
+        parameters.put(STATUS_KEY, Objects.requireNonNull(status));
         Iterables.partition(Objects.requireNonNull(wrWrkInsts), MAX_VARIABLES_COUNT)
             .forEach(
                 partition -> {
                     parameters.put("wrWrkInsts", Objects.requireNonNull(wrWrkInsts));
-                    count.addAndGet(selectOne("IUsageMapper.findUnclassifiedCountByWrWrkInts", parameters));
+                    count.addAndGet(selectOne("IUsageMapper.findCountByStatusAndWrWrkInsts", parameters));
                 });
         return count.get();
     }

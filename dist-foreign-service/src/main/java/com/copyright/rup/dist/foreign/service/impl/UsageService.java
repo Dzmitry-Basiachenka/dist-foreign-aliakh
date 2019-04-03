@@ -531,7 +531,7 @@ public class UsageService implements IUsageService {
 
     @Override
     public int getUnclassifiedUsagesCount(Set<Long> wrWrkInsts) {
-        return usageRepository.findUnclassifiedCountByWrWrkInts(wrWrkInsts);
+        return usageRepository.findCountByStatusAndWrWrkInsts(UsageStatusEnum.UNCLASSIFIED, wrWrkInsts);
     }
 
     private void updateRighstholdersInSeparateThread(List<Usage> usages) {
