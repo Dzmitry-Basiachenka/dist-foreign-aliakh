@@ -68,13 +68,20 @@ public interface IUsageAuditService {
     List<UsageAuditItem> getUsageAudit(String usageId);
 
     /**
-     * Gets batches statistic by mandatory batch name and optional date or by mandatory start and end dates.
+     * Gets batches statistic by batch name and date (the date is optional).
      *
      * @param batchName batch name
-     * @param date      action date
-     * @param dateFrom  action start date
-     * @param dateTo    action end date
+     * @param date      date to compare with batch audit create date
      * @return list of {@link BatchStatistic}
      */
-    List<BatchStatistic> getBatchesStatistic(String batchName, LocalDate date, LocalDate dateFrom, LocalDate dateTo);
+    List<BatchStatistic> getBatchesStatisticByBatchNameAndDate(String batchName, LocalDate date);
+
+    /**
+     * Gets batches statistic by start and end dates.
+     *
+     * @param dateFrom start date to compare with batch audit create date
+     * @param dateTo   end date to compare with batch audit create date
+     * @return list of {@link BatchStatistic}
+     */
+    List<BatchStatistic> getBatchesStatisticByDateFromAndDateTo(LocalDate dateFrom, LocalDate dateTo);
 }

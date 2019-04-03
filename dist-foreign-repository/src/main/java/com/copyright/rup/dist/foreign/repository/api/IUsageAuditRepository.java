@@ -54,15 +54,22 @@ public interface IUsageAuditRepository {
     List<UsageAuditItem> findByUsageId(String usageId);
 
     /**
-     * Finds batches statistic.
+     * Finds batches statistic by batch name and date (the date is optional).
      *
      * @param batchName batch name
-     * @param date      action date
-     * @param dateFrom  action start date
-     * @param dateTo    action end date
+     * @param date      date to compare with batch audit create date
      * @return list of {@link BatchStatistic}
      */
-    List<BatchStatistic> findBatchesStatistic(String batchName, LocalDate date, LocalDate dateFrom, LocalDate dateTo);
+    List<BatchStatistic> findBatchesStatisticByBatchNameAndDate(String batchName, LocalDate date);
+
+    /**
+     * Finds batches statistic by start and end dates.
+     *
+     * @param dateFrom start date to compare with batch audit create date
+     * @param dateTo   end date to compare with batch audit create date
+     * @return list of {@link BatchStatistic}
+     */
+    List<BatchStatistic> findBatchesStatisticByDateFromAndDateTo(LocalDate dateFrom, LocalDate dateTo);
 
     /**
      * Gets usage statistic.

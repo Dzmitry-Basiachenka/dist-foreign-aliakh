@@ -36,9 +36,9 @@ public class BatchStatistic {
     private int multipleMatchingCount;
     private BigDecimal multipleMatchingAmount = DEFAULT_AMOUNT;
     private BigDecimal multipleMatchingPercent = DEFAULT_AMOUNT;
-    private int ntsWithDrawnCount;
-    private BigDecimal ntsWithDrawnAmount = DEFAULT_AMOUNT;
-    private BigDecimal ntsWithDrawnPercent = DEFAULT_AMOUNT;
+    private int ntsWithdrawnCount;
+    private BigDecimal ntsWithdrawnAmount = DEFAULT_AMOUNT;
+    private BigDecimal ntsWithdrawnPercent = DEFAULT_AMOUNT;
     private int rhNotFoundCount;
     private BigDecimal rhNotFoundAmount = DEFAULT_AMOUNT;
     private BigDecimal rhNotFoundPercent = DEFAULT_AMOUNT;
@@ -191,28 +191,28 @@ public class BatchStatistic {
         this.multipleMatchingPercent = multipleMatchingPercent;
     }
 
-    public int getNtsWithDrawnCount() {
-        return ntsWithDrawnCount;
+    public int getNtsWithdrawnCount() {
+        return ntsWithdrawnCount;
     }
 
-    public void setNtsWithDrawnCount(int ntsWithDrawnCount) {
-        this.ntsWithDrawnCount = ntsWithDrawnCount;
+    public void setNtsWithdrawnCount(int ntsWithdrawnCount) {
+        this.ntsWithdrawnCount = ntsWithdrawnCount;
     }
 
-    public BigDecimal getNtsWithDrawnAmount() {
-        return ntsWithDrawnAmount;
+    public BigDecimal getNtsWithdrawnAmount() {
+        return ntsWithdrawnAmount;
     }
 
-    public void setNtsWithDrawnAmount(BigDecimal ntsWithDrawnAmount) {
-        this.ntsWithDrawnAmount = ntsWithDrawnAmount;
+    public void setNtsWithdrawnAmount(BigDecimal ntsWithdrawnAmount) {
+        this.ntsWithdrawnAmount = ntsWithdrawnAmount;
     }
 
-    public BigDecimal getNtsWithDrawnPercent() {
-        return ntsWithDrawnPercent;
+    public BigDecimal getNtsWithdrawnPercent() {
+        return ntsWithdrawnPercent;
     }
 
-    public void setNtsWithDrawnPercent(BigDecimal ntsWithDrawnPercent) {
-        this.ntsWithDrawnPercent = ntsWithDrawnPercent;
+    public void setNtsWithdrawnPercent(BigDecimal ntsWithdrawnPercent) {
+        this.ntsWithdrawnPercent = ntsWithdrawnPercent;
     }
 
     public int getRhNotFoundCount() {
@@ -356,9 +356,9 @@ public class BatchStatistic {
             .append(matchedCount, that.matchedCount)
             .append(matchedAmount, that.matchedAmount)
             .append(matchedPercent, that.matchedPercent)
-            .append(ntsWithDrawnCount, that.ntsWithDrawnCount)
-            .append(ntsWithDrawnAmount, that.ntsWithDrawnAmount)
-            .append(ntsWithDrawnPercent, that.ntsWithDrawnPercent)
+            .append(ntsWithdrawnCount, that.ntsWithdrawnCount)
+            .append(ntsWithdrawnAmount, that.ntsWithdrawnAmount)
+            .append(ntsWithdrawnPercent, that.ntsWithdrawnPercent)
             .append(worksNotFoundCount, that.worksNotFoundCount)
             .append(worksNotFoundAmount, that.worksNotFoundAmount)
             .append(worksNotFoundPercent, that.worksNotFoundPercent)
@@ -397,9 +397,9 @@ public class BatchStatistic {
             .append(matchedCount)
             .append(matchedAmount)
             .append(matchedPercent)
-            .append(ntsWithDrawnCount)
-            .append(ntsWithDrawnAmount)
-            .append(ntsWithDrawnPercent)
+            .append(ntsWithdrawnCount)
+            .append(ntsWithdrawnAmount)
+            .append(ntsWithdrawnPercent)
             .append(worksNotFoundCount)
             .append(worksNotFoundAmount)
             .append(worksNotFoundPercent)
@@ -438,9 +438,9 @@ public class BatchStatistic {
             .append("matchedCount", matchedCount)
             .append("matchedAmount", matchedAmount)
             .append("matchedPercent", matchedPercent)
-            .append("ntsWithDrawnCount", ntsWithDrawnCount)
-            .append("ntsWithDrawnAmount", ntsWithDrawnAmount)
-            .append("ntsWithDrawnPercent", ntsWithDrawnPercent)
+            .append("ntsWithdrawnCount", ntsWithdrawnCount)
+            .append("ntsWithdrawnAmount", ntsWithdrawnAmount)
+            .append("ntsWithdrawnPercent", ntsWithdrawnPercent)
             .append("worksNotFoundCount", worksNotFoundCount)
             .append("worksNotFoundAmount", worksNotFoundAmount)
             .append("worksNotFoundPercent", worksNotFoundPercent)

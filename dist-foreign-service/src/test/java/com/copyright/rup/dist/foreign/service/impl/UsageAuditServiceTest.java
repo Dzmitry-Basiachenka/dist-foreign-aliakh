@@ -45,6 +45,7 @@ public class UsageAuditServiceTest {
     private static final String BATCH_UID = "f2104232-b274-11e7-abc4-cec278b6b50a";
     private static final String REASON = "Uploaded in 'ABC' Batch";
     private static final String BATCH_NAME = "Test Batch Name";
+    private static final BigDecimal AMOUNT_ZERO = new BigDecimal("0.00");
 
     private UsageAuditService usageAuditService;
     private UsageAuditRepository usageAuditRepository;
@@ -114,10 +115,10 @@ public class UsageAuditServiceTest {
     @Test
     public void testGetBatchesStatisticByBatchName() {
         List<BatchStatistic> statistics = buildStatistics();
-        expect(usageAuditRepository.findBatchesStatistic(BATCH_NAME, null, null, null))
+        expect(usageAuditRepository.findBatchesStatisticByBatchNameAndDate(BATCH_NAME, null))
             .andReturn(statistics).once();
         replay(usageAuditRepository);
-        assertEquals(usageAuditService.getBatchesStatistic(BATCH_NAME, null, null, null), statistics);
+        assertEquals(usageAuditService.getBatchesStatisticByBatchNameAndDate(BATCH_NAME, null), statistics);
         verify(usageAuditRepository);
     }
 
@@ -125,33 +126,11 @@ public class UsageAuditServiceTest {
     public void testGetBatchesStatisticByBatchNameAndDate() {
         LocalDate date = LocalDate.now();
         List<BatchStatistic> statistics = buildStatistics();
-        expect(usageAuditRepository.findBatchesStatistic(BATCH_NAME, date, null, null))
+        expect(usageAuditRepository.findBatchesStatisticByBatchNameAndDate(BATCH_NAME, date))
             .andReturn(statistics).once();
         replay(usageAuditRepository);
-        assertEquals(usageAuditService.getBatchesStatistic(BATCH_NAME, date, null, null), statistics);
+        assertEquals(usageAuditService.getBatchesStatisticByBatchNameAndDate(BATCH_NAME, date), statistics);
         verify(usageAuditRepository);
-    }
-
-    @Test
-    public void testGetBatchesStatisticByBatchNameAndDateFrom() {
-        try {
-            usageAuditService.getBatchesStatistic(BATCH_NAME, null, LocalDate.now(), null);
-            fail();
-        } catch (IllegalArgumentException e) {
-            assertEquals("If the parameter 'batchName' is set, the parameter 'dateFrom' must not be set",
-                e.getMessage());
-        }
-    }
-
-    @Test
-    public void testGetBatchesStatisticByBatchNameAndDateTo() {
-        try {
-            usageAuditService.getBatchesStatistic(BATCH_NAME, null, null, LocalDate.now());
-            fail();
-        } catch (IllegalArgumentException e) {
-            assertEquals("If the parameter 'batchName' is set, the parameter 'dateTo' must not be set",
-                e.getMessage());
-        }
     }
 
     @Test
@@ -159,46 +138,11 @@ public class UsageAuditServiceTest {
         LocalDate dateFrom = LocalDate.now();
         LocalDate dateTo = dateFrom.plusDays(1);
         List<BatchStatistic> statistics = buildStatistics();
-        expect(usageAuditRepository.findBatchesStatistic(null, null, dateFrom, dateTo))
+        expect(usageAuditRepository.findBatchesStatisticByDateFromAndDateTo(dateFrom, dateTo))
             .andReturn(statistics).once();
         replay(usageAuditRepository);
-        assertEquals(usageAuditService.getBatchesStatistic(null, null, dateFrom, dateTo), statistics);
+        assertEquals(usageAuditService.getBatchesStatisticByDateFromAndDateTo(dateFrom, dateTo), statistics);
         verify(usageAuditRepository);
-    }
-
-    @Test
-    public void testGetBatchesStatisticByDateAndDateFromAndDateTo() {
-        try {
-            LocalDate dateFrom = LocalDate.now();
-            LocalDate dateTo = dateFrom.plusDays(1);
-            usageAuditService.getBatchesStatistic(null, LocalDate.now(), dateFrom, dateTo);
-            fail();
-        } catch (IllegalArgumentException e) {
-            assertEquals("If the parameter 'batchName' is not set, the parameter 'date' must not be set either",
-                e.getMessage());
-        }
-    }
-
-    @Test
-    public void testGetBatchesStatisticByDateAndDateTo() {
-        try {
-            usageAuditService.getBatchesStatistic(null, null, null, LocalDate.now());
-            fail();
-        } catch (IllegalArgumentException e) {
-            assertEquals("If the parameter 'batchName' is not set, the parameter 'dateFrom' must be set",
-                e.getMessage());
-        }
-    }
-
-    @Test
-    public void testGetBatchesStatisticByDateAndDateFrom() {
-        try {
-            usageAuditService.getBatchesStatistic(null, null, LocalDate.now(), null);
-            fail();
-        } catch (IllegalArgumentException e) {
-            assertEquals("If the parameter 'batchName' is not set, the parameter 'dateTo' must be set",
-                e.getMessage());
-        }
     }
 
     @Test
@@ -206,7 +150,7 @@ public class UsageAuditServiceTest {
         try {
             LocalDate dateFrom = LocalDate.now();
             LocalDate dateTo = dateFrom.minusDays(1);
-            usageAuditService.getBatchesStatistic(null, null, dateFrom, dateTo);
+            usageAuditService.getBatchesStatisticByDateFromAndDateTo(dateFrom, dateTo);
             fail();
         } catch (IllegalArgumentException e) {
             assertEquals("The parameter 'dateFrom' must be before or equal the parameter 'dateTo'",
@@ -223,23 +167,41 @@ public class UsageAuditServiceTest {
 
     private List<BatchStatistic> buildStatistics() {
         BatchStatistic statistic = new BatchStatistic();
-        statistic.setTotalCount(10);
-        statistic.setLoadedCount(10);
+        statistic.setBatchName(BATCH_NAME);
+        statistic.setTotalCount(2);
+        statistic.setLoadedCount(2);
         statistic.setLoadedAmount(new BigDecimal("1000.00"));
-        statistic.setMatchedCount(2);
-        statistic.setMatchedAmount(new BigDecimal("300.00"));
-        statistic.setWorksNotFoundCount(1);
-        statistic.setWorksNotFoundAmount(new BigDecimal("50.00"));
-        statistic.setNtsWithDrawnCount(1);
-        statistic.setNtsWithDrawnAmount(new BigDecimal("150.00"));
-        statistic.setRhNotFoundCount(1);
-        statistic.setRhNotFoundAmount(new BigDecimal("130.00"));
-        statistic.setSendForRaCount(1);
-        statistic.setSendForRaAmount(new BigDecimal("130.00"));
+        statistic.setLoadedPercent(new BigDecimal("100.00"));
+        statistic.setCreatedCount(0);
+        statistic.setCreatedAmount(AMOUNT_ZERO);
+        statistic.setCreatedPercent(AMOUNT_ZERO);
+        statistic.setMatchedCount(1);
+        statistic.setMatchedAmount(new BigDecimal("500.00"));
+        statistic.setMatchedPercent(new BigDecimal("50.00"));
+        statistic.setWorksNotFoundCount(0);
+        statistic.setWorksNotFoundAmount(AMOUNT_ZERO);
+        statistic.setWorksNotFoundPercent(AMOUNT_ZERO);
+        statistic.setMultipleMatchingCount(0);
+        statistic.setMultipleMatchingAmount(AMOUNT_ZERO);
+        statistic.setMultipleMatchingPercent(AMOUNT_ZERO);
+        statistic.setNtsWithdrawnCount(0);
+        statistic.setNtsWithdrawnAmount(AMOUNT_ZERO);
+        statistic.setNtsWithdrawnPercent(AMOUNT_ZERO);
+        statistic.setRhNotFoundCount(0);
+        statistic.setRhNotFoundAmount(AMOUNT_ZERO);
+        statistic.setRhNotFoundPercent(AMOUNT_ZERO);
+        statistic.setRhFoundCount(0);
+        statistic.setRhFoundAmount(AMOUNT_ZERO);
+        statistic.setRhFoundPercent(AMOUNT_ZERO);
         statistic.setEligibleCount(1);
-        statistic.setEligibleAmount(new BigDecimal("170.00"));
-        statistic.setPaidCount(5);
-        statistic.setPaidAmount(new BigDecimal("500.00"));
+        statistic.setEligibleAmount(new BigDecimal("500.00"));
+        statistic.setEligiblePercent(new BigDecimal("50.00"));
+        statistic.setSendForRaCount(0);
+        statistic.setSendForRaAmount(AMOUNT_ZERO);
+        statistic.setSendForRaPercent(AMOUNT_ZERO);
+        statistic.setPaidCount(0);
+        statistic.setPaidAmount(AMOUNT_ZERO);
+        statistic.setPaidPercent(AMOUNT_ZERO);
         return ImmutableList.of(statistic);
     }
 }

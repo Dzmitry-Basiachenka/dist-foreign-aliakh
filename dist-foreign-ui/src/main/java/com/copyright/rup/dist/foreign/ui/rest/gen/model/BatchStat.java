@@ -159,29 +159,29 @@ public class BatchStat   {
 
     private BigDecimal multipleMatchingPercent = null;
 
-    @JsonProperty("ntsWithDrawnCount")
+    @JsonProperty("ntsWithdrawnCount")
     
 
 
 
 
-    private Integer ntsWithDrawnCount = null;
+    private Integer ntsWithdrawnCount = null;
 
-    @JsonProperty("ntsWithDrawnAmount")
-    
-@Valid
-
-
-
-    private BigDecimal ntsWithDrawnAmount = null;
-
-    @JsonProperty("ntsWithDrawnPercent")
+    @JsonProperty("ntsWithdrawnAmount")
     
 @Valid
 
 
 
-    private BigDecimal ntsWithDrawnPercent = null;
+    private BigDecimal ntsWithdrawnAmount = null;
+
+    @JsonProperty("ntsWithdrawnPercent")
+    
+@Valid
+
+
+
+    private BigDecimal ntsWithdrawnPercent = null;
 
     @JsonProperty("rhNotFoundCount")
     
@@ -677,69 +677,69 @@ public class BatchStat   {
         }
     }
 
-    public BatchStat ntsWithDrawnCount(Integer ntsWithDrawnCount) {
-        this.ntsWithDrawnCount = ntsWithDrawnCount;
+    public BatchStat ntsWithdrawnCount(Integer ntsWithdrawnCount) {
+        this.ntsWithdrawnCount = ntsWithdrawnCount;
         return this;
     }
 
      /**
-     * Get ntsWithDrawnCount
-     * @return ntsWithDrawnCount
+     * Get ntsWithdrawnCount
+     * @return ntsWithdrawnCount
     **/
     @ApiModelProperty(value = "")
-    public Integer getNtsWithDrawnCount() {
-        return ntsWithDrawnCount;
+    public Integer getNtsWithdrawnCount() {
+        return ntsWithdrawnCount;
     }
 
-    public void setNtsWithDrawnCount(Integer ntsWithDrawnCount) {
-        if(ntsWithDrawnCount == null) {
-            this.ntsWithDrawnCount = null;
+    public void setNtsWithdrawnCount(Integer ntsWithdrawnCount) {
+        if(ntsWithdrawnCount == null) {
+            this.ntsWithdrawnCount = null;
         } else {
-            this.ntsWithDrawnCount = ntsWithDrawnCount;
+            this.ntsWithdrawnCount = ntsWithdrawnCount;
         }
     }
 
-    public BatchStat ntsWithDrawnAmount(BigDecimal ntsWithDrawnAmount) {
-        this.ntsWithDrawnAmount = ntsWithDrawnAmount;
+    public BatchStat ntsWithdrawnAmount(BigDecimal ntsWithdrawnAmount) {
+        this.ntsWithdrawnAmount = ntsWithdrawnAmount;
         return this;
     }
 
      /**
-     * Get ntsWithDrawnAmount
-     * @return ntsWithDrawnAmount
+     * Get ntsWithdrawnAmount
+     * @return ntsWithdrawnAmount
     **/
     @ApiModelProperty(value = "")
-    public BigDecimal getNtsWithDrawnAmount() {
-        return ntsWithDrawnAmount;
+    public BigDecimal getNtsWithdrawnAmount() {
+        return ntsWithdrawnAmount;
     }
 
-    public void setNtsWithDrawnAmount(BigDecimal ntsWithDrawnAmount) {
-        if(ntsWithDrawnAmount == null) {
-            this.ntsWithDrawnAmount = null;
+    public void setNtsWithdrawnAmount(BigDecimal ntsWithdrawnAmount) {
+        if(ntsWithdrawnAmount == null) {
+            this.ntsWithdrawnAmount = null;
         } else {
-            this.ntsWithDrawnAmount = ntsWithDrawnAmount;
+            this.ntsWithdrawnAmount = ntsWithdrawnAmount;
         }
     }
 
-    public BatchStat ntsWithDrawnPercent(BigDecimal ntsWithDrawnPercent) {
-        this.ntsWithDrawnPercent = ntsWithDrawnPercent;
+    public BatchStat ntsWithdrawnPercent(BigDecimal ntsWithdrawnPercent) {
+        this.ntsWithdrawnPercent = ntsWithdrawnPercent;
         return this;
     }
 
      /**
-     * Get ntsWithDrawnPercent
-     * @return ntsWithDrawnPercent
+     * Get ntsWithdrawnPercent
+     * @return ntsWithdrawnPercent
     **/
     @ApiModelProperty(value = "")
-    public BigDecimal getNtsWithDrawnPercent() {
-        return ntsWithDrawnPercent;
+    public BigDecimal getNtsWithdrawnPercent() {
+        return ntsWithdrawnPercent;
     }
 
-    public void setNtsWithDrawnPercent(BigDecimal ntsWithDrawnPercent) {
-        if(ntsWithDrawnPercent == null) {
-            this.ntsWithDrawnPercent = null;
+    public void setNtsWithdrawnPercent(BigDecimal ntsWithdrawnPercent) {
+        if(ntsWithdrawnPercent == null) {
+            this.ntsWithdrawnPercent = null;
         } else {
-            this.ntsWithDrawnPercent = ntsWithDrawnPercent;
+            this.ntsWithdrawnPercent = ntsWithdrawnPercent;
         }
     }
 
@@ -1100,9 +1100,9 @@ public class BatchStat   {
                 Objects.equals(this.multipleMatchingCount, batchStat.multipleMatchingCount) &&
                 Objects.equals(this.multipleMatchingAmount, batchStat.multipleMatchingAmount) &&
                 Objects.equals(this.multipleMatchingPercent, batchStat.multipleMatchingPercent) &&
-                Objects.equals(this.ntsWithDrawnCount, batchStat.ntsWithDrawnCount) &&
-                Objects.equals(this.ntsWithDrawnAmount, batchStat.ntsWithDrawnAmount) &&
-                Objects.equals(this.ntsWithDrawnPercent, batchStat.ntsWithDrawnPercent) &&
+                Objects.equals(this.ntsWithdrawnCount, batchStat.ntsWithdrawnCount) &&
+                Objects.equals(this.ntsWithdrawnAmount, batchStat.ntsWithdrawnAmount) &&
+                Objects.equals(this.ntsWithdrawnPercent, batchStat.ntsWithdrawnPercent) &&
                 Objects.equals(this.rhNotFoundCount, batchStat.rhNotFoundCount) &&
                 Objects.equals(this.rhNotFoundAmount, batchStat.rhNotFoundAmount) &&
                 Objects.equals(this.rhNotFoundPercent, batchStat.rhNotFoundPercent) &&
@@ -1122,7 +1122,7 @@ public class BatchStat   {
 
     @Override
     public int hashCode() {
-        return Objects.hash(batchName, totalCount, loadedCount, loadedAmount, loadedPercent, createdCount, createdAmount, createdPercent, matchedCount, matchedAmount, matchedPercent, worksNotFoundCount, worksNotFoundAmount, worksNotFoundPercent, multipleMatchingCount, multipleMatchingAmount, multipleMatchingPercent, ntsWithDrawnCount, ntsWithDrawnAmount, ntsWithDrawnPercent, rhNotFoundCount, rhNotFoundAmount, rhNotFoundPercent, rhFoundCount, rhFoundAmount, rhFoundPercent, eligibleCount, eligibleAmount, eligiblePercent, sendForRaCount, sendForRaAmount, sendForRaPercent, paidCount, paidAmount, paidPercent);
+        return Objects.hash(batchName, totalCount, loadedCount, loadedAmount, loadedPercent, createdCount, createdAmount, createdPercent, matchedCount, matchedAmount, matchedPercent, worksNotFoundCount, worksNotFoundAmount, worksNotFoundPercent, multipleMatchingCount, multipleMatchingAmount, multipleMatchingPercent, ntsWithdrawnCount, ntsWithdrawnAmount, ntsWithdrawnPercent, rhNotFoundCount, rhNotFoundAmount, rhNotFoundPercent, rhFoundCount, rhFoundAmount, rhFoundPercent, eligibleCount, eligibleAmount, eligiblePercent, sendForRaCount, sendForRaAmount, sendForRaPercent, paidCount, paidAmount, paidPercent);
     }
 
     @Override
@@ -1147,9 +1147,9 @@ public class BatchStat   {
         sb.append("        multipleMatchingCount: ").append(toIndentedString(multipleMatchingCount)).append("\n");
         sb.append("        multipleMatchingAmount: ").append(toIndentedString(multipleMatchingAmount)).append("\n");
         sb.append("        multipleMatchingPercent: ").append(toIndentedString(multipleMatchingPercent)).append("\n");
-        sb.append("        ntsWithDrawnCount: ").append(toIndentedString(ntsWithDrawnCount)).append("\n");
-        sb.append("        ntsWithDrawnAmount: ").append(toIndentedString(ntsWithDrawnAmount)).append("\n");
-        sb.append("        ntsWithDrawnPercent: ").append(toIndentedString(ntsWithDrawnPercent)).append("\n");
+        sb.append("        ntsWithdrawnCount: ").append(toIndentedString(ntsWithdrawnCount)).append("\n");
+        sb.append("        ntsWithdrawnAmount: ").append(toIndentedString(ntsWithdrawnAmount)).append("\n");
+        sb.append("        ntsWithdrawnPercent: ").append(toIndentedString(ntsWithdrawnPercent)).append("\n");
         sb.append("        rhNotFoundCount: ").append(toIndentedString(rhNotFoundCount)).append("\n");
         sb.append("        rhNotFoundAmount: ").append(toIndentedString(rhNotFoundAmount)).append("\n");
         sb.append("        rhNotFoundPercent: ").append(toIndentedString(rhNotFoundPercent)).append("\n");
