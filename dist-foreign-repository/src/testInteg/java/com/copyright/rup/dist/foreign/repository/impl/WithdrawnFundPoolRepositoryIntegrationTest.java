@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -72,8 +73,9 @@ public class WithdrawnFundPoolRepositoryIntegrationTest {
     public void testFindAll() {
         List<WithdrawnFundPool> fundPools = withdrawnFundPoolRepository.findAll();
         assertEquals(2, fundPools.size());
-        assertFundPool(fundPools.get(0), ID_1, "FAS Q1 2019", "some comment");
-        assertFundPool(fundPools.get(1), "49060c9b-9cc2-4b93-b701-fffc82eb28b0", "Test fund", "test comment");
+        assertFundPool(fundPools.get(0), ID_1, "FAS Q1 2019", new BigDecimal("50.00"), "some comment");
+        assertFundPool(fundPools.get(1), "49060c9b-9cc2-4b93-b701-fffc82eb28b0", "Test fund", new BigDecimal("10.00"),
+            "test comment");
     }
 
     @Test
@@ -97,9 +99,10 @@ public class WithdrawnFundPoolRepositoryIntegrationTest {
         assertEquals(0, withdrawnFundPoolRepository.findCountByName("missing fund pool name"));
     }
 
-    private void assertFundPool(WithdrawnFundPool fundPool, String id, String name, String comment) {
+    private void assertFundPool(WithdrawnFundPool fundPool, String id, String name, BigDecimal amount, String comment) {
         assertEquals(fundPool.getId(), id);
         assertEquals(fundPool.getName(), name);
+        assertEquals(fundPool.getAmount(), amount);
         assertEquals(fundPool.getComment(), comment);
     }
 }
