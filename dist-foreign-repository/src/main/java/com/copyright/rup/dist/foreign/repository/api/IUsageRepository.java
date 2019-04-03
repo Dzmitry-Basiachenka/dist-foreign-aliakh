@@ -101,12 +101,13 @@ public interface IUsageRepository {
     List<String> findUnclassifiedUsageIds();
 
     /**
-     * Finds count of usages to be updated based on set of Wr Wrk Insts.
+     * Finds count of usages based on set of Wr Wrk Insts and status.
      *
+     * @param status     usage status
      * @param wrWrkInsts set of Wr Wrk Insts
      * @return count of usages
      */
-    int findUnclassifiedCountByWrWrkInts(Set<Long> wrWrkInsts);
+    int findCountByStatusAndWrWrkInsts(UsageStatusEnum status, Set<Long> wrWrkInsts);
 
     /**
      * Finds {@link Usage}s for reconcile based on scenario identifier.

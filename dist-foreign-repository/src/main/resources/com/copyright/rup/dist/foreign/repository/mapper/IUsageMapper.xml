@@ -698,7 +698,7 @@
         where u.status_ind = #{status}
     </select>
 
-    <select id="findUnclassifiedCountByWrWrkInts" resultType="int">
+    <select id="findCountByStatusAndWrWrkInsts" resultType="int">
         select count(1)
         from ${schema}.df_usage
         where status_ind = #{status}

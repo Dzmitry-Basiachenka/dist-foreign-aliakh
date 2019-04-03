@@ -487,9 +487,11 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindUnclassifiedCountByWrWrkInts() {
-        assertEquals(2, usageRepository.findUnclassifiedCountByWrWrkInts(Sets.newHashSet(987632764L, 12318778798L)));
-        assertEquals(0, usageRepository.findUnclassifiedCountByWrWrkInts(Collections.singleton(1L)));
+    public void testFindByStatusAndWrWrkInsts() {
+        assertEquals(2, usageRepository.findCountByStatusAndWrWrkInsts(UsageStatusEnum.UNCLASSIFIED,
+            Sets.newHashSet(987632764L, 12318778798L)));
+        assertEquals(0,
+            usageRepository.findCountByStatusAndWrWrkInsts(UsageStatusEnum.UNCLASSIFIED, Collections.singleton(1L)));
     }
 
     @Test

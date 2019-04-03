@@ -63,6 +63,7 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link UsageService}.
@@ -607,6 +608,16 @@ public class UsageServiceTest {
         replay(usageArchiveRepository);
         usageService.updatePaidInfo(Collections.singletonList(paidUsage));
         verify(usageArchiveRepository);
+    }
+
+    @Test
+    public void testGetUnclassifiedUsagesCount() {
+        Set<Long> wrWrkInsts = Collections.singleton(987654321L);
+        expect(usageRepository.findCountByStatusAndWrWrkInsts(UsageStatusEnum.UNCLASSIFIED, wrWrkInsts))
+            .andReturn(2).once();
+        replay(usageRepository);
+        usageService.getUnclassifiedUsagesCount(wrWrkInsts);
+        verify(usageRepository);
     }
 
     @Test
