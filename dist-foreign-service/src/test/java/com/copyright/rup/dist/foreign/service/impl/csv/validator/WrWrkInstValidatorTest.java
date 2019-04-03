@@ -40,7 +40,7 @@ public class WrWrkInstValidatorTest {
 
     @Test
     public void testIsValid() {
-        Usage usage = buildUsage(WR_WRK_INST);
+        Usage usage = buildUsage(WR_WRK_INST, null);
         expect(piIntegrationService.findWorkByWrWrkInst(WR_WRK_INST))
             .andReturn(new Work(WR_WRK_INST, "Technical Journal", "VALISSN"))
             .once();
@@ -51,8 +51,8 @@ public class WrWrkInstValidatorTest {
     }
 
     @Test
-    public void testIsValidUsageWithNullWrWrkInst() {
-        Usage usage = buildUsage(null);
+    public void testIsValidUsageWithoutWrWrkInstAndStandardNumberType() {
+        Usage usage = buildUsage(null, null);
         replay(piIntegrationService);
         assertTrue(validator.isValid(usage));
         assertNull(usage.getStandardNumberType());
@@ -60,8 +60,17 @@ public class WrWrkInstValidatorTest {
     }
 
     @Test
+    public void testIsValidUsageWithoutWrWrkInstAndWithStandardNumberType() {
+        Usage usage = buildUsage(null, "VALISBN10");
+        replay(piIntegrationService);
+        assertTrue(validator.isValid(usage));
+        assertEquals("VALISBN10", usage.getStandardNumberType());
+        verify(piIntegrationService);
+    }
+
+    @Test
     public void testIsValidEmptyWork() {
-        Usage usage = buildUsage(WR_WRK_INST);
+        Usage usage = buildUsage(WR_WRK_INST, null);
         expect(piIntegrationService.findWorkByWrWrkInst(WR_WRK_INST))
             .andReturn(new Work())
             .once();
@@ -81,10 +90,11 @@ public class WrWrkInstValidatorTest {
         assertEquals("Loaded Wr Wrk Inst is missing in PI", validator.getErrorMessage());
     }
 
-    private Usage buildUsage(Long wrWrkInst) {
+    private Usage buildUsage(Long wrWrkInst, String standardNumberType) {
         Usage usage = new Usage();
         usage.setWrWrkInst(wrWrkInst);
         usage.setWorkTitle("Technical Journal");
+        usage.setStandardNumberType(standardNumberType);
         return usage;
     }
 }

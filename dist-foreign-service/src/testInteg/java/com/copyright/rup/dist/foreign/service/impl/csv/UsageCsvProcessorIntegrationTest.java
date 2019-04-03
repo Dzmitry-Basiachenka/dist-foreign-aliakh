@@ -167,6 +167,7 @@ public class UsageCsvProcessorIntegrationTest {
         assertStoredEntity(payee);
         assertNull(payee.getName());
         assertNull(payee.getAccountNumber());
+        assertEquals(expectedUsage.getStandardNumberType(), actualUsage.getStandardNumberType());
     }
 
     private void assertStoredEntity(StoredEntity entity) {

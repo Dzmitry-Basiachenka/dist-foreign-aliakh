@@ -35,4 +35,11 @@ public class PiIntegrationServiceMock extends PiIntegrationService {
     public Work findWorkByTitle(String title) {
         return new Work(123059057L, title, "VALISBN10");
     }
+
+    @Override
+    public Work findWorkByWrWrkInst(Long wrWrkInst) {
+        return Objects.equals(123456789L, wrWrkInst)
+            ? new Work(123456789L, "BIOCHEMISTRY (MOSCOW)", "VALISBN10")
+            : new Work();
+    }
 }
