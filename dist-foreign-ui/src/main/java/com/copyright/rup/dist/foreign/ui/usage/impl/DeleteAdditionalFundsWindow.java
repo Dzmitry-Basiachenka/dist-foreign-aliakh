@@ -68,6 +68,7 @@ class DeleteAdditionalFundsWindow extends Window {
         grid.addColumn(fundPool -> CurrencyUtils.format(fundPool.getAmount(), null))
             .setCaption(ForeignUi.getMessage("table.column.fund_amount"))
             .setSortProperty("amount")
+            .setStyleGenerator(item -> "v-align-right")
             .setWidth(100);
         grid.addColumn(WithdrawnFundPool::getCreateUser)
             .setCaption(ForeignUi.getMessage("table.column.create_user"))

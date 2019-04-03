@@ -7,6 +7,7 @@
     <resultMap id="withdrawnFundPoolResultMap" type="WithdrawnFundPool" extends="StoredEntityMapper.storedEntityResult">
         <result property="id" column="df_fund_pool_uid"/>
         <result property="name" column="name"/>
+        <result property="amount" column="withdrawn_amount"/>
         <result property="comment" column="comment"/>
         <result property="createUser" column="created_by_user"/>
     </resultMap>
@@ -15,11 +16,13 @@
         insert into ${schema}.df_fund_pool (
             df_fund_pool_uid,
             name,
+            withdrawn_amount,
             comment,
             <include refid="StoredEntityMapper.additionalColumns"/>
         ) values (
             #{id},
             #{name},
+            #{amount},
             #{comment},
             <include refid="StoredEntityMapper.insert"/>
         )
@@ -29,6 +32,7 @@
         select
             df_fund_pool_uid,
             name,
+            withdrawn_amount,
             comment
         from ${schema}.df_fund_pool
         where df_fund_pool_uid = #{fundPoolId}
@@ -38,6 +42,7 @@
         select
             df_fund_pool_uid,
             name,
+            withdrawn_amount,
             comment,
             created_by_user
         from ${schema}.df_fund_pool

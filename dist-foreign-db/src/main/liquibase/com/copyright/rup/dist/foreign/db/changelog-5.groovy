@@ -66,7 +66,7 @@ databaseChangeLog {
 
         addNotNullConstraint(schemaName: dbAppsSchema, tableName: 'df_usage_batch',
                 columnName: 'product_family', columnDataType: 'VARCHAR(128)')
-    
+
         rollback {
             dropColumn(schemaName: dbAppsSchema, tableName: 'df_usage_batch', columnName: 'product_family')
         }
@@ -307,6 +307,21 @@ databaseChangeLog {
                 baseColumnNames: 'df_fund_pool_uid',
                 referencedTableName: 'df_fund_pool',
                 referencedColumnNames: 'df_fund_pool_uid')
+
+        rollback {
+            // automatic rollback
+        }
+    }
+
+    changeSet(id: '2019-04-03-00', author: 'Ihar Suvorau<isuvorau@copyright.com>') {
+        comment('B-48760 FDA: Create NTS Pre-service fee additional fund pool from NTS withdrawn details: ' +
+                'add withdrawn_amount column to df_fund_pool table')
+
+        addColumn(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
+            column(name: 'withdrawn_amount', type: 'DECIMAL(38,2)', defaultValue: 0.00, remarks: 'NTS withdrawn amount of fund pool') {
+                constraints(nullable: false)
+            }
+        }
 
         rollback {
             // automatic rollback

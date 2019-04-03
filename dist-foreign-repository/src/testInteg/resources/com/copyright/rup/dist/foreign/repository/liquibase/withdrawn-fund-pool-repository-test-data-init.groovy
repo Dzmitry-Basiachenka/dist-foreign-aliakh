@@ -9,6 +9,7 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: 'b5b64c3a-55d2-462e-b169-362dca6a4dd7')
             column(name: 'name', value: 'FAS Q1 2019')
             column(name: 'comment', value: 'some comment')
+            column(name: 'withdrawn_amount', value: '50.00')
             column(name: 'updated_datetime',  value: '2019-03-27 16:35:52.735531+03')
         }
 
@@ -16,6 +17,7 @@ databaseChangeLog {
             column(name: 'df_fund_pool_uid', value: '49060c9b-9cc2-4b93-b701-fffc82eb28b0')
             column(name: 'name', value: 'Test fund')
             column(name: 'comment', value: 'test comment')
+            column(name: 'withdrawn_amount', value: '10.00')
             column(name: 'updated_datetime',  value: '2019-03-26 16:35:52.735531+03')
         }
 

@@ -79,7 +79,7 @@ public class DeleteAdditionalFundsWindowTest {
 
     @Test
     public void testComponentStructure() {
-        assertEquals("Delete NTS Pre-Service Funds", deleteWindow.getCaption());
+        assertEquals("Delete NTS Pre-Service Fee Funds", deleteWindow.getCaption());
         verifySize(deleteWindow, 700, Unit.PIXELS, 450, Unit.PIXELS);
         VerticalLayout content = (VerticalLayout) deleteWindow.getContent();
         assertEquals(new MarginInfo(true), content.getMargin());

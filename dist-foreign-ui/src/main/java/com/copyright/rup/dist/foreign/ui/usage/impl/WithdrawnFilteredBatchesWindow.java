@@ -81,6 +81,7 @@ class WithdrawnFilteredBatchesWindow extends Window {
             .setCaption(ForeignUi.getMessage("table.column.withdrawn_amount"))
             .setId("grossAmount")
             .setSortProperty("grossAmount")
+            .setStyleGenerator(item -> "v-align-right")
             .setWidth(200);
         grid.appendFooterRow();
         grid.setFooterVisible(true);
