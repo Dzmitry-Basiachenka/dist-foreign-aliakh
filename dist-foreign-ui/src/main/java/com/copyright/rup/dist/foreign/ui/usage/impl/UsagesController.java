@@ -154,14 +154,16 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
-    public void loadNtsBatch(UsageBatch usageBatch) {
+    public int loadNtsBatch(UsageBatch usageBatch) {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Insert NTS batch. Started. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
         List<String> ntsUsageIds = usageBatchService.insertNtsBatch(usageBatch, userName);
+        int insertedUsagesCount = CollectionUtils.size(ntsUsageIds);
         LOGGER.info("Insert NTS batch. Finished. UsageBatchName={}, UserName={}, UsagesCount={}",
-            usageBatch.getName(), userName, LogUtils.size(ntsUsageIds));
+            usageBatch.getName(), userName, insertedUsagesCount);
         usageBatchService.getAndSendForGettingRights(ntsUsageIds, usageBatch.getName());
         filterController.getWidget().clearFilter();
+        return insertedUsagesCount;
     }
 
     @Override

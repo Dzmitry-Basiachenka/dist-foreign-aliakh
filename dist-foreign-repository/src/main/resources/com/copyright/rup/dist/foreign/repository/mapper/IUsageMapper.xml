@@ -1485,13 +1485,11 @@
     <select id="getCutoffAmountByBatchIdAndClassification" parameterType="map" resultType="BigDecimal">
         with grand_total_divisor_subquery as (
             select
-                round(sum(u.gross_amount *
-                    ((#{usageBatch.fundPool.fundPoolPeriodTo} - #{usageBatch.fundPool.fundPoolPeriodFrom} +1)
-                        /(u.market_period_to - u.market_period_from +1))), 2) grand_total_divisor
+                sum(u.gross_amount *
+                    (#{fundPoolPeriodDividend} / (u.market_period_to - u.market_period_from +1))) grand_total_divisor
             from ${schema}.df_usage u
-            join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
             join ${schema}.df_work_classification wc on u.wr_wrk_inst = wc.wr_wrk_inst
-            where u.df_usage_batch_uid = #{usageBatch.id}
+            where u.df_usage_batch_uid = #{batchId}
                 and wc.classification = #{classification}
         )
         select
@@ -1506,22 +1504,20 @@
             select u.wr_wrk_inst,
                 wc.classification,
                 sum(u.gross_amount *
-                    ((#{usageBatch.fundPool.fundPoolPeriodTo} - #{usageBatch.fundPool.fundPoolPeriodFrom} +1)
-                        /(u.market_period_to - u.market_period_from +1))) work_total_weight
+                    (#{fundPoolPeriodDividend} / (u.market_period_to - u.market_period_from +1))) work_total_weight
             from ${schema}.df_usage u
-            join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
             left join ${schema}.df_work_classification wc on u.wr_wrk_inst = wc.wr_wrk_inst
-            where u.df_usage_batch_uid = #{usageBatch.id}
+            where u.df_usage_batch_uid = #{batchId}
             group by u.wr_wrk_inst, wc.classification
         )
 
         delete from ${schema}.df_usage u
         using work_total_weight_subquery sub
-        where u.df_usage_batch_uid = #{usageBatch.id}
+        where u.df_usage_batch_uid = #{batchId}
             and sub.wr_wrk_inst = u.wr_wrk_inst
             and ((sub.classification = 'STM' and sub.work_total_weight &lt; #{stmCutoffAmount})
                 or (sub.classification = 'NON-STM' and sub.work_total_weight &lt; #{nonStmCutoffAmount})
-                or (sub.classification is null and sub.work_total_weight &lt; least (#{stmCutoffAmount}, #{nonStmCutoffAmount})))
+                or (sub.classification is null and sub.work_total_weight &lt; #{unclassifiedCutoffAmount}))
         returning u.df_usage_uid
     </select>
 

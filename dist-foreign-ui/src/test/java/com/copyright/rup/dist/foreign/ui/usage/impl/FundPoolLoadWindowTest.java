@@ -190,8 +190,7 @@ public class FundPoolLoadWindowTest {
         initUploadComponents();
         expect(window.isValid()).andReturn(true).once();
         expect(usagesController.getUsagesCountForNtsBatch(capture(usageBatchCapture))).andReturn(3).once();
-        usagesController.loadNtsBatch(capture(usageBatchCapture));
-        expectLastCall().once();
+        expect(usagesController.loadNtsBatch(capture(usageBatchCapture))).andReturn(3).once();
         Windows.showNotificationWindow("Upload completed: 3 record(s) were stored successfully");
         expectLastCall().once();
         replay(window, usagesController, Windows.class);
