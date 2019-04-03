@@ -1,3 +1,13 @@
+5.1.9
+-
+*  B-48760 FDA: Create NTS PreService fee additional fund pool from NTS withdrawn details: add withdrawn_amount column to df_fund_pool table
+* B-46739 FDA: Remove NTS titles that do not meet the minimum from the fund pool batch: fix checkstyle issue
+* B-46739 FDA: Remove NTS titles that do not meet the minimum from the fund pool batch: make changes based on comments in CR-DIST-FOREIGN-97
+* B-48760 FDA: Create NTS Pre-service fee additional fund pool from NTS withdrawn details: Implement service to create NTS withdrawn fund pool
+* B-49463 Tech Debt: FDA: rename repository method for getting unclassified usages by Wr Wrk Insts
+* B-50004 FDA: Add Standard Number Type to the usage for classification: add Standard Number Type column to csv template to upload usage batch
+* B-50004 FDA: Add Standard Number Type to the usage for classification: apply Wr Wrk Inst validator to uploaded usages
+
 5.1.8
 -
 * B-48760 FDA: Create NTS Pre-service fee additional fund pool from NTS withdrawn details: Implement the Create Fund Pool dialog
