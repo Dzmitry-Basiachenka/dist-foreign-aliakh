@@ -117,6 +117,7 @@ public class UsageCsvProcessorIntegrationTest {
                     "<li>Title</li>" +
                     "<li>Article</li>" +
                     "<li>Standard Number</li>" +
+                    "<li>Standard Number Type</li>" +
                     "<li>Wr Wrk Inst</li>" +
                     "<li>RH Account #</li>" +
                     "<li>Publisher</li>" +
