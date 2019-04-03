@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class WithdrawnBatchesCsvReportHandler extends BaseCsvReportHandler<UsageBatch> {
 
-    private static final List<String> HEADERS = ImmutableList.of("Usage Batch Name", "NTS Withdrawn Amount");
+    private static final List<String> HEADERS = ImmutableList.of("Usage Batch Name", "Gross NTS Withdrawn Amount");
 
     /**
      * Constructor.

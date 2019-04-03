@@ -22,6 +22,7 @@ import com.vaadin.ui.components.grid.FooterRow;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Window for filtered batches to create NTS withdrawn fund pool.
@@ -98,7 +99,9 @@ class WithdrawnFilteredBatchesWindow extends Window {
         fileDownloader.extend(exportButton);
         Button continueButton = Buttons.createButton("Continue");
         continueButton.addClickListener((ClickListener) event ->
-            Windows.showModalWindow(new CreateWithdrawnFundPoolWindow(controller, batchFilterWindow, this)));
+            Windows.showModalWindow(new CreateWithdrawnFundPoolWindow(controller,
+                batches.stream().map(UsageBatch::getId).collect(Collectors.toList()), grossAmount,
+                batchFilterWindow, this)));
         Button cancelButton = Buttons.createButton("Cancel");
         cancelButton.addClickListener(event -> {
             this.close();

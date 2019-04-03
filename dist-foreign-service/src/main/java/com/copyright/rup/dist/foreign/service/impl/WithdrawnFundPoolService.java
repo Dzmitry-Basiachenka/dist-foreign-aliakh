@@ -2,7 +2,9 @@ package com.copyright.rup.dist.foreign.service.impl;
 
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
+import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.WithdrawnFundPool;
+import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.IWithdrawnFundPoolRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.IWithdrawnFundPoolService;
@@ -31,11 +33,22 @@ public class WithdrawnFundPoolService implements IWithdrawnFundPoolService {
     @Autowired
     private IWithdrawnFundPoolRepository withdrawnFundPoolRepository;
     @Autowired
+    private IUsageRepository usageRepository;
+    @Autowired
     private IUsageService usageService;
 
     @Override
-    public void insert(WithdrawnFundPool fundPool) {
+    @Transactional
+    public void create(WithdrawnFundPool fundPool, List<String> batchIds) {
+        String userName = RupContextUtils.getUserName();
+        fundPool.setCreateUser(userName);
+        fundPool.setUpdateUser(userName);
+        LOGGER.info("Create fund pool. Started. FundPoolName={}, FundPoolAmount={}, BatchesCount={}, UserName={}",
+            fundPool.getName(), fundPool.getAmount(), LogUtils.size(batchIds), userName);
         withdrawnFundPoolRepository.insert(fundPool);
+        usageRepository.addWithdrawnUsagesToFundPool(fundPool.getId(), batchIds, userName);
+        LOGGER.info("Create fund pool. Finished. FundPoolName={}, FundPoolAmount={}, BatchesCount={}, UserName={}",
+            fundPool.getName(), fundPool.getAmount(), LogUtils.size(batchIds), userName);
     }
 
     @Override
@@ -61,13 +74,5 @@ public class WithdrawnFundPoolService implements IWithdrawnFundPoolService {
     @Override
     public boolean fundPoolNameExists(String fundPoolName) {
         return 0 < withdrawnFundPoolRepository.findCountByName(fundPoolName);
-    }
-
-    void setWithdrawnFundPoolRepository(IWithdrawnFundPoolRepository withdrawnFundPoolRepository) {
-        this.withdrawnFundPoolRepository = withdrawnFundPoolRepository;
-    }
-
-    void setUsageService(IUsageService usageService) {
-        this.usageService = usageService;
     }
 }

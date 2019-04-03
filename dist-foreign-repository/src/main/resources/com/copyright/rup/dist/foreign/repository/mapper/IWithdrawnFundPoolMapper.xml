@@ -8,7 +8,7 @@
         <result property="id" column="df_fund_pool_uid"/>
         <result property="name" column="name"/>
         <result property="comment" column="comment"/>
-        <result property="createUser" column="create_user"/>
+        <result property="createUser" column="created_by_user"/>
     </resultMap>
 
     <insert id="insert" parameterType="WithdrawnFundPool">

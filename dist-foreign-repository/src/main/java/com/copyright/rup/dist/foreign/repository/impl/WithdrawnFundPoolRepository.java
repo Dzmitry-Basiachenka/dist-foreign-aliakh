@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.foreign.domain.WithdrawnFundPool;
@@ -11,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Implementation of {@link IWithdrawnFundPoolRepository}.
@@ -26,7 +26,7 @@ public class WithdrawnFundPoolRepository extends BaseRepository implements IWith
 
     @Override
     public void insert(WithdrawnFundPool fundPool) {
-        insert("IWithdrawnFundPoolMapper.insert", checkNotNull(fundPool));
+        insert("IWithdrawnFundPoolMapper.insert", Objects.requireNonNull(fundPool));
     }
 
     @Override

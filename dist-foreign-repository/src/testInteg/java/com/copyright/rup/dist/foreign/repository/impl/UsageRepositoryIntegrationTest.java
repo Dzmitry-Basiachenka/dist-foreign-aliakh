@@ -1081,6 +1081,24 @@ public class UsageRepositoryIntegrationTest {
                 new BigDecimal("2.10")));
     }
 
+    @Test
+    public void testAddWithdrawnUsagesToFundPool() {
+        List<String> usageIds = Collections.singletonList("4dd8cdf8-ca10-422e-bdd5-3220105e6379");
+        List<Usage> usages = usageRepository.findByIds(usageIds);
+        assertEquals(1, usages.size());
+        Usage usage = usages.get(0);
+        assertEquals(UsageStatusEnum.NTS_WITHDRAWN, usage.getStatus());
+        assertNull(usage.getFundPoolId());
+        String fundPoolId = "3fef25b0-c0d1-4819-887f-4c6acc01390e";
+        List<String> batchIds = Collections.singletonList("cb597f4e-f636-447f-8710-0436d8994d10");
+        usageRepository.addWithdrawnUsagesToFundPool(fundPoolId, batchIds, StoredEntity.DEFAULT_USER);
+        usages = usageRepository.findByIds(usageIds);
+        assertEquals(1, usages.size());
+        usage = usages.get(0);
+        assertEquals(UsageStatusEnum.TO_BE_DISTRIBUTED, usage.getStatus());
+        assertEquals(fundPoolId, usage.getFundPoolId());
+    }
+
     private void verifyFilterForTwoBatches(AuditFilter filter) {
         filter.setBatchesIds(Sets.newHashSet(BATCH_ID, "74b736f2-81ce-41fa-bd8e-574299232458"));
         verifyUsageDtos(findForAuditWithSort(filter, BATCH_NAME_KEY, true), 2, USAGE_ID_5, USAGE_ID_4);

@@ -21,6 +21,9 @@ import com.vaadin.ui.Window;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 /**
  * Window to create NTS withdrawn fund pool.
  * <p/>
@@ -33,6 +36,8 @@ import org.apache.commons.lang3.StringUtils;
 class CreateWithdrawnFundPoolWindow extends Window {
 
     private final IUsagesController controller;
+    private final List<String> batchIds;
+    private final BigDecimal amount;
     private final WithdrawnBatchFilterWindow batchFilterWindow;
     private final WithdrawnFilteredBatchesWindow filteredBatchesWindow;
     private final Binder<WithdrawnFundPool> binder = new Binder<>();
@@ -44,12 +49,17 @@ class CreateWithdrawnFundPoolWindow extends Window {
      * Constructor.
      *
      * @param controller            instance of {@link IUsagesController}
+     * @param batchIds              list of ids of usage batches
+     * @param amount                gross amount
      * @param batchFilterWindow     instance of {@link WithdrawnBatchFilterWindow}
      * @param filteredBatchesWindow instance of {@link WithdrawnFilteredBatchesWindow}
      */
-    CreateWithdrawnFundPoolWindow(IUsagesController controller, WithdrawnBatchFilterWindow batchFilterWindow,
+    CreateWithdrawnFundPoolWindow(IUsagesController controller, List<String> batchIds, BigDecimal amount,
+                                  WithdrawnBatchFilterWindow batchFilterWindow,
                                   WithdrawnFilteredBatchesWindow filteredBatchesWindow) {
         this.controller = controller;
+        this.batchIds = batchIds;
+        this.amount = amount;
         this.batchFilterWindow = batchFilterWindow;
         this.filteredBatchesWindow = filteredBatchesWindow;
         setResizable(false);
@@ -113,7 +123,8 @@ class CreateWithdrawnFundPoolWindow extends Window {
             fundPool.setId(RupPersistUtils.generateUuid());
             fundPool.setName(StringUtils.trimToEmpty(fundPoolNameField.getValue()));
             fundPool.setComment(StringUtils.trimToEmpty(commentsArea.getValue()));
-            controller.getWithdrawnFundPoolService().insert(fundPool);
+            fundPool.setAmount(amount);
+            controller.getWithdrawnFundPoolService().create(fundPool, batchIds);
             closeAllWindows();
         } else {
             Windows.showValidationErrorWindow(Lists.newArrayList(fundPoolNameField, commentsArea));
