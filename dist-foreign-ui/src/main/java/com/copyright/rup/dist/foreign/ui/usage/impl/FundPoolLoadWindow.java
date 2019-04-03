@@ -87,9 +87,9 @@ class FundPoolLoadWindow extends Window {
             UsageBatch usageBatch = buildUsageBatch();
             int usagesCount = usagesController.getUsagesCountForNtsBatch(usageBatch);
             if (0 < usagesCount) {
-                usagesController.loadNtsBatch(usageBatch);
+                int insertedUsages = usagesController.loadNtsBatch(usageBatch);
                 close();
-                Windows.showNotificationWindow(ForeignUi.getMessage("message.upload_completed", usagesCount));
+                Windows.showNotificationWindow(ForeignUi.getMessage("message.upload_completed", insertedUsages));
             } else {
                 Windows.showNotificationWindow(ForeignUi.getMessage("message.load_fund_pool.no_usages"));
             }

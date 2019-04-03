@@ -323,7 +323,7 @@ public class UsagesControllerTest {
         filterWidgetMock.clearFilter();
         expectLastCall().once();
         replay(usageBatchService, filterController, filterWidgetMock, RupContextUtils.class);
-        controller.loadNtsBatch(usageBatch);
+        assertEquals(2, controller.loadNtsBatch(usageBatch));
         verify(usageBatchService, filterController, filterWidgetMock, RupContextUtils.class);
     }
 

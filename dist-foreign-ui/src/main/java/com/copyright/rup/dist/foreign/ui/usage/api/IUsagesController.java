@@ -155,8 +155,9 @@ public interface IUsagesController extends IController<IUsagesWidget> {
      * Inserts NTS batch and assigns eligible for NTS usages to it based on fund pool information.
      *
      * @param usageBatch {@link UsageBatch} to insert
+     * @return count of inserted usages
      */
-    void loadNtsBatch(UsageBatch usageBatch);
+    int loadNtsBatch(UsageBatch usageBatch);
 
     /**
      * Gets all additional funds.
