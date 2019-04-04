@@ -104,10 +104,7 @@ class WithdrawnFilteredBatchesWindow extends Window {
                 batches.stream().map(UsageBatch::getId).collect(Collectors.toList()), grossAmount,
                 batchFilterWindow, this)));
         Button cancelButton = Buttons.createButton("Cancel");
-        cancelButton.addClickListener(event -> {
-            this.close();
-            batchFilterWindow.close();
-        });
+        cancelButton.addClickListener(event -> this.close());
         return new HorizontalLayout(exportButton, continueButton, cancelButton);
     }
 }

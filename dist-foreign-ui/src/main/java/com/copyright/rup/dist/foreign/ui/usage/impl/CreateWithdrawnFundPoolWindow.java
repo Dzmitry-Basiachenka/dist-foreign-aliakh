@@ -83,7 +83,7 @@ class CreateWithdrawnFundPoolWindow extends Window {
             .asRequired(ForeignUi.getMessage("field.error.empty"))
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
             .withValidator(value -> !controller.getWithdrawnFundPoolService().fundPoolNameExists(value),
-                ForeignUi.getMessage("message.error.unique_name", "Fund Pool"))
+                ForeignUi.getMessage("message.error.unique_name", "Fund"))
             .bind(WithdrawnFundPool::getName, WithdrawnFundPool::setName);
         VaadinUtils.setMaxComponentsWidth(fundPoolNameField);
     }
@@ -100,10 +100,7 @@ class CreateWithdrawnFundPoolWindow extends Window {
         Button confirmButton = Buttons.createButton(ForeignUi.getMessage("button.confirm"));
         confirmButton.addClickListener(event -> onConfirmButtonClicked());
         Button cancelButton = Buttons.createButton(ForeignUi.getMessage("button.cancel"));
-        cancelButton.addClickListener(event -> {
-            this.close();
-            filteredBatchesWindow.close();
-        });
+        cancelButton.addClickListener(event -> this.close());
         Button closeButton = Buttons.createButton(ForeignUi.getMessage("button.close"));
         closeButton.addClickListener(event -> closeAllWindows());
         HorizontalLayout layout = new HorizontalLayout(confirmButton, cancelButton, closeButton);
