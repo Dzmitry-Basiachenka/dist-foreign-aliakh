@@ -53,7 +53,7 @@ public class CreateWithdrawnFundPoolWindowTest {
     private void verifyFundPoolNameField(Component component) {
         assertNotNull(component);
         TextField fundPoolNameField = (TextField) component;
-        assertEquals("Fund Pool Name", fundPoolNameField.getCaption());
+        assertEquals("Fund Name", fundPoolNameField.getCaption());
         assertEquals(StringUtils.EMPTY, fundPoolNameField.getValue());
     }
 
