@@ -723,7 +723,7 @@
         where df_scenario_uid = #{scenarioId}
     </delete>
 
-    <update id="deleteFromAdditionalFund" parameterType="map">
+    <update id="deleteFromPreServiceFeeFund" parameterType="map">
         update
             ${schema}.df_usage
         set

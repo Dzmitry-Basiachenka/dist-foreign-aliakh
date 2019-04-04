@@ -23,7 +23,7 @@ import java.math.BigDecimal;
 import java.util.Collections;
 
 /**
- * Verifies {@link CreateWithdrawnFundPoolWindow}.
+ * Verifies {@link CreatePreServiceFeeFundWindow}.
  * <p/>
  * Copyright (C) 2019 copyright.com
  * <p/>
@@ -31,12 +31,12 @@ import java.util.Collections;
  *
  * @author Aliaksandr Liakh
  */
-public class CreateWithdrawnFundPoolWindowTest {
+public class CreatePreServiceFeeFundWindowTest {
 
     @Test
     public void testConstructor() {
         IUsagesController controller = createMock(IUsagesController.class);
-        CreateWithdrawnFundPoolWindow window = new CreateWithdrawnFundPoolWindow(controller,
+        CreatePreServiceFeeFundWindow window = new CreatePreServiceFeeFundWindow(controller,
             Collections.emptyList(), BigDecimal.ONE,
             createMock(WithdrawnBatchFilterWindow.class), createMock(WithdrawnFilteredBatchesWindow.class));
         assertEquals("Create NTS Pre-Service Fee Funds", window.getCaption());

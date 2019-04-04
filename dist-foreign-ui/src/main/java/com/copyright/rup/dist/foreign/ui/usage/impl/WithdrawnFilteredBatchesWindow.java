@@ -100,7 +100,7 @@ class WithdrawnFilteredBatchesWindow extends Window {
         fileDownloader.extend(exportButton);
         Button continueButton = Buttons.createButton("Continue");
         continueButton.addClickListener((ClickListener) event ->
-            Windows.showModalWindow(new CreateWithdrawnFundPoolWindow(controller,
+            Windows.showModalWindow(new CreatePreServiceFeeFundWindow(controller,
                 batches.stream().map(UsageBatch::getId).collect(Collectors.toList()), grossAmount,
                 batchFilterWindow, this)));
         Button cancelButton = Buttons.createButton("Cancel");

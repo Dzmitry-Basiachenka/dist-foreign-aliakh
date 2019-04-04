@@ -63,7 +63,7 @@ public class DomainVerifierTest {
             {BatchStatistic.class},
             {Work.class},
             {WorkClassification.class},
-            {WithdrawnFundPool.class},
+            {PreServiceFeeFund.class},
         };
         return Arrays.asList(testData);
     }

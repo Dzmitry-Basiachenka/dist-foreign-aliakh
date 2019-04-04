@@ -40,7 +40,7 @@ public interface IUsageBatchService {
     List<UsageBatch> getUsageBatches(String productFamily);
 
     /**
-     * Finds list of {@link UsageBatch}es suitable for including in NTS additional funds.
+     * Finds list of {@link UsageBatch}es suitable for including in Pre-Service fee funds.
      *
      * @return list of found {@link UsageBatch}es
      */
