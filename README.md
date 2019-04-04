@@ -1,3 +1,8 @@
+5.1.10
+-
+* B-48760 FDA: Create NTS Pre-service fee additional fund pool from NTS withdrawn details: Implement moving from current dialog to its parent dialog by clicking on the Cancel button
+* B-50004 FDA: Add Standard Number Type to the usage for classification: adjust logic of uploading researched usages
+
 5.1.9
 -
 *  B-48760 FDA: Create NTS PreService fee additional fund pool from NTS withdrawn details: add withdrawn_amount column to df_fund_pool table
