@@ -97,6 +97,7 @@ public class UsageRepositoryIntegrationTest {
     private static final String SERVICE_FEE_KEY = "serviceFee";
     private static final String COMMENT_KEY = "comment";
     private static final String STATUS_KEY = "status";
+    private static final String STANDARD_NUMBER = "2192-3558";
     private static final String USAGE_ID_1 = "3ab5e80b-89c0-4d78-9675-54c7ab284450";
     private static final String USAGE_ID_2 = "8a06905f-37ae-4e1f-8550-245277f8165c";
     private static final String USAGE_ID_3 = "5c5f8c1c-1418-4cfd-8685-9212f4c421d1";
@@ -953,45 +954,13 @@ public class UsageRepositoryIntegrationTest {
     public void testUpdateResearchedUsages() {
         String usageId1 = "721ca627-09bc-4204-99f4-6acae415fa5d";
         String usageId2 = "9c07f6dd-382e-4cbb-8cd1-ab9f51413e0a";
-        String title1 = "Title1";
-        String title2 = "Title2";
-        List<Usage> usages = usageRepository.findByIds(Collections.singletonList(usageId1));
-        assertEquals(1, CollectionUtils.size(usages));
-        Usage usage1 = usages.get(0);
-        assertEquals(UsageStatusEnum.WORK_RESEARCH, usage1.getStatus());
-        assertEquals(WORK_TITLE_1, usage1.getWorkTitle());
-        assertNull(usage1.getSystemTitle());
-        assertNull(usage1.getWrWrkInst());
-        usages = usageRepository.findByIds(Collections.singletonList(usageId2));
-        assertEquals(1, CollectionUtils.size(usages));
-        Usage usage2 = usages.get(0);
-        assertEquals(UsageStatusEnum.WORK_RESEARCH, usage2.getStatus());
-        assertEquals(WORK_TITLE_1, usage2.getWorkTitle());
-        assertNull(usage2.getSystemTitle());
-        assertNull(usage2.getWrWrkInst());
-        ResearchedUsage researchedUsage1 = new ResearchedUsage();
-        researchedUsage1.setUsageId(usageId1);
-        researchedUsage1.setSystemTitle(title1);
-        researchedUsage1.setWrWrkInst(180382916L);
-        ResearchedUsage researchedUsage2 = new ResearchedUsage();
-        researchedUsage2.setUsageId(usageId2);
-        researchedUsage2.setSystemTitle(title2);
-        researchedUsage2.setWrWrkInst(854030733L);
-        usageRepository.updateResearchedUsages(Lists.newArrayList(researchedUsage1, researchedUsage2));
-        usages = usageRepository.findByIds(Collections.singletonList(usageId1));
-        assertEquals(1, CollectionUtils.size(usages));
-        usage1 = usages.get(0);
-        assertEquals(UsageStatusEnum.WORK_FOUND, usage1.getStatus());
-        assertEquals(WORK_TITLE_1, usage1.getWorkTitle());
-        assertEquals(title1, usage1.getSystemTitle());
-        assertEquals(180382916L, usage1.getWrWrkInst().longValue());
-        usages = usageRepository.findByIds(Collections.singletonList(usageId2));
-        assertEquals(1, CollectionUtils.size(usages));
-        usage2 = usages.get(0);
-        assertEquals(UsageStatusEnum.WORK_FOUND, usage2.getStatus());
-        assertEquals(WORK_TITLE_1, usage2.getWorkTitle());
-        assertEquals(title2, usage2.getSystemTitle());
-        assertEquals(854030733L, usage2.getWrWrkInst().longValue());
+        verifyUsage(usageId1, null, null, STANDARD_NUMBER, null, UsageStatusEnum.WORK_RESEARCH);
+        verifyUsage(usageId2, null, null, null, null, UsageStatusEnum.WORK_RESEARCH);
+        usageRepository.updateResearchedUsages(Arrays.asList(
+            buildResearchedUsage(usageId1, "Technical Journal", 180382916L, STANDARD_NUMBER, "VALISSN"),
+            buildResearchedUsage(usageId2, "Medical Journal", 854030733L, "2192-3566", "VALISBN13")));
+        verifyUsage(usageId1, "Technical Journal", 180382916L, STANDARD_NUMBER, "VALISSN", UsageStatusEnum.WORK_FOUND);
+        verifyUsage(usageId2, "Medical Journal", 854030733L, "2192-3566", "VALISBN13", UsageStatusEnum.WORK_FOUND);
     }
 
     @Test
@@ -1099,6 +1068,30 @@ public class UsageRepositoryIntegrationTest {
         usage = usages.get(0);
         assertEquals(UsageStatusEnum.TO_BE_DISTRIBUTED, usage.getStatus());
         assertEquals(fundPoolId, usage.getFundPoolId());
+    }
+
+    private ResearchedUsage buildResearchedUsage(String id, String title, Long wrWrkInst, String standardNumber,
+                                                 String standardNumberType) {
+        ResearchedUsage researchedUsage = new ResearchedUsage();
+        researchedUsage.setUsageId(id);
+        researchedUsage.setSystemTitle(title);
+        researchedUsage.setWrWrkInst(wrWrkInst);
+        researchedUsage.setStandardNumber(standardNumber);
+        researchedUsage.setStandardNumberType(standardNumberType);
+        return researchedUsage;
+    }
+
+    private void verifyUsage(String usageId, String title, Long wrWrkInst, String standardNumber,
+                             String standardNumberType, UsageStatusEnum status) {
+        List<Usage> usages = usageRepository.findByIds(Collections.singletonList(usageId));
+        assertEquals(1, CollectionUtils.size(usages));
+        Usage usage = usages.get(0);
+        assertEquals(status, usage.getStatus());
+        assertEquals(WORK_TITLE_1, usage.getWorkTitle());
+        assertEquals(title, usage.getSystemTitle());
+        assertEquals(wrWrkInst, usage.getWrWrkInst());
+        assertEquals(standardNumber, usage.getStandardNumber());
+        assertEquals(standardNumberType, usage.getStandardNumberType());
     }
 
     private void verifyFilterForTwoBatches(AuditFilter filter) {

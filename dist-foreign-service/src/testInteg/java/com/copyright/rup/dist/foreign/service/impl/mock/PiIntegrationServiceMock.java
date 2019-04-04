@@ -16,15 +16,20 @@ import java.util.Objects;
  */
 public class PiIntegrationServiceMock extends PiIntegrationService {
 
+    private static final String VALISSN = "VALISSN";
     private static final String TITLE = "At-risk youth : a comprehensive response : for counselors teachers " +
         "psychologists and human service professionals";
 
     @Override
     public Work findWorkByIdnoAndTitle(String idno, String title) {
-        if (Objects.equals("978-0-271-01750-1", idno)) {
-            return new Work(123059057L, "BIOCHEMISTRY (MOSCOW)", "VALISSN");
+        if (Objects.equals("978-0-7695-2365-2", idno)) {
+            return new Work(876543210L, "Medical Journal", VALISSN);
+        } else if (Objects.equals("978-0-7695-2365-1", idno)) {
+            return new Work(987654321L, "Technical Journal", VALISSN);
+        } else if (Objects.equals("978-0-271-01750-1", idno)) {
+            return new Work(123059057L, "BIOCHEMISTRY (MOSCOW)", VALISSN);
         } else if (Objects.equals("1906011", idno) && Objects.equals("Solar Cells", title)) {
-            return new Work(292891647L, "Solar Cells", "VALISSN");
+            return new Work(292891647L, "Solar Cells", VALISSN);
         } else if (Objects.equals("12345XX-12978", idno) && Objects.equals(TITLE, title)) {
             return new Work(100012905L, TITLE, "VALISBN13");
         }

@@ -1,11 +1,15 @@
 [
   {
     "usageId": "e1108526-5945-4a30-971e-91e584b4bc88",
+    "standardNumber": "978-0-7695-2365-1",
+    "standardNumberType": "VALISSN",
     "systemTitle": "test system title",
     "wrWrkInst": 987654321
   },
   {
     "usageId": "9f717d69-785a-4f25-ae60-8d90c1f334cc",
+    "standardNumber": "978-0-7695-2365-2",
+    "standardNumberType": "VALISSN",
     "systemTitle": "test system title",
     "wrWrkInst": 876543210
   }
