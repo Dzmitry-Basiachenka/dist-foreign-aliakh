@@ -43,8 +43,6 @@ public class ReportServiceTest {
 
     private static final String PATH_TO_EXPECTED_REPORTS =
         "src/test/resources/com/copyright/rup/dist/foreign/service/impl/csv";
-    private static final String USAGE_BATCH_ID = "2358deb3-caa3-4c4e-85cd-c353fcc8e6b9";
-    private static final String USAGE_BATCH_NAME = "Copibec 25May18";
     private static final BigDecimal USAGE_BATCH_GROSS_AMOUNT = BigDecimal.ONE;
 
     private final ReportTestUtils reportTestUtils = new ReportTestUtils(PATH_TO_EXPECTED_REPORTS);
@@ -196,10 +194,10 @@ public class ReportServiceTest {
     }
 
     @Test
-    public void testWriteWithdrawnBatchesCsvReport() throws IOException {
+    public void testWritePreServiceFeeFundBatchesCsvReport() throws IOException {
         PipedOutputStream pos = new PipedOutputStream();
         PipedInputStream pis = new PipedInputStream(pos);
-        new ReportService().writeWithdrawnBatchesCsvReport(
+        new ReportService().writePreServiceFeeFundBatchesCsvReport(
             Collections.singletonList(buildUsageBatch()), USAGE_BATCH_GROSS_AMOUNT, pos);
         reportTestUtils.assertCsvReport("batches_nts_withdrawn.csv", pis);
     }
@@ -213,8 +211,8 @@ public class ReportServiceTest {
 
     private UsageBatch buildUsageBatch() {
         UsageBatch usageBatch = new UsageBatch();
-        usageBatch.setId(USAGE_BATCH_ID);
-        usageBatch.setName(USAGE_BATCH_NAME);
+        usageBatch.setId("2358deb3-caa3-4c4e-85cd-c353fcc8e6b9");
+        usageBatch.setName("Copibec 25May18");
         usageBatch.setGrossAmount(USAGE_BATCH_GROSS_AMOUNT);
         return usageBatch;
     }

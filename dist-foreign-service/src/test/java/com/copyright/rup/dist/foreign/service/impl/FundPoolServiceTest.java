@@ -69,7 +69,7 @@ public class FundPoolServiceTest {
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         fundPoolRepository.insert(fund);
         expectLastCall().once();
-        usageRepository.addWithdrawnUsagesToFundPool(fund.getId(), batchIds, USER_NAME);
+        usageRepository.addWithdrawnUsagesToPreServiceFeeFund(fund.getId(), batchIds, USER_NAME);
         expectLastCall().once();
         replay(RupContextUtils.class, fundPoolRepository, usageRepository);
         fundPoolService.create(fund, batchIds);

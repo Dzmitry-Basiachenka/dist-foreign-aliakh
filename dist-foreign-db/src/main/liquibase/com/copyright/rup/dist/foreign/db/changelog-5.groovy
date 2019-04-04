@@ -327,4 +327,15 @@ databaseChangeLog {
             // automatic rollback
         }
     }
+
+    changeSet(id: '2019-04-05-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("B-48760 FDA: Create NTS Pre-service fee additional fund pool from NTS withdrawn details: " +
+                "rename primary key of the table df_fund_pool to follow database code standards")
+
+        sql("alter table ${dbAppsSchema}.df_fund_pool rename constraint df_fund_pool_pk to pk_df_fund_pool")
+
+        rollback {
+            sql("alter table ${dbAppsSchema}.df_fund_pool rename constraint pk_df_fund_pool to df_fund_pool_pk")
+        }
+    }
 }

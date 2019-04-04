@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Verifies {@link WithdrawnFilteredBatchesWindow}.
+ * Verifies {@link PreServiceFeeFundFilteredBatchesWindow}.
  * <p/>
  * Copyright (C) 2019 copyright.com
  * <p/>
@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
  *
  * @author Aliaksandr Liakh
  */
-public class WithdrawnFilteredBatchesWindowTest {
+public class PreServiceFeeFundFilteredBatchesWindowTest {
 
     private static final String USAGE_BATCH_ID = "2358deb3-caa3-4c4e-85cd-c353fcc8e6b9";
     private static final String USAGE_BATCH_NAME = "Copibec 25May18";
@@ -48,11 +48,12 @@ public class WithdrawnFilteredBatchesWindowTest {
     public void testConstructor() {
         IUsagesController controller = createMock(IUsagesController.class);
         List<UsageBatch> batches = Collections.singletonList(buildUsageBatch());
-        expect(controller.getWithdrawnBatchesStreamSource(batches, USAGE_BATCH_GROSS_AMOUNT))
+        expect(controller.getPreServiceFeeFundBatchesStreamSource(batches, USAGE_BATCH_GROSS_AMOUNT))
             .andReturn(createMock(IStreamSource.class)).once();
         replay(controller);
-        WithdrawnFilteredBatchesWindow window = new WithdrawnFilteredBatchesWindow(controller, batches,
-            createMock(WithdrawnBatchFilterWindow.class));
+        PreServiceFeeFundFilteredBatchesWindow
+            window = new PreServiceFeeFundFilteredBatchesWindow(controller, batches,
+            createMock(PreServiceFeeFundBatchesFilterWindow.class));
         verify(controller);
         assertEquals("Filtered batches", window.getCaption());
         verifySize(window, Unit.PIXELS, 450, Unit.PIXELS, 400);

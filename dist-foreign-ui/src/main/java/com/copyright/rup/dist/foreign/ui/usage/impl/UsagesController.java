@@ -211,8 +211,8 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
-    public List<UsageBatch> getWithdrawnUsageBatches() {
-        return usageBatchService.getWithdrawnUsageBatches();
+    public List<UsageBatch> getUsageBatchesForPreServiceFeeFunds() {
+        return usageBatchService.getUsageBatchesForPreServiceFeeFunds();
     }
 
     @Override
@@ -290,9 +290,11 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
-    public IStreamSource getWithdrawnBatchesStreamSource(List<UsageBatch> batches, BigDecimal grossAmount) {
-        return new ExportStreamSource("batches_nts_withdrawn_",
-            pipedOutputStream -> reportService.writeWithdrawnBatchesCsvReport(batches, grossAmount, pipedOutputStream));
+    public IStreamSource getPreServiceFeeFundBatchesStreamSource(List<UsageBatch> batches,
+                                                                 BigDecimal totalGrossAmount) {
+        return new ExportStreamSource("pre_service_fee_fund_batches_",
+            pipedOutputStream -> reportService.writePreServiceFeeFundBatchesCsvReport(batches, totalGrossAmount,
+                pipedOutputStream));
     }
 
     @Override

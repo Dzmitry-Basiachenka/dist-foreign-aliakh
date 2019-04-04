@@ -87,8 +87,8 @@ public class UsageBatchService implements IUsageBatchService {
     }
 
     @Override
-    public List<UsageBatch> getWithdrawnUsageBatches() {
-        return usageBatchRepository.findWithdrawnUsageBatches();
+    public List<UsageBatch> getUsageBatchesForPreServiceFeeFunds() {
+        return usageBatchRepository.findUsageBatchesForPreServiceFeeFunds();
     }
 
     @Override

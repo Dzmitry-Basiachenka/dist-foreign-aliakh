@@ -532,15 +532,15 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public void addWithdrawnUsagesToFundPool(String fundPoolId, List<String> batchIds, String userName) {
-        checkArgument(StringUtils.isNotBlank(fundPoolId));
+    public void addWithdrawnUsagesToPreServiceFeeFund(String fundId, List<String> batchIds, String userName) {
+        checkArgument(StringUtils.isNotBlank(fundId));
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(5);
-        params.put("fundPoolId", fundPoolId);
-        params.put("statusFrom", UsageStatusEnum.NTS_WITHDRAWN);
-        params.put("statusTo", UsageStatusEnum.TO_BE_DISTRIBUTED);
+        params.put("fundId", fundId);
+        params.put("statusToFind", UsageStatusEnum.NTS_WITHDRAWN);
+        params.put("statusToSet", UsageStatusEnum.TO_BE_DISTRIBUTED);
         params.put("batchIds", Objects.requireNonNull(batchIds));
         params.put("updateUser", Objects.requireNonNull(userName));
-        update("IUsageMapper.addWithdrawnUsagesToFundPool", params);
+        update("IUsageMapper.addWithdrawnUsagesToPreServiceFeeFund", params);
     }
 
     private AuditFilter escapeSqlLikePattern(AuditFilter auditFilter) {

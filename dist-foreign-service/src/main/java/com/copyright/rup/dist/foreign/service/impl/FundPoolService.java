@@ -47,7 +47,7 @@ public class FundPoolService implements IFundPoolService {
             "Create Pre-Service fee fund. Started. FundPoolName={}, FundPoolAmount={}, BatchesCount={}, UserName={}",
             fundPool.getName(), fundPool.getAmount(), LogUtils.size(batchIds), userName);
         fundPoolRepository.insert(fundPool);
-        usageRepository.addWithdrawnUsagesToFundPool(fundPool.getId(), batchIds, userName);
+        usageRepository.addWithdrawnUsagesToPreServiceFeeFund(fundPool.getId(), batchIds, userName);
         LOGGER.info(
             "Create Pre-Service fee fund. Finished. FundPoolName={}, FundPoolAmount={}, BatchesCount={}, UserName={}",
             fundPool.getName(), fundPool.getAmount(), LogUtils.size(batchIds), userName);
@@ -65,7 +65,7 @@ public class FundPoolService implements IFundPoolService {
         LOGGER.info("Delete Pre-Service fee fund. Started. FundPoolName={}, UserName={}", fund.getName(), userName);
         usageService.deleteFromPreServiceFeeFund(fund.getId());
         fundPoolRepository.delete(fund.getId());
-        LOGGER.info("Delete Pre-Service fee. Finished. FundPoolName={}, UserName={}", fund.getName(), userName);
+        LOGGER.info("Delete Pre-Service fee fund. Finished. FundPoolName={}, UserName={}", fund.getName(), userName);
     }
 
     @Override

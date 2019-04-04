@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Implementation of {@link BaseCsvReportHandler} to write NTS Withdrawn Batches Report.
+ * Implementation of {@link BaseCsvReportHandler} to write pre-service fee fund batches report.
  * <p/>
  * Copyright (C) 2019 copyright.com
  * <p/>
@@ -18,7 +18,7 @@ import java.util.List;
  *
  * @author Aliaksandr Liakh
  */
-public class WithdrawnBatchesCsvReportHandler extends BaseCsvReportHandler<UsageBatch> {
+public class PreServiceFeeFundBatchesCsvReportHandler extends BaseCsvReportHandler<UsageBatch> {
 
     private static final List<String> HEADERS = ImmutableList.of("Usage Batch Name", "Gross NTS Withdrawn Amount");
 
@@ -27,7 +27,7 @@ public class WithdrawnBatchesCsvReportHandler extends BaseCsvReportHandler<Usage
      *
      * @param outputStream instance of {@link OutputStream}
      */
-    public WithdrawnBatchesCsvReportHandler(OutputStream outputStream) {
+    public PreServiceFeeFundBatchesCsvReportHandler(OutputStream outputStream) {
         super(outputStream);
     }
 

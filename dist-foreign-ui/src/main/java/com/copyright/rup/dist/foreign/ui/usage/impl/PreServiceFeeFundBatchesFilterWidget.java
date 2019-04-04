@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.ui.usage.api.IPreServiceFeeFundBatchesFilterWidget;
 import com.copyright.rup.vaadin.ui.component.filter.FilterWindow.FilterSaveEvent;
 import com.copyright.rup.vaadin.ui.component.filter.IFilterWindowController;
 
@@ -13,7 +14,7 @@ import java.util.Set;
 import java.util.function.Supplier;
 
 /**
- * Widget to filter batches to create NTS withdrawn fund pool.
+ * Widget to filter batches to create pre-service fee funds.
  * <p/>
  * Copyright (C) 2019 copyright.com
  * <p/>
@@ -21,7 +22,8 @@ import java.util.function.Supplier;
  *
  * @author Aliaksandr Liakh
  */
-public class WithdrawnBatchFilterWidget implements IFilterWindowController<UsageBatch> {
+public class PreServiceFeeFundBatchesFilterWidget implements IPreServiceFeeFundBatchesFilterWidget,
+    IFilterWindowController<UsageBatch>  {
 
     private final Supplier<List<UsageBatch>> supplier;
     private final List<UsageBatch> selectedUsageBatches = new ArrayList<>();
@@ -31,7 +33,7 @@ public class WithdrawnBatchFilterWidget implements IFilterWindowController<Usage
      *
      * @param supplier supplier of {@link UsageBatch}'es
      */
-    public WithdrawnBatchFilterWidget(Supplier<List<UsageBatch>> supplier) {
+    public PreServiceFeeFundBatchesFilterWidget(Supplier<List<UsageBatch>> supplier) {
         this.supplier = supplier;
     }
 
@@ -60,6 +62,7 @@ public class WithdrawnBatchFilterWidget implements IFilterWindowController<Usage
         }
     }
 
+    @Override
     public List<UsageBatch> getSelectedUsageBatches() {
         return selectedUsageBatches;
     }

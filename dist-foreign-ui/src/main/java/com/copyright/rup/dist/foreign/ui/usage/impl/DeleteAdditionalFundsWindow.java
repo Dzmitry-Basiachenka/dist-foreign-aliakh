@@ -43,7 +43,7 @@ class DeleteAdditionalFundsWindow extends Window {
      */
     DeleteAdditionalFundsWindow(IUsagesController controller) {
         this.controller = controller;
-        setCaption(ForeignUi.getMessage("window.delete_fund_pool"));
+        setCaption(ForeignUi.getMessage("window.delete_fund"));
         setWidth(700, Unit.PIXELS);
         setHeight(450, Unit.PIXELS);
         searchWidget = new SearchWidget(new SearchController());

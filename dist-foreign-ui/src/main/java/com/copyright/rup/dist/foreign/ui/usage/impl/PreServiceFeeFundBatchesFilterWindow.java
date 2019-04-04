@@ -13,7 +13,7 @@ import com.vaadin.ui.Button.ClickListener;
 import java.util.List;
 
 /**
- * Window to filter batches to create NTS withdrawn fund pool.
+ * Window to filter batches to create pre-service fee funds.
  * <p/>
  * Copyright (C) 2019 copyright.com
  * <p/>
@@ -21,16 +21,15 @@ import java.util.List;
  *
  * @author Aliaksandr Liakh
  */
-class WithdrawnBatchFilterWindow extends FilterWindow<UsageBatch> {
+class PreServiceFeeFundBatchesFilterWindow extends FilterWindow<UsageBatch> {
 
     /**
      * Constructor.
      *
      * @param controller instance of {@link IFilterWindowController}
      */
-    WithdrawnBatchFilterWindow(IFilterWindowController<UsageBatch> controller) {
-        super(ForeignUi.getMessage("window.batches_filter"), controller,
-            "Continue", null,
+    PreServiceFeeFundBatchesFilterWindow(IFilterWindowController<UsageBatch> controller) {
+        super(ForeignUi.getMessage("window.batches_filter"), controller, "Continue", null,
             (ValueProvider<UsageBatch, List<String>>) batch -> Lists.newArrayList(batch.getName()));
         this.setSearchPromptString(ForeignUi.getMessage("prompt.batch"));
         VaadinUtils.addComponentStyle(this, "batches-filter-window");

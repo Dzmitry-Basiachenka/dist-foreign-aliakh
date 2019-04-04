@@ -106,7 +106,7 @@ public interface IUsagesController extends IController<IUsagesWidget> {
      *
      * @return list of found {@link UsageBatch}es
      */
-    List<UsageBatch> getWithdrawnUsageBatches();
+    List<UsageBatch> getUsageBatchesForPreServiceFeeFunds();
 
     /**
      * @return list of available markets.
@@ -274,13 +274,13 @@ public interface IUsagesController extends IController<IUsagesWidget> {
     void clearFilter();
 
     /**
-     * Gets instance of {@link IStreamSource} for for NTS Withdrawn Batches Report.
+     * Gets instance of {@link IStreamSource} for for pre-service fee fund filtered batches CSV report.
      *
-     * @param batches     list of batches
-     * @param grossAmount total gross amount
+     * @param batches          list of batches
+     * @param totalGrossAmount total gross amount
      * @return instance of {@link IStreamSource}
      */
-    IStreamSource getWithdrawnBatchesStreamSource(List<UsageBatch> batches, BigDecimal grossAmount);
+    IStreamSource getPreServiceFeeFundBatchesStreamSource(List<UsageBatch> batches, BigDecimal totalGrossAmount);
 
     /**
      * Gets instance of {@link IFundPoolService}.

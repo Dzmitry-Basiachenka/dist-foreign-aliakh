@@ -224,8 +224,8 @@
         color: red;
     }
 
-    /**==== Style for NTS withdrawn menu bar ====*/
-    .withdrawn-fund-menu-bar {
+    /**==== Style for Additional Funds menu bar ====*/
+    .additional-funds-menu-bar {
     	background-color: #638DB2;
     	border: #5380a8 1px solid;
     	border-radius: 2px;
@@ -239,13 +239,13 @@
     	font-size: 11px;
     }
 
-    .withdrawn-fund-menu-bar .v-menubar-menuitem {
+    .additional-funds-menu-bar .v-menubar-menuitem {
     	padding: 2px 5px 0 5px;
     	height: 17px;
     	line-height: 14px;
     }
 
-    .v-menubar-submenu-withdrawn-fund-menu-bar {
+    .v-menubar-submenu-additional-funds-menu-bar {
     	background-color: #f8f8f9;
     	border: none;
     	background-image: none;
@@ -256,7 +256,7 @@
     	font-size: 14px;
     }
 
-    .v-menubar-submenu-withdrawn-fund-menu-bar .v-menubar-menuitem {
+    .v-menubar-submenu-additional-funds-menu-bar .v-menubar-menuitem {
     	line-height: 20px;
     	padding: 2px 2px 2px 2px;
     }

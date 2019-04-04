@@ -44,7 +44,7 @@ public interface IUsageBatchService {
      *
      * @return list of found {@link UsageBatch}es
      */
-    List<UsageBatch> getWithdrawnUsageBatches();
+    List<UsageBatch> getUsageBatchesForPreServiceFeeFunds();
 
     /**
      * Checks whether Usage Batch with provided name exists in database or not.

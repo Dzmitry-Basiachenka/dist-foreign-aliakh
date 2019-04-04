@@ -38,11 +38,11 @@ class CreatePreServiceFeeFundWindow extends Window {
     private final IUsagesController controller;
     private final List<String> batchIds;
     private final BigDecimal amount;
-    private final WithdrawnBatchFilterWindow batchFilterWindow;
-    private final WithdrawnFilteredBatchesWindow filteredBatchesWindow;
+    private final PreServiceFeeFundBatchesFilterWindow batchesFilterWindow;
+    private final PreServiceFeeFundFilteredBatchesWindow filteredBatchesWindow;
     private final Binder<PreServiceFeeFund> binder = new Binder<>();
 
-    private TextField fundPoolNameField;
+    private TextField fundNameField;
     private TextArea commentsArea;
 
     /**
@@ -51,41 +51,41 @@ class CreatePreServiceFeeFundWindow extends Window {
      * @param controller            instance of {@link IUsagesController}
      * @param batchIds              list of ids of usage batches
      * @param amount                gross amount
-     * @param batchFilterWindow     instance of {@link WithdrawnBatchFilterWindow}
-     * @param filteredBatchesWindow instance of {@link WithdrawnFilteredBatchesWindow}
+     * @param batchesFilterWindow   instance of {@link PreServiceFeeFundBatchesFilterWindow}
+     * @param filteredBatchesWindow instance of {@link PreServiceFeeFundFilteredBatchesWindow}
      */
     CreatePreServiceFeeFundWindow(IUsagesController controller, List<String> batchIds, BigDecimal amount,
-                                  WithdrawnBatchFilterWindow batchFilterWindow,
-                                  WithdrawnFilteredBatchesWindow filteredBatchesWindow) {
+                                  PreServiceFeeFundBatchesFilterWindow batchesFilterWindow,
+                                  PreServiceFeeFundFilteredBatchesWindow filteredBatchesWindow) {
         this.controller = controller;
         this.batchIds = batchIds;
         this.amount = amount;
-        this.batchFilterWindow = batchFilterWindow;
+        this.batchesFilterWindow = batchesFilterWindow;
         this.filteredBatchesWindow = filteredBatchesWindow;
         setResizable(false);
         setWidth(320, Unit.PIXELS);
-        setCaption(ForeignUi.getMessage("window.create_fund_pool"));
+        setCaption(ForeignUi.getMessage("window.create_fund"));
         initFundPoolNameField();
         initCommentsArea();
         binder.validate();
         HorizontalLayout buttonsLayout = initButtonsLayout();
-        VerticalLayout layout = new VerticalLayout(fundPoolNameField, commentsArea, buttonsLayout);
+        VerticalLayout layout = new VerticalLayout(fundNameField, commentsArea, buttonsLayout);
         layout.setSpacing(true);
         layout.setMargin(true);
         layout.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
-        fundPoolNameField.focus();
+        fundNameField.focus();
         setContent(layout);
     }
 
     private void initFundPoolNameField() {
-        fundPoolNameField = new TextField(ForeignUi.getMessage("field.fund_pool_name"));
-        binder.forField(fundPoolNameField)
+        fundNameField = new TextField(ForeignUi.getMessage("field.fund_name"));
+        binder.forField(fundNameField)
             .asRequired(ForeignUi.getMessage("field.error.empty"))
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
             .withValidator(value -> !controller.getFundPoolService().fundPoolNameExists(value),
                 ForeignUi.getMessage("message.error.unique_name", "Fund"))
             .bind(PreServiceFeeFund::getName, PreServiceFeeFund::setName);
-        VaadinUtils.setMaxComponentsWidth(fundPoolNameField);
+        VaadinUtils.setMaxComponentsWidth(fundNameField);
     }
 
     private void initCommentsArea() {
@@ -111,20 +111,20 @@ class CreatePreServiceFeeFundWindow extends Window {
     private void closeAllWindows() {
         this.close();
         filteredBatchesWindow.close();
-        batchFilterWindow.close();
+        batchesFilterWindow.close();
     }
 
     private void onConfirmButtonClicked() {
         if (binder.isValid()) {
             PreServiceFeeFund fundPool = new PreServiceFeeFund();
             fundPool.setId(RupPersistUtils.generateUuid());
-            fundPool.setName(StringUtils.trimToEmpty(fundPoolNameField.getValue()));
+            fundPool.setName(StringUtils.trimToEmpty(fundNameField.getValue()));
             fundPool.setComment(StringUtils.trimToEmpty(commentsArea.getValue()));
             fundPool.setAmount(amount);
             controller.getFundPoolService().create(fundPool, batchIds);
             closeAllWindows();
         } else {
-            Windows.showValidationErrorWindow(Lists.newArrayList(fundPoolNameField, commentsArea));
+            Windows.showValidationErrorWindow(Lists.newArrayList(fundNameField, commentsArea));
         }
     }
 }
