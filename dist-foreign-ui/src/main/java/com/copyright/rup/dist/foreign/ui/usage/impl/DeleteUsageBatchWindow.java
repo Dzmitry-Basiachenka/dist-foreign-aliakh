@@ -11,6 +11,7 @@ import com.copyright.rup.vaadin.widget.SearchWidget;
 import com.copyright.rup.vaadin.widget.SearchWidget.ISearchController;
 
 import com.vaadin.data.provider.ListDataProvider;
+import com.vaadin.server.SerializableComparator;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
@@ -68,6 +69,8 @@ class DeleteUsageBatchWindow extends Window {
         grid.setSizeFull();
         grid.addColumn(UsageBatch::getName)
             .setCaption(ForeignUi.getMessage("table.column.batch_name"))
+            .setComparator((SerializableComparator<UsageBatch>) (batch1, batch2) ->
+                batch1.getName().compareToIgnoreCase(batch2.getName()))
             .setSortProperty("name")
             .setExpandRatio(1);
         grid.addColumn(UsageBatch::getPaymentDate)

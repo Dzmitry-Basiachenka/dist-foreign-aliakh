@@ -11,6 +11,7 @@ import com.copyright.rup.vaadin.widget.SearchWidget;
 import com.copyright.rup.vaadin.widget.SearchWidget.ISearchController;
 
 import com.vaadin.data.provider.ListDataProvider;
+import com.vaadin.server.SerializableComparator;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
@@ -63,10 +64,14 @@ class DeleteAdditionalFundsWindow extends Window {
         grid.setSizeFull();
         grid.addColumn(PreServiceFeeFund::getName)
             .setCaption(ForeignUi.getMessage("table.column.fund_name"))
+            .setComparator((SerializableComparator<PreServiceFeeFund>) (fund1, fund2) ->
+                fund1.getName().compareToIgnoreCase(fund2.getName()))
             .setSortProperty("name")
             .setExpandRatio(1);
         grid.addColumn(fundPool -> CurrencyUtils.format(fundPool.getAmount(), null))
             .setCaption(ForeignUi.getMessage("table.column.fund_amount"))
+            .setComparator((SerializableComparator<PreServiceFeeFund>) (fund1, fund2) ->
+                fund1.getAmount().compareTo(fund2.getAmount()))
             .setSortProperty("amount")
             .setStyleGenerator(item -> "v-align-right")
             .setWidth(100);
