@@ -22,18 +22,18 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
+import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.domain.WithdrawnFundPool;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
+import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
-import com.copyright.rup.dist.foreign.service.api.IWithdrawnFundPoolService;
 import com.copyright.rup.dist.foreign.service.impl.UsageService;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
@@ -92,7 +92,7 @@ public class UsagesControllerTest {
     private IPrmIntegrationService prmIntegrationService;
     private IScenarioService scenarioService;
     private IResearchService researchService;
-    private IWithdrawnFundPoolService withdrawnFundPoolService;
+    private IFundPoolService fundPoolService;
     private UsageFilter usageFilter;
 
     @Before
@@ -106,7 +106,7 @@ public class UsagesControllerTest {
         prmIntegrationService = createMock(IPrmIntegrationService.class);
         researchService = createMock(IResearchService.class);
         filterWidgetMock = createMock(IUsagesFilterWidget.class);
-        withdrawnFundPoolService = createMock(IWithdrawnFundPoolService.class);
+        fundPoolService = createMock(IFundPoolService.class);
         Whitebox.setInternalState(controller, usageBatchService);
         Whitebox.setInternalState(controller, usageService);
         Whitebox.setInternalState(controller, usageBatchService);
@@ -115,7 +115,7 @@ public class UsagesControllerTest {
         Whitebox.setInternalState(controller, prmIntegrationService);
         Whitebox.setInternalState(controller, scenarioService);
         Whitebox.setInternalState(controller, researchService);
-        Whitebox.setInternalState(controller, withdrawnFundPoolService);
+        Whitebox.setInternalState(controller, fundPoolService);
         usageFilter = new UsageFilter();
     }
 
@@ -329,31 +329,31 @@ public class UsagesControllerTest {
 
     @Test
     public void testGetAdditionalFunds() {
-        List<WithdrawnFundPool> additionalFunds = Collections.singletonList(new WithdrawnFundPool());
-        expect(withdrawnFundPoolService.getAdditionalFunds()).andReturn(additionalFunds).once();
-        replay(withdrawnFundPoolService);
-        assertEquals(additionalFunds, controller.getAdditionalFunds());
-        verify(withdrawnFundPoolService);
+        List<PreServiceFeeFund> additionalFunds = Collections.singletonList(new PreServiceFeeFund());
+        expect(fundPoolService.getPreServiceFeeFunds()).andReturn(additionalFunds).once();
+        replay(fundPoolService);
+        assertEquals(additionalFunds, controller.getPreServiceSeeFunds());
+        verify(fundPoolService);
     }
 
     @Test
     public void testDeleteAdditionalFund() {
-        WithdrawnFundPool fundPool = new WithdrawnFundPool();
-        withdrawnFundPoolService.deleteAdditionalFund(fundPool);
+        PreServiceFeeFund fundPool = new PreServiceFeeFund();
+        fundPoolService.deletePreServiceFeeFund(fundPool);
         expectLastCall().once();
-        replay(withdrawnFundPoolService);
-        controller.deleteAdditionalFund(fundPool);
-        verify(withdrawnFundPoolService);
+        replay(fundPoolService);
+        controller.deletePreServiceFeeFund(fundPool);
+        verify(fundPoolService);
     }
 
     @Test
     public void testGetAdditionalFundNamesByUsageBatchId() {
         String batchId = RupPersistUtils.generateUuid();
         List<String> names = Arrays.asList("Test 1", "Test 2");
-        expect(withdrawnFundPoolService.getAdditionalFundNamesByUsageBatchId(batchId)).andReturn(names).once();
-        replay(withdrawnFundPoolService);
-        assertEquals(names, controller.getAdditionalFundNamesByUsageBatchId(batchId));
-        verify(withdrawnFundPoolService);
+        expect(fundPoolService.getPreServiceFeeFundNamesByUsageBatchId(batchId)).andReturn(names).once();
+        replay(fundPoolService);
+        assertEquals(names, controller.getPreServiceFeeFundNamesByUsageBatchId(batchId));
+        verify(fundPoolService);
     }
 
     @Test
@@ -443,13 +443,13 @@ public class UsagesControllerTest {
         Capture<Runnable> captureRunnable = new Capture<>();
         executorService.execute(capture(captureRunnable));
         expectLastCall().once();
-        replay(usageService,  executorService);
+        replay(usageService, executorService);
         assertNotNull(streamSource.getStream());
         Runnable runnable = captureRunnable.getValue();
         assertNotNull(runnable);
         assertSame(streamSource, Whitebox.getInternalState(runnable, "arg$1"));
         assertTrue(Whitebox.getInternalState(runnable, "arg$2") instanceof PipedOutputStream);
-        verify(usageService,  executorService);
+        verify(usageService, executorService);
     }
 
     private void prepareGetAppliedFilterExpectations(UsageFilter expectedUsageFilter) {

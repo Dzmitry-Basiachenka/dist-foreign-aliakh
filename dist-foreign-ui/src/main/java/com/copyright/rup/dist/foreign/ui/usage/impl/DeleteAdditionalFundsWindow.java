@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
-import com.copyright.rup.dist.foreign.domain.WithdrawnFundPool;
+import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -21,7 +21,7 @@ import com.vaadin.ui.Window;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * Modal window that provides functionality for deleting {@link WithdrawnFundPool}s.
+ * Modal window that provides functionality for deleting {@link PreServiceFeeFund}s.
  * <p/>
  * Copyright (C) 2019 copyright.com
  * <p/>
@@ -33,7 +33,7 @@ class DeleteAdditionalFundsWindow extends Window {
 
     private final SearchWidget searchWidget;
     private final IUsagesController controller;
-    private Grid<WithdrawnFundPool> grid;
+    private Grid<PreServiceFeeFund> grid;
 
     /**
      * Constructor.
@@ -58,10 +58,10 @@ class DeleteAdditionalFundsWindow extends Window {
 
     private void initUsageBatchesGrid() {
         grid = new Grid<>();
-        grid.setItems(controller.getAdditionalFunds());
+        grid.setItems(controller.getPreServiceSeeFunds());
         grid.setSelectionMode(SelectionMode.NONE);
         grid.setSizeFull();
-        grid.addColumn(WithdrawnFundPool::getName)
+        grid.addColumn(PreServiceFeeFund::getName)
             .setCaption(ForeignUi.getMessage("table.column.fund_name"))
             .setSortProperty("name")
             .setExpandRatio(1);
@@ -70,7 +70,7 @@ class DeleteAdditionalFundsWindow extends Window {
             .setSortProperty("amount")
             .setStyleGenerator(item -> "v-align-right")
             .setWidth(100);
-        grid.addColumn(WithdrawnFundPool::getCreateUser)
+        grid.addColumn(PreServiceFeeFund::getCreateUser)
             .setCaption(ForeignUi.getMessage("table.column.create_user"))
             .setSortProperty("createUser")
             .setWidth(140);
@@ -85,15 +85,15 @@ class DeleteAdditionalFundsWindow extends Window {
         VaadinUtils.addComponentStyle(grid, "delete-fund-pool-grid");
     }
 
-    private void deleteFund(WithdrawnFundPool fundPool) {
+    private void deleteFund(PreServiceFeeFund fundPool) {
         Windows.showConfirmDialog(
             ForeignUi.getMessage("message.confirm.delete_action", fundPool.getName(), "additional fund"),
             () -> performDelete(fundPool));
     }
 
-    private void performDelete(WithdrawnFundPool fundPool) {
-        controller.deleteAdditionalFund(fundPool);
-        grid.setItems(controller.getAdditionalFunds());
+    private void performDelete(PreServiceFeeFund fundPool) {
+        controller.deletePreServiceFeeFund(fundPool);
+        grid.setItems(controller.getPreServiceSeeFunds());
     }
 
     /**
@@ -103,8 +103,8 @@ class DeleteAdditionalFundsWindow extends Window {
 
         @Override
         public void performSearch() {
-            ListDataProvider<WithdrawnFundPool> dataProvider =
-                (ListDataProvider<WithdrawnFundPool>) grid.getDataProvider();
+            ListDataProvider<PreServiceFeeFund> dataProvider =
+                (ListDataProvider<PreServiceFeeFund>) grid.getDataProvider();
             dataProvider.clearFilters();
             String searchValue = searchWidget.getSearchValue();
             if (StringUtils.isNotBlank(searchValue)) {

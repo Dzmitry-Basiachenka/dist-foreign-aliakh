@@ -425,7 +425,7 @@ public class UsageRepositoryIntegrationTest {
         Usage usage = usages.get(0);
         assertEquals(UsageStatusEnum.TO_BE_DISTRIBUTED, usage.getStatus());
         assertEquals(fundPoolId, usage.getFundPoolId());
-        usageRepository.deleteFromAdditionalFund(fundPoolId, USER_NAME);
+        usageRepository.deleteFromPreServiceFeeFund(fundPoolId, USER_NAME);
         usage =
             usageRepository.findByIds(Collections.singletonList("ba95f0b3-dc94-4925-96f2-93d05db9c469")).get(0);
         assertEquals(UsageStatusEnum.NTS_WITHDRAWN, usage.getStatus());

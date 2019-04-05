@@ -2,15 +2,15 @@ package com.copyright.rup.dist.foreign.ui.usage.api;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
+import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.domain.WithdrawnFundPool;
+import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
-import com.copyright.rup.dist.foreign.service.api.IWithdrawnFundPoolService;
 import com.copyright.rup.dist.foreign.service.impl.csv.ResearchedUsagesCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
@@ -102,7 +102,7 @@ public interface IUsagesController extends IController<IUsagesWidget> {
     List<UsageBatch> getUsageBatches(String productFamily);
 
     /**
-     * Finds list of {@link UsageBatch}es suitable for including in NTS additional funds.
+     * Finds list of {@link UsageBatch}es suitable for including in Pre-Service fee funds.
      *
      * @return list of found {@link UsageBatch}es
      */
@@ -160,26 +160,26 @@ public interface IUsagesController extends IController<IUsagesWidget> {
     int loadNtsBatch(UsageBatch usageBatch);
 
     /**
-     * Gets all additional funds.
+     * Gets all Pre-Service fee funds.
      *
-     * @return list of {@link WithdrawnFundPool}s
+     * @return list of {@link PreServiceFeeFund}s
      */
-    List<WithdrawnFundPool> getAdditionalFunds();
+    List<PreServiceFeeFund> getPreServiceSeeFunds();
 
     /**
-     * Deletes additional fund pool.
+     * Deletes Pre-Service fee fund.
      *
-     * @param fundPool {@link WithdrawnFundPool} to delete
+     * @param fundPool {@link PreServiceFeeFund} to delete
      */
-    void deleteAdditionalFund(WithdrawnFundPool fundPool);
+    void deletePreServiceFeeFund(PreServiceFeeFund fundPool);
 
     /**
-     * Gets additional fund names associated with batch identifier.
+     * Gets Pre-Service fee fund names associated with batch identifier.
      *
      * @param batchId batch identifier
      * @return list of names
      */
-    List<String> getAdditionalFundNamesByUsageBatchId(String batchId);
+    List<String> getPreServiceFeeFundNamesByUsageBatchId(String batchId);
 
     /**
      * Updates researched usage details.
@@ -283,9 +283,9 @@ public interface IUsagesController extends IController<IUsagesWidget> {
     IStreamSource getWithdrawnBatchesStreamSource(List<UsageBatch> batches, BigDecimal grossAmount);
 
     /**
-     * Gets instance of {@link IWithdrawnFundPoolService}.
+     * Gets instance of {@link IFundPoolService}.
      *
-     * @return instance of {@link IWithdrawnFundPoolService}.
+     * @return instance of {@link IFundPoolService}.
      */
-    IWithdrawnFundPoolService getWithdrawnFundPoolService();
+    IFundPoolService getFundPoolService();
 }

@@ -167,13 +167,13 @@ public interface IUsageRepository {
     void deleteById(String usageId);
 
     /**
-     * Deletes {@link Usage}s from additional fund.
-     * Reverts status of {@link Usage}s to {@link UsageStatusEnum#NTS_WITHDRAWN}.
+     * Deletes {@link Usage}s from Pre-Service fee fund.
+     * Updates {@link Usage}s status to {@link UsageStatusEnum#NTS_WITHDRAWN}.
      *
      * @param fundPoolId identifier of fund pool
      * @param userName   user name
      */
-    void deleteFromAdditionalFund(String fundPoolId, String userName);
+    void deleteFromPreServiceFeeFund(String fundPoolId, String userName);
 
     /**
      * Calculates total gross amount by standard number and batch identifier for PI matching.

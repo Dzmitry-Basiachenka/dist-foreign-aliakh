@@ -647,9 +647,19 @@ databaseChangeLog {
             column(name: 'gross_amount', value: '155.0000000007')
         }
 
+        // Undistributed Liabilities reconciliation report TO_BE_DISTRIBUTED status
+        insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
+            column(name: 'df_fund_pool_uid', value: '49060c9b-9cc2-4b93-b701-fffc82eb28b0')
+            column(name: 'name', value: 'Test fund')
+            column(name: 'comment', value: 'test comment')
+            column(name: 'withdrawn_amount', value: '155.00')
+            column(name: 'updated_datetime',  value: '2019-03-26 16:35:52.735531+03')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'b92f4f46-38c1-4f6c-9f69-2c1dcd73d579')
             column(name: 'df_usage_batch_uid', value: 'e116e5e0-9080-4abf-9e67-86959f2cae52')
+            column(name: 'df_fund_pool_uid', value: '49060c9b-9cc2-4b93-b701-fffc82eb28b0')
             column(name: 'payee_account_number', value: '1000009522')
             column(name: 'status_ind', value: 'TO_BE_DISTRIBUTED')
             column(name: 'product_family', value: 'NTS')

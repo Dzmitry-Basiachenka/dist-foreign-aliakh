@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import com.copyright.rup.dist.foreign.domain.WithdrawnFundPool;
+import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 /**
- * Verifies {@link WithdrawnFundPoolRepository}.
+ * Verifies {@link FundPoolRepository}.
  * <p/>
  * Copyright (C) 2019 copyright.com
  * <p/>
@@ -30,10 +30,10 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(
     value = {"classpath:/com/copyright/rup/dist/foreign/repository/dist-foreign-repository-test-context.xml"})
-@TestPropertySource(properties = {"test.liquibase.changelog=withdrawn-fund-pool-repository-test-data-init.groovy"})
+@TestPropertySource(properties = {"test.liquibase.changelog=fund-pool-repository-test-data-init.groovy"})
 @TransactionConfiguration
 @Transactional
-public class WithdrawnFundPoolRepositoryIntegrationTest {
+public class FundPoolRepositoryIntegrationTest {
 
     private static final String ID_1 = "b5b64c3a-55d2-462e-b169-362dca6a4dd7";
     private static final String ID_2 = "76282dbc-2468-48d4-b926-93d3458a656b";
@@ -43,17 +43,17 @@ public class WithdrawnFundPoolRepositoryIntegrationTest {
     private static final String COMMENT_2 = "other comment";
 
     @Autowired
-    private WithdrawnFundPoolRepository withdrawnFundPoolRepository;
+    private FundPoolRepository fundPoolRepository;
 
     @Test
     public void testInsert() {
-        assertNull(withdrawnFundPoolRepository.findById(ID_2));
-        WithdrawnFundPool fundPool = new WithdrawnFundPool();
+        assertNull(fundPoolRepository.findById(ID_2));
+        PreServiceFeeFund fundPool = new PreServiceFeeFund();
         fundPool.setId(ID_2);
         fundPool.setName(NAME_2);
         fundPool.setComment(COMMENT_2);
-        withdrawnFundPoolRepository.insert(fundPool);
-        WithdrawnFundPool actualFundPool = withdrawnFundPoolRepository.findById(ID_2);
+        fundPoolRepository.insert(fundPool);
+        PreServiceFeeFund actualFundPool = fundPoolRepository.findById(ID_2);
         assertNotNull(actualFundPool);
         assertEquals(ID_2, actualFundPool.getId());
         assertEquals(NAME_2, actualFundPool.getName());
@@ -62,7 +62,7 @@ public class WithdrawnFundPoolRepositoryIntegrationTest {
 
     @Test
     public void testFindById() {
-        WithdrawnFundPool fundPool = withdrawnFundPoolRepository.findById(ID_1);
+        PreServiceFeeFund fundPool = fundPoolRepository.findById(ID_1);
         assertNotNull(fundPool);
         assertEquals(ID_1, fundPool.getId());
         assertEquals(NAME_1, fundPool.getName());
@@ -71,7 +71,7 @@ public class WithdrawnFundPoolRepositoryIntegrationTest {
 
     @Test
     public void testFindAll() {
-        List<WithdrawnFundPool> fundPools = withdrawnFundPoolRepository.findAll();
+        List<PreServiceFeeFund> fundPools = fundPoolRepository.findAll();
         assertEquals(2, fundPools.size());
         assertFundPool(fundPools.get(0), ID_1, "FAS Q1 2019", new BigDecimal("50.00"), "some comment");
         assertFundPool(fundPools.get(1), "49060c9b-9cc2-4b93-b701-fffc82eb28b0", "Test fund", new BigDecimal("10.00"),
@@ -81,25 +81,25 @@ public class WithdrawnFundPoolRepositoryIntegrationTest {
     @Test
     public void testFindNamesByUsageBatchId() {
         List<String> names =
-            withdrawnFundPoolRepository.findNamesByUsageBatchId("a163cca7-8eeb-449c-8a3c-29ff3ec82e58");
+            fundPoolRepository.findNamesByUsageBatchId("a163cca7-8eeb-449c-8a3c-29ff3ec82e58");
         assertEquals(1, names.size());
         assertEquals("Test fund", names.get(0));
     }
 
     @Test
     public void testDelete() {
-        assertNotNull(withdrawnFundPoolRepository.findById(ID_1));
-        withdrawnFundPoolRepository.delete(ID_1);
-        assertNull(withdrawnFundPoolRepository.findById(ID_1));
+        assertNotNull(fundPoolRepository.findById(ID_1));
+        fundPoolRepository.delete(ID_1);
+        assertNull(fundPoolRepository.findById(ID_1));
     }
 
     @Test
     public void testFindCountByName() {
-        assertEquals(1, withdrawnFundPoolRepository.findCountByName(NAME_1));
-        assertEquals(0, withdrawnFundPoolRepository.findCountByName("missing fund pool name"));
+        assertEquals(1, fundPoolRepository.findCountByName(NAME_1));
+        assertEquals(0, fundPoolRepository.findCountByName("missing fund pool name"));
     }
 
-    private void assertFundPool(WithdrawnFundPool fundPool, String id, String name, BigDecimal amount, String comment) {
+    private void assertFundPool(PreServiceFeeFund fundPool, String id, String name, BigDecimal amount, String comment) {
         assertEquals(fundPool.getId(), id);
         assertEquals(fundPool.getName(), name);
         assertEquals(fundPool.getAmount(), amount);

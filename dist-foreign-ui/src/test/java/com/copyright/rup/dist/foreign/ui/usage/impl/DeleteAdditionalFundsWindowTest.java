@@ -13,7 +13,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
 
-import com.copyright.rup.dist.foreign.domain.WithdrawnFundPool;
+import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.dist.foreign.ui.usage.impl.DeleteAdditionalFundsWindow.SearchController;
 import com.copyright.rup.vaadin.ui.component.window.ConfirmDialogWindow.IListener;
@@ -63,14 +63,14 @@ import java.util.stream.Collectors;
 public class DeleteAdditionalFundsWindowTest {
 
     private DeleteAdditionalFundsWindow deleteWindow;
-    private WithdrawnFundPool fundPool;
+    private PreServiceFeeFund fundPool;
 
     @Before
     public void setUp() {
-        fundPool = new WithdrawnFundPool();
+        fundPool = new PreServiceFeeFund();
         fundPool.setName("Test Fund");
         IUsagesController controller = createMock(IUsagesController.class);
-        expect(controller.getAdditionalFunds()).andReturn(Collections.singletonList(fundPool)).once();
+        expect(controller.getPreServiceSeeFunds()).andReturn(Collections.singletonList(fundPool)).once();
         replay(controller);
         deleteWindow = new DeleteAdditionalFundsWindow(controller);
         verify(controller);
@@ -105,7 +105,6 @@ public class DeleteAdditionalFundsWindowTest {
         VerticalLayout content = (VerticalLayout) deleteWindow.getContent();
         Grid grid = (Grid) content.getComponent(1);
         Button button = (Button) grid.getColumn("delete").getValueProvider().apply(fundPool);
-        assertEquals("Delete", button.getCaption());
         Collection<?> listeners = button.getListeners(ClickEvent.class);
         assertEquals(1, listeners.size());
         ClickListener listener = (ClickListener) listeners.iterator().next();
@@ -146,5 +145,7 @@ public class DeleteAdditionalFundsWindowTest {
         assertEquals(100, columns.get(1).getWidth(), 0);
         assertEquals(140, columns.get(2).getWidth(), 0);
         assertEquals(90, columns.get(3).getWidth(), 0);
+        Button button = (Button) grid.getColumn("delete").getValueProvider().apply(fundPool);
+        assertEquals("Delete", button.getCaption());
     }
 }

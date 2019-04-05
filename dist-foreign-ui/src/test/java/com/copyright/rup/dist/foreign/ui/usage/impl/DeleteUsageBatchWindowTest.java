@@ -118,7 +118,7 @@ public class DeleteUsageBatchWindowTest {
         Collection<?> listeners = button.getListeners(ClickEvent.class);
         assertEquals(1, listeners.size());
         ClickListener listener = (ClickListener) listeners.iterator().next();
-        expect(controller.getAdditionalFundNamesByUsageBatchId(USAGE_BATCH_ID))
+        expect(controller.getPreServiceFeeFundNamesByUsageBatchId(USAGE_BATCH_ID))
             .andReturn(Arrays.asList("Fund 1", "Fund 2")).once();
         Windows.showNotificationWindow("Usage batch cannot be deleted because it is associated with the following " +
             "additional funds:<ul><li>Fund 1</li><li>Fund 2</li></ul>");
@@ -140,7 +140,7 @@ public class DeleteUsageBatchWindowTest {
         Collection<?> listeners = button.getListeners(ClickEvent.class);
         assertEquals(1, listeners.size());
         ClickListener listener = (ClickListener) listeners.iterator().next();
-        expect(controller.getAdditionalFundNamesByUsageBatchId(USAGE_BATCH_ID))
+        expect(controller.getPreServiceFeeFundNamesByUsageBatchId(USAGE_BATCH_ID))
             .andReturn(Collections.emptyList()).once();
         expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
             .andReturn(Collections.emptyList()).once();
@@ -162,7 +162,7 @@ public class DeleteUsageBatchWindowTest {
         Collection<?> listeners = button.getListeners(ClickEvent.class);
         assertEquals(1, listeners.size());
         ClickListener listener = (ClickListener) listeners.iterator().next();
-        expect(controller.getAdditionalFundNamesByUsageBatchId(USAGE_BATCH_ID))
+        expect(controller.getPreServiceFeeFundNamesByUsageBatchId(USAGE_BATCH_ID))
             .andReturn(Collections.emptyList()).once();
         expect(controller.getScenariosNamesAssociatedWithUsageBatch(USAGE_BATCH_ID))
             .andReturn(Arrays.asList("Scenario 1", "Scenario 2")).once();

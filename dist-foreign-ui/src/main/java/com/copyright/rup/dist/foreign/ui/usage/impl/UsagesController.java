@@ -8,20 +8,20 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
+import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.domain.WithdrawnFundPool;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
+import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IResearchService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.service.api.IWithdrawnFundPoolService;
 import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.service.impl.csv.ResearchedUsagesCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
@@ -98,7 +98,7 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     @Autowired
     private IWorkClassificationController workClassificationController;
     @Autowired
-    private IWithdrawnFundPoolService withdrawnFundPoolService;
+    private IFundPoolService fundPoolService;
 
     @Override
     public IUsagesFilterWidget initUsagesFilterWidget() {
@@ -166,18 +166,18 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
-    public List<WithdrawnFundPool> getAdditionalFunds() {
-        return withdrawnFundPoolService.getAdditionalFunds();
+    public List<PreServiceFeeFund> getPreServiceSeeFunds() {
+        return fundPoolService.getPreServiceFeeFunds();
     }
 
     @Override
-    public void deleteAdditionalFund(WithdrawnFundPool fundPool) {
-        withdrawnFundPoolService.deleteAdditionalFund(fundPool);
+    public void deletePreServiceFeeFund(PreServiceFeeFund fundPool) {
+        fundPoolService.deletePreServiceFeeFund(fundPool);
     }
 
     @Override
-    public List<String> getAdditionalFundNamesByUsageBatchId(String batchId) {
-        return withdrawnFundPoolService.getAdditionalFundNamesByUsageBatchId(batchId);
+    public List<String> getPreServiceFeeFundNamesByUsageBatchId(String batchId) {
+        return fundPoolService.getPreServiceFeeFundNamesByUsageBatchId(batchId);
     }
 
     @Override
@@ -296,8 +296,8 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
-    public IWithdrawnFundPoolService getWithdrawnFundPoolService() {
-        return withdrawnFundPoolService;
+    public IFundPoolService getFundPoolService() {
+        return fundPoolService;
     }
 
     @Override

@@ -74,12 +74,12 @@ public interface IUsageService {
     void deleteUsageBatchDetails(UsageBatch usageBatch);
 
     /**
-     * Deletes {@link Usage}s from additional fund.
+     * Deletes {@link Usage}s from Pre-Service fee fund.
      * Reverts status of {@link Usage}s to {@link UsageStatusEnum#NTS_WITHDRAWN}.
      *
      * @param fundPoolId identifier of fund pool
      */
-    void deleteFromAdditionalFund(String fundPoolId);
+    void deleteFromPreServiceFeeFund(String fundPoolId);
 
     /**
      * Deletes all archived {@link Usage}s and it's audit by provided batch id.

@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
-import com.copyright.rup.dist.foreign.domain.WithdrawnFundPool;
+import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -25,7 +25,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 /**
- * Window to create NTS withdrawn fund pool.
+ * Window to create Pre-Service fee fund.
  * <p/>
  * Copyright (C) 2019 copyright.com
  * <p/>
@@ -33,14 +33,14 @@ import java.util.List;
  *
  * @author Aliaksandr Liakh
  */
-class CreateWithdrawnFundPoolWindow extends Window {
+class CreatePreServiceFeeFundWindow extends Window {
 
     private final IUsagesController controller;
     private final List<String> batchIds;
     private final BigDecimal amount;
     private final WithdrawnBatchFilterWindow batchFilterWindow;
     private final WithdrawnFilteredBatchesWindow filteredBatchesWindow;
-    private final Binder<WithdrawnFundPool> binder = new Binder<>();
+    private final Binder<PreServiceFeeFund> binder = new Binder<>();
 
     private TextField fundPoolNameField;
     private TextArea commentsArea;
@@ -54,7 +54,7 @@ class CreateWithdrawnFundPoolWindow extends Window {
      * @param batchFilterWindow     instance of {@link WithdrawnBatchFilterWindow}
      * @param filteredBatchesWindow instance of {@link WithdrawnFilteredBatchesWindow}
      */
-    CreateWithdrawnFundPoolWindow(IUsagesController controller, List<String> batchIds, BigDecimal amount,
+    CreatePreServiceFeeFundWindow(IUsagesController controller, List<String> batchIds, BigDecimal amount,
                                   WithdrawnBatchFilterWindow batchFilterWindow,
                                   WithdrawnFilteredBatchesWindow filteredBatchesWindow) {
         this.controller = controller;
@@ -82,9 +82,9 @@ class CreateWithdrawnFundPoolWindow extends Window {
         binder.forField(fundPoolNameField)
             .asRequired(ForeignUi.getMessage("field.error.empty"))
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
-            .withValidator(value -> !controller.getWithdrawnFundPoolService().fundPoolNameExists(value),
+            .withValidator(value -> !controller.getFundPoolService().fundPoolNameExists(value),
                 ForeignUi.getMessage("message.error.unique_name", "Fund"))
-            .bind(WithdrawnFundPool::getName, WithdrawnFundPool::setName);
+            .bind(PreServiceFeeFund::getName, PreServiceFeeFund::setName);
         VaadinUtils.setMaxComponentsWidth(fundPoolNameField);
     }
 
@@ -92,7 +92,7 @@ class CreateWithdrawnFundPoolWindow extends Window {
         commentsArea = new TextArea(ForeignUi.getMessage("field.comments"));
         binder.forField(commentsArea)
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 2000), 0, 2000))
-            .bind(WithdrawnFundPool::getComment, WithdrawnFundPool::setComment);
+            .bind(PreServiceFeeFund::getComment, PreServiceFeeFund::setComment);
         VaadinUtils.setMaxComponentsWidth(commentsArea);
     }
 
@@ -116,12 +116,12 @@ class CreateWithdrawnFundPoolWindow extends Window {
 
     private void onConfirmButtonClicked() {
         if (binder.isValid()) {
-            WithdrawnFundPool fundPool = new WithdrawnFundPool();
+            PreServiceFeeFund fundPool = new PreServiceFeeFund();
             fundPool.setId(RupPersistUtils.generateUuid());
             fundPool.setName(StringUtils.trimToEmpty(fundPoolNameField.getValue()));
             fundPool.setComment(StringUtils.trimToEmpty(commentsArea.getValue()));
             fundPool.setAmount(amount);
-            controller.getWithdrawnFundPoolService().create(fundPool, batchIds);
+            controller.getFundPoolService().create(fundPool, batchIds);
             closeAllWindows();
         } else {
             Windows.showValidationErrorWindow(Lists.newArrayList(fundPoolNameField, commentsArea));

@@ -3,11 +3,11 @@ package com.copyright.rup.dist.foreign.service.impl;
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.util.LogUtils;
-import com.copyright.rup.dist.foreign.domain.WithdrawnFundPool;
+import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
+import com.copyright.rup.dist.foreign.repository.api.IFundPoolRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
-import com.copyright.rup.dist.foreign.repository.api.IWithdrawnFundPoolRepository;
+import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.service.api.IWithdrawnFundPoolService;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * Implementation of {@link IWithdrawnFundPoolService}.
+ * Implementation of {@link IFundPoolService}.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -26,12 +26,12 @@ import java.util.List;
  * @author Ihar Suvorau
  */
 @Service
-public class WithdrawnFundPoolService implements IWithdrawnFundPoolService {
+public class FundPoolService implements IFundPoolService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired
-    private IWithdrawnFundPoolRepository withdrawnFundPoolRepository;
+    private IFundPoolRepository fundPoolRepository;
     @Autowired
     private IUsageRepository usageRepository;
     @Autowired
@@ -39,40 +39,42 @@ public class WithdrawnFundPoolService implements IWithdrawnFundPoolService {
 
     @Override
     @Transactional
-    public void create(WithdrawnFundPool fundPool, List<String> batchIds) {
+    public void create(PreServiceFeeFund fundPool, List<String> batchIds) {
         String userName = RupContextUtils.getUserName();
         fundPool.setCreateUser(userName);
         fundPool.setUpdateUser(userName);
-        LOGGER.info("Create fund pool. Started. FundPoolName={}, FundPoolAmount={}, BatchesCount={}, UserName={}",
+        LOGGER.info(
+            "Create Pre-Service fee fund. Started. FundPoolName={}, FundPoolAmount={}, BatchesCount={}, UserName={}",
             fundPool.getName(), fundPool.getAmount(), LogUtils.size(batchIds), userName);
-        withdrawnFundPoolRepository.insert(fundPool);
+        fundPoolRepository.insert(fundPool);
         usageRepository.addWithdrawnUsagesToFundPool(fundPool.getId(), batchIds, userName);
-        LOGGER.info("Create fund pool. Finished. FundPoolName={}, FundPoolAmount={}, BatchesCount={}, UserName={}",
+        LOGGER.info(
+            "Create Pre-Service fee fund. Finished. FundPoolName={}, FundPoolAmount={}, BatchesCount={}, UserName={}",
             fundPool.getName(), fundPool.getAmount(), LogUtils.size(batchIds), userName);
     }
 
     @Override
-    public List<WithdrawnFundPool> getAdditionalFunds() {
-        return withdrawnFundPoolRepository.findAll();
+    public List<PreServiceFeeFund> getPreServiceFeeFunds() {
+        return fundPoolRepository.findAll();
     }
 
     @Override
     @Transactional
-    public void deleteAdditionalFund(WithdrawnFundPool fundPool) {
+    public void deletePreServiceFeeFund(PreServiceFeeFund fund) {
         String userName = RupContextUtils.getUserName();
-        LOGGER.info("Delete additional fund. Started. FundPoolName={}, UserName={}", fundPool.getName(), userName);
-        usageService.deleteFromAdditionalFund(fundPool.getId());
-        withdrawnFundPoolRepository.delete(fundPool.getId());
-        LOGGER.info("Delete additional fund. Finished. FundPoolName={}, UserName={}", fundPool.getName(), userName);
+        LOGGER.info("Delete Pre-Service fee fund. Started. FundPoolName={}, UserName={}", fund.getName(), userName);
+        usageService.deleteFromPreServiceFeeFund(fund.getId());
+        fundPoolRepository.delete(fund.getId());
+        LOGGER.info("Delete Pre-Service fee. Finished. FundPoolName={}, UserName={}", fund.getName(), userName);
     }
 
     @Override
-    public List<String> getAdditionalFundNamesByUsageBatchId(String batchId) {
-        return withdrawnFundPoolRepository.findNamesByUsageBatchId(batchId);
+    public List<String> getPreServiceFeeFundNamesByUsageBatchId(String batchId) {
+        return fundPoolRepository.findNamesByUsageBatchId(batchId);
     }
 
     @Override
     public boolean fundPoolNameExists(String fundPoolName) {
-        return 0 < withdrawnFundPoolRepository.findCountByName(fundPoolName);
+        return 0 < fundPoolRepository.findCountByName(fundPoolName);
     }
 }

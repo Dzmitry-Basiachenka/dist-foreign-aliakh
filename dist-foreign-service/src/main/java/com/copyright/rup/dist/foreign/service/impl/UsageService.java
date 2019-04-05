@@ -185,8 +185,8 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public void deleteFromAdditionalFund(String fundPoolId) {
-        usageRepository.deleteFromAdditionalFund(fundPoolId, RupContextUtils.getUserName());
+    public void deleteFromPreServiceFeeFund(String fundPoolId) {
+        usageRepository.deleteFromPreServiceFeeFund(fundPoolId, RupContextUtils.getUserName());
     }
 
     @Override

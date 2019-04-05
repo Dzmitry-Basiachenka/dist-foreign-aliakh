@@ -90,9 +90,9 @@ class DeleteUsageBatchWindow extends Window {
     }
 
     private void deleteUsageBatch(UsageBatch usageBatch) {
-        List<String> additionalFundsNames = controller.getAdditionalFundNamesByUsageBatchId(usageBatch.getId());
-        if (CollectionUtils.isNotEmpty(additionalFundsNames)) {
-            Windows.showNotificationWindow(buildNotificationMessage("additional funds", additionalFundsNames));
+        List<String> preServiceFeeFundNames = controller.getPreServiceFeeFundNamesByUsageBatchId(usageBatch.getId());
+        if (CollectionUtils.isNotEmpty(preServiceFeeFundNames)) {
+            Windows.showNotificationWindow(buildNotificationMessage("additional funds", preServiceFeeFundNames));
         } else {
             List<String> scenariosNames = controller.getScenariosNamesAssociatedWithUsageBatch(usageBatch.getId());
             if (CollectionUtils.isEmpty(scenariosNames)) {

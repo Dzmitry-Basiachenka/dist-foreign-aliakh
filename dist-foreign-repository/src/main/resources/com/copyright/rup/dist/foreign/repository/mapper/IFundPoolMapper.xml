@@ -2,9 +2,9 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="IWithdrawnFundPoolMapper">
+<mapper namespace="IFundPoolMapper">
 
-    <resultMap id="withdrawnFundPoolResultMap" type="WithdrawnFundPool" extends="StoredEntityMapper.storedEntityResult">
+    <resultMap id="preServiceFeeFundResultMap" type="PreServiceFeeFund" extends="StoredEntityMapper.storedEntityResult">
         <result property="id" column="df_fund_pool_uid"/>
         <result property="name" column="name"/>
         <result property="amount" column="withdrawn_amount"/>
@@ -12,7 +12,7 @@
         <result property="createUser" column="created_by_user"/>
     </resultMap>
 
-    <insert id="insert" parameterType="WithdrawnFundPool">
+    <insert id="insert" parameterType="PreServiceFeeFund">
         insert into ${schema}.df_fund_pool (
             df_fund_pool_uid,
             name,
@@ -28,7 +28,7 @@
         )
     </insert>
 
-    <select id="findById" resultMap="withdrawnFundPoolResultMap" parameterType="string">
+    <select id="findById" resultMap="preServiceFeeFundResultMap" parameterType="string">
         select
             df_fund_pool_uid,
             name,
@@ -38,7 +38,7 @@
         where df_fund_pool_uid = #{fundPoolId}
     </select>
 
-    <select id="findAll" resultMap="withdrawnFundPoolResultMap">
+    <select id="findAll" resultMap="preServiceFeeFundResultMap">
         select
             df_fund_pool_uid,
             name,

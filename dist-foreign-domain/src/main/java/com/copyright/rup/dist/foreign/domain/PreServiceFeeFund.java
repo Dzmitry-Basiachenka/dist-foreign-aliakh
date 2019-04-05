@@ -10,7 +10,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.math.BigDecimal;
 
 /**
- * Represents NTS withdrawn fund pool.
+ * Represents NTS Pre-Service fee fund.
  * <p/>
  * Copyright (C) 2019 copyright.com
  * <p/>
@@ -18,7 +18,7 @@ import java.math.BigDecimal;
  *
  * @author Aliaksandr Liakh
  */
-public class WithdrawnFundPool extends StoredEntity<String> {
+public class PreServiceFeeFund extends StoredEntity<String> {
 
     private String name;
     private String comment;
@@ -53,10 +53,10 @@ public class WithdrawnFundPool extends StoredEntity<String> {
         if (this == obj) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (null == obj || getClass() != obj.getClass()) {
             return false;
         }
-        WithdrawnFundPool that = (WithdrawnFundPool) obj;
+        PreServiceFeeFund that = (PreServiceFeeFund) obj;
         return new EqualsBuilder()
             .appendSuper(super.equals(obj))
             .append(name, that.name)

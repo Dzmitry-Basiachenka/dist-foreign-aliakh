@@ -204,14 +204,14 @@ public class UsageServiceTest {
     }
 
     @Test
-    public void testDeleteFromAdditionalFund() {
+    public void testDeleteFromPreServiceFeeFund() {
         mockStatic(RupContextUtils.class);
         String fundPoolId = RupPersistUtils.generateUuid();
-        usageRepository.deleteFromAdditionalFund(fundPoolId, USER_NAME);
+        usageRepository.deleteFromPreServiceFeeFund(fundPoolId, USER_NAME);
         expectLastCall().once();
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         replay(usageRepository, RupContextUtils.class);
-        usageService.deleteFromAdditionalFund(fundPoolId);
+        usageService.deleteFromPreServiceFeeFund(fundPoolId);
         verify(usageRepository, RupContextUtils.class);
     }
 
