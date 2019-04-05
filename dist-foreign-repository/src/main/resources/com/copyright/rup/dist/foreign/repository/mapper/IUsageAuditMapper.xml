@@ -16,26 +16,37 @@
         <result property="totalCount" column="total_count"/>
         <result property="loadedCount" column="loaded_count"/>
         <result property="loadedAmount" column="loaded_sum"/>
+        <result property="loadedPercent" column="loaded_percent"/>
         <result property="createdCount" column="created_count"/>
         <result property="createdAmount" column="created_sum"/>
+        <result property="createdPercent" column="created_percent"/>
         <result property="matchedCount" column="matched_count"/>
         <result property="matchedAmount" column="matched_sum"/>
-        <result property="ntsWithDrawnCount" column="nts_withdrawn_count"/>
-        <result property="ntsWithDrawnAmount" column="nts_withdrawn_sum"/>
+        <result property="matchedPercent" column="matched_percent"/>
+        <result property="ntsWithdrawnCount" column="nts_withdrawn_count"/>
+        <result property="ntsWithdrawnAmount" column="nts_withdrawn_sum"/>
+        <result property="ntsWithdrawnPercent" column="nts_withdrawn_percent"/>
         <result property="worksNotFoundCount" column="work_not_found_count"/>
         <result property="worksNotFoundAmount" column="work_not_found_sum"/>
+        <result property="worksNotFoundPercent" column="work_not_found_percent"/>
         <result property="multipleMatchingCount" column="multiple_matching_count"/>
         <result property="multipleMatchingAmount" column="multiple_matching_sum"/>
+        <result property="multipleMatchingPercent" column="multiple_matching_percent"/>
         <result property="rhNotFoundCount" column="rh_not_found_count"/>
         <result property="rhNotFoundAmount" column="rh_not_found_sum"/>
+        <result property="rhNotFoundPercent" column="rh_not_found_percent"/>
         <result property="rhFoundCount" column="rh_found_count"/>
         <result property="rhFoundAmount" column="rh_found_sum"/>
+        <result property="rhFoundPercent" column="rh_found_percent"/>
         <result property="eligibleCount" column="eligible_count"/>
         <result property="eligibleAmount" column="eligible_sum"/>
+        <result property="eligiblePercent" column="eligible_percent"/>
         <result property="sendForRaCount" column="send_for_ra_count"/>
         <result property="sendForRaAmount" column="send_for_ra_sum"/>
+        <result property="sendForRaPercent" column="send_for_ra_percent"/>
         <result property="paidCount" column="paid_count"/>
         <result property="paidAmount" column="paid_sum"/>
+        <result property="paidPercent" column="paid_percent"/>
     </resultMap>
 
     <resultMap id="usageStatisticResultMap" type="UsageStatistic">
@@ -101,85 +112,100 @@
     
     <select id="findBatchesStatistic" parameterType="map" resultMap="batchStatisticResultMap">
         select
-            nested.batch_name,
-            max(total_count1) + max(total_count2) total_count,
-            sum(nested.loaded_count) loaded_count,
-            round(sum(nested.loaded_sum), 2) loaded_sum,
-            sum(nested.created_count) created_count,
-            round(sum(nested.created_sum), 2) created_sum,
-            sum(nested.work_found_count) matched_count,
-            round(sum(nested.work_found_sum), 2) matched_sum,
-            sum(nested.nts_withdrawn_count) nts_withdrawn_count,
-            round(sum(nested.nts_withdrawn_sum), 2) nts_withdrawn_sum,
-            sum(nested.work_not_found_count) work_not_found_count,
-            round(sum(nested.work_not_found_sum), 2) work_not_found_sum,
-            sum(nested.multiple_matching_count) multiple_matching_count,
-            round(sum(nested.multiple_matching_sum), 2) multiple_matching_sum,
-            sum(nested.rh_not_found_count) rh_not_found_count,
-            round(sum(nested.rh_not_found_sum), 2) rh_not_found_sum,
-            sum(nested.rh_found_count) rh_found_count,
-            round(sum(nested.rh_found_sum), 2) rh_found_sum,
-            sum(nested.eligible_count) eligible_count,
-            round(sum(nested.eligible_sum), 2) eligible_sum,
-            sum(nested.send_for_ra_count) send_for_ra_count,
-            round(sum(nested.send_for_ra_sum), 2) send_for_ra_sum,
-            sum(nested.paid_count) paid_count,
-            round(sum(nested.paid_sum), 2) paid_sum
+            *,
+            case when (total_count != 0) then round((100 * loaded_count / total_count)::numeric, 2) else 0.00 end loaded_percent,
+            case when (total_count != 0) then round((100 * created_count / total_count)::numeric, 2) else 0.00 end created_percent,
+            case when (total_count != 0) then round((100 * matched_count / total_count)::numeric, 2) else 0.00 end matched_percent,
+            case when (total_count != 0) then round((100 * nts_withdrawn_count / total_count)::numeric, 2) else 0.00 end nts_withdrawn_percent,
+            case when (total_count != 0) then round((100 * work_not_found_count / total_count)::numeric, 2) else 0.00 end work_not_found_percent,
+            case when (total_count != 0) then round((100 * multiple_matching_count / total_count)::numeric, 2) else 0.00 end multiple_matching_percent,
+            case when (total_count != 0) then round((100 * rh_not_found_count / total_count)::numeric, 2) else 0.00 end rh_not_found_percent,
+            case when (total_count != 0) then round((100 * rh_found_count / total_count)::numeric, 2) else 0.00 end rh_found_percent,
+            case when (total_count != 0) then round((100 * eligible_count / total_count)::numeric, 2) else 0.00 end eligible_percent,
+            case when (total_count != 0) then round((100 * send_for_ra_count / total_count)::numeric, 2) else 0.00 end send_for_ra_percent,
+            case when (total_count != 0) then round((100 * paid_count / total_count)::numeric, 2) else 0.00 end paid_percent
         from (
             select
                 nested.batch_name,
-                min(total_count1) total_count1,
-                min(total_count2) total_count2,
-                case when (sum(nested.loaded_count) != 0) then nested.amount else 0 end loaded_sum,
+                max(total_count1) + max(total_count2) total_count,
                 sum(nested.loaded_count) loaded_count,
-                case when (sum(nested.created_count) != 0) then nested.amount else 0 end created_sum,
+                round(sum(nested.loaded_sum), 2) loaded_sum,
                 sum(nested.created_count) created_count,
-                case when (sum(nested.nts_withdrawn_count) != 0) then nested.amount else 0 end nts_withdrawn_sum,
+                round(sum(nested.created_sum), 2) created_sum,
+                sum(nested.work_found_count) matched_count,
+                round(sum(nested.work_found_sum), 2) matched_sum,
                 sum(nested.nts_withdrawn_count) nts_withdrawn_count,
-                case when (sum(nested.work_found_count) != 0) then nested.amount else 0 end work_found_sum,
-                sum(nested.work_found_count) work_found_count,
-                case when (sum(nested.work_not_found_count) != 0) then nested.amount else 0 end work_not_found_sum,
+                round(sum(nested.nts_withdrawn_sum), 2) nts_withdrawn_sum,
                 sum(nested.work_not_found_count) work_not_found_count,
-                case when (sum(nested.multiple_matching_count) != 0) then nested.amount else 0 end multiple_matching_sum,
+                round(sum(nested.work_not_found_sum), 2) work_not_found_sum,
                 sum(nested.multiple_matching_count) multiple_matching_count,
-                case when (sum(nested.rh_found_count) != 0) then nested.amount else 0 end rh_found_sum,
-                sum(nested.rh_found_count) rh_found_count,
-                case when (sum(nested.rh_not_found_count) != 0) then nested.amount else 0 end rh_not_found_sum,
+                round(sum(nested.multiple_matching_sum), 2) multiple_matching_sum,
                 sum(nested.rh_not_found_count) rh_not_found_count,
-                case when (sum(nested.eligible_count) != 0) then nested.amount else 0 end eligible_sum,
+                round(sum(nested.rh_not_found_sum), 2) rh_not_found_sum,
+                sum(nested.rh_found_count) rh_found_count,
+                round(sum(nested.rh_found_sum), 2) rh_found_sum,
                 sum(nested.eligible_count) eligible_count,
-                case when (sum(nested.send_for_ra_count) != 0) then nested.amount else 0 end send_for_ra_sum,
+                round(sum(nested.eligible_sum), 2) eligible_sum,
                 sum(nested.send_for_ra_count) send_for_ra_count,
-                case when (sum(nested.paid_count) != 0) then nested.amount else 0 end paid_sum,
-                sum(nested.paid_count) paid_count
-            from(
+                round(sum(nested.send_for_ra_sum), 2) send_for_ra_sum,
+                sum(nested.paid_count) paid_count,
+                round(sum(nested.paid_sum), 2) paid_sum
+            from (
                 select
-                    (select count(u) from ${schema}.df_usage u where u.df_usage_batch_uid = min(ub.df_usage_batch_uid)) total_count1,
-                    0 total_count2,
-                    <include refid="batchStatisticColumns"/>
-                from ${schema}.df_usage_audit audit
-                left join ${schema}.df_usage u on audit.df_usage_uid = u.df_usage_uid
-                left join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
-                <include refid="batchStatisticWhere"/>
-                union all
-                select
-                    0 total_count1,
-                    (select count(u) from ${schema}.df_usage_archive u where u.df_usage_batch_uid = min(ub.df_usage_batch_uid)) total_count2,
-                    <include refid="batchStatisticColumns"/>
-                from ${schema}.df_usage_audit audit
-                left join ${schema}.df_usage_archive u on audit.df_usage_uid = u.df_usage_archive_uid
-                left join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
-                <include refid="batchStatisticWhere"/>
+                    nested.batch_name,
+                    min(total_count1) total_count1,
+                    min(total_count2) total_count2,
+                    case when (sum(nested.loaded_count) != 0) then nested.amount else 0 end loaded_sum,
+                    sum(nested.loaded_count) loaded_count,
+                    case when (sum(nested.created_count) != 0) then nested.amount else 0 end created_sum,
+                    sum(nested.created_count) created_count,
+                    case when (sum(nested.nts_withdrawn_count) != 0) then nested.amount else 0 end nts_withdrawn_sum,
+                    sum(nested.nts_withdrawn_count) nts_withdrawn_count,
+                    case when (sum(nested.work_found_count) != 0) then nested.amount else 0 end work_found_sum,
+                    sum(nested.work_found_count) work_found_count,
+                    case when (sum(nested.work_not_found_count) != 0) then nested.amount else 0 end work_not_found_sum,
+                    sum(nested.work_not_found_count) work_not_found_count,
+                    case when (sum(nested.multiple_matching_count) != 0) then nested.amount else 0 end multiple_matching_sum,
+                    sum(nested.multiple_matching_count) multiple_matching_count,
+                    case when (sum(nested.rh_found_count) != 0) then nested.amount else 0 end rh_found_sum,
+                    sum(nested.rh_found_count) rh_found_count,
+                    case when (sum(nested.rh_not_found_count) != 0) then nested.amount else 0 end rh_not_found_sum,
+                    sum(nested.rh_not_found_count) rh_not_found_count,
+                    case when (sum(nested.eligible_count) != 0) then nested.amount else 0 end eligible_sum,
+                    sum(nested.eligible_count) eligible_count,
+                    case when (sum(nested.send_for_ra_count) != 0) then nested.amount else 0 end send_for_ra_sum,
+                    sum(nested.send_for_ra_count) send_for_ra_count,
+                    case when (sum(nested.paid_count) != 0) then nested.amount else 0 end paid_sum,
+                    sum(nested.paid_count) paid_count
+                from (
+                    select
+                        (select count(u) from ${schema}.df_usage u where u.df_usage_batch_uid = min(ub.df_usage_batch_uid)) total_count1,
+                        0 total_count2,
+                        <include refid="batchStatisticColumns"/>
+                    from ${schema}.df_usage_audit audit
+                    left join ${schema}.df_usage u on audit.df_usage_uid = u.df_usage_uid
+                    left join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
+                    <include refid="batchStatisticWhereAndGroupClause"/>
+                    union all
+                    select
+                        0 total_count1,
+                        (select count(u) from ${schema}.df_usage_archive u where u.df_usage_batch_uid = min(ub.df_usage_batch_uid)) total_count2,
+                        <include refid="batchStatisticColumns"/>
+                    from ${schema}.df_usage_audit audit
+                    left join ${schema}.df_usage_archive u on audit.df_usage_uid = u.df_usage_archive_uid
+                    left join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
+                    <include refid="batchStatisticWhereAndGroupClause"/>
+                ) nested
+                group by nested.batch_name, nested.amount
             ) nested
-            group by nested.batch_name, nested.amount
+            <if test="null != dateTo || null != dateFrom">
+                where (loaded_count + created_count + nts_withdrawn_count + work_found_count + work_not_found_count +
+                    multiple_matching_count + rh_found_count + rh_not_found_count + eligible_count + send_for_ra_count +
+                    paid_count) > 0
+            </if>
+            group by nested.batch_name
+            order by nested.batch_name
         ) nested
-        <if test="null != dateTo || null != dateFrom">
-            where (loaded_count + created_count + nts_withdrawn_count + work_found_count + work_not_found_count +
-                multiple_matching_count + rh_found_count + rh_not_found_count + eligible_count + send_for_ra_count +
-                paid_count) > 0
-        </if>
-        group by nested.batch_name
-        order by nested.batch_name
     </select>
 
     <sql id="batchStatisticColumns">
@@ -198,22 +224,22 @@
         case when (audit.action_type_ind = 'PAID' <include refid="actionTypeDateClause"/>) then count(1) else 0 end paid_count
     </sql>
 
-    <sql id="batchStatisticWhere">
+    <sql id="batchStatisticWhereAndGroupClause">
         <if test="null != batchName">
             where ub.name = #{batchName}
         </if>
-        group by ub.name, audit.action_type_ind, cast(audit.created_datetime as date)
+        group by ub.name, audit.action_type_ind, audit.created_datetime::date
     </sql>
 
     <sql id="actionTypeDateClause">
         <if test="null != date">
-            and <![CDATA[cast(audit.created_datetime as date) = cast(#{date} as date)]]>
+            and <![CDATA[audit.created_datetime::date = cast(#{date} as date)]]>
         </if>
         <if test="null != dateFrom">
-            and <![CDATA[cast(audit.created_datetime as date) >= cast(#{dateFrom} as date)]]>
+            and <![CDATA[audit.created_datetime::date >= cast(#{dateFrom} as date)]]>
         </if>
         <if test="null != dateTo">
-            and <![CDATA[cast(audit.created_datetime as date) <= cast(#{dateTo} as date)]]>
+            and <![CDATA[audit.created_datetime::date <= cast(#{dateTo} as date)]]>
         </if>
     </sql>
 

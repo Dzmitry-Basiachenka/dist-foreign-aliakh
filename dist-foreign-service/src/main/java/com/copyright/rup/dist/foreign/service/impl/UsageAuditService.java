@@ -13,14 +13,11 @@ import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -70,43 +67,17 @@ public class UsageAuditService implements IUsageAuditService {
     }
 
     @Override
-    public List<BatchStatistic> getBatchesStatistic(String batchName, LocalDate date,
-                                                    LocalDate dateFrom, LocalDate dateTo) {
-        if (null != batchName) {
-            checkArgument(null == dateFrom,
-                "If the parameter 'batchName' is set, the parameter 'dateFrom' must not be set");
-            checkArgument(null == dateTo,
-                "If the parameter 'batchName' is set, the parameter 'dateTo' must not be set");
-        } else {
-            checkArgument(null == date,
-                "If the parameter 'batchName' is not set, the parameter 'date' must not be set either");
-            checkArgument(null != dateFrom,
-                "If the parameter 'batchName' is not set, the parameter 'dateFrom' must be set");
-            checkArgument(null != dateTo,
-                "If the parameter 'batchName' is not set, the parameter 'dateTo' must be set");
-            checkArgument(dateFrom.compareTo(dateTo) <= 0,
-                "The parameter 'dateFrom' must be before or equal the parameter 'dateTo'");
-        }
-        List<BatchStatistic> statistics = usageAuditRepository.findBatchesStatistic(batchName, date, dateFrom, dateTo);
-        if (Objects.nonNull(statistics)) {
-            for (BatchStatistic statistic : statistics) {
-                if (0 != statistic.getTotalCount()) {
-                    double count = statistic.getTotalCount();
-                    statistic.setLoadedPercent(buildPercent(statistic.getLoadedCount() / count));
-                    statistic.setCreatedPercent(buildPercent(statistic.getCreatedCount() / count));
-                    statistic.setMatchedPercent(buildPercent(statistic.getMatchedCount() / count));
-                    statistic.setNtsWithDrawnPercent(buildPercent(statistic.getNtsWithDrawnCount() / count));
-                    statistic.setWorksNotFoundPercent(buildPercent(statistic.getWorksNotFoundCount() / count));
-                    statistic.setMultipleMatchingPercent(buildPercent(statistic.getMultipleMatchingCount() / count));
-                    statistic.setRhNotFoundPercent(buildPercent(statistic.getRhNotFoundCount() / count));
-                    statistic.setRhFoundPercent(buildPercent(statistic.getRhFoundCount() / count));
-                    statistic.setEligiblePercent(buildPercent(statistic.getEligibleCount() / count));
-                    statistic.setSendForRaPercent(buildPercent(statistic.getSendForRaCount() / count));
-                    statistic.setPaidPercent(buildPercent(statistic.getPaidCount() / count));
-                }
-            }
-        }
-        return statistics;
+    public List<BatchStatistic> getBatchesStatisticByBatchNameAndDate(String batchName, LocalDate date) {
+        return usageAuditRepository.findBatchesStatisticByBatchNameAndDate(batchName, date);
+    }
+
+    @Override
+    public List<BatchStatistic> getBatchesStatisticByDateFromAndDateTo(LocalDate dateFrom, LocalDate dateTo) {
+        checkArgument(null != dateFrom, "The parameter 'dateFrom' must be set");
+        checkArgument(null != dateTo, "The parameter 'dateTo' must be set");
+        checkArgument(dateFrom.compareTo(dateTo) <= 0,
+            "The parameter 'dateFrom' must be less than or equal to the parameter 'dateTo'");
+        return usageAuditRepository.findBatchesStatisticByDateFromAndDateTo(dateFrom, dateTo);
     }
 
     private UsageAuditItem buildUsageAuditItem(String usageId, UsageActionTypeEnum actionType, String actionReason) {
@@ -122,9 +93,5 @@ public class UsageAuditService implements IUsageAuditService {
         usageAuditItem.setCreateDate(currentDate);
         usageAuditItem.setUpdateDate(currentDate);
         return usageAuditItem;
-    }
-
-    private BigDecimal buildPercent(double value) {
-        return new BigDecimal(String.valueOf(value * 100)).setScale(1, RoundingMode.HALF_UP);
     }
 }

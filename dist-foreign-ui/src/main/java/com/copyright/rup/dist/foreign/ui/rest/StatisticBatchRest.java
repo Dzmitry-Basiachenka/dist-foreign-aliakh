@@ -10,6 +10,7 @@ import com.copyright.rup.dist.foreign.ui.rest.gen.model.BatchStat;
 import com.copyright.rup.dist.foreign.ui.rest.gen.model.BatchStats;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
-import java.util.Objects;
 
 import javax.validation.constraints.Pattern;
 
@@ -45,9 +45,10 @@ public class StatisticBatchRest implements StatisticBatchApiDelegate {
     public ResponseEntity<BatchStats> getBatchesStatistic(
         String name, @Pattern(regexp = DATE_REGEXP) String date,
         @Pattern(regexp = DATE_REGEXP) String dateFrom, @Pattern(regexp = DATE_REGEXP) String dateTo) {
-        List<BatchStatistic> statistics = usageAuditService.getBatchesStatistic(name,
-            parseDate(date), parseDate(dateFrom), parseDate(dateTo));
-        if (CollectionUtils.isEmpty(statistics) && Objects.nonNull(name)) {
+        List<BatchStatistic> statistics = StringUtils.isNotBlank(name)
+            ? usageAuditService.getBatchesStatisticByBatchNameAndDate(name, parseDate(date))
+            : usageAuditService.getBatchesStatisticByDateFromAndDateTo(parseDate(dateFrom), parseDate(dateTo));
+        if (CollectionUtils.isEmpty(statistics) && StringUtils.isNotBlank(name)) {
             throw new NotFoundException("Batch not found. BatchName=" + name);
         }
         return new ResponseEntity<>(buildBatchStats(statistics, date, dateFrom, dateTo), HttpStatus.OK);
@@ -73,42 +74,41 @@ public class StatisticBatchRest implements StatisticBatchApiDelegate {
     }
 
     private BatchStat buildBatchStat(BatchStatistic statistic) {
-        BatchStat stat = new BatchStat();
-        stat.setBatchName(statistic.getBatchName());
-        stat.setTotalCount(statistic.getTotalCount());
-        stat.setLoadedCount(statistic.getLoadedCount());
-        stat.setLoadedAmount(statistic.getLoadedAmount());
-        stat.setLoadedPercent(statistic.getLoadedPercent());
-        stat.setCreatedCount(statistic.getCreatedCount());
-        stat.setCreatedAmount(statistic.getCreatedAmount());
-        stat.setCreatedPercent(statistic.getCreatedPercent());
-        stat.setMatchedCount(statistic.getMatchedCount());
-        stat.setMatchedAmount(statistic.getMatchedAmount());
-        stat.setMatchedPercent(statistic.getMatchedPercent());
-        stat.setWorksNotFoundCount(statistic.getWorksNotFoundCount());
-        stat.setWorksNotFoundAmount(statistic.getWorksNotFoundAmount());
-        stat.setWorksNotFoundPercent(statistic.getWorksNotFoundPercent());
-        stat.setMultipleMatchingCount(statistic.getMultipleMatchingCount());
-        stat.setMultipleMatchingAmount(statistic.getMultipleMatchingAmount());
-        stat.setMultipleMatchingPercent(statistic.getMultipleMatchingPercent());
-        stat.setNtsWithDrawnCount(statistic.getNtsWithDrawnCount());
-        stat.setNtsWithDrawnAmount(statistic.getNtsWithDrawnAmount());
-        stat.setNtsWithDrawnPercent(statistic.getNtsWithDrawnPercent());
-        stat.setRhNotFoundCount(statistic.getRhNotFoundCount());
-        stat.setRhNotFoundAmount(statistic.getRhNotFoundAmount());
-        stat.setRhNotFoundPercent(statistic.getRhNotFoundPercent());
-        stat.setRhFoundCount(statistic.getRhFoundCount());
-        stat.setRhFoundAmount(statistic.getRhFoundAmount());
-        stat.setRhFoundPercent(statistic.getRhFoundPercent());
-        stat.setEligibleCount(statistic.getEligibleCount());
-        stat.setEligibleAmount(statistic.getEligibleAmount());
-        stat.setEligiblePercent(statistic.getEligiblePercent());
-        stat.setSendForRaCount(statistic.getSendForRaCount());
-        stat.setSendForRaAmount(statistic.getSendForRaAmount());
-        stat.setSendForRaPercent(statistic.getSendForRaPercent());
-        stat.setPaidCount(statistic.getPaidCount());
-        stat.setPaidAmount(statistic.getPaidAmount());
-        stat.setPaidPercent(statistic.getPaidPercent());
-        return stat;
+        return new BatchStat()
+            .batchName(statistic.getBatchName())
+            .totalCount(statistic.getTotalCount())
+            .loadedCount(statistic.getLoadedCount())
+            .loadedAmount(statistic.getLoadedAmount())
+            .loadedPercent(statistic.getLoadedPercent())
+            .createdCount(statistic.getCreatedCount())
+            .createdAmount(statistic.getCreatedAmount())
+            .createdPercent(statistic.getCreatedPercent())
+            .matchedCount(statistic.getMatchedCount())
+            .matchedAmount(statistic.getMatchedAmount())
+            .matchedPercent(statistic.getMatchedPercent())
+            .worksNotFoundCount(statistic.getWorksNotFoundCount())
+            .worksNotFoundAmount(statistic.getWorksNotFoundAmount())
+            .worksNotFoundPercent(statistic.getWorksNotFoundPercent())
+            .multipleMatchingCount(statistic.getMultipleMatchingCount())
+            .multipleMatchingAmount(statistic.getMultipleMatchingAmount())
+            .multipleMatchingPercent(statistic.getMultipleMatchingPercent())
+            .ntsWithdrawnCount(statistic.getNtsWithdrawnCount())
+            .ntsWithdrawnAmount(statistic.getNtsWithdrawnAmount())
+            .ntsWithdrawnPercent(statistic.getNtsWithdrawnPercent())
+            .rhNotFoundCount(statistic.getRhNotFoundCount())
+            .rhNotFoundAmount(statistic.getRhNotFoundAmount())
+            .rhNotFoundPercent(statistic.getRhNotFoundPercent())
+            .rhFoundCount(statistic.getRhFoundCount())
+            .rhFoundAmount(statistic.getRhFoundAmount())
+            .rhFoundPercent(statistic.getRhFoundPercent())
+            .eligibleCount(statistic.getEligibleCount())
+            .eligibleAmount(statistic.getEligibleAmount())
+            .eligiblePercent(statistic.getEligiblePercent())
+            .sendForRaCount(statistic.getSendForRaCount())
+            .sendForRaAmount(statistic.getSendForRaAmount())
+            .sendForRaPercent(statistic.getSendForRaPercent())
+            .paidCount(statistic.getPaidCount())
+            .paidAmount(statistic.getPaidAmount())
+            .paidPercent(statistic.getPaidPercent());
     }
 }

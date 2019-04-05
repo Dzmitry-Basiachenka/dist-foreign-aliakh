@@ -51,7 +51,8 @@ public class UsageAuditRepositoryIntegrationTest {
 
     private static final String USAGE_UID = "3ab5e80b-89c0-4d78-9675-54c7ab284450";
     private static final String USAGE_UID_2 = "3fb43e60-3352-4db4-9080-c30b8a6f6600";
-    private static final String AMOUNT_ZERO = "0.00";
+    private static final BigDecimal AMOUNT_ZERO = new BigDecimal("0.00");
+    private static final BigDecimal AMOUNT_TEN = new BigDecimal("10.00");
 
     @Autowired
     private IUsageAuditRepository usageAuditRepository;
@@ -97,27 +98,43 @@ public class UsageAuditRepositoryIntegrationTest {
 
     @Test
     public void testFindFasBatchStatisticByBatchName() {
-        List<BatchStatistic> statistics = usageAuditRepository.findBatchesStatistic("FAS batch statistic", null,
-            null, null);
+        List<BatchStatistic> statistics = usageAuditRepository.findBatchesStatisticByBatchNameAndDate(
+            "FAS batch statistic", null);
         assertNotNull(statistics);
         assertEquals(1, statistics.size());
-        BatchStatistic statistic = statistics.get(0);
-        assertFasBatch(statistic);
+        assertFasBatchStatistics(statistics.get(0));
+    }
+
+    @Test
+    public void testFindFasBatchStatisticByBatchNameAndDate() {
+        List<BatchStatistic> statistics = usageAuditRepository.findBatchesStatisticByBatchNameAndDate(
+            "FAS batch statistic",  LocalDate.of(2019, 4, 1));
+        assertNotNull(statistics);
+        assertEquals(1, statistics.size());
+        assertFasBatchStatistics(statistics.get(0));
     }
 
     @Test
     public void testFindNtsBatchStatisticByBatchName() {
-        List<BatchStatistic> statistics = usageAuditRepository.findBatchesStatistic("NTS batch statistic", null,
-            null, null);
+        List<BatchStatistic> statistics = usageAuditRepository.findBatchesStatisticByBatchNameAndDate(
+            "NTS batch statistic", null);
         assertNotNull(statistics);
         assertEquals(1, statistics.size());
-        BatchStatistic statistic = statistics.get(0);
-        assertNtsBatch(statistic);
+        assertNtsBatchStatistics(statistics.get(0));
     }
 
     @Test
-    public void testFindBatchesStatisticByDateFromDateTo() throws IOException {
-        List<BatchStatistic> actualStatistics = usageAuditRepository.findBatchesStatistic(null, null,
+    public void testFindNtsBatchStatisticByBatchNameAndDate() {
+        List<BatchStatistic> statistics = usageAuditRepository.findBatchesStatisticByBatchNameAndDate(
+            "NTS batch statistic", LocalDate.of(2019, 4, 1));
+        assertNotNull(statistics);
+        assertEquals(1, statistics.size());
+        assertNtsBatchStatistics(statistics.get(0));
+    }
+
+    @Test
+    public void testFindBatchesStatisticByDateFromAndDateTo() throws IOException {
+        List<BatchStatistic> actualStatistics = usageAuditRepository.findBatchesStatisticByDateFromAndDateTo(
             LocalDate.of(2013, 1, 1), LocalDate.of(2050, 1, 1));
         assertNotNull(actualStatistics);
         assertEquals(4, actualStatistics.size());
@@ -152,55 +169,75 @@ public class UsageAuditRepositoryIntegrationTest {
         });
     }
 
-    private void assertFasBatch(BatchStatistic statistic) {
+    private void assertFasBatchStatistics(BatchStatistic statistic) {
         assertNotNull(statistic);
         assertEquals("FAS batch statistic", statistic.getBatchName());
         assertEquals(10, statistic.getTotalCount());
         assertEquals(10, statistic.getLoadedCount());
         assertEquals(new BigDecimal("995.00"), statistic.getLoadedAmount());
+        assertEquals(new BigDecimal("100.00"), statistic.getLoadedPercent());
         assertEquals(0, statistic.getCreatedCount());
-        assertEquals(new BigDecimal(AMOUNT_ZERO), statistic.getCreatedAmount());
+        assertEquals(AMOUNT_ZERO, statistic.getCreatedAmount());
+        assertEquals(AMOUNT_ZERO, statistic.getCreatedPercent());
         assertEquals(2, statistic.getMatchedCount());
         assertEquals(new BigDecimal("190.00"), statistic.getMatchedAmount());
+        assertEquals(new BigDecimal("20.00"), statistic.getMatchedPercent());
         assertEquals(1, statistic.getWorksNotFoundCount());
         assertEquals(new BigDecimal("55.00"), statistic.getWorksNotFoundAmount());
-        assertEquals(1, statistic.getNtsWithDrawnCount());
-        assertEquals(new BigDecimal("150.00"), statistic.getNtsWithDrawnAmount());
+        assertEquals(AMOUNT_TEN, statistic.getWorksNotFoundPercent());
+        assertEquals(1, statistic.getNtsWithdrawnCount());
+        assertEquals(new BigDecimal("150.00"), statistic.getNtsWithdrawnAmount());
+        assertEquals(AMOUNT_TEN, statistic.getNtsWithdrawnPercent());
         assertEquals(1, statistic.getRhNotFoundCount());
         assertEquals(new BigDecimal("80.00"), statistic.getRhNotFoundAmount());
+        assertEquals(AMOUNT_TEN, statistic.getRhNotFoundPercent());
         assertEquals(1, statistic.getRhFoundCount());
         assertEquals(new BigDecimal("110.00"), statistic.getRhFoundAmount());
+        assertEquals(AMOUNT_TEN, statistic.getRhFoundPercent());
         assertEquals(0, statistic.getEligibleCount());
-        assertEquals(new BigDecimal(AMOUNT_ZERO), statistic.getEligibleAmount());
+        assertEquals(AMOUNT_ZERO, statistic.getEligibleAmount());
+        assertEquals(AMOUNT_ZERO, statistic.getEligiblePercent());
         assertEquals(1, statistic.getSendForRaCount());
         assertEquals(new BigDecimal("80.00"), statistic.getSendForRaAmount());
+        assertEquals(AMOUNT_TEN, statistic.getSendForRaPercent());
         assertEquals(5, statistic.getPaidCount());
         assertEquals(new BigDecimal("500.00"), statistic.getPaidAmount());
+        assertEquals(new BigDecimal("50.00"), statistic.getPaidPercent());
     }
 
-    private void assertNtsBatch(BatchStatistic statistic) {
+    private void assertNtsBatchStatistics(BatchStatistic statistic) {
         assertNotNull(statistic);
         assertEquals("NTS batch statistic", statistic.getBatchName());
         assertEquals(10, statistic.getTotalCount());
         assertEquals(0, statistic.getLoadedCount());
-        assertEquals(new BigDecimal(AMOUNT_ZERO), statistic.getLoadedAmount());
+        assertEquals(AMOUNT_ZERO, statistic.getLoadedAmount());
+        assertEquals(AMOUNT_ZERO, statistic.getLoadedPercent());
         assertEquals(10, statistic.getCreatedCount());
         assertEquals(new BigDecimal("995.00"), statistic.getCreatedAmount());
+        assertEquals(new BigDecimal("100.00"), statistic.getCreatedPercent());
         assertEquals(0, statistic.getMatchedCount());
-        assertEquals(new BigDecimal(AMOUNT_ZERO), statistic.getMatchedAmount());
+        assertEquals(AMOUNT_ZERO, statistic.getMatchedAmount());
+        assertEquals(AMOUNT_ZERO, statistic.getMatchedPercent());
         assertEquals(0, statistic.getWorksNotFoundCount());
-        assertEquals(new BigDecimal(AMOUNT_ZERO), statistic.getWorksNotFoundAmount());
-        assertEquals(0, statistic.getNtsWithDrawnCount());
-        assertEquals(new BigDecimal(AMOUNT_ZERO), statistic.getNtsWithDrawnAmount());
+        assertEquals(AMOUNT_ZERO, statistic.getWorksNotFoundAmount());
+        assertEquals(AMOUNT_ZERO, statistic.getWorksNotFoundPercent());
+        assertEquals(0, statistic.getNtsWithdrawnCount());
+        assertEquals(AMOUNT_ZERO, statistic.getNtsWithdrawnAmount());
+        assertEquals(AMOUNT_ZERO, statistic.getNtsWithdrawnPercent());
         assertEquals(0, statistic.getRhNotFoundCount());
-        assertEquals(new BigDecimal(AMOUNT_ZERO), statistic.getRhNotFoundAmount());
+        assertEquals(AMOUNT_ZERO, statistic.getRhNotFoundAmount());
+        assertEquals(AMOUNT_ZERO, statistic.getRhNotFoundPercent());
         assertEquals(5, statistic.getRhFoundCount());
         assertEquals(new BigDecimal("500.00"), statistic.getRhFoundAmount());
+        assertEquals(new BigDecimal("50.00"), statistic.getRhFoundPercent());
         assertEquals(4, statistic.getEligibleCount());
         assertEquals(new BigDecimal("400.00"), statistic.getEligibleAmount());
+        assertEquals(new BigDecimal("40.00"), statistic.getEligiblePercent());
         assertEquals(0, statistic.getSendForRaCount());
-        assertEquals(new BigDecimal(AMOUNT_ZERO), statistic.getSendForRaAmount());
+        assertEquals(AMOUNT_ZERO, statistic.getSendForRaAmount());
+        assertEquals(AMOUNT_ZERO, statistic.getSendForRaPercent());
         assertEquals(0, statistic.getPaidCount());
-        assertEquals(new BigDecimal(AMOUNT_ZERO), statistic.getPaidAmount());
+        assertEquals(AMOUNT_ZERO, statistic.getPaidAmount());
+        assertEquals(AMOUNT_ZERO, statistic.getPaidPercent());
     }
 }

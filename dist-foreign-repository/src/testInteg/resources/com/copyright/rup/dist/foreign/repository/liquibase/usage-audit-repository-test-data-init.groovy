@@ -358,6 +358,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "5ed3ed4f-fdd4-4521-bbe5-27870dc8bd62")
             column(name: "action_type_ind", value: "LOADED")
             column(name: "action_reason", value: "Uploaded in 'FAS batch statistic'")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -365,6 +366,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "5ed3ed4f-fdd4-4521-bbe5-27870dc8bd62")
             column(name: "action_type_ind", value: "WORK_FOUND")
             column(name: "action_reason", value: "Wr Wrk Inst 480382914 was found by standard number 1008902112377654XX")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -372,6 +374,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "5ed3ed4f-fdd4-4521-bbe5-27870dc8bd62")
             column(name: "action_type_ind", value: "RH_NOT_FOUND")
             column(name: "action_reason", value: "Rightsholder account 2000205131 was not found in RMS")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -379,6 +382,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "5ed3ed4f-fdd4-4521-bbe5-27870dc8bd62")
             column(name: "action_type_ind", value: "SENT_FOR_RA")
             column(name: "action_reason", value: "Sent for RA: job id '3e66a95c-e13d-4267-8asgrgfdee75dc77'")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -386,6 +390,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "e0b83b52-734a-439c-8e6b-2345c2aaa8e2")
             column(name: "action_type_ind", value: "LOADED")
             column(name: "action_reason", value: "Uploaded in 'FAS batch statistic'")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -393,12 +398,15 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "e0b83b52-734a-439c-8e6b-2345c2aaa8e2")
             column(name: "action_type_ind", value: "WORK_FOUND")
             column(name: "action_reason", value: "Wr Wrk Inst 480382914 was found by standard number 1008902112377654XX")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
+
         insert(schemaName: "apps", tableName: "df_usage_audit") {
             column(name: "df_usage_audit_uid", value: "348c9fd0-6cc7-4a35-86e3-f815e60c13dc")
             column(name: "df_usage_uid", value: "e0b83b52-734a-439c-8e6b-2345c2aaa8e2")
             column(name: "action_type_ind", value: "RH_FOUND")
             column(name: "action_reason", value: "Rightsholder account 2000205131 was found in RMS")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -406,6 +414,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "366eca1a-4974-4fce-a585-b9635b5a71c9")
             column(name: "action_type_ind", value: "LOADED")
             column(name: "action_reason", value: "Uploaded in 'FAS batch statistic'")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -413,6 +422,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "366eca1a-4974-4fce-a585-b9635b5a71c9")
             column(name: "action_type_ind", value: "WORK_NOT_FOUND")
             column(name: "action_reason", value: "Wr Wrk Inst was not found by Standard Number 0102112377654XX")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -420,6 +430,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "08c85ce4-15bf-4ae4-a3b0-b82742ac4357")
             column(name: "action_type_ind", value: "LOADED")
             column(name: "action_reason", value: "Uploaded in 'FAS batch statistic'")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -427,6 +438,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "08c85ce4-15bf-4ae4-a3b0-b82742ac4357")
             column(name: "action_type_ind", value: "ELIGIBLE_FOR_NTS")
             column(name: "action_reason", value: "Detail was made eligible for NTS because sum of gross amounts, grouped by standard number, is less than \$100")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -434,6 +446,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "fb41b86e-755d-437c-8834-8044e73d72e8")
             column(name: "action_type_ind", value: "LOADED")
             column(name: "action_reason", value: "Uploaded in 'FAS batch statistic'")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -441,6 +454,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "acb55e9a-d956-4a49-8662-8f6a2b2f3048")
             column(name: "action_type_ind", value: "LOADED")
             column(name: "action_reason", value: "Uploaded in 'FAS batch statistic'")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -448,6 +462,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "acb55e9a-d956-4a49-8662-8f6a2b2f3048")
             column(name: "action_type_ind", value: "PAID")
             column(name: "action_reason", value: "Usage has been paid according to information from the LM'")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -455,6 +470,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "0427f1de-2894-4a1d-b154-b1bf0e91192c")
             column(name: "action_type_ind", value: "LOADED")
             column(name: "action_reason", value: "Uploaded in 'FAS batch statistic'")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -462,6 +478,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "0427f1de-2894-4a1d-b154-b1bf0e91192c")
             column(name: "action_type_ind", value: "PAID")
             column(name: "action_reason", value: "Usage has been paid according to information from the LM'")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -469,6 +486,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "0427f1de-2894-4a1d-b154-b1bf0e91192c")
             column(name: "action_type_ind", value: "ARCHIVED")
             column(name: "action_reason", value: "Usage was sent to CRM'")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -476,6 +494,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "39105ac2-d274-44bb-a2a0-244e2c0aaacb")
             column(name: "action_type_ind", value: "LOADED")
             column(name: "action_reason", value: "Uploaded in 'FAS batch statistic'")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -483,6 +502,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "39105ac2-d274-44bb-a2a0-244e2c0aaacb")
             column(name: "action_type_ind", value: "PAID")
             column(name: "action_reason", value: "Usage has been paid according to information from the LM'")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -490,6 +510,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "39105ac2-d274-44bb-a2a0-244e2c0aaacb")
             column(name: "action_type_ind", value: "ARCHIVED")
             column(name: "action_reason", value: "Usage was sent to CRM'")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -497,6 +518,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "488bf58f-a123-4fdf-96dd-fcf510bce840")
             column(name: "action_type_ind", value: "LOADED")
             column(name: "action_reason", value: "Uploaded in 'FAS batch statistic'")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -504,6 +526,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "488bf58f-a123-4fdf-96dd-fcf510bce840")
             column(name: "action_type_ind", value: "PAID")
             column(name: "action_reason", value: "Usage has been paid according to information from the LM'")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -511,6 +534,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "488bf58f-a123-4fdf-96dd-fcf510bce840")
             column(name: "action_type_ind", value: "ARCHIVED")
             column(name: "action_reason", value: "Usage was sent to CRM'")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -518,6 +542,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "ccd30bca-f76d-48cb-853b-c6911c6f9608")
             column(name: "action_type_ind", value: "LOADED")
             column(name: "action_reason", value: "Uploaded in 'FAS batch statistic'")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -525,6 +550,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "ccd30bca-f76d-48cb-853b-c6911c6f9608")
             column(name: "action_type_ind", value: "PAID")
             column(name: "action_reason", value: "Usage has been paid according to information from the LM'")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -532,6 +558,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "ccd30bca-f76d-48cb-853b-c6911c6f9608")
             column(name: "action_type_ind", value: "ARCHIVED")
             column(name: "action_reason", value: "Usage was sent to CRM'")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         //testFindNtsBatchStatistic
@@ -800,6 +827,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "9606c52c-66de-4267-b298-ca5b69b7581d")
             column(name: "action_type_ind", value: "CREATED")
             column(name: "action_reason", value: "Usage was created based on Market(s): 'Bus', Fund Pool Period: 2000-2015")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -807,6 +835,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "d55daf59-8b4a-469a-8abf-9178d49288bc")
             column(name: "action_type_ind", value: "CREATED")
             column(name: "action_reason", value: "Usage was created based on Market(s): 'Bus', Fund Pool Period: 2000-2015")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -814,6 +843,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "c069ba24-d636-487d-b21a-7da212ebebe8")
             column(name: "action_type_ind", value: "CREATED")
             column(name: "action_reason", value: "Usage was created based on Market(s): 'Bus', Fund Pool Period: 2000-2015")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -821,6 +851,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "7e11f349-8705-4019-9b39-bbb1d3d92a95")
             column(name: "action_type_ind", value: "CREATED")
             column(name: "action_reason", value: "Usage was created based on Market(s): 'Bus', Fund Pool Period: 2000-2015")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -828,6 +859,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "a8d5a6c3-e60e-4b43-829d-dad376be47e4")
             column(name: "action_type_ind", value: "CREATED")
             column(name: "action_reason", value: "Usage was created based on Market(s): 'Bus', Fund Pool Period: 2000-2015")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -835,6 +867,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "abd996ea-8e93-444e-8f9f-74b16f3d0f21")
             column(name: "action_type_ind", value: "CREATED")
             column(name: "action_reason", value: "Usage was created based on Market(s): 'Bus', Fund Pool Period: 2000-2015")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -842,6 +875,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "abd996ea-8e93-444e-8f9f-74b16f3d0f21")
             column(name: "action_type_ind", value: "RH_FOUND")
             column(name: "action_reason", value: "Rightsholder account 1000011835 was found in RMS")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -849,6 +883,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "dcf81b2e-e238-40cf-9cf0-cd7fe829b13c")
             column(name: "action_type_ind", value: "CREATED")
             column(name: "action_reason", value: "Usage was created based on Market(s): 'Bus', Fund Pool Period: 2000-2015")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -856,6 +891,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "dcf81b2e-e238-40cf-9cf0-cd7fe829b13c")
             column(name: "action_type_ind", value: "RH_FOUND")
             column(name: "action_reason", value: "Rightsholder account 1000011835 was found in RMS")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -863,6 +899,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "dcf81b2e-e238-40cf-9cf0-cd7fe829b13c")
             column(name: "action_type_ind", value: "ELIGIBLE")
             column(name: "action_reason", value: "Usage has become eligible based on US rightsholder tax country")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -870,6 +907,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "a95a99c7-6eaf-44b1-921b-651e5722fca4")
             column(name: "action_type_ind", value: "CREATED")
             column(name: "action_reason", value: "Usage was created based on Market(s): 'Bus', Fund Pool Period: 2000-2015")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -877,6 +915,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "a95a99c7-6eaf-44b1-921b-651e5722fca4")
             column(name: "action_type_ind", value: "RH_FOUND")
             column(name: "action_reason", value: "Rightsholder account 1000011835 was found in RMS")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -884,6 +923,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "a95a99c7-6eaf-44b1-921b-651e5722fca4")
             column(name: "action_type_ind", value: "ELIGIBLE")
             column(name: "action_reason", value: "Usage has become eligible based on US rightsholder tax country")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -891,6 +931,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "289c9993-3f53-4d46-8730-c19fd0dda49f")
             column(name: "action_type_ind", value: "CREATED")
             column(name: "action_reason", value: "Usage was created based on Market(s): 'Bus', Fund Pool Period: 2000-2015")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -898,6 +939,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "289c9993-3f53-4d46-8730-c19fd0dda49f")
             column(name: "action_type_ind", value: "RH_FOUND")
             column(name: "action_reason", value: "Rightsholder account 1000011835 was found in RMS")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -905,6 +947,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "289c9993-3f53-4d46-8730-c19fd0dda49f")
             column(name: "action_type_ind", value: "ELIGIBLE")
             column(name: "action_reason", value: "Usage has become eligible based on US rightsholder tax country")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -912,6 +955,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "807a8633-bd96-4c33-b59d-39a829435cb5")
             column(name: "action_type_ind", value: "CREATED")
             column(name: "action_reason", value: "Usage was created based on Market(s): 'Bus', Fund Pool Period: 2000-2015")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -919,6 +963,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "807a8633-bd96-4c33-b59d-39a829435cb5")
             column(name: "action_type_ind", value: "RH_FOUND")
             column(name: "action_reason", value: "Rightsholder account 1000011835 was found in RMS")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         insert(schemaName: "apps", tableName: "df_usage_audit") {
@@ -926,6 +971,7 @@ databaseChangeLog {
             column(name: "df_usage_uid", value: "807a8633-bd96-4c33-b59d-39a829435cb5")
             column(name: "action_type_ind", value: "ELIGIBLE")
             column(name: "action_reason", value: "Usage has become eligible based on US rightsholder tax country")
+            column(name: 'created_datetime', value: '2019-04-01')
         }
 
         // testGetUsageStatistic

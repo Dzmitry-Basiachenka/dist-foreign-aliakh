@@ -213,11 +213,11 @@ definitions:
         type: number
       multipleMatchingPercent:
         type: number
-      ntsWithDrawnCount:
+      ntsWithdrawnCount:
         type: integer
-      ntsWithDrawnAmount:
+      ntsWithdrawnAmount:
         type: number
-      ntsWithDrawnPercent:
+      ntsWithdrawnPercent:
         type: number
       rhNotFoundCount:
         type: integer

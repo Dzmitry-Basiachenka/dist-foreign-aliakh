@@ -59,6 +59,7 @@ public class StatisticBatchRestTest {
     private static final String JSON_PATH_ERROR = "$.error";
     private static final String JSON_PATH_MESSAGE = "$.message";
     private static final String JSON_PATH_STACKTRACE = "$.stackTrace";
+    private static final BigDecimal AMOUNT_ZERO = new BigDecimal("0.00");
 
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -81,7 +82,7 @@ public class StatisticBatchRestTest {
 
     @Test
     public void testGetBatchesStatistic() throws Exception {
-        expect(usageAuditServiceMock.getBatchesStatistic(TEST_BATCH_NAME, buildDate(), null, null))
+        expect(usageAuditServiceMock.getBatchesStatisticByBatchNameAndDate(TEST_BATCH_NAME, buildDate()))
             .andReturn(buildStatistics()).once();
         replay(usageAuditServiceMock);
         mockMvc.perform(MockMvcRequestBuilders.get(STATISTIC_PATH)
@@ -114,7 +115,7 @@ public class StatisticBatchRestTest {
 
     @Test
     public void testGetBatchStatisticWrongBatchName() throws Exception {
-        expect(usageAuditServiceMock.getBatchesStatistic(TEST_BATCH_NAME, buildDate(), null, null))
+        expect(usageAuditServiceMock.getBatchesStatisticByBatchNameAndDate(TEST_BATCH_NAME, buildDate()))
             .andReturn(null).once();
         replay(usageAuditServiceMock);
         mockMvc.perform(MockMvcRequestBuilders.get(STATISTIC_PATH)
@@ -133,7 +134,7 @@ public class StatisticBatchRestTest {
 
     @Test
     public void testGetBatchesStatisticIllegalArgumentException() throws Exception {
-        expect(usageAuditServiceMock.getBatchesStatistic(TEST_BATCH_NAME, buildDate(), null, null))
+        expect(usageAuditServiceMock.getBatchesStatisticByBatchNameAndDate(TEST_BATCH_NAME, buildDate()))
             .andThrow(new IllegalArgumentException(TEST_EXCEPTION)).once();
         replay(usageAuditServiceMock);
         mockMvc.perform(MockMvcRequestBuilders.get(STATISTIC_PATH)
@@ -152,7 +153,7 @@ public class StatisticBatchRestTest {
 
     @Test
     public void testGetBatchesStatisticInternalServerError() throws Exception {
-        expect(usageAuditServiceMock.getBatchesStatistic(TEST_BATCH_NAME, buildDate(), null, null))
+        expect(usageAuditServiceMock.getBatchesStatisticByBatchNameAndDate(TEST_BATCH_NAME, buildDate()))
             .andThrow(new RuntimeException(TEST_EXCEPTION)).once();
         replay(usageAuditServiceMock);
         mockMvc.perform(MockMvcRequestBuilders.get(STATISTIC_PATH)
@@ -176,17 +177,40 @@ public class StatisticBatchRestTest {
     private List<BatchStatistic> buildStatistics() {
         BatchStatistic statistic = new BatchStatistic();
         statistic.setBatchName(TEST_BATCH_NAME);
+        statistic.setTotalCount(2);
         statistic.setLoadedCount(2);
         statistic.setLoadedAmount(new BigDecimal("1000.00"));
+        statistic.setLoadedPercent(new BigDecimal("100.00"));
+        statistic.setCreatedCount(0);
+        statistic.setCreatedAmount(AMOUNT_ZERO);
+        statistic.setCreatedPercent(AMOUNT_ZERO);
         statistic.setMatchedCount(1);
         statistic.setMatchedAmount(new BigDecimal("500.00"));
         statistic.setMatchedPercent(new BigDecimal("50.00"));
-        statistic.setRhFoundCount(1);
-        statistic.setRhFoundAmount(new BigDecimal("500.00"));
-        statistic.setRhFoundPercent(new BigDecimal("50.00"));
-        statistic.setEligibleCount(2);
-        statistic.setEligibleAmount(new BigDecimal("1000.00"));
-        statistic.setEligiblePercent(new BigDecimal("100.00"));
+        statistic.setWorksNotFoundCount(0);
+        statistic.setWorksNotFoundAmount(AMOUNT_ZERO);
+        statistic.setWorksNotFoundPercent(AMOUNT_ZERO);
+        statistic.setMultipleMatchingCount(0);
+        statistic.setMultipleMatchingAmount(AMOUNT_ZERO);
+        statistic.setMultipleMatchingPercent(AMOUNT_ZERO);
+        statistic.setNtsWithdrawnCount(0);
+        statistic.setNtsWithdrawnAmount(AMOUNT_ZERO);
+        statistic.setNtsWithdrawnPercent(AMOUNT_ZERO);
+        statistic.setRhNotFoundCount(0);
+        statistic.setRhNotFoundAmount(AMOUNT_ZERO);
+        statistic.setRhNotFoundPercent(AMOUNT_ZERO);
+        statistic.setRhFoundCount(0);
+        statistic.setRhFoundAmount(AMOUNT_ZERO);
+        statistic.setRhFoundPercent(AMOUNT_ZERO);
+        statistic.setEligibleCount(1);
+        statistic.setEligibleAmount(new BigDecimal("500.00"));
+        statistic.setEligiblePercent(new BigDecimal("50.00"));
+        statistic.setSendForRaCount(0);
+        statistic.setSendForRaAmount(AMOUNT_ZERO);
+        statistic.setSendForRaPercent(AMOUNT_ZERO);
+        statistic.setPaidCount(0);
+        statistic.setPaidAmount(AMOUNT_ZERO);
+        statistic.setPaidPercent(AMOUNT_ZERO);
         return ImmutableList.of(statistic);
     }
 

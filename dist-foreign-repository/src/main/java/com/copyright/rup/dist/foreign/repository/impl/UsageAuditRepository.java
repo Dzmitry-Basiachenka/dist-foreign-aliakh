@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.report.BatchStatistic;
@@ -8,6 +10,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageAuditRepository;
 
 import com.google.common.collect.Maps;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -53,13 +56,19 @@ public class UsageAuditRepository extends BaseRepository implements IUsageAuditR
     }
 
     @Override
-    public List<BatchStatistic> findBatchesStatistic(String batchName, LocalDate date,
-                                                     LocalDate dateFrom, LocalDate dateTo) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
+    public List<BatchStatistic> findBatchesStatisticByBatchNameAndDate(String batchName, LocalDate date) {
+        checkArgument(StringUtils.isNotBlank(batchName));
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put("batchName", batchName);
         parameters.put("date", date);
-        parameters.put("dateFrom", dateFrom);
-        parameters.put("dateTo", dateTo);
+        return selectList("IUsageAuditMapper.findBatchesStatistic", parameters);
+    }
+
+    @Override
+    public List<BatchStatistic> findBatchesStatisticByDateFromAndDateTo(LocalDate dateFrom, LocalDate dateTo) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put("dateFrom", Objects.requireNonNull(dateFrom));
+        parameters.put("dateTo", Objects.requireNonNull(dateTo));
         return selectList("IUsageAuditMapper.findBatchesStatistic", parameters);
     }
 
