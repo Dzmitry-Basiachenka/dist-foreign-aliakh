@@ -153,7 +153,7 @@ public class UsageAuditServiceTest {
             usageAuditService.getBatchesStatisticByDateFromAndDateTo(dateFrom, dateTo);
             fail();
         } catch (IllegalArgumentException e) {
-            assertEquals("The parameter 'dateFrom' must be before or equal the parameter 'dateTo'",
+            assertEquals("The parameter 'dateFrom' must be less than or equal to the parameter 'dateTo'",
                 e.getMessage());
         }
     }
