@@ -9,6 +9,7 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.CurrencyUtils;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
+import com.vaadin.server.SerializableComparator;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickListener;
@@ -76,11 +77,15 @@ class WithdrawnFilteredBatchesWindow extends Window {
             .setCaption(ForeignUi.getMessage("table.column.batch_name"))
             .setId("name")
             .setSortProperty("name")
+            .setComparator((SerializableComparator<UsageBatch>) (batch1, batch2) ->
+                batch1.getName().compareToIgnoreCase(batch2.getName()))
             .setExpandRatio(1);
         grid.addColumn(usageBatch -> CurrencyUtils.format(usageBatch.getGrossAmount(), null))
             .setCaption(ForeignUi.getMessage("table.column.withdrawn_amount"))
             .setId("grossAmount")
             .setSortProperty("grossAmount")
+            .setComparator((SerializableComparator<UsageBatch>) (batch1, batch2) ->
+                batch1.getGrossAmount().compareTo(batch2.getGrossAmount()))
             .setStyleGenerator(item -> "v-align-right")
             .setWidth(200);
         grid.appendFooterRow();
