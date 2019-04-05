@@ -1,3 +1,11 @@
+5.1.11
+-
+*  CDP-707 FDA: Create Additional Funds: fix sorting on Delete UsageBatch/PreService fee fund windows
+* B-48995 FDA: Delete NTS withdrawn fund pool: make changes based on comments in CR-DIST-FOREIGN-98
+* B-49462 FDA: Add parameters dateFrom and dateTo to the batch statistic REST: correct test for the method UsageAuditService.getBatchesStatisticByDateFromAndDateTo
+* B-49462 FDA: Add parameters dateFrom and dateTo to the batch statistic REST: make changes based on comments in CR-DIST-FOREIGN-95
+* CDP-707 FDA: Create Additional Funds: Invalid sorting on 'Filtered batches' dialog
+
 5.1.10
 -
 * B-48760 FDA: Create NTS Pre-service fee additional fund pool from NTS withdrawn details: Implement moving from current dialog to its parent dialog by clicking on the Cancel button
