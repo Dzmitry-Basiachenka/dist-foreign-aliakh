@@ -1,3 +1,9 @@
+5.1.12
+-
+* B-46739 FDA: Remove NTS titles that do not meet the minimum from the fund pool batch: adjust service logic for excluding usages that do not meet fund pool minimum
+* B-48760 FDA: Create NTS Pre-service fee additional fund pool from NTS withdrawn details: make changes based on comments in CR-DIST-FOREIGN-99
+* B-49462 FDA: Add parameters dateFrom and dateTo to the batch statistic REST: make changes based on comments in CR-DIST-FOREIGN-95: delete fields for the CREATED and LOADED statuses
+
 5.1.11
 -
 *  CDP-707 FDA: Create Additional Funds: fix sorting on Delete UsageBatch/PreService fee fund windows
