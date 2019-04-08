@@ -461,26 +461,6 @@ public interface IUsageRepository {
     List<String> insertNtsUsages(UsageBatch usageBatch, String userName);
 
     /**
-     * Gets cutoff amount based on usages related to specified batch and classification.
-     *
-     * @param usageBatch     batch
-     * @param classification classification name
-     * @return calculated cutoff amount
-     */
-    BigDecimal getCutoffAmountByBatchIdAndClassification(UsageBatch usageBatch, String classification);
-
-    /**
-     * Deletes usages from DB related to specified batch that are under min cutoff amount.
-     *
-     * @param usageBatch         {@link UsageBatch}
-     * @param stmCutoffAmount    STM cutoff amount
-     * @param nonStmCutoffAmount NON-STM cutoff amount
-     * @return list of deleted usage ids
-     */
-    List<String> deleteUnderMinimumCutoffAmountUsagesByBatchId(UsageBatch usageBatch, BigDecimal stmCutoffAmount,
-                                                               BigDecimal nonStmCutoffAmount);
-
-    /**
      * Updates usages with status NTS_WITHDRAWN from given batches to status TO_BE_DISTRIBUTED
      * and adds the usages to the NTS withdrawn fund pool.
      *

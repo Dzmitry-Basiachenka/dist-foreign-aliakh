@@ -1443,6 +1443,69 @@
     </select>
 
     <select id="insertNtsUsages" parameterType="map" resultType="string">
+        with nts_usages as (
+            select
+                uuid_generate_v4() df_usage_uid,
+                #{batchId} df_usage_batch_uid,
+                ua.wr_wrk_inst,
+                work_title,
+                system_title,
+                'WORK_FOUND' status_ind,
+                'NTS' product_family,
+                standard_number,
+                standard_number_type,
+                market,
+                market_period_from,
+                market_period_to,
+                gross_amount reported_value,
+                gross_amount,
+                comment,
+                <include refid="StoredEntityMapper.insert"/>
+            from apps.df_usage_archive ua
+            left join apps.df_work_classification wc on ua.wr_wrk_inst = wc.wr_wrk_inst
+            <include refid="IUsageArchiveMapper.ntsBatchWhereClause"/>
+        ),
+        <!--cutoff amounts for classified works - STM and NON-STM-->
+        cutoff_amounts as (
+            select
+                'STM' classification,
+                case when sum(u.gross_amount *
+                    (#{fundPoolPeriodDividend} / (u.market_period_to - u.market_period_from + 1))) is not null
+                then round(#{stmMinAmount} * sum(u.gross_amount *
+                    (#{fundPoolPeriodDividend} / (u.market_period_to - u.market_period_from + 1))) / #{stmAmount}, 2)
+                else 0.00 end cutoff_amount
+            from nts_usages u
+            join apps.df_work_classification wc on u.wr_wrk_inst = wc.wr_wrk_inst
+            where classification = 'STM'
+            union
+            select
+                'NON-STM' classification,
+                case when sum(u.gross_amount *
+                    (#{fundPoolPeriodDividend} / (u.market_period_to - u.market_period_from + 1))) is not null
+                then round(#{nonStmMinAmount} * sum(u.gross_amount *
+                    (#{fundPoolPeriodDividend} / (u.market_period_to - u.market_period_from + 1))) / #{nonStmAmount}, 2)
+                else 0.00 end cutoff_amount
+            from nts_usages u
+            join apps.df_work_classification wc on u.wr_wrk_inst = wc.wr_wrk_inst
+            where classification = 'NON-STM'
+        ),
+        <!--cutoff amount for unclassified works as minimum of STM and NON-STM-->
+        unclassified_cutoff_amount as (
+            select least(
+                (select cutoff_amount from cutoff_amounts where classification = 'STM'),
+                (select cutoff_amount from cutoff_amounts where classification = 'NON-STM')) unclassified_cutoff
+        ),
+        <!--total works weight-->
+        work_total_weight_subquery as (
+            select u.wr_wrk_inst,
+                wc.classification,
+                sum(u.gross_amount *
+                    (#{fundPoolPeriodDividend} / (u.market_period_to - u.market_period_from +1))) work_total_weight
+            from nts_usages u
+            left join apps.df_work_classification wc on u.wr_wrk_inst = wc.wr_wrk_inst
+            group by u.wr_wrk_inst, wc.classification
+        )
+
         insert into ${schema}.df_usage (
             df_usage_uid,
             df_usage_batch_uid,
@@ -1462,65 +1525,27 @@
             <include refid="StoredEntityMapper.additionalColumns"/>
         )
         select
-            uuid_generate_v4(),
-            #{batchId},
+            ua.df_usage_uid,
+            ua.df_usage_batch_uid,
             ua.wr_wrk_inst,
-            work_title,
-            system_title,
-            'WORK_FOUND',
-            'NTS',
-            standard_number,
-            standard_number_type,
-            market,
-            market_period_from,
-            market_period_to,
-            gross_amount,
-            gross_amount,
-            comment,
+            ua.work_title,
+            ua.system_title,
+            ua.status_ind,
+            ua.product_family,
+            ua.standard_number,
+            ua.standard_number_type,
+            ua.market,
+            ua.market_period_from,
+            ua.market_period_to,
+            ua.reported_value,
+            ua.gross_amount,
+            ua.comment,
             <include refid="StoredEntityMapper.insert"/>
-        from ${schema}.df_usage_archive ua
-        left join ${schema}.df_work_classification wc on ua.wr_wrk_inst = wc.wr_wrk_inst
-        <include refid="IUsageArchiveMapper.ntsBatchWhereClause"/>
+        from nts_usages ua
+        join work_total_weight_subquery sub on sub.wr_wrk_inst = ua.wr_wrk_inst
+        where ((sub.work_total_weight &gt;= (select cutoff_amount from cutoff_amounts c where c.classification = sub.classification))
+            or (sub.classification is null and sub.work_total_weight &gt;= (select unclassified_cutoff from unclassified_cutoff_amount)))
         returning df_usage_uid
-    </select>
-
-    <select id="getCutoffAmountByBatchIdAndClassification" parameterType="map" resultType="BigDecimal">
-        with grand_total_divisor_subquery as (
-            select
-                sum(u.gross_amount *
-                    (#{fundPoolPeriodDividend} / (u.market_period_to - u.market_period_from +1))) grand_total_divisor
-            from ${schema}.df_usage u
-            join ${schema}.df_work_classification wc on u.wr_wrk_inst = wc.wr_wrk_inst
-            where u.df_usage_batch_uid = #{batchId}
-                and wc.classification = #{classification}
-        )
-        select
-            case when grand_total_divisor is not null
-            then round(#{fundPoolMinAmount} * grand_total_divisor / #{fundPoolAmount}, 2)
-            else 0.00 end cutoff_amount
-        from grand_total_divisor_subquery
-    </select>
-
-    <select id="deleteUnderMinimumCutoffAmountUsagesByBatchId" parameterType="map" resultType="string">
-        with work_total_weight_subquery as (
-            select u.wr_wrk_inst,
-                wc.classification,
-                sum(u.gross_amount *
-                    (#{fundPoolPeriodDividend} / (u.market_period_to - u.market_period_from +1))) work_total_weight
-            from ${schema}.df_usage u
-            left join ${schema}.df_work_classification wc on u.wr_wrk_inst = wc.wr_wrk_inst
-            where u.df_usage_batch_uid = #{batchId}
-            group by u.wr_wrk_inst, wc.classification
-        )
-
-        delete from ${schema}.df_usage u
-        using work_total_weight_subquery sub
-        where u.df_usage_batch_uid = #{batchId}
-            and sub.wr_wrk_inst = u.wr_wrk_inst
-            and ((sub.classification = 'STM' and sub.work_total_weight &lt; #{stmCutoffAmount})
-                or (sub.classification = 'NON-STM' and sub.work_total_weight &lt; #{nonStmCutoffAmount})
-                or (sub.classification is null and sub.work_total_weight &lt; #{unclassifiedCutoffAmount}))
-        returning u.df_usage_uid
     </select>
 
     <update id="addWithdrawnUsagesToFundPool" parameterType="map">

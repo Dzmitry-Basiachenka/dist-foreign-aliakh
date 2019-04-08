@@ -130,6 +130,8 @@ public class UsageRepositoryIntegrationTest {
     private static final BigDecimal SERVICE_FEE = new BigDecimal("0.32000");
     private static final BigDecimal ZERO_AMOUNT = new BigDecimal("0.00");
     private static final BigDecimal HUNDRED_AMOUNT = new BigDecimal("100.00");
+    private static final BigDecimal STM_MIN_AMOUNT = new BigDecimal("50.00");
+    private static final BigDecimal NON_STM_MIN_AMOUNT = new BigDecimal("7.00");
 
     @Autowired
     private UsageRepository usageRepository;
@@ -1004,6 +1006,10 @@ public class UsageRepositoryIntegrationTest {
         fundPool.setMarkets(Sets.newHashSet(BUS_MARKET, DOC_DEL_MARKET));
         fundPool.setFundPoolPeriodFrom(2015);
         fundPool.setFundPoolPeriodTo(2016);
+        fundPool.setStmAmount(HUNDRED_AMOUNT);
+        fundPool.setStmMinimumAmount(STM_MIN_AMOUNT);
+        fundPool.setNonStmAmount(HUNDRED_AMOUNT);
+        fundPool.setNonStmMinimumAmount(NON_STM_MIN_AMOUNT);
         usageBatch.setFundPool(fundPool);
         List<String> insertedUsageIds = usageRepository.insertNtsUsages(usageBatch, USER_NAME);
         assertNotNull(insertedUsageIds);
@@ -1014,42 +1020,6 @@ public class UsageRepositoryIntegrationTest {
             insertedUsages.get(0));
         verifyInsertedFundPoolUsage(DOC_DEL_MARKET, 2013, new BigDecimal("1176.92"), new BigDecimal("1176.9160000000"),
             insertedUsages.get(1));
-    }
-
-    @Test
-    public void testGetCutoffAmountByBatchIdAndClassification() {
-        UsageBatch usageBatch = new UsageBatch();
-        usageBatch.setId("73027b25-f269-4bec-a8ea-b126431eedbe");
-        FundPool fundPool = new FundPool();
-        fundPool.setMarkets(Sets.newHashSet(BUS_MARKET, DOC_DEL_MARKET));
-        fundPool.setFundPoolPeriodFrom(2013);
-        fundPool.setFundPoolPeriodTo(2017);
-        fundPool.setStmAmount(HUNDRED_AMOUNT);
-        fundPool.setStmMinimumAmount(new BigDecimal("50.00"));
-        fundPool.setNonStmAmount(HUNDRED_AMOUNT);
-        fundPool.setNonStmMinimumAmount(new BigDecimal("7.00"));
-        usageBatch.setFundPool(fundPool);
-        assertEquals(new BigDecimal("2450.00"),
-            usageRepository.getCutoffAmountByBatchIdAndClassification(usageBatch, "NON-STM"));
-        assertEquals(ZERO_AMOUNT, usageRepository.getCutoffAmountByBatchIdAndClassification(usageBatch, "STM"));
-    }
-
-    @Test
-    public void testDeleteUnderMinimumCutoffAmountUsagesByBatchId() {
-        UsageBatch usageBatch = new UsageBatch();
-        usageBatch.setId("74901845-ac06-44ab-9b79-9dc9622e74de");
-        FundPool fundPool = new FundPool();
-        fundPool.setMarkets(Sets.newHashSet(BUS_MARKET, DOC_DEL_MARKET));
-        fundPool.setFundPoolPeriodFrom(2013);
-        fundPool.setFundPoolPeriodTo(2017);
-        fundPool.setStmAmount(HUNDRED_AMOUNT);
-        fundPool.setStmMinimumAmount(new BigDecimal("50.00"));
-        fundPool.setNonStmAmount(HUNDRED_AMOUNT);
-        fundPool.setNonStmMinimumAmount(new BigDecimal("7.00"));
-        usageBatch.setFundPool(fundPool);
-        assertEquals(Collections.singletonList("f9ddb072-a411-443b-89ca-1bb5a63425a4"),
-            usageRepository.deleteUnderMinimumCutoffAmountUsagesByBatchId(usageBatch, new BigDecimal("50.00"),
-                new BigDecimal("2.10")));
     }
 
     @Test
