@@ -18,7 +18,7 @@ import java.util.Collections;
 import java.util.Set;
 
 /**
- * Verifies {@link WithdrawnBatchFilterWidget}.
+ * Verifies {@link PreServiceFeeFundBatchesFilterWidget}.
  * <p/>
  * Copyright (C) 2019 copyright.com
  * <p/>
@@ -26,16 +26,16 @@ import java.util.Set;
  *
  * @author Aliaksandr Liakh
  */
-public class WithdrawnBatchFilterWidgetTest {
+public class PreServiceFeeFundBatchesFilterWidgetTest {
 
     private static final String USAGE_BATCH_ID = "c141d1ea-bb35-4ae8-8c33-ca9ac7f21785";
     private static final String USAGE_BATCH_NAME = "DALRO 29May18";
 
-    private WithdrawnBatchFilterWidget widget;
+    private PreServiceFeeFundBatchesFilterWidget widget;
 
     @Before
     public void setUp() {
-        widget = new WithdrawnBatchFilterWidget(() -> Collections.singletonList(buildUsageBatch()));
+        widget = new PreServiceFeeFundBatchesFilterWidget(() -> Collections.singletonList(buildUsageBatch()));
     }
 
     @Test

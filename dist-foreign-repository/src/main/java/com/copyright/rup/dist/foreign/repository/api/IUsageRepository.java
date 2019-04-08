@@ -462,11 +462,11 @@ public interface IUsageRepository {
 
     /**
      * Updates usages with status NTS_WITHDRAWN from given batches to status TO_BE_DISTRIBUTED
-     * and adds the usages to the NTS withdrawn fund pool.
+     * and adds the usages to the pre-service fee fund.
      *
-     * @param fundPoolId id of NTS withdrawn fund pool
-     * @param batchIds   list of ids of usage batches
-     * @param userName   user name
+     * @param fundId   id of pre-service fee fund
+     * @param batchIds list of ids of usage batches
+     * @param userName user name
      */
-    void addWithdrawnUsagesToFundPool(String fundPoolId, List<String> batchIds, String userName);
+    void addWithdrawnUsagesToPreServiceFeeFund(String fundId, List<String> batchIds, String userName);
 }

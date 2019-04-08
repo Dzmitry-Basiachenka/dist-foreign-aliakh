@@ -255,10 +255,10 @@ public class UsagesControllerTest {
     }
 
     @Test
-    public void testGetWithdrawnUsageBatches() {
-        expect(usageBatchService.getWithdrawnUsageBatches()).andReturn(Collections.emptyList()).once();
+    public void testGetUsageBatchesForPreServiceFeeFunds() {
+        expect(usageBatchService.getUsageBatchesForPreServiceFeeFunds()).andReturn(Collections.emptyList()).once();
         replay(usageBatchService);
-        controller.getWithdrawnUsageBatches();
+        controller.getUsageBatchesForPreServiceFeeFunds();
         verify(usageBatchService);
     }
 
@@ -338,11 +338,11 @@ public class UsagesControllerTest {
 
     @Test
     public void testDeleteAdditionalFund() {
-        PreServiceFeeFund fundPool = new PreServiceFeeFund();
-        fundPoolService.deletePreServiceFeeFund(fundPool);
+        PreServiceFeeFund fund = new PreServiceFeeFund();
+        fundPoolService.deletePreServiceFeeFund(fund);
         expectLastCall().once();
         replay(fundPoolService);
-        controller.deletePreServiceFeeFund(fundPool);
+        controller.deletePreServiceFeeFund(fund);
         verify(fundPoolService);
     }
 
@@ -435,8 +435,8 @@ public class UsagesControllerTest {
     }
 
     @Test
-    public void testGetWithdrawnBatchesStreamSource() {
-        IStreamSource streamSource = controller.getWithdrawnBatchesStreamSource(
+    public void testGetPreServiceFeeFundFilteredBatchesStreamSource() {
+        IStreamSource streamSource = controller.getPreServiceFeeFundBatchesStreamSource(
             Collections.singletonList(new UsageBatch()), BigDecimal.ONE);
         ExecutorService executorService = createMock(ExecutorService.class);
         Whitebox.setInternalState(streamSource, executorService);

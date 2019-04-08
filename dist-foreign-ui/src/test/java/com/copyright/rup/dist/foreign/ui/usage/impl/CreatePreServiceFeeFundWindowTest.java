@@ -37,8 +37,8 @@ public class CreatePreServiceFeeFundWindowTest {
     public void testConstructor() {
         IUsagesController controller = createMock(IUsagesController.class);
         CreatePreServiceFeeFundWindow window = new CreatePreServiceFeeFundWindow(controller,
-            Collections.emptyList(), BigDecimal.ONE,
-            createMock(WithdrawnBatchFilterWindow.class), createMock(WithdrawnFilteredBatchesWindow.class));
+            Collections.emptyList(), BigDecimal.ONE, createMock(PreServiceFeeFundBatchesFilterWindow.class),
+            createMock(PreServiceFeeFundFilteredBatchesWindow.class));
         assertEquals("Create NTS Pre-Service Fee Funds", window.getCaption());
         verifySize(window, Unit.PIXELS, 320, Unit.PIXELS, -1);
         VerticalLayout content = (VerticalLayout) window.getContent();
@@ -52,9 +52,9 @@ public class CreatePreServiceFeeFundWindowTest {
 
     private void verifyFundPoolNameField(Component component) {
         assertNotNull(component);
-        TextField fundPoolNameField = (TextField) component;
-        assertEquals("Fund Name", fundPoolNameField.getCaption());
-        assertEquals(StringUtils.EMPTY, fundPoolNameField.getValue());
+        TextField fundNameField = (TextField) component;
+        assertEquals("Fund Name", fundNameField.getCaption());
+        assertEquals(StringUtils.EMPTY, fundNameField.getValue());
     }
 
     private void verifyCommentsArea(Component component) {

@@ -62,7 +62,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
     private Button sendForResearchButton;
     private Button addToScenarioButton;
     private Button assignClassificationButton;
-    private MenuBar withdrawnFundMenuBar;
+    private MenuBar additionalFundsMenuBar;
 
     @Override
     public void refresh() {
@@ -96,7 +96,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         mediator.setAddToScenarioButton(addToScenarioButton);
         mediator.setSendForResearchButton(sendForResearchButton);
         mediator.setAssignClassificationButton(assignClassificationButton);
-        mediator.setWithdrawnFundMenuBar(withdrawnFundMenuBar);
+        mediator.setWithdrawnFundMenuBar(additionalFundsMenuBar);
         return mediator;
     }
 
@@ -234,7 +234,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         VaadinUtils.setButtonsAutoDisabled(loadUsageBatchButton, loadFundPoolButton, assignClassificationButton,
             loadResearchedUsagesButton, addToScenarioButton, deleteButton);
         HorizontalLayout layout =
-            new HorizontalLayout(loadUsageBatchButton, loadFundPoolButton, withdrawnFundMenuBar,
+            new HorizontalLayout(loadUsageBatchButton, loadFundPoolButton, additionalFundsMenuBar,
                 assignClassificationButton, sendForResearchButton, loadResearchedUsagesButton, addToScenarioButton,
                 exportButton, deleteButton);
         layout.setMargin(true);
@@ -243,26 +243,26 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
     }
 
     private void initMenuBar() {
-        withdrawnFundMenuBar = new MenuBar();
+        additionalFundsMenuBar = new MenuBar();
         MenuItem menuItem =
-            withdrawnFundMenuBar.addItem(ForeignUi.getMessage("menu.caption.additional_funds"), null, null);
+            additionalFundsMenuBar.addItem(ForeignUi.getMessage("menu.caption.additional_funds"), null, null);
         menuItem.addItem(ForeignUi.getMessage("menu.item.create"), null,
-            item -> Windows.showModalWindow(initWithdrawnBatchFilterWindow()));
+            item -> Windows.showModalWindow(initPreServiceFeeFundBatchesFilterWindow()));
         menuItem.addItem(ForeignUi.getMessage("menu.item.delete"), null,
             (item) -> Windows.showModalWindow(new DeleteAdditionalFundsWindow(controller)));
-        VaadinUtils.addComponentStyle(withdrawnFundMenuBar, "withdrawn-fund-menu-bar");
+        VaadinUtils.addComponentStyle(additionalFundsMenuBar, "additional-funds-menu-bar");
     }
 
-    private Window initWithdrawnBatchFilterWindow() {
-        WithdrawnBatchFilterWidget widget = new WithdrawnBatchFilterWidget(
-            () -> controller.getWithdrawnUsageBatches());
-        WithdrawnBatchFilterWindow window = new WithdrawnBatchFilterWindow(widget);
+    private Window initPreServiceFeeFundBatchesFilterWindow() {
+        PreServiceFeeFundBatchesFilterWidget widget = new PreServiceFeeFundBatchesFilterWidget(
+            () -> controller.getUsageBatchesForPreServiceFeeFunds());
+        PreServiceFeeFundBatchesFilterWindow window = new PreServiceFeeFundBatchesFilterWindow(widget);
         window.updateSaveButtonClickListener(
             () -> {
                 List<UsageBatch> selectedUsageBatches = widget.getSelectedUsageBatches();
                 if (!selectedUsageBatches.isEmpty()) {
                     Windows.showModalWindow(
-                        new WithdrawnFilteredBatchesWindow(controller, selectedUsageBatches, window));
+                        new PreServiceFeeFundFilteredBatchesWindow(controller, selectedUsageBatches, window));
                 } else {
                     Windows.showNotificationWindow(ForeignUi.getMessage("message.usage.batches.empty"));
                 }

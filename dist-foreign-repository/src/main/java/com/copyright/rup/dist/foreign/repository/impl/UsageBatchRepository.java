@@ -9,7 +9,6 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 
 import org.apache.commons.lang3.StringUtils;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * Implementation of {@link IUsageBatchRepository} for MyBatis.
@@ -32,10 +30,6 @@ import java.util.Set;
  */
 @Repository
 public class UsageBatchRepository extends BaseRepository implements IUsageBatchRepository {
-
-    private static final Set<String> WITHDRAWN_PRODUCT_FAMILIES = ImmutableSet.of(
-        FdaConstants.FAS_PRODUCT_FAMILY,
-        FdaConstants.CLA_FAS_PRODUCT_FAMILY);
 
     @Override
     public void insert(UsageBatch usageBatch) {
@@ -58,11 +52,11 @@ public class UsageBatchRepository extends BaseRepository implements IUsageBatchR
     }
 
     @Override
-    public List<UsageBatch> findWithdrawnUsageBatches() {
+    public List<UsageBatch> findUsageBatchesForPreServiceFeeFunds() {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
-        params.put("productFamilies", WITHDRAWN_PRODUCT_FAMILIES);
+        params.put("productFamilies", FdaConstants.FAS_FAS2_PRODUCT_FAMILY_SET);
         params.put("status", UsageStatusEnum.NTS_WITHDRAWN);
-        return selectList("IUsageBatchMapper.findWithdrawnUsageBatches", params);
+        return selectList("IUsageBatchMapper.findUsageBatchesForPreServiceFeeFunds", params);
     }
 
     @Override

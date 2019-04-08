@@ -361,9 +361,10 @@ public class UsagesWidgetTest {
 
     private void verifyMenuItemCreate(MenuItem menuItemCreate) {
         mockStatic(Windows.class);
-        Windows.showModalWindow(anyObject(WithdrawnBatchFilterWindow.class));
+        Windows.showModalWindow(anyObject(PreServiceFeeFundBatchesFilterWindow.class));
         expectLastCall().once();
-        expect(controller.getWithdrawnUsageBatches()).andReturn(Collections.singletonList(new UsageBatch())).once();
+        expect(controller.getUsageBatchesForPreServiceFeeFunds())
+            .andReturn(Collections.singletonList(new UsageBatch())).once();
         replay(controller, Windows.class);
         menuItemCreate.getCommand().menuSelected(menuItemCreate);
         verify(controller, Windows.class);

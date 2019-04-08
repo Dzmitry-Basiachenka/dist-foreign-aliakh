@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Window for filtered batches to create NTS withdrawn fund pool.
+ * Window for filtered batches to create pre-service fee funds.
  * <p/>
  * Copyright (C) 2019 copyright.com
  * <p/>
@@ -34,22 +34,22 @@ import java.util.stream.Collectors;
  *
  * @author Aliaksandr Liakh
  */
-class WithdrawnFilteredBatchesWindow extends Window {
+class PreServiceFeeFundFilteredBatchesWindow extends Window {
 
     private final IUsagesController controller;
-    private final WithdrawnBatchFilterWindow batchFilterWindow;
+    private final PreServiceFeeFundBatchesFilterWindow batchesFilterWindow;
 
     /**
      * Constructor.
      *
-     * @param controller        instance of {@link IUsagesController}
-     * @param batches           list of {@link UsageBatch}'es
-     * @param batchFilterWindow instance of {@link WithdrawnBatchFilterWindow}
+     * @param controller          instance of {@link IUsagesController}
+     * @param batches             list of {@link UsageBatch}'es
+     * @param batchesFilterWindow instance of {@link PreServiceFeeFundBatchesFilterWindow}
      */
-    WithdrawnFilteredBatchesWindow(IUsagesController controller, List<UsageBatch> batches,
-                                   WithdrawnBatchFilterWindow batchFilterWindow) {
+    PreServiceFeeFundFilteredBatchesWindow(IUsagesController controller, List<UsageBatch> batches,
+                                           PreServiceFeeFundBatchesFilterWindow batchesFilterWindow) {
         this.controller = controller;
-        this.batchFilterWindow = batchFilterWindow;
+        this.batchesFilterWindow = batchesFilterWindow;
         BigDecimal grossAmount = batches
             .stream()
             .map(UsageBatch::getGrossAmount)
@@ -101,13 +101,13 @@ class WithdrawnFilteredBatchesWindow extends Window {
     private HorizontalLayout createButtonsLayout(List<UsageBatch> batches, BigDecimal grossAmount) {
         Button exportButton = Buttons.createButton("Export");
         OnDemandFileDownloader fileDownloader = new OnDemandFileDownloader(
-            controller.getWithdrawnBatchesStreamSource(batches, grossAmount));
+            controller.getPreServiceFeeFundBatchesStreamSource(batches, grossAmount));
         fileDownloader.extend(exportButton);
         Button continueButton = Buttons.createButton("Continue");
         continueButton.addClickListener((ClickListener) event ->
             Windows.showModalWindow(new CreatePreServiceFeeFundWindow(controller,
                 batches.stream().map(UsageBatch::getId).collect(Collectors.toList()), grossAmount,
-                batchFilterWindow, this)));
+                batchesFilterWindow, this)));
         Button cancelButton = Buttons.createButton("Cancel");
         cancelButton.addClickListener(event -> this.close());
         return new HorizontalLayout(exportButton, continueButton, cancelButton);

@@ -123,10 +123,10 @@ public class UsageBatchServiceTest {
     }
 
     @Test
-    public void testGetWithdrawnUsageBatches() {
-        expect(usageBatchRepository.findWithdrawnUsageBatches()).andReturn(Collections.emptyList()).once();
+    public void testGetUsageBatchesForPreServiceFeeFunds() {
+        expect(usageBatchRepository.findUsageBatchesForPreServiceFeeFunds()).andReturn(Collections.emptyList()).once();
         replay(usageBatchRepository);
-        usageBatchService.getWithdrawnUsageBatches();
+        usageBatchService.getUsageBatchesForPreServiceFeeFunds();
         verify(usageBatchRepository);
     }
 

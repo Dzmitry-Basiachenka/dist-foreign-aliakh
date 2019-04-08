@@ -1023,7 +1023,7 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testAddWithdrawnUsagesToFundPool() {
+    public void testAddWithdrawnUsagesToPreServiceFeeFund() {
         List<String> usageIds = Collections.singletonList("4dd8cdf8-ca10-422e-bdd5-3220105e6379");
         List<Usage> usages = usageRepository.findByIds(usageIds);
         assertEquals(1, usages.size());
@@ -1032,7 +1032,7 @@ public class UsageRepositoryIntegrationTest {
         assertNull(usage.getFundPoolId());
         String fundPoolId = "3fef25b0-c0d1-4819-887f-4c6acc01390e";
         List<String> batchIds = Collections.singletonList("cb597f4e-f636-447f-8710-0436d8994d10");
-        usageRepository.addWithdrawnUsagesToFundPool(fundPoolId, batchIds, StoredEntity.DEFAULT_USER);
+        usageRepository.addWithdrawnUsagesToPreServiceFeeFund(fundPoolId, batchIds, StoredEntity.DEFAULT_USER);
         usages = usageRepository.findByIds(usageIds);
         assertEquals(1, usages.size());
         usage = usages.get(0);

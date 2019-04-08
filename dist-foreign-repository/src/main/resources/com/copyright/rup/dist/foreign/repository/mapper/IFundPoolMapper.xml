@@ -9,16 +9,19 @@
         <result property="name" column="name"/>
         <result property="amount" column="withdrawn_amount"/>
         <result property="comment" column="comment"/>
-        <result property="createUser" column="created_by_user"/>
     </resultMap>
+
+    <sql id="preServiceFeeFundColumns">
+        df_fund_pool_uid,
+        name,
+        withdrawn_amount,
+        comment,
+        <include refid="StoredEntityMapper.additionalColumns"/>
+    </sql>
 
     <insert id="insert" parameterType="PreServiceFeeFund">
         insert into ${schema}.df_fund_pool (
-            df_fund_pool_uid,
-            name,
-            withdrawn_amount,
-            comment,
-            <include refid="StoredEntityMapper.additionalColumns"/>
+            <include refid="preServiceFeeFundColumns"/>
         ) values (
             #{id},
             #{name},
@@ -30,21 +33,14 @@
 
     <select id="findById" resultMap="preServiceFeeFundResultMap" parameterType="string">
         select
-            df_fund_pool_uid,
-            name,
-            withdrawn_amount,
-            comment
+            <include refid="preServiceFeeFundColumns"/>
         from ${schema}.df_fund_pool
         where df_fund_pool_uid = #{fundPoolId}
     </select>
 
     <select id="findAll" resultMap="preServiceFeeFundResultMap">
         select
-            df_fund_pool_uid,
-            name,
-            withdrawn_amount,
-            comment,
-            created_by_user
+            <include refid="preServiceFeeFundColumns"/>
         from ${schema}.df_fund_pool
         order by updated_datetime desc
     </select>

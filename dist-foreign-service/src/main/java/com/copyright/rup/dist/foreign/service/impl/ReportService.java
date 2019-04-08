@@ -9,7 +9,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
-import com.copyright.rup.dist.foreign.service.impl.csv.WithdrawnBatchesCsvReportHandler;
+import com.copyright.rup.dist.foreign.service.impl.csv.PreServiceFeeFundBatchesCsvReportHandler;
 
 import org.apache.ibatis.executor.result.DefaultResultContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,20 +89,23 @@ public class ReportService implements IReportService {
     }
 
     @Override
-    public void writeWithdrawnBatchesCsvReport(List<UsageBatch> batches, BigDecimal grossAmount,
-                                               OutputStream outputStream) {
-        try (WithdrawnBatchesCsvReportHandler handler = new WithdrawnBatchesCsvReportHandler(outputStream)) {
+    public void writePreServiceFeeFundBatchesCsvReport(List<UsageBatch> batches, BigDecimal totalGrossAmount,
+                                                       OutputStream outputStream) {
+        try (PreServiceFeeFundBatchesCsvReportHandler handler =
+                 new PreServiceFeeFundBatchesCsvReportHandler(outputStream)) {
             batches.forEach(usageBatch -> {
-                DefaultResultContext<UsageBatch> context = new DefaultResultContext<>();
-                context.nextResultObject(usageBatch);
-                handler.handleResult(context);
+                handleUsageBatch(handler, usageBatch);
             });
             UsageBatch usageBatch = new UsageBatch();
             usageBatch.setName("Total");
-            usageBatch.setGrossAmount(grossAmount);
-            DefaultResultContext<UsageBatch> context = new DefaultResultContext<>();
-            context.nextResultObject(usageBatch);
-            handler.handleResult(context);
+            usageBatch.setGrossAmount(totalGrossAmount);
+            handleUsageBatch(handler, usageBatch);
         }
+    }
+
+    private void handleUsageBatch(PreServiceFeeFundBatchesCsvReportHandler handler, UsageBatch usageBatch) {
+        DefaultResultContext<UsageBatch> context = new DefaultResultContext<>();
+        context.nextResultObject(usageBatch);
+        handler.handleResult(context);
     }
 }

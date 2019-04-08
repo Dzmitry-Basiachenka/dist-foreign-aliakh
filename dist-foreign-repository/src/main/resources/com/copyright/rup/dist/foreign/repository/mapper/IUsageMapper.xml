@@ -1548,16 +1548,16 @@
         returning df_usage_uid
     </select>
 
-    <update id="addWithdrawnUsagesToFundPool" parameterType="map">
+    <update id="addWithdrawnUsagesToPreServiceFeeFund" parameterType="map">
         update ${schema}.df_usage
         set
-            status_ind = #{statusTo},
-            df_fund_pool_uid = #{fundPoolId},
+            status_ind = #{statusToSet},
+            df_fund_pool_uid = #{fundId},
             <include refid="StoredEntityMapper.update"/>
         where df_usage_batch_uid in
             <foreach collection="batchIds" item="batchId" separator="," open="(" close=")">
                 #{batchId}
             </foreach>
-            and status_ind = #{statusFrom}
+            and status_ind = #{statusToFind}
     </update>
 </mapper>
