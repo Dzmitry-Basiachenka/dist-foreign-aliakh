@@ -183,17 +183,7 @@ definitions:
         type: string
       totalCount:
         type: integer
-      loadedCount:
-        type: integer
-      loadedAmount:
-        type: number
-      loadedPercent:
-        type: number
-      createdCount:
-        type: integer
-      createdAmount:
-        type: number
-      createdPercent:
+      totalAmount:
         type: number
       matchedCount:
         type: integer

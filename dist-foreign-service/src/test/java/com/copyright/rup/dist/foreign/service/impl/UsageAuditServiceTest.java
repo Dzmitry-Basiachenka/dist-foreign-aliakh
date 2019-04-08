@@ -169,12 +169,7 @@ public class UsageAuditServiceTest {
         BatchStatistic statistic = new BatchStatistic();
         statistic.setBatchName(BATCH_NAME);
         statistic.setTotalCount(2);
-        statistic.setLoadedCount(2);
-        statistic.setLoadedAmount(new BigDecimal("1000.00"));
-        statistic.setLoadedPercent(new BigDecimal("100.00"));
-        statistic.setCreatedCount(0);
-        statistic.setCreatedAmount(AMOUNT_ZERO);
-        statistic.setCreatedPercent(AMOUNT_ZERO);
+        statistic.setTotalAmount(new BigDecimal("1000.00"));
         statistic.setMatchedCount(1);
         statistic.setMatchedAmount(new BigDecimal("500.00"));
         statistic.setMatchedPercent(new BigDecimal("50.00"));

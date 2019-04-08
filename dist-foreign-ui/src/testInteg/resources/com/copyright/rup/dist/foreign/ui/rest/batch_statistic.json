@@ -4,12 +4,7 @@
     {
       "batchName": "testBatchName",
       "totalCount": 2,
-      "loadedCount": 2,
-      "loadedAmount": 1000.00,
-      "loadedPercent": 100.00,
-      "createdCount": 0,
-      "createdAmount": 0.00,
-      "createdPercent": 0.00,
+      "totalAmount": 1000.00,
       "matchedCount": 1,
       "matchedAmount": 500.00,
       "matchedPercent": 50.00,

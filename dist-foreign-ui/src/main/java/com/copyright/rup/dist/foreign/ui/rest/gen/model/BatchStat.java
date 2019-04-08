@@ -39,53 +39,13 @@ public class BatchStat   {
 
     private Integer totalCount = null;
 
-    @JsonProperty("loadedCount")
-    
-
-
-
-
-    private Integer loadedCount = null;
-
-    @JsonProperty("loadedAmount")
+    @JsonProperty("totalAmount")
     
 @Valid
 
 
 
-    private BigDecimal loadedAmount = null;
-
-    @JsonProperty("loadedPercent")
-    
-@Valid
-
-
-
-    private BigDecimal loadedPercent = null;
-
-    @JsonProperty("createdCount")
-    
-
-
-
-
-    private Integer createdCount = null;
-
-    @JsonProperty("createdAmount")
-    
-@Valid
-
-
-
-    private BigDecimal createdAmount = null;
-
-    @JsonProperty("createdPercent")
-    
-@Valid
-
-
-
-    private BigDecimal createdPercent = null;
+    private BigDecimal totalAmount = null;
 
     @JsonProperty("matchedCount")
     
@@ -347,135 +307,25 @@ public class BatchStat   {
         }
     }
 
-    public BatchStat loadedCount(Integer loadedCount) {
-        this.loadedCount = loadedCount;
+    public BatchStat totalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
         return this;
     }
 
      /**
-     * Get loadedCount
-     * @return loadedCount
+     * Get totalAmount
+     * @return totalAmount
     **/
     @ApiModelProperty(value = "")
-    public Integer getLoadedCount() {
-        return loadedCount;
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
     }
 
-    public void setLoadedCount(Integer loadedCount) {
-        if(loadedCount == null) {
-            this.loadedCount = null;
+    public void setTotalAmount(BigDecimal totalAmount) {
+        if(totalAmount == null) {
+            this.totalAmount = null;
         } else {
-            this.loadedCount = loadedCount;
-        }
-    }
-
-    public BatchStat loadedAmount(BigDecimal loadedAmount) {
-        this.loadedAmount = loadedAmount;
-        return this;
-    }
-
-     /**
-     * Get loadedAmount
-     * @return loadedAmount
-    **/
-    @ApiModelProperty(value = "")
-    public BigDecimal getLoadedAmount() {
-        return loadedAmount;
-    }
-
-    public void setLoadedAmount(BigDecimal loadedAmount) {
-        if(loadedAmount == null) {
-            this.loadedAmount = null;
-        } else {
-            this.loadedAmount = loadedAmount;
-        }
-    }
-
-    public BatchStat loadedPercent(BigDecimal loadedPercent) {
-        this.loadedPercent = loadedPercent;
-        return this;
-    }
-
-     /**
-     * Get loadedPercent
-     * @return loadedPercent
-    **/
-    @ApiModelProperty(value = "")
-    public BigDecimal getLoadedPercent() {
-        return loadedPercent;
-    }
-
-    public void setLoadedPercent(BigDecimal loadedPercent) {
-        if(loadedPercent == null) {
-            this.loadedPercent = null;
-        } else {
-            this.loadedPercent = loadedPercent;
-        }
-    }
-
-    public BatchStat createdCount(Integer createdCount) {
-        this.createdCount = createdCount;
-        return this;
-    }
-
-     /**
-     * Get createdCount
-     * @return createdCount
-    **/
-    @ApiModelProperty(value = "")
-    public Integer getCreatedCount() {
-        return createdCount;
-    }
-
-    public void setCreatedCount(Integer createdCount) {
-        if(createdCount == null) {
-            this.createdCount = null;
-        } else {
-            this.createdCount = createdCount;
-        }
-    }
-
-    public BatchStat createdAmount(BigDecimal createdAmount) {
-        this.createdAmount = createdAmount;
-        return this;
-    }
-
-     /**
-     * Get createdAmount
-     * @return createdAmount
-    **/
-    @ApiModelProperty(value = "")
-    public BigDecimal getCreatedAmount() {
-        return createdAmount;
-    }
-
-    public void setCreatedAmount(BigDecimal createdAmount) {
-        if(createdAmount == null) {
-            this.createdAmount = null;
-        } else {
-            this.createdAmount = createdAmount;
-        }
-    }
-
-    public BatchStat createdPercent(BigDecimal createdPercent) {
-        this.createdPercent = createdPercent;
-        return this;
-    }
-
-     /**
-     * Get createdPercent
-     * @return createdPercent
-    **/
-    @ApiModelProperty(value = "")
-    public BigDecimal getCreatedPercent() {
-        return createdPercent;
-    }
-
-    public void setCreatedPercent(BigDecimal createdPercent) {
-        if(createdPercent == null) {
-            this.createdPercent = null;
-        } else {
-            this.createdPercent = createdPercent;
+            this.totalAmount = totalAmount;
         }
     }
 
@@ -1085,12 +935,7 @@ public class BatchStat   {
         BatchStat batchStat = (BatchStat) o;
         return Objects.equals(this.batchName, batchStat.batchName) &&
                 Objects.equals(this.totalCount, batchStat.totalCount) &&
-                Objects.equals(this.loadedCount, batchStat.loadedCount) &&
-                Objects.equals(this.loadedAmount, batchStat.loadedAmount) &&
-                Objects.equals(this.loadedPercent, batchStat.loadedPercent) &&
-                Objects.equals(this.createdCount, batchStat.createdCount) &&
-                Objects.equals(this.createdAmount, batchStat.createdAmount) &&
-                Objects.equals(this.createdPercent, batchStat.createdPercent) &&
+                Objects.equals(this.totalAmount, batchStat.totalAmount) &&
                 Objects.equals(this.matchedCount, batchStat.matchedCount) &&
                 Objects.equals(this.matchedAmount, batchStat.matchedAmount) &&
                 Objects.equals(this.matchedPercent, batchStat.matchedPercent) &&
@@ -1122,7 +967,7 @@ public class BatchStat   {
 
     @Override
     public int hashCode() {
-        return Objects.hash(batchName, totalCount, loadedCount, loadedAmount, loadedPercent, createdCount, createdAmount, createdPercent, matchedCount, matchedAmount, matchedPercent, worksNotFoundCount, worksNotFoundAmount, worksNotFoundPercent, multipleMatchingCount, multipleMatchingAmount, multipleMatchingPercent, ntsWithdrawnCount, ntsWithdrawnAmount, ntsWithdrawnPercent, rhNotFoundCount, rhNotFoundAmount, rhNotFoundPercent, rhFoundCount, rhFoundAmount, rhFoundPercent, eligibleCount, eligibleAmount, eligiblePercent, sendForRaCount, sendForRaAmount, sendForRaPercent, paidCount, paidAmount, paidPercent);
+        return Objects.hash(batchName, totalCount, totalAmount, matchedCount, matchedAmount, matchedPercent, worksNotFoundCount, worksNotFoundAmount, worksNotFoundPercent, multipleMatchingCount, multipleMatchingAmount, multipleMatchingPercent, ntsWithdrawnCount, ntsWithdrawnAmount, ntsWithdrawnPercent, rhNotFoundCount, rhNotFoundAmount, rhNotFoundPercent, rhFoundCount, rhFoundAmount, rhFoundPercent, eligibleCount, eligibleAmount, eligiblePercent, sendForRaCount, sendForRaAmount, sendForRaPercent, paidCount, paidAmount, paidPercent);
     }
 
     @Override
@@ -1132,12 +977,7 @@ public class BatchStat   {
         
         sb.append("        batchName: ").append(toIndentedString(batchName)).append("\n");
         sb.append("        totalCount: ").append(toIndentedString(totalCount)).append("\n");
-        sb.append("        loadedCount: ").append(toIndentedString(loadedCount)).append("\n");
-        sb.append("        loadedAmount: ").append(toIndentedString(loadedAmount)).append("\n");
-        sb.append("        loadedPercent: ").append(toIndentedString(loadedPercent)).append("\n");
-        sb.append("        createdCount: ").append(toIndentedString(createdCount)).append("\n");
-        sb.append("        createdAmount: ").append(toIndentedString(createdAmount)).append("\n");
-        sb.append("        createdPercent: ").append(toIndentedString(createdPercent)).append("\n");
+        sb.append("        totalAmount: ").append(toIndentedString(totalAmount)).append("\n");
         sb.append("        matchedCount: ").append(toIndentedString(matchedCount)).append("\n");
         sb.append("        matchedAmount: ").append(toIndentedString(matchedAmount)).append("\n");
         sb.append("        matchedPercent: ").append(toIndentedString(matchedPercent)).append("\n");
