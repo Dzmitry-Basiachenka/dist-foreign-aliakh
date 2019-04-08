@@ -513,7 +513,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     public List<String> insertNtsUsages(UsageBatch usageBatch, String userName) {
         Objects.requireNonNull(usageBatch);
         Objects.requireNonNull(usageBatch.getFundPool());
-        Map<String, Object> params = Maps.newHashMapWithExpectedSize(8);
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(13);
         params.put(BATCH_ID_KEY, Objects.requireNonNull(usageBatch.getId()));
         params.put("marketPeriodFrom", Objects.requireNonNull(usageBatch.getFundPool().getFundPoolPeriodFrom()));
         params.put("marketPeriodTo", Objects.requireNonNull(usageBatch.getFundPool().getFundPoolPeriodTo()));
@@ -522,37 +522,13 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         params.put("createUser", Objects.requireNonNull(userName));
         params.put("updateUser", Objects.requireNonNull(userName));
         params.put("excludeClassification", FdaConstants.BELLETRISTIC_CLASSIFICATION);
+        params.put("fundPoolPeriodDividend", Objects.requireNonNull(usageBatch.getFundPool()).getFundPoolPeriodTo() -
+            usageBatch.getFundPool().getFundPoolPeriodFrom() + 1);
+        params.put("stmMinAmount", usageBatch.getFundPool().getStmMinimumAmount());
+        params.put("stmAmount", usageBatch.getFundPool().getStmAmount());
+        params.put("nonStmMinAmount", usageBatch.getFundPool().getNonStmMinimumAmount());
+        params.put("nonStmAmount", usageBatch.getFundPool().getNonStmAmount());
         return selectList("IUsageMapper.insertNtsUsages", params);
-    }
-
-    @Override
-    public BigDecimal getCutoffAmountByBatchIdAndClassification(UsageBatch usageBatch, String classification) {
-        Map<String, Object> params = Maps.newHashMapWithExpectedSize(5);
-        params.put(BATCH_ID_KEY, Objects.requireNonNull(usageBatch).getId());
-        params.put("fundPoolPeriodDividend", Objects.requireNonNull(usageBatch.getFundPool()).getFundPoolPeriodTo() -
-            usageBatch.getFundPool().getFundPoolPeriodFrom() + 1);
-        params.put("classification", Objects.requireNonNull(classification));
-        if (FdaConstants.STM_CLASSIFICATION.equals(Objects.requireNonNull(classification))) {
-            params.put("fundPoolMinAmount", usageBatch.getFundPool().getStmMinimumAmount());
-            params.put("fundPoolAmount", usageBatch.getFundPool().getStmAmount());
-        } else {
-            params.put("fundPoolMinAmount", usageBatch.getFundPool().getNonStmMinimumAmount());
-            params.put("fundPoolAmount", usageBatch.getFundPool().getNonStmAmount());
-        }
-        return selectOne("IUsageMapper.getCutoffAmountByBatchIdAndClassification", params);
-    }
-
-    @Override
-    public List<String> deleteUnderMinimumCutoffAmountUsagesByBatchId(UsageBatch usageBatch, BigDecimal stmCutoffAmount,
-                                                                      BigDecimal nonStmCutoffAmount) {
-        Map<String, Object> params = Maps.newHashMapWithExpectedSize(5);
-        params.put(BATCH_ID_KEY, Objects.requireNonNull(usageBatch).getId());
-        params.put("fundPoolPeriodDividend", Objects.requireNonNull(usageBatch.getFundPool()).getFundPoolPeriodTo() -
-            usageBatch.getFundPool().getFundPoolPeriodFrom() + 1);
-        params.put("stmCutoffAmount", Objects.requireNonNull(stmCutoffAmount));
-        params.put("nonStmCutoffAmount", Objects.requireNonNull(nonStmCutoffAmount));
-        params.put("unclassifiedCutoffAmount", stmCutoffAmount.min(nonStmCutoffAmount));
-        return selectList("IUsageMapper.deleteUnderMinimumCutoffAmountUsagesByBatchId", params);
     }
 
     @Override

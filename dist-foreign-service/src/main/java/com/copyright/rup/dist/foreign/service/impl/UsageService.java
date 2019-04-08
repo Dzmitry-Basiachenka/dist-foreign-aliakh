@@ -80,8 +80,6 @@ public class UsageService implements IUsageService {
         "ArchivedUsagesCount={}, ArchivedScenariosCount={}, NotReportedUsageIds={}";
     private static final String UPDATE_PAID_NOT_FOUND_WARN_LOG_MESSAGE = "Update paid information. Not found usages. " +
         "UsagesCount={}, CreatedCount={}, UpdatedCount={}, NotFoundUsageIds={}";
-    private static final String EXCLUDE_UNDER_MINIMUM_FINISHED_LOG_MESSAGE = "Exclude usages under minimum. " +
-        "Finished. UsageBatchName={}, UsagesCount={}, ExcludedUsagesCount={}, StmCutoff={}, NonStmCutoff={}";
     private static final Logger LOGGER = RupLogUtils.getLogger();
     @Value("$RUP{dist.foreign.service_fee.cla_payee}")
     private BigDecimal claPayeeServiceFee;
@@ -160,18 +158,6 @@ public class UsageService implements IUsageService {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Insert NTS usages. Started. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
         List<String> usageIds = usageRepository.insertNtsUsages(usageBatch, userName);
-        BigDecimal stmCutoffAmount =
-            usageRepository.getCutoffAmountByBatchIdAndClassification(usageBatch, FdaConstants.STM_CLASSIFICATION);
-        BigDecimal nonStmCutoffAmount =
-            usageRepository.getCutoffAmountByBatchIdAndClassification(usageBatch, FdaConstants.NON_STM_CLASSIFICATION);
-        LOGGER.info(
-            "Exclude usages under minimum. Started. UsageBatchName={}, UsagesCount={}, StmCutoff={}, NonStmCutoff={}",
-                usageBatch.getName(), LogUtils.size(usageIds), stmCutoffAmount, nonStmCutoffAmount);
-        List<String> excludedUsageIds = usageRepository.deleteUnderMinimumCutoffAmountUsagesByBatchId(usageBatch,
-            stmCutoffAmount, nonStmCutoffAmount);
-        LOGGER.info(EXCLUDE_UNDER_MINIMUM_FINISHED_LOG_MESSAGE, usageBatch.getName(), LogUtils.size(usageIds),
-            LogUtils.size(excludedUsageIds), stmCutoffAmount, nonStmCutoffAmount);
-        usageIds.removeAll(excludedUsageIds);
         LOGGER.info("Insert NTS usages. Finished. UsageBatchName={}, UserName={}, InsertedUsageCount={}",
             usageBatch.getName(), userName, LogUtils.size(usageIds));
         return usageIds;
