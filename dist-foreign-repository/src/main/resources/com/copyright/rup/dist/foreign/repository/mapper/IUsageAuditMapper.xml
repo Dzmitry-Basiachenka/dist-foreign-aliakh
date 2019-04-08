@@ -14,12 +14,7 @@
     <resultMap id="batchStatisticResultMap" type="BatchStatistic">
         <result property="batchName" column="batch_name"/>
         <result property="totalCount" column="total_count"/>
-        <result property="loadedCount" column="loaded_count"/>
-        <result property="loadedAmount" column="loaded_sum"/>
-        <result property="loadedPercent" column="loaded_percent"/>
-        <result property="createdCount" column="created_count"/>
-        <result property="createdAmount" column="created_sum"/>
-        <result property="createdPercent" column="created_percent"/>
+        <result property="totalAmount" column="total_amount"/>
         <result property="matchedCount" column="matched_count"/>
         <result property="matchedAmount" column="matched_sum"/>
         <result property="matchedPercent" column="matched_percent"/>
@@ -113,8 +108,6 @@
     <select id="findBatchesStatistic" parameterType="map" resultMap="batchStatisticResultMap">
         select
             *,
-            case when (total_count != 0) then round((100 * loaded_count / total_count)::numeric, 2) else 0.00 end loaded_percent,
-            case when (total_count != 0) then round((100 * created_count / total_count)::numeric, 2) else 0.00 end created_percent,
             case when (total_count != 0) then round((100 * matched_count / total_count)::numeric, 2) else 0.00 end matched_percent,
             case when (total_count != 0) then round((100 * nts_withdrawn_count / total_count)::numeric, 2) else 0.00 end nts_withdrawn_percent,
             case when (total_count != 0) then round((100 * work_not_found_count / total_count)::numeric, 2) else 0.00 end work_not_found_percent,
@@ -128,10 +121,7 @@
             select
                 nested.batch_name,
                 max(total_count1) + max(total_count2) total_count,
-                sum(nested.loaded_count) loaded_count,
-                round(sum(nested.loaded_sum), 2) loaded_sum,
-                sum(nested.created_count) created_count,
-                round(sum(nested.created_sum), 2) created_sum,
+                round(max(total_amount1) + max(total_amount2)::numeric, 2) total_amount,
                 sum(nested.work_found_count) matched_count,
                 round(sum(nested.work_found_sum), 2) matched_sum,
                 sum(nested.nts_withdrawn_count) nts_withdrawn_count,
@@ -155,10 +145,8 @@
                     nested.batch_name,
                     min(total_count1) total_count1,
                     min(total_count2) total_count2,
-                    case when (sum(nested.loaded_count) != 0) then nested.amount else 0 end loaded_sum,
-                    sum(nested.loaded_count) loaded_count,
-                    case when (sum(nested.created_count) != 0) then nested.amount else 0 end created_sum,
-                    sum(nested.created_count) created_count,
+                    min(total_amount1) total_amount1,
+                    min(total_amount2) total_amount2,
                     case when (sum(nested.nts_withdrawn_count) != 0) then nested.amount else 0 end nts_withdrawn_sum,
                     sum(nested.nts_withdrawn_count) nts_withdrawn_count,
                     case when (sum(nested.work_found_count) != 0) then nested.amount else 0 end work_found_sum,
@@ -181,6 +169,8 @@
                     select
                         (select count(u) from ${schema}.df_usage u where u.df_usage_batch_uid = min(ub.df_usage_batch_uid)) total_count1,
                         0 total_count2,
+                        (select sum(u.gross_amount) from ${schema}.df_usage u where u.df_usage_batch_uid = min(ub.df_usage_batch_uid)) total_amount1,
+                        0 total_amount2,
                         <include refid="batchStatisticColumns"/>
                     from ${schema}.df_usage_audit audit
                     left join ${schema}.df_usage u on audit.df_usage_uid = u.df_usage_uid
@@ -190,6 +180,8 @@
                     select
                         0 total_count1,
                         (select count(u) from ${schema}.df_usage_archive u where u.df_usage_batch_uid = min(ub.df_usage_batch_uid)) total_count2,
+                        0 total_amount1,
+                        (select sum(u.gross_amount) from ${schema}.df_usage_archive u where u.df_usage_batch_uid = min(ub.df_usage_batch_uid)) total_amount2,
                         <include refid="batchStatisticColumns"/>
                     from ${schema}.df_usage_audit audit
                     left join ${schema}.df_usage_archive u on audit.df_usage_uid = u.df_usage_archive_uid
@@ -199,7 +191,7 @@
                 group by nested.batch_name, nested.amount
             ) nested
             <if test="null != dateTo || null != dateFrom">
-                where (loaded_count + created_count + nts_withdrawn_count + work_found_count + work_not_found_count +
+                where (nts_withdrawn_count + work_found_count + work_not_found_count +
                     multiple_matching_count + rh_found_count + rh_not_found_count + eligible_count + send_for_ra_count +
                     paid_count) > 0
             </if>
@@ -211,8 +203,6 @@
     <sql id="batchStatisticColumns">
         ub.name as batch_name,
         sum(u.gross_amount) amount,
-        case when (audit.action_type_ind = 'LOADED' <include refid="actionTypeDateClause"/>) then count(1) else 0 end loaded_count,
-        case when (audit.action_type_ind = 'CREATED' <include refid="actionTypeDateClause"/>) then count(1) else 0 end created_count,
         case when (audit.action_type_ind = 'ELIGIBLE_FOR_NTS' <include refid="actionTypeDateClause"/>) then count(1) else 0 end nts_withdrawn_count,
         case when (audit.action_type_ind = 'WORK_FOUND' <include refid="actionTypeDateClause"/>) then count(1) else 0 end work_found_count,
         case when (audit.action_type_ind = 'WORK_NOT_FOUND' <include refid="actionTypeDateClause"/>) then count(1) else 0 end work_not_found_count,

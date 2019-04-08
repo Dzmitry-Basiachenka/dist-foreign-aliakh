@@ -173,12 +173,7 @@ public class UsageAuditRepositoryIntegrationTest {
         assertNotNull(statistic);
         assertEquals("FAS batch statistic", statistic.getBatchName());
         assertEquals(10, statistic.getTotalCount());
-        assertEquals(10, statistic.getLoadedCount());
-        assertEquals(new BigDecimal("995.00"), statistic.getLoadedAmount());
-        assertEquals(new BigDecimal("100.00"), statistic.getLoadedPercent());
-        assertEquals(0, statistic.getCreatedCount());
-        assertEquals(AMOUNT_ZERO, statistic.getCreatedAmount());
-        assertEquals(AMOUNT_ZERO, statistic.getCreatedPercent());
+        assertEquals(new BigDecimal("995.00"), statistic.getTotalAmount());
         assertEquals(2, statistic.getMatchedCount());
         assertEquals(new BigDecimal("190.00"), statistic.getMatchedAmount());
         assertEquals(new BigDecimal("20.00"), statistic.getMatchedPercent());
@@ -209,12 +204,7 @@ public class UsageAuditRepositoryIntegrationTest {
         assertNotNull(statistic);
         assertEquals("NTS batch statistic", statistic.getBatchName());
         assertEquals(10, statistic.getTotalCount());
-        assertEquals(0, statistic.getLoadedCount());
-        assertEquals(AMOUNT_ZERO, statistic.getLoadedAmount());
-        assertEquals(AMOUNT_ZERO, statistic.getLoadedPercent());
-        assertEquals(10, statistic.getCreatedCount());
-        assertEquals(new BigDecimal("995.00"), statistic.getCreatedAmount());
-        assertEquals(new BigDecimal("100.00"), statistic.getCreatedPercent());
+        assertEquals(new BigDecimal("995.00"), statistic.getTotalAmount());
         assertEquals(0, statistic.getMatchedCount());
         assertEquals(AMOUNT_ZERO, statistic.getMatchedAmount());
         assertEquals(AMOUNT_ZERO, statistic.getMatchedPercent());
