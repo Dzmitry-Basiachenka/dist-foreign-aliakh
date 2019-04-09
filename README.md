@@ -1,3 +1,9 @@
+5.1.13
+-
+* B-48760 FDA: Create NTS Pre-service fee additional fund pool from NTS withdrawn details: make changes based on comments in CR-DIST-FOREIGN-99
+* B-49463 Tech Debt: FDA: move default 18.5% service fee from df_rro_estimated_service_fee_percentage to rup-env.property
+* CDP-708 FDA: NTS WD Status and Undistributed liability report don't agree
+
 5.1.12
 -
 * B-46739 FDA: Remove NTS titles that do not meet the minimum from the fund pool batch: adjust service logic for excluding usages that do not meet fund pool minimum
