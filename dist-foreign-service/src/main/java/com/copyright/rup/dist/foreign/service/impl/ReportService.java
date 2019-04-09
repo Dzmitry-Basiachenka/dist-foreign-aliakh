@@ -13,6 +13,7 @@ import com.copyright.rup.dist.foreign.service.impl.csv.PreServiceFeeFundBatchesC
 
 import org.apache.ibatis.executor.result.DefaultResultContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.OutputStream;
@@ -41,6 +42,9 @@ public class ReportService implements IReportService {
     @Autowired
     private IUsageService usageService;
 
+    @Value("$RUP{dist.foreign.rro.default_estimated_service_fee}")
+    private BigDecimal defaultEstimatedServiceFee;
+
     @Override
     public void writeUsageCsvReport(UsageFilter filter, PipedOutputStream pipedOutputStream) {
         usageRepository.writeUsagesCsvReport(filter, pipedOutputStream);
@@ -62,7 +66,7 @@ public class ReportService implements IReportService {
 
     @Override
     public void writeUndistributedLiabilitiesCsvReport(LocalDate paymentDate, OutputStream outputStream) {
-        usageRepository.writeUndistributedLiabilitiesCsvReport(paymentDate, outputStream);
+        usageRepository.writeUndistributedLiabilitiesCsvReport(paymentDate, outputStream, defaultEstimatedServiceFee);
     }
 
     @Override
@@ -79,7 +83,7 @@ public class ReportService implements IReportService {
     public void writeServiceFeeTrueUpCsvReport(LocalDate fromDate, LocalDate toDate, LocalDate paymentDateTo,
                                                OutputStream outputStream) {
         usageRepository.writeServiceFeeTrueUpCsvReport(fromDate, toDate, paymentDateTo, outputStream,
-            usageService.getClaAccountNumber());
+            usageService.getClaAccountNumber(), defaultEstimatedServiceFee);
     }
 
     @Override

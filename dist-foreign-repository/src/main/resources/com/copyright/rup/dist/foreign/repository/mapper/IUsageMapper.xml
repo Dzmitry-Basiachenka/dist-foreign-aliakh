@@ -1274,7 +1274,7 @@
                 batch.rro_account_number,
                 batch.payment_date,
                 coalesce(sum(u.gross_amount), 0) usages_gross_amount,
-                coalesce(fee.estimated_service_fee, 0.00000) estimated_service_fee,
+                coalesce(fee.estimated_service_fee, #{defaultEstimatedServiceFee}) estimated_service_fee,
                 coalesce(sum(u.withdrawn_gross_amount), 0) withdrawn_gross_amount
             from ${schema}.df_usage_batch batch
             left join ${schema}.df_rro_estimated_service_fee_percentage fee on fee.rro_account_number = batch.rro_account_number
@@ -1388,14 +1388,14 @@
             nestedReport.service_fee_amount_sent_to_lm,
             coalesce(nestedReport.service_fee_amount_sent_to_lm / nestedReport.gross_amount_sent_to_lm, 0) service_fee_sent_to_lm,
             nestedReport.net_amount_sent_to_lm,
-            coalesce(nestedReport.gross_amount_sent_to_lm * fee.estimated_service_fee, 0) estimated_service_fee_amount_sent_to_lm,
-            coalesce(fee.estimated_service_fee, 0) estimated_service_fee,
-            coalesce(nestedReport.gross_amount_sent_to_lm * fee.estimated_service_fee, 0) - service_fee_amount_sent_to_lm service_fee_true_up,
+            nestedReport.gross_amount_sent_to_lm * coalesce(fee.estimated_service_fee, #{defaultEstimatedServiceFee}) estimated_service_fee_amount_sent_to_lm,
+            coalesce(fee.estimated_service_fee, #{defaultEstimatedServiceFee}) estimated_service_fee,
+            nestedReport.gross_amount_sent_to_lm * coalesce(fee.estimated_service_fee, #{defaultEstimatedServiceFee}) - service_fee_amount_sent_to_lm service_fee_true_up,
             nestedReport.gross_amount_return_to_cla,
-            coalesce(nestedReport.gross_amount_return_to_cla * fee.estimated_service_fee, 0) estimated_service_fee_amount_return_to_cla,
+            nestedReport.gross_amount_return_to_cla * coalesce(fee.estimated_service_fee, #{defaultEstimatedServiceFee}) estimated_service_fee_amount_return_to_cla,
             nestedReport.service_fee_amount_return_to_cla,
             nestedReport.net_amount_return_to_cla,
-            coalesce(nestedReport.gross_amount_return_to_cla * fee.estimated_service_fee, 0) - nestedReport.service_fee_amount_return_to_cla service_fee_true_up_return_to_cla
+            nestedReport.gross_amount_return_to_cla * coalesce(fee.estimated_service_fee, #{defaultEstimatedServiceFee}) - nestedReport.service_fee_amount_return_to_cla service_fee_true_up_return_to_cla
         from
             (select
                 nestedReport2.rro_account_number,

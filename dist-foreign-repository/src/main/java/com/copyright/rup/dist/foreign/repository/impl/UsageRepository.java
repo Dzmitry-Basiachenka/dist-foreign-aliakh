@@ -450,11 +450,13 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public void writeUndistributedLiabilitiesCsvReport(LocalDate paymentDate, OutputStream outputStream) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+    public void writeUndistributedLiabilitiesCsvReport(LocalDate paymentDate, OutputStream outputStream,
+                                                       BigDecimal defaultEstimatedServiceFee) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(3);
         parameters.put("paymentDate", Objects.requireNonNull(paymentDate));
         parameters.put("withdrawnStatuses",
             Arrays.asList(UsageStatusEnum.NTS_WITHDRAWN, UsageStatusEnum.TO_BE_DISTRIBUTED));
+        parameters.put("defaultEstimatedServiceFee", Objects.requireNonNull(defaultEstimatedServiceFee));
         try (UndistributedLiabilitiesReportHandler handler =
                  new UndistributedLiabilitiesReportHandler(Objects.requireNonNull(outputStream))) {
             getTemplate().select("IUsageMapper.findUndistributedLiabilitiesReportDtos", parameters, handler);
@@ -463,10 +465,11 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
 
     @Override
     public void writeServiceFeeTrueUpCsvReport(LocalDate fromDate, LocalDate toDate, LocalDate paymentDateTo,
-                                               OutputStream outputStream, Long claAccountNumber) {
+                                               OutputStream outputStream, Long claAccountNumber,
+                                               BigDecimal defaultEstimatedServiceFee) {
         try (ServiceFeeTrueUpReportHandler handler =
                  new ServiceFeeTrueUpReportHandler(Objects.requireNonNull(outputStream))) {
-            Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(7);
+            Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(8);
             parameters.put("paymentDateTo", Objects.requireNonNull(paymentDateTo));
             parameters.put("fromDate", Objects.requireNonNull(fromDate));
             parameters.put("toDate", Objects.requireNonNull(toDate));
@@ -474,6 +477,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
             parameters.put("accountNumberClaFas", claAccountNumber);
             parameters.put("action", ScenarioActionTypeEnum.SENT_TO_LM);
             parameters.put(STATUS_KEY, UsageStatusEnum.SENT_TO_LM);
+            parameters.put("defaultEstimatedServiceFee", Objects.requireNonNull(defaultEstimatedServiceFee));
             getTemplate().select("IUsageMapper.findServiceFeeTrueUpReportDtos", parameters, handler);
         }
     }
