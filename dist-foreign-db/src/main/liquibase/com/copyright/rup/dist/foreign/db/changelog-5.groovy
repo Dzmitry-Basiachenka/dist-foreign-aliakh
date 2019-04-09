@@ -338,4 +338,129 @@ databaseChangeLog {
             sql("alter table ${dbAppsSchema}.df_fund_pool rename constraint pk_df_fund_pool to df_fund_pool_pk")
         }
     }
+
+    changeSet(id: '2019-04-08-00', author: 'Uladzislau Shalamitski<ushalamitski@copyright.com>') {
+        comment('B-49463 FDA: Tech Debt: remove records from df_rro_estimated_service_fee_percentage with 18.5% estimated_service_fee')
+
+        delete(schemaName: dbAppsSchema, tableName: 'df_rro_estimated_service_fee_percentage') {
+            where "estimated_service_fee = 0.18500"
+        }
+
+        rollback {
+            insert(schemaName: dbAppsSchema, tableName: 'df_rro_estimated_service_fee_percentage') {
+                column(name: 'rro_account_number', value: '2000017005')
+                column(name: 'estimated_service_fee', value: '0.18500')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_rro_estimated_service_fee_percentage') {
+                column(name: 'rro_account_number', value: '2000128767')
+                column(name: 'estimated_service_fee', value: '0.18500')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_rro_estimated_service_fee_percentage') {
+                column(name: 'rro_account_number', value: '7001438813')
+                column(name: 'estimated_service_fee', value: '0.18500')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_rro_estimated_service_fee_percentage') {
+                column(name: 'rro_account_number', value: '7000676925')
+                column(name: 'estimated_service_fee', value: '0.18500')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_rro_estimated_service_fee_percentage') {
+                column(name: 'rro_account_number', value: '2000045828')
+                column(name: 'estimated_service_fee', value: '0.18500')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_rro_estimated_service_fee_percentage') {
+                column(name: 'rro_account_number', value: '7000582241')
+                column(name: 'estimated_service_fee', value: '0.18500')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_rro_estimated_service_fee_percentage') {
+                column(name: 'rro_account_number', value: '2000017003')
+                column(name: 'estimated_service_fee', value: '0.18500')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_rro_estimated_service_fee_percentage') {
+                column(name: 'rro_account_number', value: '7000478504')
+                column(name: 'estimated_service_fee', value: '0.18500')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_rro_estimated_service_fee_percentage') {
+                column(name: 'rro_account_number', value: '7001498587')
+                column(name: 'estimated_service_fee', value: '0.18500')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_rro_estimated_service_fee_percentage') {
+                column(name: 'rro_account_number', value: '7000800336')
+                column(name: 'estimated_service_fee', value: '0.18500')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_rro_estimated_service_fee_percentage') {
+                column(name: 'rro_account_number', value: '2000046269')
+                column(name: 'estimated_service_fee', value: '0.18500')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_rro_estimated_service_fee_percentage') {
+                column(name: 'rro_account_number', value: '2000017002')
+                column(name: 'estimated_service_fee', value: '0.18500')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_rro_estimated_service_fee_percentage') {
+                column(name: 'rro_account_number', value: '7000340130')
+                column(name: 'estimated_service_fee', value: '0.18500')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_rro_estimated_service_fee_percentage') {
+                column(name: 'rro_account_number', value: '7000849816')
+                column(name: 'estimated_service_fee', value: '0.18500')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_rro_estimated_service_fee_percentage') {
+                column(name: 'rro_account_number', value: '2000073833')
+                column(name: 'estimated_service_fee', value: '0.18500')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_rro_estimated_service_fee_percentage') {
+                column(name: 'rro_account_number', value: '7001298418')
+                column(name: 'estimated_service_fee', value: '0.18500')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_rro_estimated_service_fee_percentage') {
+                column(name: 'rro_account_number', value: '2000072783')
+                column(name: 'estimated_service_fee', value: '0.18500')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_rro_estimated_service_fee_percentage') {
+                column(name: 'rro_account_number', value: '7001726973')
+                column(name: 'estimated_service_fee', value: '0.18500')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_rro_estimated_service_fee_percentage') {
+                column(name: 'rro_account_number', value: '2000017007')
+                column(name: 'estimated_service_fee', value: '0.18500')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_rro_estimated_service_fee_percentage') {
+                column(name: 'rro_account_number', value: '7000896777')
+                column(name: 'estimated_service_fee', value: '0.18500')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_rro_estimated_service_fee_percentage') {
+                column(name: 'rro_account_number', value: '2000017001')
+                column(name: 'estimated_service_fee', value: '0.18500')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_rro_estimated_service_fee_percentage') {
+                column(name: 'rro_account_number', value: '2000108983')
+                column(name: 'estimated_service_fee', value: '0.18500')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_rro_estimated_service_fee_percentage') {
+                column(name: 'rro_account_number', value: '7000813806')
+                column(name: 'estimated_service_fee', value: '0.18500')
+            }
+        }
+    }
 }

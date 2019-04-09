@@ -402,22 +402,26 @@ public interface IUsageRepository {
     /**
      * Writes Undistributed Liabilities Reconciliation Report into the output stream in csv format.
      *
-     * @param paymentDate  payment date
-     * @param outputStream instance of {@link OutputStream}
+     * @param paymentDate                payment date
+     * @param outputStream               instance of {@link OutputStream}
+     * @param defaultEstimatedServiceFee default estimated service fee
      */
-    void writeUndistributedLiabilitiesCsvReport(LocalDate paymentDate, OutputStream outputStream);
+    void writeUndistributedLiabilitiesCsvReport(LocalDate paymentDate, OutputStream outputStream,
+                                                BigDecimal defaultEstimatedServiceFee);
 
     /**
      * Writes Service Fee True-up Report into the output stream in csv format.
      *
-     * @param fromDate         from date
-     * @param toDate           to date
-     * @param paymentDateTo    payment date to
-     * @param outputStream     instance of {@link OutputStream}
-     * @param claAccountNumber CLA account number
+     * @param fromDate                   from date
+     * @param toDate                     to date
+     * @param paymentDateTo              payment date to
+     * @param outputStream               instance of {@link OutputStream}
+     * @param claAccountNumber           CLA account number
+     * @param defaultEstimatedServiceFee default estimated service fee
      */
     void writeServiceFeeTrueUpCsvReport(LocalDate fromDate, LocalDate toDate, LocalDate paymentDateTo,
-                                        OutputStream outputStream, Long claAccountNumber);
+                                        OutputStream outputStream, Long claAccountNumber,
+                                        BigDecimal defaultEstimatedServiceFee);
 
     /**
      * Writes Summary of Market Report into the output stream in csv format based on batch ids.

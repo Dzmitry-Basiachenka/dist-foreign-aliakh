@@ -44,6 +44,7 @@ public class ReportServiceTest {
     private static final String PATH_TO_EXPECTED_REPORTS =
         "src/test/resources/com/copyright/rup/dist/foreign/service/impl/csv";
     private static final BigDecimal USAGE_BATCH_GROSS_AMOUNT = BigDecimal.ONE;
+    private static final BigDecimal DEFAULT_ESTIMATED_SERVICE_FEE = new BigDecimal("0.18500");
 
     private final ReportTestUtils reportTestUtils = new ReportTestUtils(PATH_TO_EXPECTED_REPORTS);
 
@@ -58,13 +59,15 @@ public class ReportServiceTest {
         usageArchiveRepository = createMock(IUsageArchiveRepository.class);
         Whitebox.setInternalState(reportService, "usageRepository", usageRepository);
         Whitebox.setInternalState(reportService, "usageArchiveRepository", usageArchiveRepository);
+        Whitebox.setInternalState(reportService, "defaultEstimatedServiceFee", DEFAULT_ESTIMATED_SERVICE_FEE);
     }
 
     @Test
     public void testWriteUndistributedLiabilitiesCsvReport() {
         LocalDate paymentDate = LocalDate.now();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        usageRepository.writeUndistributedLiabilitiesCsvReport(paymentDate, outputStream);
+        usageRepository
+            .writeUndistributedLiabilitiesCsvReport(paymentDate, outputStream, DEFAULT_ESTIMATED_SERVICE_FEE);
         expectLastCall().once();
         replay(usageRepository);
         reportService.writeUndistributedLiabilitiesCsvReport(paymentDate, outputStream);
@@ -80,7 +83,8 @@ public class ReportServiceTest {
         Whitebox.setInternalState(reportService, usageService);
         expect(usageService.getClaAccountNumber()).andReturn(2000017000L).once();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        usageRepository.writeServiceFeeTrueUpCsvReport(fromDate, toDate, paymentDateTo, outputStream, 2000017000L);
+        usageRepository.writeServiceFeeTrueUpCsvReport(fromDate, toDate, paymentDateTo, outputStream, 2000017000L,
+            DEFAULT_ESTIMATED_SERVICE_FEE);
         expectLastCall().once();
         replay(usageRepository, usageService);
         reportService.writeServiceFeeTrueUpCsvReport(fromDate, toDate, paymentDateTo, outputStream);

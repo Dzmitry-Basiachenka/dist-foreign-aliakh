@@ -23,6 +23,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.concurrent.Executors;
@@ -47,6 +48,7 @@ public class CsvReportsIntegrationTest {
 
     private static final String SEARCH_WITH_SQL_1 = "%";
     private static final String SEARCH_WITH_SQL_2 = "_";
+    private static final BigDecimal DEFAULT_ESTIMATED_SERVICE_FEE = new BigDecimal("0.18500");
 
     @Autowired
     private IUsageRepository usageRepository;
@@ -141,13 +143,13 @@ public class CsvReportsIntegrationTest {
     @Test
     public void testWriteUndistributedLiabilitiesCsvReport() throws Exception {
         assertFiles(outputStream -> usageRepository.writeUndistributedLiabilitiesCsvReport(LocalDate.of(2011, 5, 5),
-            outputStream), "undistributed_liabilities_report.csv");
+            outputStream, DEFAULT_ESTIMATED_SERVICE_FEE), "undistributed_liabilities_report.csv");
     }
 
     @Test
     public void testWriteUndistributedLiabilitiesCsvEmptyReport() throws IOException {
         assertFiles(outputStream -> usageRepository.writeUndistributedLiabilitiesCsvReport(LocalDate.of(2001, 5, 5),
-            outputStream), "undistributed_liabilities_report_empty.csv");
+            outputStream, DEFAULT_ESTIMATED_SERVICE_FEE), "undistributed_liabilities_report_empty.csv");
     }
 
     @Test
@@ -173,15 +175,15 @@ public class CsvReportsIntegrationTest {
     @Test
     public void testWriteServiceFeeTrueUpCsvReport() throws IOException {
         assertFiles(outputStream -> usageRepository.writeServiceFeeTrueUpCsvReport(LocalDate.of(2012, 1, 1),
-            LocalDate.of(2012, 3, 15), LocalDate.of(2014, 5, 5), outputStream, 2000017000L),
-            "service_fee_true_up_report.csv");
+            LocalDate.of(2012, 3, 15), LocalDate.of(2014, 5, 5), outputStream, 2000017000L,
+            DEFAULT_ESTIMATED_SERVICE_FEE), "service_fee_true_up_report.csv");
     }
 
     @Test
     public void testWriteServiceFeeTrueUpCsvEmptyReport() throws IOException {
         assertFiles(outputStream -> usageRepository.writeServiceFeeTrueUpCsvReport(LocalDate.of(2013, 1, 1),
-            LocalDate.of(2012, 1, 1), LocalDate.of(2014, 5, 5), outputStream, 2000017000L),
-            "service_fee_true_up_empty_report.csv");
+            LocalDate.of(2012, 1, 1), LocalDate.of(2014, 5, 5), outputStream, 2000017000L,
+            DEFAULT_ESTIMATED_SERVICE_FEE), "service_fee_true_up_empty_report.csv");
     }
 
     private void assertFiles(Consumer<ByteArrayOutputStream> reportWriter, String fileName) throws IOException {
