@@ -13,12 +13,14 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.common.exception.RupRuntimeException;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.ui.themes.Cornerstone;
 import com.copyright.rup.vaadin.widget.LocalDateWidget;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.server.Sizeable.Unit;
@@ -63,10 +65,15 @@ public class UsagesFilterWidgetTest {
     private static final Integer FISCAL_YEAR = 2017;
     private static final Long ACCOUNT_NUMBER = 12345678L;
     private static final String FAS_PRODUCT_FAMILY = "FAS";
-    private static final Set<UsageStatusEnum> STATUSES = Sets.newHashSet(UsageStatusEnum.NEW,
+    private static final String NTS_PRODUCT_FAMILY = "NTS";
+    private static final ImmutableList<String> PRODUCT_FAMILIES = ImmutableList.of(FAS_PRODUCT_FAMILY,
+        NTS_PRODUCT_FAMILY);
+    private static final Set<UsageStatusEnum> FAS_FAS2_STATUSES = Sets.newHashSet(UsageStatusEnum.NEW,
         UsageStatusEnum.WORK_NOT_FOUND, UsageStatusEnum.WORK_RESEARCH, UsageStatusEnum.WORK_FOUND,
         UsageStatusEnum.RH_NOT_FOUND, UsageStatusEnum.RH_FOUND, UsageStatusEnum.SENT_FOR_RA, UsageStatusEnum.ELIGIBLE);
-
+    private static final Set<UsageStatusEnum> NTS_STATUSES = Sets.newHashSet(UsageStatusEnum.NTS_WITHDRAWN,
+        UsageStatusEnum.WORK_FOUND, UsageStatusEnum.RH_FOUND, UsageStatusEnum.UNCLASSIFIED, UsageStatusEnum.ELIGIBLE,
+        UsageStatusEnum.TO_BE_DISTRIBUTED);
     private IUsagesFilterController usagesFilterController;
     private UsagesFilterWidget widget;
 
@@ -78,7 +85,7 @@ public class UsagesFilterWidgetTest {
         expect(usagesFilterController.getFiscalYears(FAS_PRODUCT_FAMILY))
             .andReturn(Collections.singletonList(FISCAL_YEAR)).once();
         expect(usagesFilterController.getProductFamilies())
-            .andReturn(Collections.singletonList(FAS_PRODUCT_FAMILY)).once();
+            .andReturn(PRODUCT_FAMILIES).once();
     }
 
     @Test
@@ -203,16 +210,36 @@ public class UsagesFilterWidgetTest {
         verify(clickEvent, usagesFilterController);
     }
 
+    @Test
+    public void testGetAvailableStatusesFasProductFamily() {
+        replay(usagesFilterController);
+        widget.init();
+        ComboBox<String> productFamilyCombobox = getProductFamilyCombobox();
+        productFamilyCombobox.setValue(FAS_PRODUCT_FAMILY);
+        assertEquals(FAS_FAS2_STATUSES, getGetAvailableStatuses());
+    }
+
+    @Test
+    public void testGetAvailableStatusesNtsProductFamily() {
+        expect(usagesFilterController.getFiscalYears(NTS_PRODUCT_FAMILY))
+            .andReturn(Collections.singletonList(FISCAL_YEAR)).once();
+        replay(usagesFilterController);
+        widget.init();
+        ComboBox<String> productFamilyCombobox = getProductFamilyCombobox();
+        productFamilyCombobox.setValue(NTS_PRODUCT_FAMILY);
+        assertEquals(NTS_STATUSES, getGetAvailableStatuses());
+    }
+
     private void verifyFiltersLayout(Component layout) {
         assertTrue(layout instanceof VerticalLayout);
         VerticalLayout verticalLayout = (VerticalLayout) layout;
         assertEquals(7, verticalLayout.getComponentCount());
-        verifyProductFamilyComboboxComponent(verticalLayout.getComponent(0), Collections.singletonList("FAS"));
+        verifyProductFamilyComboboxComponent(verticalLayout.getComponent(0), PRODUCT_FAMILIES);
         verifyFiltersLabel(verticalLayout.getComponent(1));
         verifyItemsFilterLayout(verticalLayout.getComponent(2), "Batches");
         verifyItemsFilterLayout(verticalLayout.getComponent(3), "RROs");
         verifyDateWidget(verticalLayout.getComponent(4));
-        verifyStatusComboboxComponent(verticalLayout.getComponent(5), STATUSES);
+        verifyStatusComboboxComponent(verticalLayout.getComponent(5), FAS_FAS2_STATUSES);
         verifyFiscalYearComboboxComponent(verticalLayout.getComponent(6), Collections.singletonList(FISCAL_YEAR));
     }
 
@@ -298,5 +325,17 @@ public class UsagesFilterWidgetTest {
 
     private Button getApplyButton() {
         return Whitebox.getInternalState(widget, "applyButton", UsagesFilterWidget.class);
+    }
+
+    private ComboBox<String> getProductFamilyCombobox() {
+        return Whitebox.getInternalState(widget, "productFamilyCombobox", UsagesFilterWidget.class);
+    }
+
+    private Object getGetAvailableStatuses() {
+        try {
+            return Whitebox.invokeMethod(widget, "getAvailableStatuses");
+        } catch (Exception e) {
+            throw new RupRuntimeException(e);
+        }
     }
 }
