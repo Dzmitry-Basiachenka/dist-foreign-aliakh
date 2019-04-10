@@ -155,7 +155,6 @@ public class ResearchedUsagesCsvProcessorIntegrationTest {
         assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
         assertEquals(expectedUsage.getSystemTitle(), actualUsage.getSystemTitle());
         assertEquals(expectedUsage.getStandardNumber(), actualUsage.getStandardNumber());
-        assertEquals(expectedUsage.getStandardNumberType(), actualUsage.getStandardNumberType());
     }
 
     private List<ResearchedUsage> loadExpectedUsages(String fileName) throws IOException {

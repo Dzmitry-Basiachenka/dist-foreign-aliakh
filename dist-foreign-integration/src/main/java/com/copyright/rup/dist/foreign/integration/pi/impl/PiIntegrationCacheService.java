@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Implementation of {@link IPiIntegrationService} with caching.
+ * Extends {@link AbstractCacheService} class. The key element in cache is Triple<WrWrkInst, StandardNumber, Title>.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>

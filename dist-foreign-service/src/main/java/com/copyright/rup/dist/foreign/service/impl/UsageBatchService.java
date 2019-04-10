@@ -8,6 +8,8 @@ import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.Work;
+import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
@@ -18,8 +20,10 @@ import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEn
 
 import com.google.common.collect.Iterables;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,6 +59,9 @@ public class UsageBatchService implements IUsageBatchService {
         "UsageBatchName={}, UsagesCount={}, WorkFoundUsagesCount={}";
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
+    @Autowired
+    @Qualifier("df.integration.piIntegrationCacheService")
+    private IPiIntegrationService piIntegrationService;
     @Autowired
     private IUsageBatchRepository usageBatchRepository;
     @Autowired
@@ -106,6 +113,7 @@ public class UsageBatchService implements IUsageBatchService {
         LOGGER.info("Insert usage batch. Started. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
         usageBatchRepository.insert(usageBatch);
         rightsholderService.updateRightsholder(usageBatch.getRro());
+        fillStandardNumberType(usages);
         int count = usageService.insertUsages(usageBatch, usages);
         Set<Long> accountNumbersToUpdate = usages.stream()
             .map(usage -> usage.getRightsholder().getAccountNumber())
@@ -202,5 +210,15 @@ public class UsageBatchService implements IUsageBatchService {
     @PreDestroy
     void preDestroy() {
         executorService.shutdown();
+    }
+
+    private void fillStandardNumberType(Collection<Usage> usages) {
+        usages.stream()
+            .filter(usage -> Objects.nonNull(usage.getWrWrkInst())
+                && StringUtils.isBlank(usage.getStandardNumberType()))
+            .forEach(usage -> {
+                Work work = piIntegrationService.findWorkByWrWrkInst(usage.getWrWrkInst());
+                usage.setStandardNumberType(work.getMainIdnoType());
+            });
     }
 }
