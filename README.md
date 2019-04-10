@@ -1,3 +1,8 @@
+5.1.14
+-
+* B-48760 FDA: Create NTS Pre-service fee additional fund pool from NTS withdrawn details: make changes based on comments in CR-DIST-FOREIGN-99
+* B-50004 FDA: Add Standard Number Type to the usage for classification: make changes based on comments in CR-DIST-FOREIGN-100
+
 5.1.13
 -
 * B-48760 FDA: Create NTS Pre-service fee additional fund pool from NTS withdrawn details: make changes based on comments in CR-DIST-FOREIGN-99
