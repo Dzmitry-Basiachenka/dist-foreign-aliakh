@@ -184,7 +184,7 @@ databaseChangeLog {
             column(name: 'work_title', value: '10 Years Plant Molecular Biology')
             column(name: 'rh_account_number', value: '1000005413')
             column(name: 'status_ind', value: 'ELIGIBLE')
-            column(name: 'product_family', value: 'FAS')
+            column(name: 'product_family', value: 'FAS2')
             column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '1008902002377655XX')
             column(name: 'publisher', value: 'McGraw-Hill')
