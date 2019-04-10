@@ -76,9 +76,11 @@ public class LoadResearchedUsagesIntegrationTest {
         usageService.loadResearchedUsages(Arrays.asList(
             buildResearchedUsage("c219108e-f319-4636-b837-b71bccb29b76", 658824345L, "Medical Journal"),
             buildResearchedUsage("54580cd4-33b5-4079-bfc7-5c35bf9c5c9e", 854030732L, "Technical Journal")));
-        assertUsage("c219108e-f319-4636-b837-b71bccb29b76", UsageStatusEnum.ELIGIBLE, 1000023401L, "Medical Journal");
-        assertUsage("54580cd4-33b5-4079-bfc7-5c35bf9c5c9e", UsageStatusEnum.RH_NOT_FOUND, null, "Technical Journal");
-        assertUsage("644cb9ba-396d-4844-ac83-8053412b7cea", UsageStatusEnum.WORK_RESEARCH, null, null);
+        assertUsage("c219108e-f319-4636-b837-b71bccb29b76", UsageStatusEnum.ELIGIBLE, 1000023401L, "Medical Journal",
+            "VALISSN");
+        assertUsage("54580cd4-33b5-4079-bfc7-5c35bf9c5c9e", UsageStatusEnum.RH_NOT_FOUND, null, "Technical Journal",
+            "VALISSN");
+        assertUsage("644cb9ba-396d-4844-ac83-8053412b7cea", UsageStatusEnum.WORK_RESEARCH, null, null, null);
         assertAudit("c219108e-f319-4636-b837-b71bccb29b76", "Usage has become eligible",
             "Rightsholder account 1000023401 was found in RMS", "Wr Wrk Inst 658824345 was added based on research");
         assertAudit("54580cd4-33b5-4079-bfc7-5c35bf9c5c9e", "Rightsholder account for 854030732 was not found in RMS",
@@ -87,11 +89,13 @@ public class LoadResearchedUsagesIntegrationTest {
         mockServer.verify();
     }
 
-    private void assertUsage(String usageId, UsageStatusEnum status, Long rhAccounNumber, String systemTitle) {
+    private void assertUsage(String usageId, UsageStatusEnum status, Long rhAccounNumber, String systemTitle,
+                             String standardNumberType) {
         Usage usage = usageRepository.findByIds(Collections.singletonList(usageId)).get(0);
         assertEquals(status, usage.getStatus());
         assertEquals(rhAccounNumber, usage.getRightsholder().getAccountNumber());
         assertEquals(systemTitle, usage.getSystemTitle());
+        assertEquals(standardNumberType, usage.getStandardNumberType());
     }
 
     private void assertAudit(String usageId, String... reasons) {
@@ -124,6 +128,7 @@ public class LoadResearchedUsagesIntegrationTest {
 
     private ResearchedUsage buildResearchedUsage(String usageId, Long wrWrkInst, String systemTitle) {
         ResearchedUsage researchedUsage = new ResearchedUsage();
+        researchedUsage.setStandardNumber("978-0-7695-2365-2");
         researchedUsage.setSystemTitle(systemTitle);
         researchedUsage.setUsageId(usageId);
         researchedUsage.setWrWrkInst(wrWrkInst);

@@ -6,7 +6,6 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
@@ -44,7 +43,6 @@ public class StandardNumberValidatorTest {
             .once();
         replay(piIntegrationService);
         assertTrue(validator.isValid(usage));
-        assertEquals("VALISSN", usage.getStandardNumberType());
         verify(piIntegrationService);
     }
 
@@ -56,7 +54,6 @@ public class StandardNumberValidatorTest {
             .once();
         replay(piIntegrationService);
         assertFalse(validator.isValid(usage));
-        assertNull(usage.getStandardNumberType());
         verify(piIntegrationService);
     }
 

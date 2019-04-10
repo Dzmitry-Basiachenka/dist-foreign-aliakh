@@ -6,6 +6,7 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.mockStatic;
@@ -20,6 +21,8 @@ import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.Work;
+import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
@@ -28,7 +31,6 @@ import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 import org.easymock.Capture;
@@ -42,7 +44,6 @@ import org.powermock.reflect.Whitebox;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -73,6 +74,7 @@ public class UsageBatchServiceTest {
     private IChainExecutor<Usage> chainExecutor;
     private ExecutorService executorService;
     private IUsageRepository usageRepository;
+    private IPiIntegrationService piIntegrationService;
 
     @Before
     @SuppressWarnings("unchecked")
@@ -83,7 +85,9 @@ public class UsageBatchServiceTest {
         chainExecutor = createMock(IChainExecutor.class);
         executorService = createMock(ExecutorService.class);
         usageRepository = createMock(IUsageRepository.class);
+        piIntegrationService = createMock(IPiIntegrationService.class);
         usageBatchService = new UsageBatchService();
+        Whitebox.setInternalState(usageBatchService, "piIntegrationService", piIntegrationService);
         Whitebox.setInternalState(usageBatchService, "usageBatchRepository", usageBatchRepository);
         Whitebox.setInternalState(usageBatchService, "usageService", usageService);
         Whitebox.setInternalState(usageBatchService, "rightsholderService", rightsholderService);
@@ -153,28 +157,29 @@ public class UsageBatchServiceTest {
         UsageBatch usageBatch = new UsageBatch();
         Rightsholder rro = buildRro();
         usageBatch.setRro(rro);
-        Usage usage1 = new Usage();
-        usage1.setRightsholder(buildRightsholder(1000001534L));
-        Usage usage2 = new Usage();
-        usage2.setRightsholder(buildRightsholder(1000009522L));
-        usage2.setStatus(UsageStatusEnum.NEW);
-        List<Usage> usages = Lists.newArrayList(usage1, usage2);
+        Usage usage1 = buildUsage(buildRightsholder(1000001534L), 5498456456L, UsageStatusEnum.WORK_FOUND);
+        Usage usage2 = buildUsage(buildRightsholder(1000009522L), null, UsageStatusEnum.NEW);
+        Usage usage3 = buildUsage(buildRightsholder(1000009535L), 7974545646L, UsageStatusEnum.ELIGIBLE);
+        List<Usage> usages = Lists.newArrayList(usage1, usage2, usage3);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         usageBatchRepository.insert(capture(captureUsageBatch));
         expectLastCall().once();
-        Map<Long, Rightsholder> rightsholderMap = Maps.newHashMapWithExpectedSize(1);
-        rightsholderMap.put(RRO_ACCOUNT_NUMBER, rro);
         rightsholderService.updateRightsholder(rro);
         expectLastCall().once();
-        rightsholderService.updateRighstholdersAsync(Sets.newHashSet(1000001534L, 1000009522L));
+        rightsholderService.updateRighstholdersAsync(Sets.newHashSet(1000001534L, 1000009522L, 1000009535L));
         expectLastCall().once();
-        expect(usageService.insertUsages(usageBatch, usages)).andReturn(2).once();
+        expect(piIntegrationService.findWorkByWrWrkInst(5498456456L)).andReturn(buildWork("VALISBN10")).once();
+        expect(piIntegrationService.findWorkByWrWrkInst(7974545646L)).andReturn(new Work()).once();
+        expect(usageService.insertUsages(usageBatch, usages)).andReturn(3).once();
         replayAll();
-        assertEquals(2, usageBatchService.insertFasBatch(usageBatch, usages));
+        assertEquals(3, usageBatchService.insertFasBatch(usageBatch, usages));
         UsageBatch insertedUsageBatch = captureUsageBatch.getValue();
         assertNotNull(insertedUsageBatch);
         assertEquals(USER_NAME, insertedUsageBatch.getUpdateUser());
         assertEquals(USER_NAME, insertedUsageBatch.getCreateUser());
+        assertEquals("VALISBN10", usage1.getStandardNumberType());
+        assertNull(usage2.getStandardNumberType());
+        assertNull(usage2.getStandardNumberType());
         verifyAll();
     }
 
@@ -247,5 +252,19 @@ public class UsageBatchServiceTest {
         Rightsholder rightsholder = new Rightsholder();
         rightsholder.setAccountNumber(accountNumber);
         return rightsholder;
+    }
+
+    private Usage buildUsage(Rightsholder rightsholder, Long wrWrkInst, UsageStatusEnum status) {
+        Usage usage = new Usage();
+        usage.setRightsholder(rightsholder);
+        usage.setWrWrkInst(wrWrkInst);
+        usage.setStatus(status);
+        return usage;
+    }
+
+    private Work buildWork(String standardNumberType) {
+        Work work = new Work();
+        work.setMainIdnoType(standardNumberType);
+        return work;
     }
 }

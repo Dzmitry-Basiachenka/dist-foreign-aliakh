@@ -19,6 +19,7 @@ import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.Work;
 import com.copyright.rup.dist.foreign.domain.common.util.CalculationUtils;
 import com.copyright.rup.dist.foreign.domain.common.util.ForeignLogUtils;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
@@ -26,6 +27,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.crm.api.CrmResult;
 import com.copyright.rup.dist.foreign.integration.crm.api.CrmRightsDistributionRequest;
 import com.copyright.rup.dist.foreign.integration.crm.api.ICrmIntegrationService;
+import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
@@ -45,6 +47,7 @@ import com.google.common.collect.Table;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -107,6 +110,9 @@ public class UsageService implements IUsageService {
     private IChainExecutor<Usage> chainExecutor;
     @Autowired
     private IRightsholderService rightsholderService;
+    @Autowired
+    @Qualifier("df.integration.piIntegrationCacheService")
+    private IPiIntegrationService piIntegrationService;
 
     @Override
     public List<UsageDto> getUsageDtos(UsageFilter filter, Pageable pageable, Sort sort) {
@@ -427,6 +433,7 @@ public class UsageService implements IUsageService {
     @Transactional
     public void loadResearchedUsages(Collection<ResearchedUsage> researchedUsages) {
         LOGGER.info("Load researched usages. Started. ResearchedUsagesCount={}", LogUtils.size(researchedUsages));
+        fillStandardNumberType(researchedUsages);
         usageRepository.updateResearchedUsages(researchedUsages);
         researchedUsages.forEach(
             researchedUsage -> usageAuditService.logAction(researchedUsage.getUsageId(),
@@ -518,6 +525,13 @@ public class UsageService implements IUsageService {
     @Override
     public int getUnclassifiedUsagesCount(Set<Long> wrWrkInsts) {
         return usageRepository.findCountByStatusAndWrWrkInsts(UsageStatusEnum.UNCLASSIFIED, wrWrkInsts);
+    }
+
+    private void fillStandardNumberType(Collection<ResearchedUsage> researchedUsages) {
+        researchedUsages.forEach(researchedUsage -> {
+            Work work = piIntegrationService.findWorkByIdnoAndTitle(researchedUsage.getStandardNumber(), null);
+            researchedUsage.setStandardNumberType(work.getMainIdnoType());
+        });
     }
 
     private void updateRighstholdersInSeparateThread(List<Usage> usages) {

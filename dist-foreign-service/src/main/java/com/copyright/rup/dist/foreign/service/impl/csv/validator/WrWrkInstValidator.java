@@ -37,9 +37,7 @@ public class WrWrkInstValidator implements DistCsvProcessor.IValidator<Usage> {
         if (Objects.nonNull(Objects.requireNonNull(usage).getWrWrkInst())
             && StringUtils.isBlank(usage.getStandardNumberType())) {
             Work work = piIntegrationService.findWorkByWrWrkInst(usage.getWrWrkInst());
-            if (Objects.nonNull(work.getWrWrkInst())) {
-                usage.setStandardNumberType(StringUtils.upperCase(work.getMainIdnoType()));
-            } else {
+            if (Objects.isNull(work.getWrWrkInst())) {
                 result = false;
             }
         }

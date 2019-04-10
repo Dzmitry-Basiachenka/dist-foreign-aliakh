@@ -6,7 +6,6 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -46,7 +45,6 @@ public class WrWrkInstValidatorTest {
             .once();
         replay(piIntegrationService);
         assertTrue(validator.isValid(usage));
-        assertEquals("VALISSN", usage.getStandardNumberType());
         verify(piIntegrationService);
     }
 
@@ -55,7 +53,6 @@ public class WrWrkInstValidatorTest {
         Usage usage = buildUsage(null, null);
         replay(piIntegrationService);
         assertTrue(validator.isValid(usage));
-        assertNull(usage.getStandardNumberType());
         verify(piIntegrationService);
     }
 
@@ -64,7 +61,6 @@ public class WrWrkInstValidatorTest {
         Usage usage = buildUsage(null, "VALISBN10");
         replay(piIntegrationService);
         assertTrue(validator.isValid(usage));
-        assertEquals("VALISBN10", usage.getStandardNumberType());
         verify(piIntegrationService);
     }
 
@@ -76,7 +72,6 @@ public class WrWrkInstValidatorTest {
             .once();
         replay(piIntegrationService);
         assertFalse(validator.isValid(usage));
-        assertNull(usage.getStandardNumberType());
         verify(piIntegrationService);
     }
 
