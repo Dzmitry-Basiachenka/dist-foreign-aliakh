@@ -54,11 +54,11 @@ public class PaidUsageDeserializer extends JsonDeserializer<List<PaidUsage>> {
         usage.getPayee().setAccountNumber(JsonUtils.getLongValueFromString(jsonNode.get("rollup_account_number")));
         usage.setId(JsonUtils.getStringValue(jsonNode.get("detail_id")));
         usage.setCheckNumber(JsonUtils.getStringValue(jsonNode.get("check_number")));
-        usage.setCheckDate(JsonUtils.getOffsetDateTime(jsonNode.get("check_date")));
+        usage.setCheckDate(JsonUtils.getOffsetDateTime(jsonNode.get("check_date_iso")));
         usage.setCccEventId(JsonUtils.getStringValue(jsonNode.get("ccc_event_id")));
         usage.setDistributionName(JsonUtils.getStringValue(jsonNode.get("distribution_name")));
-        usage.setDistributionDate(JsonUtils.getOffsetDateTime(jsonNode.get("distribution_date")));
-        usage.setPeriodEndDate(JsonUtils.getOffsetDateTime(jsonNode.get("period_end_date")));
+        usage.setDistributionDate(JsonUtils.getOffsetDateTime(jsonNode.get("distribution_date_iso")));
+        usage.setPeriodEndDate(JsonUtils.getOffsetDateTime(jsonNode.get("period_end_date_iso")));
         usage.setLmDetailId(JsonUtils.getStringValue(jsonNode.get("lm_detail_id")));
         usage.setNetAmount(JsonUtils.getBigDecimalValue(jsonNode.get("royalty_amount")));
         usage.setServiceFeeAmount(JsonUtils.getBigDecimalValue(jsonNode.get("service_fee_amount")));
