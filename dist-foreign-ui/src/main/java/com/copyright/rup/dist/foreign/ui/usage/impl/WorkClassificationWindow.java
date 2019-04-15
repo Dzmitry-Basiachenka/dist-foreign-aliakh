@@ -20,6 +20,7 @@ import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+import com.vaadin.ui.components.grid.ItemClickListener;
 import com.vaadin.ui.components.grid.MultiSelectionModel.SelectAllCheckBoxVisibility;
 import com.vaadin.ui.components.grid.MultiSelectionModelImpl;
 
@@ -105,9 +106,20 @@ public class WorkClassificationWindow extends Window {
         grid = new Grid<>(dataProvider);
         addColumns();
         grid.setSizeFull();
-        MultiSelectionModelImpl model = (MultiSelectionModelImpl) grid.setSelectionMode(SelectionMode.MULTI);
+        MultiSelectionModelImpl<WorkClassification> model =
+            (MultiSelectionModelImpl) grid.setSelectionMode(SelectionMode.MULTI);
         model.setSelectAllCheckBoxVisibility(SelectAllCheckBoxVisibility.VISIBLE);
         grid.getColumns().forEach(column -> column.setSortable(true));
+        grid.addItemClickListener((ItemClickListener<WorkClassification>) event -> {
+            if (!event.getMouseEventDetails().isDoubleClick()) {
+                WorkClassification classification = event.getItem();
+                if (model.isSelected(classification)) {
+                    model.deselect(classification);
+                } else {
+                    model.select(classification);
+                }
+            }
+        });
         VaadinUtils.addComponentStyle(grid, "works-classification-grid");
     }
 
