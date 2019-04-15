@@ -1,3 +1,8 @@
+5.1.15
+-
+* B-49463 Tech Debt: FDA: consume dates in ISO format while receiving paid usages message
+* B-49463 Tech Debt: FDA: implement selecting and deselecting rows on Works Classification window grid by rows clicking
+
 5.1.14
 -
 * B-48760 FDA: Create NTS Pre-service fee additional fund pool from NTS withdrawn details: make changes based on comments in CR-DIST-FOREIGN-99
