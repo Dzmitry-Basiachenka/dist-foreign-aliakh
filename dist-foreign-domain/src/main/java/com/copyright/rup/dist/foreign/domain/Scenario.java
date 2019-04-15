@@ -28,6 +28,7 @@ public class Scenario extends StoredEntity<String> {
     private String description;
     private ScenarioStatusEnum status;
     private ScenarioAuditItem auditItem;
+    private NtsScenario ntsScenario;
 
     public String getName() {
         return name;
@@ -93,6 +94,14 @@ public class Scenario extends StoredEntity<String> {
         this.auditItem = auditItem;
     }
 
+    public NtsScenario getNtsScenario() {
+        return ntsScenario;
+    }
+
+    public void setNtsScenario(NtsScenario ntsScenario) {
+        this.ntsScenario = ntsScenario;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -112,6 +121,7 @@ public class Scenario extends StoredEntity<String> {
             .append(this.description, that.description)
             .append(this.status, that.status)
             .append(this.auditItem, that.auditItem)
+            .append(this.ntsScenario, that.ntsScenario)
             .isEquals();
     }
 
@@ -127,6 +137,7 @@ public class Scenario extends StoredEntity<String> {
             .append(description)
             .append(status)
             .append(auditItem)
+            .append(ntsScenario)
             .toHashCode();
     }
 
@@ -142,6 +153,7 @@ public class Scenario extends StoredEntity<String> {
             .append("description", description)
             .append("status", status)
             .append("auditItem", auditItem)
+            .append("ntsScenario", ntsScenario)
             .toString();
     }
 }

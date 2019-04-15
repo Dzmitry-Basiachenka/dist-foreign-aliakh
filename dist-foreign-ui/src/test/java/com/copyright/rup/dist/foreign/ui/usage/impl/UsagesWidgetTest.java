@@ -14,6 +14,7 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
@@ -64,6 +65,7 @@ import java.util.stream.Collectors;
 public class UsagesWidgetTest {
 
     private static final String FAS_PRODUCT_FAMILY = "FAS";
+    private static final String NTS_PRODUCT_FAMILY = "NTS";
     private UsagesWidget usagesWidget;
     private IUsagesController controller;
 
@@ -71,6 +73,7 @@ public class UsagesWidgetTest {
     public void setUp() {
         controller = createMock(IUsagesController.class);
         UsagesFilterWidget filterWidget = new UsagesFilterWidget();
+        filterWidget.getFilter().setUsageBatchesIds(Collections.singleton(RupPersistUtils.generateUuid()));
         usagesWidget = new UsagesWidget();
         usagesWidget.setController(controller);
         expect(controller.initUsagesFilterWidget()).andReturn(filterWidget).once();
@@ -233,9 +236,33 @@ public class UsagesWidgetTest {
         expect(controller.getSize()).andReturn(1).once();
         expect(controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
-        expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
+        expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).times(2);
         expect(controller.getScenarioService()).andReturn(null).once();
         Windows.showModalWindow(anyObject(CreateScenarioWindow.class));
+        expectLastCall().once();
+        replay(controller, clickEvent, Windows.class);
+        Collection<?> listeners = addToScenarioButton.getListeners(ClickEvent.class);
+        assertEquals(2, listeners.size());
+        ClickListener clickListener = (ClickListener) listeners.iterator().next();
+        clickListener.buttonClick(clickEvent);
+        verify(controller, clickEvent, Windows.class);
+    }
+
+    @Test
+    public void testAddToScenarioButtonClickListenerNtsProductFamily() {
+        mockStatic(Windows.class);
+        Grid grid = new Grid();
+        Whitebox.setInternalState(usagesWidget, grid);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
+            .getComponent(0)).getComponent(6);
+        assertTrue(addToScenarioButton.isDisableOnClick());
+        expect(controller.getSize()).andReturn(1).once();
+        expect(controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
+        expect(controller.getSelectedProductFamily()).andReturn(NTS_PRODUCT_FAMILY).times(2);
+        expect(controller.getScenarioService()).andReturn(null).once();
+        Windows.showModalWindow(anyObject(CreateNtsScenarioWindow.class));
         expectLastCall().once();
         replay(controller, clickEvent, Windows.class);
         Collection<?> listeners = addToScenarioButton.getListeners(ClickEvent.class);

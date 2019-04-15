@@ -2,12 +2,14 @@ package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
+import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesWidget;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -63,6 +65,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
     private Button addToScenarioButton;
     private Button assignClassificationButton;
     private MenuBar additionalFundsMenuBar;
+    private IUsagesFilterWidget usagesFilterWidget;
 
     @Override
     public void refresh() {
@@ -73,7 +76,8 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
     @Override
     @SuppressWarnings("unchecked")
     public UsagesWidget init() {
-        setFirstComponent(controller.initUsagesFilterWidget());
+        usagesFilterWidget = controller.initUsagesFilterWidget();
+        setFirstComponent(usagesFilterWidget);
         setSecondComponent(initUsagesLayout());
         setSplitPosition(200, Unit.PIXELS);
         setLocked(true);
@@ -282,10 +286,15 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
                         ForeignUi.getMessage("message.error.add_to_scenario.invalid_rightsholders", "created",
                             accountNumbers));
                 } else {
-                    CreateScenarioWindow window = new CreateScenarioWindow(controller);
-                    window.addListener(ScenarioCreateEvent.class, controller,
-                        IUsagesController.ON_SCENARIO_CREATED);
-                    Windows.showModalWindow(window);
+                    if (FdaConstants.NTS_PRODUCT_FAMILY.equals(getController().getSelectedProductFamily())) {
+                        if (CollectionUtils.isNotEmpty(usagesFilterWidget.getFilter().getUsageBatchesIds())) {
+                            showCreateScenarioWindow(new CreateNtsScenarioWindow(controller));
+                        } else {
+                            Windows.showNotificationWindow(ForeignUi.getMessage("message.error.empty_usage_batches"));
+                        }
+                    } else {
+                        showCreateScenarioWindow(new CreateScenarioWindow(controller));
+                    }
                 }
             } else {
                 Windows.showNotificationWindow(
@@ -295,6 +304,11 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         } else {
             Windows.showNotificationWindow(ForeignUi.getMessage("message.error.empty_usages"));
         }
+    }
+
+    private void showCreateScenarioWindow(Window window) {
+        window.addListener(ScenarioCreateEvent.class, controller, IUsagesController.ON_SCENARIO_CREATED);
+        Windows.showModalWindow(window);
     }
 
     private static class SendForResearchFileDownloader extends OnDemandFileDownloader {
