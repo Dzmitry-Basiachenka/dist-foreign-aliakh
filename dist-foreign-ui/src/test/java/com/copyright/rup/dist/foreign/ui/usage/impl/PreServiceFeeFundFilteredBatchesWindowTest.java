@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -20,6 +21,8 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.Column;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.components.grid.FooterCell;
+import com.vaadin.ui.components.grid.FooterRow;
 
 import org.junit.Test;
 
@@ -56,7 +59,7 @@ public class PreServiceFeeFundFilteredBatchesWindowTest {
             createMock(PreServiceFeeFundBatchesFilterWindow.class));
         verify(controller);
         assertEquals("Filtered batches", window.getCaption());
-        verifySize(window, Unit.PIXELS, 450, Unit.PIXELS, 400);
+        verifySize(window, Unit.PIXELS, 700, Unit.PIXELS, 400);
         assertEquals("batches-filter-window", window.getStyleName());
         verifyRootLayout(window.getContent());
     }
@@ -79,6 +82,15 @@ public class PreServiceFeeFundFilteredBatchesWindowTest {
             columns.stream().map(Column::getCaption).collect(Collectors.toList()));
         assertEquals(-1.0, columns.get(0).getWidth(), 0);
         assertEquals(200, columns.get(1).getWidth(), 0);
+        FooterRow footerRow = grid.getFooterRow(0);
+        assertNotNull(footerRow);
+        FooterCell totalCell = footerRow.getCell("name");
+        assertNotNull(totalCell);
+        assertEquals("Total", totalCell.getText());
+        FooterCell amountCell = footerRow.getCell("grossAmount");
+        assertNotNull(amountCell);
+        assertEquals("1.00", amountCell.getText());
+        assertEquals("v-align-right", amountCell.getStyleName());
     }
 
     private void verifyButtonsLayout(Component component) {
