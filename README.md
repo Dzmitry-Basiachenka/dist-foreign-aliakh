@@ -1,3 +1,9 @@
+5.1.16
+-
+* B-49019 FDA: Create NTS Scenario: implement Create Scenario dialog
+* B-49463 Tech Debt: FDA: increase width of Filtered Batches window and place value of Total gross to the rights as for all amounts
+* B-49463 Tech Debt: FDA: rename Batches Selector to Batches filter and Save button to Continue on Assign Classification step
+
 5.1.15
 -
 * B-49463 Tech Debt: FDA: consume dates in ISO format while receiving paid usages message
