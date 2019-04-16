@@ -554,6 +554,53 @@ databaseChangeLog {
             column(name: 'period_end_date', value: '2016-03-11')
         }
 
+        changeSet(id: '2019-04-16-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+            comment("B-49019 FDA: Create NTS Scenario: " +
+                    "implement repository methods to save and load the field rhMinimumAmount")
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
+                column(name: 'df_scenario_uid', value: '1a5f3df4-c8a7-4dba-9a8f-7dce0b61c41b')
+                column(name: 'name', value: 'Test NTS scenario')
+                column(name: 'status_ind', value: 'IN_PROGRESS')
+                column(name: 'description', value: 'Description for test NTS scenario')
+                column(name: 'nts_fields_holder', value: '{"rh_minimum_amount":300.00}')
+                column(name: 'updated_datetime', value: '2011-01-01 17:47:24')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+                column(name: 'df_usage_batch_uid', value: 'f27ebc80-e74e-436d-ba6e-acf3d355b700')
+                column(name: 'name', value: 'Test NTS batch')
+                column(name: 'rro_account_number', value: '2000017010')
+                column(name: 'payment_date', value: '2010-09-10')
+                column(name: 'fiscal_year', value: '2011')
+                column(name: 'gross_amount', value: '500.00')
+                column(name: 'product_family', value: 'NTS')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+                column(name: 'df_usage_uid', value: '95093193-00d9-436b-8fbc-078511b1d336')
+                column(name: 'df_usage_batch_uid', value: 'f27ebc80-e74e-436d-ba6e-acf3d355b700')
+                column(name: 'df_scenario_uid', value: '1a5f3df4-c8a7-4dba-9a8f-7dce0b61c41b')
+                column(name: 'wr_wrk_inst', value: '180382914')
+                column(name: 'work_title', value: 'A history of contemporary Italy : society and politics1088.89 1943-1988')
+                column(name: 'system_title', value: 'A history of contemporary Italy : society and politics1088.89 1943-1988')
+                column(name: 'rh_account_number', value: '1000002859')
+                column(name: 'status_ind', value: 'LOCKED')
+                column(name: 'product_family', value: 'NTS')
+                column(name: 'article', value: 'The Era of Collective Action 1968-73')
+                column(name: 'standard_number', value: '1008902112377654XX')
+                column(name: 'publisher', value: 'IEEE')
+                column(name: 'publication_date', value: '2013-09-10')
+                column(name: 'market', value: 'Doc Del')
+                column(name: 'market_period_from', value: '2012')
+                column(name: 'market_period_to', value: '2014')
+                column(name: 'author', value: 'Aarseth1088.89 Espen J.')
+                column(name: 'number_of_copies', value: '1')
+                column(name: 'reported_value', value: '500')
+                column(name: 'gross_amount', value: '500.00')
+            }
+        }
+
         rollback ""
     }
 }
