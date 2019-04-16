@@ -55,7 +55,7 @@ class PreServiceFeeFundFilteredBatchesWindow extends Window {
             .map(UsageBatch::getGrossAmount)
             .reduce(BigDecimal.ZERO, BigDecimal::add);
         setCaption(ForeignUi.getMessage("window.filtered_batches"));
-        setWidth(450, Unit.PIXELS);
+        setWidth(700, Unit.PIXELS);
         setHeight(400, Unit.PIXELS);
         Grid<UsageBatch> grid = initUsageBatchesGrid(batches, grossAmount);
         VerticalLayout content = new VerticalLayout();
@@ -95,6 +95,7 @@ class PreServiceFeeFundFilteredBatchesWindow extends Window {
         totalCell.setText(ForeignUi.getMessage("table.column.total"));
         FooterCell amountCell = row.getCell("grossAmount");
         amountCell.setText(CurrencyUtils.format(grossAmount, null));
+        amountCell.setStyleName("v-align-right");
         return grid;
     }
 
