@@ -64,8 +64,9 @@ public class NtsUsageBatchSelectorWidget implements IFilterWindowController<Usag
      */
     public FilterWindow<UsageBatch> showFilterWindow() {
         FilterWindow<UsageBatch> filterWindow =
-            Windows.showFilterWindow(ForeignUi.getMessage("window.batches_selector"), this,
+            new FilterWindow<>(ForeignUi.getMessage("window.batches_filter"), this, "Continue", null,
                 (ValueProvider<UsageBatch, List<String>>) bean -> Collections.singletonList(bean.getName()));
+        Windows.showModalWindow(filterWindow);
         filterWindow.setSearchPromptString(ForeignUi.getMessage("prompt.batch"));
         return filterWindow;
     }
