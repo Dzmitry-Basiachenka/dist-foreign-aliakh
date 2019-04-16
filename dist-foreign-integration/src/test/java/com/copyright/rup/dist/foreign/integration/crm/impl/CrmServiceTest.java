@@ -61,8 +61,8 @@ public class CrmServiceTest {
         crmService = new CrmService();
         restTemplate = createStrictMock(RestTemplate.class);
         Whitebox.setInternalState(crmService, RestTemplate.class, restTemplate);
-        Whitebox.setInternalState(crmService, "baseUrl", "http://localhost:9032/legacy-integration-rest/");
-        crmService.initializeUrls();
+        Whitebox.setInternalState(crmService, "crmRightsDistributionRequestsUrl",
+            "http://localhost:9032/legacy-integration-rest/insertCCCRightsDistribution/");
     }
 
     @Test
