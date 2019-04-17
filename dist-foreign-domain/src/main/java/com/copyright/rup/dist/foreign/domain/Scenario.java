@@ -28,7 +28,7 @@ public class Scenario extends StoredEntity<String> {
     private String description;
     private ScenarioStatusEnum status;
     private ScenarioAuditItem auditItem;
-    private NtsFieldsHolder ntsFieldsHolder;
+    private NtsFields ntsFields;
 
     public String getName() {
         return name;
@@ -94,12 +94,12 @@ public class Scenario extends StoredEntity<String> {
         this.auditItem = auditItem;
     }
 
-    public NtsFieldsHolder getNtsFieldsHolder() {
-        return ntsFieldsHolder;
+    public NtsFields getNtsFields() {
+        return ntsFields;
     }
 
-    public void setNtsFieldsHolder(NtsFieldsHolder ntsFieldsHolder) {
-        this.ntsFieldsHolder = ntsFieldsHolder;
+    public void setNtsFields(NtsFields ntsFields) {
+        this.ntsFields = ntsFields;
     }
 
     @Override
@@ -121,7 +121,7 @@ public class Scenario extends StoredEntity<String> {
             .append(this.description, that.description)
             .append(this.status, that.status)
             .append(this.auditItem, that.auditItem)
-            .append(this.ntsFieldsHolder, that.ntsFieldsHolder)
+            .append(this.ntsFields, that.ntsFields)
             .isEquals();
     }
 
@@ -137,7 +137,7 @@ public class Scenario extends StoredEntity<String> {
             .append(description)
             .append(status)
             .append(auditItem)
-            .append(ntsFieldsHolder)
+            .append(ntsFields)
             .toHashCode();
     }
 
@@ -153,7 +153,7 @@ public class Scenario extends StoredEntity<String> {
             .append("description", description)
             .append("status", status)
             .append("auditItem", auditItem)
-            .append("ntsFieldsHolder", ntsFieldsHolder)
+            .append("ntsFields", ntsFields)
             .toString();
     }
 }

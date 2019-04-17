@@ -465,11 +465,10 @@ databaseChangeLog {
     }
 
     changeSet(id: '2019-04-17-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
-        comment("B-49019 FDA: Create NTS Scenario: " +
-                "implement Liqubase script to add JSONB column nts_fields_holder to the table df_scenario")
+        comment("B-49019 FDA: Create NTS Scenario: add nts_fields column to the table df_scenario")
 
         addColumn(schemaName: dbAppsSchema, tableName: 'df_scenario') {
-            column(name: 'nts_fields_holder', type: 'JSONB', remarks: 'The holder for fields of NTS scenarios')
+            column(name: 'nts_fields', type: 'JSONB', remarks: 'The fields of NTS scenarios')
         }
 
         rollback {

@@ -97,9 +97,9 @@ public class CreateNtsScenarioWindow extends Window {
             .withConverter(new StringToBigDecimalConverter(ForeignUi.getMessage("field.error.not_numeric")))
             .withValidator(value -> new AmountValidator(true).isValid(value.toString()),
                 ForeignUi.getMessage("field.error.positive_number_or_zero_length", 10))
-            .bind(scenario -> scenario.getNtsFieldsHolder().getRhMinimumAmount(),
+            .bind(scenario -> scenario.getNtsFields().getRhMinimumAmount(),
                 (Setter<Scenario, BigDecimal>) (scenario, rhMinimumAmount) ->
-                    scenario.getNtsFieldsHolder().setRhMinimumAmount(rhMinimumAmount));
+                    scenario.getNtsFields().setRhMinimumAmount(rhMinimumAmount));
         rhMinimumAmountField.setValue(ForeignUi.getMessage("field.rh_minimum_amount.default"));
         VaadinUtils.setMaxComponentsWidth(rhMinimumAmountField);
     }

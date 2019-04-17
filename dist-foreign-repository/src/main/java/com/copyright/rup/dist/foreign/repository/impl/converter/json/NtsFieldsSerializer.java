@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.repository.impl.converter.json;
 
-import com.copyright.rup.dist.foreign.domain.NtsFieldsHolder;
+import com.copyright.rup.dist.foreign.domain.NtsFields;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import java.io.IOException;
 
 /**
- * Implementation of {@link StdSerializer} for {@link NtsFieldsHolder}.
+ * Implementation of {@link StdSerializer} for {@link NtsFields}.
  * <p/>
  * Copyright (C) 2019 copyright.com
  * <p/>
@@ -17,19 +17,19 @@ import java.io.IOException;
  *
  * @author Aliaksandr Liakh
  */
-public class NtsFieldsHolderSerializer extends StdSerializer<NtsFieldsHolder> {
+public class NtsFieldsSerializer extends StdSerializer<NtsFields> {
 
     /**
      * Constructor.
      */
-    NtsFieldsHolderSerializer() {
-        super(NtsFieldsHolder.class);
+    NtsFieldsSerializer() {
+        super(NtsFields.class);
     }
 
     @Override
-    public void serialize(NtsFieldsHolder holder, JsonGenerator jg, SerializerProvider provider) throws IOException {
+    public void serialize(NtsFields ntsFields, JsonGenerator jg, SerializerProvider provider) throws IOException {
         jg.writeStartObject();
-        jg.writeNumberField("rh_minimum_amount", holder.getRhMinimumAmount());
+        jg.writeNumberField("rh_minimum_amount", ntsFields.getRhMinimumAmount());
         jg.writeEndObject();
     }
 }

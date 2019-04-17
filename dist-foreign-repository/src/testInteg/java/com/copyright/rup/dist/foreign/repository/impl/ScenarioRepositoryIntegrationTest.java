@@ -7,7 +7,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.foreign.domain.NtsFieldsHolder;
+import com.copyright.rup.dist.foreign.domain.NtsFields;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
@@ -105,8 +105,8 @@ public class ScenarioRepositoryIntegrationTest {
         Scenario ntsScenario = scenarios.get(10);
         verifyScenario(ntsScenario, "1a5f3df4-c8a7-4dba-9a8f-7dce0b61c41b", "Test NTS scenario",
             "Description for test NTS scenario", ScenarioStatusEnum.IN_PROGRESS);
-        assertNotNull(ntsScenario.getNtsFieldsHolder());
-        assertEquals(new BigDecimal("300.00"), ntsScenario.getNtsFieldsHolder().getRhMinimumAmount());
+        assertNotNull(ntsScenario.getNtsFields());
+        assertEquals(new BigDecimal("300.00"), ntsScenario.getNtsFields().getRhMinimumAmount());
     }
 
     @Test
@@ -255,13 +255,13 @@ public class ScenarioRepositoryIntegrationTest {
     @Test
     public void testInsertNtsScenario() {
         Scenario scenario = buildScenario(SCENARIO_ID, SCENARIO_NAME);
-        NtsFieldsHolder ntsFieldsHolder = new NtsFieldsHolder();
-        ntsFieldsHolder.setRhMinimumAmount(new BigDecimal("300.00"));
-        scenario.setNtsFieldsHolder(ntsFieldsHolder);
+        NtsFields ntsFields = new NtsFields();
+        ntsFields.setRhMinimumAmount(new BigDecimal("300.00"));
+        scenario.setNtsFields(ntsFields);
         scenarioRepository.insert(scenario);
         Scenario ntsScenario = scenarioRepository.findWithAmountsAndLastAction(SCENARIO_ID);
-        assertNotNull(ntsScenario.getNtsFieldsHolder());
-        assertEquals(new BigDecimal("300.00"), ntsScenario.getNtsFieldsHolder().getRhMinimumAmount());
+        assertNotNull(ntsScenario.getNtsFields());
+        assertEquals(new BigDecimal("300.00"), ntsScenario.getNtsFields().getRhMinimumAmount());
     }
 
     private UsageBatch buildBatch(Long rroAccountNumber) {

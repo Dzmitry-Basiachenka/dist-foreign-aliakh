@@ -8,7 +8,7 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import com.copyright.rup.dist.foreign.domain.NtsFieldsHolder;
+import com.copyright.rup.dist.foreign.domain.NtsFields;
 
 import org.junit.Test;
 import org.postgresql.util.PGobject;
@@ -20,7 +20,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Verifies {@link NtsFieldsHolderTypeHandler}.
+ * Verifies {@link NtsFieldsTypeHandler}.
  * <p/>
  * Copyright (C) 2019 copyright.com
  * <p/>
@@ -28,26 +28,26 @@ import java.sql.SQLException;
  *
  * @author Aliaksandr Liakh
  */
-public class NtsFieldsHolderTypeHandlerTest {
+public class NtsFieldsTypeHandlerTest {
 
-    private static final String COLUMN_NAME = "nts_fields_holder";
+    private static final String COLUMN_NAME = "nts_fields";
     private static final int COLUMN_INDEX = 1;
     private static final int PARAMETER_INDEX = 1;
 
-    private final NtsFieldsHolderTypeHandler typeHandler = new NtsFieldsHolderTypeHandler();
+    private final NtsFieldsTypeHandler typeHandler = new NtsFieldsTypeHandler();
 
     @Test
     public void testSetNonNullParameterPreparedStatement() throws SQLException {
         PreparedStatement ps = createMock(PreparedStatement.class);
         PGobject pgobject = new PGobject();
-        NtsFieldsHolder holder = buildNtsFieldsHolder();
-        String json = typeHandler.serialize(holder);
+        NtsFields ntsFields = buildNtsFields();
+        String json = typeHandler.serialize(ntsFields);
         pgobject.setValue(json);
         pgobject.setType("jsonb");
         ps.setObject(PARAMETER_INDEX, pgobject);
         expectLastCall().once();
         replay(ps);
-        typeHandler.setNonNullParameter(ps, PARAMETER_INDEX, holder, null);
+        typeHandler.setNonNullParameter(ps, PARAMETER_INDEX, ntsFields, null);
         verify(ps);
     }
 
@@ -70,13 +70,13 @@ public class NtsFieldsHolderTypeHandlerTest {
     public void testGetNullableResultColumnIndex() throws SQLException {
         ResultSet rs = createMock(ResultSet.class);
         try {
-            NtsFieldsHolder holder = buildNtsFieldsHolder();
-            String json = typeHandler.serialize(holder);
+            NtsFields ntsFields = buildNtsFields();
+            String json = typeHandler.serialize(ntsFields);
             expect(rs.getString(COLUMN_INDEX)).andReturn(json).once();
             rs.close();
             expectLastCall().once();
             replay(rs);
-            assertEquals(holder, typeHandler.getNullableResult(rs, COLUMN_INDEX));
+            assertEquals(ntsFields, typeHandler.getNullableResult(rs, COLUMN_INDEX));
         } finally {
             rs.close();
         }
@@ -86,17 +86,17 @@ public class NtsFieldsHolderTypeHandlerTest {
     @Test
     public void testGetNullableResultCallableStatement() throws SQLException {
         CallableStatement cs = createMock(CallableStatement.class);
-        NtsFieldsHolder holder = buildNtsFieldsHolder();
-        String json = typeHandler.serialize(holder);
+        NtsFields ntsFields = buildNtsFields();
+        String json = typeHandler.serialize(ntsFields);
         expect(cs.getString(PARAMETER_INDEX)).andReturn(json).once();
         replay(cs);
-        assertEquals(holder, typeHandler.getNullableResult(cs, COLUMN_INDEX));
+        assertEquals(ntsFields, typeHandler.getNullableResult(cs, COLUMN_INDEX));
         verify(cs);
     }
 
-    private NtsFieldsHolder buildNtsFieldsHolder() {
-        NtsFieldsHolder holder = new NtsFieldsHolder();
-        holder.setRhMinimumAmount(new BigDecimal("300.00"));
-        return holder;
+    private NtsFields buildNtsFields() {
+        NtsFields ntsFields = new NtsFields();
+        ntsFields.setRhMinimumAmount(new BigDecimal("300.00"));
+        return ntsFields;
     }
 }
