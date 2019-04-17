@@ -95,8 +95,8 @@ public class CreateNtsScenarioWindow extends Window {
         binder.forField(rhMinimumAmountField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
             .withConverter(new StringToBigDecimalConverter(ForeignUi.getMessage("field.error.not_numeric")))
-            .withValidator(value -> new AmountValidator().isValid(value.toString()),
-                ForeignUi.getMessage("field.error.positive_number_length", 10))
+            .withValidator(value -> new AmountValidator(true).isValid(value.toString()),
+                ForeignUi.getMessage("field.error.positive_number_or_zero_length", 10))
             .bind(scenario -> scenario.getNtsFieldsHolder().getRhMinimumAmount(),
                 (Setter<Scenario, BigDecimal>) (scenario, rhMinimumAmount) ->
                     scenario.getNtsFieldsHolder().setRhMinimumAmount(rhMinimumAmount));
