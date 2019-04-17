@@ -127,6 +127,13 @@ public class CsvReportsIntegrationTest {
     }
 
     @Test
+    public void testExportScenarioRightsholderTotalsCsvReport() throws IOException {
+        assertFilesWithExecutor(outputStream ->
+            usageRepository.writeScenarioRightsholderTotalsCsvReport("12ec845f-0e76-4d1c-85cd-bb3fb7ca260e",
+                outputStream), "scenario_rightsholder_totals_report.csv");
+    }
+
+    @Test
     public void testWriteUsagesForResearchAndFindIds() throws IOException {
         UsageFilter usageFilter = new UsageFilter();
         usageFilter.setUsageStatus(UsageStatusEnum.WORK_NOT_FOUND);

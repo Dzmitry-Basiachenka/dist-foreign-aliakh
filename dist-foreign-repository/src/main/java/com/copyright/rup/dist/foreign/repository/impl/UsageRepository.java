@@ -6,6 +6,7 @@ import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
@@ -20,6 +21,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.repository.impl.csv.AuditCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.BatchSummaryReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.ResearchStatusReportHandler;
+import com.copyright.rup.dist.foreign.repository.impl.csv.ScenarioRightsholderTotalsCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.ScenarioUsagesCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.SendForResearchCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.ServiceFeeTrueUpReportHandler;
@@ -172,6 +174,19 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
                 parameters.put(PAGEABLE_KEY, new Pageable(offset, REPORT_BATCH_SIZE));
                 getTemplate().select("IUsageMapper.findDtoByScenarioId", parameters, handler);
             }
+        }
+    }
+
+    @Override
+    public void writeScenarioRightsholderTotalsCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
+        Objects.requireNonNull(pipedOutputStream);
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        parameters.put(SORT_KEY, new Sort("rightsholder.accountNumber", Direction.ASC));
+        try (ScenarioRightsholderTotalsCsvReportHandler handler
+                 = new ScenarioRightsholderTotalsCsvReportHandler(pipedOutputStream)) {
+            getTemplate().select("IUsageMapper.findRightsholderTotalsHoldersByScenarioId",
+                parameters, handler);
         }
     }
 

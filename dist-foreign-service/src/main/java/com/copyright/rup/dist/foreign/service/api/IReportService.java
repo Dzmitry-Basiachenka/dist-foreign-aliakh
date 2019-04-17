@@ -47,6 +47,14 @@ public interface IReportService {
     void writeScenarioUsagesCsvReport(Scenario scenario, PipedOutputStream pipedOutputStream);
 
     /**
+     * Writes scenario rightsholders into csv output stream.
+     *
+     * @param scenario          {@link Scenario}
+     * @param pipedOutputStream instance of {@link PipedOutputStream}
+     */
+    void writeScenarioRightsholderTotalsCsvReport(Scenario scenario, PipedOutputStream pipedOutputStream);
+
+    /**
      * Writes Undistributed Liabilities Reconciliation Report into the output stream in csv format.
      *
      * @param paymentDate  payment date

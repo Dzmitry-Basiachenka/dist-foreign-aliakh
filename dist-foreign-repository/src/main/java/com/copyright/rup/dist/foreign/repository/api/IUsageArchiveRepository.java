@@ -101,6 +101,14 @@ public interface IUsageArchiveRepository {
     void writeScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
 
     /**
+     * Finds {@link RightsholderTotalsHolder}s based on scenario id and writes them to the output stream in CSV format.
+     *
+     * @param scenarioId        scenario id
+     * @param pipedOutputStream instance of {@link PipedOutputStream}
+     */
+    void writeScenarioRightsholderTotalsCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
+
+    /**
      * Updates paid information for {@link PaidUsage} by id.
      *
      * @param usage {@link PaidUsage} instance

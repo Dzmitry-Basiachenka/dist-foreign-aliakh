@@ -289,11 +289,20 @@ public class UsageArchiveRepositoryIntegrationTest {
     }
 
     @Test
+    // TODO {pliakh} move to CsvReportsIntegrationTest
     public void testWriteScenarioUsagesCsvReport() throws Exception {
         PipedOutputStream pos = new PipedOutputStream();
         PipedInputStream pis = new PipedInputStream(pos);
         EXECUTOR.execute(() -> usageArchiveRepository.writeScenarioUsagesCsvReport(SCENARIO_ID, pos));
         reportTestUtils.assertCsvReport("archive_scenario_usages_report.csv", pis);
+    }
+
+    @Test
+    public void testExportScenarioRightsholderTotalsCsvReport() throws IOException {
+        PipedOutputStream pos = new PipedOutputStream();
+        PipedInputStream pis = new PipedInputStream(pos);
+        EXECUTOR.execute(() -> usageArchiveRepository.writeScenarioRightsholderTotalsCsvReport(SCENARIO_ID, pos));
+        reportTestUtils.assertCsvReport("archive_scenario_rightsholder_totals_report.csv", pis);
     }
 
     @Test
