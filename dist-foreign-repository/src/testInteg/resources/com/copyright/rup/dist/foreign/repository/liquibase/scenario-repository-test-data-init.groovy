@@ -563,7 +563,7 @@ databaseChangeLog {
                 column(name: 'name', value: 'Test NTS scenario')
                 column(name: 'status_ind', value: 'IN_PROGRESS')
                 column(name: 'description', value: 'Description for test NTS scenario')
-                column(name: 'nts_fields_holder', value: '{"rh_minimum_amount":300.00}')
+                column(name: 'nts_fields', value: '{"rh_minimum_amount":300.00}')
                 column(name: 'updated_datetime', value: '2011-01-01 17:47:24')
             }
 

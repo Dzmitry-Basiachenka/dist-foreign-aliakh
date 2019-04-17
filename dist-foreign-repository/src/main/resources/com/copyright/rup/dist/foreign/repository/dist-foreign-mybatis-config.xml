@@ -43,14 +43,14 @@
         <typeAlias alias="UsageStatistic" type="com.copyright.rup.dist.foreign.domain.report.UsageStatistic"/>
         <typeAlias alias="WorkClassification" type="com.copyright.rup.dist.foreign.domain.WorkClassification"/>
         <typeAlias alias="PreServiceFeeFund" type="com.copyright.rup.dist.foreign.domain.PreServiceFeeFund"/>
-        <typeAlias alias="NtsFieldsHolderTypeHandler" type="com.copyright.rup.dist.foreign.repository.impl.converter.NtsFieldsHolderTypeHandler"/>
+        <typeAlias alias="NtsFieldsTypeHandler" type="com.copyright.rup.dist.foreign.repository.impl.converter.NtsFieldsTypeHandler"/>
     </typeAliases>
 
     <typeHandlers>
         <typeHandler handler="org.apache.ibatis.type.LocalDateTypeHandler"/>
         <typeHandler handler="org.apache.ibatis.type.OffsetDateTimeTypeHandler"/>
         <typeHandler handler="FundPoolTypeHandler" javaType="com.copyright.rup.dist.foreign.domain.FundPool"/>
-        <typeHandler handler="NtsFieldsHolderTypeHandler" javaType="com.copyright.rup.dist.foreign.domain.NtsFieldsHolder"/>
+        <typeHandler handler="NtsFieldsTypeHandler" javaType="com.copyright.rup.dist.foreign.domain.NtsFields"/>
     </typeHandlers>
 
     <mappers>

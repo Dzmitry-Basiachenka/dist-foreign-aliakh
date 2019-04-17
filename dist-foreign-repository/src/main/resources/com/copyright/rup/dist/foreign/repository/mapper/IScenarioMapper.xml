@@ -13,7 +13,7 @@
         <result property="grossTotal" column="gross_total"/>
         <result property="reportedTotal" column="reported_total"/>
         <result property="description" column="description"/>
-        <result property="ntsFieldsHolder" column="nts_fields_holder" typeHandler="NtsFieldsHolderTypeHandler"/>
+        <result property="ntsFields" column="nts_fields" typeHandler="NtsFieldsTypeHandler"/>
         <association property="auditItem" resultMap="IScenarioAuditMapper.scenarioAuditItemResultMap" columnPrefix="action_"/>
     </resultMap>
 
@@ -29,7 +29,7 @@
         name,
         status_ind,
         description,
-        nts_fields_holder,
+        nts_fields,
         <include refid="StoredEntityMapper.additionalColumns"/>
     </sql>
 
@@ -42,7 +42,7 @@
         coalesce(sum(u.service_fee_amount), 0) service_fee_total,
         coalesce(sum(u.net_amount), 0) net_total,
         s.description,
-        s.nts_fields_holder,
+        s.nts_fields,
         a1.df_scenario_audit_uid action_df_scenario_audit_uid,
         a1.df_scenario_uid action_df_scenario_uid,
         a1.action_type_ind action_action_type_ind,
@@ -62,7 +62,7 @@
             #{name},
             #{status},
             #{description},
-            #{ntsFieldsHolder, typeHandler=NtsFieldsHolderTypeHandler},
+            #{ntsFields, typeHandler=NtsFieldsTypeHandler},
             <include refid="StoredEntityMapper.insert"/>
         )
     </insert>

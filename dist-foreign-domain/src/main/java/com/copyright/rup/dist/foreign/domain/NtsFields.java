@@ -16,7 +16,7 @@ import java.math.BigDecimal;
  *
  * @author Aliaksandr Liakh
  */
-public class NtsFieldsHolder {
+public class NtsFields {
 
     private BigDecimal rhMinimumAmount = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
 
@@ -36,7 +36,7 @@ public class NtsFieldsHolder {
         if (null == obj || this.getClass() != obj.getClass()) {
             return false;
         }
-        NtsFieldsHolder that = (NtsFieldsHolder) obj;
+        NtsFields that = (NtsFields) obj;
         return new EqualsBuilder()
             .append(this.rhMinimumAmount, that.rhMinimumAmount)
             .isEquals();

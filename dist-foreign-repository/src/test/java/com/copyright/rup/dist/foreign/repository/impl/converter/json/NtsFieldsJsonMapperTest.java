@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import com.copyright.rup.dist.common.test.TestUtils;
-import com.copyright.rup.dist.foreign.domain.NtsFieldsHolder;
+import com.copyright.rup.dist.foreign.domain.NtsFields;
 
 import com.fasterxml.jackson.core.JsonParseException;
 
@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 
 /**
- * Verifies {@link NtsFieldsHolderJsonMapper}.
+ * Verifies {@link NtsFieldsJsonMapper}.
  * <p/>
  * Copyright (C) 2019 copyright.com
  * <p/>
@@ -22,23 +22,23 @@ import java.math.BigDecimal;
  *
  * @author Aliaksandr Liakh
  */
-public class NtsFieldsHolderJsonMapperTest {
+public class NtsFieldsJsonMapperTest {
 
-    private final NtsFieldsHolderJsonMapper jsonMapper = new NtsFieldsHolderJsonMapper();
+    private final NtsFieldsJsonMapper jsonMapper = new NtsFieldsJsonMapper();
 
     @Test
     public void testDeserialize() throws IOException {
-        String json = TestUtils.fileToString(this.getClass(), "nts_fields_holder.json");
-        NtsFieldsHolder holder = jsonMapper.deserialize(json);
-        assertEquals(new BigDecimal("300.00"), holder.getRhMinimumAmount());
+        String json = TestUtils.fileToString(this.getClass(), "nts_fields.json");
+        NtsFields ntsFields = jsonMapper.deserialize(json);
+        assertEquals(new BigDecimal("300.00"), ntsFields.getRhMinimumAmount());
     }
 
     @Test
     public void testSerialize() throws IOException {
-        NtsFieldsHolder holder = new NtsFieldsHolder();
-        holder.setRhMinimumAmount(new BigDecimal("300.00"));
-        String actualJson = jsonMapper.serialize(holder);
-        assertEquals(holder, jsonMapper.deserialize(actualJson));
+        NtsFields ntsFields = new NtsFields();
+        ntsFields.setRhMinimumAmount(new BigDecimal("300.00"));
+        String actualJson = jsonMapper.serialize(ntsFields);
+        assertEquals(ntsFields, jsonMapper.deserialize(actualJson));
     }
 
     @Test
