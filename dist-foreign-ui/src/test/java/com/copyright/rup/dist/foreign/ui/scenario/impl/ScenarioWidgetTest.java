@@ -75,6 +75,7 @@ public class ScenarioWidgetTest {
         scenario.setNetTotal(new BigDecimal("13600.00"));
         expect(controller.getScenario()).andReturn(scenario).once();
         expect(controller.getExportScenarioUsagesStreamSource()).andReturn(createMock(IStreamSource.class)).once();
+        expect(controller.getExportScenarioRightsholdersStreamSource()).andReturn(createMock(IStreamSource.class)).once();
         expect(controller.getScenarioWithAmountsAndLastAction()).andReturn(scenario).once();
         replay(controller, ForeignSecurityUtils.class, mediator);
         scenarioWidget.init();
@@ -154,13 +155,16 @@ public class ScenarioWidgetTest {
     private void verifyButtonsLayout(Component component) {
         assertTrue(component instanceof HorizontalLayout);
         HorizontalLayout horizontalLayout = (HorizontalLayout) component;
-        assertEquals(3, horizontalLayout.getComponentCount());
+        assertEquals(4, horizontalLayout.getComponentCount());
         Button excludeButton = (Button) horizontalLayout.getComponent(0);
         assertEquals("Exclude Details", excludeButton.getCaption());
-        Button exportButton = (Button) horizontalLayout.getComponent(1);
-        assertEquals("Export", exportButton.getCaption());
-        assertEquals("Export", exportButton.getId());
-        Button closeButton = (Button) horizontalLayout.getComponent(2);
+        Button exportDetailsButton = (Button) horizontalLayout.getComponent(1);
+        assertEquals("Export Details", exportDetailsButton.getCaption());
+        assertEquals("Export_Details", exportDetailsButton.getId());
+        Button exportRightsholdersButton = (Button) horizontalLayout.getComponent(2);
+        assertEquals("Export Rightsholders", exportRightsholdersButton.getCaption());
+        assertEquals("Export_Rightsholders", exportRightsholdersButton.getId());
+        Button closeButton = (Button) horizontalLayout.getComponent(3);
         assertEquals("Close", closeButton.getCaption());
         assertEquals("Close", closeButton.getId());
         assertTrue(horizontalLayout.isSpacing());

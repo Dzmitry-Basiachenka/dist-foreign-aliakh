@@ -22,7 +22,8 @@ import com.vaadin.ui.VerticalLayout;
 class ScenarioMediator implements IMediator {
 
     private Button excludeButton;
-    private Button exportButton;
+    private Button exportDetailsButton;
+    private Button exportRightsholdersButton;
     private Grid<RightsholderTotalsHolder> rightsholderGrid;
     private SearchWidget searchWidget;
     private VerticalLayout emptyUsagesLayout;
@@ -36,8 +37,12 @@ class ScenarioMediator implements IMediator {
         this.excludeButton = excludeButton;
     }
 
-    void setExportButton(Button exportButton) {
-        this.exportButton = exportButton;
+    void setExportDetailsButton(Button exportDetailsButton) {
+        this.exportDetailsButton = exportDetailsButton;
+    }
+
+    void setExportRightsholdersButton(Button exportRightsholdersButton) {
+        this.exportRightsholdersButton = exportRightsholdersButton;
     }
 
     public void setRightsholderGrid(Grid<RightsholderTotalsHolder> rightsholderGrid) {
@@ -60,7 +65,8 @@ class ScenarioMediator implements IMediator {
      */
     void onScenarioUpdated(boolean scenarioEmpty, ScenarioStatusEnum status) {
         excludeButton.setEnabled(!scenarioEmpty && ScenarioStatusEnum.IN_PROGRESS == status);
-        exportButton.setEnabled(!scenarioEmpty);
+        exportDetailsButton.setEnabled(!scenarioEmpty);
+        exportRightsholdersButton.setEnabled(!scenarioEmpty);
         rightsholderGrid.setVisible(!scenarioEmpty);
         searchWidget.setVisible(!scenarioEmpty);
         emptyUsagesLayout.setVisible(scenarioEmpty);

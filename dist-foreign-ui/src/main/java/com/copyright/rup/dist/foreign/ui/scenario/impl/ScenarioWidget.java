@@ -55,7 +55,8 @@ public class ScenarioWidget extends Window implements IScenarioWidget, IMediator
     private ScenarioController controller;
     private SearchWidget searchWidget;
     private VerticalLayout emptyUsagesLayout;
-    private Button exportButton;
+    private Button exportDetailsButton;
+    private Button exportRightsholdersButton;
     private Button excludeButton;
     private ScenarioMediator mediator;
     private Grid<RightsholderTotalsHolder> rightsholdersGrid;
@@ -115,7 +116,8 @@ public class ScenarioWidget extends Window implements IScenarioWidget, IMediator
     public IMediator initMediator() {
         mediator = new ScenarioMediator();
         mediator.setExcludeButton(excludeButton);
-        mediator.setExportButton(exportButton);
+        mediator.setExportDetailsButton(exportDetailsButton);
+        mediator.setExportRightsholdersButton(exportRightsholdersButton);
         mediator.setEmptyUsagesLayout(emptyUsagesLayout);
         mediator.setRightsholderGrid(rightsholdersGrid);
         mediator.setSearchWidget(searchWidget);
@@ -246,13 +248,18 @@ public class ScenarioWidget extends Window implements IScenarioWidget, IMediator
     }
 
     private HorizontalLayout initButtons() {
-        exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
-        OnDemandFileDownloader fileDownloader =
+        exportDetailsButton = Buttons.createButton(ForeignUi.getMessage("button.export_details"));
+        OnDemandFileDownloader exportDetailsFileDownloader =
             new OnDemandFileDownloader(controller.getExportScenarioUsagesStreamSource());
-        fileDownloader.extend(exportButton);
+        exportDetailsFileDownloader.extend(exportDetailsButton);
+        exportRightsholdersButton = Buttons.createButton(ForeignUi.getMessage("button.export_rightsholders"));
+        OnDemandFileDownloader exportRightsholdersFileDownloader =
+            new OnDemandFileDownloader(controller.getExportScenarioRightsholdersStreamSource());
+        exportRightsholdersFileDownloader.extend(exportRightsholdersButton);
         excludeButton = new Button(ForeignUi.getMessage("button.exclude.details"));
         excludeButton.addClickListener(event -> controller.onExcludeDetailsClicked());
-        HorizontalLayout buttons = new HorizontalLayout(excludeButton, exportButton, Buttons.createCloseButton(this));
+        HorizontalLayout buttons = new HorizontalLayout(
+            excludeButton, exportDetailsButton, exportRightsholdersButton, Buttons.createCloseButton(this));
         VaadinUtils.addComponentStyle(buttons, "scenario-buttons-layout");
         buttons.setMargin(new MarginInfo(false, true, true, false));
         return buttons;
