@@ -87,15 +87,14 @@ public class ScenarioController extends CommonController<IScenarioWidget> implem
 
     @Override
     public IStreamSource getExportScenarioUsagesStreamSource() {
-        return new ExportStreamSource(scenario.getName() + "_",
+        return new ExportStreamSource(scenario.getName() + "_Details_",
             pipedStream -> reportService.writeScenarioUsagesCsvReport(scenario, pipedStream));
     }
 
     @Override
-    public IStreamSource getExportScenarioRightsholdersStreamSource() {
-        // TODO {pliakh} replace with export scenario rightsholders logic after it will be implemented and add test
+    public IStreamSource getExportScenarioRightsholderTotalsStreamSource() {
         return new ExportStreamSource(scenario.getName() + "_",
-            pipedStream -> reportService.writeScenarioUsagesCsvReport(scenario, pipedStream));
+            pipedStream -> reportService.writeScenarioRightsholderTotalsCsvReport(scenario, pipedStream));
     }
 
     @Override

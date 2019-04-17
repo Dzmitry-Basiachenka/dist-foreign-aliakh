@@ -171,9 +171,38 @@ public class ScenarioControllerTest {
 
     @Test
     public void testGetScenarioUsagesExportFileName() {
-        assertEquals("Scenario_name_" + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm") + ".csv",
+        assertEquals(
+            "Scenario_name_Details_" + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm") + ".csv",
             controller.getExportScenarioUsagesStreamSource().getFileName());
     }
+
+    @Test
+    public void testGetScenarioRightsholderTotalsExportStream() {
+        IStreamSource exportScenarioUsagesStreamSource = controller.getExportScenarioRightsholderTotalsStreamSource();
+        ExecutorService executorService = createMock(ExecutorService.class);
+        Whitebox.setInternalState(exportScenarioUsagesStreamSource, executorService);
+        Capture<Runnable> captureRunnable = new Capture<>();
+        executorService.execute(capture(captureRunnable));
+        expectLastCall().once();
+        expect(scenarioService.getScenarioWithAmountsAndLastAction(scenario)).andReturn(scenario).once();
+        expect(ForeignSecurityUtils.hasExcludeFromScenarioPermission()).andReturn(true).once();
+        replay(usageService, executorService, scenarioService, ForeignSecurityUtils.class);
+        controller.initWidget();
+        assertNotNull(exportScenarioUsagesStreamSource.getStream());
+        Runnable runnable = captureRunnable.getValue();
+        assertNotNull(runnable);
+        assertSame(exportScenarioUsagesStreamSource, Whitebox.getInternalState(runnable, "arg$1"));
+        assertTrue(Whitebox.getInternalState(runnable, "arg$2") instanceof PipedOutputStream);
+        verify(usageService, executorService, scenarioService, ForeignSecurityUtils.class);
+    }
+
+    @Test
+    public void testGetScenarioRightsholderTotalsExportFileName() {
+        assertEquals(
+            "Scenario_name_" + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm") + ".csv",
+            controller.getExportScenarioRightsholderTotalsStreamSource().getFileName());
+    }
+
 
     @Test
     public void testOnExcludeDetailsClickedWithDiscrepancies() {

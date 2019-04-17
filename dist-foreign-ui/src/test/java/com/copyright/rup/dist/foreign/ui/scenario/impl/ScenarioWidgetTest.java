@@ -75,7 +75,7 @@ public class ScenarioWidgetTest {
         scenario.setNetTotal(new BigDecimal("13600.00"));
         expect(controller.getScenario()).andReturn(scenario).once();
         expect(controller.getExportScenarioUsagesStreamSource()).andReturn(createMock(IStreamSource.class)).once();
-        expect(controller.getExportScenarioRightsholdersStreamSource()).andReturn(createMock(IStreamSource.class))
+        expect(controller.getExportScenarioRightsholderTotalsStreamSource()).andReturn(createMock(IStreamSource.class))
             .once();
         expect(controller.getScenarioWithAmountsAndLastAction()).andReturn(scenario).once();
         replay(controller, ForeignSecurityUtils.class, mediator);
@@ -162,9 +162,9 @@ public class ScenarioWidgetTest {
         Button exportDetailsButton = (Button) horizontalLayout.getComponent(1);
         assertEquals("Export Details", exportDetailsButton.getCaption());
         assertEquals("Export_Details", exportDetailsButton.getId());
-        Button exportRightsholdersButton = (Button) horizontalLayout.getComponent(2);
-        assertEquals("Export Rightsholders", exportRightsholdersButton.getCaption());
-        assertEquals("Export_Rightsholders", exportRightsholdersButton.getId());
+        Button exportScenarioButton = (Button) horizontalLayout.getComponent(2);
+        assertEquals("Export Scenario", exportScenarioButton.getCaption());
+        assertEquals("Export_Scenario", exportScenarioButton.getId());
         Button closeButton = (Button) horizontalLayout.getComponent(3);
         assertEquals("Close", closeButton.getCaption());
         assertEquals("Close", closeButton.getId());
