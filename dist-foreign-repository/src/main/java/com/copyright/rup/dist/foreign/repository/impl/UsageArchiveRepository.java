@@ -6,6 +6,7 @@ import com.copyright.rup.dist.common.domain.StoredEntity;
 import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
@@ -13,6 +14,7 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
+import com.copyright.rup.dist.foreign.repository.impl.csv.ScenarioRightsholderTotalsCsvReportHandler;
 import com.copyright.rup.dist.foreign.repository.impl.csv.ScenarioUsagesCsvReportHandler;
 
 import com.google.common.collect.ImmutableMap;
@@ -111,6 +113,19 @@ public class UsageArchiveRepository extends BaseRepository implements IUsageArch
             if (Objects.nonNull(scenarioId)) {
                 getTemplate().select("IUsageArchiveMapper.findDtoByScenarioId", scenarioId, handler);
             }
+        }
+    }
+
+    @Override
+    public void writeScenarioRightsholderTotalsCsvReport(String scenarioId, PipedOutputStream pipedOutputStream) {
+        Objects.requireNonNull(pipedOutputStream);
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        parameters.put(SORT_KEY, new Sort("rightsholder.accountNumber", Direction.ASC));
+        try (ScenarioRightsholderTotalsCsvReportHandler handler
+                 = new ScenarioRightsholderTotalsCsvReportHandler(pipedOutputStream)) {
+            getTemplate().select("IUsageArchiveMapper.findRightsholderTotalsHoldersByScenarioId",
+                parameters, handler);
         }
     }
 

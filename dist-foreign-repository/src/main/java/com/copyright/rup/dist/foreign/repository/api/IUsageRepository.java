@@ -153,6 +153,14 @@ public interface IUsageRepository {
     void writeScenarioUsagesCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
 
     /**
+     * Finds {@link RightsholderTotalsHolder}s based on scenario id and writes them to the output stream in CSV format.
+     *
+     * @param scenarioId        scenario id
+     * @param pipedOutputStream instance of {@link PipedOutputStream}
+     */
+    void writeScenarioRightsholderTotalsCsvReport(String scenarioId, PipedOutputStream pipedOutputStream);
+
+    /**
      * Deletes all {@link Usage}s from the batch with given id.
      *
      * @param batchId {@link com.copyright.rup.dist.foreign.domain.UsageBatch} id
