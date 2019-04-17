@@ -1,3 +1,14 @@
+5.1.17
+-
+* B-49019 FDA: Create NTS Scenario: add nts_fields column to the table df_scenario
+* B-49019 FDA: Create NTS Scenario: implement Liqubase script to add JSONB column nts_fields_holder to the table df_scenario
+* B-49019 FDA: Create NTS Scenario: implement repository methods to save and load the field rhMinimumAmount
+* B-49019 FDA: Create NTS Scenario: refactor Create Scenario dialog to allow zero to be a valid value for the field rhMinimumAmount
+* B-50007 FDA: Export Rightsholders from Scenario View: add service logic for export scenario rightsholders
+* B-50007 FDA: Export Rightsholders from Scenario View: adjust Export Rightsholders button to export scenario Rhs, rename Export Rightsholders button to Export Scenario
+* B-50007 FDA: Export Rightsholders from Scenario View: fix checkstyle error in ScenarioWidgetTest
+* B-50007 FDA: Export Rightsholders from Scenario View: rename scenario view Export button to Export Details, add button mocked Export Rightsholders button to scenario view
+
 5.1.16
 -
 * B-49019 FDA: Create NTS Scenario: implement Create Scenario dialog
