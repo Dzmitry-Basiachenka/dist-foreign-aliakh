@@ -8,6 +8,7 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.repository.api.Sort.Direction;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
+import com.copyright.rup.dist.foreign.domain.NtsFields;
 import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.Scenario;
@@ -189,6 +190,16 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     @Override
     public Scenario createScenario(String scenarioName, String description) {
         Scenario scenario = scenarioService.createScenario(scenarioName, description,
+            filterController.getWidget().getAppliedFilter());
+        filterController.getWidget().clearFilter();
+        return scenario;
+    }
+
+    @Override
+    public Scenario createNtsScenario(String scenarioName, BigDecimal rhMinimumAmount, String description) {
+        NtsFields ntsFields = new NtsFields();
+        ntsFields.setRhMinimumAmount(rhMinimumAmount);
+        Scenario scenario = scenarioService.createNtsScenario(scenarioName, ntsFields, description,
             filterController.getWidget().getAppliedFilter());
         filterController.getWidget().clearFilter();
         return scenario;

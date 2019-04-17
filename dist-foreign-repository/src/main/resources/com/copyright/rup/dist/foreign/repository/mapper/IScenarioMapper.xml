@@ -67,6 +67,34 @@
         )
     </insert>
 
+    <insert id="insertNtsScenarioAndAddUsages" parameterType="map">
+        with result as (
+            insert into ${schema}.df_scenario (
+                <include refid="scenarioColumns"/>
+            ) values (
+                #{scenario.id},
+                #{scenario.name},
+                #{scenario.status},
+                #{scenario.description},
+                #{scenario.ntsFields, typeHandler=NtsFieldsTypeHandler},
+                <include refid="StoredEntityMapper.insert"/>
+            )
+        )
+        update
+            ${schema}.df_usage
+        set
+            status_ind = #{status},
+            df_scenario_uid = #{scenario.id},
+            <include refid="StoredEntityMapper.update"/>
+        where df_usage_uid in (
+            select
+                u.df_usage_uid
+            from ${schema}.df_usage u
+            join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+            <include refid="IUsageMapper.usageFilter"/>
+        )
+    </insert>
+
     <update id="refresh" parameterType="Scenario">
         update ${schema}.df_scenario
         set

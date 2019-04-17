@@ -124,7 +124,8 @@ public class CreateNtsScenarioWindow extends Window {
     private void onConfirmButtonClicked() {
         if (binder.isValid()) {
             fireEvent(new ScenarioCreateEvent(this,
-                controller.createScenario(StringUtils.trimToEmpty(scenarioNameField.getValue()),
+                controller.createNtsScenario(StringUtils.trimToEmpty(scenarioNameField.getValue()),
+                    new BigDecimal(StringUtils.trimToEmpty(rhMinimumAmountField.getValue())),
                     StringUtils.trimToEmpty(descriptionArea.getValue()))));
             close();
         } else {

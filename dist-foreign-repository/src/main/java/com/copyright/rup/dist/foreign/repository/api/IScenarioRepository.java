@@ -4,6 +4,7 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
+import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import java.util.List;
 
@@ -26,6 +27,14 @@ public interface IScenarioRepository {
      * @param scenario {@link Scenario} instance
      */
     void insert(Scenario scenario);
+
+    /**
+     * Inserts NTS scenario and adds usages to it.
+     *
+     * @param scenario {@link Scenario} instance
+     * @param filter   instance of {@link UsageFilter} for usages to be added
+     */
+    void insertNtsScenarioAndAddUsages(Scenario scenario, UsageFilter filter);
 
     /**
      * Refreshes {@link Scenario} in database.

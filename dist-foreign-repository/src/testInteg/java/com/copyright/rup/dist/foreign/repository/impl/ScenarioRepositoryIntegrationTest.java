@@ -16,6 +16,7 @@ import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 
@@ -34,6 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -253,15 +255,24 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     @Test
-    public void testInsertNtsScenario() {
+    public void testInsertNtsScenarioAndAddUsages() {
         Scenario scenario = buildScenario(SCENARIO_ID, SCENARIO_NAME);
         NtsFields ntsFields = new NtsFields();
         ntsFields.setRhMinimumAmount(new BigDecimal("300.00"));
         scenario.setNtsFields(ntsFields);
-        scenarioRepository.insert(scenario);
+        UsageFilter usageFilter = new UsageFilter();
+        usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
+        usageFilter.setProductFamilies(Collections.singleton("NTS"));
+        scenarioRepository.insertNtsScenarioAndAddUsages(scenario, usageFilter);
         Scenario ntsScenario = scenarioRepository.findWithAmountsAndLastAction(SCENARIO_ID);
         assertNotNull(ntsScenario.getNtsFields());
         assertEquals(new BigDecimal("300.00"), ntsScenario.getNtsFields().getRhMinimumAmount());
+        List<Usage> usages = usageRepository.findByScenarioId(SCENARIO_ID);
+        assertNotNull(usages);
+        assertEquals(1, usages.size());
+        Usage usage = usages.get(0);
+        assertEquals(UsageStatusEnum.LOCKED, usage.getStatus());
+        assertEquals(SCENARIO_ID, usage.getScenarioId());
     }
 
     private UsageBatch buildBatch(Long rroAccountNumber) {
@@ -310,6 +321,8 @@ public class ScenarioRepositoryIntegrationTest {
         scenario.setName(name);
         scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
         scenario.setDescription(DESCRIPTION);
+        scenario.setCreateUser("SYSTEM");
+        scenario.setUpdateUser("SYSTEM");
         return scenario;
     }
 
