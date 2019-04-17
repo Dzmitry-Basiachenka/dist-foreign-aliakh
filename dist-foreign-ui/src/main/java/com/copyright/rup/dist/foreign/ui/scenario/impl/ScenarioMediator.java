@@ -23,7 +23,7 @@ class ScenarioMediator implements IMediator {
 
     private Button excludeButton;
     private Button exportDetailsButton;
-    private Button exportRightsholdersButton;
+    private Button exportScenarioButton;
     private Grid<RightsholderTotalsHolder> rightsholderGrid;
     private SearchWidget searchWidget;
     private VerticalLayout emptyUsagesLayout;
@@ -41,8 +41,8 @@ class ScenarioMediator implements IMediator {
         this.exportDetailsButton = exportDetailsButton;
     }
 
-    void setExportRightsholdersButton(Button exportRightsholdersButton) {
-        this.exportRightsholdersButton = exportRightsholdersButton;
+    void setExportScenarioButton(Button exportScenarioButton) {
+        this.exportScenarioButton = exportScenarioButton;
     }
 
     public void setRightsholderGrid(Grid<RightsholderTotalsHolder> rightsholderGrid) {
@@ -66,7 +66,7 @@ class ScenarioMediator implements IMediator {
     void onScenarioUpdated(boolean scenarioEmpty, ScenarioStatusEnum status) {
         excludeButton.setEnabled(!scenarioEmpty && ScenarioStatusEnum.IN_PROGRESS == status);
         exportDetailsButton.setEnabled(!scenarioEmpty);
-        exportRightsholdersButton.setEnabled(!scenarioEmpty);
+        exportScenarioButton.setEnabled(!scenarioEmpty);
         rightsholderGrid.setVisible(!scenarioEmpty);
         searchWidget.setVisible(!scenarioEmpty);
         emptyUsagesLayout.setVisible(scenarioEmpty);

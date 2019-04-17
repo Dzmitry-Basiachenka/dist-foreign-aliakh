@@ -29,9 +29,9 @@ public interface IScenarioController extends IController<IScenarioWidget>, ISear
     IStreamSource getExportScenarioUsagesStreamSource();
 
     /**
-     * @return instance of {@link IStreamSource} for export rightsholders.
+     * @return instance of {@link IStreamSource} for export scenario.
      */
-    IStreamSource getExportScenarioRightsholdersStreamSource();
+    IStreamSource getExportScenarioRightsholderTotalsStreamSource();
 
     /**
      * Handles click on "Rightsholder Account Number" button.
