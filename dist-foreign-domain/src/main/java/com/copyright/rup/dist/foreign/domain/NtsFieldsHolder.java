@@ -16,16 +16,16 @@ import java.math.BigDecimal;
  *
  * @author Aliaksandr Liakh
  */
-public class NtsScenario {
+public class NtsFieldsHolder {
 
-    private BigDecimal minimumRhAmount = BigDecimal.ZERO;
+    private BigDecimal rhMinimumAmount = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
 
-    public BigDecimal getMinimumRhAmount() {
-        return minimumRhAmount;
+    public BigDecimal getRhMinimumAmount() {
+        return rhMinimumAmount;
     }
 
-    public void setMinimumRhAmount(BigDecimal minimumRhAmount) {
-        this.minimumRhAmount = minimumRhAmount;
+    public void setRhMinimumAmount(BigDecimal rhMinimumAmount) {
+        this.rhMinimumAmount = rhMinimumAmount;
     }
 
     @Override
@@ -36,23 +36,23 @@ public class NtsScenario {
         if (null == obj || this.getClass() != obj.getClass()) {
             return false;
         }
-        NtsScenario that = (NtsScenario) obj;
+        NtsFieldsHolder that = (NtsFieldsHolder) obj;
         return new EqualsBuilder()
-            .append(this.minimumRhAmount, that.minimumRhAmount)
+            .append(this.rhMinimumAmount, that.rhMinimumAmount)
             .isEquals();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
-            .append(minimumRhAmount)
+            .append(rhMinimumAmount)
             .toHashCode();
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-            .append("minimumRhAmount", minimumRhAmount)
+            .append("rhMinimumAmount", rhMinimumAmount)
             .toString();
     }
 }

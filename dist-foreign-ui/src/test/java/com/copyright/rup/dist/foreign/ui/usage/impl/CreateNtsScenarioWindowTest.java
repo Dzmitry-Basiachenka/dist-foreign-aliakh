@@ -78,9 +78,9 @@ public class CreateNtsScenarioWindowTest {
 
     private void verifyMinimumRhAmountField(Component component) {
         assertNotNull(component);
-        TextField minimumRhAmountField = (TextField) component;
-        assertEquals("Minimum RH amount", minimumRhAmountField.getCaption());
-        assertEquals("300", minimumRhAmountField.getValue());
+        TextField rhMinimumAmountField = (TextField) component;
+        assertEquals("RH Minimum Amount", rhMinimumAmountField.getCaption());
+        assertEquals("300", rhMinimumAmountField.getValue());
     }
 
     private void verifyDescriptionArea(Component component) {

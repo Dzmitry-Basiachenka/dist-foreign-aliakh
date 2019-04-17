@@ -43,7 +43,7 @@ public class CreateNtsScenarioWindow extends Window {
     private final IUsagesController controller;
     private final Binder<Scenario> binder = new Binder<>();
     private TextField scenarioNameField;
-    private TextField minimumRhAmountField;
+    private TextField rhMinimumAmountField;
     private TextArea descriptionArea;
 
     /**
@@ -58,7 +58,7 @@ public class CreateNtsScenarioWindow extends Window {
         setCaption(ForeignUi.getMessage("window.create_scenario"));
         initFields();
         HorizontalLayout buttonsLayout = initButtonsLayout();
-        VerticalLayout layout = new VerticalLayout(scenarioNameField, minimumRhAmountField, descriptionArea,
+        VerticalLayout layout = new VerticalLayout(scenarioNameField, rhMinimumAmountField, descriptionArea,
             buttonsLayout);
         layout.setSpacing(true);
         layout.setMargin(true);
@@ -90,18 +90,18 @@ public class CreateNtsScenarioWindow extends Window {
     }
 
     private void initMinimumRhAmountField() {
-        minimumRhAmountField = new TextField(ForeignUi.getMessage("field.minimum_rh_amount"));
-        minimumRhAmountField.setRequiredIndicatorVisible(true);
-        binder.forField(minimumRhAmountField)
+        rhMinimumAmountField = new TextField(ForeignUi.getMessage("field.rh_minimum_amount"));
+        rhMinimumAmountField.setRequiredIndicatorVisible(true);
+        binder.forField(rhMinimumAmountField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
             .withConverter(new StringToBigDecimalConverter(ForeignUi.getMessage("field.error.not_numeric")))
             .withValidator(value -> new AmountValidator().isValid(value.toString()),
                 ForeignUi.getMessage("field.error.positive_number_length", 10))
-            .bind(scenario -> scenario.getNtsScenario().getMinimumRhAmount(),
-                (Setter<Scenario, BigDecimal>) (scenario, minimumRhAmount) ->
-                    scenario.getNtsScenario().setMinimumRhAmount(minimumRhAmount));
-        minimumRhAmountField.setValue(ForeignUi.getMessage("field.minimum_rh_amount.default"));
-        VaadinUtils.setMaxComponentsWidth(minimumRhAmountField);
+            .bind(scenario -> scenario.getNtsFieldsHolder().getRhMinimumAmount(),
+                (Setter<Scenario, BigDecimal>) (scenario, rhMinimumAmount) ->
+                    scenario.getNtsFieldsHolder().setRhMinimumAmount(rhMinimumAmount));
+        rhMinimumAmountField.setValue(ForeignUi.getMessage("field.rh_minimum_amount.default"));
+        VaadinUtils.setMaxComponentsWidth(rhMinimumAmountField);
     }
 
     private void initDescriptionArea() {
@@ -129,7 +129,7 @@ public class CreateNtsScenarioWindow extends Window {
             close();
         } else {
             Windows.showValidationErrorWindow(
-                Lists.newArrayList(scenarioNameField, minimumRhAmountField, descriptionArea));
+                Lists.newArrayList(scenarioNameField, rhMinimumAmountField, descriptionArea));
         }
     }
 }

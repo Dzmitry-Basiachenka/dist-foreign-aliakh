@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.foreign.domain.NtsFieldsHolder;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
@@ -77,11 +78,11 @@ public class ScenarioRepositoryIntegrationTest {
 
     @Test
     public void testFindAll() {
-        assertEquals(9, scenarioRepository.findAll().size());
+        assertEquals(10, scenarioRepository.findAll().size());
         String scenarioId = RupPersistUtils.generateUuid();
         scenarioRepository.insert(buildScenario(scenarioId, SCENARIO_NAME));
         List<Scenario> scenarios = scenarioRepository.findAll();
-        assertEquals(10, scenarios.size());
+        assertEquals(11, scenarios.size());
         verifyScenario(scenarios.get(0), scenarioId, SCENARIO_NAME, DESCRIPTION, ScenarioStatusEnum.IN_PROGRESS);
         verifyScenario(scenarios.get(1), "095f3df4-c8a7-4dba-9a8f-7dce0b61c40a", "Scenario with excluded usages",
             "The description of scenario 6", ScenarioStatusEnum.IN_PROGRESS);
@@ -101,6 +102,11 @@ public class ScenarioRepositoryIntegrationTest {
             "All usages are paid and reported to CRM", ScenarioStatusEnum.SENT_TO_LM);
         verifyScenario(scenarios.get(9), "a386bd74-c112-4b19-b9b7-c5e4f18c7fcd", "Archived Scenario",
             "Scenario already archived", ScenarioStatusEnum.ARCHIVED);
+        Scenario ntsScenario = scenarios.get(10);
+        verifyScenario(ntsScenario, "1a5f3df4-c8a7-4dba-9a8f-7dce0b61c41b", "Test NTS scenario",
+            "Description for test NTS scenario", ScenarioStatusEnum.IN_PROGRESS);
+        assertNotNull(ntsScenario.getNtsFieldsHolder());
+        assertEquals(new BigDecimal("300.00"), ntsScenario.getNtsFieldsHolder().getRhMinimumAmount());
     }
 
     @Test
@@ -244,6 +250,18 @@ public class ScenarioRepositoryIntegrationTest {
         assertTrue(CollectionUtils.isNotEmpty(scenariosIds));
         assertEquals(1, scenariosIds.size());
         assertEquals("a9ee7491-d166-47cd-b36f-fe80ee7450f1", scenariosIds.get(0));
+    }
+
+    @Test
+    public void testInsertNtsScenario() {
+        Scenario scenario = buildScenario(SCENARIO_ID, SCENARIO_NAME);
+        NtsFieldsHolder ntsFieldsHolder = new NtsFieldsHolder();
+        ntsFieldsHolder.setRhMinimumAmount(new BigDecimal("300.00"));
+        scenario.setNtsFieldsHolder(ntsFieldsHolder);
+        scenarioRepository.insert(scenario);
+        Scenario ntsScenario = scenarioRepository.findWithAmountsAndLastAction(SCENARIO_ID);
+        assertNotNull(ntsScenario.getNtsFieldsHolder());
+        assertEquals(new BigDecimal("300.00"), ntsScenario.getNtsFieldsHolder().getRhMinimumAmount());
     }
 
     private UsageBatch buildBatch(Long rroAccountNumber) {
