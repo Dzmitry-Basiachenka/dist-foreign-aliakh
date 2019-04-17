@@ -24,9 +24,14 @@ import java.util.List;
 public interface IScenarioController extends IController<IScenarioWidget>, ISearchController {
 
     /**
-     * @return instance of {@link IStreamSource} for export.
+     * @return instance of {@link IStreamSource} for export details.
      */
     IStreamSource getExportScenarioUsagesStreamSource();
+
+    /**
+     * @return instance of {@link IStreamSource} for export rightsholders.
+     */
+    IStreamSource getExportScenarioRightsholdersStreamSource();
 
     /**
      * Handles click on "Rightsholder Account Number" button.
