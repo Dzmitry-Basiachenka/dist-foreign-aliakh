@@ -251,7 +251,7 @@ class FundPoolLoadWindow extends Window {
     private HorizontalLayout initAmountsLayout() {
         stmAmountField = initAmountField(ForeignUi.getMessage("label.stm.amount"));
         VaadinUtils.addComponentStyle(stmAmountField, "stm-amount-field");
-        nonStmAmountField = initAmountField(ForeignUi.getMessage("label.non.stm.amount"));
+        nonStmAmountField = initNonStmFundPoolAmountField(ForeignUi.getMessage("label.non.stm.amount"));
         VaadinUtils.addComponentStyle(nonStmAmountField, "non-stm-amount-field");
         HorizontalLayout amountLayout = new HorizontalLayout(stmAmountField, nonStmAmountField);
         amountLayout.setSizeFull();
@@ -312,10 +312,26 @@ class FundPoolLoadWindow extends Window {
         textField.setRequiredIndicatorVisible(true);
         binder.forField(textField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
-            .withValidator(value -> new AmountValidator().isValid(StringUtils.trimToEmpty(value)),
+            .withValidator(value -> new AmountValidator(true).isValid(StringUtils.trimToEmpty(value)),
                 "Field value should be positive number and not exceed 10 digits")
             .withConverter(new StringToBigDecimalConverter("Field should be numeric"))
             .bind(UsageBatch::getGrossAmount, UsageBatch::setGrossAmount);
+        VaadinUtils.setMaxComponentsWidth(textField);
+        return textField;
+    }
+
+    private TextField initNonStmFundPoolAmountField(String label) {
+        TextField textField = new TextField(label);
+        textField.setRequiredIndicatorVisible(true);
+        binder.forField(textField)
+            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage(EMPTY_FIELD_MESSAGE))
+            .withValidator(value -> new AmountValidator(true).isValid(StringUtils.trimToEmpty(value)),
+                "Field value should be positive number and not exceed 10 digits")
+            .withValidator(getFundPoolAmountValidator(),
+                "At least one of STM Amount or NON-STM Amount should be greater than 0")
+            .withConverter(new StringToBigDecimalConverter("Field should be numeric"))
+            .bind(UsageBatch::getGrossAmount, UsageBatch::setGrossAmount);
+        binder.addValueChangeListener(event -> binder.validate());
         VaadinUtils.setMaxComponentsWidth(textField);
         return textField;
     }
@@ -341,5 +357,10 @@ class FundPoolLoadWindow extends Window {
 
     private SerializablePredicate<String> getYearValidator() {
         return value -> Integer.parseInt(value) >= MIN_YEAR && Integer.parseInt(value) <= MAX_YEAR;
+    }
+
+    private SerializablePredicate<String> getFundPoolAmountValidator() {
+        return value -> 0 > BigDecimal.ZERO.compareTo(new BigDecimal(value))
+            || 0 > BigDecimal.ZERO.compareTo(new BigDecimal(stmAmountField.getValue()));
     }
 }
