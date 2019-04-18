@@ -27,7 +27,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,8 +34,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
-
-import javax.annotation.PostConstruct;
 
 /**
  * Implementation of {@link ICrmService}.
@@ -51,14 +48,21 @@ import javax.annotation.PostConstruct;
 public class CrmService implements ICrmService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
-    private ObjectMapper objectMapper;
-    private String crmRightsDistributionRequestsUrl;
+    private final ObjectMapper objectMapper;
 
     @Autowired
     private RestTemplate restTemplate;
 
-    @Value("$RUP{dist.foreign.rest.crm.url}")
-    private String baseUrl;
+    @Value("$RUP{dist.foreign.rest.crm.insert_ccc_rights_distribution.url}")
+    private String crmRightsDistributionRequestsUrl;
+
+    /**
+     * Constructor.
+     */
+    public CrmService() {
+        objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+    }
 
     @Override
     public CrmResult sendRightsDistributionRequests(List<CrmRightsDistributionRequest> crmRightsDistributionRequests) {
@@ -69,18 +73,6 @@ public class CrmService implements ICrmService {
         } catch (IOException e) {
             throw new RupRuntimeException("Problem with processing (parsing, generating) JSON content", e);
         }
-    }
-
-    /**
-     * Initializes urls.
-     */
-    @PostConstruct
-    void initializeUrls() {
-        objectMapper = new ObjectMapper();
-        crmRightsDistributionRequestsUrl = UriComponentsBuilder.fromHttpUrl(baseUrl)
-            .pathSegment("insertCCCRightsDistribution")
-            .build().toUriString();
-        objectMapper.registerModule(new JavaTimeModule());
     }
 
     /**
