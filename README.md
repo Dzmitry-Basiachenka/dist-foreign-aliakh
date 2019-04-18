@@ -1,3 +1,10 @@
+5.1.18
+-
+* B-48300 FDA: Remove under minimum RHs and reallocate funds proportionally: introduce NTS_EXCLUDED status in usage and audit filters
+* B-49463 Tech Debt: FDA: create separate urls for CRM REST
+* CDP-715 FDA: Gross amount should be 0 for NTS details that are not associated to any scenario
+* CDP-717 NTS: User is not allowed to enter 0 in STM/Non-STM Amount and STM/Non-STM Minimum amount fields on Load fund pool window
+
 5.1.17
 -
 * B-49019 FDA: Create NTS Scenario: add nts_fields column to the table df_scenario
