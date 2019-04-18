@@ -1458,7 +1458,6 @@
                 market_period_from,
                 market_period_to,
                 gross_amount reported_value,
-                gross_amount,
                 comment,
                 <include refid="StoredEntityMapper.insert"/>
             from apps.df_usage_archive ua
@@ -1469,9 +1468,9 @@
         cutoff_amounts as (
             select
                 'STM' classification,
-                case when sum(u.gross_amount *
+                case when sum(u.reported_value *
                     (#{fundPoolPeriodDividend} / (u.market_period_to - u.market_period_from + 1))) is not null
-                then round(#{stmMinAmount} * sum(u.gross_amount *
+                then round(#{stmMinAmount} * sum(u.reported_value *
                     (#{fundPoolPeriodDividend} / (u.market_period_to - u.market_period_from + 1))) / #{stmAmount}, 2)
                 else 0.00 end cutoff_amount
             from nts_usages u
@@ -1480,9 +1479,9 @@
             union
             select
                 'NON-STM' classification,
-                case when sum(u.gross_amount *
+                case when sum(u.reported_value *
                     (#{fundPoolPeriodDividend} / (u.market_period_to - u.market_period_from + 1))) is not null
-                then round(#{nonStmMinAmount} * sum(u.gross_amount *
+                then round(#{nonStmMinAmount} * sum(u.reported_value *
                     (#{fundPoolPeriodDividend} / (u.market_period_to - u.market_period_from + 1))) / #{nonStmAmount}, 2)
                 else 0.00 end cutoff_amount
             from nts_usages u
@@ -1499,7 +1498,7 @@
         work_total_weight_subquery as (
             select u.wr_wrk_inst,
                 wc.classification,
-                sum(u.gross_amount *
+                sum(u.reported_value *
                     (#{fundPoolPeriodDividend} / (u.market_period_to - u.market_period_from +1))) work_total_weight
             from nts_usages u
             left join apps.df_work_classification wc on u.wr_wrk_inst = wc.wr_wrk_inst
@@ -1520,7 +1519,6 @@
             market_period_from,
             market_period_to,
             reported_value,
-            gross_amount,
             comment,
             <include refid="StoredEntityMapper.additionalColumns"/>
         )
@@ -1538,7 +1536,6 @@
             ua.market_period_from,
             ua.market_period_to,
             ua.reported_value,
-            ua.gross_amount,
             ua.comment,
             <include refid="StoredEntityMapper.insert"/>
         from nts_usages ua

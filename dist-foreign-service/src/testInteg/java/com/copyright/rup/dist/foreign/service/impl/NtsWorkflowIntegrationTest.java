@@ -175,7 +175,7 @@ public class NtsWorkflowIntegrationTest {
         usage.setMarket(market);
         usage.setMarketPeriodFrom(2013);
         usage.setMarketPeriodTo(2017);
-        usage.setGrossAmount(new BigDecimal("1176.9160000000"));
+        usage.setGrossAmount(new BigDecimal("0.0000000000"));
         usage.setReportedValue(new BigDecimal("1176.92"));
         return usage;
     }

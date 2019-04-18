@@ -129,6 +129,7 @@ public class UsageRepositoryIntegrationTest {
     private static final String UNDERSCORE = "_";
     private static final BigDecimal SERVICE_FEE = new BigDecimal("0.32000");
     private static final BigDecimal ZERO_AMOUNT = new BigDecimal("0.00");
+    private static final BigDecimal DEFAULT_ZERO_AMOUNT = new BigDecimal("0.0000000000");
     private static final BigDecimal HUNDRED_AMOUNT = new BigDecimal("100.00");
     private static final BigDecimal STM_MIN_AMOUNT = new BigDecimal("50.00");
     private static final BigDecimal NON_STM_MIN_AMOUNT = new BigDecimal("7.00");
@@ -1016,10 +1017,8 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(2, insertedUsageIds.size());
         List<Usage> insertedUsages = usageRepository.findByIds(insertedUsageIds);
         insertedUsages.sort(Comparator.comparing(Usage::getMarket));
-        verifyInsertedFundPoolUsage(BUS_MARKET, 2016, new BigDecimal("500.00"), new BigDecimal("500.0000000000"),
-            insertedUsages.get(0));
-        verifyInsertedFundPoolUsage(DOC_DEL_MARKET, 2013, new BigDecimal("1176.92"), new BigDecimal("1176.9160000000"),
-            insertedUsages.get(1));
+        verifyInsertedFundPoolUsage(BUS_MARKET, 2016, new BigDecimal("500.00"), insertedUsages.get(0));
+        verifyInsertedFundPoolUsage(DOC_DEL_MARKET, 2013, new BigDecimal("1176.92"), insertedUsages.get(1));
     }
 
     @Test
@@ -1098,8 +1097,8 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(PRODUCT_FAMILY_FAS, usage.getProductFamily());
     }
 
-    private void verifyInsertedFundPoolUsage(String market, Integer marketPeriodFrom, BigDecimal grossAmount,
-                                             BigDecimal reportedValues, Usage actualUsage) {
+    private void verifyInsertedFundPoolUsage(String market, Integer marketPeriodFrom, BigDecimal reportedValue,
+                                             Usage actualUsage) {
         assertEquals(actualUsage.getBatchId(), "b9d0ea49-9e38-4bb0-a7e0-0ca299e3dcfa");
         assertEquals(243904752L, actualUsage.getWrWrkInst(), 0);
         assertEquals(WORK_TITLE_2, actualUsage.getWorkTitle());
@@ -1111,8 +1110,8 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(market, actualUsage.getMarket());
         assertEquals(marketPeriodFrom, actualUsage.getMarketPeriodFrom());
         assertEquals(Integer.valueOf(2017), actualUsage.getMarketPeriodTo());
-        assertEquals(grossAmount, actualUsage.getReportedValue());
-        assertEquals(reportedValues, actualUsage.getGrossAmount());
+        assertEquals(DEFAULT_ZERO_AMOUNT, actualUsage.getGrossAmount());
+        assertEquals(reportedValue, actualUsage.getReportedValue());
         assertEquals("for nts batch", actualUsage.getComment());
         assertEquals(USER_NAME, actualUsage.getCreateUser());
     }
@@ -1122,9 +1121,8 @@ public class UsageRepositoryIntegrationTest {
         assertNull(usage.getScenarioId());
         assertNull(usage.getPayee().getAccountNumber());
         assertNull(usage.getServiceFee());
-        BigDecimal expectedDefaultAmount = new BigDecimal("0.0000000000");
-        assertEquals(expectedDefaultAmount, usage.getServiceFeeAmount());
-        assertEquals(expectedDefaultAmount, usage.getNetAmount());
+        assertEquals(DEFAULT_ZERO_AMOUNT, usage.getServiceFeeAmount());
+        assertEquals(DEFAULT_ZERO_AMOUNT, usage.getNetAmount());
         assertFalse(usage.isRhParticipating());
         assertEquals(USER_NAME, usage.getUpdateUser());
         assertEquals(PRODUCT_FAMILY_FAS, usage.getProductFamily());
