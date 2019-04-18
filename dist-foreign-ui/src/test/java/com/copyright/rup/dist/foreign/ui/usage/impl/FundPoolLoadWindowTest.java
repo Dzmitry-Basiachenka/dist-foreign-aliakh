@@ -72,6 +72,7 @@ public class FundPoolLoadWindowTest {
     private static final String PERIOD_TO = "2000";
     private static final String AMOUNT = "100.00";
     private static final String MIN_AMOUNT = "10.00";
+    private static final String ZERO_AMOUNT = "0.00";
     private static final String ACCOUNT_NUMBER = "1000001863";
     private static final String RRO_NAME = "RRO name";
     private static final String USAGE_BATCH_NAME = "BatchName";
@@ -144,6 +145,15 @@ public class FundPoolLoadWindowTest {
         assertFalse(window.isValid());
         setTextFieldValue("marketValidationField", "2");
         assertTrue(window.isValid());
+        setTextFieldValue(STM_FIELD, AMOUNT);
+        setTextFieldValue(NON_STM_FIELD, ZERO_AMOUNT);
+        assertTrue(window.isValid());
+        setTextFieldValue(STM_FIELD, ZERO_AMOUNT);
+        setTextFieldValue(NON_STM_FIELD, AMOUNT);
+        assertTrue(window.isValid());
+        setTextFieldValue(STM_FIELD, ZERO_AMOUNT);
+        setTextFieldValue(NON_STM_FIELD, "0");
+        assertFalse(window.isValid());
         verify(usagesController);
     }
 
@@ -253,7 +263,7 @@ public class FundPoolLoadWindowTest {
         TextField grossAmountField = Whitebox.getInternalState(window, fieldName);
         Binder binder = Whitebox.getInternalState(window, "binder");
         verifyAmountValidationMessage(grossAmountField, "123.5684", binder, true);
-        verifyAmountValidationMessage(grossAmountField, "0.00", binder, false);
+        verifyAmountValidationMessage(grossAmountField, ZERO_AMOUNT, binder, true);
         verifyAmountValidationMessage(grossAmountField, "value", binder, false);
         verifyAmountValidationMessage(grossAmountField, "10000000000.00", binder, false);
         verifyAmountValidationMessage(grossAmountField, "9999999999.99", binder, true);
