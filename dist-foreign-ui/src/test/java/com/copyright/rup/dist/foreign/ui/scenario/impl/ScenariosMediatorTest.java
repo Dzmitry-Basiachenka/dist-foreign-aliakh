@@ -33,6 +33,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 @PrepareForTest(SecurityUtils.class)
 public class ScenariosMediatorTest {
 
+    private static final String FAS_PRODUCT_FAMILY = "FAS";
     private ScenariosMediator mediator;
     private Button deleteButton;
     private Button viewButton;
@@ -129,6 +130,7 @@ public class ScenariosMediatorTest {
     @Test
     public void testSelectedScenarioChangedInProgress() {
         Scenario scenario = new Scenario();
+        scenario.setProductFamily(FAS_PRODUCT_FAMILY);
         scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
         mediator.selectedScenarioChanged(scenario);
         assertTrue(deleteButton.isEnabled());
@@ -144,6 +146,7 @@ public class ScenariosMediatorTest {
     @Test
     public void testSelectedScenarioChangedSubmitted() {
         Scenario scenario = new Scenario();
+        scenario.setProductFamily(FAS_PRODUCT_FAMILY);
         scenario.setStatus(ScenarioStatusEnum.SUBMITTED);
         mediator.selectedScenarioChanged(scenario);
         assertFalse(deleteButton.isEnabled());
@@ -159,6 +162,7 @@ public class ScenariosMediatorTest {
     @Test
     public void testSelectedScenarioChangedApproved() {
         Scenario scenario = new Scenario();
+        scenario.setProductFamily(FAS_PRODUCT_FAMILY);
         scenario.setStatus(ScenarioStatusEnum.APPROVED);
         mediator.selectedScenarioChanged(scenario);
         assertFalse(deleteButton.isEnabled());
@@ -174,6 +178,7 @@ public class ScenariosMediatorTest {
     @Test
     public void testSelectedScenarioChangedSentToLm() {
         Scenario scenario = new Scenario();
+        scenario.setProductFamily(FAS_PRODUCT_FAMILY);
         scenario.setStatus(ScenarioStatusEnum.SENT_TO_LM);
         mediator.selectedScenarioChanged(scenario);
         assertFalse(deleteButton.isEnabled());
@@ -184,6 +189,26 @@ public class ScenariosMediatorTest {
         assertFalse(approveButton.isEnabled());
         assertFalse(sendToLmButton.isEnabled());
         assertFalse(refreshScenarioButton.isEnabled());
+    }
+
+    @Test
+    public void testSelectedScenarioFas2() {
+        Scenario scenario = new Scenario();
+        scenario.setProductFamily("FAS2");
+        scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
+        mediator.selectedScenarioChanged(scenario);
+        assertTrue(refreshScenarioButton.isEnabled());
+        assertTrue(reconcileRightsholdersButton.isEnabled());
+    }
+
+    @Test
+    public void testSelectedScenarioNts() {
+        Scenario scenario = new Scenario();
+        scenario.setProductFamily("NTS");
+        scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
+        mediator.selectedScenarioChanged(scenario);
+        assertFalse(refreshScenarioButton.isEnabled());
+        assertFalse(reconcileRightsholdersButton.isEnabled());
     }
 
     private void mockViewOnlyPermissions() {

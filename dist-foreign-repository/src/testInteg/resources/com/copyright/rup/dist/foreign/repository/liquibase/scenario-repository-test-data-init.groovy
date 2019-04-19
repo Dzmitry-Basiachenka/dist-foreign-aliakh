@@ -369,6 +369,13 @@ databaseChangeLog {
             column(name: 'updated_datetime', value: '2017-01-03 17:47:24')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
+            column(name: 'df_scenario_usage_filter_uid', value: '54bab996-829f-445e-a853-cf30ea760b5b')
+            column(name: 'df_scenario_uid', value: '005a33fc-26c5-4e0d-afd3-1d581b62ec70')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '05bfb2e0-27ce-4378-ab46-9954e7d987b6')
             column(name: 'name', value: 'Paid batch')
@@ -480,6 +487,13 @@ databaseChangeLog {
             column(name: 'updated_datetime', value: '2017-01-02 17:47:24')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
+            column(name: 'df_scenario_usage_filter_uid', value: '78f092a3-af1a-44ff-bde5-34263d30d040')
+            column(name: 'df_scenario_uid', value: 'a9ee7491-d166-47cd-b36f-fe80ee7450f1')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
             column(name: 'df_usage_archive_uid', value: '2f235210-36af-4c7e-a5a3-25fc2e0668a2')
             column(name: 'df_usage_batch_uid', value: '05bfb2e0-27ce-4378-ab46-9954e7d987b6')
@@ -519,6 +533,13 @@ databaseChangeLog {
             column(name: 'status_ind', value: 'ARCHIVED')
             column(name: 'description', value: 'Scenario already archived')
             column(name: 'updated_datetime', value: '2017-01-01 17:47:24')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
+            column(name: 'df_scenario_usage_filter_uid', value: '4499e89b-3d2e-4358-b133-668e92ea4f43')
+            column(name: 'df_scenario_uid', value: 'a386bd74-c112-4b19-b9b7-c5e4f18c7fcd')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'status_ind', value: 'ELIGIBLE')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
@@ -565,6 +586,13 @@ databaseChangeLog {
                 column(name: 'description', value: 'Description for test NTS scenario')
                 column(name: 'nts_fields', value: '{"rh_minimum_amount":300.00}')
                 column(name: 'updated_datetime', value: '2011-01-01 17:47:24')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
+                column(name: 'df_scenario_usage_filter_uid', value: '102f2e3b-ed14-48a1-b628-a528d07fc9c5')
+                column(name: 'df_scenario_uid', value: '1a5f3df4-c8a7-4dba-9a8f-7dce0b61c41b')
+                column(name: 'product_family', value: 'NTS')
+                column(name: 'status_ind', value: 'ELIGIBLE')
             }
 
             insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {

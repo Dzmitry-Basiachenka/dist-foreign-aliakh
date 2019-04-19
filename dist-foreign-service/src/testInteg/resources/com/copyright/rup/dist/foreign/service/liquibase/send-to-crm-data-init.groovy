@@ -23,6 +23,13 @@ databaseChangeLog {
             column(name: 'description', value: 'Scenario already sent to LM')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
+            column(name: 'df_scenario_usage_filter_uid', value: 'd612ad12-1d53-4284-9bed-050638e0b05f')
+            column(name: 'df_scenario_uid', value: '221c5a30-1937-4bf6-977f-93741f9b20f1')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '10defe40-ef47-47c9-96b4-be9226f3d591')
             column(name: 'name', value: 'Paid batch')
@@ -167,6 +174,13 @@ databaseChangeLog {
             column(name: 'name', value: 'Sent to CRM Scenario')
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'description', value: 'All usages reported to CRM')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
+            column(name: 'df_scenario_usage_filter_uid', value: 'd2a33753-9e84-463e-a2fc-79de8b57744c')
+            column(name: 'df_scenario_uid', value: 'cb7e3237-50c3-46a5-938e-46afd8c1e0bf')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'status_ind', value: 'ELIGIBLE')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {

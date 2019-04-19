@@ -63,6 +63,7 @@ public class ScenarioRepositoryIntegrationTest {
     private static final String USAGE_BATCH_ID = "a5b64c3a-55d2-462e-b169-362dca6a4dd6";
     private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
     private static final String SCENARIO_WITH_AUDIT_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
+    private static final String FAS_PRODUCT_FAMILY = "FAS";
 
     @Autowired
     private ScenarioRepository scenarioRepository;
@@ -80,33 +81,29 @@ public class ScenarioRepositoryIntegrationTest {
 
     @Test
     public void testFindAll() {
-        assertEquals(10, scenarioRepository.findAll().size());
-        String scenarioId = RupPersistUtils.generateUuid();
-        scenarioRepository.insert(buildScenario(scenarioId, SCENARIO_NAME));
         List<Scenario> scenarios = scenarioRepository.findAll();
-        assertEquals(11, scenarios.size());
-        verifyScenario(scenarios.get(0), scenarioId, SCENARIO_NAME, DESCRIPTION, ScenarioStatusEnum.IN_PROGRESS);
-        verifyScenario(scenarios.get(1), "095f3df4-c8a7-4dba-9a8f-7dce0b61c40a", "Scenario with excluded usages",
-            "The description of scenario 6", ScenarioStatusEnum.IN_PROGRESS);
-        verifyScenario(scenarios.get(2), "e27551ed-3f69-4e08-9e4f-8ac03f67595f", "Scenario name 2",
-            "The description of scenario 2", ScenarioStatusEnum.IN_PROGRESS);
-        verifyScenario(scenarios.get(3), "b1f0b236-3ae9-4a60-9fab-61db84199d6f", "Scenario name",
-            "The description of scenario", ScenarioStatusEnum.IN_PROGRESS);
-        verifyScenario(scenarios.get(4), "1230b236-1239-4a60-9fab-123b84199123", "Scenario name 4",
-            "The description of scenario 4", ScenarioStatusEnum.IN_PROGRESS);
-        verifyScenario(scenarios.get(5), "8a6a6b15-6922-4fda-b40c-5097fcbd256e", "Scenario name 5",
-            "The description of scenario 5", ScenarioStatusEnum.SENT_TO_LM);
-        verifyScenario(scenarios.get(6), "3210b236-1239-4a60-9fab-888b84199321", "Scenario name 3",
-            "The description of scenario 3", ScenarioStatusEnum.IN_PROGRESS);
-        verifyScenario(scenarios.get(7), "005a33fc-26c5-4e0d-afd3-1d581b62ec70", "Partially Paid Scenario",
-            "Not all usages are paid", ScenarioStatusEnum.SENT_TO_LM);
-        verifyScenario(scenarios.get(8), "a9ee7491-d166-47cd-b36f-fe80ee7450f1", "Fully Paid Scenario",
-            "All usages are paid and reported to CRM", ScenarioStatusEnum.SENT_TO_LM);
-        verifyScenario(scenarios.get(9), "a386bd74-c112-4b19-b9b7-c5e4f18c7fcd", "Archived Scenario",
-            "Scenario already archived", ScenarioStatusEnum.ARCHIVED);
-        Scenario ntsScenario = scenarios.get(10);
+        assertEquals(10, scenarios.size());
+        verifyScenario(scenarios.get(0), "095f3df4-c8a7-4dba-9a8f-7dce0b61c40a", "Scenario with excluded usages",
+            "The description of scenario 6", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.IN_PROGRESS);
+        verifyScenario(scenarios.get(1), "e27551ed-3f69-4e08-9e4f-8ac03f67595f", "Scenario name 2",
+            "The description of scenario 2", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.IN_PROGRESS);
+        verifyScenario(scenarios.get(2), "b1f0b236-3ae9-4a60-9fab-61db84199d6f", "Scenario name",
+            "The description of scenario", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.IN_PROGRESS);
+        verifyScenario(scenarios.get(3), "1230b236-1239-4a60-9fab-123b84199123", "Scenario name 4",
+            "The description of scenario 4", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.IN_PROGRESS);
+        verifyScenario(scenarios.get(4), "8a6a6b15-6922-4fda-b40c-5097fcbd256e", "Scenario name 5",
+            "The description of scenario 5", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.SENT_TO_LM);
+        verifyScenario(scenarios.get(5), "3210b236-1239-4a60-9fab-888b84199321", "Scenario name 3",
+            "The description of scenario 3", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.IN_PROGRESS);
+        verifyScenario(scenarios.get(6), "005a33fc-26c5-4e0d-afd3-1d581b62ec70", "Partially Paid Scenario",
+            "Not all usages are paid", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.SENT_TO_LM);
+        verifyScenario(scenarios.get(7), "a9ee7491-d166-47cd-b36f-fe80ee7450f1", "Fully Paid Scenario",
+            "All usages are paid and reported to CRM", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.SENT_TO_LM);
+        verifyScenario(scenarios.get(8), "a386bd74-c112-4b19-b9b7-c5e4f18c7fcd", "Archived Scenario",
+            "Scenario already archived", FAS_PRODUCT_FAMILY, ScenarioStatusEnum.ARCHIVED);
+        Scenario ntsScenario = scenarios.get(9);
         verifyScenario(ntsScenario, "1a5f3df4-c8a7-4dba-9a8f-7dce0b61c41b", "Test NTS scenario",
-            "Description for test NTS scenario", ScenarioStatusEnum.IN_PROGRESS);
+            "Description for test NTS scenario", "NTS", ScenarioStatusEnum.IN_PROGRESS);
         assertNotNull(ntsScenario.getNtsFields());
         assertEquals(new BigDecimal("300.00"), ntsScenario.getNtsFields().getRhMinimumAmount());
     }
@@ -278,7 +275,7 @@ public class ScenarioRepositoryIntegrationTest {
     private UsageBatch buildBatch(Long rroAccountNumber) {
         UsageBatch batch = new UsageBatch();
         batch.setId(RupPersistUtils.generateUuid());
-        batch.setProductFamily("FAS");
+        batch.setProductFamily("FAS_PRODUCT_FAMILY");
         batch.setGrossAmount(new BigDecimal("100.00"));
         batch.setPaymentDate(LocalDate.of(2017, 1, 1));
         batch.setFiscalYear(2017);
@@ -300,7 +297,7 @@ public class ScenarioRepositoryIntegrationTest {
             "CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil"));
         usage.setPayee(usage.getRightsholder());
         usage.setStatus(UsageStatusEnum.LOCKED);
-        usage.setProductFamily("FAS");
+        usage.setProductFamily("FAS_PRODUCT_FAMILY");
         usage.setArticle("Article");
         usage.setStandardNumber("StandardNumber");
         usage.setPublisher("Publisher");
@@ -326,12 +323,13 @@ public class ScenarioRepositoryIntegrationTest {
         return scenario;
     }
 
-    private void verifyScenario(Scenario scenario, String id, String name, String description,
+    private void verifyScenario(Scenario scenario, String id, String name, String description, String productFamily,
                                 ScenarioStatusEnum status) {
         assertEquals(id, scenario.getId());
         assertEquals(name, scenario.getName());
         assertEquals(description, scenario.getDescription());
         assertEquals("SYSTEM", scenario.getCreateUser());
+        assertEquals(productFamily, scenario.getProductFamily());
         assertEquals(status, scenario.getStatus());
     }
 

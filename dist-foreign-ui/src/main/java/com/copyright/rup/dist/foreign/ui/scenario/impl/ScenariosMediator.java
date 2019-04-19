@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
@@ -81,10 +82,11 @@ class ScenariosMediator implements IMediator {
             viewButton.setEnabled(true);
             ScenarioStatusEnum status = scenario.getStatus();
             boolean isInProgressState = ScenarioStatusEnum.IN_PROGRESS == status;
+            boolean isFasProductFamily = FdaConstants.FAS_FAS2_PRODUCT_FAMILY_SET.contains(scenario.getProductFamily());
             deleteButton.setEnabled(isInProgressState);
             submitButton.setEnabled(isInProgressState);
-            refreshScenarioButton.setEnabled(isInProgressState);
-            reconcileRightsholdersButton.setEnabled(isInProgressState);
+            refreshScenarioButton.setEnabled(isInProgressState && isFasProductFamily);
+            reconcileRightsholdersButton.setEnabled(isInProgressState && isFasProductFamily);
             boolean isSubmittedState = ScenarioStatusEnum.SUBMITTED == status;
             rejectButton.setEnabled(isSubmittedState);
             approveButton.setEnabled(isSubmittedState);
