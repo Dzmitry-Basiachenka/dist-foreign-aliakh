@@ -22,8 +22,10 @@ import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.service.impl.csv.DistCsvProcessor.ProcessingResult;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
+import com.copyright.rup.dist.foreign.domain.NtsFields;
 import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
+import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
@@ -83,6 +85,10 @@ public class UsagesControllerTest {
     private static final Long RRO_ACCOUNT_NUMBER = 12345678L;
     private static final String USER_NAME = "Test User Name";
     private static final String BATCH_NAME = "Test Batch Name";
+    private static final String SCENARIO_NAME = "Test Scenario Name";
+    private static final String DESCRIPTION = "Test Description";
+    private static final BigDecimal RH_MINIMUM_AMOUNT = new BigDecimal("300.00");
+
     private UsagesController controller;
     private UsageService usageService;
     private IUsagesFilterController filterController;
@@ -117,6 +123,22 @@ public class UsagesControllerTest {
         Whitebox.setInternalState(controller, researchService);
         Whitebox.setInternalState(controller, fundPoolService);
         usageFilter = new UsageFilter();
+    }
+
+    @Test
+    public void testCreateNtsScenario() {
+        NtsFields ntsFields = new NtsFields();
+        ntsFields.setRhMinimumAmount(RH_MINIMUM_AMOUNT);
+        Scenario scenario = new Scenario();
+        expect(scenarioService.createNtsScenario(SCENARIO_NAME, ntsFields, DESCRIPTION, usageFilter))
+            .andReturn(scenario).once();
+        expect(filterController.getWidget()).andReturn(filterWidgetMock).times(2);
+        expect(filterWidgetMock.getAppliedFilter()).andReturn(usageFilter).once();
+        filterWidgetMock.clearFilter();
+        expectLastCall().once();
+        replay(filterController, filterWidgetMock, scenarioService);
+        assertEquals(scenario, controller.createNtsScenario(SCENARIO_NAME, RH_MINIMUM_AMOUNT, DESCRIPTION));
+        verify(filterController, filterWidgetMock, scenarioService);
     }
 
     @Test

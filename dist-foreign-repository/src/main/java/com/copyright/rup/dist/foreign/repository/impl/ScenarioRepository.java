@@ -10,6 +10,7 @@ import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IScenarioRepository;
 
 import com.google.common.collect.Maps;
@@ -37,6 +38,17 @@ public class ScenarioRepository extends BaseRepository implements IScenarioRepos
     @Override
     public void insert(Scenario scenario) {
         insert("IScenarioMapper.insert", checkNotNull(scenario));
+    }
+
+    @Override
+    public void insertNtsScenarioAndAddUsages(Scenario scenario, UsageFilter filter) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(5);
+        params.put("scenario", Objects.requireNonNull(scenario));
+        params.put("filter", Objects.requireNonNull(filter));
+        params.put("status", UsageStatusEnum.LOCKED);
+        params.put("createUser", scenario.getCreateUser());
+        params.put("updateUser", scenario.getUpdateUser());
+        insert("IScenarioMapper.insertNtsScenarioAndAddUsages", params);
     }
 
     @Override

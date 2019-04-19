@@ -10,6 +10,7 @@ import com.copyright.rup.dist.common.service.api.discrepancy.ICommonDiscrepancyS
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
+import com.copyright.rup.dist.foreign.domain.NtsFields;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
@@ -112,6 +113,17 @@ public class ScenarioService implements IScenarioService {
         Scenario scenario = buildScenario(scenarioName, description, usages);
         scenarioRepository.insert(scenario);
         usageService.addUsagesToScenario(usages, scenario);
+        scenarioUsageFilterService.insert(scenario.getId(), new ScenarioUsageFilter(usageFilter));
+        scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY);
+        return scenario;
+    }
+
+    @Override
+    @Transactional
+    public Scenario createNtsScenario(String scenarioName, NtsFields ntsFields, String description,
+                                      UsageFilter usageFilter) {
+        Scenario scenario = buildNtsScenario(scenarioName, ntsFields, description);
+        scenarioRepository.insertNtsScenarioAndAddUsages(scenario, usageFilter);
         scenarioUsageFilterService.insert(scenario.getId(), new ScenarioUsageFilter(usageFilter));
         scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY);
         return scenario;
@@ -299,6 +311,19 @@ public class ScenarioService implements IScenarioService {
         scenario.setReportedTotal(usages.stream()
             .map(Usage::getReportedValue)
             .reduce(BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP), BigDecimal::add));
+        String userName = RupContextUtils.getUserName();
+        scenario.setCreateUser(userName);
+        scenario.setUpdateUser(userName);
+        return scenario;
+    }
+
+    private Scenario buildNtsScenario(String scenarioName, NtsFields ntsFields, String description) {
+        Scenario scenario = new Scenario();
+        scenario.setId(RupPersistUtils.generateUuid());
+        scenario.setName(scenarioName);
+        scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
+        scenario.setNtsFields(ntsFields);
+        scenario.setDescription(description);
         String userName = RupContextUtils.getUserName();
         scenario.setCreateUser(userName);
         scenario.setUpdateUser(userName);

@@ -198,6 +198,16 @@ public interface IUsagesController extends IController<IUsagesWidget> {
     Scenario createScenario(String scenarioName, String description);
 
     /**
+     * Creates a {@link Scenario} by entered scenario name, rightholder's minimum amount and description.
+     *
+     * @param scenarioName    name of scenario
+     * @param rhMinimumAmount rightholder's minimum amount
+     * @param description     description for creating scenario
+     * @return created scenario
+     */
+    Scenario createNtsScenario(String scenarioName, BigDecimal rhMinimumAmount, String description);
+
+    /**
      * @return instance of {@link IScenarioService}.
      */
     IScenarioService getScenarioService();

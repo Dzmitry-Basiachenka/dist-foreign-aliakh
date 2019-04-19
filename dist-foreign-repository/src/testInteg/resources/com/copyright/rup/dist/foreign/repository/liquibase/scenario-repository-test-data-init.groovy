@@ -601,6 +601,39 @@ databaseChangeLog {
             }
         }
 
+        changeSet(id: '2019-04-18-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+            comment("B-49019 FDA: Create NTS Scenario: insert test data for insertNtsScenarioAndAddUsages")
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+                column(name: 'df_usage_batch_uid', value: '16282dbc-2468-48d4-b926-93d3458a656a')
+                column(name: 'name', value: 'NTS fund pool')
+                column(name: 'rro_account_number', value: '7000813806')
+                column(name: 'product_family', value: 'NTS')
+                column(name: 'payment_date', value: '2017-01-11')
+                column(name: 'fiscal_year', value: '2017')
+                column(name: 'gross_amount', value: '0.00')
+                column(name: 'fund_pool', value: '{"markets": ["Univ"], "stm_amount": 10, "non_stm_amount": 20, "stm_minimum_amount": 30, "non_stm_minimum_amount": 40, "fund_pool_period_to": 2017, "fund_pool_period_from": 2017}')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+                column(name: 'df_usage_uid', value: '1ab5e80b-89c0-4d78-9675-54c7ab284450')
+                column(name: 'df_usage_batch_uid', value: '16282dbc-2468-48d4-b926-93d3458a656a')
+                column(name: 'wr_wrk_inst', value: '180382914')
+                column(name: 'work_title', value: '365 days')
+                column(name: 'rh_account_number', value: '1000009997')
+                column(name: 'status_ind', value: 'ELIGIBLE')
+                column(name: 'product_family', value: 'NTS')
+                column(name: 'standard_number', value: '1008902112377654XX')
+                column(name: 'publisher', value: 'IEEE')
+                column(name: 'publication_date', value: '2013-09-10')
+                column(name: 'market', value: 'Univ')
+                column(name: 'market_period_from', value: '2013')
+                column(name: 'market_period_to', value: '2017')
+                column(name: 'reported_value', value: '0.00')
+                column(name: 'gross_amount', value: '250.00')
+            }
+        }
+
         rollback ""
     }
 }
