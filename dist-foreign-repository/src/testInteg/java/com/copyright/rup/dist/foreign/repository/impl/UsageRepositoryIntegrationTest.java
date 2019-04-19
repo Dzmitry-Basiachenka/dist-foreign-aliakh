@@ -696,7 +696,7 @@ public class UsageRepositoryIntegrationTest {
     public void testFindForAuditByProductFamilies() {
         AuditFilter filter = new AuditFilter();
         filter.setProductFamilies(Collections.singleton(PRODUCT_FAMILY_FAS));
-        assertEquals(27, usageRepository.findCountForAudit(filter));
+        assertEquals(28, usageRepository.findCountForAudit(filter));
         List<UsageDto> usages = usageRepository.findForAudit(filter, new Pageable(0, 25), null);
         verifyUsageDtos(usages, 25, USAGE_ID_14, USAGE_ID_15, USAGE_ID_16, USAGE_ID_1, USAGE_ID_23,
             USAGE_ID_21, USAGE_ID_12, USAGE_ID_9, USAGE_ID_6, USAGE_ID_13, USAGE_ID_18, USAGE_ID_11, USAGE_ID_2,
@@ -1014,11 +1014,15 @@ public class UsageRepositoryIntegrationTest {
         usageBatch.setFundPool(fundPool);
         List<String> insertedUsageIds = usageRepository.insertNtsUsages(usageBatch, USER_NAME);
         assertNotNull(insertedUsageIds);
-        assertEquals(2, insertedUsageIds.size());
+        assertEquals(3, insertedUsageIds.size());
         List<Usage> insertedUsages = usageRepository.findByIds(insertedUsageIds);
-        insertedUsages.sort(Comparator.comparing(Usage::getMarket));
-        verifyInsertedFundPoolUsage(BUS_MARKET, 2016, new BigDecimal("500.00"), insertedUsages.get(0));
-        verifyInsertedFundPoolUsage(DOC_DEL_MARKET, 2013, new BigDecimal("1176.92"), insertedUsages.get(1));
+        insertedUsages.sort(Comparator.comparing(Usage::getMarketPeriodFrom));
+        verifyInsertedFundPoolUsage(243904752L, WORK_TITLE_2, DOC_DEL_MARKET, 2013, new BigDecimal("1176.92"),
+            insertedUsages.get(0));
+        verifyInsertedFundPoolUsage(105062654L, "Our fathers lies", BUS_MARKET, 2014, new BigDecimal("500.00"),
+            insertedUsages.get(1));
+        verifyInsertedFundPoolUsage(243904752L, WORK_TITLE_2, BUS_MARKET, 2016, new BigDecimal("500.00"),
+            insertedUsages.get(2));
     }
 
     @Test
@@ -1097,12 +1101,12 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(PRODUCT_FAMILY_FAS, usage.getProductFamily());
     }
 
-    private void verifyInsertedFundPoolUsage(String market, Integer marketPeriodFrom, BigDecimal reportedValue,
-                                             Usage actualUsage) {
+    private void verifyInsertedFundPoolUsage(Long wrWrkInst, String workTitle, String market, Integer marketPeriodFrom,
+                                             BigDecimal reportedValue, Usage actualUsage) {
         assertEquals(actualUsage.getBatchId(), "b9d0ea49-9e38-4bb0-a7e0-0ca299e3dcfa");
-        assertEquals(243904752L, actualUsage.getWrWrkInst(), 0);
-        assertEquals(WORK_TITLE_2, actualUsage.getWorkTitle());
-        assertEquals(WORK_TITLE_2, actualUsage.getSystemTitle());
+        assertEquals(wrWrkInst, actualUsage.getWrWrkInst(), 0);
+        assertEquals(workTitle, actualUsage.getWorkTitle());
+        assertEquals(workTitle, actualUsage.getSystemTitle());
         assertEquals(UsageStatusEnum.WORK_FOUND, actualUsage.getStatus());
         assertEquals("NTS", actualUsage.getProductFamily());
         assertEquals("1008902112317555XX", actualUsage.getStandardNumber());

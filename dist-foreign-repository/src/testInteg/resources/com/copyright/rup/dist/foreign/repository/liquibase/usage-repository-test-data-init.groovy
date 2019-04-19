@@ -1137,6 +1137,42 @@ databaseChangeLog {
             column(name: 'comment', value: 'for nts batch')
         }
 
+        // included unclassified
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
+            column(name: 'df_usage_archive_uid', value: 'f06de87a-511e-46ae-88a8-fc9778efc194')
+            column(name: 'df_usage_batch_uid', value: '63e350c1-b211-485f-bc42-6ebee8acb22d')
+            column(name: 'df_scenario_uid', value: '929b9f19-489a-47a2-a680-4d5ad6ba887a')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'wr_wrk_inst', value: '105062654')
+            column(name: 'work_title', value: 'Our fathers lies')
+            column(name: 'system_title', value: 'Our fathers lies')
+            column(name: 'rh_account_number', value: '1000002859')
+            column(name: 'payee_account_number', value: '1000002859')
+            column(name: 'status_ind', value: 'ARCHIVED')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '1008902112317555XX')
+            column(name: 'standard_number_type', value: 'VALISBN13')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2016-11-03')
+            column(name: 'market', value: 'Bus')
+            column(name: 'market_period_from', value: '2014')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'number_of_copies', value: '100')
+            column(name: 'reported_value', value: '3000')
+            column(name: 'gross_amount', value: '500.00')
+            column(name: 'net_amount', value: '80.00')
+            column(name: 'service_fee_amount', value: '420.00')
+            column(name: 'service_fee', value: '0.16000')
+            column(name: 'check_number', value: '578945')
+            column(name: 'check_date', value: '2016-11-03')
+            column(name: 'ccc_event_id', value: '9873214')
+            column(name: 'distribution_name', value: 'FDA March 17')
+            column(name: 'distribution_date', value: '2016-11-03')
+            column(name: 'lm_detail_id', value: '4c56f661-5bef-4c82-8526-fd987b5455f8')
+            column(name: 'comment', value: 'for nts batch')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_work_classification') {
             column(name: 'df_work_classification_uid', value: '1d182000-4c91-11e9-b475-0800200c9a66')
             column(name: 'wr_wrk_inst', value: '243904752')

@@ -1490,7 +1490,7 @@
         ),
         <!--cutoff amount for unclassified works as minimum of STM and NON-STM-->
         unclassified_cutoff_amount as (
-            select least(
+            select greatest(
                 (select cutoff_amount from cutoff_amounts where classification = 'STM'),
                 (select cutoff_amount from cutoff_amounts where classification = 'NON-STM')) unclassified_cutoff
         ),

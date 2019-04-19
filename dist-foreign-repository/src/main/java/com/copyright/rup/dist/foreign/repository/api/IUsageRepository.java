@@ -464,7 +464,8 @@ public interface IUsageRepository {
     boolean isValidUsagesState(UsageFilter filter, UsageStatusEnum status);
 
     /**
-     * Inserts usages from archived usages during for NTS batch creation.
+     * Inserts usages from archived FAS usages based on NTS Batch criteria (Market Period From/To, Markets).
+     * Belletristic usages and usages that do not meet minimum Cutoff Amounts will not be inserted.
      *
      * @param usageBatch instance of {@link UsageBatch}
      * @param userName   user name
