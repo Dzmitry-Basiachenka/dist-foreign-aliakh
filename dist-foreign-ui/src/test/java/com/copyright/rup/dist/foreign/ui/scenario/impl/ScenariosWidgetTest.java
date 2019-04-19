@@ -11,6 +11,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.foreign.domain.NtsFields;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
@@ -70,6 +71,9 @@ public class ScenariosWidgetTest {
         scenariosWidget.setController(controller);
         scenario = new Scenario();
         scenario.setId(SCENARIO_ID);
+        NtsFields ntsFields = new NtsFields();
+        ntsFields.setRhMinimumAmount(new BigDecimal("300.00"));
+        scenario.setNtsFields(ntsFields);
         scenario.setDescription("Description");
         scenario.setNetTotal(new BigDecimal("10000.00"));
         scenario.setGrossTotal(new BigDecimal("20000.00"));
@@ -217,7 +221,7 @@ public class ScenariosWidgetTest {
         assertEquals(new MarginInfo(false, true, false, true), layout.getMargin());
         assertEquals(100, layout.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, layout.getWidthUnits());
-        assertEquals(7, layout.getComponentCount());
+        assertEquals(8, layout.getComponentCount());
         verifyMetadataLabel(layout.getComponent(0), "<b>Owner: </b>User@copyright.com");
         verifyMetadataLabel(layout.getComponent(1),
             "<b>Net Amt in USD: </b><span class='label-amount'>10,000.00</span>");
@@ -225,10 +229,12 @@ public class ScenariosWidgetTest {
             "<b>Gross Amt in USD: </b><span class='label-amount'>20,000.00</span>");
         verifyMetadataLabel(layout.getComponent(3),
             "<b>Reported Value Total: </b><span class='label-amount'>30,000.00</span>");
-        verifyMetadataLabel(layout.getComponent(4), "<b>Description: </b>Description");
-        verifyMetadataLabel(layout.getComponent(5), SELECTION_CRITERIA);
-        assertTrue(layout.getComponent(6) instanceof VerticalLayout);
-        VerticalLayout lastActionLayout = (VerticalLayout) layout.getComponent(6);
+        verifyMetadataLabel(layout.getComponent(4),
+            "<b>RH Minimum Amt in USD: </b><span class='label-amount'>300.00</span>");
+        verifyMetadataLabel(layout.getComponent(5), "<b>Description: </b>Description");
+        verifyMetadataLabel(layout.getComponent(6), SELECTION_CRITERIA);
+        assertTrue(layout.getComponent(7) instanceof VerticalLayout);
+        VerticalLayout lastActionLayout = (VerticalLayout) layout.getComponent(7);
         assertEquals(5, lastActionLayout.getComponentCount());
         verifyMetadataLabel(lastActionLayout.getComponent(0), "<b>Type:</b> ADDED_USAGES");
         verifyMetadataLabel(lastActionLayout.getComponent(1), "<b>User:</b> user@copyright.com");
