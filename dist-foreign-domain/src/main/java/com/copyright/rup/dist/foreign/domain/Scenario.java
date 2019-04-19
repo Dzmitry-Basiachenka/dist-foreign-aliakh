@@ -21,6 +21,7 @@ import java.math.BigDecimal;
 public class Scenario extends StoredEntity<String> {
 
     private String name;
+    private String productFamily;
     private BigDecimal netTotal = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
     private BigDecimal serviceFeeTotal = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
     private BigDecimal grossTotal = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
@@ -36,6 +37,14 @@ public class Scenario extends StoredEntity<String> {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getProductFamily() {
+        return productFamily;
+    }
+
+    public void setProductFamily(String productFamily) {
+        this.productFamily = productFamily;
     }
 
     public BigDecimal getNetTotal() {
@@ -114,6 +123,7 @@ public class Scenario extends StoredEntity<String> {
         return new EqualsBuilder()
             .appendSuper(super.equals(obj))
             .append(this.name, that.name)
+            .append(this.productFamily, that.productFamily)
             .append(this.netTotal, that.netTotal)
             .append(this.serviceFeeTotal, that.serviceFeeTotal)
             .append(this.grossTotal, that.grossTotal)
@@ -130,6 +140,7 @@ public class Scenario extends StoredEntity<String> {
         return new HashCodeBuilder()
             .appendSuper(super.hashCode())
             .append(name)
+            .append(productFamily)
             .append(netTotal)
             .append(serviceFeeTotal)
             .append(grossTotal)
@@ -146,6 +157,7 @@ public class Scenario extends StoredEntity<String> {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
             .appendSuper(super.toString())
             .append("name", name)
+            .append("productFamily", productFamily)
             .append("netTotal", netTotal)
             .append("serviceFeeTotal", serviceFeeTotal)
             .append("grossTotal", grossTotal)

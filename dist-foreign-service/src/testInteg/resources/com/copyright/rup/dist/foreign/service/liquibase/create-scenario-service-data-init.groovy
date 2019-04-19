@@ -11,6 +11,13 @@ databaseChangeLog {
             column(name: 'description', value: 'Scenario description')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario_usage_filter') {
+            column(name: 'df_scenario_usage_filter_uid', value: '0003cc8d-2e67-49aa-b6f0-e40efdf2cc90')
+            column(name: 'df_scenario_uid', value: '4c014547-06f3-4840-94ff-6249730d537d')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '31ddaa1a-e60b-44ce-a968-0ca262870358')
             column(name: 'name', value: 'CADRA_27Oct17')

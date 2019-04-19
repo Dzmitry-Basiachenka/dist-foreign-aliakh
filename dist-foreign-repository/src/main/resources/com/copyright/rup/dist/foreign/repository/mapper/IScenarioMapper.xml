@@ -7,6 +7,7 @@
     <resultMap id="scenarioResultMap" type="Scenario" extends="StoredEntityMapper.storedEntityResult">
         <result property="id" column="df_scenario_uid"/>
         <result property="name" column="name"/>
+        <result property="productFamily" column="product_family"/>
         <result property="status" column="status_ind"/>
         <result property="netTotal" column="net_total"/>
         <result property="serviceFeeTotal" column="service_fee_total"/>
@@ -90,9 +91,16 @@
 
     <select id="findAll" resultMap="scenarioResultMap">
         select
-        <include refid="scenarioColumns"/>
-        from ${schema}.df_scenario
-        order by updated_datetime desc
+            s.df_scenario_uid,
+            s.name,
+            s.status_ind,
+            s.description,
+            s.nts_fields,
+            s.updated_datetime,
+            f.product_family
+        from ${schema}.df_scenario s
+        join ${schema}.df_scenario_usage_filter f on s.df_scenario_uid = f.df_scenario_uid
+        order by s.updated_datetime desc
     </select>
 
     <select id="findNamesByUsageBatchId" parameterType="string" resultType="string">
