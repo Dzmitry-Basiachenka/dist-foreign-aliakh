@@ -51,6 +51,7 @@ public class CreateScenarioTest {
     private static final String RIGHTHOLDER_ID_8 = "f366285a-ce46-48b0-96ee-cd35d62fb243";
     private static final String RIGHTHOLDER_ID_9 = "b0e6b1f6-89e9-4767-b143-db0f49f32769";
     private static final String RIGHTHOLDER_ID_10 = "60080587-a225-439c-81af-f016cb33aeac";
+    private static final String AMOUNT_ZERO = "0.00";
 
     @Autowired
     private CreateScenarioTestBuilder testBuilder;
@@ -61,6 +62,7 @@ public class CreateScenarioTest {
     @Before
     public void setUp() {
         cacheServices.forEach(ICacheService::invalidateCache);
+        testBuilder.reset();
     }
 
     @Test
@@ -142,6 +144,21 @@ public class CreateScenarioTest {
                 buildUsageForCreatedScenario(1000024950L, 1000024950L, "870.016", "1848.784"),
                 buildUsageForCreatedScenario(2000139286L, 2000017000L, "509.322", "4583.898")))
             .expectScenario(buildScenario("26832.7356", "34909.38", "8076.6444", "38520.00"))
+            .build()
+            .run();
+    }
+
+    @Test
+    public void testCreateNtsScenario() {
+        testBuilder
+            .withFilter(buildUsageFilter("26282dbd-3463-58d7-c927-03d3458a656a", "NTS"))
+            .expectUsages(Arrays.asList(
+                buildUsageForCreatedScenario(7000429266L, null, AMOUNT_ZERO, AMOUNT_ZERO),
+                buildUsageForCreatedScenario(1000002859L, null, AMOUNT_ZERO, AMOUNT_ZERO),
+                buildUsageForCreatedScenario(1000001820L, null, AMOUNT_ZERO, AMOUNT_ZERO),
+                buildUsageForCreatedScenario(1000024497L, null, AMOUNT_ZERO, AMOUNT_ZERO),
+                buildUsageForCreatedScenario(1000002562L, null, AMOUNT_ZERO, AMOUNT_ZERO)))
+            .expectScenario(buildScenario(AMOUNT_ZERO, AMOUNT_ZERO, AMOUNT_ZERO, "1063.59"))
             .build()
             .run();
     }

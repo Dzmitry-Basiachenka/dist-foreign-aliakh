@@ -340,6 +340,101 @@ databaseChangeLog {
             column(name: 'name', value: '2HC [T]')
         }
 
+        changeSet(id: '2019-04-19-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+            comment("Insert test data for testCreateNtsScenario")
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+                column(name: 'df_usage_batch_uid', value: '26282dbd-3463-58d7-c927-03d3458a656a')
+                column(name: 'name', value: 'NTS usage batch')
+                column(name: 'rro_account_number', value: '2000017004')
+                column(name: 'product_family', value: 'NTS')
+                column(name: 'payment_date', value: '2017-01-11')
+                column(name: 'fiscal_year', value: '2017')
+                column(name: 'gross_amount', value: '0.00')
+                column(name: 'fund_pool', value: '{"markets": ["Bus,Univ,Doc Del"], "stm_amount": 10, "non_stm_amount": 20, "stm_minimum_amount": 30, "non_stm_minimum_amount": 40, "fund_pool_period_to": 2017, "fund_pool_period_from": 2017}')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+                column(name: 'df_usage_uid', value: '3d921c9c-8036-421a-ab05-39cc4d3c3b68')
+                column(name: 'df_usage_batch_uid', value: '26282dbd-3463-58d7-c927-03d3458a656a')
+                column(name: 'wr_wrk_inst', value: '180382914')
+                column(name: 'work_title', value: 'Wired')
+                column(name: 'rh_account_number', value: '7000429266')
+                column(name: 'status_ind', value: 'ELIGIBLE')
+                column(name: 'product_family', value: 'NTS')
+                column(name: 'standard_number', value: '10859241')
+                column(name: 'market', value: 'Bus,Univ,Doc Del')
+                column(name: 'market_period_from', value: '2013')
+                column(name: 'market_period_to', value: '2017')
+                column(name: 'reported_value', value: '59.30')
+                column(name: 'gross_amount', value: '0.00')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+                column(name: 'df_usage_uid', value: '669cf304-0921-41a2-85d5-c3905e77c696')
+                column(name: 'df_usage_batch_uid', value: '26282dbd-3463-58d7-c927-03d3458a656a')
+                column(name: 'wr_wrk_inst', value: '180382914')
+                column(name: 'work_title', value: 'Wired')
+                column(name: 'rh_account_number', value: '1000002859')
+                column(name: 'status_ind', value: 'ELIGIBLE')
+                column(name: 'product_family', value: 'NTS')
+                column(name: 'standard_number', value: '10859241')
+                column(name: 'market', value: 'Bus,Univ,Doc Del')
+                column(name: 'market_period_from', value: '2013')
+                column(name: 'market_period_to', value: '2017')
+                column(name: 'reported_value', value: '19.20')
+                column(name: 'gross_amount', value: '0.00')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+                column(name: 'df_usage_uid', value: '6402d5c8-ba80-4966-a7cc-34ba1fdc1d9c')
+                column(name: 'df_usage_batch_uid', value: '26282dbd-3463-58d7-c927-03d3458a656a')
+                column(name: 'wr_wrk_inst', value: '180382914')
+                column(name: 'work_title', value: 'Wired')
+                column(name: 'rh_account_number', value: '1000001820')
+                column(name: 'status_ind', value: 'ELIGIBLE')
+                column(name: 'product_family', value: 'NTS')
+                column(name: 'standard_number', value: '10859241')
+                column(name: 'market', value: 'Bus,Univ,Doc Del')
+                column(name: 'market_period_from', value: '2013')
+                column(name: 'market_period_to', value: '2017')
+                column(name: 'reported_value', value: '25.96')
+                column(name: 'gross_amount', value: '0.00')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+                column(name: 'df_usage_uid', value: '91813777-3dd4-4f5f-bb83-ca145866317d')
+                column(name: 'df_usage_batch_uid', value: '26282dbd-3463-58d7-c927-03d3458a656a')
+                column(name: 'wr_wrk_inst', value: '180382914')
+                column(name: 'work_title', value: 'Wired')
+                column(name: 'rh_account_number', value: '1000024497')
+                column(name: 'status_ind', value: 'ELIGIBLE')
+                column(name: 'product_family', value: 'NTS')
+                column(name: 'standard_number', value: '10859241')
+                column(name: 'market', value: 'Bus,Univ,Doc Del')
+                column(name: 'market_period_from', value: '2013')
+                column(name: 'market_period_to', value: '2017')
+                column(name: 'reported_value', value: '896.72')
+                column(name: 'gross_amount', value: '0.00')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+                column(name: 'df_usage_uid', value: 'e001c596-a66f-4fd3-b34c-5ef65a215d68')
+                column(name: 'df_usage_batch_uid', value: '26282dbd-3463-58d7-c927-03d3458a656a')
+                column(name: 'wr_wrk_inst', value: '180382914')
+                column(name: 'work_title', value: 'Wired')
+                column(name: 'rh_account_number', value: '1000002562')
+                column(name: 'status_ind', value: 'ELIGIBLE')
+                column(name: 'product_family', value: 'NTS')
+                column(name: 'standard_number', value: '10859241')
+                column(name: 'market', value: 'Bus,Univ,Doc Del')
+                column(name: 'market_period_from', value: '2013')
+                column(name: 'market_period_to', value: '2017')
+                column(name: 'reported_value', value: '62.41')
+                column(name: 'gross_amount', value: '0.00')
+            }
+        }
+
         rollback ""
     }
 }

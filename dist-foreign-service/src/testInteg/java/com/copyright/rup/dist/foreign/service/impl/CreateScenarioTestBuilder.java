@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.test.TestUtils;
+import com.copyright.rup.dist.foreign.domain.NtsFields;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
@@ -33,6 +34,7 @@ import org.springframework.test.web.client.response.MockRestResponseCreators;
 import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -48,6 +50,9 @@ import java.util.Objects;
  */
 @Component
 class CreateScenarioTestBuilder {
+
+    private static final String SCENARIO_NAME = "Test Scenario";
+    private static final String DESCRIPTION = "Scenario Description";
 
     @Autowired
     private IScenarioService scenarioService;
@@ -106,6 +111,17 @@ class CreateScenarioTestBuilder {
         return new Runner();
     }
 
+    void reset() {
+        expectedRollupsJson = null;
+        expectedRollupsRightholderIds = null;
+        expectedPreferencesJson = null;
+        expectedPreferencesRightholderIds = null;
+        usageFilter = null;
+        expectedUsages = null;
+        scenarioId = null;
+        expectedScenario = null;
+    }
+    
     /**
      * Test runner class.
      */
@@ -113,15 +129,29 @@ class CreateScenarioTestBuilder {
 
         void run() {
             createRestServer();
-            expectGetRollups(expectedRollupsJson, expectedRollupsRightholderIds);
-            expectGetPreferences(expectedPreferencesJson, expectedPreferencesRightholderIds);
-            scenarioId = scenarioService.createScenario("Test Scenario", "Scenario Description", usageFilter).getId();
+            if (Objects.nonNull(expectedRollupsRightholderIds)) {
+                expectGetRollups(expectedRollupsJson, expectedRollupsRightholderIds);
+            }
+            if (Objects.nonNull(expectedPreferencesRightholderIds)) {
+                expectGetPreferences(expectedPreferencesJson, expectedPreferencesRightholderIds);
+            }
+            scenarioId = createScenario();
             mockServer.verify();
             asyncMockServer.verify();
             assertScenario();
             assertUsages();
             assertScenarioActions();
             assertScenarioUsageFilter();
+        }
+
+        private String createScenario() {
+            if ("NTS".equals(usageFilter.getProductFamilies().iterator().next())) {
+                NtsFields ntsFields = new NtsFields();
+                ntsFields.setRhMinimumAmount(new BigDecimal("300.00"));
+                return scenarioService.createNtsScenario(SCENARIO_NAME, ntsFields, DESCRIPTION, usageFilter).getId();
+            } else {
+                return scenarioService.createScenario(SCENARIO_NAME, DESCRIPTION, usageFilter).getId();
+            }
         }
 
         private void assertScenario() {
@@ -171,7 +201,9 @@ class CreateScenarioTestBuilder {
                     new Pageable(0, 10), null);
             assertEquals(1, usages.size());
             UsageDto usageDto = usages.get(0);
-            assertEquals(usage.getPayee().getAccountNumber(), usageDto.getPayeeAccountNumber(), 0);
+            if (null != usage.getPayee()) {
+                assertEquals(usage.getPayee().getAccountNumber(), usageDto.getPayeeAccountNumber());
+            }
             assertEquals(UsageStatusEnum.LOCKED, usageDto.getStatus());
             assertEquals("SYSTEM", usageDto.getUpdateUser());
             assertEquals(usage.getServiceFeeAmount(), usageDto.getServiceFeeAmount());
