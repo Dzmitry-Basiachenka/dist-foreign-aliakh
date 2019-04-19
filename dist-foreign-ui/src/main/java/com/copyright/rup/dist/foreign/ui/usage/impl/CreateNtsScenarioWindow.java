@@ -70,7 +70,7 @@ public class CreateNtsScenarioWindow extends Window {
 
     private void initFields() {
         initScenarioNameField();
-        initMinimumRhAmountField();
+        initRhMinimumAmountField();
         initDescriptionArea();
     }
 
@@ -89,7 +89,7 @@ public class CreateNtsScenarioWindow extends Window {
                 CommonDateUtils.format(LocalDate.now(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT)));
     }
 
-    private void initMinimumRhAmountField() {
+    private void initRhMinimumAmountField() {
         rhMinimumAmountField = new TextField(ForeignUi.getMessage("field.rh_minimum_amount"));
         rhMinimumAmountField.setRequiredIndicatorVisible(true);
         binder.forField(rhMinimumAmountField)

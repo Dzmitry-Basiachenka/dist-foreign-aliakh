@@ -62,7 +62,7 @@ public class CreateNtsScenarioWindowTest {
         assertTrue(content.isSpacing());
         assertEquals(4, content.getComponentCount());
         verifyScenarioNameField(content.getComponent(0));
-        verifyMinimumRhAmountField(content.getComponent(1));
+        verifyRhMinimumAmountField(content.getComponent(1));
         verifyDescriptionArea(content.getComponent(2));
         verifyButtonsLayout(content.getComponent(3));
     }
@@ -76,7 +76,7 @@ public class CreateNtsScenarioWindowTest {
         assertEquals("scenario-name", scenarioNameField.getId());
     }
 
-    private void verifyMinimumRhAmountField(Component component) {
+    private void verifyRhMinimumAmountField(Component component) {
         assertNotNull(component);
         TextField rhMinimumAmountField = (TextField) component;
         assertEquals("RH Minimum Amount", rhMinimumAmountField.getCaption());

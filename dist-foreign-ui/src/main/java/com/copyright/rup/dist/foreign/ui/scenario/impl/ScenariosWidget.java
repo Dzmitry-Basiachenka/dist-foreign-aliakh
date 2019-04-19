@@ -65,6 +65,7 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
     private final Label netTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label reportedTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label grossTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label rhMinimumAmountLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label descriptionLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label selectionCriteriaLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label actionType = new Label(StringUtils.EMPTY, ContentMode.HTML);
@@ -205,7 +206,7 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
         descriptionLabel.setStyleName("v-label-white-space-normal");
         selectionCriteriaLabel.setStyleName("v-label-white-space-normal");
         metadataLayout = new VerticalLayout(ownerLabel, netTotalLabel, grossTotalLabel, reportedTotalLabel,
-            descriptionLabel, selectionCriteriaLabel, initScenarioActionLayout());
+            rhMinimumAmountLabel, descriptionLabel, selectionCriteriaLabel, initScenarioActionLayout());
         metadataLayout.setMargin(new MarginInfo(false, true, false, true));
         VaadinUtils.setMaxComponentsWidth(metadataLayout);
     }
@@ -240,6 +241,14 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
                 formatAmount(scenarioWithAmounts.getGrossTotal())));
             reportedTotalLabel.setValue(ForeignUi.getMessage("label.reported_total",
                 formatAmount(scenarioWithAmounts.getReportedTotal())));
+            if (null != scenario.getNtsFields()) {
+                rhMinimumAmountLabel.setValue(ForeignUi.getMessage("label.rh_minimum_amount_in_usd",
+                    formatAmount(scenario.getNtsFields().getRhMinimumAmount())));
+                rhMinimumAmountLabel.setVisible(true);
+            } else {
+                rhMinimumAmountLabel.setValue(StringUtils.EMPTY);
+                rhMinimumAmountLabel.setVisible(false);
+            }
             descriptionLabel.setValue(ForeignUi.getMessage("label.description", scenario.getDescription()));
             selectionCriteriaLabel.setValue(controller.getCriteriaHtmlRepresentation());
             ScenarioAuditItem lastAction = scenarioWithAmounts.getAuditItem();
