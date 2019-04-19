@@ -1,3 +1,10 @@
+5.1.19
+-
+* B-46740 FDA: Ensure that there is at least one rightsholder for the corresponding fund pool: adjust logic for excluding under minimum unclassified usages by greatest STM or Non-STM Cutoff Amount
+* B-49019 FDA: Create NTS Scenario: disable refresh and reconcile buttons on scenarios tab for NTS product family
+* B-49019 FDA: Create NTS Scenario: implement service methods to save and load NTS scenarios
+* B-49019 FDA: Create NTS Scenario: refactor Scenario Metadata Panel to show value of the field rhMinimumAmount
+
 5.1.18
 -
 * B-48300 FDA: Remove under minimum RHs and reallocate funds proportionally: introduce NTS_EXCLUDED status in usage and audit filters
