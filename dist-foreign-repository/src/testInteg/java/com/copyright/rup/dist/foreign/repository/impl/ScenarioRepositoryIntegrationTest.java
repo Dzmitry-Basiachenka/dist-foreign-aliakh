@@ -64,6 +64,7 @@ public class ScenarioRepositoryIntegrationTest {
     private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
     private static final String SCENARIO_WITH_AUDIT_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
     private static final String FAS_PRODUCT_FAMILY = "FAS";
+    private static final String USER = "user@copyright.com";
 
     @Autowired
     private ScenarioRepository scenarioRepository;
@@ -318,8 +319,8 @@ public class ScenarioRepositoryIntegrationTest {
         scenario.setName(name);
         scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
         scenario.setDescription(DESCRIPTION);
-        scenario.setCreateUser("SYSTEM");
-        scenario.setUpdateUser("SYSTEM");
+        scenario.setCreateUser(USER);
+        scenario.setUpdateUser(USER);
         return scenario;
     }
 
@@ -328,7 +329,7 @@ public class ScenarioRepositoryIntegrationTest {
         assertEquals(id, scenario.getId());
         assertEquals(name, scenario.getName());
         assertEquals(description, scenario.getDescription());
-        assertEquals("SYSTEM", scenario.getCreateUser());
+        assertEquals(USER, scenario.getCreateUser());
         assertEquals(productFamily, scenario.getProductFamily());
         assertEquals(status, scenario.getStatus());
     }
