@@ -1,3 +1,8 @@
+5.1.20
+-
+* B-46740 FDA: Ensure that there is at least one rightsholder for the corresponding fund pool: exclude STM/Non-STM usages during loading NTS Fund Pool if corresponding Fund Pool Amount is zero
+* B-49019 FDA: Create NTS Scenario: implement NTS scenario creation test method in CreateScenarioTest
+
 5.1.19
 -
 * B-46740 FDA: Ensure that there is at least one rightsholder for the corresponding fund pool: adjust logic for excluding under minimum unclassified usages by greatest STM or Non-STM Cutoff Amount
