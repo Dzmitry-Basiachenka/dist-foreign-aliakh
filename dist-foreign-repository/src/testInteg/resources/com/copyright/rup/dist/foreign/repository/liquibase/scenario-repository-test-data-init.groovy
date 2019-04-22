@@ -67,6 +67,7 @@ databaseChangeLog {
             column(name: 'name', value: 'Scenario name 3')
             column(name: 'status_ind', value: 'IN_PROGRESS')
             column(name: 'description', value: 'The description of scenario 3')
+            column(name: 'created_by_user', value: 'user@copyright.com')
             column(name: 'updated_datetime', value: '2017-02-01 11:41:52.735531+03')
         }
 
@@ -75,6 +76,7 @@ databaseChangeLog {
             column(name: 'name', value: 'Scenario name')
             column(name: 'status_ind', value: 'IN_PROGRESS')
             column(name: 'description', value: 'The description of scenario')
+            column(name: 'created_by_user', value: 'user@copyright.com')
             column(name: 'updated_datetime', value: '2017-02-14 11:41:52.735531+03')
         }
 
@@ -83,6 +85,7 @@ databaseChangeLog {
             column(name: 'name', value: 'Scenario name 2')
             column(name: 'status_ind', value: 'IN_PROGRESS')
             column(name: 'description', value: 'The description of scenario 2')
+            column(name: 'created_by_user', value: 'user@copyright.com')
             column(name: 'updated_datetime', value: '2017-03-14 12:50:42.735531+03')
         }
 
@@ -91,6 +94,7 @@ databaseChangeLog {
             column(name: 'name', value: 'Scenario name 4')
             column(name: 'status_ind', value: 'IN_PROGRESS')
             column(name: 'description', value: 'The description of scenario 4')
+            column(name: 'created_by_user', value: 'user@copyright.com')
             column(name: 'updated_datetime', value: '2017-02-10 11:41:52.735531+03')
         }
 
@@ -99,6 +103,7 @@ databaseChangeLog {
             column(name: 'name', value: 'Scenario name 5')
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'description', value: 'The description of scenario 5')
+            column(name: 'created_by_user', value: 'user@copyright.com')
             column(name: 'updated_datetime', value: '2017-02-09 11:41:52.735531+03')
         }
 
@@ -300,6 +305,7 @@ databaseChangeLog {
             column(name: 'name', value: 'Scenario with excluded usages')
             column(name: 'status_ind', value: 'IN_PROGRESS')
             column(name: 'description', value: 'The description of scenario 6')
+            column(name: 'created_by_user', value: 'user@copyright.com')
             column(name: 'updated_datetime', value: '2018-03-30 17:47:24')
         }
 
@@ -366,6 +372,7 @@ databaseChangeLog {
             column(name: 'name', value: 'Partially Paid Scenario')
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'description', value: 'Not all usages are paid')
+            column(name: 'created_by_user', value: 'user@copyright.com')
             column(name: 'updated_datetime', value: '2017-01-03 17:47:24')
         }
 
@@ -484,6 +491,7 @@ databaseChangeLog {
             column(name: 'name', value: 'Fully Paid Scenario')
             column(name: 'status_ind', value: 'SENT_TO_LM')
             column(name: 'description', value: 'All usages are paid and reported to CRM')
+            column(name: 'created_by_user', value: 'user@copyright.com')
             column(name: 'updated_datetime', value: '2017-01-02 17:47:24')
         }
 
@@ -532,6 +540,7 @@ databaseChangeLog {
             column(name: 'name', value: 'Archived Scenario')
             column(name: 'status_ind', value: 'ARCHIVED')
             column(name: 'description', value: 'Scenario already archived')
+            column(name: 'created_by_user', value: 'user@copyright.com')
             column(name: 'updated_datetime', value: '2017-01-01 17:47:24')
         }
 
@@ -585,6 +594,7 @@ databaseChangeLog {
                 column(name: 'status_ind', value: 'IN_PROGRESS')
                 column(name: 'description', value: 'Description for test NTS scenario')
                 column(name: 'nts_fields', value: '{"rh_minimum_amount":300.00}')
+                column(name: 'created_by_user', value: 'user@copyright.com')
                 column(name: 'updated_datetime', value: '2011-01-01 17:47:24')
             }
 
