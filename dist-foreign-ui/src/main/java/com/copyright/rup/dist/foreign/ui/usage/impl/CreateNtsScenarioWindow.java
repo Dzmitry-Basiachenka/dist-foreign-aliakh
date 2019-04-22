@@ -79,7 +79,7 @@ public class CreateNtsScenarioWindow extends Window {
         binder.forField(scenarioNameField)
             .asRequired(ForeignUi.getMessage("field.error.empty"))
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
-            .withValidator(value -> !controller.getScenarioService().scenarioExists(value),
+            .withValidator(value -> !controller.getScenarioService().scenarioExists(StringUtils.trimToEmpty(value)),
                 ForeignUi.getMessage("message.error.unique_name", "Scenario"))
             .bind(Scenario::getName, Scenario::setName);
         VaadinUtils.setMaxComponentsWidth(scenarioNameField);

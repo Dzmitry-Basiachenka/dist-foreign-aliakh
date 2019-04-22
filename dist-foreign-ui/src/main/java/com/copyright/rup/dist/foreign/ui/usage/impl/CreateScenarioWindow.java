@@ -88,7 +88,7 @@ public class CreateScenarioWindow extends Window {
         scenarioNameField = new TextField(ForeignUi.getMessage("field.scenario_name"));
         binder.forField(scenarioNameField)
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
-            .withValidator(value -> !controller.getScenarioService().scenarioExists(value),
+            .withValidator(value -> !controller.getScenarioService().scenarioExists(StringUtils.trimToEmpty(value)),
                 ForeignUi.getMessage("message.error.unique_name", "Scenario"))
             .asRequired(ForeignUi.getMessage("field.error.empty"))
             .bind(Scenario::getName, Scenario::setName);
