@@ -82,7 +82,8 @@ public class UsageRepositoryIntegrationTest {
     private static final String RH_ACCOUNT_NAME_3 = "Kluwer Academic Publishers - Dordrecht";
     private static final String WORK_TITLE_1 = "Wissenschaft & Forschung Japan";
     private static final String WORK_TITLE_2 = "100 ROAD MOVIES";
-    private static final String PRODUCT_FAMILY_FAS = "FAS";
+    private static final String FAS_PRODUCT_FAMILY = "FAS";
+    private static final String NTS_PRODUCT_FAMILY = "NTS";
     private static final String BUS_MARKET = "Bus";
     private static final String DOC_DEL_MARKET = "Doc Del";
     private static final String DETAIL_ID_KEY = "detailId";
@@ -137,6 +138,7 @@ public class UsageRepositoryIntegrationTest {
     @Autowired
     private UsageRepository usageRepository;
 
+
     @Test
     public void testInsert() throws IOException {
         Usage expectedUsage = buildUsage();
@@ -144,21 +146,21 @@ public class UsageRepositoryIntegrationTest {
         usageRepository.insert(expectedUsage);
         List<Usage> usages = usageRepository.findByIds(Collections.singletonList(expectedUsage.getId()));
         assertEquals(1, CollectionUtils.size(usages));
-        verifyUsage(expectedUsage, usages.get(0));
+        verifyFasUsage(expectedUsage, usages.get(0));
     }
 
     @Test
     public void testFindCountByFilter() {
         assertEquals(1, usageRepository.findCountByFilter(
             buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.singleton(USAGE_BATCH_ID_1),
-                Collections.singleton(PRODUCT_FAMILY_FAS), UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, FISCAL_YEAR)));
+                Collections.singleton(FAS_PRODUCT_FAMILY), UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, FISCAL_YEAR)));
     }
 
     @Test
     public void testFindDtosByFilter() {
         UsageFilter usageFilter =
             buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.singleton(USAGE_BATCH_ID_1),
-                Collections.singleton(PRODUCT_FAMILY_FAS), UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, FISCAL_YEAR);
+                Collections.singleton(FAS_PRODUCT_FAMILY), UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, FISCAL_YEAR);
         verifyUsageDtos(usageRepository.findDtosByFilter(usageFilter, null,
             new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 1, USAGE_ID_1);
     }
@@ -166,14 +168,15 @@ public class UsageRepositoryIntegrationTest {
     @Test
     public void testFindIdsByStatusAnsProductFamily() {
         List<String> actualUsageIds =
-            usageRepository.findIdsByStatusAndProductFamily(UsageStatusEnum.US_TAX_COUNTRY, "NTS");
+            usageRepository.findIdsByStatusAndProductFamily(UsageStatusEnum.US_TAX_COUNTRY, NTS_PRODUCT_FAMILY);
         assertEquals(Arrays.asList("463e2239-1a36-41cc-9a51-ee2a80eae0c7", "bd407b50-6101-4304-8316-6404fe32a800"),
             actualUsageIds);
     }
 
     @Test
     public void testFindByStatusAnsProductFamily() throws IOException {
-        List<Usage> actualUsages = usageRepository.findByStatusAndProductFamily(UsageStatusEnum.US_TAX_COUNTRY, "NTS");
+        List<Usage> actualUsages =
+            usageRepository.findByStatusAndProductFamily(UsageStatusEnum.US_TAX_COUNTRY, NTS_PRODUCT_FAMILY);
         verifyUsages(loadExpectedUsages("json/usages_find_by_status.json"), actualUsages);
     }
 
@@ -196,7 +199,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     public void testFindDtosByProductFamiliesFilter() {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
-            Collections.singleton(PRODUCT_FAMILY_FAS), null, null, null);
+            Collections.singleton(FAS_PRODUCT_FAMILY), null, null, null);
         verifyUsageDtos(usageRepository.findDtosByFilter(usageFilter, null,
             new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 16, USAGE_ID_14, USAGE_ID_1, USAGE_ID_23, USAGE_ID_21,
             USAGE_ID_12, USAGE_ID_9, USAGE_ID_6, USAGE_ID_13, USAGE_ID_18, USAGE_ID_11, USAGE_ID_2, USAGE_ID_19,
@@ -440,7 +443,8 @@ public class UsageRepositoryIntegrationTest {
         List<Usage> usages = usageRepository.findByScenarioId(SCENARIO_ID);
         assertEquals(2, usages.size());
         usages.forEach(
-            usage -> verifyUsage(usage, UsageStatusEnum.LOCKED, SCENARIO_ID, StoredEntity.DEFAULT_USER, 1000002859L));
+            usage -> verifyFasUsage(usage, UsageStatusEnum.LOCKED, SCENARIO_ID, StoredEntity.DEFAULT_USER,
+                1000002859L));
     }
 
     @Test
@@ -452,7 +456,7 @@ public class UsageRepositoryIntegrationTest {
             assertEquals(1000002859L, usage.getRightsholder().getAccountNumber(), 0);
             assertEquals("John Wiley & Sons - Books", usage.getRightsholder().getName());
             assertEquals(WORK_TITLE_2, usage.getWorkTitle());
-            assertEquals(PRODUCT_FAMILY_FAS, usage.getProductFamily());
+            assertEquals(FAS_PRODUCT_FAMILY, usage.getProductFamily());
             assertNotNull(usage.getGrossAmount());
         });
     }
@@ -502,7 +506,7 @@ public class UsageRepositoryIntegrationTest {
     public void testFindWithAmountsAndRightsholders() {
         UsageFilter usageFilter =
             buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.singleton(USAGE_BATCH_ID_1),
-                Collections.singleton(PRODUCT_FAMILY_FAS), UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, FISCAL_YEAR);
+                Collections.singleton(FAS_PRODUCT_FAMILY), UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, FISCAL_YEAR);
         verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 1, USAGE_ID_1);
     }
 
@@ -510,7 +514,7 @@ public class UsageRepositoryIntegrationTest {
     public void testVerifyFindWithAmountsAndRightsholders() {
         UsageFilter usageFilter =
             buildUsageFilter(Collections.singleton(RH_ACCOUNT_NUMBER), Collections.singleton(USAGE_BATCH_ID_1),
-                Collections.singleton(PRODUCT_FAMILY_FAS), UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, FISCAL_YEAR);
+                Collections.singleton(FAS_PRODUCT_FAMILY), UsageStatusEnum.ELIGIBLE, PAYMENT_DATE, FISCAL_YEAR);
         List<Usage> usages = usageRepository.findWithAmountsAndRightsholders(usageFilter);
         assertEquals(1, usages.size());
         Usage usage = usages.get(0);
@@ -547,7 +551,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     public void testFindWithAmountsAndRightsholdersByProductFamiliesFilter() {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
-            Collections.singleton(PRODUCT_FAMILY_FAS), UsageStatusEnum.ELIGIBLE, null, null);
+            Collections.singleton(FAS_PRODUCT_FAMILY), UsageStatusEnum.ELIGIBLE, null, null);
         verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 3, USAGE_ID_1, USAGE_ID_2,
             USAGE_ID_3);
     }
@@ -581,7 +585,7 @@ public class UsageRepositoryIntegrationTest {
         List<Usage> usages = usageRepository.findByIds(Collections.singletonList(USAGE_ID_9));
         assertEquals(1, CollectionUtils.size(usages));
         Usage usage = usages.get(0);
-        verifyUsage(usage, UsageStatusEnum.ELIGIBLE, null, StoredEntity.DEFAULT_USER, null);
+        verifyFasUsage(usage, UsageStatusEnum.ELIGIBLE, null, StoredEntity.DEFAULT_USER, null);
         usage.getPayee().setAccountNumber(2000017004L);
         usage.setStatus(UsageStatusEnum.LOCKED);
         usage.setScenarioId(SCENARIO_ID);
@@ -594,7 +598,7 @@ public class UsageRepositoryIntegrationTest {
         usageRepository.addToScenario(Collections.singletonList(usage));
         usages = usageRepository.findByIds(Collections.singletonList(USAGE_ID_9));
         assertEquals(1, CollectionUtils.size(usages));
-        verifyUsage(usages.get(0), UsageStatusEnum.LOCKED, SCENARIO_ID, USER_NAME, 2000017004L);
+        verifyFasUsage(usages.get(0), UsageStatusEnum.LOCKED, SCENARIO_ID, USER_NAME, 2000017004L);
         assertEquals(SERVICE_FEE, usage.getServiceFee());
         assertEquals(serviceFeeAmount, usage.getServiceFeeAmount());
         assertEquals(netAmount, usage.getNetAmount());
@@ -604,9 +608,29 @@ public class UsageRepositoryIntegrationTest {
     public void testDeleteFromScenario() {
         List<Usage> usages = usageRepository.findByIds(Collections.singletonList(USAGE_ID_8));
         assertEquals(1, CollectionUtils.size(usages));
-        verifyUsage(usages.get(0), UsageStatusEnum.LOCKED, SCENARIO_ID, StoredEntity.DEFAULT_USER, 1000002859L);
+        verifyFasUsage(usages.get(0), UsageStatusEnum.LOCKED, SCENARIO_ID, StoredEntity.DEFAULT_USER, 1000002859L);
         usageRepository.deleteFromScenario(SCENARIO_ID, USER_NAME);
         verifyUsageExcludedFromScenario(usageRepository.findByIds(Collections.singletonList(USAGE_ID_8)).get(0));
+    }
+
+    @Test
+    public void testDeleteFromNtsScenario() {
+        List<Usage> usages = usageRepository.findByIds(
+            Arrays.asList("c09aa888-85a5-4377-8c7a-85d84d255b5a", "45445974-5bee-477a-858b-e9e8c1a642b8"));
+        assertEquals(2, CollectionUtils.size(usages));
+        BigDecimal aboveMinimumAmount = new BigDecimal("900.00");
+        String scenarioId = "ca163655-8978-4a45-8fe3-c3b5572c6879";
+        verifyNtsUsage(usages.get(0), UsageStatusEnum.NTS_EXCLUDED, null, StoredEntity.DEFAULT_USER,
+            DEFAULT_ZERO_AMOUNT, HUNDRED_AMOUNT);
+        verifyNtsUsage(usages.get(1), UsageStatusEnum.LOCKED, scenarioId, StoredEntity.DEFAULT_USER, aboveMinimumAmount,
+            aboveMinimumAmount);
+        usageRepository.deleteFromNtsScenario(scenarioId, USER_NAME);
+        usages = usageRepository.findByIds(
+            Arrays.asList("c09aa888-85a5-4377-8c7a-85d84d255b5a", "45445974-5bee-477a-858b-e9e8c1a642b8"));
+        assertEquals(2, CollectionUtils.size(usages));
+        verifyNtsUsage(usages.get(0), UsageStatusEnum.ELIGIBLE, null, USER_NAME, DEFAULT_ZERO_AMOUNT, HUNDRED_AMOUNT);
+        verifyNtsUsage(usages.get(1), UsageStatusEnum.ELIGIBLE, null, USER_NAME, DEFAULT_ZERO_AMOUNT,
+            aboveMinimumAmount);
     }
 
     @Test
@@ -695,7 +719,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     public void testFindForAuditByProductFamilies() {
         AuditFilter filter = new AuditFilter();
-        filter.setProductFamilies(Collections.singleton(PRODUCT_FAMILY_FAS));
+        filter.setProductFamilies(Collections.singleton(FAS_PRODUCT_FAMILY));
         assertEquals(28, usageRepository.findCountForAudit(filter));
         List<UsageDto> usages = usageRepository.findForAudit(filter, new Pageable(0, 25), null);
         verifyUsageDtos(usages, 25, USAGE_ID_14, USAGE_ID_15, USAGE_ID_16, USAGE_ID_1, USAGE_ID_23,
@@ -957,13 +981,14 @@ public class UsageRepositoryIntegrationTest {
     public void testUpdateResearchedUsages() {
         String usageId1 = "721ca627-09bc-4204-99f4-6acae415fa5d";
         String usageId2 = "9c07f6dd-382e-4cbb-8cd1-ab9f51413e0a";
-        verifyUsage(usageId1, null, null, STANDARD_NUMBER, null, UsageStatusEnum.WORK_RESEARCH);
-        verifyUsage(usageId2, null, null, null, null, UsageStatusEnum.WORK_RESEARCH);
+        verifyFasUsage(usageId1, null, null, STANDARD_NUMBER, null, UsageStatusEnum.WORK_RESEARCH);
+        verifyFasUsage(usageId2, null, null, null, null, UsageStatusEnum.WORK_RESEARCH);
         usageRepository.updateResearchedUsages(Arrays.asList(
             buildResearchedUsage(usageId1, "Technical Journal", 180382916L, STANDARD_NUMBER, "VALISSN"),
             buildResearchedUsage(usageId2, "Medical Journal", 854030733L, "2192-3566", "VALISBN13")));
-        verifyUsage(usageId1, "Technical Journal", 180382916L, STANDARD_NUMBER, "VALISSN", UsageStatusEnum.WORK_FOUND);
-        verifyUsage(usageId2, "Medical Journal", 854030733L, "2192-3566", "VALISBN13", UsageStatusEnum.WORK_FOUND);
+        verifyFasUsage(usageId1, "Technical Journal", 180382916L, STANDARD_NUMBER, "VALISSN",
+            UsageStatusEnum.WORK_FOUND);
+        verifyFasUsage(usageId2, "Medical Journal", 854030733L, "2192-3566", "VALISBN13", UsageStatusEnum.WORK_FOUND);
     }
 
     @Test
@@ -982,7 +1007,7 @@ public class UsageRepositoryIntegrationTest {
         Usage usage = usages.get(0);
         usage.setStatus(UsageStatusEnum.RH_FOUND);
         usage.getRightsholder().setAccountNumber(RH_ACCOUNT_NUMBER);
-        usage.setProductFamily(PRODUCT_FAMILY_FAS);
+        usage.setProductFamily(FAS_PRODUCT_FAMILY);
         usage.setWrWrkInst(5697789789L);
         usage.setWorkTitle("Wissenschaft & Forschung Italy");
         usage.setSystemTitle("Wissenschaft & Forschung France");
@@ -993,7 +1018,7 @@ public class UsageRepositoryIntegrationTest {
         Usage updatedUsage = updatedUsages.get(0);
         assertEquals(RH_ACCOUNT_NUMBER, updatedUsage.getRightsholder().getAccountNumber());
         assertEquals(UsageStatusEnum.RH_FOUND, updatedUsage.getStatus());
-        assertEquals(PRODUCT_FAMILY_FAS, updatedUsage.getProductFamily());
+        assertEquals(FAS_PRODUCT_FAMILY, updatedUsage.getProductFamily());
         assertEquals("VALISBN10", updatedUsage.getStandardNumberType());
         assertEquals("Wissenschaft & Forschung Italy", updatedUsage.getWorkTitle());
         assertEquals("Wissenschaft & Forschung France", updatedUsage.getSystemTitle());
@@ -1054,8 +1079,8 @@ public class UsageRepositoryIntegrationTest {
         return researchedUsage;
     }
 
-    private void verifyUsage(String usageId, String title, Long wrWrkInst, String standardNumber,
-                             String standardNumberType, UsageStatusEnum status) {
+    private void verifyFasUsage(String usageId, String title, Long wrWrkInst, String standardNumber,
+                                String standardNumberType, UsageStatusEnum status) {
         List<Usage> usages = usageRepository.findByIds(Collections.singletonList(usageId));
         assertEquals(1, CollectionUtils.size(usages));
         Usage usage = usages.get(0);
@@ -1091,14 +1116,27 @@ public class UsageRepositoryIntegrationTest {
             SCENARIO_ID, searchValue));
     }
 
-    private void verifyUsage(Usage usage, UsageStatusEnum status, String scenarioId, String defaultUser,
+    private void verifyUsage(Usage usage, UsageStatusEnum status, String scenarioId, String username,
                              Long payeeAccountNumber) {
         assertNotNull(usage);
         assertEquals(status, usage.getStatus());
         assertEquals(scenarioId, usage.getScenarioId());
-        assertEquals(defaultUser, usage.getUpdateUser());
+        assertEquals(username, usage.getUpdateUser());
         assertEquals(payeeAccountNumber, usage.getPayee().getAccountNumber());
-        assertEquals(PRODUCT_FAMILY_FAS, usage.getProductFamily());
+    }
+
+    private void verifyFasUsage(Usage usage, UsageStatusEnum status, String scenarioId, String username,
+                                Long payeeAccountNumber) {
+        verifyUsage(usage, status, scenarioId, username, payeeAccountNumber);
+        assertEquals(FAS_PRODUCT_FAMILY, usage.getProductFamily());
+    }
+
+    private void verifyNtsUsage(Usage usage, UsageStatusEnum status, String scenarioId, String username,
+                                BigDecimal grossAmount, BigDecimal reportedValue) {
+        verifyUsage(usage, status, scenarioId, username, null);
+        assertEquals(NTS_PRODUCT_FAMILY, usage.getProductFamily());
+        assertEquals(0, grossAmount.compareTo(usage.getGrossAmount()));
+        assertEquals(0, reportedValue.compareTo(usage.getReportedValue()));
     }
 
     private void verifyInsertedFundPoolUsage(Long wrWrkInst, String workTitle, String market, Integer marketPeriodFrom,
@@ -1108,7 +1146,7 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(workTitle, actualUsage.getWorkTitle());
         assertEquals(workTitle, actualUsage.getSystemTitle());
         assertEquals(UsageStatusEnum.WORK_FOUND, actualUsage.getStatus());
-        assertEquals("NTS", actualUsage.getProductFamily());
+        assertEquals(NTS_PRODUCT_FAMILY, actualUsage.getProductFamily());
         assertEquals("1008902112317555XX", actualUsage.getStandardNumber());
         assertEquals("VALISBN13", actualUsage.getStandardNumberType());
         assertEquals(market, actualUsage.getMarket());
@@ -1129,7 +1167,7 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(DEFAULT_ZERO_AMOUNT, usage.getNetAmount());
         assertFalse(usage.isRhParticipating());
         assertEquals(USER_NAME, usage.getUpdateUser());
-        assertEquals(PRODUCT_FAMILY_FAS, usage.getProductFamily());
+        assertEquals(FAS_PRODUCT_FAMILY, usage.getProductFamily());
     }
 
     private UsageFilter buildUsageFilter(Set<Long> accountNumbers, Set<String> usageBatchIds,
@@ -1168,10 +1206,10 @@ public class UsageRepositoryIntegrationTest {
     private void verifyUsages(List<Usage> expectedUsages, List<Usage> actualUsages) {
         assertEquals(CollectionUtils.size(expectedUsages), CollectionUtils.size(actualUsages));
         IntStream.range(0, expectedUsages.size())
-            .forEach(index -> verifyUsage(expectedUsages.get(index), actualUsages.get(index)));
+            .forEach(index -> verifyFasUsage(expectedUsages.get(index), actualUsages.get(index)));
     }
 
-    private void verifyUsage(Usage expectedUsage, Usage actualUsage) {
+    private void verifyFasUsage(Usage expectedUsage, Usage actualUsage) {
         assertEquals(expectedUsage.getId(), actualUsage.getId());
         assertEquals(expectedUsage.getBatchId(), actualUsage.getBatchId());
         assertEquals(expectedUsage.getScenarioId(), actualUsage.getScenarioId());

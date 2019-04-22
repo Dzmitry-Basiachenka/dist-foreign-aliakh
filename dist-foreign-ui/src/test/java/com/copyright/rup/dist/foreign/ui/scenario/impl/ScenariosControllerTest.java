@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
 import static org.easymock.EasyMock.anyObject;
+import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
@@ -41,6 +42,7 @@ import com.google.common.collect.Sets;
 import com.vaadin.data.Validator;
 import com.vaadin.ui.Window;
 
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -106,15 +108,21 @@ public class ScenariosControllerTest {
     }
 
     @Test
-    public void testOnDeleteButtonClicked() {
+    public void testOnDeleteButtonClickedFasScenario() {
         mockStatic(Windows.class);
+        Capture<ConfirmDialogWindow.IListener> listenerCapture = new Capture<>();
         expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
         expect(Windows.showConfirmDialog(
             eq("Are you sure you want to delete <i><b>'" + SCENARIO_NAME + "'</b></i> scenario?"),
-            anyObject(ConfirmDialogWindow.IListener.class))).andReturn(null).once();
-        replay(scenariosWidget, Windows.class);
+            capture(listenerCapture))).andReturn(null).once();
+        scenarioService.deleteScenario(scenario);
+        expectLastCall().once();
+        scenariosWidget.refresh();
+        expectLastCall().once();
+        replay(scenariosWidget, scenarioService, Windows.class);
         scenariosController.onDeleteButtonClicked();
-        verify(scenariosWidget, Windows.class);
+        listenerCapture.getValue().onActionConfirmed();
+        verify(scenariosWidget, scenarioService, Windows.class);
     }
 
     @Test
@@ -177,7 +185,7 @@ public class ScenariosControllerTest {
     }
 
     @Test
-    public void testHandleAction() throws Exception {
+    public void testHandleAction() {
         expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
         scenarioController.setScenario(scenario);
         expectLastCall().once();
@@ -349,6 +357,7 @@ public class ScenariosControllerTest {
         scenario = new Scenario();
         scenario.setId(SCENARIO_ID);
         scenario.setName(SCENARIO_NAME);
+        scenario.setProductFamily("FAS");
     }
 
     private Rightsholder buildRightsholder(Long accountNumber, String name) {

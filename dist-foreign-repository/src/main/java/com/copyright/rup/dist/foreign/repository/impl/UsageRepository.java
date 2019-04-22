@@ -313,6 +313,16 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
+    public void deleteFromNtsScenario(String scenarioId, String updateUser) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        parameters.put(UPDATE_USER_KEY, Objects.requireNonNull(updateUser));
+        parameters.put(STATUS_KEY, UsageStatusEnum.ELIGIBLE);
+        parameters.put("statusesToUpdate", Sets.newHashSet(UsageStatusEnum.NTS_EXCLUDED, UsageStatusEnum.LOCKED));
+        update("IUsageMapper.deleteFromNtsScenario", parameters);
+    }
+
+    @Override
     public int findCountByUsageIdAndStatus(String usageId, UsageStatusEnum statusEnum) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(USAGE_ID_KEY, Objects.requireNonNull(usageId));

@@ -794,6 +794,27 @@
         where df_usage_uid = #{usageId}
     </update>
 
+    <update id="deleteFromNtsScenario" parameterType="map">
+        update
+            ${schema}.df_usage
+        set
+            status_ind = #{status},
+            df_scenario_uid = null,
+            gross_amount = 0,
+            <include refid="StoredEntityMapper.update"/>
+        where
+            df_usage_batch_uid in (
+                select ub.df_usage_batch_uid
+                from ${schema}.df_scenario_usage_filter f
+                left join ${schema}.df_scenario_usage_filter_to_usage_batches_ids_map ub on f.df_scenario_usage_filter_uid = ub.df_scenario_usage_filter_uid
+                where f.df_scenario_uid = #{scenarioId}
+            )
+        and status_ind in
+            <foreach collection="statusesToUpdate" item="statusToUpdate" separator="," open="(" close=")">
+                #{statusToUpdate}
+            </foreach>
+    </update>
+
     <select id="findCountByUsageIdAndStatus" parameterType="map" resultType="int">
         select count(1)
             from (

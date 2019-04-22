@@ -135,10 +135,14 @@ public class ScenarioService implements IScenarioService {
         String userName = RupContextUtils.getUserName();
         LOGGER.info("Delete scenario. Started. {}, User={}", ForeignLogUtils.scenario(scenario), userName);
         String scenarioId = scenario.getId();
-        usageService.deleteFromScenario(scenarioId);
+        if (FdaConstants.NTS_PRODUCT_FAMILY.equals(scenario.getProductFamily())) {
+            usageService.deleteFromNtsScenario(scenarioId);
+        } else {
+            usageService.deleteFromScenario(scenarioId);
+            rightsholderDiscrepancyService.deleteByScenarioId(scenarioId);
+        }
         scenarioAuditService.deleteActions(scenarioId);
         scenarioUsageFilterService.removeByScenarioId(scenarioId);
-        rightsholderDiscrepancyService.deleteByScenarioId(scenarioId);
         scenarioRepository.remove(scenarioId);
         LOGGER.info("Delete scenario. Finished. {}, User={}", ForeignLogUtils.scenario(scenario), userName);
     }

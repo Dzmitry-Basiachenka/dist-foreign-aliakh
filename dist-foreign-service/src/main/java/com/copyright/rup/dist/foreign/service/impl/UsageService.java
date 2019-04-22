@@ -284,6 +284,11 @@ public class UsageService implements IUsageService {
     }
 
     @Override
+    public void deleteFromNtsScenario(String scenarioId) {
+        usageRepository.deleteFromNtsScenario(scenarioId, RupContextUtils.getUserName());
+    }
+
+    @Override
     @Transactional
     public void deleteFromScenario(Scenario scenario, Long rroAccountNumber, List<Long> accountNumbers, String reason) {
         List<String> usagesIds =

@@ -15,7 +15,6 @@ import static org.powermock.api.easymock.PowerMock.verifyAll;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.integration.rest.prm.PrmRollUpService;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
-import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
@@ -125,7 +124,7 @@ public class ScenarioServiceTest {
     }
 
     @Test
-    public void testRemove() {
+    public void testDeleteScenario() {
         usageService.deleteFromScenario(SCENARIO_ID);
         expectLastCall().once();
         scenarioRepository.remove(SCENARIO_ID);
@@ -134,8 +133,25 @@ public class ScenarioServiceTest {
         expectLastCall().once();
         scenarioAuditService.deleteActions(SCENARIO_ID);
         expectLastCall().once();
-        rightsholderDiscrepancyService.deleteByScenarioIdAndStatus(SCENARIO_ID,
-            RightsholderDiscrepancyStatusEnum.APPROVED);
+        rightsholderDiscrepancyService.deleteByScenarioId(SCENARIO_ID);
+        replay(usageService, scenarioRepository, scenarioAuditService, scenarioUsageFilterService,
+            rightsholderDiscrepancyService);
+        scenarioService.deleteScenario(scenario);
+        verify(usageService, scenarioRepository, scenarioAuditService, scenarioUsageFilterService,
+            rightsholderDiscrepancyService);
+    }
+
+    @Test
+    public void testDeleteNtsScenario() {
+        scenario.setProductFamily("NTS");
+        usageService.deleteFromNtsScenario(SCENARIO_ID);
+        expectLastCall().once();
+        scenarioRepository.remove(SCENARIO_ID);
+        expectLastCall().once();
+        scenarioUsageFilterService.removeByScenarioId(SCENARIO_ID);
+        expectLastCall().once();
+        scenarioAuditService.deleteActions(SCENARIO_ID);
+        expectLastCall().once();
         replay(usageService, scenarioRepository, scenarioAuditService, scenarioUsageFilterService);
         scenarioService.deleteScenario(scenario);
         verify(usageService, scenarioRepository, scenarioAuditService, scenarioUsageFilterService);
