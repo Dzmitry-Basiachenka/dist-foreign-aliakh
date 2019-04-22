@@ -1463,6 +1463,12 @@
             from apps.df_usage_archive ua
             left join apps.df_work_classification wc on ua.wr_wrk_inst = wc.wr_wrk_inst
             <include refid="IUsageArchiveMapper.ntsBatchWhereClause"/>
+                <if test="0 == stmAmount">
+                    and wc.classification != 'STM'
+                </if>
+                <if test="0 == nonStmAmount">
+                    and wc.classification != 'NON-STM'
+                </if>
         ),
         <!--cutoff amounts for classified works - STM and NON-STM-->
         cutoff_amounts as (
