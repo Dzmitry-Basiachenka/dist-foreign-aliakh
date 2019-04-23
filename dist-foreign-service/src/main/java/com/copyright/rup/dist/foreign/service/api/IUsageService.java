@@ -218,6 +218,13 @@ public interface IUsageService {
     List<Usage> moveToArchive(Scenario scenario);
 
     /**
+     * Deletes {@link Usage}s in {@link UsageStatusEnum#NTS_EXCLUDED} status for specified scenario by batches.
+     *
+     * @param scenarioId scenario identifier
+     */
+    void deleteNtsExcludedByScenarioId(String scenarioId);
+
+    /**
      * Gets {@link RightsholderTotalsHolder}s based on {@link Scenario}.
      *
      * @param scenario    instance of {@link Scenario}

@@ -200,6 +200,9 @@ public class ScenarioService implements IScenarioService {
         LOGGER.info("Send scenario to LM. Started. {}, User={}", ForeignLogUtils.scenario(scenario),
             RupContextUtils.getUserName());
         List<Usage> usages = usageService.moveToArchive(scenario);
+        if (FdaConstants.NTS_PRODUCT_FAMILY.equals(scenario.getProductFamily())) {
+            usageService.deleteNtsExcludedByScenarioId(scenario.getId());
+        }
         if (CollectionUtils.isNotEmpty(usages)) {
             changeScenarioState(scenario, ScenarioStatusEnum.SENT_TO_LM, ScenarioActionTypeEnum.SENT_TO_LM,
                 StringUtils.EMPTY);

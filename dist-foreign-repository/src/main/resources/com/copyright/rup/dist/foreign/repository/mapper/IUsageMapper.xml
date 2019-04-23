@@ -240,6 +240,16 @@
         left join ${schema}.df_rightsholder p on p.rh_account_number = u.payee_account_number
     </sql>
 
+    <sql id="scenarioBatchesFilter">
+        where
+        df_usage_batch_uid in (
+            select ub.df_usage_batch_uid
+            from ${schema}.df_scenario_usage_filter f
+            left join ${schema}.df_scenario_usage_filter_to_usage_batches_ids_map ub on f.df_scenario_usage_filter_uid = ub.df_scenario_usage_filter_uid
+            where f.df_scenario_uid = #{scenarioId}
+        )
+    </sql>
+
     <sql id="usageFilter">
         <where>
             <if test="filter.usageBatchesIds.size() > 0">
@@ -723,6 +733,12 @@
         where df_scenario_uid = #{scenarioId}
     </delete>
 
+    <delete id="deleteNtsExcludedByScenarioId" parameterType="map">
+        delete from ${schema}.df_usage
+        <include refid="scenarioBatchesFilter"/>
+        and status_ind = #{status}
+    </delete>
+
     <update id="deleteFromPreServiceFeeFund" parameterType="map">
         update
             ${schema}.df_usage
@@ -802,13 +818,7 @@
             df_scenario_uid = null,
             gross_amount = 0,
             <include refid="StoredEntityMapper.update"/>
-        where
-            df_usage_batch_uid in (
-                select ub.df_usage_batch_uid
-                from ${schema}.df_scenario_usage_filter f
-                left join ${schema}.df_scenario_usage_filter_to_usage_batches_ids_map ub on f.df_scenario_usage_filter_uid = ub.df_scenario_usage_filter_uid
-                where f.df_scenario_uid = #{scenarioId}
-            )
+        <include refid="scenarioBatchesFilter"/>
         and status_ind in
             <foreach collection="statusesToUpdate" item="statusToUpdate" separator="," open="(" close=")">
                 #{statusToUpdate}

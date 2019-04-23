@@ -272,6 +272,14 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
+    public void deleteNtsExcludedByScenarioId(String scenarioId) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        parameters.put(STATUS_KEY, UsageStatusEnum.NTS_EXCLUDED);
+        delete("IUsageMapper.deleteNtsExcludedByScenarioId", parameters);
+    }
+
+    @Override
     public List<Usage> findWithAmountsAndRightsholders(UsageFilter filter) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(FILTER_KEY, Objects.requireNonNull(filter));

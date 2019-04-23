@@ -124,6 +124,7 @@ public class UsageRepositoryIntegrationTest {
     private static final String USAGE_ID_24 = "3c31db4f-4065-4fe1-84c2-b48a0f3bc079";
     private static final String POST_DISTRIBUTION_USAGE_ID = "cce295c6-23cf-47b4-b00c-2e0e50cce169";
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
+    private static final String NTS_SCENARIO_ID = "ca163655-8978-4a45-8fe3-c3b5572c6879";
     private static final String USER_NAME = "user@copyright.com";
     private static final String BATCH_ID = "e0af666b-cbb7-4054-9906-12daa1fbd76e";
     private static final String PERCENT = "%";
@@ -479,6 +480,13 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
+    public void testDeleteNtsExcludedByScenarioId() {
+        assertEquals(1, usageRepository.findByStatuses(UsageStatusEnum.NTS_EXCLUDED).size());
+        usageRepository.deleteNtsExcludedByScenarioId(NTS_SCENARIO_ID);
+        assertTrue(usageRepository.findByStatuses(UsageStatusEnum.NTS_EXCLUDED).isEmpty());
+    }
+
+    @Test
     public void testFindByIds() {
         List<Usage> usages = usageRepository.findByIds(Arrays.asList(USAGE_ID_1, USAGE_ID_2));
         assertEquals(2, CollectionUtils.size(usages));
@@ -619,12 +627,11 @@ public class UsageRepositoryIntegrationTest {
             Arrays.asList("c09aa888-85a5-4377-8c7a-85d84d255b5a", "45445974-5bee-477a-858b-e9e8c1a642b8"));
         assertEquals(2, CollectionUtils.size(usages));
         BigDecimal aboveMinimumAmount = new BigDecimal("900.00");
-        String scenarioId = "ca163655-8978-4a45-8fe3-c3b5572c6879";
         verifyNtsUsage(usages.get(0), UsageStatusEnum.NTS_EXCLUDED, null, StoredEntity.DEFAULT_USER,
             DEFAULT_ZERO_AMOUNT, HUNDRED_AMOUNT);
-        verifyNtsUsage(usages.get(1), UsageStatusEnum.LOCKED, scenarioId, StoredEntity.DEFAULT_USER, aboveMinimumAmount,
-            aboveMinimumAmount);
-        usageRepository.deleteFromNtsScenario(scenarioId, USER_NAME);
+        verifyNtsUsage(usages.get(1), UsageStatusEnum.LOCKED, NTS_SCENARIO_ID, StoredEntity.DEFAULT_USER,
+            aboveMinimumAmount, aboveMinimumAmount);
+        usageRepository.deleteFromNtsScenario(NTS_SCENARIO_ID, USER_NAME);
         usages = usageRepository.findByIds(
             Arrays.asList("c09aa888-85a5-4377-8c7a-85d84d255b5a", "45445974-5bee-477a-858b-e9e8c1a642b8"));
         assertEquals(2, CollectionUtils.size(usages));
