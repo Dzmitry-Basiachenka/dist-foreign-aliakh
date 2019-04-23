@@ -82,12 +82,13 @@ public class CreateScenarioTest {
                 RIGHTHOLDER_ID_5,
                 RIGHTHOLDER_ID_2)
             .expectUsages(Arrays.asList(
-                buildUsageForCreatedScenario(7000429266L, 1000009997L, "2871.0528", "6100.9872"),
-                buildUsageForCreatedScenario(1000002859L, 2000017000L, "1450.0256", "3081.3044"),
-                buildUsageForCreatedScenario(1000001820L, 1000001820L, "2175.0384", "11418.9516"),
-                buildUsageForCreatedScenario(1000024497L, 1000024497L, "435.008", "2283.792"),
-                buildUsageForCreatedScenario(1000002562L, 1000009997L, "1629.8304", "3463.3896"),
-                buildUsage("4c014547-06f3-4840-94ff-6249730d537d", 1000003821L, 1000003821L, "29.00", "61.63")))
+                buildUsageForCreatedScenario(7000429266L, 1000009997L, "2871.0528", "6100.9872", "8972.0400000000"),
+                buildUsageForCreatedScenario(1000002859L, 2000017000L, "1450.0256", "3081.3044", "4531.3300000000"),
+                buildUsageForCreatedScenario(1000001820L, 1000001820L, "2175.0384", "11418.9516", "13593.9900000000"),
+                buildUsageForCreatedScenario(1000024497L, 1000024497L, "435.008", "2283.792", "2718.8000000000"),
+                buildUsageForCreatedScenario(1000002562L, 1000009997L, "1629.8304", "3463.3896", "5093.2200000000"),
+                buildUsage("4c014547-06f3-4840-94ff-6249730d537d", 1000003821L, 1000003821L, "29.00", "61.63",
+                    "90.6300000000")))
             .expectScenario(buildScenario("26348.4248", "34909.38", "8560.9552", "38520.00"))
             .build()
             .run();
@@ -110,12 +111,13 @@ public class CreateScenarioTest {
                 RIGHTHOLDER_ID_5,
                 RIGHTHOLDER_ID_2)
             .expectUsages(Arrays.asList(
-                buildUsageForCreatedScenario(7000429266L, 7000429266L, "2871.0528", "6100.9872"),
-                buildUsageForCreatedScenario(1000002859L, 1000002859L, "1450.0256", "3081.3044"),
-                buildUsageForCreatedScenario(1000001820L, 1000001820L, "4350.0768", "9243.9132"),
-                buildUsageForCreatedScenario(1000024497L, 1000024497L, "870.016", "1848.784"),
-                buildUsageForCreatedScenario(1000002562L, 1000002562L, "1629.8304", "3463.3896"),
-                buildUsage("4c014547-06f3-4840-94ff-6249730d537d", 1000003821L, 1000003821L, "29.00", "61.63")))
+                buildUsageForCreatedScenario(7000429266L, 7000429266L, "2871.0528", "6100.9872", "8972.0400000000"),
+                buildUsageForCreatedScenario(1000002859L, 1000002859L, "1450.0256", "3081.3044", "4531.3300000000"),
+                buildUsageForCreatedScenario(1000001820L, 1000001820L, "4350.0768", "9243.9132", "13593.9900000000"),
+                buildUsageForCreatedScenario(1000024497L, 1000024497L, "870.016", "1848.784", "2718.8000000000"),
+                buildUsageForCreatedScenario(1000002562L, 1000002562L, "1629.8304", "3463.3896", "5093.2200000000"),
+                buildUsage("4c014547-06f3-4840-94ff-6249730d537d", 1000003821L, 1000003821L, "29.00", "61.63",
+                    "90.6300000000")))
             .expectScenario(buildScenario("23738.3784", "34909.38", "11171.0016", "38520.00"))
             .build()
             .run();
@@ -138,11 +140,11 @@ public class CreateScenarioTest {
                 RIGHTHOLDER_ID_6,
                 RIGHTHOLDER_ID_8)
             .expectUsages(Arrays.asList(
-                buildUsageForCreatedScenario(2000133267L, 2000017000L, "897.204", "8074.836"),
-                buildUsageForCreatedScenario(2000073957L, 2000073957L, "1450.0256", "3081.3044"),
-                buildUsageForCreatedScenario(7001508482L, 7001508482L, "4350.0768", "9243.9132"),
-                buildUsageForCreatedScenario(1000024950L, 1000024950L, "870.016", "1848.784"),
-                buildUsageForCreatedScenario(2000139286L, 2000017000L, "509.322", "4583.898")))
+                buildUsageForCreatedScenario(2000133267L, 2000017000L, "897.204", "8074.836", "8972.0400000000"),
+                buildUsageForCreatedScenario(2000073957L, 2000073957L, "1450.0256", "3081.3044", "4531.3300000000"),
+                buildUsageForCreatedScenario(7001508482L, 7001508482L, "4350.0768", "9243.9132", "13593.9900000000"),
+                buildUsageForCreatedScenario(1000024950L, 1000024950L, "870.016", "1848.784", "2718.8000000000"),
+                buildUsageForCreatedScenario(2000139286L, 2000017000L, "509.322", "4583.898", "5093.2200000000")))
             .expectScenario(buildScenario("26832.7356", "34909.38", "8076.6444", "38520.00"))
             .build()
             .run();
@@ -153,12 +155,12 @@ public class CreateScenarioTest {
         testBuilder
             .withFilter(buildUsageFilter("26282dbd-3463-58d7-c927-03d3458a656a", "NTS"))
             .expectUsages(Arrays.asList(
-                buildUsageForCreatedScenario(7000429266L, null, AMOUNT_ZERO, AMOUNT_ZERO),
-                buildUsageForCreatedScenario(1000002859L, null, AMOUNT_ZERO, AMOUNT_ZERO),
-                buildUsageForCreatedScenario(1000001820L, null, AMOUNT_ZERO, AMOUNT_ZERO),
-                buildUsageForCreatedScenario(1000024497L, null, AMOUNT_ZERO, AMOUNT_ZERO),
-                buildUsageForCreatedScenario(1000002562L, null, AMOUNT_ZERO, AMOUNT_ZERO)))
-            .expectScenario(buildScenario(AMOUNT_ZERO, AMOUNT_ZERO, AMOUNT_ZERO, "1063.59"))
+                buildUsageForCreatedScenario(7000429266L, null, AMOUNT_ZERO, AMOUNT_ZERO, "11.3536281830"),
+                buildUsageForCreatedScenario(1000002859L, null, AMOUNT_ZERO, AMOUNT_ZERO, "3.6760482481"),
+                buildUsageForCreatedScenario(1000001820L, null, AMOUNT_ZERO, AMOUNT_ZERO, "4.9703235688"),
+                buildUsageForCreatedScenario(1000024497L, null, AMOUNT_ZERO, AMOUNT_ZERO, "9.3493061420"),
+                buildUsageForCreatedScenario(1000002562L, null, AMOUNT_ZERO, AMOUNT_ZERO, "0.6506938580")))
+            .expectScenario(buildScenario(AMOUNT_ZERO, "29.9999999999", AMOUNT_ZERO, "1063.59"))
             .build()
             .run();
     }
@@ -175,17 +177,18 @@ public class CreateScenarioTest {
     }
 
     private Usage buildUsageForCreatedScenario(Long rhAccountNumber, Long payeeAccountNumber, String serviceFeeAmount,
-                                               String netAmount) {
-        return buildUsage(null, rhAccountNumber, payeeAccountNumber, serviceFeeAmount, netAmount);
+                                               String netAmount, String grossAmount) {
+        return buildUsage(null, rhAccountNumber, payeeAccountNumber, serviceFeeAmount, netAmount, grossAmount);
     }
 
     private Usage buildUsage(String scenarioId, Long rhAccountNumber, Long payeeAccountNumber, String serviceFeeAmount,
-                             String netAmount) {
+                             String netAmount, String grossAmount) {
         Usage usage = new Usage();
         usage.setScenarioId(scenarioId);
         usage.setRightsholder(buildRightsholder(rhAccountNumber));
         usage.setPayee(buildRightsholder(payeeAccountNumber));
         usage.setServiceFeeAmount(new BigDecimal(serviceFeeAmount).setScale(10, RoundingMode.HALF_UP));
+        usage.setGrossAmount(new BigDecimal(grossAmount));
         usage.setNetAmount(new BigDecimal(netAmount).setScale(10, RoundingMode.HALF_UP));
         return usage;
     }

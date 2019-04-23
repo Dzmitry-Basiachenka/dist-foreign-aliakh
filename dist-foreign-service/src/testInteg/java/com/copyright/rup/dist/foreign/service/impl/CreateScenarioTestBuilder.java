@@ -208,6 +208,7 @@ class CreateScenarioTestBuilder {
             assertEquals("SYSTEM", usageDto.getUpdateUser());
             assertEquals(usage.getServiceFeeAmount(), usageDto.getServiceFeeAmount());
             assertEquals(usage.getNetAmount(), usageDto.getNetAmount());
+            assertEquals(usage.getGrossAmount(), usageDto.getGrossAmount());
         }
 
         private void createRestServer() {
