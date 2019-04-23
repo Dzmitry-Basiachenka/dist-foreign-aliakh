@@ -35,10 +35,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Verifies {@link ScenarioRepository}.
@@ -258,19 +260,22 @@ public class ScenarioRepositoryIntegrationTest {
         NtsFields ntsFields = new NtsFields();
         ntsFields.setRhMinimumAmount(new BigDecimal("300.00"));
         scenario.setNtsFields(ntsFields);
-        UsageFilter usageFilter = new UsageFilter();
-        usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
-        usageFilter.setProductFamilies(Collections.singleton("NTS"));
-        scenarioRepository.insertNtsScenarioAndAddUsages(scenario, usageFilter);
+        scenarioRepository.insertNtsScenarioAndAddUsages(scenario, buildUsageFilter());
         Scenario ntsScenario = scenarioRepository.findWithAmountsAndLastAction(SCENARIO_ID);
         assertNotNull(ntsScenario.getNtsFields());
         assertEquals(new BigDecimal("300.00"), ntsScenario.getNtsFields().getRhMinimumAmount());
-        List<Usage> usages = usageRepository.findByScenarioId(SCENARIO_ID);
-        assertNotNull(usages);
-        assertEquals(1, usages.size());
-        Usage usage = usages.get(0);
-        assertEquals(UsageStatusEnum.LOCKED, usage.getStatus());
-        assertEquals(SCENARIO_ID, usage.getScenarioId());
+        List<Usage> actualUsages = usageRepository.findByScenarioId(SCENARIO_ID).stream()
+            .sorted(Comparator.comparing(Usage::getId))
+            .collect(Collectors.toList());
+        List<Usage> expectedUsages = Arrays.asList(
+            buildUsage("0d200064-185a-4c48-bbc9-c67554e7db8e", "0.0000000000"),
+            buildUsage("244de0db-b50c-45e8-937c-72e033e2a3a9", "666.6666666667"),
+            buildUsage("3caf371f-f2e6-47cd-af6b-1e02b79f6195", "2857.1428571429"),
+            buildUsage("87666035-2bdf-49ef-8c80-1d1b281fdc34", "7142.8571428571"),
+            buildUsage("9bc172f4-edbb-4a62-9ffc-254336e7a56d", "333.3333333333"));
+        assertEquals(CollectionUtils.size(expectedUsages), CollectionUtils.size(actualUsages));
+        IntStream.range(0, actualUsages.size())
+            .forEach(index -> verifyUsage(expectedUsages.get(index), actualUsages.get(index)));
     }
 
     private UsageBatch buildBatch(Long rroAccountNumber) {
@@ -339,5 +344,34 @@ public class ScenarioRepositoryIntegrationTest {
         rightsholder.setAccountNumber(accountNumber);
         rightsholder.setName(name);
         return rightsholder;
+    }
+
+    private UsageFilter buildUsageFilter() {
+        UsageFilter usageFilter = new UsageFilter();
+        usageFilter.setUsageBatchesIds(Sets.newHashSet("7c8f48fe-3429-43fd-9389-d9b77fa9f3a0",
+            "ac9bae73-9bd7-477c-bc95-e73daee455ee", "5769e9fe-1b4b-4399-841c-73108893f7d2",
+            "d8baa8e6-10fd-4c3c-8851-b1e6883e8cde", "f8f23728-75ac-4114-b910-2d7abc061217"));
+        usageFilter.setRhAccountNumbers(Collections.singleton(2000017001L));
+        usageFilter.setUsageStatus(UsageStatusEnum.ELIGIBLE);
+        usageFilter.setProductFamilies(Collections.singleton("NTS"));
+        usageFilter.setPaymentDate(LocalDate.of(2020, 1, 1));
+        usageFilter.setFiscalYear(2020);
+        return usageFilter;
+    }
+
+    private Usage buildUsage(String usageId, String grossAmount) {
+        Usage usage = new Usage();
+        usage.setId(usageId);
+        usage.setGrossAmount(new BigDecimal(grossAmount));
+        usage.setScenarioId(SCENARIO_ID);
+        usage.setStatus(UsageStatusEnum.LOCKED);
+        return usage;
+    }
+
+    private void verifyUsage(Usage expectedUsage, Usage actualUsage) {
+        assertEquals(expectedUsage.getScenarioId(), actualUsage.getScenarioId());
+        assertEquals(expectedUsage.getId(), actualUsage.getId());
+        assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
+        assertEquals(expectedUsage.getGrossAmount(), actualUsage.getGrossAmount());
     }
 }

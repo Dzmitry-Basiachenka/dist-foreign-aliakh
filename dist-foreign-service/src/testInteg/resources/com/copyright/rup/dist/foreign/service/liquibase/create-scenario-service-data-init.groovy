@@ -343,6 +343,18 @@ databaseChangeLog {
         changeSet(id: '2019-04-19-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
             comment("Insert test data for testCreateNtsScenario")
 
+            insert(schemaName: dbAppsSchema, tableName: 'df_work_classification') {
+                column(name: 'df_work_classification_uid', value: 'fc9ee4ed-519e-41c8-927b-92206b34c8cc')
+                column(name: 'wr_wrk_inst', value: '135632563')
+                column(name: 'classification', value: 'NON-STM')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_work_classification') {
+                column(name: 'df_work_classification_uid', value: '7c04aac5-ccc5-4abc-b84a-4077dd6ca9a8')
+                column(name: 'wr_wrk_inst', value: '145632563')
+                column(name: 'classification', value: 'STM')
+            }
+
             insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
                 column(name: 'df_usage_batch_uid', value: '26282dbd-3463-58d7-c927-03d3458a656a')
                 column(name: 'name', value: 'NTS usage batch')
@@ -357,7 +369,7 @@ databaseChangeLog {
             insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
                 column(name: 'df_usage_uid', value: '3d921c9c-8036-421a-ab05-39cc4d3c3b68')
                 column(name: 'df_usage_batch_uid', value: '26282dbd-3463-58d7-c927-03d3458a656a')
-                column(name: 'wr_wrk_inst', value: '180382914')
+                column(name: 'wr_wrk_inst', value: '135632563')
                 column(name: 'work_title', value: 'Wired')
                 column(name: 'rh_account_number', value: '7000429266')
                 column(name: 'status_ind', value: 'ELIGIBLE')
@@ -373,7 +385,7 @@ databaseChangeLog {
             insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
                 column(name: 'df_usage_uid', value: '669cf304-0921-41a2-85d5-c3905e77c696')
                 column(name: 'df_usage_batch_uid', value: '26282dbd-3463-58d7-c927-03d3458a656a')
-                column(name: 'wr_wrk_inst', value: '180382914')
+                column(name: 'wr_wrk_inst', value: '135632563')
                 column(name: 'work_title', value: 'Wired')
                 column(name: 'rh_account_number', value: '1000002859')
                 column(name: 'status_ind', value: 'ELIGIBLE')
@@ -389,7 +401,7 @@ databaseChangeLog {
             insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
                 column(name: 'df_usage_uid', value: '6402d5c8-ba80-4966-a7cc-34ba1fdc1d9c')
                 column(name: 'df_usage_batch_uid', value: '26282dbd-3463-58d7-c927-03d3458a656a')
-                column(name: 'wr_wrk_inst', value: '180382914')
+                column(name: 'wr_wrk_inst', value: '135632563')
                 column(name: 'work_title', value: 'Wired')
                 column(name: 'rh_account_number', value: '1000001820')
                 column(name: 'status_ind', value: 'ELIGIBLE')
@@ -405,7 +417,7 @@ databaseChangeLog {
             insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
                 column(name: 'df_usage_uid', value: '91813777-3dd4-4f5f-bb83-ca145866317d')
                 column(name: 'df_usage_batch_uid', value: '26282dbd-3463-58d7-c927-03d3458a656a')
-                column(name: 'wr_wrk_inst', value: '180382914')
+                column(name: 'wr_wrk_inst', value: '145632563')
                 column(name: 'work_title', value: 'Wired')
                 column(name: 'rh_account_number', value: '1000024497')
                 column(name: 'status_ind', value: 'ELIGIBLE')
@@ -421,7 +433,7 @@ databaseChangeLog {
             insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
                 column(name: 'df_usage_uid', value: 'e001c596-a66f-4fd3-b34c-5ef65a215d68')
                 column(name: 'df_usage_batch_uid', value: '26282dbd-3463-58d7-c927-03d3458a656a')
-                column(name: 'wr_wrk_inst', value: '180382914')
+                column(name: 'wr_wrk_inst', value: '145632563')
                 column(name: 'work_title', value: 'Wired')
                 column(name: 'rh_account_number', value: '1000002562')
                 column(name: 'status_ind', value: 'ELIGIBLE')

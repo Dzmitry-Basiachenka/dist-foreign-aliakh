@@ -69,6 +69,7 @@
     </insert>
 
     <insert id="insertNtsScenarioAndAddUsages" parameterType="map">
+        <!-- Inserts NTS scenario -->
         with result as (
             insert into ${schema}.df_scenario (
                 <include refid="scenarioColumns"/>
@@ -80,20 +81,40 @@
                 #{scenario.ntsFields, typeHandler=NtsFieldsTypeHandler},
                 <include refid="StoredEntityMapper.insert"/>
             )
+        ),
+        <!-- Calculates numerator weight for each usage -->
+        numerator as (
+            select
+                u.df_usage_uid,
+                u.df_usage_batch_uid,
+                wc.classification,
+                u.reported_value * ((ub.fund_pool ->> 'fund_pool_period_to')::int - (ub.fund_pool ->> 'fund_pool_period_from')::int + 1) /
+                (u.market_period_to - u.market_period_from + 1) as numerator_weight,
+                case when wc.classification = 'STM' then (ub.fund_pool ->> 'stm_amount')::numeric else (ub.fund_pool ->> 'non_stm_amount')::numeric end fund_pool_amount
+            from ${schema}.df_usage u
+            join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
+            join ${schema}.df_work_classification wc on wc.wr_wrk_inst = u.wr_wrk_inst
+            <include refid="IUsageMapper.usageFilter"/>
+        ),
+        <!-- Calculates denominator weight for each classification in each NTS fund pool -->
+        denominator as (
+            select
+                n.classification,
+                n.df_usage_batch_uid,
+                sum(n.numerator_weight) as denominator_weight
+            from numerator n
+            group by n.classification, df_usage_batch_uid
         )
         update
-            ${schema}.df_usage
+            ${schema}.df_usage u
         set
             status_ind = #{status},
             df_scenario_uid = #{scenario.id},
+            gross_amount = n.numerator_weight / d.denominator_weight * n.fund_pool_amount,
             <include refid="StoredEntityMapper.update"/>
-        where df_usage_uid in (
-            select
-                u.df_usage_uid
-            from ${schema}.df_usage u
-            join ${schema}.df_usage_batch ub on u.df_usage_batch_uid = ub.df_usage_batch_uid
-            <include refid="IUsageMapper.usageFilter"/>
-        )
+        from numerator n
+        join denominator d on n.classification = d.classification and n.df_usage_batch_uid = d.df_usage_batch_uid
+        where n.df_usage_uid = u.df_usage_uid
     </insert>
 
     <update id="refresh" parameterType="Scenario">
