@@ -401,6 +401,17 @@ public class UsageServiceTest {
     }
 
     @Test
+    public void testDeleteUsagesFromNtsScenario() {
+        mockStatic(RupContextUtils.class);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
+        usageRepository.deleteFromNtsScenario(SCENARIO_ID, USER_NAME);
+        expectLastCall().once();
+        replay(usageRepository, RupContextUtils.class);
+        usageService.deleteFromNtsScenario(SCENARIO_ID);
+        verify(usageRepository, RupContextUtils.class);
+    }
+
+    @Test
     public void testDeleteFromScenarioByAccountNumbers() {
         List<String> usagesIds = Lists.newArrayList(RupPersistUtils.generateUuid(), RupPersistUtils.generateUuid());
         mockStatic(RupContextUtils.class);

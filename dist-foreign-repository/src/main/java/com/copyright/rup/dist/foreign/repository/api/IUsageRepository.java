@@ -234,10 +234,9 @@ public interface IUsageRepository {
     void addToScenario(List<Usage> usages);
 
     /**
-     * Deletes {@link Usage}s from scenario. Reverts status of {@link Usage}s
-     * to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE} sets scenario id, payee account
-     * number, service fee to {@code null}, sets rh participating flag to {@code false}, service fee amount and net
-     * amount to 0.
+     * Deletes {@link Usage}s from scenario. Reverts status of {@link Usage}s to {@link UsageStatusEnum#ELIGIBLE},
+     * sets scenario id, payee account number, service fee to {@code null}, sets rh participating flag to {@code false},
+     * service fee amount and net amount to 0.
      *
      * @param scenarioId scenario identifier
      * @param updateUser name of user who performed this action
@@ -245,15 +244,24 @@ public interface IUsageRepository {
     void deleteFromScenario(String scenarioId, String updateUser);
 
     /**
-     * Deletes {@link Usage}s from scenario. Reverts status of {@link Usage}s
-     * to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE}, sets scenario id, payee account
-     * number, service fee to {@code null}, sets rh participating flag to {@code false}, service fee amount and net
-     * amount to 0 for usages with given ids.
+     * Deletes {@link Usage}s from scenario. Reverts status of {@link Usage}s to {@link UsageStatusEnum#ELIGIBLE},
+     * sets scenario id, payee account number, service fee to {@code null}, sets rh participating flag to {@code false},
+     * service fee amount and net amount to 0 for usages with given ids.
      *
      * @param usagesIds list of {@link Usage}s ids
      * @param userName  user name
      */
     void deleteFromScenario(List<String> usagesIds, String userName);
+
+    /**
+     * Deletes {@link Usage}s from NTS scenario. Updates {@link Usage}s associated with scenario in
+     * {@link UsageStatusEnum#NTS_EXCLUDED} and {@link UsageStatusEnum#LOCKED} statuses.
+     * Reverts status to {@link UsageStatusEnum#ELIGIBLE}, sets scenario id to {@code null}, sets gross amount to 0.
+     *
+     * @param scenarioId scenario identifier
+     * @param updateUser user name
+     */
+    void deleteFromNtsScenario(String scenarioId, String updateUser);
 
     /**
      * Finds count of all usages by usage id and status.

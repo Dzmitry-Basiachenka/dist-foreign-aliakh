@@ -180,10 +180,18 @@ public interface IUsageService {
     void deleteFromScenario(String scenarioId);
 
     /**
-     * Deletes {@link Usage}s from scenario. Reverts status of {@link Usage}s
-     * to {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ELIGIBLE}, sets scenario id, payee account
-     * number, service fee to {@code null}, sets rh participating flag to {@code false}, service fee amount and net
-     * amount to 0 for usages with rightsholders from given list of account numbers for specified RRO.
+     * Deletes {@link Usage}s from NTS scenario. Reverts status of {@link Usage}s to {@link UsageStatusEnum#ELIGIBLE},
+     * sets scenario id to {@code null}, sets gross amount to 0.
+     *
+     * @param scenarioId scenario identifier
+     */
+    void deleteFromNtsScenario(String scenarioId);
+
+    /**
+     * Deletes {@link Usage}s from scenario. Reverts status of {@link Usage}s to {@link UsageStatusEnum#ELIGIBLE},
+     * sets scenario id, payee account number, service fee to {@code null}, sets rh participating flag to {@code false},
+     * service fee amount and net amount to 0 for usages with rightsholders from given list of account numbers for
+     * specified RRO.
      *
      * @param scenario         {@link Scenario}
      * @param rroAccountNumber RRO account number
