@@ -1,3 +1,11 @@
+5.1.21
+-
+* B-48300 FDA: Remove under minimum RHs and reallocate funds proportionally: implement delete NTS scenario functionality
+* B-48300 FDA: Remove under minimum RHs and reallocate funds proportionally: implement logic for removing NTS_EXCLUDED usages during sending scenario to LM
+* B-48300 FDA: Remove under minimum RHs and reallocate funds proportionally: remove unused import from scenarios controller
+* CDP-719 FDA: Create Scenario: User is able to create scenarios with the same name using leading and trailing spaces
+* CDP-727 FDA: Scenario metadata panel: Scenario owner is ‘SYSTEM’ instead of user created it
+
 5.1.20
 -
 * B-46740 FDA: Ensure that there is at least one rightsholder for the corresponding fund pool: exclude STM/Non-STM usages during loading NTS Fund Pool if corresponding Fund Pool Amount is zero
