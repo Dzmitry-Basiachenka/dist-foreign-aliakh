@@ -11,8 +11,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
-import com.copyright.rup.dist.foreign.domain.NtsFields;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;

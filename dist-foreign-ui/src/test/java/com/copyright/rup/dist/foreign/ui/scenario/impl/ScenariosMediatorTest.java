@@ -9,16 +9,22 @@ import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.vaadin.security.SecurityUtils;
 
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Label;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+
+import java.math.BigDecimal;
 
 /**
  * Verifies {@link ScenariosMediator}.
@@ -43,6 +49,7 @@ public class ScenariosMediatorTest {
     private Button approveButton;
     private Button sendToLmButton;
     private Button refreshScenarioButton;
+    private Label rhMinimumAmountLabel;
 
     @Before
     public void setUp() {
@@ -64,6 +71,8 @@ public class ScenariosMediatorTest {
         mediator.setSendToLmButton(sendToLmButton);
         refreshScenarioButton = new Button("Refresh Scenario");
         mediator.setRefreshScenarioButton(refreshScenarioButton);
+        rhMinimumAmountLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+        mediator.setRhMinimumAmountLabel(rhMinimumAmountLabel);
     }
 
     @Test
@@ -199,6 +208,7 @@ public class ScenariosMediatorTest {
         mediator.selectedScenarioChanged(scenario);
         assertTrue(refreshScenarioButton.isEnabled());
         assertTrue(reconcileRightsholdersButton.isEnabled());
+        assertFalse(rhMinimumAmountLabel.isVisible());
     }
 
     @Test
@@ -206,9 +216,13 @@ public class ScenariosMediatorTest {
         Scenario scenario = new Scenario();
         scenario.setProductFamily("NTS");
         scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
+        NtsFields ntsFields = new NtsFields();
+        ntsFields.setRhMinimumAmount(new BigDecimal("300.00"));
+        scenario.setNtsFields(ntsFields);
         mediator.selectedScenarioChanged(scenario);
         assertFalse(refreshScenarioButton.isEnabled());
         assertFalse(reconcileRightsholdersButton.isEnabled());
+        assertTrue(rhMinimumAmountLabel.isVisible());
     }
 
     private void mockViewOnlyPermissions() {

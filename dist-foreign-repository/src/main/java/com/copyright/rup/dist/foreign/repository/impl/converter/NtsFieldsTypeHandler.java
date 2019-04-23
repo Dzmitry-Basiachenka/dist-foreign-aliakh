@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.impl.converter;
 
 import com.copyright.rup.common.exception.RupRuntimeException;
-import com.copyright.rup.dist.foreign.domain.NtsFields;
+import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.repository.impl.converter.json.NtsFieldsJsonMapper;
 
 import com.fasterxml.jackson.core.JsonProcessingException;

@@ -171,6 +171,7 @@ public class UsagesWidgetTest {
         Windows.showNotificationWindow("Scenario cannot be created. There are no usages to include into scenario");
         expectLastCall().once();
         expect(controller.getSize()).andReturn(0).once();
+        expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
         replay(controller, clickEvent, Windows.class);
         Collection<?> listeners = addToScenarioButton.getListeners(ClickEvent.class);
         assertEquals(2, listeners.size());
@@ -191,6 +192,7 @@ public class UsagesWidgetTest {
         assertTrue(addToScenarioButton.isDisableOnClick());
         expect(controller.getSize()).andReturn(1).once();
         expect(controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)).andReturn(false).once();
+        expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
         Windows.showNotificationWindow("Only usages in ELIGIBLE status can be added to scenario");
         expectLastCall().once();
         replay(controller, clickEvent, Windows.class);
@@ -213,6 +215,7 @@ public class UsagesWidgetTest {
         expect(controller.getSize()).andReturn(1).once();
         expect(controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.singletonList(1000000001L)).once();
+        expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
         Windows.showNotificationWindow("Scenario cannot be created. The following rightsholder(s) are absent " +
             "in PRM: <i><b>[1000000001]</b></i>");
         expectLastCall().once();

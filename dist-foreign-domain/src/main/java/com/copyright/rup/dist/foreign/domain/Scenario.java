@@ -168,4 +168,48 @@ public class Scenario extends StoredEntity<String> {
             .append("ntsFields", ntsFields)
             .toString();
     }
+
+    /**
+     * Represents fields specific for NTS scenario.
+     */
+    public static class NtsFields {
+
+        private BigDecimal rhMinimumAmount = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
+
+        public BigDecimal getRhMinimumAmount() {
+            return rhMinimumAmount;
+        }
+
+        public void setRhMinimumAmount(BigDecimal rhMinimumAmount) {
+            this.rhMinimumAmount = rhMinimumAmount;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == this) {
+                return true;
+            }
+            if (null == obj || this.getClass() != obj.getClass()) {
+                return false;
+            }
+            NtsFields that = (NtsFields) obj;
+            return new EqualsBuilder()
+                .append(this.rhMinimumAmount, that.rhMinimumAmount)
+                .isEquals();
+        }
+
+        @Override
+        public int hashCode() {
+            return new HashCodeBuilder()
+                .append(rhMinimumAmount)
+                .toHashCode();
+        }
+
+        @Override
+        public String toString() {
+            return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("rhMinimumAmount", rhMinimumAmount)
+                .toString();
+        }
+    }
 }

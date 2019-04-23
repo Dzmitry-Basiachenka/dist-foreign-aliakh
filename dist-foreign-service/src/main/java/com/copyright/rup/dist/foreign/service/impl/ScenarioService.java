@@ -10,11 +10,11 @@ import com.copyright.rup.dist.common.service.api.discrepancy.ICommonDiscrepancyS
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
-import com.copyright.rup.dist.foreign.domain.NtsFields;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;

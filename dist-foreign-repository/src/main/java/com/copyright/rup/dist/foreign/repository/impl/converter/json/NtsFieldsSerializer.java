@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.repository.impl.converter.json;
 
-import com.copyright.rup.dist.foreign.domain.NtsFields;
+import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;

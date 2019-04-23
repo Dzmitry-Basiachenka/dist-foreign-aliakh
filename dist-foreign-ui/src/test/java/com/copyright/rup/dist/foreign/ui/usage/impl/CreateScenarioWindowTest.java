@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.usage.impl;
 
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.powermock.api.easymock.PowerMock.createMock;
@@ -10,12 +11,16 @@ import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
+import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
+import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationResult;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextArea;
@@ -26,6 +31,7 @@ import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
+import java.util.EventObject;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,7 +44,6 @@ import java.util.stream.Collectors;
  *
  * @author Mikalai Bezmen
  */
-// TODO add testOnConfirmButtonClicked
 public class CreateScenarioWindowTest {
 
     private static final String DATE =
@@ -68,6 +73,52 @@ public class CreateScenarioWindowTest {
         verifyScenarioNameField(content.getComponent(0));
         verifyDescriptionArea(content.getComponent(1));
         verifyButtonsLayout(content.getComponent(2));
+    }
+
+    @Test
+    public void testButtonConfirmClick() {
+        IUsagesController controller = createMock(IUsagesController.class);
+        IScenarioService scenarioService = createMock(IScenarioService.class);
+        expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
+        expect(controller.getScenarioService()).andReturn(scenarioService).times(2);
+        Scenario scenario = new Scenario();
+        expect(controller.createScenario(SCENARIO_NAME, "")).andReturn(scenario).once();
+        expect(scenarioService.scenarioExists(SCENARIO_NAME)).andReturn(false).times(2);
+        replay(controller, scenarioService);
+        TestCreateScenarioWindow window = new TestCreateScenarioWindow(controller);
+        VerticalLayout content = (VerticalLayout) window.getContent();
+        Component component = content.getComponent(2);
+        HorizontalLayout buttonsLayout = (HorizontalLayout) component;
+        Button confirmButton = verifyButton(buttonsLayout.getComponent(0), "Confirm");
+        ClickListener listener = (ClickListener) confirmButton.getListeners(ClickEvent.class).iterator().next();
+        listener.buttonClick(new ClickEvent(window));
+        EventObject event = window.getEventObject();
+        assertNotNull(event);
+        assertTrue(event instanceof ScenarioCreateEvent);
+        ScenarioCreateEvent scenarioCreateEvent = (ScenarioCreateEvent) event;
+        assertEquals(scenario, scenarioCreateEvent.getScenarioId());
+        assertEquals(window, scenarioCreateEvent.getSource());
+        verify(controller, scenarioService);
+    }
+
+    @Test
+    public void testButtonCloseClick() {
+        IUsagesController controller = createMock(IUsagesController.class);
+        IScenarioService scenarioService = createMock(IScenarioService.class);
+        expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
+        expect(controller.getScenarioService()).andReturn(scenarioService).once();
+        expect(scenarioService.scenarioExists(SCENARIO_NAME)).andReturn(false).once();
+        replay(controller, scenarioService);
+        TestCreateScenarioWindow window = new TestCreateScenarioWindow(controller);
+        assertFalse(window.isClosed());
+        VerticalLayout content = (VerticalLayout) window.getContent();
+        Component component = content.getComponent(2);
+        HorizontalLayout buttonsLayout = (HorizontalLayout) component;
+        Button cancelButton = verifyButton(buttonsLayout.getComponent(1), "Cancel");
+        ClickListener listener = (ClickListener) cancelButton.getListeners(ClickEvent.class).iterator().next();
+        listener.buttonClick(new ClickEvent(window));
+        assertTrue(window.isClosed());
+        verify(controller, scenarioService);
     }
 
     @Test
@@ -118,9 +169,38 @@ public class CreateScenarioWindowTest {
         verifyButton(buttonsLayout.getComponent(1), "Cancel");
     }
 
-    private void verifyButton(Component component, String caption) {
+    private Button verifyButton(Component component, String caption) {
         assertNotNull(component);
-        Button cancelButton = (Button) component;
-        assertEquals(caption, cancelButton.getCaption());
+        Button button = (Button) component;
+        assertEquals(caption, button.getCaption());
+        return button;
+    }
+
+    private static class TestCreateScenarioWindow extends CreateScenarioWindow {
+
+        private EventObject eventObject;
+        private boolean closed;
+
+        TestCreateScenarioWindow(IUsagesController controller) {
+            super(controller);
+        }
+
+        EventObject getEventObject() {
+            return eventObject;
+        }
+
+        boolean isClosed() {
+            return closed;
+        }
+
+        @Override
+        protected void fireEvent(EventObject event) {
+            this.eventObject = event;
+        }
+
+        @Override
+        public void close() {
+            this.closed = true;
+        }
     }
 }

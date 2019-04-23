@@ -7,8 +7,8 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.test.TestUtils;
-import com.copyright.rup.dist.foreign.domain.NtsFields;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
@@ -121,7 +121,7 @@ class CreateScenarioTestBuilder {
         scenarioId = null;
         expectedScenario = null;
     }
-    
+
     /**
      * Test runner class.
      */
@@ -201,7 +201,9 @@ class CreateScenarioTestBuilder {
                     new Pageable(0, 10), null);
             assertEquals(1, usages.size());
             UsageDto usageDto = usages.get(0);
-            if (null != usage.getPayee()) {
+            if ("NTS".equals(usageFilter.getProductFamilies().iterator().next())) {
+                assertNull(usage.getPayee().getAccountNumber());
+            } else {
                 assertEquals(usage.getPayee().getAccountNumber(), usageDto.getPayeeAccountNumber());
             }
             assertEquals(UsageStatusEnum.LOCKED, usageDto.getStatus());
