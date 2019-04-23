@@ -450,6 +450,15 @@ public class UsageServiceTest {
     }
 
     @Test
+    public void testDeleteNtsExcludedByScenarioId() {
+        usageRepository.deleteNtsExcludedByScenarioId(scenario.getId());
+        expectLastCall().once();
+        replay(usageRepository);
+        usageService.deleteNtsExcludedByScenarioId(scenario.getId());
+        verify(usageRepository);
+    }
+
+    @Test
     public void testRecalculateUsagesForRefresh() {
         UsageFilter filter = new UsageFilter();
         Usage usage1 = buildUsage(RupPersistUtils.generateUuid());
