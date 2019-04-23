@@ -124,6 +124,7 @@ public class UsageRepositoryIntegrationTest {
     private static final String USAGE_ID_24 = "3c31db4f-4065-4fe1-84c2-b48a0f3bc079";
     private static final String POST_DISTRIBUTION_USAGE_ID = "cce295c6-23cf-47b4-b00c-2e0e50cce169";
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
+    private static final String NTS_BATCH_ID = "b9d0ea49-9e38-4bb0-a7e0-0ca299e3dcfa";
     private static final String NTS_SCENARIO_ID = "ca163655-8978-4a45-8fe3-c3b5572c6879";
     private static final String USER_NAME = "user@copyright.com";
     private static final String BATCH_ID = "e0af666b-cbb7-4054-9906-12daa1fbd76e";
@@ -1034,16 +1035,8 @@ public class UsageRepositoryIntegrationTest {
     @Test
     public void testInsertNtsUsages() {
         UsageBatch usageBatch = new UsageBatch();
-        usageBatch.setId("b9d0ea49-9e38-4bb0-a7e0-0ca299e3dcfa");
-        FundPool fundPool = new FundPool();
-        fundPool.setMarkets(Sets.newHashSet(BUS_MARKET, DOC_DEL_MARKET));
-        fundPool.setFundPoolPeriodFrom(2015);
-        fundPool.setFundPoolPeriodTo(2016);
-        fundPool.setStmAmount(HUNDRED_AMOUNT);
-        fundPool.setStmMinimumAmount(STM_MIN_AMOUNT);
-        fundPool.setNonStmAmount(HUNDRED_AMOUNT);
-        fundPool.setNonStmMinimumAmount(NON_STM_MIN_AMOUNT);
-        usageBatch.setFundPool(fundPool);
+        usageBatch.setId(NTS_BATCH_ID);
+        usageBatch.setFundPool(buildNtsFundPool(HUNDRED_AMOUNT));
         List<String> insertedUsageIds = usageRepository.insertNtsUsages(usageBatch, USER_NAME);
         assertNotNull(insertedUsageIds);
         assertEquals(3, insertedUsageIds.size());
@@ -1055,6 +1048,20 @@ public class UsageRepositoryIntegrationTest {
             insertedUsages.get(1));
         verifyInsertedFundPoolUsage(243904752L, WORK_TITLE_2, BUS_MARKET, 2016, new BigDecimal("500.00"),
             insertedUsages.get(2));
+    }
+
+    @Test
+    public void testInsertNtsUsagesZeroFundPoolAmount() {
+        UsageBatch usageBatch = new UsageBatch();
+        usageBatch.setId(NTS_BATCH_ID);
+        usageBatch.setFundPool(buildNtsFundPool(BigDecimal.ZERO));
+        List<String> insertedUsageIds = usageRepository.insertNtsUsages(usageBatch, USER_NAME);
+        assertNotNull(insertedUsageIds);
+        assertEquals(1, insertedUsageIds.size());
+        List<Usage> insertedUsages = usageRepository.findByIds(insertedUsageIds);
+        insertedUsages.sort(Comparator.comparing(Usage::getMarketPeriodFrom));
+        verifyInsertedFundPoolUsage(105062654L, "Our fathers lies", BUS_MARKET, 2014, new BigDecimal("500.00"),
+            insertedUsages.get(0));
     }
 
     @Test
@@ -1073,6 +1080,18 @@ public class UsageRepositoryIntegrationTest {
         usage = usages.get(0);
         assertEquals(UsageStatusEnum.TO_BE_DISTRIBUTED, usage.getStatus());
         assertEquals(fundPoolId, usage.getFundPoolId());
+    }
+
+    private FundPool buildNtsFundPool(BigDecimal nonStmAmount) {
+        FundPool fundPool = new FundPool();
+        fundPool.setMarkets(Sets.newHashSet(BUS_MARKET, DOC_DEL_MARKET));
+        fundPool.setFundPoolPeriodFrom(2015);
+        fundPool.setFundPoolPeriodTo(2016);
+        fundPool.setStmAmount(HUNDRED_AMOUNT);
+        fundPool.setStmMinimumAmount(STM_MIN_AMOUNT);
+        fundPool.setNonStmAmount(nonStmAmount);
+        fundPool.setNonStmMinimumAmount(NON_STM_MIN_AMOUNT);
+        return fundPool;
     }
 
     private ResearchedUsage buildResearchedUsage(String id, String title, Long wrWrkInst, String standardNumber,
@@ -1148,7 +1167,7 @@ public class UsageRepositoryIntegrationTest {
 
     private void verifyInsertedFundPoolUsage(Long wrWrkInst, String workTitle, String market, Integer marketPeriodFrom,
                                              BigDecimal reportedValue, Usage actualUsage) {
-        assertEquals(actualUsage.getBatchId(), "b9d0ea49-9e38-4bb0-a7e0-0ca299e3dcfa");
+        assertEquals(actualUsage.getBatchId(), NTS_BATCH_ID);
         assertEquals(wrWrkInst, actualUsage.getWrWrkInst(), 0);
         assertEquals(workTitle, actualUsage.getWorkTitle());
         assertEquals(workTitle, actualUsage.getSystemTitle());
