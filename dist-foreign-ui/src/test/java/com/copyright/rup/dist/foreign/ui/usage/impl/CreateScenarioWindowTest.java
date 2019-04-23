@@ -13,6 +13,8 @@ import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 
+import com.vaadin.data.Binder;
+import com.vaadin.data.ValidationResult;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
@@ -20,10 +22,12 @@ import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
-import org.junit.Before;
 import org.junit.Test;
+import org.powermock.reflect.Whitebox;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Verifies {@link CreateScenarioWindow}.
@@ -39,22 +43,21 @@ public class CreateScenarioWindowTest {
 
     private static final String DATE =
         CommonDateUtils.format(LocalDate.now(), RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT);
-    private CreateScenarioWindow createScenarioWindow;
+    private static final String SCENARIO_NAME = "FAS Distribution " + DATE;
+    private static final String FAS_PRODUCT_FAMILY = "FAS";
 
-    @Before
-    public void setUp() {
-        IUsagesController controller = createMock(IUsagesController.class);
-        IScenarioService scenarioService = createMock(IScenarioService.class);
-        expect(controller.getSelectedProductFamily()).andReturn("FAS").once();
-        expect(controller.getScenarioService()).andReturn(scenarioService).times(1);
-        expect(scenarioService.scenarioExists("FAS Distribution " + DATE)).andReturn(false).once();
-        replay(controller, scenarioService);
-        createScenarioWindow = new CreateScenarioWindow(controller);
-        verify(controller, scenarioService);
-    }
+    private CreateScenarioWindow createScenarioWindow;
 
     @Test
     public void testComponentStructure() {
+        IUsagesController controller = createMock(IUsagesController.class);
+        IScenarioService scenarioService = createMock(IScenarioService.class);
+        expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
+        expect(controller.getScenarioService()).andReturn(scenarioService).times(1);
+        expect(scenarioService.scenarioExists(SCENARIO_NAME)).andReturn(false).once();
+        replay(controller, scenarioService);
+        createScenarioWindow = new CreateScenarioWindow(controller);
+        verify(controller, scenarioService);
         assertEquals("Create Scenario", createScenarioWindow.getCaption());
         assertEquals(320, createScenarioWindow.getWidth(), 0);
         assertEquals("create-scenario-window", createScenarioWindow.getId());
@@ -67,12 +70,35 @@ public class CreateScenarioWindowTest {
         verifyButtonsLayout(content.getComponent(2));
     }
 
+    @Test
+    public void testScenarioNameExists() {
+        IUsagesController controller = createMock(IUsagesController.class);
+        IScenarioService scenarioService = createMock(IScenarioService.class);
+        expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
+        expect(controller.getScenarioService()).andReturn(scenarioService).times(4);
+        expect(scenarioService.scenarioExists(SCENARIO_NAME)).andReturn(true).times(4);
+        replay(controller, scenarioService);
+        createScenarioWindow = new CreateScenarioWindow(controller);
+        TextField scenarioNameField = Whitebox.getInternalState(createScenarioWindow, "scenarioNameField");
+        Binder binder = Whitebox.getInternalState(createScenarioWindow, "binder");
+        validateScenarioNameExistence(scenarioNameField, binder, SCENARIO_NAME);
+        validateScenarioNameExistence(scenarioNameField, binder, ' ' + SCENARIO_NAME + ' ');
+        verify(controller, scenarioService);
+    }
+
+    private void validateScenarioNameExistence(TextField scenarioNameField, Binder binder, String scenarioName) {
+        scenarioNameField.setValue(scenarioName);
+        List<String> errorMessages = ((List<ValidationResult>) binder.validate().getValidationErrors())
+            .stream().map(ValidationResult::getErrorMessage).collect(Collectors.toList());
+        assertEquals(1, errorMessages.size());
+        assertEquals("Scenario with such name already exists", errorMessages.get(0));
+    }
+
     private void verifyScenarioNameField(Component component) {
         assertNotNull(component);
         TextField scenarioNameField = (TextField) component;
         assertEquals("Scenario name", scenarioNameField.getCaption());
-        assertEquals(String.format("FAS Distribution %s", CommonDateUtils.format(LocalDate.now(),
-            RupDateUtils.US_DATE_FORMAT_PATTERN_SHORT)), scenarioNameField.getValue());
+        assertEquals(SCENARIO_NAME, scenarioNameField.getValue());
         assertEquals("scenario-name", scenarioNameField.getId());
     }
 
