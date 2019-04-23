@@ -102,6 +102,7 @@ public class CreateNtsScenarioWindow extends Window {
                     scenario.getNtsFields().setRhMinimumAmount(rhMinimumAmount));
         rhMinimumAmountField.setValue(ForeignUi.getMessage("field.rh_minimum_amount.default"));
         VaadinUtils.setMaxComponentsWidth(rhMinimumAmountField);
+        VaadinUtils.addComponentStyle(rhMinimumAmountField, "rh-minimum-amount-field");
     }
 
     private void initDescriptionArea() {
