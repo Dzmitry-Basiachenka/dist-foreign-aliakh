@@ -99,6 +99,7 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
         mediator.setSendToLmButton(sendToLmButton);
         mediator.setReconcileRightsholdersButton(reconcileRightsholdersButton);
         mediator.setRefreshScenarioButton(refreshScenarioButton);
+        mediator.setRhMinimumAmountLabel(rhMinimumAmountLabel);
         mediator.selectedScenarioChanged(getSelectedScenario());
         return mediator;
     }
@@ -244,10 +245,8 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
             if (null != scenario.getNtsFields()) {
                 rhMinimumAmountLabel.setValue(ForeignUi.getMessage("label.rh_minimum_amount_in_usd",
                     formatAmount(scenario.getNtsFields().getRhMinimumAmount())));
-                rhMinimumAmountLabel.setVisible(true);
             } else {
                 rhMinimumAmountLabel.setValue(StringUtils.EMPTY);
-                rhMinimumAmountLabel.setVisible(false);
             }
             descriptionLabel.setValue(ForeignUi.getMessage("label.description", scenario.getDescription()));
             selectionCriteriaLabel.setValue(controller.getCriteriaHtmlRepresentation());

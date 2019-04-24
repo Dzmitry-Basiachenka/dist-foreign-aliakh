@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import com.copyright.rup.dist.common.test.TestUtils;
-import com.copyright.rup.dist.foreign.domain.NtsFields;
+import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 
 import com.fasterxml.jackson.core.JsonParseException;
 

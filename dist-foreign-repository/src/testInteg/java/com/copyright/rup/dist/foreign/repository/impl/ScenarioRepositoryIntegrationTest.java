@@ -7,9 +7,9 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
-import com.copyright.rup.dist.foreign.domain.NtsFields;
 import com.copyright.rup.dist.foreign.domain.RightsholderPayeePair;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
@@ -281,7 +281,7 @@ public class ScenarioRepositoryIntegrationTest {
     private UsageBatch buildBatch(Long rroAccountNumber) {
         UsageBatch batch = new UsageBatch();
         batch.setId(RupPersistUtils.generateUuid());
-        batch.setProductFamily("FAS_PRODUCT_FAMILY");
+        batch.setProductFamily(FAS_PRODUCT_FAMILY);
         batch.setGrossAmount(new BigDecimal("100.00"));
         batch.setPaymentDate(LocalDate.of(2017, 1, 1));
         batch.setFiscalYear(2017);
@@ -303,7 +303,7 @@ public class ScenarioRepositoryIntegrationTest {
             "CADRA, Centro de Administracion de Derechos Reprograficos, Asociacion Civil"));
         usage.setPayee(usage.getRightsholder());
         usage.setStatus(UsageStatusEnum.LOCKED);
-        usage.setProductFamily("FAS_PRODUCT_FAMILY");
+        usage.setProductFamily(FAS_PRODUCT_FAMILY);
         usage.setArticle("Article");
         usage.setStandardNumber("StandardNumber");
         usage.setPublisher("Publisher");

@@ -585,8 +585,7 @@ databaseChangeLog {
         }
 
         changeSet(id: '2019-04-16-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
-            comment("B-49019 FDA: Create NTS Scenario: " +
-                    "implement repository methods to save and load the field rhMinimumAmount")
+            comment("Insert test data for testFindAll")
 
             insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
                 column(name: 'df_scenario_uid', value: '1a5f3df4-c8a7-4dba-9a8f-7dce0b61c41b')
@@ -640,7 +639,7 @@ databaseChangeLog {
         }
 
         changeSet(id: '2019-04-18-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
-            comment("B-49019 FDA: Create NTS Scenario: insert test data for insertNtsScenarioAndAddUsages")
+            comment("Insert test data for insertNtsScenarioAndAddUsages")
 
             insert(schemaName: dbAppsSchema, tableName: 'df_work_classification') {
                 column(name: 'df_work_classification_uid', value: 'fc9ee4ed-519e-41c8-927b-92206b34c8cc')

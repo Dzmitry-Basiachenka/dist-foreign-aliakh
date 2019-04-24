@@ -50,7 +50,7 @@
         <typeHandler handler="org.apache.ibatis.type.LocalDateTypeHandler"/>
         <typeHandler handler="org.apache.ibatis.type.OffsetDateTimeTypeHandler"/>
         <typeHandler handler="FundPoolTypeHandler" javaType="com.copyright.rup.dist.foreign.domain.FundPool"/>
-        <typeHandler handler="NtsFieldsTypeHandler" javaType="com.copyright.rup.dist.foreign.domain.NtsFields"/>
+        <typeHandler handler="NtsFieldsTypeHandler" javaType="com.copyright.rup.dist.foreign.domain.Scenario$NtsFields"/>
     </typeHandlers>
 
     <mappers>

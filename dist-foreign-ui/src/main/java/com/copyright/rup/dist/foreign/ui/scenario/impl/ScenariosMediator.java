@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.vaadin.widget.api.IMediator;
 
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Label;
 
 /**
  * Mediator for scenarios widget.
@@ -27,6 +28,7 @@ class ScenariosMediator implements IMediator {
     private Button sendToLmButton;
     private Button reconcileRightsholdersButton;
     private Button refreshScenarioButton;
+    private Label rhMinimumAmountLabel;
 
     @Override
     public void applyPermissions() {
@@ -72,6 +74,10 @@ class ScenariosMediator implements IMediator {
         this.refreshScenarioButton = refreshScenarioButton;
     }
 
+    void setRhMinimumAmountLabel(Label rhMinimumAmountLabel) {
+        this.rhMinimumAmountLabel = rhMinimumAmountLabel;
+    }
+
     /**
      * Handles buttons state depending on selected {@link Scenario}.
      *
@@ -91,6 +97,7 @@ class ScenariosMediator implements IMediator {
             rejectButton.setEnabled(isSubmittedState);
             approveButton.setEnabled(isSubmittedState);
             sendToLmButton.setEnabled(ScenarioStatusEnum.APPROVED == status);
+            rhMinimumAmountLabel.setVisible(FdaConstants.NTS_PRODUCT_FAMILY.equals(scenario.getProductFamily()));
         } else {
             deleteButton.setEnabled(false);
             viewButton.setEnabled(false);

@@ -8,7 +8,7 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import com.copyright.rup.dist.foreign.domain.NtsFields;
+import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 
 import org.junit.Test;
 import org.postgresql.util.PGobject;

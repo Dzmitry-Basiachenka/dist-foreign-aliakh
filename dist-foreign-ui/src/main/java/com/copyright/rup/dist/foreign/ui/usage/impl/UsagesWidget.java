@@ -278,32 +278,35 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
     }
 
     private void onAddToScenarioClicked() {
-        if (0 < controller.getSize()) {
-            if (controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)) {
-                List<Long> accountNumbers = controller.getInvalidRightsholders();
-                if (CollectionUtils.isNotEmpty(accountNumbers)) {
-                    Windows.showNotificationWindow(
-                        ForeignUi.getMessage("message.error.add_to_scenario.invalid_rightsholders", "created",
-                            accountNumbers));
-                } else {
-                    if (FdaConstants.NTS_PRODUCT_FAMILY.equals(getController().getSelectedProductFamily())) {
-                        if (CollectionUtils.isNotEmpty(usagesFilterWidget.getFilter().getUsageBatchesIds())) {
-                            showCreateScenarioWindow(new CreateNtsScenarioWindow(controller));
-                        } else {
-                            Windows.showNotificationWindow(ForeignUi.getMessage("message.error.empty_usage_batches"));
-                        }
-                    } else {
-                        showCreateScenarioWindow(new CreateScenarioWindow(controller));
-                    }
-                }
-            } else {
-                Windows.showNotificationWindow(
-                    ForeignUi.getMessage("message.error.invalid_usages_status", UsageStatusEnum.ELIGIBLE,
-                        "added to scenario"));
-            }
+        boolean isNtsProductFamily = FdaConstants.NTS_PRODUCT_FAMILY.equals(getController().getSelectedProductFamily());
+        String message = getScenarioValidationMessage(isNtsProductFamily);
+        if (null != message) {
+            Windows.showNotificationWindow(message);
+        } else if (isNtsProductFamily) {
+            showCreateScenarioWindow(new CreateNtsScenarioWindow(controller));
         } else {
-            Windows.showNotificationWindow(ForeignUi.getMessage("message.error.empty_usages"));
+            showCreateScenarioWindow(new CreateScenarioWindow(controller));
         }
+    }
+
+    private String getScenarioValidationMessage(boolean isNtsProductFamily) {
+        String message = null;
+        if (0 == controller.getSize()) {
+            message = ForeignUi.getMessage("message.error.empty_usages");
+        } else if (!controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)) {
+            message = ForeignUi.getMessage("message.error.invalid_usages_status", UsageStatusEnum.ELIGIBLE,
+                "added to scenario");
+        } else {
+            List<Long> accountNumbers = controller.getInvalidRightsholders();
+            if (CollectionUtils.isNotEmpty(accountNumbers)) {
+                message = ForeignUi.getMessage("message.error.add_to_scenario.invalid_rightsholders", "created",
+                    accountNumbers);
+            } else if (isNtsProductFamily
+                && CollectionUtils.isEmpty(usagesFilterWidget.getFilter().getUsageBatchesIds())) {
+                message = ForeignUi.getMessage("message.error.empty_usage_batches");
+            }
+        }
+        return message;
     }
 
     private void showCreateScenarioWindow(Window window) {
