@@ -155,12 +155,11 @@ public class CreateScenarioTest {
         testBuilder
             .withFilter(buildUsageFilter("26282dbd-3463-58d7-c927-03d3458a656a", "NTS"))
             .expectUsages(Arrays.asList(
-                buildUsageForCreatedScenario(7000429266L, null, AMOUNT_ZERO, AMOUNT_ZERO, "11.3536281830"),
-                buildUsageForCreatedScenario(1000002859L, null, AMOUNT_ZERO, AMOUNT_ZERO, "3.6760482481"),
-                buildUsageForCreatedScenario(1000001820L, null, AMOUNT_ZERO, AMOUNT_ZERO, "4.9703235688"),
-                buildUsageForCreatedScenario(1000024497L, null, AMOUNT_ZERO, AMOUNT_ZERO, "9.3493061420"),
-                buildUsageForCreatedScenario(1000002562L, null, AMOUNT_ZERO, AMOUNT_ZERO, "0.6506938580")))
-            .expectScenario(buildScenario(AMOUNT_ZERO, "29.9999999999", AMOUNT_ZERO, "1063.59"))
+                buildUsageForCreatedScenario(7000429266L, null, AMOUNT_ZERO, AMOUNT_ZERO, "16.4522014195"),
+                buildUsageForCreatedScenario(1000024497L, null, AMOUNT_ZERO, AMOUNT_ZERO, "13.5477985805"),
+                buildNtsExcludedUsage(1000002859L), buildNtsExcludedUsage(1000001820L),
+                buildNtsExcludedUsage(1000002562L)))
+            .expectScenario(buildScenario(AMOUNT_ZERO, "30.00", AMOUNT_ZERO, "956.02"))
             .build()
             .run();
     }
@@ -174,6 +173,12 @@ public class CreateScenarioTest {
         scenario.setReportedTotal(new BigDecimal(reportedTotal).setScale(2, RoundingMode.HALF_UP));
         scenario.setDescription("Scenario Description");
         return scenario;
+    }
+
+    private Usage buildNtsExcludedUsage(Long rhAccountNumber) {
+        Usage usage = buildUsageForCreatedScenario(rhAccountNumber, null, AMOUNT_ZERO, AMOUNT_ZERO, AMOUNT_ZERO);
+        usage.setStatus(UsageStatusEnum.NTS_EXCLUDED);
+        return usage;
     }
 
     private Usage buildUsageForCreatedScenario(Long rhAccountNumber, Long payeeAccountNumber, String serviceFeeAmount,
@@ -190,6 +195,7 @@ public class CreateScenarioTest {
         usage.setServiceFeeAmount(new BigDecimal(serviceFeeAmount).setScale(10, RoundingMode.HALF_UP));
         usage.setGrossAmount(new BigDecimal(grossAmount));
         usage.setNetAmount(new BigDecimal(netAmount).setScale(10, RoundingMode.HALF_UP));
+        usage.setStatus(UsageStatusEnum.LOCKED);
         return usage;
     }
 
