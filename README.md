@@ -1,3 +1,11 @@
+5.1.22
+-
+* B-46718 FDA: Apply RRO fund pool to an associated batch: calculate NTS gross amount
+* B-48300 FDA: Remove under minimum RHs and reallocate funds proportionally: implement logic for recalculating amount for usages above minimum RH gross amount
+* B-49019 FDA: Create NTS Scenario: make changes based on comments in CR-DIST-FOREIGN-102
+* B-49464 Tech Debt: FDA: add HTML id 'rh-minimum-amount-field' to the field RH Minimum Amount in CreateNtsScenarioWindow
+* CDP-732 FDA: Load Fund Pool: No UNCLASSIFIED usages are included in a Fund Pool in case 'STM Amount' or 'NON-STM Amount' field has 0 value
+
 5.1.21
 -
 * B-48300 FDA: Remove under minimum RHs and reallocate funds proportionally: implement delete NTS scenario functionality
