@@ -258,24 +258,31 @@ public class ScenarioRepositoryIntegrationTest {
     public void testInsertNtsScenarioAndAddUsages() {
         Scenario scenario = buildScenario(SCENARIO_ID, SCENARIO_NAME);
         NtsFields ntsFields = new NtsFields();
-        ntsFields.setRhMinimumAmount(new BigDecimal("300.00"));
+        ntsFields.setRhMinimumAmount(new BigDecimal("350.00"));
         scenario.setNtsFields(ntsFields);
         scenarioRepository.insertNtsScenarioAndAddUsages(scenario, buildUsageFilter());
         Scenario ntsScenario = scenarioRepository.findWithAmountsAndLastAction(SCENARIO_ID);
         assertNotNull(ntsScenario.getNtsFields());
-        assertEquals(new BigDecimal("300.00"), ntsScenario.getNtsFields().getRhMinimumAmount());
-        List<Usage> actualUsages = usageRepository.findByScenarioId(SCENARIO_ID).stream()
+        assertEquals(new BigDecimal("350.00"), ntsScenario.getNtsFields().getRhMinimumAmount());
+        assertUsages(
+            Arrays.asList(
+                buildUsage("244de0db-b50c-45e8-937c-72e033e2a3a9", "687.5000000000"),
+                buildUsage("3caf371f-f2e6-47cd-af6b-1e02b79f6195", "2946.4285714286"),
+                buildUsage("87666035-2bdf-49ef-8c80-1d1b281fdc34", "7366.0714285714")),
+            usageRepository.findByScenarioId(SCENARIO_ID));
+        assertUsages(
+            Arrays.asList(buildNtsExcludedUsage("0d200064-185a-4c48-bbc9-c67554e7db8e"),
+                buildNtsExcludedUsage("9bc172f4-edbb-4a62-9ffc-254336e7a56d")),
+            usageRepository.findByStatuses(UsageStatusEnum.NTS_EXCLUDED));
+    }
+
+    private void assertUsages(List<Usage> expected, List<Usage> actual) {
+        List<Usage> sorted = actual.stream()
             .sorted(Comparator.comparing(Usage::getId))
             .collect(Collectors.toList());
-        List<Usage> expectedUsages = Arrays.asList(
-            buildUsage("0d200064-185a-4c48-bbc9-c67554e7db8e", "0.0000000000"),
-            buildUsage("244de0db-b50c-45e8-937c-72e033e2a3a9", "666.6666666667"),
-            buildUsage("3caf371f-f2e6-47cd-af6b-1e02b79f6195", "2857.1428571429"),
-            buildUsage("87666035-2bdf-49ef-8c80-1d1b281fdc34", "7142.8571428571"),
-            buildUsage("9bc172f4-edbb-4a62-9ffc-254336e7a56d", "333.3333333333"));
-        assertEquals(CollectionUtils.size(expectedUsages), CollectionUtils.size(actualUsages));
-        IntStream.range(0, actualUsages.size())
-            .forEach(index -> verifyUsage(expectedUsages.get(index), actualUsages.get(index)));
+        assertEquals(CollectionUtils.size(expected), CollectionUtils.size(actual));
+        IntStream.range(0, sorted.size())
+            .forEach(index -> verifyUsage(expected.get(index), sorted.get(index)));
     }
 
     private UsageBatch buildBatch(Long rroAccountNumber) {
@@ -365,6 +372,14 @@ public class ScenarioRepositoryIntegrationTest {
         usage.setGrossAmount(new BigDecimal(grossAmount));
         usage.setScenarioId(SCENARIO_ID);
         usage.setStatus(UsageStatusEnum.LOCKED);
+        return usage;
+    }
+
+    private Usage buildNtsExcludedUsage(String usageId) {
+        Usage usage = new Usage();
+        usage.setId(usageId);
+        usage.setStatus(UsageStatusEnum.NTS_EXCLUDED);
+        usage.setGrossAmount(new BigDecimal("0.0000000000"));
         return usage;
     }
 

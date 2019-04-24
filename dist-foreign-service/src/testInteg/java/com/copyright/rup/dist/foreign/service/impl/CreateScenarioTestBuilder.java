@@ -38,6 +38,7 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Builder for {@link CreateScenarioTest}.
@@ -147,7 +148,7 @@ class CreateScenarioTestBuilder {
         private String createScenario() {
             if ("NTS".equals(usageFilter.getProductFamilies().iterator().next())) {
                 NtsFields ntsFields = new NtsFields();
-                ntsFields.setRhMinimumAmount(new BigDecimal("300.00"));
+                ntsFields.setRhMinimumAmount(new BigDecimal("5.00"));
                 return scenarioService.createNtsScenario(SCENARIO_NAME, ntsFields, DESCRIPTION, usageFilter).getId();
             } else {
                 return scenarioService.createScenario(SCENARIO_NAME, DESCRIPTION, usageFilter).getId();
@@ -160,10 +161,10 @@ class CreateScenarioTestBuilder {
             Scenario scenario = scenarioService.getScenarioWithAmountsAndLastAction(expectedScenario);
             assertEquals(expectedScenario.getId(), scenario.getId());
             assertEquals(expectedScenario.getName(), scenario.getName());
-            assertEquals(expectedScenario.getNetTotal(), scenario.getNetTotal());
-            assertEquals(expectedScenario.getGrossTotal(), scenario.getGrossTotal());
-            assertEquals(expectedScenario.getServiceFeeTotal(), scenario.getServiceFeeTotal());
-            assertEquals(expectedScenario.getReportedTotal(), scenario.getReportedTotal());
+            assertEquals(0, expectedScenario.getNetTotal().compareTo(scenario.getNetTotal()));
+            assertEquals(0, expectedScenario.getGrossTotal().compareTo(scenario.getGrossTotal()));
+            assertEquals(0, expectedScenario.getServiceFeeTotal().compareTo(scenario.getServiceFeeTotal()));
+            assertEquals(0, expectedScenario.getReportedTotal().compareTo(scenario.getReportedTotal()));
             assertEquals(ScenarioStatusEnum.IN_PROGRESS, scenario.getStatus());
             assertEquals(expectedScenario.getDescription(), scenario.getDescription());
             assertEquals("SYSTEM", scenario.getCreateUser());
@@ -191,7 +192,12 @@ class CreateScenarioTestBuilder {
         }
 
         private void assertUsages() {
-            expectedUsages.forEach(this::assertUsage);
+            expectedUsages.stream()
+                .filter(usage -> UsageStatusEnum.ELIGIBLE == usage.getStatus())
+                .forEach(this::assertUsage);
+            assertNtsExcludedUsages(expectedUsages.stream()
+                .filter(usage -> UsageStatusEnum.NTS_EXCLUDED == usage.getStatus())
+                .collect(Collectors.toList()));
         }
 
         private void assertUsage(Usage usage) {
@@ -206,11 +212,21 @@ class CreateScenarioTestBuilder {
             } else {
                 assertEquals(usage.getPayee().getAccountNumber(), usageDto.getPayeeAccountNumber());
             }
-            assertEquals(UsageStatusEnum.LOCKED, usageDto.getStatus());
             assertEquals("SYSTEM", usageDto.getUpdateUser());
-            assertEquals(usage.getServiceFeeAmount(), usageDto.getServiceFeeAmount());
-            assertEquals(usage.getNetAmount(), usageDto.getNetAmount());
-            assertEquals(usage.getGrossAmount(), usageDto.getGrossAmount());
+            assertEquals(0, usage.getServiceFeeAmount().compareTo(usageDto.getServiceFeeAmount()));
+            assertEquals(0, usage.getNetAmount().compareTo(usageDto.getNetAmount()));
+            assertEquals(0, usage.getGrossAmount().compareTo(usageDto.getGrossAmount()));
+        }
+
+        private void assertNtsExcludedUsages(List<Usage> expected) {
+            List<Usage> actualUsages = usageRepository.findByStatuses(UsageStatusEnum.NTS_EXCLUDED);
+            assertEquals(expected.size(), actualUsages.size());
+            actualUsages.forEach(usage -> {
+                assertNull(usage.getScenarioId());
+                assertEquals(0, usage.getServiceFeeAmount().compareTo(BigDecimal.ZERO));
+                assertEquals(0, usage.getNetAmount().compareTo(BigDecimal.ZERO));
+                assertEquals(0, usage.getGrossAmount().compareTo(BigDecimal.ZERO));
+            });
         }
 
         private void createRestServer() {
@@ -219,26 +235,26 @@ class CreateScenarioTestBuilder {
         }
 
         private void expectGetPreferences(String fileName, List<String> rightholderIds) {
-            rightholderIds.forEach(rightholderId -> {
+            rightholderIds.forEach(rightholderId ->
                 mockServer.expect(MockRestRequestMatchers
                     .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelpref?orgIds%5B%5D="
                         + rightholderId
                         + "&prefCodes%5B%5D=IS-RH-FDA-PARTICIPATING,ISRHDISTINELIGIBLE"))
                     .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
                     .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), fileName),
-                        MediaType.APPLICATION_JSON));
-            });
+                        MediaType.APPLICATION_JSON))
+            );
         }
 
         private void expectGetRollups(String fileName, List<String> rightsholdersIds) {
-            rightsholdersIds.forEach(rightsholdersId -> {
+            rightsholdersIds.forEach(rightsholdersId ->
                 (prmRollUpAsync ? asyncMockServer : mockServer).expect(MockRestRequestMatchers
                     .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelprefrollup?orgIds%5B%5D=" +
                         rightsholdersId + "&relationshipCode=PARENT&prefCodes%5B%5D=payee"))
                     .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
                     .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), fileName),
-                        MediaType.APPLICATION_JSON));
-            });
+                        MediaType.APPLICATION_JSON))
+            );
         }
     }
 }

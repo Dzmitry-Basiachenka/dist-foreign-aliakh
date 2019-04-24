@@ -87,6 +87,7 @@
             select
                 u.df_usage_uid,
                 u.df_usage_batch_uid,
+                u.rh_account_number,
                 wc.classification,
                 u.reported_value * ((ub.fund_pool ->> 'fund_pool_period_to')::int - (ub.fund_pool ->> 'fund_pool_period_from')::int + 1) /
                 (u.market_period_to - u.market_period_from + 1) as numerator_weight,
@@ -104,17 +105,44 @@
                 sum(n.numerator_weight) as denominator_weight
             from numerator n
             group by n.classification, df_usage_batch_uid
+        ),
+        <!-- Calculates amount for each usage -->
+        usage_amounts as (
+            select
+                n.df_usage_uid,
+                n.rh_account_number,
+                n.numerator_weight / d.denominator_weight * n.fund_pool_amount as gross_amount
+            from numerator n
+            join denominator d on n.classification = d.classification and n.df_usage_batch_uid = d.df_usage_batch_uid
+        ),
+        <!-- Calculates amount for each rightsholder under minimum -->
+        under_minimum_rh_totals as (
+            select
+                rh_account_number,
+                sum(gross_amount) rh_total
+            from usage_amounts
+            group by rh_account_number
+            having sum(gross_amount) &lt; #{scenario.ntsFields.rhMinimumAmount}
+        ),
+        <!-- Calculates GT factor based on scenario gross amount -->
+        gt_factor as (
+            select sum(gross_amount) / (sum(gross_amount) - under_minimum_total) as factor
+            from (
+                select coalesce(sum(rh_total), 0) under_minimum_total
+                from under_minimum_rh_totals
+            ) under_minimum, usage_amounts
+            group by under_minimum_total
         )
+        <!-- Update usages based on rh account numbers -->
         update
             ${schema}.df_usage u
         set
-            status_ind = #{status},
-            df_scenario_uid = #{scenario.id},
-            gross_amount = n.numerator_weight / d.denominator_weight * n.fund_pool_amount,
+            status_ind = case when u.rh_account_number in (select rh_account_number from under_minimum_rh_totals) then 'NTS_EXCLUDED' else 'LOCKED' end,
+            df_scenario_uid = case when u.rh_account_number in (select rh_account_number from under_minimum_rh_totals) then null else #{scenario.id} end,
+            gross_amount = case when u.rh_account_number in (select rh_account_number from under_minimum_rh_totals) then 0.00 else amounts.gross_amount * (select factor from gt_factor) end,
             <include refid="StoredEntityMapper.update"/>
-        from numerator n
-        join denominator d on n.classification = d.classification and n.df_usage_batch_uid = d.df_usage_batch_uid
-        where n.df_usage_uid = u.df_usage_uid
+        from usage_amounts amounts
+        where amounts.df_usage_uid = u.df_usage_uid
     </insert>
 
     <update id="refresh" parameterType="Scenario">
