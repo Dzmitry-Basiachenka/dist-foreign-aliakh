@@ -497,4 +497,12 @@ public interface IUsageRepository {
      * @param userName user name
      */
     void addWithdrawnUsagesToPreServiceFeeFund(String fundId, List<String> batchIds, String userName);
+
+    /**
+     * Updates status to UNCLASSIFIED for ELIGIBLE usages with defined works without classification.
+     *
+     * @param wrWrkInsts list of Wr Wrk Insts
+     * @param userName   user name
+     */
+    void updateUsagesStatusToUnclassified(List<Long> wrWrkInsts, String userName);
 }

@@ -1594,4 +1594,18 @@
             </foreach>
             and status_ind = #{statusToFind}
     </update>
+
+    <update id="updateUsagesStatusToUnclassified" parameterType="map">
+        update ${schema}.df_usage
+        set
+            status_ind = #{statusToSet},
+            <include refid="StoredEntityMapper.update"/>
+        where wr_wrk_inst in
+            <foreach collection="wrWrkInsts" item="wrWrkInst" separator="," open="(" close=")">
+                #{wrWrkInst}
+            </foreach>
+            and status_ind = #{statusToFind}
+            and product_family = #{productFamily}
+    </update>
+
 </mapper>
