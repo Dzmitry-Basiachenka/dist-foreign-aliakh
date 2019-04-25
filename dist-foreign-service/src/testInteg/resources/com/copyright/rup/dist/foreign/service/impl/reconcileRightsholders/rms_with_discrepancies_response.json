@@ -26,7 +26,7 @@
           "wg_owner_org_number": "2000152614",
           "right_id": "a11e8f38-3b3a-4ac4-a707-5bd3a44fb33a",
           "license_type": "ACLDIGITAL",
-          "product_family": "ACLDIGITAL",
+          "product_family": "JACDCL",
           "rh_account_number": "2000152614"
         },
         {
@@ -45,7 +45,7 @@
           "wg_owner_org_number": "1000002137",
           "right_id": "1ca1125c-d458-49cc-9658-48289026c8a2",
           "license_type": "ACLDIGITAL",
-          "product_family": "ACLDIGITAL",
+          "product_family": "MACL",
           "rh_account_number": "1000002137"
         },
         {
@@ -64,7 +64,7 @@
           "wg_owner_org_number": "2000152614",
           "right_id": "a11e8f38-3b3a-4ac4-a707-5bd3a44fb33a",
           "license_type": "ACLDIGITAL",
-          "product_family": "ACLDIGITAL",
+          "product_family": "VGW",
           "rh_account_number": "2000152614"
         },
         {
@@ -83,7 +83,7 @@
           "wg_owner_org_number": "1000002137",
           "right_id": "1ca1125c-d458-49cc-9658-48289026c8a2",
           "license_type": "ACLDIGITAL",
-          "product_family": "ACLDIGITAL",
+          "product_family": "ACL",
           "rh_account_number": "1000002137"
         },
         {
@@ -102,7 +102,7 @@
           "wg_owner_org_number": "2000152614",
           "right_id": "a11e8f38-3b3a-4ac4-a707-5bd3a44fb33a",
           "license_type": "ACLDIGITAL",
-          "product_family": "ACLDIGITAL",
+          "product_family": "ACL",
           "rh_account_number": "2000152614"
         },
         {
@@ -121,7 +121,7 @@
           "wg_owner_org_number": "1000000322",
           "right_id": "a1abbce6-9ad5-45dd-9be9-f9549d888c9b",
           "license_type": "ACLDIGITAL",
-          "product_family": "ACLDIGITAL",
+          "product_family": "ACL",
           "rh_account_number": "1000000322"
         }
       ]

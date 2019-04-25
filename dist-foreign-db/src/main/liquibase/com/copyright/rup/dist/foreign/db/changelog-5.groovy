@@ -475,4 +475,495 @@ databaseChangeLog {
             // automatic rollback
         }
     }
+
+    changeSet(id: '2019-04-24-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
+        comment("CDP-728 FDA: Grants prioritiy: replace ACLPRINT and ACLDIGITAL product families with ACL, JACDCL, MACL, VGW")
+
+        sql("delete from ${dbAppsSchema}.df_grant_priority")
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: 'd9309c58-50bd-4ab9-9c12-bcefd752ce43')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'grant_product_family', value: 'TRS')
+            column(name: 'type_of_use', value: 'NGT_PHOTOCOPY')
+            column(name: 'priority', value: '0')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: 'e3389fff-1cdc-44f5-9bb2-ccd195eced26')
+            column(name: 'product_family', value: 'FAS2')
+            column(name: 'grant_product_family', value: 'TRS')
+            column(name: 'type_of_use', value: 'NGT_PHOTOCOPY')
+            column(name: 'priority', value: '0')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: '8003d592-9c63-489f-bda3-72be51ce3ad6')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'grant_product_family', value: 'TRS')
+            column(name: 'type_of_use', value: 'NGT_PHOTOCOPY')
+            column(name: 'priority', value: '0')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: '1174d1d0-f3bb-4e80-8b92-08ab97457a97')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'grant_product_family', value: 'ACL')
+            column(name: 'type_of_use', value: 'PRINT')
+            column(name: 'priority', value: '1')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: '8332cdb1-9b61-4c57-9c4b-d6acd6a0d07a')
+            column(name: 'product_family', value: 'FAS2')
+            column(name: 'grant_product_family', value: 'ACL')
+            column(name: 'type_of_use', value: 'PRINT')
+            column(name: 'priority', value: '1')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: '63311aac-ffa0-456b-ae6e-32f8c3fed08f')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'grant_product_family', value: 'ACL')
+            column(name: 'type_of_use', value: 'PRINT')
+            column(name: 'priority', value: '1')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: '37e18a20-27d0-4185-b662-01c0448d6814')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'grant_product_family', value: 'JACDCL')
+            column(name: 'type_of_use', value: 'PRINT')
+            column(name: 'priority', value: '2')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: '8cfc0428-984d-44f0-93ba-ee0b968b1b7b')
+            column(name: 'product_family', value: 'FAS2')
+            column(name: 'grant_product_family', value: 'JACDCL')
+            column(name: 'type_of_use', value: 'PRINT')
+            column(name: 'priority', value: '2')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: 'de705039-7fe2-4b17-b0b2-29df7d543ebf')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'grant_product_family', value: 'JACDCL')
+            column(name: 'type_of_use', value: 'PRINT')
+            column(name: 'priority', value: '2')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: 'a2c5004e-7b30-45b1-ae35-0ba81691e327')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'grant_product_family', value: 'MACL')
+            column(name: 'type_of_use', value: 'PRINT')
+            column(name: 'priority', value: '3')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: '1e2bbab1-1b91-4deb-b482-f83a5e7ed359')
+            column(name: 'product_family', value: 'FAS2')
+            column(name: 'grant_product_family', value: 'MACL')
+            column(name: 'type_of_use', value: 'PRINT')
+            column(name: 'priority', value: '3')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: '2b7223fe-8b94-4a12-ae72-4f4fe1c8e67e')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'grant_product_family', value: 'MACL')
+            column(name: 'type_of_use', value: 'PRINT')
+            column(name: 'priority', value: '3')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: '4d381817-e9ea-46a1-872c-efcb7f123a9d')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'grant_product_family', value: 'VGW')
+            column(name: 'type_of_use', value: 'PRINT')
+            column(name: 'priority', value: '4')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: '19d0e3f0-2b85-498a-bc1a-447e65b621db')
+            column(name: 'product_family', value: 'FAS2')
+            column(name: 'grant_product_family', value: 'VGW')
+            column(name: 'type_of_use', value: 'PRINT')
+            column(name: 'priority', value: '4')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: '7be0e2dc-7ba3-48b5-98f5-b5a98a3141b7')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'grant_product_family', value: 'VGW')
+            column(name: 'type_of_use', value: 'PRINT')
+            column(name: 'priority', value: '4')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: '36e54a54-baae-46c4-a4f5-ae097510d3d6')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'grant_product_family', value: 'ACL')
+            column(name: 'type_of_use', value: 'DIGITAL')
+            column(name: 'priority', value: '5')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: '5d3096b6-d066-4477-97bb-0d232c6c5f8b')
+            column(name: 'product_family', value: 'FAS2')
+            column(name: 'grant_product_family', value: 'ACL')
+            column(name: 'type_of_use', value: 'DIGITAL')
+            column(name: 'priority', value: '5')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: 'e880644a-c9a0-4932-a0db-41ee344ecb52')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'grant_product_family', value: 'ACL')
+            column(name: 'type_of_use', value: 'DIGITAL')
+            column(name: 'priority', value: '5')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: '4102d52e-20d6-4cec-a2a7-11fcbe8017d4')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'grant_product_family', value: 'JACDCL')
+            column(name: 'type_of_use', value: 'DIGITAL')
+            column(name: 'priority', value: '6')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: 'd24c9930-2c02-4e99-a928-4437275d75ed')
+            column(name: 'product_family', value: 'FAS2')
+            column(name: 'grant_product_family', value: 'JACDCL')
+            column(name: 'type_of_use', value: 'DIGITAL')
+            column(name: 'priority', value: '6')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: '56b46588-7241-4949-9353-48eb93f5fc3a')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'grant_product_family', value: 'JACDCL')
+            column(name: 'type_of_use', value: 'DIGITAL')
+            column(name: 'priority', value: '6')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: '5a7213ac-8535-45ce-be2e-5ae96e759afb')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'grant_product_family', value: 'MACL')
+            column(name: 'type_of_use', value: 'DIGITAL')
+            column(name: 'priority', value: '7')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: 'e6353235-1764-4196-86c4-7936e83696dd')
+            column(name: 'product_family', value: 'FAS2')
+            column(name: 'grant_product_family', value: 'MACL')
+            column(name: 'type_of_use', value: 'DIGITAL')
+            column(name: 'priority', value: '7')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: '882aa6dd-8093-4259-8a3e-d958789a6f87')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'grant_product_family', value: 'MACL')
+            column(name: 'type_of_use', value: 'DIGITAL')
+            column(name: 'priority', value: '7')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: '0e408e6f-30e4-4224-aac3-5cbadb7ab251')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'grant_product_family', value: 'VGW')
+            column(name: 'type_of_use', value: 'DIGITAL')
+            column(name: 'priority', value: '8')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: '91311f75-eed1-4465-841f-774f5f041328')
+            column(name: 'product_family', value: 'FAS2')
+            column(name: 'grant_product_family', value: 'VGW')
+            column(name: 'type_of_use', value: 'DIGITAL')
+            column(name: 'priority', value: '8')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: 'ff7270dd-5b26-44f8-a5f6-72b2f71295c2')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'grant_product_family', value: 'VGW')
+            column(name: 'type_of_use', value: 'DIGITAL')
+            column(name: 'priority', value: '8')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: 'c01dd974-d7b9-489e-91e2-2b4174eec41d')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'grant_product_family', value: 'AACL')
+            column(name: 'type_of_use', value: 'PRINT')
+            column(name: 'priority', value: '9')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: 'c73571a9-86b1-4739-8979-58897afd7809')
+            column(name: 'product_family', value: 'FAS2')
+            column(name: 'grant_product_family', value: 'AACL')
+            column(name: 'type_of_use', value: 'PRINT')
+            column(name: 'priority', value: '9')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: 'fa9d5c79-d551-4f27-aab6-540c16dc6fe3')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'grant_product_family', value: 'AACL')
+            column(name: 'type_of_use', value: 'PRINT')
+            column(name: 'priority', value: '9')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: '311caf82-e43f-402e-b4ff-a54363d0f19f')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'grant_product_family', value: 'AACL')
+            column(name: 'type_of_use', value: 'DIGITAL')
+            column(name: 'priority', value: '10')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: '85db0f2f-4f02-4054-97f3-5d470d29ecb4')
+            column(name: 'product_family', value: 'FAS2')
+            column(name: 'grant_product_family', value: 'AACL')
+            column(name: 'type_of_use', value: 'DIGITAL')
+            column(name: 'priority', value: '10')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: '8d79e173-cf13-4c2b-b920-38d31665ede1')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'grant_product_family', value: 'AACL')
+            column(name: 'type_of_use', value: 'DIGITAL')
+            column(name: 'priority', value: '10')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: '40f97da2-79f6-4917-b683-1cfa0fccd669')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'grant_product_family', value: 'NGT_PRINT_COURSE_MATERIALS')
+            column(name: 'type_of_use', value: 'NGT_PRINT_COURSE_MATERIALS')
+            column(name: 'priority', value: '11')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: '5549a633-57a9-49b6-a54d-9cbb1e0d13c9')
+            column(name: 'product_family', value: 'FAS2')
+            column(name: 'grant_product_family', value: 'NGT_PRINT_COURSE_MATERIALS')
+            column(name: 'type_of_use', value: 'NGT_PRINT_COURSE_MATERIALS')
+            column(name: 'priority', value: '11')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: '76ce3849-1f70-40a0-b42b-fa77efbba73f')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'grant_product_family', value: 'NGT_PRINT_COURSE_MATERIALS')
+            column(name: 'type_of_use', value: 'NGT_PRINT_COURSE_MATERIALS')
+            column(name: 'priority', value: '11')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: '2ad646de-d6c0-4eae-9a85-9c65f5c7e46b')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'grant_product_family', value: 'NGT_ELECTRONIC_COURSE_MATERIALS')
+            column(name: 'type_of_use', value: 'NGT_ELECTRONIC_COURSE_MATERIALS')
+            column(name: 'priority', value: '12')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: 'b1b7c100-42f8-49f7-ab9f-a89e92a011c1')
+            column(name: 'product_family', value: 'FAS2')
+            column(name: 'grant_product_family', value: 'NGT_ELECTRONIC_COURSE_MATERIALS')
+            column(name: 'type_of_use', value: 'NGT_ELECTRONIC_COURSE_MATERIALS')
+            column(name: 'priority', value: '12')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+            column(name: 'df_grant_priority_uid', value: '9c07f6dd-382e-4cbb-8cd1-ab9f51413e0a')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'grant_product_family', value: 'NGT_ELECTRONIC_COURSE_MATERIALS')
+            column(name: 'type_of_use', value: 'NGT_ELECTRONIC_COURSE_MATERIALS')
+            column(name: 'priority', value: '12')
+        }
+
+        rollback {
+
+            sql("delete from ${dbAppsSchema}.df_grant_priority")
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'df_grant_priority_uid', value: 'd9309c58-50bd-4ab9-9c12-bcefd752ce43')
+                column(name: 'product_family', value: 'FAS')
+                column(name: 'grant_product_family', value: 'TRS')
+                column(name: 'type_of_use', value: 'NGT_PHOTOCOPY')
+                column(name: 'priority', value: '0')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'df_grant_priority_uid', value: 'e3389fff-1cdc-44f5-9bb2-ccd195eced26')
+                column(name: 'product_family', value: 'FAS2')
+                column(name: 'grant_product_family', value: 'TRS')
+                column(name: 'type_of_use', value: 'NGT_PHOTOCOPY')
+                column(name: 'priority', value: '0')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'df_grant_priority_uid', value: '8003d592-9c63-489f-bda3-72be51ce3ad6')
+                column(name: 'product_family', value: 'NTS')
+                column(name: 'grant_product_family', value: 'TRS')
+                column(name: 'type_of_use', value: 'NGT_PHOTOCOPY')
+                column(name: 'priority', value: '0')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'df_grant_priority_uid', value: '1174d1d0-f3bb-4e80-8b92-08ab97457a97')
+                column(name: 'product_family', value: 'FAS')
+                column(name: 'grant_product_family', value: 'ACLPRINT')
+                column(name: 'type_of_use', value: 'PRINT')
+                column(name: 'priority', value: '1')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'df_grant_priority_uid', value: '8332cdb1-9b61-4c57-9c4b-d6acd6a0d07a')
+                column(name: 'product_family', value: 'FAS2')
+                column(name: 'grant_product_family', value: 'ACLPRINT')
+                column(name: 'type_of_use', value: 'PRINT')
+                column(name: 'priority', value: '1')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'df_grant_priority_uid', value: '63311aac-ffa0-456b-ae6e-32f8c3fed08f')
+                column(name: 'product_family', value: 'NTS')
+                column(name: 'grant_product_family', value: 'ACLPRINT')
+                column(name: 'type_of_use', value: 'PRINT')
+                column(name: 'priority', value: '1')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'df_grant_priority_uid', value: '2367d120-e982-4ee6-a67f-7d0dd0192c69')
+                column(name: 'product_family', value: 'FAS')
+                column(name: 'grant_product_family', value: 'ACLDIGITAL')
+                column(name: 'type_of_use', value: 'DIGITAL')
+                column(name: 'priority', value: '2')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'df_grant_priority_uid', value: '52945c7b-2de1-4a3e-9da6-d92309f7feeb')
+                column(name: 'product_family', value: 'FAS2')
+                column(name: 'grant_product_family', value: 'ACLDIGITAL')
+                column(name: 'type_of_use', value: 'DIGITAL')
+                column(name: 'priority', value: '2')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'df_grant_priority_uid', value: '429ebca7-1265-4451-adfe-197fcbecf6bf')
+                column(name: 'product_family', value: 'NTS')
+                column(name: 'grant_product_family', value: 'ACLDIGITAL')
+                column(name: 'type_of_use', value: 'DIGITAL')
+                column(name: 'priority', value: '2')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'df_grant_priority_uid', value: 'c01dd974-d7b9-489e-91e2-2b4174eec41d')
+                column(name: 'product_family', value: 'FAS')
+                column(name: 'grant_product_family', value: 'AACL')
+                column(name: 'type_of_use', value: 'PRINT')
+                column(name: 'priority', value: '3')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'df_grant_priority_uid', value: 'c73571a9-86b1-4739-8979-58897afd7809')
+                column(name: 'product_family', value: 'FAS2')
+                column(name: 'grant_product_family', value: 'AACL')
+                column(name: 'type_of_use', value: 'PRINT')
+                column(name: 'priority', value: '3')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'df_grant_priority_uid', value: 'fa9d5c79-d551-4f27-aab6-540c16dc6fe3')
+                column(name: 'product_family', value: 'NTS')
+                column(name: 'grant_product_family', value: 'AACL')
+                column(name: 'type_of_use', value: 'PRINT')
+                column(name: 'priority', value: '3')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'df_grant_priority_uid', value: '311caf82-e43f-402e-b4ff-a54363d0f19f')
+                column(name: 'product_family', value: 'FAS')
+                column(name: 'grant_product_family', value: 'AACL')
+                column(name: 'type_of_use', value: 'DIGITAL')
+                column(name: 'priority', value: '4')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'df_grant_priority_uid', value: '85db0f2f-4f02-4054-97f3-5d470d29ecb4')
+                column(name: 'product_family', value: 'FAS2')
+                column(name: 'grant_product_family', value: 'AACL')
+                column(name: 'type_of_use', value: 'DIGITAL')
+                column(name: 'priority', value: '4')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'df_grant_priority_uid', value: '8d79e173-cf13-4c2b-b920-38d31665ede1')
+                column(name: 'product_family', value: 'NTS')
+                column(name: 'grant_product_family', value: 'AACL')
+                column(name: 'type_of_use', value: 'DIGITAL')
+                column(name: 'priority', value: '4')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'df_grant_priority_uid', value: '40f97da2-79f6-4917-b683-1cfa0fccd669')
+                column(name: 'product_family', value: 'FAS')
+                column(name: 'grant_product_family', value: 'NGT_PRINT_COURSE_MATERIALS')
+                column(name: 'type_of_use', value: 'NGT_PRINT_COURSE_MATERIALS')
+                column(name: 'priority', value: '5')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'df_grant_priority_uid', value: '5549a633-57a9-49b6-a54d-9cbb1e0d13c9')
+                column(name: 'product_family', value: 'FAS2')
+                column(name: 'grant_product_family', value: 'NGT_PRINT_COURSE_MATERIALS')
+                column(name: 'type_of_use', value: 'NGT_PRINT_COURSE_MATERIALS')
+                column(name: 'priority', value: '5')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'df_grant_priority_uid', value: '76ce3849-1f70-40a0-b42b-fa77efbba73f')
+                column(name: 'product_family', value: 'NTS')
+                column(name: 'grant_product_family', value: 'NGT_PRINT_COURSE_MATERIALS')
+                column(name: 'type_of_use', value: 'NGT_PRINT_COURSE_MATERIALS')
+                column(name: 'priority', value: '5')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'df_grant_priority_uid', value: '2ad646de-d6c0-4eae-9a85-9c65f5c7e46b')
+                column(name: 'product_family', value: 'FAS')
+                column(name: 'grant_product_family', value: 'NGT_ELECTRONIC_COURSE_MATERIALS')
+                column(name: 'type_of_use', value: 'NGT_ELECTRONIC_COURSE_MATERIALS')
+                column(name: 'priority', value: '6')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'df_grant_priority_uid', value: 'b1b7c100-42f8-49f7-ab9f-a89e92a011c1')
+                column(name: 'product_family', value: 'FAS2')
+                column(name: 'grant_product_family', value: 'NGT_ELECTRONIC_COURSE_MATERIALS')
+                column(name: 'type_of_use', value: 'NGT_ELECTRONIC_COURSE_MATERIALS')
+                column(name: 'priority', value: '6')
+            }
+
+            insert(schemaName: dbAppsSchema, tableName: 'df_grant_priority') {
+                column(name: 'df_grant_priority_uid', value: '9c07f6dd-382e-4cbb-8cd1-ab9f51413e0a')
+                column(name: 'product_family', value: 'NTS')
+                column(name: 'grant_product_family', value: 'NGT_ELECTRONIC_COURSE_MATERIALS')
+                column(name: 'type_of_use', value: 'NGT_ELECTRONIC_COURSE_MATERIALS')
+                column(name: 'priority', value: '6')
+            }
+        }
+    }
 }

@@ -31,6 +31,9 @@ import java.util.stream.IntStream;
     value = {"classpath:/com/copyright/rup/dist/foreign/repository/dist-foreign-repository-test-context.xml"})
 public class GrantPriorityRepositoryIntegrationTest {
 
+    private static final String PRINT_TYPE_OF_USE = "PRINT";
+    private static final String DIGITAL_TYPE_OF_USE = "DIGITAL";
+
     @Autowired
     private IGrantPriorityRepository grantPriorityRepository;
 
@@ -57,15 +60,21 @@ public class GrantPriorityRepositoryIntegrationTest {
     private void assertFindByProductFamily() {
         List<GrantPriority> actualGrantPriorities = grantPriorityRepository.findByProductFamily(productFamily);
         assertNotNull(actualGrantPriorities);
-        assertEquals(7, CollectionUtils.size(actualGrantPriorities));
+        assertEquals(13, CollectionUtils.size(actualGrantPriorities));
         List<GrantPriority> expectedGrantPriorities = Arrays.asList(
             buildGrantPriority("NGT_PHOTOCOPY", 0, "TRS"),
-            buildGrantPriority("PRINT", 1, "ACLPRINT"),
-            buildGrantPriority("DIGITAL", 2, "ACLDIGITAL"),
-            buildGrantPriority("PRINT", 3, "AACL"),
-            buildGrantPriority("DIGITAL", 4, "AACL"),
-            buildGrantPriority("NGT_PRINT_COURSE_MATERIALS", 5, "NGT_PRINT_COURSE_MATERIALS"),
-            buildGrantPriority("NGT_ELECTRONIC_COURSE_MATERIALS", 6, "NGT_ELECTRONIC_COURSE_MATERIALS")
+            buildGrantPriority(PRINT_TYPE_OF_USE, 1, "ACL"),
+            buildGrantPriority(PRINT_TYPE_OF_USE, 2, "JACDCL"),
+            buildGrantPriority(PRINT_TYPE_OF_USE, 3, "MACL"),
+            buildGrantPriority(PRINT_TYPE_OF_USE, 4, "VGW"),
+            buildGrantPriority(DIGITAL_TYPE_OF_USE, 5, "ACL"),
+            buildGrantPriority(DIGITAL_TYPE_OF_USE, 6, "JACDCL"),
+            buildGrantPriority(DIGITAL_TYPE_OF_USE, 7, "MACL"),
+            buildGrantPriority(DIGITAL_TYPE_OF_USE, 8, "VGW"),
+            buildGrantPriority(PRINT_TYPE_OF_USE, 9, "AACL"),
+            buildGrantPriority(DIGITAL_TYPE_OF_USE, 10, "AACL"),
+            buildGrantPriority("NGT_PRINT_COURSE_MATERIALS", 11, "NGT_PRINT_COURSE_MATERIALS"),
+            buildGrantPriority("NGT_ELECTRONIC_COURSE_MATERIALS", 12, "NGT_ELECTRONIC_COURSE_MATERIALS")
         );
         IntStream.range(0, expectedGrantPriorities.size())
             .forEach(i -> assertGrantPriority(expectedGrantPriorities.get(i), actualGrantPriorities.get(i)));
