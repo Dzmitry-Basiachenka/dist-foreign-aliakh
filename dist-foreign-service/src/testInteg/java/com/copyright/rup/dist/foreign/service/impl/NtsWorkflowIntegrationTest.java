@@ -49,6 +49,7 @@ public class NtsWorkflowIntegrationTest {
     private static final String PRM_ELIGIBLE_RH_1000023401_RESPONSE = "eligibility/pref_eligible_rh_response.json";
     private static final String RH_ID = "85f864f2-30a5-4215-ac4f-f1f541901218";
     private static final BigDecimal STM_AMOUNT = new BigDecimal("100");
+    private static final BigDecimal DEFAULT_GROSS_AMOUNT = new BigDecimal("0.0000000000");
 
     @Autowired
     private List<ICacheService<?, ?>> cacheServices;
@@ -69,7 +70,7 @@ public class NtsWorkflowIntegrationTest {
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
             .expectOracleCall(ORACLE_RH_TAX_1000023401_REQUEST, ORACLE_RH_TAX_1000023401_US_RESPONSE)
             .expectPreferences(PRM_ELIGIBLE_RH_1000023401_RESPONSE, RH_ID)
-            .expectUsage(buildUsage(BUS_MARKET, UsageStatusEnum.ELIGIBLE, 658824345L))
+            .expectUsage(buildUsage(BUS_MARKET, UsageStatusEnum.ELIGIBLE, 658824345L, DEFAULT_GROSS_AMOUNT))
             .expectAudit(getEligibleUsageAuditItem())
             .build()
             .run();
@@ -83,7 +84,7 @@ public class NtsWorkflowIntegrationTest {
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
             .expectOracleCall(ORACLE_RH_TAX_1000023401_REQUEST, ORACLE_RH_TAX_1000023401_US_RESPONSE)
             .expectPreferences(PRM_ELIGIBLE_RH_1000023401_RESPONSE, RH_ID)
-            .expectUsage(buildUsage("Gov", UsageStatusEnum.UNCLASSIFIED, 576324545L))
+            .expectUsage(buildUsage("Gov", UsageStatusEnum.UNCLASSIFIED, 576324545L, DEFAULT_GROSS_AMOUNT))
             .build()
             .run();
     }
@@ -115,21 +116,21 @@ public class NtsWorkflowIntegrationTest {
     @Test
     public void testNtsBatchWorkflowWithRhNotFound() {
         testBuilder
-            .withUsageBatch(buildUsageBatch(buildFundPool("Utiv", STM_AMOUNT)))
+            .withUsageBatch(buildUsageBatch(buildFundPool("Univ", STM_AMOUNT)))
             .expectRmsRights("rights/rms_grants_854030732_request.json", "rights/rms_grants_empty_response.json")
             .build()
             .run();
     }
 
     @Test
-    public void testNtsBatchWorkflowWithUsageUnderMinimun() {
+    public void testNtsBatchWorkflowWithUsageUnderMinimum() {
         testBuilder
             .withUsageBatch(buildUsageBatch(buildFundPool("Lib", STM_AMOUNT)))
             .expectRmsRights(RMS_GRANTS_65882434_REQUEST, RMS_GRANTS_65882434_RESPONSE)
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
             .expectOracleCall(ORACLE_RH_TAX_1000023401_REQUEST, ORACLE_RH_TAX_1000023401_US_RESPONSE)
             .expectPreferences(PRM_ELIGIBLE_RH_1000023401_RESPONSE, RH_ID)
-            .expectUsage(buildUsage("Lib", UsageStatusEnum.ELIGIBLE, 658824345L))
+            .expectUsage(buildUsage("Lib", UsageStatusEnum.ELIGIBLE, 658824345L, DEFAULT_GROSS_AMOUNT))
             .expectAudit(getEligibleUsageAuditItem())
             .build()
             .run();
@@ -143,7 +144,8 @@ public class NtsWorkflowIntegrationTest {
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
             .expectOracleCall(ORACLE_RH_TAX_1000023401_REQUEST, ORACLE_RH_TAX_1000023401_US_RESPONSE)
             .expectPreferences(PRM_ELIGIBLE_RH_1000023401_RESPONSE, RH_ID)
-            .expectUsage(buildUsage("Edu", UsageStatusEnum.ELIGIBLE, 658824345L))
+            .expectLmDetails("details/nts_details_to_lm.json")
+            .expectUsage(buildUsage("Edu", UsageStatusEnum.SENT_TO_LM, 658824345L, new BigDecimal("400.4400000000")))
             .expectAudit(getEligibleUsageAuditItem())
             .build()
             .run();
@@ -179,7 +181,7 @@ public class NtsWorkflowIntegrationTest {
         return fundPool;
     }
 
-    private Usage buildUsage(String market, UsageStatusEnum status, Long wrWrkInst) {
+    private Usage buildUsage(String market, UsageStatusEnum status, Long wrWrkInst, BigDecimal grossAmount) {
         Usage usage = new Usage();
         usage.setWrWrkInst(wrWrkInst);
         usage.setWorkTitle("100 ROAD MOVIES");
@@ -191,7 +193,7 @@ public class NtsWorkflowIntegrationTest {
         usage.setMarket(market);
         usage.setMarketPeriodFrom(2013);
         usage.setMarketPeriodTo(2017);
-        usage.setGrossAmount(new BigDecimal("0.0000000000"));
+        usage.setGrossAmount(grossAmount);
         usage.setReportedValue(new BigDecimal("1176.92"));
         return usage;
     }
