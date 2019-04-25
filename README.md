@@ -1,3 +1,8 @@
+5.1.23
+-
+* B-46740 FDA: Ensure that there is at least one rightsholder for the corresponding fund pool: reject NTS scenario creation in case when there is no at least one RH for the corresponding fund pool or there are unclassified usages in selected batches
+* CDP-728 FDA: Grants prioritiy: ACLPRINT and ACLDIGITAL product families should be replaced with ACL, JACDCL, MACL, VGW
+
 5.1.22
 -
 * B-46718 FDA: Apply RRO fund pool to an associated batch: calculate NTS gross amount
