@@ -4,7 +4,10 @@ import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
+import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.util.LogUtils;
+import com.copyright.rup.dist.common.util.LogUtils.ILogWrapper;
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.WorkClassification;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
@@ -12,7 +15,9 @@ import com.copyright.rup.dist.foreign.repository.api.IWorkClassificationReposito
 import com.copyright.rup.dist.foreign.service.api.IWorkClassificationService;
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
@@ -38,6 +43,8 @@ import java.util.Set;
 public class WorkClassificationService implements IWorkClassificationService {
 
     private static final Logger LOGGER = RupLogUtils.getLogger();
+    private static final Set<String> NON_BELLETRISTIC_CLASSIFICATIONS = ImmutableSet.of(FdaConstants.STM_CLASSIFICATION,
+        FdaConstants.NON_STM_CLASSIFICATION);
 
     @Autowired
     private IWorkClassificationRepository workClassificationRepository;
@@ -69,10 +76,23 @@ public class WorkClassificationService implements IWorkClassificationService {
     @Override
     @Transactional
     public void deleteClassifications(Set<WorkClassification> classifications) {
-        LOGGER.debug("Delete classification. Started. WorksCount={}", LogUtils.size(classifications));
-        classifications.forEach(workClassification ->
-            workClassificationRepository.deleteByWrWrkInst(workClassification.getWrWrkInst()));
-        LOGGER.debug("Delete classification. Finished. WorksCount={}", LogUtils.size(classifications));
+        String userName = RupContextUtils.getUserName();
+        ILogWrapper classificationsCount = LogUtils.size(classifications);
+        LOGGER.debug("Delete classification. Started. ClassificationsCount={}, UserName={}", classificationsCount,
+            userName);
+        List<Long> wrWrkInsts = Lists.newArrayList();
+        classifications.forEach(workClassification -> {
+            Long wrWrkInst = workClassification.getWrWrkInst();
+            workClassificationRepository.deleteByWrWrkInst(wrWrkInst);
+            if (NON_BELLETRISTIC_CLASSIFICATIONS.contains(workClassification.getClassification())) {
+                wrWrkInsts.add(wrWrkInst);
+            }
+        });
+        if (!wrWrkInsts.isEmpty()) {
+            usageRepository.updateUsagesStatusToUnclassified(wrWrkInsts, userName);
+        }
+        LOGGER.debug("Delete classification. Finished. ClassificationsCount={}, UserName={}", classificationsCount,
+            userName);
     }
 
     @Override

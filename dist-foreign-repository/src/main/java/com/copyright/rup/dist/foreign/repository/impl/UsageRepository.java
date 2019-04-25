@@ -580,6 +580,20 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         update("IUsageMapper.addWithdrawnUsagesToPreServiceFeeFund", params);
     }
 
+    @Override
+    public void updateUsagesStatusToUnclassified(List<Long> wrWrkInsts, String userName) {
+        checkArgument(CollectionUtils.isNotEmpty(wrWrkInsts));
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(5);
+        params.put("statusToFind", UsageStatusEnum.ELIGIBLE);
+        params.put("statusToSet", UsageStatusEnum.UNCLASSIFIED);
+        params.put("productFamily", FdaConstants.NTS_PRODUCT_FAMILY);
+        params.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
+        Iterables.partition(wrWrkInsts, MAX_VARIABLES_COUNT).forEach(partition -> {
+            params.put("wrWrkInsts", Objects.requireNonNull(partition));
+            update("IUsageMapper.updateUsagesStatusToUnclassified", params);
+        });
+    }
+
     private AuditFilter escapeSqlLikePattern(AuditFilter auditFilter) {
         AuditFilter filterCopy = new AuditFilter(auditFilter);
         filterCopy.setCccEventId(escapeSqlLikePattern(filterCopy.getCccEventId()));

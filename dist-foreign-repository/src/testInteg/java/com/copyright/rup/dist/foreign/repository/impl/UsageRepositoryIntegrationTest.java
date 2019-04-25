@@ -44,6 +44,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -122,6 +123,8 @@ public class UsageRepositoryIntegrationTest {
     private static final String USAGE_ID_22 = "c5ea47b0-b269-4791-9aa7-76308fe835e6";
     private static final String USAGE_ID_23 = "3b6892a9-49b2-41a2-aa3a-8705ea6640cc";
     private static final String USAGE_ID_24 = "3c31db4f-4065-4fe1-84c2-b48a0f3bc079";
+    private static final String USAGE_ID_25 = "f6cb5b07-45c0-4188-9da3-920046eec4c0";
+    private static final String USAGE_ID_26 = "f255188f-d582-4516-8c08-835cfe1d68c3";
     private static final String POST_DISTRIBUTION_USAGE_ID = "cce295c6-23cf-47b4-b00c-2e0e50cce169";
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
     private static final String NTS_BATCH_ID = "b9d0ea49-9e38-4bb0-a7e0-0ca299e3dcfa";
@@ -213,7 +216,7 @@ public class UsageRepositoryIntegrationTest {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             Collections.emptySet(), UsageStatusEnum.ELIGIBLE, null, null);
         verifyUsageDtos(usageRepository.findDtosByFilter(usageFilter, null, new Sort(DETAIL_ID_KEY,
-            Sort.Direction.ASC)), 3, USAGE_ID_1, USAGE_ID_3, USAGE_ID_2);
+            Sort.Direction.ASC)), 5, USAGE_ID_1, USAGE_ID_3, USAGE_ID_2, USAGE_ID_26, USAGE_ID_25);
     }
 
     @Test
@@ -569,8 +572,8 @@ public class UsageRepositoryIntegrationTest {
     public void testFindWithAmountsAndRightsholdersByStatusFilter() {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             Collections.emptySet(), UsageStatusEnum.ELIGIBLE, null, null);
-        verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 3, USAGE_ID_1, USAGE_ID_2,
-            USAGE_ID_3);
+        verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 5, USAGE_ID_1, USAGE_ID_2,
+            USAGE_ID_3, USAGE_ID_25, USAGE_ID_26);
     }
 
     @Test
@@ -1080,6 +1083,21 @@ public class UsageRepositoryIntegrationTest {
         usage = usages.get(0);
         assertEquals(UsageStatusEnum.TO_BE_DISTRIBUTED, usage.getStatus());
         assertEquals(fundPoolId, usage.getFundPoolId());
+    }
+
+    @Test
+    public void testUpdateUsagesStatusToUnclassified() {
+        ArrayList<String> usageIds = Lists.newArrayList(USAGE_ID_25, USAGE_ID_26);
+        List<Usage> usages = usageRepository.findByIds(usageIds);
+        assertEquals(2, usages.size());
+        assertEquals(UsageStatusEnum.ELIGIBLE, usages.get(0).getStatus());
+        assertEquals(UsageStatusEnum.ELIGIBLE, usages.get(1).getStatus());
+        usageRepository.updateUsagesStatusToUnclassified(Lists.newArrayList(122267671L, 159526526L),
+            StoredEntity.DEFAULT_USER);
+        usages = usageRepository.findByIds(usageIds);
+        assertEquals(2, usages.size());
+        assertEquals(UsageStatusEnum.UNCLASSIFIED, usages.get(0).getStatus());
+        assertEquals(UsageStatusEnum.UNCLASSIFIED, usages.get(1).getStatus());
     }
 
     private FundPool buildNtsFundPool(BigDecimal nonStmAmount) {

@@ -7,24 +7,32 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
+import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.WorkClassification;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.repository.api.IWorkClassificationRepository;
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -37,6 +45,8 @@ import java.util.Set;
  *
  * @author Pavel Liakh
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(RupContextUtils.class)
 public class WorkClassificationServiceTest {
 
     private static final String NON_STM = "NON-STM";
@@ -45,6 +55,8 @@ public class WorkClassificationServiceTest {
     private static final String SEARCH_VALUE = "test";
     private static final Long WR_WRK_INST_1 = 111111111L;
     private static final Long WR_WRK_INST_2 = 222222222L;
+    private static final String USER_NAME = "user@copyright.com";
+
     private WorkClassificationService workClassificationService;
     private IWorkClassificationRepository workClassificationRepository;
     private IUsageRepository usageRepository;
@@ -59,6 +71,7 @@ public class WorkClassificationServiceTest {
         workClassificationService.setWorkClassificationRepository(workClassificationRepository);
         workClassificationService.setUsageRepository(usageRepository);
         workClassificationService.setNonBelletristicProcessor(nonBelletristicProcessorMock);
+        Whitebox.setInternalState(workClassificationService, "usagesBatchSize", 100);
     }
 
     @Test
@@ -106,14 +119,20 @@ public class WorkClassificationServiceTest {
 
     @Test
     public void testDeleteClassifications() {
+        mockStatic(RupContextUtils.class);
+        expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         workClassificationRepository.deleteByWrWrkInst(WR_WRK_INST_1);
         expectLastCall().once();
         workClassificationRepository.deleteByWrWrkInst(WR_WRK_INST_2);
         expectLastCall().once();
-        replay(workClassificationRepository);
-        workClassificationService.deleteClassifications(
-            Sets.newHashSet(buildClassification(WR_WRK_INST_1), buildClassification(WR_WRK_INST_2)));
-        verify(workClassificationRepository);
+        usageRepository.updateUsagesStatusToUnclassified(Lists.newArrayList(WR_WRK_INST_1, WR_WRK_INST_2), USER_NAME);
+        expectLastCall().once();
+        replay(RupContextUtils.class, workClassificationRepository, usageRepository);
+        HashSet<WorkClassification> classifications = Sets.newLinkedHashSet();
+        classifications.add(buildClassification(WR_WRK_INST_1));
+        classifications.add(buildClassification(WR_WRK_INST_2));
+        workClassificationService.deleteClassifications(classifications);
+        verify(RupContextUtils.class, workClassificationRepository, usageRepository);
     }
 
     @Test
