@@ -7,6 +7,7 @@ import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 
 import com.google.common.collect.Maps;
@@ -69,6 +70,14 @@ public class UsageBatchRepository extends BaseRepository implements IUsageBatchR
     public void deleteUsageBatch(String batchId) {
         checkArgument(StringUtils.isNotBlank(batchId));
         delete("IUsageBatchMapper.deleteUsageBatch", batchId);
+    }
+
+    @Override
+    public List<String> findBatchNamesWithoutUsagesForClassification(UsageFilter filter, String classification) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
+        params.put("filter", Objects.requireNonNull(filter));
+        params.put("classification", Objects.requireNonNull(classification));
+        return selectList("IUsageBatchMapper.findBatchNamesWithoutUsagesForClassification", params);
     }
 
     /**

@@ -22,6 +22,7 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Work;
+import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
@@ -240,6 +241,28 @@ public class UsageBatchServiceTest {
         Runnable runnable = captureRunnable.getValue();
         runnable.run();
         verify(chainExecutor, executorService, usageRepository);
+    }
+
+    @Test
+    public void testGetBatchNamesWithUnclassifiedWorks() {
+        UsageFilter filter = new UsageFilter();
+        expect(usageBatchRepository.findBatchNamesWithoutUsagesForClassification(filter, "UNCLASSIFIED"))
+            .andReturn(Collections.singletonList("Batch with unclassified usages")).once();
+        replay(usageBatchRepository);
+        usageBatchService.getBatchNamesWithUnclassifiedWorks(filter);
+        verify(usageBatchRepository);
+    }
+
+    @Test
+    public void testGetBatchNamesWithoutUsagesForStmOrNonStmClassification() {
+        UsageFilter filter = new UsageFilter();
+        expect(usageBatchRepository.findBatchNamesWithoutUsagesForClassification(filter, "STM"))
+            .andReturn(Collections.singletonList("Batch without STM usages")).once();
+        expect(usageBatchRepository.findBatchNamesWithoutUsagesForClassification(filter, "NON-STM"))
+            .andReturn(Collections.emptyList()).once();
+        replay(usageBatchRepository);
+        usageBatchService.getBatchNamesWithoutUsagesForStmOrNonStmClassification(filter);
+        verify(usageBatchRepository);
     }
 
     private Rightsholder buildRro() {

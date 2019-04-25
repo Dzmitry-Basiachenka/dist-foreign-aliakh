@@ -9,6 +9,7 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Work;
+import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
@@ -20,6 +21,7 @@ import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEn
 
 import com.google.common.collect.Iterables;
 
+import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
@@ -184,6 +187,22 @@ public class UsageBatchService implements IUsageBatchService {
         usageService.deleteUsageBatchDetails(usageBatch);
         usageBatchRepository.deleteUsageBatch(usageBatch.getId());
         LOGGER.info("Delete usage batch. Finished. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
+    }
+
+    @Override
+    public List<String> getBatchNamesWithUnclassifiedWorks(UsageFilter usageFilter) {
+        return usageBatchRepository.findBatchNamesWithoutUsagesForClassification(usageFilter, "UNCLASSIFIED");
+    }
+
+    @Override
+    public Map<String, List<String>> getBatchNamesWithoutUsagesForStmOrNonStmClassification(UsageFilter filter) {
+        Map<String, List<String>> classificationToBatchNamesMap = Maps.newHashMapWithExpectedSize(3);
+        classificationToBatchNamesMap.put(FdaConstants.STM_CLASSIFICATION,
+            usageBatchRepository.findBatchNamesWithoutUsagesForClassification(filter, FdaConstants.STM_CLASSIFICATION));
+        classificationToBatchNamesMap.put(FdaConstants.NON_STM_CLASSIFICATION,
+            usageBatchRepository.findBatchNamesWithoutUsagesForClassification(filter,
+                FdaConstants.NON_STM_CLASSIFICATION));
+        return classificationToBatchNamesMap;
     }
 
     /**

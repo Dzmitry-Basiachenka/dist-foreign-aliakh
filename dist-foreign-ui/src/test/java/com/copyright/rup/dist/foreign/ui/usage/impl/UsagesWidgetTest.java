@@ -22,6 +22,7 @@ import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
+import com.google.common.collect.ImmutableMap;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.server.Extension;
 import com.vaadin.server.Sizeable.Unit;
@@ -68,11 +69,12 @@ public class UsagesWidgetTest {
     private static final String NTS_PRODUCT_FAMILY = "NTS";
     private UsagesWidget usagesWidget;
     private IUsagesController controller;
+    private UsagesFilterWidget filterWidget;
 
     @Before
     public void setUp() {
         controller = createMock(IUsagesController.class);
-        UsagesFilterWidget filterWidget = new UsagesFilterWidget();
+        filterWidget = new UsagesFilterWidget();
         filterWidget.getFilter().setUsageBatchesIds(Collections.singleton(RupPersistUtils.generateUuid()));
         usagesWidget = new UsagesWidget();
         usagesWidget.setController(controller);
@@ -264,8 +266,96 @@ public class UsagesWidgetTest {
         expect(controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
         expect(controller.getSelectedProductFamily()).andReturn(NTS_PRODUCT_FAMILY).times(2);
+        expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getFilter()))
+            .andReturn(Collections.emptyList()).once();
+        expect(controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(filterWidget.getFilter()))
+            .andReturn(ImmutableMap.of("STM", Collections.emptyList(), "NON-STM", Collections.emptyList())).once();
         expect(controller.getScenarioService()).andReturn(null).once();
         Windows.showModalWindow(anyObject(CreateNtsScenarioWindow.class));
+        expectLastCall().once();
+        replay(controller, clickEvent, Windows.class);
+        Collection<?> listeners = addToScenarioButton.getListeners(ClickEvent.class);
+        assertEquals(2, listeners.size());
+        ClickListener clickListener = (ClickListener) listeners.iterator().next();
+        clickListener.buttonClick(clickEvent);
+        verify(controller, clickEvent, Windows.class);
+    }
+
+    @Test
+    public void testAddToScenarioButtonClickListenerNtsProductFamilyUnclassifiedUsages() {
+        mockStatic(Windows.class);
+        Grid grid = new Grid();
+        Whitebox.setInternalState(usagesWidget, grid);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
+            .getComponent(0)).getComponent(6);
+        assertTrue(addToScenarioButton.isDisableOnClick());
+        expect(controller.getSelectedProductFamily()).andReturn(NTS_PRODUCT_FAMILY).once();
+        expect(controller.getSize()).andReturn(1).once();
+        expect(controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
+        expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getFilter()))
+            .andReturn(Collections.singletonList("Batch with unclassified usages")).once();
+        Windows.showNotificationWindow(
+            "The following batches have unclassified works:<ul><li><i><b>Batch with unclassified usages</b></i></ul>");
+        expectLastCall().once();
+        replay(controller, clickEvent, Windows.class);
+        Collection<?> listeners = addToScenarioButton.getListeners(ClickEvent.class);
+        assertEquals(2, listeners.size());
+        ClickListener clickListener = (ClickListener) listeners.iterator().next();
+        clickListener.buttonClick(clickEvent);
+        verify(controller, clickEvent, Windows.class);
+    }
+
+    @Test
+    public void testAddToScenarioButtonClickListenerNtsProductFamilyNoStmRhs() {
+        mockStatic(Windows.class);
+        Grid grid = new Grid();
+        Whitebox.setInternalState(usagesWidget, grid);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
+            .getComponent(0)).getComponent(6);
+        assertTrue(addToScenarioButton.isDisableOnClick());
+        expect(controller.getSelectedProductFamily()).andReturn(NTS_PRODUCT_FAMILY).once();
+        expect(controller.getSize()).andReturn(1).once();
+        expect(controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
+        expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getFilter()))
+            .andReturn(Collections.emptyList()).once();
+        expect(controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(filterWidget.getFilter()))
+            .andReturn(ImmutableMap.of("STM", Collections.singletonList("Batch without STM RHs"))).once();
+        Windows.showNotificationWindow("There are no STM rightsholders in the following batches: " +
+            "<ul><li><i><b>Batch without STM RHs</b></i></ul>");
+        expectLastCall().once();
+        replay(controller, clickEvent, Windows.class);
+        Collection<?> listeners = addToScenarioButton.getListeners(ClickEvent.class);
+        assertEquals(2, listeners.size());
+        ClickListener clickListener = (ClickListener) listeners.iterator().next();
+        clickListener.buttonClick(clickEvent);
+        verify(controller, clickEvent, Windows.class);
+    }
+
+    @Test
+    public void testAddToScenarioButtonClickListenerNtsProductFamilyNoStmAndNonStmRhs() {
+        mockStatic(Windows.class);
+        Grid grid = new Grid();
+        Whitebox.setInternalState(usagesWidget, grid);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
+            .getComponent(0)).getComponent(6);
+        assertTrue(addToScenarioButton.isDisableOnClick());
+        expect(controller.getSelectedProductFamily()).andReturn(NTS_PRODUCT_FAMILY).once();
+        expect(controller.getSize()).andReturn(1).once();
+        expect(controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
+        expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getFilter()))
+            .andReturn(Collections.emptyList()).once();
+        expect(controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(filterWidget.getFilter()))
+            .andReturn(ImmutableMap.of("STM", Collections.singletonList("Batch without STM RHs"),
+                "NON-STM", Collections.singletonList("Batch without NON-STM RHs"))).once();
+        Windows.showNotificationWindow("There are no STM rightsholders in the following batches: " +
+            "<ul><li><i><b>Batch without STM RHs</b></i></ul>There are no NON-STM rightsholders " +
+            "in the following batches: <ul><li><i><b>Batch without NON-STM RHs</b></i></ul>");
         expectLastCall().once();
         replay(controller, clickEvent, Windows.class);
         Collection<?> listeners = addToScenarioButton.getListeners(ClickEvent.class);

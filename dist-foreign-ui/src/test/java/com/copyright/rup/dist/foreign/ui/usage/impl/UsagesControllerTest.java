@@ -474,6 +474,26 @@ public class UsagesControllerTest {
         verify(usageService, executorService);
     }
 
+    @Test
+    public void testGetBatchNamesWithUnclassifiedUsages() {
+        UsageFilter filter = new UsageFilter();
+        expect(usageBatchService.getBatchNamesWithUnclassifiedWorks(filter))
+            .andReturn(Collections.singletonList("Batch with unclassified usages")).once();
+        replay(usageBatchService);
+        controller.getBatchNamesWithUnclassifiedWorks(filter);
+        verify(usageBatchService);
+    }
+
+    @Test
+    public void testGetBatchNamesWithInvalidStmOrNonStmUsagesState() {
+        UsageFilter filter = new UsageFilter();
+        expect(usageBatchService.getBatchNamesWithoutUsagesForStmOrNonStmClassification(filter))
+            .andReturn(Collections.emptyMap()).once();
+        replay(usageBatchService);
+        controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(filter);
+        verify(usageBatchService);
+    }
+
     private void prepareGetAppliedFilterExpectations(UsageFilter expectedUsageFilter) {
         expect(filterController.getWidget()).andReturn(filterWidgetMock).once();
         expect(filterWidgetMock.getAppliedFilter()).andReturn(expectedUsageFilter).once();
