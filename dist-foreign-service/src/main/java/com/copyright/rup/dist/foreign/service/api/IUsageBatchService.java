@@ -2,9 +2,11 @@ package com.copyright.rup.dist.foreign.service.api;
 
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Represents interface of service for usage batch business logic.
@@ -101,4 +103,21 @@ public interface IUsageBatchService {
      * @param usageBatch {@link UsageBatch}
      */
     void deleteUsageBatch(UsageBatch usageBatch);
+
+    /**
+     * Gets list of batch names containing usages with unclassified works.
+     *
+     * @param usageFilter {@link UsageFilter} instance
+     * @return list of found batches names
+     */
+    List<String> getBatchNamesWithUnclassifiedWorks(UsageFilter usageFilter);
+
+    /**
+     * Gets map of classification to list of batch names without usages related to STM or NON-STM classification
+     * when corresponding Fund Pool amout is greater then 0.
+     *
+     * @param filter {@link UsageFilter} instance
+     * @return map where key - classification, value - list of batch names with invalid state of usages
+     */
+    Map<String, List<String>> getBatchNamesWithoutUsagesForStmOrNonStmClassification(UsageFilter filter);
 }

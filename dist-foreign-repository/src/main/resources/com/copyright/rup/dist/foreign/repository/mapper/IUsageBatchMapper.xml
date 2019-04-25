@@ -129,4 +129,38 @@
         delete from ${schema}.df_usage_batch
         where df_usage_batch_uid = #{batchId}
     </delete>
+
+    <select id="findBatchNamesWithoutUsagesForClassification" parameterType="map" resultType="string">
+        with fund_pool_amounts as (
+            select ub.df_usage_batch_uid,
+                ub.name,
+                (ub.fund_pool->>'stm_amount')::numeric stm_amount,
+                case when wc.classification = 'STM' then count(1) else 0 end stm_count,
+                (ub.fund_pool->>'non_stm_amount')::numeric non_stm_amount,
+                case when wc.classification = 'NON-STM' then count(1) else 0 end non_stm_count,
+                case when wc.classification is null then count(1) else 0 end unclassified_count
+            from ${schema}.df_usage_batch ub
+            join ${schema}.df_usage u on ub.df_usage_batch_uid = u.df_usage_batch_uid
+            left join ${schema}.df_work_classification wc on wc.wr_wrk_inst = u.wr_wrk_inst
+            <include refid="IUsageMapper.usageFilter"/>
+            group by ub.df_usage_batch_uid, ub.name, wc.classification
+        )
+
+        select name
+        from fund_pool_amounts
+        <if test="'STM' == classification">
+            where stm_amount &gt; 0
+            group by name
+            having sum(stm_count) = 0
+        </if>
+        <if test="'NON-STM' == classification">
+            where non_stm_amount &gt; 0
+            group by name
+            having sum(non_stm_count) = 0
+        </if>
+        <if test="'UNCLASSIFIED' == classification">
+            group by name
+            having sum(unclassified_count) &gt; 0
+        </if>
+    </select>
 </mapper>

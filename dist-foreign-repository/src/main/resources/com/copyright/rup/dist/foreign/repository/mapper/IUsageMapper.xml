@@ -1491,8 +1491,8 @@
                 gross_amount reported_value,
                 comment,
                 <include refid="StoredEntityMapper.insert"/>
-            from apps.df_usage_archive ua
-            left join apps.df_work_classification wc on ua.wr_wrk_inst = wc.wr_wrk_inst
+            from ${schema}.df_usage_archive ua
+            left join ${schema}.df_work_classification wc on ua.wr_wrk_inst = wc.wr_wrk_inst
             <include refid="IUsageArchiveMapper.ntsBatchWhereClause"/>
                 <if test="0 == stmAmount">
                     and (wc.classification = 'NON-STM' or wc.classification is null)
@@ -1511,7 +1511,7 @@
                     (#{fundPoolPeriodDividend} / (u.market_period_to - u.market_period_from + 1))) / #{stmAmount}, 2)
                 else 0.00 end cutoff_amount
             from nts_usages u
-            join apps.df_work_classification wc on u.wr_wrk_inst = wc.wr_wrk_inst
+            join ${schema}.df_work_classification wc on u.wr_wrk_inst = wc.wr_wrk_inst
             where classification = 'STM'
             union
             select
@@ -1522,7 +1522,7 @@
                     (#{fundPoolPeriodDividend} / (u.market_period_to - u.market_period_from + 1))) / #{nonStmAmount}, 2)
                 else 0.00 end cutoff_amount
             from nts_usages u
-            join apps.df_work_classification wc on u.wr_wrk_inst = wc.wr_wrk_inst
+            join ${schema}.df_work_classification wc on u.wr_wrk_inst = wc.wr_wrk_inst
             where classification = 'NON-STM'
         ),
         <!--cutoff amount for unclassified works as minimum of STM and NON-STM-->
@@ -1538,7 +1538,7 @@
                 sum(u.reported_value *
                     (#{fundPoolPeriodDividend} / (u.market_period_to - u.market_period_from +1))) work_total_weight
             from nts_usages u
-            left join apps.df_work_classification wc on u.wr_wrk_inst = wc.wr_wrk_inst
+            left join ${schema}.df_work_classification wc on u.wr_wrk_inst = wc.wr_wrk_inst
             group by u.wr_wrk_inst, wc.classification
         )
 

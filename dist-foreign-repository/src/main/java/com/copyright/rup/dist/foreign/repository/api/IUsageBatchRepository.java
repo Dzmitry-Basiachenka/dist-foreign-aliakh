@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import java.util.List;
 
@@ -65,4 +66,16 @@ public interface IUsageBatchRepository {
      * @param batchId id of the {@link UsageBatch} to be deleted
      */
     void deleteUsageBatch(String batchId);
+
+    /**
+     * Finds list of batches names that have Fund Pool Amount greater than zero
+     * and don't have usages related to specified classification.
+     * For case when classification is defined as UNCLASSIFIED returns list of batches names
+     * that contain usages without classification.
+     *
+     * @param filter         {@link UsageFilter} instance
+     * @param classification classification
+     * @return list of found batch names
+     */
+    List<String> findBatchNamesWithoutUsagesForClassification(UsageFilter filter, String classification);
 }

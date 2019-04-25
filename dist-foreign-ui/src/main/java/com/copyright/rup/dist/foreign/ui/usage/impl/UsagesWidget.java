@@ -37,8 +37,10 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Main widget for usages.
@@ -52,6 +54,7 @@ import java.util.List;
 class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
 
     private static final String EMPTY_STYLE_NAME = "empty-usages-grid";
+    private static final String BATCH_NAMES_LIST_SEPARATOR = "<br><li>";
 
     private IUsagesController controller;
     private DataProvider<UsageDto, Void> dataProvider;
@@ -301,10 +304,48 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
             if (CollectionUtils.isNotEmpty(accountNumbers)) {
                 message = ForeignUi.getMessage("message.error.add_to_scenario.invalid_rightsholders", "created",
                     accountNumbers);
-            } else if (isNtsProductFamily
-                && CollectionUtils.isEmpty(usagesFilterWidget.getFilter().getUsageBatchesIds())) {
-                message = ForeignUi.getMessage("message.error.empty_usage_batches");
+            } else if (isNtsProductFamily) {
+                message = getNtsScenarioValidationMessage();
             }
+        }
+        return message;
+    }
+
+    private String getNtsScenarioValidationMessage() {
+        String message;
+        if (CollectionUtils.isEmpty(usagesFilterWidget.getFilter().getUsageBatchesIds())) {
+            message = ForeignUi.getMessage("message.error.empty_usage_batches");
+        } else {
+            List<String> batchesWithUnclassifiedWorks =
+                controller.getBatchNamesWithUnclassifiedWorks(usagesFilterWidget.getFilter());
+            if (CollectionUtils.isNotEmpty(batchesWithUnclassifiedWorks)) {
+                message = ForeignUi.getMessage("message.error.invalid_batch.unclassified_works",
+                    String.join(BATCH_NAMES_LIST_SEPARATOR, batchesWithUnclassifiedWorks));
+            } else {
+                message = getClassificationValidationMessage();
+            }
+        }
+        return message;
+    }
+
+    private String getClassificationValidationMessage() {
+        String message = null;
+        Map<String, List<String>> batchesWithoutRhsForStmOrNonStm =
+            controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(usagesFilterWidget.getFilter());
+        List<String> batchesWithoutRhsForStm =
+            batchesWithoutRhsForStmOrNonStm.get(FdaConstants.STM_CLASSIFICATION);
+        List<String> batchesWithoutRhsForNonStm =
+            batchesWithoutRhsForStmOrNonStm.get(FdaConstants.NON_STM_CLASSIFICATION);
+        if (CollectionUtils.isNotEmpty(batchesWithoutRhsForStm)) {
+            message = ForeignUi.getMessage("message.error.invalid_batch.no_stm_rhs",
+                String.join(BATCH_NAMES_LIST_SEPARATOR, batchesWithoutRhsForStm));
+        }
+        if (CollectionUtils.isNotEmpty(batchesWithoutRhsForNonStm)) {
+            message = StringUtils.isBlank(message)
+                ? ForeignUi.getMessage("message.error.invalid_batch.no_non_stm_rhs",
+                String.join(BATCH_NAMES_LIST_SEPARATOR, batchesWithoutRhsForNonStm))
+                : message.concat(ForeignUi.getMessage("message.error.invalid_batch.no_non_stm_rhs",
+                    String.join(BATCH_NAMES_LIST_SEPARATOR, batchesWithoutRhsForNonStm)));
         }
         return message;
     }
