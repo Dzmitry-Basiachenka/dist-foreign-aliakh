@@ -110,7 +110,7 @@ public class ScenarioService implements IScenarioService {
     @Transactional
     public Scenario createScenario(String scenarioName, String description, UsageFilter usageFilter) {
         List<Usage> usages = usageService.getUsagesWithAmounts(usageFilter);
-        Scenario scenario = buildScenario(scenarioName, description, usages);
+        Scenario scenario = buildScenario(scenarioName, description, usages, usageFilter);
         scenarioRepository.insert(scenario);
         usageService.addUsagesToScenario(usages, scenario);
         scenarioUsageFilterService.insert(scenario.getId(), new ScenarioUsageFilter(usageFilter));
@@ -122,7 +122,7 @@ public class ScenarioService implements IScenarioService {
     @Transactional
     public Scenario createNtsScenario(String scenarioName, NtsFields ntsFields, String description,
                                       UsageFilter usageFilter) {
-        Scenario scenario = buildNtsScenario(scenarioName, ntsFields, description);
+        Scenario scenario = buildNtsScenario(scenarioName, ntsFields, description, usageFilter);
         scenarioRepository.insertNtsScenarioAndAddUsages(scenario, usageFilter);
         scenarioUsageFilterService.insert(scenario.getId(), new ScenarioUsageFilter(usageFilter));
         scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY);
@@ -300,12 +300,9 @@ public class ScenarioService implements IScenarioService {
         return archivedCount;
     }
 
-    private Scenario buildScenario(String scenarioName, String description, List<Usage> usages) {
-        Scenario scenario = new Scenario();
-        scenario.setId(RupPersistUtils.generateUuid());
-        scenario.setName(scenarioName);
-        scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
-        scenario.setDescription(description);
+    private Scenario buildScenario(String scenarioName, String description, List<Usage> usages,
+                                   UsageFilter usageFilter) {
+        Scenario scenario = buildCommonScenario(scenarioName, description, usageFilter);
         scenario.setNetTotal(usages.stream()
             .map(Usage::getNetAmount)
             .reduce(BigDecimal.ZERO.setScale(10, RoundingMode.HALF_UP), BigDecimal::add));
@@ -318,18 +315,22 @@ public class ScenarioService implements IScenarioService {
         scenario.setReportedTotal(usages.stream()
             .map(Usage::getReportedValue)
             .reduce(BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP), BigDecimal::add));
-        String userName = RupContextUtils.getUserName();
-        scenario.setCreateUser(userName);
-        scenario.setUpdateUser(userName);
         return scenario;
     }
 
-    private Scenario buildNtsScenario(String scenarioName, NtsFields ntsFields, String description) {
+    private Scenario buildNtsScenario(String scenarioName, NtsFields ntsFields, String description,
+                                      UsageFilter usageFilter) {
+        Scenario scenario = buildCommonScenario(scenarioName, description, usageFilter);
+        scenario.setNtsFields(ntsFields);
+        return scenario;
+    }
+
+    private Scenario buildCommonScenario(String scenarioName, String description, UsageFilter usageFilter) {
         Scenario scenario = new Scenario();
         scenario.setId(RupPersistUtils.generateUuid());
         scenario.setName(scenarioName);
+        scenario.setProductFamily(usageFilter.getProductFamilies().iterator().next());
         scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
-        scenario.setNtsFields(ntsFields);
         scenario.setDescription(description);
         String userName = RupContextUtils.getUserName();
         scenario.setCreateUser(userName);
