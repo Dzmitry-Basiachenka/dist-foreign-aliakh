@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -49,10 +48,8 @@ public class OracleService implements IOracleService {
     @Autowired
     private RestTemplate restTemplate;
 
-    @Value("$RUP{dist.foreign.rest.oracle.url}")
-    private String baseUrl;
-
-    private String rhTaxInformationUrl;
+    @Value("$RUP{dist.foreign.rest.oracle.rh_tax.url}")
+    private String rhTaxUrl;
 
     private ObjectMapper objectMapper;
 
@@ -62,7 +59,7 @@ public class OracleService implements IOracleService {
             Map<Long, String> result = new HashMap<>(accountNumbers.size());
             OracleRhTaxInformationRestHandler handler = new OracleRhTaxInformationRestHandler(restTemplate);
             for (Collection<Long> partition : Iterables.partition(accountNumbers, BATCH_SIZE)) {
-                result.putAll(handler.handleResponse(rhTaxInformationUrl, buildHttpEntity(partition)));
+                result.putAll(handler.handleResponse(rhTaxUrl, buildHttpEntity(partition)));
             }
             return result;
         } catch (HttpClientErrorException | ResourceAccessException e) {
@@ -77,11 +74,6 @@ public class OracleService implements IOracleService {
      */
     @PostConstruct
     void init() {
-        rhTaxInformationUrl = UriComponentsBuilder
-            .fromHttpUrl(baseUrl)
-            .pathSegment("getRhTaxInformation?fmt=json")
-            .build()
-            .toUriString();
         this.objectMapper = new ObjectMapper();
     }
 

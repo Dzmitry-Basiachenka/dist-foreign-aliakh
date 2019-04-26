@@ -40,8 +40,7 @@ import java.util.Map;
  */
 public class OracleServiceTest {
 
-    private static final String BASE_URL = "http://localhost:8080/oracle-ap-rest/";
-    private static final String RH_TAX_INFORMATION_URL = BASE_URL + "getRhTaxInformation?fmt=json";
+    private static final String RH_TAX_URL = "http://localhost:8080/oracle-ap-rest/getRhTaxInformation?fmt=json";
     private static final long ACCOUNT_NUMBER = 2000017000L;
 
     private OracleService oracleService;
@@ -52,7 +51,7 @@ public class OracleServiceTest {
         restTemplate = createMock(RestTemplate.class);
         oracleService = new OracleService();
         Whitebox.setInternalState(oracleService, restTemplate);
-        Whitebox.setInternalState(oracleService, "baseUrl", BASE_URL);
+        Whitebox.setInternalState(oracleService, "rhTaxUrl", RH_TAX_URL);
         oracleService.init();
     }
 
@@ -70,7 +69,7 @@ public class OracleServiceTest {
         assertNotNull(result);
         assertEquals(1, result.size());
         assertEquals("GB", result.get(ACCOUNT_NUMBER));
-        assertTrue(urlCapture.getValue().contains(RH_TAX_INFORMATION_URL));
+        assertTrue(urlCapture.getValue().contains(RH_TAX_URL));
         verifyContentType(requestCapture.getValue().getHeaders().getContentType());
         verify(restTemplate);
     }
@@ -88,7 +87,7 @@ public class OracleServiceTest {
         Map<Long, String> result = oracleService.getAccountNumbersToCountryCodesMap(ImmutableList.of(ACCOUNT_NUMBER));
         assertNotNull(result);
         assertTrue(MapUtils.isEmpty(result));
-        assertTrue(urlCapture.getValue().contains(RH_TAX_INFORMATION_URL));
+        assertTrue(urlCapture.getValue().contains(RH_TAX_URL));
         verifyContentType(requestCapture.getValue().getHeaders().getContentType());
         verify(restTemplate);
     }
