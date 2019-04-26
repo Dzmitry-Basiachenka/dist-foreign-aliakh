@@ -135,6 +135,7 @@ public class ScenarioServiceTest {
         scenarioAuditService.deleteActions(SCENARIO_ID);
         expectLastCall().once();
         rightsholderDiscrepancyService.deleteByScenarioId(SCENARIO_ID);
+        expectLastCall().once();
         replay(usageService, scenarioRepository, scenarioAuditService, scenarioUsageFilterService,
             rightsholderDiscrepancyService);
         scenarioService.deleteScenario(scenario);
@@ -203,31 +204,13 @@ public class ScenarioServiceTest {
     }
 
     @Test
-    public void testSendToLmFas() {
+    public void testSendToLm() {
         scenarioRepository.updateStatus(scenario);
         expectLastCall().once();
         scenarioAuditService.logAction(SCENARIO_ID, ScenarioActionTypeEnum.SENT_TO_LM, StringUtils.EMPTY);
         expectLastCall().once();
         expect(usageService.moveToArchive(scenario)).andReturn(Collections.singletonList(new Usage())).once();
         lmIntegrationService.sendToLm(Collections.singletonList(new ExternalUsage(new Usage())));
-        expectLastCall().once();
-        replay(scenarioRepository, scenarioAuditService, usageService, lmIntegrationService);
-        scenarioService.sendToLm(scenario);
-        assertEquals(ScenarioStatusEnum.SENT_TO_LM, scenario.getStatus());
-        verify(scenarioRepository, scenarioAuditService, usageService, lmIntegrationService);
-    }
-
-    @Test
-    public void testSendToLmNts() {
-        scenario.setProductFamily("NTS");
-        scenarioRepository.updateStatus(scenario);
-        expectLastCall().once();
-        scenarioAuditService.logAction(SCENARIO_ID, ScenarioActionTypeEnum.SENT_TO_LM, StringUtils.EMPTY);
-        expectLastCall().once();
-        expect(usageService.moveToArchive(scenario)).andReturn(Collections.singletonList(new Usage())).once();
-        lmIntegrationService.sendToLm(Collections.singletonList(new ExternalUsage(new Usage())));
-        expectLastCall().once();
-        usageService.deleteNtsExcludedByScenarioId(SCENARIO_ID);
         expectLastCall().once();
         replay(scenarioRepository, scenarioAuditService, usageService, lmIntegrationService);
         scenarioService.sendToLm(scenario);

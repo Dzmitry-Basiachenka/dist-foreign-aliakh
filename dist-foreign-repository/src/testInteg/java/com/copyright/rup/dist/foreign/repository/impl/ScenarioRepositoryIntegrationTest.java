@@ -277,12 +277,10 @@ public class ScenarioRepositoryIntegrationTest {
     }
 
     private void assertUsages(List<Usage> expected, List<Usage> actual) {
-        List<Usage> sorted = actual.stream()
-            .sorted(Comparator.comparing(Usage::getId))
-            .collect(Collectors.toList());
+        actual.sort(Comparator.comparing(Usage::getId));
         assertEquals(CollectionUtils.size(expected), CollectionUtils.size(actual));
-        IntStream.range(0, sorted.size())
-            .forEach(index -> verifyUsage(expected.get(index), sorted.get(index)));
+        IntStream.range(0, actual.size())
+            .forEach(index -> verifyUsage(expected.get(index), actual.get(index)));
     }
 
     private UsageBatch buildBatch(Long rroAccountNumber) {

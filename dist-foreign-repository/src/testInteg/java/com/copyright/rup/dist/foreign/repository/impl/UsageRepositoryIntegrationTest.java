@@ -144,7 +144,6 @@ public class UsageRepositoryIntegrationTest {
     @Autowired
     private UsageRepository usageRepository;
 
-
     @Test
     public void testInsert() throws IOException {
         Usage expectedUsage = buildUsage();
@@ -482,12 +481,8 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(2, usageRepository.findByScenarioId(SCENARIO_ID).size());
         usageRepository.deleteByScenarioId(SCENARIO_ID);
         assertTrue(usageRepository.findByScenarioId(SCENARIO_ID).isEmpty());
-    }
-
-    @Test
-    public void testDeleteNtsExcludedByScenarioId() {
         assertEquals(1, usageRepository.findByStatuses(UsageStatusEnum.NTS_EXCLUDED).size());
-        usageRepository.deleteNtsExcludedByScenarioId(NTS_SCENARIO_ID);
+        usageRepository.deleteByScenarioId(NTS_SCENARIO_ID);
         assertTrue(usageRepository.findByStatuses(UsageStatusEnum.NTS_EXCLUDED).isEmpty());
     }
 

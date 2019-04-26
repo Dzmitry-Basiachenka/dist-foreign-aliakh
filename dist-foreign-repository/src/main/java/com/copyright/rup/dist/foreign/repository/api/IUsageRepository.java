@@ -210,13 +210,6 @@ public interface IUsageRepository {
     void deleteByScenarioId(String scenarioId);
 
     /**
-     * Deletes {@link Usage}s in {@link UsageStatusEnum#NTS_EXCLUDED} status for specified scenario by batches.
-     *
-     * @param scenarioId scenario identifier
-     */
-    void deleteNtsExcludedByScenarioId(String scenarioId);
-
-    /**
      * Finds the {@link Usage}s only with information about gross amount, net amount, reported value and rightsholder
      * based on {@link UsageFilter}.
      *
@@ -267,9 +260,9 @@ public interface IUsageRepository {
      * Reverts status to {@link UsageStatusEnum#ELIGIBLE}, sets scenario id to {@code null}, sets gross amount to 0.
      *
      * @param scenarioId scenario identifier
-     * @param updateUser user name
+     * @param userName   user name
      */
-    void deleteFromNtsScenario(String scenarioId, String updateUser);
+    void deleteFromNtsScenario(String scenarioId, String userName);
 
     /**
      * Finds count of all usages by usage id and status.

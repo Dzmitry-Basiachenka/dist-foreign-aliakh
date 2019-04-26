@@ -273,16 +273,10 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
 
     @Override
     public void deleteByScenarioId(String scenarioId) {
-        checkArgument(StringUtils.isNotBlank(scenarioId));
-        delete("IUsageMapper.deleteByScenarioId", scenarioId);
-    }
-
-    @Override
-    public void deleteNtsExcludedByScenarioId(String scenarioId) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put(STATUS_KEY, UsageStatusEnum.NTS_EXCLUDED);
-        delete("IUsageMapper.deleteNtsExcludedByScenarioId", parameters);
+        delete("IUsageMapper.deleteByScenarioId", parameters);
     }
 
     @Override
@@ -327,10 +321,10 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public void deleteFromNtsScenario(String scenarioId, String updateUser) {
+    public void deleteFromNtsScenario(String scenarioId, String userName) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put(UPDATE_USER_KEY, Objects.requireNonNull(updateUser));
+        parameters.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
         parameters.put(STATUS_KEY, UsageStatusEnum.ELIGIBLE);
         parameters.put("statusesToUpdate", Sets.newHashSet(UsageStatusEnum.NTS_EXCLUDED, UsageStatusEnum.LOCKED));
         update("IUsageMapper.deleteFromNtsScenario", parameters);

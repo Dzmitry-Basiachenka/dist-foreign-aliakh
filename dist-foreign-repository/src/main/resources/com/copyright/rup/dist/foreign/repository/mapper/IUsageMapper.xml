@@ -241,12 +241,12 @@
     </sql>
 
     <sql id="scenarioBatchesFilter">
-        where
         df_usage_batch_uid in (
-            select ub.df_usage_batch_uid
-            from ${schema}.df_scenario_usage_filter f
-            left join ${schema}.df_scenario_usage_filter_to_usage_batches_ids_map ub on f.df_scenario_usage_filter_uid = ub.df_scenario_usage_filter_uid
-            where f.df_scenario_uid = #{scenarioId}
+            select filter_to_batch_map.df_usage_batch_uid
+            from ${schema}.df_scenario_usage_filter usage_filter
+            left join ${schema}.df_scenario_usage_filter_to_usage_batches_ids_map filter_to_batch_map
+                on usage_filter.df_scenario_usage_filter_uid = filter_to_batch_map.df_scenario_usage_filter_uid
+            where usage_filter.df_scenario_uid = #{scenarioId}
         )
     </sql>
 
@@ -732,15 +732,11 @@
         where df_usage_uid = #{usageId}
     </delete>
 
-    <delete id="deleteByScenarioId" parameterType="string">
+    <delete id="deleteByScenarioId" parameterType="map">
         delete from ${schema}.df_usage
         where df_scenario_uid = #{scenarioId}
-    </delete>
-
-    <delete id="deleteNtsExcludedByScenarioId" parameterType="map">
-        delete from ${schema}.df_usage
-        <include refid="scenarioBatchesFilter"/>
-        and status_ind = #{status}
+            or (<include refid="scenarioBatchesFilter"/>
+                and status_ind = #{status})
     </delete>
 
     <update id="deleteFromPreServiceFeeFund" parameterType="map">
@@ -822,11 +818,11 @@
             df_scenario_uid = null,
             gross_amount = 0,
             <include refid="StoredEntityMapper.update"/>
-        <include refid="scenarioBatchesFilter"/>
-        and status_ind in
-            <foreach collection="statusesToUpdate" item="statusToUpdate" separator="," open="(" close=")">
-                #{statusToUpdate}
-            </foreach>
+        where <include refid="scenarioBatchesFilter"/>
+            and status_ind in
+                <foreach collection="statusesToUpdate" item="statusToUpdate" separator="," open="(" close=")">
+                    #{statusToUpdate}
+                </foreach>
     </update>
 
     <select id="findCountByUsageIdAndStatus" parameterType="map" resultType="int">
