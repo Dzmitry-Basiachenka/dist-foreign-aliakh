@@ -136,7 +136,9 @@ class CreateScenarioTestBuilder {
             if (Objects.nonNull(expectedPreferencesRightholderIds)) {
                 expectGetPreferences(expectedPreferencesJson, expectedPreferencesRightholderIds);
             }
-            scenarioId = createScenario();
+            Scenario scenario = createScenario();
+            assertEquals(usageFilter.getProductFamilies().iterator().next(), scenario.getProductFamily());
+            scenarioId = scenario.getId();
             mockServer.verify();
             asyncMockServer.verify();
             assertScenario();
@@ -145,13 +147,13 @@ class CreateScenarioTestBuilder {
             assertScenarioUsageFilter();
         }
 
-        private String createScenario() {
+        private Scenario createScenario() {
             if ("NTS".equals(usageFilter.getProductFamilies().iterator().next())) {
                 NtsFields ntsFields = new NtsFields();
                 ntsFields.setRhMinimumAmount(new BigDecimal("5.00"));
-                return scenarioService.createNtsScenario(SCENARIO_NAME, ntsFields, DESCRIPTION, usageFilter).getId();
+                return scenarioService.createNtsScenario(SCENARIO_NAME, ntsFields, DESCRIPTION, usageFilter);
             } else {
-                return scenarioService.createScenario(SCENARIO_NAME, DESCRIPTION, usageFilter).getId();
+                return scenarioService.createScenario(SCENARIO_NAME, DESCRIPTION, usageFilter);
             }
         }
 
