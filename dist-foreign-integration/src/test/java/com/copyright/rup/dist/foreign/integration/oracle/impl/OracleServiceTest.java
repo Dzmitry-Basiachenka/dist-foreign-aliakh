@@ -40,7 +40,7 @@ import java.util.Map;
  */
 public class OracleServiceTest {
 
-    private static final String RH_TAX_URL = "http://localhost:8080/oracle-ap-rest/getRhTaxInformation?fmt=json";
+    private static final String RH_TAX_URL = "http://localhost:8080/oracle-ap-rest/getRhTaxInformation";
     private static final long ACCOUNT_NUMBER = 2000017000L;
 
     private OracleService oracleService;

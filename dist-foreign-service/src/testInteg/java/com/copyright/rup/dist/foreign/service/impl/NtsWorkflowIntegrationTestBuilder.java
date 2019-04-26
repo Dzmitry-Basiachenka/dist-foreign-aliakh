@@ -301,7 +301,7 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
         private void expectOracleCall() {
             mockServer.expect(MockRestRequestMatchers
-                .requestTo("http://localhost:8080/oracle-ap-rest/getRhTaxInformation?fmt=json"))
+                .requestTo("http://localhost:8080/oracle-ap-rest/getRhTaxInformation"))
                 .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
                 .andExpect(MockRestRequestMatchers.content()
                     .string(new JsonMatcher(TestUtils.fileToString(this.getClass(), expectedOracleRequest))))
