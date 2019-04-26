@@ -1,3 +1,10 @@
+5.1.24
+-
+* B-48300 FDA: Remove under minimum RHs and reallocate funds proportionally: add scenario creation and sending to LM steps for NTS workflow test
+* B-49464 Tech Debt: FDA: create separate urls for Oracle REST
+* CDP-716 FDA: Details remain eligible after deleting classification on associated work
+* CDP-733 FDA: Scenario metadata panel: ‘RH minimum Amount’ element isn’t displayed on scenario metadata panel right after NTS scenario creation
+
 5.1.23
 -
 * B-46740 FDA: Ensure that there is at least one rightsholder for the corresponding fund pool: reject NTS scenario creation in case when there is no at least one RH for the corresponding fund pool or there are unclassified usages in selected batches
