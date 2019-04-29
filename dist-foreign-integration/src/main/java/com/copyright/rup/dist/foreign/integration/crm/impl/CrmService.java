@@ -53,7 +53,7 @@ public class CrmService implements ICrmService {
     @Autowired
     private RestTemplate restTemplate;
 
-    @Value("$RUP{dist.foreign.rest.crm.insert_ccc_rights_distribution.url}")
+    @Value("$RUP{dist.foreign.rest.crm.rights_distribution.url}")
     private String crmRightsDistributionRequestsUrl;
 
     /**
