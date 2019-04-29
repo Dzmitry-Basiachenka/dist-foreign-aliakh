@@ -125,6 +125,7 @@ public class UsageRepositoryIntegrationTest {
     private static final String USAGE_ID_24 = "3c31db4f-4065-4fe1-84c2-b48a0f3bc079";
     private static final String USAGE_ID_25 = "f6cb5b07-45c0-4188-9da3-920046eec4c0";
     private static final String USAGE_ID_26 = "f255188f-d582-4516-8c08-835cfe1d68c3";
+    private static final String NTS_USAGE_ID = "6dc54058-5566-4aa2-8cd4-d1a09805ae20";
     private static final String POST_DISTRIBUTION_USAGE_ID = "cce295c6-23cf-47b4-b00c-2e0e50cce169";
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
     private static final String NTS_BATCH_ID = "b9d0ea49-9e38-4bb0-a7e0-0ca299e3dcfa";
@@ -216,7 +217,7 @@ public class UsageRepositoryIntegrationTest {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             Collections.emptySet(), UsageStatusEnum.ELIGIBLE, null, null);
         verifyUsageDtos(usageRepository.findDtosByFilter(usageFilter, null, new Sort(DETAIL_ID_KEY,
-            Sort.Direction.ASC)), 5, USAGE_ID_1, USAGE_ID_3, USAGE_ID_2, USAGE_ID_26, USAGE_ID_25);
+            Sort.Direction.ASC)), 6, USAGE_ID_1, USAGE_ID_3, NTS_USAGE_ID, USAGE_ID_2, USAGE_ID_26, USAGE_ID_25);
     }
 
     @Test
@@ -499,11 +500,12 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindUnclassifiedUsageIds() {
-        List<String> actualUsageIds = usageRepository.findUnclassifiedUsageIds();
+    public void testFindUsageIdsForClassificationUpdate() {
+        List<String> actualUsageIds = usageRepository.findUsageIdsForClassificationUpdate();
         assertNotNull(actualUsageIds);
-        assertEquals(1, actualUsageIds.size());
+        assertEquals(2, actualUsageIds.size());
         assertEquals("c6cb5b07-45c0-4188-9da3-920046eec4cf", actualUsageIds.get(0));
+        assertEquals("6dc54058-5566-4aa2-8cd4-d1a09805ae20", actualUsageIds.get(1));
     }
 
     @Test
@@ -572,8 +574,8 @@ public class UsageRepositoryIntegrationTest {
     public void testFindWithAmountsAndRightsholdersByStatusFilter() {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             Collections.emptySet(), UsageStatusEnum.ELIGIBLE, null, null);
-        verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 5, USAGE_ID_1, USAGE_ID_2,
-            USAGE_ID_3, USAGE_ID_25, USAGE_ID_26);
+        verifyUsages(usageRepository.findWithAmountsAndRightsholders(usageFilter), 6, USAGE_ID_1,
+            USAGE_ID_2, USAGE_ID_3, NTS_USAGE_ID, USAGE_ID_25, USAGE_ID_26);
     }
 
     @Test

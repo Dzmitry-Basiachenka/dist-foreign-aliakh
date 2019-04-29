@@ -999,7 +999,6 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: '987632764')
             column(name: 'work_title', value: 'Cell Biology')
             column(name: 'system_title', value: 'Cell Biology')
-            column(name: 'rh_account_number', value: '1000009997')
             column(name: 'status_ind', value: 'UNCLASSIFIED')
             column(name: 'product_family', value: 'NTS')
             column(name: 'article', value: 'DIN EN 779:2012')
@@ -1012,7 +1011,27 @@ databaseChangeLog {
             column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
             column(name: 'number_of_copies', value: '2502232')
             column(name: 'reported_value', value: '2500')
-            column(name: 'gross_amount', value: '35000.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '6dc54058-5566-4aa2-8cd4-d1a09805ae20')
+            column(name: 'df_usage_batch_uid', value: '73027b25-f269-4bec-a8ea-b126431eedbe')
+            column(name: 'wr_wrk_inst', value: '632876487')
+            column(name: 'work_title', value: 'The myth of the visual word form area')
+            column(name: 'system_title', value: 'The myth of the visual word form area')
+            column(name: 'rh_account_number', value: '1000015086')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '1003324112314587XX')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Univ')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
+            column(name: 'number_of_copies', value: '2502232')
+            column(name: 'reported_value', value: '2500')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_work_classification') {

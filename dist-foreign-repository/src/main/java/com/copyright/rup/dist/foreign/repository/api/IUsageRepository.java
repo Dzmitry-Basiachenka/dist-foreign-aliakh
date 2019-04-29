@@ -94,11 +94,12 @@ public interface IUsageRepository {
     List<Usage> findByIds(List<String> usageIds);
 
     /**
-     * Finds identifiers of usages in status {@link UsageStatusEnum#UNCLASSIFIED} with classification available.
+     * Finds {@link Usage} ids with belletristic classification or classified usages in
+     * {@link UsageStatusEnum#UNCLASSIFIED} status.
      *
-     * @return list of {@link Usage}s
+     * @return list of {@link Usage} ids
      */
-    List<String> findUnclassifiedUsageIds();
+    List<String> findUsageIdsForClassificationUpdate();
 
     /**
      * Finds count of usages based on set of Wr Wrk Insts and status.

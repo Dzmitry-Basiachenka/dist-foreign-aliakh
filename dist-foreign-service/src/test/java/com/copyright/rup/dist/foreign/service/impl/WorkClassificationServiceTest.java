@@ -95,7 +95,7 @@ public class WorkClassificationServiceTest {
         usage1.setId(RupPersistUtils.generateUuid());
         Usage usage2 = new Usage();
         usage1.setId(RupPersistUtils.generateUuid());
-        expect(usageRepository.findUnclassifiedUsageIds())
+        expect(usageRepository.findUsageIdsForClassificationUpdate())
             .andReturn(Arrays.asList(usage1.getId(), usage2.getId())).once();
         expect(usageRepository.findByIds(Collections.singletonList(usage1.getId())))
             .andReturn(Collections.singletonList(usage1)).once();

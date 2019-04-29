@@ -17,7 +17,6 @@ import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
@@ -27,6 +26,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -68,7 +68,7 @@ public class WorkClassificationService implements IWorkClassificationService {
             workClassification.setClassification(newClassification);
             workClassificationRepository.insertOrUpdate(workClassification);
         });
-        updateUnclassifiedUsages();
+        updateClassifiedUsages();
         LOGGER.debug("Update classification. Finished. WorksCount={}, Classification={}",
             LogUtils.size(classifications), newClassification);
     }
@@ -80,7 +80,7 @@ public class WorkClassificationService implements IWorkClassificationService {
         ILogWrapper classificationsCount = LogUtils.size(classifications);
         LOGGER.debug("Delete classification. Started. ClassificationsCount={}, UserName={}", classificationsCount,
             userName);
-        List<Long> wrWrkInsts = Lists.newArrayList();
+        List<Long> wrWrkInsts = new ArrayList<>();
         classifications.forEach(workClassification -> {
             Long wrWrkInst = workClassification.getWrWrkInst();
             workClassificationRepository.deleteByWrWrkInst(wrWrkInst);
@@ -131,13 +131,15 @@ public class WorkClassificationService implements IWorkClassificationService {
         this.usagesBatchSize = usagesBatchSize;
     }
 
-    private void updateUnclassifiedUsages() {
-        List<String> unclassifiedUsageIds = usageRepository.findUnclassifiedUsageIds();
-        LOGGER.debug("Update unclassified usages. Started. UnclassifiedUsagesCount={}",
-            LogUtils.size(unclassifiedUsageIds));
-        Iterables.partition(unclassifiedUsageIds, usagesBatchSize)
-            .forEach(partition -> usageRepository.findByIds(partition).forEach(nonBelletristicProcessor::process));
-        LOGGER.debug("Update unclassified usages. Finished. UnclassifiedUsagesCount={}",
-            LogUtils.size(unclassifiedUsageIds));
+    private void updateClassifiedUsages() {
+        List<String> usageIdsToUpdate = usageRepository.findUsageIdsForClassificationUpdate();
+        if (CollectionUtils.isNotEmpty(usageIdsToUpdate)) {
+            LOGGER.debug("Update usages based on classification. Started. UsagesCount={}",
+                LogUtils.size(usageIdsToUpdate));
+            Iterables.partition(usageIdsToUpdate, usagesBatchSize)
+                .forEach(partition -> usageRepository.findByIds(partition).forEach(nonBelletristicProcessor::process));
+            LOGGER.debug("Update usages based on classification. Finished. UsagesCount={}",
+                LogUtils.size(usageIdsToUpdate));
+        }
     }
 }

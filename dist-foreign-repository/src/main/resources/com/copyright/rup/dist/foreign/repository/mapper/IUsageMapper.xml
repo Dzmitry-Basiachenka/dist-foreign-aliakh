@@ -701,11 +701,15 @@
         order by u.df_usage_uid
     </select>
 
-    <select id="findUnclassifiedUsageIds" parameterType="UsageStatusEnum" resultType="string">
+    <select id="findUsageIdsForClassificationUpdate" parameterType="map" resultType="string">
         select u.df_usage_uid
         from ${schema}.df_usage u
         join ${schema}.df_work_classification wc on u.wr_wrk_inst = wc.wr_wrk_inst
-        where u.status_ind = #{status}
+        where u.status_ind = #{unclassifiedStatus}
+            or (wc.classification = #{belletristicClassification}
+                and product_family = #{productFamily}
+                and status_ind = #{eligibleStatus}
+            )
     </select>
 
     <select id="findCountByStatusAndWrWrkInsts" resultType="int">
