@@ -1,3 +1,10 @@
+5.1.25
+-
+* B-46740 FDA: Ensure that there is at least one rightsholder for the corresponding fund pool: make changes based on comments in CR-DIST-FOREIGN-104
+* B-49019 FDA: Create NTS Scenario: make changes based on comments in CR-DIST-FOREIGN-102
+* B-49464 Tech Debt: FDA: remove parameter fmt from get RH tax url
+* B-49464 Tech Debt: FDA: replace '.' with '_' in URLs and unify them for CRM REST
+
 5.1.24
 -
 * B-48300 FDA: Remove under minimum RHs and reallocate funds proportionally: add scenario creation and sending to LM steps for NTS workflow test
