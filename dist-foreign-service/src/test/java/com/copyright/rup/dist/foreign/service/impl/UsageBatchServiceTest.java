@@ -254,14 +254,14 @@ public class UsageBatchServiceTest {
     }
 
     @Test
-    public void testGetBatchNamesWithoutUsagesForStmOrNonStmClassification() {
+    public void testGetClassifcationToBatchNamesWithoutUsagesForStmOrNonStm() {
         UsageFilter filter = new UsageFilter();
         expect(usageBatchRepository.findBatchNamesWithoutUsagesForClassification(filter, "STM"))
             .andReturn(Collections.singletonList("Batch without STM usages")).once();
         expect(usageBatchRepository.findBatchNamesWithoutUsagesForClassification(filter, "NON-STM"))
             .andReturn(Collections.emptyList()).once();
         replay(usageBatchRepository);
-        usageBatchService.getBatchNamesWithoutUsagesForStmOrNonStmClassification(filter);
+        usageBatchService.getClassifcationToBatchNamesWithoutUsagesForStmOrNonStm(filter);
         verify(usageBatchRepository);
     }
 

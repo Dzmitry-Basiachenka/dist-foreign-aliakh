@@ -195,7 +195,7 @@ public class UsageBatchService implements IUsageBatchService {
     }
 
     @Override
-    public Map<String, List<String>> getBatchNamesWithoutUsagesForStmOrNonStmClassification(UsageFilter filter) {
+    public Map<String, List<String>> getClassifcationToBatchNamesWithoutUsagesForStmOrNonStm(UsageFilter filter) {
         Map<String, List<String>> classificationToBatchNamesMap = Maps.newHashMapWithExpectedSize(3);
         classificationToBatchNamesMap.put(FdaConstants.STM_CLASSIFICATION,
             usageBatchRepository.findBatchNamesWithoutUsagesForClassification(filter, FdaConstants.STM_CLASSIFICATION));

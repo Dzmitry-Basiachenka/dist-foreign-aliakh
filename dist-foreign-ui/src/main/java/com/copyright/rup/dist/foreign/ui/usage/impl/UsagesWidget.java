@@ -343,7 +343,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         if (CollectionUtils.isNotEmpty(batchesWithoutRhsForNonStm)) {
             message = StringUtils.isBlank(message)
                 ? ForeignUi.getMessage("message.error.invalid_batch.no_non_stm_rhs",
-                String.join(BATCH_NAMES_LIST_SEPARATOR, batchesWithoutRhsForNonStm))
+                    String.join(BATCH_NAMES_LIST_SEPARATOR, batchesWithoutRhsForNonStm))
                 : message.concat(ForeignUi.getMessage("message.error.invalid_batch.no_non_stm_rhs",
                     String.join(BATCH_NAMES_LIST_SEPARATOR, batchesWithoutRhsForNonStm)));
         }
