@@ -174,7 +174,7 @@ public class Scenario extends StoredEntity<String> {
      */
     public static class NtsFields {
 
-        private BigDecimal rhMinimumAmount = BigDecimal.ZERO.setScale(10, BigDecimal.ROUND_HALF_UP);
+        private BigDecimal rhMinimumAmount = BigDecimal.ZERO;
 
         public BigDecimal getRhMinimumAmount() {
             return rhMinimumAmount;

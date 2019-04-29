@@ -44,8 +44,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -110,7 +108,7 @@ public class ScenarioService implements IScenarioService {
     @Transactional
     public Scenario createScenario(String scenarioName, String description, UsageFilter usageFilter) {
         List<Usage> usages = usageService.getUsagesWithAmounts(usageFilter);
-        Scenario scenario = buildScenario(scenarioName, description, usages, usageFilter);
+        Scenario scenario = buildScenario(scenarioName, description, usageFilter);
         scenarioRepository.insert(scenario);
         usageService.addUsagesToScenario(usages, scenario);
         scenarioUsageFilterService.insert(scenario.getId(), new ScenarioUsageFilter(usageFilter));
@@ -300,32 +298,14 @@ public class ScenarioService implements IScenarioService {
         return archivedCount;
     }
 
-    private Scenario buildScenario(String scenarioName, String description, List<Usage> usages,
-                                   UsageFilter usageFilter) {
-        Scenario scenario = buildCommonScenario(scenarioName, description, usageFilter);
-        scenario.setNetTotal(usages.stream()
-            .map(Usage::getNetAmount)
-            .reduce(BigDecimal.ZERO.setScale(10, RoundingMode.HALF_UP), BigDecimal::add));
-        scenario.setServiceFeeTotal(usages.stream()
-            .map(Usage::getServiceFeeAmount)
-            .reduce(BigDecimal.ZERO.setScale(10, RoundingMode.HALF_UP), BigDecimal::add));
-        scenario.setGrossTotal(usages.stream()
-            .map(Usage::getGrossAmount)
-            .reduce(BigDecimal.ZERO.setScale(10, RoundingMode.HALF_UP), BigDecimal::add));
-        scenario.setReportedTotal(usages.stream()
-            .map(Usage::getReportedValue)
-            .reduce(BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP), BigDecimal::add));
-        return scenario;
-    }
-
     private Scenario buildNtsScenario(String scenarioName, NtsFields ntsFields, String description,
                                       UsageFilter usageFilter) {
-        Scenario scenario = buildCommonScenario(scenarioName, description, usageFilter);
+        Scenario scenario = buildScenario(scenarioName, description, usageFilter);
         scenario.setNtsFields(ntsFields);
         return scenario;
     }
 
-    private Scenario buildCommonScenario(String scenarioName, String description, UsageFilter usageFilter) {
+    private Scenario buildScenario(String scenarioName, String description, UsageFilter usageFilter) {
         Scenario scenario = new Scenario();
         scenario.setId(RupPersistUtils.generateUuid());
         scenario.setName(scenarioName);
