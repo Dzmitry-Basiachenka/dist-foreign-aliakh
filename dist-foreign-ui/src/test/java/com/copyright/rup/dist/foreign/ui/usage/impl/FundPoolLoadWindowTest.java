@@ -82,8 +82,6 @@ public class FundPoolLoadWindowTest {
     private static final String NON_STM_FIELD = "nonStmAmountField";
     private static final String STM_MIN_FIELD = "stmMinAmountField";
     private static final String NON_STM_MIN_FIELD = "nonStmMinAmountField";
-    private static final String INVALID_GROSS_AMOUNT_ERROR_MESSAGE =
-        "Field value should be positive number and not exceed 10 digits";
     private static final String INVALID_PERIOD_ERROR_MESSAGE = "Field value should be in range from 1950 to 2099";
     private FundPoolLoadWindow window;
     private IUsagesController usagesController;
@@ -424,7 +422,8 @@ public class FundPoolLoadWindowTest {
     }
 
     private void verifyAmountValidationMessage(TextField field, String value, Binder binder, boolean isValid) {
-        verifyFieldValidationMessage(field, value, binder, INVALID_GROSS_AMOUNT_ERROR_MESSAGE, isValid);
+        verifyFieldValidationMessage(field, value, binder,
+            "Field value should be positive number or zero and should not exceed 10 digits", isValid);
     }
 
     private void verifyFieldValidationMessage(TextField field, String value, Binder binder, String message,

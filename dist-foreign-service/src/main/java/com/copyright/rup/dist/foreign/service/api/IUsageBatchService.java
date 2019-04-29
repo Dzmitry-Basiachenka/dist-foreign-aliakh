@@ -119,5 +119,5 @@ public interface IUsageBatchService {
      * @param filter {@link UsageFilter} instance
      * @return map where key - classification, value - list of batch names with invalid state of usages
      */
-    Map<String, List<String>> getBatchNamesWithoutUsagesForStmOrNonStmClassification(UsageFilter filter);
+    Map<String, List<String>> getClassifcationToBatchNamesWithoutUsagesForStmOrNonStm(UsageFilter filter);
 }

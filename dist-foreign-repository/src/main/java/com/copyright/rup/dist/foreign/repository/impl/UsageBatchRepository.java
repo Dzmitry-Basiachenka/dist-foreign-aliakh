@@ -76,7 +76,7 @@ public class UsageBatchRepository extends BaseRepository implements IUsageBatchR
     public List<String> findBatchNamesWithoutUsagesForClassification(UsageFilter filter, String classification) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
         params.put("filter", Objects.requireNonNull(filter));
-        params.put("classification", Objects.requireNonNull(classification));
+        params.put("classification", classification);
         return selectList("IUsageBatchMapper.findBatchNamesWithoutUsagesForClassification", params);
     }
 

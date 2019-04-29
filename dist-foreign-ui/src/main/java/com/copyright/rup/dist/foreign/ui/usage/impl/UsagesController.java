@@ -322,7 +322,7 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
 
     @Override
     public Map<String, List<String>> getBatchNamesWithInvalidStmOrNonStmUsagesState(UsageFilter usageFilter) {
-        return usageBatchService.getBatchNamesWithoutUsagesForStmOrNonStmClassification(usageFilter);
+        return usageBatchService.getClassifcationToBatchNamesWithoutUsagesForStmOrNonStm(usageFilter);
     }
 
     @Override

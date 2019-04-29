@@ -158,7 +158,7 @@
             group by name
             having sum(non_stm_count) = 0
         </if>
-        <if test="'UNCLASSIFIED' == classification">
+        <if test="null == classification">
             group by name
             having sum(unclassified_count) &gt; 0
         </if>

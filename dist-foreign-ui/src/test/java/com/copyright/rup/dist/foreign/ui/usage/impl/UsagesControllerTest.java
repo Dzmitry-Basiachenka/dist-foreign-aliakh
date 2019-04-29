@@ -487,7 +487,7 @@ public class UsagesControllerTest {
     @Test
     public void testGetBatchNamesWithInvalidStmOrNonStmUsagesState() {
         UsageFilter filter = new UsageFilter();
-        expect(usageBatchService.getBatchNamesWithoutUsagesForStmOrNonStmClassification(filter))
+        expect(usageBatchService.getClassifcationToBatchNamesWithoutUsagesForStmOrNonStm(filter))
             .andReturn(Collections.emptyMap()).once();
         replay(usageBatchService);
         controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(filter);

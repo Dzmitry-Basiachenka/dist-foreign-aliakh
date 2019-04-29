@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -55,6 +56,9 @@ public class UsageBatchRepositoryIntegrationTest {
     private static final LocalDate PAYMENT_DATE = LocalDate.of(2017, 2, 23);
     private static final String FAS_PRODUCT_FAMILY = "FAS";
     private static final String NTS_BATCH_NAME = "NTS Batch without STM usages";
+    private static final String NTS_USAGE_BATCH_ID_1 = "7c028d85-58c3-45f8-be2d-33c16b0905b0";
+    private static final String NTS_USAGE_BATCH_ID_2 = "334959d7-ad39-4624-a8fa-38c3e82be6eb";
+    private static final String NTS_USAGE_BATCH_ID_3 = "00aed73a-4243-440b-aa8a-445185580cb9";
 
     @Autowired
     private UsageBatchRepository usageBatchRepository;
@@ -81,7 +85,7 @@ public class UsageBatchRepositoryIntegrationTest {
 
     @Test
     public void testInsertUsageBatch() {
-        usageBatchRepository.insert(buildUsageBatch(USAGE_BATCH_NAME_1));
+        usageBatchRepository.insert(buildUsageBatch());
         UsageBatch usageBatch = usageBatchRepository.findByName(USAGE_BATCH_NAME_1);
         assertNotNull(usageBatch);
         assertEquals(FAS_PRODUCT_FAMILY, usageBatch.getProductFamily());
@@ -94,7 +98,7 @@ public class UsageBatchRepositoryIntegrationTest {
 
     @Test
     public void testInsertUsageBatchWithFundPool() {
-        usageBatchRepository.insert(buildUsageBatchWithFundPool(USAGE_BATCH_NAME_2));
+        usageBatchRepository.insert(buildUsageBatchWithFundPool());
         UsageBatch usageBatch = usageBatchRepository.findByName(USAGE_BATCH_NAME_2);
         assertNotNull(usageBatch);
         assertEquals("NTS", usageBatch.getProductFamily());
@@ -124,9 +128,9 @@ public class UsageBatchRepositoryIntegrationTest {
     public void testFindUsageBatch() {
         List<UsageBatch> usageBatches = usageBatchRepository.findAll();
         assertEquals(8, usageBatches.size());
-        assertEquals("00aed73a-4243-440b-aa8a-445185580cb9", usageBatches.get(0).getId());
-        assertEquals("334959d7-ad39-4624-a8fa-38c3e82be6eb", usageBatches.get(1).getId());
-        assertEquals("7c028d85-58c3-45f8-be2d-33c16b0905b0", usageBatches.get(2).getId());
+        assertEquals(NTS_USAGE_BATCH_ID_3, usageBatches.get(0).getId());
+        assertEquals(NTS_USAGE_BATCH_ID_2, usageBatches.get(1).getId());
+        assertEquals(NTS_USAGE_BATCH_ID_1, usageBatches.get(2).getId());
         assertEquals("3f46981e-e85a-4786-9b60-ab009c4358e7", usageBatches.get(3).getId());
         assertEquals("56282dbc-2468-48d4-b926-94d3458a666a", usageBatches.get(4).getId());
         assertEquals("56282dbc-2468-48d4-b926-93d3458a656a", usageBatches.get(5).getId());
@@ -152,40 +156,57 @@ public class UsageBatchRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindBatchNamesWithoutUsagesForClassification() {
+    public void testFindBatchNamesWithoutUsagesForClassificationStm() {
         UsageFilter usageFilter = new UsageFilter();
-        usageFilter.setUsageBatchesIds(Sets.newHashSet("7c028d85-58c3-45f8-be2d-33c16b0905b0"));
+        usageFilter.setUsageBatchesIds(Collections.singleton(NTS_USAGE_BATCH_ID_1));
         List<String> batchNames = usageBatchRepository.findBatchNamesWithoutUsagesForClassification(usageFilter, "STM");
         assertTrue(CollectionUtils.isNotEmpty(batchNames));
         assertEquals(1, batchNames.size());
         assertEquals(NTS_BATCH_NAME, batchNames.get(0));
-        batchNames = usageBatchRepository.findBatchNamesWithoutUsagesForClassification(usageFilter, "NON-STM");
-        assertTrue(CollectionUtils.isEmpty(batchNames));
-        batchNames = usageBatchRepository.findBatchNamesWithoutUsagesForClassification(usageFilter, "UNCLASSIFIED");
-        assertEquals(1, batchNames.size());
-        assertEquals(NTS_BATCH_NAME, batchNames.get(0));
-        usageFilter.setUsageBatchesIds(Sets.newHashSet("7c028d85-58c3-45f8-be2d-33c16b0905b0",
-            "334959d7-ad39-4624-a8fa-38c3e82be6eb", "00aed73a-4243-440b-aa8a-445185580cb9"));
+        usageFilter.setUsageBatchesIds(
+            Sets.newHashSet(NTS_USAGE_BATCH_ID_1, NTS_USAGE_BATCH_ID_2, NTS_USAGE_BATCH_ID_3));
         batchNames = usageBatchRepository.findBatchNamesWithoutUsagesForClassification(usageFilter, "STM");
         assertTrue(CollectionUtils.isNotEmpty(batchNames));
         assertEquals(2, batchNames.size());
         assertTrue(batchNames.contains(NTS_BATCH_NAME));
         assertTrue(batchNames.contains("NTS Batch with Belletristic usages"));
+    }
+
+    @Test
+    public void testFindBatchNamesWithoutUsagesForClassificationNonStm() {
+        UsageFilter usageFilter = new UsageFilter();
+        usageFilter.setUsageBatchesIds(Collections.singleton(NTS_USAGE_BATCH_ID_1));
+        List<String> batchNames =
+            usageBatchRepository.findBatchNamesWithoutUsagesForClassification(usageFilter, "NON-STM");
+        assertTrue(CollectionUtils.isEmpty(batchNames));
+        usageFilter.setUsageBatchesIds(
+            Sets.newHashSet(NTS_USAGE_BATCH_ID_1, NTS_USAGE_BATCH_ID_2, NTS_USAGE_BATCH_ID_3));
         batchNames = usageBatchRepository.findBatchNamesWithoutUsagesForClassification(usageFilter, "NON-STM");
         assertEquals(2, batchNames.size());
         assertTrue(batchNames.contains("NTS Batch with unclassified usages"));
         assertTrue(batchNames.contains("NTS Batch with Belletristic usages"));
-        batchNames = usageBatchRepository.findBatchNamesWithoutUsagesForClassification(usageFilter, "UNCLASSIFIED");
+    }
+
+    @Test
+    public void testFindBatchNamesWithoutUsagesForClassificationUnclassified() {
+        UsageFilter usageFilter = new UsageFilter();
+        usageFilter.setUsageBatchesIds(Collections.singleton(NTS_USAGE_BATCH_ID_1));
+        List<String> batchNames = usageBatchRepository.findBatchNamesWithoutUsagesForClassification(usageFilter, null);
+        assertEquals(1, batchNames.size());
+        assertEquals(NTS_BATCH_NAME, batchNames.get(0));
+        usageFilter.setUsageBatchesIds(Sets.newHashSet(NTS_USAGE_BATCH_ID_1, NTS_USAGE_BATCH_ID_2,
+            NTS_USAGE_BATCH_ID_3));
+        batchNames = usageBatchRepository.findBatchNamesWithoutUsagesForClassification(usageFilter, null);
         assertEquals(2, batchNames.size());
         assertTrue(batchNames.contains("NTS Batch with unclassified usages"));
         assertTrue(batchNames.contains(NTS_BATCH_NAME));
     }
 
-    private UsageBatch buildUsageBatch(String batchName) {
+    private UsageBatch buildUsageBatch() {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setId(RupPersistUtils.generateUuid());
         usageBatch.setProductFamily(FAS_PRODUCT_FAMILY);
-        usageBatch.setName(batchName);
+        usageBatch.setName(USAGE_BATCH_NAME_1);
         Rightsholder rightsholder = new Rightsholder();
         rightsholder.setAccountNumber(RRO_ACCOUNT_NUMBER);
         usageBatch.setRro(rightsholder);
@@ -195,11 +216,11 @@ public class UsageBatchRepositoryIntegrationTest {
         return usageBatch;
     }
 
-    private UsageBatch buildUsageBatchWithFundPool(String batchName) {
+    private UsageBatch buildUsageBatchWithFundPool() {
         UsageBatch usageBatch = new UsageBatch();
         usageBatch.setId(RupPersistUtils.generateUuid());
         usageBatch.setProductFamily("NTS");
-        usageBatch.setName(batchName);
+        usageBatch.setName(USAGE_BATCH_NAME_2);
         usageBatch.setFiscalYear(FISCAL_YEAR_2017);
         Rightsholder rightsholder = new Rightsholder();
         rightsholder.setAccountNumber(RRO_ACCOUNT_NUMBER);

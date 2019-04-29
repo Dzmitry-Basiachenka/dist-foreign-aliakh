@@ -70,7 +70,7 @@ public interface IUsageBatchRepository {
     /**
      * Finds list of batches names that have Fund Pool Amount greater than zero
      * and don't have usages related to specified classification.
-     * For case when classification is defined as UNCLASSIFIED returns list of batches names
+     * For case when classification is defined as null returns list of batches names
      * that contain usages without classification.
      *
      * @param filter         {@link UsageFilter} instance
