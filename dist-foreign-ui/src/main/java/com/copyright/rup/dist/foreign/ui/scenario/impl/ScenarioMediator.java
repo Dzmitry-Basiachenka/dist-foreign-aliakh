@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
+import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
+import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.ui.main.security.ForeignSecurityUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
@@ -61,10 +63,12 @@ class ScenarioMediator implements IMediator {
      * Refreshes components state.
      *
      * @param scenarioEmpty is scenario empty or not
-     * @param status        {@link ScenarioStatusEnum} of selected scenario
+     * @param scenario      selected {@link Scenario}
      */
-    void onScenarioUpdated(boolean scenarioEmpty, ScenarioStatusEnum status) {
-        excludeButton.setEnabled(!scenarioEmpty && ScenarioStatusEnum.IN_PROGRESS == status);
+    void onScenarioUpdated(boolean scenarioEmpty, Scenario scenario) {
+        excludeButton.setEnabled(!scenarioEmpty
+            && ScenarioStatusEnum.IN_PROGRESS == scenario.getStatus()
+            && FdaConstants.FAS_FAS2_PRODUCT_FAMILY_SET.contains(scenario.getProductFamily()));
         exportDetailsButton.setEnabled(!scenarioEmpty);
         exportScenarioButton.setEnabled(!scenarioEmpty);
         rightsholderGrid.setVisible(!scenarioEmpty);
