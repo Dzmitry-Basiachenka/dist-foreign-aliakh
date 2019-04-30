@@ -317,7 +317,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
             message = ForeignUi.getMessage("message.error.empty_usage_batches");
         } else {
             List<String> batchesWithUnclassifiedWorks =
-                controller.getBatchNamesWithUnclassifiedWorks(usagesFilterWidget.getFilter());
+                controller.getBatchNamesWithUnclassifiedWorks(usagesFilterWidget.getFilter().getUsageBatchesIds());
             if (CollectionUtils.isNotEmpty(batchesWithUnclassifiedWorks)) {
                 message = ForeignUi.getMessage("message.error.invalid_batch.unclassified_works",
                     String.join(BATCH_NAMES_LIST_SEPARATOR, batchesWithUnclassifiedWorks));
@@ -331,7 +331,8 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
     private String getClassificationValidationMessage() {
         String message = null;
         Map<String, List<String>> batchesWithoutRhsForStmOrNonStm =
-            controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(usagesFilterWidget.getFilter());
+            controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(
+                usagesFilterWidget.getFilter().getUsageBatchesIds());
         List<String> batchesWithoutRhsForStm =
             batchesWithoutRhsForStmOrNonStm.get(FdaConstants.STM_CLASSIFICATION);
         List<String> batchesWithoutRhsForNonStm =

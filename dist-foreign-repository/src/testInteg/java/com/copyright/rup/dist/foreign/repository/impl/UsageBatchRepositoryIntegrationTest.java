@@ -9,7 +9,6 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
-import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 
 import com.google.common.collect.ImmutableSet;
@@ -157,15 +156,13 @@ public class UsageBatchRepositoryIntegrationTest {
 
     @Test
     public void testFindBatchNamesWithoutUsagesForClassificationStm() {
-        UsageFilter usageFilter = new UsageFilter();
-        usageFilter.setUsageBatchesIds(Collections.singleton(NTS_USAGE_BATCH_ID_1));
-        List<String> batchNames = usageBatchRepository.findBatchNamesWithoutUsagesForClassification(usageFilter, "STM");
+        List<String> batchNames = usageBatchRepository.findBatchNamesWithoutUsagesForClassification(
+            Collections.singleton(NTS_USAGE_BATCH_ID_1), "STM");
         assertTrue(CollectionUtils.isNotEmpty(batchNames));
         assertEquals(1, batchNames.size());
         assertEquals(NTS_BATCH_NAME, batchNames.get(0));
-        usageFilter.setUsageBatchesIds(
-            Sets.newHashSet(NTS_USAGE_BATCH_ID_1, NTS_USAGE_BATCH_ID_2, NTS_USAGE_BATCH_ID_3));
-        batchNames = usageBatchRepository.findBatchNamesWithoutUsagesForClassification(usageFilter, "STM");
+        batchNames = usageBatchRepository.findBatchNamesWithoutUsagesForClassification(
+            Sets.newHashSet(NTS_USAGE_BATCH_ID_1, NTS_USAGE_BATCH_ID_2, NTS_USAGE_BATCH_ID_3), "STM");
         assertTrue(CollectionUtils.isNotEmpty(batchNames));
         assertEquals(2, batchNames.size());
         assertTrue(batchNames.contains(NTS_BATCH_NAME));
@@ -174,14 +171,11 @@ public class UsageBatchRepositoryIntegrationTest {
 
     @Test
     public void testFindBatchNamesWithoutUsagesForClassificationNonStm() {
-        UsageFilter usageFilter = new UsageFilter();
-        usageFilter.setUsageBatchesIds(Collections.singleton(NTS_USAGE_BATCH_ID_1));
-        List<String> batchNames =
-            usageBatchRepository.findBatchNamesWithoutUsagesForClassification(usageFilter, "NON-STM");
+        List<String> batchNames = usageBatchRepository.findBatchNamesWithoutUsagesForClassification(
+            Collections.singleton(NTS_USAGE_BATCH_ID_1), "NON-STM");
         assertTrue(CollectionUtils.isEmpty(batchNames));
-        usageFilter.setUsageBatchesIds(
-            Sets.newHashSet(NTS_USAGE_BATCH_ID_1, NTS_USAGE_BATCH_ID_2, NTS_USAGE_BATCH_ID_3));
-        batchNames = usageBatchRepository.findBatchNamesWithoutUsagesForClassification(usageFilter, "NON-STM");
+        batchNames = usageBatchRepository.findBatchNamesWithoutUsagesForClassification(
+            Sets.newHashSet(NTS_USAGE_BATCH_ID_1, NTS_USAGE_BATCH_ID_2, NTS_USAGE_BATCH_ID_3), "NON-STM");
         assertEquals(2, batchNames.size());
         assertTrue(batchNames.contains("NTS Batch with unclassified usages"));
         assertTrue(batchNames.contains("NTS Batch with Belletristic usages"));
@@ -189,14 +183,12 @@ public class UsageBatchRepositoryIntegrationTest {
 
     @Test
     public void testFindBatchNamesWithoutUsagesForClassificationUnclassified() {
-        UsageFilter usageFilter = new UsageFilter();
-        usageFilter.setUsageBatchesIds(Collections.singleton(NTS_USAGE_BATCH_ID_1));
-        List<String> batchNames = usageBatchRepository.findBatchNamesWithoutUsagesForClassification(usageFilter, null);
+        List<String> batchNames = usageBatchRepository.findBatchNamesWithoutUsagesForClassification(
+            Collections.singleton(NTS_USAGE_BATCH_ID_1), null);
         assertEquals(1, batchNames.size());
         assertEquals(NTS_BATCH_NAME, batchNames.get(0));
-        usageFilter.setUsageBatchesIds(Sets.newHashSet(NTS_USAGE_BATCH_ID_1, NTS_USAGE_BATCH_ID_2,
-            NTS_USAGE_BATCH_ID_3));
-        batchNames = usageBatchRepository.findBatchNamesWithoutUsagesForClassification(usageFilter, null);
+        batchNames = usageBatchRepository.findBatchNamesWithoutUsagesForClassification(
+            Sets.newHashSet(NTS_USAGE_BATCH_ID_1, NTS_USAGE_BATCH_ID_2, NTS_USAGE_BATCH_ID_3), null);
         assertEquals(2, batchNames.size());
         assertTrue(batchNames.contains("NTS Batch with unclassified usages"));
         assertTrue(batchNames.contains(NTS_BATCH_NAME));

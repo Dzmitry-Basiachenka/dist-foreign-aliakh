@@ -22,7 +22,6 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Work;
-import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
@@ -45,6 +44,7 @@ import org.powermock.reflect.Whitebox;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -63,6 +63,7 @@ public class UsageBatchServiceTest {
 
     private static final Integer FISCAL_YEAR = 2017;
     private static final String BATCH_NAME = "JAACC_11Dec16";
+    private static final String BATCH_UID = RupPersistUtils.generateUuid();
     private static final String USER_NAME = "User Name";
     private static final Long RRO_ACCOUNT_NUMBER = 123456789L;
     private static final String RRO_NAME = "RRO Name";
@@ -245,23 +246,23 @@ public class UsageBatchServiceTest {
 
     @Test
     public void testGetBatchNamesWithUnclassifiedWorks() {
-        UsageFilter filter = new UsageFilter();
-        expect(usageBatchRepository.findBatchNamesWithoutUsagesForClassification(filter, "UNCLASSIFIED"))
+        Set<String> batchIds = Collections.singleton(BATCH_UID);
+        expect(usageBatchRepository.findBatchNamesWithoutUsagesForClassification(batchIds, null))
             .andReturn(Collections.singletonList("Batch with unclassified usages")).once();
         replay(usageBatchRepository);
-        usageBatchService.getBatchNamesWithUnclassifiedWorks(filter);
+        usageBatchService.getBatchNamesWithUnclassifiedWorks(Collections.singleton(BATCH_UID));
         verify(usageBatchRepository);
     }
 
     @Test
     public void testGetClassifcationToBatchNamesWithoutUsagesForStmOrNonStm() {
-        UsageFilter filter = new UsageFilter();
-        expect(usageBatchRepository.findBatchNamesWithoutUsagesForClassification(filter, "STM"))
+        Set<String> batchIds = Collections.singleton(BATCH_UID);
+        expect(usageBatchRepository.findBatchNamesWithoutUsagesForClassification(batchIds, "STM"))
             .andReturn(Collections.singletonList("Batch without STM usages")).once();
-        expect(usageBatchRepository.findBatchNamesWithoutUsagesForClassification(filter, "NON-STM"))
+        expect(usageBatchRepository.findBatchNamesWithoutUsagesForClassification(batchIds, "NON-STM"))
             .andReturn(Collections.emptyList()).once();
         replay(usageBatchRepository);
-        usageBatchService.getClassifcationToBatchNamesWithoutUsagesForStmOrNonStm(filter);
+        usageBatchService.getClassifcationToBatchNamesWithoutUsagesForStmOrNonStm(batchIds);
         verify(usageBatchRepository);
     }
 

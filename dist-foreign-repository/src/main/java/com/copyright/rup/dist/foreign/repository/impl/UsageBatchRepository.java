@@ -7,7 +7,6 @@ import com.copyright.rup.dist.common.repository.BaseRepository;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 
 import com.google.common.collect.Maps;
@@ -18,6 +17,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Implementation of {@link IUsageBatchRepository} for MyBatis.
@@ -73,9 +73,9 @@ public class UsageBatchRepository extends BaseRepository implements IUsageBatchR
     }
 
     @Override
-    public List<String> findBatchNamesWithoutUsagesForClassification(UsageFilter filter, String classification) {
+    public List<String> findBatchNamesWithoutUsagesForClassification(Set<String> batchIds, String classification) {
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
-        params.put("filter", Objects.requireNonNull(filter));
+        params.put("batchIds", Objects.requireNonNull(batchIds));
         params.put("classification", classification);
         return selectList("IUsageBatchMapper.findBatchNamesWithoutUsagesForClassification", params);
     }

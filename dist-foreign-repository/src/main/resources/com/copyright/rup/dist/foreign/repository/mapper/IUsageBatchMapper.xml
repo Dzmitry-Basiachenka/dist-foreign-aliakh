@@ -142,7 +142,10 @@
             from ${schema}.df_usage_batch ub
             join ${schema}.df_usage u on ub.df_usage_batch_uid = u.df_usage_batch_uid
             left join ${schema}.df_work_classification wc on wc.wr_wrk_inst = u.wr_wrk_inst
-            <include refid="IUsageMapper.usageFilter"/>
+            where ub.df_usage_batch_uid in
+                <foreach collection="batchIds" item="batchId" separator="," open="(" close=")">
+                    #{batchId}
+                </foreach>
             group by ub.df_usage_batch_uid, ub.name, wc.classification
         )
 

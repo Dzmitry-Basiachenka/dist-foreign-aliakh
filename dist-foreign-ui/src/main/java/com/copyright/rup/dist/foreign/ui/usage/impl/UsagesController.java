@@ -16,7 +16,6 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
 import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
@@ -62,6 +61,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -316,13 +316,13 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
-    public List<String> getBatchNamesWithUnclassifiedWorks(UsageFilter usageFilter) {
-        return usageBatchService.getBatchNamesWithUnclassifiedWorks(usageFilter);
+    public List<String> getBatchNamesWithUnclassifiedWorks(Set<String> batchIds) {
+        return usageBatchService.getBatchNamesWithUnclassifiedWorks(batchIds);
     }
 
     @Override
-    public Map<String, List<String>> getBatchNamesWithInvalidStmOrNonStmUsagesState(UsageFilter usageFilter) {
-        return usageBatchService.getClassifcationToBatchNamesWithoutUsagesForStmOrNonStm(usageFilter);
+    public Map<String, List<String>> getBatchNamesWithInvalidStmOrNonStmUsagesState(Set<String> batchIds) {
+        return usageBatchService.getClassifcationToBatchNamesWithoutUsagesForStmOrNonStm(batchIds);
     }
 
     @Override

@@ -9,7 +9,6 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Work;
-import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
@@ -190,17 +189,18 @@ public class UsageBatchService implements IUsageBatchService {
     }
 
     @Override
-    public List<String> getBatchNamesWithUnclassifiedWorks(UsageFilter usageFilter) {
-        return usageBatchRepository.findBatchNamesWithoutUsagesForClassification(usageFilter, "UNCLASSIFIED");
+    public List<String> getBatchNamesWithUnclassifiedWorks(Set<String> batchIds) {
+        return usageBatchRepository.findBatchNamesWithoutUsagesForClassification(batchIds, null);
     }
 
     @Override
-    public Map<String, List<String>> getClassifcationToBatchNamesWithoutUsagesForStmOrNonStm(UsageFilter filter) {
-        Map<String, List<String>> classificationToBatchNamesMap = Maps.newHashMapWithExpectedSize(3);
+    public Map<String, List<String>> getClassifcationToBatchNamesWithoutUsagesForStmOrNonStm(Set<String> batchIds) {
+        Map<String, List<String>> classificationToBatchNamesMap = Maps.newHashMapWithExpectedSize(2);
         classificationToBatchNamesMap.put(FdaConstants.STM_CLASSIFICATION,
-            usageBatchRepository.findBatchNamesWithoutUsagesForClassification(filter, FdaConstants.STM_CLASSIFICATION));
+            usageBatchRepository.findBatchNamesWithoutUsagesForClassification(batchIds,
+                FdaConstants.STM_CLASSIFICATION));
         classificationToBatchNamesMap.put(FdaConstants.NON_STM_CLASSIFICATION,
-            usageBatchRepository.findBatchNamesWithoutUsagesForClassification(filter,
+            usageBatchRepository.findBatchNamesWithoutUsagesForClassification(batchIds,
                 FdaConstants.NON_STM_CLASSIFICATION));
         return classificationToBatchNamesMap;
     }
