@@ -107,12 +107,16 @@ public class ScenarioService implements IScenarioService {
     @Override
     @Transactional
     public Scenario createScenario(String scenarioName, String description, UsageFilter usageFilter) {
+        LOGGER.info("Insert scenario. Started. Name={}, Description={}, UsageFilter={}",
+            scenarioName, description, usageFilter);
         List<Usage> usages = usageService.getUsagesWithAmounts(usageFilter);
         Scenario scenario = buildScenario(scenarioName, description, usageFilter);
         scenarioRepository.insert(scenario);
         usageService.addUsagesToScenario(usages, scenario);
         scenarioUsageFilterService.insert(scenario.getId(), new ScenarioUsageFilter(usageFilter));
         scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY);
+        LOGGER.info("Insert scenario. Finished. Name={}, Description={}, UsageFilter={}",
+            scenarioName, description, usageFilter);
         return scenario;
     }
 
@@ -120,10 +124,14 @@ public class ScenarioService implements IScenarioService {
     @Transactional
     public Scenario createNtsScenario(String scenarioName, NtsFields ntsFields, String description,
                                       UsageFilter usageFilter) {
+        LOGGER.info("Insert NTS scenario. Started. Name={}, NtsFields={}, Description={}, UsageFilter={}",
+            scenarioName, ntsFields, description, usageFilter);
         Scenario scenario = buildNtsScenario(scenarioName, ntsFields, description, usageFilter);
         scenarioRepository.insertNtsScenarioAndAddUsages(scenario, usageFilter);
         scenarioUsageFilterService.insert(scenario.getId(), new ScenarioUsageFilter(usageFilter));
         scenarioAuditService.logAction(scenario.getId(), ScenarioActionTypeEnum.ADDED_USAGES, StringUtils.EMPTY);
+        LOGGER.info("Insert NTS scenario. Finished. Name={}, NtsFields={}, Description={}, UsageFilter={}",
+            scenarioName, ntsFields, description, usageFilter);
         return scenario;
     }
 
