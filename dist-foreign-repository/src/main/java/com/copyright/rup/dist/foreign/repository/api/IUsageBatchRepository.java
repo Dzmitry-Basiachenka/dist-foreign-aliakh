@@ -1,9 +1,9 @@
 package com.copyright.rup.dist.foreign.repository.api;
 
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
-import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Represents interface of repository for usage batches.
@@ -73,9 +73,9 @@ public interface IUsageBatchRepository {
      * For case when classification is defined as null returns list of batches names
      * that contain usages without classification.
      *
-     * @param filter         {@link UsageFilter} instance
+     * @param batchIds       set of batch ids
      * @param classification classification
      * @return list of found batch names
      */
-    List<String> findBatchNamesWithoutUsagesForClassification(UsageFilter filter, String classification);
+    List<String> findBatchNamesWithoutUsagesForClassification(Set<String> batchIds, String classification);
 }

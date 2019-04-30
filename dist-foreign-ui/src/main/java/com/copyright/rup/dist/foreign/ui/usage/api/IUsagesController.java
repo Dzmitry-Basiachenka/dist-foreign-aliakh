@@ -9,7 +9,6 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.impl.csv.ResearchedUsagesCsvProcessor;
@@ -25,6 +24,7 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Interface for controller for {@link IUsagesWidget}.
@@ -304,18 +304,18 @@ public interface IUsagesController extends IController<IUsagesWidget> {
     /**
      * Gets list of batch names containing usages with unclassified works.
      *
-     * @param usageFilter {@link UsageFilter} instance
+     * @param batchIds set of batch ids
      * @return list of found batches names
      */
-    List<String> getBatchNamesWithUnclassifiedWorks(UsageFilter usageFilter);
+    List<String> getBatchNamesWithUnclassifiedWorks(Set<String> batchIds);
 
     /**
      * Gets map of STM and NON-STM classification to list of batch names
      * that don't have at least one usages related to corresponding STM and NON-STM classification
      * when corresponding Fund Pool amount is greater than zero.
      *
-     * @param usageFilter {@link UsageFilter} instance
+     * @param batchIds set of batch ids
      * @return map with key - classficiation, value - list of batch names with invalid classification state of usages
      */
-    Map<String, List<String>> getBatchNamesWithInvalidStmOrNonStmUsagesState(UsageFilter usageFilter);
+    Map<String, List<String>> getBatchNamesWithInvalidStmOrNonStmUsagesState(Set<String> batchIds);
 }

@@ -266,9 +266,9 @@ public class UsagesWidgetTest {
         expect(controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
         expect(controller.getSelectedProductFamily()).andReturn(NTS_PRODUCT_FAMILY).times(2);
-        expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getFilter()))
+        expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getFilter().getUsageBatchesIds()))
             .andReturn(Collections.emptyList()).once();
-        expect(controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(filterWidget.getFilter()))
+        expect(controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(filterWidget.getFilter().getUsageBatchesIds()))
             .andReturn(ImmutableMap.of("STM", Collections.emptyList(), "NON-STM", Collections.emptyList())).once();
         expect(controller.getScenarioService()).andReturn(null).once();
         Windows.showModalWindow(anyObject(CreateNtsScenarioWindow.class));
@@ -294,7 +294,7 @@ public class UsagesWidgetTest {
         expect(controller.getSize()).andReturn(1).once();
         expect(controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
-        expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getFilter()))
+        expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getFilter().getUsageBatchesIds()))
             .andReturn(Collections.singletonList("Batch with unclassified usages")).once();
         Windows.showNotificationWindow(
             "The following batches have unclassified works:<ul><li><i><b>Batch with unclassified usages</b></i></ul>");
@@ -320,9 +320,9 @@ public class UsagesWidgetTest {
         expect(controller.getSize()).andReturn(1).once();
         expect(controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
-        expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getFilter()))
+        expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getFilter().getUsageBatchesIds()))
             .andReturn(Collections.emptyList()).once();
-        expect(controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(filterWidget.getFilter()))
+        expect(controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(filterWidget.getFilter().getUsageBatchesIds()))
             .andReturn(ImmutableMap.of("STM", Collections.singletonList("Batch without STM RHs"))).once();
         Windows.showNotificationWindow("There are no STM rightsholders in the following batches: " +
             "<ul><li><i><b>Batch without STM RHs</b></i></ul>");
@@ -348,9 +348,9 @@ public class UsagesWidgetTest {
         expect(controller.getSize()).andReturn(1).once();
         expect(controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
-        expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getFilter()))
+        expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getFilter().getUsageBatchesIds()))
             .andReturn(Collections.emptyList()).once();
-        expect(controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(filterWidget.getFilter()))
+        expect(controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(filterWidget.getFilter().getUsageBatchesIds()))
             .andReturn(ImmutableMap.of("STM", Collections.singletonList("Batch without STM RHs"),
                 "NON-STM", Collections.singletonList("Batch without NON-STM RHs"))).once();
         Windows.showNotificationWindow("There are no STM rightsholders in the following batches: " +

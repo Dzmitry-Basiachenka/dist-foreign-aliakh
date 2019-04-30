@@ -64,6 +64,7 @@ import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -476,21 +477,20 @@ public class UsagesControllerTest {
 
     @Test
     public void testGetBatchNamesWithUnclassifiedUsages() {
-        UsageFilter filter = new UsageFilter();
-        expect(usageBatchService.getBatchNamesWithUnclassifiedWorks(filter))
+        expect(usageBatchService.getBatchNamesWithUnclassifiedWorks(Collections.singleton(USAGE_BATCH_ID)))
             .andReturn(Collections.singletonList("Batch with unclassified usages")).once();
         replay(usageBatchService);
-        controller.getBatchNamesWithUnclassifiedWorks(filter);
+        controller.getBatchNamesWithUnclassifiedWorks(Collections.singleton(USAGE_BATCH_ID));
         verify(usageBatchService);
     }
 
     @Test
     public void testGetBatchNamesWithInvalidStmOrNonStmUsagesState() {
-        UsageFilter filter = new UsageFilter();
-        expect(usageBatchService.getClassifcationToBatchNamesWithoutUsagesForStmOrNonStm(filter))
+        Set<String> batchIds = Collections.singleton(USAGE_BATCH_ID);
+        expect(usageBatchService.getClassifcationToBatchNamesWithoutUsagesForStmOrNonStm(batchIds))
             .andReturn(Collections.emptyMap()).once();
         replay(usageBatchService);
-        controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(filter);
+        controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(batchIds);
         verify(usageBatchService);
     }
 
