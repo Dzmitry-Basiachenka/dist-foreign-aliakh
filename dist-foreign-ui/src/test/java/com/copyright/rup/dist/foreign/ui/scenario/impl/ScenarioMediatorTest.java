@@ -7,6 +7,7 @@ import static org.powermock.api.easymock.PowerMock.mockStatic;
 import static org.powermock.api.easymock.PowerMock.replay;
 import static org.powermock.api.easymock.PowerMock.verify;
 
+import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.vaadin.security.SecurityUtils;
 import com.copyright.rup.vaadin.widget.SearchWidget;
@@ -42,10 +43,13 @@ public class ScenarioMediatorTest {
     private final Grid grid = new Grid();
     private final VerticalLayout emptyUsagesLayout = new VerticalLayout();
     private ScenarioMediator mediator;
+    private Scenario scenario;
 
     @Before
     public void setUp() {
         mockStatic(SecurityUtils.class);
+        scenario = new Scenario();
+        scenario.setProductFamily("FAS");
         mediator = new ScenarioMediator();
         mediator.setExcludeButton(excludeButton);
         mediator.setExportDetailsButton(exportDetailsButton);
@@ -88,7 +92,8 @@ public class ScenarioMediatorTest {
         expect(SecurityUtils.hasPermission(PERMISSION_NAME)).andReturn(true).once();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
-        mediator.onScenarioUpdated(false, ScenarioStatusEnum.IN_PROGRESS);
+        scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
+        mediator.onScenarioUpdated(false, scenario);
         verify(SecurityUtils.class);
         assertTrue(excludeButton.isEnabled());
         assertTrue(exportDetailsButton.isEnabled());
@@ -103,7 +108,8 @@ public class ScenarioMediatorTest {
         expect(SecurityUtils.hasPermission(PERMISSION_NAME)).andReturn(true).once();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
-        mediator.onScenarioUpdated(false, ScenarioStatusEnum.SUBMITTED);
+        scenario.setStatus(ScenarioStatusEnum.SUBMITTED);
+        mediator.onScenarioUpdated(false, scenario);
         verify(SecurityUtils.class);
         assertFalse(excludeButton.isEnabled());
         assertTrue(exportDetailsButton.isEnabled());
@@ -118,7 +124,8 @@ public class ScenarioMediatorTest {
         expect(SecurityUtils.hasPermission(PERMISSION_NAME)).andReturn(true).once();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
-        mediator.onScenarioUpdated(true, ScenarioStatusEnum.IN_PROGRESS);
+        scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
+        mediator.onScenarioUpdated(true, scenario);
         verify(SecurityUtils.class);
         assertFalse(excludeButton.isEnabled());
         assertFalse(exportDetailsButton.isEnabled());
@@ -133,7 +140,8 @@ public class ScenarioMediatorTest {
         expect(SecurityUtils.hasPermission(PERMISSION_NAME)).andReturn(false).once();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
-        mediator.onScenarioUpdated(true, ScenarioStatusEnum.IN_PROGRESS);
+        scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
+        mediator.onScenarioUpdated(true, scenario);
         verify(SecurityUtils.class);
         assertFalse(excludeButton.isVisible());
         assertFalse(excludeButton.isEnabled());
@@ -142,5 +150,23 @@ public class ScenarioMediatorTest {
         assertFalse(grid.isVisible());
         assertTrue(emptyUsagesLayout.isVisible());
         assertFalse(searchWidget.isVisible());
+    }
+
+    @Test
+    public void testOnScenarioUpdatedNtsProductFamily() {
+        expect(SecurityUtils.hasPermission(PERMISSION_NAME)).andReturn(true).once();
+        replay(SecurityUtils.class);
+        mediator.applyPermissions();
+        scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
+        scenario.setProductFamily("NTS");
+        mediator.onScenarioUpdated(false, scenario);
+        verify(SecurityUtils.class);
+        assertTrue(excludeButton.isVisible());
+        assertFalse(excludeButton.isEnabled());
+        assertTrue(exportDetailsButton.isEnabled());
+        assertTrue(exportScenarioButton.isEnabled());
+        assertTrue(grid.isVisible());
+        assertFalse(emptyUsagesLayout.isVisible());
+        assertTrue(searchWidget.isVisible());
     }
 }

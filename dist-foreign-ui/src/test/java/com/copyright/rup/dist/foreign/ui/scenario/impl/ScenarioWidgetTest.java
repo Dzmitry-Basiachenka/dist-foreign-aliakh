@@ -114,7 +114,7 @@ public class ScenarioWidgetTest {
         scenario.setStatus(ScenarioStatusEnum.IN_PROGRESS);
         expect(controller.isScenarioEmpty()).andReturn(false).once();
         expect(controller.getScenario()).andReturn(scenario).once();
-        mediator.onScenarioUpdated(false, ScenarioStatusEnum.IN_PROGRESS);
+        mediator.onScenarioUpdated(false, scenario);
         expectLastCall().once();
         replay(mediator, controller);
         scenarioWidget.refresh();
