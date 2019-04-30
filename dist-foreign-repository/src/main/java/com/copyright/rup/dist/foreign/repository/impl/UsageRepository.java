@@ -81,6 +81,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     private static final String USAGE_ID_KEY = "usageId";
     private static final String STATUS_KEY = "status";
     private static final String RH_ACCOUNT_NUMBER_KEY = "rhAccountNumber";
+    private static final String PRODUCT_FAMILY_KEY = "productFamily";
     private static final String BATCH_ID_KEY = "batchId";
     private static final int REPORT_BATCH_SIZE = 100000;
 
@@ -102,7 +103,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     public List<String> findIdsByStatusAndProductFamily(UsageStatusEnum status, String productFamily) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(STATUS_KEY, Objects.requireNonNull(status));
-        parameters.put("productFamily", Objects.requireNonNull(productFamily));
+        parameters.put(PRODUCT_FAMILY_KEY, Objects.requireNonNull(productFamily));
         return selectList("IUsageMapper.findIdsByStatusAndProductFamily", parameters);
     }
 
@@ -110,7 +111,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     public List<Usage> findByStatusAndProductFamily(UsageStatusEnum status, String productFamily) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(STATUS_KEY, Objects.requireNonNull(status));
-        parameters.put("productFamily", Objects.requireNonNull(productFamily));
+        parameters.put(PRODUCT_FAMILY_KEY, Objects.requireNonNull(productFamily));
         return selectList("IUsageMapper.findByStatusAndProductFamily", parameters);
     }
 
@@ -128,8 +129,13 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public List<String> findUnclassifiedUsageIds() {
-        return selectList("IUsageMapper.findUnclassifiedUsageIds", UsageStatusEnum.UNCLASSIFIED);
+    public List<String> findUsageIdsForClassificationUpdate() {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(4);
+        params.put("unclassifiedStatus", UsageStatusEnum.UNCLASSIFIED);
+        params.put("belletristicClassification", FdaConstants.BELLETRISTIC_CLASSIFICATION);
+        params.put("eligibleStatus", UsageStatusEnum.ELIGIBLE);
+        params.put(PRODUCT_FAMILY_KEY, FdaConstants.NTS_PRODUCT_FAMILY);
+        return selectList("IUsageMapper.findUsageIdsForClassificationUpdate", params);
     }
 
     @Override
@@ -586,7 +592,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(5);
         params.put("statusToFind", UsageStatusEnum.ELIGIBLE);
         params.put("statusToSet", UsageStatusEnum.UNCLASSIFIED);
-        params.put("productFamily", FdaConstants.NTS_PRODUCT_FAMILY);
+        params.put(PRODUCT_FAMILY_KEY, FdaConstants.NTS_PRODUCT_FAMILY);
         params.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
         Iterables.partition(wrWrkInsts, MAX_VARIABLES_COUNT).forEach(partition -> {
             params.put("wrWrkInsts", Objects.requireNonNull(partition));

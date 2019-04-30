@@ -80,7 +80,7 @@ public class WorkClassificationIntegrationTest {
         assertAndGetUsages(1, UsageStatusEnum.UNCLASSIFIED);
         workClassificationService.insertOrUpdateClassifications(
             Sets.newHashSet(buildClassification(WR_WRK_INST_1), buildClassification(WR_WRK_INST_2)), BELLETRISTIC);
-        assertAndGetUsages(1, UsageStatusEnum.ELIGIBLE);
+        assertAndGetUsages(0, UsageStatusEnum.ELIGIBLE);
         assertAndGetUsages(0, UsageStatusEnum.UNCLASSIFIED);
         assertEquals(BELLETRISTIC, workClassificationService.getClassification(WR_WRK_INST_1));
         assertEquals(BELLETRISTIC, workClassificationService.getClassification(WR_WRK_INST_2));
