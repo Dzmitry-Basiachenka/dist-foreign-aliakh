@@ -1,3 +1,11 @@
+5.1.26
+-
+* B-48300 FDA: Remove under minimum RHs and reallocate funds proportionally: make changes based on comments in CR-DIST-FOREIGN-103
+* B-49019 FDA: Create NTS Scenario: make changes based on comments in CR-DIST-FOREIGN-102
+* B-49464 Tech Debt: FDA: disable exclude details button for NTS scenarios
+* CDP-722 FDA: NTS classification: Usage remains in ELIGIBLE status after it was reclassified as BELLETRISTIC
+* CDP-736 FDA: Create NTS scenario: Scenario can be created if batch contains usages with UNCLASSIFIED status
+
 5.1.25
 -
 * B-46740 FDA: Ensure that there is at least one rightsholder for the corresponding fund pool: make changes based on comments in CR-DIST-FOREIGN-104
