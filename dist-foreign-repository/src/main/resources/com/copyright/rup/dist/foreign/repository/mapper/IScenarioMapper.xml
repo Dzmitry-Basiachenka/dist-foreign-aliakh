@@ -69,7 +69,6 @@
     </insert>
 
     <insert id="insertNtsScenarioAndAddUsages" parameterType="map">
-        <!-- Inserts NTS scenario -->
         with result as (
             insert into ${schema}.df_scenario (
                 <include refid="scenarioColumns"/>

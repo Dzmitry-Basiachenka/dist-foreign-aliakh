@@ -319,11 +319,6 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public void deleteNtsExcludedByScenarioId(String scenarioId) {
-        usageRepository.deleteNtsExcludedByScenarioId(scenarioId);
-    }
-
-    @Override
     public List<RightsholderTotalsHolder> getRightsholderTotalsHoldersByScenario(Scenario scenario,
                                                                                  String searchValue,
                                                                                  Pageable pageable, Sort sort) {

@@ -442,20 +442,11 @@ public class UsageServiceTest {
         expectLastCall().once();
         usageArchiveRepository.insert(usage2);
         expectLastCall().once();
-        usageRepository.deleteByScenarioId(scenario.getId());
+        usageRepository.deleteByScenarioId(SCENARIO_ID);
         expectLastCall().once();
         replay(usageRepository, usageArchiveRepository);
         usageService.moveToArchive(scenario);
         verify(usageRepository, usageArchiveRepository);
-    }
-
-    @Test
-    public void testDeleteNtsExcludedByScenarioId() {
-        usageRepository.deleteNtsExcludedByScenarioId(scenario.getId());
-        expectLastCall().once();
-        replay(usageRepository);
-        usageService.deleteNtsExcludedByScenarioId(scenario.getId());
-        verify(usageRepository);
     }
 
     @Test
