@@ -27,9 +27,8 @@ import java.math.BigDecimal;
 @JsonInclude(Include.NON_NULL)
 public class ExternalUsage {
 
-    @JsonProperty("rh_account_number")
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long rhAccountNumber;
+    @JsonProperty("rh_uid")
+    private String rhId;
 
     @JsonProperty("product_family")
     private String productFamily;
@@ -59,7 +58,7 @@ public class ExternalUsage {
      * @param usage base usage
      */
     public ExternalUsage(Usage usage) {
-        this.rhAccountNumber = usage.getRightsholder().getAccountNumber();
+        this.rhId = usage.getRightsholder().getId();
         this.productFamily = usage.getProductFamily();
         this.usageId = usage.getId();
         this.workTitle = usage.getSystemTitle();
@@ -69,12 +68,12 @@ public class ExternalUsage {
         this.wrWrkInst = usage.getWrWrkInst();
     }
 
-    public Long getRhAccountNumber() {
-        return rhAccountNumber;
+    public String getRhId() {
+        return rhId;
     }
 
-    public void setRhAccountNumber(Long rhAccountNumber) {
-        this.rhAccountNumber = rhAccountNumber;
+    public void setRhId(String rhId) {
+        this.rhId = rhId;
     }
 
     public String getProductFamily() {
@@ -143,7 +142,7 @@ public class ExternalUsage {
         }
         ExternalUsage that = (ExternalUsage) obj;
         return new EqualsBuilder()
-            .append(rhAccountNumber, that.rhAccountNumber)
+            .append(rhId, that.rhId)
             .append(productFamily, that.productFamily)
             .append(usageId, that.usageId)
             .append(royaltyAmount, that.royaltyAmount)
@@ -157,7 +156,7 @@ public class ExternalUsage {
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
-            .append(rhAccountNumber)
+            .append(rhId)
             .append(productFamily)
             .append(usageId)
             .append(royaltyAmount)
@@ -171,7 +170,7 @@ public class ExternalUsage {
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-            .append("rhAccountNumber", rhAccountNumber)
+            .append("rhId", rhId)
             .append("productFamily", productFamily)
             .append("usageId", usageId)
             .append("royaltyAmount", royaltyAmount)

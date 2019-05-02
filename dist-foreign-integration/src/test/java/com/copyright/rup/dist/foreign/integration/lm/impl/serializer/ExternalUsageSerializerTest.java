@@ -40,7 +40,7 @@ public class ExternalUsageSerializerTest {
     private ExternalUsageSerializer externalUsageSerializer;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         externalUsageSerializer = new ExternalUsageSerializer();
     }
 
@@ -85,7 +85,7 @@ public class ExternalUsageSerializerTest {
         Usage usage = new Usage();
         usage.setId(usageId);
         Rightsholder rightsholder = new Rightsholder();
-        rightsholder.setAccountNumber(1000010023L);
+        rightsholder.setId("07529566-6ce4-11e9-a923-1681be663d3e");
         usage.setRightsholder(rightsholder);
         usage.setNetAmount(new BigDecimal("100.00"));
         usage.setServiceFeeAmount(new BigDecimal("20.00"));
