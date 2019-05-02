@@ -44,6 +44,7 @@
         <typeAlias alias="WorkClassification" type="com.copyright.rup.dist.foreign.domain.WorkClassification"/>
         <typeAlias alias="PreServiceFeeFund" type="com.copyright.rup.dist.foreign.domain.PreServiceFeeFund"/>
         <typeAlias alias="NtsFieldsTypeHandler" type="com.copyright.rup.dist.foreign.repository.impl.converter.NtsFieldsTypeHandler"/>
+        <typeAlias alias="batchNameScenarioNamePair" type="com.copyright.rup.dist.foreign.repository.impl.BatchesNamesToScenariosNamesResultHandler$BatchNameScenarioNamePair"/>
     </typeAliases>
 
     <typeHandlers>

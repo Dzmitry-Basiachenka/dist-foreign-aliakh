@@ -28,6 +28,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Verifies {@link UsageBatchRepository}.
@@ -117,24 +118,25 @@ public class UsageBatchRepositoryIntegrationTest {
     @Test
     public void testDeleteUsageBatch() {
         String batchId = "56282dbc-2468-48d4-b926-93d3458a656a";
-        assertEquals(8, usageBatchRepository.findAll().size());
+        assertEquals(9, usageBatchRepository.findAll().size());
         usageRepository.deleteByBatchId(batchId);
         usageBatchRepository.deleteUsageBatch(batchId);
-        assertEquals(7, usageBatchRepository.findAll().size());
+        assertEquals(8, usageBatchRepository.findAll().size());
     }
 
     @Test
     public void testFindUsageBatch() {
         List<UsageBatch> usageBatches = usageBatchRepository.findAll();
-        assertEquals(8, usageBatches.size());
-        assertEquals(NTS_USAGE_BATCH_ID_3, usageBatches.get(0).getId());
-        assertEquals(NTS_USAGE_BATCH_ID_2, usageBatches.get(1).getId());
-        assertEquals(NTS_USAGE_BATCH_ID_1, usageBatches.get(2).getId());
-        assertEquals("3f46981e-e85a-4786-9b60-ab009c4358e7", usageBatches.get(3).getId());
-        assertEquals("56282dbc-2468-48d4-b926-94d3458a666a", usageBatches.get(4).getId());
-        assertEquals("56282dbc-2468-48d4-b926-93d3458a656a", usageBatches.get(5).getId());
-        assertEquals("a5b64c3a-55d2-462e-b169-362dca6a4dd6", usageBatches.get(6).getId());
-        assertEquals("66282dbc-2468-48d4-b926-93d3458a656b", usageBatches.get(7).getId());
+        assertEquals(9, usageBatches.size());
+        assertEquals("13027b25-2269-3bec-48ea-5126431eedb0", usageBatches.get(0).getId());
+        assertEquals(NTS_USAGE_BATCH_ID_3, usageBatches.get(1).getId());
+        assertEquals(NTS_USAGE_BATCH_ID_2, usageBatches.get(2).getId());
+        assertEquals(NTS_USAGE_BATCH_ID_1, usageBatches.get(3).getId());
+        assertEquals("3f46981e-e85a-4786-9b60-ab009c4358e7", usageBatches.get(4).getId());
+        assertEquals("56282dbc-2468-48d4-b926-94d3458a666a", usageBatches.get(5).getId());
+        assertEquals("56282dbc-2468-48d4-b926-93d3458a656a", usageBatches.get(6).getId());
+        assertEquals("a5b64c3a-55d2-462e-b169-362dca6a4dd6", usageBatches.get(7).getId());
+        assertEquals("66282dbc-2468-48d4-b926-93d3458a656b", usageBatches.get(8).getId());
     }
 
     @Test
@@ -192,6 +194,27 @@ public class UsageBatchRepositoryIntegrationTest {
         assertEquals(2, batchNames.size());
         assertTrue(batchNames.contains("NTS Batch with unclassified usages"));
         assertTrue(batchNames.contains(NTS_BATCH_NAME));
+    }
+
+    @Test
+    public void testFindProcessingBatchesNames() {
+        List<String> batchesNames = usageBatchRepository.findProcessingBatchesNames(
+            ImmutableSet.of("7c028d85-58c3-45f8-be2d-33c16b0905b0", "334959d7-ad39-4624-a8fa-38c3e82be6eb",
+                "00aed73a-4243-440b-aa8a-445185580cb9", "13027b25-2269-3bec-48ea-5126431eedb0"));
+        assertNotNull(batchesNames);
+        assertEquals(3, batchesNames.size());
+        assertEquals("NTS Batch with Belletristic usages", batchesNames.get(0));
+        assertEquals("NTS Batch with unclassified usages", batchesNames.get(1));
+        assertEquals("NTS Batch without STM usages", batchesNames.get(2));
+    }
+
+    @Test
+    public void testFindBatchesNamesToScenariosNames() {
+        Map<String, String> batchesNamesToScenariosNames = usageBatchRepository.findBatchesNamesToScenariosNames(
+            ImmutableSet.of("3f46981e-e85a-4786-9b60-ab009c4358e7","7c028d85-58c3-45f8-be2d-33c16b0905b0"));
+        assertNotNull(batchesNamesToScenariosNames);
+        assertEquals(1, batchesNamesToScenariosNames.size());
+        assertEquals("Scenario name 4", batchesNamesToScenariosNames.get("NEW_26_OCT_2017"));
     }
 
     private UsageBatch buildUsageBatch() {
