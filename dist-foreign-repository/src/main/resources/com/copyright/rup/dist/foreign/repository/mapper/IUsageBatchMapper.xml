@@ -17,6 +17,11 @@
         <result property="updateDate" column="updated_datetime"/>
     </resultMap>
 
+    <resultMap id="batchNameScenarioNamePairResultMap" type="BatchNameScenarioNamePair">
+        <result property="batchName" column="batch_name"/>
+        <result property="scenarioName" column="scenario_name"/>
+    </resultMap>
+
     <sql id="usageBatchColumns">
         ub.df_usage_batch_uid,
         ub.name,
@@ -165,5 +170,38 @@
             group by name
             having sum(unclassified_count) &gt; 0
         </if>
+    </select>
+
+    <select id="findProcessingBatchesNames" parameterType="map" resultType="string">
+        select
+            name
+        from ${schema}.df_usage_batch ub
+        where
+            ub.df_usage_batch_uid in
+            <foreach collection="batchesIds" item="batchId" separator="," open="(" close=")">
+                #{batchId}
+            </foreach>
+        and exists (
+            select 1
+            from ${schema}.df_usage u
+                where u.df_usage_batch_uid = ub.df_usage_batch_uid
+                and u.status_ind not in
+                <foreach collection="statuses" item="status" separator="," open="(" close=")">
+                    #{status}
+                </foreach>
+        )
+        order by ub.updated_datetime desc
+    </select>
+
+    <select id="findBatchesNamesToScenariosNames" parameterType="collection" resultMap="batchNameScenarioNamePairResultMap">
+        select
+            (select name from ${schema}.df_usage_batch ub where ub.df_usage_batch_uid = batch_filter.df_usage_batch_uid) batch_name,
+            (select name from ${schema}.df_scenario s where s.df_scenario_uid = f.df_scenario_uid) scenario_name
+        from ${schema}.df_scenario_usage_filter_to_usage_batches_ids_map batch_filter
+        join ${schema}.df_scenario_usage_filter f on f.df_scenario_usage_filter_uid = batch_filter.df_scenario_usage_filter_uid
+        where batch_filter.df_usage_batch_uid in
+            <foreach collection="collection" item="batchId" separator="," open="(" close=")">
+                #{batchId}
+            </foreach>
     </select>
 </mapper>

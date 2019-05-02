@@ -41,6 +41,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Main widget for usages.
@@ -313,40 +315,59 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
 
     private String getNtsScenarioValidationMessage() {
         String message;
-        if (CollectionUtils.isEmpty(usagesFilterWidget.getFilter().getUsageBatchesIds())) {
+        Set<String> batchesIds = usagesFilterWidget.getFilter().getUsageBatchesIds();
+        if (CollectionUtils.isEmpty(batchesIds)) {
             message = ForeignUi.getMessage("message.error.empty_usage_batches");
         } else {
-            List<String> batchesWithUnclassifiedWorks =
-                controller.getBatchNamesWithUnclassifiedWorks(usagesFilterWidget.getFilter().getUsageBatchesIds());
-            if (CollectionUtils.isNotEmpty(batchesWithUnclassifiedWorks)) {
-                message = ForeignUi.getMessage("message.error.invalid_batch.unclassified_works",
-                    String.join(BATCH_NAMES_LIST_SEPARATOR, batchesWithUnclassifiedWorks));
+            List<String> batchesNames = controller.getProcessingBatchesNames(batchesIds);
+            if (CollectionUtils.isNotEmpty(batchesNames)) {
+                message = ForeignUi.getMessage("message.error.processing_batches_names",
+                    String.join(BATCH_NAMES_LIST_SEPARATOR, batchesNames));
             } else {
-                message = getClassificationValidationMessage();
+                Map<String, String> batchesNamesToScenarioNames =
+                    controller.getBatchesNamesToScenariosNames(batchesIds);
+                if (batchesNamesToScenarioNames.isEmpty()) {
+                    message = getClassificationValidationMessage(batchesIds);
+                } else {
+                    message = ForeignUi.getMessage("message.error.batches_already_associated_with_scenarios",
+                        String.join(BATCH_NAMES_LIST_SEPARATOR,
+                            batchesNamesToScenarioNames
+                                .entrySet()
+                                .stream()
+                                .map(entry -> entry.getKey() + " : " + entry.getValue())
+                                .collect(Collectors.toList())));
+                }
             }
         }
         return message;
     }
 
-    private String getClassificationValidationMessage() {
+    private String getClassificationValidationMessage(Set<String> batchesIds) {
         String message = null;
-        Map<String, List<String>> batchesWithoutRhsForStmOrNonStm =
-            controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(
-                usagesFilterWidget.getFilter().getUsageBatchesIds());
-        List<String> batchesWithoutRhsForStm =
-            batchesWithoutRhsForStmOrNonStm.get(FdaConstants.STM_CLASSIFICATION);
-        List<String> batchesWithoutRhsForNonStm =
-            batchesWithoutRhsForStmOrNonStm.get(FdaConstants.NON_STM_CLASSIFICATION);
-        if (CollectionUtils.isNotEmpty(batchesWithoutRhsForStm)) {
-            message = ForeignUi.getMessage("message.error.invalid_batch.no_stm_rhs",
-                String.join(BATCH_NAMES_LIST_SEPARATOR, batchesWithoutRhsForStm));
-        }
-        if (CollectionUtils.isNotEmpty(batchesWithoutRhsForNonStm)) {
-            message = StringUtils.isBlank(message)
-                ? ForeignUi.getMessage("message.error.invalid_batch.no_non_stm_rhs",
+        List<String> batchesWithUnclassifiedWorks =
+            controller.getBatchNamesWithUnclassifiedWorks(batchesIds);
+        if (CollectionUtils.isNotEmpty(batchesWithUnclassifiedWorks)) {
+            message = ForeignUi.getMessage("message.error.invalid_batch.unclassified_works",
+                String.join(BATCH_NAMES_LIST_SEPARATOR, batchesWithUnclassifiedWorks));
+        } else {
+            Map<String, List<String>> batchesWithoutRhsForStmOrNonStm =
+                controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(
+                    usagesFilterWidget.getFilter().getUsageBatchesIds());
+            List<String> batchesWithoutRhsForStm =
+                batchesWithoutRhsForStmOrNonStm.get(FdaConstants.STM_CLASSIFICATION);
+            List<String> batchesWithoutRhsForNonStm =
+                batchesWithoutRhsForStmOrNonStm.get(FdaConstants.NON_STM_CLASSIFICATION);
+            if (CollectionUtils.isNotEmpty(batchesWithoutRhsForStm)) {
+                message = ForeignUi.getMessage("message.error.invalid_batch.no_stm_rhs",
+                    String.join(BATCH_NAMES_LIST_SEPARATOR, batchesWithoutRhsForStm));
+            }
+            if (CollectionUtils.isNotEmpty(batchesWithoutRhsForNonStm)) {
+                message = StringUtils.isBlank(message)
+                    ? ForeignUi.getMessage("message.error.invalid_batch.no_non_stm_rhs",
                     String.join(BATCH_NAMES_LIST_SEPARATOR, batchesWithoutRhsForNonStm))
-                : message.concat(ForeignUi.getMessage("message.error.invalid_batch.no_non_stm_rhs",
+                    : message.concat(ForeignUi.getMessage("message.error.invalid_batch.no_non_stm_rhs",
                     String.join(BATCH_NAMES_LIST_SEPARATOR, batchesWithoutRhsForNonStm)));
+            }
         }
         return message;
     }

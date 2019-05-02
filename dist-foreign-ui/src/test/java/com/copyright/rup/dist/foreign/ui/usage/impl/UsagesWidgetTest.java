@@ -22,6 +22,7 @@ import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.server.Extension;
@@ -70,12 +71,14 @@ public class UsagesWidgetTest {
     private UsagesWidget usagesWidget;
     private IUsagesController controller;
     private UsagesFilterWidget filterWidget;
+    private String batchId;
 
     @Before
     public void setUp() {
         controller = createMock(IUsagesController.class);
         filterWidget = new UsagesFilterWidget();
-        filterWidget.getFilter().setUsageBatchesIds(Collections.singleton(RupPersistUtils.generateUuid()));
+        batchId = RupPersistUtils.generateUuid();
+        filterWidget.getFilter().setUsageBatchesIds(Collections.singleton(batchId));
         usagesWidget = new UsagesWidget();
         usagesWidget.setController(controller);
         expect(controller.initUsagesFilterWidget()).andReturn(filterWidget).once();
@@ -265,6 +268,10 @@ public class UsagesWidgetTest {
         expect(controller.getSize()).andReturn(1).once();
         expect(controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
+        expect(controller.getProcessingBatchesNames(Collections.singleton(batchId)))
+            .andReturn(Collections.emptyList()).once();
+        expect(controller.getBatchesNamesToScenariosNames(Collections.singleton(batchId)))
+            .andReturn(Collections.emptyMap()).once();
         expect(controller.getSelectedProductFamily()).andReturn(NTS_PRODUCT_FAMILY).times(2);
         expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getFilter().getUsageBatchesIds()))
             .andReturn(Collections.emptyList()).once();
@@ -272,6 +279,60 @@ public class UsagesWidgetTest {
             .andReturn(ImmutableMap.of("STM", Collections.emptyList(), "NON-STM", Collections.emptyList())).once();
         expect(controller.getScenarioService()).andReturn(null).once();
         Windows.showModalWindow(anyObject(CreateNtsScenarioWindow.class));
+        expectLastCall().once();
+        replay(controller, clickEvent, Windows.class);
+        Collection<?> listeners = addToScenarioButton.getListeners(ClickEvent.class);
+        assertEquals(2, listeners.size());
+        ClickListener clickListener = (ClickListener) listeners.iterator().next();
+        clickListener.buttonClick(clickEvent);
+        verify(controller, clickEvent, Windows.class);
+    }
+
+    @Test
+    public void testAddToScenarioButtonClickListenerNtsProductFamilyProcessingBatches() {
+        mockStatic(Windows.class);
+        Grid grid = new Grid();
+        Whitebox.setInternalState(usagesWidget, grid);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
+            .getComponent(0)).getComponent(6);
+        assertTrue(addToScenarioButton.isDisableOnClick());
+        expect(controller.getSelectedProductFamily()).andReturn(NTS_PRODUCT_FAMILY).once();
+        expect(controller.getSize()).andReturn(1).once();
+        expect(controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
+        expect(controller.getProcessingBatchesNames(Collections.singleton(batchId)))
+            .andReturn(ImmutableList.of("batch name 1", "batch name 2")).once();
+        Windows.showNotificationWindow("Please wait while batch(es) processing is completed:" +
+            "<ul><li><i><b>batch name 1<br><li>batch name 2</b></i></ul>");
+        expectLastCall().once();
+        replay(controller, clickEvent, Windows.class);
+        Collection<?> listeners = addToScenarioButton.getListeners(ClickEvent.class);
+        assertEquals(2, listeners.size());
+        ClickListener clickListener = (ClickListener) listeners.iterator().next();
+        clickListener.buttonClick(clickEvent);
+        verify(controller, clickEvent, Windows.class);
+    }
+
+    @Test
+    public void testAddToScenarioButtonClickListenerNtsProductFamilyBatchInScenario() {
+        mockStatic(Windows.class);
+        Grid grid = new Grid();
+        Whitebox.setInternalState(usagesWidget, grid);
+        ClickEvent clickEvent = createMock(ClickEvent.class);
+        Button addToScenarioButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
+            .getComponent(0)).getComponent(6);
+        assertTrue(addToScenarioButton.isDisableOnClick());
+        expect(controller.getSelectedProductFamily()).andReturn(NTS_PRODUCT_FAMILY).once();
+        expect(controller.getSize()).andReturn(1).once();
+        expect(controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
+        expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
+        expect(controller.getProcessingBatchesNames(Collections.singleton(batchId)))
+            .andReturn(Collections.emptyList()).once();
+        expect(controller.getBatchesNamesToScenariosNames(Collections.singleton(batchId)))
+            .andReturn(ImmutableMap.of("batch name","scenario name")).once();
+        Windows.showNotificationWindow("The following batch(es) already associated with scenario(s):" +
+            "<ul><li><i><b>batch name : scenario name</b></i></ul>");
         expectLastCall().once();
         replay(controller, clickEvent, Windows.class);
         Collection<?> listeners = addToScenarioButton.getListeners(ClickEvent.class);
@@ -296,6 +357,10 @@ public class UsagesWidgetTest {
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
         expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getFilter().getUsageBatchesIds()))
             .andReturn(Collections.singletonList("Batch with unclassified usages")).once();
+        expect(controller.getProcessingBatchesNames(Collections.singleton(batchId)))
+            .andReturn(Collections.emptyList()).once();
+        expect(controller.getBatchesNamesToScenariosNames(Collections.singleton(batchId)))
+            .andReturn(Collections.emptyMap()).once();
         Windows.showNotificationWindow(
             "The following batches have unclassified works:<ul><li><i><b>Batch with unclassified usages</b></i></ul>");
         expectLastCall().once();
@@ -322,6 +387,10 @@ public class UsagesWidgetTest {
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
         expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getFilter().getUsageBatchesIds()))
             .andReturn(Collections.emptyList()).once();
+        expect(controller.getProcessingBatchesNames(Collections.singleton(batchId)))
+            .andReturn(Collections.emptyList()).once();
+        expect(controller.getBatchesNamesToScenariosNames(Collections.singleton(batchId)))
+            .andReturn(Collections.emptyMap()).once();
         expect(controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(filterWidget.getFilter().getUsageBatchesIds()))
             .andReturn(ImmutableMap.of("STM", Collections.singletonList("Batch without STM RHs"))).once();
         Windows.showNotificationWindow("There are no STM rightsholders in the following batches: " +
@@ -348,6 +417,10 @@ public class UsagesWidgetTest {
         expect(controller.getSize()).andReturn(1).once();
         expect(controller.isValidUsagesState(UsageStatusEnum.ELIGIBLE)).andReturn(true).once();
         expect(controller.getInvalidRightsholders()).andReturn(Collections.emptyList()).once();
+        expect(controller.getProcessingBatchesNames(Collections.singleton(batchId)))
+            .andReturn(Collections.emptyList()).once();
+        expect(controller.getBatchesNamesToScenariosNames(Collections.singleton(batchId)))
+            .andReturn(Collections.emptyMap()).once();
         expect(controller.getBatchNamesWithUnclassifiedWorks(filterWidget.getFilter().getUsageBatchesIds()))
             .andReturn(Collections.emptyList()).once();
         expect(controller.getBatchNamesWithInvalidStmOrNonStmUsagesState(filterWidget.getFilter().getUsageBatchesIds()))

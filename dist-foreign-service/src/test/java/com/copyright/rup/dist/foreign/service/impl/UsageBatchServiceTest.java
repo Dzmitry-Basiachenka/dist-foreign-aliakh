@@ -30,6 +30,7 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
@@ -44,6 +45,7 @@ import org.powermock.reflect.Whitebox;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 
@@ -263,6 +265,28 @@ public class UsageBatchServiceTest {
             .andReturn(Collections.emptyList()).once();
         replay(usageBatchRepository);
         usageBatchService.getClassifcationToBatchNamesWithoutUsagesForStmOrNonStm(batchIds);
+        verify(usageBatchRepository);
+    }
+
+    @Test
+    public void testGetProcessingBatchesNames() {
+        Set<String> batchesIds = Collections.singleton(RupPersistUtils.generateUuid());
+        List<String> batchesNames = Collections.singletonList("test batch name");
+        expect(usageBatchRepository.findProcessingBatchesNames(batchesIds)).andReturn(batchesNames).once();
+        replay(usageBatchRepository);
+        assertEquals(batchesNames, usageBatchService.getProcessingBatchesNames(batchesIds));
+        verify(usageBatchRepository);
+    }
+
+    @Test
+    public void testGetBatchesNamesToScenariosNames() {
+        String batchId = RupPersistUtils.generateUuid();
+        Set<String> batchesIds = Collections.singleton(batchId);
+        Map<String, String> batchesNamesToScenariosNames = ImmutableMap.of("test batch name", "test scenario name");
+        expect(usageBatchRepository.findBatchesNamesToScenariosNames(batchesIds))
+            .andReturn(batchesNamesToScenariosNames).once();
+        replay(usageBatchRepository);
+        assertEquals(batchesNamesToScenariosNames, usageBatchService.getBatchesNamesToScenariosNames(batchesIds));
         verify(usageBatchRepository);
     }
 

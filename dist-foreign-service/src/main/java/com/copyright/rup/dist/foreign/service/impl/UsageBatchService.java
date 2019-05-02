@@ -205,6 +205,16 @@ public class UsageBatchService implements IUsageBatchService {
         return classificationToBatchNamesMap;
     }
 
+    @Override
+    public List<String> getProcessingBatchesNames(Set<String> batchesIds) {
+        return usageBatchRepository.findProcessingBatchesNames(batchesIds);
+    }
+
+    @Override
+    public Map<String, String> getBatchesNamesToScenariosNames(Set<String> batchesIds) {
+        return usageBatchRepository.findBatchesNamesToScenariosNames(batchesIds);
+    }
+
     /**
      * Gets instance of {@link ExecutorService} with 2 threads.
      * Used for sending usages to queues to process them.

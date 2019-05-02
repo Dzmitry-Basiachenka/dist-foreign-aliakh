@@ -326,6 +326,16 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
+    public List<String> getProcessingBatchesNames(Set<String> batchesIds) {
+        return usageBatchService.getProcessingBatchesNames(batchesIds);
+    }
+
+    @Override
+    public Map<String, String> getBatchesNamesToScenariosNames(Set<String> batchesIds) {
+        return usageBatchService.getBatchesNamesToScenariosNames(batchesIds);
+    }
+
+    @Override
     protected IUsagesWidget instantiateWidget() {
         return new UsagesWidget();
     }

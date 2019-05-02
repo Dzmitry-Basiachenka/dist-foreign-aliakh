@@ -318,4 +318,20 @@ public interface IUsagesController extends IController<IUsagesWidget> {
      * @return map with key - classficiation, value - list of batch names with invalid classification state of usages
      */
     Map<String, List<String>> getBatchNamesWithInvalidStmOrNonStmUsagesState(Set<String> batchIds);
+
+    /**
+     * Gets names of processing batches (with usages in statuses besides ELIGIBLE, UNCLASSIFIED).
+     *
+     * @param batchesIds set of batches ids
+     * @return list of batches names
+     */
+    List<String> getProcessingBatchesNames(Set<String> batchesIds);
+
+    /**
+     * Gets map of batches names to scenario names associated with the given batches.
+     *
+     * @param batchesIds set of batches ids
+     * @return map of batches names to scenario names
+     */
+    Map<String, String> getBatchesNamesToScenariosNames(Set<String> batchesIds);
 }
