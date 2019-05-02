@@ -1,3 +1,8 @@
+5.1.27
+-
+* CDP-735 FDA: NTS Scenario: Several scenarios can be created for the same NTS batch with full RRO fund pool (STM and Non-STM amounts) applied to each scenario
+* CDP-737 FDA: NTS Scenario: Usages marked as BELLETRISTIC or UNCLASSIFIED after scenario creation, remain in ELIGIBLE status after scenario deletion
+
 5.1.26
 -
 * B-48300 FDA: Remove under minimum RHs and reallocate funds proportionally: make changes based on comments in CR-DIST-FOREIGN-103
