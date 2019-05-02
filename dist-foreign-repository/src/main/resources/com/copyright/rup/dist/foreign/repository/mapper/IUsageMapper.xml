@@ -739,6 +739,16 @@
                 and status_ind = #{status})
     </delete>
 
+    <delete id="deleteBelletristicByScenarioId" parameterType="map">
+        delete from ${schema}.df_usage
+        where df_usage_uid in (
+            select u.df_usage_uid
+            from ${schema}.df_usage u
+            join ${schema}.df_work_classification wc on wc.wr_wrk_inst = u.wr_wrk_inst
+                and wc.classification = #{belletristicClassification}
+            where <include refid="scenarioBatchesFilter"/>)
+    </delete>
+
     <update id="deleteFromPreServiceFeeFund" parameterType="map">
         update
             ${schema}.df_usage
@@ -812,17 +822,24 @@
 
     <update id="deleteFromNtsScenario" parameterType="map">
         update
-            ${schema}.df_usage
+            ${schema}.df_usage u
         set
-            status_ind = #{status},
+            status_ind = case when usage_with_classification.classification is not null then #{eligibleStatus} else #{unclassifiedStatus} end,
             df_scenario_uid = null,
             gross_amount = 0,
             <include refid="StoredEntityMapper.update"/>
-        where <include refid="scenarioBatchesFilter"/>
-            and status_ind in
+        from (
+            select
+                u.df_usage_uid,
+                wc.classification
+            from ${schema}.df_usage u
+            left join ${schema}.df_work_classification wc on wc.wr_wrk_inst = u.wr_wrk_inst
+            where <include refid="scenarioBatchesFilter"/>
+                and status_ind in
                 <foreach collection="statusesToUpdate" item="statusToUpdate" separator="," open="(" close=")">
                     #{statusToUpdate}
-                </foreach>
+                </foreach>) as usage_with_classification
+        where u.df_usage_uid = usage_with_classification.df_usage_uid
     </update>
 
     <select id="findCountByUsageIdAndStatus" parameterType="map" resultType="int">

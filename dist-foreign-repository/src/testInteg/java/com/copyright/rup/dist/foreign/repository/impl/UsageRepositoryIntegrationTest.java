@@ -125,6 +125,9 @@ public class UsageRepositoryIntegrationTest {
     private static final String USAGE_ID_24 = "3c31db4f-4065-4fe1-84c2-b48a0f3bc079";
     private static final String USAGE_ID_25 = "f6cb5b07-45c0-4188-9da3-920046eec4c0";
     private static final String USAGE_ID_26 = "f255188f-d582-4516-8c08-835cfe1d68c3";
+    private static final String USAGE_ID_BELLETRISTIC = "bbbd64db-2668-499a-9d18-be8b3f87fbf5";
+    private static final String USAGE_ID_UNCLASSIFIED = "6cad4cf2-6a19-4e5b-b4e0-f2f7a62ff91c";
+    private static final String USAGE_ID_STM = "83a26087-a3b3-43ca-8b34-c66134fb6edf";
     private static final String NTS_USAGE_ID = "6dc54058-5566-4aa2-8cd4-d1a09805ae20";
     private static final String POST_DISTRIBUTION_USAGE_ID = "cce295c6-23cf-47b4-b00c-2e0e50cce169";
     private static final String SCENARIO_ID = "b1f0b236-3ae9-4a60-9fab-61db84199d6f";
@@ -487,6 +490,18 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
+    public void testDeleteBelletristicByScenarioId() {
+        String scenarioId = "dd4fca1d-eac8-4b76-85e4-121b7971d049";
+        verifyUsageIdsInScenario(Arrays.asList(USAGE_ID_BELLETRISTIC, USAGE_ID_STM, USAGE_ID_UNCLASSIFIED), scenarioId);
+        assertTrue(CollectionUtils.isNotEmpty(
+            usageRepository.findByIds(Collections.singletonList(USAGE_ID_BELLETRISTIC))));
+        usageRepository.deleteBelletristicByScenarioId(scenarioId);
+        verifyUsageIdsInScenario(Arrays.asList(USAGE_ID_STM, USAGE_ID_UNCLASSIFIED), scenarioId);
+        assertTrue(CollectionUtils.isEmpty(
+            usageRepository.findByIds(Collections.singletonList(USAGE_ID_BELLETRISTIC))));
+    }
+
+    @Test
     public void testFindByIds() {
         List<Usage> usages = usageRepository.findByIds(Arrays.asList(USAGE_ID_1, USAGE_ID_2));
         assertEquals(2, CollectionUtils.size(usages));
@@ -637,7 +652,7 @@ public class UsageRepositoryIntegrationTest {
             Arrays.asList("c09aa888-85a5-4377-8c7a-85d84d255b5a", "45445974-5bee-477a-858b-e9e8c1a642b8"));
         assertEquals(2, CollectionUtils.size(usages));
         verifyNtsUsage(usages.get(0), UsageStatusEnum.ELIGIBLE, null, USER_NAME, DEFAULT_ZERO_AMOUNT, HUNDRED_AMOUNT);
-        verifyNtsUsage(usages.get(1), UsageStatusEnum.ELIGIBLE, null, USER_NAME, DEFAULT_ZERO_AMOUNT,
+        verifyNtsUsage(usages.get(1), UsageStatusEnum.UNCLASSIFIED, null, USER_NAME, DEFAULT_ZERO_AMOUNT,
             aboveMinimumAmount);
     }
 
@@ -1356,5 +1371,14 @@ public class UsageRepositoryIntegrationTest {
         filter.setDistributionName(distributionName);
         assertEquals(expectedSize, usageRepository.findCountForAudit(filter));
         verifyUsageDtos(usageRepository.findForAudit(filter, null, null), expectedSize, usageIds);
+    }
+
+    private void verifyUsageIdsInScenario(List<String> expectedUsageIds, String scenarioId) {
+        List<Usage> actualUsages = usageRepository.findByScenarioId(scenarioId);
+        assertEquals(CollectionUtils.size(expectedUsageIds), CollectionUtils.size(actualUsages));
+        List<String> usagesIdsBeforeDeletion = actualUsages.stream()
+            .map(Usage::getId)
+            .collect(Collectors.toList());
+        assertTrue(CollectionUtils.containsAll(usagesIdsBeforeDeletion, expectedUsageIds));
     }
 }

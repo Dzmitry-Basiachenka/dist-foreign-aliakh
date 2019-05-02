@@ -280,6 +280,14 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
+    public void deleteBelletristicByScenarioId(String usageId) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(usageId));
+        parameters.put("belletristicClassification", FdaConstants.BELLETRISTIC_CLASSIFICATION);
+        delete("IUsageMapper.deleteBelletristicByScenarioId", parameters);
+    }
+
+    @Override
     public List<Usage> findWithAmountsAndRightsholders(UsageFilter filter) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(FILTER_KEY, Objects.requireNonNull(filter));
@@ -322,10 +330,11 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
 
     @Override
     public void deleteFromNtsScenario(String scenarioId, String userName) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(5);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put(UPDATE_USER_KEY, Objects.requireNonNull(userName));
-        parameters.put(STATUS_KEY, UsageStatusEnum.ELIGIBLE);
+        parameters.put("eligibleStatus", UsageStatusEnum.ELIGIBLE);
+        parameters.put("unclassifiedStatus", UsageStatusEnum.UNCLASSIFIED);
         parameters.put("statusesToUpdate", Sets.newHashSet(UsageStatusEnum.NTS_EXCLUDED, UsageStatusEnum.LOCKED));
         update("IUsageMapper.deleteFromNtsScenario", parameters);
     }

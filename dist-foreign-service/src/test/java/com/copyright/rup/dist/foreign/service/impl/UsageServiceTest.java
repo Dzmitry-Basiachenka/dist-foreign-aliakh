@@ -232,6 +232,16 @@ public class UsageServiceTest {
     }
 
     @Test
+    public void testDeleteBelletristicByScenarioId() {
+        String scenarioId = RupPersistUtils.generateUuid();
+        usageRepository.deleteBelletristicByScenarioId(scenarioId);
+        expectLastCall().once();
+        replay(usageRepository);
+        usageService.deleteBelletristicByScenarioId(scenarioId);
+        verify(usageRepository);
+    }
+
+    @Test
     public void testGetUsagesByScenario() {
         List<Usage> usages = Collections.singletonList(new Usage());
         expect(usageRepository.findByScenarioId(scenario.getId())).andReturn(usages).once();

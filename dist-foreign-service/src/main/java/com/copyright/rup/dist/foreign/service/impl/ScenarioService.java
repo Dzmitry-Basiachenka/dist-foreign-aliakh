@@ -142,6 +142,7 @@ public class ScenarioService implements IScenarioService {
         LOGGER.info("Delete scenario. Started. {}, User={}", ForeignLogUtils.scenario(scenario), userName);
         String scenarioId = scenario.getId();
         if (FdaConstants.NTS_PRODUCT_FAMILY.equals(scenario.getProductFamily())) {
+            usageService.deleteBelletristicByScenarioId(scenarioId);
             usageService.deleteFromNtsScenario(scenarioId);
         } else {
             usageService.deleteFromScenario(scenarioId);
