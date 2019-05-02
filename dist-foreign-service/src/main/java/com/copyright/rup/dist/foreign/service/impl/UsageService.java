@@ -194,6 +194,11 @@ public class UsageService implements IUsageService {
     }
 
     @Override
+    public void deleteBelletristicByScenarioId(String scenarioId) {
+        usageRepository.deleteBelletristicByScenarioId(scenarioId);
+    }
+
+    @Override
     public List<Usage> getUsagesWithAmounts(UsageFilter filter) {
         return usageRepository.findWithAmountsAndRightsholders(filter);
     }

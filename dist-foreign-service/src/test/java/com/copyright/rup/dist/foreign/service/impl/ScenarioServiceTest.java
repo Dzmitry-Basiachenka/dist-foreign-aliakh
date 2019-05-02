@@ -146,6 +146,8 @@ public class ScenarioServiceTest {
     @Test
     public void testDeleteNtsScenario() {
         scenario.setProductFamily("NTS");
+        usageService.deleteBelletristicByScenarioId(SCENARIO_ID);
+        expectLastCall().once();
         usageService.deleteFromNtsScenario(SCENARIO_ID);
         expectLastCall().once();
         scenarioRepository.remove(SCENARIO_ID);

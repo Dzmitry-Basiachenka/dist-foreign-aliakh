@@ -245,6 +245,13 @@ public interface IUsageRepository {
     void deleteFromScenario(String scenarioId, String updateUser);
 
     /**
+     * Deletes {@link Usage}s with Wr Wrk Insts that were classified as BELLETRISTIC by scenario identifier.
+     *
+     * @param scenarioId scenario identifier
+     */
+    void deleteBelletristicByScenarioId(String scenarioId);
+
+    /**
      * Deletes {@link Usage}s from scenario. Reverts status of {@link Usage}s to {@link UsageStatusEnum#ELIGIBLE},
      * sets scenario id, payee account number, service fee to {@code null}, sets rh participating flag to {@code false},
      * service fee amount and net amount to 0 for usages with given ids.

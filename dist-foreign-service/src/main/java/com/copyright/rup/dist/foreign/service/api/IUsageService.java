@@ -96,6 +96,13 @@ public interface IUsageService {
     void deleteById(String usageId);
 
     /**
+     * Deletes {@link Usage}s with Wr Wrk Insts that were classified as BELLETRISTIC by scenario identifier.
+     *
+     * @param scenarioId scenario identifier
+     */
+    void deleteBelletristicByScenarioId(String scenarioId);
+
+    /**
      * Gets the {@link Usage}s based on {@link UsageFilter}.
      *
      * @param filter instance of {@link UsageFilter}
