@@ -1,5 +1,6 @@
 5.1.28
 -
+* CDP-735 FDA: NTS Scenario: Several scenarios can be created for the same NTS batch with full RRO fund pool (STM and Non-STM amounts) applied to each scenario
 
 5.1.27
 -
