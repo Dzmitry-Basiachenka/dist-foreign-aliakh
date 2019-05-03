@@ -34,7 +34,7 @@ import java.util.Set;
 public class UsageBatchRepository extends BaseRepository implements IUsageBatchRepository {
 
     private static final EnumSet<UsageStatusEnum> PROCESSED_NTS_BATCH_USAGE_STATUSES = EnumSet.of(
-        UsageStatusEnum.ELIGIBLE, UsageStatusEnum.UNCLASSIFIED);
+        UsageStatusEnum.ELIGIBLE, UsageStatusEnum.UNCLASSIFIED, UsageStatusEnum.LOCKED, UsageStatusEnum.NTS_EXCLUDED);
 
     @Override
     public void insert(UsageBatch usageBatch) {

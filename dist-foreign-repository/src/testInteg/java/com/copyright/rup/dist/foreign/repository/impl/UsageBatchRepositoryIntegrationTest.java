@@ -14,6 +14,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.google.common.collect.ImmutableSet;
 
 import com.google.common.collect.Sets;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -59,6 +60,7 @@ public class UsageBatchRepositoryIntegrationTest {
     private static final String NTS_USAGE_BATCH_ID_1 = "7c028d85-58c3-45f8-be2d-33c16b0905b0";
     private static final String NTS_USAGE_BATCH_ID_2 = "334959d7-ad39-4624-a8fa-38c3e82be6eb";
     private static final String NTS_USAGE_BATCH_ID_3 = "00aed73a-4243-440b-aa8a-445185580cb9";
+    private static final String NTS_USAGE_BATCH_ID_4 = "3f46981e-e85a-4786-9b60-ab009c4358e7";
 
     @Autowired
     private UsageBatchRepository usageBatchRepository;
@@ -132,7 +134,7 @@ public class UsageBatchRepositoryIntegrationTest {
         assertEquals(NTS_USAGE_BATCH_ID_3, usageBatches.get(1).getId());
         assertEquals(NTS_USAGE_BATCH_ID_2, usageBatches.get(2).getId());
         assertEquals(NTS_USAGE_BATCH_ID_1, usageBatches.get(3).getId());
-        assertEquals("3f46981e-e85a-4786-9b60-ab009c4358e7", usageBatches.get(4).getId());
+        assertEquals(NTS_USAGE_BATCH_ID_4, usageBatches.get(4).getId());
         assertEquals("56282dbc-2468-48d4-b926-94d3458a666a", usageBatches.get(5).getId());
         assertEquals("56282dbc-2468-48d4-b926-93d3458a656a", usageBatches.get(6).getId());
         assertEquals("a5b64c3a-55d2-462e-b169-362dca6a4dd6", usageBatches.get(7).getId());
@@ -143,7 +145,7 @@ public class UsageBatchRepositoryIntegrationTest {
     public void testFindByProductFamily() {
         List<UsageBatch> usageBatches = usageBatchRepository.findByProductFamily(FAS_PRODUCT_FAMILY);
         assertEquals(4, usageBatches.size());
-        assertEquals("3f46981e-e85a-4786-9b60-ab009c4358e7", usageBatches.get(0).getId());
+        assertEquals(NTS_USAGE_BATCH_ID_4, usageBatches.get(0).getId());
         assertEquals("56282dbc-2468-48d4-b926-94d3458a666a", usageBatches.get(1).getId());
         assertEquals("56282dbc-2468-48d4-b926-93d3458a656a", usageBatches.get(2).getId());
         assertEquals("a5b64c3a-55d2-462e-b169-362dca6a4dd6", usageBatches.get(3).getId());
@@ -200,7 +202,7 @@ public class UsageBatchRepositoryIntegrationTest {
     public void testFindProcessingBatchesNames() {
         List<String> batchesNames = usageBatchRepository.findProcessingBatchesNames(
             ImmutableSet.of("7c028d85-58c3-45f8-be2d-33c16b0905b0", "334959d7-ad39-4624-a8fa-38c3e82be6eb",
-                "00aed73a-4243-440b-aa8a-445185580cb9", "13027b25-2269-3bec-48ea-5126431eedb0"));
+                "00aed73a-4243-440b-aa8a-445185580cb9", "13027b25-2269-3bec-48ea-5126431eedb0", NTS_USAGE_BATCH_ID_4));
         assertNotNull(batchesNames);
         assertEquals(3, batchesNames.size());
         assertEquals("NTS Batch with Belletristic usages", batchesNames.get(0));
@@ -211,7 +213,7 @@ public class UsageBatchRepositoryIntegrationTest {
     @Test
     public void testFindBatchesNamesToScenariosNames() {
         Map<String, String> batchesNamesToScenariosNames = usageBatchRepository.findBatchesNamesToScenariosNames(
-            ImmutableSet.of("3f46981e-e85a-4786-9b60-ab009c4358e7","7c028d85-58c3-45f8-be2d-33c16b0905b0"));
+            ImmutableSet.of(NTS_USAGE_BATCH_ID_4, "7c028d85-58c3-45f8-be2d-33c16b0905b0"));
         assertNotNull(batchesNamesToScenariosNames);
         assertEquals(1, batchesNamesToScenariosNames.size());
         assertEquals("Scenario name 4", batchesNamesToScenariosNames.get("NEW_26_OCT_2017"));
