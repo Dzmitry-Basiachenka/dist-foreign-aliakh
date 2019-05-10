@@ -1,7 +1,7 @@
 {
   "details": [
     {
-      "rh_account_number": "2000133267",
+      "rh_uid": "60080587-a225-439c-81af-f016cb33aeac",
       "product_family": "FAS2",
       "royalty_amount": 35.82,
       "service_fee_amount": 3.98,
@@ -11,7 +11,7 @@
       "work_title": "Journal of human lactation : official journal of International Lactation Consultant Association (1985- )"
     },
     {
-      "rh_account_number": "2000073957",
+      "rh_uid": "b0e6b1f6-89e9-4767-b143-db0f49f32769",
       "product_family": "FAS2",
       "royalty_amount": 27.06,
       "service_fee_amount": 12.74,
@@ -21,7 +21,7 @@
       "work_title": "Reclaiming youth at risk : our hope for the future"
     },
     {
-      "rh_account_number": "7001508482",
+      "rh_uid": "f366285a-ce46-48b0-96ee-cd35d62fb243",
       "product_family": "FAS2",
       "royalty_amount": 27.06,
       "service_fee_amount": 12.74,
@@ -31,7 +31,7 @@
       "work_title": "Journal of human lactation : official journal of International Lactation Consultant Association (1985- )"
     },
     {
-      "rh_account_number": "1000024950",
+      "rh_uid": "624dcf73-a30f-4381-b6aa-c86d17198bd5",
       "product_family": "FAS2",
       "royalty_amount": 27.06,
       "service_fee_amount": 12.74,
@@ -41,7 +41,7 @@
       "work_title": "True directions : living your sacred instructions"
     },
     {
-      "rh_account_number": "2000139286",
+      "rh_uid": "37338ed1-7083-45e2-a96b-5872a7de3a98",
       "product_family": "FAS2",
       "royalty_amount": 35.82,
       "service_fee_amount": 3.98,
