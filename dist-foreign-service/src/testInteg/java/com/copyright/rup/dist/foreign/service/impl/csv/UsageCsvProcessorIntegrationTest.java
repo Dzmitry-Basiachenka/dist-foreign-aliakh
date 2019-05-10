@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import com.copyright.rup.dist.common.domain.Rightsholder;
@@ -70,7 +69,7 @@ public class UsageCsvProcessorIntegrationTest {
 
     @Test
     public void testProcessor() throws Exception {
-        ProcessingResult<Usage> result = processFile("usages.csv", true);
+        ProcessingResult<Usage> result = processFile("usages.csv");
         assertNotNull(result);
         List<Usage> actualUsages = result.get();
         List<Usage> expectedUsages = loadExpectedUsages("usages.json");
@@ -87,7 +86,7 @@ public class UsageCsvProcessorIntegrationTest {
         PipedOutputStream outputStream = new PipedOutputStream();
         PipedInputStream pipedInputStream = new PipedInputStream(outputStream);
         try {
-            processFile("usages_with_2000_errors.csv", true);
+            processFile("usages_with_2000_errors.csv");
             fail();
         } catch (ThresholdExceededException ex) {
             assertEquals("The file could not be uploaded. There are more than 2000 errors", ex.getMessage());
@@ -98,7 +97,7 @@ public class UsageCsvProcessorIntegrationTest {
 
     @Test
     public void testProcessorForNegativePath() throws Exception {
-        ProcessingResult<Usage> result = processFile("usages_with_errors.csv", true);
+        ProcessingResult<Usage> result = processFile("usages_with_errors.csv");
         PipedOutputStream outputStream = new PipedOutputStream();
         PipedInputStream pipedInputStream = new PipedInputStream(outputStream);
         Executors.newSingleThreadExecutor().execute(() -> result.writeToFile(outputStream));
@@ -108,7 +107,7 @@ public class UsageCsvProcessorIntegrationTest {
     @Test
     public void testProcessorForInvalidHeaderWithHeaderValidation() throws Exception {
         try {
-            processFile("invalid_header_usage_data_file.csv", true);
+            processFile("invalid_header_usage_data_file.csv");
             fail();
         } catch (HeaderValidationException e) {
             assertEquals(
@@ -134,13 +133,7 @@ public class UsageCsvProcessorIntegrationTest {
         }
     }
 
-    @Test
-    public void testProcessorWithInvalidHeaderWithoutHeaderValidation() throws Exception {
-        ProcessingResult<Usage> result = processFile("invalid_header_usage_data_file.csv", false);
-        assertTrue(result.isSuccessful());
-    }
-
-    private ProcessingResult<Usage> processFile(String file, boolean validateHeaders)
+    private ProcessingResult<Usage> processFile(String file)
         throws IOException {
         ProcessingResult<Usage> result;
         try (InputStream stream = this.getClass()
@@ -148,7 +141,6 @@ public class UsageCsvProcessorIntegrationTest {
              ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             IOUtils.copy(stream, outputStream);
             UsageCsvProcessor processor = csvProcessorFactory.getUsageCsvProcessor(PRODUCT_FAMILY);
-            processor.setValidateHeaders(validateHeaders);
             result = processor.process(outputStream);
         }
         return result;

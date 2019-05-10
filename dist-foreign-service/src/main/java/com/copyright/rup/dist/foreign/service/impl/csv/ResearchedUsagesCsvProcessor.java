@@ -10,6 +10,8 @@ import com.copyright.rup.dist.foreign.service.impl.csv.validator.DuplicateInFile
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -27,20 +29,21 @@ public class ResearchedUsagesCsvProcessor extends DistCsvProcessor<ResearchedUsa
      * Constructor.
      */
     ResearchedUsagesCsvProcessor() {
-        super(new ResearchedUsageConverter(), true, getColumns());
-    }
-
-    /**
-     * @return array of expected columns in CSV file.
-     */
-    static String[] getColumns() {
-        return Stream.of(Header.values())
-            .map(Header::getColumnName)
-            .toArray(String[]::new);
+        super();
     }
 
     @Override
-    protected void initPlainValidators() {
+    public List<String> getHeadersForValidation() {
+        return Stream.of(Header.values()).map(Header::getColumnName).collect(Collectors.toList());
+    }
+
+    @Override
+    public IConverter<ResearchedUsage> getConverter() {
+        return new ResearchedUsageConverter();
+    }
+
+    @Override
+    public void initPlainValidators() {
         RequiredValidator requiredValidator = new RequiredValidator();
         PositiveNumberValidator positiveNumberValidator = new PositiveNumberValidator();
         addPlainValidators(Header.DETAIL_ID, requiredValidator, new LengthValidator(36),
@@ -54,7 +57,6 @@ public class ResearchedUsagesCsvProcessor extends DistCsvProcessor<ResearchedUsa
      * CSV file headers.
      */
     private enum Header implements ICsvColumn {
-
         DETAIL_ID("Detail ID"),
         STATUS("Detail Status"),
         PRODUCT_FAMILY("Product Family"),
