@@ -1,3 +1,7 @@
+5.1.29
+-
+* B-51364 Tech Debt: FDA: Add Amt in USD column on RH DrillDown window
+
 5.1.28
 -
 * CDP-735 FDA: NTS Scenario: Several scenarios can be created for the same NTS batch with full RRO fund pool (STM and Non-STM amounts) applied to each scenario
