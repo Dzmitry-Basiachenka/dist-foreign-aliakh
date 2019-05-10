@@ -114,8 +114,10 @@ public class DrillDownByRightsholderWidget extends Window implements IDrillDownB
         addColumn(UsageDto::getNumberOfCopies, "table.column.number_of_copies", "numberOfCopies", true, 140);
         addColumn(usageDto -> CurrencyUtils.format(usageDto.getReportedValue(), null), "table.column.reported_value",
             "reportedValue", STYLE_ALIGN_RIGHT, 130);
+        addColumn(usageDto -> CurrencyUtils.format(usageDto.getGrossAmount(), null), "table.column.gross_amount",
+            "grossAmount", STYLE_ALIGN_RIGHT, 110);
         addColumn(usageDto -> CurrencyUtils.format(usageDto.getBatchGrossAmount(), null),
-            "table.column.batch_gross_amount", "grossAmount", STYLE_ALIGN_RIGHT, 135);
+            "table.column.batch_gross_amount", "batchGrossAmount", STYLE_ALIGN_RIGHT, 135);
         addColumn(usageDto -> CurrencyUtils.format(usageDto.getServiceFeeAmount(), null),
             "table.column.service_fee_amount", "serviceFeeAmount", STYLE_ALIGN_RIGHT, 150);
         addColumn(usageDto -> CurrencyUtils.format(usageDto.getNetAmount(), null), "table.column.net_amount",
