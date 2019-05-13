@@ -63,11 +63,11 @@ public interface IReportService {
     void writeUndistributedLiabilitiesCsvReport(LocalDate paymentDate, OutputStream outputStream);
 
     /**
-     * Writes Batch Summary Report into the output stream in csv format.
+     * Writes FAS/FAS2 Batch Summary Report into the output stream in csv format.
      *
      * @param outputStream instance of {@link OutputStream}
      */
-    void writeBatchSummaryCsvReport(OutputStream outputStream);
+    void writeFasBatchSummaryCsvReport(OutputStream outputStream);
 
     /**
      * Writes Research Status Report into the output stream in csv format.

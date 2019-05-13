@@ -80,7 +80,7 @@ public class ReportWidgetTest {
         assertEquals(1, CollectionUtils.size(reportWidget.getItems()));
         List<MenuItem> menuItems = reportWidget.getItems().get(0).getChildren();
         assertEquals(5, CollectionUtils.size(menuItems));
-        assertEquals("Batch Summary Report", menuItems.get(0).getText());
+        assertEquals("FAS Batch Summary Report", menuItems.get(0).getText());
         assertEquals("Summary of Market Report", menuItems.get(1).getText());
         assertEquals("Research Status Report", menuItems.get(2).getText());
         assertEquals("Service Fee True-up Report", menuItems.get(3).getText());
@@ -100,8 +100,8 @@ public class ReportWidgetTest {
     }
 
     @Test
-    public void testBatchSummaryReportSelected() {
-        expectReportGenerated(reportController.getBatchSummaryReportStreamSource());
+    public void testFasBatchSummaryReportSelected() {
+        expectReportGenerated(reportController.getFasBatchSummaryReportStreamSource());
         replayAll();
         selectMenuItem(0);
         verifyAll();

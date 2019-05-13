@@ -60,18 +60,18 @@ public class ReportControllerTest {
     }
 
     @Test
-    public void testBatchSummaryStreamSourceFileName() {
-        assertEquals("batch_summary_report_" + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm") +
-            ".csv", reportController.getBatchSummaryReportStreamSource().getFileName());
+    public void testFasBatchSummaryStreamSourceFileName() {
+        assertEquals("fas_batch_summary_report_" + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm") +
+            ".csv", reportController.getFasBatchSummaryReportStreamSource().getFileName());
     }
 
     @Test
-    public void testBatchSummaryReportStreamSource() {
-        reportService.writeBatchSummaryCsvReport(anyObject(OutputStream.class));
+    public void testFasBatchSummaryReportStreamSource() {
+        reportService.writeFasBatchSummaryCsvReport(anyObject(OutputStream.class));
         expectLastCall().once();
         replay(reportService);
         reportController.initWidget();
-        assertNotNull(reportController.getBatchSummaryReportStreamSource().getStream());
+        assertNotNull(reportController.getFasBatchSummaryReportStreamSource().getStream());
         verify(reportService);
     }
 
