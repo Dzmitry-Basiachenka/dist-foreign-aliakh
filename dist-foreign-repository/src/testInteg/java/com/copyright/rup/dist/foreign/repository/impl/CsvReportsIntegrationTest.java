@@ -174,9 +174,9 @@ public class CsvReportsIntegrationTest {
     }
 
     @Test
-    public void testWriteBatchSummaryCsvReport() throws IOException {
+    public void testWriteFasBatchSummaryCsvReport() throws IOException {
         assertFiles(outputStream ->
-            usageRepository.writeBatchSummaryCsvReport(outputStream), "batch_summary_report.csv");
+            usageRepository.writeBatchSummaryCsvReport(outputStream), "fas_batch_summary_report.csv");
     }
 
     @Test

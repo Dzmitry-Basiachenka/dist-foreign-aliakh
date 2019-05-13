@@ -1172,7 +1172,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2019-03-27-01', author: 'Pavel Liakh <pliakh@copyright.com>') {
-        comment('Inserting test data for testWriteBatchSummaryCsvReport')
+        comment('Inserting test data for testWriteFasBatchSummaryCsvReport')
 
         // Batch summary report
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
