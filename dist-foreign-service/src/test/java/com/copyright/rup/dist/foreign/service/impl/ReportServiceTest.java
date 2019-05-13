@@ -193,7 +193,7 @@ public class ReportServiceTest {
     @Test
     public void testWriteFasBatchSummaryCsvReport() {
         ByteArrayOutputStream outputStream = createMock(ByteArrayOutputStream.class);
-        usageRepository.writeBatchSummaryCsvReport(outputStream);
+        usageRepository.writeFasBatchSummaryCsvReport(outputStream);
         expectLastCall().once();
         replay(usageRepository);
         reportService.writeFasBatchSummaryCsvReport(outputStream);

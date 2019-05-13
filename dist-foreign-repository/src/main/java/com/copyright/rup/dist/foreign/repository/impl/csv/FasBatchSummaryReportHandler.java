@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.impl.csv;
 
 import com.copyright.rup.dist.common.repository.impl.csv.BaseCsvReportHandler;
-import com.copyright.rup.dist.foreign.domain.report.BatchSummaryReportDto;
+import com.copyright.rup.dist.foreign.domain.report.FasBatchSummaryReportDto;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Writes batch summary report into a {@link OutputStream} connected to the {@link java.io.InputStream}.
+ * Writes FAS/FAS2 Batch Summary Report into a {@link OutputStream} connected to the {@link java.io.InputStream}.
  * <p/>
  * Copyright (C) 2018 copyright.com
  * <p/>
@@ -17,7 +17,7 @@ import java.util.List;
  *
  * @author Uladzislau Shalamitski
  */
-public class BatchSummaryReportHandler extends BaseCsvReportHandler<BatchSummaryReportDto> {
+public class FasBatchSummaryReportHandler extends BaseCsvReportHandler<FasBatchSummaryReportDto> {
 
     private static final List<String> HEADERS = Arrays.asList("Usage Batch Name", "RRO Account Number", "RRO Name",
         "Payment Date", "Gross Fund Pool in USD", "# non-Eligible Details", "Gross USD non-Eligible Details",
@@ -30,12 +30,12 @@ public class BatchSummaryReportHandler extends BaseCsvReportHandler<BatchSummary
      *
      * @param outputStream instance of {@link OutputStream}
      */
-    public BatchSummaryReportHandler(OutputStream outputStream) {
+    public FasBatchSummaryReportHandler(OutputStream outputStream) {
         super(outputStream);
     }
 
     @Override
-    protected List<String> getBeanProperties(BatchSummaryReportDto bean) {
+    protected List<String> getBeanProperties(FasBatchSummaryReportDto bean) {
         List<String> beanProperties = new ArrayList<>();
         beanProperties.add(getBeanPropertyAsString(bean.getBatchName()));
         beanProperties.add(getBeanPropertyAsString(bean.getRroAccountNumber()));

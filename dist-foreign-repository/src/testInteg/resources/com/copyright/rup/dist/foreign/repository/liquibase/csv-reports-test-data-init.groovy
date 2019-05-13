@@ -1312,6 +1312,18 @@ databaseChangeLog {
             column(name: 'gross_amount', value: '600.00')
         }
 
+        // Batch with NTS product family to be excluded from report
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: 'e016d9c2-6460-51bf-937c-9598cf00b652')
+            column(name: 'name', value: 'NTS batch to be excluded from FAS/FAS2 Batch Summary Report')
+            column(name: 'rro_account_number', value: '7000581909')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'payment_date', value: '2018-01-04')
+            column(name: 'fiscal_year', value: '2018')
+            column(name: 'gross_amount', value: '0.00')
+            column(name: 'fund_pool', value: '{"markets": ["Bus,Univ,Doc Del"], "stm_amount": 10, "non_stm_amount": 20, "stm_minimum_amount": 30, "non_stm_minimum_amount": 40, "fund_pool_period_to": 2018, "fund_pool_period_from": 2018}')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
             column(name: 'df_scenario_uid', value: '82824546-c34d-4102-9939-62c50f356fe1')
             column(name: 'name', value: 'AT_batch-summary-report-1_SCENARIO')
@@ -1387,6 +1399,12 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
             column(name: 'df_scenario_uid', value: '82824546-c34d-4102-9939-62c50f356f13')
             column(name: 'name', value: 'AT_batch-summary-report-13_SCENARIO')
+            column(name: 'status_ind', value: 'IN_PROGRESS')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
+            column(name: 'df_scenario_uid', value: '92824546-d34d-7102-9939-92c50f356fe2')
+            column(name: 'name', value: 'AT_batch-summary-report-14_SCENARIO')
             column(name: 'status_ind', value: 'IN_PROGRESS')
         }
 
@@ -3020,6 +3038,24 @@ databaseChangeLog {
             column(name: 'service_fee', value: '0.10000')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '92db1184-740c-5745-9e4e-3e96e9d0ea02')
+            column(name: 'df_usage_batch_uid', value: 'e016d9c2-6460-51bf-937c-9598cf00b652')
+            column(name: 'df_scenario_uid', value: '92824546-d34d-7102-9939-92c50f356fe2')
+            column(name: 'wr_wrk_inst', value: '123321123')
+            column(name: 'work_title', value: 'The rites of passage')
+            column(name: 'system_title', value: 'The rites of passage')
+            column(name: 'rh_account_number', value: '7000581909')
+            column(name: 'status_ind', value: 'LOCKED')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'standard_number', value: '12345XX-177361')
+            column(name: 'market', value: 'Univ')
+            column(name: 'market_period_from', value: '2018')
+            column(name: 'market_period_to', value: '2018')
+            column(name: 'reported_value', value: '51.50')
+            column(name: 'gross_amount', value: '0.00')
+        }
+
         rollback ""
     }
 
@@ -3365,7 +3401,7 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: "df_usage") {
             column(name: "df_usage_uid", value: "022184ed-2adb-4237-8a5f-34eac350bcbc")
             column(name: "df_usage_batch_uid", value: "6b75221e-432e-4349-ba05-796d1fd5900e")
-            column(name: "status_ind", value: "ELIGIBLE")
+            column(name: "status_ind", value: "ELIGIBLE_FOR_NTS")
             column(name: "product_family", value: "NTS")
             column(name: "article", value: "DIN EN 779:2013")
             column(name: "standard_number", value: "5475802112214578XX")

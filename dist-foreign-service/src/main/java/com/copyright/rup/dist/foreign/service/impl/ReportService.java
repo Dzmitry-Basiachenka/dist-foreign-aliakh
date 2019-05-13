@@ -80,8 +80,7 @@ public class ReportService implements IReportService {
 
     @Override
     public void writeFasBatchSummaryCsvReport(OutputStream outputStream) {
-        // TODO {aliakh} refactor the repository method implementation and name to include only FAS/FAS2 batches
-        usageRepository.writeBatchSummaryCsvReport(outputStream);
+        usageRepository.writeFasBatchSummaryCsvReport(outputStream);
     }
 
     @Override

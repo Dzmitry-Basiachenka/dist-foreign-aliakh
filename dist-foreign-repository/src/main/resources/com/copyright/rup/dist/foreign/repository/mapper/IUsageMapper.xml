@@ -58,7 +58,7 @@
         <result property="totalPaymentAmount" column="total_payment_amount"/>
     </resultMap>
 
-    <resultMap id="batchSummaryReportDtoResultMap" type="BatchSummaryReportDto">
+    <resultMap id="fasBatchSummaryReportDtoResultMap" type="FasBatchSummaryReportDto">
         <result property="batchName" column="batch_name"/>
         <result property="rroAccountNumber" column="rro_account_number"/>
         <result property="rroName" column="rro_name"/>
@@ -1405,8 +1405,7 @@
         order by report.payment_date desc, report.name
     </select>
 
-
-    <select id="findBatchSummaryReportDtos" resultMap="batchSummaryReportDtoResultMap">
+    <select id="findFasBatchSummaryReportDtos" resultMap="fasBatchSummaryReportDtoResultMap">
         select
             batch_name,
             rro_account_number,
@@ -1424,7 +1423,7 @@
             scenarios_details_net_amount,
             return_to_cla_details_count,
             return_to_cla_details_gross_amount
-        from ${schema}.v_batch_summary_report
+        from ${schema}.v_fas_batch_summary_report
     </select>
 
     <select id="findServiceFeeTrueUpReportDtos" resultMap="serviceFeeTrueUpReportDtoResultMap">

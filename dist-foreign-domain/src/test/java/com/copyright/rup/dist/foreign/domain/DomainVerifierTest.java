@@ -4,7 +4,7 @@ import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.copyright.rup.dist.foreign.domain.report.BatchStatistic;
-import com.copyright.rup.dist.foreign.domain.report.BatchSummaryReportDto;
+import com.copyright.rup.dist.foreign.domain.report.FasBatchSummaryReportDto;
 import com.copyright.rup.dist.foreign.domain.report.ResearchStatusReportDto;
 import com.copyright.rup.dist.foreign.domain.report.ServiceFeeTrueUpReportDto;
 import com.copyright.rup.dist.foreign.domain.report.UndistributedLiabilitiesReportDto;
@@ -57,7 +57,7 @@ public class DomainVerifierTest {
             {RightsholderDiscrepancy.class},
             {ResearchedUsage.class},
             {UndistributedLiabilitiesReportDto.class},
-            {BatchSummaryReportDto.class},
+            {FasBatchSummaryReportDto.class},
             {ResearchStatusReportDto.class},
             {ServiceFeeTrueUpReportDto.class},
             {BatchStatistic.class},

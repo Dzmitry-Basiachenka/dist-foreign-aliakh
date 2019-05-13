@@ -35,7 +35,7 @@
         <typeAlias alias="RightsholderDiscrepancy" type="com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy"/>
         <typeAlias alias="UndistributedLiabilitiesReportDto" type="com.copyright.rup.dist.foreign.domain.report.UndistributedLiabilitiesReportDto"/>
         <typeAlias alias="ResearchStatusReportDto" type="com.copyright.rup.dist.foreign.domain.report.ResearchStatusReportDto"/>
-        <typeAlias alias="BatchSummaryReportDto" type="com.copyright.rup.dist.foreign.domain.report.BatchSummaryReportDto"/>
+        <typeAlias alias="FasBatchSummaryReportDto" type="com.copyright.rup.dist.foreign.domain.report.FasBatchSummaryReportDto"/>
         <typeAlias alias="ServiceFeeTrueUpReportDto" type="com.copyright.rup.dist.foreign.domain.report.ServiceFeeTrueUpReportDto"/>
         <typeAlias alias="SummaryMarketReportDto" type="com.copyright.rup.dist.foreign.domain.report.SummaryMarketReportDto"/>
         <typeAlias alias="BatchStatistic" type="com.copyright.rup.dist.foreign.domain.report.BatchStatistic"/>
