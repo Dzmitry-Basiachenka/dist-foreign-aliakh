@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 /**
- * Represents batch summary report record.
+ * Represents FAS/FAS2 Batch Summary Report record.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -18,7 +18,7 @@ import java.time.LocalDate;
  *
  * @author Uladzislau Shalamitski
  */
-public class BatchSummaryReportDto extends StoredEntity<String> {
+public class FasBatchSummaryReportDto extends StoredEntity<String> {
 
     private static final BigDecimal DEFAULT_AMOUNT = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP);
 
@@ -172,10 +172,10 @@ public class BatchSummaryReportDto extends StoredEntity<String> {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof BatchSummaryReportDto)) {
+        if (!(o instanceof FasBatchSummaryReportDto)) {
             return false;
         }
-        BatchSummaryReportDto that = (BatchSummaryReportDto) o;
+        FasBatchSummaryReportDto that = (FasBatchSummaryReportDto) o;
         return new EqualsBuilder()
             .appendSuper(super.equals(o))
             .append(nonEligibleDetailsCount, that.nonEligibleDetailsCount)
