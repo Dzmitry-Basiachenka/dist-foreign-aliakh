@@ -173,6 +173,7 @@
             s.description,
             s.nts_fields,
             s.created_by_user,
+            s.created_datetime,
             s.updated_datetime,
             f.product_family
         from ${schema}.df_scenario s
