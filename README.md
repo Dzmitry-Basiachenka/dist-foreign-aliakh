@@ -1,3 +1,14 @@
+5.1.31
+-
+* B-51254 FDA: Enhance FAS Batch reimport logic: apply common usage
+processor for uploading usage batch, apply headers validation
+* B-51258 FDA: Adjust Batch Summary Report to be FAS specific: adjust
+report view to include only FAS and CLA batches
+* B-51258 FDA: Adjust Batch Summary Report to be FAS specific: adjust UI,
+report filename and type names
+* CDP-749 FDA: Scenarios table: All scenarios have the same (current)
+'Create Date'
+
 5.1.30
 -
 * B-49464 Tech Debt: FDA: replace rh account number by uid for FDA-LM
