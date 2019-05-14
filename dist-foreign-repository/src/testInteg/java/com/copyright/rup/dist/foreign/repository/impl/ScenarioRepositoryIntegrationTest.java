@@ -35,6 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -340,6 +341,8 @@ public class ScenarioRepositoryIntegrationTest {
         assertEquals(name, scenario.getName());
         assertEquals(description, scenario.getDescription());
         assertEquals(USER, scenario.getCreateUser());
+        assertEquals(OffsetDateTime.parse("2017-02-14T12:00:00+00:00").toInstant(),
+            scenario.getCreateDate().toInstant());
         assertEquals(productFamily, scenario.getProductFamily());
         assertEquals(status, scenario.getStatus());
     }
