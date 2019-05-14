@@ -39,7 +39,7 @@ public class StandardNumberValidatorTest {
     public void testIsValid() {
         ResearchedUsage usage = buildResearchedUsage();
         expect(piIntegrationService.findWorkByIdnoAndTitle(usage.getStandardNumber(), null))
-            .andReturn(new Work(185367895L, "Technical Journal", "VALISSN"))
+            .andReturn(new Work(185367895L, "Technical Journal", null, "VALISSN"))
             .once();
         replay(piIntegrationService);
         assertTrue(validator.isValid(usage));

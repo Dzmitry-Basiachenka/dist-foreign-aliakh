@@ -90,6 +90,7 @@ public class WorkMatchingService implements IWorkMatchingService {
             usage.setSystemTitle(usage.getWorkTitle());
             usage.setStatus(UsageStatusEnum.WORK_FOUND);
             usage.setStandardNumberType(StringUtils.upperCase(work.getMainIdnoType()));
+            usage.setStandardNumber(work.getMainIdno());
         }
         return work;
     }
@@ -98,6 +99,9 @@ public class WorkMatchingService implements IWorkMatchingService {
         Work work = piIntegrationService.findWorkByIdnoAndTitle(usage.getStandardNumber(), usage.getWorkTitle());
         if (Objects.nonNull(work.getWrWrkInst())) {
             usage.setWrWrkInst(work.getWrWrkInst());
+            if (Objects.isNull(usage.getWorkTitle())) {
+                usage.setWorkTitle(work.getMainTitle());
+            }
             usage.setSystemTitle(work.getMainTitle());
             usage.setStatus(UsageStatusEnum.WORK_FOUND);
             usage.setStandardNumberType(StringUtils.upperCase(work.getMainIdnoType()));

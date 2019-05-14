@@ -16,7 +16,7 @@ public interface IPiIntegrationService {
     /**
      * Finds {@link Work} for given IDNO and title.
      *
-     * @param idno  indo to match
+     * @param idno  idno to match
      * @param title title to match
      * @return instance of {@link Work}
      */

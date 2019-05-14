@@ -18,6 +18,7 @@ public class Work {
 
     private Long wrWrkInst;
     private String mainTitle;
+    private String mainIdno;
     private String mainIdnoType;
     private boolean multipleMatches;
 
@@ -30,13 +31,15 @@ public class Work {
     /**
      * Constructor.
      *
-     * @param wrWrkInst wr wrk inst
-     * @param mainTitle main title
+     * @param wrWrkInst    wr wrk inst
+     * @param mainTitle    main title
+     * @param mainIdno     main idno
      * @param mainIdnoType main idno type
      */
-    public Work(Long wrWrkInst, String mainTitle, String mainIdnoType) {
+    public Work(Long wrWrkInst, String mainTitle, String mainIdno, String mainIdnoType) {
         this.wrWrkInst = wrWrkInst;
         this.mainTitle = mainTitle;
+        this.mainIdno = mainIdno;
         this.mainIdnoType = mainIdnoType;
     }
 
@@ -54,6 +57,14 @@ public class Work {
 
     public void setMainTitle(String mainTitle) {
         this.mainTitle = mainTitle;
+    }
+
+    public String getMainIdno() {
+        return mainIdno;
+    }
+
+    public void setMainIdno(String mainIdno) {
+        this.mainIdno = mainIdno;
     }
 
     public boolean isMultipleMatches() {
@@ -84,6 +95,7 @@ public class Work {
         return new EqualsBuilder()
             .append(this.wrWrkInst, that.wrWrkInst)
             .append(this.mainTitle, that.mainTitle)
+            .append(this.mainIdno, that.mainIdno)
             .append(this.multipleMatches, that.multipleMatches)
             .append(this.mainIdnoType, that.mainIdnoType)
             .isEquals();
@@ -94,6 +106,7 @@ public class Work {
         return new HashCodeBuilder()
             .append(wrWrkInst)
             .append(mainTitle)
+            .append(mainIdno)
             .append(multipleMatches)
             .append(mainIdnoType)
             .toHashCode();
@@ -104,6 +117,7 @@ public class Work {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
             .append("wrWrkInst", wrWrkInst)
             .append("mainTitle", mainTitle)
+            .append("mainIdno", mainIdno)
             .append("multipleMatches", multipleMatches)
             .append("mainIdnoType", mainIdnoType)
             .toString();

@@ -17,8 +17,8 @@ import com.copyright.rup.dist.foreign.domain.Work;
 import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
-
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -36,6 +36,7 @@ import java.math.BigDecimal;
  */
 public class WorkMatchingServiceTest {
 
+    private static final String STANDARD_NUMBER = "000043122-1";
     private IPiIntegrationService piIntegrationService;
     private WorkMatchingService workMatchingService;
     private IUsageRepository usageRepository;
@@ -57,11 +58,10 @@ public class WorkMatchingServiceTest {
 
     @Test
     public void testMatchByIdno() {
-        String standardNumber = "000043122-1";
         String title = "The theological roots of Pentecostalism";
-        Usage usage = buildUsage(standardNumber, title);
-        expect(piIntegrationService.findWorkByIdnoAndTitle(standardNumber, title))
-            .andReturn(new Work(112930820L, title, "valisbn10")).once();
+        Usage usage = buildUsage(STANDARD_NUMBER, title);
+        expect(piIntegrationService.findWorkByIdnoAndTitle(STANDARD_NUMBER, title))
+            .andReturn(new Work(112930820L, title, null, "valisbn10")).once();
         usageService.updateProcessedUsage(usage);
         expectLastCall().once();
         auditService.logAction(anyString(), eq(UsageActionTypeEnum.WORK_FOUND), anyString());
@@ -70,21 +70,21 @@ public class WorkMatchingServiceTest {
         workMatchingService.matchByIdno(usage);
         assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
         assertEquals("VALISBN10", usage.getStandardNumberType());
+        assertEquals(STANDARD_NUMBER, usage.getStandardNumber());
         assertEquals(112930820L, usage.getWrWrkInst(), 0);
         verify(piIntegrationService, usageRepository, auditService, usageService);
     }
 
     @Test
     public void testMatchByIdnoForNts() {
-        String standardNumber = "000043122-1";
         String title = "The theological roots of Pentecostalism";
         String batchId = RupPersistUtils.generateUuid();
-        Usage usage = buildUsage(standardNumber, title);
+        Usage usage = buildUsage(STANDARD_NUMBER, title);
         usage.setId(RupPersistUtils.generateUuid());
         usage.setBatchId(batchId);
-        expect(piIntegrationService.findWorkByIdnoAndTitle(standardNumber, title))
+        expect(piIntegrationService.findWorkByIdnoAndTitle(STANDARD_NUMBER, title))
             .andReturn(new Work()).once();
-        expect(usageRepository.getTotalAmountByStandardNumberAndBatchId(standardNumber, batchId))
+        expect(usageRepository.getTotalAmountByStandardNumberAndBatchId(STANDARD_NUMBER, batchId))
             .andReturn(new BigDecimal("99.00"));
         usageService.updateProcessedUsage(usage);
         expectLastCall().once();
@@ -103,7 +103,8 @@ public class WorkMatchingServiceTest {
     public void testMatchByTitle() {
         String title = "The theological roots of Pentecostalism";
         Usage usage = buildUsage(null, title);
-        expect(piIntegrationService.findWorkByTitle(title)).andReturn(new Work(112930820L, null, "valissn")).once();
+        expect(piIntegrationService.findWorkByTitle(title))
+            .andReturn(new Work(112930820L, title, STANDARD_NUMBER, "valissn")).once();
         usageService.updateProcessedUsage(usage);
         expectLastCall().once();
         auditService.logAction(anyString(), eq(UsageActionTypeEnum.WORK_FOUND), anyString());
@@ -113,6 +114,7 @@ public class WorkMatchingServiceTest {
         assertEquals(UsageStatusEnum.WORK_FOUND, usage.getStatus());
         assertEquals(112930820L, usage.getWrWrkInst(), 0);
         assertEquals("VALISSN", usage.getStandardNumberType());
+        assertEquals(STANDARD_NUMBER, usage.getStandardNumber());
         verify(piIntegrationService, usageRepository, auditService);
     }
 

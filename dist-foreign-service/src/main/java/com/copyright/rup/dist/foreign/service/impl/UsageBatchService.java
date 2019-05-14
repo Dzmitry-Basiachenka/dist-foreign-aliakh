@@ -19,9 +19,8 @@ import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
 import com.google.common.collect.Iterables;
-
 import com.google.common.collect.Maps;
-import org.apache.commons.lang3.StringUtils;
+
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -243,11 +242,12 @@ public class UsageBatchService implements IUsageBatchService {
 
     private void fillStandardNumberType(Collection<Usage> usages) {
         usages.stream()
-            .filter(usage -> Objects.nonNull(usage.getWrWrkInst())
-                && StringUtils.isBlank(usage.getStandardNumberType()))
+            .filter(usage -> Objects.nonNull(usage.getWrWrkInst()))
             .forEach(usage -> {
                 Work work = piIntegrationService.findWorkByWrWrkInst(usage.getWrWrkInst());
                 usage.setStandardNumberType(work.getMainIdnoType());
+                usage.setStandardNumber(work.getMainIdno());
+                usage.setWorkTitle(work.getMainTitle());
             });
     }
 }

@@ -1035,6 +1035,7 @@ public class UsageRepositoryIntegrationTest {
         usage.setWorkTitle("Wissenschaft & Forschung Italy");
         usage.setSystemTitle("Wissenschaft & Forschung France");
         usage.setStandardNumberType("VALISBN10");
+        usage.setStandardNumber(STANDARD_NUMBER);
         assertNotNull(usageRepository.updateProcessedUsage(usage));
         List<Usage> updatedUsages = usageRepository.findByIds(Collections.singletonList(USAGE_ID_24));
         assertEquals(1, CollectionUtils.size(updatedUsages));
@@ -1043,6 +1044,7 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(UsageStatusEnum.RH_FOUND, updatedUsage.getStatus());
         assertEquals(FAS_PRODUCT_FAMILY, updatedUsage.getProductFamily());
         assertEquals("VALISBN10", updatedUsage.getStandardNumberType());
+        assertEquals(STANDARD_NUMBER, updatedUsage.getStandardNumber());
         assertEquals("Wissenschaft & Forschung Italy", updatedUsage.getWorkTitle());
         assertEquals("Wissenschaft & Forschung France", updatedUsage.getSystemTitle());
     }
