@@ -8,19 +8,12 @@
       "java.util.ArrayList",
       [
         {
-          "@class": "com.copyright.rup.adapters.oracle.ap.domain.RhTaxInfo",
-          "payeeAccountNumber": "2000017000",
-          "tboAccountNumber": "2000017000",
-          "tboAccountName": "CLA, The Copyright Licensing Agency Ltd.",
-          "taxOnFile": "0",
-          "notificationsSent": 2,
-          "dateOfLastNotificationSent": "2000-04-10 00:00:00",
-          "addressLine1": "Barnard’s Inn",
-          "addressLine2": "86 Fetter Lane",
-          "city": "London",
-          "zip": "EC4A 1EN",
-          "country": "GB",
-          "payGroup": "WIRE"
+          "@class": "com.copyright.rup.adapters.oracle.ap.domain.RightsholderDataInfo",
+          "rightsholderAccountNumber": "7001413934",
+          "rightsholderName": "Castanea / Allen Press, Inc.",
+          "withholdingIndicator": "U",
+          "domesticInternationalIndicator": "D",
+          "taxCountry": "US"
         }
       ]
     ]

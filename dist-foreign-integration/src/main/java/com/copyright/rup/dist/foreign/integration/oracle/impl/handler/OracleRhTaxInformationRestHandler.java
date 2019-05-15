@@ -4,12 +4,8 @@ import com.copyright.rup.dist.common.integration.rest.CommonRestHandler;
 import com.copyright.rup.dist.common.integration.util.JsonUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.google.common.collect.Maps;
 
 import org.springframework.web.client.RestTemplate;
-
-import java.util.Collections;
-import java.util.Map;
 
 /**
  * Handler for processing rightsholders tax information response.
@@ -20,7 +16,9 @@ import java.util.Map;
  *
  * @author Aliaksandr Liakh
  */
-public class OracleRhTaxInformationRestHandler extends CommonRestHandler<Map<Long, String>> {
+public class OracleRhTaxInformationRestHandler extends CommonRestHandler<Boolean> {
+
+    private static final String DOMESTIC_INDICATOR = "D";
 
     /**
      * Constructor.
@@ -37,18 +35,17 @@ public class OracleRhTaxInformationRestHandler extends CommonRestHandler<Map<Lon
     }
 
     @Override
-    protected Map<Long, String> doHandleResponse(JsonNode response) {
-        Map<Long, String> result = Maps.newHashMap();
-        response.forEach(node -> {
-            Long accountNumber = JsonUtils.getLongValue(node.get("tboAccountNumber"));
-            String countryCode = JsonUtils.getStringValue(node.get("country"));
-            result.put(accountNumber, countryCode);
-        });
+    protected Boolean doHandleResponse(JsonNode response) {
+        Boolean result = Boolean.FALSE;
+        if (response.elements().hasNext()) {
+            JsonNode node = response.elements().next();
+            result = DOMESTIC_INDICATOR.equals(JsonUtils.getStringValue(node.get("domesticInternationalIndicator")));
+        }
         return result;
     }
 
     @Override
-    protected Map<Long, String> getDefaultValue() {
-        return Collections.emptyMap();
+    protected Boolean getDefaultValue() {
+        return Boolean.FALSE;
     }
 }

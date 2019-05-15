@@ -2,7 +2,7 @@
   "response": {
     "status": {
       "code": "NOT_FOUND",
-      "message": "No data returned for list of Rightsholders. Fed Ids entered on all supplier records."
+      "message": "Rightsholder, [7001413934], returned no data"
     }
   }
 }
