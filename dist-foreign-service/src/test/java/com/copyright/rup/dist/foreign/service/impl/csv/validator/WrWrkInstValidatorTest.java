@@ -41,7 +41,7 @@ public class WrWrkInstValidatorTest {
     public void testIsValid() {
         Usage usage = buildUsage(WR_WRK_INST, null);
         expect(piIntegrationService.findWorkByWrWrkInst(WR_WRK_INST))
-            .andReturn(new Work(WR_WRK_INST, "Technical Journal", "VALISSN"))
+            .andReturn(new Work(WR_WRK_INST, "Technical Journal", null, "VALISSN"))
             .once();
         replay(piIntegrationService);
         assertTrue(validator.isValid(usage));

@@ -65,7 +65,7 @@ public class WorkflowIntegrationTest {
     private List<ICacheService<?, ?>> cacheServices;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         testBuilder.reset();
         cacheServices.forEach(ICacheService::invalidateCache);
     }
