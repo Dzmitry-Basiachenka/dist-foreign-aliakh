@@ -79,8 +79,8 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
     private String expectedRmsRequest;
     private String expectedRmsResponse;
-    private String expectedOracleRequest;
     private String expectedOracleResponse;
+    private Long expectedOracleAccountNumber;
     private String expectedPrmResponse;
     private String expectedPreferencesResponse;
     private String expectedPreferencesRightsholderId;
@@ -112,8 +112,8 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
         return this;
     }
 
-    NtsWorkflowIntegrationTestBuilder expectOracleCall(String request, String response) {
-        this.expectedOracleRequest = request;
+    NtsWorkflowIntegrationTestBuilder expectOracleCall(Long accountNumber, String response) {
+        this.expectedOracleAccountNumber = accountNumber;
         this.expectedOracleResponse = response;
         return this;
     }
@@ -145,10 +145,10 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
         expectedAudit = null;
         expectedUsage = null;
         expectedPrmAccountNumber = null;
+        expectedOracleAccountNumber = null;
         expectedPrmResponse = null;
         expectedRmsRequest = null;
         expectedRmsResponse = null;
-        expectedOracleRequest = null;
         expectedOracleResponse = null;
         expectedPreferencesResponse = null;
         expectedPreferencesRightsholderId = null;
@@ -170,7 +170,7 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
             if (Objects.nonNull(expectedPrmResponse)) {
                 expectPrmCall();
             }
-            if (Objects.nonNull(expectedOracleRequest)) {
+            if (Objects.nonNull(expectedOracleAccountNumber)) {
                 expectOracleCall();
             }
             if (Objects.nonNull(expectedPreferencesResponse)) {
@@ -301,10 +301,10 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
         private void expectOracleCall() {
             mockServer.expect(MockRestRequestMatchers
-                .requestTo("http://localhost:8080/oracle-ap-rest/getRhTaxInformation"))
-                .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
-                .andExpect(MockRestRequestMatchers.content()
-                    .string(new JsonMatcher(TestUtils.fileToString(this.getClass(), expectedOracleRequest))))
+                .requestTo(
+                    "http://localhost:8080/oracle-ap-rest/getRightsholderDataInfo?rightsholderAccountNumbers=" +
+                        expectedOracleAccountNumber))
+                .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
                 .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(),
                     expectedOracleResponse), MediaType.APPLICATION_JSON));
         }

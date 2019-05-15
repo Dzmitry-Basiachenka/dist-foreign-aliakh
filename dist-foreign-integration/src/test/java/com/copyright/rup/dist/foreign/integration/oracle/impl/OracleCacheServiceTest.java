@@ -7,19 +7,12 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertFalse;
 
 import com.copyright.rup.dist.foreign.integration.oracle.api.IOracleService;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-
-import org.apache.commons.collections4.MapUtils;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.Collections;
-import java.util.Map;
 
 /**
  * Verifies {@link OracleCacheService}.
@@ -33,7 +26,6 @@ import java.util.Map;
 public class OracleCacheServiceTest {
 
     private static final long ACCOUNT_NUMBER = 1000015778L;
-    private static final String COUNTRY_CODE = "US";
 
     private IOracleService oracleServiceMock;
     private OracleCacheService oracleCacheService;
@@ -52,30 +44,18 @@ public class OracleCacheServiceTest {
     }
 
     @Test
-    public void testGetAccountNumbersToCountryCodesMap() {
-        expect(oracleServiceMock.getAccountNumbersToCountryCodesMap(ImmutableList.of(ACCOUNT_NUMBER)))
-            .andReturn(ImmutableMap.of(ACCOUNT_NUMBER, COUNTRY_CODE)).once();
+    public void testIsUsTaxCountry() {
+        expect(oracleServiceMock.isUsTaxCountry(ACCOUNT_NUMBER)).andReturn(Boolean.TRUE).once();
         replay(oracleServiceMock);
-        Map<Long, String> actualResult =
-            oracleCacheService.getAccountNumbersToCountryCodesMap(Collections.singletonList(ACCOUNT_NUMBER));
-        assertTrue(MapUtils.isNotEmpty(actualResult));
-        assertEquals(1, actualResult.size());
-        assertEquals(COUNTRY_CODE, actualResult.get(ACCOUNT_NUMBER));
-        assertEquals(COUNTRY_CODE,
-            oracleCacheService.getAccountNumbersToCountryCodesMap(Collections.singletonList(ACCOUNT_NUMBER))
-                .get(ACCOUNT_NUMBER));
+        assertTrue(oracleCacheService.isUsTaxCountry(ACCOUNT_NUMBER));
         verify(oracleServiceMock);
     }
 
     @Test
-    public void testGetAccountNumbersToCountryCodesMapWithNotFoundResponse() {
-        expect(oracleServiceMock.getAccountNumbersToCountryCodesMap(ImmutableList.of(ACCOUNT_NUMBER)))
-            .andReturn(Collections.EMPTY_MAP).once();
+    public void testIsUsTaxCountryWithNotFoundResponse() {
+        expect(oracleServiceMock.isUsTaxCountry(ACCOUNT_NUMBER)).andReturn(Boolean.FALSE).once();
         replay(oracleServiceMock);
-        Map<Long, String> actualResult =
-            oracleCacheService.getAccountNumbersToCountryCodesMap(Collections.singletonList(ACCOUNT_NUMBER));
-        assertNotNull(actualResult);
-        assertTrue(MapUtils.isEmpty(actualResult));
+        assertFalse(oracleCacheService.isUsTaxCountry(ACCOUNT_NUMBER));
         verify(oracleServiceMock);
     }
 }

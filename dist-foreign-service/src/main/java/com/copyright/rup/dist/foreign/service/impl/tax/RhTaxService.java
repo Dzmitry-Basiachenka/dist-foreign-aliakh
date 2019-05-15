@@ -3,12 +3,13 @@ package com.copyright.rup.dist.foreign.service.impl.tax;
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.integration.oracle.api.IOracleIntegrationService;
+import com.copyright.rup.dist.foreign.integration.oracle.api.IOracleService;
 import com.copyright.rup.dist.foreign.service.api.IRhTaxService;
 
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
@@ -28,7 +29,8 @@ public class RhTaxService implements IRhTaxService {
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired
-    private IOracleIntegrationService oracleIntegrationService;
+    @Qualifier("df.integration.oracleCacheService")
+    private IOracleService oracleService;
     @Autowired
     private IUsageService usageService;
 
@@ -37,7 +39,7 @@ public class RhTaxService implements IRhTaxService {
         String usageId = usage.getId();
         Long accountNumber = Objects.requireNonNull(usage.getRightsholder().getAccountNumber());
         LOGGER.debug("Processing RH tax country. Started. UsageId={}, RhAccountNumber={}", usageId, accountNumber);
-        boolean isUsTaxCountry = oracleIntegrationService.isUsCountryCode(accountNumber);
+        Boolean isUsTaxCountry = oracleService.isUsTaxCountry(accountNumber);
         if (isUsTaxCountry) {
             usage.setStatus(UsageStatusEnum.US_TAX_COUNTRY);
             usageService.updateProcessedUsage(usage);
@@ -46,8 +48,8 @@ public class RhTaxService implements IRhTaxService {
             accountNumber, isUsTaxCountry);
     }
 
-    void setOracleIntegrationService(IOracleIntegrationService oracleIntegrationService) {
-        this.oracleIntegrationService = oracleIntegrationService;
+    void setOracleService(IOracleService oracleService) {
+        this.oracleService = oracleService;
     }
 
     void setUsageService(IUsageService usageService) {
