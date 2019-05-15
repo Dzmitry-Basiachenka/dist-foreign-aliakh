@@ -126,7 +126,7 @@ public class ResearchedUsagesCsvProcessorIntegrationTest {
                     "<li>Publisher</li>" +
                     "<li>Pub Date</li>" +
                     "<li>Number of Copies</li>" +
-                    "<li>Reported value</li>" +
+                    "<li>Reported Value</li>" +
                     "<li>Amt in USD</li>" +
                     "<li>Gross Amt in USD</li>" +
                     "<li>Market</li>" +

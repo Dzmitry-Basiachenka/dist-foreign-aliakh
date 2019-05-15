@@ -76,7 +76,7 @@ public class ResearchedUsagesCsvProcessor extends DistCsvProcessor<ResearchedUsa
         PUBLISHER("Publisher"),
         PUBLICATION_DATE("Pub Date"),
         NUMBER_OF_COPIES("Number of Copies"),
-        REPORTED_VALUE("Reported value"),
+        REPORTED_VALUE("Reported Value"),
         GROSS_AMOUNT("Amt in USD"),
         BATCH_GROSS_AMOUNT("Gross Amt in USD"),
         MARKET("Market"),
