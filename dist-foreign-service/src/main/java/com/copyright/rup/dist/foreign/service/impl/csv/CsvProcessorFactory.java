@@ -6,7 +6,7 @@ import com.copyright.rup.dist.foreign.service.impl.csv.validator.MarketPeriodVal
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ResearchedUsageValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.RightsholderWrWrkInstValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.StandardNumberValidator;
-import com.copyright.rup.dist.foreign.service.impl.csv.validator.WorkTitleValidator;
+import com.copyright.rup.dist.foreign.service.impl.csv.validator.WorkTitleStandardNumberValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.WrWrkInstValidator;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +40,7 @@ public class CsvProcessorFactory {
     public UsageCsvProcessor getUsageCsvProcessor(String productFamily) {
         UsageCsvProcessor processor = new UsageCsvProcessor(productFamily);
         processor.addBusinessValidators(new MarketPeriodValidator(), new RightsholderWrWrkInstValidator(),
-            new WorkTitleValidator(), new WrWrkInstValidator(piIntegrationService));
+            new WorkTitleStandardNumberValidator(), new WrWrkInstValidator(piIntegrationService));
         return processor;
     }
 
