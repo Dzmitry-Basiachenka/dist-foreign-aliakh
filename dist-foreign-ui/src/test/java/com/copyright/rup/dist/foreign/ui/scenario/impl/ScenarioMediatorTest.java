@@ -53,7 +53,7 @@ public class ScenarioMediatorTest {
         mediator = new ScenarioMediator();
         mediator.setExcludeButton(excludeButton);
         mediator.setExportDetailsButton(exportDetailsButton);
-        mediator.setExportScenarioButton(exportScenarioButton);
+        mediator.setExportResultsByRhButton(exportScenarioButton);
         mediator.setSearchWidget(searchWidget);
         mediator.setRightsholderGrid(grid);
         mediator.setEmptyUsagesLayout(emptyUsagesLayout);
