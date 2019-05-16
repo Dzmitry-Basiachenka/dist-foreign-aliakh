@@ -1,3 +1,15 @@
+5.1.32
+-
+* B-50635 FDA: Consume Oracle A/P service to determine RH tax country:
+adjust service logic to get RH tax information using new service
+* B-51254 FDA: Enhance FAS Batch reimport logic: apply Title and Standard
+Number validation if Wr Wrk Inst is not null
+* B-51254 FDA: Enhance FAS Batch reimport logic: populate standard number
+and work title if empty during PI matching
+* B-51254 FDA: Enhance FAS Batch reimport logic: rename Reported Value
+header for exported and imported files
+* B-51364 Tech Debt: FDA: migrate to the latest versions of prm services
+
 5.1.31
 -
 * B-51254 FDA: Enhance FAS Batch reimport logic: apply common usage
