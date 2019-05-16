@@ -153,7 +153,7 @@ public class UpdateRightsTest {
     private void expectPrmCall() {
         (prmRightsholderAsync ? asyncMockServer : mockServer).expect(MockRestRequestMatchers
             .requestTo(
-                "http://localhost:8080/party-rest/organization/extorgkeys?extOrgKeys%5B%5D=1000000322&fmt=json"))
+                "http://localhost:8080/party-rest/organization/extorgkeysv2?extOrgKeys=1000000322"))
             .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
             .andRespond(MockRestResponseCreators.withSuccess(
                 TestUtils.fileToString(RightsholderService.class, "prm/rightsholder_1000000322_response.json"),
