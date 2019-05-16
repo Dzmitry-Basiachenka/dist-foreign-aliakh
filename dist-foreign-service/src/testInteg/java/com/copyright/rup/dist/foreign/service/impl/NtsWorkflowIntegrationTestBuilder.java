@@ -292,8 +292,8 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
         private void expectPrmCall() {
             (prmRightsholderAsync ? asyncMockServer : mockServer).expect(MockRestRequestMatchers
-                .requestTo("http://localhost:8080/party-rest/organization/extorgkeys?extOrgKeys%5B%5D=" +
-                    expectedPrmAccountNumber + "&fmt=json"))
+                .requestTo("http://localhost:8080/party-rest/organization/extorgkeysv2?extOrgKeys=" +
+                    expectedPrmAccountNumber))
                 .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
                 .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(),
                     expectedPrmResponse), MediaType.APPLICATION_JSON));
@@ -311,9 +311,9 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
         private void expectGetPreferences() {
             mockServer.expect(MockRestRequestMatchers
-                .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelpref?orgIds%5B%5D="
+                .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelprefv2?orgIds="
                     + expectedPreferencesRightsholderId
-                    + "&prefCodes%5B%5D=IS-RH-FDA-PARTICIPATING,ISRHDISTINELIGIBLE"))
+                    + "&prefCodes=IS-RH-FDA-PARTICIPATING,ISRHDISTINELIGIBLE"))
                 .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
                 .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(),
                     expectedPreferencesResponse), MediaType.APPLICATION_JSON));

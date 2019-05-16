@@ -119,8 +119,7 @@ public class LoadResearchedUsagesIntegrationTest {
 
     private void expectPrmCall(Long accountNumber, String prmResponseFileName) {
         (prmRightsholderAsync ? asyncMockServer : mockServer).expect(MockRestRequestMatchers
-            .requestTo("http://localhost:8080/party-rest/organization/extorgkeys?extOrgKeys%5B%5D=" + accountNumber +
-                "&fmt=json"))
+            .requestTo("http://localhost:8080/party-rest/organization/extorgkeysv2?extOrgKeys=" + accountNumber))
             .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
             .andRespond(MockRestResponseCreators.withSuccess(
                 TestUtils.fileToString(RightsholderService.class, prmResponseFileName), MediaType.APPLICATION_JSON));

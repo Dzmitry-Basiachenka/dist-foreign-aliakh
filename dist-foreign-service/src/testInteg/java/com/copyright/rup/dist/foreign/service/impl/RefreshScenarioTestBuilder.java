@@ -170,9 +170,9 @@ class RefreshScenarioTestBuilder {
         private void expectGetPreferences(String fileName, List<String> rightholderIds) {
             rightholderIds.forEach(rightholderId -> {
                 mockServer.expect(MockRestRequestMatchers
-                    .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelpref?orgIds%5B%5D="
+                    .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelprefv2?orgIds="
                         + rightholderId
-                        + "&prefCodes%5B%5D=IS-RH-FDA-PARTICIPATING,ISRHDISTINELIGIBLE"))
+                        + "&prefCodes=IS-RH-FDA-PARTICIPATING,ISRHDISTINELIGIBLE"))
                     .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
                     .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), fileName),
                         MediaType.APPLICATION_JSON));
@@ -182,8 +182,8 @@ class RefreshScenarioTestBuilder {
         private void expectGetRollups(String fileName, List<String> rightsholdersIds) {
             rightsholdersIds.forEach(ightsholdersId -> {
                 (prmRollUpAsync ? asyncMockServer : mockServer).expect(MockRestRequestMatchers
-                    .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelprefrollup?orgIds%5B%5D=" +
-                        ightsholdersId + "&relationshipCode=PARENT&prefCodes%5B%5D=payee"))
+                    .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelprefrollupv2?orgIds=" +
+                        ightsholdersId + "&relationshipCode=PARENT&prefCodes=payee"))
                     .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
                     .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), fileName),
                         MediaType.APPLICATION_JSON));

@@ -165,8 +165,8 @@ class ReconcileRightsholdersTestBuilder {
         private void expectGetRollups(String fileName, List<String> rightsholdersIds) {
             rightsholdersIds.forEach(rightsholdersId -> {
                 (prmRollUpAsync ? asyncMockServer : mockServer).expect(MockRestRequestMatchers
-                    .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelprefrollup?orgIds%5B%5D=" +
-                        rightsholdersId + "&relationshipCode=PARENT&prefCodes%5B%5D=payee"))
+                    .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelprefrollupv2?orgIds=" +
+                        rightsholdersId + "&relationshipCode=PARENT&prefCodes=payee"))
                     .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
                     .andRespond(
                         MockRestResponseCreators.withSuccess(
@@ -178,7 +178,7 @@ class ReconcileRightsholdersTestBuilder {
         private void expectPrmCall() {
             (prmRightsholderAsync ? asyncMockServer : mockServer).expect(MockRestRequestMatchers
                 .requestTo(
-                    "http://localhost:8080/party-rest/organization/extorgkeys?extOrgKeys%5B%5D=1000002137&fmt=json"))
+                    "http://localhost:8080/party-rest/organization/extorgkeysv2?extOrgKeys=1000002137"))
                 .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
                 .andRespond(
                     MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), expectedPrmResponse),
@@ -188,9 +188,9 @@ class ReconcileRightsholdersTestBuilder {
         private void expectGetPreferences(String fileName, List<String> rightholderIds) {
             rightholderIds.forEach(rightholderId -> {
                 mockServer.expect(MockRestRequestMatchers
-                    .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelpref?orgIds%5B%5D="
+                    .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelprefv2?orgIds="
                         + rightholderId
-                        + "&prefCodes%5B%5D=IS-RH-FDA-PARTICIPATING,ISRHDISTINELIGIBLE"))
+                        + "&prefCodes=IS-RH-FDA-PARTICIPATING,ISRHDISTINELIGIBLE"))
                     .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
                     .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), fileName),
                         MediaType.APPLICATION_JSON));
