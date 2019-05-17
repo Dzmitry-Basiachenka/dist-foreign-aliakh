@@ -25,7 +25,7 @@ class ScenarioMediator implements IMediator {
 
     private Button excludeButton;
     private Button exportDetailsButton;
-    private Button exportResultsByRhButton;
+    private Button exportButton;
     private Grid<RightsholderTotalsHolder> rightsholderGrid;
     private SearchWidget searchWidget;
     private VerticalLayout emptyUsagesLayout;
@@ -47,8 +47,8 @@ class ScenarioMediator implements IMediator {
         this.exportDetailsButton = exportDetailsButton;
     }
 
-    void setExportResultsByRhButton(Button exportResultsByRhButton) {
-        this.exportResultsByRhButton = exportResultsByRhButton;
+    void setExportButton(Button exportButton) {
+        this.exportButton = exportButton;
     }
 
     void setSearchWidget(SearchWidget searchWidget) {
@@ -70,7 +70,7 @@ class ScenarioMediator implements IMediator {
             && ScenarioStatusEnum.IN_PROGRESS == scenario.getStatus()
             && FdaConstants.FAS_FAS2_PRODUCT_FAMILY_SET.contains(scenario.getProductFamily()));
         exportDetailsButton.setEnabled(!scenarioEmpty);
-        exportResultsByRhButton.setEnabled(!scenarioEmpty);
+        exportButton.setEnabled(!scenarioEmpty);
         rightsholderGrid.setVisible(!scenarioEmpty);
         searchWidget.setVisible(!scenarioEmpty);
         emptyUsagesLayout.setVisible(scenarioEmpty);
