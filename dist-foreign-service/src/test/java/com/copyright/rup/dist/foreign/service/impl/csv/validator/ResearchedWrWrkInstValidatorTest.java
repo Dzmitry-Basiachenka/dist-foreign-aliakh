@@ -16,7 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Validates {@link StandardNumberValidator}.
+ * Validates {@link ResearchedWrWrkInstValidator}.
  * <p/>
  * Copyright (C) 2019 copyright.com
  * <p/>
@@ -24,23 +24,23 @@ import org.junit.Test;
  *
  * @author Uladzislau Shalamitski
  */
-public class StandardNumberValidatorTest {
+public class ResearchedWrWrkInstValidatorTest {
 
+    private static final Long WR_WRK_INST = 185367895L;
     private IPiIntegrationService piIntegrationService;
-    private StandardNumberValidator validator;
+    private ResearchedWrWrkInstValidator validator;
 
     @Before
     public void setUp() {
         piIntegrationService = createMock(IPiIntegrationService.class);
-        validator = new StandardNumberValidator(piIntegrationService);
+        validator = new ResearchedWrWrkInstValidator(piIntegrationService);
     }
 
     @Test
     public void testIsValid() {
-        ResearchedUsage usage = buildResearchedUsage();
-        expect(piIntegrationService.findWorkByIdnoAndTitle(usage.getStandardNumber(), null))
-            .andReturn(new Work(185367895L, "Technical Journal", null, "VALISSN"))
-            .once();
+        ResearchedUsage usage = buildResearchedUsage(WR_WRK_INST);
+        expect(piIntegrationService.findWorkByWrWrkInst(WR_WRK_INST))
+            .andReturn(new Work(WR_WRK_INST, "Technical Journal", null, "VALISSN")).once();
         replay(piIntegrationService);
         assertTrue(validator.isValid(usage));
         verify(piIntegrationService);
@@ -48,12 +48,19 @@ public class StandardNumberValidatorTest {
 
     @Test
     public void testIsValidEmptyWork() {
-        ResearchedUsage usage = buildResearchedUsage();
-        expect(piIntegrationService.findWorkByIdnoAndTitle(usage.getStandardNumber(), null))
-            .andReturn(new Work())
-            .once();
+        ResearchedUsage usage = buildResearchedUsage(WR_WRK_INST);
+        expect(piIntegrationService.findWorkByWrWrkInst(WR_WRK_INST))
+            .andReturn(new Work(null, null, null, null)).once();
         replay(piIntegrationService);
         assertFalse(validator.isValid(usage));
+        verify(piIntegrationService);
+    }
+
+    @Test
+    public void testIsValidUsageNullWork() {
+        ResearchedUsage usage = buildResearchedUsage(null);
+        replay(piIntegrationService);
+        assertTrue(validator.isValid(usage));
         verify(piIntegrationService);
     }
 
@@ -64,13 +71,12 @@ public class StandardNumberValidatorTest {
 
     @Test
     public void testGetErrorMessage() {
-        assertEquals("Loaded Standard Number is missing in PI or there are multiple matches",
-            validator.getErrorMessage());
+        assertEquals("Loaded Wr Wrk Inst is missing in PI", validator.getErrorMessage());
     }
 
-    private ResearchedUsage buildResearchedUsage() {
+    private ResearchedUsage buildResearchedUsage(Long wrWrkInst) {
         ResearchedUsage researchedUsage = new ResearchedUsage();
-        researchedUsage.setWrWrkInst(1000009522L);
+        researchedUsage.setWrWrkInst(wrWrkInst);
         researchedUsage.setSystemTitle("Technical Journal");
         researchedUsage.setStandardNumber("978-0-7695-2365-2");
         return researchedUsage;

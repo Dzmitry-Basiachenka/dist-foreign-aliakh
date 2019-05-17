@@ -58,6 +58,10 @@ public class PiIntegrationServiceMock extends PiIntegrationService {
             work = new Work(100011725L, TITLE_2, "12345XX-79069", "VALISBN10");
         } else if (Objects.equals(100011821L, wrWrkInst)) {
             work = new Work(100011821L, "True directions : living your sacred instructions", "12345XX-190048", VALISSN);
+        } else if (Objects.equals(987654321L, wrWrkInst)) {
+            work = new Work(987654321L, "978-0-7695-2365-1", "12345XX-79069", VALISSN);
+        } else if (Objects.equals(876543210L, wrWrkInst)) {
+            work = new Work(876543210L, "978-0-7695-2365-2", "12345XX-79069", VALISSN);
         }
         return work;
     }

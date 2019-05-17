@@ -4,8 +4,8 @@ import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.MarketPeriodValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.ResearchedUsageValidator;
+import com.copyright.rup.dist.foreign.service.impl.csv.validator.ResearchedWrWrkInstValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.RightsholderWrWrkInstValidator;
-import com.copyright.rup.dist.foreign.service.impl.csv.validator.StandardNumberValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.WorkTitleStandardNumberValidator;
 import com.copyright.rup.dist.foreign.service.impl.csv.validator.WrWrkInstValidator;
 
@@ -50,7 +50,7 @@ public class CsvProcessorFactory {
     public ResearchedUsagesCsvProcessor getResearchedUsagesCsvProcessor() {
         ResearchedUsagesCsvProcessor processor = new ResearchedUsagesCsvProcessor();
         processor.addBusinessValidators(new ResearchedUsageValidator(usageService),
-            new StandardNumberValidator(piIntegrationService));
+            new ResearchedWrWrkInstValidator(piIntegrationService));
         return processor;
     }
 }

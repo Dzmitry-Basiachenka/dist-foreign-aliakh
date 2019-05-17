@@ -5,8 +5,6 @@ import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.Work;
 import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.Objects;
 
 /**
@@ -34,8 +32,7 @@ public class WrWrkInstValidator implements DistCsvProcessor.IValidator<Usage> {
     @Override
     public boolean isValid(Usage usage) {
         boolean result = true;
-        if (Objects.nonNull(Objects.requireNonNull(usage).getWrWrkInst())
-            && StringUtils.isBlank(usage.getStandardNumberType())) {
+        if (Objects.nonNull(Objects.requireNonNull(usage).getWrWrkInst())) {
             Work work = piIntegrationService.findWorkByWrWrkInst(usage.getWrWrkInst());
             if (Objects.isNull(work.getWrWrkInst())) {
                 result = false;
