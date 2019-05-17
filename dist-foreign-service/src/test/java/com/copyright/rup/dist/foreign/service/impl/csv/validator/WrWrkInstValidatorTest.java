@@ -39,26 +39,9 @@ public class WrWrkInstValidatorTest {
 
     @Test
     public void testIsValid() {
-        Usage usage = buildUsage(WR_WRK_INST, null);
+        Usage usage = buildUsage(WR_WRK_INST);
         expect(piIntegrationService.findWorkByWrWrkInst(WR_WRK_INST))
-            .andReturn(new Work(WR_WRK_INST, "Technical Journal", null, "VALISSN"))
-            .once();
-        replay(piIntegrationService);
-        assertTrue(validator.isValid(usage));
-        verify(piIntegrationService);
-    }
-
-    @Test
-    public void testIsValidUsageWithoutWrWrkInstAndStandardNumberType() {
-        Usage usage = buildUsage(null, null);
-        replay(piIntegrationService);
-        assertTrue(validator.isValid(usage));
-        verify(piIntegrationService);
-    }
-
-    @Test
-    public void testIsValidUsageWithoutWrWrkInstAndWithStandardNumberType() {
-        Usage usage = buildUsage(null, "VALISBN10");
+            .andReturn(new Work(WR_WRK_INST, "Technical Journal", null, "VALISSN")).once();
         replay(piIntegrationService);
         assertTrue(validator.isValid(usage));
         verify(piIntegrationService);
@@ -66,12 +49,19 @@ public class WrWrkInstValidatorTest {
 
     @Test
     public void testIsValidEmptyWork() {
-        Usage usage = buildUsage(WR_WRK_INST, null);
+        Usage usage = buildUsage(WR_WRK_INST);
         expect(piIntegrationService.findWorkByWrWrkInst(WR_WRK_INST))
-            .andReturn(new Work())
-            .once();
+            .andReturn(new Work(null, null, null, null)).once();
         replay(piIntegrationService);
         assertFalse(validator.isValid(usage));
+        verify(piIntegrationService);
+    }
+
+    @Test
+    public void testIsValidUsageNullWork() {
+        Usage usage = buildUsage(null);
+        replay(piIntegrationService);
+        assertTrue(validator.isValid(usage));
         verify(piIntegrationService);
     }
 
@@ -85,11 +75,10 @@ public class WrWrkInstValidatorTest {
         assertEquals("Loaded Wr Wrk Inst is missing in PI", validator.getErrorMessage());
     }
 
-    private Usage buildUsage(Long wrWrkInst, String standardNumberType) {
+    private Usage buildUsage(Long wrWrkInst) {
         Usage usage = new Usage();
         usage.setWrWrkInst(wrWrkInst);
         usage.setWorkTitle("Technical Journal");
-        usage.setStandardNumberType(standardNumberType);
         return usage;
     }
 }
