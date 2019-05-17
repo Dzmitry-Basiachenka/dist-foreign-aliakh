@@ -163,8 +163,8 @@ public class ScenarioWidgetTest {
         assertEquals("Export Details", exportDetailsButton.getCaption());
         assertEquals("Export_Details", exportDetailsButton.getId());
         Button exportScenarioButton = (Button) horizontalLayout.getComponent(2);
-        assertEquals("Export Scenario", exportScenarioButton.getCaption());
-        assertEquals("Export_Scenario", exportScenarioButton.getId());
+        assertEquals("Export Results by RH", exportScenarioButton.getCaption());
+        assertEquals("Export_Results_by_RH", exportScenarioButton.getId());
         Button closeButton = (Button) horizontalLayout.getComponent(3);
         assertEquals("Close", closeButton.getCaption());
         assertEquals("Close", closeButton.getId());
