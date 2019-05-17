@@ -248,6 +248,7 @@ public class UsageBatchService implements IUsageBatchService {
                 usage.setStandardNumberType(work.getMainIdnoType());
                 usage.setStandardNumber(work.getMainIdno());
                 usage.setWorkTitle(work.getMainTitle());
+                usage.setSystemTitle(work.getMainTitle());
             });
     }
 }

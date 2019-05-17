@@ -50,12 +50,10 @@ public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
     @Override
     public List<String> getHeadersForValidation() {
         List<String> basicHeader =
-            Arrays.stream(BasicColumns.values()).map(BasicColumns::getColumnName).collect(Collectors.toList());
-        List<String> fullHeader = Arrays.stream(AdditionalColumns.values())
-            .map(AdditionalColumns::getColumnName)
-            .collect(Collectors.toList());
-        fullHeader.addAll(basicHeader);
-        return getActualHeaders().size() <= basicHeader.size() ? basicHeader : fullHeader;
+            Arrays.stream(BasicHeader.values()).map(BasicHeader::getColumnName).collect(Collectors.toList());
+        List<String> exportedHeader =
+            Arrays.stream(ExportedHeader.values()).map(ExportedHeader::getColumnName).collect(Collectors.toList());
+        return getActualHeaders().size() <= basicHeader.size() ? basicHeader : exportedHeader;
     }
 
     @Override
@@ -69,27 +67,27 @@ public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
         PositiveNumberValidator positiveNumberValidator = new PositiveNumberValidator();
         LengthValidator lengthValidator1000 = new LengthValidator(1000);
         LengthValidator lengthValidator2000 = new LengthValidator(2000);
-        addPlainValidators(BasicColumns.TITLE, lengthValidator2000);
-        addPlainValidators(BasicColumns.ARTICLE, lengthValidator1000);
-        addPlainValidators(BasicColumns.STANDARD_NUMBER, lengthValidator1000);
-        addPlainValidators(BasicColumns.STANDARD_NUMBER_TYPE, new LengthValidator(50));
-        addPlainValidators(BasicColumns.WR_WRK_INST, positiveNumberValidator, new LengthValidator(9));
-        addPlainValidators(BasicColumns.RH_ACCT_NUMBER, positiveNumberValidator, new LengthValidator(18));
-        addPlainValidators(BasicColumns.PUBLISHER, lengthValidator1000);
-        addPlainValidators(BasicColumns.PUB_DATE, new DateFormatValidator());
-        addPlainValidators(BasicColumns.NUMBER_OF_COPIES, positiveNumberValidator, new LengthValidator(9));
-        addPlainValidators(BasicColumns.REPORTED_VALUE, requiredValidator, new AmountValidator());
-        addPlainValidators(BasicColumns.MARKET, requiredValidator, new LengthValidator(200));
-        addPlainValidators(BasicColumns.MARKET_PERIOD_FROM, requiredValidator, new YearValidator());
-        addPlainValidators(BasicColumns.MARKET_PERIOD_TO, requiredValidator, new YearValidator());
-        addPlainValidators(BasicColumns.AUTHOR, lengthValidator2000);
-        addPlainValidators(BasicColumns.COMMENT, new LengthValidator(100));
+        addPlainValidators(BasicHeader.TITLE, lengthValidator2000);
+        addPlainValidators(BasicHeader.ARTICLE, lengthValidator1000);
+        addPlainValidators(BasicHeader.STANDARD_NUMBER, lengthValidator1000);
+        addPlainValidators(BasicHeader.STANDARD_NUMBER_TYPE, new LengthValidator(50));
+        addPlainValidators(BasicHeader.WR_WRK_INST, positiveNumberValidator, new LengthValidator(9));
+        addPlainValidators(BasicHeader.RH_ACCT_NUMBER, positiveNumberValidator, new LengthValidator(18));
+        addPlainValidators(BasicHeader.PUBLISHER, lengthValidator1000);
+        addPlainValidators(BasicHeader.PUB_DATE, new DateFormatValidator());
+        addPlainValidators(BasicHeader.NUMBER_OF_COPIES, positiveNumberValidator, new LengthValidator(9));
+        addPlainValidators(BasicHeader.REPORTED_VALUE, requiredValidator, new AmountValidator());
+        addPlainValidators(BasicHeader.MARKET, requiredValidator, new LengthValidator(200));
+        addPlainValidators(BasicHeader.MARKET_PERIOD_FROM, requiredValidator, new YearValidator());
+        addPlainValidators(BasicHeader.MARKET_PERIOD_TO, requiredValidator, new YearValidator());
+        addPlainValidators(BasicHeader.AUTHOR, lengthValidator2000);
+        addPlainValidators(BasicHeader.COMMENT, new LengthValidator(100));
     }
 
     /**
-     * Headers to support.
+     * Headers for common usages.
      */
-    private enum BasicColumns implements ICsvColumn {
+    private enum BasicHeader implements ICsvColumn {
         TITLE("Title"),
         ARTICLE("Article"),
         STANDARD_NUMBER("Standard Number"),
@@ -108,7 +106,7 @@ public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
 
         private String columnName;
 
-        BasicColumns(String columnName) {
+        BasicHeader(String columnName) {
             this.columnName = columnName;
         }
 
@@ -118,7 +116,10 @@ public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
         }
     }
 
-    private enum AdditionalColumns implements ICsvColumn {
+    /**
+     * Headers for exported usages.
+     */
+    private enum ExportedHeader implements ICsvColumn {
         DETAIL_ID("Detail ID"),
         STATUS("Detail Status"),
         PRODUCT_FAMILY("Product Family"),
@@ -127,14 +128,29 @@ public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
         RRO_ACCOUNT_NUMBER("RRO Account #"),
         RRO_NAME("RRO Name"),
         PAYMENT_DATE("Payment Date"),
-        RH_NAME("RH Name"),
+        WORK_TITLE("Title"),
+        ARTICLE("Article"),
+        STANDARD_NUMBER("Standard Number"),
+        STANDARD_NUMBER_TYPE("Standard Number Type"),
+        WR_WRK_INST("Wr Wrk Inst"),
         SYSTEM_TITLE("System Title"),
+        RH_ACCOUNT_NUMBER("RH Account #"),
+        RH_NAME("RH Name"),
+        PUBLISHER("Publisher"),
+        PUBLICATION_DATE("Pub Date"),
+        NUMBER_OF_COPIES("Number of Copies"),
+        REPORTED_VALUE("Reported Value"),
         GROSS_AMOUNT("Amt in USD"),
-        BATCH_GROSS_AMOUNT("Gross Amt in USD");
+        BATCH_GROSS_AMOUNT("Gross Amt in USD"),
+        MARKET("Market"),
+        MARKET_PERIOD_FROM("Market Period From"),
+        MARKET_PERIOD_TO("Market Period To"),
+        AUTHOR("Author"),
+        COMMENT("Comment");
 
         private String columnName;
 
-        AdditionalColumns(String columnName) {
+        ExportedHeader(String columnName) {
             this.columnName = columnName;
         }
 
@@ -206,30 +222,28 @@ public class UsageCsvProcessor extends DistCsvProcessor<Usage> {
             List<String> headers = UsageCsvProcessor.this.getActualHeaders();
             Usage result = new Usage();
             result.setId(RupPersistUtils.generateUuid());
-            result.setWorkTitle(getString(row, BasicColumns.TITLE, headers));
-            result.setArticle(getString(row, BasicColumns.ARTICLE, headers));
-            result.setStandardNumber(getString(row, BasicColumns.STANDARD_NUMBER, headers));
+            result.setWorkTitle(getString(row, BasicHeader.TITLE, headers));
+            result.setArticle(getString(row, BasicHeader.ARTICLE, headers));
+            result.setStandardNumber(getString(row, BasicHeader.STANDARD_NUMBER, headers));
             result.setStandardNumberType(
-                StringUtils.upperCase(getString(row, BasicColumns.STANDARD_NUMBER_TYPE, headers)));
-            result.setWrWrkInst(getLong(row, BasicColumns.WR_WRK_INST, headers));
-            if (Objects.nonNull(result.getWrWrkInst())) {
-                result.setSystemTitle(result.getWorkTitle());
-            }
+                StringUtils.upperCase(getString(row, BasicHeader.STANDARD_NUMBER_TYPE, headers)));
+            result.setWrWrkInst(getLong(row, BasicHeader.WR_WRK_INST, headers));
+            result.setSystemTitle(result.getWorkTitle());
             Rightsholder rightsholder = new Rightsholder();
-            rightsholder.setAccountNumber(getLong(row, BasicColumns.RH_ACCT_NUMBER, headers));
+            rightsholder.setAccountNumber(getLong(row, BasicHeader.RH_ACCT_NUMBER, headers));
             result.setRightsholder(rightsholder);
-            result.setPublisher(getString(row, BasicColumns.PUBLISHER, headers));
-            result.setPublicationDate(getDate(row, BasicColumns.PUB_DATE, headers));
-            result.setNumberOfCopies(getInteger(row, BasicColumns.NUMBER_OF_COPIES, headers));
-            result.setReportedValue(getBigDecimal(row, BasicColumns.REPORTED_VALUE, headers));
-            result.setMarket(getString(row, BasicColumns.MARKET, headers));
-            result.setMarketPeriodFrom(getInteger(row, BasicColumns.MARKET_PERIOD_FROM, headers));
-            result.setMarketPeriodTo(getInteger(row, BasicColumns.MARKET_PERIOD_TO, headers));
-            result.setAuthor(getString(row, BasicColumns.AUTHOR, headers));
+            result.setPublisher(getString(row, BasicHeader.PUBLISHER, headers));
+            result.setPublicationDate(getDate(row, BasicHeader.PUB_DATE, headers));
+            result.setNumberOfCopies(getInteger(row, BasicHeader.NUMBER_OF_COPIES, headers));
+            result.setReportedValue(getBigDecimal(row, BasicHeader.REPORTED_VALUE, headers));
+            result.setMarket(getString(row, BasicHeader.MARKET, headers));
+            result.setMarketPeriodFrom(getInteger(row, BasicHeader.MARKET_PERIOD_FROM, headers));
+            result.setMarketPeriodTo(getInteger(row, BasicHeader.MARKET_PERIOD_TO, headers));
+            result.setAuthor(getString(row, BasicHeader.AUTHOR, headers));
             result.setStatus(isEligible(result) ? UsageStatusEnum.ELIGIBLE
                 : isWorkFound(result) ? UsageStatusEnum.WORK_FOUND : UsageStatusEnum.NEW);
             result.setProductFamily(productFamily);
-            result.setComment(getString(row, BasicColumns.COMMENT, headers));
+            result.setComment(getString(row, BasicHeader.COMMENT, headers));
             return result;
         }
 

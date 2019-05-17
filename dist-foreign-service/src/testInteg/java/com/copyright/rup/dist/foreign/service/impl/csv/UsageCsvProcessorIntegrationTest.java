@@ -82,6 +82,20 @@ public class UsageCsvProcessorIntegrationTest {
     }
 
     @Test
+    public void testProcessorForExportedUsages() throws Exception {
+        ProcessingResult<Usage> result = processFile("exported_usages.csv");
+        assertNotNull(result);
+        List<Usage> actualUsages = result.get();
+        List<Usage> expectedUsages = loadExpectedUsages("usages.json");
+        int expectedSize = 5;
+        assertEquals(expectedSize, actualUsages.size());
+        assertEquals(expectedSize, expectedUsages.size());
+        IntStream.range(0, expectedSize).forEach(i ->
+            assertUsage(expectedUsages.get(i), actualUsages.get(i))
+        );
+    }
+
+    @Test
     public void testProcessorErrorsExceededThreshold() throws Exception {
         PipedOutputStream outputStream = new PipedOutputStream();
         PipedInputStream pipedInputStream = new PipedInputStream(outputStream);
@@ -105,7 +119,16 @@ public class UsageCsvProcessorIntegrationTest {
     }
 
     @Test
-    public void testProcessorForInvalidHeaderWithHeaderValidation() throws Exception {
+    public void testProcessorForExportedUsagesForNegativePath() throws Exception {
+        ProcessingResult<Usage> result = processFile("exported_usages_with_errors.csv");
+        PipedOutputStream outputStream = new PipedOutputStream();
+        PipedInputStream pipedInputStream = new PipedInputStream(outputStream);
+        Executors.newSingleThreadExecutor().execute(() -> result.writeToFile(outputStream));
+        reportTestUtils.assertCsvReport("exported_usages_with_errors_report.csv", pipedInputStream);
+    }
+
+    @Test
+    public void testProcessorWithInvalidHeader() throws Exception {
         try {
             processFile("invalid_header_usage_data_file.csv");
             fail();
@@ -123,6 +146,47 @@ public class UsageCsvProcessorIntegrationTest {
                     "<li>Pub Date</li>" +
                     "<li>Number of Copies</li>" +
                     "<li>Reported Value</li>" +
+                    "<li>Market</li>" +
+                    "<li>Market Period From</li>" +
+                    "<li>Market Period To</li>" +
+                    "<li>Author</li>" +
+                    "<li>Comment</li>" +
+                    "</ul>",
+                e.getHtmlMessage());
+        }
+    }
+
+    @Test
+    public void testProcessorExportedUsagesWithInvalidHeader() throws Exception {
+        try {
+            processFile("invalid_header_exported_usage_data_file.csv");
+            fail();
+        } catch (HeaderValidationException e) {
+            assertEquals(
+                "Columns headers are incorrect. Expected columns headers are:\n" +
+                    "<ul>" +
+                    "<li>Detail ID</li>" +
+                    "<li>Detail Status</li>" +
+                    "<li>Product Family</li>" +
+                    "<li>Usage Batch Name</li>" +
+                    "<li>Fiscal Year</li>" +
+                    "<li>RRO Account #</li>" +
+                    "<li>RRO Name</li>" +
+                    "<li>Payment Date</li>" +
+                    "<li>Title</li>" +
+                    "<li>Article</li>" +
+                    "<li>Standard Number</li>" +
+                    "<li>Standard Number Type</li>" +
+                    "<li>Wr Wrk Inst</li>" +
+                    "<li>System Title</li>" +
+                    "<li>RH Account #</li>" +
+                    "<li>RH Name</li>" +
+                    "<li>Publisher</li>" +
+                    "<li>Pub Date</li>" +
+                    "<li>Number of Copies</li>" +
+                    "<li>Reported Value</li>" +
+                    "<li>Amt in USD</li>" +
+                    "<li>Gross Amt in USD</li>" +
                     "<li>Market</li>" +
                     "<li>Market Period From</li>" +
                     "<li>Market Period To</li>" +
