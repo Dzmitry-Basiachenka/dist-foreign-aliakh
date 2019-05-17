@@ -1,3 +1,18 @@
+5.1.33
+-
+* B-51254 FDA: Enhance FAS Batch reimport logic: apply Wr Wrk Inst
+validation for uploading researched usages instead of Standard Number
+* B-51254 FDA: Enhance FAS Batch reimport logic: refine headers validation
+message, implement integration tests to cover reimport batch
+functionality
+* B-51364 Tech Debt: FDA: add text “Note: If you modify an already
+classified work, please be sure to reload the batch.” to the Works
+Classification window
+* CDP-741 FDA - FAS Scenario Export buttons in P_QA. One needs to be
+renamed
+* CDP-741 FDA - FAS Scenario Export buttons in P_QA. One needs to be
+renamed
+
 5.1.32
 -
 * B-50635 FDA: Consume Oracle A/P service to determine RH tax country:
