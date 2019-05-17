@@ -12,12 +12,14 @@ import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.vaadin.data.ValueProvider;
 import com.vaadin.data.provider.DataProvider;
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.components.grid.ItemClickListener;
@@ -62,10 +64,12 @@ public class WorkClassificationWindow extends Window {
     private Component initContent() {
         initGrid();
         HorizontalLayout buttons = initButtons();
+        Label label = new Label(ForeignUi.getMessage("label.work.classification.note"), ContentMode.HTML);
+        label.setStyleName("label-note");
         searchWidget = new SearchWidget(() -> dataProvider.refreshAll());
         searchWidget.setPrompt(ForeignUi.getMessage("prompt.works_classification"));
         searchWidget.setWidth(60, Unit.PERCENTAGE);
-        VerticalLayout content = new VerticalLayout(searchWidget, grid, buttons);
+        VerticalLayout content = new VerticalLayout(label, searchWidget, grid, buttons);
         content.setMargin(true);
         content.setSpacing(true);
         content.setSizeFull();
