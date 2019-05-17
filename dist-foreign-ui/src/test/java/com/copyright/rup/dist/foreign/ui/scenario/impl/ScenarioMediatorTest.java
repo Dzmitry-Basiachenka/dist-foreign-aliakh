@@ -38,7 +38,7 @@ public class ScenarioMediatorTest {
     private static final String PERMISSION_NAME = "FDA_EXCLUDE_FROM_SCENARIO";
     private final Button excludeButton = new Button();
     private final Button exportDetailsButton = new Button();
-    private final Button exportScenarioButton = new Button();
+    private final Button exportButton = new Button();
     private final SearchWidget searchWidget = new SearchWidget(() -> {/*stub*/});
     private final Grid grid = new Grid();
     private final VerticalLayout emptyUsagesLayout = new VerticalLayout();
@@ -53,7 +53,7 @@ public class ScenarioMediatorTest {
         mediator = new ScenarioMediator();
         mediator.setExcludeButton(excludeButton);
         mediator.setExportDetailsButton(exportDetailsButton);
-        mediator.setExportResultsByRhButton(exportScenarioButton);
+        mediator.setExportButton(exportButton);
         mediator.setSearchWidget(searchWidget);
         mediator.setRightsholderGrid(grid);
         mediator.setEmptyUsagesLayout(emptyUsagesLayout);
@@ -67,7 +67,7 @@ public class ScenarioMediatorTest {
         verify(SecurityUtils.class);
         assertTrue(excludeButton.isVisible());
         assertTrue(exportDetailsButton.isVisible());
-        assertTrue(exportScenarioButton.isVisible());
+        assertTrue(exportButton.isVisible());
         assertTrue(grid.isVisible());
         assertTrue(emptyUsagesLayout.isVisible());
         assertTrue(searchWidget.isVisible());
@@ -81,7 +81,7 @@ public class ScenarioMediatorTest {
         verify(SecurityUtils.class);
         assertFalse(excludeButton.isVisible());
         assertTrue(exportDetailsButton.isVisible());
-        assertTrue(exportScenarioButton.isVisible());
+        assertTrue(exportButton.isVisible());
         assertTrue(grid.isVisible());
         assertTrue(emptyUsagesLayout.isVisible());
         assertTrue(searchWidget.isVisible());
@@ -97,7 +97,7 @@ public class ScenarioMediatorTest {
         verify(SecurityUtils.class);
         assertTrue(excludeButton.isEnabled());
         assertTrue(exportDetailsButton.isEnabled());
-        assertTrue(exportScenarioButton.isEnabled());
+        assertTrue(exportButton.isEnabled());
         assertTrue(grid.isVisible());
         assertFalse(emptyUsagesLayout.isVisible());
         assertTrue(searchWidget.isVisible());
@@ -113,7 +113,7 @@ public class ScenarioMediatorTest {
         verify(SecurityUtils.class);
         assertFalse(excludeButton.isEnabled());
         assertTrue(exportDetailsButton.isEnabled());
-        assertTrue(exportScenarioButton.isEnabled());
+        assertTrue(exportButton.isEnabled());
         assertTrue(grid.isVisible());
         assertFalse(emptyUsagesLayout.isVisible());
         assertTrue(searchWidget.isVisible());
@@ -129,7 +129,7 @@ public class ScenarioMediatorTest {
         verify(SecurityUtils.class);
         assertFalse(excludeButton.isEnabled());
         assertFalse(exportDetailsButton.isEnabled());
-        assertFalse(exportScenarioButton.isEnabled());
+        assertFalse(exportButton.isEnabled());
         assertFalse(grid.isVisible());
         assertTrue(emptyUsagesLayout.isVisible());
         assertFalse(searchWidget.isVisible());
@@ -146,7 +146,7 @@ public class ScenarioMediatorTest {
         assertFalse(excludeButton.isVisible());
         assertFalse(excludeButton.isEnabled());
         assertFalse(exportDetailsButton.isEnabled());
-        assertFalse(exportScenarioButton.isEnabled());
+        assertFalse(exportButton.isEnabled());
         assertFalse(grid.isVisible());
         assertTrue(emptyUsagesLayout.isVisible());
         assertFalse(searchWidget.isVisible());
@@ -164,7 +164,7 @@ public class ScenarioMediatorTest {
         assertTrue(excludeButton.isVisible());
         assertFalse(excludeButton.isEnabled());
         assertTrue(exportDetailsButton.isEnabled());
-        assertTrue(exportScenarioButton.isEnabled());
+        assertTrue(exportButton.isEnabled());
         assertTrue(grid.isVisible());
         assertFalse(emptyUsagesLayout.isVisible());
         assertTrue(searchWidget.isVisible());
