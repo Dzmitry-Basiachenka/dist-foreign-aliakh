@@ -76,13 +76,13 @@ public class WorkClassificationWindowTest {
         assertEquals(new MarginInfo(true), content.getMargin());
         assertTrue(content.isSpacing());
         verifySize(content, 100, Unit.PERCENTAGE, 100, Unit.PERCENTAGE);
-        assertEquals(3, content.getComponentCount());
-        assertEquals(SearchWidget.class, content.getComponent(0).getClass());
-        Component component = content.getComponent(1);
+        assertEquals(4, content.getComponentCount());
+        assertEquals(SearchWidget.class, content.getComponent(1).getClass());
+        Component component = content.getComponent(2);
         assertEquals(Grid.class, component.getClass());
         verifyGrid((Grid) component);
         assertEquals(1, content.getExpandRatio(component), 0);
-        component = content.getComponent(2);
+        component = content.getComponent(3);
         assertEquals(HorizontalLayout.class, component.getClass());
         verifyButtonsLayout((HorizontalLayout) component);
         assertEquals(Alignment.BOTTOM_RIGHT, content.getComponentAlignment(component));
@@ -93,7 +93,7 @@ public class WorkClassificationWindowTest {
         mockStatic(Windows.class);
         Window confirmWindowCapture = createMock(Window.class);
         VerticalLayout content = (VerticalLayout) window.getContent();
-        Button button = (Button) ((HorizontalLayout) content.getComponent(2)).getComponent(0);
+        Button button = (Button) ((HorizontalLayout) content.getComponent(3)).getComponent(0);
         ClickListener listener = (ClickListener) button.getListeners(ClickEvent.class).iterator().next();
         Windows.showNotificationWindow(eq("Please select at least one work"));
         expectLastCall().once();
@@ -107,11 +107,11 @@ public class WorkClassificationWindowTest {
         mockStatic(Windows.class);
         Window confirmWindowCapture = createMock(Window.class);
         VerticalLayout content = (VerticalLayout) window.getContent();
-        Grid<WorkClassification> grid = (Grid) content.getComponent(1);
+        Grid<WorkClassification> grid = (Grid) content.getComponent(2);
         Set<WorkClassification> classifications = buildClassifications();
         grid.setItems(classifications);
         grid.getSelectionModel().select(new WorkClassification());
-        Button button = (Button) ((HorizontalLayout) content.getComponent(2)).getComponent(0);
+        Button button = (Button) ((HorizontalLayout) content.getComponent(3)).getComponent(0);
         ClickListener listener = (ClickListener) button.getListeners(ClickEvent.class).iterator().next();
         expect(workClassificationController.getCountToUpdate(classifications)).andReturn(2).once();
         expect(Windows.showConfirmDialog(eq("2 usages will be updated. Are you sure you want to confirm action?"),
@@ -126,11 +126,11 @@ public class WorkClassificationWindowTest {
         mockStatic(Windows.class);
         Window confirmWindowCapture = createMock(Window.class);
         VerticalLayout content = (VerticalLayout) window.getContent();
-        Grid<WorkClassification> grid = (Grid) content.getComponent(1);
+        Grid<WorkClassification> grid = (Grid) content.getComponent(2);
         Set<WorkClassification> classifications = buildClassifications();
         grid.setItems(classifications);
         grid.getSelectionModel().select(new WorkClassification());
-        Button button = (Button) ((HorizontalLayout) content.getComponent(2)).getComponent(0);
+        Button button = (Button) ((HorizontalLayout) content.getComponent(3)).getComponent(0);
         ClickListener listener = (ClickListener) button.getListeners(ClickEvent.class).iterator().next();
         expect(workClassificationController.getCountToUpdate(classifications)).andReturn(0).once();
         expect(Windows.showConfirmDialog(eq("Are you sure you want to perform action?"), anyObject(IListener.class)))
