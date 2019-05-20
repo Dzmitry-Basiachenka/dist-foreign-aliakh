@@ -1,0 +1,6 @@
+{
+  "name" : "df.service.rhEligibilityQuartzJob",
+  "status" : "FAILED",
+  "execution_datetime" : "2019-05-05T10:30:25-04:00",
+  "result" : "ErrorMessage=NullPointerException: , ErrorStackTrace=[java.lang.NullPointerException, at java.util.Objects.requireNonNull(Objects.java:23), at com.copyright.rup.dist.modeling.feeder.impl.quartz.UnpaidLiabilitiesJob.executeInternal(UnpaidLiabilitiesJob.java:32)"
+}

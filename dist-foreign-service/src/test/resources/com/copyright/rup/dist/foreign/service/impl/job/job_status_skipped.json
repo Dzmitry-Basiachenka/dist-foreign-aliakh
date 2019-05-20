@@ -1,0 +1,6 @@
+{
+  "name" : "df.service.rhEligibilityQuartzJob",
+  "status" : "SKIPPED",
+  "execution_datetime" : "2019-05-05T10:30:25-04:00",
+  "result" : "Reason=There are no usages"
+}
