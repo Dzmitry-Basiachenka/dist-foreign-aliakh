@@ -24,6 +24,8 @@ import com.copyright.rup.dist.foreign.domain.common.util.CalculationUtils;
 import com.copyright.rup.dist.foreign.domain.common.util.ForeignLogUtils;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.domain.job.JobInfo;
+import com.copyright.rup.dist.foreign.domain.job.JobStatusEnum;
 import com.copyright.rup.dist.foreign.integration.crm.api.CrmResult;
 import com.copyright.rup.dist.foreign.integration.crm.api.CrmRightsDistributionRequest;
 import com.copyright.rup.dist.foreign.integration.crm.api.ICrmIntegrationService;
@@ -458,10 +460,11 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public void sendToCrm() {
+    public JobInfo sendToCrm() {
         List<String> paidUsagesIds = usageArchiveRepository.findPaidIds();
         LOGGER.info("Send to CRM. Started. PaidUsagesCount={}", LogUtils.size(paidUsagesIds));
         int archivedUsagesCount = 0;
+        JobInfo jobInfo;
         if (CollectionUtils.isNotEmpty(paidUsagesIds)) {
             Set<String> invalidUsageIds = Sets.newHashSet();
             for (List<String> ids : Iterables.partition(paidUsagesIds, 128)) {
@@ -495,10 +498,15 @@ public class UsageService implements IUsageService {
                 invalidUsageIds.size(), archivedScenariosCount);
             LOGGER.trace(SEND_TO_CRM_FINISHED_DEBUG_LOG_MESSAGE, LogUtils.size(paidUsagesIds), archivedUsagesCount,
                 archivedScenariosCount, invalidUsageIds);
+            jobInfo = new JobInfo(JobStatusEnum.FINISHED, "PaidUsagesCount=" + LogUtils.size(paidUsagesIds) +
+                ", ArchivedUsagesCount=" + archivedUsagesCount + ", NotReportedUsagesCount=" +
+                invalidUsageIds.size() + ", ArchivedScenariosCount=" + archivedScenariosCount);
         } else {
-            LOGGER.info("Send to CRM. Skipped. PaidUsagesCount={}, Reason=There are no usages to report",
-                LogUtils.size(paidUsagesIds));
+            String message = "PaidUsagesCount=" + LogUtils.size(paidUsagesIds) + ", Reason=There are no usages";
+            LOGGER.info("Send to CRM. Skipped. {}", message);
+            jobInfo = new JobInfo(JobStatusEnum.SKIPPED, message);
         }
+        return jobInfo;
     }
 
     @Override

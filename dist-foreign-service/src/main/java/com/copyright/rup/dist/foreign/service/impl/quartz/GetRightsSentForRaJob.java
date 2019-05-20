@@ -26,10 +26,6 @@ public class GetRightsSentForRaJob extends QuartzJobBean {
 
     @Override
     public void executeInternal(JobExecutionContext context) {
-        rightsService.updateRightsSentForRaUsages();
-    }
-
-    void setRightsService(IRightsService rightsService) {
-        this.rightsService = rightsService;
+        context.setResult(rightsService.updateRightsSentForRaUsages());
     }
 }

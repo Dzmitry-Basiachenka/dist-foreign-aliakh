@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.api;
 
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.job.JobInfo;
 
 /**
  * Interface represents API for working with RA functionality.
@@ -17,8 +18,10 @@ public interface IRightsService {
      * Finds list of {@link com.copyright.rup.dist.foreign.domain.Usage}s with FAS and FAS2 product families and
      * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#SENT_FOR_RA} status, sends their Wr Wrk Insts
      * to RMS for getting Grants and updates RHs information.
+     *
+     * @return {@link JobInfo} instance with information about job name, execution status and job result
      */
-    void updateRightsSentForRaUsages();
+    JobInfo updateRightsSentForRaUsages();
 
     /**
      * Sends Wr Wrk Inst to RMS to get Grants and updates usage status and usage RH based on response. Sets usage status
@@ -40,6 +43,8 @@ public interface IRightsService {
      * Updates {@link com.copyright.rup.dist.foreign.domain.Usage}s status to
      * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#SENT_FOR_RA}
      * and writes audit with job id information only after successful sending.
+     *
+     * @return {@link JobInfo} instance with information about job name, execution status and job result
      */
-    void sendForRightsAssignment();
+    JobInfo sendForRightsAssignment();
 }

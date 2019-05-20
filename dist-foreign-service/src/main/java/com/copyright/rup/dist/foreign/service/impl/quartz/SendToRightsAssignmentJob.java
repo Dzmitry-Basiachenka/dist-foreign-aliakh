@@ -26,6 +26,6 @@ public class SendToRightsAssignmentJob extends QuartzJobBean {
 
     @Override
     public void executeInternal(JobExecutionContext context) {
-        rightsService.sendForRightsAssignment();
+        context.setResult(rightsService.sendForRightsAssignment());
     }
 }
