@@ -48,8 +48,8 @@ public class PaidUsageDeserializerTest {
 
     private void verifyPaidUsage(PaidUsage paidUsage) {
         assertEquals("6039cab2-8d7d-409f-8843-3930daf6a48d", paidUsage.getId());
-        assertEquals(1000010022L, paidUsage.getRightsholder().getAccountNumber(), 0);
-        assertEquals(1000002859L, paidUsage.getPayee().getAccountNumber(), 0);
+        assertEquals("79f75491-fb0d-431e-8e4e-5b819748e198", paidUsage.getRightsholder().getId());
+        assertEquals("fc8c5ed1-a08d-48d2-84a3-5abae856bf89", paidUsage.getPayee().getId());
         assertEquals("578945", paidUsage.getCheckNumber());
         assertEquals(OffsetDateTime.parse("2017-01-15T00:00:00-05:00").toInstant(),
             paidUsage.getCheckDate().toInstant());

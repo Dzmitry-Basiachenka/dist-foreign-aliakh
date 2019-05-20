@@ -6,6 +6,7 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.api.ICommonRightsholderService;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -59,4 +60,12 @@ public interface IRightsholderService extends ICommonRightsholderService {
      * @param accountNumbers set of RH account numbers
      */
     void updateRighstholdersAsync(Set<Long> accountNumbers);
+
+    /**
+     * Finds map of {@link Rightsholder}s' ids to account numbers.
+     *
+     * @param rhIds set of {@link Rightsholder}s identifiers
+     * @return map of {@link Rightsholder}s' ids to account numbers
+     */
+    Map<String, Long> findAccountNumbersByRightsholderIds(Set<String> rhIds);
 }
