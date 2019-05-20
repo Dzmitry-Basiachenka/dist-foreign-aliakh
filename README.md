@@ -1,3 +1,10 @@
+5.1.34
+-
+* B-50350 CDP: Generate notification for Scheduled jobs: fix
+dist.foreign.endpoint.job.status.topic property
+* B-51256 FDA: Generate notification for Scheduled jobs: implement job
+status topic, producer and listener
+
 5.1.33
 -
 * B-51254 FDA: Enhance FAS Batch reimport logic: apply Wr Wrk Inst
