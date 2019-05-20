@@ -64,6 +64,10 @@
         <property name="endPoint" value="direct:df.service.matching"/>
     </bean>
 
+    <bean id="df.producer.jobStatus" class="com.copyright.rup.dist.foreign.service.impl.job.JobStatusProducer">
+        <property name="endPoint" value="direct:df.feeder.job.status"/>
+    </bean>
+
     <bean id="df.service.paidUsageSubscriber"
           class="com.copyright.rup.dist.foreign.service.impl.usage.paid.PaidUsageSubscriber">
         <constructor-arg ref="df.service.lm.detail.paid.endpoint.topic"/>
@@ -103,6 +107,9 @@
         <endpoint id="df.service.internal.eligibility.endpoint" uri="direct:df.service.eligibility"/>
         <endpoint id="df.service.rh.eligibility.endpoint" uri="$RUP{dist.foreign.endpoint.rh_eligibility}"/>
 
+        <endpoint id="df.producer.job.status.internal" uri="direct:df.feeder.job.status"/>
+        <endpoint id="df.producer.job.status.sns" uri="$RUP{dist.foreign.endpoint.job.status.topic}"/>
+
         <onException useOriginalMessage="true">
             <exception>com.copyright.rup.dist.foreign.service.impl.InconsistentUsageStateException</exception>
             <handled>
@@ -111,6 +118,14 @@
             <log message="Exception on processed usage update. ExceptionMessage=${exception.message}, ExceptionStacktrace=${exception.stacktrace}"
                  loggingLevel="DEBUG" logName="com.copyright.rup.dist.foreign.service.impl.chain.processor"/>
         </onException>
+
+        <route id="jobStatusRoute">
+            <from ref="df.producer.job.status.internal"/>
+            <marshal>
+                <custom ref="df.producer.jobStatusMarshaller"/>
+            </marshal>
+            <to ref="df.producer.job.status.sns"/>
+        </route>
 
         <route id="df.service.paidUsageRoute">
             <from ref="df.service.lm.detail.paid.endpoint"/>

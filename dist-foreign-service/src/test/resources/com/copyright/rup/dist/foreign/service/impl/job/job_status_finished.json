@@ -1,0 +1,6 @@
+{
+  "name" : "df.service.rhEligibilityQuartzJob",
+  "status" : "FINISHED",
+  "execution_datetime" : "2019-05-05T10:30:25-04:00",
+  "result" : "ProductFamily=FAS, UsagesCount=100"
+}
