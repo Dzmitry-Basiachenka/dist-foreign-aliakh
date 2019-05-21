@@ -136,6 +136,7 @@
             <unmarshal>
                 <custom ref="df.service.paidUsageUnmarshaller"/>
             </unmarshal>
+            <bean ref="df.service.usageRhIdValidator"/>
             <bean ref="df.service.paidUsageConsumer"/>
 
             <onException useOriginalMessage="true">

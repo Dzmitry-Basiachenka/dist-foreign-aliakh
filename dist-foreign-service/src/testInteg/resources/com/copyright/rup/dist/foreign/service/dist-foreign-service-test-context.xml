@@ -50,6 +50,9 @@
     <bean id="df.integration.piIntegrationCacheService"
           class="com.copyright.rup.dist.foreign.service.impl.mock.PiIntegrationServiceMock"/>
 
+    <bean id="dist.common.integration.rest.prmRightsholderOrganizationAsyncService"
+          class="com.copyright.rup.dist.foreign.service.impl.mock.PrmRightsholderOrganizationServiceMock"/>
+
     <bean id="usageBatchService" class="com.copyright.rup.dist.foreign.service.impl.mock.UsageBatchServiceMock"/>
 
     <import resource="classpath:/com/copyright/rup/dist/common/test/mock/aws/dist-common-sqs-test-context.xml"/>

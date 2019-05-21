@@ -1,15 +1,15 @@
 {
   "details": [
     {
-      "rh_account_number": "1000010022",
-      "rollup_account_number": "1000002859",
+      "rh_uid": "79f75491-fb0d-431e-8e4e-5b819748e198",
+      "rollup_uid": "fc8c5ed1-a08d-48d2-84a3-5abae856bf89",
       "detail_id": "6039cab2-8d7d-409f-8843-3930daf6a48d",
       "distribution_name": "FDA March 17",
-      "distribution_date_iso": "2017-01-14T05:00:00+00:00",
+      "distribution_date": "2017-01-14T05:00:00+00:00",
       "ccc_event_id": "53256",
       "check_number": "578945",
-      "check_date_iso": "2017-01-15T05:00:00+00:00",
-      "period_end_date_iso": "2017-01-16T05:00:00+00:00",
+      "check_date": "2017-01-15T05:00:00+00:00",
+      "period_end_date": "2017-01-16T05:00:00+00:00",
       "lm_detail_id": "47ab477a-7007-4d78-ba39-6137474a47e3",
       "royalty_amount": 100.0,
       "service_fee_amount": 16.0,

@@ -50,15 +50,15 @@ public class PaidUsageDeserializer extends JsonDeserializer<List<PaidUsage>> {
 
     private PaidUsage deserializePaidUsage(JsonNode jsonNode) {
         PaidUsage usage = new PaidUsage();
-        usage.getRightsholder().setAccountNumber(JsonUtils.getLongValueFromString(jsonNode.get("rh_account_number")));
-        usage.getPayee().setAccountNumber(JsonUtils.getLongValueFromString(jsonNode.get("rollup_account_number")));
+        usage.getRightsholder().setId(JsonUtils.getStringValue(jsonNode.get("rh_uid")));
+        usage.getPayee().setId(JsonUtils.getStringValue(jsonNode.get("rollup_uid")));
         usage.setId(JsonUtils.getStringValue(jsonNode.get("detail_id")));
         usage.setCheckNumber(JsonUtils.getStringValue(jsonNode.get("check_number")));
-        usage.setCheckDate(JsonUtils.getOffsetDateTime(jsonNode.get("check_date_iso")));
+        usage.setCheckDate(JsonUtils.getOffsetDateTime(jsonNode.get("check_date")));
         usage.setCccEventId(JsonUtils.getStringValue(jsonNode.get("ccc_event_id")));
         usage.setDistributionName(JsonUtils.getStringValue(jsonNode.get("distribution_name")));
-        usage.setDistributionDate(JsonUtils.getOffsetDateTime(jsonNode.get("distribution_date_iso")));
-        usage.setPeriodEndDate(JsonUtils.getOffsetDateTime(jsonNode.get("period_end_date_iso")));
+        usage.setDistributionDate(JsonUtils.getOffsetDateTime(jsonNode.get("distribution_date")));
+        usage.setPeriodEndDate(JsonUtils.getOffsetDateTime(jsonNode.get("period_end_date")));
         usage.setLmDetailId(JsonUtils.getStringValue(jsonNode.get("lm_detail_id")));
         usage.setNetAmount(JsonUtils.getBigDecimalValue(jsonNode.get("royalty_amount")));
         usage.setServiceFeeAmount(JsonUtils.getBigDecimalValue(jsonNode.get("service_fee_amount")));

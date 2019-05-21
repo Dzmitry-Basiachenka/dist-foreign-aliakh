@@ -45,7 +45,7 @@ public class RightsholderServiceTest {
     public void setUp() {
         rightsholderRepository = createMock(IRightsholderRepository.class);
         IPrmRightsholderService prmRightsholderService = createMock(IPrmRightsholderService.class);
-        rightsholderService = new RightsholderService(rightsholderRepository, prmRightsholderService);
+        rightsholderService = new RightsholderService(rightsholderRepository, prmRightsholderService, null);
     }
 
     @Test

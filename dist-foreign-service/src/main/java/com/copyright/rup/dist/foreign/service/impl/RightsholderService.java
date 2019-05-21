@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.service.impl;
 
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
+import com.copyright.rup.dist.common.integration.rest.prm.IPrmRightsholderOrganizationService;
 import com.copyright.rup.dist.common.integration.rest.prm.IPrmRightsholderService;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
@@ -15,10 +16,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
@@ -43,15 +47,19 @@ public class RightsholderService extends CommonRightsholderService implements IR
     /**
      * Constructor.
      *
-     * @param rightsholderRepository an instance of {@link IRightsholderRepository}
-     * @param prmRightsholderService an instance of {@link IPrmRightsholderService}
+     * @param rightsholderRepository             an instance of {@link IRightsholderRepository}
+     * @param prmRightsholderService             an instance of {@link IPrmRightsholderService}
+     * @param prmRightsholderOrganizationService an instance of {@link IPrmRightsholderOrganizationService}
      */
     @Autowired
     public RightsholderService(IRightsholderRepository rightsholderRepository,
                                @Qualifier("dist.common.integration.rest.prmRightsholderAsyncService")
-                               IPrmRightsholderService prmRightsholderService) {
-        super(rightsholderRepository, prmRightsholderService);
+                               IPrmRightsholderService prmRightsholderService,
+                               @Qualifier("dist.common.integration.rest.prmRightsholderOrganizationAsyncService")
+                               IPrmRightsholderOrganizationService prmRightsholderOrganizationService) {
+        super(rightsholderRepository, prmRightsholderService, prmRightsholderOrganizationService);
         this.rightsholderRepository = rightsholderRepository;
+
     }
 
     @Override
@@ -85,6 +93,13 @@ public class RightsholderService extends CommonRightsholderService implements IR
                 updateRightsholders(accountNumbers);
             }
         });
+    }
+
+    @Override
+    public Map<String, Long> findAccountNumbersByRightsholderIds(Set<String> rhIds) {
+        return rightsholderRepository.findByIds(rhIds)
+            .stream()
+            .collect(Collectors.toMap(Rightsholder::getId, Rightsholder::getAccountNumber));
     }
 
     /**

@@ -57,12 +57,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Represents interface of service for usage business logic.
@@ -400,6 +402,7 @@ public class UsageService implements IUsageService {
     @Transactional
     public void updatePaidInfo(List<PaidUsage> paidUsages) {
         LOGGER.info("Update paid information. Started. UsagesCount={}", LogUtils.size(paidUsages));
+        populateAccountNumbers(paidUsages);
         AtomicInteger newUsagesCount = new AtomicInteger();
         Set<String> notFoundUsageIds = Sets.newHashSet();
         Map<String, Usage> usageIdToUsageMap = usageArchiveRepository.findUsageInformationById(
@@ -558,6 +561,22 @@ public class UsageService implements IUsageService {
                 .map(usage -> usage.getPayee().getAccountNumber())
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet()));
+    }
+
+    private void populateAccountNumbers(List<PaidUsage> paidUsages) {
+        Set<String> rhIds = paidUsages.stream()
+            .flatMap(usage -> Stream.of(usage.getRightsholder().getId(), usage.getPayee().getId()))
+            .filter(Objects::nonNull)
+            .collect(Collectors.toSet());
+        if (CollectionUtils.isNotEmpty(rhIds)) {
+            Map<String, Long> rhRhIdToAccountNumberMap = CollectionUtils.isNotEmpty(rhIds)
+                ? rightsholderService.findAccountNumbersByRightsholderIds(rhIds)
+                : new HashMap<>();
+            paidUsages.forEach(usage -> {
+                usage.getRightsholder().setAccountNumber(rhRhIdToAccountNumberMap.get(usage.getRightsholder().getId()));
+                usage.getPayee().setAccountNumber(rhRhIdToAccountNumberMap.get(usage.getPayee().getId()));
+            });
+        }
     }
 
     private void updatePaidUsage(PaidUsage paidUsage, String actionReason) {
