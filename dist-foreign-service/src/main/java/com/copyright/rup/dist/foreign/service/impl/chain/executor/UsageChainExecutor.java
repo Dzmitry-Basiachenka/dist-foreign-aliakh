@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.chain.executor;
 
+import com.copyright.rup.dist.common.domain.job.JobInfo;
+import com.copyright.rup.dist.common.domain.job.JobStatusEnum;
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -52,8 +55,11 @@ public class UsageChainExecutor implements IChainExecutor<Usage> {
     }
 
     @Override
-    public void execute(ChainProcessorTypeEnum type) {
-        productFamilyToProcessorMap.forEach((productFamily, processor) -> execute(productFamily, processor, type));
+    public JobInfo execute(ChainProcessorTypeEnum type) {
+        List<JobInfo> jobInfos = new ArrayList<>();
+        productFamilyToProcessorMap.forEach((productFamily, processor) ->
+            jobInfos.addAll(execute(productFamily, processor, type)));
+        return mergeJobResults(jobInfos);
     }
 
     @Override
@@ -71,15 +77,17 @@ public class UsageChainExecutor implements IChainExecutor<Usage> {
         });
     }
 
-    private void execute(String productFamily, IChainProcessor<Usage> processor, ChainProcessorTypeEnum type) {
+    private List<JobInfo> execute(String productFamily, IChainProcessor<Usage> processor, ChainProcessorTypeEnum type) {
+        List<JobInfo> jobInfos = new ArrayList<>();
         if (Objects.nonNull(processor)) {
             if (processor instanceof IUsageJobProcessor && type == processor.getChainProcessorType()) {
-                ((IUsageJobProcessor) processor).jobProcess(productFamily);
+                jobInfos.add(((IUsageJobProcessor) processor).jobProcess(productFamily));
             } else {
-                execute(productFamily, processor.getSuccessProcessor(), type);
-                execute(productFamily, processor.getFailureProcessor(), type);
+                jobInfos.addAll(execute(productFamily, processor.getSuccessProcessor(), type));
+                jobInfos.addAll(execute(productFamily, processor.getFailureProcessor(), type));
             }
         }
+        return jobInfos;
     }
 
     private void execute(List<Usage> usages, IChainProcessor<Usage> processor, ChainProcessorTypeEnum type) {
@@ -91,5 +99,14 @@ public class UsageChainExecutor implements IChainExecutor<Usage> {
                 execute(usages, processor.getFailureProcessor(), type);
             }
         }
+    }
+
+    private JobInfo mergeJobResults(List<JobInfo> jobInfos) {
+        JobStatusEnum status = jobInfos.stream().anyMatch(jobInfo -> JobStatusEnum.FINISHED == jobInfo.getStatus())
+            ? JobStatusEnum.FINISHED : JobStatusEnum.SKIPPED;
+        String result = jobInfos.stream()
+            .map(JobInfo::getResult)
+            .collect(Collectors.joining("; "));
+        return new JobInfo(status, result);
     }
 }

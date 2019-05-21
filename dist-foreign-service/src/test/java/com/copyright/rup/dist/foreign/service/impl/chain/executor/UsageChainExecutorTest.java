@@ -4,8 +4,11 @@ import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.domain.job.JobInfo;
+import com.copyright.rup.dist.common.domain.job.JobStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 import com.copyright.rup.dist.foreign.service.api.processor.IChainProcessor;
@@ -49,10 +52,13 @@ public class UsageChainExecutorTest {
     @Test
     public void testExecuteJobProcessor() {
         expect(fasProcessor.getSuccessProcessor())
-            .andReturn(new MockProcessor())
-            .times(2);
+            .andReturn(new MockProcessor(JobStatusEnum.FINISHED, "ProductFamily=FAS, UsagesCount=2"))
+            .once();
+        expect(fasProcessor.getSuccessProcessor())
+            .andReturn(new MockProcessor(JobStatusEnum.FINISHED, "ProductFamily=FAS2, UsagesCount=5"))
+            .once();
         expect(ntsProcessor.getSuccessProcessor())
-            .andReturn(new MockProcessor())
+            .andReturn(new MockProcessor(JobStatusEnum.SKIPPED, "ProductFamily=NTS, Reason=There are no usages"))
             .once();
         expect(fasProcessor.getFailureProcessor())
             .andReturn(new MockProcessor())
@@ -61,7 +67,9 @@ public class UsageChainExecutorTest {
             .andReturn(new MockProcessor())
             .once();
         replay(fasProcessor, ntsProcessor);
-        executor.execute(ChainProcessorTypeEnum.RIGHTS);
+        assertEquals(new JobInfo(JobStatusEnum.FINISHED, "ProductFamily=FAS, UsagesCount=2; " +
+                "ProductFamily=FAS2, UsagesCount=5; ProductFamily=NTS, Reason=There are no usages"),
+            executor.execute(ChainProcessorTypeEnum.RIGHTS));
         verify(fasProcessor, ntsProcessor);
     }
 
@@ -73,7 +81,7 @@ public class UsageChainExecutorTest {
             .once();
         expect(fasProcessor.getSuccessProcessor())
             .andReturn(fasEligibilityProcessor)
-            .times(1);
+            .once();
         expect(fasProcessor.getFailureProcessor())
             .andReturn(null)
             .once();
@@ -95,19 +103,32 @@ public class UsageChainExecutorTest {
 
     private static class MockProcessor extends AbstractUsageChainProcessor implements IUsageJobProcessor {
 
+        private final JobInfo jobInfo;
+        private final ChainProcessorTypeEnum chainProcessorType;
+
+        MockProcessor() {
+            jobInfo = new JobInfo();
+            chainProcessorType = ChainProcessorTypeEnum.ELIGIBILITY;
+        }
+
+        MockProcessor(JobStatusEnum statusEnum, String reason) {
+            jobInfo = new JobInfo(statusEnum, reason);
+            chainProcessorType = ChainProcessorTypeEnum.RIGHTS;
+        }
+
         @Override
         public void process(Usage item) {
             // Empty method
         }
 
         @Override
-        public void jobProcess(String productFamily) {
-            // Empty method
+        public JobInfo jobProcess(String productFamily) {
+            return jobInfo;
         }
 
         @Override
         public ChainProcessorTypeEnum getChainProcessorType() {
-            return ChainProcessorTypeEnum.ELIGIBILITY;
+            return chainProcessorType;
         }
     }
 }

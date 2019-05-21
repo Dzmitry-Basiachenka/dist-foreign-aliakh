@@ -10,6 +10,8 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.domain.job.JobInfo;
+import com.copyright.rup.dist.common.domain.job.JobStatusEnum;
 import com.copyright.rup.dist.common.integration.camel.IProducer;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -20,6 +22,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,6 +36,8 @@ import java.util.stream.Collectors;
  * @author Uladzislau Shalamitski
  */
 public class RhEligibilityProcessorTest {
+
+    private static final String NTS_PRODUCT_FAMILY = "NTS";
 
     private RhEligibilityProcessor rhEligibilityProcessor;
     private IProducer<Usage> rhEligibilityProducerMock;
@@ -61,10 +66,11 @@ public class RhEligibilityProcessorTest {
     }
 
     @Test
-    public void testProcessByProductFamily() {
+    public void testJobProcess() {
         List<Usage> rhFoundUsages = Arrays.asList(buildUsage(), buildUsage());
         List<String> rhFoundUsageIds = rhFoundUsages.stream().map(Usage::getId).collect(Collectors.toList());
-        expect(usageServiceMock.getUsageIdsByStatusAndProductFamily(eq(UsageStatusEnum.US_TAX_COUNTRY), eq("NTS")))
+        expect(usageServiceMock.getUsageIdsByStatusAndProductFamily(
+            eq(UsageStatusEnum.US_TAX_COUNTRY), eq(NTS_PRODUCT_FAMILY)))
             .andReturn(rhFoundUsageIds)
             .once();
         expect(usageServiceMock.getUsagesByIds(eq(rhFoundUsageIds)))
@@ -77,17 +83,29 @@ public class RhEligibilityProcessorTest {
         rhEligibilityProducerMock.send(capture(usageCapture2));
         expectLastCall().once();
         replay(usageServiceMock, rhEligibilityProducerMock);
-        rhEligibilityProcessor.jobProcess("NTS");
+        assertEquals(new JobInfo(JobStatusEnum.FINISHED, "ProductFamily=NTS, UsagesCount=2"),
+            rhEligibilityProcessor.jobProcess(NTS_PRODUCT_FAMILY));
         verify(usageServiceMock, rhEligibilityProducerMock);
         assertEquals(usageCapture1.getValue(), rhFoundUsages.get(0));
         assertEquals(usageCapture2.getValue(), rhFoundUsages.get(1));
+    }
+
+    @Test
+    public void testJobProcessSkipped() {
+        expect(usageServiceMock.getUsageIdsByStatusAndProductFamily(
+            eq(UsageStatusEnum.US_TAX_COUNTRY), eq(NTS_PRODUCT_FAMILY)))
+            .andReturn(Collections.emptyList()).once();
+        replay(usageServiceMock, rhEligibilityProducerMock);
+        assertEquals(new JobInfo(JobStatusEnum.SKIPPED, "ProductFamily=NTS, Reason=There are no usages"),
+            rhEligibilityProcessor.jobProcess(NTS_PRODUCT_FAMILY));
+        verify(usageServiceMock, rhEligibilityProducerMock);
     }
 
     private Usage buildUsage() {
         Usage usage = new Usage();
         usage.setId(RupPersistUtils.generateUuid());
         usage.setWrWrkInst(854030733L);
-        usage.setProductFamily("NTS");
+        usage.setProductFamily(NTS_PRODUCT_FAMILY);
         usage.setStatus(UsageStatusEnum.US_TAX_COUNTRY);
         return usage;
     }

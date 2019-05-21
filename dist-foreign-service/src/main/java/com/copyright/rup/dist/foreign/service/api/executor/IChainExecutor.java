@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.service.api.executor;
 
+import com.copyright.rup.dist.common.domain.job.JobInfo;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
 import java.util.List;
@@ -21,8 +22,9 @@ public interface IChainExecutor<T> {
      * Method is used by jobs.
      *
      * @param type processor in chain from which execution will be started by job
+     * @return instance of {@link JobInfo}
      */
-    void execute(ChainProcessorTypeEnum type);
+    JobInfo execute(ChainProcessorTypeEnum type);
 
     /**
      * Executes chain of processors for list of items starting with {@link ChainProcessorTypeEnum}.

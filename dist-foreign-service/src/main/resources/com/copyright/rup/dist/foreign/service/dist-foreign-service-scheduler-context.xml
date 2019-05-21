@@ -85,6 +85,11 @@
     </bean>
 
     <bean id="schedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="globalJobListeners">
+            <array>
+                <ref bean="df.service.jobListener"/>
+            </array>
+        </property>
         <property name="jobDetails">
             <list>
                 <ref bean="df.service.getRightsQuartzJob"/>

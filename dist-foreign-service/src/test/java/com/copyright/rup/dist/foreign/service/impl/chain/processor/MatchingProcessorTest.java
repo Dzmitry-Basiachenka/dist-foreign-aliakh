@@ -6,8 +6,11 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.domain.job.JobInfo;
+import com.copyright.rup.dist.common.domain.job.JobStatusEnum;
 import com.copyright.rup.dist.common.integration.camel.IProducer;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
@@ -18,6 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -30,6 +34,8 @@ import java.util.List;
  * @author Uladzislau Shalamitski
  */
 public class MatchingProcessorTest {
+
+    private static final String FAS_PRODUCT_FAMILY = "FAS";
 
     private MatchingProcessor processor;
     private IProducer<Usage> matchingProducer;
@@ -54,22 +60,30 @@ public class MatchingProcessorTest {
     }
 
     @Test
-    public void testProcess() {
+    public void testJobProcess() {
         Usage usage1 = buildUsage(UsageStatusEnum.NEW);
         Usage usage2 = buildUsage(UsageStatusEnum.NEW);
         List<String> usageIds = Arrays.asList(usage1.getId(), usage2.getId());
-        expect(usageService.getUsageIdsByStatusAndProductFamily(eq(UsageStatusEnum.NEW), eq("FAS")))
-            .andReturn(usageIds)
-            .once();
-        expect(usageService.getUsagesByIds(eq(usageIds)))
-            .andReturn(Arrays.asList(usage1, usage2))
-            .once();
+        expect(usageService.getUsageIdsByStatusAndProductFamily(eq(UsageStatusEnum.NEW), eq(FAS_PRODUCT_FAMILY)))
+            .andReturn(usageIds).once();
+        expect(usageService.getUsagesByIds(eq(usageIds))).andReturn(Arrays.asList(usage1, usage2)).once();
         matchingProducer.send(usage1);
         expectLastCall().once();
         matchingProducer.send(usage2);
         expectLastCall().once();
         replay(usageService, matchingProducer);
-        processor.jobProcess("FAS");
+        assertEquals(new JobInfo(JobStatusEnum.FINISHED, "ProductFamily=FAS, UsagesCount=2"),
+            processor.jobProcess(FAS_PRODUCT_FAMILY));
+        verify(usageService, matchingProducer);
+    }
+
+    @Test
+    public void testJobProcessSkipped() {
+        expect(usageService.getUsageIdsByStatusAndProductFamily(eq(UsageStatusEnum.NEW), eq(FAS_PRODUCT_FAMILY)))
+            .andReturn(Collections.emptyList()).once();
+        replay(usageService, matchingProducer);
+        assertEquals(new JobInfo(JobStatusEnum.SKIPPED, "ProductFamily=FAS, Reason=There are no usages"),
+            processor.jobProcess(FAS_PRODUCT_FAMILY));
         verify(usageService, matchingProducer);
     }
 

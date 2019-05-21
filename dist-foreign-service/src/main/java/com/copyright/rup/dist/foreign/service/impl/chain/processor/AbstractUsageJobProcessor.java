@@ -1,6 +1,8 @@
 package com.copyright.rup.dist.foreign.service.impl.chain.processor;
 
 import com.copyright.rup.common.logging.RupLogUtils;
+import com.copyright.rup.dist.common.domain.job.JobInfo;
+import com.copyright.rup.dist.common.domain.job.JobStatusEnum;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
@@ -36,7 +38,8 @@ public abstract class AbstractUsageJobProcessor extends AbstractUsageChainProces
     private UsageStatusEnum usageStatus;
 
     @Override
-    public void jobProcess(String productFamily) {
+    public JobInfo jobProcess(String productFamily) {
+        JobInfo jobInfo;
         List<String> usageIds = usageService.getUsageIdsByStatusAndProductFamily(usageStatus, productFamily);
         if (CollectionUtils.isNotEmpty(usageIds)) {
             LogUtils.ILogWrapper usagesCount = LogUtils.size(usageIds);
@@ -44,12 +47,15 @@ public abstract class AbstractUsageJobProcessor extends AbstractUsageChainProces
                 productFamily, usagesCount);
             Iterables.partition(usageIds, usagesBatchSize)
                 .forEach(partition -> usageService.getUsagesByIds(partition).forEach(this::process));
-            LOGGER.info("Send {} usages for processing. Finished. ProductFamily={}, UsagesCount={}", usageStatus,
-                productFamily, usagesCount);
+            String message = "ProductFamily=" + productFamily + ", UsagesCount=" + usagesCount;
+            LOGGER.info("Send {} usages for processing. Finished. {}", usageStatus, message);
+            jobInfo = new JobInfo(JobStatusEnum.FINISHED, message);
         } else {
-            LOGGER.info("Send {} usages for processing. Skipped. Reason=There are no usages. ProductFamily={}",
-                usageStatus, productFamily);
+            String message = "ProductFamily=" + productFamily + ", Reason=There are no usages";
+            LOGGER.info("Send {} usages for processing. Skipped. {}", usageStatus, message);
+            jobInfo = new JobInfo(JobStatusEnum.SKIPPED, message);
         }
+        return jobInfo;
     }
 
     public void setUsageStatus(UsageStatusEnum usageStatus) {

@@ -18,17 +18,17 @@ import org.powermock.reflect.Whitebox;
 import org.quartz.JobExecutionContext;
 
 /**
- * Verifies {@link WorksMatchingJob}.
- * <p>
+ * Verifies {@link GetRightsJob}.
+ * <p/>
  * Copyright (C) 2018 copyright.com
- * <p>
- * Date: 11/20/17
+ * <p/>
+ * Date: 04/24/2018
  *
- * @author Darya Baraukova
+ * @author Aliaksandr Liakh
  */
-public class WorksMatchingJobTest {
+public class GetRightsJobTest {
 
-    private WorksMatchingJob job;
+    private GetRightsJob getRightsJob;
     private IChainExecutor<Usage> executor;
     private JobExecutionContext jobExecutionContext;
 
@@ -37,18 +37,18 @@ public class WorksMatchingJobTest {
     public void setUp() {
         executor = createMock(IChainExecutor.class);
         jobExecutionContext = createMock(JobExecutionContext.class);
-        job = new WorksMatchingJob();
-        Whitebox.setInternalState(job, executor);
+        getRightsJob = new GetRightsJob();
+        Whitebox.setInternalState(getRightsJob, executor);
     }
 
     @Test
     public void testExecuteInternal() {
         JobInfo jobInfo = new JobInfo(JobStatusEnum.FINISHED, "ProductFamily=FAS, Reason=There are no usages");
-        expect(executor.execute(ChainProcessorTypeEnum.MATCHING)).andReturn(jobInfo).once();
+        expect(executor.execute(ChainProcessorTypeEnum.RIGHTS)).andReturn(jobInfo).once();
         jobExecutionContext.setResult(jobInfo);
         expectLastCall().once();
         replay(executor, jobExecutionContext);
-        job.executeInternal(jobExecutionContext);
+        getRightsJob.executeInternal(jobExecutionContext);
         verify(executor, jobExecutionContext);
     }
 }

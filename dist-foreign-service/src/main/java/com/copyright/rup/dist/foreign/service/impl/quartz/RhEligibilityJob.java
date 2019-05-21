@@ -31,10 +31,6 @@ public class RhEligibilityJob extends QuartzJobBean {
      */
     @Override
     public void executeInternal(JobExecutionContext context) {
-        executor.execute(ChainProcessorTypeEnum.RH_ELIGIBILITY);
-    }
-
-    void setExecutor(IChainExecutor<Usage> executor) {
-        this.executor = executor;
+        context.setResult(executor.execute(ChainProcessorTypeEnum.RH_ELIGIBILITY));
     }
 }
