@@ -21,7 +21,7 @@ public class FasBatchSummaryReportHandler extends BaseCsvReportHandler<FasBatchS
 
     private static final List<String> HEADERS = Arrays.asList("Usage Batch Name", "RRO Account Number", "RRO Name",
         "Payment Date", "Gross Fund Pool in USD", "# non-Eligible Details", "Gross USD non-Eligible Details",
-        "# Details NTS", "Gross USD NTS", "# FAS/CLA_FAS Eligible Details", "Gross FAS/CLA_FAS Eligible USD",
+        "# Details NTS", "Gross USD NTS", "# FAS/FAS2 Eligible Details", "Gross FAS/FAS2 Eligible USD",
         "# Details in-progress Scenarios", "Gross USD in-progress Scenarios", "Royalty Payable USD",
         "# Details Return to CLA", "Gross USD Return to CLA");
 
