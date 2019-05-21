@@ -20,7 +20,7 @@ import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * Verifies {@link OracleService}.
+ * Verifies {@link OracleRhTaxService}.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -28,21 +28,21 @@ import org.springframework.web.client.RestTemplate;
  *
  * @author Aliaksandr Liakh
  */
-public class OracleServiceTest {
+public class OracleRhTaxServiceTest {
 
     private static final String RH_TAX_URL =
         "http://localhost:8080/oracle-ap-rest/getRightsholderDataInfo?rightsholderAccountNumbers={accountNumbers}";
     private static final long ACCOUNT_NUMBER = 7001413934L;
 
-    private OracleService oracleService;
+    private OracleRhTaxService oracleRhTaxService;
     private RestTemplate restTemplate;
 
     @Before
     public void setUp() {
         restTemplate = createMock(RestTemplate.class);
-        oracleService = new OracleService();
-        Whitebox.setInternalState(oracleService, restTemplate);
-        Whitebox.setInternalState(oracleService, "rhTaxUrl", RH_TAX_URL);
+        oracleRhTaxService = new OracleRhTaxService();
+        Whitebox.setInternalState(oracleRhTaxService, restTemplate);
+        Whitebox.setInternalState(oracleRhTaxService, "rhTaxUrl", RH_TAX_URL);
     }
 
     @Test
@@ -53,7 +53,7 @@ public class OracleServiceTest {
             .andReturn(loadJson("rh_tax_information_response.json"))
             .once();
         replay(restTemplate);
-        assertTrue(oracleService.isUsTaxCountry(ACCOUNT_NUMBER));
+        assertTrue(oracleRhTaxService.isUsTaxCountry(ACCOUNT_NUMBER));
         verify(restTemplate);
     }
 
@@ -65,7 +65,7 @@ public class OracleServiceTest {
             .andReturn(loadJson("rh_tax_information_not_found_response.json"))
             .once();
         replay(restTemplate);
-        assertFalse(oracleService.isUsTaxCountry(ACCOUNT_NUMBER));
+        assertFalse(oracleRhTaxService.isUsTaxCountry(ACCOUNT_NUMBER));
         verify(restTemplate);
     }
 
