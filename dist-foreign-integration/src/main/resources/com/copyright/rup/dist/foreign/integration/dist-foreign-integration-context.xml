@@ -96,7 +96,7 @@
         </bean>
     </util:list>
 
-    <bean id="df.integration.oracleCacheService" class="com.copyright.rup.dist.foreign.integration.oracle.impl.OracleCacheService">
+    <bean id="df.integration.oracleRhTaxCacheService" class="com.copyright.rup.dist.foreign.integration.oracle.impl.OracleRhTaxCacheService">
         <constructor-arg value="$RUP{dist.foreign.rest.oracle.ttl.minutes}"/>
     </bean>
 

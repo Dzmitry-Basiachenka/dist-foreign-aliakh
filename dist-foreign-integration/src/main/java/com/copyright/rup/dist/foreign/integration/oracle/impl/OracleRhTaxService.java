@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.integration.oracle.impl;
 
 import com.copyright.rup.dist.common.integration.IntegrationConnectionException;
-import com.copyright.rup.dist.foreign.integration.oracle.api.IOracleService;
+import com.copyright.rup.dist.foreign.integration.oracle.api.IOracleRhTaxService;
 import com.copyright.rup.dist.foreign.integration.oracle.impl.handler.OracleRhTaxInformationRestHandler;
 
 import com.google.common.collect.ImmutableMap;
@@ -14,7 +14,7 @@ import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * Implementation of {@link IOracleService}.
+ * Implementation of {@link IOracleRhTaxService}.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -22,8 +22,8 @@ import org.springframework.web.client.RestTemplate;
  *
  * @author Aliaksandr Liakh
  */
-@Service("df.integration.oracleService")
-public class OracleService implements IOracleService {
+@Service("df.integration.oracleRhTaxService")
+public class OracleRhTaxService implements IOracleRhTaxService {
 
     private static final String CONNECTION_EXCEPTION_MESSAGE = "Could not connect to the Oracle AP";
 
@@ -34,7 +34,7 @@ public class OracleService implements IOracleService {
     private String rhTaxUrl;
 
     @Override
-    public Boolean isUsTaxCountry(Long accountNumber) {
+    public boolean isUsTaxCountry(Long accountNumber) {
         try {
             OracleRhTaxInformationRestHandler handler = new OracleRhTaxInformationRestHandler(restTemplate);
             return handler.handleResponse(rhTaxUrl, ImmutableMap.of("accountNumbers", accountNumber));

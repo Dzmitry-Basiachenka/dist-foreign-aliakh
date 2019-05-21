@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Objects;
+
 /**
  * Handler for processing rightsholders tax information response.
  * <p>
@@ -37,7 +39,7 @@ public class OracleRhTaxInformationRestHandler extends CommonRestHandler<Boolean
     @Override
     protected Boolean doHandleResponse(JsonNode response) {
         Boolean result = Boolean.FALSE;
-        if (response.elements().hasNext()) {
+        if (Objects.nonNull(response) && response.elements().hasNext()) {
             JsonNode node = response.elements().next();
             result = DOMESTIC_INDICATOR.equals(JsonUtils.getStringValue(node.get("domesticInternationalIndicator")));
         }
