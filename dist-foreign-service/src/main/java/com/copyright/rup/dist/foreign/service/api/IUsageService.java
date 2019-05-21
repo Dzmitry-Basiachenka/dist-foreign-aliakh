@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.service.api;
 
+import com.copyright.rup.dist.common.domain.job.JobInfo;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
@@ -12,7 +13,6 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
-import com.copyright.rup.dist.foreign.domain.job.JobInfo;
 
 import java.util.Collection;
 import java.util.List;

@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.service.impl.job;
 
+import com.copyright.rup.dist.common.domain.job.JobInfo;
 import com.copyright.rup.dist.common.integration.camel.IProducer;
-import com.copyright.rup.dist.foreign.domain.job.JobInfo;
 
 import org.apache.camel.ProducerTemplate;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
 package com.copyright.rup.dist.foreign.service.impl.job;
 
-import com.copyright.rup.dist.foreign.domain.job.JobInfo;
+import com.copyright.rup.dist.common.domain.job.JobInfo;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;

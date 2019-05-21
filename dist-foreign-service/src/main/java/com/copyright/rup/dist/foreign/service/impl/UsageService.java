@@ -2,6 +2,8 @@ package com.copyright.rup.dist.foreign.service.impl;
 
 import com.copyright.rup.common.logging.RupLogUtils;
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.common.domain.job.JobInfo;
+import com.copyright.rup.dist.common.domain.job.JobStatusEnum;
 import com.copyright.rup.dist.common.integration.rest.prm.PrmRollUpService;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
@@ -24,8 +26,6 @@ import com.copyright.rup.dist.foreign.domain.common.util.CalculationUtils;
 import com.copyright.rup.dist.foreign.domain.common.util.ForeignLogUtils;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
-import com.copyright.rup.dist.foreign.domain.job.JobInfo;
-import com.copyright.rup.dist.foreign.domain.job.JobStatusEnum;
 import com.copyright.rup.dist.foreign.integration.crm.api.CrmResult;
 import com.copyright.rup.dist.foreign.integration.crm.api.CrmRightsDistributionRequest;
 import com.copyright.rup.dist.foreign.integration.crm.api.ICrmIntegrationService;
