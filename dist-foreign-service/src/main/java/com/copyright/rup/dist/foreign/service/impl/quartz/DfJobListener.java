@@ -1,8 +1,8 @@
 package com.copyright.rup.dist.foreign.service.impl.quartz;
 
 import com.copyright.rup.common.logging.RupLogUtils;
-import com.copyright.rup.dist.foreign.domain.job.JobInfo;
-import com.copyright.rup.dist.foreign.domain.job.JobStatusEnum;
+import com.copyright.rup.dist.common.domain.job.JobInfo;
+import com.copyright.rup.dist.common.domain.job.JobStatusEnum;
 import com.copyright.rup.dist.foreign.service.impl.job.JobStatusProducer;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;

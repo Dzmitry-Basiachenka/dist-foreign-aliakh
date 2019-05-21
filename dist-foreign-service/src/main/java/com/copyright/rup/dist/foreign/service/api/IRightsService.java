@@ -1,7 +1,7 @@
 package com.copyright.rup.dist.foreign.service.api;
 
+import com.copyright.rup.dist.common.domain.job.JobInfo;
 import com.copyright.rup.dist.foreign.domain.Usage;
-import com.copyright.rup.dist.foreign.domain.job.JobInfo;
 
 /**
  * Interface represents API for working with RA functionality.

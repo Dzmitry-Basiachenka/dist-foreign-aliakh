@@ -6,8 +6,8 @@ import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 
-import com.copyright.rup.dist.foreign.domain.job.JobInfo;
-import com.copyright.rup.dist.foreign.domain.job.JobStatusEnum;
+import com.copyright.rup.dist.common.domain.job.JobInfo;
+import com.copyright.rup.dist.common.domain.job.JobStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IRightsService;
 
 import org.junit.Test;
