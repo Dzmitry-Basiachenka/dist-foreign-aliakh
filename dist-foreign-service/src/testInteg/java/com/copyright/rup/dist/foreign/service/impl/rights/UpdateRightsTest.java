@@ -7,6 +7,8 @@ import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.job.JobInfo;
+import com.copyright.rup.dist.foreign.domain.job.JobStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
@@ -77,7 +79,10 @@ public class UpdateRightsTest {
         expectRmsCall("rms_grants_854030732_request.json", "rms_grants_empty_response.json");
         expectRmsCall("rms_grants_122824345_request.json", "rms_grants_122824345_response.json");
         expectPrmCall();
-        rightsService.updateRightsSentForRaUsages();
+        JobInfo jobInfo = rightsService.updateRightsSentForRaUsages();
+        assertEquals(JobStatusEnum.FINISHED, jobInfo.getStatus());
+        assertEquals("ProductFamily=FAS, UsagesCount=2; ProductFamily=FAS2, Reason=There are no usages;",
+            jobInfo.getResult());
         assertUsage("2de40e13-d353-44ce-b6bb-a11383ba9fb9", UsageStatusEnum.NEW, null);
         assertUsage("e6378e17-b0c9-420f-aa5c-a653156339d2", UsageStatusEnum.SENT_FOR_RA, null);
         assertUsage("11853c83-780a-4533-ad01-dde87c8b8592", UsageStatusEnum.ELIGIBLE, 1000000322L);

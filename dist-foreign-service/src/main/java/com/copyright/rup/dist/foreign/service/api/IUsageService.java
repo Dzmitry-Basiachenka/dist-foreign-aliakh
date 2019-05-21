@@ -12,6 +12,7 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.domain.job.JobInfo;
 
 import java.util.Collection;
 import java.util.List;
@@ -339,8 +340,10 @@ public interface IUsageService {
      * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#ARCHIVED}.
      * Also updates scenario status to {@link com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum#ARCHIVED}
      * if all usages from scenario were sent to CRM.
+     *
+     * @return {@link JobInfo} instance with information about job name, execution status and job result}
      */
-    void sendToCrm();
+    JobInfo sendToCrm();
 
     /**
      * Gets list of {@link Usage}s by specified {@link Usage} ids.

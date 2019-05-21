@@ -26,6 +26,6 @@ public class SendToCrmJob extends QuartzJobBean {
 
     @Override
     public void executeInternal(JobExecutionContext context) {
-        usageService.sendToCrm();
+        context.setResult(usageService.sendToCrm());
     }
 }

@@ -8,6 +8,8 @@ import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.job.JobInfo;
+import com.copyright.rup.dist.foreign.domain.job.JobStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
@@ -75,7 +77,9 @@ public class RightsAssignmentServiceIntegrationTest {
             .andRespond(MockRestResponseCreators.withSuccess(
                 TestUtils.fileToString(this.getClass(), "rights_assignment_response.json"),
                 MediaType.APPLICATION_JSON));
-        rightsAssigmentService.sendForRightsAssignment();
+        JobInfo jobInfo = rightsAssigmentService.sendForRightsAssignment();
+        assertEquals(JobStatusEnum.FINISHED, jobInfo.getStatus());
+        assertEquals("UsagesCount=3", jobInfo.getResult());
         List<Usage> usages = usageRepository.findByStatuses(UsageStatusEnum.SENT_FOR_RA);
         assertTrue(CollectionUtils.isNotEmpty(usages));
         assertEquals(4, usages.size());

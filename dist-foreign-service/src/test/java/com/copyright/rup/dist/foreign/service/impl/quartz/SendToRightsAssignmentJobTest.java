@@ -1,14 +1,18 @@
 package com.copyright.rup.dist.foreign.service.impl.quartz;
 
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 
+import com.copyright.rup.dist.foreign.domain.job.JobInfo;
+import com.copyright.rup.dist.foreign.domain.job.JobStatusEnum;
 import com.copyright.rup.dist.foreign.service.api.IRightsService;
 
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
+import org.quartz.JobExecutionContext;
 
 /**
  * Verifies {@link SendToRightsAssignmentJob}.
@@ -19,17 +23,20 @@ import org.powermock.reflect.Whitebox;
  *
  * @author Aliaksandr Liakh
  */
-public class SendToRightsAssignmentQuartzJobTest {
+public class SendToRightsAssignmentJobTest {
 
     @Test
     public void testExecuteInternal() {
         IRightsService rightsService = createMock(IRightsService.class);
+        JobExecutionContext jobExecutionContext = createMock(JobExecutionContext.class);
         SendToRightsAssignmentJob job = new SendToRightsAssignmentJob();
         Whitebox.setInternalState(job, rightsService);
-        rightsService.sendForRightsAssignment();
+        JobInfo jobInfo = new JobInfo(JobStatusEnum.FINISHED, "UsagesCount=2");
+        expect(rightsService.sendForRightsAssignment()).andReturn(jobInfo).once();
+        jobExecutionContext.setResult(jobInfo);
         expectLastCall().once();
-        replay(rightsService);
-        job.executeInternal(null);
-        verify(rightsService);
+        replay(rightsService, jobExecutionContext);
+        job.executeInternal(jobExecutionContext);
+        verify(rightsService, jobExecutionContext);
     }
 }

@@ -10,6 +10,8 @@ import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.job.JobInfo;
+import com.copyright.rup.dist.foreign.domain.job.JobStatusEnum;
 import com.copyright.rup.dist.foreign.integration.rms.api.IRmsIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsService;
@@ -68,9 +70,10 @@ public class RightsService implements IRightsService {
 
     @Override
     @Transactional
-    public void sendForRightsAssignment() {
+    public JobInfo sendForRightsAssignment() {
         List<Usage> usages = usageRepository.findByStatuses(UsageStatusEnum.RH_NOT_FOUND);
         LOGGER.info("Send for Rights Assignment. Started. UsagesCount={}", LogUtils.size(usages));
+        JobInfo jobInfo;
         if (CollectionUtils.isNotEmpty(usages)) {
             RightsAssignmentResult result = rmsIntegrationService.sendForRightsAssignment(
                 usages.stream().map(Usage::getWrWrkInst).collect(Collectors.toSet()));
@@ -83,33 +86,54 @@ public class RightsService implements IRightsService {
                     String.format("Sent for RA: job id '%s'", result.getJobId()));
                 LOGGER.info("Send for Rights Assignment. Finished. UsagesCount={}, JobId={}", LogUtils.size(usages),
                     result.getJobId());
+                jobInfo = new JobInfo(JobStatusEnum.FINISHED, "UsagesCount=" + LogUtils.size(usages));
             } else {
                 LOGGER.warn("Send for Rights Assignment. Failed. Reason={}, UsagesIds={}", result.getErrorMessage(),
                     usages.stream().map(Usage::getId).collect(Collectors.toList()));
+                jobInfo = new JobInfo(JobStatusEnum.FAILED,
+                    "UsagesCount=" + LogUtils.size(usages) + ", Reason=" + result.getErrorMessage());
             }
         } else {
             LOGGER.info("Send for Rights Assignment. Skipped. Reason=There are no usages for sending");
+            jobInfo = new JobInfo(JobStatusEnum.SKIPPED, "Reason=There are no usages");
         }
+        return jobInfo;
     }
 
     @Override
     @Transactional
-    public void updateRightsSentForRaUsages() {
-        Arrays.asList(FdaConstants.FAS_PRODUCT_FAMILY, FdaConstants.CLA_FAS_PRODUCT_FAMILY).forEach(productFamily -> {
+    public JobInfo updateRightsSentForRaUsages() {
+        List<String> fasProductFamilies =
+            Arrays.asList(FdaConstants.FAS_PRODUCT_FAMILY, FdaConstants.CLA_FAS_PRODUCT_FAMILY);
+        JobInfo jobInfo = null;
+        for (String productFamily : fasProductFamilies) {
             List<Usage> usages =
                 usageService.getUsagesByStatusAndProductFamily(UsageStatusEnum.SENT_FOR_RA, productFamily);
             if (CollectionUtils.isNotEmpty(usages)) {
                 LogUtils.ILogWrapper usagesCount = LogUtils.size(usages);
-                LOGGER.info("Update rights for SEND_FOR_RA usages. Started. ProductFamily={},, UsagesCount={}",
-                    productFamily, usagesCount);
+                String message = String.format("ProductFamily=%s, UsagesCount=%s; ", productFamily, usagesCount);
+                LOGGER.info("Update rights for SEND_FOR_RA usages. Started. {}", message);
                 updateSentForRaUsagesRightsholders(usages);
-                LOGGER.info("Update rights for SEND_FOR_RA usages. Finished. ProductFamily={}, UsagesCount={}",
-                    productFamily, usagesCount);
+                LOGGER.info("Update rights for SEND_FOR_RA usages. Finished. {}", message);
+                if (Objects.isNull(jobInfo)) {
+                    jobInfo = new JobInfo(JobStatusEnum.FINISHED, message);
+                } else {
+                    if (JobStatusEnum.SKIPPED == jobInfo.getStatus()) {
+                        jobInfo.setStatus(JobStatusEnum.FINISHED);
+                    }
+                    jobInfo.setResult(jobInfo.getResult() + message);
+                }
             } else {
-                LOGGER.info("Update rights for SEND_FOR_RA usages. Skipped. Reason=There are no SENT_FOR_RA {} usages.",
-                    productFamily);
+                String message = "ProductFamily=" + productFamily + ", Reason=There are no usages;";
+                LOGGER.info("Update rights for SEND_FOR_RA usages. Skipped. {}", message);
+                if (Objects.isNull(jobInfo)) {
+                    jobInfo = new JobInfo(JobStatusEnum.SKIPPED, message);
+                } else {
+                    jobInfo.setResult(jobInfo.getResult() + message);
+                }
             }
-        });
+        }
+        return jobInfo;
     }
 
     @Override

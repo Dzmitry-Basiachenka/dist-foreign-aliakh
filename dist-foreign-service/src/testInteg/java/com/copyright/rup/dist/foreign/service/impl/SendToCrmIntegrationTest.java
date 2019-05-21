@@ -11,6 +11,8 @@ import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.copyright.rup.dist.foreign.domain.job.JobInfo;
+import com.copyright.rup.dist.foreign.domain.job.JobStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
@@ -77,7 +79,10 @@ public class SendToCrmIntegrationTest {
             .andRespond(MockRestResponseCreators.withSuccess(
                 TestUtils.fileToString(this.getClass(), "crm/rights_distribution_response.json"),
                 MediaType.APPLICATION_JSON));
-        usageService.sendToCrm();
+        JobInfo jobInfo = usageService.sendToCrm();
+        assertEquals(JobStatusEnum.FINISHED, jobInfo.getStatus());
+        assertEquals("PaidUsagesCount=5, ArchivedUsagesCount=3, NotReportedUsagesCount=2, ArchivedScenariosCount=1",
+            jobInfo.getResult());
         verifyUsages("0d1829eb-de35-4f93-bb36-2a7435263051", UsageStatusEnum.ARCHIVED);
         verifyUsages("9e356e22-57b3-49b3-af99-155093a9dc0a", UsageStatusEnum.PAID);
         verifyUsages("53496a2f-fb52-4b5b-9f60-9034cceb69b9", UsageStatusEnum.PAID);
