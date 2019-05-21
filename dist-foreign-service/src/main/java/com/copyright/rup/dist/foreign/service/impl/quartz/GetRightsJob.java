@@ -28,6 +28,6 @@ public class GetRightsJob extends QuartzJobBean {
 
     @Override
     public void executeInternal(JobExecutionContext context) {
-        executor.execute(ChainProcessorTypeEnum.RIGHTS);
+        context.setResult(executor.execute(ChainProcessorTypeEnum.RIGHTS));
     }
 }

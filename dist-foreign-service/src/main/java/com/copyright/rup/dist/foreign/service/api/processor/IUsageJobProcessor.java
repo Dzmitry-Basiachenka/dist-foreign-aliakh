@@ -1,5 +1,7 @@
 package com.copyright.rup.dist.foreign.service.api.processor;
 
+import com.copyright.rup.dist.common.domain.job.JobInfo;
+
 /**
  * Interface for usage processors that will be run by job.
  * <p>
@@ -15,6 +17,7 @@ public interface IUsageJobProcessor {
      * Processes all available usages by specified product family.
      *
      * @param productFamily product family
+     * @return instance of {@link JobInfo}
      */
-    void jobProcess(String productFamily);
+    JobInfo jobProcess(String productFamily);
 }

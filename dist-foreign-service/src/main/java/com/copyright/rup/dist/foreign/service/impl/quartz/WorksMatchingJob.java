@@ -31,6 +31,6 @@ public class WorksMatchingJob extends QuartzJobBean {
      */
     @Override
     public void executeInternal(JobExecutionContext context) {
-        executor.execute(ChainProcessorTypeEnum.MATCHING);
+        context.setResult(executor.execute(ChainProcessorTypeEnum.MATCHING));
     }
 }
