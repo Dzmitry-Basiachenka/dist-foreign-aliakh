@@ -1,3 +1,22 @@
+5.1.35
+-
+* B-50635 FDA: Consume Oracle A/P service to determine RH tax country:
+make changes based on comments in CR-DIST-FOREIGN-106
+* B-51256 FDA: Generate notification for Scheduled jobs: adjust jobs that
+use JobExecutor to store job execution result in context
+* B-51256 FDA: Generate notifications for Scheduled jobs: send
+notifications about execution status for Send for RA, Update Rights for
+sent for RA usages and Send to CRM jobs
+* B-51256 FDA: Generate notifications for Scheduled jobs: send
+notifications about execution status for Update RHs job
+* B-51258 FDA: Adjust Batch Summary Report to be FAS specific: rename CLA
+to FAS2 in report
+* B-51364 Tech Debt: FDA: OWASP Dependency Check: Security Vulnerabilities
+in guava
+* B-51364 Tech Debt: FDA: adjust paid message deserialiser, introduce
+rh_uid validation for paid messages, apply logic for populating account
+numbers based on ids
+
 5.1.34
 -
 * B-50350 CDP: Generate notification for Scheduled jobs: fix
