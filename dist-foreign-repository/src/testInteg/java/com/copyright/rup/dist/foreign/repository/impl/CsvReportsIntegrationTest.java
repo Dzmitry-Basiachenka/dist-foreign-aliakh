@@ -1,9 +1,11 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
 import com.copyright.rup.dist.common.test.ReportTestUtils;
+import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.repository.api.IRightsholderDiscrepancyRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 
 import com.google.common.collect.Sets;
@@ -52,6 +54,9 @@ public class CsvReportsIntegrationTest {
 
     @Autowired
     private IUsageRepository usageRepository;
+
+    @Autowired
+    private IRightsholderDiscrepancyRepository rightsholderDiscrepancyRepository;
 
     private final ReportTestUtils reportTestUtils =
         new ReportTestUtils("src/testInteg/resources/com/copyright/rup/dist/foreign/repository/impl/csv");
@@ -191,6 +196,20 @@ public class CsvReportsIntegrationTest {
         assertFiles(outputStream -> usageRepository.writeServiceFeeTrueUpCsvReport(LocalDate.of(2013, 1, 1),
             LocalDate.of(2012, 1, 1), LocalDate.of(2014, 5, 5), outputStream, 2000017000L,
             DEFAULT_ESTIMATED_SERVICE_FEE), "service_fee_true_up_empty_report.csv");
+    }
+
+    @Test
+    public void testWriteOwnershipAdjustmentCsvReport() throws Exception {
+        assertFiles(outputStream -> rightsholderDiscrepancyRepository.writeOwnershipAdjustmentCsvReport(
+            "3210b236-1239-4a60-9fab-888b84199321",  RightsholderDiscrepancyStatusEnum.APPROVED,  outputStream), 
+            "ownership_adjustment_report.csv");
+    }
+
+    @Test
+    public void testWriteOwnershipAdjustmentCsvEmptyReport() throws IOException {
+        assertFiles(outputStream -> rightsholderDiscrepancyRepository.writeOwnershipAdjustmentCsvReport(
+            "3210b236-1239-4a60-9fab-888b84199321",  RightsholderDiscrepancyStatusEnum.IN_PROGRESS,  outputStream),
+            "ownership_adjustment_report_empty.csv");
     }
 
     private void assertFiles(Consumer<ByteArrayOutputStream> reportWriter, String fileName) throws IOException {

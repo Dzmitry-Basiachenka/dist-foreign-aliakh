@@ -1,10 +1,12 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
 import com.copyright.rup.dist.foreign.domain.FdaConstants;
+import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.repository.api.IRightsholderDiscrepancyRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
@@ -41,6 +43,8 @@ public class ReportService implements IReportService {
     private IUsageArchiveRepository usageArchiveRepository;
     @Autowired
     private IUsageService usageService;
+    @Autowired
+    private IRightsholderDiscrepancyRepository rightsholderDiscrepancyRepository;
 
     @Value("$RUP{dist.foreign.rro.default_estimated_service_fee}")
     private BigDecimal defaultEstimatedServiceFee;
@@ -114,6 +118,12 @@ public class ReportService implements IReportService {
             usageBatch.setGrossAmount(totalGrossAmount);
             handleUsageBatch(handler, usageBatch);
         }
+    }
+
+    @Override
+    public void writeOwnershipAdjustmentCsvReport(String scenarioId, RightsholderDiscrepancyStatusEnum status,
+                                                  OutputStream outputStream) {
+        rightsholderDiscrepancyRepository.writeOwnershipAdjustmentCsvReport(scenarioId, status, outputStream);
     }
 
     private void handleUsageBatch(PreServiceFeeFundBatchesCsvReportHandler handler, UsageBatch usageBatch) {

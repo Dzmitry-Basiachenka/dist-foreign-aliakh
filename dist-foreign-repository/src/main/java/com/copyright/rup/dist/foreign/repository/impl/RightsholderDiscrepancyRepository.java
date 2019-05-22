@@ -8,12 +8,14 @@ import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IRightsholderDiscrepancyRepository;
+import com.copyright.rup.dist.foreign.repository.impl.csv.OwnershipAdjustmentReportHandler;
 
 import com.google.common.collect.Maps;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Repository;
 
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -91,5 +93,17 @@ public class RightsholderDiscrepancyRepository extends BaseRepository implements
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
         parameters.put(STATUS_KEY, RightsholderDiscrepancyStatusEnum.APPROVED);
         update("IRightsholderDiscrepancyMapper.approveByScenarioId", parameters);
+    }
+
+    @Override
+    public void writeOwnershipAdjustmentCsvReport(String scenarioId, RightsholderDiscrepancyStatusEnum status,
+                                                  OutputStream outputStream) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        parameters.put(STATUS_KEY, Objects.requireNonNull(status));
+        try (OwnershipAdjustmentReportHandler handler = new OwnershipAdjustmentReportHandler(
+            Objects.requireNonNull(outputStream))) {
+            getTemplate().select("IRightsholderDiscrepancyMapper.findByScenarioIdAndStatus", parameters, handler);
+        }
     }
 }
