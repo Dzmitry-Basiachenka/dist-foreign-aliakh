@@ -18,6 +18,7 @@ import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.common.util.ForeignLogUtils;
 import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
@@ -30,6 +31,7 @@ import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioAuditService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioUsageFilterService;
+import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 
 import com.google.common.collect.Iterables;
@@ -74,6 +76,8 @@ public class ScenarioService implements IScenarioService {
     private IScenarioRepository scenarioRepository;
     @Autowired
     private IUsageService usageService;
+    @Autowired
+    private IUsageAuditService usageAuditService;
     @Autowired
     private IScenarioAuditService scenarioAuditService;
     @Autowired
@@ -276,6 +280,8 @@ public class ScenarioService implements IScenarioService {
                 groupedByWrWrkInstUsages.get(discrepancy.getWrWrkInst()).forEach(usage -> {
                     usage.setRightsholder(newRightsholder);
                     usage.getPayee().setAccountNumber(payeeAccountNumber);
+                    usageAuditService.logAction(usage.getId(), UsageActionTypeEnum.RH_UPDATED, String.format(
+                        "Rightsholder account %s found during reconciliation", newRightsholder.getAccountNumber()));
                 });
             }
         );

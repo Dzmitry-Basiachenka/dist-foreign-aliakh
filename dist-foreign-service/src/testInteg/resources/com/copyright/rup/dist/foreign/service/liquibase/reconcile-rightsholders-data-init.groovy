@@ -46,6 +46,13 @@ databaseChangeLog {
             column(name: 'service_fee', value: '0.32000')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: "df_usage_audit") {
+            column(name: "df_usage_audit_uid", value: "d50d8097-b2dd-441b-bf3e-84eac1b3902a")
+            column(name: "df_usage_uid", value: "fcdaea01-2439-4c51-b3e2-23649cf710c7")
+            column(name: "action_type_ind", value: "LOADED")
+            column(name: "action_reason", value: "Uploaded in 'Test Batch 1'")
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '05dc9217-26d4-46ca-aa6e-18572591f3c8')
             column(name: 'rh_account_number', value: '1000003821')
@@ -98,6 +105,13 @@ databaseChangeLog {
             column(name: 'service_fee', value: '0.32000')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: "df_usage_audit") {
+            column(name: "df_usage_audit_uid", value: "914f7ff1-f0d8-4b7e-8d0d-a9e96382fc35")
+            column(name: "df_usage_uid", value: "4713282c-c698-4ffb-8de1-44863d48954f")
+            column(name: "action_type_ind", value: "LOADED")
+            column(name: "action_reason", value: "Uploaded in 'Test Batch 2'")
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'daf2483b-a7b4-415b-81d2-adb328423661')
             column(name: 'df_usage_batch_uid', value: '10150cf3-9820-41e0-8ea6-97105b6eaf45')
@@ -122,6 +136,13 @@ databaseChangeLog {
             column(name: 'service_fee_amount', value: '320.00')
             column(name: 'net_amount', value: '680.00')
             column(name: 'service_fee', value: '0.32000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: "df_usage_audit") {
+            column(name: "df_usage_audit_uid", value: "de353de1-9002-4143-bddd-c18db07fa74c")
+            column(name: "df_usage_uid", value: "daf2483b-a7b4-415b-81d2-adb328423661")
+            column(name: "action_type_ind", value: "LOADED")
+            column(name: "action_reason", value: "Uploaded in 'Test Batch 2'")
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -150,6 +171,13 @@ databaseChangeLog {
             column(name: 'service_fee', value: '0.32000')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: "df_usage_audit") {
+            column(name: "df_usage_audit_uid", value: "9c83c9ec-2823-4f60-87bf-0ff3c00c76b1")
+            column(name: "df_usage_uid", value: "f9f5d608-c6e7-49dd-b658-174522b0549e")
+            column(name: "action_type_ind", value: "LOADED")
+            column(name: "action_reason", value: "Uploaded in 'Test Batch 2'")
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'd2da6044-7ff7-4b5d-984a-69978b9e0678')
             column(name: 'df_usage_batch_uid', value: '10150cf3-9820-41e0-8ea6-97105b6eaf45')
@@ -174,6 +202,13 @@ databaseChangeLog {
             column(name: 'service_fee_amount', value: '576.00')
             column(name: 'net_amount', value: '1224.00')
             column(name: 'service_fee', value: '0.32000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: "df_usage_audit") {
+            column(name: "df_usage_audit_uid", value: "71207b2f-d6da-4771-a1e4-020c3e81d589")
+            column(name: "df_usage_uid", value: "d2da6044-7ff7-4b5d-984a-69978b9e0678")
+            column(name: "action_type_ind", value: "LOADED")
+            column(name: "action_reason", value: "Uploaded in 'Test Batch 2'")
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
@@ -202,6 +237,13 @@ databaseChangeLog {
             column(name: 'service_fee', value: '0.16000')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: "df_usage_audit") {
+            column(name: "df_usage_audit_uid", value: "ffb049eb-1c0f-48eb-afa8-e4671ecbbf9c")
+            column(name: "df_usage_uid", value: "f1d2c084-973b-4c88-9b45-d4060d87b4ba")
+            column(name: "action_type_ind", value: "LOADED")
+            column(name: "action_reason", value: "Uploaded in 'Test Batch 2'")
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'cf2b4a25-d786-4fee-9c7f-5bec12b017c1')
             column(name: 'df_usage_batch_uid', value: '10150cf3-9820-41e0-8ea6-97105b6eaf45')
@@ -226,6 +268,13 @@ databaseChangeLog {
             column(name: 'service_fee_amount', value: '400.00')
             column(name: 'net_amount', value: '2100.00')
             column(name: 'service_fee', value: '0.16000')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: "df_usage_audit") {
+            column(name: "df_usage_audit_uid", value: "d811a761-639c-450b-899f-6a45d65c58bb")
+            column(name: "df_usage_uid", value: "cf2b4a25-d786-4fee-9c7f-5bec12b017c1")
+            column(name: "action_type_ind", value: "LOADED")
+            column(name: "action_reason", value: "Uploaded in 'Test Batch 2'")
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder_discrepancy') {

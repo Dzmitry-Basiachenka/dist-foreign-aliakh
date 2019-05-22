@@ -6,6 +6,9 @@ import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
 
+import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
+import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 
 import org.junit.Before;
@@ -19,6 +22,8 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -39,6 +44,7 @@ public class ReconcileRightsholdersTest {
 
     private static final String SERVICE_FEE_16 = "0.16";
     private static final String SERVICE_FEE_32 = "0.32";
+    private static final String BATCH_NAME = "Test Batch 2";
 
     @Autowired
     private ReconcileRightsholdersTestBuilder testBuilder;
@@ -63,6 +69,8 @@ public class ReconcileRightsholdersTest {
             .expectUsages(
                 buildUsage("fcdaea01-2439-4c51-b3e2-23649cf710c7", 1000003821L, 1000003821L, 471137470L, "1000.00",
                     "840.00", "160.00", SERVICE_FEE_16))
+            .expectUsageAudit(ImmutableMap.of("fcdaea01-2439-4c51-b3e2-23649cf710c7",
+                Collections.singletonList(buildLoadedAuditItem("Test Batch 1"))))
             .build()
             .run();
     }
@@ -91,15 +99,45 @@ public class ReconcileRightsholdersTest {
                 buildUsage("cf2b4a25-d786-4fee-9c7f-5bec12b017c1", 1000000322L, 1000000322L, 123642505L, "2500.00",
                     "1700.00", "800.00", SERVICE_FEE_32),
                 buildUsage("d2da6044-7ff7-4b5d-984a-69978b9e0678", 1000002137L, 2000017000L, 122799407L, "1800.00",
-                        "1224.00", "576.00", SERVICE_FEE_32),
+                    "1224.00", "576.00", SERVICE_FEE_32),
                 buildUsage("daf2483b-a7b4-415b-81d2-adb328423661", 1000002137L, 2000017000L, 122861189L, "1000.00",
-                        "680.00", "320.00", SERVICE_FEE_32),
+                    "680.00", "320.00", SERVICE_FEE_32),
                 buildUsage("f1d2c084-973b-4c88-9b45-d4060d87b4ba", 2000152614L, 2000152614L, 123636551L, "4500.00",
                     "3780.00", "720.00", SERVICE_FEE_16),
                 buildUsage("f9f5d608-c6e7-49dd-b658-174522b0549e", 2000152614L, 2000152614L, 123647460L, "200.00",
                     "168.00", "32.00", SERVICE_FEE_16))
+            .expectUsageAudit(ImmutableMap.<String, List<UsageAuditItem>>builder()
+                .put("4713282c-c698-4ffb-8de1-44863d48954f",
+                    Arrays.asList(buildRhUpdatedAuditItem(2000152614L), buildLoadedAuditItem(BATCH_NAME)))
+                .put("cf2b4a25-d786-4fee-9c7f-5bec12b017c1",
+                    Collections.singletonList(buildLoadedAuditItem(BATCH_NAME)))
+                .put("d2da6044-7ff7-4b5d-984a-69978b9e0678",
+                    Arrays.asList(buildRhUpdatedAuditItem(1000002137L), buildLoadedAuditItem(BATCH_NAME)))
+                .put("daf2483b-a7b4-415b-81d2-adb328423661",
+                    Arrays.asList(buildRhUpdatedAuditItem(1000002137L), buildLoadedAuditItem(BATCH_NAME)))
+                .put("f1d2c084-973b-4c88-9b45-d4060d87b4ba",
+                    Arrays.asList(buildRhUpdatedAuditItem(2000152614L), buildLoadedAuditItem(BATCH_NAME)))
+                .put("f9f5d608-c6e7-49dd-b658-174522b0549e",
+                    Collections.singletonList(buildLoadedAuditItem(BATCH_NAME)))
+                .build())
             .build()
             .run();
+    }
+
+    private UsageAuditItem buildRhUpdatedAuditItem(Long accountNumber) {
+        return buildAuditItem(UsageActionTypeEnum.RH_UPDATED,
+            "Rightsholder account " + accountNumber + " found during reconciliation");
+    }
+
+    private UsageAuditItem buildLoadedAuditItem(String batchName) {
+        return buildAuditItem(UsageActionTypeEnum.LOADED, "Uploaded in '" + batchName + "'");
+    }
+
+    private UsageAuditItem buildAuditItem(UsageActionTypeEnum type, String reason) {
+        UsageAuditItem item = new UsageAuditItem();
+        item.setActionReason(reason);
+        item.setActionType(type);
+        return item;
     }
 
     private Scenario buildScenario(String id, String name) {

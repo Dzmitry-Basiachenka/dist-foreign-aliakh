@@ -9,8 +9,10 @@ import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Usage;
+import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderDiscrepancyService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
+import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 
 import com.google.common.collect.Lists;
@@ -30,8 +32,10 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.IntStream;
@@ -58,7 +62,10 @@ class ReconcileRightsholdersTestBuilder {
     private String expectedPrmResponse;
     private Set<RightsholderDiscrepancy> expectedDiscrepancies = new HashSet<>();
     private List<Usage> expectedUsages = new ArrayList<>();
+    private Map<String, List<UsageAuditItem>> usageIdToAuditItemsMap;
 
+    @Autowired
+    private IUsageAuditService usageAuditService;
     @Autowired
     private IScenarioService scenarioService;
     @Autowired
@@ -116,9 +123,15 @@ class ReconcileRightsholdersTestBuilder {
         return this;
     }
 
+    ReconcileRightsholdersTestBuilder expectUsageAudit(Map<String, List<UsageAuditItem>> usageIdToAuditItems) {
+        this.usageIdToAuditItemsMap = usageIdToAuditItems;
+        return this;
+    }
+
     void reset() {
         this.expectedDiscrepancies = new HashSet<>();
         this.expectedUsages = new ArrayList<>();
+        this.usageIdToAuditItemsMap = new HashMap<>();
     }
 
     /**
@@ -216,7 +229,21 @@ class ReconcileRightsholdersTestBuilder {
             List<Usage> usages = usageService.getUsagesByScenarioId(expectedScenario.getId());
             usages.sort(Comparator.comparing(Usage::getId));
             assertEquals(expectedUsages.size(), CollectionUtils.size(usages));
-            IntStream.range(0, usages.size()).forEach(i -> assertUsage(expectedUsages.get(i), usages.get(i)));
+            IntStream.range(0, usages.size()).forEach(i -> {
+                assertUsage(expectedUsages.get(i), usages.get(i));
+                assertAudit(usages.get(i).getId());
+            });
+        }
+
+        private void assertAudit(String usageId) {
+            List<UsageAuditItem> items = usageAuditService.getUsageAudit(usageId);
+            assertEquals(CollectionUtils.size(usageIdToAuditItemsMap.get(usageId)), CollectionUtils.size(items));
+            IntStream.range(0, items.size()).forEach(index -> {
+                UsageAuditItem expectedAuditItem = usageIdToAuditItemsMap.get(usageId).get(index);
+                UsageAuditItem actualAuditItem = items.get(index);
+                assertEquals(expectedAuditItem.getActionType(), actualAuditItem.getActionType());
+                assertEquals(expectedAuditItem.getActionReason(), actualAuditItem.getActionReason());
+            });
         }
 
         private void assertUsage(Usage expected, Usage actual) {

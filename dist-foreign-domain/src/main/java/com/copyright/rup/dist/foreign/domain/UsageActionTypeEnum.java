@@ -83,6 +83,11 @@ public enum UsageActionTypeEnum {
     EXCLUDED_FROM_SCENARIO,
 
     /**
+     * Action type for {@link Usage}s that receive new rightholders during reconciliation.
+     */
+    RH_UPDATED,
+
+    /**
      * Action type for sending {@link Usage} to LM.
      */
     SENT_TO_LM,
