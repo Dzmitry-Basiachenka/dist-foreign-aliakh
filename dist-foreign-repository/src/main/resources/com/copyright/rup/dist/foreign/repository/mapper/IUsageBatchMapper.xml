@@ -22,6 +22,11 @@
         <result property="scenarioName" column="scenario_name"/>
     </resultMap>
 
+    <resultMap id="batchNameToWrWrkInstPairResultMap" type="BatchNameWrWrkInstPair">
+        <result property="batchName" column="batch_name"/>
+        <result property="wrWrkInst" column="wr_wrk_inst"/>
+    </resultMap>
+
     <sql id="usageBatchColumns">
         ub.df_usage_batch_uid,
         ub.name,
@@ -203,5 +208,14 @@
             <foreach collection="collection" item="batchId" separator="," open="(" close=")">
                 #{batchId}
             </foreach>
+    </select>
+
+    <select id="findBatchNameToWrWrkInstsMapForRa" resultMap="batchNameToWrWrkInstPairResultMap">
+        select distinct ub.name batch_name,
+            u.wr_wrk_inst
+        from ${schema}.df_usage u
+        join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
+        where u.status_ind = #{status}
+            and u.wr_wrk_inst is not null
     </select>
 </mapper>
