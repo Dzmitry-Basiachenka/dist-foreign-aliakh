@@ -1,3 +1,8 @@
+5.1.36
+-
+* B-50684 FDA: Send FAS Batch Name to RMS as RMS Job Name: implement repository method for getting map of batch names to set of Wr Wrk Insts available for RA
+* B-51570 FDA : Add audit for RH update after RH Reconciliation: add audit if RH was updated during RH reconciliation
+
 5.1.35
 -
 * B-50635 FDA: Consume Oracle A/P service to determine RH tax country:
