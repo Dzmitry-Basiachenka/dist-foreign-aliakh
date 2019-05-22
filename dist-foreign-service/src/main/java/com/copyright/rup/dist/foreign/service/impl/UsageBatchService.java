@@ -114,7 +114,7 @@ public class UsageBatchService implements IUsageBatchService {
         LOGGER.info("Insert usage batch. Started. UsageBatchName={}, UserName={}", usageBatch.getName(), userName);
         usageBatchRepository.insert(usageBatch);
         rightsholderService.updateRightsholder(usageBatch.getRro());
-        fillStandardNumberType(usages);
+        populateTitlesStandardNumberAndType(usages);
         int count = usageService.insertUsages(usageBatch, usages);
         Set<Long> accountNumbersToUpdate = usages.stream()
             .map(usage -> usage.getRightsholder().getAccountNumber())
@@ -240,7 +240,7 @@ public class UsageBatchService implements IUsageBatchService {
         executorService.shutdown();
     }
 
-    private void fillStandardNumberType(Collection<Usage> usages) {
+    private void populateTitlesStandardNumberAndType(Collection<Usage> usages) {
         usages.stream()
             .filter(usage -> Objects.nonNull(usage.getWrWrkInst()))
             .forEach(usage -> {

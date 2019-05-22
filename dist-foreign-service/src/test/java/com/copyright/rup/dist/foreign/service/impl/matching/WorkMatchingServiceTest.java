@@ -85,7 +85,7 @@ public class WorkMatchingServiceTest {
         expect(piIntegrationService.findWorkByIdnoAndTitle(STANDARD_NUMBER, title))
             .andReturn(new Work()).once();
         expect(usageRepository.getTotalAmountByStandardNumberAndBatchId(STANDARD_NUMBER, batchId))
-            .andReturn(new BigDecimal("99.00"));
+            .andReturn(new BigDecimal("99.00")).once();
         usageService.updateProcessedUsage(usage);
         expectLastCall().once();
         auditService.logAction(usage.getId(), UsageActionTypeEnum.ELIGIBLE_FOR_NTS,

@@ -684,8 +684,8 @@ public class UsageServiceTest {
         ResearchedUsage researchedUsage1 = buildResearchedUsage(usageId1, "Title1", "742354894", 987654321L);
         ResearchedUsage researchedUsage2 = buildResearchedUsage(usageId2, "Title2", "879456165", 876543210L);
         List<ResearchedUsage> researchedUsages = ImmutableList.of(researchedUsage1, researchedUsage2);
-        expect(piIntegrationService.findWorkByIdnoAndTitle("742354894", null)).andReturn(buildWork("VALISSN")).once();
-        expect(piIntegrationService.findWorkByIdnoAndTitle("879456165", null)).andReturn(new Work()).once();
+        expect(piIntegrationService.findWorkByWrWrkInst(987654321L)).andReturn(buildWork("VALISSN")).once();
+        expect(piIntegrationService.findWorkByWrWrkInst(876543210L)).andReturn(new Work()).once();
         usageRepository.updateResearchedUsages(researchedUsages);
         expectLastCall().once();
         usageAuditService.logAction(usageId1, UsageActionTypeEnum.WORK_FOUND,

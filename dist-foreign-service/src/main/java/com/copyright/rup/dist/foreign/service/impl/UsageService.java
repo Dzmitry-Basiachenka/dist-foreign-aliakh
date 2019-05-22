@@ -448,7 +448,7 @@ public class UsageService implements IUsageService {
     @Transactional
     public void loadResearchedUsages(Collection<ResearchedUsage> researchedUsages) {
         LOGGER.info("Load researched usages. Started. ResearchedUsagesCount={}", LogUtils.size(researchedUsages));
-        fillStandardNumberType(researchedUsages);
+        populateTitlesStandardNumberAndType(researchedUsages);
         usageRepository.updateResearchedUsages(researchedUsages);
         researchedUsages.forEach(
             researchedUsage -> usageAuditService.logAction(researchedUsage.getUsageId(),
@@ -548,10 +548,12 @@ public class UsageService implements IUsageService {
         return usageRepository.findCountByStatusAndWrWrkInsts(UsageStatusEnum.UNCLASSIFIED, wrWrkInsts);
     }
 
-    private void fillStandardNumberType(Collection<ResearchedUsage> researchedUsages) {
+    private void populateTitlesStandardNumberAndType(Collection<ResearchedUsage> researchedUsages) {
         researchedUsages.forEach(researchedUsage -> {
-            Work work = piIntegrationService.findWorkByIdnoAndTitle(researchedUsage.getStandardNumber(), null);
+            Work work = piIntegrationService.findWorkByWrWrkInst(researchedUsage.getWrWrkInst());
             researchedUsage.setStandardNumberType(work.getMainIdnoType());
+            researchedUsage.setStandardNumber(work.getMainIdno());
+            researchedUsage.setSystemTitle(work.getMainTitle());
         });
     }
 
