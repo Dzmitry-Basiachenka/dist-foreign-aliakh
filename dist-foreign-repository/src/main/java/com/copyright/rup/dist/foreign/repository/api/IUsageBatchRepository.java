@@ -95,4 +95,13 @@ public interface IUsageBatchRepository {
      * @return map of batches names to scenario names
      */
     Map<String, String> findBatchesNamesToScenariosNames(Set<String> batchesIds);
+
+    /**
+     * Finds list of batch names and Wr Wrk Insts related to usages
+     * in {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#RH_NOT_FOUND} status.
+     *
+     * @return map where key - batch name, value - set of Wr Wrk Insts related to usages
+     * in {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#RH_NOT_FOUND}
+     */
+    Map<String, Set<Long>> findBatchNameToWrWrkInstsMapForRa();
 }

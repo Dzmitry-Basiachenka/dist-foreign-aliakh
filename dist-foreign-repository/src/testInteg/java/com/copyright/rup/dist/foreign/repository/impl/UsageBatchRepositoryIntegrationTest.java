@@ -11,11 +11,13 @@ import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
 import com.google.common.collect.Sets;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,7 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Verifies {@link UsageBatchRepository}.
@@ -120,16 +123,16 @@ public class UsageBatchRepositoryIntegrationTest {
     @Test
     public void testDeleteUsageBatch() {
         String batchId = "56282dbc-2468-48d4-b926-93d3458a656a";
-        assertEquals(9, usageBatchRepository.findAll().size());
+        assertEquals(11, usageBatchRepository.findAll().size());
         usageRepository.deleteByBatchId(batchId);
         usageBatchRepository.deleteUsageBatch(batchId);
-        assertEquals(8, usageBatchRepository.findAll().size());
+        assertEquals(10, usageBatchRepository.findAll().size());
     }
 
     @Test
-    public void testFindUsageBatch() {
+    public void testFindAll() {
         List<UsageBatch> usageBatches = usageBatchRepository.findAll();
-        assertEquals(9, usageBatches.size());
+        assertEquals(11, usageBatches.size());
         assertEquals("13027b25-2269-3bec-48ea-5126431eedb0", usageBatches.get(0).getId());
         assertEquals(NTS_USAGE_BATCH_ID_3, usageBatches.get(1).getId());
         assertEquals(NTS_USAGE_BATCH_ID_2, usageBatches.get(2).getId());
@@ -139,6 +142,8 @@ public class UsageBatchRepositoryIntegrationTest {
         assertEquals("56282dbc-2468-48d4-b926-93d3458a656a", usageBatches.get(6).getId());
         assertEquals("a5b64c3a-55d2-462e-b169-362dca6a4dd6", usageBatches.get(7).getId());
         assertEquals("66282dbc-2468-48d4-b926-93d3458a656b", usageBatches.get(8).getId());
+        assertEquals("071ebf56-eb38-49fc-b26f-cc210a374d3a", usageBatches.get(9).getId());
+        assertEquals("033cc3dd-b121-41d5-91e6-cf4ddf71c141", usageBatches.get(10).getId());
     }
 
     @Test
@@ -217,6 +222,17 @@ public class UsageBatchRepositoryIntegrationTest {
         assertNotNull(batchesNamesToScenariosNames);
         assertEquals(1, batchesNamesToScenariosNames.size());
         assertEquals("Scenario name 4", batchesNamesToScenariosNames.get("NEW_26_OCT_2017"));
+    }
+
+    @Test
+    public void testFindBatchNameToWrWrkInstsMapForRa() {
+        Map<String, Set<Long>> actualResultMap = usageBatchRepository.findBatchNameToWrWrkInstsMapForRa();
+        assertTrue(MapUtils.isNotEmpty(actualResultMap));
+        assertEquals(2, actualResultMap.size());
+        Map<String, Set<Long>> expectedResultMap =
+            ImmutableMap.of("FAS2 Batch With RH Not Found usages", Sets.newHashSet(180382914L, 345870577L),
+                "FAS2 Batch With Eligible and RH Not Found usages", Collections.singleton(180382914L));
+        assertEquals(expectedResultMap, actualResultMap);
     }
 
     private UsageBatch buildUsageBatch() {

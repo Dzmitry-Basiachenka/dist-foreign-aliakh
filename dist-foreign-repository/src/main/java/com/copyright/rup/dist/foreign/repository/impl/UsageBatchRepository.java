@@ -100,6 +100,14 @@ public class UsageBatchRepository extends BaseRepository implements IUsageBatchR
         return handler.getBatchesNamesToScenariosNames();
     }
 
+    @Override
+    public Map<String, Set<Long>> findBatchNameToWrWrkInstsMapForRa() {
+        BatchNameToWrWrkInstsResultHandler handler = new BatchNameToWrWrkInstsResultHandler();
+        getTemplate().select("IUsageBatchMapper.findBatchNameToWrWrkInstsMapForRa", UsageStatusEnum.RH_NOT_FOUND,
+            handler);
+        return handler.getBatchNameToWrWrkInstsMap();
+    }
+
     /**
      * Finds usage batch by provided name.
      *

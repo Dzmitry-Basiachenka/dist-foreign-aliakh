@@ -438,4 +438,131 @@ databaseChangeLog {
 
         rollback ""
     }
+
+    changeSet(id: '2019-05-22-00', author: 'Darya Baraukova <dbaraukova@copyright.com>') {
+        comment('Inserting test data for testFindBatchNameToWrWrkInstMapByUsageStatus')
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: '071ebf56-eb38-49fc-b26f-cc210a374d3a')
+            column(name: 'name', value: 'FAS2 Batch With RH Not Found usages')
+            column(name: 'rro_account_number', value: '2000017000')
+            column(name: 'product_family', value: 'FAS2')
+            column(name: 'payment_date', value: '2017-01-11')
+            column(name: 'fiscal_year', value: '2017')
+            column(name: 'gross_amount', value: '35000')
+            column(name: 'updated_datetime', value: '2017-01-13 11:41:52.735531+03')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'c0ac91f9-9815-4c7b-aac9-3c446b1b9b78')
+            column(name: 'df_usage_batch_uid', value: '071ebf56-eb38-49fc-b26f-cc210a374d3a')
+            column(name: 'wr_wrk_inst', value: '180382914')
+            column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
+            column(name: 'status_ind', value: 'RH_NOT_FOUND')
+            column(name: 'product_family', value: 'FAS2')
+            column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle')
+            column(name: 'standard_number', value: '1008902112377654XX')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
+            column(name: 'number_of_copies', value: '2502232')
+            column(name: 'reported_value', value: '2500')
+            column(name: 'gross_amount', value: '35000.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'c49e77fb-b3b9-4b8b-884c-0216d46ed2dd')
+            column(name: 'df_usage_batch_uid', value: '071ebf56-eb38-49fc-b26f-cc210a374d3a')
+            column(name: 'wr_wrk_inst', value: '345870577')
+            column(name: 'work_title', value: '10 Years Plant Molecular Biology')
+            column(name: 'status_ind', value: 'RH_NOT_FOUND')
+            column(name: 'product_family', value: 'FAS2')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '1008902002377655XX')
+            column(name: 'publisher', value: 'McGraw-Hill')
+            column(name: 'publication_date', value: '2009-12-31')
+            column(name: 'market', value: 'Edu')
+            column(name: 'market_period_from', value: '2015')
+            column(name: 'market_period_to', value: '2019')
+            column(name: 'author', value: 'Mirjam H. Hüberli')
+            column(name: 'number_of_copies', value: '2630')
+            column(name: 'reported_value', value: '1280.00')
+            column(name: 'gross_amount', value: '2125.24')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: '033cc3dd-b121-41d5-91e6-cf4ddf71c141')
+            column(name: 'name', value: 'FAS2 Batch With Eligible and RH Not Found usages')
+            column(name: 'rro_account_number', value: '2000017000')
+            column(name: 'product_family', value: 'FAS2')
+            column(name: 'payment_date', value: '2017-01-11')
+            column(name: 'fiscal_year', value: '2017')
+            column(name: 'gross_amount', value: '35000')
+            column(name: 'updated_datetime', value: '2017-01-12 11:41:52.735531+03')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'e6bf0df7-5c84-4a04-b726-80853a39d050')
+            column(name: 'df_usage_batch_uid', value: '033cc3dd-b121-41d5-91e6-cf4ddf71c141')
+            column(name: 'wr_wrk_inst', value: '180382914')
+            column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
+            column(name: 'status_ind', value: 'RH_NOT_FOUND')
+            column(name: 'product_family', value: 'FAS2')
+            column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle')
+            column(name: 'standard_number', value: '1008902112377654XX')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
+            column(name: 'number_of_copies', value: '2502232')
+            column(name: 'reported_value', value: '2500')
+            column(name: 'gross_amount', value: '35000.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '2b7b7d14-606c-473f-a78b-2bd985d55a6a')
+            column(name: 'df_usage_batch_uid', value: '033cc3dd-b121-41d5-91e6-cf4ddf71c141')
+            column(name: 'wr_wrk_inst', value: '180382914')
+            column(name: 'work_title', value: '2001 IEEE Workshop on High Performance Switching and Routing, 29-31 May 2001, Dallas, Texas, USA')
+            column(name: 'status_ind', value: 'RH_NOT_FOUND')
+            column(name: 'product_family', value: 'FAS2')
+            column(name: 'article', value: 'Efficient Generation of H2 by Splitting Water with an Isothermal Redox Cycle')
+            column(name: 'standard_number', value: '1008902112377654XX')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2014')
+            column(name: 'market_period_to', value: '2016')
+            column(name: 'author', value: 'Íñigo López de Mendoza, marqués de Santillana')
+            column(name: 'number_of_copies', value: '200')
+            column(name: 'reported_value', value: '1000')
+            column(name: 'gross_amount', value: '1000.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'ea8f10f6-e1b0-4e22-8cc4-b8b8d5627def')
+            column(name: 'df_usage_batch_uid', value: '033cc3dd-b121-41d5-91e6-cf4ddf71c141')
+            column(name: 'wr_wrk_inst', value: '345870577')
+            column(name: 'work_title', value: '10 Years Plant Molecular Biology')
+            column(name: 'rh_account_number', value: '1000005413')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '1008902002377655XX')
+            column(name: 'publisher', value: 'McGraw-Hill')
+            column(name: 'publication_date', value: '2009-12-31')
+            column(name: 'market', value: 'Edu')
+            column(name: 'market_period_from', value: '2015')
+            column(name: 'market_period_to', value: '2019')
+            column(name: 'author', value: 'Mirjam H. Hüberli')
+            column(name: 'number_of_copies', value: '2630')
+            column(name: 'reported_value', value: '1280.00')
+            column(name: 'gross_amount', value: '2125.24')
+        }
+    }
 }
