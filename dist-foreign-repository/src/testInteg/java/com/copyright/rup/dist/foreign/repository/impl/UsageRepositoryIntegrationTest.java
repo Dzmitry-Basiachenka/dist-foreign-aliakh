@@ -713,6 +713,15 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
+    public void testGetTotalAmountByWrWrkInstAndBatchId() {
+        assertEquals(new BigDecimal("32874.80"),
+            usageRepository.getTotalAmountByWrWrkInstAndBatchId(243904752L, "a5b64c3a-55d2-462e-b169-362dca6a4dd6"));
+        assertEquals(ZERO_AMOUNT,
+            usageRepository.getTotalAmountByWrWrkInstAndBatchId(243904752L, "8b56c3d6-52c0-4f25-8d78-923afcfd31e6"));
+        assertEquals(ZERO_AMOUNT, usageRepository.getTotalAmountByWrWrkInstAndBatchId(243904752L, "invalid id"));
+    }
+
+    @Test
     public void testFindForAuditByStatus() {
         AuditFilter filter = new AuditFilter();
         filter.setStatuses(EnumSet.of(UsageStatusEnum.SENT_TO_LM));

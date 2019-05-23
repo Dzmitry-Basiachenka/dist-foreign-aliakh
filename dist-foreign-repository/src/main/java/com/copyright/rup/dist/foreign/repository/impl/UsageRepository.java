@@ -253,6 +253,17 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
+    public BigDecimal getTotalAmountByWrWrkInstAndBatchId(Long wrWrkInst, String batchId) {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
+        parameters.put("wrWrkInst", Objects.requireNonNull(wrWrkInst));
+        parameters.put(BATCH_ID_KEY, Objects.requireNonNull(batchId));
+        BigDecimal totalAmount =
+            ObjectUtils.defaultIfNull(selectOne("IUsageMapper.getTotalAmountByWrWrkInstAndBatchId", parameters),
+                BigDecimal.ZERO);
+        return totalAmount.setScale(2, RoundingMode.HALF_UP);
+    }
+
+    @Override
     public void deleteByBatchId(String batchId) {
         delete("IUsageMapper.deleteByBatchId", Objects.requireNonNull(batchId));
     }

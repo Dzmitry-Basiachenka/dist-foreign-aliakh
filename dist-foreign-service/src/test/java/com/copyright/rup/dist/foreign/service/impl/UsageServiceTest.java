@@ -88,6 +88,7 @@ public class UsageServiceTest {
     private static final String USAGE_ID_1 = "Usage id 1";
     private static final String USAGE_ID_2 = "Usage id 2";
     private static final String SCENARIO_ID = RupPersistUtils.generateUuid();
+    private static final String BATCH_ID = RupPersistUtils.generateUuid();
     private static final String USER_NAME = "User name";
     private static final Long RH_ACCOUNT_NUMBER = 1000001534L;
     private static final Long PAYEE_ACCOUNT_NUMBER = 12387456L;
@@ -205,7 +206,7 @@ public class UsageServiceTest {
     @Test
     public void testDeleteUsageBatchDetails() {
         UsageBatch usageBatch = new UsageBatch();
-        usageBatch.setId(RupPersistUtils.generateUuid());
+        usageBatch.setId(BATCH_ID);
         usageRepository.deleteByBatchId(usageBatch.getId());
         expectLastCall().once();
         usageAuditService.deleteActionsByBatchId(usageBatch.getId());
@@ -271,6 +272,15 @@ public class UsageServiceTest {
         expect(usageRepository.findForReconcile(scenario.getId())).andReturn(usages).once();
         replay(usageRepository);
         assertSame(usages, usageService.getUsagesForReconcile(scenario.getId()));
+        verify(usageRepository);
+    }
+
+    @Test
+    public void testGetTotalAmountByWrWrkInstAndBatchId() {
+        expect(usageRepository.getTotalAmountByWrWrkInstAndBatchId(123456789L, BATCH_ID))
+            .andReturn(BigDecimal.TEN).once();
+        replay(usageRepository);
+        assertEquals(BigDecimal.TEN, usageService.getTotalAmountByWrWrkInstAndBatchId(123456789L, BATCH_ID));
         verify(usageRepository);
     }
 

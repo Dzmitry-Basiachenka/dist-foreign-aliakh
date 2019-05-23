@@ -913,6 +913,13 @@
             </foreach>
     </select>
 
+    <select id="getTotalAmountByWrWrkInstAndBatchId" parameterType="map" resultType="BigDecimal">
+        select sum(gross_amount)
+        from ${schema}.df_usage
+        where wr_wrk_inst = #{wrWrkInst}
+            and df_usage_batch_uid = #{batchId}
+    </select>
+
     <select id="findRightsholderTotalsHolderCountByScenarioId" parameterType="map" resultType="int">
         select count(1)
         from (
