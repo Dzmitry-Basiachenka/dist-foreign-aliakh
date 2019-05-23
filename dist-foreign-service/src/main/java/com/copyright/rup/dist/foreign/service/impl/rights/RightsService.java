@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.service.impl.rights;
 
 import com.copyright.rup.common.logging.RupLogUtils;
-import com.copyright.rup.dist.common.domain.BaseEntity;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.domain.job.JobInfo;
 import com.copyright.rup.dist.common.domain.job.JobStatusEnum;
@@ -17,6 +16,7 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsService;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
+import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
@@ -53,7 +53,10 @@ public class RightsService implements IRightsService {
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired
+    private IUsageBatchService usageBatchService;
+    @Autowired
     private IUsageService usageService;
+    //TODO {dbaraukova} replace repository with service
     @Autowired
     private IUsageRepository usageRepository;
     @Autowired
@@ -71,27 +74,30 @@ public class RightsService implements IRightsService {
     @Override
     @Transactional
     public JobInfo sendForRightsAssignment() {
-        List<Usage> usages = usageRepository.findByStatuses(UsageStatusEnum.RH_NOT_FOUND);
-        LOGGER.info("Send for Rights Assignment. Started. UsagesCount={}", LogUtils.size(usages));
+        Set<String> usageIds = usageService.getIdsByStatus(UsageStatusEnum.RH_NOT_FOUND);
+        LOGGER.info("Send for Rights Assignment. Started. UsagesCount={}", LogUtils.size(usageIds));
         JobInfo jobInfo;
-        if (CollectionUtils.isNotEmpty(usages)) {
-            RightsAssignmentResult result = rmsIntegrationService.sendForRightsAssignment(
-                usages.stream().map(Usage::getWrWrkInst).collect(Collectors.toSet()));
+        if (CollectionUtils.isNotEmpty(usageIds)) {
+            Map<String, Set<Long>> batchNameToWrWrkInsts =
+                usageBatchService.getBatchNameToWrWrkInstsForRightsAssignment(usageIds);
+            //TODO {dbaraukova} adjust RA service and send Batch Name as job id
+            Set<Long> wrWrkInsts = batchNameToWrWrkInsts.values()
+                .stream()
+                .flatMap(Set::stream)
+                .collect(Collectors.toSet());
+            RightsAssignmentResult result = rmsIntegrationService.sendForRightsAssignment(wrWrkInsts);
             if (result.isSuccessful()) {
-                Set<String> usageIds = usages.stream()
-                    .map(BaseEntity::getId)
-                    .collect(Collectors.toSet());
                 usageRepository.updateStatus(usageIds, UsageStatusEnum.SENT_FOR_RA);
                 auditService.logAction(usageIds, UsageActionTypeEnum.SENT_FOR_RA,
                     String.format("Sent for RA: job id '%s'", result.getJobId()));
-                LOGGER.info("Send for Rights Assignment. Finished. UsagesCount={}, JobId={}", LogUtils.size(usages),
+                LOGGER.info("Send for Rights Assignment. Finished. UsagesCount={}, JobId={}", LogUtils.size(usageIds),
                     result.getJobId());
-                jobInfo = new JobInfo(JobStatusEnum.FINISHED, "UsagesCount=" + LogUtils.size(usages));
+                jobInfo = new JobInfo(JobStatusEnum.FINISHED, "UsagesCount=" + LogUtils.size(usageIds));
             } else {
                 LOGGER.warn("Send for Rights Assignment. Failed. Reason={}, UsagesIds={}", result.getErrorMessage(),
-                    usages.stream().map(Usage::getId).collect(Collectors.toList()));
+                    usageIds);
                 jobInfo = new JobInfo(JobStatusEnum.FAILED,
-                    "UsagesCount=" + LogUtils.size(usages) + ", Reason=" + result.getErrorMessage());
+                    "UsagesCount=" + LogUtils.size(usageIds) + ", Reason=" + result.getErrorMessage());
             }
         } else {
             LOGGER.info("Send for Rights Assignment. Skipped. Reason=There are no usages for sending");

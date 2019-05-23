@@ -547,10 +547,9 @@ databaseChangeLog {
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'ea8f10f6-e1b0-4e22-8cc4-b8b8d5627def')
             column(name: 'df_usage_batch_uid', value: '033cc3dd-b121-41d5-91e6-cf4ddf71c141')
-            column(name: 'wr_wrk_inst', value: '345870577')
             column(name: 'work_title', value: '10 Years Plant Molecular Biology')
             column(name: 'rh_account_number', value: '1000005413')
-            column(name: 'status_ind', value: 'ELIGIBLE')
+            column(name: 'status_ind', value: 'NEW')
             column(name: 'product_family', value: 'FAS')
             column(name: 'article', value: 'DIN EN 779:2012')
             column(name: 'standard_number', value: '1008902002377655XX')

@@ -225,8 +225,12 @@ public class UsageBatchRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindBatchNameToWrWrkInstsMapForRa() {
-        Map<String, Set<Long>> actualResultMap = usageBatchRepository.findBatchNameToWrWrkInstsMapForRa();
+    public void testFindBatchNameToWrWrkInstsByUsageIds() {
+        Set<String> usageIds = Sets.newHashSet("c0ac91f9-9815-4c7b-aac9-3c446b1b9b78",
+            "c49e77fb-b3b9-4b8b-884c-0216d46ed2dd", "e6bf0df7-5c84-4a04-b726-80853a39d050",
+            "2b7b7d14-606c-473f-a78b-2bd985d55a6a", "ea8f10f6-e1b0-4e22-8cc4-b8b8d5627def");
+        Map<String, Set<Long>> actualResultMap =
+            usageBatchRepository.findBatchNameToWrWrkInstsByUsageIds(usageIds);
         assertTrue(MapUtils.isNotEmpty(actualResultMap));
         assertEquals(2, actualResultMap.size());
         Map<String, Set<Long>> expectedResultMap =
