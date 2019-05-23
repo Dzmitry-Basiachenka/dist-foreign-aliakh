@@ -290,6 +290,17 @@ public class UsageBatchServiceTest {
         verify(usageBatchRepository);
     }
 
+    @Test
+    public void testGetBatchNameToWrWrkInstsForRightsAssignment() {
+        Set<String> usageIds = Collections.singleton(RupPersistUtils.generateUuid());
+        Map<String, Set<Long>> batchToWrWrkInstsMap = ImmutableMap.of("FAS Batch", Collections.singleton(12345678L));
+        expect(usageBatchRepository.findBatchNameToWrWrkInstsByUsageIds(usageIds))
+            .andReturn(batchToWrWrkInstsMap).once();
+        replay(usageBatchRepository);
+        assertEquals(batchToWrWrkInstsMap, usageBatchService.getBatchNameToWrWrkInstsForRightsAssignment(usageIds));
+        verify(usageBatchRepository);
+    }
+
     private Rightsholder buildRro() {
         Rightsholder rightsholder = buildRightsholder(RRO_ACCOUNT_NUMBER);
         rightsholder.setName(RRO_NAME);

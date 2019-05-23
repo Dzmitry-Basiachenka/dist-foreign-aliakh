@@ -210,12 +210,15 @@
             </foreach>
     </select>
 
-    <select id="findBatchNameToWrWrkInstsMapForRa" resultMap="batchNameToWrWrkInstPairResultMap">
+    <select id="findBatchNameToWrWrkInstsByUsageIds" resultMap="batchNameToWrWrkInstPairResultMap" parameterType="list">
         select distinct ub.name batch_name,
             u.wr_wrk_inst
         from ${schema}.df_usage u
         join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
-        where u.status_ind = #{status}
+        where u.df_usage_uid in
+            <foreach collection="collection" item="usageId" separator="," open="(" close=")">
+                #{usageId}
+            </foreach>
             and u.wr_wrk_inst is not null
     </select>
 </mapper>

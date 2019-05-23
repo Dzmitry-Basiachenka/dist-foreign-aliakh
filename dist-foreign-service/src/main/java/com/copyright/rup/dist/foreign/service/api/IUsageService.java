@@ -354,6 +354,14 @@ public interface IUsageService {
     List<Usage> getUsagesByIds(List<String> usageIds);
 
     /**
+     * Gets set of {@link Usage} ids by specified {@link UsageStatusEnum}.
+     *
+     * @param status {@link UsageStatusEnum} instance
+     * @return set of found {@link Usage} ids
+     */
+    Set<String> getIdsByStatus(UsageStatusEnum status);
+
+    /**
      * Gets list of {@link Usage} ids by specified {@link UsageStatusEnum} and product family.
      *
      * @param status        {@link UsageStatusEnum} instance

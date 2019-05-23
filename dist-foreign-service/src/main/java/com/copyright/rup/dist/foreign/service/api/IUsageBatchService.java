@@ -136,4 +136,12 @@ public interface IUsageBatchService {
      * @return map of batches names to scenario names
      */
     Map<String, String> getBatchesNamesToScenariosNames(Set<String> batchesIds);
+
+    /**
+     * Gets map of batch names to set of Wr Wrk Insts related to specified usages available for Rights Assignment.
+     *
+     * @param usageIds set of usage ids
+     * @return map where key - batch name, value - set of Wr Wrk Insts related to specified usages
+     */
+    Map<String, Set<Long>> getBatchNameToWrWrkInstsForRightsAssignment(Set<String> usageIds);
 }
