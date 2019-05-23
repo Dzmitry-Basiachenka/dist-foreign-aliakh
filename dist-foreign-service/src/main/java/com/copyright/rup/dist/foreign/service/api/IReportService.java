@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.service.api;
 
+import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
@@ -104,4 +105,14 @@ public interface IReportService {
      */
     void writePreServiceFeeFundBatchesCsvReport(List<UsageBatch> batches, BigDecimal totalGrossAmount,
                                                 OutputStream outputStream);
+
+    /**
+     * Writes Ownership Adjustment Report into a {@link OutputStream} in CSV format.
+     *
+     * @param scenarioId   the scenario identifier
+     * @param status       instance of {@link RightsholderDiscrepancyStatusEnum}
+     * @param outputStream instance of {@link OutputStream}
+     */
+    void writeOwnershipAdjustmentCsvReport(String scenarioId, RightsholderDiscrepancyStatusEnum status,
+                                           OutputStream outputStream);
 }

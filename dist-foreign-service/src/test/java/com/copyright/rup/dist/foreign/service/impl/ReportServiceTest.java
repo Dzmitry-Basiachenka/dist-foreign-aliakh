@@ -8,11 +8,13 @@ import static org.easymock.EasyMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.test.ReportTestUtils;
+import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
+import com.copyright.rup.dist.foreign.repository.api.IRightsholderDiscrepancyRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
@@ -50,6 +52,7 @@ public class ReportServiceTest {
 
     private IReportService reportService;
     private IUsageArchiveRepository usageArchiveRepository;
+    private IRightsholderDiscrepancyRepository rightsholderDiscrepancyRepository;
     private IUsageRepository usageRepository;
 
     @Before
@@ -57,8 +60,10 @@ public class ReportServiceTest {
         reportService = new ReportService();
         usageRepository = createMock(IUsageRepository.class);
         usageArchiveRepository = createMock(IUsageArchiveRepository.class);
-        Whitebox.setInternalState(reportService, "usageRepository", usageRepository);
-        Whitebox.setInternalState(reportService, "usageArchiveRepository", usageArchiveRepository);
+        rightsholderDiscrepancyRepository = createMock(IRightsholderDiscrepancyRepository.class);
+        Whitebox.setInternalState(reportService, usageRepository);
+        Whitebox.setInternalState(reportService, usageArchiveRepository);
+        Whitebox.setInternalState(reportService, rightsholderDiscrepancyRepository);
         Whitebox.setInternalState(reportService, "defaultEstimatedServiceFee", DEFAULT_ESTIMATED_SERVICE_FEE);
     }
 
@@ -226,6 +231,18 @@ public class ReportServiceTest {
         new ReportService().writePreServiceFeeFundBatchesCsvReport(
             Collections.singletonList(buildUsageBatch()), USAGE_BATCH_GROSS_AMOUNT, pos);
         reportTestUtils.assertCsvReport("batches_nts_withdrawn.csv", pis);
+    }
+
+    @Test
+    public void testWriteOwnershipAdjustmentCsvReport() {
+        String scenarioId = "12b3c369-3084-41ad-92b5-62197660d642";
+        RightsholderDiscrepancyStatusEnum status = RightsholderDiscrepancyStatusEnum.APPROVED;
+        PipedOutputStream outputStream = createMock(PipedOutputStream.class);
+        rightsholderDiscrepancyRepository.writeOwnershipAdjustmentCsvReport(scenarioId, status, outputStream);
+        expectLastCall().once();
+        replay(rightsholderDiscrepancyRepository);
+        reportService.writeOwnershipAdjustmentCsvReport(scenarioId, status, outputStream);
+        verify(rightsholderDiscrepancyRepository);
     }
 
     private Scenario buildScenario(ScenarioStatusEnum status) {
