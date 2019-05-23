@@ -1,3 +1,9 @@
+5.1.37
+-
+* B-50684 FDA: Send FAS Batch Name to RMS as RMS Job Name: implement service methods for getting batch and works information for usages available for RA
+* B-51553 FDA: Export from RH reconcile view: implement service method to generate report
+* B-51659 Tech Debt: FDA: make changes based on comments in CR-DIST-FOREIGN-108
+
 5.1.36
 -
 * B-50684 FDA: Send FAS Batch Name to RMS as RMS Job Name: implement repository method for getting map of batch names to set of Wr Wrk Insts available for RA
