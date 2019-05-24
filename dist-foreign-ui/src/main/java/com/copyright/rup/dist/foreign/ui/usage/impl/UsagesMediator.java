@@ -18,19 +18,21 @@ import com.vaadin.ui.MenuBar;
  */
 class UsagesMediator implements IUsagesMediator {
 
-    private Button loadUsageBatchButton;
-    private Button loadFundPoolButton;
     private Button loadResearchedUsagesButton;
     private Button deleteUsageButton;
     private Button addToScenarioButton;
     private Button sendForResearchButton;
     private Button assignClassificationButton;
     private MenuBar withdrawnFundMenuBar;
+    private MenuBar usageBatchMenuBar;
+    private MenuBar fundPoolMenuBar;
+    private MenuBar.MenuItem loadUsageBatchMenuItem;
+    private MenuBar.MenuItem loadFundPoolMenuItem;
 
     @Override
     public void applyPermissions() {
-        loadUsageBatchButton.setVisible(ForeignSecurityUtils.hasLoadUsagePermission());
-        loadFundPoolButton.setVisible(ForeignSecurityUtils.hasLoadFundPoolPermission());
+        loadUsageBatchMenuItem.setVisible(ForeignSecurityUtils.hasLoadUsagePermission());
+        loadFundPoolMenuItem.setVisible(ForeignSecurityUtils.hasLoadFundPoolPermission());
         loadResearchedUsagesButton.setVisible(ForeignSecurityUtils.hasLoadResearchedUsagePermission());
         deleteUsageButton.setVisible(ForeignSecurityUtils.hasDeleteUsagePermission());
         addToScenarioButton.setVisible(ForeignSecurityUtils.hasCreateEditScenarioPermission());
@@ -43,8 +45,10 @@ class UsagesMediator implements IUsagesMediator {
     public void onProductFamilyChanged(String productFamily) {
         boolean isFasFas2ProductFamily = FdaConstants.FAS_FAS2_PRODUCT_FAMILY_SET.contains(productFamily);
         boolean isNtsProductFamily = FdaConstants.NTS_PRODUCT_FAMILY.equals(productFamily);
-        loadUsageBatchButton.setVisible(ForeignSecurityUtils.hasLoadUsagePermission() && isFasFas2ProductFamily);
-        loadFundPoolButton.setVisible(ForeignSecurityUtils.hasLoadFundPoolPermission() && isNtsProductFamily);
+        usageBatchMenuBar.setVisible(isFasFas2ProductFamily);
+        fundPoolMenuBar.setVisible(isNtsProductFamily);
+        loadUsageBatchMenuItem.setVisible(ForeignSecurityUtils.hasLoadUsagePermission() && isFasFas2ProductFamily);
+        loadFundPoolMenuItem.setVisible(ForeignSecurityUtils.hasLoadFundPoolPermission() && isNtsProductFamily);
         loadResearchedUsagesButton.setVisible(ForeignSecurityUtils.hasLoadResearchedUsagePermission()
             && isFasFas2ProductFamily);
         sendForResearchButton.setVisible(ForeignSecurityUtils.hasSendForWorkResearchPermission()
@@ -54,14 +58,6 @@ class UsagesMediator implements IUsagesMediator {
         withdrawnFundMenuBar.setVisible(ForeignSecurityUtils.hasCreateDeleteFundPermission() && isNtsProductFamily);
         deleteUsageButton.setVisible(ForeignSecurityUtils.hasDeleteUsagePermission());
         addToScenarioButton.setVisible(ForeignSecurityUtils.hasCreateEditScenarioPermission());
-    }
-
-    void setLoadUsageBatchButton(Button loadUsageBatchButton) {
-        this.loadUsageBatchButton = loadUsageBatchButton;
-    }
-
-    void setLoadFundPoolButton(Button loadFundPoolButton) {
-        this.loadFundPoolButton = loadFundPoolButton;
     }
 
     void setLoadResearchedUsagesButton(Button loadResearchedUsagesButton) {
@@ -86,5 +82,21 @@ class UsagesMediator implements IUsagesMediator {
 
     void setWithdrawnFundMenuBar(MenuBar withdrawnFundMenuBar) {
         this.withdrawnFundMenuBar = withdrawnFundMenuBar;
+    }
+
+    void setLoadUsageBatchMenuItem(MenuBar.MenuItem loadUsageBatchMenuItem) {
+        this.loadUsageBatchMenuItem = loadUsageBatchMenuItem;
+    }
+
+    void setLoadFundPoolMenuItem(MenuBar.MenuItem loadFundPoolMenuItem) {
+        this.loadFundPoolMenuItem = loadFundPoolMenuItem;
+    }
+
+    void setUsageBatchMenuBar(MenuBar usageBatchMenuBar) {
+        this.usageBatchMenuBar = usageBatchMenuBar;
+    }
+
+    void setFundPoolMenuBar(MenuBar fundPoolMenuBar) {
+        this.fundPoolMenuBar = fundPoolMenuBar;
     }
 }

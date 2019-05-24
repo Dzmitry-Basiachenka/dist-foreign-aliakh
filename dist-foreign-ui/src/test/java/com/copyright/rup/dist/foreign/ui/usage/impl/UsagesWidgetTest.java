@@ -15,7 +15,6 @@ import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
-import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
@@ -52,6 +51,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Verifies {@link UsagesWidget}.
@@ -112,37 +112,45 @@ public class UsagesWidgetTest {
     }
 
     @Test
-    public void testLoadUsageBatchButtonClickListener() {
+    public void testSelectUsageBatchMenuItems() {
         mockStatic(Windows.class);
-        ClickEvent clickEvent = createMock(ClickEvent.class);
-        Button loadUsageBatchButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
-            .getComponent(0)).getComponent(0);
-        assertTrue(loadUsageBatchButton.isDisableOnClick());
         Windows.showModalWindow(anyObject(UsageBatchUploadWindow.class));
         expectLastCall().once();
-        replay(clickEvent, Windows.class, controller);
-        Collection<?> listeners = loadUsageBatchButton.getListeners(ClickEvent.class);
-        assertEquals(2, listeners.size());
-        ClickListener clickListener = (ClickListener) listeners.iterator().next();
-        clickListener.buttonClick(clickEvent);
-        verify(clickEvent, Windows.class, controller);
+        replay(controller, Windows.class);
+        List<MenuItem> menuItems = getMenuBarItems(0);
+        MenuItem menuItemLoad = menuItems.get(0);
+        menuItemLoad.getCommand().menuSelected(menuItemLoad);
+        verify(controller, Windows.class);
     }
 
     @Test
-    public void testLoadFundPoolButtonClickListener() {
+    public void testSelectFundPoolMenuItems() {
         mockStatic(Windows.class);
-        ClickEvent clickEvent = createMock(ClickEvent.class);
-        Button loadFundPoolButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
-            .getComponent(0)).getComponent(1);
-        assertTrue(loadFundPoolButton.isDisableOnClick());
-        Windows.showModalWindow(anyObject(FundPoolLoadWindow.class));
+        Windows.showModalWindow(anyObject(UsageBatchUploadWindow.class));
         expectLastCall().once();
-        replay(clickEvent, Windows.class, controller);
-        Collection<?> listeners = loadFundPoolButton.getListeners(ClickEvent.class);
-        assertEquals(2, listeners.size());
-        ClickListener clickListener = (ClickListener) listeners.iterator().next();
-        clickListener.buttonClick(clickEvent);
-        verify(clickEvent, Windows.class, controller);
+        replay(controller, Windows.class);
+        List<MenuItem> menuItems = getMenuBarItems(1);
+        MenuItem menuItemLoad = menuItems.get(0);
+        menuItemLoad.getCommand().menuSelected(menuItemLoad);
+        verify(controller, Windows.class);
+    }
+
+    @Test
+    public void testSelectAdditionalFundsMenuItems() {
+        mockStatic(Windows.class);
+        expect(controller.getUsageBatchesForPreServiceFeeFunds()).andReturn(Collections.emptyList()).once();
+        Windows.showModalWindow(anyObject(PreServiceFeeFundBatchesFilterWindow.class));
+        expectLastCall().once();
+        expect(controller.getPreServiceSeeFunds()).andReturn(Collections.emptyList()).once();
+        Windows.showModalWindow(anyObject(DeleteAdditionalFundsWindow.class));
+        expectLastCall().once();
+        replay(controller, Windows.class);
+        List<MenuItem> menuItems = getMenuBarItems(2);
+        MenuItem menuItemCreate = menuItems.get(0);
+        MenuItem menuItemDelete = menuItems.get(1);
+        menuItemCreate.getCommand().menuSelected(menuItemCreate);
+        menuItemDelete.getCommand().menuSelected(menuItemDelete);
+        verify(controller, Windows.class);
     }
 
     @Test
@@ -330,7 +338,7 @@ public class UsagesWidgetTest {
         expect(controller.getProcessingBatchesNames(Collections.singleton(batchId)))
             .andReturn(Collections.emptyList()).once();
         expect(controller.getBatchesNamesToScenariosNames(Collections.singleton(batchId)))
-            .andReturn(ImmutableMap.of("batch name","scenario name")).once();
+            .andReturn(ImmutableMap.of("batch name", "scenario name")).once();
         Windows.showNotificationWindow("The following batch(es) already associated with scenario(s):" +
             "<ul><li><i><b>batch name : scenario name</b></i></ul>");
         expectLastCall().once();
@@ -498,9 +506,9 @@ public class UsagesWidgetTest {
         expectNew(UsagesMediator.class).andReturn(mediator).once();
         mediator.setDeleteUsageButton(anyObject(Button.class));
         expectLastCall().once();
-        mediator.setLoadFundPoolButton(anyObject(Button.class));
+        mediator.setUsageBatchMenuBar(anyObject(MenuBar.class));
         expectLastCall().once();
-        mediator.setLoadUsageBatchButton(anyObject(Button.class));
+        mediator.setFundPoolMenuBar(anyObject(MenuBar.class));
         expectLastCall().once();
         mediator.setLoadResearchedUsagesButton(anyObject(Button.class));
         expectLastCall().once();
@@ -512,6 +520,10 @@ public class UsagesWidgetTest {
         expectLastCall().once();
         mediator.setWithdrawnFundMenuBar(anyObject(MenuBar.class));
         expectLastCall().once();
+        mediator.setLoadUsageBatchMenuItem(anyObject(MenuItem.class));
+        expectLastCall().once();
+        mediator.setLoadFundPoolMenuItem(anyObject(MenuItem.class));
+        expectLastCall().once();
         replay(UsagesMediator.class, mediator, controller);
         assertNotNull(usagesWidget.initMediator());
         verify(UsagesMediator.class, mediator, controller);
@@ -521,9 +533,9 @@ public class UsagesWidgetTest {
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(true), layout.getMargin());
         assertEquals(9, layout.getComponentCount());
-        assertEquals("Load Usage Batch", layout.getComponent(0).getCaption());
-        assertEquals("Load Fund Pool", layout.getComponent(1).getCaption());
-        verifyMenuBar(layout.getComponent(2));
+        verifyMenuBar(layout.getComponent(0), "Usage Batch", Arrays.asList("Load", "View"));
+        verifyMenuBar(layout.getComponent(1), "Fund Pool", Arrays.asList("Load", "View"));
+        verifyMenuBar(layout.getComponent(2), "Additional Funds", Arrays.asList("Create", "Delete"));
         assertEquals("Assign Classification", layout.getComponent(3).getCaption());
         assertEquals("Send for Research", layout.getComponent(4).getCaption());
         assertEquals("Load Researched Details", layout.getComponent(5).getCaption());
@@ -537,31 +549,24 @@ public class UsagesWidgetTest {
         assertEquals("Delete Usage Batch", layout.getComponent(8).getCaption());
     }
 
-    private void verifyMenuBar(Component component) {
+    private void verifyMenuBar(Component component, String menuBarName, List<String> menuItems) {
         assertTrue(component instanceof MenuBar);
         MenuBar menuBar = (MenuBar) component;
         List<MenuItem> parentItems = menuBar.getItems();
         assertEquals(1, parentItems.size());
         MenuItem item = parentItems.get(0);
-        assertEquals("Additional Funds", item.getText());
+        assertEquals(menuBarName, item.getText());
         List<MenuItem> childItems = item.getChildren();
-        assertEquals(2, childItems.size());
-        MenuItem menuItemCreate = childItems.get(0);
-        assertEquals("Create", menuItemCreate.getText());
-        assertEquals("Delete", childItems.get(1).getText());
-        verifyMenuItemCreate(menuItemCreate);
+        assertEquals(CollectionUtils.size(menuItems), CollectionUtils.size(childItems));
+        IntStream.range(0, menuItems.size())
+            .forEach(index -> assertEquals(menuItems.get(index), childItems.get(index).getText()));
     }
 
-    private void verifyMenuItemCreate(MenuItem menuItemCreate) {
-        mockStatic(Windows.class);
-        Windows.showModalWindow(anyObject(PreServiceFeeFundBatchesFilterWindow.class));
-        expectLastCall().once();
-        expect(controller.getUsageBatchesForPreServiceFeeFunds())
-            .andReturn(Collections.singletonList(new UsageBatch())).once();
-        replay(controller, Windows.class);
-        menuItemCreate.getCommand().menuSelected(menuItemCreate);
-        verify(controller, Windows.class);
-        reset(controller, Windows.class);
+    private List<MenuItem> getMenuBarItems(int menuBarIndex) {
+        HorizontalLayout buttonsBar =
+            (HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent()).getComponent(0);
+        MenuBar menuBar = (MenuBar) buttonsBar.getComponent(menuBarIndex);
+        return menuBar.getItems().get(0).getChildren();
     }
 
     private void verifyGrid(Grid grid) {
