@@ -1,3 +1,9 @@
+5.1.38
+-
+* B-50669 FDA: View NTS Fund Pools Information: add Usage Batch and Fund Pool menu bars, remove Load Usage Batch and Load Fund Pool buttons
+* B-51552 FDA: Update NTS Withdrawn rules related to Rights Assignment: implement integration test to cover upload usage functionality for different statuses
+* B-51552 FDA: Update NTS Withdrawn rules related to Rights Assignment: implement service logic to mark usage as NTS_WITHDRAWN if total gross amount by Wr Wrk Inst under minimum
+
 5.1.37
 -
 * B-50684 FDA: Send FAS Batch Name to RMS as RMS Job Name: implement service methods for getting batch and works information for usages available for RA
