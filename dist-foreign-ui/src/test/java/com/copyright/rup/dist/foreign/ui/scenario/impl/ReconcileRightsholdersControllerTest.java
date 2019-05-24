@@ -9,7 +9,9 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.same;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.repository.api.Pageable;
@@ -19,15 +21,18 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderDiscrepancyService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IReconcileRightsholdersController;
+import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
+import java.io.PipedOutputStream;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 /**
  * Verifies {@link ReconcileRightsholdersController}.
@@ -109,5 +114,22 @@ public class ReconcileRightsholdersControllerTest {
         replay(rightsholderDiscrepancyService);
         controller.cancelReconciliation();
         verify(rightsholderDiscrepancyService);
+    }
+
+    @Test
+    public void testgetOwnershipAdjustmentReportStreamSource() {
+        IStreamSource streamSource = controller.getOwnershipAdjustmentReportStreamSource();
+        ExecutorService executorService = createMock(ExecutorService.class);
+        Whitebox.setInternalState(streamSource, executorService);
+        Capture<Runnable> captureRunnable = new Capture<>();
+        executorService.execute(capture(captureRunnable));
+        expectLastCall().once();
+        replay(rightsholderDiscrepancyService, executorService);
+        assertNotNull(streamSource.getStream());
+        Runnable runnable = captureRunnable.getValue();
+        assertNotNull(runnable);
+        assertSame(streamSource, Whitebox.getInternalState(runnable, "arg$1"));
+        assertTrue(Whitebox.getInternalState(runnable, "arg$2") instanceof PipedOutputStream);
+        verify(rightsholderDiscrepancyService, executorService);
     }
 }
