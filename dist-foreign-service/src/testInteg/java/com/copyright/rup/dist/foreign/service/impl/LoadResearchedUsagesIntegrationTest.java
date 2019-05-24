@@ -78,9 +78,9 @@ public class LoadResearchedUsagesIntegrationTest {
             buildResearchedUsage("c219108e-f319-4636-b837-b71bccb29b76", 658824345L, "Medical Journal"),
             buildResearchedUsage("54580cd4-33b5-4079-bfc7-5c35bf9c5c9e", 854030732L, "Technical Journal")));
         assertUsage("c219108e-f319-4636-b837-b71bccb29b76", UsageStatusEnum.ELIGIBLE, 658824345L, 1000023401L,
-            "1008902112377654XX", "Medical Journal", "VALISSN");
+            "Medical Journal", "1008902112377654XX", "VALISSN");
         assertUsage("54580cd4-33b5-4079-bfc7-5c35bf9c5c9e", UsageStatusEnum.RH_NOT_FOUND, 854030732L, null,
-            "2998622115929154XX", "Technical Journal", "VALISSN");
+            "Technical Journal", "2998622115929154XX", "VALISSN");
         assertUsage("644cb9ba-396d-4844-ac83-8053412b7cea", UsageStatusEnum.WORK_RESEARCH, null, null, null, null,
             null);
         assertAudit("c219108e-f319-4636-b837-b71bccb29b76", "Usage has become eligible",

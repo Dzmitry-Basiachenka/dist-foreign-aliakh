@@ -1,0 +1,32 @@
+{
+  "response": {
+    "status": {
+      "code": "SUCCESS",
+      "message": "OK"
+    },
+    "content": [
+      "java.util.ArrayList",
+      [
+        {
+          "@class": "com.copyright.rup.party.domain.organization.Organization",
+          "version": 1,
+          "createDate": "2013-03-23T02:25:07-0400",
+          "updateDate": "2015-12-10T09:57:30-0500",
+          "createUser": "pmOrganizationLoad",
+          "updateUser": "pmOrganizationLoad",
+          "id": "18a34f8a-cdeb-4645-adfd-ac21686d480d",
+          "name": "2D Publications",
+          "extOrgKey": "1000024950",
+          "extOrgSource": "EBUSINESS",
+          "defaultCurrencyID": "USD",
+          "defaultOrgAccountID": "3bdac6e1-bd58-4945-9906-7b08bd30b302",
+          "defaultLanguageID": "en",
+          "notForProfit": "false",
+          "organizationTypeID": "RH",
+          "articleSearchAllowed": true,
+          "organizationSubType": "COMPANY"
+        }
+      ]
+    ]
+  }
+}
