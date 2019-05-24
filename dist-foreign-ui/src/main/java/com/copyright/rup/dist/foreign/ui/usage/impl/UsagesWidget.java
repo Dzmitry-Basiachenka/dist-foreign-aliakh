@@ -62,14 +62,16 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
     private DataProvider<UsageDto, Void> dataProvider;
     private Grid<UsageDto> usagesGrid;
     private UsagesMediator mediator;
-    private Button loadUsageBatchButton;
-    private Button loadFundPoolButton;
     private Button loadResearchedUsagesButton;
     private Button deleteButton;
     private Button sendForResearchButton;
     private Button addToScenarioButton;
     private Button assignClassificationButton;
     private MenuBar additionalFundsMenuBar;
+    private MenuBar usageBatchMenuBar;
+    private MenuBar fundPoolMenuBar;
+    private MenuBar.MenuItem loadUsageBatchMenuItem;
+    private MenuBar.MenuItem loadFundPoolMenuItem;
     private IUsagesFilterWidget usagesFilterWidget;
 
     @Override
@@ -98,14 +100,16 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
     @Override
     public UsagesMediator initMediator() {
         mediator = new UsagesMediator();
-        mediator.setLoadUsageBatchButton(loadUsageBatchButton);
-        mediator.setLoadFundPoolButton(loadFundPoolButton);
         mediator.setLoadResearchedUsagesButton(loadResearchedUsagesButton);
         mediator.setDeleteUsageButton(deleteButton);
         mediator.setAddToScenarioButton(addToScenarioButton);
         mediator.setSendForResearchButton(sendForResearchButton);
         mediator.setAssignClassificationButton(assignClassificationButton);
         mediator.setWithdrawnFundMenuBar(additionalFundsMenuBar);
+        mediator.setUsageBatchMenuBar(usageBatchMenuBar);
+        mediator.setFundPoolMenuBar(fundPoolMenuBar);
+        mediator.setLoadUsageBatchMenuItem(loadUsageBatchMenuItem);
+        mediator.setLoadFundPoolMenuItem(loadFundPoolMenuItem);
         return mediator;
     }
 
@@ -206,10 +210,6 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
     }
 
     private HorizontalLayout initButtonsLayout() {
-        loadUsageBatchButton = Buttons.createButton(ForeignUi.getMessage("button.load_usage_batch"));
-        loadUsageBatchButton.addClickListener(event -> Windows.showModalWindow(new UsageBatchUploadWindow(controller)));
-        loadFundPoolButton = Buttons.createButton(ForeignUi.getMessage("button.load_fund_pool"));
-        loadFundPoolButton.addClickListener(event -> Windows.showModalWindow(new FundPoolLoadWindow(controller)));
         loadResearchedUsagesButton = Buttons.createButton(ForeignUi.getMessage("button.load_researched_usages"));
         loadResearchedUsagesButton.addClickListener(event ->
             Windows.showModalWindow(new ResearchedUsagesUploadWindow(controller)));
@@ -239,19 +239,39 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         assignClassificationButton = Buttons.createButton(ForeignUi.getMessage("button.assign_classification"));
         assignClassificationButton.addClickListener(
             event -> new NtsUsageBatchSelectorWidget(controller).showFilterWindow());
-        initMenuBar();
-        VaadinUtils.setButtonsAutoDisabled(loadUsageBatchButton, loadFundPoolButton, assignClassificationButton,
-            loadResearchedUsagesButton, addToScenarioButton, deleteButton);
-        HorizontalLayout layout =
-            new HorizontalLayout(loadUsageBatchButton, loadFundPoolButton, additionalFundsMenuBar,
-                assignClassificationButton, sendForResearchButton, loadResearchedUsagesButton, addToScenarioButton,
-                exportButton, deleteButton);
+        initAdditionalFundsMenuBar();
+        initFundPoolMenuBar();
+        initUsageBatchMenuBar();
+        VaadinUtils.setButtonsAutoDisabled(assignClassificationButton, loadResearchedUsagesButton, addToScenarioButton,
+            deleteButton);
+        HorizontalLayout layout = new HorizontalLayout(usageBatchMenuBar, fundPoolMenuBar, additionalFundsMenuBar,
+            assignClassificationButton, sendForResearchButton, loadResearchedUsagesButton, addToScenarioButton,
+            exportButton, deleteButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "usages-buttons");
         return layout;
     }
 
-    private void initMenuBar() {
+    private void initUsageBatchMenuBar() {
+        usageBatchMenuBar = new MenuBar();
+        MenuItem menuItem =
+            usageBatchMenuBar.addItem(ForeignUi.getMessage("menu.caption.usage_batch"), null, null);
+        loadUsageBatchMenuItem = menuItem.addItem(ForeignUi.getMessage("menu.item.load"), null,
+            event -> Windows.showModalWindow(new UsageBatchUploadWindow(controller)));
+        menuItem.addItem(ForeignUi.getMessage("menu.item.view"), null, null);
+        VaadinUtils.addComponentStyle(usageBatchMenuBar, "usage-batch-menu-bar");
+    }
+
+    private void initFundPoolMenuBar() {
+        fundPoolMenuBar = new MenuBar();
+        MenuItem menuItem = fundPoolMenuBar.addItem(ForeignUi.getMessage("menu.caption.fund_pool"), null, null);
+        loadFundPoolMenuItem = menuItem.addItem(ForeignUi.getMessage("menu.item.load"), null,
+            event -> Windows.showModalWindow(new FundPoolLoadWindow(controller)));
+        menuItem.addItem(ForeignUi.getMessage("menu.item.view"), null, null);
+        VaadinUtils.addComponentStyle(fundPoolMenuBar, "fund-pool-menu-bar");
+    }
+
+    private void initAdditionalFundsMenuBar() {
         additionalFundsMenuBar = new MenuBar();
         MenuItem menuItem =
             additionalFundsMenuBar.addItem(ForeignUi.getMessage("menu.caption.additional_funds"), null, null);
