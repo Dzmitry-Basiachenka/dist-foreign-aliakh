@@ -24,7 +24,7 @@ public class PiIntegrationServiceMock extends PiIntegrationService {
 
     @Override
     public Work findWorkByIdnoAndTitle(String idno, String title) {
-        Work work = null;
+        Work work = new Work();
         if (Objects.equals("978-0-7695-2365-2", idno)) {
             work = new Work(876543210L, "Medical Journal", idno, VALISSN);
         } else if (Objects.equals("978-0-7695-2365-1", idno)) {
@@ -59,13 +59,13 @@ public class PiIntegrationServiceMock extends PiIntegrationService {
         } else if (Objects.equals(100011821L, wrWrkInst)) {
             work = new Work(100011821L, "True directions : living your sacred instructions", "12345XX-190048", VALISSN);
         } else if (Objects.equals(987654321L, wrWrkInst)) {
-            work = new Work(987654321L, "978-0-7695-2365-1", "12345XX-79069", VALISSN);
+            work = new Work(987654321L, "Nouveau guide en Suisse", "12345XX-79031", VALISSN);
         } else if (Objects.equals(876543210L, wrWrkInst)) {
-            work = new Work(876543210L, "978-0-7695-2365-2", "12345XX-79069", VALISSN);
+            work = new Work(876543210L, "Paris tonique", "12345XX-79069", VALISSN);
         } else if (Objects.equals(658824345L, wrWrkInst)) {
-            work = new Work(658824345L, "1008902112377654XX", "Medical Journal", VALISSN);
+            work = new Work(658824345L, "Medical Journal", "1008902112377654XX", VALISSN);
         } else if (Objects.equals(854030732L, wrWrkInst)) {
-            work = new Work(854030732L, "2998622115929154XX", "Technical Journal", VALISSN);
+            work = new Work(854030732L, "Technical Journal", "2998622115929154XX", VALISSN);
         }
         return work;
     }

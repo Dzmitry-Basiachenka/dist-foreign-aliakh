@@ -1,0 +1,9 @@
+{
+  "works": [
+    {
+      "status": ["GRANT", "DENY"],
+      "wr_wrk_inst": 100011725,
+      "period_end_date": "02/01/2018"
+    }
+  ]
+}
