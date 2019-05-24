@@ -211,6 +211,15 @@ public interface IUsageRepository {
     BigDecimal getTotalAmountByTitleAndBatchId(String title, String batchId);
 
     /**
+     * Calculates total gross amount by Wr Wrk Inst and batch identifier.
+     *
+     * @param wrWrkInst Wr Wrk Inst
+     * @param batchId   batch identifier
+     * @return total gross amount
+     */
+    BigDecimal getTotalAmountByWrWrkInstAndBatchId(Long wrWrkInst, String batchId);
+
+    /**
      * Deletes all {@link Usage}s for specified scenario.
      *
      * @param scenarioId scenario identifier

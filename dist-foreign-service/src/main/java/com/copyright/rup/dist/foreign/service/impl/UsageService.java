@@ -215,6 +215,11 @@ public class UsageService implements IUsageService {
     }
 
     @Override
+    public BigDecimal getTotalAmountByWrWrkInstAndBatchId(Long wrWrkInst, String batchId) {
+        return usageRepository.getTotalAmountByWrWrkInstAndBatchId(wrWrkInst, batchId);
+    }
+
+    @Override
     public List<Long> getInvalidRightsholdersByFilter(UsageFilter filter) {
         return usageRepository.findInvalidRightsholdersByFilter(filter);
     }

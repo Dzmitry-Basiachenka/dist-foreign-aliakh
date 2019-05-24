@@ -14,6 +14,7 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -119,6 +120,15 @@ public interface IUsageService {
      * @return usages count
      */
     int getUsagesCountForNtsBatch(UsageBatch usageBatch);
+
+    /**
+     * Calculates total gross amount by Wr Wrk Inst and batch identifier.
+     *
+     * @param wrWrkInst Wr Wrk Inst
+     * @param batchId   batch identifier
+     * @return total gross amount
+     */
+    BigDecimal getTotalAmountByWrWrkInstAndBatchId(Long wrWrkInst, String batchId);
 
     /**
      * Gets rightsholders account numbers that are not presented in database based on {@link UsageFilter}.
