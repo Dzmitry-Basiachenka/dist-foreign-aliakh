@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.ui.scenario.api.IReconcileRightsholdersCon
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
 import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.dataprovider.LoadingIndicatorDataProvider;
+import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
@@ -46,13 +47,13 @@ class RightsholderDiscrepanciesWindow extends Window {
      */
     RightsholderDiscrepanciesWindow(IReconcileRightsholdersController reconcileRightsholdersController,
                                     IScenariosController scenariosController) {
+        this.controller = reconcileRightsholdersController;
+        this.scenariosController = scenariosController;
+        this.addCloseListener(event -> controller.cancelReconciliation());
         setWidth(900, Unit.PIXELS);
         setHeight(530, Unit.PIXELS);
         setContent(initContent());
         setCaption(ForeignUi.getMessage("label.reconcile_rightsholders"));
-        this.controller = reconcileRightsholdersController;
-        this.scenariosController = scenariosController;
-        this.addCloseListener(event -> controller.cancelReconciliation());
         VaadinUtils.addComponentStyle(this, "rightsholder-discrepancies-window");
     }
 
@@ -70,6 +71,10 @@ class RightsholderDiscrepanciesWindow extends Window {
 
     private HorizontalLayout initButtons() {
         HorizontalLayout buttonsLayout = new HorizontalLayout();
+        Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
+        OnDemandFileDownloader fileDownloader = new OnDemandFileDownloader(
+            controller.getOwnershipAdjustmentReportStreamSource());
+        fileDownloader.extend(exportButton);
         Button approveButton = Buttons.createButton(ForeignUi.getMessage("button.approve"));
         approveButton.addClickListener(event -> {
             List<Long> prohibitedAccountNumbers = controller.getProhibitedAccountNumbers();
@@ -85,7 +90,7 @@ class RightsholderDiscrepanciesWindow extends Window {
                     ForeignUi.getMessage("window.prohibition_approval", prohibitedAccountNumbers));
             }
         });
-        buttonsLayout.addComponents(approveButton, Buttons.createCancelButton(this));
+        buttonsLayout.addComponents(exportButton, approveButton, Buttons.createCancelButton(this));
         buttonsLayout.setSpacing(true);
         VaadinUtils.addComponentStyle(buttonsLayout, "rightsholder-discrepancies-buttons-layout");
         return buttonsLayout;

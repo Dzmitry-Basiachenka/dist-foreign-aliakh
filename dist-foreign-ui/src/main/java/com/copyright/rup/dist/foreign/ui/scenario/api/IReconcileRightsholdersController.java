@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.scenario.api;
 
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 
 import com.vaadin.data.provider.QuerySortOrder;
 
@@ -59,4 +60,11 @@ public interface IReconcileRightsholdersController {
      * Cancels reconciliation of rightsholders.
      */
     void cancelReconciliation();
+
+    /**
+     * Gets instance of {@link IStreamSource} to export Ownership Adjustment Report.
+     *
+     * @return instance of {@link IStreamSource} for export
+     */
+    IStreamSource getOwnershipAdjustmentReportStreamSource();
 }
