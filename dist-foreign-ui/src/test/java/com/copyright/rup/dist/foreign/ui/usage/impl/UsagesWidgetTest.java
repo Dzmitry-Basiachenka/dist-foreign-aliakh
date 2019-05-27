@@ -15,6 +15,7 @@ import static org.powermock.api.easymock.PowerMock.reset;
 import static org.powermock.api.easymock.PowerMock.verify;
 
 import com.copyright.rup.common.persist.RupPersistUtils;
+import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
@@ -116,10 +117,18 @@ public class UsagesWidgetTest {
         mockStatic(Windows.class);
         Windows.showModalWindow(anyObject(UsageBatchUploadWindow.class));
         expectLastCall().once();
+        expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
+        expect(controller.getUsageBatches(FAS_PRODUCT_FAMILY))
+            .andReturn(Collections.singletonList(new UsageBatch())).once();
+        Windows.showModalWindow(anyObject(ViewUsageBatchWindow.class));
+        expectLastCall().once();
         replay(controller, Windows.class);
         List<MenuItem> menuItems = getMenuBarItems(0);
+        assertEquals(2, CollectionUtils.size(menuItems));
         MenuItem menuItemLoad = menuItems.get(0);
+        MenuItem menuItemView = menuItems.get(1);
         menuItemLoad.getCommand().menuSelected(menuItemLoad);
+        menuItemView.getCommand().menuSelected(menuItemView);
         verify(controller, Windows.class);
     }
 
@@ -128,10 +137,18 @@ public class UsagesWidgetTest {
         mockStatic(Windows.class);
         Windows.showModalWindow(anyObject(UsageBatchUploadWindow.class));
         expectLastCall().once();
+        expect(controller.getSelectedProductFamily()).andReturn(NTS_PRODUCT_FAMILY).once();
+        expect(controller.getUsageBatches(NTS_PRODUCT_FAMILY))
+            .andReturn(Collections.singletonList(new UsageBatch())).once();
+        Windows.showModalWindow(anyObject(ViewFundPoolWindow.class));
+        expectLastCall().once();
         replay(controller, Windows.class);
         List<MenuItem> menuItems = getMenuBarItems(1);
+        assertEquals(2, CollectionUtils.size(menuItems));
         MenuItem menuItemLoad = menuItems.get(0);
+        MenuItem menuItemView = menuItems.get(1);
         menuItemLoad.getCommand().menuSelected(menuItemLoad);
+        menuItemView.getCommand().menuSelected(menuItemView);
         verify(controller, Windows.class);
     }
 

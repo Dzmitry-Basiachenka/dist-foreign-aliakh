@@ -257,8 +257,9 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         MenuItem menuItem =
             usageBatchMenuBar.addItem(ForeignUi.getMessage("menu.caption.usage_batch"), null, null);
         loadUsageBatchMenuItem = menuItem.addItem(ForeignUi.getMessage("menu.item.load"), null,
-            event -> Windows.showModalWindow(new UsageBatchUploadWindow(controller)));
-        menuItem.addItem(ForeignUi.getMessage("menu.item.view"), null, null);
+            item -> Windows.showModalWindow(new UsageBatchUploadWindow(controller)));
+        menuItem.addItem(ForeignUi.getMessage("menu.item.view"), null,
+            item -> Windows.showModalWindow(new ViewUsageBatchWindow(controller)));
         VaadinUtils.addComponentStyle(usageBatchMenuBar, "usage-batch-menu-bar");
     }
 
@@ -266,8 +267,9 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         fundPoolMenuBar = new MenuBar();
         MenuItem menuItem = fundPoolMenuBar.addItem(ForeignUi.getMessage("menu.caption.fund_pool"), null, null);
         loadFundPoolMenuItem = menuItem.addItem(ForeignUi.getMessage("menu.item.load"), null,
-            event -> Windows.showModalWindow(new FundPoolLoadWindow(controller)));
-        menuItem.addItem(ForeignUi.getMessage("menu.item.view"), null, null);
+            item -> Windows.showModalWindow(new FundPoolLoadWindow(controller)));
+        menuItem.addItem(ForeignUi.getMessage("menu.item.view"), null,
+            item -> Windows.showModalWindow(new ViewFundPoolWindow(controller)));
         VaadinUtils.addComponentStyle(fundPoolMenuBar, "fund-pool-menu-bar");
     }
 
@@ -278,7 +280,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         menuItem.addItem(ForeignUi.getMessage("menu.item.create"), null,
             item -> Windows.showModalWindow(initPreServiceFeeFundBatchesFilterWindow()));
         menuItem.addItem(ForeignUi.getMessage("menu.item.delete"), null,
-            (item) -> Windows.showModalWindow(new DeleteAdditionalFundsWindow(controller)));
+            item -> Windows.showModalWindow(new DeleteAdditionalFundsWindow(controller)));
         VaadinUtils.addComponentStyle(additionalFundsMenuBar, "additional-funds-menu-bar");
     }
 

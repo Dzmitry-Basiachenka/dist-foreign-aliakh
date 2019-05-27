@@ -51,7 +51,7 @@ class DeleteUsageBatchWindow extends Window {
         setWidth(700, Unit.PIXELS);
         setHeight(450, Unit.PIXELS);
         searchWidget = new SearchWidget(new SearchController());
-        searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.batch.search_usage_batch"));
+        searchWidget.setPrompt(ForeignUi.getMessage("field.prompt.view_batch.search", "Batch Name"));
         initUsageBatchesGrid();
         Button closeButton = Buttons.createCloseButton(this);
         VerticalLayout layout = new VerticalLayout(searchWidget, grid, closeButton);
@@ -140,6 +140,6 @@ class DeleteUsageBatchWindow extends Window {
             htmlNamesList.append("<li>").append(name).append("</li>");
         }
         htmlNamesList.append("</ul>");
-        return ForeignUi.getMessage("message.error.delete_usage_batch", associatedField, htmlNamesList);
+        return ForeignUi.getMessage("message.error.delete_action", "Usage batch", associatedField, htmlNamesList);
     }
 }
