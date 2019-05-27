@@ -22,8 +22,9 @@
         <result property="scenarioName" column="scenario_name"/>
     </resultMap>
 
-    <resultMap id="batchNameToWrWrkInstPairResultMap" type="BatchNameWrWrkInstPair">
+    <resultMap id="batchNameToUsageIdWrWrkInstResultMap" type="BatchNameUsageIdWrWrkInstHolder">
         <result property="batchName" column="batch_name"/>
+        <result property="usageId" column="df_usage_uid"/>
         <result property="wrWrkInst" column="wr_wrk_inst"/>
     </resultMap>
 
@@ -210,15 +211,13 @@
             </foreach>
     </select>
 
-    <select id="findBatchNameToWrWrkInstsByUsageIds" resultMap="batchNameToWrWrkInstPairResultMap" parameterType="list">
-        select distinct ub.name batch_name,
+    <select id="findBatchNameUsageIdWrWrkInstTableByStatus" resultMap="batchNameToUsageIdWrWrkInstResultMap">
+        select ub.name batch_name,
+            u.df_usage_uid,
             u.wr_wrk_inst
         from ${schema}.df_usage u
         join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
-        where u.df_usage_uid in
-            <foreach collection="collection" item="usageId" separator="," open="(" close=")">
-                #{usageId}
-            </foreach>
+        where u.status_ind = #{status}
             and u.wr_wrk_inst is not null
     </select>
 </mapper>

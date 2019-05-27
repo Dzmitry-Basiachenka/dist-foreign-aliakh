@@ -88,8 +88,7 @@ public class RightsAssignmentServiceIntegrationTest {
             .collect(Collectors.toList())
             .forEach(usage -> {
                 List<UsageAuditItem> auditItems = usageAuditService.getUsageAudit(usage.getId());
-                assertEquals("Sent for RA: job id 'f439c011-04a7-4a25-bbc3-7acf87aa4bd6'",
-                    auditItems.get(0).getActionReason());
+                assertEquals("Sent for RA: job name 'SENT_FOR_RA_TEST'", auditItems.get(0).getActionReason());
             });
         mockServer.verify();
     }

@@ -518,11 +518,6 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public Set<String> getIdsByStatus(UsageStatusEnum status) {
-        return Sets.newHashSet(usageRepository.findIdsByStatus(status));
-    }
-
-    @Override
     public List<Usage> getUsagesByIds(List<String> usageIds) {
         return CollectionUtils.isNotEmpty(usageIds)
             ? usageRepository.findByIds(usageIds)

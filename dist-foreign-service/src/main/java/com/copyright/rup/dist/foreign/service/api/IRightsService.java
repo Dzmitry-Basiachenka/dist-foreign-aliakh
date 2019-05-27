@@ -42,7 +42,7 @@ public interface IRightsService {
      * status and sends Wr Wrk Insts to RMS for rights assignment.
      * Updates {@link com.copyright.rup.dist.foreign.domain.Usage}s status to
      * {@link com.copyright.rup.dist.foreign.domain.UsageStatusEnum#SENT_FOR_RA}
-     * and writes audit with job id information only after successful sending.
+     * and writes audit with job name information only after successful sending.
      *
      * @return {@link JobInfo} instance with information about job name, execution status and job result
      */

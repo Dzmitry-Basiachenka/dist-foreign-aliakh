@@ -718,15 +718,6 @@ public class UsageServiceTest {
     }
 
     @Test
-    public void testGetIdsByStatus() {
-        expect(usageRepository.findIdsByStatus(UsageStatusEnum.RH_NOT_FOUND))
-            .andReturn(Collections.singletonList(USAGE_ID_1)).once();
-        replay(usageRepository);
-        assertEquals(Collections.singleton(USAGE_ID_1), usageService.getIdsByStatus(UsageStatusEnum.RH_NOT_FOUND));
-        verify(usageRepository);
-    }
-
-    @Test
     public void testGetUsagesByIds() {
         List<String> usageIds = Collections.singletonList(USAGE_ID_1);
         List<Usage> usages = Collections.singletonList(buildUsage(USAGE_ID_1));

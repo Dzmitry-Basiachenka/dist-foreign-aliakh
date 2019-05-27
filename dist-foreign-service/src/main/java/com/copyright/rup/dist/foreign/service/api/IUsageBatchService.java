@@ -2,6 +2,8 @@ package com.copyright.rup.dist.foreign.service.api;
 
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
+import com.google.common.collect.Table;
 
 import java.util.Collection;
 import java.util.List;
@@ -138,10 +140,11 @@ public interface IUsageBatchService {
     Map<String, String> getBatchesNamesToScenariosNames(Set<String> batchesIds);
 
     /**
-     * Gets map of batch names to set of Wr Wrk Insts related to specified usages available for Rights Assignment.
+     * Gets table of batch names, usage ids and Wr Wrk Insts by specified {@link UsageStatusEnum}
+     * available for Rights Assignment.
      *
-     * @param usageIds set of usage ids
-     * @return map where key - batch name, value - set of Wr Wrk Insts related to specified usages
+     * @param status {@link UsageStatusEnum} instance
+     * @return table where key - batch name, row - map of usage ids to Wr Wrk Insts
      */
-    Map<String, Set<Long>> getBatchNameToWrWrkInstsForRightsAssignment(Set<String> usageIds);
+    Table<String, String, Long> getBatchNameToUsageIdsWrWrkInstsForRightsAssignment(UsageStatusEnum status);
 }

@@ -174,12 +174,6 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindIdsByStatus() {
-        assertEquals(Arrays.asList("463e2239-1a36-41cc-9a51-ee2a80eae0c7", "bd407b50-6101-4304-8316-6404fe32a800"),
-            usageRepository.findIdsByStatus(UsageStatusEnum.US_TAX_COUNTRY));
-    }
-
-    @Test
     public void testFindIdsByStatusAnsProductFamily() {
         List<String> actualUsageIds =
             usageRepository.findIdsByStatusAndProductFamily(UsageStatusEnum.US_TAX_COUNTRY, NTS_PRODUCT_FAMILY);

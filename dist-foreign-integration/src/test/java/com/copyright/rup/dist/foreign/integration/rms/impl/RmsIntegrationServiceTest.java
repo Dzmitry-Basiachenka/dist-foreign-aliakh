@@ -45,10 +45,10 @@ public class RmsIntegrationServiceTest {
         Set<Long> wrWrkInsts = Sets.newHashSet(WR_WRK_INST_1);
         RightsAssignmentResult result = new RightsAssignmentResult(RightsAssignmentResultStatusEnum.SUCCESS);
         result.setJobId("d4127dbb-9ab8-46a3-b952-b9517deff116");
-        expect(rmsRightsAssignmentService.sendForRightsAssignment(wrWrkInsts))
+        expect(rmsRightsAssignmentService.sendForRightsAssignment("FAS Batch 02/04/2018", wrWrkInsts))
             .andReturn(result).once();
         replay(rmsRightsAssignmentService);
-        assertSame(result, rmsIntegrationService.sendForRightsAssignment(wrWrkInsts));
+        assertSame(result, rmsIntegrationService.sendForRightsAssignment("FAS Batch 02/04/2018", wrWrkInsts));
         verify(rmsRightsAssignmentService);
     }
 }

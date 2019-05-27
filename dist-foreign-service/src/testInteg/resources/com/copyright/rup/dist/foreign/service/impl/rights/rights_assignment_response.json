@@ -7,7 +7,7 @@
     "content": {
       "@class": "com.copyright.rup.rms.rights.domain.JobInfo",
       "jobId": "f439c011-04a7-4a25-bbc3-7acf87aa4bd6",
-      "name": "Job from REST on 01/24/2018 08:16 AM",
+      "name": "SENT_FOR_RA_TEST",
       "totalWorks": 2,
       "status": "PREPARING"
     }

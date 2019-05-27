@@ -24,6 +24,7 @@ import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEn
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
+import com.google.common.collect.Table;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,10 +34,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -74,30 +77,38 @@ public class RightsService implements IRightsService {
     @Override
     @Transactional
     public JobInfo sendForRightsAssignment() {
-        Set<String> usageIds = usageService.getIdsByStatus(UsageStatusEnum.RH_NOT_FOUND);
-        LOGGER.info("Send for Rights Assignment. Started. UsagesCount={}", LogUtils.size(usageIds));
+        Table<String, String, Long> batchNameToUsageIdWrWrkInstMap =
+            usageBatchService.getBatchNameToUsageIdsWrWrkInstsForRightsAssignment(UsageStatusEnum.RH_NOT_FOUND);
+        int usagesCount = batchNameToUsageIdWrWrkInstMap.columnKeySet().size();
+        LOGGER.info("Send for Rights Assignment. Started. UsagesCount={}", usagesCount);
         JobInfo jobInfo;
-        if (CollectionUtils.isNotEmpty(usageIds)) {
-            Map<String, Set<Long>> batchNameToWrWrkInsts =
-                usageBatchService.getBatchNameToWrWrkInstsForRightsAssignment(usageIds);
-            //TODO {dbaraukova} adjust RA service and send Batch Name as job id
-            Set<Long> wrWrkInsts = batchNameToWrWrkInsts.values()
-                .stream()
-                .flatMap(Set::stream)
-                .collect(Collectors.toSet());
-            RightsAssignmentResult result = rmsIntegrationService.sendForRightsAssignment(wrWrkInsts);
-            if (result.isSuccessful()) {
-                usageRepository.updateStatus(usageIds, UsageStatusEnum.SENT_FOR_RA);
-                auditService.logAction(usageIds, UsageActionTypeEnum.SENT_FOR_RA,
-                    String.format("Sent for RA: job id '%s'", result.getJobId()));
-                LOGGER.info("Send for Rights Assignment. Finished. UsagesCount={}, JobId={}", LogUtils.size(usageIds),
-                    result.getJobId());
-                jobInfo = new JobInfo(JobStatusEnum.FINISHED, "UsagesCount=" + LogUtils.size(usageIds));
+        AtomicInteger updatedUsagesCount = new AtomicInteger(0);
+        Set<String> failedUsageIds = new HashSet<>();
+        if (!batchNameToUsageIdWrWrkInstMap.isEmpty()) {
+            batchNameToUsageIdWrWrkInstMap.rowKeySet().forEach(batchName -> {
+                Map<String, Long> usageWrWrkInstMap = batchNameToUsageIdWrWrkInstMap.row(batchName);
+                RightsAssignmentResult result =
+                    rmsIntegrationService.sendForRightsAssignment(batchName,
+                        Sets.newHashSet(usageWrWrkInstMap.values()));
+                Set<String> usageIds = usageWrWrkInstMap.keySet();
+                if (result.isSuccessful()) {
+                    usageRepository.updateStatus(usageIds, UsageStatusEnum.SENT_FOR_RA);
+                    updatedUsagesCount.addAndGet(usageIds.size());
+                    auditService.logAction(usageIds, UsageActionTypeEnum.SENT_FOR_RA,
+                        String.format("Sent for RA: job name '%s'", result.getJobName()));
+                    LOGGER.info("Send for Rights Assignment. Finished. UsagesCount={}, JobName={}",
+                        LogUtils.size(usageIds), result.getJobName());
+                } else {
+                    failedUsageIds.addAll(usageIds);
+                    LOGGER.warn("Send for Rights Assignment. Failed. Reason={}, UsagesIds={}", result.getErrorMessage(),
+                        usageIds);
+                }
+            });
+            if (CollectionUtils.isEmpty(failedUsageIds)) {
+                jobInfo = new JobInfo(JobStatusEnum.FINISHED, "UsagesCount=" + usagesCount);
             } else {
-                LOGGER.warn("Send for Rights Assignment. Failed. Reason={}, UsagesIds={}", result.getErrorMessage(),
-                    usageIds);
-                jobInfo = new JobInfo(JobStatusEnum.FAILED,
-                    "UsagesCount=" + LogUtils.size(usageIds) + ", Reason=" + result.getErrorMessage());
+                jobInfo = new JobInfo(JobStatusEnum.FINISHED, "UsagesCount=" + usagesCount + ", NotReportedUsage=" +
+                    failedUsageIds.size());
             }
         } else {
             LOGGER.info("Send for Rights Assignment. Skipped. Reason=There are no usages for sending");

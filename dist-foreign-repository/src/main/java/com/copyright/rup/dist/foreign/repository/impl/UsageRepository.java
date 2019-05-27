@@ -100,13 +100,6 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public List<String> findIdsByStatus(UsageStatusEnum status) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(1);
-        parameters.put(STATUS_KEY, Objects.requireNonNull(status));
-        return selectList("IUsageMapper.findIdsByStatus", parameters);
-    }
-
-    @Override
     public List<String> findIdsByStatusAndProductFamily(UsageStatusEnum status, String productFamily) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(STATUS_KEY, Objects.requireNonNull(status));
