@@ -25,7 +25,7 @@ public class RmsIntegrationService implements IRmsIntegrationService {
     private IRmsRightsAssignmentService rmsRightsAssignmentService;
 
     @Override
-    public RightsAssignmentResult sendForRightsAssignment(Set<Long> wrWrkInsts) {
-        return rmsRightsAssignmentService.sendForRightsAssignment(wrWrkInsts);
+    public RightsAssignmentResult sendForRightsAssignment(String jobName, Set<Long> wrWrkInsts) {
+        return rmsRightsAssignmentService.sendForRightsAssignment(jobName, wrWrkInsts);
     }
 }

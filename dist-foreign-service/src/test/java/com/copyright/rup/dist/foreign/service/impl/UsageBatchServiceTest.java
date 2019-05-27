@@ -30,10 +30,12 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
 import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEnum;
 
+import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
+import com.google.common.collect.Table;
 import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
@@ -291,13 +293,14 @@ public class UsageBatchServiceTest {
     }
 
     @Test
-    public void testGetBatchNameToWrWrkInstsForRightsAssignment() {
-        Set<String> usageIds = Collections.singleton(RupPersistUtils.generateUuid());
-        Map<String, Set<Long>> batchToWrWrkInstsMap = ImmutableMap.of("FAS Batch", Collections.singleton(12345678L));
-        expect(usageBatchRepository.findBatchNameToWrWrkInstsByUsageIds(usageIds))
-            .andReturn(batchToWrWrkInstsMap).once();
+    public void testGetBatchNameToUsageIdsWrWrkInstsForRightsAssignment() {
+        Table<String, String, Long> actualTable = HashBasedTable.create();
+        actualTable.put("FAS Batch", RupPersistUtils.generateUuid(), 123456874L);
+        expect(usageBatchRepository.findBatchNameUsageIdWrWrkInstTableByStatus(UsageStatusEnum.RH_NOT_FOUND))
+            .andReturn(actualTable).once();
         replay(usageBatchRepository);
-        assertEquals(batchToWrWrkInstsMap, usageBatchService.getBatchNameToWrWrkInstsForRightsAssignment(usageIds));
+        assertEquals(actualTable,
+            usageBatchService.getBatchNameToUsageIdsWrWrkInstsForRightsAssignment(UsageStatusEnum.RH_NOT_FOUND));
         verify(usageBatchRepository);
     }
 

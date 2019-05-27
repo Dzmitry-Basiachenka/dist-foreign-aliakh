@@ -9,15 +9,16 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.FundPool;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
+import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 
-import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.ImmutableSet;
 
 import com.google.common.collect.Sets;
 
+import com.google.common.collect.Table;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.MapUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,6 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Verifies {@link UsageBatchRepository}.
@@ -226,17 +226,20 @@ public class UsageBatchRepositoryIntegrationTest {
 
     @Test
     public void testFindBatchNameToWrWrkInstsByUsageIds() {
-        Set<String> usageIds = Sets.newHashSet("c0ac91f9-9815-4c7b-aac9-3c446b1b9b78",
-            "c49e77fb-b3b9-4b8b-884c-0216d46ed2dd", "e6bf0df7-5c84-4a04-b726-80853a39d050",
-            "2b7b7d14-606c-473f-a78b-2bd985d55a6a", "ea8f10f6-e1b0-4e22-8cc4-b8b8d5627def");
-        Map<String, Set<Long>> actualResultMap =
-            usageBatchRepository.findBatchNameToWrWrkInstsByUsageIds(usageIds);
-        assertTrue(MapUtils.isNotEmpty(actualResultMap));
-        assertEquals(2, actualResultMap.size());
-        Map<String, Set<Long>> expectedResultMap =
-            ImmutableMap.of("FAS2 Batch With RH Not Found usages", Sets.newHashSet(180382914L, 345870577L),
-                "FAS2 Batch With Eligible and RH Not Found usages", Collections.singleton(180382914L));
-        assertEquals(expectedResultMap, actualResultMap);
+        Table<String, String, Long> actualResult =
+            usageBatchRepository.findBatchNameUsageIdWrWrkInstTableByStatus(UsageStatusEnum.RH_NOT_FOUND);
+        assertNotNull(actualResult);
+        assertEquals(4, actualResult.size());
+        Table<String, String, Long> expectedResult = HashBasedTable.create();
+        expectedResult.put("FAS2 Batch With RH Not Found usages", "c0ac91f9-9815-4c7b-aac9-3c446b1b9b78",
+            180382914L);
+        expectedResult.row("FAS2 Batch With RH Not Found usages").put("c49e77fb-b3b9-4b8b-884c-0216d46ed2dd",
+            345870577L);
+        expectedResult.put("FAS2 Batch With Eligible and RH Not Found usages", "e6bf0df7-5c84-4a04-b726-80853a39d050",
+            180382914L);
+        expectedResult.row("FAS2 Batch With Eligible and RH Not Found usages")
+            .put("2b7b7d14-606c-473f-a78b-2bd985d55a6a", 180382914L);
+        assertEquals(expectedResult, actualResult);
     }
 
     private UsageBatch buildUsageBatch() {

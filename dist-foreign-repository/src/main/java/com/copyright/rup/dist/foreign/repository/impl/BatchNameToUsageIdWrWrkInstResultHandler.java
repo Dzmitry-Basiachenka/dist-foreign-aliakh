@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.repository.impl;
 
-import com.google.common.collect.Sets;
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -8,10 +9,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.ibatis.session.ResultContext;
 import org.apache.ibatis.session.ResultHandler;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Implementation of {@link ResultHandler} for getting map of batches names to Wr Wrk Insts related to this batch.
@@ -22,35 +20,35 @@ import java.util.Set;
  *
  * @author Darya Baraukova
  */
-class BatchNameToWrWrkInstsResultHandler implements ResultHandler {
+class BatchNameToUsageIdWrWrkInstResultHandler implements ResultHandler {
 
-    private final Map<String, Set<Long>> batchNameToWrWrkInstsMap = new HashMap<>();
+    private final Table<String, String, Long> batchNameToWrWrkInstsMap = HashBasedTable.create();
 
     @Override
     public void handleResult(ResultContext context) {
-        BatchNameWrWrkInstPair holder = (BatchNameWrWrkInstPair) context.getResultObject();
-        if (batchNameToWrWrkInstsMap.containsKey(holder.getBatchName())) {
-            Set<Long> wrWrkInsts = Sets.newHashSet(batchNameToWrWrkInstsMap.get(holder.getBatchName()));
-            wrWrkInsts.add(holder.getWrWrkInst());
-            batchNameToWrWrkInstsMap.put(holder.getBatchName(), wrWrkInsts);
+        BatchNameUsageIdWrWrkInstHolder holder = (BatchNameUsageIdWrWrkInstHolder) context.getResultObject();
+        if (batchNameToWrWrkInstsMap.containsRow(holder.getBatchName())) {
+            Map<String, Long> usageIdWrWrkInstMap = batchNameToWrWrkInstsMap.row(holder.getBatchName());
+            usageIdWrWrkInstMap.put(holder.getUsageId(), holder.getWrWrkInst());
         } else {
-            batchNameToWrWrkInstsMap.put(holder.getBatchName(), Collections.singleton(holder.getWrWrkInst()));
+            batchNameToWrWrkInstsMap.put(holder.getBatchName(), holder.getUsageId(), holder.getWrWrkInst());
         }
     }
 
     /**
      * @return map where key is batch name, value is set of Wr Wrk Insts related to this batch.
      */
-    Map<String, Set<Long>> getBatchNameToWrWrkInstsMap() {
+    Table<String, String, Long> getBatchNameToWrWrkInstsMap() {
         return batchNameToWrWrkInstsMap;
     }
 
     /**
-     * Class to represent pair of batch name to Wr Wrk Inst.
+     * Class to represent holder of batch name, usage id and Wr Wrk Inst.
      */
-    public static class BatchNameWrWrkInstPair {
+    public static class BatchNameUsageIdWrWrkInstHolder {
 
         private String batchName;
+        private String usageId;
         private Long wrWrkInst;
 
         public String getBatchName() {
@@ -59,6 +57,14 @@ class BatchNameToWrWrkInstsResultHandler implements ResultHandler {
 
         public void setBatchName(String batchName) {
             this.batchName = batchName;
+        }
+
+        public String getUsageId() {
+            return usageId;
+        }
+
+        public void setUsageId(String usageId) {
+            this.usageId = usageId;
         }
 
         public Long getWrWrkInst() {
@@ -77,9 +83,10 @@ class BatchNameToWrWrkInstsResultHandler implements ResultHandler {
             if (null == obj || this.getClass() != obj.getClass()) {
                 return false;
             }
-            BatchNameWrWrkInstPair that = (BatchNameWrWrkInstPair) obj;
+            BatchNameUsageIdWrWrkInstHolder that = (BatchNameUsageIdWrWrkInstHolder) obj;
             return new EqualsBuilder()
                 .append(this.batchName, that.batchName)
+                .append(this.usageId, that.usageId)
                 .append(this.wrWrkInst, that.wrWrkInst)
                 .isEquals();
         }
@@ -88,6 +95,7 @@ class BatchNameToWrWrkInstsResultHandler implements ResultHandler {
         public int hashCode() {
             return new HashCodeBuilder()
                 .append(batchName)
+                .append(usageId)
                 .append(wrWrkInst)
                 .toHashCode();
         }
@@ -96,6 +104,7 @@ class BatchNameToWrWrkInstsResultHandler implements ResultHandler {
         public String toString() {
             return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("batchName", batchName)
+                .append("usageId", usageId)
                 .append("wrWrkInst", wrWrkInst)
                 .toString();
         }

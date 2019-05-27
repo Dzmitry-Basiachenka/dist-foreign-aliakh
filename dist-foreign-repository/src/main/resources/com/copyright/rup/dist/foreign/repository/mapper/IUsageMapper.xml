@@ -511,20 +511,11 @@
         <include refid="ifPageable"/>
     </select>
 
-    <sql id="findIdsByStatusSql">
+    <select id="findIdsByStatusAndProductFamily" resultType="string" parameterType="map">
         select df_usage_uid
         from ${schema}.df_usage
         where status_ind = #{status}
-    </sql>
-
-    <select id="findIdsByStatusAndProductFamily" resultType="string" parameterType="map">
-        <include refid="findIdsByStatusSql"/>
             and product_family = #{productFamily}
-        order by df_usage_uid
-    </select>
-
-    <select id="findIdsByStatus" resultType="string">
-        <include refid="findIdsByStatusSql"/>
         order by df_usage_uid
     </select>
 

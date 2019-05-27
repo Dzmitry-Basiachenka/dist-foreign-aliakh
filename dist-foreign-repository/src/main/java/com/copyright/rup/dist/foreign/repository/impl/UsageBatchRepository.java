@@ -9,9 +9,9 @@ import com.copyright.rup.dist.foreign.domain.UsageBatch;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 
+import com.google.common.collect.Table;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
@@ -34,10 +34,6 @@ import java.util.Set;
 @Repository
 public class UsageBatchRepository extends BaseRepository implements IUsageBatchRepository {
 
-    /**
-     * It's a max value for count of variables in statement.
-     */
-    private static final int MAX_VARIABLES_COUNT = 32000;
     private static final EnumSet<UsageStatusEnum> PROCESSED_NTS_BATCH_USAGE_STATUSES = EnumSet.of(
         UsageStatusEnum.ELIGIBLE, UsageStatusEnum.UNCLASSIFIED, UsageStatusEnum.LOCKED, UsageStatusEnum.NTS_EXCLUDED);
 
@@ -106,12 +102,10 @@ public class UsageBatchRepository extends BaseRepository implements IUsageBatchR
     }
 
     @Override
-    public Map<String, Set<Long>> findBatchNameToWrWrkInstsByUsageIds(Set<String> usageIds) {
-        BatchNameToWrWrkInstsResultHandler handler = new BatchNameToWrWrkInstsResultHandler();
-        Iterables.partition(Objects.requireNonNull(usageIds), MAX_VARIABLES_COUNT)
-            .forEach(partition ->
-                getTemplate().select("IUsageBatchMapper.findBatchNameToWrWrkInstsByUsageIds",
-                    Objects.requireNonNull(usageIds), handler));
+    public Table<String, String, Long> findBatchNameUsageIdWrWrkInstTableByStatus(UsageStatusEnum status) {
+        BatchNameToUsageIdWrWrkInstResultHandler handler = new BatchNameToUsageIdWrWrkInstResultHandler();
+        getTemplate().select("IUsageBatchMapper.findBatchNameUsageIdWrWrkInstTableByStatus",
+            Objects.requireNonNull(status), handler);
         return handler.getBatchNameToWrWrkInstsMap();
     }
 

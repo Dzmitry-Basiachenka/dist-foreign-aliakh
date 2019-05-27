@@ -16,10 +16,11 @@ import java.util.Set;
 public interface IRmsIntegrationService {
 
     /**
-     * Sends set of Wr Wrk Insts to RMS for rights assignment.
+     * Sends set of Wr Wrk Insts with provided job name to RMS for rights assignment.
      *
+     * @param jobName    RA job name
      * @param wrWrkInsts set of Wr Wrk Insts
      * @return {@link RightsAssignmentResult} instance
      */
-    RightsAssignmentResult sendForRightsAssignment(Set<Long> wrWrkInsts);
+    RightsAssignmentResult sendForRightsAssignment(String jobName, Set<Long> wrWrkInsts);
 }

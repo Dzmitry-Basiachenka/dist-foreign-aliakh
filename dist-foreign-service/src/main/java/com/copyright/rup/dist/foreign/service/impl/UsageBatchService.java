@@ -21,7 +21,7 @@ import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEn
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 
-import org.apache.commons.collections4.CollectionUtils;
+import com.google.common.collect.Table;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -30,7 +30,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -217,10 +216,8 @@ public class UsageBatchService implements IUsageBatchService {
     }
 
     @Override
-    public Map<String, Set<Long>> getBatchNameToWrWrkInstsForRightsAssignment(Set<String> usageIds) {
-        return CollectionUtils.isNotEmpty(usageIds)
-            ? usageBatchRepository.findBatchNameToWrWrkInstsByUsageIds(usageIds)
-            : Collections.emptyMap();
+    public Table<String, String, Long> getBatchNameToUsageIdsWrWrkInstsForRightsAssignment(UsageStatusEnum status) {
+        return usageBatchRepository.findBatchNameUsageIdWrWrkInstTableByStatus(status);
     }
 
     /**
