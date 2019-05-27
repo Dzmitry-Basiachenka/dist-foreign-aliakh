@@ -49,7 +49,6 @@ class RightsholderDiscrepanciesWindow extends Window {
                                     IScenariosController scenariosController) {
         this.controller = reconcileRightsholdersController;
         this.scenariosController = scenariosController;
-        this.addCloseListener(event -> controller.cancelReconciliation());
         setWidth(900, Unit.PIXELS);
         setHeight(530, Unit.PIXELS);
         setContent(initContent());

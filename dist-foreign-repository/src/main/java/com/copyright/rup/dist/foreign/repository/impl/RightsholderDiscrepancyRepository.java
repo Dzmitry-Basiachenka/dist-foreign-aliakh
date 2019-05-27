@@ -100,7 +100,7 @@ public class RightsholderDiscrepancyRepository extends BaseRepository implements
                                                   OutputStream outputStream) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put(STATUS_KEY, Objects.requireNonNull(status));
+        parameters.put(STATUS_KEY, status);
         try (OwnershipAdjustmentReportHandler handler = new OwnershipAdjustmentReportHandler(
             Objects.requireNonNull(outputStream))) {
             getTemplate().select("IRightsholderDiscrepancyMapper.findByScenarioIdAndStatus", parameters, handler);

@@ -57,11 +57,6 @@ public interface IReconcileRightsholdersController {
     List<Long> getProhibitedAccountNumbers();
 
     /**
-     * Cancels reconciliation of rightsholders.
-     */
-    void cancelReconciliation();
-
-    /**
      * Gets instance of {@link IStreamSource} to export Ownership Adjustment Report.
      *
      * @return instance of {@link IStreamSource} for export

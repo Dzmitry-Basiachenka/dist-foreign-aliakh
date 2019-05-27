@@ -206,6 +206,13 @@ public class CsvReportsIntegrationTest {
     }
 
     @Test
+    public void testWriteOwnershipAdjustmentCsvReportAnyRightsholderDiscrepancyStatus() throws Exception {
+        assertFiles(outputStream -> rightsholderDiscrepancyRepository.writeOwnershipAdjustmentCsvReport(
+            "3210b236-1239-4a60-9fab-888b84199321",  null,  outputStream),
+            "ownership_adjustment_report.csv");
+    }
+
+    @Test
     public void testWriteOwnershipAdjustmentCsvEmptyReport() throws IOException {
         assertFiles(outputStream -> rightsholderDiscrepancyRepository.writeOwnershipAdjustmentCsvReport(
             "3210b236-1239-4a60-9fab-888b84199321",  RightsholderDiscrepancyStatusEnum.IN_PROGRESS,  outputStream),

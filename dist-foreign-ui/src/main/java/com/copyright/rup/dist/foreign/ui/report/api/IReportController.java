@@ -30,6 +30,11 @@ public interface IReportController extends IController<IReportWidget> {
     ISummaryMarketReportController getSummaryMarketReportController();
 
     /**
+     * @return ownership adjustment report controller.
+     */
+    IOwnershipAdjustmentReportController getOwnershipAdjustmentReportController();
+
+    /**
      * @return instance of {@link IStreamSource} for FAS/FAS2 Batch Summary Report.
      */
     IStreamSource getFasBatchSummaryReportStreamSource();

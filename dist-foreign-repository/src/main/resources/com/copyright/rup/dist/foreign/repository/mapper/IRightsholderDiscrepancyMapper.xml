@@ -117,7 +117,9 @@
         left join ${schema}.df_rightsholder new_rh on new_rh.rh_account_number = d.new_rh_account_number
         left join ${schema}.df_rightsholder old_rh on old_rh.rh_account_number = d.old_rh_account_number
         where d.df_scenario_uid = #{scenarioId}
-            and status_ind = #{status}
+            <if test="null != status">
+                and status_ind = #{status}
+            </if>
         order by
         <choose>
             <when test="null != sort">
