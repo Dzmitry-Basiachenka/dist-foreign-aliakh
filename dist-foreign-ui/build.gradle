@@ -60,14 +60,6 @@ war {
 
 afterEvaluate {
 
-    [tomcatRun, tomcatRunDebug].each { tomcatRunTask ->
-        tomcatRunTask.doFirst {
-            if (!PluginUtils.onBuildServer()) {
-                systemProperty("dist.foreign.aws.service.environment.prefix", "lm-pdev-local")
-            }
-        }
-    }
-
     appBeforeIntegrationTest.doFirst {
         systemProperty "dbPidLocation", "${projectDir}/build/tmp/embeddedPostgres/postgresUi.pid"
     }

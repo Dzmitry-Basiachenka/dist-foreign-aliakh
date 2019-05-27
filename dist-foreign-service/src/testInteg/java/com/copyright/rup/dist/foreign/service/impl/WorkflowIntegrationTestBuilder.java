@@ -298,27 +298,25 @@ public class WorkflowIntegrationTestBuilder implements Builder<Runner> {
                     MediaType.APPLICATION_JSON)));
         }
 
-        private void expectGetPreferences(String fileName, List<String> rightholderIds) {
-            rightholderIds.forEach(rightholderId -> {
+        private void expectGetPreferences(String fileName, List<String> rightsholderIds) {
+            rightsholderIds.forEach(rightsholderId ->
                 mockServer.expect(MockRestRequestMatchers
                     .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelprefv2?orgIds="
-                        + rightholderId
+                        + rightsholderId
                         + "&prefCodes=IS-RH-FDA-PARTICIPATING,ISRHDISTINELIGIBLE"))
                     .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
                     .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), fileName),
-                        MediaType.APPLICATION_JSON));
-            });
+                        MediaType.APPLICATION_JSON)));
         }
 
         private void expectGetRollups(String fileName, List<String> rightsholdersIds) {
-            rightsholdersIds.forEach(rightsholdersId -> {
+            rightsholdersIds.forEach(rightsholdersId ->
                 (prmRollUpAsync ? asyncMockServer : mockServer).expect(MockRestRequestMatchers
                     .requestTo("http://localhost:8080/party-rest/orgPreference/orgrelprefrollupv2?orgIds=" +
                         rightsholdersId + "&relationshipCode=PARENT&prefCodes=payee"))
                     .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
                     .andRespond(MockRestResponseCreators.withSuccess(TestUtils.fileToString(this.getClass(), fileName),
-                        MediaType.APPLICATION_JSON));
-            });
+                        MediaType.APPLICATION_JSON)));
         }
 
         void sendScenarioToLm() {

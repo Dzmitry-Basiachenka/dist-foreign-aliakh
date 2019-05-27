@@ -112,8 +112,7 @@
         <template id="df.integration.producerTemplate"/>
 
         <endpoint id="df.integration.internal.usage.endpoint" uri="direct:df.integration.externalUsage"/>
-        <endpoint id="df.integration.lm.detail.endpoint"
-                  uri="aws-sqs://$RUP{dist.foreign.aws.service.environment.prefix}-$RUP{dist.foreign.endpoint.lm.detail}?amazonSQSClient=#dist.common.integration.sqs.client&amp;messageAttributeNames=All&amp;messageGroupIdStrategy=useConstant"/>
+        <endpoint id="df.integration.lm.detail.endpoint" uri="$RUP{dist.foreign.endpoint.lm.detail}"/>
 
         <redeliveryPolicyProfile id="defaultRedeliveryPolicy"
                                  maximumRedeliveries="10"
