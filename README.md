@@ -1,3 +1,9 @@
+5.1.39
+-
+* B-50684 FDA: Send FAS Batch Name to RMS as RMS Job Name: adjust logic for RA job to send batch name as job name parameter
+* B-51553 FDA: Export from RH reconcile view: implement UI on Reconcile Rightsholders dialog to generate report
+* B-51659 Tech Debt: FDA: configure sqs/sns endpoints in rup-env.properties file instead of context file
+
 5.1.38
 -
 * B-50669 FDA: View NTS Fund Pools Information: add Usage Batch and Fund Pool menu bars, remove Load Usage Batch and Load Fund Pool buttons
