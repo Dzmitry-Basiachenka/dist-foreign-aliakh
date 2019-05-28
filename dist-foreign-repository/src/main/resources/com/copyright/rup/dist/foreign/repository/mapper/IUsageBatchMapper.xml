@@ -4,7 +4,7 @@
 
 <mapper namespace="IUsageBatchMapper">
 
-    <resultMap id="usageBatchResultMap" type="UsageBatch">
+    <resultMap id="usageBatchResultMap" type="UsageBatch" extends="StoredEntityMapper.storedEntityResult">
         <result property="id" column="df_usage_batch_uid"/>
         <result property="name" column="name"/>
         <result property="rro.accountNumber" column="rro_account_number"/>
@@ -14,7 +14,6 @@
         <result property="fiscalYear" column="fiscal_year"/>
         <result property="grossAmount" column="gross_amount"/>
         <result property="fundPool" column="fund_pool" typeHandler="FundPoolTypeHandler"/>
-        <result property="updateDate" column="updated_datetime"/>
     </resultMap>
 
     <resultMap id="batchNameScenarioNamePairResultMap" type="BatchNameScenarioNamePair">
