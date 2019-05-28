@@ -35,7 +35,6 @@ public class UsagesMediatorTest {
 
     private static final String FAS_PRODUCT_FAMILY = "FAS";
     private static final String NTS_PRODUCT_FAMILY = "NTS";
-    private Button deleteButton;
     private Button loadResearchedUsagesButton;
     private Button addToScenarioButton;
     private Button sendForResearchButton;
@@ -49,7 +48,6 @@ public class UsagesMediatorTest {
 
     @Before
     public void setUp() {
-        deleteButton = new Button();
         loadResearchedUsagesButton = new Button();
         addToScenarioButton = new Button();
         sendForResearchButton = new Button();
@@ -65,7 +63,6 @@ public class UsagesMediatorTest {
         mediator.setLoadFundPoolMenuItem(loadFundPoolMenuItem);
         mediator.setLoadUsageBatchMenuItem(loadUsageBatchMenuItem);
         mediator.setLoadResearchedUsagesButton(loadResearchedUsagesButton);
-        mediator.setDeleteUsageButton(deleteButton);
         mediator.setAddToScenarioButton(addToScenarioButton);
         mediator.setSendForResearchButton(sendForResearchButton);
         mediator.setAssignClassificationButton(assignClassificationButton);
@@ -77,7 +74,6 @@ public class UsagesMediatorTest {
         mockViewOnlyPermissions();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
-        assertFalse(deleteButton.isVisible());
         assertTrue(usageBatchMenuBar.isVisible());
         assertTrue(fundPoolMenuBar.isVisible());
         assertFalse(loadUsageBatchMenuItem.isVisible());
@@ -95,7 +91,6 @@ public class UsagesMediatorTest {
         mockManagerPermissions();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
-        assertFalse(deleteButton.isVisible());
         assertTrue(usageBatchMenuBar.isVisible());
         assertTrue(fundPoolMenuBar.isVisible());
         assertFalse(loadUsageBatchMenuItem.isVisible());
@@ -113,7 +108,6 @@ public class UsagesMediatorTest {
         mockSpecialistPermissions();
         replay(SecurityUtils.class);
         mediator.applyPermissions();
-        assertTrue(deleteButton.isVisible());
         assertTrue(usageBatchMenuBar.isVisible());
         assertTrue(fundPoolMenuBar.isVisible());
         assertTrue(loadUsageBatchMenuItem.isVisible());
@@ -131,7 +125,6 @@ public class UsagesMediatorTest {
         mockViewOnlyPermissions();
         replay(SecurityUtils.class);
         mediator.onProductFamilyChanged(FAS_PRODUCT_FAMILY);
-        assertFalse(deleteButton.isVisible());
         assertTrue(usageBatchMenuBar.isVisible());
         assertFalse(fundPoolMenuBar.isVisible());
         assertFalse(loadUsageBatchMenuItem.isVisible());
@@ -148,7 +141,6 @@ public class UsagesMediatorTest {
         mockSpecialistPermissions();
         replay(SecurityUtils.class);
         mediator.onProductFamilyChanged(FAS_PRODUCT_FAMILY);
-        assertTrue(deleteButton.isVisible());
         assertTrue(usageBatchMenuBar.isVisible());
         assertFalse(fundPoolMenuBar.isVisible());
         assertTrue(loadUsageBatchMenuItem.isVisible());
@@ -166,7 +158,6 @@ public class UsagesMediatorTest {
         mockManagerPermissions();
         replay(SecurityUtils.class);
         mediator.onProductFamilyChanged(FAS_PRODUCT_FAMILY);
-        assertFalse(deleteButton.isVisible());
         assertTrue(usageBatchMenuBar.isVisible());
         assertFalse(fundPoolMenuBar.isVisible());
         assertFalse(loadUsageBatchMenuItem.isVisible());
@@ -183,7 +174,6 @@ public class UsagesMediatorTest {
         mockViewOnlyPermissions();
         replay(SecurityUtils.class);
         mediator.onProductFamilyChanged(NTS_PRODUCT_FAMILY);
-        assertFalse(deleteButton.isVisible());
         assertFalse(usageBatchMenuBar.isVisible());
         assertTrue(fundPoolMenuBar.isVisible());
         assertFalse(loadUsageBatchMenuItem.isVisible());
@@ -200,7 +190,6 @@ public class UsagesMediatorTest {
         mockSpecialistPermissions();
         replay(SecurityUtils.class);
         mediator.onProductFamilyChanged(NTS_PRODUCT_FAMILY);
-        assertTrue(deleteButton.isVisible());
         assertFalse(usageBatchMenuBar.isVisible());
         assertTrue(fundPoolMenuBar.isVisible());
         assertFalse(loadUsageBatchMenuItem.isVisible());
@@ -218,7 +207,6 @@ public class UsagesMediatorTest {
         mockManagerPermissions();
         replay(SecurityUtils.class);
         mediator.onProductFamilyChanged(NTS_PRODUCT_FAMILY);
-        assertFalse(deleteButton.isVisible());
         assertFalse(usageBatchMenuBar.isVisible());
         assertTrue(fundPoolMenuBar.isVisible());
         assertFalse(loadUsageBatchMenuItem.isVisible());
@@ -246,7 +234,6 @@ public class UsagesMediatorTest {
         mockStatic(SecurityUtils.class);
         expect(SecurityUtils.hasPermission(anyString())).andStubReturn(false);
         expect(SecurityUtils.hasPermission("FDA_ACCESS_APPLICATION")).andReturn(true).anyTimes();
-        expect(SecurityUtils.hasPermission("FDA_DELETE_USAGE")).andReturn(true).anyTimes();
         expect(SecurityUtils.hasPermission("FDA_LOAD_USAGE")).andReturn(true).anyTimes();
         expect(SecurityUtils.hasPermission("FDA_LOAD_FUND_POOL")).andReturn(true).anyTimes();
         expect(SecurityUtils.hasPermission("FDA_LOAD_RESEARCHED_USAGE")).andReturn(true).anyTimes();
