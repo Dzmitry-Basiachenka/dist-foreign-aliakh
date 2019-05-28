@@ -1,3 +1,9 @@
+5.1.40
+-
+* B-50669 FDA: View NTS Fund Pools Information: Remove Delete Usage Batch window and button from Usages tab
+* B-50669 FDA: View NTS Fund Pools Information: add View Usage Batch and View Fund Pool windows
+* B-51553 FDA: Export from RH reconcile view: implement the Ownership Adjustment Report dialog called from Reports tab to select scenario
+
 5.1.39
 -
 * B-50684 FDA: Send FAS Batch Name to RMS as RMS Job Name: adjust logic for RA job to send batch name as job name parameter
