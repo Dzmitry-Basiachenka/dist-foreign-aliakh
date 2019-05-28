@@ -63,7 +63,6 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
     private Grid<UsageDto> usagesGrid;
     private UsagesMediator mediator;
     private Button loadResearchedUsagesButton;
-    private Button deleteButton;
     private Button sendForResearchButton;
     private Button addToScenarioButton;
     private Button assignClassificationButton;
@@ -101,7 +100,6 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
     public UsagesMediator initMediator() {
         mediator = new UsagesMediator();
         mediator.setLoadResearchedUsagesButton(loadResearchedUsagesButton);
-        mediator.setDeleteUsageButton(deleteButton);
         mediator.setAddToScenarioButton(addToScenarioButton);
         mediator.setSendForResearchButton(sendForResearchButton);
         mediator.setAssignClassificationButton(assignClassificationButton);
@@ -234,19 +232,16 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
                 Windows.showModalWindow(window);
             }
         });
-        deleteButton = Buttons.createButton(ForeignUi.getMessage("button.delete_usage_batch"));
-        deleteButton.addClickListener(event -> Windows.showModalWindow(new DeleteUsageBatchWindow(controller)));
         assignClassificationButton = Buttons.createButton(ForeignUi.getMessage("button.assign_classification"));
         assignClassificationButton.addClickListener(
             event -> new NtsUsageBatchSelectorWidget(controller).showFilterWindow());
         initAdditionalFundsMenuBar();
         initFundPoolMenuBar();
         initUsageBatchMenuBar();
-        VaadinUtils.setButtonsAutoDisabled(assignClassificationButton, loadResearchedUsagesButton, addToScenarioButton,
-            deleteButton);
+        VaadinUtils.setButtonsAutoDisabled(assignClassificationButton, loadResearchedUsagesButton, addToScenarioButton);
         HorizontalLayout layout = new HorizontalLayout(usageBatchMenuBar, fundPoolMenuBar, additionalFundsMenuBar,
             assignClassificationButton, sendForResearchButton, loadResearchedUsagesButton, addToScenarioButton,
-            exportButton, deleteButton);
+            exportButton);
         layout.setMargin(true);
         VaadinUtils.addComponentStyle(layout, "usages-buttons");
         return layout;

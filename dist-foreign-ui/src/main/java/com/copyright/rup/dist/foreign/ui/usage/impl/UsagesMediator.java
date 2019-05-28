@@ -19,7 +19,6 @@ import com.vaadin.ui.MenuBar;
 class UsagesMediator implements IUsagesMediator {
 
     private Button loadResearchedUsagesButton;
-    private Button deleteUsageButton;
     private Button addToScenarioButton;
     private Button sendForResearchButton;
     private Button assignClassificationButton;
@@ -34,7 +33,6 @@ class UsagesMediator implements IUsagesMediator {
         loadUsageBatchMenuItem.setVisible(ForeignSecurityUtils.hasLoadUsagePermission());
         loadFundPoolMenuItem.setVisible(ForeignSecurityUtils.hasLoadFundPoolPermission());
         loadResearchedUsagesButton.setVisible(ForeignSecurityUtils.hasLoadResearchedUsagePermission());
-        deleteUsageButton.setVisible(ForeignSecurityUtils.hasDeleteUsagePermission());
         addToScenarioButton.setVisible(ForeignSecurityUtils.hasCreateEditScenarioPermission());
         sendForResearchButton.setVisible(ForeignSecurityUtils.hasSendForWorkResearchPermission());
         assignClassificationButton.setVisible(ForeignSecurityUtils.hasAssignClassificationPermission());
@@ -56,16 +54,11 @@ class UsagesMediator implements IUsagesMediator {
         assignClassificationButton.setVisible(ForeignSecurityUtils.hasAssignClassificationPermission()
             && isNtsProductFamily);
         withdrawnFundMenuBar.setVisible(ForeignSecurityUtils.hasCreateDeleteFundPermission() && isNtsProductFamily);
-        deleteUsageButton.setVisible(ForeignSecurityUtils.hasDeleteUsagePermission());
         addToScenarioButton.setVisible(ForeignSecurityUtils.hasCreateEditScenarioPermission());
     }
 
     void setLoadResearchedUsagesButton(Button loadResearchedUsagesButton) {
         this.loadResearchedUsagesButton = loadResearchedUsagesButton;
-    }
-
-    void setDeleteUsageButton(Button deleteUsageButton) {
-        this.deleteUsageButton = deleteUsageButton;
     }
 
     void setAddToScenarioButton(Button addToScenarioButton) {

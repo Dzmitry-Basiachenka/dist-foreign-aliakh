@@ -483,25 +483,6 @@ public class UsagesWidgetTest {
     }
 
     @Test
-    public void testDeleteButtonClickListener() {
-        mockStatic(Windows.class);
-        ClickEvent clickEvent = createMock(ClickEvent.class);
-        Button deleteButton = (Button) ((HorizontalLayout) ((VerticalLayout) usagesWidget.getSecondComponent())
-            .getComponent(0)).getComponent(8);
-        assertTrue(deleteButton.isDisableOnClick());
-        expect(controller.getSelectedProductFamily()).andReturn(FAS_PRODUCT_FAMILY).once();
-        expect(controller.getUsageBatches(FAS_PRODUCT_FAMILY)).andReturn(Collections.emptyList()).once();
-        Windows.showModalWindow(anyObject(DeleteUsageBatchWindow.class));
-        expectLastCall().once();
-        replay(clickEvent, Windows.class, controller);
-        Collection<?> listeners = deleteButton.getListeners(ClickEvent.class);
-        assertEquals(2, listeners.size());
-        ClickListener clickListener = (ClickListener) listeners.iterator().next();
-        clickListener.buttonClick(clickEvent);
-        verify(clickEvent, Windows.class, controller);
-    }
-
-    @Test
     public void testRefresh() {
         DataProvider dataProvider = createMock(DataProvider.class);
         UsagesMediator mediator = createMock(UsagesMediator.class);
@@ -521,8 +502,6 @@ public class UsagesWidgetTest {
     public void testInitMediator() throws Exception {
         UsagesMediator mediator = createMock(UsagesMediator.class);
         expectNew(UsagesMediator.class).andReturn(mediator).once();
-        mediator.setDeleteUsageButton(anyObject(Button.class));
-        expectLastCall().once();
         mediator.setUsageBatchMenuBar(anyObject(MenuBar.class));
         expectLastCall().once();
         mediator.setFundPoolMenuBar(anyObject(MenuBar.class));
@@ -549,7 +528,7 @@ public class UsagesWidgetTest {
     private void verifyButtonsLayout(HorizontalLayout layout) {
         assertTrue(layout.isSpacing());
         assertEquals(new MarginInfo(true), layout.getMargin());
-        assertEquals(9, layout.getComponentCount());
+        assertEquals(8, layout.getComponentCount());
         verifyMenuBar(layout.getComponent(0), "Usage Batch", Arrays.asList("Load", "View"));
         verifyMenuBar(layout.getComponent(1), "Fund Pool", Arrays.asList("Load", "View"));
         verifyMenuBar(layout.getComponent(2), "Additional Funds", Arrays.asList("Create", "Delete"));
@@ -563,7 +542,6 @@ public class UsagesWidgetTest {
         assertTrue(CollectionUtils.isNotEmpty(extensions));
         assertEquals(1, extensions.size());
         assertTrue(extensions.iterator().next() instanceof OnDemandFileDownloader);
-        assertEquals("Delete Usage Batch", layout.getComponent(8).getCaption());
     }
 
     private void verifyMenuBar(Component component, String menuBarName, List<String> menuItems) {
