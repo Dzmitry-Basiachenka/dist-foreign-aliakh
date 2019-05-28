@@ -79,12 +79,13 @@ public class ReportWidgetTest {
         assertEquals("reports-menu", reportWidget.getStyleName());
         assertEquals(1, CollectionUtils.size(reportWidget.getItems()));
         List<MenuItem> menuItems = reportWidget.getItems().get(0).getChildren();
-        assertEquals(5, CollectionUtils.size(menuItems));
+        assertEquals(6, CollectionUtils.size(menuItems));
         assertEquals("FAS Batch Summary Report", menuItems.get(0).getText());
         assertEquals("Summary of Market Report", menuItems.get(1).getText());
         assertEquals("Research Status Report", menuItems.get(2).getText());
         assertEquals("Service Fee True-up Report", menuItems.get(3).getText());
         assertEquals("Undistributed Liabilities Reconciliation Report", menuItems.get(4).getText());
+        assertEquals("Ownership Adjustment Report", menuItems.get(5).getText());
     }
 
     @Test

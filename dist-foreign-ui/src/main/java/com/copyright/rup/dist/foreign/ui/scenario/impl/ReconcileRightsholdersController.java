@@ -9,7 +9,7 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderDiscrepancyService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
-import com.copyright.rup.dist.foreign.ui.common.ExportStreamSource;
+import com.copyright.rup.dist.foreign.ui.report.impl.OwnershipAdjustmentCsvReportExportStreamSource;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IReconcileRightsholdersController;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 
@@ -84,14 +84,8 @@ public class ReconcileRightsholdersController implements IReconcileRightsholders
     }
 
     @Override
-    public void cancelReconciliation() {
-        rightsholderDiscrepancyService.deleteByScenarioIdAndStatus(scenario.getId(),
-            RightsholderDiscrepancyStatusEnum.IN_PROGRESS);
-    }
-
-    @Override
     public IStreamSource getOwnershipAdjustmentReportStreamSource() {
-        return new ExportStreamSource(String.format("ownership_adjustment_report_%s_", scenario.getName()),
+        return new OwnershipAdjustmentCsvReportExportStreamSource(() -> scenario,
             pipedStream -> reportService.writeOwnershipAdjustmentCsvReport(scenario.getId(),
                 RightsholderDiscrepancyStatusEnum.IN_PROGRESS, pipedStream));
     }

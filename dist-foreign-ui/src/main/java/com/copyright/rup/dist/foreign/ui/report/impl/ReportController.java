@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.report.impl;
 
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
+import com.copyright.rup.dist.foreign.ui.report.api.IOwnershipAdjustmentReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IReportWidget;
 import com.copyright.rup.dist.foreign.ui.report.api.IServiceFeeTrueUpReportController;
@@ -35,6 +36,8 @@ public class ReportController extends CommonController<IReportWidget> implements
     @Autowired
     private ISummaryMarketReportController summaryMarketReportController;
     @Autowired
+    private IOwnershipAdjustmentReportController ownershipAdjustmentReportController;
+    @Autowired
     private IReportService reportService;
 
     @Override
@@ -50,6 +53,11 @@ public class ReportController extends CommonController<IReportWidget> implements
     @Override
     public ISummaryMarketReportController getSummaryMarketReportController() {
         return summaryMarketReportController;
+    }
+
+    @Override
+    public IOwnershipAdjustmentReportController getOwnershipAdjustmentReportController() {
+        return ownershipAdjustmentReportController;
     }
 
     @Override

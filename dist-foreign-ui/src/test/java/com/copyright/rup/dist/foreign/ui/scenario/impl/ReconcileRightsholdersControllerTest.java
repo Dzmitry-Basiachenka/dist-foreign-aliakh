@@ -55,6 +55,7 @@ public class ReconcileRightsholdersControllerTest {
         controller = new ReconcileRightsholdersController();
         scenario = new Scenario();
         scenario.setId(RupPersistUtils.generateUuid());
+        scenario.setName("Test scenario name");
         controller.setScenario(scenario);
         scenarioService = createMock(IScenarioService.class);
         Whitebox.setInternalState(controller, scenarioService);
@@ -107,17 +108,7 @@ public class ReconcileRightsholdersControllerTest {
     }
 
     @Test
-    public void testCancelReconciliation() {
-        rightsholderDiscrepancyService.deleteByScenarioIdAndStatus(scenario.getId(),
-            RightsholderDiscrepancyStatusEnum.IN_PROGRESS);
-        expectLastCall().once();
-        replay(rightsholderDiscrepancyService);
-        controller.cancelReconciliation();
-        verify(rightsholderDiscrepancyService);
-    }
-
-    @Test
-    public void testgetOwnershipAdjustmentReportStreamSource() {
+    public void testGetOwnershipAdjustmentReportStreamSource() {
         IStreamSource streamSource = controller.getOwnershipAdjustmentReportStreamSource();
         ExecutorService executorService = createMock(ExecutorService.class);
         Whitebox.setInternalState(streamSource, executorService);

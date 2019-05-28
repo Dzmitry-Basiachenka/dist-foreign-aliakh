@@ -46,6 +46,7 @@ public class ReportWidget extends MenuBar implements IReportWidget {
         String undistributedLiabilitiesReportCaption = ForeignUi.getMessage("menu.report.undistributed_liabilities");
         String serviceFeeTrueUpReportCaption = ForeignUi.getMessage("menu.report.service_fee_true_up");
         String summaryMarketReportCaption = ForeignUi.getMessage("menu.report.market_summary");
+        String ownershipAdjustmentReportCaption = ForeignUi.getMessage("menu.report.ownership_adjustment_report");
         rootItem.addItem(ForeignUi.getMessage("menu.report.batch_summary"),
             menuItem -> generateReport(controller.getFasBatchSummaryReportStreamSource()));
         rootItem.addItem(summaryMarketReportCaption,
@@ -57,6 +58,8 @@ public class ReportWidget extends MenuBar implements IReportWidget {
         rootItem.addItem(undistributedLiabilitiesReportCaption, menuItem ->
             openReportWindow(undistributedLiabilitiesReportCaption,
                 controller.getUndistributedLiabilitiesReportController()));
+        rootItem.addItem(ownershipAdjustmentReportCaption, menuItem ->
+            openReportWindow(ownershipAdjustmentReportCaption, controller.getOwnershipAdjustmentReportController()));
         return this;
     }
 

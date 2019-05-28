@@ -53,8 +53,17 @@ public class ExportStreamSource implements IStreamSource {
 
     @Override
     public String getFileName() {
-        return VaadinUtils.encodeAndBuildFileName(fileNamePrefix +
+        return VaadinUtils.encodeAndBuildFileName(getFileNamePrefix() +
             CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm"), "csv");
+    }
+
+    /**
+     * Gets file name prefix.
+     *
+     * @return file name prefix
+     */
+    protected String getFileNamePrefix() {
+        return fileNamePrefix;
     }
 
     /**
