@@ -46,7 +46,7 @@ public class RightsholderDiscrepanciesWindowTest {
         IReconcileRightsholdersController reconcileRightsholdersController =
             createMock(IReconcileRightsholdersController.class);
         expect(reconcileRightsholdersController.getOwnershipAdjustmentReportStreamSource())
-            .andReturn(createMock(IStreamSource.class));
+            .andReturn(createMock(IStreamSource.class)).once();
         IScenariosController scenariosController = createMock(IScenariosController.class);
         replay(reconcileRightsholdersController);
         RightsholderDiscrepanciesWindow window =

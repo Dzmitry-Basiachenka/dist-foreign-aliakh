@@ -4523,6 +4523,18 @@ databaseChangeLog {
     changeSet(id: '2019-05-22-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
         comment('Inserting test data for testWriteOwnershipAdjustmentCsvReport, testWriteOwnershipAdjustmentCsvEmptyReport')
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'df_rightsholder_uid', value: 'a5989f7c-fc6f-4e8c-88d4-2fe7bcce8d1f')
+            column(name: 'rh_account_number', value: '1000002859')
+            column(name: 'name', value: 'John Wiley & Sons - Books')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'df_rightsholder_uid', value: '60241909-744c-4766-ad67-fdc9e2c043eb')
+            column(name: 'rh_account_number', value: '1000005413')
+            column(name: 'name', value: 'Kluwer Academic Publishers - Dordrecht')
+        }
+
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: '56282cac-2468-48d4-b346-93d3458a656a')
             column(name: 'name', value: 'Ownership Adjustment Report Batch')
