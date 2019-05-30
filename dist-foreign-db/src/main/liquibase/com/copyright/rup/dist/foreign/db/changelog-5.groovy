@@ -1100,4 +1100,18 @@ databaseChangeLog {
             }
         }
     }
+
+    changeSet(id: '2019-05-30-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("CDP-757 FDA: Export from RH reconcile view: Ownership Adjustment Report displays unapproved " +
+                "rightsholder discrepancies for scenarios in APPROVED, SENT_TO_LM and ARCHIVED statuses")
+
+        update(schemaName: dbAppsSchema, tableName: 'df_rightsholder_discrepancy') {
+            column(name: 'status_ind', value: 'DRAFT')
+            where "status_ind = 'IN_PROGRESS'"
+        }
+
+        rollback {
+            // automatic rollback
+        }
+    }
 }

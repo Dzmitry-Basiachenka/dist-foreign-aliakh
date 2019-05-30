@@ -20,7 +20,7 @@ import java.util.List;
 public class OwnershipAdjustmentReportHandler extends BaseCsvReportHandler<RightsholderDiscrepancy> {
 
     private static final List<String> HEADERS =
-        Arrays.asList("RH Account #", "RH Name", "New RH Account #", "New RH Name", "Wr Wrk Inst", "Title");
+        Arrays.asList("RH Account #", "RH Name", "New RH Account #", "New RH Name", "Wr Wrk Inst", "Title", "Status");
 
     /**
      * Constructor.
@@ -40,6 +40,7 @@ public class OwnershipAdjustmentReportHandler extends BaseCsvReportHandler<Right
         beanProperties.add(bean.getNewRightsholder().getName());
         beanProperties.add(getBeanPropertyAsString(bean.getWrWrkInst()));
         beanProperties.add(bean.getWorkTitle());
+        beanProperties.add(bean.getStatus().name());
         return beanProperties;
     }
 

@@ -121,9 +121,9 @@ public class ReportService implements IReportService {
     }
 
     @Override
-    public void writeOwnershipAdjustmentCsvReport(String scenarioId, RightsholderDiscrepancyStatusEnum status,
+    public void writeOwnershipAdjustmentCsvReport(String scenarioId, List<RightsholderDiscrepancyStatusEnum> statuses,
                                                   OutputStream outputStream) {
-        rightsholderDiscrepancyRepository.writeOwnershipAdjustmentCsvReport(scenarioId, status, outputStream);
+        rightsholderDiscrepancyRepository.writeOwnershipAdjustmentCsvReport(scenarioId, statuses, outputStream);
     }
 
     private void handleUsageBatch(PreServiceFeeFundBatchesCsvReportHandler handler, UsageBatch usageBatch) {

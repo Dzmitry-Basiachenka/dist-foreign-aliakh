@@ -16,6 +16,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.io.OutputStream;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -58,7 +59,7 @@ public class RightsholderDiscrepancyRepository extends BaseRepository implements
     public List<Long> findProhibitedAccountNumbers(String scenarioId) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put(STATUS_KEY, RightsholderDiscrepancyStatusEnum.IN_PROGRESS);
+        parameters.put(STATUS_KEY, RightsholderDiscrepancyStatusEnum.DRAFT);
         return selectList("IRightsholderDiscrepancyMapper.findProhibitedAccountNumbers", parameters);
     }
 
@@ -68,7 +69,7 @@ public class RightsholderDiscrepancyRepository extends BaseRepository implements
                                                                    Pageable pageable, Sort sort) {
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(4);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put(STATUS_KEY, Objects.requireNonNull(status));
+        parameters.put("statuses", Collections.singleton(Objects.requireNonNull(status)));
         parameters.put("pageable", pageable);
         parameters.put("sort", sort);
         return selectList("IRightsholderDiscrepancyMapper.findByScenarioIdAndStatus", parameters);
@@ -96,11 +97,12 @@ public class RightsholderDiscrepancyRepository extends BaseRepository implements
     }
 
     @Override
-    public void writeOwnershipAdjustmentCsvReport(String scenarioId, RightsholderDiscrepancyStatusEnum status,
+    public void writeOwnershipAdjustmentCsvReport(String scenarioId, List<RightsholderDiscrepancyStatusEnum> statuses,
                                                   OutputStream outputStream) {
+        checkArgument(CollectionUtils.isNotEmpty(statuses));
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
         parameters.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
-        parameters.put(STATUS_KEY, status);
+        parameters.put("statuses", statuses);
         try (OwnershipAdjustmentReportHandler handler = new OwnershipAdjustmentReportHandler(
             Objects.requireNonNull(outputStream))) {
             getTemplate().select("IRightsholderDiscrepancyMapper.findByScenarioIdAndStatus", parameters, handler);

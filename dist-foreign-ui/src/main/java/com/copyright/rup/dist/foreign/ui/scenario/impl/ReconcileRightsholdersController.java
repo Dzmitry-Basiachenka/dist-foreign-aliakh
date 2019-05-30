@@ -22,6 +22,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -64,7 +65,7 @@ public class ReconcileRightsholdersController implements IReconcileRightsholders
     @Override
     public int getBeansCount() {
         return rightsholderDiscrepancyService.getCountByScenarioIdAndStatus(scenario.getId(),
-            RightsholderDiscrepancyStatusEnum.IN_PROGRESS);
+            RightsholderDiscrepancyStatusEnum.DRAFT);
     }
 
     @Override
@@ -75,7 +76,7 @@ public class ReconcileRightsholdersController implements IReconcileRightsholders
             sort = new Sort(sortOrder.getSorted(), Direction.of(SortDirection.ASCENDING == sortOrder.getDirection()));
         }
         return rightsholderDiscrepancyService.getByScenarioIdAndStatus(scenario.getId(),
-            RightsholderDiscrepancyStatusEnum.IN_PROGRESS, new Pageable(startIndex, count), sort);
+            RightsholderDiscrepancyStatusEnum.DRAFT, new Pageable(startIndex, count), sort);
     }
 
     @Override
@@ -87,6 +88,6 @@ public class ReconcileRightsholdersController implements IReconcileRightsholders
     public IStreamSource getOwnershipAdjustmentReportStreamSource() {
         return new OwnershipAdjustmentCsvReportExportStreamSource(() -> scenario,
             pipedStream -> reportService.writeOwnershipAdjustmentCsvReport(scenario.getId(),
-                RightsholderDiscrepancyStatusEnum.IN_PROGRESS, pipedStream));
+                Collections.singletonList(RightsholderDiscrepancyStatusEnum.DRAFT), pipedStream));
     }
 }

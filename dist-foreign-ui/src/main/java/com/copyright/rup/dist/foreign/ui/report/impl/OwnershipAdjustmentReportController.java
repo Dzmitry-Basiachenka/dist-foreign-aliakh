@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.report.impl;
 
+import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
@@ -7,6 +8,8 @@ import com.copyright.rup.dist.foreign.ui.report.api.IOwnershipAdjustmentReportCo
 import com.copyright.rup.dist.foreign.ui.report.api.IOwnershipAdjustmentReportWidget;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.widget.api.CommonController;
+
+import com.google.common.collect.ImmutableList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -29,6 +32,9 @@ import java.util.List;
 public class OwnershipAdjustmentReportController extends CommonController<IOwnershipAdjustmentReportWidget>
     implements IOwnershipAdjustmentReportController {
 
+    private static final ImmutableList<RightsholderDiscrepancyStatusEnum> REPORT_STATUSES =
+        ImmutableList.of(RightsholderDiscrepancyStatusEnum.DRAFT, RightsholderDiscrepancyStatusEnum.APPROVED);
+
     @Autowired
     private IScenarioService scenarioService;
 
@@ -44,7 +50,7 @@ public class OwnershipAdjustmentReportController extends CommonController<IOwner
     public IStreamSource getOwnershipAdjustmentReportStreamSource() {
         return new OwnershipAdjustmentCsvReportExportStreamSource(() -> getWidget().getScenario(),
             pipedStream -> reportService.writeOwnershipAdjustmentCsvReport(getWidget().getScenario().getId(),
-                null, pipedStream));
+                REPORT_STATUSES, pipedStream));
     }
 
     @Override

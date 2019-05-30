@@ -57,10 +57,10 @@ public class RightsholderDiscrepancyServiceTest {
     @Test
     public void testGetCountByScenarioIdAndStatus() {
         expect(rightsholderDiscrepancyRepository.findCountByScenarioIdAndStatus(SCENARIO_ID,
-            RightsholderDiscrepancyStatusEnum.IN_PROGRESS)).andReturn(3).once();
+            RightsholderDiscrepancyStatusEnum.DRAFT)).andReturn(3).once();
         replay(rightsholderDiscrepancyRepository);
         assertEquals(3, rightsholderDiscrepancyService.getCountByScenarioIdAndStatus(SCENARIO_ID,
-            RightsholderDiscrepancyStatusEnum.IN_PROGRESS), 0);
+            RightsholderDiscrepancyStatusEnum.DRAFT), 0);
         verify(rightsholderDiscrepancyRepository);
     }
 
@@ -87,21 +87,21 @@ public class RightsholderDiscrepancyServiceTest {
     public void testGetByScenarioIdAndStatus() {
         List<RightsholderDiscrepancy> discrepancies = Collections.singletonList(new RightsholderDiscrepancy());
         expect(rightsholderDiscrepancyRepository.findByScenarioIdAndStatus(SCENARIO_ID,
-            RightsholderDiscrepancyStatusEnum.IN_PROGRESS, null, null)).andReturn(discrepancies).once();
+            RightsholderDiscrepancyStatusEnum.DRAFT, null, null)).andReturn(discrepancies).once();
         replay(rightsholderDiscrepancyRepository);
         assertSame(discrepancies, rightsholderDiscrepancyService.getByScenarioIdAndStatus(SCENARIO_ID,
-            RightsholderDiscrepancyStatusEnum.IN_PROGRESS, null, null));
+            RightsholderDiscrepancyStatusEnum.DRAFT, null, null));
         verify(rightsholderDiscrepancyRepository);
     }
 
     @Test
     public void testDeleteByScenarioIdAndStatus() {
         rightsholderDiscrepancyRepository.deleteByScenarioIdAndStatus(SCENARIO_ID,
-            RightsholderDiscrepancyStatusEnum.IN_PROGRESS);
+            RightsholderDiscrepancyStatusEnum.DRAFT);
         expectLastCall().once();
         replay(rightsholderDiscrepancyRepository);
         rightsholderDiscrepancyService.deleteByScenarioIdAndStatus(SCENARIO_ID,
-            RightsholderDiscrepancyStatusEnum.IN_PROGRESS);
+            RightsholderDiscrepancyStatusEnum.DRAFT);
         verify(rightsholderDiscrepancyRepository);
     }
 

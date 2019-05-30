@@ -49,20 +49,20 @@ public class RightsholderDiscrepancyRepositoryIntegrationTest {
     public void testInsertAll() {
         List<RightsholderDiscrepancy> discrepancies =
             rightsholderDiscrepancyRepository.findByScenarioIdAndStatus(SCENARIO_ID,
-                RightsholderDiscrepancyStatusEnum.IN_PROGRESS, null, null);
+                RightsholderDiscrepancyStatusEnum.DRAFT, null, null);
         assertNotNull(discrepancies);
         assertEquals(3, discrepancies.size());
         rightsholderDiscrepancyRepository.insertAll(Collections.singletonList(buildRightsholderDiscrepancy()),
             SCENARIO_ID);
         discrepancies = rightsholderDiscrepancyRepository.findByScenarioIdAndStatus(SCENARIO_ID,
-            RightsholderDiscrepancyStatusEnum.IN_PROGRESS, null, null);
+            RightsholderDiscrepancyStatusEnum.DRAFT, null, null);
         assertEquals(4, discrepancies.size());
     }
 
     @Test
     public void testFindCountByScenarioIdAndStatus() {
         assertEquals(3, rightsholderDiscrepancyRepository.findCountByScenarioIdAndStatus(SCENARIO_ID,
-            RightsholderDiscrepancyStatusEnum.IN_PROGRESS));
+            RightsholderDiscrepancyStatusEnum.DRAFT));
         assertEquals(0, rightsholderDiscrepancyRepository.findCountByScenarioIdAndStatus(SCENARIO_ID,
             RightsholderDiscrepancyStatusEnum.APPROVED));
     }
@@ -86,13 +86,13 @@ public class RightsholderDiscrepancyRepositoryIntegrationTest {
     public void testDeleteByScenarioIdAndStatus() {
         List<RightsholderDiscrepancy> discrepancies =
             rightsholderDiscrepancyRepository.findByScenarioIdAndStatus(SCENARIO_ID,
-                RightsholderDiscrepancyStatusEnum.IN_PROGRESS, null, null);
+                RightsholderDiscrepancyStatusEnum.DRAFT, null, null);
         assertNotNull(discrepancies);
         assertEquals(3, discrepancies.size());
         rightsholderDiscrepancyRepository.deleteByScenarioIdAndStatus(SCENARIO_ID,
-            RightsholderDiscrepancyStatusEnum.IN_PROGRESS);
+            RightsholderDiscrepancyStatusEnum.DRAFT);
         discrepancies = rightsholderDiscrepancyRepository.findByScenarioIdAndStatus(SCENARIO_ID,
-            RightsholderDiscrepancyStatusEnum.IN_PROGRESS, null, null);
+            RightsholderDiscrepancyStatusEnum.DRAFT, null, null);
         assertEquals(0, discrepancies.size());
     }
 
@@ -100,12 +100,12 @@ public class RightsholderDiscrepancyRepositoryIntegrationTest {
     public void testDeleteByScenarioId() {
         List<RightsholderDiscrepancy> discrepancies =
             rightsholderDiscrepancyRepository.findByScenarioIdAndStatus(SCENARIO_ID,
-                RightsholderDiscrepancyStatusEnum.IN_PROGRESS, null, null);
+                RightsholderDiscrepancyStatusEnum.DRAFT, null, null);
         assertNotNull(discrepancies);
         assertEquals(3, discrepancies.size());
         rightsholderDiscrepancyRepository.deleteByScenarioId(SCENARIO_ID);
         discrepancies = rightsholderDiscrepancyRepository.findByScenarioIdAndStatus(SCENARIO_ID,
-            RightsholderDiscrepancyStatusEnum.IN_PROGRESS, null, null);
+            RightsholderDiscrepancyStatusEnum.DRAFT, null, null);
         assertEquals(0, discrepancies.size());
     }
 
@@ -133,7 +133,7 @@ public class RightsholderDiscrepancyRepositoryIntegrationTest {
         rightsholderDiscrepancy.setProductFamily("FAS");
         rightsholderDiscrepancy.setWorkTitle("Work title");
         rightsholderDiscrepancy.setWrWrkInst(123456789L);
-        rightsholderDiscrepancy.setStatus(RightsholderDiscrepancyStatusEnum.IN_PROGRESS);
+        rightsholderDiscrepancy.setStatus(RightsholderDiscrepancyStatusEnum.DRAFT);
         rightsholderDiscrepancy.setId(RupPersistUtils.generateUuid());
         rightsholderDiscrepancy.setCreateUser("SYSTEM");
         rightsholderDiscrepancy.setUpdateUser("SYSTEM");

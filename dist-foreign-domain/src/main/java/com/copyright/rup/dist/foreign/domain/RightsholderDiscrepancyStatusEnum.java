@@ -14,7 +14,7 @@ public enum RightsholderDiscrepancyStatusEnum {
     /**
      * Status for rightsholder discrepancies which were not approved.
      */
-    IN_PROGRESS,
+    DRAFT,
 
     /**
      * Status for approved rightsholder discrepancies.

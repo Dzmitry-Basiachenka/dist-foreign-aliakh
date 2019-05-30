@@ -202,6 +202,8 @@ public class ScenarioService implements IScenarioService {
     @Override
     @Transactional
     public void approve(Scenario scenario, String reason) {
+        rightsholderDiscrepancyService.deleteByScenarioIdAndStatus(scenario.getId(),
+            RightsholderDiscrepancyStatusEnum.DRAFT);
         changeScenarioState(scenario, ScenarioStatusEnum.APPROVED, ScenarioActionTypeEnum.APPROVED, reason);
     }
 
@@ -228,7 +230,7 @@ public class ScenarioService implements IScenarioService {
     public void reconcileRightsholders(Scenario scenario) {
         LOGGER.info("Reconcile rightsholders. Started. {}", ForeignLogUtils.scenario(Objects.requireNonNull(scenario)));
         rightsholderDiscrepancyService.deleteByScenarioIdAndStatus(scenario.getId(),
-            RightsholderDiscrepancyStatusEnum.IN_PROGRESS);
+            RightsholderDiscrepancyStatusEnum.DRAFT);
         List<Usage> usagesForReconcile = usageService.getUsagesForReconcile(scenario.getId());
         Map<Long, List<Usage>> groupedByWrWrkInstUsages =
             usagesForReconcile.stream().collect(Collectors.groupingBy(Usage::getWrWrkInst));
@@ -251,7 +253,7 @@ public class ScenarioService implements IScenarioService {
         LOGGER.info("Reconcile rightsholders. Finished. {}, RhDiscrepanciesCount={}",
             ForeignLogUtils.scenario(scenario),
             rightsholderDiscrepancyService.getCountByScenarioIdAndStatus(scenario.getId(),
-                RightsholderDiscrepancyStatusEnum.IN_PROGRESS));
+                RightsholderDiscrepancyStatusEnum.DRAFT));
     }
 
     @Override
@@ -264,7 +266,7 @@ public class ScenarioService implements IScenarioService {
     public void approveOwnershipChanges(Scenario scenario) {
         List<RightsholderDiscrepancy> discrepancies =
             rightsholderDiscrepancyService.getByScenarioIdAndStatus(
-                Objects.requireNonNull(scenario).getId(), RightsholderDiscrepancyStatusEnum.IN_PROGRESS, null, null);
+                Objects.requireNonNull(scenario).getId(), RightsholderDiscrepancyStatusEnum.DRAFT, null, null);
         LOGGER.info("Approve Ownership Changes. Started. {}, RhDiscrepanciesCount={}",
             ForeignLogUtils.scenario(scenario), LogUtils.size(discrepancies));
         Map<Long, List<Usage>> groupedByWrWrkInstUsages = usageService.getUsagesForReconcile(scenario.getId())
@@ -373,7 +375,7 @@ public class ScenarioService implements IScenarioService {
             discrepancy.setWrWrkInst(usage.getWrWrkInst());
             discrepancy.setWorkTitle(usage.getWorkTitle());
             discrepancy.setProductFamily(usage.getProductFamily());
-            discrepancy.setStatus(RightsholderDiscrepancyStatusEnum.IN_PROGRESS);
+            discrepancy.setStatus(RightsholderDiscrepancyStatusEnum.DRAFT);
             discrepancy.setCreateUser(userName);
             discrepancy.setUpdateUser(userName);
             return discrepancy;
