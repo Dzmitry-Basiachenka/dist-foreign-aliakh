@@ -406,7 +406,8 @@ public class UsageService implements IUsageService {
     @Override
     @Transactional
     public void updatePaidInfo(List<PaidUsage> paidUsages) {
-        LOGGER.info("Update paid information. Started. UsagesCount={}", LogUtils.size(paidUsages));
+        LogUtils.ILogWrapper paidUsagesCount = LogUtils.size(paidUsages);
+        LOGGER.info("Update paid information. Started. UsagesCount={}", paidUsagesCount);
         populateAccountNumbers(paidUsages);
         AtomicInteger newUsagesCount = new AtomicInteger();
         Set<String> notFoundUsageIds = Sets.newHashSet();
@@ -442,17 +443,18 @@ public class UsageService implements IUsageService {
         int updatedUsagesCount =
             CollectionUtils.size(paidUsages) - newUsagesCount.get() - CollectionUtils.size(notFoundUsageIds);
         if (CollectionUtils.isNotEmpty(notFoundUsageIds)) {
-            LOGGER.warn(UPDATE_PAID_NOT_FOUND_WARN_LOG_MESSAGE, LogUtils.size(paidUsages), newUsagesCount,
-                updatedUsagesCount, notFoundUsageIds);
+            LOGGER.warn(UPDATE_PAID_NOT_FOUND_WARN_LOG_MESSAGE, paidUsagesCount, newUsagesCount, updatedUsagesCount,
+                notFoundUsageIds);
         }
         LOGGER.info("Update paid information. Finished. UsagesCount={}, CreatedCount={}, UpdatedCount={}",
-            LogUtils.size(paidUsages), newUsagesCount, updatedUsagesCount);
+            paidUsagesCount, newUsagesCount, updatedUsagesCount);
     }
 
     @Override
     @Transactional
     public void loadResearchedUsages(Collection<ResearchedUsage> researchedUsages) {
-        LOGGER.info("Load researched usages. Started. ResearchedUsagesCount={}", LogUtils.size(researchedUsages));
+        LogUtils.ILogWrapper researchedUsagesCount = LogUtils.size(researchedUsages);
+        LOGGER.info("Load researched usages. Started. ResearchedUsagesCount={}", researchedUsagesCount);
         populateTitlesStandardNumberAndType(researchedUsages);
         usageRepository.updateResearchedUsages(researchedUsages);
         researchedUsages.forEach(
@@ -464,13 +466,14 @@ public class UsageService implements IUsageService {
             .map(ResearchedUsage::getUsageId)
             .collect(Collectors.toList());
         chainExecutor.execute(usageRepository.findByIds(usageIds), ChainProcessorTypeEnum.RIGHTS);
-        LOGGER.info("Load researched usages. Finished. ResearchedUsagesCount={}", LogUtils.size(researchedUsages));
+        LOGGER.info("Load researched usages. Finished. ResearchedUsagesCount={}", researchedUsagesCount);
     }
 
     @Override
     public JobInfo sendToCrm() {
         List<String> paidUsagesIds = usageArchiveRepository.findPaidIds();
-        LOGGER.info("Send to CRM. Started. PaidUsagesCount={}", LogUtils.size(paidUsagesIds));
+        LogUtils.ILogWrapper paidUsagesCount = LogUtils.size(paidUsagesIds);
+        LOGGER.info("Send to CRM. Started. PaidUsagesCount={}", paidUsagesCount);
         int archivedUsagesCount = 0;
         JobInfo jobInfo;
         if (CollectionUtils.isNotEmpty(paidUsagesIds)) {
@@ -502,15 +505,15 @@ public class UsageService implements IUsageService {
                 }
             }
             int archivedScenariosCount = scenarioService.archiveScenarios();
-            LOGGER.info(SEND_TO_CRM_FINISHED_INFO_LOG_MESSAGE, LogUtils.size(paidUsagesIds), archivedUsagesCount,
+            LOGGER.info(SEND_TO_CRM_FINISHED_INFO_LOG_MESSAGE, paidUsagesCount, archivedUsagesCount,
                 invalidUsageIds.size(), archivedScenariosCount);
-            LOGGER.trace(SEND_TO_CRM_FINISHED_DEBUG_LOG_MESSAGE, LogUtils.size(paidUsagesIds), archivedUsagesCount,
+            LOGGER.trace(SEND_TO_CRM_FINISHED_DEBUG_LOG_MESSAGE, paidUsagesCount, archivedUsagesCount,
                 archivedScenariosCount, invalidUsageIds);
-            jobInfo = new JobInfo(JobStatusEnum.FINISHED, "PaidUsagesCount=" + LogUtils.size(paidUsagesIds) +
+            jobInfo = new JobInfo(JobStatusEnum.FINISHED, "PaidUsagesCount=" + paidUsagesCount +
                 ", ArchivedUsagesCount=" + archivedUsagesCount + ", NotReportedUsagesCount=" +
                 invalidUsageIds.size() + ", ArchivedScenariosCount=" + archivedScenariosCount);
         } else {
-            String message = "PaidUsagesCount=" + LogUtils.size(paidUsagesIds) + ", Reason=There are no usages";
+            String message = "PaidUsagesCount=" + paidUsagesCount + ", Reason=There are no usages";
             LOGGER.info("Send to CRM. Skipped. {}", message);
             jobInfo = new JobInfo(JobStatusEnum.SKIPPED, message);
         }
