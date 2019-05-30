@@ -15,6 +15,7 @@ import static org.powermock.api.easymock.PowerMock.verifyAll;
 import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.integration.rest.prm.PrmRollUpService;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
+import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
@@ -195,14 +196,17 @@ public class ScenarioServiceTest {
 
     @Test
     public void testApprove() {
+        rightsholderDiscrepancyService.deleteByScenarioIdAndStatus(SCENARIO_ID,
+            RightsholderDiscrepancyStatusEnum.DRAFT);
+        expectLastCall().once();
         scenarioRepository.updateStatus(scenario);
         expectLastCall().once();
         scenarioAuditService.logAction(SCENARIO_ID, ScenarioActionTypeEnum.APPROVED, REASON);
         expectLastCall().once();
-        replay(scenarioRepository, scenarioAuditService);
+        replay(scenarioRepository, scenarioAuditService, rightsholderDiscrepancyService);
         scenarioService.approve(scenario, REASON);
         assertEquals(ScenarioStatusEnum.APPROVED, scenario.getStatus());
-        verify(scenarioRepository, scenarioAuditService);
+        verify(scenarioRepository, scenarioAuditService, rightsholderDiscrepancyService);
     }
 
     @Test

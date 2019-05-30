@@ -150,7 +150,7 @@ public class ScenariosControllerTest {
         scenarioService.reconcileRightsholders(scenario);
         expectLastCall().once();
         expect(rightsholderDiscrepancyService.getCountByScenarioIdAndStatus(SCENARIO_ID,
-            RightsholderDiscrepancyStatusEnum.IN_PROGRESS)).andReturn(0).once();
+            RightsholderDiscrepancyStatusEnum.DRAFT)).andReturn(0).once();
         expect(Windows.showConfirmDialog(eq("There are no rightsholders updates for scenario " +
                 "<i><b>Scenario name</b></i>. Do you want to update service fee?"),
             anyObject(ConfirmDialogWindow.IListener.class))).andReturn(null).once();
@@ -175,7 +175,7 @@ public class ScenariosControllerTest {
         scenarioService.reconcileRightsholders(scenario);
         expectLastCall().once();
         expect(rightsholderDiscrepancyService.getCountByScenarioIdAndStatus(SCENARIO_ID,
-            RightsholderDiscrepancyStatusEnum.IN_PROGRESS)).andReturn(5).once();
+            RightsholderDiscrepancyStatusEnum.DRAFT)).andReturn(5).once();
         Windows.showModalWindow(anyObject(RightsholderDiscrepanciesWindow.class));
         expectLastCall().once();
         reconcileRightsholdersController.setScenario(scenario);

@@ -76,7 +76,7 @@ public class ReconcileRightsholdersControllerTest {
     @Test
     public void testGetBeansCount() {
         expect(rightsholderDiscrepancyService.getCountByScenarioIdAndStatus(scenario.getId(),
-            RightsholderDiscrepancyStatusEnum.IN_PROGRESS)).andReturn(5).once();
+            RightsholderDiscrepancyStatusEnum.DRAFT)).andReturn(5).once();
         replay(rightsholderDiscrepancyService);
         assertEquals(5, controller.getBeansCount(), 0);
         verify(rightsholderDiscrepancyService);
@@ -97,7 +97,7 @@ public class ReconcileRightsholdersControllerTest {
         Capture<Pageable> pageableCapture = new Capture<>();
         List<RightsholderDiscrepancy> discrepancies = Collections.singletonList(new RightsholderDiscrepancy());
         expect(rightsholderDiscrepancyService.getByScenarioIdAndStatus(same(scenario.getId()),
-            same(RightsholderDiscrepancyStatusEnum.IN_PROGRESS), capture(pageableCapture), isNull()))
+            same(RightsholderDiscrepancyStatusEnum.DRAFT), capture(pageableCapture), isNull()))
             .andReturn(discrepancies).once();
         replay(rightsholderDiscrepancyService);
         assertSame(discrepancies, controller.loadBeans(0, 10, null));

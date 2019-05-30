@@ -213,7 +213,7 @@ class ReconcileRightsholdersTestBuilder {
         private void assertDiscrepancies() {
             List<RightsholderDiscrepancy> discrepancies =
                 rightsholderDiscrepancyService.getByScenarioIdAndStatus(expectedScenario.getId(),
-                    RightsholderDiscrepancyStatusEnum.IN_PROGRESS, null, null);
+                    RightsholderDiscrepancyStatusEnum.DRAFT, null, null);
             expectedDiscrepancies.forEach(expected -> {
                 Long oldAccountNumber = expected.getOldRightsholder().getAccountNumber();
                 Long newAccountNumber = expected.getNewRightsholder().getAccountNumber();

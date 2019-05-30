@@ -119,7 +119,7 @@ public class ScenariosController extends CommonController<IScenariosWidget> impl
         if (!scenarioController.isScenarioEmpty()) {
             scenarioService.reconcileRightsholders(scenario);
             if (0 < rightsholderDiscrepancyService.getCountByScenarioIdAndStatus(scenario.getId(),
-                RightsholderDiscrepancyStatusEnum.IN_PROGRESS)) {
+                RightsholderDiscrepancyStatusEnum.DRAFT)) {
                 reconcileRightsholdersController.setScenario(scenario);
                 Windows.showModalWindow(new RightsholderDiscrepanciesWindow(reconcileRightsholdersController, this));
             } else {

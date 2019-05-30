@@ -28,6 +28,7 @@ import java.io.PipedOutputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
@@ -201,21 +202,16 @@ public class CsvReportsIntegrationTest {
     @Test
     public void testWriteOwnershipAdjustmentCsvReport() throws Exception {
         assertFiles(outputStream -> rightsholderDiscrepancyRepository.writeOwnershipAdjustmentCsvReport(
-            "3210b236-1239-4a60-9fab-888b84199321",  RightsholderDiscrepancyStatusEnum.APPROVED,  outputStream), 
-            "ownership_adjustment_report.csv");
-    }
-
-    @Test
-    public void testWriteOwnershipAdjustmentCsvReportAnyRightsholderDiscrepancyStatus() throws Exception {
-        assertFiles(outputStream -> rightsholderDiscrepancyRepository.writeOwnershipAdjustmentCsvReport(
-            "3210b236-1239-4a60-9fab-888b84199321",  null,  outputStream),
+            "3210b236-1239-4a60-9fab-888b84199321",
+            Collections.singletonList(RightsholderDiscrepancyStatusEnum.APPROVED), outputStream),
             "ownership_adjustment_report.csv");
     }
 
     @Test
     public void testWriteOwnershipAdjustmentCsvEmptyReport() throws IOException {
         assertFiles(outputStream -> rightsholderDiscrepancyRepository.writeOwnershipAdjustmentCsvReport(
-            "3210b236-1239-4a60-9fab-888b84199321",  RightsholderDiscrepancyStatusEnum.IN_PROGRESS,  outputStream),
+            "3210b236-1239-4a60-9fab-888b84199321",
+            Collections.singletonList(RightsholderDiscrepancyStatusEnum.DRAFT), outputStream),
             "ownership_adjustment_report_empty.csv");
     }
 

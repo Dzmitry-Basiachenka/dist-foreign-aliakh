@@ -31,6 +31,7 @@ import java.io.PipedOutputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Verifies {@link ReportService}.
@@ -236,12 +237,13 @@ public class ReportServiceTest {
     @Test
     public void testWriteOwnershipAdjustmentCsvReport() {
         String scenarioId = "12b3c369-3084-41ad-92b5-62197660d642";
-        RightsholderDiscrepancyStatusEnum status = RightsholderDiscrepancyStatusEnum.APPROVED;
+        List<RightsholderDiscrepancyStatusEnum> statuses =
+            Collections.singletonList(RightsholderDiscrepancyStatusEnum.APPROVED);
         PipedOutputStream outputStream = createMock(PipedOutputStream.class);
-        rightsholderDiscrepancyRepository.writeOwnershipAdjustmentCsvReport(scenarioId, status, outputStream);
+        rightsholderDiscrepancyRepository.writeOwnershipAdjustmentCsvReport(scenarioId, statuses, outputStream);
         expectLastCall().once();
         replay(rightsholderDiscrepancyRepository);
-        reportService.writeOwnershipAdjustmentCsvReport(scenarioId, status, outputStream);
+        reportService.writeOwnershipAdjustmentCsvReport(scenarioId, statuses, outputStream);
         verify(rightsholderDiscrepancyRepository);
     }
 

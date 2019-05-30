@@ -82,9 +82,9 @@ public interface IRightsholderDiscrepancyRepository {
      * Writes Ownership Adjustment Report into a {@link OutputStream} in CSV format.
      *
      * @param scenarioId   the scenario identifier
-     * @param status       instance of {@link RightsholderDiscrepancyStatusEnum}
+     * @param statuses     list of {@link RightsholderDiscrepancyStatusEnum}
      * @param outputStream instance of {@link OutputStream}
      */
-    void writeOwnershipAdjustmentCsvReport(String scenarioId, RightsholderDiscrepancyStatusEnum status,
+    void writeOwnershipAdjustmentCsvReport(String scenarioId, List<RightsholderDiscrepancyStatusEnum> statuses,
                                            OutputStream outputStream);
 }
