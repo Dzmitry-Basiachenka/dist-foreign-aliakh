@@ -135,7 +135,9 @@ public class WorkClassificationWindow extends Window {
         addColumn(
             WorkClassification::getStandardNumberType, "table.column.standard_number_type", "standardNumberType", 155);
         addColumn(WorkClassification::getRhAccountNumber, "table.column.rh_account_number", "rhAccountNumber", 100);
-        addColumn(WorkClassification::getRhName, "table.column.rh_account_name", "rhName", 200);
+        grid.addColumn(WorkClassification::getRhName)
+            .setCaption(ForeignUi.getMessage("table.column.rh_account_name"))
+            .setSortProperty("rhName");
     }
 
     private void addColumn(ValueProvider<WorkClassification, ?> provider, String captionProperty, String sort,

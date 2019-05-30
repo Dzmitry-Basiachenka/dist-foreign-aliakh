@@ -60,8 +60,6 @@ class RightsholderDiscrepanciesWindow extends Window {
         initGrid();
         HorizontalLayout buttons = initButtons();
         VerticalLayout content = new VerticalLayout(grid, buttons);
-        content.setMargin(true);
-        content.setSpacing(true);
         content.setSizeFull();
         content.setExpandRatio(grid, 1.0f);
         content.setComponentAlignment(buttons, Alignment.BOTTOM_RIGHT);
