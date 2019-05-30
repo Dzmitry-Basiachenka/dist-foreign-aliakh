@@ -231,9 +231,7 @@
     }
 
     /**==== Styles for menu bars ====*/
-    .v-menubar-usage-batch-menu-bar,
-    .v-menubar-additional-funds-menu-bar,
-    .v-menubar-fund-pool-menu-bar {
+    .v-menubar-df {
         background-color: #638DB2;
         border: #5380a8 1px solid;
         border-radius: 2px;
@@ -247,9 +245,7 @@
         font-size: 11px;
     }
 
-    .v-menubar-usage-batch-menu-bar:hover,
-    .v-menubar-additional-funds-menu-bar:hover,
-    .v-menubar-fund-pool-menu-bar:hover {
+    .v-menubar-df:hover {
     	background: #476e90 !important;
     	box-shadow: 0px 0px 2px #ccc;
         transition: background-color 500ms;
@@ -257,25 +253,19 @@
         -moz-transition: width 1s, background-color 500ms;
     }
 
-    .v-menubar-additional-funds-menu-bar > .v-menubar-menuitem,
-    .v-menubar-fund-pool-menu-bar > .v-menubar-menuitem,
-    .v-menubar-usage-batch-menu-bar > .v-menubar-menuitem {
+    .v-menubar-df > .v-menubar-menuitem {
     	padding: 2px 15px 2px 15px;
     	height: auto;
     	outline: none;
     	cursor: pointer;
     }
 
-    .v-menubar-additional-funds-menu-bar > .v-menubar-menuitem-selected,
-    .v-menubar-fund-pool-menu-bar > .v-menubar-menuitem-selected,
-    .v-menubar-usage-batch-menu-bar > .v-menubar-menuitem-selected {
+    .v-menubar-df > .v-menubar-menuitem-selected {
         text-shadow: none !important;
         background: #476e90 !important;
     }
 
-    .v-menubar-submenu-additional-funds-menu-bar,
-    .v-menubar-submenu-fund-pool-menu-bar,
-    .v-menubar-submenu-usage-batch-menu-bar {
+    .v-menubar-submenu-v-menubar-df {
     	background-color: #f8f8f9;
     	border: none;
     	background-image: none;
@@ -286,9 +276,7 @@
     	padding: 5px 0px 5px 0px;
     }
 
-    .v-menubar-submenu-additional-funds-menu-bar .v-menubar-menuitem,
-    .v-menubar-submenu-fund-pool-menu-bar .v-menubar-menuitem,
-    .v-menubar-submenu-usage-batch-menu-bar .v-menubar-menuitem {
+    .v-menubar-submenu-v-menubar-df .v-menubar-menuitem {
     	padding: 4px 10px 4px 10px;
         cursor: pointer;
     	outline: none;
