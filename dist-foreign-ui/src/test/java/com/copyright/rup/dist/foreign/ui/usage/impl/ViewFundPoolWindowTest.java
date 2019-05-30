@@ -161,7 +161,7 @@ public class ViewFundPoolWindowTest {
             "Market Period From", "Market Period To", "Create User", "Create Date"),
             columns.stream().map(Grid.Column::getCaption).collect(Collectors.toList()));
         assertEquals(Arrays.asList(150.0, 120.0, 150.0, 100.0, 90.0, 100.0, 115.0, 140.0, 160.0, 140.0, 140.0, 125.0,
-            170.0, 145.0), columns.stream().map(Grid.Column::getWidth).collect(Collectors.toList()));
+            170.0, -1.0), columns.stream().map(Grid.Column::getWidth).collect(Collectors.toList()));
     }
 
     private Button.ClickListener getDeleteButtonClickListener() {

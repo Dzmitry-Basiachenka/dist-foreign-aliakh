@@ -159,7 +159,7 @@ public class ViewUsageBatchWindowTest {
         assertEquals(Arrays.asList("Usage Batch Name", "RRO Account #", "RRO Name", "Payment Date", "Fiscal Year",
             "Gross Amt in USD", "Create User", "Create Date"),
             columns.stream().map(Grid.Column::getCaption).collect(Collectors.toList()));
-        assertEquals(Arrays.asList(150.0, 120.0, 150.0, 100.0, 90.0, 130.0, 170.0, 145.0),
+        assertEquals(Arrays.asList(150.0, 120.0, 150.0, 100.0, 90.0, 130.0, 170.0, -1.0),
             columns.stream().map(Grid.Column::getWidth).collect(Collectors.toList()));
     }
 

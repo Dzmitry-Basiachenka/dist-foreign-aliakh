@@ -73,6 +73,7 @@ class ViewFundPoolWindow extends AbstractViewUsageBatchWindow {
         addColumn(batch -> batch.getFundPool().getFundPoolPeriodFrom(), "table.column.market_period_from", 140);
         addColumn(batch -> batch.getFundPool().getFundPoolPeriodTo(), "table.column.market_period_to", 125);
         addColumn(UsageBatch::getCreateUser, "table.column.create_user", 170);
-        addColumn(batch -> getStringFromDate(batch.getCreateDate()), "table.column.create_date", 145);
+        grid.addColumn(batch -> getStringFromDate(batch.getCreateDate()))
+            .setCaption(ForeignUi.getMessage("table.column.create_date"));
     }
 }
