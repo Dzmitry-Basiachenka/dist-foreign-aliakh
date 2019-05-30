@@ -235,9 +235,9 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         assignClassificationButton = Buttons.createButton(ForeignUi.getMessage("button.assign_classification"));
         assignClassificationButton.addClickListener(
             event -> new NtsUsageBatchSelectorWidget(controller).showFilterWindow());
-        initAdditionalFundsMenuBar();
-        initFundPoolMenuBar();
         initUsageBatchMenuBar();
+        initFundPoolMenuBar();
+        initAdditionalFundsMenuBar();
         VaadinUtils.setButtonsAutoDisabled(assignClassificationButton, loadResearchedUsagesButton, addToScenarioButton);
         HorizontalLayout layout = new HorizontalLayout(usageBatchMenuBar, fundPoolMenuBar, additionalFundsMenuBar,
             assignClassificationButton, sendForResearchButton, loadResearchedUsagesButton, addToScenarioButton,
@@ -256,6 +256,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         menuItem.addItem(ForeignUi.getMessage("menu.item.view"), null,
             item -> Windows.showModalWindow(new ViewUsageBatchWindow(controller)));
         VaadinUtils.addComponentStyle(usageBatchMenuBar, "usage-batch-menu-bar");
+        VaadinUtils.addComponentStyle(usageBatchMenuBar, "v-menubar-df");
     }
 
     private void initFundPoolMenuBar() {
@@ -266,6 +267,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         menuItem.addItem(ForeignUi.getMessage("menu.item.view"), null,
             item -> Windows.showModalWindow(new ViewFundPoolWindow(controller)));
         VaadinUtils.addComponentStyle(fundPoolMenuBar, "fund-pool-menu-bar");
+        VaadinUtils.addComponentStyle(fundPoolMenuBar, "v-menubar-df");
     }
 
     private void initAdditionalFundsMenuBar() {
@@ -277,6 +279,7 @@ class UsagesWidget extends HorizontalSplitPanel implements IUsagesWidget {
         menuItem.addItem(ForeignUi.getMessage("menu.item.delete"), null,
             item -> Windows.showModalWindow(new DeleteAdditionalFundsWindow(controller)));
         VaadinUtils.addComponentStyle(additionalFundsMenuBar, "additional-funds-menu-bar");
+        VaadinUtils.addComponentStyle(additionalFundsMenuBar, "v-menubar-df");
     }
 
     private Window initPreServiceFeeFundBatchesFilterWindow() {
