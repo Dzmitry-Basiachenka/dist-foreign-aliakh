@@ -11,8 +11,60 @@ databaseChangeLog {
             column(name: 'product_family', value: 'FAS')
             column(name: 'payment_date', value: '2018-01-24')
             column(name: 'fiscal_year', value: '2018')
-            column(name: 'gross_amount', value: '1200.00')
+            column(name: 'gross_amount', value: '1394.00')
             column(name: 'updated_datetime', value: '2018-01-24 08:20:19.813522-05')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '935612bc-cf10-4ef7-8d46-47890fccdba8')
+            column(name: 'df_usage_batch_uid', value: '01219a91-d033-40db-a9ba-d717513a3b65')
+            column(name: 'wr_wrk_inst', value: '180382914')
+            column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
+            column(name: 'status_ind', value: 'RH_NOT_FOUND')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'standard_number', value: '9780000000000')
+            column(name: 'article', value: 'Appendix: The Principles of Newspeak')
+            column(name: 'publication_date', value: '3000-12-12')
+            column(name: 'market', value: 'Univ')
+            column(name: 'market_period_from', value: '2015')
+            column(name: 'market_period_to', value: '2015')
+            column(name: 'author', value: 'Aarseth, Espen J.')
+            column(name: 'gross_amount', value: '70.00')
+            column(name: 'reported_value', value: '70.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '3ec01afa-7f8f-4551-9f3d-22b1975f8314')
+            column(name: 'df_usage_batch_uid', value: '01219a91-d033-40db-a9ba-d717513a3b65')
+            column(name: 'wr_wrk_inst', value: '180382914')
+            column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
+            column(name: 'status_ind', value: 'RH_NOT_FOUND')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'standard_number', value: '9780000000000')
+            column(name: 'article', value: 'Appendix: The Principles of Newspeak')
+            column(name: 'publication_date', value: '3000-12-12')
+            column(name: 'market', value: 'Univ')
+            column(name: 'market_period_from', value: '2015')
+            column(name: 'market_period_to', value: '2015')
+            column(name: 'author', value: 'Aarseth, Espen J.')
+            column(name: 'gross_amount', value: '25.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '857cdd83-a88d-4777-9e91-d2386adbd146')
+            column(name: 'df_usage_batch_uid', value: '01219a91-d033-40db-a9ba-d717513a3b65')
+            column(name: 'wr_wrk_inst', value: '123194821')
+            column(name: 'work_title', value: 'Wissenschaft & Forschung Japan')
+            column(name: 'status_ind', value: 'RH_NOT_FOUND')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'standard_number', value: '9780000000000')
+            column(name: 'article', value: 'Appendix: The Principles of Newspeak')
+            column(name: 'publication_date', value: '3000-12-12')
+            column(name: 'market', value: 'Univ')
+            column(name: 'market_period_from', value: '2015')
+            column(name: 'market_period_to', value: '2015')
+            column(name: 'author', value: 'Aarseth, Espen J.')
+            column(name: 'gross_amount', value: '99.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {

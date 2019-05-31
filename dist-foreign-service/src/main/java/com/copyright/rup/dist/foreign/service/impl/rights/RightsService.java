@@ -51,6 +51,9 @@ import java.util.stream.Collectors;
  */
 @Service
 public class RightsService implements IRightsService {
+
+    private static final String NTS_WITHDRAWN_AUDIT_MESSAGE =
+        "Detail was made eligible for NTS because sum of gross amounts, grouped by Wr Wrk Inst, is less than $100";
     private static final Logger LOGGER = RupLogUtils.getLogger();
 
     @Autowired
@@ -73,6 +76,7 @@ public class RightsService implements IRightsService {
     @Override
     @Transactional
     public JobInfo sendForRightsAssignment() {
+        updateNtsWithdrawnUsages();
         JobInfo jobInfo;
         List<String> availableBatches = usageBatchService.getBatchNamesAvailableForRightsAssignment();
         LOGGER.info("Send for Rights Assignment. Started. BatchesCount=", availableBatches.size());
@@ -83,7 +87,7 @@ public class RightsService implements IRightsService {
             availableBatches.forEach(batchName -> {
                 Map<Long, Set<String>> wrWrkInstToUsageIds =
                     usageService.getWrWrkInstToUsageIdsForRightsAssignment(batchName);
-                Set<String> usageIds =  wrWrkInstToUsageIds.values()
+                Set<String> usageIds = wrWrkInstToUsageIds.values()
                     .stream()
                     .flatMap(Set::stream)
                     .collect(Collectors.toSet());
@@ -169,6 +173,20 @@ public class RightsService implements IRightsService {
             usageService.updateProcessedUsage(usage);
             logAction(usageId, UsageActionTypeEnum.RH_NOT_FOUND,
                 String.format("Rightsholder account for %s was not found in RMS", wrWrkInst), logAction);
+        }
+    }
+
+    private void updateNtsWithdrawnUsages() {
+        LOGGER.info("Update RH_NOT_FOUND usages to NTS_WITHDRAWN status. Started.");
+        List<String> updatedIds = usageService.updateNtsWithdrawnUsagesAndGetIds();
+        if (CollectionUtils.isNotEmpty(updatedIds)) {
+            updatedIds.forEach(usageId ->
+                auditService.logAction(usageId, UsageActionTypeEnum.ELIGIBLE_FOR_NTS, NTS_WITHDRAWN_AUDIT_MESSAGE)
+            );
+            LOGGER.info("Update RH_NOT_FOUND usages to NTS_WITHDRAWN status. Finished. Updated UsagesCount={}",
+                LogUtils.size(updatedIds));
+        } else {
+            LOGGER.info("Update RH_NOT_FOUND usages to NTS_WITHDRAWN status. Skipped. Reason=There are no usages");
         }
     }
 

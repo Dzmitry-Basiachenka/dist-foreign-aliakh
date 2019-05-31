@@ -253,14 +253,14 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public BigDecimal getTotalAmountByWrWrkInstAndBatchId(Long wrWrkInst, String batchId) {
-        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
-        parameters.put("wrWrkInst", Objects.requireNonNull(wrWrkInst));
-        parameters.put(BATCH_ID_KEY, Objects.requireNonNull(batchId));
-        BigDecimal totalAmount =
-            ObjectUtils.defaultIfNull(selectOne("IUsageMapper.getTotalAmountByWrWrkInstAndBatchId", parameters),
-                BigDecimal.ZERO);
-        return totalAmount.setScale(2, RoundingMode.HALF_UP);
+    public List<String> updateNtsWithdrawnUsagesAndGetIds() {
+        Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(5);
+        parameters.put("statusToFind", UsageStatusEnum.RH_NOT_FOUND);
+        parameters.put("statusToSet", UsageStatusEnum.NTS_WITHDRAWN);
+        parameters.put(PRODUCT_FAMILY_KEY, FdaConstants.NTS_PRODUCT_FAMILY);
+        parameters.put("minimumTotal", new BigDecimal("100"));
+        parameters.put(UPDATE_USER_KEY, StoredEntity.DEFAULT_USER);
+        return selectList("IUsageMapper.updateNtsWithdrawnUsagesAndGetIds", parameters);
     }
 
     @Override

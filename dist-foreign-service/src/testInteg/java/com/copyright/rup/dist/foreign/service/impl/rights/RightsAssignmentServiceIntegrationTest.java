@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.service.impl.rights;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.common.domain.job.JobInfo;
 import com.copyright.rup.dist.common.domain.job.JobStatusEnum;
@@ -16,7 +15,6 @@ import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 
 import com.google.common.collect.Sets;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +31,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Verifies functionality for sending usages to RMS for rights assignment.
@@ -50,10 +47,13 @@ import java.util.stream.Collectors;
 @TestPropertySource(properties = {"test.liquibase.changelog=send-usages-for-ra-data-init.groovy"})
 public class RightsAssignmentServiceIntegrationTest {
 
+    private static final String AUDIT_MESSAGE =
+        "Detail was made eligible for NTS because sum of gross amounts, grouped by Wr Wrk Inst, is less than $100";
+
     @Autowired
     private IUsageRepository usageRepository;
     @Autowired
-    private IRightsService rightsAssigmentService;
+    private IRightsService rightsAssignmentService;
     @Autowired
     private IUsageAuditService usageAuditService;
     @Autowired
@@ -72,24 +72,35 @@ public class RightsAssignmentServiceIntegrationTest {
             .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
             .andExpect(MockRestRequestMatchers.content()
                 .string(new JsonMatcher(
-                    StringUtils.trim(
-                        TestUtils.fileToString(this.getClass(), "rights_assignment_request.json")))))
+                    StringUtils.trim(TestUtils.fileToString(this.getClass(), "rights_assignment_request.json")))))
             .andRespond(MockRestResponseCreators.withSuccess(
                 TestUtils.fileToString(this.getClass(), "rights_assignment_response.json"),
                 MediaType.APPLICATION_JSON));
-        JobInfo jobInfo = rightsAssigmentService.sendForRightsAssignment();
+        JobInfo jobInfo = rightsAssignmentService.sendForRightsAssignment();
         assertEquals(JobStatusEnum.FINISHED, jobInfo.getStatus());
         assertEquals("UsagesCount=3", jobInfo.getResult());
+        assertNtsWithdrawnUsage();
+        assertSentForRaUsages();
+        mockServer.verify();
+    }
+
+    private void assertNtsWithdrawnUsage() {
+        List<Usage> usages = usageRepository.findByStatuses(UsageStatusEnum.NTS_WITHDRAWN);
+        assertEquals(3, usages.size());
+        usages.forEach(usage -> {
+            List<UsageAuditItem> auditItems = usageAuditService.getUsageAudit(usage.getId());
+            assertEquals(AUDIT_MESSAGE, auditItems.get(0).getActionReason());
+        });
+    }
+
+    private void assertSentForRaUsages() {
         List<Usage> usages = usageRepository.findByStatuses(UsageStatusEnum.SENT_FOR_RA);
-        assertTrue(CollectionUtils.isNotEmpty(usages));
         assertEquals(4, usages.size());
         usages.stream()
             .filter(usage -> USAGE_IDS.contains(usage.getId()))
-            .collect(Collectors.toList())
             .forEach(usage -> {
                 List<UsageAuditItem> auditItems = usageAuditService.getUsageAudit(usage.getId());
                 assertEquals("Sent for RA: job name 'SENT_FOR_RA_TEST'", auditItems.get(0).getActionReason());
             });
-        mockServer.verify();
     }
 }

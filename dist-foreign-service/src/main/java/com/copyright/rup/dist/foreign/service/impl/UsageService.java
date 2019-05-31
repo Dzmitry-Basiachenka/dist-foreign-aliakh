@@ -219,8 +219,8 @@ public class UsageService implements IUsageService {
     }
 
     @Override
-    public BigDecimal getTotalAmountByWrWrkInstAndBatchId(Long wrWrkInst, String batchId) {
-        return usageRepository.getTotalAmountByWrWrkInstAndBatchId(wrWrkInst, batchId);
+    public List<String> updateNtsWithdrawnUsagesAndGetIds() {
+        return usageRepository.updateNtsWithdrawnUsagesAndGetIds();
     }
 
     @Override

@@ -63,10 +63,9 @@ public class LoadUsagesIntegrationTest {
 
     private static final String USAGE_ID_1 = "0f263081-1a5d-4c76-a1ff-d9a6e1e0b694";
     private static final String USAGE_ID_2 = "5ae4880e-0955-4518-8681-2aeeda667474";
-    private static final String USAGE_ID_3 = "cb25ce2c-730f-483f-be83-221272abaf04";
-    private static final String USAGE_ID_4 = "afef95d3-d525-49ec-91fe-79fdced6830f";
-    private static final String USAGE_ID_5 = "ddc1672e-ef63-4965-a6bc-1d299272c953";
-    private static final List<String> IDS = Arrays.asList(USAGE_ID_1, USAGE_ID_2, USAGE_ID_3, USAGE_ID_4, USAGE_ID_5);
+    private static final String USAGE_ID_3 = "afef95d3-d525-49ec-91fe-79fdced6830f";
+    private static final String USAGE_ID_4 = "ddc1672e-ef63-4965-a6bc-1d299272c953";
+    private static final List<String> IDS = Arrays.asList(USAGE_ID_1, USAGE_ID_2,  USAGE_ID_3, USAGE_ID_4);
     private static final String TITLE =
         "Journal of human lactation : official journal of International Lactation Consultant Association (1985- )";
     private static final String UPLOADED_REASON = "Uploaded in 'Test_Batch' Batch";
@@ -107,21 +106,14 @@ public class LoadUsagesIntegrationTest {
         assertAudit(USAGE_ID_2,
             "Wr Wrk Inst was not found by standard number 12345XX-123117",
             UPLOADED_REASON);
-        assertUsage(USAGE_ID_3, UsageStatusEnum.NTS_WITHDRAWN, 123059057L, null, "BIOCHEMISTRY (MOSCOW)",
-            "978-0-271-01750-1", "VALISSN");
-        assertAudit(USAGE_ID_3,
-            "Detail was made eligible for NTS because sum of gross amounts, grouped by Wr Wrk Inst, is less than $100",
-            "Rightsholder account for 123059057 was not found in RMS",
-            "Wr Wrk Inst 123059057 was found by standard number 978-0-271-01750-1",
-            UPLOADED_REASON);
-        assertUsage(USAGE_ID_4, UsageStatusEnum.RH_NOT_FOUND, 123059057L, null,
+        assertUsage(USAGE_ID_3, UsageStatusEnum.RH_NOT_FOUND, 123059057L, null,
             "True directions : living your sacred instructions", null, "VALISBN10");
-        assertAudit(USAGE_ID_4,
+        assertAudit(USAGE_ID_3,
             "Rightsholder account for 123059057 was not found in RMS",
             "Wr Wrk Inst 123059057 was found by title \"True directions : living your sacred instructions\"",
             UPLOADED_REASON);
-        assertUsage(USAGE_ID_5, UsageStatusEnum.ELIGIBLE, 100011725L, 1000024950L, TITLE, "12345XX-79069", "VALISBN10");
-        assertAudit(USAGE_ID_5,
+        assertUsage(USAGE_ID_4, UsageStatusEnum.ELIGIBLE, 100011725L, 1000024950L, TITLE, "12345XX-79069", "VALISBN10");
+        assertAudit(USAGE_ID_4,
             "Usage has become eligible",
             "Rightsholder account 1000024950 was found in RMS",
             "Usage was uploaded with Wr Wrk Inst",
@@ -138,7 +130,7 @@ public class LoadUsagesIntegrationTest {
         List<Usage> usages = result.get();
         setPredefinedUsageIds(usages);
         int usagesInsertedCount = usageBatchService.insertFasBatch(batch, usages);
-        assertEquals(5, usagesInsertedCount);
+        assertEquals(4, usagesInsertedCount);
         usageBatchService.sendForMatching(usages);
         usageBatchService.sendForGettingRights(usages, batch.getName());
     }
