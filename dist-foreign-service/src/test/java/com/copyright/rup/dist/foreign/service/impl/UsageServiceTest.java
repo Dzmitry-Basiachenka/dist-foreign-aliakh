@@ -790,6 +790,15 @@ public class UsageServiceTest {
         verify(usageRepository);
     }
 
+    @Test
+    public void testGetWrWrkInstToUsageIdsForRightsAssignment() {
+        expect(usageRepository.findWrWrkInstToUsageIdsByBatchNameAndUsageStatus("FAS Distribution 05/07/2018",
+            UsageStatusEnum.RH_NOT_FOUND)).andReturn(null).once();
+        replay(usageRepository);
+        usageService.getWrWrkInstToUsageIdsForRightsAssignment("FAS Distribution 05/07/2018");
+        verify(usageRepository);
+    }
+
     private Work buildWork(String standardNumberType) {
         Work work = new Work();
         work.setMainIdnoType(standardNumberType);

@@ -45,7 +45,7 @@
         <typeAlias alias="PreServiceFeeFund" type="com.copyright.rup.dist.foreign.domain.PreServiceFeeFund"/>
         <typeAlias alias="NtsFieldsTypeHandler" type="com.copyright.rup.dist.foreign.repository.impl.converter.NtsFieldsTypeHandler"/>
         <typeAlias alias="batchNameScenarioNamePair" type="com.copyright.rup.dist.foreign.repository.impl.BatchesNamesToScenariosNamesResultHandler$BatchNameScenarioNamePair"/>
-        <typeAlias alias="BatchNameUsageIdWrWrkInstHolder" type="com.copyright.rup.dist.foreign.repository.impl.BatchNameToUsageIdWrWrkInstResultHandler$BatchNameUsageIdWrWrkInstHolder"/>
+        <typeAlias alias="WrWrkInstUsageIdPair" type="com.copyright.rup.dist.foreign.repository.impl.WrWrkInstToUsageIdResultHandler$WrWrkInstUsageIdPair"/>
     </typeAliases>
 
     <typeHandlers>

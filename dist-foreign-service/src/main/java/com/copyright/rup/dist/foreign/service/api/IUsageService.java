@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.service.api;
 
 import com.copyright.rup.dist.common.domain.job.JobInfo;
+import com.copyright.rup.dist.common.integration.rest.rms.RightsAssignmentResult;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.foreign.domain.PaidUsage;
@@ -356,6 +357,17 @@ public interface IUsageService {
     JobInfo sendToCrm();
 
     /**
+     * Sends set of works related to specified batch name to RMS for Rights Assignment.
+     * Updates status of usages related to specified batch and Wr Wrk Insts to {@link UsageStatusEnum#SENT_FOR_RA}.
+     *
+     * @param batchName  bacth name
+     * @param wrWrkInsts set of Wr Wrk Insts
+     * @param usageIds   set of usage ids
+     * @return {@link RightsAssignmentResult} instance
+     */
+    RightsAssignmentResult sendForRightsAssignment(String batchName, Set<Long> wrWrkInsts, Set<String> usageIds);
+
+    /**
      * Gets list of {@link Usage}s by specified {@link Usage} ids.
      *
      * @param usageIds list of {@link Usage} ids
@@ -407,4 +419,13 @@ public interface IUsageService {
      * @return usages count
      */
     int getUnclassifiedUsagesCount(Set<Long> wrWrkInsts);
+
+    /**
+     * Gets map of Wr Wrk Insts to usage ids related to specified batch
+     * and having {@link UsageStatusEnum#RH_NOT_FOUND} status.
+     *
+     * @param batchName batch name
+     * @return map where key - Wr Wrk Inst, value - set of usage ids related to Wr Wrk Inst
+     */
+    Map<Long, Set<String>> getWrWrkInstToUsageIdsForRightsAssignment(String batchName);
 }

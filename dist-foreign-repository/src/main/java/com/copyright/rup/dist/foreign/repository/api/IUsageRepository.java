@@ -515,4 +515,13 @@ public interface IUsageRepository {
      * @param userName   user name
      */
     void updateUsagesStatusToUnclassified(List<Long> wrWrkInsts, String userName);
+
+    /**
+     * Finds map of Wr Wrk Insts to usage ids related to specified batch and having specified status.
+     *
+     * @param batchName batch name
+     * @param status    {@link UsageStatusEnum}
+     * @return map where key - Wr Wrk Inst, value - set of usage ids related to Wr Wrk Inst
+     */
+    Map<Long, Set<String>> findWrWrkInstToUsageIdsByBatchNameAndUsageStatus(String batchName, UsageStatusEnum status);
 }

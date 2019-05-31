@@ -615,6 +615,17 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         });
     }
 
+    @Override
+    public Map<Long, Set<String>> findWrWrkInstToUsageIdsByBatchNameAndUsageStatus(String batchName,
+                                                                                   UsageStatusEnum status) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
+        params.put("batchName", Objects.requireNonNull(batchName));
+        params.put("status", Objects.requireNonNull(status));
+        WrWrkInstToUsageIdResultHandler handler = new WrWrkInstToUsageIdResultHandler();
+        getTemplate().select("IUsageMapper.findWrWrkInstToUsageIdsByBatchNameAndUsageStatus", params, handler);
+        return handler.getWrWrkInstToUsageIdsMap();
+    }
+
     private AuditFilter escapeSqlLikePattern(AuditFilter auditFilter) {
         AuditFilter filterCopy = new AuditFilter(auditFilter);
         filterCopy.setCccEventId(escapeSqlLikePattern(filterCopy.getCccEventId()));
