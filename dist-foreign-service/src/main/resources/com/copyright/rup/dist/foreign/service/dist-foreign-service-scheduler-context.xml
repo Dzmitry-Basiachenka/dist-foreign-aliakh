@@ -87,7 +87,7 @@
     <bean id="schedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
         <property name="globalJobListeners">
             <array>
-                <ref bean="df.service.jobListener"/>
+                <ref bean="common.jobStatusListener"/>
             </array>
         </property>
         <property name="jobDetails">
