@@ -169,6 +169,11 @@
         <result property="comment" column="comment"/>
     </resultMap>
 
+    <resultMap id="wrWrkInstToUsageIdResultMap" type="WrWrkInstUsageIdPair">
+        <result property="wrWrkInst" column="wr_wrk_inst"/>
+        <result property="usageId" column="df_usage_uid"/>
+    </resultMap>
+
     <sql id="usageColumns">
         df_usage_batch_uid,
         df_scenario_uid,
@@ -1631,4 +1636,12 @@
             and product_family = #{productFamily}
     </update>
 
+    <select id="findWrWrkInstToUsageIdsByBatchNameAndUsageStatus" resultMap="wrWrkInstToUsageIdResultMap">
+        select u.df_usage_uid,
+            u.wr_wrk_inst
+        from ${schema}.df_usage u
+        join ${schema}.df_usage_batch ub on ub.df_usage_batch_uid = u.df_usage_batch_uid
+        where ub.name = #{batchName} and u.status_ind = #{status}
+            and u.wr_wrk_inst is not null
+    </select>
 </mapper>

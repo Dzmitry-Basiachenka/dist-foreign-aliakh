@@ -21,7 +21,6 @@ import com.copyright.rup.dist.foreign.service.api.processor.ChainProcessorTypeEn
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 
-import com.google.common.collect.Table;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -216,8 +215,8 @@ public class UsageBatchService implements IUsageBatchService {
     }
 
     @Override
-    public Table<String, String, Long> getBatchNameToUsageIdsWrWrkInstsForRightsAssignment(UsageStatusEnum status) {
-        return usageBatchRepository.findBatchNameUsageIdWrWrkInstTableByStatus(status);
+    public List<String> getBatchNamesAvailableForRightsAssignment() {
+        return usageBatchRepository.findBatchNamesWithRhNotFoundUsages();
     }
 
     /**

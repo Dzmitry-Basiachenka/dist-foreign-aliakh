@@ -11,7 +11,6 @@ import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 
 import com.google.common.collect.Maps;
 
-import com.google.common.collect.Table;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
@@ -102,11 +101,8 @@ public class UsageBatchRepository extends BaseRepository implements IUsageBatchR
     }
 
     @Override
-    public Table<String, String, Long> findBatchNameUsageIdWrWrkInstTableByStatus(UsageStatusEnum status) {
-        BatchNameToUsageIdWrWrkInstResultHandler handler = new BatchNameToUsageIdWrWrkInstResultHandler();
-        getTemplate().select("IUsageBatchMapper.findBatchNameUsageIdWrWrkInstTableByStatus",
-            Objects.requireNonNull(status), handler);
-        return handler.getBatchNameToWrWrkInstsMap();
+    public List<String> findBatchNamesWithRhNotFoundUsages() {
+        return selectList("IUsageBatchMapper.findBatchNamesWithRhNotFoundUsages", UsageStatusEnum.RH_NOT_FOUND);
     }
 
     /**

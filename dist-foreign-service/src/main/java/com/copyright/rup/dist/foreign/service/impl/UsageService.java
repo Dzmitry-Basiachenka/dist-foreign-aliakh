@@ -5,6 +5,7 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.job.JobInfo;
 import com.copyright.rup.dist.common.domain.job.JobStatusEnum;
 import com.copyright.rup.dist.common.integration.rest.prm.PrmRollUpService;
+import com.copyright.rup.dist.common.integration.rest.rms.RightsAssignmentResult;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
@@ -31,6 +32,7 @@ import com.copyright.rup.dist.foreign.integration.crm.api.CrmRightsDistributionR
 import com.copyright.rup.dist.foreign.integration.crm.api.ICrmIntegrationService;
 import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.integration.prm.api.IPrmIntegrationService;
+import com.copyright.rup.dist.foreign.integration.rms.api.IRmsIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
@@ -108,6 +110,8 @@ public class UsageService implements IUsageService {
     private IPrmIntegrationService prmIntegrationService;
     @Autowired
     private ICrmIntegrationService crmIntegrationService;
+    @Autowired
+    private IRmsIntegrationService rmsIntegrationService;
     @Autowired
     private IScenarioAuditService scenarioAuditService;
     @Autowired
@@ -521,6 +525,26 @@ public class UsageService implements IUsageService {
     }
 
     @Override
+    @Transactional
+    public RightsAssignmentResult sendForRightsAssignment(String batchName, Set<Long> wrWrkInsts,
+                                                          Set<String> usageIds) {
+        LOGGER.info("Send for Rights Assignment. Started. BatchName={}, WrWrkInstsCount={}, UsagesCount={}",
+            batchName, LogUtils.size(wrWrkInsts), LogUtils.size(usageIds));
+        RightsAssignmentResult result = rmsIntegrationService.sendForRightsAssignment(batchName, wrWrkInsts);
+        if (result.isSuccessful()) {
+            usageRepository.updateStatus(usageIds, UsageStatusEnum.SENT_FOR_RA);
+            usageAuditService.logAction(usageIds, UsageActionTypeEnum.SENT_FOR_RA,
+                String.format("Sent for RA: job name '%s'", result.getJobName()));
+            LOGGER.info("Send for Rights Assignment. Finished. BatchName={}, WrWrkInstsCount={}, UpdatedUsagesCount={}",
+                batchName, LogUtils.size(wrWrkInsts), LogUtils.size(usageIds));
+        } else {
+            LOGGER.warn("Send for Rights Assignment. Failed. Reason={}, UsagesIds={}", result.getErrorMessage(),
+                usageIds);
+        }
+        return result;
+    }
+
+    @Override
     public List<Usage> getUsagesByIds(List<String> usageIds) {
         return CollectionUtils.isNotEmpty(usageIds)
             ? usageRepository.findByIds(usageIds)
@@ -554,6 +578,12 @@ public class UsageService implements IUsageService {
     @Override
     public int getUnclassifiedUsagesCount(Set<Long> wrWrkInsts) {
         return usageRepository.findCountByStatusAndWrWrkInsts(UsageStatusEnum.UNCLASSIFIED, wrWrkInsts);
+    }
+
+    @Override
+    public Map<Long, Set<String>> getWrWrkInstToUsageIdsForRightsAssignment(String batchName) {
+        return usageRepository.findWrWrkInstToUsageIdsByBatchNameAndUsageStatus(batchName,
+            UsageStatusEnum.RH_NOT_FOUND);
     }
 
     private void populateTitlesStandardNumberAndType(Collection<ResearchedUsage> researchedUsages) {

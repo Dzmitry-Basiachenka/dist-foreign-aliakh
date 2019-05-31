@@ -25,6 +25,7 @@ import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -107,7 +108,7 @@ public class UsageRepositoryIntegrationTest {
     private static final String USAGE_ID_5 = "a71a0544-128e-41c0-b6b0-cfbbea6d2182";
     private static final String USAGE_ID_6 = "62e0ddd7-a37f-4810-8ada-abab805cb48d";
     private static final String USAGE_ID_7 = "cf38d390-11bb-4af7-9685-e034c9c32fb6";
-    private static final String USAGE_ID_8 = "b1f0b236-3ae9-4a60-9fab-61db84199dss";
+    private static final String USAGE_ID_8 = "b1f0b236-3ae9-4a60-9fab-61db84199d11";
     private static final String USAGE_ID_9 = "5c5f8c1c-1418-4cfd-8685-9212f4c421d1";
     private static final String USAGE_ID_11 = "7db6455e-5249-44db-801a-307f1c239310";
     private static final String USAGE_ID_12 = "593c49c3-eb5b-477b-8556-f7a4725df2b3";
@@ -361,7 +362,7 @@ public class UsageRepositoryIntegrationTest {
     @Test
     public void testFindByScenarioIdAndRhAccountNumberSearchDetailId() {
         populateScenario();
-        verifyFindByScenarioIdAndRhSearch("b1f0b236-3ae9-4a60-9fab-61db84199dss", 1);
+        verifyFindByScenarioIdAndRhSearch("b1f0b236-3ae9-4a60-9fab-61db84199d11", 1);
         verifyFindByScenarioIdAndRhSearch("4a60", 1);
         verifyFindByScenarioIdAndRhSearch("4a", 2);
     }
@@ -1121,6 +1122,14 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(2, usages.size());
         assertEquals(UsageStatusEnum.UNCLASSIFIED, usages.get(0).getStatus());
         assertEquals(UsageStatusEnum.UNCLASSIFIED, usages.get(1).getStatus());
+    }
+
+    @Test
+    public void testFindWrWrkInstToUsageIdsByBatchNameAndUsageStatus() {
+        Map<Long, Set<String>> wrWrkInstToUsageIdsMap =
+            ImmutableMap.of(243904752L, Sets.newHashSet(USAGE_ID_7, USAGE_ID_8));
+        assertEquals(wrWrkInstToUsageIdsMap,
+            usageRepository.findWrWrkInstToUsageIdsByBatchNameAndUsageStatus("JAACC_11Dec16", UsageStatusEnum.LOCKED));
     }
 
     private FundPool buildNtsFundPool(BigDecimal nonStmAmount) {
