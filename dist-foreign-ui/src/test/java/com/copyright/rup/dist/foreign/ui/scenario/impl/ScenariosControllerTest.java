@@ -167,7 +167,7 @@ public class ScenariosControllerTest {
         Whitebox.setInternalState(scenariosController, "reconcileRightsholdersController",
             reconcileRightsholdersController);
         expect(reconcileRightsholdersController.getOwnershipAdjustmentReportStreamSource())
-            .andReturn(createMock(IStreamSource.class));
+            .andReturn(createMock(IStreamSource.class)).once();
         IRightsholderDiscrepancyService rightsholderDiscrepancyService =
             createMock(IRightsholderDiscrepancyService.class);
         Whitebox.setInternalState(scenariosController, rightsholderDiscrepancyService);
@@ -272,7 +272,7 @@ public class ScenariosControllerTest {
         IScenarioUsageFilterService scenarioUsageFilterService = createMock(IScenarioUsageFilterService.class);
         Whitebox.setInternalState(scenariosController, scenarioUsageFilterService);
         expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
-        expect(scenarioUsageFilterService.getByScenarioId(SCENARIO_ID)).andReturn(null);
+        expect(scenarioUsageFilterService.getByScenarioId(SCENARIO_ID)).andReturn(null).once();
         Windows.showNotificationWindow("There are no usages that meet the criteria");
         expectLastCall().once();
         replay(Windows.class, scenariosWidget, scenarioUsageFilterService);
@@ -286,7 +286,7 @@ public class ScenariosControllerTest {
         IScenarioUsageFilterService scenarioUsageFilterService = createMock(IScenarioUsageFilterService.class);
         Whitebox.setInternalState(scenariosController, scenarioUsageFilterService);
         expect(scenariosWidget.getSelectedScenario()).andReturn(scenario).once();
-        expect(scenarioUsageFilterService.getByScenarioId(SCENARIO_ID)).andReturn(new ScenarioUsageFilter());
+        expect(scenarioUsageFilterService.getByScenarioId(SCENARIO_ID)).andReturn(new ScenarioUsageFilter()).once();
         IUsageService usageService = createMock(IUsageService.class);
         Whitebox.setInternalState(scenariosController, usageService);
         UsageDto usageDto = new UsageDto();
@@ -326,7 +326,7 @@ public class ScenariosControllerTest {
         usageBatch.setId("batchId");
         usageBatch.setName("BatchName");
         scenarioUsageFilter.setUsageBatches(Collections.singleton(usageBatch));
-        expect(scenarioUsageFilterService.getByScenarioId(SCENARIO_ID)).andReturn(scenarioUsageFilter);
+        expect(scenarioUsageFilterService.getByScenarioId(SCENARIO_ID)).andReturn(scenarioUsageFilter).once();
         IRightsholderService rightsholderService = createMock(IRightsholderService.class);
         Whitebox.setInternalState(scenariosController, rightsholderService);
         expect(rightsholderService.updateAndGetRightsholders(Sets.newHashSet(1000000001L, 1000000002L))).andReturn(
