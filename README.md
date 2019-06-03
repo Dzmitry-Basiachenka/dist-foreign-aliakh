@@ -1,3 +1,14 @@
+5.1.41
+-
+* B-51659 Tech Debt: FDA: make changes based on comments in CR-DIST-FOREIGN-109
+* B-50669 FDA: View NTS Fund Pools Information: make changes based on comments in CR-DIST-FOREIGN-113
+* CDP-757 FDA: Export from RH reconcile view: Ownership Adjustment Report displays unapproved rightsholder discrepancies for scenarios in APPROVED, SENT_TO_LM and ARCHIVED statuses
+* B-51659 Tech Debt: FDA: adjust grids on View Fund Pool, View Usage Batch and Work Classification windows to make them resizable
+* B-51659 Tech Debt: FDA: use common components for Job Status notification logic from dist-common
+* B-50684 FDA: Send FAS Batch Name to RMS as RMS Job Name: make changes based on comments in CR-DIST-FOREIGN-112
+* B-51553 FDA: Export from RH reconcile view: make changes based on comments in CR-DIST-FOREIGN-111
+* CDP-758 FDA: NTS Withdrawn determination: Usages with the same wr wrk inst get both NTS_WITHDRAWN and RH_NOT_FOUND statuses
+
 5.1.40
 -
 * B-50669 FDA: View NTS Fund Pools Information: Remove Delete Usage Batch window and button from Usages tab
