@@ -109,7 +109,6 @@ public class UsageRepositoryIntegrationTest {
     private static final String USAGE_ID_6 = "62e0ddd7-a37f-4810-8ada-abab805cb48d";
     private static final String USAGE_ID_7 = "cf38d390-11bb-4af7-9685-e034c9c32fb6";
     private static final String USAGE_ID_8 = "b1f0b236-3ae9-4a60-9fab-61db84199d11";
-    private static final String USAGE_ID_9 = "5c5f8c1c-1418-4cfd-8685-9212f4c421d1";
     private static final String USAGE_ID_11 = "7db6455e-5249-44db-801a-307f1c239310";
     private static final String USAGE_ID_12 = "593c49c3-eb5b-477b-8556-f7a4725df2b3";
     private static final String USAGE_ID_13 = "66a7c2c0-3b09-48ad-9aa5-a6d0822226c7";
@@ -126,6 +125,10 @@ public class UsageRepositoryIntegrationTest {
     private static final String USAGE_ID_24 = "3c31db4f-4065-4fe1-84c2-b48a0f3bc079";
     private static final String USAGE_ID_25 = "f6cb5b07-45c0-4188-9da3-920046eec4c0";
     private static final String USAGE_ID_26 = "f255188f-d582-4516-8c08-835cfe1d68c3";
+    private static final String USAGE_ID_27 = "2f2ca785-a7d3-4a7f-abd9-2bad80ac71dd";
+    private static final String USAGE_ID_28 = "cbd6768d-a424-476e-b502-a832d9dbe85e";
+    private static final String USAGE_ID_29 = "d5e3c637-155a-4c05-999a-31a07e335491";
+    private static final String USAGE_ID_30 = "e2834925-ede5-4796-a30b-05770a6f04be";
     private static final String USAGE_ID_BELLETRISTIC = "bbbd64db-2668-499a-9d18-be8b3f87fbf5";
     private static final String USAGE_ID_UNCLASSIFIED = "6cad4cf2-6a19-4e5b-b4e0-f2f7a62ff91c";
     private static final String USAGE_ID_STM = "83a26087-a3b3-43ca-8b34-c66134fb6edf";
@@ -210,9 +213,9 @@ public class UsageRepositoryIntegrationTest {
         UsageFilter usageFilter = buildUsageFilter(Collections.emptySet(), Collections.emptySet(),
             Collections.singleton(FAS_PRODUCT_FAMILY), null, null, null);
         verifyUsageDtos(usageRepository.findDtosByFilter(usageFilter, null,
-            new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 16, USAGE_ID_14, USAGE_ID_1, USAGE_ID_23, USAGE_ID_21,
-            USAGE_ID_12, USAGE_ID_9, USAGE_ID_6, USAGE_ID_13, USAGE_ID_18, USAGE_ID_11, USAGE_ID_2, USAGE_ID_19,
-            USAGE_ID_17, USAGE_ID_22, USAGE_ID_4, USAGE_ID_20);
+            new Sort(DETAIL_ID_KEY, Sort.Direction.ASC)), 20, USAGE_ID_14, USAGE_ID_27, USAGE_ID_1, USAGE_ID_23,
+            USAGE_ID_21, USAGE_ID_12, USAGE_ID_3, USAGE_ID_6, USAGE_ID_13, USAGE_ID_18, USAGE_ID_11, USAGE_ID_2,
+            USAGE_ID_19, USAGE_ID_17, USAGE_ID_22, USAGE_ID_28, USAGE_ID_29, USAGE_ID_4, USAGE_ID_20, USAGE_ID_30);
     }
 
     @Test
@@ -607,7 +610,7 @@ public class UsageRepositoryIntegrationTest {
 
     @Test
     public void testAddToScenario() {
-        List<Usage> usages = usageRepository.findByIds(Collections.singletonList(USAGE_ID_9));
+        List<Usage> usages = usageRepository.findByIds(Collections.singletonList(USAGE_ID_3));
         assertEquals(1, CollectionUtils.size(usages));
         Usage usage = usages.get(0);
         verifyFasUsage(usage, UsageStatusEnum.ELIGIBLE, null, StoredEntity.DEFAULT_USER, null);
@@ -621,7 +624,7 @@ public class UsageRepositoryIntegrationTest {
         usage.setNetAmount(netAmount);
         usage.setServiceFee(SERVICE_FEE);
         usageRepository.addToScenario(Collections.singletonList(usage));
-        usages = usageRepository.findByIds(Collections.singletonList(USAGE_ID_9));
+        usages = usageRepository.findByIds(Collections.singletonList(USAGE_ID_3));
         assertEquals(1, CollectionUtils.size(usages));
         verifyFasUsage(usages.get(0), UsageStatusEnum.LOCKED, SCENARIO_ID, USER_NAME, 2000017004L);
         assertEquals(SERVICE_FEE, usage.getServiceFee());
@@ -714,12 +717,14 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testGetTotalAmountByWrWrkInstAndBatchId() {
-        assertEquals(new BigDecimal("32874.80"),
-            usageRepository.getTotalAmountByWrWrkInstAndBatchId(243904752L, "a5b64c3a-55d2-462e-b169-362dca6a4dd6"));
-        assertEquals(ZERO_AMOUNT,
-            usageRepository.getTotalAmountByWrWrkInstAndBatchId(243904752L, "8b56c3d6-52c0-4f25-8d78-923afcfd31e6"));
-        assertEquals(ZERO_AMOUNT, usageRepository.getTotalAmountByWrWrkInstAndBatchId(243904752L, "invalid id"));
+    public void testUpdateNtsWithdrawnUsagesAndGetIds() {
+        List<String> actualIds = usageRepository.updateNtsWithdrawnUsagesAndGetIds();
+        assertEquals(3, actualIds.size());
+        assertTrue(actualIds.containsAll(Arrays.asList(USAGE_ID_27, USAGE_ID_28, USAGE_ID_29)));
+        usageRepository.findByIds(actualIds).forEach(usage -> {
+            assertEquals(UsageStatusEnum.NTS_WITHDRAWN, usage.getStatus());
+            assertEquals("NTS", usage.getProductFamily());
+        });
     }
 
     @Test
@@ -753,14 +758,15 @@ public class UsageRepositoryIntegrationTest {
     public void testFindForAuditByProductFamilies() {
         AuditFilter filter = new AuditFilter();
         filter.setProductFamilies(Collections.singleton(FAS_PRODUCT_FAMILY));
-        assertEquals(28, usageRepository.findCountForAudit(filter));
-        List<UsageDto> usages = usageRepository.findForAudit(filter, new Pageable(0, 25), null);
-        verifyUsageDtos(usages, 25, USAGE_ID_14, USAGE_ID_15, USAGE_ID_16, USAGE_ID_1, USAGE_ID_23,
-            USAGE_ID_21, USAGE_ID_12, USAGE_ID_9, USAGE_ID_6, USAGE_ID_13, USAGE_ID_18, USAGE_ID_11, USAGE_ID_2,
-            USAGE_ID_19, USAGE_ID_5, USAGE_ID_8, USAGE_ID_17, USAGE_ID_22, POST_DISTRIBUTION_USAGE_ID, USAGE_ID_7,
-            "b6fc6063-a0ea-4e4d-832d-b1cbc896963d", "a9fac1e1-5a34-416b-9ecb-f2615b24d1c1",
-            "33113b79-791a-4aa9-b192-12b292c32823", "5b8c2754-2f63-425a-a95f-dbd744e815fc",
-            "bc0fe9bc-9b24-4324-b624-eed0d9773e19");
+        assertEquals(32, usageRepository.findCountForAudit(filter));
+        List<UsageDto> usages =
+            usageRepository.findForAudit(filter, new Pageable(0, 25), new Sort(DETAIL_ID_KEY, Sort.Direction.ASC));
+        verifyUsageDtos(usages, 25, USAGE_ID_14, USAGE_ID_15, USAGE_ID_16, USAGE_ID_27,
+            "33113b79-791a-4aa9-b192-12b292c32823", USAGE_ID_1, USAGE_ID_23, USAGE_ID_21, USAGE_ID_12,
+            "5b8c2754-2f63-425a-a95f-dbd744e815fc", USAGE_ID_3, USAGE_ID_6, USAGE_ID_13,
+            USAGE_ID_18, USAGE_ID_11, USAGE_ID_2, USAGE_ID_19, USAGE_ID_5, "a9fac1e1-5a34-416b-9ecb-f2615b24d1c1",
+            USAGE_ID_8, USAGE_ID_17, "b6fc6063-a0ea-4e4d-832d-b1cbc896963d", "bc0fe9bc-9b24-4324-b624-eed0d9773e19",
+            USAGE_ID_22, USAGE_ID_28, POST_DISTRIBUTION_USAGE_ID, USAGE_ID_7);
     }
 
     @Test
@@ -1326,20 +1332,19 @@ public class UsageRepositoryIntegrationTest {
 
     private void populateScenario() {
         List<Usage> usages = Lists.newArrayListWithExpectedSize(3);
-        Usage usage =
-            usageRepository.findByIds(Collections.singletonList("3ab5e80b-89c0-4d78-9675-54c7ab284450")).get(0);
+        Usage usage = usageRepository.findByIds(Collections.singletonList(USAGE_ID_1)).get(0);
         usage.getPayee().setAccountNumber(1000009997L);
         usage.setScenarioId(SCENARIO_ID);
         usage.setServiceFee(SERVICE_FEE);
         calculateAmounts(usage);
         usages.add(usage);
-        usage = usageRepository.findByIds(Collections.singletonList("8a06905f-37ae-4e1f-8550-245277f8165c")).get(0);
+        usage = usageRepository.findByIds(Collections.singletonList(USAGE_ID_2)).get(0);
         usage.getPayee().setAccountNumber(1000002859L);
         usage.setScenarioId(SCENARIO_ID);
         usage.setServiceFee(SERVICE_FEE);
         calculateAmounts(usage);
         usages.add(usage);
-        usage = usageRepository.findByIds(Collections.singletonList(USAGE_ID_9)).get(0);
+        usage = usageRepository.findByIds(Collections.singletonList(USAGE_ID_3)).get(0);
         usage.getPayee().setAccountNumber(1000005413L);
         usage.setScenarioId(SCENARIO_ID);
         usage.setServiceFee(SERVICE_FEE);

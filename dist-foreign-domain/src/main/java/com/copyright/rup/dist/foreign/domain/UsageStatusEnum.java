@@ -43,11 +43,6 @@ public enum UsageStatusEnum {
     RH_FOUND,
 
     /**
-     * Status for usages that were sent to LM.
-     */
-    SENT_TO_LM,
-
-    /**
      * Status for usages that were sent to RA.
      */
     SENT_FOR_RA,
@@ -91,6 +86,11 @@ public enum UsageStatusEnum {
      * Status for paid usages.
      */
     PAID,
+
+    /**
+     * Status for usages that were sent to LM.
+     */
+    SENT_TO_LM,
 
     /**
      * Status for sent to CRM usages.

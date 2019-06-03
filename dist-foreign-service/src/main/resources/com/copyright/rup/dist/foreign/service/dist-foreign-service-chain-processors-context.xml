@@ -8,12 +8,10 @@
     <bean id="df.service.commonEligibilityProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.EligibilityProcessor"/>
 
     <!-- FAS/FAS2 processors -->
-    <bean id="df.service.fasRhNotFoundProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.RhNotFoundProcessor"/>
 
     <bean id="df.service.fasRightsProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.RightsProcessor">
         <property name="usageStatus" value="WORK_FOUND"/>
         <property name="successProcessor" ref="df.service.commonEligibilityProcessor"/>
-        <property name="failureProcessor" ref="df.service.fasRhNotFoundProcessor"/>
     </bean>
 
     <bean id="df.service.fasMatchingProcessor" class="com.copyright.rup.dist.foreign.service.impl.chain.processor.MatchingProcessor">

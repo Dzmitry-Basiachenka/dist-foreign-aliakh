@@ -15,7 +15,6 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
 
-import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -123,13 +122,12 @@ public interface IUsageService {
     int getUsagesCountForNtsBatch(UsageBatch usageBatch);
 
     /**
-     * Calculates total gross amount by Wr Wrk Inst and batch identifier.
+     * Updates under minimum usages grouped by Wr Wrk Inst in {@link UsageStatusEnum#RH_NOT_FOUND} status.
+     * Sets NTS product family and {@link UsageStatusEnum#NTS_WITHDRAWN} status.
      *
-     * @param wrWrkInst Wr Wrk Inst
-     * @param batchId   batch identifier
-     * @return total gross amount
+     * @return updated usages ids
      */
-    BigDecimal getTotalAmountByWrWrkInstAndBatchId(Long wrWrkInst, String batchId);
+    List<String> updateNtsWithdrawnUsagesAndGetIds();
 
     /**
      * Gets rightsholders account numbers that are not presented in database based on {@link UsageFilter}.

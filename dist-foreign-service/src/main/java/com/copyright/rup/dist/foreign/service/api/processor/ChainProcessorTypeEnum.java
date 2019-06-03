@@ -22,11 +22,6 @@ public enum ChainProcessorTypeEnum {
     RIGHTS,
 
     /**
-     * Rightsholder not found processor.
-     */
-    RH_NOT_FOUND,
-
-    /**
      * Deleting processor.
      */
     DELETE,

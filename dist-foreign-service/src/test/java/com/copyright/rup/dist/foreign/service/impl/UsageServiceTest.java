@@ -277,10 +277,10 @@ public class UsageServiceTest {
 
     @Test
     public void testGetTotalAmountByWrWrkInstAndBatchId() {
-        expect(usageRepository.getTotalAmountByWrWrkInstAndBatchId(123456789L, BATCH_ID))
-            .andReturn(BigDecimal.TEN).once();
+        List<String> ids = Arrays.asList(USAGE_ID_1, USAGE_ID_2);
+        expect(usageRepository.updateNtsWithdrawnUsagesAndGetIds()).andReturn(ids).once();
         replay(usageRepository);
-        assertEquals(BigDecimal.TEN, usageService.getTotalAmountByWrWrkInstAndBatchId(123456789L, BATCH_ID));
+        assertEquals(ids, usageService.updateNtsWithdrawnUsagesAndGetIds());
         verify(usageRepository);
     }
 
