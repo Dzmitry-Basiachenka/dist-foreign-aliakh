@@ -1111,7 +1111,10 @@ databaseChangeLog {
         }
 
         rollback {
-            // automatic rollback
+            update(schemaName: dbAppsSchema, tableName: 'df_rightsholder_discrepancy') {
+                column(name: 'status_ind', value: 'IN_PROGRESS')
+                where "status_ind = 'DRAFT'"
+            }
         }
     }
 }
