@@ -27,7 +27,7 @@ import com.copyright.rup.dist.foreign.service.impl.csv.CsvProcessorFactory;
 import com.copyright.rup.dist.foreign.service.impl.csv.ResearchedUsagesCsvProcessor;
 import com.copyright.rup.dist.foreign.service.impl.csv.UsageCsvProcessor;
 import com.copyright.rup.dist.foreign.ui.common.ByteArrayStreamSource;
-import com.copyright.rup.dist.foreign.ui.common.ExportStreamSource;
+import com.copyright.rup.dist.foreign.ui.report.api.IStreamSourceHandler;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesFilterController;
@@ -98,6 +98,8 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     private CsvProcessorFactory csvProcessorFactory;
     @Autowired
     private IReportService reportService;
+    @Autowired
+    private IStreamSourceHandler streamSourceHandler;
     @Autowired
     private IWorkClassificationController workClassificationController;
     @Autowired
@@ -246,9 +248,8 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
 
     @Override
     public IStreamSource getExportUsagesStreamSource() {
-        return new ExportStreamSource("export_usage_",
-            pipedStream -> reportService.writeUsageCsvReport(filterController.getWidget().getAppliedFilter(),
-                pipedStream));
+        return streamSourceHandler.getCsvStreamSource(() -> "export_usage_",
+            pos -> reportService.writeUsageCsvReport(filterController.getWidget().getAppliedFilter(), pos));
     }
 
     @Override
@@ -305,9 +306,8 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     @Override
     public IStreamSource getPreServiceFeeFundBatchesStreamSource(List<UsageBatch> batches,
                                                                  BigDecimal totalGrossAmount) {
-        return new ExportStreamSource("pre_service_fee_fund_batches_",
-            pipedOutputStream -> reportService.writePreServiceFeeFundBatchesCsvReport(batches, totalGrossAmount,
-                pipedOutputStream));
+        return streamSourceHandler.getCsvStreamSource(() -> "pre_service_fee_fund_batches_",
+            pos -> reportService.writePreServiceFeeFundBatchesCsvReport(batches, totalGrossAmount, pos));
     }
 
     @Override

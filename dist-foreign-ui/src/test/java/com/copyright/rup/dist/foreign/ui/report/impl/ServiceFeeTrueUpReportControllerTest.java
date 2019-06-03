@@ -1,7 +1,8 @@
 package com.copyright.rup.dist.foreign.ui.report.impl;
 
-import static org.easymock.EasyMock.anyObject;
+import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
@@ -11,6 +12,9 @@ import static org.powermock.api.easymock.PowerMock.verify;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.ui.report.api.IServiceFeeTrueUpReportWidget;
+import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
+
+import org.easymock.Capture;
 import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
@@ -48,20 +52,32 @@ public class ServiceFeeTrueUpReportControllerTest {
     }
 
     @Test
-    public void testSendForResearchUsagesStreamSourceFileName() {
-        assertEquals(
-            "service_fee_true_up_report_" + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm") + ".csv",
-            controller.getServiceFeeTrueUpReportStreamSource().getFileName());
-    }
-
-    @Test
-    public void testGetServiveFeeTrueUpReportStreamSource() {
-        reportService.writeServiceFeeTrueUpCsvReport(anyObject(LocalDate.class), anyObject(LocalDate.class),
-            anyObject(LocalDate.class), anyObject(OutputStream.class));
+    public void testGetCsvStreamSource() {
+        LocalDate fromDate = LocalDate.now();
+        LocalDate toDate = LocalDate.now().plusDays(1);
+        LocalDate paymentDateTo = LocalDate.now().plusDays(2);
+        IServiceFeeTrueUpReportWidget widget = createMock(IServiceFeeTrueUpReportWidget.class);
+        Whitebox.setInternalState(controller, widget);
+        String fileName = "service_fee_true_up_report_";
+        Capture<LocalDate> fromDateCapture = new Capture<>();
+        Capture<LocalDate> toDateCapture = new Capture<>();
+        Capture<LocalDate> paymentDateToCapture = new Capture<>();
+        Capture<OutputStream> osCapture = new Capture<>();
+        expect(widget.getFromDate()).andReturn(fromDate).once();
+        expect(widget.getToDate()).andReturn(toDate).once();
+        expect(widget.getPaymentDateTo()).andReturn(paymentDateTo).once();
+        reportService.writeServiceFeeTrueUpCsvReport(capture(fromDateCapture), capture(toDateCapture),
+            capture(paymentDateToCapture), capture(osCapture));
         expectLastCall().once();
-        replay(reportService);
-        controller.initWidget();
-        assertNotNull(controller.getServiceFeeTrueUpReportStreamSource().getStream());
-        verify(reportService);
+        replay(widget, reportService);
+        IStreamSource streamSource = controller.getCsvStreamSource();
+        assertEquals(fileName + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm") + ".csv",
+            streamSource.getFileName());
+        assertNotNull(streamSource.getStream());
+        assertEquals(fromDate, fromDateCapture.getValue());
+        assertEquals(toDate, toDateCapture.getValue());
+        assertEquals(paymentDateTo, paymentDateToCapture.getValue());
+        assertNotNull(osCapture.getValue());
+        verify(widget, reportService);
     }
 }

@@ -1,7 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
 import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
@@ -9,7 +8,6 @@ import static org.junit.Assert.assertTrue;
 
 import com.copyright.rup.dist.foreign.ui.scenario.api.IReconcileRightsholdersController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
-import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.ui.component.downloader.OnDemandFileDownloader;
 
 import com.vaadin.server.Extension;
@@ -45,8 +43,6 @@ public class RightsholderDiscrepanciesWindowTest {
     public void testConstructor() {
         IReconcileRightsholdersController reconcileRightsholdersController =
             createMock(IReconcileRightsholdersController.class);
-        expect(reconcileRightsholdersController.getOwnershipAdjustmentReportStreamSource())
-            .andReturn(createMock(IStreamSource.class)).once();
         IScenariosController scenariosController = createMock(IScenariosController.class);
         replay(reconcileRightsholdersController);
         RightsholderDiscrepanciesWindow window =

@@ -30,10 +30,10 @@ public class ServiceFeeTrueUpReportController extends CommonController<IServiceF
     private IReportService reportService;
 
     @Override
-    public IStreamSource getServiceFeeTrueUpReportStreamSource() {
-        return new ByteArrayStreamSource("service_fee_true_up_report_", outputStream ->
-            reportService.writeServiceFeeTrueUpCsvReport(getWidget().getFromDate(), getWidget().getToDate(),
-                getWidget().getPaymentDateTo(), outputStream));
+    public IStreamSource getCsvStreamSource() {
+        return new ByteArrayStreamSource("service_fee_true_up_report_",
+            os -> reportService.writeServiceFeeTrueUpCsvReport(getWidget().getFromDate(), getWidget().getToDate(),
+                getWidget().getPaymentDateTo(), os));
     }
 
     @Override

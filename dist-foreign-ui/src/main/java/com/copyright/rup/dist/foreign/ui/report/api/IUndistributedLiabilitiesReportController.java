@@ -1,6 +1,5 @@
 package com.copyright.rup.dist.foreign.ui.report.api;
 
-import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.widget.api.IController;
 
 /**
@@ -12,10 +11,6 @@ import com.copyright.rup.vaadin.widget.api.IController;
  *
  * @author Uladzislau_Shalamitski
  */
-public interface IUndistributedLiabilitiesReportController extends IController<IUndistributedLiabilitiesReportWidget> {
-
-    /**
-     * @return instance of {@link IStreamSource} for undistributed liabilities reconciliation report.
-     */
-    IStreamSource getUndistributedLiabilitiesReportStreamSource();
+public interface IUndistributedLiabilitiesReportController extends IController<IUndistributedLiabilitiesReportWidget>,
+    ICsvReportProvider {
 }

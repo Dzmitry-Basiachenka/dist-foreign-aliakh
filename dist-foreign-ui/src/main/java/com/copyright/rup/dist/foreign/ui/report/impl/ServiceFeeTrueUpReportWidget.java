@@ -1,5 +1,6 @@
 package com.copyright.rup.dist.foreign.ui.report.impl;
 
+import com.copyright.rup.dist.foreign.ui.common.component.CsvStreamSource;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.report.api.IServiceFeeTrueUpReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IServiceFeeTrueUpReportWidget;
@@ -85,8 +86,7 @@ public class ServiceFeeTrueUpReportWidget extends Window implements IServiceFeeT
         Button closeButton = Buttons.createCloseButton((Window) controller.getWidget());
         exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
         exportButton.setEnabled(false);
-        OnDemandFileDownloader downloader =
-            new OnDemandFileDownloader(controller.getServiceFeeTrueUpReportStreamSource());
+        OnDemandFileDownloader downloader = new OnDemandFileDownloader(new CsvStreamSource(controller));
         downloader.extend(exportButton);
         HorizontalLayout layout = new HorizontalLayout(exportButton, closeButton);
         layout.setComponentAlignment(closeButton, Alignment.MIDDLE_RIGHT);

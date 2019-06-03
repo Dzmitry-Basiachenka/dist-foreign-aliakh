@@ -182,7 +182,6 @@ public class AuditWidgetTest {
     private void initWidget() {
         expect(controller.getAuditFilterController()).andReturn(filterController).once();
         expect(filterController.initWidget()).andReturn(filterWidget).once();
-        expect(controller.getExportUsagesStreamSource()).andReturn(streamSource).once();
         replay(controller, filterController, streamSource);
         widget.init();
         verify(controller, filterController, streamSource);

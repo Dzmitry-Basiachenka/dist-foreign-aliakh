@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.ui.report.api.IOwnershipAdjustmentReportController;
 import com.copyright.rup.dist.foreign.ui.report.api.IOwnershipAdjustmentReportWidget;
+import com.copyright.rup.dist.foreign.ui.report.api.IStreamSourceHandler;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
@@ -42,16 +43,20 @@ public class OwnershipAdjustmentReportController extends CommonController<IOwner
     @Autowired
     private IReportService reportService;
 
+    @Autowired
+    private IStreamSourceHandler streamSourceHandler;
+
     @Override
     public List<Scenario> getScenarios() {
         return scenarioService.getScenarios();
     }
 
     @Override
-    public IStreamSource getOwnershipAdjustmentReportStreamSource() {
-        return new OwnershipAdjustmentCsvReportExportStreamSource(() -> getWidget().getScenario(),
-            pipedStream -> reportService.writeOwnershipAdjustmentCsvReport(getWidget().getScenario().getId(),
-                REPORT_STATUSES, pipedStream));
+    public IStreamSource getCsvStreamSource() {
+        return streamSourceHandler.getCsvStreamSource(
+            () -> String.format("ownership_adjustment_report_%s_", getWidget().getScenario().getName()),
+            pos -> reportService.writeOwnershipAdjustmentCsvReport(getWidget().getScenario().getId(),
+                REPORT_STATUSES, pos));
     }
 
     @Override

@@ -11,7 +11,7 @@ import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditController;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterController;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditWidget;
-import com.copyright.rup.dist.foreign.ui.common.ExportStreamSource;
+import com.copyright.rup.dist.foreign.ui.report.api.IStreamSourceHandler;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.api.CommonController;
@@ -49,6 +49,8 @@ public class AuditController extends CommonController<IAuditWidget> implements I
     private IUsageService usageService;
     @Autowired
     private IReportService reportService;
+    @Autowired
+    private IStreamSourceHandler streamSourceHandler;
 
     @Override
     public IAuditFilterController getAuditFilterController() {
@@ -85,9 +87,9 @@ public class AuditController extends CommonController<IAuditWidget> implements I
     }
 
     @Override
-    public IStreamSource getExportUsagesStreamSource() {
-        return new ExportStreamSource("export_usage_audit_",
-            pipedStream -> reportService.writeAuditCsvReport(getFilter(), pipedStream));
+    public IStreamSource getCsvStreamSource() {
+        return streamSourceHandler.getCsvStreamSource(() -> "export_usage_audit_",
+            pos -> reportService.writeAuditCsvReport(getFilter(), pos));
     }
 
     @Override

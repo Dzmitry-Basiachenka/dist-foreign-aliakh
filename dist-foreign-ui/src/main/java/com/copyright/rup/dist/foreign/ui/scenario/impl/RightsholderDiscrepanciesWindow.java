@@ -1,6 +1,7 @@
 package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
 import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancy;
+import com.copyright.rup.dist.foreign.ui.common.component.CsvStreamSource;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IReconcileRightsholdersController;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
@@ -69,8 +70,7 @@ class RightsholderDiscrepanciesWindow extends Window {
     private HorizontalLayout initButtons() {
         HorizontalLayout buttonsLayout = new HorizontalLayout();
         Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
-        OnDemandFileDownloader fileDownloader = new OnDemandFileDownloader(
-            controller.getOwnershipAdjustmentReportStreamSource());
+        OnDemandFileDownloader fileDownloader = new OnDemandFileDownloader(new CsvStreamSource(controller));
         fileDownloader.extend(exportButton);
         Button approveButton = Buttons.createButton(ForeignUi.getMessage("button.approve"));
         approveButton.addClickListener(event -> {

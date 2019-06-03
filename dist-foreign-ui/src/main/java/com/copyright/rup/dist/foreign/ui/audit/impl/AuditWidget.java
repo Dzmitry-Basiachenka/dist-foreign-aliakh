@@ -6,6 +6,7 @@ import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditController;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterWidget;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditWidget;
+import com.copyright.rup.dist.foreign.ui.common.component.CsvStreamSource;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.FilterChangedEvent;
 import com.copyright.rup.vaadin.ui.Buttons;
@@ -103,7 +104,7 @@ public class AuditWidget extends HorizontalSplitPanel implements IAuditWidget {
         searchWidget.setPrompt(ForeignUi.getMessage("prompt.audit_search"));
         searchWidget.setWidth(75, Unit.PERCENTAGE);
         Button exportButton = Buttons.createButton(ForeignUi.getMessage("button.export"));
-        OnDemandFileDownloader fileDownloader = new OnDemandFileDownloader(controller.getExportUsagesStreamSource());
+        OnDemandFileDownloader fileDownloader = new OnDemandFileDownloader(new CsvStreamSource(controller));
         fileDownloader.extend(exportButton);
         HorizontalLayout toolbar = new HorizontalLayout(exportButton, searchWidget);
         VaadinUtils.setMaxComponentsWidth(toolbar);

@@ -9,7 +9,7 @@ import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderDiscrepancyService;
 import com.copyright.rup.dist.foreign.service.api.IScenarioService;
-import com.copyright.rup.dist.foreign.ui.report.impl.OwnershipAdjustmentCsvReportExportStreamSource;
+import com.copyright.rup.dist.foreign.ui.report.api.IStreamSourceHandler;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IReconcileRightsholdersController;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 
@@ -46,6 +46,8 @@ public class ReconcileRightsholdersController implements IReconcileRightsholders
     private IRightsholderDiscrepancyService rightsholderDiscrepancyService;
     @Autowired
     private IReportService reportService;
+    @Autowired
+    private IStreamSourceHandler streamSourceHandler;
 
     @Override
     public void approveReconciliation() {
@@ -85,9 +87,10 @@ public class ReconcileRightsholdersController implements IReconcileRightsholders
     }
 
     @Override
-    public IStreamSource getOwnershipAdjustmentReportStreamSource() {
-        return new OwnershipAdjustmentCsvReportExportStreamSource(() -> scenario,
-            pipedStream -> reportService.writeOwnershipAdjustmentCsvReport(scenario.getId(),
-                Collections.singleton(RightsholderDiscrepancyStatusEnum.DRAFT), pipedStream));
+    public IStreamSource getCsvStreamSource() {
+        return streamSourceHandler.getCsvStreamSource(
+            () -> String.format("ownership_adjustment_report_%s_", scenario.getName()),
+            pos -> reportService.writeOwnershipAdjustmentCsvReport(scenario.getId(),
+                Collections.singleton(RightsholderDiscrepancyStatusEnum.DRAFT), pos));
     }
 }

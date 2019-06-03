@@ -16,16 +16,18 @@ import com.copyright.rup.dist.common.util.CommonDateUtils;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.AuditFilter;
+import com.copyright.rup.dist.foreign.service.api.IReportService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterController;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditFilterWidget;
 import com.copyright.rup.dist.foreign.ui.audit.api.IAuditWidget;
-import com.copyright.rup.dist.foreign.ui.common.ExportStreamSource;
+import com.copyright.rup.dist.foreign.ui.report.api.IStreamSourceHandler;
+import com.copyright.rup.dist.foreign.ui.report.impl.StreamSource;
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
-import com.copyright.rup.vaadin.widget.api.IWidget;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
 import org.junit.Before;
@@ -35,10 +37,15 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import java.io.InputStream;
+import java.io.PipedOutputStream;
+import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * Verifies {@link AuditController}.
@@ -59,6 +66,8 @@ public class AuditControllerTest {
     private IUsageService usageService;
     private IAuditWidget auditWidget;
     private IAuditFilterWidget filterWidget;
+    private IReportService reportService;
+    private IStreamSourceHandler streamSourceHandler;
 
     @Before
     public void setUp() {
@@ -67,11 +76,15 @@ public class AuditControllerTest {
         usageService = createMock(IUsageService.class);
         auditWidget = createMock(IAuditWidget.class);
         filterWidget = createMock(IAuditFilterWidget.class);
+        reportService = createMock(IReportService.class);
+        streamSourceHandler = createMock(IStreamSourceHandler.class);
         controller = new AuditController();
-        Whitebox.setInternalState(controller, IWidget.class, auditWidget);
-        Whitebox.setInternalState(controller, "usageAuditService", usageAuditService);
-        Whitebox.setInternalState(controller, "auditFilterController", auditFilterController);
-        Whitebox.setInternalState(controller, "usageService", usageService);
+        Whitebox.setInternalState(controller, auditWidget);
+        Whitebox.setInternalState(controller, usageAuditService);
+        Whitebox.setInternalState(controller, auditFilterController);
+        Whitebox.setInternalState(controller, usageService);
+        Whitebox.setInternalState(controller, reportService);
+        Whitebox.setInternalState(controller, streamSourceHandler);
     }
 
     @Test
@@ -151,12 +164,28 @@ public class AuditControllerTest {
     }
 
     @Test
-    public void testGetExportUsagesStreamSource() {
-        IStreamSource streamSource = controller.getExportUsagesStreamSource();
-        assertTrue(streamSource instanceof ExportStreamSource);
-        assertNotNull(streamSource.getStream());
-        assertEquals("export_usage_audit_" + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm") + ".csv",
+    public void testGetCsvStreamSource() {
+        AuditFilter filter = new AuditFilter();
+        Capture<Supplier<String>> fileNameSupplierCapture = new Capture<>();
+        Capture<Consumer<PipedOutputStream>> posConsumerCapture = new Capture<>();
+        String fileName = "export_usage_audit_";
+        Supplier<String> fileNameSupplier = () -> fileName;
+        Supplier<InputStream> isSupplier = () -> IOUtils.toInputStream(StringUtils.EMPTY, StandardCharsets.UTF_8);
+        PipedOutputStream pos = new PipedOutputStream();
+        expect(auditFilterController.getWidget()).andReturn(filterWidget).once();
+        expect(filterWidget.getAppliedFilter()).andReturn(filter).once();
+        expect(streamSourceHandler.getCsvStreamSource(capture(fileNameSupplierCapture), capture(posConsumerCapture)))
+            .andReturn(new StreamSource(fileNameSupplier, "csv", isSupplier)).once();
+        reportService.writeAuditCsvReport(filter, pos);
+        expectLastCall().once();
+        replay(auditFilterController, filterWidget, streamSourceHandler, reportService);
+        IStreamSource streamSource = controller.getCsvStreamSource();
+        assertEquals(fileName + CommonDateUtils.format(OffsetDateTime.now(), "MM_dd_YYYY_HH_mm") + ".csv",
             streamSource.getFileName());
+        assertEquals(fileName, fileNameSupplierCapture.getValue().get());
+        Consumer<PipedOutputStream> posConsumer = posConsumerCapture.getValue();
+        posConsumer.accept(pos);
+        verify(auditFilterController, filterWidget, streamSourceHandler, reportService);
     }
 
     @Test
