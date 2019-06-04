@@ -24,7 +24,6 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Work;
 import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
-import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 import com.copyright.rup.dist.foreign.service.api.executor.IChainExecutor;
@@ -77,7 +76,6 @@ public class UsageBatchServiceTest {
     private UsageBatchService usageBatchService;
     private IChainExecutor<Usage> chainExecutor;
     private ExecutorService executorService;
-    private IUsageRepository usageRepository;
     private IPiIntegrationService piIntegrationService;
 
     @Before
@@ -88,7 +86,6 @@ public class UsageBatchServiceTest {
         rightsholderService = createMock(IRightsholderService.class);
         chainExecutor = createMock(IChainExecutor.class);
         executorService = createMock(ExecutorService.class);
-        usageRepository = createMock(IUsageRepository.class);
         piIntegrationService = createMock(IPiIntegrationService.class);
         usageBatchService = new UsageBatchService();
         Whitebox.setInternalState(usageBatchService, "piIntegrationService", piIntegrationService);
@@ -97,7 +94,6 @@ public class UsageBatchServiceTest {
         Whitebox.setInternalState(usageBatchService, "rightsholderService", rightsholderService);
         Whitebox.setInternalState(usageBatchService, "chainExecutor", chainExecutor);
         Whitebox.setInternalState(usageBatchService, "executorService", executorService);
-        Whitebox.setInternalState(usageBatchService, "usageRepository", usageRepository);
         Whitebox.setInternalState(usageBatchService, "usagesBatchSize", 100);
     }
 
@@ -232,18 +228,18 @@ public class UsageBatchServiceTest {
         Usage usage2 = new Usage();
         usage2.setStatus(UsageStatusEnum.WORK_FOUND);
         List<Usage> usages = Arrays.asList(usage1, usage2);
-        expect(usageRepository.findByIds(usageIds)).andReturn(usages).once();
+        expect(usageService.getUsagesByIds(usageIds)).andReturn(usages).once();
         Capture<Runnable> captureRunnable = new Capture<>();
         executorService.execute(capture(captureRunnable));
         expectLastCall().once();
         chainExecutor.execute(usages, ChainProcessorTypeEnum.RIGHTS);
         expectLastCall().once();
-        replay(chainExecutor, executorService, usageRepository);
+        replay(chainExecutor, executorService, usageService);
         usageBatchService.getAndSendForGettingRights(usageIds, BATCH_NAME);
         assertNotNull(captureRunnable);
         Runnable runnable = captureRunnable.getValue();
         runnable.run();
-        verify(chainExecutor, executorService, usageRepository);
+        verify(chainExecutor, executorService, usageService);
     }
 
     @Test

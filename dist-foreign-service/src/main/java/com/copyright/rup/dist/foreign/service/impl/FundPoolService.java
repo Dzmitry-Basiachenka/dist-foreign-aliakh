@@ -5,7 +5,6 @@ import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.util.LogUtils;
 import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
 import com.copyright.rup.dist.foreign.repository.api.IFundPoolRepository;
-import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IFundPoolService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Implementation of {@link IFundPoolService}.
@@ -33,13 +33,11 @@ public class FundPoolService implements IFundPoolService {
     @Autowired
     private IFundPoolRepository fundPoolRepository;
     @Autowired
-    private IUsageRepository usageRepository;
-    @Autowired
     private IUsageService usageService;
 
     @Override
     @Transactional
-    public void create(PreServiceFeeFund fundPool, List<String> batchIds) {
+    public void create(PreServiceFeeFund fundPool, Set<String> batchIds) {
         String userName = RupContextUtils.getUserName();
         fundPool.setCreateUser(userName);
         fundPool.setUpdateUser(userName);
@@ -47,7 +45,7 @@ public class FundPoolService implements IFundPoolService {
             "Create Pre-Service fee fund. Started. FundPoolName={}, FundPoolAmount={}, BatchesCount={}, UserName={}",
             fundPool.getName(), fundPool.getAmount(), LogUtils.size(batchIds), userName);
         fundPoolRepository.insert(fundPool);
-        usageRepository.addWithdrawnUsagesToPreServiceFeeFund(fundPool.getId(), batchIds, userName);
+        usageService.addWithdrawnUsagesToPreServiceFeeFund(fundPool.getId(), batchIds, userName);
         LOGGER.info(
             "Create Pre-Service fee fund. Finished. FundPoolName={}, FundPoolAmount={}, BatchesCount={}, UserName={}",
             fundPool.getName(), fundPool.getAmount(), LogUtils.size(batchIds), userName);

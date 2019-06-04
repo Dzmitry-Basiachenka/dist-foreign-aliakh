@@ -22,7 +22,7 @@ import com.vaadin.ui.Window;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Window to create Pre-Service fee fund.
@@ -36,7 +36,7 @@ import java.util.List;
 class CreatePreServiceFeeFundWindow extends Window {
 
     private final IUsagesController controller;
-    private final List<String> batchIds;
+    private final Set<String> batchIds;
     private final BigDecimal amount;
     private final PreServiceFeeFundBatchesFilterWindow batchesFilterWindow;
     private final PreServiceFeeFundFilteredBatchesWindow filteredBatchesWindow;
@@ -49,12 +49,12 @@ class CreatePreServiceFeeFundWindow extends Window {
      * Constructor.
      *
      * @param controller            instance of {@link IUsagesController}
-     * @param batchIds              list of ids of usage batches
+     * @param batchIds              set of ids of usage batches
      * @param amount                gross amount
      * @param batchesFilterWindow   instance of {@link PreServiceFeeFundBatchesFilterWindow}
      * @param filteredBatchesWindow instance of {@link PreServiceFeeFundFilteredBatchesWindow}
      */
-    CreatePreServiceFeeFundWindow(IUsagesController controller, List<String> batchIds, BigDecimal amount,
+    CreatePreServiceFeeFundWindow(IUsagesController controller, Set<String> batchIds, BigDecimal amount,
                                   PreServiceFeeFundBatchesFilterWindow batchesFilterWindow,
                                   PreServiceFeeFundFilteredBatchesWindow filteredBatchesWindow) {
         this.controller = controller;

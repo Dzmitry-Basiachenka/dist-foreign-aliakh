@@ -11,7 +11,6 @@ import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Work;
 import com.copyright.rup.dist.foreign.integration.pi.api.IPiIntegrationService;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
-import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
@@ -67,8 +66,6 @@ public class UsageBatchService implements IUsageBatchService {
     private IUsageBatchRepository usageBatchRepository;
     @Autowired
     private IUsageService usageService;
-    @Autowired
-    private IUsageRepository usageRepository;
     @Autowired
     private IRightsholderService rightsholderService;
     @Autowired
@@ -168,7 +165,7 @@ public class UsageBatchService implements IUsageBatchService {
                 .forEach(partition -> {
                     usageIdsCount.addAndGet(partition.size());
                     LOGGER.info(GETTING_RIGHTS_STARTED_LOG, batchName, usageIdsCount, usagesBatchSize);
-                    List<Usage> workFoundUsages = usageRepository.findByIds(partition)
+                    List<Usage> workFoundUsages = usageService.getUsagesByIds(partition)
                         .stream()
                         .filter(usage -> UsageStatusEnum.WORK_FOUND == usage.getStatus())
                         .collect(Collectors.toList());

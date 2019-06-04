@@ -11,7 +11,6 @@ import com.copyright.rup.dist.foreign.domain.FdaConstants;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
-import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsService;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
@@ -60,9 +59,6 @@ public class RightsService implements IRightsService {
     private IUsageBatchService usageBatchService;
     @Autowired
     private IUsageService usageService;
-    //TODO {dbaraukova} replace repository with service
-    @Autowired
-    private IUsageRepository usageRepository;
     @Autowired
     private IUsageAuditService auditService;
     @Autowired
@@ -206,7 +202,7 @@ public class RightsService implements IRightsService {
         wrWrkInstToAccountNumber.forEach((wrWrkInst, rhAccountNumber) -> {
             List<Usage> usagesToUpdate = wrWrkInstToUsagesMap.get(wrWrkInst);
             Set<String> usageIds = usagesToUpdate.stream().map(Usage::getId).collect(Collectors.toSet());
-            usageRepository.updateStatusAndRhAccountNumber(usageIds, UsageStatusEnum.RH_FOUND, rhAccountNumber);
+            usageService.updateStatusAndRhAccountNumber(usageIds, UsageStatusEnum.RH_FOUND, rhAccountNumber);
             auditService.logAction(usageIds, UsageActionTypeEnum.RH_FOUND,
                 String.format("Rightsholder account %s was found in RMS", rhAccountNumber));
             chainExecutor.execute(usagesToUpdate, ChainProcessorTypeEnum.ELIGIBILITY);

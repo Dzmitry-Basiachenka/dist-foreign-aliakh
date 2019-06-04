@@ -13,7 +13,6 @@ import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
 import com.copyright.rup.dist.foreign.repository.api.IFundPoolRepository;
-import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
 import com.copyright.rup.dist.foreign.service.api.IUsageService;
 
 import org.junit.Before;
@@ -26,6 +25,7 @@ import org.powermock.reflect.Whitebox;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Verifies {@link FundPoolService}.
@@ -48,32 +48,29 @@ public class FundPoolServiceTest {
     private FundPoolService fundPoolService;
     private IUsageService usageService;
     private IFundPoolRepository fundPoolRepository;
-    private IUsageRepository usageRepository;
 
     @Before
     public void setUp() {
         fundPoolService = new FundPoolService();
         fundPoolRepository = createMock(IFundPoolRepository.class);
-        usageRepository = createMock(IUsageRepository.class);
         usageService = createMock(IUsageService.class);
         Whitebox.setInternalState(fundPoolService, usageService);
         Whitebox.setInternalState(fundPoolService, fundPoolRepository);
-        Whitebox.setInternalState(fundPoolService, usageRepository);
     }
 
     @Test
     public void testCreate() {
         mockStatic(RupContextUtils.class);
         PreServiceFeeFund fund = buildPreServiceFeeFund();
-        List<String> batchIds = Collections.singletonList(RupPersistUtils.generateUuid());
+        Set<String> batchIds = Collections.singleton(RupPersistUtils.generateUuid());
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
         fundPoolRepository.insert(fund);
         expectLastCall().once();
-        usageRepository.addWithdrawnUsagesToPreServiceFeeFund(fund.getId(), batchIds, USER_NAME);
+        usageService.addWithdrawnUsagesToPreServiceFeeFund(fund.getId(), batchIds, USER_NAME);
         expectLastCall().once();
-        replay(RupContextUtils.class, fundPoolRepository, usageRepository);
+        replay(RupContextUtils.class, fundPoolRepository, usageService);
         fundPoolService.create(fund, batchIds);
-        verify(RupContextUtils.class, fundPoolRepository, usageRepository);
+        verify(RupContextUtils.class, fundPoolRepository, usageService);
     }
 
     @Test

@@ -107,7 +107,7 @@ class PreServiceFeeFundFilteredBatchesWindow extends Window {
         Button continueButton = Buttons.createButton("Continue");
         continueButton.addClickListener((ClickListener) event ->
             Windows.showModalWindow(new CreatePreServiceFeeFundWindow(controller,
-                batches.stream().map(UsageBatch::getId).collect(Collectors.toList()), grossAmount,
+                batches.stream().map(UsageBatch::getId).collect(Collectors.toSet()), grossAmount,
                 batchesFilterWindow, this)));
         Button cancelButton = Buttons.createButton("Cancel");
         cancelButton.addClickListener(event -> this.close());

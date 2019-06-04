@@ -411,6 +411,15 @@ public interface IUsageService {
     void updateProcessedUsage(Usage usage);
 
     /**
+     * Updates status and RH account number of {@link Usage} based on set of {@link Usage} identifiers.
+     *
+     * @param usageIds        set of usage identifiers
+     * @param status          instance of {@link UsageStatusEnum}
+     * @param rhAccountNumber RH account number
+     */
+    void updateStatusAndRhAccountNumber(Set<String> usageIds, UsageStatusEnum status, Long rhAccountNumber);
+
+    /**
      * Gets count of unclassified usages to be updated based on set of Wr Wrk Insts.
      *
      * @param wrWrkInsts set of Wr Wrk Insts
@@ -426,4 +435,14 @@ public interface IUsageService {
      * @return map where key - Wr Wrk Inst, value - set of usage ids related to Wr Wrk Inst
      */
     Map<Long, Set<String>> getWrWrkInstToUsageIdsForRightsAssignment(String batchName);
+
+    /**
+     * Updates usages with status {@link UsageStatusEnum#NTS_WITHDRAWN} from given batches to status TO_BE_DISTRIBUTED
+     * and adds the usages to the pre-service fee fund.
+     *
+     * @param fundId   id of pre-service fee fund
+     * @param batchIds set of ids of usage batches
+     * @param userName user name
+     */
+    void addWithdrawnUsagesToPreServiceFeeFund(String fundId, Set<String> batchIds, String userName);
 }
