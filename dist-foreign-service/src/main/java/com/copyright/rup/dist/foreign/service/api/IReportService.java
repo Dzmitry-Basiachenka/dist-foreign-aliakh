@@ -11,6 +11,7 @@ import java.io.PipedOutputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Interface that provides ability to generate multiple reports.
@@ -110,9 +111,9 @@ public interface IReportService {
      * Writes Ownership Adjustment Report into a {@link OutputStream} in CSV format.
      *
      * @param scenarioId   the scenario identifier
-     * @param statuses     list of {@link RightsholderDiscrepancyStatusEnum}
+     * @param statuses     set of {@link RightsholderDiscrepancyStatusEnum}
      * @param outputStream instance of {@link OutputStream}
      */
-    void writeOwnershipAdjustmentCsvReport(String scenarioId, List<RightsholderDiscrepancyStatusEnum> statuses,
+    void writeOwnershipAdjustmentCsvReport(String scenarioId, Set<RightsholderDiscrepancyStatusEnum> statuses,
                                            OutputStream outputStream);
 }

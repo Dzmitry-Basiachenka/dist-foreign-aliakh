@@ -203,7 +203,7 @@ public class CsvReportsIntegrationTest {
     public void testWriteOwnershipAdjustmentCsvReport() throws Exception {
         assertFiles(outputStream -> rightsholderDiscrepancyRepository.writeOwnershipAdjustmentCsvReport(
             "3210b236-1239-4a60-9fab-888b84199321",
-            Collections.singletonList(RightsholderDiscrepancyStatusEnum.APPROVED), outputStream),
+            Collections.singleton(RightsholderDiscrepancyStatusEnum.APPROVED), outputStream),
             "ownership_adjustment_report.csv");
     }
 
@@ -211,7 +211,7 @@ public class CsvReportsIntegrationTest {
     public void testWriteOwnershipAdjustmentCsvEmptyReport() throws IOException {
         assertFiles(outputStream -> rightsholderDiscrepancyRepository.writeOwnershipAdjustmentCsvReport(
             "3210b236-1239-4a60-9fab-888b84199321",
-            Collections.singletonList(RightsholderDiscrepancyStatusEnum.DRAFT), outputStream),
+            Collections.singleton(RightsholderDiscrepancyStatusEnum.DRAFT), outputStream),
             "ownership_adjustment_report_empty.csv");
     }
 

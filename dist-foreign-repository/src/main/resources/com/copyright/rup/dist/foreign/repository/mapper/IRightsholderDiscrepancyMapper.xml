@@ -102,7 +102,7 @@
         ) discrepancies
     </select>
 
-    <select id="findByScenarioIdAndStatus" parameterType="map" resultMap="rightsholderDiscrepancyResultMap">
+    <select id="findByScenarioIdAndStatuses" parameterType="map" resultMap="rightsholderDiscrepancyResultMap">
         select distinct
             d.old_rh_account_number,
             old_rh.name old_rh_name,

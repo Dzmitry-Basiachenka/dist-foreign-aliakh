@@ -7,6 +7,7 @@ import com.copyright.rup.dist.foreign.domain.RightsholderDiscrepancyStatusEnum;
 
 import java.io.OutputStream;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Represents interface of repository for {@link RightsholderDiscrepancy}ies.
@@ -82,9 +83,9 @@ public interface IRightsholderDiscrepancyRepository {
      * Writes Ownership Adjustment Report into a {@link OutputStream} in CSV format.
      *
      * @param scenarioId   the scenario identifier
-     * @param statuses     list of {@link RightsholderDiscrepancyStatusEnum}
+     * @param statuses     set of {@link RightsholderDiscrepancyStatusEnum}
      * @param outputStream instance of {@link OutputStream}
      */
-    void writeOwnershipAdjustmentCsvReport(String scenarioId, List<RightsholderDiscrepancyStatusEnum> statuses,
+    void writeOwnershipAdjustmentCsvReport(String scenarioId, Set<RightsholderDiscrepancyStatusEnum> statuses,
                                            OutputStream outputStream);
 }

@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Implementation of {@link IRightsholderDiscrepancyRepository}.
@@ -72,7 +73,7 @@ public class RightsholderDiscrepancyRepository extends BaseRepository implements
         parameters.put("statuses", Collections.singleton(Objects.requireNonNull(status)));
         parameters.put("pageable", pageable);
         parameters.put("sort", sort);
-        return selectList("IRightsholderDiscrepancyMapper.findByScenarioIdAndStatus", parameters);
+        return selectList("IRightsholderDiscrepancyMapper.findByScenarioIdAndStatuses", parameters);
     }
 
     @Override
@@ -97,7 +98,7 @@ public class RightsholderDiscrepancyRepository extends BaseRepository implements
     }
 
     @Override
-    public void writeOwnershipAdjustmentCsvReport(String scenarioId, List<RightsholderDiscrepancyStatusEnum> statuses,
+    public void writeOwnershipAdjustmentCsvReport(String scenarioId, Set<RightsholderDiscrepancyStatusEnum> statuses,
                                                   OutputStream outputStream) {
         checkArgument(CollectionUtils.isNotEmpty(statuses));
         Map<String, Object> parameters = Maps.newHashMapWithExpectedSize(2);
@@ -105,7 +106,7 @@ public class RightsholderDiscrepancyRepository extends BaseRepository implements
         parameters.put("statuses", statuses);
         try (OwnershipAdjustmentReportHandler handler = new OwnershipAdjustmentReportHandler(
             Objects.requireNonNull(outputStream))) {
-            getTemplate().select("IRightsholderDiscrepancyMapper.findByScenarioIdAndStatus", parameters, handler);
+            getTemplate().select("IRightsholderDiscrepancyMapper.findByScenarioIdAndStatuses", parameters, handler);
         }
     }
 }

@@ -88,6 +88,6 @@ public class ReconcileRightsholdersController implements IReconcileRightsholders
     public IStreamSource getOwnershipAdjustmentReportStreamSource() {
         return new OwnershipAdjustmentCsvReportExportStreamSource(() -> scenario,
             pipedStream -> reportService.writeOwnershipAdjustmentCsvReport(scenario.getId(),
-                Collections.singletonList(RightsholderDiscrepancyStatusEnum.DRAFT), pipedStream));
+                Collections.singleton(RightsholderDiscrepancyStatusEnum.DRAFT), pipedStream));
     }
 }
