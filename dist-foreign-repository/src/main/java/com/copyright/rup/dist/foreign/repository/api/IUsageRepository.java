@@ -502,10 +502,10 @@ public interface IUsageRepository {
      * and adds the usages to the pre-service fee fund.
      *
      * @param fundId   id of pre-service fee fund
-     * @param batchIds list of ids of usage batches
+     * @param batchIds set of ids of usage batches
      * @param userName user name
      */
-    void addWithdrawnUsagesToPreServiceFeeFund(String fundId, List<String> batchIds, String userName);
+    void addWithdrawnUsagesToPreServiceFeeFund(String fundId, Set<String> batchIds, String userName);
 
     /**
      * Updates status to UNCLASSIFIED for ELIGIBLE usages with defined works without classification.

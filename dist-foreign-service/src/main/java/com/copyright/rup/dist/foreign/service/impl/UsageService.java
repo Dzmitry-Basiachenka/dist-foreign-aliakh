@@ -576,6 +576,11 @@ public class UsageService implements IUsageService {
     }
 
     @Override
+    public void updateStatusAndRhAccountNumber(Set<String> usageIds, UsageStatusEnum status, Long rhAccountNumber) {
+        usageRepository.updateStatusAndRhAccountNumber(usageIds, status, rhAccountNumber);
+    }
+
+    @Override
     public int getUnclassifiedUsagesCount(Set<Long> wrWrkInsts) {
         return usageRepository.findCountByStatusAndWrWrkInsts(UsageStatusEnum.UNCLASSIFIED, wrWrkInsts);
     }
@@ -584,6 +589,11 @@ public class UsageService implements IUsageService {
     public Map<Long, Set<String>> getWrWrkInstToUsageIdsForRightsAssignment(String batchName) {
         return usageRepository.findWrWrkInstToUsageIdsByBatchNameAndUsageStatus(batchName,
             UsageStatusEnum.RH_NOT_FOUND);
+    }
+
+    @Override
+    public void addWithdrawnUsagesToPreServiceFeeFund(String fundId, Set<String> batchIds, String userName) {
+        usageRepository.addWithdrawnUsagesToPreServiceFeeFund(fundId, batchIds, userName);
     }
 
     private void populateTitlesStandardNumberAndType(Collection<ResearchedUsage> researchedUsages) {

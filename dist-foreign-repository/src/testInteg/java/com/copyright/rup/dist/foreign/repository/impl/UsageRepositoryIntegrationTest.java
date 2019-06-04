@@ -1106,7 +1106,7 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(UsageStatusEnum.NTS_WITHDRAWN, usage.getStatus());
         assertNull(usage.getFundPoolId());
         String fundPoolId = "3fef25b0-c0d1-4819-887f-4c6acc01390e";
-        List<String> batchIds = Collections.singletonList("cb597f4e-f636-447f-8710-0436d8994d10");
+        Set<String> batchIds = Collections.singleton("cb597f4e-f636-447f-8710-0436d8994d10");
         usageRepository.addWithdrawnUsagesToPreServiceFeeFund(fundPoolId, batchIds, StoredEntity.DEFAULT_USER);
         usages = usageRepository.findByIds(usageIds);
         assertEquals(1, usages.size());

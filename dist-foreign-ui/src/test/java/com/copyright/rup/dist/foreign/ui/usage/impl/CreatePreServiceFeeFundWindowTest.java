@@ -37,7 +37,7 @@ public class CreatePreServiceFeeFundWindowTest {
     public void testConstructor() {
         IUsagesController controller = createMock(IUsagesController.class);
         CreatePreServiceFeeFundWindow window = new CreatePreServiceFeeFundWindow(controller,
-            Collections.emptyList(), BigDecimal.ONE, createMock(PreServiceFeeFundBatchesFilterWindow.class),
+            Collections.emptySet(), BigDecimal.ONE, createMock(PreServiceFeeFundBatchesFilterWindow.class),
             createMock(PreServiceFeeFundFilteredBatchesWindow.class));
         assertEquals("Create NTS Pre-Service Fee Funds", window.getCaption());
         verifySize(window, Unit.PIXELS, 320, Unit.PIXELS, -1);

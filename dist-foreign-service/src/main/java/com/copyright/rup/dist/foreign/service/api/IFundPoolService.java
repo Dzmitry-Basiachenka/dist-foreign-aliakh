@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.service.api;
 import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Represents interface of service for fund pools business logic.
@@ -19,9 +20,9 @@ public interface IFundPoolService {
      * Creates Pre-Service fee fund.
      *
      * @param fundPool instance of {@link PreServiceFeeFund}
-     * @param batchIds list of ids of usage batches
+     * @param batchIds set of ids of usage batches
      */
-    void create(PreServiceFeeFund fundPool, List<String> batchIds);
+    void create(PreServiceFeeFund fundPool, Set<String> batchIds);
 
     /**
      * Gets all Pre-Service fee funds.

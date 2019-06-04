@@ -590,7 +590,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
     }
 
     @Override
-    public void addWithdrawnUsagesToPreServiceFeeFund(String fundId, List<String> batchIds, String userName) {
+    public void addWithdrawnUsagesToPreServiceFeeFund(String fundId, Set<String> batchIds, String userName) {
         checkArgument(StringUtils.isNotBlank(fundId));
         Map<String, Object> params = Maps.newHashMapWithExpectedSize(5);
         params.put("fundId", fundId);

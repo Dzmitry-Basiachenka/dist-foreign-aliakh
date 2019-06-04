@@ -767,6 +767,16 @@ public class UsageServiceTest {
     }
 
     @Test
+    public void testUpdateStatusAndRhAccountNumber() {
+        Set<String> ids = Sets.newHashSet(USAGE_ID_1, USAGE_ID_2);
+        usageRepository.updateStatusAndRhAccountNumber(ids, UsageStatusEnum.ELIGIBLE, RH_ACCOUNT_NUMBER);
+        expectLastCall().once();
+        replay(usageRepository);
+        usageRepository.updateStatusAndRhAccountNumber(ids, UsageStatusEnum.ELIGIBLE, RH_ACCOUNT_NUMBER);
+        verify(usageRepository);
+    }
+
+    @Test
     public void testUpdateProcessedUsage() {
         String usageId = RupPersistUtils.generateUuid();
         Usage usage = buildUsage(usageId);
@@ -796,6 +806,17 @@ public class UsageServiceTest {
             UsageStatusEnum.RH_NOT_FOUND)).andReturn(null).once();
         replay(usageRepository);
         usageService.getWrWrkInstToUsageIdsForRightsAssignment("FAS Distribution 05/07/2018");
+        verify(usageRepository);
+    }
+
+    @Test
+    public void testAddWithdrawnUsagesToPreServiceFeeFund() {
+        String fundId = RupPersistUtils.generateUuid();
+        Set<String> batchIds = Collections.singleton(BATCH_ID);
+        usageRepository.addWithdrawnUsagesToPreServiceFeeFund(fundId, batchIds, USER_NAME);
+        expectLastCall().once();
+        replay(usageRepository);
+        usageService.addWithdrawnUsagesToPreServiceFeeFund(fundId, batchIds, USER_NAME);
         verify(usageRepository);
     }
 
