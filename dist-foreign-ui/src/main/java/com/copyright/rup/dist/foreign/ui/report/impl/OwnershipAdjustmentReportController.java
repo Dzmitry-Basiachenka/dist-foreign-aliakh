@@ -9,7 +9,7 @@ import com.copyright.rup.dist.foreign.ui.report.api.IOwnershipAdjustmentReportWi
 import com.copyright.rup.vaadin.ui.component.downloader.IStreamSource;
 import com.copyright.rup.vaadin.widget.api.CommonController;
 
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Implementation of {@link IOwnershipAdjustmentReportController}.
@@ -32,8 +33,8 @@ import java.util.List;
 public class OwnershipAdjustmentReportController extends CommonController<IOwnershipAdjustmentReportWidget>
     implements IOwnershipAdjustmentReportController {
 
-    private static final ImmutableList<RightsholderDiscrepancyStatusEnum> REPORT_STATUSES =
-        ImmutableList.of(RightsholderDiscrepancyStatusEnum.DRAFT, RightsholderDiscrepancyStatusEnum.APPROVED);
+    private static final Set<RightsholderDiscrepancyStatusEnum> REPORT_STATUSES =
+        ImmutableSet.of(RightsholderDiscrepancyStatusEnum.DRAFT, RightsholderDiscrepancyStatusEnum.APPROVED);
 
     @Autowired
     private IScenarioService scenarioService;
