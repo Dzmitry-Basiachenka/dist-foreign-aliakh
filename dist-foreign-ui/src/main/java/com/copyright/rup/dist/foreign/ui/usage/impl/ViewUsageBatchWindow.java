@@ -5,6 +5,7 @@ import com.copyright.rup.dist.foreign.domain.common.util.UsageBatchUtils;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 
+import com.vaadin.server.SerializableComparator;
 import com.vaadin.ui.Grid;
 
 /**
@@ -61,6 +62,8 @@ class ViewUsageBatchWindow extends AbstractViewUsageBatchWindow {
             (batch1, batch2) -> batch1.getGrossAmount().compareTo(batch2.getGrossAmount()));
         addColumn(UsageBatch::getCreateUser, "table.column.create_user", 170);
         grid.addColumn(batch -> getStringFromDate(batch.getCreateDate()))
-            .setCaption(ForeignUi.getMessage("table.column.create_date"));
+            .setCaption(ForeignUi.getMessage("table.column.create_date"))
+            .setComparator((SerializableComparator<UsageBatch>) (batch1, batch2) ->
+                batch1.getCreateDate().compareTo(batch2.getCreateDate()));
     }
 }

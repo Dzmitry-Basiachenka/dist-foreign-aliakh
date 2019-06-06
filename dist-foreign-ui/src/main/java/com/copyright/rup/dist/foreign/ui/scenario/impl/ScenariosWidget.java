@@ -17,6 +17,7 @@ import com.copyright.rup.vaadin.widget.api.IMediator;
 
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.data.provider.ListDataProvider;
+import com.vaadin.server.SerializableComparator;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
@@ -192,7 +193,8 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
             .setExpandRatio(1);
         scenarioGrid.addColumn(scenario -> getStringFromDate(scenario.getCreateDate()))
             .setCaption(ForeignUi.getMessage("table.column.create_date"))
-            .setSortProperty("createDate")
+            .setComparator((SerializableComparator<Scenario>) (scenario1, scenario2) ->
+                scenario1.getCreateDate().compareTo(scenario2.getCreateDate()))
             .setWidth(100);
         scenarioGrid.addColumn(scenario -> scenario.getStatus().name())
             .setCaption(ForeignUi.getMessage("table.column.status"))

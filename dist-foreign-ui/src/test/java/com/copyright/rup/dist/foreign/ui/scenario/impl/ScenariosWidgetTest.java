@@ -7,6 +7,7 @@ import static org.easymock.EasyMock.reset;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -18,6 +19,7 @@ import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.ui.scenario.api.IScenariosController;
 
 import com.vaadin.server.Sizeable.Unit;
+import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -180,6 +182,8 @@ public class ScenariosWidgetTest {
         List<Column> columns = grid.getColumns();
         assertEquals(Arrays.asList("Name", "Create Date", "Status"),
             columns.stream().map(Column::getCaption).collect(Collectors.toList()));
+        Grid.Column createDateColumn = columns.get(2);
+        assertNotNull(createDateColumn.getComparator(SortDirection.ASCENDING));
     }
 
     private void verifyButtonsLayout(HorizontalLayout layout) {
