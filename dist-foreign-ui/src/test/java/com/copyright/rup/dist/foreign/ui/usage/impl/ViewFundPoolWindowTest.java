@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.anyString;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.powermock.api.easymock.PowerMock.createMock;
 import static org.powermock.api.easymock.PowerMock.expectLastCall;
@@ -20,6 +21,7 @@ import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.widget.SearchWidget;
 
 import com.vaadin.server.Sizeable;
+import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
@@ -162,6 +164,8 @@ public class ViewFundPoolWindowTest {
             columns.stream().map(Grid.Column::getCaption).collect(Collectors.toList()));
         assertEquals(Arrays.asList(150.0, 120.0, 150.0, 100.0, 90.0, 100.0, 115.0, 140.0, 160.0, 140.0, 140.0, 125.0,
             170.0, -1.0), columns.stream().map(Grid.Column::getWidth).collect(Collectors.toList()));
+        Grid.Column createDateColumn = columns.get(13);
+        assertNotNull(createDateColumn.getComparator(SortDirection.ASCENDING));
     }
 
     private Button.ClickListener getDeleteButtonClickListener() {
