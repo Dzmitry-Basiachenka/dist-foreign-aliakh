@@ -1,3 +1,12 @@
+5.1.42
+-
+* B-51553 FDA: Export from RH reconcile view: make changes based on
+comments in CR-DIST-FOREIGN-111
+* B-51659 Tech Debt: FDA: reuse service logic instead repositories for
+creating Withdrawn Funds, updating usages during RA job
+* CDP-762 FDA: View Usage Batch: Sorting on ‘Create Date’ column is
+incorrect
+
 5.1.41
 -
 * B-51659 Tech Debt: FDA: make changes based on comments in CR-DIST-FOREIGN-109
