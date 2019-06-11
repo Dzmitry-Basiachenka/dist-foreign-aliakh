@@ -31,12 +31,20 @@ public class NtsFieldsJsonMapperTest {
         String json = TestUtils.fileToString(this.getClass(), "nts_fields.json");
         NtsFields ntsFields = jsonMapper.deserialize(json);
         assertEquals(new BigDecimal("300.00"), ntsFields.getRhMinimumAmount());
+        assertEquals(new BigDecimal("500.00"), ntsFields.getPreServiceFeeAmount());
+        assertEquals(new BigDecimal("1000.00"), ntsFields.getPostServiceFeeAmount());
+        assertEquals("3d34ebf4-7b39-4477-be8d-515a53dd59c1", ntsFields.getPreServiceFeeFundId());
+        assertEquals(new BigDecimal("0.00"), ntsFields.getPreServiceFeeFundTotal());
+        assertNull(ntsFields.getPreServiceFeeFundName());
     }
 
     @Test
     public void testSerialize() throws IOException {
         NtsFields ntsFields = new NtsFields();
         ntsFields.setRhMinimumAmount(new BigDecimal("300.00"));
+        ntsFields.setPreServiceFeeAmount(new BigDecimal("500.00"));
+        ntsFields.setPostServiceFeeAmount(new BigDecimal("1000.00"));
+        ntsFields.setPreServiceFeeFundId("3d34ebf4-7b39-4477-be8d-515a53dd59c1");
         String actualJson = jsonMapper.serialize(ntsFields);
         assertEquals(ntsFields, jsonMapper.deserialize(actualJson));
     }

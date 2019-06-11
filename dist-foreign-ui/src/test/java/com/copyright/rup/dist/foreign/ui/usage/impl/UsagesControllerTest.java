@@ -138,7 +138,7 @@ public class UsagesControllerTest {
         filterWidgetMock.clearFilter();
         expectLastCall().once();
         replay(filterController, filterWidgetMock, scenarioService);
-        assertEquals(scenario, controller.createNtsScenario(SCENARIO_NAME, RH_MINIMUM_AMOUNT, DESCRIPTION));
+        assertEquals(scenario, controller.createNtsScenario(SCENARIO_NAME, ntsFields, DESCRIPTION));
         verify(filterController, filterWidgetMock, scenarioService);
     }
 

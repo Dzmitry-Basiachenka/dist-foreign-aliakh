@@ -225,7 +225,7 @@ public class ScenariosWidgetTest {
         assertEquals(new MarginInfo(false, true, false, true), layout.getMargin());
         assertEquals(100, layout.getWidth(), 0);
         assertEquals(Unit.PERCENTAGE, layout.getWidthUnits());
-        assertEquals(8, layout.getComponentCount());
+        assertEquals(11, layout.getComponentCount());
         verifyMetadataLabel(layout.getComponent(0), "<b>Owner: </b>User@copyright.com");
         verifyMetadataLabel(layout.getComponent(1),
             "<b>Net Amt in USD: </b><span class='label-amount'>10,000.00</span>");
@@ -235,10 +235,10 @@ public class ScenariosWidgetTest {
             "<b>Reported Value Total: </b><span class='label-amount'>30,000.00</span>");
         verifyMetadataLabel(layout.getComponent(4),
             "<b>RH Minimum Amt in USD: </b><span class='label-amount'>300.00</span>");
-        verifyMetadataLabel(layout.getComponent(5), "<b>Description: </b>Description");
-        verifyMetadataLabel(layout.getComponent(6), SELECTION_CRITERIA);
-        assertTrue(layout.getComponent(7) instanceof VerticalLayout);
-        VerticalLayout lastActionLayout = (VerticalLayout) layout.getComponent(7);
+        verifyMetadataLabel(layout.getComponent(8), "<b>Description: </b>Description");
+        verifyMetadataLabel(layout.getComponent(9), SELECTION_CRITERIA);
+        assertTrue(layout.getComponent(10) instanceof VerticalLayout);
+        VerticalLayout lastActionLayout = (VerticalLayout) layout.getComponent(10);
         assertEquals(5, lastActionLayout.getComponentCount());
         verifyMetadataLabel(lastActionLayout.getComponent(0), "<b>Type:</b> ADDED_USAGES");
         verifyMetadataLabel(lastActionLayout.getComponent(1), "<b>User:</b> user@copyright.com");

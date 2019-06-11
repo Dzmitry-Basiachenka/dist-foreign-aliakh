@@ -3,7 +3,9 @@ package com.copyright.rup.dist.foreign.ui.usage.impl;
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.common.service.impl.csv.validator.AmountValidator;
 import com.copyright.rup.dist.common.util.CommonDateUtils;
+import com.copyright.rup.dist.foreign.domain.PreServiceFeeFund;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
 import com.copyright.rup.dist.foreign.ui.usage.api.IUsagesController;
 import com.copyright.rup.dist.foreign.ui.usage.api.ScenarioCreateEvent;
@@ -11,13 +13,14 @@ import com.copyright.rup.vaadin.ui.Buttons;
 import com.copyright.rup.vaadin.ui.component.window.Windows;
 import com.copyright.rup.vaadin.util.VaadinUtils;
 
-import com.google.common.collect.Lists;
 import com.vaadin.data.Binder;
+import com.vaadin.data.ValueProvider;
 import com.vaadin.data.converter.StringToBigDecimalConverter;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.server.Setter;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
@@ -28,6 +31,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * Window to create NTS scenario.
@@ -41,9 +46,13 @@ import java.time.LocalDate;
 public class CreateNtsScenarioWindow extends Window {
 
     private final IUsagesController controller;
-    private final Binder<Scenario> binder = new Binder<>();
+    private final Binder<Scenario> scenarioBinder = new Binder<>();
+    private final Binder<PreServiceFeeFund> fundBinder = new Binder<>();
     private TextField scenarioNameField;
     private TextField rhMinimumAmountField;
+    private TextField preServiceFeeAmountField;
+    private TextField postServiceFeeAmountField;
+    private ComboBox<PreServiceFeeFund> fundsComboBox;
     private TextArea descriptionArea;
 
     /**
@@ -58,8 +67,8 @@ public class CreateNtsScenarioWindow extends Window {
         setCaption(ForeignUi.getMessage("window.create_scenario"));
         initFields();
         HorizontalLayout buttonsLayout = initButtonsLayout();
-        VerticalLayout layout = new VerticalLayout(scenarioNameField, rhMinimumAmountField, descriptionArea,
-            buttonsLayout);
+        VerticalLayout layout = new VerticalLayout(scenarioNameField, rhMinimumAmountField, preServiceFeeAmountField,
+            postServiceFeeAmountField, fundsComboBox, descriptionArea, buttonsLayout);
         layout.setSpacing(true);
         layout.setMargin(true);
         layout.setComponentAlignment(buttonsLayout, Alignment.MIDDLE_RIGHT);
@@ -71,12 +80,15 @@ public class CreateNtsScenarioWindow extends Window {
     private void initFields() {
         initScenarioNameField();
         initRhMinimumAmountField();
+        initPreServiceFeeAmountField();
+        initPostServiceFeeAmountField();
+        initPreServiceFeeFundsCombobox();
         initDescriptionArea();
     }
 
     private void initScenarioNameField() {
         scenarioNameField = new TextField(ForeignUi.getMessage("field.scenario_name"));
-        binder.forField(scenarioNameField)
+        scenarioBinder.forField(scenarioNameField)
             .asRequired(ForeignUi.getMessage("field.error.empty"))
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 50), 0, 50))
             .withValidator(value -> !controller.getScenarioService().scenarioExists(StringUtils.trimToEmpty(value)),
@@ -91,8 +103,9 @@ public class CreateNtsScenarioWindow extends Window {
 
     private void initRhMinimumAmountField() {
         rhMinimumAmountField = new TextField(ForeignUi.getMessage("field.rh_minimum_amount"));
+        rhMinimumAmountField.setValue("300");
         rhMinimumAmountField.setRequiredIndicatorVisible(true);
-        binder.forField(rhMinimumAmountField)
+        scenarioBinder.forField(rhMinimumAmountField)
             .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
             .withConverter(new StringToBigDecimalConverter(ForeignUi.getMessage("field.error.not_numeric")))
             .withValidator(value -> new AmountValidator(true).isValid(value.toString()),
@@ -100,14 +113,50 @@ public class CreateNtsScenarioWindow extends Window {
             .bind(scenario -> scenario.getNtsFields().getRhMinimumAmount(),
                 (Setter<Scenario, BigDecimal>) (scenario, rhMinimumAmount) ->
                     scenario.getNtsFields().setRhMinimumAmount(rhMinimumAmount));
-        rhMinimumAmountField.setValue(ForeignUi.getMessage("field.rh_minimum_amount.default"));
         VaadinUtils.setMaxComponentsWidth(rhMinimumAmountField);
         VaadinUtils.addComponentStyle(rhMinimumAmountField, "rh-minimum-amount-field");
     }
 
+    private void initPreServiceFeeAmountField() {
+        preServiceFeeAmountField = new TextField(ForeignUi.getMessage("field.pre_service_fee_amount"));
+        initFundAmountField(preServiceFeeAmountField, "pre-service-fee-amount-field",
+            (ValueProvider<PreServiceFeeFund, BigDecimal>) PreServiceFeeFund::getAmount,
+            (Setter<PreServiceFeeFund, BigDecimal>) PreServiceFeeFund::setAmount);
+    }
+
+    private void initPostServiceFeeAmountField() {
+        postServiceFeeAmountField = new TextField(ForeignUi.getMessage("field.post_service_fee_amount"));
+        initFundAmountField(postServiceFeeAmountField, "post-service-fee-amount-field",
+            (ValueProvider<PreServiceFeeFund, BigDecimal>) PreServiceFeeFund::getAmount,
+            (Setter<PreServiceFeeFund, BigDecimal>) PreServiceFeeFund::setAmount);
+    }
+
+    private void initFundAmountField(TextField amountField, String fieldId,
+                                     ValueProvider<PreServiceFeeFund, BigDecimal> getter,
+                                     Setter<PreServiceFeeFund, BigDecimal> setter) {
+        amountField.setRequiredIndicatorVisible(true);
+        amountField.setValue("0");
+        fundBinder.forField(amountField)
+            .withValidator(StringUtils::isNotBlank, ForeignUi.getMessage("field.error.empty"))
+            .withConverter(new StringToBigDecimalConverter(ForeignUi.getMessage("field.error.not_numeric")))
+            .withValidator(value -> new AmountValidator(true).isValid(value.toString()),
+                ForeignUi.getMessage("field.error.positive_number_or_zero_length", 10))
+            .bind(getter, setter);
+        VaadinUtils.setMaxComponentsWidth(amountField);
+        VaadinUtils.addComponentStyle(amountField, fieldId);
+    }
+
+    private void initPreServiceFeeFundsCombobox() {
+        fundsComboBox = new ComboBox<>(ForeignUi.getMessage("label.pre_service_fee_funds"));
+        fundsComboBox.setItems(controller.getPreServiceSeeFunds());
+        fundsComboBox.setItemCaptionGenerator(PreServiceFeeFund::getName);
+        VaadinUtils.setMaxComponentsWidth(fundsComboBox);
+        VaadinUtils.addComponentStyle(fundsComboBox, "pre-service-fee-funds-filter");
+    }
+
     private void initDescriptionArea() {
         descriptionArea = new TextArea(ForeignUi.getMessage("field.description"));
-        binder.forField(descriptionArea)
+        scenarioBinder.forField(descriptionArea)
             .withValidator(new StringLengthValidator(ForeignUi.getMessage("field.error.length", 2000), 0, 2000))
             .bind(Scenario::getDescription, Scenario::setDescription);
         VaadinUtils.setMaxComponentsWidth(descriptionArea);
@@ -123,15 +172,27 @@ public class CreateNtsScenarioWindow extends Window {
     }
 
     private void onConfirmButtonClicked() {
-        if (binder.isValid()) {
+        if (scenarioBinder.isValid() && fundBinder.isValid()) {
+            NtsFields ntsFields = new NtsFields();
+            ntsFields.setRhMinimumAmount(getAmountFromTextField(rhMinimumAmountField));
+            ntsFields.setPreServiceFeeAmount(getAmountFromTextField(preServiceFeeAmountField));
+            ntsFields.setPostServiceFeeAmount(getAmountFromTextField(postServiceFeeAmountField));
+            PreServiceFeeFund selectedFund = fundsComboBox.getValue();
+            if (Objects.nonNull(selectedFund)) {
+                ntsFields.setPreServiceFeeFundId(selectedFund.getId());
+            }
             fireEvent(new ScenarioCreateEvent(this,
                 controller.createNtsScenario(StringUtils.trimToEmpty(scenarioNameField.getValue()),
-                    new BigDecimal(StringUtils.trimToEmpty(rhMinimumAmountField.getValue())),
-                    StringUtils.trimToEmpty(descriptionArea.getValue()))));
+                    ntsFields, StringUtils.trimToEmpty(descriptionArea.getValue()))));
             close();
         } else {
             Windows.showValidationErrorWindow(
-                Lists.newArrayList(scenarioNameField, rhMinimumAmountField, descriptionArea));
+                Arrays.asList(scenarioNameField, rhMinimumAmountField, preServiceFeeAmountField,
+                    postServiceFeeAmountField, descriptionArea));
         }
+    }
+
+    private BigDecimal getAmountFromTextField(TextField textField) {
+        return new BigDecimal(StringUtils.trimToEmpty(textField.getValue()));
     }
 }

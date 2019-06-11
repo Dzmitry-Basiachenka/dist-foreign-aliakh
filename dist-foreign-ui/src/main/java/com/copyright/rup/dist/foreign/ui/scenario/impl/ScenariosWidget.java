@@ -2,6 +2,7 @@ package com.copyright.rup.dist.foreign.ui.scenario.impl;
 
 import com.copyright.rup.common.date.RupDateUtils;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.ui.main.ForeignUi;
@@ -67,6 +68,9 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
     private final Label reportedTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label grossTotalLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label rhMinimumAmountLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label preServiceFeeAmountLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label postServiceFeeAmountLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
+    private final Label preServiceFeeFundLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label descriptionLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label selectionCriteriaLabel = new Label(StringUtils.EMPTY, ContentMode.HTML);
     private final Label actionType = new Label(StringUtils.EMPTY, ContentMode.HTML);
@@ -209,7 +213,8 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
         descriptionLabel.setStyleName("v-label-white-space-normal");
         selectionCriteriaLabel.setStyleName("v-label-white-space-normal");
         metadataLayout = new VerticalLayout(ownerLabel, netTotalLabel, grossTotalLabel, reportedTotalLabel,
-            rhMinimumAmountLabel, descriptionLabel, selectionCriteriaLabel, initScenarioActionLayout());
+            rhMinimumAmountLabel, preServiceFeeAmountLabel, postServiceFeeAmountLabel, preServiceFeeFundLabel,
+            descriptionLabel, selectionCriteriaLabel, initScenarioActionLayout());
         metadataLayout.setMargin(new MarginInfo(false, true, false, true));
         VaadinUtils.setMaxComponentsWidth(metadataLayout);
     }
@@ -235,7 +240,7 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
     }
 
     private void onItemChanged(Scenario scenario) {
-        if (null != scenario) {
+        if (Objects.nonNull(scenario)) {
             Scenario scenarioWithAmounts = controller.getScenarioWithAmountsAndLastAction(scenario);
             ownerLabel.setValue(ForeignUi.getMessage("label.owner", scenario.getCreateUser()));
             netTotalLabel.setValue(ForeignUi.getMessage("label.net_amount_in_usd",
@@ -245,10 +250,24 @@ public class ScenariosWidget extends VerticalLayout implements IScenariosWidget 
             reportedTotalLabel.setValue(ForeignUi.getMessage("label.reported_total",
                 formatAmount(scenarioWithAmounts.getReportedTotal())));
             if (null != scenario.getNtsFields()) {
+                NtsFields ntsFields = scenarioWithAmounts.getNtsFields();
                 rhMinimumAmountLabel.setValue(ForeignUi.getMessage("label.rh_minimum_amount_in_usd",
-                    formatAmount(scenario.getNtsFields().getRhMinimumAmount())));
+                    formatAmount(ntsFields.getRhMinimumAmount())));
+                preServiceFeeAmountLabel.setValue(ForeignUi.getMessage("label.pre_service_fee_amount",
+                    formatAmount(ntsFields.getPreServiceFeeAmount())));
+                postServiceFeeAmountLabel.setValue(ForeignUi.getMessage("label.post_service_fee_amount",
+                    formatAmount(ntsFields.getPostServiceFeeAmount())));
+                if (Objects.nonNull(ntsFields.getPreServiceFeeFundName())) {
+                    preServiceFeeFundLabel.setValue(ForeignUi.getMessage("label.pre_service_fee_fund",
+                        ntsFields.getPreServiceFeeFundName(), formatAmount(ntsFields.getPreServiceFeeFundTotal())));
+                } else {
+                    preServiceFeeFundLabel.setValue(StringUtils.EMPTY);
+                }
             } else {
                 rhMinimumAmountLabel.setValue(StringUtils.EMPTY);
+                preServiceFeeAmountLabel.setValue(StringUtils.EMPTY);
+                postServiceFeeAmountLabel.setValue(StringUtils.EMPTY);
+                preServiceFeeFundLabel.setValue(StringUtils.EMPTY);
             }
             descriptionLabel.setValue(ForeignUi.getMessage("label.description", scenario.getDescription()));
             selectionCriteriaLabel.setValue(controller.getCriteriaHtmlRepresentation());

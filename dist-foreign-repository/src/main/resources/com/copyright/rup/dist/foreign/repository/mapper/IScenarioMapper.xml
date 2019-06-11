@@ -15,6 +15,8 @@
         <result property="reportedTotal" column="reported_total"/>
         <result property="description" column="description"/>
         <result property="ntsFields" column="nts_fields" typeHandler="NtsFieldsTypeHandler"/>
+        <result property="ntsFields.preServiceFeeFundName" column="pre_service_fee_fund_name"/>
+        <result property="ntsFields.preServiceFeeFundTotal" column="pre_service_fee_fund_total"/>
         <association property="auditItem" resultMap="IScenarioAuditMapper.scenarioAuditItemResultMap" columnPrefix="action_"/>
     </resultMap>
 
@@ -44,6 +46,8 @@
         coalesce(sum(u.net_amount), 0) net_total,
         s.description,
         s.nts_fields,
+        fund.name pre_service_fee_fund_name,
+        fund.withdrawn_amount pre_service_fee_fund_total,
         a1.df_scenario_audit_uid action_df_scenario_audit_uid,
         a1.df_scenario_uid action_df_scenario_uid,
         a1.action_type_ind action_action_type_ind,
@@ -223,6 +227,7 @@
             <include refid="fullScenarioInformation"/>
         from ${schema}.df_scenario s
         left join ${schema}.df_usage u on u.df_scenario_uid = s.df_scenario_uid
+        left join ${schema}.df_fund_pool fund on (s.nts_fields->>'pre_service_fee_fund_uid') = fund.df_fund_pool_uid
         left join ${schema}.df_scenario_audit a1 on s.df_scenario_uid = a1.df_scenario_uid
         left join ${schema}.df_scenario_audit a2 on s.df_scenario_uid = a2.df_scenario_uid
             <![CDATA[and a1.created_datetime < a2.created_datetime]]>
@@ -231,7 +236,9 @@
         group by
             s.df_scenario_uid,
             s.name,
-            a1.df_scenario_audit_uid
+            a1.df_scenario_audit_uid,
+            fund.name,
+            fund.withdrawn_amount
     </select>
 
     <select id="findArchivedWithAmountsAndLastAction" parameterType="string" resultMap="scenarioResultMap">
@@ -239,6 +246,7 @@
             <include refid="fullScenarioInformation"/>
         from ${schema}.df_scenario s
         left join ${schema}.df_usage_archive u on u.df_scenario_uid = s.df_scenario_uid
+        left join ${schema}.df_fund_pool fund on (s.nts_fields->>'pre_service_fee_fund_uid') = fund.df_fund_pool_uid
         left join ${schema}.df_scenario_audit a1 on s.df_scenario_uid = a1.df_scenario_uid
         left join ${schema}.df_scenario_audit a2 on s.df_scenario_uid = a2.df_scenario_uid
             <![CDATA[and a1.created_datetime < a2.created_datetime]]>
@@ -247,7 +255,9 @@
         group by
             s.df_scenario_uid,
             s.name,
-            a1.df_scenario_audit_uid
+            a1.df_scenario_audit_uid,
+            fund.name,
+            fund.withdrawn_amount
     </select>
 
     <select id="findRightsholdersByScenarioIdAndSourceRro" parameterType="map" resultMap="rightsholderPayeePairResultMap">

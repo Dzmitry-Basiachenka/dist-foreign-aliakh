@@ -198,9 +198,7 @@ public class UsagesController extends CommonController<IUsagesWidget> implements
     }
 
     @Override
-    public Scenario createNtsScenario(String scenarioName, BigDecimal rhMinimumAmount, String description) {
-        NtsFields ntsFields = new NtsFields();
-        ntsFields.setRhMinimumAmount(rhMinimumAmount);
+    public Scenario createNtsScenario(String scenarioName, NtsFields ntsFields, String description) {
         Scenario scenario = scenarioService.createNtsScenario(scenarioName, ntsFields, description,
             filterController.getWidget().getAppliedFilter());
         filterController.getWidget().clearFilter();

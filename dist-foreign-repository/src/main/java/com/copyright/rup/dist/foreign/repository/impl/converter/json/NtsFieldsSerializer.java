@@ -30,6 +30,9 @@ public class NtsFieldsSerializer extends StdSerializer<NtsFields> {
     public void serialize(NtsFields ntsFields, JsonGenerator jg, SerializerProvider provider) throws IOException {
         jg.writeStartObject();
         jg.writeNumberField("rh_minimum_amount", ntsFields.getRhMinimumAmount());
+        jg.writeNumberField("pre_service_fee_amount", ntsFields.getPreServiceFeeAmount());
+        jg.writeNumberField("post_service_fee_amount", ntsFields.getPostServiceFeeAmount());
+        jg.writeStringField("pre_service_fee_fund_uid", ntsFields.getPreServiceFeeFundId());
         jg.writeEndObject();
     }
 }
