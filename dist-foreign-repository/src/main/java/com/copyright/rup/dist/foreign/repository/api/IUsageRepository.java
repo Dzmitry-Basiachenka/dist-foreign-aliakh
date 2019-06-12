@@ -523,4 +523,13 @@ public interface IUsageRepository {
      * @return map where key - Wr Wrk Inst, value - set of usage ids related to Wr Wrk Inst
      */
     Map<Long, Set<String>> findWrWrkInstToUsageIdsByBatchNameAndUsageStatus(String batchName, UsageStatusEnum status);
+
+    /**
+     * Returns list of {@link Usage}s by scenario identifier with limit and offset for NTS service fee calculation.
+     *
+     * @param scenarioId scenario identifier
+     * @param pageable   limit and offset
+     * @return list of {@link Usage}s by scenario identifier using limit and offset
+     */
+    List<Usage> findForNtsServiceFeeCalculation(String scenarioId, Pageable pageable);
 }

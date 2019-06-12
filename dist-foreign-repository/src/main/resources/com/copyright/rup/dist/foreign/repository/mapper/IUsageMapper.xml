@@ -1624,6 +1624,17 @@
         returning df_usage_uid
     </select>
 
+    <select id="findForNtsServiceFeeCalculation" resultMap="usageResultMap" parameterType="map">
+        select
+            df_usage_uid,
+            rh_account_number,
+            gross_amount
+        from ${schema}.df_usage
+        where df_scenario_uid = #{scenarioId}
+        order by df_usage_uid
+        <include refid="ifPageable"/>
+    </select>
+
     <update id="addWithdrawnUsagesToPreServiceFeeFund" parameterType="map">
         update ${schema}.df_usage
         set

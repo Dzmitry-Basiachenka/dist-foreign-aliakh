@@ -1138,6 +1138,24 @@ public class UsageRepositoryIntegrationTest {
             usageRepository.findWrWrkInstToUsageIdsByBatchNameAndUsageStatus("JAACC_11Dec16", UsageStatusEnum.LOCKED));
     }
 
+    @Test
+    public void testFindForNtsServiceFeeCalculation() {
+        List<Usage> usages =
+            usageRepository.findForNtsServiceFeeCalculation("d7e9bae8-6b10-4675-9668-8e3605a47dad", new Pageable(1, 2));
+        assertEquals(2, CollectionUtils.size(usages));
+        verifyUsageForNtsCalculation("8a80a2e7-4758-4e43-ae42-e8b29802a210", new BigDecimal("256.0000000000"),
+            1000009997L, usages.get(0));
+        verifyUsageForNtsCalculation("bfc9e375-c489-4600-9308-daa101eed97c", new BigDecimal("145.2000000000"),
+            1000009997L, usages.get(1));
+    }
+
+    private void verifyUsageForNtsCalculation(String usageId, BigDecimal grossAmount, Long rhAccountNumber,
+                                              Usage actualUsage) {
+        assertEquals(usageId, actualUsage.getId());
+        assertEquals(grossAmount, actualUsage.getGrossAmount());
+        assertEquals(rhAccountNumber, actualUsage.getRightsholder().getAccountNumber());
+    }
+
     private FundPool buildNtsFundPool(BigDecimal nonStmAmount) {
         FundPool fundPool = new FundPool();
         fundPool.setMarkets(Sets.newHashSet(BUS_MARKET, DOC_DEL_MARKET));

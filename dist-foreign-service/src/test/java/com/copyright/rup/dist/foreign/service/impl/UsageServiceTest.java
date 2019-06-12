@@ -820,6 +820,17 @@ public class UsageServiceTest {
         verify(usageRepository);
     }
 
+    @Test
+    public void testGetForNtsServiceFeeCalculation() {
+        Pageable pageable = new Pageable(64000, 32000);
+        List<Usage> usages = Collections.singletonList(buildUsage(RupPersistUtils.generateUuid()));
+        expect(usageRepository.findForNtsServiceFeeCalculation(SCENARIO_ID, pageable)).andReturn(usages).once();
+        replay(usageRepository);
+        assertTrue(CollectionUtils.containsAll(usages,
+            usageService.getForNtsServiceFeeCalculation(SCENARIO_ID, pageable)));
+        verify(usageRepository);
+    }
+
     private Work buildWork(String standardNumberType) {
         Work work = new Work();
         work.setMainIdnoType(standardNumberType);

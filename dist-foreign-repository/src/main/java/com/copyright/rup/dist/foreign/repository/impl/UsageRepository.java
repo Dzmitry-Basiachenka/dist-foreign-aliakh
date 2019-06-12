@@ -625,6 +625,14 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         return handler.getWrWrkInstToUsageIdsMap();
     }
 
+    @Override
+    public List<Usage> findForNtsServiceFeeCalculation(String scenarioId, Pageable pageable) {
+        Map<String, Object> params = Maps.newHashMapWithExpectedSize(2);
+        params.put(SCENARIO_ID_KEY, Objects.requireNonNull(scenarioId));
+        params.put(PAGEABLE_KEY, Objects.requireNonNull(pageable));
+        return selectList("IUsageMapper.findForNtsServiceFeeCalculation", params);
+    }
+
     private AuditFilter escapeSqlLikePattern(AuditFilter auditFilter) {
         AuditFilter filterCopy = new AuditFilter(auditFilter);
         filterCopy.setCccEventId(escapeSqlLikePattern(filterCopy.getCccEventId()));

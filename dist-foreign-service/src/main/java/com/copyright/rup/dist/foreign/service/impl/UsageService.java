@@ -596,6 +596,11 @@ public class UsageService implements IUsageService {
         usageRepository.addWithdrawnUsagesToPreServiceFeeFund(fundId, batchIds, userName);
     }
 
+    @Override
+    public List<Usage> getForNtsServiceFeeCalculation(String scenarioId, Pageable pageable) {
+        return usageRepository.findForNtsServiceFeeCalculation(scenarioId, pageable);
+    }
+
     private void populateTitlesStandardNumberAndType(Collection<ResearchedUsage> researchedUsages) {
         researchedUsages.forEach(researchedUsage -> {
             Work work = piIntegrationService.findWorkByWrWrkInst(researchedUsage.getWrWrkInst());

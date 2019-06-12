@@ -445,4 +445,13 @@ public interface IUsageService {
      * @param userName user name
      */
     void addWithdrawnUsagesToPreServiceFeeFund(String fundId, Set<String> batchIds, String userName);
+
+    /**
+     * Returns list of {@link Usage}s by scenario identifier with limit and offset for NTS service fee calculation.
+     *
+     * @param scenarioId scenario identifier
+     * @param pageable   limit and offset
+     * @return list of {@link Usage}s by scenario identifier with limit and offset
+     */
+    List<Usage> getForNtsServiceFeeCalculation(String scenarioId, Pageable pageable);
 }
