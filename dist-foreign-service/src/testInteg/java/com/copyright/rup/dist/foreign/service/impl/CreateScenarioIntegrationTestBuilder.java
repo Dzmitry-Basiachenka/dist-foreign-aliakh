@@ -1,11 +1,11 @@
 package com.copyright.rup.dist.foreign.service.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.foreign.domain.Scenario;
 import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
@@ -13,7 +13,6 @@ import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioAuditItem;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
-import com.copyright.rup.dist.foreign.domain.UsageDto;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.ScenarioUsageFilter;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
@@ -36,12 +35,14 @@ import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
- * Builder for {@link CreateScenarioTest}.
+ * Builder for {@link CreateScenarioIntegrationTest}.
  * <p>
  * Copyright (C) 2017 copyright.com
  * <p>
@@ -50,7 +51,7 @@ import java.util.stream.Collectors;
  * @author Uladzislau_Shalamitski
  */
 @Component
-class CreateScenarioTestBuilder {
+class CreateScenarioIntegrationTestBuilder {
 
     private static final String SCENARIO_NAME = "Test Scenario";
     private static final String DESCRIPTION = "Scenario Description";
@@ -78,32 +79,43 @@ class CreateScenarioTestBuilder {
     private List<String> expectedPreferencesRightholderIds;
     private UsageFilter usageFilter;
     private List<Usage> expectedUsages;
-    private String scenarioId;
+    private List<Usage> expectedNtsExcludedUsages;
+    private List<Usage> expectedAlreadyInScenarioUsages;
     private Scenario expectedScenario;
 
-    CreateScenarioTestBuilder expectRollups(String rollupsJson, String... rollupsRightsholdersIds) {
+    CreateScenarioIntegrationTestBuilder expectRollups(String rollupsJson, String... rollupsRightsholdersIds) {
         this.expectedRollupsJson = rollupsJson;
         this.expectedRollupsRightholderIds = Arrays.asList(rollupsRightsholdersIds);
         return this;
     }
 
-    CreateScenarioTestBuilder expectPreferences(String preferencesJson, String... rightholderIds) {
+    CreateScenarioIntegrationTestBuilder expectPreferences(String preferencesJson, String... rightholderIds) {
         this.expectedPreferencesJson = preferencesJson;
         this.expectedPreferencesRightholderIds = Arrays.asList(rightholderIds);
         return this;
     }
 
-    CreateScenarioTestBuilder withFilter(UsageFilter filter) {
+    CreateScenarioIntegrationTestBuilder withFilter(UsageFilter filter) {
         this.usageFilter = filter;
         return this;
     }
 
-    CreateScenarioTestBuilder expectUsages(List<Usage> usages) {
+    CreateScenarioIntegrationTestBuilder expectUsages(List<Usage> usages) {
         this.expectedUsages = usages;
         return this;
     }
 
-    CreateScenarioTestBuilder expectScenario(Scenario scenario) {
+    CreateScenarioIntegrationTestBuilder expectUsagesAlreadyInScenario(List<Usage> alreadyInScenarioUsages) {
+        this.expectedAlreadyInScenarioUsages = alreadyInScenarioUsages;
+        return this;
+    }
+
+    CreateScenarioIntegrationTestBuilder expectNtsExcludedUsages(List<Usage> ntsExcludedUsages) {
+        this.expectedNtsExcludedUsages = ntsExcludedUsages;
+        return this;
+    }
+
+    CreateScenarioIntegrationTestBuilder expectScenario(Scenario scenario) {
         this.expectedScenario = scenario;
         return this;
     }
@@ -119,7 +131,8 @@ class CreateScenarioTestBuilder {
         expectedPreferencesRightholderIds = null;
         usageFilter = null;
         expectedUsages = null;
-        scenarioId = null;
+        expectedAlreadyInScenarioUsages = null;
+        expectedNtsExcludedUsages = null;
         expectedScenario = null;
     }
 
@@ -127,6 +140,16 @@ class CreateScenarioTestBuilder {
      * Test runner class.
      */
     class Runner {
+
+        private String scenarioId;
+        private final String productFamily = usageFilter.getProductFamilies().iterator().next();
+
+        Runner() {
+            expectedUsages.forEach(usage -> {
+                usage.setReportedValue(
+                    usageRepository.findByIds(Collections.singletonList(usage.getId())).get(0).getReportedValue());
+            });
+        }
 
         void run() {
             createRestServer();
@@ -136,9 +159,7 @@ class CreateScenarioTestBuilder {
             if (Objects.nonNull(expectedPreferencesRightholderIds)) {
                 expectGetPreferences(expectedPreferencesJson, expectedPreferencesRightholderIds);
             }
-            Scenario scenario = createScenario();
-            assertEquals(usageFilter.getProductFamilies().iterator().next(), scenario.getProductFamily());
-            scenarioId = scenario.getId();
+            createScenario();
             mockServer.verify();
             asyncMockServer.verify();
             assertScenario();
@@ -147,19 +168,21 @@ class CreateScenarioTestBuilder {
             assertScenarioUsageFilter();
         }
 
-        private Scenario createScenario() {
+        private void createScenario() {
+            Scenario scenario;
             if ("NTS".equals(usageFilter.getProductFamilies().iterator().next())) {
                 NtsFields ntsFields = new NtsFields();
                 ntsFields.setRhMinimumAmount(new BigDecimal("5.00"));
-                return scenarioService.createNtsScenario(SCENARIO_NAME, ntsFields, DESCRIPTION, usageFilter);
+                scenario = scenarioService.createNtsScenario(SCENARIO_NAME, ntsFields, DESCRIPTION, usageFilter);
             } else {
-                return scenarioService.createScenario(SCENARIO_NAME, DESCRIPTION, usageFilter);
+                scenario = scenarioService.createScenario(SCENARIO_NAME, DESCRIPTION, usageFilter);
             }
+            assertEquals(productFamily, scenario.getProductFamily());
+            scenarioId = scenario.getId();
+            expectedScenario.setId(scenario.getId());
         }
 
         private void assertScenario() {
-            assertEquals(2, scenarioService.getScenarios().size());
-            expectedScenario.setId(scenarioId);
             Scenario scenario = scenarioService.getScenarioWithAmountsAndLastAction(expectedScenario);
             assertEquals(expectedScenario.getId(), scenario.getId());
             assertEquals(expectedScenario.getName(), scenario.getName());
@@ -194,40 +217,54 @@ class CreateScenarioTestBuilder {
         }
 
         private void assertUsages() {
-            expectedUsages.stream()
-                .filter(usage -> UsageStatusEnum.ELIGIBLE == usage.getStatus())
-                .forEach(this::assertUsage);
-            assertNtsExcludedUsages(expectedUsages.stream()
-                .filter(usage -> UsageStatusEnum.NTS_EXCLUDED == usage.getStatus())
-                .collect(Collectors.toList()));
-        }
-
-        private void assertUsage(Usage usage) {
-            List<UsageDto> usages =
-                usageRepository.findByScenarioIdAndRhAccountNumber(usage.getRightsholder().getAccountNumber(),
-                    Objects.isNull(usage.getScenarioId()) ? scenarioId : usage.getScenarioId(), null,
-                    new Pageable(0, 10), null);
-            assertEquals(1, usages.size());
-            UsageDto usageDto = usages.get(0);
-            if ("NTS".equals(usageFilter.getProductFamilies().iterator().next())) {
-                assertNull(usage.getPayee().getAccountNumber());
-            } else {
-                assertEquals(usage.getPayee().getAccountNumber(), usageDto.getPayeeAccountNumber());
+            List<Usage> actualUsages = usageRepository.findByScenarioId(scenarioId);
+            assertEquals(expectedUsages.size(), actualUsages.size());
+            Map<String, Usage> expectedIdToUsageMap =
+                expectedUsages.stream().collect(Collectors.toMap(Usage::getId, usage -> usage));
+            Map<String, Usage> actualIdToUsageMap =
+                actualUsages.stream().collect(Collectors.toMap(Usage::getId, usage -> usage));
+            expectedIdToUsageMap.keySet().forEach(id ->
+                assertUsage(expectedIdToUsageMap.get(id), actualIdToUsageMap.get(id)));
+            if (Objects.nonNull(expectedNtsExcludedUsages)) {
+                assertNtsExcludedUsages();
             }
-            assertEquals("SYSTEM", usageDto.getUpdateUser());
-            assertEquals(0, usage.getServiceFeeAmount().compareTo(usageDto.getServiceFeeAmount()));
-            assertEquals(0, usage.getNetAmount().compareTo(usageDto.getNetAmount()));
-            assertEquals(0, usage.getGrossAmount().compareTo(usageDto.getGrossAmount()));
+            if (Objects.nonNull(expectedAlreadyInScenarioUsages)) {
+                assertAlreadyInScenarioUsages();
+            }
         }
 
-        private void assertNtsExcludedUsages(List<Usage> expected) {
-            List<Usage> actualUsages = usageRepository.findByStatuses(UsageStatusEnum.NTS_EXCLUDED);
-            assertEquals(expected.size(), actualUsages.size());
-            actualUsages.forEach(usage -> {
-                assertNull(usage.getScenarioId());
-                assertEquals(0, usage.getServiceFeeAmount().compareTo(BigDecimal.ZERO));
-                assertEquals(0, usage.getNetAmount().compareTo(BigDecimal.ZERO));
-                assertEquals(0, usage.getGrossAmount().compareTo(BigDecimal.ZERO));
+        private void assertUsage(Usage expectedUsage, Usage actualUsage) {
+            assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
+            assertEquals(productFamily, actualUsage.getProductFamily());
+            assertEquals(0, expectedUsage.getGrossAmount().compareTo(actualUsage.getGrossAmount()));
+            assertEquals(0, expectedUsage.getNetAmount().compareTo(actualUsage.getNetAmount()));
+            assertEquals(expectedUsage.getServiceFee(), actualUsage.getServiceFee());
+            assertEquals(0, expectedUsage.getServiceFeeAmount().compareTo(actualUsage.getServiceFeeAmount()));
+            assertEquals(expectedUsage.getReportedValue(), actualUsage.getReportedValue());
+            assertEquals(expectedUsage.getRightsholder().getAccountNumber(),
+                actualUsage.getRightsholder().getAccountNumber());
+            assertEquals(expectedUsage.getPayee().getAccountNumber(), actualUsage.getPayee().getAccountNumber());
+        }
+
+        private void assertAlreadyInScenarioUsages() {
+            usageRepository.findByIds(
+                expectedAlreadyInScenarioUsages.stream().map(Usage::getId).collect(Collectors.toList()))
+                .forEach(actualUsage -> {
+                    assertNotNull(actualUsage.getScenarioId());
+                    assertNotEquals(scenarioId, actualUsage.getScenarioId());
+                });
+        }
+
+        private void assertNtsExcludedUsages() {
+            List<Usage> actualNtsExcludedUsages =
+                usageRepository.findByIds(expectedNtsExcludedUsages.stream().map(Usage::getId).collect(
+                    Collectors.toList()));
+            assertEquals(expectedNtsExcludedUsages.size(), actualNtsExcludedUsages.size());
+            actualNtsExcludedUsages.forEach(actualUsage -> {
+                assertEquals(UsageStatusEnum.NTS_EXCLUDED, actualUsage.getStatus());
+                assertEquals(0, actualUsage.getServiceFeeAmount().compareTo(BigDecimal.ZERO));
+                assertEquals(0, actualUsage.getNetAmount().compareTo(BigDecimal.ZERO));
+                assertEquals(0, actualUsage.getGrossAmount().compareTo(BigDecimal.ZERO));
             });
         }
 

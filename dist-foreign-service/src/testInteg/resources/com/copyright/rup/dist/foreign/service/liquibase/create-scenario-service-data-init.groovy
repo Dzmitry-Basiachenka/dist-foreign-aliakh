@@ -2,7 +2,7 @@ databaseChangeLog {
     property(file: 'database.properties')
 
     changeSet(id: '2017-12-01-00', author: 'Aliaksandra Bayanouskaya <abayanouskaya@copyright.com>') {
-        comment('Inserting test data for CreateScenarioTest')
+        comment('Inserting test data for testCreateFasScenario and testCreateFasScenarioNoRollupsNoPreferences')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
             column(name: 'df_scenario_uid', value: '4c014547-06f3-4840-94ff-6249730d537d')
@@ -28,6 +28,7 @@ databaseChangeLog {
             column(name: 'gross_amount', value: '35000')
         }
 
+        // usage will stay in existing scenario after test run
         insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
             column(name: 'df_usage_uid', value: 'fcdaea01-2439-4c51-b3e2-23649cf710c7')
             column(name: 'df_usage_batch_uid', value: '31ddaa1a-e60b-44ce-a968-0ca262870358')
@@ -159,6 +160,48 @@ databaseChangeLog {
             column(name: 'gross_amount', value: '5093.22')
         }
 
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'df_rightsholder_uid', value: 'a5989f7c-fc6f-4e8c-88d4-2fe7bcce8d1f')
+            column(name: 'rh_account_number', value: '1000002859')
+            column(name: 'name', value: 'John Wiley & Sons - Books')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'df_rightsholder_uid', value: '756299b5-02ce-4f76-b0bc-ee2571cf906e')
+            column(name: 'rh_account_number', value: '7000429266')
+            column(name: 'name', value: 'INSTITUTE OF FILM & TELEVISION STUDIES')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'df_rightsholder_uid', value: '019acfde-91be-43aa-8871-6305642bcb2c')
+            column(name: 'rh_account_number', value: '1000024497')
+            column(name: 'name', value: 'White Horse Press')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'df_rightsholder_uid', value: '038bf4aa-b6cc-430a-9b32-655954d95278')
+            column(name: 'rh_account_number', value: '1000002562')
+            column(name: 'name', value: 'Pall Mall Press/Phaidon Press')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'df_rightsholder_uid', value: '00d4ae90-5fe7-47bf-ace1-781c8d76d4da')
+            column(name: 'rh_account_number', value: '1000001820')
+            column(name: 'name', value: 'Delhi Medical Assn')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
+            column(name: 'df_rightsholder_uid', value: '05dc9217-26d4-46ca-aa6e-18572591f3c8')
+            column(name: 'rh_account_number', value: '1000003821')
+            column(name: 'name', value: 'Abbey Publications, Inc. [L]')
+        }
+
+        rollback ""
+    }
+
+    changeSet(id: '2018-03-15-00', author: 'Darya Baraukova <dbaraukova@copyright.com>') {
+        comment("Insert test data for testCreateClaScenario")
+
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
             column(name: 'df_usage_batch_uid', value: 'ce0ca941-1e16-4a3b-a991-b596189b4f22')
             column(name: 'name', value: 'CLA_27Oct17')
@@ -275,42 +318,6 @@ databaseChangeLog {
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
-            column(name: 'df_rightsholder_uid', value: 'a5989f7c-fc6f-4e8c-88d4-2fe7bcce8d1f')
-            column(name: 'rh_account_number', value: '1000002859')
-            column(name: 'name', value: 'John Wiley & Sons - Books')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
-            column(name: 'df_rightsholder_uid', value: '756299b5-02ce-4f76-b0bc-ee2571cf906e')
-            column(name: 'rh_account_number', value: '7000429266')
-            column(name: 'name', value: 'INSTITUTE OF FILM & TELEVISION STUDIES')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
-            column(name: 'df_rightsholder_uid', value: '019acfde-91be-43aa-8871-6305642bcb2c')
-            column(name: 'rh_account_number', value: '1000024497')
-            column(name: 'name', value: 'White Horse Press')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
-            column(name: 'df_rightsholder_uid', value: '038bf4aa-b6cc-430a-9b32-655954d95278')
-            column(name: 'rh_account_number', value: '1000002562')
-            column(name: 'name', value: 'Pall Mall Press/Phaidon Press')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
-            column(name: 'df_rightsholder_uid', value: '00d4ae90-5fe7-47bf-ace1-781c8d76d4da')
-            column(name: 'rh_account_number', value: '1000001820')
-            column(name: 'name', value: 'Delhi Medical Assn')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
-            column(name: 'df_rightsholder_uid', value: '05dc9217-26d4-46ca-aa6e-18572591f3c8')
-            column(name: 'rh_account_number', value: '1000003821')
-            column(name: 'name', value: 'Abbey Publications, Inc. [L]')
-        }
-
-        insert(schemaName: dbAppsSchema, tableName: 'df_rightsholder') {
             column(name: 'df_rightsholder_uid', value: '60080587-a225-439c-81af-f016cb33aeac')
             column(name: 'rh_account_number', value: '2000133267')
             column(name: 'name', value: '101 Communications, Ltd.')
@@ -340,111 +347,113 @@ databaseChangeLog {
             column(name: 'name', value: '2HC [T]')
         }
 
-        changeSet(id: '2019-04-19-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
-            comment("Insert test data for testCreateNtsScenario")
+        rollback ""
+    }
 
-            insert(schemaName: dbAppsSchema, tableName: 'df_work_classification') {
-                column(name: 'df_work_classification_uid', value: 'fc9ee4ed-519e-41c8-927b-92206b34c8cc')
-                column(name: 'wr_wrk_inst', value: '135632563')
-                column(name: 'classification', value: 'NON-STM')
-            }
+    changeSet(id: '2019-04-19-00', author: 'Aliaksandr Liakh <aliakh@copyright.com>') {
+        comment("Insert test data for testCreateNtsScenario")
 
-            insert(schemaName: dbAppsSchema, tableName: 'df_work_classification') {
-                column(name: 'df_work_classification_uid', value: '7c04aac5-ccc5-4abc-b84a-4077dd6ca9a8')
-                column(name: 'wr_wrk_inst', value: '145632563')
-                column(name: 'classification', value: 'STM')
-            }
+        insert(schemaName: dbAppsSchema, tableName: 'df_work_classification') {
+            column(name: 'df_work_classification_uid', value: 'fc9ee4ed-519e-41c8-927b-92206b34c8cc')
+            column(name: 'wr_wrk_inst', value: '135632563')
+            column(name: 'classification', value: 'NON-STM')
+        }
 
-            insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
-                column(name: 'df_usage_batch_uid', value: '26282dbd-3463-58d7-c927-03d3458a656a')
-                column(name: 'name', value: 'NTS usage batch')
-                column(name: 'rro_account_number', value: '2000017004')
-                column(name: 'product_family', value: 'NTS')
-                column(name: 'payment_date', value: '2017-01-11')
-                column(name: 'fiscal_year', value: '2017')
-                column(name: 'gross_amount', value: '0.00')
-                column(name: 'fund_pool', value: '{"markets": ["Bus,Univ,Doc Del"], "stm_amount": 10, "non_stm_amount": 20, "stm_minimum_amount": 30, "non_stm_minimum_amount": 40, "fund_pool_period_to": 2017, "fund_pool_period_from": 2017}')
-            }
+        insert(schemaName: dbAppsSchema, tableName: 'df_work_classification') {
+            column(name: 'df_work_classification_uid', value: '7c04aac5-ccc5-4abc-b84a-4077dd6ca9a8')
+            column(name: 'wr_wrk_inst', value: '145632563')
+            column(name: 'classification', value: 'STM')
+        }
 
-            insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
-                column(name: 'df_usage_uid', value: '3d921c9c-8036-421a-ab05-39cc4d3c3b68')
-                column(name: 'df_usage_batch_uid', value: '26282dbd-3463-58d7-c927-03d3458a656a')
-                column(name: 'wr_wrk_inst', value: '135632563')
-                column(name: 'work_title', value: 'Jazz chants')
-                column(name: 'rh_account_number', value: '7000429266')
-                column(name: 'status_ind', value: 'ELIGIBLE')
-                column(name: 'product_family', value: 'NTS')
-                column(name: 'standard_number', value: '10859241')
-                column(name: 'market', value: 'Bus,Univ,Doc Del')
-                column(name: 'market_period_from', value: '2013')
-                column(name: 'market_period_to', value: '2017')
-                column(name: 'reported_value', value: '59.30')
-                column(name: 'gross_amount', value: '0.00')
-            }
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: '26282dbd-3463-58d7-c927-03d3458a656a')
+            column(name: 'name', value: 'NTS usage batch')
+            column(name: 'rro_account_number', value: '2000017004')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'payment_date', value: '2017-01-11')
+            column(name: 'fiscal_year', value: '2017')
+            column(name: 'gross_amount', value: '0.00')
+            column(name: 'fund_pool', value: '{"markets": ["Bus,Univ,Doc Del"], "stm_amount": 10, "non_stm_amount": 20, "stm_minimum_amount": 30, "non_stm_minimum_amount": 40, "fund_pool_period_to": 2017, "fund_pool_period_from": 2017}')
+        }
 
-            insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
-                column(name: 'df_usage_uid', value: '669cf304-0921-41a2-85d5-c3905e77c696')
-                column(name: 'df_usage_batch_uid', value: '26282dbd-3463-58d7-c927-03d3458a656a')
-                column(name: 'wr_wrk_inst', value: '135632563')
-                column(name: 'work_title', value: 'Jazz chants')
-                column(name: 'rh_account_number', value: '1000002859')
-                column(name: 'status_ind', value: 'ELIGIBLE')
-                column(name: 'product_family', value: 'NTS')
-                column(name: 'standard_number', value: '10859241')
-                column(name: 'market', value: 'Bus,Univ,Doc Del')
-                column(name: 'market_period_from', value: '2013')
-                column(name: 'market_period_to', value: '2017')
-                column(name: 'reported_value', value: '19.20')
-                column(name: 'gross_amount', value: '0.00')
-            }
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '3d921c9c-8036-421a-ab05-39cc4d3c3b68')
+            column(name: 'df_usage_batch_uid', value: '26282dbd-3463-58d7-c927-03d3458a656a')
+            column(name: 'wr_wrk_inst', value: '135632563')
+            column(name: 'work_title', value: 'Jazz chants')
+            column(name: 'rh_account_number', value: '7000429266')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'standard_number', value: '10859241')
+            column(name: 'market', value: 'Bus,Univ,Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '59.30')
+            column(name: 'gross_amount', value: '0.00')
+        }
 
-            insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
-                column(name: 'df_usage_uid', value: '6402d5c8-ba80-4966-a7cc-34ba1fdc1d9c')
-                column(name: 'df_usage_batch_uid', value: '26282dbd-3463-58d7-c927-03d3458a656a')
-                column(name: 'wr_wrk_inst', value: '135632563')
-                column(name: 'work_title', value: 'Jazz chants')
-                column(name: 'rh_account_number', value: '1000001820')
-                column(name: 'status_ind', value: 'ELIGIBLE')
-                column(name: 'product_family', value: 'NTS')
-                column(name: 'standard_number', value: '10859241')
-                column(name: 'market', value: 'Bus,Univ,Doc Del')
-                column(name: 'market_period_from', value: '2013')
-                column(name: 'market_period_to', value: '2017')
-                column(name: 'reported_value', value: '25.96')
-                column(name: 'gross_amount', value: '0.00')
-            }
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '669cf304-0921-41a2-85d5-c3905e77c696')
+            column(name: 'df_usage_batch_uid', value: '26282dbd-3463-58d7-c927-03d3458a656a')
+            column(name: 'wr_wrk_inst', value: '135632563')
+            column(name: 'work_title', value: 'Jazz chants')
+            column(name: 'rh_account_number', value: '1000002859')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'standard_number', value: '10859241')
+            column(name: 'market', value: 'Bus,Univ,Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '19.20')
+            column(name: 'gross_amount', value: '0.00')
+        }
 
-            insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
-                column(name: 'df_usage_uid', value: '91813777-3dd4-4f5f-bb83-ca145866317d')
-                column(name: 'df_usage_batch_uid', value: '26282dbd-3463-58d7-c927-03d3458a656a')
-                column(name: 'wr_wrk_inst', value: '145632563')
-                column(name: 'work_title', value: 'Wired')
-                column(name: 'rh_account_number', value: '1000024497')
-                column(name: 'status_ind', value: 'ELIGIBLE')
-                column(name: 'product_family', value: 'NTS')
-                column(name: 'standard_number', value: '10859241')
-                column(name: 'market', value: 'Bus,Univ,Doc Del')
-                column(name: 'market_period_from', value: '2013')
-                column(name: 'market_period_to', value: '2017')
-                column(name: 'reported_value', value: '896.72')
-                column(name: 'gross_amount', value: '0.00')
-            }
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '6402d5c8-ba80-4966-a7cc-34ba1fdc1d9c')
+            column(name: 'df_usage_batch_uid', value: '26282dbd-3463-58d7-c927-03d3458a656a')
+            column(name: 'wr_wrk_inst', value: '135632563')
+            column(name: 'work_title', value: 'Jazz chants')
+            column(name: 'rh_account_number', value: '1000001820')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'standard_number', value: '10859241')
+            column(name: 'market', value: 'Bus,Univ,Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '25.96')
+            column(name: 'gross_amount', value: '0.00')
+        }
 
-            insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
-                column(name: 'df_usage_uid', value: 'e001c596-a66f-4fd3-b34c-5ef65a215d68')
-                column(name: 'df_usage_batch_uid', value: '26282dbd-3463-58d7-c927-03d3458a656a')
-                column(name: 'wr_wrk_inst', value: '145632563')
-                column(name: 'work_title', value: 'Wired')
-                column(name: 'rh_account_number', value: '1000002562')
-                column(name: 'status_ind', value: 'ELIGIBLE')
-                column(name: 'product_family', value: 'NTS')
-                column(name: 'standard_number', value: '10859241')
-                column(name: 'market', value: 'Bus,Univ,Doc Del')
-                column(name: 'market_period_from', value: '2013')
-                column(name: 'market_period_to', value: '2017')
-                column(name: 'reported_value', value: '62.41')
-                column(name: 'gross_amount', value: '0.00')
-            }
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '91813777-3dd4-4f5f-bb83-ca145866317d')
+            column(name: 'df_usage_batch_uid', value: '26282dbd-3463-58d7-c927-03d3458a656a')
+            column(name: 'wr_wrk_inst', value: '145632563')
+            column(name: 'work_title', value: 'Wired')
+            column(name: 'rh_account_number', value: '1000024497')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'standard_number', value: '10859241')
+            column(name: 'market', value: 'Bus,Univ,Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '896.72')
+            column(name: 'gross_amount', value: '0.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'e001c596-a66f-4fd3-b34c-5ef65a215d68')
+            column(name: 'df_usage_batch_uid', value: '26282dbd-3463-58d7-c927-03d3458a656a')
+            column(name: 'wr_wrk_inst', value: '145632563')
+            column(name: 'work_title', value: 'Wired')
+            column(name: 'rh_account_number', value: '1000002562')
+            column(name: 'status_ind', value: 'ELIGIBLE')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'standard_number', value: '10859241')
+            column(name: 'market', value: 'Bus,Univ,Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'reported_value', value: '62.41')
+            column(name: 'gross_amount', value: '0.00')
         }
 
         rollback ""
