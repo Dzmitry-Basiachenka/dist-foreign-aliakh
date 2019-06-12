@@ -8,22 +8,14 @@ import com.copyright.rup.dist.common.service.impl.util.RupContextUtils;
 import com.copyright.rup.dist.common.test.JsonMatcher;
 import com.copyright.rup.dist.common.test.TestUtils;
 import com.copyright.rup.dist.common.test.mock.aws.SqsClientMock;
-import com.copyright.rup.dist.foreign.domain.Scenario;
-import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageAuditItem;
 import com.copyright.rup.dist.foreign.domain.UsageBatch;
-import com.copyright.rup.dist.foreign.domain.UsageDto;
-import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
-import com.copyright.rup.dist.foreign.repository.api.IUsageArchiveRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageBatchRepository;
 import com.copyright.rup.dist.foreign.repository.api.IUsageRepository;
-import com.copyright.rup.dist.foreign.service.api.IScenarioService;
 import com.copyright.rup.dist.foreign.service.api.IUsageAuditService;
 import com.copyright.rup.dist.foreign.service.api.IUsageBatchService;
-import com.copyright.rup.dist.foreign.service.impl.NtsWorkflowIntegrationTestBuilder.Runner;
-
-import com.google.common.collect.ImmutableMap;
+import com.copyright.rup.dist.foreign.service.impl.CreateNtsBatchIntegrationTestBuilder.Runner;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.builder.Builder;
@@ -38,13 +30,12 @@ import org.springframework.test.web.client.response.MockRestResponseCreators;
 import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
 
-import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
 /**
- * Builder for {@link NtsWorkflowIntegrationTest}.
+ * Builder for {@link CreateNtsBatchIntegrationTest}.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -52,21 +43,18 @@ import java.util.Objects;
  *
  * @author Uladzislau Shalamitski
  */
+// TODO {pliakh} move common REST-expectation and assertion methods to helper, apply in other tests
 @Component
-public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
+public class CreateNtsBatchIntegrationTestBuilder implements Builder<Runner> {
 
     @Autowired
     private IUsageAuditService usageAuditService;
     @Autowired
     private IUsageBatchService usageBatchService;
     @Autowired
-    private IScenarioService scenarioService;
-    @Autowired
     private IUsageBatchRepository usageBatchRepository;
     @Autowired
     private IUsageRepository usageRepository;
-    @Autowired
-    private IUsageArchiveRepository usageArchiveRepository;
     @Autowired
     private RestTemplate restTemplate;
     @Autowired
@@ -84,54 +72,48 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
     private String expectedPrmResponse;
     private String expectedPreferencesResponse;
     private String expectedPreferencesRightsholderId;
-    private String expectedLmDetailsJsonFile;
-    private Scenario scenario;
     private Long expectedPrmAccountNumber;
     private UsageBatch usageBatch;
-    private Usage expectedUsage;
+    // TODO {pliakh} allow to assert multiple usages
+    private Usage expectedUsages;
     private UsageAuditItem expectedAudit;
 
-    NtsWorkflowIntegrationTestBuilder withUsageBatch(UsageBatch batch) {
+    CreateNtsBatchIntegrationTestBuilder withUsageBatch(UsageBatch batch) {
         this.usageBatch = batch;
         return this;
     }
 
-    NtsWorkflowIntegrationTestBuilder expectUsage(Usage usage) {
-        this.expectedUsage = usage;
+    CreateNtsBatchIntegrationTestBuilder expectUsage(Usage usage) {
+        this.expectedUsages = usage;
         return this;
     }
 
-    NtsWorkflowIntegrationTestBuilder expectAudit(UsageAuditItem audit) {
+    CreateNtsBatchIntegrationTestBuilder expectAudit(UsageAuditItem audit) {
         this.expectedAudit = audit;
         return this;
     }
 
-    NtsWorkflowIntegrationTestBuilder expectRmsRights(String request, String response) {
+    CreateNtsBatchIntegrationTestBuilder expectRmsRights(String request, String response) {
         this.expectedRmsRequest = request;
         this.expectedRmsResponse = response;
         return this;
     }
 
-    NtsWorkflowIntegrationTestBuilder expectOracleCall(Long accountNumber, String response) {
+    CreateNtsBatchIntegrationTestBuilder expectOracleCall(Long accountNumber, String response) {
         this.expectedOracleAccountNumber = accountNumber;
         this.expectedOracleResponse = response;
         return this;
     }
 
-    NtsWorkflowIntegrationTestBuilder expectPreferences(String preferencesJson, String rightsholderId) {
+    CreateNtsBatchIntegrationTestBuilder expectPreferences(String preferencesJson, String rightsholderId) {
         this.expectedPreferencesResponse = preferencesJson;
         this.expectedPreferencesRightsholderId = rightsholderId;
         return this;
     }
 
-    NtsWorkflowIntegrationTestBuilder expectPrmCall(Long accountNumber, String expectedResponse) {
+    CreateNtsBatchIntegrationTestBuilder expectPrmCall(Long accountNumber, String expectedResponse) {
         this.expectedPrmAccountNumber = accountNumber;
         this.expectedPrmResponse = expectedResponse;
-        return this;
-    }
-
-    NtsWorkflowIntegrationTestBuilder expectLmDetails(String jsonFile) {
-        this.expectedLmDetailsJsonFile = jsonFile;
         return this;
     }
 
@@ -143,7 +125,7 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
     void reset() {
         usageBatch = null;
         expectedAudit = null;
-        expectedUsage = null;
+        expectedUsages = null;
         expectedPrmAccountNumber = null;
         expectedOracleAccountNumber = null;
         expectedPrmResponse = null;
@@ -152,7 +134,6 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
         expectedOracleResponse = null;
         expectedPreferencesResponse = null;
         expectedPreferencesRightsholderId = null;
-        expectedLmDetailsJsonFile = null;
         this.sqsClientMock.reset();
     }
 
@@ -163,6 +144,7 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
 
         private MockRestServiceServer mockServer;
         private MockRestServiceServer asyncMockServer;
+        private List<String> actualUsageIds;
 
         public void run() {
             createRestServer();
@@ -178,37 +160,14 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
             }
             loadNtsBatch();
             assertBatch();
-            if (Objects.nonNull(expectedLmDetailsJsonFile)) {
-                createScenario();
-                scenarioService.submit(scenario, "Submitting scenario for testing purposes");
-                scenarioService.approve(scenario, "Approving scenario for testing purposes");
-                sendScenarioToLm();
-                assertArchivedUsages();
-            } else {
-                assertUsages();
-            }
+            assertUsages();
+            assertAudit();
             verifyRestServer();
         }
 
         private void loadNtsBatch() {
-            List<String> ntsUsageIds = usageBatchService.insertNtsBatch(usageBatch, RupContextUtils.getUserName());
-            usageBatchService.getAndSendForGettingRights(ntsUsageIds, usageBatch.getName());
-        }
-
-        private void createScenario() {
-            UsageFilter usageFilter = new UsageFilter();
-            usageFilter.setUsageBatchesIds(Collections.singleton(usageBatch.getId()));
-            usageFilter.setProductFamilies(Collections.singleton("NTS"));
-            NtsFields ntsFields = new NtsFields();
-            ntsFields.setRhMinimumAmount(new BigDecimal("300"));
-            scenario = scenarioService.createNtsScenario("Test Scenario", ntsFields, null, usageFilter);
-        }
-
-        private void sendScenarioToLm() {
-            scenarioService.sendToLm(scenario);
-            sqsClientMock.assertSendMessages("fda-test-sf-detail.fifo",
-                Collections.singletonList(TestUtils.fileToString(this.getClass(), expectedLmDetailsJsonFile)),
-                Collections.singletonList("detail_id"), ImmutableMap.of("source", "FDA"));
+            actualUsageIds = usageBatchService.insertNtsBatch(usageBatch, RupContextUtils.getUserName());
+            usageBatchService.getAndSendForGettingRights(actualUsageIds, usageBatch.getName());
         }
 
         private void assertBatch() {
@@ -217,32 +176,25 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
                 .findFirst()
                 .orElse(null);
             assertNotNull(insertedBatch);
+            assertEquals(usageBatch.getFundPool(), insertedBatch.getFundPool());
+            assertEquals(usageBatch.getFiscalYear(), insertedBatch.getFiscalYear());
+            assertEquals(usageBatch.getGrossAmount(), insertedBatch.getGrossAmount());
+            assertEquals(usageBatch.getPaymentDate(), insertedBatch.getPaymentDate());
+            assertEquals(usageBatch.getRro().getAccountNumber(), insertedBatch.getRro().getAccountNumber());
             usageBatch.setId(insertedBatch.getId());
         }
 
-        private void assertArchivedUsages() {
-            List<UsageDto> actualUsages = usageArchiveRepository.findByScenarioIdAndRhAccountNumber(scenario.getId(),
-                1000023401L, null, null, null);
-            assertEquals(1, CollectionUtils.size(actualUsages));
-            assertUsage(actualUsages.get(0));
-        }
-
         private void assertUsages() {
-            UsageFilter usageFilter = new UsageFilter();
-            usageFilter.setUsageBatchesIds(Collections.singleton(usageBatch.getId()));
-            List<UsageDto> actualUsages = usageRepository.findDtosByFilter(usageFilter, null, null);
-            if (Objects.isNull(expectedUsage)) {
-                assertTrue(CollectionUtils.isEmpty(actualUsages));
+            if (Objects.isNull(expectedUsages)) {
+                assertTrue(CollectionUtils.isEmpty(usageRepository.findByIds(actualUsageIds)));
             } else {
-                assertEquals(1, CollectionUtils.size(actualUsages));
-                assertUsage(actualUsages.get(0));
-            }
-            if (Objects.nonNull(expectedAudit)) {
-                assertAudit(actualUsages.get(0).getId());
+                List<Usage> actualUsages = usageRepository.findByIds(actualUsageIds);
+                assertEquals(1, actualUsages.size());
+                assertUsage(expectedUsages, actualUsages.get(0));
             }
         }
 
-        private void assertUsage(UsageDto actualUsage) {
+        private void assertUsage(Usage expectedUsage, Usage actualUsage) {
             assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
             assertEquals(expectedUsage.getWrWrkInst(), actualUsage.getWrWrkInst());
             assertEquals(expectedUsage.getWorkTitle(), actualUsage.getWorkTitle());
@@ -258,7 +210,14 @@ public class NtsWorkflowIntegrationTestBuilder implements Builder<Runner> {
             assertEquals(expectedUsage.getAuthor(), actualUsage.getAuthor());
             assertEquals(expectedUsage.getGrossAmount(), actualUsage.getGrossAmount());
             assertEquals(expectedUsage.getReportedValue(), actualUsage.getReportedValue());
-            assertEquals(expectedUsage.getRightsholder().getAccountNumber(), actualUsage.getRhAccountNumber());
+            assertEquals(expectedUsage.getRightsholder().getAccountNumber(),
+                actualUsage.getRightsholder().getAccountNumber());
+        }
+
+        private void assertAudit() {
+            actualUsageIds.forEach(Objects.isNull(expectedAudit)
+                ? usageId -> assertTrue(CollectionUtils.isEmpty(usageAuditService.getUsageAudit(usageId)))
+                : this::assertAudit);
         }
 
         private void assertAudit(String usageId) {

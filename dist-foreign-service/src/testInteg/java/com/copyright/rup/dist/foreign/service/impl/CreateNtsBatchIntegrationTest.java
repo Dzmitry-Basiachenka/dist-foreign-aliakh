@@ -25,7 +25,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 /**
- * Verifies application workflow for NTS usage.
+ * Verifies application workflow for NTS batches.
  * <p>
  * Copyright (C) 2018 copyright.com
  * <p>
@@ -35,9 +35,9 @@ import java.util.List;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:com/copyright/rup/dist/foreign/service/dist-foreign-service-test-context.xml")
-@TestPropertySource(properties = {"test.liquibase.changelog=nts-workflow-data-init.groovy"})
+@TestPropertySource(properties = {"test.liquibase.changelog=nts-batch-workflow-data-init.groovy"})
 @Transactional
-public class NtsWorkflowIntegrationTest {
+public class CreateNtsBatchIntegrationTest {
 
     private static final LocalDate DATE = LocalDate.of(2017, 2, 1);
     private static final String BUS_MARKET = "Bus";
@@ -53,7 +53,7 @@ public class NtsWorkflowIntegrationTest {
     @Autowired
     private List<ICacheService<?, ?>> cacheServices;
     @Autowired
-    private NtsWorkflowIntegrationTestBuilder testBuilder;
+    private CreateNtsBatchIntegrationTestBuilder testBuilder;
 
     @Before
     public void setUp() {
@@ -69,7 +69,7 @@ public class NtsWorkflowIntegrationTest {
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
             .expectOracleCall(1000023401L, ORACLE_RH_TAX_1000023401_US_RESPONSE)
             .expectPreferences(PRM_ELIGIBLE_RH_1000023401_RESPONSE, RH_ID)
-            .expectUsage(buildUsage(BUS_MARKET, UsageStatusEnum.ELIGIBLE, 658824345L, DEFAULT_GROSS_AMOUNT))
+            .expectUsage(buildUsage(BUS_MARKET, UsageStatusEnum.ELIGIBLE, 658824345L))
             .expectAudit(getEligibleUsageAuditItem())
             .build()
             .run();
@@ -83,7 +83,7 @@ public class NtsWorkflowIntegrationTest {
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
             .expectOracleCall(1000023401L, ORACLE_RH_TAX_1000023401_US_RESPONSE)
             .expectPreferences(PRM_ELIGIBLE_RH_1000023401_RESPONSE, RH_ID)
-            .expectUsage(buildUsage("Gov", UsageStatusEnum.UNCLASSIFIED, 576324545L, DEFAULT_GROSS_AMOUNT))
+            .expectUsage(buildUsage("Gov", UsageStatusEnum.UNCLASSIFIED, 576324545L))
             .build()
             .run();
     }
@@ -128,7 +128,7 @@ public class NtsWorkflowIntegrationTest {
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
             .expectOracleCall(1000023401L, ORACLE_RH_TAX_1000023401_US_RESPONSE)
             .expectPreferences(PRM_ELIGIBLE_RH_1000023401_RESPONSE, RH_ID)
-            .expectUsage(buildUsage("Lib", UsageStatusEnum.ELIGIBLE, 658824345L, DEFAULT_GROSS_AMOUNT))
+            .expectUsage(buildUsage("Lib", UsageStatusEnum.ELIGIBLE, 658824345L))
             .expectAudit(getEligibleUsageAuditItem())
             .build()
             .run();
@@ -142,8 +142,7 @@ public class NtsWorkflowIntegrationTest {
             .expectPrmCall(1000023401L, PRM_RH_1000023401_RESPONSE)
             .expectOracleCall(1000023401L, ORACLE_RH_TAX_1000023401_US_RESPONSE)
             .expectPreferences(PRM_ELIGIBLE_RH_1000023401_RESPONSE, RH_ID)
-            .expectLmDetails("details/nts_details_to_lm.json")
-            .expectUsage(buildUsage("Edu", UsageStatusEnum.SENT_TO_LM, 658824345L, new BigDecimal("400.4400000000")))
+            .expectUsage(buildUsage("Edu", UsageStatusEnum.ELIGIBLE, 658824345L))
             .expectAudit(getEligibleUsageAuditItem())
             .build()
             .run();
@@ -157,6 +156,7 @@ public class NtsWorkflowIntegrationTest {
         usageBatch.setRro(buildRightsholder(2000017001L, "CFC, Centre Francais d'exploitation du droit de Copie"));
         usageBatch.setProductFamily("NTS");
         usageBatch.setFundPool(fundPool);
+        usageBatch.setGrossAmount(new BigDecimal("0.00"));
         return usageBatch;
     }
 
@@ -179,7 +179,7 @@ public class NtsWorkflowIntegrationTest {
         return fundPool;
     }
 
-    private Usage buildUsage(String market, UsageStatusEnum status, Long wrWrkInst, BigDecimal grossAmount) {
+    private Usage buildUsage(String market, UsageStatusEnum status, Long wrWrkInst) {
         Usage usage = new Usage();
         usage.setWrWrkInst(wrWrkInst);
         usage.setWorkTitle("100 ROAD MOVIES");
@@ -191,7 +191,7 @@ public class NtsWorkflowIntegrationTest {
         usage.setMarket(market);
         usage.setMarketPeriodFrom(2013);
         usage.setMarketPeriodTo(2017);
-        usage.setGrossAmount(grossAmount);
+        usage.setGrossAmount(DEFAULT_GROSS_AMOUNT);
         usage.setReportedValue(new BigDecimal("1176.92"));
         return usage;
     }
