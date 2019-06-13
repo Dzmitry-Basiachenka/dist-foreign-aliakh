@@ -1,3 +1,8 @@
+5.1.43
+-
+* CDP-764 FDA: Payee information is not populated while getting rollups after reconciliation
+* CDP-765 FDA: Assign classification: Exception occurs when the user tries to assign classification for all works in 'Works Classification' window
+
 5.1.42
 -
 * B-51553 FDA: Export from RH reconcile view: make changes based on
