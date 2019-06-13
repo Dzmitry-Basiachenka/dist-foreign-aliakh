@@ -41,6 +41,7 @@ import java.util.function.Consumer;
 public class WorkClassificationWindow extends Window {
 
     private Grid<WorkClassification> grid;
+    private MultiSelectionModelImpl gridSelectionModel;
     private SearchWidget searchWidget;
     private DataProvider<WorkClassification, Void> dataProvider;
     private final IWorkClassificationController controller;
@@ -110,17 +111,16 @@ public class WorkClassificationWindow extends Window {
         grid = new Grid<>(dataProvider);
         addColumns();
         grid.setSizeFull();
-        MultiSelectionModelImpl<WorkClassification> model =
-            (MultiSelectionModelImpl) grid.setSelectionMode(SelectionMode.MULTI);
-        model.setSelectAllCheckBoxVisibility(SelectAllCheckBoxVisibility.VISIBLE);
+        gridSelectionModel = (MultiSelectionModelImpl) grid.setSelectionMode(SelectionMode.MULTI);
+        gridSelectionModel.setSelectAllCheckBoxVisibility(SelectAllCheckBoxVisibility.VISIBLE);
         grid.getColumns().forEach(column -> column.setSortable(true));
         grid.addItemClickListener((ItemClickListener<WorkClassification>) event -> {
             if (!event.getMouseEventDetails().isDoubleClick()) {
                 WorkClassification classification = event.getItem();
-                if (model.isSelected(classification)) {
-                    model.deselect(classification);
+                if (gridSelectionModel.isSelected(classification)) {
+                    gridSelectionModel.deselect(classification);
                 } else {
-                    model.select(classification);
+                    gridSelectionModel.select(classification);
                 }
             }
         });
@@ -150,7 +150,7 @@ public class WorkClassificationWindow extends Window {
 
     private void addClickListener(Button button, String message, Consumer<Set<WorkClassification>> consumer) {
         button.addClickListener(event -> {
-            Set<WorkClassification> selectedItems = grid.getSelectedItems();
+            Set<WorkClassification> selectedItems = getSelectedItems();
             if (!selectedItems.isEmpty()) {
                 int usageCount = controller.getCountToUpdate(selectedItems);
                 Windows.showConfirmDialog(0 < usageCount
@@ -165,5 +165,14 @@ public class WorkClassificationWindow extends Window {
                 Windows.showNotificationWindow(ForeignUi.getMessage("message.classification.empty"));
             }
         });
+    }
+
+    private Set<WorkClassification> getSelectedItems() {
+        // Server selection is not synched with UI-client on search changes while "allSelected" is checked.
+        // See https://github.com/vaadin/framework/issues/11479
+        if (gridSelectionModel.isAllSelected()) {
+            gridSelectionModel.selectAll();
+        }
+        return grid.getSelectedItems();
     }
 }
