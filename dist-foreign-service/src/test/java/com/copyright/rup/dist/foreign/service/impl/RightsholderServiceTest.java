@@ -12,6 +12,7 @@ import static org.junit.Assert.assertNotNull;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.integration.rest.prm.IPrmRightsholderService;
 import com.copyright.rup.dist.common.repository.api.Pageable;
+import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.repository.api.IRightsholderRepository;
 
 import org.easymock.Capture;
@@ -37,6 +38,7 @@ import java.util.concurrent.ExecutorService;
 public class RightsholderServiceTest {
 
     private static final Long ACCOUNT_NUMBER_1 = 7000813806L;
+    private static final Long ACCOUNT_NUMBER_2 = 5412316485L;
     private static final String RIGHTSHOLDER_NAME = "Rightsholder Name";
     private IRightsholderRepository rightsholderRepository;
     private RightsholderService rightsholderService;
@@ -90,13 +92,29 @@ public class RightsholderServiceTest {
     @Test
     public void testUpdateRighstholdersAsync() {
         ExecutorService executorService = createMock(ExecutorService.class);
-        Whitebox.setInternalState(rightsholderService, "executorService", executorService);
+        Whitebox.setInternalState(rightsholderService, executorService);
         Capture<Runnable> runnableCapture = new Capture<>();
-        Set<Long> accountNumbers = Collections.singleton(541236485L);
+        Set<Long> accountNumbers = Collections.singleton(ACCOUNT_NUMBER_2);
         executorService.execute(capture(runnableCapture));
         expectLastCall().once();
         replay(executorService);
         rightsholderService.updateRighstholdersAsync(accountNumbers);
+        assertNotNull(runnableCapture.getValue());
+        verify(executorService);
+    }
+
+    @Test
+    public void testUpdateUsagesPayeesAsync() {
+        ExecutorService executorService = createMock(ExecutorService.class);
+        Whitebox.setInternalState(rightsholderService, executorService);
+        Capture<Runnable> runnableCapture = new Capture<>();
+        Usage usage = new Usage();
+        usage.getPayee().setAccountNumber(ACCOUNT_NUMBER_2);
+        List<Usage> usages = Collections.singletonList(usage);
+        executorService.execute(capture(runnableCapture));
+        expectLastCall().once();
+        replay(executorService);
+        rightsholderService.updateUsagesPayeesAsync(usages);
         assertNotNull(runnableCapture.getValue());
         verify(executorService);
     }
