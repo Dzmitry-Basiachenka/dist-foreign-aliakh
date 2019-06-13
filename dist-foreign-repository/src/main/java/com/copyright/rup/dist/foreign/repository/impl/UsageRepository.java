@@ -146,7 +146,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         Iterables.partition(Objects.requireNonNull(wrWrkInsts), MAX_VARIABLES_COUNT)
             .forEach(
                 partition -> {
-                    parameters.put("wrWrkInsts", Objects.requireNonNull(wrWrkInsts));
+                    parameters.put("wrWrkInsts", partition);
                     count.addAndGet(selectOne("IUsageMapper.findCountByStatusAndWrWrkInsts", parameters));
                 });
         return count.get();
@@ -191,8 +191,7 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         parameters.put(SORT_KEY, new Sort("rightsholder.accountNumber", Direction.ASC));
         try (ScenarioRightsholderTotalsCsvReportHandler handler
                  = new ScenarioRightsholderTotalsCsvReportHandler(pipedOutputStream)) {
-            getTemplate().select("IUsageMapper.findRightsholderTotalsHoldersByScenarioId",
-                parameters, handler);
+            getTemplate().select("IUsageMapper.findRightsholderTotalsHoldersByScenarioId", parameters, handler);
         }
     }
 
