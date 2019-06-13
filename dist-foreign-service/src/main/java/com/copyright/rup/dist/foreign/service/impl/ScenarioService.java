@@ -287,8 +287,11 @@ public class ScenarioService implements IScenarioService {
                 });
             }
         );
-        usageService.updateRhPayeeAndAmounts(
-            groupedByWrWrkInstUsages.values().stream().flatMap(Collection::stream).collect(Collectors.toList()));
+        List<Usage> usages = groupedByWrWrkInstUsages.values().stream()
+            .flatMap(Collection::stream)
+            .collect(Collectors.toList());
+        usageService.updateRhPayeeAndAmounts(usages);
+        rightsholderService.updateUsagesPayeesAsync(usages);
         rightsholderDiscrepancyService.approveByScenarioId(scenario.getId());
         LOGGER.info("Approve Ownership Changes. Finished. {}, RhDiscrepanciesCount={}",
             ForeignLogUtils.scenario(scenario), LogUtils.size(discrepancies));

@@ -4,6 +4,7 @@ import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.api.ICommonRightsholderService;
+import com.copyright.rup.dist.foreign.domain.Usage;
 
 import java.util.List;
 import java.util.Map;
@@ -60,6 +61,14 @@ public interface IRightsholderService extends ICommonRightsholderService {
      * @param accountNumbers set of RH account numbers
      */
     void updateRighstholdersAsync(Set<Long> accountNumbers);
+
+    /**
+     * Updates RHs information for account numbers of usages' payees absent in database based on PRM information.
+     * Updates information in background thread.
+     *
+     * @param usages list of {@link Usage}
+     */
+    void updateUsagesPayeesAsync(List<Usage> usages);
 
     /**
      * Finds map of {@link Rightsholder}s' ids to account numbers.

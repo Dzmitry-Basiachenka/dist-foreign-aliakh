@@ -7,6 +7,7 @@ import com.copyright.rup.dist.common.integration.rest.prm.IPrmRightsholderServic
 import com.copyright.rup.dist.common.repository.api.Pageable;
 import com.copyright.rup.dist.common.repository.api.Sort;
 import com.copyright.rup.dist.common.service.impl.CommonRightsholderService;
+import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.repository.api.IRightsholderRepository;
 import com.copyright.rup.dist.foreign.service.api.IRightsholderService;
 
@@ -93,6 +94,15 @@ public class RightsholderService extends CommonRightsholderService implements IR
                 updateRightsholders(accountNumbers);
             }
         });
+    }
+
+    @Override
+    public void updateUsagesPayeesAsync(List<Usage> usages) {
+        updateRighstholdersAsync(
+            usages.stream()
+                .map(usage -> usage.getPayee().getAccountNumber())
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet()));
     }
 
     @Override

@@ -250,7 +250,7 @@ public class UsageService implements IUsageService {
                 : scenarioUsage.isRhParticipating());
         });
         usageRepository.addToScenario(newUsages);
-        updateRighstholdersInSeparateThread(newUsages);
+        rightsholderService.updateUsagesPayeesAsync(newUsages);
     }
 
     @Override
@@ -281,7 +281,7 @@ public class UsageService implements IUsageService {
                     usage.getProductFamily()));
         });
         usageRepository.addToScenario(usages);
-        updateRighstholdersInSeparateThread(usages);
+        rightsholderService.updateUsagesPayeesAsync(usages);
     }
 
     @Override
@@ -603,14 +603,6 @@ public class UsageService implements IUsageService {
             researchedUsage.setStandardNumber(work.getMainIdno());
             researchedUsage.setSystemTitle(work.getMainTitle());
         });
-    }
-
-    private void updateRighstholdersInSeparateThread(List<Usage> usages) {
-        rightsholderService.updateRighstholdersAsync(
-            usages.stream()
-                .map(usage -> usage.getPayee().getAccountNumber())
-                .filter(Objects::nonNull)
-                .collect(Collectors.toSet()));
     }
 
     private void populateAccountNumbers(List<PaidUsage> paidUsages) {

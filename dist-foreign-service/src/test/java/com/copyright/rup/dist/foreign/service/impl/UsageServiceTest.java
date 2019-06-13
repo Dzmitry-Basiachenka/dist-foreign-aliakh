@@ -323,7 +323,7 @@ public class UsageServiceTest {
             usage2.getProductFamily())).andReturn(true).once();
         expect(prmIntegrationService.getRhParticipatingServiceFee(true))
             .andReturn(new BigDecimal("0.16000")).times(2);
-        rightsholderService.updateRighstholdersAsync(Collections.singleton(PAYEE_ACCOUNT_NUMBER));
+        rightsholderService.updateUsagesPayeesAsync(Lists.newArrayList(usage1, usage2));
         expectLastCall().once();
         replay(usageRepository, prmIntegrationService, rightsholderService);
         usageService.addUsagesToScenario(Lists.newArrayList(usage1, usage2), scenario);
@@ -490,7 +490,7 @@ public class UsageServiceTest {
         expect(prmIntegrationService.getRhParticipatingServiceFee(false)).andReturn(new BigDecimal("0.32")).once();
         usageRepository.addToScenario(Collections.singletonList(usage1));
         expectLastCall().once();
-        rightsholderService.updateRighstholdersAsync(Collections.singleton(PAYEE_ACCOUNT_NUMBER));
+        rightsholderService.updateUsagesPayeesAsync(Collections.singletonList(usage1));
         expectLastCall().once();
         replay(usageRepository, prmIntegrationService, rightsholderService);
         usageService.recalculateUsagesForRefresh(filter, scenario);
