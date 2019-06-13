@@ -122,6 +122,12 @@ public class ScenarioRepositoryIntegrationTest {
         assertEquals(new BigDecimal("22354.8000000000"), scenario.getNetTotal());
         assertEquals(new BigDecimal("10520.0000000000"), scenario.getServiceFeeTotal());
         assertEquals(new BigDecimal("19800.00"), scenario.getReportedTotal());
+        NtsFields ntsFields = scenario.getNtsFields();
+        assertEquals("3210b859-1239-4a60-9fab-888b84199321", ntsFields.getPreServiceFeeFundId());
+        assertEquals("Pre-Service Fee Additional Fund 2", ntsFields.getPreServiceFeeFundName());
+        assertEquals(new BigDecimal("300.00"), ntsFields.getRhMinimumAmount());
+        assertEquals(new BigDecimal("800.00"), ntsFields.getPostServiceFeeAmount());
+        assertEquals(new BigDecimal("500.00"), ntsFields.getPreServiceFeeAmount());
     }
 
     @Test
@@ -135,6 +141,12 @@ public class ScenarioRepositoryIntegrationTest {
         assertEquals(new BigDecimal("680.0000000000"), scenario.getNetTotal());
         assertEquals(new BigDecimal("320.0000000000"), scenario.getServiceFeeTotal());
         assertEquals(new BigDecimal("1000.00"), scenario.getReportedTotal());
+        NtsFields ntsFields = scenario.getNtsFields();
+        assertEquals("5210b859-1239-4a60-9fab-999b84199321", ntsFields.getPreServiceFeeFundId());
+        assertEquals("Pre-Service Fee Additional Fund 1", ntsFields.getPreServiceFeeFundName());
+        assertEquals(new BigDecimal("300.00"), ntsFields.getRhMinimumAmount());
+        assertEquals(new BigDecimal("800.00"), ntsFields.getPostServiceFeeAmount());
+        assertEquals(new BigDecimal("500.00"), ntsFields.getPreServiceFeeAmount());
     }
 
     @Test

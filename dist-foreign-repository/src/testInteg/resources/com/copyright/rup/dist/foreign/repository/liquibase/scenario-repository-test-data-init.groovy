@@ -80,6 +80,8 @@ databaseChangeLog {
             column(name: 'created_by_user', value: 'user@copyright.com')
             column(name: 'created_datetime', value: '2017-02-14 12:00:00+00')
             column(name: 'updated_datetime', value: '2017-02-14 11:41:52.735531+03')
+            column(name: 'nts_fields', value: '{"rh_minimum_amount": 300.00, "pre_service_fee_amount": 500.00,' +
+                    '"post_service_fee_amount": 800.00, "pre_service_fee_fund_uid": "3210b859-1239-4a60-9fab-888b84199321"}')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
@@ -110,6 +112,20 @@ databaseChangeLog {
             column(name: 'created_by_user', value: 'user@copyright.com')
             column(name: 'created_datetime', value: '2017-02-14 12:00:00+00')
             column(name: 'updated_datetime', value: '2017-02-09 11:41:52.735531+03')
+            column(name: 'nts_fields', value: '{"rh_minimum_amount": 300.00, "pre_service_fee_amount": 500.00,' +
+                    '"post_service_fee_amount": 800.00, "pre_service_fee_fund_uid": "5210b859-1239-4a60-9fab-999b84199321"}')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
+            column(name: 'df_fund_pool_uid', value: '5210b859-1239-4a60-9fab-999b84199321')
+            column(name: 'name', value: 'Pre-Service Fee Additional Fund 1')
+            column(name: 'withdrawn_amount', value: '500.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
+            column(name: 'df_fund_pool_uid', value: '3210b859-1239-4a60-9fab-888b84199321')
+            column(name: 'name', value: 'Pre-Service Fee Additional Fund 2')
+            column(name: 'withdrawn_amount', value: '500.00')
         }
 
         insert(schemaName: dbAppsSchema, tableName: 'df_usage_archive') {
