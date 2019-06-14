@@ -179,6 +179,14 @@ public interface IUsageService {
     void addUsagesToScenario(List<Usage> usages, Scenario scenario);
 
     /**
+     * Calculates service fee and net amounts for NTS {@link Scenario}'s {@link Usage}s based on participation status.
+     * Updates scenario usages.
+     *
+     * @param scenarioId scenario identifier
+     */
+    void calculateAmountsForNtsScenario(String scenarioId);
+
+    /**
      * Updates RH account number, payee account number, net amount, service fee amount and RH participating flag
      * for {@link Usage}s.
      *
@@ -445,13 +453,4 @@ public interface IUsageService {
      * @param userName user name
      */
     void addWithdrawnUsagesToPreServiceFeeFund(String fundId, Set<String> batchIds, String userName);
-
-    /**
-     * Returns list of {@link Usage}s by scenario identifier with limit and offset for NTS service fee calculation.
-     *
-     * @param scenarioId scenario identifier
-     * @param pageable   limit and offset
-     * @return list of {@link Usage}s by scenario identifier with limit and offset
-     */
-    List<Usage> getForNtsServiceFeeCalculation(String scenarioId, Pageable pageable);
 }

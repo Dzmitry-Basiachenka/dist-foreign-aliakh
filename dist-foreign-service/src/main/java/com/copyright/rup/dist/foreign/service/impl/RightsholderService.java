@@ -112,6 +112,11 @@ public class RightsholderService extends CommonRightsholderService implements IR
             .collect(Collectors.toMap(Rightsholder::getId, Rightsholder::getAccountNumber));
     }
 
+    @Override
+    public List<Rightsholder> getByScenarioId(String scenarioId) {
+        return rightsholderRepository.findByScenarioId(scenarioId);
+    }
+
     /**
      * Post construct method.
      */

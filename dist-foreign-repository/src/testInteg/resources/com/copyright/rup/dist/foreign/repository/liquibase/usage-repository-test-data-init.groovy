@@ -1823,7 +1823,7 @@ databaseChangeLog {
     }
 
     changeSet(id: '2019-06-12-00', author: 'Uladzislau Shalamitski <ushalamitski@copyright.com>') {
-        comment('Inserting test data for testFindForNtsServiceFeeCalculation')
+        comment('Inserting test data for testCalculateAmountsByAccountNumber')
 
         insert(schemaName: dbAppsSchema, tableName: 'df_scenario') {
             column(name: 'df_scenario_uid', value: 'd7e9bae8-6b10-4675-9668-8e3605a47dad')
@@ -1851,7 +1851,7 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: '122267672')
             column(name: 'work_title', value: 'A theory of cognitive dissonance')
             column(name: 'system_title', value: 'A theory of cognitive dissonance')
-            column(name: 'rh_account_number', value: '1000009997')
+            column(name: 'rh_account_number', value: '1000002859')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'NTS')
             column(name: 'article', value: 'DIN EN 779:2012')
@@ -1891,7 +1891,7 @@ databaseChangeLog {
             column(name: 'wr_wrk_inst', value: '159526527')
             column(name: 'work_title', value: 'Speculum')
             column(name: 'system_title', value: 'Speculum')
-            column(name: 'rh_account_number', value: '1000009997')
+            column(name: 'rh_account_number', value: '1000002859')
             column(name: 'status_ind', value: 'LOCKED')
             column(name: 'product_family', value: 'NTS')
             column(name: 'article', value: 'DIN EN 779:2012')

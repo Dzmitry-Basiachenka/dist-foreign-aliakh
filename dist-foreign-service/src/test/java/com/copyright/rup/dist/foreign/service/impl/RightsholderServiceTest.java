@@ -9,6 +9,7 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import com.copyright.rup.common.persist.RupPersistUtils;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.common.integration.rest.prm.IPrmRightsholderService;
 import com.copyright.rup.dist.common.repository.api.Pageable;
@@ -20,6 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.powermock.reflect.Whitebox;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -117,6 +119,17 @@ public class RightsholderServiceTest {
         rightsholderService.updateUsagesPayeesAsync(usages);
         assertNotNull(runnableCapture.getValue());
         verify(executorService);
+    }
+
+    @Test
+    public void testGetByScenarioId() {
+        List<Rightsholder> rightsholders =
+            Arrays.asList(buildRightsholder(7000813806L), buildRightsholder(1000009522L));
+        String scenarioId = RupPersistUtils.generateUuid();
+        expect(rightsholderRepository.findByScenarioId(scenarioId)).andReturn(rightsholders).once();
+        replay(rightsholderRepository);
+        assertEquals(rightsholders, rightsholderService.getByScenarioId(scenarioId));
+        verify(rightsholderRepository);
     }
 
     private Rightsholder buildRightsholder(Long accountNumber) {

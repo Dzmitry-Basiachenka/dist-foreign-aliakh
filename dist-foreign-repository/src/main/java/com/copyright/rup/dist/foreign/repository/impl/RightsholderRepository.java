@@ -62,6 +62,11 @@ public class RightsholderRepository extends CommonRightsholderRepository impleme
     }
 
     @Override
+    public List<Rightsholder> findByScenarioId(String scenarioId) {
+        return selectList("RightsholderMapper.findByScenarioId", Objects.requireNonNull(scenarioId));
+    }
+
+    @Override
     protected String getPrefix() {
         return "df";
     }

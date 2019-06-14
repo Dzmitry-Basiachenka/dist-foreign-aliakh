@@ -131,9 +131,9 @@ public class NtsScenarioWorkflowIntegrationTest {
         usage.setMarketPeriodTo(2017);
         usage.setGrossAmount(new BigDecimal("400.4400000000"));
         usage.setReportedValue(new BigDecimal("1176.92"));
-        usage.setNetAmount(BigDecimal.ZERO);
-        usage.setServiceFee(BigDecimal.ZERO);
-        usage.setServiceFeeAmount(BigDecimal.ZERO);
+        usage.setNetAmount(new BigDecimal("272.2992000000"));
+        usage.setServiceFee(new BigDecimal("0.32000"));
+        usage.setServiceFeeAmount(new BigDecimal("128.1408000000"));
         return usage;
     }
 

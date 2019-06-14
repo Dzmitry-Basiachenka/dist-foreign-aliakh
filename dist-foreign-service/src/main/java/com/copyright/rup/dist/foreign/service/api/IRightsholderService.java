@@ -77,4 +77,12 @@ public interface IRightsholderService extends ICommonRightsholderService {
      * @return map of {@link Rightsholder}s' ids to account numbers
      */
     Map<String, Long> findAccountNumbersByRightsholderIds(Set<String> rhIds);
+
+    /**
+     * Returns list of {@link Rightsholder}s from usages with given scenario identifier.
+     *
+     * @param scenarioId scenario identifier
+     * @return list of {@link Rightsholder}s from usages with given scenario identifier
+     */
+    List<Rightsholder> getByScenarioId(String scenarioId);
 }
