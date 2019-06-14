@@ -1,3 +1,7 @@
+5.1.44
+-
+* CDP-766 FDA: Works Classification window: System doesn't apply 'Select All' works selection after clearing search
+
 5.1.43
 -
 * CDP-764 FDA: Payee information is not populated while getting rollups after reconciliation
