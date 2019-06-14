@@ -147,6 +147,19 @@ public class RightsholderRepositoryIntegrationTest {
         assertEquals(1, rightsholderRepository.findCountFromUsages("IEEE"));
     }
 
+    @Test
+    public void testFindByScenarioId() {
+        List<Rightsholder> rightsholders =
+            rightsholderRepository.findByScenarioId("d7e9bae8-6b10-4675-9668-8e3605a47dad");
+        assertEquals(2, CollectionUtils.size(rightsholders));
+        Rightsholder rightsholder1 = rightsholders.get(0);
+        assertEquals("5bcf2c37-2f32-48e9-90fe-c9d75298eeed", rightsholder1.getId());
+        assertEquals(1000002859L, rightsholder1.getAccountNumber(), 0);
+        Rightsholder rightsholder2 = rightsholders.get(1);
+        assertEquals("8a0dbf78-d9c9-49d9-a895-05f55cfc8329", rightsholder2.getId());
+        assertEquals(1000005413L, rightsholder2.getAccountNumber(), 0);
+    }
+
     private Rightsholder buildRightsholder() {
         Rightsholder rightsholder = new Rightsholder();
         rightsholder.setAccountNumber(12345678L);

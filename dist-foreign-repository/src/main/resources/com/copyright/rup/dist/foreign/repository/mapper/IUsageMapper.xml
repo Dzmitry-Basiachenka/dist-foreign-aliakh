@@ -1624,16 +1624,17 @@
         returning df_usage_uid
     </select>
 
-    <select id="findForNtsServiceFeeCalculation" resultMap="usageResultMap" parameterType="map">
-        select
-            df_usage_uid,
-            rh_account_number,
-            gross_amount
-        from ${schema}.df_usage
-        where df_scenario_uid = #{scenarioId}
-        order by df_usage_uid
-        <include refid="ifPageable"/>
-    </select>
+    <update id="calculateAmountsByAccountNumber" parameterType="map">
+        update ${schema}.df_usage
+        set
+            is_rh_participating_flag = #{participatingFlag},
+            service_fee = #{serviceFee},
+            service_fee_amount = gross_amount * #{serviceFee},
+            net_amount = gross_amount - (gross_amount * #{serviceFee}),
+            <include refid="StoredEntityMapper.update"/>
+        where rh_account_number = #{rhAccountNumber}
+            and df_scenario_uid = #{scenarioId}
+    </update>
 
     <update id="addWithdrawnUsagesToPreServiceFeeFund" parameterType="map">
         update ${schema}.df_usage

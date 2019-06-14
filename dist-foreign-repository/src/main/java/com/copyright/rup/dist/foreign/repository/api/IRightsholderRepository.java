@@ -52,4 +52,12 @@ public interface IRightsholderRepository extends ICommonRightsholderRepository {
      * @return count of rightsholders
      */
     int findCountFromUsages(String searchValue);
+
+    /**
+     * Returns list of {@link Rightsholder}s from usages with given scenario identifier.
+     *
+     * @param scenarioId scenario identifier
+     * @return list of {@link Rightsholder}s from usages with given scenario identifier
+     */
+    List<Rightsholder> findByScenarioId(String scenarioId);
 }

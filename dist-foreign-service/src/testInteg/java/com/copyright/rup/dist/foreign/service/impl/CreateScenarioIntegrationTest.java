@@ -148,16 +148,17 @@ public class CreateScenarioIntegrationTest {
     public void testCreateNtsScenario() {
         testBuilder
             .withFilter(buildUsageFilter("26282dbd-3463-58d7-c927-03d3458a656a", "NTS"))
+            .expectPreferences("prm/preferences_response.json", RIGHTHOLDER_ID_2, RIGHTHOLDER_ID_5)
             .expectUsages(Arrays.asList(
-                buildUsage("3d921c9c-8036-421a-ab05-39cc4d3c3b68", 7000429266L, null, null,
-                    AMOUNT_ZERO, AMOUNT_ZERO, "16.4522014195"),
-                buildUsage("91813777-3dd4-4f5f-bb83-ca145866317d", 1000024497L, null, null,
-                    AMOUNT_ZERO, AMOUNT_ZERO, "13.5477985805")))
+                buildUsage("3d921c9c-8036-421a-ab05-39cc4d3c3b68", 7000429266L, null, SERVICE_FEE_32,
+                    "5.2647044542", "11.1874969653", "16.4522014195"),
+                buildUsage("91813777-3dd4-4f5f-bb83-ca145866317d", 1000024497L, null, SERVICE_FEE_32,
+                    "4.3352955458", "9.2125030347", "13.5477985805")))
             .expectNtsExcludedUsages(Arrays.asList(
                 buildNtsExcludedUsage("669cf304-0921-41a2-85d5-c3905e77c696", 1000002859L),
                 buildNtsExcludedUsage("6402d5c8-ba80-4966-a7cc-34ba1fdc1d9c", 1000001820L),
                 buildNtsExcludedUsage("e001c596-a66f-4fd3-b34c-5ef65a215d68", 1000002562L)))
-            .expectScenario(buildScenario(AMOUNT_ZERO, "30.00", AMOUNT_ZERO, "956.02"))
+            .expectScenario(buildScenario("20.4000000000", "30.00", "9.6000000000", "956.02"))
             .build()
             .run();
     }

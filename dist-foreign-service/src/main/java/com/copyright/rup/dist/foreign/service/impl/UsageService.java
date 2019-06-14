@@ -285,6 +285,19 @@ public class UsageService implements IUsageService {
     }
 
     @Override
+    @Transactional
+    public void calculateAmountsForNtsScenario(String scenarioId) {
+        String userName = RupContextUtils.getUserName();
+        rightsholderService.getByScenarioId(scenarioId).forEach(rightsholder -> {
+            boolean participationFlag = prmIntegrationService.
+                isRightsholderParticipating(rightsholder.getId(), FdaConstants.NTS_PRODUCT_FAMILY);
+            BigDecimal serviceFee = prmIntegrationService.getRhParticipatingServiceFee(participationFlag);
+            usageRepository.calculateAmountsByAccountNumber(rightsholder.getAccountNumber(), scenarioId, serviceFee,
+                participationFlag, userName);
+        });
+    }
+
+    @Override
     public void updateRhPayeeAndAmounts(List<Usage> usages) {
         String userName = RupContextUtils.getUserName();
         usages.forEach(usage -> {
@@ -594,11 +607,6 @@ public class UsageService implements IUsageService {
     @Override
     public void addWithdrawnUsagesToPreServiceFeeFund(String fundId, Set<String> batchIds, String userName) {
         usageRepository.addWithdrawnUsagesToPreServiceFeeFund(fundId, batchIds, userName);
-    }
-
-    @Override
-    public List<Usage> getForNtsServiceFeeCalculation(String scenarioId, Pageable pageable) {
-        return usageRepository.findForNtsServiceFeeCalculation(scenarioId, pageable);
     }
 
     private void populateTitlesStandardNumberAndType(Collection<ResearchedUsage> researchedUsages) {

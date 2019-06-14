@@ -1139,21 +1139,24 @@ public class UsageRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFindForNtsServiceFeeCalculation() {
-        List<Usage> usages =
-            usageRepository.findForNtsServiceFeeCalculation("d7e9bae8-6b10-4675-9668-8e3605a47dad", new Pageable(1, 2));
-        assertEquals(2, CollectionUtils.size(usages));
-        verifyUsageForNtsCalculation("8a80a2e7-4758-4e43-ae42-e8b29802a210", new BigDecimal("256.0000000000"),
-            1000009997L, usages.get(0));
-        verifyUsageForNtsCalculation("bfc9e375-c489-4600-9308-daa101eed97c", new BigDecimal("145.2000000000"),
-            1000009997L, usages.get(1));
+    public void testCalculateAmountsByAccountNumber() {
+        usageRepository.calculateAmountsByAccountNumber(1000002859L, "d7e9bae8-6b10-4675-9668-8e3605a47dad",
+            SERVICE_FEE, true, "SYSTEM");
+        assertNtsUsageAmounts("8a80a2e7-4758-4e43-ae42-e8b29802a210", new BigDecimal("256.0000000000"),
+            new BigDecimal("174.0800000000"), SERVICE_FEE, new BigDecimal("81.9200000000"));
+        assertNtsUsageAmounts("bfc9e375-c489-4600-9308-daa101eed97c", new BigDecimal("145.2000000000"),
+            new BigDecimal("98.7360000000"), SERVICE_FEE, new BigDecimal("46.4640000000"));
+        assertNtsUsageAmounts("085268cd-7a0c-414e-8b28-2acb299d9698", new BigDecimal("1452.0000000000"),
+            new BigDecimal("0.0000000000"), null, new BigDecimal("0.0000000000"));
     }
 
-    private void verifyUsageForNtsCalculation(String usageId, BigDecimal grossAmount, Long rhAccountNumber,
-                                              Usage actualUsage) {
-        assertEquals(usageId, actualUsage.getId());
-        assertEquals(grossAmount, actualUsage.getGrossAmount());
-        assertEquals(rhAccountNumber, actualUsage.getRightsholder().getAccountNumber());
+    private void assertNtsUsageAmounts(String usageId, BigDecimal grossAmount, BigDecimal netAmount,
+                                       BigDecimal serviceFee, BigDecimal serviceFeeAmount) {
+        Usage usage = usageRepository.findByIds(Collections.singletonList(usageId)).get(0);
+        assertEquals(grossAmount, usage.getGrossAmount());
+        assertEquals(netAmount, usage.getNetAmount());
+        assertEquals(serviceFee, usage.getServiceFee());
+        assertEquals(serviceFeeAmount, usage.getServiceFeeAmount());
     }
 
     private FundPool buildNtsFundPool(BigDecimal nonStmAmount) {

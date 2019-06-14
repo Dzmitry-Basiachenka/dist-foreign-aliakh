@@ -525,11 +525,14 @@ public interface IUsageRepository {
     Map<Long, Set<String>> findWrWrkInstToUsageIdsByBatchNameAndUsageStatus(String batchName, UsageStatusEnum status);
 
     /**
-     * Returns list of {@link Usage}s by scenario identifier with limit and offset for NTS service fee calculation.
+     * Calculates service fee and net amounts for usages with given RH account number and scenario uid.
      *
-     * @param scenarioId scenario identifier
-     * @param pageable   limit and offset
-     * @return list of {@link Usage}s by scenario identifier using limit and offset
+     * @param accountNUmber     rightsholder account number
+     * @param scenarioId        identifier of scenario
+     * @param serviceFee        service fee
+     * @param participatingFlag participating flag
+     * @param userName          user name
      */
-    List<Usage> findForNtsServiceFeeCalculation(String scenarioId, Pageable pageable);
+    void calculateAmountsByAccountNumber(Long accountNUmber, String scenarioId, BigDecimal serviceFee,
+                                         boolean participatingFlag, String userName);
 }

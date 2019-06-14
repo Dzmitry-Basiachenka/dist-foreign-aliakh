@@ -99,4 +99,14 @@
             offset #{pageable.offset}
         </if>
     </select>
+
+    <select id="findByScenarioId" resultMap="rightsholderResultMap" parameterType="string">
+        select distinct
+            rh.df_rightsholder_uid rightsholder_uid,
+            rh.rh_account_number
+        from ${schema}.df_usage u
+        join ${schema}.df_rightsholder rh on rh.rh_account_number = u.rh_account_number
+        where u.df_scenario_uid = #{scenarioId}
+        order by rh.df_rightsholder_uid
+    </select>
 </mapper>
