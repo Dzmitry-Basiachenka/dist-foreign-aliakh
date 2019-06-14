@@ -123,7 +123,7 @@ public class ScenarioRepositoryIntegrationTest {
         assertEquals(new BigDecimal("10520.0000000000"), scenario.getServiceFeeTotal());
         assertEquals(new BigDecimal("19800.00"), scenario.getReportedTotal());
         NtsFields ntsFields = scenario.getNtsFields();
-        assertEquals("3210b859-1239-4a60-9fab-888b84199321", ntsFields.getPreServiceFeeFundId());
+        assertEquals("a7131cd2-c7cd-4d70-a78f-9554e9598693", ntsFields.getPreServiceFeeFundId());
         assertEquals("Pre-Service Fee Additional Fund 2", ntsFields.getPreServiceFeeFundName());
         assertEquals(new BigDecimal("300.00"), ntsFields.getRhMinimumAmount());
         assertEquals(new BigDecimal("800.00"), ntsFields.getPostServiceFeeAmount());
@@ -271,17 +271,20 @@ public class ScenarioRepositoryIntegrationTest {
     public void testInsertNtsScenarioAndAddUsages() {
         Scenario scenario = buildScenario(SCENARIO_ID, SCENARIO_NAME);
         NtsFields ntsFields = new NtsFields();
-        ntsFields.setRhMinimumAmount(new BigDecimal("350.00"));
+        ntsFields.setRhMinimumAmount(new BigDecimal("700.00"));
+        ntsFields.setPreServiceFeeAmount(new BigDecimal("3250.00"));
+        ntsFields.setPostServiceFeeAmount(new BigDecimal("5005.00"));
+        ntsFields.setPreServiceFeeFundId("5210b859-1239-4a60-9fab-999b84199321");
         scenario.setNtsFields(ntsFields);
         scenarioRepository.insertNtsScenarioAndAddUsages(scenario, buildUsageFilter());
         Scenario ntsScenario = scenarioRepository.findWithAmountsAndLastAction(SCENARIO_ID);
         assertNotNull(ntsScenario.getNtsFields());
-        assertEquals(new BigDecimal("350.00"), ntsScenario.getNtsFields().getRhMinimumAmount());
+        assertEquals(new BigDecimal("700.00"), ntsScenario.getNtsFields().getRhMinimumAmount());
         assertUsages(
             Arrays.asList(
-                buildUsage("244de0db-b50c-45e8-937c-72e033e2a3a9", "687.5000000000"),
-                buildUsage("3caf371f-f2e6-47cd-af6b-1e02b79f6195", "2946.4285714286"),
-                buildUsage("87666035-2bdf-49ef-8c80-1d1b281fdc34", "7366.0714285714")),
+                buildUsage("244de0db-b50c-45e8-937c-72e033e2a3a9", "921.8750000000"),
+                buildUsage("3caf371f-f2e6-47cd-af6b-1e02b79f6195", "3950.8928571429"),
+                buildUsage("87666035-2bdf-49ef-8c80-1d1b281fdc34", "9877.2321428571")),
             usageRepository.findByScenarioId(SCENARIO_ID));
         assertUsages(
             Arrays.asList(buildNtsExcludedUsage("0d200064-185a-4c48-bbc9-c67554e7db8e"),

@@ -42,16 +42,16 @@ import java.util.List;
 @Transactional
 public class CreateScenarioIntegrationTest {
 
-    private static final String RIGHTHOLDER_ID_1 = "038bf4aa-b6cc-430a-9b32-655954d95278";
-    private static final String RIGHTHOLDER_ID_2 = "019acfde-91be-43aa-8871-6305642bcb2c";
-    private static final String RIGHTHOLDER_ID_3 = "00d4ae90-5fe7-47bf-ace1-781c8d76d4da";
-    private static final String RIGHTHOLDER_ID_4 = "a5989f7c-fc6f-4e8c-88d4-2fe7bcce8d1f";
-    private static final String RIGHTHOLDER_ID_5 = "756299b5-02ce-4f76-b0bc-ee2571cf906e";
-    private static final String RIGHTHOLDER_ID_6 = "37338ed1-7083-45e2-a96b-5872a7de3a98";
-    private static final String RIGHTHOLDER_ID_7 = "624dcf73-a30f-4381-b6aa-c86d17198bd5";
-    private static final String RIGHTHOLDER_ID_8 = "f366285a-ce46-48b0-96ee-cd35d62fb243";
-    private static final String RIGHTHOLDER_ID_9 = "b0e6b1f6-89e9-4767-b143-db0f49f32769";
-    private static final String RIGHTHOLDER_ID_10 = "60080587-a225-439c-81af-f016cb33aeac";
+    private static final String RIGHTSHOLDER_ID_1 = "038bf4aa-b6cc-430a-9b32-655954d95278";
+    private static final String RIGHTSHOLDER_ID_2 = "019acfde-91be-43aa-8871-6305642bcb2c";
+    private static final String RIGHTSHOLDER_ID_3 = "00d4ae90-5fe7-47bf-ace1-781c8d76d4da";
+    private static final String RIGHTSHOLDER_ID_4 = "a5989f7c-fc6f-4e8c-88d4-2fe7bcce8d1f";
+    private static final String RIGHTSHOLDER_ID_5 = "756299b5-02ce-4f76-b0bc-ee2571cf906e";
+    private static final String RIGHTSHOLDER_ID_6 = "37338ed1-7083-45e2-a96b-5872a7de3a98";
+    private static final String RIGHTSHOLDER_ID_7 = "624dcf73-a30f-4381-b6aa-c86d17198bd5";
+    private static final String RIGHTSHOLDER_ID_8 = "f366285a-ce46-48b0-96ee-cd35d62fb243";
+    private static final String RIGHTSHOLDER_ID_9 = "b0e6b1f6-89e9-4767-b143-db0f49f32769";
+    private static final String RIGHTSHOLDER_ID_10 = "60080587-a225-439c-81af-f016cb33aeac";
     private static final BigDecimal SERVICE_FEE_32 = new BigDecimal("0.32000");
     private static final String AMOUNT_ZERO = "0.00";
 
@@ -72,9 +72,9 @@ public class CreateScenarioIntegrationTest {
         testBuilder
             .withFilter(buildUsageFilter("31ddaa1a-e60b-44ce-a968-0ca262870358", "FAS"))
             .expectPreferences("prm/preferences_response.json",
-                RIGHTHOLDER_ID_1, RIGHTHOLDER_ID_2, RIGHTHOLDER_ID_3, RIGHTHOLDER_ID_4, RIGHTHOLDER_ID_5)
+                RIGHTSHOLDER_ID_1, RIGHTSHOLDER_ID_2, RIGHTSHOLDER_ID_3, RIGHTSHOLDER_ID_4, RIGHTSHOLDER_ID_5)
             .expectRollups("prm/fas_rollups_response.json",
-                RIGHTHOLDER_ID_4, RIGHTHOLDER_ID_3, RIGHTHOLDER_ID_1, RIGHTHOLDER_ID_5, RIGHTHOLDER_ID_2)
+                RIGHTSHOLDER_ID_4, RIGHTSHOLDER_ID_3, RIGHTSHOLDER_ID_1, RIGHTSHOLDER_ID_5, RIGHTSHOLDER_ID_2)
             .expectUsages(Arrays.asList(
                 buildUsage("b1f0b236-3ae9-4a60-9fab-61db84199dss", 7000429266L, 1000009997L,
                     SERVICE_FEE_32, "2871.0528", "6100.9872", "8972.0400000000"),
@@ -99,9 +99,9 @@ public class CreateScenarioIntegrationTest {
         testBuilder
             .withFilter(buildUsageFilter("31ddaa1a-e60b-44ce-a968-0ca262870358", "FAS"))
             .expectPreferences("prm/not_found_response.json",
-                RIGHTHOLDER_ID_1, RIGHTHOLDER_ID_2, RIGHTHOLDER_ID_3, RIGHTHOLDER_ID_4, RIGHTHOLDER_ID_5)
+                RIGHTSHOLDER_ID_1, RIGHTSHOLDER_ID_2, RIGHTSHOLDER_ID_3, RIGHTSHOLDER_ID_4, RIGHTSHOLDER_ID_5)
             .expectRollups("prm/not_found_response.json",
-                RIGHTHOLDER_ID_4, RIGHTHOLDER_ID_3, RIGHTHOLDER_ID_1, RIGHTHOLDER_ID_5, RIGHTHOLDER_ID_2)
+                RIGHTSHOLDER_ID_4, RIGHTSHOLDER_ID_3, RIGHTSHOLDER_ID_1, RIGHTSHOLDER_ID_5, RIGHTSHOLDER_ID_2)
             .expectUsages(Arrays.asList(
                 buildUsage("b1f0b236-3ae9-4a60-9fab-61db84199dss", 7000429266L, 7000429266L,
                     SERVICE_FEE_32, "2871.0528", "6100.9872", "8972.0400000000"),
@@ -126,9 +126,9 @@ public class CreateScenarioIntegrationTest {
         testBuilder
             .withFilter(buildUsageFilter("ce0ca941-1e16-4a3b-a991-b596189b4f22", "FAS2"))
             .expectPreferences("prm/not_found_response.json",
-                RIGHTHOLDER_ID_6, RIGHTHOLDER_ID_7, RIGHTHOLDER_ID_8, RIGHTHOLDER_ID_9, RIGHTHOLDER_ID_10)
+                RIGHTSHOLDER_ID_6, RIGHTSHOLDER_ID_7, RIGHTSHOLDER_ID_8, RIGHTSHOLDER_ID_9, RIGHTSHOLDER_ID_10)
             .expectRollups("prm/cla_rollups_response.json",
-                RIGHTHOLDER_ID_7, RIGHTHOLDER_ID_9, RIGHTHOLDER_ID_10, RIGHTHOLDER_ID_6, RIGHTHOLDER_ID_8)
+                RIGHTSHOLDER_ID_7, RIGHTSHOLDER_ID_9, RIGHTSHOLDER_ID_10, RIGHTSHOLDER_ID_6, RIGHTSHOLDER_ID_8)
             .expectUsages(Arrays.asList(
                 buildUsage("8fc81e08-3611-4697-8059-6c970ee5d643", 2000133267L, 2000017000L,
                     new BigDecimal("0.10000"), "897.204", "8074.836", "8972.0400000000"),
@@ -149,18 +149,19 @@ public class CreateScenarioIntegrationTest {
     public void testCreateNtsScenario() {
         testBuilder
             .withFilter(buildUsageFilter("26282dbd-3463-58d7-c927-03d3458a656a", "NTS"))
-            .expectPreferences("prm/preferences_response.json", RIGHTHOLDER_ID_2, RIGHTHOLDER_ID_5)
+            .expectPreferences("prm/preferences_response.json", RIGHTSHOLDER_ID_2, RIGHTSHOLDER_ID_5)
             .expectUsages(Arrays.asList(
                 buildUsage("3d921c9c-8036-421a-ab05-39cc4d3c3b68", 7000429266L, null, SERVICE_FEE_32,
-                    "5.2647044542", "11.1874969653", "16.4522014195"),
+                    "83.3578205256", "177.1353686169", "260.4931891425"),
                 buildUsage("91813777-3dd4-4f5f-bb83-ca145866317d", 1000024497L, null, SERVICE_FEE_32,
-                    "4.3352955458", "9.2125030347", "13.5477985805")))
+                    "68.6421794744", "145.8646313831", "214.5068108575")))
             .expectNtsExcludedUsages(Arrays.asList(
                 buildNtsExcludedUsage("669cf304-0921-41a2-85d5-c3905e77c696", 1000002859L),
                 buildNtsExcludedUsage("6402d5c8-ba80-4966-a7cc-34ba1fdc1d9c", 1000001820L),
                 buildNtsExcludedUsage("e001c596-a66f-4fd3-b34c-5ef65a215d68", 1000002562L)))
-            .expectScenario(buildScenario("20.4000000000", "30.0000000000", "9.6000000000", "956.02",
-                buildNtsFields(new BigDecimal("5.00"), new BigDecimal("0.00"))))
+            .expectScenario(buildScenario("323.00", "475.00", "152.00", "956.02",
+                buildNtsFields(new BigDecimal("100.00"), new BigDecimal("255.00"), BigDecimal.ZERO,
+                    "c7ca1ca1-7cd8-49cc-aaeb-ac53fe62d903")))
             .build()
             .run();
     }
@@ -169,7 +170,7 @@ public class CreateScenarioIntegrationTest {
     public void testCreateNtsScenarioWithPostServiceFeeAmount() {
         testBuilder
             .withFilter(buildUsageFilter("26282dbd-3463-58d7-c927-03d3458a656a", "NTS"))
-            .expectPreferences("prm/preferences_response.json", RIGHTHOLDER_ID_2, RIGHTHOLDER_ID_5)
+            .expectPreferences("prm/preferences_response.json", RIGHTSHOLDER_ID_2, RIGHTSHOLDER_ID_5)
             .expectUsages(Arrays.asList(
                 buildUsage("3d921c9c-8036-421a-ab05-39cc4d3c3b68", 7000429266L, null, SERVICE_FEE_32,
                     "5.2647044542", "559.8684143076", "565.1331187618"),
@@ -180,7 +181,7 @@ public class CreateScenarioIntegrationTest {
                 buildNtsExcludedUsage("6402d5c8-ba80-4966-a7cc-34ba1fdc1d9c", 1000001820L),
                 buildNtsExcludedUsage("e001c596-a66f-4fd3-b34c-5ef65a215d68", 1000002562L)))
             .expectScenario(buildScenario("1020.9000000000", "1030.5000000000", "9.6000000000", "956.02",
-                buildNtsFields(new BigDecimal("5.00"), new BigDecimal("1000.5"))))
+                buildNtsFields(new BigDecimal("5.00"), BigDecimal.ZERO, new BigDecimal("1000.5"), null)))
             .build()
             .run();
     }
@@ -198,9 +199,12 @@ public class CreateScenarioIntegrationTest {
         return scenario;
     }
 
-    private NtsFields buildNtsFields(BigDecimal rhMinimumAmount, BigDecimal postServiceFeeAmount) {
+    private NtsFields buildNtsFields(BigDecimal rhMinimumAmount, BigDecimal preServiceFeeAmount,
+                                     BigDecimal postServiceFeeAmount, String preServiceFeeFundId) {
         NtsFields ntsFields = new NtsFields();
         ntsFields.setRhMinimumAmount(rhMinimumAmount);
+        ntsFields.setPreServiceFeeAmount(preServiceFeeAmount);
+        ntsFields.setPreServiceFeeFundId(preServiceFeeFundId);
         ntsFields.setPostServiceFeeAmount(postServiceFeeAmount);
         return ntsFields;
     }

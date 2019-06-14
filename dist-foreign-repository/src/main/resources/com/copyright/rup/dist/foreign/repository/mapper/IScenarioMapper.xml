@@ -72,6 +72,15 @@
         )
     </insert>
 
+    <sql id="selectAmountTable">
+        <if test="null != scenario.ntsFields.preServiceFeeFundId or scenario.ntsFields.preServiceFeeAmount > 0">
+            recalculated_usage_amounts
+        </if>
+        <if test="null == scenario.ntsFields.preServiceFeeFundId and scenario.ntsFields.preServiceFeeAmount == 0">
+            usage_amounts
+        </if>
+    </sql>
+
     <insert id="insertNtsScenarioAndAddUsages" parameterType="map">
         with result as (
             insert into ${schema}.df_scenario (
@@ -118,12 +127,30 @@
             from numerator n
             join denominator d on n.classification = d.classification and n.df_usage_batch_uid = d.df_usage_batch_uid
         ),
+        <if test="null != scenario.ntsFields.preServiceFeeFundId || scenario.ntsFields.preServiceFeeAmount > 0">
+            <!-- Calculates Pre-Service fee factor-->
+            pre_service_fee_factor as (
+                select
+                    (sum(gross_amount) + #{scenario.ntsFields.preServiceFeeAmount}
+                        + coalesce((select withdrawn_amount from ${schema}.df_fund_pool where df_fund_pool_uid = #{scenario.ntsFields.preServiceFeeFundId}), 0))
+                        / sum(gross_amount)  as factor
+                from usage_amounts
+            ),
+            <!-- Recalculates gross_amount based on Pre-Service fee factor -->
+            recalculated_usage_amounts as (
+                select
+                    df_usage_uid,
+                    rh_account_number,
+                    gross_amount * (select factor from pre_service_fee_factor) gross_amount
+                from usage_amounts
+            ),
+        </if>
         <!-- Calculates amount for each rightsholder under minimum -->
         under_minimum_rh_totals as (
             select
                 rh_account_number,
                 sum(gross_amount) rh_total
-            from usage_amounts
+            from <include refid="selectAmountTable"/>
             group by rh_account_number
             having sum(gross_amount) &lt; #{scenario.ntsFields.rhMinimumAmount}
         ),
@@ -133,7 +160,7 @@
             from (
                 select coalesce(sum(rh_total), 0) under_minimum_total
                 from under_minimum_rh_totals
-            ) under_minimum, usage_amounts
+            ) under_minimum, <include refid="selectAmountTable"/>
             group by under_minimum_total
         )
         <!-- Update usages based on rh account numbers -->
@@ -144,7 +171,7 @@
             df_scenario_uid = case when u.rh_account_number in (select rh_account_number from under_minimum_rh_totals) then null else #{scenario.id} end,
             gross_amount = case when u.rh_account_number in (select rh_account_number from under_minimum_rh_totals) then 0.00 else amounts.gross_amount * (select factor from gt_factor) end,
             <include refid="StoredEntityMapper.update"/>
-        from usage_amounts amounts
+        from <include refid="selectAmountTable"/> amounts
         where amounts.df_usage_uid = u.df_usage_uid
     </insert>
 
