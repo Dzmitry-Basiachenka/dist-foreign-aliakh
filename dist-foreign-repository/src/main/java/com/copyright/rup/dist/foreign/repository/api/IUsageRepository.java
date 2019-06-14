@@ -535,4 +535,11 @@ public interface IUsageRepository {
      */
     void calculateAmountsByAccountNumber(Long accountNUmber, String scenarioId, BigDecimal serviceFee,
                                          boolean participatingFlag, String userName);
+
+    /**
+     * Proportionally distributes Post Service Fee Amount among scenario usages above minimum.
+     *
+     * @param scenarioId identifier of scenario
+     */
+    void applyPostServiceFeeAmount(String scenarioId);
 }

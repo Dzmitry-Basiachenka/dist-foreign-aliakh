@@ -3,6 +3,7 @@ package com.copyright.rup.dist.foreign.service.impl;
 import com.copyright.rup.common.caching.api.ICacheService;
 import com.copyright.rup.dist.common.domain.Rightsholder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.domain.Usage;
 import com.copyright.rup.dist.foreign.domain.UsageStatusEnum;
 import com.copyright.rup.dist.foreign.domain.filter.UsageFilter;
@@ -88,7 +89,7 @@ public class CreateScenarioIntegrationTest {
             .expectUsagesAlreadyInScenario(Collections.singletonList(
                 buildUsage("fcdaea01-2439-4c51-b3e2-23649cf710c7", "4c014547-06f3-4840-94ff-6249730d537d",
                     1000003821L, 1000003821L, SERVICE_FEE_32, "29.00", "61.63", "90.6300000000")))
-            .expectScenario(buildScenario("26348.4248", "34909.38", "8560.9552", "38520.00"))
+            .expectScenario(buildScenario("26348.4248", "34909.38", "8560.9552", "38520.00", null))
             .build()
             .run();
     }
@@ -115,7 +116,7 @@ public class CreateScenarioIntegrationTest {
             .expectUsagesAlreadyInScenario(Collections.singletonList(
                 buildUsage("fcdaea01-2439-4c51-b3e2-23649cf710c7", "4c014547-06f3-4840-94ff-6249730d537d",
                     1000003821L, 1000003821L, SERVICE_FEE_32, "29.00", "61.63", "90.6300000000")))
-            .expectScenario(buildScenario("23738.3784", "34909.38", "11171.0016", "38520.00"))
+            .expectScenario(buildScenario("23738.3784", "34909.38", "11171.0016", "38520.00", null))
             .build()
             .run();
     }
@@ -139,7 +140,7 @@ public class CreateScenarioIntegrationTest {
                     SERVICE_FEE_32, "870.016", "1848.784", "2718.8000000000"),
                 buildUsage("3c3a3329-d64c-45a9-962c-f247e4bbf3b6", 2000139286L, 2000017000L,
                     new BigDecimal("0.10000"), "509.322", "4583.898", "5093.2200000000")))
-            .expectScenario(buildScenario("26832.7356", "34909.38", "8076.6444", "38520.00"))
+            .expectScenario(buildScenario("26832.7356", "34909.38", "8076.6444", "38520.00", null))
             .build()
             .run();
     }
@@ -158,12 +159,34 @@ public class CreateScenarioIntegrationTest {
                 buildNtsExcludedUsage("669cf304-0921-41a2-85d5-c3905e77c696", 1000002859L),
                 buildNtsExcludedUsage("6402d5c8-ba80-4966-a7cc-34ba1fdc1d9c", 1000001820L),
                 buildNtsExcludedUsage("e001c596-a66f-4fd3-b34c-5ef65a215d68", 1000002562L)))
-            .expectScenario(buildScenario("20.4000000000", "30.00", "9.6000000000", "956.02"))
+            .expectScenario(buildScenario("20.4000000000", "30.0000000000", "9.6000000000", "956.02",
+                buildNtsFields(new BigDecimal("5.00"), new BigDecimal("0.00"))))
             .build()
             .run();
     }
 
-    private Scenario buildScenario(String netTotal, String grossAmount, String serviceFeeTotal, String reportedTotal) {
+    @Test
+    public void testCreateNtsScenarioWithPostServiceFeeAmount() {
+        testBuilder
+            .withFilter(buildUsageFilter("26282dbd-3463-58d7-c927-03d3458a656a", "NTS"))
+            .expectPreferences("prm/preferences_response.json", RIGHTHOLDER_ID_2, RIGHTHOLDER_ID_5)
+            .expectUsages(Arrays.asList(
+                buildUsage("3d921c9c-8036-421a-ab05-39cc4d3c3b68", 7000429266L, null, SERVICE_FEE_32,
+                    "5.2647044542", "559.8684143076", "565.1331187618"),
+                buildUsage("91813777-3dd4-4f5f-bb83-ca145866317d", 1000024497L, null, SERVICE_FEE_32,
+                    "4.3352955458", "461.0315856924", "465.3668812382")))
+            .expectNtsExcludedUsages(Arrays.asList(
+                buildNtsExcludedUsage("669cf304-0921-41a2-85d5-c3905e77c696", 1000002859L),
+                buildNtsExcludedUsage("6402d5c8-ba80-4966-a7cc-34ba1fdc1d9c", 1000001820L),
+                buildNtsExcludedUsage("e001c596-a66f-4fd3-b34c-5ef65a215d68", 1000002562L)))
+            .expectScenario(buildScenario("1020.9000000000", "1030.5000000000", "9.6000000000", "956.02",
+                buildNtsFields(new BigDecimal("5.00"), new BigDecimal("1000.5"))))
+            .build()
+            .run();
+    }
+
+    private Scenario buildScenario(String netTotal, String grossAmount, String serviceFeeTotal, String reportedTotal,
+                                   NtsFields ntsFields) {
         Scenario scenario = new Scenario();
         scenario.setName("Test Scenario");
         scenario.setNetTotal(new BigDecimal(netTotal).setScale(10, RoundingMode.HALF_UP));
@@ -171,7 +194,15 @@ public class CreateScenarioIntegrationTest {
         scenario.setServiceFeeTotal(new BigDecimal(serviceFeeTotal).setScale(10, RoundingMode.HALF_UP));
         scenario.setReportedTotal(new BigDecimal(reportedTotal).setScale(2, RoundingMode.HALF_UP));
         scenario.setDescription("Scenario Description");
+        scenario.setNtsFields(ntsFields);
         return scenario;
+    }
+
+    private NtsFields buildNtsFields(BigDecimal rhMinimumAmount, BigDecimal postServiceFeeAmount) {
+        NtsFields ntsFields = new NtsFields();
+        ntsFields.setRhMinimumAmount(rhMinimumAmount);
+        ntsFields.setPostServiceFeeAmount(postServiceFeeAmount);
+        return ntsFields;
     }
 
     private Usage buildNtsExcludedUsage(String id, Long rhAccountNumber) {

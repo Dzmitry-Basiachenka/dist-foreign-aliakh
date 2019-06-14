@@ -637,6 +637,11 @@ public class UsageRepository extends BaseRepository implements IUsageRepository 
         update("IUsageMapper.calculateAmountsByAccountNumber", params);
     }
 
+    @Override
+    public void applyPostServiceFeeAmount(String scenarioId) {
+        update("IUsageMapper.applyPostServiceFeeAmount", Objects.requireNonNull(scenarioId));
+    }
+
     private AuditFilter escapeSqlLikePattern(AuditFilter auditFilter) {
         AuditFilter filterCopy = new AuditFilter(auditFilter);
         filterCopy.setCccEventId(escapeSqlLikePattern(filterCopy.getCccEventId()));

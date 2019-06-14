@@ -1674,4 +1674,29 @@
         where ub.name = #{batchName} and u.status_ind = #{status}
             and u.wr_wrk_inst is not null
     </select>
+
+    <update id="applyPostServiceFeeAmount" parameterType="string">
+        <!-- Calculates scenario net amount totals-->
+        with net_amount_totals as (
+            select sum(net_amount) net_amount_total
+            from ${schema}.df_usage u
+            where df_scenario_uid = #{scenarioId}
+        ),
+        <!-- Calculate GT factor based on scenario net totals and Post Service Fee Amount -->
+        gt_factor as (
+            select
+                ((select net_amount_total from net_amount_totals) + (s.nts_fields->>'post_service_fee_amount')::numeric)
+                    / (select net_amount_total from net_amount_totals) net_amount_gt_factor
+            from ${schema}.df_scenario s
+            where df_scenario_uid = #{scenarioId}
+        )
+        <!-- Proportionally distributes Post Service Fee Amount among scenario usages -->
+        update
+            ${schema}.df_usage u
+        set
+            net_amount = u.net_amount * net_amount_gt_factor,
+            gross_amount = u.net_amount * net_amount_gt_factor + u.service_fee_amount
+        from gt_factor
+        where u.df_scenario_uid = #{scenarioId}
+    </update>
 </mapper>

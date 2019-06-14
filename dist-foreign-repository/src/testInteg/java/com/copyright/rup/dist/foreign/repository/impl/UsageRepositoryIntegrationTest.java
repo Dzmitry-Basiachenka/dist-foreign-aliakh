@@ -488,9 +488,9 @@ public class UsageRepositoryIntegrationTest {
         assertEquals(2, usageRepository.findByScenarioId(SCENARIO_ID).size());
         usageRepository.deleteByScenarioId(SCENARIO_ID);
         assertTrue(usageRepository.findByScenarioId(SCENARIO_ID).isEmpty());
-        assertEquals(1, usageRepository.findByStatuses(UsageStatusEnum.NTS_EXCLUDED).size());
+        assertEquals(2, usageRepository.findByStatuses(UsageStatusEnum.NTS_EXCLUDED).size());
         usageRepository.deleteByScenarioId(NTS_SCENARIO_ID);
-        assertTrue(usageRepository.findByStatuses(UsageStatusEnum.NTS_EXCLUDED).isEmpty());
+        assertEquals(1, usageRepository.findByStatuses(UsageStatusEnum.NTS_EXCLUDED).size());
     }
 
     @Test
@@ -1150,6 +1150,20 @@ public class UsageRepositoryIntegrationTest {
             new BigDecimal("98.7360000000"), SERVICE_FEE, new BigDecimal("46.4640000000"), new BigDecimal("16.24"));
         assertNtsUsageAmounts("085268cd-7a0c-414e-8b28-2acb299d9698", new BigDecimal("1452.0000000000"),
             DEFAULT_ZERO_AMOUNT, null, DEFAULT_ZERO_AMOUNT, new BigDecimal("162.41"));
+    }
+
+    @Test
+    public void testApplyPostServiceFeeAmount() {
+        // Post Service Fee Amount = 100
+        usageRepository.applyPostServiceFeeAmount("c4bc09c1-eb9b-41f3-ac93-9cd088dff408");
+        assertNtsUsageAmounts("7778a37d-6184-42c1-8e23-5841837c5411", new BigDecimal("71.1818181818"),
+            new BigDecimal("65.9018181818"), new BigDecimal("0.16000"), new BigDecimal("5.2800000000"),
+            new BigDecimal("33.00"));
+        assertNtsUsageAmounts("54247c55-bf6b-4ad6-9369-fb4baea6b19b", new BigDecimal("127.8181818182"),
+            new BigDecimal("106.6981818182"), new BigDecimal("0.32000"), new BigDecimal("21.1200000000"),
+            new BigDecimal("66.00"));
+        assertNtsUsageAmounts("ade68eac-0d79-4d23-861b-499a0c6e91d3", new BigDecimal("11.0000000000"),
+            DEFAULT_ZERO_AMOUNT, null, DEFAULT_ZERO_AMOUNT, new BigDecimal("11.00"));
     }
 
     private void assertNtsUsageAmounts(String usageId, BigDecimal grossAmount, BigDecimal netAmount,

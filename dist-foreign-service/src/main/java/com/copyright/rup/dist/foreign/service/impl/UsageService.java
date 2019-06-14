@@ -286,15 +286,18 @@ public class UsageService implements IUsageService {
 
     @Override
     @Transactional
-    public void calculateAmountsForNtsScenario(String scenarioId) {
+    public void calculateAmountsForNtsScenario(Scenario scenario) {
         String userName = RupContextUtils.getUserName();
-        rightsholderService.getByScenarioId(scenarioId).forEach(rightsholder -> {
+        rightsholderService.getByScenarioId(scenario.getId()).forEach(rightsholder -> {
             boolean participationFlag = prmIntegrationService.
                 isRightsholderParticipating(rightsholder.getId(), FdaConstants.NTS_PRODUCT_FAMILY);
             BigDecimal serviceFee = prmIntegrationService.getRhParticipatingServiceFee(participationFlag);
-            usageRepository.calculateAmountsByAccountNumber(rightsholder.getAccountNumber(), scenarioId, serviceFee,
-                participationFlag, userName);
+            usageRepository.calculateAmountsByAccountNumber(rightsholder.getAccountNumber(), scenario.getId(),
+                serviceFee, participationFlag, userName);
         });
+        if (0 != BigDecimal.ZERO.compareTo(scenario.getNtsFields().getPostServiceFeeAmount())) {
+            usageRepository.applyPostServiceFeeAmount(scenario.getId());
+        }
     }
 
     @Override
