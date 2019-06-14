@@ -646,18 +646,20 @@ public class UsageRepositoryIntegrationTest {
         List<Usage> usages = usageRepository.findByIds(
             Arrays.asList("c09aa888-85a5-4377-8c7a-85d84d255b5a", "45445974-5bee-477a-858b-e9e8c1a642b8"));
         assertEquals(2, CollectionUtils.size(usages));
-        BigDecimal aboveMinimumAmount = new BigDecimal("900.00");
+        BigDecimal reportedValue = new BigDecimal("900.00");
         verifyNtsUsage(usages.get(0), UsageStatusEnum.NTS_EXCLUDED, null, StoredEntity.DEFAULT_USER,
-            DEFAULT_ZERO_AMOUNT, HUNDRED_AMOUNT);
+            DEFAULT_ZERO_AMOUNT, HUNDRED_AMOUNT, null, DEFAULT_ZERO_AMOUNT, DEFAULT_ZERO_AMOUNT);
         verifyNtsUsage(usages.get(1), UsageStatusEnum.LOCKED, NTS_SCENARIO_ID, StoredEntity.DEFAULT_USER,
-            aboveMinimumAmount, aboveMinimumAmount);
+            new BigDecimal("900.0000000000"), reportedValue, SERVICE_FEE, new BigDecimal("288.0000000000"),
+            new BigDecimal("612.0000000000"));
         usageRepository.deleteFromNtsScenario(NTS_SCENARIO_ID, USER_NAME);
         usages = usageRepository.findByIds(
             Arrays.asList("c09aa888-85a5-4377-8c7a-85d84d255b5a", "45445974-5bee-477a-858b-e9e8c1a642b8"));
         assertEquals(2, CollectionUtils.size(usages));
-        verifyNtsUsage(usages.get(0), UsageStatusEnum.ELIGIBLE, null, USER_NAME, DEFAULT_ZERO_AMOUNT, HUNDRED_AMOUNT);
+        verifyNtsUsage(usages.get(0), UsageStatusEnum.ELIGIBLE, null, USER_NAME, DEFAULT_ZERO_AMOUNT, HUNDRED_AMOUNT,
+            null, DEFAULT_ZERO_AMOUNT, DEFAULT_ZERO_AMOUNT);
         verifyNtsUsage(usages.get(1), UsageStatusEnum.UNCLASSIFIED, null, USER_NAME, DEFAULT_ZERO_AMOUNT,
-            aboveMinimumAmount);
+            reportedValue, null, DEFAULT_ZERO_AMOUNT, DEFAULT_ZERO_AMOUNT);
     }
 
     @Test
@@ -1143,16 +1145,22 @@ public class UsageRepositoryIntegrationTest {
         usageRepository.calculateAmountsByAccountNumber(1000002859L, "d7e9bae8-6b10-4675-9668-8e3605a47dad",
             SERVICE_FEE, true, "SYSTEM");
         assertNtsUsageAmounts("8a80a2e7-4758-4e43-ae42-e8b29802a210", new BigDecimal("256.0000000000"),
-            new BigDecimal("174.0800000000"), SERVICE_FEE, new BigDecimal("81.9200000000"));
+            new BigDecimal("174.0800000000"), SERVICE_FEE, new BigDecimal("81.9200000000"), new BigDecimal("296.72"));
         assertNtsUsageAmounts("bfc9e375-c489-4600-9308-daa101eed97c", new BigDecimal("145.2000000000"),
-            new BigDecimal("98.7360000000"), SERVICE_FEE, new BigDecimal("46.4640000000"));
+            new BigDecimal("98.7360000000"), SERVICE_FEE, new BigDecimal("46.4640000000"), new BigDecimal("16.24"));
         assertNtsUsageAmounts("085268cd-7a0c-414e-8b28-2acb299d9698", new BigDecimal("1452.0000000000"),
-            new BigDecimal("0.0000000000"), null, new BigDecimal("0.0000000000"));
+            DEFAULT_ZERO_AMOUNT, null, DEFAULT_ZERO_AMOUNT, new BigDecimal("162.41"));
     }
 
     private void assertNtsUsageAmounts(String usageId, BigDecimal grossAmount, BigDecimal netAmount,
-                                       BigDecimal serviceFee, BigDecimal serviceFeeAmount) {
+                                       BigDecimal serviceFee, BigDecimal serviceFeeAmount, BigDecimal reportedValue) {
         Usage usage = usageRepository.findByIds(Collections.singletonList(usageId)).get(0);
+        assertAmounts(usage, grossAmount, netAmount, serviceFee, serviceFeeAmount, reportedValue);
+    }
+
+    private void assertAmounts(Usage usage, BigDecimal grossAmount, BigDecimal netAmount, BigDecimal serviceFee,
+                               BigDecimal serviceFeeAmount, BigDecimal reportedValue) {
+        assertEquals(reportedValue, usage.getReportedValue());
         assertEquals(grossAmount, usage.getGrossAmount());
         assertEquals(netAmount, usage.getNetAmount());
         assertEquals(serviceFee, usage.getServiceFee());
@@ -1235,11 +1243,11 @@ public class UsageRepositoryIntegrationTest {
     }
 
     private void verifyNtsUsage(Usage usage, UsageStatusEnum status, String scenarioId, String username,
-                                BigDecimal grossAmount, BigDecimal reportedValue) {
+                                BigDecimal grossAmount, BigDecimal reportedValue, BigDecimal serviceFee,
+                                BigDecimal serviceFeeAmount, BigDecimal netAmount) {
         verifyUsage(usage, status, scenarioId, username, null);
         assertEquals(NTS_PRODUCT_FAMILY, usage.getProductFamily());
-        assertEquals(0, grossAmount.compareTo(usage.getGrossAmount()));
-        assertEquals(0, reportedValue.compareTo(usage.getReportedValue()));
+        assertAmounts(usage, grossAmount, netAmount, serviceFee, serviceFeeAmount, reportedValue);
     }
 
     private void verifyInsertedFundPoolUsage(Long wrWrkInst, String workTitle, String market, Integer marketPeriodFrom,

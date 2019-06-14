@@ -830,7 +830,11 @@
         set
             status_ind = case when usage_with_classification.classification is not null then #{eligibleStatus} else #{unclassifiedStatus} end,
             df_scenario_uid = null,
+            service_fee = null,
+            service_fee_amount = 0,
+            net_amount = 0,
             gross_amount = 0,
+            is_rh_participating_flag = false,
             <include refid="StoredEntityMapper.update"/>
         from (
             select
