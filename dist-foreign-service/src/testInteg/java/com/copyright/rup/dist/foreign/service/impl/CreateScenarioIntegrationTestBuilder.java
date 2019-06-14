@@ -171,9 +171,8 @@ class CreateScenarioIntegrationTestBuilder {
         private void createScenario() {
             Scenario scenario;
             if ("NTS".equals(usageFilter.getProductFamilies().iterator().next())) {
-                NtsFields ntsFields = new NtsFields();
-                ntsFields.setRhMinimumAmount(new BigDecimal("5.00"));
-                scenario = scenarioService.createNtsScenario(SCENARIO_NAME, ntsFields, DESCRIPTION, usageFilter);
+                scenario = scenarioService.createNtsScenario(SCENARIO_NAME, expectedScenario.getNtsFields(),
+                    DESCRIPTION, usageFilter);
             } else {
                 scenario = scenarioService.createScenario(SCENARIO_NAME, DESCRIPTION, usageFilter);
             }
@@ -186,12 +185,18 @@ class CreateScenarioIntegrationTestBuilder {
             Scenario scenario = scenarioService.getScenarioWithAmountsAndLastAction(expectedScenario);
             assertEquals(expectedScenario.getId(), scenario.getId());
             assertEquals(expectedScenario.getName(), scenario.getName());
-            assertEquals(0, expectedScenario.getNetTotal().compareTo(scenario.getNetTotal()));
-            assertEquals(0, expectedScenario.getGrossTotal().compareTo(scenario.getGrossTotal()));
-            assertEquals(0, expectedScenario.getServiceFeeTotal().compareTo(scenario.getServiceFeeTotal()));
-            assertEquals(0, expectedScenario.getReportedTotal().compareTo(scenario.getReportedTotal()));
+            assertEquals(expectedScenario.getNetTotal(), scenario.getNetTotal());
+            assertEquals(expectedScenario.getGrossTotal(), scenario.getGrossTotal());
+            assertEquals(expectedScenario.getServiceFeeTotal(), scenario.getServiceFeeTotal());
+            assertEquals(expectedScenario.getReportedTotal(), scenario.getReportedTotal());
             assertEquals(ScenarioStatusEnum.IN_PROGRESS, scenario.getStatus());
             assertEquals(expectedScenario.getDescription(), scenario.getDescription());
+            if ("NTS".equals(productFamily)) {
+                NtsFields expectedNtsFields = expectedScenario.getNtsFields();
+                NtsFields actualNtsFields = scenario.getNtsFields();
+                assertEquals(expectedNtsFields.getPostServiceFeeAmount(), actualNtsFields.getPostServiceFeeAmount());
+                assertEquals(expectedNtsFields.getPreServiceFeeAmount(), actualNtsFields.getPreServiceFeeAmount());
+            }
             assertEquals("SYSTEM", scenario.getCreateUser());
             assertEquals("SYSTEM", scenario.getUpdateUser());
             assertEquals(1, scenario.getVersion());
@@ -236,10 +241,10 @@ class CreateScenarioIntegrationTestBuilder {
         private void assertUsage(Usage expectedUsage, Usage actualUsage) {
             assertEquals(expectedUsage.getStatus(), actualUsage.getStatus());
             assertEquals(productFamily, actualUsage.getProductFamily());
-            assertEquals(0, expectedUsage.getGrossAmount().compareTo(actualUsage.getGrossAmount()));
-            assertEquals(0, expectedUsage.getNetAmount().compareTo(actualUsage.getNetAmount()));
+            assertEquals(expectedUsage.getGrossAmount(), actualUsage.getGrossAmount());
+            assertEquals(expectedUsage.getNetAmount(), actualUsage.getNetAmount());
             assertEquals(expectedUsage.getServiceFee(), actualUsage.getServiceFee());
-            assertEquals(0, expectedUsage.getServiceFeeAmount().compareTo(actualUsage.getServiceFeeAmount()));
+            assertEquals(expectedUsage.getServiceFeeAmount(), actualUsage.getServiceFeeAmount());
             assertEquals(expectedUsage.getReportedValue(), actualUsage.getReportedValue());
             assertEquals(expectedUsage.getRightsholder().getAccountNumber(),
                 actualUsage.getRightsholder().getAccountNumber());

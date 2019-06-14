@@ -25,6 +25,7 @@ import com.copyright.rup.dist.foreign.domain.PaidUsage;
 import com.copyright.rup.dist.foreign.domain.ResearchedUsage;
 import com.copyright.rup.dist.foreign.domain.RightsholderTotalsHolder;
 import com.copyright.rup.dist.foreign.domain.Scenario;
+import com.copyright.rup.dist.foreign.domain.Scenario.NtsFields;
 import com.copyright.rup.dist.foreign.domain.ScenarioActionTypeEnum;
 import com.copyright.rup.dist.foreign.domain.ScenarioStatusEnum;
 import com.copyright.rup.dist.foreign.domain.Usage;
@@ -824,8 +825,11 @@ public class UsageServiceTest {
     }
 
     @Test
-    public void testCalculateAmountsByAccountNumber() {
+    public void testCalculateAmountsForNtsScenario() {
         mockStatic(RupContextUtils.class);
+        NtsFields ntsFields = new NtsFields();
+        ntsFields.setPostServiceFeeAmount(new BigDecimal("100.500"));
+        scenario.setNtsFields(ntsFields);
         Rightsholder rightsholder1 = buildRightsholder(1000009522L);
         Rightsholder rightsholder2 = buildRightsholder(2000009522L);
         expect(RupContextUtils.getUserName()).andReturn(USER_NAME).once();
@@ -841,8 +845,10 @@ public class UsageServiceTest {
         usageRepository.calculateAmountsByAccountNumber(rightsholder2.getAccountNumber(), SCENARIO_ID, SERVICE_FEE,
             true, USER_NAME);
         expectLastCall().once();
+        usageRepository.applyPostServiceFeeAmount(scenario.getId());
+        expectLastCall().once();
         replay(usageRepository, prmIntegrationService, rightsholderService, RupContextUtils.class);
-        usageService.calculateAmountsForNtsScenario(SCENARIO_ID);
+        usageService.calculateAmountsForNtsScenario(scenario);
         verify(usageRepository, prmIntegrationService, rightsholderService, RupContextUtils.class);
     }
 
