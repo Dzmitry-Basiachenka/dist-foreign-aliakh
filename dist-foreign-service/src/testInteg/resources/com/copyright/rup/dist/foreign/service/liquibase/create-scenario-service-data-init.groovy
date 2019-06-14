@@ -458,4 +458,64 @@ databaseChangeLog {
 
         rollback ""
     }
+
+    changeSet(id: '2019-06-14-00', author: 'Ihar Suvorau <isuvorau@copyright.com>') {
+        comment("Insert Pre-Service fee fund for testCreateNtsScenario")
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_fund_pool') {
+            column(name: 'df_fund_pool_uid', value: 'c7ca1ca1-7cd8-49cc-aaeb-ac53fe62d903')
+            column(name: 'name', value: 'Pre-Service Fee Additional Fund')
+            column(name: 'withdrawn_amount', value: '190.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage_batch') {
+            column(name: 'df_usage_batch_uid', value: 'c3b10f93-44f6-4569-9e3e-3423852ef47a')
+            column(name: 'name', value: 'FAS_DISTRIBUTION_2019')
+            column(name: 'rro_account_number', value: '2000017004')
+            column(name: 'product_family', value: 'FAS')
+            column(name: 'payment_date', value: '2017-01-11')
+            column(name: 'fiscal_year', value: '2017')
+            column(name: 'gross_amount', value: '190.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: 'd6fc0577-a6de-4425-a377-1e4f3315d49d')
+            column(name: 'df_usage_batch_uid', value: 'c3b10f93-44f6-4569-9e3e-3423852ef47a')
+            column(name: 'df_fund_pool_uid', value: 'c7ca1ca1-7cd8-49cc-aaeb-ac53fe62d903')
+            column(name: 'work_title', value: '"CHICKEN BREAST ON GRILL WITH FLAMES"')
+            column(name: 'status_ind', value: 'NTS_WITHDRAWN')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '2558902245377325XX')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Nanette M. Schwann')
+            column(name: 'number_of_copies', value: '1')
+            column(name: 'reported_value', value: '99.00')
+            column(name: 'gross_amount', value: '99.00')
+        }
+
+        insert(schemaName: dbAppsSchema, tableName: 'df_usage') {
+            column(name: 'df_usage_uid', value: '3d60f842-b0a0-4aee-8de5-da433d0da477')
+            column(name: 'df_usage_batch_uid', value: 'c3b10f93-44f6-4569-9e3e-3423852ef47a')
+            column(name: 'df_fund_pool_uid', value: 'c7ca1ca1-7cd8-49cc-aaeb-ac53fe62d903')
+            column(name: 'work_title', value: '100 ROAD MOVIES')
+            column(name: 'status_ind', value: 'NTS_WITHDRAWN')
+            column(name: 'product_family', value: 'NTS')
+            column(name: 'article', value: 'DIN EN 779:2012')
+            column(name: 'standard_number', value: '1003324112314587XX')
+            column(name: 'publisher', value: 'IEEE')
+            column(name: 'publication_date', value: '2013-09-10')
+            column(name: 'market', value: 'Doc Del')
+            column(name: 'market_period_from', value: '2013')
+            column(name: 'market_period_to', value: '2017')
+            column(name: 'author', value: 'Philippe de Mézières')
+            column(name: 'number_of_copies', value: '1')
+            column(name: 'reported_value', value: '91.00')
+            column(name: 'gross_amount', value: '91.00')
+        }
+    }
 }
